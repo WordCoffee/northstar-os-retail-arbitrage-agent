@@ -1,0 +1,260 @@
+If you want to create packaging design that looks like this,
+but you feel really unsure how to use dialynes,
+today we're going to demystify how to go from a sketch
+to a finished printed packaging design.
+A really helpful tool to make this whole process
+a lot easier is Pactora,
+who have really kindly decided to sponsor this video.
+We'll more on that later.
+Before we actually dig into the design,
+I want to introduce the brand we're designing for.
+It's called Sunny Side
+and it's actually my own personal stationery brand.
+I create handmade stationery products
+and today we're going to be designing for these notebooks.
+What I want to do is create a gift set of five notebooks
+that can be this beautiful box
+that you can give away for Christmas
+or as a present to someone that you really like.
+The very first thing I did was to look up
+the kind of box that I want to be using.
+This way I can download the dialynes
+and know exactly what space I have to work with.
+For some of my past projects,
+clients already have picked out a printer
+and they've sent over dialynes from that specific printer.
+But whenever that's not the case,
+you can use Pactora to actually find the type of packaging
+that you want to use,
+customize the settings and then download the dialynes.
+And this is also a great way to reduce waste
+because I'm sure all of us has bought like a bag of chips
+or something else where you've got tons of extra space
+in the bag.
+And this is really wasteful when we're shipping products
+because all of that space could have been used up
+by actual products.
+So when you can customize those dimensions,
+you can make sure they fit perfectly
+to the product you're designing for.
+I had a little browse through the website
+and I found this box that I really like.
+It's called a Flip Top Box Mailer.
+I like that it's a really simple gift box
+but I still have these flaps at the front
+that I can use to close it in a really beautiful way.
+Maybe we can incorporate a nice ribbon or a sticker
+to seal it to make it feel extra gift worthy.
+I wanna make sure that the packaging
+that I'm actually gonna be printing
+is gonna be the perfect exact size.
+So I started by stacking up all my five notebooks
+and measuring exactly how tall and how wide
+and how deep this box needs to be.
+I wanna quickly point out two things
+that I really like here.
+The first thing I really like is that
+you can actually choose the unit.
+So you can choose millimeters or inches, for example.
+That's really helpful because sometimes clients
+might give me measurements in inches
+or sometimes in millimeters.
+And instead of having to convert that
+and risk it being a little bit off
+and the product not fitting the packaging,
+we can actually be exact inner measurements.
+And the second one is that I can choose size mode.
+And that means that, for example, in this case,
+my notebooks are a specific size.
+I know that size.
+So I pick inner measurements
+because that way I know
+that the notebooks are all gonna fit.
+I'm gonna download the dialyne now
+and I'm gonna choose Adobe Illustrator
+because that's where I like to work
+but they have other formats as well.
+Then I can take this and I can either print it out
+if I wanna sketch on it on just pen and paper
+or I can drop the image to Procreate
+and start sketching there.
+Now that we have all the basics for our packaging,
+we can start designing.
+The very first thing I like to start with is hierarchy.
+So having a think about which information
+we want someone to see first
+and which information is gonna be most important
+for someone making a choice
+to buy this product over another one.
+In this case, I have a document set up here
+with all the information I wanna include in the packaging.
+This is how I usually get it from a client as well.
+We wanna have the name of the product,
+a little bit about it,
+how many notebooks are included,
+a bit about the sustainability in paper
+and then a little bit about the company as well.
+If you're designing for other kinds of products,
+you also sometimes need to include
+other types of information.
+Like if you're doing for food products, for example,
+you might need to include allergens,
+ingredients, nutritional information
+and if you're designing for kids products,
+you might need the appropriate age,
+any safety instructions, for example.
+So make sure you check with your client
+and also your local area or where it will be sold
+to see what the regulations are.
+In this case, I think the information
+I wanna put at the front is the name of the product,
+a little bit about it being environmentally friendly
+and how many notebooks are inside.
+And I think the rest of it we can put on the back.
+We do also have the sides of the packaging,
+so I think that could be a great way
+to highlight something small,
+maybe about it being handmade, for example.
+If you feel a bit unsure where to place things
+and what information is most important,
+you can have a look at competitor brands
+because they've usually done tons of research and seen,
+tweaked things once they're on the shelves
+and that way you can see, okay,
+this is what they're choosing to highlight.
+How is my brand different
+and what do I want to put front and center?
+Certain information might need to go together,
+for example, nutritional information
+and the volume of the packaging
+sometimes needs to be included in the same site of vision.
+For the box we're designing today,
+the dimensions are kind of similar to a book
+which fits perfectly with my type of audience.
+So what if we choose to design this
+to look kind of like a beautiful book sleeve?
+We can use illustration, fit the product inside,
+and use similar motifs.
+I think that could be perfect.
+We can use it as a spine of the book, covers.
+I think that would be really cute.
+I'm super excited to give this a try,
+so let's start planning out our design.
+Before we get started,
+we really want to understand which sections
+will be visible once it's folded,
+so we don't pay a lot of attention
+to areas that actually will be hidden.
+And we also want to make sure we understand
+which sides will be up and down
+so that we don't design something
+and then print it and it turns upside down.
+There's actually a really smart way
+to do this in Pactora,
+so if you head to the 3D view,
+you can actually fold and unfold the packaging
+to different degrees.
+This means that you can understand
+which parts will be visible.
+You can also turn it around
+to understand which sides will be up and down.
+This is super helpful and has saved me a lot of time
+not having to actually print a lot of tests
+to fold it myself and see which ones will be up and down.
+Once you open the dial lines in Adobe Illustrator,
+you will see these different colored lines
+and you will also have a legend at the top.
+The blue line is where we expect our design to be,
+so that's where we'll try to cut the machine,
+but sometimes it's not perfectly accurate,
+so that's why we have these green lines
+that are for the bleed.
+So essentially the area between the blue
+and the green line are gonna work as a safety zone
+where we want to extend our design out to
+in case it cuts a little bit further out.
+And then the red lines are
+where the packaging will be folded.
+Now that we know which areas we're gonna design for,
+we can get sketching.
+I'm working in Procreate
+because that's where it feels most natural to me.
+I always grew up drawing with pen and paper
+and being able to draw straight on the iPad
+just feels very natural to me,
+but make sure you find a workflow that works best for you.
+Once I have the sketch ready,
+I move into Adobe Illustrator
+and start assembling the design.
+Since we already downloaded the dial lines
+as an Adobe Illustrator file,
+we can just open that and it will be all set up for us.
+I like to just import the sketch as an image
+and lock the layer on a different layer
+in Adobe Illustrator just so that I have it
+as a reference.
+Most printers like to have the dial lines on their own layer
+and how that layer locked
+just so we make sure that we're not messing
+with any of the line work there.
+What we might wanna do is use the actual dial lines
+as the background for our packaging.
+And if you wanna do that,
+you can make sure you're embedding the image
+of the dial line and then ungrouping
+all the different elements.
+Once you have this done,
+you can convert the line into a fill
+and there you have your background.
+Make sure that this background is now on a new layer
+and that the dial lines are on a separate layer
+that's also locked.
+We can then start adding in all of our text
+and make sure that the font sizes are big enough.
+It's really easy to start focusing on the design portion,
+the illustration portion,
+but things need to be very readable
+for it to be functional as a packaging design.
+Once the text is laid out,
+we can start adding the more decorative elements.
+I personally really like using the pen tool,
+but I know a lot of people like the pencil tool as well,
+so just feel your way through it
+and see what fits best for your working style.
+If you wanna have design elements
+on the inside of the packaging as well,
+like maybe a sweet message once you open the box,
+you can just duplicate this artboard
+and that's gonna be printed as a copy on the inside.
+Sometimes clients can have a little bit of a hard time
+visualizing what the packaging is gonna look like
+just from dial lines.
+I don't blame them.
+So what I like to do is you can head back into Pactora
+and go to that 3D view that we had before
+and then you can add in your own images for the design
+and you can preview what the design
+will actually look like.
+One of the things that I often spot at this stage
+is that my text is way too big, way too small,
+something doesn't feel quite centered,
+so this is really a helpful moment for you
+to be able to review your design
+before you actually get printing.
+Since I'm gonna be making these boxes myself,
+I'm gonna start assembling it now.
+So here's the moment of truth.
+Let's put in the notebooks
+and see how the packaging turned out.
+I am so excited about how this packaging design came out
+and I really hope this video helped you feel more confident
+creating packaging design and interpreting dial lines.
+Pactora is kindly giving all of you 20% off
+if you're using the code KAYLA20.
+I'll make sure to add the link in the description.
+This is perfect if you wanna use dial lines
+but also if you wanna create custom mockups
+for your projects.
+Thank you so much for watching
+and let me know if you have any questions at all.
+Good luck with your projects and see you next time.

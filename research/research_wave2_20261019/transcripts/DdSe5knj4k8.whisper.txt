@@ -1,0 +1,71 @@
+So, Flux One is this incredible new model developed by Black Forest Labs, the same team
+of people who brought a stable diffusion. This model is clearly as good, if not better than
+other leading image generators such as Mid Journey and Dolly in terms of overall quality and realism.
+But what really sets Flux apart is its amazing ability to render text and get this. It's
+even great at generating human hands. In this video, I'm gonna show you how to get
+Flux up and running on your computer using ConfUI.
+If you've never used ConfUI before, you will need to install it on your computer.
+It's very easy and I've made a separate tutorial on that so feel free to pause here and watch that
+first. To get started, you will need to download the Flux model itself. Now, there are two main
+versions that are suitable for local use, the dev version and the schnell version, which,
+according to some reports, is meant to run faster than the dev version, which also suggests
+that it prioritizes speed over quality. For that reason alone, today I'm gonna be working with the
+dev version, but you can experiment with the schnell version if you wanna have images generated
+faster. I will leave links to both versions in the description box and whichever model you
+choose, make sure you place it under ConfUI, Models, look for the Unet folder and save the
+model over there. I've already downloaded Flux here, you will also need to download three different
+encoders. I will link the page down below, get all three files and save them under ConfUI,
+Models, Clip. And the last file you need to download is the VAE model. There are also two
+versions depending on whether you're going with dev or schnell and I will link both files
+in the description box. Just make sure you save it under ConfUI, Models, inside the VAE folder.
+You can rename the files if you'd like, just make sure that it's saved in the correct folder.
+Once you get all the files on your computer, go ahead and launch ConfUI. Now if you've had ConfUI
+on your computer for a while, make sure you go to Manager and click on Update All to get the
+latest version. Next, head over to this page on openart.ai, which I will link below.
+This is where you can download the simple workflow for Flux. To do that, click on Download,
+then drag and drop the workflow file over onto your ConfUI interface, which will load the simple
+Flux workflow. First, make sure you load the correct Flux model that you've downloaded. The name
+could be different depending on where you got it from, so make sure you load the correct file.
+Here, if you want to prioritize speed, you can go with the default FP8 encoder. I personally
+like to switch over to T5 XXL FP16 instead as it offers higher precision. Here, you need to write
+the prompt that describes the image that you want to generate. If you're wondering how to find ideas
+or write good prompts, I've made an entire video on that, so make sure you check it out.
+Now let's start by trying something realistic. I want to generate a picture of an elderly woman
+sitting in a garden with a bunch of flowers around her. Obviously, you can change the width
+and height of your output image. The higher this is, the more time it's going to take to generate,
+so keep that in mind. Next, make sure the seed is set to Randomize. For the Sampler name, you can
+leave it set to Euler, but if you have the time and patience, feel free to experiment with other
+options as well. For the scheduler, I personally like to use SGM Uniform, but again, if you
+want to experiment, feel free to try the other schedulers. By default, the steps value is
+set to 20. You can change this. The higher you go, the better quality you're gonna get,
+but the slower the process is gonna be, so keep that in mind. And finally here,
+make sure you select the VAE model that you've downloaded. If you've renamed the file,
+you will be able to see it in this list as long as it's placed in the correct folder.
+And now you can go ahead and click on Q Prompt to start generating. Now,
+Flux is not the fastest model out there. I have a 1490 RTX GPU with 24 gigabytes of VRAM,
+and as you can see, it's using pretty much all of the available video memory,
+and it's still running very slow. So you might run into issues, especially if you have a low-end GPU
+with, let's say, 12 or 8 gigabytes of VRAM. In that case, you can first try the Schnell version
+instead, or maybe try the FP8 encoder. Otherwise, you can go with one of those cloud-based solutions
+that you can use to run ConfUI online. A good example of that would be ThinkDiffusion. I've used it
+myself and believe they're working on making Flux stable on their platform. I will leave a link
+to it below so you can give it a try if you want. And once the process is done, you will get a
+preview of your image. As you can see, the output is absolutely gorgeous. I mean, just look
+at the details on the face, the wrinkles, the depth of field, the light, the hair, the edges.
+It just looks amazing. Now, of course, because we set the seat to randomize, it means that every
+time we click on Q prompt, we will get a different result, which also means that you might be able
+to get even better images using the same prompt. I find this one much more appealing.
+Let's do something different this time. I want to see how well it does with text.
+So I'm going to ask it to generate a cover for a children's book with a character and a big title.
+And let's see how that goes. Look at this, guys. The text is accurate, word for word, letter for letter.
+And the way it's designed matches the prompt really well. And that's truly impressive. The
+character also looks very well drawn and all of that makes Flux really powerful. Here,
+I have another prompt that I used to test how well it does with hands. This time, it took
+me two attempts to get to this image. But again, it looks so realistic. The finger count is correct.
+So that's great. Now, if you want to get higher quality images, but you don't want to drag the
+process even longer on Confi UI, what I personally like to do is use a third party image upscaler
+called Topaz Photo AI to sharpen and upscale the image. As you can see here, it does a very good
+job at reintroducing details into the image. The before and after comparison is truly impressive.
+It also works pretty well with both illustrations and text. That's it for today's video. I hope you
+found it useful. If you have any questions, drop them in the comments below. Stay creative and
+I'll see you guys in the next video. Peace.

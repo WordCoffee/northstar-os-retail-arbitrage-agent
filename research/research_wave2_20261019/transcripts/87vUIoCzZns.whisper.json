@@ -1,0 +1,1123 @@
+{
+ "id": "87vUIoCzZns",
+ "title": "New Photoshop AI Removes IMPOSSIBLE Glare!",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=87vUIoCzZns",
+ "query": "reflection photoshop product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.987,
+ "duration_s": 771.1,
+ "chars": 12942,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.76,
+   "text": "You might think that all you need to do is just select an area, type in a prompt and hit generate."
+  },
+  {
+   "start": 4.76,
+   "end": 6.12,
+   "text": "And that should do the trick, right?"
+  },
+  {
+   "start": 6.12,
+   "end": 7.32,
+   "text": "But is it the reality?"
+  },
+  {
+   "start": 7.32,
+   "end": 11.8,
+   "text": "When you actually sit down to do this and you keep hitting generate again and again,"
+  },
+  {
+   "start": 11.8,
+   "end": 13.56,
+   "text": "nothing really seems to happen, right?"
+  },
+  {
+   "start": 13.56,
+   "end": 18.52,
+   "text": "And by chance if it does seem to work, it changes the original eye or removes the glasses altogether."
+  },
+  {
+   "start": 18.52,
+   "end": 20.08,
+   "text": "Do not worry, there is a way."
+  },
+  {
+   "start": 20.08,
+   "end": 27.32,
+   "text": "Today we'll cover the right steps, the right settings and the right techniques to magically and easily remove clear from glasses no matter how complex that is."
+  },
+  {
+   "start": 27.32,
+   "end": 31.52,
+   "text": "We'll also learn what to do if you don't have Photoshop beta with AI or Photoshop at all."
+  },
+  {
+   "start": 31.52,
+   "end": 33.76,
+   "text": "So without any further ado, let's get started."
+  },
+  {
+   "start": 37.94,
+   "end": 43.82,
+   "text": "First of all, you want to make sure you're on the latest version of Photoshop beta and right now I'm using version 27.0.1."
+  },
+  {
+   "start": 43.82,
+   "end": 47.58,
+   "text": "If you don't already have it, you can easily install it through your Creative Cloud desktop app,"
+  },
+  {
+   "start": 47.58,
+   "end": 52.1,
+   "text": "go to apps, beta at the top and from here, install Photoshop beta."
+  },
+  {
+   "start": 52.1,
+   "end": 55.3,
+   "text": "And by the time you're watching this, maybe this feature makes it to the main version."
+  },
+  {
+   "start": 59.52,
+   "end": 64.44,
+   "text": "The first technique is something we use when the eyes are not fully covered and it's slightly visible."
+  },
+  {
+   "start": 64.44,
+   "end": 72.4,
+   "text": "In those cases, simply select the rectangular marquee tool and I recommend that because generations are rectangle anyway and it gives you a breathing room."
+  },
+  {
+   "start": 72.4,
+   "end": 79.16,
+   "text": "Let us make a selection like so, select a bit extra and then in the contextual taskbar, click on Generative Fill."
+  },
+  {
+   "start": 79.16,
+   "end": 86.04,
+   "text": "If you're not able to see the contextual taskbar, simply go to window and you want to make sure contextual taskbar is checked."
+  },
+  {
+   "start": 86.08,
+   "end": 90.08,
+   "text": "Right in here, type in Remove the Reflections."
+  },
+  {
+   "start": 90.08,
+   "end": 92.8,
+   "text": "Clearly this exact prompt."
+  },
+  {
+   "start": 92.8,
+   "end": 96.28,
+   "text": "Remove the reflections from the glasses."
+  },
+  {
+   "start": 96.28,
+   "end": 99.36,
+   "text": "And the most important step here is not using Nano Banana."
+  },
+  {
+   "start": 99.36,
+   "end": 104.64,
+   "text": "Instead, click on the model menu and choose Flux for this one."
+  },
+  {
+   "start": 104.64,
+   "end": 106.6,
+   "text": "And let us click on Generate."
+  },
+  {
+   "start": 106.6,
+   "end": 113.24,
+   "text": "That's it. You can do a couple of tries if you wish to but most of the times and in this case, oh my gosh, it worked perfectly."
+  },
+  {
+   "start": 113.28,
+   "end": 117.28,
+   "text": "Here is the overall before and here is the after."
+  },
+  {
+   "start": 117.28,
+   "end": 119.6,
+   "text": "It's the exact same eye."
+  },
+  {
+   "start": 119.6,
+   "end": 125.4,
+   "text": "For more accuracy, if you want some more variations, you can click on Generate here for more options to show up."
+  },
+  {
+   "start": 125.4,
+   "end": 137.69,
+   "text": "Now, Flux, like any Generative AI model, has a resolution limit and sometimes when you're selecting a bigger area, it might lead to a lower resolution."
+  },
+  {
+   "start": 137.69,
+   "end": 142.49,
+   "text": "We can select this entire area and remove the reflections from the glasses all at once."
+  },
+  {
+   "start": 142.49,
+   "end": 148.01,
+   "text": "But since this is a bigger image and you can clearly see that, it will lead to degradation in resolution."
+  },
+  {
+   "start": 148.01,
+   "end": 150.45,
+   "text": "So instead, you can use this obvious trick."
+  },
+  {
+   "start": 150.45,
+   "end": 152.97,
+   "text": "Let's press Ctrl or Command D to deselect."
+  },
+  {
+   "start": 152.97,
+   "end": 158.49,
+   "text": "Zoom into one glass only and then make a selection around it."
+  },
+  {
+   "start": 158.49,
+   "end": 162.21,
+   "text": "And the idea is doing it one at a time."
+  },
+  {
+   "start": 162.21,
+   "end": 165.01,
+   "text": "Then click on Generative Fill, the same prompt."
+  },
+  {
+   "start": 165.01,
+   "end": 169.49,
+   "text": "Again, you want to make sure Flux is activated and simply click on Generate."
+  },
+  {
+   "start": 169.49,
+   "end": 172.69,
+   "text": "And as you can see, it did a pretty amazing job."
+  },
+  {
+   "start": 172.69,
+   "end": 175.69,
+   "text": "So here is the before, here is the after."
+  },
+  {
+   "start": 175.69,
+   "end": 179.65,
+   "text": "And similarly, you can do the other eye one at a time."
+  },
+  {
+   "start": 179.65,
+   "end": 182.45,
+   "text": "Let us take a look at the overall before and after."
+  },
+  {
+   "start": 182.45,
+   "end": 190.34,
+   "text": "So here is the before and here is the after."
+  },
+  {
+   "start": 190.34,
+   "end": 195.38,
+   "text": "I need you to pay attention towards the edges because there will be certain changes."
+  },
+  {
+   "start": 195.38,
+   "end": 201.02,
+   "text": "You can create a soft selection, but I recommend doing this manually for absolute precision."
+  },
+  {
+   "start": 201.02,
+   "end": 203.62,
+   "text": "So this was the generated area, right?"
+  },
+  {
+   "start": 203.62,
+   "end": 208.5,
+   "text": "If you go closer towards the edges, you will see certain differences here."
+  },
+  {
+   "start": 208.5,
+   "end": 214.7,
+   "text": "Either they would be slightly misaligned or there will be a slight line or maybe a slight change in color."
+  },
+  {
+   "start": 214.7,
+   "end": 220.94,
+   "text": "So one of the other best practice that I use from time to time is only keep it in the areas where you need it."
+  },
+  {
+   "start": 220.94,
+   "end": 226.34,
+   "text": "For it, I personally delete the mask, drag it and drop it to the trash can,"
+  },
+  {
+   "start": 226.38,
+   "end": 232.38,
+   "text": "create a new negative mask by holding the Alt key or the Option key and then clicking on the Mask button."
+  },
+  {
+   "start": 232.38,
+   "end": 234.06,
+   "text": "This creates a black mask."
+  },
+  {
+   "start": 234.06,
+   "end": 236.82,
+   "text": "Remember, black hides, white shows."
+  },
+  {
+   "start": 236.82,
+   "end": 241.5,
+   "text": "With the mask selected, you take the brush, white as the foreground color,"
+  },
+  {
+   "start": 241.5,
+   "end": 248.98,
+   "text": "take a soft brown brush and only paint over the areas where you need it to keep everything else intact."
+  },
+  {
+   "start": 248.98,
+   "end": 253.06,
+   "text": "And if you don't want to have the hassle of deleting a mask, you can always create a group."
+  },
+  {
+   "start": 253.06,
+   "end": 254.86,
+   "text": "Let us take a look at our second example."
+  },
+  {
+   "start": 254.9,
+   "end": 260.5,
+   "text": "In this case, you can clearly see the edges of the generation."
+  },
+  {
+   "start": 260.5,
+   "end": 265.14,
+   "text": "To fix it again, this time, let us select the first generation layer,"
+  },
+  {
+   "start": 265.14,
+   "end": 271.1,
+   "text": "hold the Ctrl or Command, select the second one and then press Ctrl or Command G to make a group of that."
+  },
+  {
+   "start": 271.1,
+   "end": 274.82,
+   "text": "Then hold the Alt key or the Option key, click on the Mask button."
+  },
+  {
+   "start": 274.82,
+   "end": 276.94,
+   "text": "This creates a negative mask."
+  },
+  {
+   "start": 276.94,
+   "end": 281.5,
+   "text": "Similarly, with the same white brush and the mask selected,"
+  },
+  {
+   "start": 281.54,
+   "end": 284.9,
+   "text": "just paint over the areas where you need it."
+  },
+  {
+   "start": 284.9,
+   "end": 290.06,
+   "text": "And that's it."
+  },
+  {
+   "start": 290.06,
+   "end": 293.94,
+   "text": "Now there's going to be times and examples when this simple trick is not going to work."
+  },
+  {
+   "start": 293.94,
+   "end": 297.78,
+   "text": "In this case, as you can see, the eyes are really covered a lot."
+  },
+  {
+   "start": 297.78,
+   "end": 302.46,
+   "text": "If we were to try the same prompt with flux, let us hit Generate and see what happens."
+  },
+  {
+   "start": 302.46,
+   "end": 307.62,
+   "text": "As you can see, it removes the reflections all right, but it also changes the eyes entirely."
+  },
+  {
+   "start": 307.62,
+   "end": 309.42,
+   "text": "Before, after."
+  },
+  {
+   "start": 309.42,
+   "end": 312.78,
+   "text": "In this case, we need to use a different approach and maybe a different model."
+  },
+  {
+   "start": 312.78,
+   "end": 314.5,
+   "text": "Now this model, the AI one,"
+  },
+  {
+   "start": 314.5,
+   "end": 318.02,
+   "text": "let us make a selection of the entire glasses."
+  },
+  {
+   "start": 318.02,
+   "end": 320.94,
+   "text": "Now, Nano Banana is not great at removing reflections,"
+  },
+  {
+   "start": 320.94,
+   "end": 323.7,
+   "text": "but it's excellent at removing complex stuff."
+  },
+  {
+   "start": 323.7,
+   "end": 330.26,
+   "text": "So this time, click on Generate a Fill and instead type in Remove the glasses altogether."
+  },
+  {
+   "start": 330.26,
+   "end": 336.34,
+   "text": "And from the models menu, you want to make sure Gemini 2.5 Nano Banana is activated, not flux."
+  },
+  {
+   "start": 336.34,
+   "end": 337.98,
+   "text": "And then click on Generate."
+  },
+  {
+   "start": 337.98,
+   "end": 342.62,
+   "text": "You already know where we are going with this and keep in mind this might require a couple tries."
+  },
+  {
+   "start": 342.66,
+   "end": 344.42,
+   "text": "And let's have a look at the result."
+  },
+  {
+   "start": 344.42,
+   "end": 345.1,
+   "text": "Brilliant!"
+  },
+  {
+   "start": 345.1,
+   "end": 347.26,
+   "text": "It's the same exact eye."
+  },
+  {
+   "start": 347.26,
+   "end": 348.58,
+   "text": "Here's the before."
+  },
+  {
+   "start": 348.58,
+   "end": 349.34,
+   "text": "Here's the after."
+  },
+  {
+   "start": 349.34,
+   "end": 351.86,
+   "text": "It has moved a bit, but it's the same eye."
+  },
+  {
+   "start": 351.86,
+   "end": 354.14,
+   "text": "Now let's see if we can align the movement."
+  },
+  {
+   "start": 354.14,
+   "end": 358.18,
+   "text": "For it, simply change the blend mode from Normal to Difference."
+  },
+  {
+   "start": 358.18,
+   "end": 361.98,
+   "text": "Let us hide this and then you can press Ctrl or Command T"
+  },
+  {
+   "start": 361.98,
+   "end": 366.7,
+   "text": "with the arrow keys, move it to the right or left to see where it exactly aligns with the eyes."
+  },
+  {
+   "start": 366.7,
+   "end": 370.02,
+   "text": "This seems to be perfect as you can clearly see the edges are aligning."
+  },
+  {
+   "start": 370.02,
+   "end": 371.86,
+   "text": "If it's black, it has aligned."
+  },
+  {
+   "start": 371.9,
+   "end": 375.86,
+   "text": "Hit Enter or Return and change the blend mode back to Normal."
+  },
+  {
+   "start": 375.86,
+   "end": 378.9,
+   "text": "Now all we need to do is to use the magic of masking."
+  },
+  {
+   "start": 378.9,
+   "end": 381.5,
+   "text": "Let us delete this particular mask."
+  },
+  {
+   "start": 381.5,
+   "end": 386.86,
+   "text": "Again, hold the Alt key or the Option key and click on the Mask button to create a negative mask."
+  },
+  {
+   "start": 386.86,
+   "end": 392.7,
+   "text": "Then you can take the brush white as the foreground color, just simply paint here."
+  },
+  {
+   "start": 392.7,
+   "end": 397.22,
+   "text": "You don't have to recover all the areas because if you recover this area, the shadows go away."
+  },
+  {
+   "start": 397.22,
+   "end": 399.58,
+   "text": "Keep it like this so that the eyes stay."
+  },
+  {
+   "start": 399.62,
+   "end": 402.78,
+   "text": "You can also use the Quick Selection tool to make it easier."
+  },
+  {
+   "start": 402.78,
+   "end": 406.42,
+   "text": "With the Quick Selection tool, make sure Sample All Layers is checked."
+  },
+  {
+   "start": 406.42,
+   "end": 412.3,
+   "text": "Let's make a selection like this, take the brush back again and with white, just paint this area."
+  },
+  {
+   "start": 412.3,
+   "end": 414.86,
+   "text": "There you go. Easy to fix."
+  },
+  {
+   "start": 414.86,
+   "end": 417.02,
+   "text": "Press Ctrl or Command D to deselect."
+  },
+  {
+   "start": 417.02,
+   "end": 420.18,
+   "text": "Yes, there are certain more reflections but don't worry about that right now."
+  },
+  {
+   "start": 420.18,
+   "end": 423.82,
+   "text": "Now that the eyes are recovered, it's easy to fix the rest with Flux."
+  },
+  {
+   "start": 423.82,
+   "end": 429.02,
+   "text": "So with the Rectangular Maki tool again, make a selection of this entire area."
+  },
+  {
+   "start": 429.06,
+   "end": 433.66,
+   "text": "Click on Generator Fill again and this time, choose Flux as the model."
+  },
+  {
+   "start": 433.66,
+   "end": 437.18,
+   "text": "And we will use the same prompt, Remove Reflections from the glass."
+  },
+  {
+   "start": 437.18,
+   "end": 440.86,
+   "text": "Click on Generate and that should easily complete our glare removal."
+  },
+  {
+   "start": 440.86,
+   "end": 443.62,
+   "text": "Have a look before, after."
+  },
+  {
+   "start": 443.62,
+   "end": 444.78,
+   "text": "Pretty amazing."
+  },
+  {
+   "start": 444.78,
+   "end": 447.14,
+   "text": "But do not forget one last step."
+  },
+  {
+   "start": 447.14,
+   "end": 451.1,
+   "text": "With the first layer selected, hold the Ctrl or Command, click on the second layer."
+  },
+  {
+   "start": 451.1,
+   "end": 453.86,
+   "text": "Press Ctrl or Command G, create a group."
+  },
+  {
+   "start": 453.86,
+   "end": 455.42,
+   "text": "Hold the Alt key or the Option key."
+  },
+  {
+   "start": 455.42,
+   "end": 458.22,
+   "text": "Click on the Mask button to create a negative mask."
+  },
+  {
+   "start": 458.22,
+   "end": 463.58,
+   "text": "And then take the brush with white as the foreground color, only paint over areas where you needed"
+  },
+  {
+   "start": 463.58,
+   "end": 466.7,
+   "text": "the change and this keeps the edges natural."
+  },
+  {
+   "start": 466.7,
+   "end": 472.72,
+   "text": "Let me share with you another impossible example."
+  },
+  {
+   "start": 472.72,
+   "end": 474.92,
+   "text": "The eyes are entirely covered here."
+  },
+  {
+   "start": 474.92,
+   "end": 477.8,
+   "text": "So I used Nano Banana to remove the glasses altogether."
+  },
+  {
+   "start": 477.8,
+   "end": 480.52,
+   "text": "You can clearly see the prompt is Remove the glasses."
+  },
+  {
+   "start": 480.52,
+   "end": 482.36,
+   "text": "And then let's create a group out of this."
+  },
+  {
+   "start": 482.36,
+   "end": 485.76,
+   "text": "Press Ctrl or Command G, hold the Alt key or the Option key."
+  },
+  {
+   "start": 485.76,
+   "end": 488.52,
+   "text": "Click on the Mask button to create a negative mask."
+  },
+  {
+   "start": 488.52,
+   "end": 492.8,
+   "text": "And then you can use the Quick Selection tool that's up to you to make a quick selection inside"
+  },
+  {
+   "start": 492.8,
+   "end": 493.8,
+   "text": "of it."
+  },
+  {
+   "start": 493.8,
+   "end": 496.0,
+   "text": "Let's add this area as well."
+  },
+  {
+   "start": 496.0,
+   "end": 500.64,
+   "text": "And then with the brush with white as the foreground color, just paint on the inside."
+  },
+  {
+   "start": 500.64,
+   "end": 503.28,
+   "text": "Press Ctrl or Command D and you will see there's a problem."
+  },
+  {
+   "start": 503.28,
+   "end": 507.28,
+   "text": "The shadows are gone, the selection of the glass is not proper, some areas are not"
+  },
+  {
+   "start": 507.28,
+   "end": 508.28,
+   "text": "great."
+  },
+  {
+   "start": 508.28,
+   "end": 512.8,
+   "text": "Now you can take your time to fix this or why not try something smarter."
+  },
+  {
+   "start": 512.8,
+   "end": 516.44,
+   "text": "Let us select the same area by holding the Ctrl or Command and clicking on the"
+  },
+  {
+   "start": 516.44,
+   "end": 523.0,
+   "text": "thumbnail here and this time click on Generator Fill and type in Fix the Glasses Frame."
+  },
+  {
+   "start": 523.0,
+   "end": 528.88,
+   "text": "Now since you want to stay closer to the context, choose this time Flux Context Pro."
+  },
+  {
+   "start": 528.88,
+   "end": 530.24,
+   "text": "And let's see what it does."
+  },
+  {
+   "start": 530.24,
+   "end": 532.68,
+   "text": "And just like magic, it fixes the frame."
+  },
+  {
+   "start": 532.68,
+   "end": 535.52,
+   "text": "Here's the before, as you can see, here's the after."
+  },
+  {
+   "start": 535.52,
+   "end": 541.08,
+   "text": "It moves it quite a bit, no issues, change the blend mode from Normal to Difference."
+  },
+  {
+   "start": 541.08,
+   "end": 543.72,
+   "text": "Press Ctrl or Command D with the arrow keys."
+  },
+  {
+   "start": 543.72,
+   "end": 546.92,
+   "text": "Try to move it so that it's closest to black."
+  },
+  {
+   "start": 546.92,
+   "end": 552.52,
+   "text": "This seems to be about right, hit Enter or Return, change the blend mode back to Normal."
+  },
+  {
+   "start": 552.52,
+   "end": 556.2,
+   "text": "And then hold the Shift key, select the top most layer and then the bottom most layer,"
+  },
+  {
+   "start": 556.2,
+   "end": 559.28,
+   "text": "press Ctrl or Command G to create a big group."
+  },
+  {
+   "start": 559.28,
+   "end": 563.48,
+   "text": "Hold the Alt key or Option key, click on the Mask button to create a negative mask."
+  },
+  {
+   "start": 563.48,
+   "end": 568.96,
+   "text": "Take the same white soft brush and just paint over those areas just to match everything"
+  },
+  {
+   "start": 568.96,
+   "end": 570.04,
+   "text": "clearly."
+  },
+  {
+   "start": 570.04,
+   "end": 572.44,
+   "text": "And this my friend is the final result."
+  },
+  {
+   "start": 572.44,
+   "end": 580.9,
+   "text": "As the before, here is the after."
+  },
+  {
+   "start": 580.9,
+   "end": 584.26,
+   "text": "Now what do you do if you don't have Photoshop beta or Photoshop at all or for some reason something"
+  },
+  {
+   "start": 584.26,
+   "end": 585.62,
+   "text": "is just not working?"
+  },
+  {
+   "start": 585.62,
+   "end": 588.82,
+   "text": "In that case, simply go to Firefly.adobe.com."
+  },
+  {
+   "start": 588.82,
+   "end": 592.1,
+   "text": "There are many platforms that give you access to Flux, but in this case you can go to"
+  },
+  {
+   "start": 592.1,
+   "end": 594.54,
+   "text": "Boards and just create a new board."
+  },
+  {
+   "start": 594.54,
+   "end": 599.54,
+   "text": "Now Firefly Boards gives you a lot of flexibility including what we want for high-res generation."
+  },
+  {
+   "start": 599.54,
+   "end": 601.54,
+   "text": "Let us drag and drop this photo."
+  },
+  {
+   "start": 601.54,
+   "end": 602.7,
+   "text": "It is that simple."
+  },
+  {
+   "start": 602.7,
+   "end": 605.1,
+   "text": "And then we want to fix this right?"
+  },
+  {
+   "start": 605.1,
+   "end": 607.1,
+   "text": "So why not just crop it directly?"
+  },
+  {
+   "start": 607.1,
+   "end": 610.22,
+   "text": "Using these controls you can just crop it the way you like."
+  },
+  {
+   "start": 610.22,
+   "end": 612.66,
+   "text": "Similarly, let's do it from all the sides."
+  },
+  {
+   "start": 612.66,
+   "end": 615.98,
+   "text": "You can also hold the space bar to move it just like you do in Photoshop."
+  },
+  {
+   "start": 615.98,
+   "end": 618.1,
+   "text": "I'm going to keep a bit of the face."
+  },
+  {
+   "start": 618.1,
+   "end": 622.5,
+   "text": "Then click on Generate Image and using the same prompt here which is Remove Reflections"
+  },
+  {
+   "start": 622.5,
+   "end": 626.54,
+   "text": "from the glass, let us pick the model from this dropdown and let's pick"
+  },
+  {
+   "start": 626.54,
+   "end": 628.66,
+   "text": "Flux Context Pro."
+  },
+  {
+   "start": 628.66,
+   "end": 632.74,
+   "text": "And to use this image as a reference, click here and then click on this particular"
+  },
+  {
+   "start": 632.74,
+   "end": 633.9,
+   "text": "image."
+  },
+  {
+   "start": 633.9,
+   "end": 634.9,
+   "text": "Click on Generate."
+  },
+  {
+   "start": 634.9,
+   "end": 639.18,
+   "text": "You can also generate a couple times so that it's processing simultaneously, giving"
+  },
+  {
+   "start": 639.18,
+   "end": 640.74,
+   "text": "you a lot of options."
+  },
+  {
+   "start": 640.74,
+   "end": 643.78,
+   "text": "But keep in mind, credits are deducted for these."
+  },
+  {
+   "start": 643.78,
+   "end": 646.62,
+   "text": "To check how many free credits you get, whether you get them or not and what"
+  },
+  {
+   "start": 646.62,
+   "end": 649.66,
+   "text": "are the plans, I'll leave them down in the description."
+  },
+  {
+   "start": 649.66,
+   "end": 653.42,
+   "text": "You have a couple options and all of them processed brilliantly."
+  },
+  {
+   "start": 653.42,
+   "end": 654.42,
+   "text": "Let us go with this one."
+  },
+  {
+   "start": 654.42,
+   "end": 658.3,
+   "text": "You can just drag it and drop it to the board and as you can see this is"
+  },
+  {
+   "start": 658.3,
+   "end": 660.9,
+   "text": "wonderful, wonderful resolution."
+  },
+  {
+   "start": 660.9,
+   "end": 663.94,
+   "text": "You can download it by clicking on the Download button."
+  },
+  {
+   "start": 663.98,
+   "end": 664.98,
+   "text": "Click on Download."
+  },
+  {
+   "start": 664.98,
+   "end": 668.42,
+   "text": "Now back inside a Photoshop or any photo editing application, you can open your"
+  },
+  {
+   "start": 668.42,
+   "end": 669.78,
+   "text": "original photo."
+  },
+  {
+   "start": 669.78,
+   "end": 674.58,
+   "text": "On top of that, just place the one that we created, like so."
+  },
+  {
+   "start": 674.58,
+   "end": 678.18,
+   "text": "Hit Enter or Return and to simply align it, with the background layer selected,"
+  },
+  {
+   "start": 678.18,
+   "end": 680.82,
+   "text": "press Ctrl or Command J to make a copy."
+  },
+  {
+   "start": 680.82,
+   "end": 684.38,
+   "text": "Let's rasterize this layer by right clicking on it and choosing Rasterize"
+  },
+  {
+   "start": 684.38,
+   "end": 685.38,
+   "text": "Layer."
+  },
+  {
+   "start": 685.38,
+   "end": 687.1,
+   "text": "And then select both of these layers."
+  },
+  {
+   "start": 687.1,
+   "end": 691.7,
+   "text": "Hold the Ctrl or Command, select the second one as well, go to Edit,"
+  },
+  {
+   "start": 691.7,
+   "end": 693.62,
+   "text": "Auto, Align, Layers."
+  },
+  {
+   "start": 693.62,
+   "end": 695.98,
+   "text": "If it doesn't align, you can also do it manually."
+  },
+  {
+   "start": 695.98,
+   "end": 698.02,
+   "text": "Auto is fine and hit OK."
+  },
+  {
+   "start": 698.02,
+   "end": 699.7,
+   "text": "And it automatically aligns."
+  },
+  {
+   "start": 699.7,
+   "end": 702.58,
+   "text": "Create a mask by holding the Alt key or the Option key and clicking on the"
+  },
+  {
+   "start": 702.58,
+   "end": 705.14,
+   "text": "Mask button to create a negative mask."
+  },
+  {
+   "start": 705.14,
+   "end": 709.94,
+   "text": "With the brush, with a white soft brush, just reveal it in the areas where"
+  },
+  {
+   "start": 709.94,
+   "end": 711.94,
+   "text": "you need it."
+  },
+  {
+   "start": 711.94,
+   "end": 712.94,
+   "text": "That's it."
+  },
+  {
+   "start": 712.94,
+   "end": 713.94,
+   "text": "Done."
+  },
+  {
+   "start": 713.94,
+   "end": 714.94,
+   "text": "Before."
+  },
+  {
+   "start": 714.94,
+   "end": 715.94,
+   "text": "After."
+  },
+  {
+   "start": 715.94,
+   "end": 718.18,
+   "text": "A couple years ago, I made a video about removing glare from glasses."
+  },
+  {
+   "start": 718.18,
+   "end": 721.5,
+   "text": "It had those complex glares and we had to go in and do high end"
+  },
+  {
+   "start": 721.58,
+   "end": 723.3,
+   "text": "hudging and burning inside of that."
+  },
+  {
+   "start": 723.3,
+   "end": 726.74,
+   "text": "And even then, we had to use some kind of cloning or healing to fix all the"
+  },
+  {
+   "start": 726.74,
+   "end": 730.06,
+   "text": "edges. And then on top of that, we had to color match."
+  },
+  {
+   "start": 730.06,
+   "end": 733.18,
+   "text": "That would usually take 30 minutes to an hour, depending upon the"
+  },
+  {
+   "start": 733.18,
+   "end": 736.14,
+   "text": "complexity and see how far we have come."
+  },
+  {
+   "start": 736.14,
+   "end": 737.54,
+   "text": "But notice what happened."
+  },
+  {
+   "start": 737.54,
+   "end": 742.06,
+   "text": "Those techniques, those concepts, those ideas are still very important"
+  },
+  {
+   "start": 742.06,
+   "end": 745.58,
+   "text": "because when AI fails and it isn't able to do what we want it to do,"
+  },
+  {
+   "start": 745.58,
+   "end": 747.78,
+   "text": "these are the techniques that's going to save your rear."
+  },
+  {
+   "start": 747.78,
+   "end": 750.78,
+   "text": "And that's what makes you a professional and separates you from"
+  },
+  {
+   "start": 750.78,
+   "end": 752.5,
+   "text": "people who just know AI."
+  },
+  {
+   "start": 752.5,
+   "end": 755.1,
+   "text": "I hope you enjoyed this video and if you did, make sure to give us a like"
+  },
+  {
+   "start": 755.1,
+   "end": 757.78,
+   "text": "and also don't forget to subscribe and not just subscribe."
+  },
+  {
+   "start": 757.78,
+   "end": 759.66,
+   "text": "Ring the bell so that you, my friend, don't miss any other"
+  },
+  {
+   "start": 759.66,
+   "end": 761.58,
+   "text": "feature tips, tricks or tutorials."
+  },
+  {
+   "start": 761.58,
+   "end": 762.5,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 762.5,
+   "end": 763.34,
+   "text": "I'll see you in my next one."
+  },
+  {
+   "start": 763.34,
+   "end": 765.58,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:05:43.797236+00:00",
+ "seconds": 34.0
+}

@@ -1,0 +1,4103 @@
+{
+ "id": "hJSFBUXgQog",
+ "title": "The Inverse Curve Technique for Painting Light! - Photoshop Tutorial",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=hJSFBUXgQog",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 1890.9,
+ "chars": 32695,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 1.72,
+   "text": "Hi there, this is Anvesh from Piximperfect."
+  },
+  {
+   "start": 1.72,
+   "end": 4.86,
+   "text": "And today I'm gonna share with you one of the most realistic ways to blend the elements"
+  },
+  {
+   "start": 4.86,
+   "end": 9.04,
+   "text": "of a composite using a special technique called the Inverse Curve technique."
+  },
+  {
+   "start": 9.04,
+   "end": 14.04,
+   "text": "Now, using this technique, we will be creating realistic highlights and shadows and that too, colorful."
+  },
+  {
+   "start": 14.04,
+   "end": 16.48,
+   "text": "So without any further ado, let's get started."
+  },
+  {
+   "start": 16.48,
+   "end": 25.5,
+   "text": "Back in the magical world of Photoshop and here we have a background and on top of that,"
+  },
+  {
+   "start": 25.5,
+   "end": 26.62,
+   "text": "we have a subject."
+  },
+  {
+   "start": 26.62,
+   "end": 28.86,
+   "text": "I've already masked it out to save time."
+  },
+  {
+   "start": 28.86,
+   "end": 33.62,
+   "text": "Now, if you wanna download the starting PSD just like this, check the links in the description."
+  },
+  {
+   "start": 33.66,
+   "end": 37.5,
+   "text": "Now, the first thing we would do right here is to match the brightness, but right now the colors"
+  },
+  {
+   "start": 37.5,
+   "end": 38.5,
+   "text": "might be distracting us."
+  },
+  {
+   "start": 38.5,
+   "end": 40.06,
+   "text": "So how do we take the colors away?"
+  },
+  {
+   "start": 40.06,
+   "end": 42.34,
+   "text": "By creating a luminosity check layer."
+  },
+  {
+   "start": 42.34,
+   "end": 46.78,
+   "text": "So click on the Adjustment Layer icon and then choose Solid Color and choose any shade of gray,"
+  },
+  {
+   "start": 46.78,
+   "end": 48.22,
+   "text": "white or black will do too."
+  },
+  {
+   "start": 48.22,
+   "end": 51.46,
+   "text": "Hit OK and then change the Blend Mode to Color."
+  },
+  {
+   "start": 51.46,
+   "end": 52.9,
+   "text": "That will take away all the colors."
+  },
+  {
+   "start": 52.9,
+   "end": 56.62,
+   "text": "Now, all you need to do now is to create a Curves Adjustment Layer above the subject"
+  },
+  {
+   "start": 56.62,
+   "end": 59.74,
+   "text": "layer. So with the subject layer selected, click on the Adjustment Layer icon and"
+  },
+  {
+   "start": 59.74,
+   "end": 61.14,
+   "text": "then choose Curves."
+  },
+  {
+   "start": 61.18,
+   "end": 64.26,
+   "text": "Now, inside of Curves, all we gotta do right here is to darken it."
+  },
+  {
+   "start": 64.26,
+   "end": 67.78,
+   "text": "Now, if we do anything right here, it affects the entire thing."
+  },
+  {
+   "start": 67.78,
+   "end": 71.18,
+   "text": "We want it to be limited just to the subject and how do we do that?"
+  },
+  {
+   "start": 71.18,
+   "end": 73.02,
+   "text": "By creating a Clipping Mask."
+  },
+  {
+   "start": 73.02,
+   "end": 75.62,
+   "text": "By simply clicking on this button right there."
+  },
+  {
+   "start": 75.62,
+   "end": 76.98,
+   "text": "This limits the curve."
+  },
+  {
+   "start": 76.98,
+   "end": 81.22,
+   "text": "As you can see right there, this arrow, it limits the curve just to the subject."
+  },
+  {
+   "start": 81.22,
+   "end": 84.14,
+   "text": "Now, let's darken the subject accordingly."
+  },
+  {
+   "start": 84.14,
+   "end": 85.26,
+   "text": "This seems to be about right."
+  },
+  {
+   "start": 85.26,
+   "end": 88.34,
+   "text": "We can always get back to that, edit this later as well."
+  },
+  {
+   "start": 88.34,
+   "end": 88.98,
+   "text": "Let's take a look."
+  },
+  {
+   "start": 88.98,
+   "end": 89.66,
+   "text": "Here's the before."
+  },
+  {
+   "start": 89.66,
+   "end": 90.5,
+   "text": "Here's the after."
+  },
+  {
+   "start": 90.54,
+   "end": 91.82,
+   "text": "Seems to be matching more."
+  },
+  {
+   "start": 91.82,
+   "end": 94.38,
+   "text": "Now, you can take away or turn off the luminosity."
+  },
+  {
+   "start": 94.38,
+   "end": 94.86,
+   "text": "Check layer."
+  },
+  {
+   "start": 94.86,
+   "end": 97.86,
+   "text": "By the way, if you want to learn more about check layers, do watch this video."
+  },
+  {
+   "start": 97.86,
+   "end": 99.82,
+   "text": "Now, it's time for us to begin matching the colors."
+  },
+  {
+   "start": 99.82,
+   "end": 103.18,
+   "text": "But before we go ahead and start painting the highlights and the shadows"
+  },
+  {
+   "start": 103.18,
+   "end": 107.06,
+   "text": "and all of that fancy stuff, we need to create a nice base."
+  },
+  {
+   "start": 107.06,
+   "end": 108.38,
+   "text": "And what is a nice base?"
+  },
+  {
+   "start": 108.38,
+   "end": 110.74,
+   "text": "Something that would go with the background a little more."
+  },
+  {
+   "start": 110.74,
+   "end": 113.42,
+   "text": "So first of all, let's create a Gradient Map."
+  },
+  {
+   "start": 113.42,
+   "end": 116.9,
+   "text": "So click on the Adjustment Layer icon again and then choose Gradient Map."
+  },
+  {
+   "start": 116.9,
+   "end": 119.22,
+   "text": "This will help us match the atmosphere."
+  },
+  {
+   "start": 119.26,
+   "end": 120.66,
+   "text": "Now, what does the Gradient Map do?"
+  },
+  {
+   "start": 120.66,
+   "end": 124.9,
+   "text": "It maps the colors of highlights, midtones and shadows according to the colors we choose."
+  },
+  {
+   "start": 124.9,
+   "end": 127.98,
+   "text": "For example, right now on the right-hand side, we have black."
+  },
+  {
+   "start": 127.98,
+   "end": 131.62,
+   "text": "So the highlights are painted in black and the shadows are painted in white"
+  },
+  {
+   "start": 131.62,
+   "end": 133.94,
+   "text": "because on the left-hand side, we have white."
+  },
+  {
+   "start": 133.94,
+   "end": 134.94,
+   "text": "So single click on it."
+  },
+  {
+   "start": 134.94,
+   "end": 136.46,
+   "text": "You can choose whatever color you want."
+  },
+  {
+   "start": 136.46,
+   "end": 139.34,
+   "text": "So for the highlights right now, we have green and the shadows we have red."
+  },
+  {
+   "start": 139.34,
+   "end": 141.9,
+   "text": "And in between, we can add as many colors as we want."
+  },
+  {
+   "start": 141.9,
+   "end": 144.78,
+   "text": "But we want the colors on the subject to be similar to the background."
+  },
+  {
+   "start": 144.78,
+   "end": 146.1,
+   "text": "So we will go that route."
+  },
+  {
+   "start": 146.1,
+   "end": 147.62,
+   "text": "So for now, let's hit Cancel."
+  },
+  {
+   "start": 147.62,
+   "end": 149.1,
+   "text": "And first of all, let's Limit."
+  },
+  {
+   "start": 149.14,
+   "end": 152.58,
+   "text": "The Gradient Map just to the subject by holding the Alt key or the Option key"
+  },
+  {
+   "start": 152.58,
+   "end": 156.42,
+   "text": "and clicking on the line between these two lists that also creates a clipping mask"
+  },
+  {
+   "start": 156.42,
+   "end": 159.34,
+   "text": "and clicking on this button also does the same thing."
+  },
+  {
+   "start": 159.34,
+   "end": 164.5,
+   "text": "So again, we need to select the icon, the symbol of the Gradient Map, not the mask."
+  },
+  {
+   "start": 164.5,
+   "end": 167.5,
+   "text": "Otherwise, it will only sample colors from the mask, which is white."
+  },
+  {
+   "start": 167.5,
+   "end": 169.5,
+   "text": "So select the symbol right there."
+  },
+  {
+   "start": 169.5,
+   "end": 170.86,
+   "text": "Single click on the gradient."
+  },
+  {
+   "start": 170.86,
+   "end": 174.98,
+   "text": "And then just make sure Sample All Layers or Current and Below is selected."
+  },
+  {
+   "start": 174.98,
+   "end": 178.26,
+   "text": "Also, you want sample size to be 3x3 or 5x5"
+  },
+  {
+   "start": 178.3,
+   "end": 182.7,
+   "text": "so that it samples an average color of that area, not a particular pixel."
+  },
+  {
+   "start": 182.7,
+   "end": 185.74,
+   "text": "So let's zoom in and sample a highlight color for the highlights."
+  },
+  {
+   "start": 185.74,
+   "end": 188.1,
+   "text": "So click on the rightmost slider."
+  },
+  {
+   "start": 188.1,
+   "end": 191.38,
+   "text": "Click on the color and you can sample whatever color you want from the background."
+  },
+  {
+   "start": 191.38,
+   "end": 193.78,
+   "text": "So I'm going to choose one of the highlights from the light"
+  },
+  {
+   "start": 193.78,
+   "end": 196.02,
+   "text": "because that's the source of light in the background."
+  },
+  {
+   "start": 196.02,
+   "end": 197.14,
+   "text": "So let's click on that."
+  },
+  {
+   "start": 197.14,
+   "end": 197.82,
+   "text": "That's pretty good."
+  },
+  {
+   "start": 197.82,
+   "end": 200.1,
+   "text": "You can add a little bit of saturation to it."
+  },
+  {
+   "start": 200.1,
+   "end": 202.46,
+   "text": "Hit OK for the darkest spot."
+  },
+  {
+   "start": 202.46,
+   "end": 203.74,
+   "text": "Single click on it."
+  },
+  {
+   "start": 203.74,
+   "end": 207.94,
+   "text": "Single click on the color and let's sample the darkest color in the background."
+  },
+  {
+   "start": 207.94,
+   "end": 211.06,
+   "text": "So according to me, let's sample one of these colors very close to black."
+  },
+  {
+   "start": 211.06,
+   "end": 212.1,
+   "text": "Hit OK."
+  },
+  {
+   "start": 212.1,
+   "end": 213.86,
+   "text": "Now we're going to choose a mid tone."
+  },
+  {
+   "start": 213.86,
+   "end": 216.66,
+   "text": "Let's assume that these areas are gray in real life"
+  },
+  {
+   "start": 216.66,
+   "end": 219.18,
+   "text": "and it's just taking the colors of this light."
+  },
+  {
+   "start": 219.18,
+   "end": 223.26,
+   "text": "So we're going to create a point, a slider right here and single click on the color"
+  },
+  {
+   "start": 223.26,
+   "end": 225.66,
+   "text": "and pick on just select one of these colors."
+  },
+  {
+   "start": 225.66,
+   "end": 229.38,
+   "text": "Now keep in mind, the brightness level of this is 53."
+  },
+  {
+   "start": 229.38,
+   "end": 231.1,
+   "text": "Absolutely close to the mid tones."
+  },
+  {
+   "start": 231.1,
+   "end": 231.7,
+   "text": "Hit OK."
+  },
+  {
+   "start": 231.7,
+   "end": 237.22,
+   "text": "But if you want to be absolutely precise, let's you can just set the location to 53 as well."
+  },
+  {
+   "start": 237.22,
+   "end": 239.74,
+   "text": "And by chance we had that location already selected."
+  },
+  {
+   "start": 239.74,
+   "end": 244.58,
+   "text": "If you want a darker shade here as well, so let's click to add one more slider"
+  },
+  {
+   "start": 244.58,
+   "end": 247.42,
+   "text": "and single click on the color and let's choose this."
+  },
+  {
+   "start": 247.42,
+   "end": 249.98,
+   "text": "For this one, the brightness level was 18."
+  },
+  {
+   "start": 249.98,
+   "end": 253.86,
+   "text": "So hit OK and let's choose the location to be 18."
+  },
+  {
+   "start": 253.86,
+   "end": 256.06,
+   "text": "OK, that seems to be about right."
+  },
+  {
+   "start": 256.06,
+   "end": 258.42,
+   "text": "But let's take a look at the subject, how it does."
+  },
+  {
+   "start": 258.42,
+   "end": 261.42,
+   "text": "So it looks fine, but we can make some adjustments here and there."
+  },
+  {
+   "start": 261.42,
+   "end": 264.02,
+   "text": "So let's take the slider a little bit more to the left"
+  },
+  {
+   "start": 264.02,
+   "end": 266.78,
+   "text": "and the middle one a little bit more to the left as well."
+  },
+  {
+   "start": 266.82,
+   "end": 268.94,
+   "text": "Adds a little bit of highlights there as well."
+  },
+  {
+   "start": 268.94,
+   "end": 270.54,
+   "text": "Now it matches very well."
+  },
+  {
+   "start": 270.54,
+   "end": 271.82,
+   "text": "But of course it's all blue."
+  },
+  {
+   "start": 271.82,
+   "end": 274.14,
+   "text": "We don't want to turn it into avatar."
+  },
+  {
+   "start": 274.14,
+   "end": 278.18,
+   "text": "So let's decrease the opacity to about 50%."
+  },
+  {
+   "start": 278.18,
+   "end": 280.38,
+   "text": "See, that forms a nice base."
+  },
+  {
+   "start": 280.38,
+   "end": 283.06,
+   "text": "Now let's add one more Curves Adjustment layer just to, you know,"
+  },
+  {
+   "start": 283.06,
+   "end": 284.46,
+   "text": "blend the image a little bit more."
+  },
+  {
+   "start": 284.46,
+   "end": 288.18,
+   "text": "This is not painting highlights or shadows, just a little bit blending."
+  },
+  {
+   "start": 288.18,
+   "end": 291.1,
+   "text": "So click on the Adjustment layer icon and then choose Curves."
+  },
+  {
+   "start": 291.1,
+   "end": 293.22,
+   "text": "And we want a little bit blues in the highlights."
+  },
+  {
+   "start": 293.22,
+   "end": 295.46,
+   "text": "So we're going to go to the blue channel right over there"
+  },
+  {
+   "start": 295.5,
+   "end": 297.9,
+   "text": "and let's add a little bit of blues in the highlights."
+  },
+  {
+   "start": 297.9,
+   "end": 300.42,
+   "text": "But it's affecting the background as well."
+  },
+  {
+   "start": 300.42,
+   "end": 301.9,
+   "text": "We want it to be affecting the subject."
+  },
+  {
+   "start": 301.9,
+   "end": 303.06,
+   "text": "So click on this button."
+  },
+  {
+   "start": 303.06,
+   "end": 304.42,
+   "text": "Don't forget to clip it."
+  },
+  {
+   "start": 304.42,
+   "end": 308.54,
+   "text": "So let's add a little bit of blues and let's go to the red channel."
+  },
+  {
+   "start": 308.54,
+   "end": 311.9,
+   "text": "Now we want to add a little bit Cyan to the highlights."
+  },
+  {
+   "start": 311.9,
+   "end": 313.74,
+   "text": "Now Cyan is the opposite of red."
+  },
+  {
+   "start": 313.74,
+   "end": 316.54,
+   "text": "So we need to decrease the reds to bring up the Cyan."
+  },
+  {
+   "start": 316.54,
+   "end": 318.9,
+   "text": "So let's decrease the reds a bit."
+  },
+  {
+   "start": 318.9,
+   "end": 320.94,
+   "text": "See, it's getting a little closer."
+  },
+  {
+   "start": 320.94,
+   "end": 323.5,
+   "text": "Now you can play with the green and see what they do."
+  },
+  {
+   "start": 323.54,
+   "end": 326.02,
+   "text": "Let's increase it just a bit and see how it is."
+  },
+  {
+   "start": 326.02,
+   "end": 327.82,
+   "text": "So let's take a look at it before and after."
+  },
+  {
+   "start": 327.82,
+   "end": 329.14,
+   "text": "So here is the before."
+  },
+  {
+   "start": 329.14,
+   "end": 329.86,
+   "text": "Here is the after."
+  },
+  {
+   "start": 329.86,
+   "end": 332.62,
+   "text": "Look how much more it matches before, after."
+  },
+  {
+   "start": 332.62,
+   "end": 334.18,
+   "text": "We're definitely getting closer."
+  },
+  {
+   "start": 334.18,
+   "end": 337.1,
+   "text": "Looking at it now, I feel like we added a little too much Cyan"
+  },
+  {
+   "start": 337.1,
+   "end": 340.1,
+   "text": "and that, my friend, is the advantage of Adjustment Less"
+  },
+  {
+   "start": 340.1,
+   "end": 342.18,
+   "text": "that you can adjust it later."
+  },
+  {
+   "start": 342.18,
+   "end": 345.02,
+   "text": "So double click on the symbol to open up the properties."
+  },
+  {
+   "start": 345.02,
+   "end": 348.5,
+   "text": "So let's go to the red channel and decrease it just a bit."
+  },
+  {
+   "start": 348.5,
+   "end": 352.3,
+   "text": "And let's go to the green channel and just adjust it accordingly."
+  },
+  {
+   "start": 352.3,
+   "end": 354.74,
+   "text": "See what feels good to you just a little bit."
+  },
+  {
+   "start": 354.74,
+   "end": 356.58,
+   "text": "So I'm going to select that and you can also move it"
+  },
+  {
+   "start": 356.58,
+   "end": 359.18,
+   "text": "with the arrow keys to make slight adjustments."
+  },
+  {
+   "start": 359.18,
+   "end": 363.06,
+   "text": "OK, now definitely as with every adjustment and we are humans,"
+  },
+  {
+   "start": 363.06,
+   "end": 365.42,
+   "text": "we tend to go a little bit overboard."
+  },
+  {
+   "start": 365.42,
+   "end": 369.74,
+   "text": "So let's decrease the opacity of this one as well to about 45%."
+  },
+  {
+   "start": 369.74,
+   "end": 371.66,
+   "text": "And that looks a little more natural."
+  },
+  {
+   "start": 371.66,
+   "end": 373.58,
+   "text": "I would highly recommend that you go ahead and take a break,"
+  },
+  {
+   "start": 373.58,
+   "end": 375.86,
+   "text": "maybe drink coffee, tea, whatever you like."
+  },
+  {
+   "start": 375.86,
+   "end": 379.22,
+   "text": "Maybe watch the sunset, watch the sky go out in nature."
+  },
+  {
+   "start": 379.22,
+   "end": 380.82,
+   "text": "Just do something that relaxes you"
+  },
+  {
+   "start": 380.86,
+   "end": 382.38,
+   "text": "and then get back to the image."
+  },
+  {
+   "start": 382.38,
+   "end": 383.98,
+   "text": "You might be able to find some mistake"
+  },
+  {
+   "start": 383.98,
+   "end": 386.14,
+   "text": "that might have been overlooked otherwise."
+  },
+  {
+   "start": 386.14,
+   "end": 388.82,
+   "text": "Now I can see that it should have been a little flatter."
+  },
+  {
+   "start": 388.82,
+   "end": 391.34,
+   "text": "There's a little too much highlights more than required"
+  },
+  {
+   "start": 391.34,
+   "end": 393.06,
+   "text": "which might not give us enough room"
+  },
+  {
+   "start": 393.06,
+   "end": 394.78,
+   "text": "to paint in the highlights manually."
+  },
+  {
+   "start": 394.78,
+   "end": 396.42,
+   "text": "So we'll go to the Gradient Map properties"
+  },
+  {
+   "start": 396.42,
+   "end": 397.86,
+   "text": "by double clicking on the symbol"
+  },
+  {
+   "start": 397.86,
+   "end": 399.34,
+   "text": "and single clicking on the gradient"
+  },
+  {
+   "start": 399.34,
+   "end": 401.82,
+   "text": "and move it a little bit to the right."
+  },
+  {
+   "start": 401.82,
+   "end": 403.54,
+   "text": "See what it does?"
+  },
+  {
+   "start": 403.54,
+   "end": 406.58,
+   "text": "Yes, it makes it a little more flatter."
+  },
+  {
+   "start": 406.58,
+   "end": 408.1,
+   "text": "If we take this to the right,"
+  },
+  {
+   "start": 408.1,
+   "end": 410.58,
+   "text": "that would add too much shadows to it."
+  },
+  {
+   "start": 410.62,
+   "end": 412.54,
+   "text": "That seems to be about right."
+  },
+  {
+   "start": 412.54,
+   "end": 414.62,
+   "text": "Let's take it a little more towards the right."
+  },
+  {
+   "start": 414.62,
+   "end": 415.62,
+   "text": "That's perfect."
+  },
+  {
+   "start": 415.62,
+   "end": 418.42,
+   "text": "Now, here we are, this is much better."
+  },
+  {
+   "start": 418.42,
+   "end": 419.78,
+   "text": "Now it's finally time for us to move on"
+  },
+  {
+   "start": 419.78,
+   "end": 421.78,
+   "text": "to the Inverse Curve technique."
+  },
+  {
+   "start": 421.78,
+   "end": 422.94,
+   "text": "Now to be able to understand"
+  },
+  {
+   "start": 422.94,
+   "end": 424.78,
+   "text": "how the Inverse Curve technique works,"
+  },
+  {
+   "start": 424.78,
+   "end": 427.86,
+   "text": "we need to create a brand new Curves Adjustment Layer."
+  },
+  {
+   "start": 427.86,
+   "end": 430.58,
+   "text": "So select the top most lip, not the luminosity check."
+  },
+  {
+   "start": 430.58,
+   "end": 431.86,
+   "text": "Let's delete it."
+  },
+  {
+   "start": 431.86,
+   "end": 433.06,
+   "text": "Let's not confuse things."
+  },
+  {
+   "start": 433.06,
+   "end": 434.42,
+   "text": "So click on the Adjustment Layer icon"
+  },
+  {
+   "start": 434.42,
+   "end": 435.94,
+   "text": "and then choose Curves."
+  },
+  {
+   "start": 435.94,
+   "end": 437.66,
+   "text": "All right, and this time,"
+  },
+  {
+   "start": 437.66,
+   "end": 440.02,
+   "text": "instead of brightening the highlights,"
+  },
+  {
+   "start": 440.02,
+   "end": 442.46,
+   "text": "this is how we usually brighten the highlights, right?"
+  },
+  {
+   "start": 442.46,
+   "end": 444.22,
+   "text": "So we click a point on the right-hand side"
+  },
+  {
+   "start": 444.22,
+   "end": 445.06,
+   "text": "and we take it up"
+  },
+  {
+   "start": 445.06,
+   "end": 449.62,
+   "text": "or we take the rightmost point a little bit to the left."
+  },
+  {
+   "start": 449.62,
+   "end": 451.46,
+   "text": "This just brightens the highlights."
+  },
+  {
+   "start": 451.46,
+   "end": 452.3,
+   "text": "That's what we do."
+  },
+  {
+   "start": 452.3,
+   "end": 454.42,
+   "text": "Some other times when we want to brighten something,"
+  },
+  {
+   "start": 454.42,
+   "end": 457.62,
+   "text": "we create a point in the middle and then take it up."
+  },
+  {
+   "start": 457.62,
+   "end": 459.18,
+   "text": "Sometimes, very rarely,"
+  },
+  {
+   "start": 459.18,
+   "end": 460.98,
+   "text": "when we want to brighten the shadows,"
+  },
+  {
+   "start": 460.98,
+   "end": 462.5,
+   "text": "we create a point on the left-hand side"
+  },
+  {
+   "start": 462.5,
+   "end": 463.46,
+   "text": "and then take it up"
+  },
+  {
+   "start": 463.46,
+   "end": 465.22,
+   "text": "and probably create a point on the right"
+  },
+  {
+   "start": 465.22,
+   "end": 468.38,
+   "text": "and bring it down to not brighten the highlights."
+  },
+  {
+   "start": 468.38,
+   "end": 471.34,
+   "text": "But what if I told you that in this example,"
+  },
+  {
+   "start": 471.34,
+   "end": 473.18,
+   "text": "we're gonna take the leftmost point"
+  },
+  {
+   "start": 473.18,
+   "end": 475.78,
+   "text": "and take it up to paint in the highlights?"
+  },
+  {
+   "start": 475.78,
+   "end": 477.74,
+   "text": "That would be some interesting stuff, isn't it?"
+  },
+  {
+   "start": 477.74,
+   "end": 478.58,
+   "text": "Why would we do that?"
+  },
+  {
+   "start": 478.58,
+   "end": 481.22,
+   "text": "You might ask, well, for extreme composites,"
+  },
+  {
+   "start": 481.22,
+   "end": 484.14,
+   "text": "this is important because this gives you absolute freedom."
+  },
+  {
+   "start": 484.14,
+   "end": 486.06,
+   "text": "Let's say we created a point"
+  },
+  {
+   "start": 486.06,
+   "end": 488.42,
+   "text": "even a little bit on the left, right?"
+  },
+  {
+   "start": 488.42,
+   "end": 491.06,
+   "text": "And then took down the highlights, right?"
+  },
+  {
+   "start": 491.06,
+   "end": 492.86,
+   "text": "And we want to brighten this area."
+  },
+  {
+   "start": 492.86,
+   "end": 494.78,
+   "text": "So first of all, select the mask of the curves,"
+  },
+  {
+   "start": 494.78,
+   "end": 496.06,
+   "text": "press Ctrl or Command-I."
+  },
+  {
+   "start": 496.06,
+   "end": 497.66,
+   "text": "Also, we want to limit the curves"
+  },
+  {
+   "start": 497.7,
+   "end": 499.22,
+   "text": "just to the subject."
+  },
+  {
+   "start": 499.22,
+   "end": 500.94,
+   "text": "So we will click on this button."
+  },
+  {
+   "start": 500.94,
+   "end": 503.1,
+   "text": "It will create a clipping mask."
+  },
+  {
+   "start": 503.1,
+   "end": 506.1,
+   "text": "Take the brush and select white as the foreground color."
+  },
+  {
+   "start": 506.1,
+   "end": 508.46,
+   "text": "Make sure Flow and Opacity at 100."
+  },
+  {
+   "start": 508.46,
+   "end": 510.1,
+   "text": "Let's decrease the brush size"
+  },
+  {
+   "start": 510.1,
+   "end": 513.34,
+   "text": "and no matter how much you paint right here with white,"
+  },
+  {
+   "start": 513.34,
+   "end": 517.22,
+   "text": "it just won't be brightened enough, right?"
+  },
+  {
+   "start": 517.22,
+   "end": 520.3,
+   "text": "So even here in the absolute dark areas,"
+  },
+  {
+   "start": 520.3,
+   "end": 521.94,
+   "text": "no matter how much you paint,"
+  },
+  {
+   "start": 521.94,
+   "end": 524.74,
+   "text": "it just won't brighten much, right?"
+  },
+  {
+   "start": 524.74,
+   "end": 526.5,
+   "text": "This doesn't give you absolute freedom."
+  },
+  {
+   "start": 526.5,
+   "end": 528.34,
+   "text": "However, if you do it the other way,"
+  },
+  {
+   "start": 528.34,
+   "end": 532.3,
+   "text": "if you take the extreme left point up,"
+  },
+  {
+   "start": 532.3,
+   "end": 535.66,
+   "text": "look, even those areas are being brightened."
+  },
+  {
+   "start": 535.66,
+   "end": 538.18,
+   "text": "Now it does come with its own problems"
+  },
+  {
+   "start": 538.18,
+   "end": 540.1,
+   "text": "because every area is being brightened."
+  },
+  {
+   "start": 540.1,
+   "end": 543.7,
+   "text": "You have to be extra careful while painting the highlights."
+  },
+  {
+   "start": 543.7,
+   "end": 545.58,
+   "text": "So let's move on to painting the highlights."
+  },
+  {
+   "start": 545.58,
+   "end": 547.26,
+   "text": "We're gonna create a brand new curves"
+  },
+  {
+   "start": 547.26,
+   "end": 548.42,
+   "text": "just to not confuse you."
+  },
+  {
+   "start": 548.42,
+   "end": 550.7,
+   "text": "So first we will click on the Adjustment icon"
+  },
+  {
+   "start": 550.7,
+   "end": 552.42,
+   "text": "and then choose Curves."
+  },
+  {
+   "start": 552.42,
+   "end": 553.9,
+   "text": "We're gonna name this Highlights."
+  },
+  {
+   "start": 553.94,
+   "end": 557.7,
+   "text": "So double click on the text and let's name this."
+  },
+  {
+   "start": 557.7,
+   "end": 559.22,
+   "text": "We also wanna limit it to the subject."
+  },
+  {
+   "start": 559.22,
+   "end": 560.58,
+   "text": "So click on this button right there."
+  },
+  {
+   "start": 560.58,
+   "end": 564.98,
+   "text": "Now take the leftmost point up, just brighten stuff,"
+  },
+  {
+   "start": 564.98,
+   "end": 566.3,
+   "text": "just like this."
+  },
+  {
+   "start": 566.3,
+   "end": 568.54,
+   "text": "But we not only wanna brighten it,"
+  },
+  {
+   "start": 568.54,
+   "end": 570.62,
+   "text": "we also wanna create a colorful highlight."
+  },
+  {
+   "start": 570.62,
+   "end": 572.22,
+   "text": "How do we do that again?"
+  },
+  {
+   "start": 572.22,
+   "end": 573.38,
+   "text": "Channels, my friend."
+  },
+  {
+   "start": 573.38,
+   "end": 576.02,
+   "text": "So let's first of all go to the blue channel"
+  },
+  {
+   "start": 576.02,
+   "end": 578.5,
+   "text": "because we wanna match it with that of the background."
+  },
+  {
+   "start": 578.5,
+   "end": 580.5,
+   "text": "We wanna match it with the source slide."
+  },
+  {
+   "start": 580.5,
+   "end": 582.38,
+   "text": "So let's take up blues."
+  },
+  {
+   "start": 582.38,
+   "end": 585.54,
+   "text": "Again, we are not adding blues in the highlights."
+  },
+  {
+   "start": 585.54,
+   "end": 586.94,
+   "text": "We are just doing the opposite of it."
+  },
+  {
+   "start": 586.94,
+   "end": 589.62,
+   "text": "And that's why it's called the inverse curve."
+  },
+  {
+   "start": 589.62,
+   "end": 592.46,
+   "text": "So let's take it up right there."
+  },
+  {
+   "start": 592.46,
+   "end": 594.64,
+   "text": "We can always adjust this later."
+  },
+  {
+   "start": 594.64,
+   "end": 596.3,
+   "text": "Let's go to the red channel now."
+  },
+  {
+   "start": 596.3,
+   "end": 598.2,
+   "text": "We also wanna add a little cyan to it."
+  },
+  {
+   "start": 598.2,
+   "end": 599.74,
+   "text": "Bring up a little cyan."
+  },
+  {
+   "start": 599.74,
+   "end": 603.4,
+   "text": "So we will decrease the reds like this."
+  },
+  {
+   "start": 603.4,
+   "end": 605.14,
+   "text": "That seems to be okay."
+  },
+  {
+   "start": 605.14,
+   "end": 606.3,
+   "text": "Also we can play with the green,"
+  },
+  {
+   "start": 606.3,
+   "end": 608.5,
+   "text": "but in this case I don't feel like adding"
+  },
+  {
+   "start": 608.5,
+   "end": 610.18,
+   "text": "or playing with the green in a little bit."
+  },
+  {
+   "start": 610.18,
+   "end": 613.54,
+   "text": "This seems to be a very right formula for a great highlight."
+  },
+  {
+   "start": 613.54,
+   "end": 615.5,
+   "text": "Now keep in mind, you can start painting the highlight"
+  },
+  {
+   "start": 615.5,
+   "end": 618.14,
+   "text": "right now and anytime you wanna just adjust the colors,"
+  },
+  {
+   "start": 618.14,
+   "end": 619.72,
+   "text": "you can always just go to the channels"
+  },
+  {
+   "start": 619.72,
+   "end": 623.54,
+   "text": "and then just adjust it to your desire."
+  },
+  {
+   "start": 623.54,
+   "end": 624.38,
+   "text": "There you go."
+  },
+  {
+   "start": 624.38,
+   "end": 625.62,
+   "text": "Now before we start painting the highlights,"
+  },
+  {
+   "start": 625.62,
+   "end": 627.14,
+   "text": "there's one more thing we need to do."
+  },
+  {
+   "start": 627.14,
+   "end": 628.58,
+   "text": "We need to understand the fact"
+  },
+  {
+   "start": 628.58,
+   "end": 631.5,
+   "text": "that not all of us are Leonardo da Vinci's, right?"
+  },
+  {
+   "start": 631.5,
+   "end": 632.94,
+   "text": "We also need to understand the fact"
+  },
+  {
+   "start": 632.94,
+   "end": 634.68,
+   "text": "that we don't have the whole lifetime"
+  },
+  {
+   "start": 634.68,
+   "end": 636.22,
+   "text": "to just paint the highlights."
+  },
+  {
+   "start": 636.22,
+   "end": 638.5,
+   "text": "We need something to help us with it."
+  },
+  {
+   "start": 638.5,
+   "end": 639.74,
+   "text": "And that is the blendif."
+  },
+  {
+   "start": 639.78,
+   "end": 641.98,
+   "text": "Blendif will help us take away the highlights"
+  },
+  {
+   "start": 641.98,
+   "end": 645.7,
+   "text": "from extremely dark areas, like absolutely dark areas."
+  },
+  {
+   "start": 645.7,
+   "end": 648.1,
+   "text": "So double click on the right and side of the left."
+  },
+  {
+   "start": 648.1,
+   "end": 651.18,
+   "text": "Just take it away from extremely dark areas"
+  },
+  {
+   "start": 651.18,
+   "end": 653.18,
+   "text": "by taking the slider of the underlying layer"
+  },
+  {
+   "start": 653.18,
+   "end": 655.22,
+   "text": "from left to right, but this is harsh, right?"
+  },
+  {
+   "start": 655.22,
+   "end": 656.66,
+   "text": "So hold the Alt key or the Option key,"
+  },
+  {
+   "start": 656.66,
+   "end": 659.06,
+   "text": "click on the slider to break it apart"
+  },
+  {
+   "start": 659.06,
+   "end": 660.94,
+   "text": "and take it apart."
+  },
+  {
+   "start": 661.94,
+   "end": 664.66,
+   "text": "For me, about 040 looks good."
+  },
+  {
+   "start": 664.66,
+   "end": 666.82,
+   "text": "If you're satisfied, just hit okay."
+  },
+  {
+   "start": 666.82,
+   "end": 668.5,
+   "text": "You can now start painting the highlights."
+  },
+  {
+   "start": 668.54,
+   "end": 671.22,
+   "text": "First of all, select the mask, press Ctrl or Command I."
+  },
+  {
+   "start": 671.22,
+   "end": 673.58,
+   "text": "Choose the brush, make sure you have chosen"
+  },
+  {
+   "start": 673.58,
+   "end": 675.54,
+   "text": "the soft around brush."
+  },
+  {
+   "start": 675.54,
+   "end": 677.58,
+   "text": "Keep the flow lower, five, four,"
+  },
+  {
+   "start": 677.58,
+   "end": 679.38,
+   "text": "something like that would be great."
+  },
+  {
+   "start": 679.38,
+   "end": 681.9,
+   "text": "I'm gonna keep it at four and then just zoom in"
+  },
+  {
+   "start": 681.9,
+   "end": 683.74,
+   "text": "and start painting the highlights."
+  },
+  {
+   "start": 683.74,
+   "end": 685.3,
+   "text": "Now where to paint you might ask?"
+  },
+  {
+   "start": 685.3,
+   "end": 687.46,
+   "text": "Great question and the most important question"
+  },
+  {
+   "start": 687.46,
+   "end": 688.78,
+   "text": "of this lesson."
+  },
+  {
+   "start": 688.78,
+   "end": 693.78,
+   "text": "We need to paint on every area that faces the light,"
+  },
+  {
+   "start": 694.14,
+   "end": 695.26,
+   "text": "not just the edges."
+  },
+  {
+   "start": 695.26,
+   "end": 697.34,
+   "text": "So it's not like we're just painting right here"
+  },
+  {
+   "start": 697.34,
+   "end": 698.22,
+   "text": "and adding highlights."
+  },
+  {
+   "start": 698.22,
+   "end": 700.62,
+   "text": "That looks good, that looks realistic."
+  },
+  {
+   "start": 700.62,
+   "end": 703.26,
+   "text": "However, we also need to paint on areas"
+  },
+  {
+   "start": 703.26,
+   "end": 705.98,
+   "text": "that face the light, even if it is not on the edge."
+  },
+  {
+   "start": 705.98,
+   "end": 708.02,
+   "text": "For example, have a look at this area,"
+  },
+  {
+   "start": 708.02,
+   "end": 709.26,
+   "text": "this hand right there."
+  },
+  {
+   "start": 709.26,
+   "end": 711.26,
+   "text": "It also faces the light."
+  },
+  {
+   "start": 711.26,
+   "end": 712.1,
+   "text": "There's a light right here."
+  },
+  {
+   "start": 712.1,
+   "end": 713.94,
+   "text": "There might be a light, street light"
+  },
+  {
+   "start": 713.94,
+   "end": 715.58,
+   "text": "that is out of the frame of the camera."
+  },
+  {
+   "start": 715.58,
+   "end": 718.38,
+   "text": "So we need to paint a little bit right here as well."
+  },
+  {
+   "start": 718.38,
+   "end": 720.22,
+   "text": "So you understand right now where we need to paint?"
+  },
+  {
+   "start": 720.22,
+   "end": 721.86,
+   "text": "Similarly, have a look at this area."
+  },
+  {
+   "start": 721.86,
+   "end": 724.26,
+   "text": "This area faces the light and might face"
+  },
+  {
+   "start": 724.26,
+   "end": 726.46,
+   "text": "a light that is ahead forward."
+  },
+  {
+   "start": 726.5,
+   "end": 728.38,
+   "text": "So I'm gonna paint a little bit right here."
+  },
+  {
+   "start": 729.58,
+   "end": 732.7,
+   "text": "I'm painting very fast along a little bit on the edge,"
+  },
+  {
+   "start": 732.7,
+   "end": 734.62,
+   "text": "maybe a little bit on the edge right there."
+  },
+  {
+   "start": 734.62,
+   "end": 736.38,
+   "text": "This is a fast work."
+  },
+  {
+   "start": 736.38,
+   "end": 738.46,
+   "text": "We have to take our time to do it slowly."
+  },
+  {
+   "start": 738.46,
+   "end": 739.7,
+   "text": "Have a look."
+  },
+  {
+   "start": 739.7,
+   "end": 740.94,
+   "text": "Just a little bit of this,"
+  },
+  {
+   "start": 740.94,
+   "end": 743.38,
+   "text": "add a little bit glare around the edges,"
+  },
+  {
+   "start": 743.38,
+   "end": 744.54,
+   "text": "right here as well."
+  },
+  {
+   "start": 744.54,
+   "end": 747.22,
+   "text": "Just a little glare here as well,"
+  },
+  {
+   "start": 749.38,
+   "end": 750.78,
+   "text": "around the face."
+  },
+  {
+   "start": 750.78,
+   "end": 753.1,
+   "text": "This really adds a lot."
+  },
+  {
+   "start": 753.1,
+   "end": 755.1,
+   "text": "Let's take a look at the before and after."
+  },
+  {
+   "start": 755.1,
+   "end": 756.18,
+   "text": "Just doing this."
+  },
+  {
+   "start": 756.22,
+   "end": 757.3,
+   "text": "Five seconds of this."
+  },
+  {
+   "start": 757.3,
+   "end": 758.94,
+   "text": "Here's the before, here's the after."
+  },
+  {
+   "start": 758.94,
+   "end": 760.74,
+   "text": "Just look at the difference."
+  },
+  {
+   "start": 760.74,
+   "end": 761.66,
+   "text": "Now we are gonna speed it up,"
+  },
+  {
+   "start": 761.66,
+   "end": 763.38,
+   "text": "otherwise it would be absolutely boring."
+  },
+  {
+   "start": 763.38,
+   "end": 764.7,
+   "text": "We'll talk about shadows later."
+  },
+  {
+   "start": 764.7,
+   "end": 766.1,
+   "text": "Just keep in mind,"
+  },
+  {
+   "start": 766.1,
+   "end": 767.7,
+   "text": "while you are painting the highlights,"
+  },
+  {
+   "start": 767.7,
+   "end": 769.38,
+   "text": "for example, right here,"
+  },
+  {
+   "start": 769.38,
+   "end": 771.22,
+   "text": "keep in mind the folds."
+  },
+  {
+   "start": 771.22,
+   "end": 775.42,
+   "text": "Just don't paint a straight blob with this brush."
+  },
+  {
+   "start": 775.42,
+   "end": 776.9,
+   "text": "Please don't do something like this."
+  },
+  {
+   "start": 776.9,
+   "end": 778.22,
+   "text": "That would be childish."
+  },
+  {
+   "start": 778.22,
+   "end": 779.34,
+   "text": "Doesn't look right."
+  },
+  {
+   "start": 779.34,
+   "end": 780.62,
+   "text": "Keep in mind the folds."
+  },
+  {
+   "start": 780.62,
+   "end": 783.66,
+   "text": "So according to the folds, you would just brighten."
+  },
+  {
+   "start": 783.66,
+   "end": 785.14,
+   "text": "So there's folds right there."
+  },
+  {
+   "start": 785.18,
+   "end": 786.98,
+   "text": "So you would brighten this way."
+  },
+  {
+   "start": 786.98,
+   "end": 788.86,
+   "text": "And according to the folds,"
+  },
+  {
+   "start": 788.86,
+   "end": 791.1,
+   "text": "just let the brightness flow,"
+  },
+  {
+   "start": 791.1,
+   "end": 793.38,
+   "text": "just as it would in real life."
+  },
+  {
+   "start": 793.38,
+   "end": 794.9,
+   "text": "See how better that one is"
+  },
+  {
+   "start": 794.9,
+   "end": 796.58,
+   "text": "in comparison to previous one."
+  },
+  {
+   "start": 796.58,
+   "end": 798.34,
+   "text": "So keep in mind the folds."
+  },
+  {
+   "start": 798.34,
+   "end": 799.86,
+   "text": "And still, if it doesn't look right,"
+  },
+  {
+   "start": 799.86,
+   "end": 802.22,
+   "text": "you can always double click on the right inside of the layer"
+  },
+  {
+   "start": 802.22,
+   "end": 804.14,
+   "text": "and take it even further"
+  },
+  {
+   "start": 804.14,
+   "end": 806.82,
+   "text": "to help you more with painting the highlights."
+  },
+  {
+   "start": 806.82,
+   "end": 809.9,
+   "text": "You can take it as high as 0.50 in this case."
+  },
+  {
+   "start": 809.9,
+   "end": 813.3,
+   "text": "So we're gonna keep it at 0.50 right there and hit okay."
+  },
+  {
+   "start": 813.3,
+   "end": 823.98,
+   "text": "Now let's start painting the highlights."
+  },
+  {
+   "start": 823.98,
+   "end": 825.94,
+   "text": "I still feel like there's too much blue in the face."
+  },
+  {
+   "start": 825.94,
+   "end": 827.66,
+   "text": "So let's go back to the gradient map"
+  },
+  {
+   "start": 827.66,
+   "end": 830.66,
+   "text": "and decrease its opacity to about 44."
+  },
+  {
+   "start": 830.66,
+   "end": 831.58,
+   "text": "How do you feel about that?"
+  },
+  {
+   "start": 831.58,
+   "end": 832.94,
+   "text": "That looks a lot better."
+  },
+  {
+   "start": 832.94,
+   "end": 835.22,
+   "text": "Now let's get back to painting the highlights."
+  },
+  {
+   "start": 835.22,
+   "end": 882.34,
+   "text": "Select the mask and resume painting."
+  },
+  {
+   "start": 882.34,
+   "end": 883.18,
+   "text": "So there you go."
+  },
+  {
+   "start": 883.18,
+   "end": 884.9,
+   "text": "As you can see, we have finished painting the highlights."
+  },
+  {
+   "start": 884.9,
+   "end": 886.74,
+   "text": "Let's take a look at the before and after."
+  },
+  {
+   "start": 886.74,
+   "end": 890.14,
+   "text": "So this is the before and this is the after."
+  },
+  {
+   "start": 890.14,
+   "end": 891.94,
+   "text": "Isn't that a massive difference?"
+  },
+  {
+   "start": 891.94,
+   "end": 892.86,
+   "text": "Let's do it once again."
+  },
+  {
+   "start": 892.86,
+   "end": 894.06,
+   "text": "Let's zoom in and do it."
+  },
+  {
+   "start": 894.06,
+   "end": 895.3,
+   "text": "Here is the before."
+  },
+  {
+   "start": 895.34,
+   "end": 896.3,
+   "text": "Here is the after."
+  },
+  {
+   "start": 896.3,
+   "end": 897.9,
+   "text": "Now when I look at it, I feel like that"
+  },
+  {
+   "start": 897.9,
+   "end": 899.78,
+   "text": "this should have been a little less brighter,"
+  },
+  {
+   "start": 899.78,
+   "end": 901.14,
+   "text": "maybe even more blues."
+  },
+  {
+   "start": 901.14,
+   "end": 902.86,
+   "text": "So double click on the symbol of the curve"
+  },
+  {
+   "start": 902.86,
+   "end": 906.98,
+   "text": "and just take down the left most point."
+  },
+  {
+   "start": 906.98,
+   "end": 910.74,
+   "text": "See, it makes it a little more bluer and more exciting."
+  },
+  {
+   "start": 910.74,
+   "end": 913.58,
+   "text": "Let's zoom out and do a proper adjustment."
+  },
+  {
+   "start": 913.58,
+   "end": 915.86,
+   "text": "So earlier it was something like this,"
+  },
+  {
+   "start": 915.86,
+   "end": 916.98,
+   "text": "which is good too,"
+  },
+  {
+   "start": 916.98,
+   "end": 919.42,
+   "text": "but if we take it down just slightly,"
+  },
+  {
+   "start": 919.42,
+   "end": 921.58,
+   "text": "it makes it a little more bluer."
+  },
+  {
+   "start": 921.58,
+   "end": 922.9,
+   "text": "You can also adjust the blues now."
+  },
+  {
+   "start": 922.9,
+   "end": 924.86,
+   "text": "So let's go to the blue channel"
+  },
+  {
+   "start": 924.86,
+   "end": 928.42,
+   "text": "and take it up and down and see what changes it makes."
+  },
+  {
+   "start": 928.42,
+   "end": 931.62,
+   "text": "If we take it up, it matches it a little more,"
+  },
+  {
+   "start": 931.62,
+   "end": 933.38,
+   "text": "I feel in my opinion."
+  },
+  {
+   "start": 933.38,
+   "end": 934.34,
+   "text": "Okay, there you go."
+  },
+  {
+   "start": 934.34,
+   "end": 937.1,
+   "text": "Let's take a look right now at the before and after."
+  },
+  {
+   "start": 937.1,
+   "end": 940.58,
+   "text": "So this is the before and this is the after."
+  },
+  {
+   "start": 940.58,
+   "end": 941.9,
+   "text": "Now let's take a short break"
+  },
+  {
+   "start": 941.9,
+   "end": 943.3,
+   "text": "from the inverse curve technique"
+  },
+  {
+   "start": 943.3,
+   "end": 945.26,
+   "text": "and let's add some rim lighting."
+  },
+  {
+   "start": 945.26,
+   "end": 946.34,
+   "text": "So if we zoom in,"
+  },
+  {
+   "start": 946.34,
+   "end": 948.22,
+   "text": "what if we add a little bit of light,"
+  },
+  {
+   "start": 948.22,
+   "end": 949.98,
+   "text": "more light around the edge?"
+  },
+  {
+   "start": 949.98,
+   "end": 952.7,
+   "text": "And this time, we only wanna brighten the highlights."
+  },
+  {
+   "start": 952.7,
+   "end": 954.78,
+   "text": "So we don't have to do the inverse curve thing"
+  },
+  {
+   "start": 954.78,
+   "end": 955.7,
+   "text": "all over again."
+  },
+  {
+   "start": 955.7,
+   "end": 957.1,
+   "text": "Just add one more."
+  },
+  {
+   "start": 957.1,
+   "end": 959.02,
+   "text": "You already might have guessed it."
+  },
+  {
+   "start": 959.02,
+   "end": 961.82,
+   "text": "Curves and this time just create a point in the middle"
+  },
+  {
+   "start": 961.82,
+   "end": 963.14,
+   "text": "and take it up."
+  },
+  {
+   "start": 963.14,
+   "end": 964.9,
+   "text": "Just like this."
+  },
+  {
+   "start": 964.9,
+   "end": 966.74,
+   "text": "If you want, you can go to the blue channel"
+  },
+  {
+   "start": 966.74,
+   "end": 968.34,
+   "text": "and increase the blues as well,"
+  },
+  {
+   "start": 968.34,
+   "end": 969.38,
+   "text": "something like that."
+  },
+  {
+   "start": 969.38,
+   "end": 971.62,
+   "text": "And we only want to add it around the edge"
+  },
+  {
+   "start": 971.62,
+   "end": 972.74,
+   "text": "and that too automatically."
+  },
+  {
+   "start": 972.74,
+   "end": 975.34,
+   "text": "But before that, let's limit it just to the subject."
+  },
+  {
+   "start": 975.34,
+   "end": 976.82,
+   "text": "So hold the Alt key or the Option key"
+  },
+  {
+   "start": 976.82,
+   "end": 978.5,
+   "text": "and click on the line between these two."
+  },
+  {
+   "start": 978.5,
+   "end": 982.22,
+   "text": "Next thing we will do is hold the Control or Command"
+  },
+  {
+   "start": 982.22,
+   "end": 984.82,
+   "text": "and click on the mask of the subject layer."
+  },
+  {
+   "start": 984.82,
+   "end": 986.94,
+   "text": "We just wanna selection of the subject."
+  },
+  {
+   "start": 986.94,
+   "end": 990.26,
+   "text": "Now, we want to contract the selection a little bit."
+  },
+  {
+   "start": 990.26,
+   "end": 991.1,
+   "text": "All right?"
+  },
+  {
+   "start": 991.1,
+   "end": 992.38,
+   "text": "So to contract the selection,"
+  },
+  {
+   "start": 992.38,
+   "end": 995.26,
+   "text": "let's go to Select, Modify and then Contract."
+  },
+  {
+   "start": 995.26,
+   "end": 996.62,
+   "text": "Let's try two pixels."
+  },
+  {
+   "start": 996.62,
+   "end": 998.38,
+   "text": "Let's see what it does."
+  },
+  {
+   "start": 998.38,
+   "end": 1000.9,
+   "text": "So two pixels, contraction, a rim light of this."
+  },
+  {
+   "start": 1000.9,
+   "end": 1002.14,
+   "text": "How would it look?"
+  },
+  {
+   "start": 1002.14,
+   "end": 1003.78,
+   "text": "Maybe we would want more."
+  },
+  {
+   "start": 1003.78,
+   "end": 1007.14,
+   "text": "Let's go to Select, Modify and then Contract"
+  },
+  {
+   "start": 1007.14,
+   "end": 1010.26,
+   "text": "one more time and let's choose one this time."
+  },
+  {
+   "start": 1010.26,
+   "end": 1012.2,
+   "text": "If this doesn't work, we will try some other values."
+  },
+  {
+   "start": 1012.2,
+   "end": 1015.12,
+   "text": "Now, all you gotta do is to fill this with black."
+  },
+  {
+   "start": 1015.12,
+   "end": 1016.24,
+   "text": "So with the mask selected,"
+  },
+  {
+   "start": 1016.24,
+   "end": 1017.8,
+   "text": "make sure that the foreground color is black"
+  },
+  {
+   "start": 1017.8,
+   "end": 1019.8,
+   "text": "and then press Alt Backspace."
+  },
+  {
+   "start": 1019.8,
+   "end": 1022.16,
+   "text": "In a Mac, that would be Option Delete."
+  },
+  {
+   "start": 1022.16,
+   "end": 1023.08,
+   "text": "Now let's take a look."
+  },
+  {
+   "start": 1023.08,
+   "end": 1025.64,
+   "text": "Press Control or Command D to deselect."
+  },
+  {
+   "start": 1025.64,
+   "end": 1027.16,
+   "text": "We have added some rim lighting,"
+  },
+  {
+   "start": 1027.16,
+   "end": 1028.62,
+   "text": "but it's very, very harsh."
+  },
+  {
+   "start": 1028.62,
+   "end": 1030.08,
+   "text": "We need to soften it up a little bit."
+  },
+  {
+   "start": 1030.08,
+   "end": 1032.2,
+   "text": "So select the mask and open up the Mask Properties"
+  },
+  {
+   "start": 1032.2,
+   "end": 1033.92,
+   "text": "by clicking on the Properties button."
+  },
+  {
+   "start": 1033.92,
+   "end": 1035.24,
+   "text": "If you cannot see it, go to Window"
+  },
+  {
+   "start": 1035.24,
+   "end": 1037.08,
+   "text": "and then make sure Properties is checked"
+  },
+  {
+   "start": 1037.08,
+   "end": 1039.56,
+   "text": "and just increase the feather."
+  },
+  {
+   "start": 1039.56,
+   "end": 1041.52,
+   "text": "Have a look at it right now."
+  },
+  {
+   "start": 1041.52,
+   "end": 1043.76,
+   "text": "Let's set it to 2.5."
+  },
+  {
+   "start": 1043.76,
+   "end": 1045.24,
+   "text": "That seems to be a good number."
+  },
+  {
+   "start": 1045.24,
+   "end": 1048.96,
+   "text": "Now let's take a look and the rim lighting looks amazing."
+  },
+  {
+   "start": 1048.96,
+   "end": 1051.8,
+   "text": "Let's add a little more feather, see how that looks."
+  },
+  {
+   "start": 1051.8,
+   "end": 1053.72,
+   "text": "So here's the before, here's the after,"
+  },
+  {
+   "start": 1053.72,
+   "end": 1055.44,
+   "text": "just a little bit of light."
+  },
+  {
+   "start": 1055.44,
+   "end": 1058.2,
+   "text": "I'm gonna stick to 2.5, that looks good"
+  },
+  {
+   "start": 1058.2,
+   "end": 1060.94,
+   "text": "and only add it in certain areas, not all the areas."
+  },
+  {
+   "start": 1060.94,
+   "end": 1062.52,
+   "text": "So select the mask right here,"
+  },
+  {
+   "start": 1062.52,
+   "end": 1065.04,
+   "text": "take the brush, make it a little larger"
+  },
+  {
+   "start": 1065.04,
+   "end": 1067.72,
+   "text": "and just paint away the areas where we don't want it."
+  },
+  {
+   "start": 1067.76,
+   "end": 1069.56,
+   "text": "Increase the flow to about 100"
+  },
+  {
+   "start": 1069.56,
+   "end": 1076.4,
+   "text": "and paint black in these areas where you don't want it."
+  },
+  {
+   "start": 1076.4,
+   "end": 1081.42,
+   "text": "This area is fine, little bit there is good."
+  },
+  {
+   "start": 1081.42,
+   "end": 1084.58,
+   "text": "Now I want to remove it just so slightly right over here."
+  },
+  {
+   "start": 1084.58,
+   "end": 1088.38,
+   "text": "So let's decrease the flow to about 10%"
+  },
+  {
+   "start": 1088.38,
+   "end": 1090.54,
+   "text": "and then let's paint this area with black"
+  },
+  {
+   "start": 1090.54,
+   "end": 1091.78,
+   "text": "to remove it from there."
+  },
+  {
+   "start": 1092.74,
+   "end": 1094.1,
+   "text": "Okay, there you go."
+  },
+  {
+   "start": 1094.1,
+   "end": 1096.18,
+   "text": "Let's take a look at the before and after."
+  },
+  {
+   "start": 1096.18,
+   "end": 1097.58,
+   "text": "So let's zoom out a bit."
+  },
+  {
+   "start": 1097.58,
+   "end": 1099.74,
+   "text": "So here is the before, here is the after,"
+  },
+  {
+   "start": 1099.74,
+   "end": 1102.1,
+   "text": "just a little bit of rim lighting goes along with,"
+  },
+  {
+   "start": 1102.1,
+   "end": 1103.98,
+   "text": "of course, we forgot to do it right here."
+  },
+  {
+   "start": 1103.98,
+   "end": 1107.1,
+   "text": "So select the mask and then just erase it at the bottom"
+  },
+  {
+   "start": 1107.1,
+   "end": 1110.12,
+   "text": "right here, let's increase the flow."
+  },
+  {
+   "start": 1111.82,
+   "end": 1113.34,
+   "text": "There you have it my friend."
+  },
+  {
+   "start": 1114.46,
+   "end": 1116.98,
+   "text": "A little bit of rim lighting, here's the before,"
+  },
+  {
+   "start": 1116.98,
+   "end": 1119.66,
+   "text": "here's the after, just add a little oomph to the photo."
+  },
+  {
+   "start": 1119.66,
+   "end": 1120.82,
+   "text": "Now let's get back to the mood"
+  },
+  {
+   "start": 1120.82,
+   "end": 1122.82,
+   "text": "for the inverse curve technique"
+  },
+  {
+   "start": 1122.82,
+   "end": 1125.34,
+   "text": "and now we're gonna just paint in the shadows."
+  },
+  {
+   "start": 1125.34,
+   "end": 1127.4,
+   "text": "So we'll do just the opposite."
+  },
+  {
+   "start": 1127.4,
+   "end": 1128.78,
+   "text": "So let's create a curves,"
+  },
+  {
+   "start": 1128.78,
+   "end": 1131.3,
+   "text": "again, curves adjustment layer again."
+  },
+  {
+   "start": 1131.3,
+   "end": 1134.18,
+   "text": "You know what this video should be named the Infinity Curve."
+  },
+  {
+   "start": 1134.18,
+   "end": 1135.02,
+   "text": "Let's get back to it."
+  },
+  {
+   "start": 1135.02,
+   "end": 1136.74,
+   "text": "So instead of creating a point in the left"
+  },
+  {
+   "start": 1136.74,
+   "end": 1139.98,
+   "text": "in the shadow area and then making it darker,"
+  },
+  {
+   "start": 1139.98,
+   "end": 1142.18,
+   "text": "we will make the highlights darker."
+  },
+  {
+   "start": 1142.18,
+   "end": 1146.86,
+   "text": "Take the extreme right point and take it down."
+  },
+  {
+   "start": 1146.86,
+   "end": 1148.46,
+   "text": "Just as we did with the highlights,"
+  },
+  {
+   "start": 1148.46,
+   "end": 1150.46,
+   "text": "we did just the opposite."
+  },
+  {
+   "start": 1150.46,
+   "end": 1152.62,
+   "text": "We took the extreme left point and took it up."
+  },
+  {
+   "start": 1152.62,
+   "end": 1155.02,
+   "text": "Similarly in the shadows, just the opposite,"
+  },
+  {
+   "start": 1155.02,
+   "end": 1157.18,
+   "text": "extreme right point and take it down."
+  },
+  {
+   "start": 1157.18,
+   "end": 1159.02,
+   "text": "Also, we wanna limit it with the subject"
+  },
+  {
+   "start": 1159.06,
+   "end": 1161.54,
+   "text": "so click on this button to create a clipping mask"
+  },
+  {
+   "start": 1161.54,
+   "end": 1164.06,
+   "text": "and then select the mask, press Ctrl or Command I"
+  },
+  {
+   "start": 1164.06,
+   "end": 1166.3,
+   "text": "and then you can start painting the shadows."
+  },
+  {
+   "start": 1166.3,
+   "end": 1168.46,
+   "text": "By the way, to momentarily turn off the mask"
+  },
+  {
+   "start": 1168.46,
+   "end": 1170.5,
+   "text": "and see how dark your shadow is gonna go,"
+  },
+  {
+   "start": 1170.5,
+   "end": 1172.5,
+   "text": "hold the Shift key and then click on the mask"
+  },
+  {
+   "start": 1172.5,
+   "end": 1174.34,
+   "text": "to momentarily turn it off"
+  },
+  {
+   "start": 1174.34,
+   "end": 1176.54,
+   "text": "and come back to the properties of the curve"
+  },
+  {
+   "start": 1176.54,
+   "end": 1179.46,
+   "text": "and we're gonna make it dark, like really, really dark."
+  },
+  {
+   "start": 1179.46,
+   "end": 1182.14,
+   "text": "Something like this looks good."
+  },
+  {
+   "start": 1182.14,
+   "end": 1184.82,
+   "text": "Okay, if you want to add some color to it, you can."
+  },
+  {
+   "start": 1184.82,
+   "end": 1186.14,
+   "text": "You can go to the blue channel"
+  },
+  {
+   "start": 1186.14,
+   "end": 1188.1,
+   "text": "and add some blues to it,"
+  },
+  {
+   "start": 1188.14,
+   "end": 1190.98,
+   "text": "but I feel like I wouldn't add much color to the shadow."
+  },
+  {
+   "start": 1190.98,
+   "end": 1192.38,
+   "text": "Just a little bit of blue"
+  },
+  {
+   "start": 1192.38,
+   "end": 1193.86,
+   "text": "and probably in the red channel,"
+  },
+  {
+   "start": 1193.86,
+   "end": 1197.5,
+   "text": "we'll just take it down a bit, just like that"
+  },
+  {
+   "start": 1197.5,
+   "end": 1199.82,
+   "text": "and enable the mask again by holding the Shift key"
+  },
+  {
+   "start": 1199.82,
+   "end": 1201.42,
+   "text": "and clicking on the mask."
+  },
+  {
+   "start": 1201.42,
+   "end": 1203.18,
+   "text": "Just select it, take the brush,"
+  },
+  {
+   "start": 1203.18,
+   "end": 1205.18,
+   "text": "let's set the flow at about three or four."
+  },
+  {
+   "start": 1205.18,
+   "end": 1206.46,
+   "text": "So I'm gonna set it to three"
+  },
+  {
+   "start": 1206.46,
+   "end": 1208.62,
+   "text": "and begin painting the shadows."
+  },
+  {
+   "start": 1208.62,
+   "end": 1210.5,
+   "text": "Make sure the foreground color is white."
+  },
+  {
+   "start": 1210.5,
+   "end": 1211.46,
+   "text": "Now again, you might ask,"
+  },
+  {
+   "start": 1211.46,
+   "end": 1213.7,
+   "text": "and Mesh, where should I paint in the shadows?"
+  },
+  {
+   "start": 1213.7,
+   "end": 1215.26,
+   "text": "Brilliant question."
+  },
+  {
+   "start": 1215.26,
+   "end": 1217.58,
+   "text": "Similarly as we did with the highlights,"
+  },
+  {
+   "start": 1217.62,
+   "end": 1220.86,
+   "text": "we painted on the areas which faced the light."
+  },
+  {
+   "start": 1220.86,
+   "end": 1222.58,
+   "text": "We will paint the shadows in areas"
+  },
+  {
+   "start": 1222.58,
+   "end": 1225.86,
+   "text": "that do not face the light, as simple as that."
+  },
+  {
+   "start": 1225.86,
+   "end": 1242.3,
+   "text": "So let's resume painting."
+  },
+  {
+   "start": 1242.3,
+   "end": 1244.26,
+   "text": "So there you go, we have finished painting the shadows."
+  },
+  {
+   "start": 1244.26,
+   "end": 1245.1,
+   "text": "Let's take a look."
+  },
+  {
+   "start": 1245.1,
+   "end": 1248.38,
+   "text": "Here is the before and here is the after."
+  },
+  {
+   "start": 1248.38,
+   "end": 1250.34,
+   "text": "That's a massive difference, my friends."
+  },
+  {
+   "start": 1250.34,
+   "end": 1252.82,
+   "text": "Now painting the shadow was not as difficult"
+  },
+  {
+   "start": 1252.82,
+   "end": 1253.86,
+   "text": "as painting the highlights."
+  },
+  {
+   "start": 1253.86,
+   "end": 1256.46,
+   "text": "Highlights is where all the hard work takes place."
+  },
+  {
+   "start": 1256.46,
+   "end": 1257.78,
+   "text": "You know what? We are pretty much done."
+  },
+  {
+   "start": 1257.78,
+   "end": 1258.78,
+   "text": "Now all we have to do is"
+  },
+  {
+   "start": 1258.78,
+   "end": 1260.9,
+   "text": "to just some finishing adjustments."
+  },
+  {
+   "start": 1260.94,
+   "end": 1262.42,
+   "text": "So let's add one more."
+  },
+  {
+   "start": 1262.42,
+   "end": 1263.98,
+   "text": "You have already guessed it."
+  },
+  {
+   "start": 1263.98,
+   "end": 1267.06,
+   "text": "Just one more curves to blend it in a little bit more."
+  },
+  {
+   "start": 1267.06,
+   "end": 1270.86,
+   "text": "So we will limit it as well by creating a clipping mask."
+  },
+  {
+   "start": 1270.86,
+   "end": 1273.14,
+   "text": "And then let's increase the blues a little more."
+  },
+  {
+   "start": 1273.14,
+   "end": 1275.9,
+   "text": "First, we'll just make it a little darker"
+  },
+  {
+   "start": 1275.9,
+   "end": 1277.22,
+   "text": "to match it even more."
+  },
+  {
+   "start": 1277.22,
+   "end": 1281.1,
+   "text": "So let's take the rightmost point down just like this."
+  },
+  {
+   "start": 1281.1,
+   "end": 1283.5,
+   "text": "See, it's matching a little more."
+  },
+  {
+   "start": 1283.5,
+   "end": 1286.34,
+   "text": "So slowly and gradually take it down to match it."
+  },
+  {
+   "start": 1286.34,
+   "end": 1288.22,
+   "text": "Now let's go to the blue channel"
+  },
+  {
+   "start": 1288.22,
+   "end": 1289.78,
+   "text": "and increase it just a bit."
+  },
+  {
+   "start": 1289.78,
+   "end": 1291.82,
+   "text": "This value seems to resonate with me."
+  },
+  {
+   "start": 1291.82,
+   "end": 1293.54,
+   "text": "With the green channel, we're gonna play."
+  },
+  {
+   "start": 1293.54,
+   "end": 1295.74,
+   "text": "We're gonna try to take it down and take it up."
+  },
+  {
+   "start": 1295.74,
+   "end": 1297.34,
+   "text": "See what works best for us."
+  },
+  {
+   "start": 1297.34,
+   "end": 1298.58,
+   "text": "Just a touch of it."
+  },
+  {
+   "start": 1298.58,
+   "end": 1300.78,
+   "text": "Let's get back to the RGB channel."
+  },
+  {
+   "start": 1300.78,
+   "end": 1302.74,
+   "text": "If you wanna add more cyan again,"
+  },
+  {
+   "start": 1302.74,
+   "end": 1306.18,
+   "text": "go to the red channel and let's try decreasing that."
+  },
+  {
+   "start": 1306.18,
+   "end": 1309.14,
+   "text": "See, it's matching a little more."
+  },
+  {
+   "start": 1309.14,
+   "end": 1309.98,
+   "text": "There you go."
+  },
+  {
+   "start": 1309.98,
+   "end": 1311.42,
+   "text": "This was just for blending in a little bit."
+  },
+  {
+   "start": 1311.42,
+   "end": 1313.54,
+   "text": "So here is the before, here is the after."
+  },
+  {
+   "start": 1313.54,
+   "end": 1315.14,
+   "text": "Just blends in a little more."
+  },
+  {
+   "start": 1315.14,
+   "end": 1317.78,
+   "text": "Now if you zoom into the subject, there is an issue."
+  },
+  {
+   "start": 1317.78,
+   "end": 1319.3,
+   "text": "There's a lot of noise in the background"
+  },
+  {
+   "start": 1319.3,
+   "end": 1321.38,
+   "text": "but there's no noise on the subject."
+  },
+  {
+   "start": 1321.38,
+   "end": 1323.06,
+   "text": "So we need to add noise to it."
+  },
+  {
+   "start": 1323.06,
+   "end": 1325.94,
+   "text": "Press Ctrl Shift N, Command Shift N on a Mac"
+  },
+  {
+   "start": 1325.94,
+   "end": 1328.1,
+   "text": "and change the blend mode to overlay."
+  },
+  {
+   "start": 1328.1,
+   "end": 1330.22,
+   "text": "Make sure you check fill with overlay neutral color"
+  },
+  {
+   "start": 1330.22,
+   "end": 1333.22,
+   "text": "so that it fills the layer already with 50% gray."
+  },
+  {
+   "start": 1333.22,
+   "end": 1336.26,
+   "text": "And overlay is a blend mode which hides 50% gray."
+  },
+  {
+   "start": 1336.26,
+   "end": 1339.14,
+   "text": "And we're gonna name this noise."
+  },
+  {
+   "start": 1339.14,
+   "end": 1340.86,
+   "text": "We also wanna limit it to the subject."
+  },
+  {
+   "start": 1340.86,
+   "end": 1341.98,
+   "text": "Hold the Alt key or the Option key."
+  },
+  {
+   "start": 1341.98,
+   "end": 1343.46,
+   "text": "Click on the line between these two layers."
+  },
+  {
+   "start": 1343.46,
+   "end": 1347.38,
+   "text": "Let's go to Filter and Convert for Smart Filters."
+  },
+  {
+   "start": 1347.42,
+   "end": 1350.02,
+   "text": "Hit OK so that whatever filter we add,"
+  },
+  {
+   "start": 1350.02,
+   "end": 1351.7,
+   "text": "you can change the values later."
+  },
+  {
+   "start": 1351.7,
+   "end": 1355.7,
+   "text": "Let's go to Filter, Noise and then Add Noise."
+  },
+  {
+   "start": 1355.7,
+   "end": 1358.14,
+   "text": "And make sure Monochromatic is checked."
+  },
+  {
+   "start": 1358.14,
+   "end": 1359.98,
+   "text": "We don't wanna add too much color to it."
+  },
+  {
+   "start": 1359.98,
+   "end": 1362.14,
+   "text": "Slowly and gradually increase the noise"
+  },
+  {
+   "start": 1362.14,
+   "end": 1365.06,
+   "text": "to the point where it matches with that of the background."
+  },
+  {
+   "start": 1365.06,
+   "end": 1367.66,
+   "text": "In my opinion, I'm gonna keep it a little bit higher first."
+  },
+  {
+   "start": 1367.66,
+   "end": 1370.86,
+   "text": "Let's keep it at about 25 in the beginning."
+  },
+  {
+   "start": 1370.86,
+   "end": 1372.18,
+   "text": "Now we need to add some blur to it."
+  },
+  {
+   "start": 1372.18,
+   "end": 1373.42,
+   "text": "This is very sharp noise."
+  },
+  {
+   "start": 1373.42,
+   "end": 1376.78,
+   "text": "So let's go to Filter, Blur and then gosh and blur."
+  },
+  {
+   "start": 1376.82,
+   "end": 1379.18,
+   "text": "0.6, 0.7 works in this case."
+  },
+  {
+   "start": 1379.18,
+   "end": 1381.78,
+   "text": "So point, let's go for 0.6."
+  },
+  {
+   "start": 1381.78,
+   "end": 1383.06,
+   "text": "How does it match up?"
+  },
+  {
+   "start": 1383.06,
+   "end": 1385.7,
+   "text": "Not pretty well, let's go for 0.5."
+  },
+  {
+   "start": 1385.7,
+   "end": 1389.7,
+   "text": "Okay, now we only want noise in the shadow areas."
+  },
+  {
+   "start": 1389.7,
+   "end": 1392.1,
+   "text": "So we will just double click on the right-hand side"
+  },
+  {
+   "start": 1392.1,
+   "end": 1394.02,
+   "text": "of the LED, that's how noise works."
+  },
+  {
+   "start": 1394.02,
+   "end": 1396.26,
+   "text": "So hold the Alt key or the Option key."
+  },
+  {
+   "start": 1396.26,
+   "end": 1397.74,
+   "text": "Click on the right-most slider"
+  },
+  {
+   "start": 1397.74,
+   "end": 1399.06,
+   "text": "of the underlying layer section"
+  },
+  {
+   "start": 1399.06,
+   "end": 1401.74,
+   "text": "and take half all the way to the left."
+  },
+  {
+   "start": 1401.74,
+   "end": 1404.58,
+   "text": "This takes away the noise from the highlights."
+  },
+  {
+   "start": 1404.58,
+   "end": 1405.66,
+   "text": "Hit OK."
+  },
+  {
+   "start": 1405.66,
+   "end": 1406.5,
+   "text": "Take a look."
+  },
+  {
+   "start": 1406.7,
+   "end": 1407.82,
+   "text": "Now before noise is in the highlights,"
+  },
+  {
+   "start": 1407.82,
+   "end": 1408.66,
+   "text": "here's the after."
+  },
+  {
+   "start": 1408.66,
+   "end": 1410.46,
+   "text": "It gets slightly better."
+  },
+  {
+   "start": 1410.46,
+   "end": 1413.74,
+   "text": "Now I feel like the blur should have been a little less."
+  },
+  {
+   "start": 1413.74,
+   "end": 1416.46,
+   "text": "So I'm gonna decrease the blur to about 0.4."
+  },
+  {
+   "start": 1416.46,
+   "end": 1418.54,
+   "text": "And also the noise should have been a little less."
+  },
+  {
+   "start": 1418.54,
+   "end": 1420.06,
+   "text": "Double click on Add Noise"
+  },
+  {
+   "start": 1420.06,
+   "end": 1421.86,
+   "text": "and you can change the values right here."
+  },
+  {
+   "start": 1421.86,
+   "end": 1424.1,
+   "text": "So we can change it to about 15."
+  },
+  {
+   "start": 1424.1,
+   "end": 1425.02,
+   "text": "How do you feel about that?"
+  },
+  {
+   "start": 1425.02,
+   "end": 1427.98,
+   "text": "15 looks a little better and it just kind of blends well."
+  },
+  {
+   "start": 1427.98,
+   "end": 1428.82,
+   "text": "And on top of that,"
+  },
+  {
+   "start": 1428.82,
+   "end": 1430.86,
+   "text": "you can always take down the opacity"
+  },
+  {
+   "start": 1430.86,
+   "end": 1432.58,
+   "text": "and slowly and gradually increase it"
+  },
+  {
+   "start": 1433.74,
+   "end": 1436.1,
+   "text": "and stop at just the point where it looks good."
+  },
+  {
+   "start": 1436.1,
+   "end": 1439.34,
+   "text": "So in my opinion, we're gonna keep it at about 55."
+  },
+  {
+   "start": 1439.34,
+   "end": 1441.42,
+   "text": "One of the things we do while creating a composite"
+  },
+  {
+   "start": 1441.42,
+   "end": 1444.1,
+   "text": "is adding a global effect at the end."
+  },
+  {
+   "start": 1444.1,
+   "end": 1446.3,
+   "text": "What it does is that it allows us to blend"
+  },
+  {
+   "start": 1446.3,
+   "end": 1448.42,
+   "text": "all of the elements of the composite together."
+  },
+  {
+   "start": 1448.42,
+   "end": 1451.86,
+   "text": "It's just kind of a final bringing together effect."
+  },
+  {
+   "start": 1451.86,
+   "end": 1454.26,
+   "text": "So in this case, we're gonna add a color lookup table."
+  },
+  {
+   "start": 1454.26,
+   "end": 1455.66,
+   "text": "So click on the Adjustment Layer icon"
+  },
+  {
+   "start": 1455.66,
+   "end": 1457.06,
+   "text": "and then choose Color Lookup."
+  },
+  {
+   "start": 1457.06,
+   "end": 1459.94,
+   "text": "And this is something we apply to all the elements,"
+  },
+  {
+   "start": 1459.94,
+   "end": 1463.34,
+   "text": "in this case, both to the subject and the background."
+  },
+  {
+   "start": 1463.34,
+   "end": 1467.02,
+   "text": "So we're gonna choose Deal Orange Plus Contrast."
+  },
+  {
+   "start": 1467.02,
+   "end": 1470.62,
+   "text": "This is a very exciting one, but of course, this is too much."
+  },
+  {
+   "start": 1470.62,
+   "end": 1474.22,
+   "text": "So let's get the opacity to about 35%."
+  },
+  {
+   "start": 1474.22,
+   "end": 1476.54,
+   "text": "That looks good or maybe 30%."
+  },
+  {
+   "start": 1476.54,
+   "end": 1477.98,
+   "text": "Whatever suits you."
+  },
+  {
+   "start": 1477.98,
+   "end": 1479.78,
+   "text": "So we're gonna keep it at about 30."
+  },
+  {
+   "start": 1479.78,
+   "end": 1481.1,
+   "text": "Also, now if you look at this image,"
+  },
+  {
+   "start": 1481.1,
+   "end": 1483.02,
+   "text": "it's just too dark."
+  },
+  {
+   "start": 1483.02,
+   "end": 1484.46,
+   "text": "We need to add some brightness to it."
+  },
+  {
+   "start": 1484.46,
+   "end": 1487.46,
+   "text": "But if we add a simple, again, curve"
+  },
+  {
+   "start": 1487.46,
+   "end": 1489.58,
+   "text": "and just take it up,"
+  },
+  {
+   "start": 1489.58,
+   "end": 1492.38,
+   "text": "it's also gonna blow out the details and the highlights."
+  },
+  {
+   "start": 1492.42,
+   "end": 1493.82,
+   "text": "It's kind of too much."
+  },
+  {
+   "start": 1493.82,
+   "end": 1494.98,
+   "text": "So what we can do though,"
+  },
+  {
+   "start": 1494.98,
+   "end": 1497.46,
+   "text": "we can just take it even more"
+  },
+  {
+   "start": 1497.46,
+   "end": 1499.9,
+   "text": "and only brighten up the shadow areas"
+  },
+  {
+   "start": 1499.9,
+   "end": 1501.78,
+   "text": "by double clicking on the right-hand side of the layer."
+  },
+  {
+   "start": 1501.78,
+   "end": 1503.94,
+   "text": "By the way, this looks great as well."
+  },
+  {
+   "start": 1503.94,
+   "end": 1506.22,
+   "text": "So double click on the right-hand side of the layer"
+  },
+  {
+   "start": 1506.22,
+   "end": 1508.02,
+   "text": "and take it away from the highlights"
+  },
+  {
+   "start": 1508.02,
+   "end": 1509.9,
+   "text": "by taking the slider of the underlying layer"
+  },
+  {
+   "start": 1509.9,
+   "end": 1511.5,
+   "text": "from right to left."
+  },
+  {
+   "start": 1511.5,
+   "end": 1512.62,
+   "text": "Of course, it's harsh."
+  },
+  {
+   "start": 1512.62,
+   "end": 1513.86,
+   "text": "So hold the Alt key or the Option key,"
+  },
+  {
+   "start": 1513.86,
+   "end": 1515.02,
+   "text": "click on it to break it apart"
+  },
+  {
+   "start": 1515.02,
+   "end": 1518.46,
+   "text": "and take both the halves to the extremes."
+  },
+  {
+   "start": 1518.46,
+   "end": 1519.42,
+   "text": "So hit OK."
+  },
+  {
+   "start": 1519.42,
+   "end": 1520.26,
+   "text": "Let's take a look."
+  },
+  {
+   "start": 1520.26,
+   "end": 1521.14,
+   "text": "Here is the before."
+  },
+  {
+   "start": 1521.14,
+   "end": 1522.34,
+   "text": "Here is the after."
+  },
+  {
+   "start": 1522.38,
+   "end": 1524.42,
+   "text": "That makes a ton of difference, my friend."
+  },
+  {
+   "start": 1524.42,
+   "end": 1526.06,
+   "text": "You can always get back to the properties"
+  },
+  {
+   "start": 1526.06,
+   "end": 1527.58,
+   "text": "and let's decrease it a bit."
+  },
+  {
+   "start": 1527.58,
+   "end": 1529.18,
+   "text": "I think it's too much."
+  },
+  {
+   "start": 1529.18,
+   "end": 1530.82,
+   "text": "So let's decrease it just a bit"
+  },
+  {
+   "start": 1530.82,
+   "end": 1532.62,
+   "text": "and this looks perfect."
+  },
+  {
+   "start": 1532.62,
+   "end": 1534.62,
+   "text": "Now, if you want to add some overlays,"
+  },
+  {
+   "start": 1534.62,
+   "end": 1536.3,
+   "text": "you're always free to do so."
+  },
+  {
+   "start": 1536.3,
+   "end": 1537.38,
+   "text": "So I have some light leaks"
+  },
+  {
+   "start": 1537.38,
+   "end": 1539.3,
+   "text": "that I downloaded from Envato Elements,"
+  },
+  {
+   "start": 1539.3,
+   "end": 1540.82,
+   "text": "the link to which are in the description."
+  },
+  {
+   "start": 1540.82,
+   "end": 1543.42,
+   "text": "By the way, I have offers in Envato Elements as well."
+  },
+  {
+   "start": 1543.42,
+   "end": 1544.82,
+   "text": "That will give you 75,"
+  },
+  {
+   "start": 1544.82,
+   "end": 1547.82,
+   "text": "something 75-ish discount for the first month."
+  },
+  {
+   "start": 1547.82,
+   "end": 1549.78,
+   "text": "It's like for a fixed fee,"
+  },
+  {
+   "start": 1549.82,
+   "end": 1552.54,
+   "text": "you can download all of their assets,"
+  },
+  {
+   "start": 1552.54,
+   "end": 1553.9,
+   "text": "as many as you want."
+  },
+  {
+   "start": 1553.9,
+   "end": 1556.1,
+   "text": "You don't have to pay for each and every one of them."
+  },
+  {
+   "start": 1556.1,
+   "end": 1560.14,
+   "text": "So here are a lot of light leaks that we can use."
+  },
+  {
+   "start": 1560.14,
+   "end": 1561.54,
+   "text": "So I'm just gonna select this one,"
+  },
+  {
+   "start": 1561.54,
+   "end": 1566.14,
+   "text": "light leaks 2 and drag it and drop it over the canvas."
+  },
+  {
+   "start": 1566.14,
+   "end": 1567.62,
+   "text": "This looks interesting."
+  },
+  {
+   "start": 1567.62,
+   "end": 1569.46,
+   "text": "Let's make it a little larger."
+  },
+  {
+   "start": 1571.26,
+   "end": 1573.54,
+   "text": "Adjust it, adjust it like that."
+  },
+  {
+   "start": 1573.54,
+   "end": 1577.5,
+   "text": "Hit Enter and change the blend mode to Screen."
+  },
+  {
+   "start": 1577.5,
+   "end": 1578.58,
+   "text": "There you go."
+  },
+  {
+   "start": 1578.58,
+   "end": 1580.5,
+   "text": "That's fun too, as well."
+  },
+  {
+   "start": 1580.5,
+   "end": 1581.78,
+   "text": "And you can finish right here."
+  },
+  {
+   "start": 1581.78,
+   "end": 1585.86,
+   "text": "But wait, there is a mistake we still need to fix."
+  },
+  {
+   "start": 1585.86,
+   "end": 1586.7,
+   "text": "Let's turn it off."
+  },
+  {
+   "start": 1586.7,
+   "end": 1587.86,
+   "text": "This was optional."
+  },
+  {
+   "start": 1587.86,
+   "end": 1590.1,
+   "text": "If you zoom in, everything looks fine."
+  },
+  {
+   "start": 1590.1,
+   "end": 1593.18,
+   "text": "However, what if we wanted to add a depth of field?"
+  },
+  {
+   "start": 1593.18,
+   "end": 1594.46,
+   "text": "Have a look at the subject."
+  },
+  {
+   "start": 1594.46,
+   "end": 1596.82,
+   "text": "These areas are out of focus."
+  },
+  {
+   "start": 1596.82,
+   "end": 1598.82,
+   "text": "The mouth and the face is in focus."
+  },
+  {
+   "start": 1598.82,
+   "end": 1601.7,
+   "text": "This area is out of focus, even in the subject."
+  },
+  {
+   "start": 1601.7,
+   "end": 1604.94,
+   "text": "So how can the background be so tack sharp?"
+  },
+  {
+   "start": 1604.94,
+   "end": 1606.26,
+   "text": "It is just not possible, right?"
+  },
+  {
+   "start": 1606.26,
+   "end": 1608.56,
+   "text": "So we need to add some background blur to it."
+  },
+  {
+   "start": 1608.56,
+   "end": 1610.68,
+   "text": "So we're gonna make a copy of the background."
+  },
+  {
+   "start": 1610.68,
+   "end": 1612.0,
+   "text": "So with the background layer selected,"
+  },
+  {
+   "start": 1612.0,
+   "end": 1614.56,
+   "text": "press Ctrl or Command J, just to have a backup."
+  },
+  {
+   "start": 1614.56,
+   "end": 1617.48,
+   "text": "And then go to Filter, Convert for Smart Filters, hit OK,"
+  },
+  {
+   "start": 1617.48,
+   "end": 1619.16,
+   "text": "so that we can change the values later."
+  },
+  {
+   "start": 1619.16,
+   "end": 1623.52,
+   "text": "Now let's go to Filter, Blur Gallery and Tilt Shift."
+  },
+  {
+   "start": 1623.52,
+   "end": 1626.8,
+   "text": "Now Tilt Shift allows us to add blur gradient"
+  },
+  {
+   "start": 1626.8,
+   "end": 1628.76,
+   "text": "in all different directions."
+  },
+  {
+   "start": 1628.76,
+   "end": 1630.76,
+   "text": "So we're gonna bring it down"
+  },
+  {
+   "start": 1630.76,
+   "end": 1634.28,
+   "text": "and start the solid line where she must be standing."
+  },
+  {
+   "start": 1634.28,
+   "end": 1636.4,
+   "text": "So, and we're gonna bring the dotted line"
+  },
+  {
+   "start": 1636.4,
+   "end": 1637.76,
+   "text": "all the way far."
+  },
+  {
+   "start": 1637.8,
+   "end": 1640.36,
+   "text": "We're gonna create one more point right here by clicking"
+  },
+  {
+   "start": 1640.36,
+   "end": 1643.76,
+   "text": "and we will just rotate it 90 degrees"
+  },
+  {
+   "start": 1643.76,
+   "end": 1645.84,
+   "text": "and take it far as well"
+  },
+  {
+   "start": 1645.84,
+   "end": 1647.64,
+   "text": "and bring a gradient something like this"
+  },
+  {
+   "start": 1647.64,
+   "end": 1650.28,
+   "text": "and add one more point right here as well"
+  },
+  {
+   "start": 1650.28,
+   "end": 1652.12,
+   "text": "and rotate it 90 degrees."
+  },
+  {
+   "start": 1653.4,
+   "end": 1654.24,
+   "text": "There you go."
+  },
+  {
+   "start": 1654.24,
+   "end": 1656.88,
+   "text": "The solid line is where the blur starts."
+  },
+  {
+   "start": 1656.88,
+   "end": 1658.68,
+   "text": "So that's where the blur is zero"
+  },
+  {
+   "start": 1658.68,
+   "end": 1661.42,
+   "text": "and the dotted line is where the blur gradually increases"
+  },
+  {
+   "start": 1661.42,
+   "end": 1663.34,
+   "text": "to whatever value you choose, 15."
+  },
+  {
+   "start": 1663.34,
+   "end": 1665.44,
+   "text": "So blur is zero right here from zero."
+  },
+  {
+   "start": 1665.48,
+   "end": 1667.8,
+   "text": "So slowly and gradually it will increase to zero."
+  },
+  {
+   "start": 1667.8,
+   "end": 1669.78,
+   "text": "One, two, three, four, five, six,"
+  },
+  {
+   "start": 1669.78,
+   "end": 1671.32,
+   "text": "to 10, 11, 12, 13, 14"
+  },
+  {
+   "start": 1671.32,
+   "end": 1674.28,
+   "text": "and it will end at 15 right over here."
+  },
+  {
+   "start": 1674.28,
+   "end": 1675.84,
+   "text": "Hope that makes sense."
+  },
+  {
+   "start": 1675.84,
+   "end": 1679.08,
+   "text": "Now let's just control how much blur you want"
+  },
+  {
+   "start": 1679.08,
+   "end": 1680.16,
+   "text": "right here in the background."
+  },
+  {
+   "start": 1680.16,
+   "end": 1683.44,
+   "text": "So we will keep it at about 10."
+  },
+  {
+   "start": 1683.44,
+   "end": 1685.88,
+   "text": "For now you can always change things later."
+  },
+  {
+   "start": 1685.88,
+   "end": 1687.68,
+   "text": "Now before you hit OK, now keep in mind"
+  },
+  {
+   "start": 1687.68,
+   "end": 1689.36,
+   "text": "we have added a little noise on the subject."
+  },
+  {
+   "start": 1689.36,
+   "end": 1691.24,
+   "text": "We need to add a little bit noise"
+  },
+  {
+   "start": 1691.24,
+   "end": 1692.88,
+   "text": "on the background as well"
+  },
+  {
+   "start": 1692.88,
+   "end": 1693.92,
+   "text": "just to match things up"
+  },
+  {
+   "start": 1693.92,
+   "end": 1696.36,
+   "text": "because some areas like this have noise."
+  },
+  {
+   "start": 1696.36,
+   "end": 1697.48,
+   "text": "So to match things up"
+  },
+  {
+   "start": 1697.48,
+   "end": 1699.44,
+   "text": "just click on the noise button right there"
+  },
+  {
+   "start": 1699.44,
+   "end": 1701.56,
+   "text": "and just increase the amount."
+  },
+  {
+   "start": 1703.08,
+   "end": 1705.44,
+   "text": "You can also control the size of the noise"
+  },
+  {
+   "start": 1705.44,
+   "end": 1706.6,
+   "text": "but this one seems to be good."
+  },
+  {
+   "start": 1706.6,
+   "end": 1708.36,
+   "text": "You can always control these things"
+  },
+  {
+   "start": 1708.36,
+   "end": 1709.4,
+   "text": "according to your taste"
+  },
+  {
+   "start": 1709.4,
+   "end": 1712.4,
+   "text": "but in my opinion, this feels looks good to me."
+  },
+  {
+   "start": 1712.4,
+   "end": 1713.36,
+   "text": "Hit OK."
+  },
+  {
+   "start": 1713.36,
+   "end": 1716.24,
+   "text": "And there you have a little bit of background blur"
+  },
+  {
+   "start": 1716.24,
+   "end": 1717.68,
+   "text": "and we have our image ready."
+  },
+  {
+   "start": 1717.68,
+   "end": 1720.18,
+   "text": "If you want to make it absolutely shallow depth of field"
+  },
+  {
+   "start": 1720.18,
+   "end": 1722.04,
+   "text": "you are welcome to do that as well."
+  },
+  {
+   "start": 1722.04,
+   "end": 1723.12,
+   "text": "So there you go."
+  },
+  {
+   "start": 1723.16,
+   "end": 1726.32,
+   "text": "Here my friend is the before and this is the after."
+  },
+  {
+   "start": 1726.32,
+   "end": 1728.12,
+   "text": "So just to wrap it up, all you have to do"
+  },
+  {
+   "start": 1728.12,
+   "end": 1730.36,
+   "text": "is to first create a base."
+  },
+  {
+   "start": 1730.36,
+   "end": 1731.52,
+   "text": "Now how do you create a base?"
+  },
+  {
+   "start": 1731.52,
+   "end": 1732.56,
+   "text": "There are lots of ways."
+  },
+  {
+   "start": 1732.56,
+   "end": 1733.64,
+   "text": "Just look at the image."
+  },
+  {
+   "start": 1733.64,
+   "end": 1734.96,
+   "text": "Look at what it needs."
+  },
+  {
+   "start": 1734.96,
+   "end": 1737.36,
+   "text": "In this example, we first matched the brightness"
+  },
+  {
+   "start": 1737.36,
+   "end": 1738.4,
+   "text": "because have a look at it."
+  },
+  {
+   "start": 1738.4,
+   "end": 1740.44,
+   "text": "The brightness is not at all matching"
+  },
+  {
+   "start": 1740.44,
+   "end": 1743.0,
+   "text": "and you can create a luminosity check layer for that."
+  },
+  {
+   "start": 1743.0,
+   "end": 1744.16,
+   "text": "So we matched the brightness"
+  },
+  {
+   "start": 1744.16,
+   "end": 1746.72,
+   "text": "and then we were to match the colors."
+  },
+  {
+   "start": 1746.72,
+   "end": 1750.36,
+   "text": "To match the atmosphere, we created a gradient map"
+  },
+  {
+   "start": 1750.36,
+   "end": 1752.2,
+   "text": "and created a similar gradient to that"
+  },
+  {
+   "start": 1752.24,
+   "end": 1755.76,
+   "text": "of the background and just slapped on the subject."
+  },
+  {
+   "start": 1755.76,
+   "end": 1759.0,
+   "text": "And then we added one more curves to match it even more."
+  },
+  {
+   "start": 1759.0,
+   "end": 1761.76,
+   "text": "Added some blues, reduced some reds"
+  },
+  {
+   "start": 1761.76,
+   "end": 1763.96,
+   "text": "just to bring it more closer to the background"
+  },
+  {
+   "start": 1763.96,
+   "end": 1767.0,
+   "text": "and then came the inverse curve technique."
+  },
+  {
+   "start": 1767.0,
+   "end": 1768.32,
+   "text": "So if you want to add highlights,"
+  },
+  {
+   "start": 1768.32,
+   "end": 1770.32,
+   "text": "all you have to do is to do the opposite."
+  },
+  {
+   "start": 1770.32,
+   "end": 1772.44,
+   "text": "Take the extreme left or the shadows up"
+  },
+  {
+   "start": 1772.44,
+   "end": 1776.12,
+   "text": "and then combine the RGB channels to add some color to it"
+  },
+  {
+   "start": 1776.12,
+   "end": 1777.8,
+   "text": "and just begin painting the highlights."
+  },
+  {
+   "start": 1777.8,
+   "end": 1780.72,
+   "text": "Don't forget to blend if, right?"
+  },
+  {
+   "start": 1780.72,
+   "end": 1782.32,
+   "text": "You need to apply blend if to take it away"
+  },
+  {
+   "start": 1782.32,
+   "end": 1784.32,
+   "text": "from extremely dark areas."
+  },
+  {
+   "start": 1784.32,
+   "end": 1787.92,
+   "text": "So similarly, we will do the opposite with the shadows."
+  },
+  {
+   "start": 1787.92,
+   "end": 1789.44,
+   "text": "Also there's one more thing we did."
+  },
+  {
+   "start": 1789.44,
+   "end": 1791.4,
+   "text": "We added some rim lighting."
+  },
+  {
+   "start": 1791.4,
+   "end": 1793.48,
+   "text": "We just made a selection, brought it in"
+  },
+  {
+   "start": 1793.48,
+   "end": 1796.88,
+   "text": "and just painted around the edges, filled around the edges."
+  },
+  {
+   "start": 1796.88,
+   "end": 1798.56,
+   "text": "And after that, one more curve"
+  },
+  {
+   "start": 1798.56,
+   "end": 1801.28,
+   "text": "to blend all in a little more"
+  },
+  {
+   "start": 1801.28,
+   "end": 1803.8,
+   "text": "and the background had a little noise."
+  },
+  {
+   "start": 1803.8,
+   "end": 1806.36,
+   "text": "So we added a little noise on the subject as well."
+  },
+  {
+   "start": 1806.36,
+   "end": 1808.24,
+   "text": "Color lookup table on top of everything."
+  },
+  {
+   "start": 1808.28,
+   "end": 1809.6,
+   "text": "So that's a global effect"
+  },
+  {
+   "start": 1809.6,
+   "end": 1812.4,
+   "text": "to bring all the elements of composite together"
+  },
+  {
+   "start": 1812.4,
+   "end": 1815.56,
+   "text": "and then just a little curve to brighten it up."
+  },
+  {
+   "start": 1815.56,
+   "end": 1818.72,
+   "text": "This was a dark image and Light Leaks is optional."
+  },
+  {
+   "start": 1818.72,
+   "end": 1821.72,
+   "text": "And don't forget, we can always add a little depth"
+  },
+  {
+   "start": 1821.72,
+   "end": 1824.6,
+   "text": "to the image by blurring the background."
+  },
+  {
+   "start": 1824.6,
+   "end": 1826.56,
+   "text": "It's not always necessary, but in this case,"
+  },
+  {
+   "start": 1826.56,
+   "end": 1827.76,
+   "text": "if you have a look at the subject,"
+  },
+  {
+   "start": 1827.76,
+   "end": 1830.24,
+   "text": "some areas were blurred, some areas were out of focus."
+  },
+  {
+   "start": 1830.24,
+   "end": 1833.08,
+   "text": "So definitely we can tell the subject was captured"
+  },
+  {
+   "start": 1833.08,
+   "end": 1834.52,
+   "text": "with a shallow depth of field."
+  },
+  {
+   "start": 1834.52,
+   "end": 1836.84,
+   "text": "So we had to add a little blur to the background."
+  },
+  {
+   "start": 1837.32,
+   "end": 1839.48,
+   "text": "Have a look at the original image of the subject,"
+  },
+  {
+   "start": 1839.48,
+   "end": 1840.6,
+   "text": "just the subject."
+  },
+  {
+   "start": 1840.6,
+   "end": 1842.92,
+   "text": "See, it had a shallow depth of field."
+  },
+  {
+   "start": 1842.92,
+   "end": 1845.92,
+   "text": "So we had to do that with the existing background as well."
+  },
+  {
+   "start": 1845.92,
+   "end": 1847.88,
+   "text": "And on top of that, you can add some Light Leaks"
+  },
+  {
+   "start": 1847.88,
+   "end": 1849.4,
+   "text": "if you wish to."
+  },
+  {
+   "start": 1849.4,
+   "end": 1850.72,
+   "text": "So that's pretty much it for this video."
+  },
+  {
+   "start": 1850.72,
+   "end": 1853.56,
+   "text": "This was a little longer one, but I hope it helped."
+  },
+  {
+   "start": 1853.56,
+   "end": 1855.72,
+   "text": "This was something that you kept on requesting"
+  },
+  {
+   "start": 1855.72,
+   "end": 1859.0,
+   "text": "even when I created a poll and asked you what you wanted."
+  },
+  {
+   "start": 1859.0,
+   "end": 1861.44,
+   "text": "A lot of you guys said you want more compositing videos."
+  },
+  {
+   "start": 1861.44,
+   "end": 1862.28,
+   "text": "So there it is."
+  },
+  {
+   "start": 1862.28,
+   "end": 1863.12,
+   "text": "Thank you so much for watching"
+  },
+  {
+   "start": 1863.12,
+   "end": 1864.56,
+   "text": "and I would like to take this moment"
+  },
+  {
+   "start": 1864.6,
+   "end": 1867.28,
+   "text": "to thank all these nice and amazing people"
+  },
+  {
+   "start": 1867.28,
+   "end": 1869.08,
+   "text": "who are supporting Pixing Perfect on Patreon"
+  },
+  {
+   "start": 1869.08,
+   "end": 1872.44,
+   "text": "and helping keep Pixing Perfect free for everybody, forever."
+  },
+  {
+   "start": 1872.44,
+   "end": 1873.32,
+   "text": "Thanks so much for watching."
+  },
+  {
+   "start": 1873.32,
+   "end": 1874.36,
+   "text": "I'll see you in my next one."
+  },
+  {
+   "start": 1874.36,
+   "end": 1877.16,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:44:20.149216+00:00",
+ "seconds": 92.9
+}

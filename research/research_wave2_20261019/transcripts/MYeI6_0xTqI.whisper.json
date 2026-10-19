@@ -1,0 +1,23 @@
+{
+ "id": "MYeI6_0xTqI",
+ "title": "Amazing Paper Boxes Mass Production Process. Box factory in Korea.",
+ "channel": "Zoom In Process",
+ "url": "https://www.youtube.com/watch?v=MYeI6_0xTqI",
+ "query": "packaging print production",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.405,
+ "duration_s": 816.5,
+ "chars": 3,
+ "segments": [
+  {
+   "start": 0.3,
+   "end": 2.36,
+   "text": "you"
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:40:23.034189+00:00",
+ "seconds": 10.4
+}

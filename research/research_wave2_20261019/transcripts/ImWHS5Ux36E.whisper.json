@@ -1,0 +1,1548 @@
+{
+ "id": "ImWHS5Ux36E",
+ "title": "ComfyUI Tutorial Series: Ep08 - Flux 1: Schnell and Dev Installation Guide",
+ "channel": "pixaroma",
+ "url": "https://www.youtube.com/watch?v=ImWHS5Ux36E",
+ "query": "comfyui flux tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 1795.3,
+ "chars": 28312,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.6,
+   "text": "Welcome to episode 8 of our Comfy UI Tutorial series. Today I want to talk about Flux,"
+  },
+  {
+   "start": 5.6,
+   "end": 11.36,
+   "text": "the new model that is currently my favorite. I'll show you how to install and use different versions"
+  },
+  {
+   "start": 11.36,
+   "end": 16.88,
+   "text": "of it, such as the Dev and Schnell versions. I'll compare the different models, highlighting which"
+  },
+  {
+   "start": 16.88,
+   "end": 23.92,
+   "text": "one is better, faster, and which settings work best among other details. Flux is created by"
+  },
+  {
+   "start": 23.92,
+   "end": 28.16,
+   "text": "Black Forest Labs, a team of researchers and engineers who have developed various models"
+  },
+  {
+   "start": 28.16,
+   "end": 34.48,
+   "text": "in the past and previously worked for stability AI. They have now introduced the Flux version 1 model"
+  },
+  {
+   "start": 34.48,
+   "end": 39.36,
+   "text": "family, which performs quite well but requires a good computer for decent speed. It supports"
+  },
+  {
+   "start": 39.36,
+   "end": 45.44,
+   "text": "different ratios and resolutions up to 2 megapixels. They offer 3 versions. The Pro version, which"
+  },
+  {
+   "start": 45.44,
+   "end": 51.2,
+   "text": "isn't available for download, and the Dev and Schnell versions, which we can download and use"
+  },
+  {
+   "start": 51.2,
+   "end": 56.88,
+   "text": "on our computers. The Pro version is only available through the API. The Dev version produced"
+  },
+  {
+   "start": 56.88,
+   "end": 62.8,
+   "text": "the best quality but requires more resources, while the Schnell version is the fastest but has"
+  },
+  {
+   "start": 62.8,
+   "end": 69.92,
+   "text": "lower quality compared to Dev. The Dev license is non-commercial, while Schnell uses the Apache"
+  },
+  {
+   "start": 69.92,
+   "end": 76.56,
+   "text": "2.0 license. I checked the Dev license on their Hugging Face page, which includes a license.md"
+  },
+  {
+   "start": 76.56,
+   "end": 82.8,
+   "text": "file. It states, we claim no ownership rights in and to the outputs. You are solely"
+  },
+  {
+   "start": 82.8,
+   "end": 88.32,
+   "text": "responsible for the outputs you generate and their subsequent uses in accordance with this license."
+  },
+  {
+   "start": 88.32,
+   "end": 93.84,
+   "text": "You may use output for any purpose, including commercial purposes. However, it also notes,"
+  },
+  {
+   "start": 93.84,
+   "end": 99.92,
+   "text": "you may not use the output to train, fine tune, or distill a model that is competitive with Flux."
+  },
+  {
+   "start": 99.92,
+   "end": 104.48,
+   "text": "So as I understand it, you cannot use the Flux model itself for commercial purposes,"
+  },
+  {
+   "start": 104.48,
+   "end": 109.6,
+   "text": "but you can use the images generated with it commercially. You also cannot use those images"
+  },
+  {
+   "start": 109.6,
+   "end": 115.28,
+   "text": "to train a new model that competes with Flux. For the Schnell model, you can use both the model"
+  },
+  {
+   "start": 115.28,
+   "end": 120.48,
+   "text": "and its output for commercial work. Again, this is my interpretation, so you should review the"
+  },
+  {
+   "start": 120.48,
+   "end": 126.24,
+   "text": "license yourself for complete clarity. I also asked ChatGPT to look online and explain the"
+  },
+  {
+   "start": 126.24,
+   "end": 132.88,
+   "text": "license for each version, so you can pause and read this information if you want. I will put"
+  },
+  {
+   "start": 132.88,
+   "end": 137.92,
+   "text": "all the links in the description. Here are some examples from a GitHub page. We have several"
+  },
+  {
+   "start": 137.92,
+   "end": 142.48,
+   "text": "versions, the regular version which is Flux Dev, the largest version of Dev,"
+  },
+  {
+   "start": 143.6,
+   "end": 148.32,
+   "text": "Flux Schnell, the smallest version, and the simpler to use versions which are floating"
+  },
+  {
+   "start": 148.32,
+   "end": 154.88,
+   "text": ".8 versions that are smaller and don't require complicated workflows. Both Dev and Schnell"
+  },
+  {
+   "start": 154.88,
+   "end": 160.48,
+   "text": "have these smaller versions. To make it easier for you, I will show you how to quickly install"
+  },
+  {
+   "start": 160.48,
+   "end": 165.76,
+   "text": "each one and you can decide which is better for you by the end of the video. For the"
+  },
+  {
+   "start": 165.76,
+   "end": 171.44,
+   "text": "FP8 version, download the models and place them in the checkpoints folder. You can download them"
+  },
+  {
+   "start": 171.44,
+   "end": 177.52,
+   "text": "from the links provided, but I will also include additional links. From this page, you can download"
+  },
+  {
+   "start": 177.52,
+   "end": 183.76,
+   "text": "the FP8 version of the Dev model, which is 17 gigabytes. Download it using the button provided."
+  },
+  {
+   "start": 184.4,
+   "end": 190.96,
+   "text": "Next, navigate to Comfy UI, then models and place the files in the checkpoints folder."
+  },
+  {
+   "start": 190.96,
+   "end": 195.84,
+   "text": "I will also download the Schnell floating point version and place it in the same folder."
+  },
+  {
+   "start": 196.48,
+   "end": 202.24,
+   "text": "It has the same size, but is the Schnell version. Remember, Schnell means fast in German."
+  },
+  {
+   "start": 202.8,
+   "end": 207.6,
+   "text": "After the downloads finish, which might take a few minutes depending on your internet speed,"
+  },
+  {
+   "start": 207.6,
+   "end": 211.36,
+   "text": "I will first show you some quick workflows for those who are impatient,"
+  },
+  {
+   "start": 212.0,
+   "end": 216.32,
+   "text": "and then I will explain how to build that workflow from a simple SDXL workflow."
+  },
+  {
+   "start": 216.96,
+   "end": 220.64,
+   "text": "Save these images somewhere on your drive. They also include the workflow."
+  },
+  {
+   "start": 222.32,
+   "end": 229.76,
+   "text": "I will do the same for the Schnell image. Next, open Comfy UI, click on manager and then select"
+  },
+  {
+   "start": 229.76,
+   "end": 234.96,
+   "text": "update all to update Comfy UI so it adds the new nodes that recognize flux models."
+  },
+  {
+   "start": 235.92,
+   "end": 240.88,
+   "text": "After restarting, you should have the latest version, click load, and navigate to where"
+  },
+  {
+   "start": 240.88,
+   "end": 245.92,
+   "text": "you downloaded the images for both Schnell and Dev. Look for the checkpoint in the name to"
+  },
+  {
+   "start": 245.92,
+   "end": 250.96,
+   "text": "identify the floating point 8 version. I will load the Schnell version, which is faster."
+  },
+  {
+   "start": 250.96,
+   "end": 255.04,
+   "text": "It should show you the Schnell model if not select it from the list."
+  },
+  {
+   "start": 255.04,
+   "end": 257.44,
+   "text": "Running the workflow should give you an image like this."
+  },
+  {
+   "start": 258.32,
+   "end": 262.16,
+   "text": "Now let's load the Dev version workflow and run it to see what we get."
+  },
+  {
+   "start": 264.0,
+   "end": 268.96,
+   "text": "The result is this anime image. So that was the short version. I'll show you later in the"
+  },
+  {
+   "start": 268.96,
+   "end": 275.2,
+   "text": "video how to install the larger 16-bit Dev version as well. To recap the short version,"
+  },
+  {
+   "start": 275.2,
+   "end": 280.32,
+   "text": "download the models, place them in the checkpoints folder, download the images,"
+  },
+  {
+   "start": 280.32,
+   "end": 285.52,
+   "text": "load them in Comfy UI, and run the workflow. It's pretty simple. Let's explain it a bit more."
+  },
+  {
+   "start": 286.48,
+   "end": 292.24,
+   "text": "Now let's load a basic SDXL. You should have one working by now, but you can also download it from"
+  },
+  {
+   "start": 292.24,
+   "end": 297.52,
+   "text": "my Discord server. I will show you how the workflow differs compared to SDXL."
+  },
+  {
+   "start": 298.08,
+   "end": 303.84,
+   "text": "First we need to load the flux model. I will start with the Schnell floating point 8 version."
+  },
+  {
+   "start": 303.84,
+   "end": 309.12,
+   "text": "Another difference is the empty latent image. It works better if we choose an empty SD"
+  },
+  {
+   "start": 309.12,
+   "end": 314.08,
+   "text": "3 latent image, which we used in another episode for stable diffusion 3 medium."
+  },
+  {
+   "start": 314.08,
+   "end": 318.64,
+   "text": "Delete the old one and reconnect the new one to the latent input. I will change the color to purple"
+  },
+  {
+   "start": 318.64,
+   "end": 325.65,
+   "text": "so it's easier to see. I'm also changing the color of the positive prompt to green and the"
+  },
+  {
+   "start": 325.65,
+   "end": 329.17,
+   "text": "negative prompt to red, as these are the colors most people commonly use."
+  },
+  {
+   "start": 330.05,
+   "end": 333.17,
+   "text": "I'm deleting the negative prompt since flux doesn't support it."
+  },
+  {
+   "start": 333.89,
+   "end": 337.97,
+   "text": "Then I'll right-click and choose collapse to save space."
+  },
+  {
+   "start": 338.05,
+   "end": 343.49,
+   "text": "As you might recall, each model has recommended settings. On the examples page, you'll find the"
+  },
+  {
+   "start": 343.49,
+   "end": 349.81,
+   "text": "settings for the K sampler. The CFG needs to be set to 1 because when it is 1,"
+  },
+  {
+   "start": 349.81,
+   "end": 356.37,
+   "text": "it ignores the negative prompt. For Schnell, being the fast version, it only needs 4 steps to run."
+  },
+  {
+   "start": 356.37,
+   "end": 360.53,
+   "text": "The sampler should be set to Euler, and the scheduler should be set to Simple."
+  },
+  {
+   "start": 362.37,
+   "end": 364.85,
+   "text": "Let's give it a test to see if it works, and here's the result."
+  },
+  {
+   "start": 365.81,
+   "end": 371.17,
+   "text": "Not bad for only 4 steps. The first time you try it, it will take longer because the model needs"
+  },
+  {
+   "start": 371.17,
+   "end": 378.77,
+   "text": "to load, which took about 13 seconds. However, after that it should be quicker. On my RTX 4090,"
+  },
+  {
+   "start": 378.77,
+   "end": 384.53,
+   "text": "it only takes 3-4 seconds, which is great. I'll save the workflows from this video so you can"
+  },
+  {
+   "start": 384.53,
+   "end": 390.37,
+   "text": "load them quickly, and you can easily download them from my Discord. Now, let's load the"
+  },
+  {
+   "start": 390.45,
+   "end": 395.41,
+   "text": "DevFloating.8 version. This one has the same settings, except that the number of steps should"
+  },
+  {
+   "start": 395.41,
+   "end": 401.41,
+   "text": "be higher, around 20, 30 steps. I'll go with 20, then I'll make some space for a new node called"
+  },
+  {
+   "start": 401.41,
+   "end": 407.73,
+   "text": "Flux Guidance. The default value is 3.5, and since our CFG is locked to 1, we can use this"
+  },
+  {
+   "start": 407.73,
+   "end": 413.33,
+   "text": "guidance node to influence the image. It's somewhat similar to CFG, but not quite the same."
+  },
+  {
+   "start": 413.89,
+   "end": 418.05,
+   "text": "This node doesn't affect the Schnell version, it only works with the Dev version."
+  },
+  {
+   "start": 418.69,
+   "end": 423.57,
+   "text": "Connect the conditioning from the positive prompt, and then connect the conditioning to the positive"
+  },
+  {
+   "start": 423.57,
+   "end": 430.85,
+   "text": "input on the K sampler. If I run the workflow, you'll see that the first time it took 24 seconds,"
+  },
+  {
+   "start": 430.85,
+   "end": 437.17,
+   "text": "because we have more steps now. However, the second time I ran it, it only took 14 seconds."
+  },
+  {
+   "start": 437.17,
+   "end": 443.81,
+   "text": "On an older PC with 6GB of VRAM, it was still runnable, but took around 6 minutes, so having"
+  },
+  {
+   "start": 443.81,
+   "end": 449.09,
+   "text": "a newer powerful NVIDIA card will definitely help with the speed. I'm also saving this workflow,"
+  },
+  {
+   "start": 449.09,
+   "end": 453.81,
+   "text": "so you can download it. Now, let's test the Flux Guidance a little. I'll use a prompt for a"
+  },
+  {
+   "start": 453.81,
+   "end": 459.49,
+   "text": "painting of a gnome, and choose a fixed seed, so we can compare the results. Running it with the"
+  },
+  {
+   "start": 459.49,
+   "end": 465.25,
+   "text": "default value gives us this result. If I change the guidance to 3, you can see the difference."
+  },
+  {
+   "start": 465.89,
+   "end": 470.21,
+   "text": "You can go lower, but at some point, it will start to degrade the image. It might create a"
+  },
+  {
+   "start": 470.21,
+   "end": 475.41,
+   "text": "nice painting effect, but it's best to experiment to find what looks best for your prompt. The result"
+  },
+  {
+   "start": 475.41,
+   "end": 480.53,
+   "text": "varies depending on the prompt, but I usually lower the value for paintings. Sometimes higher"
+  },
+  {
+   "start": 480.53,
+   "end": 487.49,
+   "text": "values can also help, and you can use values between 1 and 100, though values above 20 have less effect."
+  },
+  {
+   "start": 487.49,
+   "end": 492.05,
+   "text": "Higher values might improve text in some cases, but the default value is usually a good starting"
+  },
+  {
+   "start": 492.05,
+   "end": 497.41,
+   "text": "point. I'm loading the Schnell version workflow again since it's faster. Someone asked if Flux"
+  },
+  {
+   "start": 497.41,
+   "end": 503.25,
+   "text": "can use styles, and yes, it can. But first, make sure to check Episode 7 to get the extra nodes"
+  },
+  {
+   "start": 503.25,
+   "end": 509.33,
+   "text": "and set up the styles correctly. I'm adding the multiple style selector node. Next, I'll convert"
+  },
+  {
+   "start": 509.33,
+   "end": 516.45,
+   "text": "the clip text encoder to text input and make some space for another node. I'll add an easy positive"
+  },
+  {
+   "start": 519.68,
+   "end": 526.72,
+   "text": "and then a text concatenate. Just like in Episode 7, I'll connect positive to text A"
+  },
+  {
+   "start": 526.8,
+   "end": 533.76,
+   "text": "and positive string to text B. Then I'll connect the string to text input. This way, our prompt,"
+  },
+  {
+   "start": 533.76,
+   "end": 539.04,
+   "text": "along with the prompt from the styles, is combined in this node before going to the clip text encoder."
+  },
+  {
+   "start": 539.68,
+   "end": 544.24,
+   "text": "I'll collapse and rearrange the nodes to make it clearer. Now I can add a prompt and select one"
+  },
+  {
+   "start": 544.24,
+   "end": 549.92,
+   "text": "of the styles, such as cartoon cute. When I run the workflow, it seems to work just fine."
+  },
+  {
+   "start": 549.92,
+   "end": 556.32,
+   "text": "I'm changing the seed to fixed so I can compare the style influence. First, I'll add a prompt"
+  },
+  {
+   "start": 556.32,
+   "end": 562.0,
+   "text": "like a gnome in a magical forest. Then I'll deactivate the styles by selecting no style."
+  },
+  {
+   "start": 562.56,
+   "end": 568.4,
+   "text": "Running the workflow gives us this image. If I switch to a new style with the same seed and prompt,"
+  },
+  {
+   "start": 568.4,
+   "end": 574.48,
+   "text": "such as the impressionism painting style, the result should be different and we get something like"
+  },
+  {
+   "start": 574.48,
+   "end": 581.52,
+   "text": "this. From my tests, Flux recognizes fewer art styles compared to SDXL,"
+  },
+  {
+   "start": 582.24,
+   "end": 585.84,
+   "text": "but it still influences the image since it uses additional prompts."
+  },
+  {
+   "start": 586.88,
+   "end": 592.64,
+   "text": "It might not capture the exact style if Flux doesn't recognize it. Let's try another style,"
+  },
+  {
+   "start": 592.64,
+   "end": 598.72,
+   "text": "such as portrait cinematic from photography. The result is a more photographic look of the gnome."
+  },
+  {
+   "start": 598.72,
+   "end": 604.0,
+   "text": "Finally, let's test a different style like biomechanical art to see how it influences the"
+  },
+  {
+   "start": 604.0,
+   "end": 610.24,
+   "text": "result. We get a sci-fi gnome, which is pretty interesting. I will create a more compact"
+  },
+  {
+   "start": 610.32,
+   "end": 615.76,
+   "text": "version to make it easier for beginners to use. You'll be able to just download and use it."
+  },
+  {
+   "start": 616.64,
+   "end": 622.88,
+   "text": "First, select all the nodes except the save image node, then right click and choose convert to group"
+  },
+  {
+   "start": 622.88,
+   "end": 628.88,
+   "text": "node. Give it a name and now we have a simplified interface. I'll hide the negative prompt from"
+  },
+  {
+   "start": 628.88,
+   "end": 634.88,
+   "text": "the interface since it's not used in Flux. You can try adding phrases like no signature or no"
+  },
+  {
+   "start": 634.96,
+   "end": 641.68,
+   "text": "watermark to the positive prompt. Sometimes these can work. You can add from one to four styles here"
+  },
+  {
+   "start": 641.68,
+   "end": 646.08,
+   "text": "with the first one being the most important so the order does matter. From the width and height"
+  },
+  {
+   "start": 646.08,
+   "end": 652.16,
+   "text": "settings you can adjust the size. Since we use the SD3 empty latent image, it handles multiples of"
+  },
+  {
+   "start": 652.16,
+   "end": 657.76,
+   "text": "16, making it more compatible. I'll make some more changes and adjustments and you'll be able"
+  },
+  {
+   "start": 657.76,
+   "end": 662.88,
+   "text": "to download a version that looks something like this. I want to test both the Schnell and"
+  },
+  {
+   "start": 662.88,
+   "end": 670.0,
+   "text": "Dev floating .8 versions so I have the Schnell workflow on top and the Dev workflow on the bottom."
+  },
+  {
+   "start": 670.0,
+   "end": 675.2,
+   "text": "I want both workflows to use the same prompt so I'll convert the positive prompt in both"
+  },
+  {
+   "start": 675.2,
+   "end": 680.96,
+   "text": "to text input instead. You can add a primitive node and connect it to both workflows with"
+  },
+  {
+   "start": 680.96,
+   "end": 688.08,
+   "text": "the text encoder. Alternatively, if you have the nodes from episode 7, the comfy easy use"
+  },
+  {
+   "start": 688.08,
+   "end": 694.72,
+   "text": "node already includes the positive prompt in green and ready to use. I'll add a prompt here"
+  },
+  {
+   "start": 694.72,
+   "end": 702.8,
+   "text": "and start with a fixed prompt for both workflows. I might change it to increment so I can test with"
+  },
+  {
+   "start": 702.8,
+   "end": 708.32,
+   "text": "another seed while keeping the same seed for both workflows. I'll create a more compact version"
+  },
+  {
+   "start": 708.32,
+   "end": 713.36,
+   "text": "leaving only the generations and the prompt visible on the screen. The first one will be"
+  },
+  {
+   "start": 713.36,
+   "end": 719.92,
+   "text": "the Schnell version and the second will be the Dev version. If I test the prompt, green sphere on a"
+  },
+  {
+   "start": 719.92,
+   "end": 726.88,
+   "text": "blue cube with a black background in 3D render style, both versions seem to understand it. However,"
+  },
+  {
+   "start": 726.88,
+   "end": 731.36,
+   "text": "for some of the seeds, I ended up with a blurred image as seen in this case. I'll show you how"
+  },
+  {
+   "start": 731.36,
+   "end": 737.84,
+   "text": "to fix this by changing to a different sampler and scheduler toward the end of the video."
+  },
+  {
+   "start": 737.84,
+   "end": 744.4,
+   "text": "I recorded this video over a few days because each day, new information, versions, and improvements"
+  },
+  {
+   "start": 744.4,
+   "end": 748.72,
+   "text": "emerged online. I've tried to include as many updates as possible in this video."
+  },
+  {
+   "start": 749.44,
+   "end": 754.64,
+   "text": "For a portrait of a woman, I got nice results. The Dev version seems to be a bit more realistic,"
+  },
+  {
+   "start": 754.64,
+   "end": 758.48,
+   "text": "but if you want even more realism, there is now a realistic aura available for flux."
+  },
+  {
+   "start": 759.44,
+   "end": 764.4,
+   "text": "For a portrait of a Viking in the rain at golden hour, the Dev version produced a more realistic"
+  },
+  {
+   "start": 764.4,
+   "end": 770.32,
+   "text": "look and successfully captured the rain which the Schnell version did not. For a witch holding a"
+  },
+  {
+   "start": 770.32,
+   "end": 775.44,
+   "text": "sign with text, the Dev version nearly got it right on the first try. On the second try,"
+  },
+  {
+   "start": 775.44,
+   "end": 780.16,
+   "text": "both models produced the correct result. While it's not perfect, it's the best offline model"
+  },
+  {
+   "start": 780.16,
+   "end": 785.68,
+   "text": "I've tried so far. For a cartoon warrior cat knight, the Dev version handles the swords and"
+  },
+  {
+   "start": 785.68,
+   "end": 790.64,
+   "text": "shield better. I also noticed that the Dev version generally has fewer mistakes with hands and"
+  },
+  {
+   "start": 790.64,
+   "end": 795.28,
+   "text": "details compared to the Schnell version. For a penguin eating ice cream with a polar bear in"
+  },
+  {
+   "start": 795.28,
+   "end": 800.96,
+   "text": "the background, the Dev version did a better job once again. The Schnell version failed to render"
+  },
+  {
+   "start": 800.96,
+   "end": 805.68,
+   "text": "the ice cream. For the prompt with a fox in a bunny, the Dev version has more details in the"
+  },
+  {
+   "start": 805.68,
+   "end": 812.4,
+   "text": "image. I then wanted a portrait of a crocodile with a wanted poster on the wall. I decided to"
+  },
+  {
+   "start": 812.4,
+   "end": 818.4,
+   "text": "add $1,000 reward to the poster and wanted the crocodile to actually be featured on it."
+  },
+  {
+   "start": 818.4,
+   "end": 822.8,
+   "text": "If you're clear with your prompt, you can get quite good results. Once again, the Dev version"
+  },
+  {
+   "start": 822.8,
+   "end": 830.0,
+   "text": "seemed to be a bit better at this. I also tried a simple prompt like Stairs to Heaven in concept art"
+  },
+  {
+   "start": 830.0,
+   "end": 834.88,
+   "text": "and the styles appeared a bit different. Then I got hungry and tested a photo of a hamburger"
+  },
+  {
+   "start": 834.88,
+   "end": 839.68,
+   "text": "which resulted in a quite delicious image. Next I wanted a small flag that says free"
+  },
+  {
+   "start": 840.32,
+   "end": 845.76,
+   "text": "and wondered what if the flag was white like a surrender flag. The model was able to"
+  },
+  {
+   "start": 845.84,
+   "end": 851.76,
+   "text": "incorporate all these elements demonstrating quite good prompt understanding. I wanted to do some vector"
+  },
+  {
+   "start": 851.76,
+   "end": 857.52,
+   "text": "style design as well and again the Dev version tended to blur the image for certain seeds. Check"
+  },
+  {
+   "start": 857.52,
+   "end": 863.04,
+   "text": "later in the video to see how I fixed that issue. However, you can create some nice vector designs"
+  },
+  {
+   "start": 863.04,
+   "end": 869.36,
+   "text": "with flux. For the Dev version, I got a charming cute cat. It's also quite good for logos from"
+  },
+  {
+   "start": 869.36,
+   "end": 874.08,
+   "text": "simple to more complex designs. You can experiment with styles and gradients to come up with some"
+  },
+  {
+   "start": 874.08,
+   "end": 880.32,
+   "text": "great logo ideas. You can also create some great photos for your presentations like cool mockups."
+  },
+  {
+   "start": 880.32,
+   "end": 886.48,
+   "text": "As you can see, the Dev version still tends to produce better results. If your video card can"
+  },
+  {
+   "start": 886.48,
+   "end": 891.76,
+   "text": "handle it and you're willing to wait a bit longer for generations, it's definitely worth it."
+  },
+  {
+   "start": 891.76,
+   "end": 897.84,
+   "text": "For the oil painting of a king on a throne, both versions produce some nice results. But I"
+  },
+  {
+   "start": 897.84,
+   "end": 902.56,
+   "text": "still think the Dev version is a bit better. Who would have imagined that you could get a"
+  },
+  {
+   "start": 902.56,
+   "end": 906.88,
+   "text": "digital painting of something so complex in just a few seconds on your computer?"
+  },
+  {
+   "start": 907.6,
+   "end": 912.16,
+   "text": "It's also quite good with hands. So far the hands are better than on any other model I've tested."
+  },
+  {
+   "start": 913.76,
+   "end": 920.64,
+   "text": "So remember I mentioned I'd show you a fix for blurred images. The issue is with the Dev model."
+  },
+  {
+   "start": 920.64,
+   "end": 926.4,
+   "text": "If I use a specific seed, I get a sharp clear image. However, testing subsequent seeds often"
+  },
+  {
+   "start": 926.4,
+   "end": 932.0,
+   "text": "results in blurred images, which can be quite frustrating. What fixed it for me was changing"
+  },
+  {
+   "start": 932.0,
+   "end": 939.76,
+   "text": "the sampler to DPM plus plus 2m and the scheduler to SGM uniform. Testing the same seed now yields a"
+  },
+  {
+   "start": 939.76,
+   "end": 944.96,
+   "text": "sharp image. I also tested the previous seeds and they work just fine. I'll probably update the"
+  },
+  {
+   "start": 944.96,
+   "end": 948.8,
+   "text": "workflows on my discord to include these settings so you don't end up with blurred images."
+  },
+  {
+   "start": 949.92,
+   "end": 956.56,
+   "text": "So we've tested the floating point versions of both Dev and Schnell. Now for those with"
+  },
+  {
+   "start": 956.56,
+   "end": 963.36,
+   "text": "top of the line video cards and plenty of system RAM who want to try what is considered the best version,"
+  },
+  {
+   "start": 963.36,
+   "end": 968.08,
+   "text": "here's how to set it up. The regular version works a bit differently. You'll need some additional"
+  },
+  {
+   "start": 968.08,
+   "end": 972.96,
+   "text": "clip models to place into the clip folder. First go to this link and download these two models."
+  },
+  {
+   "start": 975.74,
+   "end": 979.58,
+   "text": "Navigate to your models folder, then the clip folder and save the files there."
+  },
+  {
+   "start": 980.38,
+   "end": 984.7,
+   "text": "Next get the second model, which is the larger one. If you don't have enough RAM,"
+  },
+  {
+   "start": 984.7,
+   "end": 989.9,
+   "text": "you can use the version with floating point eight inches in the name and place it in the same folder."
+  },
+  {
+   "start": 989.9,
+   "end": 997.9,
+   "text": "However, the floating point 16 version is recommended if you have more than 32 GB of system RAM. You'll"
+  },
+  {
+   "start": 997.9,
+   "end": 1005.26,
+   "text": "also need the VAE file, which you can find here under the name a e safe tensor, download it"
+  },
+  {
+   "start": 1005.26,
+   "end": 1011.1,
+   "text": "and place it in your models folder specifically in the VAE folder. For the actual flux model,"
+  },
+  {
+   "start": 1011.1,
+   "end": 1017.58,
+   "text": "this time you need to place it in the unit folder, download this large model, which is 23 gigabytes"
+  },
+  {
+   "start": 1017.58,
+   "end": 1025.34,
+   "text": "and we'll take some time to download save it in the models folder, then into the unit folder."
+  },
+  {
+   "start": 1025.34,
+   "end": 1030.46,
+   "text": "Finally, you need one more thing save the image that includes the workflow, load that workflow"
+  },
+  {
+   "start": 1032.46,
+   "end": 1038.7,
+   "text": "how it looks. So this workflow is a bit different from what we're used to. I'll give it a test."
+  },
+  {
+   "start": 1038.7,
+   "end": 1045.58,
+   "text": "You can find more information about where to place the models on this note. The result is this anime image."
+  },
+  {
+   "start": 1046.94,
+   "end": 1053.42,
+   "text": "In the tips, you also have the option to change the D type, which might speed things up depending on"
+  },
+  {
+   "start": 1053.42,
+   "end": 1058.46,
+   "text": "your setup. For me, the default option was faster, but you can change it from here. This setup"
+  },
+  {
+   "start": 1058.46,
+   "end": 1065.82,
+   "text": "includes a node that loads both clip models we downloaded, and the VAE is separate compared"
+  },
+  {
+   "start": 1065.82,
+   "end": 1072.54,
+   "text": "to the floating point eight version we started with, where the model included all the clips and VAE"
+  },
+  {
+   "start": 1072.54,
+   "end": 1077.74,
+   "text": "making it simpler to use. This version is a bit more complex. We still have the flux guidance,"
+  },
+  {
+   "start": 1077.74,
+   "end": 1083.74,
+   "text": "but there's an additional basic guide or and a custom advanced sampler instead of the case sampler."
+  },
+  {
+   "start": 1083.74,
+   "end": 1088.7,
+   "text": "It also uses an empty latent image with width and height adjustments on the side."
+  },
+  {
+   "start": 1088.7,
+   "end": 1093.58,
+   "text": "This setup seems more complex with automatic adjustments based on resolution, which can"
+  },
+  {
+   "start": 1093.58,
+   "end": 1099.02,
+   "text": "be confusing. I always try to simplify workflows, but others seem to make them more complex."
+  },
+  {
+   "start": 1099.02,
+   "end": 1104.54,
+   "text": "It would be nice to have a single node that handles all these steps. The first time I ran it,"
+  },
+  {
+   "start": 1104.54,
+   "end": 1109.82,
+   "text": "it took over 35 seconds to generate, but the second generation was completed in just 18 seconds."
+  },
+  {
+   "start": 1111.02,
+   "end": 1115.9,
+   "text": "Now let's test both the regular dev version, the large one, and compare it with the floating"
+  },
+  {
+   "start": 1115.9,
+   "end": 1121.34,
+   "text": "point eight version, which is a bit smaller. I'll convert the positive prompt text encoder"
+  },
+  {
+   "start": 1121.34,
+   "end": 1127.5,
+   "text": "to a text input so I can use an easy positive node, allowing me to place the prompt in one location,"
+  },
+  {
+   "start": 1127.5,
+   "end": 1132.46,
+   "text": "the seed will be fixed. I'll arrange the setup so you can see both generations and the prompt."
+  },
+  {
+   "start": 1133.1,
+   "end": 1137.26,
+   "text": "I'll place the regular version on the left and the smaller floating point eight version on the"
+  },
+  {
+   "start": 1137.26,
+   "end": 1144.22,
+   "text": "right. For the first try, we see less detail in the eye with the floating point eight version."
+  },
+  {
+   "start": 1144.22,
+   "end": 1149.66,
+   "text": "For the gnome, the results are quite similar, but the regular version has more detail,"
+  },
+  {
+   "start": 1149.74,
+   "end": 1156.46,
+   "text": "like the moon having more details. For the pixaroma book, both versions got the text right on the first"
+  },
+  {
+   "start": 1156.46,
+   "end": 1162.7,
+   "text": "try. The same goes for the sign on an exotic island with only some small differences."
+  },
+  {
+   "start": 1162.7,
+   "end": 1166.78,
+   "text": "For the burger photo, the results are again very similar. So most of the time,"
+  },
+  {
+   "start": 1167.34,
+   "end": 1173.02,
+   "text": "it doesn't really seem worth using the regular version since the results are comparable. It"
+  },
+  {
+   "start": 1173.02,
+   "end": 1177.02,
+   "text": "depends on the prompt. Sometimes you see a difference and sometimes you don't. The floating"
+  },
+  {
+   "start": 1177.02,
+   "end": 1182.06,
+   "text": "point eight version can do nice illustrations and decent photos. And with the new realistic Laura,"
+  },
+  {
+   "start": 1182.06,
+   "end": 1188.14,
+   "text": "you can achieve even more realism. However, some people have noticed a small line on the chin"
+  },
+  {
+   "start": 1188.14,
+   "end": 1193.42,
+   "text": "in photos. It handles a girl in the grass better than stable diffusion three and can even manage"
+  },
+  {
+   "start": 1193.42,
+   "end": 1199.9,
+   "text": "a yoga pose, though I used a witch as the subject. Overall, the regular version is a bit better,"
+  },
+  {
+   "start": 1199.9,
+   "end": 1206.46,
+   "text": "but not by much. Given the extra complexity in the workflow and the increased generation time,"
+  },
+  {
+   "start": 1206.46,
+   "end": 1210.22,
+   "text": "I'll probably stick with the floating point eight version most of the time."
+  },
+  {
+   "start": 1211.1,
+   "end": 1215.9,
+   "text": "I was about to finish this video when new updates came out. For those with lower VRAM,"
+  },
+  {
+   "start": 1215.9,
+   "end": 1220.78,
+   "text": "there are now faster versions of flux. The quality is a bit lower, but at least you can check"
+  },
+  {
+   "start": 1220.78,
+   "end": 1225.58,
+   "text": "if it runs on your PC. The new version is NF4, which I believe stands for normalized float"
+  },
+  {
+   "start": 1225.58,
+   "end": 1229.66,
+   "text": "four bit. I'll show you how I managed to install both the dev and Chanel versions on my"
+  },
+  {
+   "start": 1229.66,
+   "end": 1235.26,
+   "text": "comfy UI. Download the Chanel version model from the link in the description or on discord,"
+  },
+  {
+   "start": 1235.26,
+   "end": 1241.5,
+   "text": "where it's more organized. Next, in your models folder, look for the checkpoints folder. This version"
+  },
+  {
+   "start": 1241.5,
+   "end": 1247.34,
+   "text": "worked for me when it had BNB in the name. I tried a version without BNB in the name and it didn't"
+  },
+  {
+   "start": 1247.34,
+   "end": 1253.1,
+   "text": "work. So make sure the name includes BNB. Do the same for the dev model. These models are"
+  },
+  {
+   "start": 1253.1,
+   "end": 1258.22,
+   "text": "smaller than the floating point eight versions and only take up 11 gigabytes. After downloading,"
+  },
+  {
+   "start": 1258.22,
+   "end": 1264.78,
+   "text": "you should have both models ready to make it work on comfy UI. You'll need a custom node called"
+  },
+  {
+   "start": 1264.86,
+   "end": 1270.94,
+   "text": "bits and bytes. As of making this video, it wasn't available in the manager only in the dev channel,"
+  },
+  {
+   "start": 1270.94,
+   "end": 1274.7,
+   "text": "so I'll install it manually. You'll also need to install bits and bytes."
+  },
+  {
+   "start": 1275.98,
+   "end": 1281.1,
+   "text": "Go to your comfy UI folder and look for the custom nodes folder. Here you can see all your"
+  },
+  {
+   "start": 1281.1,
+   "end": 1285.42,
+   "text": "installed custom nodes. If you ever install a node and comfy UI stops working, you can"
+  },
+  {
+   "start": 1285.42,
+   "end": 1289.74,
+   "text": "delete the folder for that node from here. Next, go to the address bar in the custom"
+  },
+  {
+   "start": 1289.74,
+   "end": 1295.9,
+   "text": "nodes folder, type cmd and press enter. This will open the command window in that exact path."
+  },
+  {
+   "start": 1295.9,
+   "end": 1302.06,
+   "text": "Use the command git clone followed by the link to the nodes GitHub page. Press enter and the"
+  },
+  {
+   "start": 1302.06,
+   "end": 1307.9,
+   "text": "node will be copied to your PC. Now you need to install bits and bytes. In the command window,"
+  },
+  {
+   "start": 1307.9,
+   "end": 1314.38,
+   "text": "use the command pip install, you bits and bytes and press enter. It shows here that I already"
+  },
+  {
+   "start": 1314.38,
+   "end": 1319.58,
+   "text": "have it installed. If it doesn't install for you on the portable comfy UI, try this command"
+  },
+  {
+   "start": 1319.9,
+   "end": 1332.98,
+   "text": "go to your update folder, type cmd and use the same command. Make sure to close all command"
+  },
+  {
+   "start": 1332.98,
+   "end": 1340.66,
+   "text": "windows you have opened or comfy UI will not start. Then run comfy UI. To ensure everything is working"
+  },
+  {
+   "start": 1340.66,
+   "end": 1346.58,
+   "text": "correctly, update comfy UI using the manager and select update all then restart comfy UI."
+  },
+  {
+   "start": 1347.62,
+   "end": 1351.78,
+   "text": "Here's the workflow for the schnell floating point eight version. To make it work with"
+  },
+  {
+   "start": 1351.78,
+   "end": 1356.66,
+   "text": "NF4, you'll need to make a change search for NF in the nodes. And since we've installed the new"
+  },
+  {
+   "start": 1356.66,
+   "end": 1364.02,
+   "text": "custom node, you should see the checkpoint loader NF4 in the list. Add this node, which looks"
+  },
+  {
+   "start": 1364.02,
+   "end": 1369.54,
+   "text": "similar to the load checkpoint node. Reconnect the nodes as you did with load checkpoint."
+  },
+  {
+   "start": 1369.54,
+   "end": 1376.58,
+   "text": "Connect the model to model clip to both positive and negative encoder and via e to via e decode."
+  },
+  {
+   "start": 1377.3,
+   "end": 1380.58,
+   "text": "After making these connections, you can delete the load checkpoint node."
+  },
+  {
+   "start": 1381.38,
+   "end": 1387.38,
+   "text": "Ensure you select the flux schnell NF4 version from the list. When you test it, you might notice"
+  },
+  {
+   "start": 1387.38,
+   "end": 1392.82,
+   "text": "that the first time it's slower, but after that, it should take around three seconds on my RTX 4090."
+  },
+  {
+   "start": 1393.38,
+   "end": 1399.3,
+   "text": "You can now save the workflow. Next, let's set up the version for the dev NF4. Select that"
+  },
+  {
+   "start": 1399.3,
+   "end": 1404.82,
+   "text": "model from the list, change the steps to 20 to avoid any blurred images with the dev version,"
+  },
+  {
+   "start": 1404.82,
+   "end": 1411.14,
+   "text": "switch to DPM plus plus two M with SGM uniform. After making these changes, do a quick test to"
+  },
+  {
+   "start": 1411.14,
+   "end": 1416.02,
+   "text": "ensure everything works correctly. For the dev version, you can add the flux guidance node,"
+  },
+  {
+   "start": 1416.02,
+   "end": 1421.06,
+   "text": "which provides extra control. Connect this node between the positive prompt and the key sampler."
+  },
+  {
+   "start": 1424.05,
+   "end": 1429.81,
+   "text": "Now let's test the floating point eight model alongside the NF4 model to compare the results."
+  },
+  {
+   "start": 1430.69,
+   "end": 1434.29,
+   "text": "First, choose a fixed seed for both models to ensure a better comparison."
+  },
+  {
+   "start": 1435.25,
+   "end": 1441.65,
+   "text": "Next, convert the positive prompt to text input. So you can use a single prompt for both workflows."
+  },
+  {
+   "start": 1442.29,
+   "end": 1446.77,
+   "text": "Arrange the images so you can see both side by side on the screen along with the prompt."
+  },
+  {
+   "start": 1447.41,
+   "end": 1451.49,
+   "text": "Place the floating point eight version on the left and the NF4 version on the right."
+  },
+  {
+   "start": 1453.41,
+   "end": 1456.77,
+   "text": "For some prompts, there's a noticeable difference between the images,"
+  },
+  {
+   "start": 1456.77,
+   "end": 1460.61,
+   "text": "while for others, the difference isn't as significant. Generally, the floating point"
+  },
+  {
+   "start": 1460.61,
+   "end": 1466.69,
+   "text": "eight version seems to have more detail. For instance, in the robot image, it appears more"
+  },
+  {
+   "start": 1466.69,
+   "end": 1472.61,
+   "text": "detailed around the eyes and the texture is a bit sharper. For some prompts, like the burger,"
+  },
+  {
+   "start": 1472.61,
+   "end": 1477.33,
+   "text": "the textures are almost the same, but the floating point eight version shows slightly more texture."
+  },
+  {
+   "start": 1478.69,
+   "end": 1483.01,
+   "text": "With the cute hamster, the differences in sharpness and detail are more evident,"
+  },
+  {
+   "start": 1483.73,
+   "end": 1489.41,
+   "text": "with the NF4 version being less sharp. In the dragon prompt, the images are similar,"
+  },
+  {
+   "start": 1489.41,
+   "end": 1495.57,
+   "text": "but the horns look different. For the pirate face, it's noticeably sharper in the floating point eight"
+  },
+  {
+   "start": 1495.57,
+   "end": 1501.97,
+   "text": "version. The monkey image is again quite similar, with a bit more texture in the wood in the floating"
+  },
+  {
+   "start": 1501.97,
+   "end": 1506.29,
+   "text": "point eight version. For the magician bunny, the bunny is sharper in the floating point eight"
+  },
+  {
+   "start": 1506.29,
+   "end": 1511.09,
+   "text": "version. So depending on your preferences, you might find the floating point eight version"
+  },
+  {
+   "start": 1511.09,
+   "end": 1515.25,
+   "text": "more appealing for the portrait. It has more texture on the nose and forehead."
+  },
+  {
+   "start": 1516.05,
+   "end": 1520.93,
+   "text": "For the last part, since I have already extended the video a few times to include the latest updates,"
+  },
+  {
+   "start": 1521.57,
+   "end": 1528.37,
+   "text": "I want to discuss using Laura with flux. You need a Laura that matches the base model. So in this"
+  },
+  {
+   "start": 1528.37,
+   "end": 1533.09,
+   "text": "case, use the dev version. I'll use the floating point eight version for this example."
+  },
+  {
+   "start": 1534.29,
+   "end": 1540.45,
+   "text": "Xlabs has released a realism Laura for flux. I found a version that works with"
+  },
+  {
+   "start": 1540.45,
+   "end": 1546.53,
+   "text": "comfy UI on this page. It's quite small. So you can download it and place it in the following folder."
+  },
+  {
+   "start": 1547.17,
+   "end": 1553.57,
+   "text": "Go to comfy UI, then models and look for the Laura's folder. Save the Laura there. I found a"
+  },
+  {
+   "start": 1553.57,
+   "end": 1558.69,
+   "text": "prompt that better demonstrates what this Laura can do. First, let's hit refresh so we can see"
+  },
+  {
+   "start": 1558.69,
+   "end": 1564.29,
+   "text": "the new downloaded model when we add it to the workflow. But before adding the Laura, let's test"
+  },
+  {
+   "start": 1564.29,
+   "end": 1569.81,
+   "text": "without it using a fixed seed. The result is this image, which has a plastic look and isn't"
+  },
+  {
+   "start": 1569.81,
+   "end": 1576.45,
+   "text": "very realistic. I'll copy this image and paste it next to the new results for comparison. To add the"
+  },
+  {
+   "start": 1576.45,
+   "end": 1584.45,
+   "text": "Laura, do it as usual. Add a load Laura node and select the Laura from the list. Place the Laura"
+  },
+  {
+   "start": 1584.45,
+   "end": 1590.69,
+   "text": "between the low checkpoint and the clip text encoders. Instead of a direct connection, route the"
+  },
+  {
+   "start": 1590.69,
+   "end": 1597.57,
+   "text": "connection through the Laura. Connect model to model input, clip to clip, then clip to positive"
+  },
+  {
+   "start": 1597.57,
+   "end": 1605.09,
+   "text": "and clip to negative. Now, let's test it to see any differences. With the realism Laura, the result is"
+  },
+  {
+   "start": 1605.09,
+   "end": 1610.69,
+   "text": "much more realistic. If you want to generate more realistic images, this Laura can help. I'll try"
+  },
+  {
+   "start": 1610.69,
+   "end": 1617.33,
+   "text": "another prompt like a portrait of a dog. First, I'll bypass the Laura to see how it looks without"
+  },
+  {
+   "start": 1617.33,
+   "end": 1623.41,
+   "text": "it. The result is quite realistic. I'll make a copy and paste it. For some reason, it kept"
+  },
+  {
+   "start": 1623.41,
+   "end": 1628.29,
+   "text": "loading different images instead of pasting the correct one. I had to click on the arrows"
+  },
+  {
+   "start": 1628.29,
+   "end": 1634.45,
+   "text": "to find my pasted version. It seems I had a folder in my input directory with more images I had pasted"
+  },
+  {
+   "start": 1634.45,
+   "end": 1639.89,
+   "text": "in the past with the same name. I cleared that folder to fix the issue. I'm going to the low"
+  },
+  {
+   "start": 1639.89,
+   "end": 1645.65,
+   "text": "Laura node and right clicking to bypass again to activate it. When I test it now, the difference"
+  },
+  {
+   "start": 1645.65,
+   "end": 1651.57,
+   "text": "is subtle but noticeable. You can see that the image on the left with the Laura activated"
+  },
+  {
+   "start": 1651.57,
+   "end": 1660.03,
+   "text": "appears more realistic. In this video, I tested five flux models as you can see, flux version one comes"
+  },
+  {
+   "start": 1660.03,
+   "end": 1664.91,
+   "text": "in different sizes and versions. Generally, the larger the file, the better the image quality,"
+  },
+  {
+   "start": 1664.91,
+   "end": 1670.83,
+   "text": "but it also requires a more powerful graphics card with more VRAM and more system RAM. Here,"
+  },
+  {
+   "start": 1670.83,
+   "end": 1675.07,
+   "text": "you can see the approximate time it took for each model to generate the images. I tested"
+  },
+  {
+   "start": 1675.07,
+   "end": 1683.47,
+   "text": "them on an RTX 4090. As a general rule, the dev version offers better quality than the schnell version."
+  },
+  {
+   "start": 1684.11,
+   "end": 1690.27,
+   "text": "Additionally, the smaller the file size, the faster it will generate. If you don't have a high-end"
+  },
+  {
+   "start": 1690.27,
+   "end": 1695.71,
+   "text": "graphics card, start with the schnell version. If your graphics card is decent but not the best,"
+  },
+  {
+   "start": 1695.71,
+   "end": 1700.91,
+   "text": "you can try the dev floating point eight version. On some cards, the NF4 version might be the"
+  },
+  {
+   "start": 1700.91,
+   "end": 1706.83,
+   "text": "fastest option. It took me a while to organize everything, but now you can find all the workflows"
+  },
+  {
+   "start": 1706.83,
+   "end": 1713.23,
+   "text": "for episode eight and earlier episodes on the Discord channel, Pixaroma workflows. I've organized"
+  },
+  {
+   "start": 1713.23,
+   "end": 1719.55,
+   "text": "them by model. For example, the full version includes an easy access download link for everything"
+  },
+  {
+   "start": 1719.55,
+   "end": 1726.59,
+   "text": "you need and instructions on where to place the files. You also have a preview of the workflow"
+  },
+  {
+   "start": 1726.59,
+   "end": 1734.59,
+   "text": "which you can download and load into Comfy UI using the load button. I've also created workflows for"
+  },
+  {
+   "start": 1734.59,
+   "end": 1741.07,
+   "text": "the dev version and floating point eight, complete with settings and other useful information."
+  },
+  {
+   "start": 1741.07,
+   "end": 1747.07,
+   "text": "I've included compact versions for most workflows added Laura and more. You can test these for"
+  },
+  {
+   "start": 1747.07,
+   "end": 1754.75,
+   "text": "free on various websites. Sometimes they can be busy. If that's the case, try the second"
+  },
+  {
+   "start": 1754.75,
+   "end": 1762.43,
+   "text": "website which should load fine. You can add a prompt, run it and see that it's waiting for a GPU to become"
+  },
+  {
+   "start": 1762.43,
+   "end": 1770.83,
+   "text": "available. Once it is, you'll get an image that you can download. I have a small request, 78% of"
+  },
+  {
+   "start": 1770.83,
+   "end": 1775.79,
+   "text": "people who watch my videos are not subscribed. If you could hit that subscribe button, it would"
+  },
+  {
+   "start": 1775.79,
+   "end": 1781.07,
+   "text": "really help. If you found this video useful, please leave a like and a comment to help my"
+  },
+  {
+   "start": 1781.07,
+   "end": 1786.35,
+   "text": "channel grow so I can create even more content for you. Thank you for watching and have a great day."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:11:58.808581+00:00",
+ "seconds": 60.5
+}

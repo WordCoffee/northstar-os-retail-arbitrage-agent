@@ -1,0 +1,753 @@
+{
+ "id": "ywYN6h3b4NA",
+ "title": "How to Make Realistic Shadows in Photoshop",
+ "channel": "PHLEARN",
+ "url": "https://www.youtube.com/watch?v=ywYN6h3b4NA",
+ "query": "shadow painting photoshop product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 768.1,
+ "chars": 13580,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.04,
+   "text": "Today I'm going to show you how to paint a realistic shadow under any object in Photoshop."
+  },
+  {
+   "start": 9.95,
+   "end": 13.87,
+   "text": "Hey there, welcome to Flurn. My name is Aaron Nase and today we're going to help you with your"
+  },
+  {
+   "start": 13.87,
+   "end": 19.63,
+   "text": "cutouts. The biggest thing to remember is that shadows tend to be like darker and more well"
+  },
+  {
+   "start": 19.63,
+   "end": 24.43,
+   "text": "defined when they're close to the object and they tend to get lighter and less well defined"
+  },
+  {
+   "start": 24.43,
+   "end": 29.31,
+   "text": "the farther they get from the object. So my recommendation is to create multiple different"
+  },
+  {
+   "start": 29.31,
+   "end": 34.51,
+   "text": "layers for both the close shadows and the farther shadows. Alrighty, let's go ahead and jump into"
+  },
+  {
+   "start": 34.51,
+   "end": 40.35,
+   "text": "Photoshop. We're going to start off by cutting our subject out. In this case, it's this piece of fruit."
+  },
+  {
+   "start": 40.35,
+   "end": 44.51,
+   "text": "Nice and easy selection here. We're going to go to select and then down to select subject."
+  },
+  {
+   "start": 45.55,
+   "end": 50.27,
+   "text": "Fantastic. And let's go ahead and click on our layer mask. Now we can see we have some other"
+  },
+  {
+   "start": 50.27,
+   "end": 54.67,
+   "text": "stuff I didn't want necessarily in this election. So I'm going to hit L for my lasso tool."
+  },
+  {
+   "start": 54.67,
+   "end": 58.27,
+   "text": "And we're just going to go ahead and make that selection hit shift delete and fill that with"
+  },
+  {
+   "start": 58.27,
+   "end": 62.83,
+   "text": "black on my layer mask. There we go. And then I'm just going to pop a solid color fill layer."
+  },
+  {
+   "start": 62.83,
+   "end": 66.99,
+   "text": "We're just going to go all the way to white and put that right underneath our object."
+  },
+  {
+   "start": 66.99,
+   "end": 71.39,
+   "text": "All right. So now our object is cut out. It's time to make our shadows. Now we have our dark"
+  },
+  {
+   "start": 71.39,
+   "end": 75.15,
+   "text": "shadows that are going to be directly under the object. And then we have our softer"
+  },
+  {
+   "start": 75.15,
+   "end": 78.11,
+   "text": "shadows that are going to be a little bit larger. So let's go ahead and start with"
+  },
+  {
+   "start": 78.11,
+   "end": 82.75,
+   "text": "those dark shadows under our object. So we're going to create a new layer right under the"
+  },
+  {
+   "start": 82.75,
+   "end": 87.07,
+   "text": "solid color fill layer. And I'm going to zoom in and actually grab some of the shadow color"
+  },
+  {
+   "start": 87.07,
+   "end": 92.91,
+   "text": "that's right there and then simply start painting with my brush tool. There we go. So you can see"
+  },
+  {
+   "start": 92.91,
+   "end": 98.35,
+   "text": "we're painting with my brush tool kind of continuing this existing shadow that's already there. If you"
+  },
+  {
+   "start": 98.35,
+   "end": 104.35,
+   "text": "didn't have a shadow, you can just choose a darker color of whatever's existing. There we go. Like"
+  },
+  {
+   "start": 104.35,
+   "end": 109.79,
+   "text": "in this case, you can see it's a dark red. Fantastic. So I'm just kind of like painting"
+  },
+  {
+   "start": 109.79,
+   "end": 114.35,
+   "text": "this in here and then choosing a little bit of a larger brush and then just kind of painting"
+  },
+  {
+   "start": 114.43,
+   "end": 120.11,
+   "text": "it in a little bit more. There we go. Because we want like a solid area where the object is"
+  },
+  {
+   "start": 120.11,
+   "end": 125.55,
+   "text": "going to contact the ground. Now keep in mind we're not using grayscale shadows here. We want to make"
+  },
+  {
+   "start": 125.55,
+   "end": 130.59,
+   "text": "sure the shadow color has a little bit of the object color in it. So that way it reflects"
+  },
+  {
+   "start": 130.59,
+   "end": 134.83,
+   "text": "light just like in real life. Let's go ahead and make that visible and we'll just zoom out."
+  },
+  {
+   "start": 134.83,
+   "end": 139.23,
+   "text": "So there we go. We can see that's where we start something that looks like that looks pretty"
+  },
+  {
+   "start": 139.23,
+   "end": 144.91,
+   "text": "good. We're going to make that a little bit bigger. Now my next suggestion is to do this in a lot of"
+  },
+  {
+   "start": 144.91,
+   "end": 149.15,
+   "text": "different layers. So that looks good to start with. Let's go ahead and create a new layer."
+  },
+  {
+   "start": 149.15,
+   "end": 154.19,
+   "text": "I'm going to use a larger brush and we're going to use a flow of like 10% and I'm just going"
+  },
+  {
+   "start": 154.19,
+   "end": 160.19,
+   "text": "to kind of paint this in. You can see I'm mostly painting in where my object is. Like if I made"
+  },
+  {
+   "start": 160.19,
+   "end": 164.35,
+   "text": "this invisible, you can see most of my paint is there, but it's kind of kind of seep out"
+  },
+  {
+   "start": 164.35,
+   "end": 170.83,
+   "text": "underneath it. Here we go. So you can see it's kind of like starting to come out right there"
+  },
+  {
+   "start": 171.47,
+   "end": 176.51,
+   "text": "towards the bottom. I'm keeping my shadow a little bit more on the right hand side than on the left"
+  },
+  {
+   "start": 176.51,
+   "end": 182.59,
+   "text": "hand side. And the reason for that is because the object is kind of like sitting on the ground"
+  },
+  {
+   "start": 182.59,
+   "end": 186.67,
+   "text": "right there a little bit more. Okay, still do a little bit on the left hand side, but definitely"
+  },
+  {
+   "start": 186.67,
+   "end": 190.43,
+   "text": "a little bit more on the right. And then my suggestion is get it to where you think it"
+  },
+  {
+   "start": 190.43,
+   "end": 193.95,
+   "text": "looks good. Like get it to where you're like, okay, that's shadow is starting to look good."
+  },
+  {
+   "start": 194.03,
+   "end": 198.35,
+   "text": "And then it's time to create another layer. So we can see we already have two layers. We have"
+  },
+  {
+   "start": 198.35,
+   "end": 202.59,
+   "text": "this shadow that's directly under there. You can lower these opacities at any time if they're too"
+  },
+  {
+   "start": 202.59,
+   "end": 207.47,
+   "text": "much. Okay, then on a new layer, we're going to do the same thing. But this time we're going to"
+  },
+  {
+   "start": 207.47,
+   "end": 212.59,
+   "text": "get even a larger brush. And I'm going to go a little bit softer with it. So I recommend it's"
+  },
+  {
+   "start": 212.59,
+   "end": 218.27,
+   "text": "kind of starting with your hard edge brush a little closer to your object. And then getting,"
+  },
+  {
+   "start": 218.27,
+   "end": 223.07,
+   "text": "you know, larger and larger with your brushes. And then just paint with like a low flow."
+  },
+  {
+   "start": 223.07,
+   "end": 227.07,
+   "text": "That's kind of like the real key to this is to use a low flow on your brush."
+  },
+  {
+   "start": 228.19,
+   "end": 232.11,
+   "text": "There we go, you can see that's starting to look really, really good. If you don't like an area"
+  },
+  {
+   "start": 232.11,
+   "end": 236.59,
+   "text": "that you did just hit E for the eraser tool, and just choose a large soft edge brush,"
+  },
+  {
+   "start": 236.59,
+   "end": 243.55,
+   "text": "and just erase it away. This really is like a kind of an opportunity to just take your time and"
+  },
+  {
+   "start": 244.19,
+   "end": 250.35,
+   "text": "like kind of analyze light and see how things work together. But the biggest tip that I can"
+  },
+  {
+   "start": 250.35,
+   "end": 254.59,
+   "text": "give you is to do this over a few different layers. So let's go ahead and start off. So there's no"
+  },
+  {
+   "start": 254.59,
+   "end": 260.75,
+   "text": "shadow. We have our first, our second, and our third. You can see if I take away any of these,"
+  },
+  {
+   "start": 260.75,
+   "end": 265.63,
+   "text": "it really doesn't work nearly as well. Let's go ahead and create another shadow. This time we're"
+  },
+  {
+   "start": 265.63,
+   "end": 271.47,
+   "text": "going to choose a slightly lighter color. And again, a nice large soft edge brush, I'm going"
+  },
+  {
+   "start": 271.47,
+   "end": 275.15,
+   "text": "to change my layer blend mode, we can use multiply. That's just going to make things a"
+  },
+  {
+   "start": 275.15,
+   "end": 284.64,
+   "text": "little bit darker for us. There we go. Because this whole fruit is going to obscure some light, right?"
+  },
+  {
+   "start": 286.64,
+   "end": 292.72,
+   "text": "There we go. That's looking pretty good. I think it's a little bit too much red in there. So"
+  },
+  {
+   "start": 292.72,
+   "end": 297.6,
+   "text": "not a big deal. You can hit controller command U, and then you can just desaturate it. Okay."
+  },
+  {
+   "start": 297.6,
+   "end": 303.2,
+   "text": "I don't want to go all that way, but I want to find the nice balance there. Okay. And then"
+  },
+  {
+   "start": 303.2,
+   "end": 306.4,
+   "text": "I think this is just a little bit too visible to so we're just going to make it a little bit less"
+  },
+  {
+   "start": 306.4,
+   "end": 313.52,
+   "text": "visible. So you can see each one of these shadows as I go through, they all add their own unique"
+  },
+  {
+   "start": 314.64,
+   "end": 320.8,
+   "text": "little bit of depth to the object itself. And again, go in here and change your opacity and"
+  },
+  {
+   "start": 320.8,
+   "end": 324.64,
+   "text": "kind of work with these. This one actually looks good. I'm going to duplicate that by hitting"
+  },
+  {
+   "start": 324.64,
+   "end": 329.6,
+   "text": "controller command J. Okay, so you can see just duplicate it that there. And then I'm"
+  },
+  {
+   "start": 329.6,
+   "end": 334.16,
+   "text": "just going to give this a little bit of a blur. So we'll go to filter down to blur and then Gaussian"
+  },
+  {
+   "start": 334.16,
+   "end": 340.8,
+   "text": "blur. There we go. Gaussian blur that looks good, but it's too, it's too visible. So we're just going"
+  },
+  {
+   "start": 340.8,
+   "end": 346.24,
+   "text": "to kind of take that opacity down there a little bit. There we go. That's looking really, really"
+  },
+  {
+   "start": 346.24,
+   "end": 353.52,
+   "text": "good. So just these little, little edits on each one of these layers can help you make a much"
+  },
+  {
+   "start": 353.52,
+   "end": 361.36,
+   "text": "more realistic looking shadow for your object. And then the cool thing here is the object itself,"
+  },
+  {
+   "start": 361.36,
+   "end": 366.32,
+   "text": "we really don't want like, you can see right here, it's a little bit light right on the bottom of the"
+  },
+  {
+   "start": 366.32,
+   "end": 370.32,
+   "text": "edge of the object. So I actually want to paint sometimes on the object itself. So we're going to"
+  },
+  {
+   "start": 370.32,
+   "end": 375.36,
+   "text": "create a new layer. And now we're going to show you a really cool tool called a clipping mask."
+  },
+  {
+   "start": 375.36,
+   "end": 378.88,
+   "text": "And that's going to allow me to paint on the object itself, because we painted a pretty"
+  },
+  {
+   "start": 378.88,
+   "end": 382.16,
+   "text": "nice shadow here, but I need to do a little bit of cleanup on the object. So we're going to"
+  },
+  {
+   "start": 382.16,
+   "end": 387.12,
+   "text": "use a clipping mask to do that. So a clipping mask is very easy to do. I'm just going to create this"
+  },
+  {
+   "start": 387.12,
+   "end": 394.64,
+   "text": "new layer right above our pomegranate here. And then almost called it tomato. And then I'm going to"
+  },
+  {
+   "start": 394.64,
+   "end": 399.52,
+   "text": "show you how a clipping mask work. So if I just have a regular layer, and I just paint with a color"
+  },
+  {
+   "start": 399.52,
+   "end": 405.04,
+   "text": "right over top of my pomegranate here, you can see it's visible everywhere. But if I go"
+  },
+  {
+   "start": 405.04,
+   "end": 410.64,
+   "text": "ahead and right click here and then go down to where it says create clipping mask, there we"
+  },
+  {
+   "start": 410.64,
+   "end": 415.68,
+   "text": "go. You can see now it's only going to be visible where my pomegranate is visible. And I can even"
+  },
+  {
+   "start": 415.68,
+   "end": 420.08,
+   "text": "move it around and things like that. But because our objects cut out, that's the only place it can"
+  },
+  {
+   "start": 420.08,
+   "end": 425.36,
+   "text": "be visible. You can then right click if you want and go down to release clipping mask. There we"
+  },
+  {
+   "start": 425.36,
+   "end": 430.48,
+   "text": "go. And it's going to be visible everywhere once more. Okay, so that's the concept I'm going to"
+  },
+  {
+   "start": 430.48,
+   "end": 435.28,
+   "text": "use to paint some shadow on underneath my object. We're going to create a new layer, right click"
+  },
+  {
+   "start": 435.28,
+   "end": 440.4,
+   "text": "and go to create clipping mask. Okay, and remember this is now only going to be visible"
+  },
+  {
+   "start": 440.4,
+   "end": 444.72,
+   "text": "exactly where the pomegranate is visible. But instead of painting with that blue color,"
+  },
+  {
+   "start": 444.72,
+   "end": 448.56,
+   "text": "I'm going to go ahead and grab my shadow color. And we're just going to paint this in."
+  },
+  {
+   "start": 448.56,
+   "end": 453.2,
+   "text": "Okay, so I'm going to make sure that we don't get this weird little area right here under my"
+  },
+  {
+   "start": 453.2,
+   "end": 458.64,
+   "text": "pomegranate, and that everything actually blends in just the way it should. And I'm holding"
+  },
+  {
+   "start": 458.64,
+   "end": 463.76,
+   "text": "alt or option to actually sample some of my shadow color that I actually painted."
+  },
+  {
+   "start": 464.64,
+   "end": 472.0,
+   "text": "There we go. And you can see, there we go, look at the edge between the two is starting to blend"
+  },
+  {
+   "start": 472.0,
+   "end": 479.52,
+   "text": "much, much better. Here we go, grab this dark color there, and kind of paint that in."
+  },
+  {
+   "start": 481.12,
+   "end": 485.68,
+   "text": "Fantastic. Let's just go ahead and lower down the saturation of that just a little bit."
+  },
+  {
+   "start": 487.12,
+   "end": 491.2,
+   "text": "And go ahead and clean this up. Now I just use select subject to cut out the pomegranate."
+  },
+  {
+   "start": 491.2,
+   "end": 494.8,
+   "text": "I could use the pen tool and, you know, taking more time and everything like that."
+  },
+  {
+   "start": 494.8,
+   "end": 499.2,
+   "text": "But in this case, I think select subject, it just worked well. It's a nice quick way to do this sort"
+  },
+  {
+   "start": 499.2,
+   "end": 504.08,
+   "text": "of thing. So let's go ahead and zoom out and take a look at the before and after. We'll grab this"
+  },
+  {
+   "start": 504.08,
+   "end": 511.26,
+   "text": "slightly dark color here. All right, that's looking great there. So here's the before,"
+  },
+  {
+   "start": 511.26,
+   "end": 515.98,
+   "text": "let's zoom in there. So there's the before and there's the after. And you can see this is"
+  },
+  {
+   "start": 515.98,
+   "end": 521.66,
+   "text": "only visible where the pomegranate is visible. That's an important takeaway. Here we go,"
+  },
+  {
+   "start": 521.66,
+   "end": 526.06,
+   "text": "because I'm taking some of the shadow color, I'm just going to race away where it didn't really need"
+  },
+  {
+   "start": 526.06,
+   "end": 531.02,
+   "text": "to be there. I'm taking the shadow color and then painting it back on the pomegranate itself."
+  },
+  {
+   "start": 531.98,
+   "end": 535.82,
+   "text": "All right, and even like here, I don't want this like light colored border here."
+  },
+  {
+   "start": 535.82,
+   "end": 541.42,
+   "text": "So we're just going to grab some of this dark color here, and kind of paint this in right here"
+  },
+  {
+   "start": 541.42,
+   "end": 545.74,
+   "text": "so we don't get any like weird fringing and things like that underneath the pomegranate."
+  },
+  {
+   "start": 545.82,
+   "end": 552.22,
+   "text": "This could be a person, this could be a shoe, this could, you know, quite literally be anything."
+  },
+  {
+   "start": 553.9,
+   "end": 560.78,
+   "text": "There we are. Fantastic. Okay, and even when we zoom out, so that's a little bit too light"
+  },
+  {
+   "start": 560.78,
+   "end": 564.54,
+   "text": "right there, right? I'm just going to come back in here and kind of darken that up a little bit"
+  },
+  {
+   "start": 564.54,
+   "end": 570.94,
+   "text": "there. Okay, so even when we zoom out, we can see there's the before and the after,"
+  },
+  {
+   "start": 570.94,
+   "end": 575.66,
+   "text": "you can see it just helps clean up the object itself. So it's not only important to paint"
+  },
+  {
+   "start": 575.82,
+   "end": 579.74,
+   "text": "the shadow, but it's important to paint the object. So let's go ahead and group those together,"
+  },
+  {
+   "start": 579.74,
+   "end": 584.86,
+   "text": "and let's go ahead and group together our shadow. Now you guys can download this entire PSD"
+  },
+  {
+   "start": 584.86,
+   "end": 589.34,
+   "text": "on flern.com in the linked below. That way you can kind of just open this up and dissect it and"
+  },
+  {
+   "start": 589.34,
+   "end": 593.98,
+   "text": "see what you like. Here we go. The pomegranate, you can see when it's gone, the shadow doesn't"
+  },
+  {
+   "start": 593.98,
+   "end": 598.14,
+   "text": "look anything special. The only part of the shadow that I care about is underneath the"
+  },
+  {
+   "start": 598.14,
+   "end": 602.62,
+   "text": "pomegranate. And the shadow layer itself, you can see is made up of all these different"
+  },
+  {
+   "start": 602.62,
+   "end": 608.06,
+   "text": "layers. So you can see if I turn each one of these off, our shadow starts to get less and less"
+  },
+  {
+   "start": 608.06,
+   "end": 615.18,
+   "text": "realistic. Okay, even if I go in, let's go ahead and turn them back on. There we go. If I turn off"
+  },
+  {
+   "start": 615.18,
+   "end": 620.86,
+   "text": "like just that layer, or just that layer, it becomes a lot less realistic. But I would encourage"
+  },
+  {
+   "start": 620.86,
+   "end": 626.22,
+   "text": "you as you do this to turn some of these layers off and on and kind of get an idea of like,"
+  },
+  {
+   "start": 626.22,
+   "end": 631.74,
+   "text": "is this better or is this worse? And should I make this more visible or less visible? Like,"
+  },
+  {
+   "start": 631.74,
+   "end": 634.78,
+   "text": "you could go in and say, Oh, I like that. I think there should be more that you can hit"
+  },
+  {
+   "start": 634.78,
+   "end": 639.42,
+   "text": "controller command J to duplicate that layer. And then maybe I'll just move it over here and then"
+  },
+  {
+   "start": 639.42,
+   "end": 644.62,
+   "text": "give it like a really big Gaussian blur. And that's going to be like where the pomegranate just like"
+  },
+  {
+   "start": 644.62,
+   "end": 649.74,
+   "text": "blocks light from, you know, hitting the table or whatever it is, right, like a large blur."
+  },
+  {
+   "start": 649.74,
+   "end": 654.86,
+   "text": "There we go, something like that. So here we go, we have a very large soft edge blur."
+  },
+  {
+   "start": 655.58,
+   "end": 659.82,
+   "text": "There we go. That's going to add that, you know what, I'm going to hit undo a couple"
+  },
+  {
+   "start": 659.82,
+   "end": 665.82,
+   "text": "times because I made that blur way too large. That was that was a irresponsibly large blur air."
+  },
+  {
+   "start": 666.78,
+   "end": 670.7,
+   "text": "Calm down, your blur does not need to be that big. Okay, there we go."
+  },
+  {
+   "start": 672.3,
+   "end": 676.3,
+   "text": "There we go. But now I just have this like blur that I can kind of move around and be like,"
+  },
+  {
+   "start": 676.3,
+   "end": 679.58,
+   "text": "Oh, you know what, actually, that looks pretty good. And then I can still go in there and"
+  },
+  {
+   "start": 679.58,
+   "end": 684.22,
+   "text": "change the opacity of that blur. I can hit controller command T and kind of stretch that"
+  },
+  {
+   "start": 684.22,
+   "end": 690.78,
+   "text": "out to. But basically, that's the idea, you want to make sure that you're, you know, creating this"
+  },
+  {
+   "start": 690.78,
+   "end": 696.38,
+   "text": "nice hard shadow under the object itself. And then that shadow just kind of gets softer and larger"
+  },
+  {
+   "start": 696.38,
+   "end": 701.18,
+   "text": "as it goes out from the shadow. And then I also want to just I know I said this again,"
+  },
+  {
+   "start": 701.18,
+   "end": 707.02,
+   "text": "but I also want to, you know, just point out that the shadow is not completely gray. Okay,"
+  },
+  {
+   "start": 707.02,
+   "end": 710.62,
+   "text": "it has some red in it because it's reflecting color from the original object. Let's go ahead"
+  },
+  {
+   "start": 710.62,
+   "end": 716.06,
+   "text": "and show you if this look if it was completely gray. So just temporarily, I'm going to create a huge"
+  },
+  {
+   "start": 716.06,
+   "end": 722.54,
+   "text": "saturation adjustment layer, we're going to clip this to the shadow. So it's only going to be visible"
+  },
+  {
+   "start": 722.54,
+   "end": 726.54,
+   "text": "where the shadow is. Now watch when I take the saturation down to zero, you can see that doesn't"
+  },
+  {
+   "start": 726.54,
+   "end": 733.1,
+   "text": "really look exactly right. Right? It should have some of the original color in the shadow."
+  },
+  {
+   "start": 733.1,
+   "end": 737.5,
+   "text": "It's going to take some of the color of the pomegranate and bounce it against the floor"
+  },
+  {
+   "start": 737.58,
+   "end": 743.98,
+   "text": "and help it make it look a lot more realistic. Thanks so much for watching. If you want to get"
+  },
+  {
+   "start": 743.98,
+   "end": 747.26,
+   "text": "a free tutorial from us every single week, make sure to hit that subscribe button,"
+  },
+  {
+   "start": 747.26,
+   "end": 751.66,
+   "text": "smash that notification bell and leave a comment right down below on any project"
+  },
+  {
+   "start": 751.66,
+   "end": 755.98,
+   "text": "you're working on. I'd love to hear from you. Thanks again, and I'll flurn you later. Bye,"
+  },
+  {
+   "start": 755.98,
+   "end": 756.62,
+   "text": "everyone."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:10:27.953441+00:00",
+ "seconds": 31.4
+}

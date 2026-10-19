@@ -1,0 +1,143 @@
+{
+ "id": "qojZEOVvvkI",
+ "title": "1-Minute Photoshop - How to Create Reflection",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=qojZEOVvvkI",
+ "query": "reflection photoshop product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.974,
+ "duration_s": 60.0,
+ "chars": 1379,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.16,
+   "text": "Hi there this is Ramesh from PicsInPerfect and today we are going to learn how to create a reflection info shop in just one minute."
+  },
+  {
+   "start": 4.16,
+   "end": 7.56,
+   "text": "Select the Fangle Market tool and make a selection till the reflection point just like that."
+  },
+  {
+   "start": 7.56,
+   "end": 8.96,
+   "text": "Press controller command J."
+  },
+  {
+   "start": 8.96,
+   "end": 11.8,
+   "text": "Press controller command D. Right click on it and choose Flip Vertical."
+  },
+  {
+   "start": 11.8,
+   "end": 13.96,
+   "text": "Now let's bring it down just like that. I'm happy with this."
+  },
+  {
+   "start": 13.96,
+   "end": 15.2,
+   "text": "And then hit enter."
+  },
+  {
+   "start": 15.2,
+   "end": 18.44,
+   "text": "Fold the controller command click on the layer thumbnail and then click on the mask button."
+  },
+  {
+   "start": 18.44,
+   "end": 22.76,
+   "text": "Now separate the mask, come back to the layer, go to Filter, Blur and then Motion Blur."
+  },
+  {
+   "start": 22.76,
+   "end": 26.48,
+   "text": "Let's keep it 90 degrees and you can play with the distance 19 is fine for this example."
+  },
+  {
+   "start": 26.48,
+   "end": 27.08,
+   "text": "Hit OK."
+  },
+  {
+   "start": 27.08,
+   "end": 29.08,
+   "text": "Go to Filter, Blur and then Gaussian Blur."
+  },
+  {
+   "start": 29.08,
+   "end": 31.44,
+   "text": "Let's add a little bit of Gaussian Blur 1.2 is fine for this example."
+  },
+  {
+   "start": 31.44,
+   "end": 31.84,
+   "text": "Hit OK."
+  },
+  {
+   "start": 31.84,
+   "end": 36.24,
+   "text": "Let's make the water a little darker by clicking on the Adjustment Layer icon and click on Levels."
+  },
+  {
+   "start": 36.24,
+   "end": 38.16,
+   "text": "Now bring this slider to the left."
+  },
+  {
+   "start": 38.16,
+   "end": 39.28,
+   "text": "But this makes everything darker."
+  },
+  {
+   "start": 39.28,
+   "end": 40.32,
+   "text": "Click on this button."
+  },
+  {
+   "start": 40.32,
+   "end": 41.68,
+   "text": "Create Clipping Mask button."
+  },
+  {
+   "start": 41.68,
+   "end": 43.08,
+   "text": "This makes just the water darker."
+  },
+  {
+   "start": 43.08,
+   "end": 43.68,
+   "text": "It looks amazing."
+  },
+  {
+   "start": 43.68,
+   "end": 46.76,
+   "text": "Now at this point you might think the water is a little bit sharp over the edge"
+  },
+  {
+   "start": 46.76,
+   "end": 49.28,
+   "text": "and then you would come back to the mask, open up the properties right here"
+  },
+  {
+   "start": 49.28,
+   "end": 51.84,
+   "text": "and increase the feather just a little bit and there you go."
+  },
+  {
+   "start": 51.84,
+   "end": 52.84,
+   "text": "Let's have a look at the before and after."
+  },
+  {
+   "start": 52.84,
+   "end": 55.64,
+   "text": "So this is the before and this is the after."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:58:25.341998+00:00",
+ "seconds": 5.0
+}

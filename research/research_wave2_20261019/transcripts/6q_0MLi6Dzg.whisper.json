@@ -1,0 +1,973 @@
+{
+ "id": "6q_0MLi6Dzg",
+ "title": "What is The Best Light For Product Photography?",
+ "channel": "Hairy Tornado",
+ "url": "https://www.youtube.com/watch?v=6q_0MLi6Dzg",
+ "query": "product listing photography",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 546.0,
+ "chars": 9453,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 2.8,
+   "text": "What's up you guys, Josh here, also known as Harry Tornado."
+  },
+  {
+   "start": 2.8,
+   "end": 7.84,
+   "text": "And in this video, I want to talk about product photography, more specifically lighting."
+  },
+  {
+   "start": 7.84,
+   "end": 11.48,
+   "text": "If you've been selling online for any amount of time on any platform, whether it be Etsy"
+  },
+  {
+   "start": 11.48,
+   "end": 16.14,
+   "text": "or eBay or Poshmark, you should know the value that a good product photo brings to"
+  },
+  {
+   "start": 16.14,
+   "end": 17.72,
+   "text": "you and your business."
+  },
+  {
+   "start": 17.72,
+   "end": 22.72,
+   "text": "Having the online photo of your item be really well lit and clear and bright really"
+  },
+  {
+   "start": 22.72,
+   "end": 26.4,
+   "text": "sets you apart from the other sellers and makes it more likely for you to be able"
+  },
+  {
+   "start": 26.4,
+   "end": 27.64,
+   "text": "to sell your item."
+  },
+  {
+   "start": 27.64,
+   "end": 31.64,
+   "text": "So in this video, I want to compare what I think are the top two choices for lighting"
+  },
+  {
+   "start": 31.64,
+   "end": 35.4,
+   "text": "rigs for online resellers or online retailers or whatever you are."
+  },
+  {
+   "start": 35.4,
+   "end": 37.8,
+   "text": "The first light option is going to be the ring light."
+  },
+  {
+   "start": 37.8,
+   "end": 41.68,
+   "text": "This light has been really popular over the last couple of years with YouTubers and vloggers"
+  },
+  {
+   "start": 41.68,
+   "end": 42.96,
+   "text": "and stuff like that."
+  },
+  {
+   "start": 42.96,
+   "end": 45.64,
+   "text": "But how well does it really work for product photography?"
+  },
+  {
+   "start": 45.64,
+   "end": 47.44,
+   "text": "And on the other hand, we have the softbox."
+  },
+  {
+   "start": 47.44,
+   "end": 49.44,
+   "text": "This is more of a traditional lighting setup."
+  },
+  {
+   "start": 49.44,
+   "end": 54.48,
+   "text": "This is what I see most of my other fellow YouTube resellers using."
+  },
+  {
+   "start": 54.48,
+   "end": 57.88,
+   "text": "But does the softbox kind of fall short where maybe the ring light excels?"
+  },
+  {
+   "start": 57.88,
+   "end": 61.16,
+   "text": "Does the ring light fall short where maybe the softbox says a little bit better?"
+  },
+  {
+   "start": 61.16,
+   "end": 62.16,
+   "text": "I don't know."
+  },
+  {
+   "start": 62.16,
+   "end": 63.16,
+   "text": "That's what the video is about."
+  },
+  {
+   "start": 63.16,
+   "end": 64.84,
+   "text": "You got to keep watching to find out."
+  },
+  {
+   "start": 64.84,
+   "end": 71.68,
+   "text": "Is the ring light going to be the king light or is the softbox going to knock off your"
+  },
+  {
+   "start": 71.68,
+   "end": 72.68,
+   "text": "socks?"
+  },
+  {
+   "start": 72.68,
+   "end": 81.98,
+   "text": "Oh yeah, that's a good one."
+  },
+  {
+   "start": 81.98,
+   "end": 85.38,
+   "text": "So to do this challenge, if you will, I thought the best idea would be to have"
+  },
+  {
+   "start": 85.38,
+   "end": 90.14,
+   "text": "three different items of various sizes and take two photos of each item using each"
+  },
+  {
+   "start": 90.14,
+   "end": 91.14,
+   "text": "light."
+  },
+  {
+   "start": 91.18,
+   "end": 94.54,
+   "text": "Maybe we could go back and compare and just see which photo looks better."
+  },
+  {
+   "start": 94.54,
+   "end": 97.9,
+   "text": "So the first item we have, which is the smallest, is going to be this GoPro."
+  },
+  {
+   "start": 97.9,
+   "end": 98.9,
+   "text": "This is my old GoPro."
+  },
+  {
+   "start": 98.9,
+   "end": 101.9,
+   "text": "I thought this was a good small item to take a picture of."
+  },
+  {
+   "start": 101.9,
+   "end": 106.3,
+   "text": "Again, I'm going to take a picture with the ring light and the softbox and see which"
+  },
+  {
+   "start": 106.3,
+   "end": 107.8,
+   "text": "one looks better."
+  },
+  {
+   "start": 107.8,
+   "end": 110.42,
+   "text": "The medium item is going to be this pair of Nike shoes."
+  },
+  {
+   "start": 110.42,
+   "end": 113.26,
+   "text": "I don't know what kind of Nike."
+  },
+  {
+   "start": 113.26,
+   "end": 114.76,
+   "text": "Purple Nikes."
+  },
+  {
+   "start": 114.76,
+   "end": 116.38,
+   "text": "These are kind of a bigger shoe."
+  },
+  {
+   "start": 116.38,
+   "end": 118.58,
+   "text": "I figured it would be a good medium-sized item."
+  },
+  {
+   "start": 118.58,
+   "end": 122.62,
+   "text": "Again, take one photo with the ring light, one with the softbox, see which one looks"
+  },
+  {
+   "start": 122.62,
+   "end": 123.62,
+   "text": "better."
+  },
+  {
+   "start": 123.62,
+   "end": 127.14,
+   "text": "And then the largest item is going to be this Koogee-ish sweater."
+  },
+  {
+   "start": 127.14,
+   "end": 129.14,
+   "text": "Man, I wish it was Koogee."
+  },
+  {
+   "start": 129.14,
+   "end": 130.14,
+   "text": "Could you imagine?"
+  },
+  {
+   "start": 130.14,
+   "end": 131.14,
+   "text": "I saw this in the thrift store."
+  },
+  {
+   "start": 131.14,
+   "end": 135.78,
+   "text": "I got really excited, but turned out to be an area, area sweater."
+  },
+  {
+   "start": 135.78,
+   "end": 136.78,
+   "text": "Not a Koogee."
+  },
+  {
+   "start": 136.78,
+   "end": 140.14,
+   "text": "But anyway, probably going to flatlay this, but still take a photo with just"
+  },
+  {
+   "start": 140.14,
+   "end": 142.82,
+   "text": "the ring light and then just the softbox."
+  },
+  {
+   "start": 142.82,
+   "end": 145.42,
+   "text": "And again, see which one looks better."
+  },
+  {
+   "start": 145.42,
+   "end": 147.14,
+   "text": "We got to get the photo area set up."
+  },
+  {
+   "start": 147.14,
+   "end": 151.14,
+   "text": "Another important aspect of a good product photo is to have a solid background."
+  },
+  {
+   "start": 151.14,
+   "end": 154.62,
+   "text": "For me personally, I use a white background, so let's go ahead and get that set up."
+  },
+  {
+   "start": 154.62,
+   "end": 156.86,
+   "text": "Now I would like to add here."
+  },
+  {
+   "start": 156.86,
+   "end": 162.62,
+   "text": "To keep things fair, I am going to use one ring light, but I'm going to use two softboxes."
+  },
+  {
+   "start": 162.62,
+   "end": 167.38,
+   "text": "I'm doing this because one, most people, if they use a softbox setup, they're going"
+  },
+  {
+   "start": 167.38,
+   "end": 168.98,
+   "text": "to have two softboxes."
+  },
+  {
+   "start": 168.98,
+   "end": 173.5,
+   "text": "And also, the two softboxes cost about the same as one ring light."
+  },
+  {
+   "start": 173.5,
+   "end": 175.5,
+   "text": "So I felt like that comparison would be pretty fair."
+  },
+  {
+   "start": 175.5,
+   "end": 178.94,
+   "text": "If you disagree with me, I guess you could leave a comment or something."
+  },
+  {
+   "start": 178.94,
+   "end": 179.94,
+   "text": "I don't really care."
+  },
+  {
+   "start": 179.94,
+   "end": 180.94,
+   "text": "It's my video."
+  },
+  {
+   "start": 180.94,
+   "end": 181.94,
+   "text": "Do what I want."
+  },
+  {
+   "start": 181.94,
+   "end": 185.1,
+   "text": "Okay, so here's my personal setup for my eBay photos."
+  },
+  {
+   "start": 185.1,
+   "end": 188.54,
+   "text": "I have just a regular table on the bottom."
+  },
+  {
+   "start": 188.54,
+   "end": 189.54,
+   "text": "It's not very big."
+  },
+  {
+   "start": 189.54,
+   "end": 194.66,
+   "text": "It's probably, I don't know, 18, 20 inches wide and about four feet long."
+  },
+  {
+   "start": 194.66,
+   "end": 196.94,
+   "text": "I didn't have a big piece of white paper."
+  },
+  {
+   "start": 196.94,
+   "end": 200.62,
+   "text": "I got a large roll of white photo paper from Amazon."
+  },
+  {
+   "start": 200.62,
+   "end": 203.7,
+   "text": "I use the same roll that's in Rally Roots video."
+  },
+  {
+   "start": 203.7,
+   "end": 209.54,
+   "text": "They have an eBay photo video and they linked their photo paper in that video and I bought"
+  },
+  {
+   "start": 209.54,
+   "end": 210.54,
+   "text": "the same roll as them."
+  },
+  {
+   "start": 210.54,
+   "end": 215.18,
+   "text": "I think it was like 40 to $45 for the roll."
+  },
+  {
+   "start": 215.18,
+   "end": 216.18,
+   "text": "You get a ton of it."
+  },
+  {
+   "start": 216.18,
+   "end": 219.06,
+   "text": "I mean, it's like, I think 30 or 40 feet."
+  },
+  {
+   "start": 219.06,
+   "end": 225.86,
+   "text": "I've used this same piece of paper for all my photos since, I'd say, December."
+  },
+  {
+   "start": 225.86,
+   "end": 229.26,
+   "text": "So it's been like three, four months using this same piece of paper."
+  },
+  {
+   "start": 229.26,
+   "end": 235.94,
+   "text": "It does get a little bit dirty here and there, but you can kind of edit that out in post."
+  },
+  {
+   "start": 235.94,
+   "end": 240.18,
+   "text": "First photo is going to be with the GoPro and the ring light."
+  },
+  {
+   "start": 240.18,
+   "end": 243.62,
+   "text": "So when I'm using my ring light to take a picture of the GoPro, this is how I'm doing"
+  },
+  {
+   "start": 243.62,
+   "end": 244.62,
+   "text": "it."
+  },
+  {
+   "start": 244.62,
+   "end": 248.94,
+   "text": "I've got the ring light down really low, kind of tilted forward a little bit facing the"
+  },
+  {
+   "start": 248.94,
+   "end": 250.7,
+   "text": "GoPro."
+  },
+  {
+   "start": 250.7,
+   "end": 253.74,
+   "text": "And then I'll come in here with my phone."
+  },
+  {
+   "start": 253.74,
+   "end": 255.06,
+   "text": "I'll take all my pictures of my phone."
+  },
+  {
+   "start": 255.06,
+   "end": 256.9,
+   "text": "Ooh, there's me."
+  },
+  {
+   "start": 256.9,
+   "end": 261.38,
+   "text": "And then I can put my phone right in the middle of the light and I'll actually hold it sideways"
+  },
+  {
+   "start": 261.38,
+   "end": 264.26,
+   "text": "right in the middle of the light like that."
+  },
+  {
+   "start": 264.26,
+   "end": 266.34,
+   "text": "And I can take my photo."
+  },
+  {
+   "start": 266.34,
+   "end": 267.9,
+   "text": "So I got the Nike shoes up here now."
+  },
+  {
+   "start": 267.9,
+   "end": 268.9,
+   "text": "It's going to be the same way."
+  },
+  {
+   "start": 268.9,
+   "end": 271.3,
+   "text": "I just, I didn't tilt the light down as much."
+  },
+  {
+   "start": 271.3,
+   "end": 274.46,
+   "text": "I kind of brought it up a little bit, put the shoes right in the middle and then"
+  },
+  {
+   "start": 274.46,
+   "end": 277.94,
+   "text": "I'll go in with my phone and take a picture through the circle."
+  },
+  {
+   "start": 277.94,
+   "end": 278.94,
+   "text": "Okay."
+  },
+  {
+   "start": 278.94,
+   "end": 283.14,
+   "text": "So for my clothing, I do a flat lay because my clothes won't fit on this paper flat"
+  },
+  {
+   "start": 283.14,
+   "end": 284.14,
+   "text": "lay."
+  },
+  {
+   "start": 284.14,
+   "end": 285.14,
+   "text": "I use a white sheet."
+  },
+  {
+   "start": 285.14,
+   "end": 287.46,
+   "text": "I use a white sheet on the floor like that."
+  },
+  {
+   "start": 287.46,
+   "end": 290.54,
+   "text": "And then I'll lay out my clothes on the sheet."
+  },
+  {
+   "start": 290.54,
+   "end": 293.86,
+   "text": "And once you edit it and make it a little bit brighter and play with the contrast on"
+  },
+  {
+   "start": 293.86,
+   "end": 297.86,
+   "text": "the eBay website, you can kind of get rid of the wrinkles and stuff like that."
+  },
+  {
+   "start": 297.86,
+   "end": 299.5,
+   "text": "So I got the ring light set up."
+  },
+  {
+   "start": 299.5,
+   "end": 302.1,
+   "text": "Let's lay the sweater down and see what the photo looks like."
+  },
+  {
+   "start": 302.1,
+   "end": 303.1,
+   "text": "Just finished with the ring light."
+  },
+  {
+   "start": 303.1,
+   "end": 307.86,
+   "text": "Now I'm going to set up the box lights over here at the sweater area and see, see"
+  },
+  {
+   "start": 307.86,
+   "end": 309.22,
+   "text": "what that looks like."
+  },
+  {
+   "start": 309.22,
+   "end": 310.94,
+   "text": "So just got the soft boxes set up over here."
+  },
+  {
+   "start": 310.94,
+   "end": 315.1,
+   "text": "I would say that the soft boxes, because there's two of them and two"
+  },
+  {
+   "start": 315.1,
+   "end": 320.1,
+   "text": "tropods, they do take up more space, but at least you can, like I had the whole"
+  },
+  {
+   "start": 320.1,
+   "end": 321.94,
+   "text": "space here where the sweater is."
+  },
+  {
+   "start": 321.94,
+   "end": 323.18,
+   "text": "I could go in the middle."
+  },
+  {
+   "start": 323.18,
+   "end": 325.74,
+   "text": "I could go further that way or back."
+  },
+  {
+   "start": 325.74,
+   "end": 327.5,
+   "text": "You know, I have all this room."
+  },
+  {
+   "start": 327.5,
+   "end": 329.9,
+   "text": "Whereas with the ring light, I had to put it right in the middle."
+  },
+  {
+   "start": 329.9,
+   "end": 333.5,
+   "text": "So I had to go like in the middle of the ring or over top the ring."
+  },
+  {
+   "start": 333.5,
+   "end": 338.42,
+   "text": "So although these take up more space, you have more space to photograph."
+  },
+  {
+   "start": 338.42,
+   "end": 339.74,
+   "text": "If that makes sense."
+  },
+  {
+   "start": 339.74,
+   "end": 340.74,
+   "text": "That makes sense."
+  },
+  {
+   "start": 340.74,
+   "end": 344.94,
+   "text": "So just move the soft boxes over to the, the white area in the same situation."
+  },
+  {
+   "start": 344.94,
+   "end": 348.66,
+   "text": "Although they take up more space on the edges, a lot more space in the middle"
+  },
+  {
+   "start": 348.66,
+   "end": 353.94,
+   "text": "to get in and, you know, adjust your items and take pictures from different"
+  },
+  {
+   "start": 353.94,
+   "end": 354.94,
+   "text": "angles."
+  },
+  {
+   "start": 354.94,
+   "end": 357.34,
+   "text": "Whereas with the ring light, it was kind of right in the middle of your"
+  },
+  {
+   "start": 357.34,
+   "end": 358.74,
+   "text": "way all the time."
+  },
+  {
+   "start": 358.74,
+   "end": 359.74,
+   "text": "Okay."
+  },
+  {
+   "start": 359.74,
+   "end": 360.74,
+   "text": "So I took all the pictures."
+  },
+  {
+   "start": 360.74,
+   "end": 362.22,
+   "text": "Look at the two pictures of the GoPros."
+  },
+  {
+   "start": 362.22,
+   "end": 366.54,
+   "text": "First that we have the picture taken with the ring light here."
+  },
+  {
+   "start": 366.54,
+   "end": 369.74,
+   "text": "And then we have the picture taken with the soft boxes."
+  },
+  {
+   "start": 369.74,
+   "end": 372.9,
+   "text": "Now right off the bat, I can tell that the GoPro taken with the ring light"
+  },
+  {
+   "start": 372.9,
+   "end": 376.54,
+   "text": "picture was a little bit brighter, but I didn't really see any more details."
+  },
+  {
+   "start": 376.54,
+   "end": 378.7,
+   "text": "I could just tell it was, it was brighter."
+  },
+  {
+   "start": 378.7,
+   "end": 382.9,
+   "text": "So I think for the small GoPro item, I would, the ring light looks a little"
+  },
+  {
+   "start": 382.9,
+   "end": 387.74,
+   "text": "bit better, but it was much easier to take the photos with the, with the,"
+  },
+  {
+   "start": 387.74,
+   "end": 391.42,
+   "text": "the soft boxes because they weren't in the way I could get in and same"
+  },
+  {
+   "start": 391.42,
+   "end": 392.42,
+   "text": "with the shoes."
+  },
+  {
+   "start": 392.42,
+   "end": 395.3,
+   "text": "I could get in and get good angles and not have to worry about the light"
+  },
+  {
+   "start": 395.3,
+   "end": 397.02,
+   "text": "being right in my face."
+  },
+  {
+   "start": 397.02,
+   "end": 398.54,
+   "text": "And then we have the pictures of the shoes."
+  },
+  {
+   "start": 398.54,
+   "end": 402.22,
+   "text": "We have the shoes photographed with the ring light here and the shoes with"
+  },
+  {
+   "start": 402.22,
+   "end": 404.58,
+   "text": "the soft boxes here."
+  },
+  {
+   "start": 404.58,
+   "end": 406.34,
+   "text": "And again, it's a similar situation."
+  },
+  {
+   "start": 406.34,
+   "end": 408.9,
+   "text": "I think the ones with the ring light are a little bit more brighter,"
+  },
+  {
+   "start": 408.9,
+   "end": 413.02,
+   "text": "but it also looked, it almost looks kind of too harsh."
+  },
+  {
+   "start": 413.02,
+   "end": 414.58,
+   "text": "I'm not sure I like it."
+  },
+  {
+   "start": 414.58,
+   "end": 416.78,
+   "text": "You can play with the settings a little bit, but all these pictures are"
+  },
+  {
+   "start": 416.78,
+   "end": 418.86,
+   "text": "totally unedited."
+  },
+  {
+   "start": 418.86,
+   "end": 421.22,
+   "text": "It might just be, I could turn down because I had the ring light brightness"
+  },
+  {
+   "start": 421.22,
+   "end": 422.22,
+   "text": "turned all the way up."
+  },
+  {
+   "start": 422.22,
+   "end": 424.94,
+   "text": "So you could turn the brightness down a little bit, but I have the same"
+  },
+  {
+   "start": 424.94,
+   "end": 425.94,
+   "text": "argument again."
+  },
+  {
+   "start": 426.14,
+   "end": 429.74,
+   "text": "It was really hard taking the pictures of the shoes with the ring"
+  },
+  {
+   "start": 429.74,
+   "end": 430.74,
+   "text": "light in the way."
+  },
+  {
+   "start": 430.74,
+   "end": 434.06,
+   "text": "Soft boxes were off to the sides and they still lit the shoes really"
+  },
+  {
+   "start": 434.06,
+   "end": 436.74,
+   "text": "well and they weren't in the way."
+  },
+  {
+   "start": 436.74,
+   "end": 440.86,
+   "text": "So take that, take that however you want."
+  },
+  {
+   "start": 440.86,
+   "end": 442.1,
+   "text": "And then finally we have the sweater."
+  },
+  {
+   "start": 442.1,
+   "end": 445.5,
+   "text": "The sweater picture taken with the ring light is here and the"
+  },
+  {
+   "start": 445.5,
+   "end": 449.14,
+   "text": "sweater picture taken with the soft boxes is here."
+  },
+  {
+   "start": 449.14,
+   "end": 452.54,
+   "text": "You can tell with the ring light, since there was only one source"
+  },
+  {
+   "start": 452.54,
+   "end": 455.26,
+   "text": "of light, you could see some shadows on the little wrinkles"
+  },
+  {
+   "start": 455.26,
+   "end": 458.38,
+   "text": "in the sheets and the sweater just doesn't quite look as clear and"
+  },
+  {
+   "start": 458.38,
+   "end": 459.66,
+   "text": "bright as it could."
+  },
+  {
+   "start": 459.66,
+   "end": 463.34,
+   "text": "I think the soft boxes did a much better job of the sweater."
+  },
+  {
+   "start": 463.34,
+   "end": 467.62,
+   "text": "I think the larger item needed multiple sources of light."
+  },
+  {
+   "start": 467.62,
+   "end": 470.42,
+   "text": "So I think for larger items, the soft boxes would be the way to"
+  },
+  {
+   "start": 470.42,
+   "end": 471.42,
+   "text": "go."
+  },
+  {
+   "start": 471.42,
+   "end": 473.98,
+   "text": "With all that being said, you can make the decision for yourself."
+  },
+  {
+   "start": 473.98,
+   "end": 478.62,
+   "text": "Me personally, I think if I were selling smaller items like"
+  },
+  {
+   "start": 478.62,
+   "end": 482.06,
+   "text": "maybe jewelry or small electronics, I think a ring light would"
+  },
+  {
+   "start": 482.06,
+   "end": 483.34,
+   "text": "be really cool."
+  },
+  {
+   "start": 483.46,
+   "end": 486.26,
+   "text": "I think the adjustable brightness on the ring light would be"
+  },
+  {
+   "start": 486.26,
+   "end": 487.98,
+   "text": "beneficial for you in that arena."
+  },
+  {
+   "start": 487.98,
+   "end": 490.82,
+   "text": "But if you're selling any larger items, I'd say anything from"
+  },
+  {
+   "start": 490.82,
+   "end": 495.02,
+   "text": "shoes on up, I would probably go with the soft boxes."
+  },
+  {
+   "start": 495.02,
+   "end": 498.94,
+   "text": "These specific ones cannot adjust their brightness, but you can"
+  },
+  {
+   "start": 498.94,
+   "end": 502.18,
+   "text": "always move them further back or closer if you want to get"
+  },
+  {
+   "start": 502.18,
+   "end": 503.7,
+   "text": "brighter or darker."
+  },
+  {
+   "start": 503.7,
+   "end": 505.22,
+   "text": "So that's my review."
+  },
+  {
+   "start": 505.22,
+   "end": 508.94,
+   "text": "Take it and run with it and make the decision that's right"
+  },
+  {
+   "start": 508.94,
+   "end": 510.14,
+   "text": "for you and your business."
+  },
+  {
+   "start": 510.14,
+   "end": 511.86,
+   "text": "If you like the video, be sure to give it a thumbs up."
+  },
+  {
+   "start": 511.9,
+   "end": 513.22,
+   "text": "It helps me out a ton."
+  },
+  {
+   "start": 513.22,
+   "end": 515.54,
+   "text": "And if you don't want to ask me any questions or leave some"
+  },
+  {
+   "start": 515.54,
+   "end": 518.7,
+   "text": "comments, critiques, anything down below, that would also be"
+  },
+  {
+   "start": 518.7,
+   "end": 519.94,
+   "text": "greatly appreciated."
+  },
+  {
+   "start": 519.94,
+   "end": 521.06,
+   "text": "Thank you guys so much for watching."
+  },
+  {
+   "start": 521.06,
+   "end": 522.9,
+   "text": "I really, really appreciate it."
+  },
+  {
+   "start": 522.9,
+   "end": 525.42,
+   "text": "Now get out there, take some good photos, and go make some"
+  },
+  {
+   "start": 525.42,
+   "end": 526.42,
+   "text": "money."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:12:21.327363+00:00",
+ "seconds": 22.5
+}

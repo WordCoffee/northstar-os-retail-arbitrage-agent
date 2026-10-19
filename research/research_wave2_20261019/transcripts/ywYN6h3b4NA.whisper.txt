@@ -1,0 +1,147 @@
+Today I'm going to show you how to paint a realistic shadow under any object in Photoshop.
+Hey there, welcome to Flurn. My name is Aaron Nase and today we're going to help you with your
+cutouts. The biggest thing to remember is that shadows tend to be like darker and more well
+defined when they're close to the object and they tend to get lighter and less well defined
+the farther they get from the object. So my recommendation is to create multiple different
+layers for both the close shadows and the farther shadows. Alrighty, let's go ahead and jump into
+Photoshop. We're going to start off by cutting our subject out. In this case, it's this piece of fruit.
+Nice and easy selection here. We're going to go to select and then down to select subject.
+Fantastic. And let's go ahead and click on our layer mask. Now we can see we have some other
+stuff I didn't want necessarily in this election. So I'm going to hit L for my lasso tool.
+And we're just going to go ahead and make that selection hit shift delete and fill that with
+black on my layer mask. There we go. And then I'm just going to pop a solid color fill layer.
+We're just going to go all the way to white and put that right underneath our object.
+All right. So now our object is cut out. It's time to make our shadows. Now we have our dark
+shadows that are going to be directly under the object. And then we have our softer
+shadows that are going to be a little bit larger. So let's go ahead and start with
+those dark shadows under our object. So we're going to create a new layer right under the
+solid color fill layer. And I'm going to zoom in and actually grab some of the shadow color
+that's right there and then simply start painting with my brush tool. There we go. So you can see
+we're painting with my brush tool kind of continuing this existing shadow that's already there. If you
+didn't have a shadow, you can just choose a darker color of whatever's existing. There we go. Like
+in this case, you can see it's a dark red. Fantastic. So I'm just kind of like painting
+this in here and then choosing a little bit of a larger brush and then just kind of painting
+it in a little bit more. There we go. Because we want like a solid area where the object is
+going to contact the ground. Now keep in mind we're not using grayscale shadows here. We want to make
+sure the shadow color has a little bit of the object color in it. So that way it reflects
+light just like in real life. Let's go ahead and make that visible and we'll just zoom out.
+So there we go. We can see that's where we start something that looks like that looks pretty
+good. We're going to make that a little bit bigger. Now my next suggestion is to do this in a lot of
+different layers. So that looks good to start with. Let's go ahead and create a new layer.
+I'm going to use a larger brush and we're going to use a flow of like 10% and I'm just going
+to kind of paint this in. You can see I'm mostly painting in where my object is. Like if I made
+this invisible, you can see most of my paint is there, but it's kind of kind of seep out
+underneath it. Here we go. So you can see it's kind of like starting to come out right there
+towards the bottom. I'm keeping my shadow a little bit more on the right hand side than on the left
+hand side. And the reason for that is because the object is kind of like sitting on the ground
+right there a little bit more. Okay, still do a little bit on the left hand side, but definitely
+a little bit more on the right. And then my suggestion is get it to where you think it
+looks good. Like get it to where you're like, okay, that's shadow is starting to look good.
+And then it's time to create another layer. So we can see we already have two layers. We have
+this shadow that's directly under there. You can lower these opacities at any time if they're too
+much. Okay, then on a new layer, we're going to do the same thing. But this time we're going to
+get even a larger brush. And I'm going to go a little bit softer with it. So I recommend it's
+kind of starting with your hard edge brush a little closer to your object. And then getting,
+you know, larger and larger with your brushes. And then just paint with like a low flow.
+That's kind of like the real key to this is to use a low flow on your brush.
+There we go, you can see that's starting to look really, really good. If you don't like an area
+that you did just hit E for the eraser tool, and just choose a large soft edge brush,
+and just erase it away. This really is like a kind of an opportunity to just take your time and
+like kind of analyze light and see how things work together. But the biggest tip that I can
+give you is to do this over a few different layers. So let's go ahead and start off. So there's no
+shadow. We have our first, our second, and our third. You can see if I take away any of these,
+it really doesn't work nearly as well. Let's go ahead and create another shadow. This time we're
+going to choose a slightly lighter color. And again, a nice large soft edge brush, I'm going
+to change my layer blend mode, we can use multiply. That's just going to make things a
+little bit darker for us. There we go. Because this whole fruit is going to obscure some light, right?
+There we go. That's looking pretty good. I think it's a little bit too much red in there. So
+not a big deal. You can hit controller command U, and then you can just desaturate it. Okay.
+I don't want to go all that way, but I want to find the nice balance there. Okay. And then
+I think this is just a little bit too visible to so we're just going to make it a little bit less
+visible. So you can see each one of these shadows as I go through, they all add their own unique
+little bit of depth to the object itself. And again, go in here and change your opacity and
+kind of work with these. This one actually looks good. I'm going to duplicate that by hitting
+controller command J. Okay, so you can see just duplicate it that there. And then I'm
+just going to give this a little bit of a blur. So we'll go to filter down to blur and then Gaussian
+blur. There we go. Gaussian blur that looks good, but it's too, it's too visible. So we're just going
+to kind of take that opacity down there a little bit. There we go. That's looking really, really
+good. So just these little, little edits on each one of these layers can help you make a much
+more realistic looking shadow for your object. And then the cool thing here is the object itself,
+we really don't want like, you can see right here, it's a little bit light right on the bottom of the
+edge of the object. So I actually want to paint sometimes on the object itself. So we're going to
+create a new layer. And now we're going to show you a really cool tool called a clipping mask.
+And that's going to allow me to paint on the object itself, because we painted a pretty
+nice shadow here, but I need to do a little bit of cleanup on the object. So we're going to
+use a clipping mask to do that. So a clipping mask is very easy to do. I'm just going to create this
+new layer right above our pomegranate here. And then almost called it tomato. And then I'm going to
+show you how a clipping mask work. So if I just have a regular layer, and I just paint with a color
+right over top of my pomegranate here, you can see it's visible everywhere. But if I go
+ahead and right click here and then go down to where it says create clipping mask, there we
+go. You can see now it's only going to be visible where my pomegranate is visible. And I can even
+move it around and things like that. But because our objects cut out, that's the only place it can
+be visible. You can then right click if you want and go down to release clipping mask. There we
+go. And it's going to be visible everywhere once more. Okay, so that's the concept I'm going to
+use to paint some shadow on underneath my object. We're going to create a new layer, right click
+and go to create clipping mask. Okay, and remember this is now only going to be visible
+exactly where the pomegranate is visible. But instead of painting with that blue color,
+I'm going to go ahead and grab my shadow color. And we're just going to paint this in.
+Okay, so I'm going to make sure that we don't get this weird little area right here under my
+pomegranate, and that everything actually blends in just the way it should. And I'm holding
+alt or option to actually sample some of my shadow color that I actually painted.
+There we go. And you can see, there we go, look at the edge between the two is starting to blend
+much, much better. Here we go, grab this dark color there, and kind of paint that in.
+Fantastic. Let's just go ahead and lower down the saturation of that just a little bit.
+And go ahead and clean this up. Now I just use select subject to cut out the pomegranate.
+I could use the pen tool and, you know, taking more time and everything like that.
+But in this case, I think select subject, it just worked well. It's a nice quick way to do this sort
+of thing. So let's go ahead and zoom out and take a look at the before and after. We'll grab this
+slightly dark color here. All right, that's looking great there. So here's the before,
+let's zoom in there. So there's the before and there's the after. And you can see this is
+only visible where the pomegranate is visible. That's an important takeaway. Here we go,
+because I'm taking some of the shadow color, I'm just going to race away where it didn't really need
+to be there. I'm taking the shadow color and then painting it back on the pomegranate itself.
+All right, and even like here, I don't want this like light colored border here.
+So we're just going to grab some of this dark color here, and kind of paint this in right here
+so we don't get any like weird fringing and things like that underneath the pomegranate.
+This could be a person, this could be a shoe, this could, you know, quite literally be anything.
+There we are. Fantastic. Okay, and even when we zoom out, so that's a little bit too light
+right there, right? I'm just going to come back in here and kind of darken that up a little bit
+there. Okay, so even when we zoom out, we can see there's the before and the after,
+you can see it just helps clean up the object itself. So it's not only important to paint
+the shadow, but it's important to paint the object. So let's go ahead and group those together,
+and let's go ahead and group together our shadow. Now you guys can download this entire PSD
+on flern.com in the linked below. That way you can kind of just open this up and dissect it and
+see what you like. Here we go. The pomegranate, you can see when it's gone, the shadow doesn't
+look anything special. The only part of the shadow that I care about is underneath the
+pomegranate. And the shadow layer itself, you can see is made up of all these different
+layers. So you can see if I turn each one of these off, our shadow starts to get less and less
+realistic. Okay, even if I go in, let's go ahead and turn them back on. There we go. If I turn off
+like just that layer, or just that layer, it becomes a lot less realistic. But I would encourage
+you as you do this to turn some of these layers off and on and kind of get an idea of like,
+is this better or is this worse? And should I make this more visible or less visible? Like,
+you could go in and say, Oh, I like that. I think there should be more that you can hit
+controller command J to duplicate that layer. And then maybe I'll just move it over here and then
+give it like a really big Gaussian blur. And that's going to be like where the pomegranate just like
+blocks light from, you know, hitting the table or whatever it is, right, like a large blur.
+There we go, something like that. So here we go, we have a very large soft edge blur.
+There we go. That's going to add that, you know what, I'm going to hit undo a couple
+times because I made that blur way too large. That was that was a irresponsibly large blur air.
+Calm down, your blur does not need to be that big. Okay, there we go.
+There we go. But now I just have this like blur that I can kind of move around and be like,
+Oh, you know what, actually, that looks pretty good. And then I can still go in there and
+change the opacity of that blur. I can hit controller command T and kind of stretch that
+out to. But basically, that's the idea, you want to make sure that you're, you know, creating this
+nice hard shadow under the object itself. And then that shadow just kind of gets softer and larger
+as it goes out from the shadow. And then I also want to just I know I said this again,
+but I also want to, you know, just point out that the shadow is not completely gray. Okay,
+it has some red in it because it's reflecting color from the original object. Let's go ahead
+and show you if this look if it was completely gray. So just temporarily, I'm going to create a huge
+saturation adjustment layer, we're going to clip this to the shadow. So it's only going to be visible
+where the shadow is. Now watch when I take the saturation down to zero, you can see that doesn't
+really look exactly right. Right? It should have some of the original color in the shadow.
+It's going to take some of the color of the pomegranate and bounce it against the floor
+and help it make it look a lot more realistic. Thanks so much for watching. If you want to get
+a free tutorial from us every single week, make sure to hit that subscribe button,
+smash that notification bell and leave a comment right down below on any project
+you're working on. I'd love to hear from you. Thanks again, and I'll flurn you later. Bye,
+everyone.

@@ -1,0 +1,48 @@
+{
+ "id": "Ay-EPRMiv7U",
+ "title": "The Art of Packaging  | Production From Start To Finish",
+ "channel": "Halaman Printing and Packaging Corp.",
+ "url": "https://www.youtube.com/watch?v=Ay-EPRMiv7U",
+ "query": "packaging print production",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.913,
+ "duration_s": 299.6,
+ "chars": 332,
+ "segments": [
+  {
+   "start": 27.63,
+   "end": 30.63,
+   "text": "Hello, Halaman printing and packaging. How can I help you?"
+  },
+  {
+   "start": 30.63,
+   "end": 35.63,
+   "text": "Hello, yes. We need carton packaging for our product. Could you help us on that?"
+  },
+  {
+   "start": 35.63,
+   "end": 40.63,
+   "text": "Of course we can help you on that, sir. Just send us an email with your artwork, please."
+  },
+  {
+   "start": 40.63,
+   "end": 42.63,
+   "text": "And then we will take care of it."
+  },
+  {
+   "start": 42.63,
+   "end": 44.63,
+   "text": "Okay, thank you very much. Have a nice day."
+  },
+  {
+   "start": 44.63,
+   "end": 46.63,
+   "text": "Have a nice day too, sir."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:03:26.415537+00:00",
+ "seconds": 7.2
+}

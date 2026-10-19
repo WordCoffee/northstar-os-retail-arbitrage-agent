@@ -1,0 +1,643 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.380
+I used ChatGPT to generate the packaging
+
+00:00:02.380 --> 00:00:03.840
+for an Amazon product,
+
+00:00:04.040 --> 00:00:06.360
+and this is what it gave me on the first
+pass.
+
+00:00:06.860 --> 00:00:09.280
+All I did was I uploaded a few reference
+images
+
+00:00:09.280 --> 00:00:11.240
+and gave a simple dictation prompt.
+
+00:00:11.580 --> 00:00:13.060
+Let me show you exactly what I did.
+
+00:00:13.220 --> 00:00:13.940
+Let's get started.
+
+00:00:14.460 --> 00:00:16.100
+Alrighty, in this video I'm gonna show you
+
+00:00:16.100 --> 00:00:19.060
+how to create your product's packaging for
+Amazon
+
+00:00:19.060 --> 00:00:23.720
+using ChatGPT's latest image generation
+model, Astra.
+
+00:00:24.080 --> 00:00:25.840
+So what we're gonna do is we're gonna
+generate
+
+00:00:25.840 --> 00:00:28.880
+a product package for this product here,
+
+00:00:28.880 --> 00:00:31.140
+which is a 22-inch magic arm
+
+00:00:31.140 --> 00:00:34.460
+with desk C clamp overhead camera mount.
+
+00:00:34.860 --> 00:00:36.840
+So the first thing I'm gonna do is I'm just
+gonna come in
+
+00:00:36.840 --> 00:00:38.660
+and I'm gonna extract a few,
+
+00:00:39.020 --> 00:00:40.400
+or let's just copy them actually.
+
+00:00:40.940 --> 00:00:43.680
+Copy the first image, come down.
+
+00:00:44.380 --> 00:00:45.980
+We'll get a couple more for context.
+
+00:00:46.780 --> 00:00:49.500
+We'll take this one, pop that in there.
+
+00:00:50.180 --> 00:00:53.300
+We'll take this one, pop that in there.
+
+00:00:54.300 --> 00:00:55.080
+Let's do one more.
+
+00:00:55.980 --> 00:00:57.140
+Oops, there we go.
+
+00:00:57.960 --> 00:01:02.020
+Okay, so now for context, this specific
+version
+
+00:01:02.020 --> 00:01:04.360
+is gonna have a slightly different
+
+00:01:04.360 --> 00:01:06.840
+actual mount of the camera,
+
+00:01:07.040 --> 00:01:10.520
+which is going to look more like this one
+
+00:01:10.520 --> 00:01:12.520
+because we have a slight differentiator.
+
+00:01:13.040 --> 00:01:15.620
+So it looks kind of more like a car phone
+holder
+
+00:01:17.060 --> 00:01:19.360
+in this type of design.
+
+00:01:19.960 --> 00:01:21.660
+Let's just find the right one.
+
+00:01:22.120 --> 00:01:23.260
+There we go, this is kind of more
+
+00:01:23.260 --> 00:01:24.420
+of the style we're looking for.
+
+00:01:24.940 --> 00:01:26.200
+This thing here.
+
+00:01:26.800 --> 00:01:28.900
+So what I'm gonna do is I'm just gonna
+screenshot
+
+00:01:28.900 --> 00:01:32.280
+this specific part and we'll pop this in
+here.
+
+00:01:32.820 --> 00:01:33.680
+There we go, okay.
+
+00:01:34.240 --> 00:01:36.580
+So what I'm gonna say now is
+
+00:01:37.340 --> 00:01:38.900
+I'm just gonna start dictating
+
+00:01:38.900 --> 00:01:42.120
+to get the specific information
+
+00:01:42.120 --> 00:01:44.200
+that I wanna communicate to ChatGPT
+
+00:01:44.200 --> 00:01:47.320
+on the kind of packaging design that we want
+
+00:01:47.320 --> 00:01:49.380
+because we're having trouble kind of figuring
+out,
+
+00:01:49.640 --> 00:01:52.060
+hey, this is a pretty boring product.
+
+00:01:52.060 --> 00:01:54.940
+What should we actually put on this package
+design
+
+00:01:54.940 --> 00:01:58.200
+to have something that appeals to the
+customer
+
+00:01:58.200 --> 00:01:59.880
+but also communicates the right information
+
+00:01:59.880 --> 00:02:03.140
+to the person who's receiving it
+
+00:02:03.140 --> 00:02:05.060
+but also meets all the requirements
+
+00:02:05.060 --> 00:02:05.920
+that you need for Amazon.
+
+00:02:06.480 --> 00:02:07.760
+So I'll just start dictating now.
+
+00:02:09.060 --> 00:02:13.680
+I want you to create a product packaging
+vector file
+
+00:02:13.680 --> 00:02:17.580
+for Amazon product packaging requirements
+
+00:02:17.580 --> 00:02:20.320
+that will effectively serve
+
+00:02:20.320 --> 00:02:23.440
+as an attractive product package for this
+product
+
+00:02:23.440 --> 00:02:28.740
+which is a flexible desk camera mount with
+C-clamp
+
+00:02:28.740 --> 00:02:34.120
+specifically for a magic arm phone holder
+functionality.
+
+00:02:35.080 --> 00:02:38.600
+So that is the product and the brand is
+Dynamo Tech.
+
+00:02:39.580 --> 00:02:41.340
+And what we're looking to achieve here
+
+00:02:42.120 --> 00:02:47.040
+is a product package that is specifically 25
+centimeters
+
+00:02:47.540 --> 00:02:50.540
+by 15 centimeters by six centimeters.
+
+00:02:51.180 --> 00:02:53.340
+The product itself is 22 inches
+
+00:02:53.340 --> 00:02:56.420
+and I've attached some reference files
+
+00:02:56.420 --> 00:02:58.820
+from the main competitor that you can use
+
+00:02:58.820 --> 00:03:00.500
+to kind of see how the product looks.
+
+00:03:00.780 --> 00:03:03.220
+The only catch there is that the final image
+
+00:03:03.220 --> 00:03:06.060
+is actually how the phone holder looks.
+
+00:03:06.400 --> 00:03:08.600
+As you can see, it's got more of like a side
+clamp
+
+00:03:08.600 --> 00:03:11.560
+and bottom support style versus the one
+
+00:03:11.560 --> 00:03:13.600
+that is actually on the NEEWER example
+
+00:03:13.600 --> 00:03:16.540
+which is kind of the side clamp only.
+
+00:03:16.540 --> 00:03:19.480
+So we've added a improvement to the product
+
+00:03:19.480 --> 00:03:23.700
+by having this kind of more robust
+
+00:03:23.700 --> 00:03:28.660
+heavy duty phone holder on the actual clamp.
+
+00:03:29.320 --> 00:03:33.020
+So what we're gonna do is generate this file
+
+00:03:33.020 --> 00:03:36.120
+and I want you to make it very attractive
+
+00:03:36.120 --> 00:03:38.300
+to the person who's receiving it.
+
+00:03:38.320 --> 00:03:40.960
+So it's gotta look sort of modern, sleek
+
+00:03:41.500 --> 00:03:44.520
+and attractive in terms of packaging
+
+00:03:44.920 --> 00:03:48.120
+but keep it concise in terms of the
+communication
+
+00:03:48.920 --> 00:03:51.380
+of the information about the product
+
+00:03:51.920 --> 00:03:54.960
+and just make it only necessary information,
+
+00:03:55.640 --> 00:03:59.200
+very concise and very informative at the same
+time.
+
+00:03:59.980 --> 00:04:02.620
+And the only things that you need to put on
+there
+
+00:04:02.620 --> 00:04:06.460
+are the brand name, a brief description of
+the product,
+
+00:04:06.800 --> 00:04:08.720
+any key features of the product,
+
+00:04:09.300 --> 00:04:13.300
+some imaging of the product and the made in
+China
+
+00:04:13.300 --> 00:04:15.600
+somewhere on that packaging and a little
+space
+
+00:04:15.600 --> 00:04:18.140
+where we can put the Amazon FNSKU label.
+
+00:04:18.720 --> 00:04:19.940
+That's really all we need.
+
+00:04:20.280 --> 00:04:23.500
+Give us your best rendering of that package
+
+00:04:23.500 --> 00:04:25.800
+as well as the vector file.
+
+00:04:27.520 --> 00:04:28.240
+All right, I just wanna make,
+
+00:04:28.340 --> 00:04:30.140
+yeah, they did spell Dynamo Tech properly
+
+00:04:30.140 --> 00:04:34.320
+so let's go ahead and put that on Pro
+
+00:04:34.780 --> 00:04:36.460
+and let's see what that comes up with.
+
+00:04:36.920 --> 00:04:38.700
+Of course, when you go for the Pro model
+
+00:04:38.700 --> 00:04:40.840
+it does take longer, just be aware of that
+
+00:04:40.840 --> 00:04:43.300
+but I wanted it to really consider
+
+00:04:43.860 --> 00:04:45.360
+what we're trying to do here
+
+00:04:45.360 --> 00:04:47.320
+and give it extra time to kind of
+
+00:04:47.320 --> 00:04:50.020
+come up with the best possible design.
+
+00:04:50.440 --> 00:04:52.040
+So it looks like it's just coming up now.
+
+00:04:52.220 --> 00:04:52.700
+Okay, perfect.
+
+00:04:53.140 --> 00:04:54.360
+So let's open this up.
+
+00:04:55.300 --> 00:04:59.840
+All right, now this for a first pass
+
+00:05:00.360 --> 00:05:02.320
+looks pretty sweet, I think.
+
+00:05:03.820 --> 00:05:04.820
+They've added a logo.
+
+00:05:05.160 --> 00:05:07.220
+Now keep in mind, we didn't give it a logo,
+right?
+
+00:05:07.260 --> 00:05:09.860
+We just gave it kind of the brand name only
+
+00:05:09.860 --> 00:05:11.580
+and asked it to come up with something
+
+00:05:11.580 --> 00:05:14.920
+that looks cool based on what the product is,
+right?
+
+00:05:15.500 --> 00:05:17.020
+So what it's actually done here
+
+00:05:17.020 --> 00:05:19.000
+is kind of what you would expect
+
+00:05:19.000 --> 00:05:22.040
+from a Amazon product package.
+
+00:05:22.240 --> 00:05:25.660
+It's giving kind of almost like info graphic
+style
+
+00:05:25.660 --> 00:05:27.320
+on the back here that is something
+
+00:05:27.320 --> 00:05:28.940
+that you would see on an Amazon listing.
+
+00:05:29.180 --> 00:05:31.680
+So this actually could serve as fuel
+
+00:05:31.680 --> 00:05:34.180
+to generate the actual product listing as
+well.
+
+00:05:34.280 --> 00:05:35.160
+When we get to that later,
+
+00:05:35.160 --> 00:05:36.580
+I'll do that in another video
+
+00:05:36.580 --> 00:05:38.940
+but what's cool here is it's giving you
+
+00:05:38.940 --> 00:05:41.480
+all the things that you need, right?
+
+00:05:41.680 --> 00:05:43.180
+It's got the Made in China there.
+
+00:05:43.760 --> 00:05:47.340
+It's got the space for the actual Amazon
+FNSKU label.
+
+00:05:47.780 --> 00:05:48.520
+It's got the brand name.
+
+00:05:48.600 --> 00:05:50.060
+It's got the main product here.
+
+00:05:50.540 --> 00:05:52.420
+It's got how the product works,
+
+00:05:52.620 --> 00:05:53.640
+just simple instructions.
+
+00:05:54.960 --> 00:05:57.500
+And it's basically telling the customer,
+
+00:05:57.580 --> 00:05:59.800
+like if you saw this on a product shelf,
+
+00:06:00.760 --> 00:06:02.760
+what's exactly you're kind of in for, right?
+
+00:06:03.040 --> 00:06:04.740
+So if anything, I would say
+
+00:06:04.740 --> 00:06:06.620
+this is maybe a little bit overkill, right?
+
+00:06:06.700 --> 00:06:08.680
+In terms of the amount of information that's
+on here.
+
+00:06:08.680 --> 00:06:12.620
+So I would do maybe one more pass at it to
+say,
+
+00:06:12.620 --> 00:06:17.660
+maybe put about 50% less information on there
+
+00:06:17.660 --> 00:06:19.440
+and try to decrowd it a little bit
+
+00:06:19.440 --> 00:06:22.180
+because it doesn't need to be this
+informative
+
+00:06:22.180 --> 00:06:24.260
+but that's just my own personal preference.
+
+00:06:24.460 --> 00:06:26.580
+Keep in mind that this is an Amazon product
+package
+
+00:06:26.580 --> 00:06:28.720
+that someone is receiving it.
+
+00:06:28.800 --> 00:06:30.080
+They've already purchased it, right?
+
+00:06:30.260 --> 00:06:31.320
+Because they got it off Amazon.
+
+00:06:31.760 --> 00:06:34.080
+So the packaging is an afterthought in a lot
+of cases
+
+00:06:34.080 --> 00:06:36.880
+but if you have the ability to invest
+
+00:06:36.880 --> 00:06:41.300
+in a gift pack style packaging like this,
+
+00:06:41.520 --> 00:06:44.780
+where you get to have a very attractive outer
+gift box
+
+00:06:44.780 --> 00:06:46.640
+for the customer, you know,
+
+00:06:46.880 --> 00:06:49.860
+you want to kind of spruce it up a little
+bit, right?
+
+00:06:50.340 --> 00:06:51.780
+But you don't need to include,
+
+00:06:51.940 --> 00:06:53.060
+I would say this much information
+
+00:06:53.060 --> 00:06:54.500
+but that's my own personal preference.
+
+00:06:55.220 --> 00:06:57.000
+Now, one other important thing to add in here
+
+00:06:57.000 --> 00:06:59.240
+is we need to actually give your supplier
+
+00:06:59.240 --> 00:07:02.840
+the appropriate file type for the vector
+design
+
+00:07:02.840 --> 00:07:05.140
+that we have done for the packaging
+
+00:07:05.140 --> 00:07:07.040
+so that they can actually print it
+
+00:07:07.040 --> 00:07:09.340
+in the appropriate quality and all this sort
+of stuff
+
+00:07:09.340 --> 00:07:12.720
+to actually be placed onto your final
+packaging.
+
+00:07:13.160 --> 00:07:14.820
+So what I did was I just prompted by saying
+
+00:07:14.820 --> 00:07:16.500
+what is the best packaging vector file
+
+00:07:16.500 --> 00:07:19.060
+to actually send to the supplier when the
+time comes
+
+00:07:19.060 --> 00:07:21.440
+and it came back which is the file
+
+00:07:21.440 --> 00:07:23.100
+that I knew just forgot
+
+00:07:23.100 --> 00:07:24.920
+which is an Adobe Illustrator file.
+
+00:07:25.280 --> 00:07:26.940
+So that is what is known as a vector file
+
+00:07:26.940 --> 00:07:30.500
+and the sort of end of that file name
+
+00:07:30.500 --> 00:07:32.640
+would be a .ai file, okay?
+
+00:07:32.640 --> 00:07:36.100
+So these are the recommended specs here.
+
+00:07:36.700 --> 00:07:39.080
+This is the final specifications for the
+packaging
+
+00:07:39.080 --> 00:07:41.660
+and then one thing you can do as well
+
+00:07:41.660 --> 00:07:44.660
+is just ask for kind of mockups of the design
+
+00:07:44.660 --> 00:07:46.320
+so that your supplier can actually see it.
+
+00:07:46.660 --> 00:07:48.580
+So what you can see here is like, you know,
+
+00:07:48.780 --> 00:07:50.900
+I said it looked maybe a little bit overkill,
+right?
+
+00:07:51.020 --> 00:07:52.820
+But this actually looks really solid
+
+00:07:52.820 --> 00:07:55.060
+once it's placed on the actual box
+
+00:07:55.570 --> 00:07:58.640
+and I think this is awesome for a first pass
+at it.
+
+00:07:59.120 --> 00:08:01.020
+Alrighty guys, now that was a first pass
+
+00:08:01.020 --> 00:08:02.900
+at generating the product packaging
+
+00:08:02.900 --> 00:08:04.720
+that I will then give to the supplier
+
+00:08:04.720 --> 00:08:07.960
+for a product on Amazon where I had no idea
+
+00:08:07.960 --> 00:08:09.880
+what that packaging should actually look
+like.
+
+00:08:10.200 --> 00:08:12.240
+So as you can see with just a few reference
+images
+
+00:08:12.240 --> 00:08:15.100
+and dictating what you wanna get out of it,
+
+00:08:15.280 --> 00:08:16.980
+you can very quickly generate something
+
+00:08:16.980 --> 00:08:18.300
+that looks pretty awesome
+
+00:08:18.300 --> 00:08:21.360
+and is 99% going to be way better
+
+00:08:21.360 --> 00:08:24.000
+than what your competitors already have on
+Amazon.
+
+00:08:24.380 --> 00:08:25.420
+Alrighty, if you wanna learn more
+
+00:08:25.420 --> 00:08:27.920
+about how to enhance your products with AI,
+
+00:08:28.120 --> 00:08:29.880
+you can join my free Skool community
+
+00:08:29.880 --> 00:08:31.660
+and the link for that is on screen
+
+00:08:31.660 --> 00:08:32.860
+and down below in the description.
+
+00:08:33.180 --> 00:08:33.840
+I will see you in there.
+

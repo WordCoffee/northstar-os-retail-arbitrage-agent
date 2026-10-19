@@ -1,0 +1,978 @@
+{
+ "id": "bMbciHJYVMw",
+ "title": "Super Easy Chip Bag Design and Assembly Tutorial w/ Canva",
+ "channel": "Kenjah Crafts",
+ "url": "https://www.youtube.com/watch?v=bMbciHJYVMw",
+ "query": "canva packaging design",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 455.7,
+ "chars": 9641,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 3.56,
+   "text": "Hey guys, if you want to learn how to make these personalized birthday chip bags from"
+  },
+  {
+   "start": 3.56,
+   "end": 7.98,
+   "text": "start to finish, stay tuned."
+  },
+  {
+   "start": 7.98,
+   "end": 10.48,
+   "text": "The first thing we're going to do is design our bags."
+  },
+  {
+   "start": 10.48,
+   "end": 14.96,
+   "text": "We're using camera to design everything, so click on create a design, custom size, change"
+  },
+  {
+   "start": 14.96,
+   "end": 19.72,
+   "text": "PX to inches and we're going to do an 11 inch by 8 1 half inch canvas."
+  },
+  {
+   "start": 19.72,
+   "end": 23.36,
+   "text": "The first step is to create our template so to do so you're going to click on elements,"
+  },
+  {
+   "start": 23.36,
+   "end": 25.68,
+   "text": "type in square and click on the open square."
+  },
+  {
+   "start": 25.68,
+   "end": 28.4,
+   "text": "Next we're going to adjust the size of our square by dragging the sides."
+  },
+  {
+   "start": 28.4,
+   "end": 33.68,
+   "text": "We're going to adjust our square to 6.5 inches long by 5.4 inches wide."
+  },
+  {
+   "start": 33.68,
+   "end": 36.8,
+   "text": "Once we reach that we're going to drag our square to the center of the page."
+  },
+  {
+   "start": 36.8,
+   "end": 40.16,
+   "text": "Next we're going to select another open square but this time we're going to adjust the square"
+  },
+  {
+   "start": 40.16,
+   "end": 43.8,
+   "text": "to 6.5 inches long by 2.5 inches wide."
+  },
+  {
+   "start": 43.8,
+   "end": 46.88,
+   "text": "We need two of these squares so what we're going to do is click on the square and"
+  },
+  {
+   "start": 46.88,
+   "end": 51.04,
+   "text": "duplicate it and then we're going to position it on the other side of the first square."
+  },
+  {
+   "start": 51.04,
+   "end": 54.6,
+   "text": "We need one more square so we're going to click on one more open square and adjust"
+  },
+  {
+   "start": 54.6,
+   "end": 59.04,
+   "text": "this one to 0.7 inches and then just drag it along the top of our template."
+  },
+  {
+   "start": 59.04,
+   "end": 62.32,
+   "text": "Next we're going to duplicate that as well and then add that second copy to the bottom."
+  },
+  {
+   "start": 62.32,
+   "end": 65.6,
+   "text": "Then we're going to highlight the entire template and group it together so you're going"
+  },
+  {
+   "start": 65.6,
+   "end": 67.24,
+   "text": "to right click and select group."
+  },
+  {
+   "start": 67.24,
+   "end": 70.2,
+   "text": "Then I'm going to drag the template until it's the same width as the size of the"
+  },
+  {
+   "start": 70.2,
+   "end": 72.12,
+   "text": "paper and then I'm going to center that."
+  },
+  {
+   "start": 72.12,
+   "end": 75.0,
+   "text": "Now we're going to start designing so to do so I'm going to click on uploads and"
+  },
+  {
+   "start": 75.0,
+   "end": 76.84,
+   "text": "then select my center image."
+  },
+  {
+   "start": 76.84,
+   "end": 80.36,
+   "text": "I'm doing a bluey themed chip back so I chose this bluey image for the center"
+  },
+  {
+   "start": 80.36,
+   "end": 84.16,
+   "text": "and then you're going to drag and adjust the image until it fits that center square."
+  },
+  {
+   "start": 84.2,
+   "end": 90.59,
+   "text": "This is going to act as the front of your chip back."
+  },
+  {
+   "start": 90.59,
+   "end": 93.59,
+   "text": "Next I'm going to click on elements and then click on the closed square and then"
+  },
+  {
+   "start": 93.59,
+   "end": 96.15,
+   "text": "I'm going to adjust it to cover up that bluey text."
+  },
+  {
+   "start": 96.15,
+   "end": 98.71,
+   "text": "I'm going to change the color of that square by clicking on color,"
+  },
+  {
+   "start": 98.71,
+   "end": 101.83,
+   "text": "clicking on the dropper tool and then selecting the color of the background."
+  },
+  {
+   "start": 101.83,
+   "end": 104.31,
+   "text": "Next we're going to remove that template out of the way just so I can group"
+  },
+  {
+   "start": 104.31,
+   "end": 105.99,
+   "text": "those two layers together."
+  },
+  {
+   "start": 105.99,
+   "end": 108.59,
+   "text": "After that I want to add some text so I'm going to click on text and add a"
+  },
+  {
+   "start": 108.59,
+   "end": 109.31,
+   "text": "heading."
+  },
+  {
+   "start": 109.31,
+   "end": 112.35,
+   "text": "I'm going to type in my son's name, then I'm going to click on the color"
+  },
+  {
+   "start": 112.35,
+   "end": 113.83,
+   "text": "and change the color to white."
+  },
+  {
+   "start": 113.83,
+   "end": 115.15,
+   "text": "After that I'm going to change the font."
+  },
+  {
+   "start": 115.15,
+   "end": 116.99,
+   "text": "I chose this bubblegum regular font."
+  },
+  {
+   "start": 116.99,
+   "end": 119.59,
+   "text": "Then you're just going to adjust the size of the text to your liking."
+  },
+  {
+   "start": 119.59,
+   "end": 122.31,
+   "text": "I wanted this to not be too big because I'm going to add a subheading."
+  },
+  {
+   "start": 122.31,
+   "end": 125.35,
+   "text": "So I clicked on add a subheading and I'm going to type in first birthday"
+  },
+  {
+   "start": 125.35,
+   "end": 126.31,
+   "text": "underneath that."
+  },
+  {
+   "start": 126.31,
+   "end": 128.67,
+   "text": "After that I'm going to change the color to white and then I'm going to"
+  },
+  {
+   "start": 128.67,
+   "end": 130.59,
+   "text": "change that font to bubblegum regular."
+  },
+  {
+   "start": 130.59,
+   "end": 132.95,
+   "text": "I'm also going to adjust the spacing on this one to make it a little bit"
+  },
+  {
+   "start": 132.95,
+   "end": 133.83,
+   "text": "more wide."
+  },
+  {
+   "start": 133.83,
+   "end": 135.99,
+   "text": "Now we're going to change the color of the side so to do that you're going to"
+  },
+  {
+   "start": 135.99,
+   "end": 138.39,
+   "text": "click on elements, click on that closed square."
+  },
+  {
+   "start": 138.39,
+   "end": 141.39,
+   "text": "Then we're going to adjust that square until it's the same size as the side"
+  },
+  {
+   "start": 141.39,
+   "end": 142.11,
+   "text": "panels."
+  },
+  {
+   "start": 142.11,
+   "end": 144.67,
+   "text": "I wanted the side color to be a little bit lighter so I'm going to click on"
+  },
+  {
+   "start": 144.67,
+   "end": 147.87,
+   "text": "the color, that dropper tool and I'm going to make it the same color as"
+  },
+  {
+   "start": 147.87,
+   "end": 149.27,
+   "text": "chili and bingo's belly."
+  },
+  {
+   "start": 149.27,
+   "end": 151.51,
+   "text": "Then I'm going to duplicate it and add it to the other side."
+  },
+  {
+   "start": 151.51,
+   "end": 154.07,
+   "text": "Next I'm going to fill in the top of that chip back so to do that I'm going to"
+  },
+  {
+   "start": 154.07,
+   "end": 157.39,
+   "text": "click on the square, change the color to orange and then I'm going to drag"
+  },
+  {
+   "start": 157.39,
+   "end": 159.07,
+   "text": "it to fit the size of the template."
+  },
+  {
+   "start": 159.07,
+   "end": 161.39,
+   "text": "And of course we needed to match the bottom so once we do that we're"
+  },
+  {
+   "start": 161.39,
+   "end": 164.07,
+   "text": "going to duplicate that and add it to the bottom of the bag."
+  },
+  {
+   "start": 164.07,
+   "end": 166.35,
+   "text": "You can stop here if you'd like but I'd like to decorate the sides of"
+  },
+  {
+   "start": 166.35,
+   "end": 168.87,
+   "text": "the bag so to do that I'm going to add a nutrition label."
+  },
+  {
+   "start": 168.87,
+   "end": 171.83,
+   "text": "I bought these labels on Etsy but you can find them on Google or"
+  },
+  {
+   "start": 171.83,
+   "end": 172.79,
+   "text": "anywhere else."
+  },
+  {
+   "start": 172.79,
+   "end": 176.07,
+   "text": "After that label has been added I like to add a barcode as well and again"
+  },
+  {
+   "start": 176.07,
+   "end": 179.27,
+   "text": "I got this one on Google so you can just search barcode and one of these"
+  },
+  {
+   "start": 179.27,
+   "end": 179.95,
+   "text": "will pop up."
+  },
+  {
+   "start": 179.95,
+   "end": 182.95,
+   "text": "Here I'm adding an image of bingo but it has a background on it so I'm"
+  },
+  {
+   "start": 182.95,
+   "end": 185.83,
+   "text": "going to click on edit image and then add the background remover and"
+  },
+  {
+   "start": 185.83,
+   "end": 187.91,
+   "text": "it's going to completely take that white background off."
+  },
+  {
+   "start": 187.91,
+   "end": 190.79,
+   "text": "Then I'm just going to adjust the image size until I'm happy with it"
+  },
+  {
+   "start": 190.79,
+   "end": 193.43,
+   "text": "and then after that I'm going to add an image of bluey so I'm going to"
+  },
+  {
+   "start": 193.43,
+   "end": 195.07,
+   "text": "click on this bluey image I downloaded."
+  },
+  {
+   "start": 195.07,
+   "end": 198.15,
+   "text": "This one already had the background gone so I just needed to adjust the"
+  },
+  {
+   "start": 198.15,
+   "end": 198.71,
+   "text": "image."
+  },
+  {
+   "start": 198.71,
+   "end": 200.95,
+   "text": "Next I'm going to go back to text and add a subheading."
+  },
+  {
+   "start": 200.95,
+   "end": 203.51,
+   "text": "I like to add a little message on the back of it so I put thanks for"
+  },
+  {
+   "start": 203.51,
+   "end": 204.63,
+   "text": "partying with us."
+  },
+  {
+   "start": 204.63,
+   "end": 206.67,
+   "text": "Then I'm going to change the color to white and then I'm going to"
+  },
+  {
+   "start": 206.67,
+   "end": 208.63,
+   "text": "change it to that bubblegum regular font."
+  },
+  {
+   "start": 208.63,
+   "end": 210.63,
+   "text": "Since the color of this text is really close to that yellow"
+  },
+  {
+   "start": 210.63,
+   "end": 213.35,
+   "text": "background I'm going to add a shadow so to do that I'm going to"
+  },
+  {
+   "start": 213.35,
+   "end": 216.43,
+   "text": "click on effects add a shadow and then change that shadow color"
+  },
+  {
+   "start": 216.43,
+   "end": 217.27,
+   "text": "to black."
+  },
+  {
+   "start": 217.27,
+   "end": 219.23,
+   "text": "To make that nutrition label stand out I'm going to add a"
+  },
+  {
+   "start": 219.23,
+   "end": 221.91,
+   "text": "square change the color to white and then I'm going to add it"
+  },
+  {
+   "start": 221.91,
+   "end": 223.79,
+   "text": "to the background of the nutrition label."
+  },
+  {
+   "start": 223.79,
+   "end": 225.83,
+   "text": "This is going to really make it pop."
+  },
+  {
+   "start": 225.83,
+   "end": 228.31,
+   "text": "After looking at the bag I didn't like how the background color of"
+  },
+  {
+   "start": 228.31,
+   "end": 230.91,
+   "text": "the side was so close to bingo's color so I changed"
+  },
+  {
+   "start": 230.91,
+   "end": 233.63,
+   "text": "it to this stone kind of yellow gray color."
+  },
+  {
+   "start": 233.63,
+   "end": 235.95,
+   "text": "Next I'll just adjust the blue to make her a little bit bigger"
+  },
+  {
+   "start": 235.95,
+   "end": 238.59,
+   "text": "and then you're done so I just downloaded it and saved it to my"
+  },
+  {
+   "start": 238.59,
+   "end": 241.99,
+   "text": "computer and then it's time to make it."
+  },
+  {
+   "start": 241.99,
+   "end": 244.55,
+   "text": "I'm using this photo paper to print the chip bags on."
+  },
+  {
+   "start": 244.55,
+   "end": 246.95,
+   "text": "It's in my Amazon storefront and it's linked below if you guys"
+  },
+  {
+   "start": 246.95,
+   "end": 247.91,
+   "text": "are interested."
+  },
+  {
+   "start": 247.91,
+   "end": 249.07,
+   "text": "The first step is to print it."
+  },
+  {
+   "start": 249.07,
+   "end": 252.67,
+   "text": "I printed it using my Epson ET 4700 using the glossy"
+  },
+  {
+   "start": 252.67,
+   "end": 254.27,
+   "text": "photo paper settings."
+  },
+  {
+   "start": 254.27,
+   "end": 256.47,
+   "text": "This is what the chip bag looks like once it's printed"
+  },
+  {
+   "start": 256.47,
+   "end": 258.55,
+   "text": "you can see it has a nice gloss to it."
+  },
+  {
+   "start": 258.55,
+   "end": 260.51,
+   "text": "The other materials you'll need for this project is a"
+  },
+  {
+   "start": 260.59,
+   "end": 261.59,
+   "text": "paper crumper."
+  },
+  {
+   "start": 261.59,
+   "end": 262.87,
+   "text": "I got this one on Amazon."
+  },
+  {
+   "start": 262.87,
+   "end": 265.67,
+   "text": "It's listed below and it's also on my Amazon storefront."
+  },
+  {
+   "start": 265.67,
+   "end": 266.87,
+   "text": "You'll need double-sided tape."
+  },
+  {
+   "start": 266.87,
+   "end": 268.99,
+   "text": "I like this one because it comes on a roll kind of like"
+  },
+  {
+   "start": 268.99,
+   "end": 270.03,
+   "text": "Whiteout does."
+  },
+  {
+   "start": 270.03,
+   "end": 272.07,
+   "text": "This will be linked below as well and then you'll need"
+  },
+  {
+   "start": 272.07,
+   "end": 273.27,
+   "text": "some pinking shears."
+  },
+  {
+   "start": 273.27,
+   "end": 274.59,
+   "text": "I've been having these for a while."
+  },
+  {
+   "start": 274.59,
+   "end": 276.03,
+   "text": "The pinking shears is going to give it a nice"
+  },
+  {
+   "start": 276.03,
+   "end": 277.51,
+   "text": "perforated look to it."
+  },
+  {
+   "start": 277.51,
+   "end": 279.35,
+   "text": "Now that we have all of our materials the first thing"
+  },
+  {
+   "start": 279.35,
+   "end": 282.15,
+   "text": "you want to do is flip the chip bag face side down"
+  },
+  {
+   "start": 282.15,
+   "end": 284.39,
+   "text": "and then you want to adjust it to see which side of the"
+  },
+  {
+   "start": 284.39,
+   "end": 285.79,
+   "text": "back you want to overlap."
+  },
+  {
+   "start": 285.79,
+   "end": 287.71,
+   "text": "I like to have the side with the nutrition facts and"
+  },
+  {
+   "start": 287.71,
+   "end": 290.19,
+   "text": "the barcode to overlap the other side."
+  },
+  {
+   "start": 290.23,
+   "end": 292.07,
+   "text": "Now that we know which side is going to overlap you want"
+  },
+  {
+   "start": 292.07,
+   "end": 294.59,
+   "text": "to take your double-sided tape and you want to tape"
+  },
+  {
+   "start": 294.59,
+   "end": 297.15,
+   "text": "along the top of that chip bag."
+  },
+  {
+   "start": 297.15,
+   "end": 299.75,
+   "text": "You also want to tape along the bottom of that chip bag"
+  },
+  {
+   "start": 299.75,
+   "end": 302.07,
+   "text": "and then the side of the chip bag that you're going"
+  },
+  {
+   "start": 302.07,
+   "end": 302.91,
+   "text": "to overlap."
+  },
+  {
+   "start": 302.91,
+   "end": 304.87,
+   "text": "You don't want to tape at the very top of the back"
+  },
+  {
+   "start": 304.87,
+   "end": 306.39,
+   "text": "or the very bottom of the back."
+  },
+  {
+   "start": 306.39,
+   "end": 308.23,
+   "text": "You want to leave a little bit of space because"
+  },
+  {
+   "start": 308.23,
+   "end": 310.63,
+   "text": "we're going to trim off that white part later."
+  },
+  {
+   "start": 310.63,
+   "end": 312.71,
+   "text": "You do however on the side of the back want to"
+  },
+  {
+   "start": 312.71,
+   "end": 314.87,
+   "text": "get as close to that edge as possible because"
+  },
+  {
+   "start": 314.87,
+   "end": 316.71,
+   "text": "this is going to overlap over the other side of"
+  },
+  {
+   "start": 316.71,
+   "end": 319.32,
+   "text": "the back."
+  },
+  {
+   "start": 319.32,
+   "end": 321.44,
+   "text": "Now that all three of our sides have been taped"
+  },
+  {
+   "start": 321.44,
+   "end": 323.4,
+   "text": "you want to take your chips and you want to place it"
+  },
+  {
+   "start": 323.4,
+   "end": 325.36,
+   "text": "in the center of that chip bag."
+  },
+  {
+   "start": 325.36,
+   "end": 327.08,
+   "text": "Once you have it where you want it to be you want to"
+  },
+  {
+   "start": 327.08,
+   "end": 330.0,
+   "text": "take that non-glued side of the chip bag and then"
+  },
+  {
+   "start": 330.0,
+   "end": 332.52,
+   "text": "you want to take the glued side and you want to"
+  },
+  {
+   "start": 332.52,
+   "end": 334.56,
+   "text": "put it over the non-glued side."
+  },
+  {
+   "start": 334.56,
+   "end": 337.32,
+   "text": "Take your time with this one because it is very sticky."
+  },
+  {
+   "start": 337.32,
+   "end": 339.88,
+   "text": "Once everything is lined up how you want it to be"
+  },
+  {
+   "start": 339.88,
+   "end": 342.48,
+   "text": "you're going to slowly press down the bag and then"
+  },
+  {
+   "start": 342.48,
+   "end": 351.81,
+   "text": "you're going to smooth it out."
+  },
+  {
+   "start": 351.81,
+   "end": 353.37,
+   "text": "After that back is sealed you want to flip your"
+  },
+  {
+   "start": 353.37,
+   "end": 355.49,
+   "text": "back over to the front and make sure the front"
+  },
+  {
+   "start": 355.49,
+   "end": 357.41,
+   "text": "of that back is nice and centered."
+  },
+  {
+   "start": 357.41,
+   "end": 359.21,
+   "text": "Once your back is centered it's time to close the"
+  },
+  {
+   "start": 359.21,
+   "end": 360.81,
+   "text": "top and the bottom of the bag."
+  },
+  {
+   "start": 360.81,
+   "end": 363.53,
+   "text": "So to do so you want to slowly press on the bag"
+  },
+  {
+   "start": 363.53,
+   "end": 364.97,
+   "text": "until the top is closed."
+  },
+  {
+   "start": 364.97,
+   "end": 366.97,
+   "text": "Remember it's already taped so you don't have to glue"
+  },
+  {
+   "start": 366.97,
+   "end": 368.53,
+   "text": "anything extra here."
+  },
+  {
+   "start": 368.53,
+   "end": 370.29,
+   "text": "After your top is closed you're going to take the"
+  },
+  {
+   "start": 370.29,
+   "end": 372.73,
+   "text": "bottom of the bag and you're going to slowly"
+  },
+  {
+   "start": 372.73,
+   "end": 376.13,
+   "text": "press it flat until everything is nice and smooth."
+  },
+  {
+   "start": 376.13,
+   "end": 378.49,
+   "text": "Take your time here because sometime it will bunch up"
+  },
+  {
+   "start": 378.49,
+   "end": 380.13,
+   "text": "and then you're going to press that close"
+  },
+  {
+   "start": 380.13,
+   "end": 381.53,
+   "text": "just like we did the top."
+  },
+  {
+   "start": 381.53,
+   "end": 383.25,
+   "text": "I've had people ask me previously why I don't"
+  },
+  {
+   "start": 383.25,
+   "end": 385.29,
+   "text": "just pour the chips into the bag but the"
+  },
+  {
+   "start": 385.29,
+   "end": 386.81,
+   "text": "reason why you don't do that is because the"
+  },
+  {
+   "start": 386.85,
+   "end": 389.41,
+   "text": "chips will go stale and the bag will be greasy."
+  },
+  {
+   "start": 389.41,
+   "end": 391.33,
+   "text": "This next step is optional but I like to do it"
+  },
+  {
+   "start": 391.33,
+   "end": 393.17,
+   "text": "because I think it makes the bag look closer"
+  },
+  {
+   "start": 393.17,
+   "end": 394.69,
+   "text": "to an actual chip bag."
+  },
+  {
+   "start": 394.69,
+   "end": 396.49,
+   "text": "I'm going to take my chip bag and place it into"
+  },
+  {
+   "start": 396.49,
+   "end": 398.61,
+   "text": "the crimper and I'm going to crimp all the way"
+  },
+  {
+   "start": 398.61,
+   "end": 401.57,
+   "text": "until the edge of that orange part of the bag."
+  },
+  {
+   "start": 401.57,
+   "end": 403.05,
+   "text": "And then once you remove it from that crimper"
+  },
+  {
+   "start": 403.05,
+   "end": 405.65,
+   "text": "you can see that it looks just like a chip bag."
+  },
+  {
+   "start": 405.65,
+   "end": 406.77,
+   "text": "And then after that you want to repeat the"
+  },
+  {
+   "start": 406.77,
+   "end": 408.85,
+   "text": "same step with the bottom of your chip bag."
+  },
+  {
+   "start": 408.85,
+   "end": 410.21,
+   "text": "I'm still going to use this crimper."
+  },
+  {
+   "start": 410.21,
+   "end": 411.81,
+   "text": "I had another one previously but I really"
+  },
+  {
+   "start": 411.81,
+   "end": 420.38,
+   "text": "like the result of this one more than the other one."
+  },
+  {
+   "start": 420.38,
+   "end": 422.14,
+   "text": "And then after that we have one more step."
+  },
+  {
+   "start": 422.14,
+   "end": 424.14,
+   "text": "Again you could stop there but I like to take"
+  },
+  {
+   "start": 424.14,
+   "end": 427.14,
+   "text": "my pinking shears and then trim off the white part"
+  },
+  {
+   "start": 427.14,
+   "end": 428.5,
+   "text": "that was left on the bag."
+  },
+  {
+   "start": 428.5,
+   "end": 430.9,
+   "text": "By using the pinking shears it gives a zig-zag"
+  },
+  {
+   "start": 430.9,
+   "end": 433.18,
+   "text": "edge to the bag and it leaves a perforated"
+  },
+  {
+   "start": 433.18,
+   "end": 434.98,
+   "text": "which makes it easier to open later."
+  },
+  {
+   "start": 436.34,
+   "end": 437.82,
+   "text": "Once you trim the top of that bag you're"
+  },
+  {
+   "start": 437.82,
+   "end": 439.9,
+   "text": "going to repeat this step and trim the bottom."
+  },
+  {
+   "start": 439.9,
+   "end": 442.34,
+   "text": "And then after that you're done with your chip bag."
+  },
+  {
+   "start": 442.34,
+   "end": 443.42,
+   "text": "I think they're super cute."
+  },
+  {
+   "start": 443.42,
+   "end": 445.22,
+   "text": "Of course you can design them however you want."
+  },
+  {
+   "start": 445.22,
+   "end": 447.5,
+   "text": "You don't have to add the borders if you don't want to."
+  },
+  {
+   "start": 447.5,
+   "end": 449.74,
+   "text": "This is just how I like to design my chip bags."
+  },
+  {
+   "start": 449.74,
+   "end": 451.18,
+   "text": "Anyways thanks for watching guys."
+  },
+  {
+   "start": 451.18,
+   "end": 452.98,
+   "text": "Don't forget to like and subscribe."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:58:20.332046+00:00",
+ "seconds": 20.5
+}

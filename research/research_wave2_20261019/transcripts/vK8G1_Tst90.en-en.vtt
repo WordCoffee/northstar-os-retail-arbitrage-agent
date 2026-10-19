@@ -1,0 +1,1958 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.240 --> 00:00:06.720
+Hello everyone. In this tutorial, I'm going to&nbsp;
+show you how to model, texture, and light the&nbsp;&nbsp;
+
+00:00:06.720 --> 00:00:13.440
+Galaxy Watch 8, which is coming out very soon.&nbsp;
+At the end of the video, you should have a result&nbsp;&nbsp;
+
+00:00:13.440 --> 00:00:21.040
+similar to this. As always, you can download this&nbsp;
+entire blend file on my Patreon. So, consider&nbsp;&nbsp;
+
+00:00:21.040 --> 00:00:27.680
+becoming a member on my Patreon and get access to&nbsp;
+my past and future tutorial project files. Make&nbsp;&nbsp;
+
+00:00:27.680 --> 00:00:33.360
+sure to hit that like button right now cuz I spend&nbsp;
+a lot of time working on these tutorials and it'll&nbsp;&nbsp;
+
+00:00:33.360 --> 00:00:38.400
+mean a lot to me if you hit that like button. But&nbsp;
+more importantly, make sure to hit that subscribe&nbsp;&nbsp;
+
+00:00:38.400 --> 00:00:44.320
+button so you don't miss out on any of my future&nbsp;
+tutorials. So, for starters, we always need&nbsp;&nbsp;
+
+00:00:44.320 --> 00:00:49.840
+reference images of the product. Conveniently,&nbsp;
+all the reference images of the product,&nbsp;&nbsp;
+
+00:00:49.840 --> 00:00:57.360
+including the front side view, is available for me&nbsp;
+to use and download. So, uh, pretty cool here. So,&nbsp;&nbsp;
+
+00:00:57.360 --> 00:01:02.160
+what I do is I you can go ahead and just, you&nbsp;
+know, do a quick screenshot. And obviously, you&nbsp;&nbsp;
+
+00:01:02.160 --> 00:01:09.840
+can just screenshot these images and then use them&nbsp;
+in Blender. We'll do shift A. We'll add in a image&nbsp;&nbsp;
+
+00:01:09.840 --> 00:01:15.040
+reference. I'll be using instead of using the full&nbsp;
+watch picture, I'm going to be using the zoomedin&nbsp;&nbsp;
+
+00:01:15.040 --> 00:01:19.600
+uh picture of the watch, which only shows a top&nbsp;
+half. And that's okay because we'll be mirroring&nbsp;&nbsp;
+
+00:01:19.600 --> 00:01:24.480
+the bottom half. So, let's go ahead and import&nbsp;
+this image in link in the description. Again,&nbsp;&nbsp;
+
+00:01:24.480 --> 00:01:32.240
+we'll click on this. I'll zero it out. Let's go&nbsp;
+to top view. I'm going to make the opacity on this&nbsp;&nbsp;
+
+00:01:32.240 --> 00:01:37.600
+a little bit lower so we can see what's going on&nbsp;
+when we add in our mesh object. Well, before that,&nbsp;&nbsp;
+
+00:01:37.600 --> 00:01:43.520
+let's just move this up. So, I'll do G, then Y on&nbsp;
+my keyboard, and we'll move it up and I'll align&nbsp;&nbsp;
+
+00:01:43.520 --> 00:01:52.480
+it with the X axis right here. There we go. And&nbsp;
+now I'll do shift A. We'll add in a mesh circle.&nbsp;&nbsp;
+
+00:01:52.480 --> 00:01:59.680
+Let's go to this menu right here. I'll make&nbsp;
+the vertices 64. Go into edit mode by hitting&nbsp;&nbsp;
+
+00:01:59.680 --> 00:02:07.200
+tab. Select the bottom half. Hit X, delete&nbsp;
+vertices. Okay. Go back into object mode.&nbsp;&nbsp;
+
+00:02:07.200 --> 00:02:12.320
+I'll hit S. I'll scale it up. We'll first&nbsp;
+model the silver portion which surrounds&nbsp;&nbsp;
+
+00:02:12.320 --> 00:02:17.120
+this black portion. So I'll be doing this back&nbsp;
+portion right here, which is the silver portion.&nbsp;&nbsp;
+
+00:02:17.120 --> 00:02:25.040
+So again, I'm just going to hit S and I'll&nbsp;
+align it something like this. Go into edit mode,&nbsp;&nbsp;
+
+00:02:25.040 --> 00:02:29.440
+and we could use we'll select this bottom&nbsp;
+verticy right here. You can use the move tool,&nbsp;&nbsp;
+
+00:02:29.440 --> 00:02:33.760
+and we'll just move it to the side right&nbsp;
+here, aligning it with the silver outline&nbsp;&nbsp;
+
+00:02:33.760 --> 00:02:43.440
+here. You can also hit G on your keyboard&nbsp;
+by hitting GX, and we'll move it like this.
+
+00:02:54.080 --> 00:02:58.880
+Okay, now that that's done, we can select&nbsp;
+this half right here, hit X, delete vertices,&nbsp;&nbsp;
+
+00:02:58.880 --> 00:03:04.320
+go back into object mode, go to the modifiers, and&nbsp;
+I'll add in a mirror modifier. So, I'll search for&nbsp;&nbsp;
+
+00:03:04.320 --> 00:03:12.000
+a mirror. Boom. And it'll just mirror this half&nbsp;
+onto this side. We can also enable the Y-axis,&nbsp;&nbsp;
+
+00:03:12.000 --> 00:03:18.800
+which will also enable the bottom half, like this.&nbsp;
+Then go ahead and hit apply mirror modifier. We'll&nbsp;&nbsp;
+
+00:03:18.800 --> 00:03:23.840
+go into edit mode. Now, we can go ahead and hit&nbsp;
+A to select all the vertices. We can hit E on&nbsp;&nbsp;
+
+00:03:23.840 --> 00:03:28.800
+our keyboard to extrude. And then right click on&nbsp;
+your mouse to set it back in place. And then I'll&nbsp;&nbsp;
+
+00:03:28.800 --> 00:03:41.840
+just hit S. And I'll scale it in a bit. Something&nbsp;
+small like this. Okay. Go to face grid fill. Okay,&nbsp;&nbsp;
+
+00:03:41.840 --> 00:03:50.640
+looking good. Now we can go and rename this.&nbsp;
+I'll rename this to silver watch body. Okay,&nbsp;&nbsp;
+
+00:03:50.640 --> 00:03:57.360
+let's go. We'll hide this. Now we'll move on to&nbsp;
+making the black portion, which is this middle&nbsp;&nbsp;
+
+00:03:57.360 --> 00:04:03.120
+portion right here. So again, let's do shift&nbsp;
+A. Add in a mesh circle. For the mesh circle, I&nbsp;&nbsp;
+
+00:04:03.120 --> 00:04:09.920
+think I'm going to make the vertices 128. We'll go&nbsp;
+into edit mode. We'll select the bottom half like&nbsp;&nbsp;
+
+00:04:09.920 --> 00:04:18.320
+this. I'll just hit X, delete vertices. Go back&nbsp;
+into object mode, hit S, and we'll scale it up.
+
+00:04:18.320 --> 00:04:22.720
+Something like that will work. And then we'll&nbsp;
+do the same thing. We'll just go into edit mode,&nbsp;&nbsp;
+
+00:04:22.720 --> 00:04:27.600
+and we'll just align it with the inner black&nbsp;
+line right here. Going up like this. So,&nbsp;&nbsp;
+
+00:04:27.600 --> 00:04:30.480
+select the bottom half, go like this.
+
+00:04:52.160 --> 00:04:56.400
+Okay, I'm not going to adjust the rest of this&nbsp;
+because it already looks like it aligns well&nbsp;&nbsp;
+
+00:04:56.400 --> 00:05:01.760
+with the black line here. So, I'm just going&nbsp;
+to go ahead and delete this half right here. X,&nbsp;&nbsp;
+
+00:05:01.760 --> 00:05:06.000
+delete. Go back into object mode. We'll&nbsp;
+do the same thing. We'll go to modifiers,&nbsp;&nbsp;
+
+00:05:06.000 --> 00:05:11.760
+search for a mirror modifier, and we'll mirror&nbsp;
+it on the Y-axis as well. Okay, nice. Go ahead&nbsp;&nbsp;
+
+00:05:11.760 --> 00:05:19.200
+and apply the mirror modifier. Also, we can rename&nbsp;
+this circle to watch black screen. Okay, go into&nbsp;&nbsp;
+
+00:05:19.200 --> 00:05:25.040
+edit mode and we'll do the same thing. We'll hit&nbsp;
+E to extrude. Right click to set it back in place&nbsp;&nbsp;
+
+00:05:25.040 --> 00:05:30.640
+and then S and we'll scale it in just a little&nbsp;
+bit like that. And then we'll go to face and we'll&nbsp;&nbsp;
+
+00:05:30.640 --> 00:05:39.040
+do grid fill. I'm going to increase this to like&nbsp;
+34. I'll increase the offset till it's straight.
+
+00:05:41.440 --> 00:05:44.240
+Okay, that's pretty straight to me. So,&nbsp;
+I'll go back into object mode. And now,&nbsp;&nbsp;
+
+00:05:44.240 --> 00:05:49.280
+let's work on the side profile because right&nbsp;
+now it's just flat and not 3D looking. So, let's&nbsp;&nbsp;
+
+00:05:49.280 --> 00:05:56.160
+bring in another reference image for the side&nbsp;
+profile. Do shift a image reference. And again,&nbsp;&nbsp;
+
+00:05:56.160 --> 00:06:02.320
+link in the description to download this reference&nbsp;
+image as well. Just add it. Boom. And I'm going to&nbsp;&nbsp;
+
+00:06:02.320 --> 00:06:12.960
+zero it out. And I'll do the Z rotation for 90 and&nbsp;
+the X rotation for 90 as well. Go into the data,&nbsp;&nbsp;
+
+00:06:12.960 --> 00:06:18.560
+decrease the opacity a bit. And now I can go&nbsp;
+ahead and just hide this for now. Go over here,&nbsp;&nbsp;
+
+00:06:18.560 --> 00:06:27.360
+hide it. Let's go to the side view, side&nbsp;
+view, and let's align this. So G and Z.
+
+00:06:27.360 --> 00:06:32.720
+Something like that will work. We can select the&nbsp;
+watch black screen right here. You can see it.&nbsp;&nbsp;
+
+00:06:32.720 --> 00:06:43.680
+Let's go into wireframe and hit S. We'll just&nbsp;
+scale it till it matches like that. And then we&nbsp;&nbsp;
+
+00:06:43.680 --> 00:06:48.960
+go into edit mode. Hit A to select everything.&nbsp;
+Let's go back to the side view. Hit E extrude&nbsp;&nbsp;
+
+00:06:48.960 --> 00:06:59.120
+down. Boom. Okay. Go back into object mode. We can&nbsp;
+unhide the silver part, which is this. And then go&nbsp;&nbsp;
+
+00:06:59.120 --> 00:07:04.960
+back into the X view. And we're going to align it&nbsp;
+with this bottom part right here. So S to scale&nbsp;&nbsp;
+
+00:07:04.960 --> 00:07:12.240
+and we'll do GZ, bring it down. Okay. And then&nbsp;
+same thing, we'll go into edit mode, deselect,&nbsp;&nbsp;
+
+00:07:12.240 --> 00:07:20.320
+hit A to select everything. Go back to side view.&nbsp;
+And we'll hit E to extrude down. Okay. E again,&nbsp;&nbsp;
+
+00:07:20.320 --> 00:07:30.000
+extrude down. We'll scale in a bit. And then&nbsp;
+once again, E to extrude down. Scale in a bit.
+
+00:07:34.000 --> 00:07:37.120
+Nice. Now, to make this bottom portion right here,&nbsp;&nbsp;
+
+00:07:37.120 --> 00:07:42.640
+I'm going to go ahead and do shift&nbsp;
+A. We'll add in a mesh circle again,&nbsp;&nbsp;
+
+00:07:42.640 --> 00:07:49.680
+but I'll make the vertices 64. I'll just go&nbsp;
+to the X view, go to wireframe, and I'll just&nbsp;&nbsp;
+
+00:07:49.680 --> 00:07:57.760
+bring it down by hitting GC. Bring it down right&nbsp;
+here. Let's go into solid mode, and we'll go into&nbsp;&nbsp;
+
+00:07:57.760 --> 00:08:10.000
+edit mode. actually go ahead and do face grid&nbsp;
+fill. Let's go to bottom. Let's fix this up.
+
+00:08:10.000 --> 00:08:18.400
+Something like that. Go back into object mode.&nbsp;
+Let's go into X view and we'll just make sure&nbsp;&nbsp;
+
+00:08:18.400 --> 00:08:24.880
+it's aligned. So, hit S scale. Something like&nbsp;
+that. Then go into edit mode and we can hit E&nbsp;&nbsp;
+
+00:08:24.880 --> 00:08:34.160
+to extrude down. Let's go into wireframe. S&nbsp;
+to scale in GC. Bring it up a bit. There we&nbsp;&nbsp;
+
+00:08:34.160 --> 00:08:40.000
+go. Let's add that line as well. So, we can&nbsp;
+select let's select this one right here. So,&nbsp;&nbsp;
+
+00:08:40.000 --> 00:08:47.120
+go to the edge select tool. We'll select&nbsp;
+this edge right here. Go to wireframe. We&nbsp;&nbsp;
+
+00:08:47.120 --> 00:08:55.360
+can do Ctrl +B on our keyboard to bevel like&nbsp;
+that. And then we can hit E to extrude up.
+
+00:08:58.640 --> 00:09:05.520
+actually just select this edge here. Delete edges.&nbsp;
+This edge, delete edge. Also delete this edge as&nbsp;&nbsp;
+
+00:09:05.520 --> 00:09:14.800
+well. Okay. And we can also go ahead and align&nbsp;
+this by selecting this right here. We'll just&nbsp;&nbsp;
+
+00:09:14.800 --> 00:09:22.320
+align it. Okay. Next, let's select the body.&nbsp;
+Let's go into edit mode. Hit CtrlR to add in&nbsp;&nbsp;
+
+00:09:22.320 --> 00:09:28.000
+some loop cuts. Scroll on your mouse wheel. One,&nbsp;
+two, three. And then we'll just click and then&nbsp;&nbsp;
+
+00:09:28.000 --> 00:09:34.800
+hit escape to add in three loop cuts. Okay.&nbsp;
+Now, I want to bevel the edges here because I&nbsp;&nbsp;
+
+00:09:34.800 --> 00:09:39.360
+don't want them to be razor sharp cuz that's&nbsp;
+not realistic. But before I start beveling,&nbsp;&nbsp;
+
+00:09:39.360 --> 00:09:44.720
+let's go back into object mode and let's correct&nbsp;
+the normals. So, to see the direction of your&nbsp;&nbsp;
+
+00:09:44.720 --> 00:09:50.320
+normals, we can go over to this menu right here&nbsp;
+and click on face orientation. Now, we can see&nbsp;&nbsp;
+
+00:09:50.320 --> 00:09:56.480
+that some of the normals are not facing the right&nbsp;
+direction. Uh we want to make sure this entire&nbsp;&nbsp;
+
+00:09:56.480 --> 00:10:02.320
+uh object is blue on the outside. So to get rid of&nbsp;
+the red parts, we can just um go into edit mode.&nbsp;&nbsp;
+
+00:10:02.320 --> 00:10:08.160
+Let's hit A to select everything. Hit alt N on&nbsp;
+your keyboard. Then we can recalculate the normals&nbsp;&nbsp;
+
+00:10:08.160 --> 00:10:12.880
+on the outside. And boom, it is now fully blue&nbsp;
+on the outside. And let's do the same thing with&nbsp;&nbsp;
+
+00:10:12.880 --> 00:10:19.520
+this object. Go to edit mode, hit A, and then alt&nbsp;
+N, recalculate outside. And just click on this.&nbsp;&nbsp;
+
+00:10:19.520 --> 00:10:26.240
+Go to edit mode, hit A, and then just hit Alt N,&nbsp;
+flip the normals. Boom. Now everything is blue&nbsp;&nbsp;
+
+00:10:26.240 --> 00:10:31.200
+and the normals are facing the right direction.&nbsp;
+Now, now you won't run into any sort of shading&nbsp;&nbsp;
+
+00:10:31.200 --> 00:10:38.640
+issue or some geometry issues. We can turn this&nbsp;
+off now. Select the silver body. Go to edit mode&nbsp;&nbsp;
+
+00:10:38.640 --> 00:10:46.880
+with the edge select tool. Hold alt to select&nbsp;
+this edge and then hit Ctrl +B to bevel. Okay,&nbsp;&nbsp;
+
+00:10:46.880 --> 00:10:54.560
+should be good. Nice. We can also bevel this&nbsp;
+as well. Hold alt, select this. Ctrl +B,&nbsp;&nbsp;
+
+00:10:54.560 --> 00:11:07.040
+bevel. Boom. Nice. Let's bring back our&nbsp;
+image. Let's go to the X view wireframe. Yeah,&nbsp;&nbsp;
+
+00:11:07.040 --> 00:11:16.160
+we got to bevel this, too. So, hold deselect.&nbsp;
+Hold alt. Select this line here. Crl + V. Bevel.
+
+00:11:16.160 --> 00:11:17.200
+Go.
+
+00:11:19.280 --> 00:11:26.640
+Alt bevel. Here we go. We can just&nbsp;
+right click, shade auto smooth,&nbsp;&nbsp;
+
+00:11:26.640 --> 00:11:31.920
+shade auto smooth, and shade auto smooth. Okay,&nbsp;&nbsp;
+
+00:11:31.920 --> 00:11:40.480
+now let's move on to adding if you go into&nbsp;
+wireframe mode, these buttons right here.
+
+00:11:40.480 --> 00:11:45.920
+And so shift A will add in a mesh circle.&nbsp;
+Now the vertices are going to be 32. So,&nbsp;&nbsp;
+
+00:11:45.920 --> 00:11:52.080
+keep them at 32. Let's go to top view. Let's go&nbsp;
+into edit mode and we'll go to vertex se mode. Use&nbsp;&nbsp;
+
+00:11:52.080 --> 00:12:00.720
+the face grid fill. You make the offset five.&nbsp;
+No, four. Yeah, four. There we go. Okay. Now,&nbsp;&nbsp;
+
+00:12:00.720 --> 00:12:07.600
+we're going to go into let's go into object mode.&nbsp;
+Let's hide these objects for a second. And we'll&nbsp;&nbsp;
+
+00:12:07.600 --> 00:12:13.440
+go to top view. Let's go into wireframe edit mode.&nbsp;
+We'll select the top half like this. And we'll&nbsp;&nbsp;
+
+00:12:13.440 --> 00:12:20.560
+do G and then Y on our keyboard. And we'll move&nbsp;
+it up here. Same with this bottom half. Gy down&nbsp;&nbsp;
+
+00:12:20.560 --> 00:12:27.440
+here. There we go. Okay. And stay in edit mode.&nbsp;
+And we'll add some loop cuts. Control R for loop&nbsp;&nbsp;
+
+00:12:27.440 --> 00:12:33.840
+cuts. We'll add in four. Click. Click. And then&nbsp;
+control R again. Four loop cuts. Click. Click.&nbsp;&nbsp;
+
+00:12:33.840 --> 00:12:42.000
+Now we can hit A and then E to extrude up. Okay.&nbsp;
+And that's what it's looking like now. All right.&nbsp;&nbsp;
+
+00:12:42.000 --> 00:12:50.880
+Now we can do R Y90 to rotate it. Enter. We'll&nbsp;
+bring back our silver watch body. Let's go to&nbsp;&nbsp;
+
+00:12:50.880 --> 00:12:57.440
+the X view. Let's go to wireframe and we'll&nbsp;
+scale it down. And we'll bring it over to the&nbsp;&nbsp;
+
+00:12:57.440 --> 00:13:06.400
+side. And we'll align it with our button from our&nbsp;
+reference image right here. Now you can hit S and&nbsp;&nbsp;
+
+00:13:06.400 --> 00:13:15.520
+then Y to scale it on the Y- axis and then S and&nbsp;
+then Z scale on the Z-axis just so it, you know,&nbsp;&nbsp;
+
+00:13:15.520 --> 00:13:21.920
+lines up a little bit with the reference image. I&nbsp;
+think that looks good. Let's go to the side view&nbsp;&nbsp;
+
+00:13:21.920 --> 00:13:26.960
+like this. And we'll bring it forward by hitting&nbsp;
+G and then X. Bring it forward. Let's go to top&nbsp;&nbsp;
+
+00:13:26.960 --> 00:13:33.760
+view and let's hit RZ to rotate it like this.&nbsp;
+Let's bring it back by hitting G and then X.&nbsp;&nbsp;
+
+00:13:34.720 --> 00:13:39.520
+Now you can see that it kind of curves along the&nbsp;
+body here. And we need it to curve as well. We&nbsp;&nbsp;
+
+00:13:39.520 --> 00:13:42.880
+don't want it to be straight like this. So to&nbsp;
+make it curve, let's go into edit mode. Let's&nbsp;&nbsp;
+
+00:13:42.880 --> 00:13:47.920
+use the edge select tool. Let's select the middle&nbsp;
+edge right here. So deselect, hold alt to select&nbsp;&nbsp;
+
+00:13:47.920 --> 00:13:53.600
+this edge, which will select the entire edge like&nbsp;
+this. Top view. Use the proportional editing tool.&nbsp;&nbsp;
+
+00:13:53.600 --> 00:13:58.160
+And you can hit G. And you can use a mouse or you&nbsp;
+can use a scroll wheel on your mouse to control&nbsp;&nbsp;
+
+00:13:58.160 --> 00:14:05.120
+the circle here. And we're just going to move it&nbsp;
+up causing a little bit of a bend. Slight bend.&nbsp;&nbsp;
+
+00:14:05.120 --> 00:14:13.600
+I think this works just fine. So, click. Let's go&nbsp;
+back into object mode. Hit GX. Move it back. Let's&nbsp;&nbsp;
+
+00:14:13.600 --> 00:14:20.080
+go to the X view. Let's go to wireframe. Let's&nbsp;
+make sure it's aligned by hitting GY. There we go.&nbsp;&nbsp;
+
+00:14:20.080 --> 00:14:30.400
+More or less aligned. I want to make it aligned&nbsp;
+with these lines here. So, let's actually hit GC.
+
+00:14:30.400 --> 00:14:38.960
+There we go. I think that works. All&nbsp;
+right, go back into solid mode and we&nbsp;&nbsp;
+
+00:14:38.960 --> 00:14:43.120
+can go to top view. See what that's looking&nbsp;
+like. Okay, looking pretty good. All right,&nbsp;&nbsp;
+
+00:14:43.120 --> 00:14:48.000
+now let's cut a hole into the body here. Now, to&nbsp;
+do that, we'll select the body. We'll go to the&nbsp;&nbsp;
+
+00:14:48.000 --> 00:14:53.200
+modifiers. We'll add in a boolean modifier to cut&nbsp;
+holes. And we'll select this button object right&nbsp;&nbsp;
+
+00:14:53.200 --> 00:14:58.800
+here. And you can see that it causes a little bit&nbsp;
+of some shading issues. If you look very closely,&nbsp;&nbsp;
+
+00:14:58.800 --> 00:15:02.160
+um it's hard to see, but if you look very closely&nbsp;
+for close-ups, you can see that there are some&nbsp;&nbsp;
+
+00:15:02.160 --> 00:15:07.920
+shading issues here like this. See that? So, to&nbsp;
+fix that, we can just click on our body, hit A,&nbsp;&nbsp;
+
+00:15:07.920 --> 00:15:13.040
+and then right click, subdivide, and then&nbsp;
+right click, subdivide. I think that Yeah,&nbsp;&nbsp;
+
+00:15:13.040 --> 00:15:21.440
+that fixes it. Okay, nice. And then we can&nbsp;
+just go ahead and hit apply boline modifier,&nbsp;&nbsp;
+
+00:15:21.440 --> 00:15:27.040
+which will then add a hole. If you hide this&nbsp;
+object, you should see a hole in the body right&nbsp;&nbsp;
+
+00:15:27.040 --> 00:15:33.120
+there. Let's bring back our button. Where is&nbsp;
+it? Here it is. Let's actually rename it to&nbsp;&nbsp;
+
+00:15:33.120 --> 00:15:41.440
+button one. Okay. And I'm going to go and select&nbsp;
+the back portion right here. So, let's deselect.&nbsp;&nbsp;
+
+00:15:41.440 --> 00:15:46.480
+Turn off the proportional editing tool. And I'll&nbsp;
+hold alt. I'll select the back like this. Hold&nbsp;&nbsp;
+
+00:15:46.480 --> 00:15:54.960
+shift alt sele like this. Select this. and hold&nbsp;
+shift alt sele like this. There we go. Okay. So,&nbsp;&nbsp;
+
+00:15:54.960 --> 00:15:59.040
+once you have the back selected, let's go&nbsp;
+back to the side view like this. Let's go&nbsp;&nbsp;
+
+00:15:59.040 --> 00:16:04.720
+to wireframe. Let's do shift D to duplicate it.&nbsp;
+And then right click to set it back in place.&nbsp;&nbsp;
+
+00:16:04.720 --> 00:16:13.280
+Okay. And now we can just bring it forward&nbsp;
+by hitting G and an X. Just bring it forward.
+
+00:16:13.280 --> 00:16:18.400
+We'll hit P, separate selection. And now it's a&nbsp;
+separate object, that line that we just made. So,&nbsp;&nbsp;
+
+00:16:18.400 --> 00:16:23.360
+select that line. should be over here. Yeah,&nbsp;
+right there. I'm going actually hide this for&nbsp;&nbsp;
+
+00:16:23.360 --> 00:16:27.840
+a second. And what this line is, it's&nbsp;
+going to be that outline that you see&nbsp;&nbsp;
+
+00:16:27.840 --> 00:16:32.960
+in the reference image. So this white outline&nbsp;
+right here, that's what this line is. So hit S,&nbsp;&nbsp;
+
+00:16:32.960 --> 00:16:46.720
+scale it up, and there you go. You bring it&nbsp;
+back like that. Okay. Go into edit mode. Go&nbsp;&nbsp;
+
+00:16:46.720 --> 00:16:51.200
+to vertex select. Hit A to select everything.&nbsp;
+and then E to extrude. And then right click&nbsp;&nbsp;
+
+00:16:51.200 --> 00:17:00.080
+to set it back in place. Let's go to wireframe&nbsp;
+and we'll just hit S to scale inside like that.
+
+00:17:00.080 --> 00:17:06.960
+Okay. H I don't like how it's clipping like this.
+
+00:17:06.960 --> 00:17:14.560
+So, you know what? Let's select this top half.&nbsp;
+Let's go to top view. Let's use the proportional&nbsp;&nbsp;
+
+00:17:14.560 --> 00:17:34.640
+editing tool. Hit G. We'll just make it stick like&nbsp;
+that. Maybe something like that. Also like this.
+
+00:17:34.640 --> 00:17:59.280
+Maybe this.
+
+00:17:59.280 --> 00:18:07.920
+I think something like that works. Maybe up here&nbsp;
+also. Here we go. All right. And we'll rename this&nbsp;&nbsp;
+
+00:18:07.920 --> 00:18:20.240
+to button outline. You know what? I'm just going&nbsp;
+to let's go into face select mode and let's just,&nbsp;&nbsp;
+
+00:18:20.240 --> 00:18:28.640
+you know, let's just delete go wireframe. Let's&nbsp;
+delete this half like this. X delete faces. And&nbsp;&nbsp;
+
+00:18:28.640 --> 00:18:37.840
+then we can just mirror this modifiers. mirror&nbsp;
+modifier. We'll do Y. We go. I'll actually select&nbsp;&nbsp;
+
+00:18:37.840 --> 00:18:44.400
+this and I'm going to just join it together&nbsp;
+with this object. So, you know what? Select&nbsp;&nbsp;
+
+00:18:44.400 --> 00:18:52.400
+this. Shift click this. Ctrl J. Join it together.&nbsp;
+Boom. Then that should copy it on the other side,&nbsp;&nbsp;
+
+00:18:52.400 --> 00:19:01.600
+which it did. Nice. Shade auto smooth. And then&nbsp;
+if I want to, I can just hit L and I can separate&nbsp;&nbsp;
+
+00:19:01.600 --> 00:19:07.600
+it if I want. So, you know what? I'll separate it.&nbsp;
+P. Separate selection. Boom. Separated. You know,&nbsp;&nbsp;
+
+00:19:07.600 --> 00:19:12.560
+shift click this. Control P and I'll parent it&nbsp;
+to the object. So, if I move this now, they'll be&nbsp;&nbsp;
+
+00:19:12.560 --> 00:19:19.760
+stuck. Nice. Okay. Now, let's go ahead and you&nbsp;
+know what? We can add that hole in the middle&nbsp;&nbsp;
+
+00:19:19.760 --> 00:19:31.920
+as well. So, shift A. We can do that by using a&nbsp;
+cylinder. Let's do R Y90. Maybe just that down.
+
+00:19:31.920 --> 00:19:37.760
+That works. Select your body. Bowling&nbsp;
+modifier. Select this cylinder right&nbsp;&nbsp;
+
+00:19:37.760 --> 00:19:42.320
+here. Let's apply. Let's actually do&nbsp;
+apply like this. So, let's apply the&nbsp;&nbsp;
+
+00:19:42.320 --> 00:19:47.600
+mirror modifier first. Then we'll apply the&nbsp;
+volume modifier. And if you delete that,&nbsp;&nbsp;
+
+00:19:47.600 --> 00:19:56.000
+there we go. Also hit A and then&nbsp;
+alt N, flip the normals. Cool.
+
+00:19:58.320 --> 00:20:06.400
+Let's bring back our button.
+
+00:20:06.400 --> 00:20:11.920
+There we go.
+
+00:20:11.920 --> 00:20:19.360
+Let's do shrink wrap. Shrink&nbsp;
+wrap onto the surface.
+
+00:20:19.360 --> 00:20:22.720
+There we go.
+
+00:20:27.840 --> 00:20:34.400
+Now, let's go ahead and bring back our black&nbsp;
+screen. And we could go ahead. Let's just hide&nbsp;&nbsp;
+
+00:20:34.400 --> 00:20:41.040
+this for a second. Let's select all our objects.&nbsp;
+Hit A or let's say A. And then M. We'll make a new&nbsp;&nbsp;
+
+00:20:41.040 --> 00:20:51.040
+collection. We'll call it watch body. Boom. Okay.&nbsp;
+And we can hide it. Let's make a new collection.&nbsp;&nbsp;
+
+00:20:51.040 --> 00:20:59.440
+We'll do right click or we'll do right click new&nbsp;
+collection. We'll do straps. Okay. So, with the&nbsp;&nbsp;
+
+00:20:59.440 --> 00:21:06.160
+straps collection selected, let's go ahead and&nbsp;
+add in our reference image. Shift A. Go to image,&nbsp;&nbsp;
+
+00:21:06.160 --> 00:21:10.880
+reference. I'll leave a link in the description&nbsp;
+for the same reference image that I'm using.&nbsp;&nbsp;
+
+00:21:10.880 --> 00:21:17.280
+It'll be this one right here. Add it. Let's&nbsp;
+go to transformation. Zero it out. Top view.&nbsp;&nbsp;
+
+00:21:17.280 --> 00:21:25.680
+Let's start with this this strap right here. So,&nbsp;
+let's actually hit G and then X and we'll move it&nbsp;&nbsp;
+
+00:21:25.680 --> 00:21:37.520
+somewhere towards the middle. Something like that.&nbsp;
+Let me click on this. Let's decrease the opacity.&nbsp;&nbsp;
+
+00:21:37.520 --> 00:21:42.320
+Okay. So, those are the location settings for my&nbsp;
+reference image right there. Let's go ahead and&nbsp;&nbsp;
+
+00:21:42.320 --> 00:21:49.440
+add in shift A. We'll add in a mesh plane. Let's&nbsp;
+go to wireframe. Let's hit S to scale it down.&nbsp;&nbsp;
+
+00:21:50.880 --> 00:21:59.120
+actually move it up here. We'll do S and then X&nbsp;
+on my keyboard to scale on the X- axis. Something&nbsp;&nbsp;
+
+00:21:59.120 --> 00:22:04.640
+like that could work. There we go. Let's go&nbsp;
+into edit mode. Let's use the edge select tool,&nbsp;&nbsp;
+
+00:22:04.640 --> 00:22:10.160
+deselect, and let's select this edge right here.&nbsp;
+We'll hit E to extrude and then Y on our keyboard&nbsp;&nbsp;
+
+00:22:10.160 --> 00:22:18.480
+to extrude on the Y- axis. Then we'll go right&nbsp;
+here. We'll hit S to scale. Hit E, extrude again.&nbsp;&nbsp;
+
+00:22:19.680 --> 00:22:28.400
+and S to scale a little bit. E and&nbsp;
+then Y to extrude on the Y axis again.
+
+00:22:28.400 --> 00:22:38.880
+E Y again S and E to extrude. Y
+
+00:22:38.880 --> 00:22:51.920
+do something like this. Maybe G Y move it down a&nbsp;
+bit. And then E to extrude. and on the Y- axis.
+
+00:22:51.920 --> 00:22:56.160
+Okay, there we go. Let's do the&nbsp;
+same for this one right here. So,&nbsp;&nbsp;
+
+00:22:56.160 --> 00:23:00.560
+deselect and then select this line.&nbsp;
+Hit E and the Y to extrude on the Y&nbsp;&nbsp;
+
+00:23:00.560 --> 00:23:14.000
+axis. We'll go right here and then E&nbsp;
+and then Y again. And then S to scale.
+
+00:23:14.000 --> 00:23:19.920
+Okay. E and a Y again.
+
+00:23:19.920 --> 00:23:26.000
+So, we're leaving a gap for the hole here. And E Y
+
+00:23:26.000 --> 00:23:33.840
+right about there. Okay. Then we'll do&nbsp;
+control R to add in a loop cut. And then&nbsp;&nbsp;
+
+00:23:33.840 --> 00:23:39.840
+we'll just add in one more loop cut right&nbsp;
+here. Okay. Now we can hit control R on&nbsp;&nbsp;
+
+00:23:39.840 --> 00:23:47.760
+our keyboard to add in more loop cuts. Crl&nbsp;
+R. And we'll add in one, two, three, four,&nbsp;&nbsp;
+
+00:23:47.760 --> 00:23:56.640
+five, six, seven, eight. I think eight works&nbsp;
+just fine. So, let's do click and then click&nbsp;&nbsp;
+
+00:23:56.640 --> 00:24:03.040
+again. Then let's go ahead and hold alt, click&nbsp;
+on this edge right here. Hold the shift, alt,&nbsp;&nbsp;
+
+00:24:03.040 --> 00:24:09.040
+click on this edge. We'll hit S and then X.&nbsp;
+And we'll just scale it on the X axis a bit.
+
+00:24:10.880 --> 00:24:16.400
+Let's hold alt, click on this, hold shift, alt,&nbsp;
+click on this, we'll hit SX, scale on the Okay,&nbsp;&nbsp;
+
+00:24:16.400 --> 00:24:20.080
+then we can go to the face select tool, select&nbsp;
+this face, hold shift, select this face,&nbsp;&nbsp;
+
+00:24:20.080 --> 00:24:27.360
+this face, this face, this face, hit X, delete&nbsp;
+faces. We go and we'll do click on this,&nbsp;&nbsp;
+
+00:24:27.360 --> 00:24:33.040
+hold shift, and we'll delete these&nbsp;
+faces as well. Boom. All right. Now,&nbsp;&nbsp;
+
+00:24:33.040 --> 00:24:38.080
+let's make this part right here. This one that&nbsp;
+curves. So, let's go use the edge select tool.&nbsp;&nbsp;
+
+00:24:38.080 --> 00:24:44.000
+Let's select this edge right here and we'll&nbsp;
+hit E to extrude on the Y axis. So click Y&nbsp;&nbsp;
+
+00:24:44.000 --> 00:24:47.840
+on your keyboard to do this and then we'll&nbsp;
+just move it up. I think it starts curving&nbsp;&nbsp;
+
+00:24:47.840 --> 00:24:56.640
+from like right here. So we'll hit R and then&nbsp;
+Z and we'll start the curve from here. E RZ&nbsp;&nbsp;
+
+00:24:56.640 --> 00:25:18.720
+rotate. And we'll do E again. RZ rotate. Again,&nbsp;
+RZ rotate again. R O Whoops. RZ rotate again. RZ&nbsp;&nbsp;
+
+00:25:18.720 --> 00:25:37.920
+rotate again. RZ rotate. E again. RZ rotate.&nbsp;
+And we'll do one more. E again. RZ rotate.
+
+00:25:37.920 --> 00:25:44.000
+Okay, let's hide this reference image for&nbsp;
+a second. And we'll just do we'll make sure&nbsp;&nbsp;
+
+00:25:44.000 --> 00:25:50.960
+it's aligned with this line right here. I&nbsp;
+want to make sure it's straight. So, RZ.
+
+00:25:50.960 --> 00:25:57.680
+Looks pretty straight.
+
+00:25:57.680 --> 00:26:07.120
+Let's use the vertex sector tool. Let's&nbsp;
+select this edge. I'll just move it like this.
+
+00:26:07.120 --> 00:26:13.600
+Okay, we can go back to solid mode. Bring back the&nbsp;
+reference image. And you know what I'm going to&nbsp;&nbsp;
+
+00:26:13.600 --> 00:26:17.760
+do? I'm going to go into wireframe. Actually, I'll&nbsp;
+use the I'll go into edit mode. Let's do control&nbsp;&nbsp;
+
+00:26:17.760 --> 00:26:23.200
+R. And let's add in one more loop cut. So, right&nbsp;
+here in the middle. Click. Control-r. Click. There&nbsp;&nbsp;
+
+00:26:23.200 --> 00:26:31.520
+we go. And now we can go selected this half using&nbsp;
+the face select tool. This hit X. Delete faces.&nbsp;&nbsp;
+
+00:26:31.520 --> 00:26:39.200
+Okay. And guess what we're about to do next?&nbsp;
+Yes. Modifiers, mirror modifier. And look, it's&nbsp;&nbsp;
+
+00:26:39.200 --> 00:26:46.400
+mirrored on the other half perfectly. Okay. Click&nbsp;
+on uh clipping. And we will just go into edit&nbsp;&nbsp;
+
+00:26:46.400 --> 00:26:52.080
+mode. Click on this edge or sorry, let's click&nbsp;
+on this edge loop or edge select tools. Click&nbsp;&nbsp;
+
+00:26:52.080 --> 00:26:58.960
+on this edge. And then we'll hit E to extrude and&nbsp;
+then on the X-axis. And then we can just bring it&nbsp;&nbsp;
+
+00:26:58.960 --> 00:27:04.320
+together. Now let's use the face select tool.&nbsp;
+We can just select all of these faces. Hit P.&nbsp;&nbsp;
+
+00:27:04.320 --> 00:27:12.800
+Separate selection. Okay. Okay. Then we'll go into&nbsp;
+edit mode, hit A, and then we'll go to the X view,&nbsp;&nbsp;
+
+00:27:12.800 --> 00:27:19.760
+and we'll hit E to extrude up. We'll do the same&nbsp;
+with this piece here. X view, go to edit mode,&nbsp;&nbsp;
+
+00:27:19.760 --> 00:27:27.200
+hit A, and then E to extrude up. Okay. Then&nbsp;
+we'll add a subdivision modifier for each object.
+
+00:27:29.120 --> 00:27:32.080
+like that. And to fix this end part&nbsp;
+here, we'll just go into edit mode.&nbsp;&nbsp;
+
+00:27:32.080 --> 00:27:37.840
+We'll do C controlr and add in a loop&nbsp;
+cut. And that'll fix that. We'll also&nbsp;&nbsp;
+
+00:27:37.840 --> 00:27:44.000
+also add in a loop cut on the side. So,&nbsp;
+control R loop cut to the side like this.&nbsp;&nbsp;
+
+00:27:44.000 --> 00:27:55.120
+And then control R. Whoops. Control&nbsp;
+R. Another loop cut like that. Okay.
+
+00:27:55.120 --> 00:28:02.640
+And maybe one more loop cut. like this. We'll&nbsp;
+do the same with this as well. So, um, let's go&nbsp;&nbsp;
+
+00:28:02.640 --> 00:28:17.840
+into edit mode. Loop cut like this. So, loop cut&nbsp;
+here. Maybe I'll fix that. A loop cut down here.
+
+00:28:17.840 --> 00:28:23.280
+And a loop cut to the side.
+
+00:28:23.280 --> 00:28:30.320
+Maybe one more loop cut like that. Let's go to&nbsp;
+top view and let's go use the face select tool.&nbsp;&nbsp;
+
+00:28:30.320 --> 00:28:38.320
+Select this face right here. And I'll just hit E&nbsp;
+to extrude down just a bit. Let's add in another&nbsp;&nbsp;
+
+00:28:38.320 --> 00:28:44.880
+subdivision like this. And we'll just auto shade&nbsp;
+smooth. Let's also go and use the edge select&nbsp;&nbsp;
+
+00:28:44.880 --> 00:28:52.320
+tool. Let's bring out Let's bring down these&nbsp;
+lines as well. GZ. Bring it down like that.&nbsp;&nbsp;
+
+00:28:52.960 --> 00:29:01.040
+this line as well. And maybe bring it back.
+
+00:29:01.040 --> 00:29:05.120
+So, we got something like this.
+
+00:29:05.120 --> 00:29:12.640
+Now, let's go turn off the subdivision for&nbsp;
+a second. Let's go into edit mode. Let's&nbsp;&nbsp;
+
+00:29:12.640 --> 00:29:19.040
+select use a face sector tool. Let's select&nbsp;
+this face. This face right here. Control I&nbsp;&nbsp;
+
+00:29:19.040 --> 00:29:23.920
+mean shift D to duplicate it. Right click.&nbsp;
+set it back in place. And then we'll do P&nbsp;&nbsp;
+
+00:29:23.920 --> 00:29:29.840
+separate selection. And then we can go back&nbsp;
+into object mode. And then hit go back into&nbsp;&nbsp;
+
+00:29:29.840 --> 00:29:37.360
+select the object. Go into edit mode.&nbsp;
+And we'll select it. Hit E, extrude up.
+
+00:29:37.360 --> 00:29:40.800
+And uh you know what? Let's go back to&nbsp;
+object mode for a second. Let's turn on&nbsp;&nbsp;
+
+00:29:40.800 --> 00:29:49.040
+our subdivision again. Boom. Let's go back&nbsp;
+into edit mode. Okay. Yeah. Let's bring it&nbsp;&nbsp;
+
+00:29:49.040 --> 00:29:59.040
+forward by hitting E. forward and then GZ&nbsp;
+bring it down and E bring it forward again.
+
+00:29:59.040 --> 00:30:02.400
+Hold on. Let's go into X view wireframe. Let's do&nbsp;&nbsp;
+
+00:30:02.400 --> 00:30:14.800
+let's do RX. Straighten that a&nbsp;
+bit up. E extrude forward a bit.
+
+00:30:14.800 --> 00:30:25.520
+And then we can E again. Bring&nbsp;
+it up. and then E again forward.
+
+00:30:25.520 --> 00:30:34.320
+Okay, that I think that bend there's too strong.&nbsp;
+So, let's go select all these lines here. Let's&nbsp;&nbsp;
+
+00:30:34.320 --> 00:30:42.160
+do GZ. Bring it up a bit. Yeah. Let's select&nbsp;
+this piece. Go into edit mode. Let's add in&nbsp;&nbsp;
+
+00:30:42.160 --> 00:30:54.560
+a loop cut by going R. Loop cut. Bring it over&nbsp;
+like so. We'll do control R. Another loop cut&nbsp;&nbsp;
+
+00:30:54.560 --> 00:31:05.200
+here. And then I'll do face select mode. Select&nbsp;
+this face. And then I'll hit E to extrude down.
+
+00:31:05.200 --> 00:31:13.200
+Okay. Let's increase the subdivision to two.&nbsp;
+And let's go back to edit mode. Let's use&nbsp;&nbsp;
+
+00:31:13.200 --> 00:31:21.520
+the line select tool here. Let's select&nbsp;
+these two lines here. Bring them down.
+
+00:31:21.520 --> 00:31:30.560
+So like that. Right click. Shade auto smooth.&nbsp;
+Okay. And we can turn this back on. And I think&nbsp;&nbsp;
+
+00:31:30.560 --> 00:31:36.000
+we are good to go. All right. Cool. Now we can&nbsp;
+just click on this end piece, shift click this,&nbsp;&nbsp;
+
+00:31:36.000 --> 00:31:40.320
+and then shift shift click this last piece here.&nbsp;
+Ctrl P to parent it to the object. And now it's&nbsp;&nbsp;
+
+00:31:40.320 --> 00:31:45.760
+just one object here. Now we can go back to top&nbsp;
+view. Let's work on this strap on the side here.&nbsp;&nbsp;
+
+00:31:45.760 --> 00:31:58.560
+So, let's just let's hide these pieces. And let's&nbsp;
+move this over to the side. Maybe move it up.
+
+00:31:58.560 --> 00:32:05.600
+I want to make sure it's facing the middle of&nbsp;
+the 3D cursor. See the transformation settings&nbsp;&nbsp;
+
+00:32:05.600 --> 00:32:10.000
+right there of my reference image. Okay.&nbsp;
+So, to make this strap here, the process&nbsp;&nbsp;
+
+00:32:10.000 --> 00:32:13.600
+is going to be a little different. We're going&nbsp;
+to do shift A and we'll add in a circle again,&nbsp;&nbsp;
+
+00:32:13.600 --> 00:32:22.240
+but we're going to decrease the vertices to eight.&nbsp;
+Okay. And then we're going to scale it down.
+
+00:32:22.240 --> 00:32:28.640
+Then we'll go into edit mode. We'll go into vertex&nbsp;
+select mode. We'll just select this vertex. GY or&nbsp;&nbsp;
+
+00:32:28.640 --> 00:32:34.400
+GX. Bring it to the side. Select this. Gy bring&nbsp;
+it to side. We can actually we don't need these.&nbsp;&nbsp;
+
+00:32:34.400 --> 00:32:41.280
+We'll just delete it. And then we'll select all&nbsp;
+of these. We'll do E and then extrude on the X&nbsp;&nbsp;
+
+00:32:41.280 --> 00:32:50.160
+axis. And what we can also do is click and then do&nbsp;
+S and then X0 enter. And then again we'll just do&nbsp;&nbsp;
+
+00:32:50.160 --> 00:32:58.080
+GX and we'll move it to the side like that. Okay.&nbsp;
+Then we'll use the edge select tool. I am going&nbsp;&nbsp;
+
+00:32:58.080 --> 00:33:06.800
+to just move well let's use the vertex se for a&nbsp;
+second and then we'll just do gy move it up a bit.&nbsp;&nbsp;
+
+00:33:07.680 --> 00:33:18.400
+Yeah. And same with this gy down. I&nbsp;
+think that works. And then we can add in
+
+00:33:18.400 --> 00:33:25.920
+E Y. And then we'll just go up. And then same&nbsp;
+with the bottom as well. E to extrude Y. And&nbsp;&nbsp;
+
+00:33:25.920 --> 00:33:33.520
+then we'll do one, two. Okay. And then we can&nbsp;
+add in a mirror modifier. And we'll also add in&nbsp;&nbsp;
+
+00:33:33.520 --> 00:33:37.840
+an array modifier to duplicate them. But we&nbsp;
+want to duplicate them at the going down on&nbsp;&nbsp;
+
+00:33:37.840 --> 00:33:49.600
+the y- axis. So zero out the x and we'll do minus&nbsp;
+one like that. And we can just go and add as many&nbsp;&nbsp;
+
+00:33:49.600 --> 00:33:56.000
+uh 10 I think. Yeah, 10 will work. Okay. So&nbsp;
+then you can go ahead and just hit apply the&nbsp;&nbsp;
+
+00:33:56.000 --> 00:34:01.520
+mirror modifier and apply the array as well.&nbsp;
+Go into edit mode and make sure you hit M and&nbsp;&nbsp;
+
+00:34:01.520 --> 00:34:06.800
+then delete. Well, let's just deselect first.&nbsp;
+A and then M merge by distance. That'll delete&nbsp;&nbsp;
+
+00:34:06.800 --> 00:34:12.960
+27 vertices there. That was duplicated. Okay.&nbsp;
+And then we can go into edit mode, ed select,&nbsp;&nbsp;
+
+00:34:12.960 --> 00:34:18.240
+and we select the top edge. And of course, we&nbsp;
+can just duplicate it. Or sorry, not duplicate&nbsp;&nbsp;
+
+00:34:18.240 --> 00:34:28.800
+it. We could extend it here and finish off&nbsp;
+the top half like we did for this strap.
+
+00:34:33.680 --> 00:34:42.080
+something like that. And we will do the same&nbsp;
+on this bottom half. Extrude down. Extrude.&nbsp;&nbsp;
+
+00:34:42.080 --> 00:34:50.480
+Extrude. Extrude. Extrude. Extrude. Then extrude.&nbsp;
+We also want to add in some loop cuts here. So,&nbsp;&nbsp;
+
+00:34:50.480 --> 00:34:58.080
+let's do control R. Let's add in some loop&nbsp;
+cuts. Add in nine there. And I'll add in guess&nbsp;&nbsp;
+
+00:34:58.080 --> 00:35:06.480
+nine here. We'll do we'll do nine as well.&nbsp;
+Okay. Control R loop cuts. One, two, three,&nbsp;&nbsp;
+
+00:35:06.480 --> 00:35:12.800
+four. And control R. One, two, three, four on this&nbsp;
+side as well. Okay. And then we can just do face&nbsp;&nbsp;
+
+00:35:12.800 --> 00:35:20.240
+select. Select these faces. And then delete those&nbsp;
+faces. Okay. Go to side view. Go to edit mode. Hit&nbsp;&nbsp;
+
+00:35:20.240 --> 00:35:30.560
+A and then extrude by hitting E up. And there we&nbsp;
+go. Let's add in a subdivision surface modifier.&nbsp;&nbsp;
+
+00:35:30.560 --> 00:35:39.920
+Increase the subdivision. And just right click,&nbsp;
+shade smooth. Okay, let's go to edit mode. Let's&nbsp;&nbsp;
+
+00:35:39.920 --> 00:35:51.600
+just we can do control R. Add in some loop cuts.&nbsp;
+One, two, three. Let's do four. There we go.
+
+00:35:51.600 --> 00:35:53.840
+Maybe bevel it.
+
+00:35:57.280 --> 00:36:03.920
+All right. So, let's go ahead and let's&nbsp;
+just name this F2. Let's do long strap.&nbsp;&nbsp;
+
+00:36:03.920 --> 00:36:13.760
+And then for this one right here,&nbsp;
+unhide. We'll do F2 short strap. Okay,&nbsp;&nbsp;
+
+00:36:13.760 --> 00:36:21.600
+let's move it over. Oh, we got to bring back all&nbsp;
+the materials. Yeah. Now, let's move it over.&nbsp;&nbsp;
+
+00:36:22.560 --> 00:36:26.400
+I don't think we need this reference image&nbsp;
+anymore, so we can hide it. Let's bring back&nbsp;&nbsp;
+
+00:36:26.400 --> 00:36:32.640
+our main watch body like this. All right,&nbsp;
+got to top view. Let's bring back one of our&nbsp;&nbsp;
+
+00:36:32.640 --> 00:36:42.400
+reference images. This one. Let's rotate&nbsp;
+this RZ 180. Let's bring it this. Well,&nbsp;&nbsp;
+
+00:36:42.400 --> 00:36:49.280
+let's go to the Let's actually make it We&nbsp;
+want to make it bigger, right? Like this.
+
+00:36:51.680 --> 00:37:04.560
+Okay, it's got a side view. Let's bring it into&nbsp;
+the middle like that. Maybe bring it in more.
+
+00:37:04.560 --> 00:37:07.520
+That works. And then same with this. We'll bring&nbsp;&nbsp;
+
+00:37:07.520 --> 00:37:15.840
+it over. I want to make it the&nbsp;
+same size as this. So, let's do
+
+00:37:22.960 --> 00:37:31.680
+That works, I think. Side&nbsp;
+view. And see, bring it down.
+
+00:37:31.680 --> 00:37:36.240
+Okay. Okay. Now, let's try to make that&nbsp;
+circle shape with the straps that we see&nbsp;&nbsp;
+
+00:37:36.240 --> 00:37:40.880
+in this reference photo right here. You see&nbsp;
+how the straps are going down like this in a&nbsp;&nbsp;
+
+00:37:40.880 --> 00:37:45.440
+circle shape? Let's try to do that. And the way&nbsp;
+that we're going to do that is by using a curve&nbsp;&nbsp;
+
+00:37:45.440 --> 00:37:51.280
+modifier. So first let's do shift A. Let me hide&nbsp;
+this for a second. Uh let's do shift A. Let's add&nbsp;&nbsp;
+
+00:37:51.280 --> 00:38:01.040
+in a curve circle. We'll rotate it on the Y axis&nbsp;
+by hitting R Y90. Enter. Let's go to the X view.&nbsp;&nbsp;
+
+00:38:01.040 --> 00:38:11.040
+And I will bring it down like this. And I'll scale&nbsp;
+it with the S. And something like this could work.&nbsp;&nbsp;
+
+00:38:12.640 --> 00:38:19.280
+something like that. Let's go into edit mode. And&nbsp;
+you know what? We could bring this down. Actually,&nbsp;&nbsp;
+
+00:38:19.280 --> 00:38:26.880
+make this flat. And then let's bring it&nbsp;
+up again. Something like that. Okay. Now,&nbsp;&nbsp;
+
+00:38:26.880 --> 00:38:35.120
+let's bring or let's uh let's choose this strap&nbsp;
+for a second. And let's go to the modifiers. And&nbsp;&nbsp;
+
+00:38:35.120 --> 00:38:40.480
+I'm going to go and add a curve modifier. And&nbsp;
+for the curve, I'm going to select the curved&nbsp;&nbsp;
+
+00:38:40.480 --> 00:38:45.520
+circle that we just added. Um, don't worry about&nbsp;
+that. We'll fix that later. But let's move this&nbsp;&nbsp;
+
+00:38:45.520 --> 00:38:51.840
+onto the minus y axis. Let's go to the X view.&nbsp;
+You can hit G and then Z on your keyboard. And&nbsp;&nbsp;
+
+00:38:51.840 --> 00:39:02.080
+we can just fix it like this. And then you can&nbsp;
+hit GY. And we can bring it up like that. Oh,&nbsp;&nbsp;
+
+00:39:02.080 --> 00:39:06.960
+um, I believe it's backwards for some reason.&nbsp;
+That's okay. But we can we can just go this&nbsp;&nbsp;
+
+00:39:06.960 --> 00:39:13.600
+way instead then. Whoops. Let's do gy. Let's&nbsp;
+go this way instead. Okay. And let's do the&nbsp;&nbsp;
+
+00:39:13.600 --> 00:39:18.960
+same thing with this. Let's add in a curve&nbsp;
+modifier. And we'll select the curved circle&nbsp;&nbsp;
+
+00:39:18.960 --> 00:39:30.400
+again. We'll do minus Y X view. And let's&nbsp;
+do GZ. Bring it closer. And then do GY.
+
+00:39:30.400 --> 00:39:34.640
+Uh we can join these objects together with&nbsp;
+this. So let's click on this. Shiftclick&nbsp;&nbsp;
+
+00:39:34.640 --> 00:39:42.560
+this. Crl J. Boom. And same thing. Same thing&nbsp;
+with this. Click on this. Ctrl J. And there&nbsp;&nbsp;
+
+00:39:42.560 --> 00:39:49.200
+it is. Okay. You know what? We'll have a&nbsp;
+se a separate curve for this object. So,&nbsp;&nbsp;
+
+00:39:49.200 --> 00:39:54.800
+let's click on our bezier circle. Let's shift D&nbsp;
+to duplicate it. Escape to set it back in place.&nbsp;&nbsp;
+
+00:39:54.800 --> 00:40:00.320
+And then we can select this. And we can just&nbsp;
+do go to the curve modifier and use the second&nbsp;&nbsp;
+
+00:40:00.320 --> 00:40:06.640
+bezier circle that we just duplicated. Okay.&nbsp;
+And then with the second bezier circle, we can&nbsp;&nbsp;
+
+00:40:06.640 --> 00:40:14.720
+go into edit mode and we can actually adjust it.&nbsp;
+So let's select this bottom verticy. Let's do GZ.&nbsp;&nbsp;
+
+00:40:14.720 --> 00:40:21.680
+Something like that. Or you know what? Let's&nbsp;
+do outside. Let's make it go outside. Yeah,&nbsp;&nbsp;
+
+00:40:21.680 --> 00:40:29.520
+we need to make it longer. I believe we do. So&nbsp;
+to make it longer, let'sick click on this. Let's&nbsp;&nbsp;
+
+00:40:29.520 --> 00:40:35.840
+go to edit mode. Let's go to the bottom. Use&nbsp;
+the face select tool. Select these faces here&nbsp;&nbsp;
+
+00:40:35.840 --> 00:40:43.520
+and then oh deselect for a second. Then go to the&nbsp;
+bottom. Select these faces. Oh, why does it keep&nbsp;&nbsp;
+
+00:40:43.520 --> 00:40:48.560
+selecting this face though? I don't get it. Okay,&nbsp;
+let's just go into wireframe C. Let's deselect&nbsp;&nbsp;
+
+00:40:48.560 --> 00:40:54.000
+anything we don't need. And then what we can do&nbsp;
+here is we can just go and use a proportional&nbsp;&nbsp;
+
+00:40:54.000 --> 00:41:00.960
+editing tool. Hit G. And then let's scroll on the&nbsp;
+mouse wheel and then Y. We can make it longer.
+
+00:41:05.760 --> 00:41:18.880
+Yeah. And let's go to X. And let's do G Y.
+
+00:41:18.880 --> 00:41:23.520
+And you know what? We can also add in a mini&nbsp;
+strap for it. So, let's do shift A. Let's add&nbsp;&nbsp;
+
+00:41:23.520 --> 00:41:31.520
+in a cube. Let's edit mode. Deselect. Uh&nbsp;
+turn off the proportional editing. Let's&nbsp;&nbsp;
+
+00:41:31.520 --> 00:41:37.440
+do the face select tool. Hit I. Let's go.&nbsp;
+Let's select shift select this and then hit&nbsp;&nbsp;
+
+00:41:37.440 --> 00:41:54.800
+I. Okay. And then we can do delete X or delete&nbsp;
+faces. A and then X S and then Y and then SC.
+
+00:41:54.800 --> 00:41:58.880
+Something like that.
+
+00:41:58.880 --> 00:42:08.880
+Yeah, [Music] let's do SX. Let's&nbsp;
+do add a subdivision surface.&nbsp;&nbsp;
+
+00:42:08.880 --> 00:42:19.120
+Yeah. Go to edit mode. Subdivide. Subdivide again.
+
+00:42:19.120 --> 00:42:28.480
+Something like that. SZ. And then rotate it.
+
+00:42:28.480 --> 00:42:34.320
+SZ.
+
+00:42:34.320 --> 00:42:40.880
+Okay, I think we're good. Okay, let's hide this.&nbsp;
+And you know what? Let's add in an empty to&nbsp;&nbsp;
+
+00:42:40.880 --> 00:42:47.840
+control this entire watch. Now, let's work on the&nbsp;
+materials. So, let's go. We're going to use the&nbsp;&nbsp;
+
+00:42:47.840 --> 00:42:56.560
+uh cycles render engine. Let's use GPU commutes.&nbsp;
+Max samples 200. Let's go into the materials and&nbsp;&nbsp;
+
+00:42:56.560 --> 00:43:01.200
+let's start adding materials to my watch here.&nbsp;
+So, I'm going to Okay, so let's start adding some&nbsp;&nbsp;
+
+00:43:01.200 --> 00:43:06.240
+material. So, if you look at the watch here, it's&nbsp;
+pretty basic. It's just, you know, some silicone,&nbsp;&nbsp;
+
+00:43:06.240 --> 00:43:11.440
+some white silicone material and some metal&nbsp;
+metallic material and then a black screen with&nbsp;&nbsp;
+
+00:43:11.440 --> 00:43:17.120
+some, you know, screen display. Okay. So, let's&nbsp;
+go ahead and just do that here. Let's select this&nbsp;&nbsp;
+
+00:43:17.120 --> 00:43:26.160
+body here. Let's go add in a new material. We'll&nbsp;
+do metal body. Let's go into material preview and&nbsp;&nbsp;
+
+00:43:26.160 --> 00:43:33.840
+we'll just make it metallic. Roughness is going&nbsp;
+to be three. I think that's good. 3 is nice. And&nbsp;&nbsp;
+
+00:43:33.840 --> 00:43:42.480
+then for this we'll make it new. We'll do black&nbsp;
+screen. Okay. And then for the black screen,&nbsp;&nbsp;
+
+00:43:42.480 --> 00:43:48.080
+we'll go to the top view and I'm going to add in&nbsp;
+an image texture. So, let's go to image texture,&nbsp;&nbsp;
+
+00:43:48.080 --> 00:43:54.560
+open. Let's go to my screenshots. I have this&nbsp;
+one right here. Link in the description. Open.&nbsp;&nbsp;
+
+00:43:54.560 --> 00:44:01.040
+And what I'm going to do is I'm going to&nbsp;
+go into edit mode. Let's select the top.
+
+00:44:01.040 --> 00:44:10.400
+Let's make sure we deselected this. There we&nbsp;
+go. And then we'll do U project from view.&nbsp;&nbsp;
+
+00:44:10.400 --> 00:44:22.080
+Let's open up a new window. Let's go to UV&nbsp;
+editor. And we'll just align it to the view.
+
+00:44:22.080 --> 00:44:31.280
+There you go. And then the rest could be So we&nbsp;
+can select the rest here. Uh alt click and alt&nbsp;&nbsp;
+
+00:44:31.280 --> 00:44:39.280
+shift click this. The rest could be like black&nbsp;
+metallic. So let's add in a plus new metallic but&nbsp;&nbsp;
+
+00:44:39.280 --> 00:44:43.360
+it's going to be dark. And nothing's happened yet.&nbsp;
+And that's because we haven't hit assign. So, make&nbsp;&nbsp;
+
+00:44:43.360 --> 00:44:49.040
+sure you hit assign to see that change. Boom. Then&nbsp;
+you'll see the change. Add some roughness to it&nbsp;&nbsp;
+
+00:44:49.040 --> 00:45:00.240
+as well. 0.4. Okay. And the buttons here, we can&nbsp;
+just add in the metal body. Same with this metal&nbsp;&nbsp;
+
+00:45:00.240 --> 00:45:10.080
+body. And this right here, we'll do new. We'll&nbsp;
+do button outline. Okay. And that's just going to&nbsp;&nbsp;
+
+00:45:10.080 --> 00:45:17.520
+be pure white. Pure white. Nothing. Nothing fancy&nbsp;
+there. Maybe we can make it metallic a little bit.&nbsp;&nbsp;
+
+00:45:17.520 --> 00:45:26.000
+Maybe. Yeah, just a little bit. Now, the straps&nbsp;
+are, I believe, a silicone material. I believe&nbsp;&nbsp;
+
+00:45:26.000 --> 00:45:32.720
+that's what it's called. So, let's go into edit&nbsp;
+preferences, and I'm going to use a add-on called&nbsp;&nbsp;
+
+00:45:32.720 --> 00:45:37.760
+Blender Kit. Uh link in the description. Again,&nbsp;
+it's completely free. You can download and install&nbsp;&nbsp;
+
+00:45:37.760 --> 00:45:42.400
+it, and then enable it. And once you enable it,&nbsp;
+a search bar should pop up here. I'm going to&nbsp;&nbsp;
+
+00:45:42.400 --> 00:45:51.200
+search for a material right here. So, click on&nbsp;
+find materials and we'll search for silicone.
+
+00:45:51.200 --> 00:45:57.040
+Silicone rubber, I believe. Silicone rubber. Let's&nbsp;&nbsp;
+
+00:45:57.040 --> 00:46:05.120
+bring it up. And then select your strap.&nbsp;
+Let's go and search for silicone rubber.
+
+00:46:05.120 --> 00:46:08.720
+There we go. I'm hoping we&nbsp;
+can change the color, though.
+
+00:46:10.880 --> 00:46:17.440
+Oh, what is happening here?&nbsp;
+Let's go to shader editor.
+
+00:46:17.440 --> 00:46:27.200
+So, you know what? Let's go into rendered view.&nbsp;
+And we can probably see it better there. Yeah,&nbsp;&nbsp;
+
+00:46:27.200 --> 00:46:35.840
+we need lights. We need lights. Let's just color.&nbsp;
+Let's go and search for an environment texture.&nbsp;&nbsp;
+
+00:46:35.840 --> 00:46:53.040
+Open. Let's go to HDRIs. I love this photo&nbsp;
+studio. There we go. Make it white, though.
+
+00:46:53.040 --> 00:47:01.280
+I just want it to be white
+
+00:47:01.280 --> 00:47:05.600
+or grayish. That works, too.&nbsp;
+And we'll do the same with this
+
+00:47:09.120 --> 00:47:13.600
+Okay. And with this as well.
+
+00:47:13.600 --> 00:47:19.200
+All right. The back or we got to do the&nbsp;
+bottom here as well. So the bottom if we&nbsp;&nbsp;
+
+00:47:19.200 --> 00:47:29.520
+go here we can see that it's kind of whitish&nbsp;
+plastic whitish I guess. So let's do that.&nbsp;&nbsp;
+
+00:47:29.520 --> 00:47:34.240
+Let's actually go into the X view. Let's&nbsp;
+go to wireframe deselect. And let's just&nbsp;&nbsp;
+
+00:47:34.240 --> 00:47:45.920
+select it like this. There we go. We'll&nbsp;
+do plus new. We'll do bottom white. Yeah,&nbsp;&nbsp;
+
+00:47:45.920 --> 00:47:52.560
+we kind of want it to be plastic white,&nbsp;
+right? So, we'll just hit assign.
+
+00:47:52.560 --> 00:48:01.120
+If you hit assign and then we can do&nbsp;
+three roughness. That should have worked.
+
+00:48:01.120 --> 00:48:10.720
+Yeah. And we also got to do this bottom circle as&nbsp;
+well. So it's a little more reflective. So we can&nbsp;&nbsp;
+
+00:48:10.720 --> 00:48:21.600
+do it. We can make it reflective as well. Let's&nbsp;
+just do new bottom circle. This is going to be&nbsp;&nbsp;
+
+00:48:21.600 --> 00:48:31.360
+2 metallic of course. And we can well let's do&nbsp;
+08 metallic. And the actual middle portion like&nbsp;&nbsp;
+
+00:48:31.360 --> 00:48:51.520
+this is going to be very reflective. So let's do&nbsp;
+plus new reflective roughness like 0.1 assign.
+
+00:48:51.520 --> 00:48:57.840
+We might even make it like a&nbsp;
+little trans seeth through.
+
+00:48:57.840 --> 00:49:03.120
+Yeah,
+
+00:49:03.120 --> 00:49:11.040
+looks like it's not completely touching. So, let's&nbsp;
+make sure it's touching. Go. CtrlR way thicker&nbsp;&nbsp;
+
+00:49:11.040 --> 00:49:25.600
+like this. Yeah. And then we can add it. Plus, new&nbsp;
+assign. And then we'll make it dark metallic.3.
+
+00:49:25.600 --> 00:49:32.080
+Let's also do the same with this. Let's&nbsp;
+let's make this completely dark as well.&nbsp;&nbsp;
+
+00:49:32.080 --> 00:49:38.160
+Some bump on this as well. So on the body&nbsp;
+as well. So let's click on the metal body&nbsp;&nbsp;
+
+00:49:38.160 --> 00:49:45.280
+and we can do shift A. Let's add in a noise&nbsp;
+texture. And we'll add in a bump node and&nbsp;&nbsp;
+
+00:49:45.280 --> 00:49:52.000
+we'll connect the bump to the normal noise&nbsp;
+texture here to the height. And you want to&nbsp;&nbsp;
+
+00:49:52.000 --> 00:50:02.880
+make it like not that strong. So, let's just&nbsp;
+It's not Let's roughness. Yeah, there we go.
+
+00:50:02.880 --> 00:50:08.320
+Let's make the strength like not that strong.
+
+00:50:08.320 --> 00:50:19.520
+Just a little bit. I don't want to make the&nbsp;
+black screen reflective as well. 0.1. Yeah,
+
+00:50:19.520 --> 00:50:26.240
+I think the straps need to be a little lighter.&nbsp;
+Okay, looking pretty accurate if I do say so&nbsp;&nbsp;
+
+00:50:26.240 --> 00:50:34.160
+myself. Let's move on to the lighting. So, let&nbsp;
+me collapse this. Let me save my work. And I'm&nbsp;&nbsp;
+
+00:50:34.160 --> 00:50:42.800
+going to bring down the brightness of my HDRI to&nbsp;
+like 06. Let's go into solid mode. And you know&nbsp;&nbsp;
+
+00:50:42.800 --> 00:50:46.800
+what I'm going to do? I'm going to let's connect&nbsp;
+everything to an empty so I can control the entire&nbsp;&nbsp;
+
+00:50:46.800 --> 00:50:55.760
+watch. So, what I can do is I can hit can do shift&nbsp;
+A. We'll add in an empty sphere. Make the sphere&nbsp;&nbsp;
+
+00:50:55.760 --> 00:51:05.280
+massive. Bring it like right here. We'll bring it&nbsp;
+like right here. And then hit A and then Ctrl P&nbsp;&nbsp;
+
+00:51:05.280 --> 00:51:15.920
+parent to object. And now this should control the&nbsp;
+entire watch. And it does. Let's go. So let's do&nbsp;&nbsp;
+
+00:51:15.920 --> 00:51:25.200
+RX. Rotate it like this. Actually, let's go add&nbsp;
+in a camera. So, shift a camera. We can go to&nbsp;&nbsp;
+
+00:51:25.200 --> 00:51:32.320
+the camera view and let's control the positioning.&nbsp;
+Oh, you know what? There's a problem here. There's&nbsp;&nbsp;
+
+00:51:32.320 --> 00:51:38.720
+a problem. The watch is way too big. Like, it's&nbsp;
+massive right now. We We need it to be real world&nbsp;&nbsp;
+
+00:51:38.720 --> 00:51:47.920
+scale. So, let's let's search for human. Search&nbsp;
+for free. And it doesn't matter. I'm just going to&nbsp;&nbsp;
+
+00:51:47.920 --> 00:51:55.040
+bring in like a low poly human model. I just need&nbsp;
+something for real world scale. This works just&nbsp;&nbsp;
+
+00:51:55.040 --> 00:52:06.400
+fine. Let's bring him to the middle. And we'll&nbsp;
+scale down the watch to real world human scale.
+
+00:52:06.400 --> 00:52:15.440
+I got to be smaller than that. I think&nbsp;
+that works. That's small enough. No,&nbsp;&nbsp;
+
+00:52:15.440 --> 00:52:21.120
+that's small enough. Okay, we could just delete&nbsp;
+this guy now. Let's do delete hierarchy. Let's&nbsp;&nbsp;
+
+00:52:21.120 --> 00:52:29.920
+just delete that as well. And we'll move this&nbsp;
+to the middle. That. And let's go back to our&nbsp;&nbsp;
+
+00:52:29.920 --> 00:52:37.760
+camera. Let's move our camera towards our&nbsp;
+subject. I want the camera focal length to&nbsp;&nbsp;
+
+00:52:37.760 --> 00:52:43.680
+be let's do 75 millimeters. Okay, there we&nbsp;
+go. Let's go back into render mode. Let's&nbsp;&nbsp;
+
+00:52:43.680 --> 00:52:50.320
+add some lights. Let's do shift A. We'll add&nbsp;
+in an aerial light. Okay. Oh, it's massive,&nbsp;&nbsp;
+
+00:52:50.320 --> 00:53:01.680
+by the way. Look at that. We don't need it to&nbsp;
+be that that big. So, let's turn down the size.
+
+00:53:01.680 --> 00:53:05.760
+And just going to like shine it there. Maybe have&nbsp;&nbsp;
+
+00:53:05.760 --> 00:53:14.640
+the power be like five instead. That's&nbsp;
+still a little too powerful, isn't it?
+
+00:53:19.200 --> 00:53:31.760
+Okay, I'm going to turn on the HDRI lighting a&nbsp;
+little bit more. Yeah, let's change it to disk.&nbsp;&nbsp;
+
+00:53:31.760 --> 00:53:42.400
+And we'll do shadow costics. And let's do shift&nbsp;
+D, duplicate it. And we'll move it like this.
+
+00:53:42.400 --> 00:53:44.080
+Let's actually move it back like that.
+
+00:53:47.600 --> 00:53:53.920
+Turn down the power as well. Let's go on to&nbsp;
+camera. Let's just make sure it's render region.&nbsp;&nbsp;
+
+00:53:53.920 --> 00:54:02.960
+Crop to render region. You know what? Let's&nbsp;
+bring this down and move it back a little.
+
+00:54:02.960 --> 00:54:08.720
+We can actually make the screen glow a little&nbsp;
+bit since it it does glow in real life. So,&nbsp;&nbsp;
+
+00:54:08.720 --> 00:54:20.480
+let's actually let's plug this into the emission&nbsp;
+color. Bring up the strength. All right. Now,&nbsp;&nbsp;
+
+00:54:20.480 --> 00:54:25.840
+let's move on to the animation portion of&nbsp;
+this tutorial. Okay. So, for the animation,&nbsp;&nbsp;
+
+00:54:25.840 --> 00:54:30.560
+I'm going to keep it very basic because this&nbsp;
+tutorial is already very long. But, uh, let's&nbsp;&nbsp;
+
+00:54:30.560 --> 00:54:33.920
+first start off with the camera right here. I'm&nbsp;
+going to make it smaller by going to the camera&nbsp;&nbsp;
+
+00:54:33.920 --> 00:54:39.840
+viewport display. And, I'll just make it smaller&nbsp;
+like this. Okay. And then I'm going to go and add&nbsp;&nbsp;
+
+00:54:39.840 --> 00:54:45.600
+in a floor and background. So over the floor&nbsp;
+I do I'll do shift a mesh plane and I'll go to&nbsp;&nbsp;
+
+00:54:45.600 --> 00:54:54.320
+materials. Let's go to new. And I'm just going to&nbsp;
+make it metallic and point two for the roughness.&nbsp;&nbsp;
+
+00:54:54.320 --> 00:55:03.840
+And let's bring this up a little bit. And I'm also&nbsp;
+going to rotate it like this. Let's do shift A.&nbsp;&nbsp;
+
+00:55:03.840 --> 00:55:12.560
+We'll add in another plane. We'll do RX90. Enter&nbsp;
+on my keyboard. And then let's move it to the Oh,&nbsp;&nbsp;
+
+00:55:12.560 --> 00:55:20.240
+let's move it to the back like this. GZ up. Hit&nbsp;
+S. And then scale it on the X axis. One, which&nbsp;&nbsp;
+
+00:55:20.240 --> 00:55:27.680
+is pretty wide actually. Yeah. And also do this&nbsp;
+as well. Okay. Control A, apply scale. A apply&nbsp;&nbsp;
+
+00:55:27.680 --> 00:55:34.000
+scale. Okay. Now, let's go and animate this. So,&nbsp;
+I'm going to go to my camera view for a second.&nbsp;&nbsp;
+
+00:55:34.000 --> 00:55:46.880
+Let's rotate this up. Let's go. Oh, keep this at&nbsp;
+zero. Actually, let's move this. Move this back.
+
+00:55:46.880 --> 00:55:54.080
+Something like I have it stare up.
+
+00:55:54.080 --> 00:55:59.040
+And I'll have the watch rotate. So,&nbsp;
+let's go let's go to frame one. Actually,&nbsp;&nbsp;
+
+00:55:59.040 --> 00:56:03.120
+we're on frame one. Let's have&nbsp;
+the watch start like this.&nbsp;&nbsp;
+
+00:56:04.000 --> 00:56:11.760
+add a key frame on the Z-axis and&nbsp;
+we will go all the way to frame
+
+00:56:11.760 --> 00:56:22.960
+150. So, this animation is going to be 150&nbsp;
+frames long. And we'll have it rotate completely
+
+00:56:22.960 --> 00:56:29.440
+like this. And then add a key frame on frame 150.
+
+00:56:31.440 --> 00:56:39.440
+Let's go to rendered mode and let's click&nbsp;
+on our background right here. Let's go to&nbsp;&nbsp;
+
+00:56:39.440 --> 00:56:45.760
+image or sorry materials. Add a new material.&nbsp;
+We'll call this galaxy background because you&nbsp;&nbsp;
+
+00:56:45.760 --> 00:56:50.720
+know it's a Galaxy Watch 8. So I'm going&nbsp;
+to make it a Galaxy background. So enter.&nbsp;&nbsp;
+
+00:56:50.720 --> 00:57:00.320
+Let's go to base color image texture and we'll&nbsp;
+we'll go to the shader editor here. Hit open.&nbsp;&nbsp;
+
+00:57:00.320 --> 00:57:07.680
+And now I'm going to go add in a video texture&nbsp;
+actually. Uh so you know you can go or an image&nbsp;&nbsp;
+
+00:57:07.680 --> 00:57:11.840
+texture. It doesn't really matter. So you can&nbsp;
+go on a website called pixels.com and download&nbsp;&nbsp;
+
+00:57:11.840 --> 00:57:18.240
+any image for free here and use it for your&nbsp;
+animation. Any galaxy image works just fine.&nbsp;&nbsp;
+
+00:57:18.240 --> 00:57:22.160
+So that's what I did here. And I'm gonna&nbsp;
+use this video right here. For some reason,&nbsp;&nbsp;
+
+00:57:22.160 --> 00:57:27.760
+it has to be 30 fps because the regular video I&nbsp;
+downloaded from Pixels was 25 fps and it didn't&nbsp;&nbsp;
+
+00:57:27.760 --> 00:57:32.320
+work for some reason. So, I had to go render it&nbsp;
+out. But again, it doesn't really have to be a&nbsp;&nbsp;
+
+00:57:32.320 --> 00:57:37.360
+video. You can use an image as well. Totally fine.&nbsp;
+Either one works. It's barely going to be moving&nbsp;&nbsp;
+
+00:57:37.360 --> 00:57:41.600
+in the background. I just need some sort of galaxy&nbsp;
+background. So, this is what I chose to use. So,&nbsp;&nbsp;
+
+00:57:41.600 --> 00:57:51.200
+open image. And since it's a video, I'm going to&nbsp;
+make the end frame 500. And we will do let's go&nbsp;&nbsp;
+
+00:57:51.200 --> 00:57:59.280
+to material preview. It's not playing. Let's do&nbsp;
+auto refresh. Now it's playing. Okay. Now that we&nbsp;&nbsp;
+
+00:57:59.280 --> 00:58:04.720
+have a background, let's see what this looks like&nbsp;
+in actual rendered mode. So let's go into render&nbsp;&nbsp;
+
+00:58:04.720 --> 00:58:16.800
+mode. Boom. Okay. So I feel like the background's&nbsp;
+a little too big. So let's go hit S. Scale down.
+
+00:58:26.000 --> 00:58:35.280
+Let's move it up. And we'll move the camera&nbsp;
+up as well. Like that. And that's going to be&nbsp;&nbsp;
+
+00:58:35.280 --> 00:58:39.680
+the background right there. You know what I&nbsp;
+could do? I could also add in a material for&nbsp;&nbsp;
+
+00:58:39.680 --> 00:58:46.240
+this strap right here. So, let's go into edit&nbsp;
+mode. Let's make this hover over here. It's L.&nbsp;&nbsp;
+
+00:58:46.240 --> 00:58:52.080
+and then hover over here and hit L. Go to&nbsp;
+materials. Add a new material by hitting&nbsp;&nbsp;
+
+00:58:52.080 --> 00:58:56.960
+the plus icon. And then the new material&nbsp;
+is is just going to be the metal the metal&nbsp;&nbsp;
+
+00:58:56.960 --> 00:59:03.280
+body material. So click on that and then just&nbsp;
+hit assign. Now if you go into render mode,&nbsp;&nbsp;
+
+00:59:03.280 --> 00:59:10.400
+it's that metal material. Okay. So that's what the&nbsp;
+animation is looking like. So for the screen, I'm&nbsp;&nbsp;
+
+00:59:10.400 --> 00:59:15.600
+going to use a video texture. Okay. So, for the&nbsp;
+video, I'm going to use uh the screen recording&nbsp;&nbsp;
+
+00:59:15.600 --> 00:59:23.920
+I got uh from the website. You can do the same&nbsp;
+thing. Uh so, I'll just open that. And yeah,&nbsp;&nbsp;
+
+00:59:23.920 --> 00:59:34.720
+I'm going to have the start frame here. And then&nbsp;
+the end frame is going to be 500. Um auto refresh.
+
+00:59:34.720 --> 00:59:41.520
+Oh, I have to adjust it. So, let's go into&nbsp;
+edit mode. Let's select the front faces. is&nbsp;&nbsp;
+
+00:59:41.520 --> 00:59:51.200
+let's go to the UV editor and let's just adjust&nbsp;
+it by hitting S and then Y. Yeah, there we go.&nbsp;&nbsp;
+
+00:59:51.200 --> 01:00:02.640
+I'm going to turn off overlay for a&nbsp;
+second and then I'll move it sy up
+
+01:00:02.640 --> 01:00:07.520
+and then sx
+
+01:00:07.520 --> 01:00:23.920
+and then we can make it then s scale it&nbsp;
+then we'll just move it something like that.
+
+01:00:23.920 --> 01:00:28.320
+There we go. What I like to do is I also like to&nbsp;
+add depth of field. So, if you go click on your&nbsp;&nbsp;
+
+01:00:28.320 --> 01:00:35.920
+camera, you can add in depth of field. Probably&nbsp;
+want to make this something like 30. And you want&nbsp;&nbsp;
+
+01:00:35.920 --> 01:00:50.720
+to adjust the focal distance so it's, you know,&nbsp;
+focused on your subject. So something like that.
+
+01:00:50.720 --> 01:00:59.440
+Maybe I'll make this like 38. There we go.&nbsp;
+And that is it. You can also, you know,&nbsp;&nbsp;
+
+01:00:59.440 --> 01:01:03.920
+go ahead and start adding more camera angles if&nbsp;
+you want by hitting shift T. And then, you know,&nbsp;&nbsp;
+
+01:01:03.920 --> 01:01:08.640
+you got another camera here. And then, you know,&nbsp;
+make this your main camera. And then you can&nbsp;&nbsp;
+
+01:01:08.640 --> 01:01:18.240
+get some different angles if you want. Something&nbsp;
+like from the side. Go to render mode. But yeah,&nbsp;&nbsp;
+
+01:01:18.240 --> 01:01:23.840
+so once you're done with that, you can just go to&nbsp;
+outputs. Uh you probably want to change this to&nbsp;&nbsp;
+
+01:01:23.840 --> 01:01:34.480
+30 fps. Then we could just save it as a video. So&nbsp;
+I'll just, you know, we can save it here. Choose&nbsp;&nbsp;
+
+01:01:34.480 --> 01:01:42.800
+a folder to save it as. And then choose ffmpeg&nbsp;
+video. Encoding. We can make it mp4. Uh let's&nbsp;&nbsp;
+
+01:01:42.800 --> 01:01:52.160
+go to our render settings. Our render sample is&nbsp;
+going to be 150 D noiseis on. And then we can&nbsp;&nbsp;
+
+01:01:52.160 --> 01:01:59.680
+just hit render animation and you're done. Okay,&nbsp;
+but that does it for this tutorial. As always,&nbsp;&nbsp;
+
+01:01:59.680 --> 01:02:05.440
+you can download this entire blend file on my&nbsp;
+Patreon. So, consider becoming a member and&nbsp;&nbsp;
+
+01:02:05.440 --> 01:02:10.880
+get access to all my past and future tutorial&nbsp;
+project files. If you made it till the end,&nbsp;&nbsp;
+
+01:02:10.880 --> 01:02:16.480
+give yourself a pat on the back. I want you all to&nbsp;
+hit that like button right now because, you know,&nbsp;&nbsp;
+
+01:02:16.480 --> 01:02:21.760
+I spend a lot of time on these tutorials. And&nbsp;
+subscribe so you don't miss out on any of my&nbsp;&nbsp;
+
+01:02:21.760 --> 01:02:28.880
+future tutorials. It's been your boy Only R.J.&nbsp;
+and I'll see you all in the next video. Peace.
+

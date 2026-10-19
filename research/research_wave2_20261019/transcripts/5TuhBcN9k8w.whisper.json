@@ -1,0 +1,578 @@
+{
+ "id": "5TuhBcN9k8w",
+ "title": "How to Make most REALISTIC SHADOWS in Photoshop, 3 simple steps",
+ "channel": "photoshopCAFE",
+ "url": "https://www.youtube.com/watch?v=5TuhBcN9k8w",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.998,
+ "duration_s": 376.4,
+ "chars": 5544,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.26,
+   "text": "In this Photoshop tutorial, I'm going to show you how to create the most realistic shadows"
+  },
+  {
+   "start": 4.26,
+   "end": 6.9,
+   "text": "in Photoshop in three steps."
+  },
+  {
+   "start": 6.9,
+   "end": 10.82,
+   "text": "Okay, so I've started with a layer on top."
+  },
+  {
+   "start": 10.82,
+   "end": 14.94,
+   "text": "I've got many other tutorials where I show you how to cut out and match colors and things."
+  },
+  {
+   "start": 14.94,
+   "end": 19.14,
+   "text": "What we're going to do is focus on the shadow."
+  },
+  {
+   "start": 19.14,
+   "end": 25.08,
+   "text": "So let's go down to the effects and choose Drop Shadow."
+  },
+  {
+   "start": 25.08,
+   "end": 29.66,
+   "text": "Now on the Drop Shadow, you want to set opacity to 100 and then set Distance"
+  },
+  {
+   "start": 29.66,
+   "end": 33.5,
+   "text": "Spread and Size all of these to zero."
+  },
+  {
+   "start": 33.5,
+   "end": 34.5,
+   "text": "Click OK."
+  },
+  {
+   "start": 34.5,
+   "end": 39.74,
+   "text": "You might just see a faint black outline around there right now, but that's our shadow."
+  },
+  {
+   "start": 39.74,
+   "end": 43.94,
+   "text": "What we want to do is separate it onto its own layer."
+  },
+  {
+   "start": 43.94,
+   "end": 52.95,
+   "text": "So where it says Effects, in the Layers panel, right-click and then choose Create Layer."
+  },
+  {
+   "start": 52.95,
+   "end": 54.89,
+   "text": "Click OK."
+  },
+  {
+   "start": 54.89,
+   "end": 59.33,
+   "text": "And if I hide our layer, you can see there's our shadow now on a separate layer."
+  },
+  {
+   "start": 59.33,
+   "end": 62.85,
+   "text": "Now step one, let's position and angle it."
+  },
+  {
+   "start": 62.85,
+   "end": 65.05,
+   "text": "This is out of the three steps, remember."
+  },
+  {
+   "start": 65.05,
+   "end": 71.09,
+   "text": "So let's select the layer with the shadow, hit Ctrl T, Command T, on Mac, brings up"
+  },
+  {
+   "start": 71.09,
+   "end": 73.98,
+   "text": "Free Transform."
+  },
+  {
+   "start": 73.98,
+   "end": 77.42,
+   "text": "Now what we're going to do is we're going to right-click within here and we want to"
+  },
+  {
+   "start": 77.42,
+   "end": 79.66,
+   "text": "choose Flip Vertical."
+  },
+  {
+   "start": 79.66,
+   "end": 81.5,
+   "text": "Great."
+  },
+  {
+   "start": 81.5,
+   "end": 87.19,
+   "text": "Now let's just drag this down and we're just going to line it up at the bottom."
+  },
+  {
+   "start": 87.19,
+   "end": 91.07,
+   "text": "Now sometimes, as you see here, it's not going to quite match, so we just rotate"
+  },
+  {
+   "start": 91.07,
+   "end": 100.45,
+   "text": "this slightly."
+  },
+  {
+   "start": 100.45,
+   "end": 101.69,
+   "text": "Now let's zoom out."
+  },
+  {
+   "start": 101.69,
+   "end": 107.45,
+   "text": "In this case, I'm going to hold the Alt key and just use this grow wheel on my mouse."
+  },
+  {
+   "start": 107.45,
+   "end": 111.29,
+   "text": "And what we want to do is we want to skew this at an angle."
+  },
+  {
+   "start": 111.29,
+   "end": 113.81,
+   "text": "So see where the light is coming from."
+  },
+  {
+   "start": 113.81,
+   "end": 116.89,
+   "text": "So if you think about where that light is coming from from the light source, let"
+  },
+  {
+   "start": 116.89,
+   "end": 118.77,
+   "text": "me just zoom in."
+  },
+  {
+   "start": 118.77,
+   "end": 120.89,
+   "text": "So if we look at this, the light source is here."
+  },
+  {
+   "start": 120.89,
+   "end": 126.37,
+   "text": "You want to have that in a straight line basically following that shadow."
+  },
+  {
+   "start": 126.37,
+   "end": 130.69,
+   "text": "So right-click on the shadow and choose Skew."
+  },
+  {
+   "start": 130.69,
+   "end": 135.81,
+   "text": "And then we're going to skew that across so the angle now is matching where the light"
+  },
+  {
+   "start": 135.81,
+   "end": 137.01,
+   "text": "is coming from."
+  },
+  {
+   "start": 137.01,
+   "end": 138.01,
+   "text": "Great."
+  },
+  {
+   "start": 138.01,
+   "end": 139.73,
+   "text": "We also want to elongate this a little bit."
+  },
+  {
+   "start": 139.73,
+   "end": 141.85,
+   "text": "So right-click once again."
+  },
+  {
+   "start": 141.85,
+   "end": 145.29,
+   "text": "And notice I haven't gone out of Free Transform yet."
+  },
+  {
+   "start": 145.29,
+   "end": 149.85,
+   "text": "And now I'm going to choose Scale and I'm going to drag it down."
+  },
+  {
+   "start": 149.85,
+   "end": 151.97,
+   "text": "So we're stretching it a little bit."
+  },
+  {
+   "start": 151.97,
+   "end": 159.24,
+   "text": "Notice all of these are done in one movement, then we hit Enter."
+  },
+  {
+   "start": 159.24,
+   "end": 162.8,
+   "text": "So step one, we now have the position of our shadow."
+  },
+  {
+   "start": 162.8,
+   "end": 165.16,
+   "text": "But there's two things missing."
+  },
+  {
+   "start": 165.16,
+   "end": 170.08,
+   "text": "If you look at a previous shadow one here, notice as it gets closer to the subject, the"
+  },
+  {
+   "start": 170.08,
+   "end": 171.08,
+   "text": "edge is harder."
+  },
+  {
+   "start": 171.08,
+   "end": 173.76,
+   "text": "It gets softer as it goes further away."
+  },
+  {
+   "start": 173.76,
+   "end": 178.04,
+   "text": "Also notice that it gets more transparent and further it gets away from the subject."
+  },
+  {
+   "start": 178.04,
+   "end": 179.84,
+   "text": "Let's do that right now."
+  },
+  {
+   "start": 179.84,
+   "end": 183.44,
+   "text": "With the shadow selected, let's add the blur as step two."
+  },
+  {
+   "start": 183.44,
+   "end": 184.44,
+   "text": "Filter."
+  },
+  {
+   "start": 184.44,
+   "end": 185.76,
+   "text": "Don't choose blur."
+  },
+  {
+   "start": 185.76,
+   "end": 190.86,
+   "text": "Choose blur gallery and grab the field blur."
+  },
+  {
+   "start": 190.86,
+   "end": 196.62,
+   "text": "Then you'll see this little icon will appear and we can drag this and this is our blur."
+  },
+  {
+   "start": 196.62,
+   "end": 199.62,
+   "text": "Now if we drag across here, we can increase the amount of blur."
+  },
+  {
+   "start": 199.62,
+   "end": 200.62,
+   "text": "Look at that."
+  },
+  {
+   "start": 200.62,
+   "end": 203.5,
+   "text": "And of course we can take it right off the page if we want."
+  },
+  {
+   "start": 203.5,
+   "end": 208.46,
+   "text": "Okay, so we've got our blur and it's definitely making the shadow look better."
+  },
+  {
+   "start": 208.46,
+   "end": 212.42,
+   "text": "In fact, I'm going to go even more just so we can really make this work."
+  },
+  {
+   "start": 212.42,
+   "end": 216.54,
+   "text": "But the problem is as it gets closer to the subject, we need it to be sharp."
+  },
+  {
+   "start": 216.54,
+   "end": 219.82,
+   "text": "So just click to add another point."
+  },
+  {
+   "start": 219.82,
+   "end": 222.06,
+   "text": "Now you could take the blur all the way to zero."
+  },
+  {
+   "start": 222.06,
+   "end": 226.18,
+   "text": "The way to do that is if you hold down control or command, double click that little pin that"
+  },
+  {
+   "start": 226.18,
+   "end": 229.38,
+   "text": "will actually remove all the blur and just set it to zero."
+  },
+  {
+   "start": 229.38,
+   "end": 231.18,
+   "text": "But I feel like we want to put just a little bit in there."
+  },
+  {
+   "start": 231.18,
+   "end": 236.46,
+   "text": "So let's drag the little wheel here, grab the amount of blur we want."
+  },
+  {
+   "start": 236.46,
+   "end": 239.62,
+   "text": "That's definitely looking a lot better."
+  },
+  {
+   "start": 239.62,
+   "end": 240.62,
+   "text": "Great."
+  },
+  {
+   "start": 240.62,
+   "end": 242.66,
+   "text": "Okay, let's apply that."
+  },
+  {
+   "start": 242.66,
+   "end": 245.3,
+   "text": "Click OK."
+  },
+  {
+   "start": 245.3,
+   "end": 249.46,
+   "text": "Now the next step we need to do is we need to make it fade as it goes away."
+  },
+  {
+   "start": 249.46,
+   "end": 251.5,
+   "text": "I just want to move it up just a little bit though."
+  },
+  {
+   "start": 251.5,
+   "end": 257.58,
+   "text": "I'm going to hit control T and let's just right click and we're going to choose warp."
+  },
+  {
+   "start": 257.58,
+   "end": 262.26,
+   "text": "And what I'm doing here is I just want to pull that shadow up a little bit in that area."
+  },
+  {
+   "start": 262.26,
+   "end": 264.14,
+   "text": "So it's a little bit closer to our model."
+  },
+  {
+   "start": 264.14,
+   "end": 265.14,
+   "text": "There we go."
+  },
+  {
+   "start": 265.14,
+   "end": 266.14,
+   "text": "That's good."
+  },
+  {
+   "start": 266.14,
+   "end": 268.74,
+   "text": "Got a little light coming through, which is nice."
+  },
+  {
+   "start": 268.74,
+   "end": 273.3,
+   "text": "All right, let's fade it as it comes towards the viewer."
+  },
+  {
+   "start": 273.3,
+   "end": 278.1,
+   "text": "So what we want to do is add a layer mask."
+  },
+  {
+   "start": 278.1,
+   "end": 281.02,
+   "text": "Once we've selected a layer mask, we're going to choose a gradient."
+  },
+  {
+   "start": 281.02,
+   "end": 284.7,
+   "text": "We're going to hit the D key to reset foreground background colors."
+  },
+  {
+   "start": 284.7,
+   "end": 287.82,
+   "text": "Choose the gradient tool."
+  },
+  {
+   "start": 287.82,
+   "end": 291.66,
+   "text": "Set it to either black to white or foreground background."
+  },
+  {
+   "start": 291.66,
+   "end": 292.66,
+   "text": "Linear."
+  },
+  {
+   "start": 292.66,
+   "end": 296.9,
+   "text": "The mode should be normal and opacity at 100."
+  },
+  {
+   "start": 296.9,
+   "end": 300.86,
+   "text": "Now I'm going to drag up just to check which way it's going."
+  },
+  {
+   "start": 300.86,
+   "end": 301.98,
+   "text": "Yep, it's going the way I want."
+  },
+  {
+   "start": 301.98,
+   "end": 305.94,
+   "text": "Okay, so what I want to do, notice that the shadow is definitely fading, but that's"
+  },
+  {
+   "start": 305.94,
+   "end": 307.94,
+   "text": "a little bit more than what we need."
+  },
+  {
+   "start": 307.94,
+   "end": 313.02,
+   "text": "So I'm actually going to start it off the screen and pull it up this way."
+  },
+  {
+   "start": 313.02,
+   "end": 316.74,
+   "text": "And notice now we get this fade is kind of fading away."
+  },
+  {
+   "start": 316.74,
+   "end": 321.38,
+   "text": "By the way, that was step number three was the fade."
+  },
+  {
+   "start": 321.38,
+   "end": 326.62,
+   "text": "So what we're going to do is choose the mask with the properties panel open density."
+  },
+  {
+   "start": 326.62,
+   "end": 328.82,
+   "text": "Did you ever wonder what that does?"
+  },
+  {
+   "start": 328.82,
+   "end": 331.42,
+   "text": "Density is like opacity for a mask."
+  },
+  {
+   "start": 331.42,
+   "end": 334.14,
+   "text": "So let's just dial in the amount of density we want."
+  },
+  {
+   "start": 334.14,
+   "end": 335.14,
+   "text": "So it's fading away."
+  },
+  {
+   "start": 335.14,
+   "end": 337.82,
+   "text": "I feel like the shadow is a little strong overall."
+  },
+  {
+   "start": 337.82,
+   "end": 341.34,
+   "text": "So choose the shadow layer and drop the opacity down just a little bit."
+  },
+  {
+   "start": 341.34,
+   "end": 342.34,
+   "text": "There we go."
+  },
+  {
+   "start": 342.34,
+   "end": 344.78,
+   "text": "Let's go back to our mask."
+  },
+  {
+   "start": 344.78,
+   "end": 348.39,
+   "text": "Find true to our density."
+  },
+  {
+   "start": 348.39,
+   "end": 349.87,
+   "text": "And there we go."
+  },
+  {
+   "start": 349.87,
+   "end": 353.19,
+   "text": "A very realistic looking shadow."
+  },
+  {
+   "start": 353.19,
+   "end": 354.67,
+   "text": "We can hide the shadow."
+  },
+  {
+   "start": 354.67,
+   "end": 357.27,
+   "text": "There's before and after."
+  },
+  {
+   "start": 357.27,
+   "end": 360.47,
+   "text": "Let me know in the comments underneath if you learned anything new."
+  },
+  {
+   "start": 360.47,
+   "end": 364.51,
+   "text": "And if you guys haven't yet subscribed or you're new, hit the subscribe button,"
+  },
+  {
+   "start": 364.51,
+   "end": 367.87,
+   "text": "turn on notifications and you won't miss any of my tutorials."
+  },
+  {
+   "start": 367.87,
+   "end": 372.75,
+   "text": "Give me a favorite, hit the thumbs up, the like button and until next time, I'll see you"
+  },
+  {
+   "start": 372.75,
+   "end": 373.47,
+   "text": "at the cafe."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:53:35.734296+00:00",
+ "seconds": 15.7
+}

@@ -46,6 +46,21 @@ SUMMARY_PATH = OUT_DIR / "sweep_summary.json"
 API = "https://api.github.com/search/repositories"
 UA = "northstar-research-wave2"
 
+# Redact credential-shaped strings that GitHub repo DESCRIPTIONS sometimes carry
+# (people commit sample tokens by accident). They are not ours; they must not be
+# copied into this repo. If the scrubber is missing, descriptions are truncated
+# rather than written raw.
+try:
+    from scrub_repos import scrub_text as _scrub_text
+except Exception:  # pragma: no cover - only when run outside its folder
+    def _scrub_text(text: str):
+        return text, []
+
+
+def _clean_description(text: str) -> str:
+    cleaned, _hits = _scrub_text(text or "")
+    return cleaned[:220]
+
 # ── query generation ────────────────────────────────────────────────────────
 
 TOPICS = [
@@ -286,7 +301,7 @@ def main() -> int:
                         "url": it.get("html_url"),
                         "stars": it.get("stargazers_count"),
                         "license": (it.get("license") or {}).get("spdx_id"),
-                        "description": (it.get("description") or "")[:220],
+                        "description": _clean_description(it.get("description") or ""),
                         "language": it.get("language"),
                         "pushed_at": it.get("pushed_at"),
                         "topics": ",".join(it.get("topics") or [])[:220],

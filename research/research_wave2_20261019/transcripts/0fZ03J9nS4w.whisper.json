@@ -1,0 +1,1203 @@
+{
+ "id": "0fZ03J9nS4w",
+ "title": "Adobe Dimension Tutorial | 3D Mockups for Beginners",
+ "channel": "Jesse Showalter",
+ "url": "https://www.youtube.com/watch?v=0fZ03J9nS4w",
+ "query": "adobe dimension packaging",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 826.3,
+ "chars": 14555,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.4,
+   "text": "What's up everybody? I'm Jesse Showalter and I love wowing people with amazing designs."
+  },
+  {
+   "start": 5.4,
+   "end": 9.52,
+   "text": "I love taking the designs and presenting them in amazing ways."
+  },
+  {
+   "start": 9.52,
+   "end": 14.36,
+   "text": "There's no better way to make people's jaws drop than 3D design."
+  },
+  {
+   "start": 14.36,
+   "end": 21.32,
+   "text": "That's either creating 3D designs from scratch or adding your designs onto 3D mock-ups to bring them to life in"
+  },
+  {
+   "start": 21.72,
+   "end": 25.32,
+   "text": "photo realism. But today I'm going to be taking a look at Adobe Dimension."
+  },
+  {
+   "start": 25.32,
+   "end": 32.4,
+   "text": "It's Adobe's way of allowing us as designers to enter into that 3D space, have some fun and wow people with our designs."
+  },
+  {
+   "start": 32.4,
+   "end": 40.72,
+   "text": "I'm going to be giving you a general overview of the software, showing you the tools that you need to know, and then showing you what you can do inside of Adobe Dimension."
+  },
+  {
+   "start": 40.72,
+   "end": 41.92,
+   "text": "Let's do it."
+  },
+  {
+   "start": 41.92,
+   "end": 50.59,
+   "text": "Alright, let's dive right in and take a look at Adobe Dimension."
+  },
+  {
+   "start": 50.59,
+   "end": 55.71,
+   "text": "I have Dimension open on my desktop and you can see this is our launch screen where we're going to want to come up and press"
+  },
+  {
+   "start": 56.23,
+   "end": 61.75,
+   "text": "new project. Once we launch Dimension, this is our basic workspace and it's pretty simple to understand."
+  },
+  {
+   "start": 61.75,
+   "end": 68.79,
+   "text": "We have tools along the left-hand panel, we have our assets that are currently open, we have our canvas that we can work in our"
+  },
+  {
+   "start": 68.79,
+   "end": 75.43,
+   "text": "three-dimension space and then you have your inspector panel where things will contextually pop up depending on what you're interacting with."
+  },
+  {
+   "start": 75.43,
+   "end": 80.51,
+   "text": "I'm going to make sure that I'm using my direct selection tool by clicking my arrow here or hitting V on the keyboard."
+  },
+  {
+   "start": 80.51,
+   "end": 82.99,
+   "text": "It's one of the biggest tools you're going to need in Adobe Dimension."
+  },
+  {
+   "start": 83.07,
+   "end": 87.39,
+   "text": "We can also go right above the selection tool and see we have the ability to add or import content."
+  },
+  {
+   "start": 87.39,
+   "end": 89.91,
+   "text": "Currently, our starting assets are open."
+  },
+  {
+   "start": 89.91,
+   "end": 96.95,
+   "text": "These are basic shapes, models that are available to us, standard materials and then directional lights and images."
+  },
+  {
+   "start": 96.95,
+   "end": 104.15,
+   "text": "You can filter any of these out by simply clicking on the small icon that represents them and by unclicking it, you'll make all of them"
+  },
+  {
+   "start": 104.15,
+   "end": 105.95,
+   "text": "available to you once again."
+  },
+  {
+   "start": 105.95,
+   "end": 112.95,
+   "text": "But we can also bring different elements in, not just our starting assets, but things from our CC libraries, importing content,"
+  },
+  {
+   "start": 112.95,
+   "end": 120.75,
+   "text": "maybe object files from Blender or other 3D programs, as well as hitting Adobe Stock and maybe picking a collection like for instance,"
+  },
+  {
+   "start": 120.75,
+   "end": 123.71,
+   "text": "this electronics collection that will open up Adobe Stock."
+  },
+  {
+   "start": 123.71,
+   "end": 130.11,
+   "text": "Quite a few of these are going to be free screens, models, different 3D packaging you can find on Adobe Stock."
+  },
+  {
+   "start": 130.11,
+   "end": 133.59,
+   "text": "You license those and they'll be available to you in Adobe Dimension."
+  },
+  {
+   "start": 133.59,
+   "end": 137.39,
+   "text": "So we've already seen the selection tool and the different assets we have available."
+  },
+  {
+   "start": 137.39,
+   "end": 141.87,
+   "text": "Why don't we bring a few of these assets out onto our canvas and start playing with them?"
+  },
+  {
+   "start": 141.91,
+   "end": 148.75,
+   "text": "I'm going to choose a sphere by clicking it, a cube and a piece of text and bring that onto our screen."
+  },
+  {
+   "start": 148.75,
+   "end": 151.43,
+   "text": "Now we're really zoomed in here and that's hard to see."
+  },
+  {
+   "start": 151.43,
+   "end": 158.31,
+   "text": "So before we do anything else with our objects, I'm going to introduce you to the three other tools that you're going to need to know if you're going to use Adobe Dimension."
+  },
+  {
+   "start": 158.31,
+   "end": 160.63,
+   "text": "You can find those in the left hand tool panel."
+  },
+  {
+   "start": 160.63,
+   "end": 162.87,
+   "text": "The first one is called your orbit tool."
+  },
+  {
+   "start": 162.87,
+   "end": 166.47,
+   "text": "The second one is called your pan tool and the third one is your dolly."
+  },
+  {
+   "start": 166.47,
+   "end": 171.03,
+   "text": "You can find these on your keyboard by clicking one, two or three."
+  },
+  {
+   "start": 171.03,
+   "end": 172.47,
+   "text": "That's the easiest way to find them."
+  },
+  {
+   "start": 172.47,
+   "end": 174.39,
+   "text": "So why don't we click our dolly tool?"
+  },
+  {
+   "start": 174.39,
+   "end": 178.83,
+   "text": "That's number three and I'm going to just left click on my mouse, drag in or out."
+  },
+  {
+   "start": 178.83,
+   "end": 183.63,
+   "text": "And it's as if I have a camera on a dolly and I'm zooming things in or out."
+  },
+  {
+   "start": 183.63,
+   "end": 189.67,
+   "text": "Next, I can hit my pan tool and move left, right up or down in my 3D space here."
+  },
+  {
+   "start": 189.67,
+   "end": 195.83,
+   "text": "And then next would be my orbit tool where I can literally orbit around the items and the elements that are on my canvas."
+  },
+  {
+   "start": 195.83,
+   "end": 201.75,
+   "text": "Let's go back to our direct selection tool, select our cube and start moving a few of these elements around."
+  },
+  {
+   "start": 201.75,
+   "end": 208.99,
+   "text": "And then we will just use those tools yet again to line ourselves up exactly where we want to be."
+  },
+  {
+   "start": 208.99,
+   "end": 211.55,
+   "text": "Now we're going to take our direct selection tool by hitting V."
+  },
+  {
+   "start": 211.55,
+   "end": 213.03,
+   "text": "We're going to select our text."
+  },
+  {
+   "start": 213.03,
+   "end": 217.31,
+   "text": "Why don't we come over here and put something else in that text field?"
+  },
+  {
+   "start": 217.31,
+   "end": 222.03,
+   "text": "And why don't we also change the font while we're here to something like poppins?"
+  },
+  {
+   "start": 222.03,
+   "end": 224.31,
+   "text": "And we'll go ahead and make that bold."
+  },
+  {
+   "start": 224.31,
+   "end": 228.59,
+   "text": "And why don't we change the depth of our text as well?"
+  },
+  {
+   "start": 228.59,
+   "end": 238.39,
+   "text": "Now we can use all of these input fields in the inspector panel, but we can also use the little gizmo controls that are here as well by moving things to the left or right."
+  },
+  {
+   "start": 238.39,
+   "end": 244.71,
+   "text": "We can rotate things also, of course, press command Z to undo anything you want."
+  },
+  {
+   "start": 244.71,
+   "end": 248.19,
+   "text": "But you can either control objects here or in the inspector panel."
+  },
+  {
+   "start": 248.23,
+   "end": 254.87,
+   "text": "Now I'm going to select my orb and make sure over my inspector panel that the scale or the size is constrained proportionally."
+  },
+  {
+   "start": 254.87,
+   "end": 259.99,
+   "text": "And I'm just going to shrink my size of my orb down a little bit and move it into place."
+  },
+  {
+   "start": 259.99,
+   "end": 260.87,
+   "text": "So far so good."
+  },
+  {
+   "start": 260.87,
+   "end": 262.39,
+   "text": "My scene's looking pretty cool."
+  },
+  {
+   "start": 262.39,
+   "end": 264.19,
+   "text": "And I like exactly where it's placed."
+  },
+  {
+   "start": 264.19,
+   "end": 269.51,
+   "text": "I want to make sure that I can always come back to this exact spot maybe right here whenever I want to."
+  },
+  {
+   "start": 269.51,
+   "end": 271.23,
+   "text": "I'm going to head at the top right section."
+  },
+  {
+   "start": 271.23,
+   "end": 274.19,
+   "text": "I'm going to hit the camera bookmarks and I'm going to create a bookmark."
+  },
+  {
+   "start": 274.19,
+   "end": 281.59,
+   "text": "That way if later on I've messed some things up and I want to get back to where I was, I can go back to that exact view that I was at before."
+  },
+  {
+   "start": 281.59,
+   "end": 283.27,
+   "text": "Well now we have some objects there."
+  },
+  {
+   "start": 283.27,
+   "end": 285.35,
+   "text": "We're definitely going to want to play with those objects."
+  },
+  {
+   "start": 285.35,
+   "end": 287.79,
+   "text": "And that's where the other assets come into play."
+  },
+  {
+   "start": 287.79,
+   "end": 296.35,
+   "text": "For instance, materials will allow me to select any object on my canvas and apply material like this metal to this one."
+  },
+  {
+   "start": 296.35,
+   "end": 300.51,
+   "text": "Maybe we want a ball that's made out of walnut wood."
+  },
+  {
+   "start": 300.51,
+   "end": 305.39,
+   "text": "And maybe we want some text that's made out of brushed iridescent metal."
+  },
+  {
+   "start": 305.39,
+   "end": 312.99,
+   "text": "Now it looks a little cartoonish and that's because Adobe Dimension needs to render it to bring all of that realism into it."
+  },
+  {
+   "start": 312.99,
+   "end": 319.23,
+   "text": "But we can get a little bit of a cheat by going up to the top right corner and hitting our render preview."
+  },
+  {
+   "start": 319.23,
+   "end": 321.35,
+   "text": "You're going to see things get a little bit pixelated."
+  },
+  {
+   "start": 321.35,
+   "end": 324.07,
+   "text": "It's going to start shading and doing a little bit of that work."
+  },
+  {
+   "start": 324.07,
+   "end": 329.19,
+   "text": "It's kind of the in-between of the design and the render that allows us to see things a little bit more realistic."
+  },
+  {
+   "start": 329.19,
+   "end": 335.19,
+   "text": "Now you'll see that our block actually being made out of metal is reflecting the word hello that's in front of it."
+  },
+  {
+   "start": 335.19,
+   "end": 336.27,
+   "text": "That's pretty cool."
+  },
+  {
+   "start": 336.27,
+   "end": 340.99,
+   "text": "If we want to get a full blown render of our item, we can head over to the render tab."
+  },
+  {
+   "start": 340.99,
+   "end": 346.27,
+   "text": "We can decide what export formats we have and what quality we want of our render."
+  },
+  {
+   "start": 346.27,
+   "end": 349.43,
+   "text": "And we can go ahead and press the big blue render button."
+  },
+  {
+   "start": 349.43,
+   "end": 350.83,
+   "text": "Adobe Dimension is going to do the work."
+  },
+  {
+   "start": 350.83,
+   "end": 356.27,
+   "text": "It will take a little while and depending on the power of the computer or machine that you're using,"
+  },
+  {
+   "start": 356.27,
+   "end": 362.12,
+   "text": "it might take a little bit longer or a little bit shorter amount of time."
+  },
+  {
+   "start": 362.12,
+   "end": 367.48,
+   "text": "All right. It's finished rendering and it's exported out a Photoshop version of our design."
+  },
+  {
+   "start": 367.48,
+   "end": 371.8,
+   "text": "We can open that up in Photoshop and you can see that we have all the layers accessible to us."
+  },
+  {
+   "start": 371.8,
+   "end": 376.36,
+   "text": "I can turn off the background layer and I have my actual object layer here."
+  },
+  {
+   "start": 376.36,
+   "end": 381.48,
+   "text": "So from here, I can export things out and put it on the website or any other project that I'm working on."
+  },
+  {
+   "start": 381.48,
+   "end": 382.44,
+   "text": "And we have 3D."
+  },
+  {
+   "start": 382.44,
+   "end": 383.32,
+   "text": "Now that's pretty cool."
+  },
+  {
+   "start": 383.32,
+   "end": 387.2,
+   "text": "I can use shapes and text, but I have some design assets and elements"
+  },
+  {
+   "start": 387.24,
+   "end": 388.8,
+   "text": "that I really want to implement."
+  },
+  {
+   "start": 388.8,
+   "end": 392.4,
+   "text": "And so I'm going to go ahead and save this design that I'm working on."
+  },
+  {
+   "start": 392.4,
+   "end": 398.1,
+   "text": "I'm going to save it on my desktop and I'm just going to call it Hello."
+  },
+  {
+   "start": 398.1,
+   "end": 401.94,
+   "text": "And then I'm going to come up to File and I'm going to close this project."
+  },
+  {
+   "start": 401.94,
+   "end": 405.74,
+   "text": "I'm going to open up a new project and I have my assets open."
+  },
+  {
+   "start": 405.74,
+   "end": 407.06,
+   "text": "I'm going to grab a beverage can."
+  },
+  {
+   "start": 407.06,
+   "end": 409.38,
+   "text": "I'm going to drag that out onto my stage."
+  },
+  {
+   "start": 409.38,
+   "end": 415.46,
+   "text": "I'm going to lock the constraints and just scale this thing up a little bit so we can see it nice and clear."
+  },
+  {
+   "start": 415.46,
+   "end": 417.62,
+   "text": "I'm going to turn off our pre-render."
+  },
+  {
+   "start": 417.66,
+   "end": 421.3,
+   "text": "And then I'm going to go into my Adobe CC Libraries."
+  },
+  {
+   "start": 421.3,
+   "end": 424.98,
+   "text": "I'm going to open up a library that I want to work with and I have a piece of artwork"
+  },
+  {
+   "start": 424.98,
+   "end": 427.54,
+   "text": "that I would love to implement onto this can."
+  },
+  {
+   "start": 427.54,
+   "end": 431.06,
+   "text": "So I'm literally just going to drag it in and drop it on the can."
+  },
+  {
+   "start": 431.06,
+   "end": 436.98,
+   "text": "And Adobe Dimension is going to go ahead and plug that piece of artwork three-dimensionally onto my can."
+  },
+  {
+   "start": 436.98,
+   "end": 438.74,
+   "text": "That is pretty cool looking."
+  },
+  {
+   "start": 438.74,
+   "end": 443.14,
+   "text": "Now I like it, but I want to make sure that we scale this thing up a little bit."
+  },
+  {
+   "start": 443.14,
+   "end": 446.14,
+   "text": "That looks great just like that."
+  },
+  {
+   "start": 446.14,
+   "end": 451.5,
+   "text": "And now we can also, inside of our can, you can see in my layers panel up here,"
+  },
+  {
+   "start": 451.5,
+   "end": 453.1,
+   "text": "I have the can selected."
+  },
+  {
+   "start": 453.1,
+   "end": 457.34,
+   "text": "I can also control the camera and the environment, but right now I can control the can."
+  },
+  {
+   "start": 457.34,
+   "end": 460.38,
+   "text": "Click a little bit deeper and select the material."
+  },
+  {
+   "start": 460.38,
+   "end": 465.26,
+   "text": "Now maybe we want to go back and go to our starter assets, open up the materials,"
+  },
+  {
+   "start": 465.26,
+   "end": 469.82,
+   "text": "and maybe I want this to be, I don't know, like a plastic or a metal can."
+  },
+  {
+   "start": 470.54,
+   "end": 475.5,
+   "text": "Now I've implemented metal and I can even come over and change the base color of my metal"
+  },
+  {
+   "start": 475.5,
+   "end": 477.98,
+   "text": "to be something a little bit cooler."
+  },
+  {
+   "start": 477.98,
+   "end": 482.62,
+   "text": "Like maybe it is, what do we want to do for our beer can?"
+  },
+  {
+   "start": 483.26,
+   "end": 485.66,
+   "text": "Maybe something like a deep dark red metal."
+  },
+  {
+   "start": 485.66,
+   "end": 486.7,
+   "text": "That could be kind of cool."
+  },
+  {
+   "start": 487.5,
+   "end": 491.82,
+   "text": "Let's just mute it a little bit or maybe a black could be really cool."
+  },
+  {
+   "start": 491.82,
+   "end": 492.54,
+   "text": "There we go."
+  },
+  {
+   "start": 492.54,
+   "end": 495.74,
+   "text": "So I'm going to do like a nice black in the background of our beer can."
+  },
+  {
+   "start": 495.74,
+   "end": 498.7,
+   "text": "Let's go ahead and turn on our pre-render and just see what it looks like."
+  },
+  {
+   "start": 498.7,
+   "end": 501.1,
+   "text": "It's going to give a little bit of shade and realism to it."
+  },
+  {
+   "start": 501.1,
+   "end": 502.78,
+   "text": "We see the light in our scene."
+  },
+  {
+   "start": 502.78,
+   "end": 507.98,
+   "text": "Let's talk about light a little bit before we go any further because light is a big deal"
+  },
+  {
+   "start": 507.98,
+   "end": 509.66,
+   "text": "in 3D objects."
+  },
+  {
+   "start": 509.66,
+   "end": 513.1,
+   "text": "And so you can see that up in our layers panel, we mentioned it before,"
+  },
+  {
+   "start": 513.1,
+   "end": 517.18,
+   "text": "we have our beverage can, we have our camera, but we also have our environment."
+  },
+  {
+   "start": 517.18,
+   "end": 519.74,
+   "text": "And our environment has an environment light."
+  },
+  {
+   "start": 519.74,
+   "end": 521.98,
+   "text": "You can see if I hide that light, everything goes black."
+  },
+  {
+   "start": 521.98,
+   "end": 523.18,
+   "text": "It's not being lit."
+  },
+  {
+   "start": 523.18,
+   "end": 526.54,
+   "text": "And you'll notice, if I bring my dolly tool in and zoom in,"
+  },
+  {
+   "start": 526.54,
+   "end": 531.82,
+   "text": "you can actually see the lights in the scene that are bouncing off of our object."
+  },
+  {
+   "start": 531.82,
+   "end": 534.06,
+   "text": "There's staged lights in that area."
+  },
+  {
+   "start": 534.06,
+   "end": 537.1,
+   "text": "Let's go click on our lighting assets and see what we have."
+  },
+  {
+   "start": 537.1,
+   "end": 540.3,
+   "text": "We have environmental lights, studio low light."
+  },
+  {
+   "start": 540.3,
+   "end": 542.78,
+   "text": "It could be studio panel light."
+  },
+  {
+   "start": 543.58,
+   "end": 546.94,
+   "text": "But perhaps we want to have something like some extra light put on here."
+  },
+  {
+   "start": 547.5,
+   "end": 550.94,
+   "text": "We can add in this three point light simply by clicking on it."
+  },
+  {
+   "start": 550.94,
+   "end": 554.38,
+   "text": "And now we have a key, a fill and a backlight as well."
+  },
+  {
+   "start": 554.38,
+   "end": 556.46,
+   "text": "We can go back and undo that if we want."
+  },
+  {
+   "start": 556.46,
+   "end": 558.78,
+   "text": "Maybe we want to add some sunlight to our scene."
+  },
+  {
+   "start": 558.78,
+   "end": 561.02,
+   "text": "So I'm going to drag the sunlight into our scene."
+  },
+  {
+   "start": 561.02,
+   "end": 563.02,
+   "text": "And you can see how much that changes it."
+  },
+  {
+   "start": 563.02,
+   "end": 567.9,
+   "text": "We actually have our sun and we can actually change,"
+  },
+  {
+   "start": 567.9,
+   "end": 570.06,
+   "text": "we can turn our sun on and off."
+  },
+  {
+   "start": 570.06,
+   "end": 575.5,
+   "text": "And we can change the direction of our sun by tapping on an area of our can."
+  },
+  {
+   "start": 575.5,
+   "end": 578.54,
+   "text": "So now I've placed the sun to be hitting on this side of the can."
+  },
+  {
+   "start": 578.54,
+   "end": 582.14,
+   "text": "And let's take the intensity of it down a little bit."
+  },
+  {
+   "start": 582.14,
+   "end": 585.58,
+   "text": "And we can rotate it here in our control panel."
+  },
+  {
+   "start": 586.14,
+   "end": 588.86,
+   "text": "And let's take the height of the sun down a little bit"
+  },
+  {
+   "start": 588.86,
+   "end": 593.34,
+   "text": "and raise the cloudiness so it's not so intense for us."
+  },
+  {
+   "start": 593.34,
+   "end": 595.02,
+   "text": "So now we have just a little bit of sunlight."
+  },
+  {
+   "start": 595.02,
+   "end": 596.54,
+   "text": "That looks really, really nice."
+  },
+  {
+   "start": 596.54,
+   "end": 600.86,
+   "text": "But this can looks completely out of place just floating in 3D space."
+  },
+  {
+   "start": 600.86,
+   "end": 603.82,
+   "text": "So why don't we grab one of our backgrounds?"
+  },
+  {
+   "start": 603.82,
+   "end": 606.46,
+   "text": "Like maybe this table looks really, really nice."
+  },
+  {
+   "start": 606.46,
+   "end": 608.86,
+   "text": "So I'm going to grab that simply by clicking on it."
+  },
+  {
+   "start": 608.86,
+   "end": 611.74,
+   "text": "It's going to apply it into my scene."
+  },
+  {
+   "start": 611.74,
+   "end": 613.5,
+   "text": "So now you can see we've applied an image,"
+  },
+  {
+   "start": 613.5,
+   "end": 615.98,
+   "text": "but our can looks kind of out of place."
+  },
+  {
+   "start": 615.98,
+   "end": 617.98,
+   "text": "And it's because of the dimensionality of it."
+  },
+  {
+   "start": 617.98,
+   "end": 622.46,
+   "text": "So what I want to do is I want to come up to image and press match image."
+  },
+  {
+   "start": 622.46,
+   "end": 626.54,
+   "text": "It's going to go ahead and it's going to analyze the aspect ratio of the image."
+  },
+  {
+   "start": 626.54,
+   "end": 627.74,
+   "text": "I'm going to press OK."
+  },
+  {
+   "start": 627.74,
+   "end": 630.54,
+   "text": "And it's going to apply the can into the scene"
+  },
+  {
+   "start": 630.54,
+   "end": 632.38,
+   "text": "so that it looks like it's really there."
+  },
+  {
+   "start": 632.38,
+   "end": 635.42,
+   "text": "So now we've actually applied some lighting and a scene"
+  },
+  {
+   "start": 635.42,
+   "end": 638.7,
+   "text": "and we've put everything the way it's supposed to be inside of our scene."
+  },
+  {
+   "start": 638.7,
+   "end": 642.14,
+   "text": "We can actually move our can around in our scene."
+  },
+  {
+   "start": 642.14,
+   "end": 645.9,
+   "text": "And it's going to match the perspective that we have going on right here."
+  },
+  {
+   "start": 645.9,
+   "end": 648.7,
+   "text": "We still have all the same controls that we did before"
+  },
+  {
+   "start": 648.7,
+   "end": 652.62,
+   "text": "by panning in and out, moving it left and right and rotating our can."
+  },
+  {
+   "start": 653.58,
+   "end": 655.74,
+   "text": "But if we ever feel like we get it off track,"
+  },
+  {
+   "start": 655.74,
+   "end": 658.46,
+   "text": "we can always come back, we can match the image,"
+  },
+  {
+   "start": 658.46,
+   "end": 660.3,
+   "text": "and it'll do a bunch of the work for us."
+  },
+  {
+   "start": 660.3,
+   "end": 661.42,
+   "text": "That looks pretty cool."
+  },
+  {
+   "start": 661.42,
+   "end": 662.54,
+   "text": "Let's do one more."
+  },
+  {
+   "start": 662.54,
+   "end": 665.66,
+   "text": "I've actually always wanted to create my own coffee mug."
+  },
+  {
+   "start": 666.46,
+   "end": 669.5,
+   "text": "And so I'm going to go ahead and go into my CC libraries"
+  },
+  {
+   "start": 669.5,
+   "end": 672.3,
+   "text": "and I'm going to pull out a coffee mug as well."
+  },
+  {
+   "start": 672.3,
+   "end": 675.66,
+   "text": "I click my coffee mug, drag it onto the scene."
+  },
+  {
+   "start": 676.22,
+   "end": 678.62,
+   "text": "And there is my coffee mug."
+  },
+  {
+   "start": 678.62,
+   "end": 679.34,
+   "text": "Pretty cool."
+  },
+  {
+   "start": 679.34,
+   "end": 682.94,
+   "text": "I'm going to bring the scale of this thing down just a little bit."
+  },
+  {
+   "start": 683.5,
+   "end": 685.5,
+   "text": "And let's bring it over."
+  },
+  {
+   "start": 685.5,
+   "end": 687.18,
+   "text": "And I'm going to hit this button right up here,"
+  },
+  {
+   "start": 687.18,
+   "end": 690.62,
+   "text": "which should move it to the ground in my scene."
+  },
+  {
+   "start": 690.62,
+   "end": 693.1,
+   "text": "Let's scale it up a little bit."
+  },
+  {
+   "start": 693.1,
+   "end": 697.26,
+   "text": "And then what we can do is come into our 10 coffee cup"
+  },
+  {
+   "start": 697.26,
+   "end": 699.66,
+   "text": "and select what we want the base color to be."
+  },
+  {
+   "start": 699.66,
+   "end": 701.18,
+   "text": "Now here's a cool thing."
+  },
+  {
+   "start": 701.18,
+   "end": 702.94,
+   "text": "Right now it's using an image for that,"
+  },
+  {
+   "start": 702.94,
+   "end": 704.54,
+   "text": "but we could change it to a color,"
+  },
+  {
+   "start": 704.54,
+   "end": 706.22,
+   "text": "or we could use an image."
+  },
+  {
+   "start": 706.22,
+   "end": 709.98,
+   "text": "I'm going to use an Adobe CC image that I have."
+  },
+  {
+   "start": 709.98,
+   "end": 712.94,
+   "text": "So here I have my little palette available to me"
+  },
+  {
+   "start": 712.94,
+   "end": 715.9,
+   "text": "and I'm going to drag this right over and drop it on top."
+  },
+  {
+   "start": 715.9,
+   "end": 717.98,
+   "text": "And it replaces it with this gritty texture"
+  },
+  {
+   "start": 717.98,
+   "end": 719.42,
+   "text": "that I had there in place."
+  },
+  {
+   "start": 719.42,
+   "end": 723.02,
+   "text": "Let's open it up and let's increase the repeating of this"
+  },
+  {
+   "start": 723.02,
+   "end": 725.58,
+   "text": "to really bring in some of the texture."
+  },
+  {
+   "start": 725.58,
+   "end": 728.22,
+   "text": "I want to see that grittiness like a gritty coffee cup."
+  },
+  {
+   "start": 728.22,
+   "end": 729.74,
+   "text": "I think that could be really, really fun."
+  },
+  {
+   "start": 729.74,
+   "end": 732.06,
+   "text": "The next thing I want to do is drag this design work"
+  },
+  {
+   "start": 732.06,
+   "end": 734.06,
+   "text": "that I have and drop it on top."
+  },
+  {
+   "start": 734.06,
+   "end": 736.86,
+   "text": "And you can see now I have my design"
+  },
+  {
+   "start": 736.86,
+   "end": 740.94,
+   "text": "for my camping coffee cup just like that."
+  },
+  {
+   "start": 740.94,
+   "end": 743.58,
+   "text": "Now remember I can grab this entire thing"
+  },
+  {
+   "start": 743.58,
+   "end": 747.1,
+   "text": "and I can swivel it around using the gizmo if I want"
+  },
+  {
+   "start": 747.82,
+   "end": 750.62,
+   "text": "or move it around in 3D space."
+  },
+  {
+   "start": 750.62,
+   "end": 751.98,
+   "text": "And there you have it."
+  },
+  {
+   "start": 751.98,
+   "end": 754.62,
+   "text": "We have different 3D elements that we've created ourselves."
+  },
+  {
+   "start": 754.62,
+   "end": 757.58,
+   "text": "So I'm going to go ahead and move over to the render tab."
+  },
+  {
+   "start": 757.58,
+   "end": 759.74,
+   "text": "And this time I'm going to render it in high quality"
+  },
+  {
+   "start": 759.74,
+   "end": 762.62,
+   "text": "and go ahead and press render out to my desktop."
+  },
+  {
+   "start": 762.7,
+   "end": 765.66,
+   "text": "Let's go ahead and rename this to cups"
+  },
+  {
+   "start": 765.66,
+   "end": 767.66,
+   "text": "and render it out and see what happens."
+  },
+  {
+   "start": 776.44,
+   "end": 779.8,
+   "text": "And just like that Adobe Dimension has rendered out our scene"
+  },
+  {
+   "start": 779.8,
+   "end": 781.64,
+   "text": "and I can open it up in Photoshop"
+  },
+  {
+   "start": 781.64,
+   "end": 785.72,
+   "text": "and we have a fully functional layered file of this."
+  },
+  {
+   "start": 785.72,
+   "end": 787.56,
+   "text": "We can take away the elements themselves,"
+  },
+  {
+   "start": 787.56,
+   "end": 789.8,
+   "text": "see how they disappear and their ground shadows."
+  },
+  {
+   "start": 789.8,
+   "end": 792.6,
+   "text": "We can take away this, the actual background image"
+  },
+  {
+   "start": 792.6,
+   "end": 795.4,
+   "text": "and the background color and we can just use those images"
+  },
+  {
+   "start": 795.4,
+   "end": 797.64,
+   "text": "if we want to or we can use the whole scene"
+  },
+  {
+   "start": 797.64,
+   "end": 799.16,
+   "text": "in our next design."
+  },
+  {
+   "start": 799.16,
+   "end": 801.08,
+   "text": "Well that's it. That's Adobe Dimension."
+  },
+  {
+   "start": 801.08,
+   "end": 802.44,
+   "text": "It's absolutely amazing."
+  },
+  {
+   "start": 802.44,
+   "end": 804.52,
+   "text": "What are you going to use Adobe Dimension for?"
+  },
+  {
+   "start": 804.52,
+   "end": 806.36,
+   "text": "Let me know down in the comments."
+  },
+  {
+   "start": 806.36,
+   "end": 807.56,
+   "text": "And if you enjoyed the video,"
+  },
+  {
+   "start": 807.56,
+   "end": 809.4,
+   "text": "make sure you leave a thumbs up, subscribe to the channel."
+  },
+  {
+   "start": 809.4,
+   "end": 812.36,
+   "text": "I do lots of videos about design and development."
+  },
+  {
+   "start": 812.36,
+   "end": 814.04,
+   "text": "So stick around, hit that subscribe button"
+  },
+  {
+   "start": 814.04,
+   "end": 815.8,
+   "text": "and that little bell notification icon"
+  },
+  {
+   "start": 815.8,
+   "end": 818.12,
+   "text": "so you know when another video like this one comes out."
+  },
+  {
+   "start": 818.12,
+   "end": 819.96,
+   "text": "I hope you guys are designing amazing things."
+  },
+  {
+   "start": 819.96,
+   "end": 821.72,
+   "text": "I hope you're making amazing things"
+  },
+  {
+   "start": 821.72,
+   "end": 824.92,
+   "text": "and I hope you're wowing people with your 3D designs."
+  },
+  {
+   "start": 824.92,
+   "end": 826.04,
+   "text": "I'll see you in the next one."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:13:20.178829+00:00",
+ "seconds": 33.8
+}

@@ -1,0 +1,300 @@
+Portfolios can give you a really good chance to showcase your work and your personality at a really quick glance.
+The right one might even land you your dream job or your dream project,
+but just the thought of creating a portfolio can be really scary and overwhelming,
+so I am here to break it down into actionable steps.
+Step one is deciding what your portfolio will be about.
+The first question you have to ask yourself is,
+what type of work should I put in my portfolio?
+Well, you have to make the work that you want.
+If you want to attract illustration jobs, make illustrations.
+You can get really specific about the kind of work that you're looking for.
+For example, if you're interested in editorial illustrations,
+find other artists who have created editorial illustrations that you like.
+Study their portfolios, reach out to them,
+and start creating illustrations that you can imagine in an editorial piece.
+For several years now, I've wanted to make a book cover,
+so I've made a lot of concept book covers over the years just to prove that I can do it.
+And eventually, I did actually design a book cover.
+I also designed a book cover this year, but it won't come out until next year,
+so I'm slowly getting there.
+If you don't fully know the answer to this question yet,
+just start trying a little bit of everything.
+Web design, logo design, brand design, motion design.
+There are a lot of sites full of inspiration to browse through,
+like Arena, Cosmos, and Pinterest.
+Take the time to explore what you like and get real about what you want to pursue.
+What I'm about to say is really important,
+and it might seem very obvious,
+but do not display work that you actually have no interest in doing.
+When I was in college, I would put up any design work I made
+because I thought it showed range.
+I had a bunch of UI, UX work in my portfolio,
+and people started asking me for help with their websites and their apps,
+and I realized I actually didn't really want to do that as a main service.
+I also like wasn't very good at it,
+and I think it didn't show range,
+it just showed that I was bad at something.
+So figure out the work that you want to showcase,
+figure out the work that you actually want to do in real life,
+and that is a great starting point.
+Once you figure that out, it's time to move on to step two,
+which is choosing what makes the cut.
+I think it's kind of hard because as a designer or as a creative,
+all of your projects are kind of your babies,
+so it's hard to pick which ones will end up in your portfolio
+and which ones don't because you're a little bit more biased about it.
+My portfolio focuses on brand design,
+so I have all of my work separated into projects on the homepage,
+but how you lay out your portfolio depends on what kind of designs you do.
+Some designers like to make different tabs for different work,
+like merch design, brand design, illustrations.
+The most important advice that I can give when it comes to picking projects to feature
+is just quality over quantity.
+Attention spans are really short.
+Realistically, that recruiter or that art director
+or that potential client is only going to spend like 30 seconds
+on your portfolio tops before deciding whether they want to look further
+or just move away completely.
+So make sure your best work is on top,
+and make sure your website is easy to navigate and click through.
+I personally really don't like the parallax swirling effect
+because I think it makes websites hard to scroll through.
+I'm also just not a fan of effects that make it
+so that your website takes forever to load.
+I want to be able to go through each project easily
+and get to where I want to go.
+Personally, when you're starting out,
+I think the sweet spot is anywhere between four to six projects,
+but if you have less than that,
+don't feel the need to fill up the space with mediocre ones.
+I'd rather have two really good projects in my portfolio than four okay ones.
+I also want to take a moment to say that concept projects are 100% okay in my opinion,
+especially if you're a student or you're just starting out.
+Do not freak out if you don't have any real life work yet.
+There are many personal projects that I'm really proud of
+that have landed me real life design work.
+I think good is good,
+and if you are really passionate about something you made, it'll show.
+Step three is designing the actual site,
+and for this, I'm going to get really serious.
+Now there are many different sites to get you started.
+Squarespace is really well known
+because it's pretty easy to use without knowing how to code
+and has a lot of customizable templates.
+There are also platforms like Framer.
+I really like it because it allows for very high level customization
+and personalization if you really want to get creative with it.
+I also really enjoy ReadyMag for the same reason.
+You get a lot of customization,
+especially if you love animations.
+The website examples I've seen on ReadyMag are super fun.
+I've been using Squarespace for several years.
+My website has a pretty clean and simple layout.
+However, I also recently put in a play tab
+where I can put some of my posters and fun personal work,
+and that page is a template that I used in Framer.
+I've worked on websites on each of these platforms,
+and I think they all do a really decent job.
+It's just really dependent on what you are personally looking for.
+I also want to take a moment to talk about the importance of personal branding,
+because once you understand your own brand,
+you'll have a much better idea of how you want your portfolio to look.
+Personal branding can be as simple or as intricate as you want it to be,
+but it should be a reflection of you and the type of vibe that you want to give off,
+whether it's clean and sleek or fun and playful.
+So pick out the one to two, maybe three fonts that you'll be using for your header
+and your body copy, and maybe pick out a color or two that you want to use on your website.
+I personally went for a very clean website layout
+because I think my work already has a lot of loud colors and fonts,
+so my actual site is pretty simple because I didn't want the layout competing with the
+brand projects, but many designers do a really beautiful job of mixing the two.
+I know there's a lot of free will here, but don't overthink it.
+Ideally, you're going to keep evolving and your personal branding will change right there with you.
+Nothing is really permanent, you can always change your portfolio if you don't like it,
+so just go with what feels right to you.
+If you really don't know where to start, I love looking at other sites for inspiration.
+I used to go on Typhool for all the time.
+That doesn't exclusively feature portfolios, it just features cool websites.
+I also really like the site, ILoveCreatives.com.
+They have a site of the week section and you can also filter by portfolio or whatever else.
+Framer, Redimag, Squarespace also have sample portfolios on their websites as well.
+Step 4 is actually building out each project.
+When you are explaining your projects, keep it straightforward.
+Answer the basic questions, like what was the brief?
+What is this company?
+What was the goal?
+What did you do?
+Who did you do it with?
+Credit anyone else that you might have worked with, like photographers or other designers.
+You don't want to be super misleading and take credit for the entire thing.
+When it comes to presenting your work and especially for brand designers or merch designers
+or anything a little bit more physical, mockups are a game changer.
+I think it really helps to present your work professionally.
+I really love looking at how studios and agencies present their case studies
+because they kind of do it across different mediums.
+They have mockups for web design, merch design, poster design.
+I feel like when you use different mockups and different environments,
+it really brings the work and the idea to life.
+I actually have a tutorial on how to use mockups,
+so if you're interested in that, you should check that out.
+Mockups are especially great if you don't have a photography studio
+or like professional photos for your brand.
+But if you do have professional photos for your brand, that's amazing.
+You should definitely include those.
+I actually updated my portfolio really recently just to prepare for this video.
+And I finally made a case study on Lentiful,
+one of my projects that I did a few years back.
+So let's do a quick breakdown of that
+just so that you can really understand what I mean.
+As you can see, we have my Figma file.
+I have built out everything in my portfolio here.
+This is the real file that I used.
+It's very messy.
+I really like using Figma for this,
+mainly because it doesn't really crash when I have all of these
+super high resolution photos that take up a lot of space.
+It's really easy to move things around and change up the dimensions.
+And it's nice having everything in one place
+where I can kind of just like look at it and see how everything's looking in relation to each other.
+I've used Figma to build out my portfolio for years and I really like it and it's free.
+So try it out.
+Let's walk you through Lentiful.
+It is an instant lentil brand.
+It is made by one of my favorite clients in the world, Ben Bacon.
+I did the branding, the packaging, and the website design,
+as well as like social media design.
+So this was a pretty meaty project.
+I also did this literally years ago and I'm updating it now.
+So don't feel bad if your portfolio is outdated.
+Just take this video as a sign that it's time to update it.
+So I am starting with this shot.
+It is one of my favorite shots that came out of this brand.
+This photo was taken by Garner Studios.
+They're a photography studio based in Brooklyn and I found them on Instagram.
+And Lentiful has worked with them for several shoots.
+This happens to be just like a flat lay studio shot,
+but again, you don't need a fancy photography studio to do it for you.
+I think a really strong mock-up or a super compelling graphic
+can be a really good hero image as well.
+Anytime I do a brand, I love creating a set of posters,
+usually like eight to 10 posters just so that it can showcase
+how the font and the colors and the product,
+packaging or photography all plays together to create one brand identity.
+So I made a bunch of posters, put them in this little poster mock-up.
+You can see the little wrinkles and it's like a wheat paste poster campaign.
+I think it really brings it to life.
+As you'll see going down this case study,
+I've just kind of taken the liberty of mixing in photography
+and mock-ups and graphics constantly.
+So here's just another studio shot of the four hero products.
+Then we have a little mock-up of like Instagram stories.
+I also drew these little guys.
+So they're fun little illustrations to put in.
+Lentiful really wanted to position itself as like a really quick,
+easy, healthy on the go lunch that you know people can have in between meetings during work days.
+So I grabbed a bunch of photos from a photo shoot we did a couple years ago
+and they showcase that really well.
+I also designed the website.
+So this is like a product page that I did and you know,
+if I were to add onto this case study now,
+I would put this in a mock-up of a laptop or a monitor just to really bring it to life.
+But you know what?
+This is good enough for me right now.
+Again, more graphics.
+I think this does a really good job of highlighting the illustrations
+that I did that go on the packaging
+and then just pairing it with some strong type that we use in the brand identity
+occasionally for like headers.
+More social media mock-ups, more like example Instagram graphics.
+I was on a social media retainer with Ben for a few years.
+But honestly, even if I wasn't,
+I think I still would have done a mock-up like this just to show
+how the brand can expand beyond just the physical and into the digital.
+Here I actually paired a product photo with nutrition facts.
+Surprise surprise, more studio photos.
+Another kind of nutrition product photographic.
+And then yeah, you kind of get it.
+You get the gist.
+Some of these hands were actually my friends who happened to live in New York
+and they got to be a part of the photo shoot.
+So that is something that I always take pleasure in.
+It's just like a little secret that no one knows about.
+Here I included like a little sneak peek into the brand book that I designed
+and this kind of highlights all of the colors that we have,
+you know, used and added in this like ever-expanding universe that is lent to full.
+And I think it showcases just how like bold and bright and vivid the brand is.
+And then here we just have another good, good old hero image.
+And I actually have some photos that I took when I saw lentiful and Whole Foods for the first time.
+And I think that adds like a really personal touch.
+So I might add that into Squarespace as well
+because it actually just shows lentiful and Whole Foods.
+And I think that's a very like important part of its journey.
+And I'm just grabbing a brand color just to use for the background of this slide
+just so everything feels cohesive.
+Okay, we're in Squarespace.
+This is kind of what my page looks like when I'm editing it.
+As you can see, I've put the hero image here.
+And then here I have like a little section that just explains what the project is,
+what services I did, what it's about and like what the goal was.
+As far as like actually designing it, it's pretty easy.
+You can just like put in sections of photos or text or whatever.
+I'll literally add in that last slide that I talked about of just me and Whole Foods
+just to show you how easy it is here.
+Upload file.
+Now I'm uploading it.
+Okay.
+And there it is.
+That is just my little last slide of me and Whole Foods.
+And then I have a little credit section.
+So I have the photography studio and then the models.
+And yeah, pretty easy, pretty simple.
+Save.
+Yeah, this is pretty much what it looks like.
+I have some that I have archived because there were too many projects on here
+and I feel like they were a little bit outdated.
+And you know what?
+I could have taken the Squarespace integration, but I didn't because I wanted to talk about
+the other websites.
+So you're welcome.
+Anyway, that was my little breakdown.
+I hope you enjoyed it.
+Some bonus tips.
+I think the about page is really important.
+I think it's important to be able to get to know the person behind the work.
+This is a chance to showcase more of your personality if you didn't do it
+through the rest of your website design.
+What do you like to do?
+What interests you?
+People like to work with other people that they think they would get along with
+or feel like they know a little bit better.
+So having a strong about page can make all the difference between a client choosing you and not.
+I also have a little inquiry form set up so that it's easier for people to get in touch with me.
+It also allows me to get some basic information about the project right away
+or potentially like field clients who might not be the right fit.
+I recently put in that play tab I mentioned.
+I think adding little fun touches or secret pages to your website
+could be a cool thing to do if you're a playful person like that
+but not necessary if you're like a little bit more serious.
+I think it's very important to pay attention to the little details
+like the favicon, favicon, favicon.
+It's basically that little icon that shows up next to your URL.
+It could be as simple as like a certain color of a circle
+or it can be like a whole brand mark totally up to you.
+I hope this helped.
+Creating a portfolio can be really really daunting
+and I kind of wish I had this advice when I had first started building mine.
+I've gone through several iterations of my portfolio since then
+and I know how hard it is.
+Even right now my portfolio has been like this for the last few years
+and I'm a little bit sick of it even though I just updated it.
+So I don't know maybe in a future video we'll switch it up and I'll redesign it.
+Anyway we are our own worst critics so try not to overthink it.
+Just start on it little by little.
+It doesn't have to be like this huge thing that you do in one sitting.
+You can just do like 20 minutes at a time whenever you have free time
+and the energy slowly but surely you will have a portfolio.
+I believe in you.
+You can do it.
+Thank you so much for watching.
+I'll talk to you soon.
+Sending you a big hug.

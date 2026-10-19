@@ -1,0 +1,237 @@
+What's up everybody? I'm Jesse Showalter and I love wowing people with amazing designs.
+I love taking the designs and presenting them in amazing ways.
+There's no better way to make people's jaws drop than 3D design.
+That's either creating 3D designs from scratch or adding your designs onto 3D mock-ups to bring them to life in
+photo realism. But today I'm going to be taking a look at Adobe Dimension.
+It's Adobe's way of allowing us as designers to enter into that 3D space, have some fun and wow people with our designs.
+I'm going to be giving you a general overview of the software, showing you the tools that you need to know, and then showing you what you can do inside of Adobe Dimension.
+Let's do it.
+Alright, let's dive right in and take a look at Adobe Dimension.
+I have Dimension open on my desktop and you can see this is our launch screen where we're going to want to come up and press
+new project. Once we launch Dimension, this is our basic workspace and it's pretty simple to understand.
+We have tools along the left-hand panel, we have our assets that are currently open, we have our canvas that we can work in our
+three-dimension space and then you have your inspector panel where things will contextually pop up depending on what you're interacting with.
+I'm going to make sure that I'm using my direct selection tool by clicking my arrow here or hitting V on the keyboard.
+It's one of the biggest tools you're going to need in Adobe Dimension.
+We can also go right above the selection tool and see we have the ability to add or import content.
+Currently, our starting assets are open.
+These are basic shapes, models that are available to us, standard materials and then directional lights and images.
+You can filter any of these out by simply clicking on the small icon that represents them and by unclicking it, you'll make all of them
+available to you once again.
+But we can also bring different elements in, not just our starting assets, but things from our CC libraries, importing content,
+maybe object files from Blender or other 3D programs, as well as hitting Adobe Stock and maybe picking a collection like for instance,
+this electronics collection that will open up Adobe Stock.
+Quite a few of these are going to be free screens, models, different 3D packaging you can find on Adobe Stock.
+You license those and they'll be available to you in Adobe Dimension.
+So we've already seen the selection tool and the different assets we have available.
+Why don't we bring a few of these assets out onto our canvas and start playing with them?
+I'm going to choose a sphere by clicking it, a cube and a piece of text and bring that onto our screen.
+Now we're really zoomed in here and that's hard to see.
+So before we do anything else with our objects, I'm going to introduce you to the three other tools that you're going to need to know if you're going to use Adobe Dimension.
+You can find those in the left hand tool panel.
+The first one is called your orbit tool.
+The second one is called your pan tool and the third one is your dolly.
+You can find these on your keyboard by clicking one, two or three.
+That's the easiest way to find them.
+So why don't we click our dolly tool?
+That's number three and I'm going to just left click on my mouse, drag in or out.
+And it's as if I have a camera on a dolly and I'm zooming things in or out.
+Next, I can hit my pan tool and move left, right up or down in my 3D space here.
+And then next would be my orbit tool where I can literally orbit around the items and the elements that are on my canvas.
+Let's go back to our direct selection tool, select our cube and start moving a few of these elements around.
+And then we will just use those tools yet again to line ourselves up exactly where we want to be.
+Now we're going to take our direct selection tool by hitting V.
+We're going to select our text.
+Why don't we come over here and put something else in that text field?
+And why don't we also change the font while we're here to something like poppins?
+And we'll go ahead and make that bold.
+And why don't we change the depth of our text as well?
+Now we can use all of these input fields in the inspector panel, but we can also use the little gizmo controls that are here as well by moving things to the left or right.
+We can rotate things also, of course, press command Z to undo anything you want.
+But you can either control objects here or in the inspector panel.
+Now I'm going to select my orb and make sure over my inspector panel that the scale or the size is constrained proportionally.
+And I'm just going to shrink my size of my orb down a little bit and move it into place.
+So far so good.
+My scene's looking pretty cool.
+And I like exactly where it's placed.
+I want to make sure that I can always come back to this exact spot maybe right here whenever I want to.
+I'm going to head at the top right section.
+I'm going to hit the camera bookmarks and I'm going to create a bookmark.
+That way if later on I've messed some things up and I want to get back to where I was, I can go back to that exact view that I was at before.
+Well now we have some objects there.
+We're definitely going to want to play with those objects.
+And that's where the other assets come into play.
+For instance, materials will allow me to select any object on my canvas and apply material like this metal to this one.
+Maybe we want a ball that's made out of walnut wood.
+And maybe we want some text that's made out of brushed iridescent metal.
+Now it looks a little cartoonish and that's because Adobe Dimension needs to render it to bring all of that realism into it.
+But we can get a little bit of a cheat by going up to the top right corner and hitting our render preview.
+You're going to see things get a little bit pixelated.
+It's going to start shading and doing a little bit of that work.
+It's kind of the in-between of the design and the render that allows us to see things a little bit more realistic.
+Now you'll see that our block actually being made out of metal is reflecting the word hello that's in front of it.
+That's pretty cool.
+If we want to get a full blown render of our item, we can head over to the render tab.
+We can decide what export formats we have and what quality we want of our render.
+And we can go ahead and press the big blue render button.
+Adobe Dimension is going to do the work.
+It will take a little while and depending on the power of the computer or machine that you're using,
+it might take a little bit longer or a little bit shorter amount of time.
+All right. It's finished rendering and it's exported out a Photoshop version of our design.
+We can open that up in Photoshop and you can see that we have all the layers accessible to us.
+I can turn off the background layer and I have my actual object layer here.
+So from here, I can export things out and put it on the website or any other project that I'm working on.
+And we have 3D.
+Now that's pretty cool.
+I can use shapes and text, but I have some design assets and elements
+that I really want to implement.
+And so I'm going to go ahead and save this design that I'm working on.
+I'm going to save it on my desktop and I'm just going to call it Hello.
+And then I'm going to come up to File and I'm going to close this project.
+I'm going to open up a new project and I have my assets open.
+I'm going to grab a beverage can.
+I'm going to drag that out onto my stage.
+I'm going to lock the constraints and just scale this thing up a little bit so we can see it nice and clear.
+I'm going to turn off our pre-render.
+And then I'm going to go into my Adobe CC Libraries.
+I'm going to open up a library that I want to work with and I have a piece of artwork
+that I would love to implement onto this can.
+So I'm literally just going to drag it in and drop it on the can.
+And Adobe Dimension is going to go ahead and plug that piece of artwork three-dimensionally onto my can.
+That is pretty cool looking.
+Now I like it, but I want to make sure that we scale this thing up a little bit.
+That looks great just like that.
+And now we can also, inside of our can, you can see in my layers panel up here,
+I have the can selected.
+I can also control the camera and the environment, but right now I can control the can.
+Click a little bit deeper and select the material.
+Now maybe we want to go back and go to our starter assets, open up the materials,
+and maybe I want this to be, I don't know, like a plastic or a metal can.
+Now I've implemented metal and I can even come over and change the base color of my metal
+to be something a little bit cooler.
+Like maybe it is, what do we want to do for our beer can?
+Maybe something like a deep dark red metal.
+That could be kind of cool.
+Let's just mute it a little bit or maybe a black could be really cool.
+There we go.
+So I'm going to do like a nice black in the background of our beer can.
+Let's go ahead and turn on our pre-render and just see what it looks like.
+It's going to give a little bit of shade and realism to it.
+We see the light in our scene.
+Let's talk about light a little bit before we go any further because light is a big deal
+in 3D objects.
+And so you can see that up in our layers panel, we mentioned it before,
+we have our beverage can, we have our camera, but we also have our environment.
+And our environment has an environment light.
+You can see if I hide that light, everything goes black.
+It's not being lit.
+And you'll notice, if I bring my dolly tool in and zoom in,
+you can actually see the lights in the scene that are bouncing off of our object.
+There's staged lights in that area.
+Let's go click on our lighting assets and see what we have.
+We have environmental lights, studio low light.
+It could be studio panel light.
+But perhaps we want to have something like some extra light put on here.
+We can add in this three point light simply by clicking on it.
+And now we have a key, a fill and a backlight as well.
+We can go back and undo that if we want.
+Maybe we want to add some sunlight to our scene.
+So I'm going to drag the sunlight into our scene.
+And you can see how much that changes it.
+We actually have our sun and we can actually change,
+we can turn our sun on and off.
+And we can change the direction of our sun by tapping on an area of our can.
+So now I've placed the sun to be hitting on this side of the can.
+And let's take the intensity of it down a little bit.
+And we can rotate it here in our control panel.
+And let's take the height of the sun down a little bit
+and raise the cloudiness so it's not so intense for us.
+So now we have just a little bit of sunlight.
+That looks really, really nice.
+But this can looks completely out of place just floating in 3D space.
+So why don't we grab one of our backgrounds?
+Like maybe this table looks really, really nice.
+So I'm going to grab that simply by clicking on it.
+It's going to apply it into my scene.
+So now you can see we've applied an image,
+but our can looks kind of out of place.
+And it's because of the dimensionality of it.
+So what I want to do is I want to come up to image and press match image.
+It's going to go ahead and it's going to analyze the aspect ratio of the image.
+I'm going to press OK.
+And it's going to apply the can into the scene
+so that it looks like it's really there.
+So now we've actually applied some lighting and a scene
+and we've put everything the way it's supposed to be inside of our scene.
+We can actually move our can around in our scene.
+And it's going to match the perspective that we have going on right here.
+We still have all the same controls that we did before
+by panning in and out, moving it left and right and rotating our can.
+But if we ever feel like we get it off track,
+we can always come back, we can match the image,
+and it'll do a bunch of the work for us.
+That looks pretty cool.
+Let's do one more.
+I've actually always wanted to create my own coffee mug.
+And so I'm going to go ahead and go into my CC libraries
+and I'm going to pull out a coffee mug as well.
+I click my coffee mug, drag it onto the scene.
+And there is my coffee mug.
+Pretty cool.
+I'm going to bring the scale of this thing down just a little bit.
+And let's bring it over.
+And I'm going to hit this button right up here,
+which should move it to the ground in my scene.
+Let's scale it up a little bit.
+And then what we can do is come into our 10 coffee cup
+and select what we want the base color to be.
+Now here's a cool thing.
+Right now it's using an image for that,
+but we could change it to a color,
+or we could use an image.
+I'm going to use an Adobe CC image that I have.
+So here I have my little palette available to me
+and I'm going to drag this right over and drop it on top.
+And it replaces it with this gritty texture
+that I had there in place.
+Let's open it up and let's increase the repeating of this
+to really bring in some of the texture.
+I want to see that grittiness like a gritty coffee cup.
+I think that could be really, really fun.
+The next thing I want to do is drag this design work
+that I have and drop it on top.
+And you can see now I have my design
+for my camping coffee cup just like that.
+Now remember I can grab this entire thing
+and I can swivel it around using the gizmo if I want
+or move it around in 3D space.
+And there you have it.
+We have different 3D elements that we've created ourselves.
+So I'm going to go ahead and move over to the render tab.
+And this time I'm going to render it in high quality
+and go ahead and press render out to my desktop.
+Let's go ahead and rename this to cups
+and render it out and see what happens.
+And just like that Adobe Dimension has rendered out our scene
+and I can open it up in Photoshop
+and we have a fully functional layered file of this.
+We can take away the elements themselves,
+see how they disappear and their ground shadows.
+We can take away this, the actual background image
+and the background color and we can just use those images
+if we want to or we can use the whole scene
+in our next design.
+Well that's it. That's Adobe Dimension.
+It's absolutely amazing.
+What are you going to use Adobe Dimension for?
+Let me know down in the comments.
+And if you enjoyed the video,
+make sure you leave a thumbs up, subscribe to the channel.
+I do lots of videos about design and development.
+So stick around, hit that subscribe button
+and that little bell notification icon
+so you know when another video like this one comes out.
+I hope you guys are designing amazing things.
+I hope you're making amazing things
+and I hope you're wowing people with your 3D designs.
+I'll see you in the next one.

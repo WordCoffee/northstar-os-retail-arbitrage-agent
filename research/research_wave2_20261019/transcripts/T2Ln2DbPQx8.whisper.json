@@ -1,0 +1,148 @@
+{
+ "id": "T2Ln2DbPQx8",
+ "title": "Photoshop Smart Objects Explained in 2 minutes",
+ "channel": "Cristi Kerekes",
+ "url": "https://www.youtube.com/watch?v=T2Ln2DbPQx8",
+ "query": "smart object mockup photoshop",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 120.8,
+ "chars": 1922,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.72,
+   "text": "Why should you use smart objects in Photoshop? Here are my top reasons."
+  },
+  {
+   "start": 4.72,
+   "end": 8.96,
+   "text": "Number one, smart objects can preserve the original resolution of an image."
+  },
+  {
+   "start": 8.96,
+   "end": 13.12,
+   "text": "Let's say I want to drag and drop this image with a smartphone into this document."
+  },
+  {
+   "start": 13.12,
+   "end": 16.8,
+   "text": "The phone has its own layer and all I want to do is to make it smaller."
+  },
+  {
+   "start": 16.8,
+   "end": 20.72,
+   "text": "The problem is, when I scale it down and then decide to scale it back,"
+  },
+  {
+   "start": 20.72,
+   "end": 23.92,
+   "text": "the resolution of the image is really bad, so the solution"
+  },
+  {
+   "start": 23.92,
+   "end": 27.68,
+   "text": "is to convert the layer into a smart object before resizing it."
+  },
+  {
+   "start": 27.76,
+   "end": 32.72,
+   "text": "Now I can scale it up or down without affecting the quality of the image."
+  },
+  {
+   "start": 32.72,
+   "end": 36.96,
+   "text": "Number two, smart objects also allow non-destructive effects."
+  },
+  {
+   "start": 36.96,
+   "end": 41.84,
+   "text": "For instance, if I apply a Gaussian blur to a simple layer and I realize that the effect is too"
+  },
+  {
+   "start": 41.84,
+   "end": 47.44,
+   "text": "exaggerated, I can only go back using the undo command and then reapply the blur effect."
+  },
+  {
+   "start": 48.32,
+   "end": 53.04,
+   "text": "If I convert the layer to a smart object first and then I apply the same Gaussian blur,"
+  },
+  {
+   "start": 53.68,
+   "end": 59.52,
+   "text": "the effect is added under the layer and if I double click it, I can modify the values whenever I want,"
+  },
+  {
+   "start": 59.52,
+   "end": 65.52,
+   "text": "click OK, and the blur is updated. This also applies for the camera raw filter as well."
+  },
+  {
+   "start": 65.52,
+   "end": 70.08,
+   "text": "I can change the contrast, brightness, or any other slider, click OK,"
+  },
+  {
+   "start": 70.08,
+   "end": 74.8,
+   "text": "and then come back whenever I want to readjust the sliders just by double clicking"
+  },
+  {
+   "start": 74.8,
+   "end": 76.24,
+   "text": "on the smart objects effect."
+  },
+  {
+   "start": 77.52,
+   "end": 81.84,
+   "text": "Number three, smart objects can be easily edited and transformed."
+  },
+  {
+   "start": 81.84,
+   "end": 87.68,
+   "text": "For example, I can replace this screen so easily. I import the second image into this document,"
+  },
+  {
+   "start": 88.24,
+   "end": 91.04,
+   "text": "convert it to a smart object, and resize it."
+  },
+  {
+   "start": 91.84,
+   "end": 96.4,
+   "text": "Holding CTRL, I can reposition each of the corners to fine-tune the correct perspective."
+  },
+  {
+   "start": 98.32,
+   "end": 103.04,
+   "text": "If I want, I can double click the smart object's thumbnail, add some text and colors,"
+  },
+  {
+   "start": 103.92,
+   "end": 107.76,
+   "text": "press CTRL S to save the changes, and when I come back to this image,"
+  },
+  {
+   "start": 107.76,
+   "end": 110.48,
+   "text": "you can see that the laptop screen was updated too."
+  },
+  {
+   "start": 111.2,
+   "end": 115.28,
+   "text": "If you enjoyed this video, I'm sure you'll love another one from the screen."
+  },
+  {
+   "start": 115.28,
+   "end": 118.96,
+   "text": "I'm Chris, thanks a lot for watching, see you in the next one."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:03:33.534955+00:00",
+ "seconds": 7.1
+}

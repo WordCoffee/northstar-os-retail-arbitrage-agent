@@ -1,0 +1,832 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:02.030 align:start position:0%
+ 
+The<00:00:00.320><c> difference</c><00:00:00.680><c> between</c><00:00:01.080><c> a</c><00:00:01.160><c> normal</c><00:00:01.600><c> render</c>
+
+00:00:02.030 --> 00:00:02.040 align:start position:0%
+The difference between a normal render
+ 
+
+00:00:02.040 --> 00:00:03.990 align:start position:0%
+The difference between a normal render
+and<00:00:02.280><c> a</c><00:00:02.360><c> professional</c><00:00:03.000><c> one</c><00:00:03.400><c> usually</c><00:00:03.760><c> comes</c>
+
+00:00:03.990 --> 00:00:04.000 align:start position:0%
+and a professional one usually comes
+ 
+
+00:00:04.000 --> 00:00:06.110 align:start position:0%
+and a professional one usually comes
+down<00:00:04.240><c> to</c><00:00:04.400><c> just</c><00:00:04.760><c> one</c><00:00:05.040><c> thing,</c><00:00:05.480><c> which</c><00:00:05.840><c> is</c>
+
+00:00:06.110 --> 00:00:06.120 align:start position:0%
+down to just one thing, which is
+ 
+
+00:00:06.120 --> 00:00:07.390 align:start position:0%
+down to just one thing, which is
+lighting.
+
+00:00:07.390 --> 00:00:07.400 align:start position:0%
+lighting.
+ 
+
+00:00:07.400 --> 00:00:10.230 align:start position:0%
+lighting.
+And<00:00:07.680><c> in</c><00:00:07.920><c> this</c><00:00:08.200><c> animation,</c><00:00:08.760><c> most</c><00:00:09.080><c> of</c><00:00:09.200><c> the</c><00:00:09.360><c> looks</c>
+
+00:00:10.230 --> 00:00:10.240 align:start position:0%
+And in this animation, most of the looks
+ 
+
+00:00:10.240 --> 00:00:11.790 align:start position:0%
+And in this animation, most of the looks
+is<00:00:10.440><c> actually</c><00:00:10.840><c> coming</c><00:00:11.160><c> from</c><00:00:11.400><c> the</c><00:00:11.520><c> lighting</c>
+
+00:00:11.790 --> 00:00:11.800 align:start position:0%
+is actually coming from the lighting
+ 
+
+00:00:11.800 --> 00:00:14.350 align:start position:0%
+is actually coming from the lighting
+setup.<00:00:12.600><c> So,</c><00:00:13.000><c> in</c><00:00:13.200><c> this</c><00:00:13.440><c> video,</c><00:00:13.880><c> I'll</c><00:00:14.080><c> show</c><00:00:14.240><c> you</c>
+
+00:00:14.350 --> 00:00:14.360 align:start position:0%
+setup. So, in this video, I'll show you
+ 
+
+00:00:14.360 --> 00:00:16.790 align:start position:0%
+setup. So, in this video, I'll show you
+exactly<00:00:14.840><c> how</c><00:00:15.160><c> I</c><00:00:15.280><c> set</c><00:00:15.520><c> up</c><00:00:15.640><c> the</c><00:00:15.800><c> lighting</c><00:00:16.640><c> for</c>
+
+00:00:16.790 --> 00:00:16.800 align:start position:0%
+exactly how I set up the lighting for
+ 
+
+00:00:16.800 --> 00:00:18.870 align:start position:0%
+exactly how I set up the lighting for
+this<00:00:17.080><c> product</c><00:00:17.560><c> and</c><00:00:17.760><c> how</c><00:00:18.040><c> you</c><00:00:18.200><c> can</c><00:00:18.400><c> use</c><00:00:18.720><c> the</c>
+
+00:00:18.870 --> 00:00:18.880 align:start position:0%
+this product and how you can use the
+ 
+
+00:00:18.880 --> 00:00:22.190 align:start position:0%
+this product and how you can use the
+same<00:00:19.240><c> setup</c><00:00:19.760><c> in</c><00:00:20.080><c> your</c><00:00:20.560><c> renders,</c><00:00:21.120><c> too.</c><00:00:21.960><c> But</c>
+
+00:00:22.190 --> 00:00:22.200 align:start position:0%
+same setup in your renders, too. But
+ 
+
+00:00:22.200 --> 00:00:24.350 align:start position:0%
+same setup in your renders, too. But
+first,<00:00:22.880><c> let's</c><00:00:23.240><c> take</c><00:00:23.440><c> a</c><00:00:23.480><c> look</c><00:00:23.840><c> at</c><00:00:23.920><c> the</c><00:00:24.000><c> final</c>
+
+00:00:24.350 --> 00:00:24.360 align:start position:0%
+first, let's take a look at the final
+ 
+
+00:00:24.360 --> 00:00:44.830 align:start position:0%
+first, let's take a look at the final
+results.
+
+00:00:44.830 --> 00:00:44.840 align:start position:0%
+ 
+ 
+
+00:00:44.840 --> 00:00:46.950 align:start position:0%
+ 
+Okay,<00:00:45.120><c> so</c><00:00:45.280><c> first,</c><00:00:45.760><c> I'm</c><00:00:45.880><c> going</c><00:00:46.120><c> to</c><00:00:46.240><c> unhide</c><00:00:46.760><c> my</c>
+
+00:00:46.950 --> 00:00:46.960 align:start position:0%
+Okay, so first, I'm going to unhide my
+ 
+
+00:00:46.960 --> 00:00:48.670 align:start position:0%
+Okay, so first, I'm going to unhide my
+background<00:00:47.440><c> light</c><00:00:47.720><c> so</c><00:00:47.880><c> you</c><00:00:48.000><c> can</c><00:00:48.200><c> see</c><00:00:48.440><c> what's</c>
+
+00:00:48.670 --> 00:00:48.680 align:start position:0%
+background light so you can see what's
+ 
+
+00:00:48.680 --> 00:00:51.030 align:start position:0%
+background light so you can see what's
+going<00:00:48.960><c> on</c><00:00:49.160><c> here.</c><00:00:50.000><c> Now,</c><00:00:50.280><c> this</c><00:00:50.520><c> setup</c><00:00:50.840><c> is</c>
+
+00:00:51.030 --> 00:00:51.040 align:start position:0%
+going on here. Now, this setup is
+ 
+
+00:00:51.040 --> 00:00:53.030 align:start position:0%
+going on here. Now, this setup is
+actually<00:00:51.400><c> pretty</c><00:00:51.680><c> simple,</c><00:00:52.120><c> but</c><00:00:52.400><c> it</c><00:00:52.640><c> already</c>
+
+00:00:53.030 --> 00:00:53.040 align:start position:0%
+actually pretty simple, but it already
+ 
+
+00:00:53.040 --> 00:00:55.430 align:start position:0%
+actually pretty simple, but it already
+gives<00:00:53.320><c> much</c><00:00:53.640><c> more</c><00:00:53.800><c> premium</c><00:00:54.160><c> looks.</c>
+
+00:00:55.430 --> 00:00:55.440 align:start position:0%
+gives much more premium looks.
+ 
+
+00:00:55.440 --> 00:00:57.390 align:start position:0%
+gives much more premium looks.
+I<00:00:55.640><c> placed</c><00:00:56.040><c> an</c><00:00:56.280><c> area</c><00:00:56.600><c> light</c><00:00:56.840><c> facing</c><00:00:57.280><c> the</c>
+
+00:00:57.390 --> 00:00:57.400 align:start position:0%
+I placed an area light facing the
+ 
+
+00:00:57.400 --> 00:00:59.230 align:start position:0%
+I placed an area light facing the
+background,<00:00:57.960><c> so</c><00:00:58.120><c> it</c><00:00:58.360><c> only</c><00:00:58.760><c> affects</c><00:00:59.120><c> the</c>
+
+00:00:59.230 --> 00:00:59.240 align:start position:0%
+background, so it only affects the
+ 
+
+00:00:59.240 --> 00:01:01.750 align:start position:0%
+background, so it only affects the
+background<00:00:59.800><c> and</c><00:01:00.000><c> not</c><00:01:00.360><c> the</c><00:01:00.520><c> model.</c>
+
+00:01:01.750 --> 00:01:01.760 align:start position:0%
+background and not the model.
+ 
+
+00:01:01.760 --> 00:01:04.270 align:start position:0%
+background and not the model.
+And<00:01:02.240><c> that's</c><00:01:02.720><c> also</c><00:01:03.200><c> why</c><00:01:03.440><c> the</c><00:01:03.600><c> background</c><00:01:04.120><c> is</c>
+
+00:01:04.270 --> 00:01:04.280 align:start position:0%
+And that's also why the background is
+ 
+
+00:01:04.280 --> 00:01:06.870 align:start position:0%
+And that's also why the background is
+placed<00:01:04.680><c> far</c><00:01:05.000><c> away</c><00:01:05.360><c> from</c><00:01:05.600><c> the</c><00:01:05.720><c> product.</c><00:01:06.760><c> For</c>
+
+00:01:06.870 --> 00:01:06.880 align:start position:0%
+placed far away from the product. For
+ 
+
+00:01:06.880 --> 00:01:09.110 align:start position:0%
+placed far away from the product. For
+the<00:01:07.000><c> light,</c><00:01:07.400><c> I</c><00:01:07.600><c> used</c><00:01:08.200><c> a</c><00:01:08.320><c> different</c><00:01:08.800><c> shape</c>
+
+00:01:09.110 --> 00:01:09.120 align:start position:0%
+the light, I used a different shape
+ 
+
+00:01:09.120 --> 00:01:11.630 align:start position:0%
+the light, I used a different shape
+because<00:01:09.480><c> I</c><00:01:09.600><c> wanted</c><00:01:10.040><c> to</c><00:01:10.160><c> create</c><00:01:10.600><c> the</c><00:01:10.760><c> soft</c>
+
+00:01:11.630 --> 00:01:11.640 align:start position:0%
+because I wanted to create the soft
+ 
+
+00:01:11.640 --> 00:01:13.190 align:start position:0%
+because I wanted to create the soft
+gradient.
+
+00:01:13.190 --> 00:01:13.200 align:start position:0%
+gradient.
+ 
+
+00:01:13.200 --> 00:01:16.990 align:start position:0%
+gradient.
+And<00:01:13.600><c> I</c><00:01:13.880><c> also</c><00:01:15.120><c> didn't</c><00:01:15.680><c> want</c><00:01:16.200><c> the</c><00:01:16.320><c> gradient</c><00:01:16.800><c> to</c>
+
+00:01:16.990 --> 00:01:17.000 align:start position:0%
+And I also didn't want the gradient to
+ 
+
+00:01:17.000 --> 00:01:19.070 align:start position:0%
+And I also didn't want the gradient to
+spread<00:01:17.440><c> too</c><00:01:17.600><c> much,</c><00:01:18.000><c> so</c><00:01:18.240><c> I</c><00:01:18.360><c> set</c><00:01:18.640><c> the</c><00:01:18.720><c> spread</c>
+
+00:01:19.070 --> 00:01:19.080 align:start position:0%
+spread too much, so I set the spread
+ 
+
+00:01:19.080 --> 00:01:20.630 align:start position:0%
+spread too much, so I set the spread
+value<00:01:19.640><c> to</c>
+
+00:01:20.630 --> 00:01:20.640 align:start position:0%
+value to
+ 
+
+00:01:20.640 --> 00:01:23.350 align:start position:0%
+value to
+uh<00:01:21.000><c> around</c><00:01:21.520><c> 140.</c><00:01:22.080><c> And</c><00:01:22.280><c> honestly,</c><00:01:22.720><c> this</c><00:01:23.000><c> works</c>
+
+00:01:23.350 --> 00:01:23.360 align:start position:0%
+uh around 140. And honestly, this works
+ 
+
+00:01:23.360 --> 00:01:24.590 align:start position:0%
+uh around 140. And honestly, this works
+really<00:01:23.640><c> well.</c>
+
+00:01:24.590 --> 00:01:24.600 align:start position:0%
+really well.
+ 
+
+00:01:24.600 --> 00:01:26.590 align:start position:0%
+really well.
+And<00:01:24.880><c> now,</c><00:01:25.240><c> the</c><00:01:25.400><c> main</c><00:01:25.680><c> thing</c><00:01:25.880><c> that</c><00:01:26.120><c> changed</c><00:01:26.480><c> the</c>
+
+00:01:26.590 --> 00:01:26.600 align:start position:0%
+And now, the main thing that changed the
+ 
+
+00:01:26.600 --> 00:01:29.270 align:start position:0%
+And now, the main thing that changed the
+background<00:01:27.040><c> from</c><00:01:27.280><c> this</c><00:01:27.520><c> to</c><00:01:27.720><c> this</c><00:01:28.200><c> is</c><00:01:28.800><c> slight</c>
+
+00:01:29.270 --> 00:01:29.280 align:start position:0%
+background from this to this is slight
+ 
+
+00:01:29.280 --> 00:01:31.110 align:start position:0%
+background from this to this is slight
+tint<00:01:29.640><c> of</c><00:01:30.080><c> color.</c>
+
+00:01:31.110 --> 00:01:31.120 align:start position:0%
+tint of color.
+ 
+
+00:01:31.120 --> 00:01:33.550 align:start position:0%
+tint of color.
+I<00:01:31.520><c> added</c><00:01:31.880><c> a</c><00:01:32.000><c> subtle</c><00:01:32.520><c> blue</c><00:01:32.840><c> tint</c><00:01:33.200><c> to</c><00:01:33.320><c> the</c>
+
+00:01:33.550 --> 00:01:33.560 align:start position:0%
+I added a subtle blue tint to the
+ 
+
+00:01:33.560 --> 00:01:36.590 align:start position:0%
+I added a subtle blue tint to the
+background<00:01:34.080><c> plane,</c><00:01:34.600><c> and</c><00:01:35.160><c> that's</c><00:01:35.600><c> what</c><00:01:35.880><c> gives</c>
+
+00:01:36.590 --> 00:01:36.600 align:start position:0%
+background plane, and that's what gives
+ 
+
+00:01:36.600 --> 00:01:38.430 align:start position:0%
+background plane, and that's what gives
+it<00:01:36.840><c> this</c><00:01:37.080><c> premium</c><00:01:37.440><c> look.</c>
+
+00:01:38.430 --> 00:01:38.440 align:start position:0%
+it this premium look.
+ 
+
+00:01:38.440 --> 00:01:40.830 align:start position:0%
+it this premium look.
+Next,<00:01:38.880><c> we</c><00:01:39.040><c> have</c><00:01:39.320><c> sharp</c><00:01:39.760><c> beam</c><00:01:40.040><c> of</c><00:01:40.280><c> light</c><00:01:40.600><c> that's</c>
+
+00:01:40.830 --> 00:01:40.840 align:start position:0%
+Next, we have sharp beam of light that's
+ 
+
+00:01:40.840 --> 00:01:42.710 align:start position:0%
+Next, we have sharp beam of light that's
+cutting<00:01:41.160><c> right</c><00:01:41.400><c> through</c><00:01:41.560><c> the</c><00:01:41.680><c> model.</c>
+
+00:01:42.710 --> 00:01:42.720 align:start position:0%
+cutting right through the model.
+ 
+
+00:01:42.720 --> 00:01:44.550 align:start position:0%
+cutting right through the model.
+Let<00:01:43.000><c> me</c><00:01:43.120><c> quickly</c><00:01:43.440><c> unhide</c><00:01:43.880><c> the</c><00:01:44.000><c> light</c><00:01:44.280><c> so</c><00:01:44.440><c> you</c>
+
+00:01:44.550 --> 00:01:44.560 align:start position:0%
+Let me quickly unhide the light so you
+ 
+
+00:01:44.560 --> 00:01:47.030 align:start position:0%
+Let me quickly unhide the light so you
+can<00:01:44.720><c> see</c><00:01:45.000><c> what's</c><00:01:45.480><c> going</c><00:01:45.960><c> on.</c>
+
+00:01:47.030 --> 00:01:47.040 align:start position:0%
+can see what's going on.
+ 
+
+00:01:47.040 --> 00:01:50.630 align:start position:0%
+can see what's going on.
+For<00:01:47.200><c> this,</c><00:01:47.560><c> I</c><00:01:47.840><c> used</c><00:01:49.000><c> an</c><00:01:49.280><c> area</c><00:01:49.560><c> light</c><00:01:50.000><c> again,</c>
+
+00:01:50.630 --> 00:01:50.640 align:start position:0%
+For this, I used an area light again,
+ 
+
+00:01:50.640 --> 00:01:52.510 align:start position:0%
+For this, I used an area light again,
+but<00:01:50.840><c> this</c><00:01:51.040><c> time</c><00:01:51.280><c> I</c><00:01:51.400><c> kept</c><00:01:51.720><c> the</c><00:01:51.840><c> intensity</c>
+
+00:01:52.510 --> 00:01:52.520 align:start position:0%
+but this time I kept the intensity
+ 
+
+00:01:52.520 --> 00:01:55.470 align:start position:0%
+but this time I kept the intensity
+pretty<00:01:53.080><c> low.</c><00:01:54.040><c> And</c><00:01:54.520><c> I</c><00:01:54.680><c> also</c><00:01:55.000><c> reduced</c><00:01:55.360><c> the</c>
+
+00:01:55.470 --> 00:01:55.480 align:start position:0%
+pretty low. And I also reduced the
+ 
+
+00:01:55.480 --> 00:01:58.070 align:start position:0%
+pretty low. And I also reduced the
+spread<00:01:55.800><c> value,</c><00:01:56.240><c> which</c><00:01:56.440><c> is</c><00:01:56.680><c> pretty</c><00:01:56.960><c> obvious.</c>
+
+00:01:58.070 --> 00:01:58.080 align:start position:0%
+spread value, which is pretty obvious.
+ 
+
+00:01:58.080 --> 00:01:59.470 align:start position:0%
+spread value, which is pretty obvious.
+Because<00:01:58.400><c> with</c><00:01:58.560><c> the</c><00:01:58.640><c> higher</c><00:01:58.960><c> spread,</c><00:01:59.320><c> the</c>
+
+00:01:59.470 --> 00:01:59.480 align:start position:0%
+Because with the higher spread, the
+ 
+
+00:01:59.480 --> 00:02:02.070 align:start position:0%
+Because with the higher spread, the
+light<00:01:59.840><c> was</c><00:02:00.120><c> spilling</c><00:02:00.520><c> too</c><00:02:00.720><c> much</c><00:02:01.440><c> the</c><00:02:01.720><c> sharp</c>
+
+00:02:02.070 --> 00:02:02.080 align:start position:0%
+light was spilling too much the sharp
+ 
+
+00:02:02.080 --> 00:02:03.750 align:start position:0%
+light was spilling too much the sharp
+look.
+
+00:02:03.750 --> 00:02:03.760 align:start position:0%
+look.
+ 
+
+00:02:03.760 --> 00:02:05.430 align:start position:0%
+look.
+The<00:02:03.960><c> goal</c><00:02:04.200><c> here</c><00:02:04.440><c> was</c><00:02:04.600><c> to</c><00:02:04.720><c> create</c><00:02:05.000><c> the</c><00:02:05.120><c> clean</c>
+
+00:02:05.430 --> 00:02:05.440 align:start position:0%
+The goal here was to create the clean
+ 
+
+00:02:05.440 --> 00:02:07.430 align:start position:0%
+The goal here was to create the clean
+focused<00:02:05.800><c> beam</c><00:02:06.040><c> of</c><00:02:06.280><c> light.</c>
+
+00:02:07.430 --> 00:02:07.440 align:start position:0%
+focused beam of light.
+ 
+
+00:02:07.440 --> 00:02:09.550 align:start position:0%
+focused beam of light.
+This<00:02:07.760><c> is</c><00:02:07.960><c> what</c><00:02:08.240><c> gives</c><00:02:08.600><c> that</c><00:02:08.840><c> cinematic</c><00:02:09.320><c> feel</c>
+
+00:02:09.550 --> 00:02:09.560 align:start position:0%
+This is what gives that cinematic feel
+ 
+
+00:02:09.560 --> 00:02:11.950 align:start position:0%
+This is what gives that cinematic feel
+to<00:02:09.679><c> the</c><00:02:09.759><c> render.</c><00:02:10.560><c> One</c><00:02:10.880><c> more</c><00:02:11.200><c> important</c><00:02:11.720><c> thing</c>
+
+00:02:11.950 --> 00:02:11.960 align:start position:0%
+to the render. One more important thing
+ 
+
+00:02:11.960 --> 00:02:13.910 align:start position:0%
+to the render. One more important thing
+that<00:02:12.200><c> really</c><00:02:12.480><c> helped</c><00:02:12.760><c> me</c><00:02:12.960><c> achieve</c><00:02:13.320><c> this</c><00:02:13.560><c> look</c>
+
+00:02:13.910 --> 00:02:13.920 align:start position:0%
+that really helped me achieve this look
+ 
+
+00:02:13.920 --> 00:02:16.630 align:start position:0%
+that really helped me achieve this look
+is<00:02:14.200><c> the</c><00:02:14.440><c> scale</c><00:02:14.920><c> of</c><00:02:15.040><c> the</c><00:02:15.160><c> model.</c><00:02:16.080><c> I</c><00:02:16.240><c> scaled</c><00:02:16.560><c> the</c>
+
+00:02:16.630 --> 00:02:16.640 align:start position:0%
+is the scale of the model. I scaled the
+ 
+
+00:02:16.640 --> 00:02:18.830 align:start position:0%
+is the scale of the model. I scaled the
+model<00:02:17.120><c> to</c><00:02:17.320><c> real-world</c><00:02:17.720><c> dimension,</c><00:02:18.400><c> and</c><00:02:18.560><c> after</c>
+
+00:02:18.830 --> 00:02:18.840 align:start position:0%
+model to real-world dimension, and after
+ 
+
+00:02:18.840 --> 00:02:20.710 align:start position:0%
+model to real-world dimension, and after
+that,<00:02:19.040><c> controlling</c><00:02:19.520><c> the</c><00:02:19.640><c> light</c><00:02:19.920><c> became</c><00:02:20.280><c> much</c>
+
+00:02:20.710 --> 00:02:20.720 align:start position:0%
+that, controlling the light became much
+ 
+
+00:02:20.720 --> 00:02:23.670 align:start position:0%
+that, controlling the light became much
+easier.<00:02:21.640><c> So,</c><00:02:22.200><c> definitely</c><00:02:22.800><c> make</c><00:02:23.120><c> sure</c><00:02:23.440><c> your</c>
+
+00:02:23.670 --> 00:02:23.680 align:start position:0%
+easier. So, definitely make sure your
+ 
+
+00:02:23.680 --> 00:02:26.270 align:start position:0%
+easier. So, definitely make sure your
+scale<00:02:24.080><c> is</c><00:02:24.280><c> correct.</c><00:02:25.280><c> It</c><00:02:25.480><c> makes</c><00:02:25.840><c> the</c><00:02:25.960><c> huge</c>
+
+00:02:26.270 --> 00:02:26.280 align:start position:0%
+scale is correct. It makes the huge
+ 
+
+00:02:26.280 --> 00:02:29.110 align:start position:0%
+scale is correct. It makes the huge
+difference.<00:02:27.360><c> Lastly,</c><00:02:28.120><c> we</c><00:02:28.240><c> don't</c><00:02:28.600><c> want</c><00:02:28.960><c> the</c>
+
+00:02:29.110 --> 00:02:29.120 align:start position:0%
+difference. Lastly, we don't want the
+ 
+
+00:02:29.120 --> 00:02:31.110 align:start position:0%
+difference. Lastly, we don't want the
+viewers<00:02:29.720><c> to</c><00:02:30.040><c> struggle</c><00:02:30.440><c> to</c><00:02:30.560><c> see</c><00:02:30.840><c> what's</c>
+
+00:02:31.110 --> 00:02:31.120 align:start position:0%
+viewers to struggle to see what's
+ 
+
+00:02:31.120 --> 00:02:34.110 align:start position:0%
+viewers to struggle to see what's
+happening<00:02:31.520><c> in</c><00:02:31.640><c> the</c><00:02:31.760><c> dark</c><00:02:32.080><c> areas.</c><00:02:33.120><c> So,</c><00:02:33.520><c> I</c><00:02:33.760><c> added</c>
+
+00:02:34.110 --> 00:02:34.120 align:start position:0%
+happening in the dark areas. So, I added
+ 
+
+00:02:34.120 --> 00:02:36.750 align:start position:0%
+happening in the dark areas. So, I added
+a<00:02:34.320><c> fill</c><00:02:34.720><c> light.</c><00:02:35.480><c> I</c><00:02:35.600><c> placed</c><00:02:36.000><c> it</c><00:02:36.280><c> in</c><00:02:36.400><c> the</c><00:02:36.480><c> same</c>
+
+00:02:36.750 --> 00:02:36.760 align:start position:0%
+a fill light. I placed it in the same
+ 
+
+00:02:36.760 --> 00:02:39.150 align:start position:0%
+a fill light. I placed it in the same
+direction<00:02:37.320><c> as</c><00:02:37.480><c> the</c><00:02:37.600><c> sharp</c><00:02:38.160><c> beam</c><00:02:38.400><c> light.</c><00:02:38.960><c> This</c>
+
+00:02:39.150 --> 00:02:39.160 align:start position:0%
+direction as the sharp beam light. This
+ 
+
+00:02:39.160 --> 00:02:42.190 align:start position:0%
+direction as the sharp beam light. This
+helps<00:02:40.080><c> soften</c><00:02:40.520><c> the</c><00:02:40.640><c> shadows</c><00:02:41.360><c> without</c><00:02:41.840><c> ruining</c>
+
+00:02:42.190 --> 00:02:42.200 align:start position:0%
+helps soften the shadows without ruining
+ 
+
+00:02:42.200 --> 00:02:43.830 align:start position:0%
+helps soften the shadows without ruining
+the<00:02:42.320><c> overall</c><00:02:42.720><c> look.</c>
+
+00:02:43.830 --> 00:02:43.840 align:start position:0%
+the overall look.
+ 
+
+00:02:43.840 --> 00:02:45.870 align:start position:0%
+the overall look.
+Now,<00:02:44.240><c> you</c><00:02:44.400><c> might</c><00:02:44.640><c> think</c><00:02:44.920><c> that</c><00:02:45.280><c> we</c><00:02:45.480><c> are</c><00:02:45.600><c> done</c>
+
+00:02:45.870 --> 00:02:45.880 align:start position:0%
+Now, you might think that we are done
+ 
+
+00:02:45.880 --> 00:02:48.630 align:start position:0%
+Now, you might think that we are done
+here,<00:02:46.200><c> but</c><00:02:46.440><c> we</c><00:02:46.520><c> can</c><00:02:46.680><c> push</c><00:02:46.880><c> this</c><00:02:47.160><c> even</c><00:02:47.560><c> further.</c>
+
+00:02:48.630 --> 00:02:48.640 align:start position:0%
+here, but we can push this even further.
+ 
+
+00:02:48.640 --> 00:02:51.350 align:start position:0%
+here, but we can push this even further.
+One<00:02:48.960><c> thing</c><00:02:49.120><c> that</c><00:02:49.320><c> really</c><00:02:49.560><c> helps</c><00:02:49.880><c> is</c><00:02:50.080><c> contrast.</c>
+
+00:02:51.350 --> 00:02:51.360 align:start position:0%
+One thing that really helps is contrast.
+ 
+
+00:02:51.360 --> 00:02:54.350 align:start position:0%
+One thing that really helps is contrast.
+So,<00:02:51.800><c> in</c><00:02:51.920><c> the</c><00:02:52.040><c> render</c><00:02:52.320><c> settings,</c><00:02:52.880><c> I</c><00:02:53.000><c> changed</c>
+
+00:02:54.350 --> 00:02:54.360 align:start position:0%
+So, in the render settings, I changed
+ 
+
+00:02:54.360 --> 00:02:57.910 align:start position:0%
+So, in the render settings, I changed
+the<00:02:55.040><c> look</c><00:02:55.520><c> from</c><00:02:55.920><c> base</c><00:02:56.280><c> to</c><00:02:56.400><c> high</c><00:02:56.520><c> contrast,</c><00:02:57.560><c> and</c>
+
+00:02:57.910 --> 00:02:57.920 align:start position:0%
+the look from base to high contrast, and
+ 
+
+00:02:57.920 --> 00:03:00.030 align:start position:0%
+the look from base to high contrast, and
+you<00:02:58.040><c> can</c><00:02:58.200><c> also</c><00:02:58.520><c> use</c><00:02:58.800><c> medium</c><00:02:59.120><c> contrast.</c><00:02:59.720><c> It</c>
+
+00:03:00.030 --> 00:03:00.040 align:start position:0%
+you can also use medium contrast. It
+ 
+
+00:03:00.040 --> 00:03:02.550 align:start position:0%
+you can also use medium contrast. It
+depends<00:03:00.600><c> on</c><00:03:00.840><c> your</c><00:03:01.000><c> preferences.</c>
+
+00:03:02.550 --> 00:03:02.560 align:start position:0%
+depends on your preferences.
+ 
+
+00:03:02.560 --> 00:03:05.430 align:start position:0%
+depends on your preferences.
+And<00:03:02.960><c> yeah,</c><00:03:03.280><c> that's</c><00:03:03.840><c> basically</c><00:03:04.280><c> how</c><00:03:04.600><c> I</c><00:03:04.720><c> lit</c><00:03:05.160><c> up</c>
+
+00:03:05.430 --> 00:03:05.440 align:start position:0%
+And yeah, that's basically how I lit up
+ 
+
+00:03:05.440 --> 00:03:06.910 align:start position:0%
+And yeah, that's basically how I lit up
+this<00:03:05.720><c> scene.</c>
+
+00:03:06.910 --> 00:03:06.920 align:start position:0%
+this scene.
+ 
+
+00:03:06.920 --> 00:03:09.750 align:start position:0%
+this scene.
+Now,<00:03:07.320><c> for</c><00:03:07.480><c> the</c><00:03:07.600><c> second</c><00:03:08.320><c> scene,</c>
+
+00:03:09.750 --> 00:03:09.760 align:start position:0%
+Now, for the second scene,
+ 
+
+00:03:09.760 --> 00:03:13.590 align:start position:0%
+Now, for the second scene,
+I<00:03:10.080><c> didn't</c><00:03:10.520><c> really</c><00:03:10.880><c> change</c><00:03:11.560><c> much.</c>
+
+00:03:13.590 --> 00:03:13.600 align:start position:0%
+I didn't really change much.
+ 
+
+00:03:13.600 --> 00:03:17.510 align:start position:0%
+I didn't really change much.
+Uh<00:03:14.200><c> I</c><00:03:14.320><c> just</c><00:03:14.520><c> rotated</c><00:03:14.920><c> the</c><00:03:15.040><c> model,</c><00:03:15.920><c> and</c><00:03:16.920><c> then</c><00:03:17.400><c> I</c>
+
+00:03:17.510 --> 00:03:17.520 align:start position:0%
+Uh I just rotated the model, and then I
+ 
+
+00:03:17.520 --> 00:03:20.830 align:start position:0%
+Uh I just rotated the model, and then I
+duplicated<00:03:18.120><c> the</c><00:03:18.280><c> same</c><00:03:18.840><c> sharp</c><00:03:19.280><c> light</c>
+
+00:03:20.830 --> 00:03:20.840 align:start position:0%
+duplicated the same sharp light
+ 
+
+00:03:20.840 --> 00:03:22.990 align:start position:0%
+duplicated the same sharp light
+and<00:03:21.120><c> placed</c><00:03:21.480><c> it</c><00:03:21.720><c> on</c><00:03:21.880><c> the</c><00:03:21.960><c> opposite</c><00:03:22.440><c> side,</c><00:03:22.800><c> and</c>
+
+00:03:22.990 --> 00:03:23.000 align:start position:0%
+and placed it on the opposite side, and
+ 
+
+00:03:23.000 --> 00:03:24.870 align:start position:0%
+and placed it on the opposite side, and
+that's<00:03:23.320><c> pretty</c><00:03:23.560><c> much</c><00:03:23.880><c> for</c><00:03:24.120><c> this</c><00:03:24.400><c> setup.</c>
+
+00:03:24.870 --> 00:03:24.880 align:start position:0%
+that's pretty much for this setup.
+ 
+
+00:03:24.880 --> 00:03:27.270 align:start position:0%
+that's pretty much for this setup.
+Sometimes,<00:03:25.840><c> small</c><00:03:26.160><c> changes</c><00:03:26.600><c> like</c><00:03:26.800><c> this</c><00:03:27.120><c> are</c>
+
+00:03:27.270 --> 00:03:27.280 align:start position:0%
+Sometimes, small changes like this are
+ 
+
+00:03:27.280 --> 00:03:30.190 align:start position:0%
+Sometimes, small changes like this are
+enough<00:03:27.520><c> to</c><00:03:27.640><c> create</c><00:03:28.680><c> completely</c><00:03:29.720><c> different</c>
+
+00:03:30.190 --> 00:03:30.200 align:start position:0%
+enough to create completely different
+ 
+
+00:03:30.200 --> 00:03:32.390 align:start position:0%
+enough to create completely different
+looks.
+
+00:03:32.390 --> 00:03:32.400 align:start position:0%
+looks.
+ 
+
+00:03:32.400 --> 00:03:34.630 align:start position:0%
+looks.
+Now,<00:03:32.760><c> for</c><00:03:32.880><c> the</c><00:03:33.040><c> third</c><00:03:33.480><c> scene,</c><00:03:34.000><c> it's</c><00:03:34.360><c> pretty</c>
+
+00:03:34.630 --> 00:03:34.640 align:start position:0%
+Now, for the third scene, it's pretty
+ 
+
+00:03:34.640 --> 00:03:37.430 align:start position:0%
+Now, for the third scene, it's pretty
+much<00:03:34.960><c> the</c><00:03:35.120><c> same</c><00:03:35.480><c> setup.</c><00:03:36.240><c> I</c><00:03:36.400><c> just</c><00:03:36.720><c> changed</c><00:03:37.240><c> the</c>
+
+00:03:37.430 --> 00:03:37.440 align:start position:0%
+much the same setup. I just changed the
+ 
+
+00:03:37.440 --> 00:03:40.390 align:start position:0%
+much the same setup. I just changed the
+angle<00:03:37.760><c> of</c><00:03:38.040><c> model</c><00:03:38.600><c> again,</c><00:03:39.680><c> and</c><00:03:39.960><c> as</c><00:03:40.120><c> you</c><00:03:40.240><c> can</c>
+
+00:03:40.390 --> 00:03:40.400 align:start position:0%
+angle of model again, and as you can
+ 
+
+00:03:40.400 --> 00:03:42.150 align:start position:0%
+angle of model again, and as you can
+see,<00:03:40.600><c> the</c><00:03:40.760><c> lighting</c><00:03:41.080><c> setup</c><00:03:41.360><c> is</c><00:03:41.520><c> exactly</c><00:03:42.040><c> the</c>
+
+00:03:42.150 --> 00:03:42.160 align:start position:0%
+see, the lighting setup is exactly the
+ 
+
+00:03:42.160 --> 00:03:45.150 align:start position:0%
+see, the lighting setup is exactly the
+same<00:03:42.480><c> as</c><00:03:42.680><c> before.</c><00:03:43.600><c> I</c><00:03:43.760><c> didn't</c><00:03:44.360><c> feel</c><00:03:44.800><c> the</c><00:03:44.920><c> need</c>
+
+00:03:45.150 --> 00:03:45.160 align:start position:0%
+same as before. I didn't feel the need
+ 
+
+00:03:45.160 --> 00:03:47.710 align:start position:0%
+same as before. I didn't feel the need
+to<00:03:45.280><c> change</c><00:03:45.640><c> anything</c><00:03:46.120><c> because</c><00:03:46.640><c> the</c><00:03:46.880><c> existing</c>
+
+00:03:47.710 --> 00:03:47.720 align:start position:0%
+to change anything because the existing
+ 
+
+00:03:47.720 --> 00:03:49.590 align:start position:0%
+to change anything because the existing
+lighting<00:03:48.320><c> already</c><00:03:48.720><c> works</c><00:03:49.080><c> well</c><00:03:49.360><c> for</c>
+
+00:03:49.590 --> 00:03:49.600 align:start position:0%
+lighting already works well for
+ 
+
+00:03:49.600 --> 00:03:51.510 align:start position:0%
+lighting already works well for
+different<00:03:49.960><c> angles.</c>
+
+00:03:51.510 --> 00:03:51.520 align:start position:0%
+different angles.
+ 
+
+00:03:51.520 --> 00:03:54.030 align:start position:0%
+different angles.
+Now,<00:03:52.120><c> for</c><00:03:52.320><c> the</c><00:03:52.480><c> last</c><00:03:52.960><c> scene,</c>
+
+00:03:54.030 --> 00:03:54.040 align:start position:0%
+Now, for the last scene,
+ 
+
+00:03:54.040 --> 00:03:55.470 align:start position:0%
+Now, for the last scene,
+you<00:03:54.200><c> can</c><00:03:54.440><c> see</c>
+
+00:03:55.470 --> 00:03:55.480 align:start position:0%
+you can see
+ 
+
+00:03:55.480 --> 00:03:57.350 align:start position:0%
+you can see
+I'm<00:03:55.760><c> using</c><00:03:56.040><c> the</c><00:03:56.120><c> same</c><00:03:56.400><c> lighting</c><00:03:56.680><c> setup</c><00:03:57.080><c> as</c><00:03:57.240><c> the</c>
+
+00:03:57.350 --> 00:03:57.360 align:start position:0%
+I'm using the same lighting setup as the
+ 
+
+00:03:57.360 --> 00:03:58.750 align:start position:0%
+I'm using the same lighting setup as the
+first<00:03:57.760><c> one.</c>
+
+00:03:58.750 --> 00:03:58.760 align:start position:0%
+first one.
+ 
+
+00:03:58.760 --> 00:04:02.230 align:start position:0%
+first one.
+And<00:03:59.080><c> overall,</c><00:04:00.080><c> I</c><00:04:00.360><c> have</c><00:04:01.320><c> kept</c><00:04:01.760><c> just</c><00:04:02.000><c> one</c>
+
+00:04:02.230 --> 00:04:02.240 align:start position:0%
+And overall, I have kept just one
+ 
+
+00:04:02.240 --> 00:04:03.950 align:start position:0%
+And overall, I have kept just one
+lighting<00:04:02.600><c> setup</c><00:04:02.960><c> for</c><00:04:03.200><c> all</c><00:04:03.440><c> the</c><00:04:03.560><c> different</c>
+
+00:04:03.950 --> 00:04:03.960 align:start position:0%
+lighting setup for all the different
+ 
+
+00:04:03.960 --> 00:04:06.630 align:start position:0%
+lighting setup for all the different
+shots,<00:04:04.800><c> which</c><00:04:05.080><c> helps</c><00:04:05.400><c> maintain</c><00:04:05.840><c> consistency</c>
+
+00:04:06.630 --> 00:04:06.640 align:start position:0%
+shots, which helps maintain consistency
+ 
+
+00:04:06.640 --> 00:04:08.430 align:start position:0%
+shots, which helps maintain consistency
+across<00:04:07.000><c> the</c><00:04:07.080><c> animation.</c>
+
+00:04:08.430 --> 00:04:08.440 align:start position:0%
+across the animation.
+ 
+
+00:04:08.440 --> 00:04:10.190 align:start position:0%
+across the animation.
+And<00:04:08.640><c> yeah,</c><00:04:08.920><c> that's</c><00:04:09.200><c> pretty</c><00:04:09.400><c> much</c><00:04:09.640><c> it</c><00:04:09.840><c> for</c><00:04:10.000><c> this</c>
+
+00:04:10.190 --> 00:04:10.200 align:start position:0%
+And yeah, that's pretty much it for this
+ 
+
+00:04:10.200 --> 00:04:12.670 align:start position:0%
+And yeah, that's pretty much it for this
+tutorial.<00:04:10.960><c> If</c><00:04:11.120><c> you</c><00:04:11.240><c> found</c><00:04:11.600><c> this</c><00:04:11.920><c> helpful,</c><00:04:12.480><c> let</c>
+
+00:04:12.670 --> 00:04:12.680 align:start position:0%
+tutorial. If you found this helpful, let
+ 
+
+00:04:12.680 --> 00:04:14.310 align:start position:0%
+tutorial. If you found this helpful, let
+me<00:04:12.760><c> know</c><00:04:12.880><c> in</c><00:04:12.960><c> the</c><00:04:13.040><c> comments.</c><00:04:13.560><c> And</c><00:04:13.800><c> if</c><00:04:14.040><c> this</c>
+
+00:04:14.310 --> 00:04:14.320 align:start position:0%
+me know in the comments. And if this
+ 
+
+00:04:14.320 --> 00:04:16.750 align:start position:0%
+me know in the comments. And if this
+video<00:04:14.640><c> gets</c><00:04:14.920><c> around</c><00:04:15.240><c> 30</c><00:04:15.480><c> comments,</c><00:04:16.400><c> I</c><00:04:16.560><c> will</c>
+
+00:04:16.750 --> 00:04:16.760 align:start position:0%
+video gets around 30 comments, I will
+ 
+
+00:04:16.760 --> 00:04:19.190 align:start position:0%
+video gets around 30 comments, I will
+drop<00:04:17.120><c> the</c><00:04:17.280><c> full</c><00:04:17.560><c> animation</c><00:04:18.120><c> breakdown</c><00:04:18.720><c> next</c>
+
+00:04:19.190 --> 00:04:19.200 align:start position:0%
+drop the full animation breakdown next
+ 
+
+00:04:19.200 --> 00:04:21.760 align:start position:0%
+drop the full animation breakdown next
+week.
+

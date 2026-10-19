@@ -1,0 +1,160 @@
+This video was sponsored by Envato. I don't think there's a single more requested video than a shadow tutorial
+I've done some highlights tutorials
+I've done a glow tutorial, but you guys just cannot stop asking me for a shadow one
+So I guess here we are all the assets
+I'm gonna use today are from Envato elements the sponsor of today's video if you want to check them out
+They're down below in the description more on them later though for now. Let's get straight into the first example
+For today's first example, let's begin simple this right here is a marble table and this is a ball
+I know crazy stuff and I would like to place this ball just over here
+This looks very fake because we don't have any shadows whatsoever
+Would you first have to understand I chose these images because they have very neutral lighting that is important to know
+There is no hard sunlight or something now the first step
+I like to do is add an adjustment layer in this case
+Exposure you can also find that down here and we're gonna put that below the ball of course
+Then if you decrease the exposure you make a very dark layer
+Essentially you can also play around with the gamma to make it just slightly more
+Contrastful but something like this should be fine where it's almost completely black
+Then I'll invert the mask using control or command I I will grab a brush and right click to edit that brush
+We're gonna make that slightly bigger maybe about this size
+You can do this by the way by holding alt hold your right click and move to the sides
+Also want to make sure the hardness is on zero and we can kind of make this go flatter like so that creates a nice round
+Flat brush you can tell on the ball this side is slightly lighter than this side
+So we can assume that there's a very subtle light coming from the left in this case with that in mind
+Let's go ahead and decrease the flow up here to something very low like maybe
+Eight and just by clicking on it making it smaller clicking again
+I can be bigger click again
+And we want to lean slightly to the right because as we know the light comes from the left
+So just by clicking very subtly not too much
+You can kind of create a shadow and be sure to make it darker the closer it gets to the subject essentially where it touches
+The ball that's where you want it to be super duper dark and the reason the shadow has to look so soft
+Is because the lighting is soft if this was sunlight you'd see a very sharp edge around the shadow as you can tell this already
+Looks a lot better then we can do the same thing another adjustment layer
+This time we'll clip it to the ball by holding alt and clicking in between in the two layers in between in the two layer
+English do the same thing just a little bit darker like so select the mask inverted with control i and now with just a
+Regular round brush we can paint the same kind of thing except this time on top of the ball
+Just very softly down here because as you know the light isn't really gonna hit that part of the ball be sure to be
+Subtle with it however you don't want to overdo this because it will end up looking very very strange
+Just something subtle like this is absolutely fine. So here we have before and after now say we have a background
+That has direct harsh lighting
+I can tell this image has that by the very dark edges around the the bricks you can tell over here
+There are some dense they are very dark and very sharp
+So the process is very similar again exposure make that darker invert the mask this time
+However, we want to have a hard brush so let's increase the hardness to
+Something higher closer to 90% again
+We'll make it flat because of the angle and this time we want to make sure the base of the ball ends there and simply
+Click a few times like so accidentally put it on top of the ball
+Here you go
+You can always enhance that slightly with a darker brush underneath for example the base of the shadow can be a bit darker than the
+Rest you can even decide to slightly fit it out at the end and also once again
+We're gonna need that shadow on the ball itself and this shadow also is a lot
+Sharper than the previous one and after some tweaking it could look something like this
+You can tell there's a huge difference between this and the previous version because of that lighting difference hard light
+Creates hard edges in the shadow soft light creates very faded shadows
+Be sure though in both cases the closer to the subject the darker they get and photo elements ladies and gentlemen has had a huge
+rebrand the logo and website are completely new and they look fantastic super clean and
+Well much more modern if we're honest, but worry not because the content of this platform still is identical
+Millions upon millions of digital assets
+There's loads of stuff even beyond the stock photos and 3d assets. I've been using today
+I mean take this logo animation for example that is from a lot of elements and this font as well
+And there are loads more categories for example. Where did you think this music is from?
+It is easy to say they have a lot of stuff, of course
+But at the end of the day it's all about quality and where it gets you for me personally over the years and photo
+Allowed me to make content quicker better and most of all more fun
+It's kind of a source of inspiration most of the time you get unlimited access. Yes, you heard that right
+Unlimited access to everything they have for just 16 dollars a month with an annual subscription
+That is a steal be quick check it out down below then now let's get to the next one
+Now let's have some more fun with this here
+I have a road with no direct sunlight the Sun is going down too far for it to hit this road
+So you already know we're gonna need some soft shadows
+I thought it'd be cool to add this sports car to this road and I will flip it because as you can see in the background
+The light is coming from the right and even though there is no direct sunlight
+It's still nice if it kind of matches with the car
+So you can tell on the car there technically is direct sunlight over here, but we're just gonna pretend that's not there
+It's not too obvious anyway, just like previously a new adjustment layer exposure make that a whole lot
+Darker like so invert the mask and with our very soft and flat brush
+We'll go ahead and paint underneath this car and we'll start at the points where it's actually touching the road over here
+Fades out to nothingness on the sides kind of something like this
+We're gonna do that exact thing for every single tire and the ones at the back as well when you've done that
+It looks a lot better already, but something is still off now
+You can make a separate adjustment layer for this to come split these up
+I like to do that sometimes so just the same thing again invert the mask and this time
+We're gonna paint the entire area underneath the car because guess what no light hits that whatsoever
+And don't be afraid to make this really really dark
+You can always just experiment with it
+You can always erase it so just go crazy for it all the way to the front over here and there
+Does that not look?
+20 times better now if you think I might have overdone it
+You can always just play around with the sliders as well. Maybe adding some contrast see that looks pretty good
+Then once again same thing to the car make sure it is clipped
+Invert the mask and this time we're gonna paint on the car itself mainly near below
+We just want to add a slightly darker
+Effect if the light is not hitting this side of the car as much as the other there you go before and after
+Now this of course is just the shadows color grading could make this look even better
+You get the idea it is just looking a lot better than without any of this before and after
+Now what if you had something similar except this time there is harsh sunlight?
+How will you determine the shape of the shadow?
+Well, let me tell you at first this is definitely gonna be a bit of a guess
+Let me first add some slight contrast to this car because it's a bit off possibly some color grading as well
+It's just for a very slight tone, but then for the shadow part once again the same thing this time
+However, it is gonna be slightly trickier. Let's first go ahead and create the ambient shadow
+The very dark touching shadow just underneath the wheels with our soft brush and the whole lower side in general has to be
+Super dark because no light hits this whatsoever in the front here, too
+I'm also gonna make this side of the car a bit darker already because it's very clear the light comes from the rise
+We can even see the sun over here
+Look, this is before and this is after just a lot darker on this side mainly
+But then the shadow of this car as you can see the sun is very low meaning the shadow is gonna be very long
+The light hits this point which goes all the way like I don't know here
+This once again isn't precise just a bit of a guess
+Then you can put that same line on the top of the windshield on the spoiler
+And then you end up with them with this and kind of play around with the sliders in this case
+Now technically there should be a way to erase these really
+Highlighted pieces which of course are sunlight those technically can't be there
+There are of course various ways you can use to try and hide them this video isn't about
+Removing those kind of things just the shadows so for now. Let's just focus on that
+This already kind of looks like something. Let me tell you I struggle with this too
+It's always gonna look just slightly weird the further back it goes
+You can just slightly fit it out
+Maybe and really this is just tweaking it until it looks like something you like but let me say it again
+This is how I do it. I'm not sure if this is 100% accurate
+Everybody has their own ways of doing stuff like this
+So really if you find this useful make sure to use it if you don't then please don't all things considered though
+Here is before and here is after
+Now this is just an example
+I thought could be fun because it has just a few spots that touch the wood this again is neutral lighting
+So no harsh shadows no weirdly shaped shadows
+But here it's important to make sure not to add shadows underneath this for example because guess what that doesn't actually
+Touch the wood the only areas that touch the wood are this
+This and that so that's where you want the harsh shadows to be so once again a very low flow and very dark
+Near the actual touching point then a very blurry very vague shadow for the stick thingy's and the closer
+You get to the actual touching bit the sharper it gets the darker it gets so just again over here
+It's gonna be very very dark almost black in fact there and then here once again fade out and fade it back in
+With a weird way of saying it but it's kind of what it is and just like that
+We're creating just a very subtle
+Shadow here you go before and after very nice
+Then finally a bit of a bonus example
+I guess what if it is straight from above and in these cases
+It's very important to know which parts touch the wood or the background in this case for example
+this part is touching and
+Let's say in the middle of this it is
+Everything else is floating above say this spoon was entirely flat
+You could literally just do this we just make a drop shadow and change the direction like this
+And then you would pretty much be done
+But this looks
+Decent to be fair but slightly off instead with these touching points in mind
+That's once again create a dark adjustment layer
+The light is coming pretty much from the left as you can tell here
+Then let's begin over here the shadow is just going around the round bit like so
+It's very close not touching but I see I think this is fine
+Yeah, then this part is actually a bit further away
+So that means the shadow is also gonna be a bit further away from it and then here
+It slowly gets closer again meaning the shadow is gonna be really dark and really close to it like so
+Just around the edge. Let's turn this off. You can see the difference here where it touches
+There's just a really dark shadow
+Right on that edge then as you go further away from the table
+It kind of goes further away from the shadow as you can tell that it simply looks right like that
+So that is something very important to keep in mind the distance from the subject to what it's standing on laying on
+Whatever is the before and the after
+I hope these tips help this is how I've been doing my shadows for as long as I can remember
+So well, then I guess that is pretty much it for today
+If you enjoyed this video make very sure to leave a like subscribe hit the button not to miss a single future video
+And I hope I'll see you in the next one

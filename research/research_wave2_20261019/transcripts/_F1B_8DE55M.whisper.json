@@ -1,0 +1,17 @@
+{
+ "id": "_F1B_8DE55M",
+ "title": "🔥 Qwen-Image-Edit-2509 IS LIVE — and it’s a GAME CHANGER. 🔥",
+ "channel": "Qwen",
+ "url": "https://www.youtube.com/watch?v=_F1B_8DE55M",
+ "query": "qwen image edit",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.377,
+ "duration_s": 57.7,
+ "chars": 0,
+ "segments": [],
+ "transcribed_at": "2026-10-19T08:57:05.626802+00:00",
+ "seconds": 3.1
+}

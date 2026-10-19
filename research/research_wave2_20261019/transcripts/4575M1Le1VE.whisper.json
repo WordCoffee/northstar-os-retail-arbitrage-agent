@@ -1,0 +1,1958 @@
+{
+ "id": "4575M1Le1VE",
+ "title": "How To Create High-End Product Photos With Photoshop!",
+ "channel": "Brendan Williams",
+ "url": "https://www.youtube.com/watch?v=4575M1Le1VE",
+ "query": "product photo composite tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 922.3,
+ "chars": 18331,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.38,
+   "text": "Today I want to prove to you how easy product photos can be without a whole lot of technical"
+  },
+  {
+   "start": 4.38,
+   "end": 5.96,
+   "text": "skills or fancy tools."
+  },
+  {
+   "start": 5.96,
+   "end": 8.72,
+   "text": "Just your camera, Photoshop, and some other household items."
+  },
+  {
+   "start": 8.72,
+   "end": 12.28,
+   "text": "First you'll need a piece of paper, maybe two just to be safe, your products which"
+  },
+  {
+   "start": 12.28,
+   "end": 16.84,
+   "text": "in my case is my partner's face lotion, don't tell her I took them, and a camera"
+  },
+  {
+   "start": 16.84,
+   "end": 20.96,
+   "text": "like your phone or for me the camera that I'm currently recording this video with."
+  },
+  {
+   "start": 20.96,
+   "end": 25.0,
+   "text": "Finally you'll need a window or a white light which I'll be using this LED panel"
+  },
+  {
+   "start": 25.0,
+   "end": 28.32,
+   "text": "I use in all my videos, link below if you want to check it out, but otherwise"
+  },
+  {
+   "start": 28.32,
+   "end": 32.36,
+   "text": "you may be able to get away with your phone's flashlight depending on the size of your product."
+  },
+  {
+   "start": 32.36,
+   "end": 35.04,
+   "text": "Oh, and you'll need Photoshop too, I guess that's kind of important."
+  },
+  {
+   "start": 35.04,
+   "end": 37.96,
+   "text": "Alright, our gear is assembled, let's go take some photos."
+  },
+  {
+   "start": 37.96,
+   "end": 41.64,
+   "text": "First I'll place my piece of paper against a cup for support, then place my product"
+  },
+  {
+   "start": 41.64,
+   "end": 43.64,
+   "text": "near the edge of that paper."
+  },
+  {
+   "start": 43.64,
+   "end": 47.08,
+   "text": "For good luck I'll also add a second piece of paper to catch more of the shadow."
+  },
+  {
+   "start": 47.08,
+   "end": 49.88,
+   "text": "Now I'll flick on my light and point it at the product, but this could also be"
+  },
+  {
+   "start": 49.88,
+   "end": 53.04,
+   "text": "your camera flashlight or even an LED lamp if you have that too."
+  },
+  {
+   "start": 53.04,
+   "end": 56.44,
+   "text": "Next you want to frame the photo so the white paper can be seen all around the"
+  },
+  {
+   "start": 56.48,
+   "end": 60.08,
+   "text": "edges of the product so that this will make life easier when it comes time to cut"
+  },
+  {
+   "start": 60.08,
+   "end": 63.6,
+   "text": "out the product in Photoshop. And if you're photographing multiple products like I am"
+  },
+  {
+   "start": 63.6,
+   "end": 67.04,
+   "text": "putting your camera on a tripod is a good idea to make sure that all of your"
+  },
+  {
+   "start": 67.04,
+   "end": 70.76,
+   "text": "framing is identical across every photo. Your camera settings don't really matter"
+  },
+  {
+   "start": 70.76,
+   "end": 73.6,
+   "text": "as long as it's properly exposed, but ideally you want to shoot with an"
+  },
+  {
+   "start": 73.6,
+   "end": 77.44,
+   "text": "aperture of f11 or greater to ensure the whole product is in focus and you"
+  },
+  {
+   "start": 77.44,
+   "end": 80.64,
+   "text": "don't have too shallow of the depth of field. Once you're done, import your"
+  },
+  {
+   "start": 80.64,
+   "end": 84.28,
+   "text": "photos and bring them into Photoshop. In my case I'll be working with some"
+  },
+  {
+   "start": 84.32,
+   "end": 87.8,
+   "text": "pretty well loved bottles of lotion so I'll need to use the clone stamp tool and"
+  },
+  {
+   "start": 87.8,
+   "end": 90.68,
+   "text": "the healing brush tools to touch them up. I'll leave a video up in the corner"
+  },
+  {
+   "start": 90.68,
+   "end": 93.56,
+   "text": "right now if you're not sure how to use those tools because they're a bit"
+  },
+  {
+   "start": 93.56,
+   "end": 96.28,
+   "text": "outside of the scope of today's tutorial. Then you'll need to cut out each of"
+  },
+  {
+   "start": 96.28,
+   "end": 100.08,
+   "text": "the products with the pen tool along with a second path around the shadow"
+  },
+  {
+   "start": 100.08,
+   "end": 103.16,
+   "text": "to place it on its own layer as well. Again if you aren't sure how to"
+  },
+  {
+   "start": 103.16,
+   "end": 106.72,
+   "text": "use the pen tool I'll leave some resources down below to learn more."
+  },
+  {
+   "start": 106.72,
+   "end": 109.32,
+   "text": "And now that that's parts out of the way let's work through the rest"
+  },
+  {
+   "start": 109.32,
+   "end": 113.68,
+   "text": "of this together here in Photoshop first creating a new document for our"
+  },
+  {
+   "start": 113.72,
+   "end": 117.84,
+   "text": "product photo. To create a new document we'll just go to file new and then"
+  },
+  {
+   "start": 117.84,
+   "end": 122.12,
+   "text": "we'll type in our desired dimensions. In this case 3000 by 2300 pixels with"
+  },
+  {
+   "start": 122.12,
+   "end": 125.64,
+   "text": "a 300 pixels per inch resolution we'll click create. Now we have that new"
+  },
+  {
+   "start": 125.64,
+   "end": 129.32,
+   "text": "document in a separate tab. Going back over to my images I need to cut out"
+  },
+  {
+   "start": 129.32,
+   "end": 132.88,
+   "text": "both the product and the shadow from my image. So since I already did this"
+  },
+  {
+   "start": 132.88,
+   "end": 136.24,
+   "text": "previously I just saved my pen path as a work path so I'll just"
+  },
+  {
+   "start": 136.24,
+   "end": 139.6,
+   "text": "reactivate that by holding command or control clicking on that thumbnail"
+  },
+  {
+   "start": 139.6,
+   "end": 143.28,
+   "text": "to reactivate that selection. And now going to that image layer I can"
+  },
+  {
+   "start": 143.32,
+   "end": 146.48,
+   "text": "just click on the layer mask icon to remove that background. Now before"
+  },
+  {
+   "start": 146.48,
+   "end": 149.4,
+   "text": "we move this into our new product photo I also need to select the"
+  },
+  {
+   "start": 149.4,
+   "end": 152.44,
+   "text": "shadow like I said. So I'm going to press command or control J to"
+  },
+  {
+   "start": 152.44,
+   "end": 155.52,
+   "text": "duplicate that image layer then I'll right click on that layer mask"
+  },
+  {
+   "start": 155.52,
+   "end": 158.24,
+   "text": "and choose delete layer mask. Now we'll grab our pen tool by"
+  },
+  {
+   "start": 158.24,
+   "end": 162.32,
+   "text": "pressing P zoom in and we can just go and make a rough selection"
+  },
+  {
+   "start": 162.32,
+   "end": 166.64,
+   "text": "around the edge of our shadow here. Something like this. Connect to"
+  },
+  {
+   "start": 166.64,
+   "end": 171.2,
+   "text": "the beginning right click go to make selection put in 0.5 feather radius"
+  },
+  {
+   "start": 171.2,
+   "end": 174.16,
+   "text": "and click OK. Now with this selection active and our duplicated"
+  },
+  {
+   "start": 174.16,
+   "end": 177.0,
+   "text": "layer selected in the layers panel will add a layer mask again"
+  },
+  {
+   "start": 177.0,
+   "end": 180.48,
+   "text": "for the shadow and I'll drag this below our main image layer."
+  },
+  {
+   "start": 180.76,
+   "end": 184.84,
+   "text": "I'll call this to shadow and I'll call this one to main product."
+  },
+  {
+   "start": 184.88,
+   "end": 187.44,
+   "text": "Now we will need to repeat this process with any other products"
+  },
+  {
+   "start": 187.44,
+   "end": 190.0,
+   "text": "that you have. So I'm going to do the same thing with my other"
+  },
+  {
+   "start": 190.0,
+   "end": 193.68,
+   "text": "lotion bottle really quickly. Now let's go and bring our images"
+  },
+  {
+   "start": 193.68,
+   "end": 196.96,
+   "text": "into our other document. But before I do that since I have"
+  },
+  {
+   "start": 196.96,
+   "end": 199.28,
+   "text": "some spot removal layers because I had to touch up all these"
+  },
+  {
+   "start": 199.32,
+   "end": 202.12,
+   "text": "bottles with the clone stamp and the healing tools I'm going to"
+  },
+  {
+   "start": 202.12,
+   "end": 205.04,
+   "text": "shift click both those and then press command or control E to"
+  },
+  {
+   "start": 205.04,
+   "end": 208.4,
+   "text": "merge them onto one layer for my product. Now I'm going to"
+  },
+  {
+   "start": 208.4,
+   "end": 211.28,
+   "text": "shift click both those layers grab my move tool by pressing"
+  },
+  {
+   "start": 211.28,
+   "end": 215.44,
+   "text": "V and then move this up and over to my new project like so"
+  },
+  {
+   "start": 215.84,
+   "end": 220.88,
+   "text": "click yes and then I'll zoom out and scale this down for now"
+  },
+  {
+   "start": 220.96,
+   "end": 223.28,
+   "text": "to something like this. Now before we bring in the next"
+  },
+  {
+   "start": 223.28,
+   "end": 226.24,
+   "text": "product we're going to create the area that our product is"
+  },
+  {
+   "start": 226.24,
+   "end": 228.0,
+   "text": "going to sit on. We're going to do that with two"
+  },
+  {
+   "start": 228.08,
+   "end": 230.4,
+   "text": "different shape layers. But what we can do to make this look"
+  },
+  {
+   "start": 230.4,
+   "end": 234.56,
+   "text": "realistic is use the original image and use the countertop that"
+  },
+  {
+   "start": 234.56,
+   "end": 237.84,
+   "text": "was sitting on to get the right angle for our shape that way"
+  },
+  {
+   "start": 238.0,
+   "end": 240.64,
+   "text": "it actually looks like a product is sitting on something."
+  },
+  {
+   "start": 240.64,
+   "end": 243.2,
+   "text": "So to do this I'll click on the one layer that I have an"
+  },
+  {
+   "start": 243.2,
+   "end": 245.04,
+   "text": "image with which is the shadow layer and I'll press"
+  },
+  {
+   "start": 245.04,
+   "end": 247.36,
+   "text": "command or control J to duplicate it and I'll right"
+  },
+  {
+   "start": 247.36,
+   "end": 250.24,
+   "text": "click on the layer mask and go to delete layer mask."
+  },
+  {
+   "start": 250.64,
+   "end": 253.12,
+   "text": "I'll drag this down below everything else. I'll turn"
+  },
+  {
+   "start": 253.12,
+   "end": 256.24,
+   "text": "off these other layers for now. Now what we can see"
+  },
+  {
+   "start": 256.24,
+   "end": 260.08,
+   "text": "here is the angle that the countertop is at. So we"
+  },
+  {
+   "start": 260.08,
+   "end": 262.64,
+   "text": "want to replicate that with a shape. So grabbing the rectangle"
+  },
+  {
+   "start": 262.64,
+   "end": 265.84,
+   "text": "tool by pressing U on our keyboard will set the shape"
+  },
+  {
+   "start": 265.84,
+   "end": 268.72,
+   "text": "just to a gray color for now or a light gray color and"
+  },
+  {
+   "start": 268.72,
+   "end": 270.96,
+   "text": "make sure our stroke is set to transparent by clicking"
+  },
+  {
+   "start": 270.96,
+   "end": 272.96,
+   "text": "this box here. Now I'll click and drag out just to"
+  },
+  {
+   "start": 272.96,
+   "end": 275.76,
+   "text": "create a basic rectangle like so and now we need to"
+  },
+  {
+   "start": 275.76,
+   "end": 278.24,
+   "text": "transform it to fit our countertop or the plane"
+  },
+  {
+   "start": 278.24,
+   "end": 279.84,
+   "text": "that our products will sit on. So I'll press"
+  },
+  {
+   "start": 279.84,
+   "end": 281.76,
+   "text": "command or control T and then hold command or"
+  },
+  {
+   "start": 281.76,
+   "end": 284.48,
+   "text": "control and then just drag these anchor points"
+  },
+  {
+   "start": 284.48,
+   "end": 287.68,
+   "text": "wherever we want to basically match the angle of"
+  },
+  {
+   "start": 287.68,
+   "end": 291.6,
+   "text": "our table. And an easy way to tell is just by looking"
+  },
+  {
+   "start": 291.6,
+   "end": 294.72,
+   "text": "at the edges here. So we have a clear edge on this side"
+  },
+  {
+   "start": 294.72,
+   "end": 297.44,
+   "text": "here and down here as well. So as long as I'm matching"
+  },
+  {
+   "start": 298.08,
+   "end": 302.16,
+   "text": "the rough angle of each of these sides I should be"
+  },
+  {
+   "start": 302.16,
+   "end": 304.72,
+   "text": "left with a shape that matches the original plane"
+  },
+  {
+   "start": 304.72,
+   "end": 306.64,
+   "text": "that our photo was taken on. So then that way"
+  },
+  {
+   "start": 306.64,
+   "end": 309.2,
+   "text": "we have the most realistic possible effect. I'll"
+  },
+  {
+   "start": 309.2,
+   "end": 311.68,
+   "text": "then move this down a little like so maybe lift up"
+  },
+  {
+   "start": 311.68,
+   "end": 314.56,
+   "text": "this corner touch and that way we have the shape"
+  },
+  {
+   "start": 314.56,
+   "end": 316.72,
+   "text": "extending right from the corner of our frame. Now"
+  },
+  {
+   "start": 316.72,
+   "end": 318.64,
+   "text": "we're going to create one more shape to make it look"
+  },
+  {
+   "start": 318.64,
+   "end": 320.8,
+   "text": "like a pedestal or something. So we're going to add"
+  },
+  {
+   "start": 320.8,
+   "end": 323.28,
+   "text": "the shape in this way. I'm going to click elsewhere"
+  },
+  {
+   "start": 323.28,
+   "end": 326.0,
+   "text": "on my layers panel so that my original shape layer"
+  },
+  {
+   "start": 326.0,
+   "end": 328.56,
+   "text": "is deselected and now I'll click and drag out on"
+  },
+  {
+   "start": 328.56,
+   "end": 330.96,
+   "text": "my canvas once again to create another shape."
+  },
+  {
+   "start": 330.96,
+   "end": 332.72,
+   "text": "But this time I'll make the color a little bit"
+  },
+  {
+   "start": 332.72,
+   "end": 334.8,
+   "text": "different so we can separate the two of them a bit."
+  },
+  {
+   "start": 334.8,
+   "end": 336.64,
+   "text": "The color right now doesn't matter because we'll do"
+  },
+  {
+   "start": 336.64,
+   "end": 338.72,
+   "text": "some touching up of that later on in the video."
+  },
+  {
+   "start": 338.72,
+   "end": 340.72,
+   "text": "But for now we're going to drag this below"
+  },
+  {
+   "start": 340.8,
+   "end": 343.36,
+   "text": "our original rectangle shape and then we'll press"
+  },
+  {
+   "start": 343.36,
+   "end": 346.88,
+   "text": "CMD or CTRL T once again and then holding the CMD"
+  },
+  {
+   "start": 346.88,
+   "end": 349.92,
+   "text": "or CTRL keys we're going to drag this to match"
+  },
+  {
+   "start": 349.92,
+   "end": 354.16,
+   "text": "the point there down over this way and then down here"
+  },
+  {
+   "start": 354.16,
+   "end": 357.84,
+   "text": "as well. So we're basically making a box. Now if you"
+  },
+  {
+   "start": 357.84,
+   "end": 360.0,
+   "text": "zoom in you just want to make sure there's no gaps"
+  },
+  {
+   "start": 360.0,
+   "end": 363.6,
+   "text": "between the two shapes so it looks like one cohesive piece."
+  },
+  {
+   "start": 363.6,
+   "end": 366.0,
+   "text": "And zooming out we now have successfully created"
+  },
+  {
+   "start": 366.0,
+   "end": 368.32,
+   "text": "our box for our products to sit on. So that means"
+  },
+  {
+   "start": 368.4,
+   "end": 370.72,
+   "text": "I can delete my reference countertop layer back here."
+  },
+  {
+   "start": 370.72,
+   "end": 373.04,
+   "text": "Turning back on my two product layers now let's go"
+  },
+  {
+   "start": 373.04,
+   "end": 376.48,
+   "text": "and blend this into this new area. Since our main product"
+  },
+  {
+   "start": 376.48,
+   "end": 378.0,
+   "text": "and the shadow are in different layers it's going to"
+  },
+  {
+   "start": 378.0,
+   "end": 380.4,
+   "text": "make life easy if we shift click these and click the"
+  },
+  {
+   "start": 380.4,
+   "end": 383.44,
+   "text": "link icon. That way when we click one layer the other"
+  },
+  {
+   "start": 383.44,
+   "end": 385.6,
+   "text": "layer will move with it and you don't have to think"
+  },
+  {
+   "start": 385.6,
+   "end": 387.68,
+   "text": "about that anymore. But obviously the problem here"
+  },
+  {
+   "start": 387.68,
+   "end": 390.08,
+   "text": "is our shadow does not look very good. So we need to"
+  },
+  {
+   "start": 390.08,
+   "end": 392.8,
+   "text": "click on that shadow layer and we need to change"
+  },
+  {
+   "start": 392.8,
+   "end": 395.2,
+   "text": "this layer blending mode for normal down here to"
+  },
+  {
+   "start": 395.2,
+   "end": 398.24,
+   "text": "multiply. Now with this layer mask selected we'll grab a"
+  },
+  {
+   "start": 398.24,
+   "end": 401.12,
+   "text": "brush tool by pressing B make sure that black is set to"
+  },
+  {
+   "start": 401.12,
+   "end": 404.48,
+   "text": "our foreground color or brush opacity at 100% and we'll"
+  },
+  {
+   "start": 404.48,
+   "end": 407.84,
+   "text": "use the soft round brush. Now I'll go and paint around"
+  },
+  {
+   "start": 407.84,
+   "end": 411.04,
+   "text": "the edges like so to remove the harsh edges of the"
+  },
+  {
+   "start": 411.04,
+   "end": 414.24,
+   "text": "shadow and then we'll add a curves adjustment layer to"
+  },
+  {
+   "start": 414.24,
+   "end": 416.24,
+   "text": "do the rest of the work. Clicking the curves"
+  },
+  {
+   "start": 416.24,
+   "end": 418.72,
+   "text": "adjustment layer, adding a clipping mask so it only"
+  },
+  {
+   "start": 418.72,
+   "end": 421.36,
+   "text": "affects our shadows layer. I'll drag up the"
+  },
+  {
+   "start": 421.36,
+   "end": 424.16,
+   "text": "highlights like so and maybe a little bit of these"
+  },
+  {
+   "start": 424.16,
+   "end": 426.8,
+   "text": "shadows and now going back to our shadow layer mask I"
+  },
+  {
+   "start": 426.8,
+   "end": 428.88,
+   "text": "can just brush over this a little bit more to touch that"
+  },
+  {
+   "start": 428.88,
+   "end": 431.28,
+   "text": "up. If you end up having issues with leftover bits of"
+  },
+  {
+   "start": 431.28,
+   "end": 433.84,
+   "text": "the shadow just continue to brighten up the curves"
+  },
+  {
+   "start": 433.84,
+   "end": 436.32,
+   "text": "until you're happy with the shadow that you have. In"
+  },
+  {
+   "start": 436.32,
+   "end": 438.96,
+   "text": "this case that looks pretty good to me there. Since"
+  },
+  {
+   "start": 438.96,
+   "end": 440.96,
+   "text": "there's a little bit of color leftover we need to add"
+  },
+  {
+   "start": 440.96,
+   "end": 443.2,
+   "text": "one more adjustment which is the black and white"
+  },
+  {
+   "start": 443.2,
+   "end": 445.04,
+   "text": "adjustment layer. So adding the black and white"
+  },
+  {
+   "start": 445.04,
+   "end": 446.96,
+   "text": "adjustment layer, adding a clipping mask so now"
+  },
+  {
+   "start": 446.96,
+   "end": 449.44,
+   "text": "our shadow has no color hue whatsoever. Now before we"
+  },
+  {
+   "start": 449.44,
+   "end": 451.12,
+   "text": "bring in our next product I'm going to just"
+  },
+  {
+   "start": 451.12,
+   "end": 454.08,
+   "text": "grab my move tool and then shuffle this over into"
+  },
+  {
+   "start": 454.08,
+   "end": 456.32,
+   "text": "the area that I would like it to be in. Finally to"
+  },
+  {
+   "start": 456.32,
+   "end": 458.24,
+   "text": "keep everything organized I'll shift click press"
+  },
+  {
+   "start": 458.24,
+   "end": 460.64,
+   "text": "commander control G to group that and I'll call this"
+  },
+  {
+   "start": 460.64,
+   "end": 463.84,
+   "text": "to product one. Now let's do the same thing with"
+  },
+  {
+   "start": 463.84,
+   "end": 465.68,
+   "text": "the second product but I'll just go through it a"
+  },
+  {
+   "start": 465.68,
+   "end": 467.44,
+   "text": "little bit faster so you don't have to sit through"
+  },
+  {
+   "start": 467.44,
+   "end": 469.12,
+   "text": "all the steps again. Once again I'm just"
+  },
+  {
+   "start": 469.12,
+   "end": 471.68,
+   "text": "merging my product image with the clone"
+  },
+  {
+   "start": 471.68,
+   "end": 473.52,
+   "text": "stamp adjustments I've made pressing commander"
+  },
+  {
+   "start": 473.52,
+   "end": 475.6,
+   "text": "control E to merge. I'll then shift click"
+  },
+  {
+   "start": 475.6,
+   "end": 477.92,
+   "text": "both these layers grab my move tool click and"
+  },
+  {
+   "start": 477.92,
+   "end": 479.76,
+   "text": "drag it into my new project drop it in"
+  },
+  {
+   "start": 479.76,
+   "end": 483.36,
+   "text": "there press yes and now we'll rescale this to"
+  },
+  {
+   "start": 483.36,
+   "end": 485.76,
+   "text": "the position that it should be in. Now this bottle is a"
+  },
+  {
+   "start": 485.76,
+   "end": 487.52,
+   "text": "little bit bigger than the other one so I'm going to try to"
+  },
+  {
+   "start": 487.52,
+   "end": 490.24,
+   "text": "keep those proportions similar in my project. Now once"
+  },
+  {
+   "start": 490.24,
+   "end": 491.92,
+   "text": "again we're going to link those layers so while"
+  },
+  {
+   "start": 491.92,
+   "end": 494.0,
+   "text": "both of these are selected I'll press the link"
+  },
+  {
+   "start": 494.0,
+   "end": 497.84,
+   "text": "icon and now we need to remove the shadow or I"
+  },
+  {
+   "start": 497.84,
+   "end": 499.52,
+   "text": "guess blend it in. So with the shadow layer"
+  },
+  {
+   "start": 499.52,
+   "end": 501.52,
+   "text": "selected I'll change the layer blending mode from"
+  },
+  {
+   "start": 501.52,
+   "end": 503.92,
+   "text": "normal down here to multiply and then we'll"
+  },
+  {
+   "start": 503.92,
+   "end": 506.96,
+   "text": "go with our brush tool and a black brush with"
+  },
+  {
+   "start": 506.96,
+   "end": 508.8,
+   "text": "the soft round brush selected I'll go and"
+  },
+  {
+   "start": 508.8,
+   "end": 510.8,
+   "text": "paint around the harsh edges here just to"
+  },
+  {
+   "start": 510.8,
+   "end": 512.4,
+   "text": "blend it all together a little bit better."
+  },
+  {
+   "start": 512.4,
+   "end": 515.36,
+   "text": "Once you have those harsh edges removed we can add"
+  },
+  {
+   "start": 515.36,
+   "end": 518.48,
+   "text": "a curves adjustment layer add a clipping mask to our"
+  },
+  {
+   "start": 518.48,
+   "end": 520.88,
+   "text": "shadows layer and then drag this up a little to"
+  },
+  {
+   "start": 520.88,
+   "end": 523.44,
+   "text": "blend that shadow in seamlessly. Again if it's"
+  },
+  {
+   "start": 523.44,
+   "end": 526.32,
+   "text": "not blending nicely you can just brighten up the"
+  },
+  {
+   "start": 526.32,
+   "end": 528.4,
+   "text": "curves a little bit more and then go back with"
+  },
+  {
+   "start": 528.4,
+   "end": 530.96,
+   "text": "your brush tool and remove any unwanted extra"
+  },
+  {
+   "start": 530.96,
+   "end": 532.88,
+   "text": "areas that just aren't working for you. Now in"
+  },
+  {
+   "start": 532.88,
+   "end": 534.8,
+   "text": "this case you can see how the shadow is"
+  },
+  {
+   "start": 534.8,
+   "end": 536.96,
+   "text": "showing up over top of my other product but I"
+  },
+  {
+   "start": 536.96,
+   "end": 539.12,
+   "text": "want it to be behind it so that means I'll"
+  },
+  {
+   "start": 539.12,
+   "end": 541.12,
+   "text": "shift click all these layers and I'll move it"
+  },
+  {
+   "start": 541.12,
+   "end": 543.68,
+   "text": "below my product one group. Now that shadow is"
+  },
+  {
+   "start": 543.68,
+   "end": 546.48,
+   "text": "behind our original product and I can position"
+  },
+  {
+   "start": 546.48,
+   "end": 549.12,
+   "text": "this into a new spot something like that works"
+  },
+  {
+   "start": 549.12,
+   "end": 551.84,
+   "text": "for me. Finally to finish up the shadow I'll"
+  },
+  {
+   "start": 551.84,
+   "end": 554.08,
+   "text": "add a black and white adjustment layer add a"
+  },
+  {
+   "start": 554.08,
+   "end": 556.64,
+   "text": "clipping mask and now our shadow is complete."
+  },
+  {
+   "start": 556.64,
+   "end": 558.48,
+   "text": "Now grouping that to keep everything organized"
+  },
+  {
+   "start": 558.48,
+   "end": 560.64,
+   "text": "looking at my image so far obviously the"
+  },
+  {
+   "start": 560.64,
+   "end": 562.48,
+   "text": "shadows look a little bit weird because they"
+  },
+  {
+   "start": 562.48,
+   "end": 565.04,
+   "text": "extend off the edge of our box as well as"
+  },
+  {
+   "start": 565.04,
+   "end": 567.2,
+   "text": "there's not really any shadow underneath our"
+  },
+  {
+   "start": 567.2,
+   "end": 568.4,
+   "text": "product so it kind of looks like they're"
+  },
+  {
+   "start": 568.4,
+   "end": 570.08,
+   "text": "floating so let's fix that up. First let's"
+  },
+  {
+   "start": 570.08,
+   "end": 572.16,
+   "text": "deal with these shadows out here holding"
+  },
+  {
+   "start": 572.16,
+   "end": 574.32,
+   "text": "command or control I can make a selection"
+  },
+  {
+   "start": 574.32,
+   "end": 576.48,
+   "text": "of this topmost shape and then I'll press"
+  },
+  {
+   "start": 576.48,
+   "end": 579.28,
+   "text": "command or control shift and I to invert"
+  },
+  {
+   "start": 579.28,
+   "end": 582.08,
+   "text": "that selection which means I can go to"
+  },
+  {
+   "start": 582.08,
+   "end": 584.0,
+   "text": "this shadow layer grab the brush tool by"
+  },
+  {
+   "start": 584.0,
+   "end": 586.16,
+   "text": "pressing B and with black set to my"
+  },
+  {
+   "start": 586.16,
+   "end": 588.08,
+   "text": "foreground color I can go and mask out"
+  },
+  {
+   "start": 588.08,
+   "end": 590.0,
+   "text": "that area without worrying about coloring"
+  },
+  {
+   "start": 590.0,
+   "end": 592.24,
+   "text": "outside of the lines and removing the"
+  },
+  {
+   "start": 592.32,
+   "end": 594.96,
+   "text": "shadow from the main shape. I'll do the"
+  },
+  {
+   "start": 594.96,
+   "end": 596.72,
+   "text": "same thing with my first product clicking"
+  },
+  {
+   "start": 596.72,
+   "end": 599.04,
+   "text": "the shadow layer and once again removing"
+  },
+  {
+   "start": 599.04,
+   "end": 601.44,
+   "text": "that area with the same method. Now I'll"
+  },
+  {
+   "start": 601.44,
+   "end": 603.2,
+   "text": "press command or control D to deselect"
+  },
+  {
+   "start": 603.2,
+   "end": 604.96,
+   "text": "that now to add a slightly darker shadow"
+  },
+  {
+   "start": 604.96,
+   "end": 606.56,
+   "text": "underneath our products I'll create a"
+  },
+  {
+   "start": 606.56,
+   "end": 609.6,
+   "text": "new layer just below my product layer"
+  },
+  {
+   "start": 610.48,
+   "end": 612.32,
+   "text": "which is just the product by itself"
+  },
+  {
+   "start": 612.32,
+   "end": 615.44,
+   "text": "here and then I'm going to grab my"
+  },
+  {
+   "start": 615.44,
+   "end": 617.44,
+   "text": "brush tool hold alt or option to"
+  },
+  {
+   "start": 617.44,
+   "end": 620.08,
+   "text": "sample an area of the shadow here"
+  },
+  {
+   "start": 620.08,
+   "end": 622.0,
+   "text": "I'll then click on that color and just"
+  },
+  {
+   "start": 622.0,
+   "end": 623.92,
+   "text": "darken it down a little bit like so"
+  },
+  {
+   "start": 623.92,
+   "end": 625.36,
+   "text": "because this is supposed to be like the"
+  },
+  {
+   "start": 625.36,
+   "end": 627.2,
+   "text": "darkest part of that shadow then we'll"
+  },
+  {
+   "start": 627.2,
+   "end": 629.04,
+   "text": "click okay now I'll just scale up my"
+  },
+  {
+   "start": 629.04,
+   "end": 630.56,
+   "text": "brush with the bracket keys and click"
+  },
+  {
+   "start": 630.56,
+   "end": 632.16,
+   "text": "once over the areas I want that shadow"
+  },
+  {
+   "start": 632.16,
+   "end": 633.52,
+   "text": "to apply I'll then press command or"
+  },
+  {
+   "start": 633.52,
+   "end": 635.6,
+   "text": "control T and then hold the shift key"
+  },
+  {
+   "start": 635.6,
+   "end": 637.68,
+   "text": "and just squish this down like so and"
+  },
+  {
+   "start": 637.68,
+   "end": 639.6,
+   "text": "then move this into position like that"
+  },
+  {
+   "start": 639.6,
+   "end": 641.04,
+   "text": "using this transform box we can"
+  },
+  {
+   "start": 641.04,
+   "end": 642.64,
+   "text": "basically create like a little"
+  },
+  {
+   "start": 642.64,
+   "end": 645.44,
+   "text": "subtle shadow that is sitting right"
+  },
+  {
+   "start": 645.44,
+   "end": 647.28,
+   "text": "below our product and it's just the"
+  },
+  {
+   "start": 647.28,
+   "end": 649.84,
+   "text": "dark shadow closest to the edge of our"
+  },
+  {
+   "start": 649.92,
+   "end": 651.84,
+   "text": "item now I'll repeat this process with"
+  },
+  {
+   "start": 651.84,
+   "end": 654.16,
+   "text": "my other product clicking on my top most"
+  },
+  {
+   "start": 654.16,
+   "end": 656.16,
+   "text": "adjustment layer adding a new layer so"
+  },
+  {
+   "start": 656.16,
+   "end": 658.56,
+   "text": "it's just below my product layer and"
+  },
+  {
+   "start": 658.56,
+   "end": 659.92,
+   "text": "then I'll once again with that same"
+  },
+  {
+   "start": 659.92,
+   "end": 662.4,
+   "text": "color I'll just click once over my image"
+  },
+  {
+   "start": 662.4,
+   "end": 664.72,
+   "text": "press command or control T and then"
+  },
+  {
+   "start": 664.72,
+   "end": 666.8,
+   "text": "hold shift key to squish this down"
+  },
+  {
+   "start": 666.8,
+   "end": 670.32,
+   "text": "move this up into place rotate it so it"
+  },
+  {
+   "start": 670.32,
+   "end": 671.68,
+   "text": "fits a little bit better and then"
+  },
+  {
+   "start": 671.68,
+   "end": 673.04,
+   "text": "just play around with this until you're"
+  },
+  {
+   "start": 673.04,
+   "end": 674.8,
+   "text": "happy with the look that you have"
+  },
+  {
+   "start": 674.8,
+   "end": 676.16,
+   "text": "going here in this case since the"
+  },
+  {
+   "start": 676.16,
+   "end": 677.44,
+   "text": "light is coming from this direction"
+  },
+  {
+   "start": 677.44,
+   "end": 679.12,
+   "text": "I want the shadow to be more dark on"
+  },
+  {
+   "start": 679.2,
+   "end": 681.28,
+   "text": "this side then obviously in the front"
+  },
+  {
+   "start": 681.28,
+   "end": 682.64,
+   "text": "where the light is coming from"
+  },
+  {
+   "start": 682.64,
+   "end": 684.16,
+   "text": "so now we've created our shapes it looks"
+  },
+  {
+   "start": 684.16,
+   "end": 685.52,
+   "text": "like our products are sitting on those"
+  },
+  {
+   "start": 685.52,
+   "end": 687.2,
+   "text": "shapes but let's take this a little bit"
+  },
+  {
+   "start": 687.2,
+   "end": 689.12,
+   "text": "further by adding a nicer background"
+  },
+  {
+   "start": 689.12,
+   "end": 690.88,
+   "text": "and also adjusting the colors of our"
+  },
+  {
+   "start": 690.88,
+   "end": 692.4,
+   "text": "shapes so it matches with our products"
+  },
+  {
+   "start": 692.4,
+   "end": 693.84,
+   "text": "a little bit better let's first change"
+  },
+  {
+   "start": 693.84,
+   "end": 695.68,
+   "text": "the color of our shapes to make this"
+  },
+  {
+   "start": 695.68,
+   "end": 697.76,
+   "text": "look the best we want a lighter color"
+  },
+  {
+   "start": 697.76,
+   "end": 700.32,
+   "text": "up top and a darker but similar color"
+  },
+  {
+   "start": 700.32,
+   "end": 702.32,
+   "text": "on the side so I'll grab my shape"
+  },
+  {
+   "start": 702.32,
+   "end": 704.08,
+   "text": "tool by pressing U and then I'll"
+  },
+  {
+   "start": 704.08,
+   "end": 706.16,
+   "text": "click on the fill color click the"
+  },
+  {
+   "start": 706.16,
+   "end": 708.4,
+   "text": "color picker and now I can click"
+  },
+  {
+   "start": 708.4,
+   "end": 710.88,
+   "text": "anywhere on my photo to sample a color"
+  },
+  {
+   "start": 710.88,
+   "end": 712.8,
+   "text": "so let's say I want to choose like this"
+  },
+  {
+   "start": 712.8,
+   "end": 715.36,
+   "text": "lighter color that is on this bottle here"
+  },
+  {
+   "start": 715.36,
+   "end": 717.12,
+   "text": "so I'm just clicking the highlight there"
+  },
+  {
+   "start": 717.12,
+   "end": 719.2,
+   "text": "click okay that'll change the color of"
+  },
+  {
+   "start": 719.2,
+   "end": 722.24,
+   "text": "that top area now I'm going to my side"
+  },
+  {
+   "start": 722.24,
+   "end": 724.4,
+   "text": "rectangle which is the side of our box"
+  },
+  {
+   "start": 724.4,
+   "end": 726.0,
+   "text": "we can once again click on that fill"
+  },
+  {
+   "start": 726.0,
+   "end": 727.6,
+   "text": "go to the color picker but this time"
+  },
+  {
+   "start": 727.6,
+   "end": 729.44,
+   "text": "I'll try to find a darker but similar"
+  },
+  {
+   "start": 729.44,
+   "end": 732.48,
+   "text": "color on my bottle so let's try this"
+  },
+  {
+   "start": 732.48,
+   "end": 735.12,
+   "text": "one for example I'll click okay now"
+  },
+  {
+   "start": 735.12,
+   "end": 737.2,
+   "text": "we have some sampled colors directly"
+  },
+  {
+   "start": 737.2,
+   "end": 739.44,
+   "text": "from our products so it kind of ties"
+  },
+  {
+   "start": 739.44,
+   "end": 740.88,
+   "text": "everything together nicely but to make"
+  },
+  {
+   "start": 740.88,
+   "end": 742.16,
+   "text": "this all look a little bit better let's"
+  },
+  {
+   "start": 742.16,
+   "end": 743.92,
+   "text": "add a gradient to the background to make"
+  },
+  {
+   "start": 743.92,
+   "end": 745.52,
+   "text": "it all come together a bit more to do"
+  },
+  {
+   "start": 745.52,
+   "end": 746.96,
+   "text": "this I'll click on my background layer"
+  },
+  {
+   "start": 746.96,
+   "end": 749.12,
+   "text": "then add a new layer just above it"
+  },
+  {
+   "start": 749.12,
+   "end": 751.04,
+   "text": "I'll call this to gradient background"
+  },
+  {
+   "start": 751.04,
+   "end": 752.4,
+   "text": "now I'll grab my gradient tool by"
+  },
+  {
+   "start": 752.4,
+   "end": 754.8,
+   "text": "pressing G and then I want to"
+  },
+  {
+   "start": 754.8,
+   "end": 757.92,
+   "text": "choose some soft and light colors to"
+  },
+  {
+   "start": 757.92,
+   "end": 759.6,
+   "text": "put in the background so for my shadows"
+  },
+  {
+   "start": 759.6,
+   "end": 760.72,
+   "text": "I'm going to double click on this"
+  },
+  {
+   "start": 761.36,
+   "end": 764.0,
+   "text": "sample the darkest edge of my box and"
+  },
+  {
+   "start": 764.0,
+   "end": 765.84,
+   "text": "then just lighten it up a touch like"
+  },
+  {
+   "start": 765.84,
+   "end": 767.76,
+   "text": "so then for my highlights I'm just going"
+  },
+  {
+   "start": 767.76,
+   "end": 770.08,
+   "text": "to have this set to pure white click"
+  },
+  {
+   "start": 770.08,
+   "end": 772.16,
+   "text": "okay now with the radial gradient"
+  },
+  {
+   "start": 772.16,
+   "end": 774.72,
+   "text": "selected and reverse enabled so that my"
+  },
+  {
+   "start": 774.72,
+   "end": 776.8,
+   "text": "highlights and my shadows are switched"
+  },
+  {
+   "start": 776.8,
+   "end": 779.6,
+   "text": "I'm going to click and drag out to add"
+  },
+  {
+   "start": 779.6,
+   "end": 781.52,
+   "text": "that background in now depending on how"
+  },
+  {
+   "start": 781.52,
+   "end": 783.28,
+   "text": "far you drag out you will change the"
+  },
+  {
+   "start": 783.28,
+   "end": 784.8,
+   "text": "look of your gradient and if you want"
+  },
+  {
+   "start": 784.8,
+   "end": 786.4,
+   "text": "to learn more about the gradient tool"
+  },
+  {
+   "start": 786.4,
+   "end": 787.76,
+   "text": "I have a video here that you can learn"
+  },
+  {
+   "start": 787.76,
+   "end": 789.12,
+   "text": "more about it in depth but"
+  },
+  {
+   "start": 789.12,
+   "end": 790.48,
+   "text": "essentially I'm just going to drag"
+  },
+  {
+   "start": 790.48,
+   "end": 792.96,
+   "text": "around until I have a look that I'm"
+  },
+  {
+   "start": 792.96,
+   "end": 794.88,
+   "text": "happy with I want that bright highlight"
+  },
+  {
+   "start": 794.88,
+   "end": 798.24,
+   "text": "to be mostly around the products or"
+  },
+  {
+   "start": 798.24,
+   "end": 799.6,
+   "text": "right behind our products I should say"
+  },
+  {
+   "start": 799.6,
+   "end": 802.16,
+   "text": "and I want it to be super super soft so"
+  },
+  {
+   "start": 802.16,
+   "end": 803.84,
+   "text": "something like this looks good for me"
+  },
+  {
+   "start": 803.84,
+   "end": 805.2,
+   "text": "now this is looking pretty good but I'd"
+  },
+  {
+   "start": 805.2,
+   "end": 806.56,
+   "text": "like to take it one step further by"
+  },
+  {
+   "start": 806.56,
+   "end": 808.24,
+   "text": "adding some hidden shadows just"
+  },
+  {
+   "start": 808.24,
+   "end": 810.24,
+   "text": "around the edges as well as the bottom"
+  },
+  {
+   "start": 810.24,
+   "end": 812.0,
+   "text": "part of our box here so clicking on"
+  },
+  {
+   "start": 812.0,
+   "end": 814.32,
+   "text": "my topmost layer I'm going to add a"
+  },
+  {
+   "start": 814.32,
+   "end": 815.84,
+   "text": "new layer and I'm going to grab my"
+  },
+  {
+   "start": 815.84,
+   "end": 817.52,
+   "text": "brush tool by pressing B with a"
+  },
+  {
+   "start": 817.52,
+   "end": 819.6,
+   "text": "soft round brush still selected 100"
+  },
+  {
+   "start": 819.6,
+   "end": 821.36,
+   "text": "percent opacity I'll click and"
+  },
+  {
+   "start": 821.36,
+   "end": 824.0,
+   "text": "sample the darkest color of my box"
+  },
+  {
+   "start": 824.0,
+   "end": 826.24,
+   "text": "and then darken this color down just a"
+  },
+  {
+   "start": 826.24,
+   "end": 828.56,
+   "text": "little bit more like so now with this"
+  },
+  {
+   "start": 828.56,
+   "end": 830.96,
+   "text": "layer set to multiply I'll begin"
+  },
+  {
+   "start": 830.96,
+   "end": 832.8,
+   "text": "painting over my image in this case it's"
+  },
+  {
+   "start": 832.8,
+   "end": 834.16,
+   "text": "a little bit too intense so I'll change"
+  },
+  {
+   "start": 834.16,
+   "end": 836.48,
+   "text": "my brush opacity to 20% by pressing"
+  },
+  {
+   "start": 836.48,
+   "end": 838.4,
+   "text": "two on my keyboard and I'll go and"
+  },
+  {
+   "start": 838.4,
+   "end": 840.56,
+   "text": "paint over these areas to add some"
+  },
+  {
+   "start": 840.56,
+   "end": 842.88,
+   "text": "shadows around there mostly just"
+  },
+  {
+   "start": 842.88,
+   "end": 844.8,
+   "text": "along the bottom of the box now from"
+  },
+  {
+   "start": 844.8,
+   "end": 846.0,
+   "text": "there you can go and add some"
+  },
+  {
+   "start": 846.0,
+   "end": 848.16,
+   "text": "individual adjustments to your"
+  },
+  {
+   "start": 848.16,
+   "end": 850.08,
+   "text": "products just by going into your"
+  },
+  {
+   "start": 850.08,
+   "end": 852.08,
+   "text": "product groups and then adding some"
+  },
+  {
+   "start": 852.08,
+   "end": 853.68,
+   "text": "adjustment layers above it adding a"
+  },
+  {
+   "start": 853.68,
+   "end": 855.92,
+   "text": "clipping mask and then doing some"
+  },
+  {
+   "start": 855.92,
+   "end": 857.76,
+   "text": "contrast or color adjustments to make"
+  },
+  {
+   "start": 857.76,
+   "end": 859.2,
+   "text": "everything blend a little bit better"
+  },
+  {
+   "start": 859.2,
+   "end": 860.4,
+   "text": "I'm just going to add a little bit of"
+  },
+  {
+   "start": 860.4,
+   "end": 863.68,
+   "text": "contrast to each of those layers or"
+  },
+  {
+   "start": 863.68,
+   "end": 865.44,
+   "text": "those product layers just by using the"
+  },
+  {
+   "start": 865.44,
+   "end": 867.68,
+   "text": "curves adjustment but of course you can"
+  },
+  {
+   "start": 867.68,
+   "end": 869.52,
+   "text": "go crazy with this and add any color"
+  },
+  {
+   "start": 869.52,
+   "end": 871.6,
+   "text": "adjustments or things like that that"
+  },
+  {
+   "start": 871.6,
+   "end": 872.8,
+   "text": "you would like and now looking at"
+  },
+  {
+   "start": 872.8,
+   "end": 874.88,
+   "text": "that before and after we've taken"
+  },
+  {
+   "start": 874.88,
+   "end": 876.56,
+   "text": "those regular photos just with a"
+  },
+  {
+   "start": 876.56,
+   "end": 878.24,
+   "text": "piece of printer paper and turn them"
+  },
+  {
+   "start": 878.24,
+   "end": 879.36,
+   "text": "into something that looks a little"
+  },
+  {
+   "start": 879.36,
+   "end": 880.96,
+   "text": "bit more high class a high-end"
+  },
+  {
+   "start": 880.96,
+   "end": 882.88,
+   "text": "product photo if you will and it was"
+  },
+  {
+   "start": 882.88,
+   "end": 885.36,
+   "text": "actually pretty easy to do with just a"
+  },
+  {
+   "start": 885.36,
+   "end": 887.6,
+   "text": "couple of shapes and some gradients so"
+  },
+  {
+   "start": 887.6,
+   "end": 889.12,
+   "text": "if you enjoyed today's video and you"
+  },
+  {
+   "start": 889.12,
+   "end": 890.32,
+   "text": "follow it along make sure to hit that"
+  },
+  {
+   "start": 890.32,
+   "end": 892.16,
+   "text": "like button down below and of course if"
+  },
+  {
+   "start": 892.16,
+   "end": 893.76,
+   "text": "you choose to share this with me or"
+  },
+  {
+   "start": 893.76,
+   "end": 894.8,
+   "text": "share this effect that you just"
+  },
+  {
+   "start": 894.8,
+   "end": 896.4,
+   "text": "created make sure to tag me on"
+  },
+  {
+   "start": 896.4,
+   "end": 898.4,
+   "text": "instagram at burnwills so I can"
+  },
+  {
+   "start": 898.4,
+   "end": 899.84,
+   "text": "check it out I'd love to see the"
+  },
+  {
+   "start": 899.84,
+   "end": 900.88,
+   "text": "creations that you guys do with"
+  },
+  {
+   "start": 900.88,
+   "end": 902.16,
+   "text": "this effect as you saw in this"
+  },
+  {
+   "start": 902.16,
+   "end": 904.48,
+   "text": "tutorial photoshop has an endless list"
+  },
+  {
+   "start": 904.48,
+   "end": 905.68,
+   "text": "of things that you can do with it"
+  },
+  {
+   "start": 905.68,
+   "end": 907.36,
+   "text": "but there's six particular things that"
+  },
+  {
+   "start": 907.36,
+   "end": 908.96,
+   "text": "I think everyone should be starting"
+  },
+  {
+   "start": 908.96,
+   "end": 910.24,
+   "text": "with and that's what I talk about"
+  },
+  {
+   "start": 910.24,
+   "end": 912.0,
+   "text": "in my free ebook called the photoshop"
+  },
+  {
+   "start": 912.0,
+   "end": 913.28,
+   "text": "blueprint I'll leave a link for that"
+  },
+  {
+   "start": 913.28,
+   "end": 914.48,
+   "text": "down below if you're interested in"
+  },
+  {
+   "start": 914.48,
+   "end": 915.84,
+   "text": "checking that out anyways I hope you"
+  },
+  {
+   "start": 915.84,
+   "end": 917.28,
+   "text": "enjoyed creating this today my name is"
+  },
+  {
+   "start": 917.28,
+   "end": 919.12,
+   "text": "Brendan from bewellcreative.com and"
+  },
+  {
+   "start": 919.12,
+   "end": 920.24,
+   "text": "I'll catch you back here next time"
+  },
+  {
+   "start": 920.24,
+   "end": 924.08,
+   "text": "for another new tutorial see you then"
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:02:46.513650+00:00",
+ "seconds": 42.5
+}

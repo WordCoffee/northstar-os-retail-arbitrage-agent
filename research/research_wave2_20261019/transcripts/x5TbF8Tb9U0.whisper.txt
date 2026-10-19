@@ -1,0 +1,55 @@
+Hi there, this is Unmation and in this video we're going to talk about five things you can do
+to make your composites match perfectly. Number one, match the perspectives.
+Something looking odd here, doesn't it? Even though we have done all kinds of adjustments to match it,
+the biggest thing that looks off is perspective. One quick way to match it is drawing lines
+along the perspective for both the subject and the background. These lines will merge together
+to a point called a vanishing point. A horizontal line through this point is your horizon for
+the respective image. All you have to do is to match these points or just match the horizon
+and in most cases the perspective looks perfect. You can move your subject along the perspective
+by placing the anchor point on the vanishing point and then resizing from it. Keep in mind that this
+is just a rule of thumb and you might have to do some manual resizing looking at the cues in
+the new background. For example in this case, the doorway. Number two, match the lighting
+and shadows. Obviously the direction of light matters. If the light is coming from the right
+inside and the subject's light is coming from the left inside or vice versa, we can easily fix that
+by flipping either one of them. Another important thing to keep in mind is to always pick elements
+for a composite based on how hard or soft the light is. A hard light creates a shadow with
+hard edges and a soft light creates a shadow with soft edges. So make sure subjects with
+hard light have a background with hard light and the same goes for softly lit images. Otherwise,
+no matter what you do, no matter how many adjustments you make, it just won't match.
+After you have picked the right elements, one good way to match the lighting is first taking away
+the colors so that they don't distract us. We can easily do that by creating a solid gray layer
+and changing its blend mode to color. This renders the luminosity perfectly as opposed to simply
+decreasing the saturation. Now with the Curves Adjustment layer, you can target any area with
+the hand and make it brighter or darker by just dragging up or down. After the job, you can
+turn off or delete the check layer, the layer that took away the colors, which brings us
+to number three and that is match the color. So here are two amazing methods. Create a Curves
+Adjustment layer and clip it to the subject layer. Make sure that the symbol of the adjustment layer
+is selected. Double click on the white point eyedropper in the Curves properties and sample
+the brightest point of the background. Click No and then click on the brightest spot of the
+subject, an area that would be close to white. Similarly, do the same with the black eyedropper
+and then eventually the gray eyedropper. And bingo, your color is matched. Make sure to
+make some manual adjustments to improve the results even better. Another method that
+you can simply use along with this is make a copy of the background layer,
+bring it above the subject layer and clip it to the subject layer by holding the Alt key of the
+Option key and clicking on the line between the two layers. Then simply add a Gaussian blur,
+completely obliterate the details and change the blend mode of that layer to color and then
+decrease the opacity. This gives the subject the color of the atmosphere.
+Number four, depth of field. If the original subject or background has a shallow depth
+of field, we have to mimic that in our composite as well. In this example,
+the original background was blurred. So blurring the new background matches the composite even better.
+And finally, number five, atmospheric effects. We cannot ignore these atmospheric effects.
+You might have noticed that whenever you look at a scene, the further away areas have
+less color in them and they are less contrasty as opposed to areas which are closer to you,
+right? In this case, as you can see, the sky is so far away from the subject and yet
+it has a lot of contrast and a lot of color. There are many such atmospheric properties
+that we have to keep in mind while creating our composite. So when the background is just
+not looking too far away, let's decrease the contrast by creating a brightness contrast
+adjustment layer and simply decrease the contrast. You can check use legacy, then do it.
+There you go. Fantastic. But it's also making it a little darker, increase the brightness
+a little bit. And on top of that, you can create a hue saturation adjustment layer and
+decrease the saturation to match it even better. And as a finishing touch, of course,
+you can blur it a little. Now with all of that being said, of course, these are not the only
+things that you can do. You, my friend, are the artist and you can do whatever you want.
+The sky, in fact, the cosmos is your limit. Thank you so much for watching.
+These tips will get you up and running. I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.

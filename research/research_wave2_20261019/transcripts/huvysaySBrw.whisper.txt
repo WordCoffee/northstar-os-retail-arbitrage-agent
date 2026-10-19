@@ -1,0 +1,42 @@
+Hey guys, in this video I'm going to show you how to conform a text or shape layer to make it look like it's wrapping around another surface in Photoshop.
+Let's get started.
+So here's the image that we're going to use as a background, and you can see that the light source is coming from the top right and going to the left.
+And that causes some wrinkles on our surface, so if we wanted to put some text on this, then to make it look realistic, we'd want that text to wrap around the curves of our blanket.
+So to do that, we're going to use Photoshop's Displacement Filter, and we're going to use this background as the Displacement Map.
+So the first thing that we need to do is make some changes to this background.
+Since there's some fine detail on this background, what we want to do is use a Gaussian Blur to get rid of some of that.
+So I'm going to come up and click Filter, Blur, Gaussian Blur, and just give it a blur of 1 pixel.
+Next, I'm going to add a Hue and Saturation Adjustment Layer, and turn the saturation all the way down so our image is in black and white.
+Next, I'm going to come up and click File, Save As, and I'm going to name this Displacement Map, and hit Save, and then I'm going to close that,
+and then I'll reopen that original image back into Photoshop.
+So now that we have our Displacement Map ready, I'm going to use the Text tool and create our text.
+Now, Displacement Maps can only be applied to rasterized layers or smart objects.
+So to keep our document as editable as possible, you want to convert your text to a smart object.
+So just right-click it in the Layers Palette, and click Convert to Smart Object.
+Next, you're going to come up and click Filter, Distort, Displace,
+and the default values for the horizontal and vertical scale are 10, and that's a good starting point.
+And these other settings only apply if our background is going to be a different size than our Displacement Map, which it's not,
+so I'm just going to leave those as they are and hit OK.
+Next, I'll find the Displacement Map PSD file that we previously saved and double-click that.
+You'll immediately see the text wrap to the surface of the background layer,
+based on the color information in our Displacement Map.
+It uses the black and white values of the Displacement Map to create the displacement
+and make it look like our text is really on the surface of our background.
+Next, you can come over on your text layer and change the Blend Mode and the Fill Percentage to make it look a little more realistic.
+Or you can leave the Blend Mode set to Normal and set the Fill to 0%,
+and then if you double-click that layer, you'll open up the Layer Style dialog.
+Then you can apply all kinds of effects to make it look more realistic.
+First, I'm going to give it a color overlay, and I'm going to make that a medium blue color,
+and set the Blend Mode to Linear Burn, and then I'm going to add a Bevel and Emboss.
+First, I'm going to change the Style to Emboss and make the direction down,
+and then I'll set the Angle to 45 degrees so it matches the light source in our background photo.
+It looks all right like that, but you can soften up this effect to make it look more realistic.
+So I'm going to change the Highlight Mode from Screen to Linear Dodge,
+and the Shadow Mode from Multiply to Linear Burn, and take the Opacity for each of those down to about 15%.
+Then I'll just increase the Size a little bit and set Soften to about 1 or 2 pixels and hit OK.
+It's a really subtle effect, but you can see the difference if I turn it on and off.
+It just adds a little more realism to our text.
+So there you have it. This method works great for anything from wrinkled cloth to weathered wood surfaces,
+and it's the perfect way to add some realism to your designs.
+I'm John Shaver for Photoshop Video Academy.
+Thanks for watching. I'll see you next time.

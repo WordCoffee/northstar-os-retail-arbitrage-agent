@@ -1,0 +1,3128 @@
+{
+ "id": "rRXepCezenk",
+ "title": "China Packaging Factory Secrets",
+ "channel": "Sourcing with Kian",
+ "url": "https://www.youtube.com/watch?v=rRXepCezenk",
+ "query": "packaging print production",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.933,
+ "duration_s": 1320.9,
+ "chars": 21697,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 1.4,
+   "text": "The SSI is going to get to hope you're well."
+  },
+  {
+   "start": 1.4,
+   "end": 4.84,
+   "text": "Today I want to show you inside of a packaging factory."
+  },
+  {
+   "start": 4.84,
+   "end": 7.32,
+   "text": "All of our goods are made and processed through packaging."
+  },
+  {
+   "start": 7.32,
+   "end": 9.84,
+   "text": "It's a first touch point our customer has with the product."
+  },
+  {
+   "start": 9.84,
+   "end": 12.48,
+   "text": "So I want to show you inside how your packaging is made"
+  },
+  {
+   "start": 12.48,
+   "end": 14.48,
+   "text": "from start to finish, as well as showing you"
+  },
+  {
+   "start": 14.48,
+   "end": 16.8,
+   "text": "how you can get better details, better quality,"
+  },
+  {
+   "start": 16.8,
+   "end": 19.04,
+   "text": "better pricing once you understand the process"
+  },
+  {
+   "start": 19.04,
+   "end": 19.88,
+   "text": "start to finish."
+  },
+  {
+   "start": 19.88,
+   "end": 21.8,
+   "text": "So let's go take a look inside this factory."
+  },
+  {
+   "start": 21.8,
+   "end": 24.4,
+   "text": "We're here in Xuxiang in Guangdong, China"
+  },
+  {
+   "start": 24.4,
+   "end": 25.96,
+   "text": "and I want to show you everything you need to know"
+  },
+  {
+   "start": 25.96,
+   "end": 26.8,
+   "text": "about your packaging."
+  },
+  {
+   "start": 26.8,
+   "end": 27.64,
+   "text": "Let's go."
+  },
+  {
+   "start": 28.64,
+   "end": 30.64,
+   "text": "Welcome to the printing workshop."
+  },
+  {
+   "start": 33.64,
+   "end": 47.9,
+   "text": "Alright, so I'm here with Matthew just now"
+  },
+  {
+   "start": 47.9,
+   "end": 50.9,
+   "text": "and Matthew and I met at the Global Sources Show in Hong Kong"
+  },
+  {
+   "start": 50.9,
+   "end": 52.9,
+   "text": "and that video will be linked up above as well"
+  },
+  {
+   "start": 52.9,
+   "end": 54.9,
+   "text": "and when we met we had a really nice conversation"
+  },
+  {
+   "start": 54.9,
+   "end": 56.9,
+   "text": "you really impressed me with all the different"
+  },
+  {
+   "start": 56.9,
+   "end": 58.9,
+   "text": "packaging styles and options that you had"
+  },
+  {
+   "start": 58.9,
+   "end": 60.9,
+   "text": "but as well as that you also explained the pricing"
+  },
+  {
+   "start": 60.9,
+   "end": 61.9,
+   "text": "and I thought your pricing was very good."
+  },
+  {
+   "start": 61.9,
+   "end": 63.9,
+   "text": "So I was like right I need to come down to see the factory"
+  },
+  {
+   "start": 63.9,
+   "end": 65.9,
+   "text": "so that's why we're here today."
+  },
+  {
+   "start": 65.9,
+   "end": 67.9,
+   "text": "Matthew thank you very much for having us"
+  },
+  {
+   "start": 67.9,
+   "end": 69.9,
+   "text": "and I'm going to ask Matthew a bunch of questions"
+  },
+  {
+   "start": 69.9,
+   "end": 72.9,
+   "text": "and by the way whoever wants to get their packaging made here"
+  },
+  {
+   "start": 72.9,
+   "end": 74.9,
+   "text": "as well I'll put all the company information down below"
+  },
+  {
+   "start": 74.9,
+   "end": 76.9,
+   "text": "so you can contact Matthew directly"
+  },
+  {
+   "start": 76.9,
+   "end": 79.9,
+   "text": "but let's understand how the packaging is now made."
+  },
+  {
+   "start": 79.9,
+   "end": 82.9,
+   "text": "So initially Matthew like where does it start?"
+  },
+  {
+   "start": 82.9,
+   "end": 86.9,
+   "text": "First step is we purchase the paper from paper back sheet"
+  },
+  {
+   "start": 86.9,
+   "end": 90.9,
+   "text": "and then the first step is we add in the paper"
+  },
+  {
+   "start": 90.9,
+   "end": 91.9,
+   "text": "this is like this machine."
+  },
+  {
+   "start": 91.9,
+   "end": 95.9,
+   "text": "We cut in the area we don't need"
+  },
+  {
+   "start": 95.9,
+   "end": 99.9,
+   "text": "or add to the measurement we need"
+  },
+  {
+   "start": 99.9,
+   "end": 101.9,
+   "text": "you buy this machine"
+  },
+  {
+   "start": 101.9,
+   "end": 103.9,
+   "text": "this is the first step, taking this machine."
+  },
+  {
+   "start": 103.9,
+   "end": 106.9,
+   "text": "So this is completely custom to the customer's orders right?"
+  },
+  {
+   "start": 106.9,
+   "end": 110.9,
+   "text": "So when you go for like a small box, big box, big box"
+  },
+  {
+   "start": 110.9,
+   "end": 112.9,
+   "text": "first of all you start with the material of the paper"
+  },
+  {
+   "start": 112.9,
+   "end": 114.9,
+   "text": "which you can see all the way around here"
+  },
+  {
+   "start": 114.9,
+   "end": 116.9,
+   "text": "you have all the different paper styles"
+  },
+  {
+   "start": 116.9,
+   "end": 118.9,
+   "text": "and then you set it in the machine"
+  },
+  {
+   "start": 118.9,
+   "end": 120.9,
+   "text": "to the dimensions that you want"
+  },
+  {
+   "start": 120.9,
+   "end": 122.9,
+   "text": "so I guess like here on this machine you've got"
+  },
+  {
+   "start": 122.9,
+   "end": 124.9,
+   "text": "the dimensions right?"
+  },
+  {
+   "start": 124.9,
+   "end": 126.9,
+   "text": "We've enjoyed the dimensions we need"
+  },
+  {
+   "start": 126.9,
+   "end": 130.9,
+   "text": "and then you can see how it's actually cut as well"
+  },
+  {
+   "start": 130.9,
+   "end": 133.9,
+   "text": "and what's really interesting is all the wasteage material"
+  },
+  {
+   "start": 133.9,
+   "end": 135.9,
+   "text": "is also gathered and recycled as well"
+  },
+  {
+   "start": 135.9,
+   "end": 138.9,
+   "text": "and that's then used to make a new paper."
+  },
+  {
+   "start": 138.9,
+   "end": 141.9,
+   "text": "So step one is we get the paper, we store it"
+  },
+  {
+   "start": 141.9,
+   "end": 143.9,
+   "text": "you set the dimensions and then we cut it"
+  },
+  {
+   "start": 143.9,
+   "end": 145.9,
+   "text": "so what happens after we cut the paper?"
+  },
+  {
+   "start": 145.9,
+   "end": 149.9,
+   "text": "After we cut the paper we send to our printing workshop."
+  },
+  {
+   "start": 150.9,
+   "end": 153.9,
+   "text": "Welcome to the Printing Workshop."
+  },
+  {
+   "start": 153.9,
+   "end": 156.9,
+   "text": "This is a UV printing machine."
+  },
+  {
+   "start": 156.9,
+   "end": 157.9,
+   "text": "So UV printing?"
+  },
+  {
+   "start": 157.9,
+   "end": 161.9,
+   "text": "Yes, we're printing the silver paper or the plastic"
+  },
+  {
+   "start": 161.9,
+   "end": 163.9,
+   "text": "so this is UV here right?"
+  },
+  {
+   "start": 163.9,
+   "end": 166.9,
+   "text": "Yeah this is the silver paper, oh so that's the silver"
+  },
+  {
+   "start": 166.9,
+   "end": 169.9,
+   "text": "there this is all the silver paper"
+  },
+  {
+   "start": 169.9,
+   "end": 170.9,
+   "text": "and that's UV?"
+  },
+  {
+   "start": 170.9,
+   "end": 174.9,
+   "text": "We use this UV printing machine to bring the color on it"
+  },
+  {
+   "start": 174.9,
+   "end": 175.9,
+   "text": "Cool."
+  },
+  {
+   "start": 175.9,
+   "end": 178.9,
+   "text": "The UV means UV light, we make the ink dry quickly"
+  },
+  {
+   "start": 178.9,
+   "end": 183.9,
+   "text": "so if it's plastic or laminated like this paper"
+  },
+  {
+   "start": 183.9,
+   "end": 185.9,
+   "text": "you can make the ink dry quickly."
+  },
+  {
+   "start": 185.9,
+   "end": 188.9,
+   "text": "We have the UV printing, we cut it"
+  },
+  {
+   "start": 188.9,
+   "end": 192.9,
+   "text": "and the outcome we want to achieve is something like this right?"
+  },
+  {
+   "start": 192.9,
+   "end": 196.9,
+   "text": "It's a nice color style but that's going to be made"
+  },
+  {
+   "start": 196.9,
+   "end": 198.9,
+   "text": "in a machine like this right?"
+  },
+  {
+   "start": 198.9,
+   "end": 199.9,
+   "text": "Yes, yes cool."
+  },
+  {
+   "start": 199.9,
+   "end": 201.9,
+   "text": "Let's see inside."
+  },
+  {
+   "start": 204.9,
+   "end": 206.9,
+   "text": "So it might be a little bit noisy in the background"
+  },
+  {
+   "start": 206.9,
+   "end": 209.9,
+   "text": "because we've got an operational machine behind us"
+  },
+  {
+   "start": 209.9,
+   "end": 212.9,
+   "text": "but Matthew so what we're doing here?"
+  },
+  {
+   "start": 212.9,
+   "end": 216.9,
+   "text": "Now after we put the paper into the printing machine"
+  },
+  {
+   "start": 216.9,
+   "end": 221.9,
+   "text": "when they print we take a while or two pieces from here"
+  },
+  {
+   "start": 221.9,
+   "end": 225.9,
+   "text": "take a while or two pieces and put under the lights"
+  },
+  {
+   "start": 225.9,
+   "end": 230.9,
+   "text": "so we can see the colors based right"
+  },
+  {
+   "start": 230.9,
+   "end": 232.9,
+   "text": "and use this to check."
+  },
+  {
+   "start": 233.9,
+   "end": 237.9,
+   "text": "There's the same working color in the right area"
+  },
+  {
+   "start": 237.9,
+   "end": 240.9,
+   "text": "and use this machine to check if the color"
+  },
+  {
+   "start": 240.9,
+   "end": 244.9,
+   "text": "how many percent is different than the original sample."
+  },
+  {
+   "start": 244.9,
+   "end": 247.9,
+   "text": "Like this, all is two percent, it's not okay"
+  },
+  {
+   "start": 247.9,
+   "end": 248.9,
+   "text": "then we will need to check."
+  },
+  {
+   "start": 248.9,
+   "end": 251.9,
+   "text": "So if I was to send you my original packaging"
+  },
+  {
+   "start": 251.9,
+   "end": 254.9,
+   "text": "and then I wanted you to make my packaging exactly"
+  },
+  {
+   "start": 254.9,
+   "end": 256.9,
+   "text": "as you can use this to test the color"
+  },
+  {
+   "start": 256.9,
+   "end": 258.9,
+   "text": "of what you made for what was the original."
+  },
+  {
+   "start": 258.9,
+   "end": 259.9,
+   "text": "Cool."
+  },
+  {
+   "start": 259.9,
+   "end": 264.9,
+   "text": "Usually we will control it under one percent"
+  },
+  {
+   "start": 264.9,
+   "end": 266.9,
+   "text": "under one percent."
+  },
+  {
+   "start": 266.9,
+   "end": 268.9,
+   "text": "And then you got like a magnifying glass here"
+  },
+  {
+   "start": 268.9,
+   "end": 270.9,
+   "text": "as well to check the quality."
+  },
+  {
+   "start": 270.9,
+   "end": 274.9,
+   "text": "So Matthew you also have here like the CMYK printing"
+  },
+  {
+   "start": 274.9,
+   "end": 277.9,
+   "text": "so for anyone who doesn't understand CMYK"
+  },
+  {
+   "start": 277.9,
+   "end": 279.9,
+   "text": "you have these four different colors"
+  },
+  {
+   "start": 279.9,
+   "end": 281.9,
+   "text": "and with these four colors you can print"
+  },
+  {
+   "start": 281.9,
+   "end": 283.9,
+   "text": "any color of fine."
+  },
+  {
+   "start": 283.9,
+   "end": 288.9,
+   "text": "And the box is full yellow so we choose the yellow"
+  },
+  {
+   "start": 288.9,
+   "end": 290.9,
+   "text": "and make it yellow, it's a jump."
+  },
+  {
+   "start": 290.9,
+   "end": 292.9,
+   "text": "And we also have this"
+  },
+  {
+   "start": 292.9,
+   "end": 295.9,
+   "text": "the Phantom Color Book."
+  },
+  {
+   "start": 295.9,
+   "end": 296.9,
+   "text": "Beautiful."
+  },
+  {
+   "start": 296.9,
+   "end": 298.9,
+   "text": "The Phantom Color Book."
+  },
+  {
+   "start": 298.9,
+   "end": 301.9,
+   "text": "So if you need a color, same as the Phantom Color"
+  },
+  {
+   "start": 301.9,
+   "end": 303.9,
+   "text": "you just give us the code."
+  },
+  {
+   "start": 303.9,
+   "end": 304.9,
+   "text": "Cool."
+  },
+  {
+   "start": 304.9,
+   "end": 305.9,
+   "text": "And we will print as the source."
+  },
+  {
+   "start": 305.9,
+   "end": 306.9,
+   "text": "We can match our color."
+  },
+  {
+   "start": 306.9,
+   "end": 307.9,
+   "text": "Yes."
+  },
+  {
+   "start": 307.9,
+   "end": 308.9,
+   "text": "Alright so this is a giant machine"
+  },
+  {
+   "start": 308.9,
+   "end": 310.9,
+   "text": "which is basically we're going to print"
+  },
+  {
+   "start": 310.9,
+   "end": 312.9,
+   "text": "all the different colors right."
+  },
+  {
+   "start": 312.9,
+   "end": 314.9,
+   "text": "And every different color that goes into the packaging"
+  },
+  {
+   "start": 314.9,
+   "end": 316.9,
+   "text": "has its own color of paint."
+  },
+  {
+   "start": 316.9,
+   "end": 319.9,
+   "text": "I mean it's all added color after color after color."
+  },
+  {
+   "start": 319.9,
+   "end": 321.9,
+   "text": "And it's mixed together right."
+  },
+  {
+   "start": 321.9,
+   "end": 323.9,
+   "text": "And Matthew's explaining that this machine"
+  },
+  {
+   "start": 323.9,
+   "end": 326.9,
+   "text": "is made in both Germany and Japan."
+  },
+  {
+   "start": 326.9,
+   "end": 327.9,
+   "text": "Yes."
+  },
+  {
+   "start": 327.9,
+   "end": 329.9,
+   "text": "And then you purchase it here."
+  },
+  {
+   "start": 329.9,
+   "end": 330.9,
+   "text": "And this machine I think you've explained"
+  },
+  {
+   "start": 330.9,
+   "end": 332.9,
+   "text": "it costs over two million dollars."
+  },
+  {
+   "start": 332.9,
+   "end": 334.9,
+   "text": "Yes yes yes very expensive."
+  },
+  {
+   "start": 334.9,
+   "end": 335.9,
+   "text": "Very expensive machine."
+  },
+  {
+   "start": 335.9,
+   "end": 337.9,
+   "text": "So I want to take you guys on top of the machine"
+  },
+  {
+   "start": 337.9,
+   "end": 339.9,
+   "text": "just to see all the different colors"
+  },
+  {
+   "start": 339.9,
+   "end": 340.9,
+   "text": "and how it's added."
+  },
+  {
+   "start": 340.9,
+   "end": 342.9,
+   "text": "And we've asked the machine to be turned off for a second"
+  },
+  {
+   "start": 342.9,
+   "end": 344.9,
+   "text": "just because it's very noisy when it's in operation."
+  },
+  {
+   "start": 344.9,
+   "end": 345.9,
+   "text": "So let's go check it out."
+  },
+  {
+   "start": 345.9,
+   "end": 348.9,
+   "text": "And each tank means one color."
+  },
+  {
+   "start": 348.9,
+   "end": 350.9,
+   "text": "And then you've got the paint there like on the"
+  },
+  {
+   "start": 350.9,
+   "end": 352.9,
+   "text": "so you've got yellow here, you've got red there,"
+  },
+  {
+   "start": 352.9,
+   "end": 353.9,
+   "text": "you've got blue there."
+  },
+  {
+   "start": 353.9,
+   "end": 354.9,
+   "text": "Yes."
+  },
+  {
+   "start": 354.9,
+   "end": 356.9,
+   "text": "And then that's essentially the one"
+  },
+  {
+   "start": 356.9,
+   "end": 357.9,
+   "text": "that you're printing right now."
+  },
+  {
+   "start": 357.9,
+   "end": 358.9,
+   "text": "Yes."
+  },
+  {
+   "start": 358.9,
+   "end": 361.9,
+   "text": "Every single color is then added"
+  },
+  {
+   "start": 361.9,
+   "end": 362.9,
+   "text": "at each different point right."
+  },
+  {
+   "start": 362.9,
+   "end": 363.9,
+   "text": "Yes."
+  },
+  {
+   "start": 363.9,
+   "end": 364.9,
+   "text": "So let's go check out what will be"
+  },
+  {
+   "start": 364.9,
+   "end": 366.9,
+   "text": "the final output of the box."
+  },
+  {
+   "start": 366.9,
+   "end": 368.9,
+   "text": "So here is just all the blank card right."
+  },
+  {
+   "start": 368.9,
+   "end": 369.9,
+   "text": "Yes."
+  },
+  {
+   "start": 369.9,
+   "end": 370.9,
+   "text": "So is this where it starts"
+  },
+  {
+   "start": 370.9,
+   "end": 371.9,
+   "text": "and on that side is where it finishes."
+  },
+  {
+   "start": 371.9,
+   "end": 372.9,
+   "text": "Yes yes."
+  },
+  {
+   "start": 372.9,
+   "end": 374.9,
+   "text": "Alright so you can hear the machine"
+  },
+  {
+   "start": 374.9,
+   "end": 376.9,
+   "text": "working behind us so it's quite loud."
+  },
+  {
+   "start": 376.9,
+   "end": 378.9,
+   "text": "But every color that you saw there"
+  },
+  {
+   "start": 378.9,
+   "end": 379.9,
+   "text": "has its own molds."
+  },
+  {
+   "start": 379.9,
+   "end": 381.9,
+   "text": "So here, the color,"
+  },
+  {
+   "start": 381.9,
+   "end": 383.9,
+   "text": "those are the parts that were added."
+  },
+  {
+   "start": 383.9,
+   "end": 385.9,
+   "text": "And then if it's a red or a yellow"
+  },
+  {
+   "start": 385.9,
+   "end": 386.9,
+   "text": "then we have a little mold like this"
+  },
+  {
+   "start": 386.9,
+   "end": 387.9,
+   "text": "so they add that color"
+  },
+  {
+   "start": 387.9,
+   "end": 389.9,
+   "text": "and it's all layered on top of each other"
+  },
+  {
+   "start": 389.9,
+   "end": 390.9,
+   "text": "just so you get an idea of"
+  },
+  {
+   "start": 390.9,
+   "end": 392.9,
+   "text": "that's what the mold looks like"
+  },
+  {
+   "start": 392.9,
+   "end": 393.9,
+   "text": "for the car to the car."
+  },
+  {
+   "start": 393.9,
+   "end": 394.9,
+   "text": "Alright so here we also have"
+  },
+  {
+   "start": 394.9,
+   "end": 396.9,
+   "text": "the exact same machine"
+  },
+  {
+   "start": 396.9,
+   "end": 397.9,
+   "text": "but this is just without UV."
+  },
+  {
+   "start": 397.9,
+   "end": 398.9,
+   "text": "So if you're just doing like"
+  },
+  {
+   "start": 398.9,
+   "end": 399.9,
+   "text": "non-plane color"
+  },
+  {
+   "start": 399.9,
+   "end": 401.9,
+   "text": "we've got offset printing machine."
+  },
+  {
+   "start": 401.9,
+   "end": 402.9,
+   "text": "Offset printing machine."
+  },
+  {
+   "start": 402.9,
+   "end": 403.9,
+   "text": "So if we're doing something like this"
+  },
+  {
+   "start": 403.9,
+   "end": 406.9,
+   "text": "is this made with CMYK as well?"
+  },
+  {
+   "start": 406.9,
+   "end": 408.9,
+   "text": "It is also basically CMYK"
+  },
+  {
+   "start": 408.9,
+   "end": 409.9,
+   "text": "so just four colors."
+  },
+  {
+   "start": 409.9,
+   "end": 410.9,
+   "text": "Yeah."
+  },
+  {
+   "start": 410.9,
+   "end": 412.9,
+   "text": "And the CMYK colors are,"
+  },
+  {
+   "start": 412.9,
+   "end": 413.9,
+   "text": "I don't know if you can see it"
+  },
+  {
+   "start": 413.9,
+   "end": 415.9,
+   "text": "but they're on that edge there as well."
+  },
+  {
+   "start": 415.9,
+   "end": 416.9,
+   "text": "So if you zoom in there"
+  },
+  {
+   "start": 416.9,
+   "end": 419.9,
+   "text": "see that black, yellow, pink and blue"
+  },
+  {
+   "start": 419.9,
+   "end": 421.9,
+   "text": "with those four colors"
+  },
+  {
+   "start": 421.9,
+   "end": 422.9,
+   "text": "you can print any color that you want"
+  },
+  {
+   "start": 422.9,
+   "end": 424.9,
+   "text": "so those four colors are mixed"
+  },
+  {
+   "start": 424.9,
+   "end": 425.9,
+   "text": "to make any of these."
+  },
+  {
+   "start": 425.9,
+   "end": 427.9,
+   "text": "So this is just where you make"
+  },
+  {
+   "start": 427.9,
+   "end": 428.9,
+   "text": "like the normal printing box"
+  },
+  {
+   "start": 428.9,
+   "end": 429.9,
+   "text": "and you have the machine here."
+  },
+  {
+   "start": 429.9,
+   "end": 430.9,
+   "text": "Yes, here."
+  },
+  {
+   "start": 430.9,
+   "end": 431.9,
+   "text": "It's two matching."
+  },
+  {
+   "start": 431.9,
+   "end": 432.9,
+   "text": "But these machines were made in China"
+  },
+  {
+   "start": 432.9,
+   "end": 433.9,
+   "text": "or they're..."
+  },
+  {
+   "start": 433.9,
+   "end": 435.9,
+   "text": "I know these two are made by Japan."
+  },
+  {
+   "start": 435.9,
+   "end": 436.9,
+   "text": "Also Japan."
+  },
+  {
+   "start": 436.9,
+   "end": 437.9,
+   "text": "Yes."
+  },
+  {
+   "start": 437.9,
+   "end": 438.9,
+   "text": "It's a good color."
+  },
+  {
+   "start": 438.9,
+   "end": 439.9,
+   "text": "Very cool."
+  },
+  {
+   "start": 439.9,
+   "end": 441.9,
+   "text": "This is the machine name."
+  },
+  {
+   "start": 441.9,
+   "end": 442.9,
+   "text": "And how much does the machine"
+  },
+  {
+   "start": 442.9,
+   "end": 443.9,
+   "text": "like this cost?"
+  },
+  {
+   "start": 443.9,
+   "end": 447.9,
+   "text": "It's half of cost than that one."
+  },
+  {
+   "start": 447.9,
+   "end": 448.9,
+   "text": "So just over a million dollars."
+  },
+  {
+   "start": 448.9,
+   "end": 449.9,
+   "text": "Yes."
+  },
+  {
+   "start": 449.9,
+   "end": 450.9,
+   "text": "And I have an interest."
+  },
+  {
+   "start": 450.9,
+   "end": 452.9,
+   "text": "Your customers are mainly"
+  },
+  {
+   "start": 452.9,
+   "end": 454.9,
+   "text": "US brands or European brands"
+  },
+  {
+   "start": 454.9,
+   "end": 456.9,
+   "text": "or local Chinese brands."
+  },
+  {
+   "start": 456.9,
+   "end": 457.9,
+   "text": "Yes, they are all my clients."
+  },
+  {
+   "start": 457.9,
+   "end": 458.9,
+   "text": "All your clients."
+  },
+  {
+   "start": 458.9,
+   "end": 459.9,
+   "text": "Yes, perfect."
+  },
+  {
+   "start": 459.9,
+   "end": 460.9,
+   "text": "Awesome."
+  },
+  {
+   "start": 460.9,
+   "end": 461.9,
+   "text": "Cool."
+  },
+  {
+   "start": 461.9,
+   "end": 463.9,
+   "text": "So to summarize, we saw the paper arrive."
+  },
+  {
+   "start": 463.9,
+   "end": 464.9,
+   "text": "We saw the paper getting cut."
+  },
+  {
+   "start": 464.9,
+   "end": 467.9,
+   "text": "We saw it going into the UV machine."
+  },
+  {
+   "start": 467.9,
+   "end": 468.9,
+   "text": "We saw the glass printing."
+  },
+  {
+   "start": 468.9,
+   "end": 470.9,
+   "text": "And then we saw the actual"
+  },
+  {
+   "start": 470.9,
+   "end": 472.9,
+   "text": "just normal paper box as well."
+  },
+  {
+   "start": 472.9,
+   "end": 475.9,
+   "text": "And now that is outside of the factory,"
+  },
+  {
+   "start": 475.9,
+   "end": 477.9,
+   "text": "we're going to go to a different room"
+  },
+  {
+   "start": 477.9,
+   "end": 479.9,
+   "text": "and see what other types of packaging"
+  },
+  {
+   "start": 479.9,
+   "end": 480.9,
+   "text": "they make here as well."
+  },
+  {
+   "start": 480.9,
+   "end": 482.9,
+   "text": "One line, we have a changing area."
+  },
+  {
+   "start": 482.9,
+   "end": 484.9,
+   "text": "All right, so here we've got"
+  },
+  {
+   "start": 484.9,
+   "end": 485.9,
+   "text": "two different lamination machines."
+  },
+  {
+   "start": 485.9,
+   "end": 486.9,
+   "text": "Yeah, lamination."
+  },
+  {
+   "start": 486.9,
+   "end": 488.9,
+   "text": "So lamination essentially just adds"
+  },
+  {
+   "start": 488.9,
+   "end": 489.9,
+   "text": "that coating and that fill"
+  },
+  {
+   "start": 489.9,
+   "end": 490.9,
+   "text": "Yes."
+  },
+  {
+   "start": 490.9,
+   "end": 492.9,
+   "text": "It sort of protects the packaging"
+  },
+  {
+   "start": 492.9,
+   "end": 494.9,
+   "text": "but also makes it feel a little bit nicer as well, right?"
+  },
+  {
+   "start": 494.9,
+   "end": 496.9,
+   "text": "We have a glossy and matte"
+  },
+  {
+   "start": 496.9,
+   "end": 497.9,
+   "text": "and soft touch."
+  },
+  {
+   "start": 497.9,
+   "end": 498.9,
+   "text": "Many, many types."
+  },
+  {
+   "start": 498.9,
+   "end": 500.9,
+   "text": "So a gloss finish, matte finish"
+  },
+  {
+   "start": 500.9,
+   "end": 501.9,
+   "text": "and soft touch."
+  },
+  {
+   "start": 501.9,
+   "end": 503.9,
+   "text": "I really like the matte finish"
+  },
+  {
+   "start": 503.9,
+   "end": 504.9,
+   "text": "finishing here."
+  },
+  {
+   "start": 504.9,
+   "end": 505.9,
+   "text": "So that's not on this figure."
+  },
+  {
+   "start": 505.9,
+   "end": 507.9,
+   "text": "Yes, that is a matte finish."
+  },
+  {
+   "start": 507.9,
+   "end": 508.9,
+   "text": "Okay, so that's the film that you use"
+  },
+  {
+   "start": 508.9,
+   "end": 509.9,
+   "text": "and then that goes over."
+  },
+  {
+   "start": 509.9,
+   "end": 511.9,
+   "text": "All right, let's have a look at that."
+  },
+  {
+   "start": 511.9,
+   "end": 513.9,
+   "text": "Hey guys, I hope you're well"
+  },
+  {
+   "start": 513.9,
+   "end": 515.9,
+   "text": "and I hope you're enjoying this video"
+  },
+  {
+   "start": 515.9,
+   "end": 516.9,
+   "text": "so far."
+  },
+  {
+   "start": 516.9,
+   "end": 518.9,
+   "text": "If you are getting value from this video,"
+  },
+  {
+   "start": 518.9,
+   "end": 519.9,
+   "text": "please do me a solid favor"
+  },
+  {
+   "start": 519.9,
+   "end": 521.9,
+   "text": "and please like this video"
+  },
+  {
+   "start": 521.9,
+   "end": 522.9,
+   "text": "and subscribe to the channel."
+  },
+  {
+   "start": 522.9,
+   "end": 524.9,
+   "text": "It helps more than you know."
+  },
+  {
+   "start": 524.9,
+   "end": 525.9,
+   "text": "The more you can subscribe,"
+  },
+  {
+   "start": 525.9,
+   "end": 526.9,
+   "text": "it shows the channel's larger."
+  },
+  {
+   "start": 526.9,
+   "end": 528.9,
+   "text": "It allows me to do more videos like this."
+  },
+  {
+   "start": 528.9,
+   "end": 530.9,
+   "text": "When I contact factories and say,"
+  },
+  {
+   "start": 530.9,
+   "end": 532.9,
+   "text": "hey, can I show you a production process"
+  },
+  {
+   "start": 532.9,
+   "end": 533.9,
+   "text": "and can I showcase your products?"
+  },
+  {
+   "start": 533.9,
+   "end": 534.9,
+   "text": "The larger the channel is,"
+  },
+  {
+   "start": 534.9,
+   "end": 536.9,
+   "text": "the more likely they are to accommodate us."
+  },
+  {
+   "start": 536.9,
+   "end": 538.9,
+   "text": "And I really want to spend more time in China"
+  },
+  {
+   "start": 538.9,
+   "end": 540.9,
+   "text": "visiting factories for physical products,"
+  },
+  {
+   "start": 540.9,
+   "end": 542.9,
+   "text": "for packaging and all that other stuff as well."
+  },
+  {
+   "start": 542.9,
+   "end": 544.9,
+   "text": "So if you could do me a solid"
+  },
+  {
+   "start": 544.9,
+   "end": 546.9,
+   "text": "subscribe and I'm going to bring"
+  },
+  {
+   "start": 546.9,
+   "end": 548.9,
+   "text": "way more videos inside factories"
+  },
+  {
+   "start": 548.9,
+   "end": 550.9,
+   "text": "showing you how goods are made"
+  },
+  {
+   "start": 550.9,
+   "end": 552.9,
+   "text": "and more discounts for you guys all the time."
+  },
+  {
+   "start": 552.9,
+   "end": 553.9,
+   "text": "All right, take care, all the best."
+  },
+  {
+   "start": 553.9,
+   "end": 555.9,
+   "text": "Let's get back to the video."
+  },
+  {
+   "start": 555.9,
+   "end": 558.9,
+   "text": "All right, so here is where we can see the initiative."
+  },
+  {
+   "start": 558.9,
+   "end": 560.9,
+   "text": "The paper is loaded in there"
+  },
+  {
+   "start": 560.9,
+   "end": 562.9,
+   "text": "and then here is where they add the coating"
+  },
+  {
+   "start": 562.9,
+   "end": 564.9,
+   "text": "and then that goes through here."
+  },
+  {
+   "start": 564.9,
+   "end": 566.9,
+   "text": "Through here."
+  },
+  {
+   "start": 566.9,
+   "end": 570.85,
+   "text": "That through there."
+  },
+  {
+   "start": 570.85,
+   "end": 573.85,
+   "text": "And then here the finished outbreak stacks up."
+  },
+  {
+   "start": 573.85,
+   "end": 576.85,
+   "text": "They just added the matte finish."
+  },
+  {
+   "start": 576.85,
+   "end": 577.85,
+   "text": "It's very thick."
+  },
+  {
+   "start": 577.85,
+   "end": 579.85,
+   "text": "So if you ever have any foil"
+  },
+  {
+   "start": 579.85,
+   "end": 581.85,
+   "text": "on your packaging like that,"
+  },
+  {
+   "start": 581.85,
+   "end": 583.85,
+   "text": "this is where it is added as well."
+  },
+  {
+   "start": 583.85,
+   "end": 585.85,
+   "text": "So this is the paper that we were seeing before"
+  },
+  {
+   "start": 585.85,
+   "end": 588.85,
+   "text": "and then the foil is added in there"
+  },
+  {
+   "start": 588.85,
+   "end": 590.85,
+   "text": "and all the foils are interchangeable"
+  },
+  {
+   "start": 590.85,
+   "end": 593.85,
+   "text": "and then you add them here,"
+  },
+  {
+   "start": 593.85,
+   "end": 595.85,
+   "text": "the process here,"
+  },
+  {
+   "start": 595.85,
+   "end": 597.85,
+   "text": "and then as we come around."
+  },
+  {
+   "start": 599.85,
+   "end": 601.85,
+   "text": "This is where it comes out."
+  },
+  {
+   "start": 601.85,
+   "end": 604.85,
+   "text": "I'll find out an example of what our foil looks like."
+  },
+  {
+   "start": 604.85,
+   "end": 606.85,
+   "text": "That was where it was added."
+  },
+  {
+   "start": 606.85,
+   "end": 609.85,
+   "text": "Very cool."
+  },
+  {
+   "start": 609.85,
+   "end": 611.85,
+   "text": "Here is the printing."
+  },
+  {
+   "start": 611.85,
+   "end": 613.85,
+   "text": "We make sure it's the printing is right"
+  },
+  {
+   "start": 613.85,
+   "end": 616.85,
+   "text": "and then all the black area can flow"
+  },
+  {
+   "start": 616.85,
+   "end": 618.85,
+   "text": "from the foil."
+  },
+  {
+   "start": 618.85,
+   "end": 620.85,
+   "text": "So you see, right area."
+  },
+  {
+   "start": 620.85,
+   "end": 624.85,
+   "text": "So when you see it to make that nice glossy finish"
+  },
+  {
+   "start": 624.85,
+   "end": 626.85,
+   "text": "which we just saw from the foil"
+  },
+  {
+   "start": 626.85,
+   "end": 628.85,
+   "text": "that was added onto the paper,"
+  },
+  {
+   "start": 628.85,
+   "end": 629.85,
+   "text": "onto the pink cards,"
+  },
+  {
+   "start": 629.85,
+   "end": 630.85,
+   "text": "and then we get a nice finish."
+  },
+  {
+   "start": 630.85,
+   "end": 632.85,
+   "text": "And then here is where you do the final quality checking, right?"
+  },
+  {
+   "start": 632.85,
+   "end": 634.85,
+   "text": "Yes, it's in checking."
+  },
+  {
+   "start": 634.85,
+   "end": 635.85,
+   "text": "Pretty cool."
+  },
+  {
+   "start": 635.85,
+   "end": 636.85,
+   "text": "Awesome."
+  },
+  {
+   "start": 636.85,
+   "end": 638.85,
+   "text": "So as you saw the printing there,"
+  },
+  {
+   "start": 638.85,
+   "end": 640.85,
+   "text": "it's still on that large card like this, right?"
+  },
+  {
+   "start": 640.85,
+   "end": 642.85,
+   "text": "So that is going to be four different boxes."
+  },
+  {
+   "start": 642.85,
+   "end": 644.85,
+   "text": "So this paper card was being used to film"
+  },
+  {
+   "start": 644.85,
+   "end": 646.85,
+   "text": "and the coating and the foil"
+  },
+  {
+   "start": 646.85,
+   "end": 648.85,
+   "text": "now needs to be cut to buy the machines."
+  },
+  {
+   "start": 648.85,
+   "end": 651.85,
+   "text": "And here you've got the printing loads, right?"
+  },
+  {
+   "start": 651.85,
+   "end": 653.85,
+   "text": "And this is the cutting loads."
+  },
+  {
+   "start": 653.85,
+   "end": 654.85,
+   "text": "Right, cool."
+  },
+  {
+   "start": 654.85,
+   "end": 656.85,
+   "text": "So essentially the loads are made"
+  },
+  {
+   "start": 656.85,
+   "end": 658.85,
+   "text": "to make use of the size of the paper."
+  },
+  {
+   "start": 658.85,
+   "end": 661.85,
+   "text": "And what's on the other side of the graph?"
+  },
+  {
+   "start": 661.85,
+   "end": 662.85,
+   "text": "This is a box."
+  },
+  {
+   "start": 662.85,
+   "end": 666.85,
+   "text": "It's one, two, three, four, five, six, eight."
+  },
+  {
+   "start": 666.85,
+   "end": 667.85,
+   "text": "Eight boxes."
+  },
+  {
+   "start": 667.85,
+   "end": 668.85,
+   "text": "Nice, nice."
+  },
+  {
+   "start": 668.85,
+   "end": 671.85,
+   "text": "And so that's just in like stamped on top of the boxes"
+  },
+  {
+   "start": 671.85,
+   "end": 673.85,
+   "text": "and that's what's then cut into the paper."
+  },
+  {
+   "start": 673.85,
+   "end": 675.85,
+   "text": "Yeah, and you've got a whole bunch of different modes."
+  },
+  {
+   "start": 675.85,
+   "end": 677.85,
+   "text": "Check out these modes as well."
+  },
+  {
+   "start": 677.85,
+   "end": 680.85,
+   "text": "So whatever type of box that you have"
+  },
+  {
+   "start": 680.85,
+   "end": 683.85,
+   "text": "like these modes, make this one."
+  },
+  {
+   "start": 683.85,
+   "end": 687.85,
+   "text": "Then you have like this box here made by these modes."
+  },
+  {
+   "start": 687.85,
+   "end": 689.85,
+   "text": "This box made by those modes."
+  },
+  {
+   "start": 689.85,
+   "end": 691.85,
+   "text": "So it's completely custom, right?"
+  },
+  {
+   "start": 691.85,
+   "end": 694.85,
+   "text": "Yeah, and whatever style of box that you have"
+  },
+  {
+   "start": 694.85,
+   "end": 698.85,
+   "text": "you will make the modes to then cut the maximum amount of boxes."
+  },
+  {
+   "start": 698.85,
+   "end": 699.85,
+   "text": "Perfect."
+  },
+  {
+   "start": 699.85,
+   "end": 704.85,
+   "text": "So these four machines here are used for the cutting"
+  },
+  {
+   "start": 704.85,
+   "end": 706.85,
+   "text": "which you just saw down there."
+  },
+  {
+   "start": 706.85,
+   "end": 707.85,
+   "text": "They're not turned on right now"
+  },
+  {
+   "start": 707.85,
+   "end": 709.85,
+   "text": "but these are the ones that do the cutting."
+  },
+  {
+   "start": 709.85,
+   "end": 711.85,
+   "text": "Hey guys, I hope you're enjoying the video so far."
+  },
+  {
+   "start": 711.85,
+   "end": 713.85,
+   "text": "I just want your attention for 30 seconds"
+  },
+  {
+   "start": 713.85,
+   "end": 716.85,
+   "text": "to help take your supply chain to the next level."
+  },
+  {
+   "start": 716.85,
+   "end": 718.85,
+   "text": "Now in all my times with sourcing products"
+  },
+  {
+   "start": 718.85,
+   "end": 720.85,
+   "text": "brands, retailers and licenses"
+  },
+  {
+   "start": 720.85,
+   "end": 722.85,
+   "text": "I've noticed that there's three big mistakes"
+  },
+  {
+   "start": 722.85,
+   "end": 724.85,
+   "text": "which a lot of them are making"
+  },
+  {
+   "start": 724.85,
+   "end": 726.85,
+   "text": "which is costing them TMQ."
+  },
+  {
+   "start": 726.85,
+   "end": 728.85,
+   "text": "It's costing them time, it's costing them money"
+  },
+  {
+   "start": 728.85,
+   "end": 730.85,
+   "text": "and it's costing them quality in their products"
+  },
+  {
+   "start": 730.85,
+   "end": 731.85,
+   "text": "and in their supply chain."
+  },
+  {
+   "start": 731.85,
+   "end": 732.85,
+   "text": "As a way to help fix that"
+  },
+  {
+   "start": 732.85,
+   "end": 735.85,
+   "text": "I've put together a quick 60 second quiz"
+  },
+  {
+   "start": 735.85,
+   "end": 737.85,
+   "text": "which is available in the link in the description down below"
+  },
+  {
+   "start": 737.85,
+   "end": 739.85,
+   "text": "and this will help identify any potential mistakes"
+  },
+  {
+   "start": 739.85,
+   "end": 741.85,
+   "text": "that you could be making"
+  },
+  {
+   "start": 741.85,
+   "end": 742.85,
+   "text": "and how to avoid them as well."
+  },
+  {
+   "start": 742.85,
+   "end": 744.85,
+   "text": "So click the link, take the quiz down below"
+  },
+  {
+   "start": 744.85,
+   "end": 746.85,
+   "text": "and I'll see you guys at the next level."
+  },
+  {
+   "start": 746.85,
+   "end": 748.85,
+   "text": "Alright cool, so we just saw the cutting"
+  },
+  {
+   "start": 748.85,
+   "end": 750.85,
+   "text": "and when the cutting is finished"
+  },
+  {
+   "start": 750.85,
+   "end": 752.85,
+   "text": "the boxings basically look like this"
+  },
+  {
+   "start": 752.85,
+   "end": 754.85,
+   "text": "and you've got the glass, you've got the foil"
+  },
+  {
+   "start": 754.85,
+   "end": 756.85,
+   "text": "you've got the nice matte finish"
+  },
+  {
+   "start": 756.85,
+   "end": 758.85,
+   "text": "and here in this pilot"
+  },
+  {
+   "start": 758.85,
+   "end": 760.85,
+   "text": "you must have like more, I don't know"
+  },
+  {
+   "start": 760.85,
+   "end": 763.85,
+   "text": "10,000, 20,000, yeah, other boxes"
+  },
+  {
+   "start": 763.85,
+   "end": 765.85,
+   "text": "and you print this like every single day right?"
+  },
+  {
+   "start": 765.85,
+   "end": 767.85,
+   "text": "Like yes, how many boxings like this"
+  },
+  {
+   "start": 767.85,
+   "end": 769.85,
+   "text": "do you think you can out-through every single day?"
+  },
+  {
+   "start": 769.85,
+   "end": 771.85,
+   "text": "You've got four different cutting machines"
+  },
+  {
+   "start": 771.85,
+   "end": 773.85,
+   "text": "so how many boxes can you make in one day?"
+  },
+  {
+   "start": 773.85,
+   "end": 775.85,
+   "text": "I need to tell you, my printing machine"
+  },
+  {
+   "start": 775.85,
+   "end": 778.85,
+   "text": "one hour can bring like"
+  },
+  {
+   "start": 778.85,
+   "end": 781.85,
+   "text": "20,000, 23,000"
+  },
+  {
+   "start": 781.85,
+   "end": 783.85,
+   "text": "piece of paper, so one hour 20,000"
+  },
+  {
+   "start": 783.85,
+   "end": 786.85,
+   "text": "yeah, one hour 30,000 piece of paper"
+  },
+  {
+   "start": 786.85,
+   "end": 789.85,
+   "text": "but no one paper and many many boxes"
+  },
+  {
+   "start": 789.85,
+   "end": 791.85,
+   "text": "Wow, for 10 hours like 200,000 units"
+  },
+  {
+   "start": 791.85,
+   "end": 793.85,
+   "text": "Yeah, so for an hour, it's for an hour"
+  },
+  {
+   "start": 793.85,
+   "end": 795.85,
+   "text": "and you've got four machines in flow"
+  },
+  {
+   "start": 795.85,
+   "end": 797.85,
+   "text": "Yes, that's about four, that's crazy"
+  },
+  {
+   "start": 797.85,
+   "end": 800.85,
+   "text": "So once you have like a box like this"
+  },
+  {
+   "start": 800.85,
+   "end": 802.85,
+   "text": "you then have to assemble it together right?"
+  },
+  {
+   "start": 802.85,
+   "end": 805.85,
+   "text": "Yes, assemble this machine"
+  },
+  {
+   "start": 805.85,
+   "end": 807.85,
+   "text": "So you put that in here right?"
+  },
+  {
+   "start": 807.85,
+   "end": 810.85,
+   "text": "Yeah, we put it into the machine"
+  },
+  {
+   "start": 810.85,
+   "end": 812.85,
+   "text": "and then it's running through"
+  },
+  {
+   "start": 812.85,
+   "end": 814.85,
+   "text": "Oh, so you add the glue to it?"
+  },
+  {
+   "start": 814.85,
+   "end": 817.85,
+   "text": "Yes, but first when we glue"
+  },
+  {
+   "start": 817.85,
+   "end": 820.85,
+   "text": "we are checking, this assistant can check the quality"
+  },
+  {
+   "start": 820.85,
+   "end": 823.85,
+   "text": "So we check the quality first"
+  },
+  {
+   "start": 823.85,
+   "end": 824.85,
+   "text": "then we glue"
+  },
+  {
+   "start": 824.85,
+   "end": 827.85,
+   "text": "Right, right, this is like proper quality control then"
+  },
+  {
+   "start": 827.85,
+   "end": 830.85,
+   "text": "Yes, so like what's like your defect rate"
+  },
+  {
+   "start": 830.85,
+   "end": 832.85,
+   "text": "Do you ever have any box in switcher damage"
+  },
+  {
+   "start": 832.85,
+   "end": 835.85,
+   "text": "or you can catch it before any damage?"
+  },
+  {
+   "start": 835.85,
+   "end": 838.85,
+   "text": "Yes, the damage box is here"
+  },
+  {
+   "start": 838.85,
+   "end": 840.85,
+   "text": "So any boxes you're not happy with"
+  },
+  {
+   "start": 840.85,
+   "end": 843.85,
+   "text": "you just put it here and then you don't use it right?"
+  },
+  {
+   "start": 843.85,
+   "end": 845.85,
+   "text": "Or you can recycle as well"
+  },
+  {
+   "start": 845.85,
+   "end": 847.85,
+   "text": "Oh, that was cool, you see that?"
+  },
+  {
+   "start": 847.85,
+   "end": 849.85,
+   "text": "So the box is coming through here and then"
+  },
+  {
+   "start": 849.85,
+   "end": 851.85,
+   "text": "was that the glue being added there?"
+  },
+  {
+   "start": 851.85,
+   "end": 853.85,
+   "text": "There's glue in that area"
+  },
+  {
+   "start": 853.85,
+   "end": 855.85,
+   "text": "Alright, cool"
+  },
+  {
+   "start": 855.85,
+   "end": 856.85,
+   "text": "Oh, that's sick"
+  },
+  {
+   "start": 856.85,
+   "end": 857.85,
+   "text": "This is more clearly"
+  },
+  {
+   "start": 857.85,
+   "end": 862.26,
+   "text": "You feed the box through the machine"
+  },
+  {
+   "start": 862.26,
+   "end": 864.26,
+   "text": "and then it gets assembled here right?"
+  },
+  {
+   "start": 864.26,
+   "end": 866.26,
+   "text": "Yes, it's folding"
+  },
+  {
+   "start": 866.26,
+   "end": 867.26,
+   "text": "Oh, that's cool"
+  },
+  {
+   "start": 867.26,
+   "end": 869.26,
+   "text": "And then is glue being added here as well"
+  },
+  {
+   "start": 869.26,
+   "end": 870.26,
+   "text": "or you just fold it?"
+  },
+  {
+   "start": 870.26,
+   "end": 872.26,
+   "text": "Yes, we put the glue first"
+  },
+  {
+   "start": 872.26,
+   "end": 875.26,
+   "text": "the machine we put the glue in the glue area first"
+  },
+  {
+   "start": 875.26,
+   "end": 877.26,
+   "text": "and then close it"
+  },
+  {
+   "start": 877.26,
+   "end": 880.26,
+   "text": "Very good, and then the final output looks like that"
+  },
+  {
+   "start": 880.26,
+   "end": 881.26,
+   "text": "Oh, cool"
+  },
+  {
+   "start": 881.26,
+   "end": 887.36,
+   "text": "This is essentially what is the final output"
+  },
+  {
+   "start": 887.36,
+   "end": 889.36,
+   "text": "Nice, beautiful finishing"
+  },
+  {
+   "start": 889.36,
+   "end": 892.36,
+   "text": "And then this is how you would send it to your customer"
+  },
+  {
+   "start": 892.36,
+   "end": 894.36,
+   "text": "and then they can essentially just take that"
+  },
+  {
+   "start": 894.36,
+   "end": 895.36,
+   "text": "and do the final assembly"
+  },
+  {
+   "start": 895.36,
+   "end": 899.36,
+   "text": "This is why it's 50 pieces"
+  },
+  {
+   "start": 899.36,
+   "end": 901.36,
+   "text": "What's the GSM?"
+  },
+  {
+   "start": 901.36,
+   "end": 903.36,
+   "text": "What's the thickness of this?"
+  },
+  {
+   "start": 903.36,
+   "end": 906.36,
+   "text": "This is why it's 375"
+  },
+  {
+   "start": 906.36,
+   "end": 910.36,
+   "text": "And you can do like 200, 300, 500"
+  },
+  {
+   "start": 910.36,
+   "end": 912.36,
+   "text": "Any style that you want"
+  },
+  {
+   "start": 912.36,
+   "end": 914.36,
+   "text": "whether it's a thinner one or thicker one"
+  },
+  {
+   "start": 914.36,
+   "end": 915.36,
+   "text": "Very cool"
+  },
+  {
+   "start": 915.36,
+   "end": 917.36,
+   "text": "I'm not sure it's speaking very roughly"
+  },
+  {
+   "start": 917.36,
+   "end": 920.36,
+   "text": "What would be the unit cost of a box like this"
+  },
+  {
+   "start": 920.36,
+   "end": 923.36,
+   "text": "with this type of printing and gloss and finishing"
+  },
+  {
+   "start": 923.36,
+   "end": 928.36,
+   "text": "This is like 0.08 or 7?"
+  },
+  {
+   "start": 928.36,
+   "end": 930.36,
+   "text": "So around 7 or 8 cent per box"
+  },
+  {
+   "start": 930.36,
+   "end": 932.36,
+   "text": "One box, tiny box"
+  },
+  {
+   "start": 932.36,
+   "end": 934.36,
+   "text": "And you can make 200,000 units"
+  },
+  {
+   "start": 934.36,
+   "end": 937.36,
+   "text": "What would be the lowest order quantity you would accept"
+  },
+  {
+   "start": 937.36,
+   "end": 939.36,
+   "text": "like if a new customer is watching this"
+  },
+  {
+   "start": 939.36,
+   "end": 940.36,
+   "text": "M-O-Q, right?"
+  },
+  {
+   "start": 940.36,
+   "end": 942.36,
+   "text": "Yes, 500 pieces"
+  },
+  {
+   "start": 942.36,
+   "end": 943.36,
+   "text": "500 pieces of scope"
+  },
+  {
+   "start": 943.36,
+   "end": 946.36,
+   "text": "Your philosophy is more so you want to start"
+  },
+  {
+   "start": 946.36,
+   "end": 948.36,
+   "text": "and build up with the customer"
+  },
+  {
+   "start": 948.36,
+   "end": 950.36,
+   "text": "Because anyone who does 500 pieces"
+  },
+  {
+   "start": 950.36,
+   "end": 952.36,
+   "text": "maybe just doing this product for the first time"
+  },
+  {
+   "start": 952.36,
+   "end": 954.36,
+   "text": "but then that will scale into"
+  },
+  {
+   "start": 954.36,
+   "end": 956.36,
+   "text": "1,000, 2,000 pieces per month"
+  },
+  {
+   "start": 956.36,
+   "end": 958.36,
+   "text": "and then to the 200,000 pieces per year"
+  },
+  {
+   "start": 958.36,
+   "end": 960.36,
+   "text": "which you can produce for a day"
+  },
+  {
+   "start": 960.36,
+   "end": 962.36,
+   "text": "Cool, awesome, thank you"
+  },
+  {
+   "start": 962.36,
+   "end": 965.36,
+   "text": "I'm assuming this is like the waste of the material"
+  },
+  {
+   "start": 965.36,
+   "end": 967.36,
+   "text": "So as you're cutting the packaging"
+  },
+  {
+   "start": 967.36,
+   "end": 969.36,
+   "text": "this is the best that you don't use"
+  },
+  {
+   "start": 969.36,
+   "end": 971.36,
+   "text": "I understand in China"
+  },
+  {
+   "start": 971.36,
+   "end": 974.36,
+   "text": "a lot of the packaging and paper that we use"
+  },
+  {
+   "start": 974.36,
+   "end": 975.36,
+   "text": "are recycled, right?"
+  },
+  {
+   "start": 975.36,
+   "end": 977.36,
+   "text": "So what happens to this paper once we decide"
+  },
+  {
+   "start": 977.36,
+   "end": 978.36,
+   "text": "I'm not going to use this"
+  },
+  {
+   "start": 978.36,
+   "end": 980.36,
+   "text": "Where does this go?"
+  },
+  {
+   "start": 980.36,
+   "end": 984.36,
+   "text": "The paper factory will collect all the waste paper"
+  },
+  {
+   "start": 984.36,
+   "end": 989.36,
+   "text": "and they will send it back to make it to new paper"
+  },
+  {
+   "start": 989.36,
+   "end": 990.36,
+   "text": "Maybe mix?"
+  },
+  {
+   "start": 990.36,
+   "end": 991.36,
+   "text": "How do they do that?"
+  },
+  {
+   "start": 991.36,
+   "end": 992.36,
+   "text": "Like do they mix it with water"
+  },
+  {
+   "start": 992.36,
+   "end": 993.36,
+   "text": "and like shred it down?"
+  },
+  {
+   "start": 993.36,
+   "end": 994.36,
+   "text": "Yes, yes"
+  },
+  {
+   "start": 994.36,
+   "end": 995.36,
+   "text": "Cool"
+  },
+  {
+   "start": 995.36,
+   "end": 996.36,
+   "text": "And if they have an elimination"
+  },
+  {
+   "start": 996.36,
+   "end": 998.36,
+   "text": "they will appear on the elimination of first"
+  },
+  {
+   "start": 998.36,
+   "end": 1000.36,
+   "text": "Which is why the elimination is another layer"
+  },
+  {
+   "start": 1000.36,
+   "end": 1002.36,
+   "text": "so it can just wastely remove"
+  },
+  {
+   "start": 1002.36,
+   "end": 1004.36,
+   "text": "Yeah, and you can just..."
+  },
+  {
+   "start": 1004.36,
+   "end": 1006.36,
+   "text": "I was asking you earlier about sustainability"
+  },
+  {
+   "start": 1006.36,
+   "end": 1007.36,
+   "text": "and eco-friendly"
+  },
+  {
+   "start": 1007.36,
+   "end": 1008.36,
+   "text": "and you explained that a lot"
+  },
+  {
+   "start": 1008.36,
+   "end": 1011.36,
+   "text": "the paint which you purchase is eco-friendly paint"
+  },
+  {
+   "start": 1011.36,
+   "end": 1013.36,
+   "text": "Which essentially means that"
+  },
+  {
+   "start": 1013.36,
+   "end": 1015.36,
+   "text": "I think it's something that paint is made from beans"
+  },
+  {
+   "start": 1015.36,
+   "end": 1016.36,
+   "text": "Did you say?"
+  },
+  {
+   "start": 1016.36,
+   "end": 1018.36,
+   "text": "Yes, so it's made from beans"
+  },
+  {
+   "start": 1018.36,
+   "end": 1020.36,
+   "text": "which is essentially the food that we eat"
+  },
+  {
+   "start": 1020.36,
+   "end": 1021.36,
+   "text": "Yes"
+  },
+  {
+   "start": 1021.36,
+   "end": 1023.36,
+   "text": "It's then used for the colour of the paint"
+  },
+  {
+   "start": 1023.36,
+   "end": 1026.36,
+   "text": "It comes from an eco-friendly source"
+  },
+  {
+   "start": 1026.36,
+   "end": 1028.36,
+   "text": "So there's no harmful chemicals or toxins"
+  },
+  {
+   "start": 1028.36,
+   "end": 1030.36,
+   "text": "from the paint that you use"
+  },
+  {
+   "start": 1030.36,
+   "end": 1031.36,
+   "text": "which go into the packaging, right?"
+  },
+  {
+   "start": 1031.36,
+   "end": 1032.36,
+   "text": "Yes"
+  },
+  {
+   "start": 1032.36,
+   "end": 1033.36,
+   "text": "Cool, I like that"
+  },
+  {
+   "start": 1033.36,
+   "end": 1034.36,
+   "text": "So it's a little bit quieter out here"
+  },
+  {
+   "start": 1034.36,
+   "end": 1036.36,
+   "text": "but in there you were showing us that there was a QR code"
+  },
+  {
+   "start": 1036.36,
+   "end": 1037.36,
+   "text": "on the packaging, right?"
+  },
+  {
+   "start": 1037.36,
+   "end": 1038.36,
+   "text": "Yes, and what was really unique"
+  },
+  {
+   "start": 1038.36,
+   "end": 1040.36,
+   "text": "is that a lot of people use QR code on their packaging"
+  },
+  {
+   "start": 1040.36,
+   "end": 1041.36,
+   "text": "which sends them to a website"
+  },
+  {
+   "start": 1041.36,
+   "end": 1043.36,
+   "text": "but you can do one-of-one QR codes"
+  },
+  {
+   "start": 1043.36,
+   "end": 1046.36,
+   "text": "Like so, if you do a thousand pieces of packaging"
+  },
+  {
+   "start": 1046.36,
+   "end": 1048.36,
+   "text": "you can have a thousand different QR codes"
+  },
+  {
+   "start": 1048.36,
+   "end": 1051.36,
+   "text": "So like let's say it's a special project"
+  },
+  {
+   "start": 1051.36,
+   "end": 1053.36,
+   "text": "and you want everyone to have a unique number"
+  },
+  {
+   "start": 1053.36,
+   "end": 1055.36,
+   "text": "or every piece is a little bit different"
+  },
+  {
+   "start": 1055.36,
+   "end": 1057.36,
+   "text": "and you want everyone to have their own code"
+  },
+  {
+   "start": 1057.36,
+   "end": 1058.36,
+   "text": "and how does that work?"
+  },
+  {
+   "start": 1058.36,
+   "end": 1060.36,
+   "text": "You download those codes"
+  },
+  {
+   "start": 1060.36,
+   "end": 1062.36,
+   "text": "and then how does it print on to all?"
+  },
+  {
+   "start": 1062.36,
+   "end": 1064.36,
+   "text": "Yes, client gets the code"
+  },
+  {
+   "start": 1064.36,
+   "end": 1067.36,
+   "text": "fast and we bring the code on the box"
+  },
+  {
+   "start": 1067.36,
+   "end": 1071.36,
+   "text": "When the client scan the code"
+  },
+  {
+   "start": 1071.36,
+   "end": 1073.36,
+   "text": "it's the first time scan"
+  },
+  {
+   "start": 1073.36,
+   "end": 1075.36,
+   "text": "or the second time scan"
+  },
+  {
+   "start": 1075.36,
+   "end": 1077.36,
+   "text": "So it's an anti-fake"
+  },
+  {
+   "start": 1077.36,
+   "end": 1078.36,
+   "text": "Okay, also like anti-fakes"
+  },
+  {
+   "start": 1078.36,
+   "end": 1079.36,
+   "text": "Got you, got you"
+  },
+  {
+   "start": 1079.36,
+   "end": 1081.36,
+   "text": "Alright Matthew, so we're in a sample room just now"
+  },
+  {
+   "start": 1081.36,
+   "end": 1084.36,
+   "text": "this is probably the quietest room in the factory"
+  },
+  {
+   "start": 1084.36,
+   "end": 1085.36,
+   "text": "So if anyone watching this"
+  },
+  {
+   "start": 1085.36,
+   "end": 1087.36,
+   "text": "wanted to make their own unique style of packaging"
+  },
+  {
+   "start": 1087.36,
+   "end": 1089.36,
+   "text": "we showed the mass production"
+  },
+  {
+   "start": 1089.36,
+   "end": 1091.36,
+   "text": "We would make it here in the sample room first"
+  },
+  {
+   "start": 1091.36,
+   "end": 1093.36,
+   "text": "So here you have like a print by machine"
+  },
+  {
+   "start": 1093.36,
+   "end": 1096.36,
+   "text": "and this is essentially just like a one-of-one"
+  },
+  {
+   "start": 1096.36,
+   "end": 1098.36,
+   "text": "like you would just make like one or two pieces here"
+  },
+  {
+   "start": 1098.36,
+   "end": 1100.36,
+   "text": "but then we would put it through those machines"
+  },
+  {
+   "start": 1100.36,
+   "end": 1102.36,
+   "text": "so we just looked at when we're doing the mass production"
+  },
+  {
+   "start": 1102.36,
+   "end": 1105.36,
+   "text": "So here's just basically where you're testing"
+  },
+  {
+   "start": 1105.36,
+   "end": 1108.36,
+   "text": "You do the printing, laminating and then cutting"
+  },
+  {
+   "start": 1108.36,
+   "end": 1111.36,
+   "text": "and then you can send the sample to the customer"
+  },
+  {
+   "start": 1111.36,
+   "end": 1115.36,
+   "text": "Yes, this sample is for the client first"
+  },
+  {
+   "start": 1115.36,
+   "end": 1117.36,
+   "text": "or the package first time"
+  },
+  {
+   "start": 1117.36,
+   "end": 1120.36,
+   "text": "I cannot imagine what my package is going to be"
+  },
+  {
+   "start": 1120.36,
+   "end": 1123.36,
+   "text": "So I use the digital printer machine"
+  },
+  {
+   "start": 1123.36,
+   "end": 1126.36,
+   "text": "print first and then to die cutting to laminate"
+  },
+  {
+   "start": 1126.36,
+   "end": 1128.36,
+   "text": "finish and send it to the client"
+  },
+  {
+   "start": 1128.36,
+   "end": 1129.36,
+   "text": "So this is digital printing"
+  },
+  {
+   "start": 1129.36,
+   "end": 1130.36,
+   "text": "Yeah, digital printing"
+  },
+  {
+   "start": 1130.36,
+   "end": 1131.36,
+   "text": "What would you call the other printing?"
+  },
+  {
+   "start": 1131.36,
+   "end": 1133.36,
+   "text": "Offset printing and UV printing"
+  },
+  {
+   "start": 1133.36,
+   "end": 1135.36,
+   "text": "Offset printing and UV printing"
+  },
+  {
+   "start": 1135.36,
+   "end": 1137.36,
+   "text": "is like the mass production style"
+  },
+  {
+   "start": 1137.36,
+   "end": 1139.36,
+   "text": "but digital printing is for the sample"
+  },
+  {
+   "start": 1139.36,
+   "end": 1142.36,
+   "text": "And for anyone watching this who wants to make a sample"
+  },
+  {
+   "start": 1142.36,
+   "end": 1146.36,
+   "text": "How would you want them to send you their artwork?"
+  },
+  {
+   "start": 1146.36,
+   "end": 1149.36,
+   "text": "Just to send me your logo we can design for you"
+  },
+  {
+   "start": 1149.36,
+   "end": 1150.36,
+   "text": "or do artwork"
+  },
+  {
+   "start": 1150.36,
+   "end": 1153.36,
+   "text": "You just give me artwork and we have a sample for you"
+  },
+  {
+   "start": 1153.36,
+   "end": 1156.36,
+   "text": "and everyone watching this video"
+  },
+  {
+   "start": 1156.36,
+   "end": 1159.36,
+   "text": "and I will get a free digital sample for you"
+  },
+  {
+   "start": 1159.36,
+   "end": 1161.36,
+   "text": "So anyone watching this video"
+  },
+  {
+   "start": 1161.36,
+   "end": 1163.36,
+   "text": "who wants a sample of their own box"
+  },
+  {
+   "start": 1163.36,
+   "end": 1165.36,
+   "text": "you will make a free sample for them"
+  },
+  {
+   "start": 1165.36,
+   "end": 1166.36,
+   "text": "Free sample for them"
+  },
+  {
+   "start": 1166.36,
+   "end": 1168.36,
+   "text": "So I'm going to put Matthew's email address"
+  },
+  {
+   "start": 1168.36,
+   "end": 1169.36,
+   "text": "down below in the video"
+  },
+  {
+   "start": 1169.36,
+   "end": 1171.36,
+   "text": "and just say you watched the YouTube episodes"
+  },
+  {
+   "start": 1171.36,
+   "end": 1173.36,
+   "text": "and then Matthew will take care of you"
+  },
+  {
+   "start": 1173.36,
+   "end": 1174.36,
+   "text": "and give you a free sample"
+  },
+  {
+   "start": 1174.36,
+   "end": 1175.36,
+   "text": "Yes, no problem"
+  },
+  {
+   "start": 1175.36,
+   "end": 1176.36,
+   "text": "Thank you very much Matthew"
+  },
+  {
+   "start": 1176.36,
+   "end": 1177.36,
+   "text": "I really appreciate it"
+  },
+  {
+   "start": 1177.36,
+   "end": 1178.36,
+   "text": "Thank you"
+  },
+  {
+   "start": 1178.36,
+   "end": 1180.36,
+   "text": "Alright so you saw the type of different boxes"
+  },
+  {
+   "start": 1180.36,
+   "end": 1182.36,
+   "text": "that we did which were kind of flat packed"
+  },
+  {
+   "start": 1182.36,
+   "end": 1184.36,
+   "text": "but for these types of gift boxes"
+  },
+  {
+   "start": 1184.36,
+   "end": 1185.36,
+   "text": "which are maybe a little bit thicker"
+  },
+  {
+   "start": 1185.36,
+   "end": 1187.36,
+   "text": "you have a little bit more structure to it as well"
+  },
+  {
+   "start": 1187.36,
+   "end": 1189.36,
+   "text": "and you can see here all the different styles"
+  },
+  {
+   "start": 1189.36,
+   "end": 1190.36,
+   "text": "that are made as well"
+  },
+  {
+   "start": 1190.36,
+   "end": 1192.36,
+   "text": "if you have something a little bit more deluxe"
+  },
+  {
+   "start": 1192.36,
+   "end": 1194.36,
+   "text": "a little bit more premium that you want to do"
+  },
+  {
+   "start": 1194.36,
+   "end": 1196.36,
+   "text": "you have a nice big machine in here"
+  },
+  {
+   "start": 1196.36,
+   "end": 1197.36,
+   "text": "which brings that"
+  },
+  {
+   "start": 1197.36,
+   "end": 1199.36,
+   "text": "So again inside it's a little bit noisy"
+  },
+  {
+   "start": 1199.36,
+   "end": 1201.36,
+   "text": "but I just want to show you"
+  },
+  {
+   "start": 1201.36,
+   "end": 1203.36,
+   "text": "how these boxes are assembled"
+  },
+  {
+   "start": 1204.36,
+   "end": 1206.36,
+   "text": "This is where the boxes come down"
+  },
+  {
+   "start": 1206.36,
+   "end": 1211.02,
+   "text": "How would you describe what happens here?"
+  },
+  {
+   "start": 1211.02,
+   "end": 1213.02,
+   "text": "The boxes come down this way"
+  },
+  {
+   "start": 1213.02,
+   "end": 1215.02,
+   "text": "and then there's a pair of 8 of that machine there right?"
+  },
+  {
+   "start": 1215.02,
+   "end": 1216.02,
+   "text": "Yes, yes"
+  },
+  {
+   "start": 1216.02,
+   "end": 1219.02,
+   "text": "We just need to put the paper in that side"
+  },
+  {
+   "start": 1219.02,
+   "end": 1222.02,
+   "text": "and we'll come to the finish for the type of gift box"
+  },
+  {
+   "start": 1222.02,
+   "end": 1225.02,
+   "text": "and feed them to you by the side"
+  },
+  {
+   "start": 1225.02,
+   "end": 1226.02,
+   "text": "Lovely"
+  },
+  {
+   "start": 1226.02,
+   "end": 1230.32,
+   "text": "Alright so this is just a very similar machine"
+  },
+  {
+   "start": 1230.32,
+   "end": 1232.32,
+   "text": "but just on a bigger scale right?"
+  },
+  {
+   "start": 1232.32,
+   "end": 1235.32,
+   "text": "Yes, so essentially you have the bigger box"
+  },
+  {
+   "start": 1235.32,
+   "end": 1237.32,
+   "text": "and you have the paper on the bottom"
+  },
+  {
+   "start": 1237.32,
+   "end": 1240.32,
+   "text": "and the machine just connects the two together"
+  },
+  {
+   "start": 1240.32,
+   "end": 1242.32,
+   "text": "and they go on the production line"
+  },
+  {
+   "start": 1242.32,
+   "end": 1245.32,
+   "text": "and the workers here are adding a little bit of perfection"
+  },
+  {
+   "start": 1245.32,
+   "end": 1247.32,
+   "text": "Anything more to the inside"
+  },
+  {
+   "start": 1247.32,
+   "end": 1249.32,
+   "text": "So they add the inner on the inside"
+  },
+  {
+   "start": 1249.32,
+   "end": 1251.32,
+   "text": "and you stack them on the end of the production line there"
+  },
+  {
+   "start": 1251.32,
+   "end": 1252.32,
+   "text": "Yes"
+  },
+  {
+   "start": 1252.32,
+   "end": 1255.32,
+   "text": "Alright Matthew, thank you so much for having us here"
+  },
+  {
+   "start": 1255.32,
+   "end": 1257.32,
+   "text": "in your factory in Fochan"
+  },
+  {
+   "start": 1257.32,
+   "end": 1259.32,
+   "text": "It's been a joy and it's been really good for me"
+  },
+  {
+   "start": 1259.32,
+   "end": 1261.32,
+   "text": "to learn more about how the packaging process is done"
+  },
+  {
+   "start": 1261.32,
+   "end": 1263.32,
+   "text": "and do you have any final message"
+  },
+  {
+   "start": 1263.32,
+   "end": 1265.32,
+   "text": "or any remarks that you want to share with the audience"
+  },
+  {
+   "start": 1265.32,
+   "end": 1268.32,
+   "text": "in terms of how people can learn more about packaging"
+  },
+  {
+   "start": 1268.32,
+   "end": 1270.32,
+   "text": "or how people can share designs with you"
+  },
+  {
+   "start": 1270.32,
+   "end": 1272.32,
+   "text": "or any last words you want to say"
+  },
+  {
+   "start": 1272.32,
+   "end": 1275.32,
+   "text": "If you have any questions about the packages"
+  },
+  {
+   "start": 1275.32,
+   "end": 1277.32,
+   "text": "you message me, you email me, okay?"
+  },
+  {
+   "start": 1277.32,
+   "end": 1280.32,
+   "text": "Sure, and Matthew, you've been in business in the packaging"
+  },
+  {
+   "start": 1280.32,
+   "end": 1283.32,
+   "text": "very similar to the same amount of time that I've been working with China as well"
+  },
+  {
+   "start": 1283.32,
+   "end": 1286.32,
+   "text": "So you've been in the packaging business for you said I think 12 or 13 years"
+  },
+  {
+   "start": 1286.32,
+   "end": 1287.32,
+   "text": "Yes, 13 years"
+  },
+  {
+   "start": 1287.32,
+   "end": 1289.32,
+   "text": "Cool, cool, so lots and lots of experience"
+  },
+  {
+   "start": 1289.32,
+   "end": 1291.32,
+   "text": "He looks very young, but he has a lot of experience"
+  },
+  {
+   "start": 1291.32,
+   "end": 1293.32,
+   "text": "I've learned a lot from him today as well"
+  },
+  {
+   "start": 1293.32,
+   "end": 1295.32,
+   "text": "So anything you need just connect us"
+  },
+  {
+   "start": 1295.32,
+   "end": 1297.32,
+   "text": "Do you have any questions about the packaging as well?"
+  },
+  {
+   "start": 1297.32,
+   "end": 1299.32,
+   "text": "Just write them down in the comments below as well"
+  },
+  {
+   "start": 1299.32,
+   "end": 1301.32,
+   "text": "and Matthew will come in and take a look"
+  },
+  {
+   "start": 1301.32,
+   "end": 1303.32,
+   "text": "and you can also write to him directly as well"
+  },
+  {
+   "start": 1303.32,
+   "end": 1305.32,
+   "text": "Thank you guys, have an amazing day"
+  },
+  {
+   "start": 1305.32,
+   "end": 1307.32,
+   "text": "and I'll see you on the next video"
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:04:54.547694+00:00",
+ "seconds": 48.7
+}

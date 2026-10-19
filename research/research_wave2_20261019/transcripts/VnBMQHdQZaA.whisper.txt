@@ -1,0 +1,307 @@
+Hi there, this is Unmai from PicsInperfect and today I'm going to share with you how to create a natural and realistic
+canvas mock-up with Photoshop. All you have to do is to just drag and drop your photo and the template will take care of the rest.
+It will automatically blend the photo according to the canvas. Also, we're going to make the template absolutely customizable.
+So without any further ado, let's get started.
+Back in the magical world, the Photoshop. If you want to go ahead and download this photo and follow along,
+you already know what to do. Check the links in the description.
+Now, the first thing we need to do here is to create a placeholder.
+A placeholder is a place which holds the image.
+Or in other words, it's a place where you're going to drag and drop your new photos.
+So let's go ahead and create a brand new layer by clicking on the New Layer icon right there.
+And let's name this Placeholder.
+There you are. The next step is to actually create a placeholder just above the canvas.
+And for that, we're going to use the rectangular Maki 2.
+Now, keep in mind, I want you to have a close look.
+This is not an absolute rectangle, right?
+There are bumps here and there, right? It's not an absolute rectangle.
+However, for smart objects to work properly for replacing images, it has to be rectangle.
+What do we do now?
+First, let's create a rectangle just leaving a little space outside of it.
+So we're going to start from right here and just make sure we are leaving some space.
+There you go. Alright?
+Make sure the rectangle we created is outside the bounds of the canvas.
+A little bit space is left.
+Once we have done that, we need to fill it with a color that can represent a wide variety of images.
+Guess what that color is? 50% gray because it's in the middle of everything, right?
+So let's make sure that the foreground color is 50% gray.
+Double-click on the foreground color box right there.
+And let's choose 808080 or RGNB all at 128.
+Hit OK.
+Now that the foreground color is gray, just press Alt, Backspace on Windows or Option Delete on a Mac.
+Then press Ctrl or Command D to deselect.
+However, do keep in mind that when we created this rectangle, we left a little space.
+There is a gap, right?
+Now we need to make sure that the placeholder is only applied to that canvas.
+And for that, we need to create a mask.
+But before we create any mask or do anything with this layer,
+let's change this into a smart object.
+So with the placeholder layer selected, let's go to Filter and then Convert for Smart Filters, hit OK.
+So that it becomes easy for us to replace it.
+Now, let's turn it off for a moment and you can take all the time in the world to create a proper selection of this.
+You can use the Quick Selection Tool, the Pen Tool, whatever is your favorite.
+So to save time, I went ahead, I used the Pen Tool to make a selection of it.
+I'm just going to load the selection.
+This is not a selection class.
+So I'm just going to go to Select and then Load Selection.
+And I had created this selection, Canvas Selection right there.
+And there you go.
+So in this, I used the Pen Tool to create a selection of this canvas.
+You can use any tool that you like.
+All you have to keep in mind is to make a selection as accurate as possible.
+Have a look.
+Once you have the selection ready, let's turn on the placeholder and then click on the Mask button right there.
+All right.
+Now, it's exactly falling on the canvas.
+Isn't that amazing?
+Now, the canvas is white, right?
+Let's turn it off.
+Let's have a look.
+The canvas is white.
+Whatever we paint on it is going to make it what?
+Darker, right?
+And what is the Blend Mode which makes things darker?
+Anything in the Darken Blend Mode group.
+However, in this case, we're going to use Multiply.
+Let's turn it on and have a look.
+We're going to choose Multiply.
+It looks right.
+At this moment, actually, we can stop.
+However, we still need some lights and shadow control over it.
+Because as is, if you place your image right here, it's going to look fake.
+So to create lights and shadows, we're going to make two copies of the original image right there.
+So select the background layer and then press Ctrl or Command J twice.
+We have two copies.
+One, we're going to name it Light.
+And the other, we're going to name this Shadow.
+Alright?
+Now, we're going to place it on top of the placeholder.
+So Shadow and then Light.
+First, let's work with Shadow.
+I have turned off the light momentarily.
+Now, this is only creating lights and shadows.
+We don't want involvement of any color in this case.
+So let's take away the colors by desaturating it.
+To desaturate it, press Ctrl, Shift, U or Command, Shift, U.
+Once it's desaturated, what blend mode do you think darkens or creates shadows?
+We just used it.
+Multiply, right?
+So change the blend mode from Normal to Multiply.
+This is perfect.
+We need to make the shadows even darker.
+You know why?
+So that we can control that later according to the image that we have.
+Because different images will require different amounts of shadows and lights.
+So, let's go ahead and create a Curves Adjustment layer by clicking on the Adjustment layer icon
+and then choose Curves.
+And we're going to take it down just a little bit, right?
+At this point, this is affecting all of the image.
+We don't want that.
+We want the curves to affect only the shadow.
+So hold the Alt key or the Option key and click on the line between these two layers.
+Now, the Curves is limited just to the shadow layer.
+Alternatively, let me redo that.
+You can open the Curves properties by double clicking on the symbol right there and then
+click on this button.
+It also creates a Clipping Mask.
+However, still there is something wrong, right?
+The shadow layer that we created is being applied over the entire image and not just the canvas.
+So, we need to make sure that it's only affecting the canvas.
+And how can we make sure that happens?
+Just simply copy the mask.
+So, hold the Alt key or the Option key, click and drag the mask on the shadow layer.
+Alright?
+Now, let's go ahead and turn on the light.
+Also, we are dealing with light.
+We don't want any color to be involved, right?
+So, desaturated by pressing Ctrl Shift U, Command Shift U.
+It's desaturated.
+Now, what is the Blend Mode which brightens stuff?
+Screen, right?
+Or any Blend Mode in the Lighting Group.
+So, let's go ahead and change the Blend Mode from Normal to Screen.
+But you know, it's very, very light.
+It's very bright.
+So, how do we control that?
+Again, Curves, right?
+The problem here is it's also brightening the shadows.
+We don't want that.
+We want to keep the highlights in the highlight areas but we don't want to brighten the
+shadows, right?
+So, click on the Adjustment Layer icon and then choose Curves.
+Now, we just want to limit the curves to the light layer.
+So, click on this button, Create Clipping Mask button.
+Now, we will create a point on the right-hand side.
+It will maintain the light and on the left-hand side we're gonna create a point and then just
+bring it down, just like that.
+That will make sure that only the brights are enhanced.
+There we go.
+That kind of looks good.
+You can make little adjustments here and there and there we are.
+Now, it again also affects the entire image.
+We don't want that.
+We just wanted to affect the canvas.
+So, what do we do?
+We can either copy the same mask there or you know what we can do?
+We can make an entire group of the lights and shadows.
+So, select the shadow layer, hold the Shift key, select the topmost layer and then press
+Ctrl or Command G, right?
+And then you can actually move this mask on the shadow layer to the entire group.
+So, you won't have to create multiple masks.
+So, let's move it to the group.
+There you have it.
+Here's before, here's after.
+Now, that's what I'm talking about.
+Even in this case, I think the light is kind of too much.
+So, let's decrease the opacity of the light to 40% and also let's decrease the opacity of
+the shadow to 40% as well.
+This looks perfect.
+Let's just minimize the group and we can name the group Lights and Shadows.
+There we are.
+So, without the group, it's too flat.
+It doesn't look right.
+But with it, it looks excellent.
+Now, I'm going to share with you how to save it as a template because that's
+an essential trick too.
+So, let's go to File and then Save As.
+I'm going to save it on my computer of course.
+And let's name this as Canvas Template.
+And this is essential, my friend.
+Instead of saving it as .psd, we're going to save it as .psdt where t stands for template.
+So, .psdt.
+Alright, and hit Save.
+Hit OK.
+Now, we're going to go ahead and close it.
+Now, here's the great part.
+Here we are in our Finder or Explorer.
+And if we open the .psdt file, have a look what it does.
+It's going to create a brand new Photoshop document, Untitled 1.
+And it does not disturb the template file.
+The template file stays intact.
+If you had saved it as a .psd, you had opened it, you had brought in an image
+and then saved it.
+It would be saved as the same file and the template would be altered.
+We don't want that.
+Every time you open a .psdt, let's not save it.
+Every time you open a .psdt file, it will open a brand new Photoshop document
+with the exact same content.
+And then you can save that version of it.
+Let me show you how this can be useful.
+I'm going to close everything.
+Alright, in one of the versions, let's just open this again.
+Alright, I want to bring in my face, my beautiful and handsome face
+by double clicking on the placeholder.
+And all you have got to do is to go to a Finder or File Explorer, locate the photo.
+So this is the photo that I'm going to use.
+I'm just going to drag it and drop it inside of it.
+And let's adjust it.
+By the way, I made this with the help of Prisma app.
+Have you ever used that?
+It's pretty cool.
+Alright, hit Enter or Return.
+I have positioned it, positioned it according to your tastes
+and then press Ctrl or Command S.
+Now let's get back to this.
+Have a look.
+It's updated.
+Isn't that amazing?
+Now, on top of that, you can control the shadow and the lighting.
+So if you want less lighting, you can just go to the left-hand side.
+So I'm going to go with less lighting on this one, probably about 30% lighting.
+How much shadow you want on this one?
+So shadow, you can increase or decrease the shadow.
+So I think I'm going to go with about 50% on this one.
+And it looks great to me.
+On top of that, if you want to make some additional adjustments with curves, you can do that as
+well.
+So click on the Adjustment Layer icon and then choose Curves.
+And probably you want to fade the artwork a little bit by holding the Alt or Option.
+Click on the line between these two or click on this button so that it only limits to
+the artwork.
+Then you can just fade in the shadows and adjust accordingly.
+But all you had to do is drag and drop.
+And then if you want, you can just customize it, customize the lights, customize the
+shadows.
+In this case, I wanted, you know, a little less light and probably a little more shadows.
+Alright, there you have it.
+Let's zoom in.
+Look, all the textures of the canvas show up.
+Everything is looking so realistic and nice.
+If you just zoom in and have a look, it's so good, isn't it?
+So this, my friend, is version one.
+You didn't have to alter the canvas template.
+Now I can just directly go to File and then Save or Save As, even if I choose Save,
+I'm just going to ask you to type in the file name.
+So I'm going to type Unmesh one.
+Done.
+This is Unmesh one.
+The canvas template is still not altered.
+That's crazy, isn't it?
+Now, let's just close this.
+Let's open the canvas template again.
+So I'm just going to double click on the canvas template and it again opens another
+brand new document.
+And this time, I want a bright version.
+In that case, maybe I will need different values of highlights and shadows.
+So double click on the placeholder thumbnail and then just open up your file explorer or
+finder and locate the artwork or the photo that you want to attach there.
+So this is the second image that I want to attach.
+I'm just going to drag it and drop it over right here.
+Again, this was also made with the Prisma app.
+Pretty cool.
+All right, I'm going to keep it like this.
+Probably something like this.
+We can always adjust this later, but anyway, you get the point.
+Hit Enter or Return, Ctrl or Command S.
+And then let's go back here and have a look.
+In this case, probably I will need some more shadows.
+So let's just open that Lights and Shadows group and scroll down and increase the shadows.
+There you have it.
+And maybe a little less lighting.
+Or who knows, a little more.
+You can always control it to your taste.
+And there you have it.
+You could have even left it at 4040 opacity or just go ahead and customize the template
+because it's customizable.
+There you have it.
+That's how to create a realistic canvas mockup in Photoshop.
+Before we finish, just a quick little reminder.
+All you have to do is to first create a placeholder.
+Every mockup has to have a placeholder.
+This is where you're going to drop the image.
+So once you create a rectangle, just leaving a little space, don't forget to convert
+it into a smart object.
+And after that, you're going to use the exact selection of the canvas and create
+a mask out of it.
+Changing the blend mode to multiply will allow you to blend it better because this is a white
+canvas.
+Everything we paint on it, it's going to make it dark.
+So we changed the blend mode to multiply.
+And after that, if it was not enough, because in this case it was looking flat.
+So we created, again, some highlights and shadows to go along with it, to add some
+punch to it.
+So in this case, we made two copies of the background layer, two copies of the original
+image and then one for the shadows, one for the highlights.
+For the shadows, we chose a blend mode which makes things darker.
+And what is that?
+Multiply.
+And for the highlights, we chose a blend mode which makes things brighter.
+And that is screen.
+And then you can control it with curves according to your tastes and then just make sure it
+is only applied to that of the canvas.
+And once you have created the perfect template, save it as a PSDT where T stands for template.
+And every time you open a PSDT file, what happens?
+It creates a brand new document without disturbing the original template file.
+And then all you have to do is to double click on the thumbnail of the placeholder and replace
+it with whatever you like and then press Ctrl or Command S and the original document would
+update.
+I hope this video made some sense to you.
+And if it did, make sure to give us a like and also don't forget to subscribe and not
+just subscribe.
+Ring the bell so that you, my friend, don't miss any other future tips, tricks or
+tutorials.
+I would like to take this moment to thank all these nice and amazing people for supporting
+this channel on Patreon and helping keep PIXimperfect free for everybody forever.
+Thanks so much for all your support.
+Thank you for watching.
+I'll see you guys in my next one.
+Till then, stay tuned and make sure that you keep creating.

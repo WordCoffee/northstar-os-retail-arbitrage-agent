@@ -1,0 +1,25 @@
+Hi there this is Ramesh from PicsInPerfect and today we are going to learn how to create a reflection info shop in just one minute.
+Select the Fangle Market tool and make a selection till the reflection point just like that.
+Press controller command J.
+Press controller command D. Right click on it and choose Flip Vertical.
+Now let's bring it down just like that. I'm happy with this.
+And then hit enter.
+Fold the controller command click on the layer thumbnail and then click on the mask button.
+Now separate the mask, come back to the layer, go to Filter, Blur and then Motion Blur.
+Let's keep it 90 degrees and you can play with the distance 19 is fine for this example.
+Hit OK.
+Go to Filter, Blur and then Gaussian Blur.
+Let's add a little bit of Gaussian Blur 1.2 is fine for this example.
+Hit OK.
+Let's make the water a little darker by clicking on the Adjustment Layer icon and click on Levels.
+Now bring this slider to the left.
+But this makes everything darker.
+Click on this button.
+Create Clipping Mask button.
+This makes just the water darker.
+It looks amazing.
+Now at this point you might think the water is a little bit sharp over the edge
+and then you would come back to the mask, open up the properties right here
+and increase the feather just a little bit and there you go.
+Let's have a look at the before and after.
+So this is the before and this is the after.

@@ -1,0 +1,138 @@
+This is the best way for creating consistent characters with AI. Whether you want to create
+cinematic AI movies, children's books or AI influences, you'll need to have your characters
+stay the same throughout multiple shots. But this is actually quite the challenge. Even with my
+consistent and plausible character workflow that I showed you in one of my last videos,
+you would still need to try out multiple prompts and seeds to get it right. And details,
+especially on complex clothes, still might change a little bit from image to image. But that
+has changed now thanks to a new image model called Flux. I updated my workflow to it and
+look at these amazing results. I can now generate images where the characters look exactly the same
+whether they are animated or live action. Oh and this also works for multiple characters in the
+same image, which is especially important if you want to tell a story. So let me show you
+how it works and how you can set it up on your own computer for free.
+The trick is that we first generate a character sheet that's depicting the character
+from multiple angles and with different emotions. And for that I created this post sheet that shows
+the characters bones in the open post format and we can now use Flux, stable diffusion XL or even
+stable diffusion 1.5 to generate our character sheet. You could use this post sheet with most
+AI interfaces, but I created a workflow for ConfUI which automates all of the steps. And as
+usual I've created a free step by step guide on how to install ConfUI and where to download
+and put all the models for this to work. And let's start with the Flux version. Once you have
+everything set up you can just drag and drop my workflow into the ConfUI interface. This workflow
+consists of four steps, but the last three will happen automatically and we don't need to use them
+yet. So we can deactivate them using this fast muta here. Let's focus on the first group.
+The only thing that you need to do here is double check if the correct models are loaded
+and import the post sheet here and you can just drag and drop that in there. For the Flux version
+you can use a prompt format like this and the weather is getting quite cold out there so let's
+create like a character for like a fashion magazine showing autumn fashion. You basically just
+leave all these keywords here and add short descriptions of the character that you want
+to have. And that's all you have to do in this first group. If you want you can also
+add like a name for your character here, but then you can just click Q prompt and wait for
+the first step to finish. So the prompt is working, but this image is a bit dark so what you can do is
+just change the seed a little bit and try out a new one. So when you found a character sheet that
+you like and let's just say even though the hair is a bit red instead of brunette and the
+coat is more like gray I would say, a little bit brown. Let's say you found an image that
+you like, a character that you like and you want to continue with it then you can just
+activate the second group and click Q prompt and this will then upscale that image. This already looks
+a lot better than this first image here. You can see the faces and everything is really broken.
+Here it already looks a lot better. And then in the second step in that group it will actually
+go through all the individual faces and just add more detail and make them a bit cleaner.
+For the next step it will be important that we have images of all the individual faces and
+we can just simply save them out by activating this node here using control B. If we now click
+Q prompt it will actually save out all the individual faces. Next we can activate the third group and
+click Q prompt and this should only take a second or so. This is another group that will only
+save out the individual poses and now we can already activate the last group and click Q prompt
+and this will quickly create different emotions for our character. I just said some example
+emotions here but you can customize them. You have all these sliders and you can just change them
+and find the emotions that you like. Maybe we can make her even more happy in this one by just
+raising the eyebrows. No that's not happy but it doesn't matter too much which emotions exactly
+you create. It's more about having a wide variety and what you could also do is like
+rotate the head so you have like different angles. So let's just change the rotation here into the other
+direction change the rotate pitch and just see what that creates. Now we have her looking to the right
+we have her looking to the left and this will be very good for the next step. If you support me
+on Patreon you can also get your hands on the advanced version of the workflow which will add
+upscalers to different parts of the workflow. For example it will upscale the individual
+face images for some better quality and it will also upscale the emotions at the end
+here. Sometimes it can happen for like stylized characters like pixel characters or anime characters
+that there are some weird glitches around the edges of your face and using this upscaler here you
+can fix that. Now it's important to know that the emotion setup will not always work perfectly
+for any type of character. Like for example here I created this lizard person that I showed you
+in the beginning and I really love how well that came out but for the emotions the face was
+just a bit too far away from a typical human face so it was not able to add the emotions correctly
+but at least we got some different angles out of it. Another important thing to note with the
+flux workflow is that it can be a bit tedious to work with. For one it's pretty slow even on
+better computers and the control net is just not as robust as for example the SDXL control net.
+So when it works it typically works really well like for this character for example but you probably
+get a lot of weird and broken results as well and I don't want you to get frustrated so I also
+created an SDXL version of this workflow which is not only a lot faster but it will also give you
+way more consistent results. So you can see it looks pretty much the exact same except the
+beginning here is a bit different we don't need as much stuff. I'm using the wild card
+turbo model which I've been using a lot in my videos because it's like super fast so the settings
+are fine tuned to this model. If you want to use another SDXL model make sure to change the case
+sampler settings here but let's quickly try out a prompt like for example let's use this one to
+create an anime character. I'm just activating all the groups here and just let that run through
+and this only took a couple of minutes it did an amazing job of creating the sheet the faces look cool
+and even the emotions look really good but you can see that for example this one is a bit broken
+so you could try to fix that by just changing it a little bit or you can use the upscaling in
+the advanced workflow to fix it. So now why did we do all this? Well we now have a perfect
+data set to create a lora. A lora is basically a way to give an AI model more contact for an
+object or a subject and it's definitely not a new technique but it has never been so easy. Let's say
+we want to create a lora for this woman here that we created earlier. Let's first just create a folder
+with all the good images of her think of a unique name for her maybe maybe she's called Tina AI
+something that's not a typical word and let's just look through the images and copy over the
+images that have a high quality and show her from multiple angles I want the different emotions
+and this is honestly probably already enough so I usually use between 10 and like 15 images
+to train the lora. Let's just look through some of these additional face poses maybe we can use
+some of these extreme side views here that's cropped in a weird way so I just open that
+with paint and just focus on the face here and I would say that's a pretty good data set to train
+the lora we need a tool called flux gym and they call flux gym a that simple web UI for training
+flux loras and I can only confirm it it really is that simple the easiest way to install it is
+using Pinocchio. Pinocchio is this super easy one click installer for many AI tools so just
+download that go to discover and search for flux gym and install it from here once it's done
+you can just start it put in the name of our lora and I'll just call that Tina AI and I also want to
+use this as the trigger word as well so when we put that in the prompt and we have the lora activated
+it will create this character you can choose which model you want to train I want to train
+flux dev and I have more than 20 gigabytes of VRAM so I choose that but I also tried this tool
+on one with 12 gigabytes and it worked pretty well as well it just takes longer that's all
+we need to do here and then I just take my images and drag and drop them here it already added the
+caption with our trigger word and now we have two options we can caption the images manually or we
+can use Florence to to tag our image so this is what it would look like so here you can see for
+example Tina AI a woman with long red hair wearing brown turtleneck sweater and a gray coat she
+is standing in front of a wall and these are actually quite good I usually prefer tagging
+the images myself and keeping it a bit simpler for example let's just drag and drop these images in
+here again so what I like to do is gray background and then the pose and emotion and shot type something
+like this this should be enough and that's pretty much it now we can just click start training
+and it will download the model which will probably take a long time the first time you run this
+because the flux dev model is huge now I just let that run okay it's now 37 minutes later and the
+Laura is finished so we can go to the Pinocchio folder API flux gym outputs and it created a
+folder with the name for our Laura we have different variations so it's doing like
+snapshots at different stages of training but let's just try out the last one go to my confu i
+directory confu i models lauras and I created an extra folder for flux and my own flux gym models
+and I'm just going to put that here so this is my custom flux workflow we have the option to input
+two lauras here but let's just deactivate one and only use this one here and we can put the
+strength pretty high I sometimes lower it to give it a bit more freedom but something between
+0.9 and 1 will work so let's just use this prompt click q prompt and this is just the first image and
+it already looks really good let's just try out another seat and this is also looking pretty nice
+it's definitely her let me quickly explain this custom flux workflow that I'm using here
+and you can also get that for free on my patreon basically the beginning here the beginning stages
+just the typical confu i flux workflow and then in for the second image here I added a little
+hack that I learned from Mateo from latent vision basically during somewhere in the middle of image
+generation you add some extra noise and this will make the textures of the image look less
+like plastic and more realistic and it will also add some minor details after that I added
+an upscaler you can also deactivate this part if you don't need that and then finally I
+add some film grain using this node just for this analog type of photography style that I'm going for
+here and generating images with this workflow and the lauras is so much fun because pretty much every
+single image looks cool no cherry picking these are just all the images that are created the
+same goes for this character here this is just a character that I trained on this character sheet
+to try out if this workflow works for other styles as well it looks really good like these
+are all the images that are created but as I said this workflow also works for multiple characters and
+it's actually really easy you just need to load in both lauras and I like to decrease the strength
+a little bit just to give more flux a little bit more flexibility and then I'm going to use a
+prompt like this first we describe the general composition of the shot mentioning both keywords
+of the laura and how they relate to each other so they are standing next to each other to keep
+them from from mixing because that's usually what happens when we stack lauras on top of each other
+it creates these sort of hybrid styles and creatures so to actually fix that I just add
+character descriptions for both of these characters so as the images generated the lauras actually
+have a chance to fall into place in the correct regions and create images that just look really
+good I hope you enjoyed this video and give laura training a try if you would like to
+support my work and gain access to the advanced workflows and exclusive example files like all
+the data sets character sheets lauras and prompts are used and created for this video consider
+supporting me on patreon your support makes this channel possible so thank you very much and see you next time

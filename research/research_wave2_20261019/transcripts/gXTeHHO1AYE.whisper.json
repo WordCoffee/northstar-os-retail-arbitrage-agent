@@ -1,0 +1,818 @@
+{
+ "id": "gXTeHHO1AYE",
+ "title": "How To Add Realistic SHADOWS in Photoshop!",
+ "channel": "Benny Productions",
+ "url": "https://www.youtube.com/watch?v=gXTeHHO1AYE",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 720.0,
+ "chars": 12677,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 6.88,
+   "text": "This video was sponsored by Envato. I don't think there's a single more requested video than a shadow tutorial"
+  },
+  {
+   "start": 6.88,
+   "end": 8.44,
+   "text": "I've done some highlights tutorials"
+  },
+  {
+   "start": 8.44,
+   "end": 13.32,
+   "text": "I've done a glow tutorial, but you guys just cannot stop asking me for a shadow one"
+  },
+  {
+   "start": 13.36,
+   "end": 15.64,
+   "text": "So I guess here we are all the assets"
+  },
+  {
+   "start": 15.64,
+   "end": 19.68,
+   "text": "I'm gonna use today are from Envato elements the sponsor of today's video if you want to check them out"
+  },
+  {
+   "start": 19.68,
+   "end": 24.6,
+   "text": "They're down below in the description more on them later though for now. Let's get straight into the first example"
+  },
+  {
+   "start": 25.6,
+   "end": 33.06,
+   "text": "For today's first example, let's begin simple this right here is a marble table and this is a ball"
+  },
+  {
+   "start": 33.06,
+   "end": 37.48,
+   "text": "I know crazy stuff and I would like to place this ball just over here"
+  },
+  {
+   "start": 37.48,
+   "end": 40.88,
+   "text": "This looks very fake because we don't have any shadows whatsoever"
+  },
+  {
+   "start": 40.88,
+   "end": 46.12,
+   "text": "Would you first have to understand I chose these images because they have very neutral lighting that is important to know"
+  },
+  {
+   "start": 46.12,
+   "end": 49.02,
+   "text": "There is no hard sunlight or something now the first step"
+  },
+  {
+   "start": 49.02,
+   "end": 51.34,
+   "text": "I like to do is add an adjustment layer in this case"
+  },
+  {
+   "start": 51.62,
+   "end": 55.9,
+   "text": "Exposure you can also find that down here and we're gonna put that below the ball of course"
+  },
+  {
+   "start": 55.9,
+   "end": 60.3,
+   "text": "Then if you decrease the exposure you make a very dark layer"
+  },
+  {
+   "start": 60.46,
+   "end": 63.78,
+   "text": "Essentially you can also play around with the gamma to make it just slightly more"
+  },
+  {
+   "start": 64.18,
+   "end": 68.7,
+   "text": "Contrastful but something like this should be fine where it's almost completely black"
+  },
+  {
+   "start": 68.7,
+   "end": 74.92,
+   "text": "Then I'll invert the mask using control or command I I will grab a brush and right click to edit that brush"
+  },
+  {
+   "start": 74.92,
+   "end": 78.44,
+   "text": "We're gonna make that slightly bigger maybe about this size"
+  },
+  {
+   "start": 78.44,
+   "end": 83.04,
+   "text": "You can do this by the way by holding alt hold your right click and move to the sides"
+  },
+  {
+   "start": 83.12,
+   "end": 89.96,
+   "text": "Also want to make sure the hardness is on zero and we can kind of make this go flatter like so that creates a nice round"
+  },
+  {
+   "start": 90.16,
+   "end": 95.08,
+   "text": "Flat brush you can tell on the ball this side is slightly lighter than this side"
+  },
+  {
+   "start": 95.08,
+   "end": 99.96,
+   "text": "So we can assume that there's a very subtle light coming from the left in this case with that in mind"
+  },
+  {
+   "start": 99.96,
+   "end": 104.18,
+   "text": "Let's go ahead and decrease the flow up here to something very low like maybe"
+  },
+  {
+   "start": 104.34,
+   "end": 108.74,
+   "text": "Eight and just by clicking on it making it smaller clicking again"
+  },
+  {
+   "start": 108.74,
+   "end": 110.46,
+   "text": "I can be bigger click again"
+  },
+  {
+   "start": 110.46,
+   "end": 114.86,
+   "text": "And we want to lean slightly to the right because as we know the light comes from the left"
+  },
+  {
+   "start": 114.86,
+   "end": 117.46,
+   "text": "So just by clicking very subtly not too much"
+  },
+  {
+   "start": 117.46,
+   "end": 124.82,
+   "text": "You can kind of create a shadow and be sure to make it darker the closer it gets to the subject essentially where it touches"
+  },
+  {
+   "start": 124.82,
+   "end": 129.78,
+   "text": "The ball that's where you want it to be super duper dark and the reason the shadow has to look so soft"
+  },
+  {
+   "start": 129.78,
+   "end": 135.62,
+   "text": "Is because the lighting is soft if this was sunlight you'd see a very sharp edge around the shadow as you can tell this already"
+  },
+  {
+   "start": 135.62,
+   "end": 138.78,
+   "text": "Looks a lot better then we can do the same thing another adjustment layer"
+  },
+  {
+   "start": 138.78,
+   "end": 144.62,
+   "text": "This time we'll clip it to the ball by holding alt and clicking in between in the two layers in between in the two layer"
+  },
+  {
+   "start": 144.98,
+   "end": 151.22,
+   "text": "English do the same thing just a little bit darker like so select the mask inverted with control i and now with just a"
+  },
+  {
+   "start": 151.22,
+   "end": 156.88,
+   "text": "Regular round brush we can paint the same kind of thing except this time on top of the ball"
+  },
+  {
+   "start": 156.88,
+   "end": 162.96,
+   "text": "Just very softly down here because as you know the light isn't really gonna hit that part of the ball be sure to be"
+  },
+  {
+   "start": 163.16,
+   "end": 168.6,
+   "text": "Subtle with it however you don't want to overdo this because it will end up looking very very strange"
+  },
+  {
+   "start": 168.6,
+   "end": 175.72,
+   "text": "Just something subtle like this is absolutely fine. So here we have before and after now say we have a background"
+  },
+  {
+   "start": 175.72,
+   "end": 178.36,
+   "text": "That has direct harsh lighting"
+  },
+  {
+   "start": 178.36,
+   "end": 184.14,
+   "text": "I can tell this image has that by the very dark edges around the the bricks you can tell over here"
+  },
+  {
+   "start": 184.14,
+   "end": 186.92,
+   "text": "There are some dense they are very dark and very sharp"
+  },
+  {
+   "start": 186.92,
+   "end": 192.38,
+   "text": "So the process is very similar again exposure make that darker invert the mask this time"
+  },
+  {
+   "start": 192.38,
+   "end": 196.06,
+   "text": "However, we want to have a hard brush so let's increase the hardness to"
+  },
+  {
+   "start": 196.42,
+   "end": 198.92,
+   "text": "Something higher closer to 90% again"
+  },
+  {
+   "start": 198.92,
+   "end": 204.58,
+   "text": "We'll make it flat because of the angle and this time we want to make sure the base of the ball ends there and simply"
+  },
+  {
+   "start": 204.58,
+   "end": 208.02,
+   "text": "Click a few times like so accidentally put it on top of the ball"
+  },
+  {
+   "start": 208.02,
+   "end": 208.62,
+   "text": "Here you go"
+  },
+  {
+   "start": 208.62,
+   "end": 215.22,
+   "text": "You can always enhance that slightly with a darker brush underneath for example the base of the shadow can be a bit darker than the"
+  },
+  {
+   "start": 215.22,
+   "end": 219.14,
+   "text": "Rest you can even decide to slightly fit it out at the end and also once again"
+  },
+  {
+   "start": 219.14,
+   "end": 223.48,
+   "text": "We're gonna need that shadow on the ball itself and this shadow also is a lot"
+  },
+  {
+   "start": 223.9,
+   "end": 228.52,
+   "text": "Sharper than the previous one and after some tweaking it could look something like this"
+  },
+  {
+   "start": 228.52,
+   "end": 234.42,
+   "text": "You can tell there's a huge difference between this and the previous version because of that lighting difference hard light"
+  },
+  {
+   "start": 234.46,
+   "end": 238.64,
+   "text": "Creates hard edges in the shadow soft light creates very faded shadows"
+  },
+  {
+   "start": 238.64,
+   "end": 246.16,
+   "text": "Be sure though in both cases the closer to the subject the darker they get and photo elements ladies and gentlemen has had a huge"
+  },
+  {
+   "start": 246.58,
+   "end": 251.64,
+   "text": "rebrand the logo and website are completely new and they look fantastic super clean and"
+  },
+  {
+   "start": 252.06,
+   "end": 258.14,
+   "text": "Well much more modern if we're honest, but worry not because the content of this platform still is identical"
+  },
+  {
+   "start": 258.42,
+   "end": 261.02,
+   "text": "Millions upon millions of digital assets"
+  },
+  {
+   "start": 261.02,
+   "end": 265.24,
+   "text": "There's loads of stuff even beyond the stock photos and 3d assets. I've been using today"
+  },
+  {
+   "start": 265.24,
+   "end": 270.44,
+   "text": "I mean take this logo animation for example that is from a lot of elements and this font as well"
+  },
+  {
+   "start": 270.44,
+   "end": 275.32,
+   "text": "And there are loads more categories for example. Where did you think this music is from?"
+  },
+  {
+   "start": 275.82,
+   "end": 278.48,
+   "text": "It is easy to say they have a lot of stuff, of course"
+  },
+  {
+   "start": 278.48,
+   "end": 283.5,
+   "text": "But at the end of the day it's all about quality and where it gets you for me personally over the years and photo"
+  },
+  {
+   "start": 283.5,
+   "end": 286.78,
+   "text": "Allowed me to make content quicker better and most of all more fun"
+  },
+  {
+   "start": 286.78,
+   "end": 291.62,
+   "text": "It's kind of a source of inspiration most of the time you get unlimited access. Yes, you heard that right"
+  },
+  {
+   "start": 292.18,
+   "end": 296.82,
+   "text": "Unlimited access to everything they have for just 16 dollars a month with an annual subscription"
+  },
+  {
+   "start": 296.98,
+   "end": 301.34,
+   "text": "That is a steal be quick check it out down below then now let's get to the next one"
+  },
+  {
+   "start": 301.38,
+   "end": 303.66,
+   "text": "Now let's have some more fun with this here"
+  },
+  {
+   "start": 303.66,
+   "end": 308.74,
+   "text": "I have a road with no direct sunlight the Sun is going down too far for it to hit this road"
+  },
+  {
+   "start": 308.74,
+   "end": 311.42,
+   "text": "So you already know we're gonna need some soft shadows"
+  },
+  {
+   "start": 311.42,
+   "end": 316.94,
+   "text": "I thought it'd be cool to add this sports car to this road and I will flip it because as you can see in the background"
+  },
+  {
+   "start": 316.94,
+   "end": 320.06,
+   "text": "The light is coming from the right and even though there is no direct sunlight"
+  },
+  {
+   "start": 320.06,
+   "end": 322.9,
+   "text": "It's still nice if it kind of matches with the car"
+  },
+  {
+   "start": 322.9,
+   "end": 329.42,
+   "text": "So you can tell on the car there technically is direct sunlight over here, but we're just gonna pretend that's not there"
+  },
+  {
+   "start": 329.42,
+   "end": 335.22,
+   "text": "It's not too obvious anyway, just like previously a new adjustment layer exposure make that a whole lot"
+  },
+  {
+   "start": 335.58,
+   "end": 340.34,
+   "text": "Darker like so invert the mask and with our very soft and flat brush"
+  },
+  {
+   "start": 340.34,
+   "end": 346.86,
+   "text": "We'll go ahead and paint underneath this car and we'll start at the points where it's actually touching the road over here"
+  },
+  {
+   "start": 346.86,
+   "end": 351.38,
+   "text": "Fades out to nothingness on the sides kind of something like this"
+  },
+  {
+   "start": 351.38,
+   "end": 356.98,
+   "text": "We're gonna do that exact thing for every single tire and the ones at the back as well when you've done that"
+  },
+  {
+   "start": 356.98,
+   "end": 360.26,
+   "text": "It looks a lot better already, but something is still off now"
+  },
+  {
+   "start": 360.26,
+   "end": 363.46,
+   "text": "You can make a separate adjustment layer for this to come split these up"
+  },
+  {
+   "start": 363.46,
+   "end": 367.74,
+   "text": "I like to do that sometimes so just the same thing again invert the mask and this time"
+  },
+  {
+   "start": 367.74,
+   "end": 373.14,
+   "text": "We're gonna paint the entire area underneath the car because guess what no light hits that whatsoever"
+  },
+  {
+   "start": 373.14,
+   "end": 376.74,
+   "text": "And don't be afraid to make this really really dark"
+  },
+  {
+   "start": 376.74,
+   "end": 378.5,
+   "text": "You can always just experiment with it"
+  },
+  {
+   "start": 378.5,
+   "end": 384.62,
+   "text": "You can always erase it so just go crazy for it all the way to the front over here and there"
+  },
+  {
+   "start": 384.62,
+   "end": 386.62,
+   "text": "Does that not look?"
+  },
+  {
+   "start": 386.82,
+   "end": 390.14,
+   "text": "20 times better now if you think I might have overdone it"
+  },
+  {
+   "start": 390.14,
+   "end": 395.98,
+   "text": "You can always just play around with the sliders as well. Maybe adding some contrast see that looks pretty good"
+  },
+  {
+   "start": 395.98,
+   "end": 399.14,
+   "text": "Then once again same thing to the car make sure it is clipped"
+  },
+  {
+   "start": 399.14,
+   "end": 403.5,
+   "text": "Invert the mask and this time we're gonna paint on the car itself mainly near below"
+  },
+  {
+   "start": 403.5,
+   "end": 406.02,
+   "text": "We just want to add a slightly darker"
+  },
+  {
+   "start": 406.7,
+   "end": 412.54,
+   "text": "Effect if the light is not hitting this side of the car as much as the other there you go before and after"
+  },
+  {
+   "start": 412.7,
+   "end": 416.82,
+   "text": "Now this of course is just the shadows color grading could make this look even better"
+  },
+  {
+   "start": 416.82,
+   "end": 422.7,
+   "text": "You get the idea it is just looking a lot better than without any of this before and after"
+  },
+  {
+   "start": 423.42,
+   "end": 428.34,
+   "text": "Now what if you had something similar except this time there is harsh sunlight?"
+  },
+  {
+   "start": 428.34,
+   "end": 430.58,
+   "text": "How will you determine the shape of the shadow?"
+  },
+  {
+   "start": 430.58,
+   "end": 434.02,
+   "text": "Well, let me tell you at first this is definitely gonna be a bit of a guess"
+  },
+  {
+   "start": 434.02,
+   "end": 439.7,
+   "text": "Let me first add some slight contrast to this car because it's a bit off possibly some color grading as well"
+  },
+  {
+   "start": 439.7,
+   "end": 445.18,
+   "text": "It's just for a very slight tone, but then for the shadow part once again the same thing this time"
+  },
+  {
+   "start": 445.18,
+   "end": 449.7,
+   "text": "However, it is gonna be slightly trickier. Let's first go ahead and create the ambient shadow"
+  },
+  {
+   "start": 449.7,
+   "end": 455.7,
+   "text": "The very dark touching shadow just underneath the wheels with our soft brush and the whole lower side in general has to be"
+  },
+  {
+   "start": 455.9,
+   "end": 460.26,
+   "text": "Super dark because no light hits this whatsoever in the front here, too"
+  },
+  {
+   "start": 460.26,
+   "end": 466.14,
+   "text": "I'm also gonna make this side of the car a bit darker already because it's very clear the light comes from the rise"
+  },
+  {
+   "start": 466.14,
+   "end": 468.14,
+   "text": "We can even see the sun over here"
+  },
+  {
+   "start": 468.14,
+   "end": 472.26,
+   "text": "Look, this is before and this is after just a lot darker on this side mainly"
+  },
+  {
+   "start": 472.26,
+   "end": 477.86,
+   "text": "But then the shadow of this car as you can see the sun is very low meaning the shadow is gonna be very long"
+  },
+  {
+   "start": 477.86,
+   "end": 482.7,
+   "text": "The light hits this point which goes all the way like I don't know here"
+  },
+  {
+   "start": 482.7,
+   "end": 485.22,
+   "text": "This once again isn't precise just a bit of a guess"
+  },
+  {
+   "start": 485.22,
+   "end": 489.5,
+   "text": "Then you can put that same line on the top of the windshield on the spoiler"
+  },
+  {
+   "start": 489.5,
+   "end": 494.5,
+   "text": "And then you end up with them with this and kind of play around with the sliders in this case"
+  },
+  {
+   "start": 494.5,
+   "end": 497.58,
+   "text": "Now technically there should be a way to erase these really"
+  },
+  {
+   "start": 498.02,
+   "end": 502.5,
+   "text": "Highlighted pieces which of course are sunlight those technically can't be there"
+  },
+  {
+   "start": 502.5,
+   "end": 506.58,
+   "text": "There are of course various ways you can use to try and hide them this video isn't about"
+  },
+  {
+   "start": 506.82,
+   "end": 510.58,
+   "text": "Removing those kind of things just the shadows so for now. Let's just focus on that"
+  },
+  {
+   "start": 510.58,
+   "end": 514.82,
+   "text": "This already kind of looks like something. Let me tell you I struggle with this too"
+  },
+  {
+   "start": 514.82,
+   "end": 518.26,
+   "text": "It's always gonna look just slightly weird the further back it goes"
+  },
+  {
+   "start": 518.26,
+   "end": 519.7,
+   "text": "You can just slightly fit it out"
+  },
+  {
+   "start": 519.7,
+   "end": 525.34,
+   "text": "Maybe and really this is just tweaking it until it looks like something you like but let me say it again"
+  },
+  {
+   "start": 525.38,
+   "end": 530.22,
+   "text": "This is how I do it. I'm not sure if this is 100% accurate"
+  },
+  {
+   "start": 530.22,
+   "end": 532.7,
+   "text": "Everybody has their own ways of doing stuff like this"
+  },
+  {
+   "start": 532.7,
+   "end": 538.5,
+   "text": "So really if you find this useful make sure to use it if you don't then please don't all things considered though"
+  },
+  {
+   "start": 538.5,
+   "end": 541.1,
+   "text": "Here is before and here is after"
+  },
+  {
+   "start": 541.74,
+   "end": 543.18,
+   "text": "Now this is just an example"
+  },
+  {
+   "start": 543.18,
+   "end": 549.14,
+   "text": "I thought could be fun because it has just a few spots that touch the wood this again is neutral lighting"
+  },
+  {
+   "start": 549.14,
+   "end": 552.14,
+   "text": "So no harsh shadows no weirdly shaped shadows"
+  },
+  {
+   "start": 552.14,
+   "end": 558.98,
+   "text": "But here it's important to make sure not to add shadows underneath this for example because guess what that doesn't actually"
+  },
+  {
+   "start": 559.22,
+   "end": 562.5,
+   "text": "Touch the wood the only areas that touch the wood are this"
+  },
+  {
+   "start": 563.1,
+   "end": 570.02,
+   "text": "This and that so that's where you want the harsh shadows to be so once again a very low flow and very dark"
+  },
+  {
+   "start": 570.06,
+   "end": 577.62,
+   "text": "Near the actual touching point then a very blurry very vague shadow for the stick thingy's and the closer"
+  },
+  {
+   "start": 577.62,
+   "end": 584.5,
+   "text": "You get to the actual touching bit the sharper it gets the darker it gets so just again over here"
+  },
+  {
+   "start": 584.5,
+   "end": 592.34,
+   "text": "It's gonna be very very dark almost black in fact there and then here once again fade out and fade it back in"
+  },
+  {
+   "start": 592.34,
+   "end": 596.16,
+   "text": "With a weird way of saying it but it's kind of what it is and just like that"
+  },
+  {
+   "start": 596.16,
+   "end": 598.16,
+   "text": "We're creating just a very subtle"
+  },
+  {
+   "start": 598.38,
+   "end": 601.42,
+   "text": "Shadow here you go before and after very nice"
+  },
+  {
+   "start": 601.86,
+   "end": 604.18,
+   "text": "Then finally a bit of a bonus example"
+  },
+  {
+   "start": 604.18,
+   "end": 607.58,
+   "text": "I guess what if it is straight from above and in these cases"
+  },
+  {
+   "start": 607.58,
+   "end": 613.1,
+   "text": "It's very important to know which parts touch the wood or the background in this case for example"
+  },
+  {
+   "start": 613.1,
+   "end": 615.1,
+   "text": "this part is touching and"
+  },
+  {
+   "start": 615.7,
+   "end": 617.9,
+   "text": "Let's say in the middle of this it is"
+  },
+  {
+   "start": 618.38,
+   "end": 621.82,
+   "text": "Everything else is floating above say this spoon was entirely flat"
+  },
+  {
+   "start": 621.82,
+   "end": 626.38,
+   "text": "You could literally just do this we just make a drop shadow and change the direction like this"
+  },
+  {
+   "start": 626.38,
+   "end": 628.34,
+   "text": "And then you would pretty much be done"
+  },
+  {
+   "start": 628.34,
+   "end": 630.14,
+   "text": "But this looks"
+  },
+  {
+   "start": 630.14,
+   "end": 634.74,
+   "text": "Decent to be fair but slightly off instead with these touching points in mind"
+  },
+  {
+   "start": 634.74,
+   "end": 637.54,
+   "text": "That's once again create a dark adjustment layer"
+  },
+  {
+   "start": 637.54,
+   "end": 640.46,
+   "text": "The light is coming pretty much from the left as you can tell here"
+  },
+  {
+   "start": 640.46,
+   "end": 645.9,
+   "text": "Then let's begin over here the shadow is just going around the round bit like so"
+  },
+  {
+   "start": 645.9,
+   "end": 649.38,
+   "text": "It's very close not touching but I see I think this is fine"
+  },
+  {
+   "start": 649.38,
+   "end": 651.78,
+   "text": "Yeah, then this part is actually a bit further away"
+  },
+  {
+   "start": 651.78,
+   "end": 655.34,
+   "text": "So that means the shadow is also gonna be a bit further away from it and then here"
+  },
+  {
+   "start": 655.34,
+   "end": 661.34,
+   "text": "It slowly gets closer again meaning the shadow is gonna be really dark and really close to it like so"
+  },
+  {
+   "start": 661.34,
+   "end": 665.02,
+   "text": "Just around the edge. Let's turn this off. You can see the difference here where it touches"
+  },
+  {
+   "start": 665.02,
+   "end": 666.74,
+   "text": "There's just a really dark shadow"
+  },
+  {
+   "start": 666.74,
+   "end": 670.3,
+   "text": "Right on that edge then as you go further away from the table"
+  },
+  {
+   "start": 670.3,
+   "end": 676.02,
+   "text": "It kind of goes further away from the shadow as you can tell that it simply looks right like that"
+  },
+  {
+   "start": 676.02,
+   "end": 682.02,
+   "text": "So that is something very important to keep in mind the distance from the subject to what it's standing on laying on"
+  },
+  {
+   "start": 682.02,
+   "end": 685.46,
+   "text": "Whatever is the before and the after"
+  },
+  {
+   "start": 685.46,
+   "end": 691.1,
+   "text": "I hope these tips help this is how I've been doing my shadows for as long as I can remember"
+  },
+  {
+   "start": 691.1,
+   "end": 693.98,
+   "text": "So well, then I guess that is pretty much it for today"
+  },
+  {
+   "start": 693.98,
+   "end": 698.9,
+   "text": "If you enjoyed this video make very sure to leave a like subscribe hit the button not to miss a single future video"
+  },
+  {
+   "start": 698.9,
+   "end": 701.18,
+   "text": "And I hope I'll see you in the next one"
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:04:05.850715+00:00",
+ "seconds": 29.5
+}

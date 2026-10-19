@@ -1,0 +1,395 @@
+Finally, we have a new open source image generator and editor.
+So Alibaba just dropped Quen Image 2.1 and this is an extremely flexible and powerful
+tool.
+In this video, we're going to go over all the incredible things that it can do plus
+of course I'm going to show you how to install this on your computer so you can
+run it for free and unlimited times offline.
+The awesome thing is this can even run on very low VRAM.
+Let's jump right in.
+First let's go over its capabilities.
+Not only can it generate some super realistic photos, it's also great at anatomy and prompt
+understanding as you can see from these comparisons.
+It's also really good at even creating some super complex stuff like diagrams and infographics
+with a ton of different elements.
+What you see here is just one text to image generation from Quen Image 2.1.
+Here's another example.
+It's also great at designing interfaces.
+So here are some examples for your reference.
+Now probably the most powerful feature about Quen Image 2.1 is that it can generate
+transparent images.
+In other words, this can also output an alpha channel.
+So here are some examples of different generations with transparency built in.
+Now not only can this do text to image, but the really nice thing about this is it can
+also take images as reference for you to edit further.
+I don't know about you, but I've been waiting like months for another new
+image editor.
+The previous models that we got like create to an ideogram were only text to image so
+you can't really edit existing images using natural language like nano banana.
+But finally for Quen Image 2.1, this is possible.
+So for example, you can input the same transparent image and then just prompt it to change
+the text of the image.
+And here's our result on the right.
+Or here's an even cooler example where we can input a photo like this and get it
+to extract only the branches and leaves in the foreground as a transparent layer.
+As you can see, it can do a pretty good job of this.
+This can also take in up to 10 reference images for you to insert into your photos.
+So here's an example of this in action.
+As you can see, it's great with facial and character consistency.
+Here's another awesome example where we can input a ton of different photos and
+just specify using natural language what out of each photo we want to extract.
+For example, we want the woman in the first image wearing the pink jacket in the
+second image and the shoes from the third image and this handbag and also wearing
+the hat from the last image.
+And it's able to combine whatever you specify into one seamless photo.
+Or here's another example where we can combine a ton of different furniture
+photos and add them into the same room.
+Or you can also just annotate directly on the photo that you want to edit.
+For example, we can draw over these items that we want to change or remove.
+Or here's an example where we can draw directly over the image and get it
+to add something there.
+This is also great at character consistency as you can see from this example.
+Or here's a really complicated outfit.
+Well, we can get it to generate a model wearing this outfit.
+And as you can see, it's able to preserve the design of the outfit very well.
+Or here's another cool example where we could input this selfie photo and get
+it to generate a panorama from the photo.
+And after generating this panorama, you can then basically explore the scene in 3D.
+So those are just some quick examples of all the cool things that Quen Image 2.1 can do.
+The best thing is this is open source.
+So you can download and run this locally.
+So if you're interested, next, let's go over how to install this.
+Now, for this tutorial, we are going to use an interface called Comfy UI,
+which is like the most popular platform for running open source image
+and video generators offline.
+It's completely free for you to install and use.
+And you can customize a ton of things with it, which is why I highly recommend
+you use Comfy UI for Quen Image 2.1.
+Now, if you're not familiar with Comfy UI, see this video first,
+where I go over a full installation tutorial.
+All right. So assuming you do have Comfy UI installed, the first step is to update
+this to the latest version.
+So simply double click into this update folder and then double click on update
+Comfy UI dot bat.
+So this will proceed to update your Comfy UI to the latest version.
+All right.
+Afterwards, let's press any key to exit this window.
+And then next, we can start up Comfy UI.
+So let me start this up.
+All right. Once you open up Comfy UI, if you click on templates in the left
+sidebar and you search for Quen Image 2.1, you should see several workflows.
+Text to image, remove background and image edit.
+So let's go over the text to image workflow first.
+Once you click on it, it should look like this.
+By the way, if you don't see these workflows, I will also link to this
+page where at the bottom, you can download the workflow files and then
+just drag and drop them onto your Comfy UI interface.
+All right. Now, once you open this up, you might get this red outline with
+some missing models.
+So let's also proceed to download the models.
+I'll link to this page in the description below.
+If you click on files and versions, here are the models that you need to download.
+First, let's click into diffusion models.
+And here you are given the option of either the full BF 16 one,
+which is 14.2 gigabytes in size or this smaller int eight Convrop version,
+which is 7.2 gigabytes in size.
+This will fit on eight gigabytes of VRAM or even potentially less.
+Now, if you have lower than this, if you have like four gigabytes of VRAM,
+don't worry, later in the video, I'm also going to show you another method
+to run this with even just four gigabytes of VRAM.
+So I'm going to download this one.
+And this goes in Comfy UI and models and then diffusion models.
+Let's click save.
+And then afterwards, we also need to download a text encoder.
+Now, the first two files here are used to enhance your prompt.
+So this is an additional AI model, which takes your prompt
+and enhances it further before it plugs it into the image generation node.
+It's supposed to make your image quality better, but note that each file
+is like almost 9.5 gigabytes in size.
+So especially if you're running low on VRAM, I would not recommend this step.
+It's better if you just, you know, manually write a good prompt.
+So the bare minimum that we need to download is one of these text encoders down here.
+Now, there's different compression levels here.
+The full BF 16 one is 17.5 gigabytes in size.
+We also have a W for a eight one, which is the smallest.
+This is only 6.3 gigabytes in size.
+If you have low VRAM, then this is highly recommended.
+So let's click on download.
+And this goes in Comfy UI in models and then text encoders.
+Let's click save.
+All right, afterwards, we also need to download the VAE for this.
+Now, this is fairly tiny at only 676 megabytes in size.
+Let's click download.
+And this goes in Comfy UI in models and then VAE.
+Let's click save.
+All right, after you've downloaded all the models, going back
+to our Comfy UI workflow, simply press R to refresh our model list.
+And then down here is where we select the downloaded models.
+So first of all, for the unit, let's select this quen image model that I just
+downloaded. And then for the clip, I will select this quen 3 VL W for a 8 model,
+which I just downloaded.
+And then for the VAE, yes, I'm going to select the VAE that I just
+downloaded. And that's pretty much it.
+So let's go over how to run this.
+It's pretty straightforward.
+So here is where you would choose the aspect ratio.
+Here are the options you can choose from.
+Here are the megapixels.
+So you can increase this for a higher resolution.
+Here is where you would enter a positive prompt or an optional negative prompt.
+Here's the CFG.
+So this is like how literally you want the AI to follow your prompt.
+If you find that it's not following everything you specified in the prompt,
+you could try increasing this value a bit more.
+Or conversely, if you want it to be more creative and do its own thing
+and introduce some variation, then you could decrease this value.
+Note that if you set the CFG to one, then the negative prompt won't actually work.
+You'll need to set the CFG to a slightly higher value for the negative prompt to take effect.
+And then this is the number of steps it takes to generate your image.
+The more steps you have, the higher quality it will be, but it'll also take longer to generate and vice versa.
+And then here's the algorithm that's used to generate the image.
+The seed is like the unique ID of the image.
+So if you keep all the settings the same and you use the same prompt and the same seed,
+you're going to get the exact same image as before.
+So if you want to use the same prompt, but get a slightly different image,
+then you'll need to change up the seed.
+And that's pretty much it.
+So let's click run and see how long it takes for me to generate an image.
+Perfect. So here's what we got.
+And if I pull up my window here, you can see that it only took like 29 seconds to generate this image.
+Note that I'm using an RTX 5000 Aida, which has 16 gigabytes of VRAM.
+And I'm just running this on my laptop.
+So it's a pretty fast and lightweight model.
+So that's text to image.
+Next, let's go over image editing.
+Again, I'm going to click on templates and then at the top search for Quen Image 2.1.
+And then here is the image edit option.
+So let's click on this and it's going to open up a new workflow like this.
+So same as before down here, we need to load the models that we just downloaded.
+So for unit, I'm going to select this one for clip.
+I will select the W for a eight one, which I just downloaded.
+And then for VAE, I'm going to select this one over here is where we can choose
+to load different reference images for it to edit or refer to.
+And note that here you can input up to 10 images.
+Let's do a simple one.
+I'm just going to upload one image.
+So to remove the second image, I can either click on it and press
+control B to bypass it, or I can just click on it and delete this altogether.
+And if I need to add a new image, I can just double click anywhere on the interface
+and then type load image to insert a load image node.
+And then I just need to connect the output to over here.
+It's as simple as that.
+So again, I'm going to just use one input image for my demo here.
+I'm going to upload this car image.
+And then here is where again, we would set the positive prompt and the negative prompt.
+Here are the same settings as what we saw from the text image workflow.
+And then down here, I don't know why it's like hanging all the way down here.
+So let me drag this up a bit.
+Here is where you would select the aspect ratio and the resolution.
+But here we have this extra toggle called custom size.
+Right now it's set to false.
+So what will happen is it'll actually ignore this and use the size of your input image.
+If you want to use this specified aspect ratio and size, then you'll need to turn this on.
+All right.
+So now it's going to set my image at one to one aspect ratio at one megapixel
+instead of this original resolution over here.
+Now, for my positive prompt, let's do something simple like make this car drive down a windy
+forest road motion blur professional photo down here.
+All the settings are the same as before.
+And that's pretty much it.
+Let's click run.
+All right.
+And here's our result.
+If I pull up my stats, note that this took around 81 seconds.
+I would say it's a bit slower than flux client, which is the previous best edit model.
+All right.
+So that's how you can do image editing.
+If you want to supercharge your content creation, definitely check out Luma,
+the sponsor of this video.
+Instead of manually doing everything one prompt at a time, Luma agents can autonomously work
+with you across entire creative workflows.
+You can start with an idea and have Luma help you develop the concept, generate assets,
+experiment with different directions and iterate on everything in one place.
+For example, I can give Luma the initial idea and then work with the agent to
+actually develop it step by step.
+It remembers the context of the project so I can keep refining the results instead
+of starting over with a new prompt every time.
+You can access the best image generators and the best video generators out there.
+In fact, one of the most impressive ones is Ray 3.2, Luma's latest video model.
+What really stands out about Ray 3.2 is its understanding of motion, physics and 3D space.
+As you can see, it can handle complex movement, camera motion and interactions
+between objects while keeping the scene coherent.
+So instead of just generating everything that looks good in a single frame,
+you can create genuinely cinematic sequences where everything actually moves
+through the scene in a believable way.
+If you're doing any type of content creation, Luma is basically like an AI
+co-pilot that can work with you across your creative workflows.
+Try Luma today using the link in the description below or by scanning the QR code here.
+Next, let's pull up the third workflow.
+Again, I'm going to type Quen Image 2.1 and then let's select this
+removed background workflow.
+Now, once we start this again, it's going to say we have a few missing models.
+So I'm going to click on each dropdown and select the appropriate model.
+All right, after that's done over here is where we would input an image,
+which we want to remove the background of.
+So let me upload this image and then here is where we would enter the positive
+prompts. So let's right remove the background, keep only the woman and
+output a PNG image.
+All the settings are the same as before.
+Again, here we have this custom size toggle.
+If we set this to false, it's going to use the same dimensions as our
+input image.
+If we set this to true, then it's going to use the width and height that we
+specified down here.
+This time let's set this to false.
+So it's just going to use the original resolution and then let's click run.
+All right, here's what we got and this took around 116 seconds.
+So by default, this is saved into my output folder.
+If I drag this into like a photo editing tool, you can see that indeed,
+it gives me a transparent background.
+So for example, let me change the background to red and here's what we get.
+All right, so that's how you can remove the background of any image using
+Quint Image 2.1.
+All right, so that sums up the three standard workflows that are
+available right now.
+Next, let's go over how to load Lora's to this.
+If you're not familiar with Lora's, these are like fine tuned models,
+which you can add on top of your workflow to generate a certain effect
+or character or action.
+For example, there's one for like grainy photography.
+There's one for phone photography, one to enhance the details of skin.
+Now for Quint Image 2.1, since we are really early to this,
+this has only been out for a day.
+There aren't Lora's available yet.
+The only one I can find so far is this one Quint 2.1 anime consistency.
+And this is supposed to enhance character consistency during anime style
+image editing.
+So just to show you a quick example of how to load a Lora to your workflow,
+I'm just going to download and try out this Lora.
+So let's click download.
+So this goes in Comfy UI in models and then in Lora's.
+Let's click save.
+Now it depends on the use case of your Lora.
+Here it says this one is for image editing.
+So I'm going to pull up my image editing workflow again.
+And to load the Lora, what you need to do is actually click on this button
+at the top here to open up this workflow.
+And you need to place a load Lora node between this node and what comes after it.
+So let me double click anywhere on the interface and type in load Lora.
+And let's just select this one by Comfy and place it over here.
+And if we click on this drop down, here's where we would select the
+Lora that we just downloaded.
+Here is the strength of this.
+So how much influence you want the Lora to have on your image right now?
+It's set at 100%.
+Let's set this to something like 0.8.
+And then I just need to connect the output from this load diffusion model over here.
+And then this output to over here.
+And that's pretty much it.
+So if we press on escape to go back to the original workflow here, let me upload
+an anime character.
+In fact, what I'm going to do is set the aspect ratio to 16 to nine.
+Let's increase the megapixels to two.
+And for the problem, let's try to make a character reference sheet with the front
+back and side view of this character.
+And let's press run and see how good this Lora is at preserving the consistency
+of this character.
+All right, here's what we got.
+Let me pull up the stats for you.
+So this took 128 seconds.
+So that's how you can load a Lora into this workflow.
+By the way, if you need to stack multiple Lora's together, then you
+can just click on this node and copy and paste it and then just string
+them together like this.
+Or there are also some other Lora stacker nodes like this, which
+allow you to stack multiple Lora's in the same node.
+Now, like I said, for this quantized Quen image model, you should be able
+to run this with like eight gigabytes of VRAM or potentially even lower.
+But what if your pores hell and you only have like four gigabytes?
+Well, in that case, maybe this Convrot version might not even work.
+The good news is you can still run Quen 2.1 using more compressed
+models called GGUFs.
+So there's already a ton of Quen image 2.1 GGUFs out there.
+I'm just going to show you this one by Abiray.
+Here they released multiple compressed versions of this and the smallest
+one is only 3.19 gigabytes in size.
+So if you have less than four gigabytes of VRAM, I would suggest
+you download this one.
+Note that for these ones like Q6 and Q8, they're not actually
+significantly smaller than this int8 Convrot version.
+So if you have like six to eight gigabytes, I would actually
+recommend you try this Convrot version first.
+But if you have like four gigabytes of VRAM, then you can
+download one of these.
+So I'm just going to show you an example with this Q3 one.
+Let's click download.
+And this goes in Convry UI in models and then in unit.
+Let's click save.
+Afterwards, back into our workflow, you can use this
+GGUF for all three workflows, text to image, image editing
+or background removal.
+I'm just going to show you an example with text to image.
+What you need to do is at the top corner, click on this
+button and over here, instead of load diffusion model, you
+need to replace it with a GGUF loader.
+So simply double click anywhere on the interface and then
+type unit loader and you should see this unit loader
+GGUF node.
+So let's insert this somewhere here.
+By the way, if you don't see this option, what you need to do
+is click on this extensions button at the top and then
+type in GGUF and you'll need to install this one
+Convry UI GGUF by City96.
+Afterwards, you should see this node.
+All right.
+So after placing this node here, we just need to take
+this input and drag it here.
+And then I'm going to hold down shift to take this output
+and drag it here.
+So right now this is going to load our GGUF instead of the
+diffusion model.
+In fact, for this node, I can just click on it and then
+press Ctrl B to bypass this model.
+And then let me press escape to go back to our main
+workflow down here for the unit name instead of the main
+quen image model, we need to click on this dropdown and
+select the GGUF that we just downloaded.
+And that's pretty much it.
+Let's click run.
+All right.
+So here's our result.
+As you can see, even the most quantized Q3 GGUF isn't too bad.
+You still get a similar quality to the full model.
+Finally, it's also important to mention the license of this.
+So here, at least for their official license agreement here,
+it says this cannot be used for any commercial purpose without
+obtaining a separate commercial license.
+Now, this has raised a lot of questions and concerns from the
+community, but the good news is quen has replied back and
+they said that outputs, in other words, your image
+generations are not part of the licensed materials.
+So you retain the rights to the images and other content
+they generate using the model.
+So at least from this post, it seems like you can use your
+generations, even for commercial purposes.
+All right.
+So that sums up my review and tutorial of quen image 2.1.
+It's a really flexible tool.
+And I really love how they included the ability to create
+transparent images.
+And I also love that we finally have a new image editing model.
+Let me know in the comments what you think of this
+and if you run into any errors during the installation,
+welcome to copy and paste the exact error message in the
+comments below and I'll try to help you troubleshoot as much
+as possible.
+As always, I will be on the lookout for the top AI news
+and tools to share with you.
+So if you enjoyed this video, remember to like, share,
+subscribe and stay tuned for more content.
+Also, there's just so much happening in the world of AI
+every week.
+I can't possibly cover everything on my YouTube channel.
+So to really stay up to date with all that's going on in AI,
+be sure to subscribe to my free weekly newsletter.
+The link to that will be in the description below.
+Thanks for watching and I'll see you in the next one.

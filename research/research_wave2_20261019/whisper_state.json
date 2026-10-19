@@ -1,0 +1,82 @@
+{
+  "done": [
+    "TK5alKYyIPg",
+    "H5s2Ba7yF_0",
+    "MYeI6_0xTqI",
+    "xQyceKmZTR8",
+    "7zlTSZR49pU",
+    "Mhrtmee18Mw",
+    "hJSFBUXgQog",
+    "Da4axkDKzxQ",
+    "huvysaySBrw",
+    "A22TQsr7Aew",
+    "VnBMQHdQZaA",
+    "_GFlR5e1ueY",
+    "23VkGD-4uwk",
+    "5TuhBcN9k8w",
+    "zakUq2BTQDQ",
+    "04K0bLwCDdM",
+    "MbQv8zoNEfY",
+    "p3JcJ99woGU",
+    "_F1B_8DE55M",
+    "qiLGtfm3vMw",
+    "yiAV5pDe6R8",
+    "bMbciHJYVMw",
+    "qojZEOVvvkI",
+    "-eVinR-JrHs",
+    "hl7kwMwkLJU",
+    "82Lu9qhQnzk",
+    "5YTSEtjlZx4",
+    "BaE6UBfNdQk",
+    "sFY1_tEXcOs",
+    "LjhoGuK5oDs",
+    "0dunCEiRscU",
+    "4575M1Le1VE",
+    "gOB8k2sEbTA",
+    "Ay-EPRMiv7U",
+    "T2Ln2DbPQx8",
+    "7GYbdxcBQ3I",
+    "gXTeHHO1AYE",
+    "rRXepCezenk",
+    "r87xomdrtRM",
+    "87vUIoCzZns",
+    "4szMtZNKELU",
+    "uZeRLXODK5w",
+    "YOWDaxVGO9I",
+    "DdSe5knj4k8",
+    "xSs5Lr_bOKg",
+    "0mX3S0OYXpI",
+    "ywYN6h3b4NA",
+    "x5TbF8Tb9U0",
+    "TzzlNni_K4o",
+    "ImWHS5Ux36E",
+    "6q_0MLi6Dzg",
+    "Zf7-3O0yQcc",
+    "0fZ03J9nS4w",
+    "u2AF_gFrO4o",
+    "m3ENCAwWDXc"
+  ],
+  "failed": [
+    {
+      "id": "g3qe4rDw1XU",
+      "reason": "Unable to allocate 1.06 GiB for an array with shape (1, 352274, 201) and data type complex128"
+    },
+    {
+      "id": "HkoRkNLWQzY",
+      "reason": "[ONNXRuntimeError] : 1 : FAIL : bad allocation"
+    },
+    {
+      "id": "I9iJmTgPy-w",
+      "reason": "audio download failed"
+    },
+    {
+      "id": "INmkd2ztW4c",
+      "reason": "Unable to allocate 1.11 GiB for an array with shape (1, 370621, 201) and data type complex128"
+    },
+    {
+      "id": "WOcxMUwKWIk",
+      "reason": "audio download failed"
+    }
+  ],
+  "started_at": "2026-10-19T08:40:02.217782+00:00"
+}

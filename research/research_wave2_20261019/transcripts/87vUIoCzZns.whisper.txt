@@ -1,0 +1,221 @@
+You might think that all you need to do is just select an area, type in a prompt and hit generate.
+And that should do the trick, right?
+But is it the reality?
+When you actually sit down to do this and you keep hitting generate again and again,
+nothing really seems to happen, right?
+And by chance if it does seem to work, it changes the original eye or removes the glasses altogether.
+Do not worry, there is a way.
+Today we'll cover the right steps, the right settings and the right techniques to magically and easily remove clear from glasses no matter how complex that is.
+We'll also learn what to do if you don't have Photoshop beta with AI or Photoshop at all.
+So without any further ado, let's get started.
+First of all, you want to make sure you're on the latest version of Photoshop beta and right now I'm using version 27.0.1.
+If you don't already have it, you can easily install it through your Creative Cloud desktop app,
+go to apps, beta at the top and from here, install Photoshop beta.
+And by the time you're watching this, maybe this feature makes it to the main version.
+The first technique is something we use when the eyes are not fully covered and it's slightly visible.
+In those cases, simply select the rectangular marquee tool and I recommend that because generations are rectangle anyway and it gives you a breathing room.
+Let us make a selection like so, select a bit extra and then in the contextual taskbar, click on Generative Fill.
+If you're not able to see the contextual taskbar, simply go to window and you want to make sure contextual taskbar is checked.
+Right in here, type in Remove the Reflections.
+Clearly this exact prompt.
+Remove the reflections from the glasses.
+And the most important step here is not using Nano Banana.
+Instead, click on the model menu and choose Flux for this one.
+And let us click on Generate.
+That's it. You can do a couple of tries if you wish to but most of the times and in this case, oh my gosh, it worked perfectly.
+Here is the overall before and here is the after.
+It's the exact same eye.
+For more accuracy, if you want some more variations, you can click on Generate here for more options to show up.
+Now, Flux, like any Generative AI model, has a resolution limit and sometimes when you're selecting a bigger area, it might lead to a lower resolution.
+We can select this entire area and remove the reflections from the glasses all at once.
+But since this is a bigger image and you can clearly see that, it will lead to degradation in resolution.
+So instead, you can use this obvious trick.
+Let's press Ctrl or Command D to deselect.
+Zoom into one glass only and then make a selection around it.
+And the idea is doing it one at a time.
+Then click on Generative Fill, the same prompt.
+Again, you want to make sure Flux is activated and simply click on Generate.
+And as you can see, it did a pretty amazing job.
+So here is the before, here is the after.
+And similarly, you can do the other eye one at a time.
+Let us take a look at the overall before and after.
+So here is the before and here is the after.
+I need you to pay attention towards the edges because there will be certain changes.
+You can create a soft selection, but I recommend doing this manually for absolute precision.
+So this was the generated area, right?
+If you go closer towards the edges, you will see certain differences here.
+Either they would be slightly misaligned or there will be a slight line or maybe a slight change in color.
+So one of the other best practice that I use from time to time is only keep it in the areas where you need it.
+For it, I personally delete the mask, drag it and drop it to the trash can,
+create a new negative mask by holding the Alt key or the Option key and then clicking on the Mask button.
+This creates a black mask.
+Remember, black hides, white shows.
+With the mask selected, you take the brush, white as the foreground color,
+take a soft brown brush and only paint over the areas where you need it to keep everything else intact.
+And if you don't want to have the hassle of deleting a mask, you can always create a group.
+Let us take a look at our second example.
+In this case, you can clearly see the edges of the generation.
+To fix it again, this time, let us select the first generation layer,
+hold the Ctrl or Command, select the second one and then press Ctrl or Command G to make a group of that.
+Then hold the Alt key or the Option key, click on the Mask button.
+This creates a negative mask.
+Similarly, with the same white brush and the mask selected,
+just paint over the areas where you need it.
+And that's it.
+Now there's going to be times and examples when this simple trick is not going to work.
+In this case, as you can see, the eyes are really covered a lot.
+If we were to try the same prompt with flux, let us hit Generate and see what happens.
+As you can see, it removes the reflections all right, but it also changes the eyes entirely.
+Before, after.
+In this case, we need to use a different approach and maybe a different model.
+Now this model, the AI one,
+let us make a selection of the entire glasses.
+Now, Nano Banana is not great at removing reflections,
+but it's excellent at removing complex stuff.
+So this time, click on Generate a Fill and instead type in Remove the glasses altogether.
+And from the models menu, you want to make sure Gemini 2.5 Nano Banana is activated, not flux.
+And then click on Generate.
+You already know where we are going with this and keep in mind this might require a couple tries.
+And let's have a look at the result.
+Brilliant!
+It's the same exact eye.
+Here's the before.
+Here's the after.
+It has moved a bit, but it's the same eye.
+Now let's see if we can align the movement.
+For it, simply change the blend mode from Normal to Difference.
+Let us hide this and then you can press Ctrl or Command T
+with the arrow keys, move it to the right or left to see where it exactly aligns with the eyes.
+This seems to be perfect as you can clearly see the edges are aligning.
+If it's black, it has aligned.
+Hit Enter or Return and change the blend mode back to Normal.
+Now all we need to do is to use the magic of masking.
+Let us delete this particular mask.
+Again, hold the Alt key or the Option key and click on the Mask button to create a negative mask.
+Then you can take the brush white as the foreground color, just simply paint here.
+You don't have to recover all the areas because if you recover this area, the shadows go away.
+Keep it like this so that the eyes stay.
+You can also use the Quick Selection tool to make it easier.
+With the Quick Selection tool, make sure Sample All Layers is checked.
+Let's make a selection like this, take the brush back again and with white, just paint this area.
+There you go. Easy to fix.
+Press Ctrl or Command D to deselect.
+Yes, there are certain more reflections but don't worry about that right now.
+Now that the eyes are recovered, it's easy to fix the rest with Flux.
+So with the Rectangular Maki tool again, make a selection of this entire area.
+Click on Generator Fill again and this time, choose Flux as the model.
+And we will use the same prompt, Remove Reflections from the glass.
+Click on Generate and that should easily complete our glare removal.
+Have a look before, after.
+Pretty amazing.
+But do not forget one last step.
+With the first layer selected, hold the Ctrl or Command, click on the second layer.
+Press Ctrl or Command G, create a group.
+Hold the Alt key or the Option key.
+Click on the Mask button to create a negative mask.
+And then take the brush with white as the foreground color, only paint over areas where you needed
+the change and this keeps the edges natural.
+Let me share with you another impossible example.
+The eyes are entirely covered here.
+So I used Nano Banana to remove the glasses altogether.
+You can clearly see the prompt is Remove the glasses.
+And then let's create a group out of this.
+Press Ctrl or Command G, hold the Alt key or the Option key.
+Click on the Mask button to create a negative mask.
+And then you can use the Quick Selection tool that's up to you to make a quick selection inside
+of it.
+Let's add this area as well.
+And then with the brush with white as the foreground color, just paint on the inside.
+Press Ctrl or Command D and you will see there's a problem.
+The shadows are gone, the selection of the glass is not proper, some areas are not
+great.
+Now you can take your time to fix this or why not try something smarter.
+Let us select the same area by holding the Ctrl or Command and clicking on the
+thumbnail here and this time click on Generator Fill and type in Fix the Glasses Frame.
+Now since you want to stay closer to the context, choose this time Flux Context Pro.
+And let's see what it does.
+And just like magic, it fixes the frame.
+Here's the before, as you can see, here's the after.
+It moves it quite a bit, no issues, change the blend mode from Normal to Difference.
+Press Ctrl or Command D with the arrow keys.
+Try to move it so that it's closest to black.
+This seems to be about right, hit Enter or Return, change the blend mode back to Normal.
+And then hold the Shift key, select the top most layer and then the bottom most layer,
+press Ctrl or Command G to create a big group.
+Hold the Alt key or Option key, click on the Mask button to create a negative mask.
+Take the same white soft brush and just paint over those areas just to match everything
+clearly.
+And this my friend is the final result.
+As the before, here is the after.
+Now what do you do if you don't have Photoshop beta or Photoshop at all or for some reason something
+is just not working?
+In that case, simply go to Firefly.adobe.com.
+There are many platforms that give you access to Flux, but in this case you can go to
+Boards and just create a new board.
+Now Firefly Boards gives you a lot of flexibility including what we want for high-res generation.
+Let us drag and drop this photo.
+It is that simple.
+And then we want to fix this right?
+So why not just crop it directly?
+Using these controls you can just crop it the way you like.
+Similarly, let's do it from all the sides.
+You can also hold the space bar to move it just like you do in Photoshop.
+I'm going to keep a bit of the face.
+Then click on Generate Image and using the same prompt here which is Remove Reflections
+from the glass, let us pick the model from this dropdown and let's pick
+Flux Context Pro.
+And to use this image as a reference, click here and then click on this particular
+image.
+Click on Generate.
+You can also generate a couple times so that it's processing simultaneously, giving
+you a lot of options.
+But keep in mind, credits are deducted for these.
+To check how many free credits you get, whether you get them or not and what
+are the plans, I'll leave them down in the description.
+You have a couple options and all of them processed brilliantly.
+Let us go with this one.
+You can just drag it and drop it to the board and as you can see this is
+wonderful, wonderful resolution.
+You can download it by clicking on the Download button.
+Click on Download.
+Now back inside a Photoshop or any photo editing application, you can open your
+original photo.
+On top of that, just place the one that we created, like so.
+Hit Enter or Return and to simply align it, with the background layer selected,
+press Ctrl or Command J to make a copy.
+Let's rasterize this layer by right clicking on it and choosing Rasterize
+Layer.
+And then select both of these layers.
+Hold the Ctrl or Command, select the second one as well, go to Edit,
+Auto, Align, Layers.
+If it doesn't align, you can also do it manually.
+Auto is fine and hit OK.
+And it automatically aligns.
+Create a mask by holding the Alt key or the Option key and clicking on the
+Mask button to create a negative mask.
+With the brush, with a white soft brush, just reveal it in the areas where
+you need it.
+That's it.
+Done.
+Before.
+After.
+A couple years ago, I made a video about removing glare from glasses.
+It had those complex glares and we had to go in and do high end
+hudging and burning inside of that.
+And even then, we had to use some kind of cloning or healing to fix all the
+edges. And then on top of that, we had to color match.
+That would usually take 30 minutes to an hour, depending upon the
+complexity and see how far we have come.
+But notice what happened.
+Those techniques, those concepts, those ideas are still very important
+because when AI fails and it isn't able to do what we want it to do,
+these are the techniques that's going to save your rear.
+And that's what makes you a professional and separates you from
+people who just know AI.
+I hope you enjoyed this video and if you did, make sure to give us a like
+and also don't forget to subscribe and not just subscribe.
+Ring the bell so that you, my friend, don't miss any other
+feature tips, tricks or tutorials.
+Thank you so much for watching.
+I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.

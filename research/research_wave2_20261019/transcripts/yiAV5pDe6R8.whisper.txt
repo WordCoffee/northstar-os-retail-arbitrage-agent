@@ -1,0 +1,81 @@
+Flux context is now available inside LTX Studio,
+introducing a new paradigm in AI image generation,
+built for creative control at every step.
+Context is a multimodal model,
+which means it understands both images and text.
+This allows you to generate, edit,
+and transform visuals using natural language
+with context-aware precision.
+To get started, head to the image workspace
+from the LTX Studio home screen.
+This is where you'll access all the new capabilities
+inside Flux context.
+Context has exceptional prompt adherence,
+and it excels when you start with short, clear instructions
+and layer them together to form a detailed prompt.
+You don't need complex formatting,
+just purposeful, descriptive language.
+For example, a woman in a bedroom
+with pink hues, heavy film grain.
+This single prompt captures subject, setting,
+mood, and visual texture, all with one line.
+But where context truly shines
+is in its image editing capabilities.
+If you've been online recently,
+you've probably seen the style transfer feature,
+even if you didn't know the name.
+This is where you use a reference image
+or detailed description
+to mimic a specific visual style or genre.
+In Flux context, it's easier and more consistent than ever.
+You can start with something as simple
+as a crayon style kids' drawing,
+then apply that look to a completely different subject.
+Context carries over the visual tone of the reference
+and applies it seamlessly to your new image.
+You can also use image reference for in painting,
+one of Context's most powerful features.
+Upload a product, prop, or person,
+and seamlessly place it into a new scene.
+You're not just editing,
+you're directing how that subject appears
+with full control over your composition.
+Want to adjust lighting or change the environment?
+Just guide it with a prompt.
+Change the jacket to yellow.
+Change the background to a jungle environment.
+Change the lighting to sunset.
+This kind of control is possible
+because of how the model understands images.
+Context doesn't see the image like a human,
+but thanks to its multimodal training,
+it understands what's in the image well enough
+to make smart targeted edits.
+It can recognize elements like a person, a sign,
+or a jacket and modify them
+without disrupting the overall composition
+or feel of the scene.
+One advantage this brings is consistency.
+One of the biggest challenges in AI
+is keeping characters, details,
+and overall tone aligned across scenes.
+Context is built for consistency,
+so your characters and objects remain stable across edits,
+making it easier to build cohesive visuals,
+maintain identity over time,
+and revisit scenes without starting from scratch.
+That consistency also allows you
+to quickly explore new angles and perspectives
+to better tell your story.
+Want to switch the lens, change the camera angle,
+or reframe the shot entirely?
+Just upload your image as a reference
+and describe the changes you want to see.
+Once your stills are ready,
+you can bring them to life using our video models.
+LTXV13B, LTXV Turbo, or Google's VO2.
+Transforming static shots into fully animated sequences.
+Flux context in LTX Studio isn't just an image tool.
+It's a creative engine designed to help you build,
+direct, and evolve your story.
+One prompt at a time.

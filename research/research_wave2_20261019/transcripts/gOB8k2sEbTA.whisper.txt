@@ -1,0 +1,251 @@
+Today I'm going to share with you a simple technique to create seamless, clean and beautiful shadows in Photoshop.
+Not always drop shadow would work unless you want to make the object hover.
+Sometimes we have to create and paint the shadows.
+It is easier than you think.
+So without any further ado, let's get started.
+Back in the magical world of Photoshop and if you wish to follow along using these assets,
+which you should, check the links in the description to download them.
+So here we have a blank new document.
+On top of that, I'm just going to drag and drop this box right here.
+Let us resize it to give it a little bit of space for the shadows.
+Now you can make the document bigger up to you.
+Now this is already a transparent, isolated photo of a box.
+If it weren't, you could have just masked it out.
+Not a big deal.
+Just keep in mind that you have the background and the box separate.
+The next thing we need to do is to create a base shadow.
+And how well you do this is going to determine whether it's going to make or break the deal.
+So just under the box layer, I'm going to create a blank new layer by clicking on this button.
+And let us name this Shadow 1.
+Alright.
+Now simply select the polygonal lasso tool.
+If you're in the Lasso tool group, just click and hold and you'll find the polygonal lasso tool.
+And then start painting or creating the shadow.
+So I'm going to start right about there.
+Have a look at where the light is falling.
+The light is coming from the right hand side and that is why this area is brighter.
+And also this area at the top is brighter.
+So from the top right somewhere here, so accordingly create the shadow.
+So I'm going to keep it possibly this way and maybe create a shadow like so.
+This looks reasonable and we're going to join it like so.
+Now let us fill this with black.
+With the foreground color black, if it's not black and white already, you can always
+press D to set the foreground and the background color to defaults.
+And now with the foreground color black, press Alt-Pack Space or Option-Delete.
+Now press Ctrl or Command-D.
+Now when you zoom out, this should look about right.
+From here, we are going to fine tune it.
+But if you think of it like a 2D cartoon, this should look right to you once you zoom out.
+Now let's zoom back in, press Ctrl or Command-Zero to fit it to the screen.
+Now we need to adjust the blur.
+As the shadows get further, the edges of the shadows get blurrier, right?
+So with the shadow layer selected, before applying any blur, let's go to Filter,
+Convert for Smart Filters, hit OK.
+Why?
+So that we can change the values later if we want it.
+Now let's go to Filter, not Blur, but Blur Gallery and then Dilt Shift.
+This allows us to apply a gradual blur.
+Now you can rotate it.
+Now as you are rotating this, you can hold the Shift key to rotate it at
+perfect angles, 90 degrees fine.
+The blur is gonna start at the solid line and
+it's gonna continue increasing till the dotted line.
+So I'm just gonna increase the blur a lot like so.
+And you can control how the blur flows.
+All right, now this looks pretty much amazing right here.
+I'm just gonna increase the amount a bit more.
+Let's see how this looks.
+164, that's perfect for now.
+You can always change this later, hit OK.
+Now this shadow of course is too dark.
+There is one more thing you must have noticed about shadows.
+As it goes further, it fades too.
+So with the shadow layer selected, click on this button to create a mask.
+And then let us pick a gradient from white to black.
+And I'm gonna draw a gradient like this.
+Now this is a hard fade.
+By the way, as you're dragging the gradient, you can also hold the Shift key
+to make sure it is in a straight line.
+Now you need to be holding it first and
+then pressing the Shift key and holding it to make sure it's accurate.
+Let us expand it even more.
+This looks pretty amazing.
+Now let's click on the layer, press Ctrl or Command 0 to set it all up.
+One more essential thing to keep in mind that as you are using the gradient
+to you want to make sure Dither is checked.
+Otherwise, there can be banding issues.
+Now as the shadows stretch, other lights begin to come in there as well.
+So we need to erase the shadows slightly from the corners.
+But we don't want to disturb this mask.
+So how do we have two masks for the same layer?
+We have learned about this in previous videos with just that one layer selected.
+Press Ctrl or Command G to put it in a group.
+Now one advantage of the group is you can create another mask of this.
+So with the group selected, click on this button to create a mask.
+And by the way, you can name this Shadow.
+Select the mask, take the brush, take a soft round brush and
+with black as the foreground color, just start erasing.
+You can even control the flow, keep it at 100, keep it at 20.
+Slowly and gradually erase the extras, like so.
+Do a very soft erasing from around the corners and have a look at this.
+It's already pretty close.
+Now to make it even more realistic and this is an optional step,
+you can create a slight reflection.
+With the box layer selected at the top, let us press Ctrl or Command J and
+this one can be your reflection.
+Let us select the move to press Ctrl or Command T and right click on it and
+choose Flip Vertical.
+This should be like a reflection.
+Let's bring it right about there.
+Now I recommend keeping it slightly on the inside because we are going to be
+blurring it anyway and we don't want to see any gaps.
+Hit Enter or Return.
+Press Ctrl or Command 0 and now let's go to Edit and
+Perspective Warp and all we have to do is to drag a rectangle like this and put
+the points along the four corners of the box.
+I'm going to do a super quick and inaccurate job right here.
+I should have done it before so that we could see the whole box but that's fine.
+It doesn't have to be very, very accurate for this one.
+Once you're done, go to the Warp tab right here and then you can move it
+as you like.
+You want to make sure it aligns properly.
+Other side we are going to erase it anyway but if you want to keep it,
+this is how you do it.
+There you go.
+Maybe a little more.
+Now for extra realistic approach, you can also do this.
+You can also do this one.
+There you go.
+That's a nice reflection.
+Hit Enter or Return.
+Now since this is a smart object, you can always go back by double clicking
+on Perspective Warp and adjust it as you wish.
+Now since we have a white floor, all that the reflection is doing is darkening it.
+Now what is the blend mode which darkens gradually and nicely?
+Multiply right?
+So select the reflection layer, change the blend mode from Normal to Multiply.
+And there you have it.
+Look at the beauty right there.
+Let us not forget we have to blur it too.
+The further the reflection gets, the more blurry it gets.
+So let's go to Filter and again, Blur Gallery and Tilt Shift.
+This time let's rotate it this way.
+I'm just going to keep the reflection on this side and the blur starts,
+let's say right here and goes still this.
+Let's control the blur.
+You can zoom in and control where the blur starts.
+If it doesn't look right to you, you can always move this.
+Oh, that looks very much nicer.
+So we can do something like this.
+Once you're happy, hit OK right here.
+And there you have it.
+And of course, decrease the opacity.
+So I'm going to keep it at about 28.
+This works fine and then we need to create a mask by clicking on this Mask button,
+take the brush and just get to work.
+Erase the extras.
+So I don't want it in this area so I'm going to erase it from there.
+Only in the shadow areas mostly.
+Now that looks fantastic.
+But is it done?
+Not really.
+There's one more layer of shadow we need to create.
+And this shadow is the most crucial.
+It actually places the object on the surface.
+If we notice things in the real world which we should do more often for inspiration,
+let's screens, you would notice that if you look at an actual photo, an actual
+object, there is that one layer of shadow right here that actually joins the subject
+with that of the surface on which it is on.
+There is this larger shadow.
+That's fine.
+We can consider multiple layers of shadows but have a look at this one.
+This one is always there.
+This hard shadow, this joins and actually places the subject on the surface or the object.
+Similarly, we need to create a closed shadow for this one as well.
+So just under the box layer, let us create a brand new layer and let's name this one
+Shadow 2.
+Select the brush tool and zoom in and all you have to do is to just dab right here.
+That's it.
+Hold the shift key and dab right here.
+You can continue this.
+You don't have to be absolutely accurate and straight lines.
+You can keep it slightly zigzag too for more realistic approach.
+Keep holding the shift key and just dabbing like so.
+See the zigzag?
+That's making it even more realistic.
+Don't forget the other side.
+This area already has that shadow.
+So it's going to work right here.
+So I'm just going to merge it like so.
+There you go.
+That is so fantastic.
+You can decrease the opacity for this one but I think this is fine.
+It just joins it so nicely.
+Now you can actually stop right here and to be honest, there is no end to it.
+You can keep going on and on.
+But for this one, we are going to create a studio clean background and that's pretty
+easy.
+So all you need to do is to choose the gradient tool right here.
+Choose a white to black gradient.
+It doesn't matter right now and let us drag in a gradient like this.
+Now what we want this new background to do is only darken stuff.
+So change the blend mode from normal to multiply because it was already white.
+Let's take it all the way to the top like this and this is a fine adjustment.
+Now you can change the colors according to your wish.
+Let's double click right here.
+Let's set it to dark gray is fine.
+Hit OK and for this one, double click right here.
+Light gray is fine.
+So we're going to keep it right about there and you can adjust the colors at any point
+in time.
+Now this looks really, really nice but for even more lighting effects, how can we
+forget our favorite curves?
+So just above the box layer, click on the Adjustment Layer icon and let us choose Curves.
+Let's take this slider to the left like so.
+Select the mask, press Ctrl or Command I.
+We want this curve to only affect this box.
+So hold the Alt key or the Option key and click on the line between these two.
+You can also do it from the Curves properties.
+Let's take the brush with white as the foreground color, just dab at the top for a nicer
+lighting effect.
+Now you can always adjust these later but this is fantastic.
+So I'm going to go back right here and adjust it.
+This may be too much.
+That's nice.
+And for lighting effects on the floor as well, just above this Gradient Fill layer, click
+on the Adjustment Layer icon and then choose Curves.
+Again, it's our favorite.
+Let's take this slider to the left like so and for this one, select the mask,
+pick the Gradient tool and this time let us pick a radial gradient.
+Pick a gradient from white to black.
+By the way, if you pick the first one, which is foreground to background, you can always
+press X to toggle it.
+Right now it is white to black and let us drag something like so.
+By the way, you can squish it and make it rounder.
+That's up to you.
+I'm going to keep it this way.
+Whoa.
+That looks great.
+That looks great, doesn't it?
+Let's keep it this way.
+And you know, really there is no end to it.
+So that's how to create seamless, clean and beautiful shadows in Photoshop.
+The important thing to understand is to learn when to start.
+Let us do a quick little recap.
+The first thing we need to do is to have the box and the background separate.
+We have a white background right here.
+Next we need to fill in a base shadow like this.
+You can introduce some blur and some masking to make it more realistic.
+On top of that, you can introduce some reflection and do not forget some additional
+shadows that joins the object to the surface.
+See that layer of shadow right there?
+On top of that, it's up to you to create different kinds of backgrounds, some lighting
+at the top, at the bottom.
+That's optional.
+So that's all there is to it.
+I hope this video helped you and if it did, make sure to give us a like and also don't
+forget to subscribe and not just subscribe.
+Ring the bell so that you, my friend, don't miss any other future tips, tricks or tutorials.
+Thank you so much for watching.
+I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.

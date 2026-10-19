@@ -1,0 +1,864 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:09.000 --> 00:00:11.990 align:start position:0%
+ 
+welcome<00:00:09.320><c> to</c><00:00:09.639><c> ic3d</c><00:00:10.480><c> training</c><00:00:10.880><c> video</c><00:00:11.440><c> Advanced</c>
+
+00:00:11.990 --> 00:00:12.000 align:start position:0%
+welcome to ic3d training video Advanced
+ 
+
+00:00:12.000 --> 00:00:15.589 align:start position:0%
+welcome to ic3d training video Advanced
+carton<00:00:12.360><c> fold</c><00:00:12.920><c> tools</c><00:00:13.920><c> ic3d</c><00:00:14.879><c> carton</c><00:00:15.240><c> fold</c>
+
+00:00:15.589 --> 00:00:15.599 align:start position:0%
+carton fold tools ic3d carton fold
+ 
+
+00:00:15.599 --> 00:00:17.550 align:start position:0%
+carton fold tools ic3d carton fold
+template<00:00:16.240><c> has</c><00:00:16.480><c> functionality</c><00:00:17.199><c> that</c><00:00:17.359><c> can</c>
+
+00:00:17.550 --> 00:00:17.560 align:start position:0%
+template has functionality that can
+ 
+
+00:00:17.560 --> 00:00:20.790 align:start position:0%
+template has functionality that can
+repair<00:00:18.199><c> and</c><00:00:18.480><c> edit</c><00:00:18.920><c> Badly</c><00:00:19.320><c> Drawn</c><00:00:19.720><c> dxf</c><00:00:20.359><c> cutter</c>
+
+00:00:20.790 --> 00:00:20.800 align:start position:0%
+repair and edit Badly Drawn dxf cutter
+ 
+
+00:00:20.800 --> 00:00:23.470 align:start position:0%
+repair and edit Badly Drawn dxf cutter
+profiles<00:00:21.760><c> drag</c><00:00:22.119><c> the</c><00:00:22.279><c> carton</c><00:00:22.640><c> fold</c><00:00:23.000><c> template</c>
+
+00:00:23.470 --> 00:00:23.480 align:start position:0%
+profiles drag the carton fold template
+ 
+
+00:00:23.480 --> 00:00:28.950 align:start position:0%
+profiles drag the carton fold template
+into<00:00:23.720><c> the</c><00:00:24.000><c> 3D</c><00:00:24.240><c> view</c><00:00:24.599><c> import</c><00:00:24.920><c> a</c><00:00:25.119><c> dxf</c><00:00:25.760><c> cutter</c>
+
+00:00:28.950 --> 00:00:28.960 align:start position:0%
+ 
+ 
+
+00:00:28.960 --> 00:00:31.109 align:start position:0%
+ 
+profile
+
+00:00:31.109 --> 00:00:31.119 align:start position:0%
+profile
+ 
+
+00:00:31.119 --> 00:00:32.910 align:start position:0%
+profile
+this<00:00:31.359><c> example</c><00:00:31.759><c> shows</c><00:00:32.040><c> a</c><00:00:32.200><c> structure</c><00:00:32.640><c> that</c><00:00:32.800><c> has</c>
+
+00:00:32.910 --> 00:00:32.920 align:start position:0%
+this example shows a structure that has
+ 
+
+00:00:32.920 --> 00:00:35.150 align:start position:0%
+this example shows a structure that has
+some<00:00:33.160><c> lines</c><00:00:33.640><c> that</c><00:00:33.760><c> do</c><00:00:33.920><c> not</c><00:00:34.079><c> join</c><00:00:34.559><c> together</c><00:00:35.040><c> and</c>
+
+00:00:35.150 --> 00:00:35.160 align:start position:0%
+some lines that do not join together and
+ 
+
+00:00:35.160 --> 00:00:36.869 align:start position:0%
+some lines that do not join together and
+need<00:00:35.360><c> to</c><00:00:35.480><c> be</c><00:00:35.680><c> corrected</c><00:00:36.280><c> before</c><00:00:36.520><c> we</c><00:00:36.680><c> can</c>
+
+00:00:36.869 --> 00:00:36.879 align:start position:0%
+need to be corrected before we can
+ 
+
+00:00:36.879 --> 00:00:40.150 align:start position:0%
+need to be corrected before we can
+create<00:00:37.160><c> a</c><00:00:37.480><c> model</c><00:00:38.480><c> split</c><00:00:39.120><c> all</c><00:00:39.280><c> the</c><00:00:39.440><c> lines</c><00:00:39.840><c> using</c>
+
+00:00:40.150 --> 00:00:40.160 align:start position:0%
+create a model split all the lines using
+ 
+
+00:00:40.160 --> 00:00:42.110 align:start position:0%
+create a model split all the lines using
+the<00:00:40.320><c> split</c><00:00:40.680><c> lines</c><00:00:41.079><c> button</c><00:00:41.600><c> turning</c><00:00:41.960><c> the</c>
+
+00:00:42.110 --> 00:00:42.120 align:start position:0%
+the split lines button turning the
+ 
+
+00:00:42.120 --> 00:00:44.709 align:start position:0%
+the split lines button turning the
+cutter<00:00:42.440><c> to</c><00:00:42.960><c> Green</c><00:00:43.960><c> then</c><00:00:44.160><c> holding</c><00:00:44.559><c> the</c>
+
+00:00:44.709 --> 00:00:44.719 align:start position:0%
+cutter to Green then holding the
+ 
+
+00:00:44.719 --> 00:00:47.470 align:start position:0%
+cutter to Green then holding the
+keyboard<00:00:45.160><c> shift</c><00:00:45.559><c> key</c><00:00:46.239><c> select</c><00:00:46.760><c> all</c><00:00:46.960><c> the</c><00:00:47.079><c> middle</c>
+
+00:00:47.470 --> 00:00:47.480 align:start position:0%
+keyboard shift key select all the middle
+ 
+
+00:00:47.480 --> 00:00:49.270 align:start position:0%
+keyboard shift key select all the middle
+lines<00:00:47.760><c> in</c><00:00:47.879><c> the</c><00:00:48.039><c> structure</c><00:00:48.640><c> so</c><00:00:48.800><c> that</c><00:00:49.000><c> these</c><00:00:49.160><c> can</c>
+
+00:00:49.270 --> 00:00:49.280 align:start position:0%
+lines in the structure so that these can
+ 
+
+00:00:49.280 --> 00:00:51.790 align:start position:0%
+lines in the structure so that these can
+be<00:00:49.440><c> changed</c><00:00:49.800><c> to</c><00:00:50.199><c> folds</c><00:00:51.199><c> once</c><00:00:51.440><c> all</c><00:00:51.600><c> the</c>
+
+00:00:51.790 --> 00:00:51.800 align:start position:0%
+be changed to folds once all the
+ 
+
+00:00:51.800 --> 00:00:54.189 align:start position:0%
+be changed to folds once all the
+required<00:00:52.320><c> lines</c><00:00:52.640><c> have</c><00:00:52.800><c> been</c><00:00:53.000><c> selected</c><00:00:53.960><c> click</c>
+
+00:00:54.189 --> 00:00:54.199 align:start position:0%
+required lines have been selected click
+ 
+
+00:00:54.199 --> 00:00:56.310 align:start position:0%
+required lines have been selected click
+on<00:00:54.320><c> the</c><00:00:54.480><c> folds</c><00:00:55.000><c> button</c><00:00:55.280><c> in</c><00:00:55.399><c> the</c><00:00:55.520><c> toolbar</c><00:00:56.120><c> to</c>
+
+00:00:56.310 --> 00:00:56.320 align:start position:0%
+on the folds button in the toolbar to
+ 
+
+00:00:56.320 --> 00:00:59.590 align:start position:0%
+on the folds button in the toolbar to
+change<00:00:56.719><c> them</c><00:00:56.879><c> to</c><00:00:57.120><c> folds</c><00:00:57.879><c> shown</c><00:00:58.160><c> in</c><00:00:58.399><c> red</c><00:00:59.239><c> next</c>
+
+00:00:59.590 --> 00:00:59.600 align:start position:0%
+change them to folds shown in red next
+ 
+
+00:00:59.600 --> 00:01:02.750 align:start position:0%
+change them to folds shown in red next
+select<00:00:59.920><c> select</c><00:01:00.320><c> the</c><00:01:00.519><c> generate</c><00:01:00.960><c> model</c>
+
+00:01:02.750 --> 00:01:02.760 align:start position:0%
+select select the generate model
+ 
+
+00:01:02.760 --> 00:01:05.670 align:start position:0%
+select select the generate model
+button<00:01:03.760><c> the</c><00:01:03.920><c> model</c><00:01:04.360><c> generator</c><00:01:05.000><c> detects</c><00:01:05.479><c> an</c>
+
+00:01:05.670 --> 00:01:05.680 align:start position:0%
+button the model generator detects an
+ 
+
+00:01:05.680 --> 00:01:07.870 align:start position:0%
+button the model generator detects an
+error<00:01:06.240><c> that</c><00:01:06.400><c> does</c><00:01:06.600><c> not</c><00:01:06.799><c> allow</c><00:01:07.080><c> a</c><00:01:07.280><c> face</c><00:01:07.520><c> to</c><00:01:07.640><c> be</c>
+
+00:01:07.870 --> 00:01:07.880 align:start position:0%
+error that does not allow a face to be
+ 
+
+00:01:07.880 --> 00:01:11.590 align:start position:0%
+error that does not allow a face to be
+created<00:01:08.799><c> select</c><00:01:09.280><c> no</c><00:01:09.640><c> to</c><00:01:09.840><c> the</c><00:01:09.960><c> error</c><00:01:10.600><c> message</c>
+
+00:01:11.590 --> 00:01:11.600 align:start position:0%
+created select no to the error message
+ 
+
+00:01:11.600 --> 00:01:13.630 align:start position:0%
+created select no to the error message
+the<00:01:11.759><c> model</c><00:01:12.159><c> generator</c><00:01:12.759><c> directs</c><00:01:13.119><c> you</c><00:01:13.280><c> to</c><00:01:13.439><c> the</c>
+
+00:01:13.630 --> 00:01:13.640 align:start position:0%
+the model generator directs you to the
+ 
+
+00:01:13.640 --> 00:01:16.510 align:start position:0%
+the model generator directs you to the
+problem<00:01:14.000><c> area</c><00:01:14.720><c> the</c><00:01:14.880><c> fold</c><00:01:15.280><c> line</c><00:01:15.560><c> does</c><00:01:15.880><c> not</c><00:01:16.080><c> join</c>
+
+00:01:16.510 --> 00:01:16.520 align:start position:0%
+problem area the fold line does not join
+ 
+
+00:01:16.520 --> 00:01:19.350 align:start position:0%
+problem area the fold line does not join
+properly<00:01:16.960><c> to</c><00:01:17.119><c> the</c><00:01:17.280><c> cut</c><00:01:17.799><c> lines</c><00:01:18.799><c> the</c><00:01:18.960><c> carton</c>
+
+00:01:19.350 --> 00:01:19.360 align:start position:0%
+properly to the cut lines the carton
+ 
+
+00:01:19.360 --> 00:01:21.710 align:start position:0%
+properly to the cut lines the carton
+toolbar<00:01:20.040><c> provides</c><00:01:20.400><c> a</c><00:01:20.600><c> variety</c><00:01:21.040><c> of</c><00:01:21.200><c> tools</c><00:01:21.560><c> to</c>
+
+00:01:21.710 --> 00:01:21.720 align:start position:0%
+toolbar provides a variety of tools to
+ 
+
+00:01:21.720 --> 00:01:24.590 align:start position:0%
+toolbar provides a variety of tools to
+correct<00:01:22.079><c> the</c><00:01:22.320><c> problem</c><00:01:23.320><c> first</c><00:01:23.880><c> delete</c><00:01:24.439><c> the</c>
+
+00:01:24.590 --> 00:01:24.600 align:start position:0%
+correct the problem first delete the
+ 
+
+00:01:24.600 --> 00:01:27.990 align:start position:0%
+correct the problem first delete the
+incorrect<00:01:25.159><c> fold</c><00:01:25.520><c> line</c><00:01:26.400><c> indicated</c><00:01:27.400><c> selecting</c>
+
+00:01:27.990 --> 00:01:28.000 align:start position:0%
+incorrect fold line indicated selecting
+ 
+
+00:01:28.000 --> 00:01:31.429 align:start position:0%
+incorrect fold line indicated selecting
+the<00:01:28.159><c> add</c><00:01:28.439><c> lines</c><00:01:28.880><c> button</c><00:01:29.159><c> in</c><00:01:29.280><c> the</c><00:01:29.400><c> toolbar</c>
+
+00:01:31.429 --> 00:01:31.439 align:start position:0%
+the add lines button in the toolbar
+ 
+
+00:01:31.439 --> 00:01:33.510 align:start position:0%
+the add lines button in the toolbar
+click<00:01:31.680><c> and</c><00:01:31.920><c> drag</c><00:01:32.240><c> the</c><00:01:32.399><c> line</c><00:01:32.640><c> to</c><00:01:32.840><c> the</c><00:01:33.000><c> selected</c>
+
+00:01:33.510 --> 00:01:33.520 align:start position:0%
+click and drag the line to the selected
+ 
+
+00:01:33.520 --> 00:01:36.469 align:start position:0%
+click and drag the line to the selected
+area<00:01:33.880><c> between</c><00:01:34.200><c> the</c><00:01:34.320><c> cut</c><00:01:34.960><c> gaps</c><00:01:35.960><c> this</c><00:01:36.119><c> can</c><00:01:36.280><c> be</c>
+
+00:01:36.469 --> 00:01:36.479 align:start position:0%
+area between the cut gaps this can be
+ 
+
+00:01:36.479 --> 00:01:38.389 align:start position:0%
+area between the cut gaps this can be
+done<00:01:36.720><c> freely</c><00:01:37.399><c> or</c><00:01:37.560><c> if</c><00:01:37.680><c> you</c><00:01:37.880><c> hold</c><00:01:38.119><c> down</c><00:01:38.280><c> the</c>
+
+00:01:38.389 --> 00:01:38.399 align:start position:0%
+done freely or if you hold down the
+ 
+
+00:01:38.399 --> 00:01:40.710 align:start position:0%
+done freely or if you hold down the
+shift<00:01:38.720><c> key</c><00:01:39.280><c> the</c><00:01:39.399><c> line</c><00:01:39.680><c> will</c><00:01:39.920><c> draw</c><00:01:40.399><c> either</c>
+
+00:01:40.710 --> 00:01:40.720 align:start position:0%
+shift key the line will draw either
+ 
+
+00:01:40.720 --> 00:01:42.710 align:start position:0%
+shift key the line will draw either
+vertically<00:01:41.200><c> straight</c><00:01:41.720><c> or</c><00:01:42.000><c> horizontally</c>
+
+00:01:42.710 --> 00:01:42.720 align:start position:0%
+vertically straight or horizontally
+ 
+
+00:01:42.720 --> 00:01:45.069 align:start position:0%
+vertically straight or horizontally
+straight<00:01:43.560><c> click</c><00:01:44.000><c> on</c><00:01:44.159><c> the</c><00:01:44.280><c> end</c><00:01:44.439><c> of</c><00:01:44.560><c> the</c><00:01:44.719><c> line</c>
+
+00:01:45.069 --> 00:01:45.079 align:start position:0%
+straight click on the end of the line
+ 
+
+00:01:45.079 --> 00:01:48.910 align:start position:0%
+straight click on the end of the line
+once<00:01:45.360><c> drawn</c><00:01:46.320><c> repeat</c><00:01:46.880><c> with</c><00:01:47.040><c> the</c><00:01:47.159><c> other</c>
+
+00:01:48.910 --> 00:01:48.920 align:start position:0%
+once drawn repeat with the other
+ 
+
+00:01:48.920 --> 00:01:51.670 align:start position:0%
+once drawn repeat with the other
+gap<00:01:49.920><c> next</c><00:01:50.360><c> draw</c><00:01:50.640><c> a</c><00:01:50.799><c> line</c><00:01:51.159><c> between</c><00:01:51.479><c> the</c>
+
+00:01:51.670 --> 00:01:51.680 align:start position:0%
+gap next draw a line between the
+ 
+
+00:01:51.680 --> 00:01:53.270 align:start position:0%
+gap next draw a line between the
+horizontal
+
+00:01:53.270 --> 00:01:53.280 align:start position:0%
+horizontal
+ 
+
+00:01:53.280 --> 00:01:56.429 align:start position:0%
+horizontal
+Cuts<00:01:54.280><c> using</c><00:01:54.640><c> the</c><00:01:54.799><c> cursor</c><00:01:55.200><c> tool</c><00:01:55.840><c> select</c><00:01:56.280><c> the</c>
+
+00:01:56.429 --> 00:01:56.439 align:start position:0%
+Cuts using the cursor tool select the
+ 
+
+00:01:56.439 --> 00:01:59.990 align:start position:0%
+Cuts using the cursor tool select the
+new<00:01:56.759><c> Top</c><00:01:57.119><c> Line</c><00:01:57.640><c> and</c><00:01:57.799><c> change</c><00:01:58.079><c> it</c><00:01:58.280><c> to</c><00:01:58.439><c> a</c><00:01:58.840><c> cut</c>
+
+00:01:59.990 --> 00:02:00.000 align:start position:0%
+new Top Line and change it to a cut
+ 
+
+00:02:00.000 --> 00:02:02.230 align:start position:0%
+new Top Line and change it to a cut
+repeat<00:02:00.520><c> with</c><00:02:00.680><c> the</c><00:02:00.840><c> bottom</c><00:02:01.200><c> line</c><00:02:01.759><c> and</c><00:02:01.920><c> change</c>
+
+00:02:02.230 --> 00:02:02.240 align:start position:0%
+repeat with the bottom line and change
+ 
+
+00:02:02.240 --> 00:02:03.109 align:start position:0%
+repeat with the bottom line and change
+to<00:02:02.439><c> a</c>
+
+00:02:03.109 --> 00:02:03.119 align:start position:0%
+to a
+ 
+
+00:02:03.119 --> 00:02:06.350 align:start position:0%
+to a
+cut<00:02:04.119><c> select</c><00:02:04.560><c> the</c><00:02:04.680><c> center</c><00:02:05.079><c> line</c><00:02:05.640><c> and</c><00:02:05.799><c> change</c><00:02:06.159><c> to</c>
+
+00:02:06.350 --> 00:02:06.360 align:start position:0%
+cut select the center line and change to
+ 
+
+00:02:06.360 --> 00:02:07.150 align:start position:0%
+cut select the center line and change to
+a
+
+00:02:07.150 --> 00:02:07.160 align:start position:0%
+a
+ 
+
+00:02:07.160 --> 00:02:10.270 align:start position:0%
+a
+fold<00:02:08.160><c> use</c><00:02:08.520><c> the</c><00:02:08.679><c> fit</c><00:02:08.959><c> to</c><00:02:09.160><c> screen</c><00:02:09.560><c> button</c><00:02:10.080><c> to</c>
+
+00:02:10.270 --> 00:02:10.280 align:start position:0%
+fold use the fit to screen button to
+ 
+
+00:02:10.280 --> 00:02:13.270 align:start position:0%
+fold use the fit to screen button to
+Center<00:02:10.640><c> the</c><00:02:10.800><c> cutter</c><00:02:11.680><c> generate</c><00:02:12.120><c> the</c>
+
+00:02:13.270 --> 00:02:13.280 align:start position:0%
+Center the cutter generate the
+ 
+
+00:02:13.280 --> 00:02:16.110 align:start position:0%
+Center the cutter generate the
+model<00:02:14.280><c> another</c><00:02:14.720><c> model</c><00:02:15.120><c> generator</c><00:02:15.800><c> error</c>
+
+00:02:16.110 --> 00:02:16.120 align:start position:0%
+model another model generator error
+ 
+
+00:02:16.120 --> 00:02:19.830 align:start position:0%
+model another model generator error
+occurs<00:02:17.080><c> select</c><00:02:17.560><c> no</c><00:02:17.879><c> to</c><00:02:18.080><c> the</c><00:02:18.200><c> error</c><00:02:18.599><c> message</c><00:02:19.599><c> a</c>
+
+00:02:19.830 --> 00:02:19.840 align:start position:0%
+occurs select no to the error message a
+ 
+
+00:02:19.840 --> 00:02:22.630 align:start position:0%
+occurs select no to the error message a
+horizontal<00:02:20.560><c> cut</c><00:02:20.840><c> line</c><00:02:21.280><c> joins</c><00:02:21.640><c> a</c><00:02:21.879><c> vertical</c><00:02:22.319><c> cut</c>
+
+00:02:22.630 --> 00:02:22.640 align:start position:0%
+horizontal cut line joins a vertical cut
+ 
+
+00:02:22.640 --> 00:02:25.830 align:start position:0%
+horizontal cut line joins a vertical cut
+line<00:02:23.560><c> change</c><00:02:24.080><c> the</c><00:02:24.280><c> vertical</c><00:02:24.760><c> cut</c><00:02:25.080><c> line</c><00:02:25.480><c> to</c><00:02:25.680><c> a</c>
+
+00:02:25.830 --> 00:02:25.840 align:start position:0%
+line change the vertical cut line to a
+ 
+
+00:02:25.840 --> 00:02:28.710 align:start position:0%
+line change the vertical cut line to a
+fold<00:02:26.840><c> use</c><00:02:27.160><c> the</c><00:02:27.319><c> fit</c><00:02:27.599><c> to</c><00:02:27.840><c> screen</c><00:02:28.200><c> button</c><00:02:28.519><c> to</c>
+
+00:02:28.710 --> 00:02:28.720 align:start position:0%
+fold use the fit to screen button to
+ 
+
+00:02:28.720 --> 00:02:31.509 align:start position:0%
+fold use the fit to screen button to
+Center<00:02:29.080><c> the</c><00:02:29.200><c> cutter</c><00:02:29.879><c> generate</c><00:02:30.319><c> the</c><00:02:30.480><c> model</c><00:02:31.280><c> an</c>
+
+00:02:31.509 --> 00:02:31.519 align:start position:0%
+Center the cutter generate the model an
+ 
+
+00:02:31.519 --> 00:02:34.430 align:start position:0%
+Center the cutter generate the model an
+adjacent<00:02:32.160><c> face</c><00:02:32.519><c> error</c><00:02:32.959><c> occurs</c><00:02:33.640><c> indicated</c><00:02:34.280><c> by</c>
+
+00:02:34.430 --> 00:02:34.440 align:start position:0%
+adjacent face error occurs indicated by
+ 
+
+00:02:34.440 --> 00:02:36.910 align:start position:0%
+adjacent face error occurs indicated by
+the<00:02:34.680><c> face</c><00:02:35.000><c> that</c><00:02:35.120><c> is</c><00:02:35.400><c> white</c><00:02:36.040><c> all</c><00:02:36.280><c> other</c><00:02:36.560><c> faces</c>
+
+00:02:36.910 --> 00:02:36.920 align:start position:0%
+the face that is white all other faces
+ 
+
+00:02:36.920 --> 00:02:39.149 align:start position:0%
+the face that is white all other faces
+have<00:02:37.040><c> turned</c><00:02:37.360><c> yellow</c><00:02:38.200><c> okay</c><00:02:38.680><c> the</c><00:02:38.800><c> error</c>
+
+00:02:39.149 --> 00:02:39.159 align:start position:0%
+have turned yellow okay the error
+ 
+
+00:02:39.159 --> 00:02:41.710 align:start position:0%
+have turned yellow okay the error
+message<00:02:39.760><c> and</c><00:02:39.959><c> using</c><00:02:40.280><c> the</c><00:02:40.400><c> zoom</c><00:02:40.720><c> tool</c><00:02:41.319><c> browse</c>
+
+00:02:41.710 --> 00:02:41.720 align:start position:0%
+message and using the zoom tool browse
+ 
+
+00:02:41.720 --> 00:02:44.270 align:start position:0%
+message and using the zoom tool browse
+to<00:02:41.920><c> the</c><00:02:42.080><c> corner</c><00:02:42.440><c> of</c><00:02:42.599><c> the</c><00:02:42.800><c> face</c><00:02:43.480><c> cuts</c><00:02:43.920><c> are</c>
+
+00:02:44.270 --> 00:02:44.280 align:start position:0%
+to the corner of the face cuts are
+ 
+
+00:02:44.280 --> 00:02:47.270 align:start position:0%
+to the corner of the face cuts are
+overlapping<00:02:44.959><c> the</c><00:02:45.360><c> folds</c><00:02:46.360><c> select</c><00:02:46.840><c> the</c><00:02:47.000><c> edit</c>
+
+00:02:47.270 --> 00:02:47.280 align:start position:0%
+overlapping the folds select the edit
+ 
+
+00:02:47.280 --> 00:02:49.070 align:start position:0%
+overlapping the folds select the edit
+and<00:02:47.480><c> move</c><00:02:47.879><c> points</c><00:02:48.200><c> mode</c><00:02:48.560><c> button</c><00:02:48.840><c> in</c><00:02:48.959><c> the</c>
+
+00:02:49.070 --> 00:02:49.080 align:start position:0%
+and move points mode button in the
+ 
+
+00:02:49.080 --> 00:02:51.509 align:start position:0%
+and move points mode button in the
+toolbar<00:02:49.800><c> to</c><00:02:50.000><c> reveal</c><00:02:50.440><c> anchor</c><00:02:50.840><c> points</c><00:02:51.200><c> between</c>
+
+00:02:51.509 --> 00:02:51.519 align:start position:0%
+toolbar to reveal anchor points between
+ 
+
+00:02:51.519 --> 00:02:53.589 align:start position:0%
+toolbar to reveal anchor points between
+the<00:02:51.640><c> two</c><00:02:51.879><c> faces</c><00:02:52.599><c> these</c><00:02:52.840><c> anchors</c><00:02:53.280><c> can</c><00:02:53.440><c> be</c>
+
+00:02:53.589 --> 00:02:53.599 align:start position:0%
+the two faces these anchors can be
+ 
+
+00:02:53.599 --> 00:02:55.869 align:start position:0%
+the two faces these anchors can be
+clicked<00:02:54.120><c> and</c><00:02:54.280><c> moved</c><00:02:54.640><c> freely</c><00:02:55.239><c> or</c><00:02:55.400><c> if</c><00:02:55.480><c> you</c><00:02:55.640><c> hold</c>
+
+00:02:55.869 --> 00:02:55.879 align:start position:0%
+clicked and moved freely or if you hold
+ 
+
+00:02:55.879 --> 00:02:58.070 align:start position:0%
+clicked and moved freely or if you hold
+down<00:02:56.120><c> the</c><00:02:56.239><c> S</c><00:02:56.560><c> key</c><00:02:57.000><c> and</c><00:02:57.239><c> click</c><00:02:57.440><c> and</c><00:02:57.640><c> drag</c><00:02:57.920><c> the</c>
+
+00:02:58.070 --> 00:02:58.080 align:start position:0%
+down the S key and click and drag the
+ 
+
+00:02:58.080 --> 00:03:00.350 align:start position:0%
+down the S key and click and drag the
+anchor<00:02:58.599><c> it</c><00:02:58.720><c> will</c><00:02:58.920><c> cleanly</c><00:02:59.319><c> snap</c><00:02:59.920><c> on</c><00:03:00.040><c> to</c><00:03:00.200><c> the</c>
+
+00:03:00.350 --> 00:03:00.360 align:start position:0%
+anchor it will cleanly snap on to the
+ 
+
+00:03:00.360 --> 00:03:02.750 align:start position:0%
+anchor it will cleanly snap on to the
+next<00:03:00.640><c> Anchor</c><00:03:01.000><c> Point</c><00:03:01.400><c> to</c><00:03:01.560><c> join</c><00:03:01.840><c> the</c>
+
+00:03:02.750 --> 00:03:02.760 align:start position:0%
+next Anchor Point to join the
+ 
+
+00:03:02.760 --> 00:03:05.630 align:start position:0%
+next Anchor Point to join the
+faces<00:03:03.760><c> zoom</c><00:03:04.080><c> into</c><00:03:04.400><c> the</c><00:03:04.599><c> bottom</c><00:03:04.959><c> corner</c><00:03:05.280><c> of</c><00:03:05.440><c> the</c>
+
+00:03:05.630 --> 00:03:05.640 align:start position:0%
+faces zoom into the bottom corner of the
+ 
+
+00:03:05.640 --> 00:03:08.750 align:start position:0%
+faces zoom into the bottom corner of the
+face<00:03:06.080><c> to</c><00:03:06.280><c> find</c><00:03:06.560><c> more</c><00:03:07.120><c> overlaps</c><00:03:08.120><c> select</c><00:03:08.599><c> the</c>
+
+00:03:08.750 --> 00:03:08.760 align:start position:0%
+face to find more overlaps select the
+ 
+
+00:03:08.760 --> 00:03:10.750 align:start position:0%
+face to find more overlaps select the
+edit<00:03:09.040><c> and</c><00:03:09.239><c> move</c><00:03:09.560><c> points</c><00:03:09.879><c> mode</c><00:03:10.200><c> button</c><00:03:10.480><c> in</c><00:03:10.640><c> the</c>
+
+00:03:10.750 --> 00:03:10.760 align:start position:0%
+edit and move points mode button in the
+ 
+
+00:03:10.760 --> 00:03:13.309 align:start position:0%
+edit and move points mode button in the
+toolbar<00:03:11.360><c> again</c><00:03:11.840><c> and</c><00:03:11.959><c> move</c><00:03:12.280><c> the</c><00:03:12.440><c> anchor</c><00:03:12.840><c> points</c>
+
+00:03:13.309 --> 00:03:13.319 align:start position:0%
+toolbar again and move the anchor points
+ 
+
+00:03:13.319 --> 00:03:15.509 align:start position:0%
+toolbar again and move the anchor points
+so<00:03:13.480><c> that</c><00:03:13.640><c> they</c><00:03:13.799><c> no</c><00:03:14.000><c> longer</c><00:03:14.400><c> overlap</c><00:03:15.360><c> by</c>
+
+00:03:15.509 --> 00:03:15.519 align:start position:0%
+so that they no longer overlap by
+ 
+
+00:03:15.519 --> 00:03:17.830 align:start position:0%
+so that they no longer overlap by
+holding<00:03:16.000><c> down</c><00:03:16.280><c> the</c><00:03:16.400><c> S</c><00:03:16.760><c> key</c><00:03:17.159><c> and</c><00:03:17.319><c> clicking</c><00:03:17.640><c> and</c>
+
+00:03:17.830 --> 00:03:17.840 align:start position:0%
+holding down the S key and clicking and
+ 
+
+00:03:17.840 --> 00:03:20.110 align:start position:0%
+holding down the S key and clicking and
+dragging<00:03:18.239><c> the</c><00:03:18.400><c> anchor</c><00:03:18.959><c> so</c><00:03:19.159><c> they</c><00:03:19.319><c> cleanly</c><00:03:19.760><c> snap</c>
+
+00:03:20.110 --> 00:03:20.120 align:start position:0%
+dragging the anchor so they cleanly snap
+ 
+
+00:03:20.120 --> 00:03:22.670 align:start position:0%
+dragging the anchor so they cleanly snap
+on<00:03:20.319><c> to</c><00:03:20.480><c> the</c><00:03:20.680><c> next</c><00:03:20.959><c> Anchor</c><00:03:21.360><c> Point</c><00:03:22.120><c> select</c><00:03:22.480><c> the</c>
+
+00:03:22.670 --> 00:03:22.680 align:start position:0%
+on to the next Anchor Point select the
+ 
+
+00:03:22.680 --> 00:03:26.070 align:start position:0%
+on to the next Anchor Point select the
+cursor<00:03:23.000><c> tool</c><00:03:23.280><c> in</c><00:03:23.440><c> the</c><00:03:23.720><c> toolbar</c><00:03:24.720><c> generate</c><00:03:25.159><c> the</c>
+
+00:03:26.070 --> 00:03:26.080 align:start position:0%
+cursor tool in the toolbar generate the
+ 
+
+00:03:26.080 --> 00:03:28.710 align:start position:0%
+cursor tool in the toolbar generate the
+model<00:03:27.080><c> the</c><00:03:27.239><c> repaired</c><00:03:27.760><c> model</c><00:03:28.159><c> can</c><00:03:28.360><c> now</c><00:03:28.519><c> be</c>
+
+00:03:28.710 --> 00:03:28.720 align:start position:0%
+model the repaired model can now be
+ 
+
+00:03:28.720 --> 00:03:31.030 align:start position:0%
+model the repaired model can now be
+generated
+
+00:03:31.030 --> 00:03:31.040 align:start position:0%
+generated
+ 
+
+00:03:31.040 --> 00:03:33.070 align:start position:0%
+generated
+change<00:03:31.480><c> the</c><00:03:31.680><c> substrate</c><00:03:32.239><c> of</c><00:03:32.360><c> the</c><00:03:32.480><c> model</c><00:03:32.840><c> as</c>
+
+00:03:33.070 --> 00:03:33.080 align:start position:0%
+change the substrate of the model as
+ 
+
+00:03:33.080 --> 00:03:39.429 align:start position:0%
+change the substrate of the model as
+desired<00:03:33.760><c> using</c><00:03:34.080><c> the</c><00:03:34.239><c> substrate</c><00:03:34.799><c> drop-down</c>
+
+00:03:39.429 --> 00:03:39.439 align:start position:0%
+ 
+ 
+
+00:03:39.439 --> 00:03:42.270 align:start position:0%
+ 
+menu<00:03:40.439><c> add</c><00:03:40.680><c> your</c><00:03:40.840><c> own</c><00:03:41.159><c> custom</c><00:03:41.560><c> substrate</c>
+
+00:03:42.270 --> 00:03:42.280 align:start position:0%
+menu add your own custom substrate
+ 
+
+00:03:42.280 --> 00:03:44.990 align:start position:0%
+menu add your own custom substrate
+selecting<00:03:42.840><c> the</c><00:03:43.080><c> add</c><00:03:43.439><c> substrate</c>
+
+00:03:44.990 --> 00:03:45.000 align:start position:0%
+selecting the add substrate
+ 
+
+00:03:45.000 --> 00:03:48.110 align:start position:0%
+selecting the add substrate
+button<00:03:46.000><c> in</c><00:03:46.239><c> substrate</c><00:03:46.840><c> editor</c><00:03:47.480><c> select</c><00:03:47.959><c> a</c>
+
+00:03:48.110 --> 00:03:48.120 align:start position:0%
+button in substrate editor select a
+ 
+
+00:03:48.120 --> 00:03:50.390 align:start position:0%
+button in substrate editor select a
+front<00:03:48.480><c> material</c><00:03:49.120><c> from</c><00:03:49.319><c> the</c><00:03:49.480><c> material</c><00:03:49.959><c> editor</c>
+
+00:03:50.390 --> 00:03:50.400 align:start position:0%
+front material from the material editor
+ 
+
+00:03:50.400 --> 00:03:52.750 align:start position:0%
+front material from the material editor
+drop-down
+
+00:03:52.750 --> 00:03:52.760 align:start position:0%
+drop-down
+ 
+
+00:03:52.760 --> 00:03:55.789 align:start position:0%
+drop-down
+menu<00:03:53.760><c> then</c><00:03:53.959><c> select</c><00:03:54.280><c> a</c><00:03:54.480><c> back</c><00:03:54.760><c> material</c><00:03:55.599><c> from</c>
+
+00:03:55.789 --> 00:03:55.799 align:start position:0%
+menu then select a back material from
+ 
+
+00:03:55.799 --> 00:03:58.670 align:start position:0%
+menu then select a back material from
+the<00:03:55.959><c> substrate</c><00:03:56.480><c> editor</c><00:03:56.879><c> dropdown</c>
+
+00:03:58.670 --> 00:03:58.680 align:start position:0%
+the substrate editor dropdown
+ 
+
+00:03:58.680 --> 00:04:01.869 align:start position:0%
+the substrate editor dropdown
+menu
+
+00:04:01.869 --> 00:04:01.879 align:start position:0%
+ 
+ 
+
+00:04:01.879 --> 00:04:07.069 align:start position:0%
+ 
+add<00:04:02.079><c> a</c><00:04:02.319><c> material</c>
+
+00:04:07.069 --> 00:04:07.079 align:start position:0%
+ 
+ 
+
+00:04:07.079 --> 00:04:10.270 align:start position:0%
+ 
+thickness<00:04:08.079><c> select</c><00:04:08.560><c> save</c><00:04:09.000><c> as</c><00:04:09.680><c> and</c><00:04:09.840><c> name</c><00:04:10.159><c> the</c>
+
+00:04:10.270 --> 00:04:10.280 align:start position:0%
+thickness select save as and name the
+ 
+
+00:04:10.280 --> 00:04:18.710 align:start position:0%
+thickness select save as and name the
+new<00:04:10.519><c> substrate</c><00:04:11.519><c> then</c>
+
+00:04:18.710 --> 00:04:18.720 align:start position:0%
+ 
+ 
+
+00:04:18.720 --> 00:04:21.509 align:start position:0%
+ 
+save<00:04:19.720><c> the</c><00:04:19.880><c> material</c><00:04:20.440><c> appears</c><00:04:20.799><c> on</c><00:04:20.959><c> the</c><00:04:21.079><c> 3D</c>
+
+00:04:21.509 --> 00:04:21.519 align:start position:0%
+save the material appears on the 3D
+ 
+
+00:04:21.519 --> 00:04:23.150 align:start position:0%
+save the material appears on the 3D
+model<00:04:21.840><c> in</c><00:04:21.959><c> the</c>
+
+00:04:23.150 --> 00:04:23.160 align:start position:0%
+model in the
+ 
+
+00:04:23.160 --> 00:04:25.990 align:start position:0%
+model in the
+preview<00:04:24.160><c> the</c><00:04:24.320><c> substrate</c><00:04:24.840><c> can</c><00:04:25.000><c> be</c><00:04:25.199><c> edited</c><00:04:25.759><c> as</c>
+
+00:04:25.990 --> 00:04:26.000 align:start position:0%
+preview the substrate can be edited as
+ 
+
+00:04:26.000 --> 00:04:28.590 align:start position:0%
+preview the substrate can be edited as
+desired<00:04:26.680><c> using</c><00:04:27.000><c> the</c><00:04:27.160><c> edit</c><00:04:27.479><c> substrate</c>
+
+00:04:28.590 --> 00:04:28.600 align:start position:0%
+desired using the edit substrate
+ 
+
+00:04:28.600 --> 00:04:35.909 align:start position:0%
+desired using the edit substrate
+button
+
+00:04:35.909 --> 00:04:35.919 align:start position:0%
+ 
+ 
+
+00:04:35.919 --> 00:04:38.150 align:start position:0%
+ 
+click<00:04:36.320><c> back</c><00:04:36.520><c> on</c><00:04:36.720><c> the</c><00:04:36.880><c> editor</c><00:04:37.440><c> and</c><00:04:37.680><c> using</c><00:04:38.000><c> the</c>
+
+00:04:38.150 --> 00:04:38.160 align:start position:0%
+click back on the editor and using the
+ 
+
+00:04:38.160 --> 00:04:41.070 align:start position:0%
+click back on the editor and using the
+keyboard<00:04:38.960><c> select</c><00:04:39.560><c> command</c><00:04:40.000><c> F</c><00:04:40.440><c> to</c><00:04:40.639><c> select</c><00:04:40.960><c> the</c>
+
+00:04:41.070 --> 00:04:41.080 align:start position:0%
+keyboard select command F to select the
+ 
+
+00:04:41.080 --> 00:04:44.350 align:start position:0%
+keyboard select command F to select the
+fold<00:04:41.479><c> lines</c><00:04:42.240><c> enter</c><00:04:42.600><c> a</c><00:04:42.759><c> figure</c><00:04:43.080><c> of</c><00:04:43.240><c> 90°</c><00:04:44.080><c> in</c><00:04:44.240><c> the</c>
+
+00:04:44.350 --> 00:04:44.360 align:start position:0%
+fold lines enter a figure of 90° in the
+ 
+
+00:04:44.360 --> 00:04:48.590 align:start position:0%
+fold lines enter a figure of 90° in the
+angle<00:04:44.720><c> field</c><00:04:45.440><c> the</c><00:04:45.680><c> model</c>
+
+00:04:48.590 --> 00:04:48.600 align:start position:0%
+ 
+ 
+
+00:04:48.600 --> 00:04:51.550 align:start position:0%
+ 
+folds<00:04:49.600><c> add</c><00:04:49.800><c> the</c><00:04:49.960><c> model</c><00:04:50.240><c> to</c><00:04:50.440><c> the</c>
+
+00:04:51.550 --> 00:04:51.560 align:start position:0%
+folds add the model to the
+ 
+
+00:04:51.560 --> 00:04:54.909 align:start position:0%
+folds add the model to the
+scene<00:04:52.560><c> on</c><00:04:52.759><c> your</c><00:04:53.000><c> keyboard</c><00:04:53.720><c> select</c><00:04:54.240><c> command</c>
+
+00:04:54.909 --> 00:04:54.919 align:start position:0%
+scene on your keyboard select command
+ 
+
+00:04:54.919 --> 00:04:57.950 align:start position:0%
+scene on your keyboard select command
+and<00:04:55.120><c> click</c><00:04:55.320><c> on</c><00:04:55.479><c> a</c><00:04:55.639><c> carton</c><00:04:56.080><c> face</c><00:04:56.360><c> in</c><00:04:56.479><c> the</c><00:04:56.639><c> 3D</c>
+
+00:04:57.950 --> 00:04:57.960 align:start position:0%
+and click on a carton face in the 3D
+ 
+
+00:04:57.960 --> 00:05:01.430 align:start position:0%
+and click on a carton face in the 3D
+view<00:04:58.960><c> in</c><00:04:59.120><c> the</c><00:04:59.240><c> cart</c><00:04:59.840><c> options</c><00:05:00.240><c> window</c><00:05:00.960><c> use</c><00:05:01.280><c> the</c>
+
+00:05:01.430 --> 00:05:01.440 align:start position:0%
+view in the cart options window use the
+ 
+
+00:05:01.440 --> 00:05:03.830 align:start position:0%
+view in the cart options window use the
+up<00:05:01.639><c> and</c><00:05:01.840><c> down</c><00:05:02.080><c> arrows</c><00:05:02.520><c> in</c><00:05:02.639><c> the</c><00:05:02.800><c> angle</c><00:05:03.160><c> field</c><00:05:03.680><c> to</c>
+
+00:05:03.830 --> 00:05:03.840 align:start position:0%
+up and down arrows in the angle field to
+ 
+
+00:05:03.840 --> 00:05:07.710 align:start position:0%
+up and down arrows in the angle field to
+change<00:05:04.199><c> the</c><00:05:04.360><c> angle</c><00:05:04.680><c> of</c><00:05:04.800><c> the</c>
+
+00:05:07.710 --> 00:05:07.720 align:start position:0%
+ 
+ 
+
+00:05:07.720 --> 00:05:10.950 align:start position:0%
+ 
+face<00:05:08.720><c> this</c><00:05:08.960><c> completes</c><00:05:09.479><c> the</c><00:05:09.680><c> ic3d</c><00:05:10.560><c> training</c>
+
+00:05:10.950 --> 00:05:10.960 align:start position:0%
+face this completes the ic3d training
+ 
+
+00:05:10.960 --> 00:05:23.150 align:start position:0%
+face this completes the ic3d training
+video<00:05:11.520><c> Advanced</c><00:05:12.080><c> carton</c>
+
+00:05:23.150 --> 00:05:23.160 align:start position:0%
+ 
+ 
+
+00:05:23.160 --> 00:05:26.160 align:start position:0%
+ 
+fold
+

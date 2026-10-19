@@ -1,0 +1,1133 @@
+{
+ "id": "82Lu9qhQnzk",
+ "title": "Photoshop’s NEW Harmonize: Blend ANYTHING in 1-Click!",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=82Lu9qhQnzk",
+ "query": "image harmonization photoshop",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.997,
+ "duration_s": 593.8,
+ "chars": 10794,
+ "segments": [
+  {
+   "start": 6.29,
+   "end": 9.01,
+   "text": "Photoshop just released a brand new feature and I'm speechless."
+  },
+  {
+   "start": 9.01,
+   "end": 10.01,
+   "text": "So let me just show you."
+  },
+  {
+   "start": 10.01,
+   "end": 12.01,
+   "text": "Here is the car on a separate layer."
+  },
+  {
+   "start": 12.01,
+   "end": 13.01,
+   "text": "Here's the background."
+  },
+  {
+   "start": 13.01,
+   "end": 15.13,
+   "text": "Both of them absolutely not matching."
+  },
+  {
+   "start": 15.13,
+   "end": 18.37,
+   "text": "Just click on Remove Background with the car layer selected."
+  },
+  {
+   "start": 18.37,
+   "end": 19.37,
+   "text": "First step done."
+  },
+  {
+   "start": 19.37,
+   "end": 20.81,
+   "text": "Still an absolutely horrible match."
+  },
+  {
+   "start": 20.81,
+   "end": 23.17,
+   "text": "But then you'll see this new button called Harmonize."
+  },
+  {
+   "start": 23.17,
+   "end": 27.57,
+   "text": "By the way, if you're not seeing the contextual taskbar, right click outside the canvas"
+  },
+  {
+   "start": 27.57,
+   "end": 29.87,
+   "text": "and click on Show Contextual Taskbar."
+  },
+  {
+   "start": 29.87,
+   "end": 31.97,
+   "text": "And just click on Harmonize."
+  },
+  {
+   "start": 31.97,
+   "end": 35.33,
+   "text": "Photoshop will take a while to generate a few things, but oh my God, have a look"
+  },
+  {
+   "start": 35.33,
+   "end": 36.25,
+   "text": "at the results."
+  },
+  {
+   "start": 36.25,
+   "end": 37.85,
+   "text": "Here is the before."
+  },
+  {
+   "start": 37.85,
+   "end": 39.21,
+   "text": "Here is the after."
+  },
+  {
+   "start": 39.21,
+   "end": 40.85,
+   "text": "And you get three options."
+  },
+  {
+   "start": 40.85,
+   "end": 43.57,
+   "text": "First, second and third."
+  },
+  {
+   "start": 43.57,
+   "end": 46.17,
+   "text": "And the best part is it doesn't change the car."
+  },
+  {
+   "start": 46.17,
+   "end": 48.65,
+   "text": "It is the exact same car."
+  },
+  {
+   "start": 48.65,
+   "end": 51.57,
+   "text": "Imagine the amount of time it would take if you were to do this by hand."
+  },
+  {
+   "start": 51.57,
+   "end": 54.29,
+   "text": "It not only matched the lighting and the shadows."
+  },
+  {
+   "start": 54.29,
+   "end": 55.29,
+   "text": "Have a look."
+  },
+  {
+   "start": 55.29,
+   "end": 56.29,
+   "text": "Here's the before."
+  },
+  {
+   "start": 56.29,
+   "end": 57.29,
+   "text": "There was nothing there."
+  },
+  {
+   "start": 57.29,
+   "end": 58.41,
+   "text": "It was all flat."
+  },
+  {
+   "start": 58.41,
+   "end": 61.33,
+   "text": "But once you turn it on, see it painted all the lights."
+  },
+  {
+   "start": 61.33,
+   "end": 64.05,
+   "text": "It also matched the color that goes with the scene."
+  },
+  {
+   "start": 64.05,
+   "end": 67.61,
+   "text": "Now I know the shadows may not be perfect right here, but if you don't like this matching,"
+  },
+  {
+   "start": 67.61,
+   "end": 70.65,
+   "text": "you can always go back to Properties here with that layer selected."
+  },
+  {
+   "start": 70.65,
+   "end": 74.89,
+   "text": "If you don't see the Properties, go to Window and you want to make sure Properties is checked,"
+  },
+  {
+   "start": 74.89,
+   "end": 76.81,
+   "text": "you can generate one more time."
+  },
+  {
+   "start": 76.81,
+   "end": 79.37,
+   "text": "And it's going to give you a different set of harmonization."
+  },
+  {
+   "start": 79.37,
+   "end": 80.85,
+   "text": "This looks even better."
+  },
+  {
+   "start": 80.85,
+   "end": 82.69,
+   "text": "First one, second one."
+  },
+  {
+   "start": 82.69,
+   "end": 83.69,
+   "text": "That's not accurate."
+  },
+  {
+   "start": 83.69,
+   "end": 84.69,
+   "text": "Third one."
+  },
+  {
+   "start": 84.69,
+   "end": 86.05,
+   "text": "I think I'm going to go with the first one."
+  },
+  {
+   "start": 86.05,
+   "end": 87.61,
+   "text": "This is pretty darn cool."
+  },
+  {
+   "start": 87.61,
+   "end": 89.29,
+   "text": "And it gives you a fantastic starting point."
+  },
+  {
+   "start": 89.29,
+   "end": 90.93,
+   "text": "We're going to cover that later in the video."
+  },
+  {
+   "start": 90.93,
+   "end": 93.61,
+   "text": "And if you thought it only could create shadows, let me just share with you another"
+  },
+  {
+   "start": 93.65,
+   "end": 94.65,
+   "text": "example."
+  },
+  {
+   "start": 94.65,
+   "end": 97.01,
+   "text": "Here we have a car on the road again."
+  },
+  {
+   "start": 97.01,
+   "end": 99.05,
+   "text": "I have removed the background."
+  },
+  {
+   "start": 99.05,
+   "end": 100.49,
+   "text": "Let us click on Harmonize."
+  },
+  {
+   "start": 100.49,
+   "end": 104.17,
+   "text": "Now this is a wet road, so there should be some sort of reflection, right?"
+  },
+  {
+   "start": 104.17,
+   "end": 105.81,
+   "text": "And it does create it."
+  },
+  {
+   "start": 105.81,
+   "end": 108.97,
+   "text": "Here's the first option, second option and third option."
+  },
+  {
+   "start": 108.97,
+   "end": 112.61,
+   "text": "Now before you rush to try this feature, know that Harmonize right now is only available"
+  },
+  {
+   "start": 112.61,
+   "end": 114.25,
+   "text": "in Photoshop Beta."
+  },
+  {
+   "start": 114.25,
+   "end": 117.61,
+   "text": "And just to be sure, it is Photoshop Beta version 26.10."
+  },
+  {
+   "start": 117.61,
+   "end": 118.61,
+   "text": "10."
+  },
+  {
+   "start": 118.61,
+   "end": 120.21,
+   "text": "However you want to say it."
+  },
+  {
+   "start": 120.21,
+   "end": 123.53,
+   "text": "So, if you want to install Photoshop Beta, simply open up your Creative Cloud desktop"
+  },
+  {
+   "start": 123.53,
+   "end": 130.69,
+   "text": "app, go to Apps here, Beta at the top and from there, install Photoshop Beta."
+  },
+  {
+   "start": 130.69,
+   "end": 133.33,
+   "text": "Once you do install it, there are two ways to apply Harmonize."
+  },
+  {
+   "start": 133.33,
+   "end": 136.21,
+   "text": "The first and the easy one is through the contextual taskbar."
+  },
+  {
+   "start": 136.21,
+   "end": 141.21,
+   "text": "If you're not seeing it, right click outside the canvas, click on Show Contextual Taskbar."
+  },
+  {
+   "start": 141.21,
+   "end": 145.77,
+   "text": "First of all, here we have a brand new chair image on this background."
+  },
+  {
+   "start": 145.77,
+   "end": 147.21,
+   "text": "Let us click on Remove Background."
+  },
+  {
+   "start": 147.21,
+   "end": 151.37,
+   "text": "And after the chair is masked, you should be able to see the Harmonize button."
+  },
+  {
+   "start": 151.37,
+   "end": 152.49,
+   "text": "That's one way of applying it."
+  },
+  {
+   "start": 152.49,
+   "end": 153.65,
+   "text": "We already learned that."
+  },
+  {
+   "start": 153.65,
+   "end": 157.37,
+   "text": "The second way is going to Layer and Harmonize."
+  },
+  {
+   "start": 157.37,
+   "end": 158.37,
+   "text": "Same thing."
+  },
+  {
+   "start": 158.37,
+   "end": 159.37,
+   "text": "Brilliant."
+  },
+  {
+   "start": 159.37,
+   "end": 161.49,
+   "text": "It already matched so darn well."
+  },
+  {
+   "start": 161.49,
+   "end": 163.97,
+   "text": "Here is the before, here is the after."
+  },
+  {
+   "start": 163.97,
+   "end": 165.17,
+   "text": "See all the shadows?"
+  },
+  {
+   "start": 165.17,
+   "end": 168.01,
+   "text": "First option, second option, third option."
+  },
+  {
+   "start": 168.01,
+   "end": 170.49,
+   "text": "If you don't like any of these, you can generate one more time."
+  },
+  {
+   "start": 170.49,
+   "end": 173.05,
+   "text": "Now let's talk about how it works through an extreme example."
+  },
+  {
+   "start": 173.05,
+   "end": 175.93,
+   "text": "So here we have a scene where the light is coming from the back and the shadows"
+  },
+  {
+   "start": 175.93,
+   "end": 177.01,
+   "text": "are up front."
+  },
+  {
+   "start": 177.01,
+   "end": 181.09,
+   "text": "On top of that, we have a picture of this person where the light is entirely different."
+  },
+  {
+   "start": 181.09,
+   "end": 182.65,
+   "text": "And you can barely see any shadows."
+  },
+  {
+   "start": 182.65,
+   "end": 184.65,
+   "text": "I have already removed the background."
+  },
+  {
+   "start": 184.65,
+   "end": 186.37,
+   "text": "Now let's click on Harmonize."
+  },
+  {
+   "start": 186.37,
+   "end": 188.69,
+   "text": "As you can see, it created the shadow for you."
+  },
+  {
+   "start": 188.69,
+   "end": 189.69,
+   "text": "Brilliant."
+  },
+  {
+   "start": 189.69,
+   "end": 190.69,
+   "text": "Take a look right here."
+  },
+  {
+   "start": 190.69,
+   "end": 193.53,
+   "text": "First option, second option, third option."
+  },
+  {
+   "start": 193.53,
+   "end": 195.01,
+   "text": "Let's say we go with the second option."
+  },
+  {
+   "start": 195.01,
+   "end": 199.01,
+   "text": "The way it works is that it generates the entire thing on a brand new layer."
+  },
+  {
+   "start": 199.01,
+   "end": 204.17,
+   "text": "If you take a look at just this layer, it generated the image again and masks"
+  },
+  {
+   "start": 204.17,
+   "end": 205.33,
+   "text": "it out."
+  },
+  {
+   "start": 205.33,
+   "end": 207.29,
+   "text": "So let us turn off the masks for now."
+  },
+  {
+   "start": 207.29,
+   "end": 210.09,
+   "text": "You would notice that it's not that high of a quality."
+  },
+  {
+   "start": 210.09,
+   "end": 211.73,
+   "text": "The resolution is quite lower."
+  },
+  {
+   "start": 211.73,
+   "end": 213.25,
+   "text": "So it has been generating the thing."
+  },
+  {
+   "start": 213.25,
+   "end": 218.29,
+   "text": "And to keep it sharp, it just masks the subject and the shadow out and the areas"
+  },
+  {
+   "start": 218.29,
+   "end": 220.17,
+   "text": "that it has generated."
+  },
+  {
+   "start": 220.17,
+   "end": 223.25,
+   "text": "As you can see in the mask, by holding the Alt key or the Option key and clicking"
+  },
+  {
+   "start": 223.25,
+   "end": 226.93,
+   "text": "on the mask, it generated all of those areas."
+  },
+  {
+   "start": 226.93,
+   "end": 230.21,
+   "text": "Hold the Alt key or the Option key again and click back on the mask to see the"
+  },
+  {
+   "start": 230.21,
+   "end": 231.21,
+   "text": "entire thing."
+  },
+  {
+   "start": 231.21,
+   "end": 234.17,
+   "text": "Now there's a quality limitation and we're going to talk about that a bit later."
+  },
+  {
+   "start": 234.21,
+   "end": 239.09,
+   "text": "But for right now, here is the overall before and here is the after."
+  },
+  {
+   "start": 239.09,
+   "end": 241.37,
+   "text": "It would have been incredible if it did it through adjustment layers."
+  },
+  {
+   "start": 241.37,
+   "end": 242.37,
+   "text": "That would be genius."
+  },
+  {
+   "start": 242.37,
+   "end": 243.61,
+   "text": "But I'm asking for a lot."
+  },
+  {
+   "start": 243.61,
+   "end": 246.61,
+   "text": "Now here's a more reasonable example where the lighting is similar."
+  },
+  {
+   "start": 246.61,
+   "end": 248.29,
+   "text": "Let's try harmonize one more time."
+  },
+  {
+   "start": 248.29,
+   "end": 250.89,
+   "text": "If you try extreme cases, of course, things are going to break a little."
+  },
+  {
+   "start": 250.89,
+   "end": 254.37,
+   "text": "But similar cases, this does a pretty amazing job."
+  },
+  {
+   "start": 254.37,
+   "end": 257.45,
+   "text": "First option, second option, third option."
+  },
+  {
+   "start": 257.45,
+   "end": 258.93,
+   "text": "Let's go with the second one."
+  },
+  {
+   "start": 258.93,
+   "end": 262.89,
+   "text": "And it created those subtle shadows and it just brings everything together."
+  },
+  {
+   "start": 262.89,
+   "end": 267.09,
+   "text": "Now you, my friend, can of course make little adjustments to make the harmonization even better."
+  },
+  {
+   "start": 267.09,
+   "end": 269.81,
+   "text": "In this case, I have already removed the background."
+  },
+  {
+   "start": 269.81,
+   "end": 271.05,
+   "text": "It is not matching."
+  },
+  {
+   "start": 271.05,
+   "end": 272.17,
+   "text": "Let's try harmonize."
+  },
+  {
+   "start": 272.17,
+   "end": 275.17,
+   "text": "It created the reflections, the shadows, everything is fine."
+  },
+  {
+   "start": 275.17,
+   "end": 277.01,
+   "text": "But it took the shine away."
+  },
+  {
+   "start": 277.01,
+   "end": 280.33,
+   "text": "Here's the first option, second option and third option."
+  },
+  {
+   "start": 280.33,
+   "end": 282.05,
+   "text": "Let's say you were to go with the second one."
+  },
+  {
+   "start": 282.05,
+   "end": 284.33,
+   "text": "I don't know why second is just working fantastic."
+  },
+  {
+   "start": 284.33,
+   "end": 288.57,
+   "text": "But in this example, if you have a look at the before, the top part was already"
+  },
+  {
+   "start": 288.57,
+   "end": 291.09,
+   "text": "matching so well, just not the bottom part."
+  },
+  {
+   "start": 291.09,
+   "end": 292.05,
+   "text": "So what do we do?"
+  },
+  {
+   "start": 292.09,
+   "end": 296.13,
+   "text": "Let us turn on the harmonized layer and then let's put it in a group."
+  },
+  {
+   "start": 296.13,
+   "end": 299.17,
+   "text": "With just that one layer selected, press Ctrl or Command G."
+  },
+  {
+   "start": 299.17,
+   "end": 301.49,
+   "text": "Now let's create a mask for the group."
+  },
+  {
+   "start": 301.49,
+   "end": 304.01,
+   "text": "That way you have two masks for the same layer."
+  },
+  {
+   "start": 304.01,
+   "end": 306.93,
+   "text": "Now let's take the brush, black as the foreground color."
+  },
+  {
+   "start": 306.93,
+   "end": 308.85,
+   "text": "You want to make sure it's a soft round brush."
+  },
+  {
+   "start": 308.85,
+   "end": 312.37,
+   "text": "Just erase the top part like so."
+  },
+  {
+   "start": 312.37,
+   "end": 317.73,
+   "text": "And just doing that improves the image so darn much."
+  },
+  {
+   "start": 317.73,
+   "end": 318.89,
+   "text": "Now have a look."
+  },
+  {
+   "start": 318.89,
+   "end": 321.65,
+   "text": "Here's the overall before, not matching at all."
+  },
+  {
+   "start": 321.69,
+   "end": 324.97,
+   "text": "Entirely different image and here is the after."
+  },
+  {
+   "start": 324.97,
+   "end": 327.69,
+   "text": "Now I have done a fair share of compositing in the past by hand."
+  },
+  {
+   "start": 327.69,
+   "end": 330.45,
+   "text": "And if you're watching this video, I'm sure you have to at some point."
+  },
+  {
+   "start": 330.45,
+   "end": 334.13,
+   "text": "But how does harmonize compare to actual manual compositing?"
+  },
+  {
+   "start": 334.13,
+   "end": 334.93,
+   "text": "Let's see."
+  },
+  {
+   "start": 334.93,
+   "end": 338.45,
+   "text": "Here we have a picture of a man on top of a completely different background."
+  },
+  {
+   "start": 338.45,
+   "end": 340.53,
+   "text": "The lighting is absolutely not matching."
+  },
+  {
+   "start": 340.53,
+   "end": 341.73,
+   "text": "Let's click on harmonize."
+  },
+  {
+   "start": 341.73,
+   "end": 342.29,
+   "text": "There you go."
+  },
+  {
+   "start": 342.29,
+   "end": 343.45,
+   "text": "The match looks great."
+  },
+  {
+   "start": 343.45,
+   "end": 346.37,
+   "text": "First option, second option, third option."
+  },
+  {
+   "start": 346.37,
+   "end": 347.57,
+   "text": "Let's go with the second one."
+  },
+  {
+   "start": 347.57,
+   "end": 351.61,
+   "text": "So here's the overall before and here is the after."
+  },
+  {
+   "start": 351.61,
+   "end": 355.25,
+   "text": "So what is the point in learning compositing and all of those manual techniques of painting"
+  },
+  {
+   "start": 355.25,
+   "end": 357.77,
+   "text": "light using blend modes, learning color?"
+  },
+  {
+   "start": 357.77,
+   "end": 362.61,
+   "text": "Well, this is the point in learning all of those things."
+  },
+  {
+   "start": 362.61,
+   "end": 367.93,
+   "text": "So on the left you have the one done with harmonize and on the right by hand using a lot of adjustment layers."
+  },
+  {
+   "start": 367.93,
+   "end": 372.09,
+   "text": "And you can clearly see while the vibe matches on the left hand side, it's a full on committed"
+  },
+  {
+   "start": 372.09,
+   "end": 376.49,
+   "text": "relationship on the right hand side, maybe a 50 year marriage when it comes to matching."
+  },
+  {
+   "start": 376.49,
+   "end": 380.09,
+   "text": "Now let's take a look at some weird examples with absolutely zero sense matching."
+  },
+  {
+   "start": 380.09,
+   "end": 381.29,
+   "text": "Here's the first one."
+  },
+  {
+   "start": 381.33,
+   "end": 385.25,
+   "text": "I was trying to place an elephant on my table because there are so many elephant decor."
+  },
+  {
+   "start": 385.25,
+   "end": 391.37,
+   "text": "So why not actually place a real elephant and with harmonize here is what it created."
+  },
+  {
+   "start": 391.37,
+   "end": 392.37,
+   "text": "Wow."
+  },
+  {
+   "start": 392.37,
+   "end": 396.13,
+   "text": "And if I were to say I was speechless, that would be an understatement."
+  },
+  {
+   "start": 396.13,
+   "end": 400.49,
+   "text": "It not only created the shadow here, but also the reflection."
+  },
+  {
+   "start": 400.49,
+   "end": 401.69,
+   "text": "So darn good."
+  },
+  {
+   "start": 401.69,
+   "end": 404.89,
+   "text": "But I felt that maybe we needed to brighten the top part a little bit."
+  },
+  {
+   "start": 404.89,
+   "end": 409.21,
+   "text": "So I just created a curves adjustment layer just to brighten the top part and it"
+  },
+  {
+   "start": 409.21,
+   "end": 410.21,
+   "text": "works brilliantly."
+  },
+  {
+   "start": 410.61,
+   "end": 413.09,
+   "text": "Here's the before, not matching at all."
+  },
+  {
+   "start": 413.09,
+   "end": 414.09,
+   "text": "Here is the after."
+  },
+  {
+   "start": 414.09,
+   "end": 417.77,
+   "text": "The exact same harmonization steps that we have done in the previous example."
+  },
+  {
+   "start": 417.77,
+   "end": 421.49,
+   "text": "Here's another example that I was experimenting with since we have already addressed the"
+  },
+  {
+   "start": 421.49,
+   "end": 424.73,
+   "text": "elephant in the room, time for the giraffe."
+  },
+  {
+   "start": 424.73,
+   "end": 430.29,
+   "text": "And it not only again created the shadows but also a little bit of the reflections and"
+  },
+  {
+   "start": 430.29,
+   "end": 433.33,
+   "text": "it took care of the light as well since it's coming from the right hand side."
+  },
+  {
+   "start": 433.33,
+   "end": 435.93,
+   "text": "See, it created all of those highlights for you."
+  },
+  {
+   "start": 435.93,
+   "end": 439.65,
+   "text": "Now the harmonize feature has its own limitations and areas of improvement."
+  },
+  {
+   "start": 439.69,
+   "end": 443.73,
+   "text": "Keep in mind this is the first iteration of this feature so it's already doing fantastic"
+  },
+  {
+   "start": 443.73,
+   "end": 444.73,
+   "text": "job."
+  },
+  {
+   "start": 444.73,
+   "end": 446.77,
+   "text": "These are just a few things you should be aware of."
+  },
+  {
+   "start": 446.77,
+   "end": 448.25,
+   "text": "Starting with shadows."
+  },
+  {
+   "start": 448.25,
+   "end": 449.77,
+   "text": "Here was the giraffe."
+  },
+  {
+   "start": 449.77,
+   "end": 450.97,
+   "text": "Here's the harmonized layer."
+  },
+  {
+   "start": 450.97,
+   "end": 452.57,
+   "text": "It looks incredible."
+  },
+  {
+   "start": 452.57,
+   "end": 456.25,
+   "text": "But as soon as you have a look at the shadows, this just doesn't sit well."
+  },
+  {
+   "start": 456.25,
+   "end": 458.01,
+   "text": "It didn't create the shadow there."
+  },
+  {
+   "start": 458.01,
+   "end": 460.33,
+   "text": "Here the shadow is just not working right."
+  },
+  {
+   "start": 460.33,
+   "end": 463.65,
+   "text": "So whenever you have to have a well-defined shadow, it can mess up."
+  },
+  {
+   "start": 463.65,
+   "end": 466.45,
+   "text": "Even if you look at other options, here was the first one."
+  },
+  {
+   "start": 466.45,
+   "end": 468.73,
+   "text": "It didn't even consider a shadow here."
+  },
+  {
+   "start": 468.77,
+   "end": 470.33,
+   "text": "Here was the third one."
+  },
+  {
+   "start": 470.33,
+   "end": 471.93,
+   "text": "Shadows are missing here."
+  },
+  {
+   "start": 471.93,
+   "end": 474.05,
+   "text": "Shadows can be a challenge unless they're soft."
+  },
+  {
+   "start": 474.05,
+   "end": 478.85,
+   "text": "Since it generates the whole thing, sometimes it can make the subject look like a cartoon."
+  },
+  {
+   "start": 478.85,
+   "end": 482.13,
+   "text": "Here's the before of course and here is the after."
+  },
+  {
+   "start": 482.13,
+   "end": 484.53,
+   "text": "From afar, this is matching perfectly."
+  },
+  {
+   "start": 484.53,
+   "end": 488.77,
+   "text": "But as soon as you zoom in, this just becomes quite softer."
+  },
+  {
+   "start": 488.77,
+   "end": 491.89,
+   "text": "And in some examples you'll see that the face looks like a cartoon."
+  },
+  {
+   "start": 491.89,
+   "end": 495.33,
+   "text": "That the highlights and the shadows on the face make it look like a painting."
+  },
+  {
+   "start": 495.37,
+   "end": 497.37,
+   "text": "So here is the overall before."
+  },
+  {
+   "start": 497.37,
+   "end": 499.81,
+   "text": "In this example, nothing matching."
+  },
+  {
+   "start": 499.81,
+   "end": 500.81,
+   "text": "Here's the after."
+  },
+  {
+   "start": 500.81,
+   "end": 502.09,
+   "text": "It's matching alright."
+  },
+  {
+   "start": 502.09,
+   "end": 503.29,
+   "text": "But have a look at the highlights."
+  },
+  {
+   "start": 503.29,
+   "end": 505.69,
+   "text": "It just makes the face look AI generated."
+  },
+  {
+   "start": 505.69,
+   "end": 508.25,
+   "text": "First option, second option, third option."
+  },
+  {
+   "start": 508.25,
+   "end": 511.37,
+   "text": "All of them do the same thing."
+  },
+  {
+   "start": 511.37,
+   "end": 513.89,
+   "text": "And I have to say this is just brilliant."
+  },
+  {
+   "start": 513.89,
+   "end": 517.37,
+   "text": "If it could have a little more texture and detail, it would make it insanely better."
+  },
+  {
+   "start": 517.37,
+   "end": 521.17,
+   "text": "And when you have drastic changes in color, there's another issue that can creep up."
+  },
+  {
+   "start": 521.17,
+   "end": 522.57,
+   "text": "Here's the before."
+  },
+  {
+   "start": 522.57,
+   "end": 523.69,
+   "text": "Here's the after."
+  },
+  {
+   "start": 523.69,
+   "end": 525.29,
+   "text": "This is just magnificent."
+  },
+  {
+   "start": 525.29,
+   "end": 531.13,
+   "text": "But as soon as you zoom in, you'll start to notice a weird fringe around the edge."
+  },
+  {
+   "start": 531.13,
+   "end": 533.93,
+   "text": "Similarly here, it's all throughout the subject."
+  },
+  {
+   "start": 533.93,
+   "end": 538.41,
+   "text": "And finally, of course since this is a generation, there is a limit to the resolution."
+  },
+  {
+   "start": 538.41,
+   "end": 543.25,
+   "text": "As soon as you zoom in to something like the shadows, you will begin to see the difference."
+  },
+  {
+   "start": 543.25,
+   "end": 545.93,
+   "text": "This is the original surface, very sharp."
+  },
+  {
+   "start": 545.93,
+   "end": 547.17,
+   "text": "But have a look at the shadows."
+  },
+  {
+   "start": 547.17,
+   "end": 549.09,
+   "text": "It just looks blurred and pixelated."
+  },
+  {
+   "start": 549.09,
+   "end": 553.33,
+   "text": "With all of its limitations on one side, this feature in its very first iteration"
+  },
+  {
+   "start": 553.37,
+   "end": 557.29,
+   "text": "is one of the biggest, the most massive feature Photoshop has ever released."
+  },
+  {
+   "start": 557.29,
+   "end": 559.89,
+   "text": "If this is not mind boggling to you, I really don't know what is."
+  },
+  {
+   "start": 559.89,
+   "end": 563.09,
+   "text": "I couldn't sleep until 4am yesterday trying out this feature."
+  },
+  {
+   "start": 563.09,
+   "end": 565.77,
+   "text": "I hope you enjoyed this video and if you did, make sure to give us a like"
+  },
+  {
+   "start": 565.77,
+   "end": 568.37,
+   "text": "and also don't forget to subscribe and not just subscribe."
+  },
+  {
+   "start": 568.37,
+   "end": 572.01,
+   "text": "Bring the buzz so that you my friend don't miss any other feature tips, tricks or tutorials."
+  },
+  {
+   "start": 572.01,
+   "end": 573.17,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 573.17,
+   "end": 574.09,
+   "text": "I'll see you in my next one."
+  },
+  {
+   "start": 574.09,
+   "end": 576.25,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:00:09.251198+00:00",
+ "seconds": 27.3
+}

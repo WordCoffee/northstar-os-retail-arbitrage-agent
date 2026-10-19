@@ -1,0 +1,358 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:02.960 --> 00:00:08.320
+Hello and welcome. Today, I'll show you how to create mockups using AI
+
+00:00:08.320 --> 00:00:12.080
+. The traditional method of creating mockups
+
+00:00:12.080 --> 00:00:16.320
+using Photoshop or Illustrator
+
+00:00:16.320 --> 00:00:21.279
+is a bit lengthy, often confusing students, and
+
+00:00:21.279 --> 00:00:25.600
+doesn't produce a very realistic output. As I told you in the last lecture,
+
+00:00:25.600 --> 00:00:30.560
+it's crucial to have mockups in your portfolio. Mockups are basically a conceptual
+
+00:00:30.560 --> 00:00:34.880
+presentation of your product, demonstrating
+
+00:00:34.880 --> 00:00:38.879
+how the print you've created will look on a particular product. This way, your client
+
+00:00:38.879 --> 00:00:43.200
+gets a visualization of how this print
+
+00:00:43.200 --> 00:00:48.160
+will look on a piece of clothing, a dress, or a product. Therefore, you
+
+00:00:48.160 --> 00:00:53.120
+must include a mockup for each design in your portfolio. The easiest way to do this is
+
+00:00:53.120 --> 00:00:58.239
+to create a mockup using Photoshop or Illustrator instead. Nowadays, since
+
+00:00:58.239 --> 00:01:03.840
+it's the era of AI, you can easily create beautiful mockups using AI
+
+00:01:03.840 --> 00:01:08.640
+. One thing you need to keep in mind here is that the
+
+00:01:08.640 --> 00:01:13.680
+prompts for overall patterns aren't the same as the prompts you use for engineered patterns
+
+00:01:13.680 --> 00:01:19.680
+. Okay? So, the first thing you need to do is prepare your designs
+
+00:01:19.680 --> 00:01:24.080
+. Let's see how. I have an overall pattern here in my Photoshop file, and
+
+00:01:24.080 --> 00:01:28.320
+I'm telling you again, this prompt I'm going to teach you right now
+
+00:01:28.320 --> 00:01:31.920
+is only for overall patterns. Okay? It's not for engineered patterns.
+
+00:01:31.920 --> 00:01:36.079
+Here, I've opened my Photoshop file, where I have a shirt
+
+00:01:36.079 --> 00:01:41.200
+pattern, and this is the tile size. Your actual design is always ready to scale
+
+00:01:41.200 --> 00:01:45.759
+. And you don't want to put this large-scale image in your prompt
+
+00:01:45.759 --> 00:01:50.159
+; you just need to scale it down a bit. Okay? Here, I've
+
+00:01:50.159 --> 00:01:55.280
+opened my overall pattern file. This is a shirt pattern. Now this design
+
+00:01:55.280 --> 00:01:59.680
+is ready to scale. So, you need to scale it down first. Go to the Image menu.
+
+00:01:59.680 --> 00:02:04.880
+Open Image Size and reduce the width and height.
+
+00:02:04.880 --> 00:02:08.879
+For example, if it's 10" wide, I'll scale it down to a very small scale.
+
+00:02:08.879 --> 00:02:13.280
+A mockup is a presentation at a very small scale.
+
+00:02:13.280 --> 00:02:17.840
+So, for a small scale, your pattern
+
+00:02:17.840 --> 00:02:22.480
+must be realistically rendered at a very small scale so that the idea of ​​how it will look when printed can be properly generated
+
+00:02:22.480 --> 00:02:27.920
+. It's not like you just save the to-scale file in a PAG
+
+00:02:27.920 --> 00:02:32.800
+and apply it to the mockup, and that motif
+
+00:02:32.800 --> 00:02:37.200
+will simply cover the entire shirt. Right? That would be a very unrealistic presentation. The
+
+00:02:37.200 --> 00:02:43.200
+original design needs to be scaled down first. You need to keep in mind that
+
+00:02:43.200 --> 00:02:49.120
+if the size of your illustration or model
+
+00:02:49.120 --> 00:02:55.120
+is 4 inches digitally in height for this shirt you're presenting, then you
+
+00:02:55.120 --> 00:03:01.120
+need to reduce the design to a smaller scale by that much. The style size has been reduced. Now I
+
+00:03:01.120 --> 00:03:07.200
+need to go to Edit and define a pattern. And I'll close this file.
+
+00:03:07.200 --> 00:03:11.680
+And don't save it. Okay? You don't have to save your actual file
+
+00:03:11.680 --> 00:03:16.239
+. If you save it, all those changes will be saved as well. So you don't save it
+
+00:03:16.239 --> 00:03:22.879
+. Then you need to open a new file. Create it.
+
+00:03:22.879 --> 00:03:28.640
+Open the Edit menu. Fill, then Contents, Pattern. Then
+
+00:03:28.640 --> 00:03:33.200
+you'll see this small arrow for Custom Patterns. Open it and
+
+00:03:33.200 --> 00:03:37.200
+click on the pattern you just reduced and defined and click OK. This
+
+00:03:37.200 --> 00:03:43.440
+will fill it in like this. Okay? Now you need to save it. Save a copy and
+
+00:03:43.440 --> 00:03:47.519
+save it as a JPG or PAG file. I'll do it in PAG. And I've labeled it "
+
+00:03:47.519 --> 00:03:52.879
+shirt." You'll open your dupatta file in the same way. Obviously, your
+
+00:03:52.879 --> 00:03:57.599
+full, 100-inch dupatta file will be ready to scale. You'll
+
+00:03:57.599 --> 00:04:03.200
+need to reduce it in the same way and save it in PAG. Now, open Safari or Chrome and
+
+00:04:03.200 --> 00:04:08.080
+enter "gemini" here. After that, a window
+
+00:04:08.080 --> 00:04:14.000
+will open like this. And here, I'll upload the designs. First, I took the shirt.
+
+00:04:14.000 --> 00:04:19.840
+Click and drag and drop it onto it. Second, I added the trousers
+
+00:04:19.840 --> 00:04:25.600
+, and third, I added the dupatta. Okay? Now, I
+
+00:04:25.600 --> 00:04:32.240
+'ll paste the mockup template I already generated here
+
+00:04:32.240 --> 00:04:36.000
+. Select the entire template.
+
+00:04:36.000 --> 00:04:42.240
+Copy it with Control C, bring it here, click and press Control V, and it
+
+00:04:42.240 --> 00:04:47.120
+will paste. Now, what I was talking about sequence, I will tell you a little bit about it here.
+
+00:04:47.120 --> 00:04:52.240
+Let me explain. I've put the sequence of image one here, so
+
+00:04:52.240 --> 00:04:57.040
+the shirt will appear in image one. So, I uploaded the shirt pattern first. Then, image two
+
+00:04:57.040 --> 00:05:01.759
+showed a trouser print, so I uploaded the trousers' image second
+
+00:05:01.759 --> 00:05:06.080
+. Then, image three showed a dupatta print, so I
+
+00:05:06.080 --> 00:05:10.639
+uploaded the dupatta print. If the sequence changes here, you'll
+
+00:05:10.639 --> 00:05:15.680
+need to upload your designs in the same order. Okay? After that, we
+
+00:05:15.680 --> 00:05:20.960
+'ll click on it and wait a bit while it generates. Here, you can see
+
+00:05:20.960 --> 00:05:26.320
+it's generated a fairly realistic model. Now, save it.
+
+00:05:26.320 --> 00:05:31.520
+When you hover your mouse over the image, you'll see the down arrow key. From here, you
+
+00:05:31.520 --> 00:05:36.400
+can download the image and add it to your portfolio. Secondly,
+
+00:05:36.400 --> 00:05:41.840
+if you want to list your designs on social media, you can use this image there
+
+00:05:41.840 --> 00:05:46.080
+very effectively. Okay, that's Gemini. Now we'll test this
+
+00:05:46.080 --> 00:05:50.880
+on Chat.GPT as well. You have to do the same thing on Chat.GPT.
+
+00:05:50.880 --> 00:05:54.800
+I've linked the document for this program I'm using in the description
+
+00:05:54.800 --> 00:05:59.919
+. Open the link and simply
+
+00:05:59.919 --> 00:06:04.240
+copy it from there and paste it into your Gemini or Chat.GPT application. Upload
+
+00:06:04.240 --> 00:06:09.120
+your designs. This way, you'll easily
+
+00:06:09.120 --> 00:06:13.520
+get a realistic model like this, and you
+
+00:06:13.520 --> 00:06:17.680
+can add it to your portfolio. Instead of going into Photoshop or Illustrator and
+
+00:06:17.680 --> 00:06:23.280
+following a series of steps to create a mockup, simply enter this program,
+
+00:06:23.280 --> 00:06:27.280
+upload your designs, and enjoy all these programs and
+
+00:06:27.280 --> 00:06:31.280
+add them to your portfolio. Okay? Let me explain. This link
+
+00:06:31.280 --> 00:06:36.240
+will be in the description like this. You simply click on it. This file
+
+00:06:36.240 --> 00:06:41.440
+will open. Okay? You can also download it. Simply
+
+00:06:41.440 --> 00:06:45.360
+copy it from here by pressing Control-C. Then, go back to ChartGPT and
+
+00:06:45.360 --> 00:06:50.240
+paste it there by pressing Control-V. Follow this sequence
+
+00:06:50.240 --> 00:06:54.639
+to upload your designs. In this sequence, first comes the shirt, then the trousers, then
+
+00:06:54.639 --> 00:07:01.199
+the dupatta. Click the arrow here and generate it. We
+
+00:07:01.199 --> 00:07:06.240
+'ll wait a bit while it generates the image. If you're wondering
+
+00:07:06.240 --> 00:07:11.039
+whether you want to give instructions to ChatGPT itself or to Gemini, what
+
+00:07:11.039 --> 00:07:14.720
+instructions would you give? So, here I opened ChatGPT and
+
+00:07:14.720 --> 00:07:19.599
+gave it very simple instructions: "Give me a prompt for making a mock model wearing a Pakistani
+
+00:07:19.599 --> 00:07:23.599
+dress." I want to use the prop as a template for making mockups of textile
+
+00:07:23.599 --> 00:07:28.319
+three-piece print suits. I want to generate it on Gemini. So give me a standard
+
+00:07:28.319 --> 00:07:33.840
+prompt. So then he gave me a bunch of standard prompts here
+
+00:07:33.840 --> 00:07:39.039
+, and I used the ones I found suitable
+
+00:07:39.039 --> 00:07:44.000
+and shared them with you guys. Okay? So you can generate this yourself
+
+00:07:44.000 --> 00:07:50.160
+with simple instructions. So do give it a try. And again, I think for
+
+00:07:50.160 --> 00:07:55.360
+the third time I'm mentioning this, this
+
+00:07:55.360 --> 00:08:00.560
+is a mockup only for overall patterns. It's not for your engineered patterns. Okay?
+
+00:08:00.560 --> 00:08:05.759
+Your prompt for engineered patterns will be separate. The instructions will be different. So, it
+
+00:08:05.759 --> 00:08:10.400
+'s not like you add this prompt here and you
+
+00:08:10.400 --> 00:08:15.520
+upload your engineered patterns here. Okay? This is for your three-piece overall pattern.
+
+00:08:15.520 --> 00:08:20.960
+Now , ChatGPT has generated a very nice image here , and I
+
+00:08:20.960 --> 00:08:26.160
+liked this ChatGPT model more than Gemini. So, I'm going to download Simple and
+
+00:08:26.160 --> 00:08:31.440
+add it to my portfolio. Okay? You should definitely try this method
+
+00:08:31.440 --> 00:08:36.719
+and enhance your portfolio in a more realistic way, because when you
+
+00:08:36.719 --> 00:08:41.200
+add these kinds of mockups to your portfolio, the impression is so different that
+
+00:08:41.200 --> 00:08:45.600
+it seems as if the fabric was actually printed. So, you should definitely try it
+
+00:08:45.600 --> 00:08:50.720
+. I've included a link in the description where you
+
+00:08:50.720 --> 00:08:55.440
+can download this document. Simple can be directly copied and pasted. When you try it,
+
+00:08:55.440 --> 00:09:00.240
+please share your experience with me about your results.
+
+00:09:00.240 --> 00:09:04.800
+You'll get the same model with Peacock and Lace, but only the prints and designs
+
+00:09:04.800 --> 00:09:10.000
+will change. Okay? There's a down arrow key here. From there, click on it and
+
+00:09:10.000 --> 00:09:13.279
+download Simple. Now, in the next video, I'll share with you the engineered pattern.
+
+00:09:13.279 --> 00:09:18.160
+I'll share the proof. And in this way, we
+
+00:09:18.160 --> 00:09:23.519
+'ll be testing proofs for many products step by step, and I
+
+00:09:23.519 --> 00:09:28.240
+'ll be sharing those documents with you along the way. I hope you find the process helpful. But if you still insist
+
+00:09:28.240 --> 00:09:33.600
+that we don't want to use AI and teach us
+
+00:09:33.600 --> 00:09:38.160
+how to create a mockup manually, using Photoshop, I'll record that lecture for you as well.
+
+00:09:38.160 --> 00:09:42.680
+Take great care. Allah Hafiz.
+

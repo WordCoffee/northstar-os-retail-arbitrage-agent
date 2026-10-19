@@ -1,0 +1,154 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.640 --> 00:00:07.200
+Hello, this is a video to show how to wrap label&nbsp;
+around cylinder shape packaging mockup in Blender&nbsp;&nbsp;
+
+00:00:07.200 --> 00:00:09.563
+this is the 3D model , I made before
+
+00:00:09.563 --> 00:00:14.383
+in this&nbsp;video, 
+I will add a label and wrap on this 3D food can
+
+00:00:14.383 --> 00:00:20.091
+now I add a label
+I use Add &gt; Mesh and add a plane
+
+00:00:20.091 --> 00:00:22.667
+and then we can go to Edit Mode
+
+00:00:22.667 --> 00:00:27.566
+I will rotate to 90°
+
+00:00:27.566 --> 00:00:35.029
+and I scale it to 2.12
+
+00:00:35.029 --> 00:00:39.679
+this is the length same&nbsp;as the circumference of the cylinder
+
+00:00:39.679 --> 00:00:47.351
+so and then I will adjust the height a bit about 0.94
+
+00:00:47.351 --> 00:00:51.272
+if we want to wrap the label 
+we need more meshes
+
+00:00:51.272 --> 00:00:56.473
+so we can right click and subdivide 
+to add number of cuts
+
+00:00:56.473 --> 00:01:01.352
+in&nbsp;the subdivide panel 
+we can increase the number of cuts
+
+00:01:01.352 --> 00:01:07.138
+I will use 19 in my case and then we can go to&nbsp;object mode
+
+00:01:07.138 --> 00:01:11.411
+and then I want to move the label forwards
+
+00:01:11.411 --> 00:01:15.292
+and then I will add the graphics on the label
+
+00:01:15.292 --> 00:01:19.259
+we&nbsp;need to add the material 
+go to material properties
+
+00:01:19.259 --> 00:01:21.790
+and add a new material
+
+00:01:21.790 --> 00:01:26.391
+in the base color 
+we can&nbsp;choose image texture
+
+00:01:26.391 --> 00:01:29.715
+and then we can link the graphics image
+
+00:01:29.715 --> 00:01:35.377
+and then we can open it to put&nbsp;the image into the texture
+
+00:01:35.377 --> 00:01:41.256
+then we can switch to material preview to preview the graphics
+
+00:01:41.256 --> 00:01:46.071
+to&nbsp;wrap the label we can go to modify properties
+
+00:01:46.071 --> 00:01:52.780
+and add a modifier, we can choose deform and simpledeform
+
+00:01:52.780 --> 00:01:56.387
+in the simple deform modifier we can choose bend
+
+00:01:56.387 --> 00:01:59.689
+and in the axis we can choose Z
+
+00:01:59.689 --> 00:02:04.685
+for the&nbsp;angle we can adjust this to 360°
+
+00:02:04.685 --> 00:02:11.583
+so the label is wrapped around the cylinder shape of 3D can
+
+00:02:11.583 --> 00:02:15.860
+if we want to&nbsp;set animation 
+we can go to the timeline
+
+00:02:15.860 --> 00:02:20.292
+and I go to frame 100 and set one key frame
+
+00:02:20.292 --> 00:02:25.096
+and go to the&nbsp;first frame and set it to 0
+
+00:02:25.096 --> 00:02:26.890
+and set the keyframe
+
+00:02:26.890 --> 00:02:32.196
+so we got the simple animation for the wrapped label
+
+00:02:32.196 --> 00:02:33.763
+I stop it here
+
+00:02:33.763 --> 00:02:39.610
+finally if we want to make the mesh smooth 
+we can add the subdivision modifier
+
+00:02:39.610 --> 00:02:43.321
+I select the food can and go to add modifier
+
+00:02:43.321 --> 00:02:47.300
+generate and choose subdivision surface modifier
+
+00:02:47.300 --> 00:02:49.633
+we can do&nbsp;the same thing for the label
+
+00:02:49.633 --> 00:02:55.678
+and add the modifier &gt; generate &gt; subdivision surface modifier
+
+00:02:55.678 --> 00:03:00.349
+and please noted that 
+we can have the Round Edge for the back
+
+00:03:00.349 --> 00:03:03.955
+so we can go to subdivision surface modifier
+
+00:03:03.955 --> 00:03:11.234
+and&nbsp;advanced and in the boundary smooth 
+we choose Keep Corner
+
+00:03:11.234 --> 00:03:16.742
+and then go to object and shade smooth
+
+00:03:16.742 --> 00:03:21.622
+this is how we can wrap label around cylinder  packaging mockup in Blender
+
+00:03:21.622 --> 00:03:24.337
+thank you for watching this&nbsp;video, hope this help
+
+00:03:24.337 --> 00:03:28.092
+please subscribe this channel more video will be Shared with you
+
+00:03:28.092 --> 00:03:31.680
+I'm artist b, see you in the next video, bye-bye
+

@@ -1,0 +1,888 @@
+{
+ "id": "5YTSEtjlZx4",
+ "title": "How to Combine Photos in Photoshop for beginners (compositing)",
+ "channel": "photoshopCAFE",
+ "url": "https://www.youtube.com/watch?v=5YTSEtjlZx4",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 574.4,
+ "chars": 8653,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.28,
+   "text": "In this Photoshop tutorial, we're going to combine two images and make it look like they"
+  },
+  {
+   "start": 4.28,
+   "end": 5.28,
+   "text": "belong together."
+  },
+  {
+   "start": 5.28,
+   "end": 8.72,
+   "text": "And if you love Photoshop, hit that subscribe button, turn on notifications, and you'll"
+  },
+  {
+   "start": 8.72,
+   "end": 11.36,
+   "text": "get a free tutorial from me each week."
+  },
+  {
+   "start": 11.36,
+   "end": 14.92,
+   "text": "Now the first thing you want to do is you want to look at the size of the image when"
+  },
+  {
+   "start": 14.92,
+   "end": 16.08,
+   "text": "you're combining the two."
+  },
+  {
+   "start": 16.08,
+   "end": 20.76,
+   "text": "So go under Document Dimensions and take note of the size."
+  },
+  {
+   "start": 20.76,
+   "end": 25.05,
+   "text": "This one's 5184."
+  },
+  {
+   "start": 25.05,
+   "end": 26.41,
+   "text": "This one's 5870."
+  },
+  {
+   "start": 26.41,
+   "end": 30.25,
+   "text": "So to avoid any resolution issues, you want to take the larger image and drop"
+  },
+  {
+   "start": 30.25,
+   "end": 33.89,
+   "text": "it on top of the smaller image so that way we're only scaling down and we're never"
+  },
+  {
+   "start": 33.89,
+   "end": 39.09,
+   "text": "scaling anything up because that softens the image and it loses quality."
+  },
+  {
+   "start": 39.09,
+   "end": 40.93,
+   "text": "Let's choose the Move tool."
+  },
+  {
+   "start": 40.93,
+   "end": 45.45,
+   "text": "And with the Move tool selected, we're going to drag and drop this into the other"
+  },
+  {
+   "start": 45.45,
+   "end": 46.45,
+   "text": "document."
+  },
+  {
+   "start": 46.45,
+   "end": 47.77,
+   "text": "So just drag up."
+  },
+  {
+   "start": 47.77,
+   "end": 48.77,
+   "text": "Now don't let go."
+  },
+  {
+   "start": 48.77,
+   "end": 50.33,
+   "text": "Go into the tab."
+  },
+  {
+   "start": 50.33,
+   "end": 52.57,
+   "text": "The second image are open."
+  },
+  {
+   "start": 52.57,
+   "end": 53.57,
+   "text": "Move to the middle."
+  },
+  {
+   "start": 53.57,
+   "end": 54.57,
+   "text": "Don't let go yet."
+  },
+  {
+   "start": 54.57,
+   "end": 57.33,
+   "text": "Now hold down the Shift key and now let go."
+  },
+  {
+   "start": 57.33,
+   "end": 61.73,
+   "text": "The reason we held down the Shift key is it will center it."
+  },
+  {
+   "start": 61.73,
+   "end": 65.33,
+   "text": "And if we look now, we've combined the two images into one."
+  },
+  {
+   "start": 65.33,
+   "end": 69.73,
+   "text": "Obviously, we want to cut out the line and match the color so it looks realistic."
+  },
+  {
+   "start": 69.73,
+   "end": 74.81,
+   "text": "Make sure the Move tool is selected and hit Ctrl T or Command T for free transform."
+  },
+  {
+   "start": 74.81,
+   "end": 78.93,
+   "text": "Let's scale this down a little bit so it fits within our boundaries."
+  },
+  {
+   "start": 78.93,
+   "end": 80.41,
+   "text": "So I'm dragging it down."
+  },
+  {
+   "start": 80.41,
+   "end": 82.57,
+   "text": "Notice it's proportional."
+  },
+  {
+   "start": 82.57,
+   "end": 87.57,
+   "text": "If it's not proportional when you drag it, hold the Shift key and that will keep it there."
+  },
+  {
+   "start": 87.57,
+   "end": 91.97,
+   "text": "And also if you hold down the Alt or the Option key, we can scale it from the middle."
+  },
+  {
+   "start": 91.97,
+   "end": 93.45,
+   "text": "Great."
+  },
+  {
+   "start": 93.45,
+   "end": 97.69,
+   "text": "So let's just drag this into the middle and hit Enter."
+  },
+  {
+   "start": 97.69,
+   "end": 99.29,
+   "text": "Now we can see the whole image."
+  },
+  {
+   "start": 99.29,
+   "end": 102.7,
+   "text": "Let's cut out our line."
+  },
+  {
+   "start": 102.7,
+   "end": 106.82,
+   "text": "So go under the Tools and then we're going to choose either the Object or the Quick"
+  },
+  {
+   "start": 106.82,
+   "end": 107.82,
+   "text": "Selection tool."
+  },
+  {
+   "start": 107.82,
+   "end": 111.5,
+   "text": "It doesn't matter because each of these will give us this option that says Select"
+  },
+  {
+   "start": 111.5,
+   "end": 112.5,
+   "text": "Subject."
+  },
+  {
+   "start": 112.78,
+   "end": 117.66,
+   "text": "Click on Select Subject and Photoshop's AI will make a selection for us."
+  },
+  {
+   "start": 117.66,
+   "end": 119.02,
+   "text": "All right."
+  },
+  {
+   "start": 119.02,
+   "end": 121.78,
+   "text": "Now we want to fix the fur areas."
+  },
+  {
+   "start": 121.78,
+   "end": 125.38,
+   "text": "So let's choose Select Mask."
+  },
+  {
+   "start": 125.38,
+   "end": 127.74,
+   "text": "And now we're in the Select Mask workspace."
+  },
+  {
+   "start": 127.74,
+   "end": 131.86,
+   "text": "What we want to do is use the Hair tool, which is the Refine Brush."
+  },
+  {
+   "start": 131.86,
+   "end": 137.1,
+   "text": "And then we're going to go around the edges here of the long hairs."
+  },
+  {
+   "start": 137.1,
+   "end": 139.42,
+   "text": "And this will help us get a better selection."
+  },
+  {
+   "start": 139.42,
+   "end": 140.42,
+   "text": "Great."
+  },
+  {
+   "start": 140.42,
+   "end": 141.42,
+   "text": "Let's do the bottom."
+  },
+  {
+   "start": 148.1,
+   "end": 151.1,
+   "text": "All right, a couple of other little settings that help with the selections."
+  },
+  {
+   "start": 151.1,
+   "end": 157.02,
+   "text": "Under Radius we're going to set this to 1 and then turn on Decontaminate Colors at the"
+  },
+  {
+   "start": 157.02,
+   "end": 158.54,
+   "text": "bottom."
+  },
+  {
+   "start": 158.54,
+   "end": 160.66,
+   "text": "So let's go ahead and we're going to click OK."
+  },
+  {
+   "start": 160.66,
+   "end": 161.66,
+   "text": "Great."
+  },
+  {
+   "start": 161.66,
+   "end": 162.66,
+   "text": "We've got our line."
+  },
+  {
+   "start": 162.66,
+   "end": 165.18,
+   "text": "Let's resize it and position it now."
+  },
+  {
+   "start": 165.18,
+   "end": 169.1,
+   "text": "Hit Ctrl T or Command T for Free Transform."
+  },
+  {
+   "start": 169.1,
+   "end": 174.62,
+   "text": "And once again, let's scale this."
+  },
+  {
+   "start": 174.62,
+   "end": 178.1,
+   "text": "And we can move it into position."
+  },
+  {
+   "start": 178.1,
+   "end": 180.1,
+   "text": "Maybe here looks quite good."
+  },
+  {
+   "start": 180.1,
+   "end": 182.78,
+   "text": "Let's hit the Enter key."
+  },
+  {
+   "start": 182.78,
+   "end": 187.02,
+   "text": "Now what we need to do is blend these feet in so they look like they're actually in the"
+  },
+  {
+   "start": 187.02,
+   "end": 188.02,
+   "text": "grass."
+  },
+  {
+   "start": 188.02,
+   "end": 192.3,
+   "text": "So we're going to make sure we're selecting our layer mask, not the layer but the mask next"
+  },
+  {
+   "start": 192.3,
+   "end": 193.3,
+   "text": "to it."
+  },
+  {
+   "start": 193.3,
+   "end": 196.66,
+   "text": "And we're going to grab a brush."
+  },
+  {
+   "start": 196.66,
+   "end": 199.46,
+   "text": "With the brush we're going to paint with black."
+  },
+  {
+   "start": 199.46,
+   "end": 200.82,
+   "text": "Black will hide the layer."
+  },
+  {
+   "start": 200.82,
+   "end": 203.86,
+   "text": "And by the way, these masks are a lot of fun to play with."
+  },
+  {
+   "start": 203.86,
+   "end": 206.06,
+   "text": "So black will hide it, white will show it."
+  },
+  {
+   "start": 206.06,
+   "end": 210.06,
+   "text": "And then with the brush we're just going to brush around the feet so the line is"
+  },
+  {
+   "start": 210.06,
+   "end": 213.86,
+   "text": "sinking into the grass and not scooting across the top of it."
+  },
+  {
+   "start": 213.86,
+   "end": 214.86,
+   "text": "There we go."
+  },
+  {
+   "start": 214.86,
+   "end": 221.4,
+   "text": "Now what we need to do is match the color of the lion with the rest of the image and"
+  },
+  {
+   "start": 221.4,
+   "end": 224.92,
+   "text": "then we're going to create a shadow to match the shadow here."
+  },
+  {
+   "start": 224.92,
+   "end": 226.76,
+   "text": "So first thing, let's match the colors."
+  },
+  {
+   "start": 226.76,
+   "end": 229.96,
+   "text": "With the lion layer selected, notice I'm not on the mask anymore."
+  },
+  {
+   "start": 229.96,
+   "end": 231.16,
+   "text": "I'm now on the layer."
+  },
+  {
+   "start": 231.16,
+   "end": 232.4,
+   "text": "Grab our Move tool."
+  },
+  {
+   "start": 232.4,
+   "end": 239.48,
+   "text": "And now what we're going to do is go under Image Adjustments and then we're going"
+  },
+  {
+   "start": 239.48,
+   "end": 244.06,
+   "text": "to choose Match Color."
+  },
+  {
+   "start": 244.06,
+   "end": 247.82,
+   "text": "So with Match Color, what we want to do is we want to match the color from our"
+  },
+  {
+   "start": 247.82,
+   "end": 251.82,
+   "text": "background to the color of our foreground."
+  },
+  {
+   "start": 251.82,
+   "end": 254.74,
+   "text": "So notice here we've got different images open."
+  },
+  {
+   "start": 254.74,
+   "end": 257.02,
+   "text": "Let's make sure we're working on this image."
+  },
+  {
+   "start": 257.02,
+   "end": 259.9,
+   "text": "So if we go under Source, you'll see all the open tabs are here."
+  },
+  {
+   "start": 259.9,
+   "end": 261.94,
+   "text": "We want to choose the same image."
+  },
+  {
+   "start": 261.94,
+   "end": 264.42,
+   "text": "And then we want to match the layer."
+  },
+  {
+   "start": 264.42,
+   "end": 267.1,
+   "text": "So the layer we want to match is called Background."
+  },
+  {
+   "start": 267.1,
+   "end": 272.02,
+   "text": "So there's the source, there's the layer, Background."
+  },
+  {
+   "start": 272.06,
+   "end": 275.06,
+   "text": "This immediately will take the color of the background."
+  },
+  {
+   "start": 275.06,
+   "end": 279.02,
+   "text": "Now this is a little too strong and that's what the fade slider is for."
+  },
+  {
+   "start": 279.02,
+   "end": 282.14,
+   "text": "So if we look at fade, on the left is the new color."
+  },
+  {
+   "start": 282.14,
+   "end": 286.54,
+   "text": "If we drag this all the way to the right, here is our original color."
+  },
+  {
+   "start": 286.54,
+   "end": 290.18,
+   "text": "So what we want to do is find just the right blend between the two."
+  },
+  {
+   "start": 290.18,
+   "end": 294.5,
+   "text": "So as we move it to the left, we bring in more of that new color."
+  },
+  {
+   "start": 294.5,
+   "end": 300.51,
+   "text": "And we just need to find a nice match and just find where it matches your eye."
+  },
+  {
+   "start": 300.95,
+   "end": 304.51,
+   "text": "And then we're going to click OK and the colors are matching better now."
+  },
+  {
+   "start": 305.95,
+   "end": 312.51,
+   "text": "Why don't we add a nice shadow so it matches the windmill over here?"
+  },
+  {
+   "start": 312.51,
+   "end": 317.07,
+   "text": "So with our layer selected, we're going to go down to Effects."
+  },
+  {
+   "start": 318.31,
+   "end": 319.71,
+   "text": "And we're going to choose a drop shadow."
+  },
+  {
+   "start": 321.71,
+   "end": 324.55,
+   "text": "So with the drop shadow, what we're going to do is we're going to take"
+  },
+  {
+   "start": 324.55,
+   "end": 330.03,
+   "text": "our opacity to 100, let's set our distance to zero, size and spread."
+  },
+  {
+   "start": 330.03,
+   "end": 331.19,
+   "text": "Let's just put all that to zero."
+  },
+  {
+   "start": 331.19,
+   "end": 335.55,
+   "text": "First this is going to create a solid black shadow and if I drag,"
+  },
+  {
+   "start": 335.55,
+   "end": 337.63,
+   "text": "you can see that's the shadow it's going to create."
+  },
+  {
+   "start": 338.79,
+   "end": 341.35,
+   "text": "And we're going to use this just as a little mask."
+  },
+  {
+   "start": 341.35,
+   "end": 345.03,
+   "text": "So once again, set that distance to zero and see how that matches it."
+  },
+  {
+   "start": 346.03,
+   "end": 346.67,
+   "text": "Click OK."
+  },
+  {
+   "start": 348.27,
+   "end": 351.27,
+   "text": "Now we want to separate the shadow out into a brand new layer."
+  },
+  {
+   "start": 352.51,
+   "end": 356.91,
+   "text": "If we right click on Effects and we go to Create Layer."
+  },
+  {
+   "start": 356.91,
+   "end": 359.35,
+   "text": "Now this will create a nice black layer and"
+  },
+  {
+   "start": 359.35,
+   "end": 361.03,
+   "text": "we can use this for our shadow."
+  },
+  {
+   "start": 362.15,
+   "end": 367.23,
+   "text": "So select our shadow layer and now we're going to go to Free Transform."
+  },
+  {
+   "start": 367.23,
+   "end": 373.98,
+   "text": "Control or Command T for Free Transform, right click and"
+  },
+  {
+   "start": 373.98,
+   "end": 378.3,
+   "text": "we're going to flip this vertical."
+  },
+  {
+   "start": 378.3,
+   "end": 379.26,
+   "text": "Let's just drag it down."
+  },
+  {
+   "start": 381.22,
+   "end": 385.5,
+   "text": "And you can see the shadows are starting to appear underneath the line."
+  },
+  {
+   "start": 385.5,
+   "end": 388.78,
+   "text": "Now if you look at that shadow, see how it's kind of moving a little bit"
+  },
+  {
+   "start": 388.78,
+   "end": 391.26,
+   "text": "to the side that's called skewing."
+  },
+  {
+   "start": 391.26,
+   "end": 395.34,
+   "text": "Let's skew that so we're going to right click and choose Skew."
+  },
+  {
+   "start": 396.98,
+   "end": 399.7,
+   "text": "And if we drag it, notice how we can skew that."
+  },
+  {
+   "start": 400.66,
+   "end": 405.22,
+   "text": "So let's just copy the angle that we're seeing from the other shadow."
+  },
+  {
+   "start": 405.22,
+   "end": 412.22,
+   "text": "And then we're just going to drag that up, line up the feet, click OK."
+  },
+  {
+   "start": 412.22,
+   "end": 413.82,
+   "text": "It's not quite looking realistic yet."
+  },
+  {
+   "start": 414.82,
+   "end": 415.9,
+   "text": "A couple more things to do."
+  },
+  {
+   "start": 417.34,
+   "end": 420.02,
+   "text": "One is I'm going to apply a blur on the edge."
+  },
+  {
+   "start": 420.02,
+   "end": 422.98,
+   "text": "So we're going to choose Filter, Blur and"
+  },
+  {
+   "start": 422.98,
+   "end": 423.94,
+   "text": "we're going to soften this."
+  },
+  {
+   "start": 423.94,
+   "end": 425.22,
+   "text": "We're going to use a Gaussian Blur."
+  },
+  {
+   "start": 426.34,
+   "end": 429.62,
+   "text": "Now we could have created the blur when we created the original drop"
+  },
+  {
+   "start": 429.62,
+   "end": 433.7,
+   "text": "shadow with the size slider, but it's better to see it here on the image,"
+  },
+  {
+   "start": 433.7,
+   "end": 435.86,
+   "text": "on screen using the Gaussian Blur."
+  },
+  {
+   "start": 435.86,
+   "end": 438.78,
+   "text": "Then we can just see what really matches our image better."
+  },
+  {
+   "start": 441.62,
+   "end": 445.78,
+   "text": "So I'm going to take it to about 14, 14.8, click OK."
+  },
+  {
+   "start": 447.02,
+   "end": 448.94,
+   "text": "And now we're going to reduce our opacity."
+  },
+  {
+   "start": 448.94,
+   "end": 452.02,
+   "text": "Let's take our opacity down so it kind of blends into the background"
+  },
+  {
+   "start": 452.02,
+   "end": 455.75,
+   "text": "a little bit better."
+  },
+  {
+   "start": 455.79,
+   "end": 458.43,
+   "text": "Now there's other things we could do such as displacement maps"
+  },
+  {
+   "start": 458.43,
+   "end": 460.63,
+   "text": "and different things, but once again, I want to keep this simple"
+  },
+  {
+   "start": 460.63,
+   "end": 461.95,
+   "text": "because it's a beginner's tutorial."
+  },
+  {
+   "start": 461.95,
+   "end": 463.79,
+   "text": "So let's just call that a shadow."
+  },
+  {
+   "start": 465.75,
+   "end": 468.71,
+   "text": "And the last step is a little trick I came up with, which works well"
+  },
+  {
+   "start": 468.71,
+   "end": 471.79,
+   "text": "when you're combining layers and you want to just tie everything together."
+  },
+  {
+   "start": 472.15,
+   "end": 474.91,
+   "text": "And that's by applying a little bit of a color to it."
+  },
+  {
+   "start": 474.99,
+   "end": 476.91,
+   "text": "Let's do that right now."
+  },
+  {
+   "start": 476.91,
+   "end": 480.03,
+   "text": "So we're going to go under the adjustment layers"
+  },
+  {
+   "start": 481.15,
+   "end": 484.03,
+   "text": "and we're going to choose a solid color just to keep it simple."
+  },
+  {
+   "start": 485.03,
+   "end": 488.23,
+   "text": "So with a solid color, we can choose any color we want."
+  },
+  {
+   "start": 491.32,
+   "end": 494.44,
+   "text": "Let's get a kind of warm color tone here."
+  },
+  {
+   "start": 494.88,
+   "end": 495.72,
+   "text": "Click OK."
+  },
+  {
+   "start": 498.29,
+   "end": 500.69,
+   "text": "Now we're going to change the blend mode of this to color."
+  },
+  {
+   "start": 500.69,
+   "end": 504.89,
+   "text": "So only the color is going to change and everything else is going to be intact."
+  },
+  {
+   "start": 507.73,
+   "end": 511.77,
+   "text": "And now what we do is we want to blend this color in with the original color."
+  },
+  {
+   "start": 511.77,
+   "end": 513.77,
+   "text": "So we're going to take the opacity all the way down"
+  },
+  {
+   "start": 515.33,
+   "end": 519.21,
+   "text": "and then just bring it up a little bit and see as we start to apply some of that color now."
+  },
+  {
+   "start": 520.01,
+   "end": 522.21,
+   "text": "Notice how it really ties everything together."
+  },
+  {
+   "start": 523.09,
+   "end": 526.61,
+   "text": "If you want to use a different color, click on the color here, just double click"
+  },
+  {
+   "start": 527.37,
+   "end": 530.53,
+   "text": "and then we can change the color and we can go through different colors."
+  },
+  {
+   "start": 530.53,
+   "end": 533.49,
+   "text": "Look at this, see how it affects the image."
+  },
+  {
+   "start": 533.49,
+   "end": 536.53,
+   "text": "Find the mood you're looking for."
+  },
+  {
+   "start": 536.53,
+   "end": 538.41,
+   "text": "Click OK."
+  },
+  {
+   "start": 538.41,
+   "end": 540.85,
+   "text": "So I wanted to just keep this one simple for beginners."
+  },
+  {
+   "start": 540.85,
+   "end": 544.89,
+   "text": "There's a lot of different things I could have done and I've created a lot of other tutorials"
+  },
+  {
+   "start": 545.13,
+   "end": 548.77,
+   "text": "that shows you how to do all those other things like displacement maps"
+  },
+  {
+   "start": 548.77,
+   "end": 551.89,
+   "text": "and more accurate color matching and different things like that."
+  },
+  {
+   "start": 552.37,
+   "end": 555.69,
+   "text": "Let me know in the comments underneath if you found this tutorial useful."
+  },
+  {
+   "start": 556.01,
+   "end": 559.97,
+   "text": "And maybe the next one you might want to look at is my layer masking for beginners."
+  },
+  {
+   "start": 560.13,
+   "end": 561.93,
+   "text": "And that'll help you understand layer masks."
+  },
+  {
+   "start": 561.93,
+   "end": 563.69,
+   "text": "I'll add a link to it."
+  },
+  {
+   "start": 563.69,
+   "end": 565.05,
+   "text": "Do me a favor, hit that thumbs up."
+  },
+  {
+   "start": 565.05,
+   "end": 565.93,
+   "text": "That's the like button."
+  },
+  {
+   "start": 565.93,
+   "end": 568.21,
+   "text": "And don't forget to subscribe to Photoshop Cafe."
+  },
+  {
+   "start": 568.49,
+   "end": 571.57,
+   "text": "Until next time, I'll see you at the cafe."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:00:31.565921+00:00",
+ "seconds": 22.3
+}

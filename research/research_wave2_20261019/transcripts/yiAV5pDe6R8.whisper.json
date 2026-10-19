@@ -1,0 +1,423 @@
+{
+ "id": "yiAV5pDe6R8",
+ "title": "How to use FLUX.1 Kontext",
+ "channel": "LTX_io",
+ "url": "https://www.youtube.com/watch?v=yiAV5pDe6R8",
+ "query": "flux image editing tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 255.0,
+ "chars": 3253,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 3.48,
+   "text": "Flux context is now available inside LTX Studio,"
+  },
+  {
+   "start": 3.48,
+   "end": 7.0,
+   "text": "introducing a new paradigm in AI image generation,"
+  },
+  {
+   "start": 7.0,
+   "end": 9.2,
+   "text": "built for creative control at every step."
+  },
+  {
+   "start": 10.48,
+   "end": 12.68,
+   "text": "Context is a multimodal model,"
+  },
+  {
+   "start": 12.68,
+   "end": 16.12,
+   "text": "which means it understands both images and text."
+  },
+  {
+   "start": 16.12,
+   "end": 18.44,
+   "text": "This allows you to generate, edit,"
+  },
+  {
+   "start": 18.44,
+   "end": 21.12,
+   "text": "and transform visuals using natural language"
+  },
+  {
+   "start": 21.12,
+   "end": 22.86,
+   "text": "with context-aware precision."
+  },
+  {
+   "start": 23.96,
+   "end": 26.16,
+   "text": "To get started, head to the image workspace"
+  },
+  {
+   "start": 26.16,
+   "end": 28.64,
+   "text": "from the LTX Studio home screen."
+  },
+  {
+   "start": 28.68,
+   "end": 31.2,
+   "text": "This is where you'll access all the new capabilities"
+  },
+  {
+   "start": 31.2,
+   "end": 33.0,
+   "text": "inside Flux context."
+  },
+  {
+   "start": 34.0,
+   "end": 36.48,
+   "text": "Context has exceptional prompt adherence,"
+  },
+  {
+   "start": 36.48,
+   "end": 39.32,
+   "text": "and it excels when you start with short, clear instructions"
+  },
+  {
+   "start": 39.32,
+   "end": 42.12,
+   "text": "and layer them together to form a detailed prompt."
+  },
+  {
+   "start": 42.12,
+   "end": 44.48,
+   "text": "You don't need complex formatting,"
+  },
+  {
+   "start": 44.48,
+   "end": 47.2,
+   "text": "just purposeful, descriptive language."
+  },
+  {
+   "start": 47.2,
+   "end": 49.32,
+   "text": "For example, a woman in a bedroom"
+  },
+  {
+   "start": 49.32,
+   "end": 51.56,
+   "text": "with pink hues, heavy film grain."
+  },
+  {
+   "start": 51.56,
+   "end": 54.72,
+   "text": "This single prompt captures subject, setting,"
+  },
+  {
+   "start": 54.72,
+   "end": 57.36,
+   "text": "mood, and visual texture, all with one line."
+  },
+  {
+   "start": 58.32,
+   "end": 60.12,
+   "text": "But where context truly shines"
+  },
+  {
+   "start": 60.12,
+   "end": 62.68,
+   "text": "is in its image editing capabilities."
+  },
+  {
+   "start": 62.68,
+   "end": 64.16,
+   "text": "If you've been online recently,"
+  },
+  {
+   "start": 64.16,
+   "end": 66.84,
+   "text": "you've probably seen the style transfer feature,"
+  },
+  {
+   "start": 66.84,
+   "end": 68.96,
+   "text": "even if you didn't know the name."
+  },
+  {
+   "start": 68.96,
+   "end": 71.0,
+   "text": "This is where you use a reference image"
+  },
+  {
+   "start": 71.0,
+   "end": 72.36,
+   "text": "or detailed description"
+  },
+  {
+   "start": 72.36,
+   "end": 76.12,
+   "text": "to mimic a specific visual style or genre."
+  },
+  {
+   "start": 76.12,
+   "end": 79.44,
+   "text": "In Flux context, it's easier and more consistent than ever."
+  },
+  {
+   "start": 79.44,
+   "end": 80.88,
+   "text": "You can start with something as simple"
+  },
+  {
+   "start": 80.88,
+   "end": 82.92,
+   "text": "as a crayon style kids' drawing,"
+  },
+  {
+   "start": 82.92,
+   "end": 87.68,
+   "text": "then apply that look to a completely different subject."
+  },
+  {
+   "start": 87.68,
+   "end": 90.8,
+   "text": "Context carries over the visual tone of the reference"
+  },
+  {
+   "start": 90.8,
+   "end": 93.76,
+   "text": "and applies it seamlessly to your new image."
+  },
+  {
+   "start": 93.76,
+   "end": 96.64,
+   "text": "You can also use image reference for in painting,"
+  },
+  {
+   "start": 96.64,
+   "end": 99.44,
+   "text": "one of Context's most powerful features."
+  },
+  {
+   "start": 99.44,
+   "end": 102.36,
+   "text": "Upload a product, prop, or person,"
+  },
+  {
+   "start": 102.36,
+   "end": 104.92,
+   "text": "and seamlessly place it into a new scene."
+  },
+  {
+   "start": 104.92,
+   "end": 106.16,
+   "text": "You're not just editing,"
+  },
+  {
+   "start": 106.16,
+   "end": 108.24,
+   "text": "you're directing how that subject appears"
+  },
+  {
+   "start": 108.24,
+   "end": 110.56,
+   "text": "with full control over your composition."
+  },
+  {
+   "start": 110.56,
+   "end": 113.84,
+   "text": "Want to adjust lighting or change the environment?"
+  },
+  {
+   "start": 113.84,
+   "end": 116.04,
+   "text": "Just guide it with a prompt."
+  },
+  {
+   "start": 116.08,
+   "end": 120.12,
+   "text": "Change the jacket to yellow."
+  },
+  {
+   "start": 120.12,
+   "end": 124.32,
+   "text": "Change the background to a jungle environment."
+  },
+  {
+   "start": 124.32,
+   "end": 131.46,
+   "text": "Change the lighting to sunset."
+  },
+  {
+   "start": 131.46,
+   "end": 132.94,
+   "text": "This kind of control is possible"
+  },
+  {
+   "start": 132.94,
+   "end": 135.9,
+   "text": "because of how the model understands images."
+  },
+  {
+   "start": 135.9,
+   "end": 138.98,
+   "text": "Context doesn't see the image like a human,"
+  },
+  {
+   "start": 138.98,
+   "end": 141.06,
+   "text": "but thanks to its multimodal training,"
+  },
+  {
+   "start": 141.06,
+   "end": 143.1,
+   "text": "it understands what's in the image well enough"
+  },
+  {
+   "start": 143.1,
+   "end": 145.54,
+   "text": "to make smart targeted edits."
+  },
+  {
+   "start": 145.54,
+   "end": 148.34,
+   "text": "It can recognize elements like a person, a sign,"
+  },
+  {
+   "start": 148.34,
+   "end": 150.22,
+   "text": "or a jacket and modify them"
+  },
+  {
+   "start": 150.22,
+   "end": 152.18,
+   "text": "without disrupting the overall composition"
+  },
+  {
+   "start": 152.18,
+   "end": 153.3,
+   "text": "or feel of the scene."
+  },
+  {
+   "start": 154.06,
+   "end": 157.06,
+   "text": "One advantage this brings is consistency."
+  },
+  {
+   "start": 157.06,
+   "end": 158.58,
+   "text": "One of the biggest challenges in AI"
+  },
+  {
+   "start": 158.58,
+   "end": 160.98,
+   "text": "is keeping characters, details,"
+  },
+  {
+   "start": 160.98,
+   "end": 164.06,
+   "text": "and overall tone aligned across scenes."
+  },
+  {
+   "start": 164.06,
+   "end": 166.5,
+   "text": "Context is built for consistency,"
+  },
+  {
+   "start": 166.5,
+   "end": 170.38,
+   "text": "so your characters and objects remain stable across edits,"
+  },
+  {
+   "start": 170.38,
+   "end": 173.06,
+   "text": "making it easier to build cohesive visuals,"
+  },
+  {
+   "start": 173.06,
+   "end": 175.06,
+   "text": "maintain identity over time,"
+  },
+  {
+   "start": 175.06,
+   "end": 178.14,
+   "text": "and revisit scenes without starting from scratch."
+  },
+  {
+   "start": 178.14,
+   "end": 179.74,
+   "text": "That consistency also allows you"
+  },
+  {
+   "start": 179.74,
+   "end": 182.42,
+   "text": "to quickly explore new angles and perspectives"
+  },
+  {
+   "start": 182.54,
+   "end": 184.66,
+   "text": "to better tell your story."
+  },
+  {
+   "start": 184.66,
+   "end": 187.62,
+   "text": "Want to switch the lens, change the camera angle,"
+  },
+  {
+   "start": 187.62,
+   "end": 189.86,
+   "text": "or reframe the shot entirely?"
+  },
+  {
+   "start": 189.86,
+   "end": 191.9,
+   "text": "Just upload your image as a reference"
+  },
+  {
+   "start": 191.9,
+   "end": 197.77,
+   "text": "and describe the changes you want to see."
+  },
+  {
+   "start": 197.77,
+   "end": 199.13,
+   "text": "Once your stills are ready,"
+  },
+  {
+   "start": 199.13,
+   "end": 203.3,
+   "text": "you can bring them to life using our video models."
+  },
+  {
+   "start": 203.3,
+   "end": 208.3,
+   "text": "LTXV13B, LTXV Turbo, or Google's VO2."
+  },
+  {
+   "start": 208.82,
+   "end": 216.3,
+   "text": "Transforming static shots into fully animated sequences."
+  },
+  {
+   "start": 216.3,
+   "end": 220.18,
+   "text": "Flux context in LTX Studio isn't just an image tool."
+  },
+  {
+   "start": 220.18,
+   "end": 222.9,
+   "text": "It's a creative engine designed to help you build,"
+  },
+  {
+   "start": 222.9,
+   "end": 224.98,
+   "text": "direct, and evolve your story."
+  },
+  {
+   "start": 224.98,
+   "end": 226.3,
+   "text": "One prompt at a time."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:57:59.785243+00:00",
+ "seconds": 10.2
+}

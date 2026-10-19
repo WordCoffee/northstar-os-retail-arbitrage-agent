@@ -1,0 +1,2773 @@
+WEBVTT
+Kind: captions
+Language: en-US
+
+00:00:00.080 --> 00:00:04.839
+hi everyone today I will show you the
+
+00:00:01.959 --> 00:00:06.879
+full step-by-step process of how you can
+
+00:00:04.839 --> 00:00:09.040
+achieve this kind of simple product
+
+00:00:06.879 --> 00:00:11.960
+rendering and I will show you the full
+
+00:00:09.040 --> 00:00:13.559
+process of how you can go from a 3D
+
+00:00:11.960 --> 00:00:16.359
+model don't worry if you don't have it
+
+00:00:13.559 --> 00:00:19.680
+you can download that over to how to
+
+00:00:16.359 --> 00:00:22.680
+create the lighting uh simple texture
+
+00:00:19.680 --> 00:00:25.840
+all the material and also the rendering
+
+00:00:22.680 --> 00:00:28.160
+itself and even if you are a blender
+
+00:00:25.840 --> 00:00:31.560
+beginner you can follow along completely
+
+00:00:28.160 --> 00:00:34.800
+step by step so first of all we need the
+
+00:00:31.560 --> 00:00:37.760
+3D model right so if you just want to
+
+00:00:34.800 --> 00:00:39.680
+start with the uh product rendering and
+
+00:00:37.760 --> 00:00:42.719
+you have your own model or you want to
+
+00:00:39.680 --> 00:00:44.360
+follow exactly along with this 3D model
+
+00:00:42.719 --> 00:00:47.559
+then you can just download below this
+
+00:00:44.360 --> 00:00:49.600
+video this exported 3D model and all of
+
+00:00:47.559 --> 00:00:52.399
+the textures that we will use in the
+
+00:00:49.600 --> 00:00:54.960
+tutorial so you can just skip this uh
+
+00:00:52.399 --> 00:00:58.039
+plasticity part so I have time stamps
+
+00:00:54.960 --> 00:01:00.480
+below the video and for those who have
+
+00:00:58.039 --> 00:01:03.879
+plasticity I just want to show you this
+
+00:01:00.480 --> 00:01:06.560
+little uh yeah extra section on how I
+
+00:01:03.879 --> 00:01:08.640
+will export that and if you want to
+
+00:01:06.560 --> 00:01:10.439
+learn how to model this completely from
+
+00:01:08.640 --> 00:01:12.680
+scratch I also have recorded the
+
+00:01:10.439 --> 00:01:14.680
+tutorial it's also below this video as
+
+00:01:12.680 --> 00:01:17.640
+always you find all of the information
+
+00:01:14.680 --> 00:01:19.400
+below this video and before we start if
+
+00:01:17.640 --> 00:01:21.720
+you watch my tutorials you know I don't
+
+00:01:19.400 --> 00:01:24.000
+care about scaling in plasticity but if
+
+00:01:21.720 --> 00:01:27.680
+we check out here the scale from this
+
+00:01:24.000 --> 00:01:30.240
+guy here it's about 16 M high in my
+
+00:01:27.680 --> 00:01:32.520
+example you know so either either you
+
+00:01:30.240 --> 00:01:35.520
+can write away model that with the right
+
+00:01:32.520 --> 00:01:38.000
+scale or if when it's then finished then
+
+00:01:35.520 --> 00:01:40.479
+you can just scale it down because you
+
+00:01:38.000 --> 00:01:43.159
+don't want to import into blender like
+
+00:01:40.479 --> 00:01:45.759
+massive uh files because also then your
+
+00:01:43.159 --> 00:01:49.000
+lighting and your and your whole
+
+00:01:45.759 --> 00:01:51.560
+proportions they will get so Cosmic uh
+
+00:01:49.000 --> 00:01:53.799
+big with the numbers values you know so
+
+00:01:51.560 --> 00:01:56.960
+that's why I just like to make it uh
+
+00:01:53.799 --> 00:01:58.640
+yeah kind of real world thing so what I
+
+00:01:56.960 --> 00:02:01.159
+want to do is I just want to go to front
+
+00:01:58.640 --> 00:02:04.079
+view and just create a line shift a and
+
+00:02:01.159 --> 00:02:07.039
+let's just make this line so just drag a
+
+00:02:04.079 --> 00:02:12.360
+line press Tab and let's make it I don't
+
+00:02:07.039 --> 00:02:15.599
+know 35 so 35 cm and now if you select
+
+00:02:12.360 --> 00:02:18.319
+everything and you just deselect this
+
+00:02:15.599 --> 00:02:21.640
+curve we can scale that so it fits
+
+00:02:18.319 --> 00:02:23.879
+inside of our curve and I just want to
+
+00:02:21.640 --> 00:02:29.000
+First bring this with
+
+00:02:23.879 --> 00:02:31.440
+G here so it's uh touching uh yeah the
+
+00:02:29.000 --> 00:02:34.239
+x-axis and now I want to scale
+
+00:02:31.440 --> 00:02:36.720
+everything down and for that just zoom
+
+00:02:34.239 --> 00:02:39.080
+in into your small line here and press s
+
+00:02:36.720 --> 00:02:41.840
+for scale and F for
+
+00:02:39.080 --> 00:02:45.480
+freestyle and now you can snap your
+
+00:02:41.840 --> 00:02:49.879
+first point here at the bottom and the
+
+00:02:45.480 --> 00:02:52.519
+top Point go as high as the uh yeah
+
+00:02:49.879 --> 00:02:54.519
+highest point of your 3D model BM and
+
+00:02:52.519 --> 00:02:56.640
+now you can scale that down but while
+
+00:02:54.519 --> 00:03:00.400
+you're scaling just scale here uh
+
+00:02:56.640 --> 00:03:04.000
+uniformly and now you can zoom in
+
+00:03:00.400 --> 00:03:06.760
+and the top point just snap to the line
+
+00:03:04.000 --> 00:03:09.280
+and if you press right click voila now
+
+00:03:06.760 --> 00:03:11.360
+you have a nice little realistic uh
+
+00:03:09.280 --> 00:03:14.680
+haird dryer and just delete the curve
+
+00:03:11.360 --> 00:03:18.640
+and now we can export it so just save
+
+00:03:14.680 --> 00:03:22.080
+the file and go to export and just call
+
+00:03:18.640 --> 00:03:26.360
+it something dryer obj on onto desktop
+
+00:03:22.080 --> 00:03:30.200
+and save and now we have this uh export
+
+00:03:26.360 --> 00:03:32.280
+uh settings and first of all so uh yes
+
+00:03:30.200 --> 00:03:34.200
+your values will look different because
+
+00:03:32.280 --> 00:03:37.360
+I've exported that already in pre-
+
+00:03:34.200 --> 00:03:40.599
+tutorial so first of all go to quads so
+
+00:03:37.360 --> 00:03:43.560
+first of all exported in quarts or Eng
+
+00:03:40.599 --> 00:03:45.400
+gons most of the time it's it it's fine
+
+00:03:43.560 --> 00:03:49.400
+when you have like such hard surface
+
+00:03:45.400 --> 00:03:51.040
+product design and I like to go so
+
+00:03:49.400 --> 00:03:53.840
+especially if you're just doing product
+
+00:03:51.040 --> 00:03:56.040
+rendering you can you can go as high as
+
+00:03:53.840 --> 00:03:58.159
+you want with your
+
+00:03:56.040 --> 00:04:01.640
+density because your scene will be
+
+00:03:58.159 --> 00:04:04.319
+anyway like very uh not heavy polygon
+
+00:04:01.640 --> 00:04:07.360
+wise and now the only thing that we have
+
+00:04:04.319 --> 00:04:10.239
+to do or what I do is you see when you
+
+00:04:07.360 --> 00:04:12.519
+export with a density density of one
+
+00:04:10.239 --> 00:04:15.320
+your fillets they are way too crazy
+
+00:04:12.519 --> 00:04:19.600
+dense we really don't
+
+00:04:15.320 --> 00:04:22.680
+need so dense fillets so I just like to
+
+00:04:19.600 --> 00:04:24.800
+to to click here this Min with and then
+
+00:04:22.680 --> 00:04:27.360
+you have to play around with uh the
+
+00:04:24.800 --> 00:04:29.160
+value because our object is super small
+
+00:04:27.360 --> 00:04:32.639
+right now we have to go super crazy
+
+00:04:29.160 --> 00:04:35.400
+small uh uh values but
+
+00:04:32.639 --> 00:04:37.120
+just drag a little bit along or just
+
+00:04:35.400 --> 00:04:40.520
+copy the values right now but you will
+
+00:04:37.120 --> 00:04:42.199
+see so if we go down with the value now
+
+00:04:40.520 --> 00:04:46.000
+you see we have a fillet with four
+
+00:04:42.199 --> 00:04:49.800
+segments and this is fine because if I
+
+00:04:46.000 --> 00:04:53.840
+just unchecked that so how it was so
+
+00:04:49.800 --> 00:04:55.560
+those fe uh four segments will be like I
+
+00:04:53.840 --> 00:04:58.039
+don't know like 20 or so you know so
+
+00:04:55.560 --> 00:05:01.199
+that's why just minwidth and you can
+
+00:04:58.039 --> 00:05:03.639
+also play around with all of the other
+
+00:05:01.199 --> 00:05:06.400
+values to uh maybe make the circular
+
+00:05:03.639 --> 00:05:08.960
+shapes a little bit less dense but again
+
+00:05:06.400 --> 00:05:08.960
+it doesn't
+
+00:05:09.080 --> 00:05:15.160
+matter how many um like polygons we have
+
+00:05:13.240 --> 00:05:16.759
+because we just have one object and then
+
+00:05:15.160 --> 00:05:20.160
+in the scene
+
+00:05:16.759 --> 00:05:21.720
+right but it depends with the UV
+
+00:05:20.160 --> 00:05:23.360
+unwrapping and all that kind of stuff
+
+00:05:21.720 --> 00:05:26.080
+but here you will see everything is so
+
+00:05:23.360 --> 00:05:29.680
+super simple uh so this will work
+
+00:05:26.080 --> 00:05:32.280
+perfectly so press okay close uh Plus
+
+00:05:29.680 --> 00:05:35.680
+itic it all right so now starts the
+
+00:05:32.280 --> 00:05:38.400
+product rning part so let's just create
+
+00:05:35.680 --> 00:05:40.199
+so uh let me save this file just create
+
+00:05:38.400 --> 00:05:43.360
+here a new file and let's delete
+
+00:05:40.199 --> 00:05:45.000
+everything here with X and I also don't
+
+00:05:43.360 --> 00:05:46.759
+like this error here at the bottom
+
+00:05:45.000 --> 00:05:49.800
+perfect so now first of all we have to
+
+00:05:46.759 --> 00:05:51.759
+import the 3D model and we will take the
+
+00:05:49.800 --> 00:05:54.880
+one from this tutorial you can import
+
+00:05:51.759 --> 00:05:57.120
+anything but yeah I highly suggest you
+
+00:05:54.880 --> 00:05:59.120
+that you download this model so you
+
+00:05:57.120 --> 00:06:00.440
+practice and can follow along exactly
+
+00:05:59.120 --> 00:06:03.080
+and you understand understand what I'm
+
+00:06:00.440 --> 00:06:06.880
+doing here and what happens then on this
+
+00:06:03.080 --> 00:06:09.800
+specific model and go to a file import
+
+00:06:06.880 --> 00:06:13.080
+obj or you whatever file you have
+
+00:06:09.800 --> 00:06:17.240
+desktop and I have it here dryer obj
+
+00:06:13.080 --> 00:06:21.039
+just uh click on that so here uh yeah we
+
+00:06:17.240 --> 00:06:24.160
+have our model and first of all just
+
+00:06:21.039 --> 00:06:30.160
+press a to select everything and let's
+
+00:06:24.160 --> 00:06:30.160
+just rotate this here 90° or minus 90°
+
+00:06:30.759 --> 00:06:36.960
+and just with G bring it to the center
+
+00:06:34.759 --> 00:06:39.160
+here of our world so just and just
+
+00:06:36.960 --> 00:06:41.960
+select everything and yeah let's just
+
+00:06:39.160 --> 00:06:43.360
+bring it right now here to the middle
+
+00:06:41.960 --> 00:06:48.360
+something like
+
+00:06:43.360 --> 00:06:52.240
+that and contrl S directly save the file
+
+00:06:48.360 --> 00:06:55.440
+and perfect so first of all let me uh
+
+00:06:52.240 --> 00:06:59.680
+call this collection here
+
+00:06:55.440 --> 00:07:02.680
+design or whatever and now let's first
+
+00:06:59.680 --> 00:07:05.800
+of all create this uh simple backdrop so
+
+00:07:02.680 --> 00:07:08.639
+just create uh press shift a mesh and
+
+00:07:05.800 --> 00:07:12.919
+plane and maybe scale this a little bit
+
+00:07:08.639 --> 00:07:15.160
+up and now press tap edit mode press two
+
+00:07:12.919 --> 00:07:17.759
+Edge mode and select this Edge and now e
+
+00:07:15.160 --> 00:07:20.280
+for extrude and Z just extrude this a
+
+00:07:17.759 --> 00:07:23.199
+little bit to the top press G bring it
+
+00:07:20.280 --> 00:07:25.240
+um yeah a little bit higher and now okay
+
+00:07:23.199 --> 00:07:26.960
+this uh plane is in our design
+
+00:07:25.240 --> 00:07:29.840
+collection I don't want it so just drag
+
+00:07:26.960 --> 00:07:33.599
+that into the seam collection here and
+
+00:07:29.840 --> 00:07:37.039
+rename this plan to BD backdrop and go
+
+00:07:33.599 --> 00:07:39.919
+here to the modifiers and add a generate
+
+00:07:37.039 --> 00:07:43.720
+bevel modifier and increase the amount
+
+00:07:39.919 --> 00:07:46.039
+and the segments and now press uh tap
+
+00:07:43.720 --> 00:07:48.159
+object mode right click uh shade smooth
+
+00:07:46.039 --> 00:07:51.680
+so we have our nice yeah infinite
+
+00:07:48.159 --> 00:07:54.280
+background here we can adjust that and
+
+00:07:51.680 --> 00:07:56.680
+now what we first want to do before I
+
+00:07:54.280 --> 00:07:58.759
+start here with anything I just want uh
+
+00:07:56.680 --> 00:08:00.199
+to create the framing so we need the
+
+00:07:58.759 --> 00:08:04.560
+camera
+
+00:08:00.199 --> 00:08:07.879
+shift a and just um yeah bring a camera
+
+00:08:04.560 --> 00:08:10.560
+here and right away so you see it's way
+
+00:08:07.879 --> 00:08:12.919
+too big so just press SS and just uh
+
+00:08:10.560 --> 00:08:15.199
+scale so you are just scaling the symbol
+
+00:08:12.919 --> 00:08:18.280
+so the icon a little bit down and now
+
+00:08:15.199 --> 00:08:21.120
+let's just um zero everything all the
+
+00:08:18.280 --> 00:08:23.919
+rotation and stuff so press n and here
+
+00:08:21.120 --> 00:08:26.639
+rotation just drag it so just select and
+
+00:08:23.919 --> 00:08:29.240
+drag and make everything zero and now
+
+00:08:26.639 --> 00:08:33.719
+with G bring it to the top and bring it
+
+00:08:29.240 --> 00:08:36.479
+to to the back and also with r and X
+
+00:08:33.719 --> 00:08:42.200
+rotated 90° so it's looking at our
+
+00:08:36.479 --> 00:08:46.880
+product here and now let's drag one more
+
+00:08:42.200 --> 00:08:49.519
+window so something like that and
+
+00:08:46.880 --> 00:08:51.360
+another window which will be something
+
+00:08:49.519 --> 00:08:54.480
+like that and here at the bottom right
+
+00:08:51.360 --> 00:08:57.519
+we will uh render our
+
+00:08:54.480 --> 00:09:00.200
+product so also press T to get rid of
+
+00:08:57.519 --> 00:09:01.760
+this icons here and now here just click
+
+00:09:00.200 --> 00:09:04.160
+into the camera so you're looking
+
+00:09:01.760 --> 00:09:09.279
+through and first of all go to the
+
+00:09:04.160 --> 00:09:10.519
+camera options and make it 120 um mm
+
+00:09:09.279 --> 00:09:13.839
+focal
+
+00:09:10.519 --> 00:09:15.600
+length and double click on our design
+
+00:09:13.839 --> 00:09:18.040
+and let's
+
+00:09:15.600 --> 00:09:20.200
+just bring it a little bit here to the
+
+00:09:18.040 --> 00:09:23.440
+middle and now just select here the
+
+00:09:20.200 --> 00:09:27.680
+camera in the left and bring
+
+00:09:23.440 --> 00:09:30.519
+it down a bit and maybe a little bit uh
+
+00:09:27.680 --> 00:09:33.680
+back and let's here zoom in a little bit
+
+00:09:30.519 --> 00:09:37.120
+and now again select the design
+
+00:09:33.680 --> 00:09:40.519
+collection and just rotate this a little
+
+00:09:37.120 --> 00:09:42.720
+bit so we get something like that so a
+
+00:09:40.519 --> 00:09:44.279
+nice angle and yeah by by the way also
+
+00:09:42.720 --> 00:09:46.079
+below this video you find here this
+
+00:09:44.279 --> 00:09:48.680
+original reference image and yeah we
+
+00:09:46.079 --> 00:09:51.600
+will recreate here the second image
+
+00:09:48.680 --> 00:09:55.560
+here so I just want to to rotate it a
+
+00:09:51.600 --> 00:09:57.640
+little bit and we can basically uh start
+
+00:09:55.560 --> 00:10:01.480
+with the lighting and materials and all
+
+00:09:57.640 --> 00:10:04.079
+that kind of stuff so so first of all
+
+00:10:01.480 --> 00:10:06.880
+let's go here into the render mode and
+
+00:10:04.079 --> 00:10:09.000
+so click on uh this thing here and we
+
+00:10:06.880 --> 00:10:11.000
+don't see anything and first of all go
+
+00:10:09.000 --> 00:10:15.000
+to the render settings and make it
+
+00:10:11.000 --> 00:10:16.920
+cycles and uh GPU contrl s just uh save
+
+00:10:15.000 --> 00:10:19.720
+everything and
+
+00:10:16.920 --> 00:10:24.000
+also just go here on the bottom right
+
+00:10:19.720 --> 00:10:26.440
+and contrl B and just select around your
+
+00:10:24.000 --> 00:10:28.360
+framing here so it's all only will
+
+00:10:26.440 --> 00:10:30.120
+render this Framing and not everything
+
+00:10:28.360 --> 00:10:32.279
+around so it's will be a little bit
+
+00:10:30.120 --> 00:10:36.680
+faster and yeah let's just make it here
+
+00:10:32.279 --> 00:10:39.440
+full HD or whatever you want and so now
+
+00:10:36.680 --> 00:10:42.639
+we can start with bringing in the area
+
+00:10:39.440 --> 00:10:45.000
+lights so what I like to do so what I
+
+00:10:42.639 --> 00:10:46.680
+constantly see in in tutorials but I
+
+00:10:45.000 --> 00:10:51.399
+don't understand why people are doing
+
+00:10:46.680 --> 00:10:54.519
+this so what most people are doing is
+
+00:10:51.399 --> 00:10:57.000
+press shift a and they go to light and
+
+00:10:54.519 --> 00:11:00.680
+bring in area light so so far so good
+
+00:10:57.000 --> 00:11:03.200
+and then they start with g and rotating
+
+00:11:00.680 --> 00:11:05.560
+and bring it it and and bring it it here
+
+00:11:03.200 --> 00:11:08.600
+to the top and to the right and then
+
+00:11:05.560 --> 00:11:10.399
+they press rotate and try to get it
+
+00:11:08.600 --> 00:11:13.120
+right and then they take this yellow
+
+00:11:10.399 --> 00:11:15.200
+thing but then they want to bring this
+
+00:11:13.120 --> 00:11:17.040
+uh light a little bit more down and a
+
+00:11:15.200 --> 00:11:18.639
+little bit more right and then they have
+
+00:11:17.040 --> 00:11:22.440
+to again to rotate everything it's
+
+00:11:18.639 --> 00:11:26.399
+completely Madness so there's a a better
+
+00:11:22.440 --> 00:11:29.720
+way just delete that light press a shift
+
+00:11:26.399 --> 00:11:31.880
+a go to empty and here create the sphere
+
+00:11:29.720 --> 00:11:33.880
+and SS just make the symbol a little bit
+
+00:11:31.880 --> 00:11:35.800
+smaller and just bring it a little bit
+
+00:11:33.880 --> 00:11:38.440
+to the center of the object right
+
+00:11:35.800 --> 00:11:42.120
+because all of our light should shine
+
+00:11:38.440 --> 00:11:44.480
+onto our product so so we have here our
+
+00:11:42.120 --> 00:11:46.200
+empty and call so double click this
+
+00:11:44.480 --> 00:11:50.880
+empty and call it
+
+00:11:46.200 --> 00:11:53.519
+Target light okay and now again shift a
+
+00:11:50.880 --> 00:11:55.279
+and create an area light and make sure
+
+00:11:53.519 --> 00:11:57.480
+it's not in the Design Collection so
+
+00:11:55.279 --> 00:12:00.560
+it's just outside here and now to the
+
+00:11:57.480 --> 00:12:03.519
+area light go to the constraint and add
+
+00:12:00.560 --> 00:12:06.680
+object constraint and track two right
+
+00:12:03.519 --> 00:12:10.279
+and now you can here Target you can
+
+00:12:06.680 --> 00:12:12.720
+select with a mouse click and then just
+
+00:12:10.279 --> 00:12:15.639
+uh scroll down and somewhere you have
+
+00:12:12.720 --> 00:12:18.440
+here your target light bum and now what
+
+00:12:15.639 --> 00:12:22.639
+this will do so if we go now to the left
+
+00:12:18.440 --> 00:12:26.519
+and now if we uh scale
+
+00:12:22.639 --> 00:12:29.480
+rotate um adjust here our light you see
+
+00:12:26.519 --> 00:12:31.959
+it's always pointing towards the product
+
+00:12:29.480 --> 00:12:33.600
+rendering and that saves so much like of
+
+00:12:31.959 --> 00:12:36.600
+this adjusting and
+
+00:12:33.600 --> 00:12:38.839
+rotation and I I don't know like how
+
+00:12:36.600 --> 00:12:40.800
+people can do that but yeah anyway so
+
+00:12:38.839 --> 00:12:43.199
+you can do that if you want obviously
+
+00:12:40.800 --> 00:12:45.199
+but maybe just try this one here and I
+
+00:12:43.199 --> 00:12:47.160
+can guarantee you you will never ever do
+
+00:12:45.199 --> 00:12:49.040
+it in a different way in most of the
+
+00:12:47.160 --> 00:12:51.600
+cases it works I know sometimes you have
+
+00:12:49.040 --> 00:12:55.480
+to position a light a little bit with an
+
+00:12:51.600 --> 00:12:57.480
+angle and or you want to light a
+
+00:12:55.480 --> 00:12:59.880
+different object and then obviously you
+
+00:12:57.480 --> 00:13:01.160
+have to create another Target light
+
+00:12:59.880 --> 00:13:04.360
+you get the
+
+00:13:01.160 --> 00:13:07.360
+point so what I want to do so you see
+
+00:13:04.360 --> 00:13:11.040
+it's looking already pretty nice is I
+
+00:13:07.360 --> 00:13:13.600
+just want to create any lighting set so
+
+00:13:11.040 --> 00:13:15.720
+any simple lighting setup right now so I
+
+00:13:13.600 --> 00:13:17.519
+don't care so much if it's correct or
+
+00:13:15.720 --> 00:13:20.680
+not I just want to bring in some light
+
+00:13:17.519 --> 00:13:23.480
+so we can start to to texture and and
+
+00:13:20.680 --> 00:13:26.320
+create materials then later we will
+
+00:13:23.480 --> 00:13:28.560
+adjust all of the lighting and so it
+
+00:13:26.320 --> 00:13:30.240
+looks good right and also the cool thing
+
+00:13:28.560 --> 00:13:32.399
+is so once once your light is selected
+
+00:13:30.240 --> 00:13:34.880
+if you press shift d you duplicate it
+
+00:13:32.399 --> 00:13:38.800
+just press right click and the second
+
+00:13:34.880 --> 00:13:41.680
+light still looks onto your target light
+
+00:13:38.800 --> 00:13:44.920
+so only the light will duplicate and not
+
+00:13:41.680 --> 00:13:47.040
+the target light so everything stays
+
+00:13:44.920 --> 00:13:49.000
+nice and organized and I really like
+
+00:13:47.040 --> 00:13:51.240
+this workflow here okay so we have
+
+00:13:49.000 --> 00:13:53.079
+something like that and I know the
+
+00:13:51.240 --> 00:13:54.600
+contrast everything it's it's not
+
+00:13:53.079 --> 00:13:56.800
+correct right now that's fine we will
+
+00:13:54.600 --> 00:13:59.279
+adjust that and first of all here click
+
+00:13:56.800 --> 00:14:03.519
+on this symbol to get rid of all of this
+
+00:13:59.279 --> 00:14:08.240
+icons here and contrl S and first of all
+
+00:14:03.519 --> 00:14:11.519
+let's start very simple with the top
+
+00:14:08.240 --> 00:14:14.240
+here so what I want to do is I just want
+
+00:14:11.519 --> 00:14:16.480
+to um so very often when you do product
+
+00:14:14.240 --> 00:14:19.199
+renderings for clients right you have
+
+00:14:16.480 --> 00:14:21.680
+like a product with their logo or like a
+
+00:14:19.199 --> 00:14:24.399
+label something like that right so we
+
+00:14:21.680 --> 00:14:26.600
+have to uh bring this uh stuff in and
+
+00:14:24.399 --> 00:14:29.839
+also here on the buttons you see we also
+
+00:14:26.600 --> 00:14:31.959
+have some some icons and most of the
+
+00:14:29.839 --> 00:14:35.519
+time obviously you will get it from the
+
+00:14:31.959 --> 00:14:36.800
+client or if you don't get it from the
+
+00:14:35.519 --> 00:14:40.079
+client then you have to basically
+
+00:14:36.800 --> 00:14:43.160
+recreate it on your own so let's just
+
+00:14:40.079 --> 00:14:44.759
+very quickly I will create here A
+
+00:14:43.160 --> 00:14:47.240
+texture with you so I will just show you
+
+00:14:44.759 --> 00:14:49.160
+so you can skip it you can download also
+
+00:14:47.240 --> 00:14:51.519
+this texture is in the file where you
+
+00:14:49.160 --> 00:14:53.600
+have everything but just for you if
+
+00:14:51.519 --> 00:14:56.160
+someone is very new and doesn't know how
+
+00:14:53.600 --> 00:14:59.560
+to create the texture so we
+
+00:14:56.160 --> 00:15:02.560
+need so in this part we just create
+
+00:14:59.560 --> 00:15:05.320
+quickly a texture to map together so you
+
+00:15:02.560 --> 00:15:07.959
+need a texture map so it's like 4x4 or
+
+00:15:05.320 --> 00:15:11.160
+2x 2K or something where you have all of
+
+00:15:07.959 --> 00:15:13.959
+the text and all of the icons so we can
+
+00:15:11.160 --> 00:15:17.000
+use this uh texture map for our model
+
+00:15:13.959 --> 00:15:19.639
+here and do some very simple texture uh
+
+00:15:17.000 --> 00:15:23.240
+texturing so what I will
+
+00:15:19.639 --> 00:15:26.560
+do is just create the file
+
+00:15:23.240 --> 00:15:28.480
+and it doesn't matter like the size I
+
+00:15:26.560 --> 00:15:30.600
+just like to go especially with product
+
+00:15:28.480 --> 00:15:32.959
+wearing like with 4K we don't need most
+
+00:15:30.600 --> 00:15:36.079
+of the time 4K but it's then super super
+
+00:15:32.959 --> 00:15:40.600
+sharp textures and again we just have
+
+00:15:36.079 --> 00:15:42.800
+one texture so we don't have to to look
+
+00:15:40.600 --> 00:15:46.120
+out for file sizes and all that kind of
+
+00:15:42.800 --> 00:15:48.519
+stuff right so just a square so just a
+
+00:15:46.120 --> 00:15:50.480
+white square and now so for this
+
+00:15:48.519 --> 00:15:53.600
+tutorial super fast because yeah it's
+
+00:15:50.480 --> 00:15:57.399
+already taking so long but here you see
+
+00:15:53.600 --> 00:15:59.600
+we have an airshot pure like logo and
+
+00:15:57.399 --> 00:16:02.560
+Unix so those you will always get from
+
+00:15:59.600 --> 00:16:05.319
+the clients right so here I just created
+
+00:16:02.560 --> 00:16:08.160
+a simple text and yeah just bring it
+
+00:16:05.319 --> 00:16:10.120
+somewhere so somewhere here so you see
+
+00:16:08.160 --> 00:16:13.600
+it's it's nice and Sharp I really like
+
+00:16:10.120 --> 00:16:15.319
+that and now with the icons so this is
+
+00:16:13.600 --> 00:16:17.519
+um interesting so if you check out here
+
+00:16:15.319 --> 00:16:20.519
+the reference image you see we have some
+
+00:16:17.519 --> 00:16:25.040
+icons again you mostly get them but if
+
+00:16:20.519 --> 00:16:29.000
+not then what I do is this I search for
+
+00:16:25.040 --> 00:16:31.920
+them first so I go to on off uh symbol
+
+00:16:29.000 --> 00:16:34.639
+or icon PNG and then you can go here to
+
+00:16:31.920 --> 00:16:38.399
+images and then you find most of the
+
+00:16:34.639 --> 00:16:43.199
+time uh the the right icon or here the
+
+00:16:38.399 --> 00:16:46.120
+second one this so uh this blade so I
+
+00:16:43.199 --> 00:16:48.560
+couldn't find something like that so you
+
+00:16:46.120 --> 00:16:52.000
+can create it also on your own if you
+
+00:16:48.560 --> 00:16:55.279
+have some illustrator um experience or
+
+00:16:52.000 --> 00:16:57.959
+yeah simple icon but I just took uh yeah
+
+00:16:55.279 --> 00:17:01.600
+this random icon here and then also a
+
+00:16:57.959 --> 00:17:05.959
+temperature so again you just type in uh
+
+00:17:01.600 --> 00:17:08.319
+temperature symbol a PNG and or SVG or
+
+00:17:05.959 --> 00:17:10.160
+whatever you want in black and white and
+
+00:17:08.319 --> 00:17:12.480
+then you can find that and just download
+
+00:17:10.160 --> 00:17:13.720
+that and just bring that then everything
+
+00:17:12.480 --> 00:17:16.600
+onto your
+
+00:17:13.720 --> 00:17:19.520
+texture and I also
+
+00:17:16.600 --> 00:17:21.400
+just want to give them a little bit of
+
+00:17:19.520 --> 00:17:24.120
+space in
+
+00:17:21.400 --> 00:17:26.760
+between so they will not intersect and
+
+00:17:24.120 --> 00:17:30.520
+stuff so I will just uh bring them all
+
+00:17:26.760 --> 00:17:34.760
+just a little bit away from each
+
+00:17:30.520 --> 00:17:36.600
+other and yes I know in the reference
+
+00:17:34.760 --> 00:17:39.799
+image we have
+
+00:17:36.600 --> 00:17:42.039
+uh some more text and also here on and
+
+00:17:39.799 --> 00:17:44.080
+off and stuff but yeah I will just keep
+
+00:17:42.039 --> 00:17:46.440
+it simple because it's always the exact
+
+00:17:44.080 --> 00:17:49.280
+same procedure so just um created the
+
+00:17:46.440 --> 00:17:52.160
+same icons here but once you have uh
+
+00:17:49.280 --> 00:17:55.480
+your texture you can just uh save it and
+
+00:17:52.160 --> 00:17:59.679
+then I just here a quick export spng or
+
+00:17:55.480 --> 00:18:03.840
+jpeg whatever you want and I just call
+
+00:17:59.679 --> 00:18:07.480
+it dryer uh texture
+
+00:18:03.840 --> 00:18:10.280
+map and fine perfect so you can close
+
+00:18:07.480 --> 00:18:12.679
+this and you go uh back to
+
+00:18:10.280 --> 00:18:16.000
+plasticity and now let's start with the
+
+00:18:12.679 --> 00:18:18.240
+materials so here at the bottom right we
+
+00:18:16.000 --> 00:18:21.559
+will work with the shaders so just click
+
+00:18:18.240 --> 00:18:24.400
+on this icon and go to Shader editor
+
+00:18:21.559 --> 00:18:27.080
+press n to get a rid of this icon here
+
+00:18:24.400 --> 00:18:29.080
+and now let's start with the top and I
+
+00:18:27.080 --> 00:18:31.919
+will just zoom in with the camera and
+
+00:18:29.080 --> 00:18:34.760
+again contrl B so the render region will
+
+00:18:31.919 --> 00:18:36.440
+only uh Focus here I will select here
+
+00:18:34.760 --> 00:18:39.200
+this top
+
+00:18:36.440 --> 00:18:42.320
+piece so just select this first and just
+
+00:18:39.200 --> 00:18:45.760
+click on new and first of all let's call
+
+00:18:42.320 --> 00:18:49.360
+it uh top main or
+
+00:18:45.760 --> 00:18:51.880
+something and if we zoom in so you see
+
+00:18:49.360 --> 00:18:55.039
+it's just kind of this aluminum um
+
+00:18:51.880 --> 00:18:57.799
+material and we have a very very very
+
+00:18:55.039 --> 00:18:59.280
+tiny small noise texture so it's because
+
+00:18:57.799 --> 00:19:01.559
+I see it again
+
+00:18:59.280 --> 00:19:05.440
+like most beginners they just here what
+
+00:19:01.559 --> 00:19:07.799
+they will do is just uh bump up the
+
+00:19:05.440 --> 00:19:12.720
+metallic and that's basically fine
+
+00:19:07.799 --> 00:19:15.600
+already right but you have a tiny tiny
+
+00:19:12.720 --> 00:19:17.720
+tiny uh bit of a texture and in general
+
+00:19:15.600 --> 00:19:19.679
+like this aluminium it's either brushed
+
+00:19:17.720 --> 00:19:21.360
+so you have like all of the super tiny
+
+00:19:19.679 --> 00:19:23.799
+brushes so you can create them with a
+
+00:19:21.360 --> 00:19:28.240
+texture that looks beautiful or you have
+
+00:19:23.799 --> 00:19:29.480
+like this sand pipe like sand blasted or
+
+00:19:28.240 --> 00:19:32.440
+like this
+
+00:19:29.480 --> 00:19:34.120
+chemistry processed aluminum which
+
+00:19:32.440 --> 00:19:36.440
+always have this a little little bit of
+
+00:19:34.120 --> 00:19:40.400
+a bump or something right so we want to
+
+00:19:36.440 --> 00:19:40.400
+add that and also here
+
+00:19:41.400 --> 00:19:51.039
+our and also uh our texture here so also
+
+00:19:46.640 --> 00:19:53.520
+here we see this um yeah rear thing has
+
+00:19:51.039 --> 00:19:56.200
+the same material so let's give it also
+
+00:19:53.520 --> 00:19:58.840
+the same material and this it's how we
+
+00:19:56.200 --> 00:20:02.360
+do it just select this inner piece shift
+
+00:19:58.840 --> 00:20:04.080
+click this piece and the last one this
+
+00:20:02.360 --> 00:20:06.520
+one which has already the material and
+
+00:20:04.080 --> 00:20:09.480
+just press
+
+00:20:06.520 --> 00:20:12.520
+controlr and then link materials and
+
+00:20:09.480 --> 00:20:14.840
+then everything gets uh the same perfect
+
+00:20:12.520 --> 00:20:18.280
+so in the base
+
+00:20:14.840 --> 00:20:21.080
+color we want our
+
+00:20:18.280 --> 00:20:23.120
+texture right because we have our white
+
+00:20:21.080 --> 00:20:24.840
+um yeah aluminum here and this is the
+
+00:20:23.120 --> 00:20:26.679
+same aluminum texture but just a little
+
+00:20:24.840 --> 00:20:29.480
+bit darker so we just want to bring it
+
+00:20:26.679 --> 00:20:32.360
+into the base color so
+
+00:20:29.480 --> 00:20:35.280
+go to your note editor and shift a and
+
+00:20:32.360 --> 00:20:38.320
+select image texture and create an image
+
+00:20:35.280 --> 00:20:40.400
+image texture and this image texture
+
+00:20:38.320 --> 00:20:42.919
+bring into the base column and now it's
+
+00:20:40.400 --> 00:20:46.679
+purple because we don't have the texture
+
+00:20:42.919 --> 00:20:51.440
+and just open that texture that we just
+
+00:20:46.679 --> 00:20:53.919
+created perfect and as you see we see
+
+00:20:51.440 --> 00:20:56.799
+nothing because we haven't unwrapped
+
+00:20:53.919 --> 00:20:59.919
+right now at the moment anything so
+
+00:20:56.799 --> 00:21:02.840
+let's do this first by dragging out
+
+00:20:59.919 --> 00:21:04.840
+another window and yes guys I know it's
+
+00:21:02.840 --> 00:21:08.600
+a lot of windows
+
+00:21:04.840 --> 00:21:11.640
+but we only will need those four and we
+
+00:21:08.600 --> 00:21:13.120
+always need those four and I really like
+
+00:21:11.640 --> 00:21:15.760
+so this is something I really like here
+
+00:21:13.120 --> 00:21:18.600
+in blender how easy it is um yeah to
+
+00:21:15.760 --> 00:21:22.880
+create those uh spaces and here on the
+
+00:21:18.600 --> 00:21:25.440
+bottom of top left we go to UV
+
+00:21:22.880 --> 00:21:29.039
+editor
+
+00:21:25.440 --> 00:21:30.720
+and you just select here your dryer
+
+00:21:29.039 --> 00:21:33.279
+texture and now you just have to zoom
+
+00:21:30.720 --> 00:21:36.559
+out a little bit and now first of all
+
+00:21:33.279 --> 00:21:38.640
+let's unwrap everything only select this
+
+00:21:36.559 --> 00:21:41.279
+piece here right because we will uh just
+
+00:21:38.640 --> 00:21:44.120
+do here those two logos here so select
+
+00:21:41.279 --> 00:21:47.640
+this and go to tab object mode and press
+
+00:21:44.120 --> 00:21:50.440
+a to select all of the faces oh uh you
+
+00:21:47.640 --> 00:21:52.279
+have to press three obviously so press
+
+00:21:50.440 --> 00:21:55.120
+three for face mode press a to select
+
+00:21:52.279 --> 00:21:59.559
+all of the faces and now just press U uh
+
+00:21:55.120 --> 00:22:03.600
+U for smart UV project okay and now you
+
+00:21:59.559 --> 00:22:06.440
+have all of those um yeah islands here
+
+00:22:03.600 --> 00:22:09.240
+and first of all I just want so while
+
+00:22:06.440 --> 00:22:11.559
+they are all selected just press SS and
+
+00:22:09.240 --> 00:22:14.440
+just scale them a little bit down and
+
+00:22:11.559 --> 00:22:16.320
+just bring them here to the white so
+
+00:22:14.440 --> 00:22:18.799
+that just then means we we are not
+
+00:22:16.320 --> 00:22:22.080
+affecting them with any texture and then
+
+00:22:18.799 --> 00:22:24.720
+we can now unwrap all of the parts that
+
+00:22:22.080 --> 00:22:27.520
+we need yes I know you can unwrap that
+
+00:22:24.720 --> 00:22:30.039
+and then paint the texture onto this
+
+00:22:27.520 --> 00:22:32.279
+this island but in in in such simple
+
+00:22:30.039 --> 00:22:34.240
+examples what we have here I just show
+
+00:22:32.279 --> 00:22:38.720
+you something very simple so what you
+
+00:22:34.240 --> 00:22:42.000
+want to do is now just zoom in and just
+
+00:22:38.720 --> 00:22:46.039
+select here this uh select Circle and go
+
+00:22:42.000 --> 00:22:48.799
+to uh front view and go to perspective
+
+00:22:46.039 --> 00:22:52.559
+mode and let's just hide the camera here
+
+00:22:48.799 --> 00:22:56.240
+in the viewport and now just
+
+00:22:52.559 --> 00:22:58.919
+select here those few lines so maybe uh
+
+00:22:56.240 --> 00:23:00.080
+this one so here somewhere right so we
+
+00:22:58.919 --> 00:23:02.919
+have it here in the middle we have this
+
+00:23:00.080 --> 00:23:06.279
+air shot pure so just select those faces
+
+00:23:02.919 --> 00:23:09.720
+and just press o and unwrap bam and now
+
+00:23:06.279 --> 00:23:12.880
+you have only this island here and you
+
+00:23:09.720 --> 00:23:17.279
+can now press R and let's rotate it
+
+00:23:12.880 --> 00:23:19.720
+90° and with G just bring this air
+
+00:23:17.279 --> 00:23:21.520
+shot somewhere here right so maybe we
+
+00:23:19.720 --> 00:23:24.159
+can make it a little bit uh bigger so
+
+00:23:21.520 --> 00:23:24.159
+it's not so
+
+00:23:24.240 --> 00:23:29.159
+big so yeah you can bring it here into
+
+00:23:27.360 --> 00:23:32.120
+position right so maybe you can make it
+
+00:23:29.159 --> 00:23:35.320
+even bigger perfect now we just have a
+
+00:23:32.120 --> 00:23:37.840
+little problem so it's repeating itself
+
+00:23:35.320 --> 00:23:41.039
+so go to your image texture so this is
+
+00:23:37.840 --> 00:23:43.200
+here our texture right and just go where
+
+00:23:41.039 --> 00:23:45.640
+it's saying repeat and just here to
+
+00:23:43.200 --> 00:23:47.400
+extend so then it will just this white
+
+00:23:45.640 --> 00:23:52.320
+it will just extend into everything
+
+00:23:47.400 --> 00:23:52.320
+what's outside of that and we
+
+00:23:52.360 --> 00:23:59.200
+have a little bit of a weird rectangle
+
+00:23:56.520 --> 00:24:01.440
+here I'm not sure why it's where it
+
+00:23:59.200 --> 00:24:05.640
+comes from but maybe something with the
+
+00:24:01.440 --> 00:24:07.880
+color is off or or so uh so what we can
+
+00:24:05.640 --> 00:24:10.000
+do because you see it's kind of going
+
+00:24:07.880 --> 00:24:12.760
+into the gray so we just want to make
+
+00:24:10.000 --> 00:24:15.840
+this white so we can go here the texture
+
+00:24:12.760 --> 00:24:17.200
+map and press shift a and bring in a
+
+00:24:15.840 --> 00:24:19.880
+color
+
+00:24:17.200 --> 00:24:23.440
+ramp and bring it in between and just
+
+00:24:19.880 --> 00:24:25.760
+drag this white towards the the blackend
+
+00:24:23.440 --> 00:24:28.720
+you see it's just getting rid of that so
+
+00:24:25.760 --> 00:24:32.880
+it's a little cheat Cod here but uh yeah
+
+00:24:28.720 --> 00:24:35.799
+works and also here so we see it's not
+
+00:24:32.880 --> 00:24:38.320
+black it's kind of gray right so also
+
+00:24:35.799 --> 00:24:40.799
+with the same color ramp you can select
+
+00:24:38.320 --> 00:24:42.720
+this black and you can make this black
+
+00:24:40.799 --> 00:24:46.640
+just gray and you see now we have this
+
+00:24:42.720 --> 00:24:49.480
+nice metallic kind of effect so yeah we
+
+00:24:46.640 --> 00:24:50.919
+do two things with one note here so I
+
+00:24:49.480 --> 00:24:53.720
+really like
+
+00:24:50.919 --> 00:24:56.600
+that and again you know I like to work
+
+00:24:53.720 --> 00:24:59.960
+simple of course we could crazy unwrap
+
+00:24:56.600 --> 00:25:00.799
+everything perfectly and stuff but it's
+
+00:24:59.960 --> 00:25:03.200
+not
+
+00:25:00.799 --> 00:25:07.039
+wrong if you are comfortable with that
+
+00:25:03.200 --> 00:25:10.200
+do that but you know like I like to take
+
+00:25:07.039 --> 00:25:12.440
+shortcuts and do things as easy as
+
+00:25:10.200 --> 00:25:15.480
+possible if it gives us the same exact
+
+00:25:12.440 --> 00:25:18.559
+result you know perfect so
+
+00:25:15.480 --> 00:25:20.720
+now we have the first one so let's bring
+
+00:25:18.559 --> 00:25:23.840
+here our Unix and yeah obviously it's
+
+00:25:20.720 --> 00:25:26.200
+just the Unix uh font here for me so now
+
+00:25:23.840 --> 00:25:28.679
+we just zoom in and now we select the
+
+00:25:26.200 --> 00:25:33.640
+other side
+
+00:25:28.679 --> 00:25:36.200
+of the of those faces so again press U
+
+00:25:33.640 --> 00:25:40.039
+and unwrap and now you see we have it
+
+00:25:36.200 --> 00:25:40.039
+here so just press again R
+
+00:25:40.320 --> 00:25:46.000
+rotate
+
+00:25:42.159 --> 00:25:48.360
+90° and with G just bring it into
+
+00:25:46.000 --> 00:25:48.360
+position
+
+00:25:48.480 --> 00:25:56.679
+and yeah again you have to scale that a
+
+00:25:51.200 --> 00:25:58.640
+little bit and I will just bring that
+
+00:25:56.679 --> 00:26:00.159
+somewhere here I think this Unix looks a
+
+00:25:58.640 --> 00:26:03.960
+little bit bigger again it's just a
+
+00:26:00.159 --> 00:26:05.960
+tutorial so I will not do 100% perfect
+
+00:26:03.960 --> 00:26:07.919
+so something like that and just press
+
+00:26:05.960 --> 00:26:10.200
+tap back again so in object mode so
+
+00:26:07.919 --> 00:26:14.600
+everything looks nice and clean crl s to
+
+00:26:10.200 --> 00:26:18.200
+save it and I think I really like
+
+00:26:14.600 --> 00:26:20.640
+it and now what I want to do is uh
+
+00:26:18.200 --> 00:26:22.840
+because yeah our texture is uh yeah
+
+00:26:20.640 --> 00:26:25.559
+correct here right now I just want to
+
+00:26:22.840 --> 00:26:27.080
+bring a little bit of this super tiny
+
+00:26:25.559 --> 00:26:31.200
+bump texture and you will see with the
+
+00:26:27.080 --> 00:26:33.600
+lighting maybe now maybe later um that
+
+00:26:31.200 --> 00:26:37.320
+it will really create a little bit of of
+
+00:26:33.600 --> 00:26:39.720
+a better feel um yeah just go here to
+
+00:26:37.320 --> 00:26:44.120
+the uh main material shift a and bring
+
+00:26:39.720 --> 00:26:46.520
+in a noise texture and this noise
+
+00:26:44.120 --> 00:26:49.480
+texture we want the
+
+00:26:46.520 --> 00:26:53.039
+factor I don't know if that's fact
+
+00:26:49.480 --> 00:26:55.520
+Factor yes so we want the factor go into
+
+00:26:53.039 --> 00:26:58.679
+the
+
+00:26:55.520 --> 00:27:00.880
+normal but it's will not be a normal it
+
+00:26:58.679 --> 00:27:03.720
+will be a bump so we have to bring in in
+
+00:27:00.880 --> 00:27:06.200
+between a bump node so shift a and just
+
+00:27:03.720 --> 00:27:10.559
+uh search for bump so Vector bump just
+
+00:27:06.200 --> 00:27:13.320
+bring it in between and bring this F to
+
+00:27:10.559 --> 00:27:15.679
+height because it's a bump it's not the
+
+00:27:13.320 --> 00:27:17.840
+normal all right and now we have some
+
+00:27:15.679 --> 00:27:20.640
+crazy things
+
+00:27:17.840 --> 00:27:23.679
+ongoing so if you go here on the left if
+
+00:27:20.640 --> 00:27:27.039
+you check out uh the material preview so
+
+00:27:23.679 --> 00:27:29.120
+this one in the middle uh you see
+
+00:27:27.039 --> 00:27:32.240
+because the UVs
+
+00:27:29.120 --> 00:27:36.399
+it looks different so we just want to
+
+00:27:32.240 --> 00:27:38.320
+unify that in this example very simple
+
+00:27:36.399 --> 00:27:42.039
+uh just go to noise section if you have
+
+00:27:38.320 --> 00:27:45.640
+the node Wrangler enabled so go to edit
+
+00:27:42.039 --> 00:27:48.880
+preferences and go to add-ons and search
+
+00:27:45.640 --> 00:27:52.840
+for note Wrangler just activate that
+
+00:27:48.880 --> 00:27:54.799
+because then if you press contrl T you
+
+00:27:52.840 --> 00:27:57.000
+get the mapping Noe and a texture
+
+00:27:54.799 --> 00:27:59.559
+coordinate and just bring the object
+
+00:27:57.000 --> 00:28:02.200
+into the vector and then you see every
+
+00:27:59.559 --> 00:28:04.720
+everywhere it's the same um
+
+00:28:02.200 --> 00:28:08.240
+texture projection and now we just have
+
+00:28:04.720 --> 00:28:09.919
+to make it way smaller so select all of
+
+00:28:08.240 --> 00:28:13.919
+those
+
+00:28:09.919 --> 00:28:17.799
+values and make it like literally 1,000
+
+00:28:13.919 --> 00:28:20.279
+or something so if you see now you see
+
+00:28:17.799 --> 00:28:22.640
+we have this super tiny things so you
+
+00:28:20.279 --> 00:28:25.640
+can also play with different um noise
+
+00:28:22.640 --> 00:28:28.320
+textures but that will work fine but now
+
+00:28:25.640 --> 00:28:30.919
+also you see because the bump is s
+
+00:28:28.320 --> 00:28:34.279
+strong it's just too rough so we have to
+
+00:28:30.919 --> 00:28:36.120
+go to our bump texture thing here and
+
+00:28:34.279 --> 00:28:38.760
+make the distance I don't know something
+
+00:28:36.120 --> 00:28:43.440
+super small
+
+00:28:38.760 --> 00:28:45.840
+01 and maybe this strength 0.1 BM that
+
+00:28:43.440 --> 00:28:48.960
+looks nice so you see if we zoom in so
+
+00:28:45.840 --> 00:28:51.080
+let's zoom in here into a nice area here
+
+00:28:48.960 --> 00:28:53.440
+and again contrl B just render this
+
+00:28:51.080 --> 00:28:55.480
+region here you see we are getting this
+
+00:28:53.440 --> 00:28:58.240
+really cool look but we can make the
+
+00:28:55.480 --> 00:28:59.320
+noise even smaller so select it and make
+
+00:28:58.240 --> 00:29:02.440
+it even
+
+00:28:59.320 --> 00:29:03.720
+2,000 so you see we get this a little
+
+00:29:02.440 --> 00:29:07.799
+bit
+
+00:29:03.720 --> 00:29:10.360
+of of this texture on the material I
+
+00:29:07.799 --> 00:29:11.600
+really really like that and it looks
+
+00:29:10.360 --> 00:29:15.640
+just much
+
+00:29:11.600 --> 00:29:19.039
+better but now also so we have to uh see
+
+00:29:15.640 --> 00:29:21.080
+with the lighting but it's way too rough
+
+00:29:19.039 --> 00:29:23.080
+everything and also you can bring this
+
+00:29:21.080 --> 00:29:25.159
+texture into the roughness so we have to
+
+00:29:23.080 --> 00:29:26.760
+see in a second if we want to do it but
+
+00:29:25.159 --> 00:29:28.880
+just bring the
+
+00:29:26.760 --> 00:29:30.640
+roughness Maybe
+
+00:29:28.880 --> 00:29:33.159
+yeah just adjust it a little bit but you
+
+00:29:30.640 --> 00:29:36.519
+see so with the lighting we it's not
+
+00:29:33.159 --> 00:29:38.240
+really nice here but you see if we zoom
+
+00:29:36.519 --> 00:29:40.159
+in I don't know if you see it on on
+
+00:29:38.240 --> 00:29:44.120
+YouTube we have this really cool thing
+
+00:29:40.159 --> 00:29:44.120
+and it just looks very
+
+00:29:44.919 --> 00:29:49.919
+beautiful again you can play around with
+
+00:29:47.720 --> 00:29:52.640
+different values you can hear the start
+
+00:29:49.919 --> 00:29:54.640
+that and that looks actually pretty cool
+
+00:29:52.640 --> 00:29:57.279
+when we have a little bit of distortion
+
+00:29:54.640 --> 00:29:59.640
+here so you see we are mimicking this
+
+00:29:57.279 --> 00:30:02.799
+kind of the sand blasting or something
+
+00:29:59.640 --> 00:30:05.799
+but yeah anyway you can spend a long
+
+00:30:02.799 --> 00:30:08.440
+time with that tweaking that but you see
+
+00:30:05.799 --> 00:30:11.000
+and guys I know it's taking 40 minutes
+
+00:30:08.440 --> 00:30:13.039
+already so when I cut it less so please
+
+00:30:11.000 --> 00:30:15.120
+let me know right now in the comments if
+
+00:30:13.039 --> 00:30:18.559
+you like it when I explain everything in
+
+00:30:15.120 --> 00:30:20.640
+such detail or if you want it faster
+
+00:30:18.559 --> 00:30:24.440
+like literally just let me know it's
+
+00:30:20.640 --> 00:30:26.080
+okay or yes I I like long explanation or
+
+00:30:24.440 --> 00:30:27.760
+something because otherwise I just don't
+
+00:30:26.080 --> 00:30:29.720
+know how I should create my tutorials
+
+00:30:27.760 --> 00:30:32.799
+you know know but there's just so much
+
+00:30:29.720 --> 00:30:36.559
+to say if if I tell you like this whole
+
+00:30:32.799 --> 00:30:39.240
+um yeah pipeline of of things you know
+
+00:30:36.559 --> 00:30:42.159
+okay so maybe let's just uh speed up
+
+00:30:39.240 --> 00:30:43.679
+things so let's make this front thing um
+
+00:30:42.159 --> 00:30:47.000
+if we check out the reference image the
+
+00:30:43.679 --> 00:30:49.880
+front thing is um yeah
+
+00:30:47.000 --> 00:30:53.720
+basically the same just with the gray
+
+00:30:49.880 --> 00:30:56.399
+texture so let's go back here and just
+
+00:30:53.720 --> 00:30:59.120
+select this front thing and create a new
+
+00:30:56.399 --> 00:31:02.840
+material just call it front
+
+00:30:59.120 --> 00:31:07.360
+and let's just make it a little bit uh
+
+00:31:02.840 --> 00:31:11.320
+gray here and let's go back to our top
+
+00:31:07.360 --> 00:31:15.039
+main material and just select all of
+
+00:31:11.320 --> 00:31:19.120
+those bump notes crl C to copy
+
+00:31:15.039 --> 00:31:22.120
+that and go back here to the uh front
+
+00:31:19.120 --> 00:31:24.399
+material and shift V and bring this bump
+
+00:31:22.120 --> 00:31:27.519
+into your normal so we basically have
+
+00:31:24.399 --> 00:31:29.919
+the exact uh same material here to the
+
+00:31:27.519 --> 00:31:29.919
+front
+
+00:31:30.519 --> 00:31:37.120
+and yeah that looks
+
+00:31:33.240 --> 00:31:39.600
+fine and now let's do the same for our
+
+00:31:37.120 --> 00:31:41.399
+handle so let's uh apply here our
+
+00:31:39.600 --> 00:31:43.120
+textures and some emission and all that
+
+00:31:41.399 --> 00:31:44.799
+kind of stuff and then tweak our
+
+00:31:43.120 --> 00:31:47.200
+lighting a little bit and the contrast
+
+00:31:44.799 --> 00:31:50.960
+and everything and then we are basically
+
+00:31:47.200 --> 00:31:53.440
+done so if we zoom in here into our
+
+00:31:50.960 --> 00:31:55.960
+button so let's first of all create our
+
+00:31:53.440 --> 00:31:58.039
+main handle material it just looks like
+
+00:31:55.960 --> 00:32:00.919
+yeah rubber so you can create um
+
+00:31:58.039 --> 00:32:02.519
+subsurface material with massive density
+
+00:32:00.919 --> 00:32:04.679
+right if you want to do it like super
+
+00:32:02.519 --> 00:32:06.720
+perfect or we just take a super simple
+
+00:32:04.679 --> 00:32:08.559
+material because nothing is really crazy
+
+00:32:06.720 --> 00:32:10.639
+here and again it has a little bit of
+
+00:32:08.559 --> 00:32:11.600
+this basically the same texture maybe a
+
+00:32:10.639 --> 00:32:15.480
+little bit
+
+00:32:11.600 --> 00:32:19.240
+bigger so just select this handle create
+
+00:32:15.480 --> 00:32:21.600
+a new material call this um I will just
+
+00:32:19.240 --> 00:32:26.440
+call it handle or something and make it
+
+00:32:21.600 --> 00:32:28.880
+very white and again shift V just bring
+
+00:32:26.440 --> 00:32:30.720
+the bump into the nor
+
+00:32:28.880 --> 00:32:32.600
+and let's just have a look if everything
+
+00:32:30.720 --> 00:32:35.519
+is fine and correct so again we just
+
+00:32:32.600 --> 00:32:38.840
+have a little bit of a texture and
+
+00:32:35.519 --> 00:32:41.840
+that's fine and now we can go to all of
+
+00:32:38.840 --> 00:32:44.000
+those others so let's start here with
+
+00:32:41.840 --> 00:32:49.200
+the big button so just select this uh
+
+00:32:44.000 --> 00:32:49.200
+big button and give it here the handle
+
+00:32:49.279 --> 00:32:54.360
+material and now
+
+00:32:51.559 --> 00:32:56.360
+again on that handle material we want to
+
+00:32:54.360 --> 00:32:59.720
+add the same texture map and then we
+
+00:32:56.360 --> 00:33:02.960
+just want to uh align our texture where
+
+00:32:59.720 --> 00:33:05.159
+has to be so again shift a just image
+
+00:33:02.960 --> 00:33:07.440
+texture and create an image texture
+
+00:33:05.159 --> 00:33:09.880
+bring the color into the base color
+
+00:33:07.440 --> 00:33:11.480
+whoops uh somewhere here and again open
+
+00:33:09.880 --> 00:33:15.000
+the same
+
+00:33:11.480 --> 00:33:16.679
+exact image texture and now select the
+
+00:33:15.000 --> 00:33:20.919
+button and the
+
+00:33:16.679 --> 00:33:22.840
+handle and press Tab and press a and
+
+00:33:20.919 --> 00:33:24.360
+press three so you're on face mode so
+
+00:33:22.840 --> 00:33:27.360
+press
+
+00:33:24.360 --> 00:33:29.799
+a and now first of all again let's just
+
+00:33:27.360 --> 00:33:33.840
+make unwrap so we just get the the the
+
+00:33:29.799 --> 00:33:36.600
+islands here onto our texture so press U
+
+00:33:33.840 --> 00:33:38.919
+and here just again smart UV projection
+
+00:33:36.600 --> 00:33:41.480
+okay and now you see we have all of this
+
+00:33:38.919 --> 00:33:44.639
+mess and this is what we want and just
+
+00:33:41.480 --> 00:33:46.519
+press s and just scale this down and
+
+00:33:44.639 --> 00:33:48.440
+just again bring this everything to a
+
+00:33:46.519 --> 00:33:50.480
+white area so we are not affecting
+
+00:33:48.440 --> 00:33:52.559
+anything here and now let's start with
+
+00:33:50.480 --> 00:33:55.480
+the onoff symbol so let me zoom in
+
+00:33:52.559 --> 00:33:58.519
+contrl B so they are in the middle
+
+00:33:55.480 --> 00:34:02.639
+perfect just press T to get out of that
+
+00:33:58.519 --> 00:34:05.120
+and let's zoom in here onto our button
+
+00:34:02.639 --> 00:34:08.159
+select the button press tap and only
+
+00:34:05.120 --> 00:34:10.280
+select here this front faces and you see
+
+00:34:08.159 --> 00:34:12.000
+because we have nice Eng gons or quads
+
+00:34:10.280 --> 00:34:14.679
+exported everything just looks so nice
+
+00:34:12.000 --> 00:34:17.599
+and clean so just select this area here
+
+00:34:14.679 --> 00:34:20.280
+in PH mode press U and just unwrap and
+
+00:34:17.599 --> 00:34:23.560
+now you have this thing here and you can
+
+00:34:20.280 --> 00:34:25.200
+bring it onto your onoff symbol and
+
+00:34:23.560 --> 00:34:28.200
+perfect so now you see you can just
+
+00:34:25.200 --> 00:34:30.599
+adjust it
+
+00:34:28.200 --> 00:34:34.919
+and let me just zoom in here a little
+
+00:34:30.599 --> 00:34:37.240
+bit and yeah now you can again just
+
+00:34:34.919 --> 00:34:40.040
+adjust everything and here bring it to
+
+00:34:37.240 --> 00:34:43.040
+the middle and that's perfectly fine and
+
+00:34:40.040 --> 00:34:45.599
+yeah because this takes already so long
+
+00:34:43.040 --> 00:34:48.800
+just uh do the same so again select an
+
+00:34:45.599 --> 00:34:53.320
+object mode this handle and press tap
+
+00:34:48.800 --> 00:34:55.480
+and only select um yeah this middle
+
+00:34:53.320 --> 00:34:57.359
+button so this will be uh here with the
+
+00:34:55.480 --> 00:35:01.480
+fan blades right so select all of those
+
+00:34:57.359 --> 00:35:03.680
+poly here and again press U and unwrap
+
+00:35:01.480 --> 00:35:06.760
+and just bring it here into the position
+
+00:35:03.680 --> 00:35:09.960
+of of of uh your fan blades and then you
+
+00:35:06.760 --> 00:35:14.320
+will do the same here and obviously for
+
+00:35:09.960 --> 00:35:16.480
+all of the other areas of of our
+
+00:35:14.320 --> 00:35:19.520
+design but I will
+
+00:35:16.480 --> 00:35:21.040
+just skip it because it's exact same
+
+00:35:19.520 --> 00:35:24.359
+process and it just takes already too
+
+00:35:21.040 --> 00:35:26.720
+long so pause this video and do it and
+
+00:35:24.359 --> 00:35:28.760
+now once you are back now let's just
+
+00:35:26.720 --> 00:35:31.440
+create here some missive
+
+00:35:28.760 --> 00:35:34.119
+material so as we have here so little
+
+00:35:31.440 --> 00:35:36.320
+lamps or something right so I have those
+
+00:35:34.119 --> 00:35:39.079
+as a separate object so also you see
+
+00:35:36.320 --> 00:35:41.560
+them here LED so I will just select one
+
+00:35:39.079 --> 00:35:43.599
+of them and go here create new material
+
+00:35:41.560 --> 00:35:46.520
+just call it
+
+00:35:43.599 --> 00:35:49.839
+LED and I will delete the principal uh
+
+00:35:46.520 --> 00:35:52.839
+bsdf with X and shift a just add a
+
+00:35:49.839 --> 00:35:55.960
+emission Shader and this emission Shader
+
+00:35:52.839 --> 00:35:59.400
+I just plug into the surface so now if
+
+00:35:55.960 --> 00:36:02.760
+we zoom in and if we give it a nice
+
+00:35:59.400 --> 00:36:05.319
+greenish color and increase the strength
+
+00:36:02.760 --> 00:36:09.000
+a little bit now you see it starts uh to
+
+00:36:05.319 --> 00:36:12.240
+shine so maybe make it a little
+
+00:36:09.000 --> 00:36:15.359
+bit something like that and now let's
+
+00:36:12.240 --> 00:36:18.680
+select all of those other ones as well
+
+00:36:15.359 --> 00:36:22.880
+in object mode and the last one the with
+
+00:36:18.680 --> 00:36:25.440
+the material and again contrl R and Link
+
+00:36:22.880 --> 00:36:28.359
+materials so now you see everywhere it's
+
+00:36:25.440 --> 00:36:31.280
+a green contrl s save your project
+
+00:36:28.359 --> 00:36:35.400
+and let's render everything
+
+00:36:31.280 --> 00:36:37.560
+here and again so now you see it doesn't
+
+00:36:35.400 --> 00:36:41.000
+look quite right and that's because the
+
+00:36:37.560 --> 00:36:43.000
+lighting and yeah it's too much gray
+
+00:36:41.000 --> 00:36:45.440
+here in this value so I like this it's
+
+00:36:43.000 --> 00:36:48.440
+very simple but effective render it's
+
+00:36:45.440 --> 00:36:50.440
+like you see it very often in very
+
+00:36:48.440 --> 00:36:52.480
+simple industrial product design this
+
+00:36:50.440 --> 00:36:54.440
+this kind of lighting right but I just
+
+00:36:52.480 --> 00:36:56.400
+want a little bit of contrast so first
+
+00:36:54.440 --> 00:36:59.200
+of all
+
+00:36:56.400 --> 00:37:03.319
+Let's uh select here the backdrop in
+
+00:36:59.200 --> 00:37:05.480
+object mode and we don't need this UV I
+
+00:37:03.319 --> 00:37:08.440
+would just make this or just yeah you
+
+00:37:05.480 --> 00:37:10.640
+can just close that uh select this and
+
+00:37:08.440 --> 00:37:12.520
+add a new material called this BD
+
+00:37:10.640 --> 00:37:15.480
+backdrop and first of all make it a
+
+00:37:12.520 --> 00:37:17.319
+little bit darker so now now I will just
+
+00:37:15.480 --> 00:37:18.880
+do it a little bit how I like it more
+
+00:37:17.319 --> 00:37:22.240
+because here it's like super super
+
+00:37:18.880 --> 00:37:24.079
+simple everything um it's still fine but
+
+00:37:22.240 --> 00:37:27.680
+I just want to add it a little bit more
+
+00:37:24.079 --> 00:37:28.640
+spicy you know so just uh make it here a
+
+00:37:27.680 --> 00:37:31.000
+little bit
+
+00:37:28.640 --> 00:37:35.079
+darker and what I want to do is just
+
+00:37:31.000 --> 00:37:37.480
+press shift a and light and a point
+
+00:37:35.079 --> 00:37:40.400
+light and this point light you just
+
+00:37:37.480 --> 00:37:43.880
+bring here to the background a little
+
+00:37:40.400 --> 00:37:45.040
+bit and just make the backdrop a little
+
+00:37:43.880 --> 00:37:47.560
+bit
+
+00:37:45.040 --> 00:37:50.920
+darker and the point
+
+00:37:47.560 --> 00:37:53.160
+light yeah so I just made the backdrop a
+
+00:37:50.920 --> 00:37:55.119
+little bit darker and just brought the
+
+00:37:53.160 --> 00:37:56.480
+spotlight a little bit closer and just
+
+00:37:55.119 --> 00:37:58.599
+increased the power a little bit and you
+
+00:37:56.480 --> 00:38:00.720
+see we kind of get this gradient so
+
+00:37:58.599 --> 00:38:04.720
+obviously you can also just make it in
+
+00:38:00.720 --> 00:38:07.359
+post uh but yeah why not so I really
+
+00:38:04.720 --> 00:38:09.960
+like this and now let's just play a
+
+00:38:07.359 --> 00:38:12.240
+little bit around with the lighting so
+
+00:38:09.960 --> 00:38:16.319
+this one I really like because it gives
+
+00:38:12.240 --> 00:38:20.680
+us here on the right just some nice uh
+
+00:38:16.319 --> 00:38:20.680
+lighting but I just want to bring
+
+00:38:21.000 --> 00:38:26.599
+it first of all make it a little bit
+
+00:38:23.480 --> 00:38:29.680
+bigger and uh increase the power so you
+
+00:38:26.599 --> 00:38:31.160
+see we don't need like those crazy 2,000
+
+00:38:29.680 --> 00:38:33.760
+uh values and
+
+00:38:31.160 --> 00:38:35.880
+stuff so something like that I like it
+
+00:38:33.760 --> 00:38:38.839
+because we have a nice light and we have
+
+00:38:35.880 --> 00:38:41.599
+a nice shadow on a cylindrical form that
+
+00:38:38.839 --> 00:38:43.520
+gives us this nice 3D look and it's like
+
+00:38:41.599 --> 00:38:44.920
+popping here to the top it's a little
+
+00:38:43.520 --> 00:38:47.200
+bit overblown so you can add the
+
+00:38:44.920 --> 00:38:49.319
+gradient so I'm not explaining now this
+
+00:38:47.200 --> 00:38:51.200
+in this video anymore how to do that or
+
+00:38:49.319 --> 00:38:53.720
+you can just assign a different material
+
+00:38:51.200 --> 00:38:57.560
+oh and by the way I forgot because in
+
+00:38:53.720 --> 00:39:01.560
+the reference image you see we have a
+
+00:38:57.560 --> 00:39:04.359
+Green Stripe here but just in the middle
+
+00:39:01.560 --> 00:39:07.240
+and I just want to show you quickly how
+
+00:39:04.359 --> 00:39:12.240
+you can uh just assign material to
+
+00:39:07.240 --> 00:39:14.440
+specific um yeah faces so just select
+
+00:39:12.240 --> 00:39:16.680
+here so yeah it's this middle part but
+
+00:39:14.440 --> 00:39:19.359
+you see we have already a material
+
+00:39:16.680 --> 00:39:23.359
+applied to that so we have to
+
+00:39:19.359 --> 00:39:25.880
+add a new slot to this material so go to
+
+00:39:23.359 --> 00:39:30.680
+slot and just press to top uh to the
+
+00:39:25.880 --> 00:39:34.800
+plus so you have a new slot a slot slot
+
+00:39:30.680 --> 00:39:36.920
+and now you can press new and this new
+
+00:39:34.800 --> 00:39:41.920
+you can just give it a nice
+
+00:39:36.920 --> 00:39:46.040
+green and now go to Tab and just select
+
+00:39:41.920 --> 00:39:49.079
+here with with uh face mode just here
+
+00:39:46.040 --> 00:39:51.599
+this uh Circle right so only those faces
+
+00:39:49.079 --> 00:39:54.520
+are selected and again go to your slot
+
+00:39:51.599 --> 00:39:56.920
+uh slot select the material and press
+
+00:39:54.520 --> 00:39:59.880
+assign and this way you assign this
+
+00:39:56.920 --> 00:40:02.640
+green new material in the new slot only
+
+00:39:59.880 --> 00:40:04.359
+to this faces here so then just adjust
+
+00:40:02.640 --> 00:40:09.119
+this a little
+
+00:40:04.359 --> 00:40:11.960
+bit and just uh makes it really nice and
+
+00:40:09.119 --> 00:40:14.400
+now you see it I I really like it
+
+00:40:11.960 --> 00:40:17.359
+already and I really really really love
+
+00:40:14.400 --> 00:40:20.200
+here our metal material and when you
+
+00:40:17.359 --> 00:40:23.040
+will render that with a lot of samples
+
+00:40:20.200 --> 00:40:24.960
+you will see this nice grainy texture
+
+00:40:23.040 --> 00:40:28.400
+also I really like it how it's popping
+
+00:40:24.960 --> 00:40:32.040
+because of this uh middle um thing here
+
+00:40:28.400 --> 00:40:34.920
+and now just select the light and maybe
+
+00:40:32.040 --> 00:40:37.160
+you can just um play a little bit with
+
+00:40:34.920 --> 00:40:40.480
+the size so you can also give it
+
+00:40:37.160 --> 00:40:43.319
+gradients and and stuff but again this
+
+00:40:40.480 --> 00:40:45.720
+will be already way more over this
+
+00:40:43.319 --> 00:40:48.800
+tutorial but just always when you give
+
+00:40:45.720 --> 00:40:52.560
+light you know when you uh produ light
+
+00:40:48.800 --> 00:40:55.640
+your products always give it nice bright
+
+00:40:52.560 --> 00:40:59.720
+spots and some dark spots this will give
+
+00:40:55.640 --> 00:41:02.079
+this whole thing like like this volume
+
+00:40:59.720 --> 00:41:04.040
+kind of right because if you don't do
+
+00:41:02.079 --> 00:41:06.480
+that but if you would just uh give here
+
+00:41:04.040 --> 00:41:09.599
+on the environment lighting just
+
+00:41:06.480 --> 00:41:11.359
+something like that so when it's
+
+00:41:09.599 --> 00:41:14.920
+everywhere a lot of light then you see
+
+00:41:11.359 --> 00:41:18.400
+it looks like super super boring and
+
+00:41:14.920 --> 00:41:22.599
+flat so that's why always spend some
+
+00:41:18.400 --> 00:41:24.800
+time with uh the lighting and if this
+
+00:41:22.599 --> 00:41:25.920
+metal material is a little bit too dark
+
+00:41:24.800 --> 00:41:29.400
+for
+
+00:41:25.920 --> 00:41:31.280
+you then just go here to the selected
+
+00:41:29.400 --> 00:41:32.920
+material to the color select the white
+
+00:41:31.280 --> 00:41:35.599
+and you can always here just make it a
+
+00:41:32.920 --> 00:41:36.720
+little bit uh more gray so it will not
+
+00:41:35.599 --> 00:41:39.760
+be so
+
+00:41:36.720 --> 00:41:44.640
+overblown so also my last Light that I
+
+00:41:39.760 --> 00:41:47.960
+just add so one here behind this design
+
+00:41:44.640 --> 00:41:51.960
+so just to add up a little bit of this
+
+00:41:47.960 --> 00:41:53.680
+uh Edge highlight here right so Rim
+
+00:41:51.960 --> 00:41:56.319
+light because if I just bring it here to
+
+00:41:53.680 --> 00:41:58.160
+zero you see it's just fading a little
+
+00:41:56.319 --> 00:42:01.440
+bit into the background so I just gave
+
+00:41:58.160 --> 00:42:03.200
+it here a tiny tiny tiny bit of light so
+
+00:42:01.440 --> 00:42:05.760
+we again just give it here some
+
+00:42:03.200 --> 00:42:08.280
+highlights but again you can spend way
+
+00:42:05.760 --> 00:42:09.800
+more time with that and tweaking around
+
+00:42:08.280 --> 00:42:12.640
+again let me know in the comments if you
+
+00:42:09.800 --> 00:42:18.160
+like that but yeah that looks
+
+00:42:12.640 --> 00:42:21.119
+great so save it and go here to to your
+
+00:42:18.160 --> 00:42:24.040
+scene render settings here make it full
+
+00:42:21.119 --> 00:42:28.359
+HD and make samples I don't know like
+
+00:42:24.040 --> 00:42:31.880
+600 or so will be enough make a d not
+
+00:42:28.359 --> 00:42:33.599
+and render image here and voila if you
+
+00:42:31.880 --> 00:42:35.480
+like that so far leave a like And
+
+00:42:33.599 --> 00:42:37.319
+subscribe so you don't miss my future
+
+00:42:35.480 --> 00:42:41.319
+blender tutorials and you have this
+
+00:42:37.319 --> 00:42:43.720
+beautiful simple modern cool slick
+
+00:42:41.319 --> 00:42:46.119
+looking product design and I really
+
+00:42:43.720 --> 00:42:49.400
+really like that and we have some really
+
+00:42:46.119 --> 00:42:52.520
+beautiful texture here on on the metal
+
+00:42:49.400 --> 00:42:55.040
+so yeah I had a lot of fun let me know
+
+00:42:52.520 --> 00:42:58.240
+in the comments what kind of tutorial
+
+00:42:55.040 --> 00:43:02.400
+you want if you like that it's like so
+
+00:42:58.240 --> 00:43:06.079
+in detail and so long but yeah so see
+
+00:43:02.400 --> 00:43:06.079
+you in the next one bye
+

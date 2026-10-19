@@ -1,0 +1,388 @@
+{
+ "id": "_GFlR5e1ueY",
+ "title": "The EASIEST Trick in Product Photography",
+ "channel": "Peter McKinnon",
+ "url": "https://www.youtube.com/watch?v=_GFlR5e1ueY",
+ "query": "stable diffusion product shots",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 311.0,
+ "chars": 2672,
+ "segments": [
+  {
+   "start": 12.94,
+   "end": 15.02,
+   "text": "I have to take photos of this today."
+  },
+  {
+   "start": 15.02,
+   "end": 18.42,
+   "text": "I thought it would be fun to show you the process"
+  },
+  {
+   "start": 18.42,
+   "end": 21.86,
+   "text": "of shooting a product and how fast I'm going to get"
+  },
+  {
+   "start": 21.86,
+   "end": 24.1,
+   "text": "a picture because I got to post a photo"
+  },
+  {
+   "start": 24.1,
+   "end": 25.66,
+   "text": "in like the next half an hour."
+  },
+  {
+   "start": 25.66,
+   "end": 46.16,
+   "text": "You can watch and follow along and all of that in two minutes."
+  },
+  {
+   "start": 46.16,
+   "end": 50.32,
+   "text": "These are perfect when you just need a little bit"
+  },
+  {
+   "start": 50.32,
+   "end": 51.32,
+   "text": "of a hit."
+  },
+  {
+   "start": 51.32,
+   "end": 55.48,
+   "text": "This is a diffuser, softens the light, place the product,"
+  },
+  {
+   "start": 55.48,
+   "end": 61.1,
+   "text": "give it some foreground, a little trail."
+  },
+  {
+   "start": 61.1,
+   "end": 65.06,
+   "text": "Okay, this is going to act as an out of focus element"
+  },
+  {
+   "start": 65.06,
+   "end": 65.9,
+   "text": "in the foreground."
+  },
+  {
+   "start": 65.9,
+   "end": 67.58,
+   "text": "These are great to carry in a kit."
+  },
+  {
+   "start": 67.58,
+   "end": 69.7,
+   "text": "For example, this light is magnetic."
+  },
+  {
+   "start": 69.7,
+   "end": 71.34,
+   "text": "Tape this to any surface."
+  },
+  {
+   "start": 71.34,
+   "end": 73.06,
+   "text": "You know what, I have no tape right now,"
+  },
+  {
+   "start": 73.06,
+   "end": 80.19,
+   "text": "but I do have a bandaid."
+  },
+  {
+   "start": 80.19,
+   "end": 85.42,
+   "text": "Now you've got a light on a surface that's not magnetic."
+  },
+  {
+   "start": 85.42,
+   "end": 87.74,
+   "text": "Using this, keep it from rolling."
+  },
+  {
+   "start": 87.74,
+   "end": 88.82,
+   "text": "Incense."
+  },
+  {
+   "start": 90.42,
+   "end": 92.62,
+   "text": "Need some smoke in the background."
+  },
+  {
+   "start": 92.62,
+   "end": 94.34,
+   "text": "If you don't want to add it in post,"
+  },
+  {
+   "start": 94.34,
+   "end": 95.98,
+   "text": "just do it in real life."
+  },
+  {
+   "start": 95.98,
+   "end": 97.02,
+   "text": "If you don't have incense,"
+  },
+  {
+   "start": 97.06,
+   "end": 99.9,
+   "text": "this is really good for just continuous smoke"
+  },
+  {
+   "start": 99.9,
+   "end": 101.62,
+   "text": "that just keeps on billowing."
+  },
+  {
+   "start": 101.62,
+   "end": 104.02,
+   "text": "You just light it, let it get kind of hot and blow it out"
+  },
+  {
+   "start": 104.02,
+   "end": 107.62,
+   "text": "and it'll just smoke for like 15 minutes or more."
+  },
+  {
+   "start": 109.26,
+   "end": 110.1,
+   "text": "Look at that."
+  },
+  {
+   "start": 110.1,
+   "end": 111.86,
+   "text": "Look how good that is."
+  },
+  {
+   "start": 111.86,
+   "end": 126.07,
+   "text": "Oh, if you get it right at the start, money."
+  },
+  {
+   "start": 126.07,
+   "end": 127.23,
+   "text": "Set up to go."
+  },
+  {
+   "start": 127.23,
+   "end": 128.39,
+   "text": "All you need at this point,"
+  },
+  {
+   "start": 128.39,
+   "end": 130.15,
+   "text": "I'm going to shoot it on a 50 mil"
+  },
+  {
+   "start": 130.15,
+   "end": 131.99,
+   "text": "because I want the out of focus elements"
+  },
+  {
+   "start": 131.99,
+   "end": 134.15,
+   "text": "at the foreground to be super shallow."
+  },
+  {
+   "start": 134.15,
+   "end": 136.59,
+   "text": "So at 1.2, so about all of this,"
+  },
+  {
+   "start": 136.63,
+   "end": 137.83,
+   "text": "it's just nice bokeh."
+  },
+  {
+   "start": 137.83,
+   "end": 139.79,
+   "text": "The smoke looks great in the background."
+  },
+  {
+   "start": 139.79,
+   "end": 142.11,
+   "text": "This is just crispy in the foreground."
+  },
+  {
+   "start": 142.11,
+   "end": 144.79,
+   "text": "You got a little bit of a hit revealing the light"
+  },
+  {
+   "start": 144.79,
+   "end": 147.07,
+   "text": "at the end of the tunnel, if you will."
+  },
+  {
+   "start": 147.07,
+   "end": 147.91,
+   "text": "Also I'm going to shoot on this"
+  },
+  {
+   "start": 147.91,
+   "end": 148.99,
+   "text": "and then we'll hop into the computer"
+  },
+  {
+   "start": 148.99,
+   "end": 153.9,
+   "text": "and take a look at what they look like."
+  },
+  {
+   "start": 153.9,
+   "end": 169.45,
+   "text": "Shoot this on the R3."
+  },
+  {
+   "start": 169.45,
+   "end": 172.41,
+   "text": "So I'm looking for 1.2."
+  },
+  {
+   "start": 172.41,
+   "end": 174.37,
+   "text": "I'm on 1.500th of a second,"
+  },
+  {
+   "start": 174.37,
+   "end": 177.41,
+   "text": "shooting at F1.2 ISO 400."
+  },
+  {
+   "start": 177.41,
+   "end": 179.73,
+   "text": "And my white balance is set to cloudy"
+  },
+  {
+   "start": 179.73,
+   "end": 182.05,
+   "text": "because I want these to be naturally warm in frame."
+  },
+  {
+   "start": 182.05,
+   "end": 183.49,
+   "text": "All of that can be changed in post,"
+  },
+  {
+   "start": 183.49,
+   "end": 192.93,
+   "text": "but I like to get as close as I can in the camera."
+  },
+  {
+   "start": 192.93,
+   "end": 195.93,
+   "text": "You can see this glass right here in frame."
+  },
+  {
+   "start": 195.93,
+   "end": 198.53,
+   "text": "If I move over, you'll see the glass is gone."
+  },
+  {
+   "start": 198.53,
+   "end": 201.57,
+   "text": "But just covering the label a little bit"
+  },
+  {
+   "start": 201.57,
+   "end": 204.57,
+   "text": "with some of that glass gives it a front"
+  },
+  {
+   "start": 204.57,
+   "end": 207.41,
+   "text": "out of focus element that's just really pretty."
+  },
+  {
+   "start": 208.33,
+   "end": 217.02,
+   "text": "There we go, that smoke's looking money."
+  },
+  {
+   "start": 217.02,
+   "end": 217.86,
+   "text": "All right, photos are done,"
+  },
+  {
+   "start": 217.86,
+   "end": 264.34,
+   "text": "let's edit them to see how they look."
+  },
+  {
+   "start": 264.34,
+   "end": 265.74,
+   "text": "Oily hands."
+  },
+  {
+   "start": 265.74,
+   "end": 267.66,
+   "text": "I hope you enjoyed watching this video."
+  },
+  {
+   "start": 267.66,
+   "end": 269.1,
+   "text": "Hope you learned something and enjoyed."
+  },
+  {
+   "start": 269.1,
+   "end": 271.66,
+   "text": "Behind the scenes, look at how I shoot product photos."
+  },
+  {
+   "start": 271.66,
+   "end": 273.26,
+   "text": "I might start doing these a little more often,"
+  },
+  {
+   "start": 273.26,
+   "end": 275.86,
+   "text": "but yeah, hope you had fun and learned something,"
+  },
+  {
+   "start": 275.86,
+   "end": 276.98,
+   "text": "even if it was something small,"
+  },
+  {
+   "start": 276.98,
+   "end": 279.14,
+   "text": "like taping a magnet to a wall."
+  },
+  {
+   "start": 279.14,
+   "end": 280.34,
+   "text": "See you in the next one."
+  },
+  {
+   "start": 280.34,
+   "end": 282.66,
+   "text": "Wait, did I pass the timer?"
+  },
+  {
+   "start": 282.66,
+   "end": 284.3,
+   "text": "I went over, didn't I?"
+  },
+  {
+   "start": 284.3,
+   "end": 286.22,
+   "text": "I really struggle with that."
+  },
+  {
+   "start": 286.22,
+   "end": 287.06,
+   "text": "See ya."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:51:50.583059+00:00",
+ "seconds": 12.1
+}

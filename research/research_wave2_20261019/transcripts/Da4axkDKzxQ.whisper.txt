@@ -1,0 +1,436 @@
+Hi there, this is Anmish from Piximperfect. Thank you so much for tuning into this video.
+Today, you and I are going to go through the entire process of creating a natural composite
+with the Focus On number one, painting the shadows and number two, matching the color
+and the lighting. You see, whenever you're creating that new composite and you bring
+in a new element onto it, I always recommend that you extract the original shadow of
+that new element and bring that over as well. That way, you create the most
+natural result as natural as possible. However, to be able to extract the shadows,
+it has to be on a flat, clean and nice surface. And also, the angle of the surface of the
+old situation or the old image should match the angle of the new surface where you bring
+in that element, right? Many a times this is not a possibility and for those times,
+you might have to manually paint in the shadows and make some adjustments. That's
+what we're going to extensively cover in this video along with many other essential
+and versatile techniques. So without any further ado, let's get started.
+Back in the Moscow world of Photoshop, and if you're going to go ahead and download
+this for an hour, you my awesome friend already know what to do. Check the links
+in the description. So the very first thing as usual whenever you're creating
+a composite is making the selection. Now the technique that I'm going to use
+to make the selection here is what I've already covered in this video. So please
+do watch it. I've already done the selection here to save time. So let's load that
+by going to Select and Load Selection. And I have it saved on a channel named
+Subject. Hit OK. I have the selection right there and click on the Mask
+button. Now we have the subject layer masked out. Okay. Let's drop it into
+the new background. To be able to do that, just open the new background in
+Photoshop. So I'm just going to open that up and drop it right over here at
+the top. Now do keep in mind that you can copy and paste layers in the
+later versions of Photoshop. So let's get back to the subject document. Select
+that layer, press Ctrl or Command C. Go to the background and press Ctrl or
+Command V. Now at this point, if you press Ctrl or Command D for
+transformation, along with the subject, the bounding box will also select
+its original background because it's masked out and it can be a hassle. To
+be able to have access to the original background and also not have to deal
+with the additional bounding box areas, here's a quick tip. Right click on the
+subject and convert it to Smart Object. That way, if you want to have access to
+any old stuff, double click on it. It will open up another document where you
+have the mask and where you can get back anything. Anyway, let's close
+that. Now also converting it into a Smart Object allows you to have
+absolute non-destructive nature. You can make it smaller, bigger, a ton of
+times without losing quality, losing pixel details or anything. Press
+Ctrl or Command D and let's adjust it accordingly. We're not going to follow
+the law of perspectives here like we have covered in this video because it just
+won't fit because if we look at it in that aspect, let's place her next to
+this man. If we do that, she would be probably of this height. Right? That
+looks about right. Now if you do place the anchor point on the horizon,
+let's bring her to the center with the same height. If you do place the
+anchor point around the horizon, just even a little up and if you try to
+bring her closer, she would look absolutely huge. It might be the
+actual case, but we're not going to take a risk. We're just going to place
+her in a way that we think it's good. Also, I feel she's leaning a little
+bit towards the right. So let's go ahead and just rotate her just so
+slightly, just like this. And this looks about right. Now I know what
+many of you are thinking that this might not be
+perspectivically right. I understand that. But many times, have you ever noticed
+that whenever we take an actual photo with some interesting lights or if the
+angle is a little too creative, a lot of viewers might think that is Photoshop
+even if it's an actual photo. So if I did make her too big, it was just not
+looking natural artistically. So sometimes you have to take the
+artistic route instead of the realistic route to look more realistic.
+Now we can start by creating the shadows and we don't have to completely
+paint the shadow from scratch. We can have a rough draft or a rough base.
+And the way to create a rough draft is hold the controller command and
+click on the subject. That way you have the selection of the subject and
+just under the subject create a brand new layer. And you can name this
+shadow and this is just a rough draft at the moment. Now fill this
+with black. With the foreground color as black, press Alt Backspace or
+Option Delete on a Mac, press controller command D to deselect. Now you
+can convert this into a smart object but I wouldn't recommend that
+because we've got painting to do. Press controller command D, right-click on
+it and then choose distort. Now before we start distorting it, just
+study the other shadows in the image. Look at the shadow of this man on a
+bicycle. If the man on the bicycle is of this height, just compare it
+with the length of the shadow. So in this case, the shadow is about
+more than two times the actual height. So about 2.2 or 2.5-ish. Just keep
+that in mind. So when we distort it, we have to extend it
+about 2.2 to 2.5 times. So she's standing right here.
+This would be one time, this would be two time and up to this mark I think
+we have to extend it. You don't have to be accurate here.
+I know this looks crazy awkward but we have to adjust it in a way
+that looks just a little bit alright. I guess we can actually work with that.
+Hit enter or return once you're satisfied. Now it is time for us to
+actually start painting the shadows and for that right now, simply select
+the hard around brush with black as the foreground color,
+just painting over it and correct little things.
+Also to erase something, whenever you're working with the brush, let's
+say you painted something right there and if you want to erase it,
+just hold the tilde key, the key next to one and once you hold that, the same
+brush becomes the same eraser with the same properties
+and if you paint over it, it's going to erase that thing.
+If you're using an older version of Photoshop, this might not work.
+For that you might have to go to the eraser tool and erase
+those certain areas alright. So let's just paint the shadow according to
+the shape of the subject. The light is coming from the left
+inside so the shadow should fall on the right inside
+right. Also when you're placing the subject, do not forget to just place her
+according to the light. If in the background the light is coming from the
+right inside, in the subject as well, the light should be from the right
+inside. If not, you can always flip it. Let's
+paint the shadow accordingly. Right now I'm just drawing the shape
+of the foot right over here. There are some things you just have to
+guess. Similarly, let's draw the shadow of the
+other leg. Let's zoom in and again according to where the
+light is falling, draw the shadows. Now notice the height where the legs
+cross. Now of course there are clothes here but just notice the height.
+So according to that height, it should cross right over here as well. So keep
+that in mind. Keep the angle in mind. So what I meant was it should cross
+right here. Now of course there will be some
+coverings here. So just let that be for now. That's
+just for guidance. By the way, if you want to draw straight lines between any two
+points, just dab once. Hold the shift key, dab
+one more time on the other side. So that way you have a straight line. So this
+will be really helpful. So similarly right here as well, just
+dab once and let's draw a straight line till this
+point. Now I know I understand legs are not
+absolutely straight but this gives us a nice base to work with.
+You can also use the pen tool to draw that first and then fill it.
+I'm just more comfortable painting it by hand. If you're using a tablet, this can
+be really fun. And by the way, if you're not using a
+tablet, you can first make a selection and then fill it.
+Now that does look like an excellent base to start the work from.
+Now also she is wearing some clothes where the light is also passing through
+slightly. So it will also have a shadow but this time
+it will be a little less opaque. In other words, a little more
+transparent. So just above the shadow layer, let's create one more layer and call
+it shadow two. Okay and don't worry about the opacity
+right now. Just fill in the dress areas. Keep that in mind. Just draw in that.
+These are the additional dress areas because there are lots of folds. So we
+can actually keep them opaque. Just some areas we can keep them
+a little more transparent. Now that they're done,
+we would just simply decrease the opacity. See, we're creating this brilliant
+look right over here. So we will keep it overall dark at the
+moment because later on we would anyway decrease the opacity.
+So keep it at about 80%. Now on top of that, let's do another shadow
+three. Let's set this one to also something.
+So set this to about 60%. Okay, now we have additional things to
+work with. And on top of that, let's do one more just to add a little bit
+fold to it. And this is shadow four. Now the reason I created them on separate
+layers is because we wanted the ability to control this later.
+Okay, so this is just for the shadow and let's keep it at about 40%.
+So you see that girl shadow going in from right there.
+So let's keep it at about, let's increase it 50.
+And also let's add a few more curls here just to create more realism.
+Now of course, we have just done too much. So let's group all of these shadows into
+one layer. So select the first one, hold the Shift key, select last one and then
+press Ctrl or Command G and let's name this Shadow.
+Okay, now we're gonna change the blend mode of this
+group to Multiply. And before we move into any further steps,
+let's just go ahead and save this PSD because we worked so hard on the
+shadows, we don't want to lose it. Ctrl or Command S is your favorite and
+most useful shortcut. Don't forget it, it's your best friend.
+Ctrl or Command S, pick Simperfect Composite and there you have it my friend.
+Now it is time for us to move on to the next step and that is
+coloring the shadows. And to move further, let's convert this group into a
+Smart Object by right clicking on it and choosing Convert to Smart Object.
+Now if you want the layers back any time you can get it back, you can just
+right click on it and then choose Convert to Layers and you will get
+everything back. Anyway, let's right click on it and convert to Smart Object
+because we will blur it down the line and probably apply some masks and
+filters. It just makes it a little more convenient. So to apply a color,
+create a solid color adjustment layer and choose at the moment any color you
+want and hit OK. Hold the Alt key or the Option key and
+click on the line between these two layers. That way this color is limited
+to the shadow. Also to make sure that the shadow is only
+darkening stuff, make sure again and again that the blend mode of the shadow
+layer is multiplied. Now we will try to match the color of the shadow
+with the shadows nearby. And the best way to do that is double
+click on the solid color adjustment layer and just take a sample of the
+shadow nearby. Just take a sample of the color. So now have a look at the
+original shadow. Is it looking anything like that? No, because of course it's
+on the multiply blend mode and it's darkening stuff.
+So we need to make certain changes to it. At least we are on the same hue.
+But before we jump into any conclusions, also we need to decrease the opacity of
+the shadow. So let's go to the shadow layer and decrease the opacity to about
+50%. This is a good starting point and it's
+also matching with the shadows nearby. Now at this point I feel that these
+areas needed to be a little more brighter,
+these shadow areas. So we can always double click on it,
+go in here and make them even more lighter.
+So this was Opacity 100, this was 80. So let's go 70 on this one.
+Where it's 60, let's go 50 on this one. Where it is 50, let's go 40 on this one.
+Press Ctrl or Command S to save it. And now let's get back to
+Pixium Perfect Composite and now it's a little more realistic.
+So now let's get back to our color and apply the color of our choice.
+Now if you really want to compare the shadows, you can always go to the
+background and just grab little bit of the shadow areas from here
+and maybe also grab this area. Press Ctrl or Command J and place it at the very top.
+Okay. And press Ctrl or Command D and bring it right over here.
+And that's just a good comparison to see how the shadows stack up.
+So this will help you to find out whether you need to darken,
+apply a little more color, so on and so forth. So let's get back to our
+shadow and I feel this needs to be a little more darker.
+So probably at about 65. Okay. And now let's go to Color and
+give it a little more blue. That looks okay for the moment. Hit OK.
+Now the next step is as you already might have guessed, blurring the shadow.
+So first of all, let's just remove these references. We don't really need it anymore.
+Let's come back to shadow. Now keep in mind this is a smart object.
+So whatever blurring filter we apply, we can always change that later.
+So let's go to Filter and Blur Gallery. This time we're going to choose Iris Blur.
+Let's choose that. Now wherever the contact point is,
+we're going to place an Iris. So let's zoom in around the leg and bring one point to one leg.
+First of all, let's make it very small like this. Just make it flat, oval and now let's stretch it
+just like so. Now these are the four points for the blur stars and the edge of the ellipse
+is where the blur ends, which means if the blur is at about five, this will be zero around
+these points and gradually increase it to five on the edge and beyond that it would be five.
+So let's bring the points close together and zoom in. And also if you want to individually
+move these points, hold the Alt key or the Option key, click on the point so that you can
+individually move them. So let's bring them very, very close. Okay. Or you can actually
+place it at the very center of both the legs.
+And now gradually increase the blur to where it matches with the shadows around it. Let's try 30.
+That looks about right. Hit okay. Now these areas around the legs are still very sharp. So we need
+to address that as well. Let's apply an overall Gaussian blur by going to Filter, Blur and then
+Gaussian Blur. Let's go with one or two. Let's go with two. How do you feel about that? Two is
+okay. Do notice that the ground is a little bit blurred and her legs are very sharp. We're
+going to deal with that later. But for right now, two is fine according to the ground and hit okay.
+Once you're okay with that. And now that is looking absolutely natural, isn't it? Now, of course,
+we need to make certain more adjustments in the coming steps. Now the ground is not absolutely
+flat. It has lots of ups and downs in it. So unless you engrave that in the shadow as well,
+it won't look natural no matter what you do. With the shadow layer selected, just create a mask.
+Click on the mask button right there. Take the brush and this time take a soft round brush.
+With the flow and opacity at about 100, just create those bumps around these pebbles and little stuff
+on the ground. So right here, I'm just going to paint with black and create a little bump.
+See, just making that little change makes a hell lot of difference. Here's the before,
+very flat, very unnatural. But just after creating that, it just makes so much of a difference. So
+keep those little bumps in mind and create those little grooves inside the shadows to make them
+look realistic. Just that little groove we did there. Here's the before, so flat. Here's the
+after, makes it look natural. Even if you zoom out, it'll make it look absolutely realistic.
+Before, after, see that little change. So do those grooves here and there.
+These little rocks. Now there should be a little bump right over here. So let's give that as well.
+I'm just increasing the brush size to add a little bit of that softness there,
+which matches with that of the shadow. These little grooves make the world of difference.
+Have a look at the overall before and after. So here's the before, super flat,
+and here's the after just after doing that groove. Now if you ask me,
+still the shadow doesn't feel right. There's something missing. Can you guess what that
+is? Let's examine a real shadow to understand this concept. Let's come back to the original
+subject image. Let's turn on the background. If you zoom in right over here, you would notice
+there is shadow of course, but wherever the leg is touching the ground, there's some additional
+shadow. We can call this contact point shadow. If my hand is right over here and there is light
+falling on it, of course there would be shadow on the table. But where my hand is exactly touching
+the surface of the table, those areas would be even darker. And those are called contact point
+shadows. And that's what we have to add in the existing shadow. Let's come back to our
+pick-simperfect composite and let's first of all zoom in right over there. And just above
+the shadow color layer, let's create one more layer and name it contact point shadow.
+Now we're going to use this existing shadow as a mask. So hold the control or command and click on
+the shadow. That way we have a mask and click on the mask button right there. Okay. Now we also
+want to subtract the mask areas of that shadow. Hold the control or command, click on the mask
+of the original shadow. All right. Now we need to invert it and delete it. Press control,
+shift I, command, shift I to invert the selection and fill that area with black. So with the
+contact point shadow layer selected, it's mask selected, press alt, backspace. So we kind of
+erase the extras from right here. You see that cuts? That was essential. Now let's come back to the
+layer and take the brush. And just first of all, let's give it one layer of darkness around the
+legs. Just dab once with black like this. Let's do the same around the other leg as well.
+So we have the first layer. This is a good starting point.
+Let's decrease the opacity and slowly and gradually increase it to a point that looks okay here. 34
+is all right. Now let's create one more layer and this is contact point shadow 2.
+This is where we go in and paint in the absolute dark areas. We need the same mask here.
+So why not create a group? Select the first one, hold the control or command, select the
+second one, press control or command G to create a group and bring the mask to the group.
+That way, both of them have a common mask. Let's come to CP shadow 2 layer and then
+start painting those absolutely dark areas. You can decrease the flow to about five or 10
+to have more precision here. I'm going to go with two.
+This is like dodging and burning. All right, this leg is done. Let's decrease the opacity
+slightly about 65%. Similarly, let's do the other side.
+It might not look like a big thing but when you zoom out, this makes the world of difference.
+So here's the before. It looks like the leg is in the air and here's the after. Just by doing that,
+the leg feels connected. But still, there is something funny about it and that my friend
+brings us to our next step and that is the shadows here are so dark. Don't you think
+that a little bit of that darkness would also fall a little bit on the legs, right? So we need
+to add a little darkness on the subject as well, especially near the shadows. So create a layer
+above the subject and also limit it just at the subject by holding the Alt key or the Option key
+and clicking on the line between these two layers. This way, no matter what we paint here,
+it will be limited to the subject. Have a look. See, it won't paint anywhere else.
+So here's what we need to do. We need to take a sample color of the shadow nearby
+and just paint over a little bit on the subject. Erase the extras. Now, I know what
+some of you are thinking. You might say, Mish, this is crazy. But wait for it. Let's do the other leg
+first. A little bit on the clothes is fine too. That looks about right. Now, all we need to do
+is to change the blend mode from Normal to, guess what the blend mode is, which darkens,
+Multiply. Now, this is of course too much. Zoom in and slowly and gradually decrease the opacity.
+And increase it and stop at the point where it matches nicely. I feel that about 46 or 50 would
+be a great place to be. And there you have a nice darkness there. Here's the before, not matching
+at all. Here's the after. Now, we are doing something. You can also go ahead and add a little
+more. Okay. There you have it. Now, it is high time that we started matching the color and
+the lighting. And the easiest way to match the ambient color and the lighting is simply
+making the copy of the background layer by selecting the background layer first
+and then pressing Ctrl or Command J. Bring it to the very top above the subject. Okay. Also,
+limited to the subject by holding the Alt key or the Option key and clicking on the line between
+these two layers and simply blur it by going to Filter, Blur and then Gaussian Blur.
+Let's apply a pretty high blur so that all of the details are gone because we only want
+what color is. Let's go with about 200, hit OK and simply change the Blend Mode to, guess what?
+What do we want here? Color, right? So change the Blend Mode to Color. Now, this is matching just
+way too much that it is completely letting go of its original color. We want you to have your
+originality here. So decrease the opacity to let's say about 40% and there we have matched
+so, so much. So here's the before and here's the after. Look at how much the color is
+matching. Now let's match the brightness and also when we do match the brightness the colors might
+distract us. To create a luminosity check layer, in other words to take away all the colors momentarily,
+in a more realistic perceptual way, you can create a solid color adjustment layer
+and choose gray or black or anything that does not have a saturation and change the Blend Mode
+to Color. All right? Now, just under it, you're going to create a Curves Adjustment
+layer and limit it just to the subject by holding the Alt key or the Option key
+and clicking on the line between these two layers or simply click on this button.
+That also creates a clipping mask. Let's zoom out and darken this overall subject. I feel like
+this matches but also at the same time, her hair is getting too dark. If you look at the background,
+it's a little faded. So we need to take the shadows up a little bit just like this
+and now it is matching. Let's have a look. Here is the before and here is the after. We have
+come close. Now, we don't need the luminosity check layer. Let's simply delete that. I feel that we can
+add slight yellow to it because if you have a look at the bright areas right here, they have
+a little yellowish tint. So let's go back to the Curves and go to the Blue Channel
+and just zoom in first of all right here and just simply decrease the blues because blue is
+the opposite of yellow. So slightly just a very slight decrease that helps us a little bit
+and there you go. Here's the before, here's the after. Now is a really good time to go ahead and
+take a break and get back to the image. We are engrossed in this image for too long that we might
+miss certain mistakes or that we might not see certain color matching or color adjustments we
+might have to do to make it look more seamless. Now when I look at it, the background looks a
+little more warmer and I feel that we need to add a little more warmth to the subject as well.
+For that, we're going to create a Curves Adjustment layer again and also limit it just to the
+subject by clicking on this button. Creates a Clipping Mask. Now to add warmth, let's first
+of all go to the Red Channel and we only want to add warmth to the bright areas. Have a look.
+Look at the dark areas. Dark areas are not warm where the light is falling, those areas are warm.
+So let's zoom in and increase the reds in the bright areas. You can take the help of
+the hand right there, just click on the hand and wherever you want to increase the reds,
+just click and drag that up. Areas corresponding to that brightness level
+will have an increase in reds. This is fine but we don't want it to increase in the shadow areas.
+So let's click and drag it down and bring it back to normal. Also, let's go to the Blue Channel
+and add some more yellow to it. Slight bit. Let's do it only in the extreme highlights right
+here and bring it back in the shadow areas. All right. This adds a little warmth to it.
+Have a look. Here's the before. Looks not so warm if you compare it with the background and
+if you turn that on, have a look, it adds a little warmth to it. Also matches so much with that of the
+background. Now with all the adjustments that we have done, the darkness that we created from the
+shadow might be affected as well. So instead of keeping it at the very bottom, why don't we
+place it at the top? All right. Bring it at the top. Make sure it is still clipped and as you
+do that, you will see a change here. So here was the before. See, it's looking very plain
+and here's the after. As soon as you bring it at the top, it looks more natural. So before the darkness,
+of course, this is unrealistic. After the darkness, you know, it's just hands down a lot better.
+Now let me share with you one more tip to take the shadow realism just off the charts and that is
+if you have a look at the cloth that she's wearing at the bottom, this is a little
+translucent. This is not absolutely opaque, right? So what if we add a pass through shadow?
+So right here, the shadow is going in this direction. So a little bit of the shadow we can see
+through her dress as well. So just above this layer, let's create one more layer, hold the Alt
+key or the Option key and click on the line between these two lists to also limit that.
+And now take the brush and this time with a soft round brush, just take a sample of that shadow
+color and continue that shadow. That's it. Also now let's erase and soften the extras.
+Any of guest at my friend just decrease the opacity. See that difference it makes? Just look at the
+difference. Here's the before and if I turn that on, here's the after. Just look at that.
+And this my friend is just mind bending. If you want to take it further, have a look at this
+bright rock right there. Why don't we take the brush and take a sample of that one as well,
+decrease the flow to about 5% and paint that as well.
+See those little see through things really make a difference. Now we are not done yet.
+Let's focus on the shadows off the subject. If you look at the shadows in the background,
+they're a little too bluish. So we need to add blues there as well. So create another
+Curves Adjustment layer and let's go to the blue channel and just focus on the shadows
+and it will be taken away from the bright areas. Don't worry about that. So in the shadow,
+let's zoom in and also focus on the shadows of the background that will help you and just
+increase the blues a bit like this. Now you would want to limit it to the subject. So create
+a clipping mask by clicking on this button. Now once we do increase the blues, I feel that
+increasing the greens a little bit will take away those pinkish magenta-ish tint there.
+So let's go to the green channel and let's increase that a bit. See? It's making it a little more
+natural. Matching that with that at the background. Let's go to the red channel and try to decrease
+or increase it and see what works. Slight increase works. Let's go back to the green channel
+and increase it a bit and there we have something for the shadows. Now the shadows
+look a little more natural. I would go ahead and increase a little more blues there.
+There you go. Look at the overall shadow. It's just matching so so much. Now we only want it in
+the shadows. So double click on the right-hand side of the limb and take it away from the
+highlights by taking the slider of the underlying left from right to left. Break it apart to
+make the transition smoother. This looks alright. Hit OK. So let's take a look at the before and
+after. Here's the before. The shadows are just too colorful and not matching. Here's the after.
+Just just so much better. But at the same time I feel it's too much. So let's decrease the opacity
+to about 60 70 ish. Alright. Now we have a little more originality there. We are still not done yet.
+Have a look at the shadow of the cycle guy. It's a little darker right. So we just need to get
+the shadow areas to be a little darker. Shadows on the right-hand side. So one more curves
+adjustment layer I know picks imperfect is synonymous to curves. Let's create one more
+curves. Just bring it down. Also limit it to the subject. Bring it down overall.
+This darkness seems about right. Let's play with the greens. I feel the green has gone too much.
+So slightly I will decrease it and also reds. Slightly we'll decrease that as well.
+Okay. We only want to apply it on the right-hand side. So select the mask.
+Press Ctrl or Command I. Take the brush. Flow in opacity at 100 with the soft
+round brush. Just paint on the right-hand side with white. Again this is harsh and we want to take
+this away from the bright area. So double click on the right-hand side of the layer and hold the
+Alt key or the Option key. Break apart the right-hand side slider and take it apart like this.
+Okay. Okay. Let's take a look at the before and after. So here's the before.
+Look not matching with that of the cycle guy. Here's the after. We are much closer.
+And as usual let's decrease the opacity. About 75 would be right.
+Now do you think we are done? Well not yet. I feel that we can apply a global effect to just
+blend and bring everything together. And that is something we do at the end of every composite.
+And in this particular example we can easily do that with a lookup table. So let's create a color
+lookup table and let's just slap on our favorite one, the usual one. That is crisp warm.
+And once you do that this scene just becomes complete. If you think it's too much you can
+decrease the opacity to about 50% and there my friend we have our composite. Do you want to
+take a look at how it would look without all the adjustments? Let me share that with you.
+This is without any of the adjustments. All right. Still looking okay. But once you turn
+all of these adjustments have a look. It just starts to blend in so beautifully.
+Let's take a look without the shadows. Let's zoom in right there to just analyze and just
+appreciate the shadow. So here's without shadow and just adding the shadows just adds so so much.
+Now of course you can take the time to make some adjustments to the shadow. There are so many
+things you can do. And what if I tell you the image is still not complete? Because it isn't.
+If you look at the ground it's a little blurry. But if you look at the subject's
+feet it's too sharp. So let's add a bit of blur to the subject. So with the subject
+layer selected make sure it's a smart object. Let's go to Filter, Blur and then Gaussian Blur.
+Let's add about one pixel blur right there. I feel that one would be enough. Hit okay.
+Now it's matching so good like crazy. Of course we want the upper part of the subject to be
+sharp. So select the mask of the Gaussian Blur or the Smart Filter whatever you want to
+call it. And let's create a gradient with black at the top. So let's draw a gradient
+so that the upper parts are sharp and only the bottom part this area is soft. So you can start
+a gradient from right here to go and there you have it. So only this area is blurred and as we go
+up we get sharper and sharper. Boom done. Now on top of that if you want to add some more
+noise to match it even more that's up to you but we're just doing too much. Time for us to do a
+quick little recap. First of all bring in the subject to the new background. Just adjust the
+position of it and then use the subject area to create a base shadow. Use Distort and this is just
+a base shadow. On top of that start painting. Start adding and subtracting. In this example
+I did this with a brush. You can also use the selection tool to first make a selection
+and then fill it. You can also use the pen tool to create a path then convert it into a selection
+and then fill it. It's up to you how you want to paint it. Sometimes when the subject is wearing a
+dress and light is passing through a little bit you might have to create several layers of shadows
+to make it look more natural. After you create the shadows set the color and the blend mode
+properly and try to match that with the existing shadows in the image. Use that as a reference.
+Do not forget the contact point shadow. For example my hand is touching the shape table.
+There's a shadow on the table but just where my hand is touching the surface of the table
+there would be a very dark area. In some cases absolute darkness. So you might have to create
+another layer and just where the subject is just touching the ground add a little more darkness
+right over there. After you have done all that this might not be enough. Where the shadow is
+a little bit of the darkness would also get onto the subject. So just above the subject
+create a new layer and just paint around it change the blend mode to multiply. Limit that
+just to the subject. Add a little darkness around the shadow on the subject. Okay after that it's
+simple. You can match the ambient lighting by just applying a blurred version of the new background
+on top of that and change the blend mode to color and then use curves to match the lighting
+the shadows and the color and at the end don't forget to apply an overall color grading or
+an overall filter something overall. You can call this a global effect which brings everything
+together. In this example we just slapped in a lot crisp warm. That's it. I hope this video
+helped you in some way or the other. I hope you learned and picked up some techniques and if it
+did help you make sure to give us a like and also don't forget to subscribe and not just
+subscribe. Ring the bell so that you don't miss any other future tips tricks or tutorials.
+I would like to take this moment to thank all these nice and amazing people
+for supporting this channel on Patreon and helping keep PIXimperfect free for everybody
+forever. Please do consider supporting PIXimperfect on Patreon. It really helps me do all of these
+research create all of these lessons and package that into a tutorial for you and
+just bring it out for you for free. There are some perks of becoming a member which you can
+check out in patreon.com slash PIXimperfect as well and if you don't wish to support at the
+moment and just want to enjoy the video I'm already grateful to you for giving me your
+time. I truly appreciate that. Thank you so much again for watching this video. I'll see you in
+my next one till then stay tuned and make sure that you keep creating.

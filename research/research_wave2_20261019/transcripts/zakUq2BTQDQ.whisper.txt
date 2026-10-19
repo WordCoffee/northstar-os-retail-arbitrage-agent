@@ -1,0 +1,686 @@
+We all love compositing.
+And one of the biggest challenges when we place our subject on a new background are the shadows, right?
+But today we're gonna make it simple by learning to use the existing shadows of the subject
+and using the same on a new background.
+And we have three examples to make the concept as clear as possible for you.
+However, this has to be kept in mind that this trick or technique will only work
+if you have the shadow on a smooth surface and it's distinguishable.
+For any other situations, I'll tell you what to do at the end of the video.
+So without any further ado, let's get started.
+This video is sponsored by Millenote.
+Whether you're a team or an individual, Millenote is the most flexible tool for planning any creative project you can imagine.
+It's like a creative wall in a design studio where you can place anything anywhere
+either for inspiration, branding, planning or collaborating and even sharing your ideas with your client.
+Let's say you're a photographer, editor or a designer.
+You can easily send boards of your work to your client or team members.
+Your client or a team member can easily comment with what they think or how they want to move forward.
+Simply attach files like BSDs, PDFs, Adobe Illustrator files or anything.
+No hassle, just simple drag and drop everything.
+By the way, you can gather ideas anywhere from the web directly to your boards
+with Millenote's web clipper browser extension.
+Whether you're working on your creative ideas or putting together your next big project,
+Millenote is the place for all the work behind the work.
+And you know what's best? You can get started for free.
+Yes, try Millenote right now using the link in the description.
+Also, if you're ever interested in the pro version subscription,
+you can use the code PIX20 to get 20% off the subscription forever.
+Isn't that awesome? Let's get back to the tutorial.
+So here we are again in the magical world of Photoshop.
+If you wanna go ahead and download any of the photos shown in the tutorial,
+you know what to do, check the links in the description.
+To be able to place this camera on a new background,
+first of all we have to make a selection of this camera.
+Then the camera along with the shadow will talk about that later.
+First, make a selection of the camera.
+Now, have a look at the camera. It has hard edges unlike hair, unlike fur.
+Anything which has a hard edge, it's always best to use the Pen 2.
+It gives you the most precise selection when it comes to hard edged stuff.
+Now, I know what you're thinking, if we zoom in, have a look at this.
+This has a soft edge right here, right? The edges have been blurred.
+But this has been blurred because of shallow depth of field.
+And we can blur the mask. That's not big of an issue.
+But the object is hard edged. It's not hair, it's not fur, right?
+So we can use the Pen 2.
+And by the way, I have a complete guide on using the Pen 2.
+You can watch the video right here if you have not watched it yet.
+So let's go ahead and select the Pen 2.
+We are not gonna cover the basics all over again.
+So this is the Pen 2. Let's select it.
+And let's start making a selection.
+Now, before we do start making a path with the pen, just go to the Paths tab.
+If you cannot see it, you can go to Windows and then make sure Paths is checked.
+You'll see it then. Now, let's create a new path.
+Click on the New Path button and you can double click on the name, text.
+You can name it Camera, okay?
+And then you can start creating the path.
+If you don't do this, let me show you what happens if you don't do it.
+So if there was no path, if I was making a path like this,
+so a work path will be created.
+Now, if I just select the Pen tool again or do something,
+it will be continued in the work path.
+If you create a new path, that work path will be deleted.
+We don't want any of that to happen.
+We want a separate path just for the camera, okay?
+So let's go ahead and delete this.
+Let's select the Pen tool, make sure you create a new path
+and double click on the text and name it Camera or anything you like.
+Now, let's start with the Pen tool.
+Click to make a point.
+Click and drag to make a curve.
+Continue right here.
+This is fine.
+Stay a little inside.
+We don't want any of the background in our selection.
+Click and drag just like this.
+See how easy that was?
+Continue from here.
+Now, as you can see, there's a sharp turn right here.
+So what I will do is I'm going to bring it right there.
+Now, one of the biggest advantages of the Pen tool is
+when you draw stuff, you can hold the control or command
+and you can move the points here and there.
+And if you keep holding the control,
+you can also just play with the handles and work with them.
+Now, if I make a point here, it will be a curve.
+We don't want that to happen.
+So you can hold the Alt or Option.
+Click on it to break it and then just make a sharp turn right there.
+Just like that.
+Now, anytime you feel that this area is sharp,
+have a look at it.
+It has a sharp turn, right?
+So you can introduce handles over there
+by holding the Alt or Option and click and drag.
+This will introduce a handle.
+For example, there was a sharp turn like this over here.
+Let's say, and you want to make this curve,
+you can hold the Alt or Option, click and drag.
+Just like that.
+That will transform into a curve.
+Now, if you want to transform that to a corner again,
+you can hold the Alt or Option, click on the point
+that will be a corner from a curve.
+So you can take your time to draw the pen around the camera.
+I've already done that for you.
+So to call the monotonous work,
+you can download that as a PST as well
+with the ready-made selection done.
+So I don't want to save it.
+So this is the one where I have already made this path.
+As you can see, we have already made the selection.
+Now, all we need to do is to create a mask out of it.
+How can we do that?
+Well, once you have made the path all around the camera,
+you can right-click on the path
+and click on Make Selection.
+We don't want any feathering at this point.
+Just hit OK.
+One other way is, let's go back.
+If we select the path, if we right-click also on the image,
+you can just select Make Selection and hit OK.
+It's the same thing.
+Now, once you have done that,
+you can click on the Mask button right there.
+Just to be able to see clearly what's happening,
+we can create a solid color adjustment layer as a background.
+So click on the Adjustment Layer icon
+and then simply choose Solid Color.
+And in this case, we're going to choose a shade of red
+so that we can see very clearly what's happening.
+Hit OK.
+Now, place this under the camera.
+Okay?
+Now, as you can see, the edges are very, very sharp.
+We don't want that to happen.
+We also want to see what's happening in the background as well, momentarily.
+So we can select the mask and you can open up the Mask Properties.
+I can just simply click here to open up the properties
+or you can go to Windows and then click on Properties.
+Okay?
+Now, decrease the density.
+As you can see, the black areas in the mask are going gray, right?
+Which means that we are seeing more and more of the background.
+If I take it all the way to the left, the mask will become completely white
+and you will see the entire image.
+We don't want that.
+We will just increase the density to see how soft some edges were.
+So something like this, just to see the softness and let's collapse it.
+Now, select the Blur tool right here.
+Zoom in.
+You can control the strength if you want 50%, if you want 100%.
+For me, I'm just going to choose 100% for this example
+because it has a lot of blur around the edge.
+Maybe let's go 75.
+With the mask selected, just paint on the edges.
+See how we are blurring the edges accordingly?
+Now, once we are zoomed in, you can hold the spacebar
+and click and drag to move.
+Just a small tip.
+Don't blur it too much.
+See how blurred that area or the edge actually is.
+Now, for these areas, it's fine.
+I'm going to skip this area.
+I'm going to do it later for you.
+Now, have a look at this.
+If I just turn off the mask by holding the Shift
+and clicking on the mask, this area has a lot of blur, right?
+So, hold the Shift, click on the mask back again to turn it on.
+Now, you can take the blur, increase the strength to 100%
+and then you can paint there a lot
+because you know that area has a ton of blur, right?
+Okay.
+So, this is all fine.
+I've already done it for you.
+So, I'm going to move it, move to this one.
+I don't want to save it.
+I've already created the mask for you.
+If you're not seeing this, this can get you confusing.
+So, it's something like this, right?
+Let me just select the same thing
+that we did in the previous thing.
+So, it's something like this.
+I've already blurred it out, created the mask for you.
+Now, if it's looking different to you,
+maybe you have not turned up the density again.
+So, we were like this for density at 40%, right?
+Now, once you are done blurring everything,
+just make sure that you open up the properties again
+and you increase the density back to 100%.
+Our job here is done.
+Now, we just have to place this on a new background.
+We'll talk about the shadows later.
+So, let's go ahead and open up the new background.
+So, I'm here in my Explorer.
+I'm going to drag and drop the new background.
+So, drag it and drop it at the top,
+not on the image at the top to open it as a separate document.
+Now, have a look at this.
+The light here in the background is coming from bottom right.
+Okay?
+But here, the light is coming from,
+if I turn off the mask,
+the light is coming from the top, the right top.
+So, what if we rotate it?
+So, if we go to Image, Image Rotation,
+90-degree Counter Clockwise.
+Now, the light is coming from the same direction.
+Right top here, right top there.
+Always while compositing,
+make sure the light is coming from the same direction
+in all the elements, alright?
+Okay?
+Now, hold the Shift, click on the mask to turn it on
+and just copy and paste the layer.
+With the layer selected, press Ctrl or Command C.
+Come back to the new background,
+Ctrl or Command V.
+If that does not happen,
+there's one more way of doing this.
+You can just drag it,
+take it to that document and drop it over there.
+Same thing, okay?
+Now, we're gonna place it somewhere
+where it's gonna look good, maybe here.
+And I think it's too big, right?
+So, Ctrl or Command T.
+And let's make it tiny bit smaller.
+We could have converted it into a Smart Object,
+but I didn't do it anyway.
+Doesn't matter much here.
+You're just decreasing the size, just by a little bit.
+Okay, now once we have done that,
+we can name this Camera.
+Let's do the Shadows.
+With the Camera selected, press Ctrl or Command J.
+Okay?
+Now, bring this under the Camera,
+you can name this Shadow, double click on the text
+and name this Shadow.
+And in this case, we're gonna do some things more special.
+So, hold the Shift, click on the mask to show everything.
+Now, we will select the Lasso Tool, right here.
+And we'll select the Shadows.
+So, give it a little space and select the Shadows.
+Now, as you can see, the shadow is incomplete.
+We will learn how to complete it as well.
+Don't worry about it.
+So, we're gonna select the Shadows, very roughly.
+Like that, it's fine.
+Now, turn back on the Mask.
+Hold the Shift key, click on the Mask to turn it on.
+You wanna show the Shadow area.
+So, what is the concept of Mask?
+White shows and black hides.
+With the Mask selected, make sure the foreground color is white.
+Press X to toggle between the foreground and the background.
+And press Alt, Backspace on Windows, Option Delete on Mac.
+Now, you see the shadow, but you also see the white.
+We don't want that to happen.
+Press Ctrl or Command D.
+Now, what is the Blend Mode which darkens stuff?
+Multiply white, multiply darkens, screen brightens.
+Now, multiply is a very interesting Blend Mode.
+Everything which is 100% white, it will completely hide that.
+Everything which is 100% black, it will completely show it.
+So, with the Shadow, we want the white areas to hide
+and only the shadows to show up.
+So, change the Blend Mode from Normal to Multiply.
+Now, even if we change the Blend Mode to Multiply,
+see this area, it's still there, right?
+It's not completely hidden because that area was not 100% white.
+We need to make it 100% white.
+So, we're going to use a Curves Adjustment layer.
+You can also use levels, it's just the same thing.
+Click on the Adjustment layer icon and then choose Curves.
+Now, we want the curves just to affect the shadow layer.
+So, we will click on this button.
+This is Create Clipping Mask button.
+Now, whatever you do, only the shadow layer will be affected.
+Zoom in slowly and gradually take this slider to the left.
+Just when this vanishes, stop.
+And it's taken care of.
+You can take it even further if you want,
+but let's see how this looks.
+It's great too.
+This is also looking great.
+So, if you don't want to complete the shadow,
+if you're feeling too lazy, you can just do something like this,
+but we will learn how to do that as well.
+So, I'm going to leave it at that.
+This is fine.
+Okay, now it's time for us to match the camera with that of the background.
+And to do the same, we're going to use Curves again.
+So, select the camera layer with that selected.
+Click on the Adjustment layer icon and then choose Curves again.
+The only one to affect the camera, nothing else.
+If we do something, everything will be affected.
+We don't want that to happen.
+Let's reset it.
+Click on the Reset button.
+Now, click on this button to create a clipping mask
+so that only the camera is affected.
+As you can see, the shadows are pretty bright, right?
+Compare it with the background. It's pretty bright.
+So, we will take this slider from the left to the right
+just to make the shadows darker.
+Yes, this is fine. I like that.
+Let's take it even more.
+Yeah, it looks pretty good.
+You can make the dark areas a little brighter like that.
+And have a look at this.
+This is looking pretty good, not bad.
+I like this.
+Play with it.
+And by the way, I have a complete guide to Curves.
+You can watch it right here from start to finish.
+It's a great video, by the way.
+Okay, this looks about right.
+I like this.
+Now, once you're satisfied with it, I'm going to delete this point.
+Okay, that looks right.
+Let's have a look. So, here's the before. Here's the after.
+It's more matching with that of the background.
+We're going to talk about coloring later.
+Now, something in this image just doesn't look right.
+I want you to have a close look at the camera.
+The picture of the camera was taken with a shallow depth of field.
+And that's why we have these edges soft.
+And have a look at these edges.
+These edges are completely blurred out.
+These areas are blurred out as well because of the shallow depth of field.
+But on the contrary, the surface is very sharp.
+How can that be?
+If this area is of the camera is sharp and the bottom area of the camera is blurry,
+the surface should also be blurry, right?
+So, we need to take care of that.
+With the background layer selected, make a copy.
+Press Ctrl or Command J.
+Now, let me make the layers a little smaller so that you can see all the layers.
+Click on the grid and go to Panel Options and I'm going to make it smaller just like this.
+So, you can see more layers over here.
+Now, with the background copy selected, we can blur it out.
+First of all, let's go to Filter and Convert for Smart Filters.
+Hit OK to convert it into a Smart Object so that any filter we apply, it's non-destructive.
+We can change the values later.
+Go to Filter, Blur and then Gaussian Blur.
+Zoom in and apply the blur just like it was over there.
+Now, we will have to add noise.
+That's a separate thing.
+But let's just compare the blur here.
+I think 6-4 will be fine.
+Hit OK.
+Now, have a look at this.
+This has a lot of noise.
+This doesn't have noise.
+And to add noise, again, it's very simple.
+Press Ctrl Shift N, Command Shift N.
+New Layer dialog box will show up.
+You can name this Noise.
+Change the Blend Mode from Normal to Overlay.
+Check this.
+Fill with Overlay Neutral Color and hit OK.
+It will show up a gray layer and the Blend Mode is Overlay.
+Now, overlay hides everything which is 50% gray.
+Darkens everything which is darker than that, brightens everything which is brighter than that.
+Now, go to Filter, Noise and then Add Noise.
+You could have converted it into a Smart Object and could have controlled the noise later but
+that's completely upon you.
+I don't want to do it so much.
+I want to add a little more noise.
+We can always decrease the Opacity.
+Hit OK.
+And let's add a little blur to it.
+Go to Filter, Blur and then Gaussian Blur.
+To make the noise much more realistic and not digital.
+See, it's becoming more natural as we increase the blur on the noise.
+This is OK.
+Now, you can play with the Opacity of how much noise you want.
+You're going to choose an Opacity of let's say, 77 is fine.
+Now, see, there is noise on the object.
+There is noise on this thing.
+It's looking so much more realistic.
+Now, what we can also do is this.
+We can create a huge saturation adjustment.
+As you can see, the camera is very desaturated but the background is very saturated.
+So, we will decrease the saturation just a little bit to match with that of the camera.
+Interesting.
+I like this.
+Okay, great.
+Now, have a look at the right side of the camera.
+Have a look at this.
+The color just doesn't fit right.
+It should have a brown tint to it, right?
+So, here is what we do.
+Again, very simple to do.
+Select the top most layer and then create a new layer.
+At the top, hold the Alt or Option.
+Click on the line between these two layers so that this is also a clipping mask,
+which means that anything you do, anything you paint over here,
+it's going to be limited to just the camera.
+Let's go back.
+So, we do a very interesting thing.
+Change the blend mode from Normal to Color.
+Where is Color?
+There it is.
+Now, sample this area.
+Make sure if you're not sampling it right,
+make sure you select the eye dropper tool.
+Point sample is not right.
+Make sure the sample size is 3 by 3 or 5 by 5.
+We're going to choose 5 by 5 and sample all layers is selected.
+Now, take the brush and hold the Alt or Option to take a sample
+and then just simply paint on this area.
+See, now you've got the right tint,
+but I got to say it's too much.
+We're going to take care of that later.
+No problem.
+Maybe a little bit of tint there.
+Maybe a tiny bit of tint over here as well.
+Okay.
+This is looking all nice.
+Great.
+Of course, you need to decrease the opacity.
+That's what we are going to do.
+So, decrease the opacity.
+Just a tiny bit of tint and have a look at the difference.
+It makes the world of difference.
+Zoom out.
+Here's the before, not looking right at all.
+If I turn it on, now it's looking like something.
+But Anmesh, what about the shadows?
+It's just not looking right.
+It's just ending right there.
+Here's what you got to do.
+It's very simple.
+Select this.
+Okay.
+Now, once you have selected the shadow layer,
+you can easily do this.
+First of all, let's extend the shadow.
+So, select the layer and take the brush.
+And with white as the foreground color selected,
+just extend that area.
+Okay.
+Now, select the layer.
+Not the mask.
+Select the layer right now.
+And take a rectangular marquee tool right there.
+And just select this area which you want to extend.
+So, this is the lens area.
+We want to extend this.
+Now, press Ctrl or Command T.
+Hold the Ctrl.
+And just drag it just like this.
+We are distorting it.
+Drag it a little more in the direction of the shadow.
+And hit Enter over it in.
+Ctrl or Command D.
+Now, you can just select the mask.
+Take the brush.
+Foreground color black.
+Press X to toggle between the foreground and the background.
+And then just soften it out.
+As easy as that.
+Okay.
+Done.
+Easy, wasn't it?
+So, there you go.
+Now, at the end, I always do this.
+If you want to make a composite realistic,
+at the end apply a global effect.
+It can be a color lookup table.
+It can be a curve adjustment layer, anything.
+So, select the top most limb.
+And then I'm going to choose simply a color lookup table.
+And choose anything right here.
+To your choice, to your taste.
+I'm going to select this one.
+And we are good to go.
+Isn't that amazing?
+Now, if you want, you can add some lighting effects to it as well.
+Have a look at how hard the shadow is.
+So, if you want, let's go back.
+Go down.
+And just above the noise layer, you can add a curves adjustment layer.
+Or just above the background copy, you can also add a curves adjustment layer.
+Click on the adjustment layer icon and then choose curves.
+Just brighten it all the way up just like that.
+And then select the mask.
+Take the brush.
+Press Ctrl or Command I.
+With white color selected as the foreground color,
+just dab on certain areas.
+Where you want the light to come in from.
+So, I'm going to dab in right there and maybe a little bit right here.
+Now, with the mask selected, you can open up the mask properties
+and simply increase the feather.
+Like that.
+You see, now it's looking so much more realistic.
+See, now the shadow is justified.
+I can select that and maybe make a dab over here as well.
+Now, I'm going to make one right here just like so.
+It's looking really nice.
+Now, you would decrease the opacity.
+I think it's too much.
+And you can play with it as much as you like.
+Let's have a look at our second example.
+And this is just for demonstration.
+I've already done everything that has to be done
+that we did in the first example.
+Have a look at this.
+We already made the camera layer.
+We created a mask out of it.
+We already created the shadow layer.
+And with the curves adjustment layer, we just deleted the white areas
+and just increased the darkness of the shadows.
+Now, if you're wondering how we did that, it was this way.
+Let me just delete the curves adjustment layer.
+We click on the adjustment layer icon and then choose curves.
+And then we click on the clipping mask button.
+Now, instead of just taking this slider to the left,
+if you also want to darken the shadows,
+you will have to take this slider, the left slider to the right.
+Just like so.
+Have a look at what magic it creates.
+Now, in this example, I also wanted to show you,
+you don't always have to match the colors or extend the shadows.
+Sometimes just placing the object and just copying the shadow
+just does it all.
+Have a look.
+This is just the background.
+Okay.
+And we placed the camera on top of it and we created the shadow.
+And that was it.
+It looks perfect, right?
+So, not all the time, you might have to match the color of the camera
+with the background or adjust the shadows
+or maybe add grains or add blur or anything like that.
+Sometimes it just works just the way it is.
+Now, let's have a look at example number three.
+Now, this example is very important
+because in the first two examples,
+we had shadows on white backgrounds.
+So, it was easy to change the blend mode to multiply
+and make the whites whiter and completely white and hide it.
+But what if you have shadows in a different colored surface?
+Or what if you have shadows in a darker surface?
+What to do then?
+And that's why we have this example.
+So, I've already made a selection of all this.
+So, I've created a mask.
+Okay.
+Now, if we change the background,
+if we go ahead and create a solid color adjustment layer,
+click on the adjustment layer icon and then choose solid color
+and we're going to choose something like,
+let's say you can choose orange or anything you like.
+I'm going to choose this and place it under the object.
+Now, we need to create the shadows.
+But if we have a look, if we hold the shift,
+click on the mask, it's a pink background
+and it's also not smooth.
+What to do here?
+Very simple.
+Hold the shift key first of all, click on the mask to turn it on
+and make a copy of the object.
+Press Ctrl or Command J.
+And you can name this shadow.
+Place it beneath the object, right?
+And then with the mask selected,
+we will extend on the shadow areas as we did in the previous example.
+We can simply select brush foreground color white
+and let's make the brush a little smaller.
+It's super huge.
+Okay.
+Let's make it soft and just extend it over here.
+Just over here.
+First of all, we need to make this area smoother.
+Gauze and blur will not do
+because it will interfere with the mask
+and it will create complications.
+We don't want that.
+Now, we need to go to Filter, blur and this is special.
+So, we need to make sure surface blur,
+but we are making a mistake over here.
+The mask is selected.
+Make sure the layer thumbnail is selected.
+Then go to Filter, blur and then surface blur.
+Now, you can increase the radius all the way high.
+Doesn't matter.
+All you need to do is to play with threshold.
+With threshold 2, nothing is being blurred.
+If we increase the threshold, let's see what happens.
+Yes, these areas are blurred,
+but have a look at the line around the shadows.
+We don't like it,
+which means we have to decrease the threshold
+and stop at just the point
+where just the unevenness is blurred out.
+Sorry about the horn in the background.
+It just happens.
+I live in a noisy neighborhood.
+Okay.
+5 looks fine to me.
+Maybe let's go 6
+and decrease the radius to something like 27,
+maybe 33 is fine.
+You can also decrease it 19-ish.
+That's okay.
+Just hit OK.
+Now it's blurred.
+The next step would be desaturating it.
+As you can see it has some color.
+We don't want any color in the shadows.
+So with that selected, desaturate.
+Ctrl Shift U,
+Command Shift U to desaturate that.
+Now, we just have to make the gray areas completely white,
+as simple as that.
+Create a Curves Adjustment layer.
+Or you can also use Levels,
+as we have already talked so much about Levels.
+Let's just use Levels in this example.
+Click on the Adjustment layer icon,
+and then simply choose Levels Adjustment layer.
+Again, you're going to do the same thing.
+Take the slider on the right and the left.
+Just like that.
+And before that, click on this button.
+Create Clipping Mask button.
+Nothing is happening.
+Why is that?
+Because we have not changed the Blend Mode to Multiply.
+Select the Shadow layer.
+Change the Blend Mode to Multiply.
+And select the Levels Adjustment layer.
+And do the same.
+We're going to stop just right there.
+Have a look at this.
+This looks perfect.
+Now, of course, you need to play with the mask a little bit.
+Select the Mask here.
+Take the brush.
+And with black as the foreground color,
+just paint over these areas.
+Just hide those areas.
+Okay, that's fine.
+The shadow looks perfect.
+Now, you can use any background you want.
+You can just double click here.
+You can change the background to whatever you like.
+I'm going to change it to blue.
+It looks great.
+That's how to do it.
+Important note.
+If your shadow is on a completely uneven surface like grass or tiles
+or anything where you just cannot extract the shadow from,
+I have to say that you have to recreate the shadows.
+But no worries.
+We have a couple tutorials on recreating and just painting in shadows.
+You can check out the links in the description.
+So, that's how to easily cut out shadows
+and use it on a new background.
+All you have to keep in mind is this.
+Just have the Object layer or the Subject layer
+and the Shadow layer, which includes the shadow.
+Now, your goal is any area which is not the shadow,
+you have to make it completely white.
+And if you want to make the shadows darker,
+you can take the left slide of the curves of the levels
+from the left to the right.
+And don't forget to change the blend mode of the Shadow layer
+to Multiply.
+Now, if the shadow surface has colors,
+first desaturated.
+If it is uneven, you can also blur it a little bit.
+Don't forget to use surface blur, not Gaussian blur.
+So, that's pretty much it for this video.
+I hope this video helped you and if it did,
+make sure to give us a like and also don't forget to subscribe
+and not just subscribe.
+Ring the bell so that you, my friend,
+don't miss any other future tip, trick or tutorial.
+Thank you so much for all your support.
+Thank you for watching.
+I'll see you guys in my next one.
+Until then, stay tuned and make sure that you keep creating.

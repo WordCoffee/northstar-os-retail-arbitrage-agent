@@ -1,0 +1,3763 @@
+{
+ "id": "xSs5Lr_bOKg",
+ "title": "8-Step GUIDE: Blend Images and Create Composites Like a Pro with Photoshop",
+ "channel": "Nour Art",
+ "url": "https://www.youtube.com/watch?v=xSs5Lr_bOKg",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.998,
+ "duration_s": 3543.4,
+ "chars": 41307,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 6.4,
+   "text": "You feel like this photocompositing photo manipulation thing is complicated and you don't know how to master it?"
+  },
+  {
+   "start": 6.4,
+   "end": 8.4,
+   "text": "Well, here is my promise to you."
+  },
+  {
+   "start": 8.4,
+   "end": 15.2,
+   "text": "At the end of this video, you will learn how to master photocompositing by simply following some principles."
+  },
+  {
+   "start": 15.2,
+   "end": 20.9,
+   "text": "It's not rocket science, it's just simple steps to gather build your own composites."
+  },
+  {
+   "start": 20.9,
+   "end": 23.4,
+   "text": "So, without wasting any more time, let's dig into business."
+  },
+  {
+   "start": 25.68,
+   "end": 33.08,
+   "text": "This video is brought to you by Squarespace, the ultimate all-in-one solution for creating an incredible website."
+  },
+  {
+   "start": 33.08,
+   "end": 36.88,
+   "text": "Hello guys, welcome to my channel, my name is Nur and this is Nur Art Channel."
+  },
+  {
+   "start": 36.88,
+   "end": 39.48,
+   "text": "Well, well, well, well, well, well."
+  },
+  {
+   "start": 40.28,
+   "end": 43.98,
+   "text": "Alright guys, if you don't know what is photocompositing or photominipulation,"
+  },
+  {
+   "start": 43.98,
+   "end": 49.28,
+   "text": "it's basically combining and blending images together to create one message."
+  },
+  {
+   "start": 49.28,
+   "end": 55.58,
+   "text": "It can be used for a book cover, it can be used for a movie poster, gaming partner, advertising designs,"
+  },
+  {
+   "start": 55.58,
+   "end": 59.08,
+   "text": "or even just for your own fun, any sort of artwork."
+  },
+  {
+   "start": 59.08,
+   "end": 63.48,
+   "text": "I usually start with the idea, gathering the references, gathering the mood board."
+  },
+  {
+   "start": 63.48,
+   "end": 67.68,
+   "text": "So the main idea in creating this composite is creating like a beauty shot."
+  },
+  {
+   "start": 67.68,
+   "end": 71.08,
+   "text": "So the shot itself should be aesthetically pleasing."
+  },
+  {
+   "start": 71.08,
+   "end": 75.28,
+   "text": "It should look good, it should represent the car in a powerful way."
+  },
+  {
+   "start": 75.28,
+   "end": 76.28,
+   "text": "This is number one."
+  },
+  {
+   "start": 76.28,
+   "end": 84.08,
+   "text": "Of course, it should be realistic to sell the idea and it should convey the message that this car is powerful and speed on the road."
+  },
+  {
+   "start": 84.08,
+   "end": 85.18,
+   "text": "So how did I start?"
+  },
+  {
+   "start": 85.18,
+   "end": 94.08,
+   "text": "Basically, every time I start any sort of photocomposite, I go to Pinterest and Behance to create like my mood board,"
+  },
+  {
+   "start": 94.08,
+   "end": 96.08,
+   "text": "my main mode for the design."
+  },
+  {
+   "start": 96.08,
+   "end": 102.98,
+   "text": "So what I wrote is just truck car ads and then started to gather the reference, the angle of the car,"
+  },
+  {
+   "start": 102.98,
+   "end": 105.88,
+   "text": "the mood, the color palette, all these stuff."
+  },
+  {
+   "start": 105.88,
+   "end": 116.98,
+   "text": "So I decided to go with this mode in coloring, this sunset sky and the overall colors are reds in the shadows, some yellows in the highlights."
+  },
+  {
+   "start": 116.98,
+   "end": 123.68,
+   "text": "So after gathering some references, I go to the next part, which is finding the proper images to use."
+  },
+  {
+   "start": 123.68,
+   "end": 127.08,
+   "text": "And for this, I use Adobe Stock and Shutterstock."
+  },
+  {
+   "start": 127.08,
+   "end": 132.58,
+   "text": "Those are paid websites, but they have a very good library of images."
+  },
+  {
+   "start": 132.58,
+   "end": 136.38,
+   "text": "So type anything you want and you will find a good picture."
+  },
+  {
+   "start": 136.38,
+   "end": 143.08,
+   "text": "But if you want a free alternative, you can always go to websites like Pixar Bay and maybe FreePick."
+  },
+  {
+   "start": 143.08,
+   "end": 145.18,
+   "text": "You will find very good stuff as well."
+  },
+  {
+   "start": 145.18,
+   "end": 147.88,
+   "text": "So here is the images that I'm going to use."
+  },
+  {
+   "start": 147.88,
+   "end": 155.58,
+   "text": "So what I wrote basically is just road and started to look for a proper image that will be suitable for my composite."
+  },
+  {
+   "start": 155.58,
+   "end": 161.68,
+   "text": "In choosing images, you need to be careful to choose proper images that will work together"
+  },
+  {
+   "start": 161.68,
+   "end": 164.28,
+   "text": "because some images will never work together."
+  },
+  {
+   "start": 164.28,
+   "end": 165.68,
+   "text": "You cannot blend them."
+  },
+  {
+   "start": 165.68,
+   "end": 171.68,
+   "text": "So for example, if you want to create like sunset soft lights into the composite,"
+  },
+  {
+   "start": 171.68,
+   "end": 178.88,
+   "text": "you should avoid an image like this because it has very harsh shadows, very harsh light."
+  },
+  {
+   "start": 178.88,
+   "end": 180.48,
+   "text": "It's in unknown time."
+  },
+  {
+   "start": 180.48,
+   "end": 185.08,
+   "text": "You'll put a ton of effort to make the images match each other."
+  },
+  {
+   "start": 185.08,
+   "end": 188.58,
+   "text": "Instead, you can go with an image like this."
+  },
+  {
+   "start": 188.58,
+   "end": 190.68,
+   "text": "It has already soft lights."
+  },
+  {
+   "start": 190.68,
+   "end": 195.28,
+   "text": "The shadows are not harsh and these reflections are good into your composite."
+  },
+  {
+   "start": 195.28,
+   "end": 198.28,
+   "text": "And that's why I chose this image."
+  },
+  {
+   "start": 198.28,
+   "end": 203.98,
+   "text": "And for the sky, I just wrote sunset sky and started to browse all the images."
+  },
+  {
+   "start": 203.98,
+   "end": 208.28,
+   "text": "I'm here looking for a sky with some level of details."
+  },
+  {
+   "start": 208.28,
+   "end": 214.48,
+   "text": "So for example, an image like this will not be suitable for my design because it is very bright."
+  },
+  {
+   "start": 214.48,
+   "end": 216.88,
+   "text": "It doesn't have so much contrast."
+  },
+  {
+   "start": 216.88,
+   "end": 223.28,
+   "text": "And at the same time, this one will not be suitable at all because it has very high contrast."
+  },
+  {
+   "start": 223.28,
+   "end": 227.88,
+   "text": "So I'm kind of looking for an image that has depth and at the same time,"
+  },
+  {
+   "start": 227.88,
+   "end": 230.98,
+   "text": "it has some level of contrast."
+  },
+  {
+   "start": 230.98,
+   "end": 235.78,
+   "text": "So something like this would be good or something like this as well."
+  },
+  {
+   "start": 235.78,
+   "end": 240.48,
+   "text": "So I ended up with this image and this one."
+  },
+  {
+   "start": 240.48,
+   "end": 244.58,
+   "text": "I will combine both images together to create the sky part."
+  },
+  {
+   "start": 244.58,
+   "end": 250.08,
+   "text": "And finally, I tried to find a proper truck image that has the same angle,"
+  },
+  {
+   "start": 250.08,
+   "end": 255.08,
+   "text": "the same perspective of the road because if they are not matching in perspective,"
+  },
+  {
+   "start": 255.08,
+   "end": 260.38,
+   "text": "you will put a ton of effort and it will not look good at all at the end."
+  },
+  {
+   "start": 260.38,
+   "end": 266.38,
+   "text": "So as you can see here, the car has this 45 maybe degree perspective"
+  },
+  {
+   "start": 266.38,
+   "end": 269.48,
+   "text": "and the road has almost the same angle."
+  },
+  {
+   "start": 269.48,
+   "end": 273.78,
+   "text": "Maybe we can tweak it a little bit, but overall it looks matching."
+  },
+  {
+   "start": 273.78,
+   "end": 277.38,
+   "text": "This is the first part which is finding proper images."
+  },
+  {
+   "start": 277.38,
+   "end": 280.28,
+   "text": "So let's open Photoshop and start by creating the project."
+  },
+  {
+   "start": 280.28,
+   "end": 285.68,
+   "text": "For this, I will go with 4K size to give me flexibility in zooming in and zooming out"
+  },
+  {
+   "start": 285.68,
+   "end": 287.88,
+   "text": "and giving attention to details."
+  },
+  {
+   "start": 287.88,
+   "end": 293.48,
+   "text": "And I will go to 16-bit coloring to give me flexibility in coloring, of course."
+  },
+  {
+   "start": 293.48,
+   "end": 298.88,
+   "text": "And if you don't have a powerful PC, you can use 8-bit and then press create."
+  },
+  {
+   "start": 298.88,
+   "end": 299.98,
+   "text": "All right, let's start."
+  },
+  {
+   "start": 299.98,
+   "end": 303.98,
+   "text": "You will find all the images that I'm going to use in the link in the description"
+  },
+  {
+   "start": 303.98,
+   "end": 306.08,
+   "text": "so that you can follow along with me."
+  },
+  {
+   "start": 306.08,
+   "end": 308.38,
+   "text": "This is the best way you can learn."
+  },
+  {
+   "start": 308.38,
+   "end": 311.88,
+   "text": "Just watch me what I'm doing and then apply it yourself."
+  },
+  {
+   "start": 311.88,
+   "end": 315.88,
+   "text": "So let's start by bringing the images that I'm going to use."
+  },
+  {
+   "start": 315.88,
+   "end": 318.78,
+   "text": "I will start by bringing the road and the car."
+  },
+  {
+   "start": 318.78,
+   "end": 321.18,
+   "text": "Let's put them into our canvas."
+  },
+  {
+   "start": 321.18,
+   "end": 325.28,
+   "text": "And then let's start by selecting the sky of the road."
+  },
+  {
+   "start": 325.28,
+   "end": 328.68,
+   "text": "So for this, I'll go to select and select sky."
+  },
+  {
+   "start": 328.68,
+   "end": 333.78,
+   "text": "This will use Adobe AI to select the sky in seconds."
+  },
+  {
+   "start": 333.78,
+   "end": 338.68,
+   "text": "And then press into this mask button, press Ctrl-I to invert the mask."
+  },
+  {
+   "start": 338.68,
+   "end": 339.58,
+   "text": "And here you go."
+  },
+  {
+   "start": 339.58,
+   "end": 341.28,
+   "text": "You have the road selected."
+  },
+  {
+   "start": 341.28,
+   "end": 346.18,
+   "text": "Press Ctrl-T to make it a little bit bigger and to fill the canvas."
+  },
+  {
+   "start": 346.18,
+   "end": 347.88,
+   "text": "So something like this."
+  },
+  {
+   "start": 347.88,
+   "end": 352.48,
+   "text": "The main thing I want to start with is creating a good composition."
+  },
+  {
+   "start": 352.48,
+   "end": 353.88,
+   "text": "So what is composition?"
+  },
+  {
+   "start": 353.88,
+   "end": 360.58,
+   "text": "Mainly the composition is the arrangement of the elements into the composite"
+  },
+  {
+   "start": 360.58,
+   "end": 365.68,
+   "text": "to deliver specific message, to focus on a focal point."
+  },
+  {
+   "start": 365.68,
+   "end": 372.68,
+   "text": "So for example, if you notice here, the car itself is a little bit shifted to the right."
+  },
+  {
+   "start": 372.68,
+   "end": 373.18,
+   "text": "Why?"
+  },
+  {
+   "start": 373.18,
+   "end": 376.78,
+   "text": "Why it's not symmetrically into the center?"
+  },
+  {
+   "start": 376.78,
+   "end": 381.08,
+   "text": "It's because I want to give it some space to the eye."
+  },
+  {
+   "start": 381.08,
+   "end": 387.08,
+   "text": "I want to give the viewer some space to look at its destination, which is something good"
+  },
+  {
+   "start": 387.08,
+   "end": 388.28,
+   "text": "for the eye, you know."
+  },
+  {
+   "start": 388.28,
+   "end": 395.58,
+   "text": "And at the same time, I want to show the relationship of the car corresponding to the environment."
+  },
+  {
+   "start": 395.58,
+   "end": 401.98,
+   "text": "So I'm now showing the car, showing the surroundings, showing everything in a pleasing way."
+  },
+  {
+   "start": 401.98,
+   "end": 404.28,
+   "text": "And that is called the rule of third."
+  },
+  {
+   "start": 404.28,
+   "end": 409.98,
+   "text": "It's basically dividing your composition into three sections."
+  },
+  {
+   "start": 409.98,
+   "end": 416.48,
+   "text": "And you should put your main focal point into one of these four points."
+  },
+  {
+   "start": 416.48,
+   "end": 416.98,
+   "text": "Okay."
+  },
+  {
+   "start": 416.98,
+   "end": 422.38,
+   "text": "So the center of this car is kind of into this line."
+  },
+  {
+   "start": 422.38,
+   "end": 426.48,
+   "text": "So let's go to the car and let's start to select it."
+  },
+  {
+   "start": 426.48,
+   "end": 430.48,
+   "text": "I will use select subject tool to select it."
+  },
+  {
+   "start": 430.48,
+   "end": 433.38,
+   "text": "I guess it's going to give us very good results."
+  },
+  {
+   "start": 433.38,
+   "end": 434.38,
+   "text": "So let's try it."
+  },
+  {
+   "start": 434.38,
+   "end": 438.08,
+   "text": "Press into the car and then go and create a mask."
+  },
+  {
+   "start": 438.08,
+   "end": 439.58,
+   "text": "Give us good results."
+  },
+  {
+   "start": 439.58,
+   "end": 441.18,
+   "text": "It needs minor adjustments."
+  },
+  {
+   "start": 441.18,
+   "end": 443.98,
+   "text": "So for example, this area needs some refinement."
+  },
+  {
+   "start": 443.98,
+   "end": 452.48,
+   "text": "So it's basically bringing the brush and activating the mask and then starting to paint over here"
+  },
+  {
+   "start": 452.48,
+   "end": 453.98,
+   "text": "and maybe here."
+  },
+  {
+   "start": 453.98,
+   "end": 454.18,
+   "text": "Okay."
+  },
+  {
+   "start": 454.18,
+   "end": 454.98,
+   "text": "That's very nice."
+  },
+  {
+   "start": 454.98,
+   "end": 460.78,
+   "text": "Obviously the car and the road are not matching in terms of the perspective."
+  },
+  {
+   "start": 460.78,
+   "end": 467.58,
+   "text": "So let's try to rotate it by pressing control T and try to rotate it to match the same"
+  },
+  {
+   "start": 467.58,
+   "end": 469.28,
+   "text": "horizon line."
+  },
+  {
+   "start": 469.28,
+   "end": 473.28,
+   "text": "Even if we did so, it's not matching."
+  },
+  {
+   "start": 473.28,
+   "end": 475.88,
+   "text": "There's something off here."
+  },
+  {
+   "start": 475.88,
+   "end": 482.58,
+   "text": "That's because the focal length of the camera that took the picture of the car has a wider"
+  },
+  {
+   "start": 482.58,
+   "end": 486.28,
+   "text": "angle than the lens that took the image of the road."
+  },
+  {
+   "start": 486.28,
+   "end": 488.58,
+   "text": "So how can we fix this?"
+  },
+  {
+   "start": 488.58,
+   "end": 491.38,
+   "text": "Let's start by defining the horizon line."
+  },
+  {
+   "start": 491.38,
+   "end": 493.48,
+   "text": "So what is horizon line?"
+  },
+  {
+   "start": 493.48,
+   "end": 500.58,
+   "text": "Horizon line is basically the level of the eye that is seeing the object again."
+  },
+  {
+   "start": 500.58,
+   "end": 508.28,
+   "text": "If you have a camera and you are taking a picture of something, then the horizon line"
+  },
+  {
+   "start": 508.28,
+   "end": 515.68,
+   "text": "is the level of this camera and it's how far is it from the ground."
+  },
+  {
+   "start": 515.68,
+   "end": 519.18,
+   "text": "So this is the horizon line of the camera."
+  },
+  {
+   "start": 519.18,
+   "end": 522.08,
+   "text": "This is the horizon line of my eye."
+  },
+  {
+   "start": 522.08,
+   "end": 527.48,
+   "text": "So if we have two images that are taking in different situations, so you maybe have one"
+  },
+  {
+   "start": 527.48,
+   "end": 531.98,
+   "text": "image that has a lower horizon line than the other."
+  },
+  {
+   "start": 531.98,
+   "end": 538.68,
+   "text": "So the way we are going to match these two images is by bringing this horizon line and"
+  },
+  {
+   "start": 538.68,
+   "end": 540.48,
+   "text": "matching it together."
+  },
+  {
+   "start": 540.48,
+   "end": 544.28,
+   "text": "Before we go to the next point, let's hear a quick message from today's sponsor,"
+  },
+  {
+   "start": 544.28,
+   "end": 545.08,
+   "text": "Squarespace."
+  },
+  {
+   "start": 545.08,
+   "end": 550.08,
+   "text": "We all know that having a powerful website is crucial for creative individuals like"
+  },
+  {
+   "start": 550.08,
+   "end": 550.58,
+   "text": "us."
+  },
+  {
+   "start": 550.58,
+   "end": 555.38,
+   "text": "Now, I'm not a professional web designer and honestly, I don't want to spend countless"
+  },
+  {
+   "start": 555.38,
+   "end": 558.38,
+   "text": "hours trying to create my website from scratch."
+  },
+  {
+   "start": 558.38,
+   "end": 563.28,
+   "text": "With Squarespace, all the complex stuff is already taking care of, allowing you to"
+  },
+  {
+   "start": 563.28,
+   "end": 566.48,
+   "text": "focus on what you do best, unleashing your creativity."
+  },
+  {
+   "start": 566.48,
+   "end": 571.58,
+   "text": "One of the things I love about Squarespace is that it's amazing in browser editor."
+  },
+  {
+   "start": 571.58,
+   "end": 577.28,
+   "text": "It enables me to effortlessly create a website by just dragging and dropping some"
+  },
+  {
+   "start": 577.28,
+   "end": 578.08,
+   "text": "elements."
+  },
+  {
+   "start": 578.08,
+   "end": 583.38,
+   "text": "It's literally easier than any design software, but Squarespace offers much more"
+  },
+  {
+   "start": 583.38,
+   "end": 583.98,
+   "text": "than that."
+  },
+  {
+   "start": 583.98,
+   "end": 589.38,
+   "text": "It provides a wide range of features, including email campaigns, powerful"
+  },
+  {
+   "start": 589.38,
+   "end": 593.88,
+   "text": "blogging tools and my personal favorite website analytics."
+  },
+  {
+   "start": 593.88,
+   "end": 596.98,
+   "text": "So you can easily track your website's performance."
+  },
+  {
+   "start": 596.98,
+   "end": 602.38,
+   "text": "Plus Squarespace offers loads of modern and solid templates to choose from,"
+  },
+  {
+   "start": 602.38,
+   "end": 604.88,
+   "text": "ensuring your website looks stunning."
+  },
+  {
+   "start": 604.88,
+   "end": 608.38,
+   "text": "Make sure to give Squarespace a try with their free trial."
+  },
+  {
+   "start": 608.38,
+   "end": 612.88,
+   "text": "And when you are ready to launch your website, head over to squarespace.com"
+  },
+  {
+   "start": 612.88,
+   "end": 618.88,
+   "text": "slash NoorArt to save 10% of your first purchase of the website or domain."
+  },
+  {
+   "start": 618.88,
+   "end": 621.38,
+   "text": "I will drop the link in the description below."
+  },
+  {
+   "start": 621.38,
+   "end": 625.18,
+   "text": "Okay, so how can I define the horizon line of an image?"
+  },
+  {
+   "start": 625.18,
+   "end": 629.18,
+   "text": "I will look for something that is called leading lines."
+  },
+  {
+   "start": 629.18,
+   "end": 630.48,
+   "text": "What is leading lines?"
+  },
+  {
+   "start": 630.48,
+   "end": 632.88,
+   "text": "I don't want to over complicate it for you."
+  },
+  {
+   "start": 632.88,
+   "end": 639.68,
+   "text": "It's basically if we draw some lines of the parts that are"
+  },
+  {
+   "start": 639.68,
+   "end": 641.18,
+   "text": "parallel to each other."
+  },
+  {
+   "start": 641.18,
+   "end": 648.08,
+   "text": "So for example, this line of the road is supposed to be parallel to this"
+  },
+  {
+   "start": 648.08,
+   "end": 652.18,
+   "text": "because the road should be like two parallel lines."
+  },
+  {
+   "start": 652.18,
+   "end": 657.68,
+   "text": "So the intersection between these two lines is defining something"
+  },
+  {
+   "start": 657.68,
+   "end": 661.18,
+   "text": "that is called the vanishing point."
+  },
+  {
+   "start": 661.18,
+   "end": 667.08,
+   "text": "This is the vanishing point and the horizon line is basically a horizontal"
+  },
+  {
+   "start": 667.08,
+   "end": 671.28,
+   "text": "line that is intersecting with this vanishing point."
+  },
+  {
+   "start": 671.28,
+   "end": 676.88,
+   "text": "So this is the level of the camera that took this picture."
+  },
+  {
+   "start": 676.88,
+   "end": 678.38,
+   "text": "That is very nice."
+  },
+  {
+   "start": 678.38,
+   "end": 680.98,
+   "text": "So this was for the road."
+  },
+  {
+   "start": 680.98,
+   "end": 682.38,
+   "text": "So what about the car?"
+  },
+  {
+   "start": 682.38,
+   "end": 684.08,
+   "text": "We will do the same thing."
+  },
+  {
+   "start": 684.08,
+   "end": 686.28,
+   "text": "Let's try to find some leading lines."
+  },
+  {
+   "start": 686.28,
+   "end": 688.08,
+   "text": "Another line here."
+  },
+  {
+   "start": 688.08,
+   "end": 690.88,
+   "text": "So this should be the vanishing point."
+  },
+  {
+   "start": 690.88,
+   "end": 694.68,
+   "text": "Then we can bring the horizon line for the car."
+  },
+  {
+   "start": 694.68,
+   "end": 697.58,
+   "text": "Should be somewhere here."
+  },
+  {
+   "start": 697.58,
+   "end": 698.48,
+   "text": "That's very nice."
+  },
+  {
+   "start": 698.48,
+   "end": 705.08,
+   "text": "So if we hide all these lines, we should have two horizon lines of the two images."
+  },
+  {
+   "start": 705.08,
+   "end": 711.58,
+   "text": "What I'm going to do is basically try to match these two horizon lines."
+  },
+  {
+   "start": 711.58,
+   "end": 715.18,
+   "text": "So now the horizon line of the two images matched."
+  },
+  {
+   "start": 715.18,
+   "end": 715.88,
+   "text": "That's very nice."
+  },
+  {
+   "start": 715.88,
+   "end": 720.78,
+   "text": "The next step, if I want to make this car a little bit smaller,"
+  },
+  {
+   "start": 720.78,
+   "end": 729.68,
+   "text": "I'll just select the car layer, press and control T and then press alt and press into the horizon line."
+  },
+  {
+   "start": 729.68,
+   "end": 734.38,
+   "text": "This will put the anchor point of making the cars smaller and bigger,"
+  },
+  {
+   "start": 734.38,
+   "end": 737.98,
+   "text": "which will maintain the same perspective."
+  },
+  {
+   "start": 737.98,
+   "end": 744.28,
+   "text": "So I will put it somewhere like this and press OK."
+  },
+  {
+   "start": 744.28,
+   "end": 745.68,
+   "text": "That is very cool."
+  },
+  {
+   "start": 745.68,
+   "end": 752.28,
+   "text": "Maybe we can just play around with the shape or the perspective of the car."
+  },
+  {
+   "start": 752.28,
+   "end": 762.78,
+   "text": "So I will do this by right click, convert the layer into a smart object of the car and then go to edit and perspective work."
+  },
+  {
+   "start": 762.78,
+   "end": 767.98,
+   "text": "So let's try to define this, the perspective of the car."
+  },
+  {
+   "start": 767.98,
+   "end": 777.58,
+   "text": "So what I'm looking for now is trying to draw the lines of the car."
+  },
+  {
+   "start": 777.58,
+   "end": 787.98,
+   "text": "So let's put this like this, this taller, match the perspective and at the same time, this line is not straight."
+  },
+  {
+   "start": 787.98,
+   "end": 795.68,
+   "text": "So as you can see right now, we should make it the same direction as well."
+  },
+  {
+   "start": 795.68,
+   "end": 807.64,
+   "text": "And secondly, I will draw some parts here as well."
+  },
+  {
+   "start": 807.64,
+   "end": 818.54,
+   "text": "So something like this and after finishing, I'll go to warp and then start to tweak the car perspective a little bit."
+  },
+  {
+   "start": 818.54,
+   "end": 825.84,
+   "text": "So I'm going to just make it a little bit taller or longer, something like this."
+  },
+  {
+   "start": 825.84,
+   "end": 831.37,
+   "text": "Zoom out."
+  },
+  {
+   "start": 831.37,
+   "end": 833.27,
+   "text": "So something like this will be OK."
+  },
+  {
+   "start": 833.27,
+   "end": 835.17,
+   "text": "So let's see before and after."
+  },
+  {
+   "start": 835.17,
+   "end": 837.47,
+   "text": "Here is before and here is after."
+  },
+  {
+   "start": 837.47,
+   "end": 841.37,
+   "text": "I think it's matching in a better way right now."
+  },
+  {
+   "start": 841.37,
+   "end": 842.57,
+   "text": "That's very nice."
+  },
+  {
+   "start": 842.57,
+   "end": 846.47,
+   "text": "So let's just remove this part of the road."
+  },
+  {
+   "start": 846.47,
+   "end": 853.57,
+   "text": "I will select the mask and using the brush, I will just paint over this area."
+  },
+  {
+   "start": 853.57,
+   "end": 855.07,
+   "text": "That's very nice."
+  },
+  {
+   "start": 855.07,
+   "end": 860.87,
+   "text": "And I'll try to refine these edges using a grass brush."
+  },
+  {
+   "start": 860.87,
+   "end": 865.97,
+   "text": "So any grass brush you can find online, something like this would help."
+  },
+  {
+   "start": 865.97,
+   "end": 875.77,
+   "text": "And then painting on the mask itself here, I will just reveal some parts, but with this grass brush."
+  },
+  {
+   "start": 875.77,
+   "end": 878.57,
+   "text": "So something like this would be OK."
+  },
+  {
+   "start": 878.57,
+   "end": 881.47,
+   "text": "Let's increase the flow of the brush."
+  },
+  {
+   "start": 881.47,
+   "end": 882.87,
+   "text": "Yeah, that's better."
+  },
+  {
+   "start": 882.87,
+   "end": 884.97,
+   "text": "That is very nice."
+  },
+  {
+   "start": 884.97,
+   "end": 888.47,
+   "text": "Now let's go to the next part, which is the sky image."
+  },
+  {
+   "start": 888.47,
+   "end": 890.87,
+   "text": "For this, I got these two images."
+  },
+  {
+   "start": 890.87,
+   "end": 893.07,
+   "text": "Let's bring them here."
+  },
+  {
+   "start": 893.07,
+   "end": 901.17,
+   "text": "Right click, click this image horizontally and the other one will be here as well."
+  },
+  {
+   "start": 901.17,
+   "end": 903.87,
+   "text": "Let's put them behind our road."
+  },
+  {
+   "start": 903.87,
+   "end": 909.57,
+   "text": "Let's hide this and let's start to match the horizon line of the sky image."
+  },
+  {
+   "start": 909.57,
+   "end": 912.17,
+   "text": "So do you remember this horizon line?"
+  },
+  {
+   "start": 912.17,
+   "end": 917.97,
+   "text": "We should match it with the horizon line of this image of the sky."
+  },
+  {
+   "start": 917.97,
+   "end": 925.87,
+   "text": "Of course, the horizon line can be defined as the line that is separating between the sky and the ground."
+  },
+  {
+   "start": 925.87,
+   "end": 932.37,
+   "text": "So if you have like an open area, like a sun or an ocean, this is the horizon line."
+  },
+  {
+   "start": 932.37,
+   "end": 933.47,
+   "text": "It's predefined."
+  },
+  {
+   "start": 933.47,
+   "end": 934.57,
+   "text": "It's easy to find."
+  },
+  {
+   "start": 934.57,
+   "end": 940.57,
+   "text": "So what I would try to do is just put it here and now everything is matching."
+  },
+  {
+   "start": 940.57,
+   "end": 942.57,
+   "text": "Let's hide this line."
+  },
+  {
+   "start": 942.57,
+   "end": 943.57,
+   "text": "That's perfect."
+  },
+  {
+   "start": 943.57,
+   "end": 952.37,
+   "text": "And the reason why I got this image of the sky is that I like how these warm, orange looks."
+  },
+  {
+   "start": 952.37,
+   "end": 959.07,
+   "text": "So let's just press Ctrl T, right click, flip horizontal and let's put them here."
+  },
+  {
+   "start": 959.07,
+   "end": 963.57,
+   "text": "I will just take this part from this area."
+  },
+  {
+   "start": 963.57,
+   "end": 966.17,
+   "text": "Let's make this a little bit bigger."
+  },
+  {
+   "start": 966.17,
+   "end": 972.87,
+   "text": "So something like this and then create a mask and using the soft rounded brush."
+  },
+  {
+   "start": 972.87,
+   "end": 976.07,
+   "text": "I will just erase some parts."
+  },
+  {
+   "start": 976.07,
+   "end": 985.97,
+   "text": "Let's make the brush bigger and erase this part and we should be good to go."
+  },
+  {
+   "start": 985.97,
+   "end": 987.37,
+   "text": "That is very nice."
+  },
+  {
+   "start": 987.37,
+   "end": 994.17,
+   "text": "The next step, I'm going to put like a fence or any sort of wooden fence here."
+  },
+  {
+   "start": 994.17,
+   "end": 1001.57,
+   "text": "So let's just open it here and let's select it using the polygonal lasso tool or a pen tool"
+  },
+  {
+   "start": 1001.57,
+   "end": 1003.47,
+   "text": "or whatever you like."
+  },
+  {
+   "start": 1003.47,
+   "end": 1006.57,
+   "text": "It's straightforward but it's time consuming."
+  },
+  {
+   "start": 1006.57,
+   "end": 1012.17,
+   "text": "So I will just speed up the process of the selection and get back to you."
+  },
+  {
+   "start": 1012.17,
+   "end": 1013.17,
+   "text": "Quick pause."
+  },
+  {
+   "start": 1013.17,
+   "end": 1017.27,
+   "text": "If you are interested in creating amazing visuals like these step by step, I have"
+  },
+  {
+   "start": 1017.27,
+   "end": 1021.63,
+   "text": "good news for you because my premium course, The Ultimate Guide to Furmanipulation is"
+  },
+  {
+   "start": 1021.63,
+   "end": 1025.17,
+   "text": "now released and you can find it in the link in the description."
+  },
+  {
+   "start": 1025.17,
+   "end": 1030.85,
+   "text": "In this course you will find 11 projects which are fully narrated in English in which"
+  },
+  {
+   "start": 1030.85,
+   "end": 1035.85,
+   "text": "I'm explaining every tiny step I took to create these visuals."
+  },
+  {
+   "start": 1035.85,
+   "end": 1041.69,
+   "text": "You will find also all the stock images used, the PSD files and all the brushes used."
+  },
+  {
+   "start": 1041.69,
+   "end": 1046.25,
+   "text": "So don't miss the chance if you want to take your furmanipulation to the next level."
+  },
+  {
+   "start": 1046.25,
+   "end": 1051.17,
+   "text": "Go to the link in the description and start making amazing composites."
+  },
+  {
+   "start": 1051.17,
+   "end": 1053.93,
+   "text": "So here's the final image after making the selection."
+  },
+  {
+   "start": 1053.93,
+   "end": 1055.53,
+   "text": "Let's make it smaller."
+  },
+  {
+   "start": 1055.53,
+   "end": 1057.73,
+   "text": "Right click, flip horizontal."
+  },
+  {
+   "start": 1057.93,
+   "end": 1063.25,
+   "text": "Let's try to match it with the perspective of the road."
+  },
+  {
+   "start": 1063.25,
+   "end": 1066.13,
+   "text": "Just press control to distort it a little bit."
+  },
+  {
+   "start": 1066.13,
+   "end": 1069.41,
+   "text": "Press enter and let's put it behind the car."
+  },
+  {
+   "start": 1069.41,
+   "end": 1074.77,
+   "text": "Of course, the perspective lines are not matched so let's press control T again."
+  },
+  {
+   "start": 1074.77,
+   "end": 1078.17,
+   "text": "Maybe we can convert the image itself into a smart object."
+  },
+  {
+   "start": 1078.17,
+   "end": 1083.65,
+   "text": "Right click, invert it into a smart object and then press control T and then let's"
+  },
+  {
+   "start": 1083.73,
+   "end": 1089.09,
+   "text": "start pressing control and start to tweak the perspective."
+  },
+  {
+   "start": 1089.09,
+   "end": 1097.09,
+   "text": "Maybe we can select these lower parts or mask them using the grass, the same grass brush."
+  },
+  {
+   "start": 1097.09,
+   "end": 1103.73,
+   "text": "So I'll just go to the layer of the fence, create a mask and using the same grass brush"
+  },
+  {
+   "start": 1103.73,
+   "end": 1109.33,
+   "text": "with the black color I just paint over here and into here."
+  },
+  {
+   "start": 1109.33,
+   "end": 1111.01,
+   "text": "That's very, very nice."
+  },
+  {
+   "start": 1111.09,
+   "end": 1117.41,
+   "text": "Now everything in place what we are going to do next is to put all the magic to blend"
+  },
+  {
+   "start": 1117.41,
+   "end": 1120.37,
+   "text": "these elements together to bring it to life."
+  },
+  {
+   "start": 1120.37,
+   "end": 1126.77,
+   "text": "So let's start by creating a solid color, anything that is gray or black or white,"
+  },
+  {
+   "start": 1126.77,
+   "end": 1132.45,
+   "text": "anything that has zero saturation of color and then turn its blending mode into color."
+  },
+  {
+   "start": 1132.45,
+   "end": 1137.73,
+   "text": "I'm doing this to only focus on the lightness values."
+  },
+  {
+   "start": 1137.73,
+   "end": 1143.41,
+   "text": "So what is lightness values is basically how dark the elements are."
+  },
+  {
+   "start": 1143.41,
+   "end": 1151.25,
+   "text": "So for example, if we created curves adjustment layer into this sky part and created a clipping mask"
+  },
+  {
+   "start": 1151.25,
+   "end": 1158.37,
+   "text": "and then if we make it like very bright like this, you can notice now that there are"
+  },
+  {
+   "start": 1158.37,
+   "end": 1165.97,
+   "text": "the huge difference between the lightness of this image of the sky and this image of the sky."
+  },
+  {
+   "start": 1165.97,
+   "end": 1170.61,
+   "text": "So what we will try to do is to match the brightness of the two images."
+  },
+  {
+   "start": 1170.61,
+   "end": 1172.77,
+   "text": "So let's have a look and see."
+  },
+  {
+   "start": 1172.77,
+   "end": 1176.21,
+   "text": "This image has more dark clouds."
+  },
+  {
+   "start": 1176.21,
+   "end": 1183.01,
+   "text": "So let's go to the curves and let's try to make this image a little bit darker."
+  },
+  {
+   "start": 1183.01,
+   "end": 1186.53,
+   "text": "Don't forget to create a clipping mask to this layer."
+  },
+  {
+   "start": 1187.17,
+   "end": 1190.61,
+   "text": "So as you can see, it's now matching in a better way."
+  },
+  {
+   "start": 1190.61,
+   "end": 1194.45,
+   "text": "I'm now shifting the brightness of the mid tones."
+  },
+  {
+   "start": 1194.53,
+   "end": 1201.81,
+   "text": "Something like this, I guess, where work and at the same time, maybe we can brighten this part"
+  },
+  {
+   "start": 1201.81,
+   "end": 1203.09,
+   "text": "of this image."
+  },
+  {
+   "start": 1203.09,
+   "end": 1206.37,
+   "text": "We will do this by another curves adjustment layer."
+  },
+  {
+   "start": 1206.37,
+   "end": 1214.85,
+   "text": "So let's just open up the absolute shadows, something like this and then press control"
+  },
+  {
+   "start": 1214.85,
+   "end": 1222.61,
+   "text": "I to invert the mask and using the soft rounded brush, I will just paint into the mask here."
+  },
+  {
+   "start": 1222.61,
+   "end": 1225.57,
+   "text": "So it's now matching in a better way."
+  },
+  {
+   "start": 1226.29,
+   "end": 1231.33,
+   "text": "So let's see before curves, here is before and here is after."
+  },
+  {
+   "start": 1231.33,
+   "end": 1235.57,
+   "text": "It's now seamlessly blended and that is good enough."
+  },
+  {
+   "start": 1235.57,
+   "end": 1237.89,
+   "text": "So let's just hide this image and see."
+  },
+  {
+   "start": 1237.89,
+   "end": 1242.85,
+   "text": "Of course, it's not matching in terms of saturation and color."
+  },
+  {
+   "start": 1242.85,
+   "end": 1245.89,
+   "text": "So let's start by matching the saturation."
+  },
+  {
+   "start": 1245.89,
+   "end": 1247.73,
+   "text": "And what is saturation?"
+  },
+  {
+   "start": 1247.73,
+   "end": 1251.65,
+   "text": "It's basically how vivid the color is."
+  },
+  {
+   "start": 1251.65,
+   "end": 1257.41,
+   "text": "So for example, here is the red color in the scale of zero to 100."
+  },
+  {
+   "start": 1257.41,
+   "end": 1260.45,
+   "text": "This is the saturation of the color."
+  },
+  {
+   "start": 1260.45,
+   "end": 1267.89,
+   "text": "I'll simply go to saturation and desaturate the whole image until I am satisfied."
+  },
+  {
+   "start": 1267.89,
+   "end": 1274.61,
+   "text": "And then I will try to match the color tone using color balance."
+  },
+  {
+   "start": 1274.61,
+   "end": 1279.01,
+   "text": "So let's go to adjustments and create color balance layer,"
+  },
+  {
+   "start": 1279.01,
+   "end": 1282.53,
+   "text": "which is the next step, matching the colors."
+  },
+  {
+   "start": 1282.53,
+   "end": 1284.53,
+   "text": "So let's analyze the picture."
+  },
+  {
+   "start": 1284.53,
+   "end": 1287.57,
+   "text": "What is the difference between this and this?"
+  },
+  {
+   "start": 1287.57,
+   "end": 1292.05,
+   "text": "Let's go to the shadows, which are the dark parts into an image."
+  },
+  {
+   "start": 1292.69,
+   "end": 1301.73,
+   "text": "And in this image of the sky, it only has very cyanish, blueish colors into the shadows,"
+  },
+  {
+   "start": 1302.37,
+   "end": 1306.93,
+   "text": "some gray, blueish colors into the mid tones."
+  },
+  {
+   "start": 1306.93,
+   "end": 1313.01,
+   "text": "And into the highlights, we have somehow bright yellowish orange colors."
+  },
+  {
+   "start": 1313.01,
+   "end": 1320.61,
+   "text": "And that is exactly what we will try to shift the colors to match this image."
+  },
+  {
+   "start": 1320.61,
+   "end": 1323.09,
+   "text": "So let's do it step by step."
+  },
+  {
+   "start": 1323.09,
+   "end": 1324.53,
+   "text": "I'll go to the shadows."
+  },
+  {
+   "start": 1324.53,
+   "end": 1328.69,
+   "text": "As I've already told you, we wanted to look cyanish and blueish."
+  },
+  {
+   "start": 1328.69,
+   "end": 1332.77,
+   "text": "So we will add cyan and blue."
+  },
+  {
+   "start": 1333.01,
+   "end": 1341.49,
+   "text": "And if we want to balance this color, we will need to get rid of some magenta component in this color."
+  },
+  {
+   "start": 1341.49,
+   "end": 1344.21,
+   "text": "We will do this by increasing the greens."
+  },
+  {
+   "start": 1344.21,
+   "end": 1352.77,
+   "text": "So if you want to decrease specific color value, you can add an opposite color to it."
+  },
+  {
+   "start": 1352.77,
+   "end": 1360.77,
+   "text": "Let's see some blues or yellows, I guess here in this image, we can add some yellows."
+  },
+  {
+   "start": 1361.01,
+   "end": 1365.01,
+   "text": "And you can always use your eye to judge."
+  },
+  {
+   "start": 1365.01,
+   "end": 1370.21,
+   "text": "It has no rule here because this is art and everything is possible, actually."
+  },
+  {
+   "start": 1370.21,
+   "end": 1370.93,
+   "text": "That's not bad."
+  },
+  {
+   "start": 1370.93,
+   "end": 1377.25,
+   "text": "So let's go to the mid tones and let's try to add some say, and maybe"
+  },
+  {
+   "start": 1378.45,
+   "end": 1383.81,
+   "text": "some how greens or maybe some blues."
+  },
+  {
+   "start": 1384.61,
+   "end": 1385.49,
+   "text": "Let's see."
+  },
+  {
+   "start": 1385.49,
+   "end": 1388.93,
+   "text": "And we can now unhide these layers."
+  },
+  {
+   "start": 1389.01,
+   "end": 1389.81,
+   "text": "Let's see."
+  },
+  {
+   "start": 1389.81,
+   "end": 1393.17,
+   "text": "Maybe we can desaturate the shadows a little bit."
+  },
+  {
+   "start": 1393.17,
+   "end": 1397.57,
+   "text": "Let's go to the shadows and desaturate it like this."
+  },
+  {
+   "start": 1397.57,
+   "end": 1404.21,
+   "text": "And next go to go back to the color balance, go to the highlights, and maybe add some say,"
+  },
+  {
+   "start": 1404.21,
+   "end": 1409.49,
+   "text": "and maybe some greens and some blues."
+  },
+  {
+   "start": 1409.49,
+   "end": 1414.45,
+   "text": "We can actually fade this part a little bit because I don't like how it looks."
+  },
+  {
+   "start": 1414.45,
+   "end": 1416.53,
+   "text": "So it should be something like this."
+  },
+  {
+   "start": 1416.53,
+   "end": 1421.81,
+   "text": "And at the same time, let's make it a little bit brighter from the curves."
+  },
+  {
+   "start": 1421.81,
+   "end": 1427.65,
+   "text": "So it's a process of going back and forth until you get the best results."
+  },
+  {
+   "start": 1427.65,
+   "end": 1434.05,
+   "text": "And maybe we can add an overall look to the sky by simply creating a color balance above"
+  },
+  {
+   "start": 1434.05,
+   "end": 1434.69,
+   "text": "everything."
+  },
+  {
+   "start": 1434.69,
+   "end": 1443.81,
+   "text": "And maybe we can add some warm to the mid tones and some green shift and some blue."
+  },
+  {
+   "start": 1443.81,
+   "end": 1445.17,
+   "text": "Let's go to the shadows."
+  },
+  {
+   "start": 1449.87,
+   "end": 1455.23,
+   "text": "And one last thing, maybe we can brighten the sky a little bit."
+  },
+  {
+   "start": 1455.79,
+   "end": 1462.03,
+   "text": "So using curves, we can make the sky a little bit brighter because it's very dark."
+  },
+  {
+   "start": 1462.03,
+   "end": 1469.07,
+   "text": "Maybe we can decrease the brightness of this part of the sky using also curves."
+  },
+  {
+   "start": 1469.07,
+   "end": 1474.67,
+   "text": "So let's create a curves adjustment layer, press Ctrl I, and using the soft rounded"
+  },
+  {
+   "start": 1474.67,
+   "end": 1477.95,
+   "text": "brush, we can just paint over this area."
+  },
+  {
+   "start": 1479.15,
+   "end": 1480.11,
+   "text": "Now it looks better."
+  },
+  {
+   "start": 1480.75,
+   "end": 1481.71,
+   "text": "Very nice."
+  },
+  {
+   "start": 1481.71,
+   "end": 1483.63,
+   "text": "I still don't like this part."
+  },
+  {
+   "start": 1484.51,
+   "end": 1492.67,
+   "text": "So before matching the car, we can do some matching here, manual matching."
+  },
+  {
+   "start": 1492.67,
+   "end": 1497.23,
+   "text": "So I will do this using a solid color adjustment layer."
+  },
+  {
+   "start": 1497.23,
+   "end": 1498.67,
+   "text": "Press OK."
+  },
+  {
+   "start": 1498.67,
+   "end": 1506.59,
+   "text": "And then choose some color from the sky, maybe this desaturated blue and then press OK."
+  },
+  {
+   "start": 1507.55,
+   "end": 1510.43,
+   "text": "And press Ctrl I to invert the mask."
+  },
+  {
+   "start": 1510.43,
+   "end": 1514.67,
+   "text": "And using the soft rounded brush, let's decrease the flow of the brush."
+  },
+  {
+   "start": 1514.67,
+   "end": 1519.63,
+   "text": "I'll just paint over this area because I want to unify the colors."
+  },
+  {
+   "start": 1520.35,
+   "end": 1522.51,
+   "text": "Maybe we can choose this color."
+  },
+  {
+   "start": 1522.51,
+   "end": 1523.87,
+   "text": "Yeah, this is better."
+  },
+  {
+   "start": 1524.67,
+   "end": 1529.55,
+   "text": "So let's try to just paint over here."
+  },
+  {
+   "start": 1531.23,
+   "end": 1539.63,
+   "text": "And we can then press double click into the layer, remove this color from the highlights"
+  },
+  {
+   "start": 1539.63,
+   "end": 1543.47,
+   "text": "by removing it from this slider."
+  },
+  {
+   "start": 1543.47,
+   "end": 1547.23,
+   "text": "I'm now removing the color from the absolute highlights."
+  },
+  {
+   "start": 1548.27,
+   "end": 1550.67,
+   "text": "So something like this."
+  },
+  {
+   "start": 1553.62,
+   "end": 1554.18,
+   "text": "Press OK."
+  },
+  {
+   "start": 1554.74,
+   "end": 1555.46,
+   "text": "Let's see."
+  },
+  {
+   "start": 1555.46,
+   "end": 1556.18,
+   "text": "Here's before."
+  },
+  {
+   "start": 1557.62,
+   "end": 1558.9,
+   "text": "I guess this is better."
+  },
+  {
+   "start": 1558.9,
+   "end": 1563.7,
+   "text": "Maybe we can decrease the opacity, but this is more consistent."
+  },
+  {
+   "start": 1563.7,
+   "end": 1567.62,
+   "text": "We need to increase the blues here."
+  },
+  {
+   "start": 1567.62,
+   "end": 1573.3,
+   "text": "You know, it's not a one time process, this color matching thing."
+  },
+  {
+   "start": 1573.3,
+   "end": 1580.9,
+   "text": "It takes some time, some back and forth, because it's easy to your eye to be deceived."
+  },
+  {
+   "start": 1581.38,
+   "end": 1583.54,
+   "text": "Okay, so I'll just into the mid tones."
+  },
+  {
+   "start": 1583.54,
+   "end": 1587.06,
+   "text": "I will add some blues and some sayans."
+  },
+  {
+   "start": 1588.74,
+   "end": 1590.66,
+   "text": "Maybe a touch of green."
+  },
+  {
+   "start": 1590.66,
+   "end": 1591.38,
+   "text": "Let's see."
+  },
+  {
+   "start": 1591.38,
+   "end": 1593.86,
+   "text": "It needs more blue and sayan."
+  },
+  {
+   "start": 1595.38,
+   "end": 1598.1,
+   "text": "Yeah, this looks better."
+  },
+  {
+   "start": 1598.1,
+   "end": 1599.86,
+   "text": "Now let's see before and after."
+  },
+  {
+   "start": 1599.86,
+   "end": 1602.42,
+   "text": "Yeah, now it's matching in a better way."
+  },
+  {
+   "start": 1602.42,
+   "end": 1608.42,
+   "text": "Okay, next let's go to the road and let's try to blend its colors."
+  },
+  {
+   "start": 1609.22,
+   "end": 1612.58,
+   "text": "I will start with the lightness values."
+  },
+  {
+   "start": 1612.58,
+   "end": 1615.14,
+   "text": "So let's create a curves adjustment layer."
+  },
+  {
+   "start": 1615.14,
+   "end": 1617.78,
+   "text": "Let's make the road darker."
+  },
+  {
+   "start": 1617.78,
+   "end": 1620.42,
+   "text": "So something like this in the mid tones."
+  },
+  {
+   "start": 1620.42,
+   "end": 1624.18,
+   "text": "And maybe we can darken the highlights a little bit, something like this."
+  },
+  {
+   "start": 1624.9,
+   "end": 1626.5,
+   "text": "And what about the shadows?"
+  },
+  {
+   "start": 1626.5,
+   "end": 1628.42,
+   "text": "Maybe we can leave it as it is."
+  },
+  {
+   "start": 1628.42,
+   "end": 1630.9,
+   "text": "So something like this before, after."
+  },
+  {
+   "start": 1632.34,
+   "end": 1636.34,
+   "text": "And next we can go to the saturation."
+  },
+  {
+   "start": 1637.06,
+   "end": 1639.3,
+   "text": "So let's go to saturation."
+  },
+  {
+   "start": 1639.3,
+   "end": 1643.62,
+   "text": "Maybe we can decrease the saturation of this green color."
+  },
+  {
+   "start": 1643.62,
+   "end": 1650.18,
+   "text": "So let's select the greens and let's decrease the saturation a little bit."
+  },
+  {
+   "start": 1650.18,
+   "end": 1655.54,
+   "text": "And maybe we can shift its color toward more of a magenta color."
+  },
+  {
+   "start": 1655.54,
+   "end": 1658.9,
+   "text": "So something like this would be good."
+  },
+  {
+   "start": 1659.94,
+   "end": 1660.82,
+   "text": "Very nice."
+  },
+  {
+   "start": 1660.82,
+   "end": 1664.66,
+   "text": "Now let's create another color balance to match the color."
+  },
+  {
+   "start": 1664.82,
+   "end": 1673.54,
+   "text": "And for this I will just give it a touch of red in the mid tones and maybe a touch of magenta"
+  },
+  {
+   "start": 1673.54,
+   "end": 1675.38,
+   "text": "and some touch of blue."
+  },
+  {
+   "start": 1675.38,
+   "end": 1676.98,
+   "text": "Let's go to the shadows."
+  },
+  {
+   "start": 1676.98,
+   "end": 1684.18,
+   "text": "Let's try to give it some touch of cyan maybe magenta and blue."
+  },
+  {
+   "start": 1685.38,
+   "end": 1688.1,
+   "text": "And maybe let's reduce this magenta."
+  },
+  {
+   "start": 1688.98,
+   "end": 1693.6,
+   "text": "Something like this would be good."
+  },
+  {
+   "start": 1694.16,
+   "end": 1696.72,
+   "text": "Let's go to the highlights."
+  },
+  {
+   "start": 1697.76,
+   "end": 1703.12,
+   "text": "I think the highlights are good but we need to remove some magenta from it."
+  },
+  {
+   "start": 1703.12,
+   "end": 1707.76,
+   "text": "So let's increase the greens and they are good."
+  },
+  {
+   "start": 1709.44,
+   "end": 1712.8,
+   "text": "Maybe add some blues and we are good to go."
+  },
+  {
+   "start": 1712.8,
+   "end": 1715.84,
+   "text": "So let's see before, after, or after."
+  },
+  {
+   "start": 1715.84,
+   "end": 1719.36,
+   "text": "Subtle yet very effect."
+  },
+  {
+   "start": 1720.0,
+   "end": 1725.92,
+   "text": "So let's go to the next element which will be this fence and we will leave the car to the end."
+  },
+  {
+   "start": 1726.48,
+   "end": 1732.0,
+   "text": "So this fence will be easier to match because it doesn't have a lot of color."
+  },
+  {
+   "start": 1732.0,
+   "end": 1737.6,
+   "text": "So I will just make it dark because it's in the opposite direction of the sun."
+  },
+  {
+   "start": 1737.6,
+   "end": 1739.44,
+   "text": "So something like this."
+  },
+  {
+   "start": 1739.44,
+   "end": 1747.04,
+   "text": "And using color balance I'll just give it a touch of red."
+  },
+  {
+   "start": 1747.76,
+   "end": 1754.4,
+   "text": "Some maybe magenta and maybe some yellow or blue."
+  },
+  {
+   "start": 1754.4,
+   "end": 1755.36,
+   "text": "I guess blue."
+  },
+  {
+   "start": 1756.24,
+   "end": 1758.96,
+   "text": "Here we can add green not magenta."
+  },
+  {
+   "start": 1758.96,
+   "end": 1760.16,
+   "text": "Let's go to the shadows."
+  },
+  {
+   "start": 1761.28,
+   "end": 1767.68,
+   "text": "This is just you will get this scale just by intuition doing and matching a lot of images"
+  },
+  {
+   "start": 1767.68,
+   "end": 1768.56,
+   "text": "together."
+  },
+  {
+   "start": 1768.56,
+   "end": 1773.68,
+   "text": "You will know which color you should add it at each situation."
+  },
+  {
+   "start": 1774.0,
+   "end": 1774.08,
+   "text": "Okay."
+  },
+  {
+   "start": 1775.12,
+   "end": 1777.12,
+   "text": "So so for now I'm satisfied."
+  },
+  {
+   "start": 1777.12,
+   "end": 1779.04,
+   "text": "Here's before and here's after."
+  },
+  {
+   "start": 1779.04,
+   "end": 1784.16,
+   "text": "Let's bring the car and for the car I don't like its native color."
+  },
+  {
+   "start": 1784.16,
+   "end": 1786.8,
+   "text": "So I'll just shift the color completely."
+  },
+  {
+   "start": 1786.8,
+   "end": 1789.2,
+   "text": "I'll do this using hue saturation."
+  },
+  {
+   "start": 1789.2,
+   "end": 1795.68,
+   "text": "So let's create a hue saturation adjustment layer, create a clipping mask and then press colorize."
+  },
+  {
+   "start": 1795.68,
+   "end": 1801.04,
+   "text": "I'll give it a color of maybe blue, cyanish blue."
+  },
+  {
+   "start": 1801.04,
+   "end": 1803.12,
+   "text": "So something like this."
+  },
+  {
+   "start": 1804.4,
+   "end": 1808.96,
+   "text": "And I guess this is a good color."
+  },
+  {
+   "start": 1808.96,
+   "end": 1814.24,
+   "text": "I will remove this color from the absolute highlights and the absolute shadows."
+  },
+  {
+   "start": 1814.24,
+   "end": 1819.6,
+   "text": "So press double click into the layer, remove it from the absolute shadows from here."
+  },
+  {
+   "start": 1820.48,
+   "end": 1821.84,
+   "text": "You can see now."
+  },
+  {
+   "start": 1823.28,
+   "end": 1829.28,
+   "text": "So let's just make this very saturated because I want to notice it."
+  },
+  {
+   "start": 1829.92,
+   "end": 1835.52,
+   "text": "So let's remove it from as you can see I'm now removing it from the absolute darks."
+  },
+  {
+   "start": 1836.64,
+   "end": 1840.32,
+   "text": "Splitting the cursor to make the transition smoother."
+  },
+  {
+   "start": 1841.2,
+   "end": 1849.12,
+   "text": "So something like this and remove it from the absolute highlights or something like this."
+  },
+  {
+   "start": 1852.54,
+   "end": 1854.38,
+   "text": "And then press okay."
+  },
+  {
+   "start": 1855.58,
+   "end": 1861.26,
+   "text": "And let's get the saturation back and then using the brush we can remove"
+  },
+  {
+   "start": 1861.9,
+   "end": 1863.82,
+   "text": "the color from some parts."
+  },
+  {
+   "start": 1863.82,
+   "end": 1872.54,
+   "text": "So for example from these the car lights itself from the tires and from these bottom parts"
+  },
+  {
+   "start": 1874.14,
+   "end": 1879.9,
+   "text": "like this using the brush from these metallic parts as well."
+  },
+  {
+   "start": 1879.9,
+   "end": 1882.86,
+   "text": "That is not bad."
+  },
+  {
+   "start": 1882.86,
+   "end": 1885.26,
+   "text": "Maybe we can make it darker."
+  },
+  {
+   "start": 1885.34,
+   "end": 1892.3,
+   "text": "So something like this will be better and a little bit more saturated."
+  },
+  {
+   "start": 1892.3,
+   "end": 1894.86,
+   "text": "But I want to make this part darker."
+  },
+  {
+   "start": 1894.86,
+   "end": 1899.42,
+   "text": "So I will go to curves and create a clipping mask of course."
+  },
+  {
+   "start": 1899.42,
+   "end": 1903.42,
+   "text": "And let's make this whole part darker like this."
+  },
+  {
+   "start": 1904.22,
+   "end": 1907.34,
+   "text": "I don't like how it looks when it's white."
+  },
+  {
+   "start": 1907.34,
+   "end": 1911.5,
+   "text": "So just I will make it darker press control I to invert the mask."
+  },
+  {
+   "start": 1911.5,
+   "end": 1916.78,
+   "text": "And using the brush I can paint over this part."
+  },
+  {
+   "start": 1917.98,
+   "end": 1920.14,
+   "text": "Simple as this."
+  },
+  {
+   "start": 1920.14,
+   "end": 1923.26,
+   "text": "So let's make the color darker like this."
+  },
+  {
+   "start": 1924.38,
+   "end": 1931.02,
+   "text": "And maybe we can go to the properties of the mask and feather it a little bit because I don't like"
+  },
+  {
+   "start": 1932.06,
+   "end": 1933.58,
+   "text": "how sharp is this."
+  },
+  {
+   "start": 1934.54,
+   "end": 1937.1,
+   "text": "So let's make it a little bit feathered."
+  },
+  {
+   "start": 1937.18,
+   "end": 1944.54,
+   "text": "And maybe we can bring this curves adjustment layer below the hue saturation."
+  },
+  {
+   "start": 1944.54,
+   "end": 1946.86,
+   "text": "Now this is looking better."
+  },
+  {
+   "start": 1946.86,
+   "end": 1953.26,
+   "text": "Let's just remove the effect from here using the brush and maybe from these top lights."
+  },
+  {
+   "start": 1958.22,
+   "end": 1959.5,
+   "text": "That's very nice."
+  },
+  {
+   "start": 1959.5,
+   "end": 1964.38,
+   "text": "I think we need to shift the colors of the road into more cyanish colors"
+  },
+  {
+   "start": 1964.38,
+   "end": 1970.06,
+   "text": "because now the overall look is more bluish cyanish color."
+  },
+  {
+   "start": 1970.06,
+   "end": 1975.5,
+   "text": "So let's try to match this to the mid tones as well."
+  },
+  {
+   "start": 1978.5,
+   "end": 1979.78,
+   "text": "That is better."
+  },
+  {
+   "start": 1981.14,
+   "end": 1981.46,
+   "text": "Okay."
+  },
+  {
+   "start": 1983.14,
+   "end": 1989.22,
+   "text": "Now we need to care about painting the light and the shadows."
+  },
+  {
+   "start": 1989.22,
+   "end": 1992.26,
+   "text": "So how can we paint it for the highlights?"
+  },
+  {
+   "start": 1992.26,
+   "end": 1995.78,
+   "text": "I will use a solid color adjustment layer."
+  },
+  {
+   "start": 1995.78,
+   "end": 1998.74,
+   "text": "Let's just pick any color create a clipping mask."
+  },
+  {
+   "start": 1998.74,
+   "end": 2002.5,
+   "text": "And then I will pick the color from the sky."
+  },
+  {
+   "start": 2002.5,
+   "end": 2009.46,
+   "text": "So let's choose some orangey reddish desaturated color like this."
+  },
+  {
+   "start": 2009.46,
+   "end": 2011.14,
+   "text": "Press okay."
+  },
+  {
+   "start": 2011.14,
+   "end": 2014.42,
+   "text": "And then press change its blending mode into screen."
+  },
+  {
+   "start": 2015.38,
+   "end": 2017.78,
+   "text": "And next I will double click into the layer."
+  },
+  {
+   "start": 2017.78,
+   "end": 2021.3,
+   "text": "Remove this effect from the absolute darks."
+  },
+  {
+   "start": 2021.86,
+   "end": 2025.78,
+   "text": "And press alt to split the cursor like this."
+  },
+  {
+   "start": 2025.78,
+   "end": 2029.62,
+   "text": "So something like this would be okay."
+  },
+  {
+   "start": 2029.62,
+   "end": 2033.78,
+   "text": "This is the layer with which I'm going to paint the highlights."
+  },
+  {
+   "start": 2034.9,
+   "end": 2037.78,
+   "text": "And then press control I to invert the mask."
+  },
+  {
+   "start": 2037.78,
+   "end": 2042.26,
+   "text": "And now I'm going to paint the highlights using the pen tool."
+  },
+  {
+   "start": 2043.14,
+   "end": 2044.1,
+   "text": "Why the pen tool?"
+  },
+  {
+   "start": 2044.1,
+   "end": 2047.46,
+   "text": "Because this is a very reflective metal surface."
+  },
+  {
+   "start": 2048.02,
+   "end": 2054.5,
+   "text": "So we we should avoid painting highlights using soft rounded brush like this"
+  },
+  {
+   "start": 2054.5,
+   "end": 2060.9,
+   "text": "because it will give us not great results, flat lighting and all this stuff."
+  },
+  {
+   "start": 2060.9,
+   "end": 2065.3,
+   "text": "Especially in these areas it looks so amateurish."
+  },
+  {
+   "start": 2065.3,
+   "end": 2070.5,
+   "text": "So for example we will select this area using the pen tool."
+  },
+  {
+   "start": 2070.5,
+   "end": 2074.02,
+   "text": "And then press control enter to turn this into selection."
+  },
+  {
+   "start": 2074.58,
+   "end": 2079.3,
+   "text": "And using the brush I'll just paint the lights like this."
+  },
+  {
+   "start": 2079.3,
+   "end": 2079.7,
+   "text": "Okay."
+  },
+  {
+   "start": 2080.34,
+   "end": 2081.78,
+   "text": "Press control D."
+  },
+  {
+   "start": 2081.86,
+   "end": 2085.06,
+   "text": "Now the lights look more realistic."
+  },
+  {
+   "start": 2085.06,
+   "end": 2090.26,
+   "text": "So let's paint the highlights for this part."
+  },
+  {
+   "start": 2090.26,
+   "end": 2095.94,
+   "text": "As I assume that you know the basics of Photoshop so you know how to use pen tool."
+  },
+  {
+   "start": 2095.94,
+   "end": 2104.42,
+   "text": "Just try to separate the core parts into specific planes."
+  },
+  {
+   "start": 2105.54,
+   "end": 2109.78,
+   "text": "So something like in this area."
+  },
+  {
+   "start": 2110.74,
+   "end": 2117.22,
+   "text": "And then press control enter using the soft rounded brush making it big."
+  },
+  {
+   "start": 2117.22,
+   "end": 2120.5,
+   "text": "I will just paint highlights like this."
+  },
+  {
+   "start": 2120.5,
+   "end": 2124.34,
+   "text": "So these are the lights coming from the sun."
+  },
+  {
+   "start": 2124.34,
+   "end": 2125.06,
+   "text": "So let's see."
+  },
+  {
+   "start": 2126.1,
+   "end": 2128.26,
+   "text": "Here is before, here is after."
+  },
+  {
+   "start": 2128.26,
+   "end": 2130.9,
+   "text": "Maybe we can fade these edges a little bit."
+  },
+  {
+   "start": 2130.9,
+   "end": 2132.9,
+   "text": "Something like this would be okay."
+  },
+  {
+   "start": 2132.9,
+   "end": 2139.7,
+   "text": "Let's do the same thing to different or various parts of the car."
+  },
+  {
+   "start": 2140.26,
+   "end": 2144.42,
+   "text": "Maybe I will speed up the process with this part because it's time consuming."
+  },
+  {
+   "start": 2144.42,
+   "end": 2145.94,
+   "text": "But I guess you got the point."
+  },
+  {
+   "start": 2166.88,
+   "end": 2167.84,
+   "text": "That's very nice."
+  },
+  {
+   "start": 2167.84,
+   "end": 2171.6,
+   "text": "So let's see here is before and here is after before and after."
+  },
+  {
+   "start": 2171.6,
+   "end": 2174.0,
+   "text": "It gives us great results."
+  },
+  {
+   "start": 2174.0,
+   "end": 2181.12,
+   "text": "And the next step we will just put some final specular lights."
+  },
+  {
+   "start": 2181.12,
+   "end": 2189.92,
+   "text": "We will do this by simply bringing the same maybe orange or more saturated color like this."
+  },
+  {
+   "start": 2190.56,
+   "end": 2194.24,
+   "text": "And paint give it one touch like this."
+  },
+  {
+   "start": 2194.24,
+   "end": 2196.0,
+   "text": "Change the blending mode into screen."
+  },
+  {
+   "start": 2197.04,
+   "end": 2203.28,
+   "text": "And I will start to just press shift to change its shape."
+  },
+  {
+   "start": 2203.28,
+   "end": 2205.52,
+   "text": "So let's try to put it here."
+  },
+  {
+   "start": 2206.08,
+   "end": 2209.84,
+   "text": "Maybe we can warp it from here."
+  },
+  {
+   "start": 2209.84,
+   "end": 2216.64,
+   "text": "So like this to match the shape of each part."
+  },
+  {
+   "start": 2217.2,
+   "end": 2219.52,
+   "text": "So something like this I guess."
+  },
+  {
+   "start": 2219.52,
+   "end": 2225.36,
+   "text": "Give us this you know shyness into some parts."
+  },
+  {
+   "start": 2225.36,
+   "end": 2228.88,
+   "text": "Let's press alt to bring it here."
+  },
+  {
+   "start": 2228.88,
+   "end": 2231.76,
+   "text": "And maybe we can shift its shape again."
+  },
+  {
+   "start": 2232.56,
+   "end": 2239.28,
+   "text": "Depends on the surface its shape and its reflection characteristics."
+  },
+  {
+   "start": 2239.84,
+   "end": 2242.0,
+   "text": "Let's bring it and put it here."
+  },
+  {
+   "start": 2248.43,
+   "end": 2249.55,
+   "text": "So that's very nice."
+  },
+  {
+   "start": 2249.55,
+   "end": 2253.07,
+   "text": "Let's put all this into a group."
+  },
+  {
+   "start": 2253.07,
+   "end": 2256.51,
+   "text": "And let's see before and after before and after."
+  },
+  {
+   "start": 2256.51,
+   "end": 2257.79,
+   "text": "That is very nice."
+  },
+  {
+   "start": 2257.79,
+   "end": 2259.95,
+   "text": "Now it's time to paint the shadows."
+  },
+  {
+   "start": 2259.95,
+   "end": 2263.31,
+   "text": "So how can we paint the shadows for the core?"
+  },
+  {
+   "start": 2263.31,
+   "end": 2266.83,
+   "text": "It's basically consists of two parts of the shadows."
+  },
+  {
+   "start": 2266.83,
+   "end": 2270.03,
+   "text": "The cast shadow and the contact shadow."
+  },
+  {
+   "start": 2270.03,
+   "end": 2271.87,
+   "text": "What is the cast shadow?"
+  },
+  {
+   "start": 2271.87,
+   "end": 2276.35,
+   "text": "It's basically the shadows that's resulting from the main source of light."
+  },
+  {
+   "start": 2276.35,
+   "end": 2279.47,
+   "text": "Which is the sun hitting the core."
+  },
+  {
+   "start": 2279.47,
+   "end": 2284.35,
+   "text": "And it should create some tall shadow like this."
+  },
+  {
+   "start": 2284.35,
+   "end": 2290.03,
+   "text": "But the ambient shadow is the shadow that is resulting from the colors of the sky."
+  },
+  {
+   "start": 2290.03,
+   "end": 2291.47,
+   "text": "The surroundings."
+  },
+  {
+   "start": 2292.91,
+   "end": 2296.59,
+   "text": "So let's start by the cast shadow."
+  },
+  {
+   "start": 2296.59,
+   "end": 2300.83,
+   "text": "I'll do this by pressing control and pressing into the layer of the core."
+  },
+  {
+   "start": 2300.83,
+   "end": 2303.55,
+   "text": "This will give me a selection around the core."
+  },
+  {
+   "start": 2303.55,
+   "end": 2307.15,
+   "text": "Then let's create a solid color adjustment layer."
+  },
+  {
+   "start": 2307.15,
+   "end": 2308.43,
+   "text": "And then press OK."
+  },
+  {
+   "start": 2308.43,
+   "end": 2311.95,
+   "text": "Let's put this solid color behind the core."
+  },
+  {
+   "start": 2311.95,
+   "end": 2315.63,
+   "text": "So here is the solid color layer."
+  },
+  {
+   "start": 2315.63,
+   "end": 2320.19,
+   "text": "Firstly let's choose the color of the shadow."
+  },
+  {
+   "start": 2320.19,
+   "end": 2324.03,
+   "text": "I'll firstly change the blending mode of the layer into multiply."
+  },
+  {
+   "start": 2324.75,
+   "end": 2330.59,
+   "text": "And then change this color into some color from the ground."
+  },
+  {
+   "start": 2330.59,
+   "end": 2338.51,
+   "text": "Because the shadow is basically the absence of light that is hitting the ground."
+  },
+  {
+   "start": 2338.51,
+   "end": 2342.59,
+   "text": "So let's choose some color maybe like this."
+  },
+  {
+   "start": 2343.15,
+   "end": 2345.07,
+   "text": "That's good."
+  },
+  {
+   "start": 2345.07,
+   "end": 2346.03,
+   "text": "And then press OK."
+  },
+  {
+   "start": 2346.67,
+   "end": 2351.07,
+   "text": "And then press control T, right click, flip it vertical."
+  },
+  {
+   "start": 2351.71,
+   "end": 2356.43,
+   "text": "And let's try to match the shape of the shadow."
+  },
+  {
+   "start": 2356.43,
+   "end": 2360.91,
+   "text": "So let's analyze how the shadow should be."
+  },
+  {
+   "start": 2360.91,
+   "end": 2365.07,
+   "text": "So it's basically here is the source of light and it's hitting the core."
+  },
+  {
+   "start": 2365.07,
+   "end": 2369.63,
+   "text": "And the core is banning the light from reaching to the ground."
+  },
+  {
+   "start": 2369.63,
+   "end": 2373.15,
+   "text": "So the shadow should be something like this."
+  },
+  {
+   "start": 2373.79,
+   "end": 2377.23,
+   "text": "Because the sun is now in a low angle."
+  },
+  {
+   "start": 2377.23,
+   "end": 2380.11,
+   "text": "So let's try to mimic this by pressing control."
+  },
+  {
+   "start": 2380.75,
+   "end": 2389.31,
+   "text": "And start to distort the shape of the shadow to match the perspective that we want."
+  },
+  {
+   "start": 2393.06,
+   "end": 2394.18,
+   "text": "Press OK."
+  },
+  {
+   "start": 2394.18,
+   "end": 2395.06,
+   "text": "Let's see."
+  },
+  {
+   "start": 2395.06,
+   "end": 2396.1,
+   "text": "That's not bad."
+  },
+  {
+   "start": 2396.66,
+   "end": 2401.7,
+   "text": "And the next part I will decrease its opacity."
+  },
+  {
+   "start": 2401.7,
+   "end": 2404.1,
+   "text": "And let's go to blend F."
+  },
+  {
+   "start": 2404.1,
+   "end": 2409.86,
+   "text": "Double click, remove the effect of the shadow from the highlights like this."
+  },
+  {
+   "start": 2410.42,
+   "end": 2416.42,
+   "text": "And split the cursor to give it more realistic shape."
+  },
+  {
+   "start": 2416.42,
+   "end": 2419.06,
+   "text": "As you can see, you can notice it here."
+  },
+  {
+   "start": 2420.98,
+   "end": 2422.82,
+   "text": "So can you see it now?"
+  },
+  {
+   "start": 2423.46,
+   "end": 2426.5,
+   "text": "So something like this would be great."
+  },
+  {
+   "start": 2427.62,
+   "end": 2428.5,
+   "text": "Then press OK."
+  },
+  {
+   "start": 2430.1,
+   "end": 2431.54,
+   "text": "Now that's very nice."
+  },
+  {
+   "start": 2431.54,
+   "end": 2435.14,
+   "text": "Maybe we can fade or soften the edges a little bit."
+  },
+  {
+   "start": 2435.86,
+   "end": 2440.42,
+   "text": "Of course, it should be sharp, but not as sharp as it is now."
+  },
+  {
+   "start": 2440.42,
+   "end": 2446.26,
+   "text": "So I'm going to go to the mask and feather the mask like this, just a tiny bit."
+  },
+  {
+   "start": 2446.98,
+   "end": 2449.22,
+   "text": "So this is the main shadow."
+  },
+  {
+   "start": 2449.94,
+   "end": 2454.5,
+   "text": "Of course, we can also soften the edges."
+  },
+  {
+   "start": 2455.54,
+   "end": 2459.3,
+   "text": "So just just soften some edges like this."
+  },
+  {
+   "start": 2459.3,
+   "end": 2461.78,
+   "text": "Maybe erase it from here."
+  },
+  {
+   "start": 2461.78,
+   "end": 2462.98,
+   "text": "You can see that."
+  },
+  {
+   "start": 2462.98,
+   "end": 2467.3,
+   "text": "Okay, this is a good shadow, but you think like something is off."
+  },
+  {
+   "start": 2467.3,
+   "end": 2469.22,
+   "text": "It's not realistic."
+  },
+  {
+   "start": 2469.22,
+   "end": 2473.46,
+   "text": "And the reason for this is that there is no contact shadow."
+  },
+  {
+   "start": 2473.46,
+   "end": 2479.54,
+   "text": "The contact shadow is the shadow resulting from two elements touching each other."
+  },
+  {
+   "start": 2479.54,
+   "end": 2483.14,
+   "text": "So for example, this element when it touches another element,"
+  },
+  {
+   "start": 2483.14,
+   "end": 2486.66,
+   "text": "there should be some dark pixels between them."
+  },
+  {
+   "start": 2486.66,
+   "end": 2490.02,
+   "text": "And that is exactly what is contact shadow."
+  },
+  {
+   "start": 2490.02,
+   "end": 2491.62,
+   "text": "So how can I paint it?"
+  },
+  {
+   "start": 2491.7,
+   "end": 2496.82,
+   "text": "I will do this by creating another solid adjustment layer."
+  },
+  {
+   "start": 2496.82,
+   "end": 2503.54,
+   "text": "And let's choose some color from these colors or something like this."
+  },
+  {
+   "start": 2503.54,
+   "end": 2507.06,
+   "text": "And press Ctrl I to invert the mask."
+  },
+  {
+   "start": 2507.06,
+   "end": 2515.78,
+   "text": "And using the soft-trand brush, I'll just change its shape to make it more elongated like this."
+  },
+  {
+   "start": 2515.78,
+   "end": 2518.98,
+   "text": "Decrease the flow of the brush to something like 10%."
+  },
+  {
+   "start": 2519.78,
+   "end": 2524.42,
+   "text": "And let's try to paint the contact shadow."
+  },
+  {
+   "start": 2525.14,
+   "end": 2527.94,
+   "text": "So I'll just paint it like this."
+  },
+  {
+   "start": 2528.98,
+   "end": 2532.26,
+   "text": "Paint over these areas."
+  },
+  {
+   "start": 2532.26,
+   "end": 2534.82,
+   "text": "This color should be more cyanish."
+  },
+  {
+   "start": 2534.82,
+   "end": 2540.42,
+   "text": "So just shift colors and maybe darker or something like this."
+  },
+  {
+   "start": 2541.38,
+   "end": 2541.78,
+   "text": "It's okay."
+  },
+  {
+   "start": 2543.06,
+   "end": 2545.3,
+   "text": "So here it should be very dark."
+  },
+  {
+   "start": 2545.94,
+   "end": 2548.66,
+   "text": "And it should be faded away"
+  },
+  {
+   "start": 2551.94,
+   "end": 2555.54,
+   "text": "in the areas that are not touching each other."
+  },
+  {
+   "start": 2555.54,
+   "end": 2556.9,
+   "text": "So something like this."
+  },
+  {
+   "start": 2558.26,
+   "end": 2558.9,
+   "text": "Be good."
+  },
+  {
+   "start": 2559.94,
+   "end": 2561.94,
+   "text": "Let's go to this part."
+  },
+  {
+   "start": 2561.94,
+   "end": 2564.34,
+   "text": "Increase the intensity of the shadow here."
+  },
+  {
+   "start": 2566.26,
+   "end": 2570.1,
+   "text": "This part because the tire is touching the ground here."
+  },
+  {
+   "start": 2570.1,
+   "end": 2576.26,
+   "text": "But now we can fade these parts like this."
+  },
+  {
+   "start": 2577.86,
+   "end": 2579.54,
+   "text": "Let's do the same thing here."
+  },
+  {
+   "start": 2585.78,
+   "end": 2591.22,
+   "text": "We can decrease its opacity or maybe we can play around with Blend F to"
+  },
+  {
+   "start": 2592.42,
+   "end": 2598.5,
+   "text": "bring some details into the shadow areas because it doesn't have any details at all."
+  },
+  {
+   "start": 2598.5,
+   "end": 2602.18,
+   "text": "So something like this I guess will be okay."
+  },
+  {
+   "start": 2602.98,
+   "end": 2604.18,
+   "text": "So let's see."
+  },
+  {
+   "start": 2604.18,
+   "end": 2607.22,
+   "text": "You guys before contact and here is after."
+  },
+  {
+   "start": 2607.22,
+   "end": 2610.66,
+   "text": "Here is before any shadows and here is after."
+  },
+  {
+   "start": 2610.66,
+   "end": 2611.7,
+   "text": "That's very nice."
+  },
+  {
+   "start": 2611.7,
+   "end": 2621.06,
+   "text": "One last thing I like to do is to create another layer here and pick any color from the"
+  },
+  {
+   "start": 2621.06,
+   "end": 2624.98,
+   "text": "bottom part from here and then let's create a clipping mask."
+  },
+  {
+   "start": 2624.98,
+   "end": 2631.06,
+   "text": "And then I'm trying to get some color from the ground and paint over the tires."
+  },
+  {
+   "start": 2631.78,
+   "end": 2636.1,
+   "text": "This is making the two images matches in a better way."
+  },
+  {
+   "start": 2639.5,
+   "end": 2640.22,
+   "text": "It's very nice."
+  },
+  {
+   "start": 2640.22,
+   "end": 2642.86,
+   "text": "Before, after, or after."
+  },
+  {
+   "start": 2642.86,
+   "end": 2645.98,
+   "text": "It's now blended in a better way."
+  },
+  {
+   "start": 2645.98,
+   "end": 2646.54,
+   "text": "That's cool."
+  },
+  {
+   "start": 2646.54,
+   "end": 2651.5,
+   "text": "Now let's try to paint some cast shadows from this fence."
+  },
+  {
+   "start": 2651.5,
+   "end": 2657.34,
+   "text": "So I'll just do it the same way we did with the car."
+  },
+  {
+   "start": 2677.12,
+   "end": 2684.72,
+   "text": "So maybe something like this and then change its blending mode into multiply decrease its opacity."
+  },
+  {
+   "start": 2685.6,
+   "end": 2688.4,
+   "text": "So something like this."
+  },
+  {
+   "start": 2688.4,
+   "end": 2695.68,
+   "text": "So the next part we will try to give these car lights some lights of course."
+  },
+  {
+   "start": 2695.68,
+   "end": 2698.96,
+   "text": "So I'll do this using solid again solid color."
+  },
+  {
+   "start": 2700.0,
+   "end": 2705.36,
+   "text": "Maybe this time it will be saturated orange something like this."
+  },
+  {
+   "start": 2705.44,
+   "end": 2712.32,
+   "text": "Press control I to invert the mask and using any flare lens flare brushes."
+  },
+  {
+   "start": 2712.32,
+   "end": 2716.0,
+   "text": "So maybe something like this will be okay."
+  },
+  {
+   "start": 2716.0,
+   "end": 2720.88,
+   "text": "It's increased the flow of the brush and change the blending mode of the layer into screen."
+  },
+  {
+   "start": 2720.88,
+   "end": 2725.44,
+   "text": "And let's try to give it a touch something like this."
+  },
+  {
+   "start": 2725.44,
+   "end": 2727.36,
+   "text": "See another one here."
+  },
+  {
+   "start": 2728.48,
+   "end": 2730.16,
+   "text": "This color is very saturated."
+  },
+  {
+   "start": 2730.16,
+   "end": 2735.04,
+   "text": "So let's just make it less saturated something like this."
+  },
+  {
+   "start": 2735.04,
+   "end": 2738.16,
+   "text": "And we can paint it again."
+  },
+  {
+   "start": 2739.36,
+   "end": 2740.8,
+   "text": "Make this smaller."
+  },
+  {
+   "start": 2742.08,
+   "end": 2748.56,
+   "text": "Let's go to these lights make this very small something like this smaller."
+  },
+  {
+   "start": 2749.12,
+   "end": 2756.24,
+   "text": "And I want it to look subtle like it's not that harsh lights."
+  },
+  {
+   "start": 2758.32,
+   "end": 2764.16,
+   "text": "Maybe as well we can give this no this is very bright very small,"
+  },
+  {
+   "start": 2764.16,
+   "end": 2766.24,
+   "text": "tinier reflection something like this."
+  },
+  {
+   "start": 2767.12,
+   "end": 2774.56,
+   "text": "And one final thing let's create like a glow around this using a saturated color and the"
+  },
+  {
+   "start": 2774.56,
+   "end": 2776.48,
+   "text": "same screen blending mode."
+  },
+  {
+   "start": 2776.48,
+   "end": 2781.28,
+   "text": "Press control I using the soft rounded brush this time."
+  },
+  {
+   "start": 2781.28,
+   "end": 2788.16,
+   "text": "I'll just give it some touches but let's decrease the flow of the brush or something like this."
+  },
+  {
+   "start": 2788.8,
+   "end": 2789.92,
+   "text": "Make this bigger."
+  },
+  {
+   "start": 2790.48,
+   "end": 2794.88,
+   "text": "And let's give this one another one."
+  },
+  {
+   "start": 2794.88,
+   "end": 2798.88,
+   "text": "So let's see here is before and here is after."
+  },
+  {
+   "start": 2798.88,
+   "end": 2800.0,
+   "text": "That's very nice."
+  },
+  {
+   "start": 2800.0,
+   "end": 2807.12,
+   "text": "Next we should paint some shadows to the car again using curves."
+  },
+  {
+   "start": 2807.12,
+   "end": 2814.96,
+   "text": "At this time I will just paint the shadows into the surfaces that are not facing the"
+  },
+  {
+   "start": 2814.96,
+   "end": 2815.92,
+   "text": "lights."
+  },
+  {
+   "start": 2816.4,
+   "end": 2821.52,
+   "text": "So here we should have some shadows and here and here as well."
+  },
+  {
+   "start": 2821.52,
+   "end": 2830.64,
+   "text": "So I will do this basically by just selecting these parts roughly using the pen tool."
+  },
+  {
+   "start": 2830.64,
+   "end": 2838.67,
+   "text": "So like this part and this part as well."
+  },
+  {
+   "start": 2838.67,
+   "end": 2844.91,
+   "text": "Press control enter to make a selection create curves adjustment layer and let's try"
+  },
+  {
+   "start": 2845.39,
+   "end": 2851.23,
+   "text": "to make this dark create a clipping mask of course and then we can make this mask"
+  },
+  {
+   "start": 2851.87,
+   "end": 2854.83,
+   "text": "softer from the feather right here."
+  },
+  {
+   "start": 2857.12,
+   "end": 2861.04,
+   "text": "And of course we can lower the effect by reducing the opacity."
+  },
+  {
+   "start": 2861.04,
+   "end": 2863.68,
+   "text": "So here's before and here's after."
+  },
+  {
+   "start": 2863.68,
+   "end": 2868.48,
+   "text": "Now it's time to bring some motion to the composite."
+  },
+  {
+   "start": 2868.48,
+   "end": 2876.24,
+   "text": "So if there is a car that is into in a road and it's very speed the road itself"
+  },
+  {
+   "start": 2876.64,
+   "end": 2880.72,
+   "text": "will have some motion blur but the car will be very sharp."
+  },
+  {
+   "start": 2880.72,
+   "end": 2890.88,
+   "text": "The wheels will have some motion blur but the four parts will not have this motion blur effect."
+  },
+  {
+   "start": 2890.88,
+   "end": 2897.36,
+   "text": "Okay so the further you go in distance so for example these elements doesn't have this"
+  },
+  {
+   "start": 2898.0,
+   "end": 2905.28,
+   "text": "motion blur effect because it's kind of far from the car itself as well as these parts"
+  },
+  {
+   "start": 2905.28,
+   "end": 2907.6,
+   "text": "of the tree."
+  },
+  {
+   "start": 2907.6,
+   "end": 2910.4,
+   "text": "Okay of course the sky as well."
+  },
+  {
+   "start": 2910.4,
+   "end": 2914.56,
+   "text": "So we want to avoid making like a motion blur everywhere."
+  },
+  {
+   "start": 2915.2,
+   "end": 2921.52,
+   "text": "We will just make it into these parts that are closer to the car itself."
+  },
+  {
+   "start": 2921.52,
+   "end": 2929.84,
+   "text": "So how can we do this is by simply selecting these the ground area only."
+  },
+  {
+   "start": 2930.48,
+   "end": 2934.16,
+   "text": "So let's select the ground with everything above it."
+  },
+  {
+   "start": 2935.36,
+   "end": 2944.24,
+   "text": "But we will not select the shadows just select the elements and the adjustment colors of it."
+  },
+  {
+   "start": 2944.24,
+   "end": 2950.96,
+   "text": "And then press Ctrl J right click and then press merge layers."
+  },
+  {
+   "start": 2950.96,
+   "end": 2956.24,
+   "text": "So we have now like a merged layer here we can play with."
+  },
+  {
+   "start": 2956.24,
+   "end": 2964.88,
+   "text": "Let's press convert to smart object and let's go to filter blur gallery and something called path blur."
+  },
+  {
+   "start": 2965.68,
+   "end": 2973.04,
+   "text": "And here we want to match the shape of the or the direction of the car."
+  },
+  {
+   "start": 2973.04,
+   "end": 2984.24,
+   "text": "So the car is running into this area so I'm going to draw some arrows into the same perspective"
+  },
+  {
+   "start": 2984.24,
+   "end": 2984.56,
+   "text": "lines."
+  },
+  {
+   "start": 2984.56,
+   "end": 2993.84,
+   "text": "So I'm putting one point here another one here and then press escape and do another one like this."
+  },
+  {
+   "start": 2994.56,
+   "end": 3004.4,
+   "text": "Another one here and another one here because if I didn't do so the shape will be distorted."
+  },
+  {
+   "start": 3004.4,
+   "end": 3012.08,
+   "text": "Okay so for example here I will change the shape to something like this."
+  },
+  {
+   "start": 3013.6,
+   "end": 3019.6,
+   "text": "Okay so you can now see the distortion that is happening right here."
+  },
+  {
+   "start": 3020.56,
+   "end": 3028.16,
+   "text": "You know that that motion effect coming from far distance and going to here and maybe we can"
+  },
+  {
+   "start": 3028.96,
+   "end": 3034.32,
+   "text": "reduce the length of this part because I want the effect to look like this."
+  },
+  {
+   "start": 3034.96,
+   "end": 3039.12,
+   "text": "Let's see something like this I guess."
+  },
+  {
+   "start": 3039.12,
+   "end": 3045.6,
+   "text": "Yeah that's very nice and maybe we can draw one final here."
+  },
+  {
+   "start": 3046.4,
+   "end": 3047.68,
+   "text": "That's very nice."
+  },
+  {
+   "start": 3047.76,
+   "end": 3055.92,
+   "text": "Let's remove this centered blur and let's decrease the speed to something like 25 maybe"
+  },
+  {
+   "start": 3057.36,
+   "end": 3058.56,
+   "text": "or 20."
+  },
+  {
+   "start": 3058.56,
+   "end": 3063.44,
+   "text": "That's nice this motion effect is bringing it to life."
+  },
+  {
+   "start": 3063.44,
+   "end": 3065.52,
+   "text": "So let's have a look before and after."
+  },
+  {
+   "start": 3066.24,
+   "end": 3072.48,
+   "text": "So here is before and here is after or after."
+  },
+  {
+   "start": 3072.48,
+   "end": 3076.72,
+   "text": "One final thing I guess we miss we're missing the shadows of the fence."
+  },
+  {
+   "start": 3076.72,
+   "end": 3084.96,
+   "text": "So let's put this there behind the shadows of the fence here and maybe we can feather these"
+  },
+  {
+   "start": 3084.96,
+   "end": 3094.16,
+   "text": "shadows a little bit to match the motion effect here and this one as well."
+  },
+  {
+   "start": 3105.87,
+   "end": 3109.47,
+   "text": "All right we are here into the final stages."
+  },
+  {
+   "start": 3109.47,
+   "end": 3116.03,
+   "text": "So what we're going to do next is to create like a bloom atmospheric effect in this area"
+  },
+  {
+   "start": 3116.83,
+   "end": 3122.19,
+   "text": "and then we can go to the color grading that is the last thing."
+  },
+  {
+   "start": 3122.19,
+   "end": 3129.39,
+   "text": "So let's start by creating a new solid color adjustment layer and then press okay."
+  },
+  {
+   "start": 3129.39,
+   "end": 3132.75,
+   "text": "Of course it will not be clipped to this layer."
+  },
+  {
+   "start": 3132.75,
+   "end": 3136.43,
+   "text": "So let's change its color to somehow"
+  },
+  {
+   "start": 3136.67,
+   "end": 3146.75,
+   "text": "Now, saturated maybe 50% saturation or color something like this and then let's put it behind"
+  },
+  {
+   "start": 3146.75,
+   "end": 3150.99,
+   "text": "everything maybe here and let's change its blending mode into screen."
+  },
+  {
+   "start": 3151.63,
+   "end": 3158.83,
+   "text": "Press Ctrl I to invert the mask and we can do this glow effect by simply using the soft"
+  },
+  {
+   "start": 3158.91,
+   "end": 3168.27,
+   "text": "rounded brush with a low flow something like 30% and make the brush big something like this."
+  },
+  {
+   "start": 3169.87,
+   "end": 3176.91,
+   "text": "Maybe let's decrease the flow something like this we can create like a glow effect around"
+  },
+  {
+   "start": 3176.91,
+   "end": 3183.79,
+   "text": "the car which will separate it from the background and it will put the focus on it."
+  },
+  {
+   "start": 3184.35,
+   "end": 3190.75,
+   "text": "So some glow effect like this maybe this is too much we can erase it from some parts"
+  },
+  {
+   "start": 3192.03,
+   "end": 3192.83,
+   "text": "and there you go."
+  },
+  {
+   "start": 3194.03,
+   "end": 3198.99,
+   "text": "Let's see this before and here is after that's very nice."
+  },
+  {
+   "start": 3198.99,
+   "end": 3206.59,
+   "text": "Next we can put some lens flare effect from this picture so let's bring it and put it"
+  },
+  {
+   "start": 3206.59,
+   "end": 3209.31,
+   "text": "above everything at the top."
+  },
+  {
+   "start": 3209.31,
+   "end": 3211.79,
+   "text": "Let's change its blending mode into screen."
+  },
+  {
+   "start": 3211.79,
+   "end": 3221.47,
+   "text": "Ctrl T make it big make this very big I just want just a tiny touch of these lens"
+  },
+  {
+   "start": 3222.59,
+   "end": 3231.23,
+   "text": "flares so something like this and maybe press Ctrl U to desaturate it because it's very"
+  },
+  {
+   "start": 3231.23,
+   "end": 3234.83,
+   "text": "saturated so something like this would be okay."
+  },
+  {
+   "start": 3236.03,
+   "end": 3238.67,
+   "text": "Maybe we can mask this part out."
+  },
+  {
+   "start": 3238.67,
+   "end": 3247.15,
+   "text": "One final thing I like to do is to select everything and press Ctrl T and I think we can"
+  },
+  {
+   "start": 3247.15,
+   "end": 3253.39,
+   "text": "rotate the canvas a little bit this gives the visual more interest it's something called"
+  },
+  {
+   "start": 3253.39,
+   "end": 3261.31,
+   "text": "doge I guess angle which is when the horizon line is now tilted a little bit has some angle"
+  },
+  {
+   "start": 3261.31,
+   "end": 3267.79,
+   "text": "it's not completely horizontal this gives it more interest and it's kind of look better."
+  },
+  {
+   "start": 3267.87,
+   "end": 3274.75,
+   "text": "That's perfect now let's go to color grading the most exciting part in which we bring everything"
+  },
+  {
+   "start": 3274.75,
+   "end": 3281.87,
+   "text": "together to get the final look so we can do this using camera row filter but what I like more is"
+  },
+  {
+   "start": 3281.87,
+   "end": 3288.59,
+   "text": "to create an empty group and put everything on it and I like to make color grading using"
+  },
+  {
+   "start": 3289.47,
+   "end": 3297.15,
+   "text": "adjustment layers because that gives me more control if I want to edit anything into the"
+  },
+  {
+   "start": 3297.15,
+   "end": 3303.87,
+   "text": "car for example it will be applied in the whole image automatically so I start with creating color"
+  },
+  {
+   "start": 3303.87,
+   "end": 3310.35,
+   "text": "balance adjustment layer and start to tweak the colors let's start with what I think it's"
+  },
+  {
+   "start": 3310.35,
+   "end": 3317.79,
+   "text": "settled down and I already know which is the highlights I'm sure that I want it to look like"
+  },
+  {
+   "start": 3317.79,
+   "end": 3323.71,
+   "text": "more yellowish and reddish that's why I started with it because I'm not sure what I will like"
+  },
+  {
+   "start": 3323.71,
+   "end": 3329.31,
+   "text": "most in the mid-tone and the shadows but the highlights I want it to look warm and"
+  },
+  {
+   "start": 3330.51,
+   "end": 3336.91,
+   "text": "somehow reddish yellowish colors so that's why I started with the highlights then let's go to the"
+  },
+  {
+   "start": 3336.91,
+   "end": 3345.79,
+   "text": "shadows maybe the shadows needs some yeah I like how it looks when adding grids so let's add some"
+  },
+  {
+   "start": 3345.79,
+   "end": 3357.07,
+   "text": "reds or about greens or magenta let's see I guess magenta gives it a good look maybe some yellows"
+  },
+  {
+   "start": 3357.63,
+   "end": 3365.15,
+   "text": "or blues no the yellows are better just preference it's just your taste you know"
+  },
+  {
+   "start": 3366.35,
+   "end": 3371.47,
+   "text": "well something like this is okay maybe the highlights is very reddish so let's decrease this"
+  },
+  {
+   "start": 3371.47,
+   "end": 3379.63,
+   "text": "red a little bit that's okay and what about the mid tones I guess the mid tones should be somehow"
+  },
+  {
+   "start": 3379.63,
+   "end": 3388.67,
+   "text": "neutral so it's increase the greens and maybe give it a touch of red or something"
+  },
+  {
+   "start": 3389.87,
+   "end": 3396.83,
+   "text": "and maybe a touch of blue so let's see here is before and here is after it's now more crisp"
+  },
+  {
+   "start": 3397.79,
+   "end": 3405.63,
+   "text": "and next I guess we should give it more contrast so I'll do this using a brightness"
+  },
+  {
+   "start": 3405.63,
+   "end": 3411.39,
+   "text": "contrast adjustment layer so let's just give it contrast like this what about the brightness"
+  },
+  {
+   "start": 3411.39,
+   "end": 3420.11,
+   "text": "yeah maybe so this looks nice as well that's awesome the next part is I'm going to shift"
+  },
+  {
+   "start": 3420.11,
+   "end": 3428.27,
+   "text": "the highlights and the mid the mid tones but this time I'll do this using curves so let's just go to"
+  },
+  {
+   "start": 3428.27,
+   "end": 3436.35,
+   "text": "the red channel and let's add cyan to the highlights so I'm just adding a little bit of cyan"
+  },
+  {
+   "start": 3436.91,
+   "end": 3446.35,
+   "text": "and what about adding some yeah adding some reds into the shadows be great let's go to the"
+  },
+  {
+   "start": 3447.15,
+   "end": 3458.24,
+   "text": "greens and see some greens to the highlights and some yeah some magenta to the shadows"
+  },
+  {
+   "start": 3458.24,
+   "end": 3466.56,
+   "text": "now let's go to the blues adding some maybe a little touch of yellow and what about the shadows"
+  },
+  {
+   "start": 3467.28,
+   "end": 3480.16,
+   "text": "maybe I should add some yellow so let's see here is before everything color grading and here is"
+  },
+  {
+   "start": 3480.96,
+   "end": 3490.0,
+   "text": "after that is really really nice all right guys that was intense I know but if you want to create"
+  },
+  {
+   "start": 3490.08,
+   "end": 3498.08,
+   "text": "amazing results you need to put a lot of effort there is no shortcuts all the AI tools the automatic"
+  },
+  {
+   "start": 3498.08,
+   "end": 3505.76,
+   "text": "tools are okay are good they are increasing your efficiency but if you want the ultimate results"
+  },
+  {
+   "start": 3505.76,
+   "end": 3512.16,
+   "text": "the best results you need to practice a lot actually and you need to know the tools and"
+  },
+  {
+   "start": 3512.16,
+   "end": 3518.08,
+   "text": "the techniques how to create everything manually because you will have to do things manually"
+  },
+  {
+   "start": 3518.08,
+   "end": 3523.92,
+   "text": "believe me guys again if this is not enough for you and you have followed me all the way to this"
+  },
+  {
+   "start": 3523.92,
+   "end": 3531.76,
+   "text": "tutorial you will find more 11 tutorials more complex than this into my course the ultimate"
+  },
+  {
+   "start": 3531.76,
+   "end": 3537.36,
+   "text": "guide to photo manipulation and the link in the description and yeah please hit the like button"
+  },
+  {
+   "start": 3537.36,
+   "end": 3541.76,
+   "text": "and subscribe and let me know in the comments what do you think about these episodes see you in"
+  },
+  {
+   "start": 3541.76,
+   "end": 3546.4,
+   "text": "the next tutorials peace"
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:09:54.230327+00:00",
+ "seconds": 115.7
+}

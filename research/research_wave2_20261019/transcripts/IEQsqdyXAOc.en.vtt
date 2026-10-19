@@ -1,0 +1,468 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.060 --> 00:00:05.560
+Picture this: You’ve spent hours creating
+your design, only to find that, when it’s
+
+00:00:05.560 --> 00:00:09.519
+printed on a t-shirt, the colors look different
+from what you saw on your screen.
+
+00:00:09.519 --> 00:00:11.759
+Wondering how this happened and how to fix
+it?
+
+00:00:11.759 --> 00:00:17.109
+Continue watching a learn how to color correct
+for print.
+
+00:00:17.109 --> 00:00:22.250
+DTG, or direct-to-garment printing, is pretty
+versatile.
+
+00:00:22.250 --> 00:00:27.039
+However, it’s important to note that the
+colors you choose for your artwork may appear
+
+00:00:27.039 --> 00:00:29.410
+different when printed on an actual product.
+
+00:00:29.410 --> 00:00:30.960
+So, what causes the difference?
+
+00:00:30.960 --> 00:00:33.230
+Why is color correcting important?
+
+00:00:33.230 --> 00:00:38.160
+As an online store owner, you strive for a
+great first impression, hoping to attract
+
+00:00:38.160 --> 00:00:39.460
+returning customers.
+
+00:00:39.460 --> 00:00:44.140
+This requires delivering a product that matches
+what customers see on their screens.
+
+00:00:44.140 --> 00:00:49.190
+Well, the human eye can detect about 10 million
+colors, but each person sees them slightly
+
+00:00:49.190 --> 00:00:50.190
+differently.
+
+00:00:50.190 --> 00:00:55.970
+Meanwhile, computer monitors can display over
+16 million colors and each screen may show
+
+00:00:55.970 --> 00:01:01.500
+them differently, some appearing warmer with
+yellow tones and others cooler with blue tones.
+
+00:01:01.500 --> 00:01:08.210
+That’s why your designs might look different
+on various screens like computers, TVs, and
+
+00:01:08.210 --> 00:01:09.210
+smartphones.
+
+00:01:09.210 --> 00:01:11.460
+Then the DTG printing process comes in.
+
+00:01:11.460 --> 00:01:16.180
+Several factors can affect how colors appear
+on the final printed product like the type
+
+00:01:16.180 --> 00:01:21.780
+of fabric, the color of the garment, whether
+a white under base is used, and the color
+
+00:01:21.780 --> 00:01:25.400
+spaces used in designing.
+
+00:01:25.400 --> 00:01:31.070
+Think of color space as a huge box of crayons,
+representing all the colors you can see in
+
+00:01:31.070 --> 00:01:34.540
+digital images or on screens and printers.
+
+00:01:34.540 --> 00:01:39.079
+Each color space has its own limits on the
+colors it can display or print.
+
+00:01:39.079 --> 00:01:43.310
+So, if you choose colors outside the range
+supported by a printer, it won’t be able
+
+00:01:43.310 --> 00:01:44.810
+to reproduce them accurately.
+
+00:01:44.810 --> 00:01:50.220
+For instance, if you use a neon color that
+is beyond what DTG printers can handle, the
+
+00:01:50.220 --> 00:01:53.100
+final result might not look as expected.
+
+00:01:53.100 --> 00:01:57.180
+Just like how different brands of crayons
+offer different color sets, your devices and
+
+00:01:57.180 --> 00:01:59.729
+software also use different color spaces.
+
+00:01:59.729 --> 00:02:04.719
+So, to get better print results, it’s important
+to understand the color space you’re designing
+
+00:02:04.719 --> 00:02:05.719
+in to get more accurate print results.
+
+00:02:05.719 --> 00:02:10.690
+For DTG printing, you can design in two color
+spaces—RGB or CMYK.
+
+00:02:10.690 --> 00:02:16.760
+RGB, which stands for red, green, and blue,
+is used for emitted light, like from monitors,
+
+00:02:16.760 --> 00:02:19.700
+and offers a wider range of colors than CMYK.
+
+00:02:19.700 --> 00:02:24.610
+If you’re designing in RGB, make sure you
+use the RGB color space in Photoshop.
+
+00:02:24.610 --> 00:02:31.330
+To do this, go to Edit, choose Convert to
+Profile, and select RGB as the profile in
+
+00:02:31.330 --> 00:02:33.510
+the Destination Space option.
+
+00:02:33.510 --> 00:02:37.700
+When designing in the RGB color space, you
+also want to ensure that the colors you pick
+
+00:02:37.700 --> 00:02:40.420
+are within the color range of DTG printers.
+
+00:02:40.420 --> 00:02:45.330
+You can check this by turning on the Gamut
+Warning feature in Photoshop by clicking View
+
+00:02:45.330 --> 00:02:46.970
+and Gamut Warning.
+
+00:02:46.970 --> 00:02:51.560
+With this feature, you can view and spot colors
+that can’t be reproduced in RGB.
+
+00:02:51.560 --> 00:02:54.280
+It helps you avoid using colors that won’t
+print well.
+
+00:02:54.280 --> 00:02:56.480
+Here’s how it appears in Photoshop.
+
+00:02:56.480 --> 00:03:02.540
+When you’re done designing in RGB, export
+your design as a PNG file with the sRGB color
+
+00:03:02.540 --> 00:03:03.540
+space.
+
+00:03:03.540 --> 00:03:04.540
+(sRGB IEC61966-2.1)
+
+00:03:04.540 --> 00:03:09.310
+If you design in CMYK, which stands for cyan,
+magenta, yellow, and black, you’ll already
+
+00:03:09.310 --> 00:03:13.090
+be designing in colors within the color range
+of DTG printers.
+
+00:03:13.090 --> 00:03:18.980
+However, you’ll have to switch your design
+to RGB once finished and export it as a PNG
+
+00:03:18.980 --> 00:03:21.849
+file with that same sRGB color space.
+
+00:03:21.849 --> 00:03:27.430
+To switch from CMYK to RGB, go to Edit in
+the top menu, pick Convert to Profile, and
+
+00:03:27.430 --> 00:03:30.000
+choose RGB in the Destination Space section.
+
+00:03:30.000 --> 00:03:31.959
+Select sRGB.
+
+00:03:31.959 --> 00:03:37.500
+No matter if you’re designing in RGB or
+CMYK, make sure to export your final design
+
+00:03:37.500 --> 00:03:44.330
+as a PNG file with an sRGB color profile for
+the best-printed results.
+
+00:03:44.330 --> 00:03:50.000
+To help you understand how colors appear on
+screen versus in print, you can order product
+
+00:03:50.000 --> 00:03:51.940
+samples to test your designs.
+
+00:03:51.940 --> 00:03:56.270
+Samples are crucial as they offer a tangible
+reference for how colors will appear when
+
+00:03:56.270 --> 00:03:57.270
+printed.
+
+00:03:57.270 --> 00:04:00.440
+Here’s a quick guide to ordering product
+samples from Printful:
+
+00:04:00.440 --> 00:04:04.280
+Log in to your Printful account and go to
+the Printful Dashboard.
+
+00:04:04.280 --> 00:04:07.080
+Click New order in the top right corner.
+
+00:04:07.080 --> 00:04:12.360
+Choose your store (if you have more than one)
+and select Create your order under Test your
+
+00:04:12.360 --> 00:04:13.360
+designs.
+
+00:04:13.360 --> 00:04:16.600
+You’ll be directed to a page where you can
+either select an existing design from your
+
+00:04:16.600 --> 00:04:18.840
+account or create a new one.
+
+00:04:18.840 --> 00:04:23.600
+For this example, I’ll select one of my
+existing DTG designs by clicking here.
+
+00:04:23.600 --> 00:04:30.220
+For optimal results in DTG printing, try testing
+your designs on black and white garments.
+
+00:04:30.220 --> 00:04:34.810
+When you select a light-colored garment, your
+design gets printed directly onto the fabric.
+
+00:04:34.810 --> 00:04:40.280
+However, for darker garment colors, we add
+a white underbase layer before applying your
+
+00:04:40.280 --> 00:04:41.280
+design.
+
+00:04:41.280 --> 00:04:44.720
+This ensures that your design colors pop on
+darker fabrics.
+
+00:04:44.720 --> 00:04:49.330
+Testing both light and dark-colored garments
+will give you a full picture of how your designs
+
+00:04:49.330 --> 00:04:50.330
+will look.
+
+00:04:50.330 --> 00:04:51.780
+How to create custom swatches of your designs
+
+00:04:51.780 --> 00:04:56.580
+Here’s a tip: If you want to test a wide
+range of colors for your designs before selling
+
+00:04:56.580 --> 00:05:00.420
+them, consider creating a custom color swatch
+to print as a sample.
+
+00:05:00.420 --> 00:05:05.860
+Make a design with squares of different color
+variations and include their RGB values below.
+
+00:05:05.860 --> 00:05:10.460
+This helps you see many colors at once and
+provides a reference for future designs.
+
+00:05:10.460 --> 00:05:15.810
+When ordering a product sample, test not only
+its main colors but also some variations to
+
+00:05:15.810 --> 00:05:17.639
+see how they’ll look in the final print.
+
+00:05:17.639 --> 00:05:20.080
+I’ll do just that with this design.
+
+00:05:20.080 --> 00:05:24.400
+After receiving your product sample with the
+custom swatch, compare the printed colors
+
+00:05:24.400 --> 00:05:26.210
+with those on your computer monitor.
+
+00:05:26.210 --> 00:05:30.690
+Decide if any adjustments are needed to match
+your original vision.
+
+00:05:30.690 --> 00:05:36.830
+Ok, so I got my design and color swatch on
+a white t-shirt and a black t-shirt with a
+
+00:05:36.830 --> 00:05:37.830
+white under base.
+
+00:05:37.830 --> 00:05:43.530
+As you can see, each color has its RGB value,
+which I can add and modify in design software
+
+00:05:43.530 --> 00:05:44.539
+like Photoshop.
+
+00:05:44.539 --> 00:05:48.951
+Seeing the printed design now, I realize that
+the yellow color of the plane didn’t turn
+
+00:05:48.951 --> 00:05:54.130
+out as vibrant as it appeared on the screen,
+and the red colors of the ribbon lost contrast
+
+00:05:54.130 --> 00:05:57.300
+because the colors ended up being too close
+in tone.
+
+00:05:57.300 --> 00:06:01.350
+So now I’ll show you how to color correct
+based on our printed swatches.
+
+00:06:01.350 --> 00:06:06.160
+I’ll open the original print file, which
+has the design on a transparent background.
+
+00:06:06.160 --> 00:06:09.690
+Then, I’ll create a new layer where we’ll
+place our new colors.
+
+00:06:09.690 --> 00:06:15.390
+Next, open your color panel to add RGB values
+for the new, preferred colors.
+
+00:06:15.390 --> 00:06:18.440
+To do that, select Window and click Color.
+
+00:06:18.440 --> 00:06:20.970
+This will bring up a color panel in your workspace.
+
+00:06:20.970 --> 00:06:22.910
+Right now, we’re using the Hue Cube view.
+
+00:06:22.910 --> 00:06:26.039
+To change it, click here and select RGB Sliders.
+
+00:06:26.039 --> 00:06:31.380
+Here, you can enter the RGB values from the
+printed color swatch variations or adjust
+
+00:06:31.380 --> 00:06:32.430
+them as needed.
+
+00:06:32.430 --> 00:06:36.340
+We’ll use the paint bucket tool to apply
+new colors to our design.
+
+00:06:36.340 --> 00:06:39.380
+Keep an eye on the panel that pops up when
+you select this tool.
+
+00:06:39.380 --> 00:06:42.000
+Make sure the All Layers box is checked.
+
+00:06:42.000 --> 00:06:45.700
+If not, you’ll fill the entire layer with
+just one color.
+
+00:06:45.700 --> 00:06:47.560
+The same goes for the Contiguous box.
+
+00:06:47.560 --> 00:06:51.890
+If checked, it lets you change the color within
+one element only.
+
+00:06:51.890 --> 00:06:55.949
+If unchecked, you’ll adjust the color of
+all pixels with the same color throughout
+
+00:06:55.949 --> 00:06:57.379
+the entire design.
+
+00:06:57.379 --> 00:07:01.879
+The next steps are simple: choose a variant
+color from the color swatch that better matches
+
+00:07:01.879 --> 00:07:03.009
+your design idea.
+
+00:07:03.009 --> 00:07:08.750
+Put the values in the RGB color panel, then,
+with the paint bucket tool selected, click
+
+00:07:08.750 --> 00:07:10.690
+on the color you want to change.
+
+00:07:10.690 --> 00:07:13.560
+Once you’ve corrected your colors, save
+your project file.
+
+00:07:13.560 --> 00:07:15.500
+Here’s the corrected result.
+
+00:07:15.500 --> 00:07:20.360
+It’s closer to the original design, and
+the colors are more vibrant and noticeable.
+
+00:07:20.360 --> 00:07:25.729
+On our screens, the colors might seem too
+bright or intense, but remember, these colors
+
+00:07:25.729 --> 00:07:28.889
+are based on the RGB values from the printed
+color swatch.
+
+00:07:28.889 --> 00:07:29.889
+Outro
+
+00:07:29.889 --> 00:07:32.509
+I hope you found this video helpful and inspiring!
+
+00:07:32.509 --> 00:07:36.750
+I’m excited to see the colorful designs
+you create for your online store!
+
+00:07:36.750 --> 00:07:41.280
+Remember, if you ever need assistance with
+your design process, our dedicated customer
+
+00:07:41.280 --> 00:07:43.169
+support team is here to help.
+
+00:07:43.169 --> 00:07:47.220
+Feel free to reach out to us at support@printful.com.
+
+00:07:47.220 --> 00:07:48.729
+See you in the next video!
+

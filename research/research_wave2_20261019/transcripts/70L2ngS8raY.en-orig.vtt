@@ -1,0 +1,1272 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.080 --> 00:00:02.230 align:start position:0%
+ 
+Hi,<00:00:00.480><c> I'm</c><00:00:00.719><c> Morgan</c><00:00:01.199><c> and</c><00:00:01.520><c> today</c><00:00:01.760><c> I'm</c><00:00:01.920><c> going</c><00:00:02.000><c> to</c><00:00:02.159><c> be</c>
+
+00:00:02.230 --> 00:00:02.240 align:start position:0%
+Hi, I'm Morgan and today I'm going to be
+ 
+
+00:00:02.240 --> 00:00:04.150 align:start position:0%
+Hi, I'm Morgan and today I'm going to be
+showing<00:00:02.399><c> you</c><00:00:02.560><c> how</c><00:00:02.800><c> I'm</c><00:00:03.120><c> using</c><00:00:03.439><c> Photoshop's</c>
+
+00:00:04.150 --> 00:00:04.160 align:start position:0%
+showing you how I'm using Photoshop's
+ 
+
+00:00:04.160 --> 00:00:06.309 align:start position:0%
+showing you how I'm using Photoshop's
+new<00:00:04.480><c> generative</c><00:00:05.120><c> fill</c><00:00:05.440><c> partner</c><00:00:05.759><c> models</c><00:00:06.080><c> to</c>
+
+00:00:06.309 --> 00:00:06.319 align:start position:0%
+new generative fill partner models to
+ 
+
+00:00:06.319 --> 00:00:07.590 align:start position:0%
+new generative fill partner models to
+streamline<00:00:06.550><c> [music]</c><00:00:06.720><c> my</c><00:00:06.879><c> workflow</c><00:00:07.279><c> as</c><00:00:07.440><c> a</c>
+
+00:00:07.590 --> 00:00:07.600 align:start position:0%
+streamline [music] my workflow as a
+ 
+
+00:00:07.600 --> 00:00:09.110 align:start position:0%
+streamline [music] my workflow as a
+graphic<00:00:07.919><c> designer.</c><00:00:08.400><c> Specifically,</c><00:00:08.960><c> I'm</c>
+
+00:00:09.110 --> 00:00:09.120 align:start position:0%
+graphic designer. Specifically, I'm
+ 
+
+00:00:09.120 --> 00:00:10.549 align:start position:0%
+graphic designer. Specifically, I'm
+going<00:00:09.200><c> to</c><00:00:09.280><c> be</c><00:00:09.440><c> showing</c><00:00:09.599><c> you</c><00:00:09.760><c> how</c><00:00:09.920><c> I'm</c><00:00:10.240><c> using</c>
+
+00:00:10.549 --> 00:00:10.559 align:start position:0%
+going to be showing you how I'm using
+ 
+
+00:00:10.559 --> 00:00:13.270 align:start position:0%
+going to be showing you how I'm using
+Nano<00:00:10.960><c> Banana</c><00:00:11.519><c> Gemini</c><00:00:11.790><c> [music]</c><00:00:12.160><c> 2.5</c><00:00:12.880><c> Flash</c>
+
+00:00:13.270 --> 00:00:13.280 align:start position:0%
+Nano Banana Gemini [music] 2.5 Flash
+ 
+
+00:00:13.280 --> 00:00:15.430 align:start position:0%
+Nano Banana Gemini [music] 2.5 Flash
+Image<00:00:13.599><c> and</c><00:00:13.840><c> Flux</c><00:00:14.240><c> Context</c><00:00:14.719><c> Pro</c><00:00:15.040><c> to</c><00:00:15.280><c> make</c>
+
+00:00:15.430 --> 00:00:15.440 align:start position:0%
+Image and Flux Context Pro to make
+ 
+
+00:00:15.440 --> 00:00:17.910 align:start position:0%
+Image and Flux Context Pro to make
+mock-ups<00:00:16.000><c> for</c><00:00:16.160><c> my</c><00:00:16.400><c> clients.</c><00:00:16.960><c> So,</c><00:00:17.199><c> to</c><00:00:17.440><c> start,</c><00:00:17.680><c> I</c>
+
+00:00:17.910 --> 00:00:17.920 align:start position:0%
+mock-ups for my clients. So, to start, I
+ 
+
+00:00:17.920 --> 00:00:19.349 align:start position:0%
+mock-ups for my clients. So, to start, I
+thought<00:00:18.000><c> I'd</c><00:00:18.240><c> show</c><00:00:18.320><c> you</c><00:00:18.480><c> this</c><00:00:18.720><c> photo</c><00:00:18.960><c> that</c><00:00:19.199><c> my</c>
+
+00:00:19.349 --> 00:00:19.359 align:start position:0%
+thought I'd show you this photo that my
+ 
+
+00:00:19.359 --> 00:00:22.260 align:start position:0%
+thought I'd show you this photo that my
+client<00:00:19.680><c> sent</c><00:00:19.920><c> me</c><00:00:20.080><c> today.</c><00:00:20.960><c> [music]</c><00:00:21.199><c> Yeah,</c>
+
+00:00:22.260 --> 00:00:22.270 align:start position:0%
+client sent me today. [music] Yeah,
+ 
+
+00:00:22.270 --> 00:00:22.790 align:start position:0%
+client sent me today. [music] Yeah,
+[laughter]
+
+00:00:22.790 --> 00:00:22.800 align:start position:0%
+[laughter]
+ 
+
+00:00:22.800 --> 00:00:24.790 align:start position:0%
+[laughter]
+they<00:00:23.119><c> asked</c><00:00:23.359><c> me</c><00:00:23.519><c> if</c><00:00:23.760><c> I</c><00:00:23.920><c> could</c><00:00:24.080><c> mock</c><00:00:24.400><c> up</c><00:00:24.560><c> the</c>
+
+00:00:24.790 --> 00:00:24.800 align:start position:0%
+they asked me if I could mock up the
+ 
+
+00:00:24.800 --> 00:00:26.390 align:start position:0%
+they asked me if I could mock up the
+designs<00:00:25.039><c> that</c><00:00:25.199><c> we've</c><00:00:25.439><c> been</c><00:00:25.600><c> working</c><00:00:25.760><c> on</c><00:00:26.000><c> onto</c>
+
+00:00:26.390 --> 00:00:26.400 align:start position:0%
+designs that we've been working on onto
+ 
+
+00:00:26.400 --> 00:00:27.830 align:start position:0%
+designs that we've been working on onto
+their<00:00:26.640><c> actual</c><00:00:26.960><c> bottle</c><00:00:27.359><c> because</c><00:00:27.599><c> they</c>
+
+00:00:27.830 --> 00:00:27.840 align:start position:0%
+their actual bottle because they
+ 
+
+00:00:27.840 --> 00:00:30.470 align:start position:0%
+their actual bottle because they
+received<00:00:28.080><c> a</c><00:00:28.320><c> sample.</c><00:00:29.439><c> Now,</c><00:00:29.920><c> the</c><00:00:30.160><c> photo</c><00:00:30.320><c> that</c>
+
+00:00:30.470 --> 00:00:30.480 align:start position:0%
+received a sample. Now, the photo that
+ 
+
+00:00:30.480 --> 00:00:32.630 align:start position:0%
+received a sample. Now, the photo that
+they've<00:00:30.720><c> sent</c><00:00:30.880><c> me</c><00:00:31.039><c> is</c><00:00:31.279><c> very</c><00:00:31.439><c> lowfi.</c><00:00:32.160><c> It's</c><00:00:32.480><c> not</c>
+
+00:00:32.630 --> 00:00:32.640 align:start position:0%
+they've sent me is very lowfi. It's not
+ 
+
+00:00:32.640 --> 00:00:34.549 align:start position:0%
+they've sent me is very lowfi. It's not
+very<00:00:32.960><c> high</c><00:00:33.200><c> quality,</c><00:00:33.840><c> and</c><00:00:34.079><c> we're</c><00:00:34.320><c> not</c><00:00:34.480><c> going</c>
+
+00:00:34.549 --> 00:00:34.559 align:start position:0%
+very high quality, and we're not going
+ 
+
+00:00:34.559 --> 00:00:36.069 align:start position:0%
+very high quality, and we're not going
+to<00:00:34.640><c> have</c><00:00:34.800><c> a</c><00:00:34.960><c> very</c><00:00:35.200><c> polished</c><00:00:35.370><c> [music]</c><00:00:35.680><c> final</c>
+
+00:00:36.069 --> 00:00:36.079 align:start position:0%
+to have a very polished [music] final
+ 
+
+00:00:36.079 --> 00:00:39.270 align:start position:0%
+to have a very polished [music] final
+result.<00:00:37.280><c> I</c><00:00:38.160><c> thought</c><00:00:38.399><c> about</c><00:00:38.719><c> maybe</c><00:00:39.040><c> just</c>
+
+00:00:39.270 --> 00:00:39.280 align:start position:0%
+result. I thought about maybe just
+ 
+
+00:00:39.280 --> 00:00:40.790 align:start position:0%
+result. I thought about maybe just
+adding<00:00:39.520><c> the</c><00:00:39.760><c> design</c><00:00:40.000><c> to</c><00:00:40.239><c> this,</c><00:00:40.559><c> which</c><00:00:40.610><c> [music]</c>
+
+00:00:40.790 --> 00:00:40.800 align:start position:0%
+adding the design to this, which [music]
+ 
+
+00:00:40.800 --> 00:00:42.869 align:start position:0%
+adding the design to this, which [music]
+would<00:00:41.040><c> be</c><00:00:41.200><c> super</c><00:00:41.520><c> easy</c><00:00:41.760><c> to</c><00:00:42.000><c> do.</c><00:00:42.399><c> I</c><00:00:42.640><c> could</c><00:00:42.719><c> just</c>
+
+00:00:42.869 --> 00:00:42.879 align:start position:0%
+would be super easy to do. I could just
+ 
+
+00:00:42.879 --> 00:00:45.840 align:start position:0%
+would be super easy to do. I could just
+drag<00:00:43.200><c> it</c><00:00:43.360><c> in</c><00:00:43.680><c> as</c><00:00:43.920><c> I</c><00:00:44.079><c> normally</c><00:00:44.480><c> would</c><00:00:45.200><c> and</c>
+
+00:00:45.840 --> 00:00:45.850 align:start position:0%
+drag it in as I normally would and
+ 
+
+00:00:45.850 --> 00:00:48.150 align:start position:0%
+drag it in as I normally would and
+[music]<00:00:46.160><c> do</c><00:00:46.399><c> some</c><00:00:46.640><c> warping.</c><00:00:47.440><c> So,</c><00:00:47.760><c> let's</c><00:00:48.000><c> just</c>
+
+00:00:48.150 --> 00:00:48.160 align:start position:0%
+[music] do some warping. So, let's just
+ 
+
+00:00:48.160 --> 00:00:50.630 align:start position:0%
+[music] do some warping. So, let's just
+see<00:00:48.239><c> how</c><00:00:48.399><c> that</c><00:00:48.640><c> looks</c><00:00:48.960><c> for</c><00:00:49.200><c> talking</c><00:00:49.600><c> sake.</c><00:00:50.399><c> I</c>
+
+00:00:50.630 --> 00:00:50.640 align:start position:0%
+see how that looks for talking sake. I
+ 
+
+00:00:50.640 --> 00:00:52.630 align:start position:0%
+see how that looks for talking sake. I
+mean,<00:00:50.719><c> it's</c><00:00:51.039><c> fine.</c>
+
+00:00:52.630 --> 00:00:52.640 align:start position:0%
+mean, it's fine.
+ 
+
+00:00:52.640 --> 00:00:54.790 align:start position:0%
+mean, it's fine.
+It's<00:00:52.960><c> not</c><00:00:53.199><c> great,</c><00:00:53.600><c> though.</c><00:00:53.920><c> I</c><00:00:54.160><c> feel</c><00:00:54.320><c> like</c><00:00:54.480><c> we</c>
+
+00:00:54.790 --> 00:00:54.800 align:start position:0%
+It's not great, though. I feel like we
+ 
+
+00:00:54.800 --> 00:00:57.910 align:start position:0%
+It's not great, though. I feel like we
+could<00:00:54.960><c> have</c><00:00:55.280><c> a</c><00:00:55.520><c> much</c><00:00:55.840><c> more</c><00:00:56.079><c> polished</c><00:00:56.719><c> finish</c>
+
+00:00:57.910 --> 00:00:57.920 align:start position:0%
+could have a much more polished finish
+ 
+
+00:00:57.920 --> 00:00:59.610 align:start position:0%
+could have a much more polished finish
+if<00:00:58.160><c> we</c><00:00:58.480><c> utilize</c><00:00:58.879><c> some</c><00:00:59.120><c> of</c><00:00:59.199><c> Adobe</c><00:00:59.600><c> Photoshop's</c>
+
+00:00:59.610 --> 00:00:59.620 align:start position:0%
+if we utilize some of Adobe Photoshop's
+ 
+
+00:00:59.620 --> 00:01:00.229 align:start position:0%
+if we utilize some of Adobe Photoshop's
+[music]
+
+00:01:00.229 --> 00:01:00.239 align:start position:0%
+[music]
+ 
+
+00:01:00.239 --> 00:01:01.910 align:start position:0%
+[music]
+new<00:01:00.480><c> features.</c><00:01:00.960><c> So,</c><00:01:01.120><c> I'm</c><00:01:01.359><c> going</c><00:01:01.440><c> to</c><00:01:01.520><c> go</c><00:01:01.680><c> ahead</c>
+
+00:01:01.910 --> 00:01:01.920 align:start position:0%
+new features. So, I'm going to go ahead
+ 
+
+00:01:01.920 --> 00:01:04.390 align:start position:0%
+new features. So, I'm going to go ahead
+and<00:01:02.079><c> select</c><00:01:02.320><c> the</c><00:01:02.480><c> rectangular</c><00:01:03.120><c> marquito.</c><00:01:04.239><c> And</c>
+
+00:01:04.390 --> 00:01:04.400 align:start position:0%
+and select the rectangular marquito. And
+ 
+
+00:01:04.400 --> 00:01:05.830 align:start position:0%
+and select the rectangular marquito. And
+I'm<00:01:04.559><c> going</c><00:01:04.640><c> to</c><00:01:04.720><c> head</c><00:01:04.879><c> into</c><00:01:05.199><c> the</c><00:01:05.360><c> generative</c>
+
+00:01:05.830 --> 00:01:05.840 align:start position:0%
+I'm going to head into the generative
+ 
+
+00:01:05.840 --> 00:01:08.630 align:start position:0%
+I'm going to head into the generative
+fill<00:01:06.240><c> option</c><00:01:06.560><c> in</c><00:01:06.720><c> the</c><00:01:06.880><c> contextual</c><00:01:07.360><c> tax</c><00:01:07.680><c> bar.</c>
+
+00:01:08.630 --> 00:01:08.640 align:start position:0%
+fill option in the contextual tax bar.
+ 
+
+00:01:08.640 --> 00:01:10.710 align:start position:0%
+fill option in the contextual tax bar.
+And<00:01:09.040><c> I'm</c><00:01:09.430><c> [music]</c><00:01:09.439><c> going</c><00:01:09.520><c> to</c><00:01:09.680><c> select</c><00:01:10.000><c> Gemini</c>
+
+00:01:10.710 --> 00:01:10.720 align:start position:0%
+And I'm [music] going to select Gemini
+ 
+
+00:01:10.720 --> 00:01:13.830 align:start position:0%
+And I'm [music] going to select Gemini
+2.5<00:01:11.439><c> Nano</c><00:01:11.840><c> Banana.</c><00:01:12.320><c> So,</c><00:01:12.479><c> in</c><00:01:12.720><c> here,</c><00:01:13.200><c> I</c><00:01:13.520><c> am</c><00:01:13.760><c> just</c>
+
+00:01:13.830 --> 00:01:13.840 align:start position:0%
+2.5 Nano Banana. So, in here, I am just
+ 
+
+00:01:13.840 --> 00:01:15.750 align:start position:0%
+2.5 Nano Banana. So, in here, I am just
+going<00:01:14.000><c> to</c><00:01:14.080><c> give</c><00:01:14.159><c> it</c><00:01:14.320><c> a</c><00:01:14.479><c> prompt.</c><00:01:15.040><c> And</c><00:01:15.360><c> Nano</c>
+
+00:01:15.750 --> 00:01:15.760 align:start position:0%
+going to give it a prompt. And Nano
+ 
+
+00:01:15.760 --> 00:01:17.935 align:start position:0%
+going to give it a prompt. And Nano
+Banana<00:01:16.240><c> is</c><00:01:16.400><c> really</c><00:01:16.720><c> good</c><00:01:17.119><c> at</c><00:01:17.840><c> understanding</c>
+
+00:01:17.935 --> 00:01:17.945 align:start position:0%
+Banana is really good at understanding
+ 
+
+00:01:17.945 --> 00:01:18.870 align:start position:0%
+Banana is really good at understanding
+[music]
+
+00:01:18.870 --> 00:01:18.880 align:start position:0%
+[music]
+ 
+
+00:01:18.880 --> 00:01:21.270 align:start position:0%
+[music]
+prompts<00:01:19.600><c> and</c><00:01:19.920><c> being</c><00:01:20.159><c> contextually</c><00:01:20.720><c> aware.</c>
+
+00:01:21.270 --> 00:01:21.280 align:start position:0%
+prompts and being contextually aware.
+ 
+
+00:01:21.280 --> 00:01:22.630 align:start position:0%
+prompts and being contextually aware.
+So,<00:01:21.600><c> you're</c><00:01:21.840><c> going</c><00:01:21.920><c> to</c><00:01:22.000><c> get</c><00:01:22.080><c> a</c><00:01:22.240><c> lot</c><00:01:22.320><c> of</c><00:01:22.479><c> your</c>
+
+00:01:22.630 --> 00:01:22.640 align:start position:0%
+So, you're going to get a lot of your
+ 
+
+00:01:22.640 --> 00:01:24.469 align:start position:0%
+So, you're going to get a lot of your
+details<00:01:23.119><c> preserved</c><00:01:23.520><c> if</c><00:01:23.759><c> you</c><00:01:23.840><c> ask</c><00:01:24.080><c> it</c><00:01:24.240><c> to</c><00:01:24.400><c> do</c>
+
+00:01:24.469 --> 00:01:24.479 align:start position:0%
+details preserved if you ask it to do
+ 
+
+00:01:24.479 --> 00:01:25.030 align:start position:0%
+details preserved if you ask it to do
+that.<00:01:24.499><c> [music]</c>
+
+00:01:25.030 --> 00:01:25.040 align:start position:0%
+that. [music]
+ 
+
+00:01:25.040 --> 00:01:27.190 align:start position:0%
+that. [music]
+So,<00:01:25.200><c> I'm</c><00:01:25.439><c> going</c><00:01:25.520><c> to</c><00:01:25.600><c> go</c><00:01:25.759><c> ahead</c><00:01:26.000><c> and</c><00:01:26.400><c> say</c><00:01:26.880><c> remove</c>
+
+00:01:27.190 --> 00:01:27.200 align:start position:0%
+So, I'm going to go ahead and say remove
+ 
+
+00:01:27.200 --> 00:01:29.590 align:start position:0%
+So, I'm going to go ahead and say remove
+the<00:01:27.439><c> hand,</c><00:01:28.159><c> remove</c><00:01:28.479><c> the</c><00:01:28.720><c> background,</c><00:01:29.360><c> place</c>
+
+00:01:29.590 --> 00:01:29.600 align:start position:0%
+the hand, remove the background, place
+ 
+
+00:01:29.600 --> 00:01:30.950 align:start position:0%
+the hand, remove the background, place
+the<00:01:29.759><c> bottle</c><00:01:30.000><c> into</c><00:01:30.240><c> a</c><00:01:30.390><c> [music]</c><00:01:30.400><c> clean</c><00:01:30.720><c> white</c>
+
+00:01:30.950 --> 00:01:30.960 align:start position:0%
+the bottle into a [music] clean white
+ 
+
+00:01:30.960 --> 00:01:32.950 align:start position:0%
+the bottle into a [music] clean white
+studio<00:01:31.360><c> background</c><00:01:31.759><c> with</c><00:01:32.000><c> studio</c><00:01:32.320><c> lighting</c>
+
+00:01:32.950 --> 00:01:32.960 align:start position:0%
+studio background with studio lighting
+ 
+
+00:01:32.960 --> 00:01:34.630 align:start position:0%
+studio background with studio lighting
+product<00:01:33.280><c> photography</c><00:01:33.840><c> style,</c><00:01:34.240><c> and</c><00:01:34.400><c> we'll</c>
+
+00:01:34.630 --> 00:01:34.640 align:start position:0%
+product photography style, and we'll
+ 
+
+00:01:34.640 --> 00:01:37.586 align:start position:0%
+product photography style, and we'll
+just<00:01:34.799><c> see</c><00:01:34.960><c> what</c><00:01:35.119><c> it</c><00:01:35.280><c> does.</c><00:01:36.640><c> Hopefully,</c><00:01:37.520><c> what</c>
+
+00:01:37.586 --> 00:01:37.596 align:start position:0%
+just see what it does. Hopefully, what
+ 
+
+00:01:37.596 --> 00:01:39.190 align:start position:0%
+just see what it does. Hopefully, what
+[music]<00:01:37.759><c> it's</c><00:01:38.000><c> going</c><00:01:38.079><c> to</c><00:01:38.159><c> do</c><00:01:38.320><c> is</c><00:01:38.560><c> tidy</c><00:01:38.880><c> up</c><00:01:39.040><c> this</c>
+
+00:01:39.190 --> 00:01:39.200 align:start position:0%
+[music] it's going to do is tidy up this
+ 
+
+00:01:39.200 --> 00:01:41.590 align:start position:0%
+[music] it's going to do is tidy up this
+image<00:01:39.439><c> and</c><00:01:39.840><c> get</c><00:01:40.000><c> rid</c><00:01:40.159><c> of</c><00:01:40.320><c> all</c><00:01:40.560><c> the</c><00:01:40.960><c> mess</c><00:01:41.280><c> in</c><00:01:41.439><c> the</c>
+
+00:01:41.590 --> 00:01:41.600 align:start position:0%
+image and get rid of all the mess in the
+ 
+
+00:01:41.600 --> 00:01:43.830 align:start position:0%
+image and get rid of all the mess in the
+background.
+
+00:01:43.830 --> 00:01:43.840 align:start position:0%
+background.
+ 
+
+00:01:43.840 --> 00:01:46.469 align:start position:0%
+background.
+Okay,<00:01:44.146><c> [music]</c><00:01:44.560><c> so</c><00:01:45.520><c> already</c><00:01:46.000><c> you</c><00:01:46.240><c> can</c><00:01:46.320><c> see</c>
+
+00:01:46.469 --> 00:01:46.479 align:start position:0%
+Okay, [music] so already you can see
+ 
+
+00:01:46.479 --> 00:01:49.030 align:start position:0%
+Okay, [music] so already you can see
+that<00:01:46.720><c> the</c><00:01:46.880><c> output</c><00:01:47.439><c> is</c><00:01:48.240><c> so</c><00:01:48.479><c> much</c><00:01:48.720><c> better</c><00:01:48.880><c> than</c>
+
+00:01:49.030 --> 00:01:49.040 align:start position:0%
+that the output is so much better than
+ 
+
+00:01:49.040 --> 00:01:51.990 align:start position:0%
+that the output is so much better than
+the<00:01:49.200><c> image</c><00:01:49.439><c> that</c><00:01:49.600><c> I</c><00:01:49.759><c> was</c><00:01:49.920><c> sent.</c><00:01:50.640><c> Uh,</c><00:01:51.040><c> wow.</c><00:01:51.840><c> So,</c>
+
+00:01:51.990 --> 00:01:52.000 align:start position:0%
+the image that I was sent. Uh, wow. So,
+ 
+
+00:01:52.000 --> 00:01:53.429 align:start position:0%
+the image that I was sent. Uh, wow. So,
+you<00:01:52.159><c> can</c><00:01:52.240><c> see</c><00:01:52.320><c> that</c><00:01:52.479><c> it's</c><00:01:52.720><c> done</c><00:01:52.880><c> a</c><00:01:53.040><c> pretty</c><00:01:53.280><c> good</c>
+
+00:01:53.429 --> 00:01:53.439 align:start position:0%
+you can see that it's done a pretty good
+ 
+
+00:01:53.439 --> 00:01:55.190 align:start position:0%
+you can see that it's done a pretty good
+job<00:01:53.920><c> and</c><00:01:53.971><c> [music]</c><00:01:54.240><c> it's</c><00:01:54.479><c> preserved</c><00:01:54.880><c> all</c><00:01:55.040><c> the</c>
+
+00:01:55.190 --> 00:01:55.200 align:start position:0%
+job and [music] it's preserved all the
+ 
+
+00:01:55.200 --> 00:01:56.630 align:start position:0%
+job and [music] it's preserved all the
+details<00:01:55.520><c> and</c><00:01:55.680><c> the</c><00:01:55.759><c> shape</c><00:01:56.000><c> from</c><00:01:56.159><c> the</c><00:01:56.320><c> bottle,</c>
+
+00:01:56.630 --> 00:01:56.640 align:start position:0%
+details and the shape from the bottle,
+ 
+
+00:01:56.640 --> 00:01:58.469 align:start position:0%
+details and the shape from the bottle,
+but<00:01:56.799><c> I</c><00:01:57.040><c> actually</c><00:01:57.360><c> need</c><00:01:57.759><c> three</c><00:01:58.079><c> bottles</c>
+
+00:01:58.469 --> 00:01:58.479 align:start position:0%
+but I actually need three bottles
+ 
+
+00:01:58.479 --> 00:02:00.310 align:start position:0%
+but I actually need three bottles
+because<00:01:58.719><c> my</c><00:01:58.960><c> client</c><00:01:59.200><c> has</c><00:01:59.520><c> three</c><00:01:59.759><c> flavors</c><00:02:00.159><c> of</c>
+
+00:02:00.310 --> 00:02:00.320 align:start position:0%
+because my client has three flavors of
+ 
+
+00:02:00.320 --> 00:02:01.830 align:start position:0%
+because my client has three flavors of
+this<00:02:00.560><c> product.</c><00:02:00.960><c> So,</c><00:02:01.119><c> I'm</c><00:02:01.280><c> going</c><00:02:01.280><c> to</c><00:02:01.360><c> go</c><00:02:01.520><c> up</c><00:02:01.680><c> to</c>
+
+00:02:01.830 --> 00:02:01.840 align:start position:0%
+this product. So, I'm going to go up to
+ 
+
+00:02:01.840 --> 00:02:03.590 align:start position:0%
+this product. So, I'm going to go up to
+object<00:02:02.320><c> select</c><00:02:02.719><c> and</c><00:02:02.960><c> I'm</c><00:02:03.119><c> just</c><00:02:03.280><c> going</c><00:02:03.360><c> to</c><00:02:03.439><c> make</c>
+
+00:02:03.590 --> 00:02:03.600 align:start position:0%
+object select and I'm just going to make
+ 
+
+00:02:03.600 --> 00:02:05.990 align:start position:0%
+object select and I'm just going to make
+a<00:02:03.840><c> really</c><00:02:04.000><c> quick</c><00:02:04.320><c> selection</c><00:02:04.640><c> of</c><00:02:04.799><c> this</c><00:02:05.040><c> bottle.</c>
+
+00:02:05.990 --> 00:02:06.000 align:start position:0%
+a really quick selection of this bottle.
+ 
+
+00:02:06.000 --> 00:02:07.910 align:start position:0%
+a really quick selection of this bottle.
+And<00:02:06.240><c> I'm</c><00:02:06.560><c> just</c><00:02:06.719><c> going</c><00:02:06.799><c> to</c><00:02:06.960><c> duplicate</c><00:02:07.439><c> that</c>
+
+00:02:07.910 --> 00:02:07.920 align:start position:0%
+And I'm just going to duplicate that
+ 
+
+00:02:07.920 --> 00:02:11.110 align:start position:0%
+And I'm just going to duplicate that
+very<00:02:08.800><c> roughly.</c><00:02:09.599><c> I'm</c><00:02:09.840><c> not</c><00:02:10.239><c> being</c><00:02:10.479><c> too</c><00:02:10.720><c> precious</c>
+
+00:02:11.110 --> 00:02:11.120 align:start position:0%
+very roughly. I'm not being too precious
+ 
+
+00:02:11.120 --> 00:02:13.589 align:start position:0%
+very roughly. I'm not being too precious
+about<00:02:11.360><c> it.</c><00:02:12.239><c> And</c><00:02:12.480><c> I'm</c><00:02:12.720><c> just</c><00:02:12.879><c> going</c><00:02:12.959><c> to</c><00:02:13.280><c> drag</c>
+
+00:02:13.589 --> 00:02:13.599 align:start position:0%
+about it. And I'm just going to drag
+ 
+
+00:02:13.599 --> 00:02:16.710 align:start position:0%
+about it. And I'm just going to drag
+that<00:02:13.920><c> so</c><00:02:14.080><c> that</c><00:02:14.319><c> they</c><00:02:14.640><c> are</c><00:02:15.280><c> side</c><00:02:15.599><c> by</c><00:02:15.840><c> side.</c><00:02:16.560><c> So</c>
+
+00:02:16.710 --> 00:02:16.720 align:start position:0%
+that so that they are side by side. So
+ 
+
+00:02:16.720 --> 00:02:18.470 align:start position:0%
+that so that they are side by side. So
+then<00:02:16.959><c> I'm</c><00:02:17.120><c> going</c><00:02:17.120><c> to</c><00:02:17.200><c> go</c><00:02:17.360><c> ahead</c><00:02:17.680><c> and</c><00:02:18.000><c> grab</c><00:02:18.239><c> the</c>
+
+00:02:18.470 --> 00:02:18.480 align:start position:0%
+then I'm going to go ahead and grab the
+ 
+
+00:02:18.480 --> 00:02:21.750 align:start position:0%
+then I'm going to go ahead and grab the
+rectangular<00:02:19.120><c> marquee</c><00:02:19.840><c> again.</c><00:02:21.200><c> And</c><00:02:21.440><c> I'm</c>
+
+00:02:21.750 --> 00:02:21.760 align:start position:0%
+rectangular marquee again. And I'm
+ 
+
+00:02:21.760 --> 00:02:24.550 align:start position:0%
+rectangular marquee again. And I'm
+basically<00:02:22.239><c> just</c><00:02:22.480><c> going</c><00:02:22.640><c> to</c><00:02:22.800><c> ask</c><00:02:23.920><c> generative</c>
+
+00:02:24.550 --> 00:02:24.560 align:start position:0%
+basically just going to ask generative
+ 
+
+00:02:24.560 --> 00:02:27.910 align:start position:0%
+basically just going to ask generative
+fill<00:02:25.120><c> to</c><00:02:26.000><c> unify</c><00:02:26.480><c> this</c><00:02:26.720><c> image.</c><00:02:27.360><c> So</c><00:02:27.380><c> [music]</c><00:02:27.680><c> I'm</c>
+
+00:02:27.910 --> 00:02:27.920 align:start position:0%
+fill to unify this image. So [music] I'm
+ 
+
+00:02:27.920 --> 00:02:30.550 align:start position:0%
+fill to unify this image. So [music] I'm
+going<00:02:28.000><c> to</c><00:02:28.160><c> go</c><00:02:28.239><c> ahead</c><00:02:28.720><c> and</c><00:02:29.520><c> select</c><00:02:30.080><c> Flux</c>
+
+00:02:30.550 --> 00:02:30.560 align:start position:0%
+going to go ahead and select Flux
+ 
+
+00:02:30.560 --> 00:02:33.190 align:start position:0%
+going to go ahead and select Flux
+Context<00:02:31.120><c> Pro.</c><00:02:31.520><c> And</c><00:02:31.680><c> Flux</c><00:02:32.080><c> Context</c><00:02:32.640><c> Pro</c><00:02:32.959><c> is</c>
+
+00:02:33.190 --> 00:02:33.200 align:start position:0%
+Context Pro. And Flux Context Pro is
+ 
+
+00:02:33.200 --> 00:02:34.571 align:start position:0%
+Context Pro. And Flux Context Pro is
+really<00:02:33.440><c> good</c><00:02:33.680><c> because</c><00:02:33.920><c> it's</c><00:02:34.400><c> contextually</c>
+
+00:02:34.571 --> 00:02:34.581 align:start position:0%
+really good because it's contextually
+ 
+
+00:02:34.581 --> 00:02:36.309 align:start position:0%
+really good because it's contextually
+[music]<00:02:35.040><c> aware.</c><00:02:35.519><c> It's</c><00:02:35.760><c> got</c><00:02:35.920><c> advanced</c>
+
+00:02:36.309 --> 00:02:36.319 align:start position:0%
+[music] aware. It's got advanced
+ 
+
+00:02:36.319 --> 00:02:37.750 align:start position:0%
+[music] aware. It's got advanced
+contextual<00:02:36.800><c> awareness.</c><00:02:37.280><c> So</c><00:02:37.360><c> it's</c><00:02:37.599><c> going</c><00:02:37.680><c> to</c>
+
+00:02:37.750 --> 00:02:37.760 align:start position:0%
+contextual awareness. So it's going to
+ 
+
+00:02:37.760 --> 00:02:39.430 align:start position:0%
+contextual awareness. So it's going to
+preserve<00:02:38.080><c> all</c><00:02:38.239><c> the</c><00:02:38.400><c> details</c><00:02:38.640><c> that</c><00:02:38.879><c> I</c><00:02:39.040><c> ask</c><00:02:39.280><c> it</c>
+
+00:02:39.430 --> 00:02:39.440 align:start position:0%
+preserve all the details that I ask it
+ 
+
+00:02:39.440 --> 00:02:41.121 align:start position:0%
+preserve all the details that I ask it
+to<00:02:39.680><c> and</c><00:02:40.000><c> hopefully</c><00:02:40.319><c> give</c><00:02:40.480><c> us</c><00:02:40.560><c> a</c><00:02:40.720><c> good</c><00:02:40.800><c> outfit.</c>
+
+00:02:41.121 --> 00:02:41.131 align:start position:0%
+to and hopefully give us a good outfit.
+ 
+
+00:02:41.131 --> 00:02:41.670 align:start position:0%
+to and hopefully give us a good outfit.
+[music]
+
+00:02:41.670 --> 00:02:41.680 align:start position:0%
+[music]
+ 
+
+00:02:41.680 --> 00:02:43.509 align:start position:0%
+[music]
+So,<00:02:41.920><c> I'm</c><00:02:42.160><c> just</c><00:02:42.319><c> going</c><00:02:42.400><c> to</c><00:02:42.480><c> ask</c><00:02:42.720><c> it</c><00:02:42.879><c> to</c><00:02:43.040><c> unify</c>
+
+00:02:43.509 --> 00:02:43.519 align:start position:0%
+So, I'm just going to ask it to unify
+ 
+
+00:02:43.519 --> 00:02:45.589 align:start position:0%
+So, I'm just going to ask it to unify
+the<00:02:43.680><c> image</c><00:02:43.920><c> so</c><00:02:44.080><c> that</c><00:02:44.319><c> all</c><00:02:44.480><c> the</c><00:02:44.640><c> bottles</c><00:02:45.120><c> are</c><00:02:45.360><c> on</c>
+
+00:02:45.589 --> 00:02:45.599 align:start position:0%
+the image so that all the bottles are on
+ 
+
+00:02:45.599 --> 00:02:48.070 align:start position:0%
+the image so that all the bottles are on
+a<00:02:46.000><c> white</c><00:02:46.319><c> studio</c><00:02:46.720><c> background</c><00:02:47.200><c> together.</c>
+
+00:02:48.070 --> 00:02:48.080 align:start position:0%
+a white studio background together.
+ 
+
+00:02:48.080 --> 00:02:49.910 align:start position:0%
+a white studio background together.
+Don't<00:02:48.319><c> change</c><00:02:48.560><c> the</c><00:02:48.720><c> bottles</c><00:02:49.040><c> and</c><00:02:49.280><c> add</c><00:02:49.519><c> subtle</c>
+
+00:02:49.910 --> 00:02:49.920 align:start position:0%
+Don't change the bottles and add subtle
+ 
+
+00:02:49.920 --> 00:02:52.150 align:start position:0%
+Don't change the bottles and add subtle
+shadows.<00:02:50.560><c> Okay.</c><00:02:50.879><c> Wow.</c><00:02:51.200><c> So,</c><00:02:51.519><c> this</c><00:02:51.680><c> has</c><00:02:51.840><c> already</c>
+
+00:02:52.150 --> 00:02:52.160 align:start position:0%
+shadows. Okay. Wow. So, this has already
+ 
+
+00:02:52.160 --> 00:02:53.830 align:start position:0%
+shadows. Okay. Wow. So, this has already
+saved<00:02:52.400><c> me</c><00:02:52.560><c> a</c><00:02:52.800><c> ton</c><00:02:52.879><c> of</c><00:02:53.040><c> time.</c><00:02:53.440><c> This</c><00:02:53.599><c> would</c><00:02:53.760><c> have</c>
+
+00:02:53.830 --> 00:02:53.840 align:start position:0%
+saved me a ton of time. This would have
+ 
+
+00:02:53.840 --> 00:02:56.150 align:start position:0%
+saved me a ton of time. This would have
+taken<00:02:54.080><c> me</c><00:02:54.319><c> so</c><00:02:54.480><c> long</c><00:02:54.640><c> to</c><00:02:54.879><c> do</c><00:02:55.040><c> before.</c><00:02:55.440><c> And</c><00:02:55.599><c> now</c><00:02:55.920><c> I</c>
+
+00:02:56.150 --> 00:02:56.160 align:start position:0%
+taken me so long to do before. And now I
+ 
+
+00:02:56.160 --> 00:02:58.151 align:start position:0%
+taken me so long to do before. And now I
+can<00:02:56.319><c> focus</c><00:02:56.640><c> on</c><00:02:56.879><c> the</c><00:02:57.120><c> actual</c><00:02:57.440><c> detail</c><00:02:57.840><c> work.</c>
+
+00:02:58.151 --> 00:02:58.161 align:start position:0%
+can focus on the actual detail work.
+ 
+
+00:02:58.161 --> 00:02:59.030 align:start position:0%
+can focus on the actual detail work.
+[music]
+
+00:02:59.030 --> 00:02:59.040 align:start position:0%
+[music]
+ 
+
+00:02:59.040 --> 00:03:01.110 align:start position:0%
+[music]
+So,<00:02:59.280><c> I'm</c><00:02:59.599><c> quite</c><00:02:59.920><c> happy</c><00:03:00.160><c> with</c><00:03:00.319><c> this</c><00:03:00.560><c> output.</c>
+
+00:03:01.110 --> 00:03:01.120 align:start position:0%
+So, I'm quite happy with this output.
+ 
+
+00:03:01.120 --> 00:03:03.110 align:start position:0%
+So, I'm quite happy with this output.
+I'm<00:03:01.280><c> going</c><00:03:01.360><c> to</c><00:03:01.440><c> go</c><00:03:01.519><c> ahead</c><00:03:01.840><c> and</c><00:03:02.000><c> drag</c><00:03:02.400><c> all</c><00:03:02.560><c> of</c><00:03:02.720><c> my</c>
+
+00:03:03.110 --> 00:03:03.120 align:start position:0%
+I'm going to go ahead and drag all of my
+ 
+
+00:03:03.120 --> 00:03:05.270 align:start position:0%
+I'm going to go ahead and drag all of my
+label<00:03:03.519><c> artwork</c><00:03:04.080><c> into</c><00:03:04.400><c> the</c><00:03:04.560><c> file.</c><00:03:04.959><c> And</c><00:03:05.040><c> I've</c>
+
+00:03:05.270 --> 00:03:05.280 align:start position:0%
+label artwork into the file. And I've
+ 
+
+00:03:05.280 --> 00:03:08.229 align:start position:0%
+label artwork into the file. And I've
+got<00:03:05.360><c> this</c><00:03:05.519><c> in</c><00:03:05.840><c> SVG</c><00:03:06.400><c> form.</c><00:03:07.280><c> So</c><00:03:07.760><c> once</c><00:03:08.000><c> I've</c>
+
+00:03:08.229 --> 00:03:08.239 align:start position:0%
+got this in SVG form. So once I've
+ 
+
+00:03:08.239 --> 00:03:09.350 align:start position:0%
+got this in SVG form. So once I've
+dropped<00:03:08.480><c> them</c><00:03:08.640><c> in,</c><00:03:08.879><c> I'm</c><00:03:09.040><c> just</c><00:03:09.200><c> going</c><00:03:09.200><c> to</c>
+
+00:03:09.350 --> 00:03:09.360 align:start position:0%
+dropped them in, I'm just going to
+ 
+
+00:03:09.360 --> 00:03:11.990 align:start position:0%
+dropped them in, I'm just going to
+select<00:03:09.760><c> all</c><00:03:10.080><c> three</c><00:03:10.560><c> and</c><00:03:11.120><c> shrink</c><00:03:11.440><c> them</c><00:03:11.680><c> down</c><00:03:11.840><c> to</c>
+
+00:03:11.990 --> 00:03:12.000 align:start position:0%
+select all three and shrink them down to
+ 
+
+00:03:12.000 --> 00:03:14.070 align:start position:0%
+select all three and shrink them down to
+size<00:03:12.400><c> together.</c>
+
+00:03:14.070 --> 00:03:14.080 align:start position:0%
+size together.
+ 
+
+00:03:14.080 --> 00:03:17.430 align:start position:0%
+size together.
+So<00:03:14.480><c> I'm</c><00:03:14.800><c> going</c><00:03:14.959><c> to</c><00:03:15.120><c> basically</c><00:03:15.599><c> put</c><00:03:15.920><c> my</c><00:03:17.157><c> [music]</c>
+
+00:03:17.430 --> 00:03:17.440 align:start position:0%
+So I'm going to basically put my [music]
+ 
+
+00:03:17.440 --> 00:03:20.149 align:start position:0%
+So I'm going to basically put my [music]
+first<00:03:17.760><c> flavor</c><00:03:18.159><c> here,</c><00:03:18.720><c> that</c><00:03:19.040><c> flavor</c><00:03:19.440><c> there,</c>
+
+00:03:20.149 --> 00:03:20.159 align:start position:0%
+first flavor here, that flavor there,
+ 
+
+00:03:20.159 --> 00:03:22.229 align:start position:0%
+first flavor here, that flavor there,
+and<00:03:20.400><c> this</c><00:03:20.640><c> flavor</c><00:03:20.959><c> in</c><00:03:21.120><c> the</c><00:03:21.200><c> middle.</c><00:03:21.599><c> And</c><00:03:21.920><c> super</c>
+
+00:03:22.229 --> 00:03:22.239 align:start position:0%
+and this flavor in the middle. And super
+ 
+
+00:03:22.239 --> 00:03:23.990 align:start position:0%
+and this flavor in the middle. And super
+quickly,<00:03:22.959><c> what</c><00:03:23.052><c> [music]</c><00:03:23.120><c> I'm</c><00:03:23.360><c> going</c><00:03:23.440><c> to</c><00:03:23.519><c> do</c><00:03:23.760><c> is</c>
+
+00:03:23.990 --> 00:03:24.000 align:start position:0%
+quickly, what [music] I'm going to do is
+ 
+
+00:03:24.000 --> 00:03:26.470 align:start position:0%
+quickly, what [music] I'm going to do is
+convert<00:03:24.560><c> all</c><00:03:24.800><c> of</c><00:03:24.879><c> these</c><00:03:25.120><c> to</c><00:03:25.280><c> smart</c><00:03:25.599><c> objects.</c>
+
+00:03:26.470 --> 00:03:26.480 align:start position:0%
+convert all of these to smart objects.
+ 
+
+00:03:26.480 --> 00:03:28.949 align:start position:0%
+convert all of these to smart objects.
+And<00:03:26.800><c> this</c><00:03:27.040><c> will</c><00:03:27.280><c> just</c><00:03:27.440><c> allow</c><00:03:27.760><c> me</c><00:03:28.239><c> to</c><00:03:28.480><c> not</c><00:03:28.720><c> only</c>
+
+00:03:28.949 --> 00:03:28.959 align:start position:0%
+And this will just allow me to not only
+ 
+
+00:03:28.959 --> 00:03:30.710 align:start position:0%
+And this will just allow me to not only
+switch<00:03:29.200><c> out</c><00:03:29.360><c> that</c><00:03:29.599><c> artwork</c><00:03:30.159><c> if</c><00:03:30.319><c> it</c><00:03:30.480><c> gets</c>
+
+00:03:30.710 --> 00:03:30.720 align:start position:0%
+switch out that artwork if it gets
+ 
+
+00:03:30.720 --> 00:03:31.990 align:start position:0%
+switch out that artwork if it gets
+changed<00:03:30.912><c> [music]</c><00:03:30.959><c> or</c><00:03:31.120><c> if</c><00:03:31.280><c> my</c><00:03:31.440><c> client</c><00:03:31.599><c> has</c><00:03:31.840><c> any</c>
+
+00:03:31.990 --> 00:03:32.000 align:start position:0%
+changed [music] or if my client has any
+ 
+
+00:03:32.000 --> 00:03:34.229 align:start position:0%
+changed [music] or if my client has any
+revisions,<00:03:32.480><c> but</c><00:03:32.720><c> also</c><00:03:32.879><c> to</c><00:03:33.040><c> warp</c><00:03:33.440><c> this</c><00:03:33.760><c> to</c><00:03:34.000><c> fit</c>
+
+00:03:34.229 --> 00:03:34.239 align:start position:0%
+revisions, but also to warp this to fit
+ 
+
+00:03:34.239 --> 00:03:36.229 align:start position:0%
+revisions, but also to warp this to fit
+the<00:03:34.480><c> bottle</c><00:03:34.799><c> slightly.</c><00:03:35.680><c> So,</c><00:03:35.840><c> I'm</c><00:03:36.080><c> going</c><00:03:36.159><c> to</c>
+
+00:03:36.229 --> 00:03:36.239 align:start position:0%
+the bottle slightly. So, I'm going to
+ 
+
+00:03:36.239 --> 00:03:37.670 align:start position:0%
+the bottle slightly. So, I'm going to
+click<00:03:36.560><c> warp.</c><00:03:37.040><c> And</c><00:03:37.200><c> then</c><00:03:37.360><c> I'm</c><00:03:37.462><c> [music]</c><00:03:37.519><c> just</c>
+
+00:03:37.670 --> 00:03:37.680 align:start position:0%
+click warp. And then I'm [music] just
+ 
+
+00:03:37.680 --> 00:03:40.710 align:start position:0%
+click warp. And then I'm [music] just
+going<00:03:37.760><c> to</c><00:03:37.840><c> go</c><00:03:38.000><c> up</c><00:03:38.159><c> to</c><00:03:38.480><c> warp</c><00:03:38.959><c> and</c><00:03:39.280><c> select</c><00:03:40.239><c> arc</c>
+
+00:03:40.710 --> 00:03:40.720 align:start position:0%
+going to go up to warp and select arc
+ 
+
+00:03:40.720 --> 00:03:43.270 align:start position:0%
+going to go up to warp and select arc
+lower.<00:03:42.080><c> And</c><00:03:42.319><c> you</c><00:03:42.480><c> can</c><00:03:42.640><c> see</c><00:03:42.702><c> [music]</c><00:03:42.799><c> that</c><00:03:43.040><c> it's</c>
+
+00:03:43.270 --> 00:03:43.280 align:start position:0%
+lower. And you can see [music] that it's
+ 
+
+00:03:43.280 --> 00:03:45.030 align:start position:0%
+lower. And you can see [music] that it's
+kept<00:03:43.519><c> the</c><00:03:43.760><c> top</c><00:03:44.000><c> straight</c><00:03:44.239><c> because</c><00:03:44.480><c> the</c><00:03:44.720><c> bottle</c>
+
+00:03:45.030 --> 00:03:45.040 align:start position:0%
+kept the top straight because the bottle
+ 
+
+00:03:45.040 --> 00:03:46.470 align:start position:0%
+kept the top straight because the bottle
+at<00:03:45.280><c> the</c><00:03:45.360><c> top</c><00:03:45.519><c> is</c><00:03:45.680><c> straight,</c><00:03:45.920><c> but</c><00:03:46.080><c> the</c><00:03:46.239><c> bottom</c>
+
+00:03:46.470 --> 00:03:46.480 align:start position:0%
+at the top is straight, but the bottom
+ 
+
+00:03:46.480 --> 00:03:48.149 align:start position:0%
+at the top is straight, but the bottom
+has<00:03:46.720><c> a</c><00:03:46.879><c> slight</c><00:03:47.120><c> curve</c><00:03:47.287><c> [music]</c><00:03:47.440><c> to</c><00:03:47.599><c> it.</c><00:03:48.000><c> And</c>
+
+00:03:48.149 --> 00:03:48.159 align:start position:0%
+has a slight curve [music] to it. And
+ 
+
+00:03:48.159 --> 00:03:49.509 align:start position:0%
+has a slight curve [music] to it. And
+this<00:03:48.319><c> just</c><00:03:48.480><c> makes</c><00:03:48.640><c> it</c><00:03:48.799><c> feel</c><00:03:49.040><c> a</c><00:03:49.280><c> little</c><00:03:49.360><c> bit</c>
+
+00:03:49.509 --> 00:03:49.519 align:start position:0%
+this just makes it feel a little bit
+ 
+
+00:03:49.519 --> 00:03:50.630 align:start position:0%
+this just makes it feel a little bit
+more<00:03:49.680><c> realistic.</c><00:03:50.159><c> So,</c><00:03:50.239><c> I'm</c><00:03:50.400><c> going</c><00:03:50.480><c> to</c><00:03:50.560><c> go</c>
+
+00:03:50.630 --> 00:03:50.640 align:start position:0%
+more realistic. So, I'm going to go
+ 
+
+00:03:50.640 --> 00:03:51.910 align:start position:0%
+more realistic. So, I'm going to go
+ahead<00:03:50.879><c> and</c><00:03:51.040><c> do</c><00:03:51.120><c> that</c><00:03:51.280><c> to</c><00:03:51.440><c> the</c><00:03:51.599><c> rest</c><00:03:51.680><c> of</c><00:03:51.760><c> the</c>
+
+00:03:51.910 --> 00:03:51.920 align:start position:0%
+ahead and do that to the rest of the
+ 
+
+00:03:51.920 --> 00:03:54.149 align:start position:0%
+ahead and do that to the rest of the
+bottles.<00:03:52.640><c> Okay,</c><00:03:52.879><c> cool.</c><00:03:53.200><c> So,</c><00:03:53.440><c> now</c><00:03:53.680><c> that</c><00:03:53.920><c> I've</c>
+
+00:03:54.149 --> 00:03:54.159 align:start position:0%
+bottles. Okay, cool. So, now that I've
+ 
+
+00:03:54.159 --> 00:03:56.070 align:start position:0%
+bottles. Okay, cool. So, now that I've
+done<00:03:54.319><c> that</c><00:03:54.640><c> and</c><00:03:54.879><c> everything</c><00:03:55.360><c> is</c><00:03:55.680><c> looking</c><00:03:55.920><c> a</c>
+
+00:03:56.070 --> 00:03:56.080 align:start position:0%
+done that and everything is looking a
+ 
+
+00:03:56.080 --> 00:03:57.509 align:start position:0%
+done that and everything is looking a
+little<00:03:56.159><c> bit</c><00:03:56.319><c> more</c><00:03:56.480><c> realistic,</c><00:03:57.120><c> I'm</c><00:03:57.360><c> going</c><00:03:57.439><c> to</c>
+
+00:03:57.509 --> 00:03:57.519 align:start position:0%
+little bit more realistic, I'm going to
+ 
+
+00:03:57.519 --> 00:03:59.670 align:start position:0%
+little bit more realistic, I'm going to
+go<00:03:57.680><c> ahead</c><00:03:57.920><c> and</c><00:03:58.239><c> select</c><00:03:58.640><c> all</c><00:03:58.799><c> of</c><00:03:58.959><c> the</c><00:03:59.120><c> labels</c>
+
+00:03:59.670 --> 00:03:59.680 align:start position:0%
+go ahead and select all of the labels
+ 
+
+00:03:59.680 --> 00:04:01.670 align:start position:0%
+go ahead and select all of the labels
+and<00:03:59.920><c> change</c><00:04:00.159><c> the</c><00:04:00.319><c> blend</c><00:04:00.560><c> mode</c><00:04:00.799><c> to</c><00:04:00.959><c> multiply.</c>
+
+00:04:01.670 --> 00:04:01.680 align:start position:0%
+and change the blend mode to multiply.
+ 
+
+00:04:01.680 --> 00:04:02.710 align:start position:0%
+and change the blend mode to multiply.
+And<00:04:01.700><c> [music]</c><00:04:01.920><c> this</c><00:04:02.080><c> is</c><00:04:02.159><c> just</c><00:04:02.319><c> going</c><00:04:02.400><c> to</c><00:04:02.480><c> allow</c>
+
+00:04:02.710 --> 00:04:02.720 align:start position:0%
+And [music] this is just going to allow
+ 
+
+00:04:02.720 --> 00:04:04.229 align:start position:0%
+And [music] this is just going to allow
+the<00:04:02.879><c> shadows</c><00:04:03.200><c> and</c><00:04:03.439><c> lighting</c><00:04:03.760><c> from</c><00:04:03.840><c> the</c><00:04:04.000><c> image</c>
+
+00:04:04.229 --> 00:04:04.239 align:start position:0%
+the shadows and lighting from the image
+ 
+
+00:04:04.239 --> 00:04:06.070 align:start position:0%
+the shadows and lighting from the image
+below<00:04:04.640><c> to</c><00:04:04.879><c> come</c><00:04:05.040><c> through</c><00:04:05.280><c> the</c><00:04:05.439><c> artwork</c><00:04:05.840><c> and</c>
+
+00:04:06.070 --> 00:04:06.080 align:start position:0%
+below to come through the artwork and
+ 
+
+00:04:06.080 --> 00:04:07.190 align:start position:0%
+below to come through the artwork and
+make<00:04:06.239><c> it</c><00:04:06.400><c> look</c><00:04:06.560><c> just</c><00:04:06.799><c> a</c><00:04:06.937><c> [music]</c><00:04:06.959><c> little</c><00:04:07.120><c> bit</c>
+
+00:04:07.190 --> 00:04:07.200 align:start position:0%
+make it look just a [music] little bit
+ 
+
+00:04:07.200 --> 00:04:09.509 align:start position:0%
+make it look just a [music] little bit
+less<00:04:07.519><c> flat.</c><00:04:07.920><c> Okay,</c><00:04:08.239><c> cool.</c><00:04:08.799><c> So,</c><00:04:09.120><c> this</c><00:04:09.360><c> is</c>
+
+00:04:09.509 --> 00:04:09.519 align:start position:0%
+less flat. Okay, cool. So, this is
+ 
+
+00:04:09.519 --> 00:04:11.190 align:start position:0%
+less flat. Okay, cool. So, this is
+looking<00:04:09.760><c> really</c><00:04:10.080><c> good.</c><00:04:10.480><c> The</c><00:04:10.720><c> only</c><00:04:10.879><c> thing</c><00:04:10.959><c> I</c>
+
+00:04:11.190 --> 00:04:11.200 align:start position:0%
+looking really good. The only thing I
+ 
+
+00:04:11.200 --> 00:04:12.789 align:start position:0%
+looking really good. The only thing I
+need<00:04:11.280><c> to</c><00:04:11.439><c> change</c><00:04:11.680><c> now</c><00:04:11.840><c> is</c><00:04:12.080><c> the</c><00:04:12.239><c> lid</c><00:04:12.480><c> color</c>
+
+00:04:12.789 --> 00:04:12.799 align:start position:0%
+need to change now is the lid color
+ 
+
+00:04:12.799 --> 00:04:14.149 align:start position:0%
+need to change now is the lid color
+because<00:04:12.959><c> the</c><00:04:13.120><c> lids</c><00:04:13.360><c> are</c><00:04:13.519><c> going</c><00:04:13.599><c> to</c><00:04:13.680><c> have</c><00:04:13.920><c> a</c>
+
+00:04:14.149 --> 00:04:14.159 align:start position:0%
+because the lids are going to have a
+ 
+
+00:04:14.159 --> 00:04:16.310 align:start position:0%
+because the lids are going to have a
+color<00:04:14.400><c> that</c><00:04:14.720><c> corresponds</c><00:04:15.360><c> to</c><00:04:15.599><c> the</c><00:04:15.760><c> flavor</c><00:04:16.079><c> of</c>
+
+00:04:16.310 --> 00:04:16.320 align:start position:0%
+color that corresponds to the flavor of
+ 
+
+00:04:16.320 --> 00:04:18.310 align:start position:0%
+color that corresponds to the flavor of
+the<00:04:16.479><c> bottle.</c><00:04:17.359><c> So,</c><00:04:17.600><c> I'm</c><00:04:17.759><c> going</c><00:04:17.840><c> to</c><00:04:17.919><c> go</c><00:04:18.079><c> ahead</c>
+
+00:04:18.310 --> 00:04:18.320 align:start position:0%
+the bottle. So, I'm going to go ahead
+ 
+
+00:04:18.320 --> 00:04:20.469 align:start position:0%
+the bottle. So, I'm going to go ahead
+and<00:04:18.560><c> use</c><00:04:18.880><c> the</c><00:04:19.120><c> rectangular</c><00:04:19.382><c> [music]</c><00:04:19.759><c> marquee</c>
+
+00:04:20.469 --> 00:04:20.479 align:start position:0%
+and use the rectangular [music] marquee
+ 
+
+00:04:20.479 --> 00:04:23.350 align:start position:0%
+and use the rectangular [music] marquee
+once<00:04:20.799><c> again.</c><00:04:21.519><c> And</c><00:04:21.680><c> I'm</c><00:04:21.919><c> just</c><00:04:22.079><c> going</c><00:04:22.160><c> to</c><00:04:22.880><c> go</c><00:04:23.120><c> in</c>
+
+00:04:23.350 --> 00:04:23.360 align:start position:0%
+once again. And I'm just going to go in
+ 
+
+00:04:23.360 --> 00:04:25.510 align:start position:0%
+once again. And I'm just going to go in
+here<00:04:23.600><c> and</c><00:04:24.000><c> create</c><00:04:24.160><c> a</c><00:04:24.400><c> new</c><00:04:24.639><c> layer.</c><00:04:25.120><c> So,</c><00:04:25.280><c> I'm</c>
+
+00:04:25.510 --> 00:04:25.520 align:start position:0%
+here and create a new layer. So, I'm
+ 
+
+00:04:25.520 --> 00:04:28.310 align:start position:0%
+here and create a new layer. So, I'm
+going<00:04:25.600><c> to</c><00:04:25.759><c> select</c><00:04:26.160><c> the</c><00:04:26.400><c> pink</c><00:04:26.800><c> from</c><00:04:27.040><c> here.</c><00:04:28.240><c> And</c>
+
+00:04:28.310 --> 00:04:28.320 align:start position:0%
+going to select the pink from here. And
+ 
+
+00:04:28.320 --> 00:04:29.590 align:start position:0%
+going to select the pink from here. And
+then<00:04:28.479><c> I'm</c><00:04:28.720><c> just</c><00:04:28.880><c> going</c><00:04:28.960><c> to</c><00:04:29.040><c> use</c><00:04:29.120><c> the</c><00:04:29.360><c> fill</c>
+
+00:04:29.590 --> 00:04:29.600 align:start position:0%
+then I'm just going to use the fill
+ 
+
+00:04:29.600 --> 00:04:32.473 align:start position:0%
+then I'm just going to use the fill
+bucket<00:04:30.000><c> tool.</c><00:04:30.960><c> fill</c><00:04:31.199><c> in</c><00:04:31.360><c> that</c><00:04:31.600><c> marquee.</c>
+
+00:04:32.473 --> 00:04:32.483 align:start position:0%
+bucket tool. fill in that marquee.
+ 
+
+00:04:32.483 --> 00:04:33.909 align:start position:0%
+bucket tool. fill in that marquee.
+[music]<00:04:32.720><c> Deselect.</c><00:04:33.360><c> And</c><00:04:33.520><c> then</c><00:04:33.680><c> I'm</c><00:04:33.759><c> going</c><00:04:33.840><c> to</c>
+
+00:04:33.909 --> 00:04:33.919 align:start position:0%
+[music] Deselect. And then I'm going to
+ 
+
+00:04:33.919 --> 00:04:36.390 align:start position:0%
+[music] Deselect. And then I'm going to
+set<00:04:34.080><c> the</c><00:04:34.240><c> blend</c><00:04:34.479><c> mode</c><00:04:34.720><c> to</c><00:04:34.960><c> multiply.</c><00:04:35.680><c> Again,</c>
+
+00:04:36.390 --> 00:04:36.400 align:start position:0%
+set the blend mode to multiply. Again,
+ 
+
+00:04:36.400 --> 00:04:38.150 align:start position:0%
+set the blend mode to multiply. Again,
+this<00:04:36.639><c> is</c><00:04:36.720><c> obviously</c><00:04:37.120><c> really</c><00:04:37.440><c> rough</c><00:04:37.759><c> and</c><00:04:38.000><c> you</c>
+
+00:04:38.150 --> 00:04:38.160 align:start position:0%
+this is obviously really rough and you
+ 
+
+00:04:38.160 --> 00:04:40.070 align:start position:0%
+this is obviously really rough and you
+can<00:04:38.320><c> go</c><00:04:38.479><c> in</c><00:04:38.639><c> and</c><00:04:38.880><c> maybe</c><00:04:39.120><c> add</c><00:04:39.280><c> a</c><00:04:39.440><c> slight</c><00:04:39.680><c> feather</c>
+
+00:04:40.070 --> 00:04:40.080 align:start position:0%
+can go in and maybe add a slight feather
+ 
+
+00:04:40.080 --> 00:04:42.230 align:start position:0%
+can go in and maybe add a slight feather
+to<00:04:40.240><c> this.</c><00:04:40.800><c> But</c><00:04:40.960><c> because</c><00:04:41.280><c> this</c><00:04:41.520><c> is</c><00:04:41.680><c> a</c><00:04:41.840><c> mockup</c>
+
+00:04:42.230 --> 00:04:42.240 align:start position:0%
+to this. But because this is a mockup
+ 
+
+00:04:42.240 --> 00:04:43.909 align:start position:0%
+to this. But because this is a mockup
+for<00:04:42.400><c> my</c><00:04:42.639><c> client,</c><00:04:43.040><c> this</c><00:04:43.199><c> is</c><00:04:43.280><c> just</c><00:04:43.440><c> a</c><00:04:43.680><c> really</c>
+
+00:04:43.909 --> 00:04:43.919 align:start position:0%
+for my client, this is just a really
+ 
+
+00:04:43.919 --> 00:04:45.270 align:start position:0%
+for my client, this is just a really
+quick<00:04:44.160><c> visual.</c><00:04:44.639><c> This</c><00:04:44.880><c> doesn't</c><00:04:44.928><c> [music]</c><00:04:45.120><c> need</c>
+
+00:04:45.270 --> 00:04:45.280 align:start position:0%
+quick visual. This doesn't [music] need
+ 
+
+00:04:45.280 --> 00:04:47.590 align:start position:0%
+quick visual. This doesn't [music] need
+to<00:04:45.440><c> be</c><00:04:45.600><c> perfect,</c><00:04:45.919><c> but</c><00:04:46.160><c> we</c><00:04:46.320><c> want</c><00:04:46.400><c> it</c><00:04:46.560><c> to</c><00:04:46.720><c> be</c><00:04:47.280><c> as</c>
+
+00:04:47.590 --> 00:04:47.600 align:start position:0%
+to be perfect, but we want it to be as
+ 
+
+00:04:47.600 --> 00:04:49.270 align:start position:0%
+to be perfect, but we want it to be as
+polished<00:04:48.000><c> as</c><00:04:48.240><c> possible.</c><00:04:48.720><c> So</c><00:04:48.880><c> now</c><00:04:49.040><c> I'm</c><00:04:49.199><c> going</c>
+
+00:04:49.270 --> 00:04:49.280 align:start position:0%
+polished as possible. So now I'm going
+ 
+
+00:04:49.280 --> 00:04:50.790 align:start position:0%
+polished as possible. So now I'm going
+to<00:04:49.360><c> go</c><00:04:49.440><c> ahead</c><00:04:49.759><c> and</c><00:04:50.000><c> do</c><00:04:50.160><c> that</c><00:04:50.320><c> to</c><00:04:50.479><c> the</c><00:04:50.560><c> rest</c><00:04:50.720><c> of</c>
+
+00:04:50.790 --> 00:04:50.800 align:start position:0%
+to go ahead and do that to the rest of
+ 
+
+00:04:50.800 --> 00:04:52.870 align:start position:0%
+to go ahead and do that to the rest of
+the<00:04:50.880><c> bottles.</c><00:04:51.360><c> So</c><00:04:51.520><c> mocking</c><00:04:51.919><c> this</c><00:04:52.080><c> up</c><00:04:52.320><c> to</c><00:04:52.479><c> be</c><00:04:52.639><c> so</c>
+
+00:04:52.870 --> 00:04:52.880 align:start position:0%
+the bottles. So mocking this up to be so
+ 
+
+00:04:52.880 --> 00:04:54.790 align:start position:0%
+the bottles. So mocking this up to be so
+realistic<00:04:53.360><c> would</c><00:04:53.600><c> have</c><00:04:53.759><c> taken</c><00:04:54.000><c> me</c><00:04:54.240><c> so</c><00:04:54.560><c> long</c>
+
+00:04:54.790 --> 00:04:54.800 align:start position:0%
+realistic would have taken me so long
+ 
+
+00:04:54.800 --> 00:04:56.469 align:start position:0%
+realistic would have taken me so long
+before,<00:04:55.199><c> but</c><00:04:55.440><c> I</c><00:04:55.600><c> was</c><00:04:55.680><c> able</c><00:04:55.840><c> to</c><00:04:55.919><c> do</c><00:04:56.080><c> it</c><00:04:56.160><c> in</c><00:04:56.320><c> a</c>
+
+00:04:56.469 --> 00:04:56.479 align:start position:0%
+before, but I was able to do it in a
+ 
+
+00:04:56.479 --> 00:04:57.990 align:start position:0%
+before, but I was able to do it in a
+matter<00:04:56.639><c> of</c><00:04:56.800><c> minutes</c><00:04:57.120><c> using</c><00:04:57.440><c> Generative</c>
+
+00:04:57.990 --> 00:04:58.000 align:start position:0%
+matter of minutes using Generative
+ 
+
+00:04:58.000 --> 00:04:59.749 align:start position:0%
+matter of minutes using Generative
+Phil's<00:04:58.400><c> new</c><00:04:58.639><c> partner</c><00:04:58.960><c> models</c><00:04:59.280><c> in</c><00:04:59.440><c> Adobe</c>
+
+00:04:59.749 --> 00:04:59.759 align:start position:0%
+Phil's new partner models in Adobe
+ 
+
+00:04:59.759 --> 00:05:02.230 align:start position:0%
+Phil's new partner models in Adobe
+Photoshop.<00:05:00.400><c> Nano</c><00:05:00.800><c> Banana</c><00:05:01.199><c> and</c><00:05:01.440><c> Flux</c><00:05:01.759><c> Context</c>
+
+00:05:02.230 --> 00:05:02.240 align:start position:0%
+Photoshop. Nano Banana and Flux Context
+ 
+
+00:05:02.240 --> 00:05:04.568 align:start position:0%
+Photoshop. Nano Banana and Flux Context
+Pro<00:05:02.639><c> and</c><00:05:02.880><c> also</c><00:05:03.199><c> my</c><00:05:03.440><c> own</c><00:05:03.600><c> Photoshop</c><00:05:04.160><c> skills</c><00:05:04.479><c> to</c>
+
+00:05:04.568 --> 00:05:04.578 align:start position:0%
+Pro and also my own Photoshop skills to
+ 
+
+00:05:04.578 --> 00:05:05.749 align:start position:0%
+Pro and also my own Photoshop skills to
+[music]<00:05:04.720><c> make</c><00:05:04.800><c> it</c><00:05:04.960><c> just</c><00:05:05.120><c> a</c><00:05:05.280><c> little</c><00:05:05.440><c> bit</c><00:05:05.600><c> more</c>
+
+00:05:05.749 --> 00:05:05.759 align:start position:0%
+[music] make it just a little bit more
+ 
+
+00:05:05.759 --> 00:05:07.590 align:start position:0%
+[music] make it just a little bit more
+refined.<00:05:06.400><c> And</c><00:05:06.560><c> you</c><00:05:06.720><c> can</c><00:05:06.800><c> see</c><00:05:06.960><c> that</c><00:05:07.120><c> we've</c><00:05:07.360><c> gone</c>
+
+00:05:07.590 --> 00:05:07.600 align:start position:0%
+refined. And you can see that we've gone
+ 
+
+00:05:07.600 --> 00:05:10.550 align:start position:0%
+refined. And you can see that we've gone
+from<00:05:07.840><c> this</c><00:05:08.560><c> to</c><00:05:08.800><c> this</c><00:05:09.199><c> and</c><00:05:09.440><c> it's</c><00:05:09.759><c> come</c><00:05:10.080><c> quite</c><00:05:10.400><c> a</c>
+
+00:05:10.550 --> 00:05:10.560 align:start position:0%
+from this to this and it's come quite a
+ 
+
+00:05:10.560 --> 00:05:12.310 align:start position:0%
+from this to this and it's come quite a
+long<00:05:10.720><c> way,</c><00:05:11.039><c> I</c><00:05:11.199><c> must</c><00:05:11.360><c> say.</c><00:05:11.840><c> And</c><00:05:12.080><c> that's</c>
+
+00:05:12.310 --> 00:05:12.320 align:start position:0%
+long way, I must say. And that's
+ 
+
+00:05:12.320 --> 00:05:13.510 align:start position:0%
+long way, I must say. And that's
+something<00:05:12.479><c> that</c><00:05:12.639><c> I'd</c><00:05:12.880><c> definitely</c><00:05:13.199><c> be</c><00:05:13.360><c> proud</c>
+
+00:05:13.510 --> 00:05:13.520 align:start position:0%
+something that I'd definitely be proud
+ 
+
+00:05:13.520 --> 00:05:15.189 align:start position:0%
+something that I'd definitely be proud
+to<00:05:13.680><c> show</c><00:05:13.919><c> my</c><00:05:14.160><c> client.</c><00:05:14.560><c> You</c><00:05:14.720><c> can</c><00:05:14.800><c> try</c><00:05:14.960><c> these</c>
+
+00:05:15.189 --> 00:05:15.199 align:start position:0%
+to show my client. You can try these
+ 
+
+00:05:15.199 --> 00:05:18.639 align:start position:0%
+to show my client. You can try these
+features<00:05:15.520><c> out</c><00:05:15.680><c> in</c><00:05:15.840><c> Adobe</c><00:05:16.240><c> Photoshop</c>
+

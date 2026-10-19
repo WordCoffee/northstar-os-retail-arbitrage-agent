@@ -1,0 +1,17 @@
+{
+ "id": "0dunCEiRscU",
+ "title": "Photoshop Tutorial: How to Cast Realistic Shadows",
+ "channel": "Fatima Homsi",
+ "url": "https://www.youtube.com/watch?v=0dunCEiRscU",
+ "query": "shadow painting photoshop product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.696,
+ "duration_s": 60.0,
+ "chars": 0,
+ "segments": [],
+ "transcribed_at": "2026-10-19T09:02:04.006706+00:00",
+ "seconds": 3.0
+}

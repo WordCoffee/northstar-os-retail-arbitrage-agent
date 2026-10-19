@@ -1,0 +1,23 @@
+{
+ "id": "7GYbdxcBQ3I",
+ "title": "How to Convert RGB to CMYK in Photoshop",
+ "channel": "Photoshop Tutorials by Layer Life",
+ "url": "https://www.youtube.com/watch?v=7GYbdxcBQ3I",
+ "query": "CMYK print file setup",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.521,
+ "duration_s": 19.4,
+ "chars": 3,
+ "segments": [
+  {
+   "start": 1.1,
+   "end": 3.16,
+   "text": "you"
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:03:36.355553+00:00",
+ "seconds": 2.8
+}

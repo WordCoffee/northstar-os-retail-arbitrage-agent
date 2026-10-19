@@ -1,0 +1,1993 @@
+{
+ "id": "BaE6UBfNdQk",
+ "title": "Finally! New best local AI image editor is here",
+ "channel": "AI Search",
+ "url": "https://www.youtube.com/watch?v=BaE6UBfNdQk",
+ "query": "qwen image edit",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 1177.8,
+ "chars": 21384,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.92,
+   "text": "Finally, we have a new open source image generator and editor."
+  },
+  {
+   "start": 4.92,
+   "end": 10.84,
+   "text": "So Alibaba just dropped Quen Image 2.1 and this is an extremely flexible and powerful"
+  },
+  {
+   "start": 10.84,
+   "end": 11.84,
+   "text": "tool."
+  },
+  {
+   "start": 11.84,
+   "end": 15.04,
+   "text": "In this video, we're going to go over all the incredible things that it can do plus"
+  },
+  {
+   "start": 15.04,
+   "end": 18.44,
+   "text": "of course I'm going to show you how to install this on your computer so you can"
+  },
+  {
+   "start": 18.44,
+   "end": 21.92,
+   "text": "run it for free and unlimited times offline."
+  },
+  {
+   "start": 21.92,
+   "end": 25.24,
+   "text": "The awesome thing is this can even run on very low VRAM."
+  },
+  {
+   "start": 25.24,
+   "end": 26.92,
+   "text": "Let's jump right in."
+  },
+  {
+   "start": 26.92,
+   "end": 29.04,
+   "text": "First let's go over its capabilities."
+  },
+  {
+   "start": 29.04,
+   "end": 34.4,
+   "text": "Not only can it generate some super realistic photos, it's also great at anatomy and prompt"
+  },
+  {
+   "start": 34.4,
+   "end": 37.56,
+   "text": "understanding as you can see from these comparisons."
+  },
+  {
+   "start": 37.56,
+   "end": 43.0,
+   "text": "It's also really good at even creating some super complex stuff like diagrams and infographics"
+  },
+  {
+   "start": 43.0,
+   "end": 44.88,
+   "text": "with a ton of different elements."
+  },
+  {
+   "start": 44.88,
+   "end": 49.76,
+   "text": "What you see here is just one text to image generation from Quen Image 2.1."
+  },
+  {
+   "start": 49.76,
+   "end": 50.96,
+   "text": "Here's another example."
+  },
+  {
+   "start": 50.96,
+   "end": 53.16,
+   "text": "It's also great at designing interfaces."
+  },
+  {
+   "start": 53.16,
+   "end": 55.52,
+   "text": "So here are some examples for your reference."
+  },
+  {
+   "start": 55.52,
+   "end": 60.36,
+   "text": "Now probably the most powerful feature about Quen Image 2.1 is that it can generate"
+  },
+  {
+   "start": 60.36,
+   "end": 62.2,
+   "text": "transparent images."
+  },
+  {
+   "start": 62.2,
+   "end": 65.04,
+   "text": "In other words, this can also output an alpha channel."
+  },
+  {
+   "start": 65.04,
+   "end": 69.8,
+   "text": "So here are some examples of different generations with transparency built in."
+  },
+  {
+   "start": 69.8,
+   "end": 73.8,
+   "text": "Now not only can this do text to image, but the really nice thing about this is it can"
+  },
+  {
+   "start": 73.8,
+   "end": 77.88,
+   "text": "also take images as reference for you to edit further."
+  },
+  {
+   "start": 77.88,
+   "end": 81.6,
+   "text": "I don't know about you, but I've been waiting like months for another new"
+  },
+  {
+   "start": 81.6,
+   "end": 82.68,
+   "text": "image editor."
+  },
+  {
+   "start": 82.68,
+   "end": 87.44,
+   "text": "The previous models that we got like create to an ideogram were only text to image so"
+  },
+  {
+   "start": 87.44,
+   "end": 92.0,
+   "text": "you can't really edit existing images using natural language like nano banana."
+  },
+  {
+   "start": 92.0,
+   "end": 94.84,
+   "text": "But finally for Quen Image 2.1, this is possible."
+  },
+  {
+   "start": 94.84,
+   "end": 99.68,
+   "text": "So for example, you can input the same transparent image and then just prompt it to change"
+  },
+  {
+   "start": 99.68,
+   "end": 101.08,
+   "text": "the text of the image."
+  },
+  {
+   "start": 101.08,
+   "end": 103.0,
+   "text": "And here's our result on the right."
+  },
+  {
+   "start": 103.0,
+   "end": 107.4,
+   "text": "Or here's an even cooler example where we can input a photo like this and get it"
+  },
+  {
+   "start": 107.4,
+   "end": 112.08,
+   "text": "to extract only the branches and leaves in the foreground as a transparent layer."
+  },
+  {
+   "start": 112.08,
+   "end": 115.12,
+   "text": "As you can see, it can do a pretty good job of this."
+  },
+  {
+   "start": 115.12,
+   "end": 120.52,
+   "text": "This can also take in up to 10 reference images for you to insert into your photos."
+  },
+  {
+   "start": 120.52,
+   "end": 122.76,
+   "text": "So here's an example of this in action."
+  },
+  {
+   "start": 122.76,
+   "end": 126.64,
+   "text": "As you can see, it's great with facial and character consistency."
+  },
+  {
+   "start": 126.64,
+   "end": 130.6,
+   "text": "Here's another awesome example where we can input a ton of different photos and"
+  },
+  {
+   "start": 130.6,
+   "end": 135.08,
+   "text": "just specify using natural language what out of each photo we want to extract."
+  },
+  {
+   "start": 135.08,
+   "end": 139.0,
+   "text": "For example, we want the woman in the first image wearing the pink jacket in the"
+  },
+  {
+   "start": 139.04,
+   "end": 142.76,
+   "text": "second image and the shoes from the third image and this handbag and also wearing"
+  },
+  {
+   "start": 142.76,
+   "end": 144.56,
+   "text": "the hat from the last image."
+  },
+  {
+   "start": 144.56,
+   "end": 149.04,
+   "text": "And it's able to combine whatever you specify into one seamless photo."
+  },
+  {
+   "start": 149.04,
+   "end": 152.96,
+   "text": "Or here's another example where we can combine a ton of different furniture"
+  },
+  {
+   "start": 152.96,
+   "end": 155.24,
+   "text": "photos and add them into the same room."
+  },
+  {
+   "start": 155.24,
+   "end": 159.24,
+   "text": "Or you can also just annotate directly on the photo that you want to edit."
+  },
+  {
+   "start": 159.24,
+   "end": 163.84,
+   "text": "For example, we can draw over these items that we want to change or remove."
+  },
+  {
+   "start": 163.84,
+   "end": 167.68,
+   "text": "Or here's an example where we can draw directly over the image and get it"
+  },
+  {
+   "start": 167.68,
+   "end": 168.76,
+   "text": "to add something there."
+  },
+  {
+   "start": 168.8,
+   "end": 173.08,
+   "text": "This is also great at character consistency as you can see from this example."
+  },
+  {
+   "start": 173.08,
+   "end": 175.44,
+   "text": "Or here's a really complicated outfit."
+  },
+  {
+   "start": 175.44,
+   "end": 178.2,
+   "text": "Well, we can get it to generate a model wearing this outfit."
+  },
+  {
+   "start": 178.2,
+   "end": 182.24,
+   "text": "And as you can see, it's able to preserve the design of the outfit very well."
+  },
+  {
+   "start": 182.24,
+   "end": 186.28,
+   "text": "Or here's another cool example where we could input this selfie photo and get"
+  },
+  {
+   "start": 186.28,
+   "end": 188.76,
+   "text": "it to generate a panorama from the photo."
+  },
+  {
+   "start": 188.76,
+   "end": 193.8,
+   "text": "And after generating this panorama, you can then basically explore the scene in 3D."
+  },
+  {
+   "start": 193.84,
+   "end": 199.28,
+   "text": "So those are just some quick examples of all the cool things that Quen Image 2.1 can do."
+  },
+  {
+   "start": 199.28,
+   "end": 201.24,
+   "text": "The best thing is this is open source."
+  },
+  {
+   "start": 201.24,
+   "end": 203.44,
+   "text": "So you can download and run this locally."
+  },
+  {
+   "start": 203.44,
+   "end": 206.64,
+   "text": "So if you're interested, next, let's go over how to install this."
+  },
+  {
+   "start": 206.64,
+   "end": 210.8,
+   "text": "Now, for this tutorial, we are going to use an interface called Comfy UI,"
+  },
+  {
+   "start": 210.8,
+   "end": 214.08,
+   "text": "which is like the most popular platform for running open source image"
+  },
+  {
+   "start": 214.08,
+   "end": 215.8,
+   "text": "and video generators offline."
+  },
+  {
+   "start": 215.8,
+   "end": 218.48,
+   "text": "It's completely free for you to install and use."
+  },
+  {
+   "start": 218.48,
+   "end": 221.92,
+   "text": "And you can customize a ton of things with it, which is why I highly recommend"
+  },
+  {
+   "start": 221.92,
+   "end": 224.52,
+   "text": "you use Comfy UI for Quen Image 2.1."
+  },
+  {
+   "start": 224.52,
+   "end": 227.52,
+   "text": "Now, if you're not familiar with Comfy UI, see this video first,"
+  },
+  {
+   "start": 227.52,
+   "end": 230.24,
+   "text": "where I go over a full installation tutorial."
+  },
+  {
+   "start": 230.24,
+   "end": 234.32,
+   "text": "All right. So assuming you do have Comfy UI installed, the first step is to update"
+  },
+  {
+   "start": 234.32,
+   "end": 235.48,
+   "text": "this to the latest version."
+  },
+  {
+   "start": 235.48,
+   "end": 239.04,
+   "text": "So simply double click into this update folder and then double click on update"
+  },
+  {
+   "start": 239.04,
+   "end": 240.28,
+   "text": "Comfy UI dot bat."
+  },
+  {
+   "start": 240.28,
+   "end": 244.4,
+   "text": "So this will proceed to update your Comfy UI to the latest version."
+  },
+  {
+   "start": 244.4,
+   "end": 244.92,
+   "text": "All right."
+  },
+  {
+   "start": 244.92,
+   "end": 247.32,
+   "text": "Afterwards, let's press any key to exit this window."
+  },
+  {
+   "start": 247.32,
+   "end": 249.28,
+   "text": "And then next, we can start up Comfy UI."
+  },
+  {
+   "start": 249.28,
+   "end": 250.52,
+   "text": "So let me start this up."
+  },
+  {
+   "start": 250.52,
+   "end": 254.24,
+   "text": "All right. Once you open up Comfy UI, if you click on templates in the left"
+  },
+  {
+   "start": 254.24,
+   "end": 260.2,
+   "text": "sidebar and you search for Quen Image 2.1, you should see several workflows."
+  },
+  {
+   "start": 260.2,
+   "end": 263.2,
+   "text": "Text to image, remove background and image edit."
+  },
+  {
+   "start": 263.2,
+   "end": 265.76,
+   "text": "So let's go over the text to image workflow first."
+  },
+  {
+   "start": 265.88,
+   "end": 268.56,
+   "text": "Once you click on it, it should look like this."
+  },
+  {
+   "start": 268.64,
+   "end": 272.68,
+   "text": "By the way, if you don't see these workflows, I will also link to this"
+  },
+  {
+   "start": 272.68,
+   "end": 275.68,
+   "text": "page where at the bottom, you can download the workflow files and then"
+  },
+  {
+   "start": 275.68,
+   "end": 278.4,
+   "text": "just drag and drop them onto your Comfy UI interface."
+  },
+  {
+   "start": 278.56,
+   "end": 281.76,
+   "text": "All right. Now, once you open this up, you might get this red outline with"
+  },
+  {
+   "start": 281.76,
+   "end": 283.32,
+   "text": "some missing models."
+  },
+  {
+   "start": 283.32,
+   "end": 286.0,
+   "text": "So let's also proceed to download the models."
+  },
+  {
+   "start": 286.0,
+   "end": 288.36,
+   "text": "I'll link to this page in the description below."
+  },
+  {
+   "start": 288.36,
+   "end": 292.0,
+   "text": "If you click on files and versions, here are the models that you need to download."
+  },
+  {
+   "start": 292.04,
+   "end": 294.04,
+   "text": "First, let's click into diffusion models."
+  },
+  {
+   "start": 294.04,
+   "end": 297.64,
+   "text": "And here you are given the option of either the full BF 16 one,"
+  },
+  {
+   "start": 297.64,
+   "end": 302.64,
+   "text": "which is 14.2 gigabytes in size or this smaller int eight Convrop version,"
+  },
+  {
+   "start": 302.64,
+   "end": 304.88,
+   "text": "which is 7.2 gigabytes in size."
+  },
+  {
+   "start": 304.96,
+   "end": 308.6,
+   "text": "This will fit on eight gigabytes of VRAM or even potentially less."
+  },
+  {
+   "start": 308.64,
+   "end": 312.0,
+   "text": "Now, if you have lower than this, if you have like four gigabytes of VRAM,"
+  },
+  {
+   "start": 312.0,
+   "end": 314.8,
+   "text": "don't worry, later in the video, I'm also going to show you another method"
+  },
+  {
+   "start": 314.8,
+   "end": 317.24,
+   "text": "to run this with even just four gigabytes of VRAM."
+  },
+  {
+   "start": 317.24,
+   "end": 318.92,
+   "text": "So I'm going to download this one."
+  },
+  {
+   "start": 318.92,
+   "end": 323.08,
+   "text": "And this goes in Comfy UI and models and then diffusion models."
+  },
+  {
+   "start": 323.28,
+   "end": 324.32,
+   "text": "Let's click save."
+  },
+  {
+   "start": 324.32,
+   "end": 327.64,
+   "text": "And then afterwards, we also need to download a text encoder."
+  },
+  {
+   "start": 327.68,
+   "end": 331.12,
+   "text": "Now, the first two files here are used to enhance your prompt."
+  },
+  {
+   "start": 331.2,
+   "end": 334.56,
+   "text": "So this is an additional AI model, which takes your prompt"
+  },
+  {
+   "start": 334.64,
+   "end": 338.08,
+   "text": "and enhances it further before it plugs it into the image generation node."
+  },
+  {
+   "start": 338.16,
+   "end": 341.36,
+   "text": "It's supposed to make your image quality better, but note that each file"
+  },
+  {
+   "start": 341.36,
+   "end": 343.84,
+   "text": "is like almost 9.5 gigabytes in size."
+  },
+  {
+   "start": 343.84,
+   "end": 348.0,
+   "text": "So especially if you're running low on VRAM, I would not recommend this step."
+  },
+  {
+   "start": 348.04,
+   "end": 350.56,
+   "text": "It's better if you just, you know, manually write a good prompt."
+  },
+  {
+   "start": 350.64,
+   "end": 355.12,
+   "text": "So the bare minimum that we need to download is one of these text encoders down here."
+  },
+  {
+   "start": 355.16,
+   "end": 357.16,
+   "text": "Now, there's different compression levels here."
+  },
+  {
+   "start": 357.16,
+   "end": 360.56,
+   "text": "The full BF 16 one is 17.5 gigabytes in size."
+  },
+  {
+   "start": 360.6,
+   "end": 363.68,
+   "text": "We also have a W for a eight one, which is the smallest."
+  },
+  {
+   "start": 363.72,
+   "end": 366.16,
+   "text": "This is only 6.3 gigabytes in size."
+  },
+  {
+   "start": 366.24,
+   "end": 368.84,
+   "text": "If you have low VRAM, then this is highly recommended."
+  },
+  {
+   "start": 368.88,
+   "end": 370.28,
+   "text": "So let's click on download."
+  },
+  {
+   "start": 370.32,
+   "end": 374.6,
+   "text": "And this goes in Comfy UI in models and then text encoders."
+  },
+  {
+   "start": 374.76,
+   "end": 375.72,
+   "text": "Let's click save."
+  },
+  {
+   "start": 375.76,
+   "end": 379.04,
+   "text": "All right, afterwards, we also need to download the VAE for this."
+  },
+  {
+   "start": 379.12,
+   "end": 383.84,
+   "text": "Now, this is fairly tiny at only 676 megabytes in size."
+  },
+  {
+   "start": 383.96,
+   "end": 385.28,
+   "text": "Let's click download."
+  },
+  {
+   "start": 385.32,
+   "end": 388.8,
+   "text": "And this goes in Comfy UI in models and then VAE."
+  },
+  {
+   "start": 389.0,
+   "end": 390.0,
+   "text": "Let's click save."
+  },
+  {
+   "start": 390.08,
+   "end": 392.68,
+   "text": "All right, after you've downloaded all the models, going back"
+  },
+  {
+   "start": 392.72,
+   "end": 396.56,
+   "text": "to our Comfy UI workflow, simply press R to refresh our model list."
+  },
+  {
+   "start": 396.6,
+   "end": 399.76,
+   "text": "And then down here is where we select the downloaded models."
+  },
+  {
+   "start": 399.84,
+   "end": 404.2,
+   "text": "So first of all, for the unit, let's select this quen image model that I just"
+  },
+  {
+   "start": 404.2,
+   "end": 411.08,
+   "text": "downloaded. And then for the clip, I will select this quen 3 VL W for a 8 model,"
+  },
+  {
+   "start": 411.12,
+   "end": 412.2,
+   "text": "which I just downloaded."
+  },
+  {
+   "start": 412.24,
+   "end": 415.68,
+   "text": "And then for the VAE, yes, I'm going to select the VAE that I just"
+  },
+  {
+   "start": 415.68,
+   "end": 417.28,
+   "text": "downloaded. And that's pretty much it."
+  },
+  {
+   "start": 417.32,
+   "end": 419.36,
+   "text": "So let's go over how to run this."
+  },
+  {
+   "start": 419.44,
+   "end": 420.6,
+   "text": "It's pretty straightforward."
+  },
+  {
+   "start": 420.64,
+   "end": 423.32,
+   "text": "So here is where you would choose the aspect ratio."
+  },
+  {
+   "start": 423.36,
+   "end": 425.04,
+   "text": "Here are the options you can choose from."
+  },
+  {
+   "start": 425.08,
+   "end": 426.28,
+   "text": "Here are the megapixels."
+  },
+  {
+   "start": 426.32,
+   "end": 428.96,
+   "text": "So you can increase this for a higher resolution."
+  },
+  {
+   "start": 429.0,
+   "end": 433.2,
+   "text": "Here is where you would enter a positive prompt or an optional negative prompt."
+  },
+  {
+   "start": 433.24,
+   "end": 434.16,
+   "text": "Here's the CFG."
+  },
+  {
+   "start": 434.16,
+   "end": 437.48,
+   "text": "So this is like how literally you want the AI to follow your prompt."
+  },
+  {
+   "start": 437.52,
+   "end": 440.96,
+   "text": "If you find that it's not following everything you specified in the prompt,"
+  },
+  {
+   "start": 440.96,
+   "end": 443.6,
+   "text": "you could try increasing this value a bit more."
+  },
+  {
+   "start": 443.64,
+   "end": 446.84,
+   "text": "Or conversely, if you want it to be more creative and do its own thing"
+  },
+  {
+   "start": 446.88,
+   "end": 450.04,
+   "text": "and introduce some variation, then you could decrease this value."
+  },
+  {
+   "start": 450.08,
+   "end": 454.44,
+   "text": "Note that if you set the CFG to one, then the negative prompt won't actually work."
+  },
+  {
+   "start": 454.48,
+   "end": 459.28,
+   "text": "You'll need to set the CFG to a slightly higher value for the negative prompt to take effect."
+  },
+  {
+   "start": 459.32,
+   "end": 463.32,
+   "text": "And then this is the number of steps it takes to generate your image."
+  },
+  {
+   "start": 463.36,
+   "end": 468.64,
+   "text": "The more steps you have, the higher quality it will be, but it'll also take longer to generate and vice versa."
+  },
+  {
+   "start": 468.68,
+   "end": 472.16,
+   "text": "And then here's the algorithm that's used to generate the image."
+  },
+  {
+   "start": 472.2,
+   "end": 474.92,
+   "text": "The seed is like the unique ID of the image."
+  },
+  {
+   "start": 474.96,
+   "end": 478.88,
+   "text": "So if you keep all the settings the same and you use the same prompt and the same seed,"
+  },
+  {
+   "start": 478.88,
+   "end": 481.4,
+   "text": "you're going to get the exact same image as before."
+  },
+  {
+   "start": 481.44,
+   "end": 484.44,
+   "text": "So if you want to use the same prompt, but get a slightly different image,"
+  },
+  {
+   "start": 484.44,
+   "end": 486.12,
+   "text": "then you'll need to change up the seed."
+  },
+  {
+   "start": 486.16,
+   "end": 487.52,
+   "text": "And that's pretty much it."
+  },
+  {
+   "start": 487.56,
+   "end": 491.92,
+   "text": "So let's click run and see how long it takes for me to generate an image."
+  },
+  {
+   "start": 491.96,
+   "end": 493.52,
+   "text": "Perfect. So here's what we got."
+  },
+  {
+   "start": 493.56,
+   "end": 499.48,
+   "text": "And if I pull up my window here, you can see that it only took like 29 seconds to generate this image."
+  },
+  {
+   "start": 499.52,
+   "end": 504.16,
+   "text": "Note that I'm using an RTX 5000 Aida, which has 16 gigabytes of VRAM."
+  },
+  {
+   "start": 504.16,
+   "end": 505.92,
+   "text": "And I'm just running this on my laptop."
+  },
+  {
+   "start": 505.96,
+   "end": 508.12,
+   "text": "So it's a pretty fast and lightweight model."
+  },
+  {
+   "start": 508.16,
+   "end": 509.68,
+   "text": "So that's text to image."
+  },
+  {
+   "start": 509.72,
+   "end": 511.96,
+   "text": "Next, let's go over image editing."
+  },
+  {
+   "start": 512.0,
+   "end": 517.12,
+   "text": "Again, I'm going to click on templates and then at the top search for Quen Image 2.1."
+  },
+  {
+   "start": 517.16,
+   "end": 519.76,
+   "text": "And then here is the image edit option."
+  },
+  {
+   "start": 519.8,
+   "end": 523.88,
+   "text": "So let's click on this and it's going to open up a new workflow like this."
+  },
+  {
+   "start": 523.92,
+   "end": 528.24,
+   "text": "So same as before down here, we need to load the models that we just downloaded."
+  },
+  {
+   "start": 528.28,
+   "end": 531.72,
+   "text": "So for unit, I'm going to select this one for clip."
+  },
+  {
+   "start": 531.76,
+   "end": 535.08,
+   "text": "I will select the W for a eight one, which I just downloaded."
+  },
+  {
+   "start": 535.12,
+   "end": 540.24,
+   "text": "And then for VAE, I'm going to select this one over here is where we can choose"
+  },
+  {
+   "start": 540.24,
+   "end": 544.36,
+   "text": "to load different reference images for it to edit or refer to."
+  },
+  {
+   "start": 544.48,
+   "end": 547.56,
+   "text": "And note that here you can input up to 10 images."
+  },
+  {
+   "start": 547.6,
+   "end": 548.6,
+   "text": "Let's do a simple one."
+  },
+  {
+   "start": 548.6,
+   "end": 550.48,
+   "text": "I'm just going to upload one image."
+  },
+  {
+   "start": 550.48,
+   "end": 554.2,
+   "text": "So to remove the second image, I can either click on it and press"
+  },
+  {
+   "start": 554.2,
+   "end": 558.52,
+   "text": "control B to bypass it, or I can just click on it and delete this altogether."
+  },
+  {
+   "start": 558.52,
+   "end": 562.52,
+   "text": "And if I need to add a new image, I can just double click anywhere on the interface"
+  },
+  {
+   "start": 562.76,
+   "end": 566.6,
+   "text": "and then type load image to insert a load image node."
+  },
+  {
+   "start": 566.64,
+   "end": 569.68,
+   "text": "And then I just need to connect the output to over here."
+  },
+  {
+   "start": 569.76,
+   "end": 570.8,
+   "text": "It's as simple as that."
+  },
+  {
+   "start": 570.8,
+   "end": 575.2,
+   "text": "So again, I'm going to just use one input image for my demo here."
+  },
+  {
+   "start": 575.32,
+   "end": 576.96,
+   "text": "I'm going to upload this car image."
+  },
+  {
+   "start": 576.96,
+   "end": 581.48,
+   "text": "And then here is where again, we would set the positive prompt and the negative prompt."
+  },
+  {
+   "start": 581.52,
+   "end": 585.48,
+   "text": "Here are the same settings as what we saw from the text image workflow."
+  },
+  {
+   "start": 585.52,
+   "end": 588.8,
+   "text": "And then down here, I don't know why it's like hanging all the way down here."
+  },
+  {
+   "start": 588.8,
+   "end": 590.16,
+   "text": "So let me drag this up a bit."
+  },
+  {
+   "start": 590.2,
+   "end": 593.8,
+   "text": "Here is where you would select the aspect ratio and the resolution."
+  },
+  {
+   "start": 593.84,
+   "end": 597.52,
+   "text": "But here we have this extra toggle called custom size."
+  },
+  {
+   "start": 597.56,
+   "end": 598.92,
+   "text": "Right now it's set to false."
+  },
+  {
+   "start": 598.92,
+   "end": 603.92,
+   "text": "So what will happen is it'll actually ignore this and use the size of your input image."
+  },
+  {
+   "start": 604.0,
+   "end": 609.16,
+   "text": "If you want to use this specified aspect ratio and size, then you'll need to turn this on."
+  },
+  {
+   "start": 609.52,
+   "end": 609.8,
+   "text": "All right."
+  },
+  {
+   "start": 609.8,
+   "end": 614.64,
+   "text": "So now it's going to set my image at one to one aspect ratio at one megapixel"
+  },
+  {
+   "start": 614.64,
+   "end": 617.6,
+   "text": "instead of this original resolution over here."
+  },
+  {
+   "start": 617.6,
+   "end": 622.28,
+   "text": "Now, for my positive prompt, let's do something simple like make this car drive down a windy"
+  },
+  {
+   "start": 622.28,
+   "end": 625.56,
+   "text": "forest road motion blur professional photo down here."
+  },
+  {
+   "start": 625.56,
+   "end": 627.68,
+   "text": "All the settings are the same as before."
+  },
+  {
+   "start": 627.68,
+   "end": 628.88,
+   "text": "And that's pretty much it."
+  },
+  {
+   "start": 628.92,
+   "end": 629.92,
+   "text": "Let's click run."
+  },
+  {
+   "start": 629.96,
+   "end": 630.64,
+   "text": "All right."
+  },
+  {
+   "start": 630.68,
+   "end": 631.84,
+   "text": "And here's our result."
+  },
+  {
+   "start": 631.84,
+   "end": 635.72,
+   "text": "If I pull up my stats, note that this took around 81 seconds."
+  },
+  {
+   "start": 635.76,
+   "end": 640.4,
+   "text": "I would say it's a bit slower than flux client, which is the previous best edit model."
+  },
+  {
+   "start": 640.48,
+   "end": 640.76,
+   "text": "All right."
+  },
+  {
+   "start": 640.76,
+   "end": 642.84,
+   "text": "So that's how you can do image editing."
+  },
+  {
+   "start": 642.88,
+   "end": 646.52,
+   "text": "If you want to supercharge your content creation, definitely check out Luma,"
+  },
+  {
+   "start": 646.52,
+   "end": 647.96,
+   "text": "the sponsor of this video."
+  },
+  {
+   "start": 648.04,
+   "end": 652.88,
+   "text": "Instead of manually doing everything one prompt at a time, Luma agents can autonomously work"
+  },
+  {
+   "start": 652.88,
+   "end": 655.32,
+   "text": "with you across entire creative workflows."
+  },
+  {
+   "start": 655.4,
+   "end": 659.76,
+   "text": "You can start with an idea and have Luma help you develop the concept, generate assets,"
+  },
+  {
+   "start": 659.8,
+   "end": 664.12,
+   "text": "experiment with different directions and iterate on everything in one place."
+  },
+  {
+   "start": 664.16,
+   "end": 668.04,
+   "text": "For example, I can give Luma the initial idea and then work with the agent to"
+  },
+  {
+   "start": 668.04,
+   "end": 669.68,
+   "text": "actually develop it step by step."
+  },
+  {
+   "start": 669.72,
+   "end": 674.12,
+   "text": "It remembers the context of the project so I can keep refining the results instead"
+  },
+  {
+   "start": 674.12,
+   "end": 676.24,
+   "text": "of starting over with a new prompt every time."
+  },
+  {
+   "start": 676.36,
+   "end": 680.48,
+   "text": "You can access the best image generators and the best video generators out there."
+  },
+  {
+   "start": 680.52,
+   "end": 685.6,
+   "text": "In fact, one of the most impressive ones is Ray 3.2, Luma's latest video model."
+  },
+  {
+   "start": 685.64,
+   "end": 691.04,
+   "text": "What really stands out about Ray 3.2 is its understanding of motion, physics and 3D space."
+  },
+  {
+   "start": 691.08,
+   "end": 695.24,
+   "text": "As you can see, it can handle complex movement, camera motion and interactions"
+  },
+  {
+   "start": 695.24,
+   "end": 697.92,
+   "text": "between objects while keeping the scene coherent."
+  },
+  {
+   "start": 698.0,
+   "end": 701.68,
+   "text": "So instead of just generating everything that looks good in a single frame,"
+  },
+  {
+   "start": 701.72,
+   "end": 705.68,
+   "text": "you can create genuinely cinematic sequences where everything actually moves"
+  },
+  {
+   "start": 705.72,
+   "end": 707.48,
+   "text": "through the scene in a believable way."
+  },
+  {
+   "start": 707.56,
+   "end": 711.32,
+   "text": "If you're doing any type of content creation, Luma is basically like an AI"
+  },
+  {
+   "start": 711.32,
+   "end": 715.04,
+   "text": "co-pilot that can work with you across your creative workflows."
+  },
+  {
+   "start": 715.12,
+   "end": 719.6,
+   "text": "Try Luma today using the link in the description below or by scanning the QR code here."
+  },
+  {
+   "start": 719.96,
+   "end": 721.96,
+   "text": "Next, let's pull up the third workflow."
+  },
+  {
+   "start": 722.24,
+   "end": 726.64,
+   "text": "Again, I'm going to type Quen Image 2.1 and then let's select this"
+  },
+  {
+   "start": 726.64,
+   "end": 728.08,
+   "text": "removed background workflow."
+  },
+  {
+   "start": 728.16,
+   "end": 732.52,
+   "text": "Now, once we start this again, it's going to say we have a few missing models."
+  },
+  {
+   "start": 732.6,
+   "end": 736.72,
+   "text": "So I'm going to click on each dropdown and select the appropriate model."
+  },
+  {
+   "start": 736.92,
+   "end": 740.72,
+   "text": "All right, after that's done over here is where we would input an image,"
+  },
+  {
+   "start": 740.76,
+   "end": 742.72,
+   "text": "which we want to remove the background of."
+  },
+  {
+   "start": 742.72,
+   "end": 747.6,
+   "text": "So let me upload this image and then here is where we would enter the positive"
+  },
+  {
+   "start": 747.6,
+   "end": 751.24,
+   "text": "prompts. So let's right remove the background, keep only the woman and"
+  },
+  {
+   "start": 751.24,
+   "end": 752.88,
+   "text": "output a PNG image."
+  },
+  {
+   "start": 752.96,
+   "end": 754.88,
+   "text": "All the settings are the same as before."
+  },
+  {
+   "start": 754.92,
+   "end": 757.52,
+   "text": "Again, here we have this custom size toggle."
+  },
+  {
+   "start": 757.64,
+   "end": 761.28,
+   "text": "If we set this to false, it's going to use the same dimensions as our"
+  },
+  {
+   "start": 761.28,
+   "end": 762.04,
+   "text": "input image."
+  },
+  {
+   "start": 762.08,
+   "end": 765.4,
+   "text": "If we set this to true, then it's going to use the width and height that we"
+  },
+  {
+   "start": 765.4,
+   "end": 766.76,
+   "text": "specified down here."
+  },
+  {
+   "start": 766.92,
+   "end": 768.56,
+   "text": "This time let's set this to false."
+  },
+  {
+   "start": 768.56,
+   "end": 772.8,
+   "text": "So it's just going to use the original resolution and then let's click run."
+  },
+  {
+   "start": 773.04,
+   "end": 777.76,
+   "text": "All right, here's what we got and this took around 116 seconds."
+  },
+  {
+   "start": 777.76,
+   "end": 780.84,
+   "text": "So by default, this is saved into my output folder."
+  },
+  {
+   "start": 780.96,
+   "end": 784.68,
+   "text": "If I drag this into like a photo editing tool, you can see that indeed,"
+  },
+  {
+   "start": 784.72,
+   "end": 786.64,
+   "text": "it gives me a transparent background."
+  },
+  {
+   "start": 786.68,
+   "end": 791.52,
+   "text": "So for example, let me change the background to red and here's what we get."
+  },
+  {
+   "start": 791.64,
+   "end": 795.28,
+   "text": "All right, so that's how you can remove the background of any image using"
+  },
+  {
+   "start": 795.28,
+   "end": 796.64,
+   "text": "Quint Image 2.1."
+  },
+  {
+   "start": 796.8,
+   "end": 799.44,
+   "text": "All right, so that sums up the three standard workflows that are"
+  },
+  {
+   "start": 799.44,
+   "end": 800.64,
+   "text": "available right now."
+  },
+  {
+   "start": 800.84,
+   "end": 803.96,
+   "text": "Next, let's go over how to load Lora's to this."
+  },
+  {
+   "start": 804.08,
+   "end": 807.2,
+   "text": "If you're not familiar with Lora's, these are like fine tuned models,"
+  },
+  {
+   "start": 807.2,
+   "end": 810.88,
+   "text": "which you can add on top of your workflow to generate a certain effect"
+  },
+  {
+   "start": 810.92,
+   "end": 812.04,
+   "text": "or character or action."
+  },
+  {
+   "start": 812.12,
+   "end": 814.96,
+   "text": "For example, there's one for like grainy photography."
+  },
+  {
+   "start": 814.96,
+   "end": 819.08,
+   "text": "There's one for phone photography, one to enhance the details of skin."
+  },
+  {
+   "start": 819.12,
+   "end": 822.32,
+   "text": "Now for Quint Image 2.1, since we are really early to this,"
+  },
+  {
+   "start": 822.32,
+   "end": 823.8,
+   "text": "this has only been out for a day."
+  },
+  {
+   "start": 823.84,
+   "end": 825.52,
+   "text": "There aren't Lora's available yet."
+  },
+  {
+   "start": 825.56,
+   "end": 829.72,
+   "text": "The only one I can find so far is this one Quint 2.1 anime consistency."
+  },
+  {
+   "start": 829.72,
+   "end": 833.32,
+   "text": "And this is supposed to enhance character consistency during anime style"
+  },
+  {
+   "start": 833.32,
+   "end": 834.12,
+   "text": "image editing."
+  },
+  {
+   "start": 834.2,
+   "end": 838.0,
+   "text": "So just to show you a quick example of how to load a Lora to your workflow,"
+  },
+  {
+   "start": 838.04,
+   "end": 840.44,
+   "text": "I'm just going to download and try out this Lora."
+  },
+  {
+   "start": 840.48,
+   "end": 841.68,
+   "text": "So let's click download."
+  },
+  {
+   "start": 841.76,
+   "end": 845.68,
+   "text": "So this goes in Comfy UI in models and then in Lora's."
+  },
+  {
+   "start": 845.8,
+   "end": 846.76,
+   "text": "Let's click save."
+  },
+  {
+   "start": 846.84,
+   "end": 848.68,
+   "text": "Now it depends on the use case of your Lora."
+  },
+  {
+   "start": 848.68,
+   "end": 851.24,
+   "text": "Here it says this one is for image editing."
+  },
+  {
+   "start": 851.32,
+   "end": 854.28,
+   "text": "So I'm going to pull up my image editing workflow again."
+  },
+  {
+   "start": 854.32,
+   "end": 858.84,
+   "text": "And to load the Lora, what you need to do is actually click on this button"
+  },
+  {
+   "start": 858.84,
+   "end": 861.12,
+   "text": "at the top here to open up this workflow."
+  },
+  {
+   "start": 861.24,
+   "end": 865.84,
+   "text": "And you need to place a load Lora node between this node and what comes after it."
+  },
+  {
+   "start": 865.88,
+   "end": 869.8,
+   "text": "So let me double click anywhere on the interface and type in load Lora."
+  },
+  {
+   "start": 869.88,
+   "end": 873.64,
+   "text": "And let's just select this one by Comfy and place it over here."
+  },
+  {
+   "start": 873.72,
+   "end": 876.6,
+   "text": "And if we click on this drop down, here's where we would select the"
+  },
+  {
+   "start": 876.6,
+   "end": 877.92,
+   "text": "Lora that we just downloaded."
+  },
+  {
+   "start": 878.0,
+   "end": 879.12,
+   "text": "Here is the strength of this."
+  },
+  {
+   "start": 879.12,
+   "end": 882.72,
+   "text": "So how much influence you want the Lora to have on your image right now?"
+  },
+  {
+   "start": 882.72,
+   "end": 884.0,
+   "text": "It's set at 100%."
+  },
+  {
+   "start": 884.04,
+   "end": 885.84,
+   "text": "Let's set this to something like 0.8."
+  },
+  {
+   "start": 885.88,
+   "end": 889.72,
+   "text": "And then I just need to connect the output from this load diffusion model over here."
+  },
+  {
+   "start": 889.8,
+   "end": 892.68,
+   "text": "And then this output to over here."
+  },
+  {
+   "start": 892.8,
+   "end": 893.92,
+   "text": "And that's pretty much it."
+  },
+  {
+   "start": 893.96,
+   "end": 898.68,
+   "text": "So if we press on escape to go back to the original workflow here, let me upload"
+  },
+  {
+   "start": 898.72,
+   "end": 899.8,
+   "text": "an anime character."
+  },
+  {
+   "start": 899.88,
+   "end": 904.52,
+   "text": "In fact, what I'm going to do is set the aspect ratio to 16 to nine."
+  },
+  {
+   "start": 904.56,
+   "end": 906.24,
+   "text": "Let's increase the megapixels to two."
+  },
+  {
+   "start": 906.28,
+   "end": 909.4,
+   "text": "And for the problem, let's try to make a character reference sheet with the front"
+  },
+  {
+   "start": 909.44,
+   "end": 911.44,
+   "text": "back and side view of this character."
+  },
+  {
+   "start": 911.48,
+   "end": 916.24,
+   "text": "And let's press run and see how good this Lora is at preserving the consistency"
+  },
+  {
+   "start": 916.28,
+   "end": 917.16,
+   "text": "of this character."
+  },
+  {
+   "start": 917.64,
+   "end": 918.92,
+   "text": "All right, here's what we got."
+  },
+  {
+   "start": 919.0,
+   "end": 920.2,
+   "text": "Let me pull up the stats for you."
+  },
+  {
+   "start": 920.2,
+   "end": 922.04,
+   "text": "So this took 128 seconds."
+  },
+  {
+   "start": 922.08,
+   "end": 924.76,
+   "text": "So that's how you can load a Lora into this workflow."
+  },
+  {
+   "start": 924.92,
+   "end": 927.64,
+   "text": "By the way, if you need to stack multiple Lora's together, then you"
+  },
+  {
+   "start": 927.64,
+   "end": 930.68,
+   "text": "can just click on this node and copy and paste it and then just string"
+  },
+  {
+   "start": 930.68,
+   "end": 932.16,
+   "text": "them together like this."
+  },
+  {
+   "start": 932.24,
+   "end": 935.72,
+   "text": "Or there are also some other Lora stacker nodes like this, which"
+  },
+  {
+   "start": 935.72,
+   "end": 938.64,
+   "text": "allow you to stack multiple Lora's in the same node."
+  },
+  {
+   "start": 938.72,
+   "end": 942.2,
+   "text": "Now, like I said, for this quantized Quen image model, you should be able"
+  },
+  {
+   "start": 942.2,
+   "end": 945.6,
+   "text": "to run this with like eight gigabytes of VRAM or potentially even lower."
+  },
+  {
+   "start": 945.64,
+   "end": 949.16,
+   "text": "But what if your pores hell and you only have like four gigabytes?"
+  },
+  {
+   "start": 949.2,
+   "end": 953.0,
+   "text": "Well, in that case, maybe this Convrot version might not even work."
+  },
+  {
+   "start": 953.08,
+   "end": 957.16,
+   "text": "The good news is you can still run Quen 2.1 using more compressed"
+  },
+  {
+   "start": 957.16,
+   "end": 958.56,
+   "text": "models called GGUFs."
+  },
+  {
+   "start": 958.56,
+   "end": 962.16,
+   "text": "So there's already a ton of Quen image 2.1 GGUFs out there."
+  },
+  {
+   "start": 962.2,
+   "end": 964.4,
+   "text": "I'm just going to show you this one by Abiray."
+  },
+  {
+   "start": 964.48,
+   "end": 968.36,
+   "text": "Here they released multiple compressed versions of this and the smallest"
+  },
+  {
+   "start": 968.36,
+   "end": 971.56,
+   "text": "one is only 3.19 gigabytes in size."
+  },
+  {
+   "start": 971.64,
+   "end": 975.08,
+   "text": "So if you have less than four gigabytes of VRAM, I would suggest"
+  },
+  {
+   "start": 975.08,
+   "end": 976.16,
+   "text": "you download this one."
+  },
+  {
+   "start": 976.2,
+   "end": 980.2,
+   "text": "Note that for these ones like Q6 and Q8, they're not actually"
+  },
+  {
+   "start": 980.24,
+   "end": 983.4,
+   "text": "significantly smaller than this int8 Convrot version."
+  },
+  {
+   "start": 983.44,
+   "end": 986.28,
+   "text": "So if you have like six to eight gigabytes, I would actually"
+  },
+  {
+   "start": 986.28,
+   "end": 988.56,
+   "text": "recommend you try this Convrot version first."
+  },
+  {
+   "start": 988.64,
+   "end": 991.8,
+   "text": "But if you have like four gigabytes of VRAM, then you can"
+  },
+  {
+   "start": 991.8,
+   "end": 992.96,
+   "text": "download one of these."
+  },
+  {
+   "start": 992.96,
+   "end": 995.72,
+   "text": "So I'm just going to show you an example with this Q3 one."
+  },
+  {
+   "start": 995.76,
+   "end": 996.76,
+   "text": "Let's click download."
+  },
+  {
+   "start": 996.8,
+   "end": 1000.4,
+   "text": "And this goes in Convry UI in models and then in unit."
+  },
+  {
+   "start": 1000.48,
+   "end": 1001.44,
+   "text": "Let's click save."
+  },
+  {
+   "start": 1001.48,
+   "end": 1004.48,
+   "text": "Afterwards, back into our workflow, you can use this"
+  },
+  {
+   "start": 1004.48,
+   "end": 1008.04,
+   "text": "GGUF for all three workflows, text to image, image editing"
+  },
+  {
+   "start": 1008.04,
+   "end": 1009.48,
+   "text": "or background removal."
+  },
+  {
+   "start": 1009.48,
+   "end": 1011.88,
+   "text": "I'm just going to show you an example with text to image."
+  },
+  {
+   "start": 1012.04,
+   "end": 1015.08,
+   "text": "What you need to do is at the top corner, click on this"
+  },
+  {
+   "start": 1015.08,
+   "end": 1018.84,
+   "text": "button and over here, instead of load diffusion model, you"
+  },
+  {
+   "start": 1018.84,
+   "end": 1021.44,
+   "text": "need to replace it with a GGUF loader."
+  },
+  {
+   "start": 1021.48,
+   "end": 1024.16,
+   "text": "So simply double click anywhere on the interface and then"
+  },
+  {
+   "start": 1024.16,
+   "end": 1027.6,
+   "text": "type unit loader and you should see this unit loader"
+  },
+  {
+   "start": 1027.64,
+   "end": 1028.76,
+   "text": "GGUF node."
+  },
+  {
+   "start": 1028.88,
+   "end": 1031.12,
+   "text": "So let's insert this somewhere here."
+  },
+  {
+   "start": 1031.24,
+   "end": 1034.32,
+   "text": "By the way, if you don't see this option, what you need to do"
+  },
+  {
+   "start": 1034.36,
+   "end": 1037.28,
+   "text": "is click on this extensions button at the top and then"
+  },
+  {
+   "start": 1037.28,
+   "end": 1040.88,
+   "text": "type in GGUF and you'll need to install this one"
+  },
+  {
+   "start": 1040.88,
+   "end": 1043.56,
+   "text": "Convry UI GGUF by City96."
+  },
+  {
+   "start": 1043.64,
+   "end": 1045.92,
+   "text": "Afterwards, you should see this node."
+  },
+  {
+   "start": 1046.04,
+   "end": 1046.32,
+   "text": "All right."
+  },
+  {
+   "start": 1046.32,
+   "end": 1049.36,
+   "text": "So after placing this node here, we just need to take"
+  },
+  {
+   "start": 1049.4,
+   "end": 1051.08,
+   "text": "this input and drag it here."
+  },
+  {
+   "start": 1051.12,
+   "end": 1054.08,
+   "text": "And then I'm going to hold down shift to take this output"
+  },
+  {
+   "start": 1054.12,
+   "end": 1055.2,
+   "text": "and drag it here."
+  },
+  {
+   "start": 1055.28,
+   "end": 1058.84,
+   "text": "So right now this is going to load our GGUF instead of the"
+  },
+  {
+   "start": 1058.84,
+   "end": 1059.64,
+   "text": "diffusion model."
+  },
+  {
+   "start": 1059.68,
+   "end": 1062.32,
+   "text": "In fact, for this node, I can just click on it and then"
+  },
+  {
+   "start": 1062.32,
+   "end": 1064.72,
+   "text": "press Ctrl B to bypass this model."
+  },
+  {
+   "start": 1064.76,
+   "end": 1067.72,
+   "text": "And then let me press escape to go back to our main"
+  },
+  {
+   "start": 1067.72,
+   "end": 1071.0,
+   "text": "workflow down here for the unit name instead of the main"
+  },
+  {
+   "start": 1071.04,
+   "end": 1073.44,
+   "text": "quen image model, we need to click on this dropdown and"
+  },
+  {
+   "start": 1073.44,
+   "end": 1075.96,
+   "text": "select the GGUF that we just downloaded."
+  },
+  {
+   "start": 1076.08,
+   "end": 1077.24,
+   "text": "And that's pretty much it."
+  },
+  {
+   "start": 1077.36,
+   "end": 1078.2,
+   "text": "Let's click run."
+  },
+  {
+   "start": 1078.28,
+   "end": 1078.88,
+   "text": "All right."
+  },
+  {
+   "start": 1078.88,
+   "end": 1080.12,
+   "text": "So here's our result."
+  },
+  {
+   "start": 1080.16,
+   "end": 1084.68,
+   "text": "As you can see, even the most quantized Q3 GGUF isn't too bad."
+  },
+  {
+   "start": 1084.76,
+   "end": 1087.0,
+   "text": "You still get a similar quality to the full model."
+  },
+  {
+   "start": 1087.04,
+   "end": 1089.88,
+   "text": "Finally, it's also important to mention the license of this."
+  },
+  {
+   "start": 1089.88,
+   "end": 1093.4,
+   "text": "So here, at least for their official license agreement here,"
+  },
+  {
+   "start": 1093.4,
+   "end": 1097.16,
+   "text": "it says this cannot be used for any commercial purpose without"
+  },
+  {
+   "start": 1097.2,
+   "end": 1099.4,
+   "text": "obtaining a separate commercial license."
+  },
+  {
+   "start": 1099.44,
+   "end": 1102.28,
+   "text": "Now, this has raised a lot of questions and concerns from the"
+  },
+  {
+   "start": 1102.28,
+   "end": 1105.28,
+   "text": "community, but the good news is quen has replied back and"
+  },
+  {
+   "start": 1105.28,
+   "end": 1107.72,
+   "text": "they said that outputs, in other words, your image"
+  },
+  {
+   "start": 1107.72,
+   "end": 1110.76,
+   "text": "generations are not part of the licensed materials."
+  },
+  {
+   "start": 1110.8,
+   "end": 1114.08,
+   "text": "So you retain the rights to the images and other content"
+  },
+  {
+   "start": 1114.08,
+   "end": 1115.4,
+   "text": "they generate using the model."
+  },
+  {
+   "start": 1115.48,
+   "end": 1119.48,
+   "text": "So at least from this post, it seems like you can use your"
+  },
+  {
+   "start": 1119.48,
+   "end": 1121.8,
+   "text": "generations, even for commercial purposes."
+  },
+  {
+   "start": 1121.88,
+   "end": 1122.12,
+   "text": "All right."
+  },
+  {
+   "start": 1122.12,
+   "end": 1126.52,
+   "text": "So that sums up my review and tutorial of quen image 2.1."
+  },
+  {
+   "start": 1126.56,
+   "end": 1127.8,
+   "text": "It's a really flexible tool."
+  },
+  {
+   "start": 1127.8,
+   "end": 1130.76,
+   "text": "And I really love how they included the ability to create"
+  },
+  {
+   "start": 1130.76,
+   "end": 1131.76,
+   "text": "transparent images."
+  },
+  {
+   "start": 1131.84,
+   "end": 1135.44,
+   "text": "And I also love that we finally have a new image editing model."
+  },
+  {
+   "start": 1135.48,
+   "end": 1137.32,
+   "text": "Let me know in the comments what you think of this"
+  },
+  {
+   "start": 1137.32,
+   "end": 1140.12,
+   "text": "and if you run into any errors during the installation,"
+  },
+  {
+   "start": 1140.2,
+   "end": 1143.28,
+   "text": "welcome to copy and paste the exact error message in the"
+  },
+  {
+   "start": 1143.28,
+   "end": 1145.92,
+   "text": "comments below and I'll try to help you troubleshoot as much"
+  },
+  {
+   "start": 1145.92,
+   "end": 1146.68,
+   "text": "as possible."
+  },
+  {
+   "start": 1146.76,
+   "end": 1150.6,
+   "text": "As always, I will be on the lookout for the top AI news"
+  },
+  {
+   "start": 1150.64,
+   "end": 1152.24,
+   "text": "and tools to share with you."
+  },
+  {
+   "start": 1152.24,
+   "end": 1155.04,
+   "text": "So if you enjoyed this video, remember to like, share,"
+  },
+  {
+   "start": 1155.04,
+   "end": 1157.8,
+   "text": "subscribe and stay tuned for more content."
+  },
+  {
+   "start": 1157.84,
+   "end": 1160.76,
+   "text": "Also, there's just so much happening in the world of AI"
+  },
+  {
+   "start": 1160.76,
+   "end": 1161.28,
+   "text": "every week."
+  },
+  {
+   "start": 1161.32,
+   "end": 1164.56,
+   "text": "I can't possibly cover everything on my YouTube channel."
+  },
+  {
+   "start": 1164.6,
+   "end": 1168.84,
+   "text": "So to really stay up to date with all that's going on in AI,"
+  },
+  {
+   "start": 1168.88,
+   "end": 1172.12,
+   "text": "be sure to subscribe to my free weekly newsletter."
+  },
+  {
+   "start": 1172.16,
+   "end": 1174.4,
+   "text": "The link to that will be in the description below."
+  },
+  {
+   "start": 1174.48,
+   "end": 1177.2,
+   "text": "Thanks for watching and I'll see you in the next one."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:01:22.317383+00:00",
+ "seconds": 50.7
+}

@@ -1,0 +1,297 @@
+The development of composite materials over the last few decades has completely transformed
+how some of the most advanced engineering problems out there can be solved.
+It's allowed the development of materials with unique thermal properties that can better
+handle the blistering temperatures of atmospheric reentry, for example, and has pushed the
+limits of jet engine design through the use of lightweight fan blades that have
+carefully tailored mechanical properties.
+But what exactly are composite materials and what makes them so special?
+Let's find out.
+A composite is really just any material made from two or more distinct constituent materials.
+They can be found in nature.
+Wood is just one example of a natural composite material.
+But they can also be engineered, where different materials are carefully combined to develop
+all sorts of incredible and exotic composites that have mechanical, electrical, thermal,
+or even magnetic properties that have been tailored to suit a specific application.
+In most composites, one material called the dispersed phase is contained within another, called
+the matrix phase.
+The ability to carefully select each phase to optimize the properties of the material
+for a specific application is what makes composites so powerful.
+The dispersed phase is usually what provides the desirable material properties, like high
+strength or improved ductility, and is usually either a ceramic or a metal.
+Composites are often categorized based on the form of the dispersed material.
+This is a particle reinforced composite, but they can also be fiber reinforced, either
+with short or with continuous fibers.
+The matrix material is used to form a mechanical and chemical bond with the elements of
+the dispersed phase, and allows loads to be transferred between them.
+It holds everything together, and it protects the dispersed phase from the environment.
+Composites are also categorized based on the type of matrix material, which can be a
+polymer, a ceramic, or even a metal.
+Probably the most widely used composite materials in engineering applications are the fiber-reinforced
+polymer matrix composites.
+This category of composites includes glass-reinforced polymers, also called GRP, or fiberglass, and
+carbon fiber-reinforced polymers, or CFRP.
+These composites usually have an epoxy matrix, which is a thermosetting polymer, and the
+dispersed material is glass or carbon fibers, which make up around 60% of the material
+by volume.
+The most basic form of fiber reinforcement is unidirectional tape, which has all
+of the fibers running in the same direction.
+The individual fibers are grouped together into bundles, which are held together with
+stitching or using a chemical binder.
+In the case of carbon fibers, these bundles are called toes.
+Each toe usually contains anywhere from 3,000 to 24,000 individual fibers.
+A typical fiber is around 10 microns in diameter, which is 10 times thinner than a human hair.
+Any fiber-reinforced material that has fibers all running in the same direction will be highly
+anisotropic.
+Its material properties will be different in different directions.
+If you apply a load along the axis of the fibers, the material will be stronger and
+stiffer than if you apply it perpendicular to the axis, because the load is taken
+by the stronger and stiffer fibers instead of by the matrix.
+This can be a good thing.
+If you know that your material will be loaded mainly in one direction, you can orient the
+fibers to make it very strong in that particular direction.
+In pressure vessels, for example, fibers can be aligned mostly in the hoop direction,
+because the hoop stress is the largest stress when the vessel is pressurized.
+In most cases, though, you need good strength and stiffness in several directions at the
+same time.
+In the case of this pressure vessel, there will be axial stresses too.
+So we'll also need some reinforcement in the axial direction, either with axial or helical
+fibers.
+This is why components made from fiber-reinforced materials are built up by stacking multiple
+layers that have different fiber orientations.
+Each layer is called a lamina, or a ply, and the stack is called the laminate.
+In this laminate, the zero-degree layer provides strength and stiffness in the
+axial direction.
+The 90-degree layer provides it in the transverse direction.
+And the 45-degree layers provide it in the shear directions.
+If enough layers are stacked with the correct orientations, the laminate can have very
+similar properties in all of the in-plane directions.
+This is called a quasi-isotropic laminate.
+Fibers can also be arranged in weave patterns, which have fibers running in two different
+directions.
+There are hundreds of possible weave patterns.
+This is a plain weave, but the twill weave pattern is also commonly used.
+There are slight differences in how different patterns behave.
+A twill weave is more flexible and will conform more easily to a curved surface, for example.
+Weave patterns have good stiffness and strength along the two fiber axes, but they're weak
+at 45 degrees, so they should be layered in different orientations if quasi-isotropic
+properties are needed.
+Since the laminate structure has been defined, the different fiber layers need to be assembled
+and combined with the polymer matrix to create the final composite part.
+One way of doing this is the wet-layup method, where fiber layers are built up in a mold,
+and the resin is applied to each layer using a roller or a brush.
+The number of plies and ply orientation are carefully selected to achieve the required
+properties.
+An alternative method involves the use of pre-preg, tapes or sheets of fibers that have
+been pre-impregnated in a partially cured epoxy resin, meaning they can be applied to the mold
+without needing any additional resin.
+The laminate can then be vacuum-backed to ensure it conforms well with the mold and
+to remove any voids, and it will then need to cure.
+The polymer matrix is usually a thermoset, a polymer that irreversibly hardens when
+treated, in which case curing is done at elevated temperatures in an oven.
+Filament winding is another manufacturing method where a machine is used to wind unidirectional
+tape that has been impregnated with resin, around a mandrel.
+Once complete, the mandrel can either be left in place or removed, and the structure
+is cured.
+Other methods like injection molding can be used for composites reinforced with short
+fibers, since the orientation of the fibers can be arbitrary.
+So why are fiber reinforced materials so special?
+To find out, let's look at their mechanical properties.
+This graph shows tensile strength on the vertical axis, and Young's modulus, which represents
+the stiffness of a material on the horizontal axis.
+Let's plot a few common engineering materials, titanium alloys, aluminum alloys, mild
+steel, and high strength steel.
+Next we can add carbon fiber reinforced polymers.
+A plain weave carbon fiber material has a tensile strength of around 600 MPa, and a Young's
+modulus similar to aluminum, although the exact properties will depend on a number of
+factors, including the type of polymer matrix that's used in the layup configuration.
+A unidirectional carbon fiber material is much stronger than the plain weave, and has
+higher stiffness as well, although remember that this is only true if the load is applied
+along the fiber axis.
+These materials correspond to standard carbon fiber grades, but there are also high strength,
+high modulus, and ultra high modulus variants.
+We can also plot glass fiber reinforced polymers, which have lower stiffness, but
+very good tensile strength.
+E-glass and S-glass refer to different glass fiber compositions that are optimized for different
+applications.
+E-glass is the most commonly used type, and was originally developed for electrical
+insulation applications, and S-glass was developed for structural applications and has
+improved strength.
+The really amazing thing about these fiber reinforced composites only becomes apparent
+when considering their mass.
+If we plot specific strength and specific stiffness on this graph by dividing by the material
+density, it's clear that the composites far outperform traditional materials.
+The unbelievable strength the weight and stiffness to weight ratios of CFRP materials
+are why they're so commonly used in industries where weight reduction is critical, like
+aerospace, the automotive industry, and even in sports like cycling and sailing.
+Glass fiber reinforced composites have lower stiffness than CFRP, but excellent strength
+properties on a per weight basis and are much more cost effective than CFRP.
+They're often used in wind turbine blades and in the construction of boats, where light
+weight, high strength, and low cost are critical parameters.
+The impressive strength of fiber reinforced composites is in large part due to the small
+diameter of the reinforcing fibers.
+The strength of a fiber, like any material, is limited by the presence of defects within
+its microstructure, from which cracks can form and grow to failure.
+The larger a fiber is, the more likely it is that it will contain more defects, and
+that the defects will be larger.
+This means that if you take two fiber bundles with the same cross-sectional area, but different
+fiber diameters, the bundle with the smaller fibers will be stronger.
+Not only that, but in the bundle of smaller fibers, failure of a single fiber can occur
+without hugely increasing the load on the remaining fibers.
+In the smaller the fibers, the larger the surface area between the fibers and
+the matrix, which means better load transfer between the two.
+The result is that the strength of a fiber-reinforced material increases significantly as the fiber
+diameter reduces.
+The main thing limiting the use of ever-thinner fibers is manufacturing constraints.
+Fiber-reinforced polymer matrix composites aren't only used for their good specific
+strength and specific stiffness.
+They have many other useful properties that provide advantages over traditional materials,
+like steel and aluminum alloys.
+They have excellent internal damping properties, which can be useful for applications involving
+dynamic loads, and they have good corrosion resistance.
+The polymer matrix does a great job of protecting the reinforcing fibers from the environment.
+They also have interesting thermal properties.
+They're usually relatively poor conductors of heat, and have very low thermal expansion
+coefficients compared to metals, which can be useful for applications requiring good dimensional
+stability over a wide range of temperatures.
+But they also have drawbacks.
+The cost is one.
+They're significantly more expensive than using standard metals.
+They can also be difficult to design with, because they're highly anisotropic nature,
+and complex and varied failure modes make it difficult to accurately model their behavior
+and to predict failure.
+And integration of fiber-reinforced parts into a larger assembly isn't always straightforward.
+Welding isn't an option, and although mechanical fasteners can be used, they tend not to perform
+as well as they do in metals, so fiber-reinforced polymers are usually bonded to other parts
+using adhesives.
+Another drawback is the brittleness of these materials.
+Let's compare stress-strain curves for a few fiber-reinforced polymers, alongside
+steel and an aluminum alloy.
+Fibers tend to be made from materials like glass and carbon, because they have high strength
+and stiffness, but they're also very brittle.
+This means the resulting composite material is also quite brittle.
+CFRP in particular will fail at very low strains compared to steel and aluminum alloys.
+A well-known fiber reinforcement we haven't mentioned yet is Kevlar, a type of aramid
+fiber.
+Kevlar-reinforced polymers are stiffer and stronger than GRP, more ductile than CFRP, and lighter
+than both.
+This makes them ideal materials for applications where excellent impact resistance is required,
+like in body armor.
+Another issue with materials that have a polymer matrix is that above temperatures
+not much higher than 100 or 200 degrees Celsius, the polymer will typically start breaking
+down.
+Depending the maximum temperatures the composites can be used at to well below the level of metals.
+If you're working with extremely high temperatures, you'll have to turn to ceramic materials,
+like alumina, silicon carbide, and silicon nitride, because they have very high melting
+points, much higher than metals and polymers.
+They can withstand temperatures upwards of 1000 degrees Celsius.
+Ceramics have other properties that make them useful at these high temperatures, including
+high thermal shock resistance and low thermal expansion coefficients, plus they have high
+strength and high stiffness.
+Carbon has similar properties to these ceramics, with a melting point above 3000 degrees, it
+can handle extremely high temperatures.
+But all of these materials are very brittle.
+They fracture suddenly at very low strains, which limits how useful they are, and
+this is where once again the use of composites can make a big difference.
+Adding silicon carbide fibers to a silicon carbide matrix, for example, results in a material
+with significantly increased toughness.
+To see how this works, let's compare two ceramic materials, with and without fiber
+reinforcement.
+Both contain an initial crack.
+When a load is applied, the crack in the pure ceramic propagates very quickly, resulting
+in failure of the material.
+In the composite, though, the fibers bridge any cracks that form in the matrix, which prevents
+them from growing, increasing the overall toughness of the material.
+Unlike polymer matrix composites, where the aim is to have a strong bond between the matrix
+and fibers, so that loads can be transferred between the two.
+In ceramic matrix composites, the fibers are coated to allow them to slide somewhat
+within the matrix, so that cracks in the matrix don't overstress the fibers.
+The resulting composite is extremely resistant to temperature, without being too brittle.
+Composites with a silicon carbide matrix and silicon carbide fibers are used in high-temperature
+jet engine turbine blades.
+And carbon-carbon composites have applications in spacecraft heat shields to protect from
+the extremely high temperatures during atmospheric reentry.
+They are also used in the braking systems of some aircraft, and even in high-performance
+cars.
+Composites with a metal matrix are usually used to try and improve the strength or stiffness
+of a metal, which often involves incorporating carbon fibers into an aluminum or titanium
+matrix.
+But sometimes the goal is to modify other properties of the metal.
+One example of this is the use of magnesium in biomedical engineering.
+Magnesium is a very promising metal for use in implants designed to heal bone fractures,
+because it's lightweight and has excellent biocompatibility.
+Another advantage it has over commonly used metals like titanium is that it biodegrades
+in the body, so a second surgery isn't needed to remove the implant once the injury
+has healed.
+But it has quite low strength, and biodegrades too quickly to be all that useful.
+Composites have found that by replacing pure magnesium with a composite that has a magnesium
+matrix and a dispersed phase of ceramic particles, the degradation rate can be controlled and
+the material strength in other properties are greatly improved.
+It's really quite incredible.
+Particle reinforced materials can be developed for all sorts of different applications.
+Designing an electronic component that dissipates a lot of power?
+A heat spreader made from a composite with a copper matrix and diamond particles will
+have higher thermal conductivity than standard materials, allowing you to dissipate the heat
+more effectively.
+The composite also allows the thermal expansion coefficient of the heat spreader to be tailored
+to match the properties of the chip die, which helps avoid high shear stresses between
+the two.
+Concrete is an example of a much more common particle reinforced material.
+The matrix phase is cement, and the dispersed phase is aggregate, a mixture of sand and crushed
+stone.
+The cement binds everything together, and the aggregate improves strength, and has the
+added advantage of being less costly than the cement.
+A more recent development is the use of engineering cementitious composites.
+These composites incorporate short randomly oriented polymer fibers into a concrete
+matrix to obtain a material that has the properties of concrete, but is also ductile, which is why
+it's sometimes called bendable concrete.
+This just illustrates that the possibilities for innovation using advanced composites really
+are endless.
+There are so many different ways materials can be combined to obtain something useful.
+A final category of composites is sandwich composites.
+Where a lightweight core material is sandwiched between thin skin layers made of a stronger
+and stiffer material.
+The lightweight core is typically a foam or honeycomb structure, and the skin layers
+are either metals, like aluminum, or a composite, like CFRP.
+The layers are bonded together using an adhesive, and the result is a lightweight
+structure that has high bending stiffness.
+Under loading, the sandwich composite behaves in a similar way to an eye beam.
+The outer layers carry bending loads, like the flanges of an eye beam, one side being in
+tension, and the other in compression.
+The core is like the web.
+It carries shear loads, but also increases the distance between the outer layers, increasing
+the second moment of area of the cross section.
+Inserts are incorporated into the panel to allow the use of threaded fasteners.
+Foam panels are used extensively in satellites as structural panels, to which instruments and
+communication equipment can be attached.
+There's no doubt that the study of composites is an exciting and constantly evolving field
+in materials science that opens up new opportunities for innovation.
+Whether for fun or for professional projects, having an understanding of the different
+composite types will help you design and build stronger, lighter, and better
+performing products.
+Equally important in the design process is having access to the right tools to bring your
+projects to life.
+And that's why I'd like to tell you about this video's sponsor, Onshape.
+Onshape is a really impressive and unique cloud-based CAD platform that has all of the functionality
+you would expect from modern CAD software, but also much more.
+And it all runs in your web browser.
+It has a rich, parametric modeling tool set that makes modeling parts and managing
+assemblies easy, with loads of tools to make your workflow really efficient, like standard
+part libraries and the frame and sheet metal features.
+You can even develop your own custom features, or download ones that have been created by
+the community.
+One of Onshape's most powerful and unique features is its amazing collaboration system
+that allows multiple people to work on the same files at the same time.
+Really useful if you're working with others and building something as a team.
+It also has a great version control system that lets you easily log changes and roll back
+to previous versions if needed.
+And because it's cloud-based, you don't need a powerful machine to run it, since all of
+the processor-heavy tasks are done in the cloud.
+You can access your files from any machine just by logging in, and they even have Android
+and iOS apps.
+You can get started creating designs of your own using Onshape for free in just a
+few minutes.
+Just head over to Onshape.pro slash Efficient Engineer to create your free account and
+start designing.
+It's genuinely a great CAD platform, and I highly recommend you check it out.
+And that's it for this look at composite materials.
+Thanks for watching!

@@ -1,0 +1,749 @@
+You feel like this photocompositing photo manipulation thing is complicated and you don't know how to master it?
+Well, here is my promise to you.
+At the end of this video, you will learn how to master photocompositing by simply following some principles.
+It's not rocket science, it's just simple steps to gather build your own composites.
+So, without wasting any more time, let's dig into business.
+This video is brought to you by Squarespace, the ultimate all-in-one solution for creating an incredible website.
+Hello guys, welcome to my channel, my name is Nur and this is Nur Art Channel.
+Well, well, well, well, well, well.
+Alright guys, if you don't know what is photocompositing or photominipulation,
+it's basically combining and blending images together to create one message.
+It can be used for a book cover, it can be used for a movie poster, gaming partner, advertising designs,
+or even just for your own fun, any sort of artwork.
+I usually start with the idea, gathering the references, gathering the mood board.
+So the main idea in creating this composite is creating like a beauty shot.
+So the shot itself should be aesthetically pleasing.
+It should look good, it should represent the car in a powerful way.
+This is number one.
+Of course, it should be realistic to sell the idea and it should convey the message that this car is powerful and speed on the road.
+So how did I start?
+Basically, every time I start any sort of photocomposite, I go to Pinterest and Behance to create like my mood board,
+my main mode for the design.
+So what I wrote is just truck car ads and then started to gather the reference, the angle of the car,
+the mood, the color palette, all these stuff.
+So I decided to go with this mode in coloring, this sunset sky and the overall colors are reds in the shadows, some yellows in the highlights.
+So after gathering some references, I go to the next part, which is finding the proper images to use.
+And for this, I use Adobe Stock and Shutterstock.
+Those are paid websites, but they have a very good library of images.
+So type anything you want and you will find a good picture.
+But if you want a free alternative, you can always go to websites like Pixar Bay and maybe FreePick.
+You will find very good stuff as well.
+So here is the images that I'm going to use.
+So what I wrote basically is just road and started to look for a proper image that will be suitable for my composite.
+In choosing images, you need to be careful to choose proper images that will work together
+because some images will never work together.
+You cannot blend them.
+So for example, if you want to create like sunset soft lights into the composite,
+you should avoid an image like this because it has very harsh shadows, very harsh light.
+It's in unknown time.
+You'll put a ton of effort to make the images match each other.
+Instead, you can go with an image like this.
+It has already soft lights.
+The shadows are not harsh and these reflections are good into your composite.
+And that's why I chose this image.
+And for the sky, I just wrote sunset sky and started to browse all the images.
+I'm here looking for a sky with some level of details.
+So for example, an image like this will not be suitable for my design because it is very bright.
+It doesn't have so much contrast.
+And at the same time, this one will not be suitable at all because it has very high contrast.
+So I'm kind of looking for an image that has depth and at the same time,
+it has some level of contrast.
+So something like this would be good or something like this as well.
+So I ended up with this image and this one.
+I will combine both images together to create the sky part.
+And finally, I tried to find a proper truck image that has the same angle,
+the same perspective of the road because if they are not matching in perspective,
+you will put a ton of effort and it will not look good at all at the end.
+So as you can see here, the car has this 45 maybe degree perspective
+and the road has almost the same angle.
+Maybe we can tweak it a little bit, but overall it looks matching.
+This is the first part which is finding proper images.
+So let's open Photoshop and start by creating the project.
+For this, I will go with 4K size to give me flexibility in zooming in and zooming out
+and giving attention to details.
+And I will go to 16-bit coloring to give me flexibility in coloring, of course.
+And if you don't have a powerful PC, you can use 8-bit and then press create.
+All right, let's start.
+You will find all the images that I'm going to use in the link in the description
+so that you can follow along with me.
+This is the best way you can learn.
+Just watch me what I'm doing and then apply it yourself.
+So let's start by bringing the images that I'm going to use.
+I will start by bringing the road and the car.
+Let's put them into our canvas.
+And then let's start by selecting the sky of the road.
+So for this, I'll go to select and select sky.
+This will use Adobe AI to select the sky in seconds.
+And then press into this mask button, press Ctrl-I to invert the mask.
+And here you go.
+You have the road selected.
+Press Ctrl-T to make it a little bit bigger and to fill the canvas.
+So something like this.
+The main thing I want to start with is creating a good composition.
+So what is composition?
+Mainly the composition is the arrangement of the elements into the composite
+to deliver specific message, to focus on a focal point.
+So for example, if you notice here, the car itself is a little bit shifted to the right.
+Why?
+Why it's not symmetrically into the center?
+It's because I want to give it some space to the eye.
+I want to give the viewer some space to look at its destination, which is something good
+for the eye, you know.
+And at the same time, I want to show the relationship of the car corresponding to the environment.
+So I'm now showing the car, showing the surroundings, showing everything in a pleasing way.
+And that is called the rule of third.
+It's basically dividing your composition into three sections.
+And you should put your main focal point into one of these four points.
+Okay.
+So the center of this car is kind of into this line.
+So let's go to the car and let's start to select it.
+I will use select subject tool to select it.
+I guess it's going to give us very good results.
+So let's try it.
+Press into the car and then go and create a mask.
+Give us good results.
+It needs minor adjustments.
+So for example, this area needs some refinement.
+So it's basically bringing the brush and activating the mask and then starting to paint over here
+and maybe here.
+Okay.
+That's very nice.
+Obviously the car and the road are not matching in terms of the perspective.
+So let's try to rotate it by pressing control T and try to rotate it to match the same
+horizon line.
+Even if we did so, it's not matching.
+There's something off here.
+That's because the focal length of the camera that took the picture of the car has a wider
+angle than the lens that took the image of the road.
+So how can we fix this?
+Let's start by defining the horizon line.
+So what is horizon line?
+Horizon line is basically the level of the eye that is seeing the object again.
+If you have a camera and you are taking a picture of something, then the horizon line
+is the level of this camera and it's how far is it from the ground.
+So this is the horizon line of the camera.
+This is the horizon line of my eye.
+So if we have two images that are taking in different situations, so you maybe have one
+image that has a lower horizon line than the other.
+So the way we are going to match these two images is by bringing this horizon line and
+matching it together.
+Before we go to the next point, let's hear a quick message from today's sponsor,
+Squarespace.
+We all know that having a powerful website is crucial for creative individuals like
+us.
+Now, I'm not a professional web designer and honestly, I don't want to spend countless
+hours trying to create my website from scratch.
+With Squarespace, all the complex stuff is already taking care of, allowing you to
+focus on what you do best, unleashing your creativity.
+One of the things I love about Squarespace is that it's amazing in browser editor.
+It enables me to effortlessly create a website by just dragging and dropping some
+elements.
+It's literally easier than any design software, but Squarespace offers much more
+than that.
+It provides a wide range of features, including email campaigns, powerful
+blogging tools and my personal favorite website analytics.
+So you can easily track your website's performance.
+Plus Squarespace offers loads of modern and solid templates to choose from,
+ensuring your website looks stunning.
+Make sure to give Squarespace a try with their free trial.
+And when you are ready to launch your website, head over to squarespace.com
+slash NoorArt to save 10% of your first purchase of the website or domain.
+I will drop the link in the description below.
+Okay, so how can I define the horizon line of an image?
+I will look for something that is called leading lines.
+What is leading lines?
+I don't want to over complicate it for you.
+It's basically if we draw some lines of the parts that are
+parallel to each other.
+So for example, this line of the road is supposed to be parallel to this
+because the road should be like two parallel lines.
+So the intersection between these two lines is defining something
+that is called the vanishing point.
+This is the vanishing point and the horizon line is basically a horizontal
+line that is intersecting with this vanishing point.
+So this is the level of the camera that took this picture.
+That is very nice.
+So this was for the road.
+So what about the car?
+We will do the same thing.
+Let's try to find some leading lines.
+Another line here.
+So this should be the vanishing point.
+Then we can bring the horizon line for the car.
+Should be somewhere here.
+That's very nice.
+So if we hide all these lines, we should have two horizon lines of the two images.
+What I'm going to do is basically try to match these two horizon lines.
+So now the horizon line of the two images matched.
+That's very nice.
+The next step, if I want to make this car a little bit smaller,
+I'll just select the car layer, press and control T and then press alt and press into the horizon line.
+This will put the anchor point of making the cars smaller and bigger,
+which will maintain the same perspective.
+So I will put it somewhere like this and press OK.
+That is very cool.
+Maybe we can just play around with the shape or the perspective of the car.
+So I will do this by right click, convert the layer into a smart object of the car and then go to edit and perspective work.
+So let's try to define this, the perspective of the car.
+So what I'm looking for now is trying to draw the lines of the car.
+So let's put this like this, this taller, match the perspective and at the same time, this line is not straight.
+So as you can see right now, we should make it the same direction as well.
+And secondly, I will draw some parts here as well.
+So something like this and after finishing, I'll go to warp and then start to tweak the car perspective a little bit.
+So I'm going to just make it a little bit taller or longer, something like this.
+Zoom out.
+So something like this will be OK.
+So let's see before and after.
+Here is before and here is after.
+I think it's matching in a better way right now.
+That's very nice.
+So let's just remove this part of the road.
+I will select the mask and using the brush, I will just paint over this area.
+That's very nice.
+And I'll try to refine these edges using a grass brush.
+So any grass brush you can find online, something like this would help.
+And then painting on the mask itself here, I will just reveal some parts, but with this grass brush.
+So something like this would be OK.
+Let's increase the flow of the brush.
+Yeah, that's better.
+That is very nice.
+Now let's go to the next part, which is the sky image.
+For this, I got these two images.
+Let's bring them here.
+Right click, click this image horizontally and the other one will be here as well.
+Let's put them behind our road.
+Let's hide this and let's start to match the horizon line of the sky image.
+So do you remember this horizon line?
+We should match it with the horizon line of this image of the sky.
+Of course, the horizon line can be defined as the line that is separating between the sky and the ground.
+So if you have like an open area, like a sun or an ocean, this is the horizon line.
+It's predefined.
+It's easy to find.
+So what I would try to do is just put it here and now everything is matching.
+Let's hide this line.
+That's perfect.
+And the reason why I got this image of the sky is that I like how these warm, orange looks.
+So let's just press Ctrl T, right click, flip horizontal and let's put them here.
+I will just take this part from this area.
+Let's make this a little bit bigger.
+So something like this and then create a mask and using the soft rounded brush.
+I will just erase some parts.
+Let's make the brush bigger and erase this part and we should be good to go.
+That is very nice.
+The next step, I'm going to put like a fence or any sort of wooden fence here.
+So let's just open it here and let's select it using the polygonal lasso tool or a pen tool
+or whatever you like.
+It's straightforward but it's time consuming.
+So I will just speed up the process of the selection and get back to you.
+Quick pause.
+If you are interested in creating amazing visuals like these step by step, I have
+good news for you because my premium course, The Ultimate Guide to Furmanipulation is
+now released and you can find it in the link in the description.
+In this course you will find 11 projects which are fully narrated in English in which
+I'm explaining every tiny step I took to create these visuals.
+You will find also all the stock images used, the PSD files and all the brushes used.
+So don't miss the chance if you want to take your furmanipulation to the next level.
+Go to the link in the description and start making amazing composites.
+So here's the final image after making the selection.
+Let's make it smaller.
+Right click, flip horizontal.
+Let's try to match it with the perspective of the road.
+Just press control to distort it a little bit.
+Press enter and let's put it behind the car.
+Of course, the perspective lines are not matched so let's press control T again.
+Maybe we can convert the image itself into a smart object.
+Right click, invert it into a smart object and then press control T and then let's
+start pressing control and start to tweak the perspective.
+Maybe we can select these lower parts or mask them using the grass, the same grass brush.
+So I'll just go to the layer of the fence, create a mask and using the same grass brush
+with the black color I just paint over here and into here.
+That's very, very nice.
+Now everything in place what we are going to do next is to put all the magic to blend
+these elements together to bring it to life.
+So let's start by creating a solid color, anything that is gray or black or white,
+anything that has zero saturation of color and then turn its blending mode into color.
+I'm doing this to only focus on the lightness values.
+So what is lightness values is basically how dark the elements are.
+So for example, if we created curves adjustment layer into this sky part and created a clipping mask
+and then if we make it like very bright like this, you can notice now that there are
+the huge difference between the lightness of this image of the sky and this image of the sky.
+So what we will try to do is to match the brightness of the two images.
+So let's have a look and see.
+This image has more dark clouds.
+So let's go to the curves and let's try to make this image a little bit darker.
+Don't forget to create a clipping mask to this layer.
+So as you can see, it's now matching in a better way.
+I'm now shifting the brightness of the mid tones.
+Something like this, I guess, where work and at the same time, maybe we can brighten this part
+of this image.
+We will do this by another curves adjustment layer.
+So let's just open up the absolute shadows, something like this and then press control
+I to invert the mask and using the soft rounded brush, I will just paint into the mask here.
+So it's now matching in a better way.
+So let's see before curves, here is before and here is after.
+It's now seamlessly blended and that is good enough.
+So let's just hide this image and see.
+Of course, it's not matching in terms of saturation and color.
+So let's start by matching the saturation.
+And what is saturation?
+It's basically how vivid the color is.
+So for example, here is the red color in the scale of zero to 100.
+This is the saturation of the color.
+I'll simply go to saturation and desaturate the whole image until I am satisfied.
+And then I will try to match the color tone using color balance.
+So let's go to adjustments and create color balance layer,
+which is the next step, matching the colors.
+So let's analyze the picture.
+What is the difference between this and this?
+Let's go to the shadows, which are the dark parts into an image.
+And in this image of the sky, it only has very cyanish, blueish colors into the shadows,
+some gray, blueish colors into the mid tones.
+And into the highlights, we have somehow bright yellowish orange colors.
+And that is exactly what we will try to shift the colors to match this image.
+So let's do it step by step.
+I'll go to the shadows.
+As I've already told you, we wanted to look cyanish and blueish.
+So we will add cyan and blue.
+And if we want to balance this color, we will need to get rid of some magenta component in this color.
+We will do this by increasing the greens.
+So if you want to decrease specific color value, you can add an opposite color to it.
+Let's see some blues or yellows, I guess here in this image, we can add some yellows.
+And you can always use your eye to judge.
+It has no rule here because this is art and everything is possible, actually.
+That's not bad.
+So let's go to the mid tones and let's try to add some say, and maybe
+some how greens or maybe some blues.
+Let's see.
+And we can now unhide these layers.
+Let's see.
+Maybe we can desaturate the shadows a little bit.
+Let's go to the shadows and desaturate it like this.
+And next go to go back to the color balance, go to the highlights, and maybe add some say,
+and maybe some greens and some blues.
+We can actually fade this part a little bit because I don't like how it looks.
+So it should be something like this.
+And at the same time, let's make it a little bit brighter from the curves.
+So it's a process of going back and forth until you get the best results.
+And maybe we can add an overall look to the sky by simply creating a color balance above
+everything.
+And maybe we can add some warm to the mid tones and some green shift and some blue.
+Let's go to the shadows.
+And one last thing, maybe we can brighten the sky a little bit.
+So using curves, we can make the sky a little bit brighter because it's very dark.
+Maybe we can decrease the brightness of this part of the sky using also curves.
+So let's create a curves adjustment layer, press Ctrl I, and using the soft rounded
+brush, we can just paint over this area.
+Now it looks better.
+Very nice.
+I still don't like this part.
+So before matching the car, we can do some matching here, manual matching.
+So I will do this using a solid color adjustment layer.
+Press OK.
+And then choose some color from the sky, maybe this desaturated blue and then press OK.
+And press Ctrl I to invert the mask.
+And using the soft rounded brush, let's decrease the flow of the brush.
+I'll just paint over this area because I want to unify the colors.
+Maybe we can choose this color.
+Yeah, this is better.
+So let's try to just paint over here.
+And we can then press double click into the layer, remove this color from the highlights
+by removing it from this slider.
+I'm now removing the color from the absolute highlights.
+So something like this.
+Press OK.
+Let's see.
+Here's before.
+I guess this is better.
+Maybe we can decrease the opacity, but this is more consistent.
+We need to increase the blues here.
+You know, it's not a one time process, this color matching thing.
+It takes some time, some back and forth, because it's easy to your eye to be deceived.
+Okay, so I'll just into the mid tones.
+I will add some blues and some sayans.
+Maybe a touch of green.
+Let's see.
+It needs more blue and sayan.
+Yeah, this looks better.
+Now let's see before and after.
+Yeah, now it's matching in a better way.
+Okay, next let's go to the road and let's try to blend its colors.
+I will start with the lightness values.
+So let's create a curves adjustment layer.
+Let's make the road darker.
+So something like this in the mid tones.
+And maybe we can darken the highlights a little bit, something like this.
+And what about the shadows?
+Maybe we can leave it as it is.
+So something like this before, after.
+And next we can go to the saturation.
+So let's go to saturation.
+Maybe we can decrease the saturation of this green color.
+So let's select the greens and let's decrease the saturation a little bit.
+And maybe we can shift its color toward more of a magenta color.
+So something like this would be good.
+Very nice.
+Now let's create another color balance to match the color.
+And for this I will just give it a touch of red in the mid tones and maybe a touch of magenta
+and some touch of blue.
+Let's go to the shadows.
+Let's try to give it some touch of cyan maybe magenta and blue.
+And maybe let's reduce this magenta.
+Something like this would be good.
+Let's go to the highlights.
+I think the highlights are good but we need to remove some magenta from it.
+So let's increase the greens and they are good.
+Maybe add some blues and we are good to go.
+So let's see before, after, or after.
+Subtle yet very effect.
+So let's go to the next element which will be this fence and we will leave the car to the end.
+So this fence will be easier to match because it doesn't have a lot of color.
+So I will just make it dark because it's in the opposite direction of the sun.
+So something like this.
+And using color balance I'll just give it a touch of red.
+Some maybe magenta and maybe some yellow or blue.
+I guess blue.
+Here we can add green not magenta.
+Let's go to the shadows.
+This is just you will get this scale just by intuition doing and matching a lot of images
+together.
+You will know which color you should add it at each situation.
+Okay.
+So so for now I'm satisfied.
+Here's before and here's after.
+Let's bring the car and for the car I don't like its native color.
+So I'll just shift the color completely.
+I'll do this using hue saturation.
+So let's create a hue saturation adjustment layer, create a clipping mask and then press colorize.
+I'll give it a color of maybe blue, cyanish blue.
+So something like this.
+And I guess this is a good color.
+I will remove this color from the absolute highlights and the absolute shadows.
+So press double click into the layer, remove it from the absolute shadows from here.
+You can see now.
+So let's just make this very saturated because I want to notice it.
+So let's remove it from as you can see I'm now removing it from the absolute darks.
+Splitting the cursor to make the transition smoother.
+So something like this and remove it from the absolute highlights or something like this.
+And then press okay.
+And let's get the saturation back and then using the brush we can remove
+the color from some parts.
+So for example from these the car lights itself from the tires and from these bottom parts
+like this using the brush from these metallic parts as well.
+That is not bad.
+Maybe we can make it darker.
+So something like this will be better and a little bit more saturated.
+But I want to make this part darker.
+So I will go to curves and create a clipping mask of course.
+And let's make this whole part darker like this.
+I don't like how it looks when it's white.
+So just I will make it darker press control I to invert the mask.
+And using the brush I can paint over this part.
+Simple as this.
+So let's make the color darker like this.
+And maybe we can go to the properties of the mask and feather it a little bit because I don't like
+how sharp is this.
+So let's make it a little bit feathered.
+And maybe we can bring this curves adjustment layer below the hue saturation.
+Now this is looking better.
+Let's just remove the effect from here using the brush and maybe from these top lights.
+That's very nice.
+I think we need to shift the colors of the road into more cyanish colors
+because now the overall look is more bluish cyanish color.
+So let's try to match this to the mid tones as well.
+That is better.
+Okay.
+Now we need to care about painting the light and the shadows.
+So how can we paint it for the highlights?
+I will use a solid color adjustment layer.
+Let's just pick any color create a clipping mask.
+And then I will pick the color from the sky.
+So let's choose some orangey reddish desaturated color like this.
+Press okay.
+And then press change its blending mode into screen.
+And next I will double click into the layer.
+Remove this effect from the absolute darks.
+And press alt to split the cursor like this.
+So something like this would be okay.
+This is the layer with which I'm going to paint the highlights.
+And then press control I to invert the mask.
+And now I'm going to paint the highlights using the pen tool.
+Why the pen tool?
+Because this is a very reflective metal surface.
+So we we should avoid painting highlights using soft rounded brush like this
+because it will give us not great results, flat lighting and all this stuff.
+Especially in these areas it looks so amateurish.
+So for example we will select this area using the pen tool.
+And then press control enter to turn this into selection.
+And using the brush I'll just paint the lights like this.
+Okay.
+Press control D.
+Now the lights look more realistic.
+So let's paint the highlights for this part.
+As I assume that you know the basics of Photoshop so you know how to use pen tool.
+Just try to separate the core parts into specific planes.
+So something like in this area.
+And then press control enter using the soft rounded brush making it big.
+I will just paint highlights like this.
+So these are the lights coming from the sun.
+So let's see.
+Here is before, here is after.
+Maybe we can fade these edges a little bit.
+Something like this would be okay.
+Let's do the same thing to different or various parts of the car.
+Maybe I will speed up the process with this part because it's time consuming.
+But I guess you got the point.
+That's very nice.
+So let's see here is before and here is after before and after.
+It gives us great results.
+And the next step we will just put some final specular lights.
+We will do this by simply bringing the same maybe orange or more saturated color like this.
+And paint give it one touch like this.
+Change the blending mode into screen.
+And I will start to just press shift to change its shape.
+So let's try to put it here.
+Maybe we can warp it from here.
+So like this to match the shape of each part.
+So something like this I guess.
+Give us this you know shyness into some parts.
+Let's press alt to bring it here.
+And maybe we can shift its shape again.
+Depends on the surface its shape and its reflection characteristics.
+Let's bring it and put it here.
+So that's very nice.
+Let's put all this into a group.
+And let's see before and after before and after.
+That is very nice.
+Now it's time to paint the shadows.
+So how can we paint the shadows for the core?
+It's basically consists of two parts of the shadows.
+The cast shadow and the contact shadow.
+What is the cast shadow?
+It's basically the shadows that's resulting from the main source of light.
+Which is the sun hitting the core.
+And it should create some tall shadow like this.
+But the ambient shadow is the shadow that is resulting from the colors of the sky.
+The surroundings.
+So let's start by the cast shadow.
+I'll do this by pressing control and pressing into the layer of the core.
+This will give me a selection around the core.
+Then let's create a solid color adjustment layer.
+And then press OK.
+Let's put this solid color behind the core.
+So here is the solid color layer.
+Firstly let's choose the color of the shadow.
+I'll firstly change the blending mode of the layer into multiply.
+And then change this color into some color from the ground.
+Because the shadow is basically the absence of light that is hitting the ground.
+So let's choose some color maybe like this.
+That's good.
+And then press OK.
+And then press control T, right click, flip it vertical.
+And let's try to match the shape of the shadow.
+So let's analyze how the shadow should be.
+So it's basically here is the source of light and it's hitting the core.
+And the core is banning the light from reaching to the ground.
+So the shadow should be something like this.
+Because the sun is now in a low angle.
+So let's try to mimic this by pressing control.
+And start to distort the shape of the shadow to match the perspective that we want.
+Press OK.
+Let's see.
+That's not bad.
+And the next part I will decrease its opacity.
+And let's go to blend F.
+Double click, remove the effect of the shadow from the highlights like this.
+And split the cursor to give it more realistic shape.
+As you can see, you can notice it here.
+So can you see it now?
+So something like this would be great.
+Then press OK.
+Now that's very nice.
+Maybe we can fade or soften the edges a little bit.
+Of course, it should be sharp, but not as sharp as it is now.
+So I'm going to go to the mask and feather the mask like this, just a tiny bit.
+So this is the main shadow.
+Of course, we can also soften the edges.
+So just just soften some edges like this.
+Maybe erase it from here.
+You can see that.
+Okay, this is a good shadow, but you think like something is off.
+It's not realistic.
+And the reason for this is that there is no contact shadow.
+The contact shadow is the shadow resulting from two elements touching each other.
+So for example, this element when it touches another element,
+there should be some dark pixels between them.
+And that is exactly what is contact shadow.
+So how can I paint it?
+I will do this by creating another solid adjustment layer.
+And let's choose some color from these colors or something like this.
+And press Ctrl I to invert the mask.
+And using the soft-trand brush, I'll just change its shape to make it more elongated like this.
+Decrease the flow of the brush to something like 10%.
+And let's try to paint the contact shadow.
+So I'll just paint it like this.
+Paint over these areas.
+This color should be more cyanish.
+So just shift colors and maybe darker or something like this.
+It's okay.
+So here it should be very dark.
+And it should be faded away
+in the areas that are not touching each other.
+So something like this.
+Be good.
+Let's go to this part.
+Increase the intensity of the shadow here.
+This part because the tire is touching the ground here.
+But now we can fade these parts like this.
+Let's do the same thing here.
+We can decrease its opacity or maybe we can play around with Blend F to
+bring some details into the shadow areas because it doesn't have any details at all.
+So something like this I guess will be okay.
+So let's see.
+You guys before contact and here is after.
+Here is before any shadows and here is after.
+That's very nice.
+One last thing I like to do is to create another layer here and pick any color from the
+bottom part from here and then let's create a clipping mask.
+And then I'm trying to get some color from the ground and paint over the tires.
+This is making the two images matches in a better way.
+It's very nice.
+Before, after, or after.
+It's now blended in a better way.
+That's cool.
+Now let's try to paint some cast shadows from this fence.
+So I'll just do it the same way we did with the car.
+So maybe something like this and then change its blending mode into multiply decrease its opacity.
+So something like this.
+So the next part we will try to give these car lights some lights of course.
+So I'll do this using solid again solid color.
+Maybe this time it will be saturated orange something like this.
+Press control I to invert the mask and using any flare lens flare brushes.
+So maybe something like this will be okay.
+It's increased the flow of the brush and change the blending mode of the layer into screen.
+And let's try to give it a touch something like this.
+See another one here.
+This color is very saturated.
+So let's just make it less saturated something like this.
+And we can paint it again.
+Make this smaller.
+Let's go to these lights make this very small something like this smaller.
+And I want it to look subtle like it's not that harsh lights.
+Maybe as well we can give this no this is very bright very small,
+tinier reflection something like this.
+And one final thing let's create like a glow around this using a saturated color and the
+same screen blending mode.
+Press control I using the soft rounded brush this time.
+I'll just give it some touches but let's decrease the flow of the brush or something like this.
+Make this bigger.
+And let's give this one another one.
+So let's see here is before and here is after.
+That's very nice.
+Next we should paint some shadows to the car again using curves.
+At this time I will just paint the shadows into the surfaces that are not facing the
+lights.
+So here we should have some shadows and here and here as well.
+So I will do this basically by just selecting these parts roughly using the pen tool.
+So like this part and this part as well.
+Press control enter to make a selection create curves adjustment layer and let's try
+to make this dark create a clipping mask of course and then we can make this mask
+softer from the feather right here.
+And of course we can lower the effect by reducing the opacity.
+So here's before and here's after.
+Now it's time to bring some motion to the composite.
+So if there is a car that is into in a road and it's very speed the road itself
+will have some motion blur but the car will be very sharp.
+The wheels will have some motion blur but the four parts will not have this motion blur effect.
+Okay so the further you go in distance so for example these elements doesn't have this
+motion blur effect because it's kind of far from the car itself as well as these parts
+of the tree.
+Okay of course the sky as well.
+So we want to avoid making like a motion blur everywhere.
+We will just make it into these parts that are closer to the car itself.
+So how can we do this is by simply selecting these the ground area only.
+So let's select the ground with everything above it.
+But we will not select the shadows just select the elements and the adjustment colors of it.
+And then press Ctrl J right click and then press merge layers.
+So we have now like a merged layer here we can play with.
+Let's press convert to smart object and let's go to filter blur gallery and something called path blur.
+And here we want to match the shape of the or the direction of the car.
+So the car is running into this area so I'm going to draw some arrows into the same perspective
+lines.
+So I'm putting one point here another one here and then press escape and do another one like this.
+Another one here and another one here because if I didn't do so the shape will be distorted.
+Okay so for example here I will change the shape to something like this.
+Okay so you can now see the distortion that is happening right here.
+You know that that motion effect coming from far distance and going to here and maybe we can
+reduce the length of this part because I want the effect to look like this.
+Let's see something like this I guess.
+Yeah that's very nice and maybe we can draw one final here.
+That's very nice.
+Let's remove this centered blur and let's decrease the speed to something like 25 maybe
+or 20.
+That's nice this motion effect is bringing it to life.
+So let's have a look before and after.
+So here is before and here is after or after.
+One final thing I guess we miss we're missing the shadows of the fence.
+So let's put this there behind the shadows of the fence here and maybe we can feather these
+shadows a little bit to match the motion effect here and this one as well.
+All right we are here into the final stages.
+So what we're going to do next is to create like a bloom atmospheric effect in this area
+and then we can go to the color grading that is the last thing.
+So let's start by creating a new solid color adjustment layer and then press okay.
+Of course it will not be clipped to this layer.
+So let's change its color to somehow
+Now, saturated maybe 50% saturation or color something like this and then let's put it behind
+everything maybe here and let's change its blending mode into screen.
+Press Ctrl I to invert the mask and we can do this glow effect by simply using the soft
+rounded brush with a low flow something like 30% and make the brush big something like this.
+Maybe let's decrease the flow something like this we can create like a glow effect around
+the car which will separate it from the background and it will put the focus on it.
+So some glow effect like this maybe this is too much we can erase it from some parts
+and there you go.
+Let's see this before and here is after that's very nice.
+Next we can put some lens flare effect from this picture so let's bring it and put it
+above everything at the top.
+Let's change its blending mode into screen.
+Ctrl T make it big make this very big I just want just a tiny touch of these lens
+flares so something like this and maybe press Ctrl U to desaturate it because it's very
+saturated so something like this would be okay.
+Maybe we can mask this part out.
+One final thing I like to do is to select everything and press Ctrl T and I think we can
+rotate the canvas a little bit this gives the visual more interest it's something called
+doge I guess angle which is when the horizon line is now tilted a little bit has some angle
+it's not completely horizontal this gives it more interest and it's kind of look better.
+That's perfect now let's go to color grading the most exciting part in which we bring everything
+together to get the final look so we can do this using camera row filter but what I like more is
+to create an empty group and put everything on it and I like to make color grading using
+adjustment layers because that gives me more control if I want to edit anything into the
+car for example it will be applied in the whole image automatically so I start with creating color
+balance adjustment layer and start to tweak the colors let's start with what I think it's
+settled down and I already know which is the highlights I'm sure that I want it to look like
+more yellowish and reddish that's why I started with it because I'm not sure what I will like
+most in the mid-tone and the shadows but the highlights I want it to look warm and
+somehow reddish yellowish colors so that's why I started with the highlights then let's go to the
+shadows maybe the shadows needs some yeah I like how it looks when adding grids so let's add some
+reds or about greens or magenta let's see I guess magenta gives it a good look maybe some yellows
+or blues no the yellows are better just preference it's just your taste you know
+well something like this is okay maybe the highlights is very reddish so let's decrease this
+red a little bit that's okay and what about the mid tones I guess the mid tones should be somehow
+neutral so it's increase the greens and maybe give it a touch of red or something
+and maybe a touch of blue so let's see here is before and here is after it's now more crisp
+and next I guess we should give it more contrast so I'll do this using a brightness
+contrast adjustment layer so let's just give it contrast like this what about the brightness
+yeah maybe so this looks nice as well that's awesome the next part is I'm going to shift
+the highlights and the mid the mid tones but this time I'll do this using curves so let's just go to
+the red channel and let's add cyan to the highlights so I'm just adding a little bit of cyan
+and what about adding some yeah adding some reds into the shadows be great let's go to the
+greens and see some greens to the highlights and some yeah some magenta to the shadows
+now let's go to the blues adding some maybe a little touch of yellow and what about the shadows
+maybe I should add some yellow so let's see here is before everything color grading and here is
+after that is really really nice all right guys that was intense I know but if you want to create
+amazing results you need to put a lot of effort there is no shortcuts all the AI tools the automatic
+tools are okay are good they are increasing your efficiency but if you want the ultimate results
+the best results you need to practice a lot actually and you need to know the tools and
+the techniques how to create everything manually because you will have to do things manually
+believe me guys again if this is not enough for you and you have followed me all the way to this
+tutorial you will find more 11 tutorials more complex than this into my course the ultimate
+guide to photo manipulation and the link in the description and yeah please hit the like button
+and subscribe and let me know in the comments what do you think about these episodes see you in
+the next tutorials peace

@@ -1,0 +1,817 @@
+Hi there, this is Anvesh from Piximperfect.
+And today I'm gonna share with you one of the most realistic ways to blend the elements
+of a composite using a special technique called the Inverse Curve technique.
+Now, using this technique, we will be creating realistic highlights and shadows and that too, colorful.
+So without any further ado, let's get started.
+Back in the magical world of Photoshop and here we have a background and on top of that,
+we have a subject.
+I've already masked it out to save time.
+Now, if you wanna download the starting PSD just like this, check the links in the description.
+Now, the first thing we would do right here is to match the brightness, but right now the colors
+might be distracting us.
+So how do we take the colors away?
+By creating a luminosity check layer.
+So click on the Adjustment Layer icon and then choose Solid Color and choose any shade of gray,
+white or black will do too.
+Hit OK and then change the Blend Mode to Color.
+That will take away all the colors.
+Now, all you need to do now is to create a Curves Adjustment Layer above the subject
+layer. So with the subject layer selected, click on the Adjustment Layer icon and
+then choose Curves.
+Now, inside of Curves, all we gotta do right here is to darken it.
+Now, if we do anything right here, it affects the entire thing.
+We want it to be limited just to the subject and how do we do that?
+By creating a Clipping Mask.
+By simply clicking on this button right there.
+This limits the curve.
+As you can see right there, this arrow, it limits the curve just to the subject.
+Now, let's darken the subject accordingly.
+This seems to be about right.
+We can always get back to that, edit this later as well.
+Let's take a look.
+Here's the before.
+Here's the after.
+Seems to be matching more.
+Now, you can take away or turn off the luminosity.
+Check layer.
+By the way, if you want to learn more about check layers, do watch this video.
+Now, it's time for us to begin matching the colors.
+But before we go ahead and start painting the highlights and the shadows
+and all of that fancy stuff, we need to create a nice base.
+And what is a nice base?
+Something that would go with the background a little more.
+So first of all, let's create a Gradient Map.
+So click on the Adjustment Layer icon again and then choose Gradient Map.
+This will help us match the atmosphere.
+Now, what does the Gradient Map do?
+It maps the colors of highlights, midtones and shadows according to the colors we choose.
+For example, right now on the right-hand side, we have black.
+So the highlights are painted in black and the shadows are painted in white
+because on the left-hand side, we have white.
+So single click on it.
+You can choose whatever color you want.
+So for the highlights right now, we have green and the shadows we have red.
+And in between, we can add as many colors as we want.
+But we want the colors on the subject to be similar to the background.
+So we will go that route.
+So for now, let's hit Cancel.
+And first of all, let's Limit.
+The Gradient Map just to the subject by holding the Alt key or the Option key
+and clicking on the line between these two lists that also creates a clipping mask
+and clicking on this button also does the same thing.
+So again, we need to select the icon, the symbol of the Gradient Map, not the mask.
+Otherwise, it will only sample colors from the mask, which is white.
+So select the symbol right there.
+Single click on the gradient.
+And then just make sure Sample All Layers or Current and Below is selected.
+Also, you want sample size to be 3x3 or 5x5
+so that it samples an average color of that area, not a particular pixel.
+So let's zoom in and sample a highlight color for the highlights.
+So click on the rightmost slider.
+Click on the color and you can sample whatever color you want from the background.
+So I'm going to choose one of the highlights from the light
+because that's the source of light in the background.
+So let's click on that.
+That's pretty good.
+You can add a little bit of saturation to it.
+Hit OK for the darkest spot.
+Single click on it.
+Single click on the color and let's sample the darkest color in the background.
+So according to me, let's sample one of these colors very close to black.
+Hit OK.
+Now we're going to choose a mid tone.
+Let's assume that these areas are gray in real life
+and it's just taking the colors of this light.
+So we're going to create a point, a slider right here and single click on the color
+and pick on just select one of these colors.
+Now keep in mind, the brightness level of this is 53.
+Absolutely close to the mid tones.
+Hit OK.
+But if you want to be absolutely precise, let's you can just set the location to 53 as well.
+And by chance we had that location already selected.
+If you want a darker shade here as well, so let's click to add one more slider
+and single click on the color and let's choose this.
+For this one, the brightness level was 18.
+So hit OK and let's choose the location to be 18.
+OK, that seems to be about right.
+But let's take a look at the subject, how it does.
+So it looks fine, but we can make some adjustments here and there.
+So let's take the slider a little bit more to the left
+and the middle one a little bit more to the left as well.
+Adds a little bit of highlights there as well.
+Now it matches very well.
+But of course it's all blue.
+We don't want to turn it into avatar.
+So let's decrease the opacity to about 50%.
+See, that forms a nice base.
+Now let's add one more Curves Adjustment layer just to, you know,
+blend the image a little bit more.
+This is not painting highlights or shadows, just a little bit blending.
+So click on the Adjustment layer icon and then choose Curves.
+And we want a little bit blues in the highlights.
+So we're going to go to the blue channel right over there
+and let's add a little bit of blues in the highlights.
+But it's affecting the background as well.
+We want it to be affecting the subject.
+So click on this button.
+Don't forget to clip it.
+So let's add a little bit of blues and let's go to the red channel.
+Now we want to add a little bit Cyan to the highlights.
+Now Cyan is the opposite of red.
+So we need to decrease the reds to bring up the Cyan.
+So let's decrease the reds a bit.
+See, it's getting a little closer.
+Now you can play with the green and see what they do.
+Let's increase it just a bit and see how it is.
+So let's take a look at it before and after.
+So here is the before.
+Here is the after.
+Look how much more it matches before, after.
+We're definitely getting closer.
+Looking at it now, I feel like we added a little too much Cyan
+and that, my friend, is the advantage of Adjustment Less
+that you can adjust it later.
+So double click on the symbol to open up the properties.
+So let's go to the red channel and decrease it just a bit.
+And let's go to the green channel and just adjust it accordingly.
+See what feels good to you just a little bit.
+So I'm going to select that and you can also move it
+with the arrow keys to make slight adjustments.
+OK, now definitely as with every adjustment and we are humans,
+we tend to go a little bit overboard.
+So let's decrease the opacity of this one as well to about 45%.
+And that looks a little more natural.
+I would highly recommend that you go ahead and take a break,
+maybe drink coffee, tea, whatever you like.
+Maybe watch the sunset, watch the sky go out in nature.
+Just do something that relaxes you
+and then get back to the image.
+You might be able to find some mistake
+that might have been overlooked otherwise.
+Now I can see that it should have been a little flatter.
+There's a little too much highlights more than required
+which might not give us enough room
+to paint in the highlights manually.
+So we'll go to the Gradient Map properties
+by double clicking on the symbol
+and single clicking on the gradient
+and move it a little bit to the right.
+See what it does?
+Yes, it makes it a little more flatter.
+If we take this to the right,
+that would add too much shadows to it.
+That seems to be about right.
+Let's take it a little more towards the right.
+That's perfect.
+Now, here we are, this is much better.
+Now it's finally time for us to move on
+to the Inverse Curve technique.
+Now to be able to understand
+how the Inverse Curve technique works,
+we need to create a brand new Curves Adjustment Layer.
+So select the top most lip, not the luminosity check.
+Let's delete it.
+Let's not confuse things.
+So click on the Adjustment Layer icon
+and then choose Curves.
+All right, and this time,
+instead of brightening the highlights,
+this is how we usually brighten the highlights, right?
+So we click a point on the right-hand side
+and we take it up
+or we take the rightmost point a little bit to the left.
+This just brightens the highlights.
+That's what we do.
+Some other times when we want to brighten something,
+we create a point in the middle and then take it up.
+Sometimes, very rarely,
+when we want to brighten the shadows,
+we create a point on the left-hand side
+and then take it up
+and probably create a point on the right
+and bring it down to not brighten the highlights.
+But what if I told you that in this example,
+we're gonna take the leftmost point
+and take it up to paint in the highlights?
+That would be some interesting stuff, isn't it?
+Why would we do that?
+You might ask, well, for extreme composites,
+this is important because this gives you absolute freedom.
+Let's say we created a point
+even a little bit on the left, right?
+And then took down the highlights, right?
+And we want to brighten this area.
+So first of all, select the mask of the curves,
+press Ctrl or Command-I.
+Also, we want to limit the curves
+just to the subject.
+So we will click on this button.
+It will create a clipping mask.
+Take the brush and select white as the foreground color.
+Make sure Flow and Opacity at 100.
+Let's decrease the brush size
+and no matter how much you paint right here with white,
+it just won't be brightened enough, right?
+So even here in the absolute dark areas,
+no matter how much you paint,
+it just won't brighten much, right?
+This doesn't give you absolute freedom.
+However, if you do it the other way,
+if you take the extreme left point up,
+look, even those areas are being brightened.
+Now it does come with its own problems
+because every area is being brightened.
+You have to be extra careful while painting the highlights.
+So let's move on to painting the highlights.
+We're gonna create a brand new curves
+just to not confuse you.
+So first we will click on the Adjustment icon
+and then choose Curves.
+We're gonna name this Highlights.
+So double click on the text and let's name this.
+We also wanna limit it to the subject.
+So click on this button right there.
+Now take the leftmost point up, just brighten stuff,
+just like this.
+But we not only wanna brighten it,
+we also wanna create a colorful highlight.
+How do we do that again?
+Channels, my friend.
+So let's first of all go to the blue channel
+because we wanna match it with that of the background.
+We wanna match it with the source slide.
+So let's take up blues.
+Again, we are not adding blues in the highlights.
+We are just doing the opposite of it.
+And that's why it's called the inverse curve.
+So let's take it up right there.
+We can always adjust this later.
+Let's go to the red channel now.
+We also wanna add a little cyan to it.
+Bring up a little cyan.
+So we will decrease the reds like this.
+That seems to be okay.
+Also we can play with the green,
+but in this case I don't feel like adding
+or playing with the green in a little bit.
+This seems to be a very right formula for a great highlight.
+Now keep in mind, you can start painting the highlight
+right now and anytime you wanna just adjust the colors,
+you can always just go to the channels
+and then just adjust it to your desire.
+There you go.
+Now before we start painting the highlights,
+there's one more thing we need to do.
+We need to understand the fact
+that not all of us are Leonardo da Vinci's, right?
+We also need to understand the fact
+that we don't have the whole lifetime
+to just paint the highlights.
+We need something to help us with it.
+And that is the blendif.
+Blendif will help us take away the highlights
+from extremely dark areas, like absolutely dark areas.
+So double click on the right and side of the left.
+Just take it away from extremely dark areas
+by taking the slider of the underlying layer
+from left to right, but this is harsh, right?
+So hold the Alt key or the Option key,
+click on the slider to break it apart
+and take it apart.
+For me, about 040 looks good.
+If you're satisfied, just hit okay.
+You can now start painting the highlights.
+First of all, select the mask, press Ctrl or Command I.
+Choose the brush, make sure you have chosen
+the soft around brush.
+Keep the flow lower, five, four,
+something like that would be great.
+I'm gonna keep it at four and then just zoom in
+and start painting the highlights.
+Now where to paint you might ask?
+Great question and the most important question
+of this lesson.
+We need to paint on every area that faces the light,
+not just the edges.
+So it's not like we're just painting right here
+and adding highlights.
+That looks good, that looks realistic.
+However, we also need to paint on areas
+that face the light, even if it is not on the edge.
+For example, have a look at this area,
+this hand right there.
+It also faces the light.
+There's a light right here.
+There might be a light, street light
+that is out of the frame of the camera.
+So we need to paint a little bit right here as well.
+So you understand right now where we need to paint?
+Similarly, have a look at this area.
+This area faces the light and might face
+a light that is ahead forward.
+So I'm gonna paint a little bit right here.
+I'm painting very fast along a little bit on the edge,
+maybe a little bit on the edge right there.
+This is a fast work.
+We have to take our time to do it slowly.
+Have a look.
+Just a little bit of this,
+add a little bit glare around the edges,
+right here as well.
+Just a little glare here as well,
+around the face.
+This really adds a lot.
+Let's take a look at the before and after.
+Just doing this.
+Five seconds of this.
+Here's the before, here's the after.
+Just look at the difference.
+Now we are gonna speed it up,
+otherwise it would be absolutely boring.
+We'll talk about shadows later.
+Just keep in mind,
+while you are painting the highlights,
+for example, right here,
+keep in mind the folds.
+Just don't paint a straight blob with this brush.
+Please don't do something like this.
+That would be childish.
+Doesn't look right.
+Keep in mind the folds.
+So according to the folds, you would just brighten.
+So there's folds right there.
+So you would brighten this way.
+And according to the folds,
+just let the brightness flow,
+just as it would in real life.
+See how better that one is
+in comparison to previous one.
+So keep in mind the folds.
+And still, if it doesn't look right,
+you can always double click on the right inside of the layer
+and take it even further
+to help you more with painting the highlights.
+You can take it as high as 0.50 in this case.
+So we're gonna keep it at 0.50 right there and hit okay.
+Now let's start painting the highlights.
+I still feel like there's too much blue in the face.
+So let's go back to the gradient map
+and decrease its opacity to about 44.
+How do you feel about that?
+That looks a lot better.
+Now let's get back to painting the highlights.
+Select the mask and resume painting.
+So there you go.
+As you can see, we have finished painting the highlights.
+Let's take a look at the before and after.
+So this is the before and this is the after.
+Isn't that a massive difference?
+Let's do it once again.
+Let's zoom in and do it.
+Here is the before.
+Here is the after.
+Now when I look at it, I feel like that
+this should have been a little less brighter,
+maybe even more blues.
+So double click on the symbol of the curve
+and just take down the left most point.
+See, it makes it a little more bluer and more exciting.
+Let's zoom out and do a proper adjustment.
+So earlier it was something like this,
+which is good too,
+but if we take it down just slightly,
+it makes it a little more bluer.
+You can also adjust the blues now.
+So let's go to the blue channel
+and take it up and down and see what changes it makes.
+If we take it up, it matches it a little more,
+I feel in my opinion.
+Okay, there you go.
+Let's take a look right now at the before and after.
+So this is the before and this is the after.
+Now let's take a short break
+from the inverse curve technique
+and let's add some rim lighting.
+So if we zoom in,
+what if we add a little bit of light,
+more light around the edge?
+And this time, we only wanna brighten the highlights.
+So we don't have to do the inverse curve thing
+all over again.
+Just add one more.
+You already might have guessed it.
+Curves and this time just create a point in the middle
+and take it up.
+Just like this.
+If you want, you can go to the blue channel
+and increase the blues as well,
+something like that.
+And we only want to add it around the edge
+and that too automatically.
+But before that, let's limit it just to the subject.
+So hold the Alt key or the Option key
+and click on the line between these two.
+Next thing we will do is hold the Control or Command
+and click on the mask of the subject layer.
+We just wanna selection of the subject.
+Now, we want to contract the selection a little bit.
+All right?
+So to contract the selection,
+let's go to Select, Modify and then Contract.
+Let's try two pixels.
+Let's see what it does.
+So two pixels, contraction, a rim light of this.
+How would it look?
+Maybe we would want more.
+Let's go to Select, Modify and then Contract
+one more time and let's choose one this time.
+If this doesn't work, we will try some other values.
+Now, all you gotta do is to fill this with black.
+So with the mask selected,
+make sure that the foreground color is black
+and then press Alt Backspace.
+In a Mac, that would be Option Delete.
+Now let's take a look.
+Press Control or Command D to deselect.
+We have added some rim lighting,
+but it's very, very harsh.
+We need to soften it up a little bit.
+So select the mask and open up the Mask Properties
+by clicking on the Properties button.
+If you cannot see it, go to Window
+and then make sure Properties is checked
+and just increase the feather.
+Have a look at it right now.
+Let's set it to 2.5.
+That seems to be a good number.
+Now let's take a look and the rim lighting looks amazing.
+Let's add a little more feather, see how that looks.
+So here's the before, here's the after,
+just a little bit of light.
+I'm gonna stick to 2.5, that looks good
+and only add it in certain areas, not all the areas.
+So select the mask right here,
+take the brush, make it a little larger
+and just paint away the areas where we don't want it.
+Increase the flow to about 100
+and paint black in these areas where you don't want it.
+This area is fine, little bit there is good.
+Now I want to remove it just so slightly right over here.
+So let's decrease the flow to about 10%
+and then let's paint this area with black
+to remove it from there.
+Okay, there you go.
+Let's take a look at the before and after.
+So let's zoom out a bit.
+So here is the before, here is the after,
+just a little bit of rim lighting goes along with,
+of course, we forgot to do it right here.
+So select the mask and then just erase it at the bottom
+right here, let's increase the flow.
+There you have it my friend.
+A little bit of rim lighting, here's the before,
+here's the after, just add a little oomph to the photo.
+Now let's get back to the mood
+for the inverse curve technique
+and now we're gonna just paint in the shadows.
+So we'll do just the opposite.
+So let's create a curves,
+again, curves adjustment layer again.
+You know what this video should be named the Infinity Curve.
+Let's get back to it.
+So instead of creating a point in the left
+in the shadow area and then making it darker,
+we will make the highlights darker.
+Take the extreme right point and take it down.
+Just as we did with the highlights,
+we did just the opposite.
+We took the extreme left point and took it up.
+Similarly in the shadows, just the opposite,
+extreme right point and take it down.
+Also, we wanna limit it with the subject
+so click on this button to create a clipping mask
+and then select the mask, press Ctrl or Command I
+and then you can start painting the shadows.
+By the way, to momentarily turn off the mask
+and see how dark your shadow is gonna go,
+hold the Shift key and then click on the mask
+to momentarily turn it off
+and come back to the properties of the curve
+and we're gonna make it dark, like really, really dark.
+Something like this looks good.
+Okay, if you want to add some color to it, you can.
+You can go to the blue channel
+and add some blues to it,
+but I feel like I wouldn't add much color to the shadow.
+Just a little bit of blue
+and probably in the red channel,
+we'll just take it down a bit, just like that
+and enable the mask again by holding the Shift key
+and clicking on the mask.
+Just select it, take the brush,
+let's set the flow at about three or four.
+So I'm gonna set it to three
+and begin painting the shadows.
+Make sure the foreground color is white.
+Now again, you might ask,
+and Mesh, where should I paint in the shadows?
+Brilliant question.
+Similarly as we did with the highlights,
+we painted on the areas which faced the light.
+We will paint the shadows in areas
+that do not face the light, as simple as that.
+So let's resume painting.
+So there you go, we have finished painting the shadows.
+Let's take a look.
+Here is the before and here is the after.
+That's a massive difference, my friends.
+Now painting the shadow was not as difficult
+as painting the highlights.
+Highlights is where all the hard work takes place.
+You know what? We are pretty much done.
+Now all we have to do is
+to just some finishing adjustments.
+So let's add one more.
+You have already guessed it.
+Just one more curves to blend it in a little bit more.
+So we will limit it as well by creating a clipping mask.
+And then let's increase the blues a little more.
+First, we'll just make it a little darker
+to match it even more.
+So let's take the rightmost point down just like this.
+See, it's matching a little more.
+So slowly and gradually take it down to match it.
+Now let's go to the blue channel
+and increase it just a bit.
+This value seems to resonate with me.
+With the green channel, we're gonna play.
+We're gonna try to take it down and take it up.
+See what works best for us.
+Just a touch of it.
+Let's get back to the RGB channel.
+If you wanna add more cyan again,
+go to the red channel and let's try decreasing that.
+See, it's matching a little more.
+There you go.
+This was just for blending in a little bit.
+So here is the before, here is the after.
+Just blends in a little more.
+Now if you zoom into the subject, there is an issue.
+There's a lot of noise in the background
+but there's no noise on the subject.
+So we need to add noise to it.
+Press Ctrl Shift N, Command Shift N on a Mac
+and change the blend mode to overlay.
+Make sure you check fill with overlay neutral color
+so that it fills the layer already with 50% gray.
+And overlay is a blend mode which hides 50% gray.
+And we're gonna name this noise.
+We also wanna limit it to the subject.
+Hold the Alt key or the Option key.
+Click on the line between these two layers.
+Let's go to Filter and Convert for Smart Filters.
+Hit OK so that whatever filter we add,
+you can change the values later.
+Let's go to Filter, Noise and then Add Noise.
+And make sure Monochromatic is checked.
+We don't wanna add too much color to it.
+Slowly and gradually increase the noise
+to the point where it matches with that of the background.
+In my opinion, I'm gonna keep it a little bit higher first.
+Let's keep it at about 25 in the beginning.
+Now we need to add some blur to it.
+This is very sharp noise.
+So let's go to Filter, Blur and then gosh and blur.
+0.6, 0.7 works in this case.
+So point, let's go for 0.6.
+How does it match up?
+Not pretty well, let's go for 0.5.
+Okay, now we only want noise in the shadow areas.
+So we will just double click on the right-hand side
+of the LED, that's how noise works.
+So hold the Alt key or the Option key.
+Click on the right-most slider
+of the underlying layer section
+and take half all the way to the left.
+This takes away the noise from the highlights.
+Hit OK.
+Take a look.
+Now before noise is in the highlights,
+here's the after.
+It gets slightly better.
+Now I feel like the blur should have been a little less.
+So I'm gonna decrease the blur to about 0.4.
+And also the noise should have been a little less.
+Double click on Add Noise
+and you can change the values right here.
+So we can change it to about 15.
+How do you feel about that?
+15 looks a little better and it just kind of blends well.
+And on top of that,
+you can always take down the opacity
+and slowly and gradually increase it
+and stop at just the point where it looks good.
+So in my opinion, we're gonna keep it at about 55.
+One of the things we do while creating a composite
+is adding a global effect at the end.
+What it does is that it allows us to blend
+all of the elements of the composite together.
+It's just kind of a final bringing together effect.
+So in this case, we're gonna add a color lookup table.
+So click on the Adjustment Layer icon
+and then choose Color Lookup.
+And this is something we apply to all the elements,
+in this case, both to the subject and the background.
+So we're gonna choose Deal Orange Plus Contrast.
+This is a very exciting one, but of course, this is too much.
+So let's get the opacity to about 35%.
+That looks good or maybe 30%.
+Whatever suits you.
+So we're gonna keep it at about 30.
+Also, now if you look at this image,
+it's just too dark.
+We need to add some brightness to it.
+But if we add a simple, again, curve
+and just take it up,
+it's also gonna blow out the details and the highlights.
+It's kind of too much.
+So what we can do though,
+we can just take it even more
+and only brighten up the shadow areas
+by double clicking on the right-hand side of the layer.
+By the way, this looks great as well.
+So double click on the right-hand side of the layer
+and take it away from the highlights
+by taking the slider of the underlying layer
+from right to left.
+Of course, it's harsh.
+So hold the Alt key or the Option key,
+click on it to break it apart
+and take both the halves to the extremes.
+So hit OK.
+Let's take a look.
+Here is the before.
+Here is the after.
+That makes a ton of difference, my friend.
+You can always get back to the properties
+and let's decrease it a bit.
+I think it's too much.
+So let's decrease it just a bit
+and this looks perfect.
+Now, if you want to add some overlays,
+you're always free to do so.
+So I have some light leaks
+that I downloaded from Envato Elements,
+the link to which are in the description.
+By the way, I have offers in Envato Elements as well.
+That will give you 75,
+something 75-ish discount for the first month.
+It's like for a fixed fee,
+you can download all of their assets,
+as many as you want.
+You don't have to pay for each and every one of them.
+So here are a lot of light leaks that we can use.
+So I'm just gonna select this one,
+light leaks 2 and drag it and drop it over the canvas.
+This looks interesting.
+Let's make it a little larger.
+Adjust it, adjust it like that.
+Hit Enter and change the blend mode to Screen.
+There you go.
+That's fun too, as well.
+And you can finish right here.
+But wait, there is a mistake we still need to fix.
+Let's turn it off.
+This was optional.
+If you zoom in, everything looks fine.
+However, what if we wanted to add a depth of field?
+Have a look at the subject.
+These areas are out of focus.
+The mouth and the face is in focus.
+This area is out of focus, even in the subject.
+So how can the background be so tack sharp?
+It is just not possible, right?
+So we need to add some background blur to it.
+So we're gonna make a copy of the background.
+So with the background layer selected,
+press Ctrl or Command J, just to have a backup.
+And then go to Filter, Convert for Smart Filters, hit OK,
+so that we can change the values later.
+Now let's go to Filter, Blur Gallery and Tilt Shift.
+Now Tilt Shift allows us to add blur gradient
+in all different directions.
+So we're gonna bring it down
+and start the solid line where she must be standing.
+So, and we're gonna bring the dotted line
+all the way far.
+We're gonna create one more point right here by clicking
+and we will just rotate it 90 degrees
+and take it far as well
+and bring a gradient something like this
+and add one more point right here as well
+and rotate it 90 degrees.
+There you go.
+The solid line is where the blur starts.
+So that's where the blur is zero
+and the dotted line is where the blur gradually increases
+to whatever value you choose, 15.
+So blur is zero right here from zero.
+So slowly and gradually it will increase to zero.
+One, two, three, four, five, six,
+to 10, 11, 12, 13, 14
+and it will end at 15 right over here.
+Hope that makes sense.
+Now let's just control how much blur you want
+right here in the background.
+So we will keep it at about 10.
+For now you can always change things later.
+Now before you hit OK, now keep in mind
+we have added a little noise on the subject.
+We need to add a little bit noise
+on the background as well
+just to match things up
+because some areas like this have noise.
+So to match things up
+just click on the noise button right there
+and just increase the amount.
+You can also control the size of the noise
+but this one seems to be good.
+You can always control these things
+according to your taste
+but in my opinion, this feels looks good to me.
+Hit OK.
+And there you have a little bit of background blur
+and we have our image ready.
+If you want to make it absolutely shallow depth of field
+you are welcome to do that as well.
+So there you go.
+Here my friend is the before and this is the after.
+So just to wrap it up, all you have to do
+is to first create a base.
+Now how do you create a base?
+There are lots of ways.
+Just look at the image.
+Look at what it needs.
+In this example, we first matched the brightness
+because have a look at it.
+The brightness is not at all matching
+and you can create a luminosity check layer for that.
+So we matched the brightness
+and then we were to match the colors.
+To match the atmosphere, we created a gradient map
+and created a similar gradient to that
+of the background and just slapped on the subject.
+And then we added one more curves to match it even more.
+Added some blues, reduced some reds
+just to bring it more closer to the background
+and then came the inverse curve technique.
+So if you want to add highlights,
+all you have to do is to do the opposite.
+Take the extreme left or the shadows up
+and then combine the RGB channels to add some color to it
+and just begin painting the highlights.
+Don't forget to blend if, right?
+You need to apply blend if to take it away
+from extremely dark areas.
+So similarly, we will do the opposite with the shadows.
+Also there's one more thing we did.
+We added some rim lighting.
+We just made a selection, brought it in
+and just painted around the edges, filled around the edges.
+And after that, one more curve
+to blend all in a little more
+and the background had a little noise.
+So we added a little noise on the subject as well.
+Color lookup table on top of everything.
+So that's a global effect
+to bring all the elements of composite together
+and then just a little curve to brighten it up.
+This was a dark image and Light Leaks is optional.
+And don't forget, we can always add a little depth
+to the image by blurring the background.
+It's not always necessary, but in this case,
+if you have a look at the subject,
+some areas were blurred, some areas were out of focus.
+So definitely we can tell the subject was captured
+with a shallow depth of field.
+So we had to add a little blur to the background.
+Have a look at the original image of the subject,
+just the subject.
+See, it had a shallow depth of field.
+So we had to do that with the existing background as well.
+And on top of that, you can add some Light Leaks
+if you wish to.
+So that's pretty much it for this video.
+This was a little longer one, but I hope it helped.
+This was something that you kept on requesting
+even when I created a poll and asked you what you wanted.
+A lot of you guys said you want more compositing videos.
+So there it is.
+Thank you so much for watching
+and I would like to take this moment
+to thank all these nice and amazing people
+who are supporting Pixing Perfect on Patreon
+and helping keep Pixing Perfect free for everybody, forever.
+Thanks so much for watching.
+I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.

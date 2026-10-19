@@ -1,0 +1,1027 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.300 --> 00:00:01.290
+- Hey guys, Alex here.
+
+00:00:01.290 --> 00:00:02.261
+Welcome to "Office Hours".
+
+00:00:02.261 --> 00:00:03.094
+(frame whooshes)
+(coffee beans rattle)
+
+00:00:03.094 --> 00:00:03.927
+(frame whooshes)
+
+00:00:03.927 --> 00:00:04.770
+(Alex slurps)
+
+00:00:04.770 --> 00:00:05.603
+Have you heard the buzz
+
+00:00:05.603 --> 00:00:08.130
+about people using AI to create 3D models?
+
+00:00:08.130 --> 00:00:09.840
+We've been seeing a
+ton of questions lately
+
+00:00:09.840 --> 00:00:12.540
+about how people can and are
+using artificial intelligence
+
+00:00:12.540 --> 00:00:14.070
+and 3D modeling together,
+(melodic music)
+
+00:00:14.070 --> 00:00:15.360
+so if you want to know more
+
+00:00:15.360 --> 00:00:17.160
+or you're looking to
+try it out for yourself,
+
+00:00:17.160 --> 00:00:18.360
+today we're gonna dive in
+
+00:00:18.360 --> 00:00:20.370
+to two of the most popular
+free options out there
+
+00:00:20.370 --> 00:00:22.680
+and show you what's
+possible, what's practical,
+
+00:00:22.680 --> 00:00:24.270
+and what the future may hold.
+
+00:00:24.270 --> 00:00:25.347
+Keep watching.
+
+00:00:25.347 --> 00:00:28.101
+(pencil scribbles)
+(harmonious music)
+
+00:00:28.101 --> 00:00:29.310
+(frame whooshes)
+
+00:00:29.310 --> 00:00:30.750
+You've probably seen some of the stunning,
+
+00:00:30.750 --> 00:00:32.790
+mind-boggling images
+that people are creating
+
+00:00:32.790 --> 00:00:33.990
+with AI these days.
+
+00:00:33.990 --> 00:00:36.240
+And then there's the amazing
+renderings people can produce
+
+00:00:36.240 --> 00:00:38.340
+from traditional 3D modeling software,
+
+00:00:38.340 --> 00:00:39.173
+but did you know that people
+
+00:00:39.173 --> 00:00:41.010
+are actually combining the two together,
+
+00:00:41.010 --> 00:00:44.597
+using AI to help create,
+edit and animate 3D models?
+
+00:00:44.597 --> 00:00:45.510
+(Alex mimics explosion)
+
+00:00:45.510 --> 00:00:47.640
+Let's talk about how you can
+try this out for yourself
+
+00:00:47.640 --> 00:00:49.680
+for free, even if you have
+little or no experience
+
+00:00:49.680 --> 00:00:51.960
+using AI or 3D modeling software,
+
+00:00:51.960 --> 00:00:55.530
+starting with getting set
+up with the right tools.
+
+00:00:55.530 --> 00:00:57.450
+For the purposes of this
+video, we'll be talking
+
+00:00:57.450 --> 00:00:59.550
+about two of the most popular
+free options out there
+
+00:00:59.550 --> 00:01:03.840
+for both AI and 3D Modeling,
+ChatGPT and Blender.
+
+00:01:03.840 --> 00:01:05.250
+But don't let the price tag fool you.
+
+00:01:05.250 --> 00:01:08.370
+Both of these are insanely
+robust and powerful tools.
+
+00:01:08.370 --> 00:01:11.160
+Let's talk about how to get up
+and running in Blender first.
+
+00:01:11.160 --> 00:01:12.630
+Blender is an open source software
+
+00:01:12.630 --> 00:01:15.090
+for everyone from creative
+professionals to hobbyists,
+
+00:01:15.090 --> 00:01:18.210
+with amazing tools for
+3D modeling, sculpting,
+
+00:01:18.210 --> 00:01:20.670
+creating photorealistic
+and highly stylized images
+
+00:01:20.670 --> 00:01:23.130
+and animations, plus a whole lot more.
+
+00:01:23.130 --> 00:01:24.930
+To get it, just open up your web browser
+
+00:01:24.930 --> 00:01:27.750
+and visit www.blender.org.
+
+00:01:27.750 --> 00:01:29.640
+Click Download Blender
+and follow the steps
+
+00:01:29.640 --> 00:01:30.750
+to download the correct version
+
+00:01:30.750 --> 00:01:32.700
+depending on your operating system.
+
+00:01:32.700 --> 00:01:34.980
+In your Downloads folder,
+if you're on a Mac,
+
+00:01:34.980 --> 00:01:37.200
+double click the DMG file
+to mount the disk image,
+
+00:01:37.200 --> 00:01:38.940
+and then drag the Blender app icon
+
+00:01:38.940 --> 00:01:41.040
+into the applications folder to install.
+
+00:01:41.040 --> 00:01:42.600
+If you're on a Windows machine,
+
+00:01:42.600 --> 00:01:44.370
+double click on the installer file.
+
+00:01:44.370 --> 00:01:46.380
+Then follow the steps to install it.
+
+00:01:46.380 --> 00:01:47.490
+If you're on Linux,
+
+00:01:47.490 --> 00:01:49.500
+I've added a link to
+Blender's reference docs
+
+00:01:49.500 --> 00:01:50.730
+in the video description
+
+00:01:50.730 --> 00:01:53.250
+in case you run into
+any unexpected issues.
+
+00:01:53.250 --> 00:01:54.720
+All right, navigate to the folder
+
+00:01:54.720 --> 00:01:57.270
+where you installed the
+application and launch Blender.
+
+00:01:57.270 --> 00:01:58.500
+You'll see a welcome screen.
+
+00:01:58.500 --> 00:02:00.120
+It may be a little different
+than what you see here
+
+00:02:00.120 --> 00:02:02.070
+depending on the version
+of Blender you download,
+
+00:02:02.070 --> 00:02:04.230
+as Blender releases frequent updates,
+
+00:02:04.230 --> 00:02:05.550
+but the core functions we're covering
+
+00:02:05.550 --> 00:02:07.140
+will work just the same.
+
+00:02:07.140 --> 00:02:08.880
+You can click once away
+from the welcome banner
+
+00:02:08.880 --> 00:02:10.500
+and you're ready to go.
+
+00:02:10.500 --> 00:02:13.200
+All right, next, let's talk about ChatGPT.
+
+00:02:13.200 --> 00:02:14.566
+What is ChatGPT?
+
+00:02:14.566 --> 00:02:17.250
+ChatGPT is an advanced AI-powered chat bot
+
+00:02:17.250 --> 00:02:19.498
+developed by a company called Open AI.
+
+00:02:19.498 --> 00:02:21.750
+ChatGPT is trained on vast data sets
+
+00:02:21.750 --> 00:02:24.480
+to mimic human conversation,
+but where it gets really cool
+
+00:02:24.480 --> 00:02:26.250
+is that you can actually ask ChatGPT
+
+00:02:26.250 --> 00:02:28.050
+to write and compose unique things
+
+00:02:28.050 --> 00:02:29.730
+based on its machine learning,
+
+00:02:29.730 --> 00:02:33.600
+from stories to poetry to
+essays, even computer code,
+
+00:02:33.600 --> 00:02:35.940
+and that's how we're able
+to interface with Blender
+
+00:02:35.940 --> 00:02:38.610
+to use AI to do our 3D modeling for us.
+
+00:02:38.610 --> 00:02:42.420
+To get started, head to chat.openai.com.
+
+00:02:42.420 --> 00:02:44.310
+Sign up if you don't
+already have an account,
+
+00:02:44.310 --> 00:02:46.140
+and once you're logged in,
+you'll see a welcome screen
+
+00:02:46.140 --> 00:02:47.940
+with a text field to type a message.
+
+00:02:47.940 --> 00:02:50.070
+Now, real quick, I should
+mention that while it's free
+
+00:02:50.070 --> 00:02:51.870
+to sign up and use ChatGPT,
+
+00:02:51.870 --> 00:02:54.570
+there's also a paid option
+called ChatGPT Plus,
+
+00:02:54.570 --> 00:02:56.790
+which gets you priority
+access to the new features
+
+00:02:56.790 --> 00:02:58.890
+and latest version of the
+machine learning model,
+
+00:02:58.890 --> 00:03:01.590
+which at the time of
+publishing this video is GPT-4,
+
+00:03:01.590 --> 00:03:03.270
+a more advanced version of ChatGPT
+
+00:03:03.270 --> 00:03:05.160
+than you currently get
+with a free account,
+
+00:03:05.160 --> 00:03:07.500
+which is GPT version 3.5.
+(frame clicks)
+
+00:03:07.500 --> 00:03:09.480
+I'll talk more about the
+differences in improvements
+
+00:03:09.480 --> 00:03:11.970
+between the two later in
+this video, but for now,
+
+00:03:11.970 --> 00:03:14.070
+let's go over the basics
+using the free version,
+
+00:03:14.070 --> 00:03:16.020
+since the process you'll
+follow is the same
+
+00:03:16.020 --> 00:03:18.600
+regardless of the version
+of GPT you're using.
+
+00:03:18.600 --> 00:03:22.500
+All right, how to use
+ChatGPT and Blender together.
+
+00:03:22.500 --> 00:03:23.790
+Now, you're probably already imagining
+
+00:03:23.790 --> 00:03:25.470
+all the exciting possibilities,
+
+00:03:25.470 --> 00:03:26.303
+like, "Render me
+(melodic music)
+
+00:03:26.303 --> 00:03:27.960
+"a three bedroom house on the beach,"
+
+00:03:27.960 --> 00:03:30.390
+or "animate a robot walking",
+(melodic music)
+
+00:03:30.390 --> 00:03:31.260
+but hold on.
+
+00:03:31.260 --> 00:03:33.300
+Before we get too far ahead of ourselves,
+
+00:03:33.300 --> 00:03:34.920
+let's dial it back and quickly cover
+
+00:03:34.920 --> 00:03:35.940
+the practical fundamentals
+
+00:03:35.940 --> 00:03:38.850
+of how to actually use
+these two programs together.
+
+00:03:38.850 --> 00:03:40.290
+To do that, let's ask ChatGPT
+
+00:03:40.290 --> 00:03:42.510
+to build us something
+super basic in Blender,
+
+00:03:42.510 --> 00:03:44.280
+and then we'll go from there.
+
+00:03:44.280 --> 00:03:45.390
+Now, as I mentioned earlier,
+
+00:03:45.390 --> 00:03:47.340
+ChatGPT is able to write computer code
+
+00:03:47.340 --> 00:03:50.310
+or what's called a script,
+which Blender can interpret.
+
+00:03:50.310 --> 00:03:52.620
+So in our browser
+window, let's ask ChatGPT
+
+00:03:52.620 --> 00:03:55.680
+to write a Blender script
+that creates a gold ball.
+
+00:03:55.680 --> 00:03:57.930
+You'll see ChatGPT print
+out a block of code
+
+00:03:57.930 --> 00:04:00.420
+along with a short explanation
+of what it created.
+
+00:04:00.420 --> 00:04:01.740
+The interesting thing to note here
+
+00:04:01.740 --> 00:04:03.960
+is that ChatGPT's responses will vary,
+
+00:04:03.960 --> 00:04:06.750
+even when asking the exact same question.
+
+00:04:06.750 --> 00:04:08.040
+So if you're following along at home,
+
+00:04:08.040 --> 00:04:10.110
+your responses will look
+different than mine.
+
+00:04:10.110 --> 00:04:12.862
+Also note that I included the
+word "script" in my question.
+
+00:04:12.862 --> 00:04:13.695
+(screen beeps)
+That's because
+
+00:04:13.695 --> 00:04:14.670
+if you just asked ChatGPT
+
+00:04:14.670 --> 00:04:16.650
+to create or model something in Blender
+
+00:04:16.650 --> 00:04:19.050
+without asking it to write
+a script specifically,
+
+00:04:19.050 --> 00:04:21.600
+it will sometimes respond
+with step-by-step instructions
+
+00:04:21.600 --> 00:04:24.210
+of how to build it yourself,
+which is also pretty cool,
+
+00:04:24.210 --> 00:04:27.150
+but not what we want for
+the purposes of this video.
+
+00:04:27.150 --> 00:04:28.530
+Okay, let's copy the code block
+
+00:04:28.530 --> 00:04:31.380
+by going to the upper right
+hand corner and clicking copy.
+
+00:04:31.380 --> 00:04:33.450
+Then in Blender, let's
+delete the default cube
+
+00:04:33.450 --> 00:04:35.220
+so we start with a blank slate.
+
+00:04:35.220 --> 00:04:38.310
+To do that, select the cube
+and hit X on your keyboard
+
+00:04:38.310 --> 00:04:39.930
+and click to confirm.
+
+00:04:39.930 --> 00:04:43.110
+Now, in the upper right,
+select the Scripting tab.
+
+00:04:43.110 --> 00:04:44.490
+Click where it says New.
+
+00:04:44.490 --> 00:04:46.980
+Then in the text area,
+press control + V on a PC
+
+00:04:46.980 --> 00:04:49.230
+or command + V on a
+Mac to paste the script
+
+00:04:49.230 --> 00:04:51.390
+you just copied from ChatGPT.
+
+00:04:51.390 --> 00:04:53.730
+Click the Run button, and
+in the upper left corner,
+
+00:04:53.730 --> 00:04:55.530
+you'll see what the script has created.
+
+00:04:55.530 --> 00:04:56.880
+If you click on the layout tab,
+
+00:04:56.880 --> 00:04:58.860
+it'll get you back to a full view.
+
+00:04:58.860 --> 00:05:00.420
+Now, our ball doesn't look gold
+
+00:05:00.420 --> 00:05:02.640
+but that's just because
+of Blender's default view.
+
+00:05:02.640 --> 00:05:05.670
+If we click this icon for
+Material Preview across the top,
+
+00:05:05.670 --> 00:05:07.140
+now we see the color.
+
+00:05:07.140 --> 00:05:10.530
+All right, we just created a
+3D model in Blender using AI.
+
+00:05:10.530 --> 00:05:12.420
+Of course, this is a super simple example
+
+00:05:12.420 --> 00:05:14.550
+and I'll admit probably
+a little underwhelming,
+
+00:05:14.550 --> 00:05:17.010
+but there's actually a lot to unpack here.
+
+00:05:17.010 --> 00:05:19.110
+First, now that you know the basic method,
+
+00:05:19.110 --> 00:05:21.600
+you can go back and forth
+between ChatGPT and Blender
+
+00:05:21.600 --> 00:05:22.860
+to experiment with creating
+
+00:05:22.860 --> 00:05:25.200
+more and more complex
+and interesting things.
+
+00:05:25.200 --> 00:05:26.580
+But a word of warning.
+
+00:05:26.580 --> 00:05:29.100
+Oftentimes the things you ask
+ChatGPT to build in Blender
+
+00:05:29.100 --> 00:05:30.180
+simply won't work,
+(text buzzes)
+
+00:05:30.180 --> 00:05:31.260
+and you can waste
+
+00:05:31.260 --> 00:05:32.093
+countless hours
+(emoji groans)
+
+00:05:32.093 --> 00:05:34.290
+struggling to get the
+results you're after.
+
+00:05:34.290 --> 00:05:35.310
+Why?
+
+00:05:35.310 --> 00:05:36.450
+Well, one of the main reasons
+
+00:05:36.450 --> 00:05:38.040
+is that ChatGPT's learning model
+
+00:05:38.040 --> 00:05:40.170
+is only trained through 2021,
+
+00:05:40.170 --> 00:05:43.350
+so changes to Blender since
+then may cause ChatGPT's script
+
+00:05:43.350 --> 00:05:45.270
+to reference something outdated.
+
+00:05:45.270 --> 00:05:47.490
+Another key factor is, just like a human
+
+00:05:47.490 --> 00:05:48.323
+writing code,
+(upbeat music)
+
+00:05:48.323 --> 00:05:49.890
+the more complex the
+problem, the more code
+
+00:05:49.890 --> 00:05:51.540
+ChatGPT has to write,
+(keyboard clicks)
+
+00:05:51.540 --> 00:05:52.890
+which means there are more chances
+
+00:05:52.890 --> 00:05:55.710
+for it to make a mistake that
+causes the script to fail.
+
+00:05:55.710 --> 00:05:56.910
+Now, one thing to know
+
+00:05:56.910 --> 00:05:58.950
+is that you can sometimes
+work with ChatGPT
+
+00:05:58.950 --> 00:06:00.600
+to overcome these issues.
+
+00:06:00.600 --> 00:06:02.280
+For instance, if a script fails,
+
+00:06:02.280 --> 00:06:04.350
+try copying the error
+message and pasting it
+
+00:06:04.350 --> 00:06:06.390
+into your reply to ChatGPT.
+
+00:06:06.390 --> 00:06:07.899
+It will try and fix the code.
+
+00:06:07.899 --> 00:06:10.620
+Again, just know that for
+more complicated requests,
+
+00:06:10.620 --> 00:06:12.510
+even the fixes often fail.
+
+00:06:12.510 --> 00:06:15.690
+But actually, the best
+way you can help ChatGPT
+
+00:06:15.690 --> 00:06:17.580
+is to learn some of the
+fundamentals of Blender
+
+00:06:17.580 --> 00:06:20.970
+before you try to use
+ChatGPT and Blender together.
+
+00:06:20.970 --> 00:06:23.400
+Being familiar with the names
+of the tools and features
+
+00:06:23.400 --> 00:06:25.260
+as well as the fundamentals
+of how modeling
+
+00:06:25.260 --> 00:06:26.940
+and the basic tools work in Blender
+
+00:06:26.940 --> 00:06:31.020
+makes creating effective
+prompts for ChatGPT much easier.
+
+00:06:31.020 --> 00:06:32.550
+Take our gold ball, for example.
+
+00:06:32.550 --> 00:06:34.380
+It looks pretty faceted and plain,
+
+00:06:34.380 --> 00:06:36.990
+but knowing your tool settings
+and terminology in Blender
+
+00:06:36.990 --> 00:06:39.060
+allows you to prompt ChatGPT in a way
+
+00:06:39.060 --> 00:06:41.700
+that can get you closer to
+the end result you're after.
+
+00:06:41.700 --> 00:06:43.230
+If you're completely new to Blender,
+
+00:06:43.230 --> 00:06:44.760
+I definitely recommend checking out
+
+00:06:44.760 --> 00:06:46.140
+our "Getting Started with Blender" video
+
+00:06:46.140 --> 00:06:48.120
+before experimenting
+with your own prompts,
+
+00:06:48.120 --> 00:06:50.100
+as it covers many of the
+basic features and tools
+
+00:06:50.100 --> 00:06:51.570
+you'll wanna be familiar with.
+(frame whooshes)
+
+00:06:51.570 --> 00:06:53.760
+I've added a link in the description.
+
+00:06:53.760 --> 00:06:56.453
+Okay, but what about
+having ChatGPT create me
+
+00:06:56.453 --> 00:06:57.286
+(melodic music)
+that three bedroom
+
+00:06:57.286 --> 00:06:58.119
+house on the beach,
+
+00:06:58.119 --> 00:06:59.910
+or that walking robot?
+(melodic music)
+
+00:06:59.910 --> 00:07:03.960
+Unfortunately, in practical
+terms, it's not quite there,
+
+00:07:03.960 --> 00:07:05.490
+yet.
+
+00:07:05.490 --> 00:07:08.130
+But let's talk about
+these more complex tasks,
+
+00:07:08.130 --> 00:07:10.260
+ChatGPT Plus, and where this is all going
+
+00:07:10.260 --> 00:07:12.030
+because it's pretty interesting.
+
+00:07:12.030 --> 00:07:14.670
+Remember when I mentioned
+that paid version of ChatGPT
+
+00:07:14.670 --> 00:07:17.700
+with a more advanced
+version of their AI, GPT-4?
+
+00:07:17.700 --> 00:07:19.290
+Well, it turns out that this new version
+
+00:07:19.290 --> 00:07:20.700
+does a remarkably better job
+
+00:07:20.700 --> 00:07:22.380
+at creating working scripts for Blender
+
+00:07:22.380 --> 00:07:24.180
+when it comes to more complex prompts.
+
+00:07:24.180 --> 00:07:25.110
+And while it's still
+
+00:07:25.110 --> 00:07:26.880
+not a magic wand that, voila,
+(bells chime)
+
+00:07:26.880 --> 00:07:28.680
+creates super polished outputs,
+
+00:07:28.680 --> 00:07:30.690
+let's talk about what
+it does do effectively
+
+00:07:30.690 --> 00:07:32.400
+and what that means for you.
+
+00:07:32.400 --> 00:07:34.470
+First, while I was unable
+to get a working script
+
+00:07:34.470 --> 00:07:38.100
+out of the free version
+of ChatGPT on GPT-3.5
+
+00:07:38.100 --> 00:07:40.740
+for either a house on the
+beach or a walking robot,
+
+00:07:40.740 --> 00:07:43.290
+using ChatGPT Plus with version 4
+
+00:07:43.290 --> 00:07:45.870
+produced a script that did
+work in Blender for both.
+
+00:07:45.870 --> 00:07:47.160
+Unfortunately,
+
+00:07:47.160 --> 00:07:48.150
+this is what it created
+(melodic music)
+
+00:07:48.150 --> 00:07:49.860
+for my house on the beach,
+
+00:07:49.860 --> 00:07:51.210
+and this is what it created
+(melodic music)
+
+00:07:51.210 --> 00:07:53.040
+for a simple robot walking.
+
+00:07:53.040 --> 00:07:55.380
+Not exactly what I was after.
+
+00:07:55.380 --> 00:07:56.213
+But that being said,
+
+00:07:56.213 --> 00:07:58.590
+there's some pretty interesting
+stuff going on here.
+
+00:07:58.590 --> 00:08:00.750
+First, you can see in the ChatGPT response
+
+00:08:00.750 --> 00:08:01.980
+that the logic is there in terms
+
+00:08:01.980 --> 00:08:04.440
+of how it sets out to
+accomplish this task.
+
+00:08:04.440 --> 00:08:07.320
+Where it fails is in
+scripting the execution.
+
+00:08:07.320 --> 00:08:08.430
+Then again, I'm asking it to do
+
+00:08:08.430 --> 00:08:10.440
+something really complex here.
+
+00:08:10.440 --> 00:08:12.630
+Similarly but slightly less complex,
+
+00:08:12.630 --> 00:08:15.960
+I also ask GPT-4 to write
+a Blender 3.4 script
+
+00:08:15.960 --> 00:08:19.080
+that animates nine planets
+orbiting around a sun,
+
+00:08:19.080 --> 00:08:22.140
+write a Blender script that
+animates the game Pong,
+
+00:08:22.140 --> 00:08:23.730
+and write a script to create
+
+00:08:23.730 --> 00:08:25.710
+a 3D model of a car in Blender.
+
+00:08:25.710 --> 00:08:27.630
+While the results are pretty rudimentary,
+
+00:08:27.630 --> 00:08:29.970
+they're also pretty amazing
+when you think about the fact
+
+00:08:29.970 --> 00:08:31.410
+that all I did was ask an AI
+
+00:08:31.410 --> 00:08:33.990
+to create these things
+for me in one sentence
+
+00:08:33.990 --> 00:08:35.460
+and potentially really helpful
+
+00:08:35.460 --> 00:08:37.320
+when I think about how much
+longer it would've taken
+
+00:08:37.320 --> 00:08:39.390
+a seasoned Blender user to manually create
+
+00:08:39.390 --> 00:08:41.730
+similar examples using Blender alone.
+
+00:08:41.730 --> 00:08:44.430
+And again, these are
+tasks that simply failed
+
+00:08:44.430 --> 00:08:47.700
+when asking ChatGPT-3.5 the same things.
+
+00:08:47.700 --> 00:08:50.517
+That's why I think some of
+the crazy hype around AI
+
+00:08:50.517 --> 00:08:53.550
+and 3D modeling is actually kind of valid.
+
+00:08:53.550 --> 00:08:55.380
+While in its current form
+some of these results
+
+00:08:55.380 --> 00:08:56.940
+may feel a little underwhelming,
+
+00:08:56.940 --> 00:08:59.550
+keep in mind that this type
+of AI is still super new
+
+00:08:59.550 --> 00:09:00.960
+and the idea of using it together
+
+00:09:00.960 --> 00:09:02.640
+with 3D modeling is even newer.
+
+00:09:02.640 --> 00:09:05.610
+And not only is the AI
+itself constantly improving,
+
+00:09:05.610 --> 00:09:07.110
+but as more people start to use
+
+00:09:07.110 --> 00:09:09.930
+this type of scripting approach
+to combine AI and Blender,
+
+00:09:09.930 --> 00:09:11.520
+the more Blender developers will continue
+
+00:09:11.520 --> 00:09:12.690
+to streamline and improve
+(melodic music)
+
+00:09:12.690 --> 00:09:14.760
+the way in which the
+two interface together.
+
+00:09:14.760 --> 00:09:17.760
+And who knows, maybe it's
+not so far off that ChatGPT
+
+00:09:17.760 --> 00:09:20.212
+will be designing you that
+three-bedroom house on the beach.
+
+00:09:20.212 --> 00:09:22.962
+(tropical music)
+
+00:09:23.820 --> 00:09:25.470
+All right, so now that you know the basics
+
+00:09:25.470 --> 00:09:28.740
+of how to use ChatGPT and
+Blender together, what's next?
+
+00:09:28.740 --> 00:09:30.180
+Try out your own prompts and ideas
+
+00:09:30.180 --> 00:09:31.020
+and leave a comment below
+
+00:09:31.020 --> 00:09:32.970
+about the things you create and discover.
+
+00:09:32.970 --> 00:09:35.040
+Then, check out one of the
+videos in this playlist,
+
+00:09:35.040 --> 00:09:36.690
+where we cover everything
+from the fundamentals
+
+00:09:36.690 --> 00:09:38.670
+you need to know to use
+Blender the right way,
+
+00:09:38.670 --> 00:09:40.680
+to tips on how to avoid
+the frustrating mistakes
+
+00:09:40.680 --> 00:09:41.850
+that often trip people up
+
+00:09:41.850 --> 00:09:43.440
+or cause them to waste a ton of time
+
+00:09:43.440 --> 00:09:45.090
+when setting out to learn Blender.
+
+00:09:45.090 --> 00:09:46.650
+Got Blender questions
+you want us to answer
+
+00:09:46.650 --> 00:09:47.910
+in a future "Office Hours"?
+
+00:09:47.910 --> 00:09:49.650
+Let us know in the comments below.
+
+00:09:49.650 --> 00:09:51.210
+Don't forget to like and subscribe,
+
+00:09:51.210 --> 00:09:53.163
+and until next time, happy Blending.
+

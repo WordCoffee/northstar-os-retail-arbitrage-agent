@@ -1,0 +1,1553 @@
+{
+ "id": "VnBMQHdQZaA",
+ "title": "Easily Create Realistic Mockups & Templates! - Photoshop Tutorial",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=VnBMQHdQZaA",
+ "query": "smart object mockup photoshop",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.995,
+ "duration_s": 937.6,
+ "chars": 15113,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.18,
+   "text": "Hi there, this is Unmai from PicsInperfect and today I'm going to share with you how to create a natural and realistic"
+  },
+  {
+   "start": 4.18,
+   "end": 9.9,
+   "text": "canvas mock-up with Photoshop. All you have to do is to just drag and drop your photo and the template will take care of the rest."
+  },
+  {
+   "start": 9.9,
+   "end": 15.18,
+   "text": "It will automatically blend the photo according to the canvas. Also, we're going to make the template absolutely customizable."
+  },
+  {
+   "start": 15.18,
+   "end": 17.26,
+   "text": "So without any further ado, let's get started."
+  },
+  {
+   "start": 17.26,
+   "end": 25.93,
+   "text": "Back in the magical world, the Photoshop. If you want to go ahead and download this photo and follow along,"
+  },
+  {
+   "start": 25.93,
+   "end": 28.57,
+   "text": "you already know what to do. Check the links in the description."
+  },
+  {
+   "start": 28.57,
+   "end": 31.89,
+   "text": "Now, the first thing we need to do here is to create a placeholder."
+  },
+  {
+   "start": 31.93,
+   "end": 34.99,
+   "text": "A placeholder is a place which holds the image."
+  },
+  {
+   "start": 34.99,
+   "end": 39.09,
+   "text": "Or in other words, it's a place where you're going to drag and drop your new photos."
+  },
+  {
+   "start": 39.09,
+   "end": 43.09,
+   "text": "So let's go ahead and create a brand new layer by clicking on the New Layer icon right there."
+  },
+  {
+   "start": 43.09,
+   "end": 44.85,
+   "text": "And let's name this Placeholder."
+  },
+  {
+   "start": 45.61,
+   "end": 49.81,
+   "text": "There you are. The next step is to actually create a placeholder just above the canvas."
+  },
+  {
+   "start": 49.81,
+   "end": 52.61,
+   "text": "And for that, we're going to use the rectangular Maki 2."
+  },
+  {
+   "start": 52.61,
+   "end": 54.97,
+   "text": "Now, keep in mind, I want you to have a close look."
+  },
+  {
+   "start": 54.97,
+   "end": 57.53,
+   "text": "This is not an absolute rectangle, right?"
+  },
+  {
+   "start": 57.53,
+   "end": 61.53,
+   "text": "There are bumps here and there, right? It's not an absolute rectangle."
+  },
+  {
+   "start": 61.65,
+   "end": 68.21,
+   "text": "However, for smart objects to work properly for replacing images, it has to be rectangle."
+  },
+  {
+   "start": 68.21,
+   "end": 69.49,
+   "text": "What do we do now?"
+  },
+  {
+   "start": 70.13,
+   "end": 75.49,
+   "text": "First, let's create a rectangle just leaving a little space outside of it."
+  },
+  {
+   "start": 75.49,
+   "end": 81.81,
+   "text": "So we're going to start from right here and just make sure we are leaving some space."
+  },
+  {
+   "start": 82.61,
+   "end": 84.29,
+   "text": "There you go. Alright?"
+  },
+  {
+   "start": 84.29,
+   "end": 89.01,
+   "text": "Make sure the rectangle we created is outside the bounds of the canvas."
+  },
+  {
+   "start": 89.49,
+   "end": 91.81,
+   "text": "A little bit space is left."
+  },
+  {
+   "start": 91.81,
+   "end": 97.45,
+   "text": "Once we have done that, we need to fill it with a color that can represent a wide variety of images."
+  },
+  {
+   "start": 97.45,
+   "end": 102.49,
+   "text": "Guess what that color is? 50% gray because it's in the middle of everything, right?"
+  },
+  {
+   "start": 102.49,
+   "end": 105.85,
+   "text": "So let's make sure that the foreground color is 50% gray."
+  },
+  {
+   "start": 105.85,
+   "end": 108.93,
+   "text": "Double-click on the foreground color box right there."
+  },
+  {
+   "start": 108.93,
+   "end": 115.81,
+   "text": "And let's choose 808080 or RGNB all at 128."
+  },
+  {
+   "start": 115.81,
+   "end": 116.65,
+   "text": "Hit OK."
+  },
+  {
+   "start": 116.65,
+   "end": 123.09,
+   "text": "Now that the foreground color is gray, just press Alt, Backspace on Windows or Option Delete on a Mac."
+  },
+  {
+   "start": 123.09,
+   "end": 126.33,
+   "text": "Then press Ctrl or Command D to deselect."
+  },
+  {
+   "start": 126.33,
+   "end": 131.53,
+   "text": "However, do keep in mind that when we created this rectangle, we left a little space."
+  },
+  {
+   "start": 131.53,
+   "end": 133.57,
+   "text": "There is a gap, right?"
+  },
+  {
+   "start": 133.57,
+   "end": 138.25,
+   "text": "Now we need to make sure that the placeholder is only applied to that canvas."
+  },
+  {
+   "start": 138.25,
+   "end": 140.37,
+   "text": "And for that, we need to create a mask."
+  },
+  {
+   "start": 140.37,
+   "end": 143.89,
+   "text": "But before we create any mask or do anything with this layer,"
+  },
+  {
+   "start": 143.93,
+   "end": 147.01,
+   "text": "let's change this into a smart object."
+  },
+  {
+   "start": 147.01,
+   "end": 152.21,
+   "text": "So with the placeholder layer selected, let's go to Filter and then Convert for Smart Filters, hit OK."
+  },
+  {
+   "start": 152.21,
+   "end": 155.73,
+   "text": "So that it becomes easy for us to replace it."
+  },
+  {
+   "start": 155.73,
+   "end": 161.89,
+   "text": "Now, let's turn it off for a moment and you can take all the time in the world to create a proper selection of this."
+  },
+  {
+   "start": 161.89,
+   "end": 166.13,
+   "text": "You can use the Quick Selection Tool, the Pen Tool, whatever is your favorite."
+  },
+  {
+   "start": 166.13,
+   "end": 170.09,
+   "text": "So to save time, I went ahead, I used the Pen Tool to make a selection of it."
+  },
+  {
+   "start": 170.09,
+   "end": 171.69,
+   "text": "I'm just going to load the selection."
+  },
+  {
+   "start": 171.69,
+   "end": 173.21,
+   "text": "This is not a selection class."
+  },
+  {
+   "start": 173.25,
+   "end": 176.53,
+   "text": "So I'm just going to go to Select and then Load Selection."
+  },
+  {
+   "start": 176.53,
+   "end": 180.25,
+   "text": "And I had created this selection, Canvas Selection right there."
+  },
+  {
+   "start": 180.25,
+   "end": 181.49,
+   "text": "And there you go."
+  },
+  {
+   "start": 181.49,
+   "end": 185.85,
+   "text": "So in this, I used the Pen Tool to create a selection of this canvas."
+  },
+  {
+   "start": 185.85,
+   "end": 187.45,
+   "text": "You can use any tool that you like."
+  },
+  {
+   "start": 187.45,
+   "end": 192.45,
+   "text": "All you have to keep in mind is to make a selection as accurate as possible."
+  },
+  {
+   "start": 192.45,
+   "end": 193.49,
+   "text": "Have a look."
+  },
+  {
+   "start": 193.49,
+   "end": 200.53,
+   "text": "Once you have the selection ready, let's turn on the placeholder and then click on the Mask button right there."
+  },
+  {
+   "start": 200.57,
+   "end": 201.33,
+   "text": "All right."
+  },
+  {
+   "start": 201.33,
+   "end": 205.69,
+   "text": "Now, it's exactly falling on the canvas."
+  },
+  {
+   "start": 205.69,
+   "end": 207.21,
+   "text": "Isn't that amazing?"
+  },
+  {
+   "start": 207.21,
+   "end": 208.73,
+   "text": "Now, the canvas is white, right?"
+  },
+  {
+   "start": 208.73,
+   "end": 209.37,
+   "text": "Let's turn it off."
+  },
+  {
+   "start": 209.37,
+   "end": 210.21,
+   "text": "Let's have a look."
+  },
+  {
+   "start": 210.21,
+   "end": 211.93,
+   "text": "The canvas is white."
+  },
+  {
+   "start": 211.93,
+   "end": 216.09,
+   "text": "Whatever we paint on it is going to make it what?"
+  },
+  {
+   "start": 216.09,
+   "end": 218.13,
+   "text": "Darker, right?"
+  },
+  {
+   "start": 218.13,
+   "end": 221.41,
+   "text": "And what is the Blend Mode which makes things darker?"
+  },
+  {
+   "start": 221.41,
+   "end": 223.61,
+   "text": "Anything in the Darken Blend Mode group."
+  },
+  {
+   "start": 223.61,
+   "end": 226.01,
+   "text": "However, in this case, we're going to use Multiply."
+  },
+  {
+   "start": 226.01,
+   "end": 229.57,
+   "text": "Let's turn it on and have a look."
+  },
+  {
+   "start": 229.61,
+   "end": 231.61,
+   "text": "We're going to choose Multiply."
+  },
+  {
+   "start": 231.61,
+   "end": 232.45,
+   "text": "It looks right."
+  },
+  {
+   "start": 232.45,
+   "end": 234.45,
+   "text": "At this moment, actually, we can stop."
+  },
+  {
+   "start": 234.45,
+   "end": 239.93,
+   "text": "However, we still need some lights and shadow control over it."
+  },
+  {
+   "start": 239.93,
+   "end": 245.09,
+   "text": "Because as is, if you place your image right here, it's going to look fake."
+  },
+  {
+   "start": 245.09,
+   "end": 250.29,
+   "text": "So to create lights and shadows, we're going to make two copies of the original image right there."
+  },
+  {
+   "start": 250.29,
+   "end": 254.97,
+   "text": "So select the background layer and then press Ctrl or Command J twice."
+  },
+  {
+   "start": 254.97,
+   "end": 256.73,
+   "text": "We have two copies."
+  },
+  {
+   "start": 256.77,
+   "end": 259.65,
+   "text": "One, we're going to name it Light."
+  },
+  {
+   "start": 259.65,
+   "end": 263.01,
+   "text": "And the other, we're going to name this Shadow."
+  },
+  {
+   "start": 263.01,
+   "end": 263.89,
+   "text": "Alright?"
+  },
+  {
+   "start": 263.89,
+   "end": 267.25,
+   "text": "Now, we're going to place it on top of the placeholder."
+  },
+  {
+   "start": 267.25,
+   "end": 270.09,
+   "text": "So Shadow and then Light."
+  },
+  {
+   "start": 270.09,
+   "end": 272.49,
+   "text": "First, let's work with Shadow."
+  },
+  {
+   "start": 272.49,
+   "end": 274.21,
+   "text": "I have turned off the light momentarily."
+  },
+  {
+   "start": 274.21,
+   "end": 276.97,
+   "text": "Now, this is only creating lights and shadows."
+  },
+  {
+   "start": 276.97,
+   "end": 280.53,
+   "text": "We don't want involvement of any color in this case."
+  },
+  {
+   "start": 280.53,
+   "end": 283.53,
+   "text": "So let's take away the colors by desaturating it."
+  },
+  {
+   "start": 283.57,
+   "end": 288.81,
+   "text": "To desaturate it, press Ctrl, Shift, U or Command, Shift, U."
+  },
+  {
+   "start": 288.81,
+   "end": 295.41,
+   "text": "Once it's desaturated, what blend mode do you think darkens or creates shadows?"
+  },
+  {
+   "start": 295.41,
+   "end": 296.65,
+   "text": "We just used it."
+  },
+  {
+   "start": 296.65,
+   "end": 297.89,
+   "text": "Multiply, right?"
+  },
+  {
+   "start": 297.89,
+   "end": 301.61,
+   "text": "So change the blend mode from Normal to Multiply."
+  },
+  {
+   "start": 301.61,
+   "end": 302.61,
+   "text": "This is perfect."
+  },
+  {
+   "start": 302.61,
+   "end": 304.45,
+   "text": "We need to make the shadows even darker."
+  },
+  {
+   "start": 304.45,
+   "end": 305.13,
+   "text": "You know why?"
+  },
+  {
+   "start": 305.13,
+   "end": 309.21,
+   "text": "So that we can control that later according to the image that we have."
+  },
+  {
+   "start": 309.21,
+   "end": 314.09,
+   "text": "Because different images will require different amounts of shadows and lights."
+  },
+  {
+   "start": 314.09,
+   "end": 319.29,
+   "text": "So, let's go ahead and create a Curves Adjustment layer by clicking on the Adjustment layer icon"
+  },
+  {
+   "start": 319.29,
+   "end": 320.85,
+   "text": "and then choose Curves."
+  },
+  {
+   "start": 320.85,
+   "end": 324.85,
+   "text": "And we're going to take it down just a little bit, right?"
+  },
+  {
+   "start": 324.85,
+   "end": 328.01,
+   "text": "At this point, this is affecting all of the image."
+  },
+  {
+   "start": 328.01,
+   "end": 328.89,
+   "text": "We don't want that."
+  },
+  {
+   "start": 328.89,
+   "end": 331.37,
+   "text": "We want the curves to affect only the shadow."
+  },
+  {
+   "start": 331.37,
+   "end": 335.21,
+   "text": "So hold the Alt key or the Option key and click on the line between these two layers."
+  },
+  {
+   "start": 335.21,
+   "end": 339.17,
+   "text": "Now, the Curves is limited just to the shadow layer."
+  },
+  {
+   "start": 339.21,
+   "end": 341.61,
+   "text": "Alternatively, let me redo that."
+  },
+  {
+   "start": 341.61,
+   "end": 345.37,
+   "text": "You can open the Curves properties by double clicking on the symbol right there and then"
+  },
+  {
+   "start": 345.37,
+   "end": 346.65,
+   "text": "click on this button."
+  },
+  {
+   "start": 346.65,
+   "end": 348.93,
+   "text": "It also creates a Clipping Mask."
+  },
+  {
+   "start": 348.93,
+   "end": 350.85,
+   "text": "However, still there is something wrong, right?"
+  },
+  {
+   "start": 350.85,
+   "end": 356.69,
+   "text": "The shadow layer that we created is being applied over the entire image and not just the canvas."
+  },
+  {
+   "start": 356.69,
+   "end": 359.93,
+   "text": "So, we need to make sure that it's only affecting the canvas."
+  },
+  {
+   "start": 359.93,
+   "end": 362.29,
+   "text": "And how can we make sure that happens?"
+  },
+  {
+   "start": 362.29,
+   "end": 364.65,
+   "text": "Just simply copy the mask."
+  },
+  {
+   "start": 364.69,
+   "end": 369.57,
+   "text": "So, hold the Alt key or the Option key, click and drag the mask on the shadow layer."
+  },
+  {
+   "start": 369.57,
+   "end": 370.57,
+   "text": "Alright?"
+  },
+  {
+   "start": 370.57,
+   "end": 372.97,
+   "text": "Now, let's go ahead and turn on the light."
+  },
+  {
+   "start": 372.97,
+   "end": 374.81,
+   "text": "Also, we are dealing with light."
+  },
+  {
+   "start": 374.81,
+   "end": 377.49,
+   "text": "We don't want any color to be involved, right?"
+  },
+  {
+   "start": 377.49,
+   "end": 382.57,
+   "text": "So, desaturated by pressing Ctrl Shift U, Command Shift U."
+  },
+  {
+   "start": 382.57,
+   "end": 383.57,
+   "text": "It's desaturated."
+  },
+  {
+   "start": 383.57,
+   "end": 386.49,
+   "text": "Now, what is the Blend Mode which brightens stuff?"
+  },
+  {
+   "start": 386.49,
+   "end": 387.61,
+   "text": "Screen, right?"
+  },
+  {
+   "start": 387.61,
+   "end": 390.25,
+   "text": "Or any Blend Mode in the Lighting Group."
+  },
+  {
+   "start": 390.25,
+   "end": 394.25,
+   "text": "So, let's go ahead and change the Blend Mode from Normal to Screen."
+  },
+  {
+   "start": 394.33,
+   "end": 396.61,
+   "text": "But you know, it's very, very light."
+  },
+  {
+   "start": 396.61,
+   "end": 397.61,
+   "text": "It's very bright."
+  },
+  {
+   "start": 397.61,
+   "end": 399.45,
+   "text": "So, how do we control that?"
+  },
+  {
+   "start": 399.45,
+   "end": 400.85,
+   "text": "Again, Curves, right?"
+  },
+  {
+   "start": 400.85,
+   "end": 403.69,
+   "text": "The problem here is it's also brightening the shadows."
+  },
+  {
+   "start": 403.69,
+   "end": 404.69,
+   "text": "We don't want that."
+  },
+  {
+   "start": 404.69,
+   "end": 408.21,
+   "text": "We want to keep the highlights in the highlight areas but we don't want to brighten the"
+  },
+  {
+   "start": 408.21,
+   "end": 409.21,
+   "text": "shadows, right?"
+  },
+  {
+   "start": 409.21,
+   "end": 413.01,
+   "text": "So, click on the Adjustment Layer icon and then choose Curves."
+  },
+  {
+   "start": 413.01,
+   "end": 417.05,
+   "text": "Now, we just want to limit the curves to the light layer."
+  },
+  {
+   "start": 417.05,
+   "end": 420.17,
+   "text": "So, click on this button, Create Clipping Mask button."
+  },
+  {
+   "start": 420.37,
+   "end": 423.13,
+   "text": "Now, we will create a point on the right-hand side."
+  },
+  {
+   "start": 423.13,
+   "end": 427.65,
+   "text": "It will maintain the light and on the left-hand side we're gonna create a point and then just"
+  },
+  {
+   "start": 427.65,
+   "end": 430.13,
+   "text": "bring it down, just like that."
+  },
+  {
+   "start": 430.13,
+   "end": 434.57,
+   "text": "That will make sure that only the brights are enhanced."
+  },
+  {
+   "start": 434.57,
+   "end": 435.89,
+   "text": "There we go."
+  },
+  {
+   "start": 435.89,
+   "end": 437.05,
+   "text": "That kind of looks good."
+  },
+  {
+   "start": 437.05,
+   "end": 442.05,
+   "text": "You can make little adjustments here and there and there we are."
+  },
+  {
+   "start": 442.05,
+   "end": 445.29,
+   "text": "Now, it again also affects the entire image."
+  },
+  {
+   "start": 445.29,
+   "end": 446.29,
+   "text": "We don't want that."
+  },
+  {
+   "start": 446.29,
+   "end": 448.49,
+   "text": "We just wanted to affect the canvas."
+  },
+  {
+   "start": 448.49,
+   "end": 449.49,
+   "text": "So, what do we do?"
+  },
+  {
+   "start": 449.53,
+   "end": 452.73,
+   "text": "We can either copy the same mask there or you know what we can do?"
+  },
+  {
+   "start": 452.73,
+   "end": 455.61,
+   "text": "We can make an entire group of the lights and shadows."
+  },
+  {
+   "start": 455.61,
+   "end": 460.37,
+   "text": "So, select the shadow layer, hold the Shift key, select the topmost layer and then press"
+  },
+  {
+   "start": 460.37,
+   "end": 463.13,
+   "text": "Ctrl or Command G, right?"
+  },
+  {
+   "start": 463.13,
+   "end": 467.33,
+   "text": "And then you can actually move this mask on the shadow layer to the entire group."
+  },
+  {
+   "start": 467.33,
+   "end": 469.61,
+   "text": "So, you won't have to create multiple masks."
+  },
+  {
+   "start": 469.61,
+   "end": 472.25,
+   "text": "So, let's move it to the group."
+  },
+  {
+   "start": 472.25,
+   "end": 473.25,
+   "text": "There you have it."
+  },
+  {
+   "start": 473.25,
+   "end": 474.85,
+   "text": "Here's before, here's after."
+  },
+  {
+   "start": 474.85,
+   "end": 477.01,
+   "text": "Now, that's what I'm talking about."
+  },
+  {
+   "start": 477.01,
+   "end": 479.37,
+   "text": "Even in this case, I think the light is kind of too much."
+  },
+  {
+   "start": 479.41,
+   "end": 486.05,
+   "text": "So, let's decrease the opacity of the light to 40% and also let's decrease the opacity of"
+  },
+  {
+   "start": 486.05,
+   "end": 489.53,
+   "text": "the shadow to 40% as well."
+  },
+  {
+   "start": 489.53,
+   "end": 491.29,
+   "text": "This looks perfect."
+  },
+  {
+   "start": 491.29,
+   "end": 496.53,
+   "text": "Let's just minimize the group and we can name the group Lights and Shadows."
+  },
+  {
+   "start": 496.53,
+   "end": 497.53,
+   "text": "There we are."
+  },
+  {
+   "start": 497.53,
+   "end": 499.73,
+   "text": "So, without the group, it's too flat."
+  },
+  {
+   "start": 499.73,
+   "end": 500.89,
+   "text": "It doesn't look right."
+  },
+  {
+   "start": 500.89,
+   "end": 502.61,
+   "text": "But with it, it looks excellent."
+  },
+  {
+   "start": 502.61,
+   "end": 506.93,
+   "text": "Now, I'm going to share with you how to save it as a template because that's"
+  },
+  {
+   "start": 506.93,
+   "end": 508.97,
+   "text": "an essential trick too."
+  },
+  {
+   "start": 509.09,
+   "end": 511.69,
+   "text": "So, let's go to File and then Save As."
+  },
+  {
+   "start": 511.69,
+   "end": 513.85,
+   "text": "I'm going to save it on my computer of course."
+  },
+  {
+   "start": 513.85,
+   "end": 517.29,
+   "text": "And let's name this as Canvas Template."
+  },
+  {
+   "start": 517.29,
+   "end": 519.17,
+   "text": "And this is essential, my friend."
+  },
+  {
+   "start": 519.17,
+   "end": 527.37,
+   "text": "Instead of saving it as .psd, we're going to save it as .psdt where t stands for template."
+  },
+  {
+   "start": 527.37,
+   "end": 530.17,
+   "text": "So, .psdt."
+  },
+  {
+   "start": 530.17,
+   "end": 532.41,
+   "text": "Alright, and hit Save."
+  },
+  {
+   "start": 532.41,
+   "end": 533.29,
+   "text": "Hit OK."
+  },
+  {
+   "start": 533.29,
+   "end": 535.97,
+   "text": "Now, we're going to go ahead and close it."
+  },
+  {
+   "start": 535.97,
+   "end": 537.29,
+   "text": "Now, here's the great part."
+  },
+  {
+   "start": 537.41,
+   "end": 539.97,
+   "text": "Here we are in our Finder or Explorer."
+  },
+  {
+   "start": 539.97,
+   "end": 544.21,
+   "text": "And if we open the .psdt file, have a look what it does."
+  },
+  {
+   "start": 544.21,
+   "end": 549.33,
+   "text": "It's going to create a brand new Photoshop document, Untitled 1."
+  },
+  {
+   "start": 549.33,
+   "end": 553.13,
+   "text": "And it does not disturb the template file."
+  },
+  {
+   "start": 553.13,
+   "end": 555.41,
+   "text": "The template file stays intact."
+  },
+  {
+   "start": 555.41,
+   "end": 560.73,
+   "text": "If you had saved it as a .psd, you had opened it, you had brought in an image"
+  },
+  {
+   "start": 560.73,
+   "end": 561.73,
+   "text": "and then saved it."
+  },
+  {
+   "start": 561.73,
+   "end": 565.09,
+   "text": "It would be saved as the same file and the template would be altered."
+  },
+  {
+   "start": 565.09,
+   "end": 566.41,
+   "text": "We don't want that."
+  },
+  {
+   "start": 566.45,
+   "end": 571.37,
+   "text": "Every time you open a .psdt, let's not save it."
+  },
+  {
+   "start": 571.37,
+   "end": 577.05,
+   "text": "Every time you open a .psdt file, it will open a brand new Photoshop document"
+  },
+  {
+   "start": 577.05,
+   "end": 579.57,
+   "text": "with the exact same content."
+  },
+  {
+   "start": 579.57,
+   "end": 582.21,
+   "text": "And then you can save that version of it."
+  },
+  {
+   "start": 582.21,
+   "end": 583.69,
+   "text": "Let me show you how this can be useful."
+  },
+  {
+   "start": 583.69,
+   "end": 585.13,
+   "text": "I'm going to close everything."
+  },
+  {
+   "start": 585.13,
+   "end": 589.13,
+   "text": "Alright, in one of the versions, let's just open this again."
+  },
+  {
+   "start": 589.13,
+   "end": 594.73,
+   "text": "Alright, I want to bring in my face, my beautiful and handsome face"
+  },
+  {
+   "start": 594.73,
+   "end": 597.81,
+   "text": "by double clicking on the placeholder."
+  },
+  {
+   "start": 597.81,
+   "end": 602.69,
+   "text": "And all you have got to do is to go to a Finder or File Explorer, locate the photo."
+  },
+  {
+   "start": 602.69,
+   "end": 604.41,
+   "text": "So this is the photo that I'm going to use."
+  },
+  {
+   "start": 604.41,
+   "end": 609.41,
+   "text": "I'm just going to drag it and drop it inside of it."
+  },
+  {
+   "start": 609.41,
+   "end": 610.41,
+   "text": "And let's adjust it."
+  },
+  {
+   "start": 610.41,
+   "end": 613.45,
+   "text": "By the way, I made this with the help of Prisma app."
+  },
+  {
+   "start": 613.45,
+   "end": 614.45,
+   "text": "Have you ever used that?"
+  },
+  {
+   "start": 614.45,
+   "end": 615.45,
+   "text": "It's pretty cool."
+  },
+  {
+   "start": 615.45,
+   "end": 618.29,
+   "text": "Alright, hit Enter or Return."
+  },
+  {
+   "start": 618.29,
+   "end": 620.93,
+   "text": "I have positioned it, positioned it according to your tastes"
+  },
+  {
+   "start": 620.93,
+   "end": 624.09,
+   "text": "and then press Ctrl or Command S."
+  },
+  {
+   "start": 624.09,
+   "end": 626.13,
+   "text": "Now let's get back to this."
+  },
+  {
+   "start": 626.13,
+   "end": 627.13,
+   "text": "Have a look."
+  },
+  {
+   "start": 627.13,
+   "end": 628.13,
+   "text": "It's updated."
+  },
+  {
+   "start": 628.13,
+   "end": 629.13,
+   "text": "Isn't that amazing?"
+  },
+  {
+   "start": 629.13,
+   "end": 631.93,
+   "text": "Now, on top of that, you can control the shadow and the lighting."
+  },
+  {
+   "start": 631.93,
+   "end": 634.89,
+   "text": "So if you want less lighting, you can just go to the left-hand side."
+  },
+  {
+   "start": 634.89,
+   "end": 639.81,
+   "text": "So I'm going to go with less lighting on this one, probably about 30% lighting."
+  },
+  {
+   "start": 639.81,
+   "end": 641.91,
+   "text": "How much shadow you want on this one?"
+  },
+  {
+   "start": 641.91,
+   "end": 645.09,
+   "text": "So shadow, you can increase or decrease the shadow."
+  },
+  {
+   "start": 645.09,
+   "end": 650.37,
+   "text": "So I think I'm going to go with about 50% on this one."
+  },
+  {
+   "start": 650.37,
+   "end": 651.89,
+   "text": "And it looks great to me."
+  },
+  {
+   "start": 651.89,
+   "end": 655.77,
+   "text": "On top of that, if you want to make some additional adjustments with curves, you can do that as"
+  },
+  {
+   "start": 655.77,
+   "end": 656.77,
+   "text": "well."
+  },
+  {
+   "start": 656.77,
+   "end": 659.45,
+   "text": "So click on the Adjustment Layer icon and then choose Curves."
+  },
+  {
+   "start": 659.45,
+   "end": 664.01,
+   "text": "And probably you want to fade the artwork a little bit by holding the Alt or Option."
+  },
+  {
+   "start": 664.01,
+   "end": 667.57,
+   "text": "Click on the line between these two or click on this button so that it only limits to"
+  },
+  {
+   "start": 667.57,
+   "end": 668.57,
+   "text": "the artwork."
+  },
+  {
+   "start": 668.57,
+   "end": 674.01,
+   "text": "Then you can just fade in the shadows and adjust accordingly."
+  },
+  {
+   "start": 674.01,
+   "end": 675.85,
+   "text": "But all you had to do is drag and drop."
+  },
+  {
+   "start": 675.85,
+   "end": 679.45,
+   "text": "And then if you want, you can just customize it, customize the lights, customize the"
+  },
+  {
+   "start": 679.45,
+   "end": 680.45,
+   "text": "shadows."
+  },
+  {
+   "start": 680.45,
+   "end": 688.57,
+   "text": "In this case, I wanted, you know, a little less light and probably a little more shadows."
+  },
+  {
+   "start": 688.57,
+   "end": 690.61,
+   "text": "Alright, there you have it."
+  },
+  {
+   "start": 690.61,
+   "end": 691.61,
+   "text": "Let's zoom in."
+  },
+  {
+   "start": 691.61,
+   "end": 694.25,
+   "text": "Look, all the textures of the canvas show up."
+  },
+  {
+   "start": 694.25,
+   "end": 696.13,
+   "text": "Everything is looking so realistic and nice."
+  },
+  {
+   "start": 696.13,
+   "end": 699.09,
+   "text": "If you just zoom in and have a look, it's so good, isn't it?"
+  },
+  {
+   "start": 699.09,
+   "end": 700.93,
+   "text": "So this, my friend, is version one."
+  },
+  {
+   "start": 700.93,
+   "end": 703.09,
+   "text": "You didn't have to alter the canvas template."
+  },
+  {
+   "start": 703.09,
+   "end": 707.85,
+   "text": "Now I can just directly go to File and then Save or Save As, even if I choose Save,"
+  },
+  {
+   "start": 707.89,
+   "end": 710.69,
+   "text": "I'm just going to ask you to type in the file name."
+  },
+  {
+   "start": 710.69,
+   "end": 712.93,
+   "text": "So I'm going to type Unmesh one."
+  },
+  {
+   "start": 712.93,
+   "end": 714.57,
+   "text": "Done."
+  },
+  {
+   "start": 714.57,
+   "end": 715.57,
+   "text": "This is Unmesh one."
+  },
+  {
+   "start": 715.57,
+   "end": 717.89,
+   "text": "The canvas template is still not altered."
+  },
+  {
+   "start": 717.89,
+   "end": 719.17,
+   "text": "That's crazy, isn't it?"
+  },
+  {
+   "start": 719.17,
+   "end": 721.65,
+   "text": "Now, let's just close this."
+  },
+  {
+   "start": 721.65,
+   "end": 723.21,
+   "text": "Let's open the canvas template again."
+  },
+  {
+   "start": 723.21,
+   "end": 727.01,
+   "text": "So I'm just going to double click on the canvas template and it again opens another"
+  },
+  {
+   "start": 727.01,
+   "end": 728.45,
+   "text": "brand new document."
+  },
+  {
+   "start": 728.45,
+   "end": 730.61,
+   "text": "And this time, I want a bright version."
+  },
+  {
+   "start": 730.61,
+   "end": 734.01,
+   "text": "In that case, maybe I will need different values of highlights and shadows."
+  },
+  {
+   "start": 734.01,
+   "end": 739.13,
+   "text": "So double click on the placeholder thumbnail and then just open up your file explorer or"
+  },
+  {
+   "start": 739.13,
+   "end": 742.93,
+   "text": "finder and locate the artwork or the photo that you want to attach there."
+  },
+  {
+   "start": 742.93,
+   "end": 745.01,
+   "text": "So this is the second image that I want to attach."
+  },
+  {
+   "start": 745.01,
+   "end": 748.49,
+   "text": "I'm just going to drag it and drop it over right here."
+  },
+  {
+   "start": 748.49,
+   "end": 751.81,
+   "text": "Again, this was also made with the Prisma app."
+  },
+  {
+   "start": 751.81,
+   "end": 752.81,
+   "text": "Pretty cool."
+  },
+  {
+   "start": 752.81,
+   "end": 755.41,
+   "text": "All right, I'm going to keep it like this."
+  },
+  {
+   "start": 755.41,
+   "end": 756.41,
+   "text": "Probably something like this."
+  },
+  {
+   "start": 756.41,
+   "end": 759.13,
+   "text": "We can always adjust this later, but anyway, you get the point."
+  },
+  {
+   "start": 759.13,
+   "end": 762.53,
+   "text": "Hit Enter or Return, Ctrl or Command S."
+  },
+  {
+   "start": 762.53,
+   "end": 764.69,
+   "text": "And then let's go back here and have a look."
+  },
+  {
+   "start": 764.69,
+   "end": 767.41,
+   "text": "In this case, probably I will need some more shadows."
+  },
+  {
+   "start": 767.41,
+   "end": 774.21,
+   "text": "So let's just open that Lights and Shadows group and scroll down and increase the shadows."
+  },
+  {
+   "start": 774.21,
+   "end": 776.37,
+   "text": "There you have it."
+  },
+  {
+   "start": 776.37,
+   "end": 779.37,
+   "text": "And maybe a little less lighting."
+  },
+  {
+   "start": 779.37,
+   "end": 781.41,
+   "text": "Or who knows, a little more."
+  },
+  {
+   "start": 781.41,
+   "end": 784.77,
+   "text": "You can always control it to your taste."
+  },
+  {
+   "start": 784.77,
+   "end": 786.09,
+   "text": "And there you have it."
+  },
+  {
+   "start": 786.09,
+   "end": 791.53,
+   "text": "You could have even left it at 4040 opacity or just go ahead and customize the template"
+  },
+  {
+   "start": 791.53,
+   "end": 793.33,
+   "text": "because it's customizable."
+  },
+  {
+   "start": 793.33,
+   "end": 794.33,
+   "text": "There you have it."
+  },
+  {
+   "start": 794.33,
+   "end": 798.41,
+   "text": "That's how to create a realistic canvas mockup in Photoshop."
+  },
+  {
+   "start": 798.41,
+   "end": 800.69,
+   "text": "Before we finish, just a quick little reminder."
+  },
+  {
+   "start": 800.69,
+   "end": 803.49,
+   "text": "All you have to do is to first create a placeholder."
+  },
+  {
+   "start": 803.49,
+   "end": 806.89,
+   "text": "Every mockup has to have a placeholder."
+  },
+  {
+   "start": 806.89,
+   "end": 809.41,
+   "text": "This is where you're going to drop the image."
+  },
+  {
+   "start": 809.41,
+   "end": 814.65,
+   "text": "So once you create a rectangle, just leaving a little space, don't forget to convert"
+  },
+  {
+   "start": 814.65,
+   "end": 816.37,
+   "text": "it into a smart object."
+  },
+  {
+   "start": 816.37,
+   "end": 819.85,
+   "text": "And after that, you're going to use the exact selection of the canvas and create"
+  },
+  {
+   "start": 819.85,
+   "end": 821.41,
+   "text": "a mask out of it."
+  },
+  {
+   "start": 822.29,
+   "end": 826.81,
+   "text": "Changing the blend mode to multiply will allow you to blend it better because this is a white"
+  },
+  {
+   "start": 826.81,
+   "end": 827.81,
+   "text": "canvas."
+  },
+  {
+   "start": 827.81,
+   "end": 830.21,
+   "text": "Everything we paint on it, it's going to make it dark."
+  },
+  {
+   "start": 830.21,
+   "end": 832.41,
+   "text": "So we changed the blend mode to multiply."
+  },
+  {
+   "start": 832.41,
+   "end": 837.13,
+   "text": "And after that, if it was not enough, because in this case it was looking flat."
+  },
+  {
+   "start": 837.13,
+   "end": 841.89,
+   "text": "So we created, again, some highlights and shadows to go along with it, to add some"
+  },
+  {
+   "start": 841.89,
+   "end": 842.89,
+   "text": "punch to it."
+  },
+  {
+   "start": 842.89,
+   "end": 846.25,
+   "text": "So in this case, we made two copies of the background layer, two copies of the original"
+  },
+  {
+   "start": 846.25,
+   "end": 850.13,
+   "text": "image and then one for the shadows, one for the highlights."
+  },
+  {
+   "start": 850.17,
+   "end": 853.21,
+   "text": "For the shadows, we chose a blend mode which makes things darker."
+  },
+  {
+   "start": 853.21,
+   "end": 854.21,
+   "text": "And what is that?"
+  },
+  {
+   "start": 854.21,
+   "end": 855.21,
+   "text": "Multiply."
+  },
+  {
+   "start": 855.21,
+   "end": 859.09,
+   "text": "And for the highlights, we chose a blend mode which makes things brighter."
+  },
+  {
+   "start": 859.09,
+   "end": 860.89,
+   "text": "And that is screen."
+  },
+  {
+   "start": 860.89,
+   "end": 865.49,
+   "text": "And then you can control it with curves according to your tastes and then just make sure it"
+  },
+  {
+   "start": 865.49,
+   "end": 869.13,
+   "text": "is only applied to that of the canvas."
+  },
+  {
+   "start": 869.13,
+   "end": 876.73,
+   "text": "And once you have created the perfect template, save it as a PSDT where T stands for template."
+  },
+  {
+   "start": 876.73,
+   "end": 879.61,
+   "text": "And every time you open a PSDT file, what happens?"
+  },
+  {
+   "start": 879.61,
+   "end": 886.81,
+   "text": "It creates a brand new document without disturbing the original template file."
+  },
+  {
+   "start": 886.81,
+   "end": 891.05,
+   "text": "And then all you have to do is to double click on the thumbnail of the placeholder and replace"
+  },
+  {
+   "start": 891.05,
+   "end": 896.05,
+   "text": "it with whatever you like and then press Ctrl or Command S and the original document would"
+  },
+  {
+   "start": 896.05,
+   "end": 897.05,
+   "text": "update."
+  },
+  {
+   "start": 897.05,
+   "end": 899.77,
+   "text": "I hope this video made some sense to you."
+  },
+  {
+   "start": 899.77,
+   "end": 902.61,
+   "text": "And if it did, make sure to give us a like and also don't forget to subscribe and not"
+  },
+  {
+   "start": 902.61,
+   "end": 903.61,
+   "text": "just subscribe."
+  },
+  {
+   "start": 903.61,
+   "end": 906.69,
+   "text": "Ring the bell so that you, my friend, don't miss any other future tips, tricks or"
+  },
+  {
+   "start": 906.69,
+   "end": 907.69,
+   "text": "tutorials."
+  },
+  {
+   "start": 907.77,
+   "end": 911.53,
+   "text": "I would like to take this moment to thank all these nice and amazing people for supporting"
+  },
+  {
+   "start": 911.53,
+   "end": 915.81,
+   "text": "this channel on Patreon and helping keep PIXimperfect free for everybody forever."
+  },
+  {
+   "start": 915.81,
+   "end": 916.81,
+   "text": "Thanks so much for all your support."
+  },
+  {
+   "start": 916.81,
+   "end": 917.81,
+   "text": "Thank you for watching."
+  },
+  {
+   "start": 917.81,
+   "end": 918.81,
+   "text": "I'll see you guys in my next one."
+  },
+  {
+   "start": 918.81,
+   "end": 921.09,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:51:38.458169+00:00",
+ "seconds": 46.9
+}

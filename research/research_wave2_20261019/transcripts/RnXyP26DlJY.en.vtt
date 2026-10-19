@@ -1,0 +1,800 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:05.280
+a tackled from the 3D product rendering&nbsp;
+accelerator and in today's video I'll guide&nbsp;&nbsp;
+
+00:00:05.280 --> 00:00:11.040
+you through the process of modeling texturing&nbsp;
+lighting and rendering of this awesome bottle&nbsp;&nbsp;
+
+00:00:11.040 --> 00:00:17.220
+so you can create them yourself I'll also share&nbsp;
+with you some mistakes to avoid and how to solve a&nbsp;&nbsp;
+
+00:00:17.220 --> 00:00:22.680
+few issues when you get stuck without further Ado&nbsp;
+let's get started so as you see here in my blender&nbsp;&nbsp;
+
+00:00:22.680 --> 00:00:28.860
+file I already put the reference there so let's&nbsp;
+just add the cylinder and for now we'll focus&nbsp;&nbsp;
+
+00:00:28.860 --> 00:00:36.660
+on the modeling of this bottle so let's take our&nbsp;
+cylinder and match this with the reference just&nbsp;&nbsp;
+
+00:00:36.660 --> 00:00:44.160
+like that some extrusions simple stuff just like&nbsp;
+that scaling now extrude this all the way to the&nbsp;&nbsp;
+
+00:00:44.160 --> 00:00:51.420
+top where we have this angle going on this nice&nbsp;
+curvature of the bottle just like that extruding&nbsp;&nbsp;
+
+00:00:51.420 --> 00:00:58.680
+extruding scaling nothing complicated and in just&nbsp;
+a moment we'll be adding the subdivision surface&nbsp;&nbsp;
+
+00:00:58.680 --> 00:01:06.960
+to smooth and things out let's extrude this like&nbsp;
+that go to the top and select this Loop Ctrl F&nbsp;&nbsp;
+
+00:01:06.960 --> 00:01:15.060
+and extrude faces along normals so we have this&nbsp;
+thing done now let's extrude couple more just&nbsp;&nbsp;
+
+00:01:15.060 --> 00:01:21.120
+like that perfect let's now add the subdivision&nbsp;
+surface modifier but before that actually we can&nbsp;&nbsp;
+
+00:01:21.120 --> 00:01:27.660
+go and add the some details on the bottom so&nbsp;
+let's insert and insert again and here we will&nbsp;&nbsp;
+
+00:01:27.660 --> 00:01:34.140
+have these let's say 18 years we'll have here and&nbsp;
+here we'll have some dots going on all around so&nbsp;&nbsp;
+
+00:01:34.140 --> 00:01:39.300
+now let's add the subdivision surface and for&nbsp;
+now I won't be adding the Adaptive subdivision&nbsp;&nbsp;
+
+00:01:39.300 --> 00:01:45.060
+I'll do that later on when we will playing with&nbsp;
+the displacement map but to enable the Adaptive&nbsp;&nbsp;
+
+00:01:45.060 --> 00:01:51.060
+subdivision you have to go to render properties&nbsp;
+and switch from supported to experimental so&nbsp;&nbsp;
+
+00:01:51.060 --> 00:01:55.920
+that's how you get this thing going on and&nbsp;
+then in subdivision I recommend changing Max&nbsp;&nbsp;
+
+00:01:55.920 --> 00:02:01.860
+subdivision to something like 8 so you don't have&nbsp;
+any crashes and stuff and dicing camera to camera&nbsp;&nbsp;
+
+00:02:01.860 --> 00:02:08.940
+and then dicing ground dicing rate render to 1&nbsp;
+and viewport to 8 pixels that will be cool so&nbsp;&nbsp;
+
+00:02:08.940 --> 00:02:15.600
+yeah let's go with the model of the bottle let's&nbsp;
+add some Loops so we have these curves going back&nbsp;&nbsp;
+
+00:02:15.600 --> 00:02:23.040
+just like that we can go select all this part&nbsp;
+and scale this a bit so we have this matching the&nbsp;&nbsp;
+
+00:02:23.040 --> 00:02:28.140
+reference because we lost obviously some you know&nbsp;
+details and stuff you can add one here awesome&nbsp;&nbsp;
+
+00:02:28.140 --> 00:02:35.520
+let's hide for now the reference and here we have&nbsp;
+to add some more faces we do this with I to insert&nbsp;&nbsp;
+
+00:02:35.520 --> 00:02:42.540
+awesome some more Loop Cuts going on here we can&nbsp;
+control B to actually let's just add very simple&nbsp;&nbsp;
+
+00:02:42.540 --> 00:02:49.020
+awesome and we can add one more here let's check&nbsp;
+how it looks like yeah looks great to me here it&nbsp;&nbsp;
+
+00:02:49.020 --> 00:02:55.500
+looks correctly you cannot perhaps even one more&nbsp;
+nice um here the angle goes okay here we have to&nbsp;&nbsp;
+
+00:02:55.500 --> 00:03:02.580
+add one two Loops here we have to add Loops here&nbsp;
+we go with the bevel just like that here also so&nbsp;&nbsp;
+
+00:03:02.580 --> 00:03:08.040
+you know we are adding these Loop Cuts in some&nbsp;
+kind of symmetry so we have the Symmetry going&nbsp;&nbsp;
+
+00:03:08.040 --> 00:03:16.980
+on and one here also bevel nice this is already&nbsp;
+coming along pretty cool just like that okay if&nbsp;&nbsp;
+
+00:03:16.980 --> 00:03:24.840
+we shade smooth looks perfect so now let's add&nbsp;
+the inner glass so the glass in inside and the&nbsp;&nbsp;
+
+00:03:24.840 --> 00:03:32.340
+liquid fluid or however you want to call this so&nbsp;
+set origin to center of mass volume and now let's&nbsp;&nbsp;
+
+00:03:32.340 --> 00:03:39.840
+go with solidify modifier we'll put this above as&nbsp;
+we'll be I'm separating these objects later on and&nbsp;&nbsp;
+
+00:03:39.840 --> 00:03:45.720
+when when we put the solidifier on the top when we&nbsp;
+accept the solidify we have the same result in the&nbsp;&nbsp;
+
+00:03:45.720 --> 00:03:51.900
+viewport basically so let's add some thickness&nbsp;
+even thickness that's important and as you see&nbsp;&nbsp;
+
+00:03:51.900 --> 00:03:58.200
+here we have some overlapping at the top but don't&nbsp;
+worry at the top we'll be deleting this anyway&nbsp;&nbsp;
+
+00:03:58.200 --> 00:04:04.440
+let's worry about the bottom because at the bottom&nbsp;
+we won't be deleting this part so yeah we have to&nbsp;&nbsp;
+
+00:04:04.440 --> 00:04:12.420
+you know anyhow solve this this thickness is cool&nbsp;
+so let's apply and then we have to separate select&nbsp;&nbsp;
+
+00:04:12.420 --> 00:04:20.700
+this Loop V to rip then L to select the inner&nbsp;
+part selection rename this inner outer go to&nbsp;&nbsp;
+
+00:04:20.700 --> 00:04:28.440
+separate View and we can delete this part and just&nbsp;
+extrude this to the top so we have this with our&nbsp;&nbsp;
+
+00:04:28.440 --> 00:04:33.900
+bottle like that the only reason I'm doing this&nbsp;
+this way because it will be much cleaner and we&nbsp;&nbsp;
+
+00:04:33.900 --> 00:04:39.900
+can just you know add the different material for&nbsp;
+the inner part without any displacement because we&nbsp;&nbsp;
+
+00:04:39.900 --> 00:04:44.400
+don't want any displacement going on on the inner&nbsp;
+part of the bottle obviously so that's the reason&nbsp;&nbsp;
+
+00:04:44.400 --> 00:04:50.220
+why I keep it like that and let's deal with our&nbsp;
+the mask that was created with the solid device&nbsp;&nbsp;
+
+00:04:50.220 --> 00:04:56.100
+so basically you have to delete this thing and&nbsp;
+we will remodel this stuff so let's see where&nbsp;&nbsp;
+
+00:04:56.100 --> 00:05:04.260
+we have the overlapping going on here's one Loop&nbsp;
+and here and it's just deleted and then select&nbsp;&nbsp;
+
+00:05:04.260 --> 00:05:09.720
+both of these right click Loop tools bridge and&nbsp;
+if you don't have Loop tools on your right click&nbsp;&nbsp;
+
+00:05:09.720 --> 00:05:15.540
+then you have to go to the atoms and enable the&nbsp;
+loop tools that's it and let's see how it looks&nbsp;&nbsp;
+
+00:05:15.540 --> 00:05:21.660
+like with the bottle awesome looks great we can&nbsp;
+just you know scale this thing to the middle&nbsp;&nbsp;
+
+00:05:21.660 --> 00:05:27.060
+and it's perfect so we have the thickness&nbsp;
+going on and now let's add the fluid shift d&nbsp;&nbsp;
+
+00:05:27.780 --> 00:05:33.840
+fluid and now let's delete some faces because&nbsp;
+we don't want to have the fluid going all the&nbsp;&nbsp;
+
+00:05:33.840 --> 00:05:40.560
+way to the top and then select this thing let's&nbsp;
+enable the subdivision and I2 insert so we have&nbsp;&nbsp;
+
+00:05:40.560 --> 00:05:47.520
+the nice shape going on and now we have to&nbsp;
+put this in between the inner and outer so&nbsp;&nbsp;
+
+00:05:47.520 --> 00:05:53.340
+the liquid is rendering correctly I'm doing this&nbsp;
+with alt s let's disable the subdivision for a&nbsp;&nbsp;
+
+00:05:53.340 --> 00:05:59.520
+moment perfect right in the middle let's see how&nbsp;
+it looks like on the bottom great we have to just&nbsp;&nbsp;
+
+00:05:59.520 --> 00:06:05.940
+go and put this lowers also in between and let's&nbsp;
+enable subdivision for everything and check how&nbsp;&nbsp;
+
+00:06:05.940 --> 00:06:12.900
+it looks like perfect so here we have our bottle&nbsp;
+done and we have some weird thing going on at the&nbsp;&nbsp;
+
+00:06:12.900 --> 00:06:18.900
+bottom where you see that this is super sharp&nbsp;
+and why is it sharp well it's actually because&nbsp;&nbsp;
+
+00:06:18.900 --> 00:06:28.020
+of the normals for our fluid we need everything&nbsp;
+to be blue faces so we do this with alt and flip&nbsp;&nbsp;
+
+00:06:28.020 --> 00:06:34.980
+and then shift n to recalculate normals and now&nbsp;
+we have this thing smooth just like it should be&nbsp;&nbsp;
+
+00:06:34.980 --> 00:06:41.100
+right the same thing is for the inner here we also&nbsp;
+are dealing with messed normals but here we want&nbsp;&nbsp;
+
+00:06:41.100 --> 00:06:47.460
+to have red normals going on so just select this&nbsp;
+part where you have the blue alt n and flip and&nbsp;&nbsp;
+
+00:06:47.460 --> 00:06:53.100
+just like that we have everything perfectly we can&nbsp;
+add one more loop at the bottom so we are kind of&nbsp;&nbsp;
+
+00:06:53.100 --> 00:06:59.640
+following this sharp edge here same for the inner&nbsp;
+Perfection let's just add one more Loop here as we&nbsp;&nbsp;
+
+00:06:59.640 --> 00:07:06.180
+lost this and now let's go with modeling the cork&nbsp;
+the cork will be very easy as it's just a cylinder&nbsp;&nbsp;
+
+00:07:06.180 --> 00:07:12.240
+with some scaling going on so just let's you know&nbsp;
+put this right there and to add this little part&nbsp;&nbsp;
+
+00:07:12.240 --> 00:07:18.180
+let's insert and extrude to the top let's see&nbsp;
+if that matches the scale we can always you know&nbsp;&nbsp;
+
+00:07:18.180 --> 00:07:25.200
+resize it no problem at all and same story goes&nbsp;
+here let's I2 insert and here we have to look for&nbsp;&nbsp;
+
+00:07:25.200 --> 00:07:31.380
+the inner part to you know get the cork matching&nbsp;
+so we don't have any intersections or stuff okay&nbsp;&nbsp;
+
+00:07:31.380 --> 00:07:37.920
+it's way too small let's scale this nice put to&nbsp;
+the bottom and add the subdivision here we don't&nbsp;&nbsp;
+
+00:07:37.920 --> 00:07:42.660
+need adaptive subdivisions as we won't be doing&nbsp;
+the displacement there so two levels of viewport&nbsp;&nbsp;
+
+00:07:42.660 --> 00:07:50.160
+is cool now let's add the loop cuts to get these&nbsp;
+details back also insert a couple of faces here&nbsp;&nbsp;
+
+00:07:50.160 --> 00:07:57.720
+and there here let's add the bevel nice look at&nbsp;
+here and insert couple faces here add the loop cut&nbsp;&nbsp;
+
+00:07:57.720 --> 00:08:05.940
+and we have the cork done it sits perfectly inside&nbsp;
+our you know bottle so we are good to go so with&nbsp;&nbsp;
+
+00:08:05.940 --> 00:08:12.960
+our bottle rendering the next step is to obviously&nbsp;
+do the text string right but let's first do the&nbsp;&nbsp;
+
+00:08:12.960 --> 00:08:19.380
+very very simple UV mapping I've noticed under&nbsp;
+the previous video some people were mentioning&nbsp;&nbsp;
+
+00:08:19.380 --> 00:08:25.740
+the projection mapping and you know that's just&nbsp;
+the other way to do things right so yeah we just&nbsp;&nbsp;
+
+00:08:25.740 --> 00:08:32.340
+need one seam and then look if I say like this&nbsp;
+hit unwrap I have the UV map going on so so yeah&nbsp;&nbsp;
+
+00:08:32.340 --> 00:08:37.980
+we need just one seam and we're good to go the&nbsp;
+same is for cork let's just add one seam and then&nbsp;&nbsp;
+
+00:08:37.980 --> 00:08:43.440
+we will be just you know selecting these like&nbsp;
+that and just you to unwrap and then using the&nbsp;&nbsp;
+
+00:08:43.440 --> 00:08:49.560
+text tools I use for these Starbucks tutorial&nbsp;
+just Rectify this so with our models done let&nbsp;&nbsp;
+
+00:08:49.560 --> 00:08:56.580
+me show you the step of texturing and as you see&nbsp;
+here I already have the so I'll just disable all&nbsp;&nbsp;
+
+00:08:56.580 --> 00:09:02.280
+of this and put the done bottle along with the&nbsp;
+lighting so as you see here we have the bottle&nbsp;&nbsp;
+
+00:09:02.280 --> 00:09:08.760
+done but let me explain how the textures are done&nbsp;
+there are a few things you have to remember we&nbsp;&nbsp;
+
+00:09:08.760 --> 00:09:15.420
+have in this case the displacement map we have the&nbsp;
+gold map for this ambos circle or however you want&nbsp;&nbsp;
+
+00:09:15.420 --> 00:09:23.280
+to call it and we have the graphic as you see all&nbsp;
+of these are the same size so it's 5000 for 496&nbsp;&nbsp;
+
+00:09:23.280 --> 00:09:29.280
+and all of these have the stuff in the same place&nbsp;
+so as you see here displacement map we have these&nbsp;&nbsp;
+
+00:09:29.280 --> 00:09:34.140
+letters in the same place as we have on the label&nbsp;
+graphic and this is very important since we'll&nbsp;&nbsp;
+
+00:09:34.140 --> 00:09:39.420
+have only one material and then we will have&nbsp;
+these three different Maps plugged the way you&nbsp;&nbsp;
+
+00:09:39.420 --> 00:09:45.540
+do the displacement map is with just you know if&nbsp;
+I go to the smart object you'll notice that I have&nbsp;&nbsp;
+
+00:09:45.540 --> 00:09:52.020
+only this rounded rectangles then I have this&nbsp;
+circle going on and then I have with different&nbsp;&nbsp;
+
+00:09:52.020 --> 00:09:59.400
+like shades of the of the gray these letters and&nbsp;
+the reason of different shades is that when you&nbsp;&nbsp;
+
+00:09:59.400 --> 00:10:06.420
+have the displacement map the value of the black&nbsp;
+is actually the value of zero so you have with&nbsp;&nbsp;
+
+00:10:06.420 --> 00:10:12.660
+the displacement Maps it's actually all about the&nbsp;
+you know contrast so like we have here all these&nbsp;&nbsp;
+
+00:10:12.660 --> 00:10:18.120
+different colors that means this will be different&nbsp;
+displays like as you see here we have these the&nbsp;&nbsp;
+
+00:10:18.120 --> 00:10:24.660
+levels of displacement are different here so just&nbsp;
+this adds the variety and on top of this we have&nbsp;&nbsp;
+
+00:10:24.660 --> 00:10:30.960
+the gaussian blur so we don't have like a sharp&nbsp;
+displacement going on we have this done smoothly&nbsp;&nbsp;
+
+00:10:30.960 --> 00:10:37.980
+and nicely and actually Arthur already made a&nbsp;
+video where he presented this in more in-depth&nbsp;&nbsp;
+
+00:10:37.980 --> 00:10:44.880
+way so make sure to check this out this story is&nbsp;
+for Cinema 4D but the Photoshop part is for all&nbsp;&nbsp;
+
+00:10:44.880 --> 00:10:49.740
+the softwares the same yeah very briefly going&nbsp;
+on this is how you do the displacement map so&nbsp;&nbsp;
+
+00:10:49.740 --> 00:10:55.800
+just with gaussian blur and then you put all the&nbsp;
+stuff and yeah this is how you do this next part&nbsp;&nbsp;
+
+00:10:55.800 --> 00:11:03.060
+is the label gold so here we have here's this is&nbsp;
+the just the mask so we are basically cutting all&nbsp;&nbsp;
+
+00:11:03.060 --> 00:11:08.220
+the stuff that is black will not be visible&nbsp;
+on the Gold Label and here is just the labels&nbsp;&nbsp;
+
+00:11:08.220 --> 00:11:14.220
+graphic and I also put together a simple text and&nbsp;
+displacement so this is the made in blender going&nbsp;&nbsp;
+
+00:11:14.220 --> 00:11:20.220
+on on this part here and we have these dots&nbsp;
+and 18 years you might wonder how to actually&nbsp;&nbsp;
+
+00:11:20.220 --> 00:11:27.900
+determine the size of this label and the way you&nbsp;
+do this is you have to go to your model so let's&nbsp;&nbsp;
+
+00:11:27.900 --> 00:11:34.980
+bring back the outer just select the part where&nbsp;
+you will have the displacement going on let's you&nbsp;&nbsp;
+
+00:11:34.980 --> 00:11:41.760
+to unwrap this go to the UV editing let's select&nbsp;
+this and rectify rotate this and just you know&nbsp;&nbsp;
+
+00:11:41.760 --> 00:11:47.580
+place it here do the screenshot and place it in&nbsp;
+the Photoshop and then you will have to adjust&nbsp;&nbsp;
+
+00:11:47.580 --> 00:11:53.400
+this further on sometimes you might notice if you&nbsp;
+have the square perfectly when you have this like&nbsp;&nbsp;
+
+00:11:53.400 --> 00:11:58.920
+tall bottle label would be very stretched so then&nbsp;
+you go back to the Photoshop change your canvas&nbsp;&nbsp;
+
+00:11:58.920 --> 00:12:05.040
+size to something like you have with my bottle&nbsp;
+which is 5000 and then you know just adjusting&nbsp;&nbsp;
+
+00:12:05.040 --> 00:12:11.580
+it and you'll be perfectly fine so now let's cover&nbsp;
+how to actually put this thing together I will go&nbsp;&nbsp;
+
+00:12:11.580 --> 00:12:18.780
+step by step with it so let's start obviously with&nbsp;
+the displacement map as this is the most important&nbsp;&nbsp;
+
+00:12:18.780 --> 00:12:25.860
+thing so breaking down our notes Here we have the&nbsp;
+glass Shader which is just the glass okay nothing&nbsp;&nbsp;
+
+00:12:25.860 --> 00:12:33.600
+more specular one roughness to 0 0 transmission&nbsp;
+to 1 and ior24 yes I know I know the ior for glass&nbsp;&nbsp;
+
+00:12:33.600 --> 00:12:40.200
+is something like 1.5 I guess something like that&nbsp;
+but it depends also on the rendering that you have&nbsp;&nbsp;
+
+00:12:40.200 --> 00:12:46.320
+so sometimes you have to go try other different&nbsp;
+things so in this case index of 4 worked the best&nbsp;&nbsp;
+
+00:12:46.320 --> 00:12:52.560
+so here we have our glass and let me plug only&nbsp;
+the glass and show you the displacement so let's&nbsp;&nbsp;
+
+00:12:52.560 --> 00:12:58.140
+go to the rendered and as you see here that's&nbsp;
+how it looks only the displacement thing and&nbsp;&nbsp;
+
+00:12:58.140 --> 00:13:05.400
+we have these plugged as PSD so whatever you just&nbsp;
+make any change to the PSD file you have to go to&nbsp;&nbsp;
+
+00:13:05.400 --> 00:13:12.360
+the user save the PSD and go to the UV editing&nbsp;
+or you can also you know get the image editor&nbsp;&nbsp;
+
+00:13:12.360 --> 00:13:20.460
+then select your PSD so just like that and then&nbsp;
+image and reload and this this will just reload so&nbsp;&nbsp;
+
+00:13:20.460 --> 00:13:25.860
+you'll have you know your stuff going on another&nbsp;
+important thing is that in the displacement node&nbsp;&nbsp;
+
+00:13:25.860 --> 00:13:32.400
+itself you have to manipulate with the mid level&nbsp;
+and most likely go with the scale to really low&nbsp;&nbsp;
+
+00:13:32.400 --> 00:13:39.360
+value because this will this is by default set to&nbsp;
+1 which makes this bump really really big and the&nbsp;&nbsp;
+
+00:13:39.360 --> 00:13:45.840
+next thing is that you have to go to settings go&nbsp;
+to the material and change because by default for&nbsp;&nbsp;
+
+00:13:45.840 --> 00:13:51.840
+whatever reason this is Bump only you have to go&nbsp;
+and get displacement and bump otherwise this will&nbsp;&nbsp;
+
+00:13:51.840 --> 00:13:57.540
+not render correctly that's how it looks like with&nbsp;
+the displacement map the next thing we're adding&nbsp;&nbsp;
+
+00:13:57.540 --> 00:14:06.660
+is the paper the paper layer that is the second&nbsp;
+layer looks like that so we have just the paper&nbsp;&nbsp;
+
+00:14:06.660 --> 00:14:14.880
+layer with the displacement going on we have to&nbsp;
+obviously cut everything besides these black text&nbsp;&nbsp;
+
+00:14:14.880 --> 00:14:23.040
+and the label so we do this using mix Shader and&nbsp;
+we put inside the mix Trader the paper layer and&nbsp;&nbsp;
+
+00:14:23.040 --> 00:14:29.100
+the glass layer and here is our mask I'll show&nbsp;
+you how it looks like image editor just basically&nbsp;&nbsp;
+
+00:14:29.100 --> 00:14:35.100
+cutting the gold part and cutting the label and&nbsp;
+let's preview the mix Trader how it looks like&nbsp;&nbsp;
+
+00:14:35.100 --> 00:14:42.720
+awesome just like that we have our first layer of&nbsp;
+materials done without adding any objects for the&nbsp;&nbsp;
+
+00:14:42.720 --> 00:14:50.400
+label itself and the last part is to add these&nbsp;
+Golden Ring The Golden Circle so the way you do&nbsp;&nbsp;
+
+00:14:50.400 --> 00:14:58.020
+this is by adding the textures from ambient CG for&nbsp;
+the gold so you have this PBR textures and then I&nbsp;&nbsp;
+
+00:14:58.020 --> 00:15:05.400
+just added a hue saturation value to get slightly&nbsp;
+pink color and then in normal map I went crazy get&nbsp;&nbsp;
+
+00:15:05.400 --> 00:15:11.640
+this to 4 so there are much more you know details&nbsp;
+going on here we have the mask basically cutting&nbsp;&nbsp;
+
+00:15:11.640 --> 00:15:18.060
+everything besides the white part and again just&nbsp;
+plugging this mix Shader we had from with the&nbsp;&nbsp;
+
+00:15:18.060 --> 00:15:24.060
+glass and the paper we're plugging this to the&nbsp;
+bottom socket here we have the gold layer so the&nbsp;&nbsp;
+
+00:15:24.060 --> 00:15:30.840
+gold layer only this gold texture just like that&nbsp;
+and with this mix Shader we have everything put&nbsp;&nbsp;
+
+00:15:30.840 --> 00:15:35.580
+together at the first glance this might seem&nbsp;
+complicated but once you get into this you&nbsp;&nbsp;
+
+00:15:35.580 --> 00:15:41.880
+will really understand the true potential of this&nbsp;
+workflow this is how you do the displacement thing&nbsp;&nbsp;
+
+00:15:41.880 --> 00:15:49.500
+going on and now let's go with the bottom part the&nbsp;
+bottom part is very similar to what I did with the&nbsp;&nbsp;
+
+00:15:49.500 --> 00:15:56.400
+body I just added another material that is only&nbsp;
+for this bottom part if I select this as you see&nbsp;&nbsp;
+
+00:15:56.400 --> 00:16:03.540
+here it's like that and I added the texture using&nbsp;
+some projection mapping I can go to the UV editing&nbsp;&nbsp;
+
+00:16:03.540 --> 00:16:09.540
+go with the text and displacement and so basically&nbsp;
+the projection on that you just would go to the&nbsp;&nbsp;
+
+00:16:09.540 --> 00:16:14.820
+seven if you have the bottle straight now I have&nbsp;
+this angle to the render so that's final version&nbsp;&nbsp;
+
+00:16:14.820 --> 00:16:20.040
+but if you have it straight you can just go to the&nbsp;
+top or bottom view then select the faces that you&nbsp;&nbsp;
+
+00:16:20.040 --> 00:16:26.160
+need and hit you and project from view this is&nbsp;
+very very important and for this part where you&nbsp;&nbsp;
+
+00:16:26.160 --> 00:16:32.160
+have this like ring going on the low hope it's&nbsp;
+just you you unwrap and then Rectify and just&nbsp;&nbsp;
+
+00:16:32.160 --> 00:16:39.180
+then you know aligning this and one thing that&nbsp;
+could go wrong here is actually that you might&nbsp;&nbsp;
+
+00:16:39.180 --> 00:16:46.440
+have this thing going on and on because it will be&nbsp;
+by default repeat so as you see here we have many&nbsp;&nbsp;
+
+00:16:46.440 --> 00:16:52.680
+made in blender text and you have to just click&nbsp;
+extend and then you don't have this thing going&nbsp;&nbsp;
+
+00:16:52.680 --> 00:16:59.940
+you know forever so yeah that's it for it the&nbsp;
+next thing is to do the inner part and for the&nbsp;&nbsp;
+
+00:16:59.940 --> 00:17:07.320
+inner part the material is super simple it's just&nbsp;
+the glass material without any more thing here the&nbsp;&nbsp;
+
+00:17:07.320 --> 00:17:15.000
+IR is too specular also could be went to one and&nbsp;
+the color is Pure White by default it's something&nbsp;&nbsp;
+
+00:17:15.000 --> 00:17:20.760
+like that so you have to just go there and put it&nbsp;
+to Pure White and the last thing from materials&nbsp;&nbsp;
+
+00:17:20.760 --> 00:17:28.080
+for the bottle is to create the fluid and the way&nbsp;
+you do color in blender I figured out that the&nbsp;&nbsp;
+
+00:17:28.080 --> 00:17:34.740
+best way is to just do it with volume absorption&nbsp;
+node the base color wasn't always giving the best&nbsp;&nbsp;
+
+00:17:34.740 --> 00:17:40.920
+results but with volume absorption the life is&nbsp;
+just much better if I go to the rendered view&nbsp;&nbsp;
+
+00:17:40.920 --> 00:17:47.340
+I'll just cut the rendering View and as you see&nbsp;
+when I unplug the volume absorption I have Pure&nbsp;&nbsp;
+
+00:17:47.340 --> 00:17:52.980
+White fluid and I plug this volume absorption&nbsp;
+in I got the colored that's just the best way&nbsp;&nbsp;
+
+00:17:52.980 --> 00:18:01.320
+of doing fluids and also colored glass in blender&nbsp;
+the last thing for the cork is the same UV mapping&nbsp;&nbsp;
+
+00:18:01.320 --> 00:18:07.800
+as with the bottle and here you have two materials&nbsp;
+one material is the same gold we used before and&nbsp;&nbsp;
+
+00:18:07.800 --> 00:18:14.580
+I'll include this link in the description and&nbsp;
+the next material is for this wooden part which&nbsp;&nbsp;
+
+00:18:14.580 --> 00:18:20.640
+is just called the cork as you see here so yeah&nbsp;
+that's for the Cork and the next thing we we have&nbsp;&nbsp;
+
+00:18:20.640 --> 00:18:27.120
+to go through is the lighting as for the lighting&nbsp;
+we have five different lights but the light that&nbsp;&nbsp;
+
+00:18:27.120 --> 00:18:32.760
+gives the color for the fluid is actually the&nbsp;
+backlight as you see here with the backlight we&nbsp;&nbsp;
+
+00:18:32.760 --> 00:18:38.880
+have all this cool color as you see it's just&nbsp;
+the plane with the gradient going on just like&nbsp;&nbsp;
+
+00:18:38.880 --> 00:18:45.000
+that we have one light behind we have left light&nbsp;
+that adds the details here and we have the right&nbsp;&nbsp;
+
+00:18:45.000 --> 00:18:52.800
+light for the bottle and this left and right&nbsp;
+lights have some RGB curves to just add some as&nbsp;&nbsp;
+
+00:18:52.800 --> 00:18:59.220
+you see here this adds some purple violet color&nbsp;
+right there that adds the details to the to the&nbsp;&nbsp;
+
+00:18:59.220 --> 00:19:05.940
+bottle rendering really cool and then we have two&nbsp;
+accent lights that just add the color and shape&nbsp;&nbsp;
+
+00:19:05.940 --> 00:19:14.220
+for these golden emboss Golden Ring the last thing&nbsp;
+one of the last things actually would be to go to&nbsp;&nbsp;
+
+00:19:14.220 --> 00:19:20.700
+the camera options and add the depth of field so&nbsp;
+the way you do this and obviously with the focal&nbsp;&nbsp;
+
+00:19:20.700 --> 00:19:27.660
+length go with something like here 120 millimeters&nbsp;
+to really get this bottle very detailed very flat&nbsp;&nbsp;
+
+00:19:27.660 --> 00:19:33.420
+looking when it's very near the camera so like&nbsp;
+that we have to do this focal length very very&nbsp;&nbsp;
+
+00:19:33.420 --> 00:19:39.120
+very macro I guess and yeah the next thing is&nbsp;
+to add the depth of field controller so this&nbsp;&nbsp;
+
+00:19:39.120 --> 00:19:46.200
+is just the empty as you see here just the empty&nbsp;
+and then camera select depth of field and focus&nbsp;&nbsp;
+
+00:19:46.200 --> 00:19:51.840
+object depth of field controller and then you know&nbsp;
+just adjust this to your liking to what you want&nbsp;&nbsp;
+
+00:19:51.840 --> 00:19:59.100
+to achieve in this case we wanted to really just&nbsp;
+blur out everything besides the label and this&nbsp;&nbsp;
+
+00:19:59.100 --> 00:20:04.500
+part of the circle and obviously these details&nbsp;
+on the on the label so we wanted to blur out&nbsp;&nbsp;
+
+00:20:04.500 --> 00:20:10.620
+this part with the with the cork that's how we&nbsp;
+did this so with just the depth of field and as&nbsp;&nbsp;
+
+00:20:10.620 --> 00:20:16.500
+for the render settings we go with render 10 000&nbsp;
+samples the noise I have open image denies but&nbsp;&nbsp;
+
+00:20:16.500 --> 00:20:22.620
+if you have the card with RTX then let's go with&nbsp;
+Optics subdivision as I said you Max subdivisions&nbsp;&nbsp;
+
+00:20:22.620 --> 00:20:28.620
+to eight so you don't have any strange errors then&nbsp;
+dicing gray render one eight like that this Leaf&nbsp;&nbsp;
+
+00:20:28.620 --> 00:20:34.140
+as default and dicing camera camera transparent&nbsp;
+so you know you can add later on in Photoshop&nbsp;&nbsp;
+
+00:20:34.140 --> 00:20:39.840
+your background and then filmic and very high&nbsp;
+contrast just like that and as for the settings&nbsp;&nbsp;
+
+00:20:39.840 --> 00:20:46.920
+in the for the bottle this is the only mesh that&nbsp;
+has the Adaptive subdivision so dicing scale to&nbsp;&nbsp;
+
+00:20:46.920 --> 00:20:53.040
+0.6 just like that all the other actually objects&nbsp;
+just have the normal subdivision as they don't&nbsp;&nbsp;
+
+00:20:53.040 --> 00:20:58.260
+need this adaptive subdivision and if you don't&nbsp;
+know what adaptive subdivision is it's basically&nbsp;&nbsp;
+
+00:20:58.260 --> 00:21:04.860
+the closer the object to the camera the more&nbsp;
+details it has so it gives a really really high&nbsp;&nbsp;
+
+00:21:04.860 --> 00:21:10.740
+subdivision values to the places of the bottle&nbsp;
+that are very close to the camera and then for&nbsp;&nbsp;
+
+00:21:10.740 --> 00:21:17.220
+the parts that are let's say behind so like this&nbsp;
+side of the bottle these have less subdivisions to&nbsp;&nbsp;
+
+00:21:17.220 --> 00:21:24.540
+you know don't kill our lovely computers so that's&nbsp;
+how you do these kind of bottles in 3D I hope you&nbsp;&nbsp;
+
+00:21:24.540 --> 00:21:30.360
+like this video and if you're looking to step up&nbsp;
+your 3D game you can do this today by checking our&nbsp;&nbsp;
+
+00:21:30.360 --> 00:21:35.280
+free training link is in the description thanks&nbsp;
+for watching and I'll see you on the next one
+

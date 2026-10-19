@@ -1,0 +1,1792 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.120 --> 00:00:02.909 align:start position:0%
+ 
+hello<00:00:00.799><c> welcome</c><00:00:01.120><c> to</c><00:00:01.280><c> my</c><00:00:01.560><c> channel</c><00:00:02.560><c> in</c><00:00:02.720><c> this</c>
+
+00:00:02.909 --> 00:00:02.919 align:start position:0%
+hello welcome to my channel in this
+ 
+
+00:00:02.919 --> 00:00:04.910 align:start position:0%
+hello welcome to my channel in this
+tutorial<00:00:03.760><c> we'll</c><00:00:04.000><c> learn</c><00:00:04.279><c> how</c><00:00:04.400><c> to</c><00:00:04.560><c> make</c><00:00:04.720><c> a</c>
+
+00:00:04.910 --> 00:00:04.920 align:start position:0%
+tutorial we'll learn how to make a
+ 
+
+00:00:04.920 --> 00:00:07.349 align:start position:0%
+tutorial we'll learn how to make a
+product<00:00:05.279><c> box</c><00:00:05.600><c> mockup</c><00:00:06.359><c> and</c><00:00:06.520><c> folding</c><00:00:06.960><c> box</c>
+
+00:00:07.349 --> 00:00:07.359 align:start position:0%
+product box mockup and folding box
+ 
+
+00:00:07.359 --> 00:00:11.150 align:start position:0%
+product box mockup and folding box
+animation<00:00:08.000><c> in</c><00:00:08.320><c> blender</c><00:00:09.320><c> let's</c><00:00:09.559><c> get</c><00:00:10.160><c> started</c>
+
+00:00:11.150 --> 00:00:11.160 align:start position:0%
+animation in blender let's get started
+ 
+
+00:00:11.160 --> 00:00:12.789 align:start position:0%
+animation in blender let's get started
+before<00:00:11.480><c> starting</c><00:00:12.240><c> I</c><00:00:12.320><c> would</c><00:00:12.480><c> like</c><00:00:12.639><c> to</c>
+
+00:00:12.789 --> 00:00:12.799 align:start position:0%
+before starting I would like to
+ 
+
+00:00:12.799 --> 00:00:15.990 align:start position:0%
+before starting I would like to
+introduce<00:00:13.240><c> an</c><00:00:13.480><c> online</c><00:00:13.960><c> tool</c><00:00:14.920><c> pacora</c><00:00:15.639><c> is</c><00:00:15.759><c> an</c>
+
+00:00:15.990 --> 00:00:16.000 align:start position:0%
+introduce an online tool pacora is an
+ 
+
+00:00:16.000 --> 00:00:18.550 align:start position:0%
+introduce an online tool pacora is an
+online<00:00:16.560><c> packaging</c><00:00:17.039><c> design</c><00:00:17.400><c> tool</c><00:00:18.039><c> that</c><00:00:18.199><c> allows</c>
+
+00:00:18.550 --> 00:00:18.560 align:start position:0%
+online packaging design tool that allows
+ 
+
+00:00:18.560 --> 00:00:20.990 align:start position:0%
+online packaging design tool that allows
+users<00:00:18.960><c> to</c><00:00:19.199><c> customize</c><00:00:19.840><c> their</c><00:00:20.080><c> packaging</c><00:00:20.840><c> with</c>
+
+00:00:20.990 --> 00:00:21.000 align:start position:0%
+users to customize their packaging with
+ 
+
+00:00:21.000 --> 00:00:24.509 align:start position:0%
+users to customize their packaging with
+their<00:00:21.160><c> own</c><00:00:21.480><c> images</c><00:00:22.279><c> logos</c><00:00:23.080><c> and</c><00:00:23.320><c> text</c><00:00:24.199><c> you</c><00:00:24.320><c> can</c>
+
+00:00:24.509 --> 00:00:24.519 align:start position:0%
+their own images logos and text you can
+ 
+
+00:00:24.519 --> 00:00:27.710 align:start position:0%
+their own images logos and text you can
+easily<00:00:24.920><c> make</c><00:00:25.240><c> product</c><00:00:25.599><c> mockups</c><00:00:26.160><c> in</c><00:00:26.720><c> minutes</c>
+
+00:00:27.710 --> 00:00:27.720 align:start position:0%
+easily make product mockups in minutes
+ 
+
+00:00:27.720 --> 00:00:29.990 align:start position:0%
+easily make product mockups in minutes
+pacora<00:00:28.400><c> gives</c><00:00:28.599><c> you</c><00:00:28.800><c> the</c><00:00:28.960><c> ability</c><00:00:29.359><c> to</c><00:00:29.519><c> change</c>
+
+00:00:29.990 --> 00:00:30.000 align:start position:0%
+pacora gives you the ability to change
+ 
+
+00:00:30.000 --> 00:00:32.709 align:start position:0%
+pacora gives you the ability to change
+the<00:00:30.119><c> dimensions</c><00:00:31.000><c> colors</c><00:00:31.720><c> and</c><00:00:31.920><c> materials</c><00:00:32.559><c> of</c>
+
+00:00:32.709 --> 00:00:32.719 align:start position:0%
+the dimensions colors and materials of
+ 
+
+00:00:32.719 --> 00:00:34.830 align:start position:0%
+the dimensions colors and materials of
+your<00:00:32.960><c> packaging</c><00:00:33.800><c> as</c><00:00:33.920><c> well</c><00:00:34.079><c> as</c><00:00:34.239><c> add</c><00:00:34.440><c> your</c><00:00:34.600><c> own</c>
+
+00:00:34.830 --> 00:00:34.840 align:start position:0%
+your packaging as well as add your own
+ 
+
+00:00:34.840 --> 00:00:37.430 align:start position:0%
+your packaging as well as add your own
+branding<00:00:35.280><c> elements</c><00:00:36.280><c> and</c><00:00:36.480><c> best</c><00:00:36.680><c> of</c><00:00:36.840><c> all</c><00:00:37.320><c> you</c>
+
+00:00:37.430 --> 00:00:37.440 align:start position:0%
+branding elements and best of all you
+ 
+
+00:00:37.440 --> 00:00:40.150 align:start position:0%
+branding elements and best of all you
+can<00:00:37.600><c> see</c><00:00:37.840><c> a</c><00:00:38.040><c> 3D</c><00:00:38.559><c> preview</c><00:00:39.040><c> of</c><00:00:39.160><c> your</c><00:00:39.399><c> design</c>
+
+00:00:40.150 --> 00:00:40.160 align:start position:0%
+can see a 3D preview of your design
+ 
+
+00:00:40.160 --> 00:00:42.310 align:start position:0%
+can see a 3D preview of your design
+before<00:00:40.440><c> you</c><00:00:40.600><c> order</c><00:00:41.520><c> so</c><00:00:41.760><c> whether</c><00:00:41.960><c> you're</c><00:00:42.160><c> a</c>
+
+00:00:42.310 --> 00:00:42.320 align:start position:0%
+before you order so whether you're a
+ 
+
+00:00:42.320 --> 00:00:44.590 align:start position:0%
+before you order so whether you're a
+small<00:00:42.680><c> business</c><00:00:43.000><c> owner</c><00:00:43.600><c> looking</c><00:00:43.840><c> for</c><00:00:44.120><c> Unique</c>
+
+00:00:44.590 --> 00:00:44.600 align:start position:0%
+small business owner looking for Unique
+ 
+
+00:00:44.600 --> 00:00:46.990 align:start position:0%
+small business owner looking for Unique
+packaging<00:00:45.000><c> for</c><00:00:45.200><c> your</c><00:00:45.440><c> products</c><00:00:46.199><c> or</c><00:00:46.399><c> a</c><00:00:46.640><c> graphic</c>
+
+00:00:46.990 --> 00:00:47.000 align:start position:0%
+packaging for your products or a graphic
+ 
+
+00:00:47.000 --> 00:00:49.389 align:start position:0%
+packaging for your products or a graphic
+designer<00:00:47.520><c> wanting</c><00:00:47.840><c> to</c><00:00:48.120><c> experiment</c><00:00:48.719><c> with</c><00:00:48.920><c> 3D</c>
+
+00:00:49.389 --> 00:00:49.399 align:start position:0%
+designer wanting to experiment with 3D
+ 
+
+00:00:49.399 --> 00:00:51.950 align:start position:0%
+designer wanting to experiment with 3D
+packaging<00:00:49.879><c> design</c><00:00:50.600><c> pacora</c><00:00:51.239><c> is</c><00:00:51.399><c> the</c><00:00:51.600><c> perfect</c>
+
+00:00:51.950 --> 00:00:51.960 align:start position:0%
+packaging design pacora is the perfect
+ 
+
+00:00:51.960 --> 00:00:55.150 align:start position:0%
+packaging design pacora is the perfect
+tool<00:00:52.280><c> for</c><00:00:52.520><c> you</c><00:00:53.480><c> sign</c><00:00:53.760><c> up</c><00:00:53.960><c> to</c><00:00:54.120><c> pacora</c><00:00:54.680><c> for</c><00:00:54.840><c> free</c>
+
+00:00:55.150 --> 00:00:55.160 align:start position:0%
+tool for you sign up to pacora for free
+ 
+
+00:00:55.160 --> 00:00:56.830 align:start position:0%
+tool for you sign up to pacora for free
+with<00:00:55.280><c> your</c><00:00:55.480><c> Google</c><00:00:55.879><c> account</c><00:00:56.160><c> or</c><00:00:56.399><c> email</c>
+
+00:00:56.830 --> 00:00:56.840 align:start position:0%
+with your Google account or email
+ 
+
+00:00:56.840 --> 00:01:00.150 align:start position:0%
+with your Google account or email
+address<00:00:57.840><c> choose</c><00:00:58.239><c> any</c><00:00:58.480><c> plan</c><00:00:58.760><c> for</c><00:00:58.960><c> your</c><00:00:59.120><c> needs</c>
+
+00:01:00.150 --> 00:01:00.160 align:start position:0%
+address choose any plan for your needs
+ 
+
+00:01:00.160 --> 00:01:02.229 align:start position:0%
+address choose any plan for your needs
+if<00:01:00.280><c> you</c><00:01:00.480><c> subscribe</c><00:01:00.960><c> to</c><00:01:01.120><c> pacora</c><00:01:01.719><c> with</c><00:01:01.840><c> the</c><00:01:01.960><c> code</c>
+
+00:01:02.229 --> 00:01:02.239 align:start position:0%
+if you subscribe to pacora with the code
+ 
+
+00:01:02.239 --> 00:01:04.869 align:start position:0%
+if you subscribe to pacora with the code
+I<00:01:02.399><c> provided</c><00:01:03.120><c> you</c><00:01:03.239><c> will</c><00:01:03.440><c> have</c><00:01:03.559><c> an</c><00:01:03.760><c> extra</c><00:01:04.119><c> 20%</c>
+
+00:01:04.869 --> 00:01:04.879 align:start position:0%
+I provided you will have an extra 20%
+ 
+
+00:01:04.879 --> 00:01:06.870 align:start position:0%
+I provided you will have an extra 20%
+discount<00:01:05.320><c> at</c><00:01:05.439><c> the</c><00:01:05.560><c> checkout</c><00:01:06.280><c> I</c><00:01:06.360><c> will</c><00:01:06.520><c> share</c>
+
+00:01:06.870 --> 00:01:06.880 align:start position:0%
+discount at the checkout I will share
+ 
+
+00:01:06.880 --> 00:01:09.190 align:start position:0%
+discount at the checkout I will share
+the<00:01:07.119><c> exclusive</c><00:01:07.640><c> discount</c><00:01:08.240><c> code</c><00:01:08.560><c> in</c><00:01:08.680><c> the</c><00:01:08.840><c> video</c>
+
+00:01:09.190 --> 00:01:09.200 align:start position:0%
+the exclusive discount code in the video
+ 
+
+00:01:09.200 --> 00:01:11.950 align:start position:0%
+the exclusive discount code in the video
+description<00:01:10.119><c> all</c><00:01:10.320><c> right</c><00:01:11.159><c> we'll</c><00:01:11.400><c> use</c><00:01:11.720><c> Pac</c>
+
+00:01:11.950 --> 00:01:11.960 align:start position:0%
+description all right we'll use Pac
+ 
+
+00:01:11.960 --> 00:01:14.310 align:start position:0%
+description all right we'll use Pac
+Dora's<00:01:12.360><c> templates</c><00:01:12.840><c> and</c><00:01:13.040><c> diine</c><00:01:13.600><c> generators</c><00:01:14.159><c> to</c>
+
+00:01:14.310 --> 00:01:14.320 align:start position:0%
+Dora's templates and diine generators to
+ 
+
+00:01:14.320 --> 00:01:16.990 align:start position:0%
+Dora's templates and diine generators to
+make<00:01:14.439><c> a</c><00:01:14.560><c> 3D</c><00:01:15.000><c> mockup</c><00:01:15.439><c> in</c><00:01:15.560><c> blender</c><00:01:16.400><c> di</c><00:01:16.680><c> lines</c>
+
+00:01:16.990 --> 00:01:17.000 align:start position:0%
+make a 3D mockup in blender di lines
+ 
+
+00:01:17.000 --> 00:01:19.910 align:start position:0%
+make a 3D mockup in blender di lines
+show<00:01:17.280><c> the</c><00:01:17.439><c> dimensions</c><00:01:18.240><c> folds</c><00:01:18.960><c> and</c><00:01:19.119><c> cut</c><00:01:19.400><c> lines</c>
+
+00:01:19.910 --> 00:01:19.920 align:start position:0%
+show the dimensions folds and cut lines
+ 
+
+00:01:19.920 --> 00:01:22.590 align:start position:0%
+show the dimensions folds and cut lines
+necessary<00:01:20.439><c> to</c><00:01:20.640><c> create</c><00:01:20.920><c> the</c><00:01:21.079><c> final</c><00:01:21.600><c> packaging</c>
+
+00:01:22.590 --> 00:01:22.600 align:start position:0%
+necessary to create the final packaging
+ 
+
+00:01:22.600 --> 00:01:25.550 align:start position:0%
+necessary to create the final packaging
+you<00:01:22.720><c> can</c><00:01:22.960><c> customize</c><00:01:23.520><c> the</c><00:01:23.680><c> sizes</c><00:01:24.360><c> as</c><00:01:24.479><c> you</c><00:01:24.680><c> wish</c>
+
+00:01:25.550 --> 00:01:25.560 align:start position:0%
+you can customize the sizes as you wish
+ 
+
+00:01:25.560 --> 00:01:28.310 align:start position:0%
+you can customize the sizes as you wish
+I<00:01:25.640><c> will</c><00:01:25.799><c> leave</c><00:01:26.040><c> them</c><00:01:26.240><c> as</c><00:01:26.400><c> they</c><00:01:26.560><c> are</c><00:01:27.320><c> select</c><00:01:27.840><c> PDF</c>
+
+00:01:28.310 --> 00:01:28.320 align:start position:0%
+I will leave them as they are select PDF
+ 
+
+00:01:28.320 --> 00:01:30.830 align:start position:0%
+I will leave them as they are select PDF
+format<00:01:29.040><c> and</c><00:01:29.240><c> download</c><00:01:29.600><c> the</c><00:01:29.720><c> D</c><00:01:29.960><c> di</c><00:01:30.119><c> line</c>
+
+00:01:30.830 --> 00:01:30.840 align:start position:0%
+format and download the D di line
+ 
+
+00:01:30.840 --> 00:01:33.550 align:start position:0%
+format and download the D di line
+convert<00:01:31.200><c> the</c><00:01:31.360><c> PDF</c><00:01:31.799><c> into</c><00:01:32.040><c> jpeg</c><00:01:32.520><c> format</c><00:01:33.040><c> online</c>
+
+00:01:33.550 --> 00:01:33.560 align:start position:0%
+convert the PDF into jpeg format online
+ 
+
+00:01:33.560 --> 00:01:36.149 align:start position:0%
+convert the PDF into jpeg format online
+and<00:01:34.040><c> download</c><00:01:35.040><c> I</c><00:01:35.079><c> will</c><00:01:35.240><c> share</c><00:01:35.560><c> the</c><00:01:35.720><c> website</c>
+
+00:01:36.149 --> 00:01:36.159 align:start position:0%
+and download I will share the website
+ 
+
+00:01:36.159 --> 00:01:38.350 align:start position:0%
+and download I will share the website
+link<00:01:36.439><c> in</c><00:01:36.560><c> the</c><00:01:36.720><c> video</c>
+
+00:01:38.350 --> 00:01:38.360 align:start position:0%
+link in the video
+ 
+
+00:01:38.360 --> 00:01:41.350 align:start position:0%
+link in the video
+description<00:01:39.360><c> open</c><00:01:39.600><c> a</c><00:01:39.759><c> new</c><00:01:39.920><c> blender</c><00:01:40.399><c> file</c>
+
+00:01:41.350 --> 00:01:41.360 align:start position:0%
+description open a new blender file
+ 
+
+00:01:41.360 --> 00:01:43.389 align:start position:0%
+description open a new blender file
+import<00:01:41.759><c> the</c><00:01:41.920><c> die</c><00:01:42.159><c> line</c><00:01:42.399><c> you</c><00:01:42.600><c> convert</c><00:01:43.119><c> as</c><00:01:43.240><c> a</c>
+
+00:01:43.389 --> 00:01:43.399 align:start position:0%
+import the die line you convert as a
+ 
+
+00:01:43.399 --> 00:01:47.109 align:start position:0%
+import the die line you convert as a
+reference
+
+00:01:47.109 --> 00:01:47.119 align:start position:0%
+ 
+ 
+
+00:01:47.119 --> 00:01:50.709 align:start position:0%
+ 
+image<00:01:48.119><c> press</c><00:01:48.439><c> alt</c><00:01:48.759><c> R</c><00:01:49.119><c> to</c><00:01:49.280><c> clear</c><00:01:49.560><c> the</c><00:01:49.719><c> rotation</c>
+
+00:01:50.709 --> 00:01:50.719 align:start position:0%
+image press alt R to clear the rotation
+ 
+
+00:01:50.719 --> 00:01:52.069 align:start position:0%
+image press alt R to clear the rotation
+add<00:01:50.880><c> a</c>
+
+00:01:52.069 --> 00:01:52.079 align:start position:0%
+add a
+ 
+
+00:01:52.079 --> 00:01:55.550 align:start position:0%
+add a
+plane<00:01:53.079><c> switch</c><00:01:53.399><c> to</c><00:01:53.560><c> edit</c><00:01:53.920><c> mode</c><00:01:54.240><c> and</c><00:01:54.439><c> x-ray</c><00:01:54.880><c> mode</c>
+
+00:01:55.550 --> 00:01:55.560 align:start position:0%
+plane switch to edit mode and x-ray mode
+ 
+
+00:01:55.560 --> 00:02:00.870 align:start position:0%
+plane switch to edit mode and x-ray mode
+s<00:01:55.920><c> key</c><00:01:56.119><c> to</c><00:01:56.280><c> scale</c><00:01:56.640><c> up</c>
+
+00:02:00.870 --> 00:02:00.880 align:start position:0%
+ 
+ 
+
+00:02:00.880 --> 00:02:03.310 align:start position:0%
+ 
+select<00:02:01.240><c> the</c><00:02:01.399><c> die</c><00:02:01.640><c> line</c><00:02:01.960><c> image</c><00:02:02.520><c> and</c><00:02:02.680><c> move</c><00:02:03.039><c> down</c>
+
+00:02:03.310 --> 00:02:03.320 align:start position:0%
+select the die line image and move down
+ 
+
+00:02:03.320 --> 00:02:11.630 align:start position:0%
+select the die line image and move down
+so<00:02:03.560><c> that</c><00:02:03.680><c> will</c><00:02:03.840><c> be</c><00:02:04.000><c> symmetric</c><00:02:04.560><c> on</c><00:02:04.719><c> the</c><00:02:04.880><c> Y</c>
+
+00:02:11.630 --> 00:02:11.640 align:start position:0%
+ 
+ 
+
+00:02:11.640 --> 00:02:15.110 align:start position:0%
+ 
+AIS<00:02:12.640><c> press</c><00:02:12.959><c> controlr</c><00:02:13.959><c> and</c><00:02:14.160><c> add</c><00:02:14.319><c> a</c><00:02:14.480><c> loop</c><00:02:14.800><c> cut</c>
+
+00:02:15.110 --> 00:02:15.120 align:start position:0%
+AIS press controlr and add a loop cut
+ 
+
+00:02:15.120 --> 00:02:17.150 align:start position:0%
+AIS press controlr and add a loop cut
+just<00:02:15.280><c> in</c><00:02:15.440><c> the</c><00:02:15.519><c> middle</c><00:02:16.319><c> select</c><00:02:16.680><c> the</c><00:02:16.800><c> bottom</c>
+
+00:02:17.150 --> 00:02:17.160 align:start position:0%
+just in the middle select the bottom
+ 
+
+00:02:17.160 --> 00:02:19.869 align:start position:0%
+just in the middle select the bottom
+vertices<00:02:17.920><c> and</c><00:02:18.080><c> delete</c><00:02:18.440><c> them</c><00:02:19.160><c> add</c><00:02:19.280><c> a</c><00:02:19.440><c> mirror</c>
+
+00:02:19.869 --> 00:02:19.879 align:start position:0%
+vertices and delete them add a mirror
+ 
+
+00:02:19.879 --> 00:02:23.710 align:start position:0%
+vertices and delete them add a mirror
+modifier<00:02:20.879><c> select</c><00:02:21.239><c> the</c><00:02:21.360><c> mirror</c><00:02:21.800><c> axis</c><00:02:22.319><c> y</c><00:02:23.239><c> so</c><00:02:23.599><c> we</c>
+
+00:02:23.710 --> 00:02:23.720 align:start position:0%
+modifier select the mirror axis y so we
+ 
+
+00:02:23.720 --> 00:02:26.589 align:start position:0%
+modifier select the mirror axis y so we
+can<00:02:23.920><c> work</c><00:02:24.160><c> symmetrically</c><00:02:24.760><c> on</c><00:02:24.920><c> the</c><00:02:25.120><c> Y</c><00:02:25.400><c> AIS</c><00:02:26.400><c> make</c>
+
+00:02:26.589 --> 00:02:26.599 align:start position:0%
+can work symmetrically on the Y AIS make
+ 
+
+00:02:26.599 --> 00:02:33.320 align:start position:0%
+can work symmetrically on the Y AIS make
+the<00:02:26.800><c> reference</c><00:02:27.280><c> image</c><00:02:27.760><c> unselectable</c>
+
+00:02:33.320 --> 00:02:33.330 align:start position:0%
+ 
+ 
+
+00:02:33.330 --> 00:02:34.990 align:start position:0%
+ 
+[Music]
+
+00:02:34.990 --> 00:02:35.000 align:start position:0%
+[Music]
+ 
+
+00:02:35.000 --> 00:02:36.910 align:start position:0%
+[Music]
+align<00:02:35.360><c> the</c><00:02:35.519><c> edges</c><00:02:35.920><c> with</c><00:02:36.040><c> the</c><00:02:36.160><c> blue</c><00:02:36.440><c> lines</c><00:02:36.760><c> and</c>
+
+00:02:36.910 --> 00:02:36.920 align:start position:0%
+align the edges with the blue lines and
+ 
+
+00:02:36.920 --> 00:02:39.390 align:start position:0%
+align the edges with the blue lines and
+the<00:02:37.040><c> die</c><00:02:37.360><c> line</c><00:02:38.160><c> blue</c><00:02:38.440><c> lines</c><00:02:38.720><c> are</c><00:02:38.920><c> the</c><00:02:39.040><c> final</c>
+
+00:02:39.390 --> 00:02:39.400 align:start position:0%
+the die line blue lines are the final
+ 
+
+00:02:39.400 --> 00:02:41.149 align:start position:0%
+the die line blue lines are the final
+size<00:02:39.680><c> of</c><00:02:39.800><c> your</c><00:02:39.959><c> print</c><00:02:40.319><c> product</c><00:02:40.760><c> after</c><00:02:40.959><c> it's</c>
+
+00:02:41.149 --> 00:02:41.159 align:start position:0%
+size of your print product after it's
+ 
+
+00:02:41.159 --> 00:02:43.630 align:start position:0%
+size of your print product after it's
+been<00:02:41.360><c> cut</c><00:02:42.120><c> it's</c><00:02:42.319><c> like</c><00:02:42.480><c> using</c><00:02:42.840><c> scissors</c><00:02:43.280><c> to</c><00:02:43.440><c> cut</c>
+
+00:02:43.630 --> 00:02:43.640 align:start position:0%
+been cut it's like using scissors to cut
+ 
+
+00:02:43.640 --> 00:02:46.070 align:start position:0%
+been cut it's like using scissors to cut
+along<00:02:43.920><c> a</c><00:02:44.080><c> dotted</c><00:02:44.440><c> line</c><00:02:44.720><c> on</c><00:02:44.879><c> a</c><00:02:45.040><c> craft</c>
+
+00:02:46.070 --> 00:02:46.080 align:start position:0%
+along a dotted line on a craft
+ 
+
+00:02:46.080 --> 00:02:48.190 align:start position:0%
+along a dotted line on a craft
+project<00:02:47.080><c> don't</c><00:02:47.280><c> forget</c><00:02:47.560><c> to</c><00:02:47.720><c> enable</c><00:02:48.080><c> the</c>
+
+00:02:48.190 --> 00:02:48.200 align:start position:0%
+project don't forget to enable the
+ 
+
+00:02:48.200 --> 00:02:50.390 align:start position:0%
+project don't forget to enable the
+clipping<00:02:48.640><c> option</c><00:02:49.440><c> so</c><00:02:49.640><c> you</c><00:02:49.760><c> can</c><00:02:49.920><c> merge</c><00:02:50.239><c> the</c>
+
+00:02:50.390 --> 00:02:50.400 align:start position:0%
+clipping option so you can merge the
+ 
+
+00:02:50.400 --> 00:02:53.750 align:start position:0%
+clipping option so you can merge the
+vertices<00:02:50.879><c> on</c><00:02:51.000><c> the</c><00:02:51.120><c> mirror</c><00:02:51.760><c> line</c><00:02:52.760><c> all</c><00:02:52.959><c> right</c>
+
+00:02:53.750 --> 00:02:53.760 align:start position:0%
+vertices on the mirror line all right
+ 
+
+00:02:53.760 --> 00:02:55.790 align:start position:0%
+vertices on the mirror line all right
+let's<00:02:54.000><c> add</c><00:02:54.239><c> vertical</c><00:02:54.599><c> Loop</c><00:02:54.879><c> Cuts</c><00:02:55.440><c> so</c><00:02:55.599><c> that</c>
+
+00:02:55.790 --> 00:02:55.800 align:start position:0%
+let's add vertical Loop Cuts so that
+ 
+
+00:02:55.800 --> 00:02:59.560 align:start position:0%
+let's add vertical Loop Cuts so that
+align<00:02:56.159><c> with</c><00:02:56.280><c> the</c><00:02:56.440><c> image</c>
+
+00:02:59.560 --> 00:02:59.570 align:start position:0%
+ 
+ 
+
+00:02:59.570 --> 00:03:25.670 align:start position:0%
+ 
+[Music]
+
+00:03:25.670 --> 00:03:25.680 align:start position:0%
+[Music]
+ 
+
+00:03:25.680 --> 00:03:32.130 align:start position:0%
+[Music]
+now<00:03:26.159><c> add</c><00:03:26.440><c> horizontal</c><00:03:26.959><c> Loops</c><00:03:27.360><c> cuts</c>
+
+00:03:32.130 --> 00:03:32.140 align:start position:0%
+ 
+ 
+
+00:03:32.140 --> 00:04:00.750 align:start position:0%
+ 
+[Music]
+
+00:04:00.750 --> 00:04:00.760 align:start position:0%
+ 
+ 
+
+00:04:00.760 --> 00:04:06.190 align:start position:0%
+ 
+[Music]
+
+00:04:06.190 --> 00:04:06.200 align:start position:0%
+ 
+ 
+
+00:04:06.200 --> 00:04:08.229 align:start position:0%
+ 
+switch<00:04:06.560><c> the</c><00:04:06.720><c> face</c><00:04:07.000><c> selection</c><00:04:07.439><c> mode</c><00:04:08.079><c> and</c>
+
+00:04:08.229 --> 00:04:08.239 align:start position:0%
+switch the face selection mode and
+ 
+
+00:04:08.239 --> 00:04:13.820 align:start position:0%
+switch the face selection mode and
+delete<00:04:08.640><c> the</c><00:04:08.799><c> unnecessary</c>
+
+00:04:13.820 --> 00:04:13.830 align:start position:0%
+ 
+ 
+
+00:04:13.830 --> 00:04:27.230 align:start position:0%
+ 
+[Music]
+
+00:04:27.230 --> 00:04:27.240 align:start position:0%
+ 
+ 
+
+00:04:27.240 --> 00:04:29.710 align:start position:0%
+ 
+faces<00:04:28.240><c> dissolve</c><00:04:28.720><c> the</c><00:04:28.880><c> unnecessary</c><00:04:29.479><c> Edge</c>
+
+00:04:29.710 --> 00:04:29.720 align:start position:0%
+faces dissolve the unnecessary Edge
+ 
+
+00:04:29.720 --> 00:04:34.370 align:start position:0%
+faces dissolve the unnecessary Edge
+edges
+
+00:04:34.370 --> 00:04:34.380 align:start position:0%
+ 
+ 
+
+00:04:34.380 --> 00:04:46.110 align:start position:0%
+ 
+[Music]
+
+00:04:46.110 --> 00:04:46.120 align:start position:0%
+ 
+ 
+
+00:04:46.120 --> 00:05:12.430 align:start position:0%
+ 
+[Music]
+
+00:05:12.430 --> 00:05:12.440 align:start position:0%
+[Music]
+ 
+
+00:05:12.440 --> 00:05:14.950 align:start position:0%
+[Music]
+press<00:05:12.720><c> k</c><00:05:13.000><c> key</c><00:05:13.320><c> to</c><00:05:13.560><c> activate</c><00:05:14.000><c> the</c><00:05:14.120><c> knife</c><00:05:14.400><c> tool</c>
+
+00:05:14.950 --> 00:05:14.960 align:start position:0%
+press k key to activate the knife tool
+ 
+
+00:05:14.960 --> 00:05:16.830 align:start position:0%
+press k key to activate the knife tool
+and<00:05:15.120><c> cut</c><00:05:15.320><c> the</c><00:05:15.440><c> geometry</c><00:05:16.120><c> from</c><00:05:16.280><c> the</c><00:05:16.400><c> reference</c>
+
+00:05:16.830 --> 00:05:16.840 align:start position:0%
+and cut the geometry from the reference
+ 
+
+00:05:16.840 --> 00:05:18.690 align:start position:0%
+and cut the geometry from the reference
+lines
+
+00:05:18.690 --> 00:05:18.700 align:start position:0%
+lines
+ 
+
+00:05:18.700 --> 00:05:47.310 align:start position:0%
+lines
+[Music]
+
+00:05:47.310 --> 00:05:47.320 align:start position:0%
+ 
+ 
+
+00:05:47.320 --> 00:06:00.670 align:start position:0%
+ 
+[Music]
+
+00:06:00.670 --> 00:06:00.680 align:start position:0%
+ 
+ 
+
+00:06:00.680 --> 00:06:04.029 align:start position:0%
+ 
+select<00:06:01.039><c> the</c><00:06:01.199><c> vertices</c><00:06:01.840><c> press</c><00:06:02.440><c> shift</c><00:06:02.919><c> contrl</c><00:06:03.400><c> B</c>
+
+00:06:04.029 --> 00:06:04.039 align:start position:0%
+select the vertices press shift contrl B
+ 
+
+00:06:04.039 --> 00:06:07.580 align:start position:0%
+select the vertices press shift contrl B
+scroll<00:06:04.440><c> up</c><00:06:04.600><c> the</c><00:06:04.720><c> mouse</c><00:06:05.039><c> wheel</c><00:06:05.560><c> and</c><00:06:05.759><c> bevel</c>
+
+00:06:07.580 --> 00:06:07.590 align:start position:0%
+scroll up the mouse wheel and bevel
+ 
+
+00:06:07.590 --> 00:06:32.680 align:start position:0%
+scroll up the mouse wheel and bevel
+[Music]
+
+00:06:32.680 --> 00:06:32.690 align:start position:0%
+ 
+ 
+
+00:06:32.690 --> 00:06:54.990 align:start position:0%
+ 
+[Music]
+
+00:06:54.990 --> 00:06:55.000 align:start position:0%
+ 
+ 
+
+00:06:55.000 --> 00:06:58.029 align:start position:0%
+ 
+all<00:06:55.199><c> right</c><00:06:56.039><c> it's</c><00:06:56.240><c> time</c><00:06:56.400><c> to</c><00:06:56.560><c> rig</c><00:06:56.840><c> the</c><00:06:56.960><c> box</c><00:06:57.720><c> go</c><00:06:57.840><c> to</c>
+
+00:06:58.029 --> 00:06:58.039 align:start position:0%
+all right it's time to rig the box go to
+ 
+
+00:06:58.039 --> 00:07:00.550 align:start position:0%
+all right it's time to rig the box go to
+edit<00:06:58.280><c> mode</c><00:06:58.919><c> select</c><00:06:59.199><c> the</c><00:06:59.319><c> ver</c><00:06:59.599><c> vertex</c><00:07:00.319><c> press</c>
+
+00:07:00.550 --> 00:07:00.560 align:start position:0%
+edit mode select the ver vertex press
+ 
+
+00:07:00.560 --> 00:07:03.589 align:start position:0%
+edit mode select the ver vertex press
+shift<00:07:00.879><c> s</c><00:07:01.400><c> and</c><00:07:01.599><c> cursor</c><00:07:02.000><c> to</c><00:07:02.240><c> selected</c><00:07:03.240><c> switch</c>
+
+00:07:03.589 --> 00:07:03.599 align:start position:0%
+shift s and cursor to selected switch
+ 
+
+00:07:03.599 --> 00:07:06.309 align:start position:0%
+shift s and cursor to selected switch
+back<00:07:03.759><c> to</c><00:07:04.039><c> object</c><00:07:04.440><c> mode</c><00:07:05.400><c> go</c><00:07:05.520><c> to</c><00:07:05.680><c> the</c><00:07:05.800><c> Armature</c>
+
+00:07:06.309 --> 00:07:06.319 align:start position:0%
+back to object mode go to the Armature
+ 
+
+00:07:06.319 --> 00:07:09.950 align:start position:0%
+back to object mode go to the Armature
+menu<00:07:06.840><c> and</c><00:07:07.000><c> add</c><00:07:07.160><c> a</c><00:07:07.280><c> single</c><00:07:07.680><c> bone</c><00:07:08.560><c> rotate</c><00:07:09.000><c> 90°</c><00:07:09.800><c> on</c>
+
+00:07:09.950 --> 00:07:09.960 align:start position:0%
+menu and add a single bone rotate 90° on
+ 
+
+00:07:09.960 --> 00:07:13.950 align:start position:0%
+menu and add a single bone rotate 90° on
+the<00:07:10.160><c> Y</c>
+
+00:07:13.950 --> 00:07:13.960 align:start position:0%
+ 
+ 
+
+00:07:13.960 --> 00:07:17.070 align:start position:0%
+ 
+AIS<00:07:14.960><c> switch</c><00:07:15.319><c> the</c><00:07:15.560><c> edit</c><00:07:15.800><c> mode</c><00:07:16.400><c> select</c><00:07:16.759><c> the</c><00:07:16.879><c> tip</c>
+
+00:07:17.070 --> 00:07:17.080 align:start position:0%
+AIS switch the edit mode select the tip
+ 
+
+00:07:17.080 --> 00:07:19.589 align:start position:0%
+AIS switch the edit mode select the tip
+of<00:07:17.199><c> the</c><00:07:17.319><c> bone</c><00:07:18.000><c> enable</c><00:07:18.400><c> the</c><00:07:18.520><c> move</c><00:07:18.800><c> tool</c><00:07:19.440><c> and</c>
+
+00:07:19.589 --> 00:07:19.599 align:start position:0%
+of the bone enable the move tool and
+ 
+
+00:07:19.599 --> 00:07:22.150 align:start position:0%
+of the bone enable the move tool and
+bring<00:07:19.800><c> it</c><00:07:19.919><c> to</c><00:07:20.080><c> the</c><00:07:20.199><c> red</c><00:07:20.479><c> line</c><00:07:21.360><c> crease</c><00:07:21.720><c> lines</c>
+
+00:07:22.150 --> 00:07:22.160 align:start position:0%
+bring it to the red line crease lines
+ 
+
+00:07:22.160 --> 00:07:24.110 align:start position:0%
+bring it to the red line crease lines
+show<00:07:22.520><c> where</c><00:07:22.639><c> to</c><00:07:22.800><c> fold</c><00:07:23.120><c> the</c><00:07:23.240><c> material</c><00:07:23.800><c> to</c><00:07:23.919><c> make</c>
+
+00:07:24.110 --> 00:07:24.120 align:start position:0%
+show where to fold the material to make
+ 
+
+00:07:24.120 --> 00:07:26.869 align:start position:0%
+show where to fold the material to make
+the<00:07:24.319><c> box</c><00:07:24.599><c> or</c><00:07:25.000><c> package</c><00:07:26.000><c> this</c><00:07:26.120><c> is</c><00:07:26.319><c> represented</c>
+
+00:07:26.869 --> 00:07:26.879 align:start position:0%
+the box or package this is represented
+ 
+
+00:07:26.879 --> 00:07:29.670 align:start position:0%
+the box or package this is represented
+by<00:07:27.039><c> the</c><00:07:27.199><c> red</c><00:07:27.440><c> lines</c><00:07:28.360><c> they're</c><00:07:28.599><c> like</c><00:07:28.840><c> guidelines</c>
+
+00:07:29.670 --> 00:07:29.680 align:start position:0%
+by the red lines they're like guidelines
+ 
+
+00:07:29.680 --> 00:07:32.350 align:start position:0%
+by the red lines they're like guidelines
+so<00:07:29.879><c> the</c><00:07:30.000><c> folds</c><00:07:30.479><c> happen</c><00:07:30.759><c> in</c><00:07:30.879><c> the</c><00:07:31.080><c> right</c><00:07:31.360><c> places</c>
+
+00:07:32.350 --> 00:07:32.360 align:start position:0%
+so the folds happen in the right places
+ 
+
+00:07:32.360 --> 00:07:34.830 align:start position:0%
+so the folds happen in the right places
+in<00:07:32.520><c> the</c><00:07:32.680><c> same</c><00:07:33.000><c> way</c><00:07:33.560><c> extrude</c><00:07:34.039><c> the</c><00:07:34.160><c> bone</c><00:07:34.479><c> to</c><00:07:34.639><c> the</c>
+
+00:07:34.830 --> 00:07:34.840 align:start position:0%
+in the same way extrude the bone to the
+ 
+
+00:07:34.840 --> 00:07:43.430 align:start position:0%
+in the same way extrude the bone to the
+red
+
+00:07:43.430 --> 00:07:43.440 align:start position:0%
+ 
+ 
+
+00:07:43.440 --> 00:07:47.189 align:start position:0%
+ 
+line<00:07:44.440><c> select</c><00:07:44.800><c> the</c><00:07:44.919><c> bone</c><00:07:45.720><c> and</c><00:07:45.919><c> press</c><00:07:46.159><c> shift</c><00:07:46.520><c> d</c>
+
+00:07:47.189 --> 00:07:47.199 align:start position:0%
+line select the bone and press shift d
+ 
+
+00:07:47.199 --> 00:07:50.589 align:start position:0%
+line select the bone and press shift d
+to<00:07:47.639><c> duplicate</c><00:07:48.639><c> press</c><00:07:48.919><c> alt</c><00:07:49.280><c> P</c><00:07:49.840><c> to</c><00:07:50.039><c> clear</c><00:07:50.319><c> the</c>
+
+00:07:50.589 --> 00:07:50.599 align:start position:0%
+to duplicate press alt P to clear the
+ 
+
+00:07:50.599 --> 00:07:54.230 align:start position:0%
+to duplicate press alt P to clear the
+parent<00:07:51.599><c> rotate</c><00:07:52.319><c> 90°</c><00:07:53.319><c> and</c><00:07:53.560><c> put</c><00:07:53.720><c> the</c><00:07:53.840><c> root</c><00:07:54.080><c> of</c>
+
+00:07:54.230 --> 00:07:54.240 align:start position:0%
+parent rotate 90° and put the root of
+ 
+
+00:07:54.240 --> 00:07:57.309 align:start position:0%
+parent rotate 90° and put the root of
+the<00:07:54.400><c> on</c><00:07:54.639><c> the</c><00:07:54.800><c> red</c>
+
+00:07:57.309 --> 00:07:57.319 align:start position:0%
+ 
+ 
+
+00:07:57.319 --> 00:08:00.830 align:start position:0%
+ 
+line<00:07:58.319><c> in</c><00:07:58.440><c> the</c><00:07:58.599><c> same</c><00:07:58.919><c> way</c><00:07:59.520><c> duplicate</c><00:08:00.360><c> and</c><00:08:00.560><c> place</c>
+
+00:08:00.830 --> 00:08:00.840 align:start position:0%
+line in the same way duplicate and place
+ 
+
+00:08:00.840 --> 00:08:03.820 align:start position:0%
+line in the same way duplicate and place
+the<00:08:01.000><c> bones</c><00:08:01.479><c> properly</c>
+
+00:08:03.820 --> 00:08:03.830 align:start position:0%
+the bones properly
+ 
+
+00:08:03.830 --> 00:08:19.260 align:start position:0%
+the bones properly
+[Music]
+
+00:08:19.260 --> 00:08:19.270 align:start position:0%
+ 
+ 
+
+00:08:19.270 --> 00:08:39.029 align:start position:0%
+ 
+[Music]
+
+00:08:39.029 --> 00:08:39.039 align:start position:0%
+ 
+ 
+
+00:08:39.039 --> 00:08:41.589 align:start position:0%
+ 
+all<00:08:39.240><c> right</c><00:08:39.919><c> let's</c><00:08:40.159><c> select</c><00:08:40.479><c> the</c>
+
+00:08:41.589 --> 00:08:41.599 align:start position:0%
+all right let's select the
+ 
+
+00:08:41.599 --> 00:08:44.670 align:start position:0%
+all right let's select the
+bones<00:08:42.599><c> duplicate</c><00:08:43.080><c> the</c><00:08:43.200><c> bones</c><00:08:43.880><c> and</c><00:08:44.039><c> mirror</c><00:08:44.519><c> on</c>
+
+00:08:44.670 --> 00:08:44.680 align:start position:0%
+bones duplicate the bones and mirror on
+ 
+
+00:08:44.680 --> 00:08:46.320 align:start position:0%
+bones duplicate the bones and mirror on
+the<00:08:44.880><c> Y</c>
+
+00:08:46.320 --> 00:08:46.330 align:start position:0%
+the Y
+ 
+
+00:08:46.330 --> 00:08:47.870 align:start position:0%
+the Y
+[Music]
+
+00:08:47.870 --> 00:08:47.880 align:start position:0%
+[Music]
+ 
+
+00:08:47.880 --> 00:08:58.110 align:start position:0%
+[Music]
+AIS<00:08:48.880><c> bring</c><00:08:49.160><c> the</c><00:08:49.279><c> bones</c><00:08:49.640><c> to</c><00:08:49.839><c> the</c><00:08:50.040><c> proper</c>
+
+00:08:58.110 --> 00:08:58.120 align:start position:0%
+ 
+ 
+
+00:08:58.120 --> 00:09:00.949 align:start position:0%
+ 
+places<00:08:59.120><c> select</c><00:08:59.399><c> select</c><00:08:59.680><c> the</c><00:08:59.760><c> bone</c><00:09:00.399><c> hold</c><00:09:00.720><c> down</c>
+
+00:09:00.949 --> 00:09:00.959 align:start position:0%
+places select select the bone hold down
+ 
+
+00:09:00.959 --> 00:09:03.230 align:start position:0%
+places select select the bone hold down
+the<00:09:01.079><c> shift</c><00:09:01.560><c> to</c><00:09:01.760><c> select</c><00:09:02.079><c> the</c><00:09:02.240><c> other</c><00:09:02.480><c> bone</c><00:09:03.079><c> and</c>
+
+00:09:03.230 --> 00:09:03.240 align:start position:0%
+the shift to select the other bone and
+ 
+
+00:09:03.240 --> 00:09:05.829 align:start position:0%
+the shift to select the other bone and
+select<00:09:03.600><c> the</c><00:09:03.680><c> middle</c><00:09:04.000><c> bone</c><00:09:04.519><c> lastly</c><00:09:05.519><c> press</c>
+
+00:09:05.829 --> 00:09:05.839 align:start position:0%
+select the middle bone lastly press
+ 
+
+00:09:05.839 --> 00:09:09.069 align:start position:0%
+select the middle bone lastly press
+contrl<00:09:06.279><c> p</c><00:09:06.920><c> and</c><00:09:07.040><c> make</c><00:09:07.240><c> a</c><00:09:07.480><c> parent</c><00:09:08.440><c> in</c><00:09:08.600><c> the</c><00:09:08.760><c> same</c>
+
+00:09:09.069 --> 00:09:09.079 align:start position:0%
+contrl p and make a parent in the same
+ 
+
+00:09:09.079 --> 00:09:20.450 align:start position:0%
+contrl p and make a parent in the same
+way<00:09:09.720><c> make</c><00:09:10.040><c> parents</c><00:09:10.519><c> the</c><00:09:10.680><c> others</c>
+
+00:09:20.450 --> 00:09:20.460 align:start position:0%
+ 
+ 
+
+00:09:20.460 --> 00:09:32.269 align:start position:0%
+ 
+[Music]
+
+00:09:32.269 --> 00:09:32.279 align:start position:0%
+ 
+ 
+
+00:09:32.279 --> 00:09:35.389 align:start position:0%
+ 
+all<00:09:32.519><c> right</c><00:09:33.360><c> switch</c><00:09:33.720><c> to</c><00:09:33.959><c> pose</c><00:09:34.279><c> mode</c><00:09:34.920><c> and</c><00:09:35.079><c> test</c>
+
+00:09:35.389 --> 00:09:35.399 align:start position:0%
+all right switch to pose mode and test
+ 
+
+00:09:35.399 --> 00:09:39.590 align:start position:0%
+all right switch to pose mode and test
+the<00:09:35.519><c> bones</c><00:09:35.920><c> if</c><00:09:36.120><c> they</c><00:09:36.240><c> work</c>
+
+00:09:39.590 --> 00:09:39.600 align:start position:0%
+ 
+ 
+
+00:09:39.600 --> 00:09:40.949 align:start position:0%
+ 
+[Music]
+
+00:09:40.949 --> 00:09:40.959 align:start position:0%
+[Music]
+ 
+
+00:09:40.959 --> 00:09:43.750 align:start position:0%
+[Music]
+properly<00:09:41.959><c> all</c><00:09:42.160><c> of</c><00:09:42.320><c> them</c><00:09:42.480><c> work</c><00:09:42.839><c> properly</c>
+
+00:09:43.750 --> 00:09:43.760 align:start position:0%
+properly all of them work properly
+ 
+
+00:09:43.760 --> 00:09:46.269 align:start position:0%
+properly all of them work properly
+switch<00:09:44.079><c> to</c><00:09:44.360><c> object</c>
+
+00:09:46.269 --> 00:09:46.279 align:start position:0%
+switch to object
+ 
+
+00:09:46.279 --> 00:09:48.829 align:start position:0%
+switch to object
+mode<00:09:47.279><c> enable</c><00:09:47.680><c> the</c><00:09:47.800><c> bone</c><00:09:48.120><c> names</c><00:09:48.480><c> in</c><00:09:48.640><c> the</c>
+
+00:09:48.829 --> 00:09:48.839 align:start position:0%
+mode enable the bone names in the
+ 
+
+00:09:48.839 --> 00:09:51.430 align:start position:0%
+mode enable the bone names in the
+viewport<00:09:49.839><c> select</c><00:09:50.200><c> the</c><00:09:50.399><c> box</c><00:09:50.800><c> and</c><00:09:51.000><c> apply</c><00:09:51.320><c> the</c>
+
+00:09:51.430 --> 00:09:51.440 align:start position:0%
+viewport select the box and apply the
+ 
+
+00:09:51.440 --> 00:09:54.470 align:start position:0%
+viewport select the box and apply the
+mirror<00:09:52.000><c> modifier</c><00:09:53.000><c> select</c><00:09:53.440><c> the</c><00:09:53.640><c> box</c><00:09:54.279><c> then</c>
+
+00:09:54.470 --> 00:09:54.480 align:start position:0%
+mirror modifier select the box then
+ 
+
+00:09:54.480 --> 00:09:57.910 align:start position:0%
+mirror modifier select the box then
+select<00:09:54.839><c> the</c><00:09:54.959><c> Armature</c><00:09:55.880><c> press</c><00:09:56.200><c> Ctrl</c><00:09:56.720><c> p</c><00:09:57.440><c> and</c><00:09:57.600><c> set</c>
+
+00:09:57.910 --> 00:09:57.920 align:start position:0%
+select the Armature press Ctrl p and set
+ 
+
+00:09:57.920 --> 00:10:00.030 align:start position:0%
+select the Armature press Ctrl p and set
+parent<00:09:58.360><c> with</c><00:09:58.560><c> empty</c><00:09:58.880><c> groups</c>
+
+00:10:00.030 --> 00:10:00.040 align:start position:0%
+parent with empty groups
+ 
+
+00:10:00.040 --> 00:10:02.269 align:start position:0%
+parent with empty groups
+when<00:10:00.200><c> we</c><00:10:00.320><c> switch</c><00:10:00.640><c> to</c><00:10:00.839><c> edit</c><00:10:01.120><c> mode</c><00:10:01.800><c> we</c><00:10:01.880><c> can</c><00:10:02.040><c> see</c>
+
+00:10:02.269 --> 00:10:02.279 align:start position:0%
+when we switch to edit mode we can see
+ 
+
+00:10:02.279 --> 00:10:05.269 align:start position:0%
+when we switch to edit mode we can see
+the<00:10:02.440><c> vertex</c><00:10:02.880><c> groups</c><00:10:03.320><c> belonging</c><00:10:03.800><c> to</c><00:10:04.000><c> each</c><00:10:04.279><c> bone</c>
+
+00:10:05.269 --> 00:10:05.279 align:start position:0%
+the vertex groups belonging to each bone
+ 
+
+00:10:05.279 --> 00:10:08.670 align:start position:0%
+the vertex groups belonging to each bone
+select<00:10:05.680><c> the</c><00:10:05.800><c> bone</c><00:10:06.120><c> 011</c><00:10:07.120><c> from</c><00:10:07.360><c> the</c><00:10:07.519><c> list</c><00:10:08.279><c> select</c>
+
+00:10:08.670 --> 00:10:08.680 align:start position:0%
+select the bone 011 from the list select
+ 
+
+00:10:08.680 --> 00:10:11.990 align:start position:0%
+select the bone 011 from the list select
+the<00:10:08.800><c> faces</c><00:10:09.200><c> to</c><00:10:09.480><c> assign</c><00:10:10.240><c> and</c><00:10:10.440><c> click</c><00:10:10.720><c> the</c><00:10:11.000><c> assign</c>
+
+00:10:11.990 --> 00:10:12.000 align:start position:0%
+the faces to assign and click the assign
+ 
+
+00:10:12.000 --> 00:10:14.670 align:start position:0%
+the faces to assign and click the assign
+in<00:10:12.120><c> the</c><00:10:12.279><c> same</c><00:10:12.640><c> way</c><00:10:13.279><c> assign</c><00:10:13.680><c> the</c><00:10:13.839><c> vertex</c><00:10:14.320><c> groups</c>
+
+00:10:14.670 --> 00:10:14.680 align:start position:0%
+in the same way assign the vertex groups
+ 
+
+00:10:14.680 --> 00:10:19.190 align:start position:0%
+in the same way assign the vertex groups
+to<00:10:14.839><c> other</c><00:10:15.040><c> bones</c>
+
+00:10:19.190 --> 00:10:19.200 align:start position:0%
+ 
+ 
+
+00:10:19.200 --> 00:10:29.630 align:start position:0%
+ 
+[Music]
+
+00:10:29.630 --> 00:10:29.640 align:start position:0%
+ 
+ 
+
+00:10:29.640 --> 00:10:32.910 align:start position:0%
+ 
+switch<00:10:29.959><c> to</c><00:10:30.120><c> pose</c><00:10:30.440><c> mode</c><00:10:30.959><c> and</c><00:10:31.120><c> test</c><00:10:31.440><c> the</c>
+
+00:10:32.910 --> 00:10:32.920 align:start position:0%
+switch to pose mode and test the
+ 
+
+00:10:32.920 --> 00:10:34.509 align:start position:0%
+switch to pose mode and test the
+[Music]
+
+00:10:34.509 --> 00:10:34.519 align:start position:0%
+[Music]
+ 
+
+00:10:34.519 --> 00:10:40.550 align:start position:0%
+[Music]
+rig<00:10:35.519><c> that's</c>
+
+00:10:40.550 --> 00:10:40.560 align:start position:0%
+ 
+ 
+
+00:10:40.560 --> 00:10:43.430 align:start position:0%
+ 
+it<00:10:41.560><c> let's</c><00:10:41.800><c> assign</c><00:10:42.200><c> vertex</c><00:10:42.680><c> groups</c><00:10:43.040><c> for</c><00:10:43.240><c> other</c>
+
+00:10:43.430 --> 00:10:43.440 align:start position:0%
+it let's assign vertex groups for other
+ 
+
+00:10:43.440 --> 00:11:07.010 align:start position:0%
+it let's assign vertex groups for other
+bones
+
+00:11:07.010 --> 00:11:07.020 align:start position:0%
+ 
+ 
+
+00:11:07.020 --> 00:11:20.080 align:start position:0%
+ 
+[Music]
+
+00:11:20.080 --> 00:11:20.090 align:start position:0%
+ 
+ 
+
+00:11:20.090 --> 00:11:32.750 align:start position:0%
+ 
+[Music]
+
+00:11:32.750 --> 00:11:32.760 align:start position:0%
+ 
+ 
+
+00:11:32.760 --> 00:11:52.310 align:start position:0%
+ 
+[Music]
+
+00:11:52.310 --> 00:11:52.320 align:start position:0%
+ 
+ 
+
+00:11:52.320 --> 00:11:54.949 align:start position:0%
+ 
+all<00:11:52.600><c> right</c><00:11:53.320><c> the</c><00:11:53.440><c> rig</c><00:11:53.680><c> works</c><00:11:54.079><c> properly</c><00:11:54.800><c> and</c>
+
+00:11:54.949 --> 00:11:54.959 align:start position:0%
+all right the rig works properly and
+ 
+
+00:11:54.959 --> 00:11:58.150 align:start position:0%
+all right the rig works properly and
+deforms<00:11:55.480><c> the</c><00:11:55.760><c> geometry</c><00:11:56.760><c> press</c><00:11:57.120><c> alt</c><00:11:57.440><c> R</c><00:11:58.000><c> to</c>
+
+00:11:58.150 --> 00:11:58.160 align:start position:0%
+deforms the geometry press alt R to
+ 
+
+00:11:58.160 --> 00:12:04.470 align:start position:0%
+deforms the geometry press alt R to
+clear<00:11:58.480><c> the</c><00:11:58.600><c> poses</c>
+
+00:12:04.470 --> 00:12:04.480 align:start position:0%
+ 
+ 
+
+00:12:04.480 --> 00:12:06.910 align:start position:0%
+ 
+select<00:12:04.880><c> the</c><00:12:05.040><c> box</c><00:12:05.760><c> and</c><00:12:05.959><c> add</c><00:12:06.120><c> a</c><00:12:06.279><c> solidify</c>
+
+00:12:06.910 --> 00:12:06.920 align:start position:0%
+select the box and add a solidify
+ 
+
+00:12:06.920 --> 00:12:09.750 align:start position:0%
+select the box and add a solidify
+modifier<00:12:07.560><c> to</c><00:12:07.760><c> add</c><00:12:08.160><c> thickness</c><00:12:09.160><c> enable</c><00:12:09.560><c> the</c>
+
+00:12:09.750 --> 00:12:09.760 align:start position:0%
+modifier to add thickness enable the
+ 
+
+00:12:09.760 --> 00:12:12.470 align:start position:0%
+modifier to add thickness enable the
+cavity<00:12:10.160><c> option</c><00:12:10.480><c> in</c><00:12:10.600><c> the</c>
+
+00:12:12.470 --> 00:12:12.480 align:start position:0%
+cavity option in the
+ 
+
+00:12:12.480 --> 00:12:16.150 align:start position:0%
+cavity option in the
+viewport<00:12:13.480><c> set</c><00:12:13.720><c> the</c><00:12:13.920><c> thickness</c><00:12:14.399><c> value</c><00:12:14.720><c> to</c>
+
+00:12:16.150 --> 00:12:16.160 align:start position:0%
+viewport set the thickness value to
+ 
+
+00:12:16.160 --> 00:12:19.069 align:start position:0%
+viewport set the thickness value to
+0.015<00:12:17.160><c> all</c><00:12:17.360><c> right</c><00:12:18.000><c> it's</c><00:12:18.199><c> time</c><00:12:18.360><c> to</c><00:12:18.560><c> animate</c><00:12:18.920><c> the</c>
+
+00:12:19.069 --> 00:12:19.079 align:start position:0%
+0.015 all right it's time to animate the
+ 
+
+00:12:19.079 --> 00:12:21.350 align:start position:0%
+0.015 all right it's time to animate the
+Box<00:12:19.320><c> folding</c><00:12:20.120><c> select</c><00:12:20.480><c> the</c><00:12:20.600><c> Armature</c><00:12:21.199><c> and</c>
+
+00:12:21.350 --> 00:12:21.360 align:start position:0%
+Box folding select the Armature and
+ 
+
+00:12:21.360 --> 00:12:23.829 align:start position:0%
+Box folding select the Armature and
+switch<00:12:21.680><c> to</c><00:12:21.800><c> the</c><00:12:21.920><c> pose</c>
+
+00:12:23.829 --> 00:12:23.839 align:start position:0%
+switch to the pose
+ 
+
+00:12:23.839 --> 00:12:27.509 align:start position:0%
+switch to the pose
+mode<00:12:24.839><c> select</c><00:12:25.199><c> the</c><00:12:25.320><c> bone</c><00:12:26.000><c> press</c><00:12:26.240><c> the</c><00:12:26.399><c> K</c><00:12:26.680><c> key</c><00:12:27.279><c> and</c>
+
+00:12:27.509 --> 00:12:27.519 align:start position:0%
+mode select the bone press the K key and
+ 
+
+00:12:27.519 --> 00:12:30.590 align:start position:0%
+mode select the bone press the K key and
+add<00:12:27.720><c> a</c><00:12:27.920><c> rotation</c><00:12:28.480><c> key</c><00:12:28.720><c> frame</c><00:12:29.199><c> at</c><00:12:29.320><c> frame</c><00:12:29.639><c> 1</c><00:12:30.440><c> go</c>
+
+00:12:30.590 --> 00:12:30.600 align:start position:0%
+add a rotation key frame at frame 1 go
+ 
+
+00:12:30.600 --> 00:12:34.230 align:start position:0%
+add a rotation key frame at frame 1 go
+to<00:12:30.760><c> the</c><00:12:30.880><c> frame</c><00:12:31.160><c> 20</c><00:12:31.959><c> rotate</c><00:12:32.360><c> the</c><00:12:32.519><c> bone</c><00:12:33.120><c> 90°</c><00:12:34.079><c> on</c>
+
+00:12:34.230 --> 00:12:34.240 align:start position:0%
+to the frame 20 rotate the bone 90° on
+ 
+
+00:12:34.240 --> 00:12:37.389 align:start position:0%
+to the frame 20 rotate the bone 90° on
+the<00:12:34.440><c> Y</c>
+
+00:12:37.389 --> 00:12:37.399 align:start position:0%
+ 
+ 
+
+00:12:37.399 --> 00:12:49.509 align:start position:0%
+ 
+AIS<00:12:38.399><c> add</c><00:12:38.639><c> another</c><00:12:39.000><c> rotation</c><00:12:39.600><c> key</c>
+
+00:12:49.509 --> 00:12:49.519 align:start position:0%
+ 
+ 
+
+00:12:49.519 --> 00:12:52.430 align:start position:0%
+ 
+frame<00:12:50.519><c> select</c><00:12:50.880><c> the</c><00:12:51.000><c> bone</c><00:12:51.399><c> and</c><00:12:51.600><c> add</c><00:12:51.880><c> key</c><00:12:52.120><c> frames</c>
+
+00:12:52.430 --> 00:12:52.440 align:start position:0%
+frame select the bone and add key frames
+ 
+
+00:12:52.440 --> 00:13:06.189 align:start position:0%
+frame select the bone and add key frames
+in<00:12:52.600><c> the</c><00:12:52.720><c> same</c><00:12:52.959><c> way</c>
+
+00:13:06.189 --> 00:13:06.199 align:start position:0%
+ 
+ 
+
+00:13:06.199 --> 00:13:08.110 align:start position:0%
+ 
+switch<00:13:06.560><c> the</c><00:13:06.720><c> pivot</c><00:13:07.040><c> point</c><00:13:07.320><c> to</c><00:13:07.519><c> individual</c>
+
+00:13:08.110 --> 00:13:08.120 align:start position:0%
+switch the pivot point to individual
+ 
+
+00:13:08.120 --> 00:13:11.269 align:start position:0%
+switch the pivot point to individual
+Origins<00:13:09.120><c> select</c><00:13:09.519><c> these</c><00:13:09.720><c> two</c><00:13:10.000><c> bones</c><00:13:10.839><c> rotate</c>
+
+00:13:11.269 --> 00:13:11.279 align:start position:0%
+Origins select these two bones rotate
+ 
+
+00:13:11.279 --> 00:13:19.320 align:start position:0%
+Origins select these two bones rotate
+90°<00:13:12.040><c> on</c><00:13:12.199><c> the</c><00:13:12.360><c> Z</c><00:13:12.680><c> AIS</c><00:13:13.399><c> and</c><00:13:13.600><c> add</c><00:13:13.839><c> key</c><00:13:14.120><c> frames</c>
+
+00:13:19.320 --> 00:13:19.330 align:start position:0%
+ 
+ 
+
+00:13:19.330 --> 00:13:34.030 align:start position:0%
+ 
+[Music]
+
+00:13:34.030 --> 00:13:34.040 align:start position:0%
+[Music]
+ 
+
+00:13:34.040 --> 00:13:35.550 align:start position:0%
+[Music]
+switch<00:13:34.440><c> back</c><00:13:34.600><c> the</c><00:13:34.760><c> pivot</c><00:13:35.079><c> point</c><00:13:35.279><c> to</c><00:13:35.440><c> the</c>
+
+00:13:35.550 --> 00:13:35.560 align:start position:0%
+switch back the pivot point to the
+ 
+
+00:13:35.560 --> 00:13:39.030 align:start position:0%
+switch back the pivot point to the
+median<00:13:36.399><c> select</c><00:13:36.760><c> the</c><00:13:36.880><c> bone</c><00:13:37.519><c> rotate</c><00:13:37.959><c> 90°</c><00:13:38.720><c> on</c><00:13:38.880><c> the</c>
+
+00:13:39.030 --> 00:13:39.040 align:start position:0%
+median select the bone rotate 90° on the
+ 
+
+00:13:39.040 --> 00:13:42.630 align:start position:0%
+median select the bone rotate 90° on the
+xais<00:13:39.959><c> and</c><00:13:40.160><c> key</c><00:13:40.440><c> frames</c>
+
+00:13:42.630 --> 00:13:42.640 align:start position:0%
+xais and key frames
+ 
+
+00:13:42.640 --> 00:13:53.450 align:start position:0%
+xais and key frames
+[Music]
+
+00:13:53.450 --> 00:13:53.460 align:start position:0%
+ 
+ 
+
+00:13:53.460 --> 00:14:40.150 align:start position:0%
+ 
+[Music]
+
+00:14:40.150 --> 00:14:40.160 align:start position:0%
+ 
+ 
+
+00:14:40.160 --> 00:14:43.310 align:start position:0%
+ 
+[Music]
+
+00:14:43.310 --> 00:14:43.320 align:start position:0%
+ 
+ 
+
+00:14:43.320 --> 00:14:48.030 align:start position:0%
+ 
+all<00:14:43.560><c> right</c><00:14:44.079><c> let's</c><00:14:44.279><c> play</c><00:14:44.480><c> the</c>
+
+00:14:48.030 --> 00:14:48.040 align:start position:0%
+ 
+ 
+
+00:14:48.040 --> 00:14:52.069 align:start position:0%
+ 
+animation<00:14:49.040><c> that's</c>
+
+00:14:52.069 --> 00:14:52.079 align:start position:0%
+ 
+ 
+
+00:14:52.079 --> 00:14:59.290 align:start position:0%
+ 
+it<00:14:53.079><c> hide</c><00:14:53.279><c> the</c><00:14:53.360><c> Armature</c><00:14:53.800><c> in</c><00:14:53.959><c> the</c><00:14:54.040><c> viewport</c>
+
+00:14:59.290 --> 00:14:59.300 align:start position:0%
+ 
+ 
+
+00:14:59.300 --> 00:15:01.030 align:start position:0%
+ 
+[Music]
+
+00:15:01.030 --> 00:15:01.040 align:start position:0%
+[Music]
+ 
+
+00:15:01.040 --> 00:15:03.350 align:start position:0%
+[Music]
+it's<00:15:01.240><c> time</c><00:15:01.399><c> to</c><00:15:01.600><c> add</c><00:15:01.839><c> materials</c><00:15:02.800><c> select</c><00:15:03.199><c> the</c>
+
+00:15:03.350 --> 00:15:03.360 align:start position:0%
+it's time to add materials select the
+ 
+
+00:15:03.360 --> 00:15:05.470 align:start position:0%
+it's time to add materials select the
+box<00:15:03.880><c> and</c><00:15:04.079><c> hit</c><00:15:04.240><c> the</c><00:15:04.360><c> Z</c><00:15:04.639><c> key</c><00:15:04.839><c> to</c><00:15:05.000><c> switch</c><00:15:05.279><c> to</c>
+
+00:15:05.470 --> 00:15:05.480 align:start position:0%
+box and hit the Z key to switch to
+ 
+
+00:15:05.480 --> 00:15:07.990 align:start position:0%
+box and hit the Z key to switch to
+material<00:15:06.079><c> preview</c><00:15:07.079><c> go</c><00:15:07.199><c> to</c><00:15:07.360><c> the</c><00:15:07.480><c> material</c>
+
+00:15:07.990 --> 00:15:08.000 align:start position:0%
+material preview go to the material
+ 
+
+00:15:08.000 --> 00:15:10.949 align:start position:0%
+material preview go to the material
+properties<00:15:08.519><c> Tab</c><00:15:09.000><c> and</c><00:15:09.199><c> add</c><00:15:09.360><c> a</c><00:15:09.519><c> material</c><00:15:10.000><c> slot</c>
+
+00:15:10.949 --> 00:15:10.959 align:start position:0%
+properties Tab and add a material slot
+ 
+
+00:15:10.959 --> 00:15:13.430 align:start position:0%
+properties Tab and add a material slot
+click<00:15:11.199><c> the</c><00:15:11.320><c> new</c><00:15:11.519><c> button</c><00:15:11.800><c> to</c><00:15:12.000><c> add</c><00:15:12.440><c> material</c>
+
+00:15:13.430 --> 00:15:13.440 align:start position:0%
+click the new button to add material
+ 
+
+00:15:13.440 --> 00:15:16.030 align:start position:0%
+click the new button to add material
+rename<00:15:13.880><c> the</c><00:15:14.040><c> material</c><00:15:14.600><c> as</c>
+
+00:15:16.030 --> 00:15:16.040 align:start position:0%
+rename the material as
+ 
+
+00:15:16.040 --> 00:15:19.629 align:start position:0%
+rename the material as
+interfaces<00:15:17.040><c> select</c><00:15:17.440><c> the</c><00:15:17.560><c> brownish</c><00:15:18.040><c> base</c>
+
+00:15:19.629 --> 00:15:19.639 align:start position:0%
+interfaces select the brownish base
+ 
+
+00:15:19.639 --> 00:15:22.829 align:start position:0%
+interfaces select the brownish base
+color<00:15:20.639><c> increase</c><00:15:21.120><c> the</c><00:15:21.279><c> roughness</c><00:15:21.800><c> value</c><00:15:22.639><c> add</c>
+
+00:15:22.829 --> 00:15:22.839 align:start position:0%
+color increase the roughness value add
+ 
+
+00:15:22.839 --> 00:15:25.030 align:start position:0%
+color increase the roughness value add
+another<00:15:23.199><c> material</c><00:15:23.639><c> slot</c><00:15:24.199><c> and</c><00:15:24.320><c> rename</c><00:15:24.720><c> it</c><00:15:24.880><c> as</c>
+
+00:15:25.030 --> 00:15:25.040 align:start position:0%
+another material slot and rename it as
+ 
+
+00:15:25.040 --> 00:15:26.870 align:start position:0%
+another material slot and rename it as
+outer
+
+00:15:26.870 --> 00:15:26.880 align:start position:0%
+outer
+ 
+
+00:15:26.880 --> 00:15:29.590 align:start position:0%
+outer
+faces<00:15:27.880><c> select</c><00:15:28.240><c> the</c><00:15:28.360><c> base</c><00:15:28.639><c> color</c><00:15:29.040><c> and</c><00:15:29.160><c> decrease</c>
+
+00:15:29.590 --> 00:15:29.600 align:start position:0%
+faces select the base color and decrease
+ 
+
+00:15:29.600 --> 00:15:32.069 align:start position:0%
+faces select the base color and decrease
+the<00:15:29.720><c> roughness</c><00:15:30.199><c> value</c><00:15:31.079><c> go</c><00:15:31.199><c> to</c><00:15:31.319><c> the</c><00:15:31.480><c> modifier</c>
+
+00:15:32.069 --> 00:15:32.079 align:start position:0%
+the roughness value go to the modifier
+ 
+
+00:15:32.079 --> 00:15:35.110 align:start position:0%
+the roughness value go to the modifier
+tab<00:15:32.800><c> in</c><00:15:32.959><c> the</c><00:15:33.079><c> solidify</c><00:15:33.680><c> modifier</c><00:15:34.560><c> open</c><00:15:34.800><c> up</c><00:15:34.959><c> the</c>
+
+00:15:35.110 --> 00:15:35.120 align:start position:0%
+tab in the solidify modifier open up the
+ 
+
+00:15:35.120 --> 00:15:37.230 align:start position:0%
+tab in the solidify modifier open up the
+material<00:15:35.600><c> panel</c><00:15:36.160><c> and</c><00:15:36.279><c> set</c><00:15:36.519><c> the</c><00:15:36.639><c> material</c>
+
+00:15:37.230 --> 00:15:37.240 align:start position:0%
+material panel and set the material
+ 
+
+00:15:37.240 --> 00:15:40.710 align:start position:0%
+material panel and set the material
+offset<00:15:37.680><c> to</c><00:15:37.920><c> one</c><00:15:38.880><c> that's</c>
+
+00:15:40.710 --> 00:15:40.720 align:start position:0%
+offset to one that's
+ 
+
+00:15:40.720 --> 00:15:44.430 align:start position:0%
+offset to one that's
+it<00:15:41.720><c> let's</c><00:15:41.959><c> add</c><00:15:42.160><c> the</c><00:15:42.279><c> blender</c><00:15:42.720><c> logo</c><00:15:43.079><c> on</c><00:15:43.240><c> the</c><00:15:43.440><c> box</c>
+
+00:15:44.430 --> 00:15:44.440 align:start position:0%
+it let's add the blender logo on the box
+ 
+
+00:15:44.440 --> 00:15:47.629 align:start position:0%
+it let's add the blender logo on the box
+first<00:15:45.040><c> unwrap</c><00:15:45.519><c> the</c><00:15:45.639><c> UV</c><00:15:46.079><c> map</c><00:15:46.759><c> go</c><00:15:46.920><c> to</c><00:15:47.079><c> the</c><00:15:47.199><c> UV</c>
+
+00:15:47.629 --> 00:15:47.639 align:start position:0%
+first unwrap the UV map go to the UV
+ 
+
+00:15:47.639 --> 00:15:50.189 align:start position:0%
+first unwrap the UV map go to the UV
+editing<00:15:48.160><c> workspace</c><00:15:49.160><c> hit</c><00:15:49.360><c> the</c><00:15:49.480><c> a</c><00:15:49.759><c> key</c><00:15:50.040><c> to</c>
+
+00:15:50.189 --> 00:15:50.199 align:start position:0%
+editing workspace hit the a key to
+ 
+
+00:15:50.199 --> 00:15:53.550 align:start position:0%
+editing workspace hit the a key to
+select<00:15:50.639><c> all</c><00:15:50.920><c> faces</c><00:15:51.839><c> go</c><00:15:52.000><c> to</c><00:15:52.160><c> the</c><00:15:52.279><c> UV</c><00:15:52.639><c> menu</c><00:15:53.360><c> and</c>
+
+00:15:53.550 --> 00:15:53.560 align:start position:0%
+select all faces go to the UV menu and
+ 
+
+00:15:53.560 --> 00:15:59.069 align:start position:0%
+select all faces go to the UV menu and
+smart<00:15:54.000><c> UV</c><00:15:54.600><c> project</c>
+
+00:15:59.069 --> 00:15:59.079 align:start position:0%
+ 
+ 
+
+00:15:59.079 --> 00:16:01.470 align:start position:0%
+ 
+go<00:15:59.240><c> to</c><00:15:59.399><c> the</c><00:15:59.560><c> texture</c><00:16:00.000><c> painting</c><00:16:00.480><c> workspace</c>
+
+00:16:01.470 --> 00:16:01.480 align:start position:0%
+go to the texture painting workspace
+ 
+
+00:16:01.480 --> 00:16:04.309 align:start position:0%
+go to the texture painting workspace
+switch<00:16:01.839><c> to</c><00:16:02.000><c> the</c><00:16:02.160><c> material</c>
+
+00:16:04.309 --> 00:16:04.319 align:start position:0%
+switch to the material
+ 
+
+00:16:04.319 --> 00:16:07.350 align:start position:0%
+switch to the material
+preview<00:16:05.319><c> go</c><00:16:05.480><c> to</c><00:16:05.639><c> the</c><00:16:05.800><c> texture</c><00:16:06.199><c> slots</c><00:16:06.639><c> menu</c>
+
+00:16:07.350 --> 00:16:07.360 align:start position:0%
+preview go to the texture slots menu
+ 
+
+00:16:07.360 --> 00:16:09.910 align:start position:0%
+preview go to the texture slots menu
+select<00:16:07.759><c> the</c><00:16:07.880><c> outer</c><00:16:08.240><c> faces</c><00:16:08.759><c> material</c><00:16:09.639><c> click</c>
+
+00:16:09.910 --> 00:16:09.920 align:start position:0%
+select the outer faces material click
+ 
+
+00:16:09.920 --> 00:16:12.470 align:start position:0%
+select the outer faces material click
+the<00:16:10.120><c> plus</c><00:16:10.519><c> icon</c><00:16:11.279><c> and</c><00:16:11.440><c> add</c><00:16:11.600><c> a</c><00:16:11.759><c> base</c><00:16:12.120><c> color</c>
+
+00:16:12.470 --> 00:16:12.480 align:start position:0%
+the plus icon and add a base color
+ 
+
+00:16:12.480 --> 00:16:16.230 align:start position:0%
+the plus icon and add a base color
+texture<00:16:13.440><c> set</c><00:16:13.680><c> the</c><00:16:13.839><c> resolution</c><00:16:14.399><c> to</c><00:16:14.800><c> 4K</c><00:16:15.800><c> set</c><00:16:16.079><c> the</c>
+
+00:16:16.230 --> 00:16:16.240 align:start position:0%
+texture set the resolution to 4K set the
+ 
+
+00:16:16.240 --> 00:16:22.269 align:start position:0%
+texture set the resolution to 4K set the
+alpha<00:16:16.680><c> value</c><00:16:17.000><c> to</c><00:16:17.279><c> zero</c><00:16:18.040><c> and</c><00:16:18.240><c> click</c><00:16:18.560><c> the</c><00:16:18.720><c> okay</c>
+
+00:16:22.269 --> 00:16:22.279 align:start position:0%
+ 
+ 
+
+00:16:22.279 --> 00:16:25.430 align:start position:0%
+ 
+button<00:16:23.279><c> add</c><00:16:23.440><c> a</c><00:16:23.600><c> new</c><00:16:23.880><c> texture</c><00:16:24.759><c> and</c><00:16:24.920><c> switch</c><00:16:25.319><c> the</c>
+
+00:16:25.430 --> 00:16:25.440 align:start position:0%
+button add a new texture and switch the
+ 
+
+00:16:25.440 --> 00:16:28.110 align:start position:0%
+button add a new texture and switch the
+mapping<00:16:25.920><c> method</c><00:16:26.240><c> to</c><00:16:26.399><c> the</c><00:16:26.639><c> stencil</c><00:16:27.639><c> switch</c><00:16:28.000><c> the</c>
+
+00:16:28.110 --> 00:16:28.120 align:start position:0%
+mapping method to the stencil switch the
+ 
+
+00:16:28.120 --> 00:16:31.470 align:start position:0%
+mapping method to the stencil switch the
+falloff<00:16:28.639><c> type</c><00:16:29.079><c> to</c>
+
+00:16:31.470 --> 00:16:31.480 align:start position:0%
+ 
+ 
+
+00:16:31.480 --> 00:16:34.069 align:start position:0%
+ 
+constant<00:16:32.480><c> go</c><00:16:32.680><c> to</c><00:16:32.839><c> the</c><00:16:33.000><c> texture</c><00:16:33.519><c> properties</c>
+
+00:16:34.069 --> 00:16:34.079 align:start position:0%
+constant go to the texture properties
+ 
+
+00:16:34.079 --> 00:16:36.629 align:start position:0%
+constant go to the texture properties
+Tab<00:16:34.720><c> and</c><00:16:34.880><c> open</c><00:16:35.120><c> the</c><00:16:35.240><c> blender</c><00:16:35.680><c> logo</c><00:16:36.120><c> image</c><00:16:36.399><c> in</c>
+
+00:16:36.629 --> 00:16:36.639 align:start position:0%
+Tab and open the blender logo image in
+ 
+
+00:16:36.639 --> 00:16:38.749 align:start position:0%
+Tab and open the blender logo image in
+PNG
+
+00:16:38.749 --> 00:16:38.759 align:start position:0%
+PNG
+ 
+
+00:16:38.759 --> 00:16:42.590 align:start position:0%
+PNG
+format<00:16:39.759><c> switch</c><00:16:40.120><c> to</c><00:16:40.279><c> the</c><00:16:40.480><c> top</c><00:16:41.040><c> view</c><00:16:42.040><c> hold</c><00:16:42.360><c> down</c>
+
+00:16:42.590 --> 00:16:42.600 align:start position:0%
+format switch to the top view hold down
+ 
+
+00:16:42.600 --> 00:16:44.230 align:start position:0%
+format switch to the top view hold down
+the<00:16:42.800><c> right</c><00:16:43.000><c> Mouse</c><00:16:43.360><c> button</c><00:16:43.680><c> to</c><00:16:43.839><c> move</c><00:16:44.120><c> the</c>
+
+00:16:44.230 --> 00:16:44.240 align:start position:0%
+the right Mouse button to move the
+ 
+
+00:16:44.240 --> 00:16:46.550 align:start position:0%
+the right Mouse button to move the
+stencil<00:16:44.680><c> where</c><00:16:44.959><c> you</c><00:16:45.120><c> want</c><00:16:45.959><c> hold</c><00:16:46.240><c> down</c><00:16:46.440><c> the</c>
+
+00:16:46.550 --> 00:16:46.560 align:start position:0%
+stencil where you want hold down the
+ 
+
+00:16:46.560 --> 00:16:48.629 align:start position:0%
+stencil where you want hold down the
+shift<00:16:46.920><c> key</c><00:16:47.240><c> and</c><00:16:47.519><c> right</c><00:16:47.759><c> Mouse</c><00:16:48.160><c> button</c><00:16:48.440><c> to</c>
+
+00:16:48.629 --> 00:16:48.639 align:start position:0%
+shift key and right Mouse button to
+ 
+
+00:16:48.639 --> 00:16:55.150 align:start position:0%
+shift key and right Mouse button to
+resize<00:16:49.199><c> the</c><00:16:49.440><c> logo</c><00:16:50.440><c> apply</c><00:16:50.720><c> the</c><00:16:50.880><c> brush</c><00:16:51.199><c> to</c><00:16:51.360><c> the</c>
+
+00:16:55.150 --> 00:16:55.160 align:start position:0%
+ 
+ 
+
+00:16:55.160 --> 00:16:58.389 align:start position:0%
+ 
+logo<00:16:56.160><c> go</c><00:16:56.279><c> to</c><00:16:56.440><c> the</c><00:16:56.600><c> texture</c><00:16:57.040><c> menu</c><00:16:57.680><c> and</c><00:16:57.920><c> unlink</c>
+
+00:16:58.389 --> 00:16:58.399 align:start position:0%
+logo go to the texture menu and unlink
+ 
+
+00:16:58.399 --> 00:16:59.590 align:start position:0%
+logo go to the texture menu and unlink
+the<00:16:58.519><c> image</c>
+
+00:16:59.590 --> 00:16:59.600 align:start position:0%
+the image
+ 
+
+00:16:59.600 --> 00:17:00.590 align:start position:0%
+the image
+that's
+
+00:17:00.590 --> 00:17:00.600 align:start position:0%
+that's
+ 
+
+00:17:00.600 --> 00:17:04.270 align:start position:0%
+that's
+it<00:17:01.600><c> go</c><00:17:01.720><c> to</c><00:17:01.839><c> the</c><00:17:01.959><c> shading</c><00:17:02.639><c> workspace</c><00:17:03.639><c> add</c><00:17:03.800><c> a</c><00:17:03.920><c> mix</c>
+
+00:17:04.270 --> 00:17:04.280 align:start position:0%
+it go to the shading workspace add a mix
+ 
+
+00:17:04.280 --> 00:17:09.510 align:start position:0%
+it go to the shading workspace add a mix
+color
+
+00:17:09.510 --> 00:17:09.520 align:start position:0%
+ 
+ 
+
+00:17:09.520 --> 00:17:13.990 align:start position:0%
+ 
+node<00:17:10.520><c> plug</c><00:17:10.799><c> the</c><00:17:10.959><c> alpha</c><00:17:11.319><c> node</c><00:17:11.679><c> into</c><00:17:11.959><c> the</c><00:17:12.120><c> factor</c>
+
+00:17:13.990 --> 00:17:14.000 align:start position:0%
+node plug the alpha node into the factor
+ 
+
+00:17:14.000 --> 00:17:16.909 align:start position:0%
+node plug the alpha node into the factor
+node<00:17:15.000><c> plug</c><00:17:15.280><c> the</c><00:17:15.400><c> base</c><00:17:15.720><c> color</c><00:17:16.039><c> into</c><00:17:16.280><c> the</c><00:17:16.400><c> B</c>
+
+00:17:16.909 --> 00:17:16.919 align:start position:0%
+node plug the base color into the B
+ 
+
+00:17:16.919 --> 00:17:21.309 align:start position:0%
+node plug the base color into the B
+socket<00:17:17.919><c> select</c><00:17:18.360><c> any</c>
+
+00:17:21.309 --> 00:17:21.319 align:start position:0%
+ 
+ 
+
+00:17:21.319 --> 00:17:27.230 align:start position:0%
+ 
+color<00:17:22.319><c> that's</c>
+
+00:17:27.230 --> 00:17:27.240 align:start position:0%
+ 
+ 
+
+00:17:27.240 --> 00:17:30.070 align:start position:0%
+ 
+it<00:17:28.240><c> thanks</c><00:17:28.439><c> for</c><00:17:28.600><c> watching</c><00:17:29.000><c> ing</c><00:17:29.640><c> see</c><00:17:29.840><c> you</c><00:17:29.960><c> in</c>
+
+00:17:30.070 --> 00:17:30.080 align:start position:0%
+it thanks for watching ing see you in
+ 
+
+00:17:30.080 --> 00:17:32.660 align:start position:0%
+it thanks for watching ing see you in
+the<00:17:30.240><c> next</c><00:17:30.520><c> tutorial</c>
+
+00:17:32.660 --> 00:17:32.670 align:start position:0%
+the next tutorial
+ 
+
+00:17:32.670 --> 00:17:35.719 align:start position:0%
+the next tutorial
+[Music]
+

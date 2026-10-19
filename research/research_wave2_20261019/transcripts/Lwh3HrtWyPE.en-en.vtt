@@ -1,0 +1,716 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.160 --> 00:00:04.240
+today we're going to make this prefume bottle&nbsp;
+using Blender but this is not just going to be&nbsp;&nbsp;
+
+00:00:04.240 --> 00:00:07.440
+a follow along tutorial because in this&nbsp;
+video I'll be showing you some modeling&nbsp;&nbsp;
+
+00:00:07.440 --> 00:00:11.680
+techniques and some shortcuts that you can use&nbsp;
+in your future projects also stay till the end&nbsp;&nbsp;
+
+00:00:11.680 --> 00:00:14.640
+because I'll be showing you some lighting&nbsp;
+techniques that will help you to take your&nbsp;&nbsp;
+
+00:00:14.640 --> 00:00:20.720
+render from this to this and also I have been&nbsp;
+using Blender for last 5 years right now so if&nbsp;&nbsp;
+
+00:00:20.720 --> 00:00:24.080
+you are someone who is just getting started&nbsp;
+with Blender I think this video is going to&nbsp;&nbsp;
+
+00:00:24.080 --> 00:00:27.440
+be a helpful resource for you so that's&nbsp;
+being said there will be also time code&nbsp;&nbsp;
+
+00:00:27.440 --> 00:00:31.200
+throughout this video so that you can skip and&nbsp;
+watch the part that might help you the most so&nbsp;&nbsp;
+
+00:00:31.200 --> 00:00:36.560
+yes let's get started so this is the model&nbsp;
+that we are going to make let's start with a
+
+00:00:36.560 --> 00:00:43.600
+cylinder so as we are doing a non-destructive&nbsp;
+modeling one of the most important thing is you&nbsp;&nbsp;
+
+00:00:43.600 --> 00:00:50.160
+need to count your vertices so here I am going for&nbsp;
+64 and I'm going to take a even number so that I&nbsp;&nbsp;
+
+00:00:50.160 --> 00:00:57.040
+can refill the faces afterward so yes so to get&nbsp;
+this shape what we're going to do is we're going&nbsp;&nbsp;
+
+00:00:57.040 --> 00:01:03.920
+to select the edges and yeah there is a boring&nbsp;
+process that you can manually select them by&nbsp;&nbsp;
+
+00:01:03.920 --> 00:01:09.280
+one by one but there is a shortcut you need to&nbsp;
+press control shift and plus and it's going to&nbsp;&nbsp;
+
+00:01:09.280 --> 00:01:18.880
+select it for you so yeah that's a lifesaver so&nbsp;
+let's go to the extreme mode and let's extrude&nbsp;&nbsp;
+
+00:01:18.880 --> 00:01:27.680
+i'm going to press shift Z so that it's&nbsp;
+only extruded along the X and Y axis okay&nbsp;&nbsp;
+
+00:01:27.680 --> 00:01:33.760
+it should be fine so yeah we have extruded&nbsp;
+the edges now we are going to bevel them
+
+00:01:33.760 --> 00:01:44.160
+slightly this should work and from here you&nbsp;
+can enable the scene statistics so that you&nbsp;&nbsp;
+
+00:01:44.160 --> 00:01:50.160
+can see the polygon and vertx count here&nbsp;
+so yeah now what we're going to do is we're&nbsp;&nbsp;
+
+00:01:50.160 --> 00:01:55.120
+going to delete these two faces because these&nbsp;
+are inborns and we don't need inbounds in our
+
+00:01:55.120 --> 00:02:04.960
+model now what we're going to do&nbsp;
+is we're going to extrude inwards&nbsp;&nbsp;
+
+00:02:04.960 --> 00:02:14.960
+let's do the same for here extrude this&nbsp;
+and I think we can merge them at center
+
+00:02:16.400 --> 00:02:19.040
+okay let's adjust the height
+
+00:02:19.040 --> 00:02:25.920
+accordingly so sometime there will be&nbsp;
+models that you won't have the access&nbsp;&nbsp;
+
+00:02:25.920 --> 00:02:31.040
+to all the angles so you need to pretty&nbsp;
+much eyeball the height and the dimensions&nbsp;&nbsp;
+
+00:02:31.040 --> 00:02:39.040
+i think this should I think this should&nbsp;
+work also let's do one thing let's put
+
+00:02:39.040 --> 00:02:50.640
+here okay so let's now apply our subdivision&nbsp;
+surface and now let's fix the corners
+
+00:02:50.640 --> 00:03:03.040
+first yeah it's looking pretty much good now&nbsp;
+what we're going to do is we need to make this&nbsp;&nbsp;
+
+00:03:03.040 --> 00:03:12.000
+a circle so for this you will need a add-on&nbsp;
+called loop tools i have already installed it&nbsp;&nbsp;
+
+00:03:12.000 --> 00:03:16.080
+so after installing loop tool what you can&nbsp;
+do is you need to right click and there is&nbsp;&nbsp;
+
+00:03:16.080 --> 00:03:23.200
+loop tools and you need to select relax so&nbsp;
+you will have a pretty much circle here and&nbsp;&nbsp;
+
+00:03:23.200 --> 00:03:30.960
+from here what we can do is we can extrude&nbsp;
+it so let's model the inside the inside&nbsp;&nbsp;
+
+00:03:30.960 --> 00:03:38.880
+won't be visible but let's just model it&nbsp;
+so that we can have this reflection here
+
+00:03:51.680 --> 00:03:56.720
+so yes our base model is almost&nbsp;
+ready let's fill this face
+
+00:03:56.720 --> 00:04:08.240
+also we're going to add edge loops to secure the&nbsp;
+corners so that we can have a even corner here&nbsp;&nbsp;
+
+00:04:09.600 --> 00:04:16.720
+okay let's model the upper portion the gap so&nbsp;
+to model it I'm going to take apart from here&nbsp;&nbsp;
+
+00:04:16.720 --> 00:04:24.640
+and I'm going to select shift D and S so&nbsp;
+and also shift Z so that it's only scaled&nbsp;&nbsp;
+
+00:04:24.640 --> 00:04:36.960
+along the X and Y axis okay let's select P&nbsp;
+and selection to have our own separate mesh&nbsp;&nbsp;
+
+00:04:36.960 --> 00:04:46.160
+now let's place it here let's extrude&nbsp;
+it inside and let's secure the
+
+00:04:46.160 --> 00:04:54.800
+corners so we have this extruded&nbsp;
+part so let's add a loop cut here
+
+00:04:54.800 --> 00:05:05.760
+and so what we're going to do here is we're&nbsp;
+going to press E and S and also press shift&nbsp;&nbsp;
+
+00:05:05.760 --> 00:05:10.800
+Z so that it's only extruded along the&nbsp;
+X and Y axis so after extruding what you&nbsp;&nbsp;
+
+00:05:10.800 --> 00:05:14.720
+can see that we are having a smooth surface&nbsp;
+here because we got the subdivision surface&nbsp;&nbsp;
+
+00:05:14.720 --> 00:05:24.960
+but let's add a bevel modifier here let's&nbsp;
+increase the segments and yeah we got pretty&nbsp;&nbsp;
+
+00:05:24.960 --> 00:05:33.440
+much similar thing i think we can reduce the&nbsp;
+extrusion here let's press this let's reduce
+
+00:05:33.440 --> 00:05:39.440
+it and
+
+00:05:39.440 --> 00:05:47.040
+let's Okay this should
+
+00:05:47.040 --> 00:05:54.000
+work so our base model is almost ready&nbsp;
+so here comes a tricky part so we need&nbsp;&nbsp;
+
+00:05:54.000 --> 00:06:01.360
+to make this part flatten and just to apply&nbsp;
+the label so here what we can do is let's go&nbsp;&nbsp;
+
+00:06:01.360 --> 00:06:14.480
+to the front end first let's add some loop&nbsp;
+cuz that where we want to add the label
+
+00:06:18.160 --> 00:06:25.680
+let's go to the face selection mode and select&nbsp;
+the faces that we want to flatten so first let's&nbsp;&nbsp;
+
+00:06:25.680 --> 00:06:35.680
+insert the faces a little bit so that we have a&nbsp;
+extra edge loop around it yes so now what we're&nbsp;&nbsp;
+
+00:06:35.680 --> 00:06:41.840
+going to do here is we are going to assign these&nbsp;
+vertices into a new vertx group so as we're doing&nbsp;&nbsp;
+
+00:06:41.840 --> 00:06:47.360
+a non-destructive model we are going to preserve&nbsp;
+this model so that we can make changes later on&nbsp;&nbsp;
+
+00:06:47.360 --> 00:06:53.360
+and if this was a non-destructive modeling what&nbsp;
+we could do here is we could just select them and&nbsp;&nbsp;
+
+00:06:53.360 --> 00:07:00.160
+then press relax and this will give us a flattened&nbsp;
+look but then there is no going back and we can't&nbsp;&nbsp;
+
+00:07:00.160 --> 00:07:05.680
+have the previous shape again so what we're&nbsp;
+going to do here is we're going to add another
+
+00:07:05.680 --> 00:07:17.920
+cylinder and here I'm going to put it 96&nbsp;
+why 96 because if you select the edges you&nbsp;&nbsp;
+
+00:07:17.920 --> 00:07:23.680
+can see that this also have 96 vertices so what&nbsp;
+we're going to do here is we're going to project&nbsp;&nbsp;
+
+00:07:23.680 --> 00:07:31.280
+this part into this cylinder so that we have&nbsp;
+control over it and let's add a shrink wrap
+
+00:07:31.280 --> 00:07:38.480
+modifier and I'm going to select this one&nbsp;&nbsp;
+
+00:07:39.760 --> 00:07:48.720
+and I don't want the entire thing pushing grab&nbsp;
+just only the vertx group and let's hide this&nbsp;&nbsp;
+
+00:07:48.720 --> 00:07:54.960
+so what we're going to do here is let's add&nbsp;
+some edge loop so that we have a much better&nbsp;&nbsp;
+
+00:07:54.960 --> 00:08:04.800
+finishing here yes you can already see the&nbsp;
+label part let's add another script here
+
+00:08:06.320 --> 00:08:12.480
+let's do the same for the bottom&nbsp;
+side and let's do one for each
+
+00:08:12.480 --> 00:08:25.440
+corner so yes now you can see that we have the&nbsp;
+label portion and we can adjust it by just scaling&nbsp;&nbsp;
+
+00:08:25.440 --> 00:08:33.520
+the inside part so you can control that how much&nbsp;
+depth we want i think this is pretty much good so&nbsp;&nbsp;
+
+00:08:33.520 --> 00:08:38.960
+we are pretty much done with the model now we need&nbsp;
+to texture it and do the light setup so before&nbsp;&nbsp;
+
+00:08:38.960 --> 00:08:48.720
+doing that let's parent everything uh make sure to&nbsp;
+enable this part so that you don't have this weird&nbsp;&nbsp;
+
+00:08:48.720 --> 00:08:56.160
+artifact as we are projecting it so let's select&nbsp;
+all and press Ctrl P and let's parent it to this&nbsp;&nbsp;
+
+00:08:56.160 --> 00:09:02.800
+part okay let's hide this cylinder so before&nbsp;
+texturing I'm doing the scene setup so that we&nbsp;&nbsp;
+
+00:09:02.800 --> 00:09:10.080
+can add some light and see how it looks so let's&nbsp;
+add a plane and one thing I'm going to do here is&nbsp;&nbsp;
+
+00:09:10.080 --> 00:09:18.880
+I'm going to add a constraint which is floor and&nbsp;
+select it to the plane so that we don't need to&nbsp;&nbsp;
+
+00:09:18.880 --> 00:09:29.760
+worry about intersecting or like how to place it&nbsp;
+so yeah and let's add a cube here and also let's&nbsp;&nbsp;
+
+00:09:29.760 --> 00:09:36.320
+set up our camera so that we can have a preview&nbsp;
+that what we're making i'm I'm going to make
+
+00:09:36.320 --> 00:09:40.080
+it 1080
+
+00:09:40.080 --> 00:09:47.920
+into it
+
+00:09:47.920 --> 00:09:55.200
+here i'm going to zoom it a bit
+
+00:09:58.480 --> 00:10:02.560
+so here's a quick shortcut press&nbsp;
+shift and this key so that you&nbsp;&nbsp;
+
+00:10:02.560 --> 00:10:06.880
+can have a firstperson view so I&nbsp;
+am flying out and just adjusting&nbsp;&nbsp;
+
+00:10:06.880 --> 00:10:13.760
+the camera accordingly and I think&nbsp;
+we can increase the focal length a
+
+00:10:13.760 --> 00:10:27.440
+bit let's bring inside okay also&nbsp;
+let's bring it here so that we&nbsp;&nbsp;
+
+00:10:27.440 --> 00:10:33.840
+have this corner and also we need to&nbsp;
+add a backdrop so let's duplicate it&nbsp;&nbsp;
+
+00:10:33.840 --> 00:10:40.080
+also let's open another preview&nbsp;
+so that we can see that how it's
+
+00:10:40.080 --> 00:10:52.720
+looking yeah this should work let's save the&nbsp;
+file and I almost forgot to save the file so&nbsp;&nbsp;
+
+00:10:52.720 --> 00:10:57.520
+please save your file because if Blender&nbsp;
+crashed here I had to do the whole thing&nbsp;&nbsp;
+
+00:10:57.520 --> 00:11:03.680
+again so yeah always save your file okay we&nbsp;
+are seeing pretty much close to the reference&nbsp;&nbsp;
+
+00:11:03.680 --> 00:11:11.920
+image so yes now let's do the texturing so&nbsp;
+let's bring it up and convert it into a shade&nbsp;&nbsp;
+
+00:11:11.920 --> 00:11:18.640
+editor so let's apply a new material here and&nbsp;
+I'm going to make it a glass material so what&nbsp;&nbsp;
+
+00:11:18.640 --> 00:11:24.800
+we're going to do here is I'm going to go to&nbsp;
+the transmission and erase it and let's go&nbsp;&nbsp;
+
+00:11:24.800 --> 00:11:30.000
+to the Blender preview and you can see there is&nbsp;
+already a HDR here because I have added it into&nbsp;&nbsp;
+
+00:11:30.000 --> 00:11:37.200
+my startup file so every time I open Blender&nbsp;
+there is always this default HDR and you can&nbsp;&nbsp;
+
+00:11:37.200 --> 00:11:43.040
+just add it from here from the world and then if&nbsp;
+you select the environment texture then you will&nbsp;&nbsp;
+
+00:11:43.040 --> 00:11:50.720
+have this and you can add HDR so yeah we need&nbsp;
+to work on the glass let's work on the label
+
+00:11:50.720 --> 00:12:03.200
+first let's select this okay now&nbsp;
+let's assign a new material for
+
+00:12:03.200 --> 00:12:11.280
+this and let's have a render so&nbsp;
+that we can see what we're doing&nbsp;&nbsp;
+
+00:12:11.280 --> 00:12:13.120
+and here what I'm going to do here
+
+00:12:13.120 --> 00:12:23.120
+is I'm going to duplicate it and add a mix
+
+00:12:23.120 --> 00:12:28.880
+shader and here I'm going to
+
+00:12:28.880 --> 00:12:32.640
+add image
+
+00:12:32.640 --> 00:12:38.480
+texture and press Ctrl D so let's bring our
+
+00:12:38.480 --> 00:12:47.200
+label and let's do project from
+
+00:12:47.200 --> 00:12:56.160
+view so now you can see nothing is happening&nbsp;
+because we have the same material here so I'm&nbsp;&nbsp;
+
+00:12:56.160 --> 00:13:03.120
+going to increase the metallic and decrease the&nbsp;
+roughness so now you can see that our texture is&nbsp;&nbsp;
+
+00:13:03.120 --> 00:13:09.520
+here i'm using a black and white texture so that&nbsp;
+I can have the flexibility to adjust the color&nbsp;&nbsp;
+
+00:13:09.520 --> 00:13:22.160
+and everything so to adjust the color I'm going&nbsp;
+to do is I'm going to add a black body node and&nbsp;&nbsp;
+
+00:13:22.160 --> 00:13:30.560
+then press the temperature to 4,000 so yeah so&nbsp;
+you can use also RGB colors but I am using the&nbsp;&nbsp;
+
+00:13:30.560 --> 00:13:35.280
+temperature because for the lighting to have&nbsp;
+that warm tone I'm going to use this node so&nbsp;&nbsp;
+
+00:13:35.280 --> 00:13:40.080
+I'm also using it for the texture you can use&nbsp;
+RGB node also so here what I'm going to do here&nbsp;&nbsp;
+
+00:13:40.080 --> 00:13:53.120
+is I'm going to add a noise texture and then put&nbsp;
+it into bump height and let's put it into normal&nbsp;&nbsp;
+
+00:13:53.120 --> 00:14:04.480
+and also let's increase the scale and let's&nbsp;
+bring down the strength so that we have this&nbsp;&nbsp;
+
+00:14:04.480 --> 00:14:10.560
+kind of texture here and on this portion we don't&nbsp;
+want any texture so it's looking pretty much good&nbsp;&nbsp;
+
+00:14:10.560 --> 00:14:21.200
+and what we can do here is we can add the same&nbsp;
+thing here so it's so it's going to have that&nbsp;&nbsp;
+
+00:14:21.200 --> 00:14:33.120
+golden vibe yeah it's pretty much good and&nbsp;
+now let's add the same texture here but for&nbsp;&nbsp;
+
+00:14:33.120 --> 00:14:42.080
+the rim uh as you can see here this has a golden&nbsp;
+texture so we are going to assign a new texture
+
+00:14:42.080 --> 00:14:58.400
+here so and I'm going to add the&nbsp;
+black body here also with the 4,000
+
+00:14:58.400 --> 00:15:11.360
+and let's make it metallic and let's reduce&nbsp;
+this we have a basic texture but this is the&nbsp;&nbsp;
+
+00:15:11.360 --> 00:15:16.240
+not exact look that we're going for so let's&nbsp;
+set up the light so that we can have a better&nbsp;&nbsp;
+
+00:15:16.240 --> 00:15:27.040
+understanding that what we're doing let's add&nbsp;
+a spotlight here i'm going to put it behind it
+
+00:15:34.160 --> 00:15:39.520
+okay now we are having a better understanding&nbsp;
+that what we are going to do and where are we&nbsp;&nbsp;
+
+00:15:39.520 --> 00:15:49.200
+going actually so I think we don't need this&nbsp;
+long shadow and this should work now I'm going&nbsp;&nbsp;
+
+00:15:49.200 --> 00:15:58.000
+to increase the radius so that we have this softer&nbsp;
+finish here and here what we are going to do here&nbsp;&nbsp;
+
+00:15:58.000 --> 00:16:10.960
+is we're going to use node and I'm going to use&nbsp;
+the same black body node with [Music] 4,000 so&nbsp;&nbsp;
+
+00:16:10.960 --> 00:16:17.280
+yes now we can see that we have a warm light&nbsp;
+here and it's looking pretty much good already&nbsp;&nbsp;
+
+00:16:17.280 --> 00:16:24.480
+so now what we're going to do is we need to add&nbsp;
+some more light so that we have the details around
+
+00:16:24.480 --> 00:16:35.360
+it let's add a light here so what you can see&nbsp;
+is it's affecting the whole environment but we&nbsp;&nbsp;
+
+00:16:35.360 --> 00:16:41.440
+don't want that we only want this light to affect&nbsp;
+the model we don't want it to affect the whole&nbsp;&nbsp;
+
+00:16:41.440 --> 00:16:48.320
+environment so to do this what you need to do is&nbsp;
+let's select the model only then select the light&nbsp;&nbsp;
+
+00:16:48.320 --> 00:16:55.600
+then press Ctrl L then you can see that you have&nbsp;
+the linking option so we are going to include this&nbsp;&nbsp;
+
+00:16:55.600 --> 00:17:01.200
+only so now you can see that this light is only&nbsp;
+affecting this model and the environment is not&nbsp;&nbsp;
+
+00:17:01.200 --> 00:17:06.320
+affected for the light so by using this you&nbsp;
+can customize the light however you want and&nbsp;&nbsp;
+
+00:17:06.320 --> 00:17:11.600
+you will have a better control on the overall&nbsp;
+lighting situation here so yeah this is the&nbsp;&nbsp;
+
+00:17:11.600 --> 00:17:17.280
+trick that I was talking about at the beginning&nbsp;
+of the video so yeah let's continue lighting our
+
+00:17:17.280 --> 00:17:30.960
+scene so now let's see how we can make this&nbsp;
+abstract backdrop so let's add a area lamp&nbsp;&nbsp;
+
+00:17:30.960 --> 00:17:38.240
+let's move it here and let's increase&nbsp;
+the power so that you can see the light&nbsp;&nbsp;
+
+00:17:38.240 --> 00:17:45.760
+and let's reduce the beam shape so we can have&nbsp;
+a harsh light that the exact thing that we are&nbsp;&nbsp;
+
+00:17:45.760 --> 00:17:50.560
+seeing here to achieve this we need to add&nbsp;
+texture to the light so now let's use node&nbsp;&nbsp;
+
+00:17:50.560 --> 00:17:59.600
+and let's add a noise texture and now let's&nbsp;
+pass it by a color ramp okay already you can&nbsp;&nbsp;
+
+00:17:59.600 --> 00:18:06.320
+see that the noise texture is visible let's&nbsp;
+make it one and now let's make it a little&nbsp;&nbsp;
+
+00:18:06.320 --> 00:18:17.680
+bit harder this should work so let's adjust&nbsp;
+the angle so we have this let's increase the&nbsp;&nbsp;
+
+00:18:17.680 --> 00:18:30.080
+size Z axis okay now let's make it a little bit&nbsp;
+softer and I think we can increase a bit more
+
+00:18:32.480 --> 00:18:33.200
+let's make
+
+00:18:33.200 --> 00:18:45.680
+it.1 to make it more longer what&nbsp;
+we can do here is we can bounce it&nbsp;&nbsp;
+
+00:18:45.680 --> 00:18:54.320
+from even [Music] side okay now we can see&nbsp;
+that we have pretty much similar shape here&nbsp;&nbsp;
+
+00:18:54.320 --> 00:19:02.000
+now we need to adjust the lighting&nbsp;
+because here it's just plain white
+
+00:19:04.080 --> 00:19:09.040
+so what we can do here is we can add uh mix
+
+00:19:09.040 --> 00:19:22.960
+shader and we can add another emission here and&nbsp;
+we can use this as a now let's add the black
+
+00:19:22.960 --> 00:19:39.920
+body and let's make it 4,000 i think we're going&nbsp;
+to this and oops and we can make this completely&nbsp;&nbsp;
+
+00:19:39.920 --> 00:19:46.240
+black so yes now you can see that we have that&nbsp;
+color also i think we can adjust the spread a&nbsp;&nbsp;
+
+00:19:46.240 --> 00:19:55.200
+little bit you can also see that there's also&nbsp;
+some light texture here so we can do it here also
+
+00:19:55.200 --> 00:20:04.800
+let's adjust the
+
+00:20:04.800 --> 00:20:16.000
+angle think we can reduce the power of this light&nbsp;&nbsp;
+
+00:20:16.000 --> 00:20:25.040
+also also what we can do here is&nbsp;
+we can adjust the angle so that it
+
+00:20:25.040 --> 00:20:38.720
+has Yeah I think it's looking good&nbsp;
+and to add the color to the bottle&nbsp;&nbsp;
+
+00:20:38.720 --> 00:20:49.040
+uh we can use the same black body node you can&nbsp;
+just use the RGB color also it's pretty much
+
+00:20:49.040 --> 00:20:55.440
+fine and
+
+00:20:55.440 --> 00:21:13.760
+let's And let's adjust the roughness and make it&nbsp;
+like this okay so another thing we can do here
+
+00:21:13.760 --> 00:21:27.120
+is we can extrude it a little bit&nbsp;
+so that we have this type of look&nbsp;&nbsp;
+
+00:21:27.120 --> 00:21:31.760
+on the inside let's select the&nbsp;
+bottom part and let's extrude it
+
+00:21:31.760 --> 00:21:44.080
+inside this should work and let's&nbsp;
+also add edge loops so that it's not
+
+00:21:44.080 --> 00:21:58.160
+rounded also what we can do here is like&nbsp;
+see so that we can only select this part&nbsp;&nbsp;
+
+00:21:58.160 --> 00:22:07.280
+and bring it a little bit down if needed&nbsp;
+okay it's looking pretty much good right now
+
+00:22:09.920 --> 00:22:18.640
+also we are going to add some other lights we are&nbsp;
+going to add another light here to light up this
+
+00:22:18.640 --> 00:22:35.680
+thing so to have that backlight we're going to add&nbsp;
+it here and let's adjust the angle a little bit
+
+00:22:38.960 --> 00:22:52.400
+now let's see how it's looking and it's looking&nbsp;
+pretty much good and let's let's do a quick render
+
+00:22:52.400 --> 00:23:04.560
+right okay so here you can see that the edges&nbsp;
+are too sharp what we can do here is let's add&nbsp;&nbsp;
+
+00:23:04.560 --> 00:23:16.400
+a bevel modifier here to have a bit smoother&nbsp;
+edge and also let's extrude it and also add a
+
+00:23:16.400 --> 00:23:24.640
+modifier and also let's add depth of
+
+00:23:24.640 --> 00:23:36.720
+field let's select our cylinder let's make&nbsp;
+it from two now just doing some fine tuning&nbsp;&nbsp;
+
+00:23:36.720 --> 00:23:52.960
+to make it better and I think what we can do&nbsp;
+here is increase the radius a little bit also
+
+00:23:57.120 --> 00:24:00.480
+i think for this slide we don't need the linking&nbsp;&nbsp;
+
+00:24:00.480 --> 00:24:08.480
+for property let's remove it and&nbsp;
+also let's use node for this one
+
+00:24:08.480 --> 00:24:20.960
+simple okay yes now we are having a better&nbsp;
+look overall and also what we can do here
+
+00:24:20.960 --> 00:24:33.520
+is sorted it a bit so that we have the reflection&nbsp;
+also we can do another thing let's add a light&nbsp;&nbsp;
+
+00:24:33.520 --> 00:24:43.600
+just to highlight the logo element like&nbsp;
+here you can see that it's highlighted
+
+00:25:10.160 --> 00:25:16.640
+so yes we have our final model so for&nbsp;
+optimizing render let's reduce the&nbsp;&nbsp;
+
+00:25:16.640 --> 00:25:23.040
+bounces to eight so that we have a better&nbsp;
+render time and let's do a quick render
+
+00:25:23.040 --> 00:25:31.920
+now so yes we have our render here if you're&nbsp;
+still watching this video that means you are&nbsp;&nbsp;
+
+00:25:31.920 --> 00:25:36.160
+among the top 6% people who are actually&nbsp;
+supporting this channel so comment down 6%&nbsp;&nbsp;
+
+00:25:36.160 --> 00:25:39.440
+so that I can know you and also feel free&nbsp;
+to give a like because it really helps in&nbsp;&nbsp;
+
+00:25:39.440 --> 00:25:43.280
+the YouTube algorithm and also if you have&nbsp;
+any kind of confusion please feel free to&nbsp;&nbsp;
+
+00:25:43.280 --> 00:25:46.880
+comment below and finally here's a video&nbsp;
+for you where I'll be showing you how you&nbsp;&nbsp;
+
+00:25:46.880 --> 00:25:54.480
+can convert your 2D image into a 3D model&nbsp;
+with the help of AI so I will see you there
+

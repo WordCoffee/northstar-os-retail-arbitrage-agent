@@ -1,0 +1,373 @@
+{
+ "id": "DdSe5knj4k8",
+ "title": "FLUX: How To Generate UNLIMITED AI Images For FREE | ComfyUI Tutorial",
+ "channel": "MDMZ",
+ "url": "https://www.youtube.com/watch?v=DdSe5knj4k8",
+ "query": "comfyui flux tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 405.0,
+ "chars": 6524,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.68,
+   "text": "So, Flux One is this incredible new model developed by Black Forest Labs, the same team"
+  },
+  {
+   "start": 5.68,
+   "end": 10.96,
+   "text": "of people who brought a stable diffusion. This model is clearly as good, if not better than"
+  },
+  {
+   "start": 10.96,
+   "end": 17.52,
+   "text": "other leading image generators such as Mid Journey and Dolly in terms of overall quality and realism."
+  },
+  {
+   "start": 17.52,
+   "end": 23.52,
+   "text": "But what really sets Flux apart is its amazing ability to render text and get this. It's"
+  },
+  {
+   "start": 23.52,
+   "end": 28.48,
+   "text": "even great at generating human hands. In this video, I'm gonna show you how to get"
+  },
+  {
+   "start": 28.48,
+   "end": 32.16,
+   "text": "Flux up and running on your computer using ConfUI."
+  },
+  {
+   "start": 33.76,
+   "end": 38.24,
+   "text": "If you've never used ConfUI before, you will need to install it on your computer."
+  },
+  {
+   "start": 38.24,
+   "end": 44.24,
+   "text": "It's very easy and I've made a separate tutorial on that so feel free to pause here and watch that"
+  },
+  {
+   "start": 44.24,
+   "end": 49.12,
+   "text": "first. To get started, you will need to download the Flux model itself. Now, there are two main"
+  },
+  {
+   "start": 49.12,
+   "end": 54.4,
+   "text": "versions that are suitable for local use, the dev version and the schnell version, which,"
+  },
+  {
+   "start": 54.4,
+   "end": 59.84,
+   "text": "according to some reports, is meant to run faster than the dev version, which also suggests"
+  },
+  {
+   "start": 59.84,
+   "end": 65.28,
+   "text": "that it prioritizes speed over quality. For that reason alone, today I'm gonna be working with the"
+  },
+  {
+   "start": 65.28,
+   "end": 70.4,
+   "text": "dev version, but you can experiment with the schnell version if you wanna have images generated"
+  },
+  {
+   "start": 70.4,
+   "end": 75.12,
+   "text": "faster. I will leave links to both versions in the description box and whichever model you"
+  },
+  {
+   "start": 75.12,
+   "end": 82.0,
+   "text": "choose, make sure you place it under ConfUI, Models, look for the Unet folder and save the"
+  },
+  {
+   "start": 82.0,
+   "end": 87.12,
+   "text": "model over there. I've already downloaded Flux here, you will also need to download three different"
+  },
+  {
+   "start": 87.12,
+   "end": 93.44,
+   "text": "encoders. I will link the page down below, get all three files and save them under ConfUI,"
+  },
+  {
+   "start": 94.08,
+   "end": 100.72,
+   "text": "Models, Clip. And the last file you need to download is the VAE model. There are also two"
+  },
+  {
+   "start": 100.72,
+   "end": 106.24,
+   "text": "versions depending on whether you're going with dev or schnell and I will link both files"
+  },
+  {
+   "start": 106.24,
+   "end": 112.64,
+   "text": "in the description box. Just make sure you save it under ConfUI, Models, inside the VAE folder."
+  },
+  {
+   "start": 112.64,
+   "end": 117.44,
+   "text": "You can rename the files if you'd like, just make sure that it's saved in the correct folder."
+  },
+  {
+   "start": 117.44,
+   "end": 122.8,
+   "text": "Once you get all the files on your computer, go ahead and launch ConfUI. Now if you've had ConfUI"
+  },
+  {
+   "start": 122.8,
+   "end": 128.48,
+   "text": "on your computer for a while, make sure you go to Manager and click on Update All to get the"
+  },
+  {
+   "start": 128.48,
+   "end": 134.24,
+   "text": "latest version. Next, head over to this page on openart.ai, which I will link below."
+  },
+  {
+   "start": 134.24,
+   "end": 140.32,
+   "text": "This is where you can download the simple workflow for Flux. To do that, click on Download,"
+  },
+  {
+   "start": 140.32,
+   "end": 146.0,
+   "text": "then drag and drop the workflow file over onto your ConfUI interface, which will load the simple"
+  },
+  {
+   "start": 146.0,
+   "end": 151.2,
+   "text": "Flux workflow. First, make sure you load the correct Flux model that you've downloaded. The name"
+  },
+  {
+   "start": 151.2,
+   "end": 156.64,
+   "text": "could be different depending on where you got it from, so make sure you load the correct file."
+  },
+  {
+   "start": 156.64,
+   "end": 162.72,
+   "text": "Here, if you want to prioritize speed, you can go with the default FP8 encoder. I personally"
+  },
+  {
+   "start": 162.72,
+   "end": 170.72,
+   "text": "like to switch over to T5 XXL FP16 instead as it offers higher precision. Here, you need to write"
+  },
+  {
+   "start": 170.72,
+   "end": 175.36,
+   "text": "the prompt that describes the image that you want to generate. If you're wondering how to find ideas"
+  },
+  {
+   "start": 175.36,
+   "end": 180.8,
+   "text": "or write good prompts, I've made an entire video on that, so make sure you check it out."
+  },
+  {
+   "start": 180.8,
+   "end": 186.96,
+   "text": "Now let's start by trying something realistic. I want to generate a picture of an elderly woman"
+  },
+  {
+   "start": 186.96,
+   "end": 192.56,
+   "text": "sitting in a garden with a bunch of flowers around her. Obviously, you can change the width"
+  },
+  {
+   "start": 192.64,
+   "end": 197.92,
+   "text": "and height of your output image. The higher this is, the more time it's going to take to generate,"
+  },
+  {
+   "start": 197.92,
+   "end": 203.84,
+   "text": "so keep that in mind. Next, make sure the seed is set to Randomize. For the Sampler name, you can"
+  },
+  {
+   "start": 203.84,
+   "end": 209.28,
+   "text": "leave it set to Euler, but if you have the time and patience, feel free to experiment with other"
+  },
+  {
+   "start": 209.28,
+   "end": 214.32,
+   "text": "options as well. For the scheduler, I personally like to use SGM Uniform, but again, if you"
+  },
+  {
+   "start": 214.32,
+   "end": 219.28,
+   "text": "want to experiment, feel free to try the other schedulers. By default, the steps value is"
+  },
+  {
+   "start": 219.28,
+   "end": 224.16,
+   "text": "set to 20. You can change this. The higher you go, the better quality you're gonna get,"
+  },
+  {
+   "start": 224.16,
+   "end": 229.36,
+   "text": "but the slower the process is gonna be, so keep that in mind. And finally here,"
+  },
+  {
+   "start": 229.36,
+   "end": 233.92,
+   "text": "make sure you select the VAE model that you've downloaded. If you've renamed the file,"
+  },
+  {
+   "start": 233.92,
+   "end": 238.4,
+   "text": "you will be able to see it in this list as long as it's placed in the correct folder."
+  },
+  {
+   "start": 238.4,
+   "end": 242.88,
+   "text": "And now you can go ahead and click on Q Prompt to start generating. Now,"
+  },
+  {
+   "start": 242.88,
+   "end": 249.84,
+   "text": "Flux is not the fastest model out there. I have a 1490 RTX GPU with 24 gigabytes of VRAM,"
+  },
+  {
+   "start": 249.84,
+   "end": 254.48,
+   "text": "and as you can see, it's using pretty much all of the available video memory,"
+  },
+  {
+   "start": 254.48,
+   "end": 260.8,
+   "text": "and it's still running very slow. So you might run into issues, especially if you have a low-end GPU"
+  },
+  {
+   "start": 260.8,
+   "end": 267.28,
+   "text": "with, let's say, 12 or 8 gigabytes of VRAM. In that case, you can first try the Schnell version"
+  },
+  {
+   "start": 267.28,
+   "end": 273.52,
+   "text": "instead, or maybe try the FP8 encoder. Otherwise, you can go with one of those cloud-based solutions"
+  },
+  {
+   "start": 273.52,
+   "end": 279.84,
+   "text": "that you can use to run ConfUI online. A good example of that would be ThinkDiffusion. I've used it"
+  },
+  {
+   "start": 279.84,
+   "end": 284.96,
+   "text": "myself and believe they're working on making Flux stable on their platform. I will leave a link"
+  },
+  {
+   "start": 284.96,
+   "end": 289.68,
+   "text": "to it below so you can give it a try if you want. And once the process is done, you will get a"
+  },
+  {
+   "start": 289.68,
+   "end": 295.44,
+   "text": "preview of your image. As you can see, the output is absolutely gorgeous. I mean, just look"
+  },
+  {
+   "start": 295.44,
+   "end": 303.04,
+   "text": "at the details on the face, the wrinkles, the depth of field, the light, the hair, the edges."
+  },
+  {
+   "start": 303.04,
+   "end": 308.0,
+   "text": "It just looks amazing. Now, of course, because we set the seat to randomize, it means that every"
+  },
+  {
+   "start": 308.0,
+   "end": 313.2,
+   "text": "time we click on Q prompt, we will get a different result, which also means that you might be able"
+  },
+  {
+   "start": 313.2,
+   "end": 318.32,
+   "text": "to get even better images using the same prompt. I find this one much more appealing."
+  },
+  {
+   "start": 318.32,
+   "end": 322.48,
+   "text": "Let's do something different this time. I want to see how well it does with text."
+  },
+  {
+   "start": 322.48,
+   "end": 328.56,
+   "text": "So I'm going to ask it to generate a cover for a children's book with a character and a big title."
+  },
+  {
+   "start": 328.56,
+   "end": 336.32,
+   "text": "And let's see how that goes. Look at this, guys. The text is accurate, word for word, letter for letter."
+  },
+  {
+   "start": 336.32,
+   "end": 341.12,
+   "text": "And the way it's designed matches the prompt really well. And that's truly impressive. The"
+  },
+  {
+   "start": 341.12,
+   "end": 346.8,
+   "text": "character also looks very well drawn and all of that makes Flux really powerful. Here,"
+  },
+  {
+   "start": 346.8,
+   "end": 351.6,
+   "text": "I have another prompt that I used to test how well it does with hands. This time, it took"
+  },
+  {
+   "start": 351.6,
+   "end": 358.32,
+   "text": "me two attempts to get to this image. But again, it looks so realistic. The finger count is correct."
+  },
+  {
+   "start": 358.32,
+   "end": 362.64,
+   "text": "So that's great. Now, if you want to get higher quality images, but you don't want to drag the"
+  },
+  {
+   "start": 362.64,
+   "end": 368.8,
+   "text": "process even longer on Confi UI, what I personally like to do is use a third party image upscaler"
+  },
+  {
+   "start": 368.8,
+   "end": 374.96,
+   "text": "called Topaz Photo AI to sharpen and upscale the image. As you can see here, it does a very good"
+  },
+  {
+   "start": 374.96,
+   "end": 380.96,
+   "text": "job at reintroducing details into the image. The before and after comparison is truly impressive."
+  },
+  {
+   "start": 381.04,
+   "end": 386.96,
+   "text": "It also works pretty well with both illustrations and text. That's it for today's video. I hope you"
+  },
+  {
+   "start": 386.96,
+   "end": 392.24,
+   "text": "found it useful. If you have any questions, drop them in the comments below. Stay creative and"
+  },
+  {
+   "start": 392.24,
+   "end": 395.84,
+   "text": "I'll see you guys in the next video. Peace."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:07:58.510239+00:00",
+ "seconds": 16.8
+}

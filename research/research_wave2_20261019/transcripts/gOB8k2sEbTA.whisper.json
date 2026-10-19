@@ -1,0 +1,1273 @@
+{
+ "id": "gOB8k2sEbTA",
+ "title": "Create Shadows That Look REAL in Photoshop!",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=gOB8k2sEbTA",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 722.6,
+ "chars": 12511,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.16,
+   "text": "Today I'm going to share with you a simple technique to create seamless, clean and beautiful shadows in Photoshop."
+  },
+  {
+   "start": 5.16,
+   "end": 9.16,
+   "text": "Not always drop shadow would work unless you want to make the object hover."
+  },
+  {
+   "start": 9.16,
+   "end": 12.32,
+   "text": "Sometimes we have to create and paint the shadows."
+  },
+  {
+   "start": 12.32,
+   "end": 13.6,
+   "text": "It is easier than you think."
+  },
+  {
+   "start": 13.6,
+   "end": 16.04,
+   "text": "So without any further ado, let's get started."
+  },
+  {
+   "start": 19.46,
+   "end": 23.14,
+   "text": "Back in the magical world of Photoshop and if you wish to follow along using these assets,"
+  },
+  {
+   "start": 23.14,
+   "end": 25.98,
+   "text": "which you should, check the links in the description to download them."
+  },
+  {
+   "start": 25.98,
+   "end": 27.66,
+   "text": "So here we have a blank new document."
+  },
+  {
+   "start": 27.66,
+   "end": 31.14,
+   "text": "On top of that, I'm just going to drag and drop this box right here."
+  },
+  {
+   "start": 31.26,
+   "end": 34.58,
+   "text": "Let us resize it to give it a little bit of space for the shadows."
+  },
+  {
+   "start": 34.58,
+   "end": 37.1,
+   "text": "Now you can make the document bigger up to you."
+  },
+  {
+   "start": 37.1,
+   "end": 41.42,
+   "text": "Now this is already a transparent, isolated photo of a box."
+  },
+  {
+   "start": 41.42,
+   "end": 44.06,
+   "text": "If it weren't, you could have just masked it out."
+  },
+  {
+   "start": 44.06,
+   "end": 45.1,
+   "text": "Not a big deal."
+  },
+  {
+   "start": 45.1,
+   "end": 48.78,
+   "text": "Just keep in mind that you have the background and the box separate."
+  },
+  {
+   "start": 48.78,
+   "end": 51.18,
+   "text": "The next thing we need to do is to create a base shadow."
+  },
+  {
+   "start": 51.18,
+   "end": 54.86,
+   "text": "And how well you do this is going to determine whether it's going to make or break the deal."
+  },
+  {
+   "start": 54.86,
+   "end": 60.3,
+   "text": "So just under the box layer, I'm going to create a blank new layer by clicking on this button."
+  },
+  {
+   "start": 60.66,
+   "end": 63.82,
+   "text": "And let us name this Shadow 1."
+  },
+  {
+   "start": 63.82,
+   "end": 64.82,
+   "text": "Alright."
+  },
+  {
+   "start": 64.82,
+   "end": 68.38,
+   "text": "Now simply select the polygonal lasso tool."
+  },
+  {
+   "start": 68.38,
+   "end": 73.14,
+   "text": "If you're in the Lasso tool group, just click and hold and you'll find the polygonal lasso tool."
+  },
+  {
+   "start": 73.14,
+   "end": 76.3,
+   "text": "And then start painting or creating the shadow."
+  },
+  {
+   "start": 76.3,
+   "end": 79.1,
+   "text": "So I'm going to start right about there."
+  },
+  {
+   "start": 79.1,
+   "end": 80.74,
+   "text": "Have a look at where the light is falling."
+  },
+  {
+   "start": 80.74,
+   "end": 84.5,
+   "text": "The light is coming from the right hand side and that is why this area is brighter."
+  },
+  {
+   "start": 84.5,
+   "end": 87.02,
+   "text": "And also this area at the top is brighter."
+  },
+  {
+   "start": 87.06,
+   "end": 92.18,
+   "text": "So from the top right somewhere here, so accordingly create the shadow."
+  },
+  {
+   "start": 92.18,
+   "end": 98.34,
+   "text": "So I'm going to keep it possibly this way and maybe create a shadow like so."
+  },
+  {
+   "start": 98.34,
+   "end": 102.22,
+   "text": "This looks reasonable and we're going to join it like so."
+  },
+  {
+   "start": 102.22,
+   "end": 104.22,
+   "text": "Now let us fill this with black."
+  },
+  {
+   "start": 104.22,
+   "end": 107.5,
+   "text": "With the foreground color black, if it's not black and white already, you can always"
+  },
+  {
+   "start": 107.5,
+   "end": 111.5,
+   "text": "press D to set the foreground and the background color to defaults."
+  },
+  {
+   "start": 111.5,
+   "end": 116.02,
+   "text": "And now with the foreground color black, press Alt-Pack Space or Option-Delete."
+  },
+  {
+   "start": 116.06,
+   "end": 118.22,
+   "text": "Now press Ctrl or Command-D."
+  },
+  {
+   "start": 118.22,
+   "end": 121.18,
+   "text": "Now when you zoom out, this should look about right."
+  },
+  {
+   "start": 121.18,
+   "end": 123.14,
+   "text": "From here, we are going to fine tune it."
+  },
+  {
+   "start": 123.14,
+   "end": 128.66,
+   "text": "But if you think of it like a 2D cartoon, this should look right to you once you zoom out."
+  },
+  {
+   "start": 128.66,
+   "end": 132.5,
+   "text": "Now let's zoom back in, press Ctrl or Command-Zero to fit it to the screen."
+  },
+  {
+   "start": 132.5,
+   "end": 133.86,
+   "text": "Now we need to adjust the blur."
+  },
+  {
+   "start": 133.86,
+   "end": 137.18,
+   "text": "As the shadows get further, the edges of the shadows get blurrier, right?"
+  },
+  {
+   "start": 137.18,
+   "end": 140.9,
+   "text": "So with the shadow layer selected, before applying any blur, let's go to Filter,"
+  },
+  {
+   "start": 140.9,
+   "end": 143.06,
+   "text": "Convert for Smart Filters, hit OK."
+  },
+  {
+   "start": 143.06,
+   "end": 143.66,
+   "text": "Why?"
+  },
+  {
+   "start": 143.7,
+   "end": 146.58,
+   "text": "So that we can change the values later if we want it."
+  },
+  {
+   "start": 146.58,
+   "end": 151.34,
+   "text": "Now let's go to Filter, not Blur, but Blur Gallery and then Dilt Shift."
+  },
+  {
+   "start": 151.34,
+   "end": 153.94,
+   "text": "This allows us to apply a gradual blur."
+  },
+  {
+   "start": 153.94,
+   "end": 155.3,
+   "text": "Now you can rotate it."
+  },
+  {
+   "start": 155.3,
+   "end": 159.86,
+   "text": "Now as you are rotating this, you can hold the Shift key to rotate it at"
+  },
+  {
+   "start": 159.86,
+   "end": 162.7,
+   "text": "perfect angles, 90 degrees fine."
+  },
+  {
+   "start": 162.7,
+   "end": 164.94,
+   "text": "The blur is gonna start at the solid line and"
+  },
+  {
+   "start": 164.94,
+   "end": 167.66,
+   "text": "it's gonna continue increasing till the dotted line."
+  },
+  {
+   "start": 167.66,
+   "end": 170.46,
+   "text": "So I'm just gonna increase the blur a lot like so."
+  },
+  {
+   "start": 170.46,
+   "end": 173.62,
+   "text": "And you can control how the blur flows."
+  },
+  {
+   "start": 173.62,
+   "end": 176.26,
+   "text": "All right, now this looks pretty much amazing right here."
+  },
+  {
+   "start": 176.26,
+   "end": 178.78,
+   "text": "I'm just gonna increase the amount a bit more."
+  },
+  {
+   "start": 178.78,
+   "end": 179.74,
+   "text": "Let's see how this looks."
+  },
+  {
+   "start": 180.86,
+   "end": 183.82,
+   "text": "164, that's perfect for now."
+  },
+  {
+   "start": 183.82,
+   "end": 186.3,
+   "text": "You can always change this later, hit OK."
+  },
+  {
+   "start": 186.3,
+   "end": 188.02,
+   "text": "Now this shadow of course is too dark."
+  },
+  {
+   "start": 188.02,
+   "end": 190.5,
+   "text": "There is one more thing you must have noticed about shadows."
+  },
+  {
+   "start": 190.5,
+   "end": 193.02,
+   "text": "As it goes further, it fades too."
+  },
+  {
+   "start": 193.02,
+   "end": 196.82,
+   "text": "So with the shadow layer selected, click on this button to create a mask."
+  },
+  {
+   "start": 196.82,
+   "end": 201.22,
+   "text": "And then let us pick a gradient from white to black."
+  },
+  {
+   "start": 201.22,
+   "end": 203.26,
+   "text": "And I'm gonna draw a gradient like this."
+  },
+  {
+   "start": 203.26,
+   "end": 204.66,
+   "text": "Now this is a hard fade."
+  },
+  {
+   "start": 204.66,
+   "end": 208.9,
+   "text": "By the way, as you're dragging the gradient, you can also hold the Shift key"
+  },
+  {
+   "start": 208.9,
+   "end": 210.9,
+   "text": "to make sure it is in a straight line."
+  },
+  {
+   "start": 210.9,
+   "end": 213.86,
+   "text": "Now you need to be holding it first and"
+  },
+  {
+   "start": 213.86,
+   "end": 217.82,
+   "text": "then pressing the Shift key and holding it to make sure it's accurate."
+  },
+  {
+   "start": 217.82,
+   "end": 219.54,
+   "text": "Let us expand it even more."
+  },
+  {
+   "start": 219.54,
+   "end": 220.9,
+   "text": "This looks pretty amazing."
+  },
+  {
+   "start": 220.9,
+   "end": 224.54,
+   "text": "Now let's click on the layer, press Ctrl or Command 0 to set it all up."
+  },
+  {
+   "start": 224.54,
+   "end": 228.5,
+   "text": "One more essential thing to keep in mind that as you are using the gradient"
+  },
+  {
+   "start": 228.5,
+   "end": 231.1,
+   "text": "to you want to make sure Dither is checked."
+  },
+  {
+   "start": 231.1,
+   "end": 233.3,
+   "text": "Otherwise, there can be banding issues."
+  },
+  {
+   "start": 233.3,
+   "end": 237.82,
+   "text": "Now as the shadows stretch, other lights begin to come in there as well."
+  },
+  {
+   "start": 237.82,
+   "end": 241.38,
+   "text": "So we need to erase the shadows slightly from the corners."
+  },
+  {
+   "start": 241.38,
+   "end": 243.3,
+   "text": "But we don't want to disturb this mask."
+  },
+  {
+   "start": 243.3,
+   "end": 245.54,
+   "text": "So how do we have two masks for the same layer?"
+  },
+  {
+   "start": 245.54,
+   "end": 249.46,
+   "text": "We have learned about this in previous videos with just that one layer selected."
+  },
+  {
+   "start": 249.46,
+   "end": 252.78,
+   "text": "Press Ctrl or Command G to put it in a group."
+  },
+  {
+   "start": 252.78,
+   "end": 256.66,
+   "text": "Now one advantage of the group is you can create another mask of this."
+  },
+  {
+   "start": 256.66,
+   "end": 259.86,
+   "text": "So with the group selected, click on this button to create a mask."
+  },
+  {
+   "start": 259.86,
+   "end": 261.74,
+   "text": "And by the way, you can name this Shadow."
+  },
+  {
+   "start": 262.94,
+   "end": 267.3,
+   "text": "Select the mask, take the brush, take a soft round brush and"
+  },
+  {
+   "start": 267.3,
+   "end": 270.14,
+   "text": "with black as the foreground color, just start erasing."
+  },
+  {
+   "start": 270.14,
+   "end": 273.5,
+   "text": "You can even control the flow, keep it at 100, keep it at 20."
+  },
+  {
+   "start": 273.5,
+   "end": 277.18,
+   "text": "Slowly and gradually erase the extras, like so."
+  },
+  {
+   "start": 277.18,
+   "end": 280.94,
+   "text": "Do a very soft erasing from around the corners and have a look at this."
+  },
+  {
+   "start": 280.94,
+   "end": 282.38,
+   "text": "It's already pretty close."
+  },
+  {
+   "start": 282.38,
+   "end": 285.22,
+   "text": "Now to make it even more realistic and this is an optional step,"
+  },
+  {
+   "start": 285.22,
+   "end": 287.26,
+   "text": "you can create a slight reflection."
+  },
+  {
+   "start": 287.26,
+   "end": 291.02,
+   "text": "With the box layer selected at the top, let us press Ctrl or Command J and"
+  },
+  {
+   "start": 291.02,
+   "end": 293.62,
+   "text": "this one can be your reflection."
+  },
+  {
+   "start": 293.62,
+   "end": 297.22,
+   "text": "Let us select the move to press Ctrl or Command T and right click on it and"
+  },
+  {
+   "start": 297.22,
+   "end": 299.94,
+   "text": "choose Flip Vertical."
+  },
+  {
+   "start": 299.94,
+   "end": 302.1,
+   "text": "This should be like a reflection."
+  },
+  {
+   "start": 302.1,
+   "end": 303.54,
+   "text": "Let's bring it right about there."
+  },
+  {
+   "start": 303.54,
+   "end": 306.5,
+   "text": "Now I recommend keeping it slightly on the inside because we are going to be"
+  },
+  {
+   "start": 306.5,
+   "end": 309.02,
+   "text": "blurring it anyway and we don't want to see any gaps."
+  },
+  {
+   "start": 309.02,
+   "end": 310.74,
+   "text": "Hit Enter or Return."
+  },
+  {
+   "start": 310.74,
+   "end": 315.18,
+   "text": "Press Ctrl or Command 0 and now let's go to Edit and"
+  },
+  {
+   "start": 315.22,
+   "end": 320.82,
+   "text": "Perspective Warp and all we have to do is to drag a rectangle like this and put"
+  },
+  {
+   "start": 320.82,
+   "end": 323.34,
+   "text": "the points along the four corners of the box."
+  },
+  {
+   "start": 323.34,
+   "end": 326.58,
+   "text": "I'm going to do a super quick and inaccurate job right here."
+  },
+  {
+   "start": 326.58,
+   "end": 329.78,
+   "text": "I should have done it before so that we could see the whole box but that's fine."
+  },
+  {
+   "start": 329.78,
+   "end": 333.02,
+   "text": "It doesn't have to be very, very accurate for this one."
+  },
+  {
+   "start": 333.02,
+   "end": 337.3,
+   "text": "Once you're done, go to the Warp tab right here and then you can move it"
+  },
+  {
+   "start": 337.3,
+   "end": 338.14,
+   "text": "as you like."
+  },
+  {
+   "start": 338.14,
+   "end": 340.26,
+   "text": "You want to make sure it aligns properly."
+  },
+  {
+   "start": 340.26,
+   "end": 343.14,
+   "text": "Other side we are going to erase it anyway but if you want to keep it,"
+  },
+  {
+   "start": 343.18,
+   "end": 345.02,
+   "text": "this is how you do it."
+  },
+  {
+   "start": 345.02,
+   "end": 345.74,
+   "text": "There you go."
+  },
+  {
+   "start": 345.74,
+   "end": 346.66,
+   "text": "Maybe a little more."
+  },
+  {
+   "start": 346.66,
+   "end": 351.02,
+   "text": "Now for extra realistic approach, you can also do this."
+  },
+  {
+   "start": 351.02,
+   "end": 352.82,
+   "text": "You can also do this one."
+  },
+  {
+   "start": 352.82,
+   "end": 353.62,
+   "text": "There you go."
+  },
+  {
+   "start": 353.62,
+   "end": 354.9,
+   "text": "That's a nice reflection."
+  },
+  {
+   "start": 354.9,
+   "end": 356.1,
+   "text": "Hit Enter or Return."
+  },
+  {
+   "start": 356.1,
+   "end": 359.66,
+   "text": "Now since this is a smart object, you can always go back by double clicking"
+  },
+  {
+   "start": 359.66,
+   "end": 363.54,
+   "text": "on Perspective Warp and adjust it as you wish."
+  },
+  {
+   "start": 363.54,
+   "end": 367.42,
+   "text": "Now since we have a white floor, all that the reflection is doing is darkening it."
+  },
+  {
+   "start": 367.42,
+   "end": 370.38,
+   "text": "Now what is the blend mode which darkens gradually and nicely?"
+  },
+  {
+   "start": 370.38,
+   "end": 371.5,
+   "text": "Multiply right?"
+  },
+  {
+   "start": 371.54,
+   "end": 376.26,
+   "text": "So select the reflection layer, change the blend mode from Normal to Multiply."
+  },
+  {
+   "start": 376.26,
+   "end": 377.26,
+   "text": "And there you have it."
+  },
+  {
+   "start": 377.26,
+   "end": 378.5,
+   "text": "Look at the beauty right there."
+  },
+  {
+   "start": 378.5,
+   "end": 380.22,
+   "text": "Let us not forget we have to blur it too."
+  },
+  {
+   "start": 380.22,
+   "end": 383.5,
+   "text": "The further the reflection gets, the more blurry it gets."
+  },
+  {
+   "start": 383.5,
+   "end": 387.42,
+   "text": "So let's go to Filter and again, Blur Gallery and Tilt Shift."
+  },
+  {
+   "start": 387.42,
+   "end": 388.94,
+   "text": "This time let's rotate it this way."
+  },
+  {
+   "start": 388.94,
+   "end": 391.94,
+   "text": "I'm just going to keep the reflection on this side and the blur starts,"
+  },
+  {
+   "start": 391.94,
+   "end": 395.42,
+   "text": "let's say right here and goes still this."
+  },
+  {
+   "start": 395.42,
+   "end": 396.42,
+   "text": "Let's control the blur."
+  },
+  {
+   "start": 396.42,
+   "end": 398.62,
+   "text": "You can zoom in and control where the blur starts."
+  },
+  {
+   "start": 398.62,
+   "end": 401.22,
+   "text": "If it doesn't look right to you, you can always move this."
+  },
+  {
+   "start": 401.22,
+   "end": 405.46,
+   "text": "Oh, that looks very much nicer."
+  },
+  {
+   "start": 405.46,
+   "end": 406.86,
+   "text": "So we can do something like this."
+  },
+  {
+   "start": 406.86,
+   "end": 409.3,
+   "text": "Once you're happy, hit OK right here."
+  },
+  {
+   "start": 409.3,
+   "end": 410.3,
+   "text": "And there you have it."
+  },
+  {
+   "start": 410.3,
+   "end": 412.82,
+   "text": "And of course, decrease the opacity."
+  },
+  {
+   "start": 412.82,
+   "end": 414.82,
+   "text": "So I'm going to keep it at about 28."
+  },
+  {
+   "start": 414.82,
+   "end": 418.62,
+   "text": "This works fine and then we need to create a mask by clicking on this Mask button,"
+  },
+  {
+   "start": 418.62,
+   "end": 421.3,
+   "text": "take the brush and just get to work."
+  },
+  {
+   "start": 421.3,
+   "end": 422.42,
+   "text": "Erase the extras."
+  },
+  {
+   "start": 422.42,
+   "end": 425.9,
+   "text": "So I don't want it in this area so I'm going to erase it from there."
+  },
+  {
+   "start": 425.9,
+   "end": 427.46,
+   "text": "Only in the shadow areas mostly."
+  },
+  {
+   "start": 427.46,
+   "end": 429.7,
+   "text": "Now that looks fantastic."
+  },
+  {
+   "start": 429.7,
+   "end": 431.06,
+   "text": "But is it done?"
+  },
+  {
+   "start": 431.06,
+   "end": 432.06,
+   "text": "Not really."
+  },
+  {
+   "start": 432.06,
+   "end": 433.74,
+   "text": "There's one more layer of shadow we need to create."
+  },
+  {
+   "start": 433.74,
+   "end": 435.78,
+   "text": "And this shadow is the most crucial."
+  },
+  {
+   "start": 435.78,
+   "end": 439.1,
+   "text": "It actually places the object on the surface."
+  },
+  {
+   "start": 439.1,
+   "end": 442.62,
+   "text": "If we notice things in the real world which we should do more often for inspiration,"
+  },
+  {
+   "start": 442.62,
+   "end": 445.66,
+   "text": "let's screens, you would notice that if you look at an actual photo, an actual"
+  },
+  {
+   "start": 445.66,
+   "end": 450.74,
+   "text": "object, there is that one layer of shadow right here that actually joins the subject"
+  },
+  {
+   "start": 450.74,
+   "end": 454.1,
+   "text": "with that of the surface on which it is on."
+  },
+  {
+   "start": 454.1,
+   "end": 455.58,
+   "text": "There is this larger shadow."
+  },
+  {
+   "start": 455.58,
+   "end": 456.58,
+   "text": "That's fine."
+  },
+  {
+   "start": 456.62,
+   "end": 460.38,
+   "text": "We can consider multiple layers of shadows but have a look at this one."
+  },
+  {
+   "start": 460.38,
+   "end": 462.18,
+   "text": "This one is always there."
+  },
+  {
+   "start": 462.18,
+   "end": 468.42,
+   "text": "This hard shadow, this joins and actually places the subject on the surface or the object."
+  },
+  {
+   "start": 468.42,
+   "end": 471.46,
+   "text": "Similarly, we need to create a closed shadow for this one as well."
+  },
+  {
+   "start": 471.46,
+   "end": 475.7,
+   "text": "So just under the box layer, let us create a brand new layer and let's name this one"
+  },
+  {
+   "start": 475.7,
+   "end": 477.78,
+   "text": "Shadow 2."
+  },
+  {
+   "start": 477.78,
+   "end": 485.58,
+   "text": "Select the brush tool and zoom in and all you have to do is to just dab right here."
+  },
+  {
+   "start": 485.58,
+   "end": 486.58,
+   "text": "That's it."
+  },
+  {
+   "start": 486.58,
+   "end": 489.7,
+   "text": "Hold the shift key and dab right here."
+  },
+  {
+   "start": 489.7,
+   "end": 491.02,
+   "text": "You can continue this."
+  },
+  {
+   "start": 491.02,
+   "end": 493.74,
+   "text": "You don't have to be absolutely accurate and straight lines."
+  },
+  {
+   "start": 493.74,
+   "end": 497.7,
+   "text": "You can keep it slightly zigzag too for more realistic approach."
+  },
+  {
+   "start": 497.7,
+   "end": 501.22,
+   "text": "Keep holding the shift key and just dabbing like so."
+  },
+  {
+   "start": 501.22,
+   "end": 502.54,
+   "text": "See the zigzag?"
+  },
+  {
+   "start": 502.54,
+   "end": 505.66,
+   "text": "That's making it even more realistic."
+  },
+  {
+   "start": 505.66,
+   "end": 508.26,
+   "text": "Don't forget the other side."
+  },
+  {
+   "start": 508.26,
+   "end": 510.86,
+   "text": "This area already has that shadow."
+  },
+  {
+   "start": 510.86,
+   "end": 512.58,
+   "text": "So it's going to work right here."
+  },
+  {
+   "start": 512.58,
+   "end": 515.34,
+   "text": "So I'm just going to merge it like so."
+  },
+  {
+   "start": 515.34,
+   "end": 516.46,
+   "text": "There you go."
+  },
+  {
+   "start": 516.46,
+   "end": 517.9,
+   "text": "That is so fantastic."
+  },
+  {
+   "start": 517.9,
+   "end": 520.88,
+   "text": "You can decrease the opacity for this one but I think this is fine."
+  },
+  {
+   "start": 520.88,
+   "end": 522.38,
+   "text": "It just joins it so nicely."
+  },
+  {
+   "start": 522.38,
+   "end": 525.26,
+   "text": "Now you can actually stop right here and to be honest, there is no end to it."
+  },
+  {
+   "start": 525.26,
+   "end": 526.98,
+   "text": "You can keep going on and on."
+  },
+  {
+   "start": 526.98,
+   "end": 530.38,
+   "text": "But for this one, we are going to create a studio clean background and that's pretty"
+  },
+  {
+   "start": 530.38,
+   "end": 531.38,
+   "text": "easy."
+  },
+  {
+   "start": 531.38,
+   "end": 534.26,
+   "text": "So all you need to do is to choose the gradient tool right here."
+  },
+  {
+   "start": 534.26,
+   "end": 535.78,
+   "text": "Choose a white to black gradient."
+  },
+  {
+   "start": 535.78,
+   "end": 540.02,
+   "text": "It doesn't matter right now and let us drag in a gradient like this."
+  },
+  {
+   "start": 540.02,
+   "end": 543.06,
+   "text": "Now what we want this new background to do is only darken stuff."
+  },
+  {
+   "start": 543.1,
+   "end": 546.94,
+   "text": "So change the blend mode from normal to multiply because it was already white."
+  },
+  {
+   "start": 546.94,
+   "end": 551.46,
+   "text": "Let's take it all the way to the top like this and this is a fine adjustment."
+  },
+  {
+   "start": 551.46,
+   "end": 554.46,
+   "text": "Now you can change the colors according to your wish."
+  },
+  {
+   "start": 554.46,
+   "end": 555.74,
+   "text": "Let's double click right here."
+  },
+  {
+   "start": 555.74,
+   "end": 557.54,
+   "text": "Let's set it to dark gray is fine."
+  },
+  {
+   "start": 557.54,
+   "end": 560.62,
+   "text": "Hit OK and for this one, double click right here."
+  },
+  {
+   "start": 560.62,
+   "end": 561.74,
+   "text": "Light gray is fine."
+  },
+  {
+   "start": 561.74,
+   "end": 566.14,
+   "text": "So we're going to keep it right about there and you can adjust the colors at any point"
+  },
+  {
+   "start": 566.14,
+   "end": 567.14,
+   "text": "in time."
+  },
+  {
+   "start": 567.14,
+   "end": 569.78,
+   "text": "Now this looks really, really nice but for even more lighting effects, how can we"
+  },
+  {
+   "start": 569.78,
+   "end": 571.66,
+   "text": "forget our favorite curves?"
+  },
+  {
+   "start": 571.66,
+   "end": 576.62,
+   "text": "So just above the box layer, click on the Adjustment Layer icon and let us choose Curves."
+  },
+  {
+   "start": 576.62,
+   "end": 580.7,
+   "text": "Let's take this slider to the left like so."
+  },
+  {
+   "start": 580.7,
+   "end": 582.98,
+   "text": "Select the mask, press Ctrl or Command I."
+  },
+  {
+   "start": 582.98,
+   "end": 585.14,
+   "text": "We want this curve to only affect this box."
+  },
+  {
+   "start": 585.14,
+   "end": 588.54,
+   "text": "So hold the Alt key or the Option key and click on the line between these two."
+  },
+  {
+   "start": 588.54,
+   "end": 590.54,
+   "text": "You can also do it from the Curves properties."
+  },
+  {
+   "start": 590.54,
+   "end": 596.58,
+   "text": "Let's take the brush with white as the foreground color, just dab at the top for a nicer"
+  },
+  {
+   "start": 596.58,
+   "end": 598.06,
+   "text": "lighting effect."
+  },
+  {
+   "start": 598.06,
+   "end": 602.9,
+   "text": "Now you can always adjust these later but this is fantastic."
+  },
+  {
+   "start": 602.9,
+   "end": 605.22,
+   "text": "So I'm going to go back right here and adjust it."
+  },
+  {
+   "start": 605.22,
+   "end": 606.38,
+   "text": "This may be too much."
+  },
+  {
+   "start": 606.38,
+   "end": 607.38,
+   "text": "That's nice."
+  },
+  {
+   "start": 607.38,
+   "end": 610.94,
+   "text": "And for lighting effects on the floor as well, just above this Gradient Fill layer, click"
+  },
+  {
+   "start": 610.94,
+   "end": 613.38,
+   "text": "on the Adjustment Layer icon and then choose Curves."
+  },
+  {
+   "start": 613.38,
+   "end": 615.3,
+   "text": "Again, it's our favorite."
+  },
+  {
+   "start": 615.3,
+   "end": 621.34,
+   "text": "Let's take this slider to the left like so and for this one, select the mask,"
+  },
+  {
+   "start": 621.34,
+   "end": 625.3,
+   "text": "pick the Gradient tool and this time let us pick a radial gradient."
+  },
+  {
+   "start": 625.3,
+   "end": 627.46,
+   "text": "Pick a gradient from white to black."
+  },
+  {
+   "start": 627.46,
+   "end": 631.1,
+   "text": "By the way, if you pick the first one, which is foreground to background, you can always"
+  },
+  {
+   "start": 631.1,
+   "end": 632.98,
+   "text": "press X to toggle it."
+  },
+  {
+   "start": 632.98,
+   "end": 638.26,
+   "text": "Right now it is white to black and let us drag something like so."
+  },
+  {
+   "start": 638.26,
+   "end": 641.14,
+   "text": "By the way, you can squish it and make it rounder."
+  },
+  {
+   "start": 641.14,
+   "end": 642.14,
+   "text": "That's up to you."
+  },
+  {
+   "start": 642.14,
+   "end": 643.74,
+   "text": "I'm going to keep it this way."
+  },
+  {
+   "start": 643.74,
+   "end": 646.5,
+   "text": "Whoa."
+  },
+  {
+   "start": 646.5,
+   "end": 647.66,
+   "text": "That looks great."
+  },
+  {
+   "start": 647.66,
+   "end": 649.22,
+   "text": "That looks great, doesn't it?"
+  },
+  {
+   "start": 649.22,
+   "end": 650.86,
+   "text": "Let's keep it this way."
+  },
+  {
+   "start": 650.86,
+   "end": 653.9,
+   "text": "And you know, really there is no end to it."
+  },
+  {
+   "start": 653.9,
+   "end": 657.44,
+   "text": "So that's how to create seamless, clean and beautiful shadows in Photoshop."
+  },
+  {
+   "start": 657.44,
+   "end": 661.16,
+   "text": "The important thing to understand is to learn when to start."
+  },
+  {
+   "start": 661.16,
+   "end": 662.84,
+   "text": "Let us do a quick little recap."
+  },
+  {
+   "start": 662.84,
+   "end": 666.08,
+   "text": "The first thing we need to do is to have the box and the background separate."
+  },
+  {
+   "start": 666.08,
+   "end": 667.68,
+   "text": "We have a white background right here."
+  },
+  {
+   "start": 667.68,
+   "end": 670.2,
+   "text": "Next we need to fill in a base shadow like this."
+  },
+  {
+   "start": 670.2,
+   "end": 674.24,
+   "text": "You can introduce some blur and some masking to make it more realistic."
+  },
+  {
+   "start": 674.24,
+   "end": 678.68,
+   "text": "On top of that, you can introduce some reflection and do not forget some additional"
+  },
+  {
+   "start": 678.68,
+   "end": 682.32,
+   "text": "shadows that joins the object to the surface."
+  },
+  {
+   "start": 682.32,
+   "end": 683.7,
+   "text": "See that layer of shadow right there?"
+  },
+  {
+   "start": 683.7,
+   "end": 688.18,
+   "text": "On top of that, it's up to you to create different kinds of backgrounds, some lighting"
+  },
+  {
+   "start": 688.18,
+   "end": 690.3,
+   "text": "at the top, at the bottom."
+  },
+  {
+   "start": 690.3,
+   "end": 691.3,
+   "text": "That's optional."
+  },
+  {
+   "start": 691.3,
+   "end": 692.3,
+   "text": "So that's all there is to it."
+  },
+  {
+   "start": 692.3,
+   "end": 695.18,
+   "text": "I hope this video helped you and if it did, make sure to give us a like and also don't"
+  },
+  {
+   "start": 695.18,
+   "end": 697.38,
+   "text": "forget to subscribe and not just subscribe."
+  },
+  {
+   "start": 697.38,
+   "end": 701.02,
+   "text": "Ring the bell so that you, my friend, don't miss any other future tips, tricks or tutorials."
+  },
+  {
+   "start": 701.02,
+   "end": 702.02,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 702.02,
+   "end": 703.02,
+   "text": "I'll see you in my next one."
+  },
+  {
+   "start": 703.02,
+   "end": 705.02,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:03:19.227484+00:00",
+ "seconds": 32.7
+}

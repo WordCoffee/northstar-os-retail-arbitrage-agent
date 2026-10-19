@@ -1,0 +1,3498 @@
+{
+ "id": "xQyceKmZTR8",
+ "title": "How To Match a Subject Into ANY Background In Photoshop! Compositing Tutorial",
+ "channel": "Photoshop Training Channel",
+ "url": "https://www.youtube.com/watch?v=xQyceKmZTR8",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 1814.5,
+ "chars": 30969,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 2.56,
+   "text": "Is your compositing work looking flat and unrealistic?"
+  },
+  {
+   "start": 2.56,
+   "end": 8.0,
+   "text": "If so, then check out this Photoshop compositing tutorial where I'm going to show you some"
+  },
+  {
+   "start": 8.0,
+   "end": 11.84,
+   "text": "amazing techniques to match a subject to any background."
+  },
+  {
+   "start": 11.84,
+   "end": 17.94,
+   "text": "Hi, this is Jesus Ramirez from the Photoshop Training Channel."
+  },
+  {
+   "start": 17.94,
+   "end": 22.7,
+   "text": "This is going to be an information-filled tutorial that is going to teach you a lot"
+  },
+  {
+   "start": 22.7,
+   "end": 23.7,
+   "text": "about compositing."
+  },
+  {
+   "start": 23.7,
+   "end": 28.7,
+   "text": "We're going to learn some powerful techniques that is going to help you create more cohesive"
+  },
+  {
+   "start": 28.7,
+   "end": 30.46,
+   "text": "and realistic composites."
+  },
+  {
+   "start": 30.46,
+   "end": 35.9,
+   "text": "We're going to start by learning how to match the perspective of two different images so"
+  },
+  {
+   "start": 35.9,
+   "end": 39.7,
+   "text": "that it feels like the person is standing on that background."
+  },
+  {
+   "start": 39.7,
+   "end": 45.86,
+   "text": "Then we're going to move on to matching the brightness, color, and saturation of the background"
+  },
+  {
+   "start": 45.86,
+   "end": 49.82,
+   "text": "and foreground so that, again, the image feels more cohesive."
+  },
+  {
+   "start": 49.82,
+   "end": 54.46,
+   "text": "In this case, we're also going to learn how to apply a similar depth of field, a blurry"
+  },
+  {
+   "start": 54.46,
+   "end": 58.38,
+   "text": "background, to create the illusion that it's an actual photo."
+  },
+  {
+   "start": 58.38,
+   "end": 62.38,
+   "text": "Then we're going to use the Camera Raw Filter to bring it all together."
+  },
+  {
+   "start": 62.38,
+   "end": 66.42,
+   "text": "Make sure that you stick to the very end of the tutorial because you don't want to miss"
+  },
+  {
+   "start": 66.42,
+   "end": 68.58,
+   "text": "any of the compositing tips and tricks."
+  },
+  {
+   "start": 68.58,
+   "end": 71.78,
+   "text": "If this is your first time at the Photoshop Training Channel, then don't forget to click"
+  },
+  {
+   "start": 71.78,
+   "end": 76.06,
+   "text": "on that Subscribe and Notification button so that you don't miss any future Photoshop"
+  },
+  {
+   "start": 76.06,
+   "end": 77.06,
+   "text": "tutorials."
+  },
+  {
+   "start": 77.06,
+   "end": 78.78,
+   "text": "Let's just get right to it."
+  },
+  {
+   "start": 78.78,
+   "end": 80.7,
+   "text": "These are the images that we're going to work with."
+  },
+  {
+   "start": 80.7,
+   "end": 88.74,
+   "text": "I have this image of this young lady standing on this street and I have this background image"
+  },
+  {
+   "start": 88.74,
+   "end": 91.94,
+   "text": "of a pier on icy waters."
+  },
+  {
+   "start": 91.94,
+   "end": 95.58,
+   "text": "And if you would like to follow along with these images, make sure that you look down"
+  },
+  {
+   "start": 95.58,
+   "end": 96.58,
+   "text": "below in the description."
+  },
+  {
+   "start": 96.58,
+   "end": 99.34,
+   "text": "There'll be a link so you can download them."
+  },
+  {
+   "start": 99.34,
+   "end": 102.78,
+   "text": "And once you have them open, they'll be open in two different tabs."
+  },
+  {
+   "start": 102.78,
+   "end": 107.06,
+   "text": "The first step is to get both images in the same Photoshop document."
+  },
+  {
+   "start": 107.06,
+   "end": 111.94,
+   "text": "To do that, make sure that you have the Move Tool active and that you click and drag one"
+  },
+  {
+   "start": 111.94,
+   "end": 114.78,
+   "text": "of the images over onto the other tab."
+  },
+  {
+   "start": 114.78,
+   "end": 117.42,
+   "text": "The tab will automatically change over."
+  },
+  {
+   "start": 117.42,
+   "end": 122.18,
+   "text": "If you hold the Shift key and release the mouse button, Photoshop will place the image"
+  },
+  {
+   "start": 122.18,
+   "end": 125.46,
+   "text": "that you drag over right in the center of the canvas."
+  },
+  {
+   "start": 125.46,
+   "end": 129.18,
+   "text": "Then you can hit the Enter key on Windows, that's the return key on the Mac, to"
+  },
+  {
+   "start": 129.18,
+   "end": 132.06,
+   "text": "place the image in your new document."
+  },
+  {
+   "start": 132.06,
+   "end": 136.1,
+   "text": "So now we have both of these images in this document as two separate layers."
+  },
+  {
+   "start": 136.1,
+   "end": 140.58,
+   "text": "The first step is to remove the background from the model's image and that's what I'll"
+  },
+  {
+   "start": 140.58,
+   "end": 141.58,
+   "text": "call the layer."
+  },
+  {
+   "start": 141.58,
+   "end": 145.18,
+   "text": "I'll call the layer model because this is the layer that will hold my model and the other"
+  },
+  {
+   "start": 145.18,
+   "end": 148.14,
+   "text": "one is called background so that name is fine."
+  },
+  {
+   "start": 148.14,
+   "end": 152.14,
+   "text": "And there's a lot of ways of removing the background from an image."
+  },
+  {
+   "start": 152.14,
+   "end": 156.86,
+   "text": "If you're in an older version of Photoshop, you probably will have access to the Quick"
+  },
+  {
+   "start": 156.86,
+   "end": 161.5,
+   "text": "Selection Tool which allows you to simply click and drag over an image to make a"
+  },
+  {
+   "start": 161.5,
+   "end": 162.5,
+   "text": "selection."
+  },
+  {
+   "start": 162.5,
+   "end": 164.0,
+   "text": "So I'm clicking and dragging over her."
+  },
+  {
+   "start": 164.0,
+   "end": 167.84,
+   "text": "If I make a mistake, I can always hold the Alt key on Windows, that's the option key"
+  },
+  {
+   "start": 167.84,
+   "end": 171.96,
+   "text": "on the Mac, and click and drag to subtract from the selection."
+  },
+  {
+   "start": 171.96,
+   "end": 176.6,
+   "text": "I'm going to press Ctrl D, Command D on the Mac to deselect."
+  },
+  {
+   "start": 176.6,
+   "end": 179.72,
+   "text": "And if you're in the newest version of Photoshop, at the moment it's Photoshop"
+  },
+  {
+   "start": 179.72,
+   "end": 186.84,
+   "text": "2020, you will have access to a really powerful tool called the Object Selection Tool."
+  },
+  {
+   "start": 186.84,
+   "end": 192.24,
+   "text": "With this tool, you can go under the Mode dropdown and select Lasso and make sure"
+  },
+  {
+   "start": 192.24,
+   "end": 196.36,
+   "text": "that you click on this button here in the Options of Art called New Selection."
+  },
+  {
+   "start": 196.36,
+   "end": 204.4,
+   "text": "And then click and drag a loose selection right over our model."
+  },
+  {
+   "start": 204.4,
+   "end": 207.6,
+   "text": "And when I release, you'll see that Photoshop will analyze the image using"
+  },
+  {
+   "start": 207.6,
+   "end": 212.6,
+   "text": "artificial intelligence known as Adobe Sensei and it will make a selection out of whatever"
+  },
+  {
+   "start": 212.6,
+   "end": 216.16,
+   "text": "it thinks the main subject is within that selection."
+  },
+  {
+   "start": 216.16,
+   "end": 219.32,
+   "text": "So what I'm going to do now is fine tune the selection."
+  },
+  {
+   "start": 219.32,
+   "end": 222.92,
+   "text": "So if you notice, it really didn't get everything perfect and that's okay."
+  },
+  {
+   "start": 222.92,
+   "end": 224.4,
+   "text": "It doesn't need to get it perfect."
+  },
+  {
+   "start": 224.4,
+   "end": 228.12,
+   "text": "All we need to do is get started with it and we can fine tune as we go."
+  },
+  {
+   "start": 228.12,
+   "end": 233.16,
+   "text": "So I'm going to press the Z key on the keyboard to switch over into the Zoom Tool."
+  },
+  {
+   "start": 233.16,
+   "end": 239.12,
+   "text": "Then I can zoom it into the image and I can deselect the part in between her legs here."
+  },
+  {
+   "start": 239.12,
+   "end": 240.4,
+   "text": "And we can do that several ways."
+  },
+  {
+   "start": 240.4,
+   "end": 245.04,
+   "text": "We can select the Quick Selection Tool, hold Alt on Windows, Option on the Mac"
+  },
+  {
+   "start": 245.04,
+   "end": 248.36,
+   "text": "and click and drag to deselect."
+  },
+  {
+   "start": 248.36,
+   "end": 251.64,
+   "text": "I'm using the spacebar to pan."
+  },
+  {
+   "start": 251.64,
+   "end": 256.76,
+   "text": "And again, you can hold Alt on Windows, Option on the Mac and click and drag to deselect."
+  },
+  {
+   "start": 256.76,
+   "end": 258.88,
+   "text": "At this point, you don't need a perfect selection."
+  },
+  {
+   "start": 258.88,
+   "end": 260.8,
+   "text": "We're going to fine tune later."
+  },
+  {
+   "start": 260.8,
+   "end": 266.0,
+   "text": "Just make sure that you get the main shapes of the person selected."
+  },
+  {
+   "start": 266.0,
+   "end": 269.72,
+   "text": "That way you get an accurate representation of the selection."
+  },
+  {
+   "start": 269.72,
+   "end": 271.52,
+   "text": "But you don't have to worry about being perfect."
+  },
+  {
+   "start": 271.52,
+   "end": 272.52,
+   "text": "That comes at the end."
+  },
+  {
+   "start": 272.52,
+   "end": 276.72,
+   "text": "I always leave all the fine tuning to the end because sometimes you can get away"
+  },
+  {
+   "start": 276.72,
+   "end": 281.04,
+   "text": "with not having a perfect selection depending on what the background is, what the foreground"
+  },
+  {
+   "start": 281.04,
+   "end": 284.64,
+   "text": "is and all the details on both layers."
+  },
+  {
+   "start": 284.64,
+   "end": 288.16,
+   "text": "So we're not going to worry about the fine tuning till the very, very end."
+  },
+  {
+   "start": 288.16,
+   "end": 293.0,
+   "text": "I just want to make sure I have the main shapes selected."
+  },
+  {
+   "start": 293.0,
+   "end": 295.36,
+   "text": "But anyway, this is going to be good for now."
+  },
+  {
+   "start": 295.36,
+   "end": 297.8,
+   "text": "And what I'm going to do is simply double click on the Hand Tool to fit the image"
+  },
+  {
+   "start": 297.8,
+   "end": 299.04,
+   "text": "to screen."
+  },
+  {
+   "start": 299.04,
+   "end": 305.0,
+   "text": "And then I'm going to click on the Layer Mask icon to create a Layer Mask based"
+  },
+  {
+   "start": 305.0,
+   "end": 306.0,
+   "text": "on the selection."
+  },
+  {
+   "start": 306.04,
+   "end": 308.18,
+   "text": "Anything that was selected we'll keep."
+  },
+  {
+   "start": 308.18,
+   "end": 309.18,
+   "text": "She was selected."
+  },
+  {
+   "start": 309.18,
+   "end": 310.28,
+   "text": "We kept her."
+  },
+  {
+   "start": 310.28,
+   "end": 312.44,
+   "text": "Everything else was hidden in the Layer Mask."
+  },
+  {
+   "start": 312.44,
+   "end": 314.28,
+   "text": "This is the Layer Mask here."
+  },
+  {
+   "start": 314.28,
+   "end": 316.88,
+   "text": "Next to the Layer Thumbnail, you can see that there."
+  },
+  {
+   "start": 316.88,
+   "end": 319.04,
+   "text": "Black hides, white reveals."
+  },
+  {
+   "start": 319.04,
+   "end": 323.08,
+   "text": "Let me hold Alt down Windows, Option on the Mac and click on the Layer Mask thumbnail"
+  },
+  {
+   "start": 323.08,
+   "end": 324.68,
+   "text": "so that you can see it."
+  },
+  {
+   "start": 324.68,
+   "end": 326.68,
+   "text": "White reveals, black conceals."
+  },
+  {
+   "start": 326.68,
+   "end": 330.88,
+   "text": "I'll once again hold Alt down Windows and Option on the Mac and click on the Layer"
+  },
+  {
+   "start": 330.88,
+   "end": 334.76,
+   "text": "Mask thumbnail to reveal the layer and we can continue working."
+  },
+  {
+   "start": 334.76,
+   "end": 339.4,
+   "text": "So if I select the Move Tool, I can obviously place her anywhere that I want."
+  },
+  {
+   "start": 339.4,
+   "end": 342.24,
+   "text": "But where should I place her?"
+  },
+  {
+   "start": 342.24,
+   "end": 346.04,
+   "text": "Right there where I have her now, it doesn't look realistic."
+  },
+  {
+   "start": 346.04,
+   "end": 349.52,
+   "text": "And sure, I could eyeball it and find the spot where I think she looks realistic and"
+  },
+  {
+   "start": 349.52,
+   "end": 352.1,
+   "text": "I could scale her and try to get it to match."
+  },
+  {
+   "start": 352.1,
+   "end": 358.28,
+   "text": "But it's always a good idea to use perspective to fit her into a scene."
+  },
+  {
+   "start": 358.28,
+   "end": 360.44,
+   "text": "If you don't know what I mean by perspective, don't worry about it."
+  },
+  {
+   "start": 360.44,
+   "end": 362.76,
+   "text": "I have a tutorial that talks all about that."
+  },
+  {
+   "start": 362.76,
+   "end": 366.72,
+   "text": "I'll place a link to my perspective tutorial down below in the description."
+  },
+  {
+   "start": 366.72,
+   "end": 369.74,
+   "text": "But for now, I'll give you a brief explanation."
+  },
+  {
+   "start": 369.74,
+   "end": 373.6,
+   "text": "I'm going to disable the foreground layer, the model layer, and we're going to work with"
+  },
+  {
+   "start": 373.6,
+   "end": 374.84,
+   "text": "the background layer."
+  },
+  {
+   "start": 374.84,
+   "end": 380.46,
+   "text": "So with this layer active, I'm going to select the Line Tool and make sure that I have"
+  },
+  {
+   "start": 380.46,
+   "end": 387.0,
+   "text": "Shape Active and a weight of 10 so that I could see the actual lines that I draw."
+  },
+  {
+   "start": 387.0,
+   "end": 392.68,
+   "text": "I can maybe change the fill to red so the lines are more obvious."
+  },
+  {
+   "start": 392.72,
+   "end": 396.56,
+   "text": "When you are combining images together and you want them to look realistic, you need to"
+  },
+  {
+   "start": 396.56,
+   "end": 398.04,
+   "text": "get the perspective right."
+  },
+  {
+   "start": 398.04,
+   "end": 403.8,
+   "text": "And the easiest way to think about perspective is matching the horizon lines of both your"
+  },
+  {
+   "start": 403.8,
+   "end": 405.44,
+   "text": "foreground and background."
+  },
+  {
+   "start": 405.44,
+   "end": 408.64,
+   "text": "And the way that you do that is by looking at your image and sometimes, like in this"
+  },
+  {
+   "start": 408.64,
+   "end": 410.68,
+   "text": "case, you don't even need to draw any lines."
+  },
+  {
+   "start": 410.68,
+   "end": 413.94,
+   "text": "You can just tell where the horizon line is."
+  },
+  {
+   "start": 413.94,
+   "end": 418.12,
+   "text": "The horizon line is where the ground plane meets the sky."
+  },
+  {
+   "start": 418.12,
+   "end": 422.56,
+   "text": "We can see the sky is up here and the ground plane is the eyes and this pier."
+  },
+  {
+   "start": 422.6,
+   "end": 425.04,
+   "text": "So where does that meet the sky?"
+  },
+  {
+   "start": 425.04,
+   "end": 426.64,
+   "text": "Well, right about here, right?"
+  },
+  {
+   "start": 426.8,
+   "end": 428.52,
+   "text": "Because this is where the sky starts."
+  },
+  {
+   "start": 428.52,
+   "end": 430.76,
+   "text": "And if you go up, you have sky."
+  },
+  {
+   "start": 430.76,
+   "end": 432.4,
+   "text": "And if you go down, you have ground."
+  },
+  {
+   "start": 433.08,
+   "end": 438.16,
+   "text": "If you can't really see that in your image, just find parallel converging lines like on"
+  },
+  {
+   "start": 438.16,
+   "end": 441.2,
+   "text": "this pier or dock, whatever it is."
+  },
+  {
+   "start": 441.2,
+   "end": 444.24,
+   "text": "Let me know them in the comments below if it's a pier or a dock."
+  },
+  {
+   "start": 444.36,
+   "end": 449.92,
+   "text": "Anyway, find the parallel converging lines and follow them all the way to the end."
+  },
+  {
+   "start": 450.0,
+   "end": 454.88,
+   "text": "And when you get to the other end where they meet, that's the vanishing point."
+  },
+  {
+   "start": 454.88,
+   "end": 457.4,
+   "text": "And the vanishing point is always in the horizon line."
+  },
+  {
+   "start": 457.72,
+   "end": 460.64,
+   "text": "So see, the horizon line is right here, right at that point."
+  },
+  {
+   "start": 461.68,
+   "end": 465.24,
+   "text": "So where is the horizon line in our model?"
+  },
+  {
+   "start": 465.28,
+   "end": 468.36,
+   "text": "So I'm going to tap the delete key just to delete those layers because we don't need"
+  },
+  {
+   "start": 468.36,
+   "end": 468.88,
+   "text": "them anymore."
+  },
+  {
+   "start": 468.88,
+   "end": 470.96,
+   "text": "And now we're going to enable the model layer."
+  },
+  {
+   "start": 471.48,
+   "end": 474.6,
+   "text": "And I'm going to figure out where the horizon line is for her."
+  },
+  {
+   "start": 475.0,
+   "end": 480.76,
+   "text": "I'm going to hold shift and click on the layer mask thumbnail to reveal the original"
+  },
+  {
+   "start": 480.76,
+   "end": 483.36,
+   "text": "background. See that red X on the layer mask thumbnail?"
+  },
+  {
+   "start": 483.36,
+   "end": 484.4,
+   "text": "That just means it's hidden."
+  },
+  {
+   "start": 484.4,
+   "end": 485.2,
+   "text": "We're not deleting it."
+  },
+  {
+   "start": 485.2,
+   "end": 486.4,
+   "text": "We're just hiding it for a moment."
+  },
+  {
+   "start": 487.0,
+   "end": 490.68,
+   "text": "And if I follow parallel converging lines like the lines on the ground here,"
+  },
+  {
+   "start": 491.0,
+   "end": 495.76,
+   "text": "you'll see that her horizon line is more or less right below her ear."
+  },
+  {
+   "start": 495.76,
+   "end": 496.48,
+   "text": "Give or take."
+  },
+  {
+   "start": 496.48,
+   "end": 498.44,
+   "text": "Doesn't have to be perfect, but right about there."
+  },
+  {
+   "start": 498.56,
+   "end": 499.76,
+   "text": "See right below her ear."
+  },
+  {
+   "start": 499.96,
+   "end": 502.16,
+   "text": "And actually I drew the lines under her."
+  },
+  {
+   "start": 502.52,
+   "end": 508.6,
+   "text": "So if I drag the model layer and place it under those lines, you'll see that the"
+  },
+  {
+   "start": 508.6,
+   "end": 511.8,
+   "text": "vanishing point and the horizon line are right below her ears."
+  },
+  {
+   "start": 511.8,
+   "end": 515.08,
+   "text": "And actually, if I click and drag from here, you'll notice that all the"
+  },
+  {
+   "start": 515.08,
+   "end": 520.64,
+   "text": "parallel converging lines in the scene end up at that vanishing point."
+  },
+  {
+   "start": 520.76,
+   "end": 521.28,
+   "text": "See that?"
+  },
+  {
+   "start": 521.84,
+   "end": 525.8,
+   "text": "See how all the lines end up at that point."
+  },
+  {
+   "start": 526.44,
+   "end": 530.76,
+   "text": "So we know for sure that that's where the horizon line is."
+  },
+  {
+   "start": 531.32,
+   "end": 534.64,
+   "text": "So if the horizon line is right below her ear, that means that we need to"
+  },
+  {
+   "start": 534.64,
+   "end": 537.16,
+   "text": "place her ear right on the horizon line of the other image."
+  },
+  {
+   "start": 537.48,
+   "end": 542.48,
+   "text": "So if I hold shift and click on the layer mask thumbnail, then I can select the"
+  },
+  {
+   "start": 542.48,
+   "end": 543.0,
+   "text": "move tool."
+  },
+  {
+   "start": 543.52,
+   "end": 547.8,
+   "text": "I can now drag her up and place her right about here."
+  },
+  {
+   "start": 547.8,
+   "end": 551.48,
+   "text": "So she's in perspective and I can place her anywhere I want left,"
+  },
+  {
+   "start": 551.48,
+   "end": 554.64,
+   "text": "right, center, as long as that ear is in that horizon line, she should"
+  },
+  {
+   "start": 554.64,
+   "end": 555.48,
+   "text": "be in perspective."
+  },
+  {
+   "start": 556.08,
+   "end": 558.4,
+   "text": "But that arises other problems, right?"
+  },
+  {
+   "start": 558.4,
+   "end": 561.2,
+   "text": "Like we now need to worry about scale."
+  },
+  {
+   "start": 561.32,
+   "end": 562.84,
+   "text": "So why don't we work on that next?"
+  },
+  {
+   "start": 562.84,
+   "end": 566.12,
+   "text": "I'm going to click on that lock icon to disable the lock."
+  },
+  {
+   "start": 566.92,
+   "end": 570.96,
+   "text": "Then I'm going to right click and convert this layer into a smart object so"
+  },
+  {
+   "start": 570.96,
+   "end": 573.12,
+   "text": "that I can distort it non-destructively."
+  },
+  {
+   "start": 573.16,
+   "end": 576.8,
+   "text": "Smart objects allow you to apply adjustments, distortions, filters and"
+  },
+  {
+   "start": 576.8,
+   "end": 579.76,
+   "text": "transformations non-destructively, which means you can always come back"
+  },
+  {
+   "start": 579.76,
+   "end": 580.36,
+   "text": "and edit them."
+  },
+  {
+   "start": 580.92,
+   "end": 585.36,
+   "text": "Next, press Ctrl T on Windows command T and the Mac to transform and"
+  },
+  {
+   "start": 585.36,
+   "end": 587.92,
+   "text": "drag the reference point over onto the horizon line."
+  },
+  {
+   "start": 587.96,
+   "end": 590.64,
+   "text": "If you don't see the reference point, you can click on this checkbox to"
+  },
+  {
+   "start": 590.64,
+   "end": 594.04,
+   "text": "enable it and then just drag the reference point onto the horizon line."
+  },
+  {
+   "start": 594.24,
+   "end": 595.76,
+   "text": "Anywhere on the horizon line works."
+  },
+  {
+   "start": 596.12,
+   "end": 600.72,
+   "text": "Then if you hold Shift and Alt on Windows, that's Shift and Option on the"
+  },
+  {
+   "start": 600.72,
+   "end": 605.2,
+   "text": "Mac and click and drag on the corner handle, you'll scale in perspective."
+  },
+  {
+   "start": 605.2,
+   "end": 605.92,
+   "text": "Isn't that awesome?"
+  },
+  {
+   "start": 605.92,
+   "end": 606.36,
+   "text": "See that?"
+  },
+  {
+   "start": 606.72,
+   "end": 607.48,
+   "text": "Super cool."
+  },
+  {
+   "start": 607.96,
+   "end": 611.92,
+   "text": "So what I'm going to do now is simply scale the layer down so that we"
+  },
+  {
+   "start": 611.92,
+   "end": 617.36,
+   "text": "could have her in perspective and not seem too small or too big."
+  },
+  {
+   "start": 617.36,
+   "end": 618.6,
+   "text": "And you can adjust it accordingly."
+  },
+  {
+   "start": 618.76,
+   "end": 622.48,
+   "text": "And by the way, the reason that I'm adjusting the background and not her is"
+  },
+  {
+   "start": 622.48,
+   "end": 624.16,
+   "text": "because I don't want to scale her up."
+  },
+  {
+   "start": 624.16,
+   "end": 629.0,
+   "text": "If I scale her up, I'm going to stretch pixels and make her look blurry"
+  },
+  {
+   "start": 629.0,
+   "end": 629.68,
+   "text": "and I don't want that."
+  },
+  {
+   "start": 629.68,
+   "end": 631.16,
+   "text": "So I'd rather adjust the background."
+  },
+  {
+   "start": 631.56,
+   "end": 635.8,
+   "text": "I'm going to click on the Crop Tool and then click and drag on these"
+  },
+  {
+   "start": 635.8,
+   "end": 639.52,
+   "text": "handles to crop the image, like so."
+  },
+  {
+   "start": 641.08,
+   "end": 643.6,
+   "text": "When you're done, you can just hit the Enter key on Windows and"
+  },
+  {
+   "start": 643.6,
+   "end": 644.84,
+   "text": "that's a return key in the Mac."
+  },
+  {
+   "start": 645.08,
+   "end": 646.88,
+   "text": "My image is still looking a little bit off scale."
+  },
+  {
+   "start": 646.88,
+   "end": 650.36,
+   "text": "So what I'm going to do is select the background layer and select the"
+  },
+  {
+   "start": 650.36,
+   "end": 656.28,
+   "text": "Move Tool, then click on this center transformation handle while holding"
+  },
+  {
+   "start": 656.32,
+   "end": 660.4,
+   "text": "Alt on Windows, Option on the Mac and drag to the left to make it just"
+  },
+  {
+   "start": 660.4,
+   "end": 661.24,
+   "text": "a little wider."
+  },
+  {
+   "start": 661.28,
+   "end": 662.8,
+   "text": "I think it looks a little bit better that way."
+  },
+  {
+   "start": 663.16,
+   "end": 665.72,
+   "text": "And this last adjustment is just subjective."
+  },
+  {
+   "start": 665.72,
+   "end": 668.0,
+   "text": "You could leave it as it was and it would still look good."
+  },
+  {
+   "start": 668.24,
+   "end": 672.24,
+   "text": "But anyway, I'm going to now work on my model."
+  },
+  {
+   "start": 672.24,
+   "end": 677.16,
+   "text": "We have a really good composite so far, but it doesn't look realistic."
+  },
+  {
+   "start": 677.4,
+   "end": 681.48,
+   "text": "And the reason that this composite doesn't look realistic is because we"
+  },
+  {
+   "start": 681.48,
+   "end": 685.24,
+   "text": "haven't matched the luminosity or the color of the image."
+  },
+  {
+   "start": 685.92,
+   "end": 688.96,
+   "text": "And the way to do that is actually very simple."
+  },
+  {
+   "start": 689.0,
+   "end": 690.84,
+   "text": "It only requires a couple of adjustment layers."
+  },
+  {
+   "start": 690.84,
+   "end": 692.04,
+   "text": "And let me show you how to do that."
+  },
+  {
+   "start": 692.48,
+   "end": 695.72,
+   "text": "First, with any composite that you make, I recommend that you"
+  },
+  {
+   "start": 695.72,
+   "end": 699.4,
+   "text": "create a black and white adjustment layer because that turns the"
+  },
+  {
+   "start": 699.4,
+   "end": 700.32,
+   "text": "image black and white."
+  },
+  {
+   "start": 700.56,
+   "end": 703.64,
+   "text": "When you remove the color from a composite, you really start seeing"
+  },
+  {
+   "start": 703.64,
+   "end": 707.56,
+   "text": "the differences in luminosity between the layers and you can see"
+  },
+  {
+   "start": 707.56,
+   "end": 708.84,
+   "text": "that the composite doesn't work."
+  },
+  {
+   "start": 709.12,
+   "end": 713.72,
+   "text": "So what you want to do now is click on the model layer and then"
+  },
+  {
+   "start": 713.72,
+   "end": 717.72,
+   "text": "create a levels adjustment layer, which will help us control the"
+  },
+  {
+   "start": 717.72,
+   "end": 722.88,
+   "text": "levels or the luminosity of the model and match it to the background"
+  },
+  {
+   "start": 722.92,
+   "end": 724.6,
+   "text": "so that the composite looks realistic."
+  },
+  {
+   "start": 724.92,
+   "end": 728.08,
+   "text": "By the way, you could also use the curves adjustment layer, but for"
+  },
+  {
+   "start": 728.08,
+   "end": 730.36,
+   "text": "beginners, levels is a little easier to understand."
+  },
+  {
+   "start": 730.36,
+   "end": 733.12,
+   "text": "If you're more advanced and prefer curves, go ahead and use that."
+  },
+  {
+   "start": 733.8,
+   "end": 736.88,
+   "text": "With the levels adjustment layer, I'm going to click on this icon"
+  },
+  {
+   "start": 736.88,
+   "end": 739.6,
+   "text": "here in the properties panel to clip it to the layer below."
+  },
+  {
+   "start": 740.0,
+   "end": 743.08,
+   "text": "Clipping a layer simply means that the levels adjustment layer"
+  },
+  {
+   "start": 743.24,
+   "end": 745.32,
+   "text": "will only control the layer directly below it."
+  },
+  {
+   "start": 745.56,
+   "end": 747.4,
+   "text": "In this case, the model layer."
+  },
+  {
+   "start": 747.96,
+   "end": 750.64,
+   "text": "And what I'm going to do is I'm going to adjust the luminosity"
+  },
+  {
+   "start": 750.88,
+   "end": 752.92,
+   "text": "to match it to the background."
+  },
+  {
+   "start": 753.2,
+   "end": 756.36,
+   "text": "But before I do that, let me quickly explain how the levels"
+  },
+  {
+   "start": 756.36,
+   "end": 757.36,
+   "text": "adjustment layer works."
+  },
+  {
+   "start": 757.92,
+   "end": 762.16,
+   "text": "So with this point, you see that we have a dark handle."
+  },
+  {
+   "start": 762.84,
+   "end": 765.76,
+   "text": "On this side, we have a white handle and the same thing is"
+  },
+  {
+   "start": 765.76,
+   "end": 767.04,
+   "text": "true for the two at the bottom."
+  },
+  {
+   "start": 767.44,
+   "end": 770.28,
+   "text": "So these five controls adjust the luminosity of the layer."
+  },
+  {
+   "start": 770.56,
+   "end": 771.88,
+   "text": "But how do they control it?"
+  },
+  {
+   "start": 771.88,
+   "end": 774.64,
+   "text": "Well, if I drag this point to the right, this black point to"
+  },
+  {
+   "start": 774.64,
+   "end": 775.76,
+   "text": "the right, watch what happens."
+  },
+  {
+   "start": 775.76,
+   "end": 777.48,
+   "text": "The image of course gets darker."
+  },
+  {
+   "start": 777.76,
+   "end": 780.44,
+   "text": "So what Photoshop is doing is making this image darker."
+  },
+  {
+   "start": 780.64,
+   "end": 781.36,
+   "text": "But how?"
+  },
+  {
+   "start": 781.64,
+   "end": 783.2,
+   "text": "Well, look at the gradient below."
+  },
+  {
+   "start": 783.64,
+   "end": 785.92,
+   "text": "This gradient tells us that the dark pixels are on the"
+  },
+  {
+   "start": 785.92,
+   "end": 787.56,
+   "text": "left and the bright pixels on the right."
+  },
+  {
+   "start": 788.12,
+   "end": 790.64,
+   "text": "If you notice right, dropped this slider."
+  },
+  {
+   "start": 791.0,
+   "end": 793.48,
+   "text": "It's right about here, right on this shade of gray."
+  },
+  {
+   "start": 793.76,
+   "end": 797.12,
+   "text": "So what we're telling Photoshop is that anything that is this"
+  },
+  {
+   "start": 797.12,
+   "end": 800.92,
+   "text": "shade of gray or darker will be black."
+  },
+  {
+   "start": 801.44,
+   "end": 801.84,
+   "text": "Right."
+  },
+  {
+   "start": 802.28,
+   "end": 803.68,
+   "text": "And why is it black?"
+  },
+  {
+   "start": 803.8,
+   "end": 806.8,
+   "text": "Well, because we're telling Photoshop that the darkest"
+  },
+  {
+   "start": 806.8,
+   "end": 809.04,
+   "text": "point is pure black."
+  },
+  {
+   "start": 809.56,
+   "end": 810.56,
+   "text": "But I can change that."
+  },
+  {
+   "start": 810.84,
+   "end": 813.16,
+   "text": "I can click and drag this point to the right."
+  },
+  {
+   "start": 813.68,
+   "end": 816.36,
+   "text": "And now the darkest point is no longer black."
+  },
+  {
+   "start": 816.44,
+   "end": 819.96,
+   "text": "Is this dark shade of gray, which is the same gray that"
+  },
+  {
+   "start": 819.96,
+   "end": 820.56,
+   "text": "you see here."
+  },
+  {
+   "start": 820.68,
+   "end": 822.36,
+   "text": "So that's the way this tool works."
+  },
+  {
+   "start": 822.72,
+   "end": 826.68,
+   "text": "The point on top tells Photoshop what pixels are the"
+  },
+  {
+   "start": 826.68,
+   "end": 830.08,
+   "text": "darkest color and the point at the bottom determines what"
+  },
+  {
+   "start": 830.08,
+   "end": 831.2,
+   "text": "the darkest color is."
+  },
+  {
+   "start": 831.6,
+   "end": 833.96,
+   "text": "And the same thing is true with the points on the"
+  },
+  {
+   "start": 833.96,
+   "end": 834.28,
+   "text": "right."
+  },
+  {
+   "start": 834.32,
+   "end": 837.52,
+   "text": "If I drag the white point to the left, it brightens up"
+  },
+  {
+   "start": 837.52,
+   "end": 838.08,
+   "text": "the image."
+  },
+  {
+   "start": 838.52,
+   "end": 841.16,
+   "text": "Notice that we have white all over her skin."
+  },
+  {
+   "start": 841.44,
+   "end": 843.68,
+   "text": "That's because the brightest points are white."
+  },
+  {
+   "start": 844.04,
+   "end": 847.56,
+   "text": "We're telling Photoshop that anything that is this shade"
+  },
+  {
+   "start": 847.56,
+   "end": 850.32,
+   "text": "of gray or brighter will be completely white."
+  },
+  {
+   "start": 850.4,
+   "end": 854.08,
+   "text": "But if I drag this point to the left, now the brightest"
+  },
+  {
+   "start": 854.08,
+   "end": 855.88,
+   "text": "point will be this shade of gray."
+  },
+  {
+   "start": 856.0,
+   "end": 857.08,
+   "text": "It will no longer be white."
+  },
+  {
+   "start": 857.48,
+   "end": 861.12,
+   "text": "So again, the bottom points control how bright the"
+  },
+  {
+   "start": 861.12,
+   "end": 864.36,
+   "text": "brightest pixel is, how dark the darkest pixel is, and"
+  },
+  {
+   "start": 864.36,
+   "end": 867.48,
+   "text": "the points on top control which of the pixels are the"
+  },
+  {
+   "start": 867.48,
+   "end": 869.0,
+   "text": "darkest and which are the brightest."
+  },
+  {
+   "start": 869.0,
+   "end": 870.72,
+   "text": "So if you wanted just the black silhouette,"
+  },
+  {
+   "start": 870.96,
+   "end": 872.68,
+   "text": "click on the black point and drag it all the way to the"
+  },
+  {
+   "start": 872.68,
+   "end": 875.36,
+   "text": "right because then everything will be completely black."
+  },
+  {
+   "start": 876.16,
+   "end": 878.96,
+   "text": "Or alternatively, you can grab the white point and"
+  },
+  {
+   "start": 878.96,
+   "end": 881.92,
+   "text": "drag it to the left and that will make the brightest"
+  },
+  {
+   "start": 881.92,
+   "end": 884.44,
+   "text": "point black and the darkest point black so it makes"
+  },
+  {
+   "start": 884.44,
+   "end": 885.56,
+   "text": "everything black in the image."
+  },
+  {
+   "start": 886.0,
+   "end": 889.4,
+   "text": "And the center point on top controls the contrast."
+  },
+  {
+   "start": 890.0,
+   "end": 891.48,
+   "text": "I hope that that made sense to you."
+  },
+  {
+   "start": 891.72,
+   "end": 893.56,
+   "text": "But now that you know how that tool works, I'm just"
+  },
+  {
+   "start": 893.56,
+   "end": 897.0,
+   "text": "going to use it to adjust the image here and I'm"
+  },
+  {
+   "start": 897.0,
+   "end": 898.56,
+   "text": "going to double click on the hand tool to fit the"
+  },
+  {
+   "start": 898.56,
+   "end": 900.32,
+   "text": "image to screen so that we can see it better."
+  },
+  {
+   "start": 900.72,
+   "end": 903.0,
+   "text": "And what I'm going to do next is make sure that this"
+  },
+  {
+   "start": 903.0,
+   "end": 904.8,
+   "text": "black and white image looks realistic."
+  },
+  {
+   "start": 905.04,
+   "end": 907.16,
+   "text": "Pretend like we're just making a black and white composite."
+  },
+  {
+   "start": 907.4,
+   "end": 909.84,
+   "text": "If it looks real in black and white, it'll look real with color."
+  },
+  {
+   "start": 910.28,
+   "end": 913.48,
+   "text": "So just adjust this dark point and try to match the"
+  },
+  {
+   "start": 913.48,
+   "end": 914.68,
+   "text": "foreground to the background."
+  },
+  {
+   "start": 915.2,
+   "end": 918.8,
+   "text": "I'm also going to maybe make a few more pixels brighter."
+  },
+  {
+   "start": 919.16,
+   "end": 921.32,
+   "text": "And I don't necessarily want them completely white."
+  },
+  {
+   "start": 921.32,
+   "end": 923.84,
+   "text": "So I'm going to drag this white point to the left so"
+  },
+  {
+   "start": 924.2,
+   "end": 926.6,
+   "text": "that the brightest point is just off white."
+  },
+  {
+   "start": 926.84,
+   "end": 929.36,
+   "text": "I'm also going to click on this center point and"
+  },
+  {
+   "start": 929.4,
+   "end": 931.76,
+   "text": "drag it to the right to add more contrast."
+  },
+  {
+   "start": 931.76,
+   "end": 935.44,
+   "text": "This center point adds or decreases contrast in an image."
+  },
+  {
+   "start": 935.6,
+   "end": 937.6,
+   "text": "But anyway, I'm just going to drag it to the right and add a"
+  },
+  {
+   "start": 937.6,
+   "end": 938.92,
+   "text": "little bit more contrast."
+  },
+  {
+   "start": 939.36,
+   "end": 941.92,
+   "text": "And what I'm really looking at is that the darkest pixels"
+  },
+  {
+   "start": 941.92,
+   "end": 944.56,
+   "text": "in the background match the darkest pixels in the"
+  },
+  {
+   "start": 944.56,
+   "end": 945.08,
+   "text": "foreground."
+  },
+  {
+   "start": 946.2,
+   "end": 949.0,
+   "text": "So if I click on this icon, you'll see the before"
+  },
+  {
+   "start": 949.84,
+   "end": 951.8,
+   "text": "and the after much, much better."
+  },
+  {
+   "start": 952.8,
+   "end": 955.52,
+   "text": "I'm going to now disable the black and white adjustment"
+  },
+  {
+   "start": 955.52,
+   "end": 956.76,
+   "text": "layer so you can see the result."
+  },
+  {
+   "start": 957.2,
+   "end": 959.64,
+   "text": "Unfortunately, when you adjust the levels adjustment layer,"
+  },
+  {
+   "start": 959.64,
+   "end": 963.04,
+   "text": "you also adjust the color of the image, hue and saturation."
+  },
+  {
+   "start": 963.08,
+   "end": 965.8,
+   "text": "And I don't want that to avoid that from happening."
+  },
+  {
+   "start": 965.8,
+   "end": 969.16,
+   "text": "I'm going to click on the drop down and select luminosity"
+  },
+  {
+   "start": 969.68,
+   "end": 972.76,
+   "text": "so that now this layer only adjusts the luminosity and"
+  },
+  {
+   "start": 972.76,
+   "end": 974.56,
+   "text": "not the hue or saturation."
+  },
+  {
+   "start": 975.0,
+   "end": 978.0,
+   "text": "And I'll give this layer a new name."
+  },
+  {
+   "start": 978.0,
+   "end": 981.68,
+   "text": "I'll call it luminosity so that we know what it"
+  },
+  {
+   "start": 981.68,
+   "end": 986.13,
+   "text": "controls before and after."
+  },
+  {
+   "start": 986.49,
+   "end": 988.29,
+   "text": "Everything's looking much, much better now."
+  },
+  {
+   "start": 988.73,
+   "end": 991.49,
+   "text": "Next, we need to control the color that's in the image."
+  },
+  {
+   "start": 991.81,
+   "end": 994.69,
+   "text": "It's somewhat difficult to tell, but the background image has"
+  },
+  {
+   "start": 994.69,
+   "end": 998.49,
+   "text": "a slight blue tint and we're going to try to match that"
+  },
+  {
+   "start": 998.49,
+   "end": 1001.25,
+   "text": "onto the foreground so that everything looks more realistic."
+  },
+  {
+   "start": 1001.73,
+   "end": 1004.77,
+   "text": "To do so, we're going to use the curves adjustment layer."
+  },
+  {
+   "start": 1005.05,
+   "end": 1007.61,
+   "text": "And once again, I'm going to click on this icon to clip"
+  },
+  {
+   "start": 1007.61,
+   "end": 1008.45,
+   "text": "it to the layer below."
+  },
+  {
+   "start": 1009.05,
+   "end": 1012.77,
+   "text": "Then make sure that the focus, the white outline"
+  },
+  {
+   "start": 1012.77,
+   "end": 1016.81,
+   "text": "on the layer thumbnail is selected and hold Alt on Windows"
+  },
+  {
+   "start": 1016.85,
+   "end": 1020.01,
+   "text": "option in the Mac and click on the auto button to bring up"
+  },
+  {
+   "start": 1020.01,
+   "end": 1022.13,
+   "text": "the auto color correction options."
+  },
+  {
+   "start": 1022.45,
+   "end": 1025.97,
+   "text": "And we're going to use the fine dark and light colors"
+  },
+  {
+   "start": 1026.01,
+   "end": 1029.89,
+   "text": "algorithm to match the colors of the foreground and background."
+  },
+  {
+   "start": 1030.13,
+   "end": 1033.89,
+   "text": "By default, this algorithm makes the darkest colors"
+  },
+  {
+   "start": 1033.89,
+   "end": 1037.33,
+   "text": "of your image black and the brightest colors of your image"
+  },
+  {
+   "start": 1037.37,
+   "end": 1040.73,
+   "text": "white, which allows you to color correct the image."
+  },
+  {
+   "start": 1041.53,
+   "end": 1044.17,
+   "text": "But we're going to use this technology to color match."
+  },
+  {
+   "start": 1044.21,
+   "end": 1045.09,
+   "text": "Let me show you how."
+  },
+  {
+   "start": 1045.37,
+   "end": 1047.61,
+   "text": "First, look for the shadows in the background."
+  },
+  {
+   "start": 1048.05,
+   "end": 1050.97,
+   "text": "Double click on the shadows swatch to bring up the color"
+  },
+  {
+   "start": 1050.97,
+   "end": 1053.13,
+   "text": "picker and select the shadows in the background."
+  },
+  {
+   "start": 1053.45,
+   "end": 1055.41,
+   "text": "Notice how these shadows are not black."
+  },
+  {
+   "start": 1055.81,
+   "end": 1059.73,
+   "text": "They have color to them somewhere between blue and green."
+  },
+  {
+   "start": 1060.21,
+   "end": 1062.77,
+   "text": "So that is the color that the shadows on the foreground"
+  },
+  {
+   "start": 1062.77,
+   "end": 1063.33,
+   "text": "need to be."
+  },
+  {
+   "start": 1063.45,
+   "end": 1065.21,
+   "text": "So I'm going to press OK to select that color."
+  },
+  {
+   "start": 1065.69,
+   "end": 1069.13,
+   "text": "Now we need to look for the brightest part of the background,"
+  },
+  {
+   "start": 1069.29,
+   "end": 1071.97,
+   "text": "not including any specular highlights, rating like that."
+  },
+  {
+   "start": 1072.25,
+   "end": 1074.25,
+   "text": "In this case, I think it would be a good idea to select"
+  },
+  {
+   "start": 1074.25,
+   "end": 1076.77,
+   "text": "the eyes because it's very bright, but it's not necessarily"
+  },
+  {
+   "start": 1076.77,
+   "end": 1079.09,
+   "text": "a specular highlight or something that is blown out."
+  },
+  {
+   "start": 1079.57,
+   "end": 1083.37,
+   "text": "And notice that the eyes also has a little bit of blue in there."
+  },
+  {
+   "start": 1083.97,
+   "end": 1087.49,
+   "text": "So I'll press OK and notice that immediately the image"
+  },
+  {
+   "start": 1087.73,
+   "end": 1090.17,
+   "text": "picks up the colors that we selected and it applies them"
+  },
+  {
+   "start": 1090.17,
+   "end": 1091.33,
+   "text": "to the shadows and highlights."
+  },
+  {
+   "start": 1091.77,
+   "end": 1092.85,
+   "text": "I'll press OK."
+  },
+  {
+   "start": 1093.61,
+   "end": 1096.69,
+   "text": "Photoshop will then ask us if we want to make these"
+  },
+  {
+   "start": 1096.69,
+   "end": 1098.37,
+   "text": "colors the new defaults."
+  },
+  {
+   "start": 1098.37,
+   "end": 1098.97,
+   "text": "We do not."
+  },
+  {
+   "start": 1099.01,
+   "end": 1100.65,
+   "text": "These colors are just for this image."
+  },
+  {
+   "start": 1100.65,
+   "end": 1102.29,
+   "text": "They'll be different for another image."
+  },
+  {
+   "start": 1102.53,
+   "end": 1104.61,
+   "text": "So I'm going to click on the no button."
+  },
+  {
+   "start": 1105.41,
+   "end": 1108.13,
+   "text": "And if I click on this curves adjustment layer icon,"
+  },
+  {
+   "start": 1108.13,
+   "end": 1110.57,
+   "text": "you'll see the before and the after."
+  },
+  {
+   "start": 1110.93,
+   "end": 1113.77,
+   "text": "Now notice that the luminosity change and we don't want"
+  },
+  {
+   "start": 1113.77,
+   "end": 1115.01,
+   "text": "the luminosity to change."
+  },
+  {
+   "start": 1115.17,
+   "end": 1118.37,
+   "text": "So we're going to change the blending mode to color."
+  },
+  {
+   "start": 1118.65,
+   "end": 1122.61,
+   "text": "Color keeps the hue and saturation in this regards"
+  },
+  {
+   "start": 1122.61,
+   "end": 1123.33,
+   "text": "the luminosity."
+  },
+  {
+   "start": 1123.73,
+   "end": 1124.53,
+   "text": "So that's what we want."
+  },
+  {
+   "start": 1124.53,
+   "end": 1125.33,
+   "text": "We want color."
+  },
+  {
+   "start": 1126.01,
+   "end": 1127.41,
+   "text": "So before."
+  },
+  {
+   "start": 1128.65,
+   "end": 1129.29,
+   "text": "And after."
+  },
+  {
+   "start": 1129.53,
+   "end": 1131.73,
+   "text": "And if the effect is too strong, you can always bring"
+  },
+  {
+   "start": 1131.73,
+   "end": 1133.89,
+   "text": "down the opacity and adjust it accordingly."
+  },
+  {
+   "start": 1133.89,
+   "end": 1136.13,
+   "text": "I think in this case, the effect was a little strong."
+  },
+  {
+   "start": 1136.13,
+   "end": 1137.85,
+   "text": "I don't like the shadows here."
+  },
+  {
+   "start": 1138.09,
+   "end": 1141.57,
+   "text": "So I'm going to reduce it down to about 70 percent before"
+  },
+  {
+   "start": 1141.81,
+   "end": 1142.25,
+   "text": "and after."
+  },
+  {
+   "start": 1142.49,
+   "end": 1145.41,
+   "text": "Still a subtle effect, but I think it does a lot to bring"
+  },
+  {
+   "start": 1145.41,
+   "end": 1146.49,
+   "text": "this composite together."
+  },
+  {
+   "start": 1146.69,
+   "end": 1149.01,
+   "text": "Next, I'll rename the layer just so that I know what it"
+  },
+  {
+   "start": 1149.01,
+   "end": 1149.37,
+   "text": "controls."
+  },
+  {
+   "start": 1149.77,
+   "end": 1150.69,
+   "text": "I'll call it color."
+  },
+  {
+   "start": 1151.29,
+   "end": 1153.77,
+   "text": "In some composites, you may need to adjust the saturation"
+  },
+  {
+   "start": 1153.77,
+   "end": 1154.49,
+   "text": "of your image."
+  },
+  {
+   "start": 1154.49,
+   "end": 1157.29,
+   "text": "If you need to do so, click on the new adjustment layer"
+  },
+  {
+   "start": 1157.29,
+   "end": 1157.77,
+   "text": "icon."
+  },
+  {
+   "start": 1157.77,
+   "end": 1159.77,
+   "text": "Select hue and saturation."
+  },
+  {
+   "start": 1160.33,
+   "end": 1162.93,
+   "text": "Clip it to the layer below by clicking on this icon and"
+  },
+  {
+   "start": 1162.93,
+   "end": 1165.97,
+   "text": "then adjust the saturation of the image."
+  },
+  {
+   "start": 1165.97,
+   "end": 1168.89,
+   "text": "In this case, I don't really think we need to adjust"
+  },
+  {
+   "start": 1168.89,
+   "end": 1170.09,
+   "text": "the saturation too much."
+  },
+  {
+   "start": 1170.41,
+   "end": 1172.53,
+   "text": "Maybe I need to decrease it just a tiny bit."
+  },
+  {
+   "start": 1172.53,
+   "end": 1174.33,
+   "text": "There's not that much saturation in the background"
+  },
+  {
+   "start": 1174.33,
+   "end": 1174.61,
+   "text": "image."
+  },
+  {
+   "start": 1174.61,
+   "end": 1177.65,
+   "text": "So maybe just a little less saturation before and"
+  },
+  {
+   "start": 1177.65,
+   "end": 1178.05,
+   "text": "after."
+  },
+  {
+   "start": 1178.37,
+   "end": 1179.49,
+   "text": "Just a subtle adjustment."
+  },
+  {
+   "start": 1179.73,
+   "end": 1182.21,
+   "text": "So now we've matched the perspective of the image"
+  },
+  {
+   "start": 1182.21,
+   "end": 1184.17,
+   "text": "with the horizon line and we've also matched the"
+  },
+  {
+   "start": 1184.17,
+   "end": 1185.97,
+   "text": "luminosity and color of the image."
+  },
+  {
+   "start": 1185.97,
+   "end": 1188.33,
+   "text": "Let me show you one other thing that I think you"
+  },
+  {
+   "start": 1188.33,
+   "end": 1190.49,
+   "text": "should look into when you're making these kinds of"
+  },
+  {
+   "start": 1190.49,
+   "end": 1190.77,
+   "text": "composites."
+  },
+  {
+   "start": 1191.13,
+   "end": 1193.77,
+   "text": "I'm going to hold shift again and click on the layer"
+  },
+  {
+   "start": 1193.77,
+   "end": 1196.05,
+   "text": "mask thumbnail for the model to bring back the"
+  },
+  {
+   "start": 1196.05,
+   "end": 1196.65,
+   "text": "original image."
+  },
+  {
+   "start": 1196.65,
+   "end": 1199.25,
+   "text": "Notice how blurry the background is, the shallow"
+  },
+  {
+   "start": 1199.25,
+   "end": 1201.17,
+   "text": "depth of field on this model layer."
+  },
+  {
+   "start": 1201.77,
+   "end": 1203.73,
+   "text": "I want to match that on my composite."
+  },
+  {
+   "start": 1203.97,
+   "end": 1207.65,
+   "text": "So to do that, I'm going to bring back the layer"
+  },
+  {
+   "start": 1207.65,
+   "end": 1208.17,
+   "text": "mask."
+  },
+  {
+   "start": 1208.41,
+   "end": 1209.77,
+   "text": "I'm going to click on the layer below."
+  },
+  {
+   "start": 1209.77,
+   "end": 1212.33,
+   "text": "Remember, I made a smart object so I can work on"
+  },
+  {
+   "start": 1212.33,
+   "end": 1213.17,
+   "text": "it non-destructively."
+  },
+  {
+   "start": 1213.17,
+   "end": 1215.89,
+   "text": "One of the easiest ways to blur the image is to"
+  },
+  {
+   "start": 1215.89,
+   "end": 1218.25,
+   "text": "blur in the background is by going into filter,"
+  },
+  {
+   "start": 1218.81,
+   "end": 1220.81,
+   "text": "blur gallery, tilt shift."
+  },
+  {
+   "start": 1221.37,
+   "end": 1224.01,
+   "text": "By the way, I have a tutorial that talks all about"
+  },
+  {
+   "start": 1224.01,
+   "end": 1225.13,
+   "text": "blurring backgrounds."
+  },
+  {
+   "start": 1225.17,
+   "end": 1226.61,
+   "text": "I'll place a link to it down below in the"
+  },
+  {
+   "start": 1226.61,
+   "end": 1227.25,
+   "text": "description."
+  },
+  {
+   "start": 1227.25,
+   "end": 1229.65,
+   "text": "There you'll find all the details and everything"
+  },
+  {
+   "start": 1229.65,
+   "end": 1231.17,
+   "text": "you want to know about blurring a background."
+  },
+  {
+   "start": 1231.41,
+   "end": 1233.01,
+   "text": "In this video, I'm just going to give you a"
+  },
+  {
+   "start": 1233.01,
+   "end": 1234.01,
+   "text": "general explanation."
+  },
+  {
+   "start": 1234.49,
+   "end": 1237.65,
+   "text": "So with this filter, you can see two solid"
+  },
+  {
+   "start": 1237.65,
+   "end": 1240.05,
+   "text": "lines and anything in between the solid line"
+  },
+  {
+   "start": 1240.09,
+   "end": 1242.93,
+   "text": "and the dash line will be a gradual transition"
+  },
+  {
+   "start": 1242.93,
+   "end": 1245.09,
+   "text": "between in focus and out of focus."
+  },
+  {
+   "start": 1245.21,
+   "end": 1246.85,
+   "text": "So between sharp and blurry."
+  },
+  {
+   "start": 1246.85,
+   "end": 1249.13,
+   "text": "So I'm going to click and drag this point down and"
+  },
+  {
+   "start": 1249.13,
+   "end": 1251.77,
+   "text": "just put the focus part way down here."
+  },
+  {
+   "start": 1251.81,
+   "end": 1253.37,
+   "text": "And I'm going to click and drag on the solid line."
+  },
+  {
+   "start": 1253.41,
+   "end": 1256.65,
+   "text": "And we're going to have a gradual transition from"
+  },
+  {
+   "start": 1257.57,
+   "end": 1259.45,
+   "text": "sharp to blurry pixels."
+  },
+  {
+   "start": 1259.61,
+   "end": 1261.33,
+   "text": "I think the background knows a little too blurry."
+  },
+  {
+   "start": 1261.33,
+   "end": 1264.77,
+   "text": "So let me decrease that a little bit like so."
+  },
+  {
+   "start": 1265.37,
+   "end": 1266.69,
+   "text": "And I'll press OK."
+  },
+  {
+   "start": 1268.65,
+   "end": 1272.25,
+   "text": "So now I have a blurry background before"
+  },
+  {
+   "start": 1272.61,
+   "end": 1273.17,
+   "text": "and after."
+  },
+  {
+   "start": 1273.81,
+   "end": 1277.25,
+   "text": "What I'm going to do now is select this layer zero,"
+  },
+  {
+   "start": 1277.25,
+   "end": 1278.33,
+   "text": "which is the background layer."
+  },
+  {
+   "start": 1278.33,
+   "end": 1281.09,
+   "text": "The name change when I converted it into a smart"
+  },
+  {
+   "start": 1281.09,
+   "end": 1281.45,
+   "text": "object."
+  },
+  {
+   "start": 1281.93,
+   "end": 1284.65,
+   "text": "Next, I'm going to place all these layers into a"
+  },
+  {
+   "start": 1284.65,
+   "end": 1287.09,
+   "text": "smart object so that I can manipulate them as a"
+  },
+  {
+   "start": 1287.09,
+   "end": 1287.85,
+   "text": "single layer."
+  },
+  {
+   "start": 1288.33,
+   "end": 1291.85,
+   "text": "So select the background, hold shift and click on"
+  },
+  {
+   "start": 1291.85,
+   "end": 1294.05,
+   "text": "the human saturation adjustment layer to select"
+  },
+  {
+   "start": 1294.05,
+   "end": 1297.41,
+   "text": "all the layers, then right click and select"
+  },
+  {
+   "start": 1297.69,
+   "end": 1299.49,
+   "text": "convert to smart object."
+  },
+  {
+   "start": 1299.77,
+   "end": 1302.61,
+   "text": "So I'm going to go into filter, camera raw"
+  },
+  {
+   "start": 1302.65,
+   "end": 1304.77,
+   "text": "filter and we're going to pretend this is just a"
+  },
+  {
+   "start": 1304.77,
+   "end": 1307.69,
+   "text": "regular photo and I can adjust the shadows,"
+  },
+  {
+   "start": 1307.73,
+   "end": 1309.81,
+   "text": "bring up the shadows so I can get more detail."
+  },
+  {
+   "start": 1309.85,
+   "end": 1313.37,
+   "text": "And maybe I want to enhance the effect and make"
+  },
+  {
+   "start": 1313.37,
+   "end": 1314.49,
+   "text": "it seem a little colder."
+  },
+  {
+   "start": 1315.17,
+   "end": 1317.65,
+   "text": "So I'll decrease the temperature, maybe add a"
+  },
+  {
+   "start": 1317.65,
+   "end": 1319.69,
+   "text": "little bit of texture, make it pop a little"
+  },
+  {
+   "start": 1320.13,
+   "end": 1322.53,
+   "text": "vibrance applies a smart saturation."
+  },
+  {
+   "start": 1322.77,
+   "end": 1325.13,
+   "text": "It protects skin tones and it also protects"
+  },
+  {
+   "start": 1325.25,
+   "end": 1326.73,
+   "text": "already saturated pixels."
+  },
+  {
+   "start": 1327.37,
+   "end": 1331.41,
+   "text": "Then I'm going to go into the detail and add"
+  },
+  {
+   "start": 1331.45,
+   "end": 1332.69,
+   "text": "a little bit of sharpening."
+  },
+  {
+   "start": 1333.69,
+   "end": 1334.77,
+   "text": "And here's the trick for you."
+  },
+  {
+   "start": 1334.77,
+   "end": 1336.93,
+   "text": "If you hold Alt on Windows, Option on the Mac and"
+  },
+  {
+   "start": 1336.93,
+   "end": 1339.37,
+   "text": "click on the masking slider, you can see where"
+  },
+  {
+   "start": 1339.37,
+   "end": 1341.37,
+   "text": "Photoshop is applying the sharpening."
+  },
+  {
+   "start": 1342.33,
+   "end": 1344.33,
+   "text": "Anything in white reveals, right?"
+  },
+  {
+   "start": 1344.37,
+   "end": 1345.37,
+   "text": "We're talking about a mask."
+  },
+  {
+   "start": 1345.69,
+   "end": 1347.49,
+   "text": "Anything in black conceals."
+  },
+  {
+   "start": 1347.53,
+   "end": 1349.85,
+   "text": "So white reveals in black conceals."
+  },
+  {
+   "start": 1350.13,
+   "end": 1351.93,
+   "text": "If I drag this slider to the right while"
+  },
+  {
+   "start": 1351.93,
+   "end": 1354.29,
+   "text": "holding the Alt key on Windows, Option on the Mac,"
+  },
+  {
+   "start": 1354.77,
+   "end": 1356.73,
+   "text": "you'll see the image become darker."
+  },
+  {
+   "start": 1356.85,
+   "end": 1358.97,
+   "text": "So that means that the areas that are black will"
+  },
+  {
+   "start": 1358.97,
+   "end": 1361.17,
+   "text": "no longer have the sharpening effect applied to"
+  },
+  {
+   "start": 1361.17,
+   "end": 1363.77,
+   "text": "them. So you can adjust it accordingly so that the"
+  },
+  {
+   "start": 1363.77,
+   "end": 1365.93,
+   "text": "effect is only applied on the areas that you"
+  },
+  {
+   "start": 1365.93,
+   "end": 1369.25,
+   "text": "intended to. Next, go into the HSL tab."
+  },
+  {
+   "start": 1369.57,
+   "end": 1372.29,
+   "text": "From here, you can control the hue, saturation"
+  },
+  {
+   "start": 1372.29,
+   "end": 1375.29,
+   "text": "and luminance of individual colors by using"
+  },
+  {
+   "start": 1375.33,
+   "end": 1378.01,
+   "text": "these sliders. For example, I'm currently in the"
+  },
+  {
+   "start": 1378.01,
+   "end": 1380.21,
+   "text": "luminance tab. And if I drag the oranges"
+  },
+  {
+   "start": 1380.21,
+   "end": 1382.77,
+   "text": "lighter, I will control the darkness of her sweater."
+  },
+  {
+   "start": 1383.81,
+   "end": 1385.29,
+   "text": "And I'll just make it a little bit brighter."
+  },
+  {
+   "start": 1386.33,
+   "end": 1388.53,
+   "text": "Then I'll drag the blue slider to the left"
+  },
+  {
+   "start": 1388.53,
+   "end": 1390.57,
+   "text": "to make those darker, add more saturation"
+  },
+  {
+   "start": 1390.57,
+   "end": 1392.97,
+   "text": "to the oranges, maybe a little more to the"
+  },
+  {
+   "start": 1392.97,
+   "end": 1394.85,
+   "text": "blue so that they have a nice contrast with the"
+  },
+  {
+   "start": 1394.85,
+   "end": 1397.29,
+   "text": "orange top. And I don't need to adjust the"
+  },
+  {
+   "start": 1397.29,
+   "end": 1399.21,
+   "text": "hue, but if you needed to adjust the hue, you"
+  },
+  {
+   "start": 1399.21,
+   "end": 1401.69,
+   "text": "can do that here. Watch what happens when I"
+  },
+  {
+   "start": 1401.69,
+   "end": 1404.49,
+   "text": "adjust the blue slider."
+  },
+  {
+   "start": 1404.53,
+   "end": 1407.65,
+   "text": "See how the colors of the sky and the water"
+  },
+  {
+   "start": 1407.65,
+   "end": 1409.97,
+   "text": "change? I don't want to do that, but I just"
+  },
+  {
+   "start": 1409.97,
+   "end": 1411.69,
+   "text": "wanted to give you that option in case you"
+  },
+  {
+   "start": 1411.69,
+   "end": 1413.37,
+   "text": "wanted to apply it in your image."
+  },
+  {
+   "start": 1414.01,
+   "end": 1417.57,
+   "text": "Next, click on the FX icon."
+  },
+  {
+   "start": 1417.93,
+   "end": 1419.85,
+   "text": "And this is really important if you apply a"
+  },
+  {
+   "start": 1419.85,
+   "end": 1421.77,
+   "text": "blur. I'm going to zoom in. Notice that we"
+  },
+  {
+   "start": 1421.77,
+   "end": 1423.45,
+   "text": "blur the background. If we blur the"
+  },
+  {
+   "start": 1423.45,
+   "end": 1424.77,
+   "text": "background, we're going to lose all the"
+  },
+  {
+   "start": 1424.77,
+   "end": 1427.77,
+   "text": "grain, all the film grain that was found"
+  },
+  {
+   "start": 1427.89,
+   "end": 1430.33,
+   "text": "in the image. This makes it look more"
+  },
+  {
+   "start": 1430.33,
+   "end": 1432.33,
+   "text": "digital and makes it look fake. So I think"
+  },
+  {
+   "start": 1432.33,
+   "end": 1434.01,
+   "text": "it's a good idea to bring in just a"
+  },
+  {
+   "start": 1434.01,
+   "end": 1436.65,
+   "text": "little bit of grain back into the image"
+  },
+  {
+   "start": 1436.73,
+   "end": 1439.37,
+   "text": "like so. I'll fit the image to screen so"
+  },
+  {
+   "start": 1439.37,
+   "end": 1441.09,
+   "text": "that we can see it better. And I think"
+  },
+  {
+   "start": 1441.09,
+   "end": 1443.17,
+   "text": "this is looking pretty good. I'll press"
+  },
+  {
+   "start": 1443.21,
+   "end": 1446.05,
+   "text": "OK. And you can see the result"
+  },
+  {
+   "start": 1447.01,
+   "end": 1450.69,
+   "text": "before and after. And now that I know that"
+  },
+  {
+   "start": 1450.69,
+   "end": 1452.89,
+   "text": "my image is working, I can start fine"
+  },
+  {
+   "start": 1452.89,
+   "end": 1454.57,
+   "text": "tuning, for example, I can fine tune the"
+  },
+  {
+   "start": 1454.57,
+   "end": 1457.17,
+   "text": "crop, maybe I can bring this down a little"
+  },
+  {
+   "start": 1457.17,
+   "end": 1460.41,
+   "text": "bit just to keep her more centered. I can"
+  },
+  {
+   "start": 1460.41,
+   "end": 1462.33,
+   "text": "also double click on the smart object"
+  },
+  {
+   "start": 1462.33,
+   "end": 1465.05,
+   "text": "which will open it up in a new tab. And"
+  },
+  {
+   "start": 1465.05,
+   "end": 1467.61,
+   "text": "I can make adjustments. For example, I"
+  },
+  {
+   "start": 1467.61,
+   "end": 1469.77,
+   "text": "can adjust the mask, the original mask"
+  },
+  {
+   "start": 1469.81,
+   "end": 1472.09,
+   "text": "from the model. So I can click on this"
+  },
+  {
+   "start": 1472.09,
+   "end": 1475.33,
+   "text": "mask and I can zoom in and really get"
+  },
+  {
+   "start": 1475.33,
+   "end": 1477.65,
+   "text": "into those details now. Next, select the"
+  },
+  {
+   "start": 1477.65,
+   "end": 1480.21,
+   "text": "brush tool and go into the options bar"
+  },
+  {
+   "start": 1480.25,
+   "end": 1482.13,
+   "text": "and click on this down pointing arrow."
+  },
+  {
+   "start": 1482.45,
+   "end": 1485.25,
+   "text": "And I can increase the hardness to 100%"
+  },
+  {
+   "start": 1485.37,
+   "end": 1487.69,
+   "text": "and I can paint with white to reveal"
+  },
+  {
+   "start": 1487.69,
+   "end": 1489.97,
+   "text": "pixels. See that's you on painting these"
+  },
+  {
+   "start": 1490.05,
+   "end": 1492.17,
+   "text": "areas in. So obviously you would spend"
+  },
+  {
+   "start": 1492.17,
+   "end": 1494.05,
+   "text": "your time making those adjustments."
+  },
+  {
+   "start": 1494.09,
+   "end": 1496.81,
+   "text": "And if you wanted to remove pixels or"
+  },
+  {
+   "start": 1496.81,
+   "end": 1498.77,
+   "text": "hide pixels, I should say, you can"
+  },
+  {
+   "start": 1498.77,
+   "end": 1500.29,
+   "text": "click on this icon to swap the"
+  },
+  {
+   "start": 1500.29,
+   "end": 1502.09,
+   "text": "Fargo in background color or simply"
+  },
+  {
+   "start": 1502.09,
+   "end": 1504.37,
+   "text": "press the X key to swap those. And"
+  },
+  {
+   "start": 1504.41,
+   "end": 1505.81,
+   "text": "when black is your foreground color, you"
+  },
+  {
+   "start": 1505.81,
+   "end": 1508.17,
+   "text": "can paint to hide pixels. And obviously"
+  },
+  {
+   "start": 1508.17,
+   "end": 1509.61,
+   "text": "this is where you really want to spend"
+  },
+  {
+   "start": 1509.61,
+   "end": 1512.09,
+   "text": "your time fine tuning your image. Another"
+  },
+  {
+   "start": 1512.09,
+   "end": 1513.81,
+   "text": "thing that I recommend that you do is"
+  },
+  {
+   "start": 1513.81,
+   "end": 1516.45,
+   "text": "to click on the layer mask, then on"
+  },
+  {
+   "start": 1516.45,
+   "end": 1519.61,
+   "text": "select the mask. By the way, I'm in the"
+  },
+  {
+   "start": 1520.37,
+   "end": 1524.13,
+   "text": "on white view and the opacity is"
+  },
+  {
+   "start": 1524.13,
+   "end": 1527.17,
+   "text": "set to 100%. That way you"
+  },
+  {
+   "start": 1527.25,
+   "end": 1529.53,
+   "text": "completely ignore the background. You"
+  },
+  {
+   "start": 1529.53,
+   "end": 1530.89,
+   "text": "can adjust the edge of the mask. You"
+  },
+  {
+   "start": 1530.89,
+   "end": 1533.41,
+   "text": "can smooth it at some contrast,"
+  },
+  {
+   "start": 1533.53,
+   "end": 1536.29,
+   "text": "shift it in, whatever you like. And you"
+  },
+  {
+   "start": 1536.29,
+   "end": 1539.05,
+   "text": "can press OK when you're done. Next, I'm"
+  },
+  {
+   "start": 1539.05,
+   "end": 1541.09,
+   "text": "going to click on the brush tool and"
+  },
+  {
+   "start": 1541.09,
+   "end": 1543.21,
+   "text": "paint with black over her head here just"
+  },
+  {
+   "start": 1543.21,
+   "end": 1545.45,
+   "text": "to remove those areas. Now, one thing"
+  },
+  {
+   "start": 1545.45,
+   "end": 1546.81,
+   "text": "that I should tell you about this"
+  },
+  {
+   "start": 1546.81,
+   "end": 1548.73,
+   "text": "area will be really difficult to mask."
+  },
+  {
+   "start": 1549.17,
+   "end": 1550.65,
+   "text": "So there's two things you can do."
+  },
+  {
+   "start": 1551.01,
+   "end": 1553.89,
+   "text": "Number one is you can try to move her"
+  },
+  {
+   "start": 1554.25,
+   "end": 1557.13,
+   "text": "so that the background sort of matches"
+  },
+  {
+   "start": 1557.37,
+   "end": 1559.09,
+   "text": "that area here and then make"
+  },
+  {
+   "start": 1559.09,
+   "end": 1561.25,
+   "text": "adjustments so that it's not noticeable"
+  },
+  {
+   "start": 1561.49,
+   "end": 1563.13,
+   "text": "that we're looking at another image."
+  },
+  {
+   "start": 1563.33,
+   "end": 1565.45,
+   "text": "And what you can do is create a layer"
+  },
+  {
+   "start": 1565.45,
+   "end": 1568.49,
+   "text": "above the model layer and"
+  },
+  {
+   "start": 1569.01,
+   "end": 1572.01,
+   "text": "simply select the brush tool and"
+  },
+  {
+   "start": 1572.01,
+   "end": 1574.89,
+   "text": "paint with the blue that you see"
+  },
+  {
+   "start": 1574.89,
+   "end": 1576.41,
+   "text": "here. And by the way, what I'm doing now is"
+  },
+  {
+   "start": 1576.41,
+   "end": 1578.53,
+   "text": "holding the Alt key on Windows option on"
+  },
+  {
+   "start": 1578.53,
+   "end": 1579.89,
+   "text": "the Mac. As I have the brush tool"
+  },
+  {
+   "start": 1579.89,
+   "end": 1581.41,
+   "text": "selected and that brings up the eye"
+  },
+  {
+   "start": 1581.41,
+   "end": 1582.97,
+   "text": "dropper and I can select the color as"
+  },
+  {
+   "start": 1582.97,
+   "end": 1585.09,
+   "text": "soon as I release the key. The tool"
+  },
+  {
+   "start": 1585.09,
+   "end": 1586.49,
+   "text": "comes back and I can paint with that"
+  },
+  {
+   "start": 1586.49,
+   "end": 1587.41,
+   "text": "color. So I'm just going to paint"
+  },
+  {
+   "start": 1587.41,
+   "end": 1590.41,
+   "text": "with that color there. And I'm going"
+  },
+  {
+   "start": 1590.41,
+   "end": 1591.85,
+   "text": "to change the blending mode to"
+  },
+  {
+   "start": 1591.89,
+   "end": 1594.33,
+   "text": "color. Next, I want the hair to come"
+  },
+  {
+   "start": 1594.33,
+   "end": 1596.57,
+   "text": "through, but not the red areas."
+  },
+  {
+   "start": 1596.97,
+   "end": 1599.41,
+   "text": "If you notice the hair is pretty dark,"
+  },
+  {
+   "start": 1599.81,
+   "end": 1601.33,
+   "text": "so I'm going to double click to the"
+  },
+  {
+   "start": 1601.33,
+   "end": 1603.65,
+   "text": "side of the layer and use the blend"
+  },
+  {
+   "start": 1603.77,
+   "end": 1606.77,
+   "text": "if to bring out the darkness."
+  },
+  {
+   "start": 1607.13,
+   "end": 1608.45,
+   "text": "So I'm going to click here where it says"
+  },
+  {
+   "start": 1608.49,
+   "end": 1610.73,
+   "text": "underline layer and click and drag"
+  },
+  {
+   "start": 1610.73,
+   "end": 1612.05,
+   "text": "this to the right."
+  },
+  {
+   "start": 1612.73,
+   "end": 1613.97,
+   "text": "See how I'm starting to bring out"
+  },
+  {
+   "start": 1613.97,
+   "end": 1615.85,
+   "text": "the hair? Then I'll hold Alt on"
+  },
+  {
+   "start": 1615.85,
+   "end": 1617.65,
+   "text": "Windows option in the Mac and click"
+  },
+  {
+   "start": 1617.65,
+   "end": 1619.09,
+   "text": "on this point to split it in half"
+  },
+  {
+   "start": 1619.09,
+   "end": 1621.37,
+   "text": "and create a smooth transition."
+  },
+  {
+   "start": 1621.89,
+   "end": 1623.81,
+   "text": "Like so. And then I'll press OK."
+  },
+  {
+   "start": 1624.37,
+   "end": 1625.45,
+   "text": "So this is before"
+  },
+  {
+   "start": 1626.37,
+   "end": 1628.25,
+   "text": "and after. If I double click on the"
+  },
+  {
+   "start": 1628.25,
+   "end": 1629.85,
+   "text": "hand tool to fit the image to screen,"
+  },
+  {
+   "start": 1630.49,
+   "end": 1631.85,
+   "text": "you can see what I did there."
+  },
+  {
+   "start": 1631.97,
+   "end": 1634.29,
+   "text": "Looks much more realistic because"
+  },
+  {
+   "start": 1634.29,
+   "end": 1636.61,
+   "text": "that area is very difficult to mask"
+  },
+  {
+   "start": 1636.69,
+   "end": 1638.77,
+   "text": "and we wouldn't be able to get a"
+  },
+  {
+   "start": 1638.77,
+   "end": 1641.01,
+   "text": "realistic result. Another thing that"
+  },
+  {
+   "start": 1641.01,
+   "end": 1643.81,
+   "text": "you can do is create a new layer"
+  },
+  {
+   "start": 1643.81,
+   "end": 1646.21,
+   "text": "on top of everything else and then"
+  },
+  {
+   "start": 1646.21,
+   "end": 1647.53,
+   "text": "paint in the hair."
+  },
+  {
+   "start": 1647.65,
+   "end": 1648.85,
+   "text": "I have a tutorial where I show you"
+  },
+  {
+   "start": 1648.85,
+   "end": 1650.93,
+   "text": "how to create brushes that allow you"
+  },
+  {
+   "start": 1650.93,
+   "end": 1652.29,
+   "text": "to easily paint in hair."
+  },
+  {
+   "start": 1652.57,
+   "end": 1653.81,
+   "text": "I'm not going to go through the steps"
+  },
+  {
+   "start": 1653.81,
+   "end": 1655.73,
+   "text": "in this video, but if you want to"
+  },
+  {
+   "start": 1655.73,
+   "end": 1657.25,
+   "text": "learn how to create those brushes,"
+  },
+  {
+   "start": 1657.25,
+   "end": 1658.93,
+   "text": "then look down below in the description."
+  },
+  {
+   "start": 1658.97,
+   "end": 1660.53,
+   "text": "I'm going to place a link to that"
+  },
+  {
+   "start": 1660.53,
+   "end": 1662.29,
+   "text": "video so that you can learn how to do"
+  },
+  {
+   "start": 1662.29,
+   "end": 1664.01,
+   "text": "that. So I'm going to go into the"
+  },
+  {
+   "start": 1664.01,
+   "end": 1665.81,
+   "text": "libraries panel where I save my brush"
+  },
+  {
+   "start": 1665.81,
+   "end": 1667.45,
+   "text": "and I have it here. Hair brush."
+  },
+  {
+   "start": 1667.61,
+   "end": 1669.09,
+   "text": "I'm going to click on it and it"
+  },
+  {
+   "start": 1669.09,
+   "end": 1670.37,
+   "text": "automatically enables it."
+  },
+  {
+   "start": 1670.89,
+   "end": 1672.93,
+   "text": "I'll then select the eyedropper tool"
+  },
+  {
+   "start": 1672.93,
+   "end": 1675.01,
+   "text": "and just select some of the color"
+  },
+  {
+   "start": 1675.01,
+   "end": 1677.13,
+   "text": "of her real hair with the brush"
+  },
+  {
+   "start": 1677.13,
+   "end": 1679.81,
+   "text": "tool active. I'm just going to bring"
+  },
+  {
+   "start": 1679.81,
+   "end": 1681.33,
+   "text": "down the size of my brush to"
+  },
+  {
+   "start": 1681.33,
+   "end": 1683.37,
+   "text": "something more manageable, maybe"
+  },
+  {
+   "start": 1683.37,
+   "end": 1686.21,
+   "text": "around 432 pixels in this case."
+  },
+  {
+   "start": 1686.21,
+   "end": 1687.69,
+   "text": "And I'll paint. See that? See how I"
+  },
+  {
+   "start": 1687.69,
+   "end": 1689.25,
+   "text": "just painted those strands of hair?"
+  },
+  {
+   "start": 1689.29,
+   "end": 1690.89,
+   "text": "Then I can press Ctrl T, Command T"
+  },
+  {
+   "start": 1690.89,
+   "end": 1692.85,
+   "text": "on the Mac to transform, right click"
+  },
+  {
+   "start": 1693.01,
+   "end": 1694.81,
+   "text": "and flip horizontal and I can just"
+  },
+  {
+   "start": 1694.81,
+   "end": 1696.77,
+   "text": "place them in these areas where I"
+  },
+  {
+   "start": 1696.77,
+   "end": 1697.61,
+   "text": "would want the hair."
+  },
+  {
+   "start": 1698.29,
+   "end": 1700.13,
+   "text": "And I can either place them here"
+  },
+  {
+   "start": 1700.17,
+   "end": 1702.65,
+   "text": "above the actual model layer and"
+  },
+  {
+   "start": 1702.65,
+   "end": 1703.97,
+   "text": "obviously have to mask those, right?"
+  },
+  {
+   "start": 1704.29,
+   "end": 1705.73,
+   "text": "I have to hold Alt on Windows"
+  },
+  {
+   "start": 1705.77,
+   "end": 1707.21,
+   "text": "option on the Mac and click on"
+  },
+  {
+   "start": 1707.21,
+   "end": 1709.41,
+   "text": "the layer mask icon to hide"
+  },
+  {
+   "start": 1709.89,
+   "end": 1711.49,
+   "text": "the contents of that layer."
+  },
+  {
+   "start": 1711.93,
+   "end": 1714.85,
+   "text": "And with white, using a regular"
+  },
+  {
+   "start": 1714.85,
+   "end": 1717.29,
+   "text": "circular soft brush, I could"
+  },
+  {
+   "start": 1717.29,
+   "end": 1719.17,
+   "text": "paint in that hair back in."
+  },
+  {
+   "start": 1719.29,
+   "end": 1720.29,
+   "text": "And obviously you would have to"
+  },
+  {
+   "start": 1720.29,
+   "end": 1721.53,
+   "text": "spend some time getting them to"
+  },
+  {
+   "start": 1721.53,
+   "end": 1724.49,
+   "text": "match. Or another option is to"
+  },
+  {
+   "start": 1724.49,
+   "end": 1726.85,
+   "text": "delete the layer mask, bring"
+  },
+  {
+   "start": 1726.85,
+   "end": 1728.85,
+   "text": "back the hair here."
+  },
+  {
+   "start": 1729.13,
+   "end": 1730.77,
+   "text": "And for example, on this side"
+  },
+  {
+   "start": 1730.77,
+   "end": 1731.77,
+   "text": "of her hair on the other side,"
+  },
+  {
+   "start": 1731.81,
+   "end": 1732.97,
+   "text": "I'll flip it once again so that"
+  },
+  {
+   "start": 1732.97,
+   "end": 1734.49,
+   "text": "you could see. So Ctrl T,"
+  },
+  {
+   "start": 1734.49,
+   "end": 1735.77,
+   "text": "Command T or Transform, right"
+  },
+  {
+   "start": 1735.77,
+   "end": 1738.09,
+   "text": "click, flip horizontal and I'll"
+  },
+  {
+   "start": 1738.13,
+   "end": 1740.93,
+   "text": "just place it right about here."
+  },
+  {
+   "start": 1741.37,
+   "end": 1743.17,
+   "text": "And I'll place the strands of hair"
+  },
+  {
+   "start": 1743.17,
+   "end": 1745.85,
+   "text": "below her so that her hair covers"
+  },
+  {
+   "start": 1745.85,
+   "end": 1748.01,
+   "text": "it and we just see these strands"
+  },
+  {
+   "start": 1748.01,
+   "end": 1749.73,
+   "text": "of hair barely popping out."
+  },
+  {
+   "start": 1749.77,
+   "end": 1751.89,
+   "text": "And I can adjust the luminosity"
+  },
+  {
+   "start": 1751.89,
+   "end": 1753.17,
+   "text": "of the strands of hair by going"
+  },
+  {
+   "start": 1753.17,
+   "end": 1756.21,
+   "text": "into image adjustment levels and"
+  },
+  {
+   "start": 1756.21,
+   "end": 1758.01,
+   "text": "then using the levels adjustments"
+  },
+  {
+   "start": 1758.05,
+   "end": 1759.81,
+   "text": "to either darken or brighten"
+  },
+  {
+   "start": 1759.81,
+   "end": 1761.05,
+   "text": "the hair accordingly."
+  },
+  {
+   "start": 1761.73,
+   "end": 1763.61,
+   "text": "So it's totally up to you how you"
+  },
+  {
+   "start": 1764.05,
+   "end": 1765.97,
+   "text": "use these strands of hair, but"
+  },
+  {
+   "start": 1766.21,
+   "end": 1767.45,
+   "text": "you will have to paint them in"
+  },
+  {
+   "start": 1767.49,
+   "end": 1769.65,
+   "text": "in these difficult to select areas."
+  },
+  {
+   "start": 1770.01,
+   "end": 1771.77,
+   "text": "But for now, I think that this is"
+  },
+  {
+   "start": 1771.77,
+   "end": 1774.21,
+   "text": "a good explanation of how to make"
+  },
+  {
+   "start": 1774.21,
+   "end": 1775.09,
+   "text": "the composite work."
+  },
+  {
+   "start": 1775.41,
+   "end": 1776.81,
+   "text": "When you do all this fine"
+  },
+  {
+   "start": 1776.81,
+   "end": 1780.49,
+   "text": "tuning, close this tab, save it."
+  },
+  {
+   "start": 1780.49,
+   "end": 1781.85,
+   "text": "Everything that you did will be"
+  },
+  {
+   "start": 1781.85,
+   "end": 1783.37,
+   "text": "automatically updated onto the"
+  },
+  {
+   "start": 1783.37,
+   "end": 1784.77,
+   "text": "Smart Object. I'll double click"
+  },
+  {
+   "start": 1784.77,
+   "end": 1785.85,
+   "text": "on the hand tool to fit the image"
+  },
+  {
+   "start": 1785.85,
+   "end": 1787.89,
+   "text": "to screen and just look for any"
+  },
+  {
+   "start": 1787.89,
+   "end": 1789.53,
+   "text": "details that you may have missed."
+  },
+  {
+   "start": 1789.77,
+   "end": 1790.89,
+   "text": "If you missed anything, just go"
+  },
+  {
+   "start": 1790.89,
+   "end": 1792.21,
+   "text": "back into the Smart Object and"
+  },
+  {
+   "start": 1792.21,
+   "end": 1793.45,
+   "text": "keep adjusting it until you're"
+  },
+  {
+   "start": 1793.45,
+   "end": 1795.17,
+   "text": "happy with your results."
+  },
+  {
+   "start": 1795.53,
+   "end": 1796.81,
+   "text": "Let me know down in the comments"
+  },
+  {
+   "start": 1796.85,
+   "end": 1798.17,
+   "text": "below which of these techniques"
+  },
+  {
+   "start": 1798.17,
+   "end": 1799.65,
+   "text": "was your favorite and what you"
+  },
+  {
+   "start": 1799.65,
+   "end": 1801.09,
+   "text": "learned from this tutorial."
+  },
+  {
+   "start": 1801.49,
+   "end": 1803.09,
+   "text": "Also, if this is your first time"
+  },
+  {
+   "start": 1803.09,
+   "end": 1804.25,
+   "text": "at the Photoshop Training Channel,"
+  },
+  {
+   "start": 1804.25,
+   "end": 1805.57,
+   "text": "then don't forget to click on that"
+  },
+  {
+   "start": 1805.57,
+   "end": 1807.57,
+   "text": "subscribe and notification buttons"
+  },
+  {
+   "start": 1807.57,
+   "end": 1809.25,
+   "text": "so that you don't miss any new"
+  },
+  {
+   "start": 1809.25,
+   "end": 1810.53,
+   "text": "Photoshop tutorials."
+  },
+  {
+   "start": 1810.57,
+   "end": 1811.89,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 1811.89,
+   "end": 1813.17,
+   "text": "I'll talk to you again in the"
+  },
+  {
+   "start": 1813.17,
+   "end": 1814.45,
+   "text": "next Photoshop tutorial."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:41:35.236660+00:00",
+ "seconds": 72.2
+}

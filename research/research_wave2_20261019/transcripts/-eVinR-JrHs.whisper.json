@@ -1,0 +1,1098 @@
+{
+ "id": "-eVinR-JrHs",
+ "title": "How to Shoot Products: Photography and Background Retouching",
+ "channel": "PHLEARN",
+ "url": "https://www.youtube.com/watch?v=-eVinR-JrHs",
+ "query": "product photo composite tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.998,
+ "duration_s": 1357.0,
+ "chars": 19544,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.4,
+   "text": "Today we're talking you through a product photo shoot with my good friend and professional product"
+  },
+  {
+   "start": 4.4,
+   "end": 9.84,
+   "text": "photographer Ross Floyd. Then we're tackling part of the post-production process where we're retouching"
+  },
+  {
+   "start": 9.84,
+   "end": 26.96,
+   "text": "and extending backgrounds in Photoshop. Hey everyone, welcome to Flurn. My name is Aaron Nace."
+  },
+  {
+   "start": 26.96,
+   "end": 33.2,
+   "text": "You can find me at flurn.com where we make learning fun. I'm so excited to bring you this"
+  },
+  {
+   "start": 33.2,
+   "end": 37.84,
+   "text": "short snippet. We worked with my good friend Ross Floyd. He's a professional product photographer."
+  },
+  {
+   "start": 37.92,
+   "end": 44.32,
+   "text": "He's shot over 70,000 individual products during his career and we've worked with Ross to create"
+  },
+  {
+   "start": 44.32,
+   "end": 49.68,
+   "text": "multiple tutorials to bring you through the photography part of product photography as well"
+  },
+  {
+   "start": 49.68,
+   "end": 54.64,
+   "text": "as the retouching. And just for you, our YouTube audience, we've actually cut together multiple"
+  },
+  {
+   "start": 54.64,
+   "end": 60.0,
+   "text": "sections from multiple different tutorials and brought them together for this exclusive look"
+  },
+  {
+   "start": 60.0,
+   "end": 65.92,
+   "text": "at the tutorials. Let's go ahead and jump in as Ross and I discussed his method for photographing"
+  },
+  {
+   "start": 65.92,
+   "end": 78.9,
+   "text": "this handbag on a custom built set. Super excited. We are photographing leather bags on a variety of"
+  },
+  {
+   "start": 78.9,
+   "end": 83.62,
+   "text": "colored backgrounds. You still want those shots on white. We need to know how to get them, but we"
+  },
+  {
+   "start": 83.62,
+   "end": 88.58,
+   "text": "wanted to just add something with a little bit more flavor. A little style. A little bit of style."
+  },
+  {
+   "start": 88.58,
+   "end": 94.02,
+   "text": "We constructed three sides of our box, drill a hole in one of the pieces of MDF, and we have"
+  },
+  {
+   "start": 94.02,
+   "end": 98.98,
+   "text": "our subject holding the handbags. Absolutely. We started with a three foot softbox with both"
+  },
+  {
+   "start": 98.98,
+   "end": 103.62,
+   "text": "baffles in, so it's super diffused, soft lighting. I just want to start off in a very safe place,"
+  },
+  {
+   "start": 103.62,
+   "end": 108.02,
+   "text": "see what happens. We decided that after a little bit of experimentation, we wanted"
+  },
+  {
+   "start": 108.02,
+   "end": 112.26,
+   "text": "a little bit more directional light and maybe make it some sort of an angular element in the"
+  },
+  {
+   "start": 112.26,
+   "end": 117.86,
+   "text": "composition. And that's without introducing the bag. So we actually removed one of the baffles"
+  },
+  {
+   "start": 117.86,
+   "end": 122.02,
+   "text": "in the softbox. That's the translucent material. Okay. Used to diffuse the light."
+  },
+  {
+   "start": 122.02,
+   "end": 126.02,
+   "text": "There's usually two, or there can be two in there, one that's close to the bulb and one"
+  },
+  {
+   "start": 126.02,
+   "end": 130.1,
+   "text": "that's further away. And what that does is it removes a layer of diffusion and allows it to"
+  },
+  {
+   "start": 130.1,
+   "end": 135.46,
+   "text": "become really a giant reflector, but it still has very light shadows to it because it's still"
+  },
+  {
+   "start": 135.46,
+   "end": 139.86,
+   "text": "bouncing a ton of light around. It's a little bit brighter here also because we removed some"
+  },
+  {
+   "start": 139.86,
+   "end": 144.5,
+   "text": "of the diffusion material. Some more light was able to go through. Yeah, the exposure is brighter now."
+  },
+  {
+   "start": 144.5,
+   "end": 149.62,
+   "text": "We compensate for that as well in this next shot. So in order not to wear Angela out,"
+  },
+  {
+   "start": 149.62,
+   "end": 153.78,
+   "text": "we had her take her arm out and relax a little bit. Yeah, totally. This takes a lot of energy"
+  },
+  {
+   "start": 154.1,
+   "end": 158.42,
+   "text": "to keep up. And we introduced the bag to the set. Okay. And right away we noticed that"
+  },
+  {
+   "start": 158.42,
+   "end": 163.38,
+   "text": "this side of the bag was pretty dark. So we added a white bounce card in. And here's the example"
+  },
+  {
+   "start": 163.38,
+   "end": 167.94,
+   "text": "of what that looks like. It's much, much more attractive. So again, that's just a piece of"
+  },
+  {
+   "start": 167.94,
+   "end": 172.82,
+   "text": "white foam core. What that's doing is reflecting some of the overhead light back onto the bag."
+  },
+  {
+   "start": 172.82,
+   "end": 176.42,
+   "text": "So now that we have the bag looking great, we're going to reintroduce Angela again,"
+  },
+  {
+   "start": 176.42,
+   "end": 180.42,
+   "text": "which is this next image. And right away we kind of run into a little bit of a problem."
+  },
+  {
+   "start": 180.98,
+   "end": 184.34,
+   "text": "Our set's very small. Right. We didn't really think these straps were that long."
+  },
+  {
+   "start": 184.34,
+   "end": 188.18,
+   "text": "But we can still work around it. So first we tried to have a razor arm, you know,"
+  },
+  {
+   "start": 188.18,
+   "end": 192.66,
+   "text": "a simple solution. But you can only raise your arms so far when it's sticking through a piece of board."
+  },
+  {
+   "start": 194.18,
+   "end": 199.7,
+   "text": "Without it totally looking awkward and again, not graceful. So the other thing we noticed"
+  },
+  {
+   "start": 199.7,
+   "end": 204.74,
+   "text": "was that we had a green cast from the actual set reflected into our bag. And we didn't,"
+  },
+  {
+   "start": 204.74,
+   "end": 209.14,
+   "text": "since this is such a light color, we didn't want it to look sickly. So what we did"
+  },
+  {
+   "start": 209.22,
+   "end": 214.82,
+   "text": "was introduce a little white bounce card in there to keep that color bleed from affecting the bag."
+  },
+  {
+   "start": 214.82,
+   "end": 218.5,
+   "text": "Now we do want that to be green eventually. Right. So we'll remove that card."
+  },
+  {
+   "start": 218.5,
+   "end": 222.18,
+   "text": "We'll remove the card in Photoshop. And then when we did that, we actually noticed"
+  },
+  {
+   "start": 222.82,
+   "end": 227.06,
+   "text": "that this shadow is really kind of awkward and well-defined. So we went back and we changed"
+  },
+  {
+   "start": 227.06,
+   "end": 231.54,
+   "text": "our light again. We lowered the three-foot octa bank and we put a little piece of diffusion"
+  },
+  {
+   "start": 231.54,
+   "end": 236.42,
+   "text": "over the interior baffle. So now we have a double thick layer of diffusion in front"
+  },
+  {
+   "start": 236.42,
+   "end": 241.3,
+   "text": "of the actual light. So it's still directional but much softer. Oh, it is much softer."
+  },
+  {
+   "start": 241.3,
+   "end": 246.26,
+   "text": "Yeah. And let me show you that side by side. It's really, you can really see it in her"
+  },
+  {
+   "start": 246.98,
+   "end": 252.42,
+   "text": "in two places. Oh, yeah, totally. In this kind of shadow underneath her arm. But also,"
+  },
+  {
+   "start": 252.42,
+   "end": 257.54,
+   "text": "look behind the bag. See how there's a really well-defined kind of awkward weird shape there."
+  },
+  {
+   "start": 258.18,
+   "end": 262.98,
+   "text": "Now it's less defined. Yeah. I always thought of like soft boxes as like, this is how it is,"
+  },
+  {
+   "start": 262.98,
+   "end": 267.46,
+   "text": "you know, but it's good to know that you can make it a harder light source by removing some of the"
+  },
+  {
+   "start": 267.46,
+   "end": 273.46,
+   "text": "diffusion or even softer by adding more diffusion. We definitely have to take a look at her hand gesture,"
+  },
+  {
+   "start": 273.46,
+   "end": 277.46,
+   "text": "but that's the last thing we need to solve for. We want to get our camera in place and then I'll"
+  },
+  {
+   "start": 277.46,
+   "end": 280.74,
+   "text": "give her direction and we can play with that a little bit more. That makes sense. The other"
+  },
+  {
+   "start": 280.74,
+   "end": 285.14,
+   "text": "thing we need to pay attention to are how these straps are looking and they're not very symmetrical."
+  },
+  {
+   "start": 285.14,
+   "end": 289.22,
+   "text": "A very practical way to solve that is to shift our camera to the left. Add a benefit. It"
+  },
+  {
+   "start": 289.22,
+   "end": 294.9,
+   "text": "makes her arm look longer. So let's see what that looks like. Yeah, that looks instantly way better."
+  },
+  {
+   "start": 294.9,
+   "end": 298.66,
+   "text": "So we just shifted the camera to the left. It looks like her hand is a little bit higher there,"
+  },
+  {
+   "start": 298.66,
+   "end": 302.82,
+   "text": "which looks good. So we had her external arm even further in the set. So now we even have"
+  },
+  {
+   "start": 302.82,
+   "end": 308.26,
+   "text": "more distance between the bag and the wall. And then eventually I get lower. In this next"
+  },
+  {
+   "start": 308.26,
+   "end": 313.3,
+   "text": "shot, I'll lower the camera. So now we have almost even space between the bag and the wall"
+  },
+  {
+   "start": 313.3,
+   "end": 317.14,
+   "text": "and the bag and the, I guess we call floor maybe. Yeah, that definitely makes a big difference."
+  },
+  {
+   "start": 317.14,
+   "end": 320.82,
+   "text": "Just looking at the top, you know that hand is really close to the border of the pink, but"
+  },
+  {
+   "start": 320.82,
+   "end": 325.14,
+   "text": "we know in Photoshop you can just extend that pink super easy. Exactly. And now that she's"
+  },
+  {
+   "start": 325.14,
+   "end": 329.14,
+   "text": "extended her arm a little bit more and raised it up a little bit, although uncomfortable, it gives a"
+  },
+  {
+   "start": 329.14,
+   "end": 333.62,
+   "text": "nice S shape to the composition. So we're looking good. We added another bounce card to the"
+  },
+  {
+   "start": 333.62,
+   "end": 337.86,
+   "text": "front. You can see that really filling in the areas in the bottom of the bag that were kind"
+  },
+  {
+   "start": 337.86,
+   "end": 342.18,
+   "text": "of like in dingy before. We have a lot of variations and we really had to pay attention"
+  },
+  {
+   "start": 342.18,
+   "end": 346.34,
+   "text": "to her hands because they changed. It's really hard to hold your arm like that. Yeah, for sure."
+  },
+  {
+   "start": 346.34,
+   "end": 350.82,
+   "text": "She was so patient and nice when we did that. Definitely. I would maybe only use this one,"
+  },
+  {
+   "start": 350.82,
+   "end": 355.62,
+   "text": "but also change the position of the bag as well. We could choose her hand from one,"
+  },
+  {
+   "start": 355.62,
+   "end": 360.34,
+   "text": "the bag from another, ground from another and put all these together. Exactly. We could even"
+  },
+  {
+   "start": 360.34,
+   "end": 365.06,
+   "text": "go as far as to take just the straps. If the straps look great in one and the bag looks great"
+  },
+  {
+   "start": 365.06,
+   "end": 370.42,
+   "text": "in another. I really like this hand placement, but I also really like a little further up"
+  },
+  {
+   "start": 370.66,
+   "end": 375.46,
+   "text": "this one as well because her fingers are really nicely shaped, but this is also more active."
+  },
+  {
+   "start": 375.46,
+   "end": 380.18,
+   "text": "Take home points for this one. There's just one light. There is only one light. It's a softbox."
+  },
+  {
+   "start": 380.18,
+   "end": 384.42,
+   "text": "We took off the front baffle, but then we added some more diffusion in there to soften it up."
+  },
+  {
+   "start": 384.42,
+   "end": 389.3,
+   "text": "It has that relatively well defined shadow, but it's still soft at the same time. It flatters"
+  },
+  {
+   "start": 389.3,
+   "end": 394.5,
+   "text": "her arm. It flatters the bag. You don't need a ton of different lights to create really great"
+  },
+  {
+   "start": 394.5,
+   "end": 399.22,
+   "text": "product photos, but I will mention that those bounce cards super important here. Absolutely."
+  },
+  {
+   "start": 405.42,
+   "end": 409.5,
+   "text": "Now what we're going to do is extend these backgrounds because we want this to be a very"
+  },
+  {
+   "start": 409.5,
+   "end": 414.54,
+   "text": "graphic image at the moment. It looks great, especially if we just like cropped in, but I"
+  },
+  {
+   "start": 414.54,
+   "end": 418.78,
+   "text": "want a little bit more to work with in my background extension. What we're going to do"
+  },
+  {
+   "start": 418.78,
+   "end": 423.34,
+   "text": "is start off by using the clone stamp tool. So let's ask for the clone stamp tool."
+  },
+  {
+   "start": 423.34,
+   "end": 429.66,
+   "text": "I'm going to hold alt or option and sample right over here and then paint right over here."
+  },
+  {
+   "start": 429.66,
+   "end": 439.87,
+   "text": "Just paint it in. There we go. And we're just extending our background. This is an exact copy"
+  },
+  {
+   "start": 439.87,
+   "end": 449.95,
+   "text": "basically. Everything we see is just getting copied exactly. There we go. We'll do this with"
+  },
+  {
+   "start": 449.95,
+   "end": 461.95,
+   "text": "the pink too because we already have our clone stamp selected. There we go. We'll do that with"
+  },
+  {
+   "start": 462.03,
+   "end": 468.64,
+   "text": "the pink there as well. Okay. So we can see we've extended our pink and our green all the way to"
+  },
+  {
+   "start": 468.64,
+   "end": 474.56,
+   "text": "the right. Our next step is I want to bring the green that we've got here. I want to bring that"
+  },
+  {
+   "start": 474.56,
+   "end": 478.64,
+   "text": "all the way down. Okay. And it's going to be out of focus, which is thank God, because there's"
+  },
+  {
+   "start": 478.64,
+   "end": 483.28,
+   "text": "no texture on there. So we're going to create a new layer. I'm going to choose this color."
+  },
+  {
+   "start": 483.28,
+   "end": 487.44,
+   "text": "So hold alt or option and sample this color with my brush tool. And then we're going to"
+  },
+  {
+   "start": 487.44,
+   "end": 500.67,
+   "text": "simply just paint in with our brush tool right there. There we go. And we just paint in right down"
+  },
+  {
+   "start": 500.67,
+   "end": 506.19,
+   "text": "there. Just turn this levels on just to make sure you, you know, we painted everything we needed to."
+  },
+  {
+   "start": 510.48,
+   "end": 514.96,
+   "text": "There we go. And that's looking pretty good. Now let's take this lighter color that's here."
+  },
+  {
+   "start": 515.84,
+   "end": 519.6,
+   "text": "Turn the levels on. You can clearly see it's a little bit lighter than it is down here."
+  },
+  {
+   "start": 520.08,
+   "end": 526.0,
+   "text": "The lighter color and we'll just kind of fade that through there as well. So sample that color"
+  },
+  {
+   "start": 527.44,
+   "end": 534.4,
+   "text": "and just kind of paint that in there. So bringing this in now you can see that lighter color just"
+  },
+  {
+   "start": 534.4,
+   "end": 539.2,
+   "text": "kind of fades in. And what we did at the same time is we reduced the"
+  },
+  {
+   "start": 541.76,
+   "end": 545.52,
+   "text": "we reduced the opacity of that shadow, maybe just a little bit much. So I'm going to grab"
+  },
+  {
+   "start": 545.52,
+   "end": 552.88,
+   "text": "a layer mask and we'll just layer mask that out just a little bit. There we go. So it does reduce"
+  },
+  {
+   "start": 552.88,
+   "end": 561.36,
+   "text": "the opacity of the shadow, but not by a ton. Now we have another choice we can make. And that's,"
+  },
+  {
+   "start": 561.36,
+   "end": 566.08,
+   "text": "do we want it to get lighter as it comes down or darker because it's, there has to be a light"
+  },
+  {
+   "start": 566.08,
+   "end": 570.0,
+   "text": "change, right? It doesn't look realistic right now because there's no change of light as it"
+  },
+  {
+   "start": 570.0,
+   "end": 575.04,
+   "text": "gets closer to us. So what we're going to do is grab a levels adjustment layer. Okay,"
+  },
+  {
+   "start": 575.76,
+   "end": 579.2,
+   "text": "we'll try lighter to start with. If it doesn't work, we'll just go darker. It doesn't matter."
+  },
+  {
+   "start": 579.84,
+   "end": 584.48,
+   "text": "We'll hit controller command I on the layer mask and then I'm going to use my gradient tool. So"
+  },
+  {
+   "start": 584.48,
+   "end": 591.68,
+   "text": "G for the gradient tool, we'll choose our linear gradient here, our foreground transparent gradient"
+  },
+  {
+   "start": 591.68,
+   "end": 597.2,
+   "text": "and I'm going to click and drag from the bottom straight up. Just make sure white is set as"
+  },
+  {
+   "start": 597.2,
+   "end": 603.76,
+   "text": "your foreground color. Okay, now what this does is just creates a light gradient on the bottom"
+  },
+  {
+   "start": 603.76,
+   "end": 609.6,
+   "text": "there. Now again, originally I said, I don't know if it needs to be lighter or darker. You just kind of"
+  },
+  {
+   "start": 609.6,
+   "end": 614.88,
+   "text": "like work with your levels adjustment to see. So here it is a little bit lighter and we just move"
+  },
+  {
+   "start": 614.88,
+   "end": 620.64,
+   "text": "this and we're getting a little bit darker. I think darker does actually make sense as far as"
+  },
+  {
+   "start": 620.64,
+   "end": 626.48,
+   "text": "like lighter draws more attention down to the bottom, darker pulls attention away."
+  },
+  {
+   "start": 627.6,
+   "end": 631.2,
+   "text": "But I do want to hit controller command T and just stretch out that gradient"
+  },
+  {
+   "start": 631.2,
+   "end": 643.41,
+   "text": "just to make it a little bit smoother and it's coming up too high. I only wanted to be visible"
+  },
+  {
+   "start": 643.41,
+   "end": 650.02,
+   "text": "in the green there. There we go. And it can be subtle. It just you don't want it to be all be"
+  },
+  {
+   "start": 650.02,
+   "end": 654.66,
+   "text": "the same color there. See how flat that looks? It doesn't look like it's three dimensional at all."
+  },
+  {
+   "start": 654.66,
+   "end": 661.38,
+   "text": "So just by putting a little bit of a gradient there just helps it out. Now this back surface"
+  },
+  {
+   "start": 661.38,
+   "end": 666.26,
+   "text": "it's on the same focal plane as the camera sensor. Okay, so it doesn't need a light"
+  },
+  {
+   "start": 666.9,
+   "end": 670.9,
+   "text": "variation in order to look realistic, but something that's coming towards the camera,"
+  },
+  {
+   "start": 670.9,
+   "end": 674.98,
+   "text": "you're going to see that light and dark variation very clearly. Now let's go ahead."
+  },
+  {
+   "start": 674.98,
+   "end": 679.62,
+   "text": "We're going to create another layer as for the clone stamp tool and we're going to sample"
+  },
+  {
+   "start": 680.18,
+   "end": 686.34,
+   "text": "this boundary here. So let's hold alt or option and sample this boundary and I'm going to bring"
+  },
+  {
+   "start": 686.34,
+   "end": 694.98,
+   "text": "this right up. Now one tip here if you guys don't see this little preview go to window"
+  },
+  {
+   "start": 695.06,
+   "end": 699.46,
+   "text": "and down to clone source and you'll have a little option here for show overlay."
+  },
+  {
+   "start": 699.46,
+   "end": 703.46,
+   "text": "Be sure that's clicked and then you'll be able to see a little preview of what you're actually"
+  },
+  {
+   "start": 703.46,
+   "end": 710.34,
+   "text": "going to be painting. And that's super helpful because you can just line everything up perfectly."
+  },
+  {
+   "start": 712.29,
+   "end": 720.21,
+   "text": "There we go. And we have a photographic edge here between this blue and the pink, right? Like"
+  },
+  {
+   "start": 720.21,
+   "end": 728.45,
+   "text": "that's, we photographed that edge. So you know I don't necessarily want to just try to make my own"
+  },
+  {
+   "start": 728.45,
+   "end": 733.17,
+   "text": "edge there because it's just going to look more real if we use the actual photographed edge."
+  },
+  {
+   "start": 735.79,
+   "end": 741.39,
+   "text": "All right, looks like I included a little bit of the, her subject's arm there. So just paint that"
+  },
+  {
+   "start": 741.39,
+   "end": 750.96,
+   "text": "out there. All right, and I'm just lifting up my cursor every couple brush strokes here,"
+  },
+  {
+   "start": 750.96,
+   "end": 756.64,
+   "text": "which is just going to sample directly beneath wherever I'm painting. The sample stays in the same"
+  },
+  {
+   "start": 757.52,
+   "end": 766.3,
+   "text": "relative place to wherever I'm painting. There we are. Just kind of building out a little bit"
+  },
+  {
+   "start": 766.3,
+   "end": 776.91,
+   "text": "more space here. And as I just continue to go straight, we're going straight up here, right?"
+  },
+  {
+   "start": 776.91,
+   "end": 798.1,
+   "text": "So it's, you know, the edges goes straight up and I'm clone stamping straight up. Very nice."
+  },
+  {
+   "start": 798.1,
+   "end": 803.06,
+   "text": "So that's an edge that looks like a photograph from, you know, from here to here because it,"
+  },
+  {
+   "start": 803.06,
+   "end": 808.1,
+   "text": "we just clone stamped it. Now the next step is to use our brush tool. We're going to hold alt or"
+  },
+  {
+   "start": 808.1,
+   "end": 814.82,
+   "text": "option, bring our brush flow up to like really pretty high, like 80%. And I just need to paint"
+  },
+  {
+   "start": 814.82,
+   "end": 822.1,
+   "text": "to all this stuff in pink. And then I want to zoom out, turn my levels on and just make sure"
+  },
+  {
+   "start": 822.98,
+   "end": 827.14,
+   "text": "that I got everything for one. And then, you know, you can see it's getting a little bit"
+  },
+  {
+   "start": 827.14,
+   "end": 832.42,
+   "text": "darker over here. So let's turn our levels back off, bring our blood brush flow down to about"
+  },
+  {
+   "start": 832.42,
+   "end": 838.5,
+   "text": "30% and make a large brush. Let's turn this levels back on so you can see what I'm doing."
+  },
+  {
+   "start": 838.5,
+   "end": 848.0,
+   "text": "It's subtle stuff, but you can see I'm basically just painting in a gradient over here. There we"
+  },
+  {
+   "start": 848.0,
+   "end": 855.55,
+   "text": "go. Just painting it a little bit darker right over here. It's just going to help it make it"
+  },
+  {
+   "start": 855.55,
+   "end": 863.84,
+   "text": "look more realistic at the end of the day. There we are. Let's turn that back off."
+  },
+  {
+   "start": 863.84,
+   "end": 868.24,
+   "text": "We're probably not going to use all that up there, but might as well make it look good if we can."
+  },
+  {
+   "start": 870.0,
+   "end": 878.88,
+   "text": "Okay. Now some of this is getting, is getting this detail, but really, I mean, this detail here that's"
+  },
+  {
+   "start": 878.88,
+   "end": 889.04,
+   "text": "in the, in the board itself, that's not necessarily like adding to the image. In other words, we want"
+  },
+  {
+   "start": 889.12,
+   "end": 894.72,
+   "text": "to see the detail in the bag, this detail in the board. It's not as, as important really."
+  },
+  {
+   "start": 894.72,
+   "end": 901.12,
+   "text": "So I might even wind up down playing that detail with a blur, but for now, let's just use our brush"
+  },
+  {
+   "start": 901.12,
+   "end": 912.08,
+   "text": "tool and we'll just kind of paint this up there. I just need to erase this real quick. We're the"
+  },
+  {
+   "start": 912.08,
+   "end": 917.76,
+   "text": "pink spilled over a little bit. Turn our levels back on and just make sure we're looking"
+  },
+  {
+   "start": 918.64,
+   "end": 926.24,
+   "text": "pretty clear. We are looking good. There's a little bit of a, if I turn my levels back on,"
+  },
+  {
+   "start": 926.24,
+   "end": 933.44,
+   "text": "you can see it. So you just kind of gets darker here. So what I'm going to do is,"
+  },
+  {
+   "start": 935.76,
+   "end": 940.48,
+   "text": "here we go, just create a new layer. We're going to clone stamp. So let's just sample here,"
+  },
+  {
+   "start": 940.48,
+   "end": 954.99,
+   "text": "bring that right up there. Looks like I clone stamped the, that little spot there also,"
+  },
+  {
+   "start": 954.99,
+   "end": 963.2,
+   "text": "but that's not a big deal. And the brush tool just kind of fade that in."
+  },
+  {
+   "start": 965.04,
+   "end": 969.84,
+   "text": "There we are. So at this point, we're actually looking pretty good. Let's just zoom out and see."
+  },
+  {
+   "start": 972.32,
+   "end": 976.88,
+   "text": "Looks like we have a slight, you can see it looks like it's getting slightly darker there."
+  },
+  {
+   "start": 976.88,
+   "end": 980.48,
+   "text": "So let's just create a new layer. We're just going to sample the slider color,"
+  },
+  {
+   "start": 981.2,
+   "end": 987.55,
+   "text": "paint it in a little bit there. It's a huge brush right now. So it's just going to take a"
+  },
+  {
+   "start": 987.55,
+   "end": 1006.05,
+   "text": "little bit of time to kind of catch up. There we go. And that blue surface looks, looks really nice."
+  },
+  {
+   "start": 1007.17,
+   "end": 1016.69,
+   "text": "I can see a little bit of a lighter area down here, some color inconsistency there as well."
+  },
+  {
+   "start": 1016.69,
+   "end": 1021.17,
+   "text": "So we're just going to sample this kind of painted on down in there as well."
+  },
+  {
+   "start": 1021.81,
+   "end": 1028.85,
+   "text": "And I realize I'm painting over top of the green and over top of the pink a little bit, but"
+  },
+  {
+   "start": 1029.97,
+   "end": 1034.85,
+   "text": "that's not really that big of a deal because we can just mask it out."
+  },
+  {
+   "start": 1036.94,
+   "end": 1042.7,
+   "text": "Okay. So let's make this layer invisible. I hit P for the pen tool. Just create a new path here."
+  },
+  {
+   "start": 1044.54,
+   "end": 1049.82,
+   "text": "Super easy. Just click right up here. Go all the way down to the bottom."
+  },
+  {
+   "start": 1051.42,
+   "end": 1061.28,
+   "text": "You know, click right there. There we go. This path will right click and go to make selection."
+  },
+  {
+   "start": 1062.48,
+   "end": 1065.92,
+   "text": "There we are. And then I'll just make this layer visible and then"
+  },
+  {
+   "start": 1065.92,
+   "end": 1070.08,
+   "text": "pop that on the layer mask there. So you can see it's only, you know,"
+  },
+  {
+   "start": 1070.08,
+   "end": 1074.88,
+   "text": "it's not going to be visible there. And then on the mask itself, we'll just go to window and down to"
+  },
+  {
+   "start": 1074.88,
+   "end": 1081.04,
+   "text": "properties. And I'll just adjust the feathering until it looks natural and realistic."
+  },
+  {
+   "start": 1082.64,
+   "end": 1087.04,
+   "text": "There we go. About four pixels is perfect there. And then of course we have to go"
+  },
+  {
+   "start": 1087.68,
+   "end": 1092.0,
+   "text": "on our layer mask and then just paint. We just do this with the brush tool."
+  },
+  {
+   "start": 1092.72,
+   "end": 1095.36,
+   "text": "Just paint black right over top of the hand."
+  },
+  {
+   "start": 1096.32,
+   "end": 1106.69,
+   "text": "You could most definitely, by the way, use the pen tool and make this a selection if you wanted to."
+  },
+  {
+   "start": 1106.69,
+   "end": 1124.61,
+   "text": "There we go. I'm just going to use the brush tool to save some time and I feel pretty good about it."
+  },
+  {
+   "start": 1124.61,
+   "end": 1135.66,
+   "text": "All right. Hit that slash key just to make sure your layer mask is actually"
+  },
+  {
+   "start": 1136.62,
+   "end": 1140.38,
+   "text": "covering everything you need it to cover. Sometimes you'll have like, you know, a little"
+  },
+  {
+   "start": 1140.38,
+   "end": 1144.94,
+   "text": "area in there you just don't see. So hitting that slash key that's right above the"
+  },
+  {
+   "start": 1145.02,
+   "end": 1151.74,
+   "text": "enter key on your keyboard. That'll just really help out. It'll show you where your layer mask is."
+  },
+  {
+   "start": 1153.1,
+   "end": 1156.7,
+   "text": "There we go. So we can see we just cleaned up that blue really nicely as well."
+  },
+  {
+   "start": 1157.98,
+   "end": 1162.06,
+   "text": "Now at this point, normally I would go ahead and crop in a little bit because that's like"
+  },
+  {
+   "start": 1162.06,
+   "end": 1165.02,
+   "text": "kind of obvious that we want to crop. So like see for the crop tool,"
+  },
+  {
+   "start": 1166.22,
+   "end": 1172.38,
+   "text": "we would probably go ahead and choose a crop at this point. But what I want to do is just"
+  },
+  {
+   "start": 1172.38,
+   "end": 1176.78,
+   "text": "leave this. I'm playing the role of the retoucher here, right? So I want that to be decided by the"
+  },
+  {
+   "start": 1176.78,
+   "end": 1182.14,
+   "text": "photographer or the company that this was taken for. Maybe they want to put some type on here,"
+  },
+  {
+   "start": 1182.14,
+   "end": 1187.58,
+   "text": "or maybe they would even want to extend it further. Like maybe they would want, you know,"
+  },
+  {
+   "start": 1188.14,
+   "end": 1192.94,
+   "text": "something like this. Let's go ahead and just extend this out and show you"
+  },
+  {
+   "start": 1193.9,
+   "end": 1199.18,
+   "text": "if they wanted something like that. Then basically what I would do, there's a couple"
+  },
+  {
+   "start": 1199.18,
+   "end": 1205.18,
+   "text": "ways I would create a new layer actually. M for my marquee tool. This is actually a pretty cool tool"
+  },
+  {
+   "start": 1205.18,
+   "end": 1211.74,
+   "text": "tool. M for the marquee tool. I'm on a new layer by the way. And I made a stamp visible. So you can"
+  },
+  {
+   "start": 1211.74,
+   "end": 1217.42,
+   "text": "go to image and then down to apply image to do that. And then I would go to edit and then content"
+  },
+  {
+   "start": 1217.42,
+   "end": 1224.64,
+   "text": "to wear scale it's under edit. And then just stretch that out. All right hit enter and then"
+  },
+  {
+   "start": 1224.64,
+   "end": 1232.32,
+   "text": "deselect. So like boom, there we go. You got a, you know, easy. You put your type right over there"
+  },
+  {
+   "start": 1232.32,
+   "end": 1238.16,
+   "text": "if you wanted to do that. All right, we'll hit it undo a couple times. So we don't obviously need"
+  },
+  {
+   "start": 1238.16,
+   "end": 1245.04,
+   "text": "to do that right now. But that's that's what we have. That's the that's our ability now."
+  },
+  {
+   "start": 1245.04,
+   "end": 1249.28,
+   "text": "Well, at this point, I think we're looking really great. So thank you so much for watching"
+  },
+  {
+   "start": 1249.28,
+   "end": 1254.0,
+   "text": "this exclusive tutorial for our YouTube audience. Now this is actually a combination"
+  },
+  {
+   "start": 1254.0,
+   "end": 1261.28,
+   "text": "of multiple tutorials we created with Ross. Those tutorials combined are over 18 hours in length"
+  },
+  {
+   "start": 1261.28,
+   "end": 1266.08,
+   "text": "covering so many different product photo shoots as well as retouching. So if you'd enjoy this,"
+  },
+  {
+   "start": 1266.08,
+   "end": 1270.56,
+   "text": "you're going to love our product photography tutorials with Ross Floyd. Let us know what"
+  },
+  {
+   "start": 1270.56,
+   "end": 1274.32,
+   "text": "you thought of this video. Give us a big thumbs up and hit that subscribe button. We'll send"
+  },
+  {
+   "start": 1274.32,
+   "end": 1280.0,
+   "text": "you free tutorials every single week. Thank you so much. I'll learn you later. Bye everyone."
+  },
+  {
+   "start": 1285.15,
+   "end": 1299.46,
+   "text": "The rocks. We've got some malachite and some obsidian with rocks Floyd. Here you go."
+  },
+  {
+   "start": 1300.98,
+   "end": 1311.22,
+   "text": "Malachite too for a clear projection of your throat chakra. Blah blah blah. It worked. It worked, Mike."
+  },
+  {
+   "start": 1312.18,
+   "end": 1321.46,
+   "text": "Do you want it back here? No, I don't want it. Thanks, man. I appreciate it."
+  },
+  {
+   "start": 1326.8,
+   "end": 1327.68,
+   "text": "All right. Thanks, Aaron."
+  },
+  {
+   "start": 1329.36,
+   "end": 1336.45,
+   "text": "You take your rocks. These are good. I just don't need it anymore."
+  },
+  {
+   "start": 1337.65,
+   "end": 1344.13,
+   "text": "I mean, you say that after you just hide it on. So, you know, I mean, I took all this power."
+  },
+  {
+   "start": 1344.13,
+   "end": 1348.05,
+   "text": "Oh, interesting. So it's just totally blowing out the metal."
+  },
+  {
+   "start": 1354.02,
+   "end": 1356.74,
+   "text": "It is going to help."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:59:15.124392+00:00",
+ "seconds": 49.8
+}

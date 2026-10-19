@@ -1,0 +1,1318 @@
+{
+ "id": "Zf7-3O0yQcc",
+ "title": "How to Design Packaging in Adobe Illustrator - from Sketch to Dielines",
+ "channel": "Kayla - Brand Identity Community",
+ "url": "https://www.youtube.com/watch?v=Zf7-3O0yQcc",
+ "query": "packaging dieline tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 594.0,
+ "chars": 10548,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 2.84,
+   "text": "If you want to create packaging design that looks like this,"
+  },
+  {
+   "start": 2.84,
+   "end": 5.52,
+   "text": "but you feel really unsure how to use dialynes,"
+  },
+  {
+   "start": 5.52,
+   "end": 8.56,
+   "text": "today we're going to demystify how to go from a sketch"
+  },
+  {
+   "start": 8.56,
+   "end": 10.92,
+   "text": "to a finished printed packaging design."
+  },
+  {
+   "start": 10.92,
+   "end": 13.0,
+   "text": "A really helpful tool to make this whole process"
+  },
+  {
+   "start": 13.0,
+   "end": 14.56,
+   "text": "a lot easier is Pactora,"
+  },
+  {
+   "start": 14.56,
+   "end": 17.36,
+   "text": "who have really kindly decided to sponsor this video."
+  },
+  {
+   "start": 17.36,
+   "end": 18.68,
+   "text": "We'll more on that later."
+  },
+  {
+   "start": 18.68,
+   "end": 20.36,
+   "text": "Before we actually dig into the design,"
+  },
+  {
+   "start": 20.36,
+   "end": 22.64,
+   "text": "I want to introduce the brand we're designing for."
+  },
+  {
+   "start": 22.64,
+   "end": 23.72,
+   "text": "It's called Sunny Side"
+  },
+  {
+   "start": 23.72,
+   "end": 26.24,
+   "text": "and it's actually my own personal stationery brand."
+  },
+  {
+   "start": 26.24,
+   "end": 28.08,
+   "text": "I create handmade stationery products"
+  },
+  {
+   "start": 28.08,
+   "end": 30.92,
+   "text": "and today we're going to be designing for these notebooks."
+  },
+  {
+   "start": 30.92,
+   "end": 33.72,
+   "text": "What I want to do is create a gift set of five notebooks"
+  },
+  {
+   "start": 33.72,
+   "end": 35.28,
+   "text": "that can be this beautiful box"
+  },
+  {
+   "start": 35.28,
+   "end": 37.0,
+   "text": "that you can give away for Christmas"
+  },
+  {
+   "start": 37.0,
+   "end": 39.4,
+   "text": "or as a present to someone that you really like."
+  },
+  {
+   "start": 39.4,
+   "end": 41.08,
+   "text": "The very first thing I did was to look up"
+  },
+  {
+   "start": 41.08,
+   "end": 42.84,
+   "text": "the kind of box that I want to be using."
+  },
+  {
+   "start": 42.84,
+   "end": 44.6,
+   "text": "This way I can download the dialynes"
+  },
+  {
+   "start": 44.6,
+   "end": 46.72,
+   "text": "and know exactly what space I have to work with."
+  },
+  {
+   "start": 46.72,
+   "end": 48.12,
+   "text": "For some of my past projects,"
+  },
+  {
+   "start": 48.12,
+   "end": 49.88,
+   "text": "clients already have picked out a printer"
+  },
+  {
+   "start": 49.88,
+   "end": 53.2,
+   "text": "and they've sent over dialynes from that specific printer."
+  },
+  {
+   "start": 53.2,
+   "end": 54.64,
+   "text": "But whenever that's not the case,"
+  },
+  {
+   "start": 54.64,
+   "end": 57.76,
+   "text": "you can use Pactora to actually find the type of packaging"
+  },
+  {
+   "start": 57.76,
+   "end": 58.84,
+   "text": "that you want to use,"
+  },
+  {
+   "start": 58.84,
+   "end": 61.48,
+   "text": "customize the settings and then download the dialynes."
+  },
+  {
+   "start": 61.48,
+   "end": 63.52,
+   "text": "And this is also a great way to reduce waste"
+  },
+  {
+   "start": 63.52,
+   "end": 66.12,
+   "text": "because I'm sure all of us has bought like a bag of chips"
+  },
+  {
+   "start": 66.12,
+   "end": 68.4,
+   "text": "or something else where you've got tons of extra space"
+  },
+  {
+   "start": 68.4,
+   "end": 69.24,
+   "text": "in the bag."
+  },
+  {
+   "start": 69.24,
+   "end": 72.12,
+   "text": "And this is really wasteful when we're shipping products"
+  },
+  {
+   "start": 72.12,
+   "end": 73.92,
+   "text": "because all of that space could have been used up"
+  },
+  {
+   "start": 73.92,
+   "end": 74.96,
+   "text": "by actual products."
+  },
+  {
+   "start": 74.96,
+   "end": 76.76,
+   "text": "So when you can customize those dimensions,"
+  },
+  {
+   "start": 76.76,
+   "end": 78.24,
+   "text": "you can make sure they fit perfectly"
+  },
+  {
+   "start": 78.24,
+   "end": 79.88,
+   "text": "to the product you're designing for."
+  },
+  {
+   "start": 79.88,
+   "end": 81.32,
+   "text": "I had a little browse through the website"
+  },
+  {
+   "start": 81.32,
+   "end": 83.16,
+   "text": "and I found this box that I really like."
+  },
+  {
+   "start": 83.16,
+   "end": 85.32,
+   "text": "It's called a Flip Top Box Mailer."
+  },
+  {
+   "start": 85.32,
+   "end": 87.52,
+   "text": "I like that it's a really simple gift box"
+  },
+  {
+   "start": 87.52,
+   "end": 89.32,
+   "text": "but I still have these flaps at the front"
+  },
+  {
+   "start": 89.32,
+   "end": 91.8,
+   "text": "that I can use to close it in a really beautiful way."
+  },
+  {
+   "start": 91.8,
+   "end": 94.2,
+   "text": "Maybe we can incorporate a nice ribbon or a sticker"
+  },
+  {
+   "start": 94.2,
+   "end": 96.64,
+   "text": "to seal it to make it feel extra gift worthy."
+  },
+  {
+   "start": 96.64,
+   "end": 98.08,
+   "text": "I wanna make sure that the packaging"
+  },
+  {
+   "start": 98.08,
+   "end": 99.44,
+   "text": "that I'm actually gonna be printing"
+  },
+  {
+   "start": 99.44,
+   "end": 101.56,
+   "text": "is gonna be the perfect exact size."
+  },
+  {
+   "start": 101.56,
+   "end": 104.28,
+   "text": "So I started by stacking up all my five notebooks"
+  },
+  {
+   "start": 104.28,
+   "end": 106.72,
+   "text": "and measuring exactly how tall and how wide"
+  },
+  {
+   "start": 106.72,
+   "end": 108.56,
+   "text": "and how deep this box needs to be."
+  },
+  {
+   "start": 108.56,
+   "end": 110.24,
+   "text": "I wanna quickly point out two things"
+  },
+  {
+   "start": 110.24,
+   "end": 111.72,
+   "text": "that I really like here."
+  },
+  {
+   "start": 111.72,
+   "end": 113.16,
+   "text": "The first thing I really like is that"
+  },
+  {
+   "start": 113.16,
+   "end": 114.84,
+   "text": "you can actually choose the unit."
+  },
+  {
+   "start": 114.84,
+   "end": 117.2,
+   "text": "So you can choose millimeters or inches, for example."
+  },
+  {
+   "start": 117.2,
+   "end": 119.32,
+   "text": "That's really helpful because sometimes clients"
+  },
+  {
+   "start": 119.32,
+   "end": 120.84,
+   "text": "might give me measurements in inches"
+  },
+  {
+   "start": 120.84,
+   "end": 122.12,
+   "text": "or sometimes in millimeters."
+  },
+  {
+   "start": 122.12,
+   "end": 123.8,
+   "text": "And instead of having to convert that"
+  },
+  {
+   "start": 123.8,
+   "end": 125.32,
+   "text": "and risk it being a little bit off"
+  },
+  {
+   "start": 125.32,
+   "end": 127.36,
+   "text": "and the product not fitting the packaging,"
+  },
+  {
+   "start": 127.36,
+   "end": 129.56,
+   "text": "we can actually be exact inner measurements."
+  },
+  {
+   "start": 129.56,
+   "end": 131.92,
+   "text": "And the second one is that I can choose size mode."
+  },
+  {
+   "start": 131.92,
+   "end": 133.92,
+   "text": "And that means that, for example, in this case,"
+  },
+  {
+   "start": 133.92,
+   "end": 135.68,
+   "text": "my notebooks are a specific size."
+  },
+  {
+   "start": 135.68,
+   "end": 136.92,
+   "text": "I know that size."
+  },
+  {
+   "start": 136.92,
+   "end": 138.36,
+   "text": "So I pick inner measurements"
+  },
+  {
+   "start": 138.36,
+   "end": 139.4,
+   "text": "because that way I know"
+  },
+  {
+   "start": 139.4,
+   "end": 141.04,
+   "text": "that the notebooks are all gonna fit."
+  },
+  {
+   "start": 141.04,
+   "end": 142.64,
+   "text": "I'm gonna download the dialyne now"
+  },
+  {
+   "start": 142.64,
+   "end": 144.48,
+   "text": "and I'm gonna choose Adobe Illustrator"
+  },
+  {
+   "start": 144.48,
+   "end": 146.08,
+   "text": "because that's where I like to work"
+  },
+  {
+   "start": 146.08,
+   "end": 147.52,
+   "text": "but they have other formats as well."
+  },
+  {
+   "start": 147.52,
+   "end": 149.8,
+   "text": "Then I can take this and I can either print it out"
+  },
+  {
+   "start": 149.8,
+   "end": 152.24,
+   "text": "if I wanna sketch on it on just pen and paper"
+  },
+  {
+   "start": 152.24,
+   "end": 153.96,
+   "text": "or I can drop the image to Procreate"
+  },
+  {
+   "start": 153.96,
+   "end": 155.08,
+   "text": "and start sketching there."
+  },
+  {
+   "start": 155.08,
+   "end": 157.12,
+   "text": "Now that we have all the basics for our packaging,"
+  },
+  {
+   "start": 157.12,
+   "end": 158.08,
+   "text": "we can start designing."
+  },
+  {
+   "start": 158.08,
+   "end": 160.6,
+   "text": "The very first thing I like to start with is hierarchy."
+  },
+  {
+   "start": 160.6,
+   "end": 162.48,
+   "text": "So having a think about which information"
+  },
+  {
+   "start": 162.48,
+   "end": 164.44,
+   "text": "we want someone to see first"
+  },
+  {
+   "start": 164.44,
+   "end": 166.52,
+   "text": "and which information is gonna be most important"
+  },
+  {
+   "start": 166.52,
+   "end": 167.8,
+   "text": "for someone making a choice"
+  },
+  {
+   "start": 167.8,
+   "end": 169.64,
+   "text": "to buy this product over another one."
+  },
+  {
+   "start": 169.64,
+   "end": 171.48,
+   "text": "In this case, I have a document set up here"
+  },
+  {
+   "start": 171.48,
+   "end": 173.88,
+   "text": "with all the information I wanna include in the packaging."
+  },
+  {
+   "start": 173.88,
+   "end": 176.16,
+   "text": "This is how I usually get it from a client as well."
+  },
+  {
+   "start": 176.16,
+   "end": 178.0,
+   "text": "We wanna have the name of the product,"
+  },
+  {
+   "start": 178.0,
+   "end": 179.36,
+   "text": "a little bit about it,"
+  },
+  {
+   "start": 179.36,
+   "end": 180.96,
+   "text": "how many notebooks are included,"
+  },
+  {
+   "start": 180.96,
+   "end": 183.24,
+   "text": "a bit about the sustainability in paper"
+  },
+  {
+   "start": 183.24,
+   "end": 185.64,
+   "text": "and then a little bit about the company as well."
+  },
+  {
+   "start": 185.64,
+   "end": 187.44,
+   "text": "If you're designing for other kinds of products,"
+  },
+  {
+   "start": 187.44,
+   "end": 188.88,
+   "text": "you also sometimes need to include"
+  },
+  {
+   "start": 188.88,
+   "end": 190.6,
+   "text": "other types of information."
+  },
+  {
+   "start": 190.6,
+   "end": 192.76,
+   "text": "Like if you're doing for food products, for example,"
+  },
+  {
+   "start": 192.76,
+   "end": 194.68,
+   "text": "you might need to include allergens,"
+  },
+  {
+   "start": 194.68,
+   "end": 197.04,
+   "text": "ingredients, nutritional information"
+  },
+  {
+   "start": 197.04,
+   "end": 198.88,
+   "text": "and if you're designing for kids products,"
+  },
+  {
+   "start": 198.88,
+   "end": 200.72,
+   "text": "you might need the appropriate age,"
+  },
+  {
+   "start": 200.72,
+   "end": 202.6,
+   "text": "any safety instructions, for example."
+  },
+  {
+   "start": 202.6,
+   "end": 204.4,
+   "text": "So make sure you check with your client"
+  },
+  {
+   "start": 204.4,
+   "end": 207.44,
+   "text": "and also your local area or where it will be sold"
+  },
+  {
+   "start": 207.44,
+   "end": 208.96,
+   "text": "to see what the regulations are."
+  },
+  {
+   "start": 208.96,
+   "end": 210.36,
+   "text": "In this case, I think the information"
+  },
+  {
+   "start": 210.36,
+   "end": 213.16,
+   "text": "I wanna put at the front is the name of the product,"
+  },
+  {
+   "start": 213.16,
+   "end": 215.6,
+   "text": "a little bit about it being environmentally friendly"
+  },
+  {
+   "start": 215.6,
+   "end": 217.4,
+   "text": "and how many notebooks are inside."
+  },
+  {
+   "start": 217.4,
+   "end": 219.72,
+   "text": "And I think the rest of it we can put on the back."
+  },
+  {
+   "start": 219.72,
+   "end": 221.64,
+   "text": "We do also have the sides of the packaging,"
+  },
+  {
+   "start": 221.64,
+   "end": 222.96,
+   "text": "so I think that could be a great way"
+  },
+  {
+   "start": 222.96,
+   "end": 224.8,
+   "text": "to highlight something small,"
+  },
+  {
+   "start": 224.8,
+   "end": 226.92,
+   "text": "maybe about it being handmade, for example."
+  },
+  {
+   "start": 226.92,
+   "end": 229.24,
+   "text": "If you feel a bit unsure where to place things"
+  },
+  {
+   "start": 229.24,
+   "end": 231.4,
+   "text": "and what information is most important,"
+  },
+  {
+   "start": 231.4,
+   "end": 233.56,
+   "text": "you can have a look at competitor brands"
+  },
+  {
+   "start": 233.56,
+   "end": 236.4,
+   "text": "because they've usually done tons of research and seen,"
+  },
+  {
+   "start": 236.4,
+   "end": 238.36,
+   "text": "tweaked things once they're on the shelves"
+  },
+  {
+   "start": 238.36,
+   "end": 239.84,
+   "text": "and that way you can see, okay,"
+  },
+  {
+   "start": 239.84,
+   "end": 241.64,
+   "text": "this is what they're choosing to highlight."
+  },
+  {
+   "start": 241.64,
+   "end": 243.28,
+   "text": "How is my brand different"
+  },
+  {
+   "start": 243.28,
+   "end": 245.4,
+   "text": "and what do I want to put front and center?"
+  },
+  {
+   "start": 245.4,
+   "end": 247.44,
+   "text": "Certain information might need to go together,"
+  },
+  {
+   "start": 247.44,
+   "end": 249.2,
+   "text": "for example, nutritional information"
+  },
+  {
+   "start": 249.2,
+   "end": 251.16,
+   "text": "and the volume of the packaging"
+  },
+  {
+   "start": 251.16,
+   "end": 253.84,
+   "text": "sometimes needs to be included in the same site of vision."
+  },
+  {
+   "start": 253.84,
+   "end": 255.36,
+   "text": "For the box we're designing today,"
+  },
+  {
+   "start": 255.36,
+   "end": 257.48,
+   "text": "the dimensions are kind of similar to a book"
+  },
+  {
+   "start": 257.48,
+   "end": 260.12,
+   "text": "which fits perfectly with my type of audience."
+  },
+  {
+   "start": 260.12,
+   "end": 261.84,
+   "text": "So what if we choose to design this"
+  },
+  {
+   "start": 261.84,
+   "end": 264.4,
+   "text": "to look kind of like a beautiful book sleeve?"
+  },
+  {
+   "start": 264.4,
+   "end": 266.96,
+   "text": "We can use illustration, fit the product inside,"
+  },
+  {
+   "start": 266.96,
+   "end": 268.52,
+   "text": "and use similar motifs."
+  },
+  {
+   "start": 268.52,
+   "end": 269.72,
+   "text": "I think that could be perfect."
+  },
+  {
+   "start": 269.72,
+   "end": 272.52,
+   "text": "We can use it as a spine of the book, covers."
+  },
+  {
+   "start": 272.52,
+   "end": 273.6,
+   "text": "I think that would be really cute."
+  },
+  {
+   "start": 273.6,
+   "end": 275.2,
+   "text": "I'm super excited to give this a try,"
+  },
+  {
+   "start": 275.2,
+   "end": 277.0,
+   "text": "so let's start planning out our design."
+  },
+  {
+   "start": 277.0,
+   "end": 277.96,
+   "text": "Before we get started,"
+  },
+  {
+   "start": 277.96,
+   "end": 279.68,
+   "text": "we really want to understand which sections"
+  },
+  {
+   "start": 279.68,
+   "end": 281.36,
+   "text": "will be visible once it's folded,"
+  },
+  {
+   "start": 281.36,
+   "end": 282.76,
+   "text": "so we don't pay a lot of attention"
+  },
+  {
+   "start": 282.76,
+   "end": 284.72,
+   "text": "to areas that actually will be hidden."
+  },
+  {
+   "start": 284.72,
+   "end": 286.24,
+   "text": "And we also want to make sure we understand"
+  },
+  {
+   "start": 286.24,
+   "end": 288.04,
+   "text": "which sides will be up and down"
+  },
+  {
+   "start": 288.04,
+   "end": 289.4,
+   "text": "so that we don't design something"
+  },
+  {
+   "start": 289.4,
+   "end": 291.6,
+   "text": "and then print it and it turns upside down."
+  },
+  {
+   "start": 291.6,
+   "end": 293.0,
+   "text": "There's actually a really smart way"
+  },
+  {
+   "start": 293.0,
+   "end": 294.04,
+   "text": "to do this in Pactora,"
+  },
+  {
+   "start": 294.04,
+   "end": 295.92,
+   "text": "so if you head to the 3D view,"
+  },
+  {
+   "start": 295.92,
+   "end": 298.32,
+   "text": "you can actually fold and unfold the packaging"
+  },
+  {
+   "start": 298.32,
+   "end": 299.36,
+   "text": "to different degrees."
+  },
+  {
+   "start": 299.36,
+   "end": 300.44,
+   "text": "This means that you can understand"
+  },
+  {
+   "start": 300.44,
+   "end": 301.92,
+   "text": "which parts will be visible."
+  },
+  {
+   "start": 301.92,
+   "end": 303.4,
+   "text": "You can also turn it around"
+  },
+  {
+   "start": 303.4,
+   "end": 305.68,
+   "text": "to understand which sides will be up and down."
+  },
+  {
+   "start": 305.68,
+   "end": 308.24,
+   "text": "This is super helpful and has saved me a lot of time"
+  },
+  {
+   "start": 308.24,
+   "end": 310.36,
+   "text": "not having to actually print a lot of tests"
+  },
+  {
+   "start": 310.36,
+   "end": 313.04,
+   "text": "to fold it myself and see which ones will be up and down."
+  },
+  {
+   "start": 313.04,
+   "end": 315.32,
+   "text": "Once you open the dial lines in Adobe Illustrator,"
+  },
+  {
+   "start": 315.32,
+   "end": 317.36,
+   "text": "you will see these different colored lines"
+  },
+  {
+   "start": 317.36,
+   "end": 319.44,
+   "text": "and you will also have a legend at the top."
+  },
+  {
+   "start": 319.44,
+   "end": 322.32,
+   "text": "The blue line is where we expect our design to be,"
+  },
+  {
+   "start": 322.32,
+   "end": 325.04,
+   "text": "so that's where we'll try to cut the machine,"
+  },
+  {
+   "start": 325.04,
+   "end": 327.08,
+   "text": "but sometimes it's not perfectly accurate,"
+  },
+  {
+   "start": 327.08,
+   "end": 328.72,
+   "text": "so that's why we have these green lines"
+  },
+  {
+   "start": 328.72,
+   "end": 329.76,
+   "text": "that are for the bleed."
+  },
+  {
+   "start": 329.76,
+   "end": 331.4,
+   "text": "So essentially the area between the blue"
+  },
+  {
+   "start": 331.4,
+   "end": 334.2,
+   "text": "and the green line are gonna work as a safety zone"
+  },
+  {
+   "start": 334.2,
+   "end": 336.28,
+   "text": "where we want to extend our design out to"
+  },
+  {
+   "start": 336.28,
+   "end": 338.8,
+   "text": "in case it cuts a little bit further out."
+  },
+  {
+   "start": 338.8,
+   "end": 339.92,
+   "text": "And then the red lines are"
+  },
+  {
+   "start": 339.92,
+   "end": 341.76,
+   "text": "where the packaging will be folded."
+  },
+  {
+   "start": 341.76,
+   "end": 343.84,
+   "text": "Now that we know which areas we're gonna design for,"
+  },
+  {
+   "start": 343.84,
+   "end": 345.0,
+   "text": "we can get sketching."
+  },
+  {
+   "start": 345.0,
+   "end": 346.12,
+   "text": "I'm working in Procreate"
+  },
+  {
+   "start": 346.12,
+   "end": 348.56,
+   "text": "because that's where it feels most natural to me."
+  },
+  {
+   "start": 348.56,
+   "end": 350.6,
+   "text": "I always grew up drawing with pen and paper"
+  },
+  {
+   "start": 350.6,
+   "end": 352.52,
+   "text": "and being able to draw straight on the iPad"
+  },
+  {
+   "start": 352.52,
+   "end": 354.2,
+   "text": "just feels very natural to me,"
+  },
+  {
+   "start": 354.2,
+   "end": 436.11,
+   "text": "but make sure you find a workflow that works best for you."
+  },
+  {
+   "start": 436.11,
+   "end": 437.31,
+   "text": "Once I have the sketch ready,"
+  },
+  {
+   "start": 437.31,
+   "end": 438.95,
+   "text": "I move into Adobe Illustrator"
+  },
+  {
+   "start": 438.95,
+   "end": 440.75,
+   "text": "and start assembling the design."
+  },
+  {
+   "start": 440.75,
+   "end": 442.35,
+   "text": "Since we already downloaded the dial lines"
+  },
+  {
+   "start": 442.35,
+   "end": 444.23,
+   "text": "as an Adobe Illustrator file,"
+  },
+  {
+   "start": 444.23,
+   "end": 446.67,
+   "text": "we can just open that and it will be all set up for us."
+  },
+  {
+   "start": 446.67,
+   "end": 448.99,
+   "text": "I like to just import the sketch as an image"
+  },
+  {
+   "start": 448.99,
+   "end": 450.87,
+   "text": "and lock the layer on a different layer"
+  },
+  {
+   "start": 450.87,
+   "end": 452.75,
+   "text": "in Adobe Illustrator just so that I have it"
+  },
+  {
+   "start": 452.75,
+   "end": 453.63,
+   "text": "as a reference."
+  },
+  {
+   "start": 453.63,
+   "end": 456.23,
+   "text": "Most printers like to have the dial lines on their own layer"
+  },
+  {
+   "start": 456.23,
+   "end": 457.71,
+   "text": "and how that layer locked"
+  },
+  {
+   "start": 457.71,
+   "end": 459.35,
+   "text": "just so we make sure that we're not messing"
+  },
+  {
+   "start": 459.35,
+   "end": 460.79,
+   "text": "with any of the line work there."
+  },
+  {
+   "start": 460.79,
+   "end": 463.27,
+   "text": "What we might wanna do is use the actual dial lines"
+  },
+  {
+   "start": 463.27,
+   "end": 465.35,
+   "text": "as the background for our packaging."
+  },
+  {
+   "start": 465.35,
+   "end": 466.39,
+   "text": "And if you wanna do that,"
+  },
+  {
+   "start": 466.39,
+   "end": 468.11,
+   "text": "you can make sure you're embedding the image"
+  },
+  {
+   "start": 468.11,
+   "end": 470.15,
+   "text": "of the dial line and then ungrouping"
+  },
+  {
+   "start": 470.15,
+   "end": 471.35,
+   "text": "all the different elements."
+  },
+  {
+   "start": 471.35,
+   "end": 472.19,
+   "text": "Once you have this done,"
+  },
+  {
+   "start": 472.19,
+   "end": 474.43,
+   "text": "you can convert the line into a fill"
+  },
+  {
+   "start": 474.43,
+   "end": 475.83,
+   "text": "and there you have your background."
+  },
+  {
+   "start": 475.83,
+   "end": 478.71,
+   "text": "Make sure that this background is now on a new layer"
+  },
+  {
+   "start": 478.71,
+   "end": 480.91,
+   "text": "and that the dial lines are on a separate layer"
+  },
+  {
+   "start": 480.91,
+   "end": 482.11,
+   "text": "that's also locked."
+  },
+  {
+   "start": 482.11,
+   "end": 484.03,
+   "text": "We can then start adding in all of our text"
+  },
+  {
+   "start": 484.03,
+   "end": 486.63,
+   "text": "and make sure that the font sizes are big enough."
+  },
+  {
+   "start": 486.63,
+   "end": 489.83,
+   "text": "It's really easy to start focusing on the design portion,"
+  },
+  {
+   "start": 489.83,
+   "end": 491.27,
+   "text": "the illustration portion,"
+  },
+  {
+   "start": 491.27,
+   "end": 493.03,
+   "text": "but things need to be very readable"
+  },
+  {
+   "start": 493.03,
+   "end": 495.31,
+   "text": "for it to be functional as a packaging design."
+  },
+  {
+   "start": 495.31,
+   "end": 496.55,
+   "text": "Once the text is laid out,"
+  },
+  {
+   "start": 496.55,
+   "end": 499.03,
+   "text": "we can start adding the more decorative elements."
+  },
+  {
+   "start": 499.03,
+   "end": 501.31,
+   "text": "I personally really like using the pen tool,"
+  },
+  {
+   "start": 501.31,
+   "end": 503.75,
+   "text": "but I know a lot of people like the pencil tool as well,"
+  },
+  {
+   "start": 503.75,
+   "end": 505.15,
+   "text": "so just feel your way through it"
+  },
+  {
+   "start": 505.15,
+   "end": 507.31,
+   "text": "and see what fits best for your working style."
+  },
+  {
+   "start": 507.31,
+   "end": 508.79,
+   "text": "If you wanna have design elements"
+  },
+  {
+   "start": 508.79,
+   "end": 510.93,
+   "text": "on the inside of the packaging as well,"
+  },
+  {
+   "start": 510.93,
+   "end": 513.57,
+   "text": "like maybe a sweet message once you open the box,"
+  },
+  {
+   "start": 513.57,
+   "end": 515.37,
+   "text": "you can just duplicate this artboard"
+  },
+  {
+   "start": 515.37,
+   "end": 518.53,
+   "text": "and that's gonna be printed as a copy on the inside."
+  },
+  {
+   "start": 518.53,
+   "end": 520.85,
+   "text": "Sometimes clients can have a little bit of a hard time"
+  },
+  {
+   "start": 520.85,
+   "end": 522.97,
+   "text": "visualizing what the packaging is gonna look like"
+  },
+  {
+   "start": 522.97,
+   "end": 524.17,
+   "text": "just from dial lines."
+  },
+  {
+   "start": 524.17,
+   "end": 525.37,
+   "text": "I don't blame them."
+  },
+  {
+   "start": 525.37,
+   "end": 528.17,
+   "text": "So what I like to do is you can head back into Pactora"
+  },
+  {
+   "start": 528.17,
+   "end": 530.81,
+   "text": "and go to that 3D view that we had before"
+  },
+  {
+   "start": 530.81,
+   "end": 533.37,
+   "text": "and then you can add in your own images for the design"
+  },
+  {
+   "start": 533.37,
+   "end": 534.85,
+   "text": "and you can preview what the design"
+  },
+  {
+   "start": 534.85,
+   "end": 535.93,
+   "text": "will actually look like."
+  },
+  {
+   "start": 535.93,
+   "end": 538.37,
+   "text": "One of the things that I often spot at this stage"
+  },
+  {
+   "start": 538.37,
+   "end": 541.05,
+   "text": "is that my text is way too big, way too small,"
+  },
+  {
+   "start": 541.05,
+   "end": 542.93,
+   "text": "something doesn't feel quite centered,"
+  },
+  {
+   "start": 542.93,
+   "end": 545.13,
+   "text": "so this is really a helpful moment for you"
+  },
+  {
+   "start": 545.13,
+   "end": 546.69,
+   "text": "to be able to review your design"
+  },
+  {
+   "start": 546.69,
+   "end": 548.17,
+   "text": "before you actually get printing."
+  },
+  {
+   "start": 548.17,
+   "end": 550.61,
+   "text": "Since I'm gonna be making these boxes myself,"
+  },
+  {
+   "start": 550.61,
+   "end": 552.21,
+   "text": "I'm gonna start assembling it now."
+  },
+  {
+   "start": 552.21,
+   "end": 554.09,
+   "text": "So here's the moment of truth."
+  },
+  {
+   "start": 554.09,
+   "end": 555.37,
+   "text": "Let's put in the notebooks"
+  },
+  {
+   "start": 555.37,
+   "end": 566.31,
+   "text": "and see how the packaging turned out."
+  },
+  {
+   "start": 566.31,
+   "end": 569.23,
+   "text": "I am so excited about how this packaging design came out"
+  },
+  {
+   "start": 569.23,
+   "end": 571.75,
+   "text": "and I really hope this video helped you feel more confident"
+  },
+  {
+   "start": 571.75,
+   "end": 574.79,
+   "text": "creating packaging design and interpreting dial lines."
+  },
+  {
+   "start": 574.79,
+   "end": 578.11,
+   "text": "Pactora is kindly giving all of you 20% off"
+  },
+  {
+   "start": 578.11,
+   "end": 580.35,
+   "text": "if you're using the code KAYLA20."
+  },
+  {
+   "start": 580.35,
+   "end": 582.47,
+   "text": "I'll make sure to add the link in the description."
+  },
+  {
+   "start": 582.47,
+   "end": 584.39,
+   "text": "This is perfect if you wanna use dial lines"
+  },
+  {
+   "start": 584.39,
+   "end": 586.43,
+   "text": "but also if you wanna create custom mockups"
+  },
+  {
+   "start": 586.43,
+   "end": 587.47,
+   "text": "for your projects."
+  },
+  {
+   "start": 587.47,
+   "end": 588.99,
+   "text": "Thank you so much for watching"
+  },
+  {
+   "start": 588.99,
+   "end": 591.63,
+   "text": "and let me know if you have any questions at all."
+  },
+  {
+   "start": 591.63,
+   "end": 594.27,
+   "text": "Good luck with your projects and see you next time."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:12:46.342366+00:00",
+ "seconds": 25.0
+}

@@ -1,0 +1,247 @@
+In this video, I will show you how to use Comfy UI step by step.
+Comfy UI is one of the most popular free and open source
+tools for creating AI-generated content on your own computer.
+People use it to generate images, create videos, enhance photos,
+and build powerful AI workflows using a visual node-based
+interface.
+In this tutorial, we'll start from the very beginning.
+We'll install Comfy UI, set up an image model,
+generate our first AI image, and then
+learn how workflows and nodes work
+so you can start building your own projects.
+I'm Kevin, and let's dive in.
+To get started, head to the following website.
+You'll find a link right here at the bottom of the screen.
+Here on the homepage, you'll notice
+that Comfy UI offers both a desktop version and a cloud
+version.
+For this tutorial, we'll use the desktop version,
+since it's free to use, runs directly on your own computer,
+and gives you full access to your models and workflows.
+The cloud version can be a good option
+if you don't have a powerful computer
+or maybe you'd rather not manage the hardware yourself,
+although there is a cost associated with it.
+Let's click on Download, and then Download again.
+Once the installer finishes downloading,
+run through the install process.
+After installation completes, launch Comfy UI,
+and you'll see the following screen.
+For this tutorial, we'll select Local
+so everything runs directly on your own computer.
+Down below, I'll agree to the terms,
+and then let's click on Continue.
+Next, let's give this installation a name.
+I'll set mine to Comfy UI.
+For most people, you can leave the remaining settings as is,
+and then down below, let's click on Continue.
+Once Comfy UI launches, you'll land
+on the main Getting Started screen.
+Now right away, you can see that Comfy UI supports much more
+than just image generation.
+Over here on the left-hand side,
+you'll find categories for images.
+Here we have videos, audio, 3D models, large language
+models, and more.
+To help you get up and running quickly,
+let's go back to the Getting Started section,
+and let's start with text to image.
+I'll click here.
+Comfy UI now loads a complete image generation workflow.
+Now notice in the top right-hand corner
+that Comfy UI is telling us
+that we're missing a required model.
+Think of Comfy UI as the application
+that allows us to build and run AI workflows.
+The model itself is what actually creates the image.
+To see what we need,
+let's click on Show Missing Models.
+Right here, Comfy UI shows us the exact model
+required by this workflow.
+To install the model right over here,
+let's click on Download All.
+Right up on top, we can now check on the download progress.
+Now that the model has finished downloading,
+let's generate our first image.
+Let's take a quick look at the workflow.
+You can zoom in and out using your mouse wheel,
+and you can press the middle mouse button
+to pan around the canvas.
+You can also use the mini map in the bottom right-hand
+corner to quickly navigate around larger workflows.
+Now notice that this workflow is divided
+into several different sections.
+Right over here, we start by loading the model
+that we just downloaded.
+Next, we enter a prompt.
+And this describes the image that we'd like to create.
+Now, I want to generate an image of a chocolate chip cookie.
+So right over here, I'll enter in the following prompt.
+Now, below that, we have the negative prompt.
+This tells the model what we'd like to avoid
+in the generated image.
+So over here, I'll enter in my text.
+If you want to follow along,
+you'll find these same exact prompts
+in the description of this video.
+Next, we can configure the image size.
+Here, we could set the width,
+we could also set the height,
+and also the number of images we'd like to generate.
+Now, I'll leave the default settings in place
+since they work well with this model.
+Next, let's go up and we'll look at the sampling section.
+This is where Comfy UI generates the image.
+You'll notice several different settings here.
+Now, as a beginner,
+I recommend leaving these at their default values.
+Now, there is one setting worth knowing,
+and that's the seed.
+You'll find that right here at the top of the list.
+Changing the seed allows you to generate
+different variations of the same image
+all while using the same prompt.
+For now, let's leave all of these settings as is.
+Then, in the top right-hand corner,
+let's now click on Run.
+And there we have our first AI generated image.
+It also automatically saved the image to your computer.
+Now, you might be wondering,
+how do you view all of your generated images or assets?
+Well, over on the left-hand side,
+we have this button for assets.
+When I hover over,
+you'll also notice that there is an associated shortcut key.
+You can press the letter A.
+When I click on that,
+here I can see all the different images that I've generated.
+If I right-click over here,
+I could save it elsewhere on my computer,
+or down below, I could also delete the asset if I'd like.
+Right up above, I'll close this view.
+Now that we've successfully generated an image,
+let's take a closer look at how this workflow works
+and how we could modify it to produce a different result.
+Now, right now,
+we're generating just a chocolate chip cookie.
+Let's see what happens when we make a few changes.
+So right over here, we have the prompt field,
+and let's update this text to instead create,
+let's say a double chocolate chip cookie
+with a melted chocolate center.
+That sounds so good.
+Now, if we scroll down just a little bit,
+here we have the image size.
+And previously, we went with a 512 pixel
+by 512 pixel image,
+and that produced a square image.
+But let's actually try a different aspect ratio.
+So right over here,
+let's change the width to let's say 768.
+I'll enter in that value,
+and then right up on top, let's try running this.
+I'll click here.
+And there we have a double chocolate chip cookie,
+and now it's also a wider image.
+Now that we've generated a few different images,
+let's take a closer look at how this workflow is organized.
+One of the things that makes Comfy UI unique
+is that the workflows are built using nodes.
+Each node performs a specific task.
+Here's an example.
+We have our first node,
+and that loads the checkpoint or the model that we downloaded.
+And together, all of these different nodes
+create the workflow that generates this final image.
+Now, as you look across this canvas,
+notice how all of these different nodes
+are connected together with all of these different lines.
+Data flows from one node to the next
+until we eventually arrive at the finished image.
+Now, the nice thing about this approach
+is that we're not limited to the workflow
+exactly as it exists today.
+We could easily extend it by adding new nodes.
+I'll zoom in right here on this last stage.
+To add a node, you could simply right-click
+anywhere on the canvas, and here at the top of the menu,
+you have the options here, add a node.
+I'll click on that, and that opens up a menu
+with hundreds of different nodes
+that you can use to customize your workflow.
+Now, I'd like to add an image upscaling node.
+So here, with an image at the very top of the list,
+we have the option for upscaling,
+and right here, we can upscale the image bio.
+I'll click on that.
+Right over here, it's now added a new upscaling node,
+and let's try upscaling the image.
+Let's say it by two acts here.
+I'll enter two and click on okay.
+However, right now, this node is not connected
+to the overall workflow.
+So over here, let's take the output of the decoding node,
+and here, I'll feed it into the upscaling step,
+and over here, I'll take the output
+of the upscale step,
+and let's feed that into the save image step.
+That way, we'll upscale the image
+before we end up saving it.
+Now, let's run the workflow again.
+In the top right, I'll click on run.
+And right there, you can see that we've now enhanced
+the image simply by adding a single node to the workflow.
+Right down below, you'll now see the new dimensions
+of this image.
+We've effectively upscaled it by two.
+This is the core idea behind Comfy UI.
+By combining and connecting different nodes,
+you can build workflows that generate images,
+edit photos, create videos, process audio,
+and much more.
+Now that we've customized this workflow,
+let's save it so we can use it again later.
+Right up on top, you'll see all of your different workflows.
+I'll right click on this one,
+and right here, we see the option to save.
+I'll click on this.
+Right here, we could enter in a file name.
+I'll call mine the upscale image generator,
+and down below, let's click on confirm.
+To get back to a workflow, over on the left-hand side,
+click on workflows,
+and there you could see the workflow that we just saved.
+You can also share workflows with other people,
+which is one of the reasons Comfy UI
+has such a large and active community.
+Instead of building everything from scratch,
+you can start from an existing workflow
+and then modify to fit your exact needs.
+Here, I'll close out of workflows.
+Before we wrap up, let's take one more look
+at the template library.
+Right down here at the bottom,
+let's click on templates to open it.
+One of the things I like about Comfy UI
+is that you have a large collection of starter templates
+to get you up and running quickly.
+Now, in addition to text to image, which we just used,
+here you'll find other fun ones,
+like image to video, here you have image editing,
+here you have image to video again, image to 3D.
+You even have text to song.
+So lots of different options
+and fun things that you could play with.
+Now, I recommend clicking in, downloading the models,
+and then exploring how they're built.
+Every workflow here is made up of nodes,
+and you could use these templates as a starting point
+and then customize them to fit your own needs.
+And that's how to use Comfy UI.
+Now that you understand the basics,
+go ahead and experiment with the built-in templates
+and start building workflows of your own.
+If you'd like to learn more about AI tools
+and how to get the most out of them,
+consider subscribing.
+Thanks for watching and I'll see you in the next video.

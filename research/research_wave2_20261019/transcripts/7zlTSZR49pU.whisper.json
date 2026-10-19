@@ -1,0 +1,17 @@
+{
+ "id": "7zlTSZR49pU",
+ "title": "How to Design Your Packaging in Minutes?",
+ "channel": "Pacdora",
+ "url": "https://www.youtube.com/watch?v=7zlTSZR49pU",
+ "query": "pacdora tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.377,
+ "duration_s": 20.0,
+ "chars": 0,
+ "segments": [],
+ "transcribed_at": "2026-10-19T08:41:36.967858+00:00",
+ "seconds": 1.7
+}

@@ -1,0 +1,1264 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.133 --> 00:00:01.733 position:59% line:85%
+I've condensed seven years of lighting
+
+00:00:01.733 --> 00:00:03.433 line:85%
+experience into one video.
+
+00:00:03.433 --> 00:00:04.833 position:56% line:85%
+I'm going to show you how to light a
+
+00:00:04.833 --> 00:00:06.233 line:85%
+product in Blender beautifully
+
+00:00:06.400 --> 00:00:07.433 line:85%
+and it can apply to
+
+00:00:07.433 --> 00:00:08.633 line:85%
+most other 3D software.
+
+00:00:08.966 --> 00:00:09.966 line:85%
+Right, let's get started.
+
+00:00:11.199 --> 00:00:13.466 position:59% line:85%
+All right, so let's first add a plane,
+
+00:00:13.833 --> 00:00:14.766 line:85%
+make sure it's in the center
+
+00:00:14.966 --> 00:00:17.866 position:64% line:85%
+and go to view, cameras, active camera to
+
+00:00:17.866 --> 00:00:18.600 line:85%
+look through the camera.
+
+00:00:19.033 --> 00:00:20.199 line:85%
+And also if you have the
+
+00:00:20.199 --> 00:00:21.333 line:85%
+3D cursor in the middle here
+
+00:00:21.533 --> 00:00:22.800 line:85%
+and in the transform people
+
+00:00:22.800 --> 00:00:23.899 line:85%
+point you have it selected.
+
+00:00:24.233 --> 00:00:26.266 line:85%
+When we then rotate, we will rotate
+
+00:00:26.266 --> 00:00:27.466 line:85%
+around the middle of the scene.
+
+00:00:27.733 --> 00:00:29.133 position:59% line:85%
+This is much easier to move the camera
+
+00:00:29.233 --> 00:00:30.833 position:64% line:85%
+because then we will be always looking at
+
+00:00:30.833 --> 00:00:31.699 line:85%
+the center of the screen.
+
+00:00:32.133 --> 00:00:32.966 line:85%
+And let's also go
+
+00:00:32.966 --> 00:00:33.833 line:85%
+into the camera settings
+
+00:00:34.066 --> 00:00:35.133 line:85%
+and change the focal
+
+00:00:35.133 --> 00:00:36.766 line:85%
+length to 120 millimeters.
+
+00:00:37.066 --> 00:00:38.466 position:59% line:85%
+This is because we don't want too much
+
+00:00:38.466 --> 00:00:39.799 line:85%
+distortion on the lens
+
+00:00:40.000 --> 00:00:41.666 line:85%
+when taking pictures of products
+
+00:00:41.666 --> 00:00:42.833 position:56% line:85%
+because we want to show the products
+
+00:00:42.833 --> 00:00:43.833 line:85%
+exactly how they look.
+
+00:00:44.100 --> 00:00:45.466 line:85%
+Let's scale this scene up.
+
+00:00:45.466 --> 00:00:47.033 line:85%
+We can also rotate the
+
+00:00:47.033 --> 00:00:47.833 line:85%
+camera a little bit down.
+
+00:00:48.166 --> 00:00:49.066 line:85%
+I think this looks good.
+
+00:00:49.066 --> 00:00:49.733 line:85%
+All right, so we need
+
+00:00:49.733 --> 00:00:50.766 line:85%
+something to actually light.
+
+00:00:50.966 --> 00:00:52.733 line:85%
+So let's add a sphere in the start.
+
+00:00:53.033 --> 00:00:54.133 line:85%
+We'll start simple with a sphere
+
+00:00:54.333 --> 00:00:55.533 line:85%
+and then we'll move on to
+
+00:00:55.533 --> 00:00:56.966 line:85%
+actual product very soon.
+
+00:00:57.200 --> 00:00:59.066 line:85%
+Also shade smooth this sphere.
+
+00:00:59.466 --> 00:01:00.366 line:85%
+Then let's turn on the
+
+00:01:00.366 --> 00:01:01.799 line:85%
+render preview like this.
+
+00:01:02.133 --> 00:01:02.666 line:85%
+And let's start with
+
+00:01:02.666 --> 00:01:03.733 position:58% line:85%
+something you might have heard about,
+
+00:01:03.933 --> 00:01:04.833 line:85%
+the three point lighting.
+
+00:01:05.266 --> 00:01:06.799 position:59% line:85%
+So for this first we need a key light.
+
+00:01:07.066 --> 00:01:08.233 line:85%
+So let's add a area light.
+
+00:01:08.500 --> 00:01:10.400 position:64% line:85%
+And again, change the point to 3D cursor.
+
+00:01:10.733 --> 00:01:11.933 line:85%
+And if you rotate now, it
+
+00:01:11.933 --> 00:01:13.200 line:85%
+will rotate around the scene,
+
+00:01:13.400 --> 00:01:14.133 line:85%
+which is very useful.
+
+00:01:14.433 --> 00:01:15.533 line:85%
+And for the key light will
+
+00:01:15.533 --> 00:01:17.166 line:85%
+be the most important light.
+
+00:01:17.400 --> 00:01:19.666 position:61% line:85%
+So I like to put this in front and then
+
+00:01:19.666 --> 00:01:20.633 line:85%
+tilt it a little bit.
+
+00:01:20.933 --> 00:01:22.333 position:61% line:85%
+Think we can also move it further away.
+
+00:01:22.666 --> 00:01:24.333 line:85%
+I think this is a good location.
+
+00:01:24.966 --> 00:01:26.433 line:85%
+Okay, so one issue now is
+
+00:01:26.433 --> 00:01:27.533 line:85%
+that you see the shadows here.
+
+00:01:27.799 --> 00:01:29.233 position:56% line:85%
+They might be a little bit too dark,
+
+00:01:29.233 --> 00:01:30.533 line:85%
+especially the shadow behind here.
+
+00:01:30.866 --> 00:01:31.733 line:85%
+And the way we often fix
+
+00:01:31.733 --> 00:01:33.400 line:85%
+that with is with a fill light.
+
+00:01:33.733 --> 00:01:35.133 position:56% line:85%
+But this doesn't need to be a light.
+
+00:01:35.433 --> 00:01:37.433 line:85%
+I like to use a plane instead.
+
+00:01:37.433 --> 00:01:39.166 position:59% line:85%
+So let's add a plane, scale this down.
+
+00:01:39.433 --> 00:01:41.200 line:85%
+And let's place this on the
+
+00:01:41.200 --> 00:01:42.366 line:85%
+side of the sphere like this.
+
+00:01:42.833 --> 00:01:43.533 line:85%
+And of course, we don't
+
+00:01:43.533 --> 00:01:44.333 line:85%
+want to see this plane.
+
+00:01:44.333 --> 00:01:45.766 line:85%
+So go into object properties
+
+00:01:45.766 --> 00:01:47.333 line:85%
+and scroll down to visibility
+
+00:01:47.766 --> 00:01:51.033 line:85%
+and disable the camera and shadow.
+
+00:01:51.433 --> 00:01:52.066 line:85%
+So now we basically
+
+00:01:52.066 --> 00:01:53.566 line:85%
+have a invisible plane here
+
+00:01:53.633 --> 00:01:56.066 position:64% line:85%
+that reflects this light onto the sphere.
+
+00:01:56.500 --> 00:01:59.099 position:64% line:85%
+And what this does is that it softens out
+
+00:01:59.099 --> 00:02:00.166 line:85%
+this shadow a little bit.
+
+00:02:00.166 --> 00:02:01.066 line:85%
+So if you hide this plane
+
+00:02:01.066 --> 00:02:02.366 line:85%
+now, we'll see it's very dark.
+
+00:02:02.633 --> 00:02:04.633 position:63% line:85%
+And if we unhide it, we will see that we
+
+00:02:04.633 --> 00:02:07.066 line:85%
+have a nice soft shadow here.
+
+00:02:07.366 --> 00:02:08.033 line:85%
+And if you see here, we
+
+00:02:08.033 --> 00:02:09.266 line:85%
+have an ugly line here.
+
+00:02:09.533 --> 00:02:10.333 line:85%
+So to fix this, let's
+
+00:02:10.333 --> 00:02:11.366 line:85%
+just move it up a little bit.
+
+00:02:11.733 --> 00:02:12.266 line:85%
+I think this is good.
+
+00:02:12.566 --> 00:02:13.533 line:85%
+And for the last light,
+
+00:02:13.533 --> 00:02:15.133 line:85%
+let's add a backlight.
+
+00:02:15.133 --> 00:02:16.733 position:63% line:85%
+And that is exactly what it sounds like.
+
+00:02:16.733 --> 00:02:18.300 line:85%
+It's a light we put behind the
+
+00:02:18.300 --> 00:02:20.233 line:85%
+object to add some backlight.
+
+00:02:20.566 --> 00:02:21.833 position:59% line:85%
+And of course, we don't want this ugly
+
+00:02:21.833 --> 00:02:23.033 line:85%
+light on the floor here.
+
+00:02:23.133 --> 00:02:24.900 line:85%
+So to fix this, go into object
+
+00:02:24.900 --> 00:02:26.766 line:85%
+properties, scroll down to shading.
+
+00:02:27.166 --> 00:02:28.933 line:85%
+Under light linking, press new.
+
+00:02:29.300 --> 00:02:30.233 line:85%
+And let's drag the floor
+
+00:02:30.233 --> 00:02:32.033 line:85%
+object into the light leaking here
+
+00:02:32.166 --> 00:02:33.433 line:85%
+and disable this check mark.
+
+00:02:33.833 --> 00:02:35.666 position:61% line:85%
+Now it will not light up the floor, but
+
+00:02:35.666 --> 00:02:36.866 line:85%
+it will light up the sphere.
+
+00:02:37.266 --> 00:02:38.333 line:85%
+And the point of the backlight is
+
+00:02:38.333 --> 00:02:39.800 line:85%
+basically to add a nice
+
+00:02:39.800 --> 00:02:41.800 line:85%
+rim light around the subject.
+
+00:02:43.966 --> 00:02:44.633 line:85%
+And if you're enjoying the
+
+00:02:44.633 --> 00:02:45.733 line:85%
+video, make sure to subscribe.
+
+00:02:45.933 --> 00:02:47.199 line:85%
+And if you have a suggestion for a
+
+00:02:47.199 --> 00:02:48.699 position:58% line:85%
+tutorial, make sure to comment below.
+
+00:02:49.099 --> 00:02:50.599 position:56% line:85%
+I read every single comment and your
+
+00:02:50.599 --> 00:02:51.733 line:85%
+suggestions are amazing.
+
+00:02:51.766 --> 00:02:52.933 line:85%
+So thanks for that.
+
+00:02:54.000 --> 00:02:54.833 line:85%
+All right. On with the video.
+
+00:02:55.199 --> 00:02:56.800 line:85%
+All right. So we just lit a sphere.
+
+00:02:56.800 --> 00:02:58.033 position:58% line:85%
+So what do you think the next one is?
+
+00:02:58.033 --> 00:02:59.166 line:85%
+And it's a default cube.
+
+00:02:59.166 --> 00:02:59.800 line:85%
+So of course, we have
+
+00:02:59.800 --> 00:03:00.599 line:85%
+to delete this later.
+
+00:03:00.900 --> 00:03:02.533 line:85%
+So let's just put a cube in here.
+
+00:03:02.933 --> 00:03:03.966 line:85%
+Now let's add a light and
+
+00:03:03.966 --> 00:03:05.366 line:85%
+you might spot some problems.
+
+00:03:05.366 --> 00:03:06.033 line:85%
+Problem is that the
+
+00:03:06.033 --> 00:03:07.366 line:85%
+edges are way too sharp
+
+00:03:07.533 --> 00:03:08.633 line:85%
+and the surfaces are
+
+00:03:08.633 --> 00:03:09.933 line:85%
+way too flat and boring.
+
+00:03:10.500 --> 00:03:11.266 line:85%
+And a way to improve
+
+00:03:11.266 --> 00:03:12.800 line:85%
+this is to add some bevels.
+
+00:03:12.800 --> 00:03:14.566 position:61% line:85%
+And we have two ways of improving this.
+
+00:03:14.866 --> 00:03:16.466 position:56% line:85%
+The one way is to do it in material.
+
+00:03:16.766 --> 00:03:18.099 line:85%
+So let's add a new material.
+
+00:03:18.266 --> 00:03:19.300 line:85%
+Let's also make it metallic
+
+00:03:19.300 --> 00:03:20.633 line:85%
+because then it's easier to see.
+
+00:03:20.666 --> 00:03:22.099 position:58% line:85%
+Turn the roughness down a little bit.
+
+00:03:22.433 --> 00:03:23.833 line:85%
+And let's add a bevel node.
+
+00:03:24.166 --> 00:03:25.866 position:64% line:85%
+And when we connect this into the normal,
+
+00:03:25.866 --> 00:03:27.433 position:59% line:85%
+you will see that the edges soften up,
+
+00:03:27.433 --> 00:03:29.033 position:59% line:85%
+but it's kind of too strong right now.
+
+00:03:29.300 --> 00:03:31.466 position:59% line:85%
+So let's turn the radius down to 0.02.
+
+00:03:32.033 --> 00:03:32.699 line:85%
+Think that's nice.
+
+00:03:33.066 --> 00:03:34.333 line:85%
+And already, if we now try
+
+00:03:34.333 --> 00:03:35.166 line:85%
+to move the light around,
+
+00:03:35.466 --> 00:03:37.033 line:85%
+we get some nice edges here.
+
+00:03:37.333 --> 00:03:38.300 line:85%
+And that already makes the
+
+00:03:38.300 --> 00:03:39.233 line:85%
+cube look more realistic.
+
+00:03:39.666 --> 00:03:40.666 line:85%
+But there are some issues.
+
+00:03:40.666 --> 00:03:41.966 line:85%
+If we zoom in, we will
+
+00:03:41.966 --> 00:03:43.266 line:85%
+still see the original edge
+
+00:03:43.266 --> 00:03:44.866 position:58% line:85%
+because this is only happening in the
+
+00:03:44.866 --> 00:03:46.233 line:85%
+shader, not in the mesh itself.
+
+00:03:46.566 --> 00:03:48.466 line:85%
+So the best way to add bevels is of
+
+00:03:48.466 --> 00:03:49.599 line:85%
+course, do it manually.
+
+00:03:49.866 --> 00:03:51.133 line:85%
+So let's remove this bevel
+
+00:03:51.133 --> 00:03:52.466 line:85%
+shader and go into modifiers.
+
+00:03:52.966 --> 00:03:55.166 line:85%
+And let's add a bevel modifier.
+
+00:03:55.433 --> 00:03:56.233 line:85%
+Let's do five segments
+
+00:03:56.233 --> 00:03:58.833 line:85%
+and let's make it 0.03.
+
+00:03:59.433 --> 00:04:00.466 line:85%
+So now our bevels are
+
+00:04:00.466 --> 00:04:01.333 line:85%
+much higher quality.
+
+00:04:01.599 --> 00:04:02.066 line:85%
+And you can see it
+
+00:04:02.066 --> 00:04:03.133 line:85%
+already looks more realistic.
+
+00:04:03.500 --> 00:04:04.500 position:56% line:85%
+All right, let's move on to actually
+
+00:04:04.500 --> 00:04:05.500 line:85%
+lighting a real product.
+
+00:04:05.933 --> 00:04:06.666 line:85%
+And of course, if you
+
+00:04:06.666 --> 00:04:07.466 line:85%
+want this blender file,
+
+00:04:07.533 --> 00:04:08.633 line:85%
+go to my Patreon and
+
+00:04:08.633 --> 00:04:09.900 line:85%
+you can get it over there.
+
+00:04:09.900 --> 00:04:11.466 position:63% line:85%
+There you will also get all the assets I
+
+00:04:11.466 --> 00:04:12.233 line:85%
+used in this tutorial.
+
+00:04:12.800 --> 00:04:13.933 position:59% line:85%
+All right, so let's start with a three
+
+00:04:13.933 --> 00:04:15.066 line:85%
+point lighting on this one.
+
+00:04:15.333 --> 00:04:17.333 line:85%
+So as before, add a key light.
+
+00:04:17.366 --> 00:04:19.433 line:85%
+You can also make this a
+
+00:04:19.433 --> 00:04:20.633 line:85%
+bit stronger, maybe 25.
+
+00:04:20.966 --> 00:04:21.766 line:85%
+And when we have a nice
+
+00:04:21.766 --> 00:04:23.033 line:85%
+key light, let's add a fill.
+
+00:04:23.300 --> 00:04:24.633 line:85%
+So add a plane like before.
+
+00:04:25.133 --> 00:04:27.100 line:85%
+Let's place this in front
+
+00:04:27.100 --> 00:04:28.733 line:85%
+of the object like this.
+
+00:04:29.033 --> 00:04:30.333 line:85%
+Let's also go into object
+
+00:04:30.333 --> 00:04:31.699 line:85%
+properties and go into visibility,
+
+00:04:31.933 --> 00:04:33.066 line:85%
+turn off camera and
+
+00:04:33.066 --> 00:04:34.133 line:85%
+shadow so it's invisible.
+
+00:04:34.466 --> 00:04:36.033 position:64% line:85%
+Now we have softened up the shadows here.
+
+00:04:36.300 --> 00:04:37.966 line:85%
+And let's also make the backlight.
+
+00:04:38.199 --> 00:04:39.166 line:85%
+So let's duplicate this
+
+00:04:39.166 --> 00:04:40.766 line:85%
+and let's rotate it around.
+
+00:04:41.033 --> 00:04:42.600 position:64% line:85%
+And I like to move the light around until
+
+00:04:42.600 --> 00:04:43.866 line:85%
+I find the perfect spot.
+
+00:04:44.133 --> 00:04:45.133 line:85%
+For example, here, if
+
+00:04:45.133 --> 00:04:46.133 line:85%
+you look at the top here,
+
+00:04:46.166 --> 00:04:48.366 position:64% line:85%
+I don't want it to be flat and all white.
+
+00:04:48.766 --> 00:04:49.266 line:85%
+So if you move it
+
+00:04:49.266 --> 00:04:50.833 line:85%
+slightly more, rotate it,
+
+00:04:50.833 --> 00:04:52.733 position:58% line:85%
+we can get a nice gradient like this.
+
+00:04:53.133 --> 00:04:54.066 line:85%
+And I think this looks nice.
+
+00:04:54.366 --> 00:04:54.866 line:85%
+Of course, we don't
+
+00:04:54.866 --> 00:04:55.933 line:85%
+want it to be bright here.
+
+00:04:55.933 --> 00:04:56.933 line:85%
+So like before, let's go
+
+00:04:56.933 --> 00:04:57.899 line:85%
+into object properties.
+
+00:04:58.233 --> 00:04:59.466 line:85%
+On light linking, click new.
+
+00:04:59.766 --> 00:05:01.233 position:61% line:85%
+And let's drag the floor into the light
+
+00:05:01.233 --> 00:05:02.966 line:85%
+linking and disable the check mark.
+
+00:05:03.433 --> 00:05:04.133 line:85%
+And I think we can make
+
+00:05:04.133 --> 00:05:05.066 line:85%
+this a little bit weaker.
+
+00:05:05.066 --> 00:05:06.133 line:85%
+So let's do five.
+
+00:05:08.100 --> 00:05:09.800 position:64% line:85%
+So imagine you're making a teaser and you
+
+00:05:09.800 --> 00:05:10.966 position:59% line:85%
+don't want to show the entire product.
+
+00:05:11.266 --> 00:05:13.333 position:64% line:85%
+Then I like to only work with backlights.
+
+00:05:13.366 --> 00:05:15.133 line:85%
+So let's add a light and
+
+00:05:15.133 --> 00:05:17.399 line:85%
+let's put it behind the product.
+
+00:05:17.733 --> 00:05:19.733 position:61% line:85%
+And again, let's also add a light group
+
+00:05:19.733 --> 00:05:20.666 line:85%
+and drag the floor
+
+00:05:20.666 --> 00:05:21.933 line:85%
+into it and disable it.
+
+00:05:21.966 --> 00:05:24.033 line:85%
+So it doesn't light up the floor.
+
+00:05:24.433 --> 00:05:25.766 line:85%
+And I think this looks nice.
+
+00:05:25.766 --> 00:05:27.266 line:85%
+We can also duplicate
+
+00:05:27.266 --> 00:05:29.300 line:85%
+this light with shift D
+
+00:05:29.433 --> 00:05:31.399 position:59% line:85%
+and then rotate one to the other side.
+
+00:05:31.699 --> 00:05:33.333 position:59% line:85%
+Make sure it's more or less symmetric.
+
+00:05:33.633 --> 00:05:34.500 line:85%
+And now we have a pretty
+
+00:05:34.500 --> 00:05:35.899 line:85%
+cool teaser for a product.
+
+00:05:36.133 --> 00:05:36.899 line:85%
+Alright, for this one, we're
+
+00:05:36.899 --> 00:05:38.233 line:85%
+lighting it for e-commerce,
+
+00:05:38.233 --> 00:05:39.066 line:85%
+which is basically
+
+00:05:39.066 --> 00:05:40.666 line:85%
+product images for websites.
+
+00:05:40.800 --> 00:05:41.833 line:85%
+And they often have a
+
+00:05:41.833 --> 00:05:42.800 line:85%
+completely white background.
+
+00:05:43.033 --> 00:05:44.600 line:85%
+So let's try to light it like that.
+
+00:05:44.866 --> 00:05:47.699 position:56% line:85%
+So add a light and let's move it up.
+
+00:05:47.699 --> 00:05:50.366 position:64% line:85%
+Let's make this larger and pretty strong.
+
+00:05:50.699 --> 00:05:51.333 line:85%
+I think that looks nice.
+
+00:05:51.766 --> 00:05:53.533 line:85%
+And I also like to duplicate it.
+
+00:05:53.833 --> 00:05:55.233 line:85%
+So shift D to duplicate it.
+
+00:05:55.233 --> 00:05:56.399 line:85%
+And for the second one,
+
+00:05:56.399 --> 00:05:57.266 line:85%
+let's make it really small.
+
+00:05:57.566 --> 00:05:58.733 line:85%
+And let's make this weaker.
+
+00:05:59.300 --> 00:06:00.366 line:85%
+This is just to add a
+
+00:06:00.366 --> 00:06:01.966 line:85%
+nice specular like this.
+
+00:06:01.966 --> 00:06:03.666 position:61% line:85%
+Because if you just have a large light,
+
+00:06:03.866 --> 00:06:04.800 line:85%
+we won't get any
+
+00:06:04.800 --> 00:06:06.233 line:85%
+reflections because it's too large.
+
+00:06:06.533 --> 00:06:07.766 position:61% line:85%
+If you have a small one, it's easier to
+
+00:06:07.766 --> 00:06:08.633 line:85%
+see the reflections.
+
+00:06:09.033 --> 00:06:09.666 line:85%
+And we also want to
+
+00:06:09.666 --> 00:06:10.766 line:85%
+make our background white.
+
+00:06:11.100 --> 00:06:12.933 position:63% line:85%
+So let's disable render preview for now.
+
+00:06:13.033 --> 00:06:14.033 line:85%
+Let's take the floor,
+
+00:06:14.433 --> 00:06:15.366 line:85%
+make it much smaller.
+
+00:06:15.600 --> 00:06:16.166 line:85%
+I think this is good.
+
+00:06:16.566 --> 00:06:18.633 position:63% line:85%
+And go into edit mode, select this edge.
+
+00:06:18.966 --> 00:06:20.333 line:85%
+Let's extrude it up with E.
+
+00:06:20.666 --> 00:06:21.833 line:85%
+Let's select this edge
+
+00:06:21.833 --> 00:06:24.133 line:85%
+here and Ctrl B to bevel it.
+
+00:06:24.133 --> 00:06:24.899 line:85%
+Let's bevel it like
+
+00:06:24.899 --> 00:06:26.533 line:85%
+this, scroll up to add detail
+
+00:06:26.800 --> 00:06:28.800 position:59% line:85%
+and also make sure it's shaded smooth.
+
+00:06:29.066 --> 00:06:31.566 position:63% line:85%
+And that it covers the entire area here.
+
+00:06:31.566 --> 00:06:33.133 line:85%
+And if you go into render mode now,
+
+00:06:33.133 --> 00:06:34.133 line:85%
+we have a white background,
+
+00:06:34.133 --> 00:06:35.466 line:85%
+but we want to make it a bit wider.
+
+00:06:35.766 --> 00:06:39.166 position:63% line:85%
+So let's also pop this light and make it
+
+00:06:39.166 --> 00:06:39.766 line:85%
+a little bit smaller
+
+00:06:40.000 --> 00:06:41.066 line:85%
+and put it behind.
+
+00:06:41.433 --> 00:06:42.766 line:85%
+So if you click render now,
+
+00:06:42.866 --> 00:06:43.633 line:85%
+we have a product
+
+00:06:43.633 --> 00:06:45.233 line:85%
+nicely lit for e-commerce.
+
+00:06:45.666 --> 00:06:46.866 line:85%
+And it's a little bit dark still,
+
+00:06:46.866 --> 00:06:48.266 position:61% line:85%
+so we can make this, I think, stronger.
+
+00:06:48.666 --> 00:06:49.533 line:85%
+And I think that looks nice.
+
+00:06:50.133 --> 00:06:50.466 line:85%
+All right.
+
+00:06:50.466 --> 00:06:51.566 line:85%
+So for the next one,
+
+00:06:51.566 --> 00:06:52.733 line:85%
+we're lighting glass.
+
+00:06:52.966 --> 00:06:54.766 position:63% line:85%
+And glass is often pretty hard to light.
+
+00:06:55.166 --> 00:06:56.033 line:85%
+Imagine you have a simple
+
+00:06:56.033 --> 00:06:57.166 line:85%
+lighting setup like this.
+
+00:06:57.166 --> 00:06:57.966 line:85%
+Then you want to show the
+
+00:06:57.966 --> 00:06:58.933 line:85%
+glass a little bit more.
+
+00:06:58.933 --> 00:07:00.133 line:85%
+So let's try lighting
+
+00:07:00.133 --> 00:07:01.433 line:85%
+it up, add an air light.
+
+00:07:01.866 --> 00:07:02.966 line:85%
+Let's put it behind the glass.
+
+00:07:02.966 --> 00:07:03.800 line:85%
+And you'll probably see
+
+00:07:03.800 --> 00:07:04.800 line:85%
+that it looks kind of ugly
+
+00:07:04.800 --> 00:07:06.333 line:85%
+because it's completely white
+
+00:07:06.466 --> 00:07:08.766 position:61% line:85%
+and this edge is just completely sharp,
+
+00:07:08.766 --> 00:07:09.800 line:85%
+which doesn't really look nice.
+
+00:07:10.133 --> 00:07:11.533 position:59% line:85%
+So to fix this, go into the air light,
+
+00:07:11.766 --> 00:07:13.666 position:58% line:85%
+go into the shaders, click use nodes,
+
+00:07:14.100 --> 00:07:15.600 line:85%
+and let's add a gradient.
+
+00:07:16.233 --> 00:07:17.266 line:85%
+And let's add this one,
+
+00:07:17.266 --> 00:07:18.699 line:85%
+which we call elliptical sharper.
+
+00:07:19.166 --> 00:07:20.466 position:56% line:85%
+And you can make gradients like this
+
+00:07:20.466 --> 00:07:22.366 line:85%
+yourself in blender nodes.
+
+00:07:22.366 --> 00:07:23.500 line:85%
+But to keep it simple,
+
+00:07:23.500 --> 00:07:24.733 line:85%
+I made them as textures.
+
+00:07:25.000 --> 00:07:26.399 position:58% line:85%
+You can also get them in the Patreon.
+
+00:07:26.899 --> 00:07:27.933 line:85%
+So let's connect this
+
+00:07:27.933 --> 00:07:29.699 line:85%
+into the emission color.
+
+00:07:30.033 --> 00:07:31.233 line:85%
+And now let's move this
+
+00:07:31.233 --> 00:07:32.933 line:85%
+light behind the glass.
+
+00:07:33.366 --> 00:07:34.666 line:85%
+Let's rotate it down a little bit,
+
+00:07:34.666 --> 00:07:36.300 line:85%
+maybe take it a bit closer.
+
+00:07:36.500 --> 00:07:37.533 line:85%
+And the light already
+
+00:07:37.533 --> 00:07:38.699 line:85%
+looks much, much better.
+
+00:07:39.233 --> 00:07:40.133 line:85%
+Of course, this isn't
+
+00:07:40.133 --> 00:07:40.766 line:85%
+physically accurate,
+
+00:07:41.033 --> 00:07:42.033 line:85%
+but it works really
+
+00:07:42.033 --> 00:07:43.033 line:85%
+well to make the glass
+
+00:07:43.033 --> 00:07:44.766 line:85%
+just look nicer and smoother.
+
+00:07:45.166 --> 00:07:45.633 line:85%
+You can also change
+
+00:07:45.633 --> 00:07:46.300 line:85%
+the color of the light
+
+00:07:46.300 --> 00:07:47.866 line:85%
+to make it a bit more interesting.
+
+00:07:48.899 --> 00:07:50.166 line:85%
+All right, so for next one, we're
+
+00:07:50.166 --> 00:07:51.933 line:85%
+lighting a metallic object.
+
+00:07:52.133 --> 00:07:53.199 line:85%
+With metallic, it's very
+
+00:07:53.199 --> 00:07:55.333 line:85%
+similar to how we lit our glass.
+
+00:07:55.666 --> 00:07:57.000 line:85%
+So let's add a area light.
+
+00:07:57.366 --> 00:07:58.133 line:85%
+And we have the same
+
+00:07:58.133 --> 00:07:59.600 line:85%
+problem that it looks very ugly
+
+00:07:59.600 --> 00:08:02.033 position:56% line:85%
+because the edges here are so sharp,
+
+00:08:02.266 --> 00:08:03.933 position:61% line:85%
+even when we put it in front like this.
+
+00:08:03.933 --> 00:08:06.266 position:63% line:85%
+So we have to go into the shader editor,
+
+00:08:06.500 --> 00:08:07.800 line:85%
+click use nodes on the
+
+00:08:07.800 --> 00:08:09.366 line:85%
+light, add our gradient.
+
+00:08:12.000 --> 00:08:13.266 line:85%
+And connect it into color.
+
+00:08:13.766 --> 00:08:14.666 line:85%
+And now we already have
+
+00:08:14.666 --> 00:08:16.366 line:85%
+much nicer looking light.
+
+00:08:16.666 --> 00:08:17.666 line:85%
+So I also like to
+
+00:08:17.666 --> 00:08:19.833 line:85%
+scale it up in the Z axis,
+
+00:08:19.833 --> 00:08:21.566 position:63% line:85%
+make it really tall, a little bit wider,
+
+00:08:21.766 --> 00:08:22.933 line:85%
+and also make it stronger.
+
+00:08:23.399 --> 00:08:25.533 line:85%
+And let's put two lights in the
+
+00:08:25.533 --> 00:08:26.833 line:85%
+background on each side.
+
+00:08:27.199 --> 00:08:28.466 line:85%
+And let's put two lights
+
+00:08:28.466 --> 00:08:29.566 line:85%
+in the front like this,
+
+00:08:29.866 --> 00:08:30.566 line:85%
+because we don't want
+
+00:08:30.566 --> 00:08:32.000 line:85%
+too much black areas
+
+00:08:32.166 --> 00:08:34.433 line:85%
+on our metal bottle like this.
+
+00:08:34.666 --> 00:08:35.766 line:85%
+And now we have lit a
+
+00:08:35.766 --> 00:08:37.166 line:85%
+pretty nice metallic object.
+
+00:08:37.533 --> 00:08:39.566 position:64% line:85%
+You can also use HRIs to add some detail.
+
+00:08:39.766 --> 00:08:41.666 line:85%
+But I try to use HRIs sparingly
+
+00:08:41.666 --> 00:08:42.666 line:85%
+because you don't have full
+
+00:08:42.666 --> 00:08:43.733 line:85%
+control over the lighting.
+
+00:08:44.333 --> 00:08:45.033 line:85%
+And with products, you
+
+00:08:45.033 --> 00:08:46.299 line:85%
+often want to have full control.
+
+00:08:46.966 --> 00:08:47.833 line:85%
+And for last one is
+
+00:08:47.833 --> 00:08:49.533 line:85%
+when to use a sunlight.
+
+00:08:50.033 --> 00:08:50.633 line:85%
+Sometimes you have a
+
+00:08:50.633 --> 00:08:52.733 line:85%
+product with very flat colors
+
+00:08:52.866 --> 00:08:54.166 line:85%
+and matte surface.
+
+00:08:54.633 --> 00:08:55.033 line:85%
+And in these
+
+00:08:55.033 --> 00:08:56.066 line:85%
+situations, you can't really play
+
+00:08:56.066 --> 00:08:56.766 line:85%
+with the reflections
+
+00:08:56.766 --> 00:08:58.100 line:85%
+and make it look nice.
+
+00:08:58.466 --> 00:08:59.866 line:85%
+And I often like to use sunlight.
+
+00:09:00.266 --> 00:09:02.166 line:85%
+So let's add a sunlight here.
+
+00:09:02.533 --> 00:09:03.633 line:85%
+Let's rotate it like this.
+
+00:09:04.133 --> 00:09:04.733 line:85%
+And we're already
+
+00:09:04.733 --> 00:09:06.466 line:85%
+getting a nice light here.
+
+00:09:06.466 --> 00:09:08.066 line:85%
+So a sunlight is often
+
+00:09:08.066 --> 00:09:09.766 line:85%
+used if you want hard shadows,
+
+00:09:09.933 --> 00:09:11.766 line:85%
+which often work well with products
+
+00:09:11.766 --> 00:09:14.366 line:85%
+that have a very strong flat color.
+
+00:09:14.733 --> 00:09:15.633 line:85%
+You will often see it in
+
+00:09:15.633 --> 00:09:16.933 line:85%
+like summertime commercials
+
+00:09:17.133 --> 00:09:19.133 position:63% line:85%
+like for sunscreen and things like that.
+
+00:09:19.466 --> 00:09:20.333 line:85%
+And you can also soften
+
+00:09:20.333 --> 00:09:21.066 line:85%
+the shadows if you want
+
+00:09:21.200 --> 00:09:22.433 line:85%
+by increasing the angle
+
+00:09:22.433 --> 00:09:24.133 line:85%
+on the sunlight like this.
+
+00:09:24.466 --> 00:09:25.166 line:85%
+And for this to add
+
+00:09:25.166 --> 00:09:26.399 line:85%
+some more visual interest,
+
+00:09:26.399 --> 00:09:28.033 line:85%
+I like to add some gobos,
+
+00:09:28.299 --> 00:09:30.500 position:59% line:85%
+which is texture for the light itself.
+
+00:09:31.033 --> 00:09:32.799 line:85%
+So let's first add a spotlight.
+
+00:09:33.299 --> 00:09:34.633 line:85%
+Let's make sure it's
+
+00:09:34.633 --> 00:09:36.466 line:85%
+lighting up this scene nicely
+
+00:09:36.799 --> 00:09:38.333 line:85%
+and let's increase it.
+
+00:09:38.333 --> 00:09:39.100 line:85%
+We probably have to
+
+00:09:39.100 --> 00:09:40.966 line:85%
+increase the spot size.
+
+00:09:41.366 --> 00:09:41.866 line:85%
+That looks good.
+
+00:09:42.266 --> 00:09:42.933 line:85%
+And now make sure the
+
+00:09:42.933 --> 00:09:44.066 line:85%
+spotlight is selected,
+
+00:09:44.066 --> 00:09:45.966 position:63% line:85%
+going to use nodes and let's add a gobo.
+
+00:09:46.333 --> 00:09:48.000 line:85%
+So a gobo might look like
+
+00:09:48.000 --> 00:09:50.766 line:85%
+this or this or this or this,
+
+00:09:50.766 --> 00:09:51.600 line:85%
+depending on what
+
+00:09:51.600 --> 00:09:52.299 line:85%
+you're going to use it for.
+
+00:09:52.600 --> 00:09:54.299 position:56% line:85%
+It basically applies this image as a
+
+00:09:54.299 --> 00:09:55.299 line:85%
+texture for the light.
+
+00:09:55.666 --> 00:09:56.633 line:85%
+So let's choose this one.
+
+00:09:56.899 --> 00:09:57.733 line:85%
+And all of this is in
+
+00:09:57.733 --> 00:09:58.433 line:85%
+the Patreon, of course.
+
+00:09:58.799 --> 00:09:59.833 line:85%
+Drag it into the shade
+
+00:09:59.833 --> 00:10:01.233 line:85%
+editor, connect it to color.
+
+00:10:01.700 --> 00:10:03.533 position:59% line:85%
+The shadows are a bit sharp right now.
+
+00:10:03.933 --> 00:10:05.366 line:85%
+So let's go into the light settings
+
+00:10:05.600 --> 00:10:07.066 line:85%
+and let's increase the radius
+
+00:10:07.066 --> 00:10:09.200 line:85%
+slightly like this, I think.
+
+00:10:09.533 --> 00:10:10.566 line:85%
+And then just position the shadows
+
+00:10:10.566 --> 00:10:11.899 line:85%
+exactly how you want it to look.
+
+00:10:12.166 --> 00:10:13.166 line:85%
+All right, that's about it.
+
+00:10:13.299 --> 00:10:13.866 line:85%
+Thank you for watching
+
+00:10:13.866 --> 00:10:14.899 line:85%
+and see you in the next one.
+
+00:10:15.066 --> 00:10:16.166 position:56% line:85%
+You made it to the end of the video.
+
+00:10:16.166 --> 00:10:17.600 position:63% line:85%
+That means you're dedicated to learning.
+
+00:10:17.833 --> 00:10:18.433 line:85%
+And if you want to take
+
+00:10:18.433 --> 00:10:19.433 line:85%
+your blender skills seriously
+
+00:10:19.533 --> 00:10:20.433 line:85%
+or you just need
+
+00:10:20.433 --> 00:10:21.333 line:85%
+something to stay committed,
+
+00:10:21.566 --> 00:10:22.366 line:85%
+I just launched a
+
+00:10:22.366 --> 00:10:23.866 line:85%
+Patreon and at the third tier,
+
+00:10:23.866 --> 00:10:24.899 line:85%
+you can send me your blend file
+
+00:10:24.899 --> 00:10:26.566 line:85%
+and I will record a personal video
+
+00:10:26.566 --> 00:10:27.533 line:85%
+giving feedback on your
+
+00:10:27.533 --> 00:10:28.966 line:85%
+project every single month.
+
+00:10:28.966 --> 00:10:29.566 line:85%
+Link in the description.
+
+00:10:29.899 --> 00:10:30.033 line:85%
+All right.
+
+00:10:30.100 --> 00:10:30.833 line:85%
+Thanks for watching
+
+00:10:30.833 --> 00:10:31.766 line:85%
+and see you next time.
+

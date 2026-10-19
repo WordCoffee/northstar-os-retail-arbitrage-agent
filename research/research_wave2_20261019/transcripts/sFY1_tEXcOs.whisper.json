@@ -1,0 +1,1518 @@
+{
+ "id": "sFY1_tEXcOs",
+ "title": "How to design a creative portfolio | resources, personal branding, tips & tricks",
+ "channel": "edgykatrina",
+ "url": "https://www.youtube.com/watch?v=sFY1_tEXcOs",
+ "query": "packaging design portfolio",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 875.9,
+ "chars": 16408,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.16,
+   "text": "Portfolios can give you a really good chance to showcase your work and your personality at a really quick glance."
+  },
+  {
+   "start": 5.16,
+   "end": 8.24,
+   "text": "The right one might even land you your dream job or your dream project,"
+  },
+  {
+   "start": 8.24,
+   "end": 12.0,
+   "text": "but just the thought of creating a portfolio can be really scary and overwhelming,"
+  },
+  {
+   "start": 12.0,
+   "end": 15.0,
+   "text": "so I am here to break it down into actionable steps."
+  },
+  {
+   "start": 21.76,
+   "end": 24.64,
+   "text": "Step one is deciding what your portfolio will be about."
+  },
+  {
+   "start": 24.64,
+   "end": 26.64,
+   "text": "The first question you have to ask yourself is,"
+  },
+  {
+   "start": 26.64,
+   "end": 28.94,
+   "text": "what type of work should I put in my portfolio?"
+  },
+  {
+   "start": 28.94,
+   "end": 31.1,
+   "text": "Well, you have to make the work that you want."
+  },
+  {
+   "start": 31.1,
+   "end": 33.9,
+   "text": "If you want to attract illustration jobs, make illustrations."
+  },
+  {
+   "start": 33.9,
+   "end": 36.7,
+   "text": "You can get really specific about the kind of work that you're looking for."
+  },
+  {
+   "start": 36.7,
+   "end": 39.9,
+   "text": "For example, if you're interested in editorial illustrations,"
+  },
+  {
+   "start": 39.9,
+   "end": 42.94,
+   "text": "find other artists who have created editorial illustrations that you like."
+  },
+  {
+   "start": 42.94,
+   "end": 45.34,
+   "text": "Study their portfolios, reach out to them,"
+  },
+  {
+   "start": 45.34,
+   "end": 49.1,
+   "text": "and start creating illustrations that you can imagine in an editorial piece."
+  },
+  {
+   "start": 49.1,
+   "end": 51.66,
+   "text": "For several years now, I've wanted to make a book cover,"
+  },
+  {
+   "start": 51.66,
+   "end": 56.3,
+   "text": "so I've made a lot of concept book covers over the years just to prove that I can do it."
+  },
+  {
+   "start": 56.3,
+   "end": 58.78,
+   "text": "And eventually, I did actually design a book cover."
+  },
+  {
+   "start": 58.78,
+   "end": 62.06,
+   "text": "I also designed a book cover this year, but it won't come out until next year,"
+  },
+  {
+   "start": 62.06,
+   "end": 63.82,
+   "text": "so I'm slowly getting there."
+  },
+  {
+   "start": 65.66,
+   "end": 68.06,
+   "text": "If you don't fully know the answer to this question yet,"
+  },
+  {
+   "start": 68.06,
+   "end": 69.82,
+   "text": "just start trying a little bit of everything."
+  },
+  {
+   "start": 69.82,
+   "end": 73.58,
+   "text": "Web design, logo design, brand design, motion design."
+  },
+  {
+   "start": 73.58,
+   "end": 76.46,
+   "text": "There are a lot of sites full of inspiration to browse through,"
+  },
+  {
+   "start": 76.46,
+   "end": 79.66,
+   "text": "like Arena, Cosmos, and Pinterest."
+  },
+  {
+   "start": 79.66,
+   "end": 83.18,
+   "text": "Take the time to explore what you like and get real about what you want to pursue."
+  },
+  {
+   "start": 83.18,
+   "end": 85.02,
+   "text": "What I'm about to say is really important,"
+  },
+  {
+   "start": 85.02,
+   "end": 86.54,
+   "text": "and it might seem very obvious,"
+  },
+  {
+   "start": 86.54,
+   "end": 89.74,
+   "text": "but do not display work that you actually have no interest in doing."
+  },
+  {
+   "start": 89.74,
+   "end": 92.38,
+   "text": "When I was in college, I would put up any design work I made"
+  },
+  {
+   "start": 92.38,
+   "end": 93.82,
+   "text": "because I thought it showed range."
+  },
+  {
+   "start": 93.82,
+   "end": 96.06,
+   "text": "I had a bunch of UI, UX work in my portfolio,"
+  },
+  {
+   "start": 96.06,
+   "end": 99.58,
+   "text": "and people started asking me for help with their websites and their apps,"
+  },
+  {
+   "start": 99.58,
+   "end": 103.34,
+   "text": "and I realized I actually didn't really want to do that as a main service."
+  },
+  {
+   "start": 103.34,
+   "end": 105.18,
+   "text": "I also like wasn't very good at it,"
+  },
+  {
+   "start": 105.18,
+   "end": 107.18,
+   "text": "and I think it didn't show range,"
+  },
+  {
+   "start": 107.18,
+   "end": 109.26,
+   "text": "it just showed that I was bad at something."
+  },
+  {
+   "start": 109.26,
+   "end": 111.58,
+   "text": "So figure out the work that you want to showcase,"
+  },
+  {
+   "start": 111.58,
+   "end": 113.9,
+   "text": "figure out the work that you actually want to do in real life,"
+  },
+  {
+   "start": 113.9,
+   "end": 115.42,
+   "text": "and that is a great starting point."
+  },
+  {
+   "start": 115.42,
+   "end": 117.82,
+   "text": "Once you figure that out, it's time to move on to step two,"
+  },
+  {
+   "start": 117.82,
+   "end": 120.06,
+   "text": "which is choosing what makes the cut."
+  },
+  {
+   "start": 120.06,
+   "end": 123.18,
+   "text": "I think it's kind of hard because as a designer or as a creative,"
+  },
+  {
+   "start": 123.18,
+   "end": 124.94,
+   "text": "all of your projects are kind of your babies,"
+  },
+  {
+   "start": 124.94,
+   "end": 127.82,
+   "text": "so it's hard to pick which ones will end up in your portfolio"
+  },
+  {
+   "start": 127.82,
+   "end": 131.02,
+   "text": "and which ones don't because you're a little bit more biased about it."
+  },
+  {
+   "start": 131.02,
+   "end": 133.18,
+   "text": "My portfolio focuses on brand design,"
+  },
+  {
+   "start": 133.18,
+   "end": 136.62,
+   "text": "so I have all of my work separated into projects on the homepage,"
+  },
+  {
+   "start": 136.62,
+   "end": 139.9,
+   "text": "but how you lay out your portfolio depends on what kind of designs you do."
+  },
+  {
+   "start": 139.9,
+   "end": 142.46,
+   "text": "Some designers like to make different tabs for different work,"
+  },
+  {
+   "start": 142.46,
+   "end": 145.58,
+   "text": "like merch design, brand design, illustrations."
+  },
+  {
+   "start": 145.58,
+   "end": 149.82,
+   "text": "The most important advice that I can give when it comes to picking projects to feature"
+  },
+  {
+   "start": 149.82,
+   "end": 152.06,
+   "text": "is just quality over quantity."
+  },
+  {
+   "start": 152.06,
+   "end": 154.06,
+   "text": "Attention spans are really short."
+  },
+  {
+   "start": 154.06,
+   "end": 156.7,
+   "text": "Realistically, that recruiter or that art director"
+  },
+  {
+   "start": 156.7,
+   "end": 160.14,
+   "text": "or that potential client is only going to spend like 30 seconds"
+  },
+  {
+   "start": 160.14,
+   "end": 163.58,
+   "text": "on your portfolio tops before deciding whether they want to look further"
+  },
+  {
+   "start": 163.58,
+   "end": 165.1,
+   "text": "or just move away completely."
+  },
+  {
+   "start": 165.1,
+   "end": 167.26,
+   "text": "So make sure your best work is on top,"
+  },
+  {
+   "start": 167.26,
+   "end": 170.7,
+   "text": "and make sure your website is easy to navigate and click through."
+  },
+  {
+   "start": 170.7,
+   "end": 173.34,
+   "text": "I personally really don't like the parallax swirling effect"
+  },
+  {
+   "start": 173.34,
+   "end": 176.62,
+   "text": "because I think it makes websites hard to scroll through."
+  },
+  {
+   "start": 176.62,
+   "end": 179.34,
+   "text": "I'm also just not a fan of effects that make it"
+  },
+  {
+   "start": 179.34,
+   "end": 181.5,
+   "text": "so that your website takes forever to load."
+  },
+  {
+   "start": 181.5,
+   "end": 185.02,
+   "text": "I want to be able to go through each project easily"
+  },
+  {
+   "start": 185.02,
+   "end": 186.46,
+   "text": "and get to where I want to go."
+  },
+  {
+   "start": 186.46,
+   "end": 187.66,
+   "text": "Personally, when you're starting out,"
+  },
+  {
+   "start": 187.66,
+   "end": 190.94,
+   "text": "I think the sweet spot is anywhere between four to six projects,"
+  },
+  {
+   "start": 190.94,
+   "end": 192.7,
+   "text": "but if you have less than that,"
+  },
+  {
+   "start": 192.7,
+   "end": 196.22,
+   "text": "don't feel the need to fill up the space with mediocre ones."
+  },
+  {
+   "start": 196.22,
+   "end": 201.02,
+   "text": "I'd rather have two really good projects in my portfolio than four okay ones."
+  },
+  {
+   "start": 201.02,
+   "end": 205.82,
+   "text": "I also want to take a moment to say that concept projects are 100% okay in my opinion,"
+  },
+  {
+   "start": 205.82,
+   "end": 208.14,
+   "text": "especially if you're a student or you're just starting out."
+  },
+  {
+   "start": 208.14,
+   "end": 210.86,
+   "text": "Do not freak out if you don't have any real life work yet."
+  },
+  {
+   "start": 210.86,
+   "end": 213.98,
+   "text": "There are many personal projects that I'm really proud of"
+  },
+  {
+   "start": 213.98,
+   "end": 216.14,
+   "text": "that have landed me real life design work."
+  },
+  {
+   "start": 216.14,
+   "end": 217.5,
+   "text": "I think good is good,"
+  },
+  {
+   "start": 217.5,
+   "end": 221.5,
+   "text": "and if you are really passionate about something you made, it'll show."
+  },
+  {
+   "start": 221.5,
+   "end": 223.82,
+   "text": "Step three is designing the actual site,"
+  },
+  {
+   "start": 223.82,
+   "end": 225.82,
+   "text": "and for this, I'm going to get really serious."
+  },
+  {
+   "start": 225.82,
+   "end": 227.98,
+   "text": "Now there are many different sites to get you started."
+  },
+  {
+   "start": 227.98,
+   "end": 229.5,
+   "text": "Squarespace is really well known"
+  },
+  {
+   "start": 229.5,
+   "end": 231.9,
+   "text": "because it's pretty easy to use without knowing how to code"
+  },
+  {
+   "start": 231.9,
+   "end": 233.98,
+   "text": "and has a lot of customizable templates."
+  },
+  {
+   "start": 233.98,
+   "end": 235.66,
+   "text": "There are also platforms like Framer."
+  },
+  {
+   "start": 235.66,
+   "end": 239.34,
+   "text": "I really like it because it allows for very high level customization"
+  },
+  {
+   "start": 239.34,
+   "end": 242.06,
+   "text": "and personalization if you really want to get creative with it."
+  },
+  {
+   "start": 242.06,
+   "end": 244.86,
+   "text": "I also really enjoy ReadyMag for the same reason."
+  },
+  {
+   "start": 244.86,
+   "end": 246.86,
+   "text": "You get a lot of customization,"
+  },
+  {
+   "start": 246.86,
+   "end": 248.86,
+   "text": "especially if you love animations."
+  },
+  {
+   "start": 248.86,
+   "end": 251.66,
+   "text": "The website examples I've seen on ReadyMag are super fun."
+  },
+  {
+   "start": 251.66,
+   "end": 253.82,
+   "text": "I've been using Squarespace for several years."
+  },
+  {
+   "start": 253.82,
+   "end": 256.14,
+   "text": "My website has a pretty clean and simple layout."
+  },
+  {
+   "start": 256.14,
+   "end": 258.3,
+   "text": "However, I also recently put in a play tab"
+  },
+  {
+   "start": 258.3,
+   "end": 261.02,
+   "text": "where I can put some of my posters and fun personal work,"
+  },
+  {
+   "start": 261.02,
+   "end": 263.74,
+   "text": "and that page is a template that I used in Framer."
+  },
+  {
+   "start": 263.74,
+   "end": 266.3,
+   "text": "I've worked on websites on each of these platforms,"
+  },
+  {
+   "start": 266.3,
+   "end": 268.3,
+   "text": "and I think they all do a really decent job."
+  },
+  {
+   "start": 268.3,
+   "end": 271.42,
+   "text": "It's just really dependent on what you are personally looking for."
+  },
+  {
+   "start": 271.42,
+   "end": 275.26,
+   "text": "I also want to take a moment to talk about the importance of personal branding,"
+  },
+  {
+   "start": 275.26,
+   "end": 277.18,
+   "text": "because once you understand your own brand,"
+  },
+  {
+   "start": 277.18,
+   "end": 279.98,
+   "text": "you'll have a much better idea of how you want your portfolio to look."
+  },
+  {
+   "start": 279.98,
+   "end": 283.9,
+   "text": "Personal branding can be as simple or as intricate as you want it to be,"
+  },
+  {
+   "start": 283.9,
+   "end": 287.34,
+   "text": "but it should be a reflection of you and the type of vibe that you want to give off,"
+  },
+  {
+   "start": 287.34,
+   "end": 290.06,
+   "text": "whether it's clean and sleek or fun and playful."
+  },
+  {
+   "start": 290.06,
+   "end": 295.9,
+   "text": "So pick out the one to two, maybe three fonts that you'll be using for your header"
+  },
+  {
+   "start": 295.9,
+   "end": 300.94,
+   "text": "and your body copy, and maybe pick out a color or two that you want to use on your website."
+  },
+  {
+   "start": 300.94,
+   "end": 303.66,
+   "text": "I personally went for a very clean website layout"
+  },
+  {
+   "start": 303.66,
+   "end": 307.34,
+   "text": "because I think my work already has a lot of loud colors and fonts,"
+  },
+  {
+   "start": 307.34,
+   "end": 311.1,
+   "text": "so my actual site is pretty simple because I didn't want the layout competing with the"
+  },
+  {
+   "start": 311.1,
+   "end": 315.1,
+   "text": "brand projects, but many designers do a really beautiful job of mixing the two."
+  },
+  {
+   "start": 315.1,
+   "end": 318.3,
+   "text": "I know there's a lot of free will here, but don't overthink it."
+  },
+  {
+   "start": 318.3,
+   "end": 322.7,
+   "text": "Ideally, you're going to keep evolving and your personal branding will change right there with you."
+  },
+  {
+   "start": 322.7,
+   "end": 325.98,
+   "text": "Nothing is really permanent, you can always change your portfolio if you don't like it,"
+  },
+  {
+   "start": 325.98,
+   "end": 327.98,
+   "text": "so just go with what feels right to you."
+  },
+  {
+   "start": 327.98,
+   "end": 331.98,
+   "text": "If you really don't know where to start, I love looking at other sites for inspiration."
+  },
+  {
+   "start": 331.98,
+   "end": 334.06,
+   "text": "I used to go on Typhool for all the time."
+  },
+  {
+   "start": 334.06,
+   "end": 337.98,
+   "text": "That doesn't exclusively feature portfolios, it just features cool websites."
+  },
+  {
+   "start": 337.98,
+   "end": 340.54,
+   "text": "I also really like the site, ILoveCreatives.com."
+  },
+  {
+   "start": 340.54,
+   "end": 346.54,
+   "text": "They have a site of the week section and you can also filter by portfolio or whatever else."
+  },
+  {
+   "start": 346.54,
+   "end": 351.98,
+   "text": "Framer, Redimag, Squarespace also have sample portfolios on their websites as well."
+  },
+  {
+   "start": 351.98,
+   "end": 354.54,
+   "text": "Step 4 is actually building out each project."
+  },
+  {
+   "start": 354.54,
+   "end": 357.26,
+   "text": "When you are explaining your projects, keep it straightforward."
+  },
+  {
+   "start": 357.26,
+   "end": 359.66,
+   "text": "Answer the basic questions, like what was the brief?"
+  },
+  {
+   "start": 359.66,
+   "end": 360.78,
+   "text": "What is this company?"
+  },
+  {
+   "start": 360.78,
+   "end": 361.82,
+   "text": "What was the goal?"
+  },
+  {
+   "start": 361.82,
+   "end": 362.7,
+   "text": "What did you do?"
+  },
+  {
+   "start": 362.7,
+   "end": 364.06,
+   "text": "Who did you do it with?"
+  },
+  {
+   "start": 364.06,
+   "end": 367.98,
+   "text": "Credit anyone else that you might have worked with, like photographers or other designers."
+  },
+  {
+   "start": 367.98,
+   "end": 371.34,
+   "text": "You don't want to be super misleading and take credit for the entire thing."
+  },
+  {
+   "start": 371.34,
+   "end": 377.02,
+   "text": "When it comes to presenting your work and especially for brand designers or merch designers"
+  },
+  {
+   "start": 377.02,
+   "end": 380.62,
+   "text": "or anything a little bit more physical, mockups are a game changer."
+  },
+  {
+   "start": 380.62,
+   "end": 383.26,
+   "text": "I think it really helps to present your work professionally."
+  },
+  {
+   "start": 383.26,
+   "end": 387.5,
+   "text": "I really love looking at how studios and agencies present their case studies"
+  },
+  {
+   "start": 387.5,
+   "end": 390.06,
+   "text": "because they kind of do it across different mediums."
+  },
+  {
+   "start": 390.06,
+   "end": 393.58,
+   "text": "They have mockups for web design, merch design, poster design."
+  },
+  {
+   "start": 393.58,
+   "end": 396.46,
+   "text": "I feel like when you use different mockups and different environments,"
+  },
+  {
+   "start": 396.46,
+   "end": 399.1,
+   "text": "it really brings the work and the idea to life."
+  },
+  {
+   "start": 399.1,
+   "end": 401.34,
+   "text": "I actually have a tutorial on how to use mockups,"
+  },
+  {
+   "start": 401.34,
+   "end": 403.74,
+   "text": "so if you're interested in that, you should check that out."
+  },
+  {
+   "start": 403.74,
+   "end": 407.02,
+   "text": "Mockups are especially great if you don't have a photography studio"
+  },
+  {
+   "start": 407.02,
+   "end": 410.3,
+   "text": "or like professional photos for your brand."
+  },
+  {
+   "start": 410.3,
+   "end": 413.66,
+   "text": "But if you do have professional photos for your brand, that's amazing."
+  },
+  {
+   "start": 413.66,
+   "end": 414.86,
+   "text": "You should definitely include those."
+  },
+  {
+   "start": 414.86,
+   "end": 419.02,
+   "text": "I actually updated my portfolio really recently just to prepare for this video."
+  },
+  {
+   "start": 419.02,
+   "end": 421.26,
+   "text": "And I finally made a case study on Lentiful,"
+  },
+  {
+   "start": 421.26,
+   "end": 423.5,
+   "text": "one of my projects that I did a few years back."
+  },
+  {
+   "start": 423.5,
+   "end": 425.5,
+   "text": "So let's do a quick breakdown of that"
+  },
+  {
+   "start": 425.5,
+   "end": 427.42,
+   "text": "just so that you can really understand what I mean."
+  },
+  {
+   "start": 429.26,
+   "end": 431.82,
+   "text": "As you can see, we have my Figma file."
+  },
+  {
+   "start": 431.82,
+   "end": 434.94,
+   "text": "I have built out everything in my portfolio here."
+  },
+  {
+   "start": 434.94,
+   "end": 437.1,
+   "text": "This is the real file that I used."
+  },
+  {
+   "start": 437.1,
+   "end": 438.46,
+   "text": "It's very messy."
+  },
+  {
+   "start": 438.46,
+   "end": 440.06,
+   "text": "I really like using Figma for this,"
+  },
+  {
+   "start": 440.06,
+   "end": 443.5,
+   "text": "mainly because it doesn't really crash when I have all of these"
+  },
+  {
+   "start": 443.5,
+   "end": 446.78,
+   "text": "super high resolution photos that take up a lot of space."
+  },
+  {
+   "start": 446.78,
+   "end": 450.7,
+   "text": "It's really easy to move things around and change up the dimensions."
+  },
+  {
+   "start": 450.7,
+   "end": 453.74,
+   "text": "And it's nice having everything in one place"
+  },
+  {
+   "start": 453.74,
+   "end": 458.62,
+   "text": "where I can kind of just like look at it and see how everything's looking in relation to each other."
+  },
+  {
+   "start": 458.62,
+   "end": 464.06,
+   "text": "I've used Figma to build out my portfolio for years and I really like it and it's free."
+  },
+  {
+   "start": 464.06,
+   "end": 465.5,
+   "text": "So try it out."
+  },
+  {
+   "start": 465.5,
+   "end": 466.94,
+   "text": "Let's walk you through Lentiful."
+  },
+  {
+   "start": 466.94,
+   "end": 468.46,
+   "text": "It is an instant lentil brand."
+  },
+  {
+   "start": 468.46,
+   "end": 471.42,
+   "text": "It is made by one of my favorite clients in the world, Ben Bacon."
+  },
+  {
+   "start": 471.42,
+   "end": 474.78,
+   "text": "I did the branding, the packaging, and the website design,"
+  },
+  {
+   "start": 474.78,
+   "end": 476.86,
+   "text": "as well as like social media design."
+  },
+  {
+   "start": 476.86,
+   "end": 478.86,
+   "text": "So this was a pretty meaty project."
+  },
+  {
+   "start": 478.86,
+   "end": 482.3,
+   "text": "I also did this literally years ago and I'm updating it now."
+  },
+  {
+   "start": 482.3,
+   "end": 484.62,
+   "text": "So don't feel bad if your portfolio is outdated."
+  },
+  {
+   "start": 484.62,
+   "end": 488.06,
+   "text": "Just take this video as a sign that it's time to update it."
+  },
+  {
+   "start": 488.06,
+   "end": 490.54,
+   "text": "So I am starting with this shot."
+  },
+  {
+   "start": 490.54,
+   "end": 493.82,
+   "text": "It is one of my favorite shots that came out of this brand."
+  },
+  {
+   "start": 493.82,
+   "end": 495.74,
+   "text": "This photo was taken by Garner Studios."
+  },
+  {
+   "start": 495.74,
+   "end": 499.42,
+   "text": "They're a photography studio based in Brooklyn and I found them on Instagram."
+  },
+  {
+   "start": 499.42,
+   "end": 502.46,
+   "text": "And Lentiful has worked with them for several shoots."
+  },
+  {
+   "start": 502.46,
+   "end": 505.34,
+   "text": "This happens to be just like a flat lay studio shot,"
+  },
+  {
+   "start": 505.34,
+   "end": 509.26,
+   "text": "but again, you don't need a fancy photography studio to do it for you."
+  },
+  {
+   "start": 509.26,
+   "end": 512.94,
+   "text": "I think a really strong mock-up or a super compelling graphic"
+  },
+  {
+   "start": 512.94,
+   "end": 515.26,
+   "text": "can be a really good hero image as well."
+  },
+  {
+   "start": 515.26,
+   "end": 518.38,
+   "text": "Anytime I do a brand, I love creating a set of posters,"
+  },
+  {
+   "start": 518.38,
+   "end": 521.82,
+   "text": "usually like eight to 10 posters just so that it can showcase"
+  },
+  {
+   "start": 521.82,
+   "end": 525.66,
+   "text": "how the font and the colors and the product,"
+  },
+  {
+   "start": 525.66,
+   "end": 530.06,
+   "text": "packaging or photography all plays together to create one brand identity."
+  },
+  {
+   "start": 530.06,
+   "end": 534.06,
+   "text": "So I made a bunch of posters, put them in this little poster mock-up."
+  },
+  {
+   "start": 534.06,
+   "end": 538.94,
+   "text": "You can see the little wrinkles and it's like a wheat paste poster campaign."
+  },
+  {
+   "start": 539.26,
+   "end": 540.54,
+   "text": "I think it really brings it to life."
+  },
+  {
+   "start": 540.54,
+   "end": 542.22,
+   "text": "As you'll see going down this case study,"
+  },
+  {
+   "start": 542.22,
+   "end": 545.66,
+   "text": "I've just kind of taken the liberty of mixing in photography"
+  },
+  {
+   "start": 545.66,
+   "end": 548.14,
+   "text": "and mock-ups and graphics constantly."
+  },
+  {
+   "start": 548.14,
+   "end": 551.9,
+   "text": "So here's just another studio shot of the four hero products."
+  },
+  {
+   "start": 551.9,
+   "end": 555.5,
+   "text": "Then we have a little mock-up of like Instagram stories."
+  },
+  {
+   "start": 555.5,
+   "end": 557.02,
+   "text": "I also drew these little guys."
+  },
+  {
+   "start": 557.02,
+   "end": 559.34,
+   "text": "So they're fun little illustrations to put in."
+  },
+  {
+   "start": 559.34,
+   "end": 562.86,
+   "text": "Lentiful really wanted to position itself as like a really quick,"
+  },
+  {
+   "start": 562.86,
+   "end": 568.7,
+   "text": "easy, healthy on the go lunch that you know people can have in between meetings during work days."
+  },
+  {
+   "start": 568.7,
+   "end": 572.86,
+   "text": "So I grabbed a bunch of photos from a photo shoot we did a couple years ago"
+  },
+  {
+   "start": 572.86,
+   "end": 574.7,
+   "text": "and they showcase that really well."
+  },
+  {
+   "start": 574.7,
+   "end": 576.38,
+   "text": "I also designed the website."
+  },
+  {
+   "start": 576.38,
+   "end": 579.98,
+   "text": "So this is like a product page that I did and you know,"
+  },
+  {
+   "start": 579.98,
+   "end": 582.86,
+   "text": "if I were to add onto this case study now,"
+  },
+  {
+   "start": 582.86,
+   "end": 588.06,
+   "text": "I would put this in a mock-up of a laptop or a monitor just to really bring it to life."
+  },
+  {
+   "start": 588.06,
+   "end": 588.62,
+   "text": "But you know what?"
+  },
+  {
+   "start": 588.62,
+   "end": 590.62,
+   "text": "This is good enough for me right now."
+  },
+  {
+   "start": 590.62,
+   "end": 591.9,
+   "text": "Again, more graphics."
+  },
+  {
+   "start": 591.9,
+   "end": 595.02,
+   "text": "I think this does a really good job of highlighting the illustrations"
+  },
+  {
+   "start": 595.02,
+   "end": 597.42,
+   "text": "that I did that go on the packaging"
+  },
+  {
+   "start": 597.42,
+   "end": 601.1,
+   "text": "and then just pairing it with some strong type that we use in the brand identity"
+  },
+  {
+   "start": 601.1,
+   "end": 603.18,
+   "text": "occasionally for like headers."
+  },
+  {
+   "start": 603.18,
+   "end": 607.34,
+   "text": "More social media mock-ups, more like example Instagram graphics."
+  },
+  {
+   "start": 607.34,
+   "end": 610.94,
+   "text": "I was on a social media retainer with Ben for a few years."
+  },
+  {
+   "start": 610.94,
+   "end": 612.46,
+   "text": "But honestly, even if I wasn't,"
+  },
+  {
+   "start": 612.46,
+   "end": 615.74,
+   "text": "I think I still would have done a mock-up like this just to show"
+  },
+  {
+   "start": 615.74,
+   "end": 619.82,
+   "text": "how the brand can expand beyond just the physical and into the digital."
+  },
+  {
+   "start": 619.82,
+   "end": 623.5,
+   "text": "Here I actually paired a product photo with nutrition facts."
+  },
+  {
+   "start": 623.5,
+   "end": 625.9,
+   "text": "Surprise surprise, more studio photos."
+  },
+  {
+   "start": 625.9,
+   "end": 629.02,
+   "text": "Another kind of nutrition product photographic."
+  },
+  {
+   "start": 629.02,
+   "end": 630.7,
+   "text": "And then yeah, you kind of get it."
+  },
+  {
+   "start": 630.7,
+   "end": 631.66,
+   "text": "You get the gist."
+  },
+  {
+   "start": 631.66,
+   "end": 635.5,
+   "text": "Some of these hands were actually my friends who happened to live in New York"
+  },
+  {
+   "start": 635.5,
+   "end": 637.26,
+   "text": "and they got to be a part of the photo shoot."
+  },
+  {
+   "start": 637.26,
+   "end": 639.98,
+   "text": "So that is something that I always take pleasure in."
+  },
+  {
+   "start": 639.98,
+   "end": 642.3,
+   "text": "It's just like a little secret that no one knows about."
+  },
+  {
+   "start": 642.3,
+   "end": 646.3,
+   "text": "Here I included like a little sneak peek into the brand book that I designed"
+  },
+  {
+   "start": 646.3,
+   "end": 649.74,
+   "text": "and this kind of highlights all of the colors that we have,"
+  },
+  {
+   "start": 649.74,
+   "end": 654.14,
+   "text": "you know, used and added in this like ever-expanding universe that is lent to full."
+  },
+  {
+   "start": 654.14,
+   "end": 658.62,
+   "text": "And I think it showcases just how like bold and bright and vivid the brand is."
+  },
+  {
+   "start": 658.62,
+   "end": 662.3,
+   "text": "And then here we just have another good, good old hero image."
+  },
+  {
+   "start": 662.3,
+   "end": 668.86,
+   "text": "And I actually have some photos that I took when I saw lentiful and Whole Foods for the first time."
+  },
+  {
+   "start": 668.86,
+   "end": 671.18,
+   "text": "And I think that adds like a really personal touch."
+  },
+  {
+   "start": 671.18,
+   "end": 674.38,
+   "text": "So I might add that into Squarespace as well"
+  },
+  {
+   "start": 674.38,
+   "end": 677.18,
+   "text": "because it actually just shows lentiful and Whole Foods."
+  },
+  {
+   "start": 677.18,
+   "end": 680.3,
+   "text": "And I think that's a very like important part of its journey."
+  },
+  {
+   "start": 685.47,
+   "end": 690.43,
+   "text": "And I'm just grabbing a brand color just to use for the background of this slide"
+  },
+  {
+   "start": 690.43,
+   "end": 692.11,
+   "text": "just so everything feels cohesive."
+  },
+  {
+   "start": 692.11,
+   "end": 693.63,
+   "text": "Okay, we're in Squarespace."
+  },
+  {
+   "start": 693.63,
+   "end": 696.43,
+   "text": "This is kind of what my page looks like when I'm editing it."
+  },
+  {
+   "start": 696.43,
+   "end": 698.43,
+   "text": "As you can see, I've put the hero image here."
+  },
+  {
+   "start": 698.43,
+   "end": 703.07,
+   "text": "And then here I have like a little section that just explains what the project is,"
+  },
+  {
+   "start": 703.07,
+   "end": 707.15,
+   "text": "what services I did, what it's about and like what the goal was."
+  },
+  {
+   "start": 707.15,
+   "end": 709.87,
+   "text": "As far as like actually designing it, it's pretty easy."
+  },
+  {
+   "start": 709.87,
+   "end": 714.43,
+   "text": "You can just like put in sections of photos or text or whatever."
+  },
+  {
+   "start": 714.43,
+   "end": 718.99,
+   "text": "I'll literally add in that last slide that I talked about of just me and Whole Foods"
+  },
+  {
+   "start": 718.99,
+   "end": 721.39,
+   "text": "just to show you how easy it is here."
+  },
+  {
+   "start": 721.39,
+   "end": 722.27,
+   "text": "Upload file."
+  },
+  {
+   "start": 723.23,
+   "end": 724.59,
+   "text": "Now I'm uploading it."
+  },
+  {
+   "start": 724.59,
+   "end": 725.23,
+   "text": "Okay."
+  },
+  {
+   "start": 725.23,
+   "end": 726.27,
+   "text": "And there it is."
+  },
+  {
+   "start": 726.27,
+   "end": 729.39,
+   "text": "That is just my little last slide of me and Whole Foods."
+  },
+  {
+   "start": 729.39,
+   "end": 731.07,
+   "text": "And then I have a little credit section."
+  },
+  {
+   "start": 731.07,
+   "end": 734.51,
+   "text": "So I have the photography studio and then the models."
+  },
+  {
+   "start": 734.51,
+   "end": 737.47,
+   "text": "And yeah, pretty easy, pretty simple."
+  },
+  {
+   "start": 738.11,
+   "end": 738.51,
+   "text": "Save."
+  },
+  {
+   "start": 739.15,
+   "end": 740.83,
+   "text": "Yeah, this is pretty much what it looks like."
+  },
+  {
+   "start": 740.83,
+   "end": 745.31,
+   "text": "I have some that I have archived because there were too many projects on here"
+  },
+  {
+   "start": 745.31,
+   "end": 747.79,
+   "text": "and I feel like they were a little bit outdated."
+  },
+  {
+   "start": 747.79,
+   "end": 748.99,
+   "text": "And you know what?"
+  },
+  {
+   "start": 748.99,
+   "end": 752.83,
+   "text": "I could have taken the Squarespace integration, but I didn't because I wanted to talk about"
+  },
+  {
+   "start": 752.83,
+   "end": 753.95,
+   "text": "the other websites."
+  },
+  {
+   "start": 753.95,
+   "end": 754.99,
+   "text": "So you're welcome."
+  },
+  {
+   "start": 754.99,
+   "end": 756.99,
+   "text": "Anyway, that was my little breakdown."
+  },
+  {
+   "start": 756.99,
+   "end": 758.19,
+   "text": "I hope you enjoyed it."
+  },
+  {
+   "start": 758.19,
+   "end": 759.31,
+   "text": "Some bonus tips."
+  },
+  {
+   "start": 759.31,
+   "end": 761.71,
+   "text": "I think the about page is really important."
+  },
+  {
+   "start": 761.71,
+   "end": 764.51,
+   "text": "I think it's important to be able to get to know the person behind the work."
+  },
+  {
+   "start": 764.51,
+   "end": 768.03,
+   "text": "This is a chance to showcase more of your personality if you didn't do it"
+  },
+  {
+   "start": 768.03,
+   "end": 769.87,
+   "text": "through the rest of your website design."
+  },
+  {
+   "start": 769.87,
+   "end": 770.99,
+   "text": "What do you like to do?"
+  },
+  {
+   "start": 770.99,
+   "end": 772.03,
+   "text": "What interests you?"
+  },
+  {
+   "start": 772.03,
+   "end": 775.31,
+   "text": "People like to work with other people that they think they would get along with"
+  },
+  {
+   "start": 775.31,
+   "end": 777.15,
+   "text": "or feel like they know a little bit better."
+  },
+  {
+   "start": 777.15,
+   "end": 782.43,
+   "text": "So having a strong about page can make all the difference between a client choosing you and not."
+  },
+  {
+   "start": 782.43,
+   "end": 786.67,
+   "text": "I also have a little inquiry form set up so that it's easier for people to get in touch with me."
+  },
+  {
+   "start": 786.67,
+   "end": 790.43,
+   "text": "It also allows me to get some basic information about the project right away"
+  },
+  {
+   "start": 790.43,
+   "end": 794.11,
+   "text": "or potentially like field clients who might not be the right fit."
+  },
+  {
+   "start": 794.11,
+   "end": 796.67,
+   "text": "I recently put in that play tab I mentioned."
+  },
+  {
+   "start": 796.67,
+   "end": 800.43,
+   "text": "I think adding little fun touches or secret pages to your website"
+  },
+  {
+   "start": 800.43,
+   "end": 804.35,
+   "text": "could be a cool thing to do if you're a playful person like that"
+  },
+  {
+   "start": 804.35,
+   "end": 806.99,
+   "text": "but not necessary if you're like a little bit more serious."
+  },
+  {
+   "start": 806.99,
+   "end": 809.71,
+   "text": "I think it's very important to pay attention to the little details"
+  },
+  {
+   "start": 809.71,
+   "end": 813.55,
+   "text": "like the favicon, favicon, favicon."
+  },
+  {
+   "start": 813.55,
+   "end": 816.59,
+   "text": "It's basically that little icon that shows up next to your URL."
+  },
+  {
+   "start": 816.59,
+   "end": 819.63,
+   "text": "It could be as simple as like a certain color of a circle"
+  },
+  {
+   "start": 819.63,
+   "end": 822.11,
+   "text": "or it can be like a whole brand mark totally up to you."
+  },
+  {
+   "start": 823.07,
+   "end": 824.11,
+   "text": "I hope this helped."
+  },
+  {
+   "start": 824.11,
+   "end": 826.83,
+   "text": "Creating a portfolio can be really really daunting"
+  },
+  {
+   "start": 826.83,
+   "end": 830.27,
+   "text": "and I kind of wish I had this advice when I had first started building mine."
+  },
+  {
+   "start": 830.27,
+   "end": 833.23,
+   "text": "I've gone through several iterations of my portfolio since then"
+  },
+  {
+   "start": 833.23,
+   "end": 834.51,
+   "text": "and I know how hard it is."
+  },
+  {
+   "start": 834.51,
+   "end": 837.79,
+   "text": "Even right now my portfolio has been like this for the last few years"
+  },
+  {
+   "start": 837.79,
+   "end": 840.51,
+   "text": "and I'm a little bit sick of it even though I just updated it."
+  },
+  {
+   "start": 840.51,
+   "end": 844.27,
+   "text": "So I don't know maybe in a future video we'll switch it up and I'll redesign it."
+  },
+  {
+   "start": 844.27,
+   "end": 848.27,
+   "text": "Anyway we are our own worst critics so try not to overthink it."
+  },
+  {
+   "start": 848.27,
+   "end": 849.71,
+   "text": "Just start on it little by little."
+  },
+  {
+   "start": 849.71,
+   "end": 852.51,
+   "text": "It doesn't have to be like this huge thing that you do in one sitting."
+  },
+  {
+   "start": 852.51,
+   "end": 855.79,
+   "text": "You can just do like 20 minutes at a time whenever you have free time"
+  },
+  {
+   "start": 855.79,
+   "end": 859.87,
+   "text": "and the energy slowly but surely you will have a portfolio."
+  },
+  {
+   "start": 859.87,
+   "end": 861.07,
+   "text": "I believe in you."
+  },
+  {
+   "start": 861.07,
+   "end": 862.19,
+   "text": "You can do it."
+  },
+  {
+   "start": 862.19,
+   "end": 863.55,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 863.55,
+   "end": 864.67,
+   "text": "I'll talk to you soon."
+  },
+  {
+   "start": 864.67,
+   "end": 866.19,
+   "text": "Sending you a big hug."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:01:57.313510+00:00",
+ "seconds": 35.0
+}

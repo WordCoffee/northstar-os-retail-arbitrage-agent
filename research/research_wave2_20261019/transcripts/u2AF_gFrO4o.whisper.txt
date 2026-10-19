@@ -1,0 +1,277 @@
+You want to blend all these images together, it's simple.
+Just cut the images precisely, correct the lightness of each element to match the whole
+scene.
+Next let's correct the colors and saturation, bring this beautiful sun and of course we
+need to draw its lights and obviously the shadows.
+Then let's put this atmosphere effect to create depth and finally let's put the
+final effects and final color grading to match the whole scene.
+So without wasting any more time, let's dig into business.
+Hello guys, welcome to my channel, my name is Noor and this is Noor Art Channel.
+Alright, let me just quickly tell you what we're going to do in this video.
+We're going to create this visual out of all these images.
+So let's start with the idea itself.
+Basically, this is a shampoo product.
+We want to show that this is a natural product.
+So I wanted to immerse the product itself in some natural beautiful scene which will
+show the idea that this is a natural product.
+That's it.
+By the way guys, this is gonna be like a breakdown for me explaining how I did this
+visual but if you want a step-by-step tutorial for me explaining every tiny
+step you will find it in my ultimate course in the link in the description in
+addition to other visuals like these and I'm adding some lessons from time
+to time for you to practice it with me.
+You will find also all the stock images used or the brushes used, the PSD files,
+all the materials used to create these designs.
+The link is in the description and let's start with the design.
+So I start with this beautiful known time sky and the reason why I chose the known
+time is that at any visual if you are in the known time you will find that
+the colors of the elements are very saturated and bright.
+You can notice it here at the dark times you will find the elements
+desaturated and bluish it's dull and at the sunset time you will find the elements
+color shifted towards more yellowish or orangey but at the known time you will
+find that the elements are very bright and colorful and I wanted to put this
+effect to show the product which is the focal point the colors of the
+nature.
+Okay so I started by making the sky brighter by using curves I just
+brightened the mid tones and at the same time started to put like a bright spot
+here and I don't like the colors of the sky I want to shift them towards
+more cyanish colors that's why I used color balance so I shifted the
+colors towards more greenish somehow bluish cyanish colors not too yellowish
+orangey tones.
+Okay and then used hue saturation to desaturate it a little bit and next I
+started to darken this area.
+The next element I wanted to put these very far away atmospheric mountains.
+I don't like this part.
+I don't like it because it's visually imbalancing the image that's why I
+started to take a copy of the same image and then create a clipping mask and
+put it inside the image itself.
+Okay now as you can see the colors needs to be shifted towards more
+cyanish colors that's why I created color balance layer and added some
+cyan some greens and in the mid tones and the same thing into the shadows
+that's how I corrected the colors here is before it's more bluish and here
+is after more cyanish and it's already blended with the sky that's why I
+like to start with the sky at first because I want to reflect the
+lightness or the mode of the sky into each element later very nice.
+Next I put this lake part and the way I selected these edges is by a tree
+brush so using a brush and with creating a mask I just paint over the
+areas where I want to put the trees and removed it from where I don't want.
+Very nice.
+Now I want to correct the colors and the lightness of this part.
+So I started using the curves I opened up the shadows and I shifted the
+colors towards more yellowish hot colors.
+So I shifted the colors toward more reddish and more yellowish or greenish
+and somehow blueish and then painted with a very soft rounded
+so here's before here is after and next I used curves to make this area
+bright to separate it from the product which we will see later in the video.
+Next I don't like how this part looks because we want to create some
+atmosphere effect behind the trees to separate between the mountains and the
+trees.
+That's why I created this hazing effect layer.
+This is basically a solid color layer painting with a soft rounded
+brush like this.
+Just put this part.
+Okay.
+So let's see here's before and here's after now they are separated from each
+other.
+By the way don't worry about these parts because they will not be
+visible at the end.
+Okay.
+Next I started to put some light effects using this solid color layer
+with a screen blending mode.
+Just make it pop more.
+So at any visual I like to make three layers of depth.
+The background which is the mountains the mid ground which is the lake
+and these trees and the foreground which will be the main product and the
+trees.
+So I started by putting this ground into the foreground and let me show
+you the main picture.
+This is the main picture.
+I selected this area here using the grass brush as well.
+So let me show you.
+So this is the grass brush started to mask some parts like this.
+This is the easiest way I find to select like irregular shapes like
+grass clouds or whatever.
+So I started to duplicate this layer and put it to the left.
+This one to put it here and then started to take another copy and put it
+right here.
+Very nice.
+Now it's time to correct everything to match the whole scene.
+The colors, the saturation and the lightness.
+I started with the hue saturation because this green is very saturated.
+So I used hue saturation to shift its colors and to desaturate it a little
+bit.
+So I shifted the colors towards more yellowish and more orangey colors.
+And at the same time, I shifted the saturation towards more desaturated
+color.
+So here is before and here is after.
+And it's somehow contrasty and dark.
+So I started to make it brighter by opening up the shadows and the mid
+tones.
+So here's before, here is after.
+And next I started to darken these areas, the very close parts using curves as
+well.
+Next I brought this image of the trees.
+And the reason why I chose this image with this shape is that I want the
+composition to be like centralized around the product, which will be here.
+So I want something to frame the composition and it should be at
+the same time an interesting element.
+Next I started to open up the shadows.
+As you can see right now, the shadows here are very dark using curves.
+Just open up the shadows a little bit.
+And next started to shift the colors.
+These are very subtle adjustments.
+But believe me, guys, the tiny differences is that what makes your
+visual good at the end.
+Okay, very nice.
+The next element will be these trees at the left.
+And I started by making it dark and at the same time making the absolute
+darks a little bit brighter.
+So I opened up the shadows a little bit, as you can see right now.
+And at the same time, I darkened the whole image.
+Then I started to correct the colors.
+Of course, these colors needs to be shifted towards more yellowish a little
+bit.
+So I shifted the colors using color balance.
+I added some yellows and the shadows as well added some yellows.
+And I selected these trees using the same technique I used before with a grass
+brush.
+As you can see, this is a grass or a plant's brush.
+I just selected it.
+So let me show you here's before and here's after.
+Before and after.
+Next, I put this the product itself, which is the focal point.
+And then I started to put some elements to the right and to the left of the
+product to put it into the scene.
+Okay, so I put this tree to the left and these trees to the right and these
+to the left bunch of trees and bunch of layers to immerse the product into
+the environment.
+Okay.
+And then started to correct the colors, saturation, the lightness and everything
+at the same way.
+Okay.
+So let me show you an example in this part, starting with you saturation and
+curves and for this one, the same thing and the same thing for this one.
+The next element will be this tree truck.
+So this is the main image I used.
+And I liked how it looks because the lighting in the image itself is kind of
+soft and you can put the light later the way you want.
+Okay.
+That's why I chose this color and at the same time it has a good shape.
+Okay.
+So I started to cut this image and put it into separate parts.
+Here's the first part and here's the second part and then started to put
+some plants here and there using this image of the plants, this one and this
+one here.
+I didn't put any effects in this part yet because I wanted to explain it using
+the source of light, the main source of light in this visual will be this sun.
+So how did I create it?
+This sun is basically using this lens flare image and I put it right here
+using the screen blending mode and I reduced its opacity.
+Okay.
+So this was the main image and then started to reduce the opacity and put
+some hue saturation adjustments and changed the blending mode into screen.
+That's it.
+So because we have this source of light, the main source of light, this sun,
+we distribute the light according to this source of light.
+So here we have the light coming from the top left.
+We should have some lights here and these areas should be dark.
+The same thing for the tree truck here.
+Should we should have some lights and here as well.
+And here we should have some shadows.
+The same thing here, some lights here and some shadows over there.
+And the same thing for the product itself, some lights here.
+And if you want to know how to draw light and shadow precisely, I have a full
+video for this, you will find it in the link in the description.
+So we should have lights here, some shadows over there and some
+overall shadows right here.
+Okay.
+So let me show you how I did.
+So let's start with this left tree.
+I darken these areas and I find that it doesn't need a lot of adjustments
+actually, so I just darkened these edges and that's it.
+And at the same time, I felt like I want some thing here
+composition wise because this area looks like it's empty.
+So I put this plants image and started to correct its lightness and its color.
+Next, I started to paint light and shadow here in this tree.
+So I started to paint shadows over these areas and here some bright spots.
+You can see all these I've done using curves.
+So it's simple curves adjustments.
+Maybe sometimes I'm shifting the colors towards more reddish and some adding
+some yellow and some greens just to give it some warm touch.
+Very nice.
+And the same thing I've done into this grass part.
+Okay.
+So the sun should reflect some lights here into the grass and here.
+That's what I have done using curves as well.
+And at this time I shifted the colors into more yellowish and reddish colors.
+And at the same time, greenish before after or next, I started to paint
+light and shadow in this truck area.
+I'm doing every adjustment, all the adjustments using curves, as you can see.
+And then started to paint lightness, as you can see here.
+Here is the light painting.
+And here's the shadows.
+And for the shadows, I shifted its colors towards more reddish or a G tent
+because I don't like shadows to be like very dark without any color.
+I like to give it a color from the surrounding.
+So we have here a reddish dark shadows.
+As you can see, let me show you before and after.
+Now it's time to put all the adjustments for the product itself.
+So let's start by putting some very subtle shadows over here using curves
+and then started to paint the overall shadows of the product.
+Okay.
+So I painted this using the soft rounded brush and putting in mind
+the direction of the light.
+So we should have some shadows in these parts.
+And we want to put in consideration the form or the shape of the product.
+So this this part is rounded.
+Okay.
+So we we should have shadows up to this edge.
+We don't we don't want to have shadows here.
+Okay.
+The same thing here.
+We we put shadows in this area because of course the truck will cast some shadow.
+But we need the shadow shape to be like rounded like this.
+Because we want to put in consideration the form or the shape of the product itself.
+Okay.
+So this is the shadow layer.
+And I've done this using simple curves adjustment like this.
+And another one for the highlights.
+So let me show you.
+Here's before after basic painting of the light.
+But I didn't paint it over this area because it will not have light from the sun.
+Okay.
+That's all.
+And then I noticed that the product itself is a little bit dark.
+So I started to make it brighter and more yellowish color.
+I noticed that this area I don't like how it looks.
+So I I put this truck and started to correct its colors.
+This plant needs some adjustment.
+That's how I corrected its colors, lightness and it's basically the same process again and again.
+I guess you got the point.
+Okay.
+Next I wanted to create like a framing or focus effect onto the product itself.
+That's why I got this image of the plants to be in the close foreground.
+So I put this image here and corrected its color and lightness using hue saturation and using curves.
+And then I put Gaussian blur to make the effect of the lens, you know, in the camera.
+I put one here and another one to the right.
+Next I brought these birds because I want to put different colors, you know, some reddish, some orangey colors.
+That's the main reason it's composition wise and color wise choice.
+Okay.
+And at the same time, this adds to the story of the design.
+Then I started to desaturate them and color correct them a little bit.
+And one final thing I put final layer into multiply blending mode to create like shadow area here.
+This area should be a little bit darker.
+That's why I put this layer very subtle shadows.
+And finally started to put some glow effect and some lens flare effects.
+Some color grading using selective colors, adding some cyan.
+To the shadows because I've noticed that the shadows have a lot of threads shifted colors.
+So I went to the blacks, added some sayans to the neutrals shifted the colors towards sayans.
+And here is the final results.
+Here is before and after.
+And finally put the color contrast brightness, contrast adjustment layer to increase the overall contrast of the design.
+So yeah, this is the final result.
+So here is before blending and here is after.
+Alright guys, as mentioned, if you want the full length tutorial of this design fully narrated in English,
+you will find it in the link in the description along with all the stock images used, the PSD files and all the brushes used.
+Alright guys, thanks for watching and see you in next tutorials.
+Peace.

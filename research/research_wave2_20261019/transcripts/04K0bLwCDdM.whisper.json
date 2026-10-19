@@ -1,0 +1,1503 @@
+{
+ "id": "04K0bLwCDdM",
+ "title": "The Incredible Properties of Composite Materials",
+ "channel": "The Efficient Engineer",
+ "url": "https://www.youtube.com/watch?v=04K0bLwCDdM",
+ "query": "realistic product composite",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 1415.3,
+ "chars": 19863,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.72,
+   "text": "The development of composite materials over the last few decades has completely transformed"
+  },
+  {
+   "start": 5.72,
+   "end": 10.92,
+   "text": "how some of the most advanced engineering problems out there can be solved."
+  },
+  {
+   "start": 10.92,
+   "end": 15.04,
+   "text": "It's allowed the development of materials with unique thermal properties that can better"
+  },
+  {
+   "start": 15.04,
+   "end": 26.96,
+   "text": "handle the blistering temperatures of atmospheric reentry, for example, and has pushed the"
+  },
+  {
+   "start": 26.96,
+   "end": 31.0,
+   "text": "limits of jet engine design through the use of lightweight fan blades that have"
+  },
+  {
+   "start": 31.0,
+   "end": 35.72,
+   "text": "carefully tailored mechanical properties."
+  },
+  {
+   "start": 35.72,
+   "end": 40.0,
+   "text": "But what exactly are composite materials and what makes them so special?"
+  },
+  {
+   "start": 40.0,
+   "end": 41.92,
+   "text": "Let's find out."
+  },
+  {
+   "start": 41.92,
+   "end": 48.36,
+   "text": "A composite is really just any material made from two or more distinct constituent materials."
+  },
+  {
+   "start": 48.36,
+   "end": 50.36,
+   "text": "They can be found in nature."
+  },
+  {
+   "start": 50.36,
+   "end": 54.44,
+   "text": "Wood is just one example of a natural composite material."
+  },
+  {
+   "start": 54.44,
+   "end": 59.44,
+   "text": "But they can also be engineered, where different materials are carefully combined to develop"
+  },
+  {
+   "start": 59.44,
+   "end": 65.12,
+   "text": "all sorts of incredible and exotic composites that have mechanical, electrical, thermal,"
+  },
+  {
+   "start": 65.12,
+   "end": 72.56,
+   "text": "or even magnetic properties that have been tailored to suit a specific application."
+  },
+  {
+   "start": 72.56,
+   "end": 78.44,
+   "text": "In most composites, one material called the dispersed phase is contained within another, called"
+  },
+  {
+   "start": 78.44,
+   "end": 81.16,
+   "text": "the matrix phase."
+  },
+  {
+   "start": 81.16,
+   "end": 85.68,
+   "text": "The ability to carefully select each phase to optimize the properties of the material"
+  },
+  {
+   "start": 85.68,
+   "end": 91.04,
+   "text": "for a specific application is what makes composites so powerful."
+  },
+  {
+   "start": 91.04,
+   "end": 95.88,
+   "text": "The dispersed phase is usually what provides the desirable material properties, like high"
+  },
+  {
+   "start": 95.88,
+   "end": 101.92,
+   "text": "strength or improved ductility, and is usually either a ceramic or a metal."
+  },
+  {
+   "start": 101.92,
+   "end": 105.88,
+   "text": "Composites are often categorized based on the form of the dispersed material."
+  },
+  {
+   "start": 105.88,
+   "end": 110.8,
+   "text": "This is a particle reinforced composite, but they can also be fiber reinforced, either"
+  },
+  {
+   "start": 110.8,
+   "end": 115.65,
+   "text": "with short or with continuous fibers."
+  },
+  {
+   "start": 115.65,
+   "end": 120.57,
+   "text": "The matrix material is used to form a mechanical and chemical bond with the elements of"
+  },
+  {
+   "start": 120.57,
+   "end": 124.89,
+   "text": "the dispersed phase, and allows loads to be transferred between them."
+  },
+  {
+   "start": 124.89,
+   "end": 131.37,
+   "text": "It holds everything together, and it protects the dispersed phase from the environment."
+  },
+  {
+   "start": 131.37,
+   "end": 135.53,
+   "text": "Composites are also categorized based on the type of matrix material, which can be a"
+  },
+  {
+   "start": 135.53,
+   "end": 144.15,
+   "text": "polymer, a ceramic, or even a metal."
+  },
+  {
+   "start": 144.15,
+   "end": 149.95,
+   "text": "Probably the most widely used composite materials in engineering applications are the fiber-reinforced"
+  },
+  {
+   "start": 149.95,
+   "end": 152.55,
+   "text": "polymer matrix composites."
+  },
+  {
+   "start": 152.55,
+   "end": 160.87,
+   "text": "This category of composites includes glass-reinforced polymers, also called GRP, or fiberglass, and"
+  },
+  {
+   "start": 160.87,
+   "end": 167.22,
+   "text": "carbon fiber-reinforced polymers, or CFRP."
+  },
+  {
+   "start": 167.22,
+   "end": 172.1,
+   "text": "These composites usually have an epoxy matrix, which is a thermosetting polymer, and the"
+  },
+  {
+   "start": 172.1,
+   "end": 177.86,
+   "text": "dispersed material is glass or carbon fibers, which make up around 60% of the material"
+  },
+  {
+   "start": 177.86,
+   "end": 184.05,
+   "text": "by volume."
+  },
+  {
+   "start": 184.05,
+   "end": 188.69,
+   "text": "The most basic form of fiber reinforcement is unidirectional tape, which has all"
+  },
+  {
+   "start": 188.69,
+   "end": 196.15,
+   "text": "of the fibers running in the same direction."
+  },
+  {
+   "start": 196.15,
+   "end": 200.35,
+   "text": "The individual fibers are grouped together into bundles, which are held together with"
+  },
+  {
+   "start": 200.35,
+   "end": 203.95,
+   "text": "stitching or using a chemical binder."
+  },
+  {
+   "start": 203.95,
+   "end": 208.51,
+   "text": "In the case of carbon fibers, these bundles are called toes."
+  },
+  {
+   "start": 208.51,
+   "end": 220.27,
+   "text": "Each toe usually contains anywhere from 3,000 to 24,000 individual fibers."
+  },
+  {
+   "start": 220.27,
+   "end": 229.91,
+   "text": "A typical fiber is around 10 microns in diameter, which is 10 times thinner than a human hair."
+  },
+  {
+   "start": 229.91,
+   "end": 235.19,
+   "text": "Any fiber-reinforced material that has fibers all running in the same direction will be highly"
+  },
+  {
+   "start": 235.19,
+   "end": 236.87,
+   "text": "anisotropic."
+  },
+  {
+   "start": 236.87,
+   "end": 240.95,
+   "text": "Its material properties will be different in different directions."
+  },
+  {
+   "start": 240.95,
+   "end": 245.39,
+   "text": "If you apply a load along the axis of the fibers, the material will be stronger and"
+  },
+  {
+   "start": 245.39,
+   "end": 250.43,
+   "text": "stiffer than if you apply it perpendicular to the axis, because the load is taken"
+  },
+  {
+   "start": 250.43,
+   "end": 255.19,
+   "text": "by the stronger and stiffer fibers instead of by the matrix."
+  },
+  {
+   "start": 255.19,
+   "end": 256.99,
+   "text": "This can be a good thing."
+  },
+  {
+   "start": 256.99,
+   "end": 261.71,
+   "text": "If you know that your material will be loaded mainly in one direction, you can orient the"
+  },
+  {
+   "start": 261.71,
+   "end": 265.87,
+   "text": "fibers to make it very strong in that particular direction."
+  },
+  {
+   "start": 265.87,
+   "end": 271.27,
+   "text": "In pressure vessels, for example, fibers can be aligned mostly in the hoop direction,"
+  },
+  {
+   "start": 271.27,
+   "end": 276.63,
+   "text": "because the hoop stress is the largest stress when the vessel is pressurized."
+  },
+  {
+   "start": 276.63,
+   "end": 281.31,
+   "text": "In most cases, though, you need good strength and stiffness in several directions at the"
+  },
+  {
+   "start": 281.31,
+   "end": 282.59,
+   "text": "same time."
+  },
+  {
+   "start": 282.59,
+   "end": 286.79,
+   "text": "In the case of this pressure vessel, there will be axial stresses too."
+  },
+  {
+   "start": 286.79,
+   "end": 292.07,
+   "text": "So we'll also need some reinforcement in the axial direction, either with axial or helical"
+  },
+  {
+   "start": 292.07,
+   "end": 293.87,
+   "text": "fibers."
+  },
+  {
+   "start": 293.87,
+   "end": 299.39,
+   "text": "This is why components made from fiber-reinforced materials are built up by stacking multiple"
+  },
+  {
+   "start": 299.39,
+   "end": 302.79,
+   "text": "layers that have different fiber orientations."
+  },
+  {
+   "start": 302.79,
+   "end": 308.95,
+   "text": "Each layer is called a lamina, or a ply, and the stack is called the laminate."
+  },
+  {
+   "start": 308.95,
+   "end": 313.27,
+   "text": "In this laminate, the zero-degree layer provides strength and stiffness in the"
+  },
+  {
+   "start": 313.27,
+   "end": 315.07,
+   "text": "axial direction."
+  },
+  {
+   "start": 315.07,
+   "end": 319.43,
+   "text": "The 90-degree layer provides it in the transverse direction."
+  },
+  {
+   "start": 319.43,
+   "end": 330.07,
+   "text": "And the 45-degree layers provide it in the shear directions."
+  },
+  {
+   "start": 330.07,
+   "end": 334.39,
+   "text": "If enough layers are stacked with the correct orientations, the laminate can have very"
+  },
+  {
+   "start": 334.39,
+   "end": 338.39,
+   "text": "similar properties in all of the in-plane directions."
+  },
+  {
+   "start": 338.39,
+   "end": 347.29,
+   "text": "This is called a quasi-isotropic laminate."
+  },
+  {
+   "start": 347.29,
+   "end": 351.61,
+   "text": "Fibers can also be arranged in weave patterns, which have fibers running in two different"
+  },
+  {
+   "start": 351.61,
+   "end": 356.06,
+   "text": "directions."
+  },
+  {
+   "start": 356.06,
+   "end": 358.9,
+   "text": "There are hundreds of possible weave patterns."
+  },
+  {
+   "start": 358.9,
+   "end": 364.54,
+   "text": "This is a plain weave, but the twill weave pattern is also commonly used."
+  },
+  {
+   "start": 364.54,
+   "end": 367.66,
+   "text": "There are slight differences in how different patterns behave."
+  },
+  {
+   "start": 367.66,
+   "end": 373.9,
+   "text": "A twill weave is more flexible and will conform more easily to a curved surface, for example."
+  },
+  {
+   "start": 373.9,
+   "end": 378.74,
+   "text": "Weave patterns have good stiffness and strength along the two fiber axes, but they're weak"
+  },
+  {
+   "start": 378.74,
+   "end": 384.26,
+   "text": "at 45 degrees, so they should be layered in different orientations if quasi-isotropic"
+  },
+  {
+   "start": 384.26,
+   "end": 387.26,
+   "text": "properties are needed."
+  },
+  {
+   "start": 387.26,
+   "end": 391.66,
+   "text": "Since the laminate structure has been defined, the different fiber layers need to be assembled"
+  },
+  {
+   "start": 391.66,
+   "end": 397.7,
+   "text": "and combined with the polymer matrix to create the final composite part."
+  },
+  {
+   "start": 397.7,
+   "end": 402.98,
+   "text": "One way of doing this is the wet-layup method, where fiber layers are built up in a mold,"
+  },
+  {
+   "start": 402.98,
+   "end": 418.03,
+   "text": "and the resin is applied to each layer using a roller or a brush."
+  },
+  {
+   "start": 418.03,
+   "end": 422.67,
+   "text": "The number of plies and ply orientation are carefully selected to achieve the required"
+  },
+  {
+   "start": 422.67,
+   "end": 426.46,
+   "text": "properties."
+  },
+  {
+   "start": 426.46,
+   "end": 431.18,
+   "text": "An alternative method involves the use of pre-preg, tapes or sheets of fibers that have"
+  },
+  {
+   "start": 431.18,
+   "end": 436.86,
+   "text": "been pre-impregnated in a partially cured epoxy resin, meaning they can be applied to the mold"
+  },
+  {
+   "start": 436.86,
+   "end": 443.15,
+   "text": "without needing any additional resin."
+  },
+  {
+   "start": 443.15,
+   "end": 447.63,
+   "text": "The laminate can then be vacuum-backed to ensure it conforms well with the mold and"
+  },
+  {
+   "start": 447.63,
+   "end": 451.39,
+   "text": "to remove any voids, and it will then need to cure."
+  },
+  {
+   "start": 451.39,
+   "end": 456.59,
+   "text": "The polymer matrix is usually a thermoset, a polymer that irreversibly hardens when"
+  },
+  {
+   "start": 456.59,
+   "end": 468.96,
+   "text": "treated, in which case curing is done at elevated temperatures in an oven."
+  },
+  {
+   "start": 468.96,
+   "end": 474.04,
+   "text": "Filament winding is another manufacturing method where a machine is used to wind unidirectional"
+  },
+  {
+   "start": 474.04,
+   "end": 481.71,
+   "text": "tape that has been impregnated with resin, around a mandrel."
+  },
+  {
+   "start": 481.71,
+   "end": 486.23,
+   "text": "Once complete, the mandrel can either be left in place or removed, and the structure"
+  },
+  {
+   "start": 486.23,
+   "end": 489.86,
+   "text": "is cured."
+  },
+  {
+   "start": 489.86,
+   "end": 494.14,
+   "text": "Other methods like injection molding can be used for composites reinforced with short"
+  },
+  {
+   "start": 494.14,
+   "end": 498.98,
+   "text": "fibers, since the orientation of the fibers can be arbitrary."
+  },
+  {
+   "start": 498.98,
+   "end": 502.5,
+   "text": "So why are fiber reinforced materials so special?"
+  },
+  {
+   "start": 502.5,
+   "end": 506.66,
+   "text": "To find out, let's look at their mechanical properties."
+  },
+  {
+   "start": 506.66,
+   "end": 512.14,
+   "text": "This graph shows tensile strength on the vertical axis, and Young's modulus, which represents"
+  },
+  {
+   "start": 512.14,
+   "end": 516.02,
+   "text": "the stiffness of a material on the horizontal axis."
+  },
+  {
+   "start": 516.02,
+   "end": 522.1,
+   "text": "Let's plot a few common engineering materials, titanium alloys, aluminum alloys, mild"
+  },
+  {
+   "start": 522.1,
+   "end": 525.82,
+   "text": "steel, and high strength steel."
+  },
+  {
+   "start": 525.82,
+   "end": 529.06,
+   "text": "Next we can add carbon fiber reinforced polymers."
+  },
+  {
+   "start": 529.06,
+   "end": 535.9,
+   "text": "A plain weave carbon fiber material has a tensile strength of around 600 MPa, and a Young's"
+  },
+  {
+   "start": 535.9,
+   "end": 540.86,
+   "text": "modulus similar to aluminum, although the exact properties will depend on a number of"
+  },
+  {
+   "start": 540.86,
+   "end": 546.58,
+   "text": "factors, including the type of polymer matrix that's used in the layup configuration."
+  },
+  {
+   "start": 546.58,
+   "end": 551.82,
+   "text": "A unidirectional carbon fiber material is much stronger than the plain weave, and has"
+  },
+  {
+   "start": 551.82,
+   "end": 557.18,
+   "text": "higher stiffness as well, although remember that this is only true if the load is applied"
+  },
+  {
+   "start": 557.18,
+   "end": 560.42,
+   "text": "along the fiber axis."
+  },
+  {
+   "start": 560.42,
+   "end": 566.26,
+   "text": "These materials correspond to standard carbon fiber grades, but there are also high strength,"
+  },
+  {
+   "start": 566.26,
+   "end": 572.8,
+   "text": "high modulus, and ultra high modulus variants."
+  },
+  {
+   "start": 572.8,
+   "end": 577.56,
+   "text": "We can also plot glass fiber reinforced polymers, which have lower stiffness, but"
+  },
+  {
+   "start": 577.56,
+   "end": 580.52,
+   "text": "very good tensile strength."
+  },
+  {
+   "start": 580.52,
+   "end": 587.04,
+   "text": "E-glass and S-glass refer to different glass fiber compositions that are optimized for different"
+  },
+  {
+   "start": 587.04,
+   "end": 588.64,
+   "text": "applications."
+  },
+  {
+   "start": 588.64,
+   "end": 593.68,
+   "text": "E-glass is the most commonly used type, and was originally developed for electrical"
+  },
+  {
+   "start": 593.68,
+   "end": 598.88,
+   "text": "insulation applications, and S-glass was developed for structural applications and has"
+  },
+  {
+   "start": 598.88,
+   "end": 601.8,
+   "text": "improved strength."
+  },
+  {
+   "start": 601.8,
+   "end": 606.68,
+   "text": "The really amazing thing about these fiber reinforced composites only becomes apparent"
+  },
+  {
+   "start": 606.68,
+   "end": 608.92,
+   "text": "when considering their mass."
+  },
+  {
+   "start": 608.92,
+   "end": 615.2,
+   "text": "If we plot specific strength and specific stiffness on this graph by dividing by the material"
+  },
+  {
+   "start": 615.2,
+   "end": 621.64,
+   "text": "density, it's clear that the composites far outperform traditional materials."
+  },
+  {
+   "start": 621.64,
+   "end": 627.68,
+   "text": "The unbelievable strength the weight and stiffness to weight ratios of CFRP materials"
+  },
+  {
+   "start": 627.68,
+   "end": 632.56,
+   "text": "are why they're so commonly used in industries where weight reduction is critical, like"
+  },
+  {
+   "start": 632.56,
+   "end": 639.44,
+   "text": "aerospace, the automotive industry, and even in sports like cycling and sailing."
+  },
+  {
+   "start": 639.44,
+   "end": 644.9,
+   "text": "Glass fiber reinforced composites have lower stiffness than CFRP, but excellent strength"
+  },
+  {
+   "start": 644.9,
+   "end": 650.68,
+   "text": "properties on a per weight basis and are much more cost effective than CFRP."
+  },
+  {
+   "start": 650.68,
+   "end": 655.36,
+   "text": "They're often used in wind turbine blades and in the construction of boats, where light"
+  },
+  {
+   "start": 655.36,
+   "end": 661.48,
+   "text": "weight, high strength, and low cost are critical parameters."
+  },
+  {
+   "start": 661.48,
+   "end": 666.12,
+   "text": "The impressive strength of fiber reinforced composites is in large part due to the small"
+  },
+  {
+   "start": 666.12,
+   "end": 669.6,
+   "text": "diameter of the reinforcing fibers."
+  },
+  {
+   "start": 669.6,
+   "end": 674.86,
+   "text": "The strength of a fiber, like any material, is limited by the presence of defects within"
+  },
+  {
+   "start": 674.86,
+   "end": 679.72,
+   "text": "its microstructure, from which cracks can form and grow to failure."
+  },
+  {
+   "start": 679.72,
+   "end": 684.76,
+   "text": "The larger a fiber is, the more likely it is that it will contain more defects, and"
+  },
+  {
+   "start": 684.76,
+   "end": 687.48,
+   "text": "that the defects will be larger."
+  },
+  {
+   "start": 687.48,
+   "end": 692.36,
+   "text": "This means that if you take two fiber bundles with the same cross-sectional area, but different"
+  },
+  {
+   "start": 692.36,
+   "end": 699.26,
+   "text": "fiber diameters, the bundle with the smaller fibers will be stronger."
+  },
+  {
+   "start": 699.26,
+   "end": 704.34,
+   "text": "Not only that, but in the bundle of smaller fibers, failure of a single fiber can occur"
+  },
+  {
+   "start": 704.34,
+   "end": 708.14,
+   "text": "without hugely increasing the load on the remaining fibers."
+  },
+  {
+   "start": 708.14,
+   "end": 712.3,
+   "text": "In the smaller the fibers, the larger the surface area between the fibers and"
+  },
+  {
+   "start": 712.3,
+   "end": 716.76,
+   "text": "the matrix, which means better load transfer between the two."
+  },
+  {
+   "start": 716.76,
+   "end": 722.32,
+   "text": "The result is that the strength of a fiber-reinforced material increases significantly as the fiber"
+  },
+  {
+   "start": 722.32,
+   "end": 725.28,
+   "text": "diameter reduces."
+  },
+  {
+   "start": 725.28,
+   "end": 731.92,
+   "text": "The main thing limiting the use of ever-thinner fibers is manufacturing constraints."
+  },
+  {
+   "start": 731.92,
+   "end": 736.76,
+   "text": "Fiber-reinforced polymer matrix composites aren't only used for their good specific"
+  },
+  {
+   "start": 736.76,
+   "end": 739.28,
+   "text": "strength and specific stiffness."
+  },
+  {
+   "start": 739.28,
+   "end": 744.36,
+   "text": "They have many other useful properties that provide advantages over traditional materials,"
+  },
+  {
+   "start": 744.36,
+   "end": 747.44,
+   "text": "like steel and aluminum alloys."
+  },
+  {
+   "start": 747.44,
+   "end": 752.4,
+   "text": "They have excellent internal damping properties, which can be useful for applications involving"
+  },
+  {
+   "start": 752.4,
+   "end": 756.16,
+   "text": "dynamic loads, and they have good corrosion resistance."
+  },
+  {
+   "start": 756.16,
+   "end": 762.28,
+   "text": "The polymer matrix does a great job of protecting the reinforcing fibers from the environment."
+  },
+  {
+   "start": 762.28,
+   "end": 764.96,
+   "text": "They also have interesting thermal properties."
+  },
+  {
+   "start": 764.96,
+   "end": 769.64,
+   "text": "They're usually relatively poor conductors of heat, and have very low thermal expansion"
+  },
+  {
+   "start": 769.64,
+   "end": 774.88,
+   "text": "coefficients compared to metals, which can be useful for applications requiring good dimensional"
+  },
+  {
+   "start": 774.88,
+   "end": 779.2,
+   "text": "stability over a wide range of temperatures."
+  },
+  {
+   "start": 779.2,
+   "end": 781.28,
+   "text": "But they also have drawbacks."
+  },
+  {
+   "start": 781.28,
+   "end": 782.52,
+   "text": "The cost is one."
+  },
+  {
+   "start": 782.52,
+   "end": 786.72,
+   "text": "They're significantly more expensive than using standard metals."
+  },
+  {
+   "start": 786.72,
+   "end": 791.4,
+   "text": "They can also be difficult to design with, because they're highly anisotropic nature,"
+  },
+  {
+   "start": 791.4,
+   "end": 796.72,
+   "text": "and complex and varied failure modes make it difficult to accurately model their behavior"
+  },
+  {
+   "start": 796.72,
+   "end": 799.36,
+   "text": "and to predict failure."
+  },
+  {
+   "start": 799.36,
+   "end": 805.52,
+   "text": "And integration of fiber-reinforced parts into a larger assembly isn't always straightforward."
+  },
+  {
+   "start": 805.52,
+   "end": 810.68,
+   "text": "Welding isn't an option, and although mechanical fasteners can be used, they tend not to perform"
+  },
+  {
+   "start": 810.68,
+   "end": 816.0,
+   "text": "as well as they do in metals, so fiber-reinforced polymers are usually bonded to other parts"
+  },
+  {
+   "start": 816.0,
+   "end": 818.52,
+   "text": "using adhesives."
+  },
+  {
+   "start": 818.52,
+   "end": 821.92,
+   "text": "Another drawback is the brittleness of these materials."
+  },
+  {
+   "start": 821.92,
+   "end": 826.48,
+   "text": "Let's compare stress-strain curves for a few fiber-reinforced polymers, alongside"
+  },
+  {
+   "start": 826.48,
+   "end": 830.94,
+   "text": "steel and an aluminum alloy."
+  },
+  {
+   "start": 831.14,
+   "end": 835.82,
+   "text": "Fibers tend to be made from materials like glass and carbon, because they have high strength"
+  },
+  {
+   "start": 835.82,
+   "end": 838.94,
+   "text": "and stiffness, but they're also very brittle."
+  },
+  {
+   "start": 838.94,
+   "end": 843.22,
+   "text": "This means the resulting composite material is also quite brittle."
+  },
+  {
+   "start": 843.22,
+   "end": 851.96,
+   "text": "CFRP in particular will fail at very low strains compared to steel and aluminum alloys."
+  },
+  {
+   "start": 851.96,
+   "end": 857.04,
+   "text": "A well-known fiber reinforcement we haven't mentioned yet is Kevlar, a type of aramid"
+  },
+  {
+   "start": 857.04,
+   "end": 858.6,
+   "text": "fiber."
+  },
+  {
+   "start": 858.6,
+   "end": 865.72,
+   "text": "Kevlar-reinforced polymers are stiffer and stronger than GRP, more ductile than CFRP, and lighter"
+  },
+  {
+   "start": 865.72,
+   "end": 867.16,
+   "text": "than both."
+  },
+  {
+   "start": 867.16,
+   "end": 873.08,
+   "text": "This makes them ideal materials for applications where excellent impact resistance is required,"
+  },
+  {
+   "start": 873.08,
+   "end": 876.97,
+   "text": "like in body armor."
+  },
+  {
+   "start": 876.97,
+   "end": 881.41,
+   "text": "Another issue with materials that have a polymer matrix is that above temperatures"
+  },
+  {
+   "start": 881.41,
+   "end": 887.01,
+   "text": "not much higher than 100 or 200 degrees Celsius, the polymer will typically start breaking"
+  },
+  {
+   "start": 887.01,
+   "end": 888.01,
+   "text": "down."
+  },
+  {
+   "start": 888.01,
+   "end": 894.97,
+   "text": "Depending the maximum temperatures the composites can be used at to well below the level of metals."
+  },
+  {
+   "start": 894.97,
+   "end": 900.29,
+   "text": "If you're working with extremely high temperatures, you'll have to turn to ceramic materials,"
+  },
+  {
+   "start": 900.29,
+   "end": 905.93,
+   "text": "like alumina, silicon carbide, and silicon nitride, because they have very high melting"
+  },
+  {
+   "start": 905.93,
+   "end": 909.13,
+   "text": "points, much higher than metals and polymers."
+  },
+  {
+   "start": 909.13,
+   "end": 914.09,
+   "text": "They can withstand temperatures upwards of 1000 degrees Celsius."
+  },
+  {
+   "start": 914.09,
+   "end": 918.17,
+   "text": "Ceramics have other properties that make them useful at these high temperatures, including"
+  },
+  {
+   "start": 918.17,
+   "end": 923.57,
+   "text": "high thermal shock resistance and low thermal expansion coefficients, plus they have high"
+  },
+  {
+   "start": 923.57,
+   "end": 926.45,
+   "text": "strength and high stiffness."
+  },
+  {
+   "start": 926.45,
+   "end": 931.61,
+   "text": "Carbon has similar properties to these ceramics, with a melting point above 3000 degrees, it"
+  },
+  {
+   "start": 931.61,
+   "end": 934.77,
+   "text": "can handle extremely high temperatures."
+  },
+  {
+   "start": 934.77,
+   "end": 937.49,
+   "text": "But all of these materials are very brittle."
+  },
+  {
+   "start": 937.49,
+   "end": 942.41,
+   "text": "They fracture suddenly at very low strains, which limits how useful they are, and"
+  },
+  {
+   "start": 942.41,
+   "end": 947.17,
+   "text": "this is where once again the use of composites can make a big difference."
+  },
+  {
+   "start": 947.17,
+   "end": 952.93,
+   "text": "Adding silicon carbide fibers to a silicon carbide matrix, for example, results in a material"
+  },
+  {
+   "start": 952.93,
+   "end": 955.89,
+   "text": "with significantly increased toughness."
+  },
+  {
+   "start": 955.89,
+   "end": 960.85,
+   "text": "To see how this works, let's compare two ceramic materials, with and without fiber"
+  },
+  {
+   "start": 960.85,
+   "end": 962.81,
+   "text": "reinforcement."
+  },
+  {
+   "start": 962.81,
+   "end": 966.13,
+   "text": "Both contain an initial crack."
+  },
+  {
+   "start": 966.13,
+   "end": 971.49,
+   "text": "When a load is applied, the crack in the pure ceramic propagates very quickly, resulting"
+  },
+  {
+   "start": 971.57,
+   "end": 973.93,
+   "text": "in failure of the material."
+  },
+  {
+   "start": 973.93,
+   "end": 979.17,
+   "text": "In the composite, though, the fibers bridge any cracks that form in the matrix, which prevents"
+  },
+  {
+   "start": 979.17,
+   "end": 986.55,
+   "text": "them from growing, increasing the overall toughness of the material."
+  },
+  {
+   "start": 986.55,
+   "end": 991.39,
+   "text": "Unlike polymer matrix composites, where the aim is to have a strong bond between the matrix"
+  },
+  {
+   "start": 991.39,
+   "end": 995.15,
+   "text": "and fibers, so that loads can be transferred between the two."
+  },
+  {
+   "start": 995.15,
+   "end": 999.79,
+   "text": "In ceramic matrix composites, the fibers are coated to allow them to slide somewhat"
+  },
+  {
+   "start": 999.79,
+   "end": 1004.91,
+   "text": "within the matrix, so that cracks in the matrix don't overstress the fibers."
+  },
+  {
+   "start": 1004.91,
+   "end": 1011.47,
+   "text": "The resulting composite is extremely resistant to temperature, without being too brittle."
+  },
+  {
+   "start": 1011.47,
+   "end": 1016.35,
+   "text": "Composites with a silicon carbide matrix and silicon carbide fibers are used in high-temperature"
+  },
+  {
+   "start": 1016.35,
+   "end": 1018.95,
+   "text": "jet engine turbine blades."
+  },
+  {
+   "start": 1018.95,
+   "end": 1024.27,
+   "text": "And carbon-carbon composites have applications in spacecraft heat shields to protect from"
+  },
+  {
+   "start": 1024.27,
+   "end": 1028.43,
+   "text": "the extremely high temperatures during atmospheric reentry."
+  },
+  {
+   "start": 1028.43,
+   "end": 1033.27,
+   "text": "They are also used in the braking systems of some aircraft, and even in high-performance"
+  },
+  {
+   "start": 1033.27,
+   "end": 1038.8,
+   "text": "cars."
+  },
+  {
+   "start": 1038.8,
+   "end": 1043.68,
+   "text": "Composites with a metal matrix are usually used to try and improve the strength or stiffness"
+  },
+  {
+   "start": 1043.68,
+   "end": 1049.6,
+   "text": "of a metal, which often involves incorporating carbon fibers into an aluminum or titanium"
+  },
+  {
+   "start": 1049.6,
+   "end": 1053.28,
+   "text": "matrix."
+  },
+  {
+   "start": 1053.28,
+   "end": 1057.28,
+   "text": "But sometimes the goal is to modify other properties of the metal."
+  },
+  {
+   "start": 1057.28,
+   "end": 1062.48,
+   "text": "One example of this is the use of magnesium in biomedical engineering."
+  },
+  {
+   "start": 1062.48,
+   "end": 1067.44,
+   "text": "Magnesium is a very promising metal for use in implants designed to heal bone fractures,"
+  },
+  {
+   "start": 1067.44,
+   "end": 1071.68,
+   "text": "because it's lightweight and has excellent biocompatibility."
+  },
+  {
+   "start": 1071.68,
+   "end": 1076.84,
+   "text": "Another advantage it has over commonly used metals like titanium is that it biodegrades"
+  },
+  {
+   "start": 1076.84,
+   "end": 1081.68,
+   "text": "in the body, so a second surgery isn't needed to remove the implant once the injury"
+  },
+  {
+   "start": 1081.68,
+   "end": 1083.48,
+   "text": "has healed."
+  },
+  {
+   "start": 1083.48,
+   "end": 1089.48,
+   "text": "But it has quite low strength, and biodegrades too quickly to be all that useful."
+  },
+  {
+   "start": 1089.48,
+   "end": 1093.72,
+   "text": "Composites have found that by replacing pure magnesium with a composite that has a magnesium"
+  },
+  {
+   "start": 1093.72,
+   "end": 1099.24,
+   "text": "matrix and a dispersed phase of ceramic particles, the degradation rate can be controlled and"
+  },
+  {
+   "start": 1099.24,
+   "end": 1102.72,
+   "text": "the material strength in other properties are greatly improved."
+  },
+  {
+   "start": 1102.72,
+   "end": 1109.52,
+   "text": "It's really quite incredible."
+  },
+  {
+   "start": 1109.52,
+   "end": 1115.04,
+   "text": "Particle reinforced materials can be developed for all sorts of different applications."
+  },
+  {
+   "start": 1115.04,
+   "end": 1118.48,
+   "text": "Designing an electronic component that dissipates a lot of power?"
+  },
+  {
+   "start": 1118.48,
+   "end": 1123.04,
+   "text": "A heat spreader made from a composite with a copper matrix and diamond particles will"
+  },
+  {
+   "start": 1123.04,
+   "end": 1127.92,
+   "text": "have higher thermal conductivity than standard materials, allowing you to dissipate the heat"
+  },
+  {
+   "start": 1127.92,
+   "end": 1131.12,
+   "text": "more effectively."
+  },
+  {
+   "start": 1131.12,
+   "end": 1136.04,
+   "text": "The composite also allows the thermal expansion coefficient of the heat spreader to be tailored"
+  },
+  {
+   "start": 1136.04,
+   "end": 1140.6,
+   "text": "to match the properties of the chip die, which helps avoid high shear stresses between"
+  },
+  {
+   "start": 1140.6,
+   "end": 1148.75,
+   "text": "the two."
+  },
+  {
+   "start": 1148.75,
+   "end": 1153.83,
+   "text": "Concrete is an example of a much more common particle reinforced material."
+  },
+  {
+   "start": 1153.83,
+   "end": 1159.47,
+   "text": "The matrix phase is cement, and the dispersed phase is aggregate, a mixture of sand and crushed"
+  },
+  {
+   "start": 1159.47,
+   "end": 1160.67,
+   "text": "stone."
+  },
+  {
+   "start": 1160.67,
+   "end": 1165.51,
+   "text": "The cement binds everything together, and the aggregate improves strength, and has the"
+  },
+  {
+   "start": 1165.51,
+   "end": 1169.55,
+   "text": "added advantage of being less costly than the cement."
+  },
+  {
+   "start": 1169.55,
+   "end": 1174.67,
+   "text": "A more recent development is the use of engineering cementitious composites."
+  },
+  {
+   "start": 1174.67,
+   "end": 1179.79,
+   "text": "These composites incorporate short randomly oriented polymer fibers into a concrete"
+  },
+  {
+   "start": 1179.79,
+   "end": 1185.35,
+   "text": "matrix to obtain a material that has the properties of concrete, but is also ductile, which is why"
+  },
+  {
+   "start": 1185.35,
+   "end": 1190.43,
+   "text": "it's sometimes called bendable concrete."
+  },
+  {
+   "start": 1190.43,
+   "end": 1195.27,
+   "text": "This just illustrates that the possibilities for innovation using advanced composites really"
+  },
+  {
+   "start": 1195.27,
+   "end": 1196.91,
+   "text": "are endless."
+  },
+  {
+   "start": 1196.91,
+   "end": 1203.32,
+   "text": "There are so many different ways materials can be combined to obtain something useful."
+  },
+  {
+   "start": 1203.32,
+   "end": 1207.92,
+   "text": "A final category of composites is sandwich composites."
+  },
+  {
+   "start": 1207.92,
+   "end": 1213.16,
+   "text": "Where a lightweight core material is sandwiched between thin skin layers made of a stronger"
+  },
+  {
+   "start": 1213.16,
+   "end": 1215.2,
+   "text": "and stiffer material."
+  },
+  {
+   "start": 1215.2,
+   "end": 1219.52,
+   "text": "The lightweight core is typically a foam or honeycomb structure, and the skin layers"
+  },
+  {
+   "start": 1219.52,
+   "end": 1224.92,
+   "text": "are either metals, like aluminum, or a composite, like CFRP."
+  },
+  {
+   "start": 1224.92,
+   "end": 1228.8,
+   "text": "The layers are bonded together using an adhesive, and the result is a lightweight"
+  },
+  {
+   "start": 1228.8,
+   "end": 1233.04,
+   "text": "structure that has high bending stiffness."
+  },
+  {
+   "start": 1233.04,
+   "end": 1238.0,
+   "text": "Under loading, the sandwich composite behaves in a similar way to an eye beam."
+  },
+  {
+   "start": 1238.0,
+   "end": 1243.04,
+   "text": "The outer layers carry bending loads, like the flanges of an eye beam, one side being in"
+  },
+  {
+   "start": 1243.04,
+   "end": 1246.16,
+   "text": "tension, and the other in compression."
+  },
+  {
+   "start": 1246.16,
+   "end": 1247.96,
+   "text": "The core is like the web."
+  },
+  {
+   "start": 1247.96,
+   "end": 1253.4,
+   "text": "It carries shear loads, but also increases the distance between the outer layers, increasing"
+  },
+  {
+   "start": 1253.4,
+   "end": 1260.09,
+   "text": "the second moment of area of the cross section."
+  },
+  {
+   "start": 1260.09,
+   "end": 1267.22,
+   "text": "Inserts are incorporated into the panel to allow the use of threaded fasteners."
+  },
+  {
+   "start": 1267.22,
+   "end": 1272.66,
+   "text": "Foam panels are used extensively in satellites as structural panels, to which instruments and"
+  },
+  {
+   "start": 1272.66,
+   "end": 1278.94,
+   "text": "communication equipment can be attached."
+  },
+  {
+   "start": 1278.94,
+   "end": 1283.66,
+   "text": "There's no doubt that the study of composites is an exciting and constantly evolving field"
+  },
+  {
+   "start": 1283.66,
+   "end": 1288.66,
+   "text": "in materials science that opens up new opportunities for innovation."
+  },
+  {
+   "start": 1288.66,
+   "end": 1292.58,
+   "text": "Whether for fun or for professional projects, having an understanding of the different"
+  },
+  {
+   "start": 1292.58,
+   "end": 1297.26,
+   "text": "composite types will help you design and build stronger, lighter, and better"
+  },
+  {
+   "start": 1297.26,
+   "end": 1299.86,
+   "text": "performing products."
+  },
+  {
+   "start": 1299.86,
+   "end": 1304.38,
+   "text": "Equally important in the design process is having access to the right tools to bring your"
+  },
+  {
+   "start": 1304.38,
+   "end": 1305.94,
+   "text": "projects to life."
+  },
+  {
+   "start": 1305.94,
+   "end": 1310.5,
+   "text": "And that's why I'd like to tell you about this video's sponsor, Onshape."
+  },
+  {
+   "start": 1310.5,
+   "end": 1316.18,
+   "text": "Onshape is a really impressive and unique cloud-based CAD platform that has all of the functionality"
+  },
+  {
+   "start": 1316.18,
+   "end": 1320.18,
+   "text": "you would expect from modern CAD software, but also much more."
+  },
+  {
+   "start": 1320.18,
+   "end": 1322.62,
+   "text": "And it all runs in your web browser."
+  },
+  {
+   "start": 1322.62,
+   "end": 1327.14,
+   "text": "It has a rich, parametric modeling tool set that makes modeling parts and managing"
+  },
+  {
+   "start": 1327.14,
+   "end": 1332.42,
+   "text": "assemblies easy, with loads of tools to make your workflow really efficient, like standard"
+  },
+  {
+   "start": 1332.42,
+   "end": 1337.38,
+   "text": "part libraries and the frame and sheet metal features."
+  },
+  {
+   "start": 1337.38,
+   "end": 1341.7,
+   "text": "You can even develop your own custom features, or download ones that have been created by"
+  },
+  {
+   "start": 1341.7,
+   "end": 1345.41,
+   "text": "the community."
+  },
+  {
+   "start": 1345.41,
+   "end": 1350.37,
+   "text": "One of Onshape's most powerful and unique features is its amazing collaboration system"
+  },
+  {
+   "start": 1350.37,
+   "end": 1354.63,
+   "text": "that allows multiple people to work on the same files at the same time."
+  },
+  {
+   "start": 1354.63,
+   "end": 1361.6,
+   "text": "Really useful if you're working with others and building something as a team."
+  },
+  {
+   "start": 1361.6,
+   "end": 1366.44,
+   "text": "It also has a great version control system that lets you easily log changes and roll back"
+  },
+  {
+   "start": 1366.44,
+   "end": 1368.96,
+   "text": "to previous versions if needed."
+  },
+  {
+   "start": 1368.96,
+   "end": 1373.0,
+   "text": "And because it's cloud-based, you don't need a powerful machine to run it, since all of"
+  },
+  {
+   "start": 1373.0,
+   "end": 1376.08,
+   "text": "the processor-heavy tasks are done in the cloud."
+  },
+  {
+   "start": 1376.08,
+   "end": 1380.96,
+   "text": "You can access your files from any machine just by logging in, and they even have Android"
+  },
+  {
+   "start": 1380.96,
+   "end": 1383.96,
+   "text": "and iOS apps."
+  },
+  {
+   "start": 1383.96,
+   "end": 1388.72,
+   "text": "You can get started creating designs of your own using Onshape for free in just a"
+  },
+  {
+   "start": 1388.72,
+   "end": 1390.12,
+   "text": "few minutes."
+  },
+  {
+   "start": 1390.12,
+   "end": 1395.52,
+   "text": "Just head over to Onshape.pro slash Efficient Engineer to create your free account and"
+  },
+  {
+   "start": 1395.52,
+   "end": 1397.08,
+   "text": "start designing."
+  },
+  {
+   "start": 1397.08,
+   "end": 1405.59,
+   "text": "It's genuinely a great CAD platform, and I highly recommend you check it out."
+  },
+  {
+   "start": 1405.59,
+   "end": 1408.55,
+   "text": "And that's it for this look at composite materials."
+  },
+  {
+   "start": 1408.55,
+   "end": 1409.39,
+   "text": "Thanks for watching!"
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:55:49.237530+00:00",
+ "seconds": 49.0
+}

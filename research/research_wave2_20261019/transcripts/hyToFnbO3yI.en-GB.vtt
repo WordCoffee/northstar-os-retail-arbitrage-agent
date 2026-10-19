@@ -1,0 +1,1058 @@
+WEBVTT
+Kind: captions
+Language: en-GB
+
+00:00:00.130 --> 00:00:00.881
+Hey guys, what's going on?
+
+00:00:00.896 --> 00:00:01.761
+It's me, Will Paterson.
+
+00:00:01.786 --> 00:00:03.245
+Welcome back to a new video.
+
+00:00:03.308 --> 00:00:05.081
+Today I'm going to show you
+something different.
+
+00:00:05.156 --> 00:00:07.773
+I'm going to show you how you
+can actually create mockups
+
+00:00:07.784 --> 00:00:09.693
+inside of Photoshop.
+
+00:00:09.742 --> 00:00:14.009
+This is a really basic way of
+doing so, but really effective.
+
+00:00:17.070 --> 00:00:19.824
+So the first thing you want to
+do is in Photoshop, we're going
+
+00:00:19.836 --> 00:00:21.037
+to bring in an image.
+
+00:00:21.074 --> 00:00:22.797
+I'm just going to bring in this one.
+
+00:00:22.824 --> 00:00:23.761
+This is a coffee mug.
+
+00:00:23.786 --> 00:00:26.245
+It's the easiest way to show you. 
+Now when presenting to a
+
+00:00:26.256 --> 00:00:27.909
+client what I like to do.
+
+00:00:27.960 --> 00:00:31.033
+And many other designers, they
+love to put their work on to
+
+00:00:31.044 --> 00:00:33.441
+products that mean something 
+to the company.
+
+00:00:33.516 --> 00:00:36.639
+So, for instance, a coffee shop
+would have a coffee logo on
+
+00:00:36.650 --> 00:00:39.169
+their coffee cup if it's a
+takeaway cup.
+
+00:00:39.230 --> 00:00:41.833
+But what if we have an image
+like this, where it's just a
+
+00:00:41.844 --> 00:00:46.245
+static image and we need to make 
+it look real with the logo on it.
+
+00:00:46.308 --> 00:00:48.937
+So bring your image and make
+sure it's high quality so you
+
+00:00:48.948 --> 00:00:51.057
+can tell by the way it zooms in.
+
+00:00:51.084 --> 00:00:53.337
+If it zooms in and it's nice
+and crisp, that's good.
+
+00:00:53.424 --> 00:00:56.185
+First thing I'm going to do is
+hold Alt or option and just
+
+00:00:56.196 --> 00:00:57.601
+double click on the background
+layer.
+
+00:00:57.626 --> 00:00:58.921
+And I'm going to call this cup.
+
+00:00:59.006 --> 00:01:00.453
+There's a lot of things I could
+do better.
+
+00:01:00.552 --> 00:01:02.679
+However, I'm going to show you
+how to get the work onto the
+
+00:01:02.690 --> 00:01:04.065
+cup face itself.
+
+00:01:04.188 --> 00:01:05.737
+So we're going to use a shape.
+
+00:01:05.774 --> 00:01:08.185
+So the first thing we need to
+do is press U or go to the
+
+00:01:08.196 --> 00:01:11.221
+shape down here and just
+approximately over the top of
+
+00:01:11.232 --> 00:01:14.065
+this, create a rectangle, make
+sure it's overlapping.
+
+00:01:14.138 --> 00:01:17.037
+I'm going to change the colour
+of the rectangle to any colour.
+
+00:01:17.184 --> 00:01:19.681
+And then right here, I'm going
+to right click on this shape.
+
+00:01:19.706 --> 00:01:21.261
+And this is really important.
+
+00:01:21.396 --> 00:01:23.733
+Right click and go to Convert
+to Smart Object.
+
+00:01:23.832 --> 00:01:27.314
+What this does is it allows us
+to click into that shape layer
+
+00:01:27.326 --> 00:01:30.333
+or the smart object and edit it
+in here.
+
+00:01:30.432 --> 00:01:36.057
+And when we save that, it will
+apply it to anything in here.
+
+00:01:36.144 --> 00:01:39.204
+This also means we can warp
+this rectangle into the shape
+
+00:01:39.216 --> 00:01:42.237
+of the coffee cup and it would
+apply the effect.
+
+00:01:42.384 --> 00:01:45.673
+So on the smart object, we're
+going to call this the edit.
+
+00:01:45.782 --> 00:01:48.204
+I'm going to change the opacity
+to around 30 because I want to
+
+00:01:48.216 --> 00:01:49.605
+see the mug behind it.
+
+00:01:49.668 --> 00:01:52.417
+Press command T or control T
+for free transform.
+
+00:01:52.514 --> 00:01:53.421
+And then go up here.
+
+00:01:53.436 --> 00:01:54.837
+You'll see this warp option.
+
+00:01:54.924 --> 00:01:55.693
+Click on warp.
+
+00:01:55.742 --> 00:01:59.109
+You'll automatically see this
+mesh pop up here.
+
+00:01:59.220 --> 00:02:01.995
+Now this mesh is really cool
+because what you can do is warp
+
+00:02:02.006 --> 00:02:02.889
+it around things.
+
+00:02:02.940 --> 00:02:04.297
+It's like a 3D mesh.
+
+00:02:04.394 --> 00:02:07.653
+What we're going to do is warp
+it around the mug here.
+
+00:02:07.752 --> 00:02:09.249
+There's plenty of ways to do this.
+
+00:02:09.300 --> 00:02:11.845
+In fact, you can actually go up
+to the warp function up here
+
+00:02:11.856 --> 00:02:14.325
+and change the warp function here.
+
+00:02:14.388 --> 00:02:16.677
+It's got loads of presets, even
+a cylinder one.
+
+00:02:16.704 --> 00:02:19.209
+But we're not going to use that
+because it warps it a bit too much.
+
+00:02:19.260 --> 00:02:23.365
+We're just going to go to the default, 
+the custom warp one up here.
+
+00:02:23.436 --> 00:02:25.921
+The first thing we want to do
+is just approximately bring up
+
+00:02:25.932 --> 00:02:29.353
+the warp in the corners, like
+so kind of matching the corners,
+
+00:02:29.364 --> 00:02:32.953
+not perfectly because we want
+to have some overlap that
+
+00:02:32.964 --> 00:02:33.969
+we can edit later.
+
+00:02:34.080 --> 00:02:37.201
+Then we can just click on the
+warp itself and just very
+
+00:02:37.212 --> 00:02:38.913
+carefully drag them in.
+
+00:02:38.952 --> 00:02:41.925
+It's going to look a bit strange at 
+first, but we can always edit this.
+
+00:02:41.988 --> 00:02:45.073
+Then we can zoom in and start
+messing around with these handles.
+
+00:02:45.122 --> 00:02:47.973
+It's kind of like the pen tool,
+like the direct selection tool.
+
+00:02:48.012 --> 00:02:51.477
+But we're trying to get the warping 
+to look nice all the way through.
+
+00:02:51.564 --> 00:02:54.693
+You can see why we change the
+opacity here as well.
+
+00:02:54.792 --> 00:02:57.249
+If we zoom in, we can get as
+fine as we want to.
+
+00:02:57.300 --> 00:03:00.541
+And I'm just going to kind of
+eyeball this to make sure it
+
+00:03:00.552 --> 00:03:02.961
+works perfectly all the way through.
+
+00:03:03.096 --> 00:03:05.787
+and boom. Photoshop is a really 
+powerful tool, so don't worry
+
+00:03:05.798 --> 00:03:09.009
+if you make any mistakes or if
+it doesn't look perfect just yet.
+
+00:03:09.120 --> 00:03:10.089
+That's just the way it is.
+
+00:03:10.140 --> 00:03:12.693
+Okay, so now we have our warp
+function.
+
+00:03:12.792 --> 00:03:14.985
+It kind of looks good so far.
+
+00:03:15.048 --> 00:03:17.445
+So press this button, appear to
+apply it.
+
+00:03:17.508 --> 00:03:19.261
+We intentionally had some
+overlap here because we're
+
+00:03:19.272 --> 00:03:20.673
+going to mask that out later.
+
+00:03:20.712 --> 00:03:22.605
+It's going to be a lot easier
+for us to use.
+
+00:03:22.668 --> 00:03:25.099
+The next thing we're going to
+do is go and change my fill,
+
+00:03:25.100 --> 00:03:26.553
+my opacity to 100.
+
+00:03:26.652 --> 00:03:28.237
+Then we're going to change the
+Blend mode.
+
+00:03:28.274 --> 00:03:31.263
+This is the huge part because
+if we just have this shape on
+
+00:03:31.274 --> 00:03:32.833
+top, it kind of looks weird.
+
+00:03:32.882 --> 00:03:34.069
+It just looks flat.
+
+00:03:34.190 --> 00:03:36.837
+So the Blend mode option is
+really important.
+
+00:03:36.984 --> 00:03:38.241
+On the smart object.
+
+00:03:38.376 --> 00:03:40.549
+Go to Blend mode and Linear
+Burn.
+
+00:03:40.610 --> 00:03:43.813
+It might not look it right now,
+but it'll actually help with
+
+00:03:43.824 --> 00:03:46.093
+creating the shadows and the
+highlights.
+
+00:03:46.142 --> 00:03:48.879
+It allows the highlights and
+the shadows to appear through
+
+00:03:48.890 --> 00:03:51.169
+so we don't have to do any
+dodging or burning.
+
+00:03:51.230 --> 00:03:54.673
+It uses the shadows and the
+highlights from the image.
+
+00:03:54.722 --> 00:03:57.745
+Now the problem we have is
+obviously the colours of it strange.
+
+00:03:57.818 --> 00:04:01.353
+There's no work on it, but we
+have the sharp corners down here.
+
+00:04:01.452 --> 00:04:04.261
+Now what I'm going to do is
+hide this shape and we're going
+
+00:04:04.272 --> 00:04:06.733
+to select the coffee cup and
+only the coffee cup.
+
+00:04:06.782 --> 00:04:09.553
+Now because we have a white
+background on this, what I need
+
+00:04:09.564 --> 00:04:12.625
+to do is go to this object
+selection tool up here and
+
+00:04:12.636 --> 00:04:15.565
+we're going to drag all the way
+around it like so, and it will
+
+00:04:15.576 --> 00:04:17.929
+create a really nice quick selection.
+
+00:04:17.990 --> 00:04:18.597
+It's amazing.
+
+00:04:18.684 --> 00:04:21.073
+Then I'm going to press Command
+C and Command V, which will
+
+00:04:21.084 --> 00:04:25.213
+paste only the object that I've
+asked for it to paste, which is
+
+00:04:25.224 --> 00:04:27.769
+pretty neat. If you want to and
+you want to get really precise
+
+00:04:27.780 --> 00:04:30.597
+or the object tool doesn't it 
+work for you, go ahead and
+
+00:04:30.600 --> 00:04:31.641
+use the pen tool.
+
+00:04:31.716 --> 00:04:33.085
+I'm going to call this selection.
+
+00:04:33.158 --> 00:04:35.005
+I'm going to mark it as red,
+because whenever I mark
+
+00:04:35.016 --> 00:04:38.289
+something as red, it means
+don't touch it, don't use it.
+
+00:04:38.340 --> 00:04:42.189
+It's just for some nefarious
+purpose, such as selecting it.
+
+00:04:42.240 --> 00:04:44.989
+The next thing we're going to
+do is select the coffee cup.
+
+00:04:45.050 --> 00:04:47.125
+The reason why I've got it like
+this is because I can just
+
+00:04:47.136 --> 00:04:50.413
+click like so with command onto
+the shape and it will select
+
+00:04:50.424 --> 00:04:52.105
+the coffee cup automatically.
+
+00:04:52.178 --> 00:04:55.509
+What we want to do is get rid
+of all these lines here.
+
+00:04:55.560 --> 00:04:58.593
+And the way we do that is just
+by pressing it and masking it.
+
+00:04:58.632 --> 00:05:01.065
+We've applied a mask on top of
+this.
+
+00:05:01.128 --> 00:05:04.117
+Now there's a few more problems,
+but don't worry, you can see
+
+00:05:04.128 --> 00:05:05.557
+down here we've got a bit missing.
+
+00:05:05.594 --> 00:05:07.389
+It kind of looks a bit strange here.
+
+00:05:07.500 --> 00:05:09.501
+And we've got this black stroke
+around it.
+
+00:05:09.516 --> 00:05:11.529
+This signifies to me it's not
+big enough.
+
+00:05:11.580 --> 00:05:12.609
+The shape that I've used.
+
+00:05:12.660 --> 00:05:16.113
+It needs to have a bit more of a bleed, 
+so we need to warp it even more.
+
+00:05:16.152 --> 00:05:19.019
+But unfortunately, we can't warp 
+it when there's a mask on it.
+
+00:05:19.044 --> 00:05:20.601
+So get rid of the mask again.
+
+00:05:20.676 --> 00:05:23.845
+We're going to warp it again
+and you'll see that it kind of
+
+00:05:23.856 --> 00:05:25.341
+works pretty well.
+
+00:05:25.416 --> 00:05:29.973
+I want the warp to come slightly 
+away from the actual shape here.
+
+00:05:30.072 --> 00:05:32.185
+It doesn't matter if it's like
+a line like this, where it's
+
+00:05:32.196 --> 00:05:35.425
+quite a sharp line going up,
+it's quite straight.
+
+00:05:35.498 --> 00:05:38.125
+But on these ones where it gets
+a bit weird, we want to make
+
+00:05:38.136 --> 00:05:40.585
+sure that we have enough space
+for the bleed.
+
+00:05:40.658 --> 00:05:41.505
+Press okay.
+
+00:05:41.628 --> 00:05:44.205
+Select the coffee cup again and
+we'll mask it again.
+
+00:05:44.268 --> 00:05:47.805
+And you'll see that we get a
+lot nicer off a curve down here.
+
+00:05:47.868 --> 00:05:50.685
+Now we have another problem
+happening here, too.
+
+00:05:50.748 --> 00:05:53.949
+The mask didn't fully work and that's 
+because we weren't precise enough.
+
+00:05:54.000 --> 00:05:56.805
+So a way to mitigate this is go
+to your brush, press B.
+
+00:05:56.868 --> 00:05:59.137
+We're going to decrease the
+brush size and we're going to
+
+00:05:59.148 --> 00:06:02.823
+increase the hardness to around
+80, I think, and decrease the
+
+00:06:02.834 --> 00:06:03.957
+brush size even more.
+
+00:06:04.044 --> 00:06:06.421
+And when we're in black and
+white, we can actually change
+
+00:06:06.432 --> 00:06:08.637
+what comes through here.
+
+00:06:08.664 --> 00:06:10.557
+I like to use the brush most of
+the time.
+
+00:06:10.644 --> 00:06:12.565
+Some people might want to use
+something different, but
+
+00:06:12.576 --> 00:06:15.741
+depending on what you're doing,
+the brush is normally fine.
+
+00:06:15.816 --> 00:06:19.873
+Decrease the hardest to around
+60 and in any area where it
+
+00:06:19.884 --> 00:06:24.693
+looks slightly strange, just decrease 
+the brush size and change it.
+
+00:06:24.732 --> 00:06:25.137
+Mask it.
+
+00:06:25.164 --> 00:06:28.833
+This is non destructive, so we don't 
+have to worry too much about it.
+
+00:06:28.932 --> 00:06:31.533
+And like so we've got a 
+nice shape here already.
+
+00:06:31.632 --> 00:06:34.177
+The next thing to do is we need
+to test whether our work is
+
+00:06:34.188 --> 00:06:36.021
+going to work with this or not.
+
+00:06:36.096 --> 00:06:38.065
+So what we do is we double
+click, and this is what you
+
+00:06:38.076 --> 00:06:40.153
+normally do with all the mock
+ups that you get from Envato.
+
+00:06:40.164 --> 00:06:41.373
+Double click.
+
+00:06:41.412 --> 00:06:42.513
+And we're going to bring in
+some work.
+
+00:06:42.552 --> 00:06:45.121
+I'm going to just bring in all
+my work from this part here,
+
+00:06:45.132 --> 00:06:47.709
+which is my logo with a cool
+background on it.
+
+00:06:47.760 --> 00:06:49.005
+Get my logo in the middle.
+
+00:06:49.068 --> 00:06:52.381
+Now, when our work is in here and 
+I press Command S to save it,
+
+00:06:52.392 --> 00:06:55.201
+you'll see that it appears
+on our coffee mode.
+
+00:06:55.226 --> 00:06:57.873
+And it looks pretty strange so far.
+
+00:06:57.972 --> 00:07:00.777
+Now, the reason for this is the
+warping isn't correct.
+
+00:07:00.924 --> 00:07:03.325
+Now, the way that I deal with
+this, and I find it the most
+
+00:07:03.336 --> 00:07:06.721
+simplistic way when we get
+these strange objects, is to
+
+00:07:06.732 --> 00:07:09.181
+again go into another warp.
+
+00:07:09.266 --> 00:07:13.893
+So I get rid of my mask again, and you 
+can always put the mask on and off.
+
+00:07:13.932 --> 00:07:15.793
+I like to test it as I go throughout.
+
+00:07:15.902 --> 00:07:17.305
+So get rid of the mask.
+
+00:07:17.378 --> 00:07:18.993
+Go ahead and warp it again.
+
+00:07:19.092 --> 00:07:22.521
+Now, from the middle here, we
+can actually play around with it.
+
+00:07:22.596 --> 00:07:24.673
+And I like to have my logo
+appear in it because it's
+
+00:07:24.684 --> 00:07:27.793
+something that I've spent a lot
+of time viewing and I can see
+
+00:07:27.804 --> 00:07:30.333
+whether it's warping correctly
+or not.
+
+00:07:30.432 --> 00:07:32.715
+And what I'm trying to do is
+make it look like it's warping
+
+00:07:32.726 --> 00:07:35.265
+around, but not too much.
+
+00:07:35.388 --> 00:07:37.657
+You can see here I'm changing
+the handles.
+
+00:07:37.814 --> 00:07:40.993
+I'm going to mask it again, go
+down with my brush and do some
+
+00:07:41.004 --> 00:07:42.493
+further refinements.
+
+00:07:42.602 --> 00:07:44.397
+So right there, that's looking
+pretty good.
+
+00:07:44.424 --> 00:07:47.365
+But to go a step further, we
+want to blend in a few more of
+
+00:07:47.376 --> 00:07:50.005
+the highlights into this
+because right now, it kind of
+
+00:07:50.016 --> 00:07:51.457
+looks still a bit flat.
+
+00:07:51.554 --> 00:07:54.805
+So what we do is on our edit
+page here, we're going to go
+
+00:07:54.816 --> 00:07:56.541
+into blending options.
+
+00:07:56.676 --> 00:08:00.075
+So right click blending options
+and we'll get this layer style
+
+00:08:00.086 --> 00:08:01.797
+panel pop up here.
+
+00:08:01.944 --> 00:08:05.857
+Now, the Blend If function is
+super important and really
+
+00:08:05.868 --> 00:08:09.387
+powerful for any image editing,
+especially when we're doing
+
+00:08:09.398 --> 00:08:13.508
+mockups because we have this,
+this allows us to Blend If.
+
+00:08:13.510 --> 00:08:16.905
+The underlying gray is this,
+it will blend it through.
+
+00:08:16.968 --> 00:08:18.441
+But you see, this doesn't look
+very good.
+
+00:08:18.516 --> 00:08:21.493
+However, if we click but hold
+option at the same time,
+
+00:08:21.504 --> 00:08:22.761
+it will do it like this.
+
+00:08:22.836 --> 00:08:26.841
+You'll see that it will break apart, 
+but it's a lot more of a softer effect.
+
+00:08:26.916 --> 00:08:29.989
+And what we want to do is just
+bring it a few more of those highlights.
+
+00:08:30.050 --> 00:08:33.956
+And you'll see as I do it,
+those highlights just appear in.
+
+00:08:34.044 --> 00:08:37.213
+Now, we can do the same with
+the blacks also, but we kind of
+
+00:08:37.224 --> 00:08:41.677
+like the blacks as well to be
+in there, press okay and boom.
+
+00:08:41.774 --> 00:08:45.253
+Before I go ahead and show you
+how to colour the lid off the
+
+00:08:45.264 --> 00:08:47.641
+coffee cup, I just want to tell
+you about Envato because if
+
+00:08:47.652 --> 00:08:50.473
+you're watching this, you're
+wanting to make mockups.
+
+00:08:50.522 --> 00:08:52.657
+Well, if you don't want to make
+them and you're in a bit of a
+
+00:08:52.668 --> 00:08:55.645
+hurry, or you want to get some
+really good mockups for your
+
+00:08:55.656 --> 00:08:58.491
+logo designs, for your
+portfolio, for showing your
+
+00:08:58.502 --> 00:09:01.645
+clients and presenting, which I
+would very much advice to do
+
+00:09:01.656 --> 00:09:03.321
+then Envato Elements has got
+
+00:09:03.336 --> 00:09:07.165
+you covered with over 50
+million assets for you to use,
+
+00:09:07.176 --> 00:09:08.269
+which is insane.
+
+00:09:08.330 --> 00:09:11.511
+50 million assets all the way
+from photography, fonts, images,
+
+00:09:11.522 --> 00:09:14.173
+sound, intro, videos, mockups.
+
+00:09:14.222 --> 00:09:17.293
+But not only that, they have
+these cool logo intros.
+
+00:09:17.342 --> 00:09:20.425
+So if you need a logo reveal
+and you want a template to put
+
+00:09:20.436 --> 00:09:22.365
+your logo in, they have those
+as well.
+
+00:09:22.428 --> 00:09:25.237
+You can even get images where
+you can start making mockups
+
+00:09:25.248 --> 00:09:26.697
+with them as well.
+
+00:09:26.784 --> 00:09:29.173
+Envato Elements offers 
+you a simple license.
+
+00:09:29.222 --> 00:09:31.995
+You can read more about it on
+the website, but honestly, it's
+
+00:09:32.006 --> 00:09:34.753
+super simple and you don't have
+to worry about using the work
+
+00:09:34.764 --> 00:09:36.409
+even when your trial ends.
+
+00:09:36.470 --> 00:09:40.233
+But as well as that, you get seven 
+days completely free of use.
+
+00:09:40.272 --> 00:09:42.373
+That means you can download
+anything you want and use it
+
+00:09:42.384 --> 00:09:43.545
+for seven days.
+
+00:09:43.668 --> 00:09:47.149
+And if you click the link down
+below, you'll get 50% of
+
+00:09:47.160 --> 00:09:50.185
+Envato's annual subscription,
+which means that you're
+
+00:09:50.196 --> 00:09:55.573
+spending less than $20 per month 
+to get access to 50 million assets.
+
+00:09:55.682 --> 00:09:56.913
+So go ahead and click the link.
+
+00:09:56.952 --> 00:09:59.541
+I use Envato Elements all the
+time, me and the team
+
+00:09:59.616 --> 00:10:03.249
+all use it for presentations,
+fonts, you name it, they have it.
+
+00:10:03.300 --> 00:10:05.077
+Okay, let's try and colour in this lid.
+
+00:10:05.114 --> 00:10:06.013
+We're going to go to Layer.
+
+00:10:06.062 --> 00:10:10.029
+We're going to go to New Fill
+Layer, Solid Color and press okay.
+
+00:10:10.200 --> 00:10:13.237
+I'm going to change this to
+something crazy like another pink.
+
+00:10:13.334 --> 00:10:15.057
+Bring this down for now.
+
+00:10:15.144 --> 00:10:15.393
+Okay.
+
+00:10:15.432 --> 00:10:18.025
+We have a solid colour where we
+can just instantly change it if
+
+00:10:18.036 --> 00:10:20.377
+we need to by double clicking
+on it, which is always nice,
+
+00:10:20.388 --> 00:10:23.953
+but we need to mask everything
+out again, like so I'm going to
+
+00:10:23.964 --> 00:10:26.593
+copy and paste it because it
+makes life easier for myself
+
+00:10:26.604 --> 00:10:28.298
+and get rid of it there.
+
+00:10:28.392 --> 00:10:32.085
+Select change it to red so I know 
+not to mess around with it too much.
+
+00:10:32.148 --> 00:10:34.563
+Now when it's selected, I'm
+going to press Command Shift
+
+00:10:34.574 --> 00:10:36.033
+and I to invert it.
+
+00:10:36.072 --> 00:10:38.073
+Now we're going to bring the
+field colour to the top here.
+
+00:10:38.112 --> 00:10:41.593
+I'm going to change it to Linear 
+Burn again so we can see
+
+00:10:41.604 --> 00:10:42.573
+what's underneath it.
+
+00:10:42.612 --> 00:10:45.889
+I'm going to select the top of
+the coffee cup again to the lid.
+
+00:10:46.010 --> 00:10:48.745
+Then I'm going to press Command
+Shift and I, that's going to
+
+00:10:48.756 --> 00:10:50.065
+invert the selection.
+
+00:10:50.138 --> 00:10:53.695
+So when we click on the actual mask 
+for the colour fill, the backspace
+
+00:10:53.704 --> 00:10:57.097
+it will already be on top of our mug.
+
+00:10:57.134 --> 00:11:00.541
+And we can actually change this
+on the fly by going in adding
+
+00:11:00.552 --> 00:11:02.805
+or taking away with the brush
+tool.
+
+00:11:02.868 --> 00:11:04.797
+But I'm going to change the
+opacity of this.
+
+00:11:04.824 --> 00:11:06.885
+So we just have a little bit of
+colour there.
+
+00:11:06.948 --> 00:11:08.941
+But now when we double click,
+you can see that we can change
+
+00:11:08.952 --> 00:11:12.973
+the colour of this lid and it
+has a metallic look to it as
+
+00:11:12.984 --> 00:11:15.913
+well, so we can change the
+brightness to make it a sort of
+
+00:11:15.924 --> 00:11:17.457
+green autumnal colour.
+
+00:11:17.544 --> 00:11:18.573
+And there you have it.
+
+00:11:18.612 --> 00:11:19.641
+There is the mockup.
+
+00:11:19.656 --> 00:11:21.093
+It's fully editable as well.
+
+00:11:21.132 --> 00:11:23.181
+You can go even further than
+this, actually.
+
+00:11:23.316 --> 00:11:25.213
+You can create some shadows.
+
+00:11:25.322 --> 00:11:26.373
+You can make it so you move.
+
+00:11:26.412 --> 00:11:29.661
+You can duplicate it and change 
+the perspective of everything else.
+
+00:11:29.736 --> 00:11:32.581
+You can do a lot with this, but
+this is the most simple way of
+
+00:11:32.592 --> 00:11:36.865
+creating a mockup onto a
+coffee cup or anything else
+
+00:11:36.876 --> 00:11:39.853
+that you can think of, using
+these methods and principles.
+
+00:11:39.902 --> 00:11:41.193
+This is how you do it.
+
+00:11:41.232 --> 00:11:43.489
+If you enjoyed this video, then
+please press the red subscribe
+
+00:11:43.500 --> 00:11:45.477
+button and turn notifications on.
+
+00:11:45.504 --> 00:11:48.315
+I post every weekday, twice a
+week, and the whole goal of
+
+00:11:48.326 --> 00:11:51.745
+this channel is to teach you
+things, to inspire you and to
+
+00:11:51.756 --> 00:11:55.129
+make you become a better graphic 
+designer or creative professional.
+
+00:11:55.190 --> 00:11:57.025
+So thank you so much for
+watching and I'll catch you in
+
+00:11:57.036 --> 00:11:57.729
+the next one.
+
+00:11:57.780 --> 00:11:58.365
+See you soon.
+
+00:11:58.428 --> 00:11:58.609
+Goodbye.
+

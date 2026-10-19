@@ -1,0 +1,288 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.240 --> 00:00:03.520
+Hi, this is Anne with Graphic Design&nbsp;
+How To, and today I'm going to show you&nbsp;&nbsp;
+
+00:00:04.080 --> 00:00:08.800
+how to save a file for printing in Adobe&nbsp;
+Illustrator, and this will be for a small&nbsp;&nbsp;
+
+00:00:08.800 --> 00:00:14.480
+project, like a flyer or a postcard. Now&nbsp;
+before we get too far into this video,&nbsp;&nbsp;
+
+00:00:14.480 --> 00:00:19.280
+I really want you to reach out to your printer&nbsp;
+and ask them what their requirements are,&nbsp;&nbsp;
+
+00:00:19.280 --> 00:00:23.680
+because I've worked with five or six printers&nbsp;
+over my career, and they all have different&nbsp;&nbsp;
+
+00:00:23.680 --> 00:00:29.360
+requirements. Some want bleeds with no crop marks.&nbsp;
+Some want bleeds and crop marks. So you definitely&nbsp;&nbsp;
+
+00:00:29.360 --> 00:00:33.840
+need to just check with your printer and see what&nbsp;
+they want. So first, I'm going to show you how to&nbsp;&nbsp;
+
+00:00:34.480 --> 00:00:39.440
+save a document with bleeds and crop marks.&nbsp;
+Now honestly, when this gets to the printer,&nbsp;&nbsp;
+
+00:00:39.440 --> 00:00:45.520
+they'll probably just take the crop marks&nbsp;
+off, but it allows them to see exactly where&nbsp;&nbsp;
+
+00:00:45.520 --> 00:00:50.000
+this should be cut. And that way, there's no&nbsp;
+question about that. All right, let's get started.&nbsp;&nbsp;
+
+00:00:53.440 --> 00:00:58.560
+Ok, so I'm going to start a new document by going&nbsp;
+to Create New. The first thing you'll want to do&nbsp;&nbsp;
+
+00:00:58.560 --> 00:01:05.440
+is make your artboard the size of the cut flyer&nbsp;
+or postcard. So I want this one to be 4 by 6,&nbsp;&nbsp;
+
+00:01:06.320 --> 00:01:13.360
+so I'll just type that in here. And since this one&nbsp;
+will have bleeds, I'm going to put my bleeds at an&nbsp;&nbsp;
+
+00:01:13.360 --> 00:01:20.000
+eighth of an inch, and that is the standard size.&nbsp;
+So it's .125, and if you have this selected, it'll&nbsp;&nbsp;
+
+00:01:20.000 --> 00:01:26.000
+automatically fill in in all these areas. And then&nbsp;
+we'll Create. So this will give us a document. Our&nbsp;&nbsp;
+
+00:01:26.000 --> 00:01:32.240
+artboard is 4 by 6. And then we've got this little&nbsp;
+red area, then this out here is the bleed area.&nbsp;&nbsp;
+
+00:01:32.800 --> 00:01:37.920
+So I'm going to just paste something in that I&nbsp;
+copied from another document. So I'm going to hit&nbsp;&nbsp;
+
+00:01:37.920 --> 00:01:45.280
+CMD F or CTRL F. So it puts it right exactly where&nbsp;
+it was on my other document. This is a 4 by 6&nbsp;&nbsp;
+
+00:01:45.280 --> 00:01:51.280
+postcard that I'm wanting to add bleeds to and, as&nbsp;
+you can see, I'm just going to zoom in here, if I&nbsp;&nbsp;
+
+00:01:51.280 --> 00:01:56.880
+hit SHIFT O, I can see the edge of my artboard.&nbsp;
+And this comes all the way out to the edge, but&nbsp;&nbsp;
+
+00:01:56.880 --> 00:02:03.120
+it doesn't extend over to the bleed line. And if&nbsp;
+you have bleeds, you need to extend your artwork&nbsp;&nbsp;
+
+00:02:03.120 --> 00:02:08.960
+all the way over to that, so I'm just going&nbsp;
+to grab that black area. I don't want to move&nbsp;&nbsp;
+
+00:02:08.960 --> 00:02:14.720
+anything else, I just want to extend the black so&nbsp;
+that it goes all the way out to the bleeds. And&nbsp;&nbsp;
+
+00:02:14.720 --> 00:02:21.360
+I'm holding OPT now so that it'll resize both ways&nbsp;
+at the same time, top and bottom and then right&nbsp;&nbsp;
+
+00:02:21.360 --> 00:02:27.440
+and left. So now if we zoom in, nothing here has&nbsp;
+changed. This is the same distance to the edge,&nbsp;&nbsp;
+
+00:02:27.440 --> 00:02:33.200
+but I just extended the black out to the&nbsp;
+bleeds. And by the way, I got this postcard from&nbsp;&nbsp;
+
+00:02:33.200 --> 00:02:40.640
+Vecteezy.com. Anyway, we're ready to save as a&nbsp;
+PDF now. So I'm going to come up here to File&gt;Save&nbsp;&nbsp;
+
+00:02:40.640 --> 00:02:48.320
+As. And I'll just choose PDF right down here. I'm&nbsp;
+going to call it Halloween postcard with bleed,&nbsp;&nbsp;
+
+00:02:49.120 --> 00:02:55.600
+and it'll have pdf at the end because I chose that&nbsp;
+here. And I'll Save. Now here's where we'll set up&nbsp;&nbsp;
+
+00:02:55.600 --> 00:02:59.280
+the bleeds and crop marks. So let's just&nbsp;
+come right over here to Marks and Bleeds.&nbsp;&nbsp;
+
+00:03:00.080 --> 00:03:05.040
+I'm going to make sure this is checked: Use&nbsp;
+Document Bleed Settings. If you uncheck it,&nbsp;&nbsp;
+
+00:03:05.040 --> 00:03:08.480
+you can input whatever you want.&nbsp;
+So you can manually do it that way&nbsp;&nbsp;
+
+00:03:09.600 --> 00:03:13.680
+or you can just click this button if&nbsp;
+you've already set up your document bleeds.&nbsp;&nbsp;
+
+00:03:14.480 --> 00:03:20.640
+And we also want Trim Marks. That'll give us&nbsp;
+crop marks. And we'll say Save PDF. Now if&nbsp;&nbsp;
+
+00:03:20.640 --> 00:03:27.520
+we come out here and look at our PDF...I'm just&nbsp;
+going to hit CMD O or CTRL O to open that...you&nbsp;&nbsp;
+
+00:03:27.520 --> 00:03:33.040
+can see we have our crop marks and bleeds now.&nbsp;
+So they can cut right along this line and then&nbsp;&nbsp;
+
+00:03:33.040 --> 00:03:38.960
+cut along that line and still have plenty of&nbsp;
+area down here and on the sides to mess up,&nbsp;&nbsp;
+
+00:03:38.960 --> 00:03:43.840
+if they don't get the cut exactly right. Now&nbsp;
+I'm going to go back to my Illustrator document.&nbsp;&nbsp;
+
+00:03:43.840 --> 00:03:48.320
+And some printing places don't want&nbsp;
+crop marks, but they do want bleeds.&nbsp;&nbsp;
+
+00:03:48.320 --> 00:03:52.720
+So let's make one like that. We've got our&nbsp;
+document opened up, and we've got the background&nbsp;&nbsp;
+
+00:03:52.720 --> 00:03:58.560
+extending all the way to the bleed line. Now&nbsp;
+we'll just do Save As which is SHIFT CMD S or&nbsp;&nbsp;
+
+00:03:58.560 --> 00:04:06.320
+SHIFT CTRL S. And I'm just going to call this one&nbsp;
+Halloween postcard and I'll call this bleeds only.&nbsp;&nbsp;
+
+00:04:08.160 --> 00:04:15.840
+We'll save as PDF. And now the only difference is&nbsp;
+we don't want trim marks. So I'll uncheck that.&nbsp;&nbsp;
+
+00:04:15.840 --> 00:04:19.920
+We'll continue to use the Document&nbsp;
+Bleed settings, and we'll Save PDF.&nbsp;
+
+00:04:21.440 --> 00:04:26.240
+Now let's go and look at what this one looks&nbsp;
+like. This one goes all the way out to the&nbsp;&nbsp;
+
+00:04:26.240 --> 00:04:35.440
+edge. And if we hover down here, you can see it's&nbsp;
+4.25 by 6.25. That's including that bleed of .125&nbsp;&nbsp;
+
+00:04:35.440 --> 00:04:40.480
+on both the right and the left sides, and the top&nbsp;
+and the bottom. That's where the .25 comes from.&nbsp;&nbsp;
+
+00:04:41.120 --> 00:04:47.040
+If we look at our other one, this size is kind of&nbsp;
+a random size. And that's because it's including&nbsp;&nbsp;
+
+00:04:47.040 --> 00:04:52.400
+this whitespace out here, but once this is cut,&nbsp;
+if they use the crop marks and make a perfect cut,&nbsp;&nbsp;
+
+00:04:52.400 --> 00:04:58.240
+it'll be 4 by 6. The last thing I want to&nbsp;
+show you is, if you don't have bleeds at all,&nbsp;&nbsp;
+
+00:04:58.240 --> 00:05:04.240
+so that means that nothing is printing&nbsp;
+up to that edge or going off the edge.&nbsp;&nbsp;
+
+00:05:04.880 --> 00:05:10.080
+So, in that case, you're going to want no crops&nbsp;
+or bleeds, probably. You'll want to check with&nbsp;&nbsp;
+
+00:05:10.080 --> 00:05:17.520
+your printer on that, too. So let's open one that&nbsp;
+doesn't have something going off the edge. Ok,&nbsp;&nbsp;
+
+00:05:17.520 --> 00:05:23.040
+this is a good example. We don't have any color&nbsp;
+that's being printed up to the edge or off the&nbsp;&nbsp;
+
+00:05:23.040 --> 00:05:29.280
+edge. All the way around, it's white. So in this&nbsp;
+case, we would want to Save As like we did before,&nbsp;&nbsp;
+
+00:05:30.080 --> 00:05:35.680
+and we'll change our file type down here to&nbsp;
+PDF. Then I'll hit Save, and then we'll come&nbsp;&nbsp;
+
+00:05:35.680 --> 00:05:40.640
+down here to Marks and Bleeds. Make sure neither&nbsp;
+one of these things are checked. And then we can&nbsp;&nbsp;
+
+00:05:40.640 --> 00:05:47.520
+Save PDF. Now I do want to mention, if you want&nbsp;
+really good quality, you can change your Adobe PDF&nbsp;&nbsp;
+
+00:05:47.520 --> 00:05:54.160
+preset here. I like to use either Illustrator&nbsp;
+Default, High Quality Print or Press Quality.&nbsp;&nbsp;
+
+00:05:54.160 --> 00:05:59.600
+So once you hit that, like let's choose Press&nbsp;
+Quality, then I'll come here to Marks and Bleeds,&nbsp;&nbsp;
+
+00:05:59.600 --> 00:06:05.280
+make sure nothing is checked, and I'll Save&nbsp;
+PDF. And now when we open this one in Acrobat,&nbsp;&nbsp;
+
+00:06:05.280 --> 00:06:10.960
+we can hover down here, and you can see that&nbsp;
+it's exactly 4 by 6, so if you don't need bleeds&nbsp;&nbsp;
+
+00:06:10.960 --> 00:06:17.680
+or crops, your final size will end up exactly the&nbsp;
+size as your document itself, unless your printer&nbsp;&nbsp;
+
+00:06:17.680 --> 00:06:23.920
+wants you to add those for some reason. Now if you&nbsp;
+have a front and back to your postcard or flyer,&nbsp;&nbsp;
+
+00:06:23.920 --> 00:06:28.560
+you're going to have two pages in your PDF. So&nbsp;
+you'll have a page here and then you'll have&nbsp;&nbsp;
+
+00:06:28.560 --> 00:06:35.040
+another page that's exactly the same size with the&nbsp;
+same setup. So if one of them has crops and bleeds&nbsp;&nbsp;
+
+00:06:35.040 --> 00:06:38.960
+your other one will have crops and bleeds, and&nbsp;
+one will be the front and one will be the back.&nbsp;&nbsp;
+
+00:06:39.600 --> 00:06:43.760
+So that's how to save your document&nbsp;
+if it's just a small print piece&nbsp;&nbsp;
+
+00:06:43.760 --> 00:06:48.160
+for printing. All right, if you liked this&nbsp;
+video and you want to see more videos like this,&nbsp;&nbsp;
+
+00:06:48.160 --> 00:06:51.840
+just hit the subscribe button and the little&nbsp;
+bell next to it and you'll be notified every&nbsp;&nbsp;
+
+00:06:51.840 --> 00:06:56.240
+time a new video comes out. All right, I'll&nbsp;
+see you in the next video. Thank you!!!
+

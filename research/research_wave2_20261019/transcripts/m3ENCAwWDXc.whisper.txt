@@ -1,0 +1,150 @@
+In this video I will take you step by step how to use it your data set of images to create the loader that you can use with a
+Flux inside a comfui. All our workflow will be residing inside a comfui.
+In this video I'm going to use comfui 0.3.36. You can download this version directly from the links down below in the
+descriptions and depend on what version you used you can select. I would recommend to use it Windows Portable.
+That's what I'm using in this video. Just going down and click on direct link. As I mentioned before all links to all resources will be
+down in the descriptions. It's easy for you to find in one convenient place.
+After when you've downloaded it, you just extract and you should have multiple directories. Before we start running comfui, we also want to
+install comfui manager. You can find this again with the links. What I recommend for you to do just going down below
+where it says installations and this is what we're going to use. You should have a git installed on your computer.
+If for some reason you're missing some of those like a python git or any other applications, I would recommend for you to
+watch my video about comfui from A to Z where I explain everything how to install what application
+additional you kind of prefer to have in general how comfui works. Right here, this is what we're going to use it, but we
+cannot just yet run. We actually need to locate it and custom nodes and it's all going to your path comfui windows
+comfui config nodes just right here on the top click on a path and type cmd command prompt press enter and it
+should be open terminal for you. Next, what we want to do with this terminal, you just want to go copy this path as we did
+before. Actually, this is command. It says git repository clone and path what we need to do just paste inside here, press
+enter and it's will install it on successful install. You should have it nothing here yet. You just will have
+this comfui manager after install comfui manager you're ready to run. So let's go inside the r30 will go inside
+right here windows portable and right here just run run nvidia gpu batch file which should execute for you
+the main file and after short installations you should have it your comfui running and ready.
+Also notice if not top you should have it a manager this special tab is available for you
+if not it's probably custom nodes wasn't installed and in some cases if you already run server you
+maybe neither is started. Okay let's say everything is running and manager is here let's open manager
+and we want downloaded few custom nodes to do this we'll go click on a custom nodes inside here
+and in a top search bar just type comfui flux trainer this is from kaige this set of the nodes
+or construction blocks that we're going to use it to train. So just click and install latest version
+next set of nodes we wanted it's a rg3 comfui all of the names for this nodes will be down in
+description so you can just copy and paste them inside the search same right here i just installed
+the latest version and it's going as a nightly and you can preview which version is used so we
+install this not yet restart your server because we need to install one more and after this we just
+will restart our server. Okay another one so recommended it just type kge nodes and install
+kge nodes for comfui and last but not least there was no node suite this is kind of optional if you
+want to pre-train on the text generate from images i will show you how we can use it in descriptions
+but just in case this one is optional and if you feel like you can install it but i highly
+recommend because it's have a very nice set of nodes so after all of this installed just go
+ahead and click restart you can restart from here but in a few times i notice it's not always
+restart completely so what i like to do it's find where's my server running and just close the windows
+and relaunch batch file again so right here just to run this again before we start working on a
+main workflow this is optional and i just want to share with you in case if you need it all
+what it does it's using a blip compsion for the better performance you want to take those images
+that we have before and create descriptions for them as a text file so later when your
+laura will train it's actually read name or text file description for everyone and embedded this is
+will work much better when you in the future if you try to describe and laura will perform
+better with this description it is optional it's not required for example the latest laura
+that you will see it's trained without those text files just in case if you want it i will provide
+this workflow for you downloaded but it's very simple all what we have right here it's downloaded
+images from the folder where we specify folder resolution of images also we downloaded blip model
+here and currently also link will provide for you down below to download it but if you use it
+with art venture it's actually it's a was not in the preloaded itself which is kind of nice
+or you can just preload it from here and of course we have our preset max link recommended to
+75 in this case for the flux and we just save it in same path with the names so as i say it's
+very simple and it's totally optional let me warn you about this for example when i'm run on my machine
+rtx 3090 two times it's actually hardcore this model hardcore shut down my computer
+so just keep in mind this is it's why i say it's optional it's not required but if you
+aren't be very fancy it's what you're creating then you can use it this and as well i will
+provide for your links for this model we can download it directly for the big large model for the blip
+or the smaller model as well so you can reference this and download it in use if you decide to
+generate text files now for the our workflow with generating inside the flags for directly
+lower trainings you will need download server files if you don't have it most likely you do
+already have them and installing properly you can download it two ways one manually by going
+links i'll provide down below and right here for example you can download it flags def safe sensor
+put it this inside the model directory clip model you also have with your text encoders which is
+going in a clip directory and you have it your vf file which going inside the vf folder
+and let me show you as example right here if we look we inside our models checkpoints and right here
+inside the flux it's where put in those models or you can just put it location however you want to
+organize so this is our flux we also have it inside our clip clip t2 base those ones that i show
+you before and inside our vf file okay right here there's we'll like it another so you
+have to say it is straightforward names and just like a did for those files
+the base model or based workflow json i'd recommend to download it from directly kaiji
+flux trainer you can see it's right here and you can just download it script directly from here
+or i will also provide for you link so you can download it from share drive okay notice right
+there also have some nodes which you should already have it pre-installed after you downloaded json file
+just simply drag and drop in your workspace and you should have it like this open all nodes should
+be present from if you installed it for some reason some of these nodes come up with red color i
+would recommend for you going to manager install missing custom nodes and that will also install
+if you're missing but you should have it all nodes is available okay let's go check what we have here
+and first this is where preloaded our trainers okay we won't go too much in details and we have
+a very good documentation in original page also just in case if you don't know where the workflow
+located they will be inside the code says example workflows just click on this open and right
+here you can download it those examples as i mentioned i'm using the data set and my data set is
+located in a folder called training my data set you can modify path if you need it and inside here
+i like i put it this file so currently i think it's about 36 files yep it's 36 files and they're
+all 10 1024 by 1024 resolution and this is where specify i was a little bit lazy so i don't want
+kind of change size but i would recommend for the best performance if you also resize them
+or use a different set as you're creating so it's a reference you can also reference to different
+areas so i left everything as default on the stage let's go see what after the preloaded
+data set we're going to influx lot of training model where we can preload it right here example
+it is a string multi-line consent where i use it the exactly same what i used before for
+describing woman in this case we have our same optimizations we just leave it everything
+default here as well is on a model so notice right there we have it our flex if for some reason
+models is not fine you can pre-downloaded them and a relink here just go click down select
+the model because sometimes i found maybe path like it in different sub directory so for some reason
+if the missing you can connect them here okay we have it also this is all pretty well i did
+not change any variables we leave it for the hour test and when you pre-train first time if you do
+training i would recommend try avoid to modify setting as much as possible try to set as a basic
+it's meaning input the data set maybe input description in this case just verify if everything
+is look okay included your path output name and path as well here that's why we have it i even
+just leave it as default in this case because many case many times i just want to be sure everything
+is running and after this just click run and it will have it your processing 300 steps and more
+display here as we're running and in a end it should be pre-train please aware when you try to
+train this and in my case again i was using gt i'm using gtx 3090 with 24 gigabyte ram and i have
+with 36 images in my reference in my data set 10 000 1024 by 1024 so let's go ahead and start
+training our lower training is completed and we look it's took almost five hours so it was 36
+images 1024 by 1024 resolution for the flux training and you can see right here as we're going
+get still how long this will take per each step for example two hours 23 minutes here
+and it's combined three hours 35 and four hours 44 and after save everything i say it's about four
+hours uh almost five hours total we'll take in here okay let's look closer what's happening
+with our flow we did look before on some of the settings and as a processing
+so the couple things when i created i received some errors mostly it's related to the path so i end up
+just putting absolute path to my data set you can modify this however i did not change
+name for my flux model output which is right here can be it doesn't matter at this point
+because i can rename it it just uh if you want to put in specific path you need to put it right here
+but let's see how it's created one thing i do like about this training because you can first
+if you remember you can have a different resolutions which is actually work very well
+if you decide to reuse it on different sizes but in my case because all images was 1024 so
+i was using right here exactly same settings okay let's go next preview this is our first
+pass pre-training and what's good about this workflow you can see also on training class
+over time you can see how the dropping on the trainings and it's always will happen
+doesn't matter what as you train some of us will drop but if you come up with some anomalies
+you can actually preview here in our case everything okay and as well we have it steps
+between when it's training on a lower how it was done okay so after all this time
+and just like me repeat the time is depend on how many images you want trained and what
+resolution of the images so in this case 36 images 1024 so we can see last over time 0.25 which is actually
+not bad at all on a 2000 steps pre-training how much we're taking and here's our example
+after training is completed in the loader let's look on our folder and this is will
+located in our comfy y-flora uh flux loader output path it's what we sped before and right
+here we have it between our steps safe tensor so you can try them if you're interested just
+before for the comparison you'll notice we also have it our jsonc workflow configuration which
+will look a little bit later and as well we have it our final right here is created if for some
+reason you confuse with names just look on the time and we can see this is done after midnight
+is actually what's happening overnight i just put it and i went to bed i let its training gun on its
+own and you can see right here training completed last and you can see each step how long it's
+taken between them to complete it okay so let's go ahead right now and put to the test our lower
+model okay so right here is our test and we're just preloading our flux model we're preloading
+our lower that we just created i just renamed red hair dash v to kind of remember what it is about
+and i put maximum strength which is probably will create some little bit artifacts but that should
+give us good example if it's lower actually reading and type simple portraits of a young woman
+which is very generic and we'll see without uh lower loaded what this will happen right now
+you can see it's exactly same from ours so because if we can go and check
+on our data set you will see it's a very similar it's what we want this face it's look exactly
+the same so we know the lower is just training and put it properly output some artifacts will
+include like those lines but this is partially with settings when we need training maybe a little
+too aggressively and as well the resizing and as well it is very strong use of the lower here
+so let's just as example i'm going to go ahead and bypass this so we'll just go without loading
+lower go test this one just to be sure it's will have it at this time should be no effect on
+and here example with bypass on a lower off and you can see it's look total different
+portrait okay so hopefully you'll find this video is interesting for you it's how you can
+pre-train your lores using with the flux inside the confiui be sure you have it plenty of the
+time to give it and as well give it different resolution of the image for the better result
+thank you for watching and we'll see you next time bye

@@ -1,0 +1,1528 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.040 --> 00:00:06.730 align:start position:0%
+ 
+[Music]
+
+00:00:06.730 --> 00:00:06.740 align:start position:0%
+[Music]
+ 
+
+00:00:06.740 --> 00:00:09.690 align:start position:0%
+[Music]
+thank<00:00:07.740><c> you</c>
+
+00:00:09.690 --> 00:00:09.700 align:start position:0%
+thank you
+ 
+
+00:00:09.700 --> 00:00:12.610 align:start position:0%
+thank you
+[Music]
+
+00:00:12.610 --> 00:00:12.620 align:start position:0%
+[Music]
+ 
+
+00:00:12.620 --> 00:00:15.289 align:start position:0%
+[Music]
+hi<00:00:13.620><c> there</c><00:00:13.799><c> guys</c><00:00:14.040><c> both</c><00:00:14.280><c> protesters</c><00:00:14.940><c> here</c><00:00:15.120><c> and</c>
+
+00:00:15.289 --> 00:00:15.299 align:start position:0%
+hi there guys both protesters here and
+ 
+
+00:00:15.299 --> 00:00:17.029 align:start position:0%
+hi there guys both protesters here and
+welcome<00:00:15.540><c> back</c><00:00:15.780><c> to</c><00:00:15.960><c> my</c><00:00:16.080><c> Unreal</c><00:00:16.440><c> Engine</c><00:00:16.619><c> Series</c>
+
+00:00:17.029 --> 00:00:17.039 align:start position:0%
+welcome back to my Unreal Engine Series
+ 
+
+00:00:17.039 --> 00:00:19.010 align:start position:0%
+welcome back to my Unreal Engine Series
+today<00:00:17.760><c> I'm</c><00:00:17.940><c> going</c><00:00:18.180><c> to</c><00:00:18.300><c> break</c><00:00:18.480><c> down</c><00:00:18.660><c> the</c><00:00:18.900><c> light</c>
+
+00:00:19.010 --> 00:00:19.020 align:start position:0%
+today I'm going to break down the light
+ 
+
+00:00:19.020 --> 00:00:21.470 align:start position:0%
+today I'm going to break down the light
+setup<00:00:19.440><c> for</c><00:00:19.680><c> this</c><00:00:19.859><c> epic</c><00:00:20.220><c> scene</c><00:00:20.460><c> as</c><00:00:20.939><c> it's</c><00:00:21.240><c> much</c>
+
+00:00:21.470 --> 00:00:21.480 align:start position:0%
+setup for this epic scene as it's much
+ 
+
+00:00:21.480 --> 00:00:23.510 align:start position:0%
+setup for this epic scene as it's much
+more<00:00:21.779><c> complex</c><00:00:22.199><c> than</c><00:00:22.439><c> others</c><00:00:22.859><c> from</c><00:00:23.160><c> my</c><00:00:23.340><c> video</c>
+
+00:00:23.510 --> 00:00:23.520 align:start position:0%
+more complex than others from my video
+ 
+
+00:00:23.520 --> 00:00:25.490 align:start position:0%
+more complex than others from my video
+where<00:00:23.880><c> I</c><00:00:24.119><c> used</c><00:00:24.300><c> only</c><00:00:24.539><c> one</c><00:00:24.840><c> source</c><00:00:25.199><c> of</c><00:00:25.320><c> light</c>
+
+00:00:25.490 --> 00:00:25.500 align:start position:0%
+where I used only one source of light
+ 
+
+00:00:25.500 --> 00:00:27.529 align:start position:0%
+where I used only one source of light
+this<00:00:26.160><c> tutorial</c><00:00:26.699><c> will</c><00:00:26.880><c> be</c><00:00:27.000><c> useful</c><00:00:27.240><c> not</c><00:00:27.420><c> only</c>
+
+00:00:27.529 --> 00:00:27.539 align:start position:0%
+this tutorial will be useful not only
+ 
+
+00:00:27.539 --> 00:00:29.509 align:start position:0%
+this tutorial will be useful not only
+for<00:00:27.779><c> automotive</c><00:00:28.380><c> enthusiasts</c><00:00:28.859><c> starting</c><00:00:29.220><c> to</c>
+
+00:00:29.509 --> 00:00:29.519 align:start position:0%
+for automotive enthusiasts starting to
+ 
+
+00:00:29.519 --> 00:00:31.130 align:start position:0%
+for automotive enthusiasts starting to
+explore<00:00:29.760><c> Unreal</c><00:00:30.119><c> Engine</c><00:00:30.300><c> but</c><00:00:30.660><c> also</c><00:00:30.960><c> for</c>
+
+00:00:31.130 --> 00:00:31.140 align:start position:0%
+explore Unreal Engine but also for
+ 
+
+00:00:31.140 --> 00:00:32.749 align:start position:0%
+explore Unreal Engine but also for
+people<00:00:31.439><c> who</c><00:00:31.920><c> would</c><00:00:32.040><c> like</c><00:00:32.220><c> to</c><00:00:32.399><c> learn</c><00:00:32.520><c> some</c>
+
+00:00:32.749 --> 00:00:32.759 align:start position:0%
+people who would like to learn some
+ 
+
+00:00:32.759 --> 00:00:34.670 align:start position:0%
+people who would like to learn some
+lighting<00:00:33.180><c> tips</c><00:00:33.420><c> in</c><00:00:33.600><c> unreal</c><00:00:34.020><c> which</c><00:00:34.380><c> I</c><00:00:34.500><c> will</c>
+
+00:00:34.670 --> 00:00:34.680 align:start position:0%
+lighting tips in unreal which I will
+ 
+
+00:00:34.680 --> 00:00:36.889 align:start position:0%
+lighting tips in unreal which I will
+show<00:00:34.860><c> in</c><00:00:35.040><c> this</c><00:00:35.160><c> tutorial</c><00:00:35.640><c> so</c><00:00:36.120><c> stick</c><00:00:36.360><c> around</c><00:00:36.540><c> in</c>
+
+00:00:36.889 --> 00:00:36.899 align:start position:0%
+show in this tutorial so stick around in
+ 
+
+00:00:36.899 --> 00:00:38.270 align:start position:0%
+show in this tutorial so stick around in
+this<00:00:37.079><c> couple</c><00:00:37.260><c> of</c><00:00:37.380><c> hours</c><00:00:37.559><c> of</c><00:00:37.860><c> practicing</c>
+
+00:00:38.270 --> 00:00:38.280 align:start position:0%
+this couple of hours of practicing
+ 
+
+00:00:38.280 --> 00:00:40.490 align:start position:0%
+this couple of hours of practicing
+you'll<00:00:38.640><c> be</c><00:00:38.820><c> able</c><00:00:38.940><c> to</c><00:00:39.120><c> do</c><00:00:39.300><c> that</c><00:00:39.480><c> too</c><00:00:39.719><c> but</c><00:00:40.320><c> before</c>
+
+00:00:40.490 --> 00:00:40.500 align:start position:0%
+you'll be able to do that too but before
+ 
+
+00:00:40.500 --> 00:00:42.470 align:start position:0%
+you'll be able to do that too but before
+we<00:00:40.800><c> get</c><00:00:40.920><c> into</c><00:00:41.160><c> it</c><00:00:41.399><c> make</c><00:00:41.879><c> sure</c><00:00:42.059><c> that</c><00:00:42.360><c> you</c>
+
+00:00:42.470 --> 00:00:42.480 align:start position:0%
+we get into it make sure that you
+ 
+
+00:00:42.480 --> 00:00:43.970 align:start position:0%
+we get into it make sure that you
+subscribe<00:00:42.899><c> to</c><00:00:43.079><c> my</c><00:00:43.260><c> channel</c><00:00:43.440><c> if</c><00:00:43.739><c> you</c><00:00:43.860><c> would</c>
+
+00:00:43.970 --> 00:00:43.980 align:start position:0%
+subscribe to my channel if you would
+ 
+
+00:00:43.980 --> 00:00:45.709 align:start position:0%
+subscribe to my channel if you would
+like<00:00:44.100><c> to</c><00:00:44.280><c> get</c><00:00:44.399><c> more</c><00:00:44.700><c> tips</c><00:00:44.940><c> about</c><00:00:45.120><c> Unreal</c>
+
+00:00:45.709 --> 00:00:45.719 align:start position:0%
+like to get more tips about Unreal
+ 
+
+00:00:45.719 --> 00:00:47.690 align:start position:0%
+like to get more tips about Unreal
+Engine<00:00:45.840><c> and</c><00:00:46.260><c> post-production</c><00:00:46.920><c> without</c>
+
+00:00:47.690 --> 00:00:47.700 align:start position:0%
+Engine and post-production without
+ 
+
+00:00:47.700 --> 00:00:50.630 align:start position:0%
+Engine and post-production without
+further<00:00:48.180><c> Ado</c><00:00:48.420><c> let's</c><00:00:49.140><c> light</c><00:00:49.440><c> this</c><00:00:49.680><c> scene</c><00:00:49.920><c> here</c>
+
+00:00:50.630 --> 00:00:50.640 align:start position:0%
+further Ado let's light this scene here
+ 
+
+00:00:50.640 --> 00:00:52.869 align:start position:0%
+further Ado let's light this scene here
+I<00:00:50.879><c> have</c><00:00:51.059><c> the</c><00:00:51.300><c> environment</c><00:00:51.660><c> I</c><00:00:51.899><c> have</c><00:00:52.079><c> recreated</c>
+
+00:00:52.869 --> 00:00:52.879 align:start position:0%
+I have the environment I have recreated
+ 
+
+00:00:52.879 --> 00:00:55.790 align:start position:0%
+I have the environment I have recreated
+inspired<00:00:53.879><c> by</c><00:00:54.120><c> McLaren</c><00:00:54.780><c> 750s</c><00:00:55.500><c> commercial</c>
+
+00:00:55.790 --> 00:00:55.800 align:start position:0%
+inspired by McLaren 750s commercial
+ 
+
+00:00:55.800 --> 00:00:58.130 align:start position:0%
+inspired by McLaren 750s commercial
+according<00:00:56.640><c> to</c><00:00:56.820><c> the</c><00:00:57.000><c> reference</c><00:00:57.420><c> it's</c><00:00:57.899><c> done</c>
+
+00:00:58.130 --> 00:00:58.140 align:start position:0%
+according to the reference it's done
+ 
+
+00:00:58.140 --> 00:01:00.650 align:start position:0%
+according to the reference it's done
+with<00:00:58.320><c> the</c><00:00:58.500><c> simple</c><00:00:58.680><c> shapes</c><00:00:59.160><c> like</c><00:00:59.460><c> cubes</c><00:01:00.059><c> planes</c>
+
+00:01:00.650 --> 00:01:00.660 align:start position:0%
+with the simple shapes like cubes planes
+ 
+
+00:01:00.660 --> 00:01:02.750 align:start position:0%
+with the simple shapes like cubes planes
+and<00:01:01.020><c> with</c><00:01:01.199><c> mega</c><00:01:01.559><c> scan</c><00:01:01.800><c> materials</c><00:01:02.399><c> from</c><00:01:02.579><c> bridge</c>
+
+00:01:02.750 --> 00:01:02.760 align:start position:0%
+and with mega scan materials from bridge
+ 
+
+00:01:02.760 --> 00:01:04.549 align:start position:0%
+and with mega scan materials from bridge
+and<00:01:03.120><c> some</c><00:01:03.300><c> assets</c><00:01:03.719><c> from</c><00:01:03.960><c> free</c><00:01:04.140><c> and</c><00:01:04.379><c> real</c>
+
+00:01:04.549 --> 00:01:04.559 align:start position:0%
+and some assets from free and real
+ 
+
+00:01:04.559 --> 00:01:06.830 align:start position:0%
+and some assets from free and real
+engine<00:01:04.799><c> asset</c><00:01:05.220><c> packs</c><00:01:05.640><c> creating</c><00:01:06.299><c> this</c><00:01:06.540><c> scene</c>
+
+00:01:06.830 --> 00:01:06.840 align:start position:0%
+engine asset packs creating this scene
+ 
+
+00:01:06.840 --> 00:01:09.109 align:start position:0%
+engine asset packs creating this scene
+was<00:01:07.200><c> easy</c><00:01:07.500><c> as</c><00:01:07.860><c> environment</c><00:01:08.340><c> is</c><00:01:08.580><c> very</c><00:01:08.820><c> simple</c>
+
+00:01:09.109 --> 00:01:09.119 align:start position:0%
+was easy as environment is very simple
+ 
+
+00:01:09.119 --> 00:01:11.149 align:start position:0%
+was easy as environment is very simple
+the<00:01:09.600><c> scene</c><00:01:09.780><c> looks</c><00:01:10.140><c> good</c><00:01:10.260><c> in</c><00:01:10.439><c> Lumen</c><00:01:10.799><c> and</c><00:01:10.920><c> past</c>
+
+00:01:11.149 --> 00:01:11.159 align:start position:0%
+the scene looks good in Lumen and past
+ 
+
+00:01:11.159 --> 00:01:13.670 align:start position:0%
+the scene looks good in Lumen and past
+racing<00:01:11.700><c> and</c><00:01:11.939><c> I</c><00:01:12.119><c> would</c><00:01:12.180><c> say</c><00:01:12.479><c> almost</c><00:01:13.080><c> identical</c>
+
+00:01:13.670 --> 00:01:13.680 align:start position:0%
+racing and I would say almost identical
+ 
+
+00:01:13.680 --> 00:01:15.890 align:start position:0%
+racing and I would say almost identical
+if<00:01:14.220><c> it</c><00:01:14.400><c> looks</c><00:01:14.640><c> good</c><00:01:14.760><c> in</c><00:01:14.880><c> Lumen</c><00:01:15.240><c> then</c><00:01:15.479><c> it</c><00:01:15.659><c> means</c>
+
+00:01:15.890 --> 00:01:15.900 align:start position:0%
+if it looks good in Lumen then it means
+ 
+
+00:01:15.900 --> 00:01:17.870 align:start position:0%
+if it looks good in Lumen then it means
+in<00:01:16.020><c> bus</c><00:01:16.200><c> tracing</c><00:01:16.680><c> it</c><00:01:16.860><c> will</c><00:01:17.040><c> too</c><00:01:17.220><c> I</c><00:01:17.640><c> like</c><00:01:17.760><c> to</c>
+
+00:01:17.870 --> 00:01:17.880 align:start position:0%
+in bus tracing it will too I like to
+ 
+
+00:01:17.880 --> 00:01:20.510 align:start position:0%
+in bus tracing it will too I like to
+keep<00:01:18.060><c> my</c><00:01:18.299><c> project</c><00:01:18.479><c> organized</c><00:01:19.380><c> so</c><00:01:19.860><c> I</c><00:01:20.159><c> have</c><00:01:20.280><c> here</c>
+
+00:01:20.510 --> 00:01:20.520 align:start position:0%
+keep my project organized so I have here
+ 
+
+00:01:20.520 --> 00:01:23.390 align:start position:0%
+keep my project organized so I have here
+all<00:01:20.820><c> sorted</c><00:01:21.240><c> by</c><00:01:21.420><c> folders</c><00:01:21.900><c> geometry</c><00:01:22.560><c> props</c><00:01:23.159><c> and</c>
+
+00:01:23.390 --> 00:01:23.400 align:start position:0%
+all sorted by folders geometry props and
+ 
+
+00:01:23.400 --> 00:01:25.249 align:start position:0%
+all sorted by folders geometry props and
+lights<00:01:23.640><c> you</c><00:01:24.119><c> can</c><00:01:24.240><c> easily</c><00:01:24.540><c> find</c><00:01:24.720><c> what</c><00:01:25.020><c> you</c><00:01:25.140><c> need</c>
+
+00:01:25.249 --> 00:01:25.259 align:start position:0%
+lights you can easily find what you need
+ 
+
+00:01:25.259 --> 00:01:27.350 align:start position:0%
+lights you can easily find what you need
+or<00:01:25.560><c> hide</c><00:01:25.740><c> it</c><00:01:25.920><c> in</c><00:01:26.040><c> groups</c><00:01:26.400><c> right</c><00:01:26.820><c> now</c><00:01:27.000><c> I</c><00:01:27.240><c> will</c>
+
+00:01:27.350 --> 00:01:27.360 align:start position:0%
+or hide it in groups right now I will
+ 
+
+00:01:27.360 --> 00:01:28.670 align:start position:0%
+or hide it in groups right now I will
+delete<00:01:27.540><c> all</c><00:01:27.900><c> the</c><00:01:28.080><c> lights</c><00:01:28.200><c> and</c><00:01:28.500><c> post</c>
+
+00:01:28.670 --> 00:01:28.680 align:start position:0%
+delete all the lights and post
+ 
+
+00:01:28.680 --> 00:01:30.649 align:start position:0%
+delete all the lights and post
+processing<00:01:29.159><c> volume</c><00:01:29.400><c> from</c><00:01:29.759><c> the</c><00:01:29.880><c> scene</c><00:01:30.060><c> and</c><00:01:30.420><c> we</c>
+
+00:01:30.649 --> 00:01:30.659 align:start position:0%
+processing volume from the scene and we
+ 
+
+00:01:30.659 --> 00:01:41.250 align:start position:0%
+processing volume from the scene and we
+will<00:01:30.840><c> create</c><00:01:31.259><c> a</c><00:01:31.500><c> setup</c><00:01:31.799><c> from</c><00:01:31.979><c> a</c><00:01:32.159><c> scratch</c>
+
+00:01:41.250 --> 00:01:41.260 align:start position:0%
+ 
+ 
+
+00:01:41.260 --> 00:01:43.490 align:start position:0%
+ 
+[Music]
+
+00:01:43.490 --> 00:01:43.500 align:start position:0%
+[Music]
+ 
+
+00:01:43.500 --> 00:01:46.010 align:start position:0%
+[Music]
+first<00:01:44.040><c> I</c><00:01:44.520><c> add</c><00:01:44.700><c> new</c><00:01:44.939><c> post</c><00:01:45.180><c> processing</c><00:01:45.780><c> volume</c>
+
+00:01:46.010 --> 00:01:46.020 align:start position:0%
+first I add new post processing volume
+ 
+
+00:01:46.020 --> 00:01:48.950 align:start position:0%
+first I add new post processing volume
+to<00:01:46.259><c> the</c><00:01:46.439><c> scene</c><00:01:46.619><c> and</c><00:01:46.979><c> set</c><00:01:47.159><c> it</c><00:01:47.340><c> to</c><00:01:47.759><c> Unbound</c><00:01:48.240><c> so</c><00:01:48.780><c> it</c>
+
+00:01:48.950 --> 00:01:48.960 align:start position:0%
+to the scene and set it to Unbound so it
+ 
+
+00:01:48.960 --> 00:01:51.050 align:start position:0%
+to the scene and set it to Unbound so it
+will<00:01:49.140><c> affect</c><00:01:49.500><c> the</c><00:01:49.680><c> whole</c><00:01:49.860><c> level</c><00:01:50.100><c> but</c><00:01:50.640><c> not</c><00:01:50.880><c> only</c>
+
+00:01:51.050 --> 00:01:51.060 align:start position:0%
+will affect the whole level but not only
+ 
+
+00:01:51.060 --> 00:01:55.690 align:start position:0%
+will affect the whole level but not only
+the<00:01:51.360><c> Box</c><00:01:51.540><c> area</c>
+
+00:01:55.690 --> 00:01:55.700 align:start position:0%
+ 
+ 
+
+00:01:55.700 --> 00:01:58.550 align:start position:0%
+ 
+after<00:01:56.700><c> that</c><00:01:57.000><c> I</c><00:01:57.360><c> set</c><00:01:57.540><c> up</c><00:01:57.659><c> exposure</c><00:01:58.140><c> metering</c>
+
+00:01:58.550 --> 00:01:58.560 align:start position:0%
+after that I set up exposure metering
+ 
+
+00:01:58.560 --> 00:02:01.069 align:start position:0%
+after that I set up exposure metering
+mode<00:01:58.740><c> to</c><00:01:58.920><c> manual</c><00:01:59.340><c> as</c><00:01:59.880><c> I</c><00:02:00.119><c> don't</c><00:02:00.240><c> want</c><00:02:00.420><c> exposure</c>
+
+00:02:01.069 --> 00:02:01.079 align:start position:0%
+mode to manual as I don't want exposure
+ 
+
+00:02:01.079 --> 00:02:03.469 align:start position:0%
+mode to manual as I don't want exposure
+to<00:02:01.259><c> adjust</c><00:02:01.380><c> automatically</c><00:02:02.159><c> all</c><00:02:02.759><c> the</c><00:02:02.939><c> time</c><00:02:03.119><c> and</c>
+
+00:02:03.469 --> 00:02:03.479 align:start position:0%
+to adjust automatically all the time and
+ 
+
+00:02:03.479 --> 00:02:05.270 align:start position:0%
+to adjust automatically all the time and
+increase<00:02:03.659><c> exposure</c><00:02:04.259><c> compensation</c><00:02:04.799><c> to</c>
+
+00:02:05.270 --> 00:02:05.280 align:start position:0%
+increase exposure compensation to
+ 
+
+00:02:05.280 --> 00:02:07.370 align:start position:0%
+increase exposure compensation to
+brighten<00:02:05.700><c> the</c><00:02:05.880><c> scene</c><00:02:06.060><c> change</c><00:02:06.540><c> Bloom</c><00:02:06.960><c> mode</c><00:02:07.140><c> to</c>
+
+00:02:07.370 --> 00:02:07.380 align:start position:0%
+brighten the scene change Bloom mode to
+ 
+
+00:02:07.380 --> 00:02:10.370 align:start position:0%
+brighten the scene change Bloom mode to
+convolution
+
+00:02:10.370 --> 00:02:10.380 align:start position:0%
+ 
+ 
+
+00:02:10.380 --> 00:02:12.410 align:start position:0%
+ 
+I<00:02:10.800><c> already</c><00:02:10.920><c> mentioned</c><00:02:11.400><c> why</c><00:02:11.520><c> I</c><00:02:11.760><c> use</c><00:02:11.879><c> that</c><00:02:12.060><c> in</c><00:02:12.239><c> my</c>
+
+00:02:12.410 --> 00:02:12.420 align:start position:0%
+I already mentioned why I use that in my
+ 
+
+00:02:12.420 --> 00:02:14.510 align:start position:0%
+I already mentioned why I use that in my
+previous<00:02:12.540><c> videos</c><00:02:12.959><c> now</c><00:02:13.500><c> I</c><00:02:13.739><c> disable</c><00:02:14.160><c> lens</c>
+
+00:02:14.510 --> 00:02:14.520 align:start position:0%
+previous videos now I disable lens
+ 
+
+00:02:14.520 --> 00:02:16.729 align:start position:0%
+previous videos now I disable lens
+flares<00:02:15.000><c> it</c><00:02:15.300><c> creates</c><00:02:15.540><c> flickering</c><00:02:16.140><c> on</c><00:02:16.319><c> renders</c>
+
+00:02:16.729 --> 00:02:16.739 align:start position:0%
+flares it creates flickering on renders
+ 
+
+00:02:16.739 --> 00:02:19.010 align:start position:0%
+flares it creates flickering on renders
+sometimes<00:02:17.340><c> not</c><00:02:17.640><c> looking</c><00:02:17.819><c> good</c><00:02:18.120><c> and</c><00:02:18.480><c> may</c><00:02:18.660><c> ruin</c>
+
+00:02:19.010 --> 00:02:19.020 align:start position:0%
+sometimes not looking good and may ruin
+ 
+
+00:02:19.020 --> 00:02:20.869 align:start position:0%
+sometimes not looking good and may ruin
+the<00:02:19.140><c> shot</c><00:02:19.319><c> I</c><00:02:19.980><c> use</c><00:02:20.099><c> them</c><00:02:20.280><c> only</c><00:02:20.459><c> when</c><00:02:20.700><c> I'm</c>
+
+00:02:20.869 --> 00:02:20.879 align:start position:0%
+the shot I use them only when I'm
+ 
+
+00:02:20.879 --> 00:02:22.369 align:start position:0%
+the shot I use them only when I'm
+confident<00:02:21.300><c> that</c><00:02:21.599><c> the</c><00:02:21.780><c> result</c><00:02:21.900><c> will</c><00:02:22.200><c> look</c>
+
+00:02:22.369 --> 00:02:22.379 align:start position:0%
+confident that the result will look
+ 
+
+00:02:22.379 --> 00:02:24.229 align:start position:0%
+confident that the result will look
+great<00:02:22.620><c> now</c><00:02:23.160><c> let's</c><00:02:23.340><c> introduce</c><00:02:23.760><c> our</c><00:02:24.000><c> first</c>
+
+00:02:24.229 --> 00:02:24.239 align:start position:0%
+great now let's introduce our first
+ 
+
+00:02:24.239 --> 00:02:26.150 align:start position:0%
+great now let's introduce our first
+slides<00:02:24.660><c> into</c><00:02:24.780><c> this</c><00:02:25.020><c> Scene</c><00:02:25.260><c> It</c><00:02:25.680><c> will</c><00:02:25.800><c> be</c><00:02:25.920><c> our</c>
+
+00:02:26.150 --> 00:02:26.160 align:start position:0%
+slides into this Scene It will be our
+ 
+
+00:02:26.160 --> 00:02:28.250 align:start position:0%
+slides into this Scene It will be our
+ceiling<00:02:26.580><c> light</c><00:02:26.760><c> for</c><00:02:27.540><c> this</c><00:02:27.599><c> purpose</c><00:02:27.900><c> I</c><00:02:28.140><c> used</c>
+
+00:02:28.250 --> 00:02:28.260 align:start position:0%
+ceiling light for this purpose I used
+ 
+
+00:02:28.260 --> 00:02:30.229 align:start position:0%
+ceiling light for this purpose I used
+most<00:02:28.560><c> direct</c><00:02:28.800><c> lights</c><00:02:29.160><c> as</c><00:02:29.520><c> they</c><00:02:29.700><c> work</c><00:02:29.879><c> as</c><00:02:30.120><c> the</c>
+
+00:02:30.229 --> 00:02:30.239 align:start position:0%
+most direct lights as they work as the
+ 
+
+00:02:30.239 --> 00:02:31.790 align:start position:0%
+most direct lights as they work as the
+soft<00:02:30.420><c> boxes</c>
+
+00:02:31.790 --> 00:02:31.800 align:start position:0%
+soft boxes
+ 
+
+00:02:31.800 --> 00:02:34.130 align:start position:0%
+soft boxes
+I<00:02:32.400><c> adjust</c><00:02:32.580><c> its</c><00:02:33.060><c> position</c><00:02:33.180><c> over</c><00:02:33.599><c> the</c><00:02:33.840><c> top</c><00:02:33.959><c> of</c>
+
+00:02:34.130 --> 00:02:34.140 align:start position:0%
+I adjust its position over the top of
+ 
+
+00:02:34.140 --> 00:02:38.690 align:start position:0%
+I adjust its position over the top of
+the<00:02:34.260><c> car</c>
+
+00:02:38.690 --> 00:02:38.700 align:start position:0%
+ 
+ 
+
+00:02:38.700 --> 00:02:43.250 align:start position:0%
+ 
+already<00:02:39.180><c> we</c><00:02:39.599><c> have</c><00:02:39.780><c> something</c>
+
+00:02:43.250 --> 00:02:43.260 align:start position:0%
+ 
+ 
+
+00:02:43.260 --> 00:02:45.470 align:start position:0%
+ 
+let's<00:02:43.680><c> adjust</c><00:02:43.920><c> exposure</c><00:02:44.519><c> in</c><00:02:44.760><c> post-processing</c>
+
+00:02:45.470 --> 00:02:45.480 align:start position:0%
+let's adjust exposure in post-processing
+ 
+
+00:02:45.480 --> 00:02:47.930 align:start position:0%
+let's adjust exposure in post-processing
+volume<00:02:45.720><c> I</c><00:02:46.379><c> think</c><00:02:46.560><c> 12</c><00:02:46.860><c> is</c><00:02:47.340><c> good</c><00:02:47.580><c> for</c><00:02:47.760><c> current</c>
+
+00:02:47.930 --> 00:02:47.940 align:start position:0%
+volume I think 12 is good for current
+ 
+
+00:02:47.940 --> 00:02:50.150 align:start position:0%
+volume I think 12 is good for current
+setup<00:02:48.420><c> we</c><00:02:48.780><c> need</c><00:02:48.900><c> to</c><00:02:49.080><c> make</c><00:02:49.200><c> light</c><00:02:49.379><c> softer</c><00:02:49.920><c> and</c>
+
+00:02:50.150 --> 00:02:50.160 align:start position:0%
+setup we need to make light softer and
+ 
+
+00:02:50.160 --> 00:02:51.949 align:start position:0%
+setup we need to make light softer and
+fill<00:02:50.340><c> the</c><00:02:50.580><c> environment</c><00:02:50.940><c> to</c><00:02:51.360><c> achieve</c><00:02:51.660><c> that</c><00:02:51.780><c> we</c>
+
+00:02:51.949 --> 00:02:51.959 align:start position:0%
+fill the environment to achieve that we
+ 
+
+00:02:51.959 --> 00:02:53.809 align:start position:0%
+fill the environment to achieve that we
+need<00:02:52.140><c> to</c><00:02:52.260><c> change</c><00:02:52.440><c> the</c><00:02:52.739><c> size</c><00:02:52.860><c> of</c><00:02:53.040><c> the</c><00:02:53.160><c> light</c><00:02:53.340><c> it</c>
+
+00:02:53.809 --> 00:02:53.819 align:start position:0%
+need to change the size of the light it
+ 
+
+00:02:53.819 --> 00:02:56.150 align:start position:0%
+need to change the size of the light it
+works<00:02:54.120><c> just</c><00:02:54.239><c> like</c><00:02:54.420><c> in</c><00:02:54.660><c> real</c><00:02:54.840><c> world</c><00:02:55.080><c> the</c><00:02:55.920><c> bigger</c>
+
+00:02:56.150 --> 00:02:56.160 align:start position:0%
+works just like in real world the bigger
+ 
+
+00:02:56.160 --> 00:02:58.490 align:start position:0%
+works just like in real world the bigger
+the<00:02:56.340><c> size</c><00:02:56.519><c> of</c><00:02:56.819><c> the</c><00:02:57.000><c> light</c><00:02:57.239><c> source</c><00:02:57.720><c> the</c><00:02:58.140><c> softer</c>
+
+00:02:58.490 --> 00:02:58.500 align:start position:0%
+the size of the light source the softer
+ 
+
+00:02:58.500 --> 00:03:00.410 align:start position:0%
+the size of the light source the softer
+the<00:02:58.680><c> light</c><00:02:58.860><c> is</c><00:02:59.160><c> just</c><00:02:59.459><c> like</c><00:02:59.700><c> here</c><00:02:59.940><c> when</c><00:03:00.300><c> I'm</c>
+
+00:03:00.410 --> 00:03:00.420 align:start position:0%
+the light is just like here when I'm
+ 
+
+00:03:00.420 --> 00:03:02.930 align:start position:0%
+the light is just like here when I'm
+using<00:03:00.720><c> my</c><00:03:00.900><c> softbox</c><00:03:01.319><c> which</c><00:03:02.160><c> is</c><00:03:02.280><c> actually</c><00:03:02.580><c> the</c>
+
+00:03:02.930 --> 00:03:02.940 align:start position:0%
+using my softbox which is actually the
+ 
+
+00:03:02.940 --> 00:03:05.809 align:start position:0%
+using my softbox which is actually the
+monitor<00:03:03.420><c> I</c><00:03:03.959><c> just</c><00:03:04.140><c> set</c><00:03:04.379><c> up</c><00:03:04.620><c> the</c><00:03:05.099><c> temperature</c><00:03:05.340><c> I</c>
+
+00:03:05.809 --> 00:03:05.819 align:start position:0%
+monitor I just set up the temperature I
+ 
+
+00:03:05.819 --> 00:03:06.770 align:start position:0%
+monitor I just set up the temperature I
+like
+
+00:03:06.770 --> 00:03:06.780 align:start position:0%
+like
+ 
+
+00:03:06.780 --> 00:03:08.690 align:start position:0%
+like
+that's<00:03:07.500><c> that</c><00:03:07.860><c> simple</c>
+
+00:03:08.690 --> 00:03:08.700 align:start position:0%
+that's that simple
+ 
+
+00:03:08.700 --> 00:03:10.610 align:start position:0%
+that's that simple
+you<00:03:09.180><c> can</c><00:03:09.300><c> increase</c><00:03:09.480><c> red</c><00:03:09.840><c> light</c><00:03:10.080><c> size</c><00:03:10.319><c> by</c>
+
+00:03:10.610 --> 00:03:10.620 align:start position:0%
+you can increase red light size by
+ 
+
+00:03:10.620 --> 00:03:12.949 align:start position:0%
+you can increase red light size by
+changing<00:03:10.980><c> width</c><00:03:11.340><c> and</c><00:03:11.760><c> height</c><00:03:12.060><c> in</c><00:03:12.540><c> actor</c>
+
+00:03:12.949 --> 00:03:12.959 align:start position:0%
+changing width and height in actor
+ 
+
+00:03:12.959 --> 00:03:16.670 align:start position:0%
+changing width and height in actor
+details<00:03:13.379><c> tab</c>
+
+00:03:16.670 --> 00:03:16.680 align:start position:0%
+ 
+ 
+
+00:03:16.680 --> 00:03:18.949 align:start position:0%
+ 
+after<00:03:17.099><c> I</c><00:03:17.459><c> slightly</c><00:03:17.760><c> adjust</c><00:03:17.940><c> Bond</c><00:03:18.360><c> the</c><00:03:18.599><c> Wrangle</c>
+
+00:03:18.949 --> 00:03:18.959 align:start position:0%
+after I slightly adjust Bond the Wrangle
+ 
+
+00:03:18.959 --> 00:03:29.149 align:start position:0%
+after I slightly adjust Bond the Wrangle
+to<00:03:19.560><c> decreased</c><00:03:20.159><c> side</c><00:03:20.459><c> spill</c>
+
+00:03:29.149 --> 00:03:29.159 align:start position:0%
+ 
+ 
+
+00:03:29.159 --> 00:03:31.430 align:start position:0%
+ 
+let's<00:03:29.580><c> change</c><00:03:29.879><c> the</c><00:03:30.120><c> color</c><00:03:30.300><c> to</c><00:03:30.659><c> something</c><00:03:31.200><c> that</c>
+
+00:03:31.430 --> 00:03:31.440 align:start position:0%
+let's change the color to something that
+ 
+
+00:03:31.440 --> 00:03:34.369 align:start position:0%
+let's change the color to something that
+better<00:03:31.680><c> suits</c><00:03:32.220><c> our</c><00:03:32.340><c> mood</c><00:03:32.580><c> of</c><00:03:33.000><c> the</c><00:03:33.180><c> scene</c><00:03:33.379><c> make</c>
+
+00:03:34.369 --> 00:03:34.379 align:start position:0%
+better suits our mood of the scene make
+ 
+
+00:03:34.379 --> 00:03:38.210 align:start position:0%
+better suits our mood of the scene make
+it<00:03:34.560><c> cooler</c>
+
+00:03:38.210 --> 00:03:38.220 align:start position:0%
+ 
+ 
+
+00:03:38.220 --> 00:03:39.649 align:start position:0%
+ 
+right<00:03:38.640><c> now</c><00:03:38.760><c> I</c><00:03:38.879><c> would</c><00:03:39.060><c> like</c><00:03:39.239><c> to</c><00:03:39.360><c> get</c><00:03:39.480><c> better</c>
+
+00:03:39.649 --> 00:03:39.659 align:start position:0%
+right now I would like to get better
+ 
+
+00:03:39.659 --> 00:03:41.330 align:start position:0%
+right now I would like to get better
+results<00:03:39.900><c> of</c><00:03:40.200><c> light</c><00:03:40.379><c> Reflections</c><00:03:40.980><c> on</c><00:03:41.220><c> the</c>
+
+00:03:41.330 --> 00:03:41.340 align:start position:0%
+results of light Reflections on the
+ 
+
+00:03:41.340 --> 00:03:43.070 align:start position:0%
+results of light Reflections on the
+windscreen<00:03:41.819><c> so</c><00:03:42.180><c> we</c><00:03:42.299><c> need</c><00:03:42.420><c> to</c><00:03:42.599><c> turn</c><00:03:42.720><c> Ray</c>
+
+00:03:43.070 --> 00:03:43.080 align:start position:0%
+windscreen so we need to turn Ray
+ 
+
+00:03:43.080 --> 00:03:45.110 align:start position:0%
+windscreen so we need to turn Ray
+tracing<00:03:43.500><c> for</c><00:03:43.680><c> translucent</c><00:03:44.280><c> objects</c><00:03:44.760><c> in</c><00:03:44.940><c> our</c>
+
+00:03:45.110 --> 00:03:45.120 align:start position:0%
+tracing for translucent objects in our
+ 
+
+00:03:45.120 --> 00:03:47.630 align:start position:0%
+tracing for translucent objects in our
+post<00:03:45.360><c> processing</c><00:03:45.840><c> volume</c><00:03:46.080><c> go</c><00:03:46.680><c> to</c><00:03:46.799><c> details</c><00:03:47.400><c> Tab</c>
+
+00:03:47.630 --> 00:03:47.640 align:start position:0%
+post processing volume go to details Tab
+ 
+
+00:03:47.640 --> 00:03:49.970 align:start position:0%
+post processing volume go to details Tab
+and<00:03:47.819><c> search</c><00:03:48.060><c> for</c><00:03:48.299><c> translucency</c><00:03:48.900><c> enable</c><00:03:49.560><c> type</c>
+
+00:03:49.970 --> 00:03:49.980 align:start position:0%
+and search for translucency enable type
+ 
+
+00:03:49.980 --> 00:03:52.610 align:start position:0%
+and search for translucency enable type
+checkbox<00:03:50.640><c> and</c><00:03:51.120><c> change</c><00:03:51.299><c> it</c><00:03:51.540><c> from</c><00:03:51.659><c> raster</c><00:03:52.080><c> to</c>
+
+00:03:52.610 --> 00:03:52.620 align:start position:0%
+checkbox and change it from raster to
+ 
+
+00:03:52.620 --> 00:03:55.430 align:start position:0%
+checkbox and change it from raster to
+Ray<00:03:52.860><c> tracing</c><00:03:53.400><c> now</c><00:03:54.060><c> if</c><00:03:54.299><c> I</c><00:03:54.420><c> move</c><00:03:54.659><c> our</c><00:03:54.959><c> source</c><00:03:55.319><c> of</c>
+
+00:03:55.430 --> 00:03:55.440 align:start position:0%
+Ray tracing now if I move our source of
+ 
+
+00:03:55.440 --> 00:03:57.350 align:start position:0%
+Ray tracing now if I move our source of
+light<00:03:55.560><c> it</c><00:03:55.920><c> will</c><00:03:56.040><c> have</c><00:03:56.220><c> proper</c><00:03:56.640><c> Reflections</c><00:03:57.180><c> on</c>
+
+00:03:57.350 --> 00:03:57.360 align:start position:0%
+light it will have proper Reflections on
+ 
+
+00:03:57.360 --> 00:04:07.130 align:start position:0%
+light it will have proper Reflections on
+the<00:03:57.480><c> glass</c>
+
+00:04:07.130 --> 00:04:07.140 align:start position:0%
+ 
+ 
+
+00:04:07.140 --> 00:04:10.009 align:start position:0%
+ 
+now<00:04:07.799><c> let's</c><00:04:08.040><c> add</c><00:04:08.519><c> more</c><00:04:08.760><c> lights</c><00:04:09.000><c> to</c><00:04:09.540><c> light</c><00:04:09.780><c> our</c>
+
+00:04:10.009 --> 00:04:10.019 align:start position:0%
+now let's add more lights to light our
+ 
+
+00:04:10.019 --> 00:04:12.110 align:start position:0%
+now let's add more lights to light our
+scene<00:04:10.260><c> better</c><00:04:10.500><c> holding</c><00:04:11.220><c> out</c><00:04:11.400><c> to</c><00:04:11.640><c> my</c><00:04:11.879><c> keyboard</c>
+
+00:04:12.110 --> 00:04:12.120 align:start position:0%
+scene better holding out to my keyboard
+ 
+
+00:04:12.120 --> 00:04:13.850 align:start position:0%
+scene better holding out to my keyboard
+I'm<00:04:12.480><c> dragging</c><00:04:12.959><c> the</c><00:04:13.080><c> light</c><00:04:13.260><c> source</c><00:04:13.739><c> and</c>
+
+00:04:13.850 --> 00:04:13.860 align:start position:0%
+I'm dragging the light source and
+ 
+
+00:04:13.860 --> 00:04:16.370 align:start position:0%
+I'm dragging the light source and
+duplicating<00:04:14.340><c> it</c><00:04:14.640><c> at</c><00:04:14.819><c> the</c><00:04:15.000><c> same</c><00:04:15.120><c> time</c><00:04:15.380><c> checking</c>
+
+00:04:16.370 --> 00:04:16.380 align:start position:0%
+duplicating it at the same time checking
+ 
+
+00:04:16.380 --> 00:04:18.409 align:start position:0%
+duplicating it at the same time checking
+the<00:04:16.500><c> result</c><00:04:16.680><c> and</c><00:04:17.160><c> create</c><00:04:17.340><c> one</c><00:04:17.760><c> more</c><00:04:18.000><c> ceiling</c>
+
+00:04:18.409 --> 00:04:18.419 align:start position:0%
+the result and create one more ceiling
+ 
+
+00:04:18.419 --> 00:04:27.770 align:start position:0%
+the result and create one more ceiling
+light
+
+00:04:27.770 --> 00:04:27.780 align:start position:0%
+ 
+ 
+
+00:04:27.780 --> 00:04:30.050 align:start position:0%
+ 
+looks<00:04:28.380><c> fine</c><00:04:28.560><c> for</c><00:04:28.860><c> now</c><00:04:29.040><c> we</c><00:04:29.460><c> will</c><00:04:29.639><c> adjust</c><00:04:29.759><c> their</c>
+
+00:04:30.050 --> 00:04:30.060 align:start position:0%
+looks fine for now we will adjust their
+ 
+
+00:04:30.060 --> 00:04:32.270 align:start position:0%
+looks fine for now we will adjust their
+position<00:04:30.300><c> later</c><00:04:30.780><c> following</c><00:04:31.740><c> the</c><00:04:31.919><c> reference</c>
+
+00:04:32.270 --> 00:04:32.280 align:start position:0%
+position later following the reference
+ 
+
+00:04:32.280 --> 00:04:34.610 align:start position:0%
+position later following the reference
+right<00:04:32.699><c> now</c><00:04:32.880><c> I</c><00:04:33.120><c> want</c><00:04:33.300><c> to</c><00:04:33.419><c> create</c><00:04:33.600><c> red</c><00:04:33.960><c> tint</c><00:04:34.320><c> from</c>
+
+00:04:34.610 --> 00:04:34.620 align:start position:0%
+right now I want to create red tint from
+ 
+
+00:04:34.620 --> 00:04:36.950 align:start position:0%
+right now I want to create red tint from
+their<00:04:34.800><c> car</c><00:04:35.160><c> rear</c><00:04:35.520><c> lights</c><00:04:35.699><c> once</c><00:04:36.419><c> again</c><00:04:36.540><c> I</c>
+
+00:04:36.950 --> 00:04:36.960 align:start position:0%
+their car rear lights once again I
+ 
+
+00:04:36.960 --> 00:04:39.050 align:start position:0%
+their car rear lights once again I
+duplicate<00:04:37.440><c> over</c><00:04:37.740><c> the</c><00:04:37.979><c> existing</c><00:04:38.340><c> light</c><00:04:38.580><c> change</c>
+
+00:04:39.050 --> 00:04:39.060 align:start position:0%
+duplicate over the existing light change
+ 
+
+00:04:39.060 --> 00:04:41.990 align:start position:0%
+duplicate over the existing light change
+its<00:04:39.479><c> size</c><00:04:39.660><c> and</c><00:04:39.900><c> actor</c><00:04:40.320><c> details</c><00:04:40.740><c> place</c><00:04:41.580><c> it</c><00:04:41.820><c> near</c>
+
+00:04:41.990 --> 00:04:42.000 align:start position:0%
+its size and actor details place it near
+ 
+
+00:04:42.000 --> 00:04:44.930 align:start position:0%
+its size and actor details place it near
+rare<00:04:42.479><c> end</c><00:04:42.660><c> of</c><00:04:42.840><c> the</c><00:04:43.020><c> car</c><00:04:43.199><c> and</c><00:04:44.040><c> change</c><00:04:44.220><c> color</c><00:04:44.580><c> to</c>
+
+00:04:44.930 --> 00:04:44.940 align:start position:0%
+rare end of the car and change color to
+ 
+
+00:04:44.940 --> 00:04:54.350 align:start position:0%
+rare end of the car and change color to
+red<00:04:45.120><c> and</c><00:04:45.720><c> slightly</c><00:04:46.199><c> lower</c><00:04:46.740><c> in</c><00:04:47.100><c> intensity</c>
+
+00:04:54.350 --> 00:04:54.360 align:start position:0%
+ 
+ 
+
+00:04:54.360 --> 00:04:55.730 align:start position:0%
+ 
+it's<00:04:54.780><c> always</c><00:04:54.900><c> good</c><00:04:55.199><c> to</c><00:04:55.320><c> look</c><00:04:55.440><c> for</c><00:04:55.620><c> the</c>
+
+00:04:55.730 --> 00:04:55.740 align:start position:0%
+it's always good to look for the
+ 
+
+00:04:55.740 --> 00:04:57.409 align:start position:0%
+it's always good to look for the
+references<00:04:56.220><c> when</c><00:04:56.460><c> you're</c><00:04:56.759><c> creating</c><00:04:57.180><c> this</c>
+
+00:04:57.409 --> 00:04:57.419 align:start position:0%
+references when you're creating this
+ 
+
+00:04:57.419 --> 00:04:59.210 align:start position:0%
+references when you're creating this
+scene<00:04:57.660><c> like</c><00:04:57.840><c> that</c><00:04:58.020><c> it</c><00:04:58.560><c> really</c><00:04:58.740><c> helps</c><00:04:59.100><c> to</c>
+
+00:04:59.210 --> 00:04:59.220 align:start position:0%
+scene like that it really helps to
+ 
+
+00:04:59.220 --> 00:05:01.129 align:start position:0%
+scene like that it really helps to
+understand<00:04:59.400><c> how</c><00:04:59.880><c> the</c><00:05:00.000><c> light</c><00:05:00.180><c> works</c><00:05:00.600><c> and</c><00:05:00.960><c> how</c>
+
+00:05:01.129 --> 00:05:01.139 align:start position:0%
+understand how the light works and how
+ 
+
+00:05:01.139 --> 00:05:02.810 align:start position:0%
+understand how the light works and how
+to<00:05:01.259><c> approach</c><00:05:01.560><c> it</c><00:05:01.740><c> into</c><00:05:02.100><c> your</c><00:05:02.400><c> environment</c>
+
+00:05:02.810 --> 00:05:02.820 align:start position:0%
+to approach it into your environment
+ 
+
+00:05:02.820 --> 00:05:05.390 align:start position:0%
+to approach it into your environment
+next<00:05:03.360><c> step</c><00:05:03.600><c> is</c><00:05:03.900><c> adjusting</c><00:05:04.620><c> some</c><00:05:04.860><c> Global</c><00:05:05.220><c> light</c>
+
+00:05:05.390 --> 00:05:05.400 align:start position:0%
+next step is adjusting some Global light
+ 
+
+00:05:05.400 --> 00:05:07.490 align:start position:0%
+next step is adjusting some Global light
+that<00:05:05.820><c> will</c><00:05:05.940><c> make</c><00:05:06.180><c> the</c><00:05:06.479><c> whole</c><00:05:06.600><c> scene</c><00:05:06.960><c> less</c><00:05:07.199><c> dark</c>
+
+00:05:07.490 --> 00:05:07.500 align:start position:0%
+that will make the whole scene less dark
+ 
+
+00:05:07.500 --> 00:05:09.530 align:start position:0%
+that will make the whole scene less dark
+again<00:05:08.040><c> I</c><00:05:08.340><c> just</c><00:05:08.520><c> duplicate</c><00:05:08.940><c> ceiling</c><00:05:09.360><c> light</c>
+
+00:05:09.530 --> 00:05:09.540 align:start position:0%
+again I just duplicate ceiling light
+ 
+
+00:05:09.540 --> 00:05:11.629 align:start position:0%
+again I just duplicate ceiling light
+increase<00:05:09.960><c> its</c><00:05:10.440><c> size</c><00:05:10.560><c> and</c><00:05:10.860><c> change</c><00:05:11.040><c> intensity</c>
+
+00:05:11.629 --> 00:05:11.639 align:start position:0%
+increase its size and change intensity
+ 
+
+00:05:11.639 --> 00:05:14.030 align:start position:0%
+increase its size and change intensity
+to<00:05:12.180><c> add</c><00:05:12.300><c> some</c><00:05:12.600><c> soft</c><00:05:12.840><c> light</c><00:05:13.139><c> to</c><00:05:13.680><c> the</c><00:05:13.860><c> whole</c>
+
+00:05:14.030 --> 00:05:14.040 align:start position:0%
+to add some soft light to the whole
+ 
+
+00:05:14.040 --> 00:05:16.730 align:start position:0%
+to add some soft light to the whole
+construction<00:05:14.400><c> from</c><00:05:15.240><c> the</c><00:05:15.419><c> right</c><00:05:15.600><c> side</c><00:05:15.840><c> so</c><00:05:16.500><c> it</c>
+
+00:05:16.730 --> 00:05:16.740 align:start position:0%
+construction from the right side so it
+ 
+
+00:05:16.740 --> 00:05:28.730 align:start position:0%
+construction from the right side so it
+fills<00:05:17.460><c> this</c><00:05:17.580><c> scene</c><00:05:17.759><c> with</c><00:05:18.000><c> a</c><00:05:18.180><c> soft</c><00:05:18.360><c> light</c>
+
+00:05:28.730 --> 00:05:28.740 align:start position:0%
+ 
+ 
+
+00:05:28.740 --> 00:05:37.610 align:start position:0%
+ 
+foreign
+
+00:05:37.610 --> 00:05:37.620 align:start position:0%
+ 
+ 
+
+00:05:37.620 --> 00:05:39.770 align:start position:0%
+ 
+now<00:05:38.220><c> I</c><00:05:38.400><c> will</c><00:05:38.520><c> adjust</c><00:05:38.699><c> camera</c><00:05:39.000><c> position</c><00:05:39.300><c> to</c><00:05:39.660><c> the</c>
+
+00:05:39.770 --> 00:05:39.780 align:start position:0%
+now I will adjust camera position to the
+ 
+
+00:05:39.780 --> 00:05:48.590 align:start position:0%
+now I will adjust camera position to the
+reference<00:05:40.139><c> picture</c>
+
+00:05:48.590 --> 00:05:48.600 align:start position:0%
+ 
+ 
+
+00:05:48.600 --> 00:05:50.749 align:start position:0%
+ 
+and<00:05:49.080><c> start</c><00:05:49.259><c> adjusting</c><00:05:49.860><c> light's</c><00:05:50.220><c> position</c><00:05:50.400><c> to</c>
+
+00:05:50.749 --> 00:05:50.759 align:start position:0%
+and start adjusting light's position to
+ 
+
+00:05:50.759 --> 00:05:53.150 align:start position:0%
+and start adjusting light's position to
+make<00:05:50.880><c> accents</c><00:05:51.479><c> to</c><00:05:51.720><c> our</c><00:05:51.900><c> object</c><00:05:52.440><c> lines</c><00:05:52.860><c> and</c>
+
+00:05:53.150 --> 00:05:53.160 align:start position:0%
+make accents to our object lines and
+ 
+
+00:05:53.160 --> 00:05:55.610 align:start position:0%
+make accents to our object lines and
+highlight<00:05:53.460><c> the</c><00:05:53.639><c> geometry</c><00:05:54.240><c> showing</c><00:05:54.960><c> it</c><00:05:55.139><c> in</c><00:05:55.440><c> the</c>
+
+00:05:55.610 --> 00:05:55.620 align:start position:0%
+highlight the geometry showing it in the
+ 
+
+00:05:55.620 --> 00:05:57.770 align:start position:0%
+highlight the geometry showing it in the
+best<00:05:55.800><c> way</c><00:05:56.100><c> possible</c><00:05:56.520><c> for</c><00:05:57.000><c> example</c><00:05:57.240><c> with</c><00:05:57.479><c> one</c>
+
+00:05:57.770 --> 00:05:57.780 align:start position:0%
+best way possible for example with one
+ 
+
+00:05:57.780 --> 00:05:59.749 align:start position:0%
+best way possible for example with one
+of<00:05:57.900><c> the</c><00:05:58.020><c> ceiling</c><00:05:58.320><c> lights</c><00:05:58.500><c> I</c><00:05:58.919><c> want</c><00:05:59.100><c> to</c><00:05:59.280><c> split</c>
+
+00:05:59.749 --> 00:05:59.759 align:start position:0%
+of the ceiling lights I want to split
+ 
+
+00:05:59.759 --> 00:06:02.029 align:start position:0%
+of the ceiling lights I want to split
+windshield<00:06:00.240><c> in</c><00:06:00.539><c> half</c><00:06:00.780><c> so</c><00:06:01.440><c> it</c><00:06:01.680><c> can</c><00:06:01.800><c> create</c>
+
+00:06:02.029 --> 00:06:02.039 align:start position:0%
+windshield in half so it can create
+ 
+
+00:06:02.039 --> 00:06:04.550 align:start position:0%
+windshield in half so it can create
+checkerboard<00:06:02.759><c> pattern</c><00:06:03.419><c> playing</c><00:06:03.900><c> with</c><00:06:04.259><c> dark</c>
+
+00:06:04.550 --> 00:06:04.560 align:start position:0%
+checkerboard pattern playing with dark
+ 
+
+00:06:04.560 --> 00:06:05.990 align:start position:0%
+checkerboard pattern playing with dark
+and<00:06:04.800><c> light</c><00:06:04.979><c> parts</c>
+
+00:06:05.990 --> 00:06:06.000 align:start position:0%
+and light parts
+ 
+
+00:06:06.000 --> 00:06:08.810 align:start position:0%
+and light parts
+also<00:06:06.720><c> I'm</c><00:06:06.840><c> working</c><00:06:07.080><c> on</c><00:06:07.320><c> making</c><00:06:07.560><c> nice</c><00:06:08.039><c> flat</c>
+
+00:06:08.810 --> 00:06:08.820 align:start position:0%
+also I'm working on making nice flat
+ 
+
+00:06:08.820 --> 00:06:10.909 align:start position:0%
+also I'm working on making nice flat
+reflection<00:06:09.240><c> on</c><00:06:09.600><c> the</c><00:06:09.780><c> car's</c><00:06:10.080><c> Bonnet</c><00:06:10.500><c> try</c>
+
+00:06:10.909 --> 00:06:10.919 align:start position:0%
+reflection on the car's Bonnet try
+ 
+
+00:06:10.919 --> 00:06:12.770 align:start position:0%
+reflection on the car's Bonnet try
+avoiding<00:06:11.460><c> multiple</c><00:06:11.759><c> complex</c><00:06:12.120><c> Reflections</c>
+
+00:06:12.770 --> 00:06:12.780 align:start position:0%
+avoiding multiple complex Reflections
+ 
+
+00:06:12.780 --> 00:06:15.050 align:start position:0%
+avoiding multiple complex Reflections
+from<00:06:13.080><c> the</c><00:06:13.259><c> multiple</c><00:06:13.560><c> sources</c><00:06:13.979><c> of</c><00:06:14.160><c> light</c><00:06:14.340><c> it</c>
+
+00:06:15.050 --> 00:06:15.060 align:start position:0%
+from the multiple sources of light it
+ 
+
+00:06:15.060 --> 00:06:17.210 align:start position:0%
+from the multiple sources of light it
+really<00:06:15.180><c> makes</c><00:06:15.900><c> it</c><00:06:16.139><c> harder</c><00:06:16.500><c> to</c><00:06:16.620><c> understand</c><00:06:16.800><c> the</c>
+
+00:06:17.210 --> 00:06:17.220 align:start position:0%
+really makes it harder to understand the
+ 
+
+00:06:17.220 --> 00:06:19.310 align:start position:0%
+really makes it harder to understand the
+geometry<00:06:17.699><c> of</c><00:06:17.820><c> the</c><00:06:18.060><c> car</c><00:06:18.240><c> or</c><00:06:18.600><c> the</c><00:06:18.900><c> object</c><00:06:19.139><c> you</c>
+
+00:06:19.310 --> 00:06:19.320 align:start position:0%
+geometry of the car or the object you
+ 
+
+00:06:19.320 --> 00:06:21.409 align:start position:0%
+geometry of the car or the object you
+light<00:06:19.560><c> and</c><00:06:19.860><c> just</c><00:06:20.100><c> makes</c><00:06:20.639><c> the</c><00:06:20.820><c> picture</c><00:06:21.060><c> look</c>
+
+00:06:21.409 --> 00:06:21.419 align:start position:0%
+light and just makes the picture look
+ 
+
+00:06:21.419 --> 00:06:24.170 align:start position:0%
+light and just makes the picture look
+dirty<00:06:21.840><c> and</c><00:06:22.440><c> unprofessional</c><00:06:23.220><c> looks</c><00:06:23.880><c> good</c><00:06:24.060><c> to</c>
+
+00:06:24.170 --> 00:06:24.180 align:start position:0%
+dirty and unprofessional looks good to
+ 
+
+00:06:24.180 --> 00:06:26.210 align:start position:0%
+dirty and unprofessional looks good to
+me<00:06:24.300><c> but</c><00:06:24.479><c> we</c><00:06:24.660><c> are</c><00:06:24.840><c> not</c><00:06:24.960><c> finished</c><00:06:25.139><c> yet</c><00:06:25.440><c> here</c>
+
+00:06:26.210 --> 00:06:26.220 align:start position:0%
+me but we are not finished yet here
+ 
+
+00:06:26.220 --> 00:06:28.490 align:start position:0%
+me but we are not finished yet here
+starts<00:06:26.699><c> the</c><00:06:26.880><c> most</c><00:06:27.000><c> interesting</c><00:06:27.419><c> part</c><00:06:27.720><c> light</c>
+
+00:06:28.490 --> 00:06:28.500 align:start position:0%
+starts the most interesting part light
+ 
+
+00:06:28.500 --> 00:06:31.309 align:start position:0%
+starts the most interesting part light
+channels<00:06:29.100><c> which</c><00:06:29.880><c> is</c><00:06:30.120><c> the</c><00:06:30.479><c> magic</c><00:06:30.600><c> of</c><00:06:30.900><c> lighting</c>
+
+00:06:31.309 --> 00:06:31.319 align:start position:0%
+channels which is the magic of lighting
+ 
+
+00:06:31.319 --> 00:06:33.710 align:start position:0%
+channels which is the magic of lighting
+in<00:06:31.680><c> 3D</c><00:06:32.039><c> Unreal</c><00:06:32.819><c> Engine</c><00:06:32.940><c> has</c><00:06:33.240><c> three</c><00:06:33.479><c> light</c>
+
+00:06:33.710 --> 00:06:33.720 align:start position:0%
+in 3D Unreal Engine has three light
+ 
+
+00:06:33.720 --> 00:06:35.749 align:start position:0%
+in 3D Unreal Engine has three light
+channels<00:06:34.199><c> for</c><00:06:34.440><c> each</c><00:06:34.740><c> mesh</c><00:06:35.220><c> and</c><00:06:35.340><c> source</c><00:06:35.699><c> of</c>
+
+00:06:35.749 --> 00:06:35.759 align:start position:0%
+channels for each mesh and source of
+ 
+
+00:06:35.759 --> 00:06:37.490 align:start position:0%
+channels for each mesh and source of
+Light<00:06:35.940><c> which</c><00:06:36.419><c> means</c><00:06:36.720><c> you</c><00:06:36.840><c> can</c><00:06:37.020><c> create</c><00:06:37.199><c> lights</c>
+
+00:06:37.490 --> 00:06:37.500 align:start position:0%
+Light which means you can create lights
+ 
+
+00:06:37.500 --> 00:06:39.770 align:start position:0%
+Light which means you can create lights
+that<00:06:37.979><c> are</c><00:06:38.220><c> not</c><00:06:38.340><c> affecting</c><00:06:38.880><c> certain</c><00:06:39.240><c> objects</c>
+
+00:06:39.770 --> 00:06:39.780 align:start position:0%
+that are not affecting certain objects
+ 
+
+00:06:39.780 --> 00:06:41.930 align:start position:0%
+that are not affecting certain objects
+and<00:06:40.080><c> don't</c><00:06:40.259><c> drop</c><00:06:40.560><c> Shadows</c><00:06:41.160><c> so</c><00:06:41.460><c> you</c><00:06:41.639><c> can</c><00:06:41.759><c> create</c>
+
+00:06:41.930 --> 00:06:41.940 align:start position:0%
+and don't drop Shadows so you can create
+ 
+
+00:06:41.940 --> 00:06:44.029 align:start position:0%
+and don't drop Shadows so you can create
+unreal<00:06:42.539><c> light</c><00:06:42.600><c> scenarios</c><00:06:43.199><c> which</c><00:06:43.500><c> will</c><00:06:43.740><c> look</c>
+
+00:06:44.029 --> 00:06:44.039 align:start position:0%
+unreal light scenarios which will look
+ 
+
+00:06:44.039 --> 00:06:45.950 align:start position:0%
+unreal light scenarios which will look
+really<00:06:44.280><c> epic</c><00:06:44.699><c> for</c><00:06:45.060><c> example</c><00:06:45.300><c> I</c><00:06:45.660><c> want</c><00:06:45.780><c> to</c>
+
+00:06:45.950 --> 00:06:45.960 align:start position:0%
+really epic for example I want to
+ 
+
+00:06:45.960 --> 00:06:48.650 align:start position:0%
+really epic for example I want to
+emphasize<00:06:46.440><c> right</c><00:06:47.039><c> side</c><00:06:47.280><c> of</c><00:06:47.520><c> the</c><00:06:47.639><c> car</c><00:06:47.819><c> but</c><00:06:48.419><c> I</c>
+
+00:06:48.650 --> 00:06:48.660 align:start position:0%
+emphasize right side of the car but I
+ 
+
+00:06:48.660 --> 00:06:50.270 align:start position:0%
+emphasize right side of the car but I
+don't<00:06:48.780><c> want</c><00:06:49.020><c> to</c><00:06:49.199><c> create</c><00:06:49.440><c> additional</c><00:06:49.979><c> Shadow</c>
+
+00:06:50.270 --> 00:06:50.280 align:start position:0%
+don't want to create additional Shadow
+ 
+
+00:06:50.280 --> 00:06:52.370 align:start position:0%
+don't want to create additional Shadow
+and<00:06:50.639><c> ruin</c><00:06:51.000><c> the</c><00:06:51.120><c> shape</c><00:06:51.360><c> that</c><00:06:51.539><c> ceiling</c><00:06:51.960><c> light</c><00:06:52.139><c> is</c>
+
+00:06:52.370 --> 00:06:52.380 align:start position:0%
+and ruin the shape that ceiling light is
+ 
+
+00:06:52.380 --> 00:06:54.529 align:start position:0%
+and ruin the shape that ceiling light is
+painting<00:06:52.740><c> right</c><00:06:53.039><c> now</c><00:06:53.220><c> I</c><00:06:53.880><c> create</c><00:06:54.060><c> the</c><00:06:54.360><c> light</c>
+
+00:06:54.529 --> 00:06:54.539 align:start position:0%
+painting right now I create the light
+ 
+
+00:06:54.539 --> 00:06:57.170 align:start position:0%
+painting right now I create the light
+adjust<00:06:55.080><c> its</c><00:06:55.500><c> position</c><00:06:55.620><c> and</c><00:06:56.100><c> size</c><00:06:56.340><c> place</c><00:06:56.940><c> it</c>
+
+00:06:57.170 --> 00:06:57.180 align:start position:0%
+adjust its position and size place it
+ 
+
+00:06:57.180 --> 00:06:59.749 align:start position:0%
+adjust its position and size place it
+where<00:06:57.360><c> I</c><00:06:57.660><c> want</c><00:06:57.840><c> now</c><00:06:58.500><c> I</c><00:06:58.740><c> select</c><00:06:59.039><c> my</c><00:06:59.220><c> car</c><00:06:59.460><c> model</c>
+
+00:06:59.749 --> 00:06:59.759 align:start position:0%
+where I want now I select my car model
+ 
+
+00:06:59.759 --> 00:07:02.510 align:start position:0%
+where I want now I select my car model
+and<00:07:00.240><c> look</c><00:07:00.360><c> for</c><00:07:00.539><c> channels</c><00:07:01.080><c> and</c><00:07:01.800><c> enable</c><00:07:02.160><c> Channel</c>
+
+00:07:02.510 --> 00:07:02.520 align:start position:0%
+and look for channels and enable Channel
+ 
+
+00:07:02.520 --> 00:07:04.010 align:start position:0%
+and look for channels and enable Channel
+1<00:07:02.819><c> checkbox</c>
+
+00:07:04.010 --> 00:07:04.020 align:start position:0%
+1 checkbox
+ 
+
+00:07:04.020 --> 00:07:06.350 align:start position:0%
+1 checkbox
+so<00:07:04.380><c> now</c><00:07:04.620><c> my</c><00:07:04.860><c> car</c><00:07:05.039><c> model</c><00:07:05.280><c> will</c><00:07:05.699><c> receive</c><00:07:06.060><c> light</c>
+
+00:07:06.350 --> 00:07:06.360 align:start position:0%
+so now my car model will receive light
+ 
+
+00:07:06.360 --> 00:07:08.749 align:start position:0%
+so now my car model will receive light
+from<00:07:06.660><c> two</c><00:07:06.900><c> channels</c><00:07:07.319><c> I</c><00:07:07.740><c> select</c><00:07:08.039><c> my</c><00:07:08.220><c> light</c><00:07:08.400><c> and</c>
+
+00:07:08.749 --> 00:07:08.759 align:start position:0%
+from two channels I select my light and
+ 
+
+00:07:08.759 --> 00:07:10.969 align:start position:0%
+from two channels I select my light and
+enable<00:07:09.060><c> checkbox</c><00:07:09.600><c> for</c><00:07:09.960><c> channel</c><00:07:10.199><c> 1</c><00:07:10.500><c> and</c>
+
+00:07:10.969 --> 00:07:10.979 align:start position:0%
+enable checkbox for channel 1 and
+ 
+
+00:07:10.979 --> 00:07:13.670 align:start position:0%
+enable checkbox for channel 1 and
+disable<00:07:11.340><c> channel</c><00:07:11.819><c> 0.</c><00:07:12.539><c> so</c><00:07:13.139><c> my</c><00:07:13.380><c> construction</c>
+
+00:07:13.670 --> 00:07:13.680 align:start position:0%
+disable channel 0. so my construction
+ 
+
+00:07:13.680 --> 00:07:16.670 align:start position:0%
+disable channel 0. so my construction
+paths<00:07:14.460><c> won't</c><00:07:14.819><c> be</c><00:07:15.060><c> lit</c><00:07:15.419><c> by</c><00:07:15.780><c> this</c><00:07:15.960><c> light</c><00:07:16.199><c> by</c>
+
+00:07:16.670 --> 00:07:16.680 align:start position:0%
+paths won't be lit by this light by
+ 
+
+00:07:16.680 --> 00:07:18.350 align:start position:0%
+paths won't be lit by this light by
+default<00:07:16.979><c> all</c><00:07:17.160><c> objects</c><00:07:17.580><c> in</c><00:07:17.639><c> Unreal</c><00:07:18.000><c> Engine</c><00:07:18.120><c> are</c>
+
+00:07:18.350 --> 00:07:18.360 align:start position:0%
+default all objects in Unreal Engine are
+ 
+
+00:07:18.360 --> 00:07:20.450 align:start position:0%
+default all objects in Unreal Engine are
+using<00:07:18.600><c> Channel</c><00:07:18.780><c> Zero</c><00:07:19.259><c> so</c><00:07:19.500><c> light</c><00:07:19.680><c> affects</c><00:07:20.220><c> all</c>
+
+00:07:20.450 --> 00:07:20.460 align:start position:0%
+using Channel Zero so light affects all
+ 
+
+00:07:20.460 --> 00:07:22.790 align:start position:0%
+using Channel Zero so light affects all
+of<00:07:20.580><c> them</c><00:07:20.759><c> in</c><00:07:21.240><c> the</c><00:07:21.360><c> scene</c><00:07:21.539><c> if</c><00:07:22.020><c> you</c><00:07:22.139><c> add</c><00:07:22.259><c> model</c><00:07:22.500><c> to</c>
+
+00:07:22.790 --> 00:07:22.800 align:start position:0%
+of them in the scene if you add model to
+ 
+
+00:07:22.800 --> 00:07:24.469 align:start position:0%
+of them in the scene if you add model to
+separate<00:07:23.160><c> Channel</c><00:07:23.460><c> and</c><00:07:23.819><c> tell</c><00:07:23.940><c> the</c><00:07:24.120><c> light</c><00:07:24.240><c> to</c>
+
+00:07:24.469 --> 00:07:24.479 align:start position:0%
+separate Channel and tell the light to
+ 
+
+00:07:24.479 --> 00:07:26.570 align:start position:0%
+separate Channel and tell the light to
+effect<00:07:24.660><c> on</c><00:07:24.900><c> the</c><00:07:25.080><c> one</c><00:07:25.259><c> channel</c><00:07:25.500><c> like</c><00:07:26.220><c> in</c><00:07:26.400><c> my</c>
+
+00:07:26.570 --> 00:07:26.580 align:start position:0%
+effect on the one channel like in my
+ 
+
+00:07:26.580 --> 00:07:31.730 align:start position:0%
+effect on the one channel like in my
+example<00:07:26.940><c> you</c><00:07:27.360><c> will</c><00:07:27.599><c> get</c><00:07:27.840><c> this</c><00:07:28.080><c> result</c>
+
+00:07:31.730 --> 00:07:31.740 align:start position:0%
+ 
+ 
+
+00:07:31.740 --> 00:07:58.029 align:start position:0%
+ 
+foreign
+
+00:07:58.029 --> 00:07:58.039 align:start position:0%
+ 
+ 
+
+00:07:58.039 --> 00:08:00.529 align:start position:0%
+ 
+the<00:07:59.039><c> light</c><00:07:59.160><c> to</c><00:07:59.340><c> emphasize</c><00:07:59.759><c> the</c><00:08:00.060><c> back</c><00:08:00.180><c> of</c><00:08:00.360><c> the</c>
+
+00:08:00.529 --> 00:08:00.539 align:start position:0%
+the light to emphasize the back of the
+ 
+
+00:08:00.539 --> 00:08:02.510 align:start position:0%
+the light to emphasize the back of the
+car<00:08:00.660><c> and</c><00:08:01.139><c> adjust</c><00:08:01.380><c> all</c><00:08:01.919><c> the</c><00:08:02.039><c> lights</c><00:08:02.220><c> position</c>
+
+00:08:02.510 --> 00:08:02.520 align:start position:0%
+car and adjust all the lights position
+ 
+
+00:08:02.520 --> 00:08:05.330 align:start position:0%
+car and adjust all the lights position
+right<00:08:03.000><c> now</c><00:08:03.180><c> and</c><00:08:03.660><c> enabling</c><00:08:04.020><c> light</c><00:08:04.680><c> Channel</c><00:08:04.979><c> 1</c>
+
+00:08:05.330 --> 00:08:05.340 align:start position:0%
+right now and enabling light Channel 1
+ 
+
+00:08:05.340 --> 00:08:08.270 align:start position:0%
+right now and enabling light Channel 1
+for<00:08:05.940><c> car</c><00:08:06.240><c> wheels</c><00:08:06.780><c> too</c><00:08:06.960><c> so</c><00:08:07.380><c> they</c><00:08:07.620><c> will</c><00:08:07.860><c> also</c>
+
+00:08:08.270 --> 00:08:08.280 align:start position:0%
+for car wheels too so they will also
+ 
+
+00:08:08.280 --> 00:08:21.830 align:start position:0%
+for car wheels too so they will also
+receive<00:08:08.580><c> the</c><00:08:08.759><c> light</c><00:08:08.940><c> from</c><00:08:09.539><c> this</c><00:08:09.720><c> light</c><00:08:09.960><c> source</c>
+
+00:08:21.830 --> 00:08:21.840 align:start position:0%
+ 
+ 
+
+00:08:21.840 --> 00:08:23.809 align:start position:0%
+ 
+let's<00:08:22.199><c> make</c><00:08:22.500><c> a</c><00:08:22.620><c> conclusion</c><00:08:23.039><c> for</c><00:08:23.340><c> this</c><00:08:23.580><c> scene</c>
+
+00:08:23.809 --> 00:08:23.819 align:start position:0%
+let's make a conclusion for this scene
+ 
+
+00:08:23.819 --> 00:08:25.850 align:start position:0%
+let's make a conclusion for this scene
+try<00:08:24.300><c> to</c><00:08:24.479><c> avoid</c><00:08:24.780><c> multiple</c><00:08:25.139><c> shape</c><00:08:25.500><c> reflection</c>
+
+00:08:25.850 --> 00:08:25.860 align:start position:0%
+try to avoid multiple shape reflection
+ 
+
+00:08:25.860 --> 00:08:28.189 align:start position:0%
+try to avoid multiple shape reflection
+on<00:08:26.160><c> Geometry</c><00:08:26.699><c> keep</c><00:08:27.180><c> them</c><00:08:27.360><c> plain</c><00:08:27.780><c> and</c><00:08:28.020><c> simple</c>
+
+00:08:28.189 --> 00:08:28.199 align:start position:0%
+on Geometry keep them plain and simple
+ 
+
+00:08:28.199 --> 00:08:30.770 align:start position:0%
+on Geometry keep them plain and simple
+in<00:08:28.620><c> order</c><00:08:28.740><c> to</c><00:08:28.979><c> make</c><00:08:29.099><c> accent's</c><00:08:29.639><c> own</c><00:08:29.819><c> shapes</c><00:08:30.240><c> use</c>
+
+00:08:30.770 --> 00:08:30.780 align:start position:0%
+in order to make accent's own shapes use
+ 
+
+00:08:30.780 --> 00:08:32.449 align:start position:0%
+in order to make accent's own shapes use
+light<00:08:31.080><c> channels</c><00:08:31.620><c> to</c><00:08:31.800><c> make</c><00:08:31.979><c> your</c><00:08:32.159><c> object</c>
+
+00:08:32.449 --> 00:08:32.459 align:start position:0%
+light channels to make your object
+ 
+
+00:08:32.459 --> 00:08:34.610 align:start position:0%
+light channels to make your object
+popped<00:08:32.940><c> out</c><00:08:33.060><c> without</c><00:08:33.419><c> affecting</c><00:08:34.140><c> other</c><00:08:34.320><c> parts</c>
+
+00:08:34.610 --> 00:08:34.620 align:start position:0%
+popped out without affecting other parts
+ 
+
+00:08:34.620 --> 00:08:36.709 align:start position:0%
+popped out without affecting other parts
+of<00:08:34.860><c> the</c><00:08:35.039><c> scene</c><00:08:35.219><c> and</c><00:08:35.880><c> the</c><00:08:36.060><c> most</c><00:08:36.240><c> important</c>
+
+00:08:36.709 --> 00:08:36.719 align:start position:0%
+of the scene and the most important
+ 
+
+00:08:36.719 --> 00:08:38.810 align:start position:0%
+of the scene and the most important
+practice<00:08:37.380><c> by</c><00:08:37.740><c> recreating</c><00:08:38.339><c> some</c><00:08:38.640><c> light</c>
+
+00:08:38.810 --> 00:08:38.820 align:start position:0%
+practice by recreating some light
+ 
+
+00:08:38.820 --> 00:08:41.029 align:start position:0%
+practice by recreating some light
+scenarios<00:08:39.360><c> from</c><00:08:39.779><c> your</c><00:08:39.959><c> favorite</c><00:08:40.140><c> movies</c><00:08:40.500><c> or</c>
+
+00:08:41.029 --> 00:08:41.039 align:start position:0%
+scenarios from your favorite movies or
+ 
+
+00:08:41.039 --> 00:08:45.530 align:start position:0%
+scenarios from your favorite movies or
+commercial<00:08:41.339><c> and</c><00:08:42.000><c> here</c><00:08:42.240><c> is</c><00:08:42.419><c> the</c><00:08:42.779><c> final</c><00:08:42.959><c> result</c>
+
+00:08:45.530 --> 00:08:45.540 align:start position:0%
+ 
+ 
+
+00:08:45.540 --> 00:08:47.949 align:start position:0%
+ 
+[Music]
+
+00:08:47.949 --> 00:08:47.959 align:start position:0%
+[Music]
+ 
+
+00:08:47.959 --> 00:08:50.269 align:start position:0%
+[Music]
+and<00:08:48.959><c> this</c><00:08:49.140><c> is</c><00:08:49.200><c> it</c><00:08:49.380><c> for</c><00:08:49.560><c> today</c><00:08:49.740><c> hope</c><00:08:50.160><c> you</c>
+
+00:08:50.269 --> 00:08:50.279 align:start position:0%
+and this is it for today hope you
+ 
+
+00:08:50.279 --> 00:08:51.889 align:start position:0%
+and this is it for today hope you
+enjoyed<00:08:50.640><c> it</c><00:08:50.820><c> if</c><00:08:51.120><c> you</c><00:08:51.300><c> liked</c><00:08:51.480><c> it</c><00:08:51.600><c> don't</c><00:08:51.779><c> forget</c>
+
+00:08:51.889 --> 00:08:51.899 align:start position:0%
+enjoyed it if you liked it don't forget
+ 
+
+00:08:51.899 --> 00:08:54.290 align:start position:0%
+enjoyed it if you liked it don't forget
+to<00:08:52.140><c> put</c><00:08:52.320><c> a</c><00:08:52.500><c> thumb</c><00:08:52.680><c> up</c><00:08:52.860><c> for</c><00:08:53.100><c> this</c><00:08:53.279><c> video</c><00:08:53.459><c> and</c><00:08:54.060><c> see</c>
+
+00:08:54.290 --> 00:08:54.300 align:start position:0%
+to put a thumb up for this video and see
+ 
+
+00:08:54.300 --> 00:08:57.560 align:start position:0%
+to put a thumb up for this video and see
+you<00:08:54.420><c> in</c><00:08:55.019><c> the</c><00:08:55.140><c> next</c><00:08:55.320><c> one</c>
+

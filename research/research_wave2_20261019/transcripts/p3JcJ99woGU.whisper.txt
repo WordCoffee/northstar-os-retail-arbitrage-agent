@@ -1,0 +1,437 @@
+So whenever you try to crop a group photo, usually the resolution is absolute crap.
+But if I were to process the same cropped photo in this wonderful upscaler,
+so here's the before and here is the after.
+If that's not crazy, I don't know what is.
+But how do you make sure it's the same person?
+Sometimes while upscaling, it generates new details and makes it an entirely different person.
+Here's the trick.
+We are going to take a super high resolution photo,
+turn this into a low resolution photo by going to image, image size,
+and let us just reduce it to width 600.
+Why not?
+And hit OK.
+Right now this is super low res pixels are bleeding out.
+Now how about we upscale this one and compare it with the original high res?
+And here's three of them side by side.
+On the left you have the absolute original high resolution.
+And this one is the upscaled one.
+And as you can see, there is a bit of a change in skin texture,
+but it's pretty darn close.
+And remember, this was upscaled from this image.
+And if you're ready to get your minds blown,
+let's zoom in a little more towards the eyes.
+Here's the absolute original one.
+This is the upscaled one.
+And here's the image that we upscaled from.
+What is happening?
+Now these were extreme cases with faces.
+What about wildlife, old photos, landscapes, products,
+or maybe you entirely missed the focus?
+Can we recover all that?
+And how does this tool compare with upscalers
+from Photoshop and Topaz?
+All that and more so without any further ado, let's get started.
+A few years ago I made a video about Magnific AI,
+a tool that upscaled like no one else.
+The only downside for precise results was that it added
+a lot of creative details while upscaling,
+thus changing the original image by a lot.
+Since then they created a brand new setting called Precision.
+Does that get rid of the crazy creativity?
+Let's see. Let's take a look at this example.
+It's a great shot, but due to cropping,
+the resolution may not be the highest.
+To upscale it, we can access Magnific through FreePick.
+It's one of the best platforms to have everything
+under one roof, all the tools you need.
+So here I'm just gonna click on Image Upscaler
+and let's simply drag and drop this photo.
+Now Magnific still has creative upscaling,
+which adds a lot of creative detail.
+We don't want that.
+We are interested in Precision for precise upscaling.
+And I don't wanna introduce any additional sharpness
+or grain.
+Again, these are my preferred settings.
+You can use whatever you wish.
+Here's an important setting.
+How much you wanna upscale?
+2x, 4x, 8x, up to you.
+Let's go 8x and click on upscale.
+Now while it's processing,
+let us also upscale it through Photoshop and Topaz.
+In Photoshop, let's go to Image Generative Upscale.
+Inside of that, choose Adobe's own Firefly Upscaler.
+4x, now Firefly has a limit.
+It cannot go 8x.
+Click on upscale.
+Now I'm gonna process the same image
+in Topaz Gigapixel right now by default.
+It is doing 2x.
+Let's see if we can do 8x.
+Custom.
+It is doing something.
+And here's four of them side by side.
+And the results I must say, it's pretty clear.
+Here is the original one.
+Topaz Gigapixel, Photoshop Firefly and Magnific.
+And no matter how you look at it,
+there is no doubt that Magnific killed it right there.
+Now if you were to zoom in further
+and let's have a look at the eyes, this is insane.
+Let's have a look at Topaz.
+Very less detail as compared to Magnific.
+With Photoshop, although it was 4x,
+it's just very, very soft.
+Now let's have some fun with some old photos.
+As I told you, everything can be done inside of FreePik.
+So here I have this photo.
+Let's see how much we can restore it.
+So let's upload it inside of FreePik.
+I'm just gonna open the image generator
+inside of that, let's drag it and drop it right there.
+For model, there are so many models available.
+I'm just gonna go to possibly Google right there.
+Nano Banana Pro.
+Now FreePik is one of the few platforms
+that give you absolute flexibility.
+I can just type something like,
+restore this old photo to look
+as if it was taken today
+with high resolution modern digital camera.
+Now I have the option to choose the resolution.
+1K, 2K, 4K, let's go for 4K.
+Let's keep the aspect ratio auto and we can generate.
+With Adobe Firefly,
+you can definitely choose Nano Banana Pro,
+but there is no option to choose the resolution.
+And by default at the moment of recording this video,
+it only does 1K.
+So let's go back to this, let's click on generate.
+And if you're not shocked by this result,
+I honestly don't know what to say.
+And you can upscale it even further directly from here.
+Let's click on upscale.
+And of course, we are going to go to precision.
+Now when it comes to precision upscaling,
+inside of the precision tab,
+there are many models that are available.
+Most of the time I use the sublime model.
+There are other ones that you can try,
+but the sublime gives you a lot of flexibility
+while upscaling.
+Once it is done, simply click on it.
+Click on the download button right there.
+And let's examine it.
+PNG is fine, click on download.
+PNG restores the absolute high quality
+and have a look, this is 113 MB.
+So here is the before and here is the after.
+I don't even know what to say.
+Let's zoom in even further.
+You can even continue to zoom in, that's insane.
+You can use liquefy to slightly move the eyes
+a little bit to create an exact match.
+But apart from that, have a look at the details
+in her dress, texture of the wood,
+texture of her clothes, before, after.
+Now if you have a look at the entire image as a whole,
+you would realize that this was impossible
+just a few months ago.
+Creating something like this would be a thing of dreams
+and especially an image that is coming from this to this.
+I did one more example with another image
+with a lot of complexity and it boggled my mind.
+Here is the before and here is the after.
+Even if we zoom in and if we zoom in a lot,
+have a look at the face of the lady.
+Here's the before, here's the after.
+And you can zoom in further and further.
+Look at the resolution of this photo.
+Now we saw that it can do great things with faces.
+But what about other areas?
+Many upscalers enhance the face and leave out the rest
+like the jewelry or the details in the clothes.
+So here we have a low resolution photo,
+only 1200 pixels wide.
+If you were to zoom in,
+you would notice that this is quite pixelated.
+What's even concerning is that if you have a look
+at the jewelry, there is no detail left.
+Similarly right here, no detail there.
+Have a look at her outfit, no detail right there.
+Can Magnific recover it?
+Let's see.
+Now you can choose to upscale it by 4x or 8x.
+That's up to you.
+For this one, let's keep it 4x.
+So I have opened it up in Photoshop
+and we're gonna compare the before and after.
+So here is the before and here is the after.
+As you can tell, for the face,
+it did a pretty amazing job.
+But how does it stand in comparison
+to Photoshop's Firefly and Topaz?
+Let's see.
+Three of them side by side.
+As you can see, Magnific is miles apart.
+Look at the skin texture with Magnific.
+Nobody has been able to replicate that.
+If you were to scroll down on the jewelry,
+there is no detail here on the Topaz.
+And when it comes to the hair and the strands,
+Magnific created every single strand.
+This is where Topaz absolutely messes up.
+Firefly is one is more natural than Topaz,
+but not as good as Magnific.
+Again, it messed up the jewelry entirely here in Topaz.
+The details are crazy amazing with Magnific.
+This one is soft.
+If you have a look at the outfit
+and all of these details,
+Topaz just messes it up.
+Look at the details here.
+Even Adobe Firefly has done a pretty amazing job,
+even though it's soft.
+Have a look at the fabric details here.
+This is insanely bad.
+This is much better.
+Let's take a look right there.
+This is an alien planet jewelry with Magnific.
+It even created all the single beads.
+Even Adobe Firefly did that.
+This is, I don't know what they're doing.
+Water droplets all throughout,
+no matter where you look, Magnific is just miles better.
+Adobe Firefly in this case is second,
+and Topaz has just turned it into trash.
+Now we have talked about a lot of details here.
+Can we introduce more details in an existing image
+that probably doesn't need upscaling,
+but may need more details, especially the skin areas?
+So here we have an image.
+It's quite high resolution,
+but it looks overly retouched.
+Let us drag and drop it inside of the image editor
+Now here's the upscale setting that we already talked about.
+Right beside it, there's this new thing called Skin Enhancer.
+Now you can choose flexible skin enhancing.
+I'm just gonna choose faithful
+so that the original stuff is restored
+and the default settings are fine.
+Let's click on enhance.
+Do keep in mind though,
+every time you apply any of these effects,
+it just does consume certain credits.
+I wish we had an unlimited plan for everything
+or wish there was an offline version of this,
+but unfortunately we don't.
+Anyway, what in the world?
+It did flip the image.
+This is weird.
+Let us download it and flip it back in Photoshop.
+We definitely do have more detail, more detail in the skin,
+but it introduces some kind of patch line.
+It's hard to explain, but it's there.
+Before, after.
+Again, it's way more detailed,
+helps you prevent plastic skin in AI generated photos,
+but in real photos, I'm not so sure,
+especially because of these patches,
+but I'm sure with time they're gonna make it better.
+One thing we have not covered yet are products
+and for product photography solely,
+I wouldn't recommend any of the AI upscalers.
+Here's why.
+So this is a picture of a watch that I took with my phone.
+And as you can see, even though this is just 12 megapixels,
+this is very detailed.
+If I went upscale it to get the absolute maximum quality,
+this is what would happen.
+So here in Magnific, it's already 12 megapixels,
+so we cannot go 4X, but we can go 2X.
+Let us upscale it and let's see what happens.
+Now, even though the upscaling might seem great,
+and it may seem to have more detail,
+there is a big flaw.
+It deviates the product slightly.
+For example, this here in the original one says,
+made in Japan, it's slightly covered.
+And when we process it for upscaling,
+it makes it made in Japan and N is gone,
+E is gone right there,
+and you don't wanna show pictures of a product
+that is not the actual one.
+Similarly with certain textures, have a look right there.
+Here's the original one, here's how Citizen is written.
+In the upscaled one, it adds an emboss effect,
+which is not there in reality.
+And even if you were to look at the honeycomb design
+in the original one, that is how it should be.
+In the after, it introduces some additional shapes
+and lines which were not there.
+So for product photography,
+I just recommend get a high resolution camera
+and capture directly.
+You don't want any of your product photos
+to deviate and mislead the customer.
+Now, when it comes to landscapes,
+you can apply it, but not all the time.
+When there are mountains and rivers and water
+and foliage trees and stuff,
+where details can slightly change, that's fine.
+This is safe.
+Let me share with you an example with this image.
+Let's have a look at the before and after in Photoshop.
+So if you were to zoom into the mountains,
+it's all jaggery, pixely, and here is the after.
+That's crazy good, no matter how much you zoom in,
+before, after.
+Let's look at all of these areas.
+Everything is just so detailed.
+Before, no detail there.
+It's all messed up.
+And here is the after.
+Now let's have a look at the lady right there.
+Beautifully upscaled before, nothing there.
+And if you have a look at the after,
+all the hair, everything is just wonderfully done.
+Jeans, clothes.
+Now parts of the grass, I would say it could have done better.
+This is where it's slightly smudged.
+But overall, if you look at the entire image before,
+very less detail after.
+All that detail back in place.
+Now there's one critique here.
+Whenever it comes to plain areas,
+or areas with gradients,
+Magnificates, artifacts, some kind of blotchy banding.
+Have a look right there.
+You see all of these blotches?
+In these areas, if you were to zoom out,
+this would be clearer.
+You see all these blotches?
+I hope, I really hope they make it better with an update.
+Now one of the areas where I would not recommend upscaling
+is when you have artistic details.
+So this is a photo that I took in Paris,
+just a snapshot from my phone.
+And as you can see, there are these artistic details
+all over this building.
+And if you were to upscale it,
+wait for the magic to happen.
+Let's zoom in on to the results.
+So here's the before.
+Here's the after.
+After looks more detailed.
+But if you were to zoom into the statues right there,
+what is this?
+Before, artistic, nice, everything is beautiful.
+After, it tried to invent all the monster details
+right in there.
+Similarly, have a look at the design of the clock.
+Before, so beautiful, so elegant.
+After, it tried to merge a lot of things
+just to create detail.
+Before, see the artistic detail?
+Even in low rest, this looks like a masterpiece.
+And it is after.
+What in the alien is this?
+Now so far, you and I did a lot of work
+with the upscalers and the comparisons.
+Time for something fun.
+Let's have a look at this photo.
+The focus is entirely lost, maybe on purpose.
+Just as a creative project,
+can we bring it back to the girl?
+With all the tools we have inside a free pick,
+let us try it.
+So we are just gonna go to Image Generator right there.
+Inside of that, let's drag and drop this photo right here.
+And upload this as a reference.
+Right now it is not letting me upload
+because this is not the right model.
+Let's try a new model.
+Let's try Sea Dream.
+And 4.5 is the latest one, why not try it?
+It's a preview.
+So let's go to our finder again.
+Upload this photo and this should work.
+And let's type in, restore and sharpen this blurry person
+and add details.
+Now let's pick the resolution 4K is fine.
+Aspect ratio, this was about 2s to 3.
+And the great part about this model
+is that you can generate four images at once.
+Click on generate.
+And for certain plans for right now,
+this is unlimited as you can see.
+Let's have a look at the results.
+These are pretty amazing.
+Even this one, that's pretty good.
+Now this is already crazy, but I was wondering,
+what if we could upscale it further?
+Moment of truth, I did a few tries
+and this is the result we can get.
+This is where the focus was entirely missed.
+This is what we can restore from it.
+Again, here is the before and here is the after.
+If that was not enough, we upscaled it
+and now this is the result.
+Doesn't seem like much.
+Let's zoom in further.
+What in the world is this?
+Here's the before, after restoration.
+And as you can see, there are some pattern in there
+that can be created with any form of generation.
+And again, here is the after.
+All that skin texture, every pore just shows up.
+Look at the light on the eyelid.
+This is insane detail.
+Now keep in mind, we came from here to here.
+With all that being said, as for the pros,
+Magnificia is definitely magic.
+And combined that with all the tools inside of FreePik,
+it becomes an absolute workhorse.
+I highly recommend that you check out FreePik.
+I'll leave a link in the description or somewhere
+so that you can get the highest discount possible,
+but it will be there.
+Just check it out.
+Whether we compare the details in the face
+or the outfit, wildlife or anything,
+in each and every example, Magnific just stood out.
+Although it has a resolution limitation around 10K,
+it is much higher than most of the competition.
+Now, as for the cons, this works in the cloud
+and many do, but the bigger problem is
+it consumes a lot of credits.
+Depending upon your resolution,
+the amount of credits it is consuming may change.
+So there's only a limited amount of time
+you can use it as per your plan.
+And if you want to use it more,
+you would have to buy more credits.
+Unfortunately, that's where the world is going at the moment.
+As far as the technicalities go,
+I really hope they improve upon those patchy artifacts,
+especially on blurred, plain or gradient areas.
+I only wish there was an offline or unlimited version,
+but that's wishful thinking.
+Apart from that, I wish them the best
+and you don't have to take my word for it.
+I highly recommend that you try Magnific on your photos
+and see how they work.
+I hope you enjoyed this video and if you did,
+make sure to give us a like
+and also don't forget to subscribe
+and not just subscribe.
+Bring the bell so that you, my friend,
+don't miss any other future tips, tricks or tutorials.
+Thank you so much for watching.
+I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.
+I've been to the top of Mount Everest.
+I've sailed the seven seas.
+I've shared the stage with all the best.
+Lot of good it did for me.

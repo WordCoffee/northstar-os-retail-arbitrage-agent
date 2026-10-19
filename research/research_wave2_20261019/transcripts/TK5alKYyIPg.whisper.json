@@ -1,0 +1,17 @@
+{
+ "id": "TK5alKYyIPg",
+ "title": "🚀 Introducing Qwen-Image-Edit-2511",
+ "channel": "Qwen",
+ "url": "https://www.youtube.com/watch?v=TK5alKYyIPg",
+ "query": "qwen image edit",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.377,
+ "duration_s": 86.0,
+ "chars": 0,
+ "segments": [],
+ "transcribed_at": "2026-10-19T08:40:10.182731+00:00",
+ "seconds": 5.5
+}

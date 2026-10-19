@@ -1,0 +1,328 @@
+{
+ "id": "YOWDaxVGO9I",
+ "title": "Use ORIGINAL SHADOW Product Photography PHOTOSHOP",
+ "channel": "Jacob Manfred",
+ "url": "https://www.youtube.com/watch?v=YOWDaxVGO9I",
+ "query": "shadow painting photoshop product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 234.7,
+ "chars": 3526,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 6.0,
+   "text": "You have a product shot on a white background, but you want to change the background color to achieve something like this."
+  },
+  {
+   "start": 6.0,
+   "end": 10.24,
+   "text": "Well, my friend, you are in like because in today's video you'll be learning just that."
+  },
+  {
+   "start": 10.24,
+   "end": 11.04,
+   "text": "Roll that intro."
+  },
+  {
+   "start": 11.6,
+   "end": 16.22,
+   "text": "What is up guys? Welcome back to the raw factory."
+  },
+  {
+   "start": 16.22,
+   "end": 21.26,
+   "text": "My name is Jacob and the goal of this channel is to help you become a better food and product photographer."
+  },
+  {
+   "start": 21.26,
+   "end": 23.34,
+   "text": "Now today's tutorial is super exciting."
+  },
+  {
+   "start": 23.34,
+   "end": 24.14,
+   "text": "Why you ask?"
+  },
+  {
+   "start": 24.14,
+   "end": 31.18,
+   "text": "Well, because for the first time ever, I'm going to give you guys full access to the image that I use for this tutorial so you can follow along at home."
+  },
+  {
+   "start": 31.18,
+   "end": 32.14,
+   "text": "How exciting."
+  },
+  {
+   "start": 32.14,
+   "end": 34.46,
+   "text": "To begin, load up your image in Photoshop."
+  },
+  {
+   "start": 34.46,
+   "end": 38.62,
+   "text": "Now we want to put the can on its own layer and also the shadow on its own layer."
+  },
+  {
+   "start": 38.62,
+   "end": 40.46,
+   "text": "So let's begin with the can."
+  },
+  {
+   "start": 40.46,
+   "end": 42.78,
+   "text": "Grab the pen tool and start clipping around the can."
+  },
+  {
+   "start": 48.22,
+   "end": 50.94,
+   "text": "Once that is done, right click and duplicate the layer."
+  },
+  {
+   "start": 51.58,
+   "end": 52.78,
+   "text": "Rename it to can."
+  },
+  {
+   "start": 53.66,
+   "end": 55.1,
+   "text": "Head over to the paths panel."
+  },
+  {
+   "start": 55.74,
+   "end": 59.26,
+   "text": "Hold down the command key on your keyboard and left click with your mouse."
+  },
+  {
+   "start": 59.26,
+   "end": 61.9,
+   "text": "This will create a selection around the can."
+  },
+  {
+   "start": 61.9,
+   "end": 65.26,
+   "text": "Head back to the layers panel and select the layer mask icon."
+  },
+  {
+   "start": 66.86,
+   "end": 69.18,
+   "text": "This will hide the background on the can layer."
+  },
+  {
+   "start": 71.1,
+   "end": 76.14,
+   "text": "If you want to know more about layer mask, I have a video which I'll leave that linked below that you can watch later on."
+  },
+  {
+   "start": 76.14,
+   "end": 78.94,
+   "text": "Now it is time to put the shadow on its own layer."
+  },
+  {
+   "start": 78.94,
+   "end": 81.58,
+   "text": "Right click the background image and duplicate the layer."
+  },
+  {
+   "start": 81.58,
+   "end": 82.86,
+   "text": "Rename it to shadow."
+  },
+  {
+   "start": 84.22,
+   "end": 89.18,
+   "text": "Grab the polygonal lasso tool and roughly cut out the shadow like so."
+  },
+  {
+   "start": 93.18,
+   "end": 96.78,
+   "text": "Ensure that you are on the shadow layer and select the layer mask icon."
+  },
+  {
+   "start": 97.58,
+   "end": 101.34,
+   "text": "Now we should have both the shadow and can on separate layers."
+  },
+  {
+   "start": 101.34,
+   "end": 105.26,
+   "text": "If you have gotten up to this point so far, you are doing really well my friend."
+  },
+  {
+   "start": 105.26,
+   "end": 107.74,
+   "text": "Now let's give our image a background color."
+  },
+  {
+   "start": 107.74,
+   "end": 109.5,
+   "text": "Make a new layer and fill it with white."
+  },
+  {
+   "start": 112.91,
+   "end": 116.43,
+   "text": "Now to blend in the edges of the shadow, select the shadow layer."
+  },
+  {
+   "start": 116.43,
+   "end": 119.47,
+   "text": "Go to adjustments and apply it levels."
+  },
+  {
+   "start": 119.47,
+   "end": 122.83,
+   "text": "Right click the adjustment and select create clipping mask."
+  },
+  {
+   "start": 122.83,
+   "end": 127.47,
+   "text": "This ensures that the levels adjustment will only affect the layer below it."
+  },
+  {
+   "start": 127.47,
+   "end": 130.03,
+   "text": "Now pull the whites in like so."
+  },
+  {
+   "start": 130.03,
+   "end": 131.47,
+   "text": "And that's looking good I reckon."
+  },
+  {
+   "start": 131.47,
+   "end": 134.19,
+   "text": "Thumbs up for you too if you're following along."
+  },
+  {
+   "start": 134.19,
+   "end": 136.43,
+   "text": "Now I want to remove color from my shadow."
+  },
+  {
+   "start": 136.43,
+   "end": 143.15,
+   "text": "So I'm going to apply a black and white adjustment layer to ensure that there is no color besides shades of black in my shadow."
+  },
+  {
+   "start": 143.15,
+   "end": 145.95,
+   "text": "Again right click and select create clipping mask."
+  },
+  {
+   "start": 145.95,
+   "end": 148.51,
+   "text": "And to see if it worked let's change the background color."
+  },
+  {
+   "start": 154.38,
+   "end": 159.42,
+   "text": "Whoops my bad guys I forgot to change the blend mode on the shadow layer to make it to multiply."
+  },
+  {
+   "start": 159.42,
+   "end": 163.18,
+   "text": "Click the shadow layer, hit over to the blend modes and select multiply."
+  },
+  {
+   "start": 163.9,
+   "end": 165.34,
+   "text": "Bam just like that."
+  },
+  {
+   "start": 165.34,
+   "end": 166.14,
+   "text": "Not bad right?"
+  },
+  {
+   "start": 166.14,
+   "end": 167.9,
+   "text": "I know that's pretty good."
+  },
+  {
+   "start": 167.9,
+   "end": 171.82,
+   "text": "Now I always like to keep my layers organized and I do this by putting them into groups."
+  },
+  {
+   "start": 183.46,
+   "end": 188.66,
+   "text": "Also feel free to play around with different background colors or even put different textures or scenes behind this can."
+  },
+  {
+   "start": 188.66,
+   "end": 192.26,
+   "text": "Because that shadow my friend is pretty much transparent these days."
+  },
+  {
+   "start": 192.26,
+   "end": 194.18,
+   "text": "It's going to work on anything and everything."
+  },
+  {
+   "start": 194.18,
+   "end": 195.06,
+   "text": "You're going to love this."
+  },
+  {
+   "start": 195.06,
+   "end": 198.18,
+   "text": "And here are some photos that I have created with this exact technique."
+  },
+  {
+   "start": 198.9,
+   "end": 199.94,
+   "text": "Pretty awesome right?"
+  },
+  {
+   "start": 200.74,
+   "end": 202.74,
+   "text": "Well that is all for me today guys."
+  },
+  {
+   "start": 202.74,
+   "end": 204.26,
+   "text": "I hope you guys something in this video."
+  },
+  {
+   "start": 204.26,
+   "end": 208.1,
+   "text": "If you did like comment and subscribe to help others find this video."
+  },
+  {
+   "start": 208.1,
+   "end": 210.34,
+   "text": "And I will see you in the next one."
+  },
+  {
+   "start": 210.34,
+   "end": 214.58,
+   "text": "If you like this whole new process of downloading my image and using it in Photoshop."
+  },
+  {
+   "start": 214.58,
+   "end": 215.78,
+   "text": "Let me know in the comments below."
+  },
+  {
+   "start": 215.78,
+   "end": 219.94,
+   "text": "And until then my friends keep making cool cool shit really."
+  },
+  {
+   "start": 219.94,
+   "end": 223.86,
+   "text": "Oh gosh remember guys don't wait make something creative today."
+  },
+  {
+   "start": 223.86,
+   "end": 224.66,
+   "text": "Catch us."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:07:39.683256+00:00",
+ "seconds": 10.0
+}

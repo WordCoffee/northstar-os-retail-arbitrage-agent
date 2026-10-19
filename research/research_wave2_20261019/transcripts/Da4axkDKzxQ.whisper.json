@@ -1,0 +1,2198 @@
+{
+ "id": "Da4axkDKzxQ",
+ "title": "Master Shadows & Lighting in Compositing with Photoshop!",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=Da4axkDKzxQ",
+ "query": "photoshop composite shadows",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.998,
+ "duration_s": 2161.7,
+ "chars": 35435,
+ "segments": [
+  {
+   "start": 5.74,
+   "end": 9.74,
+   "text": "Hi there, this is Anmish from Piximperfect. Thank you so much for tuning into this video."
+  },
+  {
+   "start": 9.74,
+   "end": 13.9,
+   "text": "Today, you and I are going to go through the entire process of creating a natural composite"
+  },
+  {
+   "start": 13.9,
+   "end": 18.22,
+   "text": "with the Focus On number one, painting the shadows and number two, matching the color"
+  },
+  {
+   "start": 18.22,
+   "end": 22.26,
+   "text": "and the lighting. You see, whenever you're creating that new composite and you bring"
+  },
+  {
+   "start": 22.26,
+   "end": 27.38,
+   "text": "in a new element onto it, I always recommend that you extract the original shadow of"
+  },
+  {
+   "start": 27.38,
+   "end": 31.38,
+   "text": "that new element and bring that over as well. That way, you create the most"
+  },
+  {
+   "start": 31.42,
+   "end": 36.38,
+   "text": "natural result as natural as possible. However, to be able to extract the shadows,"
+  },
+  {
+   "start": 36.38,
+   "end": 42.06,
+   "text": "it has to be on a flat, clean and nice surface. And also, the angle of the surface of the"
+  },
+  {
+   "start": 42.06,
+   "end": 48.7,
+   "text": "old situation or the old image should match the angle of the new surface where you bring"
+  },
+  {
+   "start": 48.7,
+   "end": 53.34,
+   "text": "in that element, right? Many a times this is not a possibility and for those times,"
+  },
+  {
+   "start": 53.34,
+   "end": 57.78,
+   "text": "you might have to manually paint in the shadows and make some adjustments. That's"
+  },
+  {
+   "start": 57.78,
+   "end": 62.06,
+   "text": "what we're going to extensively cover in this video along with many other essential"
+  },
+  {
+   "start": 62.06,
+   "end": 66.5,
+   "text": "and versatile techniques. So without any further ado, let's get started."
+  },
+  {
+   "start": 66.5,
+   "end": 74.23,
+   "text": "Back in the Moscow world of Photoshop, and if you're going to go ahead and download"
+  },
+  {
+   "start": 74.23,
+   "end": 78.55,
+   "text": "this for an hour, you my awesome friend already know what to do. Check the links"
+  },
+  {
+   "start": 78.55,
+   "end": 82.91,
+   "text": "in the description. So the very first thing as usual whenever you're creating"
+  },
+  {
+   "start": 82.91,
+   "end": 86.87,
+   "text": "a composite is making the selection. Now the technique that I'm going to use"
+  },
+  {
+   "start": 86.87,
+   "end": 91.55,
+   "text": "to make the selection here is what I've already covered in this video. So please"
+  },
+  {
+   "start": 91.59,
+   "end": 95.55,
+   "text": "do watch it. I've already done the selection here to save time. So let's load that"
+  },
+  {
+   "start": 95.55,
+   "end": 99.95,
+   "text": "by going to Select and Load Selection. And I have it saved on a channel named"
+  },
+  {
+   "start": 99.95,
+   "end": 104.91,
+   "text": "Subject. Hit OK. I have the selection right there and click on the Mask"
+  },
+  {
+   "start": 104.91,
+   "end": 111.03,
+   "text": "button. Now we have the subject layer masked out. Okay. Let's drop it into"
+  },
+  {
+   "start": 111.03,
+   "end": 113.95,
+   "text": "the new background. To be able to do that, just open the new background in"
+  },
+  {
+   "start": 113.95,
+   "end": 117.83,
+   "text": "Photoshop. So I'm just going to open that up and drop it right over here at"
+  },
+  {
+   "start": 117.83,
+   "end": 120.79,
+   "text": "the top. Now do keep in mind that you can copy and paste layers in the"
+  },
+  {
+   "start": 120.79,
+   "end": 124.87,
+   "text": "later versions of Photoshop. So let's get back to the subject document. Select"
+  },
+  {
+   "start": 124.87,
+   "end": 129.59,
+   "text": "that layer, press Ctrl or Command C. Go to the background and press Ctrl or"
+  },
+  {
+   "start": 129.59,
+   "end": 133.51,
+   "text": "Command V. Now at this point, if you press Ctrl or Command D for"
+  },
+  {
+   "start": 133.51,
+   "end": 138.19,
+   "text": "transformation, along with the subject, the bounding box will also select"
+  },
+  {
+   "start": 138.19,
+   "end": 143.27,
+   "text": "its original background because it's masked out and it can be a hassle. To"
+  },
+  {
+   "start": 143.27,
+   "end": 147.15,
+   "text": "be able to have access to the original background and also not have to deal"
+  },
+  {
+   "start": 147.19,
+   "end": 151.47,
+   "text": "with the additional bounding box areas, here's a quick tip. Right click on the"
+  },
+  {
+   "start": 151.47,
+   "end": 155.51,
+   "text": "subject and convert it to Smart Object. That way, if you want to have access to"
+  },
+  {
+   "start": 155.51,
+   "end": 159.79,
+   "text": "any old stuff, double click on it. It will open up another document where you"
+  },
+  {
+   "start": 159.79,
+   "end": 163.71,
+   "text": "have the mask and where you can get back anything. Anyway, let's close"
+  },
+  {
+   "start": 163.71,
+   "end": 167.15,
+   "text": "that. Now also converting it into a Smart Object allows you to have"
+  },
+  {
+   "start": 167.15,
+   "end": 171.63,
+   "text": "absolute non-destructive nature. You can make it smaller, bigger, a ton of"
+  },
+  {
+   "start": 171.63,
+   "end": 175.51,
+   "text": "times without losing quality, losing pixel details or anything. Press"
+  },
+  {
+   "start": 175.55,
+   "end": 179.67,
+   "text": "Ctrl or Command D and let's adjust it accordingly. We're not going to follow"
+  },
+  {
+   "start": 179.67,
+   "end": 183.63,
+   "text": "the law of perspectives here like we have covered in this video because it just"
+  },
+  {
+   "start": 183.63,
+   "end": 189.19,
+   "text": "won't fit because if we look at it in that aspect, let's place her next to"
+  },
+  {
+   "start": 189.19,
+   "end": 194.59,
+   "text": "this man. If we do that, she would be probably of this height. Right? That"
+  },
+  {
+   "start": 194.59,
+   "end": 197.99,
+   "text": "looks about right. Now if you do place the anchor point on the horizon,"
+  },
+  {
+   "start": 197.99,
+   "end": 201.91,
+   "text": "let's bring her to the center with the same height. If you do place the"
+  },
+  {
+   "start": 201.95,
+   "end": 207.11,
+   "text": "anchor point around the horizon, just even a little up and if you try to"
+  },
+  {
+   "start": 207.11,
+   "end": 211.11,
+   "text": "bring her closer, she would look absolutely huge. It might be the"
+  },
+  {
+   "start": 211.11,
+   "end": 214.75,
+   "text": "actual case, but we're not going to take a risk. We're just going to place"
+  },
+  {
+   "start": 214.75,
+   "end": 219.27,
+   "text": "her in a way that we think it's good. Also, I feel she's leaning a little"
+  },
+  {
+   "start": 219.27,
+   "end": 224.23,
+   "text": "bit towards the right. So let's go ahead and just rotate her just so"
+  },
+  {
+   "start": 224.23,
+   "end": 228.51,
+   "text": "slightly, just like this. And this looks about right. Now I know what"
+  },
+  {
+   "start": 228.55,
+   "end": 231.27,
+   "text": "many of you are thinking that this might not be"
+  },
+  {
+   "start": 231.27,
+   "end": 235.59,
+   "text": "perspectivically right. I understand that. But many times, have you ever noticed"
+  },
+  {
+   "start": 235.59,
+   "end": 240.75,
+   "text": "that whenever we take an actual photo with some interesting lights or if the"
+  },
+  {
+   "start": 240.75,
+   "end": 245.07,
+   "text": "angle is a little too creative, a lot of viewers might think that is Photoshop"
+  },
+  {
+   "start": 245.07,
+   "end": 249.63,
+   "text": "even if it's an actual photo. So if I did make her too big, it was just not"
+  },
+  {
+   "start": 249.63,
+   "end": 253.47,
+   "text": "looking natural artistically. So sometimes you have to take the"
+  },
+  {
+   "start": 253.51,
+   "end": 258.35,
+   "text": "artistic route instead of the realistic route to look more realistic."
+  },
+  {
+   "start": 258.35,
+   "end": 262.83,
+   "text": "Now we can start by creating the shadows and we don't have to completely"
+  },
+  {
+   "start": 262.83,
+   "end": 266.79,
+   "text": "paint the shadow from scratch. We can have a rough draft or a rough base."
+  },
+  {
+   "start": 266.79,
+   "end": 270.59,
+   "text": "And the way to create a rough draft is hold the controller command and"
+  },
+  {
+   "start": 270.59,
+   "end": 273.79,
+   "text": "click on the subject. That way you have the selection of the subject and"
+  },
+  {
+   "start": 273.79,
+   "end": 277.79,
+   "text": "just under the subject create a brand new layer. And you can name this"
+  },
+  {
+   "start": 277.79,
+   "end": 283.15,
+   "text": "shadow and this is just a rough draft at the moment. Now fill this"
+  },
+  {
+   "start": 283.15,
+   "end": 287.15,
+   "text": "with black. With the foreground color as black, press Alt Backspace or"
+  },
+  {
+   "start": 287.15,
+   "end": 291.71,
+   "text": "Option Delete on a Mac, press controller command D to deselect. Now you"
+  },
+  {
+   "start": 291.71,
+   "end": 294.91,
+   "text": "can convert this into a smart object but I wouldn't recommend that"
+  },
+  {
+   "start": 294.91,
+   "end": 299.23,
+   "text": "because we've got painting to do. Press controller command D, right-click on"
+  },
+  {
+   "start": 299.23,
+   "end": 303.71,
+   "text": "it and then choose distort. Now before we start distorting it, just"
+  },
+  {
+   "start": 303.71,
+   "end": 307.15,
+   "text": "study the other shadows in the image. Look at the shadow of this man on a"
+  },
+  {
+   "start": 307.15,
+   "end": 311.23,
+   "text": "bicycle. If the man on the bicycle is of this height, just compare it"
+  },
+  {
+   "start": 311.23,
+   "end": 315.71,
+   "text": "with the length of the shadow. So in this case, the shadow is about"
+  },
+  {
+   "start": 315.71,
+   "end": 322.51,
+   "text": "more than two times the actual height. So about 2.2 or 2.5-ish. Just keep"
+  },
+  {
+   "start": 322.51,
+   "end": 326.99,
+   "text": "that in mind. So when we distort it, we have to extend it"
+  },
+  {
+   "start": 326.99,
+   "end": 330.91,
+   "text": "about 2.2 to 2.5 times. So she's standing right here."
+  },
+  {
+   "start": 330.91,
+   "end": 335.39,
+   "text": "This would be one time, this would be two time and up to this mark I think"
+  },
+  {
+   "start": 335.39,
+   "end": 338.51,
+   "text": "we have to extend it. You don't have to be accurate here."
+  },
+  {
+   "start": 338.51,
+   "end": 342.75,
+   "text": "I know this looks crazy awkward but we have to adjust it in a way"
+  },
+  {
+   "start": 342.75,
+   "end": 346.67,
+   "text": "that looks just a little bit alright. I guess we can actually work with that."
+  },
+  {
+   "start": 346.67,
+   "end": 349.47,
+   "text": "Hit enter or return once you're satisfied. Now it is time for us to"
+  },
+  {
+   "start": 349.47,
+   "end": 354.19,
+   "text": "actually start painting the shadows and for that right now, simply select"
+  },
+  {
+   "start": 354.19,
+   "end": 357.95,
+   "text": "the hard around brush with black as the foreground color,"
+  },
+  {
+   "start": 357.95,
+   "end": 361.23,
+   "text": "just painting over it and correct little things."
+  },
+  {
+   "start": 361.23,
+   "end": 363.95,
+   "text": "Also to erase something, whenever you're working with the brush, let's"
+  },
+  {
+   "start": 363.95,
+   "end": 366.99,
+   "text": "say you painted something right there and if you want to erase it,"
+  },
+  {
+   "start": 366.99,
+   "end": 372.11,
+   "text": "just hold the tilde key, the key next to one and once you hold that, the same"
+  },
+  {
+   "start": 372.11,
+   "end": 376.19,
+   "text": "brush becomes the same eraser with the same properties"
+  },
+  {
+   "start": 376.19,
+   "end": 379.55,
+   "text": "and if you paint over it, it's going to erase that thing."
+  },
+  {
+   "start": 379.55,
+   "end": 382.51,
+   "text": "If you're using an older version of Photoshop, this might not work."
+  },
+  {
+   "start": 382.51,
+   "end": 385.87,
+   "text": "For that you might have to go to the eraser tool and erase"
+  },
+  {
+   "start": 385.87,
+   "end": 390.19,
+   "text": "those certain areas alright. So let's just paint the shadow according to"
+  },
+  {
+   "start": 390.19,
+   "end": 392.51,
+   "text": "the shape of the subject. The light is coming from the left"
+  },
+  {
+   "start": 392.51,
+   "end": 395.71,
+   "text": "inside so the shadow should fall on the right inside"
+  },
+  {
+   "start": 395.71,
+   "end": 400.11,
+   "text": "right. Also when you're placing the subject, do not forget to just place her"
+  },
+  {
+   "start": 400.11,
+   "end": 402.59,
+   "text": "according to the light. If in the background the light is coming from the"
+  },
+  {
+   "start": 402.59,
+   "end": 406.27,
+   "text": "right inside, in the subject as well, the light should be from the right"
+  },
+  {
+   "start": 406.27,
+   "end": 409.15,
+   "text": "inside. If not, you can always flip it. Let's"
+  },
+  {
+   "start": 409.15,
+   "end": 414.53,
+   "text": "paint the shadow accordingly. Right now I'm just drawing the shape"
+  },
+  {
+   "start": 414.53,
+   "end": 417.57,
+   "text": "of the foot right over here. There are some things you just have to"
+  },
+  {
+   "start": 417.57,
+   "end": 428.53,
+   "text": "guess. Similarly, let's draw the shadow of the"
+  },
+  {
+   "start": 428.53,
+   "end": 433.17,
+   "text": "other leg. Let's zoom in and again according to where the"
+  },
+  {
+   "start": 433.17,
+   "end": 442.85,
+   "text": "light is falling, draw the shadows. Now notice the height where the legs"
+  },
+  {
+   "start": 442.85,
+   "end": 446.69,
+   "text": "cross. Now of course there are clothes here but just notice the height."
+  },
+  {
+   "start": 446.69,
+   "end": 451.33,
+   "text": "So according to that height, it should cross right over here as well. So keep"
+  },
+  {
+   "start": 451.33,
+   "end": 454.85,
+   "text": "that in mind. Keep the angle in mind. So what I meant was it should cross"
+  },
+  {
+   "start": 454.85,
+   "end": 457.65,
+   "text": "right here. Now of course there will be some"
+  },
+  {
+   "start": 457.65,
+   "end": 461.33,
+   "text": "coverings here. So just let that be for now. That's"
+  },
+  {
+   "start": 461.33,
+   "end": 464.85,
+   "text": "just for guidance. By the way, if you want to draw straight lines between any two"
+  },
+  {
+   "start": 464.85,
+   "end": 469.49,
+   "text": "points, just dab once. Hold the shift key, dab"
+  },
+  {
+   "start": 469.49,
+   "end": 472.53,
+   "text": "one more time on the other side. So that way you have a straight line. So this"
+  },
+  {
+   "start": 472.53,
+   "end": 475.65,
+   "text": "will be really helpful. So similarly right here as well, just"
+  },
+  {
+   "start": 475.65,
+   "end": 479.97,
+   "text": "dab once and let's draw a straight line till this"
+  },
+  {
+   "start": 479.97,
+   "end": 482.45,
+   "text": "point. Now I know I understand legs are not"
+  },
+  {
+   "start": 482.45,
+   "end": 488.56,
+   "text": "absolutely straight but this gives us a nice base to work with."
+  },
+  {
+   "start": 488.56,
+   "end": 492.56,
+   "text": "You can also use the pen tool to draw that first and then fill it."
+  },
+  {
+   "start": 492.56,
+   "end": 496.72,
+   "text": "I'm just more comfortable painting it by hand. If you're using a tablet, this can"
+  },
+  {
+   "start": 496.72,
+   "end": 499.2,
+   "text": "be really fun. And by the way, if you're not using a"
+  },
+  {
+   "start": 499.2,
+   "end": 514.06,
+   "text": "tablet, you can first make a selection and then fill it."
+  },
+  {
+   "start": 514.06,
+   "end": 517.82,
+   "text": "Now that does look like an excellent base to start the work from."
+  },
+  {
+   "start": 517.82,
+   "end": 523.18,
+   "text": "Now also she is wearing some clothes where the light is also passing through"
+  },
+  {
+   "start": 523.18,
+   "end": 526.46,
+   "text": "slightly. So it will also have a shadow but this time"
+  },
+  {
+   "start": 526.46,
+   "end": 531.02,
+   "text": "it will be a little less opaque. In other words, a little more"
+  },
+  {
+   "start": 531.02,
+   "end": 535.42,
+   "text": "transparent. So just above the shadow layer, let's create one more layer and call"
+  },
+  {
+   "start": 535.42,
+   "end": 540.06,
+   "text": "it shadow two. Okay and don't worry about the opacity"
+  },
+  {
+   "start": 540.06,
+   "end": 546.22,
+   "text": "right now. Just fill in the dress areas. Keep that in mind. Just draw in that."
+  },
+  {
+   "start": 546.22,
+   "end": 549.66,
+   "text": "These are the additional dress areas because there are lots of folds. So we"
+  },
+  {
+   "start": 549.66,
+   "end": 556.14,
+   "text": "can actually keep them opaque. Just some areas we can keep them"
+  },
+  {
+   "start": 556.14,
+   "end": 562.88,
+   "text": "a little more transparent. Now that they're done,"
+  },
+  {
+   "start": 562.88,
+   "end": 568.4,
+   "text": "we would just simply decrease the opacity. See, we're creating this brilliant"
+  },
+  {
+   "start": 568.4,
+   "end": 571.2,
+   "text": "look right over here. So we will keep it overall dark at the"
+  },
+  {
+   "start": 571.2,
+   "end": 574.48,
+   "text": "moment because later on we would anyway decrease the opacity."
+  },
+  {
+   "start": 574.48,
+   "end": 579.76,
+   "text": "So keep it at about 80%. Now on top of that, let's do another shadow"
+  },
+  {
+   "start": 579.76,
+   "end": 585.09,
+   "text": "three. Let's set this one to also something."
+  },
+  {
+   "start": 585.09,
+   "end": 591.17,
+   "text": "So set this to about 60%. Okay, now we have additional things to"
+  },
+  {
+   "start": 591.17,
+   "end": 595.41,
+   "text": "work with. And on top of that, let's do one more just to add a little bit"
+  },
+  {
+   "start": 595.41,
+   "end": 602.45,
+   "text": "fold to it. And this is shadow four. Now the reason I created them on separate"
+  },
+  {
+   "start": 602.45,
+   "end": 607.49,
+   "text": "layers is because we wanted the ability to control this later."
+  },
+  {
+   "start": 607.49,
+   "end": 611.49,
+   "text": "Okay, so this is just for the shadow and let's keep it at about 40%."
+  },
+  {
+   "start": 611.49,
+   "end": 615.09,
+   "text": "So you see that girl shadow going in from right there."
+  },
+  {
+   "start": 615.09,
+   "end": 620.21,
+   "text": "So let's keep it at about, let's increase it 50."
+  },
+  {
+   "start": 620.21,
+   "end": 625.97,
+   "text": "And also let's add a few more curls here just to create more realism."
+  },
+  {
+   "start": 625.97,
+   "end": 630.69,
+   "text": "Now of course, we have just done too much. So let's group all of these shadows into"
+  },
+  {
+   "start": 630.69,
+   "end": 634.53,
+   "text": "one layer. So select the first one, hold the Shift key, select last one and then"
+  },
+  {
+   "start": 634.53,
+   "end": 638.37,
+   "text": "press Ctrl or Command G and let's name this Shadow."
+  },
+  {
+   "start": 638.37,
+   "end": 641.33,
+   "text": "Okay, now we're gonna change the blend mode of this"
+  },
+  {
+   "start": 641.33,
+   "end": 645.89,
+   "text": "group to Multiply. And before we move into any further steps,"
+  },
+  {
+   "start": 645.89,
+   "end": 649.41,
+   "text": "let's just go ahead and save this PSD because we worked so hard on the"
+  },
+  {
+   "start": 649.41,
+   "end": 655.17,
+   "text": "shadows, we don't want to lose it. Ctrl or Command S is your favorite and"
+  },
+  {
+   "start": 655.17,
+   "end": 658.45,
+   "text": "most useful shortcut. Don't forget it, it's your best friend."
+  },
+  {
+   "start": 658.45,
+   "end": 665.09,
+   "text": "Ctrl or Command S, pick Simperfect Composite and there you have it my friend."
+  },
+  {
+   "start": 665.09,
+   "end": 667.89,
+   "text": "Now it is time for us to move on to the next step and that is"
+  },
+  {
+   "start": 667.89,
+   "end": 671.41,
+   "text": "coloring the shadows. And to move further, let's convert this group into a"
+  },
+  {
+   "start": 671.41,
+   "end": 675.97,
+   "text": "Smart Object by right clicking on it and choosing Convert to Smart Object."
+  },
+  {
+   "start": 675.97,
+   "end": 679.25,
+   "text": "Now if you want the layers back any time you can get it back, you can just"
+  },
+  {
+   "start": 679.25,
+   "end": 683.89,
+   "text": "right click on it and then choose Convert to Layers and you will get"
+  },
+  {
+   "start": 683.89,
+   "end": 687.49,
+   "text": "everything back. Anyway, let's right click on it and convert to Smart Object"
+  },
+  {
+   "start": 687.49,
+   "end": 691.89,
+   "text": "because we will blur it down the line and probably apply some masks and"
+  },
+  {
+   "start": 691.89,
+   "end": 695.57,
+   "text": "filters. It just makes it a little more convenient. So to apply a color,"
+  },
+  {
+   "start": 695.57,
+   "end": 699.81,
+   "text": "create a solid color adjustment layer and choose at the moment any color you"
+  },
+  {
+   "start": 699.81,
+   "end": 702.85,
+   "text": "want and hit OK. Hold the Alt key or the Option key and"
+  },
+  {
+   "start": 702.85,
+   "end": 706.37,
+   "text": "click on the line between these two layers. That way this color is limited"
+  },
+  {
+   "start": 706.37,
+   "end": 709.41,
+   "text": "to the shadow. Also to make sure that the shadow is only"
+  },
+  {
+   "start": 709.41,
+   "end": 713.97,
+   "text": "darkening stuff, make sure again and again that the blend mode of the shadow"
+  },
+  {
+   "start": 713.97,
+   "end": 717.17,
+   "text": "layer is multiplied. Now we will try to match the color of the shadow"
+  },
+  {
+   "start": 717.17,
+   "end": 721.25,
+   "text": "with the shadows nearby. And the best way to do that is double"
+  },
+  {
+   "start": 721.25,
+   "end": 724.61,
+   "text": "click on the solid color adjustment layer and just take a sample of the"
+  },
+  {
+   "start": 724.61,
+   "end": 728.21,
+   "text": "shadow nearby. Just take a sample of the color. So now have a look at the"
+  },
+  {
+   "start": 728.21,
+   "end": 732.29,
+   "text": "original shadow. Is it looking anything like that? No, because of course it's"
+  },
+  {
+   "start": 732.29,
+   "end": 734.93,
+   "text": "on the multiply blend mode and it's darkening stuff."
+  },
+  {
+   "start": 734.93,
+   "end": 738.69,
+   "text": "So we need to make certain changes to it. At least we are on the same hue."
+  },
+  {
+   "start": 738.69,
+   "end": 744.05,
+   "text": "But before we jump into any conclusions, also we need to decrease the opacity of"
+  },
+  {
+   "start": 744.05,
+   "end": 747.41,
+   "text": "the shadow. So let's go to the shadow layer and decrease the opacity to about"
+  },
+  {
+   "start": 747.41,
+   "end": 750.21,
+   "text": "50%. This is a good starting point and it's"
+  },
+  {
+   "start": 750.21,
+   "end": 753.73,
+   "text": "also matching with the shadows nearby. Now at this point I feel that these"
+  },
+  {
+   "start": 753.73,
+   "end": 756.69,
+   "text": "areas needed to be a little more brighter,"
+  },
+  {
+   "start": 756.69,
+   "end": 760.21,
+   "text": "these shadow areas. So we can always double click on it,"
+  },
+  {
+   "start": 760.21,
+   "end": 763.17,
+   "text": "go in here and make them even more lighter."
+  },
+  {
+   "start": 763.17,
+   "end": 768.61,
+   "text": "So this was Opacity 100, this was 80. So let's go 70 on this one."
+  },
+  {
+   "start": 768.61,
+   "end": 774.37,
+   "text": "Where it's 60, let's go 50 on this one. Where it is 50, let's go 40 on this one."
+  },
+  {
+   "start": 774.37,
+   "end": 778.21,
+   "text": "Press Ctrl or Command S to save it. And now let's get back to"
+  },
+  {
+   "start": 778.21,
+   "end": 781.73,
+   "text": "Pixium Perfect Composite and now it's a little more realistic."
+  },
+  {
+   "start": 781.73,
+   "end": 785.65,
+   "text": "So now let's get back to our color and apply the color of our choice."
+  },
+  {
+   "start": 785.65,
+   "end": 788.29,
+   "text": "Now if you really want to compare the shadows, you can always go to the"
+  },
+  {
+   "start": 788.29,
+   "end": 792.77,
+   "text": "background and just grab little bit of the shadow areas from here"
+  },
+  {
+   "start": 792.85,
+   "end": 798.13,
+   "text": "and maybe also grab this area. Press Ctrl or Command J and place it at the very top."
+  },
+  {
+   "start": 798.13,
+   "end": 803.09,
+   "text": "Okay. And press Ctrl or Command D and bring it right over here."
+  },
+  {
+   "start": 803.09,
+   "end": 807.89,
+   "text": "And that's just a good comparison to see how the shadows stack up."
+  },
+  {
+   "start": 807.89,
+   "end": 810.69,
+   "text": "So this will help you to find out whether you need to darken,"
+  },
+  {
+   "start": 810.69,
+   "end": 813.73,
+   "text": "apply a little more color, so on and so forth. So let's get back to our"
+  },
+  {
+   "start": 813.73,
+   "end": 816.21,
+   "text": "shadow and I feel this needs to be a little more darker."
+  },
+  {
+   "start": 816.21,
+   "end": 821.09,
+   "text": "So probably at about 65. Okay. And now let's go to Color and"
+  },
+  {
+   "start": 821.33,
+   "end": 825.73,
+   "text": "give it a little more blue. That looks okay for the moment. Hit OK."
+  },
+  {
+   "start": 825.73,
+   "end": 829.97,
+   "text": "Now the next step is as you already might have guessed, blurring the shadow."
+  },
+  {
+   "start": 829.97,
+   "end": 834.69,
+   "text": "So first of all, let's just remove these references. We don't really need it anymore."
+  },
+  {
+   "start": 834.69,
+   "end": 837.25,
+   "text": "Let's come back to shadow. Now keep in mind this is a smart object."
+  },
+  {
+   "start": 837.25,
+   "end": 841.57,
+   "text": "So whatever blurring filter we apply, we can always change that later."
+  },
+  {
+   "start": 841.57,
+   "end": 847.09,
+   "text": "So let's go to Filter and Blur Gallery. This time we're going to choose Iris Blur."
+  },
+  {
+   "start": 847.09,
+   "end": 849.49,
+   "text": "Let's choose that. Now wherever the contact point is,"
+  },
+  {
+   "start": 849.49,
+   "end": 856.85,
+   "text": "we're going to place an Iris. So let's zoom in around the leg and bring one point to one leg."
+  },
+  {
+   "start": 856.85,
+   "end": 865.81,
+   "text": "First of all, let's make it very small like this. Just make it flat, oval and now let's stretch it"
+  },
+  {
+   "start": 867.65,
+   "end": 871.65,
+   "text": "just like so. Now these are the four points for the blur stars and the edge of the ellipse"
+  },
+  {
+   "start": 871.65,
+   "end": 877.09,
+   "text": "is where the blur ends, which means if the blur is at about five, this will be zero around"
+  },
+  {
+   "start": 877.09,
+   "end": 882.93,
+   "text": "these points and gradually increase it to five on the edge and beyond that it would be five."
+  },
+  {
+   "start": 882.93,
+   "end": 888.61,
+   "text": "So let's bring the points close together and zoom in. And also if you want to individually"
+  },
+  {
+   "start": 888.61,
+   "end": 893.57,
+   "text": "move these points, hold the Alt key or the Option key, click on the point so that you can"
+  },
+  {
+   "start": 893.57,
+   "end": 900.37,
+   "text": "individually move them. So let's bring them very, very close. Okay. Or you can actually"
+  },
+  {
+   "start": 900.37,
+   "end": 902.69,
+   "text": "place it at the very center of both the legs."
+  },
+  {
+   "start": 903.57,
+   "end": 908.85,
+   "text": "And now gradually increase the blur to where it matches with the shadows around it. Let's try 30."
+  },
+  {
+   "start": 908.85,
+   "end": 914.13,
+   "text": "That looks about right. Hit okay. Now these areas around the legs are still very sharp. So we need"
+  },
+  {
+   "start": 914.13,
+   "end": 919.09,
+   "text": "to address that as well. Let's apply an overall Gaussian blur by going to Filter, Blur and then"
+  },
+  {
+   "start": 919.09,
+   "end": 923.49,
+   "text": "Gaussian Blur. Let's go with one or two. Let's go with two. How do you feel about that? Two is"
+  },
+  {
+   "start": 923.49,
+   "end": 929.01,
+   "text": "okay. Do notice that the ground is a little bit blurred and her legs are very sharp. We're"
+  },
+  {
+   "start": 929.01,
+   "end": 933.89,
+   "text": "going to deal with that later. But for right now, two is fine according to the ground and hit okay."
+  },
+  {
+   "start": 933.89,
+   "end": 940.29,
+   "text": "Once you're okay with that. And now that is looking absolutely natural, isn't it? Now, of course,"
+  },
+  {
+   "start": 940.29,
+   "end": 944.29,
+   "text": "we need to make certain more adjustments in the coming steps. Now the ground is not absolutely"
+  },
+  {
+   "start": 944.29,
+   "end": 950.45,
+   "text": "flat. It has lots of ups and downs in it. So unless you engrave that in the shadow as well,"
+  },
+  {
+   "start": 950.45,
+   "end": 955.01,
+   "text": "it won't look natural no matter what you do. With the shadow layer selected, just create a mask."
+  },
+  {
+   "start": 955.33,
+   "end": 961.73,
+   "text": "Click on the mask button right there. Take the brush and this time take a soft round brush."
+  },
+  {
+   "start": 962.93,
+   "end": 969.17,
+   "text": "With the flow and opacity at about 100, just create those bumps around these pebbles and little stuff"
+  },
+  {
+   "start": 969.73,
+   "end": 974.85,
+   "text": "on the ground. So right here, I'm just going to paint with black and create a little bump."
+  },
+  {
+   "start": 978.8,
+   "end": 983.36,
+   "text": "See, just making that little change makes a hell lot of difference. Here's the before,"
+  },
+  {
+   "start": 983.36,
+   "end": 989.6,
+   "text": "very flat, very unnatural. But just after creating that, it just makes so much of a difference. So"
+  },
+  {
+   "start": 989.6,
+   "end": 994.72,
+   "text": "keep those little bumps in mind and create those little grooves inside the shadows to make them"
+  },
+  {
+   "start": 994.72,
+   "end": 999.28,
+   "text": "look realistic. Just that little groove we did there. Here's the before, so flat. Here's the"
+  },
+  {
+   "start": 999.28,
+   "end": 1003.92,
+   "text": "after, makes it look natural. Even if you zoom out, it'll make it look absolutely realistic."
+  },
+  {
+   "start": 1003.92,
+   "end": 1008.88,
+   "text": "Before, after, see that little change. So do those grooves here and there."
+  },
+  {
+   "start": 1009.84,
+   "end": 1019.94,
+   "text": "These little rocks. Now there should be a little bump right over here. So let's give that as well."
+  },
+  {
+   "start": 1020.66,
+   "end": 1024.9,
+   "text": "I'm just increasing the brush size to add a little bit of that softness there,"
+  },
+  {
+   "start": 1025.54,
+   "end": 1038.29,
+   "text": "which matches with that of the shadow. These little grooves make the world of difference."
+  },
+  {
+   "start": 1038.29,
+   "end": 1042.29,
+   "text": "Have a look at the overall before and after. So here's the before, super flat,"
+  },
+  {
+   "start": 1042.29,
+   "end": 1045.49,
+   "text": "and here's the after just after doing that groove. Now if you ask me,"
+  },
+  {
+   "start": 1045.49,
+   "end": 1049.33,
+   "text": "still the shadow doesn't feel right. There's something missing. Can you guess what that"
+  },
+  {
+   "start": 1049.41,
+   "end": 1054.85,
+   "text": "is? Let's examine a real shadow to understand this concept. Let's come back to the original"
+  },
+  {
+   "start": 1054.85,
+   "end": 1060.45,
+   "text": "subject image. Let's turn on the background. If you zoom in right over here, you would notice"
+  },
+  {
+   "start": 1060.45,
+   "end": 1067.25,
+   "text": "there is shadow of course, but wherever the leg is touching the ground, there's some additional"
+  },
+  {
+   "start": 1067.25,
+   "end": 1073.57,
+   "text": "shadow. We can call this contact point shadow. If my hand is right over here and there is light"
+  },
+  {
+   "start": 1073.57,
+   "end": 1079.49,
+   "text": "falling on it, of course there would be shadow on the table. But where my hand is exactly touching"
+  },
+  {
+   "start": 1079.49,
+   "end": 1085.65,
+   "text": "the surface of the table, those areas would be even darker. And those are called contact point"
+  },
+  {
+   "start": 1085.65,
+   "end": 1089.97,
+   "text": "shadows. And that's what we have to add in the existing shadow. Let's come back to our"
+  },
+  {
+   "start": 1089.97,
+   "end": 1094.29,
+   "text": "pick-simperfect composite and let's first of all zoom in right over there. And just above"
+  },
+  {
+   "start": 1094.29,
+   "end": 1100.29,
+   "text": "the shadow color layer, let's create one more layer and name it contact point shadow."
+  },
+  {
+   "start": 1100.37,
+   "end": 1104.93,
+   "text": "Now we're going to use this existing shadow as a mask. So hold the control or command and click on"
+  },
+  {
+   "start": 1104.93,
+   "end": 1110.53,
+   "text": "the shadow. That way we have a mask and click on the mask button right there. Okay. Now we also"
+  },
+  {
+   "start": 1110.53,
+   "end": 1114.85,
+   "text": "want to subtract the mask areas of that shadow. Hold the control or command, click on the mask"
+  },
+  {
+   "start": 1114.85,
+   "end": 1119.49,
+   "text": "of the original shadow. All right. Now we need to invert it and delete it. Press control,"
+  },
+  {
+   "start": 1119.49,
+   "end": 1124.05,
+   "text": "shift I, command, shift I to invert the selection and fill that area with black. So with the"
+  },
+  {
+   "start": 1124.13,
+   "end": 1130.37,
+   "text": "contact point shadow layer selected, it's mask selected, press alt, backspace. So we kind of"
+  },
+  {
+   "start": 1130.37,
+   "end": 1136.61,
+   "text": "erase the extras from right here. You see that cuts? That was essential. Now let's come back to the"
+  },
+  {
+   "start": 1136.61,
+   "end": 1142.93,
+   "text": "layer and take the brush. And just first of all, let's give it one layer of darkness around the"
+  },
+  {
+   "start": 1142.93,
+   "end": 1149.17,
+   "text": "legs. Just dab once with black like this. Let's do the same around the other leg as well."
+  },
+  {
+   "start": 1149.17,
+   "end": 1152.53,
+   "text": "So we have the first layer. This is a good starting point."
+  },
+  {
+   "start": 1152.53,
+   "end": 1157.41,
+   "text": "Let's decrease the opacity and slowly and gradually increase it to a point that looks okay here. 34"
+  },
+  {
+   "start": 1157.41,
+   "end": 1162.37,
+   "text": "is all right. Now let's create one more layer and this is contact point shadow 2."
+  },
+  {
+   "start": 1163.65,
+   "end": 1168.21,
+   "text": "This is where we go in and paint in the absolute dark areas. We need the same mask here."
+  },
+  {
+   "start": 1168.21,
+   "end": 1171.81,
+   "text": "So why not create a group? Select the first one, hold the control or command, select the"
+  },
+  {
+   "start": 1171.81,
+   "end": 1176.29,
+   "text": "second one, press control or command G to create a group and bring the mask to the group."
+  },
+  {
+   "start": 1176.29,
+   "end": 1181.73,
+   "text": "That way, both of them have a common mask. Let's come to CP shadow 2 layer and then"
+  },
+  {
+   "start": 1181.73,
+   "end": 1186.61,
+   "text": "start painting those absolutely dark areas. You can decrease the flow to about five or 10"
+  },
+  {
+   "start": 1186.61,
+   "end": 1189.33,
+   "text": "to have more precision here. I'm going to go with two."
+  },
+  {
+   "start": 1191.17,
+   "end": 1200.37,
+   "text": "This is like dodging and burning. All right, this leg is done. Let's decrease the opacity"
+  },
+  {
+   "start": 1200.37,
+   "end": 1205.81,
+   "text": "slightly about 65%. Similarly, let's do the other side."
+  },
+  {
+   "start": 1206.77,
+   "end": 1211.25,
+   "text": "It might not look like a big thing but when you zoom out, this makes the world of difference."
+  },
+  {
+   "start": 1211.25,
+   "end": 1216.85,
+   "text": "So here's the before. It looks like the leg is in the air and here's the after. Just by doing that,"
+  },
+  {
+   "start": 1216.85,
+   "end": 1221.57,
+   "text": "the leg feels connected. But still, there is something funny about it and that my friend"
+  },
+  {
+   "start": 1221.57,
+   "end": 1226.05,
+   "text": "brings us to our next step and that is the shadows here are so dark. Don't you think"
+  },
+  {
+   "start": 1226.05,
+   "end": 1230.85,
+   "text": "that a little bit of that darkness would also fall a little bit on the legs, right? So we need"
+  },
+  {
+   "start": 1230.93,
+   "end": 1236.45,
+   "text": "to add a little darkness on the subject as well, especially near the shadows. So create a layer"
+  },
+  {
+   "start": 1236.45,
+   "end": 1241.65,
+   "text": "above the subject and also limit it just at the subject by holding the Alt key or the Option key"
+  },
+  {
+   "start": 1241.65,
+   "end": 1246.53,
+   "text": "and clicking on the line between these two layers. This way, no matter what we paint here,"
+  },
+  {
+   "start": 1247.09,
+   "end": 1252.93,
+   "text": "it will be limited to the subject. Have a look. See, it won't paint anywhere else."
+  },
+  {
+   "start": 1253.49,
+   "end": 1257.01,
+   "text": "So here's what we need to do. We need to take a sample color of the shadow nearby"
+  },
+  {
+   "start": 1257.25,
+   "end": 1267.76,
+   "text": "and just paint over a little bit on the subject. Erase the extras. Now, I know what"
+  },
+  {
+   "start": 1267.76,
+   "end": 1272.56,
+   "text": "some of you are thinking. You might say, Mish, this is crazy. But wait for it. Let's do the other leg"
+  },
+  {
+   "start": 1272.56,
+   "end": 1280.72,
+   "text": "first. A little bit on the clothes is fine too. That looks about right. Now, all we need to do"
+  },
+  {
+   "start": 1280.72,
+   "end": 1285.92,
+   "text": "is to change the blend mode from Normal to, guess what the blend mode is, which darkens,"
+  },
+  {
+   "start": 1285.92,
+   "end": 1292.0,
+   "text": "Multiply. Now, this is of course too much. Zoom in and slowly and gradually decrease the opacity."
+  },
+  {
+   "start": 1292.56,
+   "end": 1298.56,
+   "text": "And increase it and stop at the point where it matches nicely. I feel that about 46 or 50 would"
+  },
+  {
+   "start": 1298.56,
+   "end": 1304.4,
+   "text": "be a great place to be. And there you have a nice darkness there. Here's the before, not matching"
+  },
+  {
+   "start": 1304.4,
+   "end": 1308.56,
+   "text": "at all. Here's the after. Now, we are doing something. You can also go ahead and add a little"
+  },
+  {
+   "start": 1308.56,
+   "end": 1316.38,
+   "text": "more. Okay. There you have it. Now, it is high time that we started matching the color and"
+  },
+  {
+   "start": 1316.38,
+   "end": 1320.86,
+   "text": "the lighting. And the easiest way to match the ambient color and the lighting is simply"
+  },
+  {
+   "start": 1320.94,
+   "end": 1325.26,
+   "text": "making the copy of the background layer by selecting the background layer first"
+  },
+  {
+   "start": 1325.26,
+   "end": 1331.18,
+   "text": "and then pressing Ctrl or Command J. Bring it to the very top above the subject. Okay. Also,"
+  },
+  {
+   "start": 1331.18,
+   "end": 1335.5,
+   "text": "limited to the subject by holding the Alt key or the Option key and clicking on the line between"
+  },
+  {
+   "start": 1335.5,
+   "end": 1340.7,
+   "text": "these two layers and simply blur it by going to Filter, Blur and then Gaussian Blur."
+  },
+  {
+   "start": 1340.7,
+   "end": 1345.1,
+   "text": "Let's apply a pretty high blur so that all of the details are gone because we only want"
+  },
+  {
+   "start": 1345.1,
+   "end": 1351.42,
+   "text": "what color is. Let's go with about 200, hit OK and simply change the Blend Mode to, guess what?"
+  },
+  {
+   "start": 1351.42,
+   "end": 1357.26,
+   "text": "What do we want here? Color, right? So change the Blend Mode to Color. Now, this is matching just"
+  },
+  {
+   "start": 1357.26,
+   "end": 1362.06,
+   "text": "way too much that it is completely letting go of its original color. We want you to have your"
+  },
+  {
+   "start": 1362.06,
+   "end": 1369.02,
+   "text": "originality here. So decrease the opacity to let's say about 40% and there we have matched"
+  },
+  {
+   "start": 1369.02,
+   "end": 1373.98,
+   "text": "so, so much. So here's the before and here's the after. Look at how much the color is"
+  },
+  {
+   "start": 1373.98,
+   "end": 1378.3,
+   "text": "matching. Now let's match the brightness and also when we do match the brightness the colors might"
+  },
+  {
+   "start": 1378.3,
+   "end": 1384.94,
+   "text": "distract us. To create a luminosity check layer, in other words to take away all the colors momentarily,"
+  },
+  {
+   "start": 1384.94,
+   "end": 1389.58,
+   "text": "in a more realistic perceptual way, you can create a solid color adjustment layer"
+  },
+  {
+   "start": 1389.58,
+   "end": 1395.5,
+   "text": "and choose gray or black or anything that does not have a saturation and change the Blend Mode"
+  },
+  {
+   "start": 1395.5,
+   "end": 1400.3,
+   "text": "to Color. All right? Now, just under it, you're going to create a Curves Adjustment"
+  },
+  {
+   "start": 1400.3,
+   "end": 1404.86,
+   "text": "layer and limit it just to the subject by holding the Alt key or the Option key"
+  },
+  {
+   "start": 1404.86,
+   "end": 1408.78,
+   "text": "and clicking on the line between these two layers or simply click on this button."
+  },
+  {
+   "start": 1408.78,
+   "end": 1414.3,
+   "text": "That also creates a clipping mask. Let's zoom out and darken this overall subject. I feel like"
+  },
+  {
+   "start": 1414.3,
+   "end": 1418.54,
+   "text": "this matches but also at the same time, her hair is getting too dark. If you look at the background,"
+  },
+  {
+   "start": 1418.54,
+   "end": 1423.66,
+   "text": "it's a little faded. So we need to take the shadows up a little bit just like this"
+  },
+  {
+   "start": 1423.66,
+   "end": 1428.3,
+   "text": "and now it is matching. Let's have a look. Here is the before and here is the after. We have"
+  },
+  {
+   "start": 1428.3,
+   "end": 1433.58,
+   "text": "come close. Now, we don't need the luminosity check layer. Let's simply delete that. I feel that we can"
+  },
+  {
+   "start": 1433.58,
+   "end": 1437.98,
+   "text": "add slight yellow to it because if you have a look at the bright areas right here, they have"
+  },
+  {
+   "start": 1437.98,
+   "end": 1443.02,
+   "text": "a little yellowish tint. So let's go back to the Curves and go to the Blue Channel"
+  },
+  {
+   "start": 1443.66,
+   "end": 1447.42,
+   "text": "and just zoom in first of all right here and just simply decrease the blues because blue is"
+  },
+  {
+   "start": 1447.42,
+   "end": 1454.3,
+   "text": "the opposite of yellow. So slightly just a very slight decrease that helps us a little bit"
+  },
+  {
+   "start": 1454.3,
+   "end": 1458.14,
+   "text": "and there you go. Here's the before, here's the after. Now is a really good time to go ahead and"
+  },
+  {
+   "start": 1458.14,
+   "end": 1461.98,
+   "text": "take a break and get back to the image. We are engrossed in this image for too long that we might"
+  },
+  {
+   "start": 1461.98,
+   "end": 1467.18,
+   "text": "miss certain mistakes or that we might not see certain color matching or color adjustments we"
+  },
+  {
+   "start": 1467.18,
+   "end": 1471.98,
+   "text": "might have to do to make it look more seamless. Now when I look at it, the background looks a"
+  },
+  {
+   "start": 1471.98,
+   "end": 1477.9,
+   "text": "little more warmer and I feel that we need to add a little more warmth to the subject as well."
+  },
+  {
+   "start": 1477.9,
+   "end": 1482.94,
+   "text": "For that, we're going to create a Curves Adjustment layer again and also limit it just to the"
+  },
+  {
+   "start": 1482.94,
+   "end": 1487.9,
+   "text": "subject by clicking on this button. Creates a Clipping Mask. Now to add warmth, let's first"
+  },
+  {
+   "start": 1487.9,
+   "end": 1492.54,
+   "text": "of all go to the Red Channel and we only want to add warmth to the bright areas. Have a look."
+  },
+  {
+   "start": 1492.54,
+   "end": 1497.74,
+   "text": "Look at the dark areas. Dark areas are not warm where the light is falling, those areas are warm."
+  },
+  {
+   "start": 1497.74,
+   "end": 1502.22,
+   "text": "So let's zoom in and increase the reds in the bright areas. You can take the help of"
+  },
+  {
+   "start": 1502.22,
+   "end": 1505.9,
+   "text": "the hand right there, just click on the hand and wherever you want to increase the reds,"
+  },
+  {
+   "start": 1505.9,
+   "end": 1509.74,
+   "text": "just click and drag that up. Areas corresponding to that brightness level"
+  },
+  {
+   "start": 1509.74,
+   "end": 1515.42,
+   "text": "will have an increase in reds. This is fine but we don't want it to increase in the shadow areas."
+  },
+  {
+   "start": 1515.42,
+   "end": 1520.7,
+   "text": "So let's click and drag it down and bring it back to normal. Also, let's go to the Blue Channel"
+  },
+  {
+   "start": 1520.7,
+   "end": 1529.28,
+   "text": "and add some more yellow to it. Slight bit. Let's do it only in the extreme highlights right"
+  },
+  {
+   "start": 1529.28,
+   "end": 1536.0,
+   "text": "here and bring it back in the shadow areas. All right. This adds a little warmth to it."
+  },
+  {
+   "start": 1536.0,
+   "end": 1540.0,
+   "text": "Have a look. Here's the before. Looks not so warm if you compare it with the background and"
+  },
+  {
+   "start": 1540.0,
+   "end": 1545.28,
+   "text": "if you turn that on, have a look, it adds a little warmth to it. Also matches so much with that of the"
+  },
+  {
+   "start": 1545.28,
+   "end": 1549.84,
+   "text": "background. Now with all the adjustments that we have done, the darkness that we created from the"
+  },
+  {
+   "start": 1549.84,
+   "end": 1556.0,
+   "text": "shadow might be affected as well. So instead of keeping it at the very bottom, why don't we"
+  },
+  {
+   "start": 1556.0,
+   "end": 1562.32,
+   "text": "place it at the top? All right. Bring it at the top. Make sure it is still clipped and as you"
+  },
+  {
+   "start": 1562.32,
+   "end": 1567.44,
+   "text": "do that, you will see a change here. So here was the before. See, it's looking very plain"
+  },
+  {
+   "start": 1567.44,
+   "end": 1573.92,
+   "text": "and here's the after. As soon as you bring it at the top, it looks more natural. So before the darkness,"
+  },
+  {
+   "start": 1573.92,
+   "end": 1581.2,
+   "text": "of course, this is unrealistic. After the darkness, you know, it's just hands down a lot better."
+  },
+  {
+   "start": 1581.2,
+   "end": 1586.0,
+   "text": "Now let me share with you one more tip to take the shadow realism just off the charts and that is"
+  },
+  {
+   "start": 1586.0,
+   "end": 1590.72,
+   "text": "if you have a look at the cloth that she's wearing at the bottom, this is a little"
+  },
+  {
+   "start": 1590.72,
+   "end": 1597.04,
+   "text": "translucent. This is not absolutely opaque, right? So what if we add a pass through shadow?"
+  },
+  {
+   "start": 1597.04,
+   "end": 1603.92,
+   "text": "So right here, the shadow is going in this direction. So a little bit of the shadow we can see"
+  },
+  {
+   "start": 1603.92,
+   "end": 1609.2,
+   "text": "through her dress as well. So just above this layer, let's create one more layer, hold the Alt"
+  },
+  {
+   "start": 1609.2,
+   "end": 1612.88,
+   "text": "key or the Option key and click on the line between these two lists to also limit that."
+  },
+  {
+   "start": 1612.88,
+   "end": 1618.72,
+   "text": "And now take the brush and this time with a soft round brush, just take a sample of that shadow"
+  },
+  {
+   "start": 1618.72,
+   "end": 1627.71,
+   "text": "color and continue that shadow. That's it. Also now let's erase and soften the extras."
+  },
+  {
+   "start": 1627.95,
+   "end": 1635.6,
+   "text": "Any of guest at my friend just decrease the opacity. See that difference it makes? Just look at the"
+  },
+  {
+   "start": 1635.6,
+   "end": 1641.36,
+   "text": "difference. Here's the before and if I turn that on, here's the after. Just look at that."
+  },
+  {
+   "start": 1641.36,
+   "end": 1645.92,
+   "text": "And this my friend is just mind bending. If you want to take it further, have a look at this"
+  },
+  {
+   "start": 1645.92,
+   "end": 1651.76,
+   "text": "bright rock right there. Why don't we take the brush and take a sample of that one as well,"
+  },
+  {
+   "start": 1651.92,
+   "end": 1656.4,
+   "text": "decrease the flow to about 5% and paint that as well."
+  },
+  {
+   "start": 1658.24,
+   "end": 1664.24,
+   "text": "See those little see through things really make a difference. Now we are not done yet."
+  },
+  {
+   "start": 1664.24,
+   "end": 1668.48,
+   "text": "Let's focus on the shadows off the subject. If you look at the shadows in the background,"
+  },
+  {
+   "start": 1668.48,
+   "end": 1673.76,
+   "text": "they're a little too bluish. So we need to add blues there as well. So create another"
+  },
+  {
+   "start": 1673.76,
+   "end": 1679.6,
+   "text": "Curves Adjustment layer and let's go to the blue channel and just focus on the shadows"
+  },
+  {
+   "start": 1679.68,
+   "end": 1683.52,
+   "text": "and it will be taken away from the bright areas. Don't worry about that. So in the shadow,"
+  },
+  {
+   "start": 1683.52,
+   "end": 1687.6,
+   "text": "let's zoom in and also focus on the shadows of the background that will help you and just"
+  },
+  {
+   "start": 1687.6,
+   "end": 1693.52,
+   "text": "increase the blues a bit like this. Now you would want to limit it to the subject. So create"
+  },
+  {
+   "start": 1693.52,
+   "end": 1697.92,
+   "text": "a clipping mask by clicking on this button. Now once we do increase the blues, I feel that"
+  },
+  {
+   "start": 1697.92,
+   "end": 1703.2,
+   "text": "increasing the greens a little bit will take away those pinkish magenta-ish tint there."
+  },
+  {
+   "start": 1703.2,
+   "end": 1710.48,
+   "text": "So let's go to the green channel and let's increase that a bit. See? It's making it a little more"
+  },
+  {
+   "start": 1710.48,
+   "end": 1715.76,
+   "text": "natural. Matching that with that at the background. Let's go to the red channel and try to decrease"
+  },
+  {
+   "start": 1716.32,
+   "end": 1721.12,
+   "text": "or increase it and see what works. Slight increase works. Let's go back to the green channel"
+  },
+  {
+   "start": 1721.68,
+   "end": 1725.92,
+   "text": "and increase it a bit and there we have something for the shadows. Now the shadows"
+  },
+  {
+   "start": 1725.92,
+   "end": 1730.0,
+   "text": "look a little more natural. I would go ahead and increase a little more blues there."
+  },
+  {
+   "start": 1730.0,
+   "end": 1736.56,
+   "text": "There you go. Look at the overall shadow. It's just matching so so much. Now we only want it in"
+  },
+  {
+   "start": 1736.56,
+   "end": 1740.56,
+   "text": "the shadows. So double click on the right-hand side of the limb and take it away from the"
+  },
+  {
+   "start": 1740.56,
+   "end": 1745.28,
+   "text": "highlights by taking the slider of the underlying left from right to left. Break it apart to"
+  },
+  {
+   "start": 1745.28,
+   "end": 1751.2,
+   "text": "make the transition smoother. This looks alright. Hit OK. So let's take a look at the before and"
+  },
+  {
+   "start": 1751.2,
+   "end": 1756.16,
+   "text": "after. Here's the before. The shadows are just too colorful and not matching. Here's the after."
+  },
+  {
+   "start": 1756.88,
+   "end": 1761.92,
+   "text": "Just just so much better. But at the same time I feel it's too much. So let's decrease the opacity"
+  },
+  {
+   "start": 1761.92,
+   "end": 1768.56,
+   "text": "to about 60 70 ish. Alright. Now we have a little more originality there. We are still not done yet."
+  },
+  {
+   "start": 1768.56,
+   "end": 1774.0,
+   "text": "Have a look at the shadow of the cycle guy. It's a little darker right. So we just need to get"
+  },
+  {
+   "start": 1774.0,
+   "end": 1778.32,
+   "text": "the shadow areas to be a little darker. Shadows on the right-hand side. So one more curves"
+  },
+  {
+   "start": 1778.32,
+   "end": 1782.48,
+   "text": "adjustment layer I know picks imperfect is synonymous to curves. Let's create one more"
+  },
+  {
+   "start": 1782.48,
+   "end": 1788.32,
+   "text": "curves. Just bring it down. Also limit it to the subject. Bring it down overall."
+  },
+  {
+   "start": 1789.28,
+   "end": 1794.4,
+   "text": "This darkness seems about right. Let's play with the greens. I feel the green has gone too much."
+  },
+  {
+   "start": 1794.4,
+   "end": 1801.12,
+   "text": "So slightly I will decrease it and also reds. Slightly we'll decrease that as well."
+  },
+  {
+   "start": 1801.12,
+   "end": 1804.08,
+   "text": "Okay. We only want to apply it on the right-hand side. So select the mask."
+  },
+  {
+   "start": 1804.08,
+   "end": 1808.32,
+   "text": "Press Ctrl or Command I. Take the brush. Flow in opacity at 100 with the soft"
+  },
+  {
+   "start": 1808.32,
+   "end": 1819.6,
+   "text": "round brush. Just paint on the right-hand side with white. Again this is harsh and we want to take"
+  },
+  {
+   "start": 1819.6,
+   "end": 1823.84,
+   "text": "this away from the bright area. So double click on the right-hand side of the layer and hold the"
+  },
+  {
+   "start": 1823.84,
+   "end": 1829.44,
+   "text": "Alt key or the Option key. Break apart the right-hand side slider and take it apart like this."
+  },
+  {
+   "start": 1829.44,
+   "end": 1834.16,
+   "text": "Okay. Okay. Let's take a look at the before and after. So here's the before."
+  },
+  {
+   "start": 1834.88,
+   "end": 1839.44,
+   "text": "Look not matching with that of the cycle guy. Here's the after. We are much closer."
+  },
+  {
+   "start": 1839.44,
+   "end": 1843.76,
+   "text": "And as usual let's decrease the opacity. About 75 would be right."
+  },
+  {
+   "start": 1845.04,
+   "end": 1850.64,
+   "text": "Now do you think we are done? Well not yet. I feel that we can apply a global effect to just"
+  },
+  {
+   "start": 1850.64,
+   "end": 1855.36,
+   "text": "blend and bring everything together. And that is something we do at the end of every composite."
+  },
+  {
+   "start": 1855.36,
+   "end": 1860.56,
+   "text": "And in this particular example we can easily do that with a lookup table. So let's create a color"
+  },
+  {
+   "start": 1860.56,
+   "end": 1866.72,
+   "text": "lookup table and let's just slap on our favorite one, the usual one. That is crisp warm."
+  },
+  {
+   "start": 1867.36,
+   "end": 1872.88,
+   "text": "And once you do that this scene just becomes complete. If you think it's too much you can"
+  },
+  {
+   "start": 1872.88,
+   "end": 1880.48,
+   "text": "decrease the opacity to about 50% and there my friend we have our composite. Do you want to"
+  },
+  {
+   "start": 1880.48,
+   "end": 1884.4,
+   "text": "take a look at how it would look without all the adjustments? Let me share that with you."
+  },
+  {
+   "start": 1884.4,
+   "end": 1890.16,
+   "text": "This is without any of the adjustments. All right. Still looking okay. But once you turn"
+  },
+  {
+   "start": 1890.16,
+   "end": 1894.96,
+   "text": "all of these adjustments have a look. It just starts to blend in so beautifully."
+  },
+  {
+   "start": 1894.96,
+   "end": 1899.28,
+   "text": "Let's take a look without the shadows. Let's zoom in right there to just analyze and just"
+  },
+  {
+   "start": 1899.28,
+   "end": 1906.96,
+   "text": "appreciate the shadow. So here's without shadow and just adding the shadows just adds so so much."
+  },
+  {
+   "start": 1906.96,
+   "end": 1910.4,
+   "text": "Now of course you can take the time to make some adjustments to the shadow. There are so many"
+  },
+  {
+   "start": 1910.4,
+   "end": 1916.56,
+   "text": "things you can do. And what if I tell you the image is still not complete? Because it isn't."
+  },
+  {
+   "start": 1916.56,
+   "end": 1921.04,
+   "text": "If you look at the ground it's a little blurry. But if you look at the subject's"
+  },
+  {
+   "start": 1921.04,
+   "end": 1925.76,
+   "text": "feet it's too sharp. So let's add a bit of blur to the subject. So with the subject"
+  },
+  {
+   "start": 1925.76,
+   "end": 1929.76,
+   "text": "layer selected make sure it's a smart object. Let's go to Filter, Blur and then Gaussian Blur."
+  },
+  {
+   "start": 1930.8,
+   "end": 1936.16,
+   "text": "Let's add about one pixel blur right there. I feel that one would be enough. Hit okay."
+  },
+  {
+   "start": 1936.16,
+   "end": 1942.48,
+   "text": "Now it's matching so good like crazy. Of course we want the upper part of the subject to be"
+  },
+  {
+   "start": 1942.48,
+   "end": 1946.64,
+   "text": "sharp. So select the mask of the Gaussian Blur or the Smart Filter whatever you want to"
+  },
+  {
+   "start": 1946.64,
+   "end": 1953.2,
+   "text": "call it. And let's create a gradient with black at the top. So let's draw a gradient"
+  },
+  {
+   "start": 1953.2,
+   "end": 1958.32,
+   "text": "so that the upper parts are sharp and only the bottom part this area is soft. So you can start"
+  },
+  {
+   "start": 1958.32,
+   "end": 1966.48,
+   "text": "a gradient from right here to go and there you have it. So only this area is blurred and as we go"
+  },
+  {
+   "start": 1966.48,
+   "end": 1972.88,
+   "text": "up we get sharper and sharper. Boom done. Now on top of that if you want to add some more"
+  },
+  {
+   "start": 1972.88,
+   "end": 1978.32,
+   "text": "noise to match it even more that's up to you but we're just doing too much. Time for us to do a"
+  },
+  {
+   "start": 1978.32,
+   "end": 1983.52,
+   "text": "quick little recap. First of all bring in the subject to the new background. Just adjust the"
+  },
+  {
+   "start": 1983.52,
+   "end": 1990.32,
+   "text": "position of it and then use the subject area to create a base shadow. Use Distort and this is just"
+  },
+  {
+   "start": 1990.32,
+   "end": 1996.08,
+   "text": "a base shadow. On top of that start painting. Start adding and subtracting. In this example"
+  },
+  {
+   "start": 1996.08,
+   "end": 2000.24,
+   "text": "I did this with a brush. You can also use the selection tool to first make a selection"
+  },
+  {
+   "start": 2000.24,
+   "end": 2004.96,
+   "text": "and then fill it. You can also use the pen tool to create a path then convert it into a selection"
+  },
+  {
+   "start": 2004.96,
+   "end": 2009.44,
+   "text": "and then fill it. It's up to you how you want to paint it. Sometimes when the subject is wearing a"
+  },
+  {
+   "start": 2009.44,
+   "end": 2014.16,
+   "text": "dress and light is passing through a little bit you might have to create several layers of shadows"
+  },
+  {
+   "start": 2014.16,
+   "end": 2018.64,
+   "text": "to make it look more natural. After you create the shadows set the color and the blend mode"
+  },
+  {
+   "start": 2018.64,
+   "end": 2023.76,
+   "text": "properly and try to match that with the existing shadows in the image. Use that as a reference."
+  },
+  {
+   "start": 2024.4,
+   "end": 2029.36,
+   "text": "Do not forget the contact point shadow. For example my hand is touching the shape table."
+  },
+  {
+   "start": 2029.36,
+   "end": 2033.36,
+   "text": "There's a shadow on the table but just where my hand is touching the surface of the table"
+  },
+  {
+   "start": 2033.92,
+   "end": 2040.48,
+   "text": "there would be a very dark area. In some cases absolute darkness. So you might have to create"
+  },
+  {
+   "start": 2040.48,
+   "end": 2046.4,
+   "text": "another layer and just where the subject is just touching the ground add a little more darkness"
+  },
+  {
+   "start": 2046.4,
+   "end": 2050.64,
+   "text": "right over there. After you have done all that this might not be enough. Where the shadow is"
+  },
+  {
+   "start": 2051.28,
+   "end": 2056.56,
+   "text": "a little bit of the darkness would also get onto the subject. So just above the subject"
+  },
+  {
+   "start": 2056.56,
+   "end": 2060.8,
+   "text": "create a new layer and just paint around it change the blend mode to multiply. Limit that"
+  },
+  {
+   "start": 2060.8,
+   "end": 2066.48,
+   "text": "just to the subject. Add a little darkness around the shadow on the subject. Okay after that it's"
+  },
+  {
+   "start": 2066.48,
+   "end": 2072.08,
+   "text": "simple. You can match the ambient lighting by just applying a blurred version of the new background"
+  },
+  {
+   "start": 2072.08,
+   "end": 2077.28,
+   "text": "on top of that and change the blend mode to color and then use curves to match the lighting"
+  },
+  {
+   "start": 2077.28,
+   "end": 2081.92,
+   "text": "the shadows and the color and at the end don't forget to apply an overall color grading or"
+  },
+  {
+   "start": 2081.92,
+   "end": 2087.12,
+   "text": "an overall filter something overall. You can call this a global effect which brings everything"
+  },
+  {
+   "start": 2087.12,
+   "end": 2092.72,
+   "text": "together. In this example we just slapped in a lot crisp warm. That's it. I hope this video"
+  },
+  {
+   "start": 2092.72,
+   "end": 2096.48,
+   "text": "helped you in some way or the other. I hope you learned and picked up some techniques and if it"
+  },
+  {
+   "start": 2096.48,
+   "end": 2100.16,
+   "text": "did help you make sure to give us a like and also don't forget to subscribe and not just"
+  },
+  {
+   "start": 2100.16,
+   "end": 2104.64,
+   "text": "subscribe. Ring the bell so that you don't miss any other future tips tricks or tutorials."
+  },
+  {
+   "start": 2104.64,
+   "end": 2108.48,
+   "text": "I would like to take this moment to thank all these nice and amazing people"
+  },
+  {
+   "start": 2108.48,
+   "end": 2112.72,
+   "text": "for supporting this channel on Patreon and helping keep PIXimperfect free for everybody"
+  },
+  {
+   "start": 2112.72,
+   "end": 2117.44,
+   "text": "forever. Please do consider supporting PIXimperfect on Patreon. It really helps me do all of these"
+  },
+  {
+   "start": 2117.44,
+   "end": 2122.96,
+   "text": "research create all of these lessons and package that into a tutorial for you and"
+  },
+  {
+   "start": 2122.96,
+   "end": 2126.8,
+   "text": "just bring it out for you for free. There are some perks of becoming a member which you can"
+  },
+  {
+   "start": 2126.8,
+   "end": 2131.44,
+   "text": "check out in patreon.com slash PIXimperfect as well and if you don't wish to support at the"
+  },
+  {
+   "start": 2131.44,
+   "end": 2136.56,
+   "text": "moment and just want to enjoy the video I'm already grateful to you for giving me your"
+  },
+  {
+   "start": 2136.56,
+   "end": 2140.88,
+   "text": "time. I truly appreciate that. Thank you so much again for watching this video. I'll see you in"
+  },
+  {
+   "start": 2140.88,
+   "end": 2144.4,
+   "text": "my next one till then stay tuned and make sure that you keep creating."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:45:58.179720+00:00",
+ "seconds": 98.0
+}

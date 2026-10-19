@@ -1,0 +1,418 @@
+{
+ "id": "TzzlNni_K4o",
+ "title": "How to create a Product Packaging Design | Tutorial",
+ "channel": "Abi Connick",
+ "url": "https://www.youtube.com/watch?v=TzzlNni_K4o",
+ "query": "packaging design tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 480.3,
+ "chars": 7560,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.04,
+   "text": "In this video, I'm going to be redesigning this orange juice carton packaging, which is sourced"
+  },
+  {
+   "start": 5.04,
+   "end": 12.24,
+   "text": "locally from my fridge. This is an Azto's own orange juice carton and it is in need of some serious"
+  },
+  {
+   "start": 12.24,
+   "end": 18.24,
+   "text": "design help to try and help market it better when sat on the shelves next to big brands like Tropacana"
+  },
+  {
+   "start": 18.24,
+   "end": 24.08,
+   "text": "and Innocent. That is where I come in the magic design ferry where I'm going to be redesigning"
+  },
+  {
+   "start": 24.08,
+   "end": 29.92,
+   "text": "the packaging. So let's look at the original design so we know what to tweak and what to"
+  },
+  {
+   "start": 29.92,
+   "end": 35.68,
+   "text": "keep. Things I quite like are the boldness of the orange and the capital letters of orange juice."
+  },
+  {
+   "start": 35.68,
+   "end": 41.28,
+   "text": "Things that need to change are the blue box and the images of fruits. With that in mind,"
+  },
+  {
+   "start": 41.28,
+   "end": 47.52,
+   "text": "let's start pouring into the process of the redesign. The first stage is taking a look at"
+  },
+  {
+   "start": 47.52,
+   "end": 52.56,
+   "text": "other packaging and seeing exactly where we want to market this brand. We will also be having"
+  },
+  {
+   "start": 52.56,
+   "end": 57.76,
+   "text": "a look at what other competitors are doing. So here are six different carton packaging"
+  },
+  {
+   "start": 57.76,
+   "end": 63.04,
+   "text": "that are out in the supermarkets and sat on the shelf. If I'm honest, I would probably only pick"
+  },
+  {
+   "start": 63.04,
+   "end": 67.84,
+   "text": "up one of these which is the Innocent smoothie bottle because the Lego is quite fun and it suits the"
+  },
+  {
+   "start": 67.84,
+   "end": 73.2,
+   "text": "shape of the bottle. But with all of the others, I probably would not even look twice at these"
+  },
+  {
+   "start": 73.2,
+   "end": 77.76,
+   "text": "just from the design aspect alone. But we are going to try and change that. So there's actually"
+  },
+  {
+   "start": 77.76,
+   "end": 83.52,
+   "text": "some quite common patterns that I'm noticing across all of the packaging. One, using real life"
+  },
+  {
+   "start": 83.52,
+   "end": 89.36,
+   "text": "photography to showcase the orange juice instead of design elements or drawings. Two,"
+  },
+  {
+   "start": 89.36,
+   "end": 95.92,
+   "text": "using either a milk light carton shape or a plastic curved bottle. Three, using white,"
+  },
+  {
+   "start": 95.92,
+   "end": 101.04,
+   "text": "orange and blue colors throughout. With all that being said, we are going to keep with the milk"
+  },
+  {
+   "start": 101.04,
+   "end": 106.8,
+   "text": "carton packaging and go for an organic look. I don't think the plastic bottle shape will work"
+  },
+  {
+   "start": 106.8,
+   "end": 112.08,
+   "text": "well with this organic feel. So I've drawn out a simple template so I have something to go"
+  },
+  {
+   "start": 112.08,
+   "end": 117.12,
+   "text": "from when designing the carton. Let's talk the drink up and go on to the next stage which is"
+  },
+  {
+   "start": 117.12,
+   "end": 122.96,
+   "text": "designing the carton box. Let's start with picking the background color. With all the competitors,"
+  },
+  {
+   "start": 122.96,
+   "end": 128.72,
+   "text": "the common themes are bright orange or a lot of white space. So to stand out, we can mix this up"
+  },
+  {
+   "start": 128.72,
+   "end": 134.48,
+   "text": "and go for something a little darker, like a dark green to keep it organic and symbolize the leaves"
+  },
+  {
+   "start": 134.48,
+   "end": 139.28,
+   "text": "on an orange tree. Next is adding in the fruit. We're going to stay away from the common theme"
+  },
+  {
+   "start": 139.28,
+   "end": 144.8,
+   "text": "of using real photography as I feel like this makes it slightly outdated and not so modern."
+  },
+  {
+   "start": 144.8,
+   "end": 150.08,
+   "text": "Instead, we're going to add in some hand drawn elements and shapes to really add to that organic"
+  },
+  {
+   "start": 150.08,
+   "end": 155.2,
+   "text": "and homegrown feel of the oranges. We're not going to make it too cartoon like as this will"
+  },
+  {
+   "start": 155.2,
+   "end": 160.96,
+   "text": "take away from that organic and mature feel of the brand. So we've now got some beautiful hand"
+  },
+  {
+   "start": 160.96,
+   "end": 166.08,
+   "text": "drawn oranges and leaves to showcase this in the best way. I don't know about you but at the"
+  },
+  {
+   "start": 166.08,
+   "end": 171.84,
+   "text": "moment the design feels a little flat. So I'm going to tweak some of the green colors and adjust them"
+  },
+  {
+   "start": 171.84,
+   "end": 177.52,
+   "text": "with different shades of green to add in that aspect of light. Then we're going to add in a gradient"
+  },
+  {
+   "start": 177.52,
+   "end": 183.44,
+   "text": "to the oranges to make them look more 3D. We should make them appear bigger and stand out to the eye."
+  },
+  {
+   "start": 183.44,
+   "end": 187.84,
+   "text": "Now it's time to add in those little design elements that are going to lift the brand."
+  },
+  {
+   "start": 187.84,
+   "end": 192.32,
+   "text": "We're going to add lines to the leaves and add some little dots to the oranges"
+  },
+  {
+   "start": 192.32,
+   "end": 198.4,
+   "text": "to add to that organic and homegrown feel. Perfect! Adding in those little design elements has really"
+  },
+  {
+   "start": 198.4,
+   "end": 204.24,
+   "text": "lifted this design and also made it feel less flat. Next, what I feel like is missing on a lot of"
+  },
+  {
+   "start": 204.24,
+   "end": 209.84,
+   "text": "the competitors packaging is everything feels displaced and the design feels like it's working"
+  },
+  {
+   "start": 209.84,
+   "end": 215.52,
+   "text": "against the shape of the box. For example, with this packaging design, there is a lot of orange"
+  },
+  {
+   "start": 215.52,
+   "end": 221.52,
+   "text": "space above and below the design which could be utilized in a much better way. Therefore,"
+  },
+  {
+   "start": 221.52,
+   "end": 226.48,
+   "text": "we're going to add in a box to the middle of our design and shape the oranges and leaves around this"
+  },
+  {
+   "start": 226.48,
+   "end": 232.88,
+   "text": "box making the positioning feel really comfortable to the eye. Using overlapping elements is a great"
+  },
+  {
+   "start": 232.88,
+   "end": 238.08,
+   "text": "way to do this as the box will feel like it's happily placed there and not just sat on top."
+  },
+  {
+   "start": 238.08,
+   "end": 243.28,
+   "text": "The box color is going to be an off-white cream to match the warm tones of the oranges"
+  },
+  {
+   "start": 243.28,
+   "end": 248.4,
+   "text": "and the lid can also match this color which will add in a perfect contrast with the dark"
+  },
+  {
+   "start": 248.4,
+   "end": 253.6,
+   "text": "green. Let's pour in some more drink and go on to this typography. So, I actually don't mind the"
+  },
+  {
+   "start": 253.6,
+   "end": 259.2,
+   "text": "original typography on this packaging. The only thing that is really bugging me is the different"
+  },
+  {
+   "start": 259.2,
+   "end": 264.88,
+   "text": "font sizes. So, we're going to make sure that we keep ours consistent and use a bold typeface."
+  },
+  {
+   "start": 264.88,
+   "end": 272.16,
+   "text": "So, I've got three options that I quite like. Number one is a bold condensed font. Two, a sans serif"
+  },
+  {
+   "start": 272.16,
+   "end": 278.88,
+   "text": "font. Three, a bold display font. So, I really like the look of the bold condensed font. It works really"
+  },
+  {
+   "start": 278.88,
+   "end": 284.48,
+   "text": "nicely. It's clean and the condensed part makes it feel like it's been squeezed a little tighter"
+  },
+  {
+   "start": 284.48,
+   "end": 290.8,
+   "text": "than a wider font fitting in perfectly with the squeezing element of making the orange juice."
+  },
+  {
+   "start": 290.8,
+   "end": 296.32,
+   "text": "Now, I've chosen a complimentary sans serif font for the extra words of smooth and from"
+  },
+  {
+   "start": 296.32,
+   "end": 302.56,
+   "text": "concentrate. I've sat these above and below orange juice to balance the design out and make the main"
+  },
+  {
+   "start": 302.56,
+   "end": 309.84,
+   "text": "focus around the orange juice. So, your eyes will read orange juice, smooth and then from concentrate."
+  },
+  {
+   "start": 309.84,
+   "end": 315.36,
+   "text": "We can now arrange where the Aster logo can go as this is used on the original packaging."
+  },
+  {
+   "start": 315.36,
+   "end": 320.16,
+   "text": "I quite like the positioning of the original design which works nicely with our design."
+  },
+  {
+   "start": 320.16,
+   "end": 324.8,
+   "text": "The only thing that I'm changing is the color of the logo to white to fit in better with"
+  },
+  {
+   "start": 324.88,
+   "end": 331.12,
+   "text": "our overall design. Let's fill the cup up more and go on to adding in the correct labels on the packaging."
+  },
+  {
+   "start": 331.12,
+   "end": 336.32,
+   "text": "We need to add in exactly what was on the original packaging. So, things like the calories, sugars,"
+  },
+  {
+   "start": 336.32,
+   "end": 342.16,
+   "text": "saturates, etc. So, next I'm going to redesign the side of the packaging and use all of the"
+  },
+  {
+   "start": 342.16,
+   "end": 348.32,
+   "text": "elements that we've used on the front of the package. This is the original design and I'm not"
+  },
+  {
+   "start": 348.32,
+   "end": 355.12,
+   "text": "going to lie that is a lot going on and it's making me feel kind of uneasy. So, to simplify it,"
+  },
+  {
+   "start": 355.12,
+   "end": 360.56,
+   "text": "we are going to align the text, put the text in an order of what we want people to read first"
+  },
+  {
+   "start": 360.56,
+   "end": 365.76,
+   "text": "and now add in our design elements. I've tweaked some of the words just to make it more mature"
+  },
+  {
+   "start": 365.76,
+   "end": 371.52,
+   "text": "and fit in with the organic and homegrown feel. I honestly feel so more at ease just looking"
+  },
+  {
+   "start": 371.52,
+   "end": 376.56,
+   "text": "at this with those small tweaks that we have added. Let's fill the glass up fully and go on"
+  },
+  {
+   "start": 376.56,
+   "end": 382.0,
+   "text": "to the last stage which is presenting our work in the best possible way. So, to do this I'm going to"
+  },
+  {
+   "start": 382.0,
+   "end": 387.76,
+   "text": "use mock-ups and my go-to place is in Varto Elements that I always use for client work"
+  },
+  {
+   "start": 387.76,
+   "end": 393.04,
+   "text": "and showcasing my work on Instagram. So, they are the sponsor of this video and if you want to"
+  },
+  {
+   "start": 393.04,
+   "end": 397.2,
+   "text": "check them out make sure you click the link in my description so you can use them too."
+  },
+  {
+   "start": 397.2,
+   "end": 402.08,
+   "text": "They actually have some awesome orange juice cartons that I'll be using to showcase this"
+  },
+  {
+   "start": 402.08,
+   "end": 407.76,
+   "text": "design. The design has now been placed in the mock-up and as you can see it is such a good way"
+  },
+  {
+   "start": 407.76,
+   "end": 414.4,
+   "text": "of showcasing your designs in a real-life situation. So, we have completely redesigned the packaging of"
+  },
+  {
+   "start": 414.4,
+   "end": 419.68,
+   "text": "the orange juice carton into something completely different to what the competitors are doing"
+  },
+  {
+   "start": 419.68,
+   "end": 424.32,
+   "text": "and I'm not going to lie I would pick this up off of the design aspect alone."
+  },
+  {
+   "start": 424.32,
+   "end": 430.72,
+   "text": "So, without further ado let me introduce you to the new and improved Asda's own orange juice"
+  },
+  {
+   "start": 430.72,
+   "end": 446.98,
+   "text": "carton packaging. Asda, eat your heart out. Let me know your thoughts on the design process and if"
+  },
+  {
+   "start": 446.98,
+   "end": 452.9,
+   "text": "my design beats the original carton design. If you have enjoyed this video make sure to give it a big"
+  },
+  {
+   "start": 452.9,
+   "end": 457.78,
+   "text": "thumbs up, hit that subscribe button and I will see you at the next video."
+  }
+ ],
+ "transcribed_at": "2026-10-19T09:10:58.287720+00:00",
+ "seconds": 18.3
+}

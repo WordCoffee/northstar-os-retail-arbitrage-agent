@@ -1,0 +1,343 @@
+Hi there, this is Unmesh from Pics and Perfect. How are you doing?
+I hope you had a fantastic New Year's celebration and I pray that every day in this year and
+the coming years, you strive to make these days the most beautiful that you possibly
+can. Well, in this video, I'm going to share with you how to create seamless backdrops
+for products in Photoshop and that too with shadows. Remember, we made a similar video
+about it a couple months ago, actually, it was a year ago on creating seamless
+backdrops. In that case, the shadows were very easy to extract. But what happens when
+it's a little twisted? What happens when there is not enough shadow in there? How do
+you make it seamless? That's what we're going to do in this video. We're going to
+reconstruct the shadows and learn a couple tricks along the way. So without
+any further ado, let's get started. Back in the magical world of Photoshop and
+this, my friend, is our product of the day. If you want to go ahead and
+download this for a follow along, you, my friend, already know what to do.
+Check the links in the description. And before we move forward, I wanted to
+quickly let you know that Domestika has created 350. Yes, for this year, 350
+absolutely free courses. These courses are full of stuff that you would love to
+learn in 2022. Crafts, you know, making pom-poms, POSCUP and for beginners,
+watercolor, photography, illustration, just check it out. It's absolutely free.
+I've linked it up in the description. Back to the lesson. I want you to
+take a close look at the product. Do you see something peculiar? It all looks
+alright, but do you see something wrong with the photography? It's also
+absolutely alright. However, when you take a photo with a little wider lens,
+you will see some sort of distortion. Even if it's natural, sometimes we
+want our products to be absolutely straight, like they have been taken
+with a super telephoto lens. Alright? And to be able to do that, we can
+use camera raw. So let's do that first. First of all, make a copy of
+the background layer by pressing Ctrl or Command J. Then let's go to Filter,
+Convert for Smart Filter. So you can do that. You can choose not to do it.
+That's absolutely up to you. Just click on that so that it can change
+the values later, but it really doesn't matter at this point. Now let's go
+to Filter and then Camera Raw Filter. Now inside of that, there would
+be a guide that you can draw to straighten things out. So as we
+scroll down, have a look, just open up geometry right there, right?
+And click on this one on the very right, which is guided. So you can
+now zoom in. So let's draw a guide for this side. And similarly, we
+can draw a guide for the other side. Now also, you might want to
+zoom in and correct these. So hold the Ctrl or Command, just
+slide right to zoom in. Make sure it's on the line. And let's
+just do it for the other points as well. Make sure everything is
+straight and to the point. Now, the guide tool is just not
+showing up. What is the problem here? Just unselect this. And
+now it's unselect this as well. Now it's going to show up. Alright,
+that side is taken care of. Similarly, let's do it on the other
+side here. Make sure it's perfectly on the line. I think
+it's alright. Now let's zoom out and have a look how straight
+this is at the moment. Let's take a look at the before and
+after. Press B to look at the before. This is before. This
+is after. Look at how straight it is. Also, you can draw a line
+horizontally to make the horizon straight as well. I think
+it's already straight, but to be on the safer side, you can just
+draw a line if there is a horizon line indeed for reference. Now
+it's all straight and nice. But as we make it straight, image
+will be cropped a little. So we might need to scale it down a
+little to see more of it, all of it. And anyway, we're
+going to mask it out so it doesn't matter that some areas
+are transparent. Hit OK. And this is straightened. The next
+step, as you might have already guessed it right, is
+masking. Now I have another document where I've already
+straightened it out. And the reason I moved to this is because
+I wanted to save time on selection. I already have a
+selection in there. Now you can create a selection using
+any method that you prefer. But when it comes to professional
+product masking, I always recommend using the pen to so
+to select the pen to press B for the pen to and then
+click to create a point, click and drag to create a
+curve and you can master the ins and outs of pen to by
+watching this video. We already have a video about it. I've
+already created a path around it. If I go to paths, have a look.
+It's already there. If you want to make a selection outfit, hold
+the control or command and click on the thumbnail. Or once you
+have just made the path control or command enter, it also
+makes the selection. Once that is done, just mask it out.
+That's all there is to it. Oh, we have low battery on the
+keyboard.
+Just create a solid background by clicking on the
+adjustment layer icon and then choose solid color. And you
+can choose whatever color you want at the point. Hold the
+shift key and click on the mask to turn it off momentarily and
+then double click on it and then select the color around it.
+So let's go with this color, hit OK and then turn back on the
+mask by holding the shift key and clicking on the mask and it
+turns that back on. Now keep in mind when it comes to the
+bristles right here, I just made a path a little outside of
+it. We're going to take care of this later. Don't worry
+about this right now. Now it is time for us to expand the
+canvas to give us a breathing room. All right. Right now,
+if you work on the shadows, we will be limited right here.
+And if we try to make anything seamless, there can be lines
+appearing here and there. We don't want any edge problems.
+So press C for the crop tool and just extend it as much as
+you like. I think that would be more than enough.
+All right. Hit enter or return. And we can name this
+layer solid background. Now when you work on a project in
+Photoshop and also in life, as much as important it is to
+zoom out and look at the big picture, it's also important
+to zoom in from time to time and look at the minute details.
+And when you do, you will find out the little gaps we need to
+fill. And these little gaps, if you fill them, it makes for a
+smooth road. Anyway, too much for analogies. And let's take a
+look here. If you look at the original picture, have a look,
+it has a shallow depth of field. And as a result, the edges
+that are further away are a little blurred out. But after
+we made a mask using the pen tool, of course, it's going to
+lead to hard edges. So how do we soften that out? Pretty
+simple. Just select the blur tool, make sure the mask is
+selected, not the layer. The mask is selected and decrease the
+strength to about 20. How do you feel about that? 20 is fine.
+And now let's just blur it out. Now if you do anything, it
+won't blur the image. It just will blur the mask. If I show
+you just the mask by holding the alt key or the option key
+and clicking on the mask button, if I blur it, have a
+look. It's blurring it out. Hold the alt key or the
+option key, click on the mask back on to get back to
+the image view. And now you can do the same over the edges
+which are a little blurred. Time to time you can hold the
+shift key and click on the mask to turn it off to see which
+edges are blurred. So let's hold the shift key back again
+and click on it and then just resume painting. Again, this
+is not journalism. You don't have to be picture perfect. As
+long as it looks right to you, it's good to go. Also, if
+you look at these areas, the rope areas, if I turn that
+off, there's a lot of blurriness right here. So we
+might need to increase the strength. So let's increase it to
+50. And then see, this just doesn't look right. So if you're
+just going to blur it. And also, there were a lot of strands.
+If you want to keep the strands, you might have to keep the
+same background color. If you're okay with it, we can just
+let's turn on the mask. We can just take the brush, white
+as the foreground color, and just bring back in some of
+those. But then what happens is that if you change the
+background to something else, it's going to stay like
+this. So it's up to you. It's your call if you want to
+bring it. You can use the refinance to bring it back. But
+that's again, besides the tutorial anyway. So in here, I've
+just created a soft edge. It is more than enough, trust me, for
+a product page. And if you think it isn't, you have all the
+right to believe so you have all the right to go
+professional and paint in every strand. And there are
+techniques that are here, selection techniques that
+are a fine edge techniques to do it. We have videos
+about it. I highly recommend watching them. Similar
+hair selection techniques will work here. Let's get back
+to it. Hold the shift key, click on the mask button. Hold
+the Alt key or the Option key, click on the mask to bring
+everything back to normal. Let's select the blur tool back
+again, and just blur it out. And again, these were
+extra. So what we're going to do, we're going to take the
+brush black as the foreground color and just erase some of
+it. You can decrease the flow if you like. So I'm going
+to decrease it to 10% and just erase it in a way that it
+looks natural. There you go. The masking is done. If
+you want, you can also do it right over here. You can
+go to the mask, take the brush with black as the
+foreground color, make sure the mask is selected, and just
+blur it out. Make sure you don't see the edge. That's it.
+Now in this case, if you wanted to use a different color
+background, you might have to use a fine edge or a very
+minute time taking selections. Now it is finally time for us
+to bring in the shadows. To do that, make a copy of the
+straightened layer by pressing Ctrl or Command J. So this
+is the straightened layer. Let's rename that. And this
+is the shadows. All right. Now for the shadows, first
+of all, let's delete the mask. Let's drag the mask and
+drop it to the trash can. Click on Delete. And now with the
+help of the lasso, just select the shadow areas. So these
+are basically the shadow areas. Don't select anything
+extra. There you go. And then click on the mask button. Now
+what do shadows do? They darken, right? And what is the
+blend mode that darkens? Well, there's actually a blend
+mode group for it. The second group that you see right
+here is the darken blend mode group. So you can
+choose darken, multiply, color burn, any of this. We
+just going to choose multiply because it just
+simply hides anything that is 100% white and completely
+shows anything that is 100% black and it follows that
+gradient nicely. So we need to make any area that is not
+a shadow absolutely white. And for that, we can use a
+curve. But then this also has brought in some color to
+it. So how do we get rid of that color? Well, for that,
+we're going to create a hue saturation adjustment layer.
+We will make sure that we only limit it to the
+shadows by clicking on this button. This creates a
+clipping mask and then simply decrease the saturation. Now
+we can create a curves adjustment layer and then take
+the slider on the right to the left. But it's also
+affecting the background. Where did we go wrong? We want
+to limit the curves also to the shadows. Again, we need
+to click on this button to create a clipping mask. All
+right, let's go further. If the value is too high, it's
+just going to create this hard edge stuff that
+doesn't look realistic. So we have to find a sweet
+spot where the edges are just going away. So at
+this point, you can clearly see all of these
+edges. And right here, if we go a little more than
+that, all of the edges go away from here. Still, there
+are a couple edges here. So we'll wait for these
+edges to go. So just at this point, most of it goes
+away. This looks about right. But still, we need to
+reconstruct the shadows right here. Take care of
+the edges. And this, my friend, is our next step.
+Let's clean up the edges first. So to be able
+to see all of these edges, let's create a curves
+adjustment layer at the very top. This is just
+for indication purposes. And we're just going to
+make it absolutely dark just to be able to see
+where the edges are. As you can see, there are no
+hard edges here. However, there's one right over
+here. So we need to take care of that. To do it,
+just come back to the mask right here. Take the
+brush black as the foreground color. You can
+decrease the flow. 10% is fine. And just start
+erasing it until it becomes soft. There you
+go. That looks about right. And now we can
+take care of the extras, increase the flow
+back to 100 and dab, hold the shift key, dab,
+just to create a straight line from point A to
+point B. And there you go. We have taken care of
+that. We have to reconstruct it. Don't worry
+about it. But for now, this looks all right. Now
+you can turn off this indicative curves
+adjustment layer. Now how do we extend the
+shadow beyond that point? Well, that's our
+next step. But before we begin to do that,
+we need to apply the mask right here. Right
+click on the mask and click on apply layer
+mask to extend it. Take the rectangular
+marquee to make a selection of the area
+you want to extend. Now press control or
+command D for transform. Right click on it
+and then choose distort. Now we're going to
+take this point right there and just
+extend it. This much seems to be about
+right? Hit enter or return, press control or
+command D. It is extended. But still, it
+doesn't look realistic. It is not flowing
+nicely. How do we make sure that the
+shadows look all right? Well, look at
+other shadows. So if you look at the
+shadow right here, you would notice that
+it's a soft shadow, which means that
+there's a soft light source. And when you
+have a soft light source, the shadows are
+soft. And as it goes further, it begins
+to blur and gradually ends by blurring
+into infinity. That's what we're going
+to do right here. So let's go to filter,
+blur gallery and then tilt shift. What
+happens with tilt shift is that you see
+that solid line right there. That's
+where the blur starts. That's where
+the blur is zero. From the solid line
+to the dotted line, the blur
+increases to whatever value you have
+chosen right here. For example, if it's
+15, it's going to increase from zero to
+15. And beyond this point, it's going to
+be 15. So we want the blur to start
+from right here. Let's just take this
+line a little more to the left. All
+right. The blur starts from here and
+it ends right here. Also, we don't
+want to blur these areas. So make sure
+all of that is in focus. Now let's
+keep on increasing the blur. And now
+we can adjust this line as well.
+And you can adjust this line as well.
+That's up to you and hit OK. You might
+have noticed that as the shadow
+blurs, it blurs into the light falling
+on the surface. It just doesn't blur
+and spread out as it's happening in
+this case. So we need to brighten just
+that area. To do it, simply again,
+create a Curves Adjustment layer and
+let's limit it to the shadows. So
+let's create Curves. Click on this
+button to create a clipping mask and
+then just focus on this area, not
+the other areas and take it to the
+left. There you go. I think this would be
+too much. And now select the mask, take
+the Gradient tool and let's create a
+Gradient from white to black. I'm
+choosing a gradient of foreground to
+background color and I pressed X to
+toggle between the foreground and the
+background. So we only want it in this
+area. So let's first of all create a
+random gradient at the top to see where
+it is. And then let's start from
+right here and to this point. Right.
+Now have a look. Now have a look how
+realistic this looks. If you want, you
+can try different combinations to see
+what works best for your image. Now
+you can also do this. You can take it
+from the furthest point to the
+nearest point like this and then you
+can play with this. See what works for
+you. And you can also play, of course,
+with Opacity if you like as well. I
+feel with this one I'm going to stay
+with 66. And there you go. Isn't that
+fantastic? Absolutely seamless. You can
+move it anywhere you want. Now for
+your convenience, you can select the
+topmost layer. Hold the Shift key.
+Select the bottom most layer just
+above the solid background. Press
+Ctrl or Command G. Press Ctrl or
+Command T and you can move it around
+anywhere you wish. So that's how to
+create seamless backdrops with
+shadows for products in Photoshop. A few
+things to keep in mind now. This
+depends upon your product. If you want
+your product to be straight and nice,
+you can go to the camera and use
+the guides to make it absolutely
+straight. The next step, mask it out
+preferably using the pen too. And
+also let's not forget to look at the
+depth of field. If the edges are blurred,
+make sure you blur that in the mask as
+well. Then extract the shadows and if
+the shadows are creating some color,
+make sure you desaturate them. Then
+change the blend mode of that shadow
+to multiply and then using curves,
+you can make sure that only the
+shadow areas show up. You can also
+use masks if you need. You can also
+add a gradual blur to the shadow and
+that is pretty much it. I hope this
+video helped you and if it did, make
+sure to give us a like and also
+don't forget to subscribe and not just
+subscribe. Ring the bell so that
+you my friend don't miss any other
+feature tips, tricks or tutorials. I'll
+see in my next one till then. Stay
+tuned and make sure that you keep
+creating.

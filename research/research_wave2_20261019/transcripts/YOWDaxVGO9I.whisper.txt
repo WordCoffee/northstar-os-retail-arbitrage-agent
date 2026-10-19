@@ -1,0 +1,62 @@
+You have a product shot on a white background, but you want to change the background color to achieve something like this.
+Well, my friend, you are in like because in today's video you'll be learning just that.
+Roll that intro.
+What is up guys? Welcome back to the raw factory.
+My name is Jacob and the goal of this channel is to help you become a better food and product photographer.
+Now today's tutorial is super exciting.
+Why you ask?
+Well, because for the first time ever, I'm going to give you guys full access to the image that I use for this tutorial so you can follow along at home.
+How exciting.
+To begin, load up your image in Photoshop.
+Now we want to put the can on its own layer and also the shadow on its own layer.
+So let's begin with the can.
+Grab the pen tool and start clipping around the can.
+Once that is done, right click and duplicate the layer.
+Rename it to can.
+Head over to the paths panel.
+Hold down the command key on your keyboard and left click with your mouse.
+This will create a selection around the can.
+Head back to the layers panel and select the layer mask icon.
+This will hide the background on the can layer.
+If you want to know more about layer mask, I have a video which I'll leave that linked below that you can watch later on.
+Now it is time to put the shadow on its own layer.
+Right click the background image and duplicate the layer.
+Rename it to shadow.
+Grab the polygonal lasso tool and roughly cut out the shadow like so.
+Ensure that you are on the shadow layer and select the layer mask icon.
+Now we should have both the shadow and can on separate layers.
+If you have gotten up to this point so far, you are doing really well my friend.
+Now let's give our image a background color.
+Make a new layer and fill it with white.
+Now to blend in the edges of the shadow, select the shadow layer.
+Go to adjustments and apply it levels.
+Right click the adjustment and select create clipping mask.
+This ensures that the levels adjustment will only affect the layer below it.
+Now pull the whites in like so.
+And that's looking good I reckon.
+Thumbs up for you too if you're following along.
+Now I want to remove color from my shadow.
+So I'm going to apply a black and white adjustment layer to ensure that there is no color besides shades of black in my shadow.
+Again right click and select create clipping mask.
+And to see if it worked let's change the background color.
+Whoops my bad guys I forgot to change the blend mode on the shadow layer to make it to multiply.
+Click the shadow layer, hit over to the blend modes and select multiply.
+Bam just like that.
+Not bad right?
+I know that's pretty good.
+Now I always like to keep my layers organized and I do this by putting them into groups.
+Also feel free to play around with different background colors or even put different textures or scenes behind this can.
+Because that shadow my friend is pretty much transparent these days.
+It's going to work on anything and everything.
+You're going to love this.
+And here are some photos that I have created with this exact technique.
+Pretty awesome right?
+Well that is all for me today guys.
+I hope you guys something in this video.
+If you did like comment and subscribe to help others find this video.
+And I will see you in the next one.
+If you like this whole new process of downloading my image and using it in Photoshop.
+Let me know in the comments below.
+And until then my friends keep making cool cool shit really.
+Oh gosh remember guys don't wait make something creative today.
+Catch us.

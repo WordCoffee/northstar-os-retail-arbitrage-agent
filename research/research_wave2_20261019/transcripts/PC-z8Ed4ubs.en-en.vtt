@@ -1,0 +1,152 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:03.500 --> 00:00:07.990
+Hi everybody, Evan from PureButtons.com here
+with a brief overview of rich black values
+
+00:00:07.990 --> 00:00:09.980
+in the CMYK printing process.
+
+00:00:10.060 --> 00:00:14.240
+A lot of the time when setting up black in
+Adobe Illustrator or or Photoshop, designers
+
+00:00:14.240 --> 00:00:18.910
+will set it to what is called "100k Black".
+
+00:00:18.910 --> 00:00:24.790
+This is equated as 0s in all of the colors
+except for black 100%.
+
+00:00:24.790 --> 00:00:28.910
+You can also just grab the darkest color out
+of the color picker and you get something
+
+00:00:28.910 --> 00:00:35.360
+like this: 75/68/67/90.
+
+00:00:35.520 --> 00:00:40.140
+But what we like is something called "Rich
+Black" and this is a value that we have created
+
+00:00:40.140 --> 00:00:47.010
+based on tests with our printers to produce
+the darkest, most natural-looking black value.
+
+00:00:47.010 --> 00:00:52.410
+This is 60% Cyan, 40% Magenta and Yellow,
+and 100% Black.
+
+00:00:52.410 --> 00:00:57.090
+This produces a rich black color that is not
+milky or too heavy.
+
+00:00:57.090 --> 00:01:02.690
+Finally, we have what's called "Registration
+Black" which is seen as 100 all the way across
+
+00:01:02.690 --> 00:01:03.800
+the board.
+
+00:01:03.800 --> 00:01:06.420
+NEVER USE REGISTRATION BLACK.
+
+00:01:06.420 --> 00:01:10.750
+What this does is it puts too much ink or
+pigment on the page, it can create printing
+
+00:01:10.750 --> 00:01:15.890
+abnormalities, with liquid based inks there
+can be smearing due to increased dry time
+
+00:01:15.890 --> 00:01:20.360
+that has increased, and it can also create
+shiny patches in your design that are unwanted.
+
+00:01:20.360 --> 00:01:24.040
+Finally we must talk about how Illustrator
+handles black values.
+
+00:01:24.040 --> 00:01:30.210
+I'm going to leave this text here at Registration
+Black and then I'm going to draw a box behind
+
+00:01:30.210 --> 00:01:37.810
+it and set that to 100K Black.
+
+00:01:37.810 --> 00:01:46.340
+Now, you would think that since the text is
+at Registration Black, and the background
+
+00:01:46.340 --> 00:01:52.080
+is at 100K Black, the background would be
+lighter since there's less ink, but they look the same.
+
+00:01:52.220 --> 00:01:56.110
+So if I sent this file based on what it looks
+like to the printer I would get back a document
+
+00:01:56.110 --> 00:01:57.580
+that actually looks different.
+
+00:01:59.600 --> 00:02:03.740
+So we need to go to our Preferences and go
+to the Appearance of Black menu, and by default
+
+00:02:03.740 --> 00:02:06.009
+it says to Display All Blacks as Rich Black.
+
+00:02:06.009 --> 00:02:11.150
+You need to turn this to say Display All Blacks
+Accurately.
+
+00:02:11.150 --> 00:02:12.870
+And this is what we would get back from the
+printer.
+
+00:02:12.870 --> 00:02:13.879
+A HUGE surprise.
+
+00:02:13.879 --> 00:02:19.010
+It's very important to work in the same type
+of black across the entire project, and this
+
+00:02:19.010 --> 00:02:20.890
+would be unacceptable.
+
+00:02:20.890 --> 00:02:25.690
+When using very small text it's okay to get
+by with 100K Black.
+
+00:02:25.690 --> 00:02:30.590
+Because on a white or light background and
+very small black text, you're not going to
+
+00:02:30.590 --> 00:02:33.610
+notice if the text is not as dark as it could
+be.
+
+00:02:33.610 --> 00:02:37.580
+You'll also have better resolution because
+you don't have other layers of color that
+
+00:02:37.580 --> 00:02:40.560
+are microscopically misaligned causing blurring.
+
+00:02:40.560 --> 00:02:43.580
+You simply have a single layer of 100% Black.
+
+00:02:43.580 --> 00:02:47.200
+This is the only instance I would recommend
+using 100K Black.
+
+00:02:47.200 --> 00:02:53.000
+For everything else I would use Rich Black
+which again is a combination of 60/40/40/100.
+
+00:02:53.000 --> 00:02:58.940
+And that's all- keep an eye on your black
+values, and visit PureButtons.com for custom buttons and more.
+

@@ -1,0 +1,388 @@
+Today I want to prove to you how easy product photos can be without a whole lot of technical
+skills or fancy tools.
+Just your camera, Photoshop, and some other household items.
+First you'll need a piece of paper, maybe two just to be safe, your products which
+in my case is my partner's face lotion, don't tell her I took them, and a camera
+like your phone or for me the camera that I'm currently recording this video with.
+Finally you'll need a window or a white light which I'll be using this LED panel
+I use in all my videos, link below if you want to check it out, but otherwise
+you may be able to get away with your phone's flashlight depending on the size of your product.
+Oh, and you'll need Photoshop too, I guess that's kind of important.
+Alright, our gear is assembled, let's go take some photos.
+First I'll place my piece of paper against a cup for support, then place my product
+near the edge of that paper.
+For good luck I'll also add a second piece of paper to catch more of the shadow.
+Now I'll flick on my light and point it at the product, but this could also be
+your camera flashlight or even an LED lamp if you have that too.
+Next you want to frame the photo so the white paper can be seen all around the
+edges of the product so that this will make life easier when it comes time to cut
+out the product in Photoshop. And if you're photographing multiple products like I am
+putting your camera on a tripod is a good idea to make sure that all of your
+framing is identical across every photo. Your camera settings don't really matter
+as long as it's properly exposed, but ideally you want to shoot with an
+aperture of f11 or greater to ensure the whole product is in focus and you
+don't have too shallow of the depth of field. Once you're done, import your
+photos and bring them into Photoshop. In my case I'll be working with some
+pretty well loved bottles of lotion so I'll need to use the clone stamp tool and
+the healing brush tools to touch them up. I'll leave a video up in the corner
+right now if you're not sure how to use those tools because they're a bit
+outside of the scope of today's tutorial. Then you'll need to cut out each of
+the products with the pen tool along with a second path around the shadow
+to place it on its own layer as well. Again if you aren't sure how to
+use the pen tool I'll leave some resources down below to learn more.
+And now that that's parts out of the way let's work through the rest
+of this together here in Photoshop first creating a new document for our
+product photo. To create a new document we'll just go to file new and then
+we'll type in our desired dimensions. In this case 3000 by 2300 pixels with
+a 300 pixels per inch resolution we'll click create. Now we have that new
+document in a separate tab. Going back over to my images I need to cut out
+both the product and the shadow from my image. So since I already did this
+previously I just saved my pen path as a work path so I'll just
+reactivate that by holding command or control clicking on that thumbnail
+to reactivate that selection. And now going to that image layer I can
+just click on the layer mask icon to remove that background. Now before
+we move this into our new product photo I also need to select the
+shadow like I said. So I'm going to press command or control J to
+duplicate that image layer then I'll right click on that layer mask
+and choose delete layer mask. Now we'll grab our pen tool by
+pressing P zoom in and we can just go and make a rough selection
+around the edge of our shadow here. Something like this. Connect to
+the beginning right click go to make selection put in 0.5 feather radius
+and click OK. Now with this selection active and our duplicated
+layer selected in the layers panel will add a layer mask again
+for the shadow and I'll drag this below our main image layer.
+I'll call this to shadow and I'll call this one to main product.
+Now we will need to repeat this process with any other products
+that you have. So I'm going to do the same thing with my other
+lotion bottle really quickly. Now let's go and bring our images
+into our other document. But before I do that since I have
+some spot removal layers because I had to touch up all these
+bottles with the clone stamp and the healing tools I'm going to
+shift click both those and then press command or control E to
+merge them onto one layer for my product. Now I'm going to
+shift click both those layers grab my move tool by pressing
+V and then move this up and over to my new project like so
+click yes and then I'll zoom out and scale this down for now
+to something like this. Now before we bring in the next
+product we're going to create the area that our product is
+going to sit on. We're going to do that with two
+different shape layers. But what we can do to make this look
+realistic is use the original image and use the countertop that
+was sitting on to get the right angle for our shape that way
+it actually looks like a product is sitting on something.
+So to do this I'll click on the one layer that I have an
+image with which is the shadow layer and I'll press
+command or control J to duplicate it and I'll right
+click on the layer mask and go to delete layer mask.
+I'll drag this down below everything else. I'll turn
+off these other layers for now. Now what we can see
+here is the angle that the countertop is at. So we
+want to replicate that with a shape. So grabbing the rectangle
+tool by pressing U on our keyboard will set the shape
+just to a gray color for now or a light gray color and
+make sure our stroke is set to transparent by clicking
+this box here. Now I'll click and drag out just to
+create a basic rectangle like so and now we need to
+transform it to fit our countertop or the plane
+that our products will sit on. So I'll press
+command or control T and then hold command or
+control and then just drag these anchor points
+wherever we want to basically match the angle of
+our table. And an easy way to tell is just by looking
+at the edges here. So we have a clear edge on this side
+here and down here as well. So as long as I'm matching
+the rough angle of each of these sides I should be
+left with a shape that matches the original plane
+that our photo was taken on. So then that way
+we have the most realistic possible effect. I'll
+then move this down a little like so maybe lift up
+this corner touch and that way we have the shape
+extending right from the corner of our frame. Now
+we're going to create one more shape to make it look
+like a pedestal or something. So we're going to add
+the shape in this way. I'm going to click elsewhere
+on my layers panel so that my original shape layer
+is deselected and now I'll click and drag out on
+my canvas once again to create another shape.
+But this time I'll make the color a little bit
+different so we can separate the two of them a bit.
+The color right now doesn't matter because we'll do
+some touching up of that later on in the video.
+But for now we're going to drag this below
+our original rectangle shape and then we'll press
+CMD or CTRL T once again and then holding the CMD
+or CTRL keys we're going to drag this to match
+the point there down over this way and then down here
+as well. So we're basically making a box. Now if you
+zoom in you just want to make sure there's no gaps
+between the two shapes so it looks like one cohesive piece.
+And zooming out we now have successfully created
+our box for our products to sit on. So that means
+I can delete my reference countertop layer back here.
+Turning back on my two product layers now let's go
+and blend this into this new area. Since our main product
+and the shadow are in different layers it's going to
+make life easy if we shift click these and click the
+link icon. That way when we click one layer the other
+layer will move with it and you don't have to think
+about that anymore. But obviously the problem here
+is our shadow does not look very good. So we need to
+click on that shadow layer and we need to change
+this layer blending mode for normal down here to
+multiply. Now with this layer mask selected we'll grab a
+brush tool by pressing B make sure that black is set to
+our foreground color or brush opacity at 100% and we'll
+use the soft round brush. Now I'll go and paint around
+the edges like so to remove the harsh edges of the
+shadow and then we'll add a curves adjustment layer to
+do the rest of the work. Clicking the curves
+adjustment layer, adding a clipping mask so it only
+affects our shadows layer. I'll drag up the
+highlights like so and maybe a little bit of these
+shadows and now going back to our shadow layer mask I
+can just brush over this a little bit more to touch that
+up. If you end up having issues with leftover bits of
+the shadow just continue to brighten up the curves
+until you're happy with the shadow that you have. In
+this case that looks pretty good to me there. Since
+there's a little bit of color leftover we need to add
+one more adjustment which is the black and white
+adjustment layer. So adding the black and white
+adjustment layer, adding a clipping mask so now
+our shadow has no color hue whatsoever. Now before we
+bring in our next product I'm going to just
+grab my move tool and then shuffle this over into
+the area that I would like it to be in. Finally to
+keep everything organized I'll shift click press
+commander control G to group that and I'll call this
+to product one. Now let's do the same thing with
+the second product but I'll just go through it a
+little bit faster so you don't have to sit through
+all the steps again. Once again I'm just
+merging my product image with the clone
+stamp adjustments I've made pressing commander
+control E to merge. I'll then shift click
+both these layers grab my move tool click and
+drag it into my new project drop it in
+there press yes and now we'll rescale this to
+the position that it should be in. Now this bottle is a
+little bit bigger than the other one so I'm going to try to
+keep those proportions similar in my project. Now once
+again we're going to link those layers so while
+both of these are selected I'll press the link
+icon and now we need to remove the shadow or I
+guess blend it in. So with the shadow layer
+selected I'll change the layer blending mode from
+normal down here to multiply and then we'll
+go with our brush tool and a black brush with
+the soft round brush selected I'll go and
+paint around the harsh edges here just to
+blend it all together a little bit better.
+Once you have those harsh edges removed we can add
+a curves adjustment layer add a clipping mask to our
+shadows layer and then drag this up a little to
+blend that shadow in seamlessly. Again if it's
+not blending nicely you can just brighten up the
+curves a little bit more and then go back with
+your brush tool and remove any unwanted extra
+areas that just aren't working for you. Now in
+this case you can see how the shadow is
+showing up over top of my other product but I
+want it to be behind it so that means I'll
+shift click all these layers and I'll move it
+below my product one group. Now that shadow is
+behind our original product and I can position
+this into a new spot something like that works
+for me. Finally to finish up the shadow I'll
+add a black and white adjustment layer add a
+clipping mask and now our shadow is complete.
+Now grouping that to keep everything organized
+looking at my image so far obviously the
+shadows look a little bit weird because they
+extend off the edge of our box as well as
+there's not really any shadow underneath our
+product so it kind of looks like they're
+floating so let's fix that up. First let's
+deal with these shadows out here holding
+command or control I can make a selection
+of this topmost shape and then I'll press
+command or control shift and I to invert
+that selection which means I can go to
+this shadow layer grab the brush tool by
+pressing B and with black set to my
+foreground color I can go and mask out
+that area without worrying about coloring
+outside of the lines and removing the
+shadow from the main shape. I'll do the
+same thing with my first product clicking
+the shadow layer and once again removing
+that area with the same method. Now I'll
+press command or control D to deselect
+that now to add a slightly darker shadow
+underneath our products I'll create a
+new layer just below my product layer
+which is just the product by itself
+here and then I'm going to grab my
+brush tool hold alt or option to
+sample an area of the shadow here
+I'll then click on that color and just
+darken it down a little bit like so
+because this is supposed to be like the
+darkest part of that shadow then we'll
+click okay now I'll just scale up my
+brush with the bracket keys and click
+once over the areas I want that shadow
+to apply I'll then press command or
+control T and then hold the shift key
+and just squish this down like so and
+then move this into position like that
+using this transform box we can
+basically create like a little
+subtle shadow that is sitting right
+below our product and it's just the
+dark shadow closest to the edge of our
+item now I'll repeat this process with
+my other product clicking on my top most
+adjustment layer adding a new layer so
+it's just below my product layer and
+then I'll once again with that same
+color I'll just click once over my image
+press command or control T and then
+hold shift key to squish this down
+move this up into place rotate it so it
+fits a little bit better and then
+just play around with this until you're
+happy with the look that you have
+going here in this case since the
+light is coming from this direction
+I want the shadow to be more dark on
+this side then obviously in the front
+where the light is coming from
+so now we've created our shapes it looks
+like our products are sitting on those
+shapes but let's take this a little bit
+further by adding a nicer background
+and also adjusting the colors of our
+shapes so it matches with our products
+a little bit better let's first change
+the color of our shapes to make this
+look the best we want a lighter color
+up top and a darker but similar color
+on the side so I'll grab my shape
+tool by pressing U and then I'll
+click on the fill color click the
+color picker and now I can click
+anywhere on my photo to sample a color
+so let's say I want to choose like this
+lighter color that is on this bottle here
+so I'm just clicking the highlight there
+click okay that'll change the color of
+that top area now I'm going to my side
+rectangle which is the side of our box
+we can once again click on that fill
+go to the color picker but this time
+I'll try to find a darker but similar
+color on my bottle so let's try this
+one for example I'll click okay now
+we have some sampled colors directly
+from our products so it kind of ties
+everything together nicely but to make
+this all look a little bit better let's
+add a gradient to the background to make
+it all come together a bit more to do
+this I'll click on my background layer
+then add a new layer just above it
+I'll call this to gradient background
+now I'll grab my gradient tool by
+pressing G and then I want to
+choose some soft and light colors to
+put in the background so for my shadows
+I'm going to double click on this
+sample the darkest edge of my box and
+then just lighten it up a touch like
+so then for my highlights I'm just going
+to have this set to pure white click
+okay now with the radial gradient
+selected and reverse enabled so that my
+highlights and my shadows are switched
+I'm going to click and drag out to add
+that background in now depending on how
+far you drag out you will change the
+look of your gradient and if you want
+to learn more about the gradient tool
+I have a video here that you can learn
+more about it in depth but
+essentially I'm just going to drag
+around until I have a look that I'm
+happy with I want that bright highlight
+to be mostly around the products or
+right behind our products I should say
+and I want it to be super super soft so
+something like this looks good for me
+now this is looking pretty good but I'd
+like to take it one step further by
+adding some hidden shadows just
+around the edges as well as the bottom
+part of our box here so clicking on
+my topmost layer I'm going to add a
+new layer and I'm going to grab my
+brush tool by pressing B with a
+soft round brush still selected 100
+percent opacity I'll click and
+sample the darkest color of my box
+and then darken this color down just a
+little bit more like so now with this
+layer set to multiply I'll begin
+painting over my image in this case it's
+a little bit too intense so I'll change
+my brush opacity to 20% by pressing
+two on my keyboard and I'll go and
+paint over these areas to add some
+shadows around there mostly just
+along the bottom of the box now from
+there you can go and add some
+individual adjustments to your
+products just by going into your
+product groups and then adding some
+adjustment layers above it adding a
+clipping mask and then doing some
+contrast or color adjustments to make
+everything blend a little bit better
+I'm just going to add a little bit of
+contrast to each of those layers or
+those product layers just by using the
+curves adjustment but of course you can
+go crazy with this and add any color
+adjustments or things like that that
+you would like and now looking at
+that before and after we've taken
+those regular photos just with a
+piece of printer paper and turn them
+into something that looks a little
+bit more high class a high-end
+product photo if you will and it was
+actually pretty easy to do with just a
+couple of shapes and some gradients so
+if you enjoyed today's video and you
+follow it along make sure to hit that
+like button down below and of course if
+you choose to share this with me or
+share this effect that you just
+created make sure to tag me on
+instagram at burnwills so I can
+check it out I'd love to see the
+creations that you guys do with
+this effect as you saw in this
+tutorial photoshop has an endless list
+of things that you can do with it
+but there's six particular things that
+I think everyone should be starting
+with and that's what I talk about
+in my free ebook called the photoshop
+blueprint I'll leave a link for that
+down below if you're interested in
+checking that out anyways I hope you
+enjoyed creating this today my name is
+Brendan from bewellcreative.com and
+I'll catch you back here next time
+for another new tutorial see you then

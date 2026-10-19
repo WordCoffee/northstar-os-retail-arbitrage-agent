@@ -1,0 +1,26 @@
+Why should you use smart objects in Photoshop? Here are my top reasons.
+Number one, smart objects can preserve the original resolution of an image.
+Let's say I want to drag and drop this image with a smartphone into this document.
+The phone has its own layer and all I want to do is to make it smaller.
+The problem is, when I scale it down and then decide to scale it back,
+the resolution of the image is really bad, so the solution
+is to convert the layer into a smart object before resizing it.
+Now I can scale it up or down without affecting the quality of the image.
+Number two, smart objects also allow non-destructive effects.
+For instance, if I apply a Gaussian blur to a simple layer and I realize that the effect is too
+exaggerated, I can only go back using the undo command and then reapply the blur effect.
+If I convert the layer to a smart object first and then I apply the same Gaussian blur,
+the effect is added under the layer and if I double click it, I can modify the values whenever I want,
+click OK, and the blur is updated. This also applies for the camera raw filter as well.
+I can change the contrast, brightness, or any other slider, click OK,
+and then come back whenever I want to readjust the sliders just by double clicking
+on the smart objects effect.
+Number three, smart objects can be easily edited and transformed.
+For example, I can replace this screen so easily. I import the second image into this document,
+convert it to a smart object, and resize it.
+Holding CTRL, I can reposition each of the corners to fine-tune the correct perspective.
+If I want, I can double click the smart object's thumbnail, add some text and colors,
+press CTRL S to save the changes, and when I come back to this image,
+you can see that the laptop screen was updated too.
+If you enjoyed this video, I'm sure you'll love another one from the screen.
+I'm Chris, thanks a lot for watching, see you in the next one.

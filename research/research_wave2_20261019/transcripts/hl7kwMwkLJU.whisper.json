@@ -1,0 +1,1253 @@
+{
+ "id": "hl7kwMwkLJU",
+ "title": "How to Use ComfyUI (Step-by-Step Tutorial)",
+ "channel": "Kevin Stratvert",
+ "url": "https://www.youtube.com/watch?v=hl7kwMwkLJU",
+ "query": "comfyui flux tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 549.2,
+ "chars": 10093,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.24,
+   "text": "In this video, I will show you how to use Comfy UI step by step."
+  },
+  {
+   "start": 5.24,
+   "end": 8.32,
+   "text": "Comfy UI is one of the most popular free and open source"
+  },
+  {
+   "start": 8.32,
+   "end": 12.24,
+   "text": "tools for creating AI-generated content on your own computer."
+  },
+  {
+   "start": 12.24,
+   "end": 15.6,
+   "text": "People use it to generate images, create videos, enhance photos,"
+  },
+  {
+   "start": 15.6,
+   "end": 19.4,
+   "text": "and build powerful AI workflows using a visual node-based"
+  },
+  {
+   "start": 19.4,
+   "end": 20.32,
+   "text": "interface."
+  },
+  {
+   "start": 20.32,
+   "end": 23.04,
+   "text": "In this tutorial, we'll start from the very beginning."
+  },
+  {
+   "start": 23.04,
+   "end": 25.84,
+   "text": "We'll install Comfy UI, set up an image model,"
+  },
+  {
+   "start": 25.84,
+   "end": 27.88,
+   "text": "generate our first AI image, and then"
+  },
+  {
+   "start": 27.88,
+   "end": 29.92,
+   "text": "learn how workflows and nodes work"
+  },
+  {
+   "start": 29.92,
+   "end": 32.4,
+   "text": "so you can start building your own projects."
+  },
+  {
+   "start": 32.4,
+   "end": 34.44,
+   "text": "I'm Kevin, and let's dive in."
+  },
+  {
+   "start": 34.44,
+   "end": 36.88,
+   "text": "To get started, head to the following website."
+  },
+  {
+   "start": 36.88,
+   "end": 40.12,
+   "text": "You'll find a link right here at the bottom of the screen."
+  },
+  {
+   "start": 40.12,
+   "end": 41.72,
+   "text": "Here on the homepage, you'll notice"
+  },
+  {
+   "start": 41.72,
+   "end": 45.12,
+   "text": "that Comfy UI offers both a desktop version and a cloud"
+  },
+  {
+   "start": 45.12,
+   "end": 45.92,
+   "text": "version."
+  },
+  {
+   "start": 45.92,
+   "end": 48.16,
+   "text": "For this tutorial, we'll use the desktop version,"
+  },
+  {
+   "start": 48.16,
+   "end": 51.8,
+   "text": "since it's free to use, runs directly on your own computer,"
+  },
+  {
+   "start": 51.8,
+   "end": 54.88,
+   "text": "and gives you full access to your models and workflows."
+  },
+  {
+   "start": 54.88,
+   "end": 56.8,
+   "text": "The cloud version can be a good option"
+  },
+  {
+   "start": 56.8,
+   "end": 58.4,
+   "text": "if you don't have a powerful computer"
+  },
+  {
+   "start": 58.4,
+   "end": 61.72,
+   "text": "or maybe you'd rather not manage the hardware yourself,"
+  },
+  {
+   "start": 61.72,
+   "end": 64.68,
+   "text": "although there is a cost associated with it."
+  },
+  {
+   "start": 64.68,
+   "end": 67.72,
+   "text": "Let's click on Download, and then Download again."
+  },
+  {
+   "start": 67.72,
+   "end": 69.8,
+   "text": "Once the installer finishes downloading,"
+  },
+  {
+   "start": 69.8,
+   "end": 71.44,
+   "text": "run through the install process."
+  },
+  {
+   "start": 71.44,
+   "end": 74.2,
+   "text": "After installation completes, launch Comfy UI,"
+  },
+  {
+   "start": 74.2,
+   "end": 76.12,
+   "text": "and you'll see the following screen."
+  },
+  {
+   "start": 76.12,
+   "end": 77.96,
+   "text": "For this tutorial, we'll select Local"
+  },
+  {
+   "start": 77.96,
+   "end": 80.92,
+   "text": "so everything runs directly on your own computer."
+  },
+  {
+   "start": 80.92,
+   "end": 82.88,
+   "text": "Down below, I'll agree to the terms,"
+  },
+  {
+   "start": 82.88,
+   "end": 84.28,
+   "text": "and then let's click on Continue."
+  },
+  {
+   "start": 84.28,
+   "end": 86.68,
+   "text": "Next, let's give this installation a name."
+  },
+  {
+   "start": 86.68,
+   "end": 88.64,
+   "text": "I'll set mine to Comfy UI."
+  },
+  {
+   "start": 88.64,
+   "end": 91.36,
+   "text": "For most people, you can leave the remaining settings as is,"
+  },
+  {
+   "start": 91.36,
+   "end": 93.24,
+   "text": "and then down below, let's click on Continue."
+  },
+  {
+   "start": 93.24,
+   "end": 95.4,
+   "text": "Once Comfy UI launches, you'll land"
+  },
+  {
+   "start": 95.4,
+   "end": 97.2,
+   "text": "on the main Getting Started screen."
+  },
+  {
+   "start": 97.2,
+   "end": 100.4,
+   "text": "Now right away, you can see that Comfy UI supports much more"
+  },
+  {
+   "start": 100.4,
+   "end": 102.16,
+   "text": "than just image generation."
+  },
+  {
+   "start": 102.16,
+   "end": 103.76,
+   "text": "Over here on the left-hand side,"
+  },
+  {
+   "start": 103.76,
+   "end": 106.64,
+   "text": "you'll find categories for images."
+  },
+  {
+   "start": 106.64,
+   "end": 111.0,
+   "text": "Here we have videos, audio, 3D models, large language"
+  },
+  {
+   "start": 111.0,
+   "end": 112.96,
+   "text": "models, and more."
+  },
+  {
+   "start": 112.96,
+   "end": 115.32,
+   "text": "To help you get up and running quickly,"
+  },
+  {
+   "start": 115.32,
+   "end": 117.48,
+   "text": "let's go back to the Getting Started section,"
+  },
+  {
+   "start": 117.48,
+   "end": 119.56,
+   "text": "and let's start with text to image."
+  },
+  {
+   "start": 119.56,
+   "end": 120.4,
+   "text": "I'll click here."
+  },
+  {
+   "start": 120.4,
+   "end": 124.4,
+   "text": "Comfy UI now loads a complete image generation workflow."
+  },
+  {
+   "start": 124.4,
+   "end": 126.56,
+   "text": "Now notice in the top right-hand corner"
+  },
+  {
+   "start": 126.56,
+   "end": 127.92,
+   "text": "that Comfy UI is telling us"
+  },
+  {
+   "start": 127.92,
+   "end": 129.84,
+   "text": "that we're missing a required model."
+  },
+  {
+   "start": 129.84,
+   "end": 132.64,
+   "text": "Think of Comfy UI as the application"
+  },
+  {
+   "start": 132.64,
+   "end": 135.76,
+   "text": "that allows us to build and run AI workflows."
+  },
+  {
+   "start": 135.76,
+   "end": 139.44,
+   "text": "The model itself is what actually creates the image."
+  },
+  {
+   "start": 139.44,
+   "end": 140.6,
+   "text": "To see what we need,"
+  },
+  {
+   "start": 140.6,
+   "end": 142.6,
+   "text": "let's click on Show Missing Models."
+  },
+  {
+   "start": 142.6,
+   "end": 145.24,
+   "text": "Right here, Comfy UI shows us the exact model"
+  },
+  {
+   "start": 145.24,
+   "end": 147.12,
+   "text": "required by this workflow."
+  },
+  {
+   "start": 147.12,
+   "end": 148.88,
+   "text": "To install the model right over here,"
+  },
+  {
+   "start": 148.88,
+   "end": 150.28,
+   "text": "let's click on Download All."
+  },
+  {
+   "start": 150.28,
+   "end": 152.8,
+   "text": "Right up on top, we can now check on the download progress."
+  },
+  {
+   "start": 152.8,
+   "end": 154.88,
+   "text": "Now that the model has finished downloading,"
+  },
+  {
+   "start": 154.88,
+   "end": 156.64,
+   "text": "let's generate our first image."
+  },
+  {
+   "start": 156.64,
+   "end": 159.04,
+   "text": "Let's take a quick look at the workflow."
+  },
+  {
+   "start": 159.04,
+   "end": 161.64,
+   "text": "You can zoom in and out using your mouse wheel,"
+  },
+  {
+   "start": 161.64,
+   "end": 163.4,
+   "text": "and you can press the middle mouse button"
+  },
+  {
+   "start": 163.4,
+   "end": 165.4,
+   "text": "to pan around the canvas."
+  },
+  {
+   "start": 165.4,
+   "end": 168.08,
+   "text": "You can also use the mini map in the bottom right-hand"
+  },
+  {
+   "start": 168.08,
+   "end": 171.64,
+   "text": "corner to quickly navigate around larger workflows."
+  },
+  {
+   "start": 171.64,
+   "end": 174.16,
+   "text": "Now notice that this workflow is divided"
+  },
+  {
+   "start": 174.16,
+   "end": 176.32,
+   "text": "into several different sections."
+  },
+  {
+   "start": 176.32,
+   "end": 178.36,
+   "text": "Right over here, we start by loading the model"
+  },
+  {
+   "start": 178.36,
+   "end": 179.92,
+   "text": "that we just downloaded."
+  },
+  {
+   "start": 179.92,
+   "end": 182.0,
+   "text": "Next, we enter a prompt."
+  },
+  {
+   "start": 182.0,
+   "end": 185.04,
+   "text": "And this describes the image that we'd like to create."
+  },
+  {
+   "start": 185.04,
+   "end": 188.24,
+   "text": "Now, I want to generate an image of a chocolate chip cookie."
+  },
+  {
+   "start": 188.24,
+   "end": 191.4,
+   "text": "So right over here, I'll enter in the following prompt."
+  },
+  {
+   "start": 191.4,
+   "end": 194.12,
+   "text": "Now, below that, we have the negative prompt."
+  },
+  {
+   "start": 194.12,
+   "end": 196.64,
+   "text": "This tells the model what we'd like to avoid"
+  },
+  {
+   "start": 196.64,
+   "end": 197.84,
+   "text": "in the generated image."
+  },
+  {
+   "start": 197.84,
+   "end": 200.0,
+   "text": "So over here, I'll enter in my text."
+  },
+  {
+   "start": 200.0,
+   "end": 201.24,
+   "text": "If you want to follow along,"
+  },
+  {
+   "start": 201.24,
+   "end": 202.96,
+   "text": "you'll find these same exact prompts"
+  },
+  {
+   "start": 202.96,
+   "end": 204.32,
+   "text": "in the description of this video."
+  },
+  {
+   "start": 204.32,
+   "end": 207.36,
+   "text": "Next, we can configure the image size."
+  },
+  {
+   "start": 207.36,
+   "end": 208.96,
+   "text": "Here, we could set the width,"
+  },
+  {
+   "start": 208.96,
+   "end": 210.2,
+   "text": "we could also set the height,"
+  },
+  {
+   "start": 210.2,
+   "end": 213.16,
+   "text": "and also the number of images we'd like to generate."
+  },
+  {
+   "start": 213.16,
+   "end": 215.0,
+   "text": "Now, I'll leave the default settings in place"
+  },
+  {
+   "start": 215.0,
+   "end": 216.92,
+   "text": "since they work well with this model."
+  },
+  {
+   "start": 216.92,
+   "end": 219.52,
+   "text": "Next, let's go up and we'll look at the sampling section."
+  },
+  {
+   "start": 219.52,
+   "end": 221.92,
+   "text": "This is where Comfy UI generates the image."
+  },
+  {
+   "start": 221.92,
+   "end": 224.6,
+   "text": "You'll notice several different settings here."
+  },
+  {
+   "start": 224.6,
+   "end": 225.88,
+   "text": "Now, as a beginner,"
+  },
+  {
+   "start": 225.88,
+   "end": 228.8,
+   "text": "I recommend leaving these at their default values."
+  },
+  {
+   "start": 228.8,
+   "end": 230.84,
+   "text": "Now, there is one setting worth knowing,"
+  },
+  {
+   "start": 230.84,
+   "end": 231.8,
+   "text": "and that's the seed."
+  },
+  {
+   "start": 231.8,
+   "end": 233.92,
+   "text": "You'll find that right here at the top of the list."
+  },
+  {
+   "start": 233.92,
+   "end": 235.64,
+   "text": "Changing the seed allows you to generate"
+  },
+  {
+   "start": 235.64,
+   "end": 237.84,
+   "text": "different variations of the same image"
+  },
+  {
+   "start": 237.84,
+   "end": 239.88,
+   "text": "all while using the same prompt."
+  },
+  {
+   "start": 239.88,
+   "end": 242.92,
+   "text": "For now, let's leave all of these settings as is."
+  },
+  {
+   "start": 242.92,
+   "end": 244.64,
+   "text": "Then, in the top right-hand corner,"
+  },
+  {
+   "start": 244.64,
+   "end": 245.76,
+   "text": "let's now click on Run."
+  },
+  {
+   "start": 245.76,
+   "end": 248.92,
+   "text": "And there we have our first AI generated image."
+  },
+  {
+   "start": 248.92,
+   "end": 251.8,
+   "text": "It also automatically saved the image to your computer."
+  },
+  {
+   "start": 251.8,
+   "end": 252.72,
+   "text": "Now, you might be wondering,"
+  },
+  {
+   "start": 252.72,
+   "end": 256.12,
+   "text": "how do you view all of your generated images or assets?"
+  },
+  {
+   "start": 256.12,
+   "end": 257.32,
+   "text": "Well, over on the left-hand side,"
+  },
+  {
+   "start": 257.32,
+   "end": 259.2,
+   "text": "we have this button for assets."
+  },
+  {
+   "start": 259.2,
+   "end": 260.16,
+   "text": "When I hover over,"
+  },
+  {
+   "start": 260.16,
+   "end": 263.12,
+   "text": "you'll also notice that there is an associated shortcut key."
+  },
+  {
+   "start": 263.12,
+   "end": 264.64,
+   "text": "You can press the letter A."
+  },
+  {
+   "start": 264.64,
+   "end": 265.48,
+   "text": "When I click on that,"
+  },
+  {
+   "start": 265.48,
+   "end": 268.32,
+   "text": "here I can see all the different images that I've generated."
+  },
+  {
+   "start": 268.32,
+   "end": 269.68,
+   "text": "If I right-click over here,"
+  },
+  {
+   "start": 269.68,
+   "end": 271.24,
+   "text": "I could save it elsewhere on my computer,"
+  },
+  {
+   "start": 271.24,
+   "end": 274.52,
+   "text": "or down below, I could also delete the asset if I'd like."
+  },
+  {
+   "start": 274.52,
+   "end": 276.2,
+   "text": "Right up above, I'll close this view."
+  },
+  {
+   "start": 276.2,
+   "end": 279.0,
+   "text": "Now that we've successfully generated an image,"
+  },
+  {
+   "start": 279.0,
+   "end": 281.6,
+   "text": "let's take a closer look at how this workflow works"
+  },
+  {
+   "start": 281.6,
+   "end": 284.8,
+   "text": "and how we could modify it to produce a different result."
+  },
+  {
+   "start": 284.8,
+   "end": 285.64,
+   "text": "Now, right now,"
+  },
+  {
+   "start": 285.64,
+   "end": 288.08,
+   "text": "we're generating just a chocolate chip cookie."
+  },
+  {
+   "start": 288.08,
+   "end": 290.16,
+   "text": "Let's see what happens when we make a few changes."
+  },
+  {
+   "start": 290.16,
+   "end": 292.24,
+   "text": "So right over here, we have the prompt field,"
+  },
+  {
+   "start": 292.24,
+   "end": 295.56,
+   "text": "and let's update this text to instead create,"
+  },
+  {
+   "start": 295.56,
+   "end": 297.44,
+   "text": "let's say a double chocolate chip cookie"
+  },
+  {
+   "start": 297.44,
+   "end": 299.36,
+   "text": "with a melted chocolate center."
+  },
+  {
+   "start": 299.36,
+   "end": 300.72,
+   "text": "That sounds so good."
+  },
+  {
+   "start": 300.72,
+   "end": 302.52,
+   "text": "Now, if we scroll down just a little bit,"
+  },
+  {
+   "start": 302.52,
+   "end": 304.24,
+   "text": "here we have the image size."
+  },
+  {
+   "start": 304.24,
+   "end": 307.04,
+   "text": "And previously, we went with a 512 pixel"
+  },
+  {
+   "start": 307.04,
+   "end": 308.96,
+   "text": "by 512 pixel image,"
+  },
+  {
+   "start": 308.96,
+   "end": 310.88,
+   "text": "and that produced a square image."
+  },
+  {
+   "start": 310.88,
+   "end": 313.36,
+   "text": "But let's actually try a different aspect ratio."
+  },
+  {
+   "start": 313.36,
+   "end": 314.48,
+   "text": "So right over here,"
+  },
+  {
+   "start": 314.48,
+   "end": 318.24,
+   "text": "let's change the width to let's say 768."
+  },
+  {
+   "start": 319.32,
+   "end": 320.96,
+   "text": "I'll enter in that value,"
+  },
+  {
+   "start": 320.96,
+   "end": 323.56,
+   "text": "and then right up on top, let's try running this."
+  },
+  {
+   "start": 323.56,
+   "end": 324.4,
+   "text": "I'll click here."
+  },
+  {
+   "start": 324.4,
+   "end": 327.12,
+   "text": "And there we have a double chocolate chip cookie,"
+  },
+  {
+   "start": 327.12,
+   "end": 329.44,
+   "text": "and now it's also a wider image."
+  },
+  {
+   "start": 329.44,
+   "end": 331.84,
+   "text": "Now that we've generated a few different images,"
+  },
+  {
+   "start": 331.84,
+   "end": 335.24,
+   "text": "let's take a closer look at how this workflow is organized."
+  },
+  {
+   "start": 335.24,
+   "end": 337.48,
+   "text": "One of the things that makes Comfy UI unique"
+  },
+  {
+   "start": 337.48,
+   "end": 340.56,
+   "text": "is that the workflows are built using nodes."
+  },
+  {
+   "start": 340.56,
+   "end": 342.68,
+   "text": "Each node performs a specific task."
+  },
+  {
+   "start": 342.68,
+   "end": 343.64,
+   "text": "Here's an example."
+  },
+  {
+   "start": 343.64,
+   "end": 344.8,
+   "text": "We have our first node,"
+  },
+  {
+   "start": 344.8,
+   "end": 348.88,
+   "text": "and that loads the checkpoint or the model that we downloaded."
+  },
+  {
+   "start": 348.88,
+   "end": 351.32,
+   "text": "And together, all of these different nodes"
+  },
+  {
+   "start": 351.32,
+   "end": 354.84,
+   "text": "create the workflow that generates this final image."
+  },
+  {
+   "start": 354.84,
+   "end": 357.16,
+   "text": "Now, as you look across this canvas,"
+  },
+  {
+   "start": 357.16,
+   "end": 359.04,
+   "text": "notice how all of these different nodes"
+  },
+  {
+   "start": 359.04,
+   "end": 362.36,
+   "text": "are connected together with all of these different lines."
+  },
+  {
+   "start": 362.36,
+   "end": 364.96,
+   "text": "Data flows from one node to the next"
+  },
+  {
+   "start": 364.96,
+   "end": 368.32,
+   "text": "until we eventually arrive at the finished image."
+  },
+  {
+   "start": 368.32,
+   "end": 370.04,
+   "text": "Now, the nice thing about this approach"
+  },
+  {
+   "start": 370.04,
+   "end": 371.84,
+   "text": "is that we're not limited to the workflow"
+  },
+  {
+   "start": 371.84,
+   "end": 373.84,
+   "text": "exactly as it exists today."
+  },
+  {
+   "start": 373.84,
+   "end": 377.16,
+   "text": "We could easily extend it by adding new nodes."
+  },
+  {
+   "start": 377.16,
+   "end": 379.92,
+   "text": "I'll zoom in right here on this last stage."
+  },
+  {
+   "start": 379.92,
+   "end": 382.24,
+   "text": "To add a node, you could simply right-click"
+  },
+  {
+   "start": 382.24,
+   "end": 384.56,
+   "text": "anywhere on the canvas, and here at the top of the menu,"
+  },
+  {
+   "start": 384.56,
+   "end": 386.44,
+   "text": "you have the options here, add a node."
+  },
+  {
+   "start": 386.44,
+   "end": 388.4,
+   "text": "I'll click on that, and that opens up a menu"
+  },
+  {
+   "start": 388.4,
+   "end": 390.48,
+   "text": "with hundreds of different nodes"
+  },
+  {
+   "start": 390.48,
+   "end": 393.04,
+   "text": "that you can use to customize your workflow."
+  },
+  {
+   "start": 393.04,
+   "end": 395.68,
+   "text": "Now, I'd like to add an image upscaling node."
+  },
+  {
+   "start": 395.68,
+   "end": 397.64,
+   "text": "So here, with an image at the very top of the list,"
+  },
+  {
+   "start": 397.64,
+   "end": 399.36,
+   "text": "we have the option for upscaling,"
+  },
+  {
+   "start": 399.4,
+   "end": 401.92,
+   "text": "and right here, we can upscale the image bio."
+  },
+  {
+   "start": 401.92,
+   "end": 402.76,
+   "text": "I'll click on that."
+  },
+  {
+   "start": 402.76,
+   "end": 405.6,
+   "text": "Right over here, it's now added a new upscaling node,"
+  },
+  {
+   "start": 405.6,
+   "end": 407.52,
+   "text": "and let's try upscaling the image."
+  },
+  {
+   "start": 407.52,
+   "end": 409.04,
+   "text": "Let's say it by two acts here."
+  },
+  {
+   "start": 409.04,
+   "end": 411.44,
+   "text": "I'll enter two and click on okay."
+  },
+  {
+   "start": 411.44,
+   "end": 414.48,
+   "text": "However, right now, this node is not connected"
+  },
+  {
+   "start": 414.48,
+   "end": 416.08,
+   "text": "to the overall workflow."
+  },
+  {
+   "start": 416.08,
+   "end": 418.8,
+   "text": "So over here, let's take the output of the decoding node,"
+  },
+  {
+   "start": 418.8,
+   "end": 421.4,
+   "text": "and here, I'll feed it into the upscaling step,"
+  },
+  {
+   "start": 421.4,
+   "end": 423.44,
+   "text": "and over here, I'll take the output"
+  },
+  {
+   "start": 423.44,
+   "end": 424.52,
+   "text": "of the upscale step,"
+  },
+  {
+   "start": 424.52,
+   "end": 426.84,
+   "text": "and let's feed that into the save image step."
+  },
+  {
+   "start": 426.84,
+   "end": 428.72,
+   "text": "That way, we'll upscale the image"
+  },
+  {
+   "start": 428.72,
+   "end": 430.16,
+   "text": "before we end up saving it."
+  },
+  {
+   "start": 430.16,
+   "end": 431.72,
+   "text": "Now, let's run the workflow again."
+  },
+  {
+   "start": 431.72,
+   "end": 433.32,
+   "text": "In the top right, I'll click on run."
+  },
+  {
+   "start": 433.32,
+   "end": 435.68,
+   "text": "And right there, you can see that we've now enhanced"
+  },
+  {
+   "start": 435.68,
+   "end": 439.2,
+   "text": "the image simply by adding a single node to the workflow."
+  },
+  {
+   "start": 439.2,
+   "end": 441.26,
+   "text": "Right down below, you'll now see the new dimensions"
+  },
+  {
+   "start": 441.26,
+   "end": 442.16,
+   "text": "of this image."
+  },
+  {
+   "start": 442.16,
+   "end": 444.2,
+   "text": "We've effectively upscaled it by two."
+  },
+  {
+   "start": 444.2,
+   "end": 447.04,
+   "text": "This is the core idea behind Comfy UI."
+  },
+  {
+   "start": 447.04,
+   "end": 449.92,
+   "text": "By combining and connecting different nodes,"
+  },
+  {
+   "start": 449.92,
+   "end": 452.44,
+   "text": "you can build workflows that generate images,"
+  },
+  {
+   "start": 452.44,
+   "end": 455.32,
+   "text": "edit photos, create videos, process audio,"
+  },
+  {
+   "start": 455.32,
+   "end": 456.28,
+   "text": "and much more."
+  },
+  {
+   "start": 456.28,
+   "end": 458.12,
+   "text": "Now that we've customized this workflow,"
+  },
+  {
+   "start": 458.12,
+   "end": 460.6,
+   "text": "let's save it so we can use it again later."
+  },
+  {
+   "start": 460.6,
+   "end": 462.88,
+   "text": "Right up on top, you'll see all of your different workflows."
+  },
+  {
+   "start": 462.88,
+   "end": 464.04,
+   "text": "I'll right click on this one,"
+  },
+  {
+   "start": 464.04,
+   "end": 466.2,
+   "text": "and right here, we see the option to save."
+  },
+  {
+   "start": 466.2,
+   "end": 467.44,
+   "text": "I'll click on this."
+  },
+  {
+   "start": 467.44,
+   "end": 469.0,
+   "text": "Right here, we could enter in a file name."
+  },
+  {
+   "start": 469.0,
+   "end": 471.04,
+   "text": "I'll call mine the upscale image generator,"
+  },
+  {
+   "start": 471.04,
+   "end": 472.72,
+   "text": "and down below, let's click on confirm."
+  },
+  {
+   "start": 472.72,
+   "end": 475.44,
+   "text": "To get back to a workflow, over on the left-hand side,"
+  },
+  {
+   "start": 475.44,
+   "end": 476.64,
+   "text": "click on workflows,"
+  },
+  {
+   "start": 476.64,
+   "end": 480.2,
+   "text": "and there you could see the workflow that we just saved."
+  },
+  {
+   "start": 480.2,
+   "end": 482.46,
+   "text": "You can also share workflows with other people,"
+  },
+  {
+   "start": 482.46,
+   "end": 484.14,
+   "text": "which is one of the reasons Comfy UI"
+  },
+  {
+   "start": 484.14,
+   "end": 486.08,
+   "text": "has such a large and active community."
+  },
+  {
+   "start": 486.12,
+   "end": 488.04,
+   "text": "Instead of building everything from scratch,"
+  },
+  {
+   "start": 488.04,
+   "end": 489.8,
+   "text": "you can start from an existing workflow"
+  },
+  {
+   "start": 489.8,
+   "end": 492.56,
+   "text": "and then modify to fit your exact needs."
+  },
+  {
+   "start": 492.56,
+   "end": 494.12,
+   "text": "Here, I'll close out of workflows."
+  },
+  {
+   "start": 494.12,
+   "end": 496.24,
+   "text": "Before we wrap up, let's take one more look"
+  },
+  {
+   "start": 496.24,
+   "end": 497.4,
+   "text": "at the template library."
+  },
+  {
+   "start": 497.4,
+   "end": 498.32,
+   "text": "Right down here at the bottom,"
+  },
+  {
+   "start": 498.32,
+   "end": 499.8,
+   "text": "let's click on templates to open it."
+  },
+  {
+   "start": 499.8,
+   "end": 501.52,
+   "text": "One of the things I like about Comfy UI"
+  },
+  {
+   "start": 501.52,
+   "end": 504.0,
+   "text": "is that you have a large collection of starter templates"
+  },
+  {
+   "start": 504.0,
+   "end": 505.76,
+   "text": "to get you up and running quickly."
+  },
+  {
+   "start": 505.76,
+   "end": 508.56,
+   "text": "Now, in addition to text to image, which we just used,"
+  },
+  {
+   "start": 508.56,
+   "end": 510.0,
+   "text": "here you'll find other fun ones,"
+  },
+  {
+   "start": 510.0,
+   "end": 512.92,
+   "text": "like image to video, here you have image editing,"
+  },
+  {
+   "start": 512.92,
+   "end": 515.36,
+   "text": "here you have image to video again, image to 3D."
+  },
+  {
+   "start": 515.36,
+   "end": 516.92,
+   "text": "You even have text to song."
+  },
+  {
+   "start": 516.92,
+   "end": 518.4,
+   "text": "So lots of different options"
+  },
+  {
+   "start": 518.4,
+   "end": 519.96,
+   "text": "and fun things that you could play with."
+  },
+  {
+   "start": 519.96,
+   "end": 522.48,
+   "text": "Now, I recommend clicking in, downloading the models,"
+  },
+  {
+   "start": 522.48,
+   "end": 524.72,
+   "text": "and then exploring how they're built."
+  },
+  {
+   "start": 524.72,
+   "end": 526.84,
+   "text": "Every workflow here is made up of nodes,"
+  },
+  {
+   "start": 526.84,
+   "end": 529.12,
+   "text": "and you could use these templates as a starting point"
+  },
+  {
+   "start": 529.12,
+   "end": 532.08,
+   "text": "and then customize them to fit your own needs."
+  },
+  {
+   "start": 532.08,
+   "end": 534.64,
+   "text": "And that's how to use Comfy UI."
+  },
+  {
+   "start": 534.64,
+   "end": 536.26,
+   "text": "Now that you understand the basics,"
+  },
+  {
+   "start": 536.26,
+   "end": 538.72,
+   "text": "go ahead and experiment with the built-in templates"
+  },
+  {
+   "start": 538.72,
+   "end": 541.36,
+   "text": "and start building workflows of your own."
+  },
+  {
+   "start": 541.36,
+   "end": 543.36,
+   "text": "If you'd like to learn more about AI tools"
+  },
+  {
+   "start": 543.36,
+   "end": 544.96,
+   "text": "and how to get the most out of them,"
+  },
+  {
+   "start": 544.96,
+   "end": 546.36,
+   "text": "consider subscribing."
+  },
+  {
+   "start": 546.36,
+   "end": 549.36,
+   "text": "Thanks for watching and I'll see you in the next video."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:59:41.925555+00:00",
+ "seconds": 26.8
+}

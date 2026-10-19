@@ -1,0 +1,708 @@
+{
+ "id": "MbQv8zoNEfY",
+ "title": "Create CONSISTENT CHARACTERS for your projects with FLUX! (ComfyUI Tutorial)",
+ "channel": "Mickmumpitz",
+ "url": "https://www.youtube.com/watch?v=MbQv8zoNEfY",
+ "query": "comfyui flux tutorial",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 1.0,
+ "duration_s": 771.9,
+ "chars": 13090,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 4.32,
+   "text": "This is the best way for creating consistent characters with AI. Whether you want to create"
+  },
+  {
+   "start": 4.32,
+   "end": 9.2,
+   "text": "cinematic AI movies, children's books or AI influences, you'll need to have your characters"
+  },
+  {
+   "start": 9.2,
+   "end": 13.44,
+   "text": "stay the same throughout multiple shots. But this is actually quite the challenge. Even with my"
+  },
+  {
+   "start": 13.44,
+   "end": 17.2,
+   "text": "consistent and plausible character workflow that I showed you in one of my last videos,"
+  },
+  {
+   "start": 17.2,
+   "end": 21.68,
+   "text": "you would still need to try out multiple prompts and seeds to get it right. And details,"
+  },
+  {
+   "start": 21.68,
+   "end": 26.8,
+   "text": "especially on complex clothes, still might change a little bit from image to image. But that"
+  },
+  {
+   "start": 26.8,
+   "end": 31.36,
+   "text": "has changed now thanks to a new image model called Flux. I updated my workflow to it and"
+  },
+  {
+   "start": 31.36,
+   "end": 36.72,
+   "text": "look at these amazing results. I can now generate images where the characters look exactly the same"
+  },
+  {
+   "start": 36.72,
+   "end": 42.0,
+   "text": "whether they are animated or live action. Oh and this also works for multiple characters in the"
+  },
+  {
+   "start": 42.0,
+   "end": 47.04,
+   "text": "same image, which is especially important if you want to tell a story. So let me show you"
+  },
+  {
+   "start": 47.04,
+   "end": 50.24,
+   "text": "how it works and how you can set it up on your own computer for free."
+  },
+  {
+   "start": 51.84,
+   "end": 56.16,
+   "text": "The trick is that we first generate a character sheet that's depicting the character"
+  },
+  {
+   "start": 56.16,
+   "end": 61.36,
+   "text": "from multiple angles and with different emotions. And for that I created this post sheet that shows"
+  },
+  {
+   "start": 61.36,
+   "end": 67.92,
+   "text": "the characters bones in the open post format and we can now use Flux, stable diffusion XL or even"
+  },
+  {
+   "start": 67.92,
+   "end": 73.04,
+   "text": "stable diffusion 1.5 to generate our character sheet. You could use this post sheet with most"
+  },
+  {
+   "start": 73.04,
+   "end": 78.72,
+   "text": "AI interfaces, but I created a workflow for ConfUI which automates all of the steps. And as"
+  },
+  {
+   "start": 78.72,
+   "end": 83.76,
+   "text": "usual I've created a free step by step guide on how to install ConfUI and where to download"
+  },
+  {
+   "start": 83.76,
+   "end": 87.84,
+   "text": "and put all the models for this to work. And let's start with the Flux version. Once you have"
+  },
+  {
+   "start": 87.84,
+   "end": 93.44,
+   "text": "everything set up you can just drag and drop my workflow into the ConfUI interface. This workflow"
+  },
+  {
+   "start": 93.44,
+   "end": 99.36,
+   "text": "consists of four steps, but the last three will happen automatically and we don't need to use them"
+  },
+  {
+   "start": 99.36,
+   "end": 105.68,
+   "text": "yet. So we can deactivate them using this fast muta here. Let's focus on the first group."
+  },
+  {
+   "start": 105.68,
+   "end": 110.56,
+   "text": "The only thing that you need to do here is double check if the correct models are loaded"
+  },
+  {
+   "start": 110.56,
+   "end": 115.68,
+   "text": "and import the post sheet here and you can just drag and drop that in there. For the Flux version"
+  },
+  {
+   "start": 115.68,
+   "end": 120.0,
+   "text": "you can use a prompt format like this and the weather is getting quite cold out there so let's"
+  },
+  {
+   "start": 120.0,
+   "end": 125.12,
+   "text": "create like a character for like a fashion magazine showing autumn fashion. You basically just"
+  },
+  {
+   "start": 125.12,
+   "end": 130.0,
+   "text": "leave all these keywords here and add short descriptions of the character that you want"
+  },
+  {
+   "start": 130.0,
+   "end": 133.76,
+   "text": "to have. And that's all you have to do in this first group. If you want you can also"
+  },
+  {
+   "start": 133.76,
+   "end": 139.76,
+   "text": "add like a name for your character here, but then you can just click Q prompt and wait for"
+  },
+  {
+   "start": 139.76,
+   "end": 145.84,
+   "text": "the first step to finish. So the prompt is working, but this image is a bit dark so what you can do is"
+  },
+  {
+   "start": 145.84,
+   "end": 151.68,
+   "text": "just change the seed a little bit and try out a new one. So when you found a character sheet that"
+  },
+  {
+   "start": 151.68,
+   "end": 156.32,
+   "text": "you like and let's just say even though the hair is a bit red instead of brunette and the"
+  },
+  {
+   "start": 156.32,
+   "end": 161.36,
+   "text": "coat is more like gray I would say, a little bit brown. Let's say you found an image that"
+  },
+  {
+   "start": 161.36,
+   "end": 164.64,
+   "text": "you like, a character that you like and you want to continue with it then you can just"
+  },
+  {
+   "start": 164.64,
+   "end": 172.24,
+   "text": "activate the second group and click Q prompt and this will then upscale that image. This already looks"
+  },
+  {
+   "start": 172.24,
+   "end": 176.96,
+   "text": "a lot better than this first image here. You can see the faces and everything is really broken."
+  },
+  {
+   "start": 176.96,
+   "end": 182.16,
+   "text": "Here it already looks a lot better. And then in the second step in that group it will actually"
+  },
+  {
+   "start": 182.16,
+   "end": 187.44,
+   "text": "go through all the individual faces and just add more detail and make them a bit cleaner."
+  },
+  {
+   "start": 187.44,
+   "end": 191.68,
+   "text": "For the next step it will be important that we have images of all the individual faces and"
+  },
+  {
+   "start": 191.68,
+   "end": 198.72,
+   "text": "we can just simply save them out by activating this node here using control B. If we now click"
+  },
+  {
+   "start": 198.72,
+   "end": 205.36,
+   "text": "Q prompt it will actually save out all the individual faces. Next we can activate the third group and"
+  },
+  {
+   "start": 205.36,
+   "end": 210.4,
+   "text": "click Q prompt and this should only take a second or so. This is another group that will only"
+  },
+  {
+   "start": 210.4,
+   "end": 216.72,
+   "text": "save out the individual poses and now we can already activate the last group and click Q prompt"
+  },
+  {
+   "start": 216.72,
+   "end": 221.68,
+   "text": "and this will quickly create different emotions for our character. I just said some example"
+  },
+  {
+   "start": 221.68,
+   "end": 226.4,
+   "text": "emotions here but you can customize them. You have all these sliders and you can just change them"
+  },
+  {
+   "start": 226.4,
+   "end": 232.64,
+   "text": "and find the emotions that you like. Maybe we can make her even more happy in this one by just"
+  },
+  {
+   "start": 232.64,
+   "end": 240.24,
+   "text": "raising the eyebrows. No that's not happy but it doesn't matter too much which emotions exactly"
+  },
+  {
+   "start": 240.24,
+   "end": 245.52,
+   "text": "you create. It's more about having a wide variety and what you could also do is like"
+  },
+  {
+   "start": 245.52,
+   "end": 250.4,
+   "text": "rotate the head so you have like different angles. So let's just change the rotation here into the other"
+  },
+  {
+   "start": 250.4,
+   "end": 255.52,
+   "text": "direction change the rotate pitch and just see what that creates. Now we have her looking to the right"
+  },
+  {
+   "start": 255.52,
+   "end": 259.52,
+   "text": "we have her looking to the left and this will be very good for the next step. If you support me"
+  },
+  {
+   "start": 259.52,
+   "end": 263.52,
+   "text": "on Patreon you can also get your hands on the advanced version of the workflow which will add"
+  },
+  {
+   "start": 263.52,
+   "end": 268.4,
+   "text": "upscalers to different parts of the workflow. For example it will upscale the individual"
+  },
+  {
+   "start": 268.4,
+   "end": 272.88,
+   "text": "face images for some better quality and it will also upscale the emotions at the end"
+  },
+  {
+   "start": 272.88,
+   "end": 278.32,
+   "text": "here. Sometimes it can happen for like stylized characters like pixel characters or anime characters"
+  },
+  {
+   "start": 278.32,
+   "end": 283.76,
+   "text": "that there are some weird glitches around the edges of your face and using this upscaler here you"
+  },
+  {
+   "start": 283.76,
+   "end": 288.64,
+   "text": "can fix that. Now it's important to know that the emotion setup will not always work perfectly"
+  },
+  {
+   "start": 288.64,
+   "end": 294.0,
+   "text": "for any type of character. Like for example here I created this lizard person that I showed you"
+  },
+  {
+   "start": 294.0,
+   "end": 299.12,
+   "text": "in the beginning and I really love how well that came out but for the emotions the face was"
+  },
+  {
+   "start": 299.12,
+   "end": 306.4,
+   "text": "just a bit too far away from a typical human face so it was not able to add the emotions correctly"
+  },
+  {
+   "start": 306.4,
+   "end": 311.44,
+   "text": "but at least we got some different angles out of it. Another important thing to note with the"
+  },
+  {
+   "start": 311.44,
+   "end": 317.92,
+   "text": "flux workflow is that it can be a bit tedious to work with. For one it's pretty slow even on"
+  },
+  {
+   "start": 317.92,
+   "end": 324.48,
+   "text": "better computers and the control net is just not as robust as for example the SDXL control net."
+  },
+  {
+   "start": 324.48,
+   "end": 329.44,
+   "text": "So when it works it typically works really well like for this character for example but you probably"
+  },
+  {
+   "start": 329.44,
+   "end": 335.68,
+   "text": "get a lot of weird and broken results as well and I don't want you to get frustrated so I also"
+  },
+  {
+   "start": 335.68,
+   "end": 341.12,
+   "text": "created an SDXL version of this workflow which is not only a lot faster but it will also give you"
+  },
+  {
+   "start": 341.12,
+   "end": 346.8,
+   "text": "way more consistent results. So you can see it looks pretty much the exact same except the"
+  },
+  {
+   "start": 346.8,
+   "end": 351.44,
+   "text": "beginning here is a bit different we don't need as much stuff. I'm using the wild card"
+  },
+  {
+   "start": 351.44,
+   "end": 356.4,
+   "text": "turbo model which I've been using a lot in my videos because it's like super fast so the settings"
+  },
+  {
+   "start": 356.4,
+   "end": 363.28,
+   "text": "are fine tuned to this model. If you want to use another SDXL model make sure to change the case"
+  },
+  {
+   "start": 363.28,
+   "end": 369.36,
+   "text": "sampler settings here but let's quickly try out a prompt like for example let's use this one to"
+  },
+  {
+   "start": 369.36,
+   "end": 376.08,
+   "text": "create an anime character. I'm just activating all the groups here and just let that run through"
+  },
+  {
+   "start": 376.08,
+   "end": 382.72,
+   "text": "and this only took a couple of minutes it did an amazing job of creating the sheet the faces look cool"
+  },
+  {
+   "start": 382.72,
+   "end": 389.28,
+   "text": "and even the emotions look really good but you can see that for example this one is a bit broken"
+  },
+  {
+   "start": 389.28,
+   "end": 393.84,
+   "text": "so you could try to fix that by just changing it a little bit or you can use the upscaling in"
+  },
+  {
+   "start": 393.84,
+   "end": 398.8,
+   "text": "the advanced workflow to fix it. So now why did we do all this? Well we now have a perfect"
+  },
+  {
+   "start": 398.8,
+   "end": 404.48,
+   "text": "data set to create a lora. A lora is basically a way to give an AI model more contact for an"
+  },
+  {
+   "start": 404.48,
+   "end": 409.52,
+   "text": "object or a subject and it's definitely not a new technique but it has never been so easy. Let's say"
+  },
+  {
+   "start": 409.52,
+   "end": 414.4,
+   "text": "we want to create a lora for this woman here that we created earlier. Let's first just create a folder"
+  },
+  {
+   "start": 414.4,
+   "end": 421.2,
+   "text": "with all the good images of her think of a unique name for her maybe maybe she's called Tina AI"
+  },
+  {
+   "start": 421.2,
+   "end": 427.28,
+   "text": "something that's not a typical word and let's just look through the images and copy over the"
+  },
+  {
+   "start": 427.28,
+   "end": 434.16,
+   "text": "images that have a high quality and show her from multiple angles I want the different emotions"
+  },
+  {
+   "start": 435.12,
+   "end": 441.92,
+   "text": "and this is honestly probably already enough so I usually use between 10 and like 15 images"
+  },
+  {
+   "start": 441.92,
+   "end": 447.36,
+   "text": "to train the lora. Let's just look through some of these additional face poses maybe we can use"
+  },
+  {
+   "start": 447.36,
+   "end": 452.88,
+   "text": "some of these extreme side views here that's cropped in a weird way so I just open that"
+  },
+  {
+   "start": 452.88,
+   "end": 458.56,
+   "text": "with paint and just focus on the face here and I would say that's a pretty good data set to train"
+  },
+  {
+   "start": 458.56,
+   "end": 464.0,
+   "text": "the lora we need a tool called flux gym and they call flux gym a that simple web UI for training"
+  },
+  {
+   "start": 464.0,
+   "end": 468.72,
+   "text": "flux loras and I can only confirm it it really is that simple the easiest way to install it is"
+  },
+  {
+   "start": 468.72,
+   "end": 474.4,
+   "text": "using Pinocchio. Pinocchio is this super easy one click installer for many AI tools so just"
+  },
+  {
+   "start": 474.4,
+   "end": 481.52,
+   "text": "download that go to discover and search for flux gym and install it from here once it's done"
+  },
+  {
+   "start": 481.6,
+   "end": 488.96,
+   "text": "you can just start it put in the name of our lora and I'll just call that Tina AI and I also want to"
+  },
+  {
+   "start": 488.96,
+   "end": 495.52,
+   "text": "use this as the trigger word as well so when we put that in the prompt and we have the lora activated"
+  },
+  {
+   "start": 495.52,
+   "end": 499.92,
+   "text": "it will create this character you can choose which model you want to train I want to train"
+  },
+  {
+   "start": 499.92,
+   "end": 505.84,
+   "text": "flux dev and I have more than 20 gigabytes of VRAM so I choose that but I also tried this tool"
+  },
+  {
+   "start": 505.84,
+   "end": 510.96,
+   "text": "on one with 12 gigabytes and it worked pretty well as well it just takes longer that's all"
+  },
+  {
+   "start": 510.96,
+   "end": 516.72,
+   "text": "we need to do here and then I just take my images and drag and drop them here it already added the"
+  },
+  {
+   "start": 516.72,
+   "end": 522.32,
+   "text": "caption with our trigger word and now we have two options we can caption the images manually or we"
+  },
+  {
+   "start": 522.32,
+   "end": 527.52,
+   "text": "can use Florence to to tag our image so this is what it would look like so here you can see for"
+  },
+  {
+   "start": 527.52,
+   "end": 533.04,
+   "text": "example Tina AI a woman with long red hair wearing brown turtleneck sweater and a gray coat she"
+  },
+  {
+   "start": 533.04,
+   "end": 540.72,
+   "text": "is standing in front of a wall and these are actually quite good I usually prefer tagging"
+  },
+  {
+   "start": 540.72,
+   "end": 546.64,
+   "text": "the images myself and keeping it a bit simpler for example let's just drag and drop these images in"
+  },
+  {
+   "start": 546.64,
+   "end": 556.16,
+   "text": "here again so what I like to do is gray background and then the pose and emotion and shot type something"
+  },
+  {
+   "start": 556.16,
+   "end": 561.6,
+   "text": "like this this should be enough and that's pretty much it now we can just click start training"
+  },
+  {
+   "start": 561.6,
+   "end": 566.4,
+   "text": "and it will download the model which will probably take a long time the first time you run this"
+  },
+  {
+   "start": 566.4,
+   "end": 572.8,
+   "text": "because the flux dev model is huge now I just let that run okay it's now 37 minutes later and the"
+  },
+  {
+   "start": 572.8,
+   "end": 580.88,
+   "text": "Laura is finished so we can go to the Pinocchio folder API flux gym outputs and it created a"
+  },
+  {
+   "start": 580.88,
+   "end": 585.52,
+   "text": "folder with the name for our Laura we have different variations so it's doing like"
+  },
+  {
+   "start": 585.52,
+   "end": 592.24,
+   "text": "snapshots at different stages of training but let's just try out the last one go to my confu i"
+  },
+  {
+   "start": 592.24,
+   "end": 602.24,
+   "text": "directory confu i models lauras and I created an extra folder for flux and my own flux gym models"
+  },
+  {
+   "start": 602.24,
+   "end": 608.96,
+   "text": "and I'm just going to put that here so this is my custom flux workflow we have the option to input"
+  },
+  {
+   "start": 608.96,
+   "end": 615.04,
+   "text": "two lauras here but let's just deactivate one and only use this one here and we can put the"
+  },
+  {
+   "start": 615.04,
+   "end": 620.8,
+   "text": "strength pretty high I sometimes lower it to give it a bit more freedom but something between"
+  },
+  {
+   "start": 620.8,
+   "end": 630.08,
+   "text": "0.9 and 1 will work so let's just use this prompt click q prompt and this is just the first image and"
+  },
+  {
+   "start": 630.08,
+   "end": 636.8,
+   "text": "it already looks really good let's just try out another seat and this is also looking pretty nice"
+  },
+  {
+   "start": 636.8,
+   "end": 641.28,
+   "text": "it's definitely her let me quickly explain this custom flux workflow that I'm using here"
+  },
+  {
+   "start": 641.28,
+   "end": 645.92,
+   "text": "and you can also get that for free on my patreon basically the beginning here the beginning stages"
+  },
+  {
+   "start": 646.0,
+   "end": 652.0,
+   "text": "just the typical confu i flux workflow and then in for the second image here I added a little"
+  },
+  {
+   "start": 652.0,
+   "end": 657.36,
+   "text": "hack that I learned from Mateo from latent vision basically during somewhere in the middle of image"
+  },
+  {
+   "start": 657.36,
+   "end": 662.32,
+   "text": "generation you add some extra noise and this will make the textures of the image look less"
+  },
+  {
+   "start": 662.32,
+   "end": 668.48,
+   "text": "like plastic and more realistic and it will also add some minor details after that I added"
+  },
+  {
+   "start": 668.48,
+   "end": 673.68,
+   "text": "an upscaler you can also deactivate this part if you don't need that and then finally I"
+  },
+  {
+   "start": 673.68,
+   "end": 680.48,
+   "text": "add some film grain using this node just for this analog type of photography style that I'm going for"
+  },
+  {
+   "start": 680.48,
+   "end": 686.32,
+   "text": "here and generating images with this workflow and the lauras is so much fun because pretty much every"
+  },
+  {
+   "start": 686.32,
+   "end": 691.12,
+   "text": "single image looks cool no cherry picking these are just all the images that are created the"
+  },
+  {
+   "start": 691.12,
+   "end": 696.16,
+   "text": "same goes for this character here this is just a character that I trained on this character sheet"
+  },
+  {
+   "start": 696.16,
+   "end": 701.36,
+   "text": "to try out if this workflow works for other styles as well it looks really good like these"
+  },
+  {
+   "start": 701.36,
+   "end": 707.92,
+   "text": "are all the images that are created but as I said this workflow also works for multiple characters and"
+  },
+  {
+   "start": 707.92,
+   "end": 713.36,
+   "text": "it's actually really easy you just need to load in both lauras and I like to decrease the strength"
+  },
+  {
+   "start": 713.36,
+   "end": 717.92,
+   "text": "a little bit just to give more flux a little bit more flexibility and then I'm going to use a"
+  },
+  {
+   "start": 717.92,
+   "end": 722.96,
+   "text": "prompt like this first we describe the general composition of the shot mentioning both keywords"
+  },
+  {
+   "start": 722.96,
+   "end": 727.84,
+   "text": "of the laura and how they relate to each other so they are standing next to each other to keep"
+  },
+  {
+   "start": 727.84,
+   "end": 732.72,
+   "text": "them from from mixing because that's usually what happens when we stack lauras on top of each other"
+  },
+  {
+   "start": 732.72,
+   "end": 740.0,
+   "text": "it creates these sort of hybrid styles and creatures so to actually fix that I just add"
+  },
+  {
+   "start": 740.0,
+   "end": 746.0,
+   "text": "character descriptions for both of these characters so as the images generated the lauras actually"
+  },
+  {
+   "start": 746.0,
+   "end": 751.2,
+   "text": "have a chance to fall into place in the correct regions and create images that just look really"
+  },
+  {
+   "start": 751.2,
+   "end": 755.36,
+   "text": "good I hope you enjoyed this video and give laura training a try if you would like to"
+  },
+  {
+   "start": 755.36,
+   "end": 760.96,
+   "text": "support my work and gain access to the advanced workflows and exclusive example files like all"
+  },
+  {
+   "start": 760.96,
+   "end": 765.68,
+   "text": "the data sets character sheets lauras and prompts are used and created for this video consider"
+  },
+  {
+   "start": 765.68,
+   "end": 771.68,
+   "text": "supporting me on patreon your support makes this channel possible so thank you very much and see you next time"
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:56:18.413612+00:00",
+ "seconds": 29.2
+}

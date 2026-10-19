@@ -1,0 +1,2203 @@
+{
+ "id": "p3JcJ99woGU",
+ "title": "After 10yrs of Testing, This is the BEST Upscaler. Period.",
+ "channel": "PiXimperfect",
+ "url": "https://www.youtube.com/watch?v=p3JcJ99woGU",
+ "query": "comfyui upscale product",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 977.9,
+ "chars": 16858,
+ "segments": [
+  {
+   "start": 0.0,
+   "end": 5.72,
+   "text": "So whenever you try to crop a group photo, usually the resolution is absolute crap."
+  },
+  {
+   "start": 5.72,
+   "end": 10.68,
+   "text": "But if I were to process the same cropped photo in this wonderful upscaler,"
+  },
+  {
+   "start": 10.68,
+   "end": 15.0,
+   "text": "so here's the before and here is the after."
+  },
+  {
+   "start": 15.0,
+   "end": 18.12,
+   "text": "If that's not crazy, I don't know what is."
+  },
+  {
+   "start": 18.12,
+   "end": 20.04,
+   "text": "But how do you make sure it's the same person?"
+  },
+  {
+   "start": 20.04,
+   "end": 24.48,
+   "text": "Sometimes while upscaling, it generates new details and makes it an entirely different person."
+  },
+  {
+   "start": 24.48,
+   "end": 25.36,
+   "text": "Here's the trick."
+  },
+  {
+   "start": 25.36,
+   "end": 27.84,
+   "text": "We are going to take a super high resolution photo,"
+  },
+  {
+   "start": 27.84,
+   "end": 31.88,
+   "text": "turn this into a low resolution photo by going to image, image size,"
+  },
+  {
+   "start": 31.88,
+   "end": 35.12,
+   "text": "and let us just reduce it to width 600."
+  },
+  {
+   "start": 35.12,
+   "end": 36.0,
+   "text": "Why not?"
+  },
+  {
+   "start": 36.0,
+   "end": 36.84,
+   "text": "And hit OK."
+  },
+  {
+   "start": 36.84,
+   "end": 40.36,
+   "text": "Right now this is super low res pixels are bleeding out."
+  },
+  {
+   "start": 40.36,
+   "end": 44.04,
+   "text": "Now how about we upscale this one and compare it with the original high res?"
+  },
+  {
+   "start": 44.04,
+   "end": 45.84,
+   "text": "And here's three of them side by side."
+  },
+  {
+   "start": 45.84,
+   "end": 48.88,
+   "text": "On the left you have the absolute original high resolution."
+  },
+  {
+   "start": 48.88,
+   "end": 51.08,
+   "text": "And this one is the upscaled one."
+  },
+  {
+   "start": 51.08,
+   "end": 54.2,
+   "text": "And as you can see, there is a bit of a change in skin texture,"
+  },
+  {
+   "start": 54.2,
+   "end": 55.64,
+   "text": "but it's pretty darn close."
+  },
+  {
+   "start": 55.68,
+   "end": 59.92,
+   "text": "And remember, this was upscaled from this image."
+  },
+  {
+   "start": 59.92,
+   "end": 61.6,
+   "text": "And if you're ready to get your minds blown,"
+  },
+  {
+   "start": 61.6,
+   "end": 64.08,
+   "text": "let's zoom in a little more towards the eyes."
+  },
+  {
+   "start": 64.08,
+   "end": 66.36,
+   "text": "Here's the absolute original one."
+  },
+  {
+   "start": 66.36,
+   "end": 69.2,
+   "text": "This is the upscaled one."
+  },
+  {
+   "start": 69.2,
+   "end": 72.72,
+   "text": "And here's the image that we upscaled from."
+  },
+  {
+   "start": 72.72,
+   "end": 74.04,
+   "text": "What is happening?"
+  },
+  {
+   "start": 74.04,
+   "end": 76.24,
+   "text": "Now these were extreme cases with faces."
+  },
+  {
+   "start": 76.24,
+   "end": 79.44,
+   "text": "What about wildlife, old photos, landscapes, products,"
+  },
+  {
+   "start": 79.44,
+   "end": 81.32,
+   "text": "or maybe you entirely missed the focus?"
+  },
+  {
+   "start": 81.32,
+   "end": 82.44,
+   "text": "Can we recover all that?"
+  },
+  {
+   "start": 82.48,
+   "end": 84.24,
+   "text": "And how does this tool compare with upscalers"
+  },
+  {
+   "start": 84.24,
+   "end": 85.76,
+   "text": "from Photoshop and Topaz?"
+  },
+  {
+   "start": 85.76,
+   "end": 88.8,
+   "text": "All that and more so without any further ado, let's get started."
+  },
+  {
+   "start": 88.8,
+   "end": 91.48,
+   "text": "A few years ago I made a video about Magnific AI,"
+  },
+  {
+   "start": 91.48,
+   "end": 93.76,
+   "text": "a tool that upscaled like no one else."
+  },
+  {
+   "start": 93.76,
+   "end": 96.32,
+   "text": "The only downside for precise results was that it added"
+  },
+  {
+   "start": 96.32,
+   "end": 98.44,
+   "text": "a lot of creative details while upscaling,"
+  },
+  {
+   "start": 98.44,
+   "end": 100.68,
+   "text": "thus changing the original image by a lot."
+  },
+  {
+   "start": 100.68,
+   "end": 103.6,
+   "text": "Since then they created a brand new setting called Precision."
+  },
+  {
+   "start": 103.6,
+   "end": 105.8,
+   "text": "Does that get rid of the crazy creativity?"
+  },
+  {
+   "start": 105.8,
+   "end": 107.6,
+   "text": "Let's see. Let's take a look at this example."
+  },
+  {
+   "start": 107.6,
+   "end": 109.52,
+   "text": "It's a great shot, but due to cropping,"
+  },
+  {
+   "start": 109.52,
+   "end": 111.28,
+   "text": "the resolution may not be the highest."
+  },
+  {
+   "start": 111.28,
+   "end": 113.96,
+   "text": "To upscale it, we can access Magnific through FreePick."
+  },
+  {
+   "start": 113.96,
+   "end": 116.24,
+   "text": "It's one of the best platforms to have everything"
+  },
+  {
+   "start": 116.24,
+   "end": 118.16,
+   "text": "under one roof, all the tools you need."
+  },
+  {
+   "start": 118.16,
+   "end": 120.36,
+   "text": "So here I'm just gonna click on Image Upscaler"
+  },
+  {
+   "start": 120.36,
+   "end": 122.28,
+   "text": "and let's simply drag and drop this photo."
+  },
+  {
+   "start": 122.28,
+   "end": 124.16,
+   "text": "Now Magnific still has creative upscaling,"
+  },
+  {
+   "start": 124.16,
+   "end": 125.84,
+   "text": "which adds a lot of creative detail."
+  },
+  {
+   "start": 125.84,
+   "end": 126.8,
+   "text": "We don't want that."
+  },
+  {
+   "start": 126.8,
+   "end": 130.52,
+   "text": "We are interested in Precision for precise upscaling."
+  },
+  {
+   "start": 130.52,
+   "end": 133.16,
+   "text": "And I don't wanna introduce any additional sharpness"
+  },
+  {
+   "start": 133.16,
+   "end": 134.08,
+   "text": "or grain."
+  },
+  {
+   "start": 134.08,
+   "end": 135.96,
+   "text": "Again, these are my preferred settings."
+  },
+  {
+   "start": 135.96,
+   "end": 137.48,
+   "text": "You can use whatever you wish."
+  },
+  {
+   "start": 137.48,
+   "end": 138.84,
+   "text": "Here's an important setting."
+  },
+  {
+   "start": 138.84,
+   "end": 140.08,
+   "text": "How much you wanna upscale?"
+  },
+  {
+   "start": 140.12,
+   "end": 142.12,
+   "text": "2x, 4x, 8x, up to you."
+  },
+  {
+   "start": 142.12,
+   "end": 144.72,
+   "text": "Let's go 8x and click on upscale."
+  },
+  {
+   "start": 144.72,
+   "end": 145.84,
+   "text": "Now while it's processing,"
+  },
+  {
+   "start": 145.84,
+   "end": 148.4,
+   "text": "let us also upscale it through Photoshop and Topaz."
+  },
+  {
+   "start": 148.4,
+   "end": 151.64,
+   "text": "In Photoshop, let's go to Image Generative Upscale."
+  },
+  {
+   "start": 151.64,
+   "end": 155.28,
+   "text": "Inside of that, choose Adobe's own Firefly Upscaler."
+  },
+  {
+   "start": 155.28,
+   "end": 157.2,
+   "text": "4x, now Firefly has a limit."
+  },
+  {
+   "start": 157.2,
+   "end": 158.48,
+   "text": "It cannot go 8x."
+  },
+  {
+   "start": 158.48,
+   "end": 159.4,
+   "text": "Click on upscale."
+  },
+  {
+   "start": 159.4,
+   "end": 160.96,
+   "text": "Now I'm gonna process the same image"
+  },
+  {
+   "start": 160.96,
+   "end": 163.68,
+   "text": "in Topaz Gigapixel right now by default."
+  },
+  {
+   "start": 163.68,
+   "end": 165.0,
+   "text": "It is doing 2x."
+  },
+  {
+   "start": 165.0,
+   "end": 167.64,
+   "text": "Let's see if we can do 8x."
+  },
+  {
+   "start": 167.64,
+   "end": 168.48,
+   "text": "Custom."
+  },
+  {
+   "start": 168.48,
+   "end": 169.64,
+   "text": "It is doing something."
+  },
+  {
+   "start": 169.64,
+   "end": 171.16,
+   "text": "And here's four of them side by side."
+  },
+  {
+   "start": 171.16,
+   "end": 173.52,
+   "text": "And the results I must say, it's pretty clear."
+  },
+  {
+   "start": 173.52,
+   "end": 175.12,
+   "text": "Here is the original one."
+  },
+  {
+   "start": 175.12,
+   "end": 178.68,
+   "text": "Topaz Gigapixel, Photoshop Firefly and Magnific."
+  },
+  {
+   "start": 178.68,
+   "end": 179.8,
+   "text": "And no matter how you look at it,"
+  },
+  {
+   "start": 179.8,
+   "end": 183.04,
+   "text": "there is no doubt that Magnific killed it right there."
+  },
+  {
+   "start": 183.04,
+   "end": 184.44,
+   "text": "Now if you were to zoom in further"
+  },
+  {
+   "start": 184.44,
+   "end": 187.84,
+   "text": "and let's have a look at the eyes, this is insane."
+  },
+  {
+   "start": 187.84,
+   "end": 189.52,
+   "text": "Let's have a look at Topaz."
+  },
+  {
+   "start": 189.52,
+   "end": 192.16,
+   "text": "Very less detail as compared to Magnific."
+  },
+  {
+   "start": 192.16,
+   "end": 194.52,
+   "text": "With Photoshop, although it was 4x,"
+  },
+  {
+   "start": 194.52,
+   "end": 196.2,
+   "text": "it's just very, very soft."
+  },
+  {
+   "start": 196.2,
+   "end": 197.96,
+   "text": "Now let's have some fun with some old photos."
+  },
+  {
+   "start": 197.96,
+   "end": 200.48,
+   "text": "As I told you, everything can be done inside of FreePik."
+  },
+  {
+   "start": 200.48,
+   "end": 201.56,
+   "text": "So here I have this photo."
+  },
+  {
+   "start": 201.56,
+   "end": 204.32,
+   "text": "Let's see how much we can restore it."
+  },
+  {
+   "start": 204.32,
+   "end": 206.92,
+   "text": "So let's upload it inside of FreePik."
+  },
+  {
+   "start": 206.92,
+   "end": 209.24,
+   "text": "I'm just gonna open the image generator"
+  },
+  {
+   "start": 209.24,
+   "end": 212.12,
+   "text": "inside of that, let's drag it and drop it right there."
+  },
+  {
+   "start": 212.12,
+   "end": 214.72,
+   "text": "For model, there are so many models available."
+  },
+  {
+   "start": 214.72,
+   "end": 217.92,
+   "text": "I'm just gonna go to possibly Google right there."
+  },
+  {
+   "start": 217.92,
+   "end": 219.2,
+   "text": "Nano Banana Pro."
+  },
+  {
+   "start": 219.2,
+   "end": 220.84,
+   "text": "Now FreePik is one of the few platforms"
+  },
+  {
+   "start": 220.84,
+   "end": 222.8,
+   "text": "that give you absolute flexibility."
+  },
+  {
+   "start": 222.8,
+   "end": 224.32,
+   "text": "I can just type something like,"
+  },
+  {
+   "start": 224.32,
+   "end": 226.28,
+   "text": "restore this old photo to look"
+  },
+  {
+   "start": 226.28,
+   "end": 227.96,
+   "text": "as if it was taken today"
+  },
+  {
+   "start": 227.96,
+   "end": 230.72,
+   "text": "with high resolution modern digital camera."
+  },
+  {
+   "start": 230.72,
+   "end": 233.36,
+   "text": "Now I have the option to choose the resolution."
+  },
+  {
+   "start": 233.36,
+   "end": 236.08,
+   "text": "1K, 2K, 4K, let's go for 4K."
+  },
+  {
+   "start": 236.08,
+   "end": 239.04,
+   "text": "Let's keep the aspect ratio auto and we can generate."
+  },
+  {
+   "start": 239.04,
+   "end": 240.48,
+   "text": "With Adobe Firefly,"
+  },
+  {
+   "start": 240.48,
+   "end": 242.64,
+   "text": "you can definitely choose Nano Banana Pro,"
+  },
+  {
+   "start": 242.64,
+   "end": 245.52,
+   "text": "but there is no option to choose the resolution."
+  },
+  {
+   "start": 245.52,
+   "end": 247.72,
+   "text": "And by default at the moment of recording this video,"
+  },
+  {
+   "start": 247.72,
+   "end": 249.24,
+   "text": "it only does 1K."
+  },
+  {
+   "start": 249.24,
+   "end": 251.6,
+   "text": "So let's go back to this, let's click on generate."
+  },
+  {
+   "start": 251.6,
+   "end": 253.72,
+   "text": "And if you're not shocked by this result,"
+  },
+  {
+   "start": 253.72,
+   "end": 255.44,
+   "text": "I honestly don't know what to say."
+  },
+  {
+   "start": 255.44,
+   "end": 258.12,
+   "text": "And you can upscale it even further directly from here."
+  },
+  {
+   "start": 258.12,
+   "end": 259.48,
+   "text": "Let's click on upscale."
+  },
+  {
+   "start": 259.48,
+   "end": 261.68,
+   "text": "And of course, we are going to go to precision."
+  },
+  {
+   "start": 261.68,
+   "end": 263.56,
+   "text": "Now when it comes to precision upscaling,"
+  },
+  {
+   "start": 263.56,
+   "end": 265.32,
+   "text": "inside of the precision tab,"
+  },
+  {
+   "start": 265.32,
+   "end": 267.84,
+   "text": "there are many models that are available."
+  },
+  {
+   "start": 267.84,
+   "end": 271.64,
+   "text": "Most of the time I use the sublime model."
+  },
+  {
+   "start": 271.64,
+   "end": 273.0,
+   "text": "There are other ones that you can try,"
+  },
+  {
+   "start": 273.0,
+   "end": 275.16,
+   "text": "but the sublime gives you a lot of flexibility"
+  },
+  {
+   "start": 275.16,
+   "end": 276.04,
+   "text": "while upscaling."
+  },
+  {
+   "start": 276.04,
+   "end": 278.4,
+   "text": "Once it is done, simply click on it."
+  },
+  {
+   "start": 278.4,
+   "end": 280.64,
+   "text": "Click on the download button right there."
+  },
+  {
+   "start": 280.64,
+   "end": 281.88,
+   "text": "And let's examine it."
+  },
+  {
+   "start": 281.88,
+   "end": 283.72,
+   "text": "PNG is fine, click on download."
+  },
+  {
+   "start": 283.72,
+   "end": 285.68,
+   "text": "PNG restores the absolute high quality"
+  },
+  {
+   "start": 285.68,
+   "end": 288.92,
+   "text": "and have a look, this is 113 MB."
+  },
+  {
+   "start": 288.92,
+   "end": 293.92,
+   "text": "So here is the before and here is the after."
+  },
+  {
+   "start": 294.0,
+   "end": 295.48,
+   "text": "I don't even know what to say."
+  },
+  {
+   "start": 295.48,
+   "end": 296.84,
+   "text": "Let's zoom in even further."
+  },
+  {
+   "start": 296.84,
+   "end": 299.36,
+   "text": "You can even continue to zoom in, that's insane."
+  },
+  {
+   "start": 299.36,
+   "end": 301.56,
+   "text": "You can use liquefy to slightly move the eyes"
+  },
+  {
+   "start": 301.56,
+   "end": 303.8,
+   "text": "a little bit to create an exact match."
+  },
+  {
+   "start": 303.8,
+   "end": 305.64,
+   "text": "But apart from that, have a look at the details"
+  },
+  {
+   "start": 305.64,
+   "end": 308.52,
+   "text": "in her dress, texture of the wood,"
+  },
+  {
+   "start": 308.52,
+   "end": 311.24,
+   "text": "texture of her clothes, before, after."
+  },
+  {
+   "start": 311.24,
+   "end": 313.4,
+   "text": "Now if you have a look at the entire image as a whole,"
+  },
+  {
+   "start": 313.4,
+   "end": 315.56,
+   "text": "you would realize that this was impossible"
+  },
+  {
+   "start": 315.56,
+   "end": 317.04,
+   "text": "just a few months ago."
+  },
+  {
+   "start": 317.04,
+   "end": 319.8,
+   "text": "Creating something like this would be a thing of dreams"
+  },
+  {
+   "start": 319.8,
+   "end": 324.8,
+   "text": "and especially an image that is coming from this to this."
+  },
+  {
+   "start": 326.08,
+   "end": 327.76,
+   "text": "I did one more example with another image"
+  },
+  {
+   "start": 327.76,
+   "end": 330.68,
+   "text": "with a lot of complexity and it boggled my mind."
+  },
+  {
+   "start": 330.68,
+   "end": 334.96,
+   "text": "Here is the before and here is the after."
+  },
+  {
+   "start": 334.96,
+   "end": 337.8,
+   "text": "Even if we zoom in and if we zoom in a lot,"
+  },
+  {
+   "start": 337.8,
+   "end": 339.44,
+   "text": "have a look at the face of the lady."
+  },
+  {
+   "start": 339.44,
+   "end": 342.16,
+   "text": "Here's the before, here's the after."
+  },
+  {
+   "start": 342.16,
+   "end": 344.92,
+   "text": "And you can zoom in further and further."
+  },
+  {
+   "start": 344.92,
+   "end": 347.56,
+   "text": "Look at the resolution of this photo."
+  },
+  {
+   "start": 347.56,
+   "end": 350.12,
+   "text": "Now we saw that it can do great things with faces."
+  },
+  {
+   "start": 350.12,
+   "end": 351.48,
+   "text": "But what about other areas?"
+  },
+  {
+   "start": 351.48,
+   "end": 355.16,
+   "text": "Many upscalers enhance the face and leave out the rest"
+  },
+  {
+   "start": 355.16,
+   "end": 357.6,
+   "text": "like the jewelry or the details in the clothes."
+  },
+  {
+   "start": 357.6,
+   "end": 359.58,
+   "text": "So here we have a low resolution photo,"
+  },
+  {
+   "start": 359.58,
+   "end": 361.48,
+   "text": "only 1200 pixels wide."
+  },
+  {
+   "start": 361.48,
+   "end": 362.36,
+   "text": "If you were to zoom in,"
+  },
+  {
+   "start": 362.36,
+   "end": 365.44,
+   "text": "you would notice that this is quite pixelated."
+  },
+  {
+   "start": 365.44,
+   "end": 367.8,
+   "text": "What's even concerning is that if you have a look"
+  },
+  {
+   "start": 367.8,
+   "end": 370.72,
+   "text": "at the jewelry, there is no detail left."
+  },
+  {
+   "start": 370.72,
+   "end": 373.16,
+   "text": "Similarly right here, no detail there."
+  },
+  {
+   "start": 373.16,
+   "end": 376.76,
+   "text": "Have a look at her outfit, no detail right there."
+  },
+  {
+   "start": 376.76,
+   "end": 378.32,
+   "text": "Can Magnific recover it?"
+  },
+  {
+   "start": 378.32,
+   "end": 379.16,
+   "text": "Let's see."
+  },
+  {
+   "start": 379.16,
+   "end": 381.92,
+   "text": "Now you can choose to upscale it by 4x or 8x."
+  },
+  {
+   "start": 381.92,
+   "end": 382.76,
+   "text": "That's up to you."
+  },
+  {
+   "start": 382.76,
+   "end": 384.64,
+   "text": "For this one, let's keep it 4x."
+  },
+  {
+   "start": 384.64,
+   "end": 386.08,
+   "text": "So I have opened it up in Photoshop"
+  },
+  {
+   "start": 386.08,
+   "end": 388.36,
+   "text": "and we're gonna compare the before and after."
+  },
+  {
+   "start": 388.36,
+   "end": 392.2,
+   "text": "So here is the before and here is the after."
+  },
+  {
+   "start": 392.2,
+   "end": 394.24,
+   "text": "As you can tell, for the face,"
+  },
+  {
+   "start": 394.24,
+   "end": 395.72,
+   "text": "it did a pretty amazing job."
+  },
+  {
+   "start": 395.72,
+   "end": 397.28,
+   "text": "But how does it stand in comparison"
+  },
+  {
+   "start": 397.28,
+   "end": 399.76,
+   "text": "to Photoshop's Firefly and Topaz?"
+  },
+  {
+   "start": 399.76,
+   "end": 400.6,
+   "text": "Let's see."
+  },
+  {
+   "start": 400.6,
+   "end": 401.72,
+   "text": "Three of them side by side."
+  },
+  {
+   "start": 401.72,
+   "end": 404.48,
+   "text": "As you can see, Magnific is miles apart."
+  },
+  {
+   "start": 404.48,
+   "end": 406.32,
+   "text": "Look at the skin texture with Magnific."
+  },
+  {
+   "start": 406.32,
+   "end": 409.04,
+   "text": "Nobody has been able to replicate that."
+  },
+  {
+   "start": 409.04,
+   "end": 411.16,
+   "text": "If you were to scroll down on the jewelry,"
+  },
+  {
+   "start": 411.16,
+   "end": 413.18,
+   "text": "there is no detail here on the Topaz."
+  },
+  {
+   "start": 413.18,
+   "end": 415.88,
+   "text": "And when it comes to the hair and the strands,"
+  },
+  {
+   "start": 415.88,
+   "end": 418.24,
+   "text": "Magnific created every single strand."
+  },
+  {
+   "start": 418.24,
+   "end": 421.08,
+   "text": "This is where Topaz absolutely messes up."
+  },
+  {
+   "start": 421.08,
+   "end": 424.04,
+   "text": "Firefly is one is more natural than Topaz,"
+  },
+  {
+   "start": 424.04,
+   "end": 426.2,
+   "text": "but not as good as Magnific."
+  },
+  {
+   "start": 426.2,
+   "end": 429.88,
+   "text": "Again, it messed up the jewelry entirely here in Topaz."
+  },
+  {
+   "start": 429.88,
+   "end": 433.68,
+   "text": "The details are crazy amazing with Magnific."
+  },
+  {
+   "start": 433.68,
+   "end": 435.0,
+   "text": "This one is soft."
+  },
+  {
+   "start": 435.0,
+   "end": 436.2,
+   "text": "If you have a look at the outfit"
+  },
+  {
+   "start": 436.2,
+   "end": 437.68,
+   "text": "and all of these details,"
+  },
+  {
+   "start": 437.68,
+   "end": 440.12,
+   "text": "Topaz just messes it up."
+  },
+  {
+   "start": 440.12,
+   "end": 441.4,
+   "text": "Look at the details here."
+  },
+  {
+   "start": 441.4,
+   "end": 444.08,
+   "text": "Even Adobe Firefly has done a pretty amazing job,"
+  },
+  {
+   "start": 444.08,
+   "end": 445.08,
+   "text": "even though it's soft."
+  },
+  {
+   "start": 445.08,
+   "end": 446.64,
+   "text": "Have a look at the fabric details here."
+  },
+  {
+   "start": 446.64,
+   "end": 448.32,
+   "text": "This is insanely bad."
+  },
+  {
+   "start": 448.32,
+   "end": 449.68,
+   "text": "This is much better."
+  },
+  {
+   "start": 449.68,
+   "end": 451.6,
+   "text": "Let's take a look right there."
+  },
+  {
+   "start": 451.6,
+   "end": 454.52,
+   "text": "This is an alien planet jewelry with Magnific."
+  },
+  {
+   "start": 454.52,
+   "end": 457.16,
+   "text": "It even created all the single beads."
+  },
+  {
+   "start": 457.16,
+   "end": 459.12,
+   "text": "Even Adobe Firefly did that."
+  },
+  {
+   "start": 459.12,
+   "end": 460.84,
+   "text": "This is, I don't know what they're doing."
+  },
+  {
+   "start": 460.84,
+   "end": 462.72,
+   "text": "Water droplets all throughout,"
+  },
+  {
+   "start": 462.72,
+   "end": 466.88,
+   "text": "no matter where you look, Magnific is just miles better."
+  },
+  {
+   "start": 466.88,
+   "end": 469.52,
+   "text": "Adobe Firefly in this case is second,"
+  },
+  {
+   "start": 469.52,
+   "end": 472.6,
+   "text": "and Topaz has just turned it into trash."
+  },
+  {
+   "start": 472.6,
+   "end": 474.88,
+   "text": "Now we have talked about a lot of details here."
+  },
+  {
+   "start": 474.88,
+   "end": 477.72,
+   "text": "Can we introduce more details in an existing image"
+  },
+  {
+   "start": 477.72,
+   "end": 479.64,
+   "text": "that probably doesn't need upscaling,"
+  },
+  {
+   "start": 479.64,
+   "end": 482.76,
+   "text": "but may need more details, especially the skin areas?"
+  },
+  {
+   "start": 482.76,
+   "end": 483.68,
+   "text": "So here we have an image."
+  },
+  {
+   "start": 483.68,
+   "end": 484.84,
+   "text": "It's quite high resolution,"
+  },
+  {
+   "start": 484.84,
+   "end": 486.88,
+   "text": "but it looks overly retouched."
+  },
+  {
+   "start": 486.88,
+   "end": 489.08,
+   "text": "Let us drag and drop it inside of the image editor"
+  },
+  {
+   "start": 489.72,
+   "end": 492.36,
+   "text": "Now here's the upscale setting that we already talked about."
+  },
+  {
+   "start": 492.36,
+   "end": 495.68,
+   "text": "Right beside it, there's this new thing called Skin Enhancer."
+  },
+  {
+   "start": 495.68,
+   "end": 497.76,
+   "text": "Now you can choose flexible skin enhancing."
+  },
+  {
+   "start": 497.76,
+   "end": 499.08,
+   "text": "I'm just gonna choose faithful"
+  },
+  {
+   "start": 499.08,
+   "end": 501.24,
+   "text": "so that the original stuff is restored"
+  },
+  {
+   "start": 501.24,
+   "end": 502.76,
+   "text": "and the default settings are fine."
+  },
+  {
+   "start": 502.76,
+   "end": 503.96,
+   "text": "Let's click on enhance."
+  },
+  {
+   "start": 503.96,
+   "end": 504.8,
+   "text": "Do keep in mind though,"
+  },
+  {
+   "start": 504.8,
+   "end": 506.52,
+   "text": "every time you apply any of these effects,"
+  },
+  {
+   "start": 506.52,
+   "end": 508.8,
+   "text": "it just does consume certain credits."
+  },
+  {
+   "start": 508.8,
+   "end": 510.68,
+   "text": "I wish we had an unlimited plan for everything"
+  },
+  {
+   "start": 510.68,
+   "end": 512.32,
+   "text": "or wish there was an offline version of this,"
+  },
+  {
+   "start": 512.32,
+   "end": 513.68,
+   "text": "but unfortunately we don't."
+  },
+  {
+   "start": 513.68,
+   "end": 515.8,
+   "text": "Anyway, what in the world?"
+  },
+  {
+   "start": 515.8,
+   "end": 517.68,
+   "text": "It did flip the image."
+  },
+  {
+   "start": 517.68,
+   "end": 518.52,
+   "text": "This is weird."
+  },
+  {
+   "start": 518.56,
+   "end": 520.64,
+   "text": "Let us download it and flip it back in Photoshop."
+  },
+  {
+   "start": 520.64,
+   "end": 523.64,
+   "text": "We definitely do have more detail, more detail in the skin,"
+  },
+  {
+   "start": 523.64,
+   "end": 526.84,
+   "text": "but it introduces some kind of patch line."
+  },
+  {
+   "start": 526.84,
+   "end": 528.72,
+   "text": "It's hard to explain, but it's there."
+  },
+  {
+   "start": 528.72,
+   "end": 531.0,
+   "text": "Before, after."
+  },
+  {
+   "start": 531.0,
+   "end": 532.44,
+   "text": "Again, it's way more detailed,"
+  },
+  {
+   "start": 532.44,
+   "end": 535.24,
+   "text": "helps you prevent plastic skin in AI generated photos,"
+  },
+  {
+   "start": 535.24,
+   "end": 538.72,
+   "text": "but in real photos, I'm not so sure,"
+  },
+  {
+   "start": 538.72,
+   "end": 540.16,
+   "text": "especially because of these patches,"
+  },
+  {
+   "start": 540.16,
+   "end": 542.36,
+   "text": "but I'm sure with time they're gonna make it better."
+  },
+  {
+   "start": 542.36,
+   "end": 544.4,
+   "text": "One thing we have not covered yet are products"
+  },
+  {
+   "start": 544.4,
+   "end": 546.16,
+   "text": "and for product photography solely,"
+  },
+  {
+   "start": 546.2,
+   "end": 548.68,
+   "text": "I wouldn't recommend any of the AI upscalers."
+  },
+  {
+   "start": 548.68,
+   "end": 549.52,
+   "text": "Here's why."
+  },
+  {
+   "start": 549.52,
+   "end": 552.16,
+   "text": "So this is a picture of a watch that I took with my phone."
+  },
+  {
+   "start": 552.16,
+   "end": 555.68,
+   "text": "And as you can see, even though this is just 12 megapixels,"
+  },
+  {
+   "start": 555.68,
+   "end": 557.6,
+   "text": "this is very detailed."
+  },
+  {
+   "start": 557.6,
+   "end": 560.52,
+   "text": "If I went upscale it to get the absolute maximum quality,"
+  },
+  {
+   "start": 560.52,
+   "end": 561.76,
+   "text": "this is what would happen."
+  },
+  {
+   "start": 561.76,
+   "end": 564.08,
+   "text": "So here in Magnific, it's already 12 megapixels,"
+  },
+  {
+   "start": 564.08,
+   "end": 567.16,
+   "text": "so we cannot go 4X, but we can go 2X."
+  },
+  {
+   "start": 567.16,
+   "end": 569.12,
+   "text": "Let us upscale it and let's see what happens."
+  },
+  {
+   "start": 569.12,
+   "end": 570.96,
+   "text": "Now, even though the upscaling might seem great,"
+  },
+  {
+   "start": 570.96,
+   "end": 573.04,
+   "text": "and it may seem to have more detail,"
+  },
+  {
+   "start": 573.04,
+   "end": 574.24,
+   "text": "there is a big flaw."
+  },
+  {
+   "start": 574.28,
+   "end": 576.68,
+   "text": "It deviates the product slightly."
+  },
+  {
+   "start": 576.68,
+   "end": 580.08,
+   "text": "For example, this here in the original one says,"
+  },
+  {
+   "start": 580.08,
+   "end": 582.96,
+   "text": "made in Japan, it's slightly covered."
+  },
+  {
+   "start": 582.96,
+   "end": 585.04,
+   "text": "And when we process it for upscaling,"
+  },
+  {
+   "start": 585.04,
+   "end": 589.44,
+   "text": "it makes it made in Japan and N is gone,"
+  },
+  {
+   "start": 589.44,
+   "end": 590.88,
+   "text": "E is gone right there,"
+  },
+  {
+   "start": 590.88,
+   "end": 592.6,
+   "text": "and you don't wanna show pictures of a product"
+  },
+  {
+   "start": 592.6,
+   "end": 594.56,
+   "text": "that is not the actual one."
+  },
+  {
+   "start": 594.56,
+   "end": 597.84,
+   "text": "Similarly with certain textures, have a look right there."
+  },
+  {
+   "start": 597.84,
+   "end": 601.52,
+   "text": "Here's the original one, here's how Citizen is written."
+  },
+  {
+   "start": 601.52,
+   "end": 604.96,
+   "text": "In the upscaled one, it adds an emboss effect,"
+  },
+  {
+   "start": 604.96,
+   "end": 606.48,
+   "text": "which is not there in reality."
+  },
+  {
+   "start": 606.48,
+   "end": 608.64,
+   "text": "And even if you were to look at the honeycomb design"
+  },
+  {
+   "start": 608.64,
+   "end": 612.64,
+   "text": "in the original one, that is how it should be."
+  },
+  {
+   "start": 612.64,
+   "end": 615.72,
+   "text": "In the after, it introduces some additional shapes"
+  },
+  {
+   "start": 615.72,
+   "end": 618.12,
+   "text": "and lines which were not there."
+  },
+  {
+   "start": 618.12,
+   "end": 619.28,
+   "text": "So for product photography,"
+  },
+  {
+   "start": 619.28,
+   "end": 621.16,
+   "text": "I just recommend get a high resolution camera"
+  },
+  {
+   "start": 621.16,
+   "end": 622.32,
+   "text": "and capture directly."
+  },
+  {
+   "start": 622.32,
+   "end": 624.28,
+   "text": "You don't want any of your product photos"
+  },
+  {
+   "start": 624.28,
+   "end": 626.6,
+   "text": "to deviate and mislead the customer."
+  },
+  {
+   "start": 626.6,
+   "end": 628.2,
+   "text": "Now, when it comes to landscapes,"
+  },
+  {
+   "start": 628.2,
+   "end": 631.04,
+   "text": "you can apply it, but not all the time."
+  },
+  {
+   "start": 631.04,
+   "end": 633.6,
+   "text": "When there are mountains and rivers and water"
+  },
+  {
+   "start": 633.6,
+   "end": 636.12,
+   "text": "and foliage trees and stuff,"
+  },
+  {
+   "start": 636.12,
+   "end": 639.16,
+   "text": "where details can slightly change, that's fine."
+  },
+  {
+   "start": 639.16,
+   "end": 640.0,
+   "text": "This is safe."
+  },
+  {
+   "start": 640.0,
+   "end": 642.2,
+   "text": "Let me share with you an example with this image."
+  },
+  {
+   "start": 642.2,
+   "end": 644.64,
+   "text": "Let's have a look at the before and after in Photoshop."
+  },
+  {
+   "start": 644.64,
+   "end": 646.12,
+   "text": "So if you were to zoom into the mountains,"
+  },
+  {
+   "start": 646.12,
+   "end": 650.24,
+   "text": "it's all jaggery, pixely, and here is the after."
+  },
+  {
+   "start": 650.24,
+   "end": 652.8,
+   "text": "That's crazy good, no matter how much you zoom in,"
+  },
+  {
+   "start": 652.8,
+   "end": 655.0,
+   "text": "before, after."
+  },
+  {
+   "start": 655.0,
+   "end": 656.8,
+   "text": "Let's look at all of these areas."
+  },
+  {
+   "start": 656.8,
+   "end": 658.72,
+   "text": "Everything is just so detailed."
+  },
+  {
+   "start": 658.72,
+   "end": 660.72,
+   "text": "Before, no detail there."
+  },
+  {
+   "start": 660.72,
+   "end": 662.24,
+   "text": "It's all messed up."
+  },
+  {
+   "start": 662.24,
+   "end": 664.36,
+   "text": "And here is the after."
+  },
+  {
+   "start": 664.36,
+   "end": 666.96,
+   "text": "Now let's have a look at the lady right there."
+  },
+  {
+   "start": 667.92,
+   "end": 671.08,
+   "text": "Beautifully upscaled before, nothing there."
+  },
+  {
+   "start": 671.08,
+   "end": 672.6,
+   "text": "And if you have a look at the after,"
+  },
+  {
+   "start": 672.6,
+   "end": 676.4,
+   "text": "all the hair, everything is just wonderfully done."
+  },
+  {
+   "start": 676.4,
+   "end": 677.68,
+   "text": "Jeans, clothes."
+  },
+  {
+   "start": 677.68,
+   "end": 681.4,
+   "text": "Now parts of the grass, I would say it could have done better."
+  },
+  {
+   "start": 681.4,
+   "end": 683.6,
+   "text": "This is where it's slightly smudged."
+  },
+  {
+   "start": 683.6,
+   "end": 687.04,
+   "text": "But overall, if you look at the entire image before,"
+  },
+  {
+   "start": 687.04,
+   "end": 690.0,
+   "text": "very less detail after."
+  },
+  {
+   "start": 690.0,
+   "end": 691.84,
+   "text": "All that detail back in place."
+  },
+  {
+   "start": 691.84,
+   "end": 693.32,
+   "text": "Now there's one critique here."
+  },
+  {
+   "start": 693.32,
+   "end": 695.2,
+   "text": "Whenever it comes to plain areas,"
+  },
+  {
+   "start": 695.2,
+   "end": 696.8,
+   "text": "or areas with gradients,"
+  },
+  {
+   "start": 696.8,
+   "end": 700.36,
+   "text": "Magnificates, artifacts, some kind of blotchy banding."
+  },
+  {
+   "start": 700.36,
+   "end": 701.24,
+   "text": "Have a look right there."
+  },
+  {
+   "start": 701.24,
+   "end": 703.24,
+   "text": "You see all of these blotches?"
+  },
+  {
+   "start": 703.24,
+   "end": 704.88,
+   "text": "In these areas, if you were to zoom out,"
+  },
+  {
+   "start": 704.88,
+   "end": 706.12,
+   "text": "this would be clearer."
+  },
+  {
+   "start": 706.12,
+   "end": 707.92,
+   "text": "You see all these blotches?"
+  },
+  {
+   "start": 707.92,
+   "end": 710.96,
+   "text": "I hope, I really hope they make it better with an update."
+  },
+  {
+   "start": 710.96,
+   "end": 713.96,
+   "text": "Now one of the areas where I would not recommend upscaling"
+  },
+  {
+   "start": 713.96,
+   "end": 716.0,
+   "text": "is when you have artistic details."
+  },
+  {
+   "start": 716.0,
+   "end": 717.84,
+   "text": "So this is a photo that I took in Paris,"
+  },
+  {
+   "start": 717.84,
+   "end": 719.88,
+   "text": "just a snapshot from my phone."
+  },
+  {
+   "start": 719.88,
+   "end": 722.24,
+   "text": "And as you can see, there are these artistic details"
+  },
+  {
+   "start": 722.24,
+   "end": 723.84,
+   "text": "all over this building."
+  },
+  {
+   "start": 723.84,
+   "end": 725.4,
+   "text": "And if you were to upscale it,"
+  },
+  {
+   "start": 725.4,
+   "end": 726.8,
+   "text": "wait for the magic to happen."
+  },
+  {
+   "start": 726.8,
+   "end": 728.92,
+   "text": "Let's zoom in on to the results."
+  },
+  {
+   "start": 728.92,
+   "end": 730.84,
+   "text": "So here's the before."
+  },
+  {
+   "start": 730.84,
+   "end": 731.76,
+   "text": "Here's the after."
+  },
+  {
+   "start": 731.76,
+   "end": 732.96,
+   "text": "After looks more detailed."
+  },
+  {
+   "start": 732.96,
+   "end": 735.12,
+   "text": "But if you were to zoom into the statues right there,"
+  },
+  {
+   "start": 735.12,
+   "end": 736.44,
+   "text": "what is this?"
+  },
+  {
+   "start": 736.44,
+   "end": 739.76,
+   "text": "Before, artistic, nice, everything is beautiful."
+  },
+  {
+   "start": 739.76,
+   "end": 742.76,
+   "text": "After, it tried to invent all the monster details"
+  },
+  {
+   "start": 742.76,
+   "end": 743.88,
+   "text": "right in there."
+  },
+  {
+   "start": 743.88,
+   "end": 745.84,
+   "text": "Similarly, have a look at the design of the clock."
+  },
+  {
+   "start": 745.84,
+   "end": 749.04,
+   "text": "Before, so beautiful, so elegant."
+  },
+  {
+   "start": 749.08,
+   "end": 751.4,
+   "text": "After, it tried to merge a lot of things"
+  },
+  {
+   "start": 751.4,
+   "end": 753.08,
+   "text": "just to create detail."
+  },
+  {
+   "start": 753.08,
+   "end": 755.04,
+   "text": "Before, see the artistic detail?"
+  },
+  {
+   "start": 755.04,
+   "end": 757.48,
+   "text": "Even in low rest, this looks like a masterpiece."
+  },
+  {
+   "start": 757.48,
+   "end": 759.72,
+   "text": "And it is after."
+  },
+  {
+   "start": 759.72,
+   "end": 761.28,
+   "text": "What in the alien is this?"
+  },
+  {
+   "start": 761.28,
+   "end": 763.24,
+   "text": "Now so far, you and I did a lot of work"
+  },
+  {
+   "start": 763.24,
+   "end": 765.44,
+   "text": "with the upscalers and the comparisons."
+  },
+  {
+   "start": 765.44,
+   "end": 766.84,
+   "text": "Time for something fun."
+  },
+  {
+   "start": 766.84,
+   "end": 767.96,
+   "text": "Let's have a look at this photo."
+  },
+  {
+   "start": 767.96,
+   "end": 771.52,
+   "text": "The focus is entirely lost, maybe on purpose."
+  },
+  {
+   "start": 771.52,
+   "end": 773.2,
+   "text": "Just as a creative project,"
+  },
+  {
+   "start": 773.2,
+   "end": 775.24,
+   "text": "can we bring it back to the girl?"
+  },
+  {
+   "start": 775.24,
+   "end": 777.32,
+   "text": "With all the tools we have inside a free pick,"
+  },
+  {
+   "start": 777.32,
+   "end": 778.16,
+   "text": "let us try it."
+  },
+  {
+   "start": 778.2,
+   "end": 781.28,
+   "text": "So we are just gonna go to Image Generator right there."
+  },
+  {
+   "start": 781.28,
+   "end": 784.6,
+   "text": "Inside of that, let's drag and drop this photo right here."
+  },
+  {
+   "start": 784.6,
+   "end": 786.6,
+   "text": "And upload this as a reference."
+  },
+  {
+   "start": 786.6,
+   "end": 788.04,
+   "text": "Right now it is not letting me upload"
+  },
+  {
+   "start": 788.04,
+   "end": 789.8,
+   "text": "because this is not the right model."
+  },
+  {
+   "start": 789.8,
+   "end": 791.6,
+   "text": "Let's try a new model."
+  },
+  {
+   "start": 791.6,
+   "end": 793.28,
+   "text": "Let's try Sea Dream."
+  },
+  {
+   "start": 793.28,
+   "end": 796.12,
+   "text": "And 4.5 is the latest one, why not try it?"
+  },
+  {
+   "start": 796.12,
+   "end": 797.16,
+   "text": "It's a preview."
+  },
+  {
+   "start": 797.16,
+   "end": 798.96,
+   "text": "So let's go to our finder again."
+  },
+  {
+   "start": 798.96,
+   "end": 800.96,
+   "text": "Upload this photo and this should work."
+  },
+  {
+   "start": 800.96,
+   "end": 804.44,
+   "text": "And let's type in, restore and sharpen this blurry person"
+  },
+  {
+   "start": 804.44,
+   "end": 805.4,
+   "text": "and add details."
+  },
+  {
+   "start": 805.4,
+   "end": 808.0,
+   "text": "Now let's pick the resolution 4K is fine."
+  },
+  {
+   "start": 808.0,
+   "end": 811.0,
+   "text": "Aspect ratio, this was about 2s to 3."
+  },
+  {
+   "start": 811.0,
+   "end": 812.2,
+   "text": "And the great part about this model"
+  },
+  {
+   "start": 812.2,
+   "end": 814.84,
+   "text": "is that you can generate four images at once."
+  },
+  {
+   "start": 814.84,
+   "end": 815.68,
+   "text": "Click on generate."
+  },
+  {
+   "start": 815.68,
+   "end": 817.12,
+   "text": "And for certain plans for right now,"
+  },
+  {
+   "start": 817.12,
+   "end": 819.4,
+   "text": "this is unlimited as you can see."
+  },
+  {
+   "start": 819.4,
+   "end": 820.48,
+   "text": "Let's have a look at the results."
+  },
+  {
+   "start": 820.48,
+   "end": 823.44,
+   "text": "These are pretty amazing."
+  },
+  {
+   "start": 823.44,
+   "end": 825.68,
+   "text": "Even this one, that's pretty good."
+  },
+  {
+   "start": 825.68,
+   "end": 828.64,
+   "text": "Now this is already crazy, but I was wondering,"
+  },
+  {
+   "start": 828.64,
+   "end": 830.76,
+   "text": "what if we could upscale it further?"
+  },
+  {
+   "start": 830.76,
+   "end": 832.32,
+   "text": "Moment of truth, I did a few tries"
+  },
+  {
+   "start": 832.32,
+   "end": 834.36,
+   "text": "and this is the result we can get."
+  },
+  {
+   "start": 834.36,
+   "end": 837.36,
+   "text": "This is where the focus was entirely missed."
+  },
+  {
+   "start": 837.4,
+   "end": 840.12,
+   "text": "This is what we can restore from it."
+  },
+  {
+   "start": 840.12,
+   "end": 844.88,
+   "text": "Again, here is the before and here is the after."
+  },
+  {
+   "start": 844.88,
+   "end": 847.96,
+   "text": "If that was not enough, we upscaled it"
+  },
+  {
+   "start": 847.96,
+   "end": 850.64,
+   "text": "and now this is the result."
+  },
+  {
+   "start": 850.64,
+   "end": 852.04,
+   "text": "Doesn't seem like much."
+  },
+  {
+   "start": 852.04,
+   "end": 854.16,
+   "text": "Let's zoom in further."
+  },
+  {
+   "start": 854.16,
+   "end": 856.6,
+   "text": "What in the world is this?"
+  },
+  {
+   "start": 856.6,
+   "end": 859.12,
+   "text": "Here's the before, after restoration."
+  },
+  {
+   "start": 859.12,
+   "end": 861.72,
+   "text": "And as you can see, there are some pattern in there"
+  },
+  {
+   "start": 861.72,
+   "end": 864.12,
+   "text": "that can be created with any form of generation."
+  },
+  {
+   "start": 864.12,
+   "end": 867.24,
+   "text": "And again, here is the after."
+  },
+  {
+   "start": 867.24,
+   "end": 871.16,
+   "text": "All that skin texture, every pore just shows up."
+  },
+  {
+   "start": 871.16,
+   "end": 872.76,
+   "text": "Look at the light on the eyelid."
+  },
+  {
+   "start": 872.76,
+   "end": 874.8,
+   "text": "This is insane detail."
+  },
+  {
+   "start": 874.8,
+   "end": 879.8,
+   "text": "Now keep in mind, we came from here to here."
+  },
+  {
+   "start": 880.16,
+   "end": 881.72,
+   "text": "With all that being said, as for the pros,"
+  },
+  {
+   "start": 881.72,
+   "end": 883.64,
+   "text": "Magnificia is definitely magic."
+  },
+  {
+   "start": 883.64,
+   "end": 885.84,
+   "text": "And combined that with all the tools inside of FreePik,"
+  },
+  {
+   "start": 885.84,
+   "end": 888.44,
+   "text": "it becomes an absolute workhorse."
+  },
+  {
+   "start": 888.44,
+   "end": 890.08,
+   "text": "I highly recommend that you check out FreePik."
+  },
+  {
+   "start": 890.08,
+   "end": 892.0,
+   "text": "I'll leave a link in the description or somewhere"
+  },
+  {
+   "start": 892.0,
+   "end": 894.04,
+   "text": "so that you can get the highest discount possible,"
+  },
+  {
+   "start": 894.04,
+   "end": 895.68,
+   "text": "but it will be there."
+  },
+  {
+   "start": 895.68,
+   "end": 896.52,
+   "text": "Just check it out."
+  },
+  {
+   "start": 896.52,
+   "end": 898.44,
+   "text": "Whether we compare the details in the face"
+  },
+  {
+   "start": 898.44,
+   "end": 901.04,
+   "text": "or the outfit, wildlife or anything,"
+  },
+  {
+   "start": 901.04,
+   "end": 903.56,
+   "text": "in each and every example, Magnific just stood out."
+  },
+  {
+   "start": 903.56,
+   "end": 906.04,
+   "text": "Although it has a resolution limitation around 10K,"
+  },
+  {
+   "start": 906.04,
+   "end": 908.56,
+   "text": "it is much higher than most of the competition."
+  },
+  {
+   "start": 908.56,
+   "end": 910.76,
+   "text": "Now, as for the cons, this works in the cloud"
+  },
+  {
+   "start": 910.76,
+   "end": 912.84,
+   "text": "and many do, but the bigger problem is"
+  },
+  {
+   "start": 912.84,
+   "end": 915.28,
+   "text": "it consumes a lot of credits."
+  },
+  {
+   "start": 915.28,
+   "end": 916.8,
+   "text": "Depending upon your resolution,"
+  },
+  {
+   "start": 916.8,
+   "end": 919.6,
+   "text": "the amount of credits it is consuming may change."
+  },
+  {
+   "start": 919.6,
+   "end": 921.2,
+   "text": "So there's only a limited amount of time"
+  },
+  {
+   "start": 921.2,
+   "end": 922.76,
+   "text": "you can use it as per your plan."
+  },
+  {
+   "start": 922.76,
+   "end": 923.76,
+   "text": "And if you want to use it more,"
+  },
+  {
+   "start": 923.76,
+   "end": 925.04,
+   "text": "you would have to buy more credits."
+  },
+  {
+   "start": 925.04,
+   "end": 927.92,
+   "text": "Unfortunately, that's where the world is going at the moment."
+  },
+  {
+   "start": 927.92,
+   "end": 929.44,
+   "text": "As far as the technicalities go,"
+  },
+  {
+   "start": 929.44,
+   "end": 932.04,
+   "text": "I really hope they improve upon those patchy artifacts,"
+  },
+  {
+   "start": 932.04,
+   "end": 935.72,
+   "text": "especially on blurred, plain or gradient areas."
+  },
+  {
+   "start": 935.72,
+   "end": 938.12,
+   "text": "I only wish there was an offline or unlimited version,"
+  },
+  {
+   "start": 938.12,
+   "end": 939.84,
+   "text": "but that's wishful thinking."
+  },
+  {
+   "start": 939.84,
+   "end": 941.72,
+   "text": "Apart from that, I wish them the best"
+  },
+  {
+   "start": 941.72,
+   "end": 943.12,
+   "text": "and you don't have to take my word for it."
+  },
+  {
+   "start": 943.12,
+   "end": 946.48,
+   "text": "I highly recommend that you try Magnific on your photos"
+  },
+  {
+   "start": 946.48,
+   "end": 947.56,
+   "text": "and see how they work."
+  },
+  {
+   "start": 947.56,
+   "end": 949.32,
+   "text": "I hope you enjoyed this video and if you did,"
+  },
+  {
+   "start": 949.32,
+   "end": 950.16,
+   "text": "make sure to give us a like"
+  },
+  {
+   "start": 950.16,
+   "end": 951.56,
+   "text": "and also don't forget to subscribe"
+  },
+  {
+   "start": 951.56,
+   "end": 952.72,
+   "text": "and not just subscribe."
+  },
+  {
+   "start": 952.72,
+   "end": 953.92,
+   "text": "Bring the bell so that you, my friend,"
+  },
+  {
+   "start": 953.92,
+   "end": 956.32,
+   "text": "don't miss any other future tips, tricks or tutorials."
+  },
+  {
+   "start": 956.32,
+   "end": 957.28,
+   "text": "Thank you so much for watching."
+  },
+  {
+   "start": 957.28,
+   "end": 958.12,
+   "text": "I'll see you in my next one."
+  },
+  {
+   "start": 958.12,
+   "end": 961.12,
+   "text": "Till then, stay tuned and make sure that you keep creating."
+  },
+  {
+   "start": 961.12,
+   "end": 964.48,
+   "text": "I've been to the top of Mount Everest."
+  },
+  {
+   "start": 964.48,
+   "end": 967.92,
+   "text": "I've sailed the seven seas."
+  },
+  {
+   "start": 967.92,
+   "end": 971.24,
+   "text": "I've shared the stage with all the best."
+  },
+  {
+   "start": 971.24,
+   "end": 973.72,
+   "text": "Lot of good it did for me."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:57:02.475445+00:00",
+ "seconds": 44.1
+}

@@ -1,0 +1,959 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:02.720 --> 00:00:06.080
+If you’ve ever wanted to have your&nbsp;
+art exist outside your screen,&nbsp;&nbsp;
+
+00:00:06.080 --> 00:00:09.760
+this tutorial will help you achieve&nbsp;
+that by going through some basics,&nbsp;&nbsp;
+
+00:00:09.760 --> 00:00:15.920
+as well as more advanced techniques of exporting&nbsp;
+your files for print in Clip Studio Paint!
+
+00:00:16.800 --> 00:00:19.440
+Setting up Image Dimensions &amp; Resolution
+
+00:00:21.920 --> 00:00:26.240
+The most basic things you want to keep&nbsp;
+in mind when preparing a file for print&nbsp;&nbsp;
+
+00:00:26.240 --> 00:00:29.840
+are the image dimension &amp; resolution values.
+
+00:00:30.640 --> 00:00:35.520
+When you create a new file in Clip Studio&nbsp;
+Paint, you are met with this dialogue window:
+
+00:00:37.360 --> 00:00:42.320
+Since we intend to print things, let’s switch&nbsp;
+over to the third button in the top row.&nbsp;&nbsp;
+
+00:00:42.320 --> 00:00:45.680
+This option is called “show all Comic settings”,&nbsp;&nbsp;
+
+00:00:45.680 --> 00:00:49.200
+but even if you just want to make&nbsp;
+an illustration rather than a comic,&nbsp;&nbsp;
+
+00:00:49.200 --> 00:00:54.320
+the more advanced settings that are available&nbsp;
+here will be helpful to optimize files for print!
+
+00:00:54.880 --> 00:00:56.720
+Let’s go over all these options.
+
+00:00:57.760 --> 00:01:02.800
+First off, the “Unit” (1) option in the top&nbsp;
+right corner. It makes sense to now either&nbsp;&nbsp;
+
+00:01:02.800 --> 00:01:08.480
+select the cm (centimeter), mm (millimeter) or&nbsp;
+in (inch) option. When preparing files for print,&nbsp;&nbsp;
+
+00:01:08.480 --> 00:01:11.840
+pixels or points aren’t going to be super helpful.
+
+00:01:13.360 --> 00:01:18.560
+In the “Canvas” section we can decide Canvas&nbsp;
+Width and Height (2), but these options are&nbsp;&nbsp;
+
+00:01:18.560 --> 00:01:25.840
+okay to ignore for now, as the more detailed&nbsp;
+settings below will actually decide them for us!
+
+00:01:26.400 --> 00:01:30.880
+The one thing we need to pay attention to is&nbsp;
+the “Resolution” option (3). If you want to&nbsp;&nbsp;
+
+00:01:30.880 --> 00:01:35.840
+print something in good quality, you need to have&nbsp;
+this set to 300 (dpi / dots per inch) at least.&nbsp;&nbsp;
+
+00:01:36.480 --> 00:01:41.040
+600 will be even better depending on the&nbsp;
+printing quality and technique. If your&nbsp;&nbsp;
+
+00:01:41.040 --> 00:01:46.080
+computer can handle a large file size well, I&nbsp;
+would recommend going with the higher value.
+
+00:01:48.400 --> 00:01:53.120
+The “Basic expression color” option (4)&nbsp;
+determines whether your image will be in color,&nbsp;&nbsp;
+
+00:01:53.120 --> 00:01:58.160
+grayscale or monochrome. This tutorial&nbsp;
+will only focus on the color option.
+
+00:02:00.240 --> 00:02:05.680
+The “Binding (finish) size” option (5) is going&nbsp;
+to be the actual final size of your artwork.&nbsp;&nbsp;
+
+00:02:05.680 --> 00:02:09.702
+Clip Studio Paint already includes a few common&nbsp;
+image size templates (currently selected:&nbsp;&nbsp;
+
+00:02:09.702 --> 00:02:14.960
+“A4 size”), which you can pick from. These&nbsp;
+will change the Canvas Width and Height values.
+
+00:02:17.280 --> 00:02:20.400
+Below these values, you’ll&nbsp;
+find an important option called&nbsp;&nbsp;
+
+00:02:20.400 --> 00:02:23.840
+“Bleed width” (6). If you&nbsp;
+are unfamiliar with the term,&nbsp;&nbsp;
+
+00:02:23.840 --> 00:02:29.440
+it refers to extra artwork being printed&nbsp;
+beyond the final artwork size. Do we need this?
+
+00:02:31.360 --> 00:02:36.800
+Well, it depends. If you want to print something&nbsp;
+like an art print that’s going to be framed and&nbsp;&nbsp;
+
+00:02:36.800 --> 00:02:42.000
+will have a white border around it, you won’t&nbsp;
+need it. If you want to print something like&nbsp;&nbsp;
+
+00:02:42.000 --> 00:02:46.880
+a poster that’s gonna have your artwork&nbsp;
+take up the entire paper, you will need it.
+
+00:02:48.560 --> 00:02:53.040
+The reason for that is that you won’t be&nbsp;
+able to print on the very edge of a paper.&nbsp;&nbsp;
+
+00:02:53.040 --> 00:02:57.680
+So to have artwork extend all the way to the&nbsp;
+edge, you actually need to print something&nbsp;&nbsp;
+
+00:02:57.680 --> 00:03:03.280
+in a larger format, and then crop it to the&nbsp;
+smaller format. Now, if there is no bleed,&nbsp;&nbsp;
+
+00:03:03.280 --> 00:03:09.920
+the cropping process might not be exact and result&nbsp;
+in white edges on the paper. Bleed helps ensure&nbsp;&nbsp;
+
+00:03:09.920 --> 00:03:15.200
+that even if things aren’t cropped precisely,&nbsp;
+we will have artwork perfectly fill out a paper.
+
+00:03:16.640 --> 00:03:21.440
+What should we set “Bleed width” to? You&nbsp;
+will need to check with your printer.&nbsp;&nbsp;
+
+00:03:21.440 --> 00:03:27.360
+Different services have different&nbsp;
+standards. Some say 2mm, some may say 5mm.&nbsp;&nbsp;
+
+00:03:27.360 --> 00:03:33.600
+It can also depend on what you are printing or in&nbsp;
+what size. So just head to your printing service’s&nbsp;&nbsp;
+
+00:03:33.600 --> 00:03:37.600
+website and look for that information&nbsp;
+in the print specifications section.
+
+00:03:40.720 --> 00:03:43.440
+The “Default border (inner) size” option (7) is a&nbsp;&nbsp;
+
+00:03:43.440 --> 00:03:47.680
+bit less relevant if you are creating an&nbsp;
+illustration. If you are creating comics,&nbsp;&nbsp;
+
+00:03:47.680 --> 00:03:52.320
+this would usually be used to determine the&nbsp;
+area of the page where panels are visible,&nbsp;&nbsp;
+
+00:03:52.320 --> 00:03:57.680
+with only page spreads or certain artwork that&nbsp;
+extends beyond panels going beyond that area.&nbsp;&nbsp;
+
+00:03:58.480 --> 00:04:04.000
+You can switch between determining the border size&nbsp;
+(“set size”) or the border itself (“set margin”).
+
+00:04:04.000 --> 00:04:06.960
+I won’t go into the “Safety&nbsp;
+margin” option (8) here,&nbsp;&nbsp;
+
+00:04:06.960 --> 00:04:10.800
+as its use is explained well by the&nbsp;
+official Clip Studio Paint article.&nbsp;&nbsp;
+
+00:04:10.800 --> 00:04:13.680
+https://tips.clip-studio.com/en-us/articles/1858&nbsp;
+In my example, we won’t be using it.
+
+00:04:13.680 --> 00:04:18.320
+We can now press “OK” to create the file.
+
+00:04:19.680 --> 00:04:22.400
+Changing Image Dimensions Retroactively
+
+00:04:24.800 --> 00:04:28.000
+Some of you might have already&nbsp;
+created artwork without setting your&nbsp;&nbsp;
+
+00:04:28.000 --> 00:04:31.520
+file up as described in the&nbsp;
+previous section. However,&nbsp;&nbsp;
+
+00:04:31.520 --> 00:04:36.640
+if you want to prepare your file for print&nbsp;
+now, you can still access these options.
+
+00:04:38.640 --> 00:04:44.160
+If you want to check that your image resolution&nbsp;
+meets the 300 dpi quality requirement,&nbsp;&nbsp;
+
+00:04:44.160 --> 00:04:46.960
+go to “Edit” &gt; “Change image resolution”.
+
+00:04:49.600 --> 00:04:52.880
+At the bottom, you can see the&nbsp;
+“Unit” and “Resolution” options.&nbsp;&nbsp;
+
+00:04:53.440 --> 00:04:59.120
+If you set your file up in a pixel format,&nbsp;
+it should still show as pixels, at 72 dpi.
+
+00:05:01.440 --> 00:05:07.120
+First, select 300 dpi in the “Resolution” menu&nbsp;
+(or whatever other option you want to aim for).&nbsp;&nbsp;
+
+00:05:08.080 --> 00:05:11.600
+You will now see the “Width”,&nbsp;
+“Height” and “Scale“ options adjust.&nbsp;&nbsp;
+
+00:05:12.160 --> 00:05:18.480
+If the “Scale” value is higher than 1.00 (such as&nbsp;
+in this example), this means you will need to size&nbsp;&nbsp;
+
+00:05:18.480 --> 00:05:23.840
+up your image to reach the higher resolution.&nbsp;
+However, this might not always be necessary.
+
+00:05:26.400 --> 00:05:33.200
+Select the “Unit” option, then select cm/mm/in&nbsp;
+and define the image width and height you want.&nbsp;&nbsp;
+
+00:05:33.840 --> 00:05:37.040
+In this example, we might only&nbsp;
+want to print an image at 15x15cm.&nbsp;&nbsp;
+
+00:05:38.960 --> 00:05:45.120
+The scale value adjusts back down to 1.77.&nbsp;
+This means that we’re gonna have to almost&nbsp;&nbsp;
+
+00:05:45.120 --> 00:05:50.880
+double the image size we have now. If we&nbsp;
+do this, our artwork might become blurry,&nbsp;&nbsp;
+
+00:05:50.880 --> 00:05:55.440
+unless you have used vector layers for&nbsp;
+your drawings. For more information on&nbsp;&nbsp;
+
+00:05:55.440 --> 00:05:59.240
+vector layers, go check out my previous tutorial!&nbsp;
+https://tips.clip-studio.com/en-us/articles/3868
+
+00:06:00.480 --> 00:06:05.280
+The “Interpolation method” option refers to&nbsp;
+different ways your image can be scaled up&nbsp;&nbsp;
+
+00:06:05.280 --> 00:06:09.920
+or down. It makes sense to leave this&nbsp;
+at “High accuracy” for most cases.
+
+00:06:11.520 --> 00:06:16.080
+We can now press “OK” and the image will be&nbsp;
+adjusted according to your specifications.
+
+00:06:17.360 --> 00:06:19.680
+Next, if you want to add bleed to your artwork,&nbsp;&nbsp;
+
+00:06:19.680 --> 00:06:24.400
+you can do this by simply going to “View”&nbsp;
+&gt; “Crop Mark / Default border settings”.
+
+00:06:26.240 --> 00:06:30.720
+Now you can adjust the same values as&nbsp;
+previously discussed in the tutorial.&nbsp;&nbsp;
+
+00:06:30.720 --> 00:06:35.040
+Keep in mind that you won’t be able to extend&nbsp;
+the canvas size in this window, and if your&nbsp;&nbsp;
+
+00:06:35.040 --> 00:06:40.480
+canvas size is already at the size of the final&nbsp;
+artwork you desire, you may have to first extend&nbsp;&nbsp;
+
+00:06:40.480 --> 00:06:49.360
+the canvas size by going to “Edit” &gt; “Change&nbsp;
+Canvas Size” and then come back to this window.
+
+00:06:53.280 --> 00:06:56.160
+Exporting full color images in CMYK
+
+00:06:58.160 --> 00:07:01.600
+Clip Studio Paint is primarily&nbsp;
+set up to work in RGB,&nbsp;&nbsp;
+
+00:07:01.600 --> 00:07:05.040
+a color space that mixes&nbsp;
+colors in an additive manner.&nbsp;
+
+00:07:05.040 --> 00:07:11.040
+However, for print we will work in CMYK, a color&nbsp;
+space that mixes colors in a subtractive manner.&nbsp;
+
+00:07:11.760 --> 00:07:15.840
+If you’re unfamiliar with these terms,&nbsp;
+I’d like to briefly explain them.
+
+00:07:16.800 --> 00:07:23.840
+First, “additive” colors. In RGB, which stands for&nbsp;
+Red, Green and Blue, we increase each color value&nbsp;&nbsp;
+
+00:07:23.840 --> 00:07:30.640
+to brighten the overall color. If all three are&nbsp;
+set to the maximum of 255, we have a white color.
+
+00:07:32.400 --> 00:07:40.000
+Now, “subtractive” colors. In CMYK, which stands&nbsp;
+for Cyan, Magenta, Yellow, Black (or Key Plate)&nbsp;&nbsp;
+
+00:07:40.560 --> 00:07:44.320
+we increase each color value&nbsp;
+to darken the overall color.&nbsp;&nbsp;
+
+00:07:44.320 --> 00:07:50.080
+If all three are set to the maximum of 100%,&nbsp;
+we will have a very dark and saturated color.
+
+00:07:52.000 --> 00:07:56.560
+One important thing to note is that screens&nbsp;
+can display brighter colors in a more&nbsp;&nbsp;
+
+00:07:56.560 --> 00:08:03.600
+vivid way. In CMYK this usually is only possible&nbsp;
+with spot colors, which we will address later.
+
+00:08:04.480 --> 00:08:08.480
+First, let’s see how we can work&nbsp;
+with CMYK in Clip Studio Paint.
+
+00:08:10.000 --> 00:08:15.920
+Go to “View” and select the “Color&nbsp;
+profile” &gt; “Preview settings” option.
+
+00:08:17.040 --> 00:08:22.480
+Before we move on, let’s quickly address the first&nbsp;
+drop down option here, “Profile for preview”.&nbsp;&nbsp;
+
+00:08:23.120 --> 00:08:28.240
+There are different color profiles in the world&nbsp;
+of printing that pay respect to different papers&nbsp;&nbsp;
+
+00:08:28.240 --> 00:08:34.160
+and colors. For example, if you create artwork&nbsp;
+for a newspaper, you will need to use a distinct&nbsp;&nbsp;
+
+00:08:34.160 --> 00:08:38.080
+color profile that limits the amount of&nbsp;
+color that can be applied to the paper.&nbsp;&nbsp;
+
+00:08:39.040 --> 00:08:43.600
+This is because newspaper soaks up color very&nbsp;
+differently to the kind of paper you might use&nbsp;&nbsp;
+
+00:08:43.600 --> 00:08:50.160
+in an inkjet office printer. Things might end up&nbsp;
+looking too dark if too much color is applied,&nbsp;&nbsp;
+
+00:08:50.160 --> 00:08:53.840
+and color profiles try to&nbsp;
+help optimize the end result.
+
+00:08:55.360 --> 00:08:59.680
+Make sure to look up the print specifications&nbsp;
+on your printing service’s website&nbsp;&nbsp;
+
+00:08:59.680 --> 00:09:02.560
+to find out which color profile&nbsp;
+you will need to work with!
+
+00:09:04.480 --> 00:09:09.440
+But back to the window that just popped up.&nbsp;
+Here, you can select your intended color profile.&nbsp;
+
+00:09:10.080 --> 00:09:13.280
+Once you’ve done so, you’ll notice&nbsp;
+that it looks a lot more dull now.
+
+00:09:15.440 --> 00:09:21.280
+We can however do a few things to improve this.&nbsp;
+Let’s look at the “Rendering intent” drop-down&nbsp;&nbsp;
+
+00:09:21.280 --> 00:09:28.000
+menu. This offers a variety of options in which&nbsp;
+your colors can be converted from RGB to CMYK!&nbsp;&nbsp;
+
+00:09:28.800 --> 00:09:34.400
+It can be a good idea to go for the "Saturation"&nbsp;
+option in most cases. This option will often&nbsp;&nbsp;
+
+00:09:34.400 --> 00:09:39.040
+result in a much more similar look to&nbsp;
+how your artwork was displayed in RGB.
+
+00:09:41.120 --> 00:09:45.680
+While you won’t be able to actually make the&nbsp;
+colors more *saturated* (there is a limit&nbsp;&nbsp;
+
+00:09:45.680 --> 00:09:51.600
+to what standard CMYK colors can do), these&nbsp;
+options DO change the contrast of your colors.&nbsp;&nbsp;
+
+00:09:51.600 --> 00:09:56.640
+And if you know your color theory, you know that&nbsp;
+more contrast can make things look more vivid.
+
+00:09:58.240 --> 00:10:02.720
+If you are unhappy with all four “Rendering&nbsp;
+intent” options, you can also select the&nbsp;&nbsp;
+
+00:10:02.720 --> 00:10:08.240
+“Tonal Correction” checkmark and fine tune the&nbsp;
+contrast on all four color plates individually!
+
+00:10:09.360 --> 00:10:14.480
+Once you are happy with the result, make sure to&nbsp;
+select the “Save on canvas” option! Otherwise,&nbsp;&nbsp;
+
+00:10:14.480 --> 00:10:17.840
+your adjustments won’t actually be&nbsp;
+saved when you export the image.
+
+00:10:19.040 --> 00:10:23.040
+You may want to now save your .csp file&nbsp;
+as a new file with a different name&nbsp;&nbsp;
+
+00:10:23.040 --> 00:10:26.400
+to signify that this is the&nbsp;
+CMYK version of your artwork.&nbsp;&nbsp;
+
+00:10:26.960 --> 00:10:31.840
+Otherwise, if you ever want to make a change,&nbsp;
+you would have to redo the color adjustments!
+
+00:10:33.600 --> 00:10:37.040
+Finally, let’s actually export the CMYK file.&nbsp;&nbsp;
+
+00:10:37.040 --> 00:10:42.480
+I would suggest exporting your file as a JPG&nbsp;
+with the quality turned up all the way to 100,&nbsp;&nbsp;
+
+00:10:42.480 --> 00:10:46.240
+or as a TIFF file, which can offer&nbsp;
+an even higher print quality.
+
+00:10:47.520 --> 00:10:50.800
+An export settings window&nbsp;
+will pop up. The important&nbsp;&nbsp;
+
+00:10:50.800 --> 00:10:53.360
+thing here is to include the “Crop mark” option.
+
+00:10:55.680 --> 00:11:00.000
+Next, select “CMYK color” in&nbsp;
+the “Expression color” menu.&nbsp;&nbsp;
+
+00:11:00.000 --> 00:11:02.720
+Make sure to also “Embed ICC profile”.
+
+00:11:04.720 --> 00:11:10.640
+Finally, leave the “Scale ratio from&nbsp;
+original data” at 100%. And that’s it!
+
+00:11:12.160 --> 00:11:17.760
+This concludes the first part of the tutorial.&nbsp;
+You now know how to export basic full color&nbsp;&nbsp;
+
+00:11:17.760 --> 00:11:22.640
+images for print in Clip Studio Paint. If&nbsp;
+you’d like to know more about preparing&nbsp;&nbsp;
+
+00:11:22.640 --> 00:11:27.840
+an image such as this for a two tone spot color&nbsp;
+print, stick around for more advanced techniques!
+
+00:11:30.960 --> 00:11:32.880
+An Introduction to Spot Colors
+
+00:11:34.640 --> 00:11:40.640
+I briefly teased the topic of spot colors earlier.&nbsp;
+The thing is: Even in print you can achieve some&nbsp;&nbsp;
+
+00:11:40.640 --> 00:11:46.560
+very bright and vivid colors, such as this&nbsp;
+neon green. This is possible with spot colors.
+
+00:11:48.640 --> 00:11:55.440
+Let’s remember how CMYK works. Colors are added&nbsp;
+together. If you have a magnifying glass nearby,&nbsp;&nbsp;
+
+00:11:55.440 --> 00:12:01.120
+why not try looking at a printed piece of paper&nbsp;
+near you? Chances are, you will notice that the&nbsp;&nbsp;
+
+00:12:01.120 --> 00:12:05.920
+picture is actually made up of tons of tiny&nbsp;
+dots, that mix these four colors together!
+
+00:12:07.360 --> 00:12:12.480
+Now, if something is printed in only one of these&nbsp;
+base colors, it’s going to result in a slightly&nbsp;&nbsp;
+
+00:12:12.480 --> 00:12:18.000
+smoother, cleaner look than if you were to mix&nbsp;
+two of them together to create Green, for example.
+
+00:12:20.640 --> 00:12:26.720
+This is one reason why spot colors exist. Think&nbsp;
+of them as pre-mixed colors. Using them will not&nbsp;&nbsp;
+
+00:12:26.720 --> 00:12:32.560
+just result in a more even color application, but&nbsp;
+it also enables brighter or more vivid colors.
+
+00:12:33.920 --> 00:12:38.160
+Clip Studio Paint sadly does not&nbsp;
+yet have support for this technique.&nbsp;&nbsp;
+
+00:12:38.160 --> 00:12:43.680
+But, we can hack our way there. To figure out&nbsp;
+how to do this, let’s first look at what a file&nbsp;&nbsp;
+
+00:12:43.680 --> 00:12:48.240
+looks like that’s been set up for print in&nbsp;
+a program that does support spot colors,&nbsp;&nbsp;
+
+00:12:48.240 --> 00:12:51.840
+such as Photoshop, Illustrator or InDesign.
+
+00:12:52.640 --> 00:12:58.240
+Take this PDF for example. When opened in Adobe&nbsp;
+Acrobat, I can access the “Print Production” menu,&nbsp;&nbsp;
+
+00:12:58.240 --> 00:13:03.280
+and the “Output Preview” window from there.&nbsp;
+Here, I am able to see that the neon green&nbsp;&nbsp;
+
+00:13:03.280 --> 00:13:09.040
+is listed as its own color alongside Cyan,&nbsp;
+Magenta, Yellow and Black (or Key Plate).
+
+00:13:09.040 --> 00:13:14.160
+If I deselect this color, I will now only see&nbsp;
+what is being printed in the other colors (in this&nbsp;&nbsp;
+
+00:13:14.160 --> 00:13:19.840
+case, only Black shows up). Likewise, I can turn&nbsp;
+things around and see what happens if I deactivate&nbsp;&nbsp;
+
+00:13:20.400 --> 00:13:24.400
+all the CMYK color plates and only&nbsp;
+have the spot color plate visible.
+
+00:13:25.680 --> 00:13:29.840
+As you can tell, the color disappears&nbsp;
+and we only see Black left.&nbsp;&nbsp;
+
+00:13:29.840 --> 00:13:34.560
+Because it basically is an instruction that&nbsp;
+tells the printer “where you see Black,&nbsp;&nbsp;
+
+00:13:34.560 --> 00:13:37.520
+print this other color and&nbsp;
+where you don’t see Black,&nbsp;&nbsp;
+
+00:13:37.520 --> 00:13:44.160
+don’t”. As you mouse over an area displayed&nbsp;
+as Black, you will still see the percentage&nbsp;&nbsp;
+
+00:13:44.160 --> 00:13:50.640
+information next to the color plate reflect this&nbsp;
+and display as “100%” for the spot color I picked.
+
+00:13:52.400 --> 00:13:56.800
+With that knowledge in mind, we are ready&nbsp;
+to switch back over to Clip Studio Paint.
+
+00:13:58.320 --> 00:14:01.840
+Setting up Spot Colors in Clip Studio Paint
+
+00:14:02.480 --> 00:14:06.240
+Before we start, let’s analyze&nbsp;
+how I set up this artwork.&nbsp;&nbsp;
+
+00:14:06.240 --> 00:14:10.080
+You may have yours set up differently, but&nbsp;
+I hope that I will still be able to show you&nbsp;&nbsp;
+
+00:14:10.080 --> 00:14:16.320
+the principles of setting up spot colors in a&nbsp;
+way where you can apply it to your own artwork!
+
+00:14:16.320 --> 00:14:22.560
+First, the actual artwork is on it’s own layer.&nbsp;
+Everything that is not black is transparent.
+
+00:14:23.680 --> 00:14:27.920
+Next, the spot color is actually a&nbsp;
+completely black layer where I used&nbsp;&nbsp;
+
+00:14:27.920 --> 00:14:31.840
+Clip Studio Paint’s “Layer Color”&nbsp;
+effect to select the neon color.
+
+00:14:33.760 --> 00:14:36.240
+Inbetween the two, there is a layer with white&nbsp;&nbsp;
+
+00:14:36.240 --> 00:14:39.360
+color that I used to give the&nbsp;
+illustration some highlights.
+
+00:14:41.280 --> 00:14:46.320
+To achieve something that looks like what we&nbsp;
+saw in the PDF file before, we will now press&nbsp;&nbsp;
+
+00:14:46.320 --> 00:14:53.200
+CTRL and click the main artwork layer to create&nbsp;
+a selection of it. Alternatively, you can right&nbsp;&nbsp;
+
+00:14:53.200 --> 00:14:58.320
+click the layer and select the “Selection&nbsp;
+from Layer” &gt; “Create Selection” option.
+
+00:14:59.920 --> 00:15:03.040
+Next, we need to also select the white area.&nbsp;&nbsp;
+
+00:15:03.040 --> 00:15:09.360
+To add it to the selection, hold down CTRL&nbsp;
++ SHIFT and click the layer. Alternatively,&nbsp;&nbsp;
+
+00:15:09.360 --> 00:15:14.960
+you can right click the layer and select the&nbsp;
+“Selection from Layer” &gt; “Add Selection” option.
+
+00:15:16.880 --> 00:15:22.320
+We now have everything selected that ISN’T&nbsp;
+going to print in neon green. This means that&nbsp;&nbsp;
+
+00:15:22.320 --> 00:15:28.080
+our next step is inverting that selection.&nbsp;
+You can do so by pressing CTRL + SHIFT + I&nbsp;&nbsp;
+
+00:15:28.640 --> 00:15:35.360
+or going to “Select” &gt; “Invert Selected Area”.&nbsp;
+Now, we actually have a selection of everything&nbsp;&nbsp;
+
+00:15:35.360 --> 00:15:41.760
+that IS supposed to print in neon green, and we&nbsp;
+can select that layer and create a new layer mask.
+
+00:15:43.280 --> 00:15:48.240
+Next, let’s turn off the “Layer Color”&nbsp;
+effect so the layer appears as fully black.&nbsp;&nbsp;
+
+00:15:49.200 --> 00:15:53.840
+What we see now is identical to&nbsp;
+what we saw in the PDF file earlier.
+
+00:15:55.040 --> 00:16:00.000
+The next step is manually adding information&nbsp;
+about which color this is supposed to print as.&nbsp;&nbsp;
+
+00:16:00.560 --> 00:16:06.000
+I’ve mentioned before that Clip Studio Paint&nbsp;
+doesn’t (yet!) have any support for spot colors&nbsp;&nbsp;
+
+00:16:06.000 --> 00:16:12.560
+such as PANTONE. However, most printers that are&nbsp;
+able to print spot colors will still accept files&nbsp;&nbsp;
+
+00:16:12.560 --> 00:16:17.520
+that don’t have them baked in naturally and&nbsp;
+instead are showing this information as text.
+
+00:16:19.280 --> 00:16:24.000
+This is why we’re going to use the Text tool&nbsp;
+to simply write the color we want to print in&nbsp;&nbsp;
+
+00:16:24.000 --> 00:16:28.320
+outside of the main printing area and&nbsp;
+in fact, even outside of the Bleed area&nbsp;&nbsp;
+
+00:16:28.960 --> 00:16:32.720
+(we don’t want to risk having this text&nbsp;
+ever show up anywhere on a print!).&nbsp;&nbsp;
+
+00:16:33.520 --> 00:16:38.400
+The way I would suggest phrasing&nbsp;
+it is “Print in [your color]”.
+
+00:16:39.760 --> 00:16:42.480
+To figure out which color you&nbsp;
+want to print something in,&nbsp;&nbsp;
+
+00:16:42.480 --> 00:16:47.600
+I would suggest investing in a PANTONE color&nbsp;
+sampler. But if that is outside your budget,&nbsp;&nbsp;
+
+00:16:47.600 --> 00:16:52.560
+you can use their website to have a color&nbsp;
+suggested to you. To do so, double click&nbsp;&nbsp;
+
+00:16:52.560 --> 00:16:59.520
+your currently active color. Note down the RGB&nbsp;
+values, or alternatively, copy paste the Hex code.
+
+00:17:01.680 --> 00:17:06.080
+Next, go to www.pantone.com and select&nbsp;
+the “Find a Pantone Color” menu option.&nbsp;&nbsp;
+
+00:17:06.640 --> 00:17:12.720
+On the left, select “Convert” &gt;&nbsp;
+“RGB/CMYK/Hex”. In the “Color Space” section,&nbsp;&nbsp;
+
+00:17:12.720 --> 00:17:16.320
+select either RGB or Hex,&nbsp;
+and input your information.
+
+00:17:17.760 --> 00:17:23.440
+Before you press “Search”, you need to select&nbsp;
+the correct Color Library. If you are unsure&nbsp;&nbsp;
+
+00:17:23.440 --> 00:17:28.720
+which one to use, you can always select&nbsp;
+“All Pantone Books”. For this example,&nbsp;&nbsp;
+
+00:17:28.720 --> 00:17:34.480
+I already know I want a neon color, so I will&nbsp;
+only select “PANTONE Pastels &amp; Neons Coated”.
+
+00:17:36.320 --> 00:17:40.000
+A quick explanation of “Coated”&nbsp;
+and “Uncoated” color profiles:&nbsp;&nbsp;
+
+00:17:40.640 --> 00:17:47.520
+These refer to the paper quality. Anytime a paper&nbsp;
+has a smooth or glossy texture, you’re probably&nbsp;&nbsp;
+
+00:17:47.520 --> 00:17:54.000
+looking at a coated paper. This usually is the&nbsp;
+case for most photo or magazine prints. Anytime a&nbsp;&nbsp;
+
+00:17:54.000 --> 00:17:59.840
+paper has a coarse and natural feeling texture,&nbsp;
+you’re probably looking at an uncoated paper.&nbsp;&nbsp;
+
+00:18:00.560 --> 00:18:06.800
+This is usually the case for newspapers or eco&nbsp;
+friendly packaging. As mentioned before, different&nbsp;&nbsp;
+
+00:18:06.800 --> 00:18:14.240
+paper types soak up color differently, which&nbsp;
+is why PANTONE offers separate color profiles.
+
+00:18:14.240 --> 00:18:18.400
+Once I’ve pressed “Search”, I will get&nbsp;
+a suggestion from PANTONE’s website&nbsp;&nbsp;
+
+00:18:18.400 --> 00:18:23.840
+for what color to use. Your screen isn’t going to&nbsp;
+accurately reflect how this will look on paper.&nbsp;&nbsp;
+
+00:18:24.480 --> 00:18:29.120
+If you can’t afford the samples, contact&nbsp;
+your printer and ask them for a suggestion.&nbsp;&nbsp;
+
+00:18:29.680 --> 00:18:33.680
+Maybe they also have samples they can&nbsp;
+send or show you to help you decide.
+
+00:18:35.280 --> 00:18:41.840
+But now, let’s go back into our file, and simply&nbsp;
+add this PANTONE color into the text information!&nbsp;&nbsp;
+
+00:18:41.840 --> 00:18:44.880
+You can also do this for the Black color&nbsp;
+plate to be extra clear in your communication.
+
+00:18:44.880 --> 00:18:46.800
+Exporting Spot Color images
+
+00:18:48.640 --> 00:18:52.480
+Now, when we export this file we&nbsp;
+have to consider a few factors.&nbsp;&nbsp;
+
+00:18:53.040 --> 00:19:00.240
+Previously, we’ve exported a CMYK file that was&nbsp;
+a full color image. However, in this example,&nbsp;&nbsp;
+
+00:19:00.240 --> 00:19:05.280
+we only want to print in two color plates&nbsp;
+- Black and the PANTONE spot color.
+
+00:19:07.120 --> 00:19:12.720
+When we export our files this time, we are going&nbsp;
+to export two separate TIFF files - one for the&nbsp;&nbsp;
+
+00:19:12.720 --> 00:19:18.400
+spot color plate and one for the black color&nbsp;
+plate. Before exporting, make sure that both&nbsp;&nbsp;
+
+00:19:18.400 --> 00:19:24.080
+the spot color and the black color plate are&nbsp;
+displayed as a pure RGB Black (R=0 G=0 B=0), and&nbsp;&nbsp;
+
+00:19:24.080 --> 00:19:28.560
+then in the Export Settings window,&nbsp;
+select “Gray” as the Expression Color.
+
+00:19:30.400 --> 00:19:34.960
+When splitting up the color plates like this,&nbsp;
+it would also be helpful to send your printer&nbsp;&nbsp;
+
+00:19:34.960 --> 00:19:40.720
+a preview of how the final artwork is supposed&nbsp;
+to look. I would recommend exporting a RGB JPG&nbsp;&nbsp;
+
+00:19:40.720 --> 00:19:46.400
+file of your artwork and sending it off to your&nbsp;
+printer alongside the TIFF files we just created.
+
+00:19:47.680 --> 00:19:52.560
+Even though we added crop marks and print color&nbsp;
+information onto the image itself already, it&nbsp;&nbsp;
+
+00:19:52.560 --> 00:19:56.800
+can also be helpful to add the final print&nbsp;
+size (after cropping) into the file name,&nbsp;&nbsp;
+
+00:19:56.800 --> 00:20:00.000
+as well as which color plate each&nbsp;
+file is supposed to represent.&nbsp;&nbsp;
+
+00:20:00.640 --> 00:20:05.840
+It’s never a bad thing to have file naming&nbsp;
+conventions that communicate clearly.
+
+00:20:06.400 --> 00:20:08.720
+And while we’re talking about communication,&nbsp;&nbsp;
+
+00:20:08.720 --> 00:20:13.760
+most important of all: Always make sure to check&nbsp;
+that your printer understands what you want&nbsp;&nbsp;
+
+00:20:13.760 --> 00:20:20.080
+and will tell you if there are any changes you&nbsp;
+might have to make for an optimal printing result!
+
+00:20:20.080 --> 00:20:20.720
+And that’s it!
+
+00:20:22.720 --> 00:20:26.800
+Before ending this tutorial, I have two&nbsp;
+short notes I quickly want to address!
+
+00:20:27.840 --> 00:20:28.560
+Overprint
+
+00:20:30.240 --> 00:20:35.040
+Keep in mind that you have the ability to&nbsp;
+overprint colors. This means that you can,&nbsp;&nbsp;
+
+00:20:35.040 --> 00:20:41.360
+for example, print 100% of your spot color in the&nbsp;
+same space as where you are also printing 100%&nbsp;&nbsp;
+
+00:20:41.360 --> 00:20:44.800
+of black. It’s useful to keep this option in mind&nbsp;&nbsp;
+
+00:20:44.800 --> 00:20:47.840
+especially when you want to&nbsp;
+print something like this:
+
+00:20:49.040 --> 00:20:53.280
+Unlike our previous example, this image&nbsp;
+has shading in various tones rather than&nbsp;&nbsp;
+
+00:20:53.280 --> 00:20:58.800
+cell shading with clear edges. To have the&nbsp;
+shading applied to the green spot color,&nbsp;&nbsp;
+
+00:20:58.800 --> 00:21:04.160
+we need to print the spot color even in areas&nbsp;
+where we also print black. Keep in mind that&nbsp;&nbsp;
+
+00:21:04.160 --> 00:21:08.400
+those areas are going to be darker than&nbsp;
+those where you are ONLY printing in black.
+
+00:21:10.000 --> 00:21:14.720
+Let’s go back to our previous example to see&nbsp;
+when you might NOT want to include overprint&nbsp;&nbsp;
+
+00:21:14.720 --> 00:21:20.000
+options. If I were to not exclude the black&nbsp;
+artwork itself and just exported the spot&nbsp;&nbsp;
+
+00:21:20.000 --> 00:21:24.400
+color plate with the white highlights, the&nbsp;
+final print would look something like this:
+
+00:21:25.120 --> 00:21:28.560
+The big circles surrounding the&nbsp;
+white sections don’t exactly look&nbsp;&nbsp;
+
+00:21:28.560 --> 00:21:33.920
+flattering. So make sure to consider what kind of&nbsp;
+look you want when setting up the spot color area.
+
+00:21:36.400 --> 00:21:37.920
+Special Print Effects
+
+00:21:41.280 --> 00:21:44.960
+I also want to bring to your attention&nbsp;
+that you can use this technique&nbsp;&nbsp;
+
+00:21:44.960 --> 00:21:49.249
+to set up files for special printing&nbsp;
+techniques, such as UV coating (parts&nbsp;&nbsp;
+
+00:21:49.249 --> 00:21:51.920
+of the image will reflect light or appear shiny),&nbsp;
+glitter coating (sparkly!) or many other effects.&nbsp;&nbsp;
+
+00:21:52.640 --> 00:21:57.840
+Contact your printer about what options they have&nbsp;
+on offer, and then simply set up the file as you&nbsp;&nbsp;
+
+00:21:57.840 --> 00:22:04.560
+would a spot color plate file, except describing&nbsp;
+that file as “Print as [desired effect]”.
+
+00:22:07.440 --> 00:22:11.840
+Thank you for reading! If you have any questions,&nbsp;
+feel free to leave them in the comments!
+

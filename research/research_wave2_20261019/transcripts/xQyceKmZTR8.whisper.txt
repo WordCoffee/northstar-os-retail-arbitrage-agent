@@ -1,0 +1,696 @@
+Is your compositing work looking flat and unrealistic?
+If so, then check out this Photoshop compositing tutorial where I'm going to show you some
+amazing techniques to match a subject to any background.
+Hi, this is Jesus Ramirez from the Photoshop Training Channel.
+This is going to be an information-filled tutorial that is going to teach you a lot
+about compositing.
+We're going to learn some powerful techniques that is going to help you create more cohesive
+and realistic composites.
+We're going to start by learning how to match the perspective of two different images so
+that it feels like the person is standing on that background.
+Then we're going to move on to matching the brightness, color, and saturation of the background
+and foreground so that, again, the image feels more cohesive.
+In this case, we're also going to learn how to apply a similar depth of field, a blurry
+background, to create the illusion that it's an actual photo.
+Then we're going to use the Camera Raw Filter to bring it all together.
+Make sure that you stick to the very end of the tutorial because you don't want to miss
+any of the compositing tips and tricks.
+If this is your first time at the Photoshop Training Channel, then don't forget to click
+on that Subscribe and Notification button so that you don't miss any future Photoshop
+tutorials.
+Let's just get right to it.
+These are the images that we're going to work with.
+I have this image of this young lady standing on this street and I have this background image
+of a pier on icy waters.
+And if you would like to follow along with these images, make sure that you look down
+below in the description.
+There'll be a link so you can download them.
+And once you have them open, they'll be open in two different tabs.
+The first step is to get both images in the same Photoshop document.
+To do that, make sure that you have the Move Tool active and that you click and drag one
+of the images over onto the other tab.
+The tab will automatically change over.
+If you hold the Shift key and release the mouse button, Photoshop will place the image
+that you drag over right in the center of the canvas.
+Then you can hit the Enter key on Windows, that's the return key on the Mac, to
+place the image in your new document.
+So now we have both of these images in this document as two separate layers.
+The first step is to remove the background from the model's image and that's what I'll
+call the layer.
+I'll call the layer model because this is the layer that will hold my model and the other
+one is called background so that name is fine.
+And there's a lot of ways of removing the background from an image.
+If you're in an older version of Photoshop, you probably will have access to the Quick
+Selection Tool which allows you to simply click and drag over an image to make a
+selection.
+So I'm clicking and dragging over her.
+If I make a mistake, I can always hold the Alt key on Windows, that's the option key
+on the Mac, and click and drag to subtract from the selection.
+I'm going to press Ctrl D, Command D on the Mac to deselect.
+And if you're in the newest version of Photoshop, at the moment it's Photoshop
+2020, you will have access to a really powerful tool called the Object Selection Tool.
+With this tool, you can go under the Mode dropdown and select Lasso and make sure
+that you click on this button here in the Options of Art called New Selection.
+And then click and drag a loose selection right over our model.
+And when I release, you'll see that Photoshop will analyze the image using
+artificial intelligence known as Adobe Sensei and it will make a selection out of whatever
+it thinks the main subject is within that selection.
+So what I'm going to do now is fine tune the selection.
+So if you notice, it really didn't get everything perfect and that's okay.
+It doesn't need to get it perfect.
+All we need to do is get started with it and we can fine tune as we go.
+So I'm going to press the Z key on the keyboard to switch over into the Zoom Tool.
+Then I can zoom it into the image and I can deselect the part in between her legs here.
+And we can do that several ways.
+We can select the Quick Selection Tool, hold Alt on Windows, Option on the Mac
+and click and drag to deselect.
+I'm using the spacebar to pan.
+And again, you can hold Alt on Windows, Option on the Mac and click and drag to deselect.
+At this point, you don't need a perfect selection.
+We're going to fine tune later.
+Just make sure that you get the main shapes of the person selected.
+That way you get an accurate representation of the selection.
+But you don't have to worry about being perfect.
+That comes at the end.
+I always leave all the fine tuning to the end because sometimes you can get away
+with not having a perfect selection depending on what the background is, what the foreground
+is and all the details on both layers.
+So we're not going to worry about the fine tuning till the very, very end.
+I just want to make sure I have the main shapes selected.
+But anyway, this is going to be good for now.
+And what I'm going to do is simply double click on the Hand Tool to fit the image
+to screen.
+And then I'm going to click on the Layer Mask icon to create a Layer Mask based
+on the selection.
+Anything that was selected we'll keep.
+She was selected.
+We kept her.
+Everything else was hidden in the Layer Mask.
+This is the Layer Mask here.
+Next to the Layer Thumbnail, you can see that there.
+Black hides, white reveals.
+Let me hold Alt down Windows, Option on the Mac and click on the Layer Mask thumbnail
+so that you can see it.
+White reveals, black conceals.
+I'll once again hold Alt down Windows and Option on the Mac and click on the Layer
+Mask thumbnail to reveal the layer and we can continue working.
+So if I select the Move Tool, I can obviously place her anywhere that I want.
+But where should I place her?
+Right there where I have her now, it doesn't look realistic.
+And sure, I could eyeball it and find the spot where I think she looks realistic and
+I could scale her and try to get it to match.
+But it's always a good idea to use perspective to fit her into a scene.
+If you don't know what I mean by perspective, don't worry about it.
+I have a tutorial that talks all about that.
+I'll place a link to my perspective tutorial down below in the description.
+But for now, I'll give you a brief explanation.
+I'm going to disable the foreground layer, the model layer, and we're going to work with
+the background layer.
+So with this layer active, I'm going to select the Line Tool and make sure that I have
+Shape Active and a weight of 10 so that I could see the actual lines that I draw.
+I can maybe change the fill to red so the lines are more obvious.
+When you are combining images together and you want them to look realistic, you need to
+get the perspective right.
+And the easiest way to think about perspective is matching the horizon lines of both your
+foreground and background.
+And the way that you do that is by looking at your image and sometimes, like in this
+case, you don't even need to draw any lines.
+You can just tell where the horizon line is.
+The horizon line is where the ground plane meets the sky.
+We can see the sky is up here and the ground plane is the eyes and this pier.
+So where does that meet the sky?
+Well, right about here, right?
+Because this is where the sky starts.
+And if you go up, you have sky.
+And if you go down, you have ground.
+If you can't really see that in your image, just find parallel converging lines like on
+this pier or dock, whatever it is.
+Let me know them in the comments below if it's a pier or a dock.
+Anyway, find the parallel converging lines and follow them all the way to the end.
+And when you get to the other end where they meet, that's the vanishing point.
+And the vanishing point is always in the horizon line.
+So see, the horizon line is right here, right at that point.
+So where is the horizon line in our model?
+So I'm going to tap the delete key just to delete those layers because we don't need
+them anymore.
+And now we're going to enable the model layer.
+And I'm going to figure out where the horizon line is for her.
+I'm going to hold shift and click on the layer mask thumbnail to reveal the original
+background. See that red X on the layer mask thumbnail?
+That just means it's hidden.
+We're not deleting it.
+We're just hiding it for a moment.
+And if I follow parallel converging lines like the lines on the ground here,
+you'll see that her horizon line is more or less right below her ear.
+Give or take.
+Doesn't have to be perfect, but right about there.
+See right below her ear.
+And actually I drew the lines under her.
+So if I drag the model layer and place it under those lines, you'll see that the
+vanishing point and the horizon line are right below her ears.
+And actually, if I click and drag from here, you'll notice that all the
+parallel converging lines in the scene end up at that vanishing point.
+See that?
+See how all the lines end up at that point.
+So we know for sure that that's where the horizon line is.
+So if the horizon line is right below her ear, that means that we need to
+place her ear right on the horizon line of the other image.
+So if I hold shift and click on the layer mask thumbnail, then I can select the
+move tool.
+I can now drag her up and place her right about here.
+So she's in perspective and I can place her anywhere I want left,
+right, center, as long as that ear is in that horizon line, she should
+be in perspective.
+But that arises other problems, right?
+Like we now need to worry about scale.
+So why don't we work on that next?
+I'm going to click on that lock icon to disable the lock.
+Then I'm going to right click and convert this layer into a smart object so
+that I can distort it non-destructively.
+Smart objects allow you to apply adjustments, distortions, filters and
+transformations non-destructively, which means you can always come back
+and edit them.
+Next, press Ctrl T on Windows command T and the Mac to transform and
+drag the reference point over onto the horizon line.
+If you don't see the reference point, you can click on this checkbox to
+enable it and then just drag the reference point onto the horizon line.
+Anywhere on the horizon line works.
+Then if you hold Shift and Alt on Windows, that's Shift and Option on the
+Mac and click and drag on the corner handle, you'll scale in perspective.
+Isn't that awesome?
+See that?
+Super cool.
+So what I'm going to do now is simply scale the layer down so that we
+could have her in perspective and not seem too small or too big.
+And you can adjust it accordingly.
+And by the way, the reason that I'm adjusting the background and not her is
+because I don't want to scale her up.
+If I scale her up, I'm going to stretch pixels and make her look blurry
+and I don't want that.
+So I'd rather adjust the background.
+I'm going to click on the Crop Tool and then click and drag on these
+handles to crop the image, like so.
+When you're done, you can just hit the Enter key on Windows and
+that's a return key in the Mac.
+My image is still looking a little bit off scale.
+So what I'm going to do is select the background layer and select the
+Move Tool, then click on this center transformation handle while holding
+Alt on Windows, Option on the Mac and drag to the left to make it just
+a little wider.
+I think it looks a little bit better that way.
+And this last adjustment is just subjective.
+You could leave it as it was and it would still look good.
+But anyway, I'm going to now work on my model.
+We have a really good composite so far, but it doesn't look realistic.
+And the reason that this composite doesn't look realistic is because we
+haven't matched the luminosity or the color of the image.
+And the way to do that is actually very simple.
+It only requires a couple of adjustment layers.
+And let me show you how to do that.
+First, with any composite that you make, I recommend that you
+create a black and white adjustment layer because that turns the
+image black and white.
+When you remove the color from a composite, you really start seeing
+the differences in luminosity between the layers and you can see
+that the composite doesn't work.
+So what you want to do now is click on the model layer and then
+create a levels adjustment layer, which will help us control the
+levels or the luminosity of the model and match it to the background
+so that the composite looks realistic.
+By the way, you could also use the curves adjustment layer, but for
+beginners, levels is a little easier to understand.
+If you're more advanced and prefer curves, go ahead and use that.
+With the levels adjustment layer, I'm going to click on this icon
+here in the properties panel to clip it to the layer below.
+Clipping a layer simply means that the levels adjustment layer
+will only control the layer directly below it.
+In this case, the model layer.
+And what I'm going to do is I'm going to adjust the luminosity
+to match it to the background.
+But before I do that, let me quickly explain how the levels
+adjustment layer works.
+So with this point, you see that we have a dark handle.
+On this side, we have a white handle and the same thing is
+true for the two at the bottom.
+So these five controls adjust the luminosity of the layer.
+But how do they control it?
+Well, if I drag this point to the right, this black point to
+the right, watch what happens.
+The image of course gets darker.
+So what Photoshop is doing is making this image darker.
+But how?
+Well, look at the gradient below.
+This gradient tells us that the dark pixels are on the
+left and the bright pixels on the right.
+If you notice right, dropped this slider.
+It's right about here, right on this shade of gray.
+So what we're telling Photoshop is that anything that is this
+shade of gray or darker will be black.
+Right.
+And why is it black?
+Well, because we're telling Photoshop that the darkest
+point is pure black.
+But I can change that.
+I can click and drag this point to the right.
+And now the darkest point is no longer black.
+Is this dark shade of gray, which is the same gray that
+you see here.
+So that's the way this tool works.
+The point on top tells Photoshop what pixels are the
+darkest color and the point at the bottom determines what
+the darkest color is.
+And the same thing is true with the points on the
+right.
+If I drag the white point to the left, it brightens up
+the image.
+Notice that we have white all over her skin.
+That's because the brightest points are white.
+We're telling Photoshop that anything that is this shade
+of gray or brighter will be completely white.
+But if I drag this point to the left, now the brightest
+point will be this shade of gray.
+It will no longer be white.
+So again, the bottom points control how bright the
+brightest pixel is, how dark the darkest pixel is, and
+the points on top control which of the pixels are the
+darkest and which are the brightest.
+So if you wanted just the black silhouette,
+click on the black point and drag it all the way to the
+right because then everything will be completely black.
+Or alternatively, you can grab the white point and
+drag it to the left and that will make the brightest
+point black and the darkest point black so it makes
+everything black in the image.
+And the center point on top controls the contrast.
+I hope that that made sense to you.
+But now that you know how that tool works, I'm just
+going to use it to adjust the image here and I'm
+going to double click on the hand tool to fit the
+image to screen so that we can see it better.
+And what I'm going to do next is make sure that this
+black and white image looks realistic.
+Pretend like we're just making a black and white composite.
+If it looks real in black and white, it'll look real with color.
+So just adjust this dark point and try to match the
+foreground to the background.
+I'm also going to maybe make a few more pixels brighter.
+And I don't necessarily want them completely white.
+So I'm going to drag this white point to the left so
+that the brightest point is just off white.
+I'm also going to click on this center point and
+drag it to the right to add more contrast.
+This center point adds or decreases contrast in an image.
+But anyway, I'm just going to drag it to the right and add a
+little bit more contrast.
+And what I'm really looking at is that the darkest pixels
+in the background match the darkest pixels in the
+foreground.
+So if I click on this icon, you'll see the before
+and the after much, much better.
+I'm going to now disable the black and white adjustment
+layer so you can see the result.
+Unfortunately, when you adjust the levels adjustment layer,
+you also adjust the color of the image, hue and saturation.
+And I don't want that to avoid that from happening.
+I'm going to click on the drop down and select luminosity
+so that now this layer only adjusts the luminosity and
+not the hue or saturation.
+And I'll give this layer a new name.
+I'll call it luminosity so that we know what it
+controls before and after.
+Everything's looking much, much better now.
+Next, we need to control the color that's in the image.
+It's somewhat difficult to tell, but the background image has
+a slight blue tint and we're going to try to match that
+onto the foreground so that everything looks more realistic.
+To do so, we're going to use the curves adjustment layer.
+And once again, I'm going to click on this icon to clip
+it to the layer below.
+Then make sure that the focus, the white outline
+on the layer thumbnail is selected and hold Alt on Windows
+option in the Mac and click on the auto button to bring up
+the auto color correction options.
+And we're going to use the fine dark and light colors
+algorithm to match the colors of the foreground and background.
+By default, this algorithm makes the darkest colors
+of your image black and the brightest colors of your image
+white, which allows you to color correct the image.
+But we're going to use this technology to color match.
+Let me show you how.
+First, look for the shadows in the background.
+Double click on the shadows swatch to bring up the color
+picker and select the shadows in the background.
+Notice how these shadows are not black.
+They have color to them somewhere between blue and green.
+So that is the color that the shadows on the foreground
+need to be.
+So I'm going to press OK to select that color.
+Now we need to look for the brightest part of the background,
+not including any specular highlights, rating like that.
+In this case, I think it would be a good idea to select
+the eyes because it's very bright, but it's not necessarily
+a specular highlight or something that is blown out.
+And notice that the eyes also has a little bit of blue in there.
+So I'll press OK and notice that immediately the image
+picks up the colors that we selected and it applies them
+to the shadows and highlights.
+I'll press OK.
+Photoshop will then ask us if we want to make these
+colors the new defaults.
+We do not.
+These colors are just for this image.
+They'll be different for another image.
+So I'm going to click on the no button.
+And if I click on this curves adjustment layer icon,
+you'll see the before and the after.
+Now notice that the luminosity change and we don't want
+the luminosity to change.
+So we're going to change the blending mode to color.
+Color keeps the hue and saturation in this regards
+the luminosity.
+So that's what we want.
+We want color.
+So before.
+And after.
+And if the effect is too strong, you can always bring
+down the opacity and adjust it accordingly.
+I think in this case, the effect was a little strong.
+I don't like the shadows here.
+So I'm going to reduce it down to about 70 percent before
+and after.
+Still a subtle effect, but I think it does a lot to bring
+this composite together.
+Next, I'll rename the layer just so that I know what it
+controls.
+I'll call it color.
+In some composites, you may need to adjust the saturation
+of your image.
+If you need to do so, click on the new adjustment layer
+icon.
+Select hue and saturation.
+Clip it to the layer below by clicking on this icon and
+then adjust the saturation of the image.
+In this case, I don't really think we need to adjust
+the saturation too much.
+Maybe I need to decrease it just a tiny bit.
+There's not that much saturation in the background
+image.
+So maybe just a little less saturation before and
+after.
+Just a subtle adjustment.
+So now we've matched the perspective of the image
+with the horizon line and we've also matched the
+luminosity and color of the image.
+Let me show you one other thing that I think you
+should look into when you're making these kinds of
+composites.
+I'm going to hold shift again and click on the layer
+mask thumbnail for the model to bring back the
+original image.
+Notice how blurry the background is, the shallow
+depth of field on this model layer.
+I want to match that on my composite.
+So to do that, I'm going to bring back the layer
+mask.
+I'm going to click on the layer below.
+Remember, I made a smart object so I can work on
+it non-destructively.
+One of the easiest ways to blur the image is to
+blur in the background is by going into filter,
+blur gallery, tilt shift.
+By the way, I have a tutorial that talks all about
+blurring backgrounds.
+I'll place a link to it down below in the
+description.
+There you'll find all the details and everything
+you want to know about blurring a background.
+In this video, I'm just going to give you a
+general explanation.
+So with this filter, you can see two solid
+lines and anything in between the solid line
+and the dash line will be a gradual transition
+between in focus and out of focus.
+So between sharp and blurry.
+So I'm going to click and drag this point down and
+just put the focus part way down here.
+And I'm going to click and drag on the solid line.
+And we're going to have a gradual transition from
+sharp to blurry pixels.
+I think the background knows a little too blurry.
+So let me decrease that a little bit like so.
+And I'll press OK.
+So now I have a blurry background before
+and after.
+What I'm going to do now is select this layer zero,
+which is the background layer.
+The name change when I converted it into a smart
+object.
+Next, I'm going to place all these layers into a
+smart object so that I can manipulate them as a
+single layer.
+So select the background, hold shift and click on
+the human saturation adjustment layer to select
+all the layers, then right click and select
+convert to smart object.
+So I'm going to go into filter, camera raw
+filter and we're going to pretend this is just a
+regular photo and I can adjust the shadows,
+bring up the shadows so I can get more detail.
+And maybe I want to enhance the effect and make
+it seem a little colder.
+So I'll decrease the temperature, maybe add a
+little bit of texture, make it pop a little
+vibrance applies a smart saturation.
+It protects skin tones and it also protects
+already saturated pixels.
+Then I'm going to go into the detail and add
+a little bit of sharpening.
+And here's the trick for you.
+If you hold Alt on Windows, Option on the Mac and
+click on the masking slider, you can see where
+Photoshop is applying the sharpening.
+Anything in white reveals, right?
+We're talking about a mask.
+Anything in black conceals.
+So white reveals in black conceals.
+If I drag this slider to the right while
+holding the Alt key on Windows, Option on the Mac,
+you'll see the image become darker.
+So that means that the areas that are black will
+no longer have the sharpening effect applied to
+them. So you can adjust it accordingly so that the
+effect is only applied on the areas that you
+intended to. Next, go into the HSL tab.
+From here, you can control the hue, saturation
+and luminance of individual colors by using
+these sliders. For example, I'm currently in the
+luminance tab. And if I drag the oranges
+lighter, I will control the darkness of her sweater.
+And I'll just make it a little bit brighter.
+Then I'll drag the blue slider to the left
+to make those darker, add more saturation
+to the oranges, maybe a little more to the
+blue so that they have a nice contrast with the
+orange top. And I don't need to adjust the
+hue, but if you needed to adjust the hue, you
+can do that here. Watch what happens when I
+adjust the blue slider.
+See how the colors of the sky and the water
+change? I don't want to do that, but I just
+wanted to give you that option in case you
+wanted to apply it in your image.
+Next, click on the FX icon.
+And this is really important if you apply a
+blur. I'm going to zoom in. Notice that we
+blur the background. If we blur the
+background, we're going to lose all the
+grain, all the film grain that was found
+in the image. This makes it look more
+digital and makes it look fake. So I think
+it's a good idea to bring in just a
+little bit of grain back into the image
+like so. I'll fit the image to screen so
+that we can see it better. And I think
+this is looking pretty good. I'll press
+OK. And you can see the result
+before and after. And now that I know that
+my image is working, I can start fine
+tuning, for example, I can fine tune the
+crop, maybe I can bring this down a little
+bit just to keep her more centered. I can
+also double click on the smart object
+which will open it up in a new tab. And
+I can make adjustments. For example, I
+can adjust the mask, the original mask
+from the model. So I can click on this
+mask and I can zoom in and really get
+into those details now. Next, select the
+brush tool and go into the options bar
+and click on this down pointing arrow.
+And I can increase the hardness to 100%
+and I can paint with white to reveal
+pixels. See that's you on painting these
+areas in. So obviously you would spend
+your time making those adjustments.
+And if you wanted to remove pixels or
+hide pixels, I should say, you can
+click on this icon to swap the
+Fargo in background color or simply
+press the X key to swap those. And
+when black is your foreground color, you
+can paint to hide pixels. And obviously
+this is where you really want to spend
+your time fine tuning your image. Another
+thing that I recommend that you do is
+to click on the layer mask, then on
+select the mask. By the way, I'm in the
+on white view and the opacity is
+set to 100%. That way you
+completely ignore the background. You
+can adjust the edge of the mask. You
+can smooth it at some contrast,
+shift it in, whatever you like. And you
+can press OK when you're done. Next, I'm
+going to click on the brush tool and
+paint with black over her head here just
+to remove those areas. Now, one thing
+that I should tell you about this
+area will be really difficult to mask.
+So there's two things you can do.
+Number one is you can try to move her
+so that the background sort of matches
+that area here and then make
+adjustments so that it's not noticeable
+that we're looking at another image.
+And what you can do is create a layer
+above the model layer and
+simply select the brush tool and
+paint with the blue that you see
+here. And by the way, what I'm doing now is
+holding the Alt key on Windows option on
+the Mac. As I have the brush tool
+selected and that brings up the eye
+dropper and I can select the color as
+soon as I release the key. The tool
+comes back and I can paint with that
+color. So I'm just going to paint
+with that color there. And I'm going
+to change the blending mode to
+color. Next, I want the hair to come
+through, but not the red areas.
+If you notice the hair is pretty dark,
+so I'm going to double click to the
+side of the layer and use the blend
+if to bring out the darkness.
+So I'm going to click here where it says
+underline layer and click and drag
+this to the right.
+See how I'm starting to bring out
+the hair? Then I'll hold Alt on
+Windows option in the Mac and click
+on this point to split it in half
+and create a smooth transition.
+Like so. And then I'll press OK.
+So this is before
+and after. If I double click on the
+hand tool to fit the image to screen,
+you can see what I did there.
+Looks much more realistic because
+that area is very difficult to mask
+and we wouldn't be able to get a
+realistic result. Another thing that
+you can do is create a new layer
+on top of everything else and then
+paint in the hair.
+I have a tutorial where I show you
+how to create brushes that allow you
+to easily paint in hair.
+I'm not going to go through the steps
+in this video, but if you want to
+learn how to create those brushes,
+then look down below in the description.
+I'm going to place a link to that
+video so that you can learn how to do
+that. So I'm going to go into the
+libraries panel where I save my brush
+and I have it here. Hair brush.
+I'm going to click on it and it
+automatically enables it.
+I'll then select the eyedropper tool
+and just select some of the color
+of her real hair with the brush
+tool active. I'm just going to bring
+down the size of my brush to
+something more manageable, maybe
+around 432 pixels in this case.
+And I'll paint. See that? See how I
+just painted those strands of hair?
+Then I can press Ctrl T, Command T
+on the Mac to transform, right click
+and flip horizontal and I can just
+place them in these areas where I
+would want the hair.
+And I can either place them here
+above the actual model layer and
+obviously have to mask those, right?
+I have to hold Alt on Windows
+option on the Mac and click on
+the layer mask icon to hide
+the contents of that layer.
+And with white, using a regular
+circular soft brush, I could
+paint in that hair back in.
+And obviously you would have to
+spend some time getting them to
+match. Or another option is to
+delete the layer mask, bring
+back the hair here.
+And for example, on this side
+of her hair on the other side,
+I'll flip it once again so that
+you could see. So Ctrl T,
+Command T or Transform, right
+click, flip horizontal and I'll
+just place it right about here.
+And I'll place the strands of hair
+below her so that her hair covers
+it and we just see these strands
+of hair barely popping out.
+And I can adjust the luminosity
+of the strands of hair by going
+into image adjustment levels and
+then using the levels adjustments
+to either darken or brighten
+the hair accordingly.
+So it's totally up to you how you
+use these strands of hair, but
+you will have to paint them in
+in these difficult to select areas.
+But for now, I think that this is
+a good explanation of how to make
+the composite work.
+When you do all this fine
+tuning, close this tab, save it.
+Everything that you did will be
+automatically updated onto the
+Smart Object. I'll double click
+on the hand tool to fit the image
+to screen and just look for any
+details that you may have missed.
+If you missed anything, just go
+back into the Smart Object and
+keep adjusting it until you're
+happy with your results.
+Let me know down in the comments
+below which of these techniques
+was your favorite and what you
+learned from this tutorial.
+Also, if this is your first time
+at the Photoshop Training Channel,
+then don't forget to click on that
+subscribe and notification buttons
+so that you don't miss any new
+Photoshop tutorials.
+Thank you so much for watching.
+I'll talk to you again in the
+next Photoshop tutorial.

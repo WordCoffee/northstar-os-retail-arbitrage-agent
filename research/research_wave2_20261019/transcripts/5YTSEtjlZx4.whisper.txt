@@ -1,0 +1,174 @@
+In this Photoshop tutorial, we're going to combine two images and make it look like they
+belong together.
+And if you love Photoshop, hit that subscribe button, turn on notifications, and you'll
+get a free tutorial from me each week.
+Now the first thing you want to do is you want to look at the size of the image when
+you're combining the two.
+So go under Document Dimensions and take note of the size.
+This one's 5184.
+This one's 5870.
+So to avoid any resolution issues, you want to take the larger image and drop
+it on top of the smaller image so that way we're only scaling down and we're never
+scaling anything up because that softens the image and it loses quality.
+Let's choose the Move tool.
+And with the Move tool selected, we're going to drag and drop this into the other
+document.
+So just drag up.
+Now don't let go.
+Go into the tab.
+The second image are open.
+Move to the middle.
+Don't let go yet.
+Now hold down the Shift key and now let go.
+The reason we held down the Shift key is it will center it.
+And if we look now, we've combined the two images into one.
+Obviously, we want to cut out the line and match the color so it looks realistic.
+Make sure the Move tool is selected and hit Ctrl T or Command T for free transform.
+Let's scale this down a little bit so it fits within our boundaries.
+So I'm dragging it down.
+Notice it's proportional.
+If it's not proportional when you drag it, hold the Shift key and that will keep it there.
+And also if you hold down the Alt or the Option key, we can scale it from the middle.
+Great.
+So let's just drag this into the middle and hit Enter.
+Now we can see the whole image.
+Let's cut out our line.
+So go under the Tools and then we're going to choose either the Object or the Quick
+Selection tool.
+It doesn't matter because each of these will give us this option that says Select
+Subject.
+Click on Select Subject and Photoshop's AI will make a selection for us.
+All right.
+Now we want to fix the fur areas.
+So let's choose Select Mask.
+And now we're in the Select Mask workspace.
+What we want to do is use the Hair tool, which is the Refine Brush.
+And then we're going to go around the edges here of the long hairs.
+And this will help us get a better selection.
+Great.
+Let's do the bottom.
+All right, a couple of other little settings that help with the selections.
+Under Radius we're going to set this to 1 and then turn on Decontaminate Colors at the
+bottom.
+So let's go ahead and we're going to click OK.
+Great.
+We've got our line.
+Let's resize it and position it now.
+Hit Ctrl T or Command T for Free Transform.
+And once again, let's scale this.
+And we can move it into position.
+Maybe here looks quite good.
+Let's hit the Enter key.
+Now what we need to do is blend these feet in so they look like they're actually in the
+grass.
+So we're going to make sure we're selecting our layer mask, not the layer but the mask next
+to it.
+And we're going to grab a brush.
+With the brush we're going to paint with black.
+Black will hide the layer.
+And by the way, these masks are a lot of fun to play with.
+So black will hide it, white will show it.
+And then with the brush we're just going to brush around the feet so the line is
+sinking into the grass and not scooting across the top of it.
+There we go.
+Now what we need to do is match the color of the lion with the rest of the image and
+then we're going to create a shadow to match the shadow here.
+So first thing, let's match the colors.
+With the lion layer selected, notice I'm not on the mask anymore.
+I'm now on the layer.
+Grab our Move tool.
+And now what we're going to do is go under Image Adjustments and then we're going
+to choose Match Color.
+So with Match Color, what we want to do is we want to match the color from our
+background to the color of our foreground.
+So notice here we've got different images open.
+Let's make sure we're working on this image.
+So if we go under Source, you'll see all the open tabs are here.
+We want to choose the same image.
+And then we want to match the layer.
+So the layer we want to match is called Background.
+So there's the source, there's the layer, Background.
+This immediately will take the color of the background.
+Now this is a little too strong and that's what the fade slider is for.
+So if we look at fade, on the left is the new color.
+If we drag this all the way to the right, here is our original color.
+So what we want to do is find just the right blend between the two.
+So as we move it to the left, we bring in more of that new color.
+And we just need to find a nice match and just find where it matches your eye.
+And then we're going to click OK and the colors are matching better now.
+Why don't we add a nice shadow so it matches the windmill over here?
+So with our layer selected, we're going to go down to Effects.
+And we're going to choose a drop shadow.
+So with the drop shadow, what we're going to do is we're going to take
+our opacity to 100, let's set our distance to zero, size and spread.
+Let's just put all that to zero.
+First this is going to create a solid black shadow and if I drag,
+you can see that's the shadow it's going to create.
+And we're going to use this just as a little mask.
+So once again, set that distance to zero and see how that matches it.
+Click OK.
+Now we want to separate the shadow out into a brand new layer.
+If we right click on Effects and we go to Create Layer.
+Now this will create a nice black layer and
+we can use this for our shadow.
+So select our shadow layer and now we're going to go to Free Transform.
+Control or Command T for Free Transform, right click and
+we're going to flip this vertical.
+Let's just drag it down.
+And you can see the shadows are starting to appear underneath the line.
+Now if you look at that shadow, see how it's kind of moving a little bit
+to the side that's called skewing.
+Let's skew that so we're going to right click and choose Skew.
+And if we drag it, notice how we can skew that.
+So let's just copy the angle that we're seeing from the other shadow.
+And then we're just going to drag that up, line up the feet, click OK.
+It's not quite looking realistic yet.
+A couple more things to do.
+One is I'm going to apply a blur on the edge.
+So we're going to choose Filter, Blur and
+we're going to soften this.
+We're going to use a Gaussian Blur.
+Now we could have created the blur when we created the original drop
+shadow with the size slider, but it's better to see it here on the image,
+on screen using the Gaussian Blur.
+Then we can just see what really matches our image better.
+So I'm going to take it to about 14, 14.8, click OK.
+And now we're going to reduce our opacity.
+Let's take our opacity down so it kind of blends into the background
+a little bit better.
+Now there's other things we could do such as displacement maps
+and different things, but once again, I want to keep this simple
+because it's a beginner's tutorial.
+So let's just call that a shadow.
+And the last step is a little trick I came up with, which works well
+when you're combining layers and you want to just tie everything together.
+And that's by applying a little bit of a color to it.
+Let's do that right now.
+So we're going to go under the adjustment layers
+and we're going to choose a solid color just to keep it simple.
+So with a solid color, we can choose any color we want.
+Let's get a kind of warm color tone here.
+Click OK.
+Now we're going to change the blend mode of this to color.
+So only the color is going to change and everything else is going to be intact.
+And now what we do is we want to blend this color in with the original color.
+So we're going to take the opacity all the way down
+and then just bring it up a little bit and see as we start to apply some of that color now.
+Notice how it really ties everything together.
+If you want to use a different color, click on the color here, just double click
+and then we can change the color and we can go through different colors.
+Look at this, see how it affects the image.
+Find the mood you're looking for.
+Click OK.
+So I wanted to just keep this one simple for beginners.
+There's a lot of different things I could have done and I've created a lot of other tutorials
+that shows you how to do all those other things like displacement maps
+and more accurate color matching and different things like that.
+Let me know in the comments underneath if you found this tutorial useful.
+And maybe the next one you might want to look at is my layer masking for beginners.
+And that'll help you understand layer masks.
+I'll add a link to it.
+Do me a favor, hit that thumbs up.
+That's the like button.
+And don't forget to subscribe to Photoshop Cafe.
+Until next time, I'll see you at the cafe.

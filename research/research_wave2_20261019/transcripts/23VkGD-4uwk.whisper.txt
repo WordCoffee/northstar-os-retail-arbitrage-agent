@@ -1,0 +1,361 @@
+Hello, you beautiful people. Today I'm going to teach you about Confi UI. Now we're going to follow
+this little deck that I put together inside of Confi UI. But the first time you start Confi UI,
+you will probably see something like this. So you manage to install it, you manage to start it,
+you're here, and you're wondering, well, Seb, what the age do I do now? I'm going to tell you.
+If you see this, or something else, it could just be empty like this. It doesn't matter. The point is
+that you've managed to get inside of Confi UI. And some of the features up here might look a little
+bit different from the ones that you have installed, right? Now, that's because I have custom nodes
+installed, and you're most likely running the default version. But most of this is going to
+be the same. And I'm going to show you what's going on here, right? So first off, this is
+called a workflow. These workflows will run AI stuff, basically, anything from text to images
+to videos and whatever you want to build into this. There are custom nodes that can get you
+anything, right? You have a little workflow menu up here, we can open previous workflows,
+you can save and export as JSON files, you can also browse templates. So these are some of the
+pre installed workflows that come with Comfy or some basic ones, you have some for flux,
+stable diffusion, Excel, you have some video ones, there are a bunch of stuff that you can explore
+here. Now, most of you are probably going to want to install custom workflows from sources online.
+And if you get them, while you can just drag and drop them into your workspace. And it's
+basically as simple as taking a JSON file that you've downloaded and drag that straight in here,
+you might see something like this, a lot of errors, missing node types, completely normal.
+Whenever you see that all you need to do is go into your manager, your manager is going to be
+your best friend. And here you can install missing custom nodes, and all the missing nodes
+are going to be in here. Now, we also said that your Comfy UI is outdated, might be might not be
+depending on when you install this, we're going to check that in a bit. But these are all the missing
+nodes from the workflow you downloaded. So you're just going to tag all these or check all these
+and press install. After that, you need to restart your Comfy UI and then refresh your
+browser. Now, if you're getting something like this, your Comfy UI is outdated, you can actually
+either update all or update Comfy UI update all means you're updating both your Comfy UI and your
+custom nodes update Comfy UI will not update your custom nodes, but only your Comfy UI base system.
+What is a custom node, we'll get to that in a second. You can also switch your Comfy UI version
+if you want to revert to a previous version or go to the newer version. There's also something
+here called the model manager. And from here, you can install models. So let's say, for example,
+you're searching for a control of model, where you can search control net. And here's a bunch of
+control models. So you probably want to know exactly what you're searching for. But this is
+an easy way to find the models that you're looking for. Now you have your queue up here. And your
+queue is basically what you have rendered previously, or what you have going on how you start a
+workflow is pressing the run button here. It can also be somewhere else because you can drag this
+around. And I prefer to have mine up here. But that's fully up to you by default, it's going to be
+somewhere here. You can set how many generations you want to do. And you can change this to run
+instant with which is going to then keep going, keep generating. And if you run this, you can
+see we're getting an image generated. But if you change this to run instant, and start that,
+this is just going to keep generating and keep generating. So you can, you know,
+set this for get a to go to sleep, and have a you know, a couple thousand images when you wake up,
+depending on your machine, maybe it's just 100. Right. And the last one run on change, well,
+then generates once and then whenever you make a change. So let's say, for example, we add in
+beautiful sunny weather. And then you can see that now when that was changed, we're getting
+this new one here. So let's stop this head back to run here. And this little button here will
+clear or cancel your pending tasks. And if you want to cancel your generation, you press the red
+X here, here's your node library with all your nodes, we're going to get to a second what a
+node is. And here is your model library with all your installed AI models, you also have
+workflows here. And these are your workflows, these as JSON files as you can load. If you
+if we move my little face here, you can see that there's a menu here down to the side.
+And if I click, I can zoom in and out. I can also scroll with my wheel to do that. And if
+you're getting lost somewhere, maybe over here, you can press fit view, and you're going to get
+back to your workflow can always also change to select mode space, which will drag like this.
+If you're in the regular pan mode, when you click and drag on a note, that will move. You can also
+hold space to go into this different kind of pan mode here, right. And the last one toggle link
+visibility. And that will, as you can see here, enable or disable the little spaghetti strings
+here, the links between the nodes, you have toggle theme here, which toggles between the
+light mode and dark mode. And then you have the settings down here. So you have your basic
+settings for comfy and the settings for any custom nodes. Again, what is a custom node?
+Well, glad you asked, let's start from the beginning. Let's move me back over there.
+There we go. Now this is comfy UI for beginners. And why would you want to use
+comfy UI? Well, the thing is, it has basically endless possibilities. So whatever you want
+to build, you can basically build. And if there is not a custom node for that, you can create one
+yourself. And then we get to custom nodes. What is a custom node? Well, a custom node is essentially
+when you're getting in features that don't exist in comfy UI, then you're building a custom node
+to get those features in. Now comfy UI is free. And why I do free with these little
+thing about jigs here is it is free to use, it is free to install. However, it requires a lot of
+beefy hardware. So if you don't have that type of hardware, a big GPU, well, then you might need
+to use a cloud solution, for example, like think diffusion, affiliate link down below is going to
+get you 20% off. So whatever you want to, you got to pay for it somehow, right, either by
+having a computer or by renting a computer. You also have easy sharing of workflows, which is super
+great. Because when you generate something, you can drag that image back into comfy and get the
+workflow. That's really cool. You can also just save the JSON send it to your friend,
+they can drag and drop it in, and they can then use it. If you haven't seen my videos before,
+my name is Sebastian, some people call me the AI dad. And I have about 200 videos on AI, a lot
+of them on comfy UI specifically. And I am an X art director. Well, I guess I still am, but I work
+mostly with this nowadays. So maybe you heard about AI models. So what AI models should you use? And I
+would say changes as new models get developed. So if I say that you should use model a today,
+well, in two weeks time or a month's time, when you're watching this, it might be model B,
+that's best is that. So I would say check what's current right now. And there's actually a
+hugging face leaderboards. Now, this does not only use open source models, it shows a lot of models,
+all the AI image models out there. But for example, one that we can use inside of comfy UI
+is this hydrae model right now, we can use the very popular flux, the flux Dev one, which is
+down here. There are also the old classic stable diffusion models, which are not very high up on
+this list currently, but with custom fine tunes and Lois, they can perform very, very well. As of
+recording the video, I would say it's a battle between flux and hydrae currently. But that might
+change when you're watching this right for you to understand comfy UI. I think it's important
+that you understand some of the theory behind it, right, or some of the theory behind image
+generation when it comes to AI. So consider the multiverse, right, you've seen a Marvel movie,
+maybe, and imagine that we have an AI universe, an R kind of RGB universe, what we can see.
+So here is me as Viking, here's me with my beautiful YouTube plaque, and here's just an old
+man. And these are like real images from the real world. And in the latent space, the AI universe,
+we got lots of weird shit going on, right? So imagine that, you know, here's our large
+GB universe, and then we're sending stuff through portals into the AI universe. And in the AI
+universe, we use something called noise, we inject noise into images to be able to
+kind of work with them to make them into something else, right? Or we start with noise
+and create an image from that. And these colors are something to take note of too,
+because those are going to be consistent throughout not only this video, but comfy UI
+in general. Here's a way to think about this. So you have an input, this image of me, for example,
+and this is in our blue RGB universe, we can see this, this is me, this is a photo, it's real,
+we then send it through our VAE encoder through the universe portal into the other AI universe,
+the latent space. And here, we can give noise to the image. So this image has noise AI noise
+applied to it. And then the AI can kind of work with that noise to create something new.
+It's feeding it, it's giving it it's giving it gas, so to speak, imagine a car driving,
+it's getting a little gas or electricity these days, and we can then send it back again through
+this universe portal to our RGB universe. And now it is transformed into something different.
+And this is me now in a kind of anime style instead. So consider this these universes,
+we're sending data across, it could be images, it could be text, doesn't really matter, right?
+Just consider that we have our universe, where we can understand and see what's going on. And then
+we have the AI universe, where we can't really see what's happening, we can see parts of it.
+But it's, you know, it's chaotic and mystic, a lot of sci fi stuff over there,
+and math, all scared of math, right? So what is a node then we'll talk about nodes,
+we talked about the custom nodes, and node is essentially kind of like a feature.
+So here we have a node, this is me again. So this is called a load image node. And the way that you
+find nodes is you have them either here on the left, by clicking this or by pressing N,
+you have a lot of nodes, you can sort up here, I think this goes to alphabetical,
+and you can find, you know, whatever you want, you can also right click,
+and you have add node, and let's say image here, for example, we have a lot of image nodes that,
+you know, does something with the image. And we have load image here, for example.
+And this is just another node, right? Here's sort of a prompt node, you can say. And here I just
+put Sebastian in a hat in these nodes are not connected now, this just to show you what a
+node is, a node is features doing something. So this is the node will actually transforms
+from clip to conditioning with this text. I'm going to tell you more about this in a second.
+Here's another node load diffusion model. So this loads an AI model into your comfort UI.
+Well, what's an AI model? Remember, we talked about them previously, flux, stable diffusion,
+high dream, basically computer models that help you work with AI or loads kind of AI.
+These nodes are rerouting nodes. They're basically just a way to clean up your workflow and send these
+strings between them. And all of the nodes that you're going to use, as you can see, these are
+not connected to anything, as we saw in the beginning, all the nodes need to be connected
+somehow. So you could send this image data through to, you know, something else, maybe you
+want to send it to a save image node, and then you've connected this little string here, and you
+have an input and an output. So that's what a node is. What are the connections in between them?
+Well, so let's take this case sampler, for example, the case sampler is kind of the machine of it all.
+And on the left, you have incoming anything here is incoming into the case sampler. So we
+have a model connection, we have a positive and a negative, which refers to a positive and a negative
+prompt. So a text description of what you want to see, we have something called a latent image
+here, which is remember, we talked about the latent space. So this is data in the AI universe.
+And then we're sending out in still inside the AI universe, latent data here. So with every node,
+you can have in, out, or both. And it's always left to right. So you can never change the direction,
+it's always coming in on the left side is always going out on the right side. And they're all going
+to be color coded. So what are these colors? Well, the yellow here is a clip. So kind of,
+it takes text and converts it to AI language, we have the red VAE. Remember, we talked about
+the universe portals. So the red is the VAE, the blue color is images when they are in our RGB
+universe, when it's in the RGB space, where we can see what's going on, right? And then we have
+this pink again, that's when data is sent through the latent space, going to be an image
+when it is inside of the AI universe. We have the orange here, which is something called
+conditioning. And that's when you have text and other types of control inside the AI universe.
+For example, you can have a prompt cat in a hat. And when it's inside the AI universe, when the
+computer or the AI model can kind of understand what's going on, then it's probably in in the
+conditioning. If it's in our universe, well, then it's probably somewhere, you know, in the
+clip or a string before it's converted to AI language, we have this green string. So it's
+just simple text could be a prompt could be a file path. Imagine typing something in notepad.
+Well, it's just simple text, we have the purple AI model, an AI model could be a safe tensors,
+an SFT, a GDUF, these CKPT checkpoints, they are not used as much anymore, as they can potentially
+contain malicious content viruses and stuff. So the community has moved towards using
+the safe tensors format, or the GDUF format. The GDUF format is a kind of a compressed format
+where you can make models, well, think of them as smaller and easier to load for lower end
+computers. This little green turquoise teal color is mostly used for control nets. A control
+net is a way to control the output of your image. Let's say you have a character that's
+standing like this, you know, and then you want to have the same pose on the output image,
+and then you can use something called a control net. Let's put this into context. So here we have
+a very simple workflow. And this is the same that we saw in the beginning, the base workflow.
+So our end result is going to be this cat in a hat, right? So we're loading an AI model,
+this is in a safe tensors format through these nodes here converting text to AI language. So we have
+cat in a hat in our positive prompts. And the way that we know that this is a positive is not because
+it is green, it's because it goes into the positive. But for many workflows, you can see
+that a positive prompt has been colored green by the workflow creator, and the negative prompt
+has been colored red. The negative prompt here is what you don't want to see. So I want
+to see a cat in a hat, I don't want to see a dog. So this clip then converts what we can see a cat in
+a hat to AI language that we then that we can't understand. But this little robot builder here,
+inside of the latent space, can that and through the latent image here, we're sending it well,
+an empty latent image. What does that mean? What's basically a canvas, right? So we're telling
+this, this image should be 1024 pixels wide and 1024 pixels high, and we want one of them. So that's
+our blank canvas or white canvas. If you want to consider a canvas of a painting, it's essentially
+blank, but there are no, you know, non colored canvases in real life. White is actually a color,
+you know, so this information that we're sending in the model, the prompt and the size, this robot
+builder in the latent space, then takes it generates this image here, sends it again through the
+universe portal. Remember, we talked about the universe portals, the VAE, the variational auto
+encoder that can send images or data in the latent space to our world in the RGB universe.
+And we can then see this cat in a hat. Pretty cool, right? So this is a very basic text to image
+workflow, because it's text to image. Feel free to ask your questions in the comments. And we're
+going to continue to something different. So if this was a text to image workflow with, I think
+this is a yes, this is a stable diffusion Excel model. So as they say in Star Wars, it's an old
+model, but it checks out here we have a newer model. This is a flux model. But the theory that we
+have been talking about is still relevant here. It is, however, a little different because the nodes
+are not the same. So remember, we have the case sampler here, for example, the robot builder,
+while it is still here, it's just different. And you might encounter this, there might be
+different types of samplers. And instead of having all the data on the inside and all the settings
+here, they can come from the outside. So all of those settings are sent from different nodes
+instead. And you can do the same for this. Let's say, for example, that we want to
+convert one of these to say, convert widgets. So the widgets are these two inputs and inputs,
+remember, are the ones on the left. So let's convert seed here, for example, to an input.
+Then we could take a new node, remember, we double click here, and find a primitive.
+And if we connect that to the seed, well, we can now sound that we can put the seed here
+instead of inside the node. Why would you want to do that? Well, there are a lot of reasons.
+Maybe you're building more complex workflows where you're requiring more data to come in,
+then what's available here. Maybe you want to build a simpler workflow where, you know,
+maybe you just want to have one setting up here. And, you know, that's the only
+thing you want your end user to see. Well, you can do it like this. Let's convert our seed
+here back. And now we're going to convert input to widgets. Now the cool part about this, now if you,
+instead of converting, you can actually drag straight into one of these.
+And that will convert it automatically. That is, however, not something I think you will do
+in the beginning. Here we have our flux model. So we're having a different node here,
+load diffusion model, instead of what was up here, which was the load checkpoint model.
+That's mainly because we're having a different type of model. So this is the flux model.
+It does not contain the clip and the VAE inside of the model, like this one up here,
+you can see this one contains the clip and the VAE built in some models don't. And then you
+have to load these separately. So we're loading the flux AI model, we're loading these clips.
+And we're then sending that data forward. We're loading a separate VAE and that's sending
+sending to all the red nodes that acquire it. And you can always see
+in the inputs of a node that if it's not connected, well, it probably needs to have
+something connected. And if I try to run this now, well, it's going to say, oops,
+something missing here, right? So what you want to do is make sure that that is connected.
+Now, in this workflow, I'm not going to go super deep into it because this is a beginner's guide.
+We have another problem called cat captain with iPatch on board a pirate ship. A parrot is
+near the captain. We're setting a width and a height. And this is still giving us an error,
+but that's because we need to then run it again. And now we can see it's connected.
+And we are now getting here a cat with an iPatch. We lost a little part there.
+We have the parrot. And well, we have to assume it's a pirate ship, right?
+So let's talk a little bit about one node. Now, we did a quick check on a workflow that might,
+you know, this is might be a little confusing to you guys. So let's go back to some of the basics
+again. So the case sampler, right? And remember up here, we said that the case sampler is our
+robot builder in latent space. Right? So it's essentially the machine or the builder that
+creates our image. Notice that this is gray and the other was green, purely visuals. And you can
+easily change that by clicking up here. So now this is green too. So these settings,
+you kind of need to understand what's going on here. There are a lot of settings inside of
+Confi UI that you don't need to understand. But as this is kind of our machine, the robot builder,
+well, you need to kind of understand the basics. Different AI models have different
+best settings, so to speak. So let's start with the seed. What is a seed? Well, remember we
+saw some images with noise. If we go way, way back up into here, for example. So this
+noise, when an image is starting, you're going to have only noise. But this noise is a random,
+right? So how do you decide where the pixels go? Well, that is the seed. So every seed is a
+random setting of random pixels, basically. So depending on the seed, you are going to get
+a different image. And do you set the seed manually? No, you don't, but you basically leave it.
+As long as you have control after generate as randomized, you will get a new image
+each generation. And we can see that if we go up to our text to image here and set this to
+randomize, we will now get a new image. And if we run this again, well, we'll get a new image
+again. But if we set this to fixed, it's going to keep generating
+here. If you can see the second time, now we get this again. And if we keep going, well,
+we're just getting the same one. And if you go back to seed one that we had initially,
+we can get this little cat with a beret back, right? So some people might tell you, well,
+you got to find the best seed for your image. Well, that's not really how it works.
+Are some seeds better than others? Short answer, no. Well, some seeds give you
+better images for a specific prompt. Well, sort of, yes, but that's because of the randomness
+of this, right? If you're doing cat in a hat, and seed one gets you cat in a hat, that's great.
+If two gets you a dog in a hat, well, unlucky, that does not mean that seed two is any better
+than seed one. It's just that for your use case, that random seed did not work. So most of the time,
+unless you're trying to retrace your steps and change things as you go, you want to have this
+set at randomize and have a random seed. Now, if you, for example, that you're working with
+this cat in a hat, and you want to say, hmm, okay, I like this. But you just want to see how a
+different prompt would work cat in a hat. Maybe you could do red beret. I don't think this is going
+to turn into a seed. It's a completely different image. But you can at least see your changes
+within that seed. Most of the time, you will probably have the same prompt, and you might
+change other settings, like for example, steps or CFG or something pertaining to control net,
+for example. And if we go back down here to the case sampler, so we talked about the seed, right?
+And if we go out to the steps, consider this little robot builder. So steps, how long will
+your builder work? How many steps do you want it to work? And here we're doing 20 steps.
+So for each step, you're going from the noise. Remember kind of this noise here. And for each
+image, you're getting more and more of your output. And by the end, this is going to be,
+you know, what I want to see. And for this example, is this right? Most of the time,
+the steps are going to be written in whatever guide you're using for that model. Most of the
+time, well, I think you know, around 20 steps is a great baseline. CFG, what is that? CFG is your
+classifier, free guidance. What does that mean? Well, think of it as your blueprint. So if you
+set this low, we'll set this to, you know, three. Your robot is, you know, you're giving him a
+blueprint of your house, maybe, and he's going to go there hammer, but but but but but,
+oh, a blueprint to look at it. Okay, whatever. And it's gonna, you know, it's gonna resemble
+the house that you want to build. But it's not gonna be fully like the blueprint. He's doing
+his own little bit. He's being creative. But you've said this high, maybe, you know, 10, I don't know.
+He's gonna be like, Oh, shit, this blueprint, I really got a bill like this. Okay, boom,
+boom, boom, look at the blueprint, boom, boom, boom, he's hammering away. And you have this
+blueprint. And it comes out, you know, more or less as you wanted it. Most of the time, you want to give
+it a little bit of creativity, while still following your blueprint. So, you know, depending on the
+model, obviously, but if you're using stable fusion, for example, maybe you're someone around like
+four to seven, if you're using flux, this needs to be set at one. And then you have
+a flux guidance, which as you can see here, this is replacing your CFG. And then you are, I would
+say it's between, you know, two and 3.5, if it's a regular text to image workflow.
+But that's going into more of the advanced stuff. We're here for the beginner stuff.
+Now, what is the sampler then? So we have a lot of, you click here on the sampler name,
+this Euler here now, it's not Euler, it's Euler. Here's a bunch of stuff. Oh, man, what is all this?
+Euler, Euler Ancestral, DPM plus plus 2M. Oh, man. Well, think of them as your builder's hammer.
+Now, if you go into like a hardware store and think, oh, man, they're like 30 hammers, which
+ones which, well, they all have different use cases. We might see them as one hammer, they're all hammers.
+But depending on what you want to do, some are like quicker, some are, you know, bigger,
+some of you have maybe a little tiny hammer that has tiny jobs. So they're kind of different types
+of hammers. And they have sort of different use cases that can you use like all in one hammer to
+do all your work? Yes, you kind of can. A lot of people use like Euler and Euler A for, you know,
+all of their work. And that's fine. You don't have to dig into the sampler. I would say
+whatever the model creator or the workflow creator recommends, you stick with that. And the schedule
+is kind of diving more deep into that hammer. So think about like how your builder spreads the
+effort. So some schedulers can be like, you know, it's starting loose, it's hammering like all over
+the place in the beginning, but then by the end, it's like very precisely building, or it could be
+other other way around. When you start, it kind of very precisely building. And then by the end,
+it's hammering all over the place, right? You don't need to worry about the schedule too much.
+Use whatever the model workflow creator is recommending. Now D noise, however, this one here,
+D noise, this is one of your best friends when it comes to Confu, INA generating in general.
+And this is essentially how much you want to rebuild. So consider that this is a slider from
+zero to one. And from zero, while you're not rebuilding anything, the robot is lazy,
+it's having lunch, nothing's happening. And at one wall, maybe you have a house is trying to renovate,
+it's tearing it all down and starting from scratch. And if you use point five, well, let's say, okay,
+let's let's keep 50% of the house and then rebuild 50% of it. Okay. And how this applies to
+Confu, INA generation is, okay, think of an image, you're saving 50% of the image and getting
+50% new, or you're keeping all of the image, or you're changing all of the image. So this is the
+basics of the case sampler. And the case sampler, again, your AI machine. And we can see here,
+the D noise. So here we have, we have the case sampler. We have a D noise of point six.
+So we're kind of saving 40% of this cat. And we're then rebuilding with 60% new material,
+so to speak, and creating this dog. Why does it turn into a dog? Well, we actually asked for it.
+So if we go here to the left, we can see dog captain with eye patch on board a pirate ship
+apparatus near the captain. So what's happening here is that we're loading an image.
+We're telling our little AI robot builder inside of the AI universe to, well, okay, do this
+dog captain, but just give it 60% new stuff. So if we set this to zero, for example,
+and we try to run this now, you can see that, oh, well, we're just getting a cat.
+Well, that's because now this left image is exactly like the right image. We're not changing anything.
+And if we set this to one, so it's basically 100% new generation, well, this right image
+is not close to the left one. Now we did buy luck of the draw, get a parrot on the left and
+the dog to the right. And if we lower this maybe like 0.4, for example, well, we're gonna be closer
+and closer to our cat here. You can see that it's very similar to the cat, but we're getting a dog.
+If you go even closer, maybe 0.3, we're getting even closer to the cat. So we're starting,
+soon we're gonna start this, see this merging kind of into the each other.
+And it's still a dog at 0.3, at 0.2, well, we're getting some dog in there.
+Bear in mind the Dino's value is gonna be different from each model. And here I would say,
+you know, we're still, this is a cat, this is not a dog. So you need some noise here,
+some gas to change the image. Most of the time you want to be like 0.5, 0.6, maybe 0.7,
+but again, that depends on the model, flux models, you know, sometimes you can, you need to go higher
+and sometimes you need to go lower. So this is what's called an imaged image, you have an input
+image, an output image and that workflow, this is essentially this workflow. But here are
+all the nodes that are required to run this. So we have a load image that goes through our
+blue connection. We're sending that through the universe portal into the latent AI universe.
+And here our case sampler can work with it, little AI robot. We're loading the checkpoints.
+This time it's included the clip and the VAE model. We have the prompt. We also have a negative
+prompt. We don't want to see a cat. Most of the time when people use negative prompts,
+they use filler words like I don't want to want it ugly. I don't want it blurry.
+When it comes to flux, you generally don't use negative prompts. This is an SDXL model.
+So here you do. And from the case sampler, we're sending it back through a portal to our RGB universe
+where we can see it as a dog. When you kind of grasp the concept of these connections
+and what they do, you can download more advanced workflows and kind of get the sense of them and
+see what's happening. And then you can rebuild them and adapt them to your own.
+And also whenever something is breaking, you can figure out why, you know? Oh, and this specific
+node here, save image. This actually saves your image. And if you add a little slash here,
+it will go, here's your folder. So this is going to be your folder name, where you type,
+you can put that in here, you can go, let's zoom out a little bit. Like I'm can be sabs folder.
+And I want the image to be called dog captain. And that's going to be saved in
+confi UI outputs, sabs folder, dog captain dot png or jpeg or whatever, right?
+If you don't want to save this, you can actually load a preview image node.
+And just connect that. You see it's a blue. So you just connect there. We go. And if you run this
+now, well, we are able to see this and you can actually, if you don't want to save the image,
+you can just delete this. Another cool feature is, well, if you're trying to build something
+and you have something disconnected and you don't know what to do, you're like, oh man,
+I forgot to set this video. What should I do here? Or you can actually drag from this
+and drop. And then you're going to get some recommendations of what you can put in there.
+So let's say checkpoint loader simple. Okay, let's try this. That sounds cool.
+Oh, okay, that one works. And that works for all of these, right?
+So if we disconnect this one, latent image, okay, what do we need?
+What do we need? Maybe empty latent image. Okay, so yeah, this was a blank canvas.
+We don't want to use the cat. We want to use a blank canvas instead. Just remember,
+when you're setting the size for something, use a size that is native for your model.
+Most of the time for flux, stable fusion XL, stable fusion 3.5, it's 1024 by 2024.
+If using older models like ST 1.5, it will be 512 by 512, you know, 768 works well too.
+But for the newer models 1024 by 1024 or correlating aspect ratio is going to work great.
+All right, so that's basically it. Thank you so much. You've learned the basics of Comfy UI.
+Like and subscribe. I'll see you in the next video. Learn more about Comfy UI here.

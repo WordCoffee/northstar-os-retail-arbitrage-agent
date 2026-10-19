@@ -1,0 +1,223 @@
+Photoshop just released a brand new feature and I'm speechless.
+So let me just show you.
+Here is the car on a separate layer.
+Here's the background.
+Both of them absolutely not matching.
+Just click on Remove Background with the car layer selected.
+First step done.
+Still an absolutely horrible match.
+But then you'll see this new button called Harmonize.
+By the way, if you're not seeing the contextual taskbar, right click outside the canvas
+and click on Show Contextual Taskbar.
+And just click on Harmonize.
+Photoshop will take a while to generate a few things, but oh my God, have a look
+at the results.
+Here is the before.
+Here is the after.
+And you get three options.
+First, second and third.
+And the best part is it doesn't change the car.
+It is the exact same car.
+Imagine the amount of time it would take if you were to do this by hand.
+It not only matched the lighting and the shadows.
+Have a look.
+Here's the before.
+There was nothing there.
+It was all flat.
+But once you turn it on, see it painted all the lights.
+It also matched the color that goes with the scene.
+Now I know the shadows may not be perfect right here, but if you don't like this matching,
+you can always go back to Properties here with that layer selected.
+If you don't see the Properties, go to Window and you want to make sure Properties is checked,
+you can generate one more time.
+And it's going to give you a different set of harmonization.
+This looks even better.
+First one, second one.
+That's not accurate.
+Third one.
+I think I'm going to go with the first one.
+This is pretty darn cool.
+And it gives you a fantastic starting point.
+We're going to cover that later in the video.
+And if you thought it only could create shadows, let me just share with you another
+example.
+Here we have a car on the road again.
+I have removed the background.
+Let us click on Harmonize.
+Now this is a wet road, so there should be some sort of reflection, right?
+And it does create it.
+Here's the first option, second option and third option.
+Now before you rush to try this feature, know that Harmonize right now is only available
+in Photoshop Beta.
+And just to be sure, it is Photoshop Beta version 26.10.
+10.
+However you want to say it.
+So, if you want to install Photoshop Beta, simply open up your Creative Cloud desktop
+app, go to Apps here, Beta at the top and from there, install Photoshop Beta.
+Once you do install it, there are two ways to apply Harmonize.
+The first and the easy one is through the contextual taskbar.
+If you're not seeing it, right click outside the canvas, click on Show Contextual Taskbar.
+First of all, here we have a brand new chair image on this background.
+Let us click on Remove Background.
+And after the chair is masked, you should be able to see the Harmonize button.
+That's one way of applying it.
+We already learned that.
+The second way is going to Layer and Harmonize.
+Same thing.
+Brilliant.
+It already matched so darn well.
+Here is the before, here is the after.
+See all the shadows?
+First option, second option, third option.
+If you don't like any of these, you can generate one more time.
+Now let's talk about how it works through an extreme example.
+So here we have a scene where the light is coming from the back and the shadows
+are up front.
+On top of that, we have a picture of this person where the light is entirely different.
+And you can barely see any shadows.
+I have already removed the background.
+Now let's click on Harmonize.
+As you can see, it created the shadow for you.
+Brilliant.
+Take a look right here.
+First option, second option, third option.
+Let's say we go with the second option.
+The way it works is that it generates the entire thing on a brand new layer.
+If you take a look at just this layer, it generated the image again and masks
+it out.
+So let us turn off the masks for now.
+You would notice that it's not that high of a quality.
+The resolution is quite lower.
+So it has been generating the thing.
+And to keep it sharp, it just masks the subject and the shadow out and the areas
+that it has generated.
+As you can see in the mask, by holding the Alt key or the Option key and clicking
+on the mask, it generated all of those areas.
+Hold the Alt key or the Option key again and click back on the mask to see the
+entire thing.
+Now there's a quality limitation and we're going to talk about that a bit later.
+But for right now, here is the overall before and here is the after.
+It would have been incredible if it did it through adjustment layers.
+That would be genius.
+But I'm asking for a lot.
+Now here's a more reasonable example where the lighting is similar.
+Let's try harmonize one more time.
+If you try extreme cases, of course, things are going to break a little.
+But similar cases, this does a pretty amazing job.
+First option, second option, third option.
+Let's go with the second one.
+And it created those subtle shadows and it just brings everything together.
+Now you, my friend, can of course make little adjustments to make the harmonization even better.
+In this case, I have already removed the background.
+It is not matching.
+Let's try harmonize.
+It created the reflections, the shadows, everything is fine.
+But it took the shine away.
+Here's the first option, second option and third option.
+Let's say you were to go with the second one.
+I don't know why second is just working fantastic.
+But in this example, if you have a look at the before, the top part was already
+matching so well, just not the bottom part.
+So what do we do?
+Let us turn on the harmonized layer and then let's put it in a group.
+With just that one layer selected, press Ctrl or Command G.
+Now let's create a mask for the group.
+That way you have two masks for the same layer.
+Now let's take the brush, black as the foreground color.
+You want to make sure it's a soft round brush.
+Just erase the top part like so.
+And just doing that improves the image so darn much.
+Now have a look.
+Here's the overall before, not matching at all.
+Entirely different image and here is the after.
+Now I have done a fair share of compositing in the past by hand.
+And if you're watching this video, I'm sure you have to at some point.
+But how does harmonize compare to actual manual compositing?
+Let's see.
+Here we have a picture of a man on top of a completely different background.
+The lighting is absolutely not matching.
+Let's click on harmonize.
+There you go.
+The match looks great.
+First option, second option, third option.
+Let's go with the second one.
+So here's the overall before and here is the after.
+So what is the point in learning compositing and all of those manual techniques of painting
+light using blend modes, learning color?
+Well, this is the point in learning all of those things.
+So on the left you have the one done with harmonize and on the right by hand using a lot of adjustment layers.
+And you can clearly see while the vibe matches on the left hand side, it's a full on committed
+relationship on the right hand side, maybe a 50 year marriage when it comes to matching.
+Now let's take a look at some weird examples with absolutely zero sense matching.
+Here's the first one.
+I was trying to place an elephant on my table because there are so many elephant decor.
+So why not actually place a real elephant and with harmonize here is what it created.
+Wow.
+And if I were to say I was speechless, that would be an understatement.
+It not only created the shadow here, but also the reflection.
+So darn good.
+But I felt that maybe we needed to brighten the top part a little bit.
+So I just created a curves adjustment layer just to brighten the top part and it
+works brilliantly.
+Here's the before, not matching at all.
+Here is the after.
+The exact same harmonization steps that we have done in the previous example.
+Here's another example that I was experimenting with since we have already addressed the
+elephant in the room, time for the giraffe.
+And it not only again created the shadows but also a little bit of the reflections and
+it took care of the light as well since it's coming from the right hand side.
+See, it created all of those highlights for you.
+Now the harmonize feature has its own limitations and areas of improvement.
+Keep in mind this is the first iteration of this feature so it's already doing fantastic
+job.
+These are just a few things you should be aware of.
+Starting with shadows.
+Here was the giraffe.
+Here's the harmonized layer.
+It looks incredible.
+But as soon as you have a look at the shadows, this just doesn't sit well.
+It didn't create the shadow there.
+Here the shadow is just not working right.
+So whenever you have to have a well-defined shadow, it can mess up.
+Even if you look at other options, here was the first one.
+It didn't even consider a shadow here.
+Here was the third one.
+Shadows are missing here.
+Shadows can be a challenge unless they're soft.
+Since it generates the whole thing, sometimes it can make the subject look like a cartoon.
+Here's the before of course and here is the after.
+From afar, this is matching perfectly.
+But as soon as you zoom in, this just becomes quite softer.
+And in some examples you'll see that the face looks like a cartoon.
+That the highlights and the shadows on the face make it look like a painting.
+So here is the overall before.
+In this example, nothing matching.
+Here's the after.
+It's matching alright.
+But have a look at the highlights.
+It just makes the face look AI generated.
+First option, second option, third option.
+All of them do the same thing.
+And I have to say this is just brilliant.
+If it could have a little more texture and detail, it would make it insanely better.
+And when you have drastic changes in color, there's another issue that can creep up.
+Here's the before.
+Here's the after.
+This is just magnificent.
+But as soon as you zoom in, you'll start to notice a weird fringe around the edge.
+Similarly here, it's all throughout the subject.
+And finally, of course since this is a generation, there is a limit to the resolution.
+As soon as you zoom in to something like the shadows, you will begin to see the difference.
+This is the original surface, very sharp.
+But have a look at the shadows.
+It just looks blurred and pixelated.
+With all of its limitations on one side, this feature in its very first iteration
+is one of the biggest, the most massive feature Photoshop has ever released.
+If this is not mind boggling to you, I really don't know what is.
+I couldn't sleep until 4am yesterday trying out this feature.
+I hope you enjoyed this video and if you did, make sure to give us a like
+and also don't forget to subscribe and not just subscribe.
+Bring the buzz so that you my friend don't miss any other feature tips, tricks or tutorials.
+Thank you so much for watching.
+I'll see you in my next one.
+Till then, stay tuned and make sure that you keep creating.

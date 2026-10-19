@@ -1,0 +1,216 @@
+Today we're talking you through a product photo shoot with my good friend and professional product
+photographer Ross Floyd. Then we're tackling part of the post-production process where we're retouching
+and extending backgrounds in Photoshop. Hey everyone, welcome to Flurn. My name is Aaron Nace.
+You can find me at flurn.com where we make learning fun. I'm so excited to bring you this
+short snippet. We worked with my good friend Ross Floyd. He's a professional product photographer.
+He's shot over 70,000 individual products during his career and we've worked with Ross to create
+multiple tutorials to bring you through the photography part of product photography as well
+as the retouching. And just for you, our YouTube audience, we've actually cut together multiple
+sections from multiple different tutorials and brought them together for this exclusive look
+at the tutorials. Let's go ahead and jump in as Ross and I discussed his method for photographing
+this handbag on a custom built set. Super excited. We are photographing leather bags on a variety of
+colored backgrounds. You still want those shots on white. We need to know how to get them, but we
+wanted to just add something with a little bit more flavor. A little style. A little bit of style.
+We constructed three sides of our box, drill a hole in one of the pieces of MDF, and we have
+our subject holding the handbags. Absolutely. We started with a three foot softbox with both
+baffles in, so it's super diffused, soft lighting. I just want to start off in a very safe place,
+see what happens. We decided that after a little bit of experimentation, we wanted
+a little bit more directional light and maybe make it some sort of an angular element in the
+composition. And that's without introducing the bag. So we actually removed one of the baffles
+in the softbox. That's the translucent material. Okay. Used to diffuse the light.
+There's usually two, or there can be two in there, one that's close to the bulb and one
+that's further away. And what that does is it removes a layer of diffusion and allows it to
+become really a giant reflector, but it still has very light shadows to it because it's still
+bouncing a ton of light around. It's a little bit brighter here also because we removed some
+of the diffusion material. Some more light was able to go through. Yeah, the exposure is brighter now.
+We compensate for that as well in this next shot. So in order not to wear Angela out,
+we had her take her arm out and relax a little bit. Yeah, totally. This takes a lot of energy
+to keep up. And we introduced the bag to the set. Okay. And right away we noticed that
+this side of the bag was pretty dark. So we added a white bounce card in. And here's the example
+of what that looks like. It's much, much more attractive. So again, that's just a piece of
+white foam core. What that's doing is reflecting some of the overhead light back onto the bag.
+So now that we have the bag looking great, we're going to reintroduce Angela again,
+which is this next image. And right away we kind of run into a little bit of a problem.
+Our set's very small. Right. We didn't really think these straps were that long.
+But we can still work around it. So first we tried to have a razor arm, you know,
+a simple solution. But you can only raise your arms so far when it's sticking through a piece of board.
+Without it totally looking awkward and again, not graceful. So the other thing we noticed
+was that we had a green cast from the actual set reflected into our bag. And we didn't,
+since this is such a light color, we didn't want it to look sickly. So what we did
+was introduce a little white bounce card in there to keep that color bleed from affecting the bag.
+Now we do want that to be green eventually. Right. So we'll remove that card.
+We'll remove the card in Photoshop. And then when we did that, we actually noticed
+that this shadow is really kind of awkward and well-defined. So we went back and we changed
+our light again. We lowered the three-foot octa bank and we put a little piece of diffusion
+over the interior baffle. So now we have a double thick layer of diffusion in front
+of the actual light. So it's still directional but much softer. Oh, it is much softer.
+Yeah. And let me show you that side by side. It's really, you can really see it in her
+in two places. Oh, yeah, totally. In this kind of shadow underneath her arm. But also,
+look behind the bag. See how there's a really well-defined kind of awkward weird shape there.
+Now it's less defined. Yeah. I always thought of like soft boxes as like, this is how it is,
+you know, but it's good to know that you can make it a harder light source by removing some of the
+diffusion or even softer by adding more diffusion. We definitely have to take a look at her hand gesture,
+but that's the last thing we need to solve for. We want to get our camera in place and then I'll
+give her direction and we can play with that a little bit more. That makes sense. The other
+thing we need to pay attention to are how these straps are looking and they're not very symmetrical.
+A very practical way to solve that is to shift our camera to the left. Add a benefit. It
+makes her arm look longer. So let's see what that looks like. Yeah, that looks instantly way better.
+So we just shifted the camera to the left. It looks like her hand is a little bit higher there,
+which looks good. So we had her external arm even further in the set. So now we even have
+more distance between the bag and the wall. And then eventually I get lower. In this next
+shot, I'll lower the camera. So now we have almost even space between the bag and the wall
+and the bag and the, I guess we call floor maybe. Yeah, that definitely makes a big difference.
+Just looking at the top, you know that hand is really close to the border of the pink, but
+we know in Photoshop you can just extend that pink super easy. Exactly. And now that she's
+extended her arm a little bit more and raised it up a little bit, although uncomfortable, it gives a
+nice S shape to the composition. So we're looking good. We added another bounce card to the
+front. You can see that really filling in the areas in the bottom of the bag that were kind
+of like in dingy before. We have a lot of variations and we really had to pay attention
+to her hands because they changed. It's really hard to hold your arm like that. Yeah, for sure.
+She was so patient and nice when we did that. Definitely. I would maybe only use this one,
+but also change the position of the bag as well. We could choose her hand from one,
+the bag from another, ground from another and put all these together. Exactly. We could even
+go as far as to take just the straps. If the straps look great in one and the bag looks great
+in another. I really like this hand placement, but I also really like a little further up
+this one as well because her fingers are really nicely shaped, but this is also more active.
+Take home points for this one. There's just one light. There is only one light. It's a softbox.
+We took off the front baffle, but then we added some more diffusion in there to soften it up.
+It has that relatively well defined shadow, but it's still soft at the same time. It flatters
+her arm. It flatters the bag. You don't need a ton of different lights to create really great
+product photos, but I will mention that those bounce cards super important here. Absolutely.
+Now what we're going to do is extend these backgrounds because we want this to be a very
+graphic image at the moment. It looks great, especially if we just like cropped in, but I
+want a little bit more to work with in my background extension. What we're going to do
+is start off by using the clone stamp tool. So let's ask for the clone stamp tool.
+I'm going to hold alt or option and sample right over here and then paint right over here.
+Just paint it in. There we go. And we're just extending our background. This is an exact copy
+basically. Everything we see is just getting copied exactly. There we go. We'll do this with
+the pink too because we already have our clone stamp selected. There we go. We'll do that with
+the pink there as well. Okay. So we can see we've extended our pink and our green all the way to
+the right. Our next step is I want to bring the green that we've got here. I want to bring that
+all the way down. Okay. And it's going to be out of focus, which is thank God, because there's
+no texture on there. So we're going to create a new layer. I'm going to choose this color.
+So hold alt or option and sample this color with my brush tool. And then we're going to
+simply just paint in with our brush tool right there. There we go. And we just paint in right down
+there. Just turn this levels on just to make sure you, you know, we painted everything we needed to.
+There we go. And that's looking pretty good. Now let's take this lighter color that's here.
+Turn the levels on. You can clearly see it's a little bit lighter than it is down here.
+The lighter color and we'll just kind of fade that through there as well. So sample that color
+and just kind of paint that in there. So bringing this in now you can see that lighter color just
+kind of fades in. And what we did at the same time is we reduced the
+we reduced the opacity of that shadow, maybe just a little bit much. So I'm going to grab
+a layer mask and we'll just layer mask that out just a little bit. There we go. So it does reduce
+the opacity of the shadow, but not by a ton. Now we have another choice we can make. And that's,
+do we want it to get lighter as it comes down or darker because it's, there has to be a light
+change, right? It doesn't look realistic right now because there's no change of light as it
+gets closer to us. So what we're going to do is grab a levels adjustment layer. Okay,
+we'll try lighter to start with. If it doesn't work, we'll just go darker. It doesn't matter.
+We'll hit controller command I on the layer mask and then I'm going to use my gradient tool. So
+G for the gradient tool, we'll choose our linear gradient here, our foreground transparent gradient
+and I'm going to click and drag from the bottom straight up. Just make sure white is set as
+your foreground color. Okay, now what this does is just creates a light gradient on the bottom
+there. Now again, originally I said, I don't know if it needs to be lighter or darker. You just kind of
+like work with your levels adjustment to see. So here it is a little bit lighter and we just move
+this and we're getting a little bit darker. I think darker does actually make sense as far as
+like lighter draws more attention down to the bottom, darker pulls attention away.
+But I do want to hit controller command T and just stretch out that gradient
+just to make it a little bit smoother and it's coming up too high. I only wanted to be visible
+in the green there. There we go. And it can be subtle. It just you don't want it to be all be
+the same color there. See how flat that looks? It doesn't look like it's three dimensional at all.
+So just by putting a little bit of a gradient there just helps it out. Now this back surface
+it's on the same focal plane as the camera sensor. Okay, so it doesn't need a light
+variation in order to look realistic, but something that's coming towards the camera,
+you're going to see that light and dark variation very clearly. Now let's go ahead.
+We're going to create another layer as for the clone stamp tool and we're going to sample
+this boundary here. So let's hold alt or option and sample this boundary and I'm going to bring
+this right up. Now one tip here if you guys don't see this little preview go to window
+and down to clone source and you'll have a little option here for show overlay.
+Be sure that's clicked and then you'll be able to see a little preview of what you're actually
+going to be painting. And that's super helpful because you can just line everything up perfectly.
+There we go. And we have a photographic edge here between this blue and the pink, right? Like
+that's, we photographed that edge. So you know I don't necessarily want to just try to make my own
+edge there because it's just going to look more real if we use the actual photographed edge.
+All right, looks like I included a little bit of the, her subject's arm there. So just paint that
+out there. All right, and I'm just lifting up my cursor every couple brush strokes here,
+which is just going to sample directly beneath wherever I'm painting. The sample stays in the same
+relative place to wherever I'm painting. There we are. Just kind of building out a little bit
+more space here. And as I just continue to go straight, we're going straight up here, right?
+So it's, you know, the edges goes straight up and I'm clone stamping straight up. Very nice.
+So that's an edge that looks like a photograph from, you know, from here to here because it,
+we just clone stamped it. Now the next step is to use our brush tool. We're going to hold alt or
+option, bring our brush flow up to like really pretty high, like 80%. And I just need to paint
+to all this stuff in pink. And then I want to zoom out, turn my levels on and just make sure
+that I got everything for one. And then, you know, you can see it's getting a little bit
+darker over here. So let's turn our levels back off, bring our blood brush flow down to about
+30% and make a large brush. Let's turn this levels back on so you can see what I'm doing.
+It's subtle stuff, but you can see I'm basically just painting in a gradient over here. There we
+go. Just painting it a little bit darker right over here. It's just going to help it make it
+look more realistic at the end of the day. There we are. Let's turn that back off.
+We're probably not going to use all that up there, but might as well make it look good if we can.
+Okay. Now some of this is getting, is getting this detail, but really, I mean, this detail here that's
+in the, in the board itself, that's not necessarily like adding to the image. In other words, we want
+to see the detail in the bag, this detail in the board. It's not as, as important really.
+So I might even wind up down playing that detail with a blur, but for now, let's just use our brush
+tool and we'll just kind of paint this up there. I just need to erase this real quick. We're the
+pink spilled over a little bit. Turn our levels back on and just make sure we're looking
+pretty clear. We are looking good. There's a little bit of a, if I turn my levels back on,
+you can see it. So you just kind of gets darker here. So what I'm going to do is,
+here we go, just create a new layer. We're going to clone stamp. So let's just sample here,
+bring that right up there. Looks like I clone stamped the, that little spot there also,
+but that's not a big deal. And the brush tool just kind of fade that in.
+There we are. So at this point, we're actually looking pretty good. Let's just zoom out and see.
+Looks like we have a slight, you can see it looks like it's getting slightly darker there.
+So let's just create a new layer. We're just going to sample the slider color,
+paint it in a little bit there. It's a huge brush right now. So it's just going to take a
+little bit of time to kind of catch up. There we go. And that blue surface looks, looks really nice.
+I can see a little bit of a lighter area down here, some color inconsistency there as well.
+So we're just going to sample this kind of painted on down in there as well.
+And I realize I'm painting over top of the green and over top of the pink a little bit, but
+that's not really that big of a deal because we can just mask it out.
+Okay. So let's make this layer invisible. I hit P for the pen tool. Just create a new path here.
+Super easy. Just click right up here. Go all the way down to the bottom.
+You know, click right there. There we go. This path will right click and go to make selection.
+There we are. And then I'll just make this layer visible and then
+pop that on the layer mask there. So you can see it's only, you know,
+it's not going to be visible there. And then on the mask itself, we'll just go to window and down to
+properties. And I'll just adjust the feathering until it looks natural and realistic.
+There we go. About four pixels is perfect there. And then of course we have to go
+on our layer mask and then just paint. We just do this with the brush tool.
+Just paint black right over top of the hand.
+You could most definitely, by the way, use the pen tool and make this a selection if you wanted to.
+There we go. I'm just going to use the brush tool to save some time and I feel pretty good about it.
+All right. Hit that slash key just to make sure your layer mask is actually
+covering everything you need it to cover. Sometimes you'll have like, you know, a little
+area in there you just don't see. So hitting that slash key that's right above the
+enter key on your keyboard. That'll just really help out. It'll show you where your layer mask is.
+There we go. So we can see we just cleaned up that blue really nicely as well.
+Now at this point, normally I would go ahead and crop in a little bit because that's like
+kind of obvious that we want to crop. So like see for the crop tool,
+we would probably go ahead and choose a crop at this point. But what I want to do is just
+leave this. I'm playing the role of the retoucher here, right? So I want that to be decided by the
+photographer or the company that this was taken for. Maybe they want to put some type on here,
+or maybe they would even want to extend it further. Like maybe they would want, you know,
+something like this. Let's go ahead and just extend this out and show you
+if they wanted something like that. Then basically what I would do, there's a couple
+ways I would create a new layer actually. M for my marquee tool. This is actually a pretty cool tool
+tool. M for the marquee tool. I'm on a new layer by the way. And I made a stamp visible. So you can
+go to image and then down to apply image to do that. And then I would go to edit and then content
+to wear scale it's under edit. And then just stretch that out. All right hit enter and then
+deselect. So like boom, there we go. You got a, you know, easy. You put your type right over there
+if you wanted to do that. All right, we'll hit it undo a couple times. So we don't obviously need
+to do that right now. But that's that's what we have. That's the that's our ability now.
+Well, at this point, I think we're looking really great. So thank you so much for watching
+this exclusive tutorial for our YouTube audience. Now this is actually a combination
+of multiple tutorials we created with Ross. Those tutorials combined are over 18 hours in length
+covering so many different product photo shoots as well as retouching. So if you'd enjoy this,
+you're going to love our product photography tutorials with Ross Floyd. Let us know what
+you thought of this video. Give us a big thumbs up and hit that subscribe button. We'll send
+you free tutorials every single week. Thank you so much. I'll learn you later. Bye everyone.
+The rocks. We've got some malachite and some obsidian with rocks Floyd. Here you go.
+Malachite too for a clear projection of your throat chakra. Blah blah blah. It worked. It worked, Mike.
+Do you want it back here? No, I don't want it. Thanks, man. I appreciate it.
+All right. Thanks, Aaron.
+You take your rocks. These are good. I just don't need it anymore.
+I mean, you say that after you just hide it on. So, you know, I mean, I took all this power.
+Oh, interesting. So it's just totally blowing out the metal.
+It is going to help.

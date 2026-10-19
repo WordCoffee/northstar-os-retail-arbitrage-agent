@@ -1,0 +1,1696 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.080 --> 00:00:01.829 align:start position:0%
+ 
+Hello<00:00:00.400><c> everyone</c><00:00:00.719><c> and</c><00:00:01.040><c> welcome</c><00:00:01.280><c> back</c><00:00:01.439><c> to</c><00:00:01.600><c> my</c>
+
+00:00:01.829 --> 00:00:01.839 align:start position:0%
+Hello everyone and welcome back to my
+ 
+
+00:00:01.839 --> 00:00:04.070 align:start position:0%
+Hello everyone and welcome back to my
+YouTube<00:00:02.159><c> channel.</c><00:00:02.800><c> My</c><00:00:03.040><c> name</c><00:00:03.120><c> is</c><00:00:03.360><c> Daniel</c><00:00:03.760><c> and</c>
+
+00:00:04.070 --> 00:00:04.080 align:start position:0%
+YouTube channel. My name is Daniel and
+ 
+
+00:00:04.080 --> 00:00:05.990 align:start position:0%
+YouTube channel. My name is Daniel and
+this<00:00:04.240><c> video</c><00:00:04.480><c> will</c><00:00:04.720><c> be</c><00:00:04.880><c> the</c><00:00:05.120><c> first</c><00:00:05.279><c> video</c><00:00:05.520><c> in</c><00:00:05.759><c> a</c>
+
+00:00:05.990 --> 00:00:06.000 align:start position:0%
+this video will be the first video in a
+ 
+
+00:00:06.000 --> 00:00:07.909 align:start position:0%
+this video will be the first video in a
+series<00:00:06.240><c> of</c><00:00:06.400><c> tutorials</c><00:00:06.960><c> focused</c><00:00:07.359><c> on</c><00:00:07.600><c> product</c>
+
+00:00:07.909 --> 00:00:07.919 align:start position:0%
+series of tutorials focused on product
+ 
+
+00:00:07.919 --> 00:00:09.910 align:start position:0%
+series of tutorials focused on product
+rendering<00:00:08.400><c> in</c><00:00:08.559><c> Blender.</c><00:00:09.200><c> This</c><00:00:09.440><c> first</c><00:00:09.679><c> video</c>
+
+00:00:09.910 --> 00:00:09.920 align:start position:0%
+rendering in Blender. This first video
+ 
+
+00:00:09.920 --> 00:00:11.669 align:start position:0%
+rendering in Blender. This first video
+will<00:00:10.160><c> start</c><00:00:10.320><c> out</c><00:00:10.559><c> simple,</c><00:00:11.040><c> but</c><00:00:11.360><c> we'll</c><00:00:11.519><c> show</c>
+
+00:00:11.669 --> 00:00:11.679 align:start position:0%
+will start out simple, but we'll show
+ 
+
+00:00:11.679 --> 00:00:13.669 align:start position:0%
+will start out simple, but we'll show
+the<00:00:11.920><c> basics</c><00:00:12.160><c> of</c><00:00:12.400><c> creating</c><00:00:12.719><c> a</c><00:00:13.040><c> product</c><00:00:13.360><c> render</c>
+
+00:00:13.669 --> 00:00:13.679 align:start position:0%
+the basics of creating a product render
+ 
+
+00:00:13.679 --> 00:00:16.310 align:start position:0%
+the basics of creating a product render
+in<00:00:13.920><c> Blender.</c><00:00:14.639><c> We</c><00:00:14.880><c> will</c><00:00:15.040><c> cover</c><00:00:15.280><c> 3D</c><00:00:15.679><c> modeling,</c>
+
+00:00:16.310 --> 00:00:16.320 align:start position:0%
+in Blender. We will cover 3D modeling,
+ 
+
+00:00:16.320 --> 00:00:18.310 align:start position:0%
+in Blender. We will cover 3D modeling,
+lighting,<00:00:16.800><c> and</c><00:00:17.039><c> basic</c><00:00:17.440><c> materials</c><00:00:17.920><c> in</c><00:00:18.160><c> this</c>
+
+00:00:18.310 --> 00:00:18.320 align:start position:0%
+lighting, and basic materials in this
+ 
+
+00:00:18.320 --> 00:00:20.710 align:start position:0%
+lighting, and basic materials in this
+video.<00:00:18.720><c> Let's</c><00:00:18.960><c> get</c><00:00:19.119><c> started.</c><00:00:20.080><c> Once</c><00:00:20.320><c> you</c><00:00:20.480><c> open</c>
+
+00:00:20.710 --> 00:00:20.720 align:start position:0%
+video. Let's get started. Once you open
+ 
+
+00:00:20.720 --> 00:00:22.150 align:start position:0%
+video. Let's get started. Once you open
+up<00:00:20.880><c> the</c><00:00:20.960><c> new</c><00:00:21.119><c> Blender</c><00:00:21.520><c> file,</c><00:00:21.760><c> delete</c>
+
+00:00:22.150 --> 00:00:22.160 align:start position:0%
+up the new Blender file, delete
+ 
+
+00:00:22.160 --> 00:00:23.990 align:start position:0%
+up the new Blender file, delete
+everything<00:00:22.400><c> in</c><00:00:22.640><c> the</c><00:00:22.800><c> scene.</c><00:00:23.359><c> After</c><00:00:23.600><c> that,</c><00:00:23.920><c> add</c>
+
+00:00:23.990 --> 00:00:24.000 align:start position:0%
+everything in the scene. After that, add
+ 
+
+00:00:24.000 --> 00:00:26.310 align:start position:0%
+everything in the scene. After that, add
+in<00:00:24.160><c> a</c><00:00:24.320><c> mesh</c><00:00:24.640><c> cylinder.</c><00:00:25.359><c> Then</c><00:00:25.600><c> go</c><00:00:25.840><c> down</c><00:00:26.000><c> to</c><00:00:26.160><c> the</c>
+
+00:00:26.310 --> 00:00:26.320 align:start position:0%
+in a mesh cylinder. Then go down to the
+ 
+
+00:00:26.320 --> 00:00:29.349 align:start position:0%
+in a mesh cylinder. Then go down to the
+cylinder<00:00:26.960><c> properties</c><00:00:27.599><c> tab</c><00:00:27.920><c> here.</c><00:00:28.960><c> Adjust</c><00:00:29.199><c> the</c>
+
+00:00:29.349 --> 00:00:29.359 align:start position:0%
+cylinder properties tab here. Adjust the
+ 
+
+00:00:29.359 --> 00:00:33.750 align:start position:0%
+cylinder properties tab here. Adjust the
+radius<00:00:29.679><c> to</c><00:00:29.920><c> 40</c><00:00:30.160><c> mm</c><00:00:30.640><c> and</c><00:00:30.880><c> the</c><00:00:31.119><c> depth</c><00:00:31.439><c> to</c><00:00:31.679><c> 100</c><00:00:32.000><c> mm.</c>
+
+00:00:33.750 --> 00:00:33.760 align:start position:0%
+radius to 40 mm and the depth to 100 mm.
+ 
+
+00:00:33.760 --> 00:00:35.750 align:start position:0%
+radius to 40 mm and the depth to 100 mm.
+Then<00:00:34.000><c> with</c><00:00:34.160><c> the</c><00:00:34.320><c> cylinder</c><00:00:34.800><c> still</c><00:00:35.040><c> selected,</c>
+
+00:00:35.750 --> 00:00:35.760 align:start position:0%
+Then with the cylinder still selected,
+ 
+
+00:00:35.760 --> 00:00:42.470 align:start position:0%
+Then with the cylinder still selected,
+move<00:00:35.920><c> it</c><00:00:36.079><c> upwards</c><00:00:36.480><c> along</c><00:00:36.800><c> the</c><00:00:37.040><c> Z-axis</c><00:00:38.000><c> 50</c><00:00:38.399><c> mm.</c>
+
+00:00:42.470 --> 00:00:42.480 align:start position:0%
+ 
+ 
+
+00:00:42.480 --> 00:00:44.950 align:start position:0%
+ 
+Then<00:00:42.719><c> go</c><00:00:42.879><c> to</c><00:00:43.040><c> the</c><00:00:43.200><c> side</c><00:00:43.440><c> view</c><00:00:44.239><c> and</c><00:00:44.559><c> from</c><00:00:44.800><c> the</c>
+
+00:00:44.950 --> 00:00:44.960 align:start position:0%
+Then go to the side view and from the
+ 
+
+00:00:44.960 --> 00:00:48.630 align:start position:0%
+Then go to the side view and from the
+side<00:00:45.280><c> view,</c><00:00:45.760><c> drag</c><00:00:46.160><c> in</c><00:00:46.480><c> the</c><00:00:46.800><c> reference</c><00:00:47.200><c> image.</c>
+
+00:00:48.630 --> 00:00:48.640 align:start position:0%
+side view, drag in the reference image.
+ 
+
+00:00:48.640 --> 00:00:54.950 align:start position:0%
+side view, drag in the reference image.
+Then<00:00:48.960><c> scale</c><00:00:49.280><c> the</c><00:00:49.440><c> reference</c><00:00:49.840><c> image</c><00:00:50.160><c> down.</c>
+
+00:00:54.950 --> 00:00:54.960 align:start position:0%
+ 
+ 
+
+00:00:54.960 --> 00:00:57.750 align:start position:0%
+ 
+adjust<00:00:55.360><c> it</c><00:00:55.600><c> to</c><00:00:55.840><c> the</c><00:00:56.320><c> approximate</c><00:00:56.960><c> size</c><00:00:57.280><c> of</c><00:00:57.520><c> the</c>
+
+00:00:57.750 --> 00:00:57.760 align:start position:0%
+adjust it to the approximate size of the
+ 
+
+00:00:57.760 --> 00:01:00.869 align:start position:0%
+adjust it to the approximate size of the
+cylinder.
+
+00:01:00.869 --> 00:01:00.879 align:start position:0%
+ 
+ 
+
+00:01:00.879 --> 00:01:02.470 align:start position:0%
+ 
+Then<00:01:01.120><c> go</c><00:01:01.280><c> to</c><00:01:01.359><c> the</c><00:01:01.520><c> image</c><00:01:01.840><c> properties</c><00:01:02.239><c> and</c>
+
+00:01:02.470 --> 00:01:02.480 align:start position:0%
+Then go to the image properties and
+ 
+
+00:01:02.480 --> 00:01:04.469 align:start position:0%
+Then go to the image properties and
+adjust<00:01:02.719><c> the</c><00:01:02.879><c> opacity</c><00:01:03.520><c> downwards</c><00:01:04.080><c> a</c><00:01:04.320><c> little</c>
+
+00:01:04.469 --> 00:01:04.479 align:start position:0%
+adjust the opacity downwards a little
+ 
+
+00:01:04.479 --> 00:01:12.789 align:start position:0%
+adjust the opacity downwards a little
+bit.
+
+00:01:12.789 --> 00:01:12.799 align:start position:0%
+ 
+ 
+
+00:01:12.799 --> 00:01:15.190 align:start position:0%
+ 
+Then<00:01:13.040><c> go</c><00:01:13.280><c> into</c><00:01:13.520><c> edit</c><00:01:13.840><c> mode</c><00:01:14.240><c> and</c><00:01:14.479><c> add</c><00:01:14.720><c> some</c><00:01:14.880><c> loop</c>
+
+00:01:15.190 --> 00:01:15.200 align:start position:0%
+Then go into edit mode and add some loop
+ 
+
+00:01:15.200 --> 00:01:17.350 align:start position:0%
+Then go into edit mode and add some loop
+cuts<00:01:15.600><c> for</c><00:01:15.840><c> the</c><00:01:16.000><c> top</c><00:01:16.240><c> and</c><00:01:16.479><c> bottom</c><00:01:16.799><c> of</c><00:01:17.119><c> the</c>
+
+00:01:17.350 --> 00:01:17.360 align:start position:0%
+cuts for the top and bottom of the
+ 
+
+00:01:17.360 --> 00:01:27.270 align:start position:0%
+cuts for the top and bottom of the
+handle<00:01:17.759><c> and</c><00:01:18.000><c> mug</c><00:01:18.400><c> transition.</c>
+
+00:01:27.270 --> 00:01:27.280 align:start position:0%
+ 
+ 
+
+00:01:27.280 --> 00:01:30.469 align:start position:0%
+ 
+Then<00:01:27.840><c> scale</c><00:01:28.400><c> down</c><00:01:28.880><c> the</c><00:01:29.200><c> bottom</c><00:01:29.520><c> of</c><00:01:29.680><c> the</c><00:01:29.920><c> mug</c><00:01:30.240><c> by</c>
+
+00:01:30.469 --> 00:01:30.479 align:start position:0%
+Then scale down the bottom of the mug by
+ 
+
+00:01:30.479 --> 00:01:32.950 align:start position:0%
+Then scale down the bottom of the mug by
+selecting<00:01:30.960><c> the</c><00:01:31.280><c> edge</c><00:01:31.600><c> loops</c><00:01:32.079><c> and</c><00:01:32.479><c> scaling</c>
+
+00:01:32.950 --> 00:01:32.960 align:start position:0%
+selecting the edge loops and scaling
+ 
+
+00:01:32.960 --> 00:01:38.630 align:start position:0%
+selecting the edge loops and scaling
+them.
+
+00:01:38.630 --> 00:01:38.640 align:start position:0%
+ 
+ 
+
+00:01:38.640 --> 00:01:41.350 align:start position:0%
+ 
+Just<00:01:38.880><c> select</c><00:01:39.680><c> loops</c><00:01:40.240><c> and</c><00:01:40.720><c> scale</c><00:01:41.119><c> them</c>
+
+00:01:41.350 --> 00:01:41.360 align:start position:0%
+Just select loops and scale them
+ 
+
+00:01:41.360 --> 00:01:43.910 align:start position:0%
+Just select loops and scale them
+downwards<00:01:42.079><c> so</c><00:01:42.320><c> that</c><00:01:42.560><c> it</c><00:01:42.720><c> matches</c><00:01:43.200><c> the</c><00:01:43.439><c> contour</c>
+
+00:01:43.910 --> 00:01:43.920 align:start position:0%
+downwards so that it matches the contour
+ 
+
+00:01:43.920 --> 00:01:58.230 align:start position:0%
+downwards so that it matches the contour
+of<00:01:44.079><c> the</c><00:01:44.240><c> mug.</c>
+
+00:01:58.230 --> 00:01:58.240 align:start position:0%
+ 
+ 
+
+00:01:58.240 --> 00:02:00.709 align:start position:0%
+ 
+You<00:01:58.399><c> might</c><00:01:58.640><c> have</c><00:01:58.799><c> to</c><00:01:59.119><c> also</c><00:01:59.439><c> add</c><00:02:00.079><c> some</c><00:02:00.399><c> extra</c>
+
+00:02:00.709 --> 00:02:00.719 align:start position:0%
+You might have to also add some extra
+ 
+
+00:02:00.719 --> 00:02:02.950 align:start position:0%
+You might have to also add some extra
+edge<00:02:01.040><c> loops</c><00:02:01.360><c> just</c><00:02:01.600><c> to</c><00:02:01.759><c> make</c><00:02:01.920><c> the</c><00:02:02.079><c> transition</c><00:02:02.719><c> a</c>
+
+00:02:02.950 --> 00:02:02.960 align:start position:0%
+edge loops just to make the transition a
+ 
+
+00:02:02.960 --> 00:02:09.029 align:start position:0%
+edge loops just to make the transition a
+little<00:02:03.040><c> bit</c><00:02:03.280><c> smoother.</c>
+
+00:02:09.029 --> 00:02:09.039 align:start position:0%
+ 
+ 
+
+00:02:09.039 --> 00:02:11.190 align:start position:0%
+ 
+Once<00:02:09.280><c> the</c><00:02:09.440><c> contour</c><00:02:09.920><c> is</c><00:02:10.080><c> matched,</c><00:02:10.720><c> go</c><00:02:10.879><c> to</c><00:02:11.039><c> the</c>
+
+00:02:11.190 --> 00:02:11.200 align:start position:0%
+Once the contour is matched, go to the
+ 
+
+00:02:11.200 --> 00:02:15.750 align:start position:0%
+Once the contour is matched, go to the
+bottom<00:02:11.520><c> face</c><00:02:11.920><c> and</c><00:02:12.239><c> insert</c><00:02:12.720><c> it.</c>
+
+00:02:15.750 --> 00:02:15.760 align:start position:0%
+ 
+ 
+
+00:02:15.760 --> 00:02:17.910 align:start position:0%
+ 
+Then<00:02:16.000><c> insert</c><00:02:16.400><c> it</c><00:02:16.560><c> again</c><00:02:16.879><c> and</c><00:02:17.120><c> move</c><00:02:17.360><c> it</c><00:02:17.520><c> upwards</c>
+
+00:02:17.910 --> 00:02:17.920 align:start position:0%
+Then insert it again and move it upwards
+ 
+
+00:02:17.920 --> 00:02:19.750 align:start position:0%
+Then insert it again and move it upwards
+a<00:02:18.080><c> little</c><00:02:18.239><c> bit.</c>
+
+00:02:19.750 --> 00:02:19.760 align:start position:0%
+a little bit.
+ 
+
+00:02:19.760 --> 00:02:21.910 align:start position:0%
+a little bit.
+And<00:02:20.080><c> the</c><00:02:20.480><c> bottom</c><00:02:20.800><c> of</c><00:02:20.879><c> the</c><00:02:21.040><c> mug</c><00:02:21.360><c> is</c><00:02:21.599><c> finished</c>
+
+00:02:21.910 --> 00:02:21.920 align:start position:0%
+And the bottom of the mug is finished
+ 
+
+00:02:21.920 --> 00:02:25.430 align:start position:0%
+And the bottom of the mug is finished
+there.
+
+00:02:25.430 --> 00:02:25.440 align:start position:0%
+ 
+ 
+
+00:02:25.440 --> 00:02:29.110 align:start position:0%
+ 
+After<00:02:25.760><c> that,</c><00:02:26.400><c> go</c><00:02:26.720><c> to</c><00:02:27.120><c> the</c><00:02:27.680><c> side,</c><00:02:28.400><c> select</c><00:02:28.720><c> these</c>
+
+00:02:29.110 --> 00:02:29.120 align:start position:0%
+After that, go to the side, select these
+ 
+
+00:02:29.120 --> 00:02:31.510 align:start position:0%
+After that, go to the side, select these
+four<00:02:29.360><c> faces</c><00:02:30.000><c> where</c><00:02:30.239><c> the</c><00:02:30.480><c> handle</c><00:02:31.040><c> should</c>
+
+00:02:31.510 --> 00:02:31.520 align:start position:0%
+four faces where the handle should
+ 
+
+00:02:31.520 --> 00:02:33.670 align:start position:0%
+four faces where the handle should
+transition<00:02:32.239><c> into</c><00:02:32.480><c> the</c><00:02:32.720><c> mug,</c><00:02:33.120><c> and</c><00:02:33.360><c> delete</c>
+
+00:02:33.670 --> 00:02:33.680 align:start position:0%
+transition into the mug, and delete
+ 
+
+00:02:33.680 --> 00:02:36.710 align:start position:0%
+transition into the mug, and delete
+those<00:02:34.080><c> faces.</c><00:02:35.440><c> Then</c><00:02:35.760><c> drag</c><00:02:36.080><c> in</c><00:02:36.319><c> your</c><00:02:36.480><c> other</c>
+
+00:02:36.710 --> 00:02:36.720 align:start position:0%
+those faces. Then drag in your other
+ 
+
+00:02:36.720 --> 00:02:38.630 align:start position:0%
+those faces. Then drag in your other
+reference<00:02:37.120><c> image,</c><00:02:37.519><c> the</c><00:02:37.760><c> reference</c><00:02:38.160><c> image</c><00:02:38.400><c> at</c>
+
+00:02:38.630 --> 00:02:38.640 align:start position:0%
+reference image, the reference image at
+ 
+
+00:02:38.640 --> 00:02:40.630 align:start position:0%
+reference image, the reference image at
+the<00:02:38.720><c> top</c><00:02:38.879><c> of</c><00:02:38.879><c> the</c><00:02:39.120><c> mug.</c>
+
+00:02:40.630 --> 00:02:40.640 align:start position:0%
+the top of the mug.
+ 
+
+00:02:40.640 --> 00:02:43.190 align:start position:0%
+the top of the mug.
+Position<00:02:41.120><c> this</c><00:02:41.440><c> image</c><00:02:41.680><c> and</c><00:02:42.000><c> scale</c><00:02:42.239><c> it</c><00:02:42.400><c> down</c><00:02:42.640><c> to</c>
+
+00:02:43.190 --> 00:02:43.200 align:start position:0%
+Position this image and scale it down to
+ 
+
+00:02:43.200 --> 00:02:47.030 align:start position:0%
+Position this image and scale it down to
+match<00:02:43.599><c> the</c><00:02:43.920><c> mug.</c>
+
+00:02:47.030 --> 00:02:47.040 align:start position:0%
+ 
+ 
+
+00:02:47.040 --> 00:02:49.190 align:start position:0%
+ 
+Select<00:02:47.360><c> the</c><00:02:47.680><c> edge</c><00:02:47.920><c> loops</c><00:02:48.319><c> of</c><00:02:48.560><c> the</c><00:02:48.720><c> deleted</c>
+
+00:02:49.190 --> 00:02:49.200 align:start position:0%
+Select the edge loops of the deleted
+ 
+
+00:02:49.200 --> 00:02:50.869 align:start position:0%
+Select the edge loops of the deleted
+faces
+
+00:02:50.869 --> 00:02:50.879 align:start position:0%
+faces
+ 
+
+00:02:50.879 --> 00:02:53.190 align:start position:0%
+faces
+and<00:02:51.280><c> duplicate</c><00:02:51.760><c> these.</c><00:02:52.160><c> Move</c><00:02:52.400><c> them</c><00:02:52.720><c> outwards</c>
+
+00:02:53.190 --> 00:02:53.200 align:start position:0%
+and duplicate these. Move them outwards
+ 
+
+00:02:53.200 --> 00:02:57.270 align:start position:0%
+and duplicate these. Move them outwards
+a<00:02:53.440><c> little</c><00:02:53.519><c> bit</c><00:02:54.560><c> and</c><00:02:54.959><c> scale</c><00:02:55.360><c> them</c><00:02:55.840><c> down</c><00:02:56.959><c> by</c>
+
+00:02:57.270 --> 00:02:57.280 align:start position:0%
+a little bit and scale them down by
+ 
+
+00:02:57.280 --> 00:02:59.030 align:start position:0%
+a little bit and scale them down by
+hitting<00:02:57.680><c> S</c><00:02:57.920><c> and</c><00:02:58.160><c> X</c><00:02:58.480><c> so</c><00:02:58.720><c> that</c><00:02:58.879><c> they're</c>
+
+00:02:59.030 --> 00:02:59.040 align:start position:0%
+hitting S and X so that they're
+ 
+
+00:02:59.040 --> 00:03:02.869 align:start position:0%
+hitting S and X so that they're
+flattened.
+
+00:03:02.869 --> 00:03:02.879 align:start position:0%
+ 
+ 
+
+00:03:02.879 --> 00:03:03.990 align:start position:0%
+ 
+Then<00:03:03.040><c> you're</c><00:03:03.280><c> going</c><00:03:03.360><c> to</c><00:03:03.440><c> want</c><00:03:03.599><c> to</c><00:03:03.760><c> select</c>
+
+00:03:03.990 --> 00:03:04.000 align:start position:0%
+Then you're going to want to select
+ 
+
+00:03:04.000 --> 00:03:06.869 align:start position:0%
+Then you're going to want to select
+these<00:03:04.239><c> loops</c><00:03:04.560><c> of</c><00:03:04.720><c> vertices</c><00:03:05.680><c> and</c><00:03:06.000><c> scale</c><00:03:06.400><c> them</c>
+
+00:03:06.869 --> 00:03:06.879 align:start position:0%
+these loops of vertices and scale them
+ 
+
+00:03:06.879 --> 00:03:09.910 align:start position:0%
+these loops of vertices and scale them
+downwards<00:03:07.360><c> along</c><00:03:07.680><c> the</c><00:03:07.840><c> Z-axis</c><00:03:08.640><c> to</c><00:03:08.959><c> match</c><00:03:09.280><c> the</c>
+
+00:03:09.910 --> 00:03:09.920 align:start position:0%
+downwards along the Z-axis to match the
+ 
+
+00:03:09.920 --> 00:03:17.110 align:start position:0%
+downwards along the Z-axis to match the
+scale<00:03:10.400><c> of</c><00:03:10.720><c> the</c><00:03:10.959><c> handle.</c>
+
+00:03:17.110 --> 00:03:17.120 align:start position:0%
+ 
+ 
+
+00:03:17.120 --> 00:03:20.710 align:start position:0%
+ 
+Next,<00:03:18.000><c> select</c><00:03:18.400><c> the</c><00:03:18.720><c> top</c><00:03:19.040><c> loop</c><00:03:19.360><c> of</c><00:03:19.519><c> edges</c><00:03:20.319><c> and</c>
+
+00:03:20.710 --> 00:03:20.720 align:start position:0%
+Next, select the top loop of edges and
+ 
+
+00:03:20.720 --> 00:03:24.470 align:start position:0%
+Next, select the top loop of edges and
+extrude<00:03:21.200><c> it</c><00:03:21.440><c> outwards.</c>
+
+00:03:24.470 --> 00:03:24.480 align:start position:0%
+ 
+ 
+
+00:03:24.480 --> 00:03:26.550 align:start position:0%
+ 
+Just<00:03:24.720><c> extrude</c><00:03:25.120><c> outwards</c><00:03:25.599><c> a</c><00:03:25.840><c> few</c><00:03:26.000><c> times</c><00:03:26.319><c> and</c>
+
+00:03:26.550 --> 00:03:26.560 align:start position:0%
+Just extrude outwards a few times and
+ 
+
+00:03:26.560 --> 00:03:29.430 align:start position:0%
+Just extrude outwards a few times and
+then<00:03:26.800><c> go</c><00:03:27.040><c> back</c><00:03:27.280><c> and</c><00:03:27.760><c> adjust</c><00:03:28.319><c> the</c><00:03:28.720><c> contour</c><00:03:29.280><c> to</c>
+
+00:03:29.430 --> 00:03:29.440 align:start position:0%
+then go back and adjust the contour to
+ 
+
+00:03:29.440 --> 00:03:34.149 align:start position:0%
+then go back and adjust the contour to
+match<00:03:29.680><c> the</c><00:03:29.920><c> mug</c><00:03:30.319><c> handle.</c>
+
+00:03:34.149 --> 00:03:34.159 align:start position:0%
+ 
+ 
+
+00:03:34.159 --> 00:03:36.229 align:start position:0%
+ 
+Don't<00:03:34.400><c> worry</c><00:03:34.560><c> too</c><00:03:34.799><c> much</c><00:03:34.959><c> about</c><00:03:35.280><c> the</c><00:03:35.519><c> initial</c>
+
+00:03:36.229 --> 00:03:36.239 align:start position:0%
+Don't worry too much about the initial
+ 
+
+00:03:36.239 --> 00:03:38.710 align:start position:0%
+Don't worry too much about the initial
+time<00:03:36.560><c> you</c><00:03:36.799><c> extrude</c><00:03:37.280><c> it</c><00:03:37.440><c> out.</c><00:03:37.840><c> Just</c><00:03:38.159><c> do</c><00:03:38.400><c> a</c><00:03:38.560><c> few</c>
+
+00:03:38.710 --> 00:03:38.720 align:start position:0%
+time you extrude it out. Just do a few
+ 
+
+00:03:38.720 --> 00:03:40.949 align:start position:0%
+time you extrude it out. Just do a few
+extrusions<00:03:39.440><c> and</c><00:03:39.680><c> then</c><00:03:40.000><c> go</c><00:03:40.239><c> back</c><00:03:40.400><c> and</c><00:03:40.640><c> you</c><00:03:40.799><c> can</c>
+
+00:03:40.949 --> 00:03:40.959 align:start position:0%
+extrusions and then go back and you can
+ 
+
+00:03:40.959 --> 00:03:43.350 align:start position:0%
+extrusions and then go back and you can
+adjust<00:03:41.200><c> the</c><00:03:41.440><c> vertices</c><00:03:42.000><c> to</c><00:03:42.239><c> match</c><00:03:42.560><c> the</c><00:03:42.879><c> contour</c>
+
+00:03:43.350 --> 00:03:43.360 align:start position:0%
+adjust the vertices to match the contour
+ 
+
+00:03:43.360 --> 00:03:52.070 align:start position:0%
+adjust the vertices to match the contour
+better.
+
+00:03:52.070 --> 00:03:52.080 align:start position:0%
+ 
+ 
+
+00:03:52.080 --> 00:03:53.830 align:start position:0%
+ 
+Once<00:03:52.400><c> the</c><00:03:52.560><c> contour</c><00:03:53.040><c> of</c><00:03:53.200><c> the</c><00:03:53.360><c> handle</c><00:03:53.680><c> is</c>
+
+00:03:53.830 --> 00:03:53.840 align:start position:0%
+Once the contour of the handle is
+ 
+
+00:03:53.840 --> 00:03:55.750 align:start position:0%
+Once the contour of the handle is
+matched,<00:03:54.239><c> go</c><00:03:54.400><c> ahead</c><00:03:54.640><c> and</c><00:03:54.799><c> select</c><00:03:55.120><c> these</c><00:03:55.440><c> last</c>
+
+00:03:55.750 --> 00:03:55.760 align:start position:0%
+matched, go ahead and select these last
+ 
+
+00:03:55.760 --> 00:03:59.750 align:start position:0%
+matched, go ahead and select these last
+two<00:03:56.159><c> loops</c><00:03:56.640><c> and</c><00:03:56.959><c> hit</c><00:03:57.280><c> F2</c><00:03:58.640><c> and</c><00:03:58.879><c> then</c><00:03:59.120><c> type</c><00:03:59.439><c> in</c>
+
+00:03:59.750 --> 00:03:59.760 align:start position:0%
+two loops and hit F2 and then type in
+ 
+
+00:03:59.760 --> 00:04:01.910 align:start position:0%
+two loops and hit F2 and then type in
+bridge.<00:04:00.720><c> And</c><00:04:00.879><c> you</c><00:04:01.040><c> should</c><00:04:01.200><c> see</c><00:04:01.360><c> a</c><00:04:01.599><c> function</c>
+
+00:04:01.910 --> 00:04:01.920 align:start position:0%
+bridge. And you should see a function
+ 
+
+00:04:01.920 --> 00:04:04.390 align:start position:0%
+bridge. And you should see a function
+that<00:04:02.319><c> says</c><00:04:02.720><c> bridge</c><00:04:03.040><c> edge</c><00:04:03.280><c> loops.</c><00:04:03.760><c> Select</c><00:04:04.159><c> that</c>
+
+00:04:04.390 --> 00:04:04.400 align:start position:0%
+that says bridge edge loops. Select that
+ 
+
+00:04:04.400 --> 00:04:06.309 align:start position:0%
+that says bridge edge loops. Select that
+option<00:04:04.879><c> and</c><00:04:05.120><c> it</c><00:04:05.280><c> should</c><00:04:05.439><c> nicely</c><00:04:05.840><c> bridge</c><00:04:06.159><c> the</c>
+
+00:04:06.309 --> 00:04:06.319 align:start position:0%
+option and it should nicely bridge the
+ 
+
+00:04:06.319 --> 00:04:09.110 align:start position:0%
+option and it should nicely bridge the
+two<00:04:06.480><c> loops</c><00:04:06.879><c> together</c><00:04:07.200><c> using</c><00:04:07.519><c> faces.</c><00:04:08.560><c> Then</c><00:04:08.879><c> do</c>
+
+00:04:09.110 --> 00:04:09.120 align:start position:0%
+two loops together using faces. Then do
+ 
+
+00:04:09.120 --> 00:04:11.670 align:start position:0%
+two loops together using faces. Then do
+the<00:04:09.360><c> same</c><00:04:09.760><c> bridge</c><00:04:10.159><c> function</c><00:04:10.799><c> for</c><00:04:11.360><c> the</c>
+
+00:04:11.670 --> 00:04:11.680 align:start position:0%
+the same bridge function for the
+ 
+
+00:04:11.680 --> 00:04:13.350 align:start position:0%
+the same bridge function for the
+transition<00:04:12.159><c> between</c><00:04:12.400><c> the</c><00:04:12.640><c> handle</c><00:04:12.959><c> and</c><00:04:13.200><c> the</c>
+
+00:04:13.350 --> 00:04:13.360 align:start position:0%
+transition between the handle and the
+ 
+
+00:04:13.360 --> 00:04:16.390 align:start position:0%
+transition between the handle and the
+mug<00:04:13.680><c> on</c><00:04:13.920><c> the</c><00:04:14.080><c> top</c><00:04:14.319><c> and</c><00:04:14.560><c> the</c><00:04:14.799><c> bottom.</c>
+
+00:04:16.390 --> 00:04:16.400 align:start position:0%
+mug on the top and the bottom.
+ 
+
+00:04:16.400 --> 00:04:19.030 align:start position:0%
+mug on the top and the bottom.
+All<00:04:16.479><c> right.</c><00:04:16.880><c> Once</c><00:04:17.120><c> the</c><00:04:17.359><c> handle</c><00:04:17.759><c> is</c><00:04:18.639><c> attached</c>
+
+00:04:19.030 --> 00:04:19.040 align:start position:0%
+All right. Once the handle is attached
+ 
+
+00:04:19.040 --> 00:04:21.430 align:start position:0%
+All right. Once the handle is attached
+to<00:04:19.199><c> the</c><00:04:19.359><c> mug,</c><00:04:20.079><c> go</c><00:04:20.239><c> ahead</c><00:04:20.400><c> and</c><00:04:20.639><c> go</c><00:04:20.799><c> to</c><00:04:20.959><c> the</c><00:04:21.120><c> top</c>
+
+00:04:21.430 --> 00:04:21.440 align:start position:0%
+to the mug, go ahead and go to the top
+ 
+
+00:04:21.440 --> 00:04:23.670 align:start position:0%
+to the mug, go ahead and go to the top
+view.<00:04:22.320><c> And</c><00:04:22.560><c> you</c><00:04:22.720><c> can</c><00:04:22.880><c> see</c><00:04:23.040><c> from</c><00:04:23.199><c> the</c><00:04:23.440><c> image</c>
+
+00:04:23.670 --> 00:04:23.680 align:start position:0%
+view. And you can see from the image
+ 
+
+00:04:23.680 --> 00:04:25.590 align:start position:0%
+view. And you can see from the image
+that<00:04:23.919><c> the</c><00:04:24.080><c> handle</c><00:04:24.400><c> tapers</c><00:04:24.880><c> down</c><00:04:25.040><c> a</c><00:04:25.280><c> little</c><00:04:25.360><c> bit</c>
+
+00:04:25.590 --> 00:04:25.600 align:start position:0%
+that the handle tapers down a little bit
+ 
+
+00:04:25.600 --> 00:04:27.510 align:start position:0%
+that the handle tapers down a little bit
+at<00:04:25.840><c> the</c><00:04:26.000><c> outside.</c>
+
+00:04:27.510 --> 00:04:27.520 align:start position:0%
+at the outside.
+ 
+
+00:04:27.520 --> 00:04:29.430 align:start position:0%
+at the outside.
+So<00:04:27.840><c> select</c><00:04:28.160><c> some</c><00:04:28.400><c> of</c><00:04:28.479><c> these</c><00:04:28.720><c> vertices,</c><00:04:29.280><c> just</c>
+
+00:04:29.430 --> 00:04:29.440 align:start position:0%
+So select some of these vertices, just
+ 
+
+00:04:29.440 --> 00:04:32.550 align:start position:0%
+So select some of these vertices, just
+the<00:04:29.600><c> outermost</c><00:04:30.080><c> vertices</c><00:04:30.639><c> there.</c><00:04:31.919><c> Then</c><00:04:32.240><c> go</c>
+
+00:04:32.550 --> 00:04:32.560 align:start position:0%
+the outermost vertices there. Then go
+ 
+
+00:04:32.560 --> 00:04:35.830 align:start position:0%
+the outermost vertices there. Then go
+and<00:04:32.960><c> enable</c><00:04:33.759><c> proportional</c><00:04:34.320><c> editing</c><00:04:35.280><c> and</c><00:04:35.600><c> just</c>
+
+00:04:35.830 --> 00:04:35.840 align:start position:0%
+and enable proportional editing and just
+ 
+
+00:04:35.840 --> 00:04:38.230 align:start position:0%
+and enable proportional editing and just
+scale<00:04:36.240><c> the</c><00:04:36.560><c> handle</c><00:04:37.040><c> down</c><00:04:37.360><c> a</c><00:04:37.680><c> little</c><00:04:37.759><c> bit</c><00:04:38.000><c> on</c>
+
+00:04:38.230 --> 00:04:38.240 align:start position:0%
+scale the handle down a little bit on
+ 
+
+00:04:38.240 --> 00:04:44.870 align:start position:0%
+scale the handle down a little bit on
+the<00:04:38.400><c> outside.</c>
+
+00:04:44.870 --> 00:04:44.880 align:start position:0%
+ 
+ 
+
+00:04:44.880 --> 00:04:46.710 align:start position:0%
+ 
+Next,<00:04:45.199><c> select</c><00:04:45.520><c> the</c><00:04:45.759><c> topmost</c><00:04:46.320><c> edge</c><00:04:46.560><c> of</c>
+
+00:04:46.710 --> 00:04:46.720 align:start position:0%
+Next, select the topmost edge of
+ 
+
+00:04:46.720 --> 00:04:49.189 align:start position:0%
+Next, select the topmost edge of
+vertices<00:04:47.280><c> around</c><00:04:47.520><c> the</c><00:04:47.680><c> edge</c><00:04:47.840><c> of</c><00:04:47.919><c> the</c><00:04:48.080><c> mug.</c>
+
+00:04:49.189 --> 00:04:49.199 align:start position:0%
+vertices around the edge of the mug.
+ 
+
+00:04:49.199 --> 00:04:54.550 align:start position:0%
+vertices around the edge of the mug.
+Extrude<00:04:49.759><c> this</c><00:04:50.000><c> edge</c><00:04:50.560><c> and</c><00:04:51.199><c> scale</c><00:04:51.520><c> it</c><00:04:51.759><c> inwards.</c>
+
+00:04:54.550 --> 00:04:54.560 align:start position:0%
+Extrude this edge and scale it inwards.
+ 
+
+00:04:54.560 --> 00:04:57.030 align:start position:0%
+Extrude this edge and scale it inwards.
+Anchor<00:04:54.880><c> the</c><00:04:55.120><c> side</c><00:04:55.360><c> view</c><00:04:55.759><c> and</c><00:04:56.160><c> extrude</c><00:04:56.639><c> these</c>
+
+00:04:57.030 --> 00:04:57.040 align:start position:0%
+Anchor the side view and extrude these
+ 
+
+00:04:57.040 --> 00:05:00.870 align:start position:0%
+Anchor the side view and extrude these
+edge<00:04:57.360><c> loops</c><00:04:57.759><c> downwards.</c>
+
+00:05:00.870 --> 00:05:00.880 align:start position:0%
+ 
+ 
+
+00:05:00.880 --> 00:05:03.030 align:start position:0%
+ 
+Then<00:05:01.280><c> scale</c><00:05:01.680><c> them</c><00:05:02.000><c> inwards</c><00:05:02.479><c> a</c><00:05:02.720><c> little</c><00:05:02.880><c> bit</c>
+
+00:05:03.030 --> 00:05:03.040 align:start position:0%
+Then scale them inwards a little bit
+ 
+
+00:05:03.040 --> 00:05:04.870 align:start position:0%
+Then scale them inwards a little bit
+every<00:05:03.360><c> so</c><00:05:03.520><c> often</c><00:05:04.080><c> just</c><00:05:04.320><c> to</c><00:05:04.479><c> match</c><00:05:04.720><c> the</c>
+
+00:05:04.870 --> 00:05:04.880 align:start position:0%
+every so often just to match the
+ 
+
+00:05:04.880 --> 00:05:11.189 align:start position:0%
+every so often just to match the
+thickness<00:05:05.199><c> of</c><00:05:05.440><c> the</c><00:05:05.600><c> outer</c><00:05:05.919><c> shape</c><00:05:06.080><c> of</c><00:05:06.240><c> the</c><00:05:06.400><c> mug.</c>
+
+00:05:11.189 --> 00:05:11.199 align:start position:0%
+ 
+ 
+
+00:05:11.199 --> 00:05:13.430 align:start position:0%
+ 
+Once<00:05:11.440><c> you</c><00:05:11.600><c> get</c><00:05:11.759><c> to</c><00:05:11.919><c> the</c><00:05:12.000><c> bottom,</c><00:05:12.800><c> go</c><00:05:13.039><c> ahead</c><00:05:13.199><c> and</c>
+
+00:05:13.430 --> 00:05:13.440 align:start position:0%
+Once you get to the bottom, go ahead and
+ 
+
+00:05:13.440 --> 00:05:16.230 align:start position:0%
+Once you get to the bottom, go ahead and
+hit<00:05:13.600><c> the</c><00:05:13.759><c> F</c><00:05:14.000><c> key</c><00:05:14.240><c> to</c><00:05:14.400><c> add</c><00:05:14.560><c> a</c><00:05:14.800><c> face</c><00:05:15.360><c> and</c><00:05:15.600><c> insert</c><00:05:16.080><c> a</c>
+
+00:05:16.230 --> 00:05:16.240 align:start position:0%
+hit the F key to add a face and insert a
+ 
+
+00:05:16.240 --> 00:05:19.590 align:start position:0%
+hit the F key to add a face and insert a
+loop<00:05:16.479><c> of</c><00:05:16.639><c> vertices</c><00:05:17.120><c> as</c><00:05:17.360><c> well.</c>
+
+00:05:19.590 --> 00:05:19.600 align:start position:0%
+loop of vertices as well.
+ 
+
+00:05:19.600 --> 00:05:22.230 align:start position:0%
+loop of vertices as well.
+Next,<00:05:20.000><c> go</c><00:05:20.160><c> over</c><00:05:20.320><c> to</c><00:05:20.400><c> the</c><00:05:20.560><c> modifiers</c><00:05:21.199><c> tab.</c><00:05:22.000><c> Add</c>
+
+00:05:22.230 --> 00:05:22.240 align:start position:0%
+Next, go over to the modifiers tab. Add
+ 
+
+00:05:22.240 --> 00:05:24.390 align:start position:0%
+Next, go over to the modifiers tab. Add
+a<00:05:22.400><c> subdivision</c><00:05:23.039><c> service</c><00:05:23.360><c> modifier</c><00:05:23.919><c> and</c><00:05:24.160><c> set</c>
+
+00:05:24.390 --> 00:05:24.400 align:start position:0%
+a subdivision service modifier and set
+ 
+
+00:05:24.400 --> 00:05:28.310 align:start position:0%
+a subdivision service modifier and set
+the<00:05:24.800><c> levels</c><00:05:25.199><c> of</c><00:05:25.600><c> subdivisions</c><00:05:26.240><c> to</c><00:05:26.479><c> two.</c><00:05:27.919><c> Add</c><00:05:28.160><c> a</c>
+
+00:05:28.310 --> 00:05:28.320 align:start position:0%
+the levels of subdivisions to two. Add a
+ 
+
+00:05:28.320 --> 00:05:30.310 align:start position:0%
+the levels of subdivisions to two. Add a
+bevel<00:05:28.639><c> modifier</c><00:05:29.199><c> and</c><00:05:29.440><c> drag</c><00:05:29.759><c> this</c><00:05:30.000><c> bevel</c>
+
+00:05:30.310 --> 00:05:30.320 align:start position:0%
+bevel modifier and drag this bevel
+ 
+
+00:05:30.320 --> 00:05:32.390 align:start position:0%
+bevel modifier and drag this bevel
+modifier<00:05:30.880><c> above</c><00:05:31.199><c> the</c><00:05:31.440><c> subdivision</c><00:05:32.080><c> surface</c>
+
+00:05:32.390 --> 00:05:32.400 align:start position:0%
+modifier above the subdivision surface
+ 
+
+00:05:32.400 --> 00:05:34.310 align:start position:0%
+modifier above the subdivision surface
+modifier.<00:05:33.039><c> Change</c><00:05:33.360><c> the</c><00:05:33.520><c> limit</c><00:05:33.840><c> method</c><00:05:34.160><c> to</c>
+
+00:05:34.310 --> 00:05:34.320 align:start position:0%
+modifier. Change the limit method to
+ 
+
+00:05:34.320 --> 00:05:38.790 align:start position:0%
+modifier. Change the limit method to
+weight<00:05:34.800><c> and</c><00:05:35.199><c> adjust</c><00:05:35.600><c> the</c><00:05:35.840><c> segments</c><00:05:36.240><c> to</c><00:05:36.479><c> three.</c>
+
+00:05:38.790 --> 00:05:38.800 align:start position:0%
+weight and adjust the segments to three.
+ 
+
+00:05:38.800 --> 00:05:40.870 align:start position:0%
+weight and adjust the segments to three.
+Next,<00:05:39.120><c> go</c><00:05:39.280><c> into</c><00:05:39.520><c> edit</c><00:05:39.840><c> mode</c><00:05:40.080><c> of</c><00:05:40.240><c> the</c><00:05:40.400><c> mug.</c>
+
+00:05:40.870 --> 00:05:40.880 align:start position:0%
+Next, go into edit mode of the mug.
+ 
+
+00:05:40.880 --> 00:05:42.950 align:start position:0%
+Next, go into edit mode of the mug.
+Select<00:05:41.120><c> the</c><00:05:41.280><c> outermost</c><00:05:41.840><c> edge</c><00:05:42.160><c> loop.</c><00:05:42.639><c> Adjust</c>
+
+00:05:42.950 --> 00:05:42.960 align:start position:0%
+Select the outermost edge loop. Adjust
+ 
+
+00:05:42.960 --> 00:05:46.150 align:start position:0%
+Select the outermost edge loop. Adjust
+the<00:05:43.120><c> mean</c><00:05:43.440><c> bevel</c><00:05:43.759><c> weight</c><00:05:44.000><c> to</c><00:05:44.240><c> one.</c><00:05:45.520><c> And</c><00:05:45.919><c> do</c>
+
+00:05:46.150 --> 00:05:46.160 align:start position:0%
+the mean bevel weight to one. And do
+ 
+
+00:05:46.160 --> 00:05:51.510 align:start position:0%
+the mean bevel weight to one. And do
+that<00:05:46.560><c> as</c><00:05:46.800><c> well</c><00:05:47.039><c> for</c><00:05:47.280><c> the</c><00:05:47.440><c> bottom</c><00:05:47.680><c> inner</c><00:05:48.000><c> edge.</c>
+
+00:05:51.510 --> 00:05:51.520 align:start position:0%
+ 
+ 
+
+00:05:51.520 --> 00:05:53.749 align:start position:0%
+ 
+Now<00:05:51.759><c> that</c><00:05:51.919><c> the</c><00:05:52.160><c> 3D</c><00:05:52.479><c> model</c><00:05:52.800><c> of</c><00:05:53.039><c> the</c><00:05:53.199><c> mug</c><00:05:53.520><c> is</c>
+
+00:05:53.749 --> 00:05:53.759 align:start position:0%
+Now that the 3D model of the mug is
+ 
+
+00:05:53.759 --> 00:05:56.790 align:start position:0%
+Now that the 3D model of the mug is
+finished,<00:05:54.639><c> go</c><00:05:54.800><c> ahead</c><00:05:55.199><c> and</c><00:05:55.520><c> add</c><00:05:55.759><c> a</c><00:05:56.080><c> camera.</c>
+
+00:05:56.790 --> 00:05:56.800 align:start position:0%
+finished, go ahead and add a camera.
+ 
+
+00:05:56.800 --> 00:05:58.870 align:start position:0%
+finished, go ahead and add a camera.
+With<00:05:56.960><c> the</c><00:05:57.120><c> camera</c><00:05:57.440><c> selected,</c><00:05:58.320><c> clear</c><00:05:58.639><c> the</c>
+
+00:05:58.870 --> 00:05:58.880 align:start position:0%
+With the camera selected, clear the
+ 
+
+00:05:58.880 --> 00:06:01.270 align:start position:0%
+With the camera selected, clear the
+rotation<00:05:59.440><c> and</c><00:05:59.680><c> location</c><00:06:00.400><c> and</c><00:06:00.880><c> move</c><00:06:01.120><c> it</c>
+
+00:06:01.270 --> 00:06:01.280 align:start position:0%
+rotation and location and move it
+ 
+
+00:06:01.280 --> 00:06:03.430 align:start position:0%
+rotation and location and move it
+upwards<00:06:01.600><c> along</c><00:06:01.840><c> the</c><00:06:02.000><c> Z-axis.</c><00:06:03.039><c> Change</c><00:06:03.280><c> the</c>
+
+00:06:03.430 --> 00:06:03.440 align:start position:0%
+upwards along the Z-axis. Change the
+ 
+
+00:06:03.440 --> 00:06:07.749 align:start position:0%
+upwards along the Z-axis. Change the
+focal<00:06:03.840><c> length</c><00:06:04.080><c> to</c><00:06:04.319><c> 85</c><00:06:04.880><c> mm.</c>
+
+00:06:07.749 --> 00:06:07.759 align:start position:0%
+focal length to 85 mm.
+ 
+
+00:06:07.759 --> 00:06:09.670 align:start position:0%
+focal length to 85 mm.
+Then<00:06:08.000><c> go</c><00:06:08.240><c> over</c><00:06:08.560><c> and</c><00:06:08.800><c> change</c><00:06:09.039><c> the</c><00:06:09.360><c> camera</c>
+
+00:06:09.670 --> 00:06:09.680 align:start position:0%
+Then go over and change the camera
+ 
+
+00:06:09.680 --> 00:06:12.870 align:start position:0%
+Then go over and change the camera
+resolution<00:06:10.160><c> to</c><00:06:10.479><c> a</c><00:06:10.800><c> square</c><00:06:11.520><c> aspect</c><00:06:12.000><c> ratio.</c><00:06:12.639><c> I</c>
+
+00:06:12.870 --> 00:06:12.880 align:start position:0%
+resolution to a square aspect ratio. I
+ 
+
+00:06:12.880 --> 00:06:16.870 align:start position:0%
+resolution to a square aspect ratio. I
+like<00:06:13.120><c> 1080x</c><00:06:13.840><c> 1080</c><00:06:14.319><c> pixels.</c><00:06:15.759><c> Next,</c><00:06:16.160><c> add</c><00:06:16.319><c> in</c><00:06:16.639><c> an</c>
+
+00:06:16.870 --> 00:06:16.880 align:start position:0%
+like 1080x 1080 pixels. Next, add in an
+ 
+
+00:06:16.880 --> 00:06:24.469 align:start position:0%
+like 1080x 1080 pixels. Next, add in an
+empty<00:06:17.280><c> sphere</c><00:06:17.680><c> and</c><00:06:17.919><c> scale</c><00:06:18.240><c> it</c><00:06:18.400><c> down.</c>
+
+00:06:24.469 --> 00:06:24.479 align:start position:0%
+ 
+ 
+
+00:06:24.479 --> 00:06:26.790 align:start position:0%
+ 
+Select<00:06:24.800><c> the</c><00:06:24.960><c> camera.</c><00:06:25.360><c> Select</c><00:06:25.680><c> the</c><00:06:25.919><c> empty.</c>
+
+00:06:26.790 --> 00:06:26.800 align:start position:0%
+Select the camera. Select the empty.
+ 
+
+00:06:26.800 --> 00:06:31.270 align:start position:0%
+Select the camera. Select the empty.
+Press<00:06:27.520><c> Ctrl</c><00:06:28.000><c> P.</c><00:06:28.720><c> Object.</c><00:06:30.000><c> Rotate</c><00:06:30.479><c> the</c><00:06:30.800><c> empty</c>
+
+00:06:31.270 --> 00:06:31.280 align:start position:0%
+Press Ctrl P. Object. Rotate the empty
+ 
+
+00:06:31.280 --> 00:06:34.469 align:start position:0%
+Press Ctrl P. Object. Rotate the empty
+90°<00:06:32.000><c> on</c><00:06:32.160><c> the</c><00:06:32.319><c> X-axis</c><00:06:32.960><c> and</c><00:06:33.199><c> move</c><00:06:33.360><c> it</c><00:06:33.600><c> upwards</c><00:06:34.160><c> 50</c>
+
+00:06:34.469 --> 00:06:34.479 align:start position:0%
+90° on the X-axis and move it upwards 50
+ 
+
+00:06:34.479 --> 00:06:35.990 align:start position:0%
+90° on the X-axis and move it upwards 50
+mm.
+
+00:06:35.990 --> 00:06:36.000 align:start position:0%
+mm.
+ 
+
+00:06:36.000 --> 00:06:38.950 align:start position:0%
+mm.
+Then<00:06:36.319><c> rotate</c><00:06:36.720><c> the</c><00:06:36.880><c> mug</c><00:06:37.759><c> 180°</c><00:06:38.479><c> along</c><00:06:38.800><c> the</c>
+
+00:06:38.950 --> 00:06:38.960 align:start position:0%
+Then rotate the mug 180° along the
+ 
+
+00:06:38.960 --> 00:06:41.110 align:start position:0%
+Then rotate the mug 180° along the
+Z-axis.
+
+00:06:41.110 --> 00:06:41.120 align:start position:0%
+Z-axis.
+ 
+
+00:06:41.120 --> 00:06:43.350 align:start position:0%
+Z-axis.
+Next,<00:06:41.440><c> select</c><00:06:41.680><c> the</c><00:06:41.919><c> empty</c><00:06:42.639><c> and</c><00:06:42.880><c> rotate</c><00:06:43.199><c> it</c>
+
+00:06:43.350 --> 00:06:43.360 align:start position:0%
+Next, select the empty and rotate it
+ 
+
+00:06:43.360 --> 00:06:46.550 align:start position:0%
+Next, select the empty and rotate it
+along<00:06:43.680><c> the</c><00:06:43.840><c> Z-axis</c><00:06:44.560><c> and</c><00:06:44.800><c> the</c><00:06:45.120><c> X-axis</c><00:06:46.080><c> to</c><00:06:46.319><c> give</c>
+
+00:06:46.550 --> 00:06:46.560 align:start position:0%
+along the Z-axis and the X-axis to give
+ 
+
+00:06:46.560 --> 00:06:48.870 align:start position:0%
+along the Z-axis and the X-axis to give
+the<00:06:46.880><c> camera</c><00:06:47.199><c> a</c><00:06:47.440><c> slight</c><00:06:47.759><c> angle</c><00:06:48.240><c> to</c><00:06:48.479><c> view</c><00:06:48.720><c> the</c>
+
+00:06:48.870 --> 00:06:48.880 align:start position:0%
+the camera a slight angle to view the
+ 
+
+00:06:48.880 --> 00:06:55.350 align:start position:0%
+the camera a slight angle to view the
+mug<00:06:49.120><c> at.</c><00:06:50.479><c> Add</c><00:06:50.720><c> a</c><00:06:50.960><c> mesh</c><00:06:51.199><c> plane.</c>
+
+00:06:55.350 --> 00:06:55.360 align:start position:0%
+ 
+ 
+
+00:06:55.360 --> 00:06:57.590 align:start position:0%
+ 
+Go<00:06:55.520><c> into</c><00:06:55.759><c> edit</c><00:06:56.080><c> mode</c><00:06:56.240><c> of</c><00:06:56.400><c> the</c><00:06:56.560><c> plane.</c><00:06:57.280><c> Select</c>
+
+00:06:57.590 --> 00:06:57.600 align:start position:0%
+Go into edit mode of the plane. Select
+ 
+
+00:06:57.600 --> 00:07:01.110 align:start position:0%
+Go into edit mode of the plane. Select
+the<00:06:57.840><c> back</c><00:06:58.080><c> edge.</c><00:06:58.880><c> Extrude</c><00:06:59.360><c> this</c><00:06:59.599><c> edge</c><00:06:59.919><c> upwards</c>
+
+00:07:01.110 --> 00:07:01.120 align:start position:0%
+the back edge. Extrude this edge upwards
+ 
+
+00:07:01.120 --> 00:07:04.150 align:start position:0%
+the back edge. Extrude this edge upwards
+and<00:07:01.520><c> select</c><00:07:01.840><c> this</c><00:07:02.160><c> corner</c><00:07:02.560><c> and</c><00:07:02.960><c> bevel</c><00:07:03.360><c> it.</c>
+
+00:07:04.150 --> 00:07:04.160 align:start position:0%
+and select this corner and bevel it.
+ 
+
+00:07:04.160 --> 00:07:08.070 align:start position:0%
+and select this corner and bevel it.
+Then<00:07:04.479><c> shade</c><00:07:04.960><c> smooth.</c><00:07:06.240><c> Go</c><00:07:06.400><c> to</c><00:07:06.560><c> rendered</c><00:07:06.960><c> mode</c>
+
+00:07:08.070 --> 00:07:08.080 align:start position:0%
+Then shade smooth. Go to rendered mode
+ 
+
+00:07:08.080 --> 00:07:10.710 align:start position:0%
+Then shade smooth. Go to rendered mode
+and<00:07:08.400><c> change</c><00:07:08.720><c> the</c><00:07:08.960><c> render</c><00:07:09.280><c> engine</c><00:07:09.599><c> to</c><00:07:09.840><c> cycles</c>
+
+00:07:10.710 --> 00:07:10.720 align:start position:0%
+and change the render engine to cycles
+ 
+
+00:07:10.720 --> 00:07:14.550 align:start position:0%
+and change the render engine to cycles
+GPU<00:07:11.360><c> compute.</c><00:07:12.560><c> Change</c><00:07:12.960><c> the</c><00:07:13.599><c> sample</c><00:07:14.000><c> count</c><00:07:14.319><c> for</c>
+
+00:07:14.550 --> 00:07:14.560 align:start position:0%
+GPU compute. Change the sample count for
+ 
+
+00:07:14.560 --> 00:07:17.990 align:start position:0%
+GPU compute. Change the sample count for
+the<00:07:14.880><c> viewport</c><00:07:15.440><c> and</c><00:07:15.759><c> also</c><00:07:16.000><c> the</c><00:07:16.240><c> render.</c>
+
+00:07:17.990 --> 00:07:18.000 align:start position:0%
+the viewport and also the render.
+ 
+
+00:07:18.000 --> 00:07:21.670 align:start position:0%
+the viewport and also the render.
+Then<00:07:18.319><c> go</c><00:07:18.479><c> to</c><00:07:18.560><c> the</c><00:07:18.800><c> world</c><00:07:19.360><c> properties</c><00:07:20.000><c> tab</c><00:07:21.280><c> and</c>
+
+00:07:21.670 --> 00:07:21.680 align:start position:0%
+Then go to the world properties tab and
+ 
+
+00:07:21.680 --> 00:07:24.309 align:start position:0%
+Then go to the world properties tab and
+change<00:07:22.000><c> the</c><00:07:22.240><c> world</c><00:07:22.560><c> strength</c><00:07:22.880><c> to</c><00:07:23.120><c> zero.</c><00:07:24.160><c> So</c>
+
+00:07:24.309 --> 00:07:24.319 align:start position:0%
+change the world strength to zero. So
+ 
+
+00:07:24.319 --> 00:07:27.270 align:start position:0%
+change the world strength to zero. So
+that<00:07:24.479><c> is</c><00:07:24.639><c> totally</c><00:07:25.039><c> dark.</c><00:07:26.240><c> Then</c><00:07:26.560><c> add</c><00:07:26.800><c> in</c><00:07:27.039><c> an</c>
+
+00:07:27.270 --> 00:07:27.280 align:start position:0%
+that is totally dark. Then add in an
+ 
+
+00:07:27.280 --> 00:07:30.390 align:start position:0%
+that is totally dark. Then add in an
+area<00:07:27.599><c> light.</c><00:07:28.319><c> Rotate</c><00:07:28.800><c> this</c><00:07:28.960><c> area</c><00:07:29.360><c> light</c><00:07:29.680><c> 90°</c>
+
+00:07:30.390 --> 00:07:30.400 align:start position:0%
+area light. Rotate this area light 90°
+ 
+
+00:07:30.400 --> 00:07:34.870 align:start position:0%
+area light. Rotate this area light 90°
+around<00:07:30.720><c> the</c><00:07:30.960><c> Y</c><00:07:31.199><c> ais</c>
+
+00:07:34.870 --> 00:07:34.880 align:start position:0%
+ 
+ 
+
+00:07:34.880 --> 00:07:36.950 align:start position:0%
+ 
+and<00:07:35.120><c> then</c><00:07:35.360><c> move</c><00:07:35.520><c> it</c><00:07:35.680><c> outward</c><00:07:36.080><c> along</c><00:07:36.400><c> the</c><00:07:36.639><c> X</c>
+
+00:07:36.950 --> 00:07:36.960 align:start position:0%
+and then move it outward along the X
+ 
+
+00:07:36.960 --> 00:07:41.749 align:start position:0%
+and then move it outward along the X
+axis.
+
+00:07:41.749 --> 00:07:41.759 align:start position:0%
+ 
+ 
+
+00:07:41.759 --> 00:07:43.909 align:start position:0%
+ 
+Change<00:07:42.000><c> the</c><00:07:42.240><c> shape</c><00:07:42.479><c> to</c><00:07:42.720><c> rectangle</c><00:07:43.360><c> and</c><00:07:43.599><c> adjust</c>
+
+00:07:43.909 --> 00:07:43.919 align:start position:0%
+Change the shape to rectangle and adjust
+ 
+
+00:07:43.919 --> 00:07:47.589 align:start position:0%
+Change the shape to rectangle and adjust
+the<00:07:44.400><c> Y</c><00:07:45.039><c> dimension</c><00:07:45.919><c> downwards.</c>
+
+00:07:47.589 --> 00:07:47.599 align:start position:0%
+the Y dimension downwards.
+ 
+
+00:07:47.599 --> 00:07:50.550 align:start position:0%
+the Y dimension downwards.
+Make<00:07:47.919><c> sure</c><00:07:48.080><c> that</c><00:07:48.319><c> the</c><00:07:48.479><c> pivot</c><00:07:48.880><c> point</c><00:07:49.759><c> is</c><00:07:50.080><c> set</c><00:07:50.319><c> to</c>
+
+00:07:50.550 --> 00:07:50.560 align:start position:0%
+Make sure that the pivot point is set to
+ 
+
+00:07:50.560 --> 00:07:53.909 align:start position:0%
+Make sure that the pivot point is set to
+the<00:07:50.800><c> 3D</c><00:07:51.120><c> cursor.</c><00:07:52.000><c> And</c><00:07:52.240><c> then</c><00:07:52.880><c> start</c><00:07:53.199><c> rotating</c>
+
+00:07:53.909 --> 00:07:53.919 align:start position:0%
+the 3D cursor. And then start rotating
+ 
+
+00:07:53.919 --> 00:07:56.790 align:start position:0%
+the 3D cursor. And then start rotating
+the<00:07:54.319><c> area</c><00:07:54.720><c> light</c><00:07:55.039><c> around</c><00:07:55.360><c> the</c><00:07:55.520><c> Z-axis</c><00:07:56.479><c> and</c>
+
+00:07:56.790 --> 00:07:56.800 align:start position:0%
+the area light around the Z-axis and
+ 
+
+00:07:56.800 --> 00:08:06.790 align:start position:0%
+the area light around the Z-axis and
+also<00:07:57.120><c> around</c><00:07:57.440><c> the</c><00:07:57.840><c> Y</c><00:07:58.160><c> ais.</c>
+
+00:08:06.790 --> 00:08:06.800 align:start position:0%
+ 
+ 
+
+00:08:06.800 --> 00:08:09.270 align:start position:0%
+ 
+Decrease<00:08:07.280><c> the</c><00:08:07.520><c> power</c><00:08:07.759><c> of</c><00:08:07.919><c> the</c><00:08:08.400><c> light</c><00:08:08.720><c> to</c><00:08:09.039><c> 5</c>
+
+00:08:09.270 --> 00:08:09.280 align:start position:0%
+Decrease the power of the light to 5
+ 
+
+00:08:09.280 --> 00:08:11.990 align:start position:0%
+Decrease the power of the light to 5
+watts<00:08:10.160><c> and</c><00:08:10.479><c> rotate</c><00:08:10.960><c> the</c><00:08:11.199><c> light</c><00:08:11.440><c> around</c><00:08:11.759><c> a</c>
+
+00:08:11.990 --> 00:08:12.000 align:start position:0%
+watts and rotate the light around a
+ 
+
+00:08:12.000 --> 00:08:14.230 align:start position:0%
+watts and rotate the light around a
+little<00:08:12.160><c> bit.</c><00:08:12.960><c> You</c><00:08:13.199><c> just</c><00:08:13.360><c> want</c><00:08:13.599><c> a</c><00:08:13.919><c> nice</c>
+
+00:08:14.230 --> 00:08:14.240 align:start position:0%
+little bit. You just want a nice
+ 
+
+00:08:14.240 --> 00:08:17.029 align:start position:0%
+little bit. You just want a nice
+highlight<00:08:14.639><c> on</c><00:08:14.960><c> the</c><00:08:15.280><c> left</c><00:08:15.599><c> side</c><00:08:15.840><c> of</c><00:08:16.000><c> the</c><00:08:16.400><c> mug</c>
+
+00:08:17.029 --> 00:08:17.039 align:start position:0%
+highlight on the left side of the mug
+ 
+
+00:08:17.039 --> 00:08:23.749 align:start position:0%
+highlight on the left side of the mug
+and<00:08:17.440><c> a</c><00:08:17.759><c> shadow</c><00:08:18.240><c> on</c><00:08:18.479><c> the</c><00:08:18.720><c> right</c><00:08:18.960><c> side.</c>
+
+00:08:23.749 --> 00:08:23.759 align:start position:0%
+ 
+ 
+
+00:08:23.759 --> 00:08:27.430 align:start position:0%
+ 
+Next,<00:08:24.240><c> add</c><00:08:24.479><c> in</c><00:08:25.039><c> a</c><00:08:25.280><c> plane.</c>
+
+00:08:27.430 --> 00:08:27.440 align:start position:0%
+Next, add in a plane.
+ 
+
+00:08:27.440 --> 00:08:29.189 align:start position:0%
+Next, add in a plane.
+Rotate<00:08:27.840><c> the</c><00:08:28.000><c> plane</c><00:08:28.240><c> along</c><00:08:28.479><c> the</c><00:08:28.639><c> Y-</c><00:08:28.800><c> axis.</c>
+
+00:08:29.189 --> 00:08:29.199 align:start position:0%
+Rotate the plane along the Y- axis.
+ 
+
+00:08:29.199 --> 00:08:31.670 align:start position:0%
+Rotate the plane along the Y- axis.
+Scale<00:08:29.440><c> it</c><00:08:29.520><c> down</c><00:08:29.759><c> about</c><00:08:30.080><c> 50%.</c>
+
+00:08:31.670 --> 00:08:31.680 align:start position:0%
+Scale it down about 50%.
+ 
+
+00:08:31.680 --> 00:08:35.269 align:start position:0%
+Scale it down about 50%.
+And<00:08:31.919><c> move</c><00:08:32.080><c> it</c><00:08:32.399><c> along</c><00:08:32.800><c> the</c><00:08:33.120><c> X</c><00:08:33.360><c> axis</c><00:08:34.159><c> outwards.</c>
+
+00:08:35.269 --> 00:08:35.279 align:start position:0%
+And move it along the X axis outwards.
+ 
+
+00:08:35.279 --> 00:08:38.389 align:start position:0%
+And move it along the X axis outwards.
+This<00:08:35.599><c> plane</c><00:08:36.000><c> acts</c><00:08:36.320><c> as</c><00:08:36.880><c> a</c><00:08:37.360><c> reflection</c><00:08:37.919><c> plane</c>
+
+00:08:38.389 --> 00:08:38.399 align:start position:0%
+This plane acts as a reflection plane
+ 
+
+00:08:38.399 --> 00:08:40.550 align:start position:0%
+This plane acts as a reflection plane
+and<00:08:38.800><c> adds</c><00:08:39.120><c> a</c><00:08:39.440><c> little</c><00:08:39.519><c> bit</c><00:08:39.760><c> of</c><00:08:39.919><c> light</c><00:08:40.159><c> to</c><00:08:40.399><c> the</c>
+
+00:08:40.550 --> 00:08:40.560 align:start position:0%
+and adds a little bit of light to the
+ 
+
+00:08:40.560 --> 00:08:42.630 align:start position:0%
+and adds a little bit of light to the
+right<00:08:40.800><c> side</c><00:08:41.039><c> of</c><00:08:41.200><c> the</c><00:08:41.360><c> mug</c><00:08:41.919><c> just</c><00:08:42.080><c> so</c><00:08:42.320><c> that</c><00:08:42.399><c> it's</c>
+
+00:08:42.630 --> 00:08:42.640 align:start position:0%
+right side of the mug just so that it's
+ 
+
+00:08:42.640 --> 00:08:45.430 align:start position:0%
+right side of the mug just so that it's
+not<00:08:42.800><c> totally</c><00:08:43.200><c> dark</c><00:08:43.440><c> on</c><00:08:43.599><c> that</c><00:08:43.839><c> side.</c><00:08:44.880><c> Next,</c>
+
+00:08:45.430 --> 00:08:45.440 align:start position:0%
+not totally dark on that side. Next,
+ 
+
+00:08:45.440 --> 00:08:48.790 align:start position:0%
+not totally dark on that side. Next,
+open<00:08:45.839><c> up</c><00:08:46.240><c> a</c><00:08:46.560><c> new</c><00:08:46.800><c> window.</c><00:08:47.440><c> Change</c><00:08:47.760><c> this</c><00:08:48.160><c> to</c><00:08:48.480><c> the</c>
+
+00:08:48.790 --> 00:08:48.800 align:start position:0%
+open up a new window. Change this to the
+ 
+
+00:08:48.800 --> 00:08:52.310 align:start position:0%
+open up a new window. Change this to the
+shader<00:08:49.279><c> editor.</c><00:08:50.160><c> Add</c><00:08:50.399><c> a</c><00:08:50.640><c> new</c><00:08:50.800><c> material</c><00:08:51.440><c> to</c><00:08:51.920><c> the</c>
+
+00:08:52.310 --> 00:08:52.320 align:start position:0%
+shader editor. Add a new material to the
+ 
+
+00:08:52.320 --> 00:08:54.790 align:start position:0%
+shader editor. Add a new material to the
+floor<00:08:52.640><c> plane.</c><00:08:53.279><c> Change</c><00:08:53.519><c> the</c><00:08:53.680><c> roughness</c><00:08:54.240><c> to</c><00:08:54.560><c> a</c>
+
+00:08:54.790 --> 00:08:54.800 align:start position:0%
+floor plane. Change the roughness to a
+ 
+
+00:08:54.800 --> 00:08:57.350 align:start position:0%
+floor plane. Change the roughness to a
+value<00:08:55.120><c> of</c><00:08:55.519><c> 0.1.</c>
+
+00:08:57.350 --> 00:08:57.360 align:start position:0%
+value of 0.1.
+ 
+
+00:08:57.360 --> 00:08:59.269 align:start position:0%
+value of 0.1.
+Then<00:08:57.680><c> set</c><00:08:57.920><c> the</c><00:08:58.080><c> base</c><00:08:58.399><c> color</c><00:08:58.640><c> to</c><00:08:58.880><c> something</c>
+
+00:08:59.269 --> 00:08:59.279 align:start position:0%
+Then set the base color to something
+ 
+
+00:08:59.279 --> 00:09:02.710 align:start position:0%
+Then set the base color to something
+darker
+
+00:09:02.710 --> 00:09:02.720 align:start position:0%
+ 
+ 
+
+00:09:02.720 --> 00:09:08.790 align:start position:0%
+ 
+and<00:09:03.040><c> add</c><00:09:03.279><c> in</c><00:09:03.519><c> a</c><00:09:03.760><c> boronoi</c><00:09:04.320><c> texture.</c>
+
+00:09:08.790 --> 00:09:08.800 align:start position:0%
+ 
+ 
+
+00:09:08.800 --> 00:09:12.070 align:start position:0%
+ 
+Then<00:09:09.200><c> add</c><00:09:09.519><c> in</c><00:09:09.839><c> a</c><00:09:10.080><c> mapping</c><00:09:10.480><c> node.</c><00:09:11.600><c> Connect</c><00:09:11.920><c> that</c>
+
+00:09:12.070 --> 00:09:12.080 align:start position:0%
+Then add in a mapping node. Connect that
+ 
+
+00:09:12.080 --> 00:09:14.470 align:start position:0%
+Then add in a mapping node. Connect that
+to<00:09:12.240><c> the</c><00:09:12.399><c> boro</c><00:09:12.880><c> texture</c>
+
+00:09:14.470 --> 00:09:14.480 align:start position:0%
+to the boro texture
+ 
+
+00:09:14.480 --> 00:09:17.190 align:start position:0%
+to the boro texture
+and<00:09:14.880><c> add</c><00:09:15.200><c> a</c><00:09:15.519><c> texture</c><00:09:15.920><c> coordinate</c><00:09:16.399><c> node.</c><00:09:16.880><c> Add</c>
+
+00:09:17.190 --> 00:09:17.200 align:start position:0%
+and add a texture coordinate node. Add
+ 
+
+00:09:17.200 --> 00:09:20.630 align:start position:0%
+and add a texture coordinate node. Add
+the<00:09:17.600><c> object</c><00:09:18.320><c> output</c><00:09:18.800><c> of</c><00:09:19.040><c> that</c><00:09:19.360><c> to</c><00:09:19.760><c> the</c><00:09:20.240><c> vector</c>
+
+00:09:20.630 --> 00:09:20.640 align:start position:0%
+the object output of that to the vector
+ 
+
+00:09:20.640 --> 00:09:23.509 align:start position:0%
+the object output of that to the vector
+socket<00:09:20.959><c> of</c><00:09:21.200><c> the</c><00:09:21.360><c> mapping</c><00:09:21.760><c> node.</c>
+
+00:09:23.509 --> 00:09:23.519 align:start position:0%
+socket of the mapping node.
+ 
+
+00:09:23.519 --> 00:09:25.590 align:start position:0%
+socket of the mapping node.
+Adjust<00:09:23.839><c> the</c><00:09:24.080><c> scale</c><00:09:24.240><c> of</c><00:09:24.399><c> the</c><00:09:24.560><c> warey</c><00:09:25.040><c> texture</c><00:09:25.360><c> to</c>
+
+00:09:25.590 --> 00:09:25.600 align:start position:0%
+Adjust the scale of the warey texture to
+ 
+
+00:09:25.600 --> 00:09:30.230 align:start position:0%
+Adjust the scale of the warey texture to
+something<00:09:26.000><c> bigger.</c>
+
+00:09:30.230 --> 00:09:30.240 align:start position:0%
+ 
+ 
+
+00:09:30.240 --> 00:09:33.590 align:start position:0%
+ 
+Then<00:09:30.640><c> add</c><00:09:30.880><c> in</c><00:09:31.120><c> a</c><00:09:31.360><c> bump</c><00:09:31.760><c> node</c><00:09:32.320><c> and</c><00:09:32.800><c> connect</c><00:09:33.120><c> the</c>
+
+00:09:33.590 --> 00:09:33.600 align:start position:0%
+Then add in a bump node and connect the
+ 
+
+00:09:33.600 --> 00:09:35.670 align:start position:0%
+Then add in a bump node and connect the
+output<00:09:34.000><c> of</c><00:09:34.160><c> the</c><00:09:34.399><c> war</c><00:09:34.640><c> node</c><00:09:34.880><c> texture</c><00:09:35.279><c> to</c><00:09:35.519><c> the</c>
+
+00:09:35.670 --> 00:09:35.680 align:start position:0%
+output of the war node texture to the
+ 
+
+00:09:35.680 --> 00:09:38.070 align:start position:0%
+output of the war node texture to the
+height<00:09:36.160><c> socket</c><00:09:36.640><c> of</c><00:09:36.800><c> the</c><00:09:36.959><c> bump</c><00:09:37.279><c> node.</c><00:09:37.760><c> Change</c>
+
+00:09:38.070 --> 00:09:38.080 align:start position:0%
+height socket of the bump node. Change
+ 
+
+00:09:38.080 --> 00:09:40.389 align:start position:0%
+height socket of the bump node. Change
+the<00:09:38.240><c> bump</c><00:09:38.480><c> node</c><00:09:38.880><c> strength</c><00:09:39.200><c> to</c><00:09:39.440><c> 0.1</c><00:09:39.920><c> and</c><00:09:40.160><c> the</c>
+
+00:09:40.389 --> 00:09:40.399 align:start position:0%
+the bump node strength to 0.1 and the
+ 
+
+00:09:40.399 --> 00:09:42.949 align:start position:0%
+the bump node strength to 0.1 and the
+distance<00:09:40.720><c> to</c><00:09:40.880><c> 0.1</c><00:09:41.360><c> as</c><00:09:41.600><c> well.</c><00:09:42.240><c> And</c><00:09:42.560><c> finally,</c>
+
+00:09:42.949 --> 00:09:42.959 align:start position:0%
+distance to 0.1 as well. And finally,
+ 
+
+00:09:42.959 --> 00:09:45.030 align:start position:0%
+distance to 0.1 as well. And finally,
+connect<00:09:43.360><c> the</c><00:09:43.760><c> output</c><00:09:44.080><c> of</c><00:09:44.240><c> the</c><00:09:44.320><c> bump</c><00:09:44.640><c> node</c><00:09:44.880><c> to</c>
+
+00:09:45.030 --> 00:09:45.040 align:start position:0%
+connect the output of the bump node to
+ 
+
+00:09:45.040 --> 00:09:47.190 align:start position:0%
+connect the output of the bump node to
+the<00:09:45.200><c> normal</c><00:09:45.519><c> of</c><00:09:45.680><c> the</c><00:09:45.839><c> principal</c><00:09:46.240><c> BSDF.</c>
+
+00:09:47.190 --> 00:09:47.200 align:start position:0%
+the normal of the principal BSDF.
+ 
+
+00:09:47.200 --> 00:09:49.269 align:start position:0%
+the normal of the principal BSDF.
+Increase<00:09:47.600><c> the</c><00:09:47.839><c> scale</c><00:09:48.000><c> of</c><00:09:48.160><c> the</c><00:09:48.320><c> vorly</c><00:09:48.880><c> texture</c>
+
+00:09:49.269 --> 00:09:49.279 align:start position:0%
+Increase the scale of the vorly texture
+ 
+
+00:09:49.279 --> 00:09:52.470 align:start position:0%
+Increase the scale of the vorly texture
+to<00:09:49.680><c> something</c><00:09:50.000><c> larger</c><00:09:50.560><c> like</c><00:09:50.880><c> 1,200.</c>
+
+00:09:52.470 --> 00:09:52.480 align:start position:0%
+to something larger like 1,200.
+ 
+
+00:09:52.480 --> 00:09:54.470 align:start position:0%
+to something larger like 1,200.
+Adjust<00:09:52.800><c> the</c><00:09:53.120><c> base</c><00:09:53.440><c> color</c><00:09:53.760><c> to</c><00:09:54.000><c> something</c><00:09:54.240><c> a</c>
+
+00:09:54.470 --> 00:09:54.480 align:start position:0%
+Adjust the base color to something a
+ 
+
+00:09:54.480 --> 00:09:57.509 align:start position:0%
+Adjust the base color to something a
+little<00:09:54.640><c> darker.</c><00:09:55.760><c> Then</c><00:09:56.320><c> select</c><00:09:56.640><c> the</c><00:09:56.800><c> mug.</c><00:09:57.279><c> Add</c>
+
+00:09:57.509 --> 00:09:57.519 align:start position:0%
+little darker. Then select the mug. Add
+ 
+
+00:09:57.519 --> 00:09:59.829 align:start position:0%
+little darker. Then select the mug. Add
+a<00:09:57.760><c> new</c><00:09:57.920><c> material.</c><00:09:58.880><c> Change</c><00:09:59.120><c> the</c><00:09:59.279><c> roughness</c><00:09:59.680><c> to</c>
+
+00:09:59.829 --> 00:09:59.839 align:start position:0%
+a new material. Change the roughness to
+ 
+
+00:09:59.839 --> 00:10:02.870 align:start position:0%
+a new material. Change the roughness to
+a<00:10:00.000><c> value</c><00:10:00.160><c> of</c><00:10:00.399><c> 0.1.</c><00:10:01.200><c> Add</c><00:10:01.519><c> a</c><00:10:01.760><c> coat</c><00:10:02.160><c> a</c><00:10:02.399><c> weight</c><00:10:02.640><c> of</c>
+
+00:10:02.870 --> 00:10:02.880 align:start position:0%
+a value of 0.1. Add a coat a weight of
+ 
+
+00:10:02.880 --> 00:10:04.949 align:start position:0%
+a value of 0.1. Add a coat a weight of
+one.<00:10:03.360><c> And</c><00:10:03.760><c> increase</c><00:10:03.920><c> the</c><00:10:04.160><c> roughness</c><00:10:04.560><c> of</c><00:10:04.720><c> the</c>
+
+00:10:04.949 --> 00:10:04.959 align:start position:0%
+one. And increase the roughness of the
+ 
+
+00:10:04.959 --> 00:10:08.310 align:start position:0%
+one. And increase the roughness of the
+coat<00:10:05.200><c> a</c><00:10:05.440><c> little</c><00:10:05.519><c> bit.</c><00:10:06.080><c> Add</c><00:10:06.320><c> some</c><00:10:06.560><c> subsurface.</c>
+
+00:10:08.310 --> 00:10:08.320 align:start position:0%
+coat a little bit. Add some subsurface.
+ 
+
+00:10:08.320 --> 00:10:10.230 align:start position:0%
+coat a little bit. Add some subsurface.
+And<00:10:08.560><c> change</c><00:10:08.800><c> the</c><00:10:09.040><c> scale</c><00:10:09.279><c> to</c><00:10:09.519><c> something</c><00:10:09.839><c> very</c>
+
+00:10:10.230 --> 00:10:10.240 align:start position:0%
+And change the scale to something very
+ 
+
+00:10:10.240 --> 00:10:15.110 align:start position:0%
+And change the scale to something very
+small.
+
+00:10:15.110 --> 00:10:15.120 align:start position:0%
+ 
+ 
+
+00:10:15.120 --> 00:10:16.710 align:start position:0%
+ 
+And<00:10:15.360><c> you</c><00:10:15.519><c> can</c><00:10:15.680><c> also</c><00:10:15.920><c> change</c><00:10:16.160><c> the</c><00:10:16.320><c> base</c><00:10:16.560><c> color</c>
+
+00:10:16.710 --> 00:10:16.720 align:start position:0%
+And you can also change the base color
+ 
+
+00:10:16.720 --> 00:10:18.389 align:start position:0%
+And you can also change the base color
+of<00:10:16.880><c> the</c><00:10:16.959><c> mug</c><00:10:17.200><c> to</c><00:10:17.440><c> something</c><00:10:17.600><c> other</c><00:10:17.920><c> than</c><00:10:18.079><c> white</c>
+
+00:10:18.389 --> 00:10:18.399 align:start position:0%
+of the mug to something other than white
+ 
+
+00:10:18.399 --> 00:10:25.190 align:start position:0%
+of the mug to something other than white
+if<00:10:18.560><c> you</c><00:10:18.720><c> like</c><00:10:18.880><c> the</c><00:10:19.040><c> look</c><00:10:19.120><c> of</c><00:10:19.279><c> that.</c>
+
+00:10:25.190 --> 00:10:25.200 align:start position:0%
+ 
+ 
+
+00:10:25.200 --> 00:10:28.069 align:start position:0%
+ 
+And<00:10:25.440><c> there</c><00:10:25.760><c> is</c><00:10:25.920><c> the</c><00:10:26.160><c> final</c><00:10:26.480><c> scene.</c><00:10:27.519><c> Go</c><00:10:27.680><c> ahead</c>
+
+00:10:28.069 --> 00:10:28.079 align:start position:0%
+And there is the final scene. Go ahead
+ 
+
+00:10:28.079 --> 00:10:30.470 align:start position:0%
+And there is the final scene. Go ahead
+and<00:10:28.560><c> render</c><00:10:29.040><c> your</c><00:10:29.279><c> final</c><00:10:29.600><c> image</c><00:10:29.839><c> by</c><00:10:30.079><c> hitting</c>
+
+00:10:30.470 --> 00:10:30.480 align:start position:0%
+and render your final image by hitting
+ 
+
+00:10:30.480 --> 00:10:33.190 align:start position:0%
+and render your final image by hitting
+F12.<00:10:31.760><c> And</c><00:10:32.000><c> make</c><00:10:32.160><c> sure</c><00:10:32.320><c> to</c><00:10:32.480><c> save</c><00:10:32.720><c> the</c><00:10:32.959><c> image</c>
+
+00:10:33.190 --> 00:10:33.200 align:start position:0%
+F12. And make sure to save the image
+ 
+
+00:10:33.200 --> 00:10:35.350 align:start position:0%
+F12. And make sure to save the image
+onto<00:10:33.600><c> your</c><00:10:33.839><c> computer.</c>
+
+00:10:35.350 --> 00:10:35.360 align:start position:0%
+onto your computer.
+ 
+
+00:10:35.360 --> 00:10:37.030 align:start position:0%
+onto your computer.
+Thank<00:10:35.519><c> you</c><00:10:35.680><c> for</c><00:10:35.920><c> watching.</c><00:10:36.399><c> You</c><00:10:36.640><c> have</c><00:10:36.800><c> now</c>
+
+00:10:37.030 --> 00:10:37.040 align:start position:0%
+Thank you for watching. You have now
+ 
+
+00:10:37.040 --> 00:10:38.949 align:start position:0%
+Thank you for watching. You have now
+completed<00:10:37.440><c> the</c><00:10:37.680><c> first</c><00:10:37.839><c> video</c><00:10:38.079><c> in</c><00:10:38.320><c> my</c><00:10:38.480><c> Blender</c>
+
+00:10:38.949 --> 00:10:38.959 align:start position:0%
+completed the first video in my Blender
+ 
+
+00:10:38.959 --> 00:10:41.190 align:start position:0%
+completed the first video in my Blender
+product<00:10:39.279><c> rendering</c><00:10:39.839><c> series.</c><00:10:40.560><c> Make</c><00:10:40.800><c> sure</c><00:10:40.959><c> to</c>
+
+00:10:41.190 --> 00:10:41.200 align:start position:0%
+product rendering series. Make sure to
+ 
+
+00:10:41.200 --> 00:10:42.790 align:start position:0%
+product rendering series. Make sure to
+stay<00:10:41.360><c> tuned</c><00:10:41.600><c> for</c><00:10:41.839><c> the</c><00:10:42.000><c> next</c><00:10:42.160><c> video</c><00:10:42.399><c> in</c><00:10:42.560><c> the</c>
+
+00:10:42.790 --> 00:10:42.800 align:start position:0%
+stay tuned for the next video in the
+ 
+
+00:10:42.800 --> 00:10:45.030 align:start position:0%
+stay tuned for the next video in the
+series.<00:10:43.600><c> If</c><00:10:43.760><c> I</c><00:10:44.000><c> have</c><00:10:44.160><c> already</c><00:10:44.480><c> posted</c><00:10:44.800><c> the</c>
+
+00:10:45.030 --> 00:10:45.040 align:start position:0%
+series. If I have already posted the
+ 
+
+00:10:45.040 --> 00:10:46.630 align:start position:0%
+series. If I have already posted the
+next<00:10:45.279><c> video</c><00:10:45.519><c> by</c><00:10:45.680><c> the</c><00:10:45.839><c> time</c><00:10:46.000><c> you</c><00:10:46.240><c> are</c><00:10:46.399><c> watching</c>
+
+00:10:46.630 --> 00:10:46.640 align:start position:0%
+next video by the time you are watching
+ 
+
+00:10:46.640 --> 00:10:48.470 align:start position:0%
+next video by the time you are watching
+this,<00:10:47.120><c> I</c><00:10:47.279><c> will</c><00:10:47.440><c> put</c><00:10:47.519><c> it</c><00:10:47.680><c> on</c><00:10:47.839><c> the</c><00:10:48.000><c> end</c><00:10:48.240><c> screen</c>
+
+00:10:48.470 --> 00:10:48.480 align:start position:0%
+this, I will put it on the end screen
+ 
+
+00:10:48.480 --> 00:10:51.480 align:start position:0%
+this, I will put it on the end screen
+here.
+

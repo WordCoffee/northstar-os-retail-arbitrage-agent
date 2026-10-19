@@ -1,0 +1,228 @@
+{
+ "id": "huvysaySBrw",
+ "title": "How to Conform Text to a Surface Using a Displacement Map in Photoshop",
+ "channel": "New Layer",
+ "url": "https://www.youtube.com/watch?v=huvysaySBrw",
+ "query": "displacement map mockup",
+ "model": "small",
+ "device": "cuda",
+ "compute_type": "int8_float16",
+ "detected_language": "en",
+ "language_probability": 0.999,
+ "duration_s": 242.3,
+ "chars": 3858,
+ "segments": [
+  {
+   "start": 6.96,
+   "end": 14.96,
+   "text": "Hey guys, in this video I'm going to show you how to conform a text or shape layer to make it look like it's wrapping around another surface in Photoshop."
+  },
+  {
+   "start": 14.96,
+   "end": 16.96,
+   "text": "Let's get started."
+  },
+  {
+   "start": 16.96,
+   "end": 23.96,
+   "text": "So here's the image that we're going to use as a background, and you can see that the light source is coming from the top right and going to the left."
+  },
+  {
+   "start": 23.96,
+   "end": 33.96,
+   "text": "And that causes some wrinkles on our surface, so if we wanted to put some text on this, then to make it look realistic, we'd want that text to wrap around the curves of our blanket."
+  },
+  {
+   "start": 33.96,
+   "end": 40.96,
+   "text": "So to do that, we're going to use Photoshop's Displacement Filter, and we're going to use this background as the Displacement Map."
+  },
+  {
+   "start": 40.96,
+   "end": 44.96,
+   "text": "So the first thing that we need to do is make some changes to this background."
+  },
+  {
+   "start": 44.96,
+   "end": 50.96,
+   "text": "Since there's some fine detail on this background, what we want to do is use a Gaussian Blur to get rid of some of that."
+  },
+  {
+   "start": 50.96,
+   "end": 57.96,
+   "text": "So I'm going to come up and click Filter, Blur, Gaussian Blur, and just give it a blur of 1 pixel."
+  },
+  {
+   "start": 57.96,
+   "end": 64.96,
+   "text": "Next, I'm going to add a Hue and Saturation Adjustment Layer, and turn the saturation all the way down so our image is in black and white."
+  },
+  {
+   "start": 64.96,
+   "end": 74.96,
+   "text": "Next, I'm going to come up and click File, Save As, and I'm going to name this Displacement Map, and hit Save, and then I'm going to close that,"
+  },
+  {
+   "start": 74.96,
+   "end": 78.96,
+   "text": "and then I'll reopen that original image back into Photoshop."
+  },
+  {
+   "start": 78.96,
+   "end": 86.07,
+   "text": "So now that we have our Displacement Map ready, I'm going to use the Text tool and create our text."
+  },
+  {
+   "start": 86.07,
+   "end": 91.07,
+   "text": "Now, Displacement Maps can only be applied to rasterized layers or smart objects."
+  },
+  {
+   "start": 91.07,
+   "end": 97.07,
+   "text": "So to keep our document as editable as possible, you want to convert your text to a smart object."
+  },
+  {
+   "start": 97.07,
+   "end": 102.07,
+   "text": "So just right-click it in the Layers Palette, and click Convert to Smart Object."
+  },
+  {
+   "start": 102.07,
+   "end": 107.07,
+   "text": "Next, you're going to come up and click Filter, Distort, Displace,"
+  },
+  {
+   "start": 107.07,
+   "end": 113.07,
+   "text": "and the default values for the horizontal and vertical scale are 10, and that's a good starting point."
+  },
+  {
+   "start": 113.07,
+   "end": 119.07,
+   "text": "And these other settings only apply if our background is going to be a different size than our Displacement Map, which it's not,"
+  },
+  {
+   "start": 119.07,
+   "end": 122.07,
+   "text": "so I'm just going to leave those as they are and hit OK."
+  },
+  {
+   "start": 122.07,
+   "end": 128.07,
+   "text": "Next, I'll find the Displacement Map PSD file that we previously saved and double-click that."
+  },
+  {
+   "start": 128.07,
+   "end": 132.07,
+   "text": "You'll immediately see the text wrap to the surface of the background layer,"
+  },
+  {
+   "start": 132.07,
+   "end": 135.07,
+   "text": "based on the color information in our Displacement Map."
+  },
+  {
+   "start": 135.07,
+   "end": 140.07,
+   "text": "It uses the black and white values of the Displacement Map to create the displacement"
+  },
+  {
+   "start": 140.07,
+   "end": 144.07,
+   "text": "and make it look like our text is really on the surface of our background."
+  },
+  {
+   "start": 144.07,
+   "end": 151.07,
+   "text": "Next, you can come over on your text layer and change the Blend Mode and the Fill Percentage to make it look a little more realistic."
+  },
+  {
+   "start": 151.07,
+   "end": 156.07,
+   "text": "Or you can leave the Blend Mode set to Normal and set the Fill to 0%,"
+  },
+  {
+   "start": 156.07,
+   "end": 160.07,
+   "text": "and then if you double-click that layer, you'll open up the Layer Style dialog."
+  },
+  {
+   "start": 160.07,
+   "end": 164.07,
+   "text": "Then you can apply all kinds of effects to make it look more realistic."
+  },
+  {
+   "start": 164.07,
+   "end": 170.07,
+   "text": "First, I'm going to give it a color overlay, and I'm going to make that a medium blue color,"
+  },
+  {
+   "start": 170.07,
+   "end": 176.07,
+   "text": "and set the Blend Mode to Linear Burn, and then I'm going to add a Bevel and Emboss."
+  },
+  {
+   "start": 176.07,
+   "end": 181.07,
+   "text": "First, I'm going to change the Style to Emboss and make the direction down,"
+  },
+  {
+   "start": 181.07,
+   "end": 187.07,
+   "text": "and then I'll set the Angle to 45 degrees so it matches the light source in our background photo."
+  },
+  {
+   "start": 187.07,
+   "end": 192.07,
+   "text": "It looks all right like that, but you can soften up this effect to make it look more realistic."
+  },
+  {
+   "start": 192.07,
+   "end": 196.07,
+   "text": "So I'm going to change the Highlight Mode from Screen to Linear Dodge,"
+  },
+  {
+   "start": 196.07,
+   "end": 203.07,
+   "text": "and the Shadow Mode from Multiply to Linear Burn, and take the Opacity for each of those down to about 15%."
+  },
+  {
+   "start": 203.07,
+   "end": 210.07,
+   "text": "Then I'll just increase the Size a little bit and set Soften to about 1 or 2 pixels and hit OK."
+  },
+  {
+   "start": 210.07,
+   "end": 214.07,
+   "text": "It's a really subtle effect, but you can see the difference if I turn it on and off."
+  },
+  {
+   "start": 214.07,
+   "end": 219.7,
+   "text": "It just adds a little more realism to our text."
+  },
+  {
+   "start": 219.7,
+   "end": 224.7,
+   "text": "So there you have it. This method works great for anything from wrinkled cloth to weathered wood surfaces,"
+  },
+  {
+   "start": 224.7,
+   "end": 228.7,
+   "text": "and it's the perfect way to add some realism to your designs."
+  },
+  {
+   "start": 228.7,
+   "end": 231.7,
+   "text": "I'm John Shaver for Photoshop Video Academy."
+  },
+  {
+   "start": 231.7,
+   "end": 234.7,
+   "text": "Thanks for watching. I'll see you next time."
+  }
+ ],
+ "transcribed_at": "2026-10-19T08:46:09.203374+00:00",
+ "seconds": 11.0
+}
