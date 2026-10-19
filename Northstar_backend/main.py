@@ -94,6 +94,13 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_CORPUS = False
 
+# Design Studio lanes (2026-10-19) — cutout / upscale / MAIN compliance.
+try:
+    from design_studio_lanes import router as studio_lanes_router
+    _HAS_STUDIO_LANES = True
+except ImportError:  # pragma: no cover
+    _HAS_STUDIO_LANES = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -318,9 +325,13 @@ if _HAS_SHELL:
 if _HAS_SEO:
     app.include_router(seo_router)
 
-# V3 S8 curated corpus — local, provenance-labelled research index (read/ingest)
+# V3 S8 curated corpus - local, provenance-labelled research index (read/ingest)
 if _HAS_CORPUS:
     app.include_router(corpus_router)
+
+# Design Studio lanes - cutout / upscale / MAIN compliance (local, deterministic)
+if _HAS_STUDIO_LANES:
+    app.include_router(studio_lanes_router)
 
 # Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
 _GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
