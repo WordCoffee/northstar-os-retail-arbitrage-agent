@@ -31,6 +31,7 @@ import json
 import os
 import queue
 import threading
+import time
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, Iterable, List, Optional
@@ -130,6 +131,9 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
     client disconnect — with the true status recorded in usage_json.
     """
     turn_id = uuid.uuid4().hex
+    # T-7 (Thorn v5.0): a real measurement of this run, recorded once on exit.
+    # A measurement that can break a turn is worse than no measurement.
+    _t0 = time.perf_counter()
     own_event = cancel_event is None
     if own_event:
         cancel_event = register_turn(turn_id)
@@ -466,6 +470,32 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                 db.chat.runs.finish(run_id, status, account_id=account_id)
             except Exception:  # noqa: BLE001
                 pass
+        # T-7 lane telemetry: record what this turn actually cost. Measurements only —
+        # no routing decision is taken from a single run. A failure here must never
+        # affect the turn that is finishing, but it must NOT be invisible either:
+        # a silently dead producer is worse than no producer.
+        try:
+            import lane_telemetry
+            focus_mode = None
+            fj = session.get("focus_json") if isinstance(session, dict) else None
+            if isinstance(fj, dict):
+                focus_mode = fj.get("mode")
+            elif isinstance(fj, str) and fj:
+                try:
+                    focus_mode = (json.loads(fj) or {}).get("mode")
+                except Exception:  # noqa: BLE001
+                    focus_mode = None
+            lane_telemetry.record(
+                db, f"chat:{model or 'default'}",
+                latency_ms=(time.perf_counter() - _t0) * 1000.0,
+                ok=(status == "done"),
+                tool_calls=len(tool_records),
+                task_class=focus_mode,
+            )
+        except Exception as exc:  # noqa: BLE001 - never break a turn, never hide a break
+            import logging as _logging
+            _logging.getLogger("northstar.chat").warning(
+                "lane telemetry not recorded: %s: %s", type(exc).__name__, exc)
         if own_event:
             _drain_turn(turn_id)
 
