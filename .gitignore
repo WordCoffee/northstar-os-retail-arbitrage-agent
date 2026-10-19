@@ -32,3 +32,6 @@ data/normalized/
 .chromeconnect/
 .playwright-mcp/
 .wrangler/tmp/
+
+# local build snapshots (rollback tooling) - never committed
+backups/

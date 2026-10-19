@@ -957,6 +957,46 @@ def _t_build_preset(args, ctx) -> dict:
             "preset": out, "assets": []}
 
 
+def _t_creative_plan(args, ctx) -> dict:
+    """Build or confirm a creative plan (Bojo). Quotes credits; never executes.
+
+    Planning returns a card the UI renders with four actions. Confirming validates
+    the operator's choice and returns the ledger reserve INSTRUCTION — the caller
+    makes the hold; this tool never charges and never renders."""
+    import creative_plan
+
+    action = str(args.get("action") or "").strip().lower()
+    if action:
+        plan_id = str(args.get("plan_id") or "").strip()
+        plan = creative_plan.get(plan_id)
+        if plan is None:
+            return {"ok": False,
+                    "summary": "That plan is no longer open — ask for a fresh plan.",
+                    "error": "unknown or expired plan_id", "assets": []}
+        decision = creative_plan.confirm(plan, action)
+        if decision.get("ok") and action == "cancel":
+            creative_plan.forget(plan_id)
+        return {"ok": bool(decision.get("ok")),
+                "summary": decision.get("message") or decision.get("error") or "",
+                "data": decision, "assets": []}
+
+    request_text = str(args.get("request") or "").strip()
+    if not request_text:
+        return {"ok": False, "summary": "Tell me what to make and I will build a plan.",
+                "error": "request is required to build a plan", "assets": []}
+    plan = creative_plan.build_plan(
+        request_text,
+        media=str(args.get("media") or "image"),
+        detail=str(args.get("detail") or "quick"),
+        count=int(args.get("count") or 1),
+        subscription=str(args.get("subscription") or "foundation"),
+    )
+    creative_plan.remember(plan)
+    card = creative_plan.render_card(plan)
+    return {"ok": True, "summary": plan["summary"],
+            "data": {"plan": plan, "card": card}, "assets": []}
+
+
 # ── Registry ─────────────────────────────────────────────────────────────────
 TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
@@ -1219,6 +1259,37 @@ TOOLS: Dict[str, dict] = {    "system_status": {
             "required": [],
         },
         "handler": _t_build_preset,
+    },
+    "creative_plan": {
+        "description": ("Plan and price a CREATIVE job before generating anything. Builds a "
+                        "quick or detailed plan (real steps from real tools), quotes the "
+                        "in-house credit cost for a draft and a final, lists what it still "
+                        "needs from the operator, and returns an interactive plan card with "
+                        "four actions: generate draft (cheaper), generate final (best), edit "
+                        "the plan, or cancel. Pass action + plan_id to confirm a choice. It "
+                        "never generates and never charges credits."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "request": {"type": "string",
+                            "description": "What to make, in the operator's own words.",
+                            "minLength": 3, "maxLength": 2000},
+                "media": {"type": "string", "enum": ["image", "video"], "default": "image"},
+                "detail": {"type": "string", "enum": ["quick", "detailed"], "default": "quick",
+                           "description": "quick = fast plan; detailed = prompt scaffold, extra direction and QC."},
+                "count": {"type": "integer", "minimum": 1, "maximum": 4, "default": 1},
+                "subscription": {"type": "string",
+                                 "enum": ["foundation", "scout", "mover", "autothink"],
+                                 "default": "foundation",
+                                 "description": "Which tier is asking — gates final quality and video."},
+                "action": {"type": "string", "enum": ["cancel", "edit", "draft", "final"],
+                           "description": "Confirm a plan: cancel | edit | draft | final."},
+                "plan_id": {"type": "string",
+                            "description": "The plan_id from the plan card (required with action)."},
+            },
+            "required": [],
+        },
+        "handler": _t_creative_plan,
     },
 }
 

@@ -429,3 +429,45 @@ html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="advanced"] .shell-m
 @media (prefers-reduced-motion: reduce) {
   .mb-shell .chat-suggestion, .mb-shell .chat-bubble { transition: none; }
 }
+
+/* ── Bojo generation-plan card (creative flow) ───────────────────────────── */
+.mb-shell .chat-card-plan {
+  border-color: rgba(47, 111, 237, 0.45);
+  background: linear-gradient(180deg, rgba(47, 111, 237, 0.10), rgba(247, 243, 236, 0.035));
+}
+.mb-shell .chat-plan-actions {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;
+}
+.mb-shell .chat-plan-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 14px; border-radius: 12px; cursor: pointer;
+  font-size: 15px; font-family: var(--font-ui); text-align: left;
+  color: var(--ink); background: rgba(247, 243, 236, 0.06);
+  border: 1px solid rgba(247, 243, 236, 0.20);
+  transition: border-color 160ms ease, background 160ms ease, transform 120ms ease;
+}
+.mb-shell .chat-plan-btn:hover:not(:disabled) {
+  border-color: rgba(247, 243, 236, 0.45); background: rgba(247, 243, 236, 0.10);
+}
+.mb-shell .chat-plan-btn:active:not(:disabled) { transform: scale(0.99); }
+.mb-shell .chat-plan-btn:focus-visible { outline: 2px solid var(--spark); outline-offset: 2px; }
+.mb-shell .chat-plan-btn.is-primary {
+  background: var(--spark); border-color: var(--spark); color: #fff;
+  box-shadow: 0 6px 22px rgba(47, 111, 237, 0.35);
+}
+.mb-shell .chat-plan-btn.is-primary:hover:not(:disabled) { background: #2a63d6; border-color: #2a63d6; }
+.mb-shell .chat-plan-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.mb-shell .chat-plan-btn-cost {
+  font-family: var(--font-mono); font-size: 12.5px; padding: 2px 8px;
+  border-radius: 999px; background: rgba(0, 0, 0, 0.25); color: inherit;
+}
+.mb-shell .chat-plan-steps { margin-top: 12px; font-size: 14px; color: var(--ink-mid); }
+.mb-shell .chat-plan-steps summary { cursor: pointer; color: var(--ink-soft); font-size: 13.5px; }
+.mb-shell .chat-plan-steps ol { margin: 8px 0 0 18px; padding: 0; }
+.mb-shell .chat-plan-steps li { margin-bottom: 5px; line-height: 1.55; }
+.mb-shell .chat-plan-steps code {
+  font-family: var(--font-mono); font-size: 12px; padding: 1px 5px;
+  border-radius: 5px; background: rgba(247, 243, 236, 0.10);
+}
+.mb-shell .chat-plan-gap { color: var(--ink-faint); font-size: 12.5px; }
+@media (max-width: 640px) { .mb-shell .chat-plan-actions { grid-template-columns: 1fr; } }

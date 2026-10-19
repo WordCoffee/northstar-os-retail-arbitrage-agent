@@ -50,6 +50,16 @@ function sessionKey(focusId) {
   return `ns-chat-session:${focusId || 'auto'}`
 }
 
+// A plan card's action becomes a precise instruction the brain can act on with the
+// creative_plan tool (it needs the plan_id to find the plan again).
+function planMessage(card, option) {
+  const base = `Plan ${card.planId}:`
+  if (option.id === 'draft') return `${base} generate the first draft now.`
+  if (option.id === 'final') return `${base} generate the final now.`
+  if (option.id === 'edit') return `${base} I want to edit the plan - ask me what to change.`
+  return `${base} cancel it.`
+}
+
 function relTime(ts) {
   if (!ts) return ''
   try {
@@ -273,6 +283,13 @@ export default function ChatSurface({
             rows: Array.isArray(p.rows) ? p.rows : [],
             action: p.action || null,
             ok: !!p.ok,
+            // Bojo's generation plan: options carry their own credit cost.
+            kind: p.kind || '',
+            planId: p.plan_id || '',
+            options: Array.isArray(p.options) ? p.options : [],
+            steps: Array.isArray(p.steps) ? p.steps : [],
+            job: p.job || '',
+            media: p.media || '',
           })),
         }
       }))
@@ -750,7 +767,7 @@ export default function ChatSurface({
                 {m.role === 'assistant' && (m.cards || []).length > 0 && (
                   <div className="chat-cards" data-testid="chat-cards">
                     {m.cards.map((c) => (
-                      <div key={c.id} className={`chat-card ${c.ok ? '' : 'error'}`}>
+                      <div key={c.id} className={`chat-card ${c.ok ? '' : 'error'} ${c.kind === 'generation_plan' ? 'chat-card-plan' : ''}`}>
                         <div className="chat-card-title">{c.title}</div>
                         {(c.rows || []).map((r, i) => (
                           <div key={i} className="chat-card-row">
@@ -758,7 +775,37 @@ export default function ChatSurface({
                             <span className="chat-card-value">{r.value}</span>
                           </div>
                         ))}
-                        {c.action && (
+                        {c.kind === 'generation_plan' && (c.options || []).length > 0 && (
+                          <div className="chat-plan-actions">
+                            {c.options.map((o) => (
+                              <button key={o.id} type="button"
+                                className={`chat-plan-btn ${o.id === 'final' ? 'is-primary' : ''} ${o.enabled === false ? 'is-disabled' : ''}`}
+                                disabled={o.enabled === false}
+                                title={o.note || ''}
+                                onClick={() => send(planMessage(c, o))}
+                                data-testid={`chat-plan-${o.id}`}>
+                                <span className="chat-plan-btn-label">{o.label}</span>
+                                {o.credits > 0 && (
+                                  <span className="chat-plan-btn-cost">{o.credits} cr</span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        {(c.steps || []).length > 0 && (
+                          <details className="chat-plan-steps">
+                            <summary>{c.steps.length} planned steps</summary>
+                            <ol>
+                              {c.steps.map((s, i) => (
+                                <li key={i}>
+                                  {s.what} <code>{s.tool}</code>
+                                  {s.available === false && <span className="chat-plan-gap"> (pipeline)</span>}
+                                </li>
+                              ))}
+                            </ol>
+                          </details>
+                        )}
+                        {c.action && c.kind !== 'generation_plan' && (
                           <button type="button" className="btn btn-sm"
                             onClick={() => send(c.action.message)}
                             data-testid="chat-card-action">

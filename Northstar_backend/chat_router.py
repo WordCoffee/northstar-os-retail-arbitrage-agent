@@ -390,13 +390,19 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                 # actionable component, not plain text.
                 card = (result.get("data") or {}).get("card")
                 if isinstance(card, dict) and card.get("title"):
-                    tool_parts.append({
+                    part = {
                         "type": "card",
                         "title": str(card.get("title"))[:120],
                         "rows": card.get("rows") or [],
                         "action": card.get("action") or None,
                         "ok": bool(result.get("ok")),
-                    })
+                    }
+                    # Additive: a generation-plan card carries its own options and
+                    # cost so the operator can cancel/edit/draft/final from the card.
+                    for key in ("kind", "plan_id", "job", "media", "options", "steps"):
+                        if key in card:
+                            part[key] = card[key]
+                    tool_parts.append(part)
                 tool_parts.append({
                     "type": "tool", "call_id": call_id, "name": call["name"],
                     "ok": bool(result.get("ok")), "summary": result.get("summary"),

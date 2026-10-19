@@ -40,7 +40,7 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "label": "Create",
         "blurb": "Packaging, product photos, listing images, ad creative, voiceovers.",
         "tools": ["list_templates", "design_brief", "create_dieline", "generate_image",
-                  "voice_list", "voice_tts", "voice_dub"],
+                  "voice_list", "voice_tts", "voice_dub", "creative_plan"],
         "requires": None,
         "suggestions": [
             "Draft three directions for a Lion's Mane pouch — kraft, botanical, premium shelf.",

@@ -129,8 +129,8 @@ export default function MasterBrainShell() {
         </div>
         <ChatSurface
           focus={shell.focus}
-          heading="Master Brain"
-          sub="Simple view"
+          heading="Bojo"
+          sub="Northstar creative assistant"
           onBusyChange={setBusy}
           onOpenAdvanced={advancedAllowed
             ? (path) => { setMode('advanced'); navigate(path || '/home') }
