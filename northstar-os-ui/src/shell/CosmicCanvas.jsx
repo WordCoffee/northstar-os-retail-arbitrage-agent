@@ -49,6 +49,7 @@ varying vec2 v_uv;
 uniform vec2 u_res;
 uniform float u_time;
 uniform float u_pulse;
+uniform float u_idle;
 // T2 (Thorn v5.0 "preset-driven visual shifts"). The active Master Brain focus
 // biases the ATMOSPHERE only — nebula warmth, a horizon band, a distant planet
 // limb. The accretion disc and photon ring stay film-gold in every mode: the
@@ -151,12 +152,16 @@ void main() {
   // The film's camera is patient: a slow push-in and a barely-there drift.
   float t = u_time * 0.010;
   p += vec2(sin(u_time * 0.013), cos(u_time * 0.011)) * 0.0055;
-  p *= 1.0 + 0.011 * sin(u_time * 0.020);
+  // 17: focal breathing - a slow 40 s push, not a visible sine
+  p *= 1.0 + 0.005 * sin(u_time * 0.157);
 
   // ── 1. deep space: desaturated nebula + a dust-laned Milky Way ────────────
   vec3 col = vec3(0.011, 0.013, 0.022);
   float neb = fbm(p * 1.55 + vec2(t * 0.5, -t * 0.3));
   col += vec3(0.038, 0.050, 0.082) * smoothstep(0.36, 0.95, neb);
+  // 6: nebula FILAMENTS - a ridged fbm (sharp crests) instead of soft blobs
+  float fil = 1.0 - abs(2.0 * fbm(p * 2.35 + vec2(t * 0.35, t * 0.2)) - 1.0);
+  col += vec3(0.030, 0.038, 0.062) * pow(fil, 3.0) * 0.55;
   float neb2 = fbm(p * 3.2 - vec2(t * 0.4, t * 0.2));
   col += vec3(0.052, 0.030, 0.066) * smoothstep(0.52, 0.98, neb2) * 0.65;
 
@@ -183,6 +188,9 @@ void main() {
   float horizonY = p.y + 0.30;
   float horizon = exp(-abs(horizonY) * 8.0) * (1.0 - smoothstep(0.0, 0.95, abs(p.x)));
   col += u_tint * horizon * 0.050 * u_horizon;
+  // 7: aurora ribbon just above the horizon - ~2% luminance, focus-tinted
+  float aurora = exp(-abs(p.y + 0.24 + 0.03 * sin(p.x * 3.0 + u_time * 0.05)) * 22.0);
+  col += u_tint * aurora * 0.020;
 
   // distant planet limb, mostly cropped by the right edge: depth, not a hero
   vec2 pl = vec2(0.78, -0.12);
@@ -192,6 +200,13 @@ void main() {
   float bands = fbm(vec2(atan(p.y - pl.y, p.x - pl.x) * 1.4, (pr - 0.29) * 9.0)
                        + vec2(u_time * 0.02, 0.0));
   col = mix(col, col * 0.84 + u_tint * (0.030 + 0.022 * bands), body * u_planet);
+  // 8: terminator - the planet has a day/night edge, not uniform fill
+  float day = smoothstep(-0.45, 0.45, dot(normalize(p - pl + 1e-6),
+                                          normalize(vec2(-0.62, 0.48))));
+  col = mix(col, col * (0.74 + 0.26 * day), body * u_planet);
+  // 9: ring shadow - a thin dark band across the body from its own ring
+  float ringShadow = exp(-abs((p.y - pl.y) + 0.018) * 90.0) * body * u_planet;
+  col *= 1.0 - ringShadow * 0.35;
   col += u_tint * rim * 0.26 * u_planet;
 
   // ── 2. black hole frame: distant, massive, OUT of the reading column ──────
@@ -219,8 +234,8 @@ void main() {
   col += bright * starTint(hash21(floor(pxw * 0.40 / 11.0) + 2.8)) * 1.10;
   // anamorphic spikes on the brightest few (GALACTIC 2)
   col += starSpikes(pxw * 0.40, 11.0, 0.006) * vec3(1.00, 0.97, 0.92) * 1.35;
-  // GALACTIC 4 - a rare shooting star, only in the gutters
-  col += vec3(0.92, 0.96, 1.00) * shootingStar(uv, u_time) * 0.85;
+  // GALACTIC 4 - a rare shooting star, only in the gutters (19: tail takes the focus tint)
+  col += mix(vec3(0.92, 0.96, 1.00), u_tint, 0.35) * shootingStar(uv, u_time) * 0.85;
 
   // ── 4. the accretion disc: a thin band through the hole's plane ──────────
   // We look from a few degrees above the plane, so the near side sits slightly
@@ -271,16 +286,32 @@ void main() {
   col *= 1.0 - smoothstep(Rs, Rs * 0.985, r);
   col += discCol * aFront * beam * 1.05 * flare;
 
-  col += vec3(1.00, 0.90, 0.76) * exp(-abs(r - Rs * 1.022) * 520.0) * (1.55 + 0.35 * u_pulse);
+  // 10: photon-ring shimmer - a slow breath tied to the brain pulse
+  float shine = 1.55 + 0.35 * u_pulse + 0.10 * sin(u_time * 0.8);
+  col += vec3(1.00, 0.90, 0.76) * exp(-abs(r - Rs * 1.022) * 520.0) * shine;
+  // 12: chromatic bloom on the hottest edge - a warm fringe, not a halo
+  float fringe = exp(-abs(r - Rs * 1.09) * 70.0);
+  col.r += fringe * 0.055;
+  col.b += fringe * 0.012;
   col += vec3(1.00, 0.72, 0.42) * exp(-abs(r - Rs * 1.06) * 30.0) * 0.30
          * (1.0 - smoothstep(Rs, Rs * 0.985, r));
+  // 18: event-horizon shimmer - a faint ripple at the shadow edge
+  col += u_tint * exp(-abs(r - Rs * 0.992) * 120.0) * 0.05;
 
   // ── 7. grade: vignette, film grain (stepped, never flickering), ACES ─────
-  col *= 1.0 - 0.36 * length(uv - 0.5) * 1.15;
-  // Grain advances at ~12fps like real film stock; a per-frame hash reads as
-  // video noise, and DNGR's whole point was a flicker-free image.
+  // 13: dither BEFORE the tone map - kills banding in the dark ramp
+  col += (hash21(v_uv * u_res + vec2(3.1, 7.7)) - 0.5) * 0.004;
+  // 16: two grain layers - fine at 12 fps, coarse at 3 fps (film, not video noise)
   float gt = floor(u_time * 12.0) / 12.0;
+  float gt2 = floor(u_time * 3.0) / 3.0;
   col += (hash21(v_uv * u_res + vec2(gt * 61.7, gt * 23.3)) - 0.5) * 0.013;
+  col += (hash21(v_uv * u_res * 0.5 + vec2(gt2 * 17.3, gt2 * 41.1)) - 0.5) * 0.008;
+  // 15: elliptical vignette shaped to the panel - gutters darker than the centre
+  col *= 1.0 - 0.42 * length((uv - 0.5) * vec2(1.0, 0.78)) * 1.15;
+  // 20: idle dim - after a minute of no input the scenery steps back 15%
+  col *= mix(1.0, 0.85, clamp(u_idle, 0.0, 1.0));
+  // 14: filmic toe - blacks sit down without crushing the mid-tones
+  col = max(col - 0.0035, 0.0);
   vec3 x = col * 1.12;
   col = clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
   col = pow(col, vec3(0.93));
@@ -312,6 +343,8 @@ function compile(gl, type, src) {
   gl.shaderSource(sh, src)
   gl.compileShader(sh)
   if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    // Never fail silently: a shader typo must be visible, not just a CSS fallback.
+    console.error('[cosmic] shader compile failed:', gl.getShaderInfoLog(sh))
     gl.deleteShader(sh)
     return null
   }
@@ -321,6 +354,9 @@ function compile(gl, type, src) {
 export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = 'auto' }) {
   const canvasRef = useRef(null)
   const pulseRef = useRef(0)
+  // 20: idle dim - fed by real input activity, eased, never a jump.
+  const idleRef = useRef(0)
+  const lastInputRef = useRef(Date.now())
   const dprRef = useRef(maxDpr)
   const activeRef = useRef(active)
   const themeRef = useRef(themeId)
@@ -372,6 +408,7 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
     const uTint = gl.getUniformLocation(prog, 'u_tint')
     const uHorizon = gl.getUniformLocation(prog, 'u_horizon')
     const uPlanet = gl.getUniformLocation(prog, 'u_planet')
+    const uIdle = gl.getUniformLocation(prog, 'u_idle')
     let lastTint = ''
 
     const reduced = typeof window.matchMedia === 'function'
@@ -409,6 +446,7 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
       gl.uniform3f(uTint, cur.tint[0], cur.tint[1], cur.tint[2])
       gl.uniform1f(uHorizon, cur.horizon)
       gl.uniform1f(uPlanet, cur.planet)
+      gl.uniform1f(uIdle, idleRef.current)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       if (canvas.dataset.cosmicTheme !== themeRef.current) {
         canvas.dataset.cosmicTheme = themeRef.current
@@ -439,6 +477,21 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
       window.removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', onVis)
       try { gl.deleteBuffer(buf); gl.deleteProgram(prog); gl.deleteShader(vs); gl.deleteShader(fs) } catch { /* teardown */ }
+    }
+  }, [])
+
+  // 20: track real input so the scenery can step back after a minute of quiet.
+  useEffect(() => {
+    const bump = () => { lastInputRef.current = Date.now() }
+    const events = ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart']
+    events.forEach((e) => window.addEventListener(e, bump, { passive: true }))
+    const id = setInterval(() => {
+      const target = Date.now() - lastInputRef.current > 60000 ? 1 : 0
+      idleRef.current += (target - idleRef.current) * 0.08
+    }, 500)
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, bump))
+      clearInterval(id)
     }
   }, [])
 
