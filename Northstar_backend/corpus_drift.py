@@ -42,6 +42,13 @@ OLLAMA_EMBED_URL = os.environ.get(
     "NORTHSTAR_EMBED_URL", "http://127.0.0.1:11434/api/embeddings")
 _EMBED_TIMEOUT = float(os.environ.get("NORTHSTAR_EMBED_TIMEOUT", "120"))
 _EMBED_TEXT_MAX = int(os.environ.get("NORTHSTAR_EMBED_TEXT_MAX", "2000"))
+# Measured on this box: left to its own devices Ollama loaded the 0.6B embed
+# model at its 32k default, holding 5.8 GB of the 16 GB card and (with
+# OLLAMA_MAX_LOADED_MODELS=1) evicting the 27B brain, so the next chat turn paid
+# a ~7 s cold reload. The lane only ever sends _EMBED_TEXT_MAX chars, so a small
+# window keeps it around 0.5 GB, and a short keep_alive lets it go on its own.
+_EMBED_NUM_CTX = int(os.environ.get("NORTHSTAR_EMBED_NUM_CTX", "2048"))
+_EMBED_KEEP_ALIVE = os.environ.get("NORTHSTAR_EMBED_KEEP_ALIVE", "2m")
 
 VEC_TABLE = "corpus_vec"
 META_TABLE = "corpus_vector_meta"
@@ -92,7 +99,12 @@ class EmbeddingLane:
         prompt = str(text or "").strip()
         if not prompt:
             raise EmbeddingUnavailable("cannot embed empty text")
-        payload = json.dumps({"model": self.model, "prompt": prompt[:_EMBED_TEXT_MAX]}).encode("utf-8")
+        payload = json.dumps({
+            "model": self.model,
+            "prompt": prompt[:_EMBED_TEXT_MAX],
+            "keep_alive": _EMBED_KEEP_ALIVE,
+            "options": {"num_ctx": _EMBED_NUM_CTX},
+        }).encode("utf-8")
         req = urllib.request.Request(
             self.url, data=payload, headers={"Content-Type": "application/json"})
         try:

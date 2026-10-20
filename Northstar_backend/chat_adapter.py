@@ -29,7 +29,12 @@ CHAT_HISTORY_MAX = int(os.environ.get("CHAT_HISTORY_MAX", "16"))
 # is shared with ComfyUI, so the chat keeps a lean context and leaves long
 # history to the store. Both values are env-overridable.
 CHAT_NUM_CTX = int(os.environ.get("CHAT_NUM_CTX", "16384"))
-CHAT_NUM_PREDICT = int(os.environ.get("CHAT_NUM_PREDICT", "4096"))
+# Measured: `num_predict` counts THINKING tokens too. At 4096 an xhigh turn ran
+# out of budget mid-reasoning, Ollama returned done_reason="length" with ZERO
+# content, and the turn degraded to the "Ollama is unavailable" notice. 16384
+# covers a full deep-reasoning turn (~15k thinking) while still bounding a
+# runaway turn to roughly six minutes on this GPU (41 tok/s).
+CHAT_NUM_PREDICT = int(os.environ.get("CHAT_NUM_PREDICT", "16384"))
 # Optional GPU-layer cap (num_gpu). Unset -> Ollama decides. On this 16 GB box
 # a cap keeps the 27B loadable when the desktop/ComfyUI hold memory.
 _chat_num_gpu_raw = os.environ.get("CHAT_NUM_GPU", "").strip()
@@ -76,7 +81,7 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
 
 
 def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
-                think: bool = True, should_cancel=None, tools=None):
+                think: Any = True, should_cancel=None, tools=None):
     """Thin seam over UnifiedLLMAdapter.stream_chat (mockable in tests)."""
     adapter = UnifiedLLMAdapter()
     yield from adapter.stream_chat(
@@ -96,4 +101,21 @@ def offline_notice(reason: str) -> str:
     return (
         "[LOCAL FALLBACK] Ollama is unavailable (%s). Start it with: "
         "ollama serve — then resend this message." % (reason or "unknown")
+    )
+
+
+def truncation_notice(usage: Optional[Dict[str, Any]] = None) -> str:
+    """Honest text when the output budget ran out before an answer was written.
+
+    Distinct from :func:`offline_notice`: Ollama answered, the model simply spent
+    the whole budget reasoning (done_reason="length"). Saying "Ollama is
+    unavailable" here would be a false diagnosis.
+    """
+    used = (usage or {}).get("completion_tokens")
+    spent = f" ({used} tokens)" if used else ""
+    return (
+        "[BUDGET REACHED] The model spent its entire output budget reasoning"
+        f"{spent} and never wrote the answer. This is a token-limit stop, not an "
+        "outage — the thinking above is real. Ask a narrower question, or raise "
+        "CHAT_NUM_PREDICT for this lane."
     )

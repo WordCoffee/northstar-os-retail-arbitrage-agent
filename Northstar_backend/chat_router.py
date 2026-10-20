@@ -267,6 +267,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
         while True:
             raw_calls: List[Dict[str, Any]] = []
             saw_done = False
+            truncated = False
             round_events = _provider(rounds, messages)
             for ev in round_events:
                 etype = ev.get("type") if isinstance(ev, dict) else None
@@ -281,6 +282,8 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                 elif etype == "tool_call":
                     raw_calls.append(ev.get("call"))
                 elif etype == "notice":
+                    if ev.get("code") == "output_truncated":
+                        truncated = True
                     yield sse_frame("notice", {
                         "turn_id": turn_id,
                         "code": ev.get("code"),
@@ -298,6 +301,11 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     status = "cancelled" if cancelled else "done"
                     break
 
+            if truncated and not content_parts and not cancelled:
+                # The budget ran out inside the reasoning block: keep the
+                # thinking and say plainly that no answer was written, instead
+                # of persisting a silent empty bubble.
+                content_parts.append(chat_adapter.truncation_notice(usage))
             if status == "error" or cancelled:
                 break
             if not tools_enabled or not raw_calls:
@@ -547,6 +555,26 @@ _THINKING_HINT = {
     "deep": ("Think deeply: state assumptions, test edge cases and name the trade-offs "
              "before you commit to an answer."),
 }
+# Measured on this box (RTX 5080 16 GB, a 3-crate algebra proof): think=True used
+# the template's xhigh default — 6,376 thinking tokens, 318 s; think="medium" used
+# 2,209 thinking tokens, 141 s, and produced the same verified answer. So the
+# composer's "standard" level now maps to a real budget instead of a prompt hint.
+# CHAT_THINK_STANDARD="true" restores the old always-xhigh behaviour without a code
+# change; "deep" always takes the full default.
+_THINK_STANDARD = (os.environ.get("CHAT_THINK_STANDARD", "medium").strip() or "medium")
+
+
+def _think_level(think: bool, thinking: str):
+    """Composer thinking switch -> Ollama think flag/level."""
+    if not think or thinking == "off":
+        return False
+    if thinking == "deep":
+        return True
+    if _THINK_STANDARD.lower() in ("true", "1", "default", "xhigh"):
+        return True
+    return _THINK_STANDARD
+
+
 _STYLE_HINT = {
     "concise": "Style: concise. Short paragraphs, no filler.",
     "balanced": "",
@@ -704,7 +732,8 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
         "content": body.content,
     })
     generator = turn_event_stream(
-        db, acct, session, body.content, think=body.think, model=body.model,
+        db, acct, session, body.content,
+        think=_think_level(body.think, body.thinking), model=body.model,
         options={"media": body.media, "thinking": body.thinking,
                  "style": body.style, "attachments": body.attachments})
     return StreamingResponse(

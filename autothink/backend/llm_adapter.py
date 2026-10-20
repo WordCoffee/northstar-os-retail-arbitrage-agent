@@ -248,7 +248,9 @@ class UnifiedLLMAdapter:
             # Explicit on the wire: with think=False a model whose DEFAULT is
             # thinking would otherwise burn the whole token budget inside its
             # reasoning and never reach answer/tool frames.
-            body["think"] = bool(think)
+            # A level ("low"/"medium"/"high") lets the caller dial the reasoning
+            # budget; any other truthy value keeps the model's own default.
+            body["think"] = think if isinstance(think, str) else bool(think)
         if tools:
             body["tools"] = tools
 
@@ -442,6 +444,13 @@ def iter_ollama_chat_events(lines, should_cancel: Optional[Callable[[], bool]] =
                 "completion_tokens": chunk.get("eval_count"),
                 "total_duration_ns": chunk.get("total_duration"),
             }
+            # A "length" stop means the token budget ran out — on this model that
+            # usually happens INSIDE the thinking block, leaving `content` empty.
+            # Surface it as a notice so the caller can say what actually happened
+            # instead of reporting Ollama as unreachable.
+            if str(chunk.get("done_reason") or "").lower() == "length":
+                yield {"type": "notice", "code": "output_truncated",
+                       "detail": "num_predict budget reached"}
             yield {"type": "done", "cancelled": False, "usage": usage}
             return
     yield {"type": "done", "cancelled": False, "usage": usage}
