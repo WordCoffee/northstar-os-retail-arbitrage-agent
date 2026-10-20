@@ -958,11 +958,11 @@ def _t_build_preset(args, ctx) -> dict:
 
 
 def _t_creative_plan(args, ctx) -> dict:
-    """Build or confirm a creative plan (Bojo). Quotes credits; never executes.
+    """Build, confirm, or EXECUTE a creative plan (Bojo).
 
-    Planning returns a card the UI renders with four actions. Confirming validates
-    the operator's choice and returns the ledger reserve INSTRUCTION — the caller
-    makes the hold; this tool never charges and never renders."""
+    Planning returns a card the UI renders with four actions. Confirming draft/final
+    runs the job for real: reserve -> generate -> commit (or release on failure), so
+    a paid job actually happens and a failed one costs nothing."""
     import creative_plan
 
     action = str(args.get("action") or "").strip().lower()
@@ -974,11 +974,36 @@ def _t_creative_plan(args, ctx) -> dict:
                     "summary": "That plan is no longer open — ask for a fresh plan.",
                     "error": "unknown or expired plan_id", "assets": []}
         decision = creative_plan.confirm(plan, action)
-        if decision.get("ok") and action == "cancel":
+        if not decision.get("ok"):
+            return {"ok": False, "summary": decision.get("error") or "That choice was refused.",
+                    "error": decision.get("error") or "", "data": decision, "assets": []}
+        if action == "cancel":
             creative_plan.forget(plan_id)
-        return {"ok": bool(decision.get("ok")),
-                "summary": decision.get("message") or decision.get("error") or "",
-                "data": decision, "assets": []}
+            return {"ok": True, "summary": decision["message"], "data": decision, "assets": []}
+        if action == "edit":
+            return {"ok": True, "summary": decision["message"], "data": decision, "assets": []}
+
+        # draft / final -> actually run it
+        import creative_execute
+
+        account_id = str((ctx or {}).get("account_id") or "default")
+        ledger = creative_execute.default_ledger()
+        generator = _CREATIVE_GENERATOR or creative_execute.default_generate
+        receipt = creative_execute.execute(
+            ledger, plan, action, generate=generator, account_id=account_id,
+            subscription=plan.get("subscription"))
+        if not receipt.get("ok"):
+            return {"ok": False,
+                    "summary": (f"That job did not run: {receipt.get('error')}. "
+                                "No credits were charged."),
+                    "error": receipt.get("error") or "", "data": {"receipt": receipt},
+                    "assets": []}
+        creative_plan.forget(plan_id)
+        return {"ok": True,
+                "summary": (f"{receipt['quality'].title()} generated — {receipt['credits_charged']} "
+                            f"credits charged (real cost ${receipt['real_cost_usd']:.3f}, "
+                            f"balance {receipt.get('balance')})."),
+                "data": {"receipt": receipt}, "assets": receipt.get("assets") or []}
 
     request_text = str(args.get("request") or "").strip()
     if not request_text:
@@ -995,6 +1020,10 @@ def _t_creative_plan(args, ctx) -> dict:
     card = creative_plan.render_card(plan)
     return {"ok": True, "summary": plan["summary"],
             "data": {"plan": plan, "card": card}, "assets": []}
+
+
+# Tests may inject a fake renderer so the money path is verifiable without a GPU.
+_CREATIVE_GENERATOR = None
 
 
 # ── Registry ─────────────────────────────────────────────────────────────────

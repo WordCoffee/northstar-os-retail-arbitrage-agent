@@ -119,7 +119,8 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                       *, think: bool = True, model: Optional[str] = None,
                       events: Optional[Any] = None,
                       cancel_event: Optional[threading.Event] = None,
-                      tools_enabled: Optional[bool] = None):
+                      tools_enabled: Optional[bool] = None,
+                      options: Optional[Dict[str, Any]] = None):
     """Sync generator of SSE frames for one turn (tool loop included).
 
     `events` injects scripted adapter streams: callable(round_idx, messages) ->
@@ -236,12 +237,19 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "session_id": session.get("id"),
             "model": model or chat_adapter.CHAT_MODEL,
             "think": bool(think),
+            "options": options or {},
             "tools": [t["function"]["name"] for t in (available_tools or [])],
         })
 
         history = db.chat.messages.list_by_session(
             session.get("id"), account_id=account_id, limit=200)
         messages = chat_adapter.build_chat_messages(history, session.get("focus_json"))
+        # Turn options v2: a model-side directive, prepended AFTER history is built so
+        # it is never persisted as part of the operator's message.
+        if options:
+            directive = turn_directive(options)
+            if directive:
+                messages = [{"role": "system", "content": directive}] + messages
 
         if events is None:
             def _provider(round_idx: int, msgs: List[Dict[str, Any]]):
@@ -519,6 +527,49 @@ class TurnIn(BaseModel):
     content: str = Field(..., min_length=1, max_length=20000)
     think: bool = True
     model: Optional[str] = Field(None, max_length=90)
+    # v2 (Bojo): the composer's switches. All optional; the defaults are v1 behaviour.
+    media: str = Field("image", pattern="^(image|video)$")
+    thinking: str = Field("standard", pattern="^(off|standard|deep)$")
+    style: str = Field("balanced", pattern="^(concise|balanced|detailed)$")
+    attachments: List[str] = Field(default_factory=list, max_length=12)
+
+
+# The switches are model-side instructions, never written into the transcript: the
+# operator's own words stay the stored message, and the transcript shows exactly
+# what they typed.
+_MEDIA_HINT = {
+    "image": "Use the still-image lane; the deliverable is one or more images.",
+    "video": "Use the video lane; the deliverable is motion, not a still described as video.",
+}
+_THINKING_HINT = {
+    "off": "Answer directly. Do not emit a reasoning trail.",
+    "standard": "",
+    "deep": ("Think deeply: state assumptions, test edge cases and name the trade-offs "
+             "before you commit to an answer."),
+}
+_STYLE_HINT = {
+    "concise": "Style: concise. Short paragraphs, no filler.",
+    "balanced": "",
+    "detailed": "Style: detailed. Cover assumptions, trade-offs and concrete next steps.",
+}
+
+
+def turn_directive(options: Optional[Dict[str, Any]]) -> str:
+    """One model-facing instruction block built from the composer switches."""
+    o = options or {}
+    lines = ["[Bojo turn options]",
+             "Requested output: " + _MEDIA_HINT.get(o.get("media"), _MEDIA_HINT["image"])]
+    thinking = _THINKING_HINT.get(o.get("thinking"), "")
+    if thinking:
+        lines.append(thinking)
+    style = _STYLE_HINT.get(o.get("style"), "")
+    if style:
+        lines.append(style)
+    atts = [str(a) for a in (o.get("attachments") or []) if a][:12]
+    if atts:
+        lines.append("Operator attachments (asset ids): " + ", ".join(atts)
+                     + ". Treat them as the operator's own artefacts.")
+    return "\n".join(lines)
 
 
 class SessionPatch(BaseModel):
@@ -653,7 +704,9 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
         "content": body.content,
     })
     generator = turn_event_stream(
-        db, acct, session, body.content, think=body.think, model=body.model)
+        db, acct, session, body.content, think=body.think, model=body.model,
+        options={"media": body.media, "thinking": body.thinking,
+                 "style": body.style, "attachments": body.attachments})
     return StreamingResponse(
         generator,
         media_type="text/event-stream",
