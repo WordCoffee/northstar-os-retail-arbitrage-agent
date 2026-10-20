@@ -428,19 +428,25 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
 
     let raf = 0
     let hidden = false
+    let lastFrame = performance.now()
     const start = performance.now()
     const draw = (now) => {
       const t = (now - start) / 1000
+      // Frame-rate independent easing: EASE is defined per 1/60s, so a slow GPU
+      // must not stretch the ~3.5s transition (it did, before this fix).
+      const dt = Math.min(0.25, Math.max(0.001, (now - lastFrame) / 1000))
+      lastFrame = now
+      const k = 1 - Math.pow(1 - EASE, dt * 60)
       const target = activeRef.current ? 1 : 0
-      pulseRef.current += (target - pulseRef.current) * 0.05
+      pulseRef.current += (target - pulseRef.current) * (1 - Math.pow(1 - 0.05, dt * 60))
       // Ease the atmosphere toward the active focus's theme. Every value is
       // observable on the element (data-cosmic-theme / data-cosmic-tint) so the
       // shift is verifiable, not just asserted in a comment.
       const want = themeFor(themeRef.current)
       const cur = curRef.current
-      for (let i = 0; i < 3; i += 1) cur.tint[i] += (want.tint[i] - cur.tint[i]) * EASE
-      cur.horizon += (want.horizon - cur.horizon) * EASE
-      cur.planet += (want.planet - cur.planet) * EASE
+      for (let i = 0; i < 3; i += 1) cur.tint[i] += (want.tint[i] - cur.tint[i]) * k
+      cur.horizon += (want.horizon - cur.horizon) * k
+      cur.planet += (want.planet - cur.planet) * k
       gl.uniform1f(uTime, t)
       gl.uniform1f(uPulse, pulseRef.current)
       gl.uniform3f(uTint, cur.tint[0], cur.tint[1], cur.tint[2])

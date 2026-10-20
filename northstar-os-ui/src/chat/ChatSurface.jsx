@@ -215,6 +215,8 @@ export default function ChatSurface({
   const [uploadNote, setUploadNote] = useState('')
   const fileRef = useRef(null)
   // Duplex voice: listen -> transcribe -> answer -> speak, with barge-in.
+  const [voices, setVoices] = useState([])
+  const [voiceId, setVoiceId] = useState('bojo-narrator')
   const [conversation, setConversation] = useState(false)
   const [voiceState, setVoiceState] = useState('idle')   // idle|listening|thinking|speaking
   const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
@@ -548,6 +550,21 @@ export default function ChatSurface({
 
   const voiceDisabled = voiceStatus && voiceStatus.ok === false
 
+  // The voice list comes from the (external) voice engine. Offline is a normal
+  // state: the picker stays visible, disabled, and says why.
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const r = await fetch('/api/chat/voice/voices', { credentials: 'include' })
+        if (!r.ok) return
+        const d = await r.json()
+        if (!cancelled && Array.isArray(d.voices)) setVoices(d.voices)
+      } catch { /* engine offline: the default voice stays selected */ }
+    })()
+    return () => { cancelled = true }
+  }, [])
+
   // Tell the shell (cosmic canvas pulse) when the Master Brain is working.
   useEffect(() => {
     if (typeof onBusyChange === 'function') onBusyChange(streaming)
@@ -663,7 +680,7 @@ export default function ChatSurface({
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json',
                    ...(csrfMatch ? { 'X-CSRF-Token': decodeURIComponent(csrfMatch[2]) } : {}) },
-        body: JSON.stringify({ text: text.slice(0, 1200), voice_id: 'bojo-narrator' }),
+        body: JSON.stringify({ text: text.slice(0, 1200), voice_id: voiceId }),
       })
       if (!res.ok) {
         const b = await res.json().catch(() => ({}))
@@ -1148,6 +1165,19 @@ export default function ChatSurface({
                 </button>
               ))}
             </div>
+            <label className="chat-control">
+              <span>Voice</span>
+              <select value={voiceId} onChange={(e) => setVoiceId(e.target.value)}
+                disabled={voices.length === 0}
+                title={voices.length ? '' : 'Voice engine offline (127.0.0.1:8321)'}
+                data-testid="chat-voice">
+                {voices.length === 0 && <option value={voiceId}>Bojo (engine offline)</option>}
+                {voices.map((v) => {
+                  const id = v.id || v.voice_id || v.name
+                  return <option key={id} value={id}>{v.name || id}</option>
+                })}
+              </select>
+            </label>
             <label className="chat-control">
               <span>Thinking</span>
               <select value={thinking} onChange={(e) => setThinking(e.target.value)}

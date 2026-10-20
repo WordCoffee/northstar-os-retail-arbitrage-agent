@@ -37,6 +37,24 @@ class SpeakIn(BaseModel):
     lang: str = Field("en", max_length=12)
 
 
+@router.get("/voices")
+async def voices(acct: str = Depends(studio_account)):
+    """The voices Bojo can speak with.
+
+    The voice engine is an external local service; when it is not running this is a
+    503 with the REAL reason, so the UI can disable the picker instead of offering
+    voices that do not exist."""
+    from voicestudio_adapter import get_adapter
+
+    out = await get_adapter().list_voices()
+    if not out.get("ok"):
+        raise HTTPException(status_code=503,
+                            detail=out.get("error") or "voice engine unavailable")
+    data = out.get("data") or {}
+    items = data.get("voices") if isinstance(data, dict) else None
+    return {"ok": True, "voices": items or []}
+
+
 @router.post("/speak")
 async def speak(body: SpeakIn, acct: str = Depends(studio_account)):
     """Bojo speaks: synthesise one line for the conversation loop.

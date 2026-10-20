@@ -76,3 +76,41 @@ def test_the_route_is_registered():
     paths = [r.path for r in chat_voice.router.routes]
     assert "/api/chat/voice/speak" in paths
     assert "/api/chat/voice/transcribe" in paths
+    assert "/api/chat/voice/voices" in paths
+
+
+# ── the voice picker ───────────────────────────────────────────────────────
+
+class _FakeVoices:
+    def __init__(self, result):
+        self.result = result
+
+    async def list_voices(self):
+        return self.result
+
+
+def _voices():
+    return asyncio.run(chat_voice.voices("acct-1"))
+
+
+def test_voices_returns_the_engine_list(monkeypatch):
+    monkeypatch.setattr(voicestudio_adapter, "get_adapter", lambda: _FakeVoices(
+        {"ok": True, "data": {"voices": [{"id": "bojo-narrator", "name": "Bojo"}]}}))
+    out = _voices()
+    assert out["ok"] is True
+    assert out["voices"][0]["id"] == "bojo-narrator"
+
+
+def test_an_empty_engine_list_is_an_empty_list_not_an_error(monkeypatch):
+    monkeypatch.setattr(voicestudio_adapter, "get_adapter",
+                        lambda: _FakeVoices({"ok": True, "data": {}}))
+    assert _voices()["voices"] == []
+
+
+def test_voices_unreachable_is_a_503_with_the_reason(monkeypatch):
+    monkeypatch.setattr(voicestudio_adapter, "get_adapter", lambda: _FakeVoices(
+        {"ok": False, "error": "VoiceStudio unreachable: connection refused"}))
+    with pytest.raises(HTTPException) as exc:
+        _voices()
+    assert exc.value.status_code == 503
+    assert "unreachable" in str(exc.value.detail).lower()
