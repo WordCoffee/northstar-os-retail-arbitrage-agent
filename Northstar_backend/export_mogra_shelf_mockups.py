@@ -47,7 +47,7 @@ BAG_DESIGNS = ["01_forest_bold", "02_sticker_fun", "03_midnight_luxe",
                "i01_logo_monument", "i02_vertical_spine", "i03_center_seal",
                "i04_off_edge_type", "i05_diagonal_split", "i06_drawn_circle",
                "i07_asymmetric_corner", "i08_logo_in_shape", "i09_curved_arcs",
-               "i10_logo_hero"]
+               "i10_logo_hero", "j01_olive_kraft", "j02_botanical_luxe"]
 CAN_DESIGNS = ["06_wall_of_type", "07_dome_gold", "08_stamp_roll",
                "09_edge_stripe", "10_concentric"]
 

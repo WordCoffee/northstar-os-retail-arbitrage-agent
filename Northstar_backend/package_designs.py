@@ -16,12 +16,15 @@ crest arch, split band, off-edge seal, sticker badge, spine lockup, patch.
 
 from __future__ import annotations
 
+import math
+
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 import numpy as np
+from scipy import ndimage
 
 import dieline_art as da
 from mockup_compositor import draw_cert_icon, recolor
@@ -379,6 +382,8 @@ def render_back(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = No
     """Bulk-supplement grade back: big headline, facts + free-of columns, warning
     block, distributed-by with address, real codes, descriptor line. All filled
     (placeholder values register in BACK_LABEL_REQUIREMENTS.md of the pack)."""
+    if spec.get("back") == "j":
+        return render_back_j(spec, W, H, logo)
     ground = spec.get("ground_b", spec["ground"])
     ink = spec.get("ink_b", INK)
     img = Image.new("RGB", (P(W), P(H)), tuple(ground))
@@ -2129,6 +2134,404 @@ CAN_FRONTS = {
 
 # ── design registry (title/desc/back colours per design) ────────────────────
 
+
+
+# ── bag series J: OPERATOR CONCEPTS (2026-10-19) ────────────────────────────
+#
+# The two directions the operator supplied as concept sheets — "01 Olive + Kraft"
+# and "02 Botanical Luxe" — rebuilt for the Lion's Mane 6 oz pouch.
+#
+# Fidelity notes (deliberate, not accidental):
+#   * Hero art is the operator's OWN Hericium photograph
+#     (assets/brand/hericium_source.jpg, cropped from IMG20240320001655.jpg),
+#     re-plated as an ink illustration. The shipped motif_lionsmane.png is a
+#     button mushroom (Agaricus) — it is NOT Hericium, so it is not used here.
+#   * The plate is flat-fielded first (the photo of a printed label has its own
+#     lighting gradient) and then ramped ground→body→shadow, so the label field
+#     lands exactly on the bag colour and the art dissolves into the stock.
+#   * Back panels carry the REAL label data from the current product label
+#     (1000 mg scoop, ~170 servings, Mogran Organics 2442 S Collins St) rather
+#     than the T2 Holdings placeholder used by the bulk back renderer.
+
+J_KRAFT = (203, 171, 128)
+J_OLIVE = (95, 106, 60)
+J_OLIVE_D = (72, 82, 46)
+J_INK = (54, 48, 32)
+J_FOREST = (44, 64, 46)
+J_CREAM = (243, 238, 226)
+J_SOURCE = Path(__file__).resolve().parent / "assets" / "brand" / "hericium_source.jpg"
+_PLATE_CACHE: Dict[tuple, Image.Image] = {}
+
+
+def _smoothstep(e0: float, e1: float, x):
+    t = np.clip((x - e0) / max(1e-6, (e1 - e0)), 0.0, 1.0)
+    return t * t * (3.0 - 2.0 * t)
+
+
+def hericium_plate(ground, body, shadow, *, flat: float = 1.0) -> Image.Image:
+    """Turn the operator's Hericium photograph into a printed plate that sits on
+    `ground`: the label field dissolves into the stock, the body reads `body`,
+    and the strand shadows read `shadow`."""
+    key = (tuple(ground), tuple(body), tuple(shadow), round(flat, 3))
+    cached = _PLATE_CACHE.get(key)
+    if cached is not None:
+        return cached.copy()
+    im = Image.open(J_SOURCE).convert("RGB")
+    im = im.resize((im.width * 2, im.height * 2), Image.LANCZOS)
+    g = np.asarray(im.convert("L"), dtype=np.float32) / 255.0
+
+    # flat-field: the crop is a PHOTOGRAPH OF A PRINTED LABEL, so it carries the
+    # label's own lighting gradient. Divide it out or the plate shows a rectangle.
+    bg = Image.fromarray((g * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(im.width / 6.0))
+    b = np.asarray(bg, dtype=np.float32) / 255.0
+    b = np.maximum(b, 1e-3)
+    # pin the paper field to exactly 1.0 so it maps onto the bag colour
+    ring = np.concatenate([b[:24].ravel(), b[-24:].ravel(), b[:, :24].ravel(), b[:, -24:].ravel()])
+    b = b / max(float(np.median(ring)), 1e-3)
+    t = np.clip(g / b * flat, 0.0, 1.12)
+    t = np.clip((t - 0.5) * 1.06 + 0.5, 0.0, 1.10)
+
+    body_t = _smoothstep(0.30, 0.93, t) * (1.0 - _smoothstep(0.955, 1.03, t))
+    col = (np.array(shadow, dtype=np.float32)[None, None]
+           + body_t[..., None] * (np.array(body, dtype=np.float32) - np.array(shadow, dtype=np.float32))[None, None])
+    edge = _smoothstep(1.0, 1.09, t)[..., None]
+    col = col * (1.0 - edge) + np.array(ground, dtype=np.float32)[None, None] * edge
+
+    # feather the crop border into the stock (the plate is a rectangle)
+    h, w = t.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    fe = np.clip(np.minimum(np.minimum(xx, w - 1 - xx), np.minimum(yy, h - 1 - yy)) / (w * 0.035), 0, 1)
+    # pin the paper field onto the stock exactly: measure the plate's own field
+    # colour and shift every field pixel by the residual to the bag colour
+    ring = np.concatenate([col[:30].reshape(-1, 3), col[-30:].reshape(-1, 3),
+                           col[:, :30].reshape(-1, 3), col[:, -30:].reshape(-1, 3)])
+    field = np.median(ring, axis=0)
+    delta = np.array(ground, dtype=np.float32) - field
+    dist = np.abs(col - field[None, None]).mean(axis=2)
+    near = np.exp(-(dist / 11.0) ** 2)[..., None]
+    col = col + delta[None, None] * near
+    col = col * fe[..., None] + np.array(ground, dtype=np.float32)[None, None] * (1 - fe[..., None])
+    plate = Image.fromarray(np.clip(col, 0, 255).astype(np.uint8), "RGB")
+    _PLATE_CACHE[key] = plate
+    return plate.copy()
+
+
+def hericium_cutout(body, shadow) -> Image.Image:
+    """RGBA Hericium illustration with a texture matte — the printed-paper field
+    of the source photo is removed instead of being ramped into the stock, so the
+    art can sit on a DARK ground (the green botanical sweep)."""
+    key = ("cut", tuple(body), tuple(shadow))
+    cached = _PLATE_CACHE.get(key)
+    if cached is not None:
+        return cached.copy()
+    im = Image.open(J_SOURCE).convert("RGB")
+    im = im.resize((im.width * 2, im.height * 2), Image.LANCZOS)
+    g = np.asarray(im.convert("L"), dtype=np.float32) / 255.0
+
+    # the paper field is smooth, the fungus is textured -> texture energy separates them
+    hp = g - np.asarray(Image.fromarray((g * 255).astype(np.uint8))
+                        .filter(ImageFilter.GaussianBlur(9)), dtype=np.float32) / 255.0
+    energy = np.asarray(Image.fromarray((np.abs(hp) * 255 * 8).clip(0, 255).astype(np.uint8))
+                        .filter(ImageFilter.GaussianBlur(5)), dtype=np.float32) / 255.0
+    m = _smoothstep(0.10, 0.34, energy)
+    m = np.maximum(m, _smoothstep(0.86, 0.55, g))          # keep solid shadow areas
+    m = ndimage.binary_closing(m > 0.4, iterations=5).astype(np.float32)
+    m = ndimage.binary_fill_holes(m > 0.4).astype(np.float32)
+    lab, n = ndimage.label(m > 0.5)
+    if n > 1:
+        sizes = ndimage.sum(m, lab, range(1, n + 1))
+        m = (lab == (int(np.argmax(sizes)) + 1)).astype(np.float32)
+    m = ndimage.gaussian_filter(m, 2.0)
+    m = np.clip((m - 0.20) / 0.55, 0, 1)
+
+    tone = np.clip((g - 0.35) / 0.62, 0, 1)
+    col = (np.array(shadow, dtype=np.float32)[None, None]
+           + tone[..., None] * (np.array(body, dtype=np.float32) - np.array(shadow, dtype=np.float32))[None, None])
+    out = np.zeros((g.shape[0], g.shape[1], 4), dtype=np.uint8)
+    out[..., :3] = np.clip(col, 0, 255).astype(np.uint8)
+    out[..., 3] = (m * 255).astype(np.uint8)
+    img = Image.fromarray(out, "RGBA")
+    _PLATE_CACHE[key] = img
+    return img.copy()
+
+
+def hericium_plaque(ground, body, shadow, *, feather: float = 0.16) -> Image.Image:
+    """Feathered elliptical plaque of the same photograph for a dark ground: the
+    art is a soft-edged printed panel rather than a hard rectangle."""
+    key = ("plaque", tuple(ground), tuple(body), tuple(shadow), round(feather, 3))
+    cached = _PLATE_CACHE.get(key)
+    if cached is not None:
+        return cached.copy()
+    base = hericium_plate(body, body, shadow).convert("RGB")
+    g = np.asarray(base.convert("L"), dtype=np.float32) / 255.0
+    h, w = g.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    nx = (xx - w * 0.5) / (w * 0.52)
+    ny = (yy - h * 0.5) / (h * 0.54)
+    r = np.sqrt(nx ** 2 + ny ** 2)
+    a = np.clip((1.02 - r) / feather, 0, 1)
+    a = a * a * (3 - 2 * a)
+    out = np.zeros((h, w, 4), dtype=np.uint8)
+    out[..., :3] = np.array(base, dtype=np.uint8)
+    out[..., 3] = (a * 250).astype(np.uint8)
+    img = Image.fromarray(out, "RGBA")
+    _PLATE_CACHE[key] = img
+    return img.copy()
+
+
+def usda_roundel(canvas, cx, cy, r, ink=J_OLIVE_D, paper=WHITE) -> None:
+    """White USDA-style roundel: double ring, leaf, USDA, ORGANIC."""
+    d = ImageDraw.Draw(canvas)
+    d.ellipse([P(cx - r), P(cy - r), P(cx + r), P(cy + r)], fill=tuple(paper))
+    d.ellipse([P(cx - r), P(cy - r), P(cx + r), P(cy + r)], outline=tuple(ink), width=max(2, P(0.55)))
+    d.ellipse([P(cx - r * 0.86), P(cy - r * 0.86), P(cx + r * 0.86), P(cy + r * 0.86)],
+              outline=tuple(ink), width=max(1, P(0.18)))
+    draw_cert_icon(d, "organic_sprout", P(cx), P(cy - r * 0.46), P(r * 0.26), ink=ink)
+    d.text((P(cx), P(cy + r * 0.10)), "USDA", font=F("Anton.ttf", r * 0.30),
+           fill=tuple(ink), anchor="mm")
+    d.text((P(cx), P(cy + r * 0.52)), "ORGANIC", font=F("Inter.ttf", r * 0.20, [14, 700]),
+           fill=tuple(ink), anchor="mm")
+
+
+def _seal_line(d) -> None:
+    """Heat-seal / zipper impression across the head of the pouch."""
+    for y, w, c in ((24.0, 0.45, (176, 146, 104)), (26.2, 0.22, (188, 158, 116)),
+                    (27.4, 0.22, (188, 158, 116))):
+        d.line([(0, P(y)), (P(BAG_W), P(y))], fill=c, width=max(1, P(w)))
+
+
+def _leaf(d, x, y, ln, wd, ang, color) -> None:
+    """One lens-shaped leaf on a stem, drawn as a filled polygon."""
+    pts_a, pts_b = [], []
+    for i in range(11):
+        u = i / 10.0
+        bx = x + math.cos(ang) * ln * u
+        by = y + math.sin(ang) * ln * u
+        off = wd * math.sin(math.pi * u) * 0.5
+        nx, ny = -math.sin(ang) * off, math.cos(ang) * off
+        pts_a.append((bx + nx, by + ny))
+        pts_b.append((bx - nx, by - ny))
+    d.polygon(pts_a + pts_b[::-1], fill=tuple(color))
+    d.line([(x, y), (x + math.cos(ang) * ln, y + math.sin(ang) * ln)],
+           fill=tuple(color), width=max(1, P(0.2)))
+
+
+def leaf_branch(canvas, cx, cy, height_mm, color, *, flip: bool = False) -> None:
+    """Herbal sprig: a curved stem carrying six paired leaves."""
+    d = ImageDraw.Draw(canvas)
+    h = height_mm
+    x0, y0 = P(cx), P(cy + h * 0.5)
+    bend = 0.28 * h * (-1 if flip else 1)
+    pts = []
+    for i in range(25):
+        u = i / 24.0
+        pts.append((x0 + bend * math.sin(math.pi * u) * (1 if flip else -1) + (P(h * 0.20) if not flip else -P(h * 0.20)) * u,
+                    y0 - P(h) * u))
+    d.line(pts, fill=tuple(color), width=max(2, P(0.30)))
+    for i, u in enumerate((0.22, 0.40, 0.58, 0.74, 0.88)):
+        px = x0 + (P(h * 0.20) if not flip else -P(h * 0.20)) * u + bend * math.sin(math.pi * u) * (1 if flip else -1)
+        py = y0 - P(h) * u
+        ln = P(h * (0.30 - 0.03 * i))
+        wd = P(h * (0.16 - 0.015 * i))
+        _leaf(d, px, py, ln, wd, math.radians(-145 + (10 * i) * (1 if flip else 1)), color)
+        _leaf(d, px, py, ln * 0.92, wd * 0.92, math.radians(-35 - (10 * i)), color)
+
+
+def j01_olive_kraft(logo, motif) -> Image.Image:
+    """Olive + Kraft: kraft stock, tracked serif caps, engraved Hericium plate,
+    olive net-weight band, USDA roundel. (Operator concept 01.)"""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), J_KRAFT)
+    d = ImageDraw.Draw(img)
+    _seal_line(d)
+
+    if LOCKUP is not None:
+        lockup_stamp(img, BAG_W / 2, 50.5, 40.0, J_INK)
+    else:
+        paste_w(img, recolor(logo, J_INK), BAG_W / 2, 50.5, 40.0)
+
+    dy = 69.0
+    rule(d, 30, dy, 59, J_OLIVE_D, 0.28)
+    rule(d, 71, dy, 100, J_OLIVE_D, 0.28)
+    s = P(1.35)
+    d.polygon([(P(65), P(dy) - s), (P(65) + s, P(dy)), (P(65), P(dy) + s), (P(65) - s, P(dy))],
+              fill=tuple(J_OLIVE_D))
+
+    ctext(d, 65, 78.0, "ORGANIC LION'S MANE", F("PlayfairDisplay.ttf", 5.6, [600]), J_INK,
+          tracking_mm=0.95)
+    ctext(d, 65, 86.4, "MUSHROOM POWDER", F("PlayfairDisplay.ttf", 3.5, [500]), J_INK,
+          tracking_mm=1.55)
+    ctext(d, 65, 94.0, "Hericium erinaceus", F("CormorantGaramond-Italic.ttf", 5.0, [500]), J_INK)
+
+    plate = hericium_plate(J_KRAFT, (222, 196, 156), (74, 60, 36)).convert("RGBA")
+    paste_w(img, plate, 65, 142.0, 78.0)
+
+    usda_roundel(img, 27.5, 175.0, 8.2, J_OLIVE_D)
+
+    d.rectangle([0, P(184.5), P(BAG_W), P(196.5)], fill=J_OLIVE)
+    rule(d, 0, 184.5, BAG_W, J_OLIVE_D, 0.5)
+    ctext(d, 65, 190.5, "NET WT 6 OZ (170 g)", F("PlayfairDisplay.ttf", 3.4, [600]), J_CREAM,
+          tracking_mm=0.75)
+    ctext(d, 65, 203.0, "MOGRA ORGANICS  ·  EST. 2023", F("Inter.ttf", 1.9, [14, 500]), J_INK,
+          tracking_mm=1.1)
+    return img
+
+
+def j02_botanical_luxe(logo, motif) -> Image.Image:
+    """Botanical Luxe: bone stock, oversized lowercase serif, forest botanical
+    sweep carrying the Hericium plate, vegan/non-GMO footer. (Concept 02.)"""
+    img = Image.new("RGB", (P(BAG_W), P(BAG_H)), J_CREAM)
+    d = ImageDraw.Draw(img)
+
+    # ── identity: the real lockup, top-left
+    if LOCKUP is not None:
+        lockup_stamp(img, 24.0, 23.0, 27.0, J_FOREST)
+    else:
+        paste_w(img, recolor(logo, J_FOREST), 24.0, 23.0, 27.0)
+
+    # ── botanical sweep (bottom-right)
+    cx, cy, r = 155.0, 255.0, 135.0
+    d.ellipse([P(cx - r), P(cy - r), P(cx + r), P(cy + r)], fill=J_FOREST)
+    d.arc([P(cx - r), P(cy - r), P(cx + r), P(cy + r)], 180, 270,
+          fill=(150, 140, 96), width=max(2, P(0.55)))
+
+    leaf_branch(img, 112.0, 124.0, 32.0, (196, 200, 168), flip=True)
+
+    paste_w(img, hericium_plaque(J_FOREST, (246, 240, 222), (30, 48, 32), feather=0.12),
+            108.0, 167.0, 53.0)
+
+    # ── editorial type block (left)
+    ltext(d, 13.5, 44.0, "organic", F("CormorantGaramond-Italic.ttf", 8.2, [500]), J_OLIVE)
+    ltext(d, 12.5, 61.5, "lion's", F("PlayfairDisplay.ttf", 21.0, [500]), J_FOREST)
+    ltext(d, 12.5, 79.5, "mane", F("PlayfairDisplay.ttf", 21.0, [500]), J_FOREST)
+    ltext(d, 13.5, 94.0, "MUSHROOM POWDER", F("Jost.ttf", 3.3, [500]), J_FOREST)
+    ltext(d, 13.5, 101.0, "Hericium erinaceus", F("CormorantGaramond-Italic.ttf", 4.9, [500]), J_FOREST)
+
+    # ── footer (on the sweep: cream ink inside the green)
+    usda_roundel(img, 23.0, 182.0, 7.4, J_FOREST, paper=(250, 247, 238))
+    ltext(d, 46.0, 178.6, "VEGAN", F("Jost.ttf", 2.6, [600]), J_CREAM)
+    ltext(d, 46.0, 183.8, "NON-GMO", F("Jost.ttf", 2.6, [600]), J_CREAM)
+    ltext(d, 46.0, 195.0, "NET WT 6 OZ (170 g)", F("Jost.ttf", 2.7, [500]), J_CREAM)
+    return img
+
+
+BACK_J_USE = [
+    "Mix one scoop (approx. 1000 mg) into tea, coffee,",
+    "or your favourite drink once daily for two weeks,",
+    "then adjust the dose if needed.",
+]
+BACK_J_DETAIL = [
+    "Lion's Mane (Hericium erinaceus) has been used for over 2000",
+    "years in the mountainous regions of Asia. Our powder is milled",
+    "from the fruiting bodies of organic Hericium erinaceus and is",
+    "always free of additives, fillers and pesticides.",
+]
+
+
+def _cert_badge(d, x, y, w, h, label, ink, paper):
+    d.rounded_rectangle([P(x), P(y), P(x + w), P(y + h)], radius=P(1.2),
+                        fill=tuple(paper), outline=tuple(ink), width=max(1, P(0.25)))
+    d.text((P(x + w / 2), P(y + h / 2)), label, font=F("Inter.ttf", 1.75, [14, 700]),
+           fill=tuple(ink), anchor="mm")
+
+
+def render_back_j(spec: Dict, W: float, H: float, logo: Optional[Image.Image] = None) -> Image.Image:
+    """Back panel for the J (operator-concept) series, carrying the real label
+    data of the current Mogra Organics Lion's Mane pouch."""
+    ground = tuple(spec.get("ground_b", spec["ground"]))
+    ink = tuple(spec.get("ink_b", J_INK))
+    img = Image.new("RGB", (P(W), P(H)), ground)
+    d = ImageDraw.Draw(img)
+    plate_paper = J_CREAM if spec.get("plate", True) else ground
+    d.rounded_rectangle([P(6), P(7), P(W - 6), P(H - 8)], radius=P(2.2),
+                        fill=plate_paper, outline=J_OLIVE_D, width=max(2, P(0.4)))
+
+    if LOCKUP is not None:
+        lockup_stamp(img, W / 2, 22.0, 27.0, J_INK)
+
+    ctext(d, W / 2, 38.0, "ORGANIC LION'S MANE", F("PlayfairDisplay.ttf", 4.6, [600]), ink,
+          tracking_mm=0.7)
+    ctext(d, W / 2, 43.6, "MUSHROOM POWDER  ·  170 g (6.0 oz)", F("Inter.ttf", 2.2, [14, 600]),
+          ink, tracking_mm=0.8)
+
+    fx, fy, fw, fh = 12.0, 48.0, W - 24.0, 41.0
+    d.rectangle([P(fx), P(fy), P(fx + fw), P(fy + fh)], fill=WHITE, outline=(0, 0, 0),
+                width=max(2, P(0.45)))
+    yy = fy + 2.4
+    ltext(d, fx + 2.2, yy + 1.6, "Supplement Facts", F("PlayfairDisplay.ttf", 5.4, [700]), (0, 0, 0))
+    yy += 6.4
+    rule(d, fx + 2, yy, fx + fw - 2, (0, 0, 0), 0.8)
+    yy += 3.0
+    ltext(d, fx + 2, yy, "Serving Size: 1 scoop (approx. 1000 mg)", F("Inter.ttf", 2.05, [14, 600]), (0, 0, 0))
+    yy += 3.0
+    ltext(d, fx + 2, yy, "Servings Per Container: approx. 170", F("Inter.ttf", 2.05, [14, 400]), (0, 0, 0))
+    yy += 2.6
+    d.rectangle([P(fx), P(yy), P(fx + fw), P(yy + 0.8)], fill=(0, 0, 0))
+    yy += 2.9
+    ltext(d, fx + 2, yy, "Amount Per Serving", F("Inter.ttf", 1.95, [14, 700]), (0, 0, 0))
+    rtext(d, fx + fw - 2, yy, "% Daily Value", F("Inter.ttf", 1.95, [14, 700]), (0, 0, 0))
+    yy += 2.3
+    rule(d, fx + 2, yy, fx + fw - 2, (0, 0, 0), 0.35)
+    yy += 2.9
+    ltext(d, fx + 2, yy, "Total Carbohydrate", F("Inter.ttf", 2.05, [14, 400]), (0, 0, 0))
+    rtext(d, fx + fw - 2, yy, "<1 g   <1%", F("Inter.ttf", 2.05, [14, 400]), (0, 0, 0))
+    yy += 3.4
+    ltext(d, fx + 2, yy, "Organic Lion's Mane (fruiting bodies)", F("Inter.ttf", 2.05, [14, 700]), (0, 0, 0))
+    rtext(d, fx + fw - 2, yy, "1000 mg   **", F("Inter.ttf", 2.05, [14, 400]), (0, 0, 0))
+    yy += 3.0
+    ltext(d, fx + 2, yy, "(Hericium erinaceus)", F("Inter.ttf", 1.9, [14, 400]), (60, 60, 60))
+    yy += 2.4
+    d.rectangle([P(fx), P(yy), P(fx + fw), P(yy + 0.8)], fill=(0, 0, 0))
+    yy += 2.6
+    ltext(d, fx + 2, yy, "** Daily Value not established.", F("Inter.ttf", 1.85, [14, 400]), (60, 60, 60))
+
+    yy = fy + fh + 5.0
+    ltext(d, 12, yy, "Other Ingredients: None.", F("Inter.ttf", 2.15, [14, 600]), ink)
+    yy += 5.4
+    for line in BACK_J_DETAIL:
+        ltext(d, 12, yy, line, F("Inter.ttf", 1.95, [14, 400]), ink)
+        yy += 3.2
+    yy += 2.2
+    ltext(d, 12, yy, "Suggested Use", F("Inter.ttf", 2.15, [14, 700]), ink)
+    yy += 3.6
+    for line in BACK_J_USE:
+        ltext(d, 12, yy, line, F("Inter.ttf", 1.95, [14, 400]), ink)
+        yy += 3.1
+    yy += 1.6
+    ltext(d, 12, yy, "Store in a cool, dark, dry place. Warning: not intended for children.",
+          F("Inter.ttf", 1.85, [14, 400]), ink)
+    yy += 2.9
+    ltext(d, 12, yy, "Not intended to diagnose, treat, cure or prevent any disease.",
+          F("Inter.ttf", 1.85, [14, 400]), ink)
+    yy += 4.4
+    ltext(d, 12, yy, "Distributed by Mogran Organics", F("Inter.ttf", 1.95, [14, 700]), ink)
+    yy += 2.9
+    ltext(d, 12, yy, "2442 S Collins St, Ste 108 PMB 1157, Arlington TX 76014, USA",
+          F("Inter.ttf", 1.8, [14, 400]), ink)
+
+    cy = H - 54.0
+    _cert_badge(d, 12.0, cy, 22.0, 9.4, "HALAL", J_OLIVE_D, WHITE)
+    _cert_badge(d, 36.0, cy, 24.0, 9.4, "KOSHER", J_OLIVE_D, WHITE)
+    _cert_badge(d, 62.0, cy, 26.0, 9.4, "ISO 9001", J_OLIVE_D, WHITE)
+    _cert_badge(d, 90.0, cy, 28.0, 9.4, "ISO 22000", J_OLIVE_D, WHITE)
+
+    qy = H - 40.0
+    draw_qr(d, d, 12.0, qy, 16.0, "https://mograorganics.com/organic-lions-mane")
+    draw_upc(d, 32.0, qy + 1.0, W - 46.0, 13.0, upc_a_placeholder())
+    d.text((P(32.0 + (W - 46.0) / 2), P(qy + 24.0)), "LOT MO-LM-2601   ·   BEST BY 01-2028   ·   X00MOGRA-LM",
+           font=F("Inter.ttf", 1.7, [14, 500]), fill=ink, anchor="mm")
+
+    d.text((P(W / 2), P(H - 10.5)),
+           "*These statements have not been evaluated by the FDA. KEEP OUT OF REACH OF CHILDREN.",
+           font=F("Inter.ttf", 1.6, [14, 400]), fill=ink, anchor="mm")
+    return img
+
+
+BAG_FRONTS.update({
+    "j01_olive_kraft": j01_olive_kraft,
+    "j02_botanical_luxe": j02_botanical_luxe,
+})
+
+
 def design_specs() -> List[Dict]:
     common_back = [
         "Suggested use: one scoop daily in water, tea or your favourite drink.",
@@ -2209,6 +2612,10 @@ def design_specs() -> List[Dict]:
                                 logo_lockup=True),
         "i10_logo_hero": dict(kind="bag", ground=OCHRE, ground_b=OCHRE, ink_b=CEDAR2,
                               logo_lockup=True),
+        "j01_olive_kraft": dict(kind="bag", ground=J_KRAFT, ground_b=J_KRAFT, ink_b=J_INK,
+                                logo_lockup=True, back="j"),
+        "j02_botanical_luxe": dict(kind="bag", ground=J_CREAM, ground_b=J_CREAM,
+                                   ink_b=J_INK, logo_lockup=True, back="j", plate=False),
         "06_wall_of_type": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),
         "07_dome_gold": dict(kind="canister", ground=FOREST, ground_b=FOREST, ink_b=CREAM),
         "08_stamp_roll": dict(kind="canister", ground=KRAFT, ground_b=KRAFT, ink_b=INK),

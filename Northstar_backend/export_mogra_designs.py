@@ -88,6 +88,20 @@ line, plus 3mm bleed + weld/fold/zipper marks (bags) / seam + glue tab (canister
 """
 
 
+def _load_logo_master(path: Path) -> tuple:
+    """Open a supplied logo master. A flat white-field companion (no alpha —
+    e.g. mogra_logo_master_v3_white.png) cannot be stamped onto kraft, so the
+    RGBA sibling of the same artwork is used and the substitution is logged."""
+    rgba = Image.open(path).convert("RGBA")
+    if rgba.getchannel("A").getextrema()[0] == 255:
+        alt = path.with_name(path.stem.replace("_white", "") + path.suffix)
+        if alt != path and alt.is_file():
+            return (Image.open(alt).convert("RGBA"),
+                    f"{path.name} has no alpha channel (white field); stamped the RGBA "
+                    f"sibling {alt.name} — same artwork, keyed matte")
+    return rgba, None
+
+
 def _cli() -> tuple:
     """Optional --only k1,k2  --pack <folder-name>  --flat (one folder, no
     per-design subfolders)  --logo-master <file.png> (pre-built sharp master,
@@ -118,7 +132,9 @@ def main() -> None:
 
     notes = []
     if logo_master is not None:
-        logo = Image.open(logo_master).convert("RGBA")
+        logo, note = _load_logo_master(logo_master)
+        if note:
+            notes.append(note)
         notes.append(f"logo master supplied via --logo-master ({logo_master.name}) "
                      "- identity series stamps the FULL lockup "
                      "(emblem + EST 2023 + wordmark + tagline)")
