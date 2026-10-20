@@ -248,9 +248,15 @@ class UnifiedLLMAdapter:
             # Explicit on the wire: with think=False a model whose DEFAULT is
             # thinking would otherwise burn the whole token budget inside its
             # reasoning and never reach answer/tool frames.
-            # A level ("low"/"medium"/"high") lets the caller dial the reasoning
-            # budget; any other truthy value keeps the model's own default.
-            body["think"] = think if isinstance(think, str) else bool(think)
+            # A level ("low"/"medium"/"xhigh") lets the caller dial the reasoning
+            # budget; any other truthy value keeps the model's own default. The
+            # template rejects "high" outright, so normalize rather than crash.
+            if isinstance(think, str):
+                _lvl = think.strip().lower()
+                body["think"] = (_lvl if _lvl in ("low", "medium", "xhigh")
+                                 else (True if _lvl == "high" else bool(think)))
+            else:
+                body["think"] = bool(think)
         if tools:
             body["tools"] = tools
 

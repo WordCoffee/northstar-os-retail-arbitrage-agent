@@ -40,7 +40,21 @@ CHAT_NUM_PREDICT = int(os.environ.get("CHAT_NUM_PREDICT", "16384"))
 _chat_num_gpu_raw = os.environ.get("CHAT_NUM_GPU", "").strip()
 CHAT_NUM_GPU = int(_chat_num_gpu_raw) if _chat_num_gpu_raw.isdigit() else None
 
-CHAT_SYSTEM_PROMPT = (
+# Measured on one hard written proof at medium effort: this discipline took the
+# same question from 2,209 thinking tokens / 141 s to 1,157 / 77 s, with every
+# verification step still present. At xhigh the model ignores it (5,864 tokens),
+# so the level — not the prompt — sets the ceiling. Env: CHAT_REASONING_DISCIPLINE=0.
+REASONING_DISCIPLINE = (
+    "\nPrivate reasoning discipline (applies to your thinking, never to the "
+    "answer): think in at most 10 short steps and keep the reasoning under "
+    "roughly 400 words. Never restate the question, never list options you "
+    "rejected, never re-check a step you already verified. Do the work once, "
+    "then write the answer. The answer itself stays as complete as the task needs."
+)
+REASONING_DISCIPLINE_ON = os.environ.get(
+    "CHAT_REASONING_DISCIPLINE", "1").strip().lower() not in ("0", "false", "off", "no")
+
+_CHAT_SYSTEM_BASE = (
     "You are the Northstar OS Master Brain in the Creative Studio — the "
     "content-generation copilot for T2 Holdings' brands (Amazon FBA and "
     "retail arbitrage; organic food brands). You help create and refine "
@@ -54,6 +68,10 @@ CHAT_SYSTEM_PROMPT = (
     "status): call them when the operator asks for a real artifact, and only "
     "describe results the tool actually returned."
 )
+# Composed into the constant (not appended per turn) so the "no focus -> exactly
+# the system constant" contract still holds for every caller.
+CHAT_SYSTEM_PROMPT = _CHAT_SYSTEM_BASE + (
+    REASONING_DISCIPLINE if REASONING_DISCIPLINE_ON else "")
 
 
 def build_chat_messages(history: Iterable[Dict[str, Any]],

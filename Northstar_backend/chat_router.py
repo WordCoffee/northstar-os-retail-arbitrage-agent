@@ -570,9 +570,14 @@ def _think_level(think: bool, thinking: str):
         return False
     if thinking == "deep":
         return True
-    if _THINK_STANDARD.lower() in ("true", "1", "default", "xhigh"):
+    level = _THINK_STANDARD.lower()
+    if level in ("true", "1", "default", "xhigh"):
         return True
-    return _THINK_STANDARD
+    # This template accepts exactly xhigh (default), medium and low; asking for
+    # "high" raises a Jinja exception inside Ollama, so normalize in one place.
+    if level not in ("low", "medium"):
+        return "medium"
+    return level
 
 
 _STYLE_HINT = {

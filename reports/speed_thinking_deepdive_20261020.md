@@ -107,6 +107,71 @@ Environment (User scope, survives reboot):
 6. **Continuation on truncation** — an automatic bounded retry instead of the
    honest notice, if the operator prefers waiting to rephrasing.
 
+---
+
+# Round 2 — overthinking, and do we need a lighter model?
+
+Question: copy what Swift 1.5 does (think less, same answer) without retraining,
+and use a smaller model for non-thinking tasks.
+
+## The Swift effect is mostly level + prompt discipline
+
+Same 3-crate proof every run, every answer verified correct:
+
+| run | thinking tokens | wall |
+|---|---|---|
+| xhigh, no discipline (old default) | 6,376 | 318 s |
+| medium, no discipline | 2,209 | 141 s |
+| medium + reasoning discipline | 1,157 | 76.6 s |
+| **medium + discipline, real Bojo prompt, end-to-end** | 1,165 | **74.1 s** |
+| xhigh + discipline | 5,864 | 280 s |
+| low + discipline | 1,428 | 89.6 s |
+
+- The discipline **holds at medium/low but is ignored at xhigh** (5,864 tokens):
+  the level sets the ceiling, the prompt only trims the waste below it.
+- Net: **4.3× faster than the old default**, same marked answer, all three
+  verification steps still present (`A = 1.17 B`, `(A+B)/2 − C = 9`, total 1,271).
+- `low` + discipline was *slower* than `medium` + discipline, so medium is the
+  efficient level — not the lowest one.
+
+## The "light model" already exists inside the 27B
+
+`think=false` on ordinary requests, measured:
+
+| request | time |
+|---|---|
+| one-line summary of 3 numbers | 2.1 s |
+| filename to kebab-case | 0.6 s |
+| three bullet points | 1.0 s |
+
+A separate 4B would not beat that, and it would not fit:
+
+- 27B @16k = 11.25 GB + embed lane 2.2 GB + 4B-Q4 ≈ 2.6 GB = **16.05 GB**
+  against 16.3 GB total (≈15.9 GB usable), so loading it would evict the brain
+  and cost 7–8 s — far more than the ~1 s it could save.
+- Worth it only for **non-interactive bulk work** where the brain is allowed to
+  stay unloaded (batch classification, tagging, bulk copy variants).
+
+## Shipped in round 2
+
+- `chat_adapter.py` — `REASONING_DISCIPLINE` composed into `CHAT_SYSTEM_PROMPT`
+  so the "no focus → system constant" contract still holds;
+  `CHAT_REASONING_DISCIPLINE=0` disables it without a code change.
+- `chat_router.py` — level whitelist: the template accepts only
+  **xhigh / medium / low** and raises a Jinja exception on `"high"`; unknown
+  values now normalize instead of crashing the turn.
+- `autothink/backend/llm_adapter.py` — same normalization on the wire, plus
+  `"high"` mapped to the model default.
+- Gates: **125 passed / 0 failed**.
+
+## What each UI switch now costs
+
+| composer switch | level | simple request | hard proof |
+|---|---|---|---|
+| off | no thinking | 0.6 – 2.1 s | — |
+| standard (default) | medium + discipline | ~1 – 3 s | 74 s |
+| deep | xhigh | — | 280 – 318 s |
+
 ## Operational note
 
 To restart Ollama cleanly:
