@@ -35,7 +35,9 @@ CLOUD_FALLBACK_MARK = "[CLOUD FALLBACK]"
 # is rebuilt with matching values. num_ctx must not exceed the rebuilt
 # model's context (northstaros-qwen3.8:27b is served at 64K-class 64576).
 NUM_PREDICT = int(os.environ.get("AUTOTHINK_NUM_PREDICT", "8192"))
-NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "64576"))
+# One window for every lane (see Modelfile.northstaros-qwen3.8): a different
+# num_ctx between callers reloads the whole 27B, measured at 7-8 s per switch.
+NUM_CTX = int(os.environ.get("AUTOTHINK_NUM_CTX", "16384"))
 
 SYSTEM_PROMPT = (
     "You are Northstar AutothinK, the premium build-anything layer of Northstar OS "

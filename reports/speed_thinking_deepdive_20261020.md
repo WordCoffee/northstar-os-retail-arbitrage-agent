@@ -172,6 +172,46 @@ A separate 4B would not beat that, and it would not fit:
 | standard (default) | medium + discipline | ~1 – 3 s | 74 s |
 | deep | xhigh | — | 280 – 318 s |
 
+---
+
+# Round 3 — the standing profile (set 2026-10-20)
+
+Instruction: stop tuning per question; set whatever is best for spend, accuracy,
+thinking, coding and extreme reasoning. This is the profile now in force.
+
+## Decisions
+
+| dimension | setting | why |
+|---|---|---|
+| everyday answer | `standard` = medium + discipline | 74 s on a hard proof vs 318 s, same verified answer |
+| coding / proofs / long briefs | auto-escalate to xhigh | code fences, `def/class/import`, tracebacks, SQL, regex, "prove", "derive", "audit", "architecture", "root cause", "step by step", "design a", "opt-in trade-off", "optimise", unit tests, >1,200 chars, or any attachment |
+| operator "deep" | xhigh | unchanged, always wins |
+| operator "off" | no thinking | 0.6 – 2.1 s on ordinary requests |
+| context window | **16,384 on every lane** (chat, AutothinK, browser agent, model fallback) | one number kills the 7 – 8 s reload class; real transcripts are <1 k tokens |
+| KV cache | `q8_0` | 12.98 GB vs 13.48 GB at the same window, same speed |
+| flash attention | on | measured flat; kept (no regression) |
+| loaded models | 2 | brain + embed lane stay resident; chat turn after an embed: **0.00 s** load |
+| parallel slots | 1 | one operator, one turn — no wasted KV |
+| output cap | 16,384 | thinking counts toward it; below ~6 k an xhigh turn returns nothing |
+| reasoning discipline | on | `CHAT_REASONING_DISCIPLINE=0` disables |
+| light tier | thinking off, **not** a second model | a 4B cannot co-reside (11.25 + 2.2 + 2.6 > 16.3 GB) and would pay a 7 – 8 s eviction to save ~1 s |
+
+Escalation only ever *adds* thinking: the operator's `off`/`deep` choice always
+wins, so no request can be made shallower than the standard tier.
+
+## Honest note on the model manifest
+
+Rebuilding `Modelfile.northstaros-qwen3.8` at `num_ctx 16384` made the **same**
+16384-token request load 13.0 – 13.5 GB at ~39 tok/s, against 10 – 11 GB at
+~44 tok/s from the original manifest (all lanes pass `num_ctx` explicitly, so
+the manifest value is only a manual-`ollama run` fallback). The original values
+(64576 / 6000) were restored and the file now carries a warning comment.
+
+The footprint did **not** fully return to 10 – 11 GB after the restore (it sits
+at ~13 GB / 39 – 44 tok/s), so part of that drift is environmental — thermals or
+driver state on a laptop GPU that has been loaded for hours — not the manifest.
+Treat 39 – 44 tok/s as the honest current range rather than a fixed number.
+
 ## Operational note
 
 To restart Ollama cleanly:

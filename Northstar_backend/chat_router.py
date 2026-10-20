@@ -564,11 +564,31 @@ _THINKING_HINT = {
 _THINK_STANDARD = (os.environ.get("CHAT_THINK_STANDARD", "medium").strip() or "medium")
 
 
-def _think_level(think: bool, thinking: str):
+# A "standard" turn takes the full budget when the request looks like code, a
+# proof, or a long brief. This only ever ESCALATES: the operator's explicit
+# "deep"/"off" choice always wins, so it can never make an answer shallower than
+# the standard tier — the safe direction for accuracy.
+_ESCALATE_SIGNALS = (
+    "```", "def ", "class ", "import ", "traceback", "stack trace", "refactor",
+    "debug", "sql", "regex", "algorithm", "architecture", "root cause", "prove",
+    "derive", "audit", "step by step", "design a", "trade-off", "tradeoff",
+    "unit test", "compile", "optimi",
+)
+_ESCALATE_CHARS = 1200
+
+
+def _auto_escalate(content: str, attachments: int = 0) -> bool:
+    text = (content or "").lower()
+    if len(text) > _ESCALATE_CHARS or attachments:
+        return True
+    return any(sig in text for sig in _ESCALATE_SIGNALS)
+
+
+def _think_level(think: bool, thinking: str, content: str = "", attachments: int = 0):
     """Composer thinking switch -> Ollama think flag/level."""
     if not think or thinking == "off":
         return False
-    if thinking == "deep":
+    if thinking == "deep" or _auto_escalate(content, attachments):
         return True
     level = _THINK_STANDARD.lower()
     if level in ("true", "1", "default", "xhigh"):
@@ -738,7 +758,8 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
     })
     generator = turn_event_stream(
         db, acct, session, body.content,
-        think=_think_level(body.think, body.thinking), model=body.model,
+        think=_think_level(body.think, body.thinking, body.content,
+                           len(body.attachments)), model=body.model,
         options={"media": body.media, "thinking": body.thinking,
                  "style": body.style, "attachments": body.attachments})
     return StreamingResponse(

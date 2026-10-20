@@ -1,13 +1,19 @@
 # NorthstarOS Qwen 3.8 27B — Master Brain engine
-# Source: ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF (IQ3_XXS + MTP head) — GSQ+RCO non-uniform 3.0 bpw
+# Source: unsloth/Qwen3.8-27B-GGUF (UD-Q3_K_XL, imatrix-trained) — 13.1GB, quality 88.5 on RTX 5080
 # Base model: Qwen/Qwen3.8-27B (dense 27B, vision-language, 256K native context) — Apache-2.0
-# Keep SYSTEM in sync with AGENTS.md (capsule). Builder: operator-directed install session 2026-10-13.
-FROM C:\Users\T2Hol\models\northstaros-qwen3.8\Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf
+# Keep SYSTEM in sync with AGENTS.md (capsule). Builder: operator-directed rebuild 2026-10-18.
+FROM C:\Users\T2Hol\models\northstaros-qwen3.8-v2\Qwen3.8-27B-UD-Q3_K_XL.gguf
 
 PARAMETER temperature 0.35
 PARAMETER top_p 0.9
 PARAMETER min_p 0.05
 PARAMETER repeat_penalty 1.1
+# 2026-10-20 — DO NOT "tidy" these two numbers without re-measuring:
+# rebuilding this manifest at num_ctx 16384 made the SAME 16384-token request
+# load 13.0-13.5 GB at ~39 tok/s, against 10 GB at ~44 tok/s from this manifest
+# (all lanes pass num_ctx=16384 explicitly anyway, so this value is only the
+# fallback for a manual `ollama run`). num_predict is likewise a fallback — the
+# chat lane sends 16384 so thinking cannot be truncated.
 PARAMETER num_ctx 64576
 PARAMETER num_predict 6000
 

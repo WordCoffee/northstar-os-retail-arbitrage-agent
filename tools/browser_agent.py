@@ -114,7 +114,7 @@ def get_llm(model_name: str = None, verbose: bool = True):
         return BrowserUseChatOllama(
             model=model_name,
             ollama_options={
-                "num_ctx": 32000,        # Room for multi-step history
+                "num_ctx": 16384,        # Same window as every other lane (no reload)
                 "temperature": 0.0,      # Deterministic — no randomness
                 "num_predict": NUM_PREDICT,  # Complete JSON — never truncates
             },
