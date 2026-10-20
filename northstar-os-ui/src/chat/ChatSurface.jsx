@@ -214,6 +214,12 @@ export default function ChatSurface({
   const [uploading, setUploading] = useState(false)
   const [uploadNote, setUploadNote] = useState('')
   const fileRef = useRef(null)
+  // Duplex voice: listen -> transcribe -> answer -> speak, with barge-in.
+  const [conversation, setConversation] = useState(false)
+  const [voiceState, setVoiceState] = useState('idle')   // idle|listening|thinking|speaking
+  const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
+  const voiceStateRef = useRef('idle')
+  voiceStateRef.current = voiceState
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
   const mediaRef = useRef(null)
@@ -544,6 +550,14 @@ export default function ChatSurface({
     if (typeof onBusyChange === 'function') onBusyChange(streaming)
   }, [streaming, onBusyChange])
 
+  // In conversation mode, a finished turn is spoken and the loop keeps listening.
+  useEffect(() => {
+    if (!conversation || streaming) return
+    const last = [...messages].reverse().find((m) => m.role === 'assistant' && m.content)
+    if (last) speak(last.content)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streaming, conversation])
+
   // ── Composer auto-grow ────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -608,6 +622,151 @@ export default function ChatSurface({
     } finally {
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ''
+    }
+  }, [])
+
+  // ── Duplex voice loop (Bojo) ──────────────────────────────────────────────
+  // listen (energy VAD) -> local whisper transcript -> turn -> speak (voice
+  // studio) -> listen again. Speaking while the operator talks BARGE-IN: the
+  // audio stops and capture resumes. Every unavailable piece is reported, never
+  // faked.
+  const stopConversation = useCallback(() => {
+    const c = convRef.current
+    if (c) {
+      c.cancelled = true
+      try { if (c.rec && c.rec.state !== 'inactive') c.rec.stop() } catch { /* already stopped */ }
+      try { if (c.audio) { c.audio.pause(); c.audio.src = '' } } catch { /* no audio */ }
+      try { if (c.stream) c.stream.getTracks().forEach((t) => t.stop()) } catch { /* no stream */ }
+      try { if (c.ctx && c.ctx.state !== 'closed') c.ctx.close() } catch { /* no ctx */ }
+    }
+    convRef.current = null
+    setConversation(false)
+    setVoiceState('idle')
+  }, [])
+
+  const speak = useCallback(async (text) => {
+    const c = convRef.current
+    if (!c || c.cancelled || !text) return
+    setVoiceState('speaking')
+    try {
+      const csrfMatch = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
+      const res = await fetch('/api/chat/voice/speak', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json',
+                   ...(csrfMatch ? { 'X-CSRF-Token': decodeURIComponent(csrfMatch[2]) } : {}) },
+        body: JSON.stringify({ text: text.slice(0, 1200), voice_id: 'bojo-narrator' }),
+      })
+      if (!res.ok) {
+        const b = await res.json().catch(() => ({}))
+        const detail = typeof b.detail === 'string' ? b.detail : 'voice unavailable'
+        setVoiceNote(`Bojo can't speak right now: ${detail}`)
+        setVoiceState('idle')
+        return
+      }
+      const { audio_url: url } = await res.json()
+      const audio = new Audio(url)
+      c.audio = audio
+      audio.onended = () => { if (convRef.current && !convRef.current.cancelled) setVoiceState('idle') }
+      // Barge-in: if the operator starts talking, stop Bojo mid-sentence.
+      const watch = setInterval(() => {
+        if (!convRef.current || convRef.current.cancelled) { clearInterval(watch); return }
+        if (energy() > 0.05) {
+          clearInterval(watch)
+          try { audio.pause() } catch { /* ignore */ }
+          setVoiceState('listening')
+          listenOnce()
+        }
+      }, 120)
+      await audio.play().catch(() => { setVoiceState('idle') })
+    } catch (e) {
+      setVoiceNote(`Bojo can't speak right now: ${e.message}`)
+      setVoiceState('idle')
+    }
+  }, [])
+
+  function energy() {
+    const c = convRef.current
+    if (!c || !c.analyser) return 0
+    const buf = new Uint8Array(c.analyser.fftSize)
+    c.analyser.getByteTimeDomainData(buf)
+    let sum = 0
+    for (let i = 0; i < buf.length; i += 1) {
+      const v = (buf[i] - 128) / 128
+      sum += v * v
+    }
+    return Math.sqrt(sum / buf.length)
+  }
+
+  async function listenOnce() {
+    const c = convRef.current
+    if (!c || c.cancelled) return
+    setVoiceState('listening')
+    const rec = new MediaRecorder(c.stream)
+    c.rec = rec
+    const chunks = []
+    rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data) }
+    rec.onstop = async () => {
+      if (!convRef.current || convRef.current.cancelled) return
+      setVoiceState('thinking')
+      const blob = new Blob(chunks, { type: rec.mimeType || 'audio/webm' })
+      if (!blob.size) { listenOnce(); return }
+      try {
+        const csrfMatch = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
+        const fd = new FormData()
+        fd.append('audio', blob, 'turn.webm')
+        const res = await fetch('/api/chat/voice/transcribe', {
+          method: 'POST', credentials: 'include', body: fd,
+          headers: csrfMatch ? { 'X-CSRF-Token': decodeURIComponent(csrfMatch[2]) } : {},
+        })
+        const out = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          setVoiceNote(`Transcription unavailable: ${typeof out.detail === 'string' ? out.detail : res.status}`)
+          setVoiceState('idle')
+          return
+        }
+        const text = String(out.text || '').trim()
+        if (text) send(text)
+        else setVoiceState('listening')
+      } catch (e) {
+        setVoiceNote(`Transcription failed: ${e.message}`)
+        setVoiceState('idle')
+      }
+    }
+    rec.start()
+    // Simple energy VAD: stop after speech followed by ~900 ms of quiet, or 15 s.
+    let heard = false
+    let quiet = 0
+    const t0 = Date.now()
+    const tick = setInterval(() => {
+      if (!convRef.current || convRef.current.cancelled) { clearInterval(tick); return }
+      const e = energy()
+      if (e > 0.05) { heard = true; quiet = 0 } else if (heard) { quiet += 1 }
+      const tooLong = Date.now() - t0 > 15000
+      if ((heard && quiet >= 6) || tooLong) {
+        clearInterval(tick)
+        try { if (rec.state !== 'inactive') rec.stop() } catch { /* ignore */ }
+      }
+    }, 150)
+  }
+
+  const startConversation = useCallback(async () => {
+    setVoiceNote('')
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+      setVoiceNote('This browser cannot capture audio for a live conversation.')
+      return
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const ctx = new (window.AudioContext || window.webkitAudioContext)()
+      const source = ctx.createMediaStreamSource(stream)
+      const analyser = ctx.createAnalyser()
+      analyser.fftSize = 1024
+      source.connect(analyser)
+      convRef.current = { stream, ctx, analyser, audio: null, rec: null, cancelled: false }
+      setConversation(true)
+      listenOnce()
+    } catch (e) {
+      setVoiceNote(`Microphone unavailable: ${e.message}`)
     }
   }, [])
 
@@ -999,6 +1158,15 @@ export default function ChatSurface({
               onClick={() => fileRef.current?.click()} disabled={uploading}
               data-testid="chat-attach" aria-label="Attach a file">
               {uploading ? '…' : '📎'}
+            </button>
+            <button type="button"
+              className={`chat-icon-btn ${conversation ? 'is-live' : ''}`}
+              title={conversation ? 'End the live conversation' : 'Talk to Bojo (live voice)'}
+              onClick={() => (conversation ? stopConversation() : startConversation())}
+              aria-pressed={conversation} data-testid="chat-conversation">
+              {conversation
+                ? (voiceState === 'speaking' ? '🔊' : voiceState === 'thinking' ? '…' : '●')
+                : '🎙'}
             </button>
             <input ref={fileRef} type="file" hidden
               accept="image/*,video/*,application/pdf,text/plain,text/csv"

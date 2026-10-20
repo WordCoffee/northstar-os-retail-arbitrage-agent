@@ -505,6 +505,10 @@ html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="advanced"] .shell-m
 }
 .mb-shell .chat-icon-btn:hover:not(:disabled) { border-color: rgba(247, 243, 236, 0.45); }
 .mb-shell .chat-icon-btn:disabled { opacity: 0.5; cursor: wait; }
+.mb-shell .chat-icon-btn.is-live {
+  background: var(--spark); border-color: var(--spark); color: #fff;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.22);
+}
 .mb-shell .chat-attachments { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 2px 10px; }
 .mb-shell .chat-attachment {
   display: inline-flex; align-items: center; gap: 8px;

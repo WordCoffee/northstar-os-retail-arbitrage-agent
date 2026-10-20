@@ -24,10 +24,38 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from pydantic import BaseModel, Field
 
 from design_studio_api import studio_account
 
 router = APIRouter(prefix="/api/chat/voice", tags=["chat-voice"])
+
+
+class SpeakIn(BaseModel):
+    text: str = Field(..., min_length=1, max_length=2000)
+    voice_id: str = Field(..., min_length=1, max_length=120)
+    lang: str = Field("en", max_length=12)
+
+
+@router.post("/speak")
+async def speak(body: SpeakIn, acct: str = Depends(studio_account)):
+    """Bojo speaks: synthesise one line for the conversation loop.
+
+    Reuses the voice-studio adapter. When it is unreachable this returns 503 with
+    the REAL reason — the client then degrades to text and says so instead of
+    pretending to talk."""
+    from voicestudio_adapter import get_adapter
+
+    out = await get_adapter().tts(body.text, body.voice_id, lang=body.lang)
+    if not out.get("ok"):
+        raise HTTPException(status_code=503,
+                            detail=out.get("error") or "voice synthesis unavailable")
+    data = out.get("data") or {}
+    if not data.get("audio_url"):
+        raise HTTPException(status_code=502,
+                            detail="the voice engine returned no audio_url")
+    return {"ok": True, "audio_url": data["audio_url"],
+            "elapsed_ms": out.get("elapsed_ms"), "voice_id": body.voice_id}
 
 MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 
