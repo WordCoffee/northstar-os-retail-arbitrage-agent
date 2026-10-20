@@ -98,6 +98,51 @@ float starField(vec2 px, float cellPx, float density, float drift) {
   return mag * smoothstep(size, 0.0, d);
 }
 
+// GALACTIC 1 - star colour temperature: a three-stop blackbody-ish ramp
+// (blue-white -> white -> amber) instead of a two-colour lerp.
+vec3 starTint(float h) {
+  float t = fract(h * 7.31);
+  vec3 cool = vec3(0.68, 0.78, 1.00);
+  vec3 white = vec3(1.00, 0.98, 0.94);
+  vec3 warm = vec3(1.00, 0.86, 0.66);
+  return t < 0.5 ? mix(cool, white, t * 2.0) : mix(white, warm, (t - 0.5) * 2.0);
+}
+
+// GALACTIC 2 - diffraction spikes on the FEW brightest stars only (anamorphic
+// cross). A low density + a wide cell means only a handful of stars carry them.
+float starSpikes(vec2 px, float cellPx, float density) {
+  vec2 g = (px + vec2(u_time * 0.6, -u_time * 0.2)) / cellPx;
+  vec2 id = floor(g);
+  vec2 f = fract(g);
+  float h = hash21(id + 41.7);
+  if (h > density) return 0.0;
+  vec2 pos = vec2(hash21(id + 13.1), hash21(id + 27.7));
+  vec2 d = abs(f - pos);
+  float core = exp(-d.x * 30.0) * exp(-d.y * 260.0)
+             + exp(-d.y * 30.0) * exp(-d.x * 260.0);
+  return core * pow(hash21(id + 3.17), 2.0);
+}
+
+// GALACTIC 4 - a shooting star every ~55 s, 0.4 s of life, and NEVER over the
+// reading column: it returns 0 inside the central band where the prose sits.
+float shootingStar(vec2 uv, float t) {
+  if (abs(uv.x - 0.5) < 0.245) return 0.0;
+  float period = 55.0;
+  float slot = floor(t / period);
+  float phase = fract(t / period);
+  if (phase > 0.12) return 0.0;
+  float y = 0.68 + 0.24 * hash21(vec2(slot, 3.1));
+  float x0 = 0.10 + 0.75 * hash21(vec2(slot, 1.7));
+  vec2 head = vec2(x0 + phase * 0.30, y - phase * 0.16);
+  vec2 tail = head - vec2(0.045, -0.024);
+  float life = smoothstep(0.0, 0.02, phase) * (1.0 - smoothstep(0.08, 0.12, phase));
+  vec2 q = (uv - head) * vec2(u_res.x / max(u_res.y, 1.0), 1.0);
+  vec2 q2 = (uv - tail) * vec2(u_res.x / max(u_res.y, 1.0), 1.0);
+  float h1 = exp(-dot(q, q) * 9000.0);
+  float h2 = exp(-dot(q2, q2) * 2600.0) * 0.35;
+  return (h1 + h2) * life;
+}
+
 void main() {
   vec2 uv = v_uv;
   float aspect = u_res.x / max(u_res.y, 1.0);
@@ -122,6 +167,10 @@ void main() {
   float dust = smoothstep(0.44, 0.82, fbm(p * 5.4 + vec2(9.0, 1.0)));
   col += band * vec3(0.082, 0.085, 0.112) * (0.50 + 0.70 * lanes);
   col *= 1.0 - dust * band * 0.60;
+  // GALACTIC 5 - a second dust layer that OCCLUDES (multiply), never adds, so the
+  // lane structure reads as depth rather than as glow.
+  float dust2 = smoothstep(0.50, 0.86, fbm(p * 9.0 + vec2(4.0, 2.0)));
+  col *= 1.0 - dust2 * 0.18;
 
   // ── 1b. focus-driven atmosphere (T2 "preset-driven visual shifts") ────────
   // Restrained on purpose: the research is unambiguous that background luminance
@@ -161,12 +210,17 @@ void main() {
   vec2 px = v_uv * u_res;
   vec2 pxw = px + dir * defl * u_res.y * 0.085;
 
-  float fine   = starField(pxw, 3.4, 0.024, 0.34);
-  float mid    = starField(pxw * 0.62, 6.2, 0.050, 0.18);
-  float bright = starField(pxw * 0.40, 11.0, 0.028, 0.07);
-  col += fine   * mix(vec3(0.70, 0.78, 1.00), vec3(1.00, 0.93, 0.82), fract(fine * 11.7))   * 0.38;
-  col += mid    * mix(vec3(0.66, 0.74, 1.00), vec3(1.00, 0.90, 0.78), fract(mid * 7.3))     * 0.70;
-  col += bright * mix(vec3(0.80, 0.86, 1.00), vec3(1.00, 0.94, 0.86), fract(bright * 5.1))  * 1.10;
+  float fine   = starField(pxw, 3.4, 0.024, 1.00);   // parallax layers: 1x
+  float mid    = starField(pxw * 0.62, 6.2, 0.050, 0.60);   //         0.6x
+  float bright = starField(pxw * 0.40, 11.0, 0.028, 0.30);  //         0.3x
+  // temperature-tinted stars (GALACTIC 1)
+  col += fine   * starTint(hash21(floor(pxw / 3.4) + 5.1))    * 0.38;
+  col += mid    * starTint(hash21(floor(pxw * 0.62 / 6.2) + 9.4)) * 0.70;
+  col += bright * starTint(hash21(floor(pxw * 0.40 / 11.0) + 2.8)) * 1.10;
+  // anamorphic spikes on the brightest few (GALACTIC 2)
+  col += starSpikes(pxw * 0.40, 11.0, 0.006) * vec3(1.00, 0.97, 0.92) * 1.35;
+  // GALACTIC 4 - a rare shooting star, only in the gutters
+  col += vec3(0.92, 0.96, 1.00) * shootingStar(uv, u_time) * 0.85;
 
   // ── 4. the accretion disc: a thin band through the hole's plane ──────────
   // We look from a few degrees above the plane, so the near side sits slightly

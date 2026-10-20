@@ -471,3 +471,50 @@ html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="advanced"] .shell-m
 }
 .mb-shell .chat-plan-gap { color: var(--ink-faint); font-size: 12.5px; }
 @media (max-width: 640px) { .mb-shell .chat-plan-actions { grid-template-columns: 1fr; } }
+
+/* ── Bojo composer controls (turn contract v2) ───────────────────────────── */
+.mb-shell .chat-controls {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 0 2px 10px;
+}
+.mb-shell .chat-media-toggle {
+  display: inline-flex; padding: 3px; gap: 3px; border-radius: 999px;
+  border: 1px solid rgba(247, 243, 236, 0.20); background: rgba(247, 243, 236, 0.05);
+}
+.mb-shell .chat-media-opt {
+  border: none; background: transparent; cursor: pointer; border-radius: 999px;
+  padding: 6px 14px; font-size: 13.5px; font-family: var(--font-ui);
+  color: var(--ink-soft); transition: background 150ms ease, color 150ms ease;
+}
+.mb-shell .chat-media-opt.is-on { background: var(--spark); color: #fff; }
+.mb-shell .chat-media-opt:focus-visible { outline: 2px solid var(--spark); outline-offset: 2px; }
+.mb-shell .chat-control {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; color: var(--ink-soft);
+}
+.mb-shell .chat-control select {
+  background: rgba(247, 243, 236, 0.06); color: var(--ink);
+  border: 1px solid rgba(247, 243, 236, 0.18); border-radius: 9px;
+  padding: 6px 9px; font-size: 13.5px; font-family: var(--font-ui);
+}
+.mb-shell .chat-control select:focus-visible { outline: 2px solid var(--spark); outline-offset: 1px; }
+.mb-shell .chat-icon-btn {
+  border: 1px solid rgba(247, 243, 236, 0.20); background: rgba(247, 243, 236, 0.06);
+  color: var(--ink); border-radius: 10px; width: 36px; height: 36px;
+  font-size: 16px; cursor: pointer; line-height: 1;
+}
+.mb-shell .chat-icon-btn:hover:not(:disabled) { border-color: rgba(247, 243, 236, 0.45); }
+.mb-shell .chat-icon-btn:disabled { opacity: 0.5; cursor: wait; }
+.mb-shell .chat-attachments { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 2px 10px; }
+.mb-shell .chat-attachment {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--ink-mid);
+  border: 1px solid rgba(247, 243, 236, 0.18); border-radius: 999px;
+  padding: 5px 6px 5px 12px; background: rgba(247, 243, 236, 0.05);
+  max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mb-shell .chat-attachment button {
+  border: none; background: transparent; color: var(--ink-faint);
+  cursor: pointer; font-size: 15px; line-height: 1; padding: 0 3px;
+}
+.mb-shell .chat-attachment button:hover { color: var(--ink); }

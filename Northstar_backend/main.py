@@ -2636,6 +2636,21 @@ except Exception as _ops_exc:  # pragma: no cover - defensive mount
         "ops status router not mounted: %s", _ops_exc
     )
 
+# =============================================================================
+# Operator uploads (Bojo attachments): POST /api/design-studio/assets/upload.
+# Additive to the design-studio surface; mounted defensively.
+# =============================================================================
+try:
+    from studio_upload_router import router as _upload_router
+
+    app.include_router(_upload_router)
+except Exception as _upload_exc:  # pragma: no cover - defensive mount
+    import logging as _logging4
+
+    _logging4.getLogger("northstar.studio").warning(
+        "studio upload router not mounted: %s", _upload_exc
+    )
+
 
 
 

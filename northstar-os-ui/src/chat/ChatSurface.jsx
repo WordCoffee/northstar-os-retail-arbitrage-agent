@@ -205,6 +205,15 @@ export default function ChatSurface({
   const [editing, setEditing] = useState(null)     // {id, text}
   const [paused, setPaused] = useState(false)     // human-in-the-loop handover
   const [workbenchOpen, setWorkbenchOpen] = useState(false)  // V3 S5 AutothinK panel
+  // Bojo composer options (turn contract v2). They travel with the turn and are
+  // never written into the operator's message.
+  const [media, setMedia] = useState('image')
+  const [thinking, setThinking] = useState('standard')
+  const [style, setStyle] = useState('balanced')
+  const [attachments, setAttachments] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [uploadNote, setUploadNote] = useState('')
+  const fileRef = useRef(null)
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
   const mediaRef = useRef(null)
@@ -387,7 +396,14 @@ export default function ChatSurface({
 
     try {
       const sid = await ensureSession()
-      await streamTurn(sid, { content, think: true }, ({ event, data }) => {
+      await streamTurn(sid, {
+        content,
+        think: thinking !== 'off',
+        media,
+        thinking,
+        style,
+        attachments: attachments.map((a) => a.id),
+      }, ({ event, data }) => {
         if (event === 'start') {
           setTurnId(data.turn_id || '')
           patchBot((m) => ({ ...m, model: data.model || m.model }))
@@ -561,6 +577,38 @@ export default function ChatSurface({
 
   const copyText = useCallback((text) => {
     try { navigator.clipboard.writeText(text || '') } catch { /* clipboard blocked */ }
+  }, [])
+
+  // Upload an operator attachment through the design-studio asset route. Cookie
+  // auth needs the CSRF double-submit header, exactly like foundation/api.js.
+  const uploadFile = useCallback(async (file) => {
+    if (!file) return
+    setUploading(true)
+    setUploadNote('')
+    try {
+      const m = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
+      const csrf = m ? decodeURIComponent(m[2]) : ''
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/design-studio/assets/upload', {
+        method: 'POST', credentials: 'include', body: fd,
+        headers: csrf ? { 'X-CSRF-Token': csrf } : {},
+      })
+      if (!res.ok) {
+        let detail = ''
+        try { const b = await res.json(); detail = typeof b.detail === 'string' ? b.detail : '' } catch { /* no body */ }
+        throw new Error(detail || `HTTP ${res.status}`)
+      }
+      const out = await res.json()
+      setAttachments((prev) => [...prev, {
+        id: out.id, name: (out.asset && out.asset.name) || file.name,
+      }])
+    } catch (e) {
+      setUploadNote(`Upload failed: ${e.message}`)
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
   }, [])
 
   return (
@@ -919,6 +967,58 @@ export default function ChatSurface({
         )}
 
         <div className="chat-composer">
+          <div className="chat-controls">
+            <div className="chat-media-toggle" role="tablist" aria-label="Output media">
+              {['image', 'video'].map((m) => (
+                <button key={m} type="button" role="tab" aria-selected={media === m}
+                  className={`chat-media-opt ${media === m ? 'is-on' : ''}`}
+                  onClick={() => setMedia(m)} data-testid={`chat-media-${m}`}>
+                  {m === 'image' ? 'Image' : 'Video'}
+                </button>
+              ))}
+            </div>
+            <label className="chat-control">
+              <span>Thinking</span>
+              <select value={thinking} onChange={(e) => setThinking(e.target.value)}
+                data-testid="chat-thinking">
+                <option value="off">Off</option>
+                <option value="standard">Standard</option>
+                <option value="deep">Deep</option>
+              </select>
+            </label>
+            <label className="chat-control">
+              <span>Style</span>
+              <select value={style} onChange={(e) => setStyle(e.target.value)}
+                data-testid="chat-style">
+                <option value="concise">Concise</option>
+                <option value="balanced">Balanced</option>
+                <option value="detailed">Detailed</option>
+              </select>
+            </label>
+            <button type="button" className="chat-icon-btn" title="Attach a file"
+              onClick={() => fileRef.current?.click()} disabled={uploading}
+              data-testid="chat-attach" aria-label="Attach a file">
+              {uploading ? '…' : '📎'}
+            </button>
+            <input ref={fileRef} type="file" hidden
+              accept="image/*,video/*,application/pdf,text/plain,text/csv"
+              onChange={(e) => uploadFile(e.target.files && e.target.files[0])}
+              data-testid="chat-file" />
+          </div>
+          {attachments.length > 0 && (
+            <div className="chat-attachments" data-testid="chat-attachments">
+              {attachments.map((a) => (
+                <span key={a.id} className="chat-attachment">
+                  {a.name}
+                  <button type="button" aria-label={`Remove ${a.name}`}
+                    onClick={() => setAttachments((prev) => prev.filter((x) => x.id !== a.id))}>
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+          {uploadNote && <div className="chat-hint">{uploadNote}</div>}
           {queue.length > 0 && (
             <div className="chat-queue-list" data-testid="chat-queue">
               {queue.map((q, i) => (
