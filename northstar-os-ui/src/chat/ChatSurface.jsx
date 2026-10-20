@@ -220,6 +220,9 @@ export default function ChatSurface({
   const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
   const voiceStateRef = useRef('idle')
   voiceStateRef.current = voiceState
+  // Always-current message list, so the loop can tell a NEW answer from history.
+  const messagesRef = useRef(messages)
+  messagesRef.current = messages
   const abortRef = useRef(null)
   const scrollRef = useRef(null)
   const mediaRef = useRef(null)
@@ -551,10 +554,16 @@ export default function ChatSurface({
   }, [streaming, onBusyChange])
 
   // In conversation mode, a finished turn is spoken and the loop keeps listening.
+  // Only a message that arrived AFTER the loop started is spoken: enabling Talk
+  // must never blurt out the previous conversation's last answer.
   useEffect(() => {
     if (!conversation || streaming) return
+    const c = convRef.current
+    if (!c) return
     const last = [...messages].reverse().find((m) => m.role === 'assistant' && m.content)
-    if (last) speak(last.content)
+    if (!last || last.id === c.seenMsgId) return
+    c.seenMsgId = last.id
+    speak(last.content)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streaming, conversation])
 
@@ -763,6 +772,9 @@ export default function ChatSurface({
       analyser.fftSize = 1024
       source.connect(analyser)
       convRef.current = { stream, ctx, analyser, audio: null, rec: null, cancelled: false }
+      const lastAssistant = [...messagesRef.current].reverse()
+        .find((m) => m.role === 'assistant' && m.content)
+      convRef.current.seenMsgId = lastAssistant ? lastAssistant.id : ''
       setConversation(true)
       listenOnce()
     } catch (e) {
