@@ -24,7 +24,6 @@ from typing import Dict, List, Optional, Tuple
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 import numpy as np
-from scipy import ndimage
 
 import dieline_art as da
 from mockup_compositor import draw_cert_icon, recolor
@@ -2214,45 +2213,6 @@ def hericium_plate(ground, body, shadow, *, flat: float = 1.0) -> Image.Image:
     plate = Image.fromarray(np.clip(col, 0, 255).astype(np.uint8), "RGB")
     _PLATE_CACHE[key] = plate
     return plate.copy()
-
-
-def hericium_cutout(body, shadow) -> Image.Image:
-    """RGBA Hericium illustration with a texture matte — the printed-paper field
-    of the source photo is removed instead of being ramped into the stock, so the
-    art can sit on a DARK ground (the green botanical sweep)."""
-    key = ("cut", tuple(body), tuple(shadow))
-    cached = _PLATE_CACHE.get(key)
-    if cached is not None:
-        return cached.copy()
-    im = Image.open(J_SOURCE).convert("RGB")
-    im = im.resize((im.width * 2, im.height * 2), Image.LANCZOS)
-    g = np.asarray(im.convert("L"), dtype=np.float32) / 255.0
-
-    # the paper field is smooth, the fungus is textured -> texture energy separates them
-    hp = g - np.asarray(Image.fromarray((g * 255).astype(np.uint8))
-                        .filter(ImageFilter.GaussianBlur(9)), dtype=np.float32) / 255.0
-    energy = np.asarray(Image.fromarray((np.abs(hp) * 255 * 8).clip(0, 255).astype(np.uint8))
-                        .filter(ImageFilter.GaussianBlur(5)), dtype=np.float32) / 255.0
-    m = _smoothstep(0.10, 0.34, energy)
-    m = np.maximum(m, _smoothstep(0.86, 0.55, g))          # keep solid shadow areas
-    m = ndimage.binary_closing(m > 0.4, iterations=5).astype(np.float32)
-    m = ndimage.binary_fill_holes(m > 0.4).astype(np.float32)
-    lab, n = ndimage.label(m > 0.5)
-    if n > 1:
-        sizes = ndimage.sum(m, lab, range(1, n + 1))
-        m = (lab == (int(np.argmax(sizes)) + 1)).astype(np.float32)
-    m = ndimage.gaussian_filter(m, 2.0)
-    m = np.clip((m - 0.20) / 0.55, 0, 1)
-
-    tone = np.clip((g - 0.35) / 0.62, 0, 1)
-    col = (np.array(shadow, dtype=np.float32)[None, None]
-           + tone[..., None] * (np.array(body, dtype=np.float32) - np.array(shadow, dtype=np.float32))[None, None])
-    out = np.zeros((g.shape[0], g.shape[1], 4), dtype=np.uint8)
-    out[..., :3] = np.clip(col, 0, 255).astype(np.uint8)
-    out[..., 3] = (m * 255).astype(np.uint8)
-    img = Image.fromarray(out, "RGBA")
-    _PLATE_CACHE[key] = img
-    return img.copy()
 
 
 def hericium_plaque(ground, body, shadow, *, feather: float = 0.16) -> Image.Image:
