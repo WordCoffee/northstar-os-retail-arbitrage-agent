@@ -1,4 +1,4 @@
-node_modules/
+﻿node_modules/
 .env
 .env.*
 !.env.example
@@ -8,7 +8,7 @@ data/snapshots/*.json
 logs/
 .DS_Store
 
-# Northstar OS Retail Arbitrage Agent — repo-hygiene guards
+# Northstar OS Retail Arbitrage Agent â€” repo-hygiene guards
 # Prevent git add -A from ever re-sweeping a WSL venv / site-packages dump
 # or a duplicate backend audit-export snapshot into the index.
 venv-wsl/
@@ -17,7 +17,7 @@ venv*/
 __pycache__/
 *.pyc
 Northstar_backend_audit_export/
-# Pipeline output artifacts — never commit generated exports (D4-F2).
+# Pipeline output artifacts â€” never commit generated exports (D4-F2).
 # Historical blobs (commit 009ac85) embedded third-party URL query tokens;
 # output dirs are now ignored going forward. History rewrite = operator decision.
 data/scored/
@@ -35,3 +35,7 @@ data/normalized/
 
 # local build snapshots (rollback tooling) - never committed
 backups/
+
+# Regenerable scan dumps (scripts rebuild them; too large to version)
+reports/video_scan/*.jsonl
+!reports/video_scan/github.jsonl

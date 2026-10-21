@@ -1,0 +1,19 @@
+{
+  "started": "2026-10-21T20:07:48+00:00",
+  "wide": true,
+  "github_queries": 0,
+  "hf_queries": 42,
+  "pre_existing": {
+    "github": 300,
+    "huggingface": 10807
+  },
+  "hf_calls": 81,
+  "finished": "2026-10-21T20:08:11+00:00",
+  "github_new": 0,
+  "hf_new": 27322,
+  "totals": {
+    "github": 300,
+    "huggingface": 38129,
+    "all": 38429
+  }
+}
