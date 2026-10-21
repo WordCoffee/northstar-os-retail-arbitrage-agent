@@ -68,9 +68,28 @@ approved.
 5-clip pack is 25 s and a 10-clip pack is 50 s — neither maps cleanly. A
 `clip_pack` job is still needed so the credit quote matches the deliverable.
 
-## Batch status
+## Batch result — five clips, completed
 
-Five clips (same still, five motion prompts, seeds 42/137/2024/777/5150) run
-sequentially in `tools/render_batch.ps1`, writing
-`reports/video_scan/batch/summary.jsonl`. Results are appended to this report
-when the run completes.
+Same still, five motion prompts, seeds 42 / 137 / 2024 / 777 / 5150, run
+sequentially by `tools/render_batch.ps1`.
+
+| # | motion | wall | peak VRAM |
+|---|---|---|---|
+| 01 | dolly-in | 693.1 s | 11,182 MB |
+| 02 | orbit | 672.3 s | 11,161 MB |
+| 03 | rack focus | 692.0 s | 11,152 MB |
+| 04 | light sweep | 680.5 s | 11,184 MB |
+| 05 | low push-in | 700.5 s | 11,184 MB |
+| | **mean** | **687.7 s** | **11.2 GB warm** |
+
+- **Total: 57.3 minutes of GPU for five clips** (plus seconds of ffmpeg).
+- Stable throughput: every clip landed between 672.3 s and 700.5 s — a **±2 %**
+  spread, which is what makes quoting honest (5 clips ≈ 1 h, 10 ≈ 1 h 55).
+- Every clip: 5.04 s, 960×960, 24 fps, VP9 0.68–0.73 MB → H.264 0.61–0.65 MB.
+- Label text stayed legible in all five mid-frames (`batch_contact.png`), and
+  each prompt produced visibly different camera motion.
+- Warm peak VRAM is **11.2 GB**, below the 12.8 GB cold run (that included the
+  model load). Either way the 13 GB brain still cannot co-reside.
+
+Files: `reports/video_scan/batch/` (`.webm` + `.mp4` + `summary.jsonl` +
+`log.txt`), contact sheet `reports/video_scan/batch_contact.png`.

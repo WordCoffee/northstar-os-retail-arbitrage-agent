@@ -43,4 +43,6 @@ reports/video_scan/*.jsonl
 # Video lane working files (regenerable; keep only the published samples)
 reports/video_scan/*.webm
 reports/video_scan/f_*.png
-reports/video_scan/batch/
+reports/video_scan/batch/*
+!reports/video_scan/batch/*.mp4
+!reports/video_scan/batch/summary.jsonl
