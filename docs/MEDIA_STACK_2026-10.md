@@ -107,3 +107,27 @@ enforced (brain unloaded) for every test.
    **applies at next reboot** and reclaims ~12 GB then.
 5. Disk hygiene: pip cache purge (10.2 GB), HF cache cleared (3.6 GB), TEMP
    cleanup (4.1 GB).
+
+## Narration lane (added 2026-10-22)
+
+Local speech is wired into the pipeline, so a narrated product video needs no
+provider key.
+
+- `Northstar_backend/local_voice.py` — the lane. Engines in order: **piper**
+  (when `PIPER_EXE` + `PIPER_MODEL` point at a real model) then **SAPI**
+  (Windows System.Speech). `engines()` reports what is actually present;
+  `synthesize()` raises with the real reason when nothing can speak.
+- `studio_generation.generate_video(..., narration="script")` speaks the text
+  and muxes it with ffmpeg `-shortest` (AAC 128k). A dead speech engine does
+  **not** fail the render: the clip returns silent with `audio.ok = false` and
+  the reason, so a silent clip is never passed off as narrated.
+- `GET /api/design-studio/lanes/status` now reports the `narration` lane.
+- `tools/local_voice_service.py` still serves the SPA on :8321 for the
+  VoiceStudio adapter; the pipeline uses the in-process engine so it works
+  whether or not that service is running.
+
+Verified live: 138,694-byte WAV (22.05 kHz mono PCM, 3.14 s) and a narrated MP4
+carrying h264 video + AAC audio. Tests: `test_local_voice.py` 12 passed.
+
+Quality note: SAPI is serviceable, not ElevenLabs. Point `PIPER_MODEL` at a
+Piper voice for a real neural read — still offline, still free.

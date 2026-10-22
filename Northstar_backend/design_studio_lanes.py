@@ -71,6 +71,11 @@ def lanes_status(acct: str = Depends(studio_account)):
         profiles = [p.name for p in pp.available_cmyk_profiles()]
     except Exception:  # noqa: BLE001
         profiles = []
+    try:
+        import local_voice as lv
+        voice = lv.engines()
+    except Exception as exc:  # noqa: BLE001 - report the real reason, never fake it
+        voice = {"preferred": None, "error": f"{type(exc).__name__}: {exc}"[:200]}
     engine = sg.engine_status()
     return {
         "engine": engine,
@@ -84,6 +89,14 @@ def lanes_status(acct: str = Depends(studio_account)):
             "main_check": {"available": True, "gpu": False},
             "prepress": {"available": bool(profiles), "profiles": profiles,
                          "gpu": False},
+            "narration": {"available": bool(voice.get("preferred")),
+                          "engine": voice.get("preferred"),
+                          "engines": {k: bool((voice.get(k) or {}).get("available"))
+                                      for k in ("piper", "sapi")},
+                          "ffmpeg": bool((voice.get("ffmpeg") or {}).get("available")),
+                          "gpu": False,
+                          "note": ("Local speech + ffmpeg mux: narrated video needs no "
+                                   "provider key. Video stays silent when this is off.")},
         },
     }
 

@@ -58,6 +58,14 @@
     "binding_constraint": "RAM 15.4 GB, not VRAM. Edit lane needs --cache-none; without it ComfyUI is killed mid-render.",
     "report": "reports/creative_pipeline_readiness_20261022.md"
   },
+  "local_first_20261022": {
+    "finding": "Grepped 15 creative modules for cloud provider references (fal, FAL_KEY, replicate, openrouter, gpt-image, nano-banana, elevenlabs, deepgram, suno): ZERO matches. The creative pipeline is already local-only by construction; the cloud lane lives in model_router + model-suite.json, not in the creative code. 'Build for local, cloud follows' is gap-filling, not a rewrite.",
+    "gap_fixed": "There was no audio anywhere in the pipeline. NEW Northstar_backend/local_voice.py: engines piper (PIPER_EXE+PIPER_MODEL) then sapi (Windows System.Speech), engines() reports what is present, synthesize() raises with the real reason when nothing can speak, mux_audio() attaches an AAC track via ffmpeg -shortest. WIRED: studio_generation.generate_video(narration=...) speaks the script and muxes it; a dead speech engine does NOT fail the render - the clip returns silent with audio.ok=false and the reason. GET /api/design-studio/lanes/status now reports a narration lane.",
+    "live_evidence": "WAV 138,694 bytes pcm_s16le 22050 Hz mono 3.14 s; narrated MP4 with 0,h264,video,2.041667 and 1,aac,audio,1.996916. Zero provider keys, zero spend.",
+    "tests": "test_local_voice.py 12 passed; 112 passed / 1 skipped across 7 creative+studio suites.",
+    "still_missing_local": "transcription not wired into the backend (faster-whisper lives in the OpenMontage venv); model upscale still LANCZOS-only; vision QC lane not wired (qwen2.5vl:7b installed and captioning but unused by the pipeline); compose/typography not re-run since 2026-10-16; no Piper voice model file on disk yet.",
+    "report": "reports/local_first_creative_buildout_20261022.md"
+  },
   "phases_completed": [
     "Phase 1: Foundation",
     "Phase 2: SourceScout",

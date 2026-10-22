@@ -22,6 +22,7 @@ import time
 import urllib.parse
 import urllib.request
 import uuid
+from typing import Optional
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8188"  # ComfyUI's own default; override with COMFYUI_URL
 
@@ -557,7 +558,16 @@ def generate_cutout(image_bytes: bytes, *, filename: Optional[str] = None) -> di
 
 
 def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None,
+                   narration: Optional[str] = None, voice: Optional[str] = None,
                    on_progress=None) -> dict:
+    """Render a clip locally; optionally attach a locally synthesised narration.
+
+    ``narration`` is plain text. It is spoken by the machine's own speech engine
+    (Northstar_backend/local_voice.py) and muxed onto the clip with ffmpeg, so a
+    narrated product video needs no provider key and costs nothing. When the
+    narration cannot be produced the render still returns, with ``audio.error``
+    set to the real reason - a silent clip is never passed off as a narrated one.
+    """
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
     if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
@@ -582,8 +592,36 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
         raise RuntimeError("the render finished but produced no video output")
     data = _fetch_output(vid)
     release_models()
-    return {
+    result = {
         "bytes": data, "ext": "mp4", "mime": "video/mp4",
         "model": "wan2.2-ti2v-5b-q5", "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": round(frames / 24.0, 1),
+        "audio": None,
     }
+    if narration and str(narration).strip():
+        result["audio"] = _attach_narration(result["bytes"], str(narration), voice)
+        if result["audio"].get("ok"):
+            result["bytes"] = result["audio"].pop("bytes")
+            result["mime"] = "video/mp4"
+    return result
+
+
+def _attach_narration(video_bytes: bytes, text: str, voice=None) -> dict:
+    """Speak `text` locally and mux it onto the clip. Never raises, never lies."""
+    try:
+        import local_voice
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"local_voice unavailable: {type(exc).__name__}: {exc}"}
+    try:
+        spoken = local_voice.synthesize(text, voice=voice)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"[:300],
+                "engine": None}
+    try:
+        muxed = local_voice.mux_audio(video_bytes, spoken["bytes"])
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "error": f"mux failed: {type(exc).__name__}: {exc}"[:300],
+                "engine": spoken.get("engine")}
+    return {"ok": True, "bytes": muxed, "engine": spoken.get("engine"),
+            "voice": spoken.get("voice"), "narration_bytes": len(spoken["bytes"]),
+            "narration_seconds_approx": round(len(spoken["bytes"]) / 44100.0, 1)}

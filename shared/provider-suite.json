@@ -169,7 +169,7 @@
       "cost": "free_local",
       "installed": "installed",
       "unlocks": "Always-available local speech for previews and accessibility reads.",
-      "notes": "tools/local_voice_service.py. Quality is below ElevenLabs; it exists so a voice path works with zero keys."
+      "notes": "tools/local_voice_service.py serves the SPA on :8321; Northstar_backend/local_voice.py is the same engine used in-process by the pipeline. WIRED 2026-10-22: studio_generation.generate_video(narration=...) speaks the script and muxes it onto the clip with ffmpeg (-shortest), so narrated product video needs no provider key. Verified live: 138,694-byte WAV, 22.05 kHz mono PCM, and a narrated MP4 carrying h264 video + AAC audio. Quality is below ElevenLabs; it exists so a voice path works with zero keys."
     },
     "faster_whisper": {
       "name": "faster-whisper",
