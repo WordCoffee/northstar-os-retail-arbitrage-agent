@@ -40,6 +40,24 @@
     "not_touched": "ComfyUI-LTX code ~4.9 GB (follow-up), Chrome caches ~4 GB (Chrome running, Chrome Connect depends on it), Recycle Bin 1.1 GB, Docker 22.5 GB (daemon down), .ollama models, opencode.db+snapshot 5.7 GB (session history), XboxGames 140 GB, C:\\AI\\northstar-remodeler 7.1 GB (unknown operator project).",
     "report": "reports/deep_clean_20261022.md"
   },
+  "creative_readiness_20261022": {
+    "verdict": "READY FOR REAL TESTING with one precondition: start ComfyUI via tools/start_comfyui.ps1 (--cache-none). Every lane below was executed through the service code, not a hand-built graph.",
+    "evidence": {
+      "image": "Flux.2 Klein 9B GGUF -> 1.45 MB PNG in 73.3 s (seed 4242)",
+      "cutout": "BiRefNet -> 1.65 MB RGBA, 694,883 transparent px / 349,861 opaque px",
+      "edit": "Qwen-Image-Edit 2511 -> 1.03 MB PNG in 163.6 s, copy-drift gate preserves_copy true",
+      "video": "Wan 2.2 TI2V 5B -> h264 832x480, 49 frames, 2.04 s, 260 KB, 87.6 s",
+      "ultratex": "10.27 MB GLB, valid glTF, 200 s (bench only - FLUX non-commercial weights)",
+      "dieline": "doypack SVG 2,801 B + native PDF 2,354 B (%PDF- magic)",
+      "prepress": "RSWOP.icm, max TAC 272.5% vs 300 limit, 0 px over, dE76 gamut check real; flagged 6.28% pixels >8 dE (warm oranges near/outside press gamut)",
+      "ocr_gate": "rapidocr status ok, contains_text false, boxes 0",
+      "readiness": "package_readiness -> blocked on MAIN (non-white background, fill unmeasurable without alpha) - correct for a backdrop prompt, guard working",
+      "vision": "qwen2.5vl:7b captioned a real Northstar plate in 17.1 s"
+    },
+    "unverified": "Compose/typography not re-run this pass (needs a real plate + quad preset; last verified 2026-10-16). Quality not judged - only that each lane executes and produces a valid artifact. Video final tier (97 frames) never attempted. Print not checked against a co-packer's die drawing.",
+    "binding_constraint": "RAM 15.4 GB, not VRAM. Edit lane needs --cache-none; without it ComfyUI is killed mid-render.",
+    "report": "reports/creative_pipeline_readiness_20261022.md"
+  },
   "phases_completed": [
     "Phase 1: Foundation",
     "Phase 2: SourceScout",
@@ -58,6 +76,22 @@
     "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) — scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. Item 4 (local admin/tenant/backup-restore) DONE (LOCAL) — admin UI sample-mode verified (verify-admin.cjs 34/0: all /beta-ops pages render for platform_admin, destructive controls disabled, nav renders, operator→/home + anonymous→/sign-in isolation), backend admin/tenant/audit/migration/e2e suites 92/0, local SQLite backup/restore drill test_backup_restore_drill.py 2/0 (round-trip parity + integrity_check + disposable-name guard), SOP/checklist in docs/ADMIN_SOP_AND_INTEGRITY.md, assumptions A-10..A-13. Item 5 (memory-limits review, evidence-only) DONE — no mem_limit/deploy.resources-memory in docker-compose.yml/hosted.yml; only GPU device reservation in docker-compose.local.yml (Ollama); ~0.46-0.78 GB RSS of 12 GB Always-Free A1 per OA-2 prep; assumption A-14; no compose change. Item 6 (local runbook + one-command verify) DONE — cites parallel-session docs/LOCAL_RUNBOOK.md + SERVICE docs; adds ADMIN_SOP_AND_INTEGRITY.md + final completion report; verifies foundation 757/59s, admin subset 92/0, drill 2/0, GG 16/0, acceptance 32/0, admin UI 34/0, npm run build 0 errors; assumption A-15. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md."
   ],
   "known_issues": [
+    {
+      "id": "unload_brain_single_model_eviction_20261022",
+      "discovered_in": "Creative readiness test 2026-10-22: first end-to-end render through studio_generation.generate_image",
+      "discovered_at": "2026-10-22T08:10:00Z",
+      "description": "generate_image failed with 'DefaultCPUAllocator: not enough memory: you tried to allocate 100663296 bytes' after reporting the engine armed. Root cause: unload_brain() evicted only NORTHSTAR_BRAIN_MODEL (default northstaros-qwen3.8:27b) and then verified only that id, so qwen2.5vl:7b - loaded by the vision work earlier the same session - stayed resident holding 6.4 GB VRAM while the function returned True. ComfyUI then loaded against a GPU that was not actually free.",
+      "resolution": "unload_brain now drains Ollama /api/ps: it evicts EVERY resident model (trying /api/generate then /api/embeddings so embedding models unload too) and returns True only when the list is empty. An explicit NORTHSTAR_BRAIN_MODEL still pins eviction to one id. Verified live: resident ['qwen2.5vl:7b'] -> [] with VRAM at 406 MiB; render then completed in 73.3 s. Four tests added to test_studio_render_guard.py (7 passed total).",
+      "status": "resolved"
+    },
+    {
+      "id": "creative_edit_lane_ram_ceiling_20261022",
+      "discovered_in": "Creative readiness test 2026-10-22: edit lane on a generated plate",
+      "discovered_at": "2026-10-22T08:40:00Z",
+      "description": "The edit lane killed the ComfyUI process with no traceback (the log simply stops). qwen-image-edit-2511-Q4_K_M is 12.3 GB and the qwen_3_8b text encoder is 8 GB; ComfyUI caches both, so peak commit reached ~20 GB against 15.4 GB RAM + a fixed 24 GB pagefile with Chrome/OpenCode resident. This box is RAM-bound, not VRAM-bound.",
+      "resolution": "Start ComfyUI with --cache-none so the encoder is freed before the unet loads (peak drops to roughly the largest single model). After the flag the edit lane completed in 163.6 s and the copy-drift gate returned preserves_copy true. Canonicalised in tools/start_comfyui.ps1 and docs/MEDIA_STACK_2026-10.md; starting ComfyUI without the flag will kill the edit lane again.",
+      "status": "resolved"
+    },
     {
       "id": "local_27b_model_fails_to_load_cuda_20261022",
       "discovered_in": "Deep clean 2026-10-22: verifying that removing GGUF source files was safe before deleting them",

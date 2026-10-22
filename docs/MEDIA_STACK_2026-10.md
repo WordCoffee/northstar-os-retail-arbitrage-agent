@@ -22,9 +22,12 @@ fit to the actual machine — RTX 5080 Laptop 16 GB VRAM / 15.4 GB RAM / C: SSD)
 ## Runtime
 
 - **ComfyUI** `C:\Users\T2Hol\ComfyUI` (git clone, venv Python 3.14, CUDA via
-  torch, updated to 0.40.0 on 2026-10-14). Start: `venv\Scripts\python.exe
-  main.py --listen 127.0.0.1 --port 8188` — the upstream default, which is what
-  `studio_generation` targets. Pin another port only via `COMFYUI_URL`.
+  torch, updated to 0.40.0 on 2026-10-14). **Start it with
+  `powershell -File tools/start_comfyui.ps1`** — it passes `--cache-none`, which
+  the edit lane requires on this 15.4 GB-RAM box (otherwise the 8 GB text encoder
+  and the 12.3 GB edit model are resident together and Windows kills the process).
+  Port 8188 is the upstream default and what `studio_generation` targets; pin
+  another port only via `COMFYUI_URL`.
 - Custom nodes: ComfyUI-GGUF, controlnet_aux, IPAdapter_plus, ComfyUI-QwenTTS.
 - **ffmpeg** — required for clip tooling (`tools/clip_split.py`). Discovered via
   $FFMPEG / PATH / WinGet Links / imageio-ffmpeg fallback.

@@ -80,3 +80,50 @@ def test_unload_brain_returns_true_when_ollama_unreachable(monkeypatch):
 
     monkeypatch.setattr(_urlreq, "urlopen", fake_urlopen)
     assert sg.unload_brain(wait_s=1) is True
+
+
+# --- 2026-10-22: eviction must drain EVERY resident model -------------------
+#
+# The old implementation evicted one hard-coded id and then checked only that
+# id. A vision model loaded by an earlier call (qwen2.5vl:7b, 6.4 GB) stayed
+# resident while unload_brain reported success, and the next render died.
+
+def test_unload_brain_evicts_every_resident_model(monkeypatch):
+    state = {"resident": ["northstaros-qwen3.8:27b", "qwen2.5vl:7b"], "evicted": []}
+
+    def fake_resident():
+        return list(state["resident"])
+
+    def fake_evict(name):
+        state["evicted"].append(name)
+        if name in state["resident"]:
+            state["resident"].remove(name)
+
+    monkeypatch.setattr(sg, "_resident_models", fake_resident)
+    monkeypatch.setattr(sg, "_evict", fake_evict)
+    monkeypatch.delenv("NORTHSTAR_BRAIN_MODEL", raising=False)
+    monkeypatch.setattr(sg.time, "sleep", lambda s: None)
+
+    assert sg.unload_brain(wait_s=0) is True
+    assert set(state["evicted"]) == {"northstaros-qwen3.8:27b", "qwen2.5vl:7b"}
+    assert state["resident"] == []
+
+
+def test_unload_brain_is_false_when_a_model_will_not_leave(monkeypatch):
+    monkeypatch.setattr(sg, "_resident_models", lambda: ["stuck:1b"])
+    monkeypatch.setattr(sg, "_evict", lambda name: None)
+    monkeypatch.setattr(sg.time, "sleep", lambda s: None)
+    assert sg.unload_brain(wait_s=0) is False
+
+
+def test_unload_brain_honours_explicit_brain_model(monkeypatch):
+    """NORTHSTAR_BRAIN_MODEL still pins eviction to one id when the operator wants that."""
+    evicted = []
+    monkeypatch.setenv("NORTHSTAR_BRAIN_MODEL", "northstaros-qwen3.8:27b")
+    monkeypatch.setattr(sg, "_resident_models",
+                        lambda: ["northstaros-qwen3.8:27b", "qwen2.5vl:7b"])
+    monkeypatch.setattr(sg, "_evict", lambda name: evicted.append(name))
+    monkeypatch.setattr(sg.time, "sleep", lambda s: None)
+    sg.unload_brain(wait_s=0)
+    assert evicted == ["northstaros-qwen3.8:27b"]
+

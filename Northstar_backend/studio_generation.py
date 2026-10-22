@@ -236,40 +236,65 @@ def release_models() -> None:
         pass
 
 
-def unload_brain(wait_s: float = 45.0) -> bool:
-    """Evict the local brain from VRAM before a render, then VERIFY it.
-
-    One 16 GB GPU: the brain (~14 GB, keep_alive=forever) and a klein render
-    cannot coexist. Fire-and-forget eviction used to race the render, and
-    ComfyUI OOM'd inside CLIPTextEncode. This now polls Ollama /api/ps until
-    the brain is gone (or wait_s elapses) and returns whether VRAM should be free.
-    Returns True when eviction succeeded OR verification is unavailable (best
-    effort preserved); False only when the brain is provably still resident.
-    """
-    model = os.environ.get("NORTHSTAR_BRAIN_MODEL", "northstaros-qwen3.8:27b")
+def _resident_models() -> list | None:
+    """Names Ollama currently has loaded, or None when /api/ps is unavailable."""
     try:
-        req = urllib.request.Request(
-            "http://127.0.0.1:11434/api/generate",
-            data=json.dumps({"model": model, "keep_alive": 0}).encode(),
-            headers={"Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(req, timeout=30):
-            pass
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=5) as resp:
+            ps = json.loads(resp.read().decode("utf-8", "replace") or "{}")
+        return [str(m.get("name", "")) for m in ps.get("models", []) if m.get("name")]
     except Exception:
-        return True  # nothing resident that we can evict; proceed best-effort
-    deadline = time.time() + max(0.0, float(wait_s))
-    base = model.split(":")[0]
-    while True:
+        return None
+
+
+def _evict(model: str) -> None:
+    """Ask Ollama to drop one model now. Works for chat and embedding models."""
+    for path, payload in (
+        ("/api/generate", {"model": model, "keep_alive": 0}),
+        ("/api/embeddings", {"model": model, "prompt": "", "keep_alive": 0}),
+    ):
         try:
-            with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=5) as resp:
-                ps = json.loads(resp.read().decode("utf-8", "replace") or "{}")
-            resident = [str(m.get("name", "")) for m in ps.get("models", [])]
+            req = urllib.request.Request(
+                "http://127.0.0.1:11434" + path,
+                data=json.dumps(payload).encode(),
+                headers={"Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=30):
+                return
         except Exception:
+            continue
+
+
+def unload_brain(wait_s: float = 45.0) -> bool:
+    """Evict EVERY locally resident model from VRAM before a render, then VERIFY.
+
+    One 16 GB GPU: the brain and a klein render cannot coexist. Fire-and-forget
+    eviction used to race the render, and ComfyUI OOM'd inside CLIPTextEncode.
+
+    This used to evict a single hard-coded model id (NORTHSTAR_BRAIN_MODEL). That
+    returned True while a *different* model stayed resident and ate the VRAM —
+    observed 2026-10-22 with qwen2.5vl:7b holding 6.4 GB after a vision call.
+    It now drains Ollama's /api/ps list and only reports success when the list is
+    empty, so any model the studio touched earlier is cleaned up too.
+
+    Returns True when eviction succeeded OR verification is unavailable (best
+    effort preserved); False only when a model is provably still resident.
+    """
+    forced = os.environ.get("NORTHSTAR_BRAIN_MODEL")
+    deadline = time.time() + max(0.0, float(wait_s))
+    while True:
+        resident = _resident_models()
+        if resident is None:
             return True  # verification unavailable: never block renders on a failed check
-        if not any(base in r for r in resident):
+        targets = [forced] if forced else resident
+        if not resident or (forced and not any(forced.split(":")[0] in r for r in resident)):
             return True
+        for name in targets:
+            _evict(name)
         if time.time() >= deadline:
-            return False
+            remaining = _resident_models() or []
+            if forced:
+                return not any(forced.split(":")[0] in r for r in remaining)
+            return not remaining
         time.sleep(2)
 
 
