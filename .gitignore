@@ -53,3 +53,7 @@ reports/improvement/loop.log
 
 # Local service launch logs (runtime)
 reports/api_launch*.log
+
+# Local dev server logs (runtime)
+reports/ui_dev*.log
+reports/voice*.log
