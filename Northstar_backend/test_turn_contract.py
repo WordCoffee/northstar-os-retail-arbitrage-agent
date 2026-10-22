@@ -26,8 +26,38 @@ def test_defaults_are_v1_behaviour():
     assert t.media == "image"
     assert t.thinking == "standard"
     assert t.style == "balanced"
+    assert t.mode == "standard"
     assert t.attachments == []
     assert t.think is True
+
+
+# ── v3 task posture: creative / standard / thinking ─────────────────────────
+
+@pytest.mark.parametrize("mode", ["creative", "standard", "thinking"])
+def test_each_mode_is_accepted(mode):
+    assert chat_router.TurnIn(content="x", mode=mode).mode == mode
+
+
+def test_unknown_mode_is_rejected():
+    with pytest.raises(ValidationError):
+        chat_router.TurnIn(content="x", mode="turbo")
+
+
+@pytest.mark.parametrize("mode,needle", [
+    ("creative", "Mode: creative"),
+    ("standard", "Mode: standard"),
+    ("thinking", "Mode: thinking"),
+])
+def test_directive_names_the_mode(mode, needle):
+    assert needle in chat_router.turn_directive({"mode": mode})
+
+
+def test_mode_sets_the_effort_ceiling():
+    # thinking always takes the full budget; creative stays at medium for speed.
+    assert chat_router._think_level(True, "standard", "hi", 0, "thinking") is True
+    assert chat_router._think_level(True, "standard", "hi", 0, "creative") == "medium"
+    # an explicit "off" wins over any mode.
+    assert chat_router._think_level(True, "off", "hi", 0, "thinking") is False
 
 
 def test_valid_v2_turn_is_accepted():

@@ -539,6 +539,9 @@ class TurnIn(BaseModel):
     media: str = Field("image", pattern="^(image|video)$")
     thinking: str = Field("standard", pattern="^(off|standard|deep)$")
     style: str = Field("balanced", pattern="^(concise|balanced|detailed)$")
+    # v3: the task posture. Orthogonal to `thinking` (which sets the effort):
+    # creative diverges, standard answers, thinking verifies.
+    mode: str = Field("standard", pattern="^(creative|standard|thinking)$")
     attachments: List[str] = Field(default_factory=list, max_length=12)
 
 
@@ -584,11 +587,17 @@ def _auto_escalate(content: str, attachments: int = 0) -> bool:
     return any(sig in text for sig in _ESCALATE_SIGNALS)
 
 
-def _think_level(think: bool, thinking: str, content: str = "", attachments: int = 0):
-    """Composer thinking switch -> Ollama think flag/level."""
+def _think_level(think: bool, thinking: str, content: str = "",
+                 attachments: int = 0, mode: str = "standard"):
+    """Composer switches + task mode -> Ollama think flag/level."""
     if not think or thinking == "off":
         return False
-    if thinking == "deep" or _auto_escalate(content, attachments):
+    if thinking == "deep" or mode == "thinking":
+        return True
+    if mode == "creative":
+        # Divergence, not verification: medium is enough and keeps ideation fast.
+        return "medium"
+    if _auto_escalate(content, attachments):
         return True
     level = _THINK_STANDARD.lower()
     if level in ("true", "1", "default", "xhigh"):
@@ -599,6 +608,26 @@ def _think_level(think: bool, thinking: str, content: str = "", attachments: int
         return "medium"
     return level
 
+
+# The task posture. Server-owned so a client cannot widen what the model may do;
+# the mode changes the SHAPE of the answer and which effort it runs at.
+_MODE_CONTRACT = {
+    "creative": (
+        "Mode: creative. Give 3 distinct options unless told otherwise, one line of "
+        "rationale each, then the concrete artefact to make. Diverge first; do not "
+        "self-verify or hedge, and do not ask for permission before drafting."
+    ),
+    "standard": (
+        "Mode: standard. Put the answer in the first sentence. At most one "
+        "clarifying question, and only when the answer would otherwise be wrong. "
+        "No preamble, no restating the request, no closing filler."
+    ),
+    "thinking": (
+        "Mode: thinking. State the assumptions, verify the checkable parts (numbers, "
+        "code, claims about the operator's data), then answer. Name uncertainty "
+        "explicitly. Do not narrate the process or repeat a check you already did."
+    ),
+}
 
 _STYLE_HINT = {
     "concise": "Style: concise. Short paragraphs, no filler.",
@@ -612,6 +641,9 @@ def turn_directive(options: Optional[Dict[str, Any]]) -> str:
     o = options or {}
     lines = ["[Bojo turn options]",
              "Requested output: " + _MEDIA_HINT.get(o.get("media"), _MEDIA_HINT["image"])]
+    mode = _MODE_CONTRACT.get(str(o.get("mode") or ""))
+    if mode:
+        lines.append(mode)
     thinking = _THINKING_HINT.get(o.get("thinking"), "")
     if thinking:
         lines.append(thinking)
@@ -759,9 +791,10 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
     generator = turn_event_stream(
         db, acct, session, body.content,
         think=_think_level(body.think, body.thinking, body.content,
-                           len(body.attachments)), model=body.model,
+                           len(body.attachments), body.mode), model=body.model,
         options={"media": body.media, "thinking": body.thinking,
-                 "style": body.style, "attachments": body.attachments})
+                 "style": body.style, "mode": body.mode,
+                 "attachments": body.attachments})
     return StreamingResponse(
         generator,
         media_type="text/event-stream",
