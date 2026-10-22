@@ -223,8 +223,16 @@ def _vision_gen_entry(cfg: Dict, quality: Optional[str]) -> Tuple[Optional[str],
 
 
 def resolve_vision(tier: str, provider: str = "cloud", role: str = "generate",
-                   quality: Optional[str] = None) -> VisionResolution:
-    """Resolve a vision tier for understanding (image->text) or generation."""
+                   quality: Optional[str] = None,
+                   installed: Optional[List[str]] = None) -> VisionResolution:
+    """Resolve a vision tier for understanding (image->text) or generation.
+
+    ``installed`` is the list of local model ids Ollama actually reports (the
+    same list ``catalog()`` receives). When supplied, a local tier whose model
+    is not installed resolves to ``available=False`` with
+    ``local_model_not_installed`` instead of claiming a capability that has no
+    weights behind it. Omit it to keep the pure config view.
+    """
     tier = (tier or "V1").upper()
     provider = (provider or "cloud").lower()
     cfg = (SUITE.get("vision", {}).get("tiers", {}) or {}).get(tier)
@@ -237,6 +245,9 @@ def resolve_vision(tier: str, provider: str = "cloud", role: str = "generate",
         backend = "local" if provider == "local" else u.get("cloud_provider", "openrouter")
         if not model:
             return VisionResolution(tier, provider, role, backend, None, None, False, "no_understanding_model")
+        if provider == "local" and installed is not None and model not in installed:
+            return VisionResolution(tier, provider, role, backend, model, None, False,
+                                    "local_model_not_installed")
         armed = provider_armed(backend)
         return VisionResolution(tier, provider, role, backend, model, None, armed,
                                 "ok" if armed else "not_armed")
@@ -340,6 +351,12 @@ def catalog(installed_local: Optional[List[str]] = None) -> Dict[str, object]:
             "live_armed": cloud_live_armed(),
         },
         "vision": SUITE.get("vision", {}),
+        # Truthful local-vision check: "ok" only when the configured model is
+        # actually installed on this machine; otherwise the reason code.
+        "vision_local_status": {
+            t: resolve_vision(t, "local", "understand", installed=installed).reason
+            for t in VISION_TIERS
+        },
         "services": SERVICE_MAP.get("services", {}),
         "service_default_provider": SERVICE_MAP.get("default_provider", {}),
         "media_key_present": {p: provider_key_present(p) for p in ("openrouter", "fal", "replicate")},

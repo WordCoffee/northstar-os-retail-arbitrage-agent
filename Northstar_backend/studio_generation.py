@@ -1,7 +1,7 @@
 """Local media generation for the Design Studio — the operator's own ComfyUI.
 
 Free and private by construction: every render happens on this machine through
-COMFYUI_URL (default http://127.0.0.1:8199) and nothing else. Armed only when
+COMFYUI_URL (default http://127.0.0.1:8188) and nothing else. Armed only when
 MEDIA_GEN_LIVE=1 AND ComfyUI answers. Models are the weights this machine
 already has staged:
 
@@ -23,7 +23,7 @@ import urllib.parse
 import urllib.request
 import uuid
 
-DEFAULT_COMFYUI_URL = "http://127.0.0.1:8199"  # this box's ComfyUI (8188 is upstream default)
+DEFAULT_COMFYUI_URL = "http://127.0.0.1:8188"  # ComfyUI's own default; override with COMFYUI_URL
 
 IMAGE_MODEL_FILE = os.environ.get("STUDIO_IMAGE_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
 TEXT_ENCODER_FILE = os.environ.get("STUDIO_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"

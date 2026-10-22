@@ -52,7 +52,7 @@
       "V1": {
         "label": "V1 Lite — screenshots, OCR, browser-control, volume drafts",
         "understand": {
-          "local": "northstaros-qwen3.8:27b",
+          "local": "qwen2.5vl:7b",
           "cloud": "qwen/qwen3.7-flash",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.03,
@@ -75,7 +75,7 @@
       "V2": {
         "label": "V2 Standard — presentations, brand decks, product stills",
         "understand": {
-          "local": "northstaros-qwen3.8:27b",
+          "local": "qwen2.5vl:7b",
           "cloud": "qwen/qwen3-vl-235b-a22b-instruct",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.21,
@@ -103,7 +103,7 @@
       "V3": {
         "label": "V3 Premium — ad visuals, A+ content, UGC, text-heavy graphics",
         "understand": {
-          "local": "northstaros-qwen3.8:27b",
+          "local": "qwen2.5vl:7b",
           "cloud": "xiaomi/mimo-v2.6-pro",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.435,

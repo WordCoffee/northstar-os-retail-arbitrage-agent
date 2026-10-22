@@ -23,8 +23,8 @@ fit to the actual machine — RTX 5080 Laptop 16 GB VRAM / 15.4 GB RAM / C: SSD)
 
 - **ComfyUI** `C:\Users\T2Hol\ComfyUI` (git clone, venv Python 3.14, CUDA via
   torch, updated to 0.40.0 on 2026-10-14). Start: `venv\Scripts\python.exe
-  main.py --listen 127.0.0.1 --port 8199` (dev/diagnostic port; default UI
-  port 8188 free for the Studio integration).
+  main.py --listen 127.0.0.1 --port 8188` — the upstream default, which is what
+  `studio_generation` targets. Pin another port only via `COMFYUI_URL`.
 - Custom nodes: ComfyUI-GGUF, controlnet_aux, IPAdapter_plus, ComfyUI-QwenTTS.
 - **ffmpeg** — required for clip tooling (`tools/clip_split.py`). Discovered via
   $FFMPEG / PATH / WinGet Links / imageio-ffmpeg fallback.

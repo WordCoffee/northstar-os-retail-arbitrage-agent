@@ -64,8 +64,8 @@
       "discovered_at": "2026-10-22T02:19:00Z",
       "description": "The local text lane cannot load its primary model. POST /api/generate for northstaros-qwen3.8:27b returns HTTP 500. Ollama server.log: 'CUDA error: shared object initialization failed' at ggml-cuda.cu:109 in launch_fattn (cudaOccupancyMaxActiveBlocksPerMultiprocessor), then 'llama-server terminated exit status 0xc0000409' (stack-based buffer overrun), 'Load failed model=...blobs\\sha256-8c2a...'. NOT caused by the clean and NOT an OOM: 15.6 GB of 16.3 GB VRAM was free. Isolation: qwen3-embedding:0.6b answers /api/embeddings 200 OK with 1024 dims on the SAME runner, so the CUDA stack works and the failure is specific to the 27B Q3_K_XL flash-attention kernel path. Driver 617.42, Ollama 0.40.4, cuda_v12 + cuda_v13 runners installed.",
       "impact": "Every local text tier (T1/T2/T3) resolves to this model, so the entire local engine is red. Cloud lane is unaffected (separately gated).",
-      "requires_decision": "Operator picks the fix, cheapest first: (a) restart Ollama with OLLAMA_FLASH_ATTENTION=0 (the failing call IS launch_fattn); (b) re-pull the model at a different quantization (the content-addressed blob makes this cheap); (c) update Ollama. No retry loop was attempted - circuit breaker honoured after the first 500.",
-      "status": "open"
+      "requires_decision": "RESOLVED 2026-10-22. Root cause was NOT flash attention and NOT the driver: the model's Modelfile baked PARAMETER num_ctx 64576, and at that context the FA kernel's cudaOccupancyMaxActiveBlocksPerMultiprocessor call fails on this 16 GB Blackwell laptop. Measured ceiling by bisection: ctx 8192 OK, 16384 OK, 32768 OK (slow), 64576 CRASH. Fix applied: model recreated with num_ctx 16384 (all other params byte-identical: num_predict 6000, repeat_penalty 1.1, temperature 0.35, top_p 0.9, min_p 0.05), original preserved as tag northstaros-qwen3.8:27b-ctx64k-orig (manifest only, same blob, zero extra disk). Operator's OLLAMA_FLASH_ATTENTION=1 / OLLAMA_KV_CACHE_TYPE=q8_0 left untouched. Verified on the default path (no options override): 100% GPU, CONTEXT 16384, 10.5 s, keep-alive Forever. Test matrix recorded: FA=0+q8_0 fails ('quantized V cache requires flash_attn'), FA=0+f16 OOMs at 8k until ComfyUI releases VRAM, FA=1+q8_0 succeeds at every context below the ceiling.",
+      "status": "resolved"
     },
     {
       "id": "studio_comfyui_default_port_8199_vs_8188_20261022",
@@ -73,8 +73,8 @@
       "discovered_at": "2026-10-22T02:20:00Z",
       "description": "Northstar_backend/studio_generation.py sets DEFAULT_COMFYUI_URL = http://127.0.0.1:8199 with the comment 'this box's ComfyUI (8188 is upstream default)', and render_studio_plates.py uses the same setdefault. Verified: nothing listens on 8199; the only live ComfyUI is on 127.0.0.1:8188 (PID from venv C:\\Users\\T2Hol\\ComfyUI). .env defines no COMFYUI_URL key.",
       "impact": "Design Studio / plate rendering would fail against the default URL even though a healthy ComfyUI is running one port away.",
-      "requires_decision": "Operator: either change the default to 8188, or set COMFYUI_URL=http://127.0.0.1:8188 in the root .env (non-secret key, editable under the capsule), or start the second instance on 8199. Not changed in this session because it alters generation routing and deserves an explicit call.",
-      "status": "open"
+      "requires_decision": "RESOLVED 2026-10-22 by aligning config to reality, not the reverse. The 8199 default came from docs/MEDIA_STACK_2026-10-10 which described a 'dev/diagnostic port' scheme; nothing else used it, no test asserted it, and the only ComfyUI anyone actually starts is on 8188. Changed DEFAULT_COMFYUI_URL to http://127.0.0.1:8188 (studio_generation.py, docstring + constant), render_studio_plates.py setdefault, and the MEDIA_STACK runtime section. COMFYUI_URL still overrides. Verified: studio_generation.comfyui_url() == 8188 and the live server answers /system_stats on 8188.",
+      "status": "resolved"
     },
     {
       "id": "local_vision_model_not_installed_20261022",
@@ -82,8 +82,8 @@
       "discovered_at": "2026-10-22T02:21:00Z",
       "description": "model_router.LOCAL_MODELS maps V1/V2/V3 to qwen2.5vl:7b, but ollama list shows only northstaros-qwen3.8:27b and qwen3-embedding:0.6b. The mmproj for the 27B (mmproj-Qwen3.8-27B-BF16.gguf, 0.87 GB) was never imported into Ollama either (no matching blob).",
       "impact": "Any local vision task resolves to a model id that does not exist locally; resolve_vision() reports available=True for local because it only checks that a model NAME is configured, not that it is installed.",
-      "requires_decision": "Operator: pull qwen2.5vl:7b, or re-point the V tiers at the 27B + mmproj (requires re-importing the model with the projector), or make resolve_vision() report unavailable when the local model is absent. The third option is the honest one and is a code change.",
-      "status": "open"
+      "requires_decision": "RESOLVED 2026-10-22. CORRECTION to this entry's original description: LOCAL_MODELS' vision literals say qwen2.5vl:7b, but model_router's config overlay replaces every V tier with shared/model-suite.json's understand.local, which was northstaros-qwen3.8:27b. That model IS installed - it simply has no projector ('ollama show' capabilities: tools, thinking, completion - no vision), so local vision resolved to a text-only model. Three-part fix: (1) shared/model-suite.json V1/V2/V3 understand.local -> qwen2.5vl:7b; (2) ollama pull qwen2.5vl:7b (6.0 GB, capabilities now include vision); (3) model_router.resolve_vision(..., installed=...) reports local_model_not_installed when the configured model is absent, and catalog() gains vision_local_status so the UI can never again show a vision tier as available without weights. Live proof: qwen2.5vl:7b captioned a real Northstar plate in 17.1 s ('Two bags of organic mushroom powder, one labeled \"Organic Lion's Mane\" and the other \"Organic Shiitake\"...'). vision_local_status now reports ok for V1/V2/V3. Tests: 49 passed in test_model_router + test_provider_suite.",
+      "status": "resolved"
     },
     {
       "id": "canonical_runner_red_from_untracked_costco_files_20261019",

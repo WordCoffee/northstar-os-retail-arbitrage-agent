@@ -25,7 +25,9 @@ def test_local_defaults_by_tier():
     assert mr.resolve("local", "T1").model == "northstaros-qwen3.8:27b"
     assert mr.resolve("local", "T2").model == "northstaros-qwen3.8:27b"
     assert mr.resolve("local", "T3").model == "northstaros-qwen3.8:27b"
-    assert mr.resolve("local", "V1").model == "northstaros-qwen3.8:27b"
+    # Vision tiers use a dedicated VL model: the 27B text model ships no
+    # projector (ollama show capabilities: tools/thinking/completion only).
+    assert mr.resolve("local", "V1").model == "qwen2.5vl:7b"
     assert mr.resolve("local", "T2").available is True
 
 
@@ -158,7 +160,7 @@ def test_resolve_vision_understand_cloud():
 
 def test_resolve_vision_understand_local():
     r = mr.resolve_vision("V2", "local", "understand")
-    assert r.model == "northstaros-qwen3.8:27b" and r.available is True
+    assert r.model == "qwen2.5vl:7b" and r.available is True
 
 
 def test_resolve_vision_generate_local_comfyui():
@@ -170,6 +172,28 @@ def test_resolve_vision_generate_cloud_gated():
     final = mr.resolve_vision("V2", "cloud", "generate", quality="final")
     assert final.model == "flux.2-pro" and final.backend == "fal"
     assert final.available is False  # no FAL_KEY / MEDIA_GEN_LIVE
+
+
+# --- local vision truthfulness (2026-10-22) ---
+
+def test_resolve_vision_local_missing_model_is_not_available():
+    r = mr.resolve_vision("V1", "local", "understand", installed=["northstaros-qwen3.8:27b"])
+    assert r.available is False
+    assert r.reason == "local_model_not_installed"
+    assert r.model == "qwen2.5vl:7b"  # config value still reported
+
+
+def test_resolve_vision_local_present_model_is_available():
+    r = mr.resolve_vision("V1", "local", "understand",
+                          installed=["qwen2.5vl:7b", "northstaros-qwen3.8:27b"])
+    assert r.available is True and r.reason == "ok"
+
+
+def test_catalog_vision_local_status_tracks_installed():
+    missing = mr.catalog([])["vision_local_status"]
+    assert set(missing.values()) == {"local_model_not_installed"}
+    present = mr.catalog(["qwen2.5vl:7b"])["vision_local_status"]
+    assert set(present.values()) == {"ok"}
 
 
 def test_media_armed_requires_gate(monkeypatch):
