@@ -877,6 +877,26 @@ async def list_models_compat():
     return await list_models()
 
 
+@app.get("/api/v1/provider-suite")
+async def provider_suite_catalog(provider: Optional[str] = None):
+    """Provider-scoped tool suite — which tools the brain may touch per lane.
+
+    LOCAL is the operator bench (non-commercial weights and copyleft agent
+    runtimes allowed, nothing resold). CLOUD is the customer lane (commercially
+    licensed tools only, each separately armed). Returns tool names, licences,
+    gates and reason codes only — never a credential value or a key name.
+    """
+    import provider_suite as _ps
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": _ps.catalog(active=provider),
+        "error": None,
+        "meta": {"service": "brain", "version": "v1"},
+    }
+
+
 # --- Memory Bank + Learning loop routes (Phase A / A0) ----------------------
 
 class MemoryIngestRequest(BaseModel):

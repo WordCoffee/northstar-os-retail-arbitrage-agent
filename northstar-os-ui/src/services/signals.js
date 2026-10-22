@@ -70,6 +70,8 @@ export const signals = {
   autothinkHistory: (limit = 20) => get(`/api/autothink/history?limit=${limit}`),
   autothinkRun: (body) => postJson('/api/autothink/run', body),
   brainModels: () => get('/api/v1/models'),
+  // Provider-scoped tool suite (local bench vs cloud customer lane).
+  providerSuite: (provider) => get(`/api/v1/provider-suite${provider ? `?provider=${encodeURIComponent(provider)}` : ''}`),
   // Memory Bank / Learning (local, read-only; search is a semantic read).
   memorySearch: (intent, opts = {}) => postJson('/api/v1/memory/search', {
     intent: intent || '',

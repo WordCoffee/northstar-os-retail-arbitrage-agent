@@ -59,6 +59,86 @@ function BrainCatalog() {
   )
 }
 
+// ═══ Provider-scoped tool suite (local bench vs cloud customer lane) ═══
+const REASON_LABEL = {
+  ok: 'available',
+  not_in_lane: 'not offered on this lane',
+  license_noncommercial: 'licence forbids commercial use',
+  weights_license_unverified: 'weights licence unverified',
+  gate_not_armed: 'gate not armed',
+  not_installed: 'not installed here',
+  unknown_tool: 'unknown tool',
+  unknown_provider: 'unknown lane',
+  agpl_network_copyleft_unreviewed: 'AGPL network clause unreviewed',
+}
+
+function ProviderSuite() {
+  const [lane, setLane] = useState('local')
+  const [st, setSt] = useState({ phase: 'loading' })
+  useEffect(() => {
+    let alive = true
+    setSt({ phase: 'loading' })
+    settle(signals.providerSuite(lane)).then(r => {
+      if (!alive) return
+      if (r.ok) setSt({ phase: 'loaded', value: r.value.data || r.value })
+      else setSt({ phase: 'error', error: r.error })
+    })
+    return () => { alive = false }
+  }, [lane])
+
+  const v = st.phase === 'loaded' ? st.value : null
+  const view = v && v.lanes && v.lanes[lane] ? v.lanes[lane] : null
+  const usable = (view && view.usable) || []
+  const blocked = (view && view.blocked) || []
+  const rows = (list, kind) => list.map(c => ({ ...c, state: kind, why: REASON_LABEL[c.reason] || c.reason }))
+
+  return (
+    <div className="card" data-testid="mb-provider-suite" style={{ marginBottom: 20 }}>
+      <div className="card-head">
+        <h3 className="card-title">Provider tool suite</h3>
+        <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>
+          {st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${usable.length} usable · ${blocked.length} blocked`}
+        </span>
+      </div>
+      <div className="inline-flex" style={{ gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+        {['local', 'cloud'].map(p => (
+          <button
+            key={p}
+            className={`pill ${lane === p ? 'pill-ochre' : 'pill-muted'}`}
+            style={{ border: 'none', cursor: 'pointer' }}
+            onClick={() => setLane(p)}
+            data-testid={`mb-suite-lane-${p}`}
+          >
+            {p} lane
+          </button>
+        ))}
+      </div>
+      {st.phase === 'error' && <p style={{ fontSize: 13 }}>Tool suite unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}
+      {view && (
+        <>
+          <div className="text-low" style={{ fontSize: 11, marginBottom: 10 }}>
+            {view.display || lane} · {view.commercial_use ? 'commercial output permitted' : 'bench use only — nothing resold'}
+          </div>
+          <DataTable
+            columns={[
+              { key: 'name', label: 'Tool', render: (x, row) => <span title={row.notes || ''}>{x}</span> },
+              { key: 'kind', label: 'Kind', render: (x) => <span className="pill pill-muted" style={{ fontSize: 10 }}>{x}</span> },
+              { key: 'license', label: 'Licence', render: (x) => x || 'UNKNOWN' },
+              { key: 'state', label: 'State', render: (x) => <span className={`pill ${x === 'usable' ? 'pill-ok' : 'pill-muted'}`} style={{ fontSize: 10 }}>{x}</span> },
+              { key: 'why', label: 'Reason', render: (x) => x || 'UNKNOWN' },
+            ]}
+            rows={[...rows(usable, 'usable'), ...rows(blocked, 'blocked')]}
+            emptyText="No tools declared for this lane"
+          />
+          <div className="text-low" style={{ fontSize: 11, marginTop: 8 }}>
+            Licences and gates only — no credential values. Non-commercial weights and copyleft agent runtimes stay on the local bench; the cloud lane is commercially licensed and separately armed.
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 // ═══ Real local knowledge-plane sessions (memory + audit, read-only) ═══
 function RealSessions() {
   const [st, setSt] = useState({ phase: 'loading' })
@@ -126,6 +206,7 @@ export default function MasterBrain() {
         The catalog and knowledge-plane sessions are live reads (presence-only, no secrets). Master Brain does NOT authorize purchases, make pricing decisions, or contact providers without explicit operator approval.
       </DataNotice>
       <BrainCatalog />
+      <ProviderSuite />
       <RealSessions />
     </PageLayout>
   )

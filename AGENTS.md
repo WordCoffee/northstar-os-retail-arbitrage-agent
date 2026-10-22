@@ -55,6 +55,12 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 - **Key components:** TopNav, SideNav, CommandPalette, RouteGuard, PageLayout, DataTable, EvidencePacket, MetricTiles, MobileBottomNav
 - **Build verification:** `npm run build` must succeed with 0 errors
 
+## Provider tool suite (local bench vs cloud lane)
+- **Local and cloud are different tool suites, not just different models.** Registry: `shared/provider-suite.json`; resolver: `Northstar_backend/provider_suite.py`; API: `GET /api/v1/provider-suite`; UI: Master Brain → *Provider tool suite*; docs: `docs/PROVIDER_SUITE_ARCHITECTURE.md`.
+- **Local lane** (operator bench, nothing resold) may use non-commercial weights and copyleft agent runtimes. **Cloud lane** (customer-facing, commercial) is restricted to commercially licensed tools, each separately armed.
+- Before using any tool that is not already wired in the repo, run `python Northstar_backend/provider_suite.py --check <tool> --provider <lane>`. Reason codes (`license_noncommercial`, `weights_license_unverified`, `agpl_network_copyleft_unreviewed`, `gate_not_armed`, `not_installed`) are refusals, not warnings — never bypass them, and never reclassify a licence to make a lane work.
+- "Local lane" ≠ "offline": check each entry's `network` field before assuming a tool makes no outbound call.
+
 ## Authority order
 1. Full constitution (`docs/OPERATING_CONSTITUTION.md`), 2. resolved user profile (refinements only), 3. benchmark/CI baseline, 4. batch files, 5. this capsule's guardrails as interpreted against the constitution. Nothing below loosens credential hygiene, real-money approval, or git safety.
 
