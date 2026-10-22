@@ -1,0 +1,943 @@
+{
+  "generated_by": "tools/creative_audit.py",
+  "modules": 28,
+  "total": 104,
+  "findings": [
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/ad_pilot.py",
+      "line": 349,
+      "evidence": "except ImportError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0001"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/ad_pilot.py",
+      "line": 353,
+      "evidence": "except ImportError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0002"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/creative_execute.py",
+      "line": 104,
+      "evidence": "except credit_ledger.InsufficientCredits as exc:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0003"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/creative_execute.py",
+      "line": 112,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - release the hold, report the truth",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0004"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/creative_execute.py",
+      "line": 135,
+      "evidence": "except Exception as exc:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0005"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/creative_plan.py",
+      "line": 111,
+      "evidence": "except Exception:  # noqa: BLE001 - a plan without the registry is still honest",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0006"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/creative_pricing.py",
+      "line": 136,
+      "evidence": "except Exception:  # noqa: BLE001 - fall back to the pinned mirror, never invent",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0007"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_agent.py",
+      "line": 35,
+      "evidence": "except Exception:  # pragma: no cover",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0008"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_agent.py",
+      "line": 181,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0009"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 357,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - reported, never swallowed",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0010"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 400,
+      "evidence": "except Exception as exc:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0011"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 587,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - reported, never swallowed",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0012"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1212,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - reported, never swallowed",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0013"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1871,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0014"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1874,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - the answer is UNARMED, never a guess",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0015"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 128,
+      "evidence": "except urllib.error.HTTPError as exc:  # a server-side non-2xx is a known status",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0016"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 131,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - delivery is best-effort by design",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0017"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 150,
+      "evidence": "except Exception:  # noqa: BLE001 - the webhook record must never break the job",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0018"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 184,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0019"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 188,
+      "evidence": "except KeyError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0020"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 233,
+      "evidence": "except KeyError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0021"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_boxes.py",
+      "line": 68,
+      "evidence": "except Exception:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0022"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_compose.py",
+      "line": 131,
+      "evidence": "except OSError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0023"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 154,
+      "evidence": "except ValueError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0024"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 173,
+      "evidence": "except ValueError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0025"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_lanes.py",
+      "line": 72,
+      "evidence": "except Exception:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0026"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_openapi.py",
+      "line": 65,
+      "evidence": "except Exception:  # noqa: BLE001 - skip corrupt lines, never crash boot",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0027"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 746,
+      "evidence": "except TypeError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0028"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 751,
+      "evidence": "except TypeError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0029"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 756,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0030"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_scenes.py",
+      "line": 23,
+      "evidence": "except Exception:  # pragma: no cover",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0031"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/dieline_art.py",
+      "line": 44,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0032"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/dieline_art.py",
+      "line": 301,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0033"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/listing_forge.py",
+      "line": 62,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0034"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/listing_forge.py",
+      "line": 92,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0035"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/listing_forge.py",
+      "line": 146,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0036"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/listing_forge.py",
+      "line": 186,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0037"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/listing_forge.py",
+      "line": 465,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0038"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/mockup_compositor.py",
+      "line": 43,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0039"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/mockup_compositor.py",
+      "line": 411,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0040"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/mockup_engine.py",
+      "line": 85,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0041"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 354,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0042"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/package_readiness.py",
+      "line": 161,
+      "evidence": "except RuntimeError as exc:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0043"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/package_readiness.py",
+      "line": 175,
+      "evidence": "except Exception:  # noqa: BLE001 - a suggestion is a bonus, never a failure",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0044"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/prepress.py",
+      "line": 79,
+      "evidence": "except Exception:  # noqa: BLE001 - not a usable profile",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0045"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/prepress.py",
+      "line": 85,
+      "evidence": "except Exception:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0046"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/social_pulse.py",
+      "line": 52,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0047"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/social_pulse.py",
+      "line": 69,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0048"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 65,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0049"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 112,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0050"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 120,
+      "evidence": "except TimeoutError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0051"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 122,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0052"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 128,
+      "evidence": "except ValueError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0053"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 144,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0054"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 166,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0055"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 204,
+      "evidence": "except Exception as exc:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0056"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 235,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0057"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 245,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0058"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 263,
+      "evidence": "except Exception:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0059"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/text_fidelity.py",
+      "line": 202,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - honest degrade, never a fake pass",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0060"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/text_fidelity.py",
+      "line": 220,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - a broken decode is 'unknown', not 'pass'",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0061"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/text_fidelity.py",
+      "line": 226,
+      "evidence": "except Exception:  # noqa: BLE001",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0062"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/voicestudio_adapter.py",
+      "line": 49,
+      "evidence": "except ValueError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0063"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/voicestudio_adapter.py",
+      "line": 81,
+      "evidence": "except requests.exceptions.RequestException as exc:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0064"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/voicestudio_adapter.py",
+      "line": 84,
+      "evidence": "except Exception as exc:  # noqa: BLE001 - any transport failure is honest",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0065"
+    },
+    {
+      "code": "CRE-SILENT",
+      "severity": "high",
+      "file": "Northstar_backend/voicestudio_adapter.py",
+      "line": 90,
+      "evidence": "except ValueError:",
+      "detail": "failure is swallowed with no log, no re-raise, no warning",
+      "id": "CRE-0066"
+    },
+    {
+      "code": "CRE-UNGATED",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 157,
+      "evidence": "def run_generation_job",
+      "detail": "public function reaches a generation/network primitive with no armed check in its own body",
+      "id": "CRE-0067"
+    },
+    {
+      "code": "CRE-UNGATED",
+      "severity": "high",
+      "file": "Northstar_backend/design_studio_lanes.py",
+      "line": 102,
+      "evidence": "def lane_cutout",
+      "detail": "public function reaches a generation/network primitive with no armed check in its own body",
+      "id": "CRE-0068"
+    },
+    {
+      "code": "CRE-UNGATED",
+      "severity": "high",
+      "file": "Northstar_backend/social_pulse.py",
+      "line": 74,
+      "evidence": "def generate_caption",
+      "detail": "public function reaches a generation/network primitive with no armed check in its own body",
+      "id": "CRE-0069"
+    },
+    {
+      "code": "CRE-UNGATED",
+      "severity": "high",
+      "file": "Northstar_backend/studio_generation.py",
+      "line": 216,
+      "evidence": "def release_models",
+      "detail": "public function reaches a generation/network primitive with no armed check in its own body",
+      "id": "CRE-0070"
+    },
+    {
+      "code": "CRE-BIGFILE",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1,
+      "evidence": "2030 lines",
+      "detail": "module large enough to hide coupling",
+      "id": "CRE-0071"
+    },
+    {
+      "code": "CRE-BIGFILE",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 1,
+      "evidence": "903 lines",
+      "detail": "module large enough to hide coupling",
+      "id": "CRE-0072"
+    },
+    {
+      "code": "CRE-BIGFILE",
+      "severity": "low",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 1,
+      "evidence": "2592 lines",
+      "detail": "module large enough to hide coupling",
+      "id": "CRE-0073"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/ad_pilot.py",
+      "line": 24,
+      "evidence": "def optimize_bid(...) spans 98 lines",
+      "detail": "function is 98 lines; split into named steps",
+      "id": "CRE-0074"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/ad_pilot.py",
+      "line": 196,
+      "evidence": "def generate_campaign_structure(...) spans 72 lines",
+      "detail": "function is 72 lines; split into named steps",
+      "id": "CRE-0075"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/creative_plan.py",
+      "line": 132,
+      "evidence": "def build_plan(...) spans 73 lines",
+      "detail": "function is 73 lines; split into named steps",
+      "id": "CRE-0076"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 308,
+      "evidence": "def migrate_legacy(...) spans 102 lines",
+      "detail": "function is 102 lines; split into named steps",
+      "id": "CRE-0077"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 634,
+      "evidence": "def create_import(...) spans 84 lines",
+      "detail": "function is 84 lines; split into named steps",
+      "id": "CRE-0078"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1300,
+      "evidence": "def master_brain_context(...) spans 80 lines",
+      "detail": "function is 80 lines; split into named steps",
+      "id": "CRE-0079"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_api.py",
+      "line": 1922,
+      "evidence": "def generate_media(...) spans 92 lines",
+      "detail": "function is 92 lines; split into named steps",
+      "id": "CRE-0080"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 157,
+      "evidence": "def run_generation_job(...) spans 89 lines",
+      "detail": "function is 89 lines; split into named steps",
+      "id": "CRE-0081"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_async.py",
+      "line": 248,
+      "evidence": "def submit_generation(...) spans 65 lines",
+      "detail": "function is 65 lines; split into named steps",
+      "id": "CRE-0082"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_compose.py",
+      "line": 85,
+      "evidence": "def compose_mockup_endpoint(...) spans 71 lines",
+      "detail": "function is 71 lines; split into named steps",
+      "id": "CRE-0083"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 220,
+      "evidence": "def parse_import(...) spans 120 lines",
+      "detail": "function is 120 lines; split into named steps",
+      "id": "CRE-0084"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 393,
+      "evidence": "def _parse_keywords(...) spans 64 lines",
+      "detail": "function is 64 lines; split into named steps",
+      "id": "CRE-0085"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 478,
+      "evidence": "def parse_variant_metrics(...) spans 60 lines",
+      "detail": "function is 60 lines; split into named steps",
+      "id": "CRE-0086"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_imports.py",
+      "line": 540,
+      "evidence": "def build_brief(...) spans 86 lines",
+      "detail": "function is 86 lines; split into named steps",
+      "id": "CRE-0087"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 169,
+      "evidence": "def _panel_blank(...) spans 87 lines",
+      "detail": "function is 87 lines; split into named steps",
+      "id": "CRE-0088"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/design_studio_print.py",
+      "line": 273,
+      "evidence": "def build_doypack(...) spans 96 lines",
+      "detail": "function is 96 lines; split into named steps",
+      "id": "CRE-0089"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/dieline_art.py",
+      "line": 101,
+      "evidence": "def build_ops(...) spans 102 lines",
+      "detail": "function is 102 lines; split into named steps",
+      "id": "CRE-0090"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/dieline_art.py",
+      "line": 207,
+      "evidence": "def render_png(...) spans 71 lines",
+      "detail": "function is 71 lines; split into named steps",
+      "id": "CRE-0091"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/dieline_art.py",
+      "line": 280,
+      "evidence": "def render_pdf(...) spans 78 lines",
+      "detail": "function is 78 lines; split into named steps",
+      "id": "CRE-0092"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/image_prep.py",
+      "line": 110,
+      "evidence": "def check_main_compliance(...) spans 87 lines",
+      "detail": "function is 87 lines; split into named steps",
+      "id": "CRE-0093"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/mockup_compositor.py",
+      "line": 274,
+      "evidence": "def warp_panel(...) spans 73 lines",
+      "detail": "function is 73 lines; split into named steps",
+      "id": "CRE-0094"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/mockup_compositor.py",
+      "line": 420,
+      "evidence": "def compose_mockup(...) spans 66 lines",
+      "detail": "function is 66 lines; split into named steps",
+      "id": "CRE-0095"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/mockup_engine.py",
+      "line": 128,
+      "evidence": "def segment_package(...) spans 65 lines",
+      "detail": "function is 65 lines; split into named steps",
+      "id": "CRE-0096"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 380,
+      "evidence": "def render_back(...) spans 194 lines",
+      "detail": "function is 194 lines; split into named steps",
+      "id": "CRE-0097"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 717,
+      "evidence": "def etch_logo(...) spans 61 lines",
+      "detail": "function is 61 lines; split into named steps",
+      "id": "CRE-0098"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 2398,
+      "evidence": "def render_back_j(...) spans 90 lines",
+      "detail": "function is 90 lines; split into named steps",
+      "id": "CRE-0099"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/package_designs.py",
+      "line": 2496,
+      "evidence": "def design_specs(...) spans 97 lines",
+      "detail": "function is 97 lines; split into named steps",
+      "id": "CRE-0100"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/prepress.py",
+      "line": 164,
+      "evidence": "def gamut_check(...) spans 73 lines",
+      "detail": "function is 73 lines; split into named steps",
+      "id": "CRE-0101"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/social_pulse.py",
+      "line": 74,
+      "evidence": "def generate_caption(...) spans 73 lines",
+      "detail": "function is 73 lines; split into named steps",
+      "id": "CRE-0102"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/text_fidelity.py",
+      "line": 249,
+      "evidence": "def clean_text_regions(...) spans 60 lines",
+      "detail": "function is 60 lines; split into named steps",
+      "id": "CRE-0103"
+    },
+    {
+      "code": "CRE-LONGFN",
+      "severity": "low",
+      "file": "Northstar_backend/text_fidelity.py",
+      "line": 417,
+      "evidence": "def render_with_text_guard(...) spans 73 lines",
+      "detail": "function is 73 lines; split into named steps",
+      "id": "CRE-0104"
+    }
+  ]
+}

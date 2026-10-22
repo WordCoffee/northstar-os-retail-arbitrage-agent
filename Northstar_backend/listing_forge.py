@@ -43,12 +43,33 @@ COMPLIANCE_RULES = [
 ]
 
 
+LOCAL_BRAIN_DEFAULT = "northstaros-qwen3.8:27b"
+
+
+def _default_model() -> str:
+    """Resolve the local text tier from shared/model-suite.json, not a literal.
+
+    These generators call Ollama directly, so they must resolve the *local*
+    provider explicitly - resolve_for_service() defaults to the customer (cloud)
+    lane, and a cloud model id would simply not exist in Ollama.
+    """
+    try:
+        import model_router
+        res = model_router.resolve_for_service("listingforge", provider="local")
+        model = getattr(res.get("resolution"), "model", None)
+        if model:
+            return str(model)
+    except Exception:
+        pass
+    return LOCAL_BRAIN_DEFAULT
+
+
 def generate_title(
     product: Dict[str, Any],
     brand_voice: Optional[Dict] = None,
     top_keywords: Optional[List[str]] = None,
     competitor_titles: Optional[List[str]] = None,
-    model: str = "northstaros-qwen3.8:27b",
+    model: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Generate optimized product title.
 
@@ -58,6 +79,7 @@ def generate_title(
         compliance: Compliance check results
         alternatives: Alternative title options
     """
+    model = model or _default_model()
     # Build prompt context
     context = _build_title_prompt(product, brand_voice, top_keywords, competitor_titles)
     prompt = context["prompt"]
@@ -101,7 +123,7 @@ def generate_bullets(
     product: Dict[str, Any],
     brand_voice: Optional[Dict] = None,
     top_keywords: Optional[List[str]] = None,
-    model: str = "northstaros-qwen3.8:27b",
+    model: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Generate optimized bullet points (5 feature bullets ≤500 chars each).
 
@@ -111,6 +133,7 @@ def generate_bullets(
         overall_score: Composite score 0-100
         compliance: Compliance check results
     """
+    model = model or _default_model()
     prompt = _build_bullets_prompt(product, brand_voice, top_keywords)
 
     bullets = []
@@ -149,9 +172,10 @@ def generate_bullets(
 def generate_description(
     product: Dict[str, Any],
     brand_voice: Optional[Dict] = None,
-    model: str = "northstaros-qwen3.8:27b",
+    model: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Generate product description (≤2000 chars)."""
+    model = model or _default_model()
     prompt = _build_description_prompt(product, brand_voice)
 
     description = ""
@@ -416,9 +440,10 @@ def _build_description_prompt(product: Dict, brand_voice: Optional[Dict]) -> str
 # LLM integration
 # ---------------------------------------------------------------------------
 
-def _call_llm(prompt: str, model: str = "northstaros-qwen3.8:27b",
+def _call_llm(prompt: str, model: Optional[str] = None,
               num_options: int = 1) -> List[str]:
     """Call local Ollama LLM for generation."""
+    model = model or _default_model()
     import httpx
     ollama_host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 

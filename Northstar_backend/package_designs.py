@@ -1628,7 +1628,8 @@ def lockup_stamp(canvas, cx, cy, visible_w_mm, ink):
 
 
 def big_name(d, cx, y, lines, ink, *, size_mm=16, gap_mm=2.0, max_w=112,
-             font="CormorantGaramond.ttf", axes=[600]):
+             font="CormorantGaramond.ttf", axes=None):
+    axes = [600] if axes is None else axes
     yy = y
     for line in lines:
         f = fit_size(font, size_mm, axes, line, max_w)

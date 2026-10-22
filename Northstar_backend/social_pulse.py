@@ -13,10 +13,13 @@ Supported platforms:
 """
 
 import json
+import logging
 import os
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
+
+_log = logging.getLogger("northstar.socialpulse")
 
 
 # ---------------------------------------------------------------------------
@@ -55,13 +58,26 @@ def load_brand_voice(brand: str) -> Dict[str, Any]:
 # Caption Generation
 # ---------------------------------------------------------------------------
 
+def _default_model() -> str:
+    """Resolve the local text tier from shared/model-suite.json, not a literal."""
+    try:
+        import model_router
+        res = model_router.resolve_for_service("socialpulse", provider="local")
+        model = getattr(res.get("resolution"), "model", None)
+        if model:
+            return str(model)
+    except Exception:
+        pass
+    return "northstaros-qwen3.8:27b"
+
+
 def generate_caption(
     product: Dict[str, Any],
     platform: str = "instagram",
     brand: str = "Kirkland Signature",
     angle: str = "quality",
     voice: Optional[Dict] = None,
-    model: str = "northstaros-qwen3.8:27b",
+    model: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Generate a social media caption for a product.
 
@@ -71,11 +87,12 @@ def generate_caption(
         brand: Brand name
         angle: Content angle (quality, value, lifestyle, seasonal, gift)
         voice: Brand voice profile override
-        model: LLM model to use
+        model: LLM model to use; defaults to the local T-tier from model-suite
 
     Returns:
         caption, hashtags, cta, platform_spec, score
     """
+    model = model or _default_model()
     voice = voice or load_brand_voice(brand)
 
     # Build prompt
@@ -99,8 +116,8 @@ def generate_caption(
         )
         resp.raise_for_status()
         caption = resp.json().get("response", "").strip()
-    except Exception:
-        pass
+    except Exception as exc:  # noqa: BLE001 - template fallback is the designed path
+        _log.debug("caption LLM unavailable (%s); using the template caption", type(exc).__name__)
 
     # Template fallback
     if not caption or len(caption) < 20:
