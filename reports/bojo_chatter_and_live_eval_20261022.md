@@ -43,6 +43,20 @@ fields, citations, one-question rule).
 - Results are stored in the `evals` table and printed in the cycle report.
 - First real sample: **0.8 on 1 question**, with the failing check named.
 
+## 4. The three modes are now in the composer
+
+`Mode: Creative · Standard · Thinking` sits next to Thinking/Style and travels
+with every turn. The contract is server-owned (`chat_router._MODE_CONTRACT`), so
+the client can only choose a posture, never widen what the model may do:
+
+| mode | shape | effort |
+|---|---|---|
+| Creative | 3 options, one line of rationale each, drafts without asking | medium |
+| Standard | answer in the first sentence, max one clarifying question | medium + discipline |
+| Thinking | assumptions, verify the checkable parts, name uncertainty | xhigh |
+
+Explicit "off" still wins over any mode.
+
 ## Gates
 
 - **128 passed / 0 failed** (`test_cie`, `test_chatter`, chat core, tools, turn

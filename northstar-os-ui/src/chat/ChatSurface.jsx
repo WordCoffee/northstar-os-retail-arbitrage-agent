@@ -209,6 +209,9 @@ export default function ChatSurface({
   // never written into the operator's message.
   const [media, setMedia] = useState('image')
   const [thinking, setThinking] = useState('standard')
+  // Task posture: creative diverges, standard answers, thinking verifies.
+  // Server-owned contract (chat_router._MODE_CONTRACT) — the client only picks.
+  const [mode, setMode] = useState('standard')
   const [style, setStyle] = useState('balanced')
   const [attachments, setAttachments] = useState([])
   const [uploading, setUploading] = useState(false)
@@ -416,6 +419,7 @@ export default function ChatSurface({
         think: thinking !== 'off',
         media,
         thinking,
+        mode,
         style,
         attachments: attachments.map((a) => a.id),
       }, ({ event, data }) => {
@@ -1211,6 +1215,16 @@ export default function ChatSurface({
                   const id = v.id || v.voice_id || v.name
                   return <option key={id} value={id}>{v.name || id}</option>
                 })}
+              </select>
+            </label>
+            <label className="chat-control">
+              <span>Mode</span>
+              <select value={mode} onChange={(e) => setMode(e.target.value)}
+                data-testid="chat-mode"
+                title="Creative diverges, standard answers, thinking verifies">
+                <option value="creative">Creative</option>
+                <option value="standard">Standard</option>
+                <option value="thinking">Thinking</option>
               </select>
             </label>
             <label className="chat-control">
