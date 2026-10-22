@@ -605,6 +605,8 @@ export default function ChatSurface({
 
   const engineLine = engine && engine.ok
     ? `Engine: ${engine.model}`
+      + (engine.tools?.length ? ` · ${engine.tools.length} skills` : '')
+      + (engine.services?.length ? ` across ${engine.services.length} services` : '')
     : engine && engine.error
       ? `Engine check failed: ${engine.error}`
       : 'Checking engine…'

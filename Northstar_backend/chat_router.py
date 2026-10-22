@@ -689,6 +689,9 @@ def chat_health(acct: str = Depends(studio_account)):
         "think_default": True,
         "events": list(SSE_EVENT_TYPES),
         "tools": chat_tools.tool_names(),
+        # The skill warehouse: every service area and the tool that handles it,
+        # so the UI can show coverage and the model can be told what it owns.
+        "services": chat_tools.SERVICES,
         "tools_enabled": tools_enabled_default(),
         "max_tool_steps": chat_tools.MAX_TOOL_STEPS,
     }

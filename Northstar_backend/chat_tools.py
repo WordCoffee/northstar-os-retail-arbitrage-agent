@@ -1027,6 +1027,179 @@ _CREATIVE_GENERATOR = None
 
 
 # ── Registry ─────────────────────────────────────────────────────────────────
+# ── skill warehouse: service tools every focus can call ─────────────────────
+# These are read-only and cheap, so they are offered in every focus. They are
+# how Bojo resolves a request in any service area instead of guessing.
+
+SERVICES = [
+    {"id": "listing", "label": "Listing Forge / Guardian",
+     "tools": ["listing_audit", "knowledge_lookup", "seo_check", "seo_retitle"],
+     "can": "audit a title and bullets against Amazon rules, check claims, retitle to the SEO profile"},
+    {"id": "ads", "label": "AdPilot",
+     "tools": ["ads_math", "knowledge_lookup", "seo_negatives"],
+     "can": "compute ACOS/TACOS/break-even, judge a campaign, split negatives"},
+    {"id": "aplus", "label": "A+ Content",
+     "tools": ["knowledge_lookup", "creative_plan"],
+     "can": "plan A+ modules, check eligibility and module limits"},
+    {"id": "creator-connections", "label": "Creator Connections",
+     "tools": ["knowledge_lookup", "creative_plan"],
+     "can": "write creator briefs, set commission and deliverables, check disclosure"},
+    {"id": "brand-store", "label": "Brand & Store",
+     "tools": ["knowledge_lookup", "creative_plan"],
+     "can": "structure store pages and brand story, check what not to claim"},
+    {"id": "reseller", "label": "Reseller Ops",
+     "tools": ["knowledge_lookup", "listing_audit"],
+     "can": "check gating and invoices, grade condition, audit a reseller listing"},
+    {"id": "creative", "label": "Creative Studio",
+     "tools": ["creative_plan", "generate_image", "design_brief", "create_dieline",
+               "voice_list", "voice_tts", "voice_dub", "list_templates"],
+     "can": "plan and price a job, render images, build dielines, add voiceover"},
+    {"id": "research", "label": "Research & Corpus",
+     "tools": ["corpus_search", "corpus_vector_search", "corpus_drift", "knowledge_lookup"],
+     "can": "search the local corpus, report drift, look up a rule with its source"},
+    {"id": "system", "label": "System & Improvement",
+     "tools": ["system_status", "improvement_status", "service_catalog", "purpose_command"],
+     "can": "report engine health, coverage and gaps, list its own skills"},
+]
+
+
+def _t_knowledge_lookup(args, ctx) -> dict:
+    """Return the verified do/don't rules for a question."""
+    import knowledge_pack as kp
+    query = str(args.get("query") or "").strip()
+    domain = str(args.get("domain") or "").strip() or None
+    limit = int(args.get("limit") or 5)
+    if domain and domain not in kp.domains():
+        return {"ok": False, "summary": "Unknown knowledge domain.",
+                "error": f"known domains: {', '.join(kp.domains())}"}
+    # A weak lexical match is not a rule. Below this bar Bojo should say it has
+    # nothing rather than quote an unrelated guideline.
+    hits = kp.retrieve(query, domain, limit=max(1, min(limit, 10)), min_score=0.25)
+    if not hits:
+        return {"ok": True, "summary": "No verified rule matches that question yet.",
+                "rules": [],
+                "note": "Say plainly that you have no verified rule and offer to research it."}
+    rules = [{
+        "id": atom.get("id"), "do": atom.get("do"), "dont": atom.get("dont"),
+        "why": atom.get("why"), "source": atom.get("source"),
+        "confidence": atom.get("confidence"),
+        "needs_verification": bool(atom.get("needs_verification")),
+        "match": round(score, 3),
+    } for score, atom in hits]
+    return {"ok": True, "summary": f"{len(rules)} rule(s) matched.",
+            "rules": rules, "pack_versions": kp.pack_versions()}
+
+
+_TITLE_CHECKS = [
+    {"type": "max_chars", "value": 200},
+    {"type": "forbidden_terms",
+     "terms": ["best seller", "free shipping", "sale", "deal", "money back",
+               "#1", "guaranteed"]},
+    {"type": "no_all_caps"},
+]
+_BULLET_CHECKS = [
+    {"type": "max_chars", "value": 500},
+    {"type": "forbidden_terms",
+     "terms": ["fda approved", "cures", "treats", "prevents disease", "guaranteed"]},
+]
+
+
+def _t_listing_audit(args, ctx) -> dict:
+    """Deterministic check of a title/bullets against Amazon listing rules."""
+    import cie_eval
+    import knowledge_pack as kp
+    title = str(args.get("title") or "").strip()
+    bullets = [str(b) for b in (args.get("bullets") or []) if str(b).strip()][:5]
+    if not title and not bullets:
+        return {"ok": False, "summary": "Nothing to audit.",
+                "error": "pass a title and/or up to 5 bullets"}
+    result: Dict[str, Any] = {"ok": True}
+    if title:
+        score, failures = cie_eval.grade(title, _TITLE_CHECKS)
+        result["title"] = {"score": score, "failures": failures, "chars": len(title)}
+    if bullets:
+        bad = []
+        for index, bullet in enumerate(bullets, 1):
+            _score, failures = cie_eval.grade(bullet, _BULLET_CHECKS)
+            if failures:
+                bad.append({"index": index, "failures": failures})
+        result["bullets"] = {"checked": len(bullets), "failures": bad}
+    hits = kp.retrieve(title or " ".join(bullets), "listing", limit=3)
+    result["rules"] = [{"id": a.get("id"), "do": a.get("do"), "dont": a.get("dont"),
+                        "source": a.get("source")} for _s, a in hits]
+    problems = (len(result.get("title", {}).get("failures", []))
+                + len(result.get("bullets", {}).get("failures", [])))
+    result["summary"] = ("No deterministic problems found."
+                         if problems == 0 else f"{problems} problem(s) found.")
+    return result
+
+
+def _t_ads_math(args, ctx) -> dict:
+    """ACOS, TACOS and break-even maths. Pure arithmetic, no network."""
+    def num(key: str, default: float = 0.0) -> float:
+        try:
+            return float(args.get(key, default) or default)
+        except (TypeError, ValueError):
+            return default
+
+    price, cogs = num("price"), num("cogs")
+    spend, ad_sales = num("ad_spend"), num("ad_sales")
+    total_revenue = num("total_revenue")
+    if price <= 0:
+        return {"ok": False, "summary": "A positive unit price is required.",
+                "error": "price must be > 0"}
+    margin = (price - cogs) / price
+    out: Dict[str, Any] = {
+        "ok": True, "unit_margin_pct": round(margin * 100, 2),
+        "break_even_acos_pct": round(margin * 100, 2),
+        "acos_pct": None, "verdict": "no ad data",
+        "tacos_pct": None,
+    }
+    if ad_sales > 0:
+        acos = spend / ad_sales
+        out["acos_pct"] = round(acos * 100, 2)
+        out["verdict"] = ("profitable" if acos <= margin else "losing money")
+        out["profit_per_ad_dollar"] = round(margin - acos, 4)
+        out["spend"] = spend
+    if total_revenue > 0:
+        out["tacos_pct"] = round(spend / total_revenue * 100, 2)
+    out["summary"] = (f"ACOS {out['acos_pct']}% vs break-even {out['break_even_acos_pct']}% "
+                      f"-> {out['verdict']}." if out["acos_pct"] is not None
+                      else f"Break-even ACOS is {out['break_even_acos_pct']}% at this margin.")
+    return out
+
+
+def _t_improvement_status(args, ctx) -> dict:
+    """What Bojo has learned, what it is missing, and the pack versions."""
+    import cie_loop
+    state = cie_loop.status()
+    packs = {d: v.get("version") for d, v in (state.get("packs") or {}).get("domains", {}).items()}
+    return {
+        "ok": True,
+        "summary": (f"Coverage {round((state.get('coverage') or 0) * 100)}% "
+                    f"over {state.get('golden_items')} questions, "
+                    f"{(state.get('packs') or {}).get('total', 0)} rules, "
+                    f"{state.get('open_gaps', 0)} open gaps."),
+        "coverage": state.get("coverage"),
+        "atoms": (state.get("packs") or {}).get("total"),
+        "open_gaps": state.get("open_gaps"),
+        "stopped": state.get("stopped"),
+        "live_ready": state.get("live_ready"),
+        "packs": packs,
+        "last_cycle": state.get("last_cycle"),
+    }
+
+
+def _t_service_catalog(args, ctx) -> dict:
+    """List the services Bojo can act on and the tool that handles each."""
+    return {
+        "ok": True,
+        "summary": f"{len(SERVICES)} service areas routed to {len(TOOLS)} tools.",
+        "services": SERVICES,
+        "tools": tool_names(),
+    }
+
+
 TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
@@ -1319,6 +1492,71 @@ TOOLS: Dict[str, dict] = {    "system_status": {
             "required": [],
         },
         "handler": _t_creative_plan,
+    },
+    "knowledge_lookup": {
+        "description": ("Look up the verified Amazon selling rules for a question and return "
+                        "the matched DO / DON'T pairs with source, confidence and pack version. "
+                        "Use this before answering any listing, ads, A+, Creator Connections, "
+                        "brand-store or reseller policy question. Read-only."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "minLength": 3, "maxLength": 500,
+                          "description": "The question or topic, in the operator's words."},
+                "domain": {"type": "string",
+                           "enum": ["listing", "ads-amazon", "aplus", "creator-connections",
+                                    "brand-store", "reseller", "ads-google-bing", "creative"],
+                           "description": "Optional: restrict to one knowledge domain."},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 10, "default": 5},
+            },
+            "required": ["query"],
+        },
+        "handler": _t_knowledge_lookup,
+    },
+    "listing_audit": {
+        "description": ("Deterministically audit an Amazon title and up to five bullets: "
+                        "character limits, promotional language, all-caps, prohibited claims. "
+                        "Returns the failing checks and the rules that apply. Read-only."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "maxLength": 500},
+                "bullets": {"type": "array", "maxItems": 5,
+                            "items": {"type": "string", "maxLength": 600}},
+            },
+            "required": [],
+        },
+        "handler": _t_listing_audit,
+    },
+    "ads_math": {
+        "description": ("Compute ACOS, break-even ACOS from unit margin, profit per ad dollar "
+                        "and TACOS from raw numbers. Use it instead of guessing arithmetic."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "price": {"type": "number", "minimum": 0},
+                "cogs": {"type": "number", "minimum": 0},
+                "ad_spend": {"type": "number", "minimum": 0},
+                "ad_sales": {"type": "number", "minimum": 0},
+                "total_revenue": {"type": "number", "minimum": 0,
+                                  "description": "Optional: total revenue for TACOS."},
+            },
+            "required": ["price"],
+        },
+        "handler": _t_ads_math,
+    },
+    "improvement_status": {
+        "description": ("Report what Bojo has learned: knowledge coverage, rule count, open "
+                        "gaps, pack versions and the last improvement cycle. Read-only."),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "handler": _t_improvement_status,
+    },
+    "service_catalog": {
+        "description": ("List every service area Bojo can act on and the exact tool that "
+                        "handles it. Use it when the operator asks what you can do, or when "
+                        "a request does not clearly match a service."),
+        "parameters": {"type": "object", "properties": {}, "required": []},
+        "handler": _t_service_catalog,
     },
 }
 

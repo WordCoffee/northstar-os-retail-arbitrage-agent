@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
@@ -121,9 +121,23 @@ def focus_by_id(focus_id: Optional[str]) -> Dict[str, Any]:
     return FOCUS_MODES[0]
 
 
+# Service skills every focus gets, regardless of its curated list. They are
+# read-only, cheap, and they are how Bojo resolves a request in any service area
+# (listing, ads, A+, Creator Connections, brand store, reseller, improvement).
+CORE_TOOLS: Tuple[str, ...] = (
+    "service_catalog", "knowledge_lookup", "listing_audit", "ads_math",
+    "improvement_status",
+)
+
+
 def tools_for_focus(focus_id: Optional[str]) -> Optional[List[str]]:
-    """Tool subset for a focus (None = all registered tools)."""
+    """Tool subset for a focus (None = all registered tools).
+
+    The core service tools are always included so no focus can strand Bojo
+    without the ability to look up a rule or audit a listing.
+    """
     tool_list = focus_by_id(focus_id).get("tools")
     if tool_list is None:
         return None
-    return [t for t in tool_list if t in chat_tools.TOOLS]
+    merged = list(dict.fromkeys(list(tool_list) + list(CORE_TOOLS)))
+    return [t for t in merged if t in chat_tools.TOOLS]
