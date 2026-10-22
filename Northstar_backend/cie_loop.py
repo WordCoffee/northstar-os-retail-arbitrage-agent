@@ -538,9 +538,13 @@ def status() -> Dict[str, Any]:
     base = cie_store.status()
     pack = kp.stats()
     table = coverage_table(suite()) if suite() else {"score": 0.0, "total": 0}
+    ready, why = can_run_live()
     base.update({"packs": pack, "coverage": table["score"],
                  "golden_items": table["total"],
-                 "corpus": cie_research.corpus_stats()})
+                 "corpus": cie_research.corpus_stats(),
+                 "gpu": gpu_state(),
+                 "live_ready": ready,
+                 "live_ready_reason": why})
     return base
 
 

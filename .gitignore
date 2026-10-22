@@ -50,3 +50,6 @@ reports/video_scan/batch/*
 # Continuous Improvement Engine runtime state (regenerable, never versioned)
 state/improvement/
 reports/improvement/loop.log
+
+# Local service launch logs (runtime)
+reports/api_launch*.log

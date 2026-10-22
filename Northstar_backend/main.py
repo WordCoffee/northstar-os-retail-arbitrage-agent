@@ -82,6 +82,9 @@ except ImportError:  # pragma: no cover
 # hardware telemetry. Own guard: a shell problem must never disable chat.
 try:
     from shell_router import router as shell_router
+    # `router` shadows the module name, so the daemon has to be imported by name;
+    # importing the module alone left shell hardware telemetry silently dead.
+    from shell_router import start_hardware_daemon as _start_shell_hardware
     _HAS_SHELL = True
 except ImportError:  # pragma: no cover
     _HAS_SHELL = False
@@ -194,9 +197,12 @@ async def lifespan(app):
         raise
 
     try:
-        from data_layer import get_database
-        db = get_database()
-        logger.info(f"Database initialized: {db.db_type}")
+        # `get_database` was renamed to `get_db` in the data-layer refactor; the
+        # old name made every boot log "Database init skipped" while the app kept
+        # working, which hid a real startup check.
+        from data_layer import get_db
+        db = get_db()
+        logger.info(f"Database initialized: {getattr(db, 'db_type', type(db).__name__)}")
     except Exception as e:
         logger.warning(f"Database init skipped: {e}")
 
@@ -327,7 +333,7 @@ if _HAS_SHELL:
     try:
         # Hardware telemetry daemon: keeps the 3 s sample cache warm so the
         # shell chip/monitor always read fresh real values (V3 S6).
-        _started = shell_router.start_hardware_daemon()
+        _started = _start_shell_hardware()
         logger.info("shell hardware daemon started" if _started
                     else "shell hardware daemon already running")
     except Exception as _hw_exc:  # pragma: no cover - telemetry must never boot-fail the app

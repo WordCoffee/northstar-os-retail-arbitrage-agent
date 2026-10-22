@@ -167,6 +167,11 @@ export default function Improvement() {
         <Tile label="Open gaps" value={status ? status.open_gaps : '—'} hint="knowledge misses + feedback" />
         <Tile label="Atoms" value={status ? status.packs.total : '—'} hint="do / don't rules" />
         <Tile label="Cycles" value={status ? status.cycle_count : '—'} hint={status?.last_cycle?.status || 'none yet'} />
+        <Tile label="Live grading"
+              value={status ? (status.live_ready ? 'ready' : 'GPU busy') : '—'}
+              hint={status ? (status.live_ready
+                ? `${Math.round((status.gpu?.free_mb || 0) / 1024)} GB free`
+                : 'knowledge cycles still run') : ''} />
       </div>
 
       <div style={card}>

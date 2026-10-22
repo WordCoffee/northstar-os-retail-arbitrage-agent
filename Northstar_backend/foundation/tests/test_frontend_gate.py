@@ -307,7 +307,9 @@ def test_v3_shell_invariants():
     route_count = len(re.findall(r"<Route\s+path=", app))
     # The shipped route table as of the V4.2 interface rebuild. Update this number
     # only when a route is deliberately added or removed.
-    assert route_count == 52, f"expected 52 routes in App.jsx, found {route_count}"
+    # 53 = 52 + /improvement (deliberately added 2026-10-22 for the continuous
+    # improvement room). Update only when a route is deliberately added/removed.
+    assert route_count == 53, f"expected 53 routes in App.jsx, found {route_count}"
 
     # The legacy client (services/api.js) must not be imported by any v3 module.
     v3_dirs = ["pages/internal", "pages/customer", "pages/admin", "pages/public",
