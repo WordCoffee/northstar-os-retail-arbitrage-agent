@@ -78,5 +78,158 @@
       "aplus",
       "auto"
     ]
+  },
+  {
+    "id": "aplus.modules.benefit-banner",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Lead the module stack with the single strongest benefit",
+    "dont": "Lead with a logo wall or brand history",
+    "why": "The first module is the only one guaranteed to be seen",
+    "source": "Amazon Seller Central - A+ modules",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "banner",
+      "benefit",
+      "modules",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.comparison.rows-limit",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Compare three or four attributes buyers actually weigh",
+    "dont": "Compare on price or against competitors",
+    "why": "Too many rows dilute the decision and price comparison invites churn",
+    "source": "Amazon Seller Central - comparison table",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "comparison",
+      "limit",
+      "rows",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.images.text-size",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep text in A+ images large enough to read on a phone",
+    "dont": "Bake body copy into an image",
+    "why": "Image text is invisible to search and unreadable on mobile",
+    "source": "Amazon Seller Central - A+ specifications",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "images",
+      "size",
+      "text",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.brand-story.people",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Show the people and place behind the product",
+    "dont": "Use generic stock imagery for the brand story",
+    "why": "Provenance is what separates a private label from a commodity",
+    "source": "Amazon Seller Central - brand story module",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "brand",
+      "people",
+      "story",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.modules.mobile-order",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Check the module order on a phone before publishing",
+    "dont": "Approve from the desktop preview only",
+    "why": "Most grocery and supplement traffic is mobile",
+    "source": "Amazon Seller Central - A+ modules",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "mobile",
+      "modules",
+      "order",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.claims.substantiation",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep written substantiation for every claim in A+",
+    "dont": "Make comparative claims without evidence",
+    "why": "A+ is still a claim surface and is enforced like the listing",
+    "source": "Amazon Seller Central - claims policy",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "claims",
+      "substantiation",
+      "aplus"
+    ]
+  },
+  {
+    "id": "aplus.aplus.ads-timing",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Publish A+ before scaling the ad budget",
+    "dont": "Scale spend on a listing with no A+",
+    "why": "Conversion rate sets the ACOS a campaign can sustain",
+    "source": "Amazon Ads - conversion guidance",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "ads",
+      "aplus",
+      "timing",
+      "aplus"
+    ]
   }
 ]

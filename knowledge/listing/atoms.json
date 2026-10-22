@@ -351,5 +351,165 @@
       "claims",
       "disclaimer"
     ]
+  },
+  {
+    "id": "listing.title.brand-first",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Lead the title with the brand, then the product and the deciding attribute",
+    "dont": "Bury the brand after a keyword string",
+    "why": "Buyers scan brand and product first, and the first words decide the click",
+    "source": "Amazon Seller Central - product title requirements",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "brand",
+      "first",
+      "title",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.bullets.benefit-first",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Open each bullet with the benefit, then the feature that proves it",
+    "dont": "Open with a raw specification and hope the buyer infers the benefit",
+    "why": "Mobile shoppers scan the first three words of each bullet",
+    "source": "Amazon Seller Central - bullet points",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "benefit",
+      "bullets",
+      "first",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.images.second-slot",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Use image two for scale or the product in use",
+    "dont": "Repeat the main image or spend the slot on a logo",
+    "why": "The second image answers the objection the first one created",
+    "source": "Amazon Seller Central - image guidance",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "images",
+      "second",
+      "slot",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.price.no-superlatives",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Describe value with facts the buyer can verify",
+    "dont": "Claim cheapest or best value in the listing copy",
+    "why": "Unverifiable superlatives are a policy risk and erode trust",
+    "source": "Amazon Seller Central - prohibited content",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "no",
+      "price",
+      "superlatives",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.category.browse-node",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Choose the most specific browse node the product actually fits",
+    "dont": "Pick the largest top-level category for reach",
+    "why": "Wrong nodes hide the product from category browsing",
+    "source": "Amazon Seller Central - browse classification",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "browse",
+      "category",
+      "node",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.variation.parent-child",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Keep the parent as the family and every child as one real variant",
+    "dont": "Attach unrelated ASINs to consolidate reviews",
+    "why": "Wrong variation families get split by Amazon and lose the review pool",
+    "source": "Amazon Seller Central - variation relationships",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "child",
+      "parent",
+      "variation",
+      "listing"
+    ]
+  },
+  {
+    "id": "listing.aplus.above-fold",
+    "domain": "listing",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Put the strongest visual claim in the first A+ module",
+    "dont": "Open A+ with a logo or a wall of badges",
+    "why": "The first screen decides whether the buyer scrolls",
+    "source": "Amazon Seller Central - A+ modules",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "above",
+      "aplus",
+      "fold",
+      "listing"
+    ]
   }
 ]

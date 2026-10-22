@@ -44,5 +44,166 @@
       "disapproval",
       "shopping"
     ]
+  },
+  {
+    "id": "ads-google-bing.pmax.themed-assets",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Build one Performance Max asset group per theme",
+    "dont": "Mix every product and offer into one asset group",
+    "why": "The system cannot learn which assets belong together",
+    "source": "Google Ads - Performance Max asset groups",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "assets",
+      "pmax",
+      "themed",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.search.brand-separate",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Run brand search in its own campaign",
+    "dont": "Let Performance Max absorb branded queries",
+    "why": "Brand traffic converts regardless of campaign and inflates reported return",
+    "source": "Google Ads - brand campaigns",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "brand",
+      "search",
+      "separate",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.feed.title-attributes",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Put the key attributes in the feed title",
+    "dont": "Keyword-stuff the feed title",
+    "why": "Shopping relevance is driven by structured attributes",
+    "source": "Google Merchant Center - product data",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "attributes",
+      "feed",
+      "title",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.bing.import-recheck",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Re-check bids and budgets after importing from Google",
+    "dont": "Assume the import is one to one",
+    "why": "Bing auction dynamics differ and imported bids can overspend",
+    "source": "Microsoft Advertising - import from Google",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "bing",
+      "import",
+      "recheck",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.conversions.one-primary",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Mark exactly one primary conversion per objective",
+    "dont": "Count add to cart as a primary conversion",
+    "why": "Multiple primaries teach bidding to chase the wrong action",
+    "source": "Google Ads - conversion actions",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "conversions",
+      "one",
+      "primary",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.negatives.shared-list",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Share one negative keyword list across campaigns",
+    "dont": "Maintain separate lists by hand",
+    "why": "A shared list prevents waste everywhere at once",
+    "source": "Google Ads - shared negative lists",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "list",
+      "negatives",
+      "shared",
+      "ads-google-bing"
+    ]
+  },
+  {
+    "id": "ads-google-bing.shopping.priority-rules",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Set shopping priority only when products overlap",
+    "dont": "Set high priority on everything",
+    "why": "Priority only resolves competition between overlapping items",
+    "source": "Google Merchant Center - priority",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "priority",
+      "rules",
+      "shopping",
+      "ads-google-bing"
+    ]
   }
 ]

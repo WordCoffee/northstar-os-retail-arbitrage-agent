@@ -38,5 +38,157 @@
       "brand-store",
       "auto"
     ]
+  },
+  {
+    "id": "brand-store.home.one-job",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Give every store page one job and one next click",
+    "dont": "List every SKU on the home page",
+    "why": "A page that answers one question converts better than a catalogue",
+    "source": "Amazon Stores - creative guidelines",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "home",
+      "job",
+      "one",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.nav.two-levels",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep store navigation to two levels",
+    "dont": "Bury products three clicks deep",
+    "why": "Depth loses the visitor before the product",
+    "source": "Amazon Stores - navigation",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "levels",
+      "nav",
+      "two",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.mobile.vertical-first",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Design store pages vertical-first for mobile",
+    "dont": "Shrink a desktop layout",
+    "why": "Most store visits are on a phone",
+    "source": "Amazon Stores - mobile guidelines",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "first",
+      "mobile",
+      "vertical",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.story.proof-points",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Use origin, process and standards as proof",
+    "dont": "Use unverifiable superlatives",
+    "why": "Proof points differentiate a commodity product",
+    "source": "Amazon Stores - brand story",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "points",
+      "proof",
+      "story",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.store.ads-destination",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Send paid traffic to the product detail page",
+    "dont": "Send cold ad traffic to the store home",
+    "why": "Ad intent is product-specific; the store home adds a step",
+    "source": "Amazon Ads - landing page guidance",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "ads",
+      "destination",
+      "store",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.metrics.sessions",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Track sessions and conversion per page",
+    "dont": "Judge a store by impressions",
+    "why": "Impressions without conversion hide a bad page",
+    "source": "Amazon Stores - metrics",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "metrics",
+      "sessions",
+      "brand-store"
+    ]
+  },
+  {
+    "id": "brand-store.international.locale",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Localise currency, language and sizing per marketplace",
+    "dont": "Reuse US copy everywhere",
+    "why": "Localisation affects trust and conversion",
+    "source": "Amazon Global Selling - localisation",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "international",
+      "locale",
+      "brand-store"
+    ]
   }
 ]

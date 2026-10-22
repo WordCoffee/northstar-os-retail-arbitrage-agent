@@ -39,5 +39,162 @@
       "creative",
       "auto"
     ]
+  },
+  {
+    "id": "creative.images.hierarchy",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Order images product, scale, detail, use case, packaging",
+    "dont": "Repeat the same angle in every slot",
+    "why": "Each slot should answer a different objection",
+    "source": "Amazon Seller Central - image guidance",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "hierarchy",
+      "images",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.video.first-frame",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Make the first frame the hook",
+    "dont": "Open with a logo animation",
+    "why": "The first frame decides whether the video plays",
+    "source": "Amazon Ads - video creative",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "first",
+      "frame",
+      "video",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.label.composite",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Composite label text as a separate layer",
+    "dont": "Let the image model render the label text",
+    "why": "Generated text warps; layered text stays accurate",
+    "source": "Internal design rule",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "composite",
+      "label",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.palette.contrast",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Keep overlay text at AA contrast",
+    "dont": "Put text over a busy photo area",
+    "why": "Low contrast text is unreadable on a phone",
+    "source": "WCAG 2.2 contrast guidance",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "contrast",
+      "palette",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.ads.square-and-vertical",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Export both 1:1 and 9:16 from the same master",
+    "dont": "Crop the product to fit a vertical",
+    "why": "Each placement needs its own composition",
+    "source": "Amazon Ads - creative specs",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "ads",
+      "and",
+      "square",
+      "vertical",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.ugc.keep-authentic",
+    "domain": "creative",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep user content rough and real",
+    "dont": "Over-polish it into a studio ad",
+    "why": "Authenticity is the reason UGC converts",
+    "source": "Amazon Creator Connections - content",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "authentic",
+      "keep",
+      "ugc",
+      "creative"
+    ]
+  },
+  {
+    "id": "creative.thumbnails.readability",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Make thumbnails readable at 200 px wide",
+    "dont": "Use thin type and fine detail",
+    "why": "Thumbnails are judged at feed size, not full screen",
+    "source": "Internal design rule",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "readability",
+      "thumbnails",
+      "creative"
+    ]
   }
 ]

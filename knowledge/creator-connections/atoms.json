@@ -20,5 +20,154 @@
       "disclosure",
       "ftc"
     ]
+  },
+  {
+    "id": "creator-connections.brief.specify-hook",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Write the hook and the allowed claim in the brief",
+    "dont": "Leave the creative direction open",
+    "why": "Vague briefs produce content that cannot be used in ads",
+    "source": "Amazon Creator Connections - campaign brief",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "brief",
+      "hook",
+      "specify",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.commission.tiered",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Tier the commission by performance",
+    "dont": "Offer one flat high commission",
+    "why": "Tiering rewards the creators who actually convert",
+    "source": "Amazon Creator Connections - commission",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "commission",
+      "tiered",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.deliverables.explicit",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "List deliverables, formats and deadlines",
+    "dont": "Accept a vague promise to post",
+    "why": "Undefined deliverables cannot be approved or measured",
+    "source": "Amazon Creator Connections - deliverables",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "deliverables",
+      "explicit",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.disclosure.required",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Require a paid partnership disclosure in the brief",
+    "dont": "Rely on the creator to remember",
+    "why": "Missing disclosure breaches platform and FTC rules",
+    "source": "FTC endorsement guides",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "disclosure",
+      "required",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.creators.audience-fit",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Pick creators whose audience matches the product",
+    "dont": "Chase follower count alone",
+    "why": "Reach without intent does not convert",
+    "source": "Amazon Creator Connections - creator selection",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "audience",
+      "creators",
+      "fit",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.tracking.links",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Use trackable links or codes for every creator",
+    "dont": "Estimate results from total sales",
+    "why": "Untracked campaigns cannot be attributed or repeated",
+    "source": "Amazon Creator Connections - reporting",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "links",
+      "tracking",
+      "creator-connections"
+    ]
+  },
+  {
+    "id": "creator-connections.rights.usage",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Agree usage rights for paid ads up front",
+    "dont": "Reuse creator content without permission",
+    "why": "Usage rights are a separate negotiation from the post itself",
+    "source": "Amazon Creator Connections - content rights",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "rights",
+      "usage",
+      "creator-connections"
+    ]
   }
 ]

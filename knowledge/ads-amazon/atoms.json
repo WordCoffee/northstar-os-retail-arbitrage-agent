@@ -262,5 +262,166 @@
       "impression-share",
       "bids"
     ]
+  },
+  {
+    "id": "ads-amazon.campaign.one-theme",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Give each ad group one theme and one match type",
+    "dont": "Mix exact and broad in the same ad group",
+    "why": "Mixed groups make budget and bid decisions unreadable",
+    "source": "Amazon Ads - campaign structure",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "campaign",
+      "one",
+      "theme",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.bids.launch-discovery",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Start new discovery keywords at the suggested bid",
+    "dont": "Underbid to save money on day one",
+    "why": "Underbidding produces no impressions and no learning",
+    "source": "Amazon Ads - bidding",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "bids",
+      "discovery",
+      "launch",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.negatives.own-brand",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Negate irrelevant brands and junk queries",
+    "dont": "Negate your own brand terms",
+    "why": "Negating your own brand gives competitors the slot",
+    "source": "Amazon Ads - negative keywords",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "brand",
+      "negatives",
+      "own",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.reports.placement-weekly",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Review the placement report every week",
+    "dont": "Set placement multipliers without placement data",
+    "why": "Placement performance varies by product and season",
+    "source": "Amazon Ads - placement reporting",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "placement",
+      "reports",
+      "weekly",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.budget.scale-one-lever",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Raise budget first when the campaign is capped",
+    "dont": "Raise bid and budget at the same time",
+    "why": "One change at a time keeps the cause of a result visible",
+    "source": "Amazon Ads - budget management",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "budget",
+      "lever",
+      "one",
+      "scale",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.acos.launch-window",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Accept a higher ACOS during a launch window",
+    "dont": "Pause a new campaign in week one for ACOS",
+    "why": "Launch spend buys rank and review velocity, not just sales",
+    "source": "Amazon Ads - launch strategy",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "acos",
+      "launch",
+      "window",
+      "ads-amazon"
+    ]
+  },
+  {
+    "id": "ads-amazon.sbv.video-brevity",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep Sponsored Brands video short and product-led",
+    "dont": "Open with a long brand logo animation",
+    "why": "The first two seconds decide whether the video is watched",
+    "source": "Amazon Ads - Sponsored Brands video",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "brevity",
+      "sbv",
+      "video",
+      "ads-amazon"
+    ]
   }
 ]

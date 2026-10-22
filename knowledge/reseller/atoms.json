@@ -18,5 +18,156 @@
       "reseller",
       "auto"
     ]
+  },
+  {
+    "id": "reseller.sourcing.invoice-match",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Match invoice brand, quantity and date to the request",
+    "dont": "Submit retail receipts or order confirmations",
+    "why": "Gating reviews reject retail documentation",
+    "source": "Amazon Seller Central - selling approval",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "invoice",
+      "match",
+      "sourcing",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.condition.grade-honest",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Grade from the real item state using standard grades",
+    "dont": "Stretch the grade to win the Buy Box",
+    "why": "Condition mismatches drive returns and account warnings",
+    "source": "Amazon Seller Central - condition guidelines",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "condition",
+      "grade",
+      "honest",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.buybox.price-floor",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Set a margin floor before repricing",
+    "dont": "Chase the lowest price indefinitely",
+    "why": "A race to the bottom removes the profit that funds the next buy",
+    "source": "Amazon Seller Central - pricing",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "buybox",
+      "floor",
+      "price",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.returns.photo-evidence",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Photograph condition before shipping",
+    "dont": "Skip evidence for low-value items",
+    "why": "Evidence is the only defence in an A-to-z claim",
+    "source": "Amazon Seller Central - A-to-z claims",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "evidence",
+      "photo",
+      "returns",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.gating.precheck",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Check gating before buying inventory",
+    "dont": "Buy first and hope for approval",
+    "why": "Unsellable stock is the most expensive mistake in arbitrage",
+    "source": "Amazon Seller Central - gated categories",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "gating",
+      "precheck",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.repricing.rules",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Set min and max rules in the repricer",
+    "dont": "Reprice with no floor",
+    "why": "Unbounded repricing can sell below cost overnight",
+    "source": "Amazon Seller Central - repricing",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "repricing",
+      "rules",
+      "reseller"
+    ]
+  },
+  {
+    "id": "reseller.hazmat.precheck",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Check hazmat and shipping restrictions first",
+    "dont": "Assume every item ships normally",
+    "why": "Restricted goods get stranded or destroyed at the warehouse",
+    "source": "Amazon Seller Central - hazmat",
+    "source_kind": "curated_fact",
+    "effective_date": "2026-10-22",
+    "last_verified": "2026-10-22",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "hazmat",
+      "precheck",
+      "reseller"
+    ]
   }
 ]

@@ -1,0 +1,68 @@
+# Bulk knowledge facts — one row per rule, pipe-delimited.
+# domain | slug | DO | DON'T | WHY | source | confidence | applies_to
+# Imported by tools/import_facts.py into knowledge/<domain>/atoms.json.
+# Rows are operator-curated and carry needs_verification until checked.
+
+listing|title.brand-first|Lead the title with the brand, then the product and the deciding attribute|Bury the brand after a keyword string|Buyers scan brand and product first, and the first words decide the click|Amazon Seller Central - product title requirements|high|pl,reseller
+listing|bullets.benefit-first|Open each bullet with the benefit, then the feature that proves it|Open with a raw specification and hope the buyer infers the benefit|Mobile shoppers scan the first three words of each bullet|Amazon Seller Central - bullet points|medium|pl,reseller
+listing|images.second-slot|Use image two for scale or the product in use|Repeat the main image or spend the slot on a logo|The second image answers the objection the first one created|Amazon Seller Central - image guidance|medium|pl,reseller
+listing|price.no-superlatives|Describe value with facts the buyer can verify|Claim cheapest or best value in the listing copy|Unverifiable superlatives are a policy risk and erode trust|Amazon Seller Central - prohibited content|high|pl,reseller
+listing|category.browse-node|Choose the most specific browse node the product actually fits|Pick the largest top-level category for reach|Wrong nodes hide the product from category browsing|Amazon Seller Central - browse classification|medium|pl,reseller
+listing|variation.parent-child|Keep the parent as the family and every child as one real variant|Attach unrelated ASINs to consolidate reviews|Wrong variation families get split by Amazon and lose the review pool|Amazon Seller Central - variation relationships|high|pl,reseller
+listing|aplus.above-fold|Put the strongest visual claim in the first A+ module|Open A+ with a logo or a wall of badges|The first screen decides whether the buyer scrolls|Amazon Seller Central - A+ modules|medium|pl
+
+ads-amazon|campaign.one-theme|Give each ad group one theme and one match type|Mix exact and broad in the same ad group|Mixed groups make budget and bid decisions unreadable|Amazon Ads - campaign structure|high|pl,reseller
+ads-amazon|bids.launch-discovery|Start new discovery keywords at the suggested bid|Underbid to save money on day one|Underbidding produces no impressions and no learning|Amazon Ads - bidding|medium|pl,reseller
+ads-amazon|negatives.own-brand|Negate irrelevant brands and junk queries|Negate your own brand terms|Negating your own brand gives competitors the slot|Amazon Ads - negative keywords|high|pl,reseller
+ads-amazon|reports.placement-weekly|Review the placement report every week|Set placement multipliers without placement data|Placement performance varies by product and season|Amazon Ads - placement reporting|medium|pl,reseller
+ads-amazon|budget.scale-one-lever|Raise budget first when the campaign is capped|Raise bid and budget at the same time|One change at a time keeps the cause of a result visible|Amazon Ads - budget management|high|pl,reseller
+ads-amazon|acos.launch-window|Accept a higher ACOS during a launch window|Pause a new campaign in week one for ACOS|Launch spend buys rank and review velocity, not just sales|Amazon Ads - launch strategy|medium|pl,reseller
+ads-amazon|sbv.video-brevity|Keep Sponsored Brands video short and product-led|Open with a long brand logo animation|The first two seconds decide whether the video is watched|Amazon Ads - Sponsored Brands video|medium|pl
+
+ads-google-bing|pmax.themed-assets|Build one Performance Max asset group per theme|Mix every product and offer into one asset group|The system cannot learn which assets belong together|Google Ads - Performance Max asset groups|medium|pl,reseller
+ads-google-bing|search.brand-separate|Run brand search in its own campaign|Let Performance Max absorb branded queries|Brand traffic converts regardless of campaign and inflates reported return|Google Ads - brand campaigns|high|pl,reseller
+ads-google-bing|feed.title-attributes|Put the key attributes in the feed title|Keyword-stuff the feed title|Shopping relevance is driven by structured attributes|Google Merchant Center - product data|high|pl,reseller
+ads-google-bing|bing.import-recheck|Re-check bids and budgets after importing from Google|Assume the import is one to one|Bing auction dynamics differ and imported bids can overspend|Microsoft Advertising - import from Google|medium|pl,reseller
+ads-google-bing|conversions.one-primary|Mark exactly one primary conversion per objective|Count add to cart as a primary conversion|Multiple primaries teach bidding to chase the wrong action|Google Ads - conversion actions|high|pl,reseller
+ads-google-bing|negatives.shared-list|Share one negative keyword list across campaigns|Maintain separate lists by hand|A shared list prevents waste everywhere at once|Google Ads - shared negative lists|medium|pl,reseller
+ads-google-bing|shopping.priority-rules|Set shopping priority only when products overlap|Set high priority on everything|Priority only resolves competition between overlapping items|Google Merchant Center - priority|medium|pl,reseller
+
+aplus|modules.benefit-banner|Lead the module stack with the single strongest benefit|Lead with a logo wall or brand history|The first module is the only one guaranteed to be seen|Amazon Seller Central - A+ modules|medium|pl
+aplus|comparison.rows-limit|Compare three or four attributes buyers actually weigh|Compare on price or against competitors|Too many rows dilute the decision and price comparison invites churn|Amazon Seller Central - comparison table|medium|pl
+aplus|images.text-size|Keep text in A+ images large enough to read on a phone|Bake body copy into an image|Image text is invisible to search and unreadable on mobile|Amazon Seller Central - A+ specifications|high|pl
+aplus|brand-story.people|Show the people and place behind the product|Use generic stock imagery for the brand story|Provenance is what separates a private label from a commodity|Amazon Seller Central - brand story module|medium|pl
+aplus|modules.mobile-order|Check the module order on a phone before publishing|Approve from the desktop preview only|Most grocery and supplement traffic is mobile|Amazon Seller Central - A+ modules|high|pl
+aplus|claims.substantiation|Keep written substantiation for every claim in A+|Make comparative claims without evidence|A+ is still a claim surface and is enforced like the listing|Amazon Seller Central - claims policy|high|pl
+aplus|aplus.ads-timing|Publish A+ before scaling the ad budget|Scale spend on a listing with no A+|Conversion rate sets the ACOS a campaign can sustain|Amazon Ads - conversion guidance|medium|pl
+
+creator-connections|brief.specify-hook|Write the hook and the allowed claim in the brief|Leave the creative direction open|Vague briefs produce content that cannot be used in ads|Amazon Creator Connections - campaign brief|high|pl
+creator-connections|commission.tiered|Tier the commission by performance|Offer one flat high commission|Tiering rewards the creators who actually convert|Amazon Creator Connections - commission|medium|pl
+creator-connections|deliverables.explicit|List deliverables, formats and deadlines|Accept a vague promise to post|Undefined deliverables cannot be approved or measured|Amazon Creator Connections - deliverables|high|pl
+creator-connections|disclosure.required|Require a paid partnership disclosure in the brief|Rely on the creator to remember|Missing disclosure breaches platform and FTC rules|FTC endorsement guides|high|pl
+creator-connections|creators.audience-fit|Pick creators whose audience matches the product|Chase follower count alone|Reach without intent does not convert|Amazon Creator Connections - creator selection|medium|pl
+creator-connections|tracking.links|Use trackable links or codes for every creator|Estimate results from total sales|Untracked campaigns cannot be attributed or repeated|Amazon Creator Connections - reporting|high|pl
+creator-connections|rights.usage|Agree usage rights for paid ads up front|Reuse creator content without permission|Usage rights are a separate negotiation from the post itself|Amazon Creator Connections - content rights|medium|pl
+
+brand-store|home.one-job|Give every store page one job and one next click|List every SKU on the home page|A page that answers one question converts better than a catalogue|Amazon Stores - creative guidelines|medium|pl
+brand-store|nav.two-levels|Keep store navigation to two levels|Bury products three clicks deep|Depth loses the visitor before the product|Amazon Stores - navigation|medium|pl
+brand-store|mobile.vertical-first|Design store pages vertical-first for mobile|Shrink a desktop layout|Most store visits are on a phone|Amazon Stores - mobile guidelines|high|pl
+brand-store|story.proof-points|Use origin, process and standards as proof|Use unverifiable superlatives|Proof points differentiate a commodity product|Amazon Stores - brand story|medium|pl
+brand-store|store.ads-destination|Send paid traffic to the product detail page|Send cold ad traffic to the store home|Ad intent is product-specific; the store home adds a step|Amazon Ads - landing page guidance|medium|pl
+brand-store|metrics.sessions|Track sessions and conversion per page|Judge a store by impressions|Impressions without conversion hide a bad page|Amazon Stores - metrics|high|pl
+brand-store|international.locale|Localise currency, language and sizing per marketplace|Reuse US copy everywhere|Localisation affects trust and conversion|Amazon Global Selling - localisation|medium|pl
+
+reseller|sourcing.invoice-match|Match invoice brand, quantity and date to the request|Submit retail receipts or order confirmations|Gating reviews reject retail documentation|Amazon Seller Central - selling approval|high|reseller
+reseller|condition.grade-honest|Grade from the real item state using standard grades|Stretch the grade to win the Buy Box|Condition mismatches drive returns and account warnings|Amazon Seller Central - condition guidelines|high|reseller
+reseller|buybox.price-floor|Set a margin floor before repricing|Chase the lowest price indefinitely|A race to the bottom removes the profit that funds the next buy|Amazon Seller Central - pricing|medium|reseller
+reseller|returns.photo-evidence|Photograph condition before shipping|Skip evidence for low-value items|Evidence is the only defence in an A-to-z claim|Amazon Seller Central - A-to-z claims|medium|reseller
+reseller|gating.precheck|Check gating before buying inventory|Buy first and hope for approval|Unsellable stock is the most expensive mistake in arbitrage|Amazon Seller Central - gated categories|high|reseller
+reseller|repricing.rules|Set min and max rules in the repricer|Reprice with no floor|Unbounded repricing can sell below cost overnight|Amazon Seller Central - repricing|high|reseller
+reseller|hazmat.precheck|Check hazmat and shipping restrictions first|Assume every item ships normally|Restricted goods get stranded or destroyed at the warehouse|Amazon Seller Central - hazmat|high|reseller
+
+creative|images.hierarchy|Order images product, scale, detail, use case, packaging|Repeat the same angle in every slot|Each slot should answer a different objection|Amazon Seller Central - image guidance|medium|pl,reseller
+creative|video.first-frame|Make the first frame the hook|Open with a logo animation|The first frame decides whether the video plays|Amazon Ads - video creative|high|pl,reseller
+creative|label.composite|Composite label text as a separate layer|Let the image model render the label text|Generated text warps; layered text stays accurate|Internal design rule|high|pl,reseller
+creative|palette.contrast|Keep overlay text at AA contrast|Put text over a busy photo area|Low contrast text is unreadable on a phone|WCAG 2.2 contrast guidance|high|pl,reseller
+creative|ads.square-and-vertical|Export both 1:1 and 9:16 from the same master|Crop the product to fit a vertical|Each placement needs its own composition|Amazon Ads - creative specs|medium|pl,reseller
+creative|ugc.keep-authentic|Keep user content rough and real|Over-polish it into a studio ad|Authenticity is the reason UGC converts|Amazon Creator Connections - content|medium|pl
+creative|thumbnails.readability|Make thumbnails readable at 200 px wide|Use thin type and fine detail|Thumbnails are judged at feed size, not full screen|Internal design rule|high|pl,reseller
