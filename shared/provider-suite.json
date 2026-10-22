@@ -117,15 +117,15 @@
       "runtime": "comfyui",
       "lanes": ["local"],
       "license": "MIT",
-      "weights_license": "unverified",
+      "weights_license": "FLUX-NonCommercial",
       "commercial_ok": false,
       "network": false,
       "cost": "free_local",
-      "installed": "ready",
+      "installed": "installed",
       "gate": "MEDIA_GEN_LIVE",
       "source": "https://github.com/visualbruno/ComfyUI-UltraTex",
       "unlocks": "Untextured mesh + one reference image -> six 2048px texture views baked to a UV-mapped GLB. Turns product meshes into textured 3D props for mockups and motion.",
-      "notes": "Node code is MIT and the base FLUX.2-Klein-9B is Apache-2.0, but the UltraTex LoRA weights served from ModelScope carry no stated commercial grant. Treat as local-only until the weights licence is confirmed in writing. Reported ~2.3 min/workflow at 1024 and ~9.6 min at 2048 on a 16 GB RTX 3080-class laptop, fp8."
+      "notes": "INSTALLED + LIVE 2026-10-21: full pipeline verified end-to-end in 200 s (prep, 25-step sampler, 2048 bake) producing a valid 10.3 MB GLB + albedo PNG on the RTX 5080 Laptop 16 GB. Runner detail: the example workflow expects flux-2-klein-base-9b-fp8.safetensors; this box uses the GGUF Q6_K base through UnetLoaderGGUF (base fp8 is gated on HF and 16.9 GB bf16 would not fit), PEFT LoRA applies cleanly over GGUF. xatlas failed to build on Python 3.14 and is NOT needed because uv_mode=comfy_gpu works. LICENCE NOW CONFIRMED: the published weight mirror ships FLUX-NON-COMMERCIAL-LICENSE.md, so the weights inherit FLUX's non-commercial terms - local bench only, never a customer render."
     },
     "openmontage": {
       "name": "OpenMontage agentic video harness",
@@ -138,11 +138,12 @@
       "cloud_block": "agpl_network_copyleft_unreviewed",
       "network": true,
       "cost": "free_local",
-      "installed": "ready",
+      "installed": "installed",
       "gate": "OPENMONTAGE_LIVE",
+      "root": "C:\\Users\\T2Hol\\Desktop\\Northstar External\\OpenMontage",
       "source": "https://github.com/calesthio/OpenMontage",
       "unlocks": "Pipelines + tools + stage-director skills for explainers, cinematic trailers, talking heads, documentary montage from free/open archives, clip factory, localization. Zero-key path uses Piper TTS, Remotion/HyperFrames, FFmpeg and Archive.org/NASA/Wikimedia footage.",
-      "notes": "Two separate facts, both true: (1) AGPL-3.0 does allow commercial use, but section 13's network clause is a legal question we have not answered, so it is local-only by default; (2) it is a harness, not a model - most of its 60+ provider integrations are paid cloud APIs, so 'local lane' means 'installed on this machine', not 'no network'. Free path = Piper + Remotion + FFmpeg + open archives."
+      "notes": "INSTALLED + LIVE 2026-10-21: cloned outside the repo (never vendored), Python 3.11 venv, core deps + piper-tts 1.8.0 + faster-whisper 1.2.1 + 199 npm packages. Registry discovers 138 tools / 38 available without any API key (96 need paid provider keys) and rendered the zero-key 'world-in-numbers' demo to a real 690-frame MP4. Two separate facts, both true: (1) AGPL-3.0 does allow commercial use, but section 13's network clause is a legal question we have not answered, so it is local-only by default; (2) it is a harness, not a model - most of its 60+ provider integrations are paid cloud APIs, so 'local lane' means 'installed on this machine', not 'no network'."
     },
     "piper_tts": {
       "name": "Piper TTS",
@@ -153,9 +154,9 @@
       "commercial_ok": true,
       "network": false,
       "cost": "free_local",
-      "installed": "ready",
+      "installed": "installed",
       "unlocks": "Offline narration for local video and voiceover drafts.",
-      "notes": "The zero-cost voice lane; it never leaves the machine."
+      "notes": "piper-tts 1.8.0 + onnxruntime 1.31.0 installed in the OpenMontage venv (Python 3.11); the CLI needs a voice .onnx per call, fetched on demand into --data-dir. The zero-cost voice lane; it never leaves the machine."
     },
     "sapi_voice": {
       "name": "Northstar local voice service (Windows SAPI)",
@@ -179,9 +180,9 @@
       "commercial_ok": true,
       "network": false,
       "cost": "free_local",
-      "installed": "ready",
+      "installed": "installed",
       "unlocks": "Local transcription for reference-video teardowns and clip selection.",
-      "notes": "Needed if we adopt OpenMontage's reference-video path without sending audio to a cloud STT API."
+      "notes": "faster-whisper 1.2.1 installed in the OpenMontage venv; it flipped OpenMontage's 'transcriber' tool from unavailable to available (37 -> 38 zero-key tools). Model weights download on first use. Needed if we adopt the reference-video path without sending audio to a cloud STT API."
     },
     "rapidocr": {
       "name": "RapidOCR (onnxruntime)",

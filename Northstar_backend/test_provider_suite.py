@@ -64,9 +64,19 @@ def test_noncommercial_weights_blocked_on_cloud():
 
 
 def test_unverified_weights_blocked_on_cloud():
+    # UltraTex weights turned out to ship a FLUX non-commercial licence, so the
+    # confirmed-block path is what fires for it now; the unverified path is
+    # covered directly below.
     v = ps.verify("ultratex", "cloud")
     assert v.allowed is False
-    assert v.reason == ps.R_WEIGHTS_UNVERIFIED
+    assert v.reason == ps.R_LICENSE_NONCOMMERCIAL
+
+
+def test_unverified_weights_reason_code():
+    tool = {"commercial_ok": True, "weights_license": "unverified", "license": "MIT"}
+    assert ps._license_block(tool, "cloud") == ps.R_WEIGHTS_UNVERIFIED
+    # Same tool is fine on the bench.
+    assert ps._license_block(tool, "local") is None
 
 
 def test_agpl_harness_blocked_on_cloud_not_for_noncommercial_reason():
@@ -111,15 +121,14 @@ def test_unknown_provider_fails_closed():
 # --- install + gate axes are separate ---------------------------------------
 
 def test_ready_tool_is_allowed_but_not_installed():
-    v = ps.verify("ultratex", "local")
+    v = ps.verify("blender", "local")
     assert v.allowed is True
     assert v.installed is False and v.usable is False
     assert v.reason == ps.R_NOT_INSTALLED
 
 
 def test_confirmed_probe_makes_ready_tool_installed():
-    v = ps.verify("ultratex", "local", confirmed=["ultratex"],
-                  env={"MEDIA_GEN_LIVE": "1"})
+    v = ps.verify("blender", "local", confirmed=["blender"])
     assert v.installed is True and v.usable is True and v.reason == ps.R_OK
 
 

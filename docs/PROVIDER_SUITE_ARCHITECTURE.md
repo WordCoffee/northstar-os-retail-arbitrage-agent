@@ -1,6 +1,7 @@
 # Provider Tool Suite — local bench vs cloud customer lane
 
 **Status:** shipped 2026-10-21 · `feature/v4.1-mesh`
+**Install run:** 2026-10-21 — UltraTex and OpenMontage installed and verified live (see §7)
 **Code:** `shared/provider-suite.json` (data) · `Northstar_backend/provider_suite.py` (resolver)
 **API:** `GET /api/v1/provider-suite[?provider=local|cloud]` · **UI:** Master Brain → *Provider tool suite*
 
@@ -81,16 +82,34 @@ Untextured mesh + one reference image → six 2048² texture views → baked UV 
 exported as GLB. Nodes: Load LoRA, Foreground VAE Decoder, Prep (mesh + reference),
 Sampler, Bake Texture.
 
-- **Licence split:** node code MIT; base `FLUX.2-Klein-base-9B` is Apache-2.0;
-  **the UltraTex LoRA weights from ModelScope state no commercial grant** →
-  `weights_license_unverified` → local lane only until confirmed in writing.
-- **Hardware:** measured on an RTX 3080 Laptop 16 GB, fp8 — ~2.3 min per workflow at
-  1024, ~9.6 min at 2048. Same class as this box.
+- **Licence split — now confirmed, not assumed:** node code MIT; base `FLUX.2-Klein-9B`
+  is Apache-2.0; **the published UltraTex weight mirror ships
+  `FLUX-NON-COMMERCIAL-LICENSE.md`**, so the LoRA inherits FLUX's non-commercial
+  terms → `license_noncommercial` → local bench only. This is the exact case the
+  suite exists for.
+- **Hardware:** the operator box is an RTX 5080 Laptop 16 GB. First live run: 200 s
+  for the full graph (prep + 25-step sampler + 2048 bake).
 - **Prerequisite already satisfied:** it needs Triton on Windows; `triton-windows
   3.8.0.post29` is already installed (it fixed KJNodes' PatchTritonVAE, 00_STATE).
 - **Why it matters:** Product Designer already has meshes. Today mockups are flat
   plates. UltraTex turns a mesh + the approved hero plate into a textured 3D prop,
   which then feeds local video (Wan 2.2) or the Blender lane. Zero marginal cost.
+
+**Installed configuration that actually works on this box** (differs from the
+example workflow in one place):
+
+| Slot | Example workflow | This machine |
+|---|---|---|
+| Diffusion base | `flux-2-klein-base-9b-fp8.safetensors` (HF, gated, 16.9 GB bf16) | **`flux-2-klein-base-9b-Q6_K.gguf`** via `UnetLoaderGGUF` |
+| Text encoder | `qwen_3_8b_fp8mixed.safetensors` | same (already present) |
+| VAE | `flux2-vae.safetensors` | same (already present) |
+| LoRA | `ultratex_flux2.safetensors` | same (+ `_mr` for metallic-roughness) |
+| Decoder | `ultratex_flux2_decoder.pt` | same |
+| UV unwrap | `comfy_gpu` | same — **xatlas is not needed** (it has no Python 3.14 wheel) |
+
+The PEFT LoRA applies cleanly over the GGUF base because `ultratex_core/lora.py`
+converts to ComfyUI's generic `lora_down/lora_up` patches rather than touching
+weights directly.
 
 ### OpenMontage — agentic video harness
 
@@ -130,12 +149,12 @@ is the missing manifest that tells the harness what it is allowed to pick up.
 
 | # | Adoption | Lane | Cost | Blocker | Verdict |
 |---|---|---|---|---|---|
-| 1 | **UltraTex** ComfyUI pack → textured 3D product props | local | $0 | LoRA weights licence (needs written confirmation or an Apache-2.0 substitute) | Ready to install; install once licence is confirmed or accept bench-only use |
+| 1 | **UltraTex** ComfyUI pack → textured 3D product props | local | $0 | **none — installed and verified 2026-10-21** (weights are FLUX non-commercial → bench only) | **DONE** |
 | 2 | **OpenMontage stage-skill pattern** → our own pipeline directors for Design Studio / ListingForge / SocialPulse | both | $0 | none (pattern, not code) | Do now |
-| 3 | **OpenMontage as an external local tool** (`OPENMONTAGE_ROOT`, invoked headless, output consumed as a file) | local only | $0 free path | AGPL §13 review before any customer-facing use | Deferred until a real video order exists |
+| 3 | **OpenMontage as an external local tool** (`OPENMONTAGE_ROOT`, invoked headless, output consumed as a file) | local only | $0 free path | **installed and verified 2026-10-21**; AGPL §13 review still required before any customer-facing use | **DONE (bench), review open** |
 
-Explicitly **not** done: nothing auto-installed, no repo vendored, no AGPL code in
-a cloud path, no new spend, no provider key touched.
+Explicitly **not** done: nothing vendored into the repo, no AGPL code in a cloud
+path, no new spend, no provider key touched.
 
 ---
 
@@ -172,7 +191,7 @@ Rules:
 ## 6. Verification
 
 ```
-python -m pytest test_provider_suite.py -q     # 23 passed
+python -m pytest test_provider_suite.py -q     # 24 passed
 npm run build                                  # 0 errors
 ```
 
@@ -182,3 +201,53 @@ blocked on cloud and allowed locally · cloud-only tool refused locally · unkno
 and unknown provider fail closed · install and gate are separate axes · gate
 `armed` vs `present` · active-lane env override · catalog never leaks credential
 values · endpoint envelope.
+
+---
+
+## 7. Install log — 2026-10-21
+
+### UltraTex (local bench)
+
+```
+custom_nodes/ComfyUI-UltraTex                 cloned (MIT node code)
+pip install trimesh moderngl scipy            ok (moderngl 5.13.0)
+pip install xatlas                            FAILED — no Python 3.14 wheel
+                                              → not needed, uv_mode=comfy_gpu
+models/diffusion_models/flux-2-klein-base-9b-Q6_K.gguf   7,865,424,160 B
+models/loras/ultratex_flux2.safetensors                  456 MB
+models/loras/ultratex_flux2_mr.safetensors               456 MB
+models/ultratex/ultratex_flux2_decoder.pt                 94.7 MB
+ComfyUI restart                               1376 nodes (+9), no import errors
+live workflow                                 200 s → NS_UltraTex_Smoke_00001_.glb
+                                              10.27 MB, valid glTF magic
+                                              + albedo PNG 2.19 MB
+```
+
+The first two submissions were rejected by validation/node errors — the enum is
+`background (LoadImage)` and `reference_mask` must be wired. Third submission
+completed. That is recorded because a "it just worked" claim would be false.
+
+### OpenMontage (local bench, external to the repo)
+
+```
+C:\Users\T2Hol\Desktop\Northstar External\OpenMontage   (clone, not vendored)
+Python 3.11 venv                                        (repo pins .python-version 3.10+)
+pip install -r requirements.txt                          ok
+pip install piper-tts                                    piper-tts 1.8.0 + onnxruntime 1.31.0
+pip install faster-whisper                               faster-whisper 1.2.1
+remotion-composer npm install                            199 packages
+registry.discover()                                      138 tools, 38 available, 96 need keys
+                                                         (faster-whisper flipped transcriber on)
+render_demo.py world-in-numbers                          690 frames → 4.2 MB MP4, zero API keys
+```
+
+The 96 unavailable tools are the honest number: they need paid provider keys. The
+zero-key path is real but narrow — that is exactly the "local ≠ offline" caveat.
+
+### Disk note
+
+C: started the run with 15 GB free and finished with 8 GB. The fp8 base model
+(8.91 GB, HF-gated, needs an operator token) was deliberately **not** used; the
+Q6_K GGUF base is 7.33 GB and ungated. If disk pressure becomes a problem, the
+fp8 route is a strict downgrade on this box.
+

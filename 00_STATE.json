@@ -22,8 +22,13 @@
       "openmontage": "AGPL-3.0 agentic video harness (10+ pipelines, 100+ tools, 60+ providers, 700+ skill files; zero-key path = Piper TTS + Remotion/HyperFrames + FFmpeg + Archive.org/NASA/Wikimedia). Commercial use permitted by AGPL but section 13 network clause unreviewed -> local lane only. Decision: clone the pipeline/stage-skill PATTERN, do not vendor the AGPL tree.",
       "harness_category": "An agent harness is the runtime layer around a model (tools, skills, sessions, approvals). Northstar already has one; provider-suite.json is its capability manifest."
     },
-    "not_done": "nothing auto-installed, no repo vendored, no AGPL code in a cloud path, no new spend, no provider key read.",
-    "verification": "pytest test_provider_suite.py 23 passed; npm run build 0 errors."
+    "not_done": "nothing vendored into the repo, no AGPL code in a cloud path, no new spend, no provider key read.",
+    "installs_20261021": {
+      "ultratex": "INSTALLED + LIVE. custom_nodes/ComfyUI-UltraTex (MIT) + trimesh/moderngl/scipy (xatlas has no py3.14 wheel and is NOT needed: uv_mode=comfy_gpu). Base = flux-2-klein-base-9b-Q6_K.gguf 7,865,424,160 B via UnetLoaderGGUF (the example workflow's fp8 base is HF-gated and 16.9 GB bf16 would not fit; PEFT LoRA applies cleanly over GGUF). LoRA albedo + MR 456 MB each, decoder 94.7 MB. ComfyUI restarted: 1376 nodes (+9), no import errors. Live run 200 s -> output/NS_UltraTex_Smoke_00001_.glb 10.27 MB (valid glTF magic) + albedo PNG. LICENCE RESOLVED: the published weight mirror ships FLUX-NON-COMMERCIAL-LICENSE.md, so the LoRA inherits FLUX non-commercial terms -> local bench only.",
+      "openmontage": "INSTALLED + LIVE at C:\\Users\\T2Hol\\Desktop\\Northstar External\\OpenMontage (outside the repo, never vendored). Python 3.11 venv, core deps, piper-tts 1.8.0, faster-whisper 1.2.1, 199 npm packages. registry.discover() = 138 tools / 38 available / 96 need paid keys / 4 degraded. Zero-key demo render world-in-numbers = 690 frames -> 4.2 MB MP4.",
+      "disk": "C: 15 GB free before, 8 GB after. fp8 base deliberately not used (HF-gated + 8.91 GB)."
+    },
+    "verification": "pytest test_provider_suite.py 24 passed; pytest with model_router 45 passed; npm run build 0 errors; UltraTex live 200 s GLB; OpenMontage live 690-frame MP4."
   },
   "phases_completed": [
     "Phase 1: Foundation",
