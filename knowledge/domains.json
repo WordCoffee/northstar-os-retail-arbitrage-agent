@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-21",
+  "domains": [
+    {"id": "listing", "label": "Listings", "weight": 1.0, "applies_to": ["pl", "reseller"]},
+    {"id": "ads-amazon", "label": "Amazon Ads", "weight": 1.0, "applies_to": ["pl", "reseller"]},
+    {"id": "aplus", "label": "A+ Content", "weight": 0.8, "applies_to": ["pl"]},
+    {"id": "creator-connections", "label": "Creator Connections", "weight": 0.8, "applies_to": ["pl"]},
+    {"id": "brand-store", "label": "Brand & Store", "weight": 0.7, "applies_to": ["pl"]},
+    {"id": "reseller", "label": "Reseller Ops", "weight": 0.9, "applies_to": ["reseller"]},
+    {"id": "ads-google-bing", "label": "Google & Bing Ads", "weight": 0.7, "applies_to": ["pl", "reseller"]},
+    {"id": "creative", "label": "Creative", "weight": 0.6, "applies_to": ["pl", "reseller"]}
+  ]
+}

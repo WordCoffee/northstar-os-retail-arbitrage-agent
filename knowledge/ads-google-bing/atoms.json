@@ -1,0 +1,48 @@
+[
+  {
+    "id": "ads-google.pmax.brand",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Keep a separate brand-search campaign and exclude brand terms from Performance Max where possible.",
+    "dont": "Do not let Performance Max absorb branded traffic and call it incremental growth.",
+    "why": "PMax will happily claim existing brand demand, inflating reported return without adding sales.",
+    "source": "Google Ads - Performance Max brand traffic guidance",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "pmax",
+      "brand",
+      "cannibalization",
+      "google"
+    ]
+  },
+  {
+    "id": "ads-google-bing.feed.disapproval",
+    "domain": "ads-google-bing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Check Merchant Center disapprovals before blaming bids; a disapproved feed cannot serve Shopping ads.",
+    "dont": "Do not add budget to a campaign whose products are disapproved.",
+    "why": "Disapprovals are a feed or policy problem, and spend changes do nothing until they clear.",
+    "source": "Google Merchant Center - product disapprovals",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "merchant-center",
+      "feed",
+      "disapproval",
+      "shopping"
+    ]
+  }
+]

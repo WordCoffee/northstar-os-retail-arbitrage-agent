@@ -1,0 +1,43 @@
+[
+  {
+    "id": "creative.auto.in-what-order-should-listing-images-be-arran",
+    "domain": "creative",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Lead with the clean product on white, then use images 2 to 6 for scale, use case, detail and packaging.",
+    "dont": "Do not spend the second image on a logo or a lifestyle shot that repeats the first.",
+    "why": "Buyers swipe for information; each slot should answer a different objection.",
+    "source": "Amazon Seller Central - image guidance",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "creative",
+      "auto"
+    ]
+  },
+  {
+    "id": "creative.auto.how-long-should-a-listing-video-be",
+    "domain": "creative",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Keep the listing video short, show the product in use, and keep any on-screen text legible on a phone.",
+    "dont": "Do not reuse a 60 second brand film as the listing video or claim results the product cannot prove.",
+    "why": "Listing video is a decision aid watched on mobile, not a brand advertisement.",
+    "source": "Amazon Seller Central - product video",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "creative",
+      "auto"
+    ]
+  }
+]

@@ -74,10 +74,31 @@ CHAT_SYSTEM_PROMPT = _CHAT_SYSTEM_BASE + (
     REASONING_DISCIPLINE if REASONING_DISCIPLINE_ON else "")
 
 
+def knowledge_block(query: str, limit: int = 6, min_score: float = 0.5) -> str:
+    """Retrieved selling rules for this turn, or "" when nothing is relevant.
+
+    This is how the improvement loop reaches the model: promoted atoms are
+    retrieved per request, never injected wholesale. A retrieval failure must
+    never break a chat turn, so every path returns "".
+    """
+    try:
+        import knowledge_pack as kp  # local import: chat stays importable without it
+    except Exception:  # noqa: BLE001
+        return ""
+    try:
+        hits = kp.retrieve(query, limit=limit, min_score=min_score)
+        if not hits:
+            return ""
+        return "\n\n" + kp.format_for_prompt([a for _, a in hits], limit=limit)
+    except Exception:  # noqa: BLE001
+        return ""
+
+
 def build_chat_messages(history: Iterable[Dict[str, Any]],
                         focus: Optional[Dict[str, Any]] = None,
-                        limit: int = CHAT_HISTORY_MAX) -> List[Dict[str, str]]:
-    """System prompt (with focus) + the most recent non-empty turns."""
+                        limit: int = CHAT_HISTORY_MAX,
+                        query: Optional[str] = None) -> List[Dict[str, str]]:
+    """System prompt (with focus + retrieved rules) + the most recent turns."""
     system = CHAT_SYSTEM_PROMPT
     if focus:
         from shell_focus import FOCUS_PROMPTS
@@ -88,6 +109,8 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
                 if v and k != "mode"]
         if bits:
             system += "\nContext — " + "; ".join(bits)
+    if query:
+        system += knowledge_block(str(query))
     messages: List[Dict[str, str]] = [{"role": "system", "content": system}]
     rows = [m for m in (history or []) if str(m.get("content") or "").strip()]
     for row in rows[-max(0, int(limit)):]:

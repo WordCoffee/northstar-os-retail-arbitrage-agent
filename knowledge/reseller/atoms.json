@@ -1,0 +1,22 @@
+[
+  {
+    "id": "reseller.auto.what-invoices-does-amazon-accept-for-gated-b",
+    "domain": "reseller",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Keep supplier invoices that show the brand, the quantity purchased and a date inside the requested window.",
+    "dont": "Do not submit retail receipts, order confirmations or screenshots as proof of authenticity.",
+    "why": "Gating reviews reject retail documentation, and a failed review can block the category.",
+    "source": "Amazon Seller Central - selling approval",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "reseller",
+      "auto"
+    ]
+  }
+]

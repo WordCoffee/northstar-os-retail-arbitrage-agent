@@ -1,0 +1,42 @@
+[
+  {
+    "id": "brand-store.auto.how-should-a-brand-store-page-be-structured",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Give every Store page one job: a product family, a use case, or a brand story, with one clear next click.",
+    "dont": "Do not build a Store page as a wall of every SKU with no hierarchy.",
+    "why": "Stores convert when the page answers a single question; a flat catalogue wastes the visit.",
+    "source": "Amazon Stores - creative guidelines",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "brand-store",
+      "auto"
+    ]
+  },
+  {
+    "id": "brand-store.auto.what-makes-a-brand-story-trustworthy",
+    "domain": "brand-store",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Use the brand story module to state who makes the product, where, and what standard it meets.",
+    "dont": "Do not use unverifiable superlatives or badges the brand has not earned.",
+    "why": "Provenance and standards are what differentiate a private label from a commodity listing.",
+    "source": "Amazon Seller Central - brand story module",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "brand-store",
+      "auto"
+    ]
+  }
+]

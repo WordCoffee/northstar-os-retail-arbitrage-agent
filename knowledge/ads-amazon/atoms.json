@@ -1,0 +1,266 @@
+[
+  {
+    "id": "ads-amazon.metric.acos",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Judge a campaign on ACOS against the product's break-even ACOS, which is its gross margin percentage.",
+    "dont": "Do not celebrate a low ACOS on tiny sales or panic at a high ACOS during a launch window.",
+    "why": "ACOS alone says nothing about profitability; the comparison to margin is what decides.",
+    "source": "Amazon Ads - ACOS definition and reporting",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "acos",
+      "margin",
+      "profitability",
+      "metrics"
+    ]
+  },
+  {
+    "id": "ads-amazon.metric.tacos",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Track TACOS (total ad spend divided by total revenue) to see whether ads are growing the whole business.",
+    "dont": "Do not use TACOS to judge a single campaign; it is an account-level health metric.",
+    "why": "A campaign can look expensive while lifting organic rank; TACOS captures that spillover.",
+    "source": "Amazon Ads - account metrics",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "tacos",
+      "organic",
+      "metrics"
+    ]
+  },
+  {
+    "id": "ads-amazon.structure.match-types",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Run broad and phrase for discovery, then move proven terms into exact match with a controlled bid.",
+    "dont": "Do not run only exact match on a new product; you will never discover the query space.",
+    "why": "Match type is a discovery-to-harvest funnel, not a preference.",
+    "source": "Amazon Ads - match types",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "match-types",
+      "discovery",
+      "harvest"
+    ]
+  },
+  {
+    "id": "ads-amazon.negatives.rule",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Add a negative exact for search terms that spend past your threshold with no conversion, and review the list weekly.",
+    "dont": "Do not negate a term after a handful of clicks or on a single bad day.",
+    "why": "Premature negatives kill discovery; late negatives waste budget for weeks.",
+    "source": "Amazon Ads - negative keywords",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "negatives",
+      "search-terms",
+      "budget"
+    ]
+  },
+  {
+    "id": "ads-amazon.search-terms.cadence",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Pull the search-term report on a fixed weekly cadence and act on the top spenders first.",
+    "dont": "Do not optimise from the campaign screen alone; the converting queries live in the search-term report.",
+    "why": "Campaign-level metrics hide which queries actually convert.",
+    "source": "Amazon Ads - search term report",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "search-terms",
+      "reporting",
+      "cadence"
+    ]
+  },
+  {
+    "id": "ads-amazon.placement.multipliers",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Set placement multipliers only after you have baseline data per placement, and raise one placement at a time.",
+    "dont": "Do not stack multipliers across top-of-search, product pages and rest-of-search at launch.",
+    "why": "Stacked multipliers hide which placement earned the sale and can blow the budget.",
+    "source": "Amazon Ads - placement bidding",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "placements",
+      "bids",
+      "testing"
+    ]
+  },
+  {
+    "id": "ads-amazon.bid.vs-cpc",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Treat the bid as a ceiling and watch actual CPC plus top-of-search impression share.",
+    "dont": "Do not assume raising the bid raises the CPC by the same amount.",
+    "why": "Auction dynamics mean the clearing price is usually below the bid; impression share tells you if you are losing.",
+    "source": "Amazon Ads - bidding",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "bids",
+      "cpc",
+      "impression-share"
+    ]
+  },
+  {
+    "id": "ads-amazon.dayparting.data",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Only run dayparting after at least two full weeks of hourly data.",
+    "dont": "Do not switch off hours based on a hunch or a single weekday.",
+    "why": "Hourly conversion patterns are noisy; short windows produce false conclusions.",
+    "source": "Amazon Ads - scheduling",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "dayparting",
+      "scheduling",
+      "data"
+    ]
+  },
+  {
+    "id": "ads-amazon.sb.brand-registry",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Confirm Brand Registry enrolment before planning Sponsored Brands or Sponsored Display creative.",
+    "dont": "Do not promise Sponsored Brands placements to a reseller who does not own the brand.",
+    "why": "Brand-gated ad formats are unavailable without enrolment, so the plan would be undeliverable.",
+    "source": "Amazon Ads - Sponsored Brands eligibility",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "sponsored-brands",
+      "brand-registry",
+      "eligibility"
+    ]
+  },
+  {
+    "id": "ads-amazon.sd.audience-size",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Check audience size before building a Sponsored Display remarketing campaign.",
+    "dont": "Do not expect delivery from a tiny retargeting pool; it will underspend and look broken.",
+    "why": "Small audiences cannot spend a meaningful budget, which is misread as a bid problem.",
+    "source": "Amazon Ads - Sponsored Display audiences",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "sponsored-display",
+      "audiences",
+      "remarketing"
+    ]
+  },
+  {
+    "id": "ads-amazon.judgement.window",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Give a new campaign at least a week and roughly ten clicks before judging it.",
+    "dont": "Do not pause a campaign after one day of no sales.",
+    "why": "Attribution lag and low volume make short windows meaningless.",
+    "source": "Amazon Ads - reporting windows",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "attribution",
+      "testing",
+      "judgement"
+    ]
+  },
+  {
+    "id": "ads-amazon.budget.caps",
+    "domain": "ads-amazon",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Check out-of-budget hours before raising bids; a capped budget loses impression share silently.",
+    "dont": "Do not keep raising bids when the campaign is already limited by budget.",
+    "why": "If the budget runs out at noon, higher bids only burn the same money faster.",
+    "source": "Amazon Ads - budget and out-of-budget",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "budget",
+      "impression-share",
+      "bids"
+    ]
+  }
+]

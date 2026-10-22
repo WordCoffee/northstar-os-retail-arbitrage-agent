@@ -70,6 +70,14 @@ try:
 except ImportError:  # pragma: no cover - chat needs the studio modules only
     _HAS_CHAT = False
 
+# Continuous Improvement Engine (2026-10-21) — knowledge packs, gap queue,
+# cycle runner, stop switch. Own guard: the engine must never boot-fail the app.
+try:
+    from cie_router import router as cie_router
+    _HAS_CIE = True
+except ImportError:  # pragma: no cover
+    _HAS_CIE = False
+
 # V3 shell context (2026-10-18) — capability gate (advanced_view), focus modes,
 # hardware telemetry. Own guard: a shell problem must never disable chat.
 try:
@@ -308,6 +316,10 @@ if _HAS_DESIGN_STUDIO_EXT:
 if _HAS_CHAT:
     app.include_router(chat_router)
     app.include_router(chat_voice_router)
+
+# Improvement room — status, gap queue, cycles, feedback, stop switch
+if _HAS_CIE:
+    app.include_router(cie_router)
 
 # V3 shell context — Simple/Advanced gate, focus modes, hardware telemetry
 if _HAS_SHELL:

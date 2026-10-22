@@ -1,0 +1,82 @@
+[
+  {
+    "id": "aplus.eligibility",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Confirm Brand Registry enrolment, then use A+ to replace the plain description with brand story, comparison and lifestyle modules.",
+    "dont": "Do not plan A+ for a reseller listing that does not own the brand, and do not repeat the bullets verbatim inside the modules.",
+    "why": "A+ requires Brand Registry and its job is persuasion the bullets cannot carry.",
+    "source": "Amazon Seller Central - A+ content guidelines",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "aplus",
+      "auto"
+    ]
+  },
+  {
+    "id": "aplus.modules",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Meet each module's image dimensions and text limits, and keep text legible on mobile.",
+    "dont": "Do not stretch images, exceed the character limits, or bake essential text into an image only.",
+    "why": "Modules that break the spec get rejected, and text inside images is invisible to search and accessibility.",
+    "source": "Amazon Seller Central - A+ module specifications",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "aplus",
+      "auto"
+    ]
+  },
+  {
+    "id": "aplus.comparison",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Use the comparison table to differentiate variants or sibling products on the attributes buyers actually compare.",
+    "dont": "Do not compare against competitor brands or make claims you cannot substantiate.",
+    "why": "Comparison tables work as an in-page decision aid; competitor comparisons create policy risk.",
+    "source": "Amazon Seller Central - A+ modules",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "aplus",
+      "auto"
+    ]
+  },
+  {
+    "id": "aplus.auto.when-should-a-be-live-relative-to-scaling-ad",
+    "domain": "aplus",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Publish A+ before scaling ads, then judge the ad impact only after the A+ page is live.",
+    "dont": "Do not scale spend on a bare listing and blame the ads for a low conversion rate.",
+    "why": "Conversion rate sets the ACOS a campaign can sustain; A+ lifts conversion on the same traffic.",
+    "source": "Amazon Ads - conversion and A+ guidance",
+    "source_kind": "curated_snippet",
+    "effective_date": "2026-10-21",
+    "last_verified": "unverified",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "aplus",
+      "auto"
+    ]
+  }
+]

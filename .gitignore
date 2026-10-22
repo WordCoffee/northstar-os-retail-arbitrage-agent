@@ -46,3 +46,7 @@ reports/video_scan/f_*.png
 reports/video_scan/batch/*
 !reports/video_scan/batch/*.mp4
 !reports/video_scan/batch/summary.jsonl
+
+# Continuous Improvement Engine runtime state (regenerable, never versioned)
+state/improvement/
+reports/improvement/loop.log

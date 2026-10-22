@@ -35,6 +35,7 @@ const RAW_GROUPS = [
     { id: 'shared-data', label: 'Shared Data Layer', route: '/shared-data', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'provider-adapters', label: 'Provider Adapters', route: '/provider-adapters', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'master-brain', label: 'Master Brain', route: '/master-brain', roles: ['operator', 'platform_admin'], status: 'Internal' },
+    { id: 'improvement', label: 'Improvement', route: '/improvement', roles: ['operator', 'platform_admin'], status: 'Internal' },
   ]},
   { id: 'role-specific', label: 'Account & Admin', icon: 'users', sections: [
     { id: 'customer-workspace', label: 'Customer Workspace', route: '/customer-workspace', roles: ['customer'] },

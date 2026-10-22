@@ -1,0 +1,355 @@
+[
+  {
+    "id": "listing.title.length",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Keep the title inside the category limit (commonly 200 characters, some categories stricter) and front-load brand, product and the deciding attribute.",
+    "dont": "Do not exceed the limit or pad it with keyword strings; long titles are truncated on mobile and can be suppressed.",
+    "why": "Mobile search results cut titles early, so anything after the limit never reaches the buyer.",
+    "source": "Amazon Seller Central - product title requirements (category style guides)",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "title",
+      "characters",
+      "mobile",
+      "suppression"
+    ]
+  },
+  {
+    "id": "listing.title.promo",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Describe the product factually: brand, product name, key attribute, size or count.",
+    "dont": "Do not use promotional language such as free shipping, best seller, sale, deal, or money-back.",
+    "why": "Promotional phrases are prohibited in titles and are a common cause of listing suppression.",
+    "source": "Amazon Seller Central - prohibited seller content",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "title",
+      "prohibited",
+      "promotional",
+      "suppression"
+    ]
+  },
+  {
+    "id": "listing.title.caps",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Write titles in normal sentence case; capitalise a brand name only if that is the registered form.",
+    "dont": "Do not set whole words or phrases in ALL CAPS for emphasis.",
+    "why": "All-caps titles violate style guidance and read as shouting, which lowers click-through.",
+    "source": "Amazon Seller Central - product title style",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "title",
+      "style",
+      "caps"
+    ]
+  },
+  {
+    "id": "listing.title.structure",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Follow brand + product + key attribute + size/count, so the buyer can identify the item from the title alone.",
+    "dont": "Do not produce keyword soup with repeated attributes or unrelated search terms.",
+    "why": "Buyers scan the first few words; relevance and readability drive click-through more than keyword count.",
+    "source": "Amazon Seller Central - product title requirements",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "title",
+      "structure",
+      "relevance"
+    ]
+  },
+  {
+    "id": "listing.bullets.count",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Use every available bullet (usually five) with one distinct benefit each.",
+    "dont": "Do not leave bullets empty or repeat the same claim in different words.",
+    "why": "Bullets are the main scan surface on mobile and each unused slot is lost selling space.",
+    "source": "Amazon Seller Central - bullet points",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "bullets",
+      "benefits",
+      "mobile"
+    ]
+  },
+  {
+    "id": "listing.bullets.length",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Keep each bullet to one idea, roughly 150-250 characters, leading with the benefit.",
+    "dont": "Do not write paragraph-length bullets or bury the benefit after three clauses.",
+    "why": "Long bullets are collapsed behind 'read more' on mobile and lose the reader.",
+    "source": "Amazon Seller Central - bullet points",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "bullets",
+      "length",
+      "readability"
+    ]
+  },
+  {
+    "id": "listing.bullets.claims",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Make only claims the product documentation supports, and keep the evidence on file.",
+    "dont": "Do not use FDA approved, cures, treats, prevents, or any disease claim on a supplement or food listing.",
+    "why": "Disease claims are restricted for supplements and are a frequent cause of takedowns.",
+    "source": "Amazon Seller Central - dietary supplements policy",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "claims",
+      "supplements",
+      "compliance",
+      "fda"
+    ]
+  },
+  {
+    "id": "listing.search_terms",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Fill the backend search terms with synonyms and misspellings that are not already in the title, within the byte limit.",
+    "dont": "Do not repeat title words, include competitor brand names, or exceed the byte limit.",
+    "why": "Repeats add nothing to indexing and competitor names create policy risk.",
+    "source": "Amazon Seller Central - search terms",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "search-terms",
+      "indexing",
+      "keywords"
+    ]
+  },
+  {
+    "id": "listing.images.main",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Use a pure white background (RGB 255,255,255) with the product filling most of the frame.",
+    "dont": "Do not put lifestyle scenes, props, text or graphics on the main image.",
+    "why": "The main image has its own policy; violations can hide the listing from search.",
+    "source": "Amazon Seller Central - product image requirements",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "images",
+      "main-image",
+      "white-background"
+    ]
+  },
+  {
+    "id": "listing.images.size",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Upload at least 1000 px on the longest side (1600 px or more for zoom) and keep a square 1:1 frame.",
+    "dont": "Do not upload low-resolution or stretched images to save space.",
+    "why": "Below the zoom threshold the buyer cannot inspect the product, which depresses conversion.",
+    "source": "Amazon Seller Central - product image requirements",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "images",
+      "resolution",
+      "zoom"
+    ]
+  },
+  {
+    "id": "listing.images.watermark",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Show the actual product cleanly; use secondary images for context and scale.",
+    "dont": "Do not add watermarks, logos, badges or promotional text to product images.",
+    "why": "Overlays on images are prohibited and make the listing ineligible for some placements.",
+    "source": "Amazon Seller Central - product image requirements",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "images",
+      "watermark",
+      "policy"
+    ]
+  },
+  {
+    "id": "listing.variations",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Group the same product in different sizes, colours or counts as one variation family.",
+    "dont": "Do not mix different products, brands or incompatible categories into one family.",
+    "why": "Wrong variation families split reviews and can be broken apart by Amazon.",
+    "source": "Amazon Seller Central - variation relationships",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "variations",
+      "reviews",
+      "family"
+    ]
+  },
+  {
+    "id": "listing.description.html",
+    "domain": "listing",
+    "applies_to": [
+      "pl",
+      "reseller"
+    ],
+    "do": "Use plain text for the description when the brand has A+ content, and reserve rich layout for A+.",
+    "dont": "Do not inject HTML, JavaScript, or external links into the description.",
+    "why": "Unsupported markup is stripped or rejected, and links to external sites are prohibited.",
+    "source": "Amazon Seller Central - product description",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "description",
+      "html",
+      "aplus"
+    ]
+  },
+  {
+    "id": "listing.condition.used",
+    "domain": "listing",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Match the condition to the real item state and use the standard condition grades (for example Used - Like New).",
+    "dont": "Do not list an opened, tested or customer-returned item as New.",
+    "why": "Condition mismatches drive returns, negative feedback and account health warnings.",
+    "source": "Amazon Seller Central - condition guidelines",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "condition",
+      "used",
+      "returns"
+    ]
+  },
+  {
+    "id": "listing.gated.invoices",
+    "domain": "listing",
+    "applies_to": [
+      "reseller"
+    ],
+    "do": "Keep supplier invoices that match the brand, quantity and date window for gated categories.",
+    "dont": "Do not submit retail receipts or screenshots as proof of authenticity.",
+    "why": "Gating reviews reject retail receipts, and a failed review can block the category for the account.",
+    "source": "Amazon Seller Central - selling approval and invoices",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "gating",
+      "invoices",
+      "reseller",
+      "approval"
+    ]
+  },
+  {
+    "id": "listing.supplements.disclaimer",
+    "domain": "listing",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Pair structure/function claims with the required disclaimer and keep substantiation on file.",
+    "dont": "Do not imply the product diagnoses, treats, cures or prevents a disease.",
+    "why": "Supplements are a restricted category; unsupported claims risk removal and regulatory exposure.",
+    "source": "Amazon Seller Central - dietary supplements policy",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "high",
+    "needs_verification": true,
+    "tags": [
+      "supplements",
+      "claims",
+      "disclaimer"
+    ]
+  }
+]

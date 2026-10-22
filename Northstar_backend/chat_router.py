@@ -243,7 +243,8 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
 
         history = db.chat.messages.list_by_session(
             session.get("id"), account_id=account_id, limit=200)
-        messages = chat_adapter.build_chat_messages(history, session.get("focus_json"))
+        messages = chat_adapter.build_chat_messages(
+            history, session.get("focus_json"), query=user_content)
         # Turn options v2: a model-side directive, prepended AFTER history is built so
         # it is never persisted as part of the operator's message.
         if options:

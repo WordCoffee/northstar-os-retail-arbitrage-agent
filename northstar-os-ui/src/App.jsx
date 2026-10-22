@@ -31,6 +31,7 @@ import MemoryBank from './pages/internal/MemoryBank.jsx'
 import SharedDataLayer from './pages/internal/SharedDataLayer.jsx'
 import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
 import MasterBrain from './pages/internal/MasterBrain.jsx'
+import Improvement from './pages/internal/Improvement.jsx'
 import CustomerWorkspace from './pages/customer/Workspace.jsx'
 import BetaOpsOverview from './pages/admin/Overview.jsx'
 import OrgsList, { OrgDetail } from './pages/admin/OrgsList.jsx'
@@ -125,6 +126,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/shared-data" element={<SharedDataLayer />} />
       <Route path="/provider-adapters" element={<ProviderAdapters />} />
       <Route path="/master-brain" element={<MasterBrain />} />
+      <Route path="/improvement" element={<Improvement />} />
       <Route path="/customer-workspace" element={<CustomerWorkspace />} />
       <Route path="/beta-ops" element={<BetaOpsOverview />} />
       <Route path="/beta-ops/orgs" element={<OrgsList />} />

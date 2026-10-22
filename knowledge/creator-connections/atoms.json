@@ -1,0 +1,24 @@
+[
+  {
+    "id": "ads-creator-connections.brief",
+    "domain": "creator-connections",
+    "applies_to": [
+      "pl"
+    ],
+    "do": "Give creators a brief with the hook, the product claim allowed, deliverables, deadline, commission and disclosure requirement.",
+    "dont": "Do not leave the claim open-ended or skip the paid-partnership disclosure.",
+    "why": "Vague briefs produce unusable content, and missing disclosure breaches platform and FTC rules.",
+    "source": "Amazon Creator Connections - campaign setup and FTC disclosure guidance",
+    "source_kind": "public_doc_named",
+    "effective_date": "2026-10-21",
+    "last_verified": "2026-10-21",
+    "confidence": "medium",
+    "needs_verification": true,
+    "tags": [
+      "creator-connections",
+      "brief",
+      "disclosure",
+      "ftc"
+    ]
+  }
+]
