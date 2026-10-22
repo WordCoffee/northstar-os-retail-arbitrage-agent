@@ -252,7 +252,8 @@ def promote(accepted: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 def write_report(cycle: Dict[str, Any], gaps: List[Dict[str, Any]],
                  candidates: List[Dict[str, Any]], accepted: List[Dict[str, Any]],
                  rejected: List[Dict[str, Any]], evaluation: Dict[str, Any],
-                 written: List[Dict[str, Any]]) -> Path:
+                 written: List[Dict[str, Any]],
+                 live: Optional[Dict[str, Any]] = None) -> Path:
     path = cie_store.report_dir() / f"{cycle['cycle_id']}.md"
     lines = [
         f"# Improvement cycle {cycle['cycle_id']}",
@@ -261,6 +262,9 @@ def write_report(cycle: Dict[str, Any], gaps: List[Dict[str, Any]],
         f"- base commit: `{cycle['base_commit']}` ({cycle.get('dirty_files', 0)} dirty files)",
         f"- coverage before: **{evaluation['before']:.0%}** -> after: **{evaluation['after']:.0%}** (delta {evaluation['delta']:+.0%})",
         f"- gaps: {len(gaps)} · candidates: {len(candidates)} · accepted: {len(accepted)} · rejected: {len(rejected)}",
+        (f"- live answer score: **{live['score']:.0%}** on {live['total']} questions "
+         f"(failed: {', '.join(live['failed']) or 'none'})" if live else
+         "- live answer score: not measured this cycle (`--live`)"),
         "",
         "## Gaps",
         "",
@@ -293,7 +297,24 @@ def write_report(cycle: Dict[str, Any], gaps: List[Dict[str, Any]],
     return path
 
 
-def run_cycle(dry_run: bool = False, cap: int = 5) -> Dict[str, Any]:
+def model_answer(item: Dict[str, Any]) -> str:
+    """Ask the live model one golden question, with the current packs in context."""
+    import chat_adapter
+    prompt = str(item.get("prompt") or "")
+    messages = chat_adapter.build_chat_messages(
+        [{"role": "user", "content": prompt}], query=prompt)
+    parts: List[str] = []
+    for event in chat_adapter.stream_turn(messages, think="medium"):
+        if isinstance(event, dict) and event.get("type") == "content":
+            parts.append(str(event.get("delta") or ""))
+        elif isinstance(event, dict) and event.get("type") == "error":
+            break
+    return "".join(parts)
+
+
+def run_cycle(dry_run: bool = False, cap: int = 5,
+              answer_fn: Optional[Callable[[Dict[str, Any]], str]] = None,
+              live_limit: int = 10) -> Dict[str, Any]:
     cycle_id = cie_store.new_cycle_id()
     if cie_store.is_stopped():
         return {"ok": False, "stopped": True, "cycle_id": cycle_id,
@@ -316,6 +337,15 @@ def run_cycle(dry_run: bool = False, cap: int = 5) -> Dict[str, Any]:
     candidates = research(gaps)
     accepted, rejected = author(candidates)
     evaluation = evaluate(items, accepted)
+    # Optional live measurement: ask the model the golden questions and grade the
+    # answers deterministically. This is a quality TREND, not the promotion gate
+    # (promotion stays coverage-based, so a bad model day cannot rewrite rules).
+    live: Optional[Dict[str, Any]] = None
+    if answer_fn is not None:
+        live_items = items[:max(1, int(live_limit))]
+        live = cie_eval.run_suite(live_items, answer_fn)
+        cie_store.add_eval(cycle_id, "live", live["score"],
+                           {"failed": live["failed"], "items": live["total"]})
     # Only promote atoms that actually closed a gap.
     gained_keys = {f"golden:{g}" for g in evaluation["gained"]}
     to_write = []
@@ -339,7 +369,7 @@ def run_cycle(dry_run: bool = False, cap: int = 5) -> Dict[str, Any]:
     report = write_report(
         {"cycle_id": cycle_id, "started_at": cie_store.now(),
          "base_commit": snap["commit"], "dirty_files": snap["dirty_files"]},
-        gaps, candidates, to_write, rejected, evaluation, written)
+        gaps, candidates, to_write, rejected, evaluation, written, live)
 
     rollback_cmd = ("git checkout -- knowledge/" if written
                     else "nothing to roll back")
@@ -371,6 +401,8 @@ def run_cycle(dry_run: bool = False, cap: int = 5) -> Dict[str, Any]:
         "rejected": rejected,
         "coverage": {"before": evaluation["before"], "after": evaluation["after"],
                      "gain": evaluation["delta"]},
+        "live": ({"score": live["score"], "items": live["total"],
+                  "failed": live["failed"]} if live else None),
         "report": str(report),
         "rollback": rollback_cmd,
     }
@@ -391,6 +423,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--cycle", action="store_true", help="run one cycle")
     ap.add_argument("--dry-run", action="store_true", help="evaluate without writing")
     ap.add_argument("--cap", type=int, default=5)
+    ap.add_argument("--live", action="store_true",
+                    help="also ask the model the golden questions and grade them")
+    ap.add_argument("--live-limit", type=int, default=10)
     ap.add_argument("--status", action="store_true")
     ap.add_argument("--stop", action="store_true")
     ap.add_argument("--resume", action="store_true")
@@ -406,7 +441,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(json.dumps(status(), indent=2))
         return 0
     if args.cycle:
-        print(json.dumps(run_cycle(dry_run=args.dry_run, cap=args.cap), indent=2))
+        print(json.dumps(run_cycle(
+            dry_run=args.dry_run, cap=args.cap,
+            answer_fn=(model_answer if args.live else None),
+            live_limit=args.live_limit), indent=2))
         return 0
     ap.print_help()
     return 1

@@ -219,6 +219,10 @@ export default function ChatSurface({
   const [voiceId, setVoiceId] = useState('bojo-narrator')
   const [conversation, setConversation] = useState(false)
   const [voiceState, setVoiceState] = useState('idle')   // idle|listening|thinking|speaking
+  // Per-message rating. This is the improvement loop's strongest signal: a
+  // thumbs-down becomes a gap in the nightly cycle. Best-effort by design —
+  // a failed rating must never disturb the conversation.
+  const [ratings, setRatings] = useState({})
   const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
   const voiceStateRef = useRef('idle')
   voiceStateRef.current = voiceState
@@ -614,6 +618,25 @@ export default function ChatSurface({
       setSessions((prev) => prev.map((s) => (s.id === sid ? { ...s, title: out.title } : s)))
     } catch { /* rename is cosmetic; ignore transport failure */ }
   }, [renameDraft])
+
+  const rate = useCallback(async (m, verdict) => {
+    setRatings((r) => ({ ...r, [m.id]: verdict }))
+    try {
+      await fetch('/api/v1/improvement/feedback', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          verdict,
+          message_id: String(m.id || ''),
+          session_id: String(activeId || ''),
+          note: verdict === 'down' ? String(m.content || '').slice(0, 600) : '',
+          mode: 'standard',
+          pack_version: '',
+        }),
+      })
+    } catch { /* rating is best-effort; the answer stands */ }
+  }, [activeId])
 
   const copyText = useCallback((text) => {
     try { navigator.clipboard.writeText(text || '') } catch { /* clipboard blocked */ }
@@ -1129,6 +1152,18 @@ export default function ChatSurface({
                       onClick={() => forkFrom(m.id)}>Fork</button>
                     <button type="button" className="chat-msg-copy"
                       onClick={() => copyText(m.content)}>Copy</button>
+                    <button type="button" className="chat-msg-copy"
+                      data-testid="rate-up"
+                      title="This answer was right — record it"
+                      onClick={() => rate(m, 'up')}>
+                      {ratings[m.id] === 'up' ? 'Rated right' : 'Right'}
+                    </button>
+                    <button type="button" className="chat-msg-copy"
+                      data-testid="rate-down"
+                      title="This answer was wrong — it becomes a gap the loop researches"
+                      onClick={() => rate(m, 'down')}>
+                      {ratings[m.id] === 'down' ? 'Gap recorded' : 'Wrong'}
+                    </button>
                   </div>
                 )}
                 {m.role === 'user' && !editing && (

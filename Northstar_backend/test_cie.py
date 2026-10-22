@@ -151,6 +151,21 @@ def test_cycle_finds_gaps_promotes_and_then_goes_quiet(cie_root):
     assert second["coverage"]["after"] == 1.0
 
 
+def test_live_measurement_uses_the_deterministic_graders(cie_root):
+    # A fixture answer function: no model, but the real grader path.
+    def answer(item):
+        if item["domain"] == "ads-amazon":
+            return "ACOS 42% against a 38% margin means you lose money. Source: Seller Central."
+        return "Source: Seller Central. Brand Registry is required."
+
+    result = cie_loop.run_cycle(dry_run=True, answer_fn=answer, live_limit=20)
+    assert result["ok"] is True
+    assert result["live"]["items"] == 20
+    assert 0.0 <= result["live"]["score"] <= 1.0
+    # The measurement never promotes.
+    assert result["promoted"] == []
+
+
 def test_dry_run_never_writes(cie_root):
     before = len(kp.load_atoms("aplus"))
     result = cie_loop.run_cycle(dry_run=True)

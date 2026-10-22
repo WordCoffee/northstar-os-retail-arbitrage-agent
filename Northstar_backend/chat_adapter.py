@@ -9,6 +9,7 @@ No provider keys, no cost, no network beyond the operator's own Ollama.
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
@@ -121,11 +122,84 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
     return messages
 
 
+# ── chatter control ─────────────────────────────────────────────────────────
+# The model is told not to preamble, but instruction-following is not a
+# guarantee. These openers are stripped from the stream itself, so the operator
+# never sees them and the stored transcript stays clean. The hold-back only
+# engages when the answer actually starts with one of them: a normal answer is
+# emitted on the first delta with no added latency.
+_PREAMBLE_OPENERS = (
+    "sure", "certainly", "absolutely", "of course", "great question",
+    "happy to help", "i'd be happy", "i would be happy", "let me",
+    "here's", "here is", "as an ai",
+)
+_SENTENCE_END = re.compile(r"[.!?\n]\s*")
+_CLOSING = re.compile(
+    r"\s*(?:let me know if you (?:need|have) (?:anything|any questions)[^.!?\n]*[.!?]?"
+    r"|hope (?:this|that) helps[^.!?\n]*[.!?]?|feel free to (?:ask|reach out)[^.!?\n]*[.!?]?"
+    r"|happy to help further[^.!?\n]*[.!?]?)\s*$", re.I)
+
+
+def strip_preamble_text(text: str) -> str:
+    """Remove a leading acknowledgement from a finished answer."""
+    t = (text or "").lstrip()
+    low = t.lower()
+    for opener in _PREAMBLE_OPENERS:
+        if low.startswith(opener):
+            m = _SENTENCE_END.search(t)
+            if m:
+                return t[m.end():].lstrip()
+            return text  # no boundary: never delete the whole answer
+    return text
+
+
+def strip_closing_filler(text: str) -> str:
+    """Remove trailing 'let me know...' style filler, keep the content."""
+    return _CLOSING.sub("", text or "").rstrip()
+
+
+def strip_preamble_events(events):
+    """Drop a leading acknowledgement from a content stream, in place."""
+    pending = ""
+    decided = False
+    for ev in events:
+        if not isinstance(ev, dict) or ev.get("type") != "content" or decided:
+            yield ev
+            continue
+        pending += str(ev.get("delta") or "")
+        low = pending.lower().lstrip()
+        if not low:
+            continue
+        # Still could become an opener ("Su" -> "Sure"): wait for one more delta.
+        if len(low) < 24 and any(op.startswith(low) for op in _PREAMBLE_OPENERS):
+            continue
+        if any(low.startswith(op) for op in _PREAMBLE_OPENERS):
+            m = _SENTENCE_END.search(pending)
+            if not m:
+                if len(pending) < 240:
+                    continue  # keep buffering until the opener's sentence ends
+                decided = True
+                yield {"type": "content", "delta": pending}
+                pending = ""
+                continue
+            rest = pending[m.end():]
+            decided = True
+            pending = ""
+            if rest:
+                yield {"type": "content", "delta": rest}
+            continue
+        decided = True
+        out, pending = pending, ""
+        yield {"type": "content", "delta": out}
+    if pending:
+        yield {"type": "content", "delta": pending}
+
+
 def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
                 think: Any = True, should_cancel=None, tools=None):
     """Thin seam over UnifiedLLMAdapter.stream_chat (mockable in tests)."""
     adapter = UnifiedLLMAdapter()
-    yield from adapter.stream_chat(
+    yield from strip_preamble_events(adapter.stream_chat(
         messages,
         model=model or CHAT_MODEL,
         think=think,
@@ -134,7 +208,7 @@ def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
         num_predict=CHAT_NUM_PREDICT,
         tools=tools,
         num_gpu=CHAT_NUM_GPU,
-    )
+    ))
 
 
 def offline_notice(reason: str) -> str:

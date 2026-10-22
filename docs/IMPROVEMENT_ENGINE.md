@@ -10,8 +10,8 @@ snapshot → observe → prioritise → research → author → evaluate → pro
 ```
 
 - **Observe** — golden-set questions the packs cannot answer, plus operator
-  feedback (`down` / `corrected`). Nothing is invented: a gap always points at a
-  question or a rating.
+  feedback from the Bojo receipt row (`Right` / `Wrong`) and `corrected` ratings.
+  Nothing is invented: a gap always points at a question or a rating.
 - **Prioritise** — domain weight × frequency, capped at 5 gaps per cycle.
 - **Research** — retrieves a curated snippet (`knowledge/sources/corpus.jsonl`)
   with its source, date and do/don't pair. No free-form model invention.
@@ -29,9 +29,15 @@ cd Northstar_backend
 python -m cie_loop --status          # packs, coverage, open gaps, last cycle
 python -m cie_loop --cycle --dry-run # evaluate only, never writes
 python -m cie_loop --cycle           # one real cycle
+python -m cie_loop --cycle --live --live-limit 10   # also grade real answers
 python -m cie_loop --stop            # stop switch (same as the UI button)
 python -m cie_loop --resume
 ```
+
+`--live` asks the model the golden questions and grades the answers with the
+deterministic graders. It is a **quality trend, not the promotion gate**: a bad
+model day must never rewrite selling rules. Results land in the `evals` table and
+the cycle report.
 
 Scheduled wrapper: `tools/improvement_cycle.ps1` (refuses to run when stopped).
 

@@ -178,7 +178,13 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
 
     def _persist(final_status: str) -> Optional[str]:
         thinking_text = "".join(thinking_parts)
-        content_text = "".join(content_parts)
+        # The stream already drops a leading acknowledgement; this also removes a
+        # trailing "let me know if..." so the stored transcript matches the
+        # no-filler contract. A partial turn is kept verbatim — a cut-off answer
+        # is evidence, not something to tidy.
+        raw_content = "".join(content_parts)
+        content_text = (chat_adapter.strip_closing_filler(raw_content)
+                        if final_status == "done" else raw_content)
         if final_status == "error" and not content_text:
             content_text = chat_adapter.offline_notice(error_reason or "unknown")
         if not (thinking_text or content_text or tool_parts):
