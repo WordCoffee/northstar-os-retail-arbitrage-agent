@@ -79,8 +79,15 @@ every stage; a cycle halts at the next boundary, never mid-write.
 
 - Research is **corpus retrieval**, not crawling. An online fetcher can append to
   `knowledge/sources/corpus.jsonl`; the atom contract does not change.
-- Coverage is measured against declared `expects` on golden items, not against
-  live answer quality. Live grading (`cie_eval.run_suite` with an answer
-  function) is wired and tested but not yet part of the nightly cycle.
+- Coverage is measured against declared `expects` on golden items (96 of the 118
+  items declare one; the rest are live-only and graded by their checks).
+- Live grading is available with `--live` and reports a weekly rotating
+  hold-out (~20 % of ids). First measured baseline: **0.65 on 2 questions** —
+  honest, and the failing checks are named in the cycle report.
 - Seed atoms are marked `needs_verification: true`. They must be checked against
   the current Seller Central page before a customer-facing claim relies on them.
+- **One GPU, one tenant.** ComfyUI and the 27B cannot share the card, and an
+  interrupted Ollama load can leave an untracked `llama-server` holding ~12 GB.
+  The symptom is a connection reset that looks like a network fault. `can_run_live()`
+  now detects that state and skips live grading with a reason instead of
+  recording a fake zero.

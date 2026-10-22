@@ -226,6 +226,8 @@ export default function ChatSurface({
   // thumbs-down becomes a gap in the nightly cycle. Best-effort by design —
   // a failed rating must never disturb the conversation.
   const [ratings, setRatings] = useState({})
+  const [noteFor, setNoteFor] = useState('')
+  const [noteText, setNoteText] = useState('')
   const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
   const voiceStateRef = useRef('idle')
   voiceStateRef.current = voiceState
@@ -623,7 +625,7 @@ export default function ChatSurface({
     } catch { /* rename is cosmetic; ignore transport failure */ }
   }, [renameDraft])
 
-  const rate = useCallback(async (m, verdict) => {
+  const rate = useCallback(async (m, verdict, note = '') => {
     setRatings((r) => ({ ...r, [m.id]: verdict }))
     try {
       await fetch('/api/v1/improvement/feedback', {
@@ -634,7 +636,9 @@ export default function ChatSurface({
           verdict,
           message_id: String(m.id || ''),
           session_id: String(activeId || ''),
-          note: verdict === 'down' ? String(m.content || '').slice(0, 600) : '',
+          // The operator's own words when given, otherwise the answer itself as
+          // evidence for the nightly gap review.
+          note: String(note || (verdict === 'down' ? String(m.content || '') : '')).slice(0, 600),
           mode: 'standard',
           pack_version: '',
         }),
@@ -1165,8 +1169,30 @@ export default function ChatSurface({
                     <button type="button" className="chat-msg-copy"
                       data-testid="rate-down"
                       title="This answer was wrong — it becomes a gap the loop researches"
-                      onClick={() => rate(m, 'down')}>
-                      {ratings[m.id] === 'down' ? 'Gap recorded' : 'Wrong'}
+                      onClick={() => {
+                        if (noteFor === m.id) { rate(m, 'down', noteText); setNoteFor('') }
+                        else { setNoteFor(m.id); setNoteText('') }
+                      }}>
+                      {ratings[m.id] === 'down' ? 'Gap recorded'
+                        : noteFor === m.id ? 'Send note' : 'Wrong'}
+                    </button>
+                  </div>
+                )}
+                {m.role === 'assistant' && noteFor === m.id && !ratings[m.id] && (
+                  <div className="chat-msg-tools" style={{ gap: 8 }}>
+                    <input
+                      value={noteText}
+                      onChange={(e) => setNoteText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') { rate(m, 'down', noteText); setNoteFor('') }
+                      }}
+                      placeholder="What was wrong? (optional — one line)"
+                      aria-label="What was wrong"
+                      style={{ flex: '1 1 260px', padding: '6px 10px', borderRadius: 8 }}
+                    />
+                    <button type="button" className="chat-msg-copy"
+                      onClick={() => { rate(m, 'down', noteText); setNoteFor('') }}>
+                      Send note
                     </button>
                   </div>
                 )}

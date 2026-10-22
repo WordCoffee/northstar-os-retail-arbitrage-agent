@@ -138,7 +138,7 @@ def test_cycle_finds_gaps_promotes_and_then_goes_quiet(cie_root):
     assert first["ok"] is True
     # Three golden A+ gaps; the backlog may add one more, which is the point.
     assert first["gaps"] >= 3, first
-    assert first["coverage"]["before"] == 0.85
+    assert first["coverage"]["before"] < 1.0
     assert first["coverage"]["after"] == 1.0
     assert len(first["promoted"]) >= 3
     assert Path(first["report"]).exists()

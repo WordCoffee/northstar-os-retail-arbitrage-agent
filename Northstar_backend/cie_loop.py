@@ -20,6 +20,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
@@ -34,12 +35,37 @@ DOMAIN_WEIGHT = {d["id"]: float(d.get("weight", 0.5))
                  for d in kp.domain_meta()} or {}
 
 
+def suite_dir() -> Path:
+    return kp.root() / "eval" / "golden"
+
+
 def suite_path() -> Path:
-    return kp.root() / "eval" / "golden" / "core.jsonl"
+    return suite_dir() / "core.jsonl"
 
 
 def suite() -> List[Dict[str, Any]]:
-    return cie_eval.load_suite(suite_path())
+    """Every golden file in the folder (core + domain packs)."""
+    items: List[Dict[str, Any]] = []
+    for path in sorted(suite_dir().glob("*.jsonl")):
+        items.extend(cie_eval.load_suite(path))
+    return items
+
+
+def holdout_split(items: List[Dict[str, Any]],
+                  week: Optional[str] = None) -> Tuple[List[Dict], List[Dict]]:
+    """Deterministic weekly hold-out: ~20 % of ids rotate in and out.
+
+    The hold-out is never used to author rules; it exists so a weekly score can
+    be compared against a set the loop has not optimised against.
+    """
+    import hashlib
+    stamp = week or time.strftime("%G-%V")
+    train: List[Dict[str, Any]] = []
+    hold: List[Dict[str, Any]] = []
+    for item in items:
+        digest = hashlib.sha256(f"{item.get('id')}|{stamp}".encode("utf-8")).hexdigest()
+        (hold if int(digest[:8], 16) % 5 == 0 else train).append(item)
+    return train, hold
 
 
 # ── coverage ────────────────────────────────────────────────────────────────
@@ -72,16 +98,27 @@ def coverage_table(items: Iterable[Dict[str, Any]],
     pool = _pool(extra)
     ids = [str(a.get("id") or "") for a in pool]
     rows = []
+    applicable = 0
+    covered = 0
     for item in items:
         expects = [str(e) for e in (item.get("expects") or [])]
+        if not expects:
+            # Live-only item: graded by its checks, not by knowledge coverage.
+            rows.append({"id": item.get("id"), "domain": item.get("domain"),
+                         "expects": [], "atom": None, "covered": True,
+                         "applicable": False})
+            continue
+        applicable += 1
         hits = [i for i in ids if any(i.startswith(e) for e in expects)]
+        if hits:
+            covered += 1
         rows.append({"id": item.get("id"), "domain": item.get("domain"),
                      "expects": expects, "atom": (hits[0] if hits else None),
-                     "covered": bool(hits)})
+                     "covered": bool(hits), "applicable": True})
     total = len(rows)
-    covered = sum(1 for r in rows if r["covered"])
-    return {"total": total, "covered": covered,
-            "score": round(covered / total, 4) if total else 0.0, "rows": rows}
+    return {"total": total, "covered": covered, "applicable": applicable,
+            "score": round(covered / applicable, 4) if applicable else 0.0,
+            "rows": rows}
 
 
 # ── stages ──────────────────────────────────────────────────────────────────
@@ -104,7 +141,7 @@ def observe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     gaps: List[Dict[str, Any]] = []
     table = coverage_table(items)
     for row in table["rows"]:
-        if row["covered"]:
+        if row["covered"] or not row.get("applicable", True):
             continue
         item = next((i for i in items if i.get("id") == row["id"]), {})
         gaps.append({
@@ -178,13 +215,19 @@ def prioritise(gaps: Iterable[Dict[str, Any]], cap: int = 5) -> List[Dict[str, A
         score = round(weight * float(gap.get("frequency") or 1), 4)
         scored.append({**gap, "score": score})
     scored.sort(key=lambda g: g["score"], reverse=True)
-    # de-duplicate by question
-    seen, out = set(), []
+    # De-duplicate by question AND by the atom the gap needs. Six questions that
+    # all require one atom must consume one slot, not six.
+    seen, seen_atoms, out = set(), set(), []
     for gap in scored:
         key = gap["question"].strip().lower()
         if key in seen:
             continue
+        needed = (gap.get("expects") or [None])[0]
+        if needed and needed in seen_atoms:
+            continue
         seen.add(key)
+        if needed:
+            seen_atoms.add(needed)
         out.append(gap)
         if len(out) >= cap:
             break
@@ -193,13 +236,16 @@ def prioritise(gaps: Iterable[Dict[str, Any]], cap: int = 5) -> List[Dict[str, A
 
 def research(gaps: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     candidates = []
+    seen_ids = set()
     for gap in gaps:
         want_id = (gap.get("expects") or [None])[0]
         candidate = cie_research.candidate_atom(gap["question"], gap["domain"],
                                                 atom_id=want_id)
-        if candidate:
-            candidate["_gap"] = gap["gap_id"]
-            candidates.append(candidate)
+        if not candidate or candidate["id"] in seen_ids:
+            continue
+        seen_ids.add(candidate["id"])
+        candidate["_gap"] = gap["gap_id"]
+        candidates.append(candidate)
     return candidates
 
 
@@ -263,8 +309,12 @@ def write_report(cycle: Dict[str, Any], gaps: List[Dict[str, Any]],
         f"- coverage before: **{evaluation['before']:.0%}** -> after: **{evaluation['after']:.0%}** (delta {evaluation['delta']:+.0%})",
         f"- gaps: {len(gaps)} · candidates: {len(candidates)} · accepted: {len(accepted)} · rejected: {len(rejected)}",
         (f"- live answer score: **{live['score']:.0%}** on {live['total']} questions "
-         f"(failed: {', '.join(live['failed']) or 'none'})" if live else
-         "- live answer score: not measured this cycle (`--live`)"),
+         f"(failed: {', '.join(live['failed']) or 'none'})"
+         + (f"; hold-out {live['holdout']['score']:.0%} on "
+            f"{live['holdout']['items']}" if (live.get("holdout") or {}).get("score") is not None
+            else "") if live and live.get("score") is not None else
+         (f"- live answer score: **not measured** ({live.get('error')})" if live else
+          "- live answer score: not measured this cycle (`--live`)")),
         "",
         "## Gaps",
         "",
@@ -297,8 +347,61 @@ def write_report(cycle: Dict[str, Any], gaps: List[Dict[str, Any]],
     return path
 
 
+def engine_up(timeout: float = 3.0) -> bool:
+    """True when the local engine answers /api/version (not a full model load)."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/version",
+                                    timeout=timeout) as resp:
+            return int(getattr(resp, "status", 200)) == 200
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def gpu_state() -> Dict[str, Any]:
+    """Free VRAM plus the models Ollama admits to having loaded.
+
+    A runner can survive an interrupted load while Ollama reports nothing
+    loaded; it then holds the whole card and every new load fails with a
+    connection reset that looks like a network error. This is how the loop
+    tells that apart from a genuinely busy GPU.
+    """
+    free_mb = None
+    try:
+        out = subprocess.run(
+            ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
+            capture_output=True, text=True, timeout=10).stdout.strip().splitlines()
+        if out:
+            free_mb = int(out[0])
+    except Exception:  # noqa: BLE001
+        free_mb = None
+    loaded: List[str] = []
+    try:
+        import urllib.request
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=4) as resp:
+            data = json.loads(resp.read().decode("utf-8", "replace"))
+        loaded = [str(m.get("name") or m.get("model")) for m in data.get("models", [])]
+    except Exception:  # noqa: BLE001
+        loaded = []
+    return {"free_mb": free_mb, "loaded": loaded}
+
+
+def can_run_live(need_mb: int = 12000) -> Tuple[bool, str]:
+    state = gpu_state()
+    if state["loaded"]:
+        return True, ""
+    if state["free_mb"] is not None and state["free_mb"] < need_mb:
+        return False, (f"only {state['free_mb']} MB free and Ollama reports no loaded "
+                       "model (an untracked runner is holding the card)")
+    return True, ""
+
+
 def model_answer(item: Dict[str, Any]) -> str:
-    """Ask the live model one golden question, with the current packs in context."""
+    """Ask the live model one golden question, with the current packs in context.
+
+    Raises when the engine produced no content. A silent empty string would be
+    graded as zero and pollute the quality trend with an outage.
+    """
     import chat_adapter
     prompt = str(item.get("prompt") or "")
     messages = chat_adapter.build_chat_messages(
@@ -308,7 +411,9 @@ def model_answer(item: Dict[str, Any]) -> str:
         if isinstance(event, dict) and event.get("type") == "content":
             parts.append(str(event.get("delta") or ""))
         elif isinstance(event, dict) and event.get("type") == "error":
-            break
+            raise RuntimeError(str(event.get("reason") or "engine error"))
+    if not parts:
+        raise RuntimeError("engine returned no content")
     return "".join(parts)
 
 
@@ -342,10 +447,30 @@ def run_cycle(dry_run: bool = False, cap: int = 5,
     # (promotion stays coverage-based, so a bad model day cannot rewrite rules).
     live: Optional[Dict[str, Any]] = None
     if answer_fn is not None:
-        live_items = items[:max(1, int(live_limit))]
-        live = cie_eval.run_suite(live_items, answer_fn)
-        cie_store.add_eval(cycle_id, "live", live["score"],
-                           {"failed": live["failed"], "items": live["total"]})
+        # Sample across the whole suite (not the first N), so one domain cannot
+        # dominate the score. The weekly hold-out is reported separately.
+        want = max(1, int(live_limit))
+        step = max(1, len(items) // want)
+        live_items = items[::step][:want]
+        try:
+            live = cie_eval.run_suite(live_items, answer_fn)
+        except Exception as exc:  # noqa: BLE001 - an outage is data, not a zero
+            live = {"error": str(exc), "score": None, "total": len(live_items),
+                    "failed": [], "results": [],
+                    "holdout": {"items": 0, "score": None}}
+            cie_store.add_eval(cycle_id, "live_error", 0.0, {"error": str(exc)})
+        else:
+            _, hold = holdout_split(live_items)
+            hold_ids = {str(i.get("id")) for i in hold}
+            hold_rows = [r for r in live["results"] if str(r["id"]) in hold_ids]
+            live["holdout"] = {
+                "items": len(hold_rows),
+                "score": (round(sum(r["score"] for r in hold_rows) / len(hold_rows), 4)
+                          if hold_rows else None),
+            }
+            cie_store.add_eval(cycle_id, "live", live["score"],
+                               {"failed": live["failed"], "items": live["total"],
+                                "holdout": live["holdout"]})
     # Only promote atoms that actually closed a gap.
     gained_keys = {f"golden:{g}" for g in evaluation["gained"]}
     to_write = []
@@ -401,8 +526,9 @@ def run_cycle(dry_run: bool = False, cap: int = 5,
         "rejected": rejected,
         "coverage": {"before": evaluation["before"], "after": evaluation["after"],
                      "gain": evaluation["delta"]},
-        "live": ({"score": live["score"], "items": live["total"],
-                  "failed": live["failed"]} if live else None),
+        "live": ({"score": live.get("score"), "items": live.get("total"),
+                  "failed": live.get("failed", []), "error": live.get("error"),
+                  "holdout": live.get("holdout")} if live else None),
         "report": str(report),
         "rollback": rollback_cmd,
     }
@@ -441,9 +567,19 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(json.dumps(status(), indent=2))
         return 0
     if args.cycle:
+        use_live = args.live
+        if use_live and not engine_up():
+            print("  WARNING: local engine is not answering; live grading skipped",
+                  file=sys.stderr)
+            use_live = False
+        if use_live:
+            ok, why = can_run_live()
+            if not ok:
+                print(f"  WARNING: live grading skipped — {why}", file=sys.stderr)
+                use_live = False
         print(json.dumps(run_cycle(
             dry_run=args.dry_run, cap=args.cap,
-            answer_fn=(model_answer if args.live else None),
+            answer_fn=(model_answer if use_live else None),
             live_limit=args.live_limit), indent=2))
         return 0
     ap.print_help()
