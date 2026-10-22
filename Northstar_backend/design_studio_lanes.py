@@ -97,8 +97,59 @@ def lanes_status(acct: str = Depends(studio_account)):
                           "gpu": False,
                           "note": ("Local speech + ffmpeg mux: narrated video needs no "
                                    "provider key. Video stays silent when this is off.")},
+            "transcription": (lambda ti: {
+                "available": bool(ti.get("available")), "device": ti.get("device"),
+                "model": ti.get("model"), "gpu": False,
+                "note": ("faster-whisper on the CPU on purpose: a teardown must not "
+                         "touch the render GPU.")})(_transcription_status()),
+            "vision_qc": (lambda vi: {
+                "available": bool(vi.get("available")), "model": vi.get("model"),
+                "would_use": vi.get("would_use"), "vram_free_mb": vi.get("vram_free_mb"),
+                "gpu": vi.get("would_use") == "gpu",
+                "note": ("Checks a render against the brief. CPU unless the GPU has "
+                         "headroom, and keep_alive=0 so it never lingers in VRAM.")})(_vision_status()),
         },
     }
+
+
+def _transcription_status() -> Dict[str, Any]:
+    try:
+        import local_transcribe as lt
+        return lt.engines()
+    except Exception as exc:  # noqa: BLE001 - report, never fake availability
+        return {"available": False, "error": f"{type(exc).__name__}: {exc}"[:200]}
+
+
+def _vision_status() -> Dict[str, Any]:
+    try:
+        import local_vision as lv
+        return lv.engines()
+    except Exception as exc:  # noqa: BLE001
+        return {"available": False, "error": f"{type(exc).__name__}: {exc}"[:200]}
+
+
+class QcIn(BaseModel):
+    asset_id: str = Field(..., min_length=3, max_length=80)
+    brief: str = Field("", max_length=800)
+    max_side: int = Field(768, ge=256, le=1536)
+    #: auto = CPU unless the GPU has headroom; yes/no force the device.
+    gpu: str = Field("auto", pattern="^(auto|yes|no)$")
+
+
+@router.post("/qc")
+def lane_qc(body: QcIn, acct: str = Depends(studio_account)):
+    """Vision QC: does this stored asset match the brief?
+
+    Runs on the CPU by default and unloads the model immediately, so it cannot
+    starve a render. A failed check returns the real reason, never a verdict.
+    """
+    import local_vision as lv
+
+    _db, _asset, path = _load_asset(body.asset_id, acct)
+    allow = {"auto": None, "yes": True, "no": False}[body.gpu]
+    verdict = lv.qc_image(path.read_bytes(), body.brief, max_side=body.max_side,
+                          allow_gpu=allow)
+    return {"asset_id": body.asset_id, "brief": body.brief[:200], "qc": verdict}
 
 
 class CutoutIn(BaseModel):

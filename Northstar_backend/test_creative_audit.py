@@ -58,6 +58,20 @@ def test_silent_handler_detection():
     assert ca._silent(handlers[1], src) is False
 
 
+def test_documented_swallow_is_reviewed_not_flagged():
+    """A stated reason counts; a bare noqa does not."""
+    src = "try:\n    x = 1\nexcept Exception:  # noqa: BLE001 - probe only\n    pass\n"
+    handler = next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ExceptHandler))
+    line = "except Exception:  # noqa: BLE001 - probe only"
+    assert ca._silent(handler, src, line) is False
+
+
+def test_bare_noqa_does_not_excuse_a_swallow():
+    src = "try:\n    x = 1\nexcept Exception:  # noqa: BLE001\n    pass\n"
+    handler = next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.ExceptHandler))
+    assert ca._silent(handler, src, "except Exception:  # noqa: BLE001") is True
+
+
 def test_audit_output_shape_and_unique_ids():
     findings = ca.audit()
     assert findings, "audit found nothing at all - that would be suspicious"

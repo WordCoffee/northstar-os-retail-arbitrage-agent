@@ -49,7 +49,7 @@ MODULE_PATTERNS = (
     "design_studio_*.py", "studio_*.py", "mockup_*.py", "creative_*.py",
     "text_fidelity.py", "package_readiness.py", "prepress.py", "image_prep.py",
     "dieline_art.py", "listing_forge.py", "ad_pilot.py", "social_pulse.py",
-    "seo_listing.py", "voicestudio*.py", "package_designs*.py",
+    "seo_listing.py", "voicestudio*.py", "package_designs*.py", "local_*.py",
 )
 
 def _dotted(node: ast.AST) -> str:
@@ -81,6 +81,10 @@ GENERATION_PRIMITIVES = ("generate_image", "generate_edit", "generate_video",
 GATE_MARKERS = ("armed", "gated", "media_live_armed", "cloud_live_armed")
 LOG_MARKERS = ("log.", "logger.", "logging.", "warnings.warn")
 RAISE_RE = re.compile(r"\braise\b")
+#: A handler is "reviewed" when the author stated WHY it is safe to swallow:
+#: `except Exception:  # noqa: BLE001 - the webhook must never break the job`.
+#: A bare `noqa: BLE001` with no reason does not count.
+SILENT_EXEMPT_RE = re.compile(r"noqa:\s*BLE001\s*-\s*\S")
 
 SEVERITY = {
     "CRE-NOTEST": "high",
@@ -180,7 +184,9 @@ def _in_ranges(lineno: int, ranges) -> bool:
     return any(lo <= lineno <= hi for lo, hi in ranges)
 
 
-def _silent(handler: ast.ExceptHandler, src: str) -> bool:
+def _silent(handler: ast.ExceptHandler, src: str, exposed: str = "") -> bool:
+    if SILENT_EXEMPT_RE.search(exposed or ""):
+        return False  # the author stated why this swallow is safe
     body = handler.body
     if len(body) == 1 and isinstance(body[0], ast.Pass):
         return True
@@ -252,10 +258,11 @@ def audit() -> List[Dict]:
                 if node.type is None:
                     findings.append(_finding("CRE-BARE", name, node.lineno, exposed,
                                              "bare except swallows everything"))
-                elif _silent(node, src):
+                elif _silent(node, src, exposed):
                     findings.append(_finding(
                         "CRE-SILENT", name, node.lineno, exposed,
-                        "failure is swallowed with no log, no re-raise, no warning"))
+                        "failure is swallowed with no log, no re-raise, no warning, "
+                        "and no stated reason"))
 
             if isinstance(node, ast.Constant) and isinstance(node.value, str):
                 if re.search(r"(?<![A-Za-z])[A-Za-z]:\\", node.value) and not node.value.startswith(SYSTEM_PATH_PREFIXES):

@@ -131,3 +131,35 @@ carrying h264 video + AAC audio. Tests: `test_local_voice.py` 12 passed.
 
 Quality note: SAPI is serviceable, not ElevenLabs. Point `PIPER_MODEL` at a
 Piper voice for a real neural read — still offline, still free.
+
+## Transcription lane (added 2026-10-22)
+
+`Northstar_backend/local_transcribe.py` — faster-whisper 1.2.1 + ctranslate2
+4.8.3 in the backend's own Python, **CPU / int8 on purpose**: a teardown must not
+touch the render GPU. `WHISPER_MODEL` (default `base`) / `WHISPER_DEVICE` /
+`WHISPER_COMPUTE_TYPE` override. Model caches on first use.
+
+Verified live: transcribed a Piper narration back word-for-word
+("North Star Piper narration lane, offline neural voice.") in **1.6 s** while
+ComfyUI held 13.4 GB of VRAM — the lane used **zero VRAM**.
+
+## Vision QC lane (added 2026-10-22)
+
+`Northstar_backend/local_vision.py` + `POST /api/design-studio/lanes/qc`.
+Asks the local VL model whether a render matches the brief and returns structured
+JSON: `matches_brief`, `issues[]`, `confidence`, `description`.
+
+Built VRAM-shy on purpose, because this box has one GPU and the render lanes own it:
+
+1. **CPU by default when the GPU is busy** — it reads free VRAM first and pins
+   `num_gpu: 0` unless there is real headroom (`VISION_QC_GPU_HEADROOM_MB`,
+   default 7000). Unknown VRAM also means CPU: the safe direction.
+2. **It never lingers** — every call sends `keep_alive: 0`, so the QC model is
+   unloaded the moment the verdict arrives.
+3. **Small frames** — downscaled to 768 px on the long side before they become
+   vision tokens (`VISION_QC_MAX_SIDE`).
+4. **A verdict or nothing** — an unparseable reply is reported as `unparsed`
+   with the raw text; a transport failure returns the real reason.
+
+Verified live in CPU mode at 2,598 MB free VRAM: **36.9 s**, verdict
+`matches_brief: true` with an accurate description of the plate.

@@ -156,7 +156,20 @@
       "cost": "free_local",
       "installed": "installed",
       "unlocks": "Offline narration for local video and voiceover drafts.",
-      "notes": "piper-tts 1.8.0 + onnxruntime 1.31.0 installed in the OpenMontage venv (Python 3.11); the CLI needs a voice .onnx per call, fetched on demand into --data-dir. The zero-cost voice lane; it never leaves the machine."
+      "notes": "WIRED + PREFERRED 2026-10-22: a real neural voice (en_US-lessac-medium, 60 MB) sits at C:/Users/T2Hol/models/piper and is auto-discovered, so piper is now the lane's first engine and SAPI is the fallback. Verified live: 145,452-byte WAV, 22.05 kHz mono PCM, 3.30 s. Fully offline; nothing leaves the machine. Point PIPER_MODEL / PIPER_MODEL_DIR elsewhere to swap voices."
+    },
+    "local_vision_qc": {
+      "name": "Local vision QC (qwen2.5vl:7b)",
+      "kind": "qc",
+      "runtime": "python",
+      "lanes": ["local"],
+      "license": "Apache-2.0",
+      "commercial_ok": true,
+      "network": false,
+      "cost": "free_local",
+      "installed": "installed",
+      "unlocks": "Asks the local VL model whether a render matches the brief and returns a structured verdict (matches_brief, issues, confidence).",
+      "notes": "WIRED 2026-10-22: Northstar_backend/local_vision.py + POST /api/design-studio/lanes/qc. Built VRAM-shy on purpose: it reads free VRAM first and runs on the CPU (num_gpu 0) unless there is real headroom (VISION_QC_GPU_HEADROOM_MB, default 7000), it always sends keep_alive 0 so the model never stays resident, and it downscales the frame to 768 px before it becomes vision tokens. Verified live in CPU mode at 2598 MB free VRAM: 36.9 s, verdict matches_brief true with an accurate description. An unparseable reply is reported as 'unparsed' - never invented."
     },
     "sapi_voice": {
       "name": "Northstar local voice service (Windows SAPI)",
@@ -182,7 +195,7 @@
       "cost": "free_local",
       "installed": "installed",
       "unlocks": "Local transcription for reference-video teardowns and clip selection.",
-      "notes": "faster-whisper 1.2.1 installed in the OpenMontage venv; it flipped OpenMontage's 'transcriber' tool from unavailable to available (37 -> 38 zero-key tools). Model weights download on first use. Needed if we adopt the reference-video path without sending audio to a cloud STT API."
+      "notes": "WIRED 2026-10-22: Northstar_backend/local_transcribe.py (faster-whisper 1.2.1 + ctranslate2 4.8.3 in the backend's own Python). Runs on the CPU with int8 on purpose - a teardown must not touch the render GPU. Verified live: it transcribed a Piper narration back word-for-word ('North Star Piper narration lane, offline neural voice.') in 1.6 s while ComfyUI held 13.4 GB of VRAM, with zero VRAM used by the lane. Model `base` cached on first use; WHISPER_MODEL/WHISPER_DEVICE override."
     },
     "rapidocr": {
       "name": "RapidOCR (onnxruntime)",

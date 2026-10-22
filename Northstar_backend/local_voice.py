@@ -55,11 +55,50 @@ def _voice_id(name: str) -> str:
 
 # ── piper ────────────────────────────────────────────────────────────────────
 
+def _first_file(paths) -> Optional[str]:
+    for p in paths:
+        if p and os.path.isfile(p):
+            return p
+    return None
+
+
+def _first_onnx(dirs) -> Optional[str]:
+    import glob
+    for d in dirs:
+        if d and os.path.isdir(d):
+            found = sorted(glob.glob(os.path.join(d, "*.onnx")))
+            if found:
+                return found[0]
+    return None
+
+
+#: Where the operator keeps external local tooling (OpenMontage and friends).
+EXTERNAL_TOOLS = os.environ.get("NORTHSTAR_EXTERNAL_TOOLS",
+                                r"C:\Users\T2Hol\Desktop\Northstar External")
+#: Where piper voice models live. Drop any *.onnx in here and it is used.
+PIPER_MODEL_DIRS = (os.environ.get("PIPER_MODEL_DIR"),
+                    r"C:\Users\T2Hol\models\piper")
+
+
+def piper_exe() -> Optional[str]:
+    """The piper CLI: explicit env, PATH, then a known external venv."""
+    venv = os.path.join(EXTERNAL_TOOLS, "OpenMontage", ".venv", "Scripts")
+    return _first_file([os.environ.get("PIPER_EXE"), shutil.which("piper"),
+                        os.path.join(venv, "piper.exe"),
+                        os.path.join(venv, "piper")])
+
+
+def piper_model() -> Optional[str]:
+    """The piper voice: explicit env, else the first model in the voices dir."""
+    explicit = os.environ.get("PIPER_MODEL")
+    if explicit and os.path.isfile(explicit):
+        return explicit
+    return _first_onnx(PIPER_MODEL_DIRS)
+
+
 def piper_paths() -> Dict[str, Optional[str]]:
-    """Where a piper binary + voice model would live. Presence only."""
-    exe = os.environ.get("PIPER_EXE") or shutil.which("piper")
-    model = os.environ.get("PIPER_MODEL")
-    return {"exe": exe, "model": model if model and os.path.isfile(model) else None}
+    """Where a piper binary + voice model live. Presence only, never invented."""
+    return {"exe": piper_exe(), "model": piper_model()}
 
 
 def _piper_synthesize(text: str, out_path: str, *, timeout: int = 300) -> bool:

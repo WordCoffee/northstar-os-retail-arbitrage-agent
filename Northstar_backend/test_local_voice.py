@@ -20,6 +20,17 @@ import local_voice as lv  # noqa: E402
 FAKE_VOICES = "Microsoft David Desktop|en-US|Male\nMicrosoft Zira Desktop|en-US|Female\n"
 
 
+@pytest.fixture(autouse=True)
+def _no_piper(monkeypatch):
+    """These tests describe the SAPI path.
+
+    Piper is auto-discovered now (a real voice model lives on this box), so the
+    engine would otherwise be preferred and the SAPI assertions would never run.
+    """
+    monkeypatch.setattr(lv, "piper_paths", lambda: {"exe": None, "model": None})
+    yield
+
+
 def _runner_that_writes(payload: bytes = b"RIFF" + b"\x00" * 4000):
     """A stand-in for PowerShell that actually produces the WAV the code expects."""
     def run(script: str, timeout: int = 120) -> str:
@@ -69,6 +80,24 @@ def test_synthesize_returns_audio_and_names_the_engine(monkeypatch, tmp_path):
     assert out["engine"] == "sapi"
     assert out["bytes"].startswith(b"RIFF")
     assert out["voice"].startswith("microsoft-david")
+
+
+def test_piper_is_preferred_when_a_voice_model_is_present(monkeypatch, tmp_path):
+    monkeypatch.setattr(lv, "piper_paths",
+                        lambda: {"exe": "C:/fake/piper.exe", "model": "C:/fake/voice.onnx"})
+    seen = {}
+
+    def fake_piper(text, out_path, *, timeout=300):
+        seen["text"] = text
+        with open(out_path, "wb") as fh:
+            fh.write(b"RIFF" + b"\x00" * 4000)
+        return True
+
+    monkeypatch.setattr(lv, "_piper_synthesize", fake_piper)
+    out = lv.synthesize("neural voice test", runner=_runner_that_fails(),
+                        out_dir=str(tmp_path))
+    assert out["engine"] == "piper"
+    assert seen["text"] == "neural voice test"
 
 
 def test_synthesize_rejects_empty_text():

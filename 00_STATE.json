@@ -58,8 +58,17 @@
     "binding_constraint": "RAM 15.4 GB, not VRAM. Edit lane needs --cache-none; without it ComfyUI is killed mid-render.",
     "report": "reports/creative_pipeline_readiness_20261022.md"
   },
-  "local_first_20261022": {
-    "finding": "Grepped 15 creative modules for cloud provider references (fal, FAL_KEY, replicate, openrouter, gpt-image, nano-banana, elevenlabs, deepgram, suno): ZERO matches. The creative pipeline is already local-only by construction; the cloud lane lives in model_router + model-suite.json, not in the creative code. 'Build for local, cloud follows' is gap-filling, not a rewrite.",
+  "local_lanes_installed_20261022": {
+    "order_followed": "transcription -> piper voice -> vision QC, as recommended.",
+    "transcription": "faster-whisper 1.2.1 + ctranslate2 4.8.3 are importable in the backend's own Python 3.14. NEW Northstar_backend/local_transcribe.py: CPU/int8 on purpose so a teardown never touches the render GPU. Live: transcribed a Piper narration word-for-word in 1.6 s while ComfyUI held 13.4 GB VRAM, lane used ZERO VRAM.",
+    "piper_voice": "en_US-lessac-medium (60 MB) downloaded to C:/Users/T2Hol/models/piper; local_voice.py now auto-discovers piper (PIPER_EXE/PATH/NORTHSTAR_EXTERNAL_TOOLS venv + PIPER_MODEL/PIPER_MODEL_DIR) so piper is the preferred engine and SAPI is the fallback. Live: 145,452-byte WAV, 22.05 kHz mono PCM, 3.30 s.",
+    "vision_qc": "NEW Northstar_backend/local_vision.py + POST /api/design-studio/lanes/qc. VRAM-shy by design: reads free VRAM first and pins num_gpu=0 unless there is headroom (VISION_QC_GPU_HEADROOM_MB, default 7000), unknown VRAM => CPU, always keep_alive=0 so the model never stays resident, frame downscaled to 768 px before it becomes tokens, unparseable replies reported as 'unparsed' never invented. Live in CPU mode at 2,598 MB free: 36.9 s, matches_brief true, accurate description.",
+    "studio_surface": "GET /api/design-studio/lanes/status now reports narration, transcription and vision_qc; routes are /status /qc /cutout /upscale /readiness /main-check.",
+    "audit_improvement": "creative_audit now covers local_*.py (31 modules) and treats a swallow as reviewed only when the author states WHY ('# noqa: BLE001 - reason'); a bare noqa does not excuse it. Backlog 105 findings; audit tests 11 passed.",
+    "tests": "test_local_voice 13, test_local_transcribe 5, test_local_vision 14, test_creative_audit 11, plus studio/provider suites - 65 passed across 5 suites.",
+    "report": "reports/local_lanes_install_20261022.md"
+  },
+  "local_first_20261022": {    "finding": "Grepped 15 creative modules for cloud provider references (fal, FAL_KEY, replicate, openrouter, gpt-image, nano-banana, elevenlabs, deepgram, suno): ZERO matches. The creative pipeline is already local-only by construction; the cloud lane lives in model_router + model-suite.json, not in the creative code. 'Build for local, cloud follows' is gap-filling, not a rewrite.",
     "gap_fixed": "There was no audio anywhere in the pipeline. NEW Northstar_backend/local_voice.py: engines piper (PIPER_EXE+PIPER_MODEL) then sapi (Windows System.Speech), engines() reports what is present, synthesize() raises with the real reason when nothing can speak, mux_audio() attaches an AAC track via ffmpeg -shortest. WIRED: studio_generation.generate_video(narration=...) speaks the script and muxes it; a dead speech engine does NOT fail the render - the clip returns silent with audio.ok=false and the reason. GET /api/design-studio/lanes/status now reports a narration lane.",
     "live_evidence": "WAV 138,694 bytes pcm_s16le 22050 Hz mono 3.14 s; narrated MP4 with 0,h264,video,2.041667 and 1,aac,audio,1.996916. Zero provider keys, zero spend.",
     "tests": "test_local_voice.py 12 passed; 112 passed / 1 skipped across 7 creative+studio suites.",
