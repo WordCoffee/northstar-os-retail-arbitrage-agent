@@ -56,3 +56,23 @@ git switch -                                # come back
 ```powershell
 npm --prefix northstar-os-ui run build
 ```
+
+## Snapshot registry (append on every deliberate snapshot)
+
+| name | date | commit | taken before |
+|---|---|---|---|
+| `pre-bojo` | 2026-10-20 | `85b813e` | the Bojo creative flow + rollback tooling |
+| `pre-cie` | 2026-10-21 | `80c7cc6` | the Continuous Improvement Engine |
+| `pre-bulk` | 2026-10-22 | `eb3a3e2` | the 56-atom bulk import and the 1,353-item queue |
+
+Restore any of them with:
+
+```powershell
+.\tools\rollback.ps1 -Action restore -Name pre-bulk
+```
+
+Every knowledge-only change can also be reverted without a branch switch:
+
+```powershell
+git checkout -- knowledge/      # packs only
+```
