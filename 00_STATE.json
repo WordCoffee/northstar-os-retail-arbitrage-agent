@@ -30,6 +30,16 @@
     },
     "verification": "pytest test_provider_suite.py 24 passed; pytest with model_router 45 passed; npm run build 0 errors; UltraTex live 200 s GLB; OpenMontage live 690-frame MP4."
   },
+  "storage_clean_20261022": {
+    "free_gb_start": 5.83,
+    "free_gb_end": 92.57,
+    "reclaimed_gb": 86.74,
+    "deleted": "C:\\AI\\WanGP 48.66 GB (unreferenced app, untouched since 2026-08-19); C:\\Users\\T2Hol\\models\\northstaros-qwen3.8-v2 24.11 GB (two unused quants); caches/junk ~5.6 GB (temp 2082 items, pip, npm, uv 41973 files, HF hub, grype DB 3.03 GB, three 2019 Windows CABs at C:\\5709c0420ddfa8c200abecba692f350b, repo __pycache__).",
+    "kept_and_wired": "C:\\Users\\T2Hol\\ComfyUI-LTX 44.9 GB KEPT: it is a separate ComfyUI clone holding LTX-2.3 22B nvfp4 + gemma-3 12B + distilled LoRA, and the active ComfyUI ships 47 native LTX2 nodes. NEW C:\\Users\\T2Hol\\ComfyUI\\extra_model_paths.yaml points the active install at those weights in place (zero copy); verified after restart - UNETLoader/CLIPLoader/VAELoader list the LTX models and all 9 UltraTex nodes still register.",
+    "process_error": "Stated intent was to keep UD-Q3_K_XL (the imported quant) and delete only the alternates; the whole v2 folder was deleted instead, including that file. No operational impact - Ollama serves from the content-addressed blob sha256-8c2a... (12.24 GB, verified intact, ollama list resolves), so only the re-downloadable source GGUF was lost.",
+    "not_touched": "ComfyUI-LTX code ~4.9 GB (follow-up), Chrome caches ~4 GB (Chrome running, Chrome Connect depends on it), Recycle Bin 1.1 GB, Docker 22.5 GB (daemon down), .ollama models, opencode.db+snapshot 5.7 GB (session history), XboxGames 140 GB, C:\\AI\\northstar-remodeler 7.1 GB (unknown operator project).",
+    "report": "reports/deep_clean_20261022.md"
+  },
   "phases_completed": [
     "Phase 1: Foundation",
     "Phase 2: SourceScout",
@@ -48,6 +58,33 @@
     "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed — provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) — scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. Item 4 (local admin/tenant/backup-restore) DONE (LOCAL) — admin UI sample-mode verified (verify-admin.cjs 34/0: all /beta-ops pages render for platform_admin, destructive controls disabled, nav renders, operator→/home + anonymous→/sign-in isolation), backend admin/tenant/audit/migration/e2e suites 92/0, local SQLite backup/restore drill test_backup_restore_drill.py 2/0 (round-trip parity + integrity_check + disposable-name guard), SOP/checklist in docs/ADMIN_SOP_AND_INTEGRITY.md, assumptions A-10..A-13. Item 5 (memory-limits review, evidence-only) DONE — no mem_limit/deploy.resources-memory in docker-compose.yml/hosted.yml; only GPU device reservation in docker-compose.local.yml (Ollama); ~0.46-0.78 GB RSS of 12 GB Always-Free A1 per OA-2 prep; assumption A-14; no compose change. Item 6 (local runbook + one-command verify) DONE — cites parallel-session docs/LOCAL_RUNBOOK.md + SERVICE docs; adds ADMIN_SOP_AND_INTEGRITY.md + final completion report; verifies foundation 757/59s, admin subset 92/0, drill 2/0, GG 16/0, acceptance 32/0, admin UI 34/0, npm run build 0 errors; assumption A-15. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md."
   ],
   "known_issues": [
+    {
+      "id": "local_27b_model_fails_to_load_cuda_20261022",
+      "discovered_in": "Deep clean 2026-10-22: verifying that removing GGUF source files was safe before deleting them",
+      "discovered_at": "2026-10-22T02:19:00Z",
+      "description": "The local text lane cannot load its primary model. POST /api/generate for northstaros-qwen3.8:27b returns HTTP 500. Ollama server.log: 'CUDA error: shared object initialization failed' at ggml-cuda.cu:109 in launch_fattn (cudaOccupancyMaxActiveBlocksPerMultiprocessor), then 'llama-server terminated exit status 0xc0000409' (stack-based buffer overrun), 'Load failed model=...blobs\\sha256-8c2a...'. NOT caused by the clean and NOT an OOM: 15.6 GB of 16.3 GB VRAM was free. Isolation: qwen3-embedding:0.6b answers /api/embeddings 200 OK with 1024 dims on the SAME runner, so the CUDA stack works and the failure is specific to the 27B Q3_K_XL flash-attention kernel path. Driver 617.42, Ollama 0.40.4, cuda_v12 + cuda_v13 runners installed.",
+      "impact": "Every local text tier (T1/T2/T3) resolves to this model, so the entire local engine is red. Cloud lane is unaffected (separately gated).",
+      "requires_decision": "Operator picks the fix, cheapest first: (a) restart Ollama with OLLAMA_FLASH_ATTENTION=0 (the failing call IS launch_fattn); (b) re-pull the model at a different quantization (the content-addressed blob makes this cheap); (c) update Ollama. No retry loop was attempted - circuit breaker honoured after the first 500.",
+      "status": "open"
+    },
+    {
+      "id": "studio_comfyui_default_port_8199_vs_8188_20261022",
+      "discovered_in": "Deep clean 2026-10-22 port survey",
+      "discovered_at": "2026-10-22T02:20:00Z",
+      "description": "Northstar_backend/studio_generation.py sets DEFAULT_COMFYUI_URL = http://127.0.0.1:8199 with the comment 'this box's ComfyUI (8188 is upstream default)', and render_studio_plates.py uses the same setdefault. Verified: nothing listens on 8199; the only live ComfyUI is on 127.0.0.1:8188 (PID from venv C:\\Users\\T2Hol\\ComfyUI). .env defines no COMFYUI_URL key.",
+      "impact": "Design Studio / plate rendering would fail against the default URL even though a healthy ComfyUI is running one port away.",
+      "requires_decision": "Operator: either change the default to 8188, or set COMFYUI_URL=http://127.0.0.1:8188 in the root .env (non-secret key, editable under the capsule), or start the second instance on 8199. Not changed in this session because it alters generation routing and deserves an explicit call.",
+      "status": "open"
+    },
+    {
+      "id": "local_vision_model_not_installed_20261022",
+      "discovered_in": "Deep clean 2026-10-22 Ollama inventory",
+      "discovered_at": "2026-10-22T02:21:00Z",
+      "description": "model_router.LOCAL_MODELS maps V1/V2/V3 to qwen2.5vl:7b, but ollama list shows only northstaros-qwen3.8:27b and qwen3-embedding:0.6b. The mmproj for the 27B (mmproj-Qwen3.8-27B-BF16.gguf, 0.87 GB) was never imported into Ollama either (no matching blob).",
+      "impact": "Any local vision task resolves to a model id that does not exist locally; resolve_vision() reports available=True for local because it only checks that a model NAME is configured, not that it is installed.",
+      "requires_decision": "Operator: pull qwen2.5vl:7b, or re-point the V tiers at the 27B + mmproj (requires re-importing the model with the projector), or make resolve_vision() report unavailable when the local model is absent. The third option is the honest one and is a code change.",
+      "status": "open"
+    },
     {
       "id": "canonical_runner_red_from_untracked_costco_files_20261019",
       "discovered_in": "Creative pipeline v2 session: scripts/run_all_tests.ps1 returned RED with 'could not parse backend summary (pytest exit code 2)'",
