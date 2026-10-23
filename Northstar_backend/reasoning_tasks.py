@@ -29,6 +29,15 @@ from adapters.reasoning_provider import (
 )
 from adapters.base import ProviderResponse, ProviderStatus
 
+
+def _skills_block(ids: List[str]) -> str:
+    """Markdown skills for this task, or "" when the skills plane is absent."""
+    try:
+        import skills_plane
+        return skills_plane.context_block(ids=ids)
+    except Exception:  # noqa: BLE001 - prompt decoration must not break a proposal
+        return ""
+
 logger = logging.getLogger(__name__)
 
 # No model is assumed at runtime. A task must name a model explicitly, or the
@@ -123,7 +132,7 @@ def listing_proposal(
         "keywords": keywords or [],
     }
     messages = [
-        {"role": "system", "content": LISTING_PROMPT},
+        {"role": "system", "content": LISTING_PROMPT + _skills_block(["product-marketing", "listing-copy"])},
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
     ]
     req = ReasoningRequest(
@@ -241,7 +250,7 @@ def ad_copy_proposal(
         "format_hint": format_hint,
     }
     messages = [
-        {"role": "system", "content": AD_COPY_PROMPT},
+        {"role": "system", "content": AD_COPY_PROMPT + _skills_block(["product-marketing", "ad-creative"])},
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
     ]
     req = ReasoningRequest(

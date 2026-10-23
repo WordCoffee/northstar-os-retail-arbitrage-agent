@@ -193,7 +193,10 @@ def test_knowledge_reaches_the_chat_prompt(cie_root):
 def test_prompt_unchanged_without_a_query(cie_root):
     import chat_adapter
     messages = chat_adapter.build_chat_messages([{"role": "user", "content": "hi"}])
-    assert messages[0]["content"] == chat_adapter.CHAT_SYSTEM_PROMPT
+    # DELIVERABLE_ROUTING is always appended; skills are not.
+    assert messages[0]["content"] == (chat_adapter.CHAT_SYSTEM_PROMPT
+                                      + chat_adapter.DELIVERABLE_ROUTING)
+    assert "[Skills" not in messages[0]["content"]
 
 
 # ── api surface ─────────────────────────────────────────────────────────────

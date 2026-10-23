@@ -99,6 +99,21 @@ def knowledge_block(query: str, limit: int = 6, min_score: float = 0.5) -> str:
         return ""
 
 
+def skills_block(query: str) -> str:
+    """Markdown skills that route to this turn, or "" when none do.
+
+    Same contract as knowledge_block: a broken skill file never breaks a turn.
+    """
+    try:
+        import skills_plane  # local import: chat stays importable without the directory
+    except Exception:  # noqa: BLE001
+        return ""
+    try:
+        return skills_plane.context_block(query)
+    except Exception:  # noqa: BLE001
+        return ""
+
+
 DELIVERABLE_ROUTING = (
     "\nDeliverable routing: a photoreal render, 3D mockup, product photo or ad "
     "visual is an IMAGE job -> call creative_plan (media=image), then generate_image "
@@ -125,6 +140,7 @@ def build_chat_messages(history: Iterable[Dict[str, Any]],
             system += "\nContext — " + "; ".join(bits)
     if query:
         system += knowledge_block(str(query))
+        system += skills_block(str(query))
     messages: List[Dict[str, str]] = [{"role": "system", "content": system}]
     rows = [m for m in (history or []) if str(m.get("content") or "").strip()]
     for row in rows[-max(0, int(limit)):]:

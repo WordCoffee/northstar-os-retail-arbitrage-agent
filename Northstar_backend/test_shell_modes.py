@@ -200,7 +200,11 @@ def test_build_chat_messages_injects_focus_prompt_and_context():
 
 def test_build_chat_messages_without_focus_matches_legacy_prompt():
     msgs = chat_adapter.build_chat_messages([{"role": "user", "content": "hi"}])
-    assert msgs[0]["content"] == chat_adapter.CHAT_SYSTEM_PROMPT
+    # DELIVERABLE_ROUTING is part of every system prompt (chat_adapter line 116);
+    # the legacy equality predates it and was stale.
+    assert msgs[0]["content"] == (chat_adapter.CHAT_SYSTEM_PROMPT
+                                  + chat_adapter.DELIVERABLE_ROUTING)
+    assert "[Skills" not in msgs[0]["content"]
 
 
 # ── Turn stream: focus restricts offered tools ──────────────────────────────
@@ -225,6 +229,8 @@ def test_turn_offers_only_focus_tools(db):
     expected = set(shell_focus.tools_for_focus("create"))
     assert set(start["tools"]) == expected
     assert "generate_image" in start["tools"]
+    # the finish-the-pack step must be reachable from the focus the operator uses
+    assert "apply_label" in start["tools"]
     assert "system_status" not in start["tools"]
 
 

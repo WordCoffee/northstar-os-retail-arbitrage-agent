@@ -391,6 +391,20 @@ def _template_description(product: Dict) -> str:
 # Prompt builders
 # ---------------------------------------------------------------------------
 
+def _skill_block() -> str:
+    """Listing skills, or "" when the skills plane is absent. Never raises."""
+    try:
+        import skills_plane
+        return skills_plane.context_block(ids=["product-marketing", "listing-copy"])
+    except Exception:  # noqa: BLE001 - prompt decoration must not break generation
+        return ""
+
+
+def _with_skills(text: str) -> str:
+    block = _skill_block()
+    return f"{block}\n\n{text}" if block else text
+
+
 def _build_title_prompt(product: Dict, brand_voice: Optional[Dict],
                         top_keywords: Optional[List[str]],
                         competitor_titles: Optional[List[str]]) -> Dict:
@@ -408,7 +422,7 @@ def _build_title_prompt(product: Dict, brand_voice: Optional[Dict],
         parts.append(f"Brand voice: {json.dumps(brand_voice)}")
     parts.append(f"Rules: Max {MAX_TITLE_LENGTH} chars. Lead with most important keyword. Include brand name. No prohibited words.")
     parts.append("Generate 3 title options, one per line.")
-    return {"prompt": "\n".join(parts), "context": product}
+    return {"prompt": _with_skills("\n".join(parts)), "context": product}
 
 
 def _build_bullets_prompt(product: Dict, brand_voice: Optional[Dict],
@@ -422,7 +436,7 @@ def _build_bullets_prompt(product: Dict, brand_voice: Optional[Dict],
     if top_keywords:
         parts.append(f"Keywords: {', '.join(top_keywords[:5])}")
     parts.append(f"Rules: Each bullet max {MAX_BULLET_LENGTH} chars. Start with CAPS keyword. Be specific and benefit-focused.")
-    return "\n".join(parts)
+    return _with_skills("\n".join(parts))
 
 
 def _build_description_prompt(product: Dict, brand_voice: Optional[Dict]) -> str:
@@ -433,7 +447,7 @@ def _build_description_prompt(product: Dict, brand_voice: Optional[Dict]) -> str
         f"Max {MAX_DESCRIPTION_LENGTH} characters.",
         "Be compelling, specific, and benefit-focused.",
     ]
-    return "\n".join(parts)
+    return _with_skills("\n".join(parts))
 
 
 # ---------------------------------------------------------------------------
