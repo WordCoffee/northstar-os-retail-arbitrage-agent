@@ -1,5 +1,9 @@
 # Marco Kaz shorts — repo extraction for Northstar OS
 
+> **Superseded in part (2026-10-23):** the captions carry no URLs; the thumbnails do. See
+> `reports/marco_kaz_thumb_scan_20261023.md` for the OCR pass over 265 thumbnails and the
+> real shortlist. This file stays as the caption-pass record and the reject table.
+
 **Date:** 2026-10-22 · **Branch:** feature/v4.1-mesh · **Trigger:** operator asked to scan the
 creator's reels for repos worth adopting. Facebook was unreachable without a logged-in
 browser, so the same clips were taken from his YouTube Shorts channel (`@MarcoKaz`), which
