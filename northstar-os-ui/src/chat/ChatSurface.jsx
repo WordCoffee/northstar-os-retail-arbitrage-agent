@@ -530,6 +530,26 @@ export default function ChatSurface({
                   summary: data.summary, error: data.error }
               : tj)),
           }))
+        } else if (event === 'card') {
+          // A card the server built without the model (e.g. the deterministic
+          // creative-plan router). Same shape the transcript loader builds from
+          // persisted parts, so live and reloaded views agree.
+          patchBot((m) => ({
+            ...m,
+            cards: [...(m.cards || []), {
+              id: `card-live-${data.plan_id || Date.now()}-${(m.cards || []).length}`,
+              title: data.title || 'Card',
+              rows: Array.isArray(data.rows) ? data.rows : [],
+              action: data.action || null,
+              ok: true,
+              kind: data.kind || '',
+              planId: data.plan_id || '',
+              options: Array.isArray(data.options) ? data.options : [],
+              steps: Array.isArray(data.steps) ? data.steps : [],
+              job: data.job || '',
+              media: data.media || '',
+            }],
+          }))
         } else if (event === 'asset') {
           patchBot((m) => ({
             ...m,

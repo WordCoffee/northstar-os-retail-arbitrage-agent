@@ -5,7 +5,7 @@ a streaming turn endpoint (SSE) with a bounded TOOL LOOP (S2). Event
 vocabulary (fixed, stable):
 
     start · notice · thinking · token · tool-start · tool-progress ·
-    tool-end · asset · error · done
+    tool-end · asset · card · error · done
 
 S2 additions:
   • tools are offered to the local model (Ollama `tools`) when enabled;
@@ -30,6 +30,7 @@ from __future__ import annotations
 import json
 import os
 import queue
+import re
 import threading
 import time
 import uuid
@@ -108,6 +109,56 @@ def _args_for_model(call: Dict[str, Any]) -> Any:
         return chat_tools.parse_arguments(call.get("raw_args"))
     except chat_tools.ToolValidationError:
         return {}
+
+
+# ── deterministic intent router (runs BEFORE the model) ─────────────────────
+# A visual-deliverable request ("create a 3D mockup of …") is fully determined
+# by its own text: it needs the same plan card every time. Sending it to a 27-b
+# model to re-derive that plan adds latency and variance for no information
+# gain. This router answers it directly and leaves every other turn untouched.
+CREATIVE_VERBS = ("create", "make", "generate", "render", "build")
+CREATIVE_NOUNS = ("mockup", "render", "product photo", "3d", "packaging",
+                  "label", "pouch", "canister", "bag")
+_ARTICLE_RE = re.compile(r"^(?:a|an|the)\s+", re.I)
+_OBJECT_RE = re.compile(r"\b(?:of|for)\b\s+(.+)$", re.I)
+_OBJECT_STOP_RE = re.compile(r"\s*[,;.]\s*|\s+(?:photoreal|studio lighting|with|in|on)\b", re.I)
+
+
+def _extract_product(text: str) -> Optional[str]:
+    """The product phrase the operator actually wrote.
+
+    Never invented: with no object phrase ("… of <product>") this returns None,
+    and the turn falls through to the model untouched.
+    """
+    m = _OBJECT_RE.search(text)
+    if not m:
+        return None
+    obj = _OBJECT_STOP_RE.split(m.group(1), maxsplit=1)[0].strip()
+    obj = _ARTICLE_RE.sub("", obj).strip()
+    if len(obj.split()) < 2:
+        return None
+    return obj
+
+
+def route_creative_intent(content: str) -> Optional[Dict[str, Any]]:
+    """Fire only when a creative verb AND a visual noun AND a real product
+    phrase are all present.
+
+    Bare nouns ("mockup") and questions that merely mention one
+    ("what's a good margin on pouches?") never fire.
+    """
+    text = str(content or "").strip()
+    if not text:
+        return None
+    low = text.lower()
+    if not any(re.search(rf"\b{re.escape(v)}\b", low) for v in CREATIVE_VERBS):
+        return None
+    if not any(re.search(rf"\b{re.escape(n)}\b", low) for n in CREATIVE_NOUNS):
+        return None
+    product = _extract_product(text)
+    if not product:
+        return None
+    return {"request": text, "product": product, "job": "visual_deliverable"}
 
 
 def _label_turn(text: str, limit: int = 80) -> str:
@@ -246,6 +297,50 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "options": options or {},
             "tools": [t["function"]["name"] for t in (available_tools or [])],
         })
+
+        # ---- deterministic intent router (before any model call) ----------
+        routed = route_creative_intent(user_content)
+        if routed and tools_enabled:
+            handler = (chat_tools.TOOLS.get("creative_plan") or {}).get("handler")
+            result = handler({"request": routed["request"], "detail": "quick"},
+                             {"account_id": account_id}) if handler else None
+            card = (result or {}).get("data", {}).get("card")
+            if isinstance(card, dict) and card.get("title"):
+                line = f"Plan ready — {routed['product']}. Pick an option below."
+                content_parts.append(line)
+                yield sse_frame("token", {"turn_id": turn_id, "delta": line})
+                yield sse_frame("card", {"turn_id": turn_id, **card})
+
+                # Persist exactly the part shape the transcript renderer reads,
+                # so the card survives a reload and not only the live stream.
+                part = {
+                    "type": "card",
+                    "title": str(card.get("title"))[:120],
+                    "rows": card.get("rows") or [],
+                    "action": card.get("action") or None,
+                    "ok": True,
+                }
+                for key in ("kind", "plan_id", "job", "media", "options", "steps"):
+                    if key in card:
+                        part[key] = card[key]
+                tool_parts.append(part)
+                tool_parts.append({
+                    "type": "tool", "call_id": "router-creative-plan",
+                    "name": "creative_plan", "ok": True,
+                    "summary": (result or {}).get("summary"),
+                    "error": None, "assets": [], "asset_meta": [],
+                })
+
+                mid = _persist("done")
+                persisted = True
+                yield sse_frame("done", {
+                    "turn_id": turn_id,
+                    "message_id": mid,
+                    "status": "done",
+                    "cancelled": False,
+                    "usage": {"router": "creative_intent", "model_called": False},
+                })
+                return
 
         history = db.chat.messages.list_by_session(
             session.get("id"), account_id=account_id, limit=200)
