@@ -90,3 +90,22 @@ Verified 2026-10-23 via `api.github.com`. Sorted by gap closed, not by stars.
 - `research/marco_kaz_20261022/thumbs_ocr.csv` — 265 rows of raw OCR text
 - `research/marco_kaz_20261022/thumbs_gh.csv` — every extracted owner/repo with video id
 - `thumbs/` git-ignored (40.7 MB, reproducible from the video ids)
+
+## 8. Screenshot batch (`C:\Users\T2Hol\Downloads\temp photos`, 8 images, 2026-10-23)
+
+Read directly, not OCR'd. Same creator, different clips.
+
+| Item | ★ | Licence | Verdict |
+|---|---:|---|---|
+| `coreyhaines31/marketingskills` | 56,101 | MIT | **Adopt the pattern.** `product-marketing` is a foundation skill every other skill reads first; the set covers copywriting, copy-editing, ad-creative, ads, image, competitor-profiling, customer-research. SaaS-flavoured, but that base-skill structure is exactly what ListingForge/AdPilot lack |
+| `opensandbox-group/OpenSandbox` | 16,075 | Apache-2.0 | Park — only if the builder is containerised |
+| `cloudflare/cloudflare-os` | 11,548 | Apache-2.0 | No — agent workspace locked to Cloudflare Workers; we are FastAPI + local-first |
+| `MengTo/threeui` | 6,790 | MIT | No — 3D hero sections for marketing sites, not product surface |
+| `ripienaar/free-for-dev` | 139,947 | — | Reference only — useful when checking the no-paid-infra rule, not code |
+| `Panniantong/Agent-Reach` | 101,083 | MIT | Reject (scraping; same call as before) |
+| `higgsfield.ai` | — | closed/paid | Not a repo. "Product ad from one photo and one prompt" is relevant to AdPilot, but it is a paid cloud dependency and needs a spend decision |
+| `osintsearch.org` | — | closed | Reject — username/email OSINT across platforms; privacy and ToS exposure with no product need |
+| `typesafe.ai` (Jev) | — | closed/paid | Already covered; `NandhaKishorM/laya` is the local substitute |
+
+Screenshots confirm the same ratio as the thumbnails: roughly one usable item per eight.
+
