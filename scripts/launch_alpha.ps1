@@ -202,7 +202,7 @@ $env:FOUNDATION_DB_PATH = Join-Path $BackendDir "data\foundation.db"   # persist
 # engine is only "armed" when ComfyUI actually answers (see docs/MEDIA_STACK_2026-10.md
 # for the start command) - if it is down the studio says so honestly.
 $env:MEDIA_GEN_LIVE = "1"
-$env:COMFYUI_URL = "http://127.0.0.1:8199"
+$env:COMFYUI_URL = "http://127.0.0.1:8188"   # 8188 is the only ComfyUI this box runs; 8199 was a dead doc-era port
 $env:VIDEO_GEN_LIVE = "1"   # legacy readiness flag; local video renders via Wan 2.2
 
 # Signing key for the hosted/cookie login (the foundation auth fails closed 503
@@ -242,15 +242,17 @@ if ($NoComfy) {
     Write-Host "ComfyUI: skipped (-NoComfy). Renders will report the engine as unreachable." -ForegroundColor DarkGray
 } else {
     $comfyUp = $false
-    try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:8199/system_stats" -TimeoutSec 2 -UseBasicParsing; $comfyUp = ($r.StatusCode -eq 200) } catch { $comfyUp = $false }
+    try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:8188/system_stats" -TimeoutSec 2 -UseBasicParsing; $comfyUp = ($r.StatusCode -eq 200) } catch { $comfyUp = $false }
     if ($comfyUp) {
         Write-Host "ComfyUI: already running (local media engine ready)." -ForegroundColor Green
     } else {
         $comfyHome = if ($env:COMFYUI_HOME) { $env:COMFYUI_HOME } else { Join-Path $env:USERPROFILE "ComfyUI" }
         $comfyPy = Join-Path $comfyHome "venv\Scripts\python.exe"
         if (Test-Path $comfyPy) {
-            Write-Host "ComfyUI: starting on :8199..."
-            $cp = Start-Process -FilePath $comfyPy -ArgumentList "main.py", "--port", "8199", "--listen", "127.0.0.1" -WorkingDirectory $comfyHome -PassThru -WindowStyle Minimized
+            # --cache-none is mandatory on this box: without it the edit lane
+            # peaks at ~20 GB against 15.4 GB RAM and kills ComfyUI.
+            Write-Host "ComfyUI: starting on :8188 (--cache-none)..."
+            $cp = Start-Process -FilePath $comfyPy -ArgumentList "main.py", "--port", "8188", "--listen", "127.0.0.1", "--cache-none" -WorkingDirectory $comfyHome -PassThru -WindowStyle Minimized
             $launched += @{ name = "comfyui"; id = $cp.Id }
         } else {
             Write-Host "ComfyUI: not found at $comfyHome - renders will report the engine as unreachable." -ForegroundColor Yellow
