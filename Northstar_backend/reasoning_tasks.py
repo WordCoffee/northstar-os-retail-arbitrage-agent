@@ -38,6 +38,17 @@ def _skills_block(ids: List[str]) -> str:
     except Exception:  # noqa: BLE001 - prompt decoration must not break a proposal
         return ""
 
+
+def _audit_copy(text: str) -> Dict[str, Any]:
+    """Typed copy decision, or an explicit unavailable marker. Never raises."""
+    try:
+        import decision_layer
+        return decision_layer.audit_copy(text)
+    except Exception as exc:  # noqa: BLE001
+        return {"kind": "copy_audit", "value": "review", "confidence": 0.0,
+                "abstained": True, "flags": ["audit_unavailable"],
+                "backend": "none", "escalate": True, "reason": str(exc)[:120]}
+
 logger = logging.getLogger(__name__)
 
 # No model is assumed at runtime. A task must name a model explicitly, or the
@@ -203,6 +214,10 @@ def _normalize_listing_response(
         if word in all_text:
             base["warnings"].append(f"Proposed text contains prohibited phrase: '{word}'")
 
+    base["copy_audit"] = _audit_copy(all_text)
+    if base["copy_audit"].get("value") == "block":
+        base["warnings"].append("Copy audit blocked this text; see copy_audit.flags.")
+
     base["ok"] = True
     return base
 
@@ -296,6 +311,11 @@ def _normalize_ad_copy_response(resp: ProviderResponse) -> Dict[str, Any]:
     base["brand_tone"] = parsed.get("brand_tone") or ""
     base["unsupported_claims"] = parsed.get("unsupported_claims") or []
     base["warnings"] = parsed.get("warnings") or []
+
+    ad_text = " ".join([str(h) for h in base["headlines"]] + [base["body"], base["cta"]])
+    base["copy_audit"] = _audit_copy(ad_text)
+    if base["copy_audit"].get("value") == "block":
+        base["warnings"].append("Copy audit blocked this ad copy; see copy_audit.flags.")
     base["ok"] = True
     return base
 
