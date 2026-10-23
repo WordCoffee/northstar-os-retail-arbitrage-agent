@@ -177,7 +177,12 @@ def test_suite_view_splits_usable_and_blocked():
 
 def test_cloud_lane_is_all_gated_when_unarmed():
     lane = ps.suite("cloud", env={})
-    assert lane["counts"]["usable"] == 0
+    # In-repo prompt/decision helpers are code, not providers: they carry no
+    # network, no metering and no credential, so there is nothing to arm.
+    usable_ids = {c["id"] for c in lane["usable"]}
+    assert usable_ids <= {"skills_plane", "decision_layer"}, usable_ids
+    external = [c["id"] for c in lane["usable"] if c["network"] or c["cost"] != "free_local"]
+    assert external == [], external
     reasons = {c["reason"] for c in lane["blocked"]}
     assert ps.R_GATE_NOT_ARMED in reasons
     assert "agpl_network_copyleft_unreviewed" in reasons

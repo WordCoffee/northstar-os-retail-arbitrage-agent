@@ -1,0 +1,16 @@
+﻿........................FFF                                              [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert 'alpha' == 'beta'
+      
+      - beta
+      + alpha
+C:\Users\T2Hol\AppData\Local\Temp\ns_proof_sample.py:8: AssertionError: assert 'alpha' == 'beta'
+E   assert 3 == 4
+C:\Users\T2Hol\AppData\Local\Temp\ns_proof_sample.py:11: assert 3 == 4
+E   RuntimeError: delta exploded
+C:\Users\T2Hol\AppData\Local\Temp\ns_proof_sample.py:14: RuntimeError: delta exploded
+=========================== short test summary info ===========================
+FAILED ..\..\AppData\Local\Temp\ns_proof_sample.py::test_fail_alpha - Asserti...
+FAILED ..\..\AppData\Local\Temp\ns_proof_sample.py::test_fail_gamma - assert ...
+FAILED ..\..\AppData\Local\Temp\ns_proof_sample.py::test_error_delta - Runtim...
+3 failed, 24 passed in 0.63s
