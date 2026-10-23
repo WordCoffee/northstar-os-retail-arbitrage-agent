@@ -39,7 +39,20 @@ const TOOL_LABELS = {
   design_brief: 'Structuring the brief',
   create_dieline: 'Building the dieline',
   generate_image: 'Rendering the image locally',
+  apply_label: 'Putting the logo and copy on the pack',
   seo_check: 'Checking the latest listing revision',
+}
+
+// Machine name shown next to a run. The raw tool id was leaking into the UI as
+// jargon; these are the same identifiers, written the way an operator reads them.
+const TOOL_MACHINE = {
+  system_status: 'engine',
+  list_templates: 'print',
+  design_brief: 'brief',
+  create_dieline: 'print',
+  generate_image: 'comfyui',
+  apply_label: 'compositor',
+  seo_check: 'seo',
 }
 
 function toolLabel(name, fallback) {
@@ -138,6 +151,35 @@ function RichText({ text }) {
         String(b.text).split(/\n{2,}/).map((para, pi) => {
           const lines = para.split('\n')
           const isList = lines.every((ln) => /^\s*[-*]\s+/.test(ln) || !ln.trim())
+          // Markdown tables were printed as raw pipes. Render them as a real
+          // table when the block looks like one (header row + separator row).
+          const isTable = lines.length >= 2
+            && lines[0].trim().startsWith('|')
+            && /^\s*\|?[\s:|-]*-{2,}[\s:|-]*\|?\s*$/.test(lines[1])
+          if (isTable) {
+            const cells = (ln) => ln.trim().replace(/^\|/, '').replace(/\|$/, '')
+              .split('|').map((c) => c.trim())
+            const header = cells(lines[0])
+            const rows = lines.slice(2).filter((ln) => ln.trim().startsWith('|')).map(cells)
+            return (
+              <div key={`p-${bi}-${pi}`} className="chat-table-wrap">
+                <table className="chat-table">
+                  <thead>
+                    <tr>{header.map((h, hi) => (
+                      <th key={`th-${hi}`}><Inline text={h} keyPrefix={`th-${bi}-${pi}-${hi}`} /></th>
+                    ))}</tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((r, ri) => (
+                      <tr key={`tr-${ri}`}>{r.map((c, ci) => (
+                        <td key={`td-${ci}`}><Inline text={c} keyPrefix={`td-${bi}-${pi}-${ri}-${ci}`} /></td>
+                      ))}</tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          }
           const head = lines.length === 1 && /^#{1,4}\s+/.test(lines[0])
           if (head) {
             return <h4 key={`p-${bi}-${pi}`}><Inline text={lines[0].replace(/^#{1,4}\s+/, '')} keyPrefix={`h-${bi}-${pi}`} /></h4>
@@ -209,6 +251,9 @@ export default function ChatSurface({
   // never written into the operator's message.
   const [media, setMedia] = useState('image')
   const [thinking, setThinking] = useState('standard')
+  // Composer v2: the six option dropdowns live behind one disclosure so the input
+  // is the biggest thing on screen instead of the smallest.
+  const [optionsOpen, setOptionsOpen] = useState(false)
   // Task posture: creative diverges, standard answers, thinking verifies.
   // Server-owned contract (chat_router._MODE_CONTRACT) — the client only picks.
   const [mode, setMode] = useState('standard')
@@ -231,6 +276,11 @@ export default function ChatSurface({
   const convRef = useRef(null)                            // {stream, ctx, analyser, rec, audio, cancelled}
   const voiceStateRef = useRef('idle')
   voiceStateRef.current = voiceState
+  // speak() is created once (it must not re-bind mid-conversation), so it reads
+  // the current voice through a ref instead of a stale closure. The stale closure
+  // was a second reason every turn sent the old default voice.
+  const voiceIdRef = useRef(voiceId)
+  voiceIdRef.current = voiceId
   // Always-current message list, so the loop can tell a NEW answer from history.
   const messagesRef = useRef(messages)
   messagesRef.current = messages
@@ -305,7 +355,23 @@ export default function ChatSurface({
             error: p.error,
           })),
           assets: parts.filter((p) => p.type === 'tool')
-            .flatMap((p) => (p.assets || []).map((id) => ({ id, name: 'asset' }))),
+            .flatMap((p) => {
+              // Prefer the persisted descriptor (name/kind/size). Older turns only
+              // stored bare ids, which is why a whole session used to reload as a
+              // row of identical "asset" cards.
+              const meta = Array.isArray(p.asset_meta) ? p.asset_meta : []
+              const byId = new Map(meta.filter((a) => a && a.id).map((a) => [a.id, a]))
+              return (p.assets || []).map((id) => {
+                const m = byId.get(id) || {}
+                return {
+                  id,
+                  name: m.name || p.label || 'asset',
+                  kind: m.kind || '',
+                  width: m.width || null,
+                  height: m.height || null,
+                }
+              })
+            }),
           cards: parts.filter((p) => p.type === 'card').map((p, i) => ({
             id: `card-${i}`,
             title: p.title || 'Card',
@@ -341,6 +407,15 @@ export default function ChatSurface({
     if (!el || !pinned) return
     el.scrollTop = el.scrollHeight
   }, [messages, streaming, pinned])
+
+  // Preview closes on Escape — a full-screen overlay with no keyboard exit traps
+  // the operator in it.
+  useEffect(() => {
+    if (!lightbox) return undefined
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightbox])
 
   const onStreamScroll = useCallback(() => {
     const el = scrollRef.current
@@ -580,6 +655,17 @@ export default function ChatSurface({
     if (typeof onBusyChange === 'function') onBusyChange(streaming)
   }, [streaming, onBusyChange])
 
+  // The voice picker must never disagree with the voice that is actually sent.
+  // It used to sit on a hardcoded 'bojo-narrator' while the <select> displayed
+  // the engine's first real voice — so the UI showed "Microsoft Zira Desktop"
+  // and every spoken turn died with `unknown voice 'bojo-narrator'`.
+  useEffect(() => {
+    if (!voices.length) return
+    const ids = voices.map((v) => v.id || v.voice_id || v.name).filter(Boolean)
+    if (!ids.length) return
+    setVoiceId((current) => (ids.includes(current) ? current : ids[0]))
+  }, [voices])
+
   // In conversation mode, a finished turn is spoken and the loop keeps listening.
   // Only a message that arrived AFTER the loop started is spoken: enabling Talk
   // must never blurt out the previous conversation's last answer.
@@ -713,7 +799,7 @@ export default function ChatSurface({
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json',
                    ...(csrfMatch ? { 'X-CSRF-Token': decodeURIComponent(csrfMatch[2]) } : {}) },
-        body: JSON.stringify({ text: text.slice(0, 1200), voice_id: voiceId }),
+        body: JSON.stringify({ text: text.slice(0, 1200), voice_id: voiceIdRef.current }),
       })
       if (!res.ok) {
         const b = await res.json().catch(() => ({}))
@@ -722,8 +808,12 @@ export default function ChatSurface({
         setVoiceState('idle')
         return
       }
-      const { audio_url: url } = await res.json()
-      const audio = new Audio(url)
+      const body = await res.json()
+      // The server resolves an unknown/stale voice to a real one; keep the picker
+      // honest about which voice is actually being used.
+      if (body.voice_id) setVoiceId((cur) => (cur === body.voice_id ? cur : body.voice_id))
+      setVoiceNote('')
+      const audio = new Audio(body.audio_url)
       c.audio = audio
       audio.onended = () => { if (convRef.current && !convRef.current.cancelled) setVoiceState('idle') }
       // Barge-in: if the operator starts talking, stop Bojo mid-sentence.
@@ -839,8 +929,9 @@ export default function ChatSurface({
           <button type="button" className="btn btn-sm" onClick={newChat} data-testid="chat-new">
             <Icon name="plus" size={13} /> New chat
           </button>
-          <button type="button" className="btn btn-sm btn-ghost" aria-label="Hide sessions"
-            onClick={() => setRailOpen(false)}>&lsaquo;</button>
+          <button type="button" className="chat-rail-toggle" aria-label="Hide sessions"
+            title="Hide sessions"
+            onClick={() => setRailOpen(false)}><Icon name="arrowLeft" size={15} /></button>
         </div>
         <input
           type="search" className="chat-rail-search" value={sessionFilter}
@@ -874,7 +965,7 @@ export default function ChatSurface({
                   <button type="button" className="chat-rail-edit" aria-label="Rename session"
                     title="Rename"
                     onClick={() => { setRenamingId(s.id); setRenameDraft(s.title || '') }}>
-                    ✎
+                    <Icon name="edit" size={13} />
                   </button>
                 </>
               )}
@@ -887,8 +978,9 @@ export default function ChatSurface({
       <section className="chat-col">
         <div className="chat-head">
           {!railOpen && (
-            <button type="button" className="btn btn-sm btn-ghost" aria-label="Show sessions"
-              onClick={() => setRailOpen(true)}>&rsaquo;</button>
+            <button type="button" className="chat-rail-toggle" aria-label="Show sessions"
+              title="Show sessions"
+              onClick={() => setRailOpen(true)}><Icon name="menu" size={15} /></button>
           )}
           <h2>{heading}</h2>
           <span className="chat-head-sub">
@@ -899,19 +991,19 @@ export default function ChatSurface({
             onClick={() => setWorkbenchOpen((v) => !v)}
             title="Plan, artifacts and runs for this session"
             aria-pressed={workbenchOpen} data-testid="chat-workbench-toggle">
-            ⌥ Workbench
+            <Icon name="workflow" size={14} /> Workbench
           </button>
           {onOpenAdvanced && (
             <button type="button" className="btn btn-sm btn-ghost"
               onClick={() => onOpenAdvanced('/home')}
               title="Open the room-based Advanced view" data-testid="chat-open-advanced">
-              Advanced view
+              <Icon name="grid" size={14} /> Advanced view
             </button>
           )}
           {streaming && !paused && (
             <button type="button" className="btn btn-sm" onClick={() => { stop(); setPaused(true) }}
               data-testid="chat-pause" title="Pause the agent and take over">
-              ⏸ Pause
+              <Icon name="clock" size={14} /> Pause
             </button>
           )}
           {paused && (
@@ -922,12 +1014,12 @@ export default function ChatSurface({
           {paused && (
             <button type="button" className="btn btn-sm btn-ghost"
               onClick={() => setPaused(false)} data-testid="chat-resume">
-              ▶ Resume agent
+              <Icon name="refresh" size={14} /> Resume agent
             </button>
           )}
           {streaming && (
             <button type="button" className="btn btn-sm" onClick={stop} data-testid="chat-stop">
-              Stop
+              <Icon name="x" size={14} /> Stop
             </button>
           )}
         </div>
@@ -967,14 +1059,17 @@ export default function ChatSurface({
                   <div className="chat-tools" data-testid="chat-tools">
                     {m.tools.map((tj) => (
                       <div key={tj.call_id} className={`chat-tool ${tj.status}`}>
-                        <span className="chat-tool-icon" aria-hidden="true">⚙</span>
+                        <span className="chat-tool-icon" aria-hidden="true">
+                          <Icon name={tj.status === 'error' ? 'alert'
+                            : tj.status === 'done' ? 'check' : 'settings'} size={15} />
+                        </span>
                         <span className="chat-tool-name">{toolLabel(tj.name, tj.label)}</span>
                         <span className="chat-tool-state">
                           {tj.status === 'running'
                             ? [tj.pct != null ? `${tj.pct}%` : null, tj.label].filter(Boolean).join(' · ') || 'working…'
-                            : tj.status === 'done' ? '✓ done' : '✗ failed'}
+                            : tj.status === 'done' ? 'done' : 'failed'}
                         </span>
-                        <span className="chat-tool-machine">{tj.name}</span>
+                        <span className="chat-tool-machine">{TOOL_MACHINE[tj.name] || tj.name}</span>
                         {tj.status === 'running' && (
                           <span className="chat-tool-bar">
                             <i className={tj.pct != null ? '' : 'indet'}
@@ -1013,19 +1108,28 @@ export default function ChatSurface({
                           <video src={assetFileUrl(a.id)} controls preload="metadata" />
                         )}
                         <span className="chat-asset-meta">
-                          {a.name || 'asset'}
-                          {a.width && a.height ? ` · ${a.width}×${a.height}` : ''}
+                          <span>
+                            {a.name || 'asset'}
+                            {a.width && a.height ? ` · ${a.width}×${a.height}` : ''}
+                          </span>
+                          {a.kind && <span className="chat-asset-kind">{a.kind}</span>}
                         </span>
                         <span className="chat-asset-actions">
                           {(!a.kind || a.kind === 'image') && (
-                            <button type="button" onClick={() => setLightbox(a)}>View</button>
+                            <button type="button" onClick={() => setLightbox(a)}>
+                              <Icon name="eye" size={13} /> View
+                            </button>
                           )}
-                          <a href={assetFileUrl(a.id)} download>Download</a>
-                          <button type="button" onClick={() => copyText(a.id)}>Copy id</button>
+                          <a href={assetFileUrl(a.id)} download>
+                            <Icon name="download" size={13} /> Download
+                          </a>
+                          <button type="button" onClick={() => copyText(a.id)}>
+                            <Icon name="copy" size={13} /> Copy id
+                          </button>
                           {onOpenAdvanced && (
                             <button type="button" title="Open the Advanced studio to composite this"
                               onClick={() => onOpenAdvanced('/design-studio')}>
-                              Open in studio
+                              <Icon name="palette" size={13} /> Open in studio
                             </button>
                           )}
                         </span>
@@ -1228,84 +1332,121 @@ export default function ChatSurface({
                 <button key={m} type="button" role="tab" aria-selected={media === m}
                   className={`chat-media-opt ${media === m ? 'is-on' : ''}`}
                   onClick={() => setMedia(m)} data-testid={`chat-media-${m}`}>
-                  {m === 'image' ? 'Image' : 'Video'}
+                  <Icon name={m === 'image' ? 'image' : 'film'} size={14} /> {m === 'image' ? 'Image' : 'Video'}
                 </button>
               ))}
             </div>
-            <label className="chat-control">
-              <span>Voice</span>
-              <select value={voiceId} onChange={(e) => setVoiceId(e.target.value)}
-                disabled={voices.length === 0}
-                title={voices.length ? '' : 'Voice engine offline (127.0.0.1:8321)'}
-                data-testid="chat-voice">
-                {voices.length === 0 && <option value={voiceId}>Bojo (engine offline)</option>}
-                {voices.map((v) => {
-                  const id = v.id || v.voice_id || v.name
-                  return <option key={id} value={id}>{v.name || id}</option>
-                })}
-              </select>
-            </label>
-            <label className="chat-control">
-              <span>Mode</span>
-              <select value={mode} onChange={(e) => setMode(e.target.value)}
-                data-testid="chat-mode"
-                title="Creative diverges, standard answers, thinking verifies">
-                <option value="creative">Creative</option>
-                <option value="standard">Standard</option>
-                <option value="thinking">Thinking</option>
-              </select>
-            </label>
-            <label className="chat-control">
-              <span>Thinking</span>
-              <select value={thinking} onChange={(e) => setThinking(e.target.value)}
-                data-testid="chat-thinking">
-                <option value="off">Off</option>
-                <option value="standard">Standard</option>
-                <option value="deep">Deep</option>
-              </select>
-            </label>
-            <label className="chat-control">
-              <span>Style</span>
-              <select value={style} onChange={(e) => setStyle(e.target.value)}
-                data-testid="chat-style">
-                <option value="concise">Concise</option>
-                <option value="balanced">Balanced</option>
-                <option value="detailed">Detailed</option>
-              </select>
-            </label>
+            <button type="button"
+              className={`chat-options-toggle ${optionsOpen ? 'is-open' : ''}`}
+              aria-expanded={optionsOpen} aria-controls="chat-options"
+              onClick={() => setOptionsOpen((v) => !v)} data-testid="chat-options-toggle">
+              <Icon name="settings" size={14} /> Options
+              <span className="chat-options-sum">
+                Mode: {mode} · {style} · effort: {thinking}
+              </span>
+            </button>
+            <span className="chat-controls-spacer" />
             <button type="button" className="chat-icon-btn" title="Attach a file"
               onClick={() => fileRef.current?.click()} disabled={uploading}
               data-testid="chat-attach" aria-label="Attach a file">
-              {uploading ? '…' : '📎'}
+              {uploading
+                ? <span className="chat-spinner" aria-hidden="true" />
+                : <Icon name="upload" size={17} />}
             </button>
             <button type="button"
               className={`chat-icon-btn ${conversation ? 'is-live' : ''}`}
-              title={conversation ? 'End the live conversation' : 'Talk to Bojo (live voice)'}
+              title={conversation
+                ? 'End the live conversation'
+                : 'Talk to Bojo (live voice — records locally, transcribes with whisper.cpp)'}
               onClick={() => (conversation ? stopConversation() : startConversation())}
-              aria-pressed={conversation} data-testid="chat-conversation">
+              aria-pressed={conversation} data-testid="chat-conversation"
+              aria-label={conversation ? 'End the live conversation' : 'Talk to Bojo'}>
               {conversation
-                ? (voiceState === 'speaking' ? '🔊' : voiceState === 'thinking' ? '…' : '●')
-                : '🎙'}
+                ? (voiceState === 'speaking' ? <Icon name="volume" size={17} />
+                  : voiceState === 'thinking' ? <span className="chat-spinner" aria-hidden="true" />
+                    : <span className="chat-live-dot" aria-hidden="true" />)
+                : <Icon name="mic" size={17} />}
             </button>
             <input ref={fileRef} type="file" hidden
               accept="image/*,video/*,application/pdf,text/plain,text/csv"
               onChange={(e) => uploadFile(e.target.files && e.target.files[0])}
               data-testid="chat-file" />
           </div>
+          {optionsOpen && (
+            <div className="chat-options" id="chat-options">
+              <label className="chat-control">
+                <span>Voice</span>
+                <select value={voiceId} onChange={(e) => setVoiceId(e.target.value)}
+                  disabled={voices.length === 0}
+                  title={voices.length ? '' : 'Voice engine offline (127.0.0.1:8321)'}
+                  data-testid="chat-voice">
+                  {voices.length === 0 && <option value={voiceId}>Bojo (engine offline)</option>}
+                  {voices.map((v) => {
+                    const id = v.id || v.voice_id || v.name
+                    return <option key={id} value={id}>{v.name || id}</option>
+                  })}
+                </select>
+              </label>
+              <label className="chat-control">
+                <span>Mode</span>
+                <select value={mode} onChange={(e) => setMode(e.target.value)}
+                  data-testid="chat-mode"
+                  title="Creative diverges, standard answers, thinking verifies">
+                  <option value="creative">Creative</option>
+                  <option value="standard">Standard</option>
+                  <option value="thinking">Thinking</option>
+                </select>
+              </label>
+              <label className="chat-control">
+                <span>Thinking</span>
+                <select value={thinking} onChange={(e) => setThinking(e.target.value)}
+                  data-testid="chat-thinking">
+                  <option value="off">Off</option>
+                  <option value="standard">Standard</option>
+                  <option value="deep">Deep</option>
+                </select>
+              </label>
+              <label className="chat-control">
+                <span>Style</span>
+                <select value={style} onChange={(e) => setStyle(e.target.value)}
+                  data-testid="chat-style">
+                  <option value="concise">Concise</option>
+                  <option value="balanced">Balanced</option>
+                  <option value="detailed">Detailed</option>
+                </select>
+              </label>
+            </div>
+          )}
+          {voiceNote && (
+            <div className="chat-note" role="status" data-testid="chat-voice-note">
+              <Icon name="alert" size={15} />
+              <span className="chat-note-text">{voiceNote}</span>
+              <button type="button" className="chat-note-close" aria-label="Dismiss"
+                onClick={() => setVoiceNote('')}><Icon name="x" size={14} /></button>
+            </div>
+          )}
           {attachments.length > 0 && (
             <div className="chat-attachments" data-testid="chat-attachments">
               {attachments.map((a) => (
                 <span key={a.id} className="chat-attachment">
+                  <Icon name="file" size={13} />
                   {a.name}
                   <button type="button" aria-label={`Remove ${a.name}`}
                     onClick={() => setAttachments((prev) => prev.filter((x) => x.id !== a.id))}>
-                    ×
+                    <Icon name="x" size={13} />
                   </button>
                 </span>
               ))}
             </div>
           )}
-          {uploadNote && <div className="chat-hint">{uploadNote}</div>}
+          {uploadNote && (
+            <div className="chat-note" role="status">
+              <Icon name="alert" size={15} />
+              <span className="chat-note-text">{uploadNote}</span>
+              <button type="button" className="chat-note-close" aria-label="Dismiss"
+                onClick={() => setUploadNote('')}><Icon name="x" size={14} /></button>
+            </div>
+          )}
           {queue.length > 0 && (
             <div className="chat-queue-list" data-testid="chat-queue">
               {queue.map((q, i) => (
@@ -1341,7 +1482,7 @@ export default function ChatSurface({
             {recording ? (
               <button type="button" className="btn btn-sm btn-danger" onClick={stopRecording}
                 data-testid="chat-voice-stop" aria-label="Stop recording">
-                ■ {recordSeconds}s — stop
+                <span className="chat-live-dot" aria-hidden="true" /> {recordSeconds}s — stop
               </button>
             ) : (
               <button type="button" className="btn btn-sm" onClick={startRecording}
@@ -1350,18 +1491,18 @@ export default function ChatSurface({
                   ? `Voice unavailable: ${voiceStatus.detail || 'whisper not found'}`
                   : 'Push-to-talk (local whisper.cpp)'}
                 aria-label="Record voice message">
-                {transcribing ? 'Transcribing…' : '● Voice'}
+                {transcribing
+                  ? <><span className="chat-spinner" aria-hidden="true" /> Transcribing…</>
+                  : <><Icon name="mic" size={14} /> Voice</>}
               </button>
             )}
             <button type="button" className="btn btn-primary btn-sm" onClick={() => send()}
               disabled={!input.trim()} data-testid="chat-send" aria-label="Send">
-              Send
+              <Icon name="send" size={14} /> Send
             </button>
           </div>
           <div className="chat-hint">
-            {voiceNote && <span className="chat-voice-note">{voiceNote} · </span>}
-            Enter sends · Shift+Enter newline · Stop saves the partial as partial ·
-            Voice records locally and transcribes with whisper.cpp (no audio leaves this machine).
+            Enter sends · Shift+Enter newline · Stop saves the partial as partial
           </div>
         </div>
       </section>
@@ -1380,9 +1521,15 @@ export default function ChatSurface({
             <img src={assetFileUrl(lightbox.id)} alt={lightbox.name || 'asset'} />
             <div className="chat-lightbox-bar">
               <span>{lightbox.name || 'asset'}</span>
-              <a href={assetFileUrl(lightbox.id)} download>Download</a>
-              <button type="button" onClick={() => copyText(lightbox.id)}>Copy id</button>
-              <button type="button" onClick={() => setLightbox(null)}>Close</button>
+              <a href={assetFileUrl(lightbox.id)} download>
+                <Icon name="download" size={13} /> Download
+              </a>
+              <button type="button" onClick={() => copyText(lightbox.id)}>
+                <Icon name="copy" size={13} /> Copy id
+              </button>
+              <button type="button" onClick={() => setLightbox(null)}>
+                <Icon name="x" size={13} /> Close
+              </button>
             </div>
           </div>
         </div>

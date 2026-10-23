@@ -254,7 +254,12 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
         # Turn options v2: a model-side directive, prepended AFTER history is built so
         # it is never persisted as part of the operator's message.
         if options:
-            directive = turn_directive(options)
+            directive = turn_directive(
+                options,
+                attachment_meta=_describe_attachments(
+                    db, account_id,
+                    [str(a) for a in (options.get("attachments") or []) if a][:12]),
+            )
             if directive:
                 messages = [{"role": "system", "content": directive}] + messages
 
@@ -432,6 +437,15 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "error": result.get("error"),
                     "assets": [a.get("id") for a in (result.get("assets") or [])
                                if isinstance(a, dict) and a.get("id")],
+                    # Full descriptors: a reloaded transcript must keep each
+                    # artefact's real name/kind/size, otherwise a dieline SVG and
+                    # its PDF both come back as an unnamed "asset" card.
+                    "asset_meta": [
+                        {k: a.get(k) for k in
+                         ("id", "kind", "name", "width", "height", "url")}
+                        for a in (result.get("assets") or [])
+                        if isinstance(a, dict) and a.get("id")
+                    ],
                 })
                 executed.append({"call": call, "result": result})
 
@@ -620,9 +634,11 @@ def _think_level(think: bool, thinking: str, content: str = "",
 # the mode changes the SHAPE of the answer and which effort it runs at.
 _MODE_CONTRACT = {
     "creative": (
-        "Mode: creative. Give 3 distinct options unless told otherwise, one line of "
-        "rationale each, then the concrete artefact to make. Diverge first; do not "
-        "self-verify or hedge, and do not ask for permission before drafting."
+        "Mode: creative. If the operator asks for a specific deliverable (create / "
+        "make / render / build / design X), DO IT: call the matching tool or return "
+        "the plan card in the same turn. Only offer 3 options when the request is "
+        "open-ended and no single deliverable is named. One line of rationale per "
+        "option, never a wall of prose, and never ask permission before drafting."
     ),
     "standard": (
         "Mode: standard. Put the answer in the first sentence. At most one "
@@ -643,7 +659,64 @@ _STYLE_HINT = {
 }
 
 
-def turn_directive(options: Optional[Dict[str, Any]]) -> str:
+def _describe_attachments(db, account_id: Optional[str],
+                          ids: List[str]) -> List[Dict[str, Any]]:
+    """Resolve attachment asset ids to the facts the model can actually use.
+
+    The old directive handed the model bare ids ("asset-1, asset-2") and nothing
+    else, so it repeatedly answered "the logo didn't come through on my end" —
+    true from its side, useless to the operator. This returns the real name,
+    type and pixel size so the model can name the file and pass the right id to
+    a tool (e.g. logo_asset_id on apply_label).
+    """
+    out: List[Dict[str, Any]] = []
+    for aid in ids:
+        rec = None
+        if db is not None and account_id:
+            try:
+                rec = db.design_studio.assets.get_by_id(str(aid), account_id=account_id)
+            except Exception:  # noqa: BLE001 - a missing asset must not break a turn
+                rec = None
+        if not rec:
+            out.append({"asset_id": aid, "name": None, "kind": None, "mime": None})
+            continue
+        meta = rec.get("metadata_json") or rec.get("metadata") or {}
+        if isinstance(meta, str):
+            try:
+                meta = json.loads(meta)
+            except ValueError:
+                meta = {}
+        out.append({
+            "asset_id": aid,
+            "name": rec.get("name"),
+            "asset_type": rec.get("asset_type"),
+            "mime": rec.get("mime_type"),
+            "width": rec.get("width"),
+            "height": rec.get("height"),
+            "label_kind": (meta or {}).get("label_kind") if isinstance(meta, dict) else None,
+        })
+    return out
+
+
+def _attachment_line(atts: List[Dict[str, Any]]) -> str:
+    parts = []
+    for a in atts:
+        bits = [a.get("name") or a.get("asset_id") or "attachment"]
+        kind = a.get("asset_type") or a.get("label_kind")
+        mime = a.get("mime")
+        if kind:
+            bits.append(str(kind))
+        elif mime:
+            bits.append(str(mime))
+        if a.get("width") and a.get("height"):
+            bits.append(f"{a['width']}x{a['height']}")
+        parts.append(" — ".join([bits[0], ", ".join(bits[1:])]) if len(bits) > 1
+                     else bits[0])
+    return "; ".join(parts)
+
+
+def turn_directive(options: Optional[Dict[str, Any]],
+                   attachment_meta: Optional[List[Dict[str, Any]]] = None) -> str:
     """One model-facing instruction block built from the composer switches."""
     o = options or {}
     lines = ["[Bojo turn options]",
@@ -658,7 +731,16 @@ def turn_directive(options: Optional[Dict[str, Any]]) -> str:
     if style:
         lines.append(style)
     atts = [str(a) for a in (o.get("attachments") or []) if a][:12]
-    if atts:
+    meta = [m for m in (attachment_meta or []) if isinstance(m, dict)]
+    if meta:
+        lines.append("Operator attachments (the operator's own artefacts, already uploaded "
+                     "and available to tools): " + _attachment_line(meta)
+                     + ". Their asset ids: " + ", ".join(str(a.get("asset_id")) for a in meta)
+                     + ". You cannot see inside an image — do not claim you can, and do not "
+                       "ask the operator to re-send one that is listed here. Refer to each by "
+                       "its file name, and pass its id as the tool argument that expects it "
+                       "(for a logo on apply_label, logo_asset_id).")
+    elif atts:
         lines.append("Operator attachments (asset ids): " + ", ".join(atts)
                      + ". Treat them as the operator's own artefacts.")
     return "\n".join(lines)

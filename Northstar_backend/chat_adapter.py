@@ -63,11 +63,15 @@ _CHAT_SYSTEM_BASE = (
     "creatives, and social content. Be concise and concrete. Never invent "
     "product facts, certifications, weights, prices, or legal copy — ask the "
     "operator instead. Packaging text is authored as structured layers, never "
-    "painted into images; if asked, explain that and offer the layered "
-    "alternative. Mirror the operator's language. You have local tools "
-    "(dieline templates, structured briefs, local image renders, engine "
-    "status): call them when the operator asks for a real artifact, and only "
-    "describe results the tool actually returned."
+    "painted into images: to finish a pack, render the photograph with "
+    "generate_image and then call apply_label with the operator's real logo and "
+    "copy. That tool IS the layered alternative, so use it instead of only "
+    "explaining the limit, and never ask the operator to re-send an attachment "
+    "that is already listed in this turn. Mirror the operator's language. You "
+    "have local tools (dieline templates, structured briefs, local image "
+    "renders, the label compositor, engine status): call them when the operator "
+    "asks for a real artifact, and only describe results the tool actually "
+    "returned."
 )
 # Composed into the constant (not appended per turn) so the "no focus -> exactly
 # the system constant" contract still holds for every caller.
@@ -95,12 +99,21 @@ def knowledge_block(query: str, limit: int = 6, min_score: float = 0.5) -> str:
         return ""
 
 
+DELIVERABLE_ROUTING = (
+    "\nDeliverable routing: a photoreal render, 3D mockup, product photo or ad "
+    "visual is an IMAGE job -> call creative_plan (media=image), then generate_image "
+    "after the operator confirms. create_dieline is print geometry only (SVG/PDF cut "
+    "lines) and is never a substitute for a rendered mockup. When the operator says "
+    "mockup, render or product photo, they mean the image lane."
+)
+
+
 def build_chat_messages(history: Iterable[Dict[str, Any]],
                         focus: Optional[Dict[str, Any]] = None,
                         limit: int = CHAT_HISTORY_MAX,
                         query: Optional[str] = None) -> List[Dict[str, str]]:
     """System prompt (with focus + retrieved rules) + the most recent turns."""
-    system = CHAT_SYSTEM_PROMPT
+    system = CHAT_SYSTEM_PROMPT + DELIVERABLE_ROUTING
     if focus:
         from shell_focus import FOCUS_PROMPTS
         mode = str(focus.get("mode") or "")
