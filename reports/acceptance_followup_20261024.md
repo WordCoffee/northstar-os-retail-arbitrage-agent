@@ -127,7 +127,7 @@ operator rather than pulled out from under it.
 | 3 | Simple Mode brief | **approved 2026-10-24**; S1–S7 still need captures (S1 desktop done, mobile needs one restart) |
 | 4 | Package Designer brief | **signed off 2026-10-24** — P1–P7 evidenced, duplicate-country defect accepted |
 | 5 | BOJO-UTIL executor | **done** — `specialists/utility_apps.py` + `build_utility` tool, 12 tests; the calculator request now produces a downloadable page |
-| 6 | Autothink send path | not started — `scope()` offers a priced handoff, no transport |
+| 6 | Autothink send path | **done** — `specialists/autothink_transport.py` + `handoff_to_autothink` tool, 17 tests; lane refuses until an endpoint and `AUTOTHINK_LIVE=1` are set |
 | 7 | Phase 7 cloud rehearsal | blocked — needs a provider choice + keys |
 | 8 | Phase 1 study debt | not started (7 Tier A repos, 10 Tier B products) |
 | 9 | Manager benchmark | blocked — 27B ctx ceiling fixed earlier; gpt-oss/Gemma weights not on disk |
@@ -175,3 +175,36 @@ never compute. Neighbouring suites: 122 passed.
 **Limit, stated plainly:** the arithmetic is verified, the page wiring is verified, but no one has clicked
 it in a browser yet — Chrome Connect's live session belongs to the parallel theme run. Opening the built
 file and checking the numbers move is a 30-second manual step, or a capture once the controller restarts.
+
+---
+
+## 9. Autothink send path (item 6) — built
+
+`scope()` priced an engineering handoff and told the operator *"say 'send it to Autothink' to proceed"*.
+Nothing carried it anywhere. That gap is now closed.
+
+**`specialists/autothink_transport.py`** — `build_packet()` produces the exact brief that would be sent
+(the decision to hand off stays in `router.scope`, so there is still one place that decides what counts as
+engineering work); `send()` makes **one** attempt.
+
+Every refusal happens **before** any network call:
+
+| Refusal | Why it exists |
+|---|---|
+| `approval_required` | the router's `requires_user_approval` is not advisory; a send costs money |
+| `not_configured` | no endpoint, or the lane is not armed with `AUTOTHINK_LIVE=1` |
+| `no_charge_ceiling` | the operator must name the ceiling they accepted |
+| `charge_exceeds_ceiling` | the estimate is over that ceiling |
+| `already_sent` | that packet id already has a successful receipt — no double charge |
+
+A failure writes a receipt (timestamp, endpoint host, approver, charge, HTTP status, response id) and is
+**never retried**; sending again is a second decision. The bearer token is redacted out of every receipt
+and error string.
+
+**`handoff_to_autothink` tool** — without `confirm` it prepares the brief and sends nothing; with `confirm`
+it needs an account to attribute the approval to, so the tool **cannot approve itself**. It sits in
+`CORE_TOOLS`, so every focus can reach it (the O-02 lesson).
+
+**Honest state right now:** no `AUTOTHINK_ENDPOINT` is configured and the lane is not armed, so a send
+returns `not_configured` naming both. The delivery path exists and is tested; what it lacks is an endpoint
+— which is a decision about which Autothink service to point at, not code.
