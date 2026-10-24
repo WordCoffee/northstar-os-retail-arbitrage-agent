@@ -417,9 +417,9 @@ def model_answer(item: Dict[str, Any]) -> str:
     return "".join(parts)
 
 
-def run_cycle(dry_run: bool = False, cap: int = 5,
-              answer_fn: Optional[Callable[[Dict[str, Any]], str]] = None,
-              live_limit: int = 10) -> Dict[str, Any]:
+def _execute_cycle(dry_run: bool = False, cap: int = 5,
+                   answer_fn: Optional[Callable[[Dict[str, Any]], str]] = None,
+                   live_limit: int = 10) -> Dict[str, Any]:
     cycle_id = cie_store.new_cycle_id()
     if cie_store.is_stopped():
         return {"ok": False, "stopped": True, "cycle_id": cycle_id,
@@ -532,6 +532,42 @@ def run_cycle(dry_run: bool = False, cap: int = 5,
         "report": str(report),
         "rollback": rollback_cmd,
     }
+
+
+def run_cycle(dry_run: bool = False, cap: int = 5,
+              answer_fn: Optional[Callable[[Dict[str, Any]], str]] = None,
+              live_limit: int = 10) -> Dict[str, Any]:
+    """Loop-breaker-guarded entry for one knowledge cycle.
+
+    Every cycle is one admission (``scope="cie:cycle"``). A burst of cycles, or
+    ``loop_breaker.FAILURE_LATCH`` consecutive hard crashes, opens a durable
+    latch that refuses further cycles until an operator resets it. Pattern
+    ported from AgentConnect's loop breaker (Apache-2.0).
+    """
+    try:
+        import loop_breaker as lb
+    except Exception:  # noqa: BLE001 - a missing breaker must not stop knowledge work
+        lb = None  # type: ignore[assignment]
+
+    if lb is not None:
+        guard = lb.admit("cie:cycle")
+        if not guard["admitted"]:
+            return {"ok": False, "loop_breaker": guard,
+                    "reason": f"loop breaker {guard['state']}: {guard['reason']}"}
+
+    try:
+        out = _execute_cycle(dry_run=dry_run, cap=cap,
+                             answer_fn=answer_fn, live_limit=live_limit)
+    except Exception as exc:  # noqa: BLE001 - crash is data to the breaker, then re-raised
+        if lb is not None:
+            lb.note("cie:cycle", ok=False,
+                    failure_code=f"cycle_crash:{type(exc).__name__}"[:40])
+        raise
+    ok = bool(out.get("ok"))
+    if lb is not None:
+        out["loop_breaker"] = lb.note(
+            "cie:cycle", ok=ok, failure_code="cycle_failed")
+    return out
 
 
 def status() -> Dict[str, Any]:
