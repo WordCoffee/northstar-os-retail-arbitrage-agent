@@ -476,6 +476,34 @@
       "unlocks": "Isolated containers for agent code execution.",
       "notes": "Only relevant if the build loop is ever containerised. Today the loop runs on the operator's bench by design."
     },
+    "agentconnect": {
+      "name": "AgentConnect multi-agent platform",
+      "kind": "orchestration",
+      "runtime": "node",
+      "lanes": ["local"],
+      "license": "Apache-2.0",
+      "commercial_ok": true,
+      "network": true,
+      "cost": "free_local",
+      "installed": "not_installed",
+      "source": "https://github.com/agentconnect-md/agentconnect",
+      "unlocks": "Slack/Telegram/GitHub multi-agent fleet with daemons, relay, control plane and reusable routing Decisions.",
+      "notes": "REJECTED 2026-10-24: it is a second harness - exactly why OpenClaw was refused. The stack needs Docker Compose with PostgreSQL, Logto auth and optional TURN/STUN relay; that is team-infrastructure for a product with one operator, and it duplicates the Master Brain's role/memory/knowledge plane. Kept on the record because Jev (its routing engine) is the production shape of the decision layer: when-to-respond, route-to-specialist, pick-model-per-session are closed-label decisions with escalation - the same contract decision_layer.py serves locally."
+    },
+    "herk_edit_kit": {
+      "name": "Herk Edit Kit (agentic video editing)",
+      "kind": "video",
+      "runtime": "node",
+      "lanes": ["local"],
+      "license": "MIT",
+      "commercial_ok": true,
+      "network": true,
+      "cost": "api_metered",
+      "installed": "not_installed",
+      "source": "https://github.com/nateherkai/herk-edit-kit",
+      "unlocks": "15 editing skills with transcript-driven cuts, storytelling and 406 motion-graphics cards rendered through HyperFrames (Apache-2.0) + GSAP.",
+      "notes": "PARKED 2026-10-24, four reasons, in order of weight: (1) browser-render collision - HyperFrames renders motion graphics through a browser, and Chrome Connect is the only sanctioned browser path, so adoption needs an operator carve-out per task; (2) metered by default - transcript-driven cuts call ElevenLabs/OpenAI/Groq transcription and kie.ai video gen (paid credits, real-money gate); (3) mixed bundle rights - the kit is MIT and the AIS brand assets are excluded, but GSAP carries its own no-charge licence, which the cloud lane would need reviewed before any customer-facing render; (4) job fit - it edits existing talking-head footage, while the UGC lane needs product-video assembly from stills plus narration. The recyclable idea is the skill-file pipeline and motion-card library, not the kit."
+    },
     "lightpanda": {
       "name": "Lightpanda headless browser",
       "kind": "browser",
