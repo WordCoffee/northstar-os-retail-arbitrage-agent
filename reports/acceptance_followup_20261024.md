@@ -126,7 +126,7 @@ operator rather than pulled out from under it.
 | 2 | Mobile capture path | **done + unit-proven**; first live use needs the browser to itself |
 | 3 | Simple Mode brief | **approved 2026-10-24**; S1–S7 still need captures (S1 desktop done, mobile needs one restart) |
 | 4 | Package Designer brief | **signed off 2026-10-24** — P1–P7 evidenced, duplicate-country defect accepted |
-| 5 | BOJO-UTIL executor | not started — router classifies (`specialists/router.py` `_UTILITY`), no executor exists |
+| 5 | BOJO-UTIL executor | **done** — `specialists/utility_apps.py` + `build_utility` tool, 12 tests; the calculator request now produces a downloadable page |
 | 6 | Autothink send path | not started — `scope()` offers a priced handoff, no transport |
 | 7 | Phase 7 cloud rehearsal | blocked — needs a provider choice + keys |
 | 8 | Phase 1 study debt | not started (7 Tier A repos, 10 Tier B products) |
@@ -146,6 +146,32 @@ operator rather than pulled out from under it.
 | Approve the Simple Mode brief? | **yes** | Recorded in `briefs/simple_mode.md` with the S1–S7 evidence state per check. Approval is of the design; S1–S7 still need captures. |
 | A `.gitignore` policy for generated output? | **yes** | `Northstar_backend/data/`, `*.db*`, `*.part0`/`*.gguf`/`*.safetensors`, `out_sb/`, `renders/`, `reports/**/*.png` (with `reports/**/screenshots/**` kept committable as evidence), `*.bak*`. Tree: 428 → 211 entries. Commit `86c9e4f`. |
 
-**What this leaves open, in order:** S1–S7 captures (needs one controller restart), BOJO-UTIL executor,
-Autothink transport, then the blocked-by-spend items (cloud provider, GPU render evidence, benchmark
-weights).
+**What this leaves open, in order:** S1–S7 captures (needs one controller restart), Autothink transport,
+then the blocked-by-spend items (cloud provider, GPU render evidence, benchmark weights).
+
+---
+
+## 8. BOJO-UTIL executor (item 5) — built
+
+The router has always said a tip calculator is Bojo's own work. Nothing built one, so the scope test
+passed on classification rather than output. That is now closed.
+
+**`Northstar_backend/specialists/utility_apps.py`** — three deterministic templates (tip, percentage,
+break-even) emitted as **one self-contained HTML page**: no CDN, no webfont, no build step, no network
+call. Design rules, in order: no invented numbers (an empty field shows a dash and says what it needs —
+the tip field deliberately does *not* pre-fill 18%), self-contained, byte-identical on rebuild, and an
+honest refusal that lists what it *can* build rather than shipping a half-working app.
+
+**`build_utility` chat tool** — persists the page as a studio asset (`asset_type: utility-app`,
+`mime_type: text/html`) and returns its `/file` URL, so what the user gets is a downloadable file, not a
+description of one. Reachable from the **operate** and **create** foci — the O-02 lesson was that a tool
+outside the current focus is invisible to the model, which then honestly reports it cannot see it.
+
+**Tests: 12 new** (`test_utility_apps.py`) covering the arithmetic mirrored between Python and the page's
+JavaScript, self-containment, determinism, title escaping, the refusal path, asset persistence and focus
+reachability — plus the id-wiring test that catches the one bug that makes a built page render and silently
+never compute. Neighbouring suites: 122 passed.
+
+**Limit, stated plainly:** the arithmetic is verified, the page wiring is verified, but no one has clicked
+it in a browser yet — Chrome Connect's live session belongs to the parallel theme run. Opening the built
+file and checking the numbers move is a 30-second manual step, or a capture once the controller restarts.
