@@ -283,6 +283,59 @@ def _t_create_dieline(args, ctx) -> dict:
     }
 
 
+def _t_build_utility(args, ctx) -> dict:
+    """BOJO-UTIL: build the small tool instead of handing it off.
+
+    The router already says a calculator is Bojo's work; this is where that
+    promise is kept. The page is one self-contained HTML file, so it needs no
+    build step and no network.
+    """
+    from specialists import utility_apps
+    request = str(args.get("request") or "").strip()
+    out = utility_apps.build(request)
+    if not out.get("ok"):
+        return {"ok": False, "summary": "I can't build that one.",
+                "error": out.get("error"), "assets": [],
+                "data": {"reason": out.get("reason"), "available": out.get("available")}}
+    fname = f"utility_{uuid.uuid4().hex}.html"
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    if db is None or not acct:
+        # No account context means no asset row, and an unreachable file on disk
+        # is not a deliverable. Say so instead of claiming a build.
+        return {"ok": False,
+                "summary": "Built the page but could not store it.",
+                "error": "no account context to store the file against.",
+                "assets": [], "data": {"template": out["template"]}}
+    (_out_dir() / fname).write_text(str(out["html"]), encoding="utf-8")
+    aid = db.design_studio.assets.create({
+        "account_id": acct,
+        "project_id": ctx.get("project_id"),
+        "name": f"{out['title']} (HTML)",
+        "asset_type": "utility-app",
+        "mime_type": "text/html",
+        "storage_key": fname,
+        "size_bytes": out["bytes"],
+        "metadata": {"utility": {
+            "template": out["template"],
+            "request": request[:400],
+            "via": "chat-tool build_utility",
+            "note": "One self-contained page: no network, no build step.",
+        }},
+    })
+    assets: List[dict] = [{"id": aid, "kind": "utility-app",
+                           "url": f"/api/design-studio/assets/{aid}/file",
+                           "name": f"{out['title']} (HTML)"}]
+    return {
+        "ok": True,
+        "summary": (f"Built the {str(out['title']).lower()} as one self-contained page "
+                    f"({out['bytes']:,} bytes). It runs offline and computes only from "
+                    f"what you type."),
+        "assets": assets,
+        "data": {"template": out["template"], "filename": fname},
+    }
+
+
 def _t_generate_image(args, ctx) -> dict:
     import studio_generation as sg
     st = sg.engine_status()
@@ -1528,6 +1581,21 @@ TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "handler": _t_system_status,
+    },
+    "build_utility": {
+        "description": ("Build a small self-contained utility page (tip, percentage, "
+                        "break-even) as ONE html file: no network, no build step, no "
+                        "account. Use this for 'make me a quick calculator' instead of "
+                        "handing simple work to Autothink. Refuses honestly when the "
+                        "request is not one of the supported tools."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "request": {"type": "string", "description": "The utility in natural language, e.g. 'a quick tip calculator'.", "minLength": 3},
+            },
+            "required": ["request"],
+        },
+        "handler": _t_build_utility,
     },
     "list_templates": {
         "description": ("List the parametric dieline/label/carton templates the print "

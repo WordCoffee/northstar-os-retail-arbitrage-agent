@@ -42,7 +42,7 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "tools": ["list_templates", "design_brief", "create_dieline", "generate_image",
                   "apply_label", "build_package", "plan_aplus", "plan_social",
                   "plan_video", "write_content", "voice_list", "voice_tts",
-                  "voice_dub", "creative_plan"],
+                  "voice_dub", "creative_plan", "build_utility"],
         "requires": None,
         "suggestions": [
             "Draft three directions for a Lion's Mane pouch — kraft, botanical, premium shelf.",
@@ -81,7 +81,7 @@ FOCUS_MODES: List[Dict[str, Any]] = [
         "id": "operate",
         "label": "Operate",
         "blurb": "Inventory, profitability, monitoring and account health.",
-        "tools": ["system_status"],
+        "tools": ["system_status", "build_utility"],
         "requires": None,
         "suggestions": [
             "Give me a portfolio posture summary — what is known vs unknown.",
