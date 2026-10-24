@@ -31,8 +31,8 @@
   inset: 0;
   background:
     radial-gradient(150% 120% at 65% 35%,
-      #111a30 0%, #090d1c 30%, #04060c 70%, #020306 100%),
-    linear-gradient(180deg, #020306 0%, #0a1022 48%, #020306 100%);
+      #1d2a4a 0%, #111a30 30%, #090d1c 70%, #0a0e1a 100%),
+    linear-gradient(180deg, #0a0e1a 0%, #111a30 48%, #0a0e1a 100%);
 }
 
 /* ── T1/T5: three star depths — tiny, crisp, slow parallax ───────────────── */
