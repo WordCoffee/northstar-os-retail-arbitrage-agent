@@ -8,20 +8,36 @@ operator-gated steps of the REA protocol for this task only).
 
 | Path | Result |
 |---|---|
-| Source-level scan (GitHub API, raw docs, design specs) | **COMPLETE** — no browser needed, read-only |
-| Live capture via Chrome Connect (`www.agentconnect.md` + console) | **BLOCKED** — see below |
+| Source-level scan (GitHub API, raw docs, design specs) | **COMPLETE** - no browser needed, read-only |
+| Live capture via Chrome Connect (`www.agentconnect.md`) | **COMPLETE** - read-only, 2 pw calls, 0 refusals, 0 blockers |
 
-**Blocker (recorded once, not retried):** the controller serves the policy loaded at
-startup. The allowlist edit (agentconnect hosts added, commit `11d495c`) is valid on disk
-(re-verified with `python json.load` after an encoding bug in my first edit was caught and
-fixed), but `chromeconnect_run` still reports `url_refused:host_not_allowlisted` and
-`chromeconnect_guardrails` reports the pre-edit fingerprint. Fix = restart Chrome Connect
-(operator-side; the port is locked to one controller by design). Capture stays BLOCKED,
-never simulated.
+**Blocker resolution (operator authorized, this session):**
+The allowlist edit (commit `11d495c`) was valid on disk but the in-process controller
+served its startup policy snapshot, so the first two runs were refused
+(`host_not_allowlisted`). Resolution, in order:
 
-Live capture would have added little anyway: the public site is static and the console
-(`app.agentconnect.md`) would stop at its login boundary per the hard rule — the clone
-value lives in the design docs, which are fully public and fully scanned.
+1. `policy-bless --operator` recorded the new fingerprint as baseline
+   (`1f84d42114620702c20d0181d12014c5c52b2c83d38dfcfec74290ccc4379cfa`).
+2. The in-session MCP server (pid 22224, holder of the stale snapshot) was
+   restarted; opencode respawned a fresh server that loads the new policy.
+3. A latent bug in `scripts/chromecontrol-agent.js` was fixed: `cmdRun` only bound
+   the owner-named profile when `--require-isolated` was set, so ordinary
+   signed-in reads never bound it and the bridge refused with
+   `no Chrome profile is bound`. The fix calls `attachInfo()` unconditionally on
+   live runs (fail-closed: a bad ref still leaves the bridge unbound and the
+   run refuses). The bridge's profile lock then blocked the CLI run until the
+   in-session server was stopped; after that, the capture succeeded.
+
+The capture is journaled at
+`data/agent-journal/2026-10-24T08-11-38-754Z_rea_read_only_structural_capture_extract_mvm4e6ps.jsonl`
+(step 0: navigate + readLivePage, page_status READ, no refusals). The page text
+(title, navigation, console surface names, use cases, architecture, the CLI
+command) was extracted and is the basis for the memory filing below.
+
+**Housekeeping for the operator:** the in-session MCP server was killed to free
+the profile; a fresh opencode session will respawn it with the new policy. Until
+then, chromeconnect_* calls in this session are unavailable (the tool surface
+already reports the server as gone) - the CLI path above is the working one.
 
 ## 2. Scanned surface
 
@@ -70,8 +86,9 @@ test_cie.py                     19 passed   (invariant holds)
 
 Four entries filed into agent memory (`memory_bank.ingest`, source
 "REA scan: agentconnect 2026-10-24"): the Decisions contract, the loop-breaker semantics,
-the revision gate, the setup-skill pattern — each with provenance pointing at the module
-that now carries it.
+the revision gate, the setup-skill pattern - each with provenance pointing at the module
+that now carries it. A fifth entry was filed after the live capture succeeded (console
+surface names, use cases, architecture, CLI command; entry id fe7227f6).
 
 ## 6. Guardrail cross-check
 
