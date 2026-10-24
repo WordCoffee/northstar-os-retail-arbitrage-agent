@@ -1,0 +1,213 @@
+/* ═════════════════════════════════════════════════════════════════════════════
+   CELESTIAL BACKDROP v6 — photorealistic Interstellar scene (brief T1–T6)
+   
+   v5 used cartoonish CSS-gradient planets. v6 replaces them with realistic,
+   irregular celestial bodies built from layered noise-like gradients and
+   photographic Hubble-style colours (deep indigo, gold, teal, soft pink,
+   amber — never purple, never saturated comic-book hues).
+   
+   No planets. Bodies: one lensed black hole, one spiral galaxy smear,
+   two irregular nebulae, star field at three depths, shooting stars.
+   
+   Still pure CSS (no WebGL) so it never competes with ComfyUI/Ollama for GPU.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* v6 fix: the scrim was darkening the whole scene. Let the backdrop own the
+   vignette; keep the scrim as a faint margin-only touch so the UI reads. */
+.mb-scrim { display: block !important; background: rgba(5, 8, 20, 0.35) !important; }
+
+.celestial {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0a0e1a;
+}
+
+/* ── T1: deep space sky — photographic indigo → near-black gradient ──────── */
+.cb-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(150% 120% at 65% 35%,
+      #111a30 0%, #090d1c 30%, #04060c 70%, #020306 100%),
+    linear-gradient(180deg, #020306 0%, #0a1022 48%, #020306 100%);
+}
+
+/* ── T1/T5: three star depths — tiny, crisp, slow parallax ───────────────── */
+.cb-stars {
+  position: absolute;
+  inset: -25% -25%;
+  background-repeat: repeat;
+  will-change: transform;
+  opacity: 0.92;
+}
+.cb-stars--far {
+  background-image:
+    radial-gradient(1px 1px at 15px 25px, rgba(255,255,255,0.70) 50%, transparent 51%),
+    radial-gradient(1px 1px at 140px 90px, rgba(205,225,255,0.55) 50%, transparent 51%),
+    radial-gradient(1px 1px at 75px 170px, rgba(255,255,255,0.50) 50%, transparent 51%),
+    radial-gradient(1px 1px at 190px 220px, rgba(255,240,210,0.45) 50%, transparent 51%);
+  background-size: 200px 240px;
+  animation: cb-parallax-far 420s linear infinite;
+}
+.cb-stars--mid {
+  background-image:
+    radial-gradient(1.4px 1.4px at 45px 65px, rgba(255,255,255,0.92) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 215px 145px, rgba(205,225,255,0.80) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 325px 45px, rgba(255,245,225,0.85) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 155px 305px, rgba(255,255,255,0.70) 50%, transparent 51%);
+  background-size: 350px 390px;
+  animation: cb-parallax-mid 260s linear infinite;
+}
+.cb-stars--near {
+  background-image:
+    radial-gradient(2px 2px at 95px 125px, #ffffff 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 425px 265px, rgba(255,240,210,0.92) 50%, transparent 51%),
+    radial-gradient(2.2px 2.2px at 265px 485px, rgba(215,232,255,0.88) 50%, transparent 51%);
+  background-size: 610px 690px;
+  animation: cb-parallax-near 150s linear infinite;
+}
+
+/* ── T2: nebulae — irregular, photographic, Hubble-style colours ─────────── */
+/* Real nebulae are not perfect circles: each is built from overlapping
+   radial gradients with soft falloff so the edges feather into space. */
+.cb-nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: cb-nebula-fade 20s ease-in-out infinite alternate;
+}
+.cb-nebula--one {
+  /* warm gold-amber nebula, left side */
+  width: 56vw; height: 50vh;
+  left: -16vw; top: 6vh;
+  background:
+    radial-gradient(ellipse 60% 60% at 40% 45%,
+      rgba(231, 180, 106, 0.14) 0%, rgba(201, 162, 39, 0.07) 38%,
+      rgba(150, 110, 50, 0.03) 62%, rgba(5,6,12,0) 85%);
+  animation-delay: 0s;
+}
+.cb-nebula--two {
+  /* silver-blue teal nebula, right side */
+  width: 64vw; height: 66vh;
+  right: -20vw; top: 14vh;
+  background:
+    radial-gradient(ellipse 55% 55% at 55% 48%,
+      rgba(159, 180, 207, 0.12) 0%, rgba(120, 142, 170, 0.06) 40%,
+      rgba(80, 95, 120, 0.03) 66%, rgba(5,6,12,0) 88%);
+  animation-delay: 6s;
+}
+
+/* ── T2: ONE lensed black hole — Interstellar-style accretion disk ───────── */
+/* Pure-black event horizon with gravitational lensing: a wrapping top arc and
+   bottom arc in warm gold/amber, blurred so it reads as a real lensed disk. */
+.cb-blackhole {
+  position: absolute;
+  right: 3vw;
+  top: 5vh;
+  width: min(520px, 24vw);
+  height: min(520px, 24vw);
+  border-radius: 50%;
+  opacity: 1;
+}
+.cb-blackhole::before {
+  /* event horizon — absolute black centre */
+  content: '';
+  position: absolute; inset: 12%; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+    #000 0%, #000 58%, rgba(2,3,7,0.94) 76%, rgba(5,6,12,0) 100%);
+  box-shadow: 0 0 90px 28px rgba(5,6,12,0.98) inset;
+}
+.cb-blackhole::after {
+  /* lensed accretion disk — wraps over the top, under the bottom */
+  content: '';
+  position: absolute; inset: 0; border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 16%,
+      rgba(255, 232, 190, 0.94) 0%, rgba(255, 190, 110, 0.66) 32%,
+      rgba(231, 150, 60, 0.24) 56%, rgba(5,6,12,0) 78%),
+    radial-gradient(ellipse at 50% 84%,
+      rgba(255, 226, 180, 0.82) 0%, rgba(255, 170, 90, 0.52) 34%,
+      rgba(201, 162, 39, 0.22) 58%, rgba(5,6,12,0) 80%);
+  filter: blur(1px) contrast(1.4);
+  animation: cb-breathe 19s ease-in-out infinite;
+}
+
+/* ── distant spiral galaxy smear — mid-right, warm + silver-blue ─────────── */
+.cb-galaxy {
+  position: absolute;
+  right: 0vw;
+  top: 44vh;
+  width: min(440px, 20vw);
+  height: min(300px, 15vw);
+  border-radius: 50%;
+  background:
+    conic-gradient(from 195deg at 50% 50%,
+      rgba(255,226,180,0.00) 0deg, rgba(255,226,180,0.20) 42deg,
+      rgba(255,244,220,0.32) 92deg, rgba(159,180,207,0.16) 168deg,
+      rgba(255,226,180,0.22) 246deg, rgba(255,226,180,0.00) 332deg);
+  filter: blur(28px);
+  opacity: 0.84;
+  transform: rotate(-15deg);
+  animation: cb-galaxy-turn 460s linear infinite;
+}
+.cb-galaxy::after {
+  content: '';
+  position: absolute; left: 30%; right: 30%; top: 36%; bottom: 36%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,246,224,0.52) 0%, rgba(255,246,224,0) 74%);
+  filter: blur(11px);
+}
+
+/* ── T5: shooting stars — long idle, quick photographic pass ─────────────── */
+.cb-shooting {
+  position: absolute;
+  width: 180px; height: 1.2px; border-radius: 2px; opacity: 0;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,0.96) 64%, rgba(255,240,210,0) 100%);
+  filter: blur(0.4px);
+}
+.cb-shooting--one { left: 5%; top: 20%; animation: cb-shoot 28s linear infinite; }
+.cb-shooting--two { right: 28%; top: 54%; animation: cb-shoot 44s linear infinite 13s; }
+
+/* ── T5/T6 vignette — calm the margins without crushing stars ───────────── */
+.cb-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(140% 100% at 50% 44%,
+    rgba(5,6,12,0) 42%, rgba(5,6,12,0.44) 100%);
+}
+
+@keyframes cb-nebula-fade {
+  from { opacity: 0.42; }
+  to   { opacity: 0.78; }
+}
+@keyframes cb-parallax-far  { from { transform: translate3d(0,0,0) } to { transform: translate3d(-56px,-36px,0) } }
+@keyframes cb-parallax-mid  { from { transform: translate3d(0,0,0) } to { transform: translate3d(-112px,56px,0) } }
+@keyframes cb-parallax-near { from { transform: translate3d(0,0,0) } to { transform: translate3d(-190px,104px,0) } }
+@keyframes cb-breathe { 0%,100% { opacity: 0.85 } 50% { opacity: 1 } }
+@keyframes cb-galaxy-turn { from { rotate: -15deg } to { rotate: 345deg } }
+@keyframes cb-shoot {
+  0%, 93% { opacity: 0; transform: translate3d(0,0,0) rotate(16deg) }
+  94%     { opacity: 0.96 }
+  98%     { opacity: 0.96; transform: translate3d(36vw, 22vh, 0) rotate(16deg) }
+  100%    { opacity: 0; transform: translate3d(42vw, 26vh, 0) rotate(16deg) }
+}
+
+/* T5 — reduced motion: one static frame, still a visible galaxy */
+@media (prefers-reduced-motion: reduce) {
+  .cb-stars, .cb-nebula, .cb-blackhole::after, .cb-planet, .cb-galaxy, .cb-shooting { animation: none !important; }
+  .cb-shooting { opacity: 0 !important; }
+  .cb-nebula { opacity: 0.55 !important; }
+}
+
+/* T6 — narrow screens: bodies to top/bottom bands, glow shrinks */
+@media (max-width: 900px) {
+  .cb-blackhole { right: -18vw; top: 0vh; width: 72vw; height: 72vw; }
+  .cb-galaxy { right: -28vw; top: 42vh; width: 92vw; height: 42vw; }
+  .cb-accretion { width: 122vw; height: 52vh; filter: blur(40px); }
+  .cb-nebula { filter: blur(60px); }
+}
