@@ -80,7 +80,7 @@
   padding: 9px 18px; border-radius: 999px;
   color: rgba(247, 243, 236, 0.90);
   border: 1px solid rgba(247, 243, 236, 0.22);
-  background: rgba(9, 12, 17, 0.62);
+  background: rgba(18, 24, 38, 0.55);
 }
 .mb-focus-chip:hover { border-color: rgba(247, 243, 236, 0.46); color: #fff; }
 .mb-focus-chip.active {
@@ -91,7 +91,7 @@
   font-size: 12.5px; padding: 5px 12px;
   color: rgba(247, 243, 236, 0.88);
   border: 1px solid rgba(247, 243, 236, 0.18);
-  background: rgba(9, 12, 17, 0.62);
+  background: rgba(18, 24, 38, 0.55);
 }
 .mb-shell .mb-status .btn { font-size: 13.5px; padding: 7px 14px; }
 
@@ -368,9 +368,9 @@
    bar only turns to cosmic glass while the Simple view is actually mounted —
    Advanced rooms keep the light editorial chrome they were designed for. */
 html[data-shell-mode="simple"] .top-nav {
-  background: rgba(9, 12, 17, 0.93);
-  border-bottom-color: rgba(247, 243, 236, 0.12);
-  backdrop-filter: blur(18px);
+  background: rgba(18, 24, 38, 0.65);
+  border-bottom-color: rgba(247, 243, 236, 0.16);
+  backdrop-filter: blur(14px);
   color: #f7f3ec;
 }
 /* A bare <button> with no background rule gets the UA's light-grey fill — the
@@ -401,9 +401,9 @@ html[data-shell-mode="simple"] .top-nav-search input:focus { border-color: var(-
 html[data-shell-mode="simple"] .top-nav-role { color: #d2ccbf; }
 html[data-shell-mode="simple"] .top-nav-avatar { background: #2f6fed; }
 html[data-shell-mode="simple"] .top-nav-menu {
-  background: rgba(13, 17, 23, 0.98);
+  background: rgba(18, 24, 38, 0.85);
   border-color: rgba(247, 243, 236, 0.16);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 }
 html[data-shell-mode="simple"] .top-nav-menu-item { color: #d2ccbf; }
 html[data-shell-mode="simple"] .top-nav-menu-item:hover { background: rgba(247, 243, 236, 0.08); color: #fff; }
@@ -571,7 +571,7 @@ html[data-shell-mode="simple"] #root {
   height: 100vh;
   height: 100dvh;
   min-height: 0;
-  background: #0b1120;
+  background: #1a2435;
   overflow: hidden;
 }
 html[data-shell-mode="simple"] .body-layout { min-height: 0; }
