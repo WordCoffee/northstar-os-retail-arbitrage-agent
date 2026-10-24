@@ -14,7 +14,7 @@
 
 /* v6 fix: the scrim was darkening the whole scene. Let the backdrop own the
    vignette; keep the scrim as a faint margin-only touch so the UI reads. */
-.mb-scrim { display: block !important; background: rgba(5, 8, 20, 0.35) !important; }
+.mb-scrim { display: block !important; background: rgba(10, 17, 32, 0.20) !important; }
 
 .celestial {
   position: fixed;
