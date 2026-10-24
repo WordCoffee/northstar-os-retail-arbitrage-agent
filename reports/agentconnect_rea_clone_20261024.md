@@ -10,6 +10,7 @@ operator-gated steps of the REA protocol for this task only).
 |---|---|
 | Source-level scan (GitHub API, raw docs, design specs) | **COMPLETE** - no browser needed, read-only |
 | Live capture via Chrome Connect (`www.agentconnect.md`) | **COMPLETE** - read-only, 2 pw calls, 0 refusals, 0 blockers |
+| Live capture via Chrome Connect (`docs.agentconnect.md`) | **COMPLETE** - read-only, 2 steps, 0 refusals; sidebar navigation + Decisions surface description extracted |
 
 **Blocker resolution (operator authorized, this session):**
 The allowlist edit (commit `11d495c`) was valid on disk but the in-process controller
@@ -88,7 +89,9 @@ Four entries filed into agent memory (`memory_bank.ingest`, source
 "REA scan: agentconnect 2026-10-24"): the Decisions contract, the loop-breaker semantics,
 the revision gate, the setup-skill pattern - each with provenance pointing at the module
 that now carries it. A fifth entry was filed after the live capture succeeded (console
-surface names, use cases, architecture, CLI command; entry id fe7227f6).
+surface names, use cases, architecture, CLI command; entry id fe7227f6). A sixth entry
+was filed after the docs capture (sidebar navigation confirming Decisions/Knowledge/
+Tools & Skills/Daemons surfaces; entry id 8670de83).
 
 ## 6. Guardrail cross-check
 
