@@ -336,6 +336,49 @@ def _t_build_utility(args, ctx) -> dict:
     }
 
 
+def _t_handoff_to_autothink(args, ctx) -> dict:
+    """Carry an approved engineering handoff to Autothink — or say why not.
+
+    The offer is priced by the router; this tool is the delivery. It refuses
+    without an endpoint, an approval, a charge ceiling, or an account to
+    attribute the approval to.
+    """
+    import os as _os
+    from specialists import autothink_transport as at
+
+    request = str(args.get("request") or "").strip()
+    packet = at.build_packet(request)
+    if not packet.get("ok"):
+        return {"ok": False, "summary": "Nothing was sent.", "assets": [],
+                "error": packet.get("error"), "data": {"reason": packet.get("reason")}}
+
+    if not args.get("confirm"):
+        return {"ok": True,
+                "summary": (f"Prepared the Autothink brief ({packet['estimated_tokens']} tokens, "
+                            f"estimated charge {packet['estimated_charge_usd']} USD). "
+                            f"Nothing has been sent."),
+                "assets": [], "data": {"packet": packet, "sent": False}}
+
+    acct = ctx.get("account_id")
+    ceiling = args.get("max_charge_usd")
+    if ceiling is None:
+        ceiling = (_os.environ.get("AUTOTHINK_MAX_CHARGE_USD") or "").strip() or None
+
+    result = at.send(packet, approved_by=acct, max_charge_usd=ceiling)
+    receipt = result.get("receipt") or {}
+    if result.get("ok"):
+        summary = (f"Sent to Autothink as {packet['packet_id']} "
+                   f"(HTTP {receipt.get('http_status')}, receipt {receipt.get('response_id') or 'no id'}).")
+    else:
+        summary = "The handoff was not sent."
+    return {"ok": bool(result.get("ok")), "summary": summary, "assets": [],
+            "error": None if result.get("ok") else result.get("error"),
+            "data": {"packet_id": packet.get("packet_id"), "sent": bool(result.get("ok")),
+                     "status": result.get("status"), "reason": result.get("reason"),
+                     "receipt": receipt,
+                     "estimated_charge_usd": packet.get("estimated_charge_usd")}}
+
+
 def _t_generate_image(args, ctx) -> dict:
     import studio_generation as sg
     st = sg.engine_status()
@@ -1581,6 +1624,23 @@ TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "handler": _t_system_status,
+    },
+    "handoff_to_autothink": {
+        "description": ("Carry an engineering request to Autothink, the premium coding "
+                        "service. Use ONLY after the operator has explicitly approved the "
+                        "handoff and its charge: pass confirm=true then. Without confirm it "
+                        "prepares the brief and sends nothing. Refuses with the exact missing "
+                        "piece when the lane is not armed."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "request": {"type": "string", "description": "The engineering work to hand off.", "minLength": 8},
+                "confirm": {"type": "boolean", "default": False, "description": "true only after the operator approved the charge."},
+                "max_charge_usd": {"type": "number", "description": "Charge ceiling the operator accepted. Falls back to AUTOTHINK_MAX_CHARGE_USD."},
+            },
+            "required": ["request"],
+        },
+        "handler": _t_handoff_to_autothink,
     },
     "build_utility": {
         "description": ("Build a small self-contained utility page (tip, percentage, "

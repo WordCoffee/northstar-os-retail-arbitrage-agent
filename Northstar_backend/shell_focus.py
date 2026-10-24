@@ -128,7 +128,7 @@ def focus_by_id(focus_id: Optional[str]) -> Dict[str, Any]:
 # (listing, ads, A+, Creator Connections, brand store, reseller, improvement).
 CORE_TOOLS: Tuple[str, ...] = (
     "service_catalog", "knowledge_lookup", "listing_audit", "ads_math",
-    "improvement_status",
+    "improvement_status", "handoff_to_autothink",
 )
 
 
