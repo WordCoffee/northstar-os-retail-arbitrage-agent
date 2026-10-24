@@ -21,6 +21,8 @@
 
 **Proof:** `node test/chromecontrol-tests.js` → **73 passed, 0 failed** (was 72).
 
+**Not committed:** the controller repo is on `main` and already carries the operator's own uncommitted work, so the change sits in that working tree. It is additive, and the running MCP child has the old module cached, so nothing the parallel session is doing changes behaviour until the server is restarted — which is the moment this becomes live.
+
 **Not proven yet, on purpose:** no live mobile capture. A parallel session is driving that same browser, and a resize is a visible change to a window the operator is using. The first live use should be a single run that captures desktop and mobile in one plan:
 
 ```
