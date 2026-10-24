@@ -303,6 +303,12 @@ def _t_generate_image(args, ctx) -> dict:
     (_out_dir() / fname).write_bytes(out["bytes"])
     db = ctx.get("db")
     acct = ctx.get("account_id")
+    fit_note = ""
+    if out.get("fitted"):
+        req = out.get("requested") or {}
+        fit_note = (f" Requested {req.get('width')}x{req.get('height')}; the engine kept the "
+                    f"aspect and fitted it to {out.get('width')}x{out.get('height')} "
+                    f"(1216 px ceiling).")
     aid = None
     if db is not None and acct:
         aid = db.design_studio.assets.create({
@@ -318,9 +324,11 @@ def _t_generate_image(args, ctx) -> dict:
                 "provider": "comfyui", "model": out["model"],
                 "tier": args.get("tier") or "draft", "purpose": "chat-tool",
                 "prompt": args["prompt"], "seed": out.get("seed"),
+                "requested": out.get("requested"), "fitted": bool(out.get("fitted")),
                 "lane": "chat",
             }, "note": ("Rendered locally on the operator's machine via ComfyUI. "
-                        "Surfaces only - no text, logos or legal copy.")},
+                        "Surfaces only - no text, logos or legal copy. Use apply_label to "
+                        "put the brand's real logo and copy on it.")},
         })
     assets = [{
         "id": aid, "kind": "image",
@@ -331,11 +339,318 @@ def _t_generate_image(args, ctx) -> dict:
     return {
         "ok": True,
         "summary": (f"Rendered a {out.get('width')}x{out.get('height')} image locally "
-                    f"({out['model']}, seed {out.get('seed')}). Surfaces only — text and "
-                    f"logos are not painted into images."),
+                    f"({out['model']}, seed {out.get('seed')}).{fit_note} Surfaces only — "
+                    f"run apply_label with the operator's logo and copy to finish the pack."),
         "assets": assets,
-        "data": {"model": out["model"], "seed": out.get("seed")},
+        "data": {"model": out["model"], "seed": out.get("seed"),
+                 "requested": out.get("requested"), "fitted": bool(out.get("fitted"))},
     }
+
+
+def _resolve_asset(db, acct, asset_id: str):
+    """Look up one studio asset for this account. Returns (record, path) or (None, None)."""
+    if db is None or not acct or not asset_id:
+        return None, None
+    rec = db.design_studio.assets.get_by_id(str(asset_id), account_id=acct)
+    if not rec or not rec.get("storage_key"):
+        return rec, None
+    path = _out_dir() / Path(str(rec["storage_key"])).name
+    return rec, (path if path.is_file() else None)
+
+
+def _t_apply_label(args, ctx) -> dict:
+    """Composite the operator's logo + copy onto a rendered pack."""
+    import pouch_label
+
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    plate_rec, plate_path = _resolve_asset(db, acct, args["plate_asset_id"])
+    if plate_rec is None:
+        return {"ok": False, "summary": "That plate asset was not found.",
+                "error": f"no studio asset {args['plate_asset_id']!r} for this account", "assets": []}
+    if plate_path is None:
+        return {"ok": False, "summary": "The plate asset has no file on disk.",
+                "error": f"asset {args['plate_asset_id']!r} has no stored image", "assets": []}
+
+    logo_path = None
+    logo_rec = None
+    if args.get("logo_asset_id"):
+        logo_rec, logo_path = _resolve_asset(db, acct, args["logo_asset_id"])
+        if logo_path is None:
+            return {"ok": False, "summary": "The logo asset could not be read.",
+                    "error": f"asset {args['logo_asset_id']!r} is missing or empty", "assets": []}
+
+    progress: Callable[[Optional[int], str], None] = ctx.get("progress") or (lambda p, l: None)
+    progress(0, "measuring the pouch face")
+    try:
+        out = pouch_label.compose(
+            plate_path, title=args["title"], subtitle=args.get("subtitle") or "",
+            weight=args.get("weight") or "", bullets=args.get("bullets"),
+            logo_path=logo_path, icons=args.get("icons"),
+        )
+    except ValueError as exc:
+        return {"ok": False, "summary": "The label could not be composited.",
+                "error": str(exc)[:400], "assets": []}
+    except Exception as exc:  # noqa: BLE001 - honest result, never a silent no-op
+        return {"ok": False, "summary": "The label compositor failed.",
+                "error": str(exc)[:400], "assets": []}
+
+    progress(100, "label composited")
+    fname = f"{uuid.uuid4().hex}.png"
+    (_out_dir() / fname).write_bytes(out["bytes"])
+    aid = None
+    if db is not None and acct:
+        aid = db.design_studio.assets.create({
+            "account_id": acct,
+            "project_id": ctx.get("project_id") or (plate_rec or {}).get("project_id"),
+            "name": args.get("name") or f"{args['title']} — labelled mockup",
+            "asset_type": "composite",
+            "mime_type": "image/png",
+            "storage_key": fname,
+            "width": out["size"][0], "height": out["size"][1],
+            "size_bytes": len(out["bytes"]),
+            "metadata": {"label": {
+                "plate_asset_id": args["plate_asset_id"],
+                "logo_asset_id": args.get("logo_asset_id"),
+                "title": out["title"], "quad": out["quad"],
+                "measured": out["measured"], "icons": out["icons"],
+                "via": "chat-tool apply_label",
+            }, "note": out["note"]},
+        })
+    logos = "the operator's logo + " if out["has_logo"] else ""
+    return {
+        "ok": True,
+        "summary": (f"Composited {logos}label onto the pouch: '{args['title']}'"
+                    + (f", {args.get('subtitle')}" if args.get("subtitle") else "")
+                    + (f", {args.get('weight')}" if args.get("weight") else "")
+                    + ". Logo pixels and fonts are real, not generated. The face was measured "
+                      "from the render — this is a mockup fit, so confirm geometry with the "
+                      "pouch converter before print."),
+        "assets": [{
+            "id": aid, "kind": "image",
+            "url": f"/api/design-studio/assets/{aid}/file" if aid else None,
+            "name": args.get("name") or f"{args['title']} — labelled mockup",
+            "width": out["size"][0], "height": out["size"][1],
+        }],
+        "data": {"quad": out["quad"], "size": out["size"],
+                 "has_logo": out["has_logo"], "icons": out["icons"]},
+    }
+
+
+def _t_build_package(args, ctx) -> dict:
+    """Complete package: panels + dieline + mockup, gated on real inputs."""
+    from specialists import package_designer as pd
+
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    spec = {k: args.get(k) for k in (
+        "title", "subtitle", "weight", "ingredients", "supplement_facts",
+        "suggested_use", "warnings", "company", "address", "country_of_origin",
+        "lot_code", "claims", "icons") if args.get(k) not in (None, "", [])}
+    dims = {k: args[k] for k in ("width_mm", "height_mm", "gusset_mm")
+            if args.get(k) not in (None, "")}
+    if dims:
+        spec["dims"] = dims
+
+    plate_path = logo_path = None
+    if args.get("plate_asset_id"):
+        _r, plate_path = _resolve_asset(db, acct, args["plate_asset_id"])
+    if args.get("logo_asset_id"):
+        _r, logo_path = _resolve_asset(db, acct, args["logo_asset_id"])
+
+    try:
+        out = pd.build_package(spec, plate_path=plate_path, logo_path=logo_path,
+                               allow_incomplete=bool(args.get("allow_incomplete")))
+    except ValueError as exc:
+        return {"ok": False, "summary": "The package could not be built.",
+                "error": str(exc)[:400], "assets": []}
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need more information.",
+                "error": "missing required inputs",
+                "questions": out.get("questions") or [],
+                "data": {"questions": out.get("questions") or []},
+                "assets": []}
+
+    pd.save_package(out, _out_dir())
+    files = out.get("files") or {}
+    assets = []
+    if db is not None and acct:
+        for key, label in (("sheet", "panel sheet"), ("front", "front panel"),
+                           ("back", "back panel"), ("side", "side panel"),
+                           ("mockup", "labelled mockup")):
+            name = files.get(key)
+            if not name:
+                continue
+            payload = (_out_dir() / name).read_bytes()
+            aid = db.design_studio.assets.create({
+                "account_id": acct,
+                "project_id": ctx.get("project_id"),
+                "name": f"{args['title']} — {label}",
+                "asset_type": "package-panel",
+                "mime_type": "image/png",
+                "storage_key": name,
+                "size_bytes": len(payload),
+                "metadata": {"package": {"role": key, "spec": spec,
+                                         "validation": out.get("validation")},
+                             "note": "Deterministic panel artwork; text is drawn, never generated."},
+            })
+            assets.append({"id": aid, "kind": "image",
+                           "url": f"/api/design-studio/assets/{aid}/file",
+                           "name": f"{args['title']} — {label}"})
+        for kind, key in (("SVG", "dieline_svg"), ("PDF", "dieline_pdf")):
+            name = files.get(key)
+            if not name:
+                continue
+            payload = (_out_dir() / name).read_bytes()
+            aid = db.design_studio.assets.create({
+                "account_id": acct, "project_id": ctx.get("project_id"),
+                "name": f"{args['title']} — dieline ({kind})",
+                "asset_type": "dieline",
+                "mime_type": "image/svg+xml" if kind == "SVG" else "application/pdf",
+                "storage_key": name, "size_bytes": len(payload),
+                "metadata": {"dieline": out.get("dieline", {}).get("meta") or {},
+                             "note": "Draft geometry - confirm with the converter."},
+            })
+            assets.append({"id": aid, "kind": "dieline",
+                           "url": f"/api/design-studio/assets/{aid}/file",
+                           "name": f"{args['title']} — dieline ({kind})"})
+
+    v = out.get("validation") or {}
+    summary = out["summary"]
+    if v.get("missing"):
+        summary += " Still missing: " + ", ".join(v["missing"]) + "."
+    if v.get("warnings"):
+        summary += " " + v["warnings"][0]
+    return {"ok": True, "summary": summary, "assets": assets,
+            "data": {"validation": v, "dieline": out.get("dieline", {}).get("meta"),
+                     "questions": out.get("questions") or []}}
+
+
+def _t_optimize_listing(args, ctx) -> dict:
+    from specialists import listing_optimizer as lo
+    out = lo.optimize(
+        title=str(args.get("title") or ""),
+        bullets=[str(b) for b in (args.get("bullets") or [])],
+        keywords=[str(k) for k in (args.get("keywords") or [])],
+        description=str(args.get("description") or ""),
+        backend_terms=str(args.get("backend_terms") or ""))
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need target keywords.",
+                "error": "missing target keywords",
+                "data": {"questions": out.get("questions") or []}, "assets": []}
+    return {"ok": True, "summary": out["summary"], "assets": [],
+            "data": {"before": out["before"], "after": out["after"],
+                     "listing": out["listing"], "change_log": out["change_log"],
+                     "notes": out.get("notes")}}
+
+
+def _t_ppc_plan(args, ctx) -> dict:
+    from specialists import ppc_agent as ppa
+    rows = args.get("search_terms") or []
+    out = ppa.analyze(rows, target_acos=float(args.get("target_acos") or 0.35))
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": "That upload was rejected rather than guessed at.",
+                "error": out.get("error") or "invalid report", "assets": []}
+    data = {"harvest": out["harvest"], "negatives": out["negatives"],
+            "thresholds": out["thresholds"], "notes": out.get("notes")}
+    if args.get("proposed_rows"):
+        data["validation"] = ppa.validate_change_rows(args["proposed_rows"], rows)
+    assets = []
+    if args.get("write_bulk"):
+        from specialists import ppc_bulk
+        db, acct = ctx.get("db"), ctx.get("account_id")
+        name = f"ppc_bulk_{uuid.uuid4().hex[:10]}.xlsx"
+        target = _out_dir() / name
+        written = ppc_bulk.write_bulk_file(
+            out, source=rows, out_path=target,
+            bid=float(args["default_bid"]) if args.get("default_bid") else None)
+        if not written.get("ok"):
+            data["bulk_file"] = written
+        else:
+            data["bulk_file"] = {k: v for k, v in written.items() if k != "path"}
+            if db is not None and acct:
+                aid = db.design_studio.assets.create({
+                    "account_id": acct, "project_id": ctx.get("project_id"),
+                    "name": "PPC bulk plan (Northstar columns)",
+                    "asset_type": "bulk-plan",
+                    "mime_type": "application/vnd.openxmlformats-officedocument."
+                                 "spreadsheetml.sheet",
+                    "storage_key": name, "size_bytes": written["bytes"],
+                    "metadata": {"ppc": {"rows": written["rows"],
+                                         "thresholds": out["thresholds"],
+                                         "note": written["note"]},
+                                 "note": "Planning sheet, not an official Amazon template."},
+                })
+                assets.append({"id": aid, "kind": "file",
+                               "url": f"/api/design-studio/assets/{aid}/file",
+                               "name": "PPC bulk plan (.xlsx)"})
+    return {"ok": True, "summary": out["summary"], "assets": assets, "data": data}
+
+
+def _t_plan_aplus(args, ctx) -> dict:
+    from specialists import image_aplus as ap
+    out = ap.plan(spec={k: args.get(k) for k in (
+        "product", "modules", "copy", "style", "shape", "colour", "logo_text",
+        "parts", "must_not") if args.get(k)})
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need more information.",
+                "error": "missing required inputs",
+                "data": {"questions": out.get("questions") or []}, "assets": []}
+    return {"ok": True, "summary": out["summary"], "assets": [],
+            "data": {"modules": out["modules"], "identity_lock": out["identity_lock"],
+                     "rules": out["rules"], "copy_check": out["copy_check"],
+                     "validation": out["validation"]}}
+
+
+def _t_plan_social(args, ctx) -> dict:
+    from specialists import social_graphics as sg
+    out = sg.plan(spec={k: args.get(k) for k in
+                        ("product", "content_type", "aspects", "headline")
+                        if args.get(k)})
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need more information.",
+                "error": "missing required inputs",
+                "data": {"questions": out.get("questions") or []}, "assets": []}
+    return {"ok": True, "summary": out["summary"], "assets": [],
+            "data": {"layouts": out["layouts"], "note": out["note"],
+                     "rules": out["rules"]}}
+
+
+def _t_plan_video(args, ctx) -> dict:
+    from specialists import video_ugc as vu
+    out = vu.plan(spec={k: args.get(k) for k in
+                        ("product", "duration_seconds", "hook", "fps", "script")
+                        if args.get(k) not in (None, "")})
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need more information.",
+                "error": out.get("error") or "missing required inputs",
+                "data": {"questions": out.get("questions") or []}, "assets": []}
+    return {"ok": True, "summary": out["summary"], "assets": [],
+            "data": {"scenes": out["scenes"], "fps": out["fps"],
+                     "frames": out["frames"],
+                     "validation_plan": out["validation_plan"],
+                     "claims_check": out["claims_check"]}}
+
+
+def _t_write_content(args, ctx) -> dict:
+    from specialists import content as ct
+    out = ct.plan(spec={k: args.get(k) for k in
+                        ("product", "surface", "keywords", "benefits", "tone", "brand")
+                        if args.get(k)})
+    if not out.get("ok"):
+        return {"ok": False, "status": out.get("status"),
+                "summary": out.get("summary") or "I need more information.",
+                "error": out.get("error") or "missing required inputs",
+                "data": {"questions": out.get("questions") or []}, "assets": []}
+    return {"ok": True, "summary": out["summary"], "assets": [],
+            "data": {"variants": out["variants"],
+                     "claim_policy": out["claim_policy"]}}
 
 
 def _t_seo_profile(args, ctx) -> dict:
@@ -988,7 +1303,8 @@ def _t_creative_plan(args, ctx) -> dict:
 
         account_id = str((ctx or {}).get("account_id") or "default")
         ledger = creative_execute.default_ledger()
-        generator = _CREATIVE_GENERATOR or creative_execute.default_generate
+        generator = _CREATIVE_GENERATOR or (
+            lambda instruction: creative_execute.default_generate(instruction, ctx=ctx))
         receipt = creative_execute.execute(
             ledger, plan, action, generate=generator, account_id=account_id,
             subscription=plan.get("subscription"))
@@ -1033,11 +1349,14 @@ _CREATIVE_GENERATOR = None
 
 SERVICES = [
     {"id": "listing", "label": "Listing Forge / Guardian",
-     "tools": ["listing_audit", "knowledge_lookup", "seo_check", "seo_retitle"],
-     "can": "audit a title and bullets against Amazon rules, check claims, retitle to the SEO profile"},
+     "tools": ["listing_audit", "optimize_listing", "knowledge_lookup", "seo_check",
+               "seo_retitle"],
+     "can": ("audit a title and bullets against Amazon rules, SCORE and REWRITE a "
+             "listing against target keywords, check claims, retitle to the SEO profile")},
     {"id": "ads", "label": "AdPilot",
-     "tools": ["ads_math", "knowledge_lookup", "seo_negatives"],
-     "can": "compute ACOS/TACOS/break-even, judge a campaign, split negatives"},
+     "tools": ["ads_math", "ppc_plan", "knowledge_lookup", "seo_negatives"],
+     "can": ("compute ACOS/TACOS/break-even, judge a campaign, split negatives, turn "
+             "ad reports into a validated bulk change plan")},
     {"id": "aplus", "label": "A+ Content",
      "tools": ["knowledge_lookup", "creative_plan"],
      "can": "plan A+ modules, check eligibility and module limits"},
@@ -1051,9 +1370,14 @@ SERVICES = [
      "tools": ["knowledge_lookup", "listing_audit"],
      "can": "check gating and invoices, grade condition, audit a reseller listing"},
     {"id": "creative", "label": "Creative Studio",
-     "tools": ["creative_plan", "generate_image", "design_brief", "create_dieline",
-               "voice_list", "voice_tts", "voice_dub", "list_templates"],
-     "can": "plan and price a job, render images, build dielines, add voiceover"},
+     "tools": ["creative_plan", "generate_image", "apply_label", "build_package",
+               "plan_aplus", "plan_social", "plan_video", "write_content",
+               "design_brief", "create_dieline", "voice_list", "voice_tts",
+               "voice_dub", "list_templates"],
+     "can": ("plan and price a job, render images, build a COMPLETE package "
+             "(front/back/side panels + dieline), put the real logo and copy on a "
+             "render, plan A+ pages and social sets at exact pixel sizes, storyboard "
+             "video, write screened copy, add voiceover")},
     {"id": "research", "label": "Research & Corpus",
      "tools": ["corpus_search", "corpus_vector_search", "corpus_drift", "knowledge_lookup"],
      "can": "search the local corpus, report drift, look up a rule with its source"},
@@ -1244,19 +1568,203 @@ TOOLS: Dict[str, dict] = {    "system_status": {
     "generate_image": {
         "description": ("Render ONE image locally via ComfyUI (surfaces/photography only). "
                         "Text, logos, weights, barcodes and legal copy are NEVER painted by the "
-                        "image model — author those as structured layers instead. Requires the "
-                        "media engine armed (MEDIA_GEN_LIVE + ComfyUI)."),
+                        "image model — author those as structured layers instead (see "
+                        "apply_label). Requires the media engine armed (MEDIA_GEN_LIVE + ComfyUI). "
+                        "Ask for the shape you want: the local engine keeps the aspect ratio and "
+                        "scales the long edge to its 1216 px ceiling, and reports the real size."),
         "parameters": {
             "type": "object",
             "properties": {
                 "prompt": {"type": "string", "description": "Scene/surface description. No text requests.", "minLength": 3, "maxLength": 2000},
-                "width": {"type": "integer", "minimum": 512, "maximum": 1216},
-                "height": {"type": "integer", "minimum": 512, "maximum": 1216},
+                "width": {"type": "integer", "minimum": 64, "maximum": 4096,
+                          "description": "Requested width in px. Any sensible value is accepted; the engine fits it into its 1216 px box without distorting the ratio."},
+                "height": {"type": "integer", "minimum": 64, "maximum": 4096,
+                           "description": "Requested height in px. A portrait product shot is usually 832x1216 or 896x1216."},
                 "tier": {"type": "string", "enum": ["draft", "final"], "default": "draft"},
             },
             "required": ["prompt"],
         },
         "handler": _t_generate_image,
+    },
+    "apply_label": {
+        "description": ("Put the operator's real logo and real copy ON a rendered pouch/tube/carton "
+                        "image — the deterministic typography pass. Use this whenever the operator "
+                        "wants a product mockup that actually shows their brand, product name and "
+                        "net weight: the render supplies the photograph, this supplies the print. "
+                        "Logo pixels and fonts are composited, never generated, so spelling is exact. "
+                        "The face is measured from the render; the fit is a mockup fit, not a die."),        "parameters": {
+            "type": "object",
+            "properties": {
+                "plate_asset_id": {"type": "string", "minLength": 3, "maxLength": 80,
+                                   "description": "Asset id of the rendered pouch/product image (from generate_image)."},
+                "title": {"type": "string", "minLength": 1, "maxLength": 60,
+                          "description": "Product name as it must appear, e.g. \"Lion's Mane\"."},
+                "subtitle": {"type": "string", "maxLength": 80,
+                             "description": "Supporting line, e.g. \"Organic Mushroom Powder\"."},
+                "weight": {"type": "string", "maxLength": 40,
+                           "description": "Net weight line, e.g. \"NET WT 6 OZ (170 g)\"."},
+                "bullets": {"type": "array", "items": {"type": "string", "maxLength": 60},
+                            "maxItems": 5, "description": "Optional short claim lines."},
+                "logo_asset_id": {"type": "string", "maxLength": 80,
+                                  "description": "Asset id of the operator's logo (an attachment). Omit for a type-only label."},
+                "icons": {"type": "array",
+                          "items": {"type": "string", "enum": ["organic_sprout", "non_gmo", "gluten_free", "fruiting_body"]},
+                          "maxItems": 4,
+                          "description": "Certification marks to draw (vectors, not generated art)."},
+                "name": {"type": "string", "maxLength": 120, "description": "Optional asset name."},
+            },
+            "required": ["plate_asset_id", "title"],
+        },
+        "handler": _t_apply_label,
+    },
+    "build_package": {
+        "description": ("Build a COMPLETE package, not one image: front panel, back panel "
+                        "(ingredients/supplement facts, warnings, company, origin, reserved barcode "
+                        "zone), side panel, a flat panel sheet, a print dieline (SVG + PDF) and, when "
+                        "a plate is supplied, a mockup. Ask the operator for any missing fact first — "
+                        "it will not invent ingredients, claims, an address or a net weight."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "maxLength": 60, "description": "Product name exactly as it must appear."},
+                "subtitle": {"type": "string", "maxLength": 80},
+                "weight": {"type": "string", "maxLength": 40, "description": "e.g. NET WT 6 OZ (170 g)"},
+                "width_mm": {"type": "number"}, "height_mm": {"type": "number"},
+                "gusset_mm": {"type": "number"},
+                "ingredients": {"type": "array", "items": {"type": "string", "maxLength": 300}, "maxItems": 20},
+                "supplement_facts": {"type": "array", "items": {"type": "string", "maxLength": 200}, "maxItems": 30},
+                "suggested_use": {"type": "string", "maxLength": 300},
+                "warnings": {"type": "array", "items": {"type": "string", "maxLength": 300}, "maxItems": 10},
+                "company": {"type": "string", "maxLength": 120},
+                "address": {"type": "string", "maxLength": 200},
+                "country_of_origin": {"type": "string", "maxLength": 60},
+                "lot_code": {"type": "string", "maxLength": 40},
+                "claims": {"type": "array", "items": {"type": "string", "maxLength": 60}, "maxItems": 4},
+                "icons": {"type": "array",
+                          "items": {"type": "string", "enum": ["organic_sprout", "non_gmo", "gluten_free", "fruiting_body"]},
+                          "maxItems": 4},
+                "plate_asset_id": {"type": "string", "maxLength": 80},
+                "logo_asset_id": {"type": "string", "maxLength": 80},
+                "allow_incomplete": {"type": "boolean", "default": False,
+                                     "description": "Build anyway and draw [MISSING: field] markers. Only when the operator insists."},
+            },
+            "required": [],
+        },
+        "handler": _t_build_package,
+    },
+    "optimize_listing": {
+        "description": ("Score and rewrite an Amazon listing against the operator's target keywords: "
+                        "deterministic rubric (title, bullets, promo/emoji, keyword coverage), a "
+                        "before/after score out of 100, a rewritten title and bullets, backend search "
+                        "terms within the 250-byte limit, and a change log. Never invents keywords or "
+                        "search volumes; asks when no keywords are supplied."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "maxLength": 500},
+                "bullets": {"type": "array", "items": {"type": "string", "maxLength": 600}, "maxItems": 5},
+                "keywords": {"type": "array", "items": {"type": "string", "maxLength": 80}, "maxItems": 30},
+                "backend_terms": {"type": "string", "maxLength": 500},
+                "description": {"type": "string", "maxLength": 4000},
+            },
+            "required": ["title", "bullets", "keywords"],
+        },
+        "handler": _t_optimize_listing,
+    },
+    "ppc_plan": {
+        "description": ("Turn Amazon ad reports into a change plan: validate the upload is really a "
+                        "search-term report, harvest converting terms, propose negative exacts, and "
+                        "reject any change that references a campaign or ad group absent from the "
+                        "source. Report-in, file-out — nothing is uploaded to Amazon."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "search_terms": {"type": "array", "items": {"type": "object"},
+                                 "description": "Parsed search-term rows (campaign, ad group, customer search term, clicks, spend, sales, orders)."},
+                "target_acos": {"type": "number", "minimum": 0, "maximum": 5, "default": 0.35},
+                "proposed_rows": {"type": "array", "items": {"type": "object"},
+                                  "description": "Optional proposed changes to validate against the source."},
+                "write_bulk": {"type": "boolean", "default": False,
+                               "description": "Write a validated .xlsx planning sheet (Northstar columns, not an official Amazon template)."},
+                "default_bid": {"type": "number", "minimum": 0,
+                                "description": "Optional bid to apply to harvested exact-match rows."},
+            },
+            "required": ["search_terms"],
+        },
+        "handler": _t_ppc_plan,
+    },
+    "plan_aplus": {
+        "description": ("Plan an Amazon A+ page: module list with EXACT pixel sizes (970x600 header, "
+                        "970x300 banner, 300x300 x3, 220x220 x4, 1464x600 premium), one render "
+                        "prompt per module, the product identity lock, and a screen for prices, "
+                        "promotions, shipping claims and competitor references."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "product": {"type": "string", "maxLength": 120},
+                "modules": {"type": "array", "items": {"type": "string", "maxLength": 24}, "maxItems": 10},
+                "copy": {"type": "string", "maxLength": 2000},
+                "style": {"type": "string", "maxLength": 120},
+                "shape": {"type": "string", "maxLength": 200},
+                "colour": {"type": "string", "maxLength": 200},
+                "logo_text": {"type": "string", "maxLength": 200},
+                "parts": {"type": "string", "maxLength": 300},
+                "must_not": {"type": "string", "maxLength": 200},
+            },
+            "required": ["product"],
+        },
+        "handler": _t_plan_aplus,
+    },
+    "plan_social": {
+        "description": ("Plan ad/social graphics at exact canvas sizes and safe zones for 1:1, 4:5, "
+                        "9:16, 16:9 and 2:3, with copy slots and one prompt per aspect."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "product": {"type": "string", "maxLength": 120},
+                "content_type": {"type": "string", "enum": ["ad", "social", "banner", "aplus"]},
+                "aspects": {"type": "array", "items": {"type": "string", "enum": ["1:1", "4:5", "9:16", "16:9", "2:3"]}, "maxItems": 5},
+                "headline": {"type": "string", "maxLength": 120},
+            },
+            "required": ["product", "content_type"],
+        },
+        "handler": _t_plan_social,
+    },
+    "plan_video": {
+        "description": ("Plan a UGC/short video: scene beats timed to the requested duration, the "
+                        "frame count at a declared fps, and the exact arithmetic to verify the "
+                        "finished clip is the right length (frames / fps, one frame tolerance). "
+                        "Rejects a duration the lane does not support instead of promising it."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "product": {"type": "string", "maxLength": 120},
+                "duration_seconds": {"type": "integer", "enum": [5, 10, 15, 30]},
+                "hook": {"type": "string", "enum": ["problem", "result", "proof"]},
+                "fps": {"type": "integer", "minimum": 12, "maximum": 60},
+                "script": {"type": "string", "maxLength": 2000},
+            },
+            "required": ["product", "duration_seconds"],
+        },
+        "handler": _t_plan_video,
+    },
+    "write_content": {
+        "description": ("Write ad copy, social captions, email subject/body, brand story or a listing "
+                        "bullet, tied to the operator's keywords and screened for disease/treatment "
+                        "claims. Returns three variants with keyword coverage per variant."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "product": {"type": "string", "maxLength": 120},
+                "surface": {"type": "string", "enum": ["ad", "social", "email", "brand_story", "listing_bullet"]},
+                "keywords": {"type": "array", "items": {"type": "string", "maxLength": 80}, "maxItems": 20},
+                "benefits": {"type": "array", "items": {"type": "string", "maxLength": 120}, "maxItems": 5},
+                "tone": {"type": "string", "maxLength": 30},
+                "brand": {"type": "string", "maxLength": 80},
+            },
+            "required": ["product", "surface"],
+        },
+        "handler": _t_write_content,
     },
     "seo_check": {
         "description": ("Score content against the brand SEO profile (S7). Copy "

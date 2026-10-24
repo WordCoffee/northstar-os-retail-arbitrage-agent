@@ -113,6 +113,19 @@ def test_directive_lists_attachment_ids():
     assert "operator's own artefacts" in text
 
 
+def test_directive_names_attachments_when_their_metadata_is_known():
+    """Bare ids made the model answer "the logo didn't come through on my end"."""
+    text = chat_router.turn_directive(
+        {"attachments": ["logo-1"]},
+        attachment_meta=[{"asset_id": "logo-1", "name": "logo.png",
+                          "asset_type": "uploaded", "width": 1024, "height": 1024}])
+    assert "logo.png" in text
+    assert "1024x1024" in text
+    assert "logo_asset_id" in text
+    # and it must stop asking the operator to re-send a file it was given
+    assert "re-send" in text
+
+
 # ── the stream applies it without persisting it ────────────────────────────
 
 def test_the_directive_is_a_separate_system_message_and_the_user_text_is_clean(tmp_path, monkeypatch):

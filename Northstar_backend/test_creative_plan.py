@@ -154,7 +154,7 @@ def test_card_carries_four_actions_and_the_cost():
 
 # ── the chat tool Bojo actually calls ──────────────────────────────────────
 
-def test_chat_tool_builds_a_plan_card_and_can_confirm_it():
+def test_chat_tool_builds_a_plan_card_and_remembers_it():
     import chat_tools
 
     assert "creative_plan" in chat_tools.TOOLS
@@ -167,16 +167,24 @@ def test_chat_tool_builds_a_plan_card_and_can_confirm_it():
     assert card["kind"] == "generation_plan"
     assert cplan.get(plan["plan_id"]) is not None       # remembered for the next turn
 
-    confirmed = chat_tools.run_tool("creative_plan", {
-        "plan_id": plan["plan_id"], "action": "final"})
-    assert confirmed["ok"] is True
-    assert confirmed["data"]["reserve"]["class"] == "creative"
-    assert confirmed["data"]["reserve"]["amount"] == plan["options"]["final"]["credits"]
-
+    # cancellation is handled here; execution (reserve -> generate -> commit) is
+    # covered in test_creative_execute.py with an injected ledger and renderer.
     cancelled = chat_tools.run_tool("creative_plan", {
         "plan_id": plan["plan_id"], "action": "cancel"})
     assert cancelled["ok"] is True
     assert cplan.get(plan["plan_id"]) is None            # cancelled plans are dropped
+
+
+def test_chat_tool_edit_returns_the_plan_for_revision():
+    import chat_tools
+
+    made = chat_tools.run_tool("creative_plan", {"request": "design a pouch",
+                                                "subscription": "mover"})
+    plan = made["data"]["plan"]
+    out = chat_tools.run_tool("creative_plan", {"plan_id": plan["plan_id"], "action": "edit"})
+    assert out["ok"] is True
+    assert "edit" in out["summary"].lower()
+    assert cplan.get(plan["plan_id"]) is not None        # still open for revision
 
 
 def test_chat_tool_reports_an_expired_plan_instead_of_inventing_one():

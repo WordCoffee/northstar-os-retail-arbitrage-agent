@@ -20,21 +20,17 @@ import shutil
 import subprocess
 import tempfile
 import time
+import uuid
 from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from design_studio_api import studio_account
 
 router = APIRouter(prefix="/api/chat/voice", tags=["chat-voice"])
-
-
-class SpeakIn(BaseModel):
-    text: str = Field(..., min_length=1, max_length=2000)
-    voice_id: str = Field(..., min_length=1, max_length=120)
-    lang: str = Field("en", max_length=12)
 
 
 @router.get("/voices")
@@ -55,25 +51,107 @@ async def voices(acct: str = Depends(studio_account)):
     return {"ok": True, "voices": items or []}
 
 
+class SpeakIn(BaseModel):
+    text: str = Field(..., min_length=1, max_length=2000)
+    # Optional: when the client's stored voice no longer exists the server picks
+    # a real one instead of failing the turn with 422.
+    voice_id: str = Field("", max_length=120)
+    lang: str = Field("en", max_length=12)
+
+
+# Synthesised audio is served from the app itself. The voice engine answers with
+# an absolute http://127.0.0.1:8321/... URL, which a browser on an https tunnel
+# refuses as mixed content — so Bojo could not speak in the hosted UI even when
+# the engine was healthy. We fetch the bytes and hand back a same-origin path.
+_AUDIO_DIR = Path(__file__).resolve().parent / "data" / "voice_out"
+_AUDIO_KEEP = 40
+
+
+def _store_audio(url: str, lang: str = "en") -> Path:
+    import requests
+
+    resp = requests.get(url, timeout=60)
+    resp.raise_for_status()
+    if not resp.content:
+        raise RuntimeError("the voice engine returned an empty audio file")
+    _AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+    suffix = Path(url.split("?")[0]).suffix or ".wav"
+    path = _AUDIO_DIR / f"{uuid.uuid4().hex[:16]}{suffix}"
+    path.write_bytes(resp.content)
+    files = sorted(_AUDIO_DIR.glob("*"), key=lambda p: p.stat().st_mtime, reverse=True)
+    for old in files[_AUDIO_KEEP:]:
+        try:
+            old.unlink()
+        except OSError:
+            pass
+    return path
+
+
+@router.get("/audio/{name}")
+def voice_audio(name: str, acct: str = Depends(studio_account)):
+    """Serve one synthesised clip from this app (same-origin, no mixed content)."""
+    safe = Path(name).name
+    path = _AUDIO_DIR / safe
+    if not safe or not path.is_file():
+        raise HTTPException(status_code=404, detail="audio not found")
+    return FileResponse(path, media_type="audio/wav" if path.suffix == ".wav" else "audio/mpeg")
+
+
+async def _pick_voice(requested: str) -> tuple:
+    """Return (voice_id, fell_back). Falls back to the engine's first voice."""
+    from voicestudio_adapter import get_adapter
+
+    wanted = (requested or "").strip()
+    try:
+        listing = await get_adapter().list_voices()
+    except Exception:  # noqa: BLE001 - a failing listing must not mask the real error
+        listing = {"ok": False}
+    ids = []
+    if listing.get("ok"):
+        data = listing.get("data") or {}
+        items = data.get("voices") if isinstance(data, dict) else None
+        ids = [str(v.get("id")) for v in (items or [])
+               if isinstance(v, dict) and v.get("id")]
+    if wanted and (not ids or wanted in ids):
+        return wanted, False
+    if ids:
+        return ids[0], True
+    return wanted, False
+
+
 @router.post("/speak")
 async def speak(body: SpeakIn, acct: str = Depends(studio_account)):
     """Bojo speaks: synthesise one line for the conversation loop.
 
     Reuses the voice-studio adapter. When it is unreachable this returns 503 with
     the REAL reason — the client then degrades to text and says so instead of
-    pretending to talk."""
+    pretending to talk. A voice id the engine no longer knows is resolved to a
+    real one and reported, never left to fail as a 422 the operator cannot act on.
+    """
     from voicestudio_adapter import get_adapter
 
-    out = await get_adapter().tts(body.text, body.voice_id, lang=body.lang)
+    voice_id, fell_back = await _pick_voice(body.voice_id)
+    out = await get_adapter().tts(body.text, voice_id or "default", lang=body.lang)
     if not out.get("ok"):
         raise HTTPException(status_code=503,
                             detail=out.get("error") or "voice synthesis unavailable")
     data = out.get("data") or {}
-    if not data.get("audio_url"):
+    remote = data.get("audio_url")
+    if not remote:
         raise HTTPException(status_code=502,
                             detail="the voice engine returned no audio_url")
-    return {"ok": True, "audio_url": data["audio_url"],
-            "elapsed_ms": out.get("elapsed_ms"), "voice_id": body.voice_id}
+    try:
+        path = _store_audio(str(remote))
+    except Exception as exc:  # noqa: BLE001 - report the real transport reason
+        raise HTTPException(status_code=502,
+                            detail=f"the voice engine produced audio that could not be "
+                                   f"fetched: {exc}")
+    return {"ok": True,
+            "audio_url": f"/api/chat/voice/audio/{path.name}",
+            "elapsed_ms": out.get("elapsed_ms"),
+            "voice_id": voice_id,
+            "voice_fell_back": fell_back,
+            "engine": data.get("engine") or "voice-engine"}
 
 MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 

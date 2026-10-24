@@ -151,6 +151,15 @@ def test_capabilities_foundation_plan_denied_even_with_user_row():
     assert caps["capabilities"]["advanced_view"] is False
 
 
+def test_the_owner_role_gets_advanced_view_on_any_plan():
+    """The owner's own account had advanced_view false: role 'owner' was not in
+    ADMIN_ROLES, so every service room was unreachable in the browser."""
+    caps = _caps({"user_id": "u1", "org_id": "", "role": "owner", "source": "session"},
+                 plan_row={"plan": "foundation"})
+    assert caps["capabilities"]["advanced_view"] is True
+    assert caps["capabilities"]["autothink_workspace"] is True
+
+
 def test_capabilities_hosted_org_advanced_reports_grants_advanced():
     caps = _caps({"user_id": "", "org_id": "org-1", "role": "member", "source": "session"},
                  org={"tier": "pro", "advanced_reports": True})

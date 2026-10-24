@@ -128,8 +128,16 @@ def execute(ledger, plan: Dict[str, Any], action: str, *, generate: Callable[[Di
     return out
 
 
-def default_generate(instruction: Dict[str, Any]) -> Dict[str, Any]:
-    """Production wiring: render through the existing generate_image tool."""
+def default_generate(instruction: Dict[str, Any], ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Production wiring: render through the existing generate_image tool.
+
+    `ctx` carries the chat turn's db + account. Without it the render was made
+    with ``account_id=None`` and no db, so `generate_image` skipped asset
+    persistence entirely: the plan lane charged its credits, produced a real
+    image and returned NO asset id or URL. The operator saw "Draft charged (34
+    credits) but the plan lane returned no retrievable asset id", and the label
+    pass could not run because there was no plate to composite onto.
+    """
     try:
         import chat_tools
     except Exception as exc:  # noqa: BLE001
@@ -138,7 +146,24 @@ def default_generate(instruction: Dict[str, Any]) -> Dict[str, Any]:
     quality = instruction.get("quality") or "draft"
     request = instruction.get("request") or ""
     prompt = f"{request}. Style: {job.replace('_', ' ')}, {quality} quality."
+    # A pouch/bottle/sachet is a PORTRAIT subject; the old fixed 1024x1024 forced
+    # every packaging plan into a square framed badly for a standing pack.
+    portrait = any(k in job for k in ("pack", "pouch", "product", "bottle", "carton",
+                                      "label", "box"))
+    width, height = (832, 1216) if portrait else (1024, 1024)
     args = {"prompt": prompt[:1800],
             "tier": "final" if quality == "final" else "draft",
-            "width": 1024, "height": 1024}
-    return chat_tools.run_tool("generate_image", args, {"account_id": None})
+            "width": width, "height": height}
+
+    context: Dict[str, Any] = dict(ctx or {})
+    if context.get("db") is None:
+        # Called outside a chat turn (a job runner, a script): open the real store
+        # so the artifact is still persisted and retrievable.
+        try:
+            from data_layer import get_northstar_db
+            context["db"] = get_northstar_db()
+        except Exception:  # noqa: BLE001 - a missing store must not lose the render
+            pass
+    if not context.get("account_id"):
+        context["account_id"] = str(instruction.get("account_id") or "default")
+    return chat_tools.run_tool("generate_image", args, context)

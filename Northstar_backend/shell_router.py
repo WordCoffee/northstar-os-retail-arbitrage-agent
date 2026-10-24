@@ -51,7 +51,12 @@ router = APIRouter(prefix="/api/shell", tags=["shell"])
 
 CONTRACT = "shell/v1"
 
-ADMIN_ROLES = ("admin", "internal_platform_admin")
+# `owner` is the platform owner's role and outranks admin on this ladder. It was
+# missing, so the owner's own account resolved to the Foundation plan's
+# capabilities (advanced_view: false) and every room - Design Studio, Listing
+# Guardian, AdPilot, Golden Goose, Memory Bank, Beta Ops, Admin - was unreachable
+# in the browser. Used only by resolve_capabilities below.
+ADMIN_ROLES = ("owner", "admin", "internal_platform_admin")
 
 
 # ── Identity resolution ─────────────────────────────────────────────────────

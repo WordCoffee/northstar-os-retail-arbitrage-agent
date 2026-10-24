@@ -247,6 +247,16 @@ def test_tool_progress_frames_stream_from_worker(db, monkeypatch):
     assert any(p.get("pct") == 50 and p.get("label") == "halfway" for p in progress)
     asset = next(d for k, d in pairs if k == "asset")
     assert asset["id"] == "asset-x"
+    # The transcript must keep the descriptor, otherwise a reloaded session shows
+    # every artefact as an unnamed "asset" card with no kind.
+    parts = db.chat.messages.list_by_session(session["id"], account_id="acct-1")
+    assistant = next(m for m in reversed(parts) if m["role"] == "assistant")
+    raw_parts = assistant["parts_json"] or []
+    if isinstance(raw_parts, str):
+        raw_parts = json.loads(raw_parts)
+    tool_part = next(p for p in raw_parts if p.get("type") == "tool")
+    assert tool_part["asset_meta"][0]["name"] == "img"
+    assert tool_part["asset_meta"][0]["kind"] == "image"
     attachments = db.chat.attachments.list_by_message(
         db.chat.messages.list_by_session(session["id"], account_id="acct-1")[0]["id"], account_id="acct-1")
     assert any(a["asset_id"] == "asset-x" for a in attachments)

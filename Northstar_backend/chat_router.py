@@ -355,6 +355,21 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     db, account_id,
                     [str(a) for a in (options.get("attachments") or []) if a][:12]),
             )
+            # Bojo is a ROUTER (blueprint §7): hand the turn to the specialist that
+            # owns it, or name the inputs still missing. Only injected when the
+            # router is confident, so a greeting or a question is left alone.
+            try:
+                from specialists import router as specialist_router
+                route = specialist_router.plan(user_content)
+                if route.get("status") == "routed":
+                    directive = ("[router] " + str(route["agent"]) + " — "
+                                 + ("inputs complete, proceed."
+                                    if route.get("ready")
+                                    else "ask for: " + ", ".join(
+                                        q["field"] for q in route.get("questions") or []))
+                                 + "\n" + directive)
+            except Exception:  # noqa: BLE001 - routing is an aid, never a blocker
+                pass
             if directive:
                 messages = [{"role": "system", "content": directive}] + messages
 

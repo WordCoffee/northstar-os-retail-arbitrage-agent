@@ -305,6 +305,33 @@ def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
     return max(mult, (v // mult) * mult)
 
 
+def _fit_box(width, height, hi: int = 1216, mult: int = 16,
+             short_floor: int = 256) -> tuple:
+    """Scale a requested render size into the engine's safe box, keeping ASPECT.
+
+    Clamping each axis independently (the previous behaviour) silently turned a
+    2:3 portrait request into a 2:2.7 render. The engine's real constraint is the
+    long edge, so scale both axes by one factor and snap to the VAE's multiple.
+    """
+    w = max(1, int(round(float(width or hi))))
+    h = max(1, int(round(float(height or hi))))
+    scale = min(1.0, float(hi) / float(max(w, h)))
+    w, h = w * scale, h * scale
+    # A very wide panorama would push the short edge below anything the model can
+    # draw; grow it back while the long edge still fits.
+    if min(w, h) < short_floor:
+        grow = float(short_floor) / max(1e-6, min(w, h))
+        if max(w, h) * grow <= hi:
+            w, h = w * grow, h * grow
+    w = max(mult, int(round(w / mult)) * mult)
+    h = max(mult, int(round(h / mult)) * mult)
+    if max(w, h) > hi:                       # rounding must not re-break the cap
+        step = float(max(w, h)) / float(hi)
+        w = max(mult, int(w / step) // mult * mult)
+        h = max(mult, int(h / step) // mult * mult)
+    return int(w), int(h)
+
+
 # ── Workflow graphs (verified by tools/comfy_smoke.py) ─────────────────────
 
 def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) -> dict:
@@ -395,8 +422,9 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
         raise RuntimeError(
             "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
             "after waiting; refusing a render that would run out of memory. Retry shortly.")
-    w = _clamp(width or 1024, 512, 1216)
-    h = _clamp(height or 1024, 512, 1216)
+    req_w = int(width) if width not in (None, "") else 1024
+    req_h = int(height) if height not in (None, "") else 1024
+    w, h = _fit_box(req_w, req_h)
     steps = 8 if str(tier).lower() == "final" else 4
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     try:
@@ -415,7 +443,11 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     return {
         "bytes": data, "ext": "png", "mime": "image/png",
         "model": os.path.splitext(IMAGE_MODEL_FILE)[0], "provider": "comfyui",
-        "seed": seed, "width": w, "height": h, "duration_seconds": None,
+        "seed": seed, "width": w, "height": h,
+        "requested": {"width": req_w, "height": req_h},
+        "fitted": (w, h) != (req_w, req_h),
+        "engine_max_edge_px": 1216,
+        "duration_seconds": None,
     }
 
 
