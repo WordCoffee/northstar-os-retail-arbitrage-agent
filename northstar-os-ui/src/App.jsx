@@ -31,7 +31,7 @@ import MemoryBank from './pages/internal/MemoryBank.jsx'
 import SharedDataLayer from './pages/internal/SharedDataLayer.jsx'
 import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
 import MasterBrain from './pages/internal/MasterBrain.jsx'
-import Improvement from './pages/internal/Improvement.jsx'
+import PackifyDesign from './pages/internal/PackifyDesign.jsx'
 import CustomerWorkspace from './pages/customer/Workspace.jsx'
 import BetaOpsOverview from './pages/admin/Overview.jsx'
 import OrgsList, { OrgDetail } from './pages/admin/OrgsList.jsx'
@@ -107,6 +107,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/product-finder/:id" element={<ProductFinder />} />
       <Route path="/design-studio/*" element={<DesignStudio />} />
       <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
+<Route path="/packify-design" element={<PackifyDesign />} />
       <Route path="/creative-studio" element={<LegacyStudioRedirect section="projects" />} />
       <Route path="/golden-goose" element={<GoldenGooseDesk />} />
       <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
@@ -240,7 +241,7 @@ function Shell() {
       />
       <div className="body-layout">
         {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
-        <main className="main-content">
+        <main className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
           {session.suspended
             ? <AccountSuspended />
             : simpleMode && !keepAdvanced
