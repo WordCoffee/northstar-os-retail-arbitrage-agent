@@ -1,0 +1,23 @@
+{
+  "questions": {
+    "copy_audit": {
+      "type": "choice",
+      "instructions": "Is the copy in `text` shippable on Amazon as written?",
+      "criteria": {
+        "pass": "no prohibited or unsupported claim is detectable",
+        "review": "a claim needs operator evidence",
+        "block": "an Amazon-prohibited promotional term is present"
+      }
+    },
+    "blocker_escalation": {
+      "type": "choice",
+      "instructions": "Does the blocker in `text` interrupt the operator now or ride the next batched report?",
+      "criteria": {
+        "now": "a live-lane failure, guardrail breach, or production break",
+        "later": "real friction but work can continue on other batches",
+        "never": "an idea or nice-to-have belonging in the backlog"
+      }
+    }
+  },
+  "state_key": "text"
+}

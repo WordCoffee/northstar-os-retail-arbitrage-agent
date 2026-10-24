@@ -34,6 +34,8 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -178,16 +180,79 @@ def _rules_listing_tier(text: str) -> Dict[str, Any]:
             "flags": [], "reason": "copy is within length and claim rules"}
 
 
+_LAYA_BIN_CANDIDATES = [
+    os.environ.get("LAYA_BIN", "").strip(),
+    r"C:\Users\T2Hol\Desktop\Northstar External\integration-venv\Scripts\laya.exe",
+]
+_LAYA_QUESTIONS = os.environ.get(
+    "LAYA_QUESTIONS",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                 "research", "laya_questions.json"),
+)
+
+
+def _laya_binary() -> Optional[str]:
+    for cand in _LAYA_BIN_CANDIDATES:
+        if cand and os.path.isfile(cand):
+            return cand
+    found = shutil.which("laya")
+    return found
+
+
+def _laya_decide(kind: str, text: str) -> Optional[Dict[str, Any]]:
+    """Run the local Laya ONNX backend. Returns None on any failure (caller falls back)."""
+    if kind not in ("copy_audit", "blocker_escalation"):
+        return None   # only kinds present in laya_questions.json
+    binary = _laya_binary()
+    if not binary or not os.path.isfile(_LAYA_QUESTIONS):
+        return None
+    try:
+        env = dict(os.environ)
+        env.setdefault("PYTHONIOENCODING", "utf-8")
+        env.setdefault("PYTHONUTF8", "1")
+        proc = subprocess.run(
+            [binary, "--predict", "--questions", _LAYA_QUESTIONS, "--json", text],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            env=env, timeout=120, check=False,
+        )
+    except Exception:  # noqa: BLE001
+        return None
+    if proc.returncode != 0:
+        return None
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception:  # noqa: BLE001
+        return None
+    answer = (payload.get("answers") or {}).get(kind)
+    if not isinstance(answer, dict):
+        return None
+    choice = answer.get("choice")
+    labels = KINDS[kind]
+    if choice not in labels:
+        return None
+    probs = answer.get("probabilities") or {}
+    confidence = float(answer.get("answer_confidence") or probs.get(choice, 0.0))
+    return {
+        "value": choice,
+        "confidence": round(confidence, 4),
+        "abstained": False,
+        "flags": [],
+        "reason": "laya onnx backend",
+        "probabilities": {label: round(float(probs.get(label, 0.0)), 4) for label in labels},
+    }
+
+
 def _laya_available() -> tuple[bool, str]:
     """Presence check only. No import, no download, no network."""
-    root = os.environ.get("LAYA_ROOT", "").strip()
-    if not root:
-        return False, "laya_not_configured"
-    try:
-        if not os.path.isdir(root):
-            return False, "laya_not_installed"
-    except Exception:  # noqa: BLE001
+    if not os.path.isfile(_LAYA_QUESTIONS):
+        return False, "laya_questions_missing"
+    binary = _laya_binary()
+    if not binary:
         return False, "laya_not_installed"
+    try:
+        import onnxruntime  # noqa: F401
+    except Exception:  # noqa: BLE001
+        return False, "laya_onnxruntime_missing"
     return True, "laya_ready"
 
 
@@ -206,11 +271,12 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
     note = ""
     if backend in ("auto", "laya"):
         ready, why = _laya_available()
-        if ready:
+        if backend == "laya" and ready:
             chosen = "laya"
         else:
             chosen = "rules"
-            note = why if backend == "laya" else ""
+            if backend == "laya":
+                note = why
 
     if kind == "copy_audit":
         out = _rules_copy_audit(text)
@@ -224,13 +290,23 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
         out = {"value": "unsure", "confidence": 0.0, "abstained": True,
                "flags": ["no_rule_backend"], "reason": "duplicate detection needs a model"}
 
+    # Optional second backend: try it, fall back to rules on any failure.
+    if chosen == "laya":
+        laya_out = _laya_decide(kind, text)
+        if laya_out is not None:
+            out = laya_out
+            chosen = "laya"
+        else:
+            chosen = "rules"
+            note = "laya_unavailable"
+
     if out["value"] not in labels:  # defensive: a backend may not invent a label
         out = {"value": labels[-1], "confidence": 0.0, "abstained": True,
                "flags": ["invalid_label"], "reason": "backend returned an unknown label"}
 
     out.update({
         "kind": kind,
-        "probabilities": _distribution(labels, out["value"], out["confidence"]),
+        "probabilities": out.get("probabilities") or _distribution(labels, out["value"], out["confidence"]),
         "criteria": DECISIONS.get(kind, {}).get("criteria"),
         "backend": chosen,
         "threshold": conf_threshold,

@@ -77,7 +77,7 @@ test counts preserved.
 
 | Item | Why it is not integrated |
 |---|---|
-| `laya` | Weights not downloaded. Adapter + lane entry are ready; `LAYA_ROOT` is the only missing piece |
+| `laya` | WIRED (optional backend) | Weights + onnxruntime installed in the integration venv; decision_layer.decide(backend="laya") shells out to the local ONNX binary. Rules backend stays primary (12/12 vs laya 6/12 on the 12-sample labelled set). |
 | `text-to-cad` | Needs an OpenCascade/OCP toolchain on Python 3.14; that install is the blocker, not the licence |
 | `surya` | Multi-GB weights; RapidOCR already covers the text-fidelity gate, Surya is ingestion-only |
 | `sana` | Multi-GB weights and would compete with FLUX.2 Klein for the same 16 GB card |
@@ -105,8 +105,7 @@ absent without a query.
 
 ## 5. Next actions
 
-1. `LAYA_ROOT` + weights → flip `decision_layer` to a real second backend and score it on 100
-   hand-labelled copy samples.
+1. ~~`LAYA_ROOT` + weights~~ **DONE** — laya 0.4.14 + onnxruntime 1.31.0 (CPU) wired as `backend="laya"`; rules stays primary (12/12 vs 6/12 on the labelled set). Next: a larger labelled set and domain fine-tuning if laya is ever to be promoted.
 2. Run `skylos` as the per-card gate (`skylos done --base main`) on the next build card.
 3. Retry Headroom only if `transformers` can load on this box; otherwise leave it un-adopted.
 4. Packaging: try `text-to-cad` in a throwaway venv before promising dieline geometry.

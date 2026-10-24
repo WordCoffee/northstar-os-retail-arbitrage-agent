@@ -329,12 +329,12 @@
       "commercial_ok": true,
       "network": false,
       "cost": "free_local",
-      "installed": "not_installed",
+      "installed": "ready",
       "gate": "LAYA_ROOT",
       "gate_mode": "present",
       "source": "https://github.com/NandhaKishorM/laya",
       "unlocks": "Local typed choice/score/yes-no decisions at single-digit millisecond latency; the free local substitute for a paid decision API.",
-      "notes": "Not downloaded on this bench (weights are separate from the repo). decision_layer.py detects LAYA_ROOT and reports laya_not_installed instead of silently substituting."
+      "notes": "NOW WIRED 2026-10-24: laya 0.4.14 + onnxruntime 1.31.0 + torch 2.14.0 (CPU) installed in the integration venv, and decision_layer.decide(kind, text, backend='laya') shells out to the laya ONNX binary with research/laya_questions.json (choice questions for copy_audit and blocker_escalation). Honesty note from the eval (12 hand-labelled copy snippets): rules backend 12/12, laya 6/12. Laya is a generic 421M model and underperforms on our domain; it stays an OPTIONAL second backend (backend='laya'), never the default. The LAYA_ROOT gate is retained as the documented seam but the real readiness check is onnxruntime + the laya binary + the questions file."
     },
     "headroom": {
       "name": "Headroom context compression",
@@ -348,7 +348,7 @@
       "installed": "ready",
       "source": "https://github.com/headroomlabs-ai/headroom",
       "unlocks": "Compresses tool output, logs and history before it reaches the model; ships an opencode wrapper.",
-      "notes": "INSTALLED 2026-10-23 in an external venv (headroom-ai 0.41.0, Python 3.14). NOT ADOPTED: compression is unavailable without `transformers`, and installing it failed on this box (OpenBLAS memory allocation). Worse, headroom fails OPEN: with the model missing it logged one stderr line and returned the input unchanged (ratio 1.0), so a loop could believe it was compressing when it was not. Adoption gate stays closed until the evidence proof (tools/headroom_evidence_proof.py) shows a real ratio with every FAILED line preserved."
+      "notes": "INSTALLED 2026-10-23 in an external venv (headroom-ai 0.41.0, Python 3.14). NOT ADOPTED and now CONFIRMED UNUSABLE on this bench: headroom compress() returns the input unchanged (ratio 1.0) on both a 16k-char pytest log and an 897-char one, while emitting '[transformers] Token indices sequence length is longer than the specified maximum sequence length (6001 > 4096)' - an indexing error it swallows and fails open on. The proof script (tools/headroom_evidence_proof.py) re-ran against the larger log and still reports ratio 1.0 with every FAILED line preserved (trivially, because nothing was compressed). Adoption gate stays closed; this is an environmental + fail-open defect, not a tuning gap."
     },
     "skylos": {
       "name": "Skylos AI-code PR scanner",

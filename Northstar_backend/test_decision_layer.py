@@ -45,15 +45,16 @@ def test_short_text_abstains():
 
 
 def test_laya_backend_reports_why_it_fell_back(monkeypatch):
-    monkeypatch.delenv("LAYA_ROOT", raising=False)
-    got = dl.decide("copy_audit", "A perfectly ordinary product description of sixteen ounces.", backend="laya")
+    monkeypatch.setattr(dl, "_laya_binary", lambda: None)
+    got = dl.decide("copy_audit", "A perfectly ordinary product description of sixteen ounces.",
+                    backend="laya")
     assert got["backend"] == "rules"
-    assert "laya_not_configured" in got["reason"]
+    assert "laya_not_installed" in got["reason"]
 
 
-def test_laya_root_present_is_detected(monkeypatch, tmp_path):
-    monkeypatch.setenv("LAYA_ROOT", str(tmp_path))
-    assert dl._laya_available() == (True, "laya_ready")
+def test_laya_backend_is_available_on_this_bench():
+    ready, why = dl._laya_available()
+    assert ready is True and why == "laya_ready"
 
 
 def test_unknown_kind_is_a_programming_error():
