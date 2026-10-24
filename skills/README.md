@@ -22,6 +22,7 @@ skills/
   listing-copy/SKILL.md           title / bullets / description / backend terms
   ad-creative/SKILL.md            headlines / body / CTA / compliance
   competitor-profiling/SKILL.md   evidence ladder + what to extract
+  operator-setup/SKILL.md         checkpoint-verified onboarding (AgentConnect pattern)
 ```
 
 Frontmatter keys the loader understands:
