@@ -78,7 +78,7 @@ test counts preserved.
 | Item | Why it is not integrated |
 |---|---|
 | `laya` | WIRED (optional backend) | Weights + onnxruntime installed in the integration venv; decision_layer.decide(backend="laya") shells out to the local ONNX binary. Rules backend stays primary (12/12 vs laya 6/12 on the 12-sample labelled set). |
-| `text-to-cad` | Needs an OpenCascade/OCP toolchain on Python 3.14; that install is the blocker, not the licence |
+| `text-to-cad` | cadquery 2.8.0 (OCP) installs and runs on Python 3.14; text-to-cad itself is a Node MCP server, not pip-installable |
 | `surya` | Multi-GB weights; RapidOCR already covers the text-fidelity gate, Surya is ingestion-only |
 | `sana` | Multi-GB weights and would compete with FLUX.2 Klein for the same 16 GB card |
 | `img2threejs` | Depends on a vision model plus a browser render check; behind text-to-cad in value |

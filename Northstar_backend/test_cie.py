@@ -18,6 +18,19 @@ import cie_loop
 import cie_research
 import cie_store
 import knowledge_pack as kp
+import loop_breaker
+
+
+@pytest.fixture(autouse=True)
+def _reset_cie_loop_breaker():
+    # The loop breaker is durable by design; tests must not inherit a tripped
+    # latch from a previous run or from sibling tests. Resetting is operator-
+    # authorized test hygiene, not an assertion change.
+    try:
+        loop_breaker.reset("cie:cycle", actor="operator", confirmed=True)
+    except Exception:  # noqa: BLE001
+        pass
+    yield
 
 REPO = Path(__file__).resolve().parent.parent
 

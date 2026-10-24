@@ -404,7 +404,7 @@
       "installed": "not_installed",
       "source": "https://github.com/earthtojake/text-to-cad",
       "unlocks": "Agent-generated STEP assemblies with mechanism validation: real packaging geometry instead of 2D fitting heuristics.",
-      "notes": "Needs an OpenCascade/OCP toolchain on Python 3.14; that install is the blocker, not the licence. Local lane only until it is proven."
+      "notes": "PARKED 2026-10-24 (refined): text-to-cad is NOT a Python package - it is a Node/TypeScript monorepo with an MCP server (apps/packages, mcp.json, .claude/.codex/.cursor plugins). pip install fails ('not a Python project'). Verified cadquery 2.8.0 (OCP) installs and runs on Python 3.14 in a throwaway venv (box volume smoke test passed), so local geometry generation is available without text-to-cad. Integration path, if pursued: wire text-to-cad as an MCP server in the FastAPI layer (Node runtime required) OR use cadquery directly for the simpler dieline primitives. Licence MIT. Still needs an operator decision on Node-runtime dependency."
     },
     "img2threejs": {
       "name": "img2threejs procedural 3D",
