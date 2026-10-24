@@ -236,9 +236,10 @@ return **401 (fail-closed)** — correct posture, not a break.
   temp 0.35 / num_ctx 64576). ~43 tok/s warm on the RTX 5080 Laptop 16GB.
 - **Performance/vision lane:** llama.cpp — `scripts\start-northstar-llm.ps1`
   serves an OpenAI-compatible API on `127.0.0.1:8080` with MTP speculative
-  decoding (`--spec-type draft-mtp`) and the BF16 `mmproj` (vision). Warm
-  ~40 tok/s; MTP draft acceptance ~85%. Unload Ollama before starting it
-  (both want the 16GB card) — see the script header.
+  decoding (`--spec-type draft-mtp`). Model: Qwen3.8-27B UD-Q3_K_XL (Unsloth
+  imatrix, 13.1GB — best quality on RTX 5080). Full GPU offload 99/99 layers.
+  ~50 tok/s gen. Context 16384. Kills background GPU processes before launch.
+  Unload Ollama before starting it (both want the 16GB card) — see the script header.
 
 ---
 

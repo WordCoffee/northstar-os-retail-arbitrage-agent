@@ -1,0 +1,20 @@
+line_id,category,line,amount_usd,basis,value_type,notes
+LB-01,Existing inventory,Acquisition cost of the ~500 bags already owned,,OWNER_INPUT_REQUIRED,UNKNOWN,Inventory already paid for is NOT economically free. Needed for view B.
+LB-02,Testing,Selected laboratory test panel (owner-reported quote),800,OWNER_REPORTED_QUOTE,OWNER_REPORTED,Confirm scope and whether it includes sample shipping
+LB-03,Testing,Preliminary testing allocation per bag,1.60,800 / 500 bags,DERIVED_PRELIMINARY,PRELIMINARY TESTING ALLOCATION ONLY - not total unit COGS. Recalculate on actual sellable count and total test cost.
+LB-04,Testing,Sample shipping to laboratory,,QUOTE REQUIRED,UNKNOWN,
+LB-05,Compliance,Additional Amazon-authorised TIC verification (if supplement path),,UNKNOWN,UNKNOWN,SEPARATE from the $800. May be required; cost not known.
+LB-06,Compliance,cGMP facility documentation / review,,UNKNOWN,UNKNOWN,May be required by Amazon 2026 supplement policy
+LB-07,Compliance,Label review / regulatory review,,UNKNOWN,UNKNOWN,
+LB-08,Packaging,Labels and label application,,QUOTE REQUIRED,UNKNOWN,External labeling only vs opening/resealing is a separate qualified task
+LB-09,Packaging,Packaging remediation (if bags require resealing),,UNKNOWN,UNKNOWN,
+LB-10,Marketing,Product photography,,UNKNOWN,UNKNOWN,
+LB-11,Marketing,Product identifiers (GTIN) if required,,UNKNOWN,UNKNOWN,
+LB-12,FBA,"FBA prep (poly-bagging, FNSKU, labelling)",,UNKNOWN,UNKNOWN,
+LB-13,Logistics,Inbound shipping to Amazon,,UNKNOWN,UNKNOWN,
+LB-14,Logistics,Inbound placement / other FBA inbound charges,,UNKNOWN,UNKNOWN,
+LB-15,Selling fees,Amazon referral fee,,UNKNOWN,UNKNOWN,Rate depends on category determination
+LB-16,Selling fees,Amazon fulfilment fee,,UNKNOWN,UNKNOWN,Depends on packaged weight/dimensions
+LB-17,Advertising,Launch advertising (SEPARATE BUDGET),,UNKNOWN,UNKNOWN,Shown separately from product costs; no CPC invented
+LB-18,Total,INCREMENTAL CASH TO LAUNCH INVENTORY ALREADY OWNED,"sum(LB-02,04,05,06,07,08,09,10,11,12,13,14,15,16)",FORMULA_ONLY,UNKNOWN,View A. Cannot compute - too many unknowns. Excludes acquisition cost
+LB-19,Total,FULL PRODUCT ECONOMICS incl. acquisition cost,LB-18 + LB-01,FORMULA_ONLY,UNKNOWN,View B. Cannot compute; acquisition cost is an owner input. Inventory already paid for is NOT free

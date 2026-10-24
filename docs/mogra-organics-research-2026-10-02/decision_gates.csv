@@ -1,0 +1,8 @@
+gate_id,trigger,decision_required,options,evidence_needed
+G1,A priority supplier returns lead time > 3 weeks OR no response by 2026-10-13,Reduce assortment / change provider,(a) cut to 1-2 SKUs (b) switch to US packer (c) shift target to 2026-12-01,Written lead times from at least 2 providers
+G2,Packer cannot confirm NOP handler certification by 2026-10-15,Change packer OR drop organic claim,(a) alternate packer (b) non-organic launch (c) defer organic SKUs,Certificate number + scope covering repacking
+G3,Ceylon cinnamon lot COA shows heavy metals above the level Mogra will stand behind,Change supplier OR change SKU,(a) alternate Ceylon supplier (b) swap to black pepper only,Lot-specific COA for the supplied lot
+G4,"Quoted MOQ for a chosen SKU exceeds the $1,500-$2,500 product budget",Reduce scope or SKU,(a) drop that SKU (b) find lower-MOQ provider (c) shrink pack size,Quotes with MOQ and unit cost
+G5,FBA receiving not confirmed by 2026-11-22,Change fulfilment plan,(a) merchant-fulfilled availability (b) revise target to 2026-12-01,FBA receiving status
+G6,Landed cost (incl. duty/AD-CVD) makes contribution negative before advertising,Change route or SKU,(a) domestic route (b) different SKU (c) different price point,Broker position + supplier quotes + FBA fee
+G7,Label approval scope is unclear or artwork misses packer spec by 2026-10-22,Do not print / re-review,(a) plain pilot units (b) hold launch until approved,Owner confirmation + packer spec match

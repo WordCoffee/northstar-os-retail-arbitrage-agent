@@ -1,0 +1,17 @@
+﻿
+200  /api/kirkland/scanner  -> 19 NON-LOOPBACK CONNECTS to ['3.232.71.244']
+200  /api/kirkland/discovery  -> 0 outbound connects
+200  /api/kirkland/discovery/meta  -> 0 outbound connects
+200  /api/kirkland/discovery/categories  -> 0 outbound connects
+200  /api/kirkland/live  -> 0 outbound connects
+200  /api/sourcescout  -> 0 outbound connects
+200  /api/sourcescout/summary  -> 0 outbound connects
+200  /api/products/finder  -> 0 outbound connects
+200  /api/v1/catalog/stocked  -> 0 outbound connects
+200  /api/golden-goose/health  -> 0 outbound connects
+200  /api/v1/status  -> 0 outbound connects
+200  /api/monitoring/error-alerts  -> 0 outbound connects
+
+total non-loopback connects: 19
+
+

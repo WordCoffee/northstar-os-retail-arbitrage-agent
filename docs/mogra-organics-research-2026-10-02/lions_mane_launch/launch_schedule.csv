@@ -1,0 +1,26 @@
+task_id,workstream,task,scenario,est_completion_date,responsible,dependencies,evidence_needed,status,delay_consequence,backup_action
+LM-01,1 Inventory,"Confirm inventory facts, count, lots, bag weight",all,2026-10-05,owner,-,Inventory register + photos,planning allowance,G1 blocked; sellable count unknown,Extend hold; do not sample blind
+LM-02,1 Testing,"Confirm lab instructions, panel, sample plan",all,2026-10-05,owner + lab,LM-01,Lab confirmation,planning allowance,Turnaround clock cannot start,"Use addendum message (drafted, unsent)"
+LM-03,2 Compliance,Answer classification questions (food vs supplement),all,2026-10-05,owner + qualified reviewer,-,Written classification rationale,planning allowance,Label and Amazon path unknown,Default to most restrictive path pending review
+LM-04,1 Testing,Sample dispatch,fast,2026-10-06,owner,"LM-01, LM-02",Carrier receipt,planning allowance,Results slip day-for-day,Reship expedited
+LM-05,1 Testing,Laboratory receipt confirmed,fast,2026-10-07,lab,LM-04,Lab receipt confirmation,planning allowance,Turnaround start date unknown,Record actual date; recalculate
+LM-06,1 Testing,Laboratory receipt confirmed,base,2026-10-08,lab,LM-04,Lab receipt confirmation,planning allowance,Turnaround start slips,Recalculate results date
+LM-07,1 Testing,Results available (ILLUSTRATIVE),fast,2026-10-21,lab,LM-05,Issued report,planning allowance,-,Assume 14 CALENDAR days from receipt; recalculate if business days or later receipt
+LM-08,1 Testing,Results available (ILLUSTRATIVE),base,2026-10-23,lab,LM-06,Issued report,planning allowance,-,Adds ~2 days vs fast
+LM-09,3 Listing,"Draft listing content, images brief, keywords",all,2026-10-12,partner,LM-03,Draft listing + shot list,planning allowance,Listing not ready at receipt,Draft in parallel with testing
+LM-10,4 Compliance,Label-gap review for this SKU,all,2026-10-14,owner + qualified reviewer,LM-03,Label gap list,planning allowance,Label cannot be finalised,Prepare artwork placeholders
+LM-11,4 Compliance,Verify organic certificate coverage,all,2026-10-14,owner,TD-11,Certificate + scope,planning allowance,Organic claim unsupported,Remove organic claim
+LM-12,4 Compliance,Check Amazon TIC / cGMP requirements if supplement,all,2026-10-16,partner,LM-03,Amazon policy determination,planning allowance,Compliance path unknown; may exceed window,Do NOT assume verification completes in this window
+LM-13,5 Shelf-life,Shelf-life and date-marking decision,fast,2026-10-23,qualified reviewer,"LM-07, TD-13",Written basis for date marking,planning allowance,Launch blocker G5,Use conservative remaining life; no invented expiry
+LM-14,5 Shelf-life,Shelf-life and date-marking decision,base,2026-10-26,qualified reviewer,"LM-08, TD-13",Written basis for date marking,planning allowance,Launch blocker G5,Delay scenario
+LM-15,4 Compliance,Qualified results review vs specifications,fast,2026-10-24,qualified reviewer,LM-13,Signed review note,planning allowance,Cannot release stock,Hold inventory
+LM-16,6 Packaging,Final labeling / label application,fast,2026-10-28,partner,"LM-10, LM-15",Approved label,planning allowance,Packaging not ready,Receive sealed units and apply later (only if packer permits)
+LM-17,7 FBA,Pilot unit + carton inspection,fast,2026-10-30,owner,LM-16,Inspection pass record,planning allowance,Cannot dispatch,Quarantine affected units
+LM-18,7 FBA,FBA dispatch,fast,2026-10-31,partner,LM-17,Shipment record,planning allowance,Buyable date slips,Dispatch partial
+LM-19,7 FBA,Delivered to Amazon,fast,2026-11-06,Amazon/carrier,LM-18,Carrier confirmation,planning allowance,Receiving risk,Expedite
+LM-20,7 FBA,Received / available inventory,fast,2026-11-14,Amazon,LM-19,FBA check-in,planning allowance,Not buyable,Merchant-fulfilled contingency (does not bypass compliance)
+LM-21,8 Listing,Buyable listing live,fast,2026-11-18,Amazon,"LM-20, LM-09",Live ASIN,planning allowance,Earlier than target if gates met,-
+LM-22,1 Testing,Results available (DELAY scenario),delay,2026-11-05,lab,later receipt / business-day TAT,Issued report,planning allowance,Compresses everything downstream,Move target to Dec 1 or reduce assortment
+LM-23,5 Shelf-life,Shelf-life decision (delay),delay,2026-11-09,qualified reviewer,LM-22,Written basis,planning allowance,Tight,-
+LM-24,7 FBA,FBA dispatch (delay),delay,2026-11-16,partner,LM-23,Shipment record,planning allowance,Dec 1 target at risk,Move to Dec 1; reduce units
+LM-25,7 FBA,Buyable listing (delay),delay,2026-12-01,Amazon,LM-24,Live ASIN,planning allowance,Latest acceptable target,Merchant-fulfilled while FBA receives

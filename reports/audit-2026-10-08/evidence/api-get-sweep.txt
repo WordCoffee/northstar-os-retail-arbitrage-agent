@@ -1,0 +1,86 @@
+﻿[32m23:15:46 [INFO    ] httpx2: HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"[0m
+[32m23:15:46 [INFO    ] httpx2: HTTP Request: GET http://testserver/health/detailed "HTTP/1.1 200 OK"[0m
+[32m23:15:46 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/status "HTTP/1.1 200 OK"[0m
+[32m23:15:48 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/models "HTTP/1.1 200 OK"[0m
+[32m23:15:48 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/reasoning/models "HTTP/1.1 200 OK"[0m
+[32m23:15:52 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/autothink/models "HTTP/1.1 200 OK"[0m
+[32m23:15:52 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/autothink/history "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout/summary "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout/matches "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout/mismatches "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout/review "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/monitoring/error-alerts "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/products/finder "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/golden-goose/health "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/golden-goose/entitlements "HTTP/1.1 200 OK"[0m
+[32m23:15:53 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/golden-goose/dry-run "HTTP/1.1 200 OK"[0m
+[Bright Data] keyword='kirkland' page=1/10 cards=48 kept=44
+[Bright Data] keyword='kirkland' page=2/10 cards=48 kept=86
+[Bright Data] keyword='kirkland' page=3/10 cards=0 kept=86
+[Costco] Ambiguous exact match for item_name
+[32m23:17:20 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m23:17:20 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/discovery "HTTP/1.1 200 OK"[0m
+[32m23:17:20 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/discovery/meta "HTTP/1.1 200 OK"[0m
+[Bright Data] keyword='kirkland' page=1/10 cards=48 kept=44
+[Bright Data] keyword='kirkland' page=2/10 cards=48 kept=86
+[Bright Data] keyword='kirkland' page=3/10 cards=0 kept=86
+[Costco] Ambiguous exact match for item_name
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/live "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/catalog/stocked "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/plans "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/invites/DOES-NOT-EXIST "HTTP/1.1 404 Not Found"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/commerce-ops/queue "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/listings/health "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/competitor/observations "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/activity "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/keywords "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/sources "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/sessions "HTTP/1.1 200 OK"[0m
+[32m23:17:27 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/accounts "HTTP/1.1 200 OK"[0m
+[32m23:17:28 [INFO    ] httpx2: HTTP Request: GET http://testserver/openapi.json "HTTP/1.1 200 OK"[0m
+=== GET sweep status ===
+200  /health
+200  /health/detailed
+200  /api/v1/status
+200  /api/v1/models
+200  /api/v1/reasoning/models
+200  /api/autothink/models
+200  /api/autothink/history
+200  /api/sourcescout
+200  /api/sourcescout/summary
+200  /api/sourcescout/matches
+200  /api/sourcescout/mismatches
+200  /api/sourcescout/review
+200  /api/monitoring/error-alerts
+200  /api/products/finder
+200  /api/golden-goose/health
+200  /api/golden-goose/entitlements
+200  /api/golden-goose/dry-run
+200  /api/kirkland/scanner
+200  /api/kirkland/discovery
+200  /api/kirkland/discovery/meta
+200  /api/kirkland/live
+200  /api/v1/catalog/stocked
+200  /api/v1/plans
+404  /api/invites/DOES-NOT-EXIST
+200  /api/v1/noncreative/commerce-ops/queue
+200  /api/v1/noncreative/listings/health
+200  /api/v1/noncreative/competitor/observations
+200  /api/v1/noncreative/activity
+200  /api/v1/noncreative/keywords
+200  /api/v1/noncreative/sources
+200  /api/v1/noncreative/sessions
+200  /api/v1/noncreative/accounts
+200  /openapi.json
+
+=== NON-LOOPBACK SOCKET CONNECTS DURING SWEEP ===
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)
+connect -> 3.232.71.244:('3.232.71.244', 443)

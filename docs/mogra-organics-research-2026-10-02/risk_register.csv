@@ -1,0 +1,14 @@
+risk_id,category,description,likelihood,impact,mitigation,owner_or_action,status
+RK-01,Certification,Supplier-wide organic grade is mistaken for product/process approval,Medium,High,Keep evidence at product-form level; verify scope per activity,Do not treat A-grade supplier as blanket approval,OPEN - policy in place
+RK-02,Certification,A certified input is mistaken for an approved finished pack,High,High,Explicit label-pathway analysis per product,Certifier/label review required before claiming the seal,OPEN
+RK-03,Certification,No-seal pathway assumed to remove certification obligations,Medium,High,State separately that obligations can persist without the seal,Confirm arrangement with certifier,OPEN
+RK-04,Certification,SQF/GMP mistaken for NOP organic certification,High,Medium,Separate food-safety certs from organic certs in every table,Ask for the specific NOP certifier,OPEN
+RK-05,Import,"AD/CVD order applies but is unverified, producing material unbudgeted duty",Low-Medium,Very High,Broker review of HTS + AD/CVD scope before any import,Commission broker review packet,OPEN
+RK-06,Import,Origin-specific additional tariffs change after quoting,Medium,High,Confirm at time of each import; do not carry stale assumptions,Re-check per shipment,OPEN
+RK-07,Quality,Turmeric adulteration (lead chromate / colourants) not detected,Medium,High,Require lot-specific adulteration screening from supplier,Add to RFQ quality section,OPEN
+RK-08,Quality,Published retail prices used as wholesale cost,Medium,Medium,Keep retail references flagged; never convert to wholesale,Cost model labels retail explicitly,CONTROLLED
+RK-09,Commercial,"Missing costs treated as zero, producing false favourable economics",Medium,High,Nulls remain null; no total from incomplete inputs,Scenario register separates assumptions,CONTROLLED
+RK-10,Commercial,Single verified supplier creates concentration risk,Medium,Medium,Route B/C provide alternatives,Do not rely on Pearl alone,OPEN
+RK-11,Data,Truncated/product-list capture treated as proof of absence,Medium,Medium,Correction logged; absence not asserted from partial capture,Re-request full list,CONTROLLED
+RK-12,Legal/label,'Mogra Organics' packaging used without certifier label review,Medium,Medium,Flag for certifier label review before printing,Do not assert compliance,OPEN
+RK-13,Scope,Research scope drifts into mushrooms/topicals/supplements not documented,Low,Medium,Keep future interests in a separate section,No new workstreams opened,CONTROLLED

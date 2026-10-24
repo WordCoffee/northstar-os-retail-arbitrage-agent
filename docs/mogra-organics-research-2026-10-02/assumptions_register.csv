@@ -1,0 +1,9 @@
+assumption_id,scenario,assumption,value,unit,basis,why_this_scenario_exists,isolated_from_observed_facts,sensitivity,status
+AS-01,Illustrative pilot,Pilot finished-unit quantity,500,units,Illustrative only - NOT owner-approved demand,No owner volume supplied; a pilot needs SOME number to size packaging and MOQ conversations,YES - no observed fact depends on this,High: drives packaging setup amortisation,PROPOSED
+AS-02,Illustrative pilot,Retail pack net weight,2,oz,Illustrative,Common culinary spice pack size; not an owner decision,YES,Medium: drives units per lb of ingredient,PROPOSED
+AS-03,Illustrative,Ingredient yield loss in grinding/packing,2,%,Industry-typical placeholder,Applied so cost model is not implicitly zero-loss,YES,Low-Medium,PROPOSED
+AS-04,Illustrative,Organic premium on bulk ingredient vs conventional,20,%,Placeholder,Organic bulk typically prices above conventional; magnitude unverified,YES,High on ingredient line,PROPOSED
+AS-05,All,Supplier lead time,,days,EXPLICITLY UNKNOWN,Avoids inventing calendar dates,n/a - left blank,Critical path if long,UNKNOWN
+AS-06,All,"Freight, duty, AD/CVD, broker cost",,USD,EXPLICITLY UNKNOWN,No confirmed HTS or AD/CVD position,n/a - left blank,Very high on landed cost,UNKNOWN
+AS-07,All,Amazon fees and demand,,USD/units,EXPLICITLY UNKNOWN,No authorised Amazon data collected,n/a - left blank,Determines channel viability,UNKNOWN
+AS-08,All,Mogra's own certification obligation,,USD/yr,Likely required; amount unknown,An organic input does not make a Mogra pack seal-eligible,n/a,Material fixed cost if applicable,UNKNOWN

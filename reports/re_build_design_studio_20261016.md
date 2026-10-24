@@ -135,5 +135,16 @@ All endpoints resolve the strict org-scoped session (`studio_account`) — call 
 
 **Also fixed this pass:** pytest sessions now default `NORTHSTAR_DISABLE_RATE_LIMIT=1` in `conftest.py` (matching `scripts/run_all_tests.ps1`) — the anonymous 30 req/min token bucket made larger ad-hoc suites order-dependent.
 
+## Dieline-art lane — true-scale print sheets without any model text
+
+**Why (operator: "its still generating like shit" on the dieline sheet):** diffusion renders of "print-ready sheets" carry ghost blurs where text was and rotated micro-text OCR cannot read — a render can never be the print deliverable. The deterministic lane that CAN be it now exists:
+
+- `dieline_art.py`: panel-art ops in **millimetre space** rendered two ways — **300-dpi PNG** preview and a **true PDF** (reportlab, embedded Playfair/Inter, real logo image) — drawn on top of the `doypack` dieline geometry (front/back/gusset grounds in the SKU colourway, 3 mm bleed, weld/fold/zip marks). Front: cream logo roundel with the operator's real lockup + gold ring, Playfair product name, tracked subtitle, **four drawn certification icons**, weight footer with rules. Back: title, description, **reserved Supplement-Facts block (65×110 mm, white with black rules)**, **reserved QR + UPC boxes**, storage/origin/distributed-by lines. Gusset carries the wordmark line.
+- Layout regression-tested: panel grounds painted first (front pixel = kraft), title ink present, **facts block never overlaps the QR/UPC row** (that overlap was caught in the first draft), PDF magic + size.
+- `build_doypack` now exposes `meta.panels` (front/gusset/back rects + zip line) for downstream composition.
+- Sheets registered as studio assets (`dieline-art`): Lion's Mane `55a47062…` (PNG) / `3ace8166…` (PDF); Shiitake `f973f54f…` (PNG) / `8f14d6d1…` (PDF).
+
+**Honest remainders:** no mushroom motif on the front yet (the model's engraved mushroom crops in as the art layer next); PDF type is embedded, not outlined; presentation sheet pending. Suite: 14/14 lane tests (63+ total).
+
 ## Status vs the RE plan
 All four items closed: (1) public API + webhooks ✅, (2) scene/product gallery ✅, (3) frontend dieline section ✅, (4) credit admin endpoints ✅. Remaining optional follow-ups: fabric.js-style freeform canvas editing on top of the layered SVG (the current editor is param-driven by design), and wiring the enforced-credit mode to a real PSP (pricing rails stay test-mode per repo posture).

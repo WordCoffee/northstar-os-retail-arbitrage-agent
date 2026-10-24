@@ -1,0 +1,18 @@
+check_id,inspection_item,what_to_verify,why_it_matters,method,evidence_required,responsible,status,blocks_which_gate,owner_input_required
+IA-01,Actual bag count,Physical count of bags on hand,500 is owner-reported; sellable count is unknown until reconciled,"Physical count, photographed",Count sheet + photos,owner,NOT STARTED,G1,YES
+IA-02,Count by lot,Bags grouped by lot code / date marking,Amazon may require separate handling of different lots/date codes,Sort by printed lot code,Lot register,owner,NOT STARTED,G1,YES
+IA-03,Net quantity per bag,Bag weight in grams/oz,"Defines serving size, net qty on label, shipping weight",Weigh a sample of bags,Weighing record,owner,NOT STARTED,"G1, G6",YES
+IA-04,Bag material,"Film type, barrier, resealable or not",Barrier affects shelf life and whether resealing is needed,Physical inspection + supplier spec,Supplier specification,owner,NOT STARTED,"G6, G7",YES
+IA-05,Ingredient identity and composition,Single ingredient (mushroom powder) or carriers/other ingredients present,Determines label ingredient declaration and classification,Supplier spec + label review,Supplier specification / invoice,owner,OWNER_INPUT_REQUIRED,"G1, G2, G6",YES
+IA-06,Plain powder vs extract,Whether concentrate/extract ratio applies,Extract ratios must never be inferred; affects claims,Supplier spec,Supplier specification,owner,OWNER_INPUT_REQUIRED,G6,YES
+IA-07,Fruiting body vs mycelium,Documented source part where available,Affects ingredient naming and consumer expectations,Supplier spec,Supplier specification,owner,OWNER_INPUT_REQUIRED,G6,YES
+IA-08,Supplier and manufacturing/packing entity,Who manufactured and who packed,Needed for Amazon facility documentation and traceability,Invoice / supplier docs,Supplier invoice + certificate,owner,OWNER_INPUT_REQUIRED,"G1, G2, G6",YES
+IA-09,Production date,Date manufactured,Product age cannot be reset to the testing date,Invoice / date code,Invoice + lot marking,owner,OWNER_INPUT_REQUIRED,G5,YES
+IA-10,Packing date,Date packed,Affects date marking,Lot marking,Lot marking,owner,OWNER_INPUT_REQUIRED,G5,YES
+IA-11,Existing lot and date markings,What is printed on the bags today,Existing markings may be usable or may need remediation,Photograph every lot,Photo record,owner,NOT STARTED,"G5, G7",YES
+IA-12,Seal integrity,Factory seal intact,Broken seals raise contamination/tamper questions,Visual + physical check,Inspection note,owner,NOT STARTED,G7,NO
+IA-13,Package damage,"Crushed, punctured, moisture-exposed bags",Damaged units are not sellable,Visual inspection,Inspection note + photos,owner,NOT STARTED,G7,NO
+IA-14,Moisture exposure / deterioration,"Clumping, discoloration, odor",Conditions current condition of stock,Visual + smell,Inspection note,owner,NOT STARTED,"G4, G7",NO
+IA-15,Home storage conditions and duration,"Temperature, humidity, light, duration",Storage history informs current-condition assessment and shelf-life argument,Owner statement,Storage log / statement,owner,NOT STARTED,G5,YES
+IA-16,Traceability to invoices,Link each lot to a purchase invoice,Traceability must exist without the bags,Invoice reconciliation,Invoices,owner,NOT STARTED,G1,YES
+IA-17,Reconciliation math,"Units available before sampling, consumed by testing, retained samples, quarantined/damaged, potentially sellable",500 bags must NOT be called sellable inventory before reconciliation,Calculation from IA-01..IA-14,Inventory register,partner,NOT STARTED,G1,YES

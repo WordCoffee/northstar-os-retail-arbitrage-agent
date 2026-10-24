@@ -1,0 +1,24 @@
+seq,workstream,milestone,est_completion_date,responsible_role,dependencies,evidence_required,status,consequence_of_delay,backup_action
+1,Owner/scope,Confirm legal entity spelling (T2Holdings LLC),2026-10-06,owner,-,Business record showing exact registered name,planning allowance,All outreach blocked,Use a documented placeholder only; do not sign
+2,Supplier/samples,"Final SKU decision (2-4, contingent on MOQ/economics)",2026-10-07,owner,1,Signed-off SKU list,planning allowance,Cannot scope quotes or packaging,Launch 2 SKUs only
+3,Supplier/samples,Send partner RFQs (6 prepared),2026-10-07,partner,"1,2",Sent RFQ records,planning allowance,No supplier responses; timeline slips,"Send fewer, higher-priority RFQs"
+4,Compliance/label,Commission customs-broker review,2026-10-08,partner,2,Written broker position on HTS + AD/CVD,planning allowance,Landed cost invalid,Domestic-only routes
+5,Packaging/label,Provider-applied vs own-label decision (artwork supplied by us),2026-10-09,owner,"2,3",Decision record + label spec,planning allowance,Packer quotes not comparable,Default to provider-applied for speed
+6,Supplier/samples,Supplier lead-time + MOQ responses received,2026-10-13,supplier,3,Written quotes with lead times,planning allowance,Target becomes unsupportable,Reduce assortment / switch provider
+7,Supplier/samples,Sample requests issued,2026-10-13,partner,"3,6",Sample order confirmations,planning allowance,Sample approval slips,Expedite a single priority sample
+8,Packaging/label,Packer selection (same-company vs bulk+separate packer),2026-10-14,partner,"5,6",Signed packer quote (packing-only or turnkey),planning allowance,No production slot,Route A via Pearl only
+9,Compliance/label,Confirm packer NOP handler certification (not SQF/GMP),2026-10-15,packer,8,Certificate number + scope covering repacking,planning allowance,Organic claim unsafe,Drop organic claim; re-scope
+10,Supplier/samples,Sample evaluation + acceptance,2026-10-20,owner/partner,7,Sample evaluation record + lot COA (heavy metals for cinnamon),planning allowance,Cannot commit to production,Re-sample or switch supplier
+11,Packaging/label,Label artwork finalised to packer spec,2026-10-21,owner,"5,8",Final artwork files + packer confirmation of format,planning allowance,Printing delayed,Use plain/unbranded pilot units
+12,Packaging/label,Organic/label review (owner-reported approval; scope NOT audited),2026-10-22,owner,11,Owner confirmation of label approval,planning allowance,Claim risk on listing,Remove organic claim from label
+13,Compliance/label,Amazon category/grocery eligibility + FBA prep requirements confirmed,2026-10-22,partner,2,Amazon guidance screenshots/notes,planning allowance,Listing blocked,Merchant-fulfilled fallback
+14,Supplier/samples,Production slot booked with packer/supplier,2026-10-23,packer,"8,9,12",Booking confirmation,planning allowance,Miss production window,Reduce volume / smaller run
+15,Supplier/samples,PRODUCTION COMPLETE (units built),2026-10-31,packer,14,Production completion report + lot records,planning allowance,Slips all downstream dates,Partial shipment of finished units
+16,Amazon/launch,"Listing build (title, bullets, images, keywords)",2026-11-02,owner,"11,13",Listing content + image assets,planning allowance,Cannot go live at receipt,Draft listing ready in advance
+17,Amazon/launch,SHIPMENT DISPATCHED (leaves origin/packer),2026-11-04,supplier/packer,15,Bill of lading / carrier tracking,planning allowance,Arrival risk,Expedited freight
+18,Amazon/launch,DELIVERED TO AMAZON (arrives at fulfilment centre),2026-11-12,Amazon/carrier,17,Carrier delivery confirmation,planning allowance,Late receiving,Ship remainder later
+19,Amazon/launch,RECEIVED / AVAILABLE INVENTORY (check-in complete),2026-11-22,Amazon,18,FBA receiving/check-in confirmation,planning allowance,Not buyable by target,Merchant-fulfilled availability
+20,Amazon/launch,BUYABLE LISTING LIVE,2026-11-25,Amazon,"19,16",Live ASIN with active offer,planning allowance,Miss target; use latest 2026-12-01,Plan B merchant fulfilment
+21,Amazon/launch,Advertising activation (separate budget),2026-11-25,owner,20,Campaign structure + budget line,planning allowance,No traffic,Organic-only start
+22,Amazon/launch,Week-1 review: conversion + unit economics,2026-12-02,owner,21,Metric snapshot,planning allowance,Blind scaling,Hold spend flat
+23,Amazon/launch,December decision: scale / adjust / reorder,2026-12-05,owner,22,Decision record + actual costs,planning allowance,Stockout or waste,Conservative reorder

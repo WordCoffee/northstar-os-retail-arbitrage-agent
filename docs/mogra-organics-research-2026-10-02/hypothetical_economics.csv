@@ -1,0 +1,27 @@
+sku,line,formula,value,unit,value_type,assumption_note,source_or_limitation
+Ceylon cinnamon ground 2 oz,Proposed selling price - scenario LOW,owner input,9.99,per unit,PROPOSED,Illustrative price point only,Not an owner-approved price
+Ceylon cinnamon ground 2 oz,Proposed selling price - scenario MID,owner input,12.99,per unit,PROPOSED,Illustrative price point only,Not an owner-approved price
+Ceylon cinnamon ground 2 oz,Proposed selling price - scenario HIGH,owner input,15.99,per unit,PROPOSED,Illustrative price point only,Not an owner-approved price
+Ceylon cinnamon ground 2 oz,Amazon referral fee,price x 0.15,,per unit,ASSUMED_STANDARD,Grocery referral commonly 15%,MUST confirm category rate
+Ceylon cinnamon ground 2 oz,Amazon FBA fulfilment fee,UNKNOWN - requires unit weight/dims,,per unit,UNKNOWN,Cannot compute without packaging spec,No FBA fee table used
+Ceylon cinnamon ground 2 oz,Ingredient (organic Ceylon cinnamon),UNKNOWN - quote required,,per unit,UNKNOWN,No supplier quote exists,Retail references are NOT wholesale
+Ceylon cinnamon ground 2 oz,Packaging (pouch/jar + label),UNKNOWN - quote required,,per unit,UNKNOWN,No co-packer quote exists,
+Ceylon cinnamon ground 2 oz,Packing labour + setup,UNKNOWN - quote required,,per unit + one-time,UNKNOWN,No co-packer quote exists,
+Ceylon cinnamon ground 2 oz,"Lot testing (heavy metals, micro)",UNKNOWN - lab quote required,,per lot,UNKNOWN,Required for the differentiation claim,
+Ceylon cinnamon ground 2 oz,Maximum acceptable finished-unit cost,price - referral - FBA - target_contribution,,per unit,FORMULA_ONLY,Cannot evaluate without FBA + target,Formula shown; no validated number
+Ceylon cinnamon ground 2 oz,Contribution before advertising,price - referral - FBA_fee - landed_unit_cost,,per unit,FORMULA_ONLY,Cannot evaluate without FBA + landed cost,Formula shown; no validated number
+Ceylon cinnamon ground 2 oz,Break-even ACOS,contribution_before_ads / price,,percent,FORMULA_ONLY,Depends entirely on contribution,Formula shown; no validated number
+Ceylon cinnamon ground 2 oz,HYPOTHETICAL illustration,12.99 - (12.99x0.15) - 3.50 - 4.00 = 3.54,3.54,per unit,HYPOTHETICAL,ALL inputs assumed: price $12.99; referral 15%; FBA $3.50 assumed; landed cost $4.00 assumed,Illustration only - NOT a forecast and NOT validated
+Ceylon cinnamon ground 2 oz,HYPOTHETICAL break-even ACOS,3.54 / 12.99,27.3,percent,HYPOTHETICAL,Derived from the illustration above,Illustration only - NOT a benchmark
+Ceylon cinnamon ground 2 oz,Initial inventory (illustrative),500 units,500,units,PROPOSED,Illustrative pilot size only,NOT an owner-approved quantity
+Ceylon cinnamon ground 2 oz,Cash exposure (illustrative),500 x landed_unit_cost,,USD,FORMULA_ONLY,Cannot compute without landed cost,Null preserved
+Whole black pepper 3 oz,Proposed selling price - scenario MID,owner input,11.99,per unit,PROPOSED,Illustrative price point only,Not an owner-approved price
+Whole black pepper 3 oz,Contribution before advertising,price - referral - FBA_fee - landed_unit_cost,,per unit,FORMULA_ONLY,"Ingredient cost UNKNOWN (Pearl verified organic, no price)",Formula shown; no validated number
+Whole black pepper 3 oz,Maximum acceptable finished-unit cost,price - referral - FBA - target_contribution,,per unit,FORMULA_ONLY,Cannot evaluate without FBA + target,Formula shown; no validated number
+Whole black pepper 3 oz,HYPOTHETICAL illustration,11.99 - 1.80 - 3.50 - 3.50 = 3.19,3.19,per unit,HYPOTHETICAL,ALL inputs assumed; referral treated as ~15%,Illustration only - NOT a forecast
+Whole black pepper 3 oz,Break-even ACOS,3.19 / 11.99,26.6,percent,HYPOTHETICAL,Derived from illustration,Illustration only - NOT a benchmark
+Cross-SKU,Holiday peak FBA surcharge window,Oct 15 2026 - Jan 14 2027,,,VERIFIED,Amazon policy summary,Applies during the launch window
+Cross-SKU,Customs duty + AD/CVD,UNKNOWN - broker review required,,per shipment,UNKNOWN,No HTS-confirmed rate,Never inferred as zero
+Cross-SKU,Mogra organic certification (if applicable),UNKNOWN - certifier opinion required,,per year,UNKNOWN,Depends on chosen role,
+Cross-SKU,PPC / CPC assumptions,NOT COLLECTED,,,UNKNOWN,No CPC data authorised,No CPC invented
+Cross-SKU,Sales forecast,NOT PROVIDED,,,UNKNOWN,No operating history exists,No forecast invented

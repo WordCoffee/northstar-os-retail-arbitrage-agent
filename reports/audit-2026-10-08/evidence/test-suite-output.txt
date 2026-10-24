@@ -1,0 +1,69 @@
+﻿# Evidence: consolidated test-suite counts and baselines
+# AUDIT-ONLY, safe local execution. No provider contacted; 0 network-guard violations.
+# Reproduce: see TEST_RESULTS.md for exact commands.
+
+## Suites executed (2026-10-08)
+
+| Suite | Command | passed | failed | skipped | notes |
+|---|---|---|---|---|---|
+| Backend full | pytest -q --no-header -p no:cacheprovider --tb=no -rf | 3512 | 9 | 65 | 3586 collected, 64 subtests, 512.37 s |
+| Golden Goose | pytest agents/golden_goose_finder | 513 | 0 | 0 | baseline 511 -> +2 tests |
+| Noncreative reads | pytest test_noncreative_reads.py | 4 | 0 | 0 | +16 subtests |
+| Foundation tree | pytest foundation/tests | 756 | 1 | 59 | sole failure = test_v3_shell_invariants |
+| AutothinK | pytest tests (in autothink/) | 25 | 0 | 0 | no recorded baseline |
+| verify-smoke.cjs | node | 40 | 1 | - | /commerce-ops/CO-01 marker 'Sourcing Validation' not found |
+| verify-acceptance.cjs | node | 32 | 0 | - | MATCHES baseline 32/0 |
+| verify-guards.cjs | node | 11 | 0 | - | MATCHES baseline 11/0 |
+| verify-admin.cjs | node | 33 | 0 | - | baseline 34 -> 1 assertion fewer |
+| verify-golden-goose.cjs | node | 16 | 0 | - | MATCHES baseline 16/0 |
+| verify-invite-flow.cjs | node | 11 | 0 | - | MATCHES baseline 11/0 (writes 3 screenshots) |
+| verify-live-signin.cjs | node | - | - | - | BLOCKED: needs NS_TEST_EMAIL / NS_TEST_PASSWORD |
+| npm run build | npm | 92 modules, 0 errors | 0 | - | baseline 88 modules |
+| npm run lint | npm | 0 rules run | 0 | - | STUB - not a check |
+
+## Aggregate
+4,935 tests passed | 12 failed | 65 skipped | 64 subtests passed
+1 suite BLOCKED | 1 check is a no-op
+
+## Recorded baseline from 00_STATE.json (updated_at 2026-09-22 - 16 days stale)
+  python: "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests"
+          "Full Northstar_backend tree re-run 3410 passed / 62 skipped / 23 failed"
+  golden_goose: "511 passed, 0 failures"
+  ui_shell_functions: "UI 1122 / Shell 293 / Functions 31 passed"
+  phase: "GO-LIVE READY (2026-09-23) ... harness FULLY GREEN - 2420 backend passed, 0 known, 0 unexpected"
+
+## Divergence from the recorded baseline
+  passed 3410 -> 3512   (better)
+  failed 23     -> 9     (better)
+  The 23 recorded failures were all test_proof_batch*.py FileNotFoundError on
+  data/scanner-search-cache.json; today only 3 remain in those files, and they are
+  sha256 mismatches, not missing files. The other 6 failures are in files the
+  recorded baseline never mentioned (test_frontend_gate, test_jobs_durable_lifecycle,
+  test_owner_test_mode_non_bypass, test_env_hygiene, tests/test_reasoning_routes).
+  Conclusion: the "GO-LIVE READY / FULLY GREEN" claim in 00_STATE.json is not
+  reproducible today.
+
+## Protected-artifact drift (three mutually inconsistent states)
+  data/scanner-search-cache.json
+    on disk : 194 bytes      sha256 95cfb9ee...
+    at HEAD : 76668 bytes    sha256 7d646324...
+    fixture : 38331 bytes    sha256 faf3575d...
+  The 194-byte file was created at 22:17 during this suite run:
+  conftest._restore_generated_artifacts only snapshots what exists at session start,
+  so it cannot restore committed bytes once a prior run has already shrunk the file.
+  All other fixture-protected artifacts still match their fixture hashes.
+
+## Reproducible test-isolation defect (bisected)
+  python -m pytest "test_provider_seller_probe.py" "tests/test_reasoning_routes.py" -k reasoning_models
+    -> 2 failed, 14 deselected
+  Root cause: test_provider_seller_probe.py:50 calls load_dotenv(<root>/.env) at
+  module import, putting the real OPENCODE_GO_API_KEY into os.environ;
+  tests/test_reasoning_routes.py:21 uses os.environ.setdefault(...) which becomes a
+  no-op. Standalone, the reasoning-route file passes 7/7. NO network test.
+
+## Safety confirmation
+The repo's own sitecustomize.py / network_guard.py blocks equests during pytest
+runs. 0 guard violations were observed across all Python suites. No test made an
+outbound call. No source, fixture, benchmark or protected file was edited by the
+test runs (only test-run byproducts such as regenerated caches, golden-goose reports
+and SQLite WAL files appeared).

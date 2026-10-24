@@ -1,0 +1,10 @@
+gate_id,gate,pass_condition,evidence_required,status,if_failed
+G1,"Inventory identity, lots, condition, traceability established","Count by lot, weight, condition, invoice traceability, no unresolved damage",Inventory register (IA-01..IA-17),NOT MET,Hold stock; reconcile before sampling or sale
+G2,Product classification and applicable Amazon path understood,"Written determination: conventional food vs dietary supplement vs unresolved, and the Amazon compliance path that follows",Classification rationale + Amazon policy determination,NOT MET,Use most restrictive path; do not choose a category to avoid requirements
+G3,Selected testing and sampling approach confirmed,"Lab identity, panel, methods, sample plan, multi-lot handling and turnaround definition confirmed",Lab confirmation response,NOT MET,Do not ship samples until confirmed; clock cannot start
+G4,Results reviewed against appropriate specifications,Report reviewed by a qualified reviewer against applicable requirements; gaps identified,Signed review note,NOT MET,Hold affected inventory; define investigation/retest path
+G5,Shelf-life / date-marking basis accepted,Defensible basis for remaining shelf life and the date marking to be printed,Supplier stability evidence + lab basis + manufacture date,NOT MET,Launch blocker; do not invent or reset an expiry date
+G6,"Labeling, organic claims and applicable verification complete",Label-gap review closed; organic claim supported by certificate; Amazon-required verification completed where applicable,Approved label + certificate scope + verification records,NOT MET,Remove unsupported claims; do not dispatch
+G7,Pilot unit and carton inspection passed,"Sample unit meets spec, seal and label correct, cartons correct",Inspection pass record,NOT MET,Quarantine; re-pack only under qualified supervision
+G8,Shipment released,All prior gates met; quarantine respected; not all units necessarily shipped,Release sign-off + shipment record,NOT MET,Do not dispatch
+G9,Buyable listing confirmed,ASIN live with active offer and in-stock inventory,Live listing screenshot,NOT MET,Correct listing or inventory issue

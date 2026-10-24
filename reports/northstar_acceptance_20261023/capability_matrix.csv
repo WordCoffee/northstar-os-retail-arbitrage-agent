@@ -1,0 +1,97 @@
+id,kind,name,route,surface,expected,risk,status
+UI-001,ui_route,CommandCenter,/home,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-002,ui_route,ProductFinder,/product-finder,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-003,ui_route,ProductFinder,/product-finder/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-004,ui_route,DesignStudio,/design-studio/*,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-005,ui_route,"LegacyStudioRedirect section=""3d-scene""",/product-designer,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-006,ui_route,"LegacyStudioRedirect section=""projects""",/creative-studio,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-007,ui_route,GoldenGooseDesk,/golden-goose,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-008,ui_route,GoldenGooseDesk,/golden-goose/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-009,ui_route,ListingGuardian,/listings,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-010,ui_route,KeywordTracker,/keyword-tracker,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-011,ui_route,CompetitorMonitor,/competitor-monitor,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-012,ui_route,ListingForge,/listingforge,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-013,ui_route,AdPilot,/adpilot,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-014,ui_route,SocialPulse,/socialpulse,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-015,ui_route,ProfitabilityDashboard,/profitability,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-016,ui_route,SpreadsheetLab,/spreadsheet-lab,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-017,ui_route,CommerceOps,/commerce-ops,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-018,ui_route,CommerceOps,/commerce-ops/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-019,ui_route,Monitoring,/monitoring,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-020,ui_route,AutothinK,/autothink,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-021,ui_route,MemoryBank,/memory-bank,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-022,ui_route,SharedDataLayer,/shared-data,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-023,ui_route,ProviderAdapters,/provider-adapters,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-024,ui_route,MasterBrain,/master-brain,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-025,ui_route,Improvement,/improvement,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-026,ui_route,CustomerWorkspace,/customer-workspace,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-027,ui_route,BetaOpsOverview,/beta-ops,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-028,ui_route,OrgsList,/beta-ops/orgs,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-029,ui_route,OrgDetail,/beta-ops/orgs/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-030,ui_route,InviteCreate,/beta-ops/invites,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-031,ui_route,InviteDetail,/beta-ops/invites/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-032,ui_route,Cohorts,/beta-ops/cohorts,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-033,ui_route,SupportOps,/beta-ops/support,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-034,ui_route,ReportsExports,/beta-ops/reports,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-035,ui_route,AuditNotes,/beta-ops/audit,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-036,ui_route,LifecycleModal,/beta-ops/lifecycle,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-037,ui_route,EligibilityChecklist,/beta-ops/eligibility,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-038,ui_route,InternalAdmin,/admin,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-039,ui_route,CustomerSetup,/setup,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-040,ui_route,CustomerDocuments,/documents,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-041,ui_route,CustomerPlan,/plan,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-042,ui_route,CustomerSupport,/support,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-043,ui_route,CustomerTicketDetail,/support/:id,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-044,ui_route,CustomerAccount,/account,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-045,ui_route,SignIn,/sign-in,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-046,ui_route,Recovery,/recovery,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-047,ui_route,BetaLanding,/beta,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-048,ui_route,BetaInviteAccept,/beta/accept,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-049,ui_route,CustomerLegal,/legal,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-050,ui_route,AccountSuspended,/suspended,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-051,ui_route,AccountDowngraded,/downgraded,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-052,ui_route,CustomerReaccept,/reaccept,spa,renders for an authorized operator; primary controls respond,,not_run
+UI-053,ui_route,NotFound,*,spa,renders for an authorized operator; primary controls respond,,not_run
+TOOL-001,chat_tool,system_status,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-002,chat_tool,list_templates,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-003,chat_tool,design_brief,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-004,chat_tool,create_dieline,chat,master_brain,callable from chat; returns a truthful result,writes,not_run
+TOOL-005,chat_tool,generate_image,chat,master_brain,callable from chat; returns a truthful result,writes,not_run
+TOOL-006,chat_tool,apply_label,chat,master_brain,callable from chat; returns a truthful result,writes,not_run
+TOOL-007,chat_tool,seo_check,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-008,chat_tool,seo_propose,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-009,chat_tool,seo_profile,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-010,chat_tool,seo_negatives,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-011,chat_tool,seo_retitle,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-012,chat_tool,corpus_search,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-013,chat_tool,corpus_vector_search,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-014,chat_tool,corpus_drift,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-015,chat_tool,voice_list,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-016,chat_tool,voice_tts,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-017,chat_tool,voice_dub,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-018,chat_tool,purpose_command,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-019,chat_tool,build_preset,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-020,chat_tool,creative_plan,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-021,chat_tool,knowledge_lookup,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-022,chat_tool,listing_audit,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-023,chat_tool,ads_math,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-024,chat_tool,improvement_status,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+TOOL-025,chat_tool,service_catalog,chat,master_brain,callable from chat; returns a truthful result,read_only,not_run
+API-001,service_api,chat_router,/api/* (chat_router),backend,router mounted; endpoints answered under auth,,not_run
+API-002,service_api,chat_voice,/api/* (chat_voice),backend,router mounted; endpoints answered under auth,,not_run
+API-003,service_api,cie_router,/api/* (cie_router),backend,router mounted; endpoints answered under auth,,not_run
+API-004,service_api,corpus_router,/api/* (corpus_router),backend,router mounted; endpoints answered under auth,,not_run
+API-005,service_api,design_studio_agent,/api/* (design_studio_agent),backend,router mounted; endpoints answered under auth,,not_run
+API-006,service_api,design_studio_api,/api/* (design_studio_api),backend,router mounted; endpoints answered under auth,,not_run
+API-007,service_api,design_studio_async,/api/* (design_studio_async),backend,router mounted; endpoints answered under auth,,not_run
+API-008,service_api,design_studio_compose,/api/* (design_studio_compose),backend,router mounted; endpoints answered under auth,,not_run
+API-009,service_api,design_studio_lanes,/api/* (design_studio_lanes),backend,router mounted; endpoints answered under auth,,not_run
+API-010,service_api,design_studio_openapi,/api/* (design_studio_openapi),backend,router mounted; endpoints answered under auth,,not_run
+API-011,service_api,design_studio_print,/api/* (design_studio_print),backend,router mounted; endpoints answered under auth,,not_run
+API-012,service_api,design_studio_scenes,/api/* (design_studio_scenes),backend,router mounted; endpoints answered under auth,,not_run
+API-013,service_api,noncreative_reads,/api/* (noncreative_reads),backend,router mounted; endpoints answered under auth,,not_run
+API-014,service_api,ops_router,/api/* (ops_router),backend,router mounted; endpoints answered under auth,,not_run
+API-015,service_api,seo_router,/api/* (seo_router),backend,router mounted; endpoints answered under auth,,not_run
+API-016,service_api,shell_router,/api/* (shell_router),backend,router mounted; endpoints answered under auth,,not_run
+API-017,service_api,studio_upload_router,/api/* (studio_upload_router),backend,router mounted; endpoints answered under auth,,not_run
+API-018,service_api,text_fidelity,/api/* (text_fidelity),backend,router mounted; endpoints answered under auth,,not_run

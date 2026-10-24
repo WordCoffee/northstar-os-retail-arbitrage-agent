@@ -1,0 +1,21 @@
+item_id,category,item,status,what_is_known,what_is_missing,why_it_matters,closure_action,blocks_which_gate
+TD-01,Testing,Selected laboratory,OWNER_INPUT_REQUIRED,A laboratory is selected (owner-reported),"Laboratory name, accreditation status, address",Determines report credibility and whether Amazon accepts it,Owner to supply lab identity and accreditation,"G3, G4"
+TD-02,Testing,Quote / reference number,OWNER_INPUT_REQUIRED,~$800 quoted (owner-reported),"Quote document, scope, reference",Confirms what $800 actually buys,Owner to supply quote,G3
+TD-03,Testing,Selected test panel,OWNER_INPUT_REQUIRED,A panel is selected (owner-reported),"Exact tests, methods, units, limits",A generic panel may not answer identity/contaminant questions,Lab-confirmation message (drafted),"G3, G4"
+TD-04,Testing,Sample quantity required,OWNER_INPUT_REQUIRED,Unknown,Grams per test / per lot,Determines units consumed from inventory,Lab-confirmation message,"G1, G3"
+TD-05,Testing,Sampling from unopened bags,UNKNOWN,Unknown,Whether samples must come from unopened original bags,Preserves representativeness of the lot,Lab-confirmation message,G3
+TD-06,Testing,Multi-lot representation,UNKNOWN,Unknown,How lots must be sampled if more than one lot exists,Each lot may need separate representation,Lab-confirmation message,G3
+TD-07,Testing,Turnaround start point,OWNER_INPUT_REQUIRED,~2 weeks reported,Calendar vs business days; starts at receipt or order,Drives the entire dated schedule,Lab-confirmation message,G3
+TD-08,Testing,Report recipient and interpreter,UNKNOWN,Unknown,Who receives and who qualifies results,A passed report is not self-interpreting,Owner to assign a qualified reviewer,G4
+TD-09,Documentation,Supplier invoice,OWNER_INPUT_REQUIRED,None found in project files,Invoice(s) linking lots to purchase,Traceability; manufacturing entity,Owner to supply,G1
+TD-10,Documentation,Product specification,OWNER_INPUT_REQUIRED,None found,"Ingredient, part, carriers, specs",Label accuracy,Owner to supply,G6
+TD-11,Documentation,Organic certificate,OWNER_INPUT_REQUIRED,Organic is owner-reported,"Certificate, certifier, number, scope, product coverage, expiry",Organic claim and seal eligibility,Owner to supply,G6
+TD-12,Documentation,Existing supplier COA,UNKNOWN,Unknown,Availability and scope,May support results; may not cover this lot,Owner to supply,G4
+TD-13,Documentation,Stability / shelf-life documentation,OWNER_INPUT_REQUIRED,None found,"Supplier stability data, retest data",Only basis for a multi-year shelf-life claim,Owner to supply,G5
+TD-14,Documentation,Existing label artwork,UNKNOWN,Unknown,Whether any artwork exists for this SKU,Label-gap review cannot be completed without it,Owner to supply,G6
+TD-15,Documentation,Inventory photos / storage records,UNKNOWN,Unknown,"Photos of each lot, storage conditions",Supports condition assessment,Owner to supply,"G1, G5"
+TD-16,Documentation,Amazon account / brand documents,UNKNOWN,No listing exists,"Seller account status, Brand Registry status",Gates listing creation,Owner to confirm,G9
+TD-17,Documentation,Business legal entity records,OWNER_INPUT_REQUIRED,T2 Holdings LLC (owner-reported spelling),Exact registered name from records,Required on external submissions,Owner to verify,G9
+TD-18,Classification,Product classification decision,UNRESOLVED,Owner describes a mushroom powder,Food vs dietary supplement determination,"Drives label panel, claims, and Amazon path",Qualified review of label/intended use,G2
+TD-19,Amazon compliance,Amazon-approved TIC provider verification,UNRESOLVED,Not checked,Whether the selected lab is an Amazon-approved TIC,A standalone COA does not equal Amazon approval,Verify against Amazon approved-provider list,"G2, G6"
+TD-20,Amazon compliance,cGMP facility documentation,UNRESOLVED,Not checked,Facility cGMP evidence for manufacturing/packing entity,Amazon 2026 supplement policy requires verified cGMP,Owner to obtain from supplier,"G2, G6"

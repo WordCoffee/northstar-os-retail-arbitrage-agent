@@ -1,0 +1,18 @@
+sku_scenario,cost_or_price_line,value_usd,unit,basis,value_type,source_or_basis,note
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Ingredient (organic Ceylon cinnamon),,per lb,bulk,UNKNOWN,quote required,No supplier quote exists
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Ingredient per finished unit,,per unit,2 oz,DERIVED,2 oz / yield,Cannot compute without ingredient price
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Pouch + label + packing,,per unit,per unit,UNKNOWN,co-packer quote required,
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Co-packer setup / artwork,,one-time,one-time,UNKNOWN,quote required,Amortised over pilot units
+Scenario A: Ceylon cinnamon ground 2 oz pouch,"Testing (heavy metals, microbiology)",,per lot,per lot,UNKNOWN,lab quote required,Differentiation depends on this
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Inbound freight (domestic or import),,per shipment,per shipment,UNKNOWN,broker/forwarder quote,Import duty/AD-CVD unresolved
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Amazon referral fee,15,% of price,percentage,ASSUMED_STANDARD,Amazon standard referral for grocery,Must confirm category rate
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Amazon fulfilment (FBA) fee,,per unit,per unit,UNKNOWN,requires weight/dims,Holiday peak surcharge Oct 15 2026-Jan 14 2027
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Retail price (target),,per unit,2 oz,PROPOSED,benchmark: premium Ceylon $0.93-1.25/oz observed,Positioning decision pending
+Scenario A: Ceylon cinnamon ground 2 oz pouch,Advertising (PPC),,per unit,ACOS assumption,UNKNOWN,no CPC data authorised,Break-even ACOS must be computed once costs known
+Scenario B: Black pepper whole 3 oz pouch,Ingredient (organic whole black pepper),,per lb,bulk,UNKNOWN,quote required,Pearl verified organic; no price
+Scenario B: Black pepper whole 3 oz pouch,Retail price (target),,per unit,3 oz,PROPOSED,benchmark: premium whole pepper listing at $9.60 observed,
+Scenario C: Ceylon cinnamon sticks 4 oz,Ingredient (organic Ceylon quills),,per lb,bulk,UNKNOWN,quote required,
+Cross-SKU,Mogra organic certification (if applicable),,per year,annual,UNKNOWN,certifier opinion required,May be avoidable on Route A/C
+Cross-SKU,Customs duty + AD/CVD (import routes),,per shipment,per shipment,UNKNOWN,broker review required,No duty figure asserted anywhere
+Cross-SKU,Pilot run quantity (illustrative),500,units,per SKU,PROPOSED,illustrative only,NOT owner-approved demand
+Cross-SKU,Holiday peak FBA fulfilment surcharge window,,,Oct 15 2026 - Jan 14 2027,VERIFIED,Amazon seller guidance 2026,Applies during the launch window

@@ -1,0 +1,19 @@
+{
+  "credits_used_this_request": 1,
+  "receipt": {
+    "dry_run": false,
+    "estimated_credits": 1.0,
+    "field_names": [
+      "brand_store",
+      "product",
+      "request_info",
+      "request_metadata",
+      "request_parameters"
+    ],
+    "notes": [],
+    "operation": "product_by_asin",
+    "provider": "rainforest",
+    "request_count": 1,
+    "status": "OK"
+  }
+}

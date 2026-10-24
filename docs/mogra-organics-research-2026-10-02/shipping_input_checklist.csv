@@ -1,0 +1,15 @@
+id,input_required,why_needed,owner,status,blocks_comparison
+SI-01,Exact origin pickup address,Determines origin charges and availability,owner,OWNER_INPUT_REQUIRED,All international quotes
+SI-02,Delivery ZIP / address (US packer),Determines destination charges and transit,owner,OWNER_INPUT_REQUIRED,All international + domestic quotes
+SI-03,Commodity and exact product form,Drives acceptance rules and HS classification,partner,OWNER_INPUT_REQUIRED,Carrier acceptance
+SI-04,Origin country,Drives customs entry and import rules,partner,PARTIALLY KNOWN (per provider),Customs quote
+SI-05,Carton count and dimensions,Air freight chargeable weight; parcel limits,partner,UNKNOWN,Freight quote
+SI-06,Gross weight,Chargeable weight (actual vs volumetric),partner,UNKNOWN,Freight quote
+SI-07,Pallet information where applicable,LTL / FBA pallet dimensions,partner,UNKNOWN,LTL quote
+SI-08,Declared value,Insurance and customs valuation,owner,UNKNOWN,Insurance + customs
+SI-09,Ready-for-pickup date,Anchors transit and buffer,partner,UNKNOWN,Delivery estimate
+SI-10,Import documents available,"Invoice, packing list, HS code, organic certificate, phytosanitary if required",partner,PARTIALLY KNOWN,Customs clearance
+SI-11,Incoterm and named place,Determines who pays which legs,owner,NOT AGREED,Cost split
+SI-12,Pickup/delivery ZIP for 'nearby' screening,Distance claims require our actual ZIP,owner,OWNER_INPUT_REQUIRED,Packager proximity
+SI-13,Amazon FBA destination,Final leg destination,owner,UNKNOWN,Amazon leg quote
+SI-14,Amazon inbound placement fee schedule,Separate charge from transport,partner,UNKNOWN,Landed cost

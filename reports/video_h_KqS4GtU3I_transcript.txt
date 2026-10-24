@@ -1,0 +1,228 @@
+Okay, so let me tell you about the most annoying afternoon I've had in a while,
+which started right after I'd watched probably the fifth video that week about Quen 3.827B.
+You know the ones where a guy puts a model card on screen, runs a couple of prompts,
+the tokens per second number looks great, and then he drops the line,
+this beats Claude Opus. And I'm sitting there with a 16GB card thinking,
+all right, I want in on this. So I set it up by following the most upvoted guide,
+I load the model, and yeah, it runs. And it's actually impressively fast,
+because I'm getting something like 45 tokens a second, and I'm thinking,
+this is the moment where I finally have a frontier model running locally.
+And then I started using it on real tasks, like coding and research questions,
+and anything else that actually needs a brain. And it's fine, I guess. It's a decent model,
+but it really doesn't feel like it's beating Claude Opus. And it doesn't feel like a 34 on any
+intelligence index either. Something was off. So how does a model that beats Claude Opus end up
+feeling this ordinary on my own card? So I go digging, and the problem was never in the model,
+it was in my setup. And there is one single line in the config that most guides quietly change,
+and changing it drops the model from frontier performance down to something that scores below
+every frontier model from February with the same weights and the same file. And once I understood
+that, everything made sense. Because the speed numbers were real, and the benchmark numbers were
+real, they just weren't measuring the same thing. So today, I want to give you the honest version of
+this, which covers what the frontier score actually means, where it came from, why your 16 gigabyte
+setup is probably running something weaker than it should be, and how we fix it without waiting all
+afternoon for a single answer. Now, before I tell you what is wrong with most setups, I want to tell you
+what is right about the model. And most of it is right. And I don't want to be that guy who dunks on
+everything just to seem smart. Quinn 3.827B is genuinely impressive, and the benchmarks are not made up.
+When we look at Quinn's own model card, it puts the model directly next to Claude Opus 4.6 Max,
+which was Anthropics' best model back in February. And on several tests, Quinn wins. On Live Code Bench, which is about
+real coding on real problems from competitions, Quinn scores 90.3 against 88.8 for Opus. And on SWE Bench Pro, which
+offers actual bug fixes in real GitHub repositories, Quinn is at 61.7 and Opus is at 53.4. So those are not small gaps. And the
+independent numbers line up too. Artificial Analysis runs their own 10 test suite of agent tasks, long documents and research
+level questions. And they gave Quinn a score of 34 at its top setting. And at that same point in time, Claude Opus 4.6 Max was sitting around 32,
+GPT 5.3 Codex was around 32.5, and Gemini 3.1 Pro Preview was at 30. So at its best setting, Quinn 3.827B was ahead of all three of those.
+And it fits on your card, since the quantized build we're going to use is 11.77 gigabytes, which is small enough for a
+16 gigabytes card with room to breathe. The speed is real too. I've seen people hitting 45, sometimes 46 tokens a second
+on an RTX 5060 TI 16 gigabytes with the right settings. And for context, the median speed from hosted API providers for this model is 41.3 tokens a second. So a 16 gigabytes card can keep up with, and sometimes beat a cloud endpoint. So the weights are strong, the speed is fine, and the benchmarks are not fabricated. What we're left with is the setting. And the setting really changes everything. Now, before we get into the fix, I want to briefly flag two numbers
+that have been spreading this week that are just wrong. And I keep seeing them in comments. And I don't want anyone building their whole setup on them.
+The first one is a video that claimed Quinn scores 86.6 on Terminal Bench 2.1 and beats Claude Opus 4.8. And neither thing is true. But Quinn's model card shows 73.0 on Terminal Bench. And on that test, Opus 4.6 Max actually wins at 78.2.
+So where did 86.6 come from? It's Opus score on a document reading benchmark two tables down from the one they were looking at. So it got copy pasted into the wrong place. And there is no Opus 4.8, because it doesn't exist.
+The second one is a score of 52 on Artificial Analysis that you might have seen quoted around August. That was from an older version of their index. And on the current version, the same model is at 34. Now, neither of these mistakes changes the conclusion that Quinn is a strong model.
+But what they do change is what frontier means. And today's actual top model on that same Artificial Analysis Index is Claude Opus 5.5, released in September and sitting at 58.
+So when we say Quinn is at February's frontier, that is still really impressive for something you can run at home. But 34 and 58 are not the same number, and you deserve to know the gap.
+Okay, so now we can talk about the actual setting, which starts with the fact that Quinn thinks before it answers. And that is the whole model. It uses what's called test time compute, where instead of just generating a reply, it first writes out a chain of thought, checks itself, considers alternatives, and then answers.
+It's a bit like having a student who doesn't just write the first thing that comes to mind, but actually works through the problem on paper before handing in the answer.
+How much it thinks is controlled by one setting called reasoning effort, which has three values, low, medium, and x high, and there is no high.
+And the way this setting actually works under the hood is pretty surprising. You think it is a cap, where you are setting a token budget and the model thinks up to that limit, but it isn't.
+When we open Quinn's chat template and look at what this setting does, it is just adding a line of text to your prompt.
+At x high, the model is told to think carefully, validate its key assumptions, and consider plausible alternatives.
+At low, it is told to keep thinking brief and get to the conclusion.
+But at medium, it gets no instruction at all. Nothing.
+And if you don't pass a reasoning effort setting at all, the template just picks x high by default.
+In practice, on something like a Pac-Man clone, one user's x high run spent 40,000 thinking tokens before writing a single line of code, while medium used a couple thousand on the same kind of task.
+So the model at x high is not just slightly more thorough, it is a completely different experience.
+And that test time compute is exactly what the benchmark scores were measuring, because the leaderboard number is the version that checks its work twice.
+And that is the part most guides are turning down.
+Now, artificial analysis didn't just run Quinn at x high.
+They ran all four settings.
+Low, medium, x high, and thinking off completely.
+And they measured both the score and how many tokens the model wrote to get there.
+So I want you to really sit with this breakdown for a second.
+At x high, it scored 34 points and wrote 200 million tokens across the suite.
+At medium, it scored 28 points with 110 million tokens.
+And at low, it scored 26 points with 82 million tokens.
+With thinking off, it scored 20 points.
+So x high writes almost twice as many tokens as medium.
+And in return, it buys six points.
+Six points sound small until we zoom out.
+At 34, Quinn is above Claude Opus 4.6 Max, above GPT 5.3 Codex, and above Gemini 3.1 Pro Preview.
+And at 28, it is below all three of them.
+That is the gap between beating February's frontier and losing to it.
+And it gets more interesting.
+Because the ArcPrize team, who work on AI research benchmarks, noticed something weird about medium specifically.
+Medium sometimes used more tokens than low and still scored lower.
+Their explanation comes back to that chat template.
+Where low gets written instructions and x high gets written instructions, but medium gets nothing.
+So the setting most guides recommend is actually the one nobody gave instructions to.
+And Yuki's AI ran their own tests on GPQA Diamond, which is graduate level science questions.
+And we see the same pattern.
+X high scored 88.28%.
+Medium scored 84.14%.
+And low scored 84.04%.
+So medium and low are basically tied.
+And both are well behind x high.
+So the model on the leaderboard is running at x high.
+And most home setups are running at medium.
+Which is the same weights with a six point gap between them.
+Okay.
+So now you're probably thinking, alright.
+Just use x high and the problem is solved.
+And honestly, I thought the same thing for about 20 minutes.
+Until I did the actual math.
+At x high, an average GPQA Diamond question, one of those graduate science multiple choice questions,
+costs Quen about 15,000 thinking tokens.
+If you're running at 45.6 tokens a second,
+that is roughly five and a half minutes of thinking for one multiple choice answer.
+And for a coding task, it is worse.
+On Terminal Bench 2.1, the average Quen run writes about 52,000 tokens.
+And once the context window starts filling up, the speed drops.
+Where one RTX 5060 Ti was measured at 31.3 tokens a second under those conditions.
+That means one task takes 28 minutes.
+While medium's couple thousand token responses come back in under a minute.
+So when I say most guides turn down reasoning effort.
+I don't mean they're being lazy or irresponsible.
+Because they are making a perfectly rational trade.
+Where medium is fast enough to be usable and x high on a home card.
+And a lot of guides is genuinely painful.
+But it gets specific when we look at the guides themselves.
+The most upvoted 50 tokens a second, 16GB setup sets reasoning effort to medium.
+And a popular RX-9070 build posted this month does the same.
+And then there is a frontier performance video showing a reasoning budget of 512 tokens.
+And in Lama CPP, that flag cuts the thinking block off after 512 tokens.
+Compared to the 15,000 the model averages per question.
+So the model got about 3% of the thinking it needed.
+And the setup still called it frontier.
+So these setups are fast precisely because they turned the frontier part off.
+I'm not saying they're wrong for their use case.
+Since medium is fine for a lot of things.
+But if you are specifically trying to replicate the benchmark scores, you need to know this.
+Now, there is a second thing the leaderboard runs had that your 16GB card probably doesn't.
+And it is almost never brought up in these guides.
+Quen's coding benchmarks were measured with a 250,000 token context window.
+And the model card itself recommends allowing roughly another 250,000 tokens just for the thinking.
+And UCSI's terminal bench runs used a half-million token window.
+So let's look at what 16GB actually holds.
+The GSQ-Quantast file at 3.5 bits, with the prediction head, is 12.12GB.
+After you account for the card's memory, keep Lama CPP's standard 1GB operating margin, and load the model,
+you've got roughly 110,000 tokens of cash left at 8-bit.
+And at 4-bit cash, one RX-9070 owner gets to 128,000 tokens at 15.2GB used.
+And that 128,000 against 500,000 is the real gap.
+And the Frontier video I mentioned ran a 50,000 token context window.
+That is less than the average terminal bench run writes just in the thinking layer, before it reads a single file.
+And in that same video's demo, the agent hit its context-sealing mid-task and stalled.
+Now, for most single tasks, like writing this code, answering this question, or reviewing this document,
+110,000 tokens is genuinely fine.
+And you'll get there most of the time.
+But where it breaks down is long agent sessions.
+The multi-step tasks where the model is calling tools, reading file output, and iterating on problems.
+And that is exactly where the benchmarks were measured.
+And it is also where your card runs out of room first, so the setup you're building isn't really benchmarked against the benchmarks.
+Okay, so this is the part that actually gets interesting.
+Because there are two ways we can make X-High practical on a 16GB card.
+Where we either make the card faster, or make the model more efficient.
+And the second one happened first.
+Yuki's AI, the same team behind the quantization we're using, released something called Swift 1.5.
+Which is Quen 3.827b, retrained to stop what they call overthinking.
+The problem they identified is that the base Quen model at X-High has patterns in its reasoning that are essentially loops.
+Like second guessing, rechecking, and going back over things it already resolved.
+It's a bit like that person who answers an exam question, erases it, and then writes the same answer again just to be sure.
+So the thinking tokens are being spent, but they aren't buying anything.
+Swift found those patterns, penalized them during training, and then trained the accuracy back.
+And on GPQA Diamond at X-High, average thinking dropped from 15,014 tokens down to 8,717.
+While the score went from 88.28% to 88.59%.
+Which makes it slightly more accurate with about 42% fewer tokens.
+At 45.6 tokens a second, that 5.5 minute question now takes roughly 3 minutes.
+Which is still not instant, but it is meaningfully different.
+Now, this part is important, so read the numbers carefully.
+The 58.5% reduction you'll see on the model car is their best single result, the GPQA median.
+While the average cut across the benchmark is closer to 42%.
+On terminal bench, the reduction is about a sixth.
+And two different tables on their card disagree on the speed improvement.
+Where one says 1.95 times faster, and the other says 9.18 times.
+Which turns out to be from a single game demo.
+One independent tester ran Swift's first version through a coding evaluation suite at X-High.
+Base Quinn completed 77.6% of tasks, and Swift completed 75.7%.
+So about two points lower, but at half the time.
+And that is the honest trade.
+A little accuracy for half the weight, which for most practical use is a good trade.
+Now, I want to give the strongest counterargument its full moment, because it's real and you should know it.
+One tester ran Quinn across nearly 5,000 tasks on four RTX 3090s with five different inference stacks in every effort level.
+And on that particular set of tasks, Low and X-High scored exactly the same at 89.3%.
+But the difference was 651,000 thinking tokens at X-High versus 86,000 at Low, which is 7.5 times the thinking for zero improvement.
+And a separate benchmark, VulcanBench, found Low and Medium tied, with X-High actually scoring slightly worse.
+So more thinking doesn't automatically win, and what decides it is the difficulty of the task.
+Benjamin Marie ran over 23,000 prompts per setting and found that X-High is most accurate, specifically on harder tasks.
+The artificial analysis suite is hard on purpose, with agent work, long documents, and research level questions.
+And that is the environment where the six points live.
+So for renaming files, low is fine.
+And for answering quick factual questions, medium is probably fine.
+But for tasks that are genuinely difficult enough to fail, like coding something non-trivial, working through a hard research question, or running an agent through a multi-step task, that is where X-High earns it.
+So I'd use it as a dial and not as a fixed setting.
+Okay, so this is exactly what I'd run, starting with the file, which is Swift 1.5 Quen 3.827b IQ3 with MTP.
+It's 12.12 gigabytes, and it's on Hugging Face under UQS AI.
+One important note is that it runs under UQS AI's own license, not Apache, so read it before you ship anything commercial.
+Then don't change reasoning effort, just leave it alone.
+The default is X-High, and that is the setting the benchmarks used.
+And every guide that overrides this is handing back six points for the sake of speed, which we're going to get a different way.
+Run your monitor off the integrated GPU if you have one.
+Windows and a browser can hold one to two gigabytes on your card before the model even loads.
+And that is context window you're giving away for free.
+And skip the vision projector unless you actually need vision, since it uses memory.
+Then set the largest context window that fits.
+At 8-bit KVcache, that's around 110,000 tokens on most 16-gigabyte setups.
+While at 4-bit KVcache, one RX-9070 owner is at 128,000 tokens with 15.2 gigs used, so go as high as you can.
+And turn multi-token prediction on, because that is where most of the speed jump comes from.
+It is how people are getting to 45 tokens per second instead of 30-something.
+One owner running this exact file on an RX-9070 XT reported 43.7 tokens a second at 65,000 context and 37.4 at 131,000.
+Those are real numbers on a real card.
+So your card will vary, but the setup carries.
+And then use reasoning effort as a dial-in practice.
+With low for quick tasks and X-high the moment something is hard enough that you'd rather wait 3 minutes and get it right, than wait 30 seconds and get it wrong.
+Now, I want to be straight with you before we wrap up, because I think this channel is worth more than hype.
+34 beats February's frontier, and that is not marketing.
+It is a real score on a real benchmark suite.
+But today's frontier has moved, since Claude Opus 5.5 hit 58 on the same artificial analysis index in September.
+And that is a 24-point gap from where Quen sits, and no setting you change on your home card closes that.
+More thinking can make Quen more accurate on hard tasks, but it can't make it a different model.
+And there is a failure mode that I think is underrated in these guides.
+On hosted inference, if a model hits a problem it can't solve, it fails in seconds and you move on.
+But on your home card, X-high on a hard problem can run for 25 minutes before giving up.
+In that big multi-stack test I mentioned, there was one command line task that none of the configuration solved.
+And together, they spent almost 700,000 reasoning tokens on it.
+The longest single attempt ran 25 minutes.
+And that is the failure that actually costs you time, so you should plan for it.
+So if your work lives in long agent sessions, or you need X-high on every request all day,
+or you need the full 500,000 token window the benchmarks used, then rent it.
+Hosted Quen 3.827B is $2.20 per million output tokens, and at that rate, X-high is genuinely cheap.
+You get the full context, you can run multiple tasks in parallel, and you don't wait.
+The reason to run it locally is that you own it, so nobody can change it, nerf it, or price you out.
+And that is a real and good reason.
+But the open weights give you that whether you run them yourself, or rent someone else's hardware to do it.
+So, all in all, the model on the leaderboard and the model on your card are the same file.
+And the difference is a line of text that most guides delete to make the speed demo look good.
+So keep it, make your window as big as it fits, and use Swift 1.5 so the thinking is efficient instead of just turning it down.
+And treat effort as a dial, with low for easy stuff and X-high when the task is actually worth thinking about.
+Because Frontier was never a file size, it is how long we let the model think.
+And if this helped you understand what you're actually running, not just that it's fast, but why the numbers work the way they do,
+hit the like button, because it genuinely helps this channel.
+And if you want more of this style where I dig into what the guides aren't saying, subscribe.
+Because that's all I want to make.
+See you in the next one.

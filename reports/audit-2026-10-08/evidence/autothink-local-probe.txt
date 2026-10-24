@@ -1,0 +1,13 @@
+﻿local_available: True
+installed models: ['qwen3:4b', 'northstar-qwen3:rev1', 'qwen3:14b', 'qwen2.5vl:7b']
+route: {"task_class": "AUTOTHINK_RESEARCH", "label": "research", "plan": ["Classify intent", "Gather available local data", "Reason step-by-step", "Deliver findings"], "gateway_backend": true}
+context data_sources: ['C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\scanner-search-cache.json', 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\scanner-search-cache.enriched-candidate.json', 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\kirkland-discovery.json']
+ok: True
+model: northstar-qwen3:rev1
+content: READY
+ elapsed_ms: 14238.0114
+
+build_system_prompt_with_context exists: True
+server.run calls adapter.generate with system prompt/context?: False
+grep of 'build_system_prompt_with_context' inside server.py: 0
+grep of 'build_context' inside server.py: 2

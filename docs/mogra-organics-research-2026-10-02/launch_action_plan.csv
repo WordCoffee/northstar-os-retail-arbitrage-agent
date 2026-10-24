@@ -1,0 +1,22 @@
+seq,milestone,target_date,date_type,depends_on,owner,status,evidence_to_retain
+1,Owner product decision (final 2-4 SKUs),2026-10-06,planning allowance,-,Owner,OPEN,Decision record
+2,Confirm legal entity spelling,2026-10-06,planning allowance,-,Owner,OPEN,Business record
+3,Supplier outreach (5 RFQs sent),2026-10-08,planning allowance,"1,2",Research/Owner,BLOCKED on D1,Sent RFQ + responses
+4,Sample requests issued,2026-10-10,planning allowance,3,Owner,OPEN,Sample order + COA
+5,Customs-broker review commissioned,2026-10-08,planning allowance,1,Owner,OPEN,Broker written position
+6,Co-packer selection + setup quote,2026-10-13,planning allowance,3,Research,OPEN,Signed quote
+7,Sample evaluation + acceptance,2026-10-17,planning allowance,4,Owner/Research,OPEN,Sample evaluation record
+8,Packaging + label artwork finalised,2026-10-20,planning allowance,7,Owner/Design,OPEN,Approved artwork
+9,Organic/label review (if claimed),2026-10-20,planning allowance,8,Certifier,OPEN,Certifier confirmation
+10,Pilot production run,2026-10-27,planning allowance,"6,8,9",Co-packer,OPEN,Pilot lot records
+11,QA + lot acceptance,2026-10-30,planning allowance,10,Owner/Research,OPEN,COA + inspection
+12,Ship to FBA / 3PL,2026-11-03,planning allowance,11,Owner,OPEN,Bill of lading / tracking
+13,Fulfilment-centre receiving + check-in,2026-11-10,planning allowance,12,Amazon,OPEN,Receiving confirmation
+14,"Listing build (title, bullets, images)",2026-11-05,planning allowance,8,Owner,OPEN,Listing content
+15,Buyable inventory (FBA live),2026-11-15,"TARGET (planning, not committed)","13,14",Amazon,OPEN,Live ASIN
+16,PPC activation,2026-11-15,planning allowance,15,Owner,OPEN,Campaign structure
+17,Week-1 review: conversion + economics,2026-11-22,planning allowance,15,Owner,OPEN,Metric snapshot
+18,Week-2 decision: scale / adjust / pause,2026-11-29,planning allowance,17,Owner,OPEN,Decision record
+19,December push (ads + promo if eligible),2026-12-01,planning allowance,18,Owner,OPEN,Campaign config
+20,Reorder evaluation,2026-12-15,planning allowance,19,Owner,OPEN,Actual costs + sales
+X,BFCM FBA inbound deadline (missed by this plan),2026-10-14 to 2026-10-28,VERIFIED (Amazon guidance),-,-,NOT FEASIBLE for this launch,Amazon Q4 guidance

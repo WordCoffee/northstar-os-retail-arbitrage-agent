@@ -1,0 +1,19 @@
+cost_id,product,route,supplier,cost_line,unit,basis,one_time_or_recurring,value_usd,status,source,notes
+CQ-001,All,A/B/C,Flavoric,Ingredient (published retail/tiered range),lb,1-10 lb listed range,recurring,12.98-111.98,PUBLISHED_RETAIL_REFERENCE,pricing_comparison.csv,"RETAIL/tiered reference, NOT a wholesale quote. Cannot be used as a wholesale cost"
+CQ-002,Black pepper,A/B/C,Flavoric,Ingredient (published retail/tiered range),lb,1-10 lb listed range,recurring,49.98-369.98,PUBLISHED_RETAIL_REFERENCE,pricing_comparison.csv,"RETAIL reference only, NOT wholesale"
+CQ-003,Salt blend,B/C,Spices Inc,Finished salt blend (published retail),unit,retail unit,recurring,6.55,PUBLISHED_RETAIL_REFERENCE,pricing_comparison.csv,Chipotle salt retail price. NOT wholesale
+CQ-004,Black pepper,A,Pearl,"Ingredient, bulk",kg,per kg,recurring,,QUOTE_REQUIRED,route_comparison.csv,No published price
+CQ-005,Black pepper,A,Pearl,Processing / packing into finished unit,unit,per finished unit,recurring,,QUOTE_REQUIRED,route_comparison.csv,Capability unconfirmed
+CQ-006,Black pepper,A,Pearl,Packaging (jar/pouch),unit,per unit,recurring,,QUOTE_REQUIRED,route_comparison.csv,Formats unconfirmed
+CQ-007,Black pepper,A,Pearl,One-time setup / artwork / plates,USD,one-time,one_time,,QUOTE_REQUIRED,route_comparison.csv,
+CQ-008,Black pepper,B,Pearl + US co-packer,"Ingredient, bulk",kg,per kg,recurring,,QUOTE_REQUIRED,route_comparison.csv,
+CQ-009,Black pepper,B,US co-packer,Packing-only service fee,unit,per finished unit,recurring,,QUOTE_REQUIRED,route_comparison.csv,
+CQ-010,Black pepper,B,US co-packer,Co-packer setup / plate,USD,one-time,one_time,,QUOTE_REQUIRED,route_comparison.csv,
+CQ-011,Turmeric,A,Pearl,"Ingredient, bulk",kg,per kg,recurring,,QUOTE_REQUIRED,route_comparison.csv,Powder form unconfirmed
+CQ-012,Turmeric,B,Amazon Andes,"Ingredient, bulk",kg,per kg,recurring,,QUOTE_REQUIRED,route_comparison.csv,Certifier named; certificate not sighted
+CQ-013,All,A/B,(freight forwarder),Ocean freight + insurance,shipment,per shipment,recurring,,QUOTE_REQUIRED,duty_and_import_review.md,Incumbent on Incoterm; not quoted
+CQ-014,All,A/B,(customs broker),Duty + entry + broker fees,shipment,per shipment,recurring,,UNKNOWN,duty_and_import_review.md,HTS not confirmed; AD/CVD scope unresolved. BROKER REVIEW REQUIRED
+CQ-015,All,A/B/C,(lab),Testing (COA / heavy metals / pesticides / aflatoxin),lot,per lot,recurring,,QUOTE_REQUIRED,supplier_questions.md,Scope depends on supplier COA coverage
+CQ-016,All,A/B/C,(certifier),Organic certification of Mogra's own handling/import activity,USD,annual,recurring,,UNKNOWN,duty_and_import_review.md,Applicability depends on Mogra's chosen role; not quoted
+CQ-017,All,A/B,(3PL),US storage / receiving,pallet/month,recurring,recurring,,UNKNOWN,(owner input),Depends on volumes
+CQ-018,All,A/B/C,(Amazon),Amazon referral + FBA fulfilment fees,unit,per unit,recurring,,UNKNOWN,(channel data not available),No Amazon fee or sales data collected; MARKET_DATA_INCOMPLETE

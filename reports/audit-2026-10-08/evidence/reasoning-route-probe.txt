@@ -1,0 +1,34 @@
+# Evidence: UI-requested hosted-reasoning routes vs the routes the backend exposes
+# AUDIT-ONLY, read-only. No provider call, no spend, no code change.
+# Reproduce: boot `python -m uvicorn main:app --host 127.0.0.1 --port 8017` from Northstar_backend/
+#            then GET the three URLs below.
+
+URL                                 HTTP   NOTE
+----------------------------------  -----  ----------------------------------------
+/api/v1/foundation/reasoning/models  404   <- exactly what northstar-os-ui/src/foundation/api.js:175 calls
+/api/v1/reasoning/models             200   <- the route that actually exists (Northstar_backend/main.py:1068)
+/api/v1/foundation/jobs              405   <- only POST exists (foundation/api.js:107 calls GET)
+
+## Method-vs-openapi confirmation
+openapi.json contains these reasoning paths (verified against the live schema):
+  GET  /api/v1/reasoning/models
+  POST /api/v1/reasoning/listing-proposal
+  POST /api/v1/reasoning/ad-copy-proposal
+  POST /api/v1/reasoning/spreadsheet-analysis
+  POST /api/v1/reasoning/run
+A repo-wide grep for "foundation/reasoning" in Northstar_backend returns ZERO matches:
+  no route is registered under /api/v1/foundation/reasoning/*.
+
+## Blast radius (all silently swallowed by `.catch(() => null)` / `settle()`)
+  northstar-os-ui/src/components/ReasoningModelSelector.jsx:44  -> catalog is null; selector shows "No models"
+  northstar-os-ui/src/pages/internal/AutothinK.jsx:130          -> hosted lane canRun is always false
+  northstar-os-ui/src/pages/internal/AdPilot.jsx:47             -> ad-copy proposal panel errors
+  northstar-os-ui/src/pages/internal/ListingForge.jsx:51        -> listing proposal panel errors
+  northstar-os-ui/src/pages/internal/SpreadsheetLab.jsx:57      -> spreadsheet analysis errors
+
+## Corroborating evidence found in the repo (stale browser logs)
+  .playwright-mcp/console-2026-09-25T02-25-45-695Z.log records repeated
+  "404 @ /api/v1/models" - the same class of silent route mismatch surfaced earlier.
+
+## This proves
+  P0-02: the hosted-reasoning feature surface is disconnected from its backend.

@@ -1,0 +1,48 @@
+[
+  {
+    "test": "inventory",
+    "ok": true,
+    "models": {
+      "klein_q8": 4300.6,
+      "seedvr2_3b": 3392.8,
+      "wan_5b": 3810.6,
+      "umt5": 4145.9,
+      "wan_vae": 1409.4,
+      "flux2_vae": 336.2,
+      "seedvr2_vae": 501.3
+    },
+    "tts": [
+      "Qwen3-TTS-12Hz-1.7B-Base",
+      "Qwen3-TTS-Tokenizer-12Hz"
+    ],
+    "qwentts_node": true
+  },
+  {
+    "test": "klein",
+    "ok": false,
+    "status": "error",
+    "seconds": 3.0,
+    "outputs": []
+  },
+  {
+    "test": "seedvr2",
+    "ok": false,
+    "error": "queue failed: HTTP Error 400: Bad Request"
+  },
+  {
+    "test": "wan",
+    "ok": true,
+    "status": "success",
+    "seconds": 105.8,
+    "outputs": [
+      "ns-smoke-wan_00001_.mp4"
+    ]
+  },
+  {
+    "test": "tts",
+    "ok": false,
+    "status": "error",
+    "seconds": 3.0,
+    "outputs": []
+  }
+]

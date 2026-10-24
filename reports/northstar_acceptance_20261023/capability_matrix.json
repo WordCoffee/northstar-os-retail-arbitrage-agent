@@ -1,0 +1,935 @@
+{
+  "generated_at": "2026-10-23",
+  "denominator": {
+    "ui_routes": 53,
+    "chat_tools": 25,
+    "service_routers": 18,
+    "total": 96
+  },
+  "nav_labels": [],
+  "capabilities": [
+    {
+      "id": "UI-001",
+      "kind": "ui_route",
+      "name": "CommandCenter",
+      "route": "/home",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed",
+      "note": "renders signed-in Simple shell; composer, plan card, artefact chips verified"
+    },
+    {
+      "id": "UI-002",
+      "kind": "ui_route",
+      "name": "ProductFinder",
+      "route": "/product-finder",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-003",
+      "kind": "ui_route",
+      "name": "ProductFinder",
+      "route": "/product-finder/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-004",
+      "kind": "ui_route",
+      "name": "DesignStudio",
+      "route": "/design-studio/*",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed_with_gap",
+      "note": "Simple mode maps the room to the Create focus (chat only); the room itself needs advanced_view, which this account lacks"
+    },
+    {
+      "id": "UI-005",
+      "kind": "ui_route",
+      "name": "LegacyStudioRedirect section=\"3d-scene\"",
+      "route": "/product-designer",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-006",
+      "kind": "ui_route",
+      "name": "LegacyStudioRedirect section=\"projects\"",
+      "route": "/creative-studio",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-007",
+      "kind": "ui_route",
+      "name": "GoldenGooseDesk",
+      "route": "/golden-goose",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed_with_gap",
+      "note": "resolves to the Research focus; GoldenGooseDesk not reachable"
+    },
+    {
+      "id": "UI-008",
+      "kind": "ui_route",
+      "name": "GoldenGooseDesk",
+      "route": "/golden-goose/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-009",
+      "kind": "ui_route",
+      "name": "ListingGuardian",
+      "route": "/listings",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed_with_gap",
+      "note": "resolves to the Grow focus; ListingGuardian room not reachable (advanced_view denied)"
+    },
+    {
+      "id": "UI-010",
+      "kind": "ui_route",
+      "name": "KeywordTracker",
+      "route": "/keyword-tracker",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-011",
+      "kind": "ui_route",
+      "name": "CompetitorMonitor",
+      "route": "/competitor-monitor",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-012",
+      "kind": "ui_route",
+      "name": "ListingForge",
+      "route": "/listingforge",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-013",
+      "kind": "ui_route",
+      "name": "AdPilot",
+      "route": "/adpilot",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed_with_gap",
+      "note": "resolves to the Grow focus; AdPilot room not reachable"
+    },
+    {
+      "id": "UI-014",
+      "kind": "ui_route",
+      "name": "SocialPulse",
+      "route": "/socialpulse",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-015",
+      "kind": "ui_route",
+      "name": "ProfitabilityDashboard",
+      "route": "/profitability",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-016",
+      "kind": "ui_route",
+      "name": "SpreadsheetLab",
+      "route": "/spreadsheet-lab",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-017",
+      "kind": "ui_route",
+      "name": "CommerceOps",
+      "route": "/commerce-ops",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-018",
+      "kind": "ui_route",
+      "name": "CommerceOps",
+      "route": "/commerce-ops/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-019",
+      "kind": "ui_route",
+      "name": "Monitoring",
+      "route": "/monitoring",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-020",
+      "kind": "ui_route",
+      "name": "AutothinK",
+      "route": "/autothink",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-021",
+      "kind": "ui_route",
+      "name": "MemoryBank",
+      "route": "/memory-bank",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed_with_gap",
+      "note": "resolves to the Operate focus; MemoryBank not reachable"
+    },
+    {
+      "id": "UI-022",
+      "kind": "ui_route",
+      "name": "SharedDataLayer",
+      "route": "/shared-data",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-023",
+      "kind": "ui_route",
+      "name": "ProviderAdapters",
+      "route": "/provider-adapters",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-024",
+      "kind": "ui_route",
+      "name": "MasterBrain",
+      "route": "/master-brain",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-025",
+      "kind": "ui_route",
+      "name": "Improvement",
+      "route": "/improvement",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-026",
+      "kind": "ui_route",
+      "name": "CustomerWorkspace",
+      "route": "/customer-workspace",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-027",
+      "kind": "ui_route",
+      "name": "BetaOpsOverview",
+      "route": "/beta-ops",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "failed",
+      "note": "redirects to /home; the operator's own account cannot open Beta Ops"
+    },
+    {
+      "id": "UI-028",
+      "kind": "ui_route",
+      "name": "OrgsList",
+      "route": "/beta-ops/orgs",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-029",
+      "kind": "ui_route",
+      "name": "OrgDetail",
+      "route": "/beta-ops/orgs/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-030",
+      "kind": "ui_route",
+      "name": "InviteCreate",
+      "route": "/beta-ops/invites",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-031",
+      "kind": "ui_route",
+      "name": "InviteDetail",
+      "route": "/beta-ops/invites/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-032",
+      "kind": "ui_route",
+      "name": "Cohorts",
+      "route": "/beta-ops/cohorts",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-033",
+      "kind": "ui_route",
+      "name": "SupportOps",
+      "route": "/beta-ops/support",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-034",
+      "kind": "ui_route",
+      "name": "ReportsExports",
+      "route": "/beta-ops/reports",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-035",
+      "kind": "ui_route",
+      "name": "AuditNotes",
+      "route": "/beta-ops/audit",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-036",
+      "kind": "ui_route",
+      "name": "LifecycleModal",
+      "route": "/beta-ops/lifecycle",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-037",
+      "kind": "ui_route",
+      "name": "EligibilityChecklist",
+      "route": "/beta-ops/eligibility",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-038",
+      "kind": "ui_route",
+      "name": "InternalAdmin",
+      "route": "/admin",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-039",
+      "kind": "ui_route",
+      "name": "CustomerSetup",
+      "route": "/setup",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-040",
+      "kind": "ui_route",
+      "name": "CustomerDocuments",
+      "route": "/documents",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-041",
+      "kind": "ui_route",
+      "name": "CustomerPlan",
+      "route": "/plan",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-042",
+      "kind": "ui_route",
+      "name": "CustomerSupport",
+      "route": "/support",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-043",
+      "kind": "ui_route",
+      "name": "CustomerTicketDetail",
+      "route": "/support/:id",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-044",
+      "kind": "ui_route",
+      "name": "CustomerAccount",
+      "route": "/account",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-045",
+      "kind": "ui_route",
+      "name": "SignIn",
+      "route": "/sign-in",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "tested",
+      "result": "passed",
+      "note": "renders and gates correctly (verified before sign-in)"
+    },
+    {
+      "id": "UI-046",
+      "kind": "ui_route",
+      "name": "Recovery",
+      "route": "/recovery",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-047",
+      "kind": "ui_route",
+      "name": "BetaLanding",
+      "route": "/beta",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-048",
+      "kind": "ui_route",
+      "name": "BetaInviteAccept",
+      "route": "/beta/accept",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-049",
+      "kind": "ui_route",
+      "name": "CustomerLegal",
+      "route": "/legal",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-050",
+      "kind": "ui_route",
+      "name": "AccountSuspended",
+      "route": "/suspended",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-051",
+      "kind": "ui_route",
+      "name": "AccountDowngraded",
+      "route": "/downgraded",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-052",
+      "kind": "ui_route",
+      "name": "CustomerReaccept",
+      "route": "/reaccept",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "UI-053",
+      "kind": "ui_route",
+      "name": "NotFound",
+      "route": "*",
+      "surface": "spa",
+      "expected": "renders for an authorized operator; primary controls respond",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-001",
+      "kind": "chat_tool",
+      "name": "system_status",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "tested",
+      "result": "passed",
+      "note": "called by the model, engine reported"
+    },
+    {
+      "id": "TOOL-002",
+      "kind": "chat_tool",
+      "name": "list_templates",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-003",
+      "kind": "chat_tool",
+      "name": "design_brief",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-004",
+      "kind": "chat_tool",
+      "name": "create_dieline",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "writes",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-005",
+      "kind": "chat_tool",
+      "name": "generate_image",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "writes",
+      "status": "tested",
+      "result": "passed",
+      "note": "832x1216 portrait render persisted as asset 180a9675"
+    },
+    {
+      "id": "TOOL-006",
+      "kind": "chat_tool",
+      "name": "apply_label",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "writes",
+      "status": "tested",
+      "result": "passed",
+      "note": "composited the real logo + copy twice; asset 7367995f is the corrected fit"
+    },
+    {
+      "id": "TOOL-007",
+      "kind": "chat_tool",
+      "name": "seo_check",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-008",
+      "kind": "chat_tool",
+      "name": "seo_propose",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-009",
+      "kind": "chat_tool",
+      "name": "seo_profile",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-010",
+      "kind": "chat_tool",
+      "name": "seo_negatives",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-011",
+      "kind": "chat_tool",
+      "name": "seo_retitle",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-012",
+      "kind": "chat_tool",
+      "name": "corpus_search",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-013",
+      "kind": "chat_tool",
+      "name": "corpus_vector_search",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-014",
+      "kind": "chat_tool",
+      "name": "corpus_drift",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-015",
+      "kind": "chat_tool",
+      "name": "voice_list",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-016",
+      "kind": "chat_tool",
+      "name": "voice_tts",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-017",
+      "kind": "chat_tool",
+      "name": "voice_dub",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-018",
+      "kind": "chat_tool",
+      "name": "purpose_command",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-019",
+      "kind": "chat_tool",
+      "name": "build_preset",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-020",
+      "kind": "chat_tool",
+      "name": "creative_plan",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "tested",
+      "result": "passed",
+      "note": "plan card rendered; draft runs a real render"
+    },
+    {
+      "id": "TOOL-021",
+      "kind": "chat_tool",
+      "name": "knowledge_lookup",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-022",
+      "kind": "chat_tool",
+      "name": "listing_audit",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-023",
+      "kind": "chat_tool",
+      "name": "ads_math",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-024",
+      "kind": "chat_tool",
+      "name": "improvement_status",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "not_run"
+    },
+    {
+      "id": "TOOL-025",
+      "kind": "chat_tool",
+      "name": "service_catalog",
+      "route": "chat",
+      "surface": "master_brain",
+      "expected": "callable from chat; returns a truthful result",
+      "risk": "read_only",
+      "status": "tested",
+      "result": "passed",
+      "note": "called by the model, catalogue returned"
+    },
+    {
+      "id": "API-001",
+      "kind": "service_api",
+      "name": "chat_router",
+      "route": "/api/* (chat_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-002",
+      "kind": "service_api",
+      "name": "chat_voice",
+      "route": "/api/* (chat_voice)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-003",
+      "kind": "service_api",
+      "name": "cie_router",
+      "route": "/api/* (cie_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-004",
+      "kind": "service_api",
+      "name": "corpus_router",
+      "route": "/api/* (corpus_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-005",
+      "kind": "service_api",
+      "name": "design_studio_agent",
+      "route": "/api/* (design_studio_agent)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-006",
+      "kind": "service_api",
+      "name": "design_studio_api",
+      "route": "/api/* (design_studio_api)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-007",
+      "kind": "service_api",
+      "name": "design_studio_async",
+      "route": "/api/* (design_studio_async)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-008",
+      "kind": "service_api",
+      "name": "design_studio_compose",
+      "route": "/api/* (design_studio_compose)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-009",
+      "kind": "service_api",
+      "name": "design_studio_lanes",
+      "route": "/api/* (design_studio_lanes)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-010",
+      "kind": "service_api",
+      "name": "design_studio_openapi",
+      "route": "/api/* (design_studio_openapi)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-011",
+      "kind": "service_api",
+      "name": "design_studio_print",
+      "route": "/api/* (design_studio_print)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-012",
+      "kind": "service_api",
+      "name": "design_studio_scenes",
+      "route": "/api/* (design_studio_scenes)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-013",
+      "kind": "service_api",
+      "name": "noncreative_reads",
+      "route": "/api/* (noncreative_reads)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-014",
+      "kind": "service_api",
+      "name": "ops_router",
+      "route": "/api/* (ops_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-015",
+      "kind": "service_api",
+      "name": "seo_router",
+      "route": "/api/* (seo_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-016",
+      "kind": "service_api",
+      "name": "shell_router",
+      "route": "/api/* (shell_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-017",
+      "kind": "service_api",
+      "name": "studio_upload_router",
+      "route": "/api/* (studio_upload_router)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    },
+    {
+      "id": "API-018",
+      "kind": "service_api",
+      "name": "text_fidelity",
+      "route": "/api/* (text_fidelity)",
+      "surface": "backend",
+      "expected": "router mounted; endpoints answered under auth",
+      "status": "not_run"
+    }
+  ],
+  "coverage": {
+    "tested": 13,
+    "total": 96,
+    "note": "UI routes were rendered and read through Chrome Connect. In Simple mode a room route selects a chat FOCUS instead of rendering the room, and ?shell=advanced is demoted because this account has no advanced_view gate - so 'tested' here means the route resolves and the chat surface is correct, NOT that the room workspace was exercised.",
+    "blocked_by_entitlement": [
+      "all Advanced rooms: Design Studio workspace, ListingGuardian, AdPilot, GoldenGooseDesk, MemoryBank, Beta Ops, Admin"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{"ts": "2026-10-09T10:06:55.597068+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T10:06:55.597554+00:00", "event": "refused", "reason": "not armed (pass --arm to arm a live run)"}
+{"ts": "2026-10-09T10:06:55.597835+00:00", "event": "final", "scanner_live_allowed_armed": false, "live_calls_made": 0, "total_recorded_cost_cents": 0.0}
+{"ts": "2026-10-09T10:07:07.642460+00:00", "event": "preflight", "dry_run": true, "armed_flag": true, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T10:07:07.642886+00:00", "event": "refused", "reason": "no positive NS_LIVE_PER_RUN_CAP_CENTS supplied"}
+{"ts": "2026-10-09T10:07:07.643158+00:00", "event": "final", "scanner_live_allowed_armed": false, "live_calls_made": 0, "total_recorded_cost_cents": 0.0}
+{"ts": "2026-10-09T10:07:07.756711+00:00", "event": "preflight", "dry_run": true, "armed_flag": true, "cap_cents": 50, "budget_supplied_by_owner": true}
+{"ts": "2026-10-09T10:07:07.757106+00:00", "event": "refused", "reason": "NS_LIVE_RUN_ACKNOWLEDGED=1 required to acknowledge live spend"}
+{"ts": "2026-10-09T10:07:07.757406+00:00", "event": "final", "scanner_live_allowed_armed": false, "live_calls_made": 0, "total_recorded_cost_cents": 0.0}
+{"ts": "2026-10-09T10:07:07.822777+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T10:07:07.823155+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T11:55:32.796628+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T11:55:32.796978+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:14:06.782337+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:14:06.782669+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:14:20.499189+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:14:20.499523+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:14:35.159521+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:14:35.159846+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:15:02.574690+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:15:02.575028+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:15:13.622852+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:15:13.623179+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}
+{"ts": "2026-10-09T12:15:43.659941+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T12:15:43.660276+00:00", "event": "refused", "reason": "not armed (pass --arm to arm a live run)"}
+{"ts": "2026-10-09T12:15:43.660547+00:00", "event": "final", "scanner_live_allowed_armed": false, "live_calls_made": 0, "total_recorded_cost_cents": 0.0}
+{"ts": "2026-10-09T22:01:19.175663+00:00", "event": "preflight", "dry_run": true, "armed_flag": false, "cap_cents": null, "budget_supplied_by_owner": false}
+{"ts": "2026-10-09T22:01:19.176603+00:00", "event": "disarmed", "gate": "SCANNER_LIVE_ALLOWED", "armed": false, "note": "live gate closed"}

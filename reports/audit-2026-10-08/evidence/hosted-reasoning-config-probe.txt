@@ -1,0 +1,51 @@
+# Evidence: hosted-reasoning configuration resolution
+# AUDIT-ONLY, read-only. This probe loads the repo-root .env and prints BOOLEANS and
+# model ids only. NO `complete()` call is made - no live provider call, no spend.
+# No credential value is read, printed, or logged.
+
+Source: Northstar_backend/adapters/reasoning_provider.py :: get_reasoning_provider().status()
+
+## As loaded from the repo-root .env (operator's stated intent)
+OPENCODE_GO_ENABLED env raw : 1
+configured                  : True
+enabled                     : True
+armed                       : True
+runtime_default_model       : step-5-preview-free
+verified_models             : ['step-5-preview-free']
+unverified_models           : ['deepseek-v4.1-flash', 'glm-5.3-flash',
+                                'mimo-v2.6-flash-free', 'kimi-k2.7-code']
+
+## As reported by the RUNNING API server (Northstar_backend/main.py)
+GET /api/v1/reasoning/models -> 200
+  configured: false
+  enabled:    false
+  armed:      false
+  verified_model:        "step-5-preview-free"
+  runtime_default_model: null
+  verified_usability:    true
+  note: "One model has a verified completion through OpenCode Go."
+
+## Why they disagree
+  - Northstar_backend/main.py contains ZERO `load_dotenv` calls.
+  - Northstar_backend/adapters/reasoning_provider.py reads `os.environ` only.
+  - python-dotenv `load_dotenv()` is invoked by individual provider modules
+    (amazon_search.py:44, canopy_client.py:9, ...) which resolve
+    Northstar_backend/.env - a DIFFERENT file that does not contain
+    OPENCODE_GO_API_KEY or OPENCODE_GO_ENABLED.
+  - Therefore the root .env's arming intent never reaches the API process.
+
+## Secondary defect observed in the same probe
+  python-dotenv emitted: "could not parse statement starting at line 98"
+  Root .env line 98 is a URL containing a colon with no leading '#' - the whole
+  authoritative env file is only partially loaded.
+
+## Credential hygiene check
+  A key-presence test (value length only, never the value) found:
+    root .env             : OPENCODE_GO_API_KEY PRESENT-NONEMPTY (51 chars)
+    root .env             : OPENCODE_GO_ENABLED=1
+    Northstar_backend/.env: OPENCODE_GO_API_KEY KEY-ABSENT
+    Northstar_backend/.env: OPENCODE_GO_ENABLED  KEY-ABSENT
+  Values were never read, echoed, written, or committed.
+
+## This proves
+  P1-08 / AT-03: config intent and runtime state disagree, and the disagreement is silent.
