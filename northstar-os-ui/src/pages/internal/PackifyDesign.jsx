@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Icon from '../../components/Icon.jsx'
-import { PageHead, Card } from '../ui.jsx'
-import { api } from '../services/api.js'
+import { PageHead, Card } from '../../ui.jsx'
+import { api } from '../../services/api.js'
 
 const SUGGESTED = [
   'Start a new packaging design from scratch',
