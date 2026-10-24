@@ -101,3 +101,65 @@ def test_ad_copy_carries_a_copy_audit():
     }))
     out = ad_copy_proposal({"sku": "SKU-9", "title": "x"}, provider=provider)
     assert out["copy_audit"]["value"] == "block"
+
+
+# --- Jev alignment: declarative decisions + consumer matching ---------------
+
+def test_every_kind_has_a_declared_decision_with_matching_criteria():
+    for kind, labels in dl.KINDS.items():
+        spec = dl.DECISIONS[kind]
+        assert spec["type"] in ("choice", "boolean")
+        assert set(spec["criteria"].keys()) == set(labels)
+
+
+def test_distribution_is_complete_and_peaks_on_the_answer():
+    got = dl.audit_copy("Best seller turmeric, guaranteed results")
+    dist = got["probabilities"]
+    labels = dl.KINDS["copy_audit"]
+    assert set(dist) == set(labels)
+    assert abs(sum(dist.values()) - 1.0) < 0.001
+    assert dist["block"] == max(dist.values())
+
+
+def test_consumer_match_with_no_conditions_skips_everything():
+    got = dl.consumer_match({"kind": "copy_audit", "probabilities": {"pass": 0.9}})
+    assert got["matched"] == [] and got["needs_review"] is False
+
+
+def test_consumer_match_matches_the_full_distribution_not_just_top():
+    out = {"kind": "copy_audit",
+           "probabilities": {"pass": 0.05, "review": 0.95, "block": 0.0}}
+    got = dl.consumer_match(out, {"review": 0.5})
+    assert got["matched"] == ["review"]
+
+
+def test_unknown_consumer_label_is_needs_review_never_a_silent_remap():
+    out = {"kind": "copy_audit",
+           "probabilities": {"pass": 0.9, "review": 0.05, "block": 0.05}}
+    got = dl.consumer_match(out, {"approved": 0.5})   # invented label
+    assert got["matched"] == [] and got["needs_review"] is True
+    assert got["unknown_labels"] == ["approved"]
+
+
+def test_blocker_escalation_interrupts_on_live_lane_language():
+    got = dl.decide("blocker_escalation", "hard failure on the live lane, all batches blocked")
+    assert got["value"] == "now" and got["escalate"] is False
+
+
+def test_blocker_escalation_sends_ideas_to_backlog():
+    got = dl.decide("blocker_escalation", "nice to have: reorder the reports directory")
+    assert got["value"] == "never"
+
+
+def test_blocker_escalation_defaults_to_batched_report():
+    got = dl.decide("blocker_escalation",
+                    "The listing import regex misses the new bullet separator character.")
+    assert got["value"] == "later"
+
+
+def test_respond_now_is_typed_boolean():
+    got = dl.decide("respond_now", "@assistant what did the last batch promote?",
+                    facts={"addressed_to_agent": True})
+    assert got["value"] in dl.KINDS["respond_now"]
+    assert got["kind"] == "respond_now"
+    assert dl.decide("respond_now", "thinking out loud about pricing", facts={})["value"] == "no"

@@ -45,6 +45,60 @@ KINDS: Dict[str, List[str]] = {
     "copy_audit": ["pass", "review", "block"],
     "listing_tier": ["keep", "improve", "rewrite"],
     "duplicate": ["same", "different", "unsure"],
+    "blocker_escalation": ["now", "later", "never"],
+    "respond_now": ["yes", "no"],
+}
+
+# Declarative decisions (AgentConnect/Jev shape): a reusable judgment RESOURCE
+# carrying a question, its type and what each answer means. The resource owns
+# no trigger and no target action - consumers (call sites) evaluate it with
+# their own state and act on the answer. Editing criteria here must be checked
+# against every consumer, because a criteria change can invalidate conditions.
+DECISIONS: Dict[str, Dict[str, Any]] = {
+    "copy_audit": {
+        "type": "choice",
+        "instructions": "Is this listing/ad copy shippable on Amazon as written?",
+        "criteria": {
+            "pass": "No prohibited or unsupported claim is detectable in the supplied text.",
+            "review": "A claim needs operator evidence (health, absolute or certification-adjacent wording).",
+            "block": "An Amazon-prohibited promotional term would risk suppression or legal exposure.",
+        },
+    },
+    "listing_tier": {
+        "type": "choice",
+        "instructions": "What work does this copy need before it ships?",
+        "criteria": {
+            "keep": "Copy is within length rules and carries no claim risk.",
+            "improve": "Copy is shippable but bloated or thin in spots.",
+            "rewrite": "Copy breaks a hard rule or is too thin to sell anything.",
+        },
+    },
+    "duplicate": {
+        "type": "choice",
+        "instructions": "Do these two product listings refer to the same SKU?",
+        "criteria": {
+            "same": "Identifiers and naming overlap beyond coincidence.",
+            "different": "Distinct products with no identifier overlap.",
+            "unsure": "No model backend; the layer refuses to guess.",
+        },
+    },
+    "blocker_escalation": {
+        "type": "choice",
+        "instructions": "Does this blocker interrupt the operator now, or ride the next batched report?",
+        "criteria": {
+            "now": "A live-lane failure, a credential/guardrail breach, a production break, or anything hard-blocking all work.",
+            "later": "Real friction, but work can continue on other batches until the next operator report.",
+            "never": "An idea or nice-to-have; belongs in the backlog, not in an interrupt.",
+        },
+    },
+    "respond_now": {
+        "type": "boolean",
+        "instructions": "Should an autonomous turn respond to this inbound message without operator direction?",
+        "criteria": {
+            "yes": "An operator-directed request addressed to the assistant that existing precedents cover.",
+            "no": "Anything ambiguous, social, or outside past authorization; observe it instead.",
+        },
+    },
 }
 
 #: Amazon-prohibited promotional terms (mirrors LISTING_PROMPT).
@@ -162,6 +216,10 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
         out = _rules_copy_audit(text)
     elif kind == "listing_tier":
         out = _rules_listing_tier(text)
+    elif kind == "blocker_escalation":
+        out = _rules_blocker_escalation(text)
+    elif kind == "respond_now":
+        out = _rules_respond_now(text, facts)
     else:  # duplicate has no rule backend yet — abstaining is the honest answer
         out = {"value": "unsure", "confidence": 0.0, "abstained": True,
                "flags": ["no_rule_backend"], "reason": "duplicate detection needs a model"}
@@ -172,6 +230,8 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
 
     out.update({
         "kind": kind,
+        "probabilities": _distribution(labels, out["value"], out["confidence"]),
+        "criteria": DECISIONS.get(kind, {}).get("criteria"),
         "backend": chosen,
         "threshold": conf_threshold,
         "escalate": bool(out["abstained"] or out["confidence"] < conf_threshold),
@@ -184,6 +244,82 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
 def audit_copy(text: str, threshold: float = DEFAULT_THRESHOLD) -> Dict[str, Any]:
     """Convenience wrapper used by the listing/ad normalisers."""
     return decide("copy_audit", text, threshold=threshold)
+
+
+def _rules_blocker_escalation(text: str) -> Dict[str, Any]:
+    body = _norm(text)
+    if len(body) < 12:
+        return {"value": "later", "confidence": 0.2, "abstained": True,
+                "flags": ["text_too_short"], "reason": "not enough signal to interrupt anyone"}
+    if _has(body, "hard failure") or _has(body, "production") or _has(body, "down") \
+            or _has(body, "blocked") or _has(body, "credential") or _has(body, "security") \
+            or _has(body, "live lane") or _has(body, "circuit breaker"):
+        return {"value": "now", "confidence": 0.85, "abstained": False,
+                "flags": ["live_or_guardrail_impact"],
+                "reason": "live-lane / guardrail language present"}
+    if _has(body, "nice to have") or _has(body, "idea") or _has(body, "someday") \
+            or _has(body, "low priority") or _has(body, "parked"):
+        return {"value": "never", "confidence": 0.75, "abstained": False,
+                "flags": ["backlog_worthy"], "reason": "explicitly aspirational"}
+    return {"value": "later", "confidence": 0.6, "abstained": False,
+            "flags": [], "reason": "no interrupt-level signal; join the batched report"}
+
+
+def _rules_respond_now(text: str, facts: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    body = _norm(text)
+    mentioned = bool((facts or {}).get("addressed_to_agent")) or "@" in body
+    asks = "?" in body and len(body) < 400
+    if not body:
+        return {"value": "no", "confidence": 0.2, "abstained": True,
+                "flags": ["empty_message"], "reason": "nothing to judge"}
+    if mentioned and asks:
+        return {"value": "yes", "confidence": 0.7, "abstained": False,
+                "flags": [], "reason": "an addressed, concrete request"}
+    return {"value": "no", "confidence": 0.65, "abstained": False,
+            "flags": ["observe_only"], "reason": "observe instead of spending a turn"}
+
+
+def _distribution(labels: List[str], chosen: str, confidence: float) -> Dict[str, float]:
+    """Deterministic rules-backend distribution over the closed label set.
+
+    The chosen label carries the backend's confidence; the residual mass is
+    split evenly, so downstream consumer matching always sees a full
+    probability landscape (Jev keeps probabilities as evaluation evidence).
+    """
+    if not labels:
+        return {}
+    if len(labels) == 1:
+        return {labels[0]: round(min(1.0, max(0.0, confidence)), 4)}
+    c = min(1.0, max(0.0, confidence))
+    rest = round((1.0 - c) / (len(labels) - 1), 4)
+    dist = {label: rest for label in labels}
+    dist[chosen] = round(c, 4)
+    return dist
+
+
+def consumer_match(out: Dict[str, Any],
+                   conditions: Optional[Dict[str, float]] = None) -> Dict[str, Any]:
+    """Apply a consumer's per-label thresholds to one decision (Jev semantics).
+
+    * Choice conditions compare ``probabilities[key] >= min_probability``.
+    * Selecting NO conditions skips every successful answer - that is the
+      deliberate Jev default, recorded here as ``matched: []``.
+    * An unknown label in the conditions is a programming error caught at the
+      seam: the layer returns ``needs_review`` and matches nothing. It never
+      silently remaps a key or clamps a threshold.
+    """
+    dist = out.get("probabilities") or {}
+    labels = KINDS.get(out.get("kind", ""), [])
+    if conditions is None or not conditions:
+        return {"matched": [], "needs_review": False,
+                "note": "no conditions selected: every successful answer skips"}
+    unknown = [k for k in conditions if k not in labels]
+    if unknown:
+        return {"matched": [], "needs_review": True,
+                "note": f"label(s) {unknown} are not in this decision; conditions need review",
+                "unknown_labels": unknown}
+    matched = [k for k, floor_value in conditions.items() if dist.get(k, 0.0) >= floor_value]
+    return {"matched": matched, "needs_review": False, "note": None}
 
 
 def _main(argv: Iterable[str]) -> int:
