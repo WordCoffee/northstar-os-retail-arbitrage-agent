@@ -135,6 +135,139 @@ def retire(eid: str) -> bool:
     return cur.rowcount > 0
 
 
+# --- Revision gate (AgentConnect organisation-knowledge pattern) ------------
+# An AI turn never rewrites an approved memory silently. It proposes a
+# revision; retrieval keeps serving the approved content until the operator
+# approves. This is the same trust shape as organisation Knowledge and
+# Chrome-Connect lessons: agent output stays PROPOSED until a human blesses it.
+
+REV_PENDING = "proposed"
+REV_APPROVED = "approved"
+REV_REJECTED = "rejected"
+
+
+def _ensure_revisions(db) -> None:
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS memory_revisions (
+               id TEXT PRIMARY KEY,
+               entry_id TEXT NOT NULL,
+               proposed_content TEXT,
+               proposed_confidence REAL,
+               proposed_tags TEXT,
+               note TEXT,
+               proposed_by TEXT NOT NULL,
+               proposed_at TEXT NOT NULL,
+               status TEXT NOT NULL,
+               reviewed_at TEXT,
+               reviewed_by TEXT,
+               review_note TEXT
+           )"""
+    )
+
+
+def _revision_row_to_dict(row) -> Dict[str, Any]:
+    d = dict(row)
+    if d.get("proposed_tags"):
+        try:
+            d["proposed_tags"] = json.loads(d["proposed_tags"])
+        except Exception:  # noqa: BLE001 - corrupt tags must not break retrieval
+            pass
+    return d
+
+
+def propose_revision(
+    eid: str,
+    content: Optional[str] = None,
+    confidence: Optional[float] = None,
+    tags: Optional[List[str]] = None,
+    proposed_by: str = "agent",
+    note: Optional[str] = None,
+) -> str:
+    """Propose a change to an approved memory. The entry itself is untouched."""
+    db = _db()
+    _ensure_revisions(db)
+    rid = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+    db.execute(
+        """INSERT INTO memory_revisions
+           (id, entry_id, proposed_content, proposed_confidence, proposed_tags,
+            note, proposed_by, proposed_at, status)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (rid, eid, content, confidence,
+         json.dumps(tags) if tags is not None else None,
+         note, proposed_by, now, REV_PENDING),
+    )
+    db.commit()
+    return rid
+
+
+def pending_revisions(entry_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Unapproved agent proposals, oldest first; retrieval never reads these."""
+    db = _db()
+    _ensure_revisions(db)
+    if entry_id:
+        cur = db.execute(
+            "SELECT * FROM memory_revisions WHERE status = ? AND entry_id = ? "
+            "ORDER BY proposed_at", (REV_PENDING, entry_id))
+    else:
+        cur = db.execute(
+            "SELECT * FROM memory_revisions WHERE status = ? ORDER BY proposed_at",
+            (REV_PENDING,))
+    return [_revision_row_to_dict(row) for row in cur.fetchall()]
+
+
+def _apply_revision_values(db, rev: Dict[str, Any]) -> None:
+    sets: List[str] = ["updated_at = ?"]
+    params: List[Any] = [datetime.now(timezone.utc).isoformat()]
+    if rev.get("proposed_content") is not None:
+        sets.append("content = ?")
+        params.append(rev["proposed_content"])
+    if rev.get("proposed_confidence") is not None:
+        sets.append("confidence = ?")
+        params.append(rev["proposed_confidence"])
+    if rev.get("proposed_tags") is not None:
+        sets.append("tags = ?")
+        params.append(json.dumps(rev["proposed_tags"]))
+    params.append(rev["entry_id"])
+    db.execute(f"UPDATE memory_entries SET {', '.join(sets)} WHERE id = ?", tuple(params))
+
+
+def approve_revision(rev_id: str, reviewer: str = "operator") -> Dict[str, Any]:
+    """Operator blessing: apply the proposed values to the approved entry."""
+    db = _db()
+    _ensure_revisions(db)
+    cur = db.execute("SELECT * FROM memory_revisions WHERE id = ?", (rev_id,))
+    row = cur.fetchone()
+    if row is None:
+        return {"approved": False, "reason": "no such revision"}
+    rev = _revision_row_to_dict(row)
+    if rev["status"] != REV_PENDING:
+        return {"approved": False, "reason": f"already {rev['status']}"}
+    now = datetime.now(timezone.utc).isoformat()
+    _apply_revision_values(db, rev)
+    db.execute(
+        "UPDATE memory_revisions SET status = ?, reviewed_at = ?, reviewed_by = ? WHERE id = ?",
+        (REV_APPROVED, now, reviewer, rev_id),
+    )
+    db.commit()
+    return {"approved": True, "entry_id": rev["entry_id"]}
+
+
+def reject_revision(rev_id: str, note: str, reviewer: str = "operator") -> Dict[str, Any]:
+    """Operator refusal: the approved content stays exactly as it was."""
+    db = _db()
+    _ensure_revisions(db)
+    cur = db.execute(
+        "UPDATE memory_revisions SET status = ?, reviewed_at = ?, reviewed_by = ?, "
+        "review_note = ? WHERE id = ? AND status = ?",
+        (REV_REJECTED, datetime.now(timezone.utc).isoformat(), reviewer,
+         note[:200], rev_id, REV_PENDING),
+    )
+    db.commit()
+    return {"rejected": cur.rowcount > 0,
+            "reason": None if cur.rowcount else "no pending revision with that id"}
+
+
 def list_by_type(
     entry_type: str,
     account_id: str = "default",
