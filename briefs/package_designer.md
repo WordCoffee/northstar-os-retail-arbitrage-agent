@@ -29,4 +29,18 @@ says so.
 
 ## Sign-off
 
-Operator signs off on the Package Designer output after P1–P7 are shown with evidence.
+**Operator approved P1–P7 on 2026-10-24.** Evidence on disk, all seven:
+
+| # | Evidence |
+|---|---|
+| P1 | `reports/northstar_acceptance_20261023/screenshots/05-scenarioA-chat-result.png` — questions before artwork |
+| P2 | tool output enforcing the six facts (product, net weight, dimensions, ingredients, company, address, origin) |
+| P3 | `screenshots/phase3-front.png`, `phase3-back.png`, `phase3-side.png`, `phase3-sheet.png`, `phase3-dieline.svg`, `phase3-dieline.pdf`, `scenarioA-labelled-v3-ui.png` |
+| P4 | `screenshots/phase3-back.png` — ingredients, warnings, company, address, origin, and a boxed `BARCODE ZONE (RESERVED) / supply GTIN/UPC at print`, no fake barcode |
+| P5 | copy drawn not generated; spelling matches the input string in the same capture |
+| P6 | `LOT [MISSING: lot code]` rendered in the artwork itself |
+| P7 | `scenarioA-labelled-v3-ui.png` — front panel plus gussets, no clipped text |
+
+**Known cosmetic defect, accepted at sign-off:** the back panel prints the country twice (the address
+line already ends `USA`, and the origin line adds `USA`). Both required fields are present and correct;
+it is recorded rather than silently fixed because a fix would invalidate the capture above.

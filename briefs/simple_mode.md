@@ -36,5 +36,15 @@ management.
 
 ## Sign-off
 
-Operator approves this brief before the Simple Mode changes; final sign-off on the flow after
-screenshots.
+**Brief approved 2026-10-24.** The flow is signed off once S1–S7 are shown with evidence; that is
+verification, not design.
+
+| Check | Evidence | State |
+|---|---|---|
+| S1 | desktop capture; mobile capture now expressible (`screenshot <path> @390x844`) | desktop done, mobile pending one run |
+| S2 | pre-flight card | pending capture |
+| S3 | question state | pending capture |
+| S4 | mid-run tool progress | pending capture |
+| S5 | downloadable file + change log | artifact exists (`2136ae5b…`); change-log surface pending |
+| S6 | SEO tie-in on the result card | pending capture |
+| S7 | Autothink handoff with a brief | `specialists/router.py scope()` returns the offer + estimate; no transport yet |

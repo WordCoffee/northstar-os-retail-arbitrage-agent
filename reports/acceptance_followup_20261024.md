@@ -88,26 +88,33 @@ Remaining dirty count after both commits: **634** — almost all data/evidence, 
 
 ---
 
-## 5. Blocker found — guardrail drift (needs one operator word)
+## 5. Guardrail drift — RESOLVED by operator bless (2026-10-24)
 
 ```
 fingerprint()  727f78e56cb4dfd513677c21d44ed40dafc4a5bcc68d52867c5d9b223ea993e9
-baseline       5ae23cde016a53b29e4f6c9b59da06bf8249fcb72b142dd559386b412a570f37
+baseline       5ae23cde016a53b29e4f6c9b59da06bf8249fcb72b142dd559386b412a570f37   ← before
 intact: false
 ```
 
-- `config/chromecontrol_policy_owner.json` is **clean in git** (no uncommitted edit).
-- The file itself records `"updated_at": "2026-10-23"` and
+- `config/chromecontrol_policy_owner.json` was **clean in git** (no uncommitted edit).
+- The file itself recorded `"updated_at": "2026-10-23"` and
   `"updated_by": "operator (authorized: Packify Tier B behaviour study, 2026-10-23)"`.
 - So the tables were changed **with** authorisation, but `baseline_fingerprint` was never recomputed.
+  (The allowlist commit `475e09a policy(chromeconnect): allow packify.ai for the Tier B behaviour study`
+  is that edit.)
 
-Consequences, all fail-closed and all visible:
+**Resolved.** The operator approved the bless, and `node scripts/chromecontrol.js policy-bless --operator`
+recorded `727f78e5…` as the new baseline. Verified as a *record*, not a policy change: every key except
+`baseline_fingerprint` / `updated_at` / `updated_by` compares **equal to HEAD, key by key** — no host added
+or removed, no prohibited action changed. `node test/agent-loop-tests.js` → **145/145 checks passed**
+(was 143/145). Committed in the controller as `df98b2b`.
 
-- `chromeconnect_status` reports `guardrails.intact: false`.
-- `node test/agent-loop-tests.js` → **143/145**; the two failures are `D0 policy guardrails are intact before any lesson write` and `D3 a legitimate selector lesson is accepted as PROPOSED`.
-- Every lesson write (including L6 above) is refused.
+**One thing still pending, and it is not a defect:** the running MCP child caches the policy file at
+`require` time, so `chromeconnect_guardrails` will keep reporting `intact: false` (old baseline `5ae2…`)
+until that child restarts. The same restart is what makes the viewport change live. A parallel session was
+mid-run (`reload_northstaros_with_the_fresh_bundle_mvlzpn5v`, 06:00:39Z), so the restart was left to the
+operator rather than pulled out from under it.
 
-I did **not** run `policy-bless` and did not edit the baseline. Recomputing an operator-owned baseline is a guardrail action, and the constitution reserves it to the operator. One word — *"bless the 2026-10-23 policy"* — and it is a one-command fix that restores 145/145 and unblocks lessons.
 
 ---
 
@@ -117,22 +124,28 @@ I did **not** run `policy-bless` and did not edit the baseline. Recomputing an o
 |---|---|---|
 | 1 | Theme v3 | **not mine, still open** — parallel session; last capture `theme-v3b-desktop.png` still reads as a smudge |
 | 2 | Mobile capture path | **done + unit-proven**; first live use needs the browser to itself |
-| 3 | Simple Mode brief | blocked on **operator approval** (S1–S7 unverified) |
-| 4 | Package Designer brief | **P1–P7 evidenced** (P4 was already on disk); awaiting sign-off |
+| 3 | Simple Mode brief | **approved 2026-10-24**; S1–S7 still need captures (S1 desktop done, mobile needs one restart) |
+| 4 | Package Designer brief | **signed off 2026-10-24** — P1–P7 evidenced, duplicate-country defect accepted |
 | 5 | BOJO-UTIL executor | not started — router classifies (`specialists/router.py` `_UTILITY`), no executor exists |
 | 6 | Autothink send path | not started — `scope()` offers a priced handoff, no transport |
 | 7 | Phase 7 cloud rehearsal | blocked — needs a provider choice + keys |
 | 8 | Phase 1 study debt | not started (7 Tier A repos, 10 Tier B products) |
 | 9 | Manager benchmark | blocked — 27B ctx ceiling fixed earlier; gpt-oss/Gemma weights not on disk |
 | 10 | Render evidence | blocked — needs the GPU lane; memory-bound box (ComfyUI + Ollama + Chrome) |
-| 11 | L6 lesson | **written**, registration blocked by §5 |
-| 12 | Commit | **done** — two commits, 43 files |
+| 11 | L6 lesson | **written**; registration now unblocked by the bless, needs the controller restart to be accepted by the live child |
+| 12 | Commit | **done** — four commits, 44 files; tree 649 → 211 entries |
 
 ---
 
-## 7. Decisions I need from you
+## 7. Decisions — all four answered 2026-10-24
 
-1. **Bless the 2026-10-23 guardrail baseline?** (unblocks lessons + restores 145/145)
-2. **Sign off Package Designer P1–P7?** (evidence is complete; nothing left to build)
-3. **Approve the Simple Mode brief?** (nothing can be verified until it is approved)
-4. **A `.gitignore` policy for `data/`, `reports/*.png`, `*.part0`?** (this is the remaining 634 entries)
+| Decision | Answer | What was done |
+|---|---|---|
+| Bless the 2026-10-23 guardrail baseline? | **yes** | `policy-bless --operator` → `727f78e5…` recorded; tables unchanged key-by-key; 145/145; controller commit `df98b2b`. Takes effect for the live child at its next restart. |
+| Sign off Package Designer P1–P7? | **yes** | Recorded in `briefs/package_designer.md` with the evidence file per check, and the duplicate-country cosmetic defect accepted rather than hidden. |
+| Approve the Simple Mode brief? | **yes** | Recorded in `briefs/simple_mode.md` with the S1–S7 evidence state per check. Approval is of the design; S1–S7 still need captures. |
+| A `.gitignore` policy for generated output? | **yes** | `Northstar_backend/data/`, `*.db*`, `*.part0`/`*.gguf`/`*.safetensors`, `out_sb/`, `renders/`, `reports/**/*.png` (with `reports/**/screenshots/**` kept committable as evidence), `*.bak*`. Tree: 428 → 211 entries. Commit `86c9e4f`. |
+
+**What this leaves open, in order:** S1–S7 captures (needs one controller restart), BOJO-UTIL executor,
+Autothink transport, then the blocked-by-spend items (cloud provider, GPU render evidence, benchmark
+weights).
