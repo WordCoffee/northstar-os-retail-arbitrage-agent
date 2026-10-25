@@ -96,3 +96,14 @@ BLOCKED. What is needed from the operator, once, to unblock:
 Everything else in this batch is committed and verified by executable checks:
 product repo `8520824b` + `09f350cd`; Chrome Connect repo `05c7df9`.
 No push was performed.
+
+
+## Controller reliability (late, 2026-10-24 23:45)
+
+The sanctioned chromecontrol-agent.js CLI attaches and reads the app, but its
+navigate step hangs unpredictably (180 s without returning; the journal stops
+at the navigate tool_call). A single read succeeded earlier in 30 s; the same
+command then hung for three consecutive runs. No generation was started, no
+credits spent, no Generate clicked successfully. G1-G6 remain BLOCKED. This is
+a controller defect, not a product defect, and it is outside the scope of the
+product repo.
