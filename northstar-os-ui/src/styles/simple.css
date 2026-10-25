@@ -418,6 +418,41 @@ html[data-shell-mode="simple"] .shell-mode-toggle[data-mode="advanced"] .shell-m
   background: var(--spark); color: #fff;
 }
 
+/* Display scale — a designed segmented control, not a raw <select>.
+   It only exists in the Simple/AutothinK shell (see TopNav.jsx). */
+.top-nav-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid var(--divider);
+  background: var(--surface-2, rgba(0, 0, 0, 0.04));
+}
+.top-nav-scale-opt {
+  border: none;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  line-height: 1;
+  padding: 5px 7px;
+  border-radius: 6px;
+  color: var(--ink-soft, #6b6459);
+  cursor: pointer;
+}
+.top-nav-scale-opt:hover { background: rgba(0, 0, 0, 0.06); }
+.top-nav-scale-opt.is-on {
+  background: var(--spark, #2f6fed);
+  color: #fff;
+}
+html[data-shell-mode="simple"] .top-nav-scale {
+  border-color: rgba(247, 243, 236, 0.18);
+  background: rgba(247, 243, 236, 0.06);
+}
+html[data-shell-mode="simple"] .top-nav-scale-opt { color: #b8b1a4; }
+html[data-shell-mode="simple"] .top-nav-scale-opt:hover { background: rgba(247, 243, 236, 0.10); }
+html[data-shell-mode="simple"] .top-nav-scale-opt.is-on { color: #fff; }
+
 /* ── 16. Responsive + motion ─────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .mb-shell .chat-shell { grid-template-columns: 232px minmax(0, 1fr); }
@@ -559,8 +594,27 @@ html[data-shell-mode="simple"] .app {
   height: 100vh;
   height: 100dvh;
   min-height: 0;
-  overflow: hidden;
+  overflow: hidden;              /* the FRAME, sized outside any zoom */
+  display: flex;
+  flex-direction: column;
 }
+/* Display scale: a single variable the whole UI scales from.
+   The zoom lives on an inner wrapper, never on .app. A 100dvh element INSIDE a
+   zoomed subtree renders at 100dvh × scale and hangs off the bottom of the
+   screen (composer unreachable at 130%). The wrapper is therefore laid out at
+   viewport/scale, so zoom × (viewport/scale) = exactly one viewport at every
+   step, and the frame that clips it never scales at all. */
+html[data-shell-mode="simple"] .app-scale {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  zoom: var(--ui-scale, 1);
+  width: calc(100vw / var(--ui-scale, 1));
+  height: calc(100dvh / var(--ui-scale, 1));
+}
+/* Advanced mode keeps the original frame behaviour (no scaling there). */
+html[data-shell-mode="advanced"] .app-scale { display: contents; }
 /* Display scale: a single variable the whole UI scales from. */
 :root { --ui-scale: 1; }
 html[data-ui-scale="90"] { --ui-scale: 0.9; }

@@ -55,6 +55,67 @@ const TOOL_MACHINE = {
   seo_check: 'seo',
 }
 
+// The service that ACTUALLY executes a tool, in product language, for the dock
+// that appears while a run is live. Naming the service is the point: "working…"
+// teaches the operator nothing.
+const TOOL_SERVICE = {
+  system_status: 'Local engine',
+  list_templates: 'Dieline templates',
+  design_brief: 'Brief builder',
+  create_dieline: 'Dieline builder',
+  generate_image: 'ComfyUI',
+  apply_label: 'Label compositor',
+  seo_check: 'SEO check',
+}
+
+// Live voice conversation (continuous listen → answer → speak) is a FUTURE
+// feature. Dictation is real today; spoken replies are optional. The UI must
+// never imply a live conversation is running, so the duplex loop stays behind
+// this flag until streaming voice ships.
+const LIVE_VOICE_ENABLED = false
+
+// ── Asset media ────────────────────────────────────────────────────────────
+// A generated artifact can be absent for different reasons, and collapsing them
+// into one broken thumbnail is how "the image is missing" becomes folklore. The
+// server reports `state` (missing_asset / missing_metadata / missing_file / ok);
+// this renders exactly that, and an image that simply fails to decode gets its
+// own honest note. It never retries, so a 404 cannot become a request loop.
+function AssetMedia({ asset, onOpen }) {
+  const [failed, setFailed] = useState(false)
+  const state = asset.state || null
+  const reason = state === 'missing_file'
+    ? 'File missing — the asset record exists but the file is gone.'
+    : state === 'missing_metadata'
+      ? 'Not stored — this asset has no file to serve.'
+      : state === 'missing_asset' || asset.present === false
+        ? 'Not found — the asset record is gone.'
+        : failed ? 'Unavailable — the file could not be loaded.' : ''
+  if (reason) {
+    return (
+      <div className="chat-asset-missing" data-testid="chat-asset-missing" role="status">
+        <span>{reason}</span>
+        <span className="chat-asset-missing-id">asset {asset.id}</span>
+      </div>
+    )
+  }
+  if (asset.kind === 'video') {
+    return <video src={assetFileUrl(asset.id)} controls preload="metadata"
+      onError={() => setFailed(true)} data-testid="chat-asset-video" />
+  }
+  if (asset.kind === 'dieline') {
+    return (
+      <object data={assetFileUrl(asset.id)} type="image/svg+xml"
+        className="chat-asset-dieline" aria-label={asset.name || 'dieline'}>
+        <span className="chat-asset-meta">{asset.name || 'dieline'}</span>
+      </object>
+    )
+  }
+  return (
+    <img src={assetFileUrl(asset.id)} alt={asset.name || 'generated asset'}
+      loading="lazy" onClick={onOpen} onError={() => setFailed(true)} />
+  )
+}
+
 function toolLabel(name, fallback) {
   return TOOL_LABELS[name] || fallback || name
 }
@@ -266,6 +327,14 @@ export default function ChatSurface({
   const [voices, setVoices] = useState([])
   const [voiceId, setVoiceId] = useState('bojo-narrator')
   const [conversation, setConversation] = useState(false)
+  // Optional spoken replies: after a turn completes, read the answer aloud with
+  // the local voice engine. This is NOT a live conversation and is not labeled
+  // as one anywhere in the UI.
+  const [speakReplies, setSpeakReplies] = useState(false)
+  // One-shot completion mark. Set ONLY from a live turn that ended `done`, so a
+  // reload can never replay a success animation for an old message.
+  const [celebrateId, setCelebrateId] = useState('')
+  const celebrateTimer = useRef(null)
   const [voiceState, setVoiceState] = useState('idle')   // idle|listening|thinking|speaking
   // Per-message rating. This is the improvement loop's strongest signal: a
   // thumbs-down becomes a gap in the nightly cycle. Best-effort by design —
@@ -567,6 +636,13 @@ export default function ChatSurface({
             usage: data.usage || m.usage,
             endedAt: Date.now(),
           }))
+          // Completion mark: only a turn that actually finished cleanly earns
+          // it, and only a LIVE turn (a reload never calls this path).
+          if ((data.status || 'done') === 'done') {
+            setCelebrateId(botId)
+            if (celebrateTimer.current) clearTimeout(celebrateTimer.current)
+            celebrateTimer.current = setTimeout(() => setCelebrateId(''), 1800)
+          }
         }
       }, controller.signal)
     } catch (e) {
@@ -653,6 +729,58 @@ export default function ChatSurface({
     if (rec && rec.state !== 'inactive') rec.stop()
   }, [])
 
+  // ── Spoken replies (optional, one answer at a time) ───────────────────────
+  // Honest replacement for the "live voice" button: nothing listens in the
+  // background, only a finished answer is read out, and it can be stopped.
+  const spokenSeen = useRef('')
+  const spokenAudio = useRef(null)
+
+  const speakReply = useCallback(async (text) => {
+    const clean = String(text || '').trim()
+    if (!clean) return
+    try {
+      if (spokenAudio.current) { try { spokenAudio.current.pause() } catch { /* no audio */ } }
+      const csrfMatch = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
+      const res = await fetch('/api/chat/voice/speak', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json',
+                   ...(csrfMatch ? { 'X-CSRF-Token': decodeURIComponent(csrfMatch[2]) } : {}) },
+        body: JSON.stringify({ text: clean.slice(0, 1200), voice_id: voiceIdRef.current }),
+      })
+      if (!res.ok) {
+        const b = await res.json().catch(() => ({}))
+        const detail = typeof b.detail === 'string' ? b.detail : 'voice unavailable'
+        setVoiceNote(`Spoken replies unavailable: ${detail}`)
+        return
+      }
+      const body = await res.json()
+      if (body.voice_id) setVoiceId((cur) => (cur === body.voice_id ? cur : body.voice_id))
+      const audio = new Audio(body.audio_url)
+      spokenAudio.current = audio
+      await audio.play().catch(() => { setVoiceNote('The browser blocked audio playback.') })
+    } catch (e) {
+      setVoiceNote(`Spoken replies unavailable: ${e.message}`)
+    }
+  }, [])
+
+  const toggleSpeakReplies = useCallback(() => {
+    setSpeakReplies((on) => {
+      const next = !on
+      if (next) {
+        // Enabling must never read out the previous answer; only messages that
+        // finish AFTER the toggle is switched on are spoken.
+        const last = [...messagesRef.current].reverse().find((m) => m.role === 'assistant' && m.content)
+        spokenSeen.current = last ? last.id : ''
+      } else {
+        if (spokenAudio.current) {
+          try { spokenAudio.current.pause() } catch { /* already stopped */ }
+          spokenAudio.current = null
+        }
+      }
+      return next
+    })
+  }, [])
+
   const voiceDisabled = voiceStatus && voiceStatus.ok === false
 
   // The voice list comes from the (external) voice engine. Offline is a normal
@@ -699,6 +827,23 @@ export default function ChatSurface({
     speak(last.content)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streaming, conversation])
+
+  // Spoken replies: when a turn finishes and the toggle is on, read the new
+  // answer once. Keyed off the message id so a re-render cannot replay it.
+  useEffect(() => {
+    if (!speakReplies || streaming) return
+    const last = [...messages].reverse().find((m) => m.role === 'assistant' && m.content)
+    if (!last || last.id === spokenSeen.current) return
+    spokenSeen.current = last.id
+    speakReply(last.content)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, streaming, speakReplies])
+
+  // A spoken answer must stop when the surface goes away.
+  useEffect(() => () => {
+    if (spokenAudio.current) { try { spokenAudio.current.pause() } catch { /* no audio */ } }
+    if (celebrateTimer.current) clearTimeout(celebrateTimer.current)
+  }, [])
 
   // ── Composer auto-grow ────────────────────────────────────────────────────
 
@@ -1072,9 +1217,20 @@ export default function ChatSurface({
               ? Math.max(1, Math.round((m.endedAt - m.startedAt) / 1000))
               : null
             const toolCount = (m.tools || []).length
+            const runningTool = [...(m.tools || [])].reverse().find((t) => t.status === 'running')
             return (
               <div key={m.id}
-                className={`chat-msg ${m.role} ${m.status === 'error' ? 'error' : ''}`}>
+                className={`chat-msg ${m.role} ${m.status === 'error' ? 'error' : ''}`
+                  + `${m.role === 'assistant' && m.status === 'streaming' ? ' is-streaming' : ''}`}>
+                {m.role === 'assistant' && runningTool && (
+                  <div className="chat-dock" data-testid="chat-dock" role="status">
+                    <span className="chat-live-dot" aria-hidden="true" />
+                    {TOOL_SERVICE[runningTool.name] || TOOL_MACHINE[runningTool.name] || 'Local service'}
+                    {' · '}
+                    {toolLabel(runningTool.name, runningTool.label)}
+                    {runningTool.pct != null ? ` · ${runningTool.pct}%` : ''}
+                  </div>
+                )}
                 {m.role === 'assistant' && toolCount > 0 && (
                   <div className="chat-tools" data-testid="chat-tools">
                     {m.tools.map((tj) => (
@@ -1114,23 +1270,7 @@ export default function ChatSurface({
                   <div className="chat-assets" data-testid="chat-assets">
                     {m.assets.map((a, i) => (a.id ? (
                       <div key={`${a.id}-${i}`} className="chat-asset-card">
-                        {(!a.kind || a.kind === 'image') && (
-                          <img src={assetFileUrl(a.id)} alt={a.name || 'generated asset'}
-                            loading="lazy" onClick={() => setLightbox(a)}
-                            onError={(e) => { e.currentTarget.style.display = 'none'; const p = e.currentTarget.parentElement.querySelector('.chat-asset-missing'); if (p) p.style.display = 'flex' } } />
-                        )}
-                        <div className="chat-asset-missing" style={{ display: 'none', alignItems: 'center', justifyContent: 'center', minHeight: 80, color: 'var(--ink-faint)', fontSize: 13 }}>
-                          File missing — asset {a.id}
-                        </div>
-                        {a.kind === 'dieline' && (
-                          <object data={assetFileUrl(a.id)} type="image/svg+xml"
-                            className="chat-asset-dieline" aria-label={a.name || 'dieline'}>
-                            <span className="chat-asset-meta">{a.name || 'dieline'}</span>
-                          </object>
-                        )}
-                        {a.kind === 'video' && (
-                          <video src={assetFileUrl(a.id)} controls preload="metadata" />
-                        )}
+                        <AssetMedia asset={a} onOpen={() => setLightbox(a)} />
                         <span className="chat-asset-meta">
                           <span>
                             {a.name || 'asset'}
@@ -1285,6 +1425,9 @@ export default function ChatSurface({
                     {m.model && <span className="chip">{m.model}</span>}
                     {toolCount > 0 && <span className="chip">{toolCount} tool run{toolCount > 1 ? 's' : ''}</span>}
                     {seconds && <span className="chip">{seconds}s</span>}
+                    {celebrateId === m.id && (
+                      <span className="chat-comet" aria-hidden="true" data-testid="chat-comet" />
+                    )}
                     <button type="button" className="chat-msg-copy" data-testid="chat-fork"
                       title="Branch a new chat from this point — the original is untouched"
                       onClick={() => forkFrom(m.id)}>Fork</button>
@@ -1378,19 +1521,44 @@ export default function ChatSurface({
                 : <Icon name="upload" size={17} />}
             </button>
             <button type="button"
-              className={`chat-icon-btn ${conversation ? 'is-live' : ''}`}
-              title={conversation
-                ? 'End the live conversation'
-                : 'Talk to Bojo (live voice — records locally, transcribes with whisper.cpp)'}
-              onClick={() => (conversation ? stopConversation() : startConversation())}
-              aria-pressed={conversation} data-testid="chat-conversation"
-              aria-label={conversation ? 'End the live conversation' : 'Talk to Bojo'}>
-              {conversation
-                ? (voiceState === 'speaking' ? <Icon name="volume" size={17} />
-                  : voiceState === 'thinking' ? <span className="chat-spinner" aria-hidden="true" />
-                    : <span className="chat-live-dot" aria-hidden="true" />)
-                : <Icon name="mic" size={17} />}
+              className={`chat-icon-btn ${recording ? 'is-live' : ''}`}
+              title={recording
+                ? 'Stop dictation'
+                : 'Dictate a message (records locally, transcribes with whisper.cpp)'}
+              onClick={() => (recording ? stopRecording() : startRecording())}
+              aria-pressed={recording} data-testid="chat-dictate"
+              aria-label={recording ? 'Stop dictation' : 'Dictate a message'}
+              disabled={transcribing}>
+              {transcribing
+                ? <span className="chat-spinner" aria-hidden="true" />
+                : recording
+                  ? <span className="chat-live-dot" aria-hidden="true" />
+                  : <Icon name="mic" size={17} />}
             </button>
+            <button type="button"
+              className={`chat-icon-btn ${speakReplies ? 'is-live' : ''}`}
+              title={speakReplies
+                ? 'Spoken replies are on — turn off'
+                : 'Speak replies aloud (local voice engine)'}
+              onClick={toggleSpeakReplies}
+              aria-pressed={speakReplies} data-testid="chat-speak-replies"
+              aria-label="Speak replies aloud">
+              <Icon name="volume" size={17} />
+            </button>
+            {LIVE_VOICE_ENABLED && (
+              <button type="button"
+                className={`chat-icon-btn ${conversation ? 'is-live' : ''}`}
+                title={conversation ? 'End the live conversation' : 'Start a live conversation'}
+                onClick={() => (conversation ? stopConversation() : startConversation())}
+                aria-pressed={conversation} data-testid="chat-conversation"
+                aria-label={conversation ? 'End the live conversation' : 'Start a live conversation'}>
+                {conversation
+                  ? (voiceState === 'speaking' ? <Icon name="volume" size={17} />
+                    : voiceState === 'thinking' ? <span className="chat-spinner" aria-hidden="true" />
+                      : <span className="chat-live-dot" aria-hidden="true" />)
+                  : <Icon name="mic" size={17} />}
+              </button>
+            )}
             <input ref={fileRef} type="file" hidden
               accept="image/*,video/*,application/pdf,text/plain,text/csv"
               onChange={(e) => uploadFile(e.target.files && e.target.files[0])}

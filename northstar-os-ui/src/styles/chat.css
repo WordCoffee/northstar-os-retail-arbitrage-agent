@@ -237,6 +237,22 @@
 }
 .chat-asset-card img { display: block; width: 100%; height: auto; }
 .chat-asset-meta { display: block; padding: 6px 10px; font-size: 11.5px; color: var(--ink-mid); }
+/* Missing-artifact state: an honest explanation, not a broken-image glyph. */
+.chat-asset-missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 80px;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-faint, #8a8377);
+  background: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0 8px, transparent 8px 16px);
+  border-bottom: 1px dashed var(--divider, rgba(0, 0, 0, 0.12));
+}
+.chat-asset-missing-id { font-size: 11px; opacity: 0.75; font-variant-numeric: tabular-nums; }
 .chat-voice-note { color: var(--status-warn); }
 
 /* ── Immersive plan graph (V3 S5 deep-visual) ────────────────────────────── */

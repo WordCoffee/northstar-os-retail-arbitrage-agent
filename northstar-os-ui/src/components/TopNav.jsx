@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { useSession } from '../foundation/session.jsx'
 import ShellModeToggle from './ShellModeToggle.jsx'
+import { useMode } from '../context/ModeContext.jsx'
 
+// Display scale is a SIMPLE-SHELL setting (Simple and AutothinK share the same
+// frame). Advanced mode is a dense room shell whose own layout is not built for
+// a scaled root, so the control is not offered there at all.
 function DisplayScaleControl() {
   const [scale, setScale] = useState(() => {
     try { return localStorage.getItem('ns-ui-scale') || '100' } catch { return '100' }
@@ -13,24 +17,33 @@ function DisplayScaleControl() {
     try { localStorage.setItem('ns-ui-scale', scale) } catch { /* storage */ }
   }, [scale])
   return (
-    <select
+    <div
       className="top-nav-scale"
-      value={scale}
-      onChange={(e) => setScale(e.target.value)}
+      role="group"
       aria-label="Display scale"
-      title="Display scale"
+      title="Display scale (Simple and AutothinK)"
+      data-testid="ns-display-scale"
     >
-      <option value="90">90%</option>
-      <option value="100">100%</option>
-      <option value="115">115%</option>
-      <option value="130">130%</option>
-    </select>
+      {['90', '100', '115', '130'].map((v) => (
+        <button
+          key={v}
+          type="button"
+          className={`top-nav-scale-opt ${scale === v ? 'is-on' : ''}`}
+          aria-pressed={scale === v}
+          data-testid={`ns-scale-${v}`}
+          onClick={() => setScale(v)}
+        >
+          {v}%
+        </button>
+      ))}
+    </div>
   )
 }
 
 export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
   const navigate = useNavigate()
   const session = useSession()
+  const { mode } = useMode()
   const [menu, setMenu] = useState('') // '' | 'notifications' | 'create'
 
   const toggle = (name) => setMenu((m) => (m === name ? '' : name))
@@ -59,8 +72,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
         </div>
 
         <ShellModeToggle />
-        <DisplayScaleControl />
-        <DisplayScaleControl />
+        {mode === 'simple' && <DisplayScaleControl />}
 
         <div className="top-nav-action">
           <button

@@ -61,10 +61,12 @@ function ArtifactsView({ artifacts }) {
               <div className="wb-artifact-name" title={a.name}>{a.name}</div>
               <div className="wb-artifact-sub">
                 {a.asset_type || a.kind || 'artifact'}
-                {a.present === false && ' · file missing'}
+                {a.state === 'missing_file' && ' · file missing'}
+                {a.state === 'missing_metadata' && ' · not stored (no file)'}
+                {a.state === 'missing_asset' && ' · record missing'}
               </div>
             </div>
-            {a.present && a.asset_id && (
+            {a.file_present !== false && a.present !== false && a.asset_id && (
               <a className="wb-artifact-dl" href={assetFileUrl(a.asset_id)} download>Download</a>
             )}
           </div>

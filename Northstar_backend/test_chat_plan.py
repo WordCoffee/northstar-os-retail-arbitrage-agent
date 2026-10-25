@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import sys
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -171,6 +172,48 @@ def test_artifacts_marks_missing_asset_honestly(db):
     with mock.patch.object(chat_router, "get_northstar_db", return_value=db):
         out = chat_router.session_artifacts(sid, acct="acct-1")
     assert out["artifacts"][0]["present"] is False
+    assert out["artifacts"][0]["state"] == "missing_asset"
+    assert out["artifacts"][0]["file_present"] is None
+
+
+def _attach_with_key(db, sid, ids, asset_id, storage_key):
+    db.design_studio.assets.create({"id": asset_id, "account_id": "acct-1", "name": "Art",
+                                    "asset_type": "image", "mime_type": "image/png",
+                                    "size_bytes": 10, "storage_key": storage_key})
+    db.chat.attachments.create({"account_id": "acct-1", "message_id": ids[1],
+                                "asset_id": asset_id, "kind": "image"})
+
+
+def test_artifacts_distinguish_missing_metadata_from_missing_file(db, tmp_path):
+    """The UI renders a different state for each, so the API must not merge them."""
+    sid, ids = _seed(db)
+    _attach_with_key(db, sid, ids, "no-key", None)
+    _attach_with_key(db, sid, ids, "no-file", "studio_generated/definitely-not-there.png")
+    with mock.patch.object(chat_router, "get_northstar_db", return_value=db):
+        arts = {a["asset_id"]: a for a in chat_router.session_artifacts(sid, acct="acct-1")["artifacts"]}
+    assert arts["no-key"]["present"] is True
+    assert arts["no-key"]["file_present"] is None
+    assert arts["no-key"]["state"] == "missing_metadata"
+    assert arts["no-file"]["present"] is True
+    assert arts["no-file"]["file_present"] is False
+    assert arts["no-file"]["state"] == "missing_file"
+
+
+def test_artifacts_report_a_real_file_as_ok(db):
+    sid, ids = _seed(db)
+    out_dir = Path(chat_router.__file__).resolve().parent / "data" / "studio_generated"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    f = out_dir / "test-artifact-present.png"
+    f.write_bytes(b"\x89PNG\r\n\x1a\n")
+    try:
+        _attach_with_key(db, sid, ids, "real", "studio_generated/test-artifact-present.png")
+        with mock.patch.object(chat_router, "get_northstar_db", return_value=db):
+            art = chat_router.session_artifacts(sid, acct="acct-1")["artifacts"][0]
+        assert art["state"] == "ok"
+        assert art["file_present"] is True
+        assert art["present"] is True
+    finally:
+        f.unlink(missing_ok=True)
 
 
 def test_artifacts_are_session_scoped(db):

@@ -1034,7 +1034,21 @@ def session_plan(sid: str, acct: str = Depends(studio_account)):
 
 @router.get("/sessions/{sid}/artifacts")
 def session_artifacts(sid: str, acct: str = Depends(studio_account)):
-    """Every build artifact attached to a session, with ds_assets metadata."""
+    """Every build artifact attached to a session, with ds_assets metadata.
+
+    Four different "it is not there" situations used to collapse into one broken
+    thumbnail, so the workbench could not tell the operator which one happened:
+
+      missing_asset    - the attachment points at an asset row that no longer exists
+      missing_metadata - the row exists but has no storage_key (nothing to serve)
+      missing_file     - the row and key exist but the backing file is gone
+      ok               - row + file present
+
+    `present` keeps its historical meaning (the asset ROW exists) because other
+    callers depend on it; `file_present`/`state` are the honest new detail.
+    An asset owned by another account is refused by get_by_id and therefore reads
+    as missing_asset - the same 404 posture as the file route.
+    """
     db = get_northstar_db()
     session = db.chat.sessions.get_by_id(sid, account_id=acct)
     if not session:
@@ -1061,9 +1075,24 @@ def session_artifacts(sid: str, acct: str = Depends(studio_account)):
             "message_id": att.get("message_id"),
             "provenance": att.get("provenance_json"),
             "created_at": att.get("created_at"),
-            "present": asset is not None,
+            **_artifact_file_state(asset),
         })
     return {"session_id": sid, "artifacts": items}
+
+
+def _artifact_file_state(asset: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Row-level and file-level presence, reported separately (never guessed)."""
+    if not asset:
+        return {"present": False, "file_present": None, "state": "missing_asset"}
+    key = asset.get("storage_key")
+    if not key:
+        return {"present": True, "file_present": None, "state": "missing_metadata"}
+    from pathlib import Path
+    name = Path(str(key)).name  # basename only - identical to the file route
+    path = Path(__file__).resolve().parent / "data" / "studio_generated" / name
+    if not path.is_file():
+        return {"present": True, "file_present": False, "state": "missing_file"}
+    return {"present": True, "file_present": True, "state": "ok"}
 
 
 @router.get("/runs")

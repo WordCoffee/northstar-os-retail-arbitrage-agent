@@ -235,6 +235,7 @@ function Shell() {
           {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
         </div>
       )}
+      <div className="app-scale">
       <TopNav
         role={role}
         paletteOpen={paletteOpen}
@@ -251,6 +252,7 @@ function Shell() {
         </main>
       </div>
       <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />
+      </div>
       {toolsOpen && (
         <div className="tools-sheet-overlay" onClick={() => setToolsOpen(false)}>
           <div className="tools-sheet" onClick={e => e.stopPropagation()}>
