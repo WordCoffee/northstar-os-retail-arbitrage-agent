@@ -1508,12 +1508,12 @@ export default function ChatSurface({
               <button type="button" className="btn btn-sm" onClick={startRecording}
                 disabled={transcribing || !!voiceDisabled} data-testid="chat-voice"
                 title={voiceDisabled
-                  ? `Voice unavailable: ${voiceStatus.detail || 'whisper not found'}`
-                  : 'Push-to-talk (local whisper.cpp)'}
-                aria-label="Record voice message">
+                  ? `Dictation unavailable: ${voiceStatus.detail || 'whisper not found'}`
+                  : 'Dictate: record, transcribe, then answer (local whisper.cpp)'}
+                aria-label="Dictate a message">
                 {transcribing
                   ? <><span className="chat-spinner" aria-hidden="true" /> Transcribing…</>
-                  : <><Icon name="mic" size={14} /> Voice</>}
+                  : <><Icon name="mic" size={14} /> Dictate</>}
               </button>
             )}
             <button type="button" className="btn btn-primary btn-sm" onClick={() => send()}

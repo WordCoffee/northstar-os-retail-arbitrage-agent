@@ -455,3 +455,317 @@ def import_snapshot(path: str, store, *, provider_name: str = PROVIDER,
         imported += 1
     return {"provider": provider_name, "result_status": "imported", "records": imported,
             "snapshot_sha256": sha, "dry_run": dry_run, "network_calls_made": 0}
+
+
+# ---------------------------------------------------------------------------
+# Adapter completion (C3 operator directive: keep + finish the symbols)
+# ---------------------------------------------------------------------------
+
+import json as _json
+import os as _os
+from pathlib import Path as _Path
+
+CAMPAIGN_MAX_URLS = 150
+CREDIT_CAP_FREE = 5000
+PAID_CAP_USD = 0.0
+CHUNK_SIZE = 10
+GTIN_MPN_COVERAGE_MIN_PCT = 25
+MAPPING_FAILURE_MAX_PCT = 20
+CAMPAIGN_STOP_CONDITIONS = [
+    "gtin_mpn_coverage_under_25pct_after_first_50",
+    "mapping_failure_over_20pct",
+]
+
+_FOOD_TOKENS = ("juice", "cranberry", "beverage", "food", "snack", "coffee", "tea",
+                "soda", "milk", "ocean spray", "wine", "beer", "cereal", "pasta",
+                "sauce", "soup", "chips")
+
+
+def _clean(v):
+    if v is None:
+        return None
+    s = str(v).strip()
+    return s if s else None
+
+
+def _is_numeric_item(v):
+    s = _clean(v)
+    if not s:
+        return False
+    try:
+        int(s)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def classify_pack_state(rec):
+    pack_raw = rec.get("costco_pack_raw")
+    unit_count = rec.get("normalized_unit_count")
+    pack_known = (pack_raw is not None) or (unit_count is not None)
+    split_status = _clean(rec.get("split_pack_status"))
+    confirmed = split_status not in (None, "", "unknown")
+    return {
+        "pack_known": bool(pack_known),
+        "pack_unknown_pending_enrichment": (not bool(pack_known)),
+        "confirmed_split_review_required": bool(confirmed),
+        "split_status_unknown": (not bool(confirmed)),
+        "split_evidence_source": ("explicit_field" if confirmed else "none"),
+    }
+
+
+def category_proxy(title):
+    t = (str(title) if title is not None else "").lower()
+    if any(w in t for w in ("towel", "cotton", "clean", "soap", "detergent", "mop",
+                             "broom", "brush", "rag")):
+        return "cleaning"
+    if any(w in t for w in ("bowl", "tupperware", "kitchen", "cookware", "utensil",
+                             "plate", "cup", "mug", "pan", "pot", "bottle", "container")):
+        return "kitchen"
+    if any(w in t for w in ("juice", "cranberry", "beverage", "food", "snack",
+                             "coffee", "tea", "soda", "milk", "wine", "beer",
+                             "cereal", "pasta", "sauce", "soup", "chips")):
+        return "food_beverage"
+    return "general"
+
+
+def _is_food_beverage(title):
+    t = (str(title) if title is not None else "").lower()
+    return any(tok in t for tok in _FOOD_TOKENS)
+
+
+def _is_oversized_poor_fit(title):
+    t = (str(title) if title is not None else "").lower()
+    return "area rug" in t or "rug collection" in t
+
+
+def previously_submitted_urls(store):
+    urls = set()
+    try:
+        recs = store.list_enrichment_records()
+    except Exception:
+        recs = []
+    # map enrichment records -> source product urls by item number
+    try:
+        srcs = store.list_source_products()
+    except Exception:
+        srcs = []
+    by_item = {}
+    for s in srcs:
+        by_item.setdefault(s.get("costco_item_number"), []).append(s)
+    for er in recs:
+        item = er.get("costco_item_number")
+        for s in by_item.get(item, []):
+            u = s.get("source_url")
+            if u:
+                urls.add(u)
+    # also honor any source_url stored on the enrichment record itself
+    for er in recs:
+        u = er.get("source_url")
+        if u:
+            urls.add(u)
+    return urls
+
+
+def _filter_basic(r):
+    """Return (ok, reason) for a source product record."""
+    if not r.get("eligible_for_costco_non_kirkland_workflow"):
+        return (False, None)  # silently skip non-eligible
+    if not (r.get("brand_normalized") or r.get("brand_raw")):
+        return (False, "no_brand")
+    if r.get("costco_price") is None:
+        return (False, "no_price")
+    if not (r.get("costco_item_number") or r.get("source_record_id")):
+        return (False, None)
+    return (True, None)
+
+
+def build_enrichment_manifest(store, run_id=None, max_items=25, excluded_urls=None):
+    excluded_urls = excluded_urls or set()
+    rows = store.list_source_products(run_id=run_id, limit=1_000_000)
+    filter_counts = {
+        "after_filters": 0,
+        "no_brand": 0,
+        "no_price": 0,
+        "previously_submitted": 0,
+        "duplicate_url": 0,
+        "oversized_poor_fit": 0,
+    }
+    candidates = []
+    seen_urls = set()
+    for r in rows:
+        ok, reason = _filter_basic(r)
+        if not ok:
+            if reason:
+                filter_counts[reason] = filter_counts.get(reason, 0) + 1
+            continue
+        url = r.get("source_url")
+        if url in excluded_urls:
+            filter_counts["previously_submitted"] += 1
+            continue
+        if url is not None and url in seen_urls:
+            filter_counts["duplicate_url"] += 1
+            continue
+        title = r.get("title_raw") or ""
+        if _is_oversized_poor_fit(title):
+            filter_counts["oversized_poor_fit"] += 1
+            continue
+        if len(candidates) >= max_items:
+            continue
+        seen_urls.add(url)
+        cp_state = classify_pack_state(r)
+        cand = {
+            "source_product_id": r.get("id"),
+            "costco_item_number": r.get("costco_item_number") or r.get("source_record_id"),
+            "url": url,
+            "brand": r.get("brand_raw"),
+            "costco_price": r.get("costco_price"),
+            "category_proxy": category_proxy(title),
+            "existing_pack_evidence": r.get("costco_pack_raw"),
+            "pack_known": cp_state["pack_known"],
+            "pack_unknown_pending_enrichment": cp_state["pack_unknown_pending_enrichment"],
+            "confirmed_split_review_required": cp_state["confirmed_split_review_required"],
+            "split_status_unknown": cp_state["split_status_unknown"],
+        }
+        candidates.append(cand)
+    filter_counts["after_filters"] = len(candidates)
+    distinct_urls = len(set(c.get("url") for c in candidates))
+    return {
+        "sample_size": len(candidates),
+        "filter_counts": filter_counts,
+        "candidates": candidates,
+        "distinct_urls": distinct_urls,
+        "network_calls_made": 0,
+    }
+
+
+def build_campaign_manifest(store, run_id=None, max_urls=150, excluded_urls=None,
+                           per_brand_max=5, per_category_max=15):
+    excluded_urls = excluded_urls or set()
+    rows = store.list_source_products(run_id=run_id, limit=1_000_000)
+    filter_counts = {
+        "duplicate_url": 0,
+        "previously_submitted": 0,
+        "food_beverage": 0,
+        "high_cogs_over_100": 0,
+        "no_brand": 0,
+        "no_price": 0,
+    }
+    candidates = []
+    seen_urls = set()
+    brand_counts = {}
+    category_counts = {}
+    for r in rows:
+        ok, reason = _filter_basic(r)
+        if not ok:
+            if reason:
+                filter_counts[reason] = filter_counts.get(reason, 0) + 1
+            continue
+        url = r.get("source_url")
+        if url in excluded_urls:
+            filter_counts["previously_submitted"] += 1
+            continue
+        if url is not None and url in seen_urls:
+            filter_counts["duplicate_url"] += 1
+            continue
+        title = r.get("title_raw") or ""
+        if _is_food_beverage(title):
+            filter_counts["food_beverage"] += 1
+            continue
+        price = r.get("costco_price")
+        if price is not None and price > 100:
+            filter_counts["high_cogs_over_100"] += 1
+            continue
+        brand = r.get("brand_raw") or ""
+        cp = category_proxy(title)
+        if brand_counts.get(brand, 0) >= per_brand_max:
+            continue
+        if category_counts.get(cp, 0) >= per_category_max:
+            continue
+        if len(candidates) >= max_urls:
+            continue
+        seen_urls.add(url)
+        brand_counts[brand] = brand_counts.get(brand, 0) + 1
+        category_counts[cp] = category_counts.get(cp, 0) + 1
+        cp_state = classify_pack_state(r)
+        cand = {
+            "source_product_id": r.get("id"),
+            "costco_item_number": r.get("costco_item_number") or r.get("source_record_id"),
+            "url": url,
+            "brand": r.get("brand_raw"),
+            "costco_price": r.get("costco_price"),
+            "title": r.get("title_raw"),
+            "category_proxy": cp,
+            "pack_unknown_pending_enrichment": cp_state["pack_unknown_pending_enrichment"],
+            "split_status_unknown": cp_state["split_status_unknown"],
+            "confirmed_split_review_required": cp_state["confirmed_split_review_required"],
+        }
+        candidates.append(cand)
+    max_brand_count = max(brand_counts.values()) if brand_counts else 0
+    return {
+        "manifest_size": len(candidates),
+        "credit_cap_free": CREDIT_CAP_FREE,
+        "paid_balance_cap_usd": PAID_CAP_USD,
+        "chunk_size": CHUNK_SIZE,
+        "chunk_count": (len(candidates) + CHUNK_SIZE - 1) // CHUNK_SIZE,
+        "filter_counts": filter_counts,
+        "candidates": candidates,
+        "diversification": {
+            "max_brand_count": max_brand_count,
+            "category_proxy_distribution": category_counts,
+        },
+        "network_calls_made": 0,
+    }
+
+
+def is_costco_product_url(url):
+    if not url:
+        return False
+    import re as _re
+    return bool(_re.match(r"^https?://www\.costco\.com/\.product\.\d+\.html$", str(url)))
+
+
+def resolve_product_url(rec, template_supported=True):
+    src_url = rec.get("source_url")
+    item = rec.get("costco_item_number")
+    if is_costco_product_url(src_url):
+        return {"status": "verified_source_url", "url": src_url}
+    if _is_numeric_item(item) and template_supported:
+        return {"status": "derived_from_item_number",
+                "url": f"https://www.costco.com/.product.{item}.html"}
+    return {"status": "url_resolution_required", "url": None}
+
+
+def build_schema_test_manifest(store, run_id=None, max_items=3):
+    rows = store.list_source_products(run_id=run_id, limit=1_000_000)
+    candidates = []
+    for r in rows:
+        res = resolve_product_url(r)
+        if res["status"] != "verified_source_url":
+            continue
+        if len(candidates) >= max_items:
+            continue
+        candidates.append({
+            "source_product_id": r.get("id"),
+            "costco_item_number": r.get("costco_item_number"),
+            "url": res["url"],
+            "url_status": "verified_source_url",
+        })
+    return {
+        "sample_size": len(candidates),
+        "candidates": candidates,
+        "network_calls_made": 0,
+    }
+
+
+def load_collector_config():
+    # repo root config/
+    here = _Path(__file__).resolve()
+    # Northstar_backend/costco_non_kirkland -> repo root is 2 up
+    repo_root = here.parents[2]
+    cfg_path = repo_root / "config" / "brightdata_costco_collector.json"
+    if not cfg_path.exists():
+        # try cwd
+        cfg_path = _Path("config") / "brightdata_costco_collector.json"
+    with open(cfg_path, "r", encoding="utf-8") as fh:
+        return _json.load(fh)

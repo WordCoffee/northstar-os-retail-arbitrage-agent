@@ -42,7 +42,7 @@ except ImportError:  # pragma: no cover - defensive
     _model_router = None
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional
 
@@ -151,8 +151,11 @@ def _require_tenant(org_id: Optional[str]) -> str:
 
 
 @app.get("/")
-def index() -> FileResponse:
-    return FileResponse(UI_PATH)
+def index() -> RedirectResponse:
+    # C2 (operator decision 2026-10-24): the standalone :8100 UI is deprecated in
+    # favour of the React AutothinK focus (one surface, one theme family). Redirect
+    # so any bookmark/launcher still lands on the live surface instead of a 404.
+    return RedirectResponse(url="http://127.0.0.1:8000/ui/autothink", status_code=302)
 
 
 @app.get("/health")
