@@ -373,48 +373,69 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
     const canvas = canvasRef.current
     if (!canvas) return undefined
     let gl = null
-    try {
-      gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' })
-        || canvas.getContext('experimental-webgl')
-    } catch { gl = null }
-    if (!gl) {
-      canvas.dataset.cosmicFallback = '1'
-      return undefined
-    }
-    const vs = compile(gl, gl.VERTEX_SHADER, VERT)
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG)
-    if (!vs || !fs) {
-      canvas.dataset.cosmicFallback = '1'
-      return undefined
-    }
-    const prog = gl.createProgram()
-    gl.attachShader(prog, vs)
-    gl.attachShader(prog, fs)
-    gl.linkProgram(prog)
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      canvas.dataset.cosmicFallback = '1'
-      return undefined
-    }
-    gl.useProgram(prog)
-    const buf = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
-    const loc = gl.getAttribLocation(prog, 'a_pos')
-    gl.enableVertexAttribArray(loc)
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
-    const uRes = gl.getUniformLocation(prog, 'u_res')
-    const uTime = gl.getUniformLocation(prog, 'u_time')
-    const uPulse = gl.getUniformLocation(prog, 'u_pulse')
-    const uTint = gl.getUniformLocation(prog, 'u_tint')
-    const uHorizon = gl.getUniformLocation(prog, 'u_horizon')
-    const uPlanet = gl.getUniformLocation(prog, 'u_planet')
-    const uIdle = gl.getUniformLocation(prog, 'u_idle')
+    let vs = null
+    let fs = null
+    let prog = null
+    let buf = null
+    let uRes = null
+    let uTime = null
+    let uPulse = null
+    let uTint = null
+    let uHorizon = null
+    let uPlanet = null
+    let uIdle = null
+    let lost = false
     let lastTint = ''
+
+    // Honest fallback: the CSS scene under the canvas is what the operator sees
+    // when the GPU path is unavailable. `data-cosmic-lost` keeps the REASON
+    // observable instead of a mysterious dark rectangle.
+    const fallback = (why) => {
+      canvas.dataset.cosmicFallback = '1'
+      if (why) canvas.dataset.cosmicLost = why
+    }
 
     const reduced = typeof window.matchMedia === 'function'
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    // Build every GPU resource. Runs at mount and AGAIN after a context restore,
+    // because a restored context has no programs, buffers or shader objects left.
+    const boot = () => {
+      try {
+        gl = gl || canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' })
+          || canvas.getContext('experimental-webgl')
+      } catch { gl = null }
+      if (!gl) { fallback(); return false }
+      vs = compile(gl, gl.VERTEX_SHADER, VERT)
+      fs = compile(gl, gl.FRAGMENT_SHADER, FRAG)
+      if (!vs || !fs) { fallback(); return false }
+      prog = gl.createProgram()
+      gl.attachShader(prog, vs)
+      gl.attachShader(prog, fs)
+      gl.linkProgram(prog)
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { fallback(); return false }
+      gl.useProgram(prog)
+      buf = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
+      const loc = gl.getAttribLocation(prog, 'a_pos')
+      gl.enableVertexAttribArray(loc)
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
+      uRes = gl.getUniformLocation(prog, 'u_res')
+      uTime = gl.getUniformLocation(prog, 'u_time')
+      uPulse = gl.getUniformLocation(prog, 'u_pulse')
+      uTint = gl.getUniformLocation(prog, 'u_tint')
+      uHorizon = gl.getUniformLocation(prog, 'u_horizon')
+      uPlanet = gl.getUniformLocation(prog, 'u_planet')
+      uIdle = gl.getUniformLocation(prog, 'u_idle')
+      lost = false
+      delete canvas.dataset.cosmicFallback
+      delete canvas.dataset.cosmicLost
+      return true
+    }
+
     const resize = () => {
+      if (!gl || lost) return
       const dpr = Math.min(window.devicePixelRatio || 1, Math.max(0.75, dprRef.current))
       const w = Math.max(1, Math.floor(canvas.clientWidth * dpr))
       const h = Math.max(1, Math.floor(canvas.clientHeight * dpr))
@@ -431,6 +452,9 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
     let lastFrame = performance.now()
     const start = performance.now()
     const draw = (now) => {
+      // A lost context has no valid GL state: drawing would throw and the canvas
+      // would freeze on its last frame. The CSS scene shows instead.
+      if (lost || !gl || !prog) return
       const t = (now - start) / 1000
       // Frame-rate independent easing: EASE is defined per 1/60s, so a slow GPU
       // must not stretch the ~3.5s transition (it did, before this fix).
@@ -465,23 +489,52 @@ export default function CosmicCanvas({ active = false, maxDpr = 1.5, themeId = '
       if (!reduced && !hidden) raf = requestAnimationFrame(draw)
     }
 
-    resize()
-    const onResize = () => { resize(); if (reduced) draw(performance.now()) }
+    const onResize = () => { resize(); if (reduced && !lost) draw(performance.now()) }
     const onVis = () => {
       hidden = document.visibilityState === 'hidden'
       if (!reduced) {
-        if (!hidden) { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw) }
+        if (!hidden && !lost) { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw) }
         else cancelAnimationFrame(raf)
       }
     }
+
+    // ── WebGL context loss ────────────────────────────────────────────────
+    // The GPU process can drop the context at any time: a driver reset, the tab
+    // being discarded, or too many live contexts in one browser session. Without
+    // this the canvas KEEPS ITS LAST FRAME forever and the shell looks frozen
+    // rather than broken. Falls back to the CSS scene, retries exactly once when
+    // the browser restores the context, and never spins.
+    const onLost = (event) => {
+      event.preventDefault()          // required, or the context can never come back
+      lost = true
+      cancelAnimationFrame(raf)
+      fallback('context_lost')
+      // eslint-disable-next-line no-console
+      console.warn('[cosmic] WebGL context lost — showing the CSS scene')
+    }
+    const onRestored = () => {
+      if (!boot()) return
+      resize()
+      lastFrame = performance.now()
+      if (!hidden) { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw) }
+    }
+    canvas.addEventListener('webglcontextlost', onLost, false)
+    canvas.addEventListener('webglcontextrestored', onRestored, false)
+
+    if (boot()) {
+      resize()
+      raf = requestAnimationFrame(draw)
+    }
+
     window.addEventListener('resize', onResize)
     document.addEventListener('visibilitychange', onVis)
-    raf = requestAnimationFrame(draw)
 
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', onVis)
+      canvas.removeEventListener('webglcontextlost', onLost)
+      canvas.removeEventListener('webglcontextrestored', onRestored)
       try { gl.deleteBuffer(buf); gl.deleteProgram(prog); gl.deleteShader(vs); gl.deleteShader(fs) } catch { /* teardown */ }
     }
   }, [])

@@ -61,16 +61,21 @@ switched on. The duplex loop is retained behind `LIVE_VOICE_ENABLED = false` and
 is not rendered.
 **State:** fixed in source; build + gate green.
 
-## D5 — Renaming a session from the rail does not open the input
+## D5 — Renaming a session from the rail did not open the input (likely controller-induced)
 
-**Observed:** `click .chat-rail-row.active .chat-rail-edit` returned `ok: true`,
+**Observed once:** `click .chat-rail-row.active .chat-rail-edit` returned `ok: true`,
 and the immediately following `type .chat-rail-rename | TEST-20261024` failed
-because `[class="chat-rail-rename"]` does not exist.
-**Consequence:** the step-0 requirement "start a NEW session named TEST-<date>"
-is only half met — the session exists (created by the first prompt) but is titled
-with the prompt text.
-**State:** open. Needs one UI run to reproduce with a screenshot of the rail (D1
-blocks it).
+because no `.chat-rail-rename` input existed.
+**Source check:** the markup is correct — `renamingId === s.id` renders
+`<input class="chat-rail-rename" autoFocus …>` and the edit button sets exactly
+that state. There is no code path that clears it between the two steps.
+**Most likely cause:** the same duplicate-tab controller bug that D-tab fixed.
+At that moment the same app was open in two tabs; the click landed in one tab and
+the `type` looked in the other, so the input existed — just not in the tab being
+driven. That exact ambiguity is what the sticky-tab fix removes.
+**State:** NOT REPRODUCED after the controller fix; must be re-run through the UI
+before it is either closed or reopened. The step-0 requirement ("session named
+TEST-20261024") is therefore still only half met.
 
 ## D6 — Controller marks a successful UI turn as FAILED
 
@@ -82,7 +87,21 @@ failure could be argued away. The check needs to compare against the composer
 value / persisted message, not a truncated body dump.
 **State:** open (controller).
 
-## D7 — Four different "missing artifact" situations collapsed into one
+## D8 — WebGL context loss froze the hero scenery
+
+**Cause:** `CosmicCanvas` handled "WebGL unavailable at mount" (CSS fallback) but
+had no `webglcontextlost` / `webglcontextrestored` handling. A dropped GPU context
+(driver reset, discarded tab, too many live contexts) left the canvas showing its
+last frame forever — the shell looks frozen, not broken.
+**Fix:** `boot()` was extracted so every GPU resource (shaders, program, buffer,
+uniforms) can be rebuilt; `webglcontextlost` calls `preventDefault()` (mandatory,
+or the context can never be restored), cancels the RAF, sets
+`data-cosmic-fallback="1"` + `data-cosmic-lost="context_lost"` so the CSS scene
+shows and the reason stays observable; `webglcontextrestored` re-boots once and
+resumes. `draw()`/`resize()` refuse to touch a lost context instead of throwing.
+**State:** fixed; `npm run build` clean, shell gate 28/0. Cannot be exercised
+until D1 clears.
+
 
 **Cause:** `/api/chat/sessions/{sid}/artifacts` reported a single `present` flag
 (does the asset ROW exist) and the transcript rendered one broken-thumbnail path.
