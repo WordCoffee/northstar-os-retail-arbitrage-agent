@@ -1116,8 +1116,12 @@ export default function ChatSurface({
                       <div key={`${a.id}-${i}`} className="chat-asset-card">
                         {(!a.kind || a.kind === 'image') && (
                           <img src={assetFileUrl(a.id)} alt={a.name || 'generated asset'}
-                            loading="lazy" onClick={() => setLightbox(a)} />
+                            loading="lazy" onClick={() => setLightbox(a)}
+                            onError={(e) => { e.currentTarget.style.display = 'none'; const p = e.currentTarget.parentElement.querySelector('.chat-asset-missing'); if (p) p.style.display = 'flex' } } />
                         )}
+                        <div className="chat-asset-missing" style={{ display: 'none', alignItems: 'center', justifyContent: 'center', minHeight: 80, color: 'var(--ink-faint)', fontSize: 13 }}>
+                          File missing — asset {a.id}
+                        </div>
                         {a.kind === 'dieline' && (
                           <object data={assetFileUrl(a.id)} type="image/svg+xml"
                             className="chat-asset-dieline" aria-label={a.name || 'dieline'}>
