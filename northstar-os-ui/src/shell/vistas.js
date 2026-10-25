@@ -20,15 +20,15 @@ function hashSeed(str) {
   return h >>> 0
 }
 
-export function vistaForToday(accountId = '') {
-  const d = new Date()
+export function vistaForToday(accountId = '', now = null) {
+  const d = now ? new Date(now) : new Date()
   const key = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}::${accountId || 'anon'}`
   const idx = hashSeed(key) % VISTAS.length
   return VISTAS[idx]
 }
 
-export function vistaIndexForToday(accountId = '') {
-  const d = new Date()
+export function vistaIndexForToday(accountId = '', now = null) {
+  const d = now ? new Date(now) : new Date()
   const key = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}::${accountId || 'anon'}`
   return hashSeed(key) % VISTAS.length
 }
