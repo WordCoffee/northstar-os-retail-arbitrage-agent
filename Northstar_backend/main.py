@@ -11,6 +11,19 @@ import json
 import re
 from datetime import datetime, timezone
 
+# Single authoritative .env load (repo root). Modules below call load_dotenv with
+# override=False, so values set here win and a backend started WITHOUT a launcher
+# no longer silently misses root-only keys (DATAFORSEO_*, FIRECRAWL_*, etc.).
+# See known issue 'dual_dotenv_divergence_backend_shadowing' (resolved: root
+# authoritative). This keeps /health honest about login state.
+try:
+    from dotenv import load_dotenv
+    from pathlib import Path as _Path
+    _REPO_ROOT = _Path(__file__).resolve().parent.parent
+    load_dotenv(_REPO_ROOT / ".env", override=False)
+except Exception:  # noqa: BLE001 - .env is optional; never block startup
+    pass
+
 from pricing import compute_profit, estimate_fba_fee, estimate_financial_profile
 from product_analysis import analyze_kirkland_products
 import amazon_search

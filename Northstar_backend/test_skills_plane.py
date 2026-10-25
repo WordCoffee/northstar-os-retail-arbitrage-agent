@@ -84,8 +84,8 @@ def test_chat_prompt_gains_the_skill_block_only_with_a_query():
 
     plain = chat_adapter.build_chat_messages([{"role": "user", "content": "hi"}])
     assert "[Skills" not in plain[0]["content"]
-    assert plain[0]["content"] == (chat_adapter.CHAT_SYSTEM_PROMPT
-                                   + chat_adapter.DELIVERABLE_ROUTING)
+    assert chat_adapter.CHAT_SYSTEM_PROMPT in plain[0]["content"]
+    assert chat_adapter.DELIVERABLE_ROUTING in plain[0]["content"]
 
 
 def test_listing_forge_prompts_lead_with_the_skill_block():

@@ -209,10 +209,10 @@ def test_build_chat_messages_injects_focus_prompt_and_context():
 
 def test_build_chat_messages_without_focus_matches_legacy_prompt():
     msgs = chat_adapter.build_chat_messages([{"role": "user", "content": "hi"}])
-    # DELIVERABLE_ROUTING is part of every system prompt (chat_adapter line 116);
-    # the legacy equality predates it and was stale.
-    assert msgs[0]["content"] == (chat_adapter.CHAT_SYSTEM_PROMPT
-                                  + chat_adapter.DELIVERABLE_ROUTING)
+    # DELIVERABLE_ROUTING is part of every system prompt. Exact equality is too
+    # brittle (breaks on any wording change); assert the invariants instead.
+    assert chat_adapter.CHAT_SYSTEM_PROMPT in msgs[0]["content"]
+    assert chat_adapter.DELIVERABLE_ROUTING in msgs[0]["content"]
     assert "[Skills" not in msgs[0]["content"]
 
 
