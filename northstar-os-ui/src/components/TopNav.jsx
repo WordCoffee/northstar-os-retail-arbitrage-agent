@@ -60,6 +60,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
 
         <ShellModeToggle />
         <DisplayScaleControl />
+        <DisplayScaleControl />
 
         <div className="top-nav-action">
           <button
