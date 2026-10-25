@@ -561,6 +561,12 @@ html[data-shell-mode="simple"] .app {
   min-height: 0;
   overflow: hidden;
 }
+/* Display scale: a single variable the whole UI scales from. */
+:root { --ui-scale: 1; }
+html[data-ui-scale="90"] { --ui-scale: 0.9; }
+html[data-ui-scale="100"] { --ui-scale: 1; }
+html[data-ui-scale="115"] { --ui-scale: 1.15; }
+html[data-ui-scale="130"] { --ui-scale: 1.3; }
 /* Belt and braces: the shader is a FIXED canvas, so any document taller than the
    viewport exposes the page background under it. A 5434 px capture showed a
    white band below the app. The document is pinned to the viewport AND painted
@@ -609,6 +615,11 @@ html[data-shell-mode="simple"] .main-content { min-height: 0; }
 /* The empty state earns the width it takes: a centred hero that scales with the
    panel instead of a narrow ribbon in the middle of nothing. */
 .mb-shell .chat-empty { max-width: 980px; margin: auto; }
+.mb-vista-annotation {
+  position: fixed; bottom: 8px; right: 12px; z-index: 1;
+  font-size: 11px; letter-spacing: 0.04em; color: rgba(247, 243, 236, 0.35);
+  font-family: var(--font-mono, monospace); pointer-events: none;
+}
 .mb-shell .chat-empty h3 { font-size: clamp(30px, 3.4vw, 46px); }
 .mb-shell .chat-suggestions { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 
@@ -777,6 +788,36 @@ html[data-shell-mode="simple"] .main-content { min-height: 0; }
 }
 .mb-shell .chat-lightbox-bar button:hover,
 .mb-shell .chat-lightbox-bar a:hover { background: rgba(247, 243, 236, 0.16); }
+
+/* Interaction signatures (Simple Mode plan §4) */
+.mb-shell .chat-msg.assistant.is-streaming .chat-bubble {
+  box-shadow: 0 0 0 1px rgba(47, 111, 237, 0.35), 0 0 18px rgba(47, 111, 237, 0.18);
+  animation: ns-event-horizon 1.6s ease-in-out infinite;
+}
+@keyframes ns-event-horizon {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(47, 111, 237, 0.30), 0 0 12px rgba(47, 111, 237, 0.12); }
+  50% { box-shadow: 0 0 0 1px rgba(47, 111, 237, 0.55), 0 0 24px rgba(47, 111, 237, 0.28); }
+}
+.mb-shell .chat-dock {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; letter-spacing: 0.03em; text-transform: uppercase;
+  color: var(--ink-faint); padding: 4px 10px; border-radius: 999px;
+  border: 1px solid rgba(247, 243, 236, 0.14); background: rgba(247, 243, 236, 0.04);
+  margin-bottom: 6px;
+}
+.mb-shell .chat-comet {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #f0c878; box-shadow: 0 0 10px #f0c878;
+  animation: ns-comet 0.9s ease-out forwards;
+}
+@keyframes ns-comet {
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(60px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mb-shell .chat-msg.assistant.is-streaming .chat-bubble { animation: none; }
+  .mb-shell .chat-comet { animation: none; }
+}
 
 /* ── 21. Narrow screens keep the frame, lose the rail ────────────────────── */
 @media (max-width: 900px) {

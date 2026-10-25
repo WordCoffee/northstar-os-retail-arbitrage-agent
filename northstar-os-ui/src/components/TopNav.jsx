@@ -4,6 +4,30 @@ import Icon from './Icon.jsx'
 import { useSession } from '../foundation/session.jsx'
 import ShellModeToggle from './ShellModeToggle.jsx'
 
+function DisplayScaleControl() {
+  const [scale, setScale] = useState(() => {
+    try { return localStorage.getItem('ns-ui-scale') || '100' } catch { return '100' }
+  })
+  useEffect(() => {
+    try { document.documentElement.dataset.uiScale = scale } catch { /* no DOM */ }
+    try { localStorage.setItem('ns-ui-scale', scale) } catch { /* storage */ }
+  }, [scale])
+  return (
+    <select
+      className="top-nav-scale"
+      value={scale}
+      onChange={(e) => setScale(e.target.value)}
+      aria-label="Display scale"
+      title="Display scale"
+    >
+      <option value="90">90%</option>
+      <option value="100">100%</option>
+      <option value="115">115%</option>
+      <option value="130">130%</option>
+    </select>
+  )
+}
+
 export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
   const navigate = useNavigate()
   const session = useSession()
@@ -35,6 +59,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
         </div>
 
         <ShellModeToggle />
+        <DisplayScaleControl />
 
         <div className="top-nav-action">
           <button
