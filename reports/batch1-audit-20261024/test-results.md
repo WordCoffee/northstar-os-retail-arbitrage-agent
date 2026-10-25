@@ -70,5 +70,29 @@ empty band below the app frame (D3).
 | Backend chat | `python -m pytest test_chat_plan.py -q` | 18 passed |
 | Controller | `node test/chromecontrol-tests.js` | 78 passed (2 new tab-selection tests) |
 
-The shell gate drives a real browser, but it is a gate, not a UI product test: it
-does not type a generation prompt, and it is not counted towards G1–G6.
+## Late-session discovery (after the commits)
+
+The Chrome Connect **MCP** server was dead, but the sanctioned path turned out to
+be the **agent CLI**, not the MCP tools:
+
+```
+node scripts/chromecontrol-agent.js run --profile "Profile 6" --task "STEPS:…" --url …
+```
+
+It attaches to the same "Profile 6" / "Work" / `northstarosllc@gmail.com`
+profile and the same guardrails. A read-only run attached successfully and read
+the app page — **but the app now renders the Sign In screen**, so the session
+that was signed in earlier has expired (or the agent landed in a signed-out tab).
+
+I cannot enter credentials (credential hygiene, §guardrails), so G1–G6 remain
+BLOCKED. What is needed from the operator, once, to unblock:
+
+1. Sign in to NorthstarOS in the "Work" Chrome profile (the one already attached
+   to Chrome Connect) at `http://127.0.0.1:8101/ui/`.
+2. Re-run the G1 scenario from the composer using the agent CLI above; the
+   existing `reports/batch1-audit-20261024/product-tests/G0/G1` evidence slots
+   and the run-id/journal convention in this file still apply.
+
+Everything else in this batch is committed and verified by executable checks:
+product repo `8520824b` + `09f350cd`; Chrome Connect repo `05c7df9`.
+No push was performed.
