@@ -86,6 +86,7 @@ export default function MasterBrainShell() {
 
   return (
     <div className="mb-shell" data-testid="mb-shell">
+      <CosmicCanvas active={busy} maxDpr={canvasDpr} themeId={shell.focusId} />
       <CelestialBackdrop />
       <div className="mb-scrim" aria-hidden="true" />
       <div className="mb-vista-annotation" aria-hidden="true">

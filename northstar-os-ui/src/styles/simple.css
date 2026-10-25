@@ -57,9 +57,9 @@
     linear-gradient(180deg, rgba(4, 6, 10, 0.06), rgba(4, 6, 10, 0.18));
 }
 .mb-shell .chat-shell {
-  /* 62% opaque glass panel: light enough that the celestial backdrop reads
-     through it, but still dark enough for white text to contrast. */
-  background: rgba(18, 24, 38, 0.62);
+  /* Panel must stay near-opaque (>=0.94) so the celestial backdrop cannot eat
+     the text. Scenery reads through the scrim, not through the reading surface. */
+  background: rgba(18, 24, 38, 0.95);
   max-width: 1782px;
   margin-inline: auto;
   border: 1px solid rgba(247, 243, 236, 0.18);

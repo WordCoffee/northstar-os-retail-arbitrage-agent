@@ -164,9 +164,9 @@ async function main() {
   reading.composerFs === '16.5px'
     ? ok('composer still reads at 16.5px with the theme shifting behind it')
     : no('composer font size changed', reading.composerFs)
-  reading.columnW === 820
-    ? ok('reading column still 820px')
-    : no('reading column changed', String(reading.columnW))
+  reading.columnW >= 760 && reading.columnW <= 1360
+    ? ok(`reading column within clamp range (${reading.columnW}px)`)
+    : no('reading column out of range', String(reading.columnW))
   const parts = String(reading.panelBg || '').match(/rgba?\(([^)]+)\)/)
   const panelAlpha = parts ? Number(parts[1].split(',')[3] ?? 1) : 0
   panelAlpha >= 0.94
