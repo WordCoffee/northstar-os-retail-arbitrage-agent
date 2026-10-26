@@ -1,4 +1,4 @@
-"""Batch 0 — AutothinK workspace API is mounted in the main app (smoke).
+"""Batch 0 - AutothinK workspace API is mounted in the main app (smoke).
 
 Offline: only asserts route existence + response shape. Does NOT call Ollama
 (that path is exercised manually / by the live smoke pass).
@@ -66,7 +66,6 @@ def test_autothink_run_rejects_empty_query():
 
 
 def test_autothink_models_refuses_without_a_session():
-    """P0-04: the audit found these routes fully public."""
     r = c.get("/api/autothink/models")
     assert r.status_code == 401, r.text
 
@@ -94,3 +93,32 @@ def test_autothink_routes_registered():
 def test_reference_docs_mount_registered():
     paths = {getattr(route, "path", "") for route in app.routes}
     assert "/reference" in paths
+
+
+def test_autothink_history_empty_store_non_5xx():
+    with _as_tenant(tenant="tenant-empty"):
+        r = c.get("/api/autothink/history?limit=5",
+                  headers={"Authorization": "Bearer " + _token("tenant-empty")})
+    assert r.status_code < 500, r.text
+
+
+def test_autothink_usage_empty_store_non_5xx():
+    with _as_tenant(tenant="tenant-empty2"):
+        r = c.get("/api/autothink/usage",
+                  headers={"Authorization": "Bearer " + _token("tenant-empty2")})
+    assert r.status_code < 500, r.text
+
+
+def test_autothink_job_missing_run_non_5xx():
+    with _as_tenant(tenant="tenant-empty3"):
+        r = c.get("/api/autothink/jobs/does-not-exist",
+                  headers={"Authorization": "Bearer " + _token("tenant-empty3")})
+    assert r.status_code < 500, r.text
+    assert r.status_code == 404
+
+
+def test_autothink_run_non_5xx_on_empty_store():
+    with _as_tenant(tenant="tenant-empty4"):
+        r = c.post("/api/autothink/run", json={"query": "hello", "provider": "local"},
+                   headers={"Authorization": "Bearer " + _token("tenant-empty4")})
+    assert r.status_code < 500, r.text
