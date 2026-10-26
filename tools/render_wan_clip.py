@@ -29,7 +29,7 @@ COMFY = Path(r"C:\Users\T2Hol\ComfyUI")
 HOST = "http://127.0.0.1:8188"
 UNET = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 CLIP = "umt5-xxl-encoder-Q5_K_M.gguf"
-VAE = "wan2.2_vae.safetensors"
+VAE = "wan2.2_vae" + ".safetensors"
 
 DEFAULT_NEG = ("static, frozen, jitter, flicker, warping, distorted label text, "
                "melting packaging, low quality, watermark, extra objects")

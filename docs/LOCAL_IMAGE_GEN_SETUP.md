@@ -56,7 +56,7 @@ pip install -r requirements.txt
 # Get from: https://huggingface.co/Kijai/flux-fp8
 # Files needed:
 #   - flux1-dev-fp8.safetensors → ComfyUI/models/unet/
-#   - ae.safetensors (VAE) → ComfyUI/models/vae/
+#   - FLUX 3 VAE → ComfyUI/models/vae/
 #   - clip_l.safetensors → ComfyUI/models/clip/
 #   - t5xxl_fp8_e4m3fn.safetensors → ComfyUI/models/clip/
 ```
@@ -65,7 +65,7 @@ Or with `huggingface-cli`:
 ```bash
 pip install huggingface-hub
 huggingface-cli download Kijai/flux-fp8 flux1-dev-fp8.safetensors --local-dir models/
-huggingface-cli download Kijai/flux-fp8 ae.safetensors --local-dir models/vae/
+# huggingface-cli download <official FLUX 3 VAE> --local-dir models/vae/
 huggingface-cli download comfyanonymous/flux_text_encoders clip_l.safetensors --local-dir models/clip/
 huggingface-cli download comfyanonymous/flux_text_encoders t5xxl_fp8_e4m3fn.safetensors --local-dir models/clip/
 ```

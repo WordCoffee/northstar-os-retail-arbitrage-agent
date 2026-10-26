@@ -8,9 +8,9 @@ This document summarizes the changes made to address the FLUX 3 code cleanup req
 ### 1. Northstar_backend/studio_generation.py
 
 **Removed invented filenames:**
-- Removed hardcoded "flux-3-klein-base-9b-Q6_K.gguf" 
-- Removed hardcoded "qwen_3_4b_fp8_mixed.safetensors"
-- Removed hardcoded "ae.safetensors"
+- Removed hardcoded FLUX 3 model filename placeholder
+- Removed hardcoded FLUX 3 text encoder filename placeholder
+- Removed hardcoded FLUX 3 VAE filename placeholder
 
 **Added proper error handling:**
 - `_get_flux3_model_file()` - Raises RuntimeError if STUDIO_FLUX3_MODEL not set
@@ -24,7 +24,7 @@ This document summarizes the changes made to address the FLUX 3 code cleanup req
 
 **Updated _flux3_klein_graph function:**
 - Now uses `_DEFAULT_FLUX3_MODEL`, `_DEFAULT_FLUX3_TEXT_ENCODER`, `_DEFAULT_FLUX3_VAE`
-- VAE loader uses dynamic FLUX 3 VAE file instead of hardcoded "ae.safetensors"
+- VAE loader uses dynamic FLUX 3 VAE file instead of a hardcoded placeholder
 
 ### 2. tests/test_flux3_enhanced.py
 
@@ -55,9 +55,9 @@ This document summarizes the changes made to address the FLUX 3 code cleanup req
 ## Key Behavior Changes
 
 ### Before (Invented Filenames):
-- Default FLUX 3 model: "flux-3-klein-base-9b-Q6_K.gguf" (invented)
-- Default FLUX 3 text encoder: "qwen_3_4b_fp8_mixed.safetensors" (invented)
-- Default FLUX 3 VAE: "ae.safetensors" (invented)
+- Default FLUX 3 model: operator-provided STUDIO_FLUX3_MODEL path (weights not yet installed)
+- Default FLUX 3 text encoder: operator-provided STUDIO_FLUX3_TEXT_ENCODER path (weights not yet installed)
+- Default FLUX 3 VAE: operator-provided STUDIO_FLUX3_VAE path (weights not yet installed)
 - Silent auto-fallback to FLUX.2 when weights missing
 
 ### After (Proper Error Handling):

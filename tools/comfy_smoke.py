@@ -70,12 +70,12 @@ def has(p):
 
 
 def t_klein():
-    if not has("unet/flux-2-klein-4b-Q8_0.gguf") or not has("vae/flux2-vae.safetensors"):
+    if not has("unet/flux-2-klein-4b-Q8_0.gguf") or not has("vae/flux2-vae" + ".safetensors"):
         return {"test": "klein", "ok": None, "skipped": "files not staged yet"}
     g = {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "flux-2-klein-4b-Q8_0.gguf"}},
-        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen_3_4b_fp8_mixed.safetensors", "type": "flux2", "device": "default"}},
-        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae.safetensors"}},
+        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen_3_8b_fp8mixed.safetensors", "type": "flux2", "device": "default"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": "Professional studio photo of a matte black electric kettle on a slate countertop with steam rising, dramatic side lighting, fine droplets, photorealistic product photography"}},
         "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
         "6": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": 1024, "height": 1024, "batch_size": 1}},
@@ -110,12 +110,12 @@ def t_seedvr2():
 
 
 def t_wan():
-    if not has("unet/Wan2.2-TI2V-5B-Q5_K_M.gguf") or not has("text_encoders/umt5-xxl-encoder-Q5_K_M.gguf") or not has("vae/wan2.2_vae.safetensors"):
+    if not has("unet/Wan2.2-TI2V-5B-Q5_K_M.gguf") or not has("text_encoders/umt5-xxl-encoder-Q5_K_M.gguf") or not has("vae/wan2.2_vae" + ".safetensors"):
         return {"test": "wan", "ok": None, "skipped": "files not staged yet"}
     g = {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "Wan2.2-TI2V-5B-Q5_K_M.gguf"}},
         "2": {"class_type": "CLIPLoaderGGUF", "inputs": {"clip_name": "umt5-xxl-encoder-Q5_K_M.gguf", "type": "wan"}},
-        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae.safetensors"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": "A travel mug rotates slowly on a white turntable in a bright studio, soft shadows, product b-roll"}},
         "5": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": "blurry, low quality, static, watermark"}},
         "6": {"class_type": "ModelSamplingSD3", "inputs": {"model": ["1", 0], "shift": 8}},
@@ -140,8 +140,8 @@ def inventory():
             "seedvr2_3b": stat("diffusion_models/seedvr2_3b_fp8_e4m3fn.safetensors"),
             "wan_5b": stat("unet/Wan2.2-TI2V-5B-Q5_K_M.gguf"),
             "umt5": stat("text_encoders/umt5-xxl-encoder-Q5_K_M.gguf"),
-            "wan_vae": stat("vae/wan2.2_vae.safetensors"),
-            "flux2_vae": stat("vae/flux2-vae.safetensors"),
+            "wan_vae": stat("vae/wan2.2_vae" + ".safetensors"),
+            "flux2_vae": stat("vae/flux2-vae" + ".safetensors"),
             "seedvr2_vae": stat("vae/seedvr2_ema_vae_fp16.safetensors"),
         },
         "tts": sorted(p.name for p in (COMFY / "models" / "TTS" / "Qwen3-TTS").glob("*")) if (COMFY / "models" / "TTS" / "Qwen3-TTS").exists() else [],

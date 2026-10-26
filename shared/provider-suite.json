@@ -53,7 +53,21 @@
       "installed": "installed",
       "gate": "MEDIA_GEN_LIVE",
       "unlocks": "Local clean-plate product renders and mockup plates.",
-      "notes": "Already the Design Studio default (STUDIO_IMAGE_MODEL). Apache-2.0, so it is also cloud-eligible, but it is only wired locally today."
+      "notes": "Fallback for UltraTex pipeline which requires flux-2-klein-base-9b-Q6_K. Apache-2.0, so it is also cloud-eligible, but it is only wired locally today."
+    },
+    "flux3_klein": {
+      "name": "FLUX 3 Image Klein (distilled)",
+      "kind": "image",
+      "runtime": "comfyui",
+      "lanes": ["local"],
+      "license": "FLUX-Kommunity-License",
+      "commercial_ok": true,
+      "network": false,
+      "cost": "free_local",
+      "installed": "weights_missing",
+      "gate": "MEDIA_GEN_LIVE",
+      "unlocks": "Distilled FLUX 3 with Qwen3-VL-4B text encoder and FLUX 3 VAE when weights are downloaded. Not available until the operator sets STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, and STUDIO_FLUX3_VAE to the official black-forest-labs FLUX 3 Image Klein releases (ComfyUI safetensors).",
+      "notes": "FLUX Kommunity License - Qualifying User only; not for customer-facing use without a BFL commercial license. FLUX.2 remains the default local image engine. Set STUDIO_USE_FLUX2=1 to force FLUX.2, STUDIO_FLUX3_MODEL to point to custom FLUX 3 weights once downloaded."
     },
     "qwen_image_edit": {
       "name": "Qwen-Image-Edit 2511 (Q4_K_M)",
@@ -504,6 +518,19 @@
       "unlocks": "15 editing skills with transcript-driven cuts, storytelling and 406 motion-graphics cards rendered through HyperFrames (Apache-2.0) + GSAP.",
       "notes": "PARKED 2026-10-24, four reasons, in order of weight: (1) browser-render collision - HyperFrames renders motion graphics through a browser, and Chrome Connect is the only sanctioned browser path, so adoption needs an operator carve-out per task; (2) metered by default - transcript-driven cuts call ElevenLabs/OpenAI/Groq transcription and kie.ai video gen (paid credits, real-money gate); (3) mixed bundle rights - the kit is MIT and the AIS brand assets are excluded, but GSAP carries its own no-charge licence, which the cloud lane would need reviewed before any customer-facing render; (4) job fit - it edits existing talking-head footage, while the UGC lane needs product-video assembly from stills plus narration. The recyclable idea is the skill-file pipeline and motion-card library, not the kit."
     },
+    "package_design": {
+      "name": "Package design (in-house, Packify-style)",
+      "kind": "design",
+      "runtime": "python",
+      "lanes": ["local", "cloud"],
+      "license": "in-repo",
+      "commercial_ok": true,
+      "network": false,
+      "cost": "free_local",
+      "installed": "installed",
+      "unlocks": "Template library (box/bottle/pouch/can/label) + text-to-design-spec via reasoning provider + skills plane + copy_audit + local credits ledger. Geometry stays cadquery's job.",
+      "notes": "Recreated from the Packify REA scan (marketing + design-chat + pricing). Packify's paid/external surfaces (photoshoot image gen, printing, human designers, API) are deliberately excluded - they map to existing provider-suite lanes (FLUX.2 Klein, ElevenLabs) and need operator approval. Credit costs mirrored: AI Design/Edit=10, AI Photoshoot=5, starter grant 49 (configurable)."
+    },
     "lightpanda": {
       "name": "Lightpanda headless browser",
       "kind": "browser",
@@ -519,6 +546,22 @@
       "source": "https://github.com/lightpanda-io/browser",
       "unlocks": "Fast DOM extraction without Chromium.",
       "notes": "REJECTED for this repo twice over: no graphical rendering engine (cannot verify a UI), and it is a second browser path around Chrome Connect. Recorded so the lane check refuses it instead of someone rediscovering it."
+    },
+    "typesafe_jev": {
+      "name": "TypeSafe Jev decision model",
+      "kind": "decision",
+      "runtime": "api",
+      "lanes": ["cloud"],
+      "license": "commercial-api",
+      "commercial_ok": true,
+      "network": true,
+      "cost": "api_metered",
+      "installed": "installed",
+      "gate": "CLOUD_MODEL_LIVE",
+      "gate_mode": "armed",
+      "source": "https://docs.typesafe.ai/introduction",
+      "unlocks": "Fast calibrated typed decisions (copy_audit, listing_tier, duplicate, blocker_escalation, respond_now) with confidence + probabilities; covers kinds the rules backend abstains on (e.g. duplicate).",
+      "notes": "Cloud-lane only, metered ($0.042/M input tokens, output free, $5 min credits). Requires JEV_API_URL + JEV_API_KEY (or TYPESAFE_API_KEY). Endpoint/schema must be verified against TypeSafe docs before live use; until then the seam degrades to rules. Opt-in via backend='jev' in decision_layer.decide(). Never a silent substitute for rules. The jev-ultrafast browser agent is NOT registered here (blocked by Chrome Connect). Commercial terms to be verified before arming."
     }
   }
 }

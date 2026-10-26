@@ -57,6 +57,8 @@ brief ──► generate (clean plate) ──► [optional] edit scene/light ─
       ──► prepress ──► readiness
 ```
 
+**Default image engine (since 2026-10-25):** FLUX 3 Image Klein (distilled) with Qwen3-VL-4B text encoder and the FLUX 3 VAE. FLUX.2 Klein 9B (Apache-2.0) remains as fallback for UltraTex pipeline and can be forced with `STUDIO_USE_FLUX2=1`.
+
 **Generate a clean plate** (no lettering — the model must never draw copy):
 ```powershell
 $env:MEDIA_GEN_LIVE="1"

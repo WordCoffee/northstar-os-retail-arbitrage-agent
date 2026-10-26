@@ -25,7 +25,7 @@ _SEED = int(sys.argv[2]) if len(sys.argv) > 2 else 20261016
 if "9b" in os.environ["STUDIO_IMAGE_MODEL"].lower():
     os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_8b_fp8mixed.safetensors")
 elif "4b" in os.environ["STUDIO_IMAGE_MODEL"].lower():
-    os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_4b_fp8_mixed.safetensors")
+    os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_4b.safetensors")
 
 
 def main() -> int:

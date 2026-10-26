@@ -35,7 +35,7 @@
 1. **27B full offload vs desktop+ComfyUI memory:** `cudaMalloc failed … unable to allocate CUDA0 buffer of size 9676124160` — with ~5.9 GB free VRAM the production 27B cannot fully offload.
 2. **27B partial offload (num_gpu=24):** `failed to allocate buffer of size 5921697792 … CUDA_Host` — the CPU-resident layers need ~5.9 GB pinned RAM; this box has 15.4 GB total, mostly claimed.
 3. **Mitigations shipped/handed over:** `CHAT_NUM_GPU` env knob (partial offload when VRAM allows), lean chat context (`CHAT_NUM_CTX=16384`), and **`qwen3:4b` pulled** as the small tool/voice lane model. Operator options for 27B chat: close GPU/RAM-heavy desktop apps before a session, restart ComfyUI to drop its cache, or run chat on the small model while rendering.
-4. Encoder pairing note: klein-4B must pair with `qwen_3_4b_fp8_mixed.safetensors` (the default pairing is for 9B).
+4. Encoder pairing note: klein-4B must pair with `qwen_3_4b.safetensors` (the default pairing is for 9B).
 
 ## 4. Explicitly NOT done in this pass (honest scope)
 

@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT))
 os.environ.setdefault("MEDIA_GEN_LIVE", "1")
 os.environ.setdefault("COMFYUI_URL", "http://127.0.0.1:8188")
 os.environ.setdefault("STUDIO_IMAGE_MODEL", "flux-2-klein-4b-Q8_0.gguf")
-os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_4b_fp8_mixed.safetensors")
+os.environ.setdefault("STUDIO_TEXT_ENCODER", "qwen_3_4b.safetensors")
 
 import studio_generation as sg  # noqa: E402
 

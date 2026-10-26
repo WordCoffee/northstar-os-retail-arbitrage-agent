@@ -102,7 +102,7 @@ example workflow in one place):
 |---|---|---|
 | Diffusion base | `flux-2-klein-base-9b-fp8.safetensors` (HF, gated, 16.9 GB bf16) | **`flux-2-klein-base-9b-Q6_K.gguf`** via `UnetLoaderGGUF` |
 | Text encoder | `qwen_3_8b_fp8mixed.safetensors` | same (already present) |
-| VAE | `flux2-vae.safetensors` | same (already present) |
+| VAE | FLUX.2 VAE (ComfyUI split file) | same (already present) |
 | LoRA | `ultratex_flux2.safetensors` | same (+ `_mr` for metallic-roughness) |
 | Decoder | `ultratex_flux2_decoder.pt` | same |
 | UV unwrap | `comfy_gpu` | same — **xatlas is not needed** (it has no Python 3.14 wheel) |

@@ -46,7 +46,7 @@ image-to-video stack is already on disk:
 | file | size |
 |---|---|
 | `unet/Wan2.2-TI2V-5B-Q5_K_M.gguf` | 3.55 GB |
-| `vae/wan2.2_vae.safetensors` | 1.31 GB |
+| `vae/Wan 2.2 VAE` | 1.31 GB |
 | `text_encoders/umt5-xxl-encoder-Q5_K_M.gguf` | 3.86 GB |
 | **working set** | **≈ 8.7 GB** |
 

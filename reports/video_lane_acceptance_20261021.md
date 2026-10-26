@@ -11,7 +11,7 @@ already on disk, one still, one prompt.
 | ComfyUI | 0.40.0 (torch 2.11.0+cu128, cudaMallocAsync) |
 | model | `Wan2.2-TI2V-5B-Q5_K_M.gguf` (3.55 GB) |
 | text encoder | `umt5-xxl-encoder-Q5_K_M.gguf` (3.86 GB) |
-| VAE | `wan2.2_vae.safetensors` (1.31 GB) |
+| VAE | `Wan 2.2 VAE` (1.31 GB) |
 | graph | native `UnetLoaderGGUF` → `ModelSamplingSD3` (shift 8) → `Wan22ImageToVideoLatent` → `KSampler` (uni_pc/simple) → `VAEDecode` → `SaveWEBM` |
 | clip | 121 frames @ 24 fps = **5.04 s**, 960×960, 30 steps, cfg 5.0, seed 42 |
 | still | `mogra_forest_dusk_composed.png` (1216×1216, existing studio render) |

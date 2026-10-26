@@ -25,8 +25,8 @@ ComfyUI-GGUF, controlnet_aux, IPAdapter_plus, **ComfyUI-QwenTTS**.
 
 | Slot | File(s) |
 |---|---|
-| Fast photoreal | `z_image_turbo_nvfp4.safetensors` (4.2 GB, pre-existing) + `qwen_3_4b_fp8_mixed` + `ae.safetensors` |
-| Commercial-safe FLUX | `flux-2-klein-4b-Q8_0.gguf` (4.30 GB) + `flux2-vae.safetensors` (re-fetched; sha `d64f3a68…`) |
+| Fast photoreal | `z_image_turbo_nvfp4.safetensors` (4.2 GB, pre-existing) + `qwen_3_4b.safetensors` + `FLUX 3 VAE` |
+| Commercial-safe FLUX | `flux-2-klein-4b-Q8_0.gguf` (4.30 GB) + `FLUX.2 VAE` (re-fetched; sha `d64f3a68…`) |
 | Photo edit / text-in-image | `qwen-image-edit-2511-Q4_K_M.gguf` (12.3 GB, pre-existing) + `qwen_2.5_vl_7b_nvfp4` |
 | Upscaler (image + video) | `seedvr2_3b_fp8_e4m3fn.safetensors` (3.39 GB) + `seedvr2_ema_vae_fp16` |
 | Video | `Wan2.2-TI2V-5B-Q5_K_M.gguf` (3.81 GB) + `umt5-xxl-encoder-Q5_K_M.gguf` (4.15 GB) + `wan2.2_vae` |

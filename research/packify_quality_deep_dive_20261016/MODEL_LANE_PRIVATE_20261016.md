@@ -87,7 +87,7 @@ before they go on a product we sell."
   server stayed up both times (VRAM free 5.2 GB with the 9B resident; second
   run served in 3.1 s). The 4B path is likewise unaffected. 9B is the studio
   default now; switch back with `STUDIO_IMAGE_MODEL=flux-2-klein-4b-Q8_0.gguf`
-  + `STUDIO_TEXT_ENCODER=qwen_3_4b_fp8_mixed.safetensors`.
+  + `STUDIO_TEXT_ENCODER=qwen_3_4b.safetensors`.
 - **SECOND failure mode — RESOLVED (2026-10-16, same day)**: with mixed 4B/9B
   traffic the server hit a *different* access violation — inside the
   text-encoder **encode** (`comfy/text_encoders/flux.py:124`) under memory

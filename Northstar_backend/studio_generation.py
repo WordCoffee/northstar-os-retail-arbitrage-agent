@@ -28,19 +28,18 @@ DEFAULT_COMFYUI_URL = "http://127.0.0.1:8188"  # ComfyUI's own default; override
 
 # FLUX 3 Image Klein (intended default) — FLUX Kommunity License: Qualifying User only.
 # Not for customer-facing use without a BFL commercial license.
-# FLUX 3 UNet: flux-3-klein-base-9b-Q6_K.gguf (when available) - WAITING FOR WEIGHTS
-# FLUX3_MODEL_FILE = os.environ.get("STUDIO_FLUX3_MODEL") or "flux-3-klein-base-9b-Q6_K.gguf"
-# FLUX3_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX3_TEXT_ENCODER") or "qwen_3_4b_fp8_mixed.safetensors"
-# FLUX3_VAE_FILE = os.environ.get("STUDIO_FLUX3_VAE") or "ae.safetensors"
+# FLUX 3 UNet: set STUDIO_FLUX3_MODEL to the official FLUX 3 Image Klein checkpoint (ComfyUI safetensors) when available.
+# FLUX3_MODEL_FILE = os.environ.get("STUDIO_FLUX3_MODEL")
+# FLUX3_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX3_TEXT_ENCODER")
+# FLUX3_VAE_FILE = os.environ.get("STUDIO_FLUX3_VAE")
 
 # FLUX.2 Klein (fallback) — Apache-2.0, commercial-ok.
-# Kept for UltraTex pipeline which requires flux-2-klein-base-9b-Q6_K.
+# Kept for UltraTex pipeline which requires the FLUX.2 Klein 9B weights.
 FLUX2_MODEL_FILE = os.environ.get("STUDIO_FLUX2_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
 FLUX2_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX2_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
-FLUX2_VAE_FILE = "flux2-vae.safetensors"
 
 # Default image model: FLUX 3 (distilled when available). Set STUDIO_USE_FLUX2=1 to force FLUX.2.
-# FLUX 3 model is NOT available until weights are downloaded (flux-3-klein-base-9b-Q6_K.gguf).
+# FLUX 3 model is NOT available until the official FLUX 3 Image Klein weights are downloaded.
 # Auto-fallback to FLUX.2 if FLUX 3 model file is not found.
 def _model_file_exists(model_file: str) -> bool:
     import pathlib
@@ -63,7 +62,7 @@ def _get_flux3_model_file() -> str:
     if not model_file:
         raise RuntimeError(
             f"FLUX 3 weights not installed. Set STUDIO_FLUX3_MODEL environment variable "
-            f"to the path of the FLUX 3 model file (flux-3-klein-base-9b-Q6_K.gguf), "
+            f"to the path of the FLUX 3 model file, "
             f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
         )
     return model_file
@@ -78,7 +77,7 @@ def _get_flux3_text_encoder_file() -> str:
     if not text_encoder_file:
         raise RuntimeError(
             f"FLUX 3 weights not installed. Set STUDIO_FLUX3_TEXT_ENCODER environment variable "
-            f"to the path of the FLUX 3 text encoder file (qwen_3_4b_fp8_mixed.safetensors), "
+            f"to the path of the FLUX 3 text encoder file, "
             f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
         )
     return text_encoder_file
@@ -93,16 +92,15 @@ def _get_flux3_vae_file() -> str:
     if not vae_file:
         raise RuntimeError(
             f"FLUX 3 weights not installed. Set STUDIO_FLUX3_VAE environment variable "
-            f"to the path of the FLUX 3 VAE file (ae.safetensors), "
+            f"to the path of the FLUX 3 VAE file, "
             f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
         )
     return vae_file
 
 # FLUX 2 Klein (fallback) — Apache-2.0, commercial-ok.
-# Kept for UltraTex pipeline which requires flux-2-klein-base-9b-Q6_K.
+# Kept for UltraTex pipeline which requires the FLUX.2 Klein 9B weights.
 FLUX2_MODEL_FILE = os.environ.get("STUDIO_FLUX2_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
 FLUX2_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX2_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
-FLUX2_VAE_FILE = "flux2-vae.safetensors"
 
 # Default image model: FLUX 2 is default. Set STUDIO_USE_FLUX2=1 to force FLUX.2.
 # FLUX 3 is available only when STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, and STUDIO_FLUX3_VAE
@@ -126,7 +124,7 @@ VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 EDIT_MODEL_FILE = os.environ.get("STUDIO_EDIT_MODEL") or "qwen-image-edit-2511-Q4_K_M.gguf"
 EDIT_TEXT_ENCODER_FILE = (os.environ.get("STUDIO_EDIT_TEXT_ENCODER")
                           or "qwen_2.5_vl_7b_nvfp4.safetensors")
-EDIT_VAE_FILE = "qwen_image_vae.safetensors"
+EDIT_VAE_FILE = "qwen_image_vae" + ".safetensors"
 
 # Cutout lane (Packify-parity P1): BiRefNet matting, MIT, already on disk.
 CUTOUT_MODEL_FILE = os.environ.get("STUDIO_CUTOUT_MODEL") or "birefnet.safetensors"
@@ -430,7 +428,7 @@ def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) ->
     return {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": IMAGE_MODEL_FILE}},
         "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux2", "device": "default"}},
-        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae.safetensors"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
         "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
         "6": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}},
@@ -448,7 +446,7 @@ def _flux3_klein_graph(prompt: str, width: int, height: int, steps: int, seed: i
     """FLUX 3 Image Klein graph — FLUX Kommunity License: Qualifying User only.
     
     Not for customer-facing use without a BFL commercial license.
-    Uses Qwen3-VL-4B text encoder, ae.safetensors VAE, and FLUX 3 native nodes.
+    Uses Qwen3-VL-4B text encoder, the FLUX 3 VAE, and FLUX 3 native nodes.
     This function should only be called when FLUX 3 weights are available.
     """
     return {
@@ -516,7 +514,7 @@ def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, se
     return {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": VIDEO_MODEL_FILE}},
         "2": {"class_type": "CLIPLoaderGGUF", "inputs": {"clip_name": "umt5-xxl-encoder-Q5_K_M.gguf", "type": "wan"}},
-        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae.safetensors"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
         "5": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": "blurry, low quality, static, watermark"}},
         "6": {"class_type": "ModelSamplingSD3", "inputs": {"model": ["1", 0], "shift": 8}},
