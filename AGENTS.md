@@ -44,6 +44,7 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 - **Lessons are PROPOSED-only.** They may add hints, selectors or notes and never take effect until an operator approves them. A policy/allowlist change is rejected unless the operator explicitly authorized it for the current task; even then it stays PROPOSED. Approve/rollback/purge via `chromeconnect_lessons`.
 - Headed, read-only by default, throttled. **Never enter credentials, solve a CAPTCHA, or bypass a login** — stop and ask the operator.
 - `tools/chromeconnect_guard.py` enforces the same rule in Python: `import playwright` raises outside a controller instruction, and port 9222 is locked to one controller.
+- **Playwright Test is the DEFAULT browser path for LOCALHOST TESTING ONLY.** For any test run whose entry point is under `tests/e2e/` AND every target URL is `localhost` or `127.0.0.1`, Playwright Test may be used directly. For all other cases — external hosts, non-e2e tests, Amazon hosts, production URLs — Chrome Connect remains the controller and Playwright is only its tool. This exception is narrow and does not apply to Amazon hosts, cloud URLs, or any non-localhost target.
 
 ## UI Build (northstar-os-ui)
 - **Dev server:** `cd northstar-os-ui && npm run dev` (port 8101)
