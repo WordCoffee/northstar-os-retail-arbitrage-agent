@@ -80,3 +80,13 @@ reports/**/*.png
 *.bak
 *.bak.*
 
+# Launcher secrets & logs (never commit)
+**/opencode-password.txt
+**/ollama*.log
+**/opencode*.log
+
+# Playwright test artifacts (never commit)
+playwright-report/
+test-results/
+tests/e2e/storageState/
+
