@@ -53,6 +53,10 @@ def test_generate_image_reports_the_size_it_actually_used(monkeypatch, tmp_path)
     monkeypatch.setattr(sg, "media_live_armed", lambda: True)
     monkeypatch.setattr(sg, "unload_brain", lambda: True)
     monkeypatch.setattr(sg, "release_models", lambda: True)
+    monkeypatch.setattr(sg, "ensure_system_ram",
+                        lambda shutdown_chrome=False, stop_dev_tools=False:
+                        {"ok": True, "free_mb_before": 8192.0, "free_mb_after": 8192.0,
+                         "stopped": [], "needed_mb": 4096, "refusal": None})
     monkeypatch.setattr(sg, "_run_graph_guarded",
                         lambda graph, timeout_s=None, on_progress=None:
                         [{"filename": "x.png"}])
