@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "Phase 3 complete (Chrome Connect 3.0). Phase 4 pending (Model benchmark). Baseline blocked (Profile 7 not clean).",
+  "current_phase": "Phase 4 complete (Chrome Connect 3.0). Phase 5 pending (Health, evidence, alerts). Baseline blocked (Profile 7 not clean).",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -120,7 +120,8 @@
     "Phase 0 (Chrome Connect 3.0): Transport binding fixed (CONNECTED, mcp_child_alive). Profile switched Profile 6 (signed-in northstarosllc@gmail.com) -> Profile 7 (signed-out Northstar Research). Run logging added (Northstar_backend/chromeconnect_run_log.py, logs/chromeconnect_runs.jsonl). Baseline clock started. Report: reports/phase0_chromeconnect_20261027.md. No policy/allowlist changes.",
     "Phase 1 (Chrome Connect 3.0): Observation layer built (chromeconnect_observation.py). Pruned accessibility snapshot with refs, token budget (4K), viewport paging, repeat collapse. 23 synthetic fixtures. 23 tests pass (flag ON and OFF). Report: reports/phase1_chromeconnect_20261027.md.",
     "Phase 2 (Chrome Connect 3.0): AI loop MVP built (chromeconnect_ai_loop.py). 8 tools, hard caps, post-condition checks, repeat-loop breaker, rollback+retry, untrusted content filter, destructive approval gate. 14 tests pass. Report: reports/phase2_chromeconnect_20261027.md.",
-    "Phase 3 (Chrome Connect 3.0): Compile and replay built (chromeconnect_compiler.py). Trace recording, adapter compilation (proposed status), replay engine, local cache (24h TTL), self-healing selectors, fallback orchestrator. 17 tests pass. Report: reports/phase3_chromeconnect_20261027.md."
+    "Phase 3 (Chrome Connect 3.0): Compile and replay built (chromeconnect_compiler.py). Trace recording, adapter compilation (proposed status), replay engine, local cache (24h TTL), self-healing selectors, fallback orchestrator. 17 tests pass. Report: reports/phase3_chromeconnect_20261027.md.",
+    "Phase 4 (Chrome Connect 3.0): Model benchmark complete. Browser brain: northstaros-qwen3.8:27b-ctx64k-orig (pass_rate=0.667, avg_time=15.8s). 3 models tested. Swap rules defined. No 9B/12B models available. Report: reports/phase4_chromeconnect_20261027.md."
   ],
   "known_issues": [
     {
