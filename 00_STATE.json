@@ -1,4 +1,4 @@
-{
+﻿{
   "test_baseline": {
     "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests. Item 4 local completion: foundation suite 757 passed / 59 skipped / 48 subtests; admin/tenant/audit/migration/e2e subset 92/0; backup-restore drill test_backup_restore_drill.py 2/0. Full `Northstar_backend` tree re-run 3410 passed / 62 skipped / 23 failed (all 23 failures are PRE-EXISTING in test_proof_batch.py + test_proof_batch_run.py â€” FileNotFoundError: data/scanner-search-cache.json missing fixture file in this env; those two test files are unmodified/clean in git, NOT Item 4 regressions). npm run build: 0 errors.",
     "golden_goose": "511 passed, 0 failures (module suite)",
@@ -454,6 +454,11 @@
       "description": "snyk-agent-scan CLI installed and local inspection ran (discovered all agent configs on this machine, incl. OpenCode MCP servers and Codex plugins; MCP contact prompts declined). Full injection/vulnerability analysis requires a free Snyk account token (SNYK_TOKEN) and sends component metadata to Snyk's API - a cloud service, mildly against the local-first posture.",
       "requires_decision": "Operator: provide a Snyk token to enable full analysis, or keep the tool for local inspection only, or skip.",
       "status": "open"
+    },
+    {
+      "id": "chrome_connect_profile_binding_20261027",
+      "status": "open",
+      "description": "Chrome Connect cannot prove isolated signed-out profile; bound to business Default/T2. See reports/real-verify-2026-10-26/R2_ACCEPTANCE_20261027.md."
     }
   ],
   "completed_batches": [
@@ -807,7 +812,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-20T04:35:21Z",
+  "last_updated": "2026-10-27",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1961,5 +1966,29 @@
       "status": "PENDING - awaiting full build completion"
     },
     "date": "2026-10-26"
+  },
+  "mogra_acceptance_20261027": {
+    "status": "BLOCKED on browser profile binding / manual auth",
+    "commits": [
+      "e0e83199",
+      "2086ebb4"
+    ],
+    "verified_non_browser": {
+      "render_safety_tests": "37 passed (test_render_session 11, test_model_compat 11, test_studio_ram_gate 8, test_studio_render_guard 7)",
+      "encoder_pairing": "9B: Flux-2-Klein-9B-KV-Q8_0.gguf + qwen_3_8b_fp8mixed.safetensors; 4B: flux-2-klein-4b-Q8_0.gguf + qwen_3_4b_fp8_mixed.safetensors; enforced via validate_configured_pairing/resolve_text_encoder",
+      "creative_routes": "6/6 routes 200, 0 console errors, 0 external, 0 axe (unauthenticated sign-in shell)",
+      "smoke_artifacts": "ns-smoke-klein_00005_.png, ns-smoke-wan_00013_.mp4, ns-smoke-tts_00009.flac (prior session)",
+      "resource_baseline": "RAM 15791MB total/5516MB free; GPU 16303MiB total/10920MiB free"
+    },
+    "blocked": {
+      "browser_binding": "Chrome Connect preflight isolated_signed_out_satisfied=false; bound profile Default/T2 signed-in t2holdingsltd@gmail.com; ChromeResearchProfile/Default has no extension; native picker launched with no --user-data-dir so cannot reach signed-out profile",
+      "t1_t8": "NOT RUN (auth required)",
+      "c5": "NOT RUN (auth required)"
+    },
+    "preserved_exclusions": [
+      "SeedVR2 UNSUPPORTED-WITH-REASON",
+      "FLUX3 SKIPPED-WITH-REASON"
+    ],
+    "report": "reports/real-verify-2026-10-26/R2_ACCEPTANCE_20261027.md"
   }
 }
