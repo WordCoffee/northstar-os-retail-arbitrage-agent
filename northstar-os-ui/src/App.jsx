@@ -244,6 +244,7 @@ function Shell() {
       <div className="body-layout">
         {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
         <main className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
+          <h1 style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</h1>
           {session.suspended
             ? <AccountSuspended />
             : simpleMode && !keepAdvanced

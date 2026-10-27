@@ -115,7 +115,7 @@ export default function SignIn() {
             </div>
             {error && <div className="text-low" style={{ fontSize: 12, color: 'var(--status-error, #b4432f)' }} role="alert">{error}</div>}
             <button className="btn btn-primary btn-block" type="submit" disabled={busy}>{busy ? 'Signing in…' : 'Sign In'}</button>
-            <div className="text-low" style={{ fontSize: 11 }}>
+            <div className="text-low" style={{ fontSize: 11, color: 'var(--ink)' }}>
               Local private-beta sign-in. In hosted environments, use your organization’s credentials.
             </div>
             <div style={{ textAlign: 'center', fontSize: 13 }}>
