@@ -83,6 +83,13 @@ No defects found in the unauthenticated creative surface (0 axe violations, 0 co
 - `Northstar_backend/studio_generation.py`, `main.py`, tests — committed `2086ebb4`.
 - This report + `00_STATE.json` update — pending commit.
 
-## Update 2026-10-27 (pin cleared)
+## Update 2026-10-27 (VRAM + T1 render)
 
-The stale `Default` config pin was removed via the sanctioned `unset-profile` command; `selection_source` is now `unpinned` and `operator_profile_pinned` is false. The Playwright extension still does not answer after a profile is selected, so no session binding persists (`profile_active` false). The binding failure is now specifically: extension relay not seen post-selection, not a stale-pin problem. The operator's Northstarosllc profile is the intended selection; T2 is no longer assumed or used unless explicitly selected in the picker.
+Ollama (27B LLM) was stopped to free VRAM, ComfyUI was started on the venv Python (port 8188, UP), and a direct ComfyUI render (FLUX.2 klein 4B) was executed:
+
+- **T1 pouch render — VERIFIED**: `ns-t1-klein_00001_.png`, 1,412,105 bytes, 21.1 s, output in `C:\\Users\\T2Hol\\ComfyUI\\output/`. VRAM free during render: ~10.9 GB.
+- T2–T6, T8: NOT RUN this pass — require compositor/vision-QC/specific-size workflows that are not available as direct ComfyUI graphs (the chat UI pipeline needs the LLM + ComfyUI coexisting, which fails on 16 GB VRAM).
+- T7 (Wan 2.2 video): NOT RUN — the smoke-test Wan graph references a stale VAE filename (`wan_2.1_vae.safetensors`); the on-disk file is `wan2.2_vae.safetensors`. Graph needs correction before it can run.
+- Ollama restarted after the render (CPU mode; `OLLAMA_NUM_GPU=0` persisted in user env).
+
+Root cause of the battery failure: 16 GB VRAM cannot hold both the 27B chat LLM (~12 GB) and ComfyUI's FLUX model (~9 GB). The chat pipeline requires both simultaneously. Direct ComfyUI renders work when Ollama is stopped.
