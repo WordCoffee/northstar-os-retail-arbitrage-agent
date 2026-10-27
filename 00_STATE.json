@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "ALL PHASES 0-5 COMPLETE (Chrome Connect 3.0). Blocked: Profile 7 not clean (Google + Alibaba session cookies). Baseline not run.",
+  "current_phase": "Chrome Connect 3.0 COMPLETE. 131 tests pass. Blocked: Profile 7 has session cookies (Google + Alibaba). Needs clean profile for baseline + live runs.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -122,7 +122,8 @@
     "Phase 2 (Chrome Connect 3.0): AI loop MVP built (chromeconnect_ai_loop.py). 8 tools, hard caps, post-condition checks, repeat-loop breaker, rollback+retry, untrusted content filter, destructive approval gate. 14 tests pass. Report: reports/phase2_chromeconnect_20261027.md.",
     "Phase 3 (Chrome Connect 3.0): Compile and replay built (chromeconnect_compiler.py). Trace recording, adapter compilation (proposed status), replay engine, local cache (24h TTL), self-healing selectors, fallback orchestrator. 17 tests pass. Report: reports/phase3_chromeconnect_20261027.md.",
     "Phase 4 (Chrome Connect 3.0): Model benchmark complete. Browser brain: northstaros-qwen3.8:27b-ctx64k-orig (pass_rate=0.667, avg_time=15.8s). 3 models tested. Swap rules defined. No 9B/12B models available. Report: reports/phase4_chromeconnect_20261027.md.",
-    "Phase 5 (Chrome Connect 3.0): Health, evidence, alerts built (chromeconnect_health.py). Adapter health (green/degraded/red), evidence records, AlertManager, HealthRegistry, QA viewports (390/768/1440), dashboard_data. 26 tests pass. ALL PHASES 0-5 COMPLETE. Report: reports/phase5_chromeconnect_20261027.md."
+    "Phase 5 (Chrome Connect 3.0): Health, evidence, alerts built (chromeconnect_health.py). Adapter health (green/degraded/red), evidence records, AlertManager, HealthRegistry, QA viewports (390/768/1440), dashboard_data. 26 tests pass. ALL PHASES 0-5 COMPLETE. Report: reports/phase5_chromeconnect_20261027.md.",
+    "Chrome Connect 3.0 COMPLETE: All phases 0-5 + runner + adapters + profile lease + admin API + DB schema. 131 tests pass (80 Northstar_backend + 35 chromeconnect_runner + 16 adapter). Modules: observation, ai_loop, compiler, model_bench, health, run_log, profile_lease, chromeconnect_api. Adapters: costco, amazon_public, vendor_dashboards. Profile lease replaces signed-out (policy change approved + logged). Report: reports/chromeconnect_3.0_build_summary_20261027.md."
   ],
   "known_issues": [
     {
