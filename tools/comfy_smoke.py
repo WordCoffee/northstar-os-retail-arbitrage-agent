@@ -17,7 +17,7 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 
-BASE = "http://127.0.0.1:8199"
+BASE = "http://127.0.0.1:8188"
 COMFY = Path(os.environ["USERPROFILE"]) / "ComfyUI"
 REPO = Path(__file__).resolve().parents[1]
 REPORT_DIR = REPO / "reports"
