@@ -63,7 +63,7 @@ def test_ensure_system_ram_stops_when_below_floor(monkeypatch):
     assert out["free_mb_after"] == 5000.0
 
 
-def test_stop_for_render_skips_self_and_opencode(monkeypatch):
+def test_stop_for_render_skips_self_opencode_and_docker(monkeypatch):
     # Mock psutil.process_iter to return fake processes.
     self_proc = MagicMock()
     self_proc.info = {"pid": os.getpid(), "name": "python.exe", "memory_info": MagicMock(rss=100*1024*1024)}
@@ -73,15 +73,22 @@ def test_stop_for_render_skips_self_and_opencode(monkeypatch):
     docker_proc.info = {"pid": 1234, "name": "dockerd.exe", "memory_info": MagicMock(rss=50*1024*1024)}
     docker_proc.terminate = MagicMock()
     docker_proc.wait = MagicMock()
+    ollama_proc = MagicMock()
+    ollama_proc.info = {"pid": 4321, "name": "ollama.exe", "memory_info": MagicMock(rss=900*1024*1024)}
+    ollama_proc.terminate = MagicMock()
+    ollama_proc.wait = MagicMock()
 
-    monkeypatch.setattr(sg._psutil, "process_iter", lambda attrs=None: [self_proc, opencode_proc, docker_proc])
+    monkeypatch.setattr(sg._psutil, "process_iter", lambda attrs=None: [self_proc, opencode_proc, docker_proc, ollama_proc])
     monkeypatch.setattr(sg._psutil, "NoSuchProcess", Exception)
     monkeypatch.setattr(sg._psutil, "AccessDenied", Exception)
     monkeypatch.setattr(sg._psutil, "TimeoutExpired", Exception)
 
     stopped = sg.stop_for_render()
     names = [s["name"] for s in stopped]
-    assert "dockerd.exe" in names
+    # Only explicitly owned idle inference processes are stopped.
+    assert "ollama.exe" in names
+    # Docker, the session host, and the executing agent are never stopped.
+    assert "dockerd.exe" not in names
     assert "python.exe" not in names
     assert "opencode.exe" not in names
 

@@ -220,6 +220,16 @@ async def lifespan(app):
         logger.warning(f"Database init skipped: {e}")
 
     try:
+        # Crash-safe render lifecycle: if a previous process died mid-render,
+        # restore whatever its stop-list took down and clear the state file.
+        import studio_generation as _sg
+        _pending = _sg.restore_pending_session()
+        if _pending:
+            logger.warning("render_session recovery: %s", _pending)
+    except Exception as e:  # noqa: BLE001 - recovery must never block boot
+        logger.warning("render_session recovery skipped: %s", e)
+
+    try:
         import httpx
         resp = httpx.get(f"{_ollama_base_url()}/api/tags", timeout=3)
         if resp.status_code == 200:

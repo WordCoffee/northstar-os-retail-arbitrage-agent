@@ -123,6 +123,76 @@ IMAGE_MODEL_FILE = FLUX2_MODEL_FILE if _USE_FLUX2 else _DEFAULT_FLUX3_MODEL
 TEXT_ENCODER_FILE = FLUX2_TEXT_ENCODER_FILE if _USE_FLUX2 else _DEFAULT_FLUX3_TEXT_ENCODER
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
+# --- Model / text-encoder compatibility (single source of truth) -----------
+# A FLUX.2 Klein 4B UNet must be paired with the 4B Qwen3 encoder; a 9B UNet
+# with the 8B encoder. Pairing the wrong one fails at dispatch with a shape
+# mismatch (512x12288 vs 7680x3072). Filename matching alone is not proof:
+# resolve_text_encoder also requires the encoder file to exist on disk.
+_ENCODER_BY_MODEL_SIZE = {
+    "4b": ("qwen_3_4b", "qwen_3_4b_fp8_mixed.safetensors"),
+    "9b": ("qwen_3_8b", "qwen_3_8b_fp8mixed.safetensors"),
+}
+_ENCODER_DIRS = (
+    os.path.join(r"C:\Users\T2Hol\ComfyUI\models", "text_encoders"),
+    os.path.join(r"C:\Users\T2Hol\ComfyUI\models", "clip"),
+)
+
+
+def _model_size_token(model_file: str) -> str:
+    name = os.path.basename(str(model_file or "")).lower()
+    for token in ("9b", "4b"):
+        if token in name:
+            return token
+    return ""
+
+
+def _encoder_on_disk(filename: str) -> bool:
+    if not filename:
+        return False
+    for base in _ENCODER_DIRS:
+        try:
+            if os.path.exists(os.path.join(base, filename)):
+                return True
+        except Exception:
+            continue
+    return False
+
+
+def resolve_text_encoder(model_file: str, encoder_file: Optional[str] = None) -> str:
+    """Return a compatible text encoder for *model_file*, or raise ValueError.
+
+    Rejects an incompatible explicit pairing before any graph is dispatched.
+    The returned encoder must also exist on disk (filename alone is not proof).
+    """
+    size = _model_size_token(model_file)
+    if not size:
+        # Non-Klein family (e.g. FLUX 3) — nothing to validate here.
+        return encoder_file or TEXT_ENCODER_FILE
+    family, default = _ENCODER_BY_MODEL_SIZE[size]
+    chosen = encoder_file or default
+    if family not in os.path.basename(str(chosen)).lower():
+        raise ValueError(
+            "incompatible_encoder_pairing: model %s (%s) requires %s*, got %s"
+            % (os.path.basename(str(model_file)), size, family,
+               os.path.basename(str(chosen))))
+    if not _encoder_on_disk(chosen):
+        raise ValueError(
+            "encoder_not_installed: %s (needed for %s)"
+            % (chosen, os.path.basename(str(model_file))))
+    return chosen
+
+
+def validate_configured_pairing() -> dict:
+    """Validate the configured image model / encoder pair; returns a report."""
+    report = {"model": IMAGE_MODEL_FILE, "encoder": TEXT_ENCODER_FILE,
+              "ok": True, "error": None}
+    try:
+        resolve_text_encoder(IMAGE_MODEL_FILE, TEXT_ENCODER_FILE)
+    except Exception as exc:  # noqa: BLE001
+        report["ok"] = False
+        report["error"] = str(exc)
+    return report
+
 # Edit/refine lane (Packify-parity P1): the text-faithful editor. Qwen-Image-Edit
 # 2511 is Apache-2.0 and already on disk (Q4_K_M GGUF + its own VL encoder + VAE).
 EDIT_MODEL_FILE = os.environ.get("STUDIO_EDIT_MODEL") or "qwen-image-edit-2511-Q4_K_M.gguf"
@@ -429,9 +499,11 @@ def _fit_box(width, height, hi: int = 1216, mult: int = 16,
 
 def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) -> dict:
     """FLUX.2 Klein (fallback) graph — Apache-2.0, commercial-ok."""
+    # Fail before dispatch if the configured model/encoder pairing is wrong.
+    encoder = resolve_text_encoder(IMAGE_MODEL_FILE, TEXT_ENCODER_FILE)
     return {
         "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": IMAGE_MODEL_FILE}},
-        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux2", "device": "default"}},
+        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": encoder, "type": "flux2", "device": "default"}},
         "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
         "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
@@ -545,19 +617,29 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     w, h = _fit_box(req_w, req_h)
     steps = 8 if str(tier).lower() == "final" else 4
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
-    try:
-        # System-RAM pre-render gate: stop heavy services if free RAM is below floor,
-        # then refuse honestly if still insufficient (never retry blindly).
-        _ram_gate = ensure_system_ram()
-        _ram_stopped = _ram_gate.get("stopped", [])
+    # Serialize renders and run the RAM stop/restore lifecycle. The lock is
+    # cross-process, so two workers cannot drive the GPU at once.
+    session = RenderSession(lane="image")
+    with session:
+        _ram_gate = {"ok": True, "stopped": session.stopped,
+                     "needed_mb": SYSTEM_RAM_FLOOR_MB}
         if on_progress is not None:
             on_progress(0, "queued on the local engine")
-        # Use FLUX 2 by default (FLUX 3 weights not yet available), FLUX 3 as fallback when weights are present
-        graph = _flux3_klein_graph(prompt, w, h, steps, seed) if not _USE_FLUX2 else _klein_graph(prompt, w, h, steps, seed)
-        files = _run_graph_guarded(graph, timeout_s=1800, on_progress=on_progress)
-    except Exception:
-        release_models()  # never leave a crammed cache behind a failed render
-        raise
+        session.mark_render_started()
+        try:
+            # Use FLUX 2 by default (FLUX 3 weights not yet available), FLUX 3 as fallback when weights are present
+            graph = _flux3_klein_graph(prompt, w, h, steps, seed) if not _USE_FLUX2 else _klein_graph(prompt, w, h, steps, seed)
+            files = _run_graph_guarded(graph, timeout_s=1800, on_progress=on_progress)
+            session.check_timeout()
+        except RuntimeError as exc:
+            if "render_timeout" not in str(exc):
+                release_models()  # never leave a crammed cache behind a failed render
+            raise
+        except Exception:
+            release_models()  # never leave a crammed cache behind a failed render
+            raise
+        else:
+            session.mark_render_finished()
     img = next((f for f in files if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
     if not img:
         raise RuntimeError("the render finished but produced no image output")
@@ -571,6 +653,7 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
         "fitted": (w, h) != (req_w, req_h),
         "engine_max_edge_px": 1216,
         "duration_seconds": None,
+        "ram_gate": _ram_gate,
     }
 
 
@@ -734,17 +817,28 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     frames = 97 if str(tier).lower() == "final" else 49   # 4n+1 for the Wan latent; ~2s / ~4s at 24fps
     steps = 20
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
-    try:
-        # System-RAM pre-render gate: stop heavy services if free RAM is below floor.
-        _ram_gate = ensure_system_ram()
-        _ram_stopped = _ram_gate.get("stopped", [])
+    # Serialize renders and run the RAM stop/restore lifecycle. The lock is
+    # cross-process, so two workers cannot drive the GPU at once.
+    session = RenderSession(lane="video")
+    with session:
+        _ram_gate = {"ok": True, "stopped": session.stopped,
+                     "needed_mb": SYSTEM_RAM_FLOOR_MB}
         if on_progress is not None:
             on_progress(0, "queued on the local engine")
-        files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400,
-                                   on_progress=on_progress)
-    except Exception:
-        release_models()  # never leave a crammed cache behind a failed render
-        raise
+        session.mark_render_started()
+        try:
+            files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400,
+                                       on_progress=on_progress)
+            session.check_timeout()
+        except RuntimeError as exc:
+            if "render_timeout" not in str(exc):
+                release_models()  # never leave a crammed cache behind a failed render
+            raise
+        except Exception:
+            release_models()  # never leave a crammed cache behind a failed render
+            raise
+        else:
+            session.mark_render_finished()
     vid = next((f for f in files if str(f.get("filename", "")).lower().endswith((".mp4", ".webm"))), None)
     if not vid:
         raise RuntimeError("the render finished but produced no video output")
@@ -755,6 +849,7 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
         "model": "wan2.2-ti2v-5b-q5", "provider": "comfyui",
         "seed": seed, "width": w, "height": h, "duration_seconds": round(frames / 24.0, 1),
         "audio": None,
+        "ram_gate": _ram_gate,
     }
     if narration and str(narration).strip():
         result["audio"] = _attach_narration(result["bytes"], str(narration), voice)
@@ -800,8 +895,10 @@ SYSTEM_RAM_FLOOR_MB = int(os.environ.get("STUDIO_RAM_FLOOR_MB", "4096"))
 # Process name substrings (lowercased) that are safe to stop for a render.
 # OpenCode is NEVER stopped (it is this session). Chrome is opt-in only.
 _STOP_LIST_NAMES = (
-    "docker", "dockerd", "docker desktop", "com.docker",
-    "llama-server", "llama-cli", "llama.cpp",
+    # Explicitly owned, idle local inference processes only.
+    # Docker, databases, the product listener (uvicorn/northstar),
+    # Chrome Connect, OpenCode and unrelated tools are NEVER stopped.
+    "llama-server", "llama-cli", "llama.cpp", "ollama_llama_server",
     "ollama",
 )
 _HEAVY_DEV_NAMES = ("code", "node", "python")  # only with --stop-dev-tools
@@ -956,8 +1053,10 @@ SYSTEM_RAM_FLOOR_MB = int(os.environ.get("STUDIO_RAM_FLOOR_MB", "4096"))
 # Process name substrings (lowercased) that are safe to stop for a render.
 # OpenCode is NEVER stopped (it is this session). Chrome is opt-in only.
 _STOP_LIST_NAMES = (
-    "docker", "dockerd", "docker desktop", "com.docker",
-    "llama-server", "llama-cli", "llama.cpp",
+    # Explicitly owned, idle local inference processes only.
+    # Docker, databases, the product listener (uvicorn/northstar),
+    # Chrome Connect, OpenCode and unrelated tools are NEVER stopped.
+    "llama-server", "llama-cli", "llama.cpp", "ollama_llama_server",
     "ollama",
 )
 _HEAVY_DEV_NAMES = ("code", "node", "python")  # only with --stop-dev-tools
@@ -1093,3 +1192,286 @@ def ensure_system_ram(shutdown_chrome: bool = False,
         )
         raise RuntimeError("system_ram_insufficient: " + result["refusal"])
     return result
+
+
+# --- Render session manager (Phase R) ---
+# --- Render session manager (Phase R) --------------------------------------
+# Wraps every creative job: lock + state file + drain + stop + verify + run +
+# restore, with crash safety (finally + state file trigger on next start).
+import json as _rs_json
+import threading as _rs_threading
+
+_RENDER_STATE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "data", "render_session_state.json")
+_RENDER_LOCK_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "data", "render_session.lock")
+_RENDER_MAX_SECONDS = int(os.environ.get("STUDIO_RENDER_MAX_SECONDS", "1800"))
+
+
+class _CrossProcessRenderLock:
+    """A render lock that is honoured across processes, not just threads.
+
+    Uses an exclusive-create lock file containing ``pid:timestamp``. A lock
+    held by a dead PID (or one older than the max render time plus a grace
+    period) is treated as stale and reclaimed. The executing backend process
+    is never killed; only the lock file is cleaned up.
+    """
+
+    def __init__(self, path: str, max_seconds: int = None):
+        self.path = path
+        self.max_seconds = max_seconds if max_seconds is not None else _RENDER_MAX_SECONDS
+        self._thread_lock = _rs_threading.Lock()
+        self._fd = None
+        self._owned = False
+
+    def _pid_alive(self, pid: int) -> bool:
+        if pid <= 0:
+            return False
+        try:
+            if _psutil is not None:
+                return bool(_psutil.pid_exists(pid)) and _psutil.Process(pid).is_running()
+        except Exception:
+            return False
+        return False
+
+    def _read_owner(self):
+        try:
+            with open(self.path, "r", encoding="utf-8") as fh:
+                raw = fh.read().strip()
+            pid_s, ts_s = raw.split(":", 1)
+            return int(pid_s), float(ts_s)
+        except Exception:
+            return None, 0.0
+
+    def _stale(self) -> bool:
+        pid, ts = self._read_owner()
+        if pid is None:
+            return True  # unreadable/garbage lock file
+        if not self._pid_alive(pid):
+            return True
+        try:
+            if ts and (time.time() - ts) > (self.max_seconds + 60):
+                return True
+        except Exception:
+            pass
+        return False
+
+    def acquire(self, timeout: float = 10.0) -> bool:
+        # Guard the same-process race first.
+        if not self._thread_lock.acquire(timeout=max(0.1, timeout)):
+            return False
+        try:
+            os.makedirs(os.path.dirname(self.path), exist_ok=True)
+            deadline = time.time() + max(0.0, timeout)
+            while True:
+                try:
+                    fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+                    try:
+                        os.write(fd, ("%d:%.3f" % (os.getpid(), time.time())).encode("ascii"))
+                    finally:
+                        os.close(fd)
+                    self._fd = None
+                    self._owned = True
+                    return True
+                except FileExistsError:
+                    if self._stale():
+                        try:
+                            os.remove(self.path)
+                            continue
+                        except OSError:
+                            pass
+                    if time.time() >= deadline:
+                        return False
+                    time.sleep(0.2)
+        except Exception:
+            return False
+        finally:
+            if not self._owned:
+                try:
+                    self._thread_lock.release()
+                except RuntimeError:
+                    pass
+
+    def release(self) -> None:
+        if self._owned:
+            try:
+                os.remove(self.path)
+            except OSError:
+                pass
+            self._owned = False
+        try:
+            self._thread_lock.release()
+        except RuntimeError:
+            pass
+
+
+_RENDER_LOCK = _CrossProcessRenderLock(_RENDER_LOCK_PATH)
+
+
+def _ram_gate_ok() -> bool:
+    try:
+        return system_ram_free_mb() >= SYSTEM_RAM_FLOOR_MB
+    except Exception:
+        return False
+
+
+class RenderSession:
+    """Context manager wrapping a creative render.
+
+    Usage:
+        with RenderSession(lane="image", shutdown_chrome=False) as rs:
+            rs.stopped = ensure_system_ram(...)  # already done in __enter__
+            ... do render ...
+            rs.result = {...}
+    On exit (normal or exception), restores. If the process dies mid-render,
+    the state file triggers restore on the next start (see restore_pending_session).
+    """
+
+    def __init__(self, lane: str = "image", shutdown_chrome: bool = False,
+                 max_seconds: int = None):
+        self.lane = lane
+        self.shutdown_chrome = shutdown_chrome
+        self.max_seconds = max_seconds if max_seconds is not None else _RENDER_MAX_SECONDS
+        self.stopped = []
+        self.result = None
+        self._start = None
+        self._lock_acquired = False
+        self._render_active = False
+
+    def mark_render_started(self) -> None:
+        self._render_active = True
+
+    def mark_render_finished(self) -> None:
+        self._render_active = False
+
+    def __enter__(self):
+        # Acquire lock (blocking, with timeout).
+        acquired = _RENDER_LOCK.acquire(timeout=10)
+        if not acquired:
+            raise RuntimeError("render_session_busy: another render is running")
+        self._lock_acquired = True
+        self._start = time.time()
+        # Write state file BEFORE stopping anything (crash safety).
+        try:
+            os.makedirs(os.path.dirname(_RENDER_STATE_PATH), exist_ok=True)
+            state = {
+                "lane": self.lane,
+                "started_at": self._start,
+                "max_seconds": self.max_seconds,
+                "stopped": [],
+                "status": "running",
+            }
+            with open(_RENDER_STATE_PATH, "w", encoding="utf-8") as fh:
+                _rs_json.dump(state, fh)
+        except Exception:
+            pass
+        # Drain: evict brain (existing). In-flight requests are the caller's
+        # responsibility; we just evict.
+        try:
+            unload_brain(wait_s=45.0)
+        except Exception:
+            pass
+        # Stop list + verify RAM.
+        try:
+            self.stopped = ensure_system_ram(shutdown_chrome=self.shutdown_chrome)
+            if isinstance(self.stopped, dict):
+                self.stopped = self.stopped.get("stopped", [])
+        except Exception as exc:
+            # Write refusal to state file, then re-raise after restore.
+            self._write_state(status="refused", refusal=str(exc))
+            self._restore()
+            if self._lock_acquired:
+                try:
+                    _RENDER_LOCK.release()
+                except RuntimeError:
+                    pass
+                self._lock_acquired = False
+            raise
+        # Update state file with stopped list.
+        self._write_state(status="running", stopped=self.stopped)
+        return self
+
+    def _write_state(self, status="running", stopped=None, refusal=None):
+        try:
+            state = {
+                "lane": self.lane,
+                "started_at": self._start,
+                "max_seconds": self.max_seconds,
+                "stopped": stopped if stopped is not None else self.stopped,
+                "status": status,
+            }
+            if refusal:
+                state["refusal"] = refusal
+            if self.result:
+                state["result"] = self.result
+            with open(_RENDER_STATE_PATH, "w", encoding="utf-8") as fh:
+                _rs_json.dump(state, fh)
+        except Exception:
+            pass
+
+    def _restore(self):
+        try:
+            restore_after_render(self.stopped)
+        except Exception:
+            pass
+        # Clear state file (session complete).
+        try:
+            if os.path.exists(_RENDER_STATE_PATH):
+                os.remove(_RENDER_STATE_PATH)
+        except Exception:
+            pass
+
+    def check_timeout(self):
+        if self._start and (time.time() - self._start) > self.max_seconds:
+            raise RuntimeError(
+                f"render_timeout: exceeded {self.max_seconds}s max render time")
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # A timed-out render may still be executing inside ComfyUI. Never
+        # release the lock or restore the LLM in that case: keep the state file
+        # as "orphaned" so the next start can recover, and never replay an
+        # ambiguous submission. Stale-lock detection reclaims it after the
+        # max render time plus a grace period.
+        if (self._render_active and exc_val is not None
+                and "render_timeout" in str(exc_val)):
+            self._write_state(status="orphaned")
+            return False
+        # Restore in finally (crash-safe).
+        self._restore()
+        if self._lock_acquired:
+            try:
+                _RENDER_LOCK.release()
+            except RuntimeError:
+                pass
+            self._lock_acquired = False
+        return False  # don't suppress exceptions
+
+
+def restore_pending_session() -> dict:
+    """Called on startup: if a state file exists from a crashed render, restore.
+
+    Returns a dict describing what was restored, or {} if nothing pending.
+    """
+    try:
+        if not os.path.exists(_RENDER_STATE_PATH):
+            return {}
+        with open(_RENDER_STATE_PATH, "r", encoding="utf-8") as fh:
+            state = _rs_json.load(fh)
+        stopped = state.get("stopped", [])
+        restore_after_render(stopped)
+        # Remove state file.
+        os.remove(_RENDER_STATE_PATH)
+        return {"restored": True, "lane": state.get("lane"), "stopped": stopped,
+                "status": state.get("status")}
+    except Exception as exc:
+        return {"restored": False, "error": str(exc)}
+
+
+def run_render_session(lane: str, render_fn, *args, **kwargs):
+    """Convenience: run render_fn inside a RenderSession. Returns render_fn result."""
+    with RenderSession(lane=lane) as rs:
+        rs.check_timeout()
+        out = render_fn(*args, **kwargs)
+        rs.result = out if isinstance(out, dict) else {"result": out}
+        rs.check_timeout()
+        return out
