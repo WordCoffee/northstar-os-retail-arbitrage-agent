@@ -93,6 +93,15 @@ def t_klein():
 def t_seedvr2():
     if not has("diffusion_models/seedvr2_3b_fp8_e4m3fn.safetensors") or not has("vae/seedvr2_ema_vae_fp16.safetensors"):
         return {"test": "seedvr2", "ok": None, "skipped": "files not staged yet"}
+    # Required custom nodes must be installed; otherwise UNSUPPORTED (do not install packs without operator approval).
+    try:
+        import urllib.request, json as _j
+        with urllib.request.urlopen(BASE + "/object_info/SeedVR2Preprocess", timeout=10) as r:
+            info = _j.loads(r.read().decode())
+        if not info or "SeedVR2Preprocess" not in info:
+            raise RuntimeError("node absent")
+    except Exception:
+        return {"test": "seedvr2", "ok": None, "skipped": "UNSUPPORTED-WITH-REASON: SeedVR2 custom nodes (SeedVR2Preprocess, ResizeImageMaskNode) not installed in ComfyUI"}
     g = {
         "1": {"class_type": "LoadImage", "inputs": {"image": "ns_input_mug.png"}},
         "2": {"class_type": "ResizeImageMaskNode", "inputs": {"input": ["1", 0], "resize_type": "scale by multiplier", "multiplier": 2.0, "scale_method": "lanczos"}},
