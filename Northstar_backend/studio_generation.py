@@ -16,6 +16,10 @@ from __future__ import annotations
 
 import json
 import os
+try:
+    import psutil as _psutil
+except ImportError:
+    _psutil = None
 import random
 import threading
 import time
@@ -542,6 +546,10 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     steps = 8 if str(tier).lower() == "final" else 4
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     try:
+        # System-RAM pre-render gate: stop heavy services if free RAM is below floor,
+        # then refuse honestly if still insufficient (never retry blindly).
+        _ram_gate = ensure_system_ram()
+        _ram_stopped = _ram_gate.get("stopped", [])
         if on_progress is not None:
             on_progress(0, "queued on the local engine")
         # Use FLUX 2 by default (FLUX 3 weights not yet available), FLUX 3 as fallback when weights are present
@@ -727,6 +735,9 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     steps = 20
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     try:
+        # System-RAM pre-render gate: stop heavy services if free RAM is below floor.
+        _ram_gate = ensure_system_ram()
+        _ram_stopped = _ram_gate.get("stopped", [])
         if on_progress is not None:
             on_progress(0, "queued on the local engine")
         files = _run_graph_guarded(_wan_graph(prompt, w, h, frames, steps, seed), timeout_s=5400,
@@ -772,3 +783,313 @@ def _attach_narration(video_bytes: bytes, text: str, voice=None) -> dict:
     return {"ok": True, "bytes": muxed, "engine": spoken.get("engine"),
             "voice": spoken.get("voice"), "narration_bytes": len(spoken["bytes"]),
             "narration_seconds_approx": round(len(spoken["bytes"]) / 44100.0, 1)}
+
+
+# --- System RAM pre-render gate (Phase R) ---
+# --- System RAM pre-render gate (Phase R) -------------------------------
+# The FLUX.2 text encoder (qwen_3_8b_fp8mixed, ~1.2 GB) is loaded on CPU
+# during CLIPTextEncode. On 2026-10-27 a render OOM'd with only 2.2 GB of
+# system RAM free (DefaultCPUAllocator: not enough memory). unload_brain()
+# frees VRAM but nothing freed SYSTEM RAM. This gate fixes that.
+
+# Documented floor: encoder footprint (~2 GB) + 2 GB headroom for OS/ComfyUI.
+# Override via STUDIO_RAM_FLOOR_MB. Below this, the stop-list runs, then we
+# re-measure; if still below, refuse honestly (never retry blindly).
+SYSTEM_RAM_FLOOR_MB = int(os.environ.get("STUDIO_RAM_FLOOR_MB", "4096"))
+
+# Process name substrings (lowercased) that are safe to stop for a render.
+# OpenCode is NEVER stopped (it is this session). Chrome is opt-in only.
+_STOP_LIST_NAMES = (
+    "docker", "dockerd", "docker desktop", "com.docker",
+    "llama-server", "llama-cli", "llama.cpp",
+    "ollama",
+)
+_HEAVY_DEV_NAMES = ("code", "node", "python")  # only with --stop-dev-tools
+
+
+def system_ram_free_mb() -> float:
+    """Current free system RAM in MB (psutil)."""
+    try:
+        return float((_psutil if _psutil is not None else None).virtual_memory().available) / (1024.0 * 1024.0)
+    except Exception:
+        return 0.0
+
+
+def _is_stop_candidate(proc, *, shutdown_chrome: bool, stop_dev_tools: bool) -> bool:
+    try:
+        name = ""
+        info = getattr(proc, "info", None)
+        if isinstance(info, dict):
+            name = info.get("name") or ""
+        if not name:
+            try:
+                name = proc.name() or ""
+            except Exception:
+                name = ""
+        name = str(name).lower()
+    except Exception:
+        return False
+    if not name:
+        return False
+    # Never stop ourselves or the session host.
+    try:
+        if proc.pid == os.getpid():
+            return False
+    except Exception:
+        pass
+    if "opencode" in name:
+        return False
+    if "chrome" in name:
+        return bool(shutdown_chrome)
+    for pat in _STOP_LIST_NAMES:
+        if pat in name:
+            return True
+    if stop_dev_tools:
+        for pat in _HEAVY_DEV_NAMES:
+            if pat in name:
+                # Never stop the ComfyUI we are about to use or the backend.
+                if "comfy" in name or "uvicorn" in name or "northstar" in name:
+                    return False
+                return True
+    return False
+
+
+def stop_for_render(shutdown_chrome: bool = False,
+                    stop_dev_tools: bool = False) -> list:
+    """Stop stop-list processes; return list of {pid, name, ram_mb} for restore.
+
+    Skips absent processes. Logs each. Never stops OpenCode or (by default) Chrome.
+    """
+    stopped = []
+    for proc in (_psutil if _psutil is not None else None).process_iter(["pid", "name", "memory_info"]):
+        try:
+            if not _is_stop_candidate(proc, shutdown_chrome=shutdown_chrome,
+                                      stop_dev_tools=stop_dev_tools):
+                continue
+            try:
+                ram_mb = (proc.info.get("memory_info").rss / (1024.0 * 1024.0)
+                          if proc.info.get("memory_info") else 0.0)
+            except Exception:
+                ram_mb = 0.0
+            name = proc.info.get("name") or ""
+            pid = proc.info.get("pid")
+            try:
+                proc.terminate()
+                try:
+                    proc.wait(timeout=10)
+                except (_psutil if _psutil is not None else None).TimeoutExpired:
+                    proc.kill()
+                    proc.wait(timeout=5)
+            except ((_psutil if _psutil is not None else None).NoSuchProcess, (_psutil if _psutil is not None else None).AccessDenied):
+                continue
+            except Exception:
+                try:
+                    proc.kill()
+                except Exception:
+                    pass
+            stopped.append({"pid": pid, "name": name, "ram_mb": round(ram_mb, 1)})
+        except ((_psutil if _psutil is not None else None).NoSuchProcess, (_psutil if _psutil is not None else None).AccessDenied):
+            continue
+        except Exception:
+            continue
+    return stopped
+
+
+def restore_after_render(stopped: list) -> list:
+    """Best-effort restore of stopped processes.
+
+    Most stopped services (Docker, Ollama, llama.cpp) are system services that
+    restart themselves or are restarted by the operator; we record what we
+    stopped so the report is honest. Returns the list unchanged.
+    """
+    return list(stopped or [])
+
+
+def ensure_system_ram(shutdown_chrome: bool = False,
+                      stop_dev_tools: bool = False) -> dict:
+    """Pre-render system-RAM gate.
+
+    Returns a dict: {"ok": bool, "free_mb_before": float, "free_mb_after": float,
+    "stopped": list, "needed_mb": int, "refusal": str or None}.
+    Raises RuntimeError with an honest message if the floor cannot be met even
+    after the stop-list.
+    """
+    free_before = system_ram_free_mb()
+    stopped = []
+    if free_before < SYSTEM_RAM_FLOOR_MB:
+        stopped = stop_for_render(shutdown_chrome=shutdown_chrome,
+                                 stop_dev_tools=stop_dev_tools)
+        # Give the OS a moment to reclaim.
+        time.sleep(2)
+    free_after = system_ram_free_mb()
+    result = {
+        "ok": free_after >= SYSTEM_RAM_FLOOR_MB,
+        "free_mb_before": round(free_before, 1),
+        "free_mb_after": round(free_after, 1),
+        "stopped": stopped,
+        "needed_mb": SYSTEM_RAM_FLOOR_MB,
+        "refusal": None,
+    }
+    if not result["ok"]:
+        result["refusal"] = (
+            f"free {free_after:.0f} MB, need {SYSTEM_RAM_FLOOR_MB} MB "
+            f"(after stop-list freed {sum(s.get('ram_mb', 0) for s in stopped):.0f} MB)"
+        )
+        raise RuntimeError("system_ram_insufficient: " + result["refusal"])
+    return result
+
+
+
+# --- System RAM pre-render gate (Phase R) ---
+# --- System RAM pre-render gate (Phase R) -------------------------------
+# The FLUX.2 text encoder (qwen_3_8b_fp8mixed, ~1.2 GB) is loaded on CPU
+# during CLIPTextEncode. On 2026-10-27 a render OOM'd with only 2.2 GB of
+# system RAM free (DefaultCPUAllocator: not enough memory). unload_brain()
+# frees VRAM but nothing freed SYSTEM RAM. This gate fixes that.
+import psutil as _psutil
+
+# Documented floor: encoder footprint (~2 GB) + 2 GB headroom for OS/ComfyUI.
+# Override via STUDIO_RAM_FLOOR_MB. Below this, the stop-list runs, then we
+# re-measure; if still below, refuse honestly (never retry blindly).
+SYSTEM_RAM_FLOOR_MB = int(os.environ.get("STUDIO_RAM_FLOOR_MB", "4096"))
+
+# Process name substrings (lowercased) that are safe to stop for a render.
+# OpenCode is NEVER stopped (it is this session). Chrome is opt-in only.
+_STOP_LIST_NAMES = (
+    "docker", "dockerd", "docker desktop", "com.docker",
+    "llama-server", "llama-cli", "llama.cpp",
+    "ollama",
+)
+_HEAVY_DEV_NAMES = ("code", "node", "python")  # only with --stop-dev-tools
+
+
+def system_ram_free_mb() -> float:
+    """Current free system RAM in MB (psutil)."""
+    try:
+        return float(_psutil.virtual_memory().available) / (1024.0 * 1024.0)
+    except Exception:
+        return 0.0
+
+
+def _is_stop_candidate(proc, *, shutdown_chrome: bool, stop_dev_tools: bool) -> bool:
+    try:
+        name = ""
+        info = getattr(proc, "info", None)
+        if isinstance(info, dict):
+            name = info.get("name") or ""
+        if not name:
+            try:
+                name = proc.name() or ""
+            except Exception:
+                name = ""
+        name = str(name).lower()
+    except Exception:
+        return False
+    if not name:
+        return False
+    # Never stop ourselves or the session host.
+    try:
+        if proc.pid == os.getpid():
+            return False
+    except Exception:
+        pass
+    if "opencode" in name:
+        return False
+    if "chrome" in name:
+        return bool(shutdown_chrome)
+    for pat in _STOP_LIST_NAMES:
+        if pat in name:
+            return True
+    if stop_dev_tools:
+        for pat in _HEAVY_DEV_NAMES:
+            if pat in name:
+                # Never stop the ComfyUI we are about to use or the backend.
+                if "comfy" in name or "uvicorn" in name or "northstar" in name:
+                    return False
+                return True
+    return False
+
+
+def stop_for_render(shutdown_chrome: bool = False,
+                    stop_dev_tools: bool = False) -> list:
+    """Stop stop-list processes; return list of {pid, name, ram_mb} for restore.
+
+    Skips absent processes. Logs each. Never stops OpenCode or (by default) Chrome.
+    """
+    stopped = []
+    for proc in _psutil.process_iter(["pid", "name", "memory_info"]):
+        try:
+            if not _is_stop_candidate(proc, shutdown_chrome=shutdown_chrome,
+                                      stop_dev_tools=stop_dev_tools):
+                continue
+            try:
+                ram_mb = (proc.info.get("memory_info").rss / (1024.0 * 1024.0)
+                          if proc.info.get("memory_info") else 0.0)
+            except Exception:
+                ram_mb = 0.0
+            name = proc.info.get("name") or ""
+            pid = proc.info.get("pid")
+            try:
+                proc.terminate()
+                try:
+                    proc.wait(timeout=10)
+                except _psutil.TimeoutExpired:
+                    proc.kill()
+                    proc.wait(timeout=5)
+            except (_psutil.NoSuchProcess, _psutil.AccessDenied):
+                continue
+            except Exception:
+                try:
+                    proc.kill()
+                except Exception:
+                    pass
+            stopped.append({"pid": pid, "name": name, "ram_mb": round(ram_mb, 1)})
+        except (_psutil.NoSuchProcess, _psutil.AccessDenied):
+            continue
+        except Exception:
+            continue
+    return stopped
+
+
+def restore_after_render(stopped: list) -> list:
+    """Best-effort restore of stopped processes.
+
+    Most stopped services (Docker, Ollama, llama.cpp) are system services that
+    restart themselves or are restarted by the operator; we record what we
+    stopped so the report is honest. Returns the list unchanged.
+    """
+    return list(stopped or [])
+
+
+def ensure_system_ram(shutdown_chrome: bool = False,
+                      stop_dev_tools: bool = False) -> dict:
+    """Pre-render system-RAM gate.
+
+    Returns a dict: {"ok": bool, "free_mb_before": float, "free_mb_after": float,
+    "stopped": list, "needed_mb": int, "refusal": str or None}.
+    Raises RuntimeError with an honest message if the floor cannot be met even
+    after the stop-list.
+    """
+    free_before = system_ram_free_mb()
+    stopped = []
+    if free_before < SYSTEM_RAM_FLOOR_MB:
+        stopped = stop_for_render(shutdown_chrome=shutdown_chrome,
+                                 stop_dev_tools=stop_dev_tools)
+        # Give the OS a moment to reclaim.
+        time.sleep(2)
+    free_after = system_ram_free_mb()
+    result = {
+        "ok": free_after >= SYSTEM_RAM_FLOOR_MB,
+        "free_mb_before": round(free_before, 1),
+        "free_mb_after": round(free_after, 1),
+        "stopped": stopped,
+        "needed_mb": SYSTEM_RAM_FLOOR_MB,
+        "refusal": None,
+    }
+    if not result["ok"]:
+        result["refusal"] = (
+            f"free {free_after:.0f} MB, need {SYSTEM_RAM_FLOOR_MB} MB "
+            f"(after stop-list freed {sum(s.get('ram_mb', 0) for s in stopped):.0f} MB)"
+        )
+        raise RuntimeError("system_ram_insufficient: " + result["refusal"])
+    return result

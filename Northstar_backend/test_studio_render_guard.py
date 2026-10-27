@@ -44,6 +44,7 @@ def test_generate_image_releases_models_on_failure(monkeypatch):
     """A failed render must never leave a crammed ComfyUI cache behind."""
     monkeypatch.setattr(sg, "media_live_armed", lambda: True)
     monkeypatch.setattr(sg, "unload_brain", lambda wait_s=45.0: True)
+    monkeypatch.setattr(sg, "ensure_system_ram", lambda **kw: {"ok": True, "stopped": [], "free_mb_before": 8192.0, "free_mb_after": 8192.0, "needed_mb": 4096, "refusal": None})
     released = {"n": 0}
     monkeypatch.setattr(sg, "release_models",
                         lambda: released.__setitem__("n", released["n"] + 1))
