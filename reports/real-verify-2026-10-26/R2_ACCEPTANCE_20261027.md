@@ -83,5 +83,6 @@ No defects found in the unauthenticated creative surface (0 axe violations, 0 co
 - `Northstar_backend/studio_generation.py`, `main.py`, tests — committed `2086ebb4`.
 - This report + `00_STATE.json` update — pending commit.
 
-## Remaining blockers / approvals (unchanged from prior state)
-B11/B12/B14 (operator actions), Unwrangle credit replenishment, SeedVR2 custom nodes, FLUX 3 weights, DataForSEO adapter repair — all outside this pass.
+## Update 2026-10-27 (pin cleared)
+
+The stale `Default` config pin was removed via the sanctioned `unset-profile` command; `selection_source` is now `unpinned` and `operator_profile_pinned` is false. The Playwright extension still does not answer after a profile is selected, so no session binding persists (`profile_active` false). The binding failure is now specifically: extension relay not seen post-selection, not a stale-pin problem. The operator's Northstarosllc profile is the intended selection; T2 is no longer assumed or used unless explicitly selected in the picker.
