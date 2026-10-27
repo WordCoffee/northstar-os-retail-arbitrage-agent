@@ -172,15 +172,38 @@ class ChromeConnectRunner:
                     job.error_reason = f"no adapter or handler for {job.task_type}"
                     self.state.jobs_failed += 1
 
-            # Post evidence if succeeded
+            # Post evidence if succeeded (evidence-first extraction, P6-T4)
             if job.state == "SUCCEEDED":
+                from evidence import make_extraction_evidence, make_field_evidence
+                extracted = job.params.get("extracted", {})
+                fields = []
+                for field_name, value in extracted.items():
+                    fe = make_field_evidence(
+                        field_name=field_name,
+                        value=value,
+                        source_url=job.params.get("url", ""),
+                        selector_version=job.params.get("selector_version", "1.0.0"),
+                        confidence=job.params.get("confidence", 1.0),
+                    )
+                    fields.append(fe)
+                ev = make_extraction_evidence(
+                    job_id=job.id,
+                    url=job.params.get("url", ""),
+                    fields=fields,
+                    selector_version=job.params.get("selector_version", "1.0.0"),
+                )
+                # Also post legacy BrowserEvidence for compatibility
                 evidence = BrowserEvidence(
                     job_id=job.id,
                     url=job.params.get("url", ""),
-                    extracted=job.params.get("extracted", {}),
+                    extracted=extracted,
+                    status=ev.status,
+                    confidence=ev.fields[0].confidence if ev.fields else 0.0,
                 )
                 self.queue.add_evidence(evidence)
                 job.evidence_ref = job.id
+                # Store full evidence for admin room
+                job.params["_evidence"] = ev.to_dict()
 
         except Exception as e:
             job.state = "FAILED"
