@@ -70,6 +70,7 @@ def _row_to_dict(row) -> Optional[dict]:
 
 
 def get_by_email(db, email: str) -> Optional[dict]:
+    ensure_table(db)
     email = (email or "").strip().lower()
     if _is_postgres(db):
         cur = db._raw.cursor()
@@ -83,6 +84,7 @@ def get_by_email(db, email: str) -> Optional[dict]:
 
 
 def count(db) -> int:
+    ensure_table(db)
     if _is_postgres(db):
         cur = db._raw.cursor()
         cur.execute("SELECT COUNT(*) AS n FROM owner_credentials")
