@@ -25,9 +25,15 @@ def _load_adapter(name):
 _costco_mod = _load_adapter('costco')
 _amazon_mod = _load_adapter('amazon_public')
 _vendor_mod = _load_adapter('vendor_dashboards')
+_sellersprite_mod = _load_adapter('sellersprite')
+_palletfly_mod = _load_adapter('palletfly')
+_prime_mod = _load_adapter('prime_national_distribution')
 CostcoAdapter = _costco_mod.CostcoAdapter
 AmazonPublicAdapter = _amazon_mod.AmazonPublicAdapter
 VendorDashboardsAdapter = _vendor_mod.VendorDashboardsAdapter
+SellerSpriteAdapter = _sellersprite_mod.SellerSpriteAdapter
+PalletFlyAdapter = _palletfly_mod.PalletFlyAdapter
+PrimeNationalDistributionAdapter = _prime_mod.PrimeNationalDistributionAdapter
 
 
 COSTCO_HTML = """
@@ -166,3 +172,92 @@ def test_adapter_max_pages():
     assert adapter.max_pages_per_run == 10
     adapter2 = AmazonPublicAdapter()
     assert adapter2.max_pages_per_run == 5
+
+
+# ---------------------------------------------------------------------------
+# SellerSprite adapter tests
+# ---------------------------------------------------------------------------
+
+SELLERSPRITE_HTML = """
+<html><body>
+  <table>
+    <tr><td class="asin">B0ABC123</td><td class="title">Turmeric Powder 16oz</td><td class="price">$12.99</td><td class="bsr">5432</td><td class="sales">340</td></tr>
+  </table>
+  <button class="export">Export Data</button>
+</body></html>
+"""
+
+def test_sellersprite_adapter_extract():
+    adapter = SellerSpriteAdapter()
+    result = adapter.extract(SELLERSPRITE_HTML, url="https://www.sellersprite.com/search")
+    assert result.status in ("OK", "DEGRADED")
+
+def test_sellersprite_signed_in_check():
+    adapter = SellerSpriteAdapter()
+    assert adapter.check_signed_in("<html><body>Logout here</body></html>") is True
+    assert adapter.check_signed_in(SELLERSPRITE_HTML) is False
+
+def test_sellersprite_allowed_tasks():
+    adapter = SellerSpriteAdapter()
+    assert adapter.is_allowed_task("read")
+    assert adapter.is_allowed_task("extract")
+    assert adapter.is_allowed_task("export_download")
+    assert not adapter.is_allowed_task("purchase")
+
+def test_sellersprite_is_export_page():
+    assert SellerSpriteAdapter.is_export_page("https://www.sellersprite.com/export") is True
+    assert SellerSpriteAdapter.is_export_page("https://www.sellersprite.com/home") is False
+
+
+# ---------------------------------------------------------------------------
+# PalletFly adapter tests
+# ---------------------------------------------------------------------------
+
+PALLETFLY_HTML = """
+<html><body>
+  <h1>Pallet #12345</h1>
+  <span class="price">$250.00</span>
+  <span class="lot-size">50 units</span>
+  <a class="manifest-link" href="/manifest/12345">View Manifest</a>
+  <button class="export">Export</button>
+</body></html>
+"""
+
+def test_palletfly_adapter_extract():
+    adapter = PalletFlyAdapter()
+    result = adapter.extract(PALLETFLY_HTML, url="https://www.palletfly.com/lot/12345")
+    assert result.status in ("OK", "DEGRADED")
+
+def test_palletfly_signed_in_check():
+    adapter = PalletFlyAdapter()
+    assert adapter.check_signed_in("<html><body>My Account</body></html>") is True
+    assert adapter.check_signed_in(PALLETFLY_HTML) is False
+
+
+# ---------------------------------------------------------------------------
+# Prime National Distribution adapter tests
+# ---------------------------------------------------------------------------
+
+PND_HTML = """
+<html><body>
+  <table>
+    <tr><td class="upc">123456789012</td><td class="title">Widget A</td><td class="wholesale-price">$5.99</td><td class="case-qty">24</td><td class="availability">In Stock</td></tr>
+  </table>
+</body></html>
+"""
+
+def test_prime_national_adapter_extract():
+    adapter = PrimeNationalDistributionAdapter()
+    result = adapter.extract(PND_HTML, url="https://www.primenationaldistribution.com/list")
+    assert result.status in ("OK", "DEGRADED")
+
+def test_prime_national_signed_in_check():
+    adapter = PrimeNationalDistributionAdapter()
+    assert adapter.check_signed_in("<html><body>Dashboard</body></html>") is True
+    assert adapter.check_signed_in(PND_HTML) is False
+
+def test_prime_national_allowed_tasks():
+    adapter = PrimeNationalDistributionAdapter()
+    assert adapter.is_allowed_task("read")
+    assert adapter.is_allowed_task("wholesale_list")
+    assert not adapter.is_allowed_task("purchase")
