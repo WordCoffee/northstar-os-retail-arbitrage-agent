@@ -23,13 +23,11 @@ def _load_adapter(name):
     return mod
 
 _costco_mod = _load_adapter('costco')
-_amazon_mod = _load_adapter('amazon_public')
 _vendor_mod = _load_adapter('vendor_dashboards')
 _sellersprite_mod = _load_adapter('sellersprite')
 _palletfly_mod = _load_adapter('palletfly')
 _prime_mod = _load_adapter('prime_national_distribution')
 CostcoAdapter = _costco_mod.CostcoAdapter
-AmazonPublicAdapter = _amazon_mod.AmazonPublicAdapter
 VendorDashboardsAdapter = _vendor_mod.VendorDashboardsAdapter
 SellerSpriteAdapter = _sellersprite_mod.SellerSpriteAdapter
 PalletFlyAdapter = _palletfly_mod.PalletFlyAdapter
@@ -43,17 +41,6 @@ COSTCO_HTML = """
   <span class="item-number">Item #1234567</span>
   <p class="description">Cold-pressed olive oil from Italy.</p>
   <span class="availability">In Stock</span>
-</body></html>
-"""
-
-AMAZON_HTML = """
-<html><body>
-  <span id="productTitle">Turmeric Powder 16oz Organic</span>
-  <span class="a-price-whole">12</span>
-  <div id="SalesRank">BSR: 5,432 in Grocery</div>
-  <span class="a-icon-alt">4.5 out of 5 stars</span>
-  <span id="acrCustomerReviewText">234 ratings</span>
-  <div id="availability">In Stock</div>
 </body></html>
 """
 
@@ -105,25 +92,6 @@ def test_costco_adapter_from_json():
         os.remove(path)
 
 
-def test_amazon_public_adapter_extract():
-    adapter = AmazonPublicAdapter()
-    result = adapter.extract(AMAZON_HTML, url="https://www.amazon.com/dp/B0ABC123")
-    assert result.status in ("OK", "DEGRADED")  # some fields may be missing
-    assert result.fields.get("title") is not None
-
-
-def test_amazon_public_is_amazon_url():
-    assert AmazonPublicAdapter.is_amazon_url("https://www.amazon.com/dp/B0ABC123") is True
-    assert AmazonPublicAdapter.is_amazon_url("https://www.costco.com/p/1") is False
-
-
-def test_amazon_public_allowed_tasks():
-    adapter = AmazonPublicAdapter()
-    assert adapter.is_allowed_task("read")
-    assert adapter.is_allowed_task("spot_verify")
-    assert not adapter.is_allowed_task("purchase")
-
-
 def test_vendor_dashboards_adapter_extract():
     adapter = VendorDashboardsAdapter()
     result = adapter.extract(VENDOR_HTML, url="https://vendor.com/api/keys")
@@ -170,8 +138,6 @@ def test_adapter_mark_degraded():
 def test_adapter_max_pages():
     adapter = CostcoAdapter()
     assert adapter.max_pages_per_run == 10
-    adapter2 = AmazonPublicAdapter()
-    assert adapter2.max_pages_per_run == 5
 
 
 # ---------------------------------------------------------------------------

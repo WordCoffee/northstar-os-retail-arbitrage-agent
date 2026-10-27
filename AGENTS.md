@@ -62,6 +62,16 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 - Before using any tool that is not already wired in the repo, run `python Northstar_backend/provider_suite.py --check <tool> --provider <lane>`. Reason codes (`license_noncommercial`, `weights_license_unverified`, `agpl_network_copyleft_unreviewed`, `gate_not_armed`, `not_installed`) are refusals, not warnings — never bypass them, and never reclassify a licence to make a lane work.
 - "Local lane" ≠ "offline": check each entry's `network` field before assuming a tool makes no outbound call.
 
+## Chrome profile selection — STANDING OWNER RULE (2026-10-27, survives compaction)
+- Chrome Connect uses Chrome profile directory **"Profile 6" only** (display name "Work", northstarosllc account).
+- Match by **DIRECTORY NAME, never display name**. Three profiles are called "Work".
+- This is the owner's standing selection and replaces per-session picking. The profile lease still applies (30-minute idle default, Disconnect action).
+- **Never** use, switch to, create, repair or copy anything for any other profile: Default, Profile 3/4/5/7/8, "Profile", or any throwaway user-data-dir. Do not delete them either. If an action resolves to another profile, stop it and report.
+- **Never kill Chrome processes.** If Chrome must close, ask the owner to close it.
+- **Never copy extension folders or profile data between profiles.** Copying a folder does not install an extension.
+- The `chrome_signed_out` gate is replaced by an owner-authorized `profile_lease_valid` gate bound to exactly "Profile 6" (`lib/chromecontrol/profile-isolation.js`, `config/chromecontrol.json`). It must still refuse every other profile.
+- Provider tool suite: `config/chromecontrol_policy_owner.json`, the host allowlist, the hardcoded Amazon blocklist, robots enforcement, capability grants, budget caps and the audit-hash chain are **not** editable by the agent.
+
 ## Authority order
 1. Full constitution (`docs/OPERATING_CONSTITUTION.md`), 2. resolved user profile (refinements only), 3. benchmark/CI baseline, 4. batch files, 5. this capsule's guardrails as interpreted against the constitution. Nothing below loosens credential hygiene, real-money approval, or git safety.
 

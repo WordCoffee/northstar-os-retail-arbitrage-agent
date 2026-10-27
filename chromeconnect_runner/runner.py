@@ -153,9 +153,12 @@ class ChromeConnectRunner:
                 # Default: run adapter
                 adapter = self._adapters.get(job.site)
                 if adapter:
-                    # html_provider would be Chrome Connect in production
-                    html = ""  # placeholder — real impl fetches via Chrome Connect
-                    adapter_result = adapter.extract(html, url=job.params.get("url", ""))
+                    # Fetch the page through Chrome Connect (policy-enforced).
+                    from chromeconnect_client import fetch_page_text
+                    url = job.params.get("url", "")
+                    task = job.params.get("task", "read page")
+                    html = fetch_page_text(task, url)
+                    adapter_result = adapter.extract(html, url=url)
                     if adapter_result.status == "OK":
                         job.state = "SUCCEEDED"
                         self.state.jobs_completed += 1
