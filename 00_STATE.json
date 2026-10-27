@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "Phase 0 complete (Chrome Connect 3.0). Baseline running. Phase 1 pending (observation layer).",
+  "current_phase": "Phase 1 complete (Chrome Connect 3.0). Phase 2 pending (AI loop MVP). Baseline blocked (Profile 7 not clean).",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -117,7 +117,8 @@
     "Phase G: Next Batch (FIXES_50 leftovers + partials + hygiene)",
     "Phase H: Private Alpha Launch (dual-engine, operator-only)",
     "Master-plan completion sprint (Items 1-6): Item 1 (P5-T4 acceptance round-trip) GG 16/0 + acceptance 32/0; Item 2 (P4-T3b rights filter) committed â€” provenance extractor + GG derived projection, no raw payload leak, data_rights+routes 21/0 and GG suite 30/0; Item 3 (scheduler/snapshot evidence-based scope) â€” scheduler core verified 41/0, new operator-created monthly_top5 schedule path test (top5 6/0), NO invented cron/retention/snapshot semantics, assumptions A-07..A-09. Item 4 (local admin/tenant/backup-restore) DONE (LOCAL) â€” admin UI sample-mode verified (verify-admin.cjs 34/0: all /beta-ops pages render for platform_admin, destructive controls disabled, nav renders, operatorâ†’/home + anonymousâ†’/sign-in isolation), backend admin/tenant/audit/migration/e2e suites 92/0, local SQLite backup/restore drill test_backup_restore_drill.py 2/0 (round-trip parity + integrity_check + disposable-name guard), SOP/checklist in docs/ADMIN_SOP_AND_INTEGRITY.md, assumptions A-10..A-13. Item 5 (memory-limits review, evidence-only) DONE â€” no mem_limit/deploy.resources-memory in docker-compose.yml/hosted.yml; only GPU device reservation in docker-compose.local.yml (Ollama); ~0.46-0.78 GB RSS of 12 GB Always-Free A1 per OA-2 prep; assumption A-14; no compose change. Item 6 (local runbook + one-command verify) DONE â€” cites parallel-session docs/LOCAL_RUNBOOK.md + SERVICE docs; adds ADMIN_SOP_AND_INTEGRITY.md + final completion report; verifies foundation 757/59s, admin subset 92/0, drill 2/0, GG 16/0, acceptance 32/0, admin UI 34/0, npm run build 0 errors; assumption A-15. See docs/ASSUMPTIONS_LOG.md and docs/BUILD_STATE.md.",
-    "Phase 0 (Chrome Connect 3.0): Transport binding fixed (CONNECTED, mcp_child_alive). Profile switched Profile 6 (signed-in northstarosllc@gmail.com) -> Profile 7 (signed-out Northstar Research). Run logging added (Northstar_backend/chromeconnect_run_log.py, logs/chromeconnect_runs.jsonl). Baseline clock started. Report: reports/phase0_chromeconnect_20261027.md. No policy/allowlist changes."
+    "Phase 0 (Chrome Connect 3.0): Transport binding fixed (CONNECTED, mcp_child_alive). Profile switched Profile 6 (signed-in northstarosllc@gmail.com) -> Profile 7 (signed-out Northstar Research). Run logging added (Northstar_backend/chromeconnect_run_log.py, logs/chromeconnect_runs.jsonl). Baseline clock started. Report: reports/phase0_chromeconnect_20261027.md. No policy/allowlist changes.",
+    "Phase 1 (Chrome Connect 3.0): Observation layer built (chromeconnect_observation.py). Pruned accessibility snapshot with refs, token budget (4K), viewport paging, repeat collapse. 23 synthetic fixtures. 23 tests pass (flag ON and OFF). Report: reports/phase1_chromeconnect_20261027.md."
   ],
   "known_issues": [
     {
