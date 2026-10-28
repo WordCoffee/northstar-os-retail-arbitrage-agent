@@ -1,0 +1,13 @@
+{
+  "_note": "PENDING MERGE into 00_STATE.json. The edit was refused in this session (permission denied on 00_STATE.json), so the block is parked here verbatim instead of being lost. Merge under the top-level key \"rea_program_20261028\" and update \"current_phase\" as shown.",
+  "current_phase_replacement": "Chrome Connect 3.0 COMPLETE. 131 tests pass. Blocked: Profile 7 has session cookies (Google + Alibaba). Needs clean profile for baseline + live runs. REA program: Phase 1 research plans issued 2026-10-28, awaiting operator approval before Phase 2.",
+  "rea_program_20261028": {
+    "phase": "Phase 1 (research plans) issued - NOT approved, Phase 2 not started",
+    "plan": "reports/rea_program_research_plans_20261028.md",
+    "what": "Six reverse-engineering research plans (label compositing, A+ layouts, video ad structures, social asset specs, Bojo infrastructure, Simple Mode UI), each anchored to files that already exist in this repo rather than to assumed greenfield scope.",
+    "supersedes": "The six bullet plans in the pasted REA master plan. Changes made after inspecting the repo: (1) the A+ plan's Amazon best-seller crawl is gated - replaced with in-repo/own-asset/design-literature sources, Amazon variant blocked pending task-specific approval; (2) all six now name the current implementation files they must inform; (3) four of the six are refinement of shipped surfaces (pouch_label/mockup_compositor, APlus.jsx + specRegistry, VideoUgc.jsx planning workspace, ChatSurface/simple.css after the 2026-10-23 repair), not greenfield; (4) added a mandatory baseline-instrument set so the Phase 5 before/after PDF compares measurements, not adjectives.",
+    "spend": "FREE-only. No trials, subscriptions, API keys or paid credits; no new runtime dependency installed during Phase 2.",
+    "known_gap": "A+ research sample quality depends on permitted sources; Amazon-only access is listed as a gap, not filled with assumptions.",
+    "next": "Operator reply 'approve all' / subset / 'amazon approved for 1.2' / 'change X'. Phase 2 order: 1.4, 1.1, 1.2, 1.3, 1.6, 1.5 (6-7 days)."
+  }
+}
