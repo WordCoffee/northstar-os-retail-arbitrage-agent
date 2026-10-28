@@ -1,0 +1,546 @@
+{
+  "item": "REA Phase 3 ITEM 1 \u2014 L1+L2 acceptance",
+  "generated_at": "2026-10-28T19:56:06.143206+00:00",
+  "plate": "Northstar_backend/data/studio_generated/2e4a7ab96e9941479b068792f592864d.png",
+  "artefact": "reports/rea_probe/item1_mogra_composed.png",
+  "decision": {
+    "max_edge_px": 2048,
+    "date": "2026-10-28",
+    "reason": "a true 2048 long edge measured +8.3 s and +864 MB; 1216 makes the 1600 px Amazon MAIN floor impossible"
+  },
+  "geometry": {
+    "quad": [
+      [
+        251.6,
+        500.0
+      ],
+      [
+        778.9,
+        500.0
+      ],
+      [
+        724.7,
+        1172.0
+      ],
+      [
+        282.8,
+        1172.0
+      ]
+    ],
+    "geom_residual_px": 0.238,
+    "geom_residual_by_side": {
+      "left": 0.292,
+      "right": 0.193
+    },
+    "fit_residual_px": {
+      "left": 0.241,
+      "right": 0.199
+    },
+    "bow_left_px": -6.122,
+    "bow_right_px": -1.197,
+    "mesh": [
+      5,
+      9
+    ],
+    "fit": {
+      "left": "quadratic",
+      "right": "quadratic"
+    },
+    "acceptance": {
+      "residual_under_0_5_px": true,
+      "mesh_present": true
+    }
+  },
+  "ocr": {
+    "status": "ok",
+    "contains_text": true,
+    "boxes": 5,
+    "words": [
+      "MOGRAORGAVCS",
+      "Healthy&organic",
+      "ORGANICLION'S MANE",
+      "MUSHROOM POWDER",
+      "6 oz (170 g)"
+    ],
+    "verify_verdict": "text_present",
+    "verify_error": null
+  },
+  "prepress": {
+    "assessed": true,
+    "status": "ok",
+    "profiles_available": [
+      "RSWOP.icm"
+    ],
+    "profile": "RSWOP.icm",
+    "gamut": {
+      "status": "ok",
+      "profile": "RSWOP.icm",
+      "intent": "relative_colorimetric",
+      "tolerance_dE76": 8.0,
+      "pixels": 199655,
+      "out_of_gamut": 4000,
+      "out_of_gamut_pct": 2.0,
+      "max_dE76": 21.85,
+      "mean_dE76": 4.74,
+      "worst_colors": [
+        {
+          "srgb": [
+            36,
+            40,
+            0
+          ],
+          "hex": "#242800",
+          "dE76": 21.85
+        },
+        {
+          "srgb": [
+            40,
+            43,
+            5
+          ],
+          "hex": "#282B05",
+          "dE76": 20.93
+        },
+        {
+          "srgb": [
+            45,
+            47,
+            6
+          ],
+          "hex": "#2D2F06",
+          "dE76": 20.87
+        },
+        {
+          "srgb": [
+            41,
+            43,
+            4
+          ],
+          "hex": "#292B04",
+          "dE76": 20.69
+        },
+        {
+          "srgb": [
+            36,
+            43,
+            6
+          ],
+          "hex": "#242B06",
+          "dE76": 20.66
+        },
+        {
+          "srgb": [
+            48,
+            49,
+            10
+          ],
+          "hex": "#30310A",
+          "dE76": 20.44
+        },
+        {
+          "srgb": [
+            43,
+            44,
+            6
+          ],
+          "hex": "#2B2C06",
+          "dE76": 20.4
+        },
+        {
+          "srgb": [
+            39,
+            41,
+            5
+          ],
+          "hex": "#272905",
+          "dE76": 20.39
+        }
+      ],
+      "note": "dE76 measured on the sRGB->CMYK->sRGB round trip through the press profile, computed in exact CIE Lab (D65). A relative colorimetric round trip carries a ~4-5 dE floor even for in-gamut neutrals because the source white/black points map onto the medium's; the tolerance is set above that floor so only genuine gamut failures (10-60 dE) are reported."
+    },
+    "ink": {
+      "status": "ok",
+      "profile": "RSWOP.icm",
+      "limit_pct": 300.0,
+      "max_tac_pct": 254.9,
+      "mean_tac_pct": 62.9,
+      "pixels_over_limit": 0,
+      "pixels_over_limit_pct": 0.0,
+      "verdict": "within_limit",
+      "note": "Coated sheet-fed work is commonly capped at 300-330% TAC; the co-packer's spec is the authority."
+    },
+    "verdict": "printable",
+    "blockers": [],
+    "note": "A pass here means the file converts cleanly through the named profile - it is not a substitute for the co-packer's own preflight.",
+    "suggested_colors": [
+      {
+        "hex": "#242800",
+        "prints_as_hex": "#282B29",
+        "prints_as_rgb": [
+          40,
+          43,
+          41
+        ],
+        "dE76": 21.71,
+        "in_gamut": false,
+        "suggested_srgb": [
+          40,
+          43,
+          41
+        ],
+        "suggested_hex": "#282B29",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      },
+      {
+        "hex": "#282B05",
+        "prints_as_hex": "#2C2E2B",
+        "prints_as_rgb": [
+          44,
+          46,
+          43
+        ],
+        "dE76": 20.75,
+        "in_gamut": false,
+        "suggested_srgb": [
+          44,
+          46,
+          43
+        ],
+        "suggested_hex": "#2C2E2B",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      },
+      {
+        "hex": "#2D2F06",
+        "prints_as_hex": "#32332D",
+        "prints_as_rgb": [
+          50,
+          51,
+          45
+        ],
+        "dE76": 20.8,
+        "in_gamut": false,
+        "suggested_srgb": [
+          50,
+          51,
+          45
+        ],
+        "suggested_hex": "#32332D",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      },
+      {
+        "hex": "#292B04",
+        "prints_as_hex": "#2D2F2B",
+        "prints_as_rgb": [
+          45,
+          47,
+          43
+        ],
+        "dE76": 20.41,
+        "in_gamut": false,
+        "suggested_srgb": [
+          45,
+          47,
+          43
+        ],
+        "suggested_hex": "#2D2F2B",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      },
+      {
+        "hex": "#242B06",
+        "prints_as_hex": "#2A2D2A",
+        "prints_as_rgb": [
+          42,
+          45,
+          42
+        ],
+        "dE76": 20.02,
+        "in_gamut": false,
+        "suggested_srgb": [
+          42,
+          45,
+          42
+        ],
+        "suggested_hex": "#2A2D2A",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      },
+      {
+        "hex": "#30310A",
+        "prints_as_hex": "#363630",
+        "prints_as_rgb": [
+          54,
+          54,
+          48
+        ],
+        "dE76": 19.61,
+        "in_gamut": false,
+        "suggested_srgb": [
+          54,
+          54,
+          48
+        ],
+        "suggested_hex": "#363630",
+        "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+      }
+    ]
+  },
+  "readiness": {
+    "verdict": "retail_ready",
+    "blockers": [],
+    "warnings": [],
+    "evidence": {
+      "prepress": {
+        "assessed": true,
+        "status": "ok",
+        "profiles_available": [
+          "RSWOP.icm"
+        ],
+        "profile": "RSWOP.icm",
+        "gamut": {
+          "status": "ok",
+          "profile": "RSWOP.icm",
+          "intent": "relative_colorimetric",
+          "tolerance_dE76": 8.0,
+          "pixels": 199655,
+          "out_of_gamut": 4000,
+          "out_of_gamut_pct": 2.0,
+          "max_dE76": 21.85,
+          "mean_dE76": 4.74,
+          "worst_colors": [
+            {
+              "srgb": [
+                36,
+                40,
+                0
+              ],
+              "hex": "#242800",
+              "dE76": 21.85
+            },
+            {
+              "srgb": [
+                40,
+                43,
+                5
+              ],
+              "hex": "#282B05",
+              "dE76": 20.93
+            },
+            {
+              "srgb": [
+                45,
+                47,
+                6
+              ],
+              "hex": "#2D2F06",
+              "dE76": 20.87
+            },
+            {
+              "srgb": [
+                41,
+                43,
+                4
+              ],
+              "hex": "#292B04",
+              "dE76": 20.69
+            },
+            {
+              "srgb": [
+                36,
+                43,
+                6
+              ],
+              "hex": "#242B06",
+              "dE76": 20.66
+            },
+            {
+              "srgb": [
+                48,
+                49,
+                10
+              ],
+              "hex": "#30310A",
+              "dE76": 20.44
+            },
+            {
+              "srgb": [
+                43,
+                44,
+                6
+              ],
+              "hex": "#2B2C06",
+              "dE76": 20.4
+            },
+            {
+              "srgb": [
+                39,
+                41,
+                5
+              ],
+              "hex": "#272905",
+              "dE76": 20.39
+            }
+          ],
+          "note": "dE76 measured on the sRGB->CMYK->sRGB round trip through the press profile, computed in exact CIE Lab (D65). A relative colorimetric round trip carries a ~4-5 dE floor even for in-gamut neutrals because the source white/black points map onto the medium's; the tolerance is set above that floor so only genuine gamut failures (10-60 dE) are reported."
+        },
+        "ink": {
+          "status": "ok",
+          "profile": "RSWOP.icm",
+          "limit_pct": 300.0,
+          "max_tac_pct": 254.9,
+          "mean_tac_pct": 62.9,
+          "pixels_over_limit": 0,
+          "pixels_over_limit_pct": 0.0,
+          "verdict": "within_limit",
+          "note": "Coated sheet-fed work is commonly capped at 300-330% TAC; the co-packer's spec is the authority."
+        },
+        "verdict": "printable",
+        "blockers": [],
+        "note": "A pass here means the file converts cleanly through the named profile - it is not a substitute for the co-packer's own preflight.",
+        "suggested_colors": [
+          {
+            "hex": "#242800",
+            "prints_as_hex": "#282B29",
+            "prints_as_rgb": [
+              40,
+              43,
+              41
+            ],
+            "dE76": 21.71,
+            "in_gamut": false,
+            "suggested_srgb": [
+              40,
+              43,
+              41
+            ],
+            "suggested_hex": "#282B29",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          },
+          {
+            "hex": "#282B05",
+            "prints_as_hex": "#2C2E2B",
+            "prints_as_rgb": [
+              44,
+              46,
+              43
+            ],
+            "dE76": 20.75,
+            "in_gamut": false,
+            "suggested_srgb": [
+              44,
+              46,
+              43
+            ],
+            "suggested_hex": "#2C2E2B",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          },
+          {
+            "hex": "#2D2F06",
+            "prints_as_hex": "#32332D",
+            "prints_as_rgb": [
+              50,
+              51,
+              45
+            ],
+            "dE76": 20.8,
+            "in_gamut": false,
+            "suggested_srgb": [
+              50,
+              51,
+              45
+            ],
+            "suggested_hex": "#32332D",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          },
+          {
+            "hex": "#292B04",
+            "prints_as_hex": "#2D2F2B",
+            "prints_as_rgb": [
+              45,
+              47,
+              43
+            ],
+            "dE76": 20.41,
+            "in_gamut": false,
+            "suggested_srgb": [
+              45,
+              47,
+              43
+            ],
+            "suggested_hex": "#2D2F2B",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          },
+          {
+            "hex": "#242B06",
+            "prints_as_hex": "#2A2D2A",
+            "prints_as_rgb": [
+              42,
+              45,
+              42
+            ],
+            "dE76": 20.02,
+            "in_gamut": false,
+            "suggested_srgb": [
+              42,
+              45,
+              42
+            ],
+            "suggested_hex": "#2A2D2A",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          },
+          {
+            "hex": "#30310A",
+            "prints_as_hex": "#363630",
+            "prints_as_rgb": [
+              54,
+              54,
+              48
+            ],
+            "dE76": 19.61,
+            "in_gamut": false,
+            "suggested_srgb": [
+              54,
+              54,
+              48
+            ],
+            "suggested_hex": "#363630",
+            "why": "this value already prints faithfully through the press profile; adopting it removes the shift"
+          }
+        ]
+      },
+      "copy": {
+        "assessed": true,
+        "contains_text": true,
+        "boxes": 5,
+        "words": [
+          "MOGRAORGAVCS",
+          "Healthy&organic",
+          "ORGANICLION'S MANE",
+          "MUSHROOM POWDER",
+          "6 oz (170 g)"
+        ],
+        "expected_terms": [
+          "ORGANIC LION'S MANE",
+          "MUSHROOM POWDER",
+          "6 oz"
+        ],
+        "matched": [
+          "ORGANIC LION'S MANE",
+          "MUSHROOM POWDER",
+          "6 oz"
+        ],
+        "matched_fuzzy": [],
+        "missing": [],
+        "blockers": [],
+        "warnings": [],
+        "note": "Fuzzy matching exists because a stylised serif wordmark is often OCR'd one character off; fuzzy hits are reported, never silently accepted."
+      },
+      "main": {
+        "assessed": false,
+        "reason": "no MAIN image supplied"
+      },
+      "dieline": {
+        "assessed": false,
+        "reason": "no dieline supplied"
+      }
+    }
+  }
+}

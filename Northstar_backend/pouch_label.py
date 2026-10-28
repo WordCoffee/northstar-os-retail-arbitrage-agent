@@ -48,6 +48,18 @@ PANEL_SIZE = (900, 1200)
 #: A gusset narrower than this cannot carry legible copy (lesson L5).
 MIN_LEGIBLE_GUSSET_PX = 220
 
+#: Mesh density for a measured face. 5x9 costs nothing, and the sine-bow fit
+#: lands inside a fraction of a pixel on a real plate (REA L2).
+MESH_NX = 5
+MESH_NY = 9
+#: A composite is refused when the measured edge and the mesh disagree by more
+#: than this. Printing on a guessed quad is worse than stopping.
+MAX_GEOM_RESIDUAL_PX = 1.5
+#: Below this the bow is measurement noise; the homography stays in place.
+MIN_BOW_PX = 0.25
+#: RANSAC inlier band for the side-edge quadratic, in pixels.
+EDGE_INLIER_PX = 0.75
+
 
 # ── image helpers ───────────────────────────────────────────────────────────
 
@@ -187,13 +199,143 @@ def _fit_line(y: np.ndarray, x: np.ndarray) -> Tuple[float, float]:
     return float(a), float(b)
 
 
+def _subpixel_row_edges(mask: np.ndarray, blur_radius: int = 2
+                        ) -> Tuple[np.ndarray, np.ndarray]:
+    """Per-row edge positions to sub-pixel precision.
+
+    The mask is binary, so its 0.5 level set is interpolated on a slightly
+    blurred copy. A hard threshold can only return an integer column; the
+    interpolated crossing is what the mesh fit needs, because half a pixel is
+    the difference between a print that sits on the pack and one that floats.
+    """
+    soft = np.asarray(
+        Image.fromarray((mask.astype(np.uint8) * 255)).filter(
+            ImageFilter.BoxBlur(blur_radius))
+    ).astype(np.float32) / 255.0
+    h, w = soft.shape
+    left = np.full(h, np.nan)
+    right = np.full(h, np.nan)
+    for y in range(h):
+        row = soft[y]
+        inside = np.flatnonzero(row >= 0.5)
+        if inside.size < 2:
+            continue
+        l, r = int(inside[0]), int(inside[-1])
+        if l > 0 and row[l] != row[l - 1]:
+            left[y] = (l - 1) + (0.5 - row[l - 1]) / (row[l] - row[l - 1])
+        if r < w - 1 and row[r] != row[r + 1]:
+            right[y] = r + (row[r] - 0.5) / (row[r] - row[r + 1])
+    return left, right
+
+
+def _ransac_quadratic(y: np.ndarray, x: np.ndarray, *, tol: float = EDGE_INLIER_PX,
+                      iters: int = 400, seed: int = 7
+                      ) -> Optional[Tuple[np.ndarray, np.ndarray, float]]:
+    """Robust quadratic x(y) for one side of a pouch.
+
+    A lifestyle plate puts a prop, a shadow or a second pack within a few pixels
+    of the true edge. Iterative least squares follows that contamination because
+    it is smooth; RANSAC finds the edge that most rows actually agree on. The
+    returned tuple is (coeffs, inlier mask, mean absolute inlier residual).
+    """
+    ok = np.isfinite(x)
+    yy, xx = y[ok].astype(float), x[ok].astype(float)
+    if yy.size < 16:
+        return None
+    rng = np.random.default_rng(seed)
+    best = None
+    for _ in range(int(iters)):
+        idx = rng.choice(yy.size, 3, replace=False)
+        if float(np.ptp(yy[idx])) < 8.0:
+            continue
+        c = np.polyfit(yy[idx], xx[idx], 2)
+        n = int((np.abs(xx - np.polyval(c, yy)) < tol).sum())
+        if best is None or n > best[0]:
+            best = (n, c)
+    if best is None or best[0] < 16:
+        return None
+    c = best[1]
+    keep = np.ones_like(xx, dtype=bool)
+    for _ in range(3):
+        res = np.abs(xx - np.polyval(c, yy))
+        keep = res < tol
+        if keep.sum() < 16:
+            return None
+        c = np.polyfit(yy[keep], xx[keep], 2)
+    res = xx - np.polyval(c, yy)
+    keep = np.abs(res) < tol
+    if keep.sum() < 16:
+        return None
+    return c, keep, float(np.mean(np.abs(res[keep])))
+
+
+def _panel_residual(grid: np.ndarray, left: np.ndarray, right: np.ndarray,
+                    yt: float, yb: float, pad_t: float, pad_b: float,
+                    inliers: Optional[Dict[str, np.ndarray]] = None
+                    ) -> Tuple[Optional[float], Dict[str, float]]:
+    """Mean distance (px) between the fitted panel edges and the mesh boundary.
+
+    Only the rows the side fit trusted are compared. A prop or a shadow touching
+    the pack is rejected by the RANSAC fit; including it here would report the
+    prop's distance as if it were geometry error.
+    """
+    ys = np.arange(int(np.ceil(yt)), int(np.floor(yb)) + 1)
+    if ys.size < 8:
+        return None, {}
+    gy = np.asarray(grid[:, 0, 1], dtype=float)
+    gx_l = np.asarray(grid[:, 0, 0], dtype=float)
+    gx_r = np.asarray(grid[:, -1, 0], dtype=float)
+    order = np.argsort(gy)
+    if order.size < 2:
+        return None, {}
+    gy, gx_l, gx_r = gy[order], gx_l[order], gx_r[order]
+    out: Dict[str, float] = {}
+    all_res = []
+    for name, xs, sign in (("left", left, +1.0), ("right", right, -1.0)):
+        rows = ys if inliers is None else np.intersect1d(ys, inliers[name])
+        rows = rows.astype(int)
+        ok = np.isfinite(xs[rows])
+        rows = rows[ok]
+        if rows.size < 8:
+            continue
+        t = (rows.astype(float) - yt) / max(1e-6, (yb - yt))
+        pad = pad_t + (pad_b - pad_t) * t
+        meas = xs[rows] + sign * pad
+        pred = np.interp(rows.astype(float), gy, gx_l if name == "left" else gx_r)
+        res = meas - pred
+        out[name] = round(float(np.mean(np.abs(res))), 3)
+        all_res.append(np.abs(res))
+    if not all_res:
+        return None, out
+    return round(float(np.mean(np.concatenate(all_res))), 3), out
+
+
+def _bow_coeff(coeffs: np.ndarray, yt: float, yb: float) -> float:
+    """Sine coefficient of the edge's departure from its own chord.
+
+    The chord is the straight line between the two panel corners. A real pouch
+    leaves it at mid-height; `sin(pi t)` is the shape the compositor's mesh
+    moves, so the coefficient is measured in that basis rather than at one row
+    where a crease could bias it.
+    """
+    ys = np.linspace(float(yt), float(yb), 64)
+    t = (ys - yt) / max(1e-6, (yb - yt))
+    chord = float(np.polyval(coeffs, yt)) + (
+        float(np.polyval(coeffs, yb)) - float(np.polyval(coeffs, yt))) * t
+    dep = np.polyval(coeffs, ys) - chord
+    basis = np.sin(np.pi * t)
+    denom = float((basis * basis).sum())
+    return float((dep * basis).sum() / denom) if denom > 1e-9 else 0.0
+
+
 def measure_face(img: Image.Image, *, inset_x: float = 0.075,
                  inset_top: float = 0.20, inset_bottom: float = 0.10,
                  threshold: float = 26.0) -> Dict[str, Any]:
     """Measure the PRINTED FRONT PANEL of a pouch render.
 
-    Returns {quad, face, background, coverage} where quad is
-    [TL, TR, BR, BL] in pixel coordinates and face is the measured bbox.
+    Returns {quad, face, background, coverage, geom_residual_px, bow_x_px}
+    where quad is [TL, TR, BR, BL] in pixel coordinates and face is the
+    measured bbox.
 
     The insets are not cosmetic. A stand-up pouch has a top weld / zipper header
     and a bottom gusset that are NOT printable label area, so a label warped to
@@ -201,6 +343,12 @@ def measure_face(img: Image.Image, *, inset_x: float = 0.075,
     the first T2 output did. 0.20 top / 0.10 bottom lands the panel under the
     zipper and above the base curve on a standard 6 oz pouch. Override per plate
     when a different stock dictates otherwise.
+
+    The sides are fitted with a robust quadratic (not a straight line), because
+    a real pouch bows outward at mid-height. The fit yields a bow measurement
+    the compositor turns into a mesh, plus a residual: when the measured edge
+    and the mesh disagree by more than MAX_GEOM_RESIDUAL_PX the caller refuses
+    rather than printing on a guess.
     """
     mask = _foreground_mask(img, threshold=threshold)
     h, w = mask.shape
@@ -217,15 +365,30 @@ def measure_face(img: Image.Image, *, inset_x: float = 0.075,
     body_top = top + int((bottom - top) * 0.14)
     body_bottom = top + int((bottom - top) * 0.86)
     body = np.arange(max(body_top, top + 1), max(body_bottom, body_top + 2))
-    left, right, _ = _row_extents(mask)
+    left, right = _subpixel_row_edges(mask)
 
-    la, lb = _fit_line(body.astype(float), left[body])
-    ra, rb = _fit_line(body.astype(float), right[body])
+    fits: Dict[str, Tuple[np.ndarray, str]] = {}
+    residuals: Dict[str, Optional[float]] = {}
+    inlier_rows: Dict[str, np.ndarray] = {}
+    for name, xs in (("left", left), ("right", right)):
+        fit = _ransac_quadratic(body.astype(float), xs[body])
+        if fit is not None:
+            fits[name] = (fit[0], "quadratic")
+            residuals[name] = round(fit[2], 3)
+            inlier_rows[name] = body[fit[1]]
+        else:
+            a, b = _fit_line(body.astype(float), xs[body])
+            fits[name] = (np.array([0.0, a, b]), "linear")
+            residuals[name] = None
+            inlier_rows[name] = body
+
+    lf = fits["left"][0]
+    rf = fits["right"][0]
 
     yt = top + int((bottom - top) * inset_top)
     yb = bottom - int((bottom - top) * inset_bottom)
-    xt_l, xt_r = la * yt + lb, ra * yt + rb
-    xb_l, xb_r = la * yb + lb, ra * yb + rb
+    xt_l, xt_r = float(np.polyval(lf, yt)), float(np.polyval(rf, yt))
+    xb_l, xb_r = float(np.polyval(lf, yb)), float(np.polyval(rf, yb))
     pad_t = (xt_r - xt_l) * inset_x
     pad_b = (xb_r - xb_l) * inset_x
 
@@ -244,6 +407,16 @@ def measure_face(img: Image.Image, *, inset_x: float = 0.075,
         [round(xb_r - pad_b, 1), float(yb)],
         [round(xb_l + pad_b, 1), float(yb)],
     ]
+
+    # The bow is the sine-fit departure from each side's own chord. Left bows
+    # outward in -x, right in +x, so the left coefficient is negated.
+    bow_l = -_bow_coeff(lf, yt, yb)
+    bow_r = _bow_coeff(rf, yt, yb)
+    bow = (bow_l + bow_r) / 2.0
+
+    mesh = mc.mesh_grid(quad, nx=MESH_NX, ny=MESH_NY, bow_x=(bow_l, bow_r))
+    geom_residual, by_side = _panel_residual(
+        mesh, left, right, yt, yb, pad_t, pad_b, inlier_rows)
     return {
         "quad": quad,
         "face": {"top": top, "bottom": bottom,
@@ -251,6 +424,13 @@ def measure_face(img: Image.Image, *, inset_x: float = 0.075,
                  "right": int(np.nanmax(right[top:bottom + 1]))},
         "background": list(_background_colour(img)),
         "coverage": round(float(mask.sum()) / float(h * w), 4),
+        "geom_residual_px": geom_residual,
+        "geom_residual_by_side": by_side,
+        "bow_x_px": round(float(bow), 3),
+        "bow_left_px": round(float(bow_l), 3),
+        "bow_right_px": round(float(bow_r), 3),
+        "fit": {name: fits[name][1] for name in fits},
+        "fit_residual_px": residuals,
     }
 
 
@@ -488,7 +668,8 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
             shading: float = 0.28,
             quad: Optional[Sequence] = None,
             panels: Optional[Dict[str, Any]] = None,
-            panel_split: bool = True) -> Dict[str, Any]:
+            panel_split: bool = True,
+            mesh: bool = True) -> Dict[str, Any]:
     """Composite a label onto a rendered pouch. Returns PNG bytes + what was fitted."""
     if not title.strip():
         raise ValueError("a product title is required to compose a label")
@@ -498,6 +679,18 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
                                                      "face": None, "background": None,
                                                      "coverage": None}
     q = measured["quad"]
+
+    residual = measured.get("geom_residual_px")
+    if residual is not None and float(residual) > MAX_GEOM_RESIDUAL_PX:
+        raise ValueError(
+            f"the pouch face is not consistent enough to label: measured edge vs mesh "
+            f"residual {float(residual):.2f} px exceeds {MAX_GEOM_RESIDUAL_PX:.1f} px. "
+            "Supply an operator quad for a lifestyle plate, or use a cleaner render.")
+    bow_l = float(measured.get("bow_left_px") or 0.0)
+    bow_r = float(measured.get("bow_right_px") or 0.0)
+    bow = (bow_l + bow_r) / 2.0
+    grid = (mc.mesh_grid(q, nx=MESH_NX, ny=MESH_NY, bow_x=(bow_l, bow_r))
+            if mesh and max(abs(bow_l), abs(bow_r)) >= MIN_BOW_PX else None)
 
     logo = load_logo(Path(logo_path)) if logo_path else None
     panel = render_label(
@@ -540,12 +733,12 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
                                                        weight=weight, claims=bullets,
                                                        icons=icons, field=field))
             out = mc.warp_panel(plate, wrapped, q, shading=shading, maps=maps,
-                                realism=realism)
+                                realism=realism, grid=grid)
         else:
             out = mc.warp_panel(plate, panel, q, shading=shading, maps=maps,
-                                realism=realism)
+                                realism=realism, grid=grid)
     except Exception:  # noqa: BLE001 - realism is an upgrade, not a requirement
-        out = mc.warp_panel(plate, panel, q, shading=shading)
+        out = mc.warp_panel(plate, panel, q, shading=shading, grid=grid)
 
     buf = io.BytesIO()
     out.save(buf, format="PNG")
@@ -554,6 +747,11 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
         "size": list(out.size),
         "quad": q,
         "measured": measured,
+        "geom_residual_px": residual,
+        "bow_x_px": round(bow, 3),
+        "bow_left_px": round(bow_l, 3),
+        "bow_right_px": round(bow_r, 3),
+        "mesh": [MESH_NX, MESH_NY] if grid is not None else None,
         "title": title,
         "has_logo": logo is not None,
         "icons": list(icons or []),

@@ -286,6 +286,12 @@ def mesh_grid(quad: Sequence, nx: int = 5, ny: int = 7,
     """
     q = np.asarray(quad, dtype=float).reshape(4, 2)
     tl, tr, br, bl = q
+    # A single number bows both sides the same; a (left, right) pair lets a
+    # measured pouch keep the asymmetry a real pack has. Positive is outward.
+    if np.ndim(bow_x) == 0:
+        bow_l = bow_r = float(bow_x)
+    else:
+        bow_l, bow_r = (float(v) for v in np.asarray(bow_x).reshape(2))
     grid = np.zeros((ny, nx, 2), dtype=float)
     for j in range(ny):
         t = j / (ny - 1) if ny > 1 else 0.0
@@ -294,9 +300,9 @@ def mesh_grid(quad: Sequence, nx: int = 5, ny: int = 7,
         axis = right - left
         norm = float(np.linalg.norm(axis))
         ux = axis / norm if norm > 1e-9 else np.array([1.0, 0.0])
-        widen = bow_x * float(np.sin(np.pi * t))
-        left = left - ux * widen
-        right = right + ux * widen
+        widen = float(np.sin(np.pi * t))
+        left = left - ux * (bow_l * widen)
+        right = right + ux * (bow_r * widen)
         for i in range(nx):
             s = i / (nx - 1) if nx > 1 else 0.0
             p = left + (right - left) * s

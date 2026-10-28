@@ -1,8 +1,8 @@
 # REA PHASE 3 — EXECUTION LOG
 **2026-10-28 · scoped to the BUILD CANDIDATES tables · no Amazon · no spend · no new dependency**
 
-Status: **ITEM 0 measured and stopped for your decision. ITEM 2 and ITEM 3
-delivered. ITEM 1, 4, 5 not started** (they wait on the ceiling decision).
+Status: **ITEM 0 resolved (2048) and ITEM 1 delivered. ITEM 2 and ITEM 3
+delivered. ITEM 4 and ITEM 5 not started.**
 
 ---
 
@@ -70,6 +70,65 @@ Passing cases that do **not** depend on the ceiling: `req0` (832×1216),
 
 **Nothing edited.** The constant, the tests and the assertions are exactly as
 found. Awaiting your decision.
+
+### 0.4 Decision — 2048 (2026-10-28)
+
+The operator chose **2048**. The six stale 1216 assertions were rewritten to the
+measured values, not to make a red test green: 2048 is the value the engine
+already used, and the measurements above show both ceilings fit on this box. The
+production constant did not change (`studio_generation.py` already defaulted to
+2048); only the tests and the record did.
+
+- `test_pouch_label.py`: six expectations now 2048, plus a ceiling regression
+  test that reads `sg.MAX_EDGE_PX` rather than hardcoding a number.
+- `reports/rea_baseline_20261028.json`: `render_fit_box.status = "resolved"`,
+  with the decision and evidence.
+- Result: **23 passed** in `test_pouch_label.py` + `test_pouch_label_placement.py`.
+
+---
+
+## ITEM 1 — L1 + L2 acceptance (delivered)
+
+### 1.1 What L2 changed
+
+| File | Change |
+|---|---|
+| `Northstar_backend/mockup_compositor.py` | `mesh_grid` accepts `bow_x=(left, right)` as well as a scalar. A real pouch is asymmetric; one number for both sides was the difference between 0.24 px and 1.9 px residual. |
+| `Northstar_backend/pouch_label.py` | Sub-pixel row edges from the blurred mask's 0.5 level set; RANSAC quadratic per side; sine-fit bow from each side's own chord; `geom_residual_px` measured mesh-vs-edge; `compose()` refuses above **1.5 px**; `mesh=False` keeps the homography path available for comparison. |
+| `Northstar_backend/test_pouch_label_geometry.py` | 5 tests: known bow recovered, straight plate stays straight, mesh moves the mid-edge by >16 levels, refusal guard, per-side `mesh_grid`. |
+
+### 1.2 Measured acceptance — Mogra reference plate
+
+Plate: `Northstar_backend/data/studio_generated/2e4a7ab96e9941479b068792f592864d.png`
+(blank Mogra pouch on marble; the labelled `52afb729…` is the same scene after
+composition and is not a valid base).
+
+| Metric | Value | Acceptance |
+|---|---|---|
+| Geometric residual (mesh vs measured edge) | **0.238 px** (left 0.292, right 0.193) | < 0.5 px **PASS** |
+| Fit residual (quadratic vs inlier edge) | left 0.241, right 0.199 | reported |
+| Measured bow | left −6.122 px, right −1.197 px | recorded |
+| Mesh | 5 × 9, per-side bow | **PASS** |
+| Mesh vs homography at mid-edge | > 16 intensity levels, > 200 pixels on the side bands | **PASS** |
+
+Evidence: `reports/rea_probe/item1_mogra_composed.png` and
+`reports/rea_probe/item1_acceptance.json`.
+
+### 1.3 OCR, prepress, readiness
+
+| Check | Result |
+|---|---|
+| OCR (`rapidocr`) | **ok** — 5 boxes: `MOGRAORGAVCS`, `Healthy&organic`, `ORGANICLION'S MANE`, `MUSHROOM POWDER`, `6 oz (170 g)`. The first is the logo read literally, not a fabricated match. |
+| `verify_asset_text` | `text_present` |
+| Prepress (`RSWOP.icm`) | **printable** — max TAC **254.9 %** (limit 300), 0 px over limit; out-of-gamut 2.0 %, max dE76 21.85, mean 4.74 |
+| Readiness (`assess_package`) | **retail_ready**, 0 blockers, 0 warnings |
+
+### 1.4 Regression harness
+
+`tools/rea_regress.py` is unchanged in behaviour and now has a documented entry
+point: `tools/verify-rea.ps1` (`-Full`, `-WithBuild`). A quick run with the
+focused tests is **PASS**; the baseline file now records the resolved ceiling and
+the measured OCR/prepress/readiness rows instead of `not_run`.
 
 ---
 
@@ -203,12 +262,11 @@ merged by a process that has write access, or with the permission lifted.
 
 | Item | State |
 |---|---|
-| ITEM 1 (L1 + L2 acceptance: synthetic **and** Mogra plate, OCR, prepress, readiness) | **blocked on the ceiling decision** |
+| ITEM 1 (L1 + L2 acceptance: synthetic **and** Mogra plate, OCR, prepress, readiness) | **DONE** — 0.238 px residual, mesh 5×9, OCR 5 boxes, prepress printable, readiness retail_ready |
 | ITEM 4 (U1 auto-chain, U4 re-measure) | not started |
 | ITEM 5 (V1 video assemble) | not started |
 | A1–A6 | held, as instructed; to be labelled UNVERIFIED in the plan |
 | Everything else | second pass |
 
-**Decision needed:** is the engine's real long-edge ceiling **1216** or **2048**?
-If 2048, the six assertions are stale and should be rewritten to the measured
-values above — with your explicit approval, not mine.
+**Ceiling decision:** **2048** (recorded 2026-10-28). The six stale assertions
+were rewritten to the measured values; no production constant changed.

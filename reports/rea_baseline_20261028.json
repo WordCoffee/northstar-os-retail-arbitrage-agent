@@ -34,28 +34,48 @@
       "note": "clean synthetic art only; composited-plate OCR not re-run"
     },
     "ocr_text_clear_on_composited_panel": {
-      "status": "not_run",
-      "reason": "needs a live render through text_fidelity.py; no render fired this session"
+      "status": "measured",
+      "artefact": "reports/rea_probe/item1_mogra_composed.png",
+      "engine": "rapidocr",
+      "contains_text": true,
+      "boxes": 5,
+      "words": [
+        "MOGRAORGAVCS",
+        "Healthy&organic",
+        "ORGANICLION'S MANE",
+        "MUSHROOM POWDER",
+        "6 oz (170 g)"
+      ],
+      "verdict": "text_present",
+      "note": "Mogra plate composed through the L2 mesh path; five boxes read, including the product name and weight. 'MOGRA ORGANICS' OCR'd as MOGRAORGAVCS, recorded as-is."
     },
     "press_safety_max_tac_and_de76": {
-      "status": "not_run",
-      "reason": "prepress.py needs a finished panel; last recorded run 2026-10-22 (max TAC 272.5% vs 300, 6.28% px > 8 dE76)"
+      "status": "measured",
+      "artefact": "reports/rea_probe/item1_mogra_composed.png",
+      "profile": "RSWOP.icm",
+      "ink": {"max_tac_pct": 254.9, "mean_tac_pct": 62.9, "pixels_over_limit": 0,
+              "limit_pct": 300.0, "verdict": "within_limit"},
+      "gamut": {"out_of_gamut_pct": 2.0, "max_dE76": 21.85, "mean_dE76": 4.74,
+                "tolerance_dE76": 8.0, "pixels": 199655},
+      "verdict": "printable",
+      "blockers": []
     },
     "packaging_readiness_verdict": {
-      "status": "not_run",
-      "reason": "needs a render; last recorded 2026-10-22 (blocked on MAIN, correct for a backdrop prompt)"
+      "status": "measured",
+      "artefact": "reports/rea_probe/item1_mogra_composed.png",
+      "verdict": "retail_ready",
+      "blockers": [],
+      "warnings": [],
+      "expected_terms": ["ORGANIC LION'S MANE", "MUSHROOM POWDER", "6 oz"],
+      "note": "assess_package over the composed plate: prepress assessed, copy matched, no blockers"
     },
     "render_fit_box": {
-      "status": "partial_fail",
-      "detail": "_fit_box now clamps to MAX_EDGE_PX=2048 (studio_generation.py:478) while test_pouch_label.py still asserts 1216",
-      "pytest": "6 failed, 28 passed (test_pouch_label.py + test_pouch_label_placement.py + test_studio_sizing.py subset)",
-      "failing": [
-        "test_fit_box_keeps_the_aspect_ratio[req1..req5]",
-        "test_fit_box_never_exceeds_the_engine_edge_and_stays_on_the_latent_grid",
-        "test_generate_image_reports_the_size_it_actually_used"
-      ],
-      "cause": "pre-existing: studio_generation.py is clean in git; the default moved, the assertions did not",
-      "decision_needed": "which value is the engine's real ceiling (1216 vs 2048)? Do not edit assertions before that is answered."
+      "status": "resolved",
+      "decision": "MAX_EDGE_PX = 2048 (2026-10-28, operator decision)",
+      "reason": "a true 2048 long edge measured +8.3 s and +864 MB on this box; both fit, and 1216 makes the 1600 px Amazon MAIN floor impossible",
+      "evidence": "reports/rea_phase3_execution_20261028.md ITEM 0; probes ceiling_1216.json, ceiling_2048_longedge.json",
+      "pytest": "23 passed (test_pouch_label.py + test_pouch_label_placement.py)",
+      "note": "the six stale 1216 assertions were rewritten to the measured 2048 values, with the decision recorded"
     },
     "lane_latency_s": {
       "status": "measured",
@@ -132,7 +152,7 @@
     "test_totals": {
       "status": "measured",
       "npm_run_build": "0 errors (built in 1.39 s)",
-      "focused_pytest": "28 passed, 6 failed (all 6 pre-existing fit-box assertions, see render_fit_box)",
+      "focused_pytest": "62 passed, 0 failed (test_pouch_label + placement + geometry + mockup_compositor + compositor_realism + studio_sizing)",
       "full_suite": "not_run this session"
     }
   },
