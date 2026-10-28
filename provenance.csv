@@ -5,7 +5,7 @@ specialists/ppc_agent.py,REBUILT,report-in/file-out pattern,unverified,n/a,"Colu
 specialists/router.py,REBUILT,Northstar, none,n/a,Deterministic classifier with negation and quoted-example handling.
 specialists/panels.py,REBUILT,Northstar, none,n/a,Front/back/side panel renderer. Uses fonts already vendored under assets/fonts (OFL).
 specialists/registry.py,REBUILT,Northstar, none,n/a,Agent roster + required inputs.
-pouch_label.py,REBUILT,Northstar, none,n/a,Face measurement + label compositing. Reuses mockup_compositor (existing, in-repo).
+pouch_label.py,REBUILT,Northstar,none,n/a,Face measurement + label compositing. Reuses mockup_compositor (existing, in-repo).
 mockup_compositor.py,ADAPTED,prior Northstar work (2026-10-16),repo license,n/a,"Pre-existing in this repository; reused, not modified in this pass."
 compositor_realism.py,ADAPTED,prior Northstar work,repo license,n/a,Pre-existing; reused via warp_panel realism params.
 assets/fonts/PlayfairDisplay.ttf,ADAPTED,Google Fonts,SIL Open Font License 1.1,n/a,"Pre-existing; OFL permits commercial embedding."
