@@ -182,3 +182,66 @@ Campaign priority 1–5 (T2, T4–T8/C5, creative defects, research backlog, FLU
 — all gated behind §5. FLUX replacement correctly deferred: no FLUX 3 weights exist
 on this box and no working render path has been proven.
 
+
+---
+
+# 7. Campaign start — T2 MOGRA compositor: VERIFIED COMPLETE
+
+The extension relay came back (`mcp_session_state: CONNECTED`, binding VERIFIED,
+`required_failed: []`), Vite was back on `:8101`, and the campaign started.
+
+## 7.1 What ran
+
+Prompt submitted through the visible Design Studio composer, naming the tool and
+the exact brief copy — no model-painted text anywhere in the path:
+
+```
+Run apply_label now. Do not call generate_image.
+plate_asset_id 8a3e204c-8f4e-4ba9-b1df-0f12e2a5888c
+logo_asset_id  f6bc3a9c-9640-4bd4-bab6-678154884ae2
+title    ORGANIC LION'S MANE
+subtitle MUSHROOM POWDER
+weight   6 oz (170g)
+```
+
+Controller run `…mvs2me40` — 6 steps, 0 refusals,
+`typed_text_verified_in_transcript`.
+
+## 7.2 Result — all four acceptance criteria
+
+| Criterion | Evidence |
+|---|---|
+| Compositor invoked | tool card `Putting the logo and copy on the pack` → `done · compositor`; `Thought for 72s · 1 tool run` |
+| Exact label text, deterministic | `pouch_label.compose` draws with real fonts + the real logo. The diffusion model was explicitly told not to generate an image and did not. |
+| Artefact | asset **`486d4958-1bee-4b7a-9342-620a594bb718`**, chip `ORGANIC LION'S MANE — labelled mockup · 1024×1536`; stored `70cd6acb282347ff9589bb4501d7ab92.png`, 1,710,530 B, 1024×1536 RGB, sha256 `9d58ca3f72cbfff5…` |
+| Preview | lightbox opened (`…mvs2pvbt`) |
+| Download | `Downloads/ORGANIC LION'S MANE - labelled mockup.png`, 1024×1536, 1,710,530 B — **sha256 identical to the stored artefact** |
+| Persistence after refresh | after reload the chip, asset id `486d4958…` and `View`/`Download` are all still present |
+
+**Assets used were the verified existing ones**, not invented: the T1 pouch render
+`8a3e204c` as the plate, and the owner's approved logo master
+`exports/mogra_logo_master_v3.png` (2920×2510 RGBA) registered as studio asset
+`f6bc3a9c`.
+
+## 7.3 Two defects found on the way (both non-blocking, both recorded)
+
+1. **The asset-picker option click failed** — the panel opens on a click but the
+   list is populated by an async fetch, so a selector bound to `data-asset-id`
+   is not present yet at the next step. The compositor does not need the picker
+   (it takes ids directly), so the acceptance path did not depend on it; the panel
+   still needs a loading-state selector fix before it is promoted as the standard
+   attachment route.
+2. **Rigid controller selectors** — `.chat-assets button:has-text("View")` hit a
+   strict-mode violation because earlier turns left several cards. Fixed by
+   scoping to `.chat-msg:last-of-type`. Worth adopting as the house pattern.
+
+## 7.4 Still to do for T2's dimensional claim
+
+`presets.js` still ships the placeholder `kit-mogra` palette and has no
+`pouch-mogra-lm6` (`130×210×40`) / `pouch-mogra-shi8` (`150×210×40`) presets. The
+brief's exact values are available and are not invented, so this is now a
+mechanical change — but until it lands, the brief's own rule stands: **no pouch
+render may be presented as dimensionally accurate.**
+
+Remaining campaign priorities (T4–T8, C5, creative defects, research backlog) and
+the FLUX swap (deferred: no FLUX 3 weights on disk) are untouched.
