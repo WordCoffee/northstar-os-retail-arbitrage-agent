@@ -211,11 +211,11 @@ export const DEFAULT_BRAND_KITS = [
   {
     id: 'kit-mogra',
     name: 'Mogra Organics',
-    note: 'Sample kit — from a local work brief.',
-    palette: ['#f4f7f0', '#1f3320', '#4a7a4a', '#d8a13a', '#ffffff'],
-    ink: '#1f3320',
-    paper: '#f4f7f0',
-    accent: '#4a7a4a',
+    note: 'Approved kit - values taken verbatim from BRIEF_pouch_2sku_20261016.md §1.',
+    palette: ['#171717', '#D5A77A', '#9DBA8B', '#F5EEE2', '#9FA9A4', '#253628', '#D0C5AC'],
+    ink: '#171717',
+    paper: '#F5EEE2',
+    accent: '#253628',
     headingFont: 'Libre Baskerville',
     bodyFont: 'DM Sans',
     voice: 'Clean, botanical, plain-spoken.',
@@ -314,7 +314,12 @@ export function lightingById(id) {
 // ── Box presets (3D packaging studio) ────────────────────────────────────────
 export const BOX_PRESETS = [
   { id: 'carton', name: 'Carton', note: 'Retail carton, 3 visible faces.', size: [1.0, 1.35, 0.28] },
-  { id: 'pouch', name: 'Stand-up pouch', note: 'Wide, shallow, tall gusset.', size: [1.15, 1.5, 0.42] },
+  { id: 'pouch', name: 'Stand-up pouch', note: 'Wide, shallow, tall gusset. NOT dimensionally accurate for Mogra - use a pouch-mogra preset.', size: [1.15, 1.5, 0.42] },
+  // MOGRA SKUs. Real millimetres from BRIEF_pouch_2sku_20261016.md §2, flagged
+  // `mm: true` so the renderer works in millimetres rather than the normalised
+  // unit cube. Do not edit these to taste: they are the physical pack.
+  { id: 'pouch-mogra-lm6', name: "Mogra Pouch - Lion's Mane 6oz", note: '130 x 210 x 40 mm, SKU 1.', size: [130, 210, 40], mm: true },
+  { id: 'pouch-mogra-shi8', name: 'Mogra Pouch - Shiitake 8oz', note: '150 x 210 x 40 mm, SKU 2.', size: [150, 210, 40], mm: true },
   { id: 'bottle', name: 'Bottle', note: 'Tall narrow pack, cap band on top.', size: [0.7, 1.7, 0.7] },
   { id: 'sleeve', name: 'Mailer box', note: 'Long flat shipping box.', size: [1.6, 0.9, 0.3] },
   { id: 'cube', name: 'Gift cube', note: 'Square box, lid band.', size: [1.1, 1.1, 1.1] },
