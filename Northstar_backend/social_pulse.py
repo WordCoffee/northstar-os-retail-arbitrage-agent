@@ -68,7 +68,7 @@ def _default_model() -> str:
             return str(model)
     except Exception:
         pass
-    return "northstaros-qwen3.8:27b"
+    return "bojo"
 
 
 def generate_caption(

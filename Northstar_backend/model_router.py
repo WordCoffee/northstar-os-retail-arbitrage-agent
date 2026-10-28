@@ -51,9 +51,9 @@ TIER_CREDIT_WEIGHT = {
 
 # LOCAL (Ollama on the operator machine). rev1 is the Master Brain primary.
 LOCAL_MODELS = {
-    "T1": "northstaros-qwen3.8:27b",
-    "T2": "northstaros-qwen3.8:27b",
-    "T3": "northstaros-qwen3.8:27b",
+    "T1": "bojo",
+    "T2": "bojo",
+    "T3": "bojo",
     "V1": "qwen2.5vl:7b",
     "V2": "qwen2.5vl:7b",
     "V3": "qwen2.5vl:7b",

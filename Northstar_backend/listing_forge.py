@@ -43,7 +43,7 @@ COMPLIANCE_RULES = [
 ]
 
 
-LOCAL_BRAIN_DEFAULT = "northstaros-qwen3.8:27b"
+LOCAL_BRAIN_DEFAULT = "bojo"
 
 
 def _default_model() -> str:
