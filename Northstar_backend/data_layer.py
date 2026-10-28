@@ -178,9 +178,20 @@ class DataLayer:
         # check_same_thread=False: the FastAPI app runs sync handlers in a
         # threadpool, so one process-wide connection must be usable across
         # threads. All access is serialized by self._lock.
-        self._conn = sqlite3.connect(str(_SQLITE_PATH), check_same_thread=False)
+        #
+        # timeout/busy_timeout: serialisation above only covers THIS connection.
+        # The chat turn writes tool calls and assets while a render runs for
+        # minutes, and other connections in the process (and short-lived tooling
+        # processes) then hit the same SQLite write lock. With the stdlib default
+        # (5 s) that surfaced as `sqlite3.OperationalError: database is locked`
+        # and an HTTP 500 on POST /api/chat/sessions — i.e. starting a new chat
+        # failed whenever another turn was in flight. A writer must wait for the
+        # lock, not fail on it.
+        self._conn = sqlite3.connect(str(_SQLITE_PATH), check_same_thread=False,
+                                     timeout=30.0)
         self._conn.row_factory = sqlite3.Row
         self._conn.execute("PRAGMA journal_mode=WAL")
+        self._conn.execute("PRAGMA busy_timeout=30000")
         self._conn.execute("PRAGMA foreign_keys=ON")
         self._create_sqlite_tables()
 
