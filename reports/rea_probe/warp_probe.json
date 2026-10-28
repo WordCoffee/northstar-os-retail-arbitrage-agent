@@ -1,0 +1,179 @@
+{
+  "probe": "rea_warp_probe",
+  "date": "2026-10-28",
+  "geometry": {
+    "f": 1000.0,
+    "D": 1200.0,
+    "R": 300.0,
+    "arc_rad": 0.9,
+    "arc_deg": 51.6,
+    "panel_px": [
+      600,
+      800
+    ],
+    "canvas_px": [
+      900,
+      1100
+    ]
+  },
+  "samples": 1813,
+  "warp_error": [
+    {
+      "method": "4-point homography (today)",
+      "mean_px": 5.413,
+      "p50_px": 4.749,
+      "p95_px": 11.437,
+      "max_px": 13.324,
+      "mean_pct_of_canvas_width": 0.6014
+    },
+    {
+      "method": "quad mesh 3x4",
+      "mean_px": 2.673,
+      "p50_px": 2.973,
+      "p95_px": 4.381,
+      "max_px": 4.834,
+      "mean_pct_of_canvas_width": 0.297
+    },
+    {
+      "method": "quad mesh 5x7",
+      "mean_px": 0.676,
+      "p50_px": 0.613,
+      "p95_px": 1.36,
+      "max_px": 1.493,
+      "mean_pct_of_canvas_width": 0.0752
+    },
+    {
+      "method": "quad mesh 9x13",
+      "mean_px": 0.171,
+      "p50_px": 0.16,
+      "p95_px": 0.367,
+      "max_px": 0.405,
+      "mean_pct_of_canvas_width": 0.019
+    },
+    {
+      "method": "quad mesh 17x25",
+      "mean_px": 0.043,
+      "p50_px": 0.041,
+      "p95_px": 0.092,
+      "max_px": 0.099,
+      "mean_pct_of_canvas_width": 0.0047
+    },
+    {
+      "method": "analytic cylinder (ceiling, exact params)",
+      "mean_px": 0.0,
+      "p50_px": 0.0,
+      "p95_px": 0.0,
+      "max_px": 0.0,
+      "mean_pct_of_canvas_width": 0.0
+    }
+  ],
+  "homography_error_inner30pct_mean_px": 3.982,
+  "homography_error_outer30pct_mean_px": 6.728,
+  "halo": [
+    {
+      "quad_overshoot_px": 0,
+      "feather_sigma_px": 0,
+      "bleed_outside_true_edge_lum": 0.0,
+      "bleed_pct_of_panel_contrast": 0.0
+    },
+    {
+      "quad_overshoot_px": 0,
+      "feather_sigma_px": 2,
+      "bleed_outside_true_edge_lum": 0.0,
+      "bleed_pct_of_panel_contrast": 0.0
+    },
+    {
+      "quad_overshoot_px": 0,
+      "feather_sigma_px": 8,
+      "bleed_outside_true_edge_lum": 0.0,
+      "bleed_pct_of_panel_contrast": 0.0
+    },
+    {
+      "quad_overshoot_px": 1,
+      "feather_sigma_px": 0,
+      "bleed_outside_true_edge_lum": 57.013,
+      "bleed_pct_of_panel_contrast": 28.51
+    },
+    {
+      "quad_overshoot_px": 1,
+      "feather_sigma_px": 2,
+      "bleed_outside_true_edge_lum": 35.633,
+      "bleed_pct_of_panel_contrast": 17.82
+    },
+    {
+      "quad_overshoot_px": 1,
+      "feather_sigma_px": 8,
+      "bleed_outside_true_edge_lum": 31.409,
+      "bleed_pct_of_panel_contrast": 15.7
+    },
+    {
+      "quad_overshoot_px": 3,
+      "feather_sigma_px": 0,
+      "bleed_outside_true_edge_lum": 190.492,
+      "bleed_pct_of_panel_contrast": 95.25
+    },
+    {
+      "quad_overshoot_px": 3,
+      "feather_sigma_px": 2,
+      "bleed_outside_true_edge_lum": 145.415,
+      "bleed_pct_of_panel_contrast": 72.71
+    },
+    {
+      "quad_overshoot_px": 3,
+      "feather_sigma_px": 8,
+      "bleed_outside_true_edge_lum": 110.073,
+      "bleed_pct_of_panel_contrast": 55.04
+    }
+  ],
+  "ocr_floor": {
+    "status": "ok",
+    "first_detected_font_px": 10,
+    "samples": [
+      {
+        "font_px": 10,
+        "detected": true,
+        "text": "ORGANIC LIONS MANE"
+      },
+      {
+        "font_px": 12,
+        "detected": true,
+        "text": "ORGANICLIONSMANE"
+      },
+      {
+        "font_px": 14,
+        "detected": true,
+        "text": "ORGANICLIONSMANE"
+      },
+      {
+        "font_px": 16,
+        "detected": true,
+        "text": "ORGANICLIONSMANE"
+      },
+      {
+        "font_px": 18,
+        "detected": true,
+        "text": "ORGANICLIONSMANE"
+      },
+      {
+        "font_px": 20,
+        "detected": true,
+        "text": "ORGANIC LIONS MANE"
+      },
+      {
+        "font_px": 24,
+        "detected": true,
+        "text": "ORGANIC LIONS MANE"
+      },
+      {
+        "font_px": 28,
+        "detected": true,
+        "text": "ORGANIC"
+      },
+      {
+        "font_px": 32,
+        "detected": true,
+        "text": "ORGANIC I"
+      }
+    ]
+  }
+}

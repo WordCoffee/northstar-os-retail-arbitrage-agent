@@ -1,0 +1,139 @@
+{
+  "program": "REA Phase 2 baseline",
+  "date": "2026-10-28",
+  "purpose": "The 'before' measurements the Phase 5 before/after report must compare against. Every row is either a number produced on this machine today, or an explicit not_run with the reason. No row is an estimate.",
+  "probes": {
+    "warp_and_halo": "tools/rea_warp_probe.py -> reports/rea_probe/warp_probe.json",
+    "video": "tools/rea_video_probe.py -> reports/rea_probe/video/video_probe.json",
+    "smui_intents": "tools/rea_smui_intents.py -> reports/rea_probe/smui_intents.json",
+    "infra": "tools/rea_bojo_probe.py -> reports/rea_probe/bojo_probe.json"
+  },
+  "metrics": {
+    "label_warp_reprojection_error_px": {
+      "status": "measured",
+      "homography_mean_px": 5.413,
+      "homography_p95_px": 11.437,
+      "mesh_5x7_mean_px": 0.676,
+      "mesh_9x13_mean_px": 0.171,
+      "samples": 1813,
+      "geometry": "synthetic cylinder R=300, arc 51.6 deg, f=1000, canvas 900x1100",
+      "note": "synthetic ground truth, not an operator plate"
+    },
+    "label_edge_bleed_lum": {
+      "status": "measured",
+      "quad_overshoot_0px_feather_any": 0.0,
+      "quad_overshoot_1px_feather_0": 57.013,
+      "quad_overshoot_3px_feather_0": 190.492,
+      "panel_contrast_lum": 200.0,
+      "finding": "feathering alone creates zero bleed; geometry does"
+    },
+    "ocr_legibility_floor_clean_art_px": {
+      "status": "measured",
+      "first_detected_font_px": 10,
+      "engine": "rapidocr_onnxruntime",
+      "note": "clean synthetic art only; composited-plate OCR not re-run"
+    },
+    "ocr_text_clear_on_composited_panel": {
+      "status": "not_run",
+      "reason": "needs a live render through text_fidelity.py; no render fired this session"
+    },
+    "press_safety_max_tac_and_de76": {
+      "status": "not_run",
+      "reason": "prepress.py needs a finished panel; last recorded run 2026-10-22 (max TAC 272.5% vs 300, 6.28% px > 8 dE76)"
+    },
+    "packaging_readiness_verdict": {
+      "status": "not_run",
+      "reason": "needs a render; last recorded 2026-10-22 (blocked on MAIN, correct for a backdrop prompt)"
+    },
+    "render_fit_box": {
+      "status": "partial_fail",
+      "detail": "_fit_box now clamps to MAX_EDGE_PX=2048 (studio_generation.py:478) while test_pouch_label.py still asserts 1216",
+      "pytest": "6 failed, 28 passed (test_pouch_label.py + test_pouch_label_placement.py + test_studio_sizing.py subset)",
+      "failing": [
+        "test_fit_box_keeps_the_aspect_ratio[req1..req5]",
+        "test_fit_box_never_exceeds_the_engine_edge_and_stays_on_the_latent_grid",
+        "test_generate_image_reports_the_size_it_actually_used"
+      ],
+      "cause": "pre-existing: studio_generation.py is clean in git; the default moved, the assertions did not",
+      "decision_needed": "which value is the engine's real ceiling (1216 vs 2048)? Do not edit assertions before that is answered."
+    },
+    "lane_latency_s": {
+      "status": "measured",
+      "source": "lane_telemetry, 52 rows",
+      "create": {"n": 43, "p50": 35.29, "p95": 268.02, "max": 2039.7, "mean": 117.63},
+      "auto": {"n": 6, "p50": 19.81, "p95": 38.29, "max": 179.47},
+      "grow": {"n": 2, "p50": 45.49, "max": 61.71},
+      "success_rate": 0.711
+    },
+    "peak_ram_vram_per_lane": {
+      "status": "not_run",
+      "snapshot_instead": {"ram_total_gb": 16.56, "ram_available_gb": 4.92, "vram_total_mb": 16303, "vram_free_mb": 15417, "gpu_util_pct": 0},
+      "reason": "live stack was serving; a render probe would have disturbed it"
+    },
+    "sqlite_writer_contention": {
+      "status": "measured",
+      "busy_timeout_0ms": {"attempted": 240, "committed": 60, "errors": 180},
+      "busy_timeout_5000ms": {"attempted": 240, "committed": 240, "errors": 0, "elapsed_s": 0.882},
+      "finding": "contention refuted at the configured timeout"
+    },
+    "social_spec_staleness": {
+      "status": "measured",
+      "entries_reviewed": 7,
+      "exact_match": 1,
+      "ratio_correct_but_incomplete": 4,
+      "off_recommendation": 1,
+      "partial": 1,
+      "missing_canvases": 7,
+      "root_cause": "presets.js social entries carry no source/date/confidence at all"
+    },
+    "aplus_arc_coverage": {
+      "status": "measured",
+      "existing_arcs_in_repo": 0,
+      "arcs_specified": 5,
+      "module_sizes_sourced": true,
+      "note": "specs were already sourced; composition was absent"
+    },
+    "smui_turns_to_tool": {
+      "status": "measured",
+      "corpus": {"sessions": 26, "messages": 121, "user_turns": 60, "tool_calls": 39, "runs": 58},
+      "messages_per_session": 4.65,
+      "tool_calls_per_session": 1.5,
+      "by_intent": {
+        "image_render": {"turns": 33, "tool_calls": 15},
+        "label_composite": {"turns": 21, "tool_calls": 3},
+        "aplus_listing": {"turns": 7, "tool_calls": 0},
+        "logo_brand": {"turns": 5, "tool_calls": 0},
+        "status_help": {"turns": 2, "tool_calls": 6}
+      }
+    },
+    "smui_contrast_wcag": {
+      "status": "measured",
+      "surface": "#1a2435",
+      "ink": 14.09,
+      "ink_mid": 9.74,
+      "ink_soft": 6.09,
+      "ink_faint": 4.32,
+      "finding": "--ink-faint fails 4.5:1 for normal text"
+    },
+    "video_assembly": {
+      "status": "measured",
+      "artifact": "reports/rea_probe/video/ad_15s_1080x1920.mp4",
+      "duration_s": 12.0,
+      "resolution": "1080x1920",
+      "fps": 30,
+      "video_codec": "h264",
+      "audio_codec": "aac",
+      "audio_engine": "piper",
+      "bytes": 2737719,
+      "captions": 3,
+      "caption_y_pct": 55.0
+    },
+    "test_totals": {
+      "status": "measured",
+      "npm_run_build": "0 errors (built in 1.39 s)",
+      "focused_pytest": "28 passed, 6 failed (all 6 pre-existing fit-box assertions, see render_fit_box)",
+      "full_suite": "not_run this session"
+    }
+  },
+  "phase5_rule": "Compare like with like: a metric marked not_run today must be measured before it can appear in a before/after claim."
+}

@@ -1,0 +1,173 @@
+{
+  "probe": "rea_smui_intents",
+  "date": "2026-10-28",
+  "source_db": "Northstar_backend\\data\\northstar.db",
+  "totals": {
+    "chat_sessions": 26,
+    "chat_messages": 121,
+    "chat_runs": 58,
+    "chat_tool_calls": 39
+  },
+  "user_messages_scanned": 60,
+  "messages_per_session": 4.65,
+  "tool_calls_per_session": 1.5,
+  "intent_counts": [
+    [
+      "image render",
+      33
+    ],
+    [
+      "label / pouch composite",
+      21
+    ],
+    [
+      "A+ / listing content",
+      7
+    ],
+    [
+      "logo / brand mark",
+      5
+    ],
+    [
+      "status / help",
+      2
+    ]
+  ],
+  "tool_usage": [
+    {
+      "tool": "generate_image",
+      "calls": 15
+    },
+    {
+      "tool": "creative_plan",
+      "calls": 8
+    },
+    {
+      "tool": "system_status",
+      "calls": 6
+    },
+    {
+      "tool": "list_templates",
+      "calls": 3
+    },
+    {
+      "tool": "apply_label",
+      "calls": 3
+    },
+    {
+      "tool": "create_dieline",
+      "calls": 2
+    },
+    {
+      "tool": "service_catalog",
+      "calls": 1
+    },
+    {
+      "tool": "knowledge_lookup",
+      "calls": 1
+    }
+  ],
+  "busiest_sessions": [
+    {
+      "session": "fcff7637-1285-49bf-bf52-b7d435b8a458",
+      "messages": 30,
+      "tool_calls": 8
+    },
+    {
+      "session": "67037788-34bd-4b5f-84c0-b08f6a68433d",
+      "messages": 18,
+      "tool_calls": 10
+    },
+    {
+      "session": "a130e203-8570-40ac-9f68-c9db50792772",
+      "messages": 10,
+      "tool_calls": 5
+    },
+    {
+      "session": "3e79c6e1-3572-49d0-ac68-ca0152319424",
+      "messages": 6,
+      "tool_calls": 6
+    },
+    {
+      "session": "6a399a01-2297-4a29-ba22-10392f2a7747",
+      "messages": 6,
+      "tool_calls": 1
+    },
+    {
+      "session": "78cba1ff-6dcf-4599-9de0-b9cb38b7768d",
+      "messages": 6,
+      "tool_calls": 1
+    },
+    {
+      "session": "a3aabf6e-fd03-4ff5-a9f6-c94b6ca711bd",
+      "messages": 6,
+      "tool_calls": 1
+    },
+    {
+      "session": "ad82fb22-ce1d-4223-be3a-bea9096cfeb4",
+      "messages": 6,
+      "tool_calls": 2
+    },
+    {
+      "session": "cb7ddfdf-ae51-41e3-93b9-f1d23b81b963",
+      "messages": 6,
+      "tool_calls": 1
+    },
+    {
+      "session": "6d2a2a2c-c0c0-4ff1-ae0b-1ba8a91d34bb",
+      "messages": 4,
+      "tool_calls": 1
+    },
+    {
+      "session": "138b3e01-c1d8-4a26-9fa4-77e012626aa1",
+      "messages": 2,
+      "tool_calls": 1
+    },
+    {
+      "session": "21353707-8d1f-48e6-8f90-67164ae5b4af",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "21e9e8a3-6d6c-4313-863c-9b7fca0bf459",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "81e515fe-2431-40ec-b014-be53c3738b23",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "89ba4221-2d39-4f7d-bc3a-753f1a56d40d",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "aec32d43-9459-43ab-8abf-2e2be4fabe24",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "bc6a98a8-5441-485f-90af-586978c3c4cb",
+      "messages": 2,
+      "tool_calls": 0
+    },
+    {
+      "session": "d99a263b-a73e-424b-b72f-0c3ded63762a",
+      "messages": 2,
+      "tool_calls": 1
+    },
+    {
+      "session": "dc3fc30b-92f8-49ff-a544-215c2a866a8d",
+      "messages": 2,
+      "tool_calls": 1
+    },
+    {
+      "session": "df79baa1-18bb-4192-a643-7a4231152811",
+      "messages": 2,
+      "tool_calls": 0
+    }
+  ],
+  "caveat": "Counts are keyword matches over user turns, not classified intents. A turn can match more than one rule. No message text is stored here."
+}

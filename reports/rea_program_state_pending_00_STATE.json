@@ -1,13 +1,46 @@
 {
-  "_note": "PENDING MERGE into 00_STATE.json. The edit was refused in this session (permission denied on 00_STATE.json), so the block is parked here verbatim instead of being lost. Merge under the top-level key \"rea_program_20261028\" and update \"current_phase\" as shown.",
-  "current_phase_replacement": "Chrome Connect 3.0 COMPLETE. 131 tests pass. Blocked: Profile 7 has session cookies (Google + Alibaba). Needs clean profile for baseline + live runs. REA program: Phase 1 research plans issued 2026-10-28, awaiting operator approval before Phase 2.",
+  "_note": "PENDING MERGE into 00_STATE.json. Edits to 00_STATE.json are refused by permission in this session, so the block is parked here verbatim instead of being lost. Merge under the top-level key \"rea_program_20261028\" and update \"current_phase\" as shown.",
+  "current_phase_replacement": "Chrome Connect 3.0 COMPLETE. 131 tests pass. REA program: Phase 1 research plans and Phase 2 execution COMPLETE 2026-10-28 (6 research deliverables + baseline); Phase 3 build plans awaiting operator approval. No Amazon contact, no spend.",
   "rea_program_20261028": {
-    "phase": "Phase 1 (research plans) issued - NOT approved, Phase 2 not started",
-    "plan": "reports/rea_program_research_plans_20261028.md",
-    "what": "Six reverse-engineering research plans (label compositing, A+ layouts, video ad structures, social asset specs, Bojo infrastructure, Simple Mode UI), each anchored to files that already exist in this repo rather than to assumed greenfield scope.",
-    "supersedes": "The six bullet plans in the pasted REA master plan. Changes made after inspecting the repo: (1) the A+ plan's Amazon best-seller crawl is gated - replaced with in-repo/own-asset/design-literature sources, Amazon variant blocked pending task-specific approval; (2) all six now name the current implementation files they must inform; (3) four of the six are refinement of shipped surfaces (pouch_label/mockup_compositor, APlus.jsx + specRegistry, VideoUgc.jsx planning workspace, ChatSurface/simple.css after the 2026-10-23 repair), not greenfield; (4) added a mandatory baseline-instrument set so the Phase 5 before/after PDF compares measurements, not adjectives.",
-    "spend": "FREE-only. No trials, subscriptions, API keys or paid credits; no new runtime dependency installed during Phase 2.",
-    "known_gap": "A+ research sample quality depends on permitted sources; Amazon-only access is listed as a gap, not filled with assumptions.",
-    "next": "Operator reply 'approve all' / subset / 'amazon approved for 1.2' / 'change X'. Phase 2 order: 1.4, 1.1, 1.2, 1.3, 1.6, 1.5 (6-7 days)."
+    "phase1": {
+      "status": "complete",
+      "plan": "reports/rea_program_research_plans_20261028.md",
+      "approved_by_operator": "2026-10-28, with the standing instruction: do not touch Amazon; use non-Amazon tools and YouTube seller tutorials instead"
+    },
+    "phase2": {
+      "status": "complete",
+      "summary": "reports/rea_phase2_complete_20261028.md",
+      "deliverables": {
+        "label_compositing": "reports/packaging_workflow_analysis_20261028.md",
+        "aplus_content": "reports/a_content_layout_patterns_20261028.md",
+        "video_ads": "reports/video_ad_structures_20261028.md",
+        "social_specs": "reports/social_media_asset_specs_20261028.md",
+        "bojo_infrastructure": "reports/bojo_infrastructure_plan_20261028.md",
+        "simple_mode_ui": "reports/smui_wireframes_and_flow_20261028.md"
+      },
+      "baseline": "reports/rea_baseline_20261028.json",
+      "probes": [
+        "tools/rea_warp_probe.py -> reports/rea_probe/warp_probe.json",
+        "tools/rea_video_probe.py -> reports/rea_probe/video/video_probe.json",
+        "tools/rea_smui_intents.py -> reports/rea_probe/smui_intents.json",
+        "tools/rea_bojo_probe.py -> reports/rea_probe/bojo_probe.json"
+      ],
+      "headline_findings": {
+        "halo": "Feathering alone creates ZERO bleed outside the true label edge (0.000 lum at sigma 2 and 8). A 1 px quad overshoot creates 57.013 lum (28.5% of panel contrast); 3 px creates 190.492 (95.3%). The halo is geometric, not the feather radius - contradicting the assumption in the research plan.",
+        "warp": "4-point homography error vs synthetic cylindrical ground truth: mean 5.413 px, p95 11.437, max 13.324 (1813 samples). Quad mesh 5x7: 0.676 px. 9x13: 0.171 px. cv2.remap is already installed; Blender not needed.",
+        "social_specs": "presets.js social canvases carry NO source, date or confidence (7 entries; 1 exact match, 4 ratio-correct-but-incomplete, 1 off-recommendation, 1 partial; 7 canvases missing entirely). specRegistry.js does this properly for Amazon - mirror that pattern for social.",
+        "video": "A real 12.0 s 1080x1920 clip assembled with FFmpeg + Piper narration + 3 captions, 2,737,719 bytes, h264 30fps + aac; proves everything except footage is deterministic and free.",
+        "substrate": "lane_telemetry create lane: p50 35.29 s, p95 268.02 s, max 2039.7 s (n=43, 71% ok). SQLite contention REFUTED at the configured busy_timeout=5000 (240/240 commits, 0 errors, 0.882 s with 4 writers; 180/240 errors at timeout 0). Redis/RabbitMQ not justified.",
+        "smui": "26 chat sessions / 121 messages / 60 user turns / 39 tool calls. 4.65 messages and 1.50 tool calls per session. Label intent: 21 turns -> 3 apply_label calls (0.14). A+/listing 7 turns and logo 5 turns reach NO tool. --ink-faint (#8d867a on #1a2435) is 4.32:1 and fails WCAG AA 4.5:1."
+      },
+      "found_defect": {
+        "id": "fit_box_drift_20261028",
+        "what": "test_pouch_label.py asserts _fit_box clamps to 1216; studio_generation.py:478 now defaults MAX_EDGE_PX=2048. 6 tests fail (28 passed). studio_generation.py is clean in git, so this is drift, not a local edit.",
+        "action": "recorded, not patched - the open question is which value is the engine's real ceiling. Editing the assertions first would hide it.",
+        "status": "open"
+      },
+      "not_done": "No Amazon contact of any kind. No spend/trial/dependency. No 20-30-ad timing corpus (ad libraries JS-gated) - instrument exists, corpus does not. No render fired at the live GPU lane (stack was serving) so peak RAM/VRAM is a snapshot not a peak. Provider rate-limit matrix not built (vendor docs not fetched, recorded as debt).",
+      "next": "Phase 3 build plans drawn only from the BUILD CANDIDATES tables (38 rows: L1-L5, A1-A6, V1-V6, S1-S6, B1-B7, U1-U8). Nothing built yet. Suggested order: L1, S1/S2, B1, U1, U4, V1."
+    }
   }
 }

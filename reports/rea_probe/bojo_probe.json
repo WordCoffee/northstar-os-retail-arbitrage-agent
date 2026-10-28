@@ -1,0 +1,70 @@
+{
+  "probe": "rea_bojo_probe",
+  "date": "2026-10-28",
+  "host": {
+    "ram_total_gb": 16.56,
+    "ram_available_gb": 4.92,
+    "ram_used_pct": 70.3,
+    "vram_total_mb": 16303,
+    "vram_used_mb": 587,
+    "vram_free_mb": 15417,
+    "gpu_util_pct": 0
+  },
+  "lane_latency": {
+    "rows": 52,
+    "ok_rows": 37,
+    "by_lane": {
+      "chat:default|None": {
+        "n": 1,
+        "p50_s": 8.21,
+        "p95_s": 8.21,
+        "max_s": 8.21,
+        "mean_s": 8.21
+      },
+      "chat:default|auto": {
+        "n": 6,
+        "p50_s": 19.81,
+        "p95_s": 38.29,
+        "max_s": 179.47,
+        "mean_s": 43.32
+      },
+      "chat:default|create": {
+        "n": 43,
+        "p50_s": 35.29,
+        "p95_s": 268.02,
+        "max_s": 2039.7,
+        "mean_s": 117.63
+      },
+      "chat:default|grow": {
+        "n": 2,
+        "p50_s": 45.49,
+        "p95_s": 29.26,
+        "max_s": 61.71,
+        "mean_s": 45.49
+      }
+    }
+  },
+  "sqlite": [
+    {
+      "busy_timeout_ms": 0,
+      "writers": 4,
+      "attempted": 240,
+      "committed": 60,
+      "errors": 180,
+      "first_error": "database is locked",
+      "elapsed_s": 0.299,
+      "rows_in_db": 60
+    },
+    {
+      "busy_timeout_ms": 5000,
+      "writers": 4,
+      "attempted": 240,
+      "committed": 240,
+      "errors": 0,
+      "first_error": null,
+      "elapsed_s": 0.882,
+      "rows_in_db": 240
+    }
+  ],
+  "not_done": "No render was fired into the live ComfyUI lane during this probe: the operator's stack was serving (backend :8000, ComfyUI :8188, Ollama :11434) and RAM headroom was the documented binding constraint. Lane latency comes from the system's own recorded telemetry instead."
+}
