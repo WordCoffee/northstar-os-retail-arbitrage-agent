@@ -323,3 +323,72 @@ Before / after / final in `screenshots/t2_placement_fix_20261028/`:
    and they should be updated to 2048.
 3. The asset-picker list is populated asynchronously, so a `data-asset-id`
    selector is not present on the next step after opening it.
+
+---
+
+# 9. Presets landed; T4 gated on a credit-spending control
+
+## 9.1 MOGRA presets — VERIFIED COMPLETE
+
+`kit-mogra` shipped a placeholder palette (`#f4f7f0/#1f3320/#4a7a4a/#d8a13a`)
+that was not the brand. Replaced verbatim from
+`BRIEF_pouch_2sku_20261016.md` §1, and the two SKU presets from §2 added in
+millimetres with `mm: true`:
+
+| Preset | Name | Size |
+|---|---|---|
+| `pouch-mogra-lm6` | Mogra Pouch - Lion's Mane 6oz | 130 × 210 × 40 mm |
+| `pouch-mogra-shi8` | Mogra Pouch - Shiitake 8oz | 150 × 210 × 40 mm |
+
+Palette `#171717 #D5A77A #9DBA8B #F5EEE2 #9FA9A4 #253628 #D0C5AC`, ink
+`#171717`, paper `#F5EEE2`, accent `#253628`. The generic `pouch` preset is kept
+but its note now states it is **not** dimensionally accurate for Mogra.
+
+No value was invented — every string and number is quoted from the brief.
+
+Regression: `tests/e2e/moggra_presets.spec.ts`, 2 passed. Asserts the exact
+palette, type, names, sizes and the `mm` flag, and that the old placeholder
+colours are absent. `npm run build` 0 errors.
+
+## 9.2 T4 lifestyle — BLOCKED on an operator decision, not on a defect
+
+Run through Chrome Connect in a fresh chat, prompt asking explicitly for a new
+`generate_image` at 1024×1024 with a kitchen-counter lifestyle subject.
+
+**The turn produced no image.** The deterministic creative intent router
+intercepted the request and returned a **plan card** instead of invoking the
+tool:
+
+```
+Plan ready - Package / pouch / carton design (print-ready)
+  Job / Package / pouch / carton design (print-ready)   Media image   Plan quick
+  Needs from you: 'ICC/CMYK conversion, soft proof, gamut dE, ink limit' runs in
+  the creative pipeline, not as a chat tool; mandatory label copy (ingredients,
+  net qty) is not provided
+  [ Generate draft  34 cr ]   [ Generate final  71 cr ]   [ Edit plan ]  [ Cancel ]
+```
+
+This is the product working as designed (plan → operator picks a tier), not a
+failure. But the next step costs **34 credits**, and "spending money or consuming
+paid credits" is one of the two standing gates. I did not click it.
+
+**To proceed, one of these is needed:**
+1. approval to spend 34 credits on the T4 draft, or
+2. confirmation that design credits are meter-only in this environment
+   (`DESIGN_CREDITS_ENFORCE` unset/0), in which case the click costs nothing and
+   I can proceed, or
+3. an instruction to reach `generate_image` directly and bypass the plan card.
+
+## 9.3 Guard gap recorded
+
+The turn produced a plan card and no artifact, and the false-success guard did
+**not** downgrade it to `no_generation`. The guard tests `tool_parts` for a tool
+entry; a routed plan card is not one. That is defensible (a plan genuinely is
+not a claim of generation) but the UI still showed a completed turn for a
+request that asked for an image. Worth a follow-up: treat "requested a new
+artifact, produced only a plan card" as `plan_only`, distinct from `done`.
+
+## 9.4 Remaining
+
+T4–T8 and C5 untouched. No Packify parity. No paid action taken, no Amazon
+contact, no model changes.
