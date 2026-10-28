@@ -173,30 +173,59 @@ After the repair the identical workflow succeeded first time (6 steps, 0 refusal
    workflow that needs to attach a local asset (T2's logo pass) cannot be driven
    through the controller at all — the sanctioned localhost Playwright path can
    (`setInputFiles`). This is a structural blocker for T2, not a flake.
+3. **`00_STATE.json` is still not writable by this session.** `opencode.json`
+   denies `edit` on it (`permission.rejected: Permission denied: edit`), so the
+   campaign entry for this pass is recorded here and in the commit message only.
+   It still needs a path that is allowed to write the state file.
 
 ---
 
-## 7. T3 — partial (render passes, refresh fails)
+## 7. T3 — render and download pass, refresh persistence fails
 
 Ran the repo's **existing** `tests/e2e/acceptance-mogra.spec.ts` (no replacement
-test was written) on `chromium-desktop`:
+test was written) on `chromium-desktop`, three times.
 
 | Assertion | Result |
 |---|---|
-| turn completes with `2000 x 2000` in the transcript | **PASS** |
+| turn completes with a tool summary for 2000×2000 | **PASS** |
 | artefact `<img>` decodes at `naturalWidth/Height = 2000×2000` | **PASS** |
 | download control saves a PNG whose header says 2000×2000 | **PASS** — 4,139,675 B |
-| **after `page.reload()` the image decodes at 2000×2000** | **FAIL** — `{w: 0, h: 0}` |
+| after `page.reload()` the artefact is still in the transcript | **FAIL** |
 
-The bytes are not the problem: `GET /api/design-studio/assets/2f2dbed6…/file`
-returns **200, 4,139,675 B, image/png**, and the turn persisted
-`status: done` with `asset_meta` 2000×2000. The failure is client-side — after a
-reload the artefact image is present in the transcript but not decoded at sample
-time, which is consistent with the transcript being rebuilt on session load
-(`ChatSurface` line 473-478 re-runs `loadSession` whenever `sessions` changes,
-which clears then repopulates `messages` and remounts the `<img>`).
+The bytes and the record are not the problem:
 
-T5 never ran because the spec is serial and T3 failed first.
+* `GET /api/design-studio/assets/2f2dbed6…/file` → **200, 4,139,675 B, image/png**
+* the turn persisted `status: done`, `cancelled: false`, with `asset_meta`
+  `{width:2000, height:2000, url:/api/design-studio/assets/…/file}`
+
+**Actual boundary (observed after reload):** the app resumes the **wrong
+session**. In the post-reload frame the rail's *active* item is the empty
+**"New chat / 4m ago"**, while the session that actually carried the turn sits
+unselected below it. The transcript therefore renders the user message with no
+assistant turn at all — the tool card and the artefact are not "lost", the page
+simply opened a different, empty conversation.
+
+The sequence that produces it is `New chat` → send immediately → reload:
+`newChat()` removes the `localStorage` resume pointer
+(`ns-chat-session:<focus>`), and the pointer that ends up written afterwards does
+not name the session the turn actually used. T1 did not hit this because the
+operator's pointer already named the T1 session.
+
+Two follow-on repairs were made while chasing this, and both stand on their own:
+
+1. `ChatSurface` re-ran `loadSession` on **every** `sessions` state update, which
+   blanked and refilled `messages`; it now resumes **once per focus**.
+2. The spec's wait predicate was racy — `/2000\s*[x×]\s*2000/` also matches the
+   model's own reasoning text ("width: 2000 … height: 2000"), so the assertions
+   could run while the turn was still generating. It now waits for the tool
+   summary (`/Rendered a 2000x2000 image/`, `/Rendered a 1464x600 image/`).
+
+**Neither repair fixed the post-reload session pointer**, and this pass does not
+claim T3. The correct repair is to persist the turn's session id as the resume
+pointer at the moment the session is created *and* when the turn starts, then pin
+it with the assertion that already catches it.
+
+T5 never ran: the spec is serial and T3 fails first.
 
 ---
 
@@ -210,7 +239,7 @@ T5 never ran because the spec is serial and T3 failed first.
 | Bojo routing the UI render to the creative lane | **FAILED** (defect logged, not repaired) | §3.1 |
 | Reload discards an in-flight turn | **FAILED** (defect logged, not repaired) | §6.1 |
 | T2 compositor label | **BLOCKED** | §6.2 — no file-input verb; plus the brief's own Lane A blockers (`kit-mogra` still the placeholder palette, no `pouch-mogra-lm6` / `pouch-mogra-shi8` presets) remain unfixed, so no pouch render may be presented as dimensionally accurate |
-| T3 2000×2000 MAIN | **FAILED** on refresh persistence only | §7 |
+| T3 2000×2000 MAIN | **FAILED** on refresh persistence only | §7 — render, decoded size and downloaded PNG all passed; the reload opens the wrong session |
 | T4 lifestyle | **DEFERRED** | depends on the same refresh defect |
 | T5 A+ 1464×600 | **DEFERRED** | did not run (serial after T3) |
 | T6 dieline/prepress | **DEFERRED** | engine-verified only, never UI-accepted |
@@ -228,8 +257,8 @@ not acceptance, and this report does not present it as such.
 
 | Budget | Used |
 |---|---|
-| Substantive repair cycles (max 10) | **1** — the `scrollbar-gutter` repair |
-| Campaign wall clock (max 90 min) | ~35 min at time of writing |
+| Substantive repair cycles (max 10) | **3** — `scrollbar-gutter` (verified), `ChatSurface` resume-once-per-focus, and the racy spec predicate. Only the first is proven to close its defect. |
+| Campaign wall clock (max 90 min) | ~70 min; stopped at the T3 session-pointer boundary rather than starting a speculative fourth repair without time to verify it |
 | Repeated unchanged failure (max 2) | The click failure was reproduced twice, then the variable was changed each time (no-navigation, different target, pinned viewport, diagnostic harness, window state) instead of retried blind |
 
 Renders are serialised by the existing cross-process GPU lock; one render at a
@@ -264,10 +293,10 @@ Controller journals (operator-side, `Default Project/data/agent-journal/`):
 
 ## 11. Next three actions
 
-1. **Repair the refresh-persistence defect** (§7) — the transcript is re-fetched and
-   rebuilt on session load; artefact images remount and decode late. Pin it with the
-   assertion that already caught it, then re-run `acceptance-mogra.spec.ts` for
-   T3 → T5.
+1. **Repair the post-reload session pointer** (§7) — `newChat()` → send → reload
+   resumes the empty "New chat" instead of the session that carried the turn.
+   Persist the turn's session id as the resume pointer when the session is created
+   *and* when the turn starts, then re-run `acceptance-mogra.spec.ts` for T3 → T5.
 2. **Repair `ChatSurface`'s reload-during-turn behaviour** (§6.1) so a completed
    tool result can never be orphaned from its turn.
 3. **Unblock T2** — add the two MOGRA pouch presets and the real `kit-mogra`

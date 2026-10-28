@@ -27,6 +27,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Icon from '../components/Icon.jsx'
 import WorkbenchPanel from './WorkbenchPanel.jsx'
 import { chatApi, chatVoice, streamTurn, assetFileUrl } from './api.js'
+import { useAssetSrc, saveAsset } from './assetUrl.js'
 
 const DEFAULT_SUGGESTIONS = [
   'What should I focus on today across my brands?',
@@ -80,8 +81,14 @@ const LIVE_VOICE_ENABLED = false
 // server reports `state` (missing_asset / missing_metadata / missing_file / ok);
 // this renders exactly that, and an image that simply fails to decode gets its
 // own honest note. It never retries, so a 404 cannot become a request loop.
+function AssetImage({ assetId, alt, ...rest }) {
+  const src = useAssetSrc(assetId)
+  return <img src={src || undefined} alt={alt} {...rest} />
+}
+
 function AssetMedia({ asset, onOpen }) {
   const [failed, setFailed] = useState(false)
+  const src = useAssetSrc(asset.id)
   const state = asset.state || null
   const reason = state === 'missing_file'
     ? 'File missing — the asset record exists but the file is gone.'
@@ -99,19 +106,19 @@ function AssetMedia({ asset, onOpen }) {
     )
   }
   if (asset.kind === 'video') {
-    return <video src={assetFileUrl(asset.id)} controls preload="metadata"
+    return <video src={src || undefined} controls preload="metadata"
       onError={() => setFailed(true)} data-testid="chat-asset-video" />
   }
   if (asset.kind === 'dieline') {
     return (
-      <object data={assetFileUrl(asset.id)} type="image/svg+xml"
+      <object data={src || undefined} type="image/svg+xml"
         className="chat-asset-dieline" aria-label={asset.name || 'dieline'}>
         <span className="chat-asset-meta">{asset.name || 'dieline'}</span>
       </object>
     )
   }
   return (
-    <img src={assetFileUrl(asset.id)} alt={asset.name || 'generated asset'}
+    <img src={src || undefined} alt={asset.name || 'generated asset'}
       loading="lazy" onClick={onOpen} onError={() => setFailed(true)} />
   )
 }
@@ -463,11 +470,22 @@ export default function ChatSurface({
   }, [focusId])
 
   // Resume the last session this focus was using, else the most recent one.
+  //
+  // This must fire ONCE per focus, not on every `sessions` update. `loadSession`
+  // blanks `messages` and refills it, so re-running it on list churn (the mount
+  // fetch, a new title, a fork) rebuilt the whole transcript underneath the
+  // reader: artefact <img> elements remounted and decoded again, which showed up
+  // as an image that reported naturalWidth 0 right after a refetch and as a
+  // composer that never satisfied an actionability "stable" check.
+  const resumedFocus = useRef('')
   useEffect(() => {
+    if (resumedFocus.current === focusId) return
     let sid = ''
     try { sid = localStorage.getItem(sessionKey(focusId)) || '' } catch { /* storage */ }
     if (!sid && sessions.length) sid = sessions[0].id
-    if (sid) loadSession(sid, { remember: false })
+    if (!sid) return
+    resumedFocus.current = focusId
+    loadSession(sid, { remember: false })
   }, [focusId, sessions, loadSession])
 
   // Auto-pin the stream only while the reader is at the bottom.
@@ -1284,9 +1302,10 @@ export default function ChatSurface({
                               <Icon name="eye" size={13} /> View
                             </button>
                           )}
-                          <a href={assetFileUrl(a.id)} download>
+                          <button type="button"
+                            onClick={() => { saveAsset(a.id, a.name).catch(() => {}) }}>
                             <Icon name="download" size={13} /> Download
-                          </a>
+                          </button>
                           <button type="button" onClick={() => copyText(a.id)}>
                             <Icon name="copy" size={13} /> Copy id
                           </button>
@@ -1710,12 +1729,13 @@ export default function ChatSurface({
         <div className="chat-lightbox" onClick={() => setLightbox(null)}
           role="dialog" aria-label="Asset preview" data-theme-scope="media">
           <div className="chat-lightbox-body" onClick={(e) => e.stopPropagation()}>
-            <img src={assetFileUrl(lightbox.id)} alt={lightbox.name || 'asset'} />
+            <AssetImage assetId={lightbox.id} alt={lightbox.name || 'asset'} />
             <div className="chat-lightbox-bar">
               <span>{lightbox.name || 'asset'}</span>
-              <a href={assetFileUrl(lightbox.id)} download>
+              <button type="button"
+                onClick={() => { saveAsset(lightbox.id, lightbox.name).catch(() => {}) }}>
                 <Icon name="download" size={13} /> Download
-              </a>
+              </button>
               <button type="button" onClick={() => copyText(lightbox.id)}>
                 <Icon name="copy" size={13} /> Copy id
               </button>
