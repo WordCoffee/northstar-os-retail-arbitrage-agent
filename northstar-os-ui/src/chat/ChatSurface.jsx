@@ -329,6 +329,9 @@ export default function ChatSurface({
   const [attachments, setAttachments] = useState([])
   const [uploading, setUploading] = useState(false)
   const [uploadNote, setUploadNote] = useState('')
+  const [assetPickerOpen, setAssetPickerOpen] = useState(false)
+  const [studioAssets, setStudioAssets] = useState([])
+  const [studioAssetsState, setStudioAssetsState] = useState('idle')
   const fileRef = useRef(null)
   // Duplex voice: listen -> transcribe -> answer -> speak, with barge-in.
   const [voices, setVoices] = useState([])
@@ -953,7 +956,41 @@ export default function ChatSurface({
     }
   }, [])
 
-  // ── Duplex voice loop (Bojo) ──────────────────────────────────────────────
+  // ── Existing-asset picker ─────────────────────────────────────────────────
+  // Lists the studio's own asset registry so an approved brand asset can be
+  // attached by id. This is the automation-drivable equivalent of the paperclip:
+  // no native file dialog, and the tool still receives a real asset id.
+  const loadStudioAssets = useCallback(async () => {
+    setStudioAssetsState('loading')
+    try {
+      const res = await fetch('/api/design-studio/assets', { credentials: 'same-origin' })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const body = await res.json()
+      const list = Array.isArray(body.assets) ? body.assets : []
+      // Newest first; logos first so a brand asset is never buried under renders.
+      list.sort((a, b) => {
+        const rank = (x) => (String(x.asset_type || '').match(/logo|brand/i) ? 0 : 1)
+        return rank(a) - rank(b) || String(b.created_at || '').localeCompare(String(a.created_at || ''))
+      })
+      setStudioAssets(list)
+      setStudioAssetsState(list.length ? 'ready' : 'empty')
+    } catch (e) {
+      setStudioAssetsState('error')
+      setUploadNote(`Asset library unavailable: ${e.message}`)
+    }
+  }, [])
+
+  const attachExistingAsset = useCallback((asset) => {
+    const id = String(asset.id || '')
+    if (!id) return
+    setAttachments((prev) => (prev.some((a) => a.id === id) ? prev : [...prev, {
+      id,
+      name: asset.name || id,
+      kind: asset.asset_type || 'image',
+    }]))
+    setAssetPickerOpen(false)
+  }, [])
+
   // listen (energy VAD) -> local whisper transcript -> turn -> speak (voice
   // studio) -> listen again. Speaking while the operator talks BARGE-IN: the
   // audio stops and capture resumes. Every unavailable piece is reported, never
@@ -1532,6 +1569,21 @@ export default function ChatSurface({
               </span>
             </button>
             <span className="chat-controls-spacer" />
+            {/* Pick an asset that ALREADY exists in the studio library.
+                The paperclip uploads a new file and needs a native file dialog,
+                which no browser-automation controller can drive; brand assets
+                (logo, plates, previous renders) are already catalogued, so the
+                honest path is to select them by id. Selecting one attaches it to
+                the next turn exactly like an upload does, and the tools take the
+                asset id (apply_label: plate_asset_id / logo_asset_id). */}
+            <button type="button" className="chat-icon-btn" title="Use a studio asset"
+              onClick={() => { setAssetPickerOpen((v) => !v); loadStudioAssets() }}
+              data-testid="chat-asset-picker-toggle" aria-label="Use a studio asset"
+              aria-expanded={assetPickerOpen} aria-busy={studioAssetsState === 'loading'}>
+              {studioAssetsState === 'loading' && assetPickerOpen
+                ? <span className="chat-spinner" aria-hidden="true" />
+                : <Icon name="image" size={17} />}
+            </button>
             <button type="button" className="chat-icon-btn" title="Attach a file"
               onClick={() => fileRef.current?.click()} disabled={uploading}
               data-testid="chat-attach" aria-label="Attach a file">
@@ -1634,6 +1686,55 @@ export default function ChatSurface({
               <span className="chat-note-text">{voiceNote}</span>
               <button type="button" className="chat-note-close" aria-label="Dismiss"
                 onClick={() => setVoiceNote('')}><Icon name="x" size={14} /></button>
+            </div>
+          )}
+          {assetPickerOpen && (
+            <div className="chat-asset-picker" data-testid="chat-asset-picker" role="dialog"
+              aria-label="Select a studio asset">
+              <div className="chat-asset-picker-head">
+                <strong>Studio assets</strong>
+                <span className="chat-asset-picker-note">
+                  {studioAssetsState === 'loading' ? 'loading…'
+                    : studioAssetsState === 'empty' ? 'none yet'
+                      : studioAssetsState === 'error' ? 'unavailable'
+                        : `${studioAssets.length} available`}
+                </span>
+                <button type="button" className="chat-icon-btn" aria-label="Close asset picker"
+                  data-testid="chat-asset-picker-close"
+                  onClick={() => setAssetPickerOpen(false)}><Icon name="x" size={14} /></button>
+              </div>
+              <div className="chat-asset-picker-list">
+                {studioAssetsState === 'loading' && (
+                  <div className="chat-asset-picker-status" data-testid="chat-asset-picker-loading"
+                    role="status">
+                    <span className="chat-spinner" aria-hidden="true" /> Loading studio assets…
+                  </div>
+                )}
+                {studioAssetsState === 'error' && (
+                  <div className="chat-asset-picker-status" data-testid="chat-asset-picker-error"
+                    role="status">
+                    The asset library could not be read.
+                  </div>
+                )}
+                {studioAssetsState !== 'loading' && studioAssetsState !== 'error'
+                  && studioAssets.length === 0 && (
+                  <div className="chat-asset-picker-status" data-testid="chat-asset-picker-empty"
+                    role="status">
+                    No studio assets yet.
+                  </div>
+                )}
+                {studioAssets.map((a) => (
+                  <button key={a.id} type="button" className="chat-asset-option"
+                    data-testid="chat-asset-option" data-asset-id={a.id}
+                    data-asset-type={a.asset_type || ''}
+                    title={`${a.name || a.id} (${a.asset_type || 'asset'})`}
+                    onClick={() => attachExistingAsset(a)}>
+                    <img src={`/api/design-studio/assets/${a.id}/file`} alt="" loading="lazy" />
+                    <span className="chat-asset-option-name">{a.name || a.id}</span>
+                    <span className="chat-asset-option-kind">{a.asset_type || 'asset'}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
           {attachments.length > 0 && (

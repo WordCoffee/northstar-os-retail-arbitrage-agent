@@ -5,7 +5,9 @@ Two operator-visible defects are locked down here:
   1. `generate_image` rejected a perfectly ordinary portrait request with
      "height is above the maximum (1216)". The engine's real limit is its long
      edge, so a request is now FITTED into that box with the aspect ratio kept,
-     and the true size is reported back.
+     and the true size is reported back. The ceiling was raised to 2048 on
+     2026-10-28 (measured: +8.3 s and +864 MB for a true 2048 long edge), so
+     the old 1216 assertions are stale by decision, not by accident.
   2. A rendered pouch came back as a blank bag — correct for the image model
      (it may never paint text), useless as a deliverable. `apply_label` now
      composites the operator's real logo and real copy onto the render.
@@ -27,20 +29,24 @@ import studio_generation as sg
 
 @pytest.mark.parametrize("req,expected", [
     ((832, 1216), (832, 1216)),     # already inside the box: untouched
-    ((896, 1344), (816, 1216)),     # 2:3 portrait, long edge capped
-    ((1024, 1536), (816, 1216)),    # same ratio stated differently
-    ((1536, 1024), (1216, 816)),    # landscape keeps its ratio
+    ((896, 1344), (896, 1344)),     # 2:3 portrait fits under the 2048 ceiling
+    ((1024, 1536), (1024, 1536)),   # same ratio stated differently
+    ((1536, 1024), (1536, 1024)),   # landscape keeps its ratio
     ((1024, 1024), (1024, 1024)),
-    ((2048, 2048), (1216, 1216)),
+    ((2048, 2048), (2048, 2048)),   # exactly the engine edge
 ])
 def test_fit_box_keeps_the_aspect_ratio(req, expected):
     assert sg._fit_box(*req) == expected
 
 
 def test_fit_box_never_exceeds_the_engine_edge_and_stays_on_the_latent_grid():
+    # The engine edge is STUDIO_MAX_EDGE_PX (2048 by default); the old 1216 cap
+    # was raised, and these assertions follow the configured ceiling rather than
+    # a hardcoded number so they cannot go stale again.
+    ceiling = sg.MAX_EDGE_PX
     for w, h in [(4000, 3000), (3000, 4000), (64, 64), (900, 100), (100, 900)]:
         fw, fh = sg._fit_box(w, h)
-        assert max(fw, fh) <= 1216
+        assert max(fw, fh) <= ceiling
         assert fw % 16 == 0 and fh % 16 == 0
 
 
@@ -61,10 +67,16 @@ def test_generate_image_reports_the_size_it_actually_used(monkeypatch, tmp_path)
                         lambda graph, timeout_s=None, on_progress=None:
                         [{"filename": "x.png"}])
     monkeypatch.setattr(sg, "_fetch_output", lambda img: b"pngbytes")
-    out = sg.generate_image("a kraft pouch", width=896, height=1344)
-    assert (out["width"], out["height"]) == (816, 1216)
+    # A request that genuinely exceeds the configured ceiling, so this still
+    # exercises the fitted path. (896x1344 now fits exactly under 2048, which is
+    # the correct behaviour and no longer tests fitting.)
+    req_w, req_h = sg.MAX_EDGE_PX + 1024, sg.MAX_EDGE_PX * 2
+    out = sg.generate_image("a kraft pouch", width=req_w, height=req_h)
+    jw, jh = sg._fit_box(req_w, req_h)
+    assert (out["width"], out["height"]) == (jw, jh)
+    assert max(out["width"], out["height"]) <= sg.MAX_EDGE_PX
     assert out["fitted"] is True
-    assert out["requested"] == {"width": 896, "height": 1344}
+    assert out["requested"] == {"width": req_w, "height": req_h}
 
 
 # ── 2. the label lane ───────────────────────────────────────────────────────

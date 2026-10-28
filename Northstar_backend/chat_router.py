@@ -42,6 +42,32 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from data_layer import get_northstar_db
+
+
+# ── false-success guard ─────────────────────────────────────────────────────
+# A request that asks for a NEW artifact must be backed by an actual tool run.
+# Live 2026-10-28: a repeated identical request answered in 31 s reciting a
+# previous asset id, wrote no file, and rendered as a completed turn.
+_NEW_ARTIFACT_INTENT = re.compile(
+    r"\b(apply_label|generate_image|generate_video|generate|render|compose|"
+    r"new artifact|new asset|create (?:a |an )?(?:new )?(?:image|label|artifact|asset|mockup))\b",
+    re.IGNORECASE,
+)
+# Legitimate reuse stays legitimate: an explicit reuse request may cite an
+# existing asset without a tool run and must NOT be downgraded.
+_REUSE_INTENT = re.compile(
+    r"\b(re-?use|same asset|existing asset|the existing|that asset|"
+    r"use the (?:previous|prior|existing)|without (?:re)?generating)\b",
+    re.IGNORECASE,
+)
+
+
+def _requests_new_artifact(text: str) -> bool:
+    return bool(_NEW_ARTIFACT_INTENT.search(text or ""))
+
+
+def _allows_reuse(text: str) -> bool:
+    return bool(_REUSE_INTENT.search(text or ""))
 from design_studio_api import studio_account
 import chat_adapter
 import chat_tools
@@ -211,6 +237,9 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
     thinking_parts: List[str] = []
     content_parts: List[str] = []
     tool_parts: List[Dict[str, Any]] = []
+    # set by the false-success guard inside _persist() so both the routed and the
+    # model path report the corrected status to the live stream
+    no_generation: Dict[str, bool] = {"hit": False}
     tool_records: List[Dict[str, Any]] = []
     attachment_records: List[Dict[str, Any]] = []
     status = "done"
@@ -238,6 +267,23 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                         if final_status == "done" else raw_content)
         if final_status == "error" and not content_text:
             content_text = chat_adapter.offline_notice(error_reason or "unknown")
+
+        # ── false-success guard ──────────────────────────────────────────
+        # A turn that was ASKED for a new artifact must actually run a tool.
+        # Observed live 2026-10-28: a repeated identical request came back in
+        # 31 s reciting a previous asset id, wrote no file, and read as success.
+        # That is a lie the operator cannot see, so it is downgraded here — the
+        # one place both the routed and the model path pass through.
+        has_tool = any(p.get("type") == "tool" for p in tool_parts)
+        if (final_status == "done" and not has_tool
+                and _requests_new_artifact(user_content)
+                and not _allows_reuse(user_content)):
+            final_status = "no_generation"
+            no_generation["hit"] = True
+            note = ("No artifact was generated. This turn ran no creative tool and produced no "
+                    "new asset, so nothing was created.")
+            content_text = f"{note}\n\n{content_text}".strip() if content_text else note
+
         if not (thinking_text or content_text or tool_parts):
             return None  # a cut turn that produced nothing is not a message
         parts: List[Dict[str, Any]] = []
@@ -255,6 +301,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
             "parts_json": parts,
             "model": model or chat_adapter.CHAT_MODEL,
             "usage_json": {"status": final_status, "cancelled": cancelled,
+                           "generated_artifact": has_tool,
                            **(usage or {})},
         })
         for idx, rec in enumerate(tool_records):
@@ -336,7 +383,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                 yield sse_frame("done", {
                     "turn_id": turn_id,
                     "message_id": mid,
-                    "status": "done",
+                    "status": ("no_generation" if no_generation["hit"] else "done"),
                     "cancelled": False,
                     "usage": {"router": "creative_intent", "model_called": False},
                 })
@@ -586,6 +633,8 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
 
         mid = _persist(status)
         persisted = True
+        if no_generation["hit"]:
+            status = "no_generation"
         yield sse_frame("done", {
             "turn_id": turn_id,
             "message_id": mid,
