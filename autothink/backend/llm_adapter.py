@@ -35,8 +35,7 @@ OLLAMA_MODELS_ENDPOINT = f"{OLLAMA_BASE_URL}/api/models"
 # Maps large models to smaller alternative models already installed and approved.
 # Value is the model name to use as fallback; key is original model name.
 OOM_FALLBACK_MODEL_MAP: Dict[str, str] = {
-    "northstaros-qwen3.8:27b": "qwen3.5:4b",  # 27B → 4B (fits ~16 GB with desktop)
-    "qwen3.8-27b-coder:latest": "qwen3.5:4b",  # coder variant fallback
+    "bojo": "qwen3.5:2b",  # Bojo fallback (same family, smaller)
 }
 
 # GPU memory estimation thresholds (MB)
