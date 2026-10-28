@@ -4,22 +4,17 @@ import { useSession } from '../../foundation/session.jsx'
 import foundationApi, { setDevSession } from '../../foundation/api.js'
 import { LOCAL_DEV } from '../../foundation/dev.js'
 
-// Local private-beta demo identity.
-// The SPA authenticates locally through the loopback development identity shim
-// (SessionProvider "dev session" -> X-User-Id/X-Org-Id/X-Role). Hosted
-// environments ignore those headers, so this grants no production access and
-// cannot bypass a real auth posture. Role is deliberately "operator" so
-// internal-only surfaces (/beta-ops, /admin) remain guarded.
-//
-// LOCAL_DEV is a build-time constant (see foundation/dev.js): in a built bundle
-// these fold to empty values and the whole branch is eliminated. The shim
-// identity and its credentials must not survive into ANY served bundle - a
-// served bundle signs in through the real credential path only.
-const LOCAL_DEMO_IDENTIFIER = LOCAL_DEV ? 'T2' : ''
-const LOCAL_DEMO_PASSWORD = LOCAL_DEV ? '123abc' : ''
-const LOCAL_DEMO_SESSION = LOCAL_DEV
-  ? { userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'production' }
-  : null
+// DEV-BY-PASS (development only, LOCAL_DEV build-time constant):
+// In a dev build the sign-in screen is replaced by an automatic route to the
+// workspace — no prompt, no username, no password. The dev shim identity
+// (X-User-Id/X-Org-Id headers) is still the ONLY backend mechanism and still
+// requires ENVIRONMENT=development + a loopback client. The bypass is a UI
+// shortcut only; production builds are unchanged and sign in with real
+// credentials. The dev constants are empty so they cannot appear in any
+// served bundle (check-prod-bundle.cjs asserts their absence).
+const LOCAL_DEMO_IDENTIFIER = ''
+const LOCAL_DEMO_PASSWORD = ''
+const LOCAL_DEMO_SESSION = { userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'development', previewId: '' }
 
 export default function SignIn() {
   const navigate = useNavigate()
@@ -35,8 +30,17 @@ export default function SignIn() {
   // Already signed in (incl. after a page refresh) -> straight to the workspace.
   if (session.authenticated) return <Navigate to="/home" replace />
 
+  // Dev-only: redirect to /home. GuardedRoutes also redirects /ui/sign-in.
+  // No banner here — DevBanner renders on every page via the shell.
+  if (LOCAL_DEV) return <Navigate to="/home" replace />
+
   const submit = async (e) => {
     e.preventDefault()
+    // Dev-only skip: no prompt, no credential entry. Route to workspace.
+    if (LOCAL_DEV) {
+      navigate('/home')
+      return
+    }
     setError('')
     const identifier = (form.identifier || '').trim()
 

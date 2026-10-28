@@ -1,6 +1,7 @@
 // Session context provider — organization, role, permissions, environment, preview.
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import foundationApi, { getDevSession, setDevSession, getToken, setToken } from './api.js'
+import { LOCAL_DEV } from './dev.js'
 import { getFlags } from './flags.js'
 
 const SessionContext = createContext(null)
@@ -37,7 +38,13 @@ const ANON = {
 
 export function SessionProvider({ children }) {
   const [session, setSession] = useState(ANON)
-  const [dev, setDev] = useState(getDevSession())
+  const [dev, setDev] = useState(() => {
+    const existing = getDevSession()
+    if (LOCAL_DEV && !existing.userId) {
+      return setDevSession({ userId: 'demo-t2', orgId: 'org-t2', role: 'operator', env: 'development', previewId: '' })
+    }
+    return existing
+  })
   const [tokenPresent, setTokenPresent] = useState(!!getToken())
 
   // Returns a SNAPSHOT of the resolved identity so callers can decide on the
@@ -104,10 +111,10 @@ export function SessionProvider({ children }) {
 
   useEffect(() => { refresh() }, [refresh, dev, tokenPresent])
 
-  const updateDev = useCallback((patch) => {
+  const updateDev = useCallback(async (patch) => {
     const next = setDevSession(patch)
     setDev(next)
-    refresh()
+    return await refresh()
   }, [refresh])
 
   const signIn = useCallback(async (token) => {

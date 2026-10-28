@@ -7,6 +7,7 @@ import SuiteRail from './components/SuiteRail.jsx'
 import TopNav from './components/TopNav.jsx'
 import MobileBottomNav from './components/MobileBottomNav.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
+import { LOCAL_DEV } from './foundation/dev.js'
 import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
 import { ModeProvider, useMode } from './context/ModeContext.jsx'
 import { ShellProvider, useShell } from './shell/ShellContext.jsx'
@@ -25,6 +26,7 @@ import SocialPulse from './pages/internal/SocialPulse.jsx'
 import ProfitabilityDashboard from './pages/internal/ProfitabilityDashboard.jsx'
 import CommerceOps from './pages/internal/CommerceOps.jsx'
 import Monitoring from './pages/internal/Monitoring.jsx'
+import ChromeConnect from './pages/internal/ChromeConnect.jsx'
 import AutothinK from './pages/internal/AutothinK.jsx'
 import SpreadsheetLab from './pages/internal/SpreadsheetLab.jsx'
 import MemoryBank from './pages/internal/MemoryBank.jsx'
@@ -93,6 +95,11 @@ function GuardedRoutes({ role, authenticated, loaded }) {
   // dev-session user is briefly treated as signed-out and bounced to /sign-in
   // (which also drops the deep-link query string).
   if (!loaded) return null
+  // Dev-only: LOCAL_DEV skips sign-in — /ui/sign-in redirects to /home after
+  // SessionProvider bootstraps the demo session (X-User-Id headers).
+  if (LOCAL_DEV && path === '/sign-in') {
+    return <Navigate to="/home" replace />
+  }
   // Internal (non-public) paths require authentication (F4).
   if (!authenticated && !isPublic) {
     return <Navigate to="/sign-in" replace />
@@ -123,6 +130,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/commerce-ops" element={<CommerceOps />} />
       <Route path="/commerce-ops/:id" element={<CommerceOps />} />
       <Route path="/monitoring" element={<Monitoring />} />
+<Route path="/chromeconnect" element={<ChromeConnect />} />
       <Route path="/autothink" element={<AutothinK />} />
       <Route path="/memory-bank" element={<MemoryBank />} />
       <Route path="/shared-data" element={<SharedDataLayer />} />
@@ -194,6 +202,9 @@ function SimpleShellRoutes({ role, authenticated, loaded }) {
   const path = location.pathname
   const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '/'))
   if (!loaded) return null
+  if (LOCAL_DEV && path === '/sign-in') {
+    return <Navigate to="/home" replace />
+  }
   if (!authenticated && !isPublic) {
     return <Navigate to="/sign-in" replace />
   }
@@ -233,6 +244,12 @@ function Shell() {
           style={{ background: '#5a3d12', color: '#fff', textAlign: 'center', padding: '4px 12px', fontSize: 13, letterSpacing: 0.3 }}
         >
           {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
+        </div>
+      )}
+      {LOCAL_DEV && (
+        <div data-testid="dev-banner" role="status"
+          style={{ background: '#b4432f', color: '#fff', textAlign: 'center', padding: '6px 12px', fontSize: 14, fontWeight: 700, letterSpacing: 0.5 }}>
+          DEV: AUTH DISABLED — local loopback only
         </div>
       )}
       <div className="app-scale">

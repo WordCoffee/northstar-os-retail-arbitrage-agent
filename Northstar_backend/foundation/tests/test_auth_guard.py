@@ -131,6 +131,13 @@ def test_dev_shim_cannot_authenticate_against_hosted_posture(client, seeded_stat
     assert r.json()["detail"]["code"] == "authentication_required"
 
 
+def test_dev_shim_cannot_authenticate_in_staging(client, seeded_state, monkeypatch):
+    monkeypatch.setenv("ENVIRONMENT", "staging")
+    r = client.get("/api/v1/foundation/me", headers=owner_headers(seeded_state))
+    assert r.status_code == 401
+    assert r.json()["detail"]["code"] == "authentication_required"
+
+
 def test_dev_shim_cannot_authenticate_when_client_is_not_loopback(seeded_state, monkeypatch):
     # The other half of the same contract, from the containerized-local reality:
     # a dev-posture API refuses the shim for any non-loopback client (Docker

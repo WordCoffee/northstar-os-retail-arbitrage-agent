@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // Single worker for local dev
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:8101', // Local dev server only
+    baseURL: 'http://127.0.0.1:8101', // Local dev server only (127.0.0.1 avoids ::1 flakiness)
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'cd northstar-os-ui && npm run dev',
-    url: 'http://localhost:8101',
+    url: 'http://127.0.0.1:8101',
     reuseExistingServer: true,
     timeout: 120000,
   },

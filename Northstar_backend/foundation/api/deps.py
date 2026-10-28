@@ -121,7 +121,6 @@ def get_context(
 
     client_host = effective_client_host(request)
     is_local = is_loopback_host(client_host)
-
     method: Optional[str] = None
     user_id: Optional[str] = None
     jti: Optional[str] = None

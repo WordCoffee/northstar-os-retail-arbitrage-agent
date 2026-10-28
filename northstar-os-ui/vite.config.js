@@ -48,24 +48,26 @@ export default defineConfig({
   server: {
     port: 8101,
     strictPort: true,
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     proxy: {
       // All backend calls route to the FastAPI service on :8000
+      // xfwd: false => do not add X-Forwarded-* headers (keeps effective_client_host
+      // loopback so the dev shim stays local-only). Dev-only; no prod impact.
       '/api': {
         target: 'http://127.0.0.1:8000',
-        changeOrigin: true
+        changeOrigin: true, xfwd: false
       },
       '/health': {
         target: 'http://127.0.0.1:8000',
-        changeOrigin: true
+        changeOrigin: true, xfwd: false
       },
       '/autothink': {
         target: 'http://127.0.0.1:8000',
-        changeOrigin: true
+        changeOrigin: true, xfwd: false
       },
       '/legal': {
         target: 'http://127.0.0.1:8000',
-        changeOrigin: true
+        changeOrigin: true, xfwd: false
       }
     }
   },
@@ -73,10 +75,10 @@ export default defineConfig({
     port: 8101,
     strictPort: true,
     proxy: {
-      '/api': { target: 'http://127.0.0.1:8000', changeOrigin: true },
-      '/health': { target: 'http://127.0.0.1:8000', changeOrigin: true },
-      '/autothink': { target: 'http://127.0.0.1:8000', changeOrigin: true },
-      '/legal': { target: 'http://127.0.0.1:8000', changeOrigin: true }
+      '/api': { target: 'http://127.0.0.1:8000', changeOrigin: true, xfwd: false },
+      '/health': { target: 'http://127.0.0.1:8000', changeOrigin: true, xfwd: false },
+      '/autothink': { target: 'http://127.0.0.1:8000', changeOrigin: true, xfwd: false },
+      '/legal': { target: 'http://127.0.0.1:8000', changeOrigin: true, xfwd: false }
     }
   }
 })

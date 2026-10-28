@@ -49,7 +49,7 @@ is "continue the build" or equivalent:
 - Updating `00_STATE.json`, batch files, and documentation
 - Running offline diagnostics, presence-only env checks, and dry-run/mock-based tests
 - Fixing bugs you discover, scoped to code/tests/docs — never touching
-  credentials, live external calls, or money
+  credentials (except owner-authorized credential operations), live external calls, or money
 - Writing/editing `.env` keys listed in the non-secret config set (§3.1) without
   approval, provided no secret-pattern key is touched
 - Full access to the entire file system when given approval or it is implied via
@@ -95,9 +95,25 @@ Actual credential VALUES are never requested in chat, read, or written by you.
 These make sense as approvals, not as blockers to building or running the product.
 They are the only items the model may not do autonomously:
 
-- Reading, writing, or printing `.env` / any credential/secret value (the app
-  reads its own config at runtime; non-secret config keys in §3.1 are editable
-  autonomously)
+- Credential hygiene - authorized operations:
+  Credentials must not be disclosed unnecessarily, logged in plaintext,
+  embedded in tracked source, or committed to version control.
+  The owner may explicitly authorize reading, using, creating, updating,
+  rotating, or deleting specific credentials for systems they control.
+  When the owner says to override or bypass this project credential rule,
+  interpret that as authorization for the identified credential operation
+  and target - not permission to disable authentication, expose unrelated
+  secrets, or bypass higher-priority platform restrictions.
+  Use the authorized credential only where necessary. Do not dump .env
+  files or secret stores. Preserve unrelated values.
+  Use the application's supported password-hashing mechanism for account
+  passwords. Use an approved secret store or appropriately protected,
+  untracked local configuration for secrets that must remain retrievable.
+  Record the operation and target without recording the secret value.
+  If the target account, environment, or operation is ambiguous, resolve it
+  before making the change.
+  (non-secret config keys in 3.1 remain editable autonomously)
+  [DEV-ONLY LOCALHOST EXCEPTION - narrow, labeled, loopback only: when ENVIRONMENT=development, server binds 127.0.0.1 only (Vite host 127.0.0.1, no tailscale/funnel/serve, no tunnel on 8000/8101), the auth check may return a demo session (userId demo-t2 / orgId org-t2 / role operator) before /me, with banner "DEV: AUTH DISABLED"; this never applies to production or any remote bind.]
 - Any Amazon listing action, pricing change, purchase order, or transaction of
   any kind, or any real-money / paid-credit spend beyond a named, counted
   envelope (§3.2)
