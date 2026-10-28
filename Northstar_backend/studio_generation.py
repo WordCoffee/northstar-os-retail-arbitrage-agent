@@ -468,7 +468,17 @@ def _clamp(v, lo: int, hi: int, mult: int = 16) -> int:
     return max(mult, (v // mult) * mult)
 
 
-def _fit_box(width, height, hi: int = 1216, mult: int = 16,
+# Long-edge ceiling for a single image render.
+#
+# 1216 was the FLUX.2 Klein draft box, and it silently made the two listing
+# deliverables impossible: an Amazon MAIN image must be at least 1600 px on the
+# long edge (2000 recommended) and an A+ Premium banner is 1464x600. Both were
+# rejected before the engine saw them. The ceiling is now a real setting, and
+# the engine reports the same number it used.
+MAX_EDGE_PX = int(os.environ.get("STUDIO_MAX_EDGE_PX", "2048"))
+
+
+def _fit_box(width, height, hi: Optional[int] = None, mult: int = 16,
              short_floor: int = 256) -> tuple:
     """Scale a requested render size into the engine's safe box, keeping ASPECT.
 
@@ -476,6 +486,7 @@ def _fit_box(width, height, hi: int = 1216, mult: int = 16,
     2:3 portrait request into a 2:2.7 render. The engine's real constraint is the
     long edge, so scale both axes by one factor and snap to the VAE's multiple.
     """
+    hi = MAX_EDGE_PX if hi is None else int(hi)
     w = max(1, int(round(float(width or hi))))
     h = max(1, int(round(float(height or hi))))
     scale = min(1.0, float(hi) / float(max(w, h)))
@@ -644,17 +655,45 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     if not img:
         raise RuntimeError("the render finished but produced no image output")
     data = _fetch_output(img)
+    # The VAE grid is a multiple of 16, so a spec size like 1464x600 (A+
+    # Premium banner) can only be requested as 1472x608. When the ONLY
+    # difference is that grid snap, finish with a deterministic LANCZOS pass to
+    # the exact deliverable size and report both numbers. Anything larger than a
+    # grid step is a real fit and is never silently rescaled.
+    delivered = (w, h)
+    snapped = None
+    if ((w, h) != (req_w, req_h)
+            and req_w <= MAX_EDGE_PX and req_h <= MAX_EDGE_PX
+            and abs(w - req_w) <= 16 and abs(h - req_h) <= 16):
+        data = _exact_size_png(data, req_w, req_h)
+        delivered = (req_w, req_h)
+        snapped = {"engine": [w, h], "delivered": [req_w, req_h]}
     release_models()
     return {
         "bytes": data, "ext": "png", "mime": "image/png",
         "model": os.path.splitext(IMAGE_MODEL_FILE)[0], "provider": "comfyui",
-        "seed": seed, "width": w, "height": h,
+        "seed": seed, "width": delivered[0], "height": delivered[1],
+        "engine_width": w, "engine_height": h,
         "requested": {"width": req_w, "height": req_h},
         "fitted": (w, h) != (req_w, req_h),
-        "engine_max_edge_px": 1216,
+        "exact_size_pass": snapped,
+        "engine_max_edge_px": MAX_EDGE_PX,
         "duration_seconds": None,
         "ram_gate": _ram_gate,
     }
+
+
+def _exact_size_png(data: bytes, width: int, height: int) -> bytes:
+    """Resize a rendered PNG to an exact deliverable size (LANCZOS)."""
+    from io import BytesIO
+    from PIL import Image
+    with Image.open(BytesIO(data)) as im:
+        if im.size == (width, height):
+            return data
+        out = im.convert("RGB").resize((int(width), int(height)), Image.LANCZOS)
+        buf = BytesIO()
+        out.save(buf, format="PNG")
+        return buf.getvalue()
 
 
 def upload_image(image_bytes: bytes, filename: str = "upload.png",
@@ -795,10 +834,31 @@ def generate_cutout(image_bytes: bytes, *, filename: Optional[str] = None) -> di
             "model": CUTOUT_MODEL_FILE, "provider": "comfyui", "duration_seconds": None}
 
 
+def _frames_for_duration(duration, default_frames: int) -> int:
+    """Snap a requested clip length to the Wan latent's legal frame count.
+
+    Wan needs 4n+1 frames at 24 fps. We round UP to the next legal count so the
+    delivered clip is never shorter than the request, and report the real
+    duration from the frame count rather than the request.
+    """
+    if duration in (None, ""):
+        return int(default_frames)
+    seconds = float(duration)
+    if seconds <= 0:
+        raise ValueError("duration must be greater than zero seconds")
+    requested_frames = int(round(seconds * 24.0))
+    n = max(1, (requested_frames - 1) // 4 + 1)
+    return 4 * n + 1
+
+
 def generate_video(prompt: str, width=None, height=None, tier: str = "draft", seed=None,
                    narration: Optional[str] = None, voice: Optional[str] = None,
+                   duration: Optional[float] = None,
                    on_progress=None) -> dict:
     """Render a clip locally; optionally attach a locally synthesised narration.
+    The Wan latent needs 4n+1 frames at 24 fps, so the request is snapped to the
+    nearest legal frame count and the delivered duration is reported, never
+    assumed. Without ``duration`` the tier default (2 s draft / 4 s final) is used.
 
     ``narration`` is plain text. It is spoken by the machine's own speech engine
     (Northstar_backend/local_voice.py) and muxed onto the clip with ffmpeg, so a
@@ -814,7 +874,8 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
             "after waiting; refusing a render that would run out of memory. Retry shortly.")
     w = _clamp(width or 832, 512, 1280)
     h = _clamp(height or 480, 480, 736)
-    frames = 97 if str(tier).lower() == "final" else 49   # 4n+1 for the Wan latent; ~2s / ~4s at 24fps
+    default_frames = 97 if str(tier).lower() == "final" else 49
+    frames = _frames_for_duration(duration, default_frames)
     steps = 20
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     # Serialize renders and run the RAM stop/restore lifecycle. The lock is
@@ -847,7 +908,9 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     result = {
         "bytes": data, "ext": "mp4", "mime": "video/mp4",
         "model": "wan2.2-ti2v-5b-q5", "provider": "comfyui",
-        "seed": seed, "width": w, "height": h, "duration_seconds": round(frames / 24.0, 1),
+        "seed": seed, "width": w, "height": h, "frames": frames,
+        "duration_seconds": round(frames / 24.0, 2),
+        "requested_duration_seconds": (float(duration) if duration not in (None, "") else None),
         "audio": None,
         "ram_gate": _ram_gate,
     }
@@ -1306,6 +1369,16 @@ class _CrossProcessRenderLock:
 
 
 _RENDER_LOCK = _CrossProcessRenderLock(_RENDER_LOCK_PATH)
+
+
+def gpu_lock() -> "_CrossProcessRenderLock":
+    """The one cross-process GPU lock this box has.
+
+    Renders take it in ``RenderSession``. Any other heavy GPU user (the on-demand
+    27B coding worker, an agent's creative lane) must take the SAME lock, so a
+    coding run and a render can never overlap on the single 16 GB card.
+    """
+    return _RENDER_LOCK
 
 
 def _ram_gate_ok() -> bool:

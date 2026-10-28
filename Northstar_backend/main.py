@@ -83,13 +83,25 @@ try:
 except ImportError:  # pragma: no cover - chat needs the studio modules only
     _HAS_CHAT = False
 
-# Continuous Improvement Engine (2026-10-21) — knowledge packs, gap queue,
+# Continuous Improvement Engine (2026-10-21) - knowledge packs, gap queue,
 # cycle runner, stop switch. Own guard: the engine must never boot-fail the app.
 try:
     from cie_router import router as cie_router
     _HAS_CIE = True
 except ImportError:  # pragma: no cover
     _HAS_CIE = False
+
+# Tys Assistant (2026-10-28) - the ADMIN/OPERATOR automation agent. Its routes
+# live under /api/admin/tys and are gated separately (platform admin in
+# production, operator-and-above in development). Own guard: an agent problem
+# must never boot-fail the product, and the customer chat lane never depends on it.
+try:
+    from tys_api import router as tys_router
+    _HAS_TYS = True
+    _TYS_IMPORT_ERROR = None
+except ImportError as _tys_exc:  # pragma: no cover
+    _HAS_TYS = False
+    _TYS_IMPORT_ERROR = f"{type(_tys_exc).__name__}: {_tys_exc}"
 
 # V3 shell context (2026-10-18) — capability gate (advanced_view), focus modes,
 # hardware telemetry. Own guard: a shell problem must never disable chat.
@@ -349,6 +361,10 @@ if _HAS_CHAT:
 # Improvement room — status, gap queue, cycles, feedback, stop switch
 if _HAS_CIE:
     app.include_router(cie_router)
+
+# Tys Assistant — admin/operator automation agent (admin namespace, admin gate)
+if _HAS_TYS:
+    app.include_router(tys_router)
 
 # V3 shell context — Simple/Advanced gate, focus modes, hardware telemetry
 if _HAS_SHELL:
