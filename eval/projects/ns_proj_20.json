@@ -1,0 +1,27 @@
+{
+  "name": "NS-PROJ-20",
+  "status": "provisional",
+  "note": "Twenty project briefs for the agent kernel. The dry runner validates plan validity, evidence coverage, retry and resume mechanics; the live Ty baseline is a separate, later run.",
+  "briefs": [
+    {"id": "p01", "title": "Fix a failing unit test", "goal": "Diagnose and fix one failing unit test without changing its assertion.", "artifact": "fix.patch", "checks": ["test passes", "no assertion edited"]},
+    {"id": "p02", "title": "Add a small API endpoint", "goal": "Add one read-only endpoint with a test and no schema migration.", "artifact": "endpoint.md", "checks": ["route registered", "test present", "no migration"]},
+    {"id": "p03", "title": "Refactor a module", "goal": "Split one oversized module into two without changing behaviour.", "artifact": "refactor.md", "checks": ["tests green", "public API unchanged"]},
+    {"id": "p04", "title": "Wire a config flag", "goal": "Add a default-off feature flag with a test proving both states.", "artifact": "flag.md", "checks": ["default off", "both states tested"]},
+    {"id": "p05", "title": "Repair a broken build", "goal": "Find the first build error, fix it, and prove a clean build.", "artifact": "build.log", "checks": ["build exit 0", "root cause named"]},
+    {"id": "p06", "title": "Audit an admin setting", "goal": "Inspect one admin panel read-only and report the value with evidence.", "artifact": "audit.json", "checks": ["value quoted", "no change made"]},
+    {"id": "p07", "title": "Prepare a safe browser run", "goal": "Plan a read-only browser task with a per-host grant and an expiry.", "artifact": "runbook.md", "checks": ["host named", "expiry set", "no login"]},
+    {"id": "p08", "title": "Recover a blocked run", "goal": "Resume a run blocked on an operator gate without repeating completed steps.", "artifact": "resume.json", "checks": ["no duplicate step", "checkpoint used"]},
+    {"id": "p09", "title": "Verify an external change", "goal": "After a simulated external change, assert the new state before reporting done.", "artifact": "state.json", "checks": ["assertion recorded", "unknown not pass"]},
+    {"id": "p10", "title": "Produce a weekly ops digest", "goal": "Assemble a digest from local evidence files with no invented numbers.", "artifact": "digest.md", "checks": ["every number cited", "missing data named"]},
+    {"id": "p11", "title": "Build a pouch label", "goal": "Compose a label on a measured pouch plate and prove OCR, prepress and readiness.", "artifact": "label.png", "checks": ["residual under 0.5 px", "OCR terms read", "printable"]},
+    {"id": "p12", "title": "Correct a package back panel", "goal": "Fix one legal-copy defect while keeping the front panel unchanged.", "artifact": "back.md", "checks": ["defect quoted", "front hash unchanged"]},
+    {"id": "p13", "title": "Generate a social canvas set", "goal": "Produce the documented canvas sizes with source provenance for each.", "artifact": "canvases.json", "checks": ["sizes sourced", "no unsourced row"]},
+    {"id": "p14", "title": "Assemble a 15-second ad", "goal": "Assemble a vertical clip with three captions and a narration track.", "artifact": "ad.mp4", "checks": ["duration 12-15 s", "1080x1920", "audio stream"]},
+    {"id": "p15", "title": "Audit a listing", "goal": "Score a supplied listing against the rubric and name every unmeasured dimension.", "artifact": "listing_audit.json", "checks": ["rubric cited", "unmeasured listed"]},
+    {"id": "p16", "title": "Plan a two-lane campaign", "goal": "Plan an inspect-then-browser campaign with a human gate between lanes.", "artifact": "campaign.md", "checks": ["gate present", "lanes scoped"]},
+    {"id": "p17", "title": "Recover from a failed verification", "goal": "Re-plan after one failed assertion instead of retrying blindly.", "artifact": "replan.json", "checks": ["new plan version", "old version retained"]},
+    {"id": "p18", "title": "Hand off across a compaction", "goal": "Write a handoff that survives context compaction and resume from it.", "artifact": "handoff.md", "checks": ["goal kept", "decisions kept", "evidence kept"]},
+    {"id": "p19", "title": "Apply a per-hunk diff", "goal": "Review a two-hunk diff and apply only the selected hunk.", "artifact": "applied.diff", "checks": ["one hunk applied", "other hunk untouched"]},
+    {"id": "p20", "title": "Close a project with evidence", "goal": "Run a three-node project end to end and finish only with passing evidence.", "artifact": "project.json", "checks": ["every node evidenced", "plan complete"]}
+  ]
+}

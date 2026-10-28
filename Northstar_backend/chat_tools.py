@@ -208,6 +208,49 @@ def _t_system_status(args, ctx) -> dict:
     }
 
 
+def _t_plan_project(args, ctx) -> dict:
+    """Build a validated project plan with the agent kernel (read-only)."""
+    from agent_kernel.model import validate_plan
+    from agent_kernel.tys_adapter import work_order_to_plan
+
+    goal = str(args.get("goal") or "").strip()
+    if not goal:
+        return {"ok": False, "summary": "A project goal is required.",
+                "error": "goal is empty", "assets": []}
+    lanes = list(args.get("lanes") or ["inspect"])
+    steps = list(args.get("steps") or [])
+    if not steps:
+        steps = [{"lane": lanes[0], "objective": goal}]
+    order = {"id": "bojo_plan", "objective": goal,
+             "scope": {"lanes": lanes}, "steps": steps,
+             "limits": {"max_steps": len(steps) * 2}}
+    try:
+        plan = work_order_to_plan(order)
+    except ValueError as exc:
+        return {"ok": False, "summary": "The plan could not be built.",
+                "error": str(exc)[:300], "assets": []}
+    errors = validate_plan(plan)
+    rows = [{"label": n.title[:70], "value": f"{n.lane or n.kind} \u00b7 {n.state}"}
+            for n in plan.nodes]
+    if errors:
+        rows.append({"label": "validation", "value": "; ".join(errors)[:90]})
+    return {
+        "ok": not errors,
+        "summary": (f"Plan with {len(plan.nodes)} step(s), "
+                    f"{len(errors)} validation error(s)."),
+        "assets": [],
+        "data": {
+            "card": {"title": "Project plan", "rows": rows,
+                     "action": {"label": "Approve the plan",
+                                "message": "Approve this plan and start the first step."}},
+            "plan": plan.to_dict(),
+            "errors": errors,
+            "note": ("This is a plan, not an execution. The kernel refuses to run "
+                     "it until an operator approves it."),
+        },
+    }
+
+
 def _t_list_templates(args, ctx) -> dict:
     from design_studio_print import TEMPLATES
     rows = [{"id": t["id"], "name": t["name"], "kind": t["kind"],
@@ -1517,7 +1560,7 @@ SERVICES = [
      "tools": ["creative_plan", "generate_image", "apply_label", "build_package",
                "plan_aplus", "plan_social", "plan_video", "write_content",
                "design_brief", "create_dieline", "voice_list", "voice_tts",
-               "voice_dub", "list_templates"],
+               "voice_dub", "list_templates", "plan_project"],
      "can": ("plan and price a job, render images, build a COMPLETE package "
              "(front/back/side panels + dieline), put the real logo and copy on a "
              "render, plan A+ pages and social sets at exact pixel sizes, storyboard "
@@ -1526,8 +1569,9 @@ SERVICES = [
      "tools": ["corpus_search", "corpus_vector_search", "corpus_drift", "knowledge_lookup"],
      "can": "search the local corpus, report drift, look up a rule with its source"},
     {"id": "system", "label": "System & Improvement",
-     "tools": ["system_status", "improvement_status", "service_catalog", "purpose_command"],
-     "can": "report engine health, coverage and gaps, list its own skills"},
+     "tools": ["system_status", "improvement_status", "service_catalog",
+               "purpose_command", "plan_project"],
+     "can": "report engine health, coverage and gaps, list its own skills, plan a project"},
 ]
 
 
@@ -1672,6 +1716,32 @@ TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "handler": _t_system_status,
+    },
+    "plan_project": {
+        "description": ("Build a validated, visible project plan (steps, lanes, "
+                        "acceptance) with the agent kernel. Read-only: it plans, it "
+                        "does not execute. Use for a multi-step request before doing "
+                        "the work, then ask the operator to approve it."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "goal": {"type": "string", "minLength": 4,
+                         "description": "The project goal in one sentence."},
+                "lanes": {"type": "array", "items": {"type": "string",
+                          "enum": ["inspect", "coding", "browser", "creative"]},
+                          "description": "Lanes this project may use."},
+                "steps": {"type": "array", "items": {"type": "object",
+                          "properties": {
+                              "lane": {"type": "string",
+                                       "enum": ["inspect", "coding", "browser", "creative"]},
+                              "objective": {"type": "string"},
+                              "acceptance": {"type": "array", "items": {"type": "object"}}},
+                          "required": ["lane", "objective"]},
+                          "description": "Optional explicit steps; omit for a one-step plan."},
+            },
+            "required": ["goal"],
+        },
+        "handler": _t_plan_project,
     },
     "handoff_to_autothink": {
         "description": ("Carry an engineering request to Autothink, the premium coding "

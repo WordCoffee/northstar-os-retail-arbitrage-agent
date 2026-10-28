@@ -1,0 +1,9 @@
+{
+  "brief": "p14",
+  "checks": [
+    "duration 12-15 s",
+    "1080x1920",
+    "audio stream"
+  ],
+  "artifact": "ad.mp4"
+}

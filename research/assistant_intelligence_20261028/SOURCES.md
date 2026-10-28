@@ -1,8 +1,8 @@
 # Sources Plan — Agent Kernel (1,500 / 100 / 12)
 
-**Status:** Phase A plan. **Honest counts today: 0 scored, 0 read, 0 deep.**
-This file defines the pool and the method; Phase B fills it. Any claim of a
-completed count before the CSV exists would be false.
+**Status:** Phase B executed 2026-10-28. **Actual: 1,500 scored, 100 README
+reads, 12 deep.** Sources: `SOURCES_1500.csv`, `TRIAGE.md`, `DEEP_12.md`,
+`readmes/` (local evidence; not committed to avoid redistributing vendor docs).
 
 **Constraints (operator, 2026-10-28):**
 - No static bundle analysis, no decompilation, no vendor-client reverse-engineering.
@@ -56,31 +56,33 @@ Families, not a fixed list; Phase B picks the best 8 per row and records why.
 
 ---
 
-## 3. The 1,500 scored — pool composition
+## 3. The 1,500 scored — actual composition
 
 | Lane | Count | Source | Method |
 |---|---|---|---|
-| OSS agent harnesses / frameworks | 600 | GitHub API (topics, stars, licence, pushed_at) | metadata only until shortlisted |
-| Public docs / help centres / changelogs | 350 | `corpus_learner.py` (robots-honouring, throttled, provenance) | static fetch |
-| Papers / benchmarks / evals | 250 | arXiv / ACL / papers-with-code | metadata + abstract |
-| HF models / spaces / datasets | 150 | HF API | metadata |
-| Videos / transcripts | 100 | public transcripts (existing 884 + new) | transcript only |
-| Product marketing / pricing pages | 50 | public pages | static fetch |
+| GitHub search (20 query families, 100/page) | 746 | GitHub public API | metadata only |
+| Existing local corpus, agent/kernel terms | 754 | `Northstar_backend/data/northstar.db` | metadata only |
+| **Total scored** | **1,500** | | |
+| README reads | 100 | `raw.githubusercontent.com` | public README, first 20 KB |
+| Deep reads | 12 | public docs + public OSS | hand-written notes (`DEEP_12.md`) |
 
-**Query families (~30), grouped:**
-- agent harness, coding agent, computer-use agent, browser agent, plan mode,
-  todo list, subagent, checkpoint, rewind, permission, hooks, memory,
-  compaction, repo map, skills, diff review, trajectory, eval harness,
-  human-in-the-loop, approval, runbook, session replay, budget, sandbox,
-  worktree, tool gateway, MCP, commerce copilot, seller assistant, voice agent.
+**Query families (20):** agent harness, coding agent, computer-use agent, browser
+agent, plan mode, subagent, checkpoint, agent memory, repo map, agent eval,
+human-in-the-loop, MCP framework, commerce copilot, seller assistant, voice agent,
+autonomous agent, LLM agent framework, workflow automation, agent toolkit, AI
+assistant desktop.
 
-Every row gets: `id, type, url/repo, licence, stars/downloads, pushed_at,
-capability_tags[], ty_score, bojo_score, rea_feasibility, read? (y/n), deep?
-(y/n), notes`.
+Every row has: `type, name, url, licence, stars, pushed_at, description,
+capabilities, ty_score, bojo_score, rea_feasibility, read_target, source,
+homepage, read_note`.
 
-**Triage:** deterministic rules + local `qwen3-embedding:0.6b` against the 12
-capability rubrics. No model decides at this scale; a model only writes notes for
-the 100 shortlisted reads.
+**Licence position:** 835 read/adapt candidates (permissive), 75 read-only
+(copyleft), 590 **observe only** (no licence / NOASSERTION). An observe-only row
+may inform a behavioural note; it is never copied.
+
+**Triage:** deterministic rules + stars; no model judgement at this scale. The
+metadata scoring surfaces candidates, not proof of quality — `TODOMVC` appearing
+on a "todo" keyword is the kind of false positive the read step exists to catch.
 
 ---
 

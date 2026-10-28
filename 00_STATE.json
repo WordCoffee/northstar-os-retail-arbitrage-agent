@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "Chrome Connect 3.0 COMPLETE. 131 tests pass. Blocked: Profile 7 has session cookies (Google + Alibaba). Needs clean profile for baseline + live runs.",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE: MAX_EDGE_PX=2048 recorded; L2 per-side mesh residual 0.238 px on the Mogra plate; OCR ok, prepress printable (TAC 254.9%), readiness retail_ready. Agent kernel v0.1 BUILT (12 capability modules, 46 tests) + NS-PROJ-20 dry harness 20/20 with resume. Phase B harvest: 1,500 scored / 100 README reads / 12 deep. Bojo plan_project tool shipped. Remaining: live Ty baseline, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -1990,5 +1990,72 @@
       "FLUX3 SKIPPED-WITH-REASON"
     ],
     "report": "reports/real-verify-2026-10-26/R2_ACCEPTANCE_20261027.md"
+  },
+  "rea_program_20261028": {
+    "phase1": {
+      "status": "complete",
+      "plan": "reports/rea_program_research_plans_20261028.md",
+      "approved_by_operator": "2026-10-28, with the standing instruction: do not touch Amazon; use non-Amazon tools and YouTube seller tutorials instead"
+    },
+    "phase2": {
+      "status": "complete",
+      "summary": "reports/rea_phase2_complete_20261028.md",
+      "deliverables": {
+        "label_compositing": "reports/packaging_workflow_analysis_20261028.md",
+        "aplus_content": "reports/a_content_layout_patterns_20261028.md",
+        "video_ads": "reports/video_ad_structures_20261028.md",
+        "social_specs": "reports/social_media_asset_specs_20261028.md",
+        "bojo_infrastructure": "reports/bojo_infrastructure_plan_20261028.md",
+        "simple_mode_ui": "reports/smui_wireframes_and_flow_20261028.md"
+      },
+      "baseline": "reports/rea_baseline_20261028.json",
+      "probes": [
+        "tools/rea_warp_probe.py -> reports/rea_probe/warp_probe.json",
+        "tools/rea_video_probe.py -> reports/rea_probe/video/video_probe.json",
+        "tools/rea_smui_intents.py -> reports/rea_probe/smui_intents.json",
+        "tools/rea_bojo_probe.py -> reports/rea_probe/bojo_probe.json"
+      ],
+      "headline_findings": {
+        "halo": "Feathering alone creates ZERO bleed outside the true label edge (0.000 lum at sigma 2 and 8). A 1 px quad overshoot creates 57.013 lum (28.5% of panel contrast); 3 px creates 190.492 (95.3%). The halo is geometric, not the feather radius - contradicting the assumption in the research plan.",
+        "warp": "4-point homography error vs synthetic cylindrical ground truth: mean 5.413 px, p95 11.437, max 13.324 (1813 samples). Quad mesh 5x7: 0.676 px. 9x13: 0.171 px. cv2.remap is already installed; Blender not needed.",
+        "social_specs": "presets.js social canvases carry NO source, date or confidence (7 entries; 1 exact match, 4 ratio-correct-but-incomplete, 1 off-recommendation, 1 partial; 7 canvases missing entirely). specRegistry.js does this properly for Amazon - mirror that pattern for social.",
+        "video": "A real 12.0 s 1080x1920 clip assembled with FFmpeg + Piper narration + 3 captions, 2,737,719 bytes, h264 30fps + aac; proves everything except footage is deterministic and free.",
+        "substrate": "lane_telemetry create lane: p50 35.29 s, p95 268.02 s, max 2039.7 s (n=43, 71% ok). SQLite contention REFUTED at the configured busy_timeout=5000 (240/240 commits, 0 errors, 0.882 s with 4 writers; 180/240 errors at timeout 0). Redis/RabbitMQ not justified.",
+        "smui": "26 chat sessions / 121 messages / 60 user turns / 39 tool calls. 4.65 messages and 1.50 tool calls per session. Label intent: 21 turns -> 3 apply_label calls (0.14). A+/listing 7 turns and logo 5 turns reach NO tool. --ink-faint (#8d867a on #1a2435) is 4.32:1 and fails WCAG AA 4.5:1."
+      },
+      "found_defect": {
+        "id": "fit_box_drift_20261028",
+        "what": "test_pouch_label.py asserts _fit_box clamps to 1216; studio_generation.py:478 now defaults MAX_EDGE_PX=2048. 6 tests fail (28 passed). studio_generation.py is clean in git, so this is drift, not a local edit.",
+        "action": "recorded, not patched - the open question is which value is the engine's real ceiling. Editing the assertions first would hide it.",
+        "status": "open"
+      },
+      "not_done": "No Amazon contact of any kind. No spend/trial/dependency. No 20-30-ad timing corpus (ad libraries JS-gated) - instrument exists, corpus does not. No render fired at the live GPU lane (stack was serving) so peak RAM/VRAM is a snapshot not a peak. Provider rate-limit matrix not built (vendor docs not fetched, recorded as debt).",
+      "next": "Phase 3 build plans drawn only from the BUILD CANDIDATES tables (38 rows: L1-L5, A1-A6, V1-V6, S1-S6, B1-B7, U1-U8). Nothing built yet. Suggested order: L1, S1/S2, B1, U1, U4, V1."
+    }
+  },
+  "agent_kernel_20261028": {
+    "status": "built-v0.1",
+    "path": "Northstar_backend/agent_kernel",
+    "spec": "research/assistant_intelligence_20261028/KERNEL_SPEC.md",
+    "clone_ledger": "research/assistant_intelligence_20261028/CLONE_LEDGER.md",
+    "tests": 46,
+    "test_file": "Northstar_backend/test_agent_kernel.py",
+    "benchmark": "eval/projects/ns_proj_20.json",
+    "harness": "tools/proj_bench.py",
+    "dry_run": {
+      "briefs": 20,
+      "complete": 20,
+      "valid_plans": 20,
+      "evidence_coverage": 1.0,
+      "resume": true
+    },
+    "live_ty_baseline": "not run (needs local models/GPU)",
+    "bojo_tool": "plan_project",
+    "remaining": [
+      "live Ty baseline",
+      "two operator windows",
+      "Phase 3 U1 auto-chain",
+      "Phase 3 V1 video assemble"
+    ]
   }
 }
