@@ -404,7 +404,7 @@ def _t_generate_image(args, ctx) -> dict:
         req = out.get("requested") or {}
         fit_note = (f" Requested {req.get('width')}x{req.get('height')}; the engine kept the "
                     f"aspect and fitted it to {out.get('width')}x{out.get('height')} "
-                    f"(1216 px ceiling).")
+                    f"({out.get('engine_max_edge_px') or 2048} px ceiling).")
     aid = None
     if db is not None and acct:
         aid = db.design_studio.assets.create({
@@ -478,18 +478,66 @@ def _t_apply_label(args, ctx) -> dict:
 
     progress: Callable[[Optional[int], str], None] = ctx.get("progress") or (lambda p, l: None)
     progress(0, "measuring the pouch face")
+
+    # ── argument type contract ───────────────────────────────────────────────
+    # Model-supplied JSON is not trusted to be the shape we expect. A sequence
+    # where a scalar belongs (or vice versa) previously surfaced as the opaque
+    # "can't multiply sequence by non-int of type 'float'" from deep inside the
+    # compositor. Normalise here, at the boundary, and reject what cannot be
+    # normalised with a message an operator can act on.
+    def _scalar_text(value, field: str) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return str(value)
+        raise ValueError(
+            f"{field} must be a single line of text, got {type(value).__name__}")
+
+    def _string_list(value, field: str) -> Optional[List[str]]:
+        if value in (None, "", []):
+            return None
+        if isinstance(value, str):
+            return [value]                      # a lone string is one item
+        if isinstance(value, (list, tuple)):
+            out: List[str] = []
+            for item in value:
+                if isinstance(item, (str, int, float)) and not isinstance(item, bool):
+                    out.append(str(item))
+                else:
+                    raise ValueError(
+                        f"{field} entries must be text, got {type(item).__name__}")
+            return out or None
+        raise ValueError(f"{field} must be a list of text, got {type(value).__name__}")
+
+    try:
+        title_text = _scalar_text(args["title"], "title")
+        subtitle_text = _scalar_text(args.get("subtitle"), "subtitle")
+        weight_text = _scalar_text(args.get("weight"), "weight")
+        bullets = _string_list(args.get("bullets"), "bullets")
+        icons = _string_list(args.get("icons"), "icons")
+    except ValueError as exc:
+        return {"ok": False, "summary": f"The label arguments were rejected: {exc}",
+                "error": str(exc), "assets": []}
+
     try:
         out = pouch_label.compose(
-            plate_path, title=args["title"], subtitle=args.get("subtitle") or "",
-            weight=args.get("weight") or "", bullets=args.get("bullets"),
-            logo_path=logo_path, icons=args.get("icons"),
+            plate_path, title=title_text, subtitle=subtitle_text,
+            weight=weight_text, bullets=bullets,
+            logo_path=logo_path, icons=icons,
         )
     except ValueError as exc:
         return {"ok": False, "summary": "The label could not be composited.",
                 "error": str(exc)[:400], "assets": []}
     except Exception as exc:  # noqa: BLE001 - honest result, never a silent no-op
+        # Keep the failing frame. A bare str(exc) hid a real compositor bug
+        # behind "can't multiply sequence by non-int of type 'float'".
+        import traceback as _tb
+        frame = _tb.extract_tb(exc.__traceback__)[-1]
+        where = f"{Path(frame.filename).name}:{frame.lineno} in {frame.name}"
         return {"ok": False, "summary": "The label compositor failed.",
-                "error": str(exc)[:400], "assets": []}
+                "error": f"{type(exc).__name__}: {exc} ({where})"[:400], "assets": []}
 
     progress(100, "label composited")
     fname = f"{uuid.uuid4().hex}.png"
@@ -1699,7 +1747,9 @@ TOOLS: Dict[str, dict] = {    "system_status": {
                         "image model — author those as structured layers instead (see "
                         "apply_label). Requires the media engine armed (MEDIA_GEN_LIVE + ComfyUI). "
                         "Ask for the shape you want: the local engine keeps the aspect ratio and "
-                        "scales the long edge to its 1216 px ceiling, and reports the real size."),
+                        "scales the long edge to its configured ceiling (2048 px), reports the real "
+                        "size, and exact-sizes a spec dimension such as 1464x600 when the only "
+                        "difference is the model's 16 px grid."),
         "parameters": {
             "type": "object",
             "properties": {
