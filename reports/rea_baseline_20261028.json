@@ -78,7 +78,8 @@
     },
     "social_spec_staleness": {
       "status": "measured",
-      "entries_reviewed": 7,
+      "entries_reviewed": 8,
+      "canvases_without_source": 8,
       "exact_match": 1,
       "ratio_correct_but_incomplete": 4,
       "off_recommendation": 1,

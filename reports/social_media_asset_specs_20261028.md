@@ -42,8 +42,13 @@ report closes.
 | `linkedin` | 1200×627 | **1200×628 (1.91:1)**, JPG/PNG/GIF (non-animated), **max 5 MB**, min 640×360, max 7680×4320 | **matches within 1 px** — reported, not verified (official page not retrieved, see §7) |
 | `yt-thumb` | 1280×720 (16:9) | 16:9; **recommended 3840×2160**, min width 640; JPG/PNG; **desktop 50 MB**, mobile 2 MB; Shorts thumbnails are 9:16 (2160×3840) | **ratio correct, 1/3 of recommended resolution, size cap missing** |
 
-Staleness count: **7 social entries reviewed, 1 exact (Pinterest), 4
-ratio-correct-but-incomplete, 1 off-recommendation, 1 partial.**
+Staleness count: **8 social entries reviewed, 1 exact (Pinterest), 4
+ratio-correct-but-incomplete, 1 off-recommendation, 1 partial, 1 matching within
+1 px but unverified (LinkedIn).**
+
+> Correction 2026-10-28: an earlier draft of this line said "7 entries" while the
+> table above lists 8. The table is right and the count is fixed here; the
+> regression harness reads 8.
 
 ### Formats that have no canvas at all
 

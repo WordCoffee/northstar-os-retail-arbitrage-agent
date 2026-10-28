@@ -6,17 +6,86 @@
 // file contacts a provider or fabricates a measurement.
 // ═══════════════════════════════════════════════════════════════════════════
 
+// ── Social spec provenance ────────────────────────────────────────────────────
+// Mirrors SPEC_SOURCES in specRegistry.js. Every social canvas below names the
+// page it came from and the date that page was read, because a canvas with no
+// provenance is a canvas nobody can tell is stale.
+//
+// confidence:
+//   VERIFIED  the platform's own page was read and stated this
+//   REPORTED  third-party spec documents agree, the platform page was not read
+//   UNSOURCED no source could be established — the value is a placeholder
+export const SOCIAL_SOURCES = {
+  'meta-ads-feed': {
+    id: 'meta-ads-feed', label: 'Meta Ads Guide — Instagram Feed (image)',
+    url: 'https://www.facebook.com/business/ads-guide/update/image/instagram-feed',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { primaryText: 125, headline: 40, hashtags: 30, maxBytes: 30 * 1024 * 1024, minWidth: 500 },
+    note: '4:5 at 1440×1800; maximum aspect-ratio tolerance 1%.',
+  },
+  'meta-ads-story': {
+    id: 'meta-ads-story', label: 'Meta Ads Guide — Instagram Stories (image)',
+    url: 'https://www.facebook.com/business/ads-guide/update/image/instagram-story',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { primaryText: 125, maxBytes: 30 * 1024 * 1024, minWidth: 500 },
+    safeArea: '14% top, 35% bottom, 6% each side free of text and logos',
+    note: '9:16 at 1440×2560.',
+  },
+  'pinterest-specs': {
+    id: 'pinterest-specs', label: 'Pinterest ad spec guide',
+    url: 'https://help.pinterest.com/en/business/article/pinterest-product-specs',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { title: 100, description: 800, maxBytesDesktop: 20 * 1024 * 1024, maxBytesInApp: 32 * 1024 * 1024 },
+    note: 'Standard image 2:3 at 1000×1500; every upload is re-encoded to 8-bit RGB JPEG.',
+  },
+  'tiktok-infeed': {
+    id: 'tiktok-infeed', label: 'TikTok Auction In-Feed Ads (page last updated June 2026)',
+    url: 'https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { maxBytes: 500 * 1024 * 1024, minBitrateKbps: 516, maxSeconds: 600 },
+    note: '9:16 at ≥540×960 (vertical recommended); 16:9 and 1:1 also accepted.',
+  },
+  'x-creative-specs': {
+    id: 'x-creative-specs', label: 'X Ads creative specs',
+    url: 'https://help.x.com/en/business-and-advertising/creative-ad-specifications',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { maxBytes: 5 * 1024 * 1024, postChars: 280 },
+    note: 'Standalone image ad recommended at 1200×628 (1.91:1) or 1200×1200 (1:1). PNG/JPEG only.',
+  },
+  'youtube-thumbnails': {
+    id: 'youtube-thumbnails', label: 'YouTube Help — custom thumbnails',
+    url: 'https://support.google.com/youtube/answer/72431',
+    pulled: '2026-10-28', confidence: 'VERIFIED',
+    limits: { maxBytesDesktop: 50 * 1024 * 1024, maxBytesMobile: 2 * 1024 * 1024, minWidth: 640 },
+    note: '16:9 at 3840×2160 recommended (not required); Shorts thumbnails are 9:16.',
+  },
+  'linkedin-ad-specs': {
+    id: 'linkedin-ad-specs', label: 'LinkedIn ad specs (official page not retrieved)',
+    url: null, pulled: '2026-10-28', confidence: 'REPORTED',
+    limits: { maxBytes: 5 * 1024 * 1024, headline: 70, intro: 150 },
+    note: 'UNVERIFIED: the official ad-spec page returned 404 at two known URLs. Values come '
+        + 'from two independent third-party spec documents that agree with each other.',
+  },
+}
+
+/** Confidence label for a social canvas, never invented. */
+export function socialConfidenceOf(format) {
+  const s = SOCIAL_SOURCES[format?.source]
+  if (!format?.source || !s) return 'UNSOURCED'
+  return s.confidence || 'REPORTED'
+}
+
 // ── Output formats ────────────────────────────────────────────────────────────
 // `px` values are the real canvas raster sizes the engine renders at.
 export const FORMAT_GROUPS = [
   {
     id: 'ads', label: 'Paid ads',
     formats: [
-      { id: 'meta-feed', label: 'Meta feed', w: 1080, h: 1080, group: 'Square', channel: 'Meta' },
-      { id: 'meta-story', label: 'Meta / Reels story', w: 1440, h: 2560, group: 'Vertical', channel: 'Meta' },
+      { id: 'meta-feed', label: 'Meta feed', w: 1080, h: 1080, group: 'Square', channel: 'Meta', source: 'meta-ads-feed' },
+      { id: 'meta-story', label: 'Meta / Reels story', w: 1440, h: 2560, group: 'Vertical', channel: 'Meta', source: 'meta-ads-story' },
       { id: 'google-display', label: 'Google display', w: 1200, h: 628, group: 'Landscape', channel: 'Google' },
       { id: 'google-square', label: 'Google square', w: 1200, h: 1200, group: 'Square', channel: 'Google' },
-      { id: 'tiktok', label: 'TikTok / Shorts', w: 1080, h: 1920, group: 'Vertical', channel: 'TikTok' },
+      { id: 'tiktok', label: 'TikTok / Shorts', w: 1080, h: 1920, group: 'Vertical', channel: 'TikTok', source: 'tiktok-infeed' },
       { id: 'sponsored-brand', label: 'Sponsored brand', w: 1200, h: 628, group: 'Landscape', channel: 'Amazon Ads' },
     ],
   },
@@ -25,14 +94,20 @@ export const FORMAT_GROUPS = [
     formats: [
       // Sizes are the DOCUMENTED platform recommendations, not a scaled
       // approximation: Instagram re-compresses anything under 1440 wide, and a
-      // 1080-wide story is upscaled by the platform. Sources (pulled
-      // 2026-10-28) are recorded in reports/social_media_asset_specs_20261028.md.
-      { id: 'ig-post', label: 'Instagram post', w: 1440, h: 1800, group: 'Portrait', channel: 'Instagram' },
-      { id: 'ig-carousel', label: 'Instagram carousel', w: 1080, h: 1080, group: 'Square', channel: 'Instagram' },
-      { id: 'pin', label: 'Pinterest pin', w: 1000, h: 1500, group: 'Portrait', channel: 'Pinterest' },
-      { id: 'x-post', label: 'X post (1.91:1)', w: 1200, h: 628, group: 'Landscape', channel: 'X' },
-      { id: 'linkedin', label: 'LinkedIn post', w: 1200, h: 628, group: 'Landscape', channel: 'LinkedIn' },
-      { id: 'yt-thumb', label: 'YouTube thumbnail', w: 3840, h: 2160, group: 'Landscape', channel: 'YouTube' },
+      // 1080-wide story is upscaled by the platform. Every row names its source
+      // in SOCIAL_SOURCES above; `socialConfidenceOf()` reports it.
+      { id: 'ig-post', label: 'Instagram post', w: 1440, h: 1800, group: 'Portrait', channel: 'Instagram', source: 'meta-ads-feed' },
+      { id: 'ig-carousel', label: 'Instagram carousel', w: 1080, h: 1080, group: 'Square', channel: 'Instagram', source: 'meta-ads-feed', note: '1:1 is a supported feed ratio; no carousel-specific canvas is published.' },
+      { id: 'pin', label: 'Pinterest pin', w: 1000, h: 1500, group: 'Portrait', channel: 'Pinterest', source: 'pinterest-specs' },
+      { id: 'x-post', label: 'X post (1.91:1)', w: 1200, h: 628, group: 'Landscape', channel: 'X', source: 'x-creative-specs' },
+      { id: 'linkedin', label: 'LinkedIn post', w: 1200, h: 628, group: 'Landscape', channel: 'LinkedIn', source: 'linkedin-ad-specs' },
+      { id: 'yt-thumb', label: 'YouTube thumbnail', w: 3840, h: 2160, group: 'Landscape', channel: 'YouTube', source: 'youtube-thumbnails' },
+      // ── placements that had no canvas before 2026-10-28 (see 1.4 §2) ────────
+      { id: 'pin-video', label: 'Pinterest standard-width video', w: 1000, h: 1500, group: 'Portrait', channel: 'Pinterest', source: 'pinterest-specs', media: 'video', note: 'mp4/mov/m4v, H.264/265, ≤2 GB, 4 s-15 min; shorter than 1:2 and taller than 1.91:1.' },
+      { id: 'pin-idea', label: 'Pinterest Idea ad', w: 1080, h: 1920, group: 'Vertical', channel: 'Pinterest', source: 'pinterest-specs', safe: 'pin-idea', note: 'Safe zone: 270 px top, 65 px left, 195 px right, 440 px bottom.' },
+      { id: 'x-carousel', label: 'X carousel slide (1:1)', w: 800, h: 800, group: 'Square', channel: 'X', source: 'x-creative-specs', note: '2-6 slides, one aspect ratio per carousel; 800×418 for 1.91:1 image slides.' },
+      { id: 'x-vertical', label: 'X vertical video', w: 1080, h: 1920, group: 'Vertical', channel: 'X', source: 'x-creative-specs', media: 'video', note: '9:16, min 720×1280, max 1080×1920, ≤60 fps, target 5-10 Mbps, AAC-LC.' },
+      { id: 'yt-shorts-thumb', label: 'YouTube Shorts thumbnail', w: 1080, h: 1920, group: 'Vertical', channel: 'YouTube', source: 'youtube-thumbnails', note: '9:16; 2160×3840 recommended, min height 640. UNVERIFIED: the mobile byte cap for Shorts thumbnails is not stated on the page.' },
     ],
   },
   {

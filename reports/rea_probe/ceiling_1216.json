@@ -1,0 +1,36 @@
+{
+  "probe": "rea_ceiling_probe",
+  "date": "2026-10-28",
+  "ceiling_requested": 1216,
+  "max_edge_px_seen_by_code": 1216,
+  "request": {
+    "width": 1024,
+    "height": 1536,
+    "tier": "draft",
+    "seed": 4242
+  },
+  "elapsed_s": 31.0,
+  "result": {
+    "width": 816,
+    "height": 1216,
+    "fitted": true,
+    "requested": {
+      "width": 1024,
+      "height": 1536
+    },
+    "engine_max_edge_px": 1216,
+    "exact_size_pass": null,
+    "duration_seconds": null,
+    "filename": null,
+    "asset_bytes": null
+  },
+  "error": null,
+  "comfyui_alive_before": true,
+  "comfyui_alive_after": true,
+  "samples": 50,
+  "sampling_interval_s": 0.5,
+  "peak_ram_used_mb": 16328.1,
+  "peak_vram_used_mb": 11947,
+  "baseline_vram_mb": 587,
+  "peak_is": "sampled peak at 0.5 s resolution (coarse), not an instantaneous peak"
+}
