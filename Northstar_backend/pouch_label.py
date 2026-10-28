@@ -65,12 +65,99 @@ def _background_colour(img: Image.Image) -> Tuple[int, int, int]:
 
 
 def _foreground_mask(img: Image.Image, threshold: float = 26.0) -> np.ndarray:
-    """Boolean mask of everything that is not the background colour."""
-    rgb = np.asarray(img.convert("RGB")).astype(np.float32)
+    """Boolean mask of the POUCH, not of "everything unlike one colour".
+
+    The original implementation compared every pixel to a single median taken
+    from the outer ring. That is only correct for a one-backdrop scene. A real
+    product plate has two or more (here: a grey wall plus a bright marble table),
+    so the table and any prop were classified as "foreground", the silhouette
+    grew to the whole frame, and the label was warped onto a quad that ran off
+    the bottom of the bag onto the table. That is the T2 visual failure.
+
+    The pouch is the tallest coloured object in a product plate, so:
+      1. chroma (saturation) separates coloured stock from neutral scenery;
+      2. morphology closes print grain and shadows;
+      3. the component with the greatest HEIGHT wins - not the greatest area,
+         so an olive sprig or a shadow that touches the bag cannot outvote it;
+      4. interior holes are filled so the label area is solid.
+
+    A low-chroma pack (an ivory or white stock on white seamless) yields nothing
+    here, so the colour-distance method remains as the fallback. Both paths are
+    deterministic; nothing is guessed.
+    """
+    rgb = np.asarray(img.convert("RGB"))
+    h, w = rgb.shape[:2]
+    try:
+        import cv2
+    except Exception:  # noqa: BLE001 - fall back to pure numpy
+        cv2 = None
+
+    if cv2 is not None:
+        hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
+        sat = hsv[:, :, 1]
+        val = hsv[:, :, 2]
+        cand = ((sat > 40) & (val > 25)).astype(np.uint8)
+        if int(cand.sum()) >= int(h * w * 0.03):
+            k_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
+            k_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+            m = cv2.morphologyEx(cand, cv2.MORPH_CLOSE, k_close)
+            m = cv2.morphologyEx(m, cv2.MORPH_OPEN, k_open)
+            n, labels, stats, _ = cv2.connectedComponentsWithStats(m, 8)
+            best, best_h = 0, 0
+            for i in range(1, n):
+                area = stats[i, cv2.CC_STAT_AREA]
+                height = stats[i, cv2.CC_STAT_HEIGHT]
+                if area < h * w * 0.02:
+                    continue
+                if height > best_h:          # tallest, not widest: props lose
+                    best, best_h = i, height
+            if best and best_h >= h * 0.35:
+                m = (labels == best).astype(np.uint8)
+                # fill interior holes (print detail punched through the mask)
+                ff = m.copy()
+                flood = np.zeros((h + 2, w + 2), np.uint8)
+                cv2.floodFill(ff, flood, (0, 0), 1)
+                filled = (m.astype(bool) | (ff == 0))
+
+                # Trim thin appendages. A prop that touches the bag (here an
+                # olive sprig) joins the component and flares the measured face
+                # out to the frame edge, which drags the label quad sideways and
+                # below the pouch base. The bag is a solid block: keep only the
+                # longest contiguous band of columns (and of rows) that carry a
+                # real share of the mask. Deterministic, and it cannot invent
+                # pixels - it only subtracts.
+                def _longest_run(counts: np.ndarray, share: float) -> Tuple[int, int]:
+                    peak = float(counts.max()) if counts.size else 0.0
+                    if peak <= 0:
+                        return 0, len(counts) - 1
+                    keep = counts >= peak * share
+                    best_s, best_len, s = 0, 0, None
+                    for i, k in enumerate(keep):
+                        if k and s is None:
+                            s = i
+                        elif not k and s is not None:
+                            if i - s > best_len:
+                                best_s, best_len = s, i - s
+                            s = None
+                    if s is not None and len(keep) - s > best_len:
+                        best_s, best_len = s, len(keep) - s
+                    return best_s, max(best_s, best_s + best_len - 1)
+
+                col_counts = filled.sum(axis=0)
+                c0, c1 = _longest_run(col_counts, 0.35)
+                row_counts = filled.sum(axis=1)
+                r0, r1 = _longest_run(row_counts, 0.35)
+                trimmed = np.zeros_like(filled)
+                trimmed[r0:r1 + 1, c0:c1 + 1] = filled[r0:r1 + 1, c0:c1 + 1]
+                if trimmed.sum() >= filled.sum() * 0.5:
+                    return trimmed
+                return filled
+
+    # Fallback: the original colour-distance method, still fail-closed.
+    rgbf = rgb.astype(np.float32)
     bg = np.array(_background_colour(img), dtype=np.float32)
-    dist = np.max(np.abs(rgb - bg), axis=2)
+    dist = np.max(np.abs(rgbf - bg), axis=2)
     mask = dist > threshold
-    # a 3px median-ish open closes the anti-aliased rim without eating detail
     blurred = np.asarray(
         Image.fromarray((mask * 255).astype("uint8")).filter(ImageFilter.BoxBlur(2))
     ).astype(np.float32)
@@ -101,12 +188,19 @@ def _fit_line(y: np.ndarray, x: np.ndarray) -> Tuple[float, float]:
 
 
 def measure_face(img: Image.Image, *, inset_x: float = 0.075,
-                 inset_top: float = 0.065, inset_bottom: float = 0.05,
+                 inset_top: float = 0.20, inset_bottom: float = 0.10,
                  threshold: float = 26.0) -> Dict[str, Any]:
-    """Measure the printed face of a pouch render.
+    """Measure the PRINTED FRONT PANEL of a pouch render.
 
     Returns {quad, face, background, coverage} where quad is
     [TL, TR, BR, BL] in pixel coordinates and face is the measured bbox.
+
+    The insets are not cosmetic. A stand-up pouch has a top weld / zipper header
+    and a bottom gusset that are NOT printable label area, so a label warped to
+    the raw silhouette covers the zipper and runs past the base - which is what
+    the first T2 output did. 0.20 top / 0.10 bottom lands the panel under the
+    zipper and above the base curve on a standard 6 oz pouch. Override per plate
+    when a different stock dictates otherwise.
     """
     mask = _foreground_mask(img, threshold=threshold)
     h, w = mask.shape
@@ -391,7 +485,7 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
             field: Optional[Sequence[int]] = None, ink: Optional[Sequence[int]] = None,
             accent: Optional[Sequence[int]] = None,
             field_alpha: int = 250,
-            shading: float = 0.55,
+            shading: float = 0.28,
             quad: Optional[Sequence] = None,
             panels: Optional[Dict[str, Any]] = None,
             panel_split: bool = True) -> Dict[str, Any]:
@@ -418,8 +512,16 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
     try:
         import compositor_realism as cr
         maps = cr.build_surface_maps(plate)
-        realism = {"displacement_k": 1.2, "softlight_strength": 0.30,
-                   "specular_cap": 0.02, "grain_sync": 0.15, "tonal_match": 0.40}
+        # Packaging-grade integration. The earlier recipe was tuned too low: the
+        # print landed as a flat opaque card because soft-light (0.30) and tonal
+        # match (0.40) barely modulated it, and the fold shadow / AO rim - the two
+        # knobs that make a print look like it belongs to the surface - were left
+        # at their off defaults. The pouch's own creases and shading now come
+        # through the ink, and a slight inner AO seats the panel edge.
+        realism = {"displacement_k": 1.8, "softlight_strength": 0.26,
+                   "specular_cap": 0.02, "grain_sync": 0.30, "tonal_match": 0.12,
+                   "fold_shadow": 0.35, "fold_threshold": 0.05,
+                   "ao_rim_px": 5, "ao_strength": 0.04}
         surfaces = None
         if panel_split and panels:
             try:
