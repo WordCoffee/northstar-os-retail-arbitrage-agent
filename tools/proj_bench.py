@@ -185,7 +185,9 @@ def main() -> int:
 
     summary = {
         "programme": "NS-PROJ-20",
-        "mode": "dry-harness",
+        "mode": "harness-validation",
+        "label": "harness validation — not a project result",
+        "project_result": False,
         "run_at": stamp,
         "briefs": len(results),
         "complete": sum(1 for r in results if r["status"] == "complete"),
@@ -195,7 +197,7 @@ def main() -> int:
         "total_interventions": sum(r["interventions"] for r in results),
         "resume": resume,
         "results": [{k: v for k, v in r.items() if k != "plan"} for r in results],
-        "note": "Dry harness only. The live Ty baseline must be run separately; "
+        "note": "Harness validation only. The live Ty baseline must be run separately; "
                 "these numbers are not a claim about Ty's project ability.",
     }
     (root / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")

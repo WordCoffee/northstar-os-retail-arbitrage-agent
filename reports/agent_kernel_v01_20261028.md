@@ -2,7 +2,8 @@
 
 **Verdict:** the spec is now working code. One kernel serves Ty, Bojo and
 Autothink; Ty can opt into it without changing its default runner; Bojo can show
-a validated project plan. The dry project harness completes 20/20. The live
+a validated project plan. The NS-PROJ-20 **harness validation** completes 20/20
+(not a project result). The live
 20-brief Ty baseline is **not** claimed — it needs the coding/creative models and
 has not been run.
 
@@ -15,7 +16,7 @@ has not been run.
 | 12-capability kernel | `Northstar_backend/agent_kernel/` | 46 tests in `test_agent_kernel.py` |
 | Ty opt-in path | `TysAssistant.run_kernel()` + `agent_kernel/tys_adapter.py` | `test_tys_kernel_integration.py` (2 tests) + a real inspect smoke run |
 | Bojo project plan | `plan_project` tool in `chat_tools.py` | `test_plan_project_tool.py` (4 tests) |
-| NS-PROJ-20 | `eval/projects/ns_proj_20.json`, `tools/proj_bench.py` | dry run 20/20, evidence 1.0, resume pass |
+| NS-PROJ-20 | `eval/projects/ns_proj_20.json`, `tools/proj_bench.py` | harness validation 20/20 (not a project result), evidence 1.0, resume pass |
 | Phase B harvest | `SOURCES_1500.csv`, `TRIAGE.md`, `DEEP_12.md`, `SOURCES.md` | 1,500 scored / 100 README reads / 12 deep |
 | State | `00_STATE.json` | `rea_program_20261028` + `agent_kernel_20261028` merged; backup in `backups/state/` |
 
@@ -65,11 +66,14 @@ rows: [{"label": "measure the plate", "value": "inspect · pending"},
 It validates the plan before showing it and says explicitly that it is **a plan,
 not an execution**. It is offered in the `system` and `creative` tool sets.
 
-## 4. NS-PROJ-20 — dry harness only
+## 4. NS-PROJ-20 — harness validation (not a project result)
+
+**This section is a harness validation, not a claim about Ty's project ability.**
 
 ```
 briefs: 20
-complete: 20
+harness_validation_complete: 20
+project_result: false
 valid_plans: 20
 mean_evidence_coverage: 1.0
 total_interventions: 0
@@ -102,7 +106,8 @@ pytest test_agent_kernel test_plan_project_tool test_chat_tools \
        test_tys_assistant test_tys_kernel_integration
   -> 144 passed
 python tools/proj_bench.py --limit 20
-  -> 20/20 complete, 20/20 valid, evidence 1.0, resume pass
+  -> harness validation 20/20 (not a project result), 20/20 valid,
+     evidence 1.0, resume pass
 python tools/rea_regress.py --quick --with-tests
   -> PASS
 ```

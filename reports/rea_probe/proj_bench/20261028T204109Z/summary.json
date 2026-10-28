@@ -1,6 +1,6 @@
 {
   "programme": "NS-PROJ-20",
-  "mode": "dry-harness",
+  "mode": "harness-validation",
   "run_at": "20261028T204109Z",
   "briefs": 20,
   "complete": 20,
@@ -319,5 +319,7 @@
       "duration_s": 0.025
     }
   ],
-  "note": "Dry harness only. The live Ty baseline must be run separately; these numbers are not a claim about Ty's project ability."
+  "note": "Harness validation only. The live Ty baseline must be run separately; these numbers are not a claim about Ty's project ability.",
+  "label": "harness validation \u2014 not a project result",
+  "project_result": false
 }

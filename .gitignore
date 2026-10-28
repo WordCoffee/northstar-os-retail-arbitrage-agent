@@ -90,3 +90,7 @@ playwright-report/
 test-results/
 tests/e2e/storageState/
 
+# Phase B local evidence: 100 public READMEs fetched for reading only.
+# The CSV keeps the URL and a read note; the files are not redistributed.
+research/assistant_intelligence_20261028/readmes/
+

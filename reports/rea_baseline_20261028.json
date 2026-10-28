@@ -47,16 +47,32 @@
         "6 oz (170 g)"
       ],
       "verdict": "text_present",
-      "note": "Mogra plate composed through the L2 mesh path; five boxes read, including the product name and weight. 'MOGRA ORGANICS' OCR'd as MOGRAORGAVCS, recorded as-is."
+      "note": "Mogra plate composed through the L2 mesh path; five boxes read. The flat panel reads 'ORGANIC LION'S MANE' with the space; the composited plate OCR merges it. text_fidelity._ocr_boxes only strips; it does not normalize spaces. That is a RapidOCR tokenization artifact, not a spacing defect.",
+      "spacing_finding": {
+        "flat_panel": "ORGANIC LION'S MANE (space preserved)",
+        "composited": "ORGANICLION'S MANE (RapidOCR merges)",
+        "text_fidelity_normalization": "none; _ocr_boxes only strips",
+        "conclusion": "recognition artifact on the warped composite, not a spacing defect"
+      }
     },
     "press_safety_max_tac_and_de76": {
       "status": "measured",
       "artefact": "reports/rea_probe/item1_mogra_composed.png",
       "profile": "RSWOP.icm",
-      "ink": {"max_tac_pct": 254.9, "mean_tac_pct": 62.9, "pixels_over_limit": 0,
-              "limit_pct": 300.0, "verdict": "within_limit"},
-      "gamut": {"out_of_gamut_pct": 2.0, "max_dE76": 21.85, "mean_dE76": 4.74,
-                "tolerance_dE76": 8.0, "pixels": 199655},
+      "ink": {
+        "max_tac_pct": 254.9,
+        "mean_tac_pct": 62.9,
+        "pixels_over_limit": 0,
+        "limit_pct": 300.0,
+        "verdict": "within_limit"
+      },
+      "gamut": {
+        "out_of_gamut_pct": 2.0,
+        "max_dE76": 21.85,
+        "mean_dE76": 4.74,
+        "tolerance_dE76": 8.0,
+        "pixels": 199655
+      },
       "verdict": "printable",
       "blockers": []
     },
@@ -66,7 +82,11 @@
       "verdict": "retail_ready",
       "blockers": [],
       "warnings": [],
-      "expected_terms": ["ORGANIC LION'S MANE", "MUSHROOM POWDER", "6 oz"],
+      "expected_terms": [
+        "ORGANIC LION'S MANE",
+        "MUSHROOM POWDER",
+        "6 oz"
+      ],
       "note": "assess_package over the composed plate: prepress assessed, copy matched, no blockers"
     },
     "render_fit_box": {
@@ -80,20 +100,50 @@
     "lane_latency_s": {
       "status": "measured",
       "source": "lane_telemetry, 52 rows",
-      "create": {"n": 43, "p50": 35.29, "p95": 268.02, "max": 2039.7, "mean": 117.63},
-      "auto": {"n": 6, "p50": 19.81, "p95": 38.29, "max": 179.47},
-      "grow": {"n": 2, "p50": 45.49, "max": 61.71},
+      "create": {
+        "n": 43,
+        "p50": 35.29,
+        "p95": 268.02,
+        "max": 2039.7,
+        "mean": 117.63
+      },
+      "auto": {
+        "n": 6,
+        "p50": 19.81,
+        "p95": 38.29,
+        "max": 179.47
+      },
+      "grow": {
+        "n": 2,
+        "p50": 45.49,
+        "max": 61.71
+      },
       "success_rate": 0.711
     },
     "peak_ram_vram_per_lane": {
       "status": "not_run",
-      "snapshot_instead": {"ram_total_gb": 16.56, "ram_available_gb": 4.92, "vram_total_mb": 16303, "vram_free_mb": 15417, "gpu_util_pct": 0},
+      "snapshot_instead": {
+        "ram_total_gb": 16.56,
+        "ram_available_gb": 4.92,
+        "vram_total_mb": 16303,
+        "vram_free_mb": 15417,
+        "gpu_util_pct": 0
+      },
       "reason": "live stack was serving; a render probe would have disturbed it"
     },
     "sqlite_writer_contention": {
       "status": "measured",
-      "busy_timeout_0ms": {"attempted": 240, "committed": 60, "errors": 180},
-      "busy_timeout_5000ms": {"attempted": 240, "committed": 240, "errors": 0, "elapsed_s": 0.882},
+      "busy_timeout_0ms": {
+        "attempted": 240,
+        "committed": 60,
+        "errors": 180
+      },
+      "busy_timeout_5000ms": {
+        "attempted": 240,
+        "committed": 240,
+        "errors": 0,
+        "elapsed_s": 0.882
+      },
       "finding": "contention refuted at the configured timeout"
     },
     "social_spec_staleness": {
@@ -116,15 +166,36 @@
     },
     "smui_turns_to_tool": {
       "status": "measured",
-      "corpus": {"sessions": 26, "messages": 121, "user_turns": 60, "tool_calls": 39, "runs": 58},
+      "corpus": {
+        "sessions": 26,
+        "messages": 121,
+        "user_turns": 60,
+        "tool_calls": 39,
+        "runs": 58
+      },
       "messages_per_session": 4.65,
       "tool_calls_per_session": 1.5,
       "by_intent": {
-        "image_render": {"turns": 33, "tool_calls": 15},
-        "label_composite": {"turns": 21, "tool_calls": 3},
-        "aplus_listing": {"turns": 7, "tool_calls": 0},
-        "logo_brand": {"turns": 5, "tool_calls": 0},
-        "status_help": {"turns": 2, "tool_calls": 6}
+        "image_render": {
+          "turns": 33,
+          "tool_calls": 15
+        },
+        "label_composite": {
+          "turns": 21,
+          "tool_calls": 3
+        },
+        "aplus_listing": {
+          "turns": 7,
+          "tool_calls": 0
+        },
+        "logo_brand": {
+          "turns": 5,
+          "tool_calls": 0
+        },
+        "status_help": {
+          "turns": 2,
+          "tool_calls": 6
+        }
       }
     },
     "smui_contrast_wcag": {

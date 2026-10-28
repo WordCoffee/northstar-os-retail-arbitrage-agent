@@ -63,7 +63,22 @@
       "6 oz (170 g)"
     ],
     "verify_verdict": "text_present",
-    "verify_error": null
+    "verify_error": null,
+    "flat_panel_words": [
+      "EST",
+      "2023",
+      "MOGRAORGANICS",
+      "Healthy&Organic",
+      "ORGANIC LION'S MANE",
+      "MUSHROOMPOWDER",
+      "6 oz (170 g)"
+    ],
+    "spacing_finding": {
+      "observed_composited": "ORGANICLION'S MANE",
+      "observed_flat_panel": "ORGANIC LION'S MANE",
+      "text_fidelity_normalization": "none: _ocr_boxes returns text.strip()[:40]; it neither inserts nor removes spaces inside a recognised box",
+      "conclusion": "RapidOCR merges the two words on the warped composite. The renderer preserves the space (flat panel reads it), so this is a recognition artifact, not a spacing defect and not whitespace normalization."
+    }
   },
   "prepress": {
     "assessed": true,
