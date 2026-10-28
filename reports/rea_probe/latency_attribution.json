@@ -1,0 +1,277 @@
+{
+  "probe": "rea_latency_attribution",
+  "date": "2026-10-28",
+  "source": "lane_telemetry (52 rows, chat:default)",
+  "summary": {
+    "rows": 52,
+    "ok_rows": 37,
+    "p50_s": 35.16,
+    "p95_s": 268.02,
+    "max_s": 2039.7,
+    "render_floor_measured_s": 31.0,
+    "render_ceiling_measured_s": 40.0
+  },
+  "buckets": {
+    "e: >900s": {
+      "n": 1,
+      "ok": 1,
+      "examples": [
+        {
+          "id": 38,
+          "seconds": 2039.7,
+          "tool_calls": 0,
+          "ok": 1,
+          "at": "2026-10-28T03:59:15.431878+00:00"
+        }
+      ],
+      "mean_tool_calls": 0.0,
+      "ok_rate": 1.0
+    },
+    "d: 300-900s": {
+      "n": 2,
+      "ok": 2,
+      "examples": [
+        {
+          "id": 47,
+          "seconds": 374.59,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-28T06:40:05.201869+00:00"
+        },
+        {
+          "id": 35,
+          "seconds": 308.75,
+          "tool_calls": 0,
+          "ok": 1,
+          "at": "2026-10-27T19:46:32.917145+00:00"
+        }
+      ],
+      "mean_tool_calls": 0.5,
+      "ok_rate": 1.0
+    },
+    "c: 90-300s": {
+      "n": 10,
+      "ok": 10,
+      "examples": [
+        {
+          "id": 45,
+          "seconds": 268.02,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-28T06:23:32.706047+00:00"
+        },
+        {
+          "id": 39,
+          "seconds": 184.52,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-28T04:27:56.576140+00:00"
+        },
+        {
+          "id": 15,
+          "seconds": 179.47,
+          "tool_calls": 4,
+          "ok": 1,
+          "at": "2026-10-23T06:23:20.688766+00:00"
+        },
+        {
+          "id": 42,
+          "seconds": 178.56,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-28T06:07:20.707308+00:00"
+        }
+      ],
+      "mean_tool_calls": 1.5,
+      "ok_rate": 1.0
+    },
+    "b: 40-90s (render + a second step)": {
+      "n": 9,
+      "ok": 7,
+      "examples": [
+        {
+          "id": 6,
+          "seconds": 87.67,
+          "tool_calls": 2,
+          "ok": 0,
+          "at": "2026-10-23T01:25:18.281193+00:00"
+        },
+        {
+          "id": 22,
+          "seconds": 81.71,
+          "tool_calls": 1,
+          "ok": 0,
+          "at": "2026-10-26T02:30:37.089390+00:00"
+        },
+        {
+          "id": 51,
+          "seconds": 72.44,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-28T12:09:59.018876+00:00"
+        },
+        {
+          "id": 23,
+          "seconds": 68.12,
+          "tool_calls": 1,
+          "ok": 1,
+          "at": "2026-10-26T02:40:09.515674+00:00"
+        }
+      ],
+      "mean_tool_calls": 1.22,
+      "ok_rate": 0.78
+    },
+    "a: <=40s (one render)": {
+      "n": 30,
+      "ok": 17,
+      "examples": [
+        {
+          "id": 2,
+          "seconds": 38.29,
+          "tool_calls": 0,
+          "ok": 1,
+          "at": "2026-10-23T01:16:44.221565+00:00"
+        },
+        {
+          "id": 24,
+          "seconds": 37.26,
+          "tool_calls": 3,
+          "ok": 0,
+          "at": "2026-10-26T02:41:22.113076+00:00"
+        },
+        {
+          "id": 16,
+          "seconds": 36.0,
+          "tool_calls": 0,
+          "ok": 0,
+          "at": "2026-10-23T06:35:03.118952+00:00"
+        },
+        {
+          "id": 48,
+          "seconds": 35.29,
+          "tool_calls": 0,
+          "ok": 1,
+          "at": "2026-10-28T06:51:16.925061+00:00"
+        }
+      ],
+      "mean_tool_calls": 0.2,
+      "ok_rate": 0.57
+    }
+  },
+  "slow_rows": [
+    {
+      "id": 38,
+      "seconds": 2039.7,
+      "at": "2026-10-28T03:59:15.431878+00:00",
+      "tool_calls": 0,
+      "ok": 1,
+      "hour": 3
+    },
+    {
+      "id": 47,
+      "seconds": 374.59,
+      "at": "2026-10-28T06:40:05.201869+00:00",
+      "tool_calls": 1,
+      "ok": 1,
+      "hour": 6
+    },
+    {
+      "id": 35,
+      "seconds": 308.75,
+      "at": "2026-10-27T19:46:32.917145+00:00",
+      "tool_calls": 0,
+      "ok": 1,
+      "hour": 19
+    }
+  ],
+  "tool_call_effect": {
+    "0": {
+      "n": 31,
+      "median_s": 7.69,
+      "max_s": 2039.7
+    },
+    "1": {
+      "n": 13,
+      "median_s": 135.26,
+      "max_s": 374.59
+    },
+    "2": {
+      "n": 5,
+      "median_s": 65.4,
+      "max_s": 94.5
+    },
+    "3": {
+      "n": 2,
+      "median_s": 72.93,
+      "max_s": 108.6
+    },
+    "4": {
+      "n": 1,
+      "median_s": 179.47,
+      "max_s": 179.47
+    }
+  },
+  "hourly_windows": [
+    {
+      "hour_utc": "2026-10-23T01",
+      "n": 7,
+      "median_s": 35.02,
+      "max_s": 94.5,
+      "slow_over_90s": 1
+    },
+    {
+      "hour_utc": "2026-10-23T02",
+      "n": 3,
+      "median_s": 33.66,
+      "max_s": 65.4,
+      "slow_over_90s": 0
+    },
+    {
+      "hour_utc": "2026-10-23T06",
+      "n": 7,
+      "median_s": 36.0,
+      "max_s": 179.47,
+      "slow_over_90s": 1
+    },
+    {
+      "hour_utc": "2026-10-26T02",
+      "n": 4,
+      "median_s": 74.91,
+      "max_s": 108.6,
+      "slow_over_90s": 1
+    },
+    {
+      "hour_utc": "2026-10-27T06",
+      "n": 7,
+      "median_s": 2.07,
+      "max_s": 5.01,
+      "slow_over_90s": 0
+    },
+    {
+      "hour_utc": "2026-10-28T03",
+      "n": 3,
+      "median_s": 8.21,
+      "max_s": 2039.7,
+      "slow_over_90s": 1
+    },
+    {
+      "hour_utc": "2026-10-28T06",
+      "n": 8,
+      "median_s": 173.2,
+      "max_s": 374.59,
+      "slow_over_90s": 6
+    }
+  ],
+  "attribution": {
+    "a_<=40s": "attributable: a single render. Measured render cost today is 31.0-40.0 s, so rows in this band are the render itself.",
+    "b_40-90s": "attributable: render plus at least one more model/tool step; the band starts where the render cost ends.",
+    "c_90-300s": "PARTIAL: consistent with several sequential steps, or a cold model load after unload_brain() evicted it for a render. lane_telemetry has no stage timestamps, so these two cannot be separated.",
+    "d_e_>300s": "NOT ATTRIBUTABLE from this table. A 34-minute row exists; the table records only total latency, tool count and ok, so queue wait, model reload and a hung engine look identical."
+  },
+  "instrumentation_missing": [
+    "per-stage timestamps on the turn (queued, model loaded, tool started, tool finished)",
+    "an explicit 'waited on render lock' marker",
+    "Ollama /api/ps state at turn start (was the brain resident or evicted?)",
+    "ComfyUI queue depth at turn start"
+  ]
+}
