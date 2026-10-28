@@ -1,5 +1,10 @@
 # REA Phase 3 close-out + Phase A spec — 2026-10-28
 
+> **Update, same day:** the operator approved and the kernel was built. See
+> `reports/agent_kernel_v01_20261028.md` for the implementation, tests and
+> remaining live-baseline work. The Phase A text below is the historical spec
+> record and is unchanged.
+
 **Verdict:** Phase 3 items 0–1 are done and verified. `rea_regress` has a
 documented entry point and passes. Phase A is on disk for operator review. **No
 kernel code has been written.**

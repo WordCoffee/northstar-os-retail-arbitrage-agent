@@ -1322,6 +1322,38 @@ class TysAssistant:
 
     # -- execution ---------------------------------------------------------
 
+    def run_kernel(self, task_id: str, *, approve_by: str = "operator") -> Dict[str, Any]:
+        """Execute a work order through the agent kernel (opt-in).
+
+        The default `run()` is unchanged. This path gives the order a visible
+        plan, a policy check per lane, evidence per step and a checkpoint.
+        """
+        from agent_kernel.policy import grant
+        from agent_kernel.tys_adapter import run_order
+
+        task = self.store.get(task_id)
+        if not task:
+            raise TysError("not_found", f"no task {task_id}")
+        if task.get("status") not in ("queued", "running", "interrupted"):
+            raise TysError("not_runnable",
+                           f"task {task_id} is {task.get('status')!r}")
+        task["status"] = "running"
+        self.store.save(task)
+        order = {"id": task["id"], "title": task.get("title") or "",
+                 "objective": task["objective"],
+                 "scope": task.get("scope") or {},
+                 "steps": task.get("steps") or [],
+                 "limits": task.get("limits") or {}}
+        grants = [grant("edit", minutes=240, why="approved work order"),
+                  grant("browser_click", minutes=240, why="approved work order"),
+                  grant("creative_generate", minutes=240, why="approved work order")]
+        res = run_order(self, order, approve_by=approve_by, grants=grants, task=task)
+        task["status"] = "done" if res.status == "complete" else res.status
+        self.store.save(task)
+        self.store.event(task_id, "kernel_result", res.to_dict())
+        self._checkpoint(task)
+        return res.to_dict()
+
     def run(self, task_id: str, max_steps: Optional[int] = None) -> Dict[str, Any]:
         """Execute at most `max_steps` steps, then checkpoint and return."""
         task = self.store.get(task_id)

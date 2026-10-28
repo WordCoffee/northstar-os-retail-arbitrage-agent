@@ -1,0 +1,140 @@
+{
+  "task_id": "tys_b0e0930289c0",
+  "status": "complete",
+  "reason": "",
+  "plan_nodes": [
+    [
+      "n1",
+      "done"
+    ]
+  ],
+  "events": [
+    {
+      "seq": 3,
+      "ts": "2026-10-28T21:00:48.345013+00:00",
+      "kind": "step_result",
+      "payload": {
+        "index": 0,
+        "lane": "inspect",
+        "objective": "Read README.md",
+        "ok": true,
+        "summary": "inspected 1/1 file(s)",
+        "detail": "",
+        "artifacts": [],
+        "blocked": false,
+        "duration_ms": 7,
+        "ts": "2026-10-28T21:00:48.345006+00:00",
+        "evidence": {
+          "files": [
+            {
+              "path": "README.md",
+              "abs": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\README.md",
+              "bytes": 3014,
+              "truncated": false
+            }
+          ],
+          "missing": []
+        }
+      }
+    },
+    {
+      "seq": 4,
+      "ts": "2026-10-28T21:00:48.354686+00:00",
+      "kind": "kernel_result",
+      "payload": {
+        "status": "complete",
+        "reason": "",
+        "ask": "",
+        "plan": {
+          "plan_id": "plan_tys_b0e0930289c0",
+          "session_id": "sess_tys_b0e0930289c0",
+          "goal": "Read README.md and report its first heading",
+          "version": 1,
+          "supersedes": null,
+          "constraints": [
+            "no Amazon",
+            "no spend",
+            "scope:inspect"
+          ],
+          "acceptance": [
+            {
+              "text": "every step is done with evidence",
+              "verifier": "plan_complete",
+              "params": {}
+            }
+          ],
+          "nodes": [
+            {
+              "node_id": "n1",
+              "kind": "inspect",
+              "title": "Read README.md",
+              "acceptance": [
+                {
+                  "text": "the lane executor reports success",
+                  "verifier": "executor_ok",
+                  "params": {}
+                }
+              ],
+              "depends_on": [],
+              "lane": "inspect",
+              "inputs": {
+                "files": [
+                  "README.md"
+                ]
+              },
+              "outputs": [],
+              "max_attempts": 2,
+              "state": "done",
+              "attempts": 0,
+              "evidence_ids": [
+                "ev_1321c0f0a66a",
+                "ev_0e5ec6007da6"
+              ]
+            }
+          ],
+          "edges": [],
+          "gates": [],
+          "budget": {
+            "max_steps": 8,
+            "max_wall_s": 900,
+            "max_attempts_per_node": 2,
+            "max_tokens": null
+          },
+          "state": "complete",
+          "created_at": "2026-10-28T21:00:48Z",
+          "approved_at": "2026-10-28T21:00:48Z",
+          "approved_by": "operator"
+        },
+        "interventions": [],
+        "budget": {
+          "steps": 1,
+          "tokens": 0,
+          "started_at": 1793221248.3340802,
+          "stopped": null,
+          "remaining": {
+            "steps": 7,
+            "wall_s": 899.9828989505768,
+            "tokens": null
+          },
+          "exhausted": false
+        },
+        "events": 11
+      }
+    },
+    {
+      "seq": 5,
+      "ts": "2026-10-28T21:00:48.357645+00:00",
+      "kind": "checkpoint",
+      "payload": {
+        "cursor": 1,
+        "of": 1,
+        "iteration": 0,
+        "completed_lanes": [
+          "inspect"
+        ],
+        "next_step": null,
+        "at": "2026-10-28T21:00:48.357638+00:00"
+      }
+    }
+  ]
+}

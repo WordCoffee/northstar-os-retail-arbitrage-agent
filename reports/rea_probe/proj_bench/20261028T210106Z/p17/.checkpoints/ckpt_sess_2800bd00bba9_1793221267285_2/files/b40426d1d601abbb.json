@@ -1,0 +1,8 @@
+{
+  "brief": "p17",
+  "checks": [
+    "new plan version",
+    "old version retained"
+  ],
+  "artifact": "replan.json"
+}

@@ -67,15 +67,22 @@ def work_order_to_plan(order: Dict[str, Any], *, session_id: str = "") -> Plan:
     )
 
 
-def executors_for(assistant: Any, order: Dict[str, Any]) -> Dict[str, Any]:
+def executors_for(assistant: Any, order: Dict[str, Any],
+                  *, task: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Map Ty's lanes onto kernel executors.
 
     `assistant` only needs `_execute_step(task, step)` returning an object with
     `ok`, `summary`, `detail`, `blocked`, `artifacts` (Ty's StepResult already
     does). A fake with the same surface is enough for tests.
+
+    `task` is the real Ty task when this is called from `TysAssistant`; it
+    carries the cursor the evidence writer needs. Without it, a minimal task is
+    built from the order.
     """
-    task = dict(order)
+    task = task if task is not None else dict(order)
     task.setdefault("id", "tys_adapter")
+    task.setdefault("cursor", 0)
+    task.setdefault("scope", dict(order.get("scope") or {}))
 
     def _wrap(node, _plan):
         step = {"lane": node.lane or node.kind, "objective": node.title,
@@ -83,6 +90,7 @@ def executors_for(assistant: Any, order: Dict[str, Any]) -> Dict[str, Any]:
         out = assistant._execute_step(task, step)
         if hasattr(out, "as_dict"):
             out = out.as_dict()
+        task["cursor"] = int(task.get("cursor") or 0) + 1
         return {"ok": bool(out.get("ok")),
                 "detail": str(out.get("detail") or out.get("summary") or ""),
                 "blocked": bool(out.get("blocked")),
@@ -97,14 +105,15 @@ def run_order(assistant: Any, order: Dict[str, Any], *,
               approve_by: str = "operator",
               grants: Sequence[PermissionRule] = (),
               journal_path: Optional[str] = None,
-              checkpoint_root: Optional[str] = None) -> RunResult:
+              checkpoint_root: Optional[str] = None,
+              task: Optional[Dict[str, Any]] = None) -> RunResult:
     plan = work_order_to_plan(order)
     policy = Policy(mode="dontAsk")
     kernel = Kernel(
         policy=policy,
         journal=Journal(journal_path),
         checkpoints=CheckpointStore(checkpoint_root),
-        executors=executors_for(assistant, order),
+        executors=executors_for(assistant, order, task=task),
     )
     kernel.submit(plan)
     kernel.approve(plan.plan_id, approve_by)
