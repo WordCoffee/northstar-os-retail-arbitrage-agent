@@ -1,51 +1,63 @@
-# NorthstarOS local LLM — high-performance lane (llama.cpp, CUDA)
-# Model: northstaros-qwen3.8:27b  (ISTA-DASLab GSQ-RCO IQ3_XXS + MTP head)
+# NorthstarOS local LLM - high-performance lane (llama.cpp, CUDA)
+# Model: Qwen3.8-27B GSQ-RCO IQ3_XXS + MTP (10.4GB, base Qwen/Qwen3.8-27B)
 # Usage: powershell -ExecutionPolicy Bypass -File scripts\start-northstar-llm.ps1
-# Serves an OpenAI-compatible API on http://127.0.0.1:8080/v1 (plus the built-in web UI on /)
+# Serves an OpenAI-compatible API on http://127.0.0.1:8080/v1
 #
-# MEASURED CONFIG (2026-10-14, RTX 5080 Laptop 16GB):
-# - Builder: llama.cpp b11632 CUDA 13.4 (official release) at %USERPROFILE%\tools\llama-b11632\cuda
-#   (the winget b11580 Vulkan build is a measured ~2-3x-slower fallback; keep it only as a spare)
-# - MTP speculative decoding: --spec-type draft-mtp --spec-draft-n-max 6 --spec-draft-p-min 0.65
-#   measured 70.1 tok/s gen at 92.7% draft acceptance (vs 41.8 tok/s with spec off = +68%);
-#   draft-max 4 measured 54.6 tok/s; draft-max 8 was unstable on this box — do not raise past 6.
-# - HIGH MODE (max reasoning) pinned on this lane: --reasoning on --reasoning-effort xhigh
-#   --reasoning-budget -1 (unrestricted).
-# - Vision: --mmproj loads the BF16 projector (this is the only lane that gives the model eyes;
-#   Ollama's local-create has no mmproj support).
-# - VRAM: Ollama (the app lane) and llama-server both want the 16GB card, so this script
-#   automatically unloads the Ollama model first (Ollama auto-reloads on its next request).
-# - For best throughput keep RAM/GPU headroom: stop leftover media servers (ComfyUI etc.) and
-#   other GPU apps before long agent runs — measured memory pressure can halve token speed.
+# MEASURED CONFIG (2026-10-27, RTX 5080 Laptop 16GB):
+# - Builder: llama.cpp b11889 CUDA at %USERPROFILE%\.config\northstar-llm\bin
+# - Model: ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp (10.4GB)
+# - MTP speculative decoding: --spec-type draft-mtp --spec-draft-n-max 4
+# - Context: -c 65536 (fits in 16GB with q4_0 KV cache)
+# - KV cache: q4_0 (K and V) - required for 64K on 16GB; q8_0 caps at ~32K
+# - GPU: full offload -ngl 99 (10.4GB model + ~2.6GB CUDA/MTP overhead = ~13GB, fits 16GB)
+# - Decode: ~69 tok/s with MTP, ~47 tok/s without; prompt eval ~70 tok/s
+# - Pre-launch: kills background GPU processes (MSI Center, Edge WebView, etc.)
 #
-# Ollama lane notes (2026-10-14 measurements): leave OLLAMA_FLASH_ATTENTION UNSET (auto) and
-# OLLAMA_KV_CACHE_TYPE at f16/default — forcing flash-attn on measured a ~6x gen regression on
-# this model, and q8_0 KV quantization is not usable with this engine/architecture.
+# To restore vision (after upgrading to 32GB+ VRAM):
+#   Add: --mmproj $mmproj
 
 $ErrorActionPreference = "Stop"
-$cudaServer = "$env:USERPROFILE\tools\llama-b11632\cuda\llama-server.exe"
-$srvFallback = "C:\Users\T2Hol\AppData\Local\Microsoft\WinGet\Packages\ggml.llamacpp_Microsoft.Winget.Source_8wekyb3d8bbwe\llama-server.exe"
+$cudaServer = "$env:USERPROFILE\.config\northstar-llm\bin\llama-server.exe"
+$srvFallback = "$env:USERPROFILE\tools\llama-cuda\llama-server.exe"
 $srv = if (Test-Path $cudaServer) { $cudaServer } else { $srvFallback }
-$modelDir = "$env:USERPROFILE\models\northstaros-qwen3.8"
-$model = Join-Path $modelDir "Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf"
-$mmproj = Join-Path $modelDir "mmproj-Qwen3.8-27B-BF16.gguf"
+$model = "$env:USERPROFILE\models\northstaros-qwen3.8\Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf"
+$mmproj = "$env:USERPROFILE\models\northstaros-qwen3.8\mmproj-Qwen3.8-27B-BF16.gguf"
 
-# free the GPU: unload the Ollama app-lane model (it auto-reloads when the app next calls it)
+# --- Free the GPU: drain EVERY resident Ollama model + kill background GPU processes ---
+# This used to evict one hard-coded id ("northstaros-qwen3.8:27b") that no longer
+# exists — the 27B moved to this llama.cpp server — so it evicted nothing and
+# reported success. It now reads /api/ps and unloads whatever is actually
+# resident. Bojo is CPU-pinned (scripts/bojo-cpu.Modelfile) and therefore holds no
+# VRAM, but it still holds ~2.4 GB of SYSTEM RAM, and RAM is this box's binding
+# constraint for a 10.4 GB model plus a 64K q4_0 KV cache.
 try {
-  Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:11434/api/generate" -TimeoutSec 30 `
-    -Body '{"model":"northstaros-qwen3.8:27b","keep_alive":0}' -ContentType "application/json" | Out-Null
-  Write-Host "Ollama model unloaded (auto-reloads on next app request)."
+  $ps = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/ps" -TimeoutSec 30
+  $resident = @($ps.models | Where-Object { $_.name } | ForEach-Object { $_.name })
+  if ($resident.Count -eq 0) {
+    Write-Host "Ollama already has nothing resident."
+  } else {
+    foreach ($m in $resident) {
+      Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:11434/api/generate" -TimeoutSec 60 `
+        -Body (@{ model = $m; keep_alive = 0 } | ConvertTo-Json) -ContentType "application/json" | Out-Null
+    }
+    Write-Host ("Ollama unloaded: {0}" -f ($resident -join ", "))
+  }
 } catch { Write-Host "Ollama unload skipped (server not reachable)." }
+
+# Kill background GPU consumers that eat VRAM (MSI Center, Edge WebView, etc.)
+$gpuHogs = @("SoundTune", "MSI.TerminalServer", "LEDKeeper2", "DCv2", "msedgewebview2", "PhoneExperienceHost")
+foreach ($hog in $gpuHogs) {
+  Get-Process -Name $hog -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+}
+Write-Host "Background GPU processes cleared."
 
 & $srv `
   -m $model `
-  --mmproj $mmproj `
   --alias "northstaros-qwen3.8:27b" `
-  -ngl 99 -ngld 99 `
-  --spec-type draft-mtp --spec-draft-n-max 6 --spec-draft-p-min 0.65 `
-  -c 64576 -fa on `
-  -ctk q8_0 -ctv q8_0 `
+  -ngl 99 `
+  -c 65536 -fa on `
+  -ctk q4_0 -ctv q4_0 `
   -np 1 --jinja `
-  --reasoning on --reasoning-effort xhigh --reasoning-budget -1 `
+  --spec-type draft-mtp --spec-draft-n-max 4 `
   --host 127.0.0.1 --port 8080 `
   --temp 0.35
