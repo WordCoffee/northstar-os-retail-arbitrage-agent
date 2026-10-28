@@ -145,7 +145,10 @@
    shrink and pushed the composer out of the panel entirely (the built sheet
    kept the frame but the input fell below the fold). */
 .mb-shell .chat-col { min-height: 0; }
-.mb-shell .chat-stream { min-height: 0; gap: 26px; padding: 26px 2px 8px; }
+/* Same gutter reservation as chat.css — see the note there. The Simple shell
+   scales artefact images to the column, so a scrollbar that appears and
+   disappears changes the content height and the panel oscillates. */
+.mb-shell .chat-stream { min-height: 0; gap: 26px; padding: 26px 2px 8px; scrollbar-gutter: stable; }
 .mb-shell .chat-msg { max-width: 100%; gap: 9px; }
 .mb-shell .chat-msg.assistant { max-width: 100%; }
 

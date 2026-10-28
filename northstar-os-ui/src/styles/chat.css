@@ -54,7 +54,14 @@
 .chat-head .chat-head-sub { font-size: 12px; color: var(--ink-soft); }
 .chat-head .chat-head-spark { color: var(--spark); }
 
-.chat-stream { flex: 1; overflow-y: auto; padding: var(--gap) 4px; display: flex; flex-direction: column; gap: var(--gap-sm); scroll-behavior: smooth; }
+/* `scrollbar-gutter: stable` is load-bearing, not cosmetic. Without it a
+   transcript that sits near the overflow threshold oscillates: the scrollbar
+   appears -> the content box narrows -> a width-scaled image gets shorter ->
+   the content no longer overflows -> the scrollbar disappears -> repeat. The
+   panel visibly jitters and Playwright's "stable" actionability check can never
+   settle, which makes the composer unclickable. Reserving the gutter means the
+   presence of the scrollbar never changes layout. */
+.chat-stream { flex: 1; overflow-y: auto; scrollbar-gutter: stable; padding: var(--gap) 4px; display: flex; flex-direction: column; gap: var(--gap-sm); scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { .chat-stream { scroll-behavior: auto; } }
 
 .chat-msg { display: flex; flex-direction: column; gap: 6px; max-width: 780px; }
