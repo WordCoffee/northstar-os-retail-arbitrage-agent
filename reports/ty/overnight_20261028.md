@@ -76,36 +76,109 @@ is what stands between an open web and the owner's signed-in accounts.
 
 ---
 
-## 2. Needs you (two items, both one edit each)
+## 2. Applied — Owner Directive in the two protected files
 
-### 2.1 `AGENTS.md` and `docs/OPERATING_CONSTITUTION.md` are edit-denied
+**Commit `e077a4ed`** (`owner-authorized: Owner Directive 2026-10-28 in the capsule
+and the constitution`).
 
-`opencode.json` denies `edit` on exactly these two files:
-
-```json
-{ "action": "edit", "resource": "AGENTS.md", "effect": "deny" },
-{ "action": "edit", "resource": "docs/OPERATING_CONSTITUTION.md", "effect": "deny" },
+```
+ AGENTS.md                      | 57 ++++++++++++++++++++++++++++++++++
+ docs/OPERATING_CONSTITUTION.md | 69 ++++++++++++++++++++++++++++++++++++++++++
+ opencode.json                  |  2 --
+ 3 files changed, 126 insertions(+), 2 deletions(-)
 ```
 
-The directive requires an additive "Owner Directive 2026-10-28" block in both.
-**Remove or scope those two deny lines** and the block can be written; it is
-drafted and ready. Nothing else in the permission list was touched.
+`opencode.json` — exactly two lines removed, nothing else touched (36 rules remain;
+every credential/secret deny stays):
 
-### 2.2 The running controller still holds the old policy in memory
+```diff
+-    { "action": "edit", "resource": "AGENTS.md", "effect": "deny" },
+-    { "action": "edit", "resource": "docs/OPERATING_CONSTITUTION.md", "effect": "deny" },
+```
 
-`chromeconnect_status` still reports `1f84d421…` (intact, old baseline) because
-the MCP child process loaded `policy.js` at startup. The file on disk is correct
-and the new baseline is `46308c9b…`. **The Chrome Connect controller needs to
-reload once** (restart the controller session; Chrome itself untouched) before
-the new reach takes effect and the guardrail check reads the new fingerprint.
+Content added to both files: Tys Assistant as the admin-facing automation agent that
+may run approved unattended bounded campaigns; **standing gates reduced to exactly
+two** (money/paid credits, Amazon); denylist mode as the configured open-web mode;
+Chrome Connect action-level protections explicitly retained; no permanent
+self-granting, no policy bypasses, no secret disclosure.
+
+`docs/OPERATING_CONSTITUTION.md` §3 (Guardrail Zone) additionally carries an
+**AMENDED 2026-10-28** note so the old list cannot be read as still gating:
+everything except the two gates is now an operating rule the model applies on its
+own judgment. The credential-hygiene prohibition on disclosure/committing secrets
+remains.
 
 ---
 
-## 3. Not started
+## 3. Controller reload — confirmed live
 
-Brains (gateway roles, GPU lock manager), research engine + knowledge base, the
-five research jobs, FLUX swap, T2 close-out, Lion's Mane package, Packify-class
-creator, self-improvement A/B, and the 14-hour loop itself.
+The MCP child had already respawned (pid 9168), so no kill was needed and Chrome was
+never touched. The running controller now reports the **new** fingerprint:
 
-Phase 0 was the prerequisite: without a tested rollback and a working policy,
-an unattended run is exactly the thing that cannot be recovered from.
+```
+fingerprint  46308c9bb48090d796906edfc5229bbfb6ca6994cdd7cc1ea257b301bac349d5
+baseline     46308c9bb48090d796906edfc5229bbfb6ca6994cdd7cc1ea257b301bac349d5
+intact       true
+```
+
+Policy surface verified against the module (no Amazon request made — these are
+policy evaluations, evaluated before any transport):
+
+```
+BLOCK amazon_prohibited   amazon.com · sellercentral.amazon.com · amazon.co.uk
+ALLOW open_web_denylist   github.com · huggingface.co · arxiv.org · 127.0.0.1:8000
+BLOCK prohibited_action   enter_credentials · solve_captcha · purchase · checkout
+BLOCK prohibited_action   account_settings · send_message
+BLOCK external_state_change_requires_gate   submit_form_external
+```
+
+Profile 6 lease valid, `selected_directory_exact` and `display_name_exact` pass.
+
+---
+
+## 4. Live checks
+
+| Check | Result |
+|---|---|
+| `rollback/pre-overnight-20261028` exists | PASS — tag + 11 DBs + 38 model manifest |
+| Restorable | PASS — proven by a real restore (see §1.1) |
+| **Fresh pre-campaign point** | **`pre-campaign-20261028`** @ `e077a4ed`, 11 DBs, 38 models |
+| Backend health | 200; `/api/chat/sessions` **200 after 7.11 s** under a held write lock (busy-timeout fix live) |
+| ComfyUI | 200 (`:8188`) |
+| Bojo | `/api/ps` empty — unloaded, CPU-only |
+| 27B worker | `:8080` closed, 0 `llama-server` processes — on demand |
+| Vite `:8101` | was down; restarted |
+
+---
+
+## 5. BLOCKER — the campaign cannot start the browser lane
+
+`chromeconnect_preflight` → `transport_profile_binding` FAILED,
+`mcp_session_state: NO_SESSION`, `child_pid: null`,
+`extension_relay_not_seen_yet`. A live run returns:
+
+```
+REFUSED  EXTENSION_RECONNECT_REQUIRED
+The Playwright MCP extension in profile "Profile 6" did not answer after 1
+reconnect attempt(s). Automatic recovery is exhausted (limit: one per run).
+Operator action: click the Playwright extension in that Chrome window to
+reconnect, then start a new run.
+```
+
+Cause: the Chrome Connect MCP server restarted (pid 22012 → 9168) and dropped the
+extension relay. Reconnecting it needs **one click on the Playwright extension icon
+in the Profile 6 window**. I cannot do that: the browser lane is the thing that is
+down, and killing/relaunching Chrome is prohibited.
+
+**This is the single operator action blocking T2 and every other Chrome Connect
+item.** Everything upstream of it is ready. No campaign work order can produce a
+UI acceptance until the relay answers.
+
+---
+
+## 6. Not started
+
+Campaign priority 1–5 (T2, T4–T8/C5, creative defects, research backlog, FLUX swap)
+— all gated behind §5. FLUX replacement correctly deferred: no FLUX 3 weights exist
+on this box and no working render path has been proven.
+
