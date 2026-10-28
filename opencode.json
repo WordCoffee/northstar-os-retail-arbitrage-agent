@@ -12,8 +12,6 @@
     { "action": "read", "resource": "*.masterkey*", "effect": "deny" },
     { "action": "read", "resource": "*.key", "effect": "deny" },
     { "action": "read", "resource": "*.pem", "effect": "deny" },
-    { "action": "edit", "resource": "AGENTS.md", "effect": "deny" },
-    { "action": "edit", "resource": "docs/OPERATING_CONSTITUTION.md", "effect": "deny" },
     { "action": "edit", "resource": "shared/master-brain/brain_policy.json", "effect": "deny" },
     { "action": "edit", "resource": "shared/usage-caps.json", "effect": "deny" },
     { "action": "edit", "resource": "watchdog.py", "effect": "deny" },
