@@ -110,6 +110,26 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                     return "mover"
         except Exception:
             pass
+
+        # Local-development identity shim (X-User-Id on loopback in development).
+        # Reuses auth_deps._dev_shim_identity so the SAME gate decides: development
+        # process + loopback effective client + an explicit header, else None.
+        #
+        # Without this the shim fell through to the anonymous `foundation` bucket
+        # (30/min) while the UI loads 10-30 calls per page, so ordinary Design
+        # Studio use tripped 429s and the chat turn answered "Max 30 requests per
+        # minute on foundation plan" instead of replying. That is the exact defect
+        # the cookie branch above was added to fix, left unsolved for the dev shim.
+        try:
+            from auth_deps import _dev_shim_identity
+            dev_user = _dev_shim_identity(request)
+            if dev_user:
+                role = str(dev_user.get("role") or "")
+                if role in ("internal_platform_admin", "platform_admin", "organization_owner"):
+                    return "autothink"
+                return "mover"
+        except Exception:
+            pass
         return "foundation"
 
     def _is_rate_limited(self, client_id: str, plan: str) -> Tuple[bool, Dict]:

@@ -241,14 +241,24 @@ function Shell() {
           className="owner-test-mode-banner"
           data-testid="owner-test-mode-banner"
           role="status"
-          style={{ background: '#5a3d12', color: '#fff', textAlign: 'center', padding: '4px 12px', fontSize: 13, letterSpacing: 0.3 }}
+          // zIndex 10 keeps this ABOVE the fixed .cosmic-canvas (position:fixed,
+          // z-index:0). A static banner paints BELOW a positioned sibling, so the
+          // warning div was in the DOM, correctly coloured and 100% covered by the
+          // shader — elementFromPoint at its centre returned CANVAS.cosmic-canvas.
+          // 10 sits above the canvas and below the sticky .top-nav (z-index:50).
+          style={{ position: 'relative', zIndex: 10, background: '#5a3d12', color: '#fff', textAlign: 'center', padding: '4px 12px', fontSize: 13, letterSpacing: 0.3 }}
         >
           {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
         </div>
       )}
       {LOCAL_DEV && (
         <div data-testid="dev-banner" role="status"
-          style={{ background: '#b4432f', color: '#fff', textAlign: 'center', padding: '6px 12px', fontSize: 14, fontWeight: 700, letterSpacing: 0.5 }}>
+          // Same paint-order fix as the owner-test banner above: `.cosmic-canvas`
+          // is position:fixed/z-index:0, so a static banner is painted underneath
+          // it. Measured 2026-10-28: the banner occupied (0,0,1760x33) with
+          // background rgb(180,67,47) and elementFromPoint at its centre still
+          // returned CANVAS.cosmic-canvas — present in the DOM, invisible on screen.
+          style={{ position: 'relative', zIndex: 10, background: '#b4432f', color: '#fff', textAlign: 'center', padding: '6px 12px', fontSize: 14, fontWeight: 700, letterSpacing: 0.5 }}>
           DEV: AUTH DISABLED — local loopback only
         </div>
       )}

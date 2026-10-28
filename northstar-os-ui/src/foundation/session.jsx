@@ -50,7 +50,14 @@ export function SessionProvider({ children }) {
   // Returns a SNAPSHOT of the resolved identity so callers can decide on the
   // real result instead of assuming success (SignIn's dev-shim fallback uses
   // this). The React state below is still the source of truth for the app.
-  const refresh = useCallback(async () => {
+  //
+  // `attempt` is the retry counter for TRANSIENT failures only. A 429 on
+  // /environment used to land in the generic branch below and, on a cold page
+  // load, leave `authenticated:false` — which bounced the operator to /sign-in
+  // mid-session (and, under LOCAL_DEV, into a /home <-> /sign-in redirect loop,
+  // because /sign-in immediately redirects back to /home). One bounded retry
+  // keeps a transient blip from being reported as a signed-out identity.
+  const refresh = useCallback(async (attempt = 0) => {
     // ui_mode is a PUBLIC signal (available pre-auth) so signed-out clients
     // also land in the correct beta entry state (never the legacy shell).
     let uiMode = 'full'
@@ -104,8 +111,16 @@ export function SessionProvider({ children }) {
         }))
         return { authenticated: true, userId: '', suspended: true, status: e.status }
       }
+      // 429 / 5xx / network: the backend is busy, not signing us out. Retry once
+      // before reporting anything, so a transient blip does not flip the UI to
+      // signed-out state and discard an established identity.
+      const retriable = !e.status || e.status === 429 || e.status >= 500
+      if (retriable && attempt < 1) {
+        await new Promise((resolve) => setTimeout(resolve, 900))
+        return refresh(attempt + 1)
+      }
       setSession((s) => ({ ...s, loaded: true, error: e }))
-      return { authenticated: false, userId: '', error: e, status: e.status }
+      return { authenticated: false, userId: '', error: e, status: e.status, retriable: true }
     }
   }, [])
 
