@@ -13,7 +13,7 @@ export const FORMAT_GROUPS = [
     id: 'ads', label: 'Paid ads',
     formats: [
       { id: 'meta-feed', label: 'Meta feed', w: 1080, h: 1080, group: 'Square', channel: 'Meta' },
-      { id: 'meta-story', label: 'Meta / Reels story', w: 1080, h: 1920, group: 'Vertical', channel: 'Meta' },
+      { id: 'meta-story', label: 'Meta / Reels story', w: 1440, h: 2560, group: 'Vertical', channel: 'Meta' },
       { id: 'google-display', label: 'Google display', w: 1200, h: 628, group: 'Landscape', channel: 'Google' },
       { id: 'google-square', label: 'Google square', w: 1200, h: 1200, group: 'Square', channel: 'Google' },
       { id: 'tiktok', label: 'TikTok / Shorts', w: 1080, h: 1920, group: 'Vertical', channel: 'TikTok' },
@@ -23,12 +23,16 @@ export const FORMAT_GROUPS = [
   {
     id: 'social', label: 'Social content',
     formats: [
-      { id: 'ig-post', label: 'Instagram post', w: 1080, h: 1350, group: 'Portrait', channel: 'Instagram' },
+      // Sizes are the DOCUMENTED platform recommendations, not a scaled
+      // approximation: Instagram re-compresses anything under 1440 wide, and a
+      // 1080-wide story is upscaled by the platform. Sources (pulled
+      // 2026-10-28) are recorded in reports/social_media_asset_specs_20261028.md.
+      { id: 'ig-post', label: 'Instagram post', w: 1440, h: 1800, group: 'Portrait', channel: 'Instagram' },
       { id: 'ig-carousel', label: 'Instagram carousel', w: 1080, h: 1080, group: 'Square', channel: 'Instagram' },
       { id: 'pin', label: 'Pinterest pin', w: 1000, h: 1500, group: 'Portrait', channel: 'Pinterest' },
-      { id: 'x-post', label: 'X post', w: 1600, h: 900, group: 'Landscape', channel: 'X' },
-      { id: 'linkedin', label: 'LinkedIn post', w: 1200, h: 627, group: 'Landscape', channel: 'LinkedIn' },
-      { id: 'yt-thumb', label: 'YouTube thumbnail', w: 1280, h: 720, group: 'Landscape', channel: 'YouTube' },
+      { id: 'x-post', label: 'X post (1.91:1)', w: 1200, h: 628, group: 'Landscape', channel: 'X' },
+      { id: 'linkedin', label: 'LinkedIn post', w: 1200, h: 628, group: 'Landscape', channel: 'LinkedIn' },
+      { id: 'yt-thumb', label: 'YouTube thumbnail', w: 3840, h: 2160, group: 'Landscape', channel: 'YouTube' },
     ],
   },
   {

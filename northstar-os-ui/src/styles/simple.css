@@ -25,7 +25,7 @@
   --ink: #f7f3ec;
   --ink-mid: #d2ccbf;
   --ink-soft: #a8a196;
-  --ink-faint: #8d867a;
+  --ink-faint: #9a9386;
   --divider: rgba(247, 243, 236, 0.13);
   --divider-mid: rgba(247, 243, 236, 0.22);
   --divider-strong: rgba(247, 243, 236, 0.34);
@@ -326,6 +326,40 @@
 .mb-shell .chat-composer-box .btn-primary:hover { background: #2a63d6; border-color: #2a63d6; }
 .mb-shell .chat-composer-box .btn-primary:disabled { opacity: 0.45; box-shadow: none; }
 .mb-shell .chat-composer .chat-hint { font-size: 12.5px; padding: 0 4px; }
+
+/* Existing-asset picker: the automation-drivable equivalent of the paperclip.
+   Brand assets are already catalogued, so they are selected by id instead of
+   uploaded through a native file dialog no controller can drive. */
+.mb-shell .chat-asset-picker {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 10px 12px; margin-bottom: 8px;
+  background: rgba(9, 12, 17, 0.92);
+  border: 1px solid rgba(247, 243, 236, 0.18); border-radius: 14px;
+  max-height: 320px;
+}
+.mb-shell .chat-asset-picker-head { display: flex; align-items: center; gap: 10px; }
+.mb-shell .chat-asset-picker-head strong { font-size: 13.5px; color: var(--ink); }
+.mb-shell .chat-asset-picker-note { font-size: 12px; color: var(--ink-faint); flex: 1 1 auto; }
+.mb-shell .chat-asset-picker-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 8px; overflow-y: auto; scrollbar-gutter: stable;
+}
+.mb-shell .chat-asset-option {
+  display: flex; flex-direction: column; gap: 4px; align-items: stretch;
+  padding: 8px; border-radius: 10px; cursor: pointer; text-align: left;
+  background: rgba(247, 243, 236, 0.05);
+  border: 1px solid rgba(247, 243, 236, 0.14); color: var(--ink);
+  font-size: 12px;
+}
+.mb-shell .chat-asset-option:hover { background: rgba(247, 243, 236, 0.12); border-color: var(--spark); }
+.mb-shell .chat-asset-option img {
+  width: 100%; height: 76px; object-fit: contain; border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+}
+.mb-shell .chat-asset-option-name {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+.mb-shell .chat-asset-option-kind { font-size: 10.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; }
 
 /* ── 14. Workbench (the AutothinK surface in Simple mode) ────────────────── */
 .mb-shell .wb-panel,

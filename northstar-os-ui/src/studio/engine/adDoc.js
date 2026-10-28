@@ -16,7 +16,7 @@ export const AD_PLACEMENTS = [
   { id: 'google-display', label: 'Google display', note: 'Responsive display unit.' },
   { id: 'tiktok', label: 'TikTok', note: 'Vertical, top-view ad slot.' },
   { id: 'sponsored-brand', label: 'Sponsored brand', note: 'Headline + logo + product.' },
-  { id: 'yt-thumb', label: 'YouTube thumbnail', note: '1280×720 preview card.' },
+  { id: 'yt-thumb', label: 'YouTube thumbnail', note: '3840×2160 recommended (16:9), min width 640.' },
 ]
 
 export function adFormat(id) {

@@ -271,11 +271,102 @@ def _homography(src, dst) -> np.ndarray:
     return H / H[2, 2]
 
 
+def mesh_grid(quad: Sequence, nx: int = 5, ny: int = 7,
+              bow_x: float = 0.0, bow_y: float = 0.0) -> np.ndarray:
+    """Build a quad mesh from four corners, with optional barrel bow.
+
+    A pouch face is not planar: its side edges bow outward at mid-height and its
+    top/bottom edges bow in the same way. `bow_x` moves the mid-height nodes
+    outward along the row axis, `bow_y` moves the mid-width nodes along the
+    column axis. With both at zero this is a bilinear grid over `quad`, i.e. the
+    same geometry a homography produces, so passing it is always safe.
+
+    Returns an (ny, nx, 2) float array of destination (x, y) node positions.
+    `quad` order is top-left, top-right, bottom-right, bottom-left.
+    """
+    q = np.asarray(quad, dtype=float).reshape(4, 2)
+    tl, tr, br, bl = q
+    grid = np.zeros((ny, nx, 2), dtype=float)
+    for j in range(ny):
+        t = j / (ny - 1) if ny > 1 else 0.0
+        left = tl + (bl - tl) * t
+        right = tr + (br - tr) * t
+        axis = right - left
+        norm = float(np.linalg.norm(axis))
+        ux = axis / norm if norm > 1e-9 else np.array([1.0, 0.0])
+        widen = bow_x * float(np.sin(np.pi * t))
+        left = left - ux * widen
+        right = right + ux * widen
+        for i in range(nx):
+            s = i / (nx - 1) if nx > 1 else 0.0
+            p = left + (right - left) * s
+            if bow_y:
+                # bow the top and bottom edges along the column normal
+                uy = np.array([-ux[1], ux[0]])
+                p = p + uy * (bow_y * float(np.sin(np.pi * s)) * (1.0 - 2.0 * t))
+            grid[j, i] = p
+    return grid
+
+
+def _mesh_pos_and_tangents(grid: np.ndarray, uu: np.ndarray, vv: np.ndarray,
+                           pw: float, ph: float):
+    """Bilinear mesh position and its tangents at panel coords (uu, vv)."""
+    ny, nx = grid.shape[:2]
+    gx = np.clip(uu / max(1.0, pw - 1.0) * (nx - 1), 0, nx - 1 - 1e-9)
+    gy = np.clip(vv / max(1.0, ph - 1.0) * (ny - 1), 0, ny - 1 - 1e-9)
+    i0 = np.floor(gx).astype(int)
+    j0 = np.floor(gy).astype(int)
+    a = (gx - i0)[..., None]
+    b = (gy - j0)[..., None]
+    p00 = grid[j0, i0]
+    p10 = grid[j0, i0 + 1]
+    p01 = grid[j0 + 1, i0]
+    p11 = grid[j0 + 1, i0 + 1]
+    pos = (1 - a) * (1 - b) * p00 + a * (1 - b) * p10 + (1 - a) * b * p01 + a * b * p11
+    d_du = ((1 - b) * (p10 - p00) + b * (p11 - p01)) * ((nx - 1) / max(1.0, pw - 1.0))
+    d_dv = ((1 - a) * (p01 - p00) + a * (p11 - p10)) * ((ny - 1) / max(1.0, ph - 1.0))
+    return pos, d_du, d_dv
+
+
+def _refine_to_mesh(uu: np.ndarray, vv: np.ndarray, px: np.ndarray, py: np.ndarray,
+                    grid: np.ndarray, pw: float, ph: float, iters: int = 3):
+    """Newton-solve the panel (u, v) whose mesh position lands on pixel (px, py).
+
+    The homography inverse is the starting guess, so two or three iterations take
+    a 5 px geometric error down to the hundredths of a pixel measured in
+    reports/rea_probe/warp_probe.json.
+    """
+    if grid is None:
+        return uu, vv
+    for _ in range(max(0, int(iters))):
+        pos, d_du, d_dv = _mesh_pos_and_tangents(grid, uu, vv, pw, ph)
+        rx = px - pos[..., 0]
+        ry = py - pos[..., 1]
+        det = d_du[..., 0] * d_dv[..., 1] - d_dv[..., 0] * d_du[..., 1]
+        det = np.where(np.abs(det) < 1e-9, 1e-9, det)
+        step_u = (rx * d_dv[..., 1] - d_dv[..., 0] * ry) / det
+        step_v = (d_du[..., 0] * ry - rx * d_du[..., 1]) / det
+        uu = uu + step_u
+        vv = vv + step_v
+        # Keep the solve bounded without turning out-of-panel pixels into valid
+        # ones: the caller's `valid` mask depends on u/v leaving [0, pw-1].
+        uu = np.clip(uu, -pw, 2.0 * pw)
+        vv = np.clip(vv, -ph, 2.0 * ph)
+    return uu, vv
+
+
 def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
                shading: float = 0.5, realism: Optional[Dict[str, Any]] = None,
                maps: Optional[Any] = None,
-               metrics_out: Optional[Dict[str, Any]] = None) -> Image.Image:
-    """Exact 4-point homography (panel -> quad), bilinear, realism-integrated.
+               metrics_out: Optional[Dict[str, Any]] = None,
+               grid: Optional[Any] = None, mesh_iters: int = 3) -> Image.Image:
+    """4-point homography (panel -> quad), bilinear, realism-integrated.
+
+    Pass ``grid`` (an (ny, nx, 2) node array, see :func:`mesh_grid`) to warp
+    through a mesh instead of a single homography. A 5x7 mesh took the mean
+    reprojection error against a synthetic curved face from 5.413 px to
+    0.676 px (reports/rea_probe/warp_probe.json); the homography stays exact at
+    the four corners, which is why it is still the fallback.
 
     With ``maps`` (a compositor_realism.SurfaceMaps built from the plate) the
     print takes the full surface-realism recipe: luminance displacement,
@@ -290,6 +381,10 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     W, Hpx = photo.size
     xs = [p[0] for p in quad]
     ys = [p[1] for p in quad]
+    if grid is not None:
+        g = np.asarray(grid, dtype=float)
+        xs = list(xs) + [float(g[..., 0].min()), float(g[..., 0].max())]
+        ys = list(ys) + [float(g[..., 1].min()), float(g[..., 1].max())]
     m = 6
     x0, x1 = max(0, int(min(xs)) - m), min(W, int(max(xs)) + m)
     y0, y1 = max(0, int(min(ys)) - m), min(Hpx, int(max(ys)) + m)
@@ -298,6 +393,11 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     uv = pts @ Hinv.T
     u = uv[..., 0] / uv[..., 2]
     v = uv[..., 1] / uv[..., 2]
+
+    if grid is not None:
+        u, v = _refine_to_mesh(
+            u, v, gx.astype(float), gy.astype(float),
+            np.asarray(grid, dtype=float), float(PW), float(PH), iters=mesh_iters)
 
     # reality pass 1: luminance displacement (ink rides the surface's folds)
     if maps is not None and shading > 0:
