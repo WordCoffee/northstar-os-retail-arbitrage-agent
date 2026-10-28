@@ -245,3 +245,81 @@ render may be presented as dimensionally accurate.**
 
 Remaining campaign priorities (T4–T8, C5, creative defects, research backlog) and
 the FLUX swap (deferred: no FLUX 3 weights on disk) are untouched.
+
+---
+
+# 8. T2 re-acceptance — clean UI regeneration: VERIFIED COMPLETE
+
+Section 7 recorded T2 as complete on workflow, text and persistence. The owner
+reviewed the artefact and reclassified it: **visual/product acceptance FAILED** -
+the label read as a flat card floating over the bag and spilling onto the table.
+That reclassification was correct. Section 7.2's acceptance was withdrawn.
+
+## 8.1 The defect, measured
+
+`_foreground_mask` compared every pixel to a single outer-ring median colour. The
+T1 plate has two backdrops (grey wall above, bright marble table below), so the
+table, the shadow and the olive sprig were classified as pouch:
+
+```
+face    top 307  bottom 1535  left 0   right 1023     (the whole frame)
+coverage 49%                                          (pouch is ~20%)
+quad    y 386 .. 1474                                 (pouch ends near y1180)
+```
+
+The label was warped onto a quad that ran off the bottom of the bag onto the
+table, and out to both frame edges.
+
+## 8.2 Repair — `Northstar_backend/pouch_label.py`
+
+| Change | Why |
+|---|---|
+| Segment by chroma, keep the component with the greatest **height**, fill holes, trim thin appendages by row/column occupancy | A prop that touches the bag can no longer outvote it; the bag is the tallest object |
+| Old colour-distance method kept as a **fallback** for low-chroma stock (ivory on white seamless), still fail-closed | SKU 2 must not break |
+| `inset_top 0.065 → 0.20`, `inset_bottom 0.05 → 0.10` | A stand-up pouch has a top weld and a base gusset that are not printable panel |
+| `fold_shadow 0→0.35`, `ao_rim_px 0→5`, `grain_sync 0.35`, `softlight 0.26` | These were at **off** defaults, which is why the print read as a paste |
+| `shading 0.55 → 0.28` | The pass multiplied by the kraft's *absolute* luminance, turning the cream field grey; at 0.28 the pouch shading shows through and the cream stays cream |
+
+Same plate now measures `left 220 right 824 bottom 1268`, coverage 35%, quad
+`262,500 → 772,500 → 744,1172 → 285,1172`.
+
+**Regression:** `test_pouch_label_placement.py` — 4 tests, fail-before proven on a
+synthetic two-backdrop scene:
+
+```
+OLD mask: left=0    right=759  bottom=1119  coverage .563   -> FAILS
+NEW mask: left=167  right=592  bottom=896   coverage .326   -> PASSES
+```
+
+## 8.3 Clean UI regeneration
+
+Fresh chat (`chat-new`), transcript confirmed blank, then an explicit instruction
+to call `apply_label` and **create a new artifact, not reuse 486d4958**.
+
+| Criterion | Evidence |
+|---|---|
+| Produced through the UI | controller run `…mvsgds75`, 5 steps, 0 refusals, `typed_text_verified_in_transcript`; tool card `Putting the logo and copy on the pack` → `done`, `Thought for 77s · 1 tool run` |
+| New artifact ID differs | **`9fef9b3c-0c1b-4e56-b9e1-6e33b16d6cce`** ≠ `486d4958-1bee-4b7a-9342-620a594bb718` |
+| Stored file | `Northstar_backend/data/studio_generated/52afb729a1db4aecafb2097bd393db7c.png`, 1,966,261 B, 1024×1536 |
+| Label conforms | viewed: sits under the zipper weld, above the base curve, inside the panel, no spill onto the table, pouch crease and shading pass through the cream field |
+| Exact strings + real logo | `ORGANIC LION'S MANE` / `MUSHROOM POWDER` / `6 oz (170g)`, real logo pixels, real fonts; no model-painted text |
+| Preview | lightbox opened (`…mvsghblj`) |
+| Download | 1024×1536, 1,966,261 B, **sha256 identical to the stored artefact** |
+| Persistence after refresh | chip `ORGANIC LION'S MANE — labelled mockup`, asset id `9fef9b3c…` and `View`/`Download` all still present |
+
+Before / after / final in `screenshots/t2_placement_fix_20261028/`:
+`BEFORE-floating-card.png`, `AFTER-corrected.png`, `FINAL-UI-reported.png`.
+
+## 8.4 Remaining defects (recorded, not blocking)
+
+1. **The first re-run did not re-invoke the tool.** After the backend restart the
+   model answered in 31 s echoing the *previous* asset id and wrote no file - it
+   anchored on the prior turn. A fresh chat fixed it, but this is a real product
+   behaviour: a repeated identical request in the same session can be answered
+   from context instead of executed. A tool-invocation guard ("this turn must
+   produce a new artifact") would be the durable fix.
+2. `test_pouch_label.py` still has 6 failures that assert the old 1216 px engine
+   edge (`_fit_box` / `generate_image`). Pre-existing, unrelated to this change,
+   and they should be updated to 2048.
+3. The asset-picker list is populated asynchronously, so a `data-asset-id`
+   selector is not present on the next step after opening it.
