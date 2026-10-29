@@ -624,6 +624,78 @@ def _t_apply_label(args, ctx) -> dict:
     }
 
 
+def _t_place_logo(args, ctx) -> dict:
+    """Put the operator's logo on a plate at a measured or explicit anchor."""
+    import logo_placement
+
+    db = ctx.get("db")
+    acct = ctx.get("account_id")
+    plate_rec, plate_path = _resolve_asset(db, acct, args["plate_asset_id"])
+    if plate_path is None:
+        return {"ok": False, "summary": "That plate asset has no file on disk.",
+                "error": f"no readable plate for {args.get('plate_asset_id')!r}", "assets": []}
+    logo_rec, logo_path = _resolve_asset(db, acct, args["logo_asset_id"])
+    if logo_path is None:
+        return {"ok": False, "summary": "The logo asset could not be read.",
+                "error": f"no readable logo for {args.get('logo_asset_id')!r}", "assets": []}
+
+    progress: Callable[[Optional[int], str], None] = ctx.get("progress") or (lambda p, l: None)
+    progress(10, "measuring where the mark sits cleanly")
+    try:
+        out = logo_placement.place(
+            plate_path.read_bytes(), logo_path.read_bytes(),
+            anchor=str(args.get("anchor") or "auto"),
+            scale=float(args.get("scale") or 0.18),
+            opacity=float(args.get("opacity") if args.get("opacity") is not None else 0.95),
+            margin=float(args.get("margin") if args.get("margin") is not None else 0.04),
+            blend=str(args.get("blend") or "normal"),
+        )
+    except ValueError as exc:
+        return {"ok": False, "summary": "The logo placement was rejected.",
+                "error": str(exc)[:300], "assets": []}
+    except Exception as exc:  # noqa: BLE001 - honest result, never a silent no-op
+        return {"ok": False, "summary": "The logo could not be placed.",
+                "error": f"{type(exc).__name__}: {exc}"[:300], "assets": []}
+
+    progress(90, "registering the composited asset")
+    fname = f"{uuid.uuid4().hex}.png"
+    (_out_dir() / fname).write_bytes(out["bytes"])
+    aid = None
+    if db is not None and acct:
+        aid = db.design_studio.assets.create({
+            "account_id": acct,
+            "project_id": ctx.get("project_id") or (plate_rec or {}).get("project_id"),
+            "name": args.get("name") or "logo placement",
+            "asset_type": "composite", "mime_type": "image/png",
+            "storage_key": fname,
+            "width": out["size"][0], "height": out["size"][1],
+            "size_bytes": len(out["bytes"]),
+            "metadata": {"logo_placement": {
+                "plate_asset_id": args["plate_asset_id"],
+                "logo_asset_id": args["logo_asset_id"],
+                "placement": out["placement"], "quality": out["quality"],
+                "via": "chat-tool place_logo"}},
+        })
+    q = out["quality"]
+    p = out["placement"]
+    warn = "" if q["contrast_ok"] else " Contrast is low (<1.5:1) — the mark may disappear."
+    return {
+        "ok": True,
+        "summary": (f"Placed the logo at {p['anchor']} ({p['width']}x{p['height']} px, "
+                    f"{int(round(p['opacity'] * 100))}% opacity, {p['blend']} blend). "
+                    f"Ink/backdrop contrast {q['contrast_ratio']}:1, coverage "
+                    f"{q['coverage_pct']}% of the frame.{warn} The anchor was measured, "
+                    "not guessed — the logo pixels are composited, never generated."),
+        "assets": [{
+            "id": aid, "kind": "image",
+            "url": f"/api/design-studio/assets/{aid}/file" if aid else None,
+            "name": args.get("name") or "logo placement",
+            "width": out["size"][0], "height": out["size"][1],
+        }],
+        "data": {"placement": p, "quality": q},
+    }
+
+
 def _t_build_package(args, ctx) -> dict:
     """Complete package: panels + dieline + mockup, gated on real inputs."""
     from specialists import package_designer as pd
@@ -1557,7 +1629,7 @@ SERVICES = [
      "tools": ["knowledge_lookup", "listing_audit"],
      "can": "check gating and invoices, grade condition, audit a reseller listing"},
     {"id": "creative", "label": "Creative Studio",
-     "tools": ["creative_plan", "generate_image", "apply_label", "build_package",
+     "tools": ["creative_plan", "generate_image", "apply_label", "place_logo", "build_package",
                "plan_aplus", "plan_social", "plan_video", "write_content",
                "design_brief", "create_dieline", "voice_list", "voice_tts",
                "voice_dub", "list_templates", "plan_project"],
@@ -1864,6 +1936,39 @@ TOOLS: Dict[str, dict] = {    "system_status": {
             "required": ["plate_asset_id", "title"],
         },
         "handler": _t_apply_label,
+    },
+    "place_logo": {
+        "description": ("Put the operator's logo ON a rendered image at a measured or explicit "
+                        "anchor — the brand-mark pass (apply_label is the full print pass). Use "
+                        "this when the ask is 'put my logo on it', not 'label this pouch'. The "
+                        "anchor is chosen by measuring the calmest perimeter cell, or you may name "
+                        "one; the logo pixels are composited, never generated. It reports the "
+                        "ink/backdrop contrast it achieved, so a low-contrast mark is flagged "
+                        "instead of shipped silently."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "plate_asset_id": {"type": "string", "minLength": 3, "maxLength": 80,
+                                   "description": "Asset id of the image to place the logo on."},
+                "logo_asset_id": {"type": "string", "minLength": 3, "maxLength": 80,
+                                  "description": "Asset id of the operator's logo."},
+                "anchor": {"type": "string",
+                           "enum": ["auto", "top-left", "top-center", "top-right",
+                                    "middle-left", "center", "middle-right",
+                                    "bottom-left", "bottom-center", "bottom-right"],
+                           "description": "auto = flattest perimeter cell (never dead centre)."},
+                "scale": {"type": "number", "minimum": 0.02, "maximum": 0.9,
+                          "description": "Logo width as a fraction of the plate's short edge (default 0.18)."},
+                "opacity": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.95},
+                "margin": {"type": "number", "minimum": 0, "maximum": 0.25, "default": 0.04,
+                           "description": "Margin as a fraction of each axis."},
+                "blend": {"type": "string", "enum": ["normal", "multiply"], "default": "normal",
+                          "description": "multiply keeps the surface shading through the mark."},
+                "name": {"type": "string", "maxLength": 120},
+            },
+            "required": ["plate_asset_id", "logo_asset_id"],
+        },
+        "handler": _t_place_logo,
     },
     "build_package": {
         "description": ("Build a COMPLETE package, not one image: front panel, back panel "
