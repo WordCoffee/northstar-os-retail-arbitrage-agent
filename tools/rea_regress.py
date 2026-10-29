@@ -67,6 +67,8 @@ SPEC = [
      "why": "S5: crop matrix + keep-in intersection must hold"},
     {"id": "hook_templates_ok", "direction": HIGHER, "tol": 0.0,
      "why": "V3: structures must stay sourced, timed and honest about thin evidence"},
+    {"id": "assembly_lane_ok", "direction": HIGHER, "tol": 0.0,
+     "why": "V2: assembly must run without the GPU engine and expose its route"},
 ]
 
 
@@ -254,6 +256,16 @@ def m_guards() -> dict:
     except Exception as exc:  # noqa: BLE001
         out["hook_templates_ok"] = 0
         out["_hooks_error"] = type(exc).__name__
+    try:
+        import design_studio_async as dsa
+        st = dsa.assembly_available()
+        routes = {getattr(r, "path", "") for r in dsa.router.routes}
+        ok = (st.get("ready") is True and st.get("needs_engine") is False
+              and "/api/design-studio/assemble-async" in routes)
+        out["assembly_lane_ok"] = 1 if ok else 0
+    except Exception as exc:  # noqa: BLE001
+        out["assembly_lane_ok"] = 0
+        out["_assembly_error"] = type(exc).__name__
     return out
 
 
@@ -290,6 +302,7 @@ def baseline_values() -> dict:
         "social_validator_ok": g("guards", "social_validator_ok"),
         "social_variants_ok": g("guards", "social_variants_ok"),
         "hook_templates_ok": g("guards", "hook_templates_ok"),
+        "assembly_lane_ok": g("guards", "assembly_lane_ok"),
     }
 
 

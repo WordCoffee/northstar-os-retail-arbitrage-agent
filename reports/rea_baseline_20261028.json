@@ -227,7 +227,8 @@
       "logo_tool_present": 1,
       "social_validator_ok": 1,
       "social_variants_ok": 1,
-      "hook_templates_ok": 1
+      "hook_templates_ok": 1,
+      "assembly_lane_ok": 1
     },
     "test_totals": {
       "status": "measured",

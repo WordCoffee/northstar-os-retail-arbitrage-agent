@@ -324,6 +324,213 @@ def generate_async(body: GenerateIn, acct: str = Depends(studio_account)):
         raise HTTPException(status_code=422, detail=str(exc))
 
 
+# ── Video assembly lane (V2) ────────────────────────────────────────────────
+# Mirrors the generation pattern above (gate -> optional reserve -> job row ->
+# executor -> status/asset/webhook) rather than forking it, with one deliberate
+# difference: assembly needs FFmpeg + PIL, NOT the GPU engine. Gating it on
+# ComfyUI would refuse a job that does not use ComfyUI.
+
+def assembly_available() -> Dict[str, Any]:
+    """Is the assembly lane runnable? FFmpeg is the only requirement."""
+    import shutil
+    exe = shutil.which("ffmpeg")
+    return {"ready": bool(exe), "ffmpeg": exe,
+            "needs_engine": False,
+            "note": "Assembly is FFmpeg + PIL on stills; it never touches the GPU lane."}
+
+
+def _assembly_cost() -> int:
+    # 0 by default: local FFmpeg costs nothing. Still metered when enforcement is on.
+    return int(os.environ.get("DESIGN_CREDIT_COST_ASSEMBLE", "0"))
+
+
+def _resolve_assembly_inputs(db, acct: str, images, out_dir: Path):
+    """Asset ids only, or a path already inside the studio output dir.
+
+    Arbitrary filesystem paths are refused on purpose: a job parameter must not
+    be able to read any file on the machine.
+    """
+    from pathlib import Path as _P
+    resolved = []
+    for item in images or []:
+        item = str(item)
+        rec = db.design_studio.assets.get_by_id(item, account_id=acct) if db is not None else None
+        if rec and rec.get("storage_key"):
+            path = out_dir / _P(str(rec["storage_key"])).name
+            if not path.is_file():
+                raise FileNotFoundError(f"asset {item!r} has no file on disk")
+            resolved.append(path)
+            continue
+        candidate = _P(item)
+        try:
+            candidate.resolve().relative_to(out_dir.resolve())
+        except Exception:
+            raise ValueError(f"input {item!r} is neither an asset id nor a file in the studio "
+                             "output directory")
+        if not candidate.is_file():
+            raise FileNotFoundError(f"input file not found: {item}")
+        resolved.append(candidate)
+    if not resolved:
+        raise ValueError("at least one input image is required")
+    return resolved
+
+
+def run_assembly_job(*, job_id: str, acct: str, body: Dict[str, Any],
+                     reservation_id: Optional[str] = None, enforce: bool = False,
+                     db=None, ledger: Optional[CreditLedger] = None,
+                     out_dir: Optional[Path] = None) -> Dict[str, Any]:
+    """Execute one queued assembly job. Same status/asset/webhook contract as a render."""
+    import studio_video_assemble as sva
+
+    db = db or get_northstar_db()
+    ledger = ledger if ledger is not None else (get_ledger() if enforce else None)
+    out_dir = out_dir or _out_dir()
+    db.design_studio.jobs.update(job_id, {"status": "running", "started_at": _now()},
+                                 account_id=acct)
+    try:
+        images = _resolve_assembly_inputs(db, acct, body.get("images"), out_dir)
+        widths = int(body.get("width") or 1080)
+        heights = int(body.get("height") or 1920)
+        meta = sva.assemble(
+            images,
+            captions=body.get("captions") or [],
+            narration=body.get("narration"),
+            out_path=out_dir / f"{uuid.uuid4().hex}.mp4",
+            seconds_per_shot=float(body.get("seconds") or 4.0),
+            size=(widths, heights),
+        )
+    except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
+        if enforce and reservation_id and ledger is not None:
+            try:
+                ledger.release(reservation_id, idempotency_key=f"release:{reservation_id}")
+            except KeyError:
+                pass
+        db.design_studio.jobs.update(job_id, {
+            "status": "failed", "ended_at": _now(), "credits_used": 0,
+            "error": str(exc)[:400],
+        }, account_id=acct)
+        _notify_callback(db, acct, job_id, body, {
+            "job_id": job_id, "status": "failed", "error": str(exc)[:400],
+            "provenance": {"lane": "assemble", "provider": "local:ffmpeg",
+                           "note": "Failure before any artifact was produced."},
+        })
+        return {"status": "failed", "error": str(exc)[:400]}
+
+    path = Path(meta["out_path"])
+    probe = meta.get("probe") or {}
+    video = next((s for s in probe.get("streams", []) if s.get("type") == "video"), {})
+    aid = db.design_studio.assets.create({
+        "account_id": acct,
+        "project_id": body.get("project_id"),
+        "name": body.get("name") or f"assembled clip - {_now()[:16]}",
+        "asset_type": "generated-video",
+        "mime_type": "video/mp4",
+        "storage_key": path.name,
+        "width": video.get("width"), "height": video.get("height"),
+        "duration_seconds": probe.get("duration_s"),
+        "size_bytes": probe.get("size_bytes") or path.stat().st_size,
+        "metadata": {
+            "assembly": {
+                "shots": meta.get("shots"), "seconds_per_shot": meta.get("seconds_per_shot"),
+                "captions": meta.get("captions"), "audio": meta.get("audio"),
+                "audio_present": meta.get("audio_present"),
+                "probe": probe, "assembled_at": _now(), "lane": "assemble",
+            },
+            "note": "Assembled locally from the operator's own stills with FFmpeg. "
+                    "Nothing was generated and nothing was sent to any provider.",
+        },
+    })
+    if enforce and reservation_id and ledger is not None:
+        try:
+            ledger.commit(reservation_id, idempotency_key=f"commit:{reservation_id}")
+        except KeyError:
+            pass
+    db.design_studio.jobs.update(job_id, {
+        "status": "done", "ended_at": _now(), "asset_id": aid,
+        "credits_used": _assembly_cost() if enforce else 0,
+        "duration_seconds": probe.get("duration_s"),
+    }, account_id=acct)
+    _notify_callback(db, acct, job_id, body, {
+        "job_id": job_id, "status": "done", "asset_ids": [aid],
+        "provenance": {"lane": "assemble", "provider": "local:ffmpeg",
+                       "duration_s": probe.get("duration_s")},
+    })
+    return {"status": "done", "asset_id": aid, "duration_s": probe.get("duration_s")}
+
+
+def submit_assembly(acct: str, *, images, captions=None, narration: Optional[str] = None,
+                    seconds: float = 4.0, width: int = 1080, height: int = 1920,
+                    project_id: Optional[str] = None,
+                    callback_url: Optional[str] = None,
+                    name: Optional[str] = None) -> Dict[str, Any]:
+    """Queue a video assembly. Raises HTTPException when FFmpeg is absent."""
+    st = assembly_available()
+    if not st["ready"]:
+        raise HTTPException(status_code=409, detail={
+            "code": "ffmpeg_missing",
+            "message": "Video assembly needs FFmpeg on PATH; it is not installed. "
+                       "The GPU engine is not required for this lane.",
+            "assembly": st,
+        })
+    enforce = credits_enforced()
+    cost = _assembly_cost()
+    ledger = get_ledger() if enforce else None
+    reservation: Optional[Dict[str, Any]] = None
+    if enforce and ledger is not None and cost > 0:
+        ensure_initial_grant(ledger, acct)
+        try:
+            res = ledger.reserve(acct, cost, action="design_studio.assemble",
+                                 idempotency_key=f"reserve:{uuid.uuid4().hex}")
+        except InsufficientCredits as exc:
+            raise HTTPException(status_code=402, detail={
+                "code": "insufficient_credits", "message": str(exc), "cost": cost})
+        reservation = {"reservation_id": res.reservation_id, "amount": cost}
+
+    db = get_northstar_db()
+    job_id = db.design_studio.jobs.create({
+        "account_id": acct, "project_id": project_id,
+        "job_type": "assemble-video", "provider": "local:ffmpeg", "status": "queued",
+        "cost_preview": {"provider": "local", "credits": cost, "enforced": enforce,
+                         "note": "Local FFmpeg assembly; nothing paid. "
+                                 f"Credit enforcement {'ON' if enforce else 'OFF'}."},
+        "params": {"images": list(images or []), "captions": list(captions or []),
+                   "narration": narration, "seconds": seconds, "width": width,
+                   "height": height, "callback_url": callback_url, "name": name},
+        "credits_used": cost if enforce else 0,
+    })
+    _EXECUTOR.submit(run_assembly_job, job_id=job_id, acct=acct,
+                     body={"images": list(images or []), "captions": list(captions or []),
+                           "narration": narration, "seconds": seconds, "width": width,
+                           "height": height, "project_id": project_id,
+                           "callback_url": callback_url, "name": name},
+                     reservation_id=(reservation or {}).get("reservation_id"),
+                     enforce=enforce)
+    return {"job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
+            "reservation": reservation, "enforce": enforce, "assembly": st}
+
+
+class AssembleIn(BaseModel):  # noqa: F811 - defined here to keep the lane self-contained
+    images: list = []
+    captions: list = []
+    narration: Optional[str] = None
+    seconds: float = 4.0
+    width: int = 1080
+    height: int = 1920
+    project_id: Optional[str] = None
+    callback_url: Optional[str] = None
+    name: Optional[str] = None
+
+
+@router.post("/assemble-async", status_code=202)
+def assemble_async(body: AssembleIn, acct: str = Depends(studio_account)):
+    """Queue a video assembly from stills. Returns immediately."""
+    return submit_assembly(acct, images=body.images, captions=body.captions,
+                           narration=body.narration, seconds=body.seconds,
+                           width=body.width, height=body.height,
+                           project_id=body.project_id, callback_url=body.callback_url,
+                           name=body.name)
+
+
 @router.get("/generate-async/{job_id}")
 def async_status(job_id: str, acct: str = Depends(studio_account)):
     """Poll a queued/running/done job (credits view included when enforced)."""
