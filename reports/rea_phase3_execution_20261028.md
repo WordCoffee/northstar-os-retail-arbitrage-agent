@@ -270,3 +270,105 @@ merged by a process that has write access, or with the permission lifted.
 
 **Ceiling decision:** **2048** (recorded 2026-10-28). The six stale assertions
 were rewritten to the measured values; no production constant changed.
+
+---
+
+# POST-DECISION WORK (2026-10-29)
+
+## ITEM 1 - independent re-verification
+
+`tools/rea_verify_item1.py` recomputes the acceptance from the plate and the
+artefact instead of trusting `item1_acceptance.json`.
+
+| Check | Claimed | Actual | Verdict |
+|---|---|---|---|
+| geometric residual | 0.238 px | **0.238 px** | ok |
+| mesh present | yes | yes | ok |
+| artefact exists | yes | yes | ok |
+| OCR status / boxes | ok / 5 | **ok / 5** | ok |
+| OCR words (exact except spacing) | 5 boxes | identical | ok |
+| prepress gamut status | ok | **ok** | ok |
+| out-of-gamut share | 2.0 % | **2.0 %** | ok |
+| max TAC | 254.9 % | **254.9 %** (limit 300) | ok |
+
+**PASS: item 1 reproduces.** Text read back: MOGRAORGAVCS, Healthy&organic,
+ORGANICLION'S MANE, MUSHROOM POWDER, 6 oz (170 g) - compared with whitespace
+squashed because RapidOCR drops spaces inside a box (recorded finding).
+
+**Commit:** 38d89be4 (verifier). No test changed.
+
+## ITEM 4 - U1 auto-chain + U4 re-measure
+
+**U1 changed** (`Northstar_backend/chat_router.py`):
+- `label_brief(text)` detects label/pouch/bag/dieline intent.
+- `explicit_label_title(text, options)` returns a name ONLY when the turn states
+  it (an explicit product_name/title option, or a double-quoted phrase). An
+  apostrophe is not a quote, so "Lion's Mane" is never mis-read.
+- After a successful `generate_image` in a label turn it calls `apply_label` with
+  the render's own `plate_asset_id` + `title`, emits the same tool-start /
+  tool-end / asset frames a model call would, and registers the artefact.
+- Bounded: once per turn, never after an explicit `apply_label`, never when the
+  turn supplies no name. Missing name emits one `notice` (`label_needs_title`);
+  nothing is invented.
+
+**Tests** (`test_label_autochain.py`, 5) + 46 passed across test_turn_contract /
+test_chat_router_intent / test_chat_tools / test_label_autochain.
+
+| Metric | Before | After | Note |
+|---|---|---|---|
+| label turn reaches the print pass (deterministic harness) | 1 call (render only) | **2 calls** (render + print) | the capability change |
+| corpus `apply_label` / label turns | 0.143 | **0.409** | **from real usage, not this patch** - historical rows cannot change. Not evidence for U1. |
+
+**U4 re-measured:** `--ink-faint` on `#1a2435` **4.32 -> 5.11** (AA needs 4.5), ok.
+
+**Commit:** 38d89be4.
+
+## ITEM 5 - V1 video assembly service
+
+`Northstar_backend/studio_video_assemble.py`:
+`assemble(images, captions=..., narration=..., out_path=..., seconds_per_shot=...,
+size=..., fps=...)` - the exact FFmpeg chain from 1.3 section 5 as a callable
+service: per-shot zoompan, concat, PIL caption overlays with enable windows,
+Piper narration, loudnorm + apad, and an ffprobe read-back. CLI included.
+
+Produced clip `reports/rea_probe/video/assembled_v1.mp4` (via the CLI):
+
+    video: h264 1080x1920 30/1
+    audio: aac 96000 Hz
+    duration: 8.000000 s
+    size: 1,639,562 bytes
+
+Tests (`test_video_assemble.py`, 3): real assembly with two captions (360x640,
+h264, ~2.4 s), refusal on a missing source, probe accuracy. 1.15 s. Skipped when
+ffmpeg is absent.
+
+| Metric | Before | After | Verdict |
+|---|---|---|---|
+| `video_clip_seconds` (reference artefact) | 12.0 | 12.0 | ok |
+| assembly available as a service | no | **yes** | capability added |
+
+**UNVERIFIED:** the Wan B-roll lane was not re-measured; this service assembles
+stills, it does not generate footage.
+
+## Harness after all of the above
+
+    python tools/rea_regress.py
+    label_warp_homography_mean_px      5.413 -> 5.413   ok
+    label_warp_mesh_5x7_mean_px        0.676 -> 0.676   ok
+    label_edge_bleed_lum              57.013 -> 57.013  ok
+    ocr_legibility_floor_px               10 -> 10      ok
+    sqlite_errors_at_5s                    0 -> 0       ok
+    lane_create_p95_s                268.020 -> 268.020 ok
+    label_intent_tool_ratio            0.143 -> 0.409   ok
+    ink_faint_contrast                 4.320 -> 5.110   ok
+    social_canvases_without_source         8 -> 0       ok
+    social_canvases_missing                7 -> 0       ok
+    video_clip_seconds                12.000 -> 12.000  ok
+    PASS: every measured metric is at or better than baseline.
+
+## Still open
+
+- A1-A6 remain held; each arc must be labelled UNVERIFIED when unblocked.
+- L2-L5, S3-S6, B2-B7, U2/U3/U5-U8, V2-V6: second pass.
+- 00_STATE.json merge still refused by permission; block parked in
+  reports/rea_program_state_pending_00_STATE.json.
