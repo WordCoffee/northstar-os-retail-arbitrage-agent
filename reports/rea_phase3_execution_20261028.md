@@ -701,3 +701,59 @@ no performance claim is made or implied.
 | B2 asset metadata migration | risky item, after V2 |
 | U2 A+ pack tool | **blocked**: depends on A1-A6, still held |
 | everything else | second pass |
+
+---
+
+# REA-FIRST PASS - V2 (2026-10-29)
+
+## What was reverse-engineered
+
+`design_studio_async.py` was read as a *contract*, not as code to copy:
+
+    gate -> optional credit reserve -> ds_jobs row (queued)
+         -> _EXECUTOR.submit(run_*_job) -> status running
+         -> work -> asset create -> status done + reservation COMMIT + webhook
+         -> on failure: reservation RELEASE, status failed, webhook, no asset
+
+Two properties of that contract mattered for the new lane:
+
+1. **The gate is not the GPU.** The render lane gates on `_engine_status()["armed"]`
+   because ComfyUI is the worker. Assembly is FFmpeg + PIL; gating it on ComfyUI
+   would refuse a job that never touches ComfyUI. The new lane gates on
+   `ffmpeg` being on PATH, and says `needs_engine: false` in its status.
+2. **The credit meter is opt-in and cost-keyed.** `_costs()` is keyed by kind and
+   `credits_enforced()` is env-driven. Assembly costs `DESIGN_CREDIT_COST_ASSEMBLE`
+   default **0** (local FFmpeg is free), so it is metered but never charged unless
+   an operator sets a price.
+
+## Built
+
+`design_studio_async.py`:
+- `assembly_available()` - readiness with `needs_engine: false`.
+- `run_assembly_job(...)` - same status / asset / webhook contract as a render;
+  resolves **asset ids only** (or a path already inside the studio output dir -
+  an arbitrary path is refused, so a job parameter cannot read the machine).
+- `submit_assembly(...)` - 409 `ffmpeg_missing` with the reason; optional
+  reserve when cost > 0; job row `assemble-video`; executor submit.
+- Route `POST /api/design-studio/assemble-async` (202); status is the existing
+  `GET /api/design-studio/generate-async/{job_id}` - one polling contract, not two.
+
+| Metric | Before | After |
+|---|---|---|
+| video assembly job type | none | `assemble-video`, queued -> running -> done |
+| gate | n/a | **FFmpeg**, not ComfyUI (`needs_engine: false`) |
+| asset record | n/a | `generated-video`, `video/mp4`, probe + shots + captions in metadata |
+| credits | n/a | metered; **cost 0** by default, charged only if an operator prices it |
+| arbitrary-path read | n/a | **refused** (paths must be inside the studio dir) |
+| route | none | `POST /assemble-async` 202, proved end-to-end in-process |
+| harness | - | `assembly_lane_ok` = 1 (**17 metrics** total) |
+
+**Commit:** `fae02a12` - **Tests:** 7 (readiness, 409 with reason, real assembly
+through the job, failure path with no asset, path refusal, cost policy, and a
+full POST -> run -> GET flow through the real router).
+**UNVERIFIED / action needed:** the **live server predates this route**. Its
+OpenAPI lists 345 paths incl. 77 design-studio ones and `generate-async`, but no
+`assemble-async`. It will appear on the next backend restart
+(`scripts/launch_alpha.ps1 -Restart`), which I did not do unprompted - say the
+word and I will, or restart it yourself. Zero-cost assembly has never been run
+against a real operator asset, only fixtures.
