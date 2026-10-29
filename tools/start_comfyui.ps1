@@ -46,6 +46,19 @@ for ($i = 0; $i -lt 90; $i++) {
     try {
         Invoke-RestMethod "$url/system_stats" -TimeoutSec 3 | Out-Null
         Write-Host "ComfyUI ready at $url (log: $log)"
+        # B3: record that this engine was started WITH --cache-none. The RAM-heavy
+        # lanes refuse to run when the marker says otherwise; a missing marker is
+        # "unknown", never "false".
+        try {
+            $repo = Split-Path -Parent $PSScriptRoot
+            $markerDir = Join-Path $repo "Northstar_backend\data"
+            New-Item -ItemType Directory -Force -Path $markerDir | Out-Null
+            @{
+                cache_none = $true
+                started_at = (Get-Date).ToUniversalTime().ToString("o")
+                argv       = "main.py --listen 127.0.0.1 --port $Port --cache-none"
+            } | ConvertTo-Json | Set-Content -Path (Join-Path $markerDir "comfyui_launch.json") -Encoding utf8
+        } catch { }
         exit 0
     } catch { }
 }

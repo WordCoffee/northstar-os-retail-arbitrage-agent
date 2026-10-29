@@ -259,7 +259,7 @@ if ($NoComfy) {
             # (that is the 2026-10-22 RAM kill with no traceback). A missing marker
             # means "unknown", never "false".
             try {
-                $markerDir = Join-Path $repo "Northstar_backend\data"
+                $markerDir = Join-Path $RepoRoot "Northstar_backend\data"
                 New-Item -ItemType Directory -Force -Path $markerDir | Out-Null
                 $marker = @{
                     cache_none = $true
