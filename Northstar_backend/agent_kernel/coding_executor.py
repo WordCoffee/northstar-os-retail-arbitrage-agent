@@ -11,19 +11,22 @@ from .model import Node, Plan
 class CodingAgentExecutor:
     def __init__(self, model: Model, workspace: str | Workspace, *,
                  task: str = "", acceptance: Optional[Acceptance] = None,
-                 max_steps: int = 12, max_repairs: int = 1):
+                 max_steps: int = 12, max_repairs: int = 1,
+                 required_artifact: str = ""):
         self.model = model
         self.workspace = workspace
         self.task = task
         self.acceptance = acceptance
         self.max_steps = max_steps
         self.max_repairs = max_repairs
+        self.required_artifact = required_artifact
 
     def __call__(self, node: Node, plan: Plan) -> Dict[str, Any]:
         task = self.task or f"{node.title}. {node.inputs.get('objective', '')}"
         agent = CodingAgent(
             self.workspace, self.model, max_steps=self.max_steps,
-            max_repairs=self.max_repairs, acceptance=self.acceptance)
+            max_repairs=self.max_repairs, acceptance=self.acceptance,
+            required_artifact=self.required_artifact)
         result = agent.run(task)
         data = result.to_dict()
         # The acceptance is the authority, not the loop's stop reason. A run can

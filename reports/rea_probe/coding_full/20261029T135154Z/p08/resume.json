@@ -1,0 +1,25 @@
+{
+  "run_id": "run-2026-10-27-a",
+  "goal": "Publish the weekly ops digest to the finance channel",
+  "checkpoint": {
+    "id": "ckpt-0003",
+    "path": "state/ckpt-0003.json",
+    "created_at": "2026-10-27T11:42:00Z",
+    "steps_done": [1, 2]
+  },
+  "blocked_on": "operator_gate:spend_approval",
+  "resume_from": "ckpt-0003",
+  "steps_to_skip": [1, 2],
+  "next_step": {
+    "n": 3,
+    "id": "publish_digest",
+    "status": "blocked",
+    "reason": "paid credit spend requires a fresh operator approval",
+    "gate": "operator_gate:spend_approval"
+  },
+  "pending_steps": [
+    {"n": 3, "id": "publish_digest"},
+    {"n": 4, "id": "notify_finance"}
+  ],
+  "rule": "Resume from ckpt-0003; do not repeat steps 1 or 2."
+}

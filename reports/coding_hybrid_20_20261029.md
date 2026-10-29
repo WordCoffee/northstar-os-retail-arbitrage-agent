@@ -21,6 +21,17 @@ runs of all 20 briefs; content validators gate every artifact.
 Failures were p03 (stalled without writing `refactor.md`, twice) and p02 (one
 server connection reset). Both are recorded, not hidden.
 
+### p03 write-stall fix
+
+The coding agent now takes a `required_artifact` and applies **step pressure**:
+after two steps without a write, only `write` and `finish` are offered and the
+prompt says the artifact must be written next. Verification:
+
+- Targeted p03 runs: **2/2** (`20261029T135055Z`, `20261029T135121Z`).
+- Full post-fix hybrid: **20/20** (`20261029T135154Z`).
+- The 3-run spread above is the pre-fix baseline; the post-fix run is a
+  remediation result, not a fourth spread sample.
+
 ## 2. Per-brief route
 
 | Route | Briefs |

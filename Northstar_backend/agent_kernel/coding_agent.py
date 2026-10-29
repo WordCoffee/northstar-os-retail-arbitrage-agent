@@ -57,19 +57,23 @@ def parse_tool_call(text: str) -> Optional[Dict[str, Any]]:
 class CodingAgent:
     def __init__(self, workspace: Workspace | str, model: Model, *,
                  max_steps: int = 12, max_repairs: int = 2,
-                 acceptance: Optional[Acceptance] = None):
+                 acceptance: Optional[Acceptance] = None,
+                 required_artifact: str = ""):
         self.tools = workspace if isinstance(workspace, Workspace) else Workspace(workspace)
         self.model = model
         self.max_steps = max(1, int(max_steps))
         self.max_repairs = max(0, int(max_repairs))
         self.acceptance = acceptance
+        self.required_artifact = str(required_artifact or "").strip()
 
     def run(self, task: str) -> CodingResult:
         history: List[Dict[str, Any]] = []
         files: set[str] = set()
         repairs = 0
+        written = False
         for step in range(1, self.max_steps + 1):
-            prompt = self._prompt(task, history)
+            pressure = bool(self.required_artifact) and not written and step > 2
+            prompt = self._prompt(task, history, pressure=pressure)
             try:
                 raw = self.model(prompt)
             except Exception as exc:  # noqa: BLE001
@@ -98,6 +102,8 @@ class CodingAgent:
                 continue
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
+            if tool == "write" and result.ok:
+                written = True
             history.append({"role": "observation", "tool": tool,
                             "ok": result.ok,
                             "output": result.output if result.ok else result.error})
@@ -114,7 +120,8 @@ class CodingAgent:
         return CodingResult(False, "step budget exhausted", self.max_steps,
                             sorted(files), history, "max_steps")
 
-    def _prompt(self, task: str, history: List[Dict[str, Any]]) -> str:
+    def _prompt(self, task: str, history: List[Dict[str, Any]],
+                *, pressure: bool = False) -> str:
         schema = (
             '{"tool":"list","args":{"path":"."}}\n'
             '{"tool":"read","args":{"path":"calc.py"}}\n'
@@ -124,6 +131,12 @@ class CodingAgent:
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
         )
+        if pressure:
+            schema = (
+                '{"tool":"write","args":{"path":"' + self.required_artifact +
+                '","content":"..."}}\n'
+                '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
+            )
         recent = history[-6:]
         observed = []
         for h in recent:
@@ -141,7 +154,12 @@ class CodingAgent:
             "artifact is an automatic failure; improve it afterwards.\n"
             "- If acceptance fails, read the failure and repair; do not repeat the same write.\n\n"
             f"TASK:\n{task}\n\n"
-            f"WORKSPACE FILES:\n{self.tools.tree(60)}\n\n"
+            + (f"REQUIRED ARTIFACT: {self.required_artifact}\n"
+               if self.required_artifact else "")
+            + (f"STEP PRESSURE: you have not written `{self.required_artifact}` yet. "
+               "Only write and finish are available now. Write the artifact in your "
+               "next JSON object.\n" if pressure else "")
+            + f"WORKSPACE FILES:\n{self.tools.tree(60)}\n\n"
             "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
             "Next JSON object:"
         )

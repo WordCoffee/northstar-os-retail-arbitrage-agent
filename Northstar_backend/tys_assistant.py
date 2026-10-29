@@ -1381,6 +1381,9 @@ class TysAssistant:
                 _model, workspace, task=node.title,
                 acceptance=make_workspace_acceptance(
                     workspace, (node.inputs or {}).get("acceptance")),
+                required_artifact=next(iter(
+                    ((node.inputs or {}).get("acceptance") or {}).get(
+                        "required_files") or []), ""),
                 max_steps=12)
         res = run_order(self, order, approve_by=approve_by, grants=grants,
                         task=task, coding_factory=coding_factory)

@@ -1,0 +1,28 @@
+{
+  "artifact": "listing_audit.json",
+  "listing_title": "Mogra Organics Organic Lion's Mane Mushroom Powder - 6 oz, 85 Servings",
+  "rubric_cited": true,
+  "rubric_source": "rubric.md",
+  "score": {
+    "title": "Present and descriptive",
+    "bullets": "5 informative bullets present",
+    "description": "Present, single-ingredient extract described",
+    "keywords": "3 relevant keywords present",
+    "images": "5 of 7 slots filled",
+    "a_plus_content": "None",
+    "price": "Not supplied in fixture"
+  },
+  "unmeasured_dimensions": [
+    "price",
+    "a_plus_content",
+    "image_slots_6_and_7",
+    "brand_story",
+    "customer_reviews",
+    "back_in_stock_status",
+    "shipping_info",
+    "return_policy",
+    "warranty_or_guarantee",
+    "video_content"
+  ],
+  "notes": "Price is explicitly not supplied in the fixture. A+ content is absent. Two image slots (6 and 7) are unfilled. No reviews, brand story, shipping, return policy, warranty, or video content are present in the listing data."
+}

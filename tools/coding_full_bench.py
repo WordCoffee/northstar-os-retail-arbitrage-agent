@@ -110,7 +110,8 @@ def run_one(brief: dict, root: Path) -> dict:
         steps = 1
     else:
         result = CodingAgent(project, model, max_steps=12, max_repairs=1,
-                             acceptance=acceptance_for(project, brief)).run(
+                             acceptance=acceptance_for(project, brief),
+                             required_artifact=brief["artifact"]).run(
                                  task_for(brief))
         steps = result.steps
     check = cv.validate_brief(root, brief)
@@ -124,14 +125,18 @@ def run_one(brief: dict, root: Path) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--restart-every", type=int, default=4)
+    ap.add_argument("--ids", default="",
+                    help="comma-separated brief ids; empty means all 20")
     ap.add_argument("--out", default="")
     args = ap.parse_args()
+    selected = [i.strip() for i in args.ids.split(",") if i.strip()]
+    briefs = [b for b in BRIEFS if b["id"] in selected] if selected else BRIEFS
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     root = Path(args.out or (ROOT / "reports/rea_probe/coding_full" / stamp))
     root.mkdir(parents=True, exist_ok=True)
     rows = []
-    for i in range(0, len(BRIEFS), max(1, args.restart_every)):
-        batch = BRIEFS[i:i + max(1, args.restart_every)]
+    for i in range(0, len(briefs), max(1, args.restart_every)):
+        batch = briefs[i:i + max(1, args.restart_every)]
         if any(b["id"] not in TOOL for b in batch):
             stop_server()
             if not start_server():

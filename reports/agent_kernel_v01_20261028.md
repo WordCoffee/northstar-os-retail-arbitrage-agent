@@ -103,11 +103,12 @@ Reports: `reports/ns_proj_20_live_baseline_20261029.md` and
 `list/read/grep/write/apply_patch/run` loop. The 3-brief pilot was 3/3
 (p01/p02/p05; real `pytest` and `py_compile` passes), then the hybrid 20-brief
 runs scored **20/20, 19/20 and 18/20** (p50 7.3–8.5 s, p95 15.7–25.6 s; thresholds
-p50 10.2 s, p95 30.7 s, completion 0.90). Ty p01–p05 is **5/5 content-valid and
-5/5 complete** through `run_kernel(coding_agent=True)`; an acceptance-recovery
-defect that could return `needs_human` after valid artifacts were written was
-found and fixed. Reports: `reports/coding_agent_pilot_20261029.md` and
-`reports/coding_hybrid_20_20261029.md`. `run_kernel(coding_agent=True)` is the
+p50 10.2 s, p95 30.7 s, completion 0.90). p03’s write-stall was fixed with
+artifact-required step pressure; the post-fix run is **20/20**. Ty p01–p05 is
+**5/5 content-valid and 5/5 complete** through `run_kernel(coding_agent=True)`; an
+acceptance-recovery defect that could return `needs_human` after valid artifacts
+were written was found and fixed. Reports: `reports/coding_agent_pilot_20261029.md`
+and `reports/coding_hybrid_20_20261029.md`. `run_kernel(coding_agent=True)` is the
 default when `scope.workspace` is set; without it the old lane is used.
 
 ## 5. Phase B — 1,500 / 100 / 12

@@ -1,0 +1,209 @@
+{
+  "mode": "hybrid-coding-tool-pilot",
+  "briefs": 20,
+  "ok": 20,
+  "rate": 1.0,
+  "rows": [
+    {
+      "id": "p01",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 12,
+      "seconds": 22.5,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p02",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 8.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p03",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 9.1,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p04",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 1,
+      "seconds": 5.5,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p05",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 8,
+      "seconds": 15.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p06",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 6.7,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p07",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 6.5,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p08",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 2,
+      "seconds": 8.5,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p09",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 7.7,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p10",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 6.8,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p11",
+      "ok": true,
+      "content_valid": true,
+      "detail": "OCR terms + prepress",
+      "steps": 1,
+      "seconds": 6.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p12",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 18.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p13",
+      "ok": true,
+      "content_valid": true,
+      "detail": "format + documented size",
+      "steps": 1,
+      "seconds": 0.1,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p14",
+      "ok": true,
+      "content_valid": true,
+      "detail": "ffprobe",
+      "steps": 1,
+      "seconds": 0.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p15",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 9.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p16",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 10.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p17",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 17.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p18",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 6.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p19",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 3,
+      "seconds": 3.7,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p20",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 2,
+      "seconds": 5.5,
+      "agent_ok": true,
+      "error": ""
+    }
+  ],
+  "note": "Coding agent for text/code, tools for p11/p13/p14."
+}

@@ -118,6 +118,24 @@ def test_executor_recovers_when_acceptance_passes_after_loop_stop(tmp_path):
     assert out["data"]["acceptance_recovered"] is True
 
 
+def test_required_artifact_pressure_after_two_steps(tmp_path):
+    ws = Workspace(tmp_path / "ws")
+    prompts = []
+
+    def model(prompt):
+        prompts.append(prompt)
+        if "STEP PRESSURE" in prompt:
+            return '{"tool":"write","args":{"path":"out.txt","content":"x"}}'
+        return '{"tool":"list","args":{"path":"."}}'
+
+    agent = CodingAgent(
+        ws, model, max_steps=5, required_artifact="out.txt",
+        acceptance=lambda: ((tmp_path / "ws" / "out.txt").is_file(), "exists"))
+    result = agent.run("write out.txt")
+    assert result.ok
+    assert any("STEP PRESSURE" in p for p in prompts)
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):

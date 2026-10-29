@@ -80,7 +80,8 @@ def run_one(bid: str, root: Path) -> dict:
     seed(project, bid)
     started = time.time()
     result = CodingAgent(project, model, max_steps=12, max_repairs=1,
-                         acceptance=acceptance_for(project, brief)).run(task_for(brief))
+                         acceptance=acceptance_for(project, brief),
+                         required_artifact=brief["artifact"]).run(task_for(brief))
     check = cv.validate_brief(folder, brief)
     extra = True
     detail = check["detail"]

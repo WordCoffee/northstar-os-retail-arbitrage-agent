@@ -1,0 +1,24 @@
+{
+  "project": "close-out-demo",
+  "evidence": "run_log.json",
+  "nodes": [
+    {
+      "id": "n1",
+      "name": "collect",
+      "script": "nodes/collect.py",
+      "depends_on": []
+    },
+    {
+      "id": "n2",
+      "name": "summarise",
+      "script": "nodes/summarise.py",
+      "depends_on": ["n1"]
+    },
+    {
+      "id": "n3",
+      "name": "verify",
+      "script": "nodes/verify.py",
+      "depends_on": ["n2"]
+    }
+  ]
+}

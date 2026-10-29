@@ -1,0 +1,19 @@
+{
+  "mode": "hybrid-coding-tool-pilot",
+  "briefs": 1,
+  "ok": 1,
+  "rate": 1.0,
+  "rows": [
+    {
+      "id": "p03",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 11.7,
+      "agent_ok": true,
+      "error": ""
+    }
+  ],
+  "note": "Coding agent for text/code, tools for p11/p13/p14."
+}
