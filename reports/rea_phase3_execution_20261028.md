@@ -626,3 +626,78 @@ refused.
 consumes it; the canvas does not); no real master asset was run through it - the
 fixture is the IG portrait; crop *aesthetics* (where the product lands) remain an
 operator judgement, not a computed one.
+
+---
+
+# REA-FIRST PASS - V3 (2026-10-29)
+
+## What was reverse-engineered
+
+The nine sources already read for `reports/video_ad_structures_20261028.md` were
+re-read as *structures*, not as advice, and only the parts they agree on were
+encoded:
+
+| Claim | Sources agreeing | Encoded as |
+|---|---|---|
+| hook lands in the first 1-3 s | truefuture, vyra, clipping-culture, captions, adssensor, sovran | beat window 0-12.5% / 0-17% of the clip |
+| fixed order: hook > body > proof > CTA | adligator, creatify, adssensor, sovran | the four-beat skeleton every template shares |
+| never open on a logo | truefuture, clipping-culture | counter-rule in the template notes |
+| captions are mandatory (sound-off default) | adssensor, captions | `captions_required: true` on every plan |
+| Amazon SB 6-45 s / store 2-20 s | repo registry (`VideoUgc.jsx:19`) | enforced, not restated |
+
+Nothing about performance was encoded: every source is a vendor/practitioner
+page with no reproducible data, so each template is labelled `confidence:
+REPORTED` and the plan carries "makes no lift claim" in its note (a test fails if
+a template name ever does).
+
+## The finding the test produced
+
+My own acceptance rule was "every template has >=3 sources". Two do not:
+
+| Template | Sources | Tier |
+|---|---|---|
+| H1 open on the payoff | truefuture, vyra, clipping-culture | strong (3) |
+| H2 name the problem | moonb, adligator, creatify | strong (3) |
+| **H3 the mistake** | clipping-culture, captions | **thin (2)** |
+| H4 unsolicited proof | adligator, creatify, adssensor | strong (3) |
+| **H5 before/after flash** | moonb, truefuture | **thin (2)** |
+
+Rather than pad the citations to pass my own test, H3 and H5 carry
+`evidence: 'thin'` plus the exact gap, and the test requires strong templates to
+have three and thin ones to say what is missing. **Two of the five structures
+rest on two sources each** — that is the honest state of the catalogue.
+
+## Built
+
+`northstar-os-ui/src/studio/engine/hookTemplates.js`:
+- `HOOK_SOURCES` - 9 sources, each with URL, pull date and `REPORTED` confidence.
+- `DURATION_WINDOWS` - the published platform windows, each naming its source.
+- `HOOK_TEMPLATES` - 5 structures as beat fractions (so one template renders at
+  12 s and at 30 s without rewriting), with slot caps and their sources.
+- `storyboardFromTemplate(id, slots, {durationSeconds, platform})` - timed beats
+  in seconds; **refuses** an out-of-window duration, a missing slot, an
+  over-budget slot, or an unknown template (and lists the known ids).
+- Wired into `buildStoryboardPack`: the pack now carries `hook_plan`, or UNKNOWN
+  when no template was chosen.
+
+| Metric | Before | After |
+|---|---|---|
+| storyboard structure | 5-second blocks, no named structure | **4 timed beats** from a sourced template |
+| slot budgets | 60-char hook field only | hook 60 / product 40 / proof 40, enforced |
+| duration window | UI hint | **refused** outside 6-45 s (SB) or 2-20 s (store) |
+| evidence honesty | n/a | 2 thin templates **declared**, not padded |
+| harness | - | `hook_templates_ok` = 1 (16 metrics total) |
+
+**Commit:** `f8c9b9e4` - **Tests:** 30 node checks; `npm run build` 0 errors.
+**UNVERIFIED:** no template has been rendered; the beat fractions are structure,
+not measured pacing (the 20-30 ad timing corpus from 1.3 is still not collected);
+no performance claim is made or implied.
+
+## Queue after this
+
+| Candidate | State |
+|---|---|
+| V2 async job type for `video_assemble` | NEXT (REA `design_studio_async` reserve/commit first) |
+| B2 asset metadata migration | risky item, after V2 |
+| U2 A+ pack tool | **blocked**: depends on A1-A6, still held |
+| everything else | second pass |
