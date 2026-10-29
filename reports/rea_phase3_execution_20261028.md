@@ -486,3 +486,82 @@ Full run (with probes) was green immediately before this wave; no metric in the
 baseline measures feather radius or cache hits yet, so those two rows above are
 new evidence rather than regression gates. Adding them to `rea_regress.py` is the
 next small step.
+
+---
+
+# WAVE 3 (2026-10-29) - U3, S4
+
+## U3 - logo placement (the gap with no tool at all)
+
+Baseline: 5 of 60 surveyed turns asked for the logo and **no tool served them**.
+
+**Built** (`logo_placement.py` + `place_logo` in `chat_tools.py`, in the Creative
+Studio scope and the model schema set):
+
+- `place(plate_png, logo_png, anchor=…, scale=…, opacity=…, margin=…, blend=…)`
+  trims the logo's empty margins, scales it to a fraction of the short edge,
+  alpha-composites it (or multiplies, for print-like seating), and returns the
+  bytes plus the placement and its evidence.
+- `anchor="auto"` measures a 3x3 grid of local gradient magnitude and picks the
+  **calmest perimeter cell** — never the dead centre, and it reports all nine
+  scores so the choice can be argued with.
+- The result reports **ink/backdrop contrast**; below 1.5:1 the tool says so in
+  the summary instead of shipping a mark that disappears.
+
+| Metric | Before | After |
+|---|---|---|
+| turns with a logo ask that reach a tool | **0** (no such tool) | 1 tool, in the Creative Studio scope |
+| placement basis | n/a | measured flatness (9 scores reported) or the operator's anchor |
+| low-contrast mark | n/a | flagged in the summary, never silent |
+| end-to-end through the tool (files -> asset record -> bytes on disk) | n/a | **6 checks pass**, incl. a real registration |
+
+**Commit:** `9c02ca8b` - **Tests:** 12 (6 module, 6 tool incl. end-to-end).
+**UNVERIFIED:** the `auto` anchor's aesthetic quality on real product shots (it is
+a flatness measure, not a taste judgement); no live chat turn exercised it yet.
+
+## S4 - local pre-upload validator
+
+**Built** (`social_validate.py`): 13 canvases, every rule from the platform's own
+page (pulled 2026-10-28). Blocks on: byte cap, format, aspect ratio outside
+**1 %** (Meta's documented tolerance), minimum dimension, caption length. Warns
+on: non-8-bit colour, >80 % of the byte cap. Reports `manual` for safe-area
+occupancy (a flat asset cannot prove placement), and lists the rules that are
+**UNVERIFIED** rather than guessing them (TikTok safe-zone pixels, Shorts mobile
+byte cap, carousel card minima).
+
+The drift guard is the point: `test_parity_with_the_ui_table` parses
+`presets.js` and fails if any canvas differs from the Python table.
+
+| Metric | Before | After |
+|---|---|---|
+| pre-upload validation | none | 13 canvases, sourced, with confidence labels |
+| wrong-ratio asset | reaches the platform | **blocked locally** (4:5 canvas, 1:1 file) |
+| UI/Python spec drift | possible, silent | **parity test** (fails on any w/h mismatch) |
+| harness gate | none | `social_validator_ok` = 1 |
+
+**Commit:** `71e16997` - **Tests:** 10, incl. the parity test.
+**UNVERIFIED:** no HTTP route yet (module + CLI only); upload-time platform
+rejection behaviour cannot be tested without uploading, which is out of scope.
+
+## Backend verification (authorised this session)
+
+Against the live backend on `127.0.0.1:8000`:
+
+    GET /health              -> 200 {"status":"ok","service":"northstar-backend"}
+    GET /api/v1/status       -> 200 contract bff/v1, mode live
+    GET /api/v1/provider-suite -> 200, local lane active
+    GET /api/design-studio/lanes/status -> 401 (auth required)
+
+Authed studio routes were exercised in-process through `TestClient` with a
+dependency override instead of using credentials (no credential was read).
+
+## Harness after wave 3
+
+    python tools/rea_regress.py --quick
+    feather_policy_ok        1 -> 1   ok
+    logo_tool_present        1 -> 1   ok
+    social_validator_ok      1 -> 1   ok
+    PASS: every measured metric is at or better than baseline.
+
+14 gating metrics now. Wave 3 added three of them, so the guards themselves can
+regress.
