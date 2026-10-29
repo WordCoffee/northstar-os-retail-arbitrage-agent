@@ -29,6 +29,9 @@ Pure PIL + numpy. No provider call, no network, no cost.
 from __future__ import annotations
 
 import io
+import json
+import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -658,6 +661,54 @@ def _panel_slice(panel: Image.Image, surface: str,
     return strip
 
 
+PLATE_GEOMETRY_PATH = Path(__file__).resolve().parent / "data" / "plate_geometry.json"
+# Only a fit that would pass the compose guard is worth remembering.
+CACHE_KEYS = ("quad", "face", "background", "coverage", "geom_residual_px",
+              "geom_residual_by_side", "bow_left_px", "bow_right_px", "fit",
+              "fit_residual_px")
+
+
+def plate_key(path: Path) -> str:
+    """Content hash of the plate. A different render must never inherit a fit."""
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()[:32]
+
+
+def load_plate_geometry(path: Path) -> Optional[Dict[str, Any]]:
+    """The stored fit for exactly this plate, or None."""
+    if not PLATE_GEOMETRY_PATH.is_file():
+        return None
+    try:
+        store = json.loads(PLATE_GEOMETRY_PATH.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - a corrupt cache is a miss, never a crash
+        return None
+    entry = store.get(plate_key(path))
+    if not isinstance(entry, dict):
+        return None
+    geometry = entry.get("geometry")
+    return geometry if isinstance(geometry, dict) else None
+
+
+def save_plate_geometry(path: Path, measured: Dict[str, Any]) -> bool:
+    """Remember a good fit for this exact plate. Refuses to cache a bad one."""
+    residual = measured.get("geom_residual_px")
+    if residual is None or float(residual) > MAX_GEOM_RESIDUAL_PX:
+        return False
+    store: Dict[str, Any] = {}
+    if PLATE_GEOMETRY_PATH.is_file():
+        try:
+            store = json.loads(PLATE_GEOMETRY_PATH.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            store = {}
+    store[plate_key(path)] = {
+        "plate_name": Path(path).name,
+        "saved_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "geometry": {k: measured.get(k) for k in CACHE_KEYS if k in measured},
+    }
+    PLATE_GEOMETRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PLATE_GEOMETRY_PATH.write_text(json.dumps(store, indent=2), encoding="utf-8")
+    return True
+
+
 def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "",
             bullets: Optional[Sequence[str]] = None,
             logo_path: Optional[Path] = None,
@@ -669,15 +720,23 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
             quad: Optional[Sequence] = None,
             panels: Optional[Dict[str, Any]] = None,
             panel_split: bool = True,
-            mesh: bool = True) -> Dict[str, Any]:
+            mesh: bool = True,
+            reuse_geometry: bool = True) -> Dict[str, Any]:
     """Composite a label onto a rendered pouch. Returns PNG bytes + what was fitted."""
     if not title.strip():
         raise ValueError("a product title is required to compose a label")
     plate = Image.open(plate_path).convert("RGB")
 
-    measured = measure_face(plate) if not quad else {"quad": [list(p) for p in quad],
-                                                     "face": None, "background": None,
-                                                     "coverage": None}
+    geometry_reused = False
+    if quad:
+        measured = {"quad": [list(p) for p in quad], "face": None, "background": None,
+                    "coverage": None}
+    else:
+        measured = load_plate_geometry(plate_path) if reuse_geometry else None
+        if measured:
+            geometry_reused = True
+        else:
+            measured = measure_face(plate)
     q = measured["quad"]
 
     residual = measured.get("geom_residual_px")
@@ -689,6 +748,11 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
     bow_l = float(measured.get("bow_left_px") or 0.0)
     bow_r = float(measured.get("bow_right_px") or 0.0)
     bow = (bow_l + bow_r) / 2.0
+    edge_feather = mc.feather_sigma(residual) if residual is not None else None
+    if not geometry_reused and not quad and residual is not None:
+        # A fit good enough to compose is good enough to remember, keyed by the
+        # plate's own hash so a new render can never inherit it.
+        save_plate_geometry(plate_path, measured)
     grid = (mc.mesh_grid(q, nx=MESH_NX, ny=MESH_NY, bow_x=(bow_l, bow_r))
             if mesh and max(abs(bow_l), abs(bow_r)) >= MIN_BOW_PX else None)
 
@@ -733,12 +797,13 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
                                                        weight=weight, claims=bullets,
                                                        icons=icons, field=field))
             out = mc.warp_panel(plate, wrapped, q, shading=shading, maps=maps,
-                                realism=realism, grid=grid)
+                                realism=realism, grid=grid, edge_feather=edge_feather)
         else:
             out = mc.warp_panel(plate, panel, q, shading=shading, maps=maps,
-                                realism=realism, grid=grid)
+                                realism=realism, grid=grid, edge_feather=edge_feather)
     except Exception:  # noqa: BLE001 - realism is an upgrade, not a requirement
-        out = mc.warp_panel(plate, panel, q, shading=shading, grid=grid)
+        out = mc.warp_panel(plate, panel, q, shading=shading, grid=grid,
+                            edge_feather=edge_feather)
 
     buf = io.BytesIO()
     out.save(buf, format="PNG")
@@ -752,6 +817,9 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
         "bow_left_px": round(bow_l, 3),
         "bow_right_px": round(bow_r, 3),
         "mesh": [MESH_NX, MESH_NY] if grid is not None else None,
+        "geometry_reused": geometry_reused,
+        "plate_sha256": None if quad else plate_key(plate_path),
+        "edge_feather_px": round(float(edge_feather), 3) if edge_feather else None,
         "title": title,
         "has_logo": logo is not None,
         "icons": list(icons or []),

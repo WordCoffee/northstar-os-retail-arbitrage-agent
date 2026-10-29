@@ -361,11 +361,31 @@ def _refine_to_mesh(uu: np.ndarray, vv: np.ndarray, px: np.ndarray, py: np.ndarr
     return uu, vv
 
 
+def feather_sigma(residual_px: float, *, lo: float = 1.0, hi: float = 12.0,
+                  per_px: float = 2.5) -> float:
+    """Edge feather (sigma, px) derived from the measured geometric residual.
+
+    The halo measurement (reports/rea_probe/warp_probe.json) is blunt about this:
+    feathering creates no bleed of its own, it only smears whatever geometric
+    error is already there. So the feather must follow the residual — a 0.2 px
+    fit needs no softening, a 2 px fit needs a few pixels of ramp, and past the
+    hi clamp the label is not trustworthy and `compose()` refuses instead.
+    """
+    try:
+        residual = float(residual_px)
+    except (TypeError, ValueError):
+        return float(lo)
+    if residual != residual or residual <= 0:      # NaN or no measurement
+        return float(lo)
+    return float(min(hi, max(lo, residual * float(per_px))))
+
+
 def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
                shading: float = 0.5, realism: Optional[Dict[str, Any]] = None,
                maps: Optional[Any] = None,
                metrics_out: Optional[Dict[str, Any]] = None,
-               grid: Optional[Any] = None, mesh_iters: int = 3) -> Image.Image:
+               grid: Optional[Any] = None, mesh_iters: int = 3,
+               edge_feather: Optional[float] = None) -> Image.Image:
     """4-point homography (panel -> quad), bilinear, realism-integrated.
 
     Pass ``grid`` (an (ny, nx, 2) node array, see :func:`mesh_grid`) to warp
@@ -432,6 +452,14 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     samp = (pa[v0, u0] * (1 - wu) * (1 - wv) + pa[v0, u1] * wu * (1 - wv)
             + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
     samp[~valid] = 0
+    if edge_feather:
+        # Ramp INWARD from the panel's own border, never outward. The halo probe
+        # showed outward paint is the entire bleed (1 px overshoot = 28 % of the
+        # panel's contrast); an inward ramp cannot create one, it only softens
+        # the print where it meets the surface.
+        inside = np.minimum(np.minimum(u, PW - 1 - u), np.minimum(v, PH - 1 - v))
+        ramp = np.clip(inside / max(1e-6, float(edge_feather)), 0.0, 1.0)
+        samp[..., 3] = samp[..., 3] * ramp
     base = np.array(photo, dtype=np.float32)
     region = base[y0:y1, x0:x1]
 
