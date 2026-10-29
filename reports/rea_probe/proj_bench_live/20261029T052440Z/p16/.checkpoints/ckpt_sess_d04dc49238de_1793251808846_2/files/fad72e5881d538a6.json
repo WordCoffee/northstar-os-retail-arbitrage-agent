@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the file 'campaign.md' exists in the current directory.",
+    "command": "test -f campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure the campaign plan explicitly defines a 'human gate' or 'manual approval' step between the inspect and browser lanes.",
+    "command": "grep -i -E \"human gate|manual approval|human-in-the-loop\" campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the document distinguishes between an 'inspect' phase and a 'browser' phase.",
+    "command": "grep -i -E \"inspect.*browser|browser.*inspect\" campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the campaign structure implies a sequential workflow where inspection precedes browsing, separated by the gate.",
+    "command": "grep -i -E \"phase 1.*inspect|inspect.*phase 1\" campaign.md && grep -i -E \"phase 2.*browser|browser.*phase 2\" campaign.md",
+    "expected": "exit code 0"
+  }
+]

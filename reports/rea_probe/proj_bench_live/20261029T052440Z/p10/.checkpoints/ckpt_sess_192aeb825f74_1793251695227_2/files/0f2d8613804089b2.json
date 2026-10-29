@@ -1,0 +1,35 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file digest.md exists in the current directory.",
+    "type": "file_exists",
+    "target": "digest.md"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that digest.md is not empty and contains at least one non-whitespace character.",
+    "type": "file_not_empty",
+    "target": "digest.md"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that digest.md does not contain any placeholder text such as 'TODO', 'FIXME', or 'PLACEHOLDER' (case-insensitive).",
+    "type": "regex_absent",
+    "target": "digest.md",
+    "pattern": "(?i)(TODO|FIXME|PLACEHOLDER)"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure that all numeric values in digest.md are traceable to at least one local evidence file (e.g., by matching against content in .txt, .csv, .json, or .log files in the project root).",
+    "type": "numeric_traceability",
+    "target": "digest.md",
+    "evidence_sources": ["*.txt", "*.csv", "*.json", "*.log"]
+  },
+  {
+    "id": "check_5",
+    "description": "Verify that digest.md contains no invented or fabricated statistics by confirming that every sentence containing a number references a source file or data point present in the local evidence files.",
+    "type": "content_integrity",
+    "target": "digest.md",
+    "rule": "No numeric claim may appear without a corresponding match in local evidence files."
+  }
+]

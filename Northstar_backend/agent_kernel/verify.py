@@ -39,6 +39,13 @@ class VerifierRegistry:
         self.register("readiness", _readiness)
         self.register("executor_ok", _executor_ok)
         self.register("plan_complete", _plan_complete)
+        self.register("label_valid", _label_valid)
+        self.register("ad_valid", _ad_valid)
+        self.register("patch_valid", _patch_valid)
+        self.register("json_valid", _json_valid)
+        self.register("text_valid", _text_valid)
+        self.register("social_valid", _social_valid)
+        self.register("aplus_valid", _aplus_valid)
 
     def register(self, name: str, fn: Verifier) -> None:
         self._registry[name] = fn
@@ -208,6 +215,55 @@ def _plan_complete(p: Dict[str, Any]) -> Dict[str, Any]:
     return {"result": "pass" if ok else "fail", "kind": "plan",
             "detail": "every node is done with evidence" if ok else
                       "a node is not done or has no evidence"}
+
+
+def _wrap_content(check: Dict[str, Any], path: Path) -> Dict[str, Any]:
+    return {"result": "pass" if check.get("valid") else "fail",
+            "kind": str(check.get("kind") or "content"),
+            "path": str(path), "detail": str(check.get("detail") or "")[:300]}
+
+
+def _label_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_label
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_label(path, list(p.get("terms") or [])), path)
+
+
+def _ad_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_ad
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_ad(path), path)
+
+
+def _patch_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_patch
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_patch(path), path)
+
+
+def _json_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_json
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_json(path), path)
+
+
+def _text_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_text
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_text(path, list(p.get("terms") or []),
+                                       int(p.get("min_chars") or 120)), path)
+
+
+def _social_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_social
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_social(path), path)
+
+
+def _aplus_valid(p: Dict[str, Any]) -> Dict[str, Any]:
+    from .content import validate_aplus
+    path = Path(str(p.get("path") or ""))
+    return _wrap_content(validate_aplus(path), path)
 
 
 def page_state_verifier(expected: Dict[str, Any]):

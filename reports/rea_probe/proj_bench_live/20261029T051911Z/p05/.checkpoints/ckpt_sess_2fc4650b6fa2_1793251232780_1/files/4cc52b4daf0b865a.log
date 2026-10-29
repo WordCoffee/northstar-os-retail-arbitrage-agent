@@ -1,0 +1,6 @@
+[2023-10-27 10:01:02] Starting build...
+[2023-10-27 10:01:03] Compiling src/main.c
+[2023-10-27 10:01:03] src/main.c:15:5: error: implicit declaration of function 'calculate_sum'
+[2023-10-27 10:01:03] src/main.c:15:5: note: 'calculate_sum' was not declared in this scope
+[2023-10-27 10:01:03] make: *** [build/main.o] Error 1
+[2023-10-27 10:01:03] Build failed.

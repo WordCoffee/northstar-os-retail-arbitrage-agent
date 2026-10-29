@@ -1,0 +1,26 @@
+[
+  {
+    "check": "Identify the oversized module file path and line count.",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  },
+  {
+    "check": "Verify that the module is split into exactly two new files.",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  },
+  {
+    "check": "Confirm that all original code logic is preserved in the two new files (no missing functions or variables).",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  },
+  {
+    "check": "Ensure that imports/dependencies are correctly updated in both new files and any files that imported the original module.",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  },
+  {
+    "check": "Verify that no behavioral changes were introduced (e.g., side effects, execution order, or API signatures remain identical).",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  },
+  {
+    "check": "Confirm that the original module file is removed or deprecated to avoid duplicate definitions.",
+    "status": "Cannot verify. No file contents or paths provided in the request."
+  }
+]

@@ -91,10 +91,13 @@ it. Three runs: **20/20 artifacts each**, **18/20 format-valid** each, p50
 **4.82–6.27 s**, p95 **11.17–14.08 s**, 180 model calls total. Content validators
 put the text lane at **17/20 (0.85)** each run (p11 label, p13 social, p14 ad).
 Fences are stripped at persistence; the 13 fenced nodes from run 1 were rerun and
-none remain. Tool nodes make p11 and p14 valid (tool-lane content **19/20**); p13
-remains invalid. **MTP off** is pinned because the MTP runs aborted at 46 and 49
-calls. It is **not a quality claim**. Report:
-`reports/ns_proj_20_live_baseline_20261029.md`.
+none remain. With validators **enforced in the kernel**, the run completed
+**17/20** (evidence 0.95, p50 5.08 s, p95 12.90 s). Tool nodes make p11, p13 and
+p14 valid (tool-lane content **20/20**). **Ty-as-is is 0/20**: its coding lane has
+no tools and no context, so it refused every artifact. **MTP off** is pinned
+because the MTP runs aborted at 46 and 49 calls. It is **not a quality claim**.
+Reports: `reports/ns_proj_20_live_baseline_20261029.md` and
+`reports/tys_as_is_baseline_20261029.md`.
 
 ## 5. Phase B — 1,500 / 100 / 12
 
@@ -128,7 +131,8 @@ python tools/rea_regress.py --quick --with-tests
 
 | Item | Why it is not done |
 |---|---|
-| Live 20-brief text-lane baseline | **3 runs 2026-10-29** — 20/20 artifacts, 18/20 format-valid, content 17/20 each; tool lane makes p11/p14 valid; thresholds set from the spread |
+| Live 20-brief text-lane baseline | **3 runs 2026-10-29** — 20/20 artifacts, 18/20 format-valid, content 17/20 each; enforced run 17/20; tool lane 20/20 |
+| Ty-as-is project baseline | **0/20 content-valid** — coding lane has no tools/context; see `reports/tys_as_is_baseline_20261029.md` |
 | Two operator windows (Claude Code, Cowork) | Requires the operator present; no unattended substitute |
 | Phase 3 U1 (auto-chain `apply_label`) | Not built; it changes the chat turn contract and needs a live UI check |
 | Phase 3 V1 (`studio_video_assemble.py`) | The probe proves the FFmpeg chain; the production module is not promoted yet |

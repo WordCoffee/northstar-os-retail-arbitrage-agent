@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Identify the first build error",
+    "status": "blocked",
+    "reason": "No build log, compiler output, or file contents were provided in the request. I cannot identify the error without the specific build output or source code."
+  },
+  {
+    "check": "Fix the error",
+    "status": "blocked",
+    "reason": "Cannot fix an error that has not been identified. No source files or error messages were provided."
+  },
+  {
+    "check": "Prove a clean build",
+    "status": "blocked",
+    "reason": "No build environment or compiler output is available to verify a clean build. No tools are available to execute the build."
+  }
+]

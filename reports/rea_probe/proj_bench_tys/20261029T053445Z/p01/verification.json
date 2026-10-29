@@ -1,0 +1,37 @@
+[
+  {
+    "check": "Identify the failing unit test by running the test suite or inspecting test logs.",
+    "status": "pending",
+    "file": "N/A",
+    "line": "N/A",
+    "notes": "No file contents provided. Cannot identify specific failing test."
+  },
+  {
+    "check": "Analyze the test assertion to understand the expected behavior.",
+    "status": "pending",
+    "file": "N/A",
+    "line": "N/A",
+    "notes": "No file contents provided. Cannot analyze assertion."
+  },
+  {
+    "check": "Locate the source code responsible for the failing behavior.",
+    "status": "pending",
+    "file": "N/A",
+    "line": "N/A",
+    "notes": "No file contents provided. Cannot locate source code."
+  },
+  {
+    "check": "Modify the source code (not the test) to satisfy the assertion.",
+    "status": "pending",
+    "file": "N/A",
+    "line": "N/A",
+    "notes": "No file contents provided. Cannot implement fix."
+  },
+  {
+    "check": "Verify the fix by re-running the unit test.",
+    "status": "pending",
+    "file": "N/A",
+    "line": "N/A",
+    "notes": "No file contents provided. Cannot verify fix."
+  }
+]

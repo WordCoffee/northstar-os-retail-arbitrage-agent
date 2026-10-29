@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that handoff.md exists and is not empty.",
+    "command": "test -s handoff.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the file contains a section header indicating the current state or summary.",
+    "command": "grep -qi \"## Current State\\|## Summary\\|## Status\" handoff.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the file includes instructions or context for resuming work.",
+    "command": "grep -qi \"resume\\|next steps\\|todo\\|action items\" handoff.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Check that the file is valid UTF-8 text.",
+    "command": "file handoff.md | grep -q \"text\"",
+    "expected": "exit code 0"
+  }
+]

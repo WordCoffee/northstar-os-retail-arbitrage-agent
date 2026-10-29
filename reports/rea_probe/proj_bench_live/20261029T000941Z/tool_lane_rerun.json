@@ -1,11 +1,10 @@
 {
   "policy": "tool-calling node instead of the text lane",
   "p11": {
-    "before_bytes": 2737,
+    "before_bytes": 1965681,
     "after_bytes": 1965681,
-    "before_valid": false,
     "after_valid": true,
-    "why": "pouch_label.compose produced a real PNG; OCR + prepress passed",
+    "why": "pouch_label.compose produced a real PNG; OCR + prepress",
     "checks": {
       "png_magic": true,
       "ocr_status": "ok",
@@ -19,10 +18,25 @@
       "printable": true
     }
   },
+  "p13": {
+    "before_bytes": 520,
+    "after_bytes": 692,
+    "after_valid": true,
+    "why": "presets.js emitted documented format/width/height rows",
+    "checks": {
+      "entries": 5,
+      "formats": {
+        "ig-post": true,
+        "meta-story": true,
+        "x-post": true,
+        "linkedin": true,
+        "yt-thumb": true
+      }
+    }
+  },
   "p14": {
-    "before_bytes": 1217,
+    "before_bytes": 2737719,
     "after_bytes": 2737719,
-    "before_valid": false,
     "after_valid": true,
     "why": "FFmpeg probe clip is a real 12 s 1080x1920 MP4 with audio",
     "checks": {

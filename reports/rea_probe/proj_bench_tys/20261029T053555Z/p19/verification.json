@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Verify that the diff contains exactly two hunks.",
+    "status": "cannot_verify",
+    "reason": "No diff content was provided in the request."
+  },
+  {
+    "check": "Identify which hunk is selected for application.",
+    "status": "cannot_verify",
+    "reason": "No diff content or selection criteria were provided."
+  },
+  {
+    "check": "Ensure only the selected hunk is applied and the other is ignored.",
+    "status": "cannot_verify",
+    "reason": "No diff content was provided to perform the operation."
+  }
+]

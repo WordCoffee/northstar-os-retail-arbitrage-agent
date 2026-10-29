@@ -1,8 +1,8 @@
 {
   "folder": "reports\\rea_probe\\proj_bench_live\\20261029T000941Z",
-  "valid": 19,
+  "valid": 20,
   "total": 20,
-  "rate": 0.95,
+  "rate": 1.0,
   "rows": [
     {
       "id": "p01",
@@ -84,7 +84,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     },
     {
       "id": "p07",
@@ -108,7 +108,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     },
     {
       "id": "p09",
@@ -116,7 +116,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     },
     {
       "id": "p10",
@@ -171,11 +171,15 @@
       "id": "p13",
       "artifact": "canvases.json",
       "kind": "social",
-      "valid": false,
+      "valid": true,
       "checks": {
-        "entries": 4,
+        "entries": 5,
         "formats": {
-          "": false
+          "ig-post": true,
+          "meta-story": true,
+          "x-post": true,
+          "linkedin": true,
+          "yt-thumb": true
         }
       },
       "detail": "format + documented size"
@@ -202,7 +206,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     },
     {
       "id": "p16",
@@ -226,7 +230,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     },
     {
       "id": "p18",
@@ -261,7 +265,7 @@
       "kind": "json",
       "valid": true,
       "checks": {},
-      "detail": "parsed dict"
+      "detail": "parsed"
     }
   ]
 }

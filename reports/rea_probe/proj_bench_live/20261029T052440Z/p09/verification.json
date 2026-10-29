@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'status' field in state.json is set to 'updated'.",
+    "command": "jq -e '.status == \"updated\"' state.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the 'timestamp' field in state.json is a valid ISO 8601 string.",
+    "command": "jq -e '.timestamp | test(\"^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$\")' state.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the 'version' field in state.json is an integer greater than 0.",
+    "command": "jq -e '.version | type == \"number\" and . > 0' state.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the 'data' field in state.json is a non-empty object.",
+    "command": "jq -e '.data | type == \"object\" and (length > 0)' state.json",
+    "expected_exit_code": 0
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "check": "Verify that the input listing text is provided in the request.",
+    "status": "fail",
+    "reason": "No listing text was supplied in the prompt."
+  },
+  {
+    "check": "Verify that the rubric criteria are provided in the request.",
+    "status": "fail",
+    "reason": "No rubric was supplied in the prompt."
+  },
+  {
+    "check": "Verify that file paths and line numbers are provided for context.",
+    "status": "fail",
+    "reason": "No file contents, paths, or line numbers were provided."
+  },
+  {
+    "check": "Score the listing against the rubric.",
+    "status": "unmeasured",
+    "reason": "Cannot score without listing and rubric."
+  },
+  {
+    "check": "Identify every unmeasured dimension.",
+    "status": "unmeasured",
+    "reason": "Cannot identify unmeasured dimensions without a defined rubric."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "check_id": "resume_file_exists",
+    "description": "Verify that the artifact 'resume.json' exists in the working directory.",
+    "command": "test -f resume.json",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "check_id": "resume_json_valid",
+    "description": "Ensure 'resume.json' is valid JSON and contains a 'status' field.",
+    "command": "python3 -c \"import json; d=json.load(open('resume.json')); assert 'status' in d\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "check_id": "completed_steps_present",
+    "description": "Verify that 'resume.json' contains a 'completed_steps' array with at least one entry.",
+    "command": "python3 -c \"import json; d=json.load(open('resume.json')); assert isinstance(d.get('completed_steps'), list) and len(d['completed_steps']) > 0\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "check_id": "operator_gate_cleared",
+    "description": "Confirm that the 'operator_gate' status in 'resume.json' is set to 'cleared' or 'approved'.",
+    "command": "python3 -c \"import json; d=json.load(open('resume.json')); assert d.get('operator_gate') in ['cleared', 'approved']\"",
+    "expected_result": "exit_code_0"
+  }
+]

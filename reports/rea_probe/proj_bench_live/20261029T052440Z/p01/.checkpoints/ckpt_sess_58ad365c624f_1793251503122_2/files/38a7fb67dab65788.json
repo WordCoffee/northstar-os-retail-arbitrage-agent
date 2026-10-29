@@ -1,0 +1,22 @@
+[
+  {
+    "check": "The patch must contain a diff that modifies at least one file other than the test file containing the failing assertion.",
+    "type": "structural",
+    "description": "Ensures the fix is applied to the source code, not the test itself."
+  },
+  {
+    "check": "The patch must not contain any lines that modify the assertion logic or expected values within the failing test file.",
+    "type": "negative",
+    "description": "Verifies that the test assertion remains unchanged as per the constraint."
+  },
+  {
+    "check": "After applying the patch, the previously failing unit test must pass when executed.",
+    "type": "functional",
+    "description": "Confirms that the fix actually resolves the failure."
+  },
+  {
+    "check": "After applying the patch, all other existing unit tests in the project must continue to pass.",
+    "type": "regression",
+    "description": "Ensures the fix does not introduce new failures in other parts of the codebase."
+  }
+]

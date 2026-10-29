@@ -1,28 +1,37 @@
-{
-  "canvases": [
-    {
-      "name": "default",
-      "width": 800,
-      "height": 600,
-      "source": "project_config.json"
-    },
-    {
-      "name": "mobile",
-      "width": 375,
-      "height": 812,
-      "source": "project_config.json"
-    },
-    {
-      "name": "tablet",
-      "width": 768,
-      "height": 1024,
-      "source": "project_config.json"
-    },
-    {
-      "name": "desktop",
-      "width": 1920,
-      "height": 1080,
-      "source": "project_config.json"
-    }
-  ]
-}
+[
+  {
+    "format": "ig-post",
+    "width": 1440,
+    "height": 1800,
+    "channel": "Instagram",
+    "source": "meta-ads-feed"
+  },
+  {
+    "format": "meta-story",
+    "width": 1440,
+    "height": 2560,
+    "channel": "Meta",
+    "source": "meta-ads-story"
+  },
+  {
+    "format": "x-post",
+    "width": 1200,
+    "height": 628,
+    "channel": "X",
+    "source": "x-creative-specs"
+  },
+  {
+    "format": "linkedin",
+    "width": 1200,
+    "height": 628,
+    "channel": "LinkedIn",
+    "source": "linkedin-ad-specs"
+  },
+  {
+    "format": "yt-thumb",
+    "width": 3840,
+    "height": 2160,
+    "channel": "YouTube",
+    "source": "youtube-thumbnails"
+  }
+]

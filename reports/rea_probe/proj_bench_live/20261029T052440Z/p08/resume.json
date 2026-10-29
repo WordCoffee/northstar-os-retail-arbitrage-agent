@@ -1,0 +1,44 @@
+{
+  "run_id": "run-20231027-001",
+  "status": "resumed",
+  "checkpoint": {
+    "last_completed_step": "step_3",
+    "timestamp": "2023-10-27T14:32:00Z"
+  },
+  "resume_action": {
+    "skip_steps": ["step_1", "step_2", "step_3"],
+    "next_step": "step_4",
+    "operator_gate": {
+      "gate_id": "gate_01",
+      "status": "cleared",
+      "cleared_by": "operator_007",
+      "cleared_at": "2023-10-27T14:35:00Z"
+    }
+  },
+  "steps": [
+    {
+      "id": "step_1",
+      "name": "Initialize",
+      "status": "completed",
+      "completed_at": "2023-10-27T14:00:00Z"
+    },
+    {
+      "id": "step_2",
+      "name": "Data Ingestion",
+      "status": "completed",
+      "completed_at": "2023-10-27T14:15:00Z"
+    },
+    {
+      "id": "step_3",
+      "name": "Validation",
+      "status": "completed",
+      "completed_at": "2023-10-27T14:32:00Z"
+    },
+    {
+      "id": "step_4",
+      "name": "Processing",
+      "status": "pending",
+      "scheduled_at": "2023-10-27T14:36:00Z"
+    }
+  ]
+}

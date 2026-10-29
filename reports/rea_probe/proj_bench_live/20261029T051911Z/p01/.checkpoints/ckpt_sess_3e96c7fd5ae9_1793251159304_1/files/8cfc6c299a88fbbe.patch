@@ -1,0 +1,14 @@
+--- a/src/utils/calculator.js
++++ b/src/utils/calculator.js
+@@ -1,7 +1,7 @@
+ function add(a, b) {
+-  return a + b;
++  return Number(a) + Number(b);
+ }
+ 
+ function multiply(a, b) {
+-  return a * b;
++  return Number(a) * Number(b);
+ }
+ 
+ module.exports = { add, multiply };

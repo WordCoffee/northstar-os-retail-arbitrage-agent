@@ -1,0 +1,34 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines with the word 'error' (case-insensitive).",
+    "type": "string_search",
+    "pattern": "error",
+    "case_sensitive": false,
+    "expected_count": 0
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the build log contains no lines with the word 'fail' (case-insensitive).",
+    "type": "string_search",
+    "pattern": "fail",
+    "case_sensitive": false,
+    "expected_count": 0
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the build log contains the phrase 'Build succeeded' or 'Build complete' (case-insensitive).",
+    "type": "string_search",
+    "pattern": "build (succeeded|complete)",
+    "case_sensitive": false,
+    "expected_count": 1
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the build log does not contain any stack traces or file paths indicating compilation failures (e.g., '.cpp', '.java', '.py' followed by ': line').",
+    "type": "regex_search",
+    "pattern": "\\.(cpp|java|py|c|js)\\s*:\\s*\\d+",
+    "case_sensitive": false,
+    "expected_count": 0
+  }
+]

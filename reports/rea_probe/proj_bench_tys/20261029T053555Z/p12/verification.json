@@ -1,0 +1,12 @@
+[
+  {
+    "check": "Identify the specific legal-copy defect in the provided file contents.",
+    "status": "Cannot perform",
+    "reason": "No file contents, file paths, or line numbers were provided in the request. Without the source code or text, it is impossible to identify the defect or propose a fix."
+  },
+  {
+    "check": "Verify that the front panel remains unchanged after the fix.",
+    "status": "Cannot perform",
+    "reason": "No file contents or definition of 'front panel' were provided."
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "check": "Verify that the handoff document explicitly includes a 'Resume' section with concrete next steps.",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that the handoff document includes a 'Context' or 'State' section summarizing current progress.",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that the handoff document is structured to be self-contained (no reliance on external chat history).",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that the handoff document includes a 'Goal' or 'Objective' statement.",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that the handoff document includes a 'Blockers' or 'Issues' section.",
+    "status": "Cannot verify: No file contents provided."
+  }
+]

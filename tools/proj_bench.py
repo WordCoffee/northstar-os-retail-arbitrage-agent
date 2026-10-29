@@ -13,8 +13,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import socket
 import statistics
+import subprocess
 import sys
 import time
 import urllib.request
@@ -132,25 +134,36 @@ def _nodes_for(brief: Dict[str, Any], project: Path, *, live: bool) -> List[Node
     artifact = project / brief["artifact"]
     verify = project / "verification.json"
     checks = list(brief.get("checks") or [])
-    verifier = "file_min_bytes" if live else "artifact_exists"
 
-    def acc(path: Path) -> List[Acceptance]:
-        params = {"path": str(path)}
-        if live:
-            params["min_bytes"] = 40
-        return [Acceptance("artifact present and non-trivial", verifier, params)]
+    def acc(path: Path, kind: str, terms=None, min_chars: int = 120) -> List[Acceptance]:
+        if not live:
+            return [Acceptance("artifact exists", "artifact_exists",
+                               {"path": str(path)})]
+        verifier = {"text": "text_valid", "json": "json_valid",
+                    "patch": "patch_valid", "label": "label_valid",
+                    "ad": "ad_valid", "social": "social_valid",
+                    "aplus": "aplus_valid"}[kind]
+        params: Dict[str, Any] = {"path": str(path)}
+        if terms:
+            params["terms"] = list(terms)
+        if kind == "text":
+            params["min_chars"] = min_chars
+        return [Acceptance(f"{kind} content valid", verifier, params)]
 
+    kind = str(brief.get("validator") or "text")
+    terms = list(brief.get("terms") or [])
     return [
         Node("plan", "inspect", "write the plan", lane="inspect",
              inputs={"write": "plan.md",
                      "content": f"# {brief['title']}\n\nGoal: {brief['goal']}\n\n"
                                 + "\n".join(f"- [ ] {c}" for c in checks)},
-             acceptance=acc(plan_doc)),
+             acceptance=acc(plan_doc, "text", min_chars=80)),
         Node("build", "coding", "produce the artifact", lane="coding",
              depends_on=["plan"],
              inputs={"write": brief["artifact"],
                      "content": f"artifact for {brief['id']}: {brief['goal']}"},
-             acceptance=acc(artifact)),
+             acceptance=acc(artifact, kind, terms,
+                            int(brief.get("min_chars") or 120))),
         Node("verify", "inspect", "verify the artifact", lane="inspect",
              depends_on=["build"],
              inputs={"write": "verification.json",
@@ -158,7 +171,7 @@ def _nodes_for(brief: Dict[str, Any], project: Path, *, live: bool) -> List[Node
                                             "checks": checks,
                                             "artifact": brief["artifact"]},
                                            indent=2)},
-             acceptance=acc(verify)),
+             acceptance=acc(verify, "json")),
     ]
 
 
@@ -254,6 +267,66 @@ def _port_open(host: str = "127.0.0.1", port: int = 8080) -> bool:
         return s.connect_ex((host, port)) == 0
 
 
+SERVER_BIN = Path.home() / ".config/northstar-llm/bin/llama-server.exe"
+SERVER_MODEL = (Path.home() / "models/northstaros-qwen3.8/"
+                "Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf")
+
+
+def _server_pid() -> int | None:
+    try:
+        import psutil
+    except Exception:  # noqa: BLE001
+        return None
+    for c in psutil.net_connections(kind="inet"):
+        if c.laddr and c.laddr.port == 8080 and c.status == "LISTEN":
+            return c.pid
+    return None
+
+
+def stop_server() -> None:
+    pid = _server_pid()
+    if not pid:
+        return
+    try:
+        import psutil
+        p = psutil.Process(pid)
+        p.terminate()
+        p.wait(timeout=20)
+    except Exception:  # noqa: BLE001
+        pass
+    for _ in range(20):
+        if not _port_open():
+            return
+        time.sleep(0.5)
+
+
+def start_server(timeout_s: int = 180) -> bool:
+    if _port_open():
+        return False
+    if not SERVER_BIN.is_file() or not SERVER_MODEL.is_file():
+        return False
+    flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+    subprocess.Popen(
+        [str(SERVER_BIN), "-m", str(SERVER_MODEL),
+         "--alias", "northstaros-qwen3.8:27b", "-ngl", "99",
+         "-c", "8192", "-fa", "on", "-ctk", "q8_0", "-ctv", "q8_0",
+         "-np", "1", "--jinja", "--host", "127.0.0.1", "--port", "8080",
+         "--temp", "0.2"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        creationflags=flags)
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        if _port_open():
+            try:
+                with urllib.request.urlopen(f"{LLM_BASE}/health", timeout=3) as r:
+                    if r.status == 200:
+                        return True
+            except Exception:  # noqa: BLE001
+                pass
+        time.sleep(2)
+    return False
+
+
 def _pct(values: List[float], p: float) -> float | None:
     if not values:
         return None
@@ -267,13 +340,15 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=20)
     ap.add_argument("--brief", default="")
     ap.add_argument("--executor", choices=["dry", "live", "tys"], default="dry")
+    ap.add_argument("--restart-every", type=int, default=0,
+                    help="restart the local 27B every N briefs (live mode)")
     ap.add_argument("--out", default="")
     args = ap.parse_args()
 
     if args.executor == "tys":
         print("Ty-as-is execution needs explicit step wiring; use dry or live.")
         return 2
-    if args.executor == "live" and not _port_open():
+    if args.executor == "live" and not _port_open() and not args.restart_every:
         print("The local 27B is not listening on 127.0.0.1:8080. Start it with "
               "scripts/start-northstar-llm.ps1, then rerun.")
         return 3
@@ -288,7 +363,18 @@ def main() -> int:
     prefix = "proj_bench_live" if args.executor == "live" else "proj_bench"
     root = Path(args.out or (ROOT / f"reports/rea_probe/{prefix}" / stamp))
     root.mkdir(parents=True, exist_ok=True)
-    results = [run_one(b, root, live=args.executor == "live") for b in briefs]
+    results = []
+    server_restarts = 0
+    if args.executor == "live" and args.restart_every and args.restart_every > 0:
+        for i in range(0, len(briefs), args.restart_every):
+            batch = briefs[i:i + args.restart_every]
+            stop_server()
+            if start_server():
+                server_restarts += 1
+            results.extend(run_one(b, root, live=True) for b in batch)
+        stop_server()
+    else:
+        results = [run_one(b, root, live=args.executor == "live") for b in briefs]
     resume = resume_probe(root)
 
     secs = [s for r in results for s in r.get("model_seconds", [])]
@@ -310,6 +396,7 @@ def main() -> int:
         "total_interventions": sum(r["interventions"] for r in results),
         "model_calls": len(secs),
         "model_chars": chars,
+        "server_restarts": server_restarts,
         "fence_stripped": sum(1 for r in results for c in r.get("model_calls", [])
                               if c.get("fence_stripped")),
         "node_seconds_p50": _pct(secs, 50),

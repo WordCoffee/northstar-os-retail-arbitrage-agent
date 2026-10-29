@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'digest.md' exists in the current directory.",
+    "command": "test -f digest.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that 'digest.md' is not empty.",
+    "command": "test -s digest.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that 'digest.md' contains at least one non-whitespace character.",
+    "command": "grep -q '[^[:space:]]' digest.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure that 'digest.md' does not contain any placeholder text such as 'TODO', 'FIXME', or 'PLACEHOLDER'.",
+    "command": "! grep -qiE '(TODO|FIXME|PLACEHOLDER)' digest.md",
+    "expected": "exit code 0"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'resume.json' file exists and is valid JSON.",
+    "command": "test -f resume.json && jq empty resume.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the 'completed_steps' array in resume.json contains at least one entry.",
+    "command": "jq -e '.completed_steps | length > 0' resume.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the 'blocked_step' field is present and is a non-empty string.",
+    "command": "jq -e '.blocked_step | type == \"string\" and length > 0' resume.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the 'next_action' field is present and is a non-empty string.",
+    "command": "jq -e '.next_action | type == \"string\" and length > 0' resume.json",
+    "expected_exit_code": 0
+  }
+]

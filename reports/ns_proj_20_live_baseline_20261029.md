@@ -15,7 +15,8 @@ q8_0 KV, **MTP off** (pinned; see §4).
 
 | Metric | Run 1 | Run 2 | Run 3 | Spread | Threshold |
 |---|---|---|---|---|---|
-| Completion | 20/20 | 20/20 | 20/20 | 1.00 | ≥ 1.00 |
+| Completion (file existence) | 20/20 | 20/20 | 20/20 | 1.00 | ≥ 1.00 |
+| Completion (content-enforced) | 17/20 | — | — | 0.85 | ≥ **0.85** |
 | Evidence coverage | 1.00 | 1.00 | 1.00 | 1.00 | ≥ 1.00 |
 | Node p50 | 6.27 s | 4.82 s | 6.11 s | 4.82–6.27 | ≤ **7.5 s** |
 | Node p95 | 11.17 s | 14.08 s | 11.97 s | 11.17–14.08 | ≤ **16.9 s** |
@@ -81,13 +82,30 @@ The two invalid binary artifacts were routed through tool nodes on run 1:
 |---|---|---|---|---|
 | p11 `label.png` | 2,737 B text | 1,965,681 B PNG | **yes** | `pouch_label.compose` produced a real label; OCR terms read; prepress printable |
 | p14 `ad.mp4` | 1,217 B text | 2,737,719 B MP4 | **yes** | 12.0 s, 1080×1920, video + audio (FFmpeg probe) |
-| p13 `canvases.json` | text/JSON | unchanged | no | still not the documented canvas schema |
+| p13 `canvases.json` | 406 B text | 692 B JSON | **yes** | `presets.js` via Node emitted the five documented format/width/height rows |
 
-Tool-lane content after the rerun: **19/20 (0.95)**. Format after tool: **20/20**.
+Tool-lane content after the rerun: **20/20 (1.00)**. Format after tool: **20/20**.
 The text-lane baseline metrics above are unchanged; the tool lane is a separate
 capability, not a retroactive baseline.
 
-## 6. What this is not
+## 6. Enforced-validator run
+
+The content validators are now registered in `agent_kernel/verify.py`, so a node
+cannot be `done` on file existence alone. A full enforced run (5 server restarts,
+4 briefs per server) produced:
+
+| Metric | Value |
+|---|---|
+| Complete | **17 / 20** |
+| Evidence coverage | **0.95** |
+| p50 / p95 | **5.08 s / 12.90 s** |
+| Failing briefs | **p11 (label), p13 (social), p14 (ad)** |
+| Tool lane on the same run | **20 / 20 content-valid** |
+
+This is the meaningful text-lane baseline: 17/20 projects pass content validation;
+the three failures are structural and are solved by tool nodes, not more text.
+
+## 7. What this is not
 
 - Not a quality claim. “Content valid” means the artifact is the right type and
   carries the required terms/streams; it does not judge prose or design.

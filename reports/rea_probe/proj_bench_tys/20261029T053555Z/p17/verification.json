@@ -1,0 +1,12 @@
+[
+  {
+    "check": "Verify that the test execution logic does not blindly retry a failed assertion.",
+    "status": "Cannot verify",
+    "reason": "No file contents or line numbers were provided in the request to inspect the code."
+  },
+  {
+    "check": "Verify that the system triggers a re-planning step after a single failed assertion.",
+    "status": "Cannot verify",
+    "reason": "No file contents or line numbers were provided in the request to inspect the code."
+  }
+]

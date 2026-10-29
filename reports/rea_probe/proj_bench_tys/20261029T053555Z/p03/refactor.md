@@ -1,0 +1,1 @@
+I cannot produce the content of `refactor.md` because the file contents were not provided in the prompt. I have no tools to access the file system.

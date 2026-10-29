@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines starting with 'error' or 'Error' (case-insensitive).",
+    "command": "grep -i '^error' build.log | wc -l",
+    "expected_output": "0"
+  },
+  {
+    "id": "check_2",
+    "description": "Confirm that the build log ends with a successful build status message (e.g., 'Build succeeded' or 'BUILD SUCCESS').",
+    "command": "tail -n 1 build.log | grep -i 'success'",
+    "expected_output": "non-empty output"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure there are no 'fatal' errors in the build log.",
+    "command": "grep -i 'fatal' build.log | wc -l",
+    "expected_output": "0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the build log file exists and is not empty.",
+    "command": "test -s build.log",
+    "expected_output": "exit code 0"
+  }
+]

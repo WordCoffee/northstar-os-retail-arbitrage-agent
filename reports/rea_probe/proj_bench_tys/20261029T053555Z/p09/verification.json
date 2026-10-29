@@ -1,0 +1,20 @@
+[
+  {
+    "check": "Verify that the code explicitly simulates an external change (e.g., via a mock, test fixture, or simulated event) before proceeding.",
+    "file": "Not provided",
+    "line": "Not provided",
+    "status": "Cannot verify - no file contents provided"
+  },
+  {
+    "check": "Assert the new state after the simulated external change (e.g., using an assertion or verification step) before reporting completion.",
+    "file": "Not provided",
+    "line": "Not provided",
+    "status": "Cannot verify - no file contents provided"
+  },
+  {
+    "check": "Ensure the 'done' report or completion signal occurs only after the assertion of the new state.",
+    "file": "Not provided",
+    "line": "Not provided",
+    "status": "Cannot verify - no file contents provided"
+  }
+]

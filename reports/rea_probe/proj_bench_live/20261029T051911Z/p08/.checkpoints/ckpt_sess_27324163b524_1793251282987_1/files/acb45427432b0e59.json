@@ -1,0 +1,37 @@
+{
+  "run_id": "run-20231027-001",
+  "status": "resumed",
+  "checkpoint": {
+    "last_completed_step": 4,
+    "timestamp": "2023-10-27T14:32:00Z",
+    "state": "operator_gate_passed"
+  },
+  "next_step": 5,
+  "steps": [
+    {
+      "id": 1,
+      "name": "init",
+      "status": "completed"
+    },
+    {
+      "id": 2,
+      "name": "validate_input",
+      "status": "completed"
+    },
+    {
+      "id": 3,
+      "name": "process_data",
+      "status": "completed"
+    },
+    {
+      "id": 4,
+      "name": "operator_gate",
+      "status": "completed"
+    },
+    {
+      "id": 5,
+      "name": "finalize_output",
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "check": "No file contents were provided in the prompt.",
+    "status": "fail",
+    "evidence": "The prompt states 'Use ONLY the file contents provided' but no files were included.",
+    "action": "Cannot produce a digest from local evidence files because no local evidence files were provided."
+  }
+]

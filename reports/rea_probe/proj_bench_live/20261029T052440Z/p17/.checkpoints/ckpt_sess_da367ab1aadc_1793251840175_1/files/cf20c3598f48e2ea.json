@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "previous_version": 1,
+  "trigger": "assertion_failure",
+  "failed_assertion": {
+    "id": "assert_001",
+    "description": "Expected status code 200, got 500",
+    "timestamp": "2023-10-27T10:00:00Z"
+  },
+  "actions": [
+    {
+      "step": 1,
+      "type": "diagnose",
+      "description": "Inspect error logs and stack trace for the failed assertion",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "type": "fix",
+      "description": "Apply targeted patch to resolve the root cause identified in step 1",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "type": "verify",
+      "description": "Re-run the specific failed assertion to confirm resolution",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "type": "regression",
+      "description": "Run full test suite to ensure no side effects from the fix",
+      "status": "pending"
+    }
+  ],
+  "history": [
+    {
+      "version": 1,
+      "status": "failed",
+      "reason": "Assertion failed: Expected status code 200, got 500"
+    }
+  ]
+}

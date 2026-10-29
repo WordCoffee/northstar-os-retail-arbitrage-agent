@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Verify that a new read-only endpoint (e.g., GET) is added to the API routes.",
+    "status": "pending",
+    "details": "No file contents provided to verify route definitions."
+  },
+  {
+    "check": "Verify that a unit or integration test exists for the new endpoint.",
+    "status": "pending",
+    "details": "No file contents provided to verify test files."
+  },
+  {
+    "check": "Verify that no database schema migration files are added or modified.",
+    "status": "pending",
+    "details": "No file contents provided to verify migration directories."
+  }
+]

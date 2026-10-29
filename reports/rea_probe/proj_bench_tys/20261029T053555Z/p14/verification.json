@@ -1,0 +1,14 @@
+[
+  {
+    "check": "Verify that a vertical clip (e.g., 9:16 aspect ratio) is created or selected.",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that exactly three captions are added to the clip.",
+    "status": "Cannot verify: No file contents provided."
+  },
+  {
+    "check": "Verify that a narration track is added to the clip.",
+    "status": "Cannot verify: No file contents provided."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the audit.json file exists and is valid JSON.",
+    "command": "test -f audit.json && python3 -c \"import json; json.load(open('audit.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the audit.json contains a 'value' field with a non-empty string.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert isinstance(d.get('value'), str) and len(d['value'])>0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure the audit.json contains an 'evidence' field with a non-empty string.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert isinstance(d.get('evidence'), str) and len(d['evidence'])>0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the 'evidence' field contains a URL or HTTP response snippet indicating a read-only inspection.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); e=d.get('evidence',''); assert ('http' in e.lower() or 'GET' in e.upper())\"",
+    "expected": "exit code 0"
+  }
+]

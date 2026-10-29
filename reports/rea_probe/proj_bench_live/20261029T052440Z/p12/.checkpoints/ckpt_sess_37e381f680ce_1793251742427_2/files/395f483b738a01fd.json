@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the front panel section (e.g., 'Front Panel' or 'Panel') is not modified.",
+    "type": "structural",
+    "target": "back.md",
+    "criteria": "The content of the front panel section must remain identical to the original version."
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure that the legal copy defect is fixed in the back panel section.",
+    "type": "content",
+    "target": "back.md",
+    "criteria": "The specific legal copy defect (e.g., incorrect disclaimer, missing liability clause) is corrected in the back panel section."
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the back panel section is present and properly formatted.",
+    "type": "structural",
+    "target": "back.md",
+    "criteria": "The back panel section exists and follows the expected markdown structure."
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that no other sections are unintentionally modified.",
+    "type": "structural",
+    "target": "back.md",
+    "criteria": "All sections other than the back panel remain unchanged."
+  }
+]

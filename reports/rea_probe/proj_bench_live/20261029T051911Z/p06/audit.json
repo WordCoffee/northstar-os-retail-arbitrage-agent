@@ -1,0 +1,12 @@
+{
+  "artifact": "audit.json",
+  "action": "inspect",
+  "target": "admin_panel",
+  "mode": "read-only",
+  "value": "status: active",
+  "evidence": "GET /admin/status returned 200 OK with body 'status: active'",
+  "checks": {
+    "value_quoted": true,
+    "no_change_made": true
+  }
+}

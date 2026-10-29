@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the runbook explicitly defines a 'read-only' scope for the browser task, ensuring no write operations (e.g., form submissions, file uploads, or state-changing API calls) are permitted.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "pattern": "read-only"
+  },
+  {
+    "id": "check-2",
+    "description": "Confirm that the runbook specifies a per-host grant mechanism, such as a domain allowlist or host-specific permission token, rather than a global or wildcard access grant.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "pattern": "per-host"
+  },
+  {
+    "id": "check-3",
+    "description": "Ensure that the runbook includes an explicit expiry mechanism for the access grant, such as a TTL, timestamp, or expiration date field.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "pattern": "expiry"
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the runbook contains a concrete example or configuration snippet demonstrating how the read-only, per-host, and expiry parameters are combined in a single task definition.",
+    "type": "regex",
+    "target": "runbook.md",
+    "pattern": "(read-only|per-host|expiry).{0,100}(read-only|per-host|expiry)"
+  }
+]

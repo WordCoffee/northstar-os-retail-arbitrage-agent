@@ -1,0 +1,8 @@
+I cannot produce the content of `listing_audit.json` because the file contents for `listing_audit.json` (or any related files containing the listing data and rubric) were not provided in the prompt.
+
+Please provide the file contents for:
+1. The listing to be scored.
+2. The rubric used for scoring.
+3. The existing `listing_audit.json` file (if it exists) or the schema expected.
+
+Without these inputs, I cannot determine the score or identify unmeasured dimensions.

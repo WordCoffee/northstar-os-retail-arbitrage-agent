@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "The file 'applied.diff' must exist and be a valid unified diff format.",
+    "type": "file_exists_and_valid_format",
+    "target": "applied.diff",
+    "criteria": "File exists and content matches unified diff regex patterns (e.g., starts with 'diff --git' or '---')"
+  },
+  {
+    "id": "check_2",
+    "description": "The applied diff must contain exactly one hunk (one '@@' header) corresponding to the selected hunk.",
+    "type": "content_constraint",
+    "target": "applied.diff",
+    "criteria": "Count of lines starting with '@@' is exactly 1"
+  },
+  {
+    "id": "check_3",
+    "description": "The applied diff must not contain any lines from the unselected hunk.",
+    "type": "content_exclusion",
+    "target": "applied.diff",
+    "criteria": "No lines from the second hunk's context or changes are present in the file"
+  },
+  {
+    "id": "check_4",
+    "description": "The applied diff must be applicable to the original file without conflicts.",
+    "type": "patch_applicability",
+    "target": "applied.diff",
+    "criteria": "Running 'git apply --check applied.diff' (or equivalent) succeeds without errors"
+  }
+]

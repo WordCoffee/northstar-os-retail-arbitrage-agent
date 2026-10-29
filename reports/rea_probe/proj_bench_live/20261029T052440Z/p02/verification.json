@@ -1,0 +1,31 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the file 'endpoint.md' exists in the repository root.",
+    "type": "file_exists",
+    "path": "endpoint.md"
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure that no SQL migration files (e.g., .sql, .migration) have been added or modified in the repository.",
+    "type": "no_migration_files",
+    "patterns": [
+      "*.sql",
+      "*migration*"
+    ]
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the endpoint is defined as read-only (GET method) in the codebase.",
+    "type": "code_pattern",
+    "pattern": "GET",
+    "file_glob": "*.py,*.js,*.ts,*.java,*.go"
+  },
+  {
+    "id": "check-4",
+    "description": "Verify that a test file exists and contains a test case for the new endpoint.",
+    "type": "file_exists_and_content",
+    "path_glob": "*test*.py,*test*.js,*test*.ts,*test*.java,*test*.go",
+    "content_pattern": "test.*endpoint|endpoint.*test"
+  }
+]

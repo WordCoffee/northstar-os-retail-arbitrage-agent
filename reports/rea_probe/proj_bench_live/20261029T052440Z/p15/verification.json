@@ -1,0 +1,47 @@
+[
+  {
+    "id": "check_1",
+    "name": "Listing Title Length",
+    "description": "Verify that the listing title is between 10 and 100 characters.",
+    "type": "numeric_range",
+    "field": "title",
+    "min": 10,
+    "max": 100
+  },
+  {
+    "id": "check_2",
+    "name": "Price Presence and Format",
+    "description": "Ensure the price field is present, is a positive number, and is formatted with exactly two decimal places.",
+    "type": "format_validation",
+    "field": "price",
+    "rules": [
+      "not_null",
+      "greater_than_zero",
+      "decimal_places_equal_2"
+    ]
+  },
+  {
+    "id": "check_3",
+    "name": "Image Count Minimum",
+    "description": "Confirm that the listing contains at least 3 images.",
+    "type": "count_minimum",
+    "field": "images",
+    "min_count": 3
+  },
+  {
+    "id": "check_4",
+    "name": "Description Keyword Density",
+    "description": "Check that the description contains at least 5 unique keywords from the provided category-specific keyword list.",
+    "type": "keyword_presence",
+    "field": "description",
+    "min_unique_keywords": 5
+  },
+  {
+    "id": "check_5",
+    "name": "Seller Rating Threshold",
+    "description": "Verify that the seller's rating is 4.0 or higher on a 5.0 scale.",
+    "type": "numeric_threshold",
+    "field": "seller_rating",
+    "min_value": 4.0
+  }
+]

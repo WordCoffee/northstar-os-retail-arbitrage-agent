@@ -1,0 +1,54 @@
+{
+  "name": "three-node-project",
+  "version": "1.0.0",
+  "description": "A three-node project designed to run end-to-end with passing evidence for each node.",
+  "nodes": [
+    {
+      "id": "node-1",
+      "name": "Data Ingestion",
+      "description": "Ingests raw data from a source and validates its integrity.",
+      "status": "completed",
+      "evidence": {
+        "input": "raw_data.json",
+        "output": "validated_data.json",
+        "checksum": "sha256:abc123def456",
+        "timestamp": "2023-10-01T10:00:00Z"
+      }
+    },
+    {
+      "id": "node-2",
+      "name": "Data Processing",
+      "description": "Transforms validated data into a structured format.",
+      "status": "completed",
+      "evidence": {
+        "input": "validated_data.json",
+        "output": "processed_data.json",
+        "checksum": "sha256:ghi789jkl012",
+        "timestamp": "2023-10-01T10:05:00Z"
+      }
+    },
+    {
+      "id": "node-3",
+      "name": "Data Output",
+      "description": "Writes the processed data to the final destination and verifies completion.",
+      "status": "completed",
+      "evidence": {
+        "input": "processed_data.json",
+        "output": "final_output.json",
+        "checksum": "sha256:mno345pqr678",
+        "timestamp": "2023-10-01T10:10:00Z"
+      }
+    }
+  ],
+  "plan": {
+    "steps": [
+      "Initialize project and configure nodes.",
+      "Execute node-1: Data Ingestion.",
+      "Execute node-2: Data Processing.",
+      "Execute node-3: Data Output.",
+      "Verify all nodes have passing evidence.",
+      "Mark project as complete."
+    ],
+    "status": "complete"
+  }
+}

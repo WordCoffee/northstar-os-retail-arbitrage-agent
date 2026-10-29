@@ -1,0 +1,22 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that project.json exists and is valid JSON with a 'nodes' array containing exactly 3 items.",
+    "command": "python3 -c \"import json; data = json.load(open('project.json')); assert isinstance(data.get('nodes'), list) and len(data['nodes']) == 3, 'Invalid node count or structure'\""
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure all three nodes have a 'status' field set to 'passing' or 'success'.",
+    "command": "python3 -c \"import json; data = json.load(open('project.json')); statuses = [n.get('status') for n in data['nodes']]; assert all(s in ['passing', 'success'] for s in statuses), 'Not all nodes have passing status'\""
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that each node contains a non-empty 'evidence' field (string or list) to prove completion.",
+    "command": "python3 -c \"import json; data = json.load(open('project.json')); assert all(n.get('evidence') for n in data['nodes']), 'Missing evidence for one or more nodes'\""
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the project metadata includes a 'version' field and a 'completed_at' timestamp in ISO 8601 format.",
+    "command": "python3 -c \"import json, re; data = json.load(open('project.json')); assert 'version' in data and re.match(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}', data.get('completed_at', '')), 'Missing version or invalid timestamp'\""
+  }
+]

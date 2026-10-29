@@ -9,30 +9,30 @@ the harness persisted it. **Not a quality claim.**
 | `20261029T000208Z` | aborted at 46 calls (8K + MTP); 6/20 |
 | `20261029T000510Z` | aborted at 49 calls (8K + MTP); 8/20 |
 | `20261029T000806Z` | stable pilot, 5 briefs (8K, no MTP) |
-| `20261029T000941Z` | baseline run 1; fenced nodes rerun; tool lane rerun |
+| `20261029T000941Z` | baseline run 1; fenced nodes rerun; tool lane |
 | `20261029T012552Z` | baseline run 2 |
 | `20261029T013245Z` | baseline run 3 |
-| `spread.json` | run-to-run spread and thresholds |
+| `20261029T051911Z` | aborted enforced attempt (server exit at 51 calls) |
+| `20261029T052440Z` | **enforced-validator run** (5 restarts, 17/20 text lane) |
+| `spread.json` | 3-run spread and latency thresholds |
 
-**Pinned settings:** 8K context, q8_0 KV, **MTP off**. The 64K + MTP launcher
-aborted twice at 46 and 49 calls; the no-MTP configuration completed every run.
+**Pinned settings:** 8K context, q8_0 KV, **MTP off**. MTP aborted at 46 and 49
+calls; no-MTP completed all 60.
 
-**Fence policy:** Markdown fences are **stripped at persistence** and the event is
-recorded in the node's model call. The 13 fenced artifacts in run 1 were rerun;
-none are fenced now.
+**Fence policy:** Markdown fences are **stripped at persistence** and recorded in
+the node's model call. The 13 fenced artifacts in run 1 were rerun; none remain.
 
-**Run-to-run spread (3 runs):**
+**Run-to-run spread (3 runs, file existence):** completion 20/20 each; p50 6.27,
+4.82, 6.11 s; p95 11.17, 14.08, 11.97 s; format 0.90; content 0.85.
 
-| Metric | Values | Threshold |
-|---|---|---|
-| Completion | 20, 20, 20 | ≥ 1.00 |
-| p50 | 6.27, 4.82, 6.11 s | ≤ 7.5 s |
-| p95 | 11.17, 14.08, 11.97 s | ≤ 16.9 s |
-| Format valid | 0.90, 0.90, 0.90 | ≥ 0.90 |
-| Content valid (text lane) | 0.85, 0.85, 0.85 | ≥ 0.85 |
+**Enforced validators (run `052440Z`):** completion **17/20**, evidence **0.95**,
+p50 5.08 s, p95 12.90 s. Failures: p11, p13, p14 — structural text-lane limits.
 
-**Tool lane (run 1):** p11 now valid (real PNG; OCR + prepress), p14 now valid
-(12 s 1080×1920 MP4 with audio), p13 still invalid. Tool-lane content: **19/20
-(0.95)**; text-lane content remains **17/20 (0.85)**.
+**Tool lane:** p11 (real PNG; OCR + prepress), p13 (`presets.js` canvases) and p14
+(12 s 1080×1920 MP4 with audio) all valid. Tool-lane content **20/20 (1.00)**.
+
+**Ty-as-is:** `reports/rea_probe/proj_bench_tys/20261029T053555Z` — Ty's
+orchestrator + coding lane is **0/20 content-valid** because the lane has no tools
+and no context; see `reports/tys_as_is_baseline_20261029.md`.
 
 The human report is `reports/ns_proj_20_live_baseline_20261029.md`.

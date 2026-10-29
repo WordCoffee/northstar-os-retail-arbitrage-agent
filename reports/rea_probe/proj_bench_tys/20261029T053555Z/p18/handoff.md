@@ -1,0 +1,1 @@
+I cannot produce the content of `handoff.md` because the file contents are not provided in the prompt. I have no tools to access the file system, and the instructions state to use ONLY the file contents provided. If the file is not shown, I must say so.

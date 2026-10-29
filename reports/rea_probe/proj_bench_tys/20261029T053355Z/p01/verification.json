@@ -1,0 +1,18 @@
+[
+  {
+    "check": "Identify the failing unit test and its assertion.",
+    "action": "Locate the test file and the specific assertion that is failing. Do not modify the assertion itself."
+  },
+  {
+    "check": "Analyze the root cause of the failure.",
+    "action": "Inspect the code under test (logic, data, dependencies) to determine why the assertion is not met. Check for off-by-one errors, incorrect state, or missing initialization."
+  },
+  {
+    "check": "Implement the fix in the source code.",
+    "action": "Modify the implementation (not the test) to satisfy the existing assertion. Ensure the fix is minimal and does not introduce side effects."
+  },
+  {
+    "check": "Verify the fix.",
+    "action": "Re-run the unit test to confirm it now passes. Ensure no other tests are broken by the change."
+  }
+]

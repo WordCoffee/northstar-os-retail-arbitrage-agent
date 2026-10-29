@@ -1,0 +1,2458 @@
+{
+  "p01": {
+    "plan_id": "plan_6db09717df02",
+    "session_id": "sess_58ad365c624f",
+    "goal": "Diagnose and fix one failing unit test without changing its assertion.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p01\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Fix a failing unit test\n\nGoal: Diagnose and fix one failing unit test without changing its assertion.\n\n- [ ] test passes\n- [ ] no assertion edited"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_d540d0b0c911",
+          "ev_32f7316423cd"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "patch content valid",
+            "verifier": "patch_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p01\\fix.patch"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "fix.patch",
+          "content": "artifact for p01: Diagnose and fix one failing unit test without changing its assertion."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_270b05b35fa1",
+          "ev_ab6e798f444f"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p01\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p01\",\n  \"checks\": [\n    \"test passes\",\n    \"no assertion edited\"\n  ],\n  \"artifact\": \"fix.patch\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_faa455ceeb87",
+          "ev_44bb5dbbe62a"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:24:52Z",
+    "approved_at": "2026-10-29T05:24:52Z",
+    "approved_by": "bench"
+  },
+  "p02": {
+    "plan_id": "plan_37ca446a2f8f",
+    "session_id": "sess_45a3a69a30c3",
+    "goal": "Add one read-only endpoint with a test and no schema migration.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p02\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Add a small API endpoint\n\nGoal: Add one read-only endpoint with a test and no schema migration.\n\n- [ ] route registered\n- [ ] test present\n- [ ] no migration"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_de11bcd50619",
+          "ev_7355cb9ef877"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p02\\endpoint.md",
+              "terms": [
+                "route",
+                "endpoint"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "endpoint.md",
+          "content": "artifact for p02: Add one read-only endpoint with a test and no schema migration."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_5215a7de0c2f",
+          "ev_7843fc45e9b8"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p02\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p02\",\n  \"checks\": [\n    \"route registered\",\n    \"test present\",\n    \"no migration\"\n  ],\n  \"artifact\": \"endpoint.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_9f8903302721",
+          "ev_2923cecd6f07"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:25:03Z",
+    "approved_at": "2026-10-29T05:25:03Z",
+    "approved_by": "bench"
+  },
+  "p03": {
+    "plan_id": "plan_2a0e621a7d8e",
+    "session_id": "sess_18ac7937bbde",
+    "goal": "Split one oversized module into two without changing behaviour.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p03\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Refactor a module\n\nGoal: Split one oversized module into two without changing behaviour.\n\n- [ ] tests green\n- [ ] public API unchanged"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_eea17bbde25b",
+          "ev_85b94096d151"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p03\\refactor.md",
+              "terms": [
+                "refactor"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "refactor.md",
+          "content": "artifact for p03: Split one oversized module into two without changing behaviour."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_08e60b12b81e",
+          "ev_a529c25f1d15"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p03\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p03\",\n  \"checks\": [\n    \"tests green\",\n    \"public API unchanged\"\n  ],\n  \"artifact\": \"refactor.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_2bfa52cf41ef",
+          "ev_410932a4a997"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:25:20Z",
+    "approved_at": "2026-10-29T05:25:20Z",
+    "approved_by": "bench"
+  },
+  "p04": {
+    "plan_id": "plan_7c7ab49455e9",
+    "session_id": "sess_f3fa6daff696",
+    "goal": "Add a default-off feature flag with a test proving both states.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p04\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Wire a config flag\n\nGoal: Add a default-off feature flag with a test proving both states.\n\n- [ ] default off\n- [ ] both states tested"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_1bec92274fb1",
+          "ev_8564e598ef0f"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p04\\flag.md",
+              "terms": [
+                "default",
+                "off"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "flag.md",
+          "content": "artifact for p04: Add a default-off feature flag with a test proving both states."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_b3afb99132d5",
+          "ev_90856d2be092"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p04\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p04\",\n  \"checks\": [\n    \"default off\",\n    \"both states tested\"\n  ],\n  \"artifact\": \"flag.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_3849fabb1b08",
+          "ev_58beb924c9bc"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:25:43Z",
+    "approved_at": "2026-10-29T05:25:43Z",
+    "approved_by": "bench"
+  },
+  "p05": {
+    "plan_id": "plan_9944f3a73b99",
+    "session_id": "sess_a8e558e3317e",
+    "goal": "Find the first build error, fix it, and prove a clean build.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p05\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Repair a broken build\n\nGoal: Find the first build error, fix it, and prove a clean build.\n\n- [ ] build exit 0\n- [ ] root cause named"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_db73f161c1c5",
+          "ev_189e7e1a3a5b"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p05\\build.log",
+              "terms": [
+                "build"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "build.log",
+          "content": "artifact for p05: Find the first build error, fix it, and prove a clean build."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_6bd88f4968a0",
+          "ev_54b4dfa9e8c4"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p05\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p05\",\n  \"checks\": [\n    \"build exit 0\",\n    \"root cause named\"\n  ],\n  \"artifact\": \"build.log\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_d9c0d4cfac8f",
+          "ev_8b0f73dbf620"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:26:12Z",
+    "approved_at": "2026-10-29T05:26:12Z",
+    "approved_by": "bench"
+  },
+  "p06": {
+    "plan_id": "plan_06ed9383a558",
+    "session_id": "sess_f615a0061573",
+    "goal": "Inspect one admin panel read-only and report the value with evidence.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p06\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Audit an admin setting\n\nGoal: Inspect one admin panel read-only and report the value with evidence.\n\n- [ ] value quoted\n- [ ] no change made"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_889ff782827e",
+          "ev_9432b3cb105b"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p06\\audit.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "audit.json",
+          "content": "artifact for p06: Inspect one admin panel read-only and report the value with evidence."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_caeaf1828efc",
+          "ev_f9e06f3ae619"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p06\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p06\",\n  \"checks\": [\n    \"value quoted\",\n    \"no change made\"\n  ],\n  \"artifact\": \"audit.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_858dad1e8ca8",
+          "ev_16acd2c90e9c"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:26:27Z",
+    "approved_at": "2026-10-29T05:26:27Z",
+    "approved_by": "bench"
+  },
+  "p07": {
+    "plan_id": "plan_ae99e05cd83a",
+    "session_id": "sess_aa3134929632",
+    "goal": "Plan a read-only browser task with a per-host grant and an expiry.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p07\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Prepare a safe browser run\n\nGoal: Plan a read-only browser task with a per-host grant and an expiry.\n\n- [ ] host named\n- [ ] expiry set\n- [ ] no login"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_bbb166b0f143",
+          "ev_5fab7595a7a7"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p07\\runbook.md",
+              "terms": [
+                "host",
+                "expiry"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "runbook.md",
+          "content": "artifact for p07: Plan a read-only browser task with a per-host grant and an expiry."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_1ffc4072b5d3",
+          "ev_525d56b1cd18"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p07\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p07\",\n  \"checks\": [\n    \"host named\",\n    \"expiry set\",\n    \"no login\"\n  ],\n  \"artifact\": \"runbook.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_67e0ae8b916a",
+          "ev_5f63d23042c4"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:26:42Z",
+    "approved_at": "2026-10-29T05:26:42Z",
+    "approved_by": "bench"
+  },
+  "p08": {
+    "plan_id": "plan_ac8a62a01f90",
+    "session_id": "sess_8725fe975492",
+    "goal": "Resume a run blocked on an operator gate without repeating completed steps.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p08\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Recover a blocked run\n\nGoal: Resume a run blocked on an operator gate without repeating completed steps.\n\n- [ ] no duplicate step\n- [ ] checkpoint used"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_30ff2a20683d",
+          "ev_2b5d90d81813"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p08\\resume.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "resume.json",
+          "content": "artifact for p08: Resume a run blocked on an operator gate without repeating completed steps."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_f9c8992ed63e",
+          "ev_cc1bf657aaae"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p08\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p08\",\n  \"checks\": [\n    \"no duplicate step\",\n    \"checkpoint used\"\n  ],\n  \"artifact\": \"resume.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_2eadf91df9fa",
+          "ev_17d99bf3eeb2"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:27:02Z",
+    "approved_at": "2026-10-29T05:27:02Z",
+    "approved_by": "bench"
+  },
+  "p09": {
+    "plan_id": "plan_81f393883040",
+    "session_id": "sess_3531d8fc0266",
+    "goal": "After a simulated external change, assert the new state before reporting done.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p09\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Verify an external change\n\nGoal: After a simulated external change, assert the new state before reporting done.\n\n- [ ] assertion recorded\n- [ ] unknown not pass"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_59f7d5b4e0f4",
+          "ev_355884bde37e"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p09\\state.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "state.json",
+          "content": "artifact for p09: After a simulated external change, assert the new state before reporting done."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_6638f28b3d55",
+          "ev_0862b4bb5094"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p09\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p09\",\n  \"checks\": [\n    \"assertion recorded\",\n    \"unknown not pass\"\n  ],\n  \"artifact\": \"state.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_a6583c8a789a",
+          "ev_02e6ae96e7c1"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:27:39Z",
+    "approved_at": "2026-10-29T05:27:39Z",
+    "approved_by": "bench"
+  },
+  "p10": {
+    "plan_id": "plan_7660c6fdcdfc",
+    "session_id": "sess_192aeb825f74",
+    "goal": "Assemble a digest from local evidence files with no invented numbers.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p10\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Produce a weekly ops digest\n\nGoal: Assemble a digest from local evidence files with no invented numbers.\n\n- [ ] every number cited\n- [ ] missing data named"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_175ea5c0131a",
+          "ev_8d303b23b747"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p10\\digest.md",
+              "terms": [
+                "digest"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "digest.md",
+          "content": "artifact for p10: Assemble a digest from local evidence files with no invented numbers."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_98f1dc21b489",
+          "ev_61034d278787"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p10\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p10\",\n  \"checks\": [\n    \"every number cited\",\n    \"missing data named\"\n  ],\n  \"artifact\": \"digest.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_b81d63f0488b",
+          "ev_e46b8a6619c5"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:27:51Z",
+    "approved_at": "2026-10-29T05:27:51Z",
+    "approved_by": "bench"
+  },
+  "p11": {
+    "plan_id": "plan_a3c6de64ec3e",
+    "session_id": "sess_443586369231",
+    "goal": "Compose a label on a measured pouch plate and prove OCR, prepress and readiness.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p11\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Build a pouch label\n\nGoal: Compose a label on a measured pouch plate and prove OCR, prepress and readiness.\n\n- [ ] residual under 0.5 px\n- [ ] OCR terms read\n- [ ] printable"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_d99d1fe35108",
+          "ev_92b75ca1988c"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "label content valid",
+            "verifier": "label_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p11\\label.png",
+              "terms": [
+                "ORGANIC LION'S MANE",
+                "MUSHROOM POWDER",
+                "6 oz"
+              ]
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "label.png",
+          "content": "artifact for p11: Compose a label on a measured pouch plate and prove OCR, prepress and readiness."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "blocked",
+        "attempts": 2,
+        "evidence_ids": [
+          "ev_b900859422dd",
+          "ev_9b483c1002dd"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p11\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p11\",\n  \"checks\": [\n    \"residual under 0.5 px\",\n    \"OCR terms read\",\n    \"printable\"\n  ],\n  \"artifact\": \"label.png\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "pending",
+        "attempts": 0,
+        "evidence_ids": []
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "active",
+    "created_at": "2026-10-29T05:28:15Z",
+    "approved_at": "2026-10-29T05:28:15Z",
+    "approved_by": "bench"
+  },
+  "p12": {
+    "plan_id": "plan_495fed07764e",
+    "session_id": "sess_37e381f680ce",
+    "goal": "Fix one legal-copy defect while keeping the front panel unchanged.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p12\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Correct a package back panel\n\nGoal: Fix one legal-copy defect while keeping the front panel unchanged.\n\n- [ ] defect quoted\n- [ ] front hash unchanged"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_1e00e25f15cb",
+          "ev_82ff922aa62a"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p12\\back.md",
+              "terms": [
+                "back"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "back.md",
+          "content": "artifact for p12: Fix one legal-copy defect while keeping the front panel unchanged."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_933c2a145752",
+          "ev_06d592a9fcc7"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p12\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p12\",\n  \"checks\": [\n    \"defect quoted\",\n    \"front hash unchanged\"\n  ],\n  \"artifact\": \"back.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_16c187d5aabb",
+          "ev_9a94ff5ce76a"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:28:46Z",
+    "approved_at": "2026-10-29T05:28:46Z",
+    "approved_by": "bench"
+  },
+  "p13": {
+    "plan_id": "plan_d7907346e3e6",
+    "session_id": "sess_24a3b3a65e69",
+    "goal": "Produce the documented canvas sizes with source provenance for each.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p13\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Generate a social canvas set\n\nGoal: Produce the documented canvas sizes with source provenance for each.\n\n- [ ] sizes sourced\n- [ ] no unsourced row"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_4d088009987d",
+          "ev_c87e16f77cc3"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "social content valid",
+            "verifier": "social_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p13\\canvases.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "canvases.json",
+          "content": "artifact for p13: Produce the documented canvas sizes with source provenance for each."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "blocked",
+        "attempts": 2,
+        "evidence_ids": [
+          "ev_cc0411c8fc7d",
+          "ev_bf5cf016f6bc"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p13\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p13\",\n  \"checks\": [\n    \"sizes sourced\",\n    \"no unsourced row\"\n  ],\n  \"artifact\": \"canvases.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "pending",
+        "attempts": 0,
+        "evidence_ids": []
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "active",
+    "created_at": "2026-10-29T05:29:13Z",
+    "approved_at": "2026-10-29T05:29:13Z",
+    "approved_by": "bench"
+  },
+  "p14": {
+    "plan_id": "plan_e3f8f99f659d",
+    "session_id": "sess_f9e925baa271",
+    "goal": "Assemble a vertical clip with three captions and a narration track.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p14\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Assemble a 15-second ad\n\nGoal: Assemble a vertical clip with three captions and a narration track.\n\n- [ ] duration 12-15 s\n- [ ] 1080x1920\n- [ ] audio stream"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_c76808cff198",
+          "ev_279c747901e5"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "ad content valid",
+            "verifier": "ad_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p14\\ad.mp4"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "ad.mp4",
+          "content": "artifact for p14: Assemble a vertical clip with three captions and a narration track."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "blocked",
+        "attempts": 2,
+        "evidence_ids": [
+          "ev_3fc1b317969b",
+          "ev_a82108ed79e9"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p14\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p14\",\n  \"checks\": [\n    \"duration 12-15 s\",\n    \"1080x1920\",\n    \"audio stream\"\n  ],\n  \"artifact\": \"ad.mp4\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "pending",
+        "attempts": 0,
+        "evidence_ids": []
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "active",
+    "created_at": "2026-10-29T05:29:25Z",
+    "approved_at": "2026-10-29T05:29:25Z",
+    "approved_by": "bench"
+  },
+  "p15": {
+    "plan_id": "plan_e123ea93e0cc",
+    "session_id": "sess_c681a87117ad",
+    "goal": "Score a supplied listing against the rubric and name every unmeasured dimension.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p15\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Audit a listing\n\nGoal: Score a supplied listing against the rubric and name every unmeasured dimension.\n\n- [ ] rubric cited\n- [ ] unmeasured listed"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_521e8d6a3a57",
+          "ev_1c40ccdd6284"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p15\\listing_audit.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "listing_audit.json",
+          "content": "artifact for p15: Score a supplied listing against the rubric and name every unmeasured dimension."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_9c1955dbf25c",
+          "ev_177ce1c63d1a"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p15\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p15\",\n  \"checks\": [\n    \"rubric cited\",\n    \"unmeasured listed\"\n  ],\n  \"artifact\": \"listing_audit.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_1f28d7d1eb43",
+          "ev_4f7bd7df8d13"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:29:34Z",
+    "approved_at": "2026-10-29T05:29:34Z",
+    "approved_by": "bench"
+  },
+  "p16": {
+    "plan_id": "plan_edd990050484",
+    "session_id": "sess_d04dc49238de",
+    "goal": "Plan an inspect-then-browser campaign with a human gate between lanes.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p16\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Plan a two-lane campaign\n\nGoal: Plan an inspect-then-browser campaign with a human gate between lanes.\n\n- [ ] gate present\n- [ ] lanes scoped"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_213c87365b9e",
+          "ev_2fa46c9ed0bd"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p16\\campaign.md",
+              "terms": [
+                "gate",
+                "lane"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "campaign.md",
+          "content": "artifact for p16: Plan an inspect-then-browser campaign with a human gate between lanes."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_bb492de5b361",
+          "ev_45a004bc6a29"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p16\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p16\",\n  \"checks\": [\n    \"gate present\",\n    \"lanes scoped\"\n  ],\n  \"artifact\": \"campaign.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_a43961da8124",
+          "ev_7b5c2b11d58e"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:29:48Z",
+    "approved_at": "2026-10-29T05:29:48Z",
+    "approved_by": "bench"
+  },
+  "p17": {
+    "plan_id": "plan_cca5af46cc29",
+    "session_id": "sess_da367ab1aadc",
+    "goal": "Re-plan after one failed assertion instead of retrying blindly.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p17\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Recover from a failed verification\n\nGoal: Re-plan after one failed assertion instead of retrying blindly.\n\n- [ ] new plan version\n- [ ] old version retained"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_5f9f5a2e4a3b",
+          "ev_1e0134d46ca9"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p17\\replan.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "replan.json",
+          "content": "artifact for p17: Re-plan after one failed assertion instead of retrying blindly."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_e65db0312500",
+          "ev_dc244a99150a"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p17\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p17\",\n  \"checks\": [\n    \"new plan version\",\n    \"old version retained\"\n  ],\n  \"artifact\": \"replan.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_6b0e7e10563d",
+          "ev_ff18aa7b398a"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:30:28Z",
+    "approved_at": "2026-10-29T05:30:28Z",
+    "approved_by": "bench"
+  },
+  "p18": {
+    "plan_id": "plan_680d2d75e715",
+    "session_id": "sess_eb4f95c58d04",
+    "goal": "Write a handoff that survives context compaction and resume from it.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p18\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Hand off across a compaction\n\nGoal: Write a handoff that survives context compaction and resume from it.\n\n- [ ] goal kept\n- [ ] decisions kept\n- [ ] evidence kept"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_201bf95f7768",
+          "ev_e3b63b6b601d"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p18\\handoff.md",
+              "terms": [
+                "handoff"
+              ],
+              "min_chars": 120
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "handoff.md",
+          "content": "artifact for p18: Write a handoff that survives context compaction and resume from it."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_376528d895a6",
+          "ev_c863136a648e"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p18\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p18\",\n  \"checks\": [\n    \"goal kept\",\n    \"decisions kept\",\n    \"evidence kept\"\n  ],\n  \"artifact\": \"handoff.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_580d8e9401b1",
+          "ev_4168049818dc"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:30:53Z",
+    "approved_at": "2026-10-29T05:30:53Z",
+    "approved_by": "bench"
+  },
+  "p19": {
+    "plan_id": "plan_5bf9c370df18",
+    "session_id": "sess_f18386b054d0",
+    "goal": "Review a two-hunk diff and apply only the selected hunk.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p19\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Apply a per-hunk diff\n\nGoal: Review a two-hunk diff and apply only the selected hunk.\n\n- [ ] one hunk applied\n- [ ] other hunk untouched"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_a9b0e568c9c0",
+          "ev_cf5ea1231c83"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "patch content valid",
+            "verifier": "patch_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p19\\applied.diff"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "applied.diff",
+          "content": "artifact for p19: Review a two-hunk diff and apply only the selected hunk."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_23702a68a201",
+          "ev_eeb4148bb991"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p19\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p19\",\n  \"checks\": [\n    \"one hunk applied\",\n    \"other hunk untouched\"\n  ],\n  \"artifact\": \"applied.diff\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_838028d1d89d",
+          "ev_b0a1bb2c7fd9"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:31:18Z",
+    "approved_at": "2026-10-29T05:31:18Z",
+    "approved_by": "bench"
+  },
+  "p20": {
+    "plan_id": "plan_5882d364c4a0",
+    "session_id": "sess_6bfa1a2ee404",
+    "goal": "Run a three-node project end to end and finish only with passing evidence.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "live lane baseline",
+      "no network beyond the local model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "text content valid",
+            "verifier": "text_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p20\\plan.md",
+              "min_chars": 80
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Close a project with evidence\n\nGoal: Run a three-node project end to end and finish only with passing evidence.\n\n- [ ] every node evidenced\n- [ ] plan complete"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_6e641b68b50c",
+          "ev_26b57e528131"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p20\\project.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "project.json",
+          "content": "artifact for p20: Run a three-node project end to end and finish only with passing evidence."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_c02ac7900933",
+          "ev_8362541f45c4"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "json content valid",
+            "verifier": "json_valid",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench_live\\20261029T052440Z\\p20\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p20\",\n  \"checks\": [\n    \"every node evidenced\",\n    \"plan complete\"\n  ],\n  \"artifact\": \"project.json\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_23da03d38930",
+          "ev_4fc214e94af9"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 1800,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T05:31:32Z",
+    "approved_at": "2026-10-29T05:31:32Z",
+    "approved_by": "bench"
+  }
+}

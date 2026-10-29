@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Identify the failing unit test and its assertion.",
+    "status": "Cannot perform",
+    "reason": "No file contents, file paths, or test code were provided in the request."
+  },
+  {
+    "check": "Diagnose the root cause of the failure.",
+    "status": "Cannot perform",
+    "reason": "No source code or error logs were provided."
+  },
+  {
+    "check": "Fix the implementation without changing the assertion.",
+    "status": "Cannot perform",
+    "reason": "No source code to modify was provided."
+  }
+]

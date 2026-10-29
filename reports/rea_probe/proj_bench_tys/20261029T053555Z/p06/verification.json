@@ -1,0 +1,7 @@
+[
+  {
+    "check": "Inspect one admin panel read-only and report the value with evidence",
+    "status": "not_applicable",
+    "evidence": "No file contents, file paths, or line numbers were provided in the request. Without specific file data, it is impossible to inspect an admin panel or report a value with evidence."
+  }
+]

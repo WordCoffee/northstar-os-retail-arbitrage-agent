@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Verify that the 'inspect' lane is defined and executed before the 'browser' lane in the campaign workflow.",
+    "status": "Cannot verify",
+    "reason": "No file contents or line numbers were provided in the request to inspect the campaign definition."
+  },
+  {
+    "check": "Confirm the existence of a human gate mechanism (e.g., approval step, manual trigger) positioned between the 'inspect' and 'browser' lanes.",
+    "status": "Cannot verify",
+    "reason": "No file contents or line numbers were provided in the request to inspect the workflow logic."
+  },
+  {
+    "check": "Ensure the human gate blocks the 'browser' lane from starting until the 'inspect' lane is complete and approved.",
+    "status": "Cannot verify",
+    "reason": "No file contents or line numbers were provided in the request to inspect the dependency logic."
+  }
+]

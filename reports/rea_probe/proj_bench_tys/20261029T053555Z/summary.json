@@ -1,0 +1,530 @@
+{
+  "mode": "ty-as-is-baseline",
+  "label": "ty-as-is (text persisted by harness; not a quality claim)",
+  "project_result": false,
+  "briefs": 20,
+  "content_valid": 0,
+  "content_rate": 0.0,
+  "rows": [
+    {
+      "id": "p01",
+      "title": "Fix a failing unit test",
+      "ty_status": "done",
+      "seconds": 6.95,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "fix.patch",
+          "bytes": 306
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 522
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "unified diff shape"
+    },
+    {
+      "id": "p02",
+      "title": "Add a small API endpoint",
+      "ty_status": "done",
+      "seconds": 5.5,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "endpoint.md",
+          "bytes": 105
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 580
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p03",
+      "title": "Refactor a module",
+      "ty_status": "done",
+      "seconds": 8.66,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 158
+        },
+        {
+          "index": 1,
+          "path": "refactor.md",
+          "bytes": 147
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 1210
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p04",
+      "title": "Wire a config flag",
+      "ty_status": "done",
+      "seconds": 6.91,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 101
+        },
+        {
+          "index": 1,
+          "path": "flag.md",
+          "bytes": 269
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 762
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p05",
+      "title": "Repair a broken build",
+      "ty_status": "done",
+      "seconds": 6.27,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "build.log",
+          "bytes": 145
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 643
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p06",
+      "title": "Audit an admin setting",
+      "ty_status": "done",
+      "seconds": 12.16,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 1398
+        },
+        {
+          "index": 1,
+          "path": "audit.json",
+          "bytes": 170
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 326
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p07",
+      "title": "Prepare a safe browser run",
+      "ty_status": "done",
+      "seconds": 5.76,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 188
+        },
+        {
+          "index": 1,
+          "path": "runbook.md",
+          "bytes": 167
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 474
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p08",
+      "title": "Recover a blocked run",
+      "ty_status": "done",
+      "seconds": 12.35,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 206
+        },
+        {
+          "index": 1,
+          "path": "resume.json",
+          "bytes": 105
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 1500
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p09",
+      "title": "Verify an external change",
+      "ty_status": "done",
+      "seconds": 7.04,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 146
+        },
+        {
+          "index": 1,
+          "path": "state.json",
+          "bytes": 199
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 782
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p10",
+      "title": "Produce a weekly ops digest",
+      "ty_status": "done",
+      "seconds": 4.0,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "digest.md",
+          "bytes": 122
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 311
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p11",
+      "title": "Build a pouch label",
+      "ty_status": "done",
+      "seconds": 6.99,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "label.png",
+          "bytes": 214
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 620
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "not a PNG"
+    },
+    {
+      "id": "p12",
+      "title": "Correct a package back panel",
+      "ty_status": "done",
+      "seconds": 5.16,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 206
+        },
+        {
+          "index": 1,
+          "path": "back.md",
+          "bytes": 100
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 510
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p13",
+      "title": "Generate a social canvas set",
+      "ty_status": "done",
+      "seconds": 4.64,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 221
+        },
+        {
+          "index": 1,
+          "path": "canvases.json",
+          "bytes": 243
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 289
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p14",
+      "title": "Assemble a 15-second ad",
+      "ty_status": "done",
+      "seconds": 4.98,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 102
+        },
+        {
+          "index": 1,
+          "path": "ad.mp4",
+          "bytes": 210
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 439
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "missing"
+    },
+    {
+      "id": "p15",
+      "title": "Audit a listing",
+      "ty_status": "done",
+      "seconds": 8.98,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 122
+        },
+        {
+          "index": 1,
+          "path": "listing_audit.json",
+          "bytes": 466
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 837
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p16",
+      "title": "Plan a two-lane campaign",
+      "ty_status": "done",
+      "seconds": 7.66,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 184
+        },
+        {
+          "index": 1,
+          "path": "campaign.md",
+          "bytes": 186
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 864
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p17",
+      "title": "Recover from a failed verification",
+      "ty_status": "done",
+      "seconds": 4.24,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 101
+        },
+        {
+          "index": 1,
+          "path": "replan.json",
+          "bytes": 105
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 476
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "id": "p18",
+      "title": "Hand off across a compaction",
+      "ty_status": "done",
+      "seconds": 8.59,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 278
+        },
+        {
+          "index": 1,
+          "path": "handoff.md",
+          "bytes": 253
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 879
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "length + required terms"
+    },
+    {
+      "id": "p19",
+      "title": "Apply a per-hunk diff",
+      "ty_status": "done",
+      "seconds": 5.22,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 80
+        },
+        {
+          "index": 1,
+          "path": "applied.diff",
+          "bytes": 178
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 536
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "unified diff shape"
+    },
+    {
+      "id": "p20",
+      "title": "Close a project with evidence",
+      "ty_status": "done",
+      "seconds": 6.86,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 194
+        },
+        {
+          "index": 1,
+          "path": "project.json",
+          "bytes": 106
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 809
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "json error: Expecting value: line 1 column 1 (char 0)"
+    }
+  ]
+}

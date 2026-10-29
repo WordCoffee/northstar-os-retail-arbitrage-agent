@@ -1,0 +1,22 @@
+[
+  {
+    "check": "Verify label composition on measured pouch plate",
+    "status": "Cannot verify",
+    "reason": "No file contents provided for label composition or pouch plate measurements."
+  },
+  {
+    "check": "Prove OCR accuracy",
+    "status": "Cannot verify",
+    "reason": "No OCR output or source text provided."
+  },
+  {
+    "check": "Prove prepress readiness",
+    "status": "Cannot verify",
+    "reason": "No prepress logs or file specifications provided."
+  },
+  {
+    "check": "Prove overall readiness",
+    "status": "Cannot verify",
+    "reason": "No file contents provided to assess readiness."
+  }
+]

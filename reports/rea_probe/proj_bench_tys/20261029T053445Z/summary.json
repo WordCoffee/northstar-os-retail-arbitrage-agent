@@ -1,0 +1,36 @@
+{
+  "mode": "ty-as-is-baseline",
+  "label": "ty-as-is (text persisted by harness; not a quality claim)",
+  "project_result": false,
+  "briefs": 1,
+  "content_valid": 0,
+  "content_rate": 0.0,
+  "rows": [
+    {
+      "id": "p01",
+      "title": "Fix a failing unit test",
+      "ty_status": "done",
+      "seconds": 10.32,
+      "steps": 3,
+      "written": [
+        {
+          "index": 0,
+          "path": "plan.md",
+          "bytes": 193
+        },
+        {
+          "index": 1,
+          "path": "fix.patch",
+          "bytes": 138
+        },
+        {
+          "index": 2,
+          "path": "verification.json",
+          "bytes": 1100
+        }
+      ],
+      "content_valid": false,
+      "content_detail": "unified diff shape"
+    }
+  ]
+}

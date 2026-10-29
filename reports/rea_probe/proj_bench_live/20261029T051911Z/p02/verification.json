@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the artifact 'endpoint.md' exists in the repository.",
+    "command": "test -f endpoint.md",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that no SQL migration files have been added or modified.",
+    "command": "git diff --name-only HEAD~1 | grep -E 'migrations|schema' | wc -l",
+    "expected_result": "0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that a test file exists for the new endpoint.",
+    "command": "find . -name '*test*' -type f | grep -i endpoint | wc -l",
+    "expected_result": ">= 1"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the endpoint is defined as read-only (GET method) in the codebase.",
+    "command": "grep -r 'GET' --include='*.py' --include='*.js' --include='*.ts' . | grep -i endpoint | wc -l",
+    "expected_result": ">= 1"
+  }
+]

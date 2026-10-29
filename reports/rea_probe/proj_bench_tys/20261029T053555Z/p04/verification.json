@@ -1,0 +1,22 @@
+[
+  {
+    "check": "Define a feature flag with a default value of false (or equivalent off state).",
+    "status": "pending",
+    "details": "No file contents provided to verify implementation."
+  },
+  {
+    "check": "Implement logic that behaves differently based on the feature flag state.",
+    "status": "pending",
+    "details": "No file contents provided to verify implementation."
+  },
+  {
+    "check": "Write a test that asserts the behavior when the flag is off (default).",
+    "status": "pending",
+    "details": "No file contents provided to verify test existence."
+  },
+  {
+    "check": "Write a test that asserts the behavior when the flag is on.",
+    "status": "pending",
+    "details": "No file contents provided to verify test existence."
+  }
+]

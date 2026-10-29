@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'audit.json' file exists in the project root directory.",
+    "command": "test -f audit.json",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_2",
+    "description": "Validate that 'audit.json' is a valid JSON document.",
+    "command": "python3 -c \"import json; json.load(open('audit.json'))\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure the JSON object contains a top-level key named 'value'.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert 'value' in d\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure the JSON object contains a top-level key named 'evidence'.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert 'evidence' in d\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_5",
+    "description": "Verify that the 'evidence' field is a non-empty string.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert isinstance(d.get('evidence'), str) and len(d['evidence']) > 0\"",
+    "expected_result": "exit_code_0"
+  }
+]

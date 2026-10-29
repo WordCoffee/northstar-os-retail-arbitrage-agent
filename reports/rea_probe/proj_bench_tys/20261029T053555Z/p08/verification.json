@@ -1,0 +1,41 @@
+[
+  {
+    "check": "Verify that the run state is explicitly marked as 'blocked_on_operator_gate' or equivalent in the run metadata.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Confirm that the resume logic loads the last completed step index from persistent storage (e.g., checkpoint file or database) rather than restarting from step 0.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Ensure that the operator gate approval token or flag is validated before resuming, to prevent unauthorized bypass.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Verify that completed steps are skipped by checking their status in the step registry (e.g., 'completed', 'skipped') and not re-executed.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Confirm that the resume function resumes execution from the first *incomplete* step after the gate, not from the gate itself.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Check that idempotency is enforced for steps that may have partially executed before the gate, to avoid duplicate side effects.",
+    "file": "N/A",
+    "line": "N/A",
+    "status": "Not provided"
+  },
+  {
+    "check": "Verify that logs or audit trail record the resume event, including the gate ID, operator identity, and timestamp.",
+    "file": "N/A",
+    "line": 

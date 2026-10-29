@@ -1,0 +1,17 @@
+[
+  {
+    "check": "Define a read-only browser task structure",
+    "status": "not_shown",
+    "note": "No file contents provided to verify task definition."
+  },
+  {
+    "check": "Implement per-host grant mechanism",
+    "status": "not_shown",
+    "note": "No file contents provided to verify host grant logic."
+  },
+  {
+    "check": "Implement expiry logic for the grant",
+    "status": "not_shown",
+    "note": "No file contents provided to verify expiry handling."
+  }
+]

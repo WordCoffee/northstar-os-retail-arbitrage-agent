@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_file_exists",
+    "description": "Verify that the artifact file 'state.json' exists in the current working directory.",
+    "command": "test -f state.json",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_valid_json",
+    "description": "Ensure that 'state.json' contains valid JSON syntax.",
+    "command": "python3 -c \"import json; json.load(open('state.json'))\"",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_required_keys",
+    "description": "Assert that the JSON object contains the required top-level keys: 'version', 'status', and 'timestamp'.",
+    "command": "python3 -c \"import json; d=json.load(open('state.json')); assert all(k in d for k in ['version','status','timestamp'])\"",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "check_status_value",
+    "description": "Verify that the 'status' field is one of the allowed values: 'initialized', 'running', or 'completed'.",
+    "command": "python3 -c \"import json; d=json.load(open('state.json')); assert d['status'] in ['initialized','running','completed']\"",
+    "expected_exit_code": 0
+  }
+]

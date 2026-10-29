@@ -1,0 +1,1 @@
+I cannot produce the content of `plan.md` because the file contents for `plan.md` (or any other file) were not provided in the prompt. I have no access to the filesystem or any external tools to retrieve this information.
