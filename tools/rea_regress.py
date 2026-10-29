@@ -57,6 +57,12 @@ SPEC = [
      "why": "1.4: documented placements with no canvas"},
     {"id": "video_clip_seconds", "direction": HIGHER, "tol": 0.0,
      "why": "1.3: a real assembled clip exists"},
+    {"id": "feather_policy_ok", "direction": HIGHER, "tol": 0.0,
+     "why": "L3: feather must follow the residual, clamped 1-12 px"},
+    {"id": "logo_tool_present", "direction": HIGHER, "tol": 0.0,
+     "why": "U3: the logo gap had no tool at all"},
+    {"id": "social_validator_ok", "direction": HIGHER, "tol": 0.0,
+     "why": "S4: a correct asset passes, a wrong ratio blocks"},
 ]
 
 
@@ -198,6 +204,43 @@ def m_build() -> dict:
     }
 
 
+def m_guards() -> dict:
+    """Cheap capability gates added after wave 2/3. 1 = the guard holds."""
+    out: dict = {}
+    sys.path.insert(0, str(ROOT / "Northstar_backend"))
+    try:
+        import mockup_compositor as mc
+        out["feather_policy_ok"] = 1 if (
+            abs(mc.feather_sigma(1.0) - 2.5) < 1e-6
+            and mc.feather_sigma(0.1) == 1.0
+            and mc.feather_sigma(10.0) == 12.0
+        ) else 0
+    except Exception as exc:  # noqa: BLE001
+        out["feather_policy_ok"] = 0
+        out["_feather_error"] = type(exc).__name__
+    try:
+        import chat_tools
+        out["logo_tool_present"] = 1 if "place_logo" in chat_tools.tool_names() else 0
+    except Exception as exc:  # noqa: BLE001
+        out["logo_tool_present"] = 0
+        out["_logo_error"] = type(exc).__name__
+    try:
+        import io
+        from PIL import Image
+        import social_validate as sv
+        good = io.BytesIO()
+        Image.new("RGB", (1000, 1500)).save(good, format="PNG")
+        bad = io.BytesIO()
+        Image.new("RGB", (1080, 1080)).save(bad, format="PNG")
+        ok_good = sv.validate(good.getvalue(), "pin")["ok"] is True
+        ok_bad = sv.validate(bad.getvalue(), "ig-post")["ok"] is False
+        out["social_validator_ok"] = 1 if (ok_good and ok_bad) else 0
+    except Exception as exc:  # noqa: BLE001
+        out["social_validator_ok"] = 0
+        out["_social_error"] = type(exc).__name__
+    return out
+
+
 # ── baseline mapping ────────────────────────────────────────────────────────
 
 def baseline_values() -> dict:
@@ -226,6 +269,9 @@ def baseline_values() -> dict:
         "social_canvases_without_source": g("social_spec_staleness", "canvases_without_source"),
         "social_canvases_missing": g("social_spec_staleness", "missing_canvases"),
         "video_clip_seconds": g("video_assembly", "duration_s"),
+        "feather_policy_ok": g("guards", "feather_policy_ok"),
+        "logo_tool_present": g("guards", "logo_tool_present"),
+        "social_validator_ok": g("guards", "social_validator_ok"),
     }
 
 
@@ -247,6 +293,7 @@ def main() -> int:
     current: dict = {}
     current.update(m_css())
     current.update(m_social())
+    current.update(m_guards())
     current.update(m_smui())
     current.update(m_bojo())
     skipped: set[str] = set()

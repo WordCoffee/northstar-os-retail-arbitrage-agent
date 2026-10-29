@@ -220,6 +220,13 @@
       "captions": 3,
       "caption_y_pct": 55.0
     },
+    "guards": {
+      "status": "measured",
+      "note": "Capability gates added after wave 2/3. 1 = the guard holds, 0 = it does not.",
+      "feather_policy_ok": 1,
+      "logo_tool_present": 1,
+      "social_validator_ok": 1
+    },
     "test_totals": {
       "status": "measured",
       "npm_run_build": "0 errors (built in 1.39 s)",
