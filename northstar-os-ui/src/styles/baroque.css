@@ -1,0 +1,566 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   BAROQUE HYPERREALISM — "The Gilded Void" theme
+   Implements reports/baroque_hyperrealism_spec_20261029_153346.md:
+   §(b) 5-component manifest, §(c) interactive dynamics, §(d) integration.
+
+   Pure CSS + inline SVG textures/filters (no WebGL, no image assets), so it
+   never competes with ComfyUI/Ollama for the GPU — same constraint as
+   celestial.css. Heavy textures mount only on the /baroque stage (lazy
+   loading per §d.2).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Material colors (spec §b.1 / §d.4) ── */
+  --baroque-marble-base: #1a1a1d;
+  --baroque-marble-vein: #2c2c30;
+  --baroque-gold-primary: #d4af37;
+  --baroque-gold-highlight: #fff8dc;
+  --baroque-gold-shadow: #8b6508;
+  --baroque-shadow-deep: #050505;
+  --baroque-velvet-base: #4a0e0e;
+  --baroque-velvet-deep: #2b0505;
+
+  /* ── Lighting & depth (spec §b.1) ── */
+  --light-source-x: -20%;
+  --light-source-y: -20%;
+  --frame-bevel: 12px;
+  --frame-depth: 24px;
+
+  /* ── Motion (spec §b dynamic animation) ── */
+  --baroque-t-breathe: 4s;
+  --baroque-t-dust: 20s;
+  --baroque-t-curtain: 0.8s;
+  --baroque-t-ripple: 0.5s;
+  --baroque-t-velvet: 14s;
+  --baroque-t-shaft: 6s;
+
+  /* ── Texture tokens (spec §d.1: all textures as CSS variables) ── */
+  --baroque-texture-marble: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+  --baroque-texture-velvet: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><filter id="velvet"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23velvet)" opacity="0.3"/></svg>');
+  --baroque-texture-brushed: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="brushed"><feTurbulence type="fractalNoise" baseFrequency="0.1 0.5" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23brushed)" opacity="0.2"/></svg>');
+  --baroque-texture-modal-marble: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="modal-marble"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23modal-marble)" opacity="0.15"/></svg>');
+  --baroque-texture-curtain: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="curtain-velvet"><feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23curtain-velvet)" opacity="0.4"/></svg>');
+  --baroque-texture-backdrop-veins: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000"><filter id="marble-veins"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="5" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0.5 0"/></filter><rect width="100%" height="100%" filter="url(%23marble-veins)"/></svg>');
+}
+
+/* ═══ Stage ═══
+   The /baroque route renders inside .main-content, which paints a paper
+   background. Make it transparent while the stage is present so the fixed
+   backdrop (z-index -1) shows through. */
+.main-content:has(.baroque-stage) {
+  background: transparent;
+}
+
+.baroque-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: calc(100vh - 180px);
+  color: var(--baroque-gold-highlight);
+  font-family: var(--font-ui, sans-serif);
+}
+
+.baroque-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.baroque-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--baroque-gold-primary);
+}
+.baroque-title {
+  font-family: var(--font-serif, serif);
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--baroque-gold-highlight);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 24px rgba(212, 175, 55, 0.25);
+}
+.baroque-lede {
+  margin: 0;
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 248, 220, 0.75);
+}
+
+/* ═══ Component 3 — Marble Ambient Backdrop (spec §b.3) ═══ */
+.ambient-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    /* Base marble gradient (chiaroscuro) */
+    radial-gradient(circle at 20% 20%, #3a3a40 0%, #1a1a1d 50%, #050505 100%),
+    /* Veining texture */
+    var(--baroque-texture-backdrop-veins);
+  background-blend-mode: overlay;
+  /* Subsurface scattering glow */
+  box-shadow: inset 0 0 100px rgba(212, 175, 55, 0.05);
+  will-change: opacity;
+  transform: translateZ(0);
+  transition: opacity 0.6s ease;
+}
+.ambient-backdrop.is-dimmed {
+  opacity: 0.8; /* spec §b.3: backdrop darkens when a modal opens */
+}
+
+/* Light shaft — follows the cursor-driven light source (spec §c.1) and
+   pulses subtly (spec §b.3: opacity 0.9 -> 1.0). */
+.baroque-shaft {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--light-source-x, 20%) var(--light-source-y, 20%),
+    rgba(255, 248, 220, 0.10) 0%,
+    transparent 45%
+  );
+  animation: shaft-pulse var(--baroque-t-shaft) ease-in-out infinite;
+}
+@keyframes shaft-pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+/* Volumetric dust motes (spec §b.3 pseudo-elements, converted from SCSS).
+   `alternate` refines the spec's linear loop so the drift never snaps back. */
+.ambient-backdrop::before,
+.ambient-backdrop::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 10%),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.08) 0%, transparent 8%),
+    radial-gradient(circle at 25% 35%, rgba(255,255,255,0.05) 0%, transparent 5%);
+  animation: dust-drift var(--baroque-t-dust) linear infinite alternate;
+}
+.ambient-backdrop::after {
+  animation-delay: calc(var(--baroque-t-dust) / -2);
+  opacity: 0.5;
+}
+@keyframes dust-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* ═══ Component 1 — Gilded Control Frame (spec §b.1) ═══ */
+.control-frame {
+  position: relative;
+  background:
+    /* Base marble gradient */
+    linear-gradient(135deg, var(--baroque-marble-base) 0%, #222225 100%),
+    /* Veining texture (simulated via noise) */
+    var(--baroque-texture-marble);
+  background-blend-mode: overlay;
+
+  /* Beveled edge effect */
+  border: var(--frame-bevel) solid transparent;
+  background-clip: padding-box;
+
+  /* Complex box shadow for depth & light */
+  box-shadow:
+    inset 0 0 var(--frame-depth) rgba(0,0,0,0.9),
+    -4px -4px 12px rgba(212, 175, 55, 0.3),
+    8px 8px 24px rgba(0,0,0,0.8),
+    0 0 40px rgba(212, 175, 55, 0.1);
+
+  /* Gold inlay border */
+  border-image:
+    linear-gradient(45deg, var(--baroque-gold-shadow), var(--baroque-gold-primary), var(--baroque-gold-highlight), var(--baroque-gold-primary), var(--baroque-gold-shadow)) 1;
+
+  /* Micro-imperfections (global SVG filter, mounted by BaroqueFilters) */
+  filter: url(#micro-surface-noise);
+
+  will-change: transform;
+  transform: translateZ(0);
+  transition: box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+/* Idle: subtle "breathing" of the gold highlights (spec §b.1: opacity
+   pulse 0.95 -> 1.0 over 4s). */
+.control-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(45deg,
+    rgba(212,175,55,0) 0%,
+    rgba(212,175,55,0.12) 50%,
+    rgba(212,175,55,0) 100%);
+  animation: gold-breathe var(--baroque-t-breathe) ease-in-out infinite;
+}
+@keyframes gold-breathe {
+  0%, 100% { opacity: 0.95; }
+  50% { opacity: 1; }
+}
+
+/* Hover: gold inlay brightens, inner shadow deepens (spec §b.1). */
+.control-frame:hover {
+  box-shadow:
+    inset 0 0 calc(var(--frame-depth) + 6px) rgba(0,0,0,0.95),
+    -4px -4px 16px rgba(212, 175, 55, 0.45),
+    8px 8px 24px rgba(0,0,0,0.8),
+    0 0 56px rgba(212, 175, 55, 0.18);
+  filter: url(#micro-surface-noise) brightness(1.06);
+}
+.control-frame:hover::after {
+  animation: none;
+  opacity: 1;
+}
+
+/* Focus (spec §c.2): gold trim glow + deepened inner shadow. */
+.control-frame:focus-visible {
+  outline: 2px solid var(--baroque-gold-highlight);
+  outline-offset: 4px;
+}
+
+.baroque-frame-title {
+  font-family: var(--font-serif, serif);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--baroque-gold-highlight);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.8), 0 0 18px rgba(212, 175, 55, 0.25);
+}
+
+.control-frame-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 30px;
+}
+
+/* ═══ Component 2 — Velvet Status Banner (spec §b.2) ═══ */
+.status-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background:
+    /* Velvet base */
+    linear-gradient(to bottom, var(--baroque-velvet-base) 0%, var(--baroque-velvet-deep) 100%),
+    /* Fiber texture */
+    var(--baroque-texture-velvet);
+  background-blend-mode: multiply;
+  background-size: 100% 100%, 50px 50px;
+
+  /* Soft top sheen */
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+
+  /* Embossed text effect */
+  color: var(--baroque-gold-primary);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.8),
+    0 -1px 0 rgba(255,255,255,0.1);
+
+  /* Soft diffuse shadow */
+  box-shadow:
+    inset 0 4px 12px rgba(0,0,0,0.5),
+    0 2px 4px rgba(0,0,0,0.3);
+
+  /* Fabric drape simulation */
+  transform: perspective(1000px) rotateX(2deg) translateZ(0);
+  will-change: transform;
+}
+
+/* Idle: fiber texture layer shifts slowly (spec §b.2). The fiber lives on
+   ::before so the hover shift can remove the animation cleanly. */
+.status-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--baroque-texture-velvet);
+  background-size: 50px 50px;
+  background-blend-mode: multiply;
+  opacity: 0.5;
+  transition: background-position 0.5s ease;
+  animation: velvet-drift var(--baroque-t-velvet) linear infinite alternate;
+}
+@keyframes velvet-drift {
+  from { background-position: 0 0; }
+  to { background-position: 60px 30px; }
+}
+
+/* Hover: light source shift (spec §b.2: background-position 10% 0). */
+.status-banner:hover::before {
+  animation: none;
+  background-position: 10% 0;
+}
+
+/* Focus (spec §b.2 / §c.2): top sheen brightens, text shadow sharpens. */
+.status-banner:focus-visible {
+  outline: none;
+  border-top-color: rgba(255, 255, 255, 0.35);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.95),
+    0 -1px 0 rgba(255,255,255,0.25);
+}
+
+.status-banner-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--baroque-gold-highlight), var(--baroque-gold-shadow));
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.6);
+}
+.status-banner-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 220, 0.8);
+}
+.status-banner-text {
+  font-size: 13.5px;
+}
+
+/* Tone variants (functional extension of the crimson base). */
+.status-banner--warn {
+  background:
+    linear-gradient(to bottom, #4a3208 0%, #2b1d05 100%),
+    var(--baroque-texture-velvet);
+}
+.status-banner--error {
+  background:
+    linear-gradient(to bottom, #5a0a12 0%, #30040a 100%),
+    var(--baroque-texture-velvet);
+}
+
+/* ═══ Component 4 — Gilded CTA Trigger (spec §b.4) ═══ */
+.cta-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  font-family: var(--font-serif, serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  background:
+    /* Gold base */
+    linear-gradient(135deg, #8b6508 0%, #d4af37 50%, #fff8dc 100%),
+    /* Brushed texture */
+    var(--baroque-texture-brushed);
+  background-blend-mode: overlay;
+
+  /* Beveled edges */
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  border-image:
+    linear-gradient(45deg, #8b6508, #d4af37, #fff8dc, #d4af37, #8b6508) 1;
+
+  /* Deep shadow & highlight */
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.3),
+    inset 0 -2px 4px rgba(0,0,0,0.5),
+    0 4px 8px rgba(0,0,0,0.6),
+    0 0 20px rgba(212, 175, 55, 0.2);
+
+  /* Text embossing */
+  color: #1a1a1d;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+
+  overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+
+/* Dynamic highlight that follows the cursor (spec §b.4 / §c.1).
+   --mouse-x/--mouse-y are set by LightSourceTracker (rAF-throttled). */
+.cta-trigger::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255,255,255,0.4) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.cta-trigger:hover::before {
+  opacity: 1;
+}
+/* Hover: the gold "glows" from within (spec §b.4). */
+.cta-trigger:hover {
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.4),
+    inset 0 -2px 4px rgba(0,0,0,0.5),
+    0 4px 10px rgba(0,0,0,0.65),
+    0 0 34px rgba(212, 175, 55, 0.45);
+}
+.cta-trigger:active {
+  transform: scale(0.98) translateZ(0);
+}
+.cta-trigger:focus-visible {
+  outline: 2px solid var(--baroque-gold-highlight);
+  outline-offset: 3px;
+}
+
+/* Ghost variant: a gilded outline plaque for secondary actions. */
+.cta-trigger--ghost {
+  background:
+    linear-gradient(135deg, rgba(26,26,29,0.9) 0%, rgba(34,34,37,0.9) 100%),
+    var(--baroque-texture-brushed);
+  color: var(--baroque-gold-highlight);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+/* Click ripple (spec §c.3 / §d.4). Sized so the origin sits on the click
+   point; the spec's minimal .ripple is extended minimally. */
+.ripple {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple-expand var(--baroque-t-ripple) ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ripple-expand {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(10); opacity: 0; }
+}
+
+/* ═══ Component 5 — Theatrical Notification Modal (spec §b.5) ═══
+   The curtain is a sibling overlay, not the panel's ::before: the panel's
+   translate(-50%,-50%) transform makes it a containing block, which would
+   shrink a position:fixed ::before to the panel's box. The sibling overlay
+   keeps the spec's full-stage curtain. */
+.baroque-curtain {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 999;
+  background:
+    linear-gradient(to bottom, rgba(43, 5, 5, 0.9) 0%, rgba(26, 26, 29, 0.95) 100%),
+    var(--baroque-texture-curtain);
+  background-blend-mode: multiply;
+  animation: curtain-draw var(--baroque-t-curtain) ease-out forwards;
+  will-change: transform, opacity;
+}
+.baroque-curtain.is-closing {
+  animation: curtain-close var(--baroque-t-curtain) ease-in forwards;
+}
+@keyframes curtain-draw {
+  0% { opacity: 0; transform: scaleY(1.1); }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+@keyframes curtain-close {
+  0% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(1.06); }
+}
+
+.notification-modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: min(560px, 92vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 28px 30px;
+  background:
+    /* Marble panel */
+    linear-gradient(135deg, #2a2a2d 0%, #1a1a1d 100%),
+    var(--baroque-texture-modal-marble);
+  background-blend-mode: overlay;
+
+  /* Gold trim */
+  border: 6px solid transparent;
+  background-clip: padding-box;
+  border-image:
+    linear-gradient(45deg, #8b6508, #d4af37, #fff8dc, #d4af37, #8b6508) 1;
+
+  /* Deep floating shadow */
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.9),
+    0 0 100px rgba(212, 175, 55, 0.1);
+
+  color: var(--baroque-gold-highlight);
+  will-change: transform, opacity;
+  animation: modal-rise var(--baroque-t-curtain) ease-out forwards;
+}
+.notification-modal.is-closing {
+  animation: modal-fall var(--baroque-t-curtain) ease-in forwards;
+}
+@keyframes modal-rise {
+  0% { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+/* Close: fades out with a slight scale-up, simulating the curtain closing
+   (spec §b.5). */
+@keyframes modal-fall {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -54%) scale(1.04); }
+}
+
+.baroque-modal-title {
+  font-family: var(--font-serif, serif);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--baroque-gold-highlight);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.8), 0 0 18px rgba(212, 175, 55, 0.3);
+}
+.baroque-modal-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 248, 220, 0.85);
+}
+.baroque-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* ═══ Stage readout ═══ */
+.baroque-stage-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+.baroque-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: rgba(255, 248, 220, 0.6);
+}
+
+/* ═══ Performance guardrails (spec §d.2) ═══
+   - GPU promotion: will-change + translateZ(0) on animated layers (above).
+   - rAF throttling: LightSourceTracker in baroque.js.
+   - Lazy loading: backdrop + filter bank mount only on the /baroque stage.
+   - Reduced motion: disable idle animations, keep states static. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-backdrop::before,
+  .ambient-backdrop::after,
+  .baroque-shaft,
+  .control-frame::after,
+  .status-banner::before,
+  .ripple,
+  .baroque-curtain,
+  .notification-modal {
+    animation: none;
+  }
+  .baroque-curtain { opacity: 1; transform: none; }
+  .notification-modal { opacity: 1; }
+}

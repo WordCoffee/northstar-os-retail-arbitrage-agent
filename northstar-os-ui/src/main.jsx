@@ -8,6 +8,8 @@ import './foundation/foundation.css'
 import './styles/chat.css'
 import './styles/shell.css'
 import './styles/simple.css'   // V4.2 Simple-mode rebuild — must load last
+import './styles/celestial.css' // §11B.2 celestial backdrop — after simple.css
+import './styles/baroque.css'   // "The Gilded Void" Baroque theme — after celestial
 
 const root = createRoot(document.getElementById('root'))
 root.render(createElement(App))

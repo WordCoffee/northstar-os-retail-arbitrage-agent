@@ -35,6 +35,7 @@ import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
 import MasterBrain from './pages/internal/MasterBrain.jsx'
 import PackifyDesign from './pages/internal/PackifyDesign.jsx'
 import Improvement from './pages/internal/Improvement.jsx'
+import GildedVoid from './pages/internal/GildedVoid.jsx'
 import CustomerWorkspace from './pages/customer/Workspace.jsx'
 import BetaOpsOverview from './pages/admin/Overview.jsx'
 import OrgsList, { OrgDetail } from './pages/admin/OrgsList.jsx'
@@ -137,6 +138,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/provider-adapters" element={<ProviderAdapters />} />
       <Route path="/master-brain" element={<MasterBrain />} />
       <Route path="/improvement" element={<Improvement />} />
+      <Route path="/baroque" element={<GildedVoid />} />
       <Route path="/customer-workspace" element={<CustomerWorkspace />} />
       <Route path="/beta-ops" element={<BetaOpsOverview />} />
       <Route path="/beta-ops/orgs" element={<OrgsList />} />
@@ -184,6 +186,9 @@ const SIMPLE_KEEP_ADVANCED = [
   /^\/support(\/|$)/, /^\/documents(\/|$)/, /^\/setup(\/|$)/, /^\/legal(\/|$)/,
   /^\/sign-in(\/|$)/, /^\/recovery(\/|$)/, /^\/beta(\/|$)/, /^\/suspended(\/|$)/,
   /^\/downgraded(\/|$)/, /^\/reaccept(\/|$)/,
+  // The Gilded Void is a visual-system surface, not a room — it keeps its
+  // real page in Simple mode like the account/legal/admin surfaces above.
+  /^\/baroque(\/|$)/,
 ]
 
 function ModeGate({ children }) {
