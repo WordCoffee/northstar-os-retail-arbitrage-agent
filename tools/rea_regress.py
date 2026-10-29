@@ -65,6 +65,8 @@ SPEC = [
      "why": "S4: a correct asset passes, a wrong ratio blocks"},
     {"id": "social_variants_ok", "direction": HIGHER, "tol": 0.0,
      "why": "S5: crop matrix + keep-in intersection must hold"},
+    {"id": "hook_templates_ok", "direction": HIGHER, "tol": 0.0,
+     "why": "V3: structures must stay sourced, timed and honest about thin evidence"},
 ]
 
 
@@ -246,6 +248,12 @@ def m_guards() -> dict:
     except Exception as exc:  # noqa: BLE001
         out["social_variants_ok"] = 0
         out["_variants_error"] = type(exc).__name__
+    try:
+        code, _ = _run(["node", "tools/test_hook_templates.mjs"])
+        out["hook_templates_ok"] = 1 if code == 0 else 0
+    except Exception as exc:  # noqa: BLE001
+        out["hook_templates_ok"] = 0
+        out["_hooks_error"] = type(exc).__name__
     return out
 
 
@@ -281,6 +289,7 @@ def baseline_values() -> dict:
         "logo_tool_present": g("guards", "logo_tool_present"),
         "social_validator_ok": g("guards", "social_validator_ok"),
         "social_variants_ok": g("guards", "social_variants_ok"),
+        "hook_templates_ok": g("guards", "hook_templates_ok"),
     }
 
 

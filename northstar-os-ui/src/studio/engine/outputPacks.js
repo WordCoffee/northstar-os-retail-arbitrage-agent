@@ -12,6 +12,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { buildVariantMatrix } from './variants.js'
+import { storyboardFromTemplate } from './hookTemplates.js'
 
 const UNKNOWN = (what) => `UNKNOWN - ${what}`
 
@@ -50,9 +51,23 @@ function base(section, spec, meta, report, kind) {
 export function buildStoryboardPack({ spec, meta = {}, report = {} } = {}) {
   const duration = Number(meta.durationSeconds) || null
   const sceneCount = duration ? Math.max(1, Math.ceil(duration / 5)) : null
+  // A chosen hook template turns the pack from "5-second blocks" into a timed
+  // plan with a named structure and its sources. No template chosen => UNKNOWN,
+  // never a default that looks like a decision.
+  let hookPlan = UNKNOWN('record a hook template (meta.templateId) to get a timed structure')
+  if (meta.templateId) {
+    try {
+      hookPlan = storyboardFromTemplate(meta.templateId, {
+        hook: meta.hook, product: meta.product, proof: meta.proof,
+      }, { durationSeconds: duration || 12, platform: meta.platform || 'amazonSbVideo' })
+    } catch (exc) {
+      hookPlan = `UNKNOWN - ${exc.message}`
+    }
+  }
   return {
     ...base('video-ugc', spec, meta, report, 'storyboard_pack'),
     hook: fieldOrUnknown(meta, 'hook', 'write the first-3-seconds hook'),
+    hook_plan: hookPlan,
     duration_seconds: duration ?? UNKNOWN('no duration recorded'),
     caption_text: fieldOrUnknown(meta, 'captionText', 'no caption text recorded'),
     scenes: sceneCount
