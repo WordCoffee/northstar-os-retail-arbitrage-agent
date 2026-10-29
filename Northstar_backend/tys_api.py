@@ -75,14 +75,49 @@ def _http_error(exc: tys.TysError) -> HTTPException:
 # ---------------------------------------------------------------------------
 
 @router.get("/state")
-async def get_state(_user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
-    """Agent identity, queue summary, lane availability and model placement."""
-    return _assistant().state()
+async def get_state(fresh: bool = Query(default=False),
+                    _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    """Agent identity, queue summary, lane availability and model placement.
+
+    ``fresh=1`` re-probes every lane. The default is a 3-second snapshot so a
+    burst of mobile clients cannot each spawn a Chrome Connect probe.
+    """
+    return _assistant().cached_state(fresh=fresh)
 
 
 @router.get("/identity")
 async def get_identity(_user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
     return _assistant().identity()
+
+
+@router.get("/ui")
+async def get_ui(
+    profile: str = Query(default="operator"),
+    density: Optional[str] = Query(default=None),
+    _user: Dict[str, Any] = Depends(require_tys_admin),
+) -> Dict[str, Any]:
+    """Adaptive UI component spec for this profile.
+
+    The client renders the tree; the server decides what belongs in it from the
+    queue, the lanes and the profile's habits. Always returns a complete tree —
+    a degraded one carries an explicit alert instead of dropping regions.
+    """
+    from tys_ops import ui as _ui
+
+    habits = {"density": density} if density else None
+    return _ui.render(profile, _assistant().cached_state(), habits)
+
+
+@router.get("/storage")
+async def get_storage(_user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    """Media ledger summary: tiers, bytes, alerts, pending download prompts."""
+    from tys_ops import storage as _storage
+
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "data", "tys", "storage_ledger.json")
+    ledger = _storage.StorageLedger(path)
+    return {"summary": ledger.summary(),
+            "disk": _storage.guard_disk(os.path.dirname(path))}
 
 
 # ---------------------------------------------------------------------------

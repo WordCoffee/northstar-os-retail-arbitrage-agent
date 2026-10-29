@@ -34,6 +34,7 @@ and with the controller.
 
 from __future__ import annotations
 
+import copy
 import json
 import os
 import re
@@ -1194,6 +1195,13 @@ class TysAssistant:
         self.evidence_dir = evidence_dir or os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "data", "tys", "evidence")
         os.makedirs(self.evidence_dir, exist_ok=True)
+        # Lane probes are cheap for the operator but not for 100 phones polling
+        # at once (the Chrome Connect probe alone can take seconds). A short
+        # cache keeps the admin state endpoint responsive under a mobile sync
+        # burst without changing what a caller sees beyond a few seconds.
+        self._state_cache: Optional[Dict[str, Any]] = None
+        self._state_cached_at = 0.0
+        self._state_cache_lock = threading.Lock()
         # Any task a previous process left `running` is resumable, not running.
         self.recovered = self.store.mark_interrupted()
 
@@ -1234,6 +1242,25 @@ class TysAssistant:
             "lanes": {name: a.available() for name, a in self.adapters.items()},
             "orchestrator": self.orchestrator.available(),
         }
+
+    def cached_state(self, ttl_s: float = 3.0, *, fresh: bool = False) -> Dict[str, Any]:
+        """``state()`` behind a short TTL, for concurrent mobile polling.
+
+        A burst of clients must not each spawn a Chrome Connect probe. The
+        cache never extends a probe's *result* beyond ``ttl_s``, and
+        ``fresh=True`` bypasses it for the operator.
+        """
+        now = time.time()
+        if not fresh:
+            with self._state_cache_lock:
+                if (self._state_cache is not None
+                        and now - self._state_cached_at < float(ttl_s)):
+                    return copy.deepcopy(self._state_cache)
+        value = self.state()
+        with self._state_cache_lock:
+            self._state_cache = value
+            self._state_cached_at = time.time()
+        return copy.deepcopy(value)
 
     # -- work orders -------------------------------------------------------
 

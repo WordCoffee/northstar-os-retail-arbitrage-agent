@@ -1,0 +1,26 @@
+{
+  "tys_ops_20261029": {
+    "label": "Tys Assistant operations layer: hybrid storage, cloud bridge, validation, memory, budgets, self-healing, adaptive UI",
+    "module": "Northstar_backend/tys_ops/",
+    "tests": "Northstar_backend/test_tys_ops.py",
+    "report": "reports/master_execution_stress_test_report.json",
+    "summary": "reports/tys_ops_stress_20261029.md",
+    "components": {
+      "storage": "local-master ledger, free 1GB images + zero video retention, paid 10GB tier, pruning of unprotected media only, mandatory download prompts, session purge",
+      "bridge": "HMAC bearer tokens (TTL + scopes + revocation), offline queue with idempotency and bounded retry, dead letters, monotonic sync envelopes, https-only gateway descriptor",
+      "validators": "headings/sentence floor/placeholders/unchanged-from-seed, JSON keys, unified-diff hunk arithmetic (agent_kernel first), workspace acceptance that outranks self-report",
+      "memory": "hashed 256-dim index with cosine retrieval, extractive budgeted compression, epistemic facts with supersession, conflicts and unlearn",
+      "budgets": "token caps per task/day, VRAM reservation that refuses, UCB1 hyperparameter tuner, feedback router",
+      "selfheal": "read-only diagnostics, safe pid liveness, stale locks, atomic write with verified rollback, conservative JSON repair",
+      "ui": "validated tys.ui.v1 component tree, personalisation by usage, degraded render never drops regions",
+      "stress": "100-profile concurrent load on the real queue, storage thresholds, fault injection, convergence, live gateway burst"
+    },
+    "api_additions": [
+      "GET /api/admin/tys/state?fresh=1 (3s snapshot by default)",
+      "GET /api/admin/tys/ui",
+      "GET /api/admin/tys/storage"
+    ],
+    "test_count": 145,
+    "quality_claim": false
+  }
+}
