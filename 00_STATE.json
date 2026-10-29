@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend. Coding-agent pilot: 3/3 (p01/p02/p05) with read/write/grep/run tools, a real pytest pass and py_compile pass; Ty adapter opt-in via run_kernel(coding_agent=True). Hybrid coding/tool run: 20/20 content-valid (17 coding loop + p11/p13/p14 tools). Ty end-to-end p01 with run_kernel(coding_agent=True): complete, pytest 0, valid patch. 121 tests green. Hybrid 3-run spread 18-20/20 (thresholds p50 10.2 s, p95 30.7 s, completion 0.90). Ty multi-brief p01-p05: 5/5 content-valid; p01 status needs_human. Coding loop is the kernel default when scope.workspace is set.",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend. Coding-agent pilot: 3/3 (p01/p02/p05) with read/write/grep/run tools, a real pytest pass and py_compile pass; Ty adapter opt-in via run_kernel(coding_agent=True). Hybrid coding/tool run: 20/20 content-valid (17 coding loop + p11/p13/p14 tools). Ty end-to-end p01 with run_kernel(coding_agent=True): complete, pytest 0, valid patch. 121 tests green. Hybrid 3-run spread 18-20/20 (thresholds p50 10.2 s, p95 30.7 s, completion 0.90). Ty multi-brief p01-p05: 5/5 content-valid; p01 status needs_human. Coding loop is the kernel default when scope.workspace is set. Ty p01-p05: 5/5 content-valid and 5/5 complete after acceptance-recovery fix. 122 tests green.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -2453,16 +2453,18 @@
   },
   "tys_kernel_multi_20261029": {
     "label": "ty-as-is + kernel coding tool loop (multi-brief pilot)",
-    "run": "reports/rea_probe/tys_kernel_multi/20261029T125110Z/summary.json",
+    "run": "reports/rea_probe/tys_kernel_multi/20261029T134414Z/summary.json",
     "briefs": 5,
     "content_valid": 5,
+    "complete": 5,
     "rows": {
-      "p01": "content valid; Ty needs_human (retry assertion)",
+      "p01": "complete",
       "p02": "complete",
       "p03": "complete",
       "p04": "complete",
       "p05": "complete"
     },
+    "fix": "CodingAgentExecutor re-checks acceptance after a loop stop; p01 no longer returns needs_human after valid artifacts",
     "quality_claim": false
   }
 }

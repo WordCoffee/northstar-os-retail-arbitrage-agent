@@ -42,17 +42,18 @@ Literal `run_kernel(coding_agent=True)` (now the default when a work order names
 
 | Brief | Ty status | Content valid |
 |---|---|---|
-| p01 | needs_human (artifact valid; kernel retry assertion) | **yes** |
+| p01 | complete | **yes** |
 | p02 | complete | **yes** |
 | p03 | complete | **yes** |
 | p04 | complete | **yes** |
 | p05 | complete | **yes** |
 
-**5/5 content-valid** across p01–p05 (`reports/rea_probe/tys_kernel_multi/20261029T125110Z/`).
-p01 is content-valid but its Ty run ended `needs_human` because the kernel’s
-`executor_ok` assertion failed on a retry after the artifacts were already
-correct — recorded as an orchestration defect, not a silent pass. The standalone
-p01 run was `complete` (`.../tys_kernel/20261029T070832Z/`).
+**5/5 content-valid and 5/5 complete** across p01–p05
+(`reports/rea_probe/tys_kernel_multi/20261029T134414Z/`). p01 initially exposed an
+acceptance-recovery defect: the loop could write every artifact, hit its step
+budget before `finish`, and the kernel would report `needs_human`. The executor
+now re-checks acceptance after a loop stop and succeeds when the artifacts
+already satisfy it. The defect is fixed, not hidden.
 
 ## 4. Honest limits
 

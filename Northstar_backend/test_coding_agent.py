@@ -105,6 +105,19 @@ def test_executor_returns_kernel_shape(tmp_path):
     assert out["files"]
 
 
+def test_executor_recovers_when_acceptance_passes_after_loop_stop(tmp_path):
+    ws = Workspace(tmp_path / "ws")
+    (tmp_path / "ws" / "done.txt").write_text("x", encoding="utf-8")
+    ex = CodingAgentExecutor(
+        lambda prompt: '{"tool":"list","args":{"path":"."}}', ws,
+        max_steps=1, acceptance=lambda: (True, "the artifact exists"))
+    plan = Plan(plan_id="p", session_id="s", goal="g", nodes=[],
+                acceptance=[Acceptance("all", "plan_complete")])
+    out = ex(Node("n1", "coding", "write", lane="coding"), plan)
+    assert out["ok"] is True
+    assert out["data"]["acceptance_recovered"] is True
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):

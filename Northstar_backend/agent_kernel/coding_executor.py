@@ -25,5 +25,16 @@ class CodingAgentExecutor:
             self.workspace, self.model, max_steps=self.max_steps,
             max_repairs=self.max_repairs, acceptance=self.acceptance)
         result = agent.run(task)
+        data = result.to_dict()
+        # The acceptance is the authority, not the loop's stop reason. A run can
+        # write every required artifact, then hit its step budget before `finish`;
+        # re-checking acceptance prevents a false `needs_human`.
+        if not result.ok and self.acceptance is not None:
+            ok, detail = self.acceptance()
+            if ok:
+                data["acceptance_recovered"] = True
+                return {"ok": True,
+                        "detail": f"acceptance satisfied after loop stop: {detail}",
+                        "files": result.files, "data": data}
         return {"ok": result.ok, "detail": result.summary,
-                "files": result.files, "data": result.to_dict()}
+                "files": result.files, "data": data}

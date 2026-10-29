@@ -72,11 +72,12 @@ seconds: 65.5
 The 0/20 baseline is the read-only lane; the same orchestrator with the coding
 loop completes the p01 project. This is one brief, not a 20-brief Ty result.
 
-**Multi-brief follow-up (p01–p05):** **5/5 content-valid** through
-`run_kernel(coding_agent=True)` (`reports/rea_probe/tys_kernel_multi/20261029T125110Z/`).
-p01 ended `needs_human` although its artifact is valid — a kernel retry assertion
-issue, recorded; p02–p05 completed. The Ty path is not declared clean until that
-p01 status is fixed.
+**Multi-brief follow-up (p01–p05):** **5/5 content-valid and 5/5 complete**
+through `run_kernel(coding_agent=True)`
+(`reports/rea_probe/tys_kernel_multi/20261029T134414Z/`). The first multi-run
+exposed an acceptance-recovery defect: the loop could write every artifact, hit
+its step budget before `finish`, and the kernel reported `needs_human`. The
+executor now re-checks acceptance after a loop stop; the defect is fixed.
 
 ## Gates
 

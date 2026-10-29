@@ -1,0 +1,7 @@
+Build started at 2024-01-15T10:00:00Z
+Compiling broken.py...
+Syntax check passed: no errors found
+Running unit tests: 3 passed, 0 failed
+Build completed successfully in 1.2s
+Artifact: broken.py (fixed)
+Status: SUCCESS
