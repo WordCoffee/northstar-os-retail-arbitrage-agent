@@ -243,7 +243,7 @@ re-renders state and evidence.
 | 10 | Verification loop | `agent_kernel/verify.py` | built v0.1 |
 | 11 | Skills | `agent_kernel/skills.py` | built v0.1 |
 | 12 | Budget & replay | `agent_kernel/budget.py`, `journal.py` | built v0.1 |
-| 13 | Bounded coding tool loop | `coding_tools.py`, `coding_agent.py`, `coding_executor.py` | built; pilot 3/3 |
+| 13 | Bounded coding tool loop | `coding_tools.py`, `coding_agent.py`, `coding_executor.py`, `patch_tool.py` | built; hybrid 20/20; apply_patch rooted/capped |
 
 Build order for the first implementation wave: **8 → 1 → 7 → 6 → 2 → 3 → 10**
 (policy before plan, because a plan without enforcement is a suggestion).

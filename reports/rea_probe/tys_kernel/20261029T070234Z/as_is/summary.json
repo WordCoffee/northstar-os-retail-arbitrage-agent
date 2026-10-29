@@ -1,0 +1,31 @@
+{
+  "run": "as_is",
+  "task_id": "tys_5d5880b70ebe",
+  "scope": {
+    "workspace_preserved_by_submit": false,
+    "note": "submit() dropped scope.workspace; the harness re-attached it so run_kernel(coding_agent=True) could start"
+  },
+  "ty_status": "needs_human",
+  "ty_reason": "verification failed: the lane executor reports it completed; the lane executor reports success",
+  "ty_error": "",
+  "executor_error": "TypeError: TysAssistant.run_kernel.<locals>.<lambda>() takes 1 positional argument but 2 were given",
+  "content_valid": false,
+  "content_detail": "unified diff shape",
+  "calc_fixed": false,
+  "pytest_exit": 1,
+  "pytest_tail": [
+    "=========================== short test summary info ===========================",
+    "FAILED test_calc.py::test_add - assert -1 == 5",
+    "1 failed in 0.13s"
+  ],
+  "artifact_written": false,
+  "artifact_bytes": 0,
+  "steps": 1,
+  "coding_steps": 0,
+  "coding_transcript": [],
+  "seconds": 0.0,
+  "events": 3,
+  "kernel_interventions": [],
+  "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070234Z\\as_is\\p01",
+  "ok": false
+}

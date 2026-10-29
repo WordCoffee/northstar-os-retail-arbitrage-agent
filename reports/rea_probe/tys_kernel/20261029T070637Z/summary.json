@@ -1,0 +1,14 @@
+{
+  "mode": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "label": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "project_result": false,
+  "ty_status": "needs_human",
+  "content_valid": true,
+  "content_detail": "unified diff shape",
+  "calc_fixed": false,
+  "pytest_exit": 1,
+  "artifact_written": true,
+  "seconds": 52.4,
+  "summary": "verification failed: the lane executor reports it completed; the lane executor reports success",
+  "task_id": "tys_98e190c50a98"
+}

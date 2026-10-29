@@ -1,0 +1,18 @@
+{
+  "artifact": "audit.json",
+  "panel": "Admin > Settings > Security",
+  "setting_key": "org.mfa_require_all",
+  "display_label": "Require MFA for all members",
+  "observed_value": false,
+  "value_quoted": "false",
+  "scope": "organisation org-t2",
+  "observed_at": "2026-10-27T14:05:00Z",
+  "evidence": {
+    "source_file": "settings_capture.txt",
+    "note": "Value read from the rendered control; no change was submitted."
+  },
+  "checks": {
+    "value_quoted": true,
+    "no_change_made": true
+  }
+}

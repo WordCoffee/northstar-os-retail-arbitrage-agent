@@ -55,6 +55,23 @@ This is exactly the gap the kernel was built to close. The 0/20 is the “before
 the kernel text lane (17/20) and tool lane (20/20) are the measured “after” for
 the same briefs.
 
+## Measured after — Ty p01 with the coding tool loop
+
+Literal `assistant.run_kernel(task_id, coding_agent=True)`, no shim:
+
+```
+ty_status: complete
+content_valid: true
+calc_fixed: true
+pytest_exit: 0
+artifact_written: true
+seconds: 65.5
+```
+
+`reports/rea_probe/tys_kernel/20261029T070832Z/summary.json`.
+The 0/20 baseline is the read-only lane; the same orchestrator with the coding
+loop completes the p01 project. This is one brief, not a 20-brief Ty result.
+
 ## Gates
 
 No Amazon. No spend. No network beyond `127.0.0.1:8080`. The worker was stopped

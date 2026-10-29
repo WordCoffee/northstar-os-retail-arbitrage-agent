@@ -1,0 +1,19 @@
+{
+  "assertion": {
+    "expected": true,
+    "observed": null,
+    "path": "org.mfa_require_all",
+    "recorded_at": null,
+    "verdict": "unknown"
+  },
+  "change": {
+    "applied_at": "2026-10-27T16:20:00Z",
+    "applied_by": "operator",
+    "from": false,
+    "path": "org.mfa_require_all",
+    "to": true,
+    "what": "operator toggled org.mfa_require_all"
+  },
+  "rule": "unknown is not pass: an unread value may never be reported as done",
+  "run_id": "run-2026-10-27-b"
+}

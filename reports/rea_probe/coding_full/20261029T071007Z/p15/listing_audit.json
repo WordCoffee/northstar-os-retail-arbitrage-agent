@@ -1,0 +1,39 @@
+{
+  "rubric_cited": "rubric.md",
+  "scores": {
+    "Title": {
+      "score": 4,
+      "cited_line": "Title: Mogra Organics Organic Lion's Mane Mushroom Powder - 6 oz, 85 Servings"
+    },
+    "Bullets": {
+      "score": 4,
+      "cited_line": "- WILD-HARVESTED FRUITING BODIES ONLY: no mycelium, no fillers, no grain."
+    },
+    "Description": {
+      "score": 4,
+      "cited_line": "Mogra Organics Organic Lion's Mane Mushroom Powder is a single-ingredient extract made from whole fruiting bodies."
+    },
+    "Keywords": {
+      "score": 3,
+      "cited_line": "Keywords: lion's mane powder, organic mushroom powder, lion mane supplement"
+    },
+    "Images": {
+      "score": 3,
+      "cited_line": "Images: 5 of 7 slots filled."
+    },
+    "A+ content": {
+      "score": 0,
+      "cited_line": "A+ content: none."
+    },
+    "Compliance": {
+      "score": 4,
+      "cited_line": "- THIRD-PARTY TESTED: every batch, heavy metals and microbials."
+    }
+  },
+  "unmeasured_dimensions": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ]
+}

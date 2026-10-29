@@ -137,6 +137,8 @@ class CodingAgent:
             "- Work only inside the workspace.\n"
             "- Use `run` only with the allowlisted commands.\n"
             "- Before `finish`, the artifact and any test/build evidence must exist.\n"
+            "- Write the declared artifact within the first two steps. An absent "
+            "artifact is an automatic failure; improve it afterwards.\n"
             "- If acceptance fails, read the failure and repair; do not repeat the same write.\n\n"
             f"TASK:\n{task}\n\n"
             f"WORKSPACE FILES:\n{self.tools.tree(60)}\n\n"

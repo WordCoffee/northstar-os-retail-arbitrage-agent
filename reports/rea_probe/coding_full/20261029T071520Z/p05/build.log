@@ -1,0 +1,3 @@
+Build error: SyntaxError in broken.py line 4 - missing colon after 'for item in items'
+Root cause: Missing colon (:) at end of for-loop statement
+Fix: Add colon after 'for item in items'

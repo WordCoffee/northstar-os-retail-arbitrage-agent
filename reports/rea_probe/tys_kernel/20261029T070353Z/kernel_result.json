@@ -1,0 +1,75 @@
+{
+  "status": "complete",
+  "reason": "",
+  "ask": "",
+  "plan": {
+    "plan_id": "plan_tys_ed6a4d4ae3c8",
+    "session_id": "sess_tys_ed6a4d4ae3c8",
+    "goal": "Fix the failing unit test in the p01 workspace and leave the evidence behind.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "no Amazon",
+      "no spend",
+      "scope:coding"
+    ],
+    "acceptance": [
+      {
+        "text": "every step is done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "n1",
+        "kind": "coding",
+        "title": "Fix the failing test, run pytest, write fix.patch (unified diff).",
+        "acceptance": [
+          {
+            "text": "the lane executor reports success",
+            "verifier": "executor_ok",
+            "params": {}
+          }
+        ],
+        "depends_on": [],
+        "lane": "coding",
+        "inputs": {},
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 1,
+        "evidence_ids": [
+          "ev_9f64aea974bf",
+          "ev_0d517221a4e6"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 8,
+      "max_wall_s": 900,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T07:04:13Z",
+    "approved_at": "2026-10-29T07:04:13Z",
+    "approved_by": "operator"
+  },
+  "interventions": [],
+  "budget": {
+    "steps": 2,
+    "tokens": 0,
+    "started_at": 1793257453.1644332,
+    "stopped": null,
+    "remaining": {
+      "steps": 6,
+      "wall_s": 873.1685817241669,
+      "tokens": null
+    },
+    "exhausted": false
+  },
+  "events": 16
+}

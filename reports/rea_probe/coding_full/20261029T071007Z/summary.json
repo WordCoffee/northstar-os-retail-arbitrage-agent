@@ -1,0 +1,209 @@
+{
+  "mode": "hybrid-coding-tool-pilot",
+  "briefs": 20,
+  "ok": 16,
+  "rate": 0.8,
+  "rows": [
+    {
+      "id": "p01",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 7,
+      "seconds": 18.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p02",
+      "ok": false,
+      "content_valid": false,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 14.9,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p03",
+      "ok": false,
+      "content_valid": false,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 15.4,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p04",
+      "ok": false,
+      "content_valid": false,
+      "detail": "length + required terms",
+      "steps": 1,
+      "seconds": 5.8,
+      "agent_ok": false,
+      "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+    },
+    {
+      "id": "p05",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 8,
+      "seconds": 12.7,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p06",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 6.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p07",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 4,
+      "seconds": 6.8,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p08",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 2,
+      "seconds": 7.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p09",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 7.9,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p10",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 4,
+      "seconds": 9.9,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p11",
+      "ok": true,
+      "content_valid": true,
+      "detail": "OCR terms + prepress",
+      "steps": 1,
+      "seconds": 5.9,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p12",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 5,
+      "seconds": 7.9,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p13",
+      "ok": true,
+      "content_valid": true,
+      "detail": "format + documented size",
+      "steps": 1,
+      "seconds": 0.1,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p14",
+      "ok": true,
+      "content_valid": true,
+      "detail": "ffprobe",
+      "steps": 1,
+      "seconds": 0.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p15",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 4,
+      "seconds": 12.0,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p16",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 12.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p17",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 16.6,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p18",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 8.3,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p19",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 5,
+      "seconds": 4.7,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p20",
+      "ok": false,
+      "content_valid": false,
+      "detail": "json error: Expecting value: line 1 column 1 (char 0)",
+      "steps": 9,
+      "seconds": 11.7,
+      "agent_ok": false,
+      "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+    }
+  ],
+  "note": "Coding agent for text/code, tools for p11/p13/p14."
+}

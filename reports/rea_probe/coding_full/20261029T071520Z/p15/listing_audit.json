@@ -1,0 +1,18 @@
+{
+  "rubric_cited": "rubric.md v1",
+  "scores": {
+    "Title": {"score": 4, "cited_line": "Title: Mogra Organics Organic Lion's Mane Mushroom Powder - 6 oz, 85 Servings", "note": "Primary keyword present, under 200 chars, no promos; brand name precedes keyword."},
+    "Bullets": {"score": 4, "cited_line": "Bullets: (5 bullets)", "note": "Five benefit-led bullets; concrete numbers in bullets 2 and 4; bullets 1, 3, 5 lack a concrete number."},
+    "Description": {"score": 3, "cited_line": "Description: Mogra Organics Organic Lion's Mane Mushroom Powder is a single-ingredient extract...", "note": "Answers form, use, serving size; does not explicitly answer all top five buyer questions; contains a mild claim ('dissolves clean')."},
+    "Keywords": {"score": 4, "cited_line": "Keywords: lion's mane powder, organic mushroom powder, lion mane supplement", "note": "Present in copy, no stuffing."},
+    "Images": {"score": 2, "cited_line": "Images: 5 of 7 slots filled.", "note": "Only 5 of 7 slots filled; no scale reference mentioned."},
+    "A+ content": {"score": 0, "cited_line": "A+ content: none.", "note": "No A+ modules present."},
+    "Compliance": {"score": 3, "cited_line": "Bullets: THIRD-PARTY TESTED: every batch, heavy metals and microbials.", "note": "No disease claims; no explicit disclaimer line; weights consistent (6 oz / 85 servings / 2 g)."}
+  },
+  "unmeasured_dimensions": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ]
+}

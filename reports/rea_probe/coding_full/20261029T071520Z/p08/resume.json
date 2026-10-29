@@ -1,0 +1,9 @@
+{
+  "run_id": "run-2026-10-27-a",
+  "checkpoint": "ckpt-0003",
+  "resumed_from_step": 3,
+  "skipped_steps": [1, 2],
+  "pending_steps": [3, 4],
+  "blocked_on": "operator_gate:spend_approval",
+  "goal": "Publish the weekly ops digest to the finance channel"
+}

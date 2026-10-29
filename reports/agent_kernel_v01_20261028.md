@@ -99,11 +99,15 @@ because the MTP runs aborted at 46 and 49 calls. It is **not a quality claim**.
 Reports: `reports/ns_proj_20_live_baseline_20261029.md` and
 `reports/tys_as_is_baseline_20261029.md`.
 
-**Coding-tool pilot (2026-10-29):** the read-only lane was replaced by a bounded
-`list/read/grep/write/run` loop for **p01, p02 and p05**. All three are
-content-valid; p01 has a real `pytest` pass and a valid patch, p05 has a real
-`py_compile` pass. Report: `reports/coding_agent_pilot_20261029.md`. Ty opts in
-with `run_kernel(coding_agent=True)` and an explicit `scope.workspace`.
+**Coding-tool run (2026-10-29):** the read-only lane was replaced by a bounded
+`list/read/grep/write/apply_patch/run` loop. The 3-brief pilot was 3/3
+(p01/p02/p05; real `pytest` and `py_compile` passes), then the hybrid 20-brief run
+was **20/20 content-valid** — coding loop for text/code, tools for p11/p13/p14.
+Ty end-to-end p01 with literal `run_kernel(coding_agent=True)` is **complete**
+(calc fixed, pytest 0, valid patch). Reports:
+`reports/coding_agent_pilot_20261029.md` and
+`reports/coding_hybrid_20_20261029.md`. Ty requires an explicit
+`scope.workspace`; the default path is unchanged.
 
 ## 5. Phase B — 1,500 / 100 / 12
 

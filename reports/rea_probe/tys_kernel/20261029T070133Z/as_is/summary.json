@@ -1,0 +1,30 @@
+{
+  "run": "as_is",
+  "task_id": "tys_bde62d892458",
+  "scope": {
+    "workspace_preserved_by_submit": false,
+    "note": "submit() dropped scope.workspace; the harness re-attached it so run_kernel(coding_agent=True) could start"
+  },
+  "ty_status": "needs_human",
+  "ty_reason": "verification failed: the lane executor reports it completed; the lane executor reports success",
+  "ty_error": "",
+  "content_valid": false,
+  "content_detail": "unified diff shape",
+  "calc_fixed": false,
+  "pytest_exit": 1,
+  "pytest_tail": [
+    "=========================== short test summary info ===========================",
+    "FAILED test_calc.py::test_add - assert -1 == 5",
+    "1 failed in 0.12s"
+  ],
+  "artifact_written": false,
+  "artifact_bytes": 0,
+  "steps": 1,
+  "coding_steps": 0,
+  "coding_transcript": [],
+  "seconds": 0.0,
+  "events": 3,
+  "kernel_interventions": [],
+  "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070133Z\\as_is\\p01",
+  "ok": false
+}

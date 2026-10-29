@@ -1256,6 +1256,7 @@ class TysAssistant:
             "lanes": lanes,
             "paths": list(scope_in.get("paths") or []),
             "hosts": list(scope_in.get("hosts") or []),
+            "workspace": str(scope_in.get("workspace") or "").strip(),
         }
 
         limits = dict(DEFAULT_LIMITS)
@@ -1330,7 +1331,7 @@ class TysAssistant:
         plan, a policy check per lane, evidence per step and a checkpoint.
         """
         from agent_kernel.policy import grant
-        from agent_kernel.tys_adapter import run_order
+        from agent_kernel.tys_adapter import make_workspace_acceptance, run_order
 
         task = self.store.get(task_id)
         if not task:
@@ -1374,7 +1375,10 @@ class TysAssistant:
                            .get("content") or "")
 
             coding_factory = lambda node: CodingAgentExecutor(
-                _model, workspace, task=node.title, max_steps=12)
+                _model, workspace, task=node.title,
+                acceptance=make_workspace_acceptance(
+                    workspace, (node.inputs or {}).get("acceptance")),
+                max_steps=12)
         res = run_order(self, order, approve_by=approve_by, grants=grants,
                         task=task, coding_factory=coding_factory)
         task["status"] = "done" if res.status == "complete" else res.status

@@ -1,0 +1,2 @@
+Build error: SyntaxError in broken.py line 5 — missing colon after 'for item in items'.
+Fix: add colon to make 'for item in items:'.

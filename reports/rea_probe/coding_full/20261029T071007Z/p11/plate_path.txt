@@ -1,0 +1,8 @@
+# Plate marker. The pouch face is MEASURED from this render by pouch_label;
+# this workspace only records which plate and which copy to use.
+plate: Northstar_backend/data/studio_generated/2e4a7ab96e9941479b068792f592864d.png
+logo: Northstar_backend/assets/brand/mogra_logo.png
+title: ORGANIC LION'S MANE
+subtitle: MUSHROOM POWDER
+weight: 6 oz (170 g)
+output: out/label.png

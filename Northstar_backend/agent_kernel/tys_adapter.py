@@ -6,6 +6,8 @@ caller opts in explicitly.
 """
 from __future__ import annotations
 
+import subprocess
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .kernel import Kernel, RunResult
@@ -14,6 +16,36 @@ from .policy import Policy
 from .session import CheckpointStore, Journal
 
 VALID_LANES = ("inspect", "coding", "browser", "creative")
+
+
+def make_workspace_acceptance(workspace: str, spec: Optional[Dict[str, Any]] = None):
+    """Build an acceptance callable from a step's explicit acceptance spec.
+
+    spec = {"commands": [["python","-m","pytest","-q"]],
+            "required_files": ["fix.patch"]}
+    """
+    spec = dict(spec or {})
+    commands = list(spec.get("commands") or [])
+    required = list(spec.get("required_files") or [])
+    root = Path(workspace)
+
+    def check():
+        missing = [f for f in required if not (root / f).is_file()]
+        failures: List[str] = []
+        for cmd in commands:
+            try:
+                r = subprocess.run([str(c) for c in cmd], cwd=str(root),
+                                   capture_output=True, text=True, timeout=180)
+            except Exception as exc:  # noqa: BLE001
+                failures.append(f"{cmd}: {exc}")
+                continue
+            if r.returncode != 0:
+                failures.append(f"{' '.join(str(c) for c in cmd)} exit "
+                                f"{r.returncode}: {(r.stderr or r.stdout)[-300:]}")
+        return (not missing and not failures,
+                f"missing={missing}; failures={failures}")
+
+    return check
 
 
 def work_order_to_plan(order: Dict[str, Any], *, session_id: str = "") -> Plan:
@@ -101,7 +133,9 @@ def executors_for(assistant: Any, order: Dict[str, Any],
 
     mapping = {lane: _wrap for lane in VALID_LANES}
     if coding_factory is not None:
-        mapping["coding"] = coding_factory
+        def _coding(node, plan):
+            return coding_factory(node)(node, plan)
+        mapping["coding"] = _coding
     return mapping
 
 

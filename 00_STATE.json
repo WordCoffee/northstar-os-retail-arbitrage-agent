@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend. Coding-agent pilot: 3/3 (p01/p02/p05) with read/write/grep/run tools, a real pytest pass and py_compile pass; Ty adapter opt-in via run_kernel(coding_agent=True).",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend. Coding-agent pilot: 3/3 (p01/p02/p05) with read/write/grep/run tools, a real pytest pass and py_compile pass; Ty adapter opt-in via run_kernel(coding_agent=True). Hybrid coding/tool run: 20/20 content-valid (17 coding loop + p11/p13/p14 tools). Ty end-to-end p01 with run_kernel(coding_agent=True): complete, pytest 0, valid patch. 121 tests green.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -2351,6 +2351,43 @@
       "workspace_escape": "rejected"
     },
     "ty_adapter": "TysAssistant.run_kernel(coding_agent=True) requires scope.workspace",
+    "quality_claim": false
+  },
+  "coding_hybrid_20261029": {
+    "label": "hybrid coding/tool capability run (one run; not a quality claim)",
+    "run": "reports/rea_probe/coding_full/20261029T071520Z/summary.json",
+    "report": "reports/coding_hybrid_20_20261029.md",
+    "briefs": 20,
+    "ok": 20,
+    "rate": 1.0,
+    "routes": {
+      "coding_loop": 17,
+      "tool_nodes": [
+        "p11",
+        "p13",
+        "p14"
+      ]
+    },
+    "tools": [
+      "list",
+      "read",
+      "grep",
+      "write",
+      "apply_patch",
+      "run(allowlist)"
+    ],
+    "server_restarts": 10,
+    "quality_claim": false
+  },
+  "tys_kernel_pilot_20261029": {
+    "label": "ty-as-is + kernel coding tool loop (capability pilot)",
+    "run": "reports/rea_probe/tys_kernel/20261029T070832Z/summary.json",
+    "ty_status": "complete",
+    "content_valid": true,
+    "calc_fixed": true,
+    "pytest_exit": 0,
+    "artifact_written": true,
+    "seconds": 65.5,
     "quality_claim": false
   }
 }

@@ -1,0 +1,119 @@
+{
+  "label": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "mode": "ty-kernel-coding-pilot",
+  "run_at": "20261029T070507Z",
+  "brief": "p01",
+  "brief_goal": "Diagnose and fix one failing unit test without changing its assertion.",
+  "artifact": "fix.patch",
+  "model": "northstaros-qwen3.8:27b",
+  "run_root": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070507Z",
+  "started_by_harness": true,
+  "primary_run": "arity_shim",
+  "ty_status": "needs_human",
+  "content_valid": true,
+  "content_detail": "unified diff shape",
+  "pytest_exit": 0,
+  "calc_fixed": true,
+  "artifact_written": true,
+  "steps": 1,
+  "coding_steps": 4,
+  "seconds": 24.7,
+  "ok": false,
+  "ty_status_as_is": "needs_human",
+  "ty_error_as_is": "TypeError: TysAssistant.run_kernel.<locals>.<lambda>() takes 1 positional argument but 2 were given",
+  "content_valid_as_is": false,
+  "pytest_exit_as_is": 1,
+  "seconds_as_is": 0.0,
+  "runs": {
+    "as_is": {
+      "run": "as_is",
+      "task_id": "tys_b00d81de926d",
+      "scope": {
+        "workspace_preserved_by_submit": false,
+        "note": "submit() dropped scope.workspace; the harness re-attached it so run_kernel(coding_agent=True) could start"
+      },
+      "ty_status": "needs_human",
+      "ty_reason": "verification failed: the lane executor reports it completed; the lane executor reports success",
+      "ty_error": "",
+      "executor_error": "TypeError: TysAssistant.run_kernel.<locals>.<lambda>() takes 1 positional argument but 2 were given",
+      "content_valid": false,
+      "content_detail": "unified diff shape",
+      "calc_fixed": false,
+      "pytest_exit": 1,
+      "pytest_tail": [
+        "=========================== short test summary info ===========================",
+        "FAILED test_calc.py::test_add - assert -1 == 5",
+        "1 failed in 0.14s"
+      ],
+      "artifact_written": false,
+      "artifact_bytes": 0,
+      "steps": 1,
+      "coding_steps": 0,
+      "coding_transcript": [],
+      "seconds": 0.0,
+      "events": 3,
+      "kernel_interventions": [],
+      "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070507Z\\as_is\\p01",
+      "ok": false
+    },
+    "arity_shim": {
+      "run": "arity_shim",
+      "task_id": "tys_a0d95e125b4e",
+      "scope": {
+        "workspace_preserved_by_submit": false,
+        "note": "submit() dropped scope.workspace; the harness re-attached it so run_kernel(coding_agent=True) could start"
+      },
+      "ty_status": "needs_human",
+      "ty_reason": "verification failed: the lane executor reports it completed; the lane executor reports success",
+      "ty_error": "",
+      "executor_error": "",
+      "content_valid": true,
+      "content_detail": "unified diff shape",
+      "calc_fixed": true,
+      "pytest_exit": 0,
+      "pytest_tail": [
+        ".                                                                        [100%]",
+        "1 passed in 0.01s"
+      ],
+      "artifact_written": true,
+      "artifact_bytes": 96,
+      "steps": 1,
+      "coding_steps": 4,
+      "coding_transcript": [
+        {
+          "role": "observation",
+          "tool": "read",
+          "ok": true,
+          "output": "def add(a, b):\n    return a + b\n"
+        },
+        {
+          "role": "observation",
+          "tool": "read",
+          "ok": true,
+          "output": "from calc import add\r\n\r\n\r\ndef test_add():\r\n    assert add(2, 3) == 5\r\n"
+        },
+        {
+          "role": "observation",
+          "tool": "run",
+          "ok": true,
+          "output": ".                                                                        [100%]\n1 passed in 0.01s\n"
+        }
+      ],
+      "seconds": 24.7,
+      "events": 3,
+      "kernel_interventions": [],
+      "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070507Z\\p01",
+      "ok": false
+    }
+  },
+  "defect": {
+    "where": "Northstar_backend/tys_assistant.py:1376 (with Northstar_backend/agent_kernel/tys_adapter.py:104)",
+    "symptom": "every coding step of run_kernel(coding_agent=True) fails before the model is called: 'executor error: <lambda>() takes 1 positional argument but 2 were given'",
+    "cause": "run_kernel builds `coding_factory = lambda node: CodingAgentExecutor(...)`; executors_for registers that factory as the executor and kernel.py calls executors as executor(node, plan)",
+    "one_line_fix": "def coding_factory(node, plan=None) -> CodingAgentExecutor: ... (accept the plan argument the kernel passes)",
+    "applied_to_repo": false,
+    "note": "not edited: this harness owns only tools/tys_kernel_bench.py. The 'arity_shim' run installs the wrapper in memory for one call."
+  },
+  "scope_count": 1,
+  "note": "One p01 pilot only. Not a 20-brief result and not a quality claim. The as-is coding_agent path is broken (see defect); the tool-loop measurement is the arity_shim run."
+}

@@ -26,8 +26,8 @@
       ],
       "validator": "text",
       "terms": [
-        "route",
-        "endpoint"
+        "GET",
+        "Response"
       ]
     },
     {

@@ -1,0 +1,57 @@
+{
+  "plan_version": 2,
+  "status": "planned",
+  "goal": "Assemble a 15-second vertical ad and verify it before reporting done",
+  "created_at": "2026-10-27T09:15:00Z",
+  "failed_assertion": {
+    "check": "duration_12_15",
+    "evidence": "ffprobe format.duration=18.4",
+    "expected": "12-15",
+    "node": "n3",
+    "observed_seconds": 18.4
+  },
+  "root_cause": "The source timeline is 18.4s; the plan did not include a trim step before muxing.",
+  "nodes": [
+    {
+      "id": "n1",
+      "action": "scale the plate to 1080x1920",
+      "status": "done"
+    },
+    {
+      "id": "n2",
+      "action": "trim the clip to 15.0s (start 0, end 15.0) before muxing",
+      "status": "pending"
+    },
+    {
+      "id": "n3",
+      "action": "mux the narration track onto the trimmed clip",
+      "status": "pending"
+    },
+    {
+      "id": "n4",
+      "action": "ffprobe the result against the checks (duration 12-15, resolution 1080x1920)",
+      "status": "pending"
+    }
+  ],
+  "checks": [
+    {
+      "check": "duration_12_15",
+      "expected": "12-15",
+      "node": "n4"
+    },
+    {
+      "check": "resolution_1080x1920",
+      "expected": "1080x1920",
+      "node": "n4"
+    }
+  ],
+  "retained_from_v1": {
+    "plan_version": 1,
+    "status": "failed",
+    "nodes": [
+      {"id": "n1", "action": "scale the plate to 1080x1920", "status": "done"},
+      {"id": "n2", "action": "mux the narration track onto the clip", "status": "done"},
+      {"id": "n3", "action": "ffprobe the result against the checks", "status": "failed"}
+    ]
+  }
+}

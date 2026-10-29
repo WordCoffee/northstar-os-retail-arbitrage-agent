@@ -1,0 +1,31 @@
+{
+  "run": "as_is",
+  "task_id": "tys_0184c80ba256",
+  "scope": {
+    "workspace_preserved_by_submit": false,
+    "note": "submit() dropped scope.workspace; the harness re-attached it so run_kernel(coding_agent=True) could start"
+  },
+  "ty_status": "error",
+  "ty_reason": "AttributeError: 'CodingAgentExecutor' object has no attribute 'get'",
+  "ty_error": "AttributeError: 'CodingAgentExecutor' object has no attribute 'get'",
+  "executor_error": "",
+  "content_valid": false,
+  "content_detail": "unified diff shape",
+  "calc_fixed": false,
+  "pytest_exit": 1,
+  "pytest_tail": [
+    "=========================== short test summary info ===========================",
+    "FAILED test_calc.py::test_add - assert -1 == 5",
+    "1 failed in 0.18s"
+  ],
+  "artifact_written": false,
+  "artifact_bytes": 0,
+  "steps": 0,
+  "coding_steps": 0,
+  "coding_transcript": [],
+  "seconds": 0.0,
+  "events": 1,
+  "kernel_interventions": null,
+  "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T070353Z\\as_is\\p01",
+  "ok": false
+}

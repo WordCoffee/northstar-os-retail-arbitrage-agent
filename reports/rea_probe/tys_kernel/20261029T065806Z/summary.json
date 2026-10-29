@@ -1,0 +1,39 @@
+{
+  "label": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "mode": "ty-kernel-coding-pilot",
+  "run_at": "20261029T065806Z",
+  "brief": "p01",
+  "brief_goal": "Diagnose and fix one failing unit test without changing its assertion.",
+  "artifact": "fix.patch",
+  "model": "northstaros-qwen3.8:27b",
+  "workspace": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T065806Z\\p01",
+  "run_root": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel\\20261029T065806Z",
+  "started_by_harness": true,
+  "scope_count": 1,
+  "note": "One p01 pilot only. Not a 20-brief result and not a quality claim.",
+  "task_id": "tys_06fd16d977c4",
+  "scope": {
+    "workspace_preserved_by_submit": false,
+    "note": "submit() dropped scope.workspace; re-attached by the harness so run_kernel(coding_agent=True) could start"
+  },
+  "ty_status": "needs_human",
+  "ty_reason": "verification failed: the lane executor reports it completed; the lane executor reports success",
+  "ty_error": "",
+  "content_valid": false,
+  "content_detail": "unified diff shape",
+  "calc_fixed": false,
+  "pytest_exit": 1,
+  "pytest_tail": [
+    "=========================== short test summary info ===========================",
+    "FAILED test_calc.py::test_add - assert -1 == 5",
+    "1 failed in 0.08s"
+  ],
+  "artifact_written": false,
+  "artifact_bytes": 0,
+  "steps": 1,
+  "seconds": 0.0,
+  "ok": false,
+  "events": 3,
+  "kernel_status": "needs_human",
+  "kernel_interventions": []
+}

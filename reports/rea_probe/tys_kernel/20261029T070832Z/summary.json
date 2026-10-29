@@ -1,0 +1,14 @@
+{
+  "mode": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "label": "ty-as-is + kernel coding tool loop (capability pilot)",
+  "project_result": false,
+  "ty_status": "complete",
+  "content_valid": true,
+  "content_detail": "unified diff shape",
+  "calc_fixed": true,
+  "pytest_exit": 0,
+  "artifact_written": true,
+  "seconds": 65.5,
+  "summary": "",
+  "task_id": "tys_58517d00a17c"
+}
