@@ -130,11 +130,32 @@ async def run_task(
     max_steps: Optional[int] = Query(default=None, ge=1, le=40),
     _user: Dict[str, Any] = Depends(require_tys_admin),
 ) -> Dict[str, Any]:
-    """One bounded run. Returns the task with its checkpoint and evidence trail."""
+    """One bounded run. Returns the task with its checkpoint and evidence trail.
+
+    This is the only task-execution contract: authenticated admin POST, executed
+    inside the request, `200 OK` with the completed work order. There is no
+    engine query parameter and no 202/SSE path — the assistant decides the lane
+    from the work order itself. When the order ran through the agent kernel, the
+    kernel's evidence payload rides back on the same response as `kernel`.
+    """
+    assistant = _assistant()
     try:
-        return {"task": _assistant().run(task_id, max_steps=max_steps)}
+        task = assistant.run(task_id, max_steps=max_steps)
     except tys.TysError as exc:
         raise _http_error(exc) from exc
+    return {"task": task, "kernel": _kernel_evidence(assistant, task_id)}
+
+
+def _kernel_evidence(assistant: Any, task_id: str) -> Optional[Dict[str, Any]]:
+    """The most recent kernel result recorded for this task, if any."""
+    try:
+        events = assistant.store.events(task_id)
+    except Exception:  # noqa: BLE001 - evidence is additive, never a failed run
+        return None
+    for ev in reversed(events):
+        if ev.get("kind") == "kernel_result":
+            return ev.get("payload") or {}
+    return None
 
 
 @router.post("/tasks/{task_id}/resume")

@@ -49,7 +49,10 @@ TIER_CREDIT_WEIGHT = {
 
 # --- model catalog ----------------------------------------------------------
 
-# LOCAL (Ollama on the operator machine). rev1 is the Master Brain primary.
+# LOCAL (Ollama on the operator machine). Bojo is the resident interaction layer
+# and serves every local text tier; the Ty 27B orchestrator is NOT an Ollama model
+# (it is a llama.cpp worker on 127.0.0.1:8080, started on demand), so naming it
+# here made every local tier resolve to an id Ollama does not have.
 LOCAL_MODELS = {
     "T1": "bojo",
     "T2": "bojo",
@@ -58,10 +61,10 @@ LOCAL_MODELS = {
     "V2": "qwen2.5vl:7b",
     "V3": "qwen2.5vl:7b",
 }
-LOCAL_ALTERNATES = {
-    "T2": ["qwen3:14b"],
-    "T3": ["qwen3:14b"],
-}
+# No local alternates: the only local text model installed is `bojo`. The old
+# `qwen3:14b` fallback was never on disk, so it advertised a fallback that could
+# not load.
+LOCAL_ALTERNATES: Dict[str, List[str]] = {}
 
 # CLOUD (OpenRouter DeepSeek lane — locked D1–D6 strategy §17).
 CLOUD_MODELS = {
@@ -150,11 +153,17 @@ class Resolution:
     pin: Optional[str] = None
 
 
-def resolve(provider: str, tier: str, model: Optional[str] = None) -> Resolution:
+def resolve(provider: str, tier: str, model: Optional[str] = None, *,
+            installed: Optional[List[str]] = None) -> Resolution:
     """Resolve a (provider, tier[, model]) request to a concrete plan.
 
     ``available=False`` means the caller must fall back or report honestly;
     the router never silently substitutes a different tier.
+
+    ``installed`` is the list of local model ids Ollama actually reports. When
+    supplied, a local text tier whose model is absent resolves to
+    ``available=False`` with ``local_model_not_installed`` instead of claiming a
+    capability with no weights behind it. Omit it to keep the pure config view.
     """
     provider = (provider or "local").strip().lower()
     tier = (tier or "T2").strip().upper()
@@ -170,6 +179,9 @@ def resolve(provider: str, tier: str, model: Optional[str] = None) -> Resolution
         chosen = model or LOCAL_MODELS.get(tier)
         if not chosen:
             return Resolution(provider, tier, None, weight, False, "no_local_model_for_tier")
+        if installed is not None and tier in TEXT_TIERS and chosen not in installed:
+            return Resolution(provider, tier, chosen, weight, False,
+                              "local_model_not_installed")
         return Resolution(provider, tier, chosen, weight, True, "ok")
 
     # cloud
@@ -351,6 +363,14 @@ def catalog(installed_local: Optional[List[str]] = None) -> Dict[str, object]:
             "live_armed": cloud_live_armed(),
         },
         "vision": SUITE.get("vision", {}),
+        # The two local engines, exactly as measured. Ty is on demand and is not
+        # an Ollama model; Bojo is the resident CPU-pinned interaction layer.
+        "local_engines": SUITE.get("local_engines", {}),
+        # Truthful local-text check: "ok" only when the configured model is
+        # actually installed on this machine; otherwise the reason code.
+        "text_local_status": {
+            t: resolve("local", t, installed=installed).reason for t in TEXT_TIERS
+        },
         # Truthful local-vision check: "ok" only when the configured model is
         # actually installed on this machine; otherwise the reason code.
         "vision_local_status": {

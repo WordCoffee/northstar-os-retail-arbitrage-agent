@@ -25,10 +25,14 @@ class CodingResult:
     files: List[str] = field(default_factory=list)
     transcript: List[Dict[str, Any]] = field(default_factory=list)
     error: str = ""
+    # True when the loop stopped without success but acceptance passed anyway
+    # (p01). Callers surface this instead of re-deriving it from the summary.
+    acceptance_recovered: bool = False
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "summary": self.summary, "steps": self.steps,
                 "files": self.files, "error": self.error,
+                "acceptance_recovered": self.acceptance_recovered,
                 "transcript": self.transcript[-20:]}
 
 
@@ -102,7 +106,11 @@ class CodingAgent:
                 continue
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
-            if tool == "write" and result.ok:
+            # The artifact clears the pressure, however it was produced: a `write`,
+            # an `apply_patch`, or a command that generated it. Keying this off the
+            # write tool alone kept the prompt in write-only pressure mode after a
+            # successful patch and starved the model of its other tools.
+            if self.required_artifact and self._artifact_present():
                 written = True
             history.append({"role": "observation", "tool": tool,
                             "ok": result.ok,
@@ -117,8 +125,36 @@ class CodingAgent:
                                     "output": "PASS: " + str(detail)[:1000]})
                     return CodingResult(True, f"acceptance passed after {tool}", step,
                                         sorted(files), history)
+        # Defect p01: a loop that ran out of steps with the work already done is a
+        # pass, not a `needs_human`. Acceptance is the authority; the stop reason
+        # is not. Checked once more here so every caller (kernel or benchmark)
+        # inherits the rule instead of re-implementing it.
+        if self.acceptance is not None:
+            try:
+                ok, detail = self.acceptance()
+            except Exception as exc:  # noqa: BLE001 - a raising check is a failed check
+                ok, detail = False, str(exc)[:300]
+            if ok:
+                history.append({"role": "observation", "tool": "acceptance",
+                                "output": "PASS: " + str(detail)[:1000]})
+                return CodingResult(True, "acceptance passed after the step budget",
+                                    self.max_steps, sorted(files), history,
+                                    acceptance_recovered=True)
         return CodingResult(False, "step budget exhausted", self.max_steps,
                             sorted(files), history, "max_steps")
+
+    def _artifact_present(self) -> bool:
+        """True when the declared artifact exists on disk and is not empty."""
+        if not self.required_artifact:
+            return False
+        try:
+            p = self.tools.resolve(self.required_artifact)
+        except ValueError:
+            return False
+        try:
+            return p.is_file() and p.stat().st_size > 0
+        except OSError:
+            return False
 
     def _prompt(self, task: str, history: List[Dict[str, Any]],
                 *, pressure: bool = False) -> str:

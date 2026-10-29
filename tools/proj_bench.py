@@ -300,29 +300,43 @@ def stop_server() -> None:
         time.sleep(0.5)
 
 
-def start_server(timeout_s: int = 180) -> bool:
-    if _port_open():
+def _healthy() -> bool:
+    try:
+        with urllib.request.urlopen(f"{LLM_BASE}/health", timeout=3) as r:
+            return r.status == 200
+    except Exception:  # noqa: BLE001
         return False
+
+
+def start_server(timeout_s: int = 180) -> bool:
+    """Ensure the Ty worker is serving. A worker that is already up counts.
+
+    The old version returned False whenever the port answered, so a harness run
+    that followed a manual `scripts/start-northstar-llm.ps1` reported "could not
+    start the local 27B" while the model was loaded and healthy one port away.
+    """
+    if _port_open():
+        return _healthy()
     if not SERVER_BIN.is_file() or not SERVER_MODEL.is_file():
         return False
     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
+    # Same profile as scripts/start-northstar-llm.ps1: 64K context on q4_0 KV with
+    # MTP. The old 8192/q8_0 line measured a configuration that does not exist in
+    # production. 65536 is a measured ceiling on this card, not a preference.
     subprocess.Popen(
         [str(SERVER_BIN), "-m", str(SERVER_MODEL),
          "--alias", "northstaros-qwen3.8:27b", "-ngl", "99",
-         "-c", "8192", "-fa", "on", "-ctk", "q8_0", "-ctv", "q8_0",
-         "-np", "1", "--jinja", "--host", "127.0.0.1", "--port", "8080",
+         "-c", "65536", "-fa", "on", "-ctk", "q4_0", "-ctv", "q4_0",
+         "-np", "1", "--jinja",
+         "--spec-type", "draft-mtp", "--spec-draft-n-max", "4",
+         "--host", "127.0.0.1", "--port", "8080",
          "--temp", "0.2"],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         creationflags=flags)
     deadline = time.time() + timeout_s
     while time.time() < deadline:
-        if _port_open():
-            try:
-                with urllib.request.urlopen(f"{LLM_BASE}/health", timeout=3) as r:
-                    if r.status == 200:
-                        return True
-            except Exception:  # noqa: BLE001
-                pass
+        if _port_open() and _healthy():
+            return True
         time.sleep(2)
     return False
 

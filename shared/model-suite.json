@@ -1,6 +1,6 @@
 {
   "$schema": "model-suite-v1",
-  "description": "Northstar OS model suite — single source of truth for tiered model selection. Text tiers T1/T2/T3 (DeepSeek cloud lane + Qwen local fleet), vision tiers V1/V2/V3 (understanding + generation), and the video lane. model_router.py loads this; services route through shared/service-model-map.json. All prices are Sept-2026 list rates and are planning values — the ledger records actual usage.cost per call.",
+  "description": "Northstar OS model suite — single source of truth for tiered model selection. Text tiers T1/T2/T3 (DeepSeek cloud lane + the local Bojo interaction layer), the Ty orchestrator/coding worker (on demand, see local_engines), vision tiers V1/V2/V3 (understanding + generation), and the video lane. model_router.py loads this; services route through shared/service-model-map.json. All prices are Sept-2026 list rates and are planning values — the ledger records actual usage.cost per call. LOCAL TEXT TIERS RESOLVE TO BOJO: bojo is the resident, CPU-pinned Ollama model that actually serves T1-T3 interaction. Ty is not an Ollama model and is not a chat tier — it is a llama.cpp worker started on demand, so naming it as a `local` text model made every local tier resolve to an id Ollama does not have.",
   "providers": [
     "local",
     "cloud"
@@ -24,14 +24,16 @@
     "tiers": {
       "T1": {
         "label": "T1 Fast — routing, extraction, summaries, drafts",
-        "local": "northstaros-qwen3.8:27b",
+        "local": "bojo",
+        "local_engine": "bojo",
         "cloud": "deepseek/deepseek-v4-flash-0731:free",
         "cloud_provider": "openrouter",
         "cloud_pin": null
       },
       "T2": {
         "label": "T2 Core — main reasoning / copy / analysis",
-        "local": "northstaros-qwen3.8:27b",
+        "local": "bojo",
+        "local_engine": "bojo",
         "local_alternates": [],
         "cloud": "deepseek/deepseek-v4-flash-0731",
         "cloud_provider": "openrouter",
@@ -39,12 +41,49 @@
       },
       "T3": {
         "label": "T3 Seam — audit-grade, high-stakes escalation",
-        "local": "northstaros-qwen3.8:27b",
+        "local": "bojo",
+        "local_engine": "bojo",
         "local_alternates": [],
         "cloud": "deepseek/deepseek-v4.1-flash",
         "cloud_provider": "openrouter",
         "cloud_pin": "deepinfra/fp8"
       }
+    }
+  },
+  "local_engines": {
+    "description": "The two local engines, measured on this machine (RTX 5080 Laptop 16 GB, 15.4 GB system RAM). Nothing here is a target - each value was read off the running server or its launch line. docs/LOCAL_ENGINES.md is the prose copy.",
+    "ty": {
+      "role": "orchestrator + coding worker (Ty's Assistant)",
+      "model": "Qwen3.8-27B GSQ-RCO IQ3_XXS + MTP",
+      "backend": "llama.cpp (llama-server, CUDA)",
+      "endpoint": "http://127.0.0.1:8080/v1",
+      "alias": "northstaros-qwen3.8:27b",
+      "weights_gb": 10.4,
+      "gpu_layers": 99,
+      "context_tokens": 65536,
+      "kv_cache": "q4_0 (K and V)",
+      "flash_attention": true,
+      "vram_gb": 13,
+      "throughput_tok_s": 69,
+      "ms_per_token": 14.5,
+      "throughput_without_mtp_tok_s": 47,
+      "residency": "on demand - not a service, not an Ollama model",
+      "launcher": "scripts/start-northstar-llm.ps1",
+      "vision": "unavailable - the mmproj is withheld for VRAM; use the V tiers",
+      "limits": "65536 is a measured ceiling on this card, not a preference: 64576 crashed the CUDA flash-attention path. q8_0 KV caps around 32K here."
+    },
+    "bojo": {
+      "role": "user-facing brain - resident T1/T2/T3 interaction layer",
+      "model": "qwen3.5 1.9B Q8_0",
+      "backend": "Ollama",
+      "endpoint": "http://127.0.0.1:11434",
+      "context_tokens": 8192,
+      "gpu_layers": 0,
+      "vram_gb": 0,
+      "ram_gb": 2.7,
+      "capabilities": "vision, tools and thinking are present",
+      "definition": "scripts/bojo-cpu.Modelfile",
+      "residency": "kept warm; evicted by unload_brain before any ComfyUI render"
     }
   },
   "vision": {

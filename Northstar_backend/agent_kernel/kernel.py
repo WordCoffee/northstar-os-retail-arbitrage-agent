@@ -214,17 +214,40 @@ class Kernel:
                 budget, ask="fix or amend the plan for " + node.node_id)
 
     def _verify_node(self, plan: Plan, node: Node, executor_ok: bool) -> List[Evidence]:
+        """Evidence for one node. Acceptance outranks the lane's self-report.
+
+        The executor row is a self-report, so it must not be able to veto a
+        passing acceptance. A bounded loop can write every required artifact,
+        pass the tests, and still stop without `finish` — budget exhausted, or a
+        model that forgot the final call. Before this rule, that run reported
+        `needs_human` with the work already on disk and the tests already green
+        (defect p01). A node with no acceptance keeps the old behaviour: with
+        nothing else to prove the work, an executor that did not report success
+        still fails.
+        """
         ctx = VerifyContext(plan.session_id, node.node_id)
+        acceptance: List[Evidence] = []
+        for a in node.acceptance:
+            params = dict(a.params)
+            params["_executor_ok"] = executor_ok
+            acceptance.append(self.verifiers.verify(replace(a, params=params), ctx))
+
+        acceptance_passed = bool(acceptance) and all(e.result == "pass" for e in acceptance)
+        if executor_ok:
+            result, detail = "pass", "lane self-report; not independent proof"
+        elif acceptance_passed:
+            result, detail = ("pass",
+                              "acceptance satisfied after the loop stopped without "
+                              "finishing; the lane self-report is superseded")
+        else:
+            result, detail = "fail", "lane self-report; not independent proof"
+
         rows = [Evidence(
             evidence_id="ev_" + uuid.uuid4().hex[:12], session_id=plan.session_id,
             node_id=node.node_id, kind="executor",
             assertion="the lane executor reports it completed",
-            verifier="executor", result="pass" if executor_ok else "fail",
-            detail="lane self-report; not independent proof")]
-        for a in node.acceptance:
-            params = dict(a.params)
-            params["_executor_ok"] = executor_ok
-            rows.append(self.verifiers.verify(replace(a, params=params), ctx))
+            verifier="executor", result=result, detail=detail)]
+        rows.extend(acceptance)
         node.evidence_ids = [e.evidence_id for e in rows]
         self.evidence.extend(rows)
         for e in rows:

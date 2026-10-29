@@ -22,13 +22,42 @@ def _clean_env(monkeypatch):
 # --- local resolution ---
 
 def test_local_defaults_by_tier():
-    assert mr.resolve("local", "T1").model == "northstaros-qwen3.8:27b"
-    assert mr.resolve("local", "T2").model == "northstaros-qwen3.8:27b"
-    assert mr.resolve("local", "T3").model == "northstaros-qwen3.8:27b"
+    # Local TEXT tiers resolve to Bojo, the resident CPU-pinned Ollama model that
+    # actually serves T1-T3. The Ty 27B orchestrator is a llama.cpp worker on
+    # 127.0.0.1:8080, not an Ollama model, so it is not a chat tier.
+    assert mr.resolve("local", "T1").model == "bojo"
+    assert mr.resolve("local", "T2").model == "bojo"
+    assert mr.resolve("local", "T3").model == "bojo"
+    # The suite and the router must not drift apart again.
+    for tier in ("T1", "T2", "T3"):
+        assert mr.SUITE["text"]["tiers"][tier]["local"] == "bojo"
+        assert mr.SUITE["text"]["tiers"][tier]["local_engine"] == "bojo"
     # Vision tiers use a dedicated VL model: the 27B text model ships no
     # projector (ollama show capabilities: tools/thinking/completion only).
     assert mr.resolve("local", "V1").model == "qwen2.5vl:7b"
     assert mr.resolve("local", "T2").available is True
+
+
+def test_local_text_tier_reports_a_missing_model(tmp_path):
+    """A configured-but-absent local model must not advertise itself as ready."""
+    r = mr.resolve("local", "T2", installed=["qwen2.5vl:7b"])
+    assert r.available is False and r.reason == "local_model_not_installed"
+    ok = mr.resolve("local", "T2", installed=["bojo", "qwen2.5vl:7b"])
+    assert ok.available is True and ok.reason == "ok"
+
+
+def test_no_local_alternate_is_advertised():
+    """The old qwen3:14b fallback was never on disk."""
+    assert mr.LOCAL_ALTERNATES == {}
+    assert mr.catalog(["bojo"])["local"]["alternates"] == {}
+
+
+def test_local_engines_are_documented_from_the_measured_profile():
+    engines = mr.catalog(["bojo"])["local_engines"]
+    ty, bojo = engines["ty"], engines["bojo"]
+    assert ty["context_tokens"] == 65536 and ty["kv_cache"].startswith("q4_0")
+    assert ty["residency"].startswith("on demand")
+    assert bojo["gpu_layers"] == 0 and bojo["context_tokens"] == 8192
 
 
 def test_local_model_override():
@@ -100,11 +129,12 @@ def test_credit_weights_are_ordered():
 
 
 def test_catalog_shape():
-    c = mr.catalog(["northstaros-qwen3.8:27b"])
+    c = mr.catalog(["bojo", "qwen2.5vl:7b"])
     assert c["providers"] == ["local", "cloud"]
     assert "T2" in c["tiers"] and "V3" in c["tiers"]
-    assert c["local"]["defaults"]["T2"] == "northstaros-qwen3.8:27b"
-    assert c["local"]["installed"] == ["northstaros-qwen3.8:27b"]
+    assert c["local"]["defaults"]["T2"] == "bojo"
+    assert c["local"]["installed"] == ["bojo", "qwen2.5vl:7b"]
+    assert c["text_local_status"] == {"T1": "ok", "T2": "ok", "T3": "ok"}
     assert c["cloud"]["live_armed"] is False
 
 
@@ -142,7 +172,7 @@ def test_resolve_for_service_t1_services():
 
 def test_resolve_for_service_operator_local():
     d = mr.resolve_for_service("autothink", provider="local")
-    assert d["resolution"].model == "northstaros-qwen3.8:27b"
+    assert d["resolution"].model == "bojo"
     assert d["escalation_tier"] == "T3"
 
 

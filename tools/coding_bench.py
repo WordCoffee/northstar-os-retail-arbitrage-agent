@@ -66,10 +66,37 @@ def task_for(brief: dict) -> str:
 
 
 def acceptance_for(project: Path, brief: dict):
+    """The loop's acceptance must be the same bar the run is scored against.
+
+    Before this, acceptance was only "the artifact exists and parses", so a
+    model could write a valid `fix.patch` that was never applied and the agent
+    would stop, satisfied, with the bug still in the tree. The outcome checks
+    (`calc_fixed`, `pytest`, `py_compile`) were only applied afterwards to
+    compute `ok` — a bar the loop could not see and therefore could not repair
+    against. Defect p01.
+    """
+    bid = brief["id"]
+
     def check():
         # project is <folder>/<id>; validate_brief expects <folder>/<id>/<artifact>
         r = cv.validate_brief(project.parent, brief)
-        return r["valid"], r["detail"]
+        ok, detail = r["valid"], r["detail"]
+        if bid == "p01":
+            calc = project / "calc.py"
+            fixed = calc.is_file() and "a + b" in calc.read_text(
+                encoding="utf-8", errors="replace")
+            test = subprocess.run([sys.executable, "-m", "pytest", "-q"],
+                                  cwd=project, capture_output=True, text=True,
+                                  timeout=120)
+            ok = ok and fixed and test.returncode == 0
+            detail += f"; calc_fixed={fixed}; pytest={test.returncode}"
+        elif bid == "p05":
+            comp = subprocess.run([sys.executable, "-m", "py_compile", "broken.py"],
+                                  cwd=project, capture_output=True, text=True,
+                                  timeout=60)
+            ok = ok and comp.returncode == 0
+            detail += f"; py_compile={comp.returncode}"
+        return ok, detail
     return check
 
 

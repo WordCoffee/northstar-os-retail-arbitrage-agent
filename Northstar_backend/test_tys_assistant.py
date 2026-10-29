@@ -920,3 +920,66 @@ def test_api_route_namespace_is_not_the_chat_lane():
 
     assert tys_api.router.prefix == "/api/admin/tys"
     assert "/api/chat" not in tys_api.router.prefix
+
+
+# ── the one real task-execution contract ────────────────────────────────────
+
+def _run_route():
+    import tys_api
+
+    for route in tys_api.router.routes:
+        if route.path.endswith("/tasks/{task_id}/run") and "POST" in route.methods:
+            return route
+    raise AssertionError("the synchronous run route is missing")
+
+
+def test_run_route_is_synchronous_and_has_no_speculative_parameters():
+    """200 with the completed work order. No engine param, no 202, no stream."""
+    route = _run_route()
+    names = {p.name for p in route.dependant.query_params}
+    assert names == {"max_steps"}, names
+    assert "engine" not in names
+    codes = set(getattr(route, "responses", {}) or {}) | {getattr(route, "status_code", 200)}
+    assert 202 not in codes
+    assert list(getattr(route, "responses", {}) or {}) == []
+
+
+def test_run_route_returns_kernel_evidence_on_the_same_response():
+    import tys_api
+
+    payload = {"status": "complete", "plan": {"plan_id": "p1"}, "evidence": 4}
+
+    class Store:
+        def events(self, task_id):
+            assert task_id == "t1"
+            return [{"kind": "run_started", "payload": {}},
+                    {"kind": "kernel_result", "payload": payload}]
+
+    class Assistant:
+        store = Store()
+
+    assert tys_api._kernel_evidence(Assistant(), "t1") == payload
+
+
+def test_run_route_omits_kernel_key_when_the_order_did_not_use_it():
+    import tys_api
+
+    class Assistant:
+        class store:  # noqa: N801 - a namespace, not an instance
+            @staticmethod
+            def events(task_id):
+                return [{"kind": "run_started", "payload": {}}]
+
+    assert tys_api._kernel_evidence(Assistant(), "t1") is None
+
+
+def test_kernel_evidence_never_breaks_a_run():
+    import tys_api
+
+    class Assistant:
+        class store:  # noqa: N801
+            @staticmethod
+            def events(task_id):
+                raise RuntimeError("event log unavailable")
+
+    assert tys_api._kernel_evidence(Assistant(), "t1") is None

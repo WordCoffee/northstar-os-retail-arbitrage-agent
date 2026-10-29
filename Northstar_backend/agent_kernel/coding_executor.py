@@ -32,6 +32,10 @@ class CodingAgentExecutor:
         # The acceptance is the authority, not the loop's stop reason. A run can
         # write every required artifact, then hit its step budget before `finish`;
         # re-checking acceptance prevents a false `needs_human`.
+        if result.acceptance_recovered:
+            data["acceptance_recovered"] = True
+            return {"ok": True, "detail": result.summary,
+                    "files": result.files, "data": data}
         if not result.ok and self.acceptance is not None:
             ok, detail = self.acceptance()
             if ok:
