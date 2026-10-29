@@ -433,6 +433,7 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                 return round0 if round_idx == 0 else iter(())
 
         rounds = 0
+        label_auto_ran = False   # U1: at most one automatic print pass per turn
         while True:
             raw_calls: List[Dict[str, Any]] = []
             saw_done = False
@@ -570,6 +571,71 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "started_at": started_at,
                     "ended_at": _now(),
                 })
+                # ── U1: a label brief must reach the label tool ─────────────
+                # The render supplies the photograph; apply_label supplies the
+                # print. Chaining is only automatic when every input is already
+                # in the turn — otherwise the operator is asked once, never given
+                # a form and never handed guessed copy.
+                if (call["name"] == "generate_image" and result.get("ok")
+                        and label_brief(user_content)
+                        and not label_auto_ran
+                        and not any(r["name"] == "apply_label" for r in tool_records)):
+                    plate_id = next((a.get("id") for a in (result.get("assets") or [])
+                                     if isinstance(a, dict) and a.get("id")), None)
+                    if plate_id:
+                        title = explicit_label_title(user_content, options)
+                        if not title:
+                            yield sse_frame("notice", {
+                                "turn_id": turn_id,
+                                "code": "label_needs_title",
+                                "detail": ("The plate is ready. Name the product and the print "
+                                           "pass runs on it."),
+                            })
+                        else:
+                            label_auto_ran = True
+                            auto_call_id = uuid.uuid4().hex[:12]
+                            auto_args = {"plate_asset_id": plate_id, "title": title}
+                            yield sse_frame("tool-start", {
+                                "turn_id": turn_id, "call_id": auto_call_id,
+                                "name": "apply_label",
+                                "args": json.dumps(auto_args),
+                                "auto": True,
+                            })
+                            try:
+                                auto_result = tool_gateway.run_tool_gated(
+                                    db.chat, account_id, "apply_label", auto_args, worker_ctx)
+                            except Exception as exc:  # noqa: BLE001 - report, never invent
+                                auto_result = {"ok": False, "summary": "label pass crashed",
+                                               "error": str(exc)[:300], "assets": []}
+                            yield sse_frame("tool-end", {
+                                "turn_id": turn_id, "call_id": auto_call_id,
+                                "name": "apply_label",
+                                "ok": bool(auto_result.get("ok")),
+                                "summary": auto_result.get("summary"),
+                                "error": auto_result.get("error"),
+                                "assets": auto_result.get("assets") or [],
+                                "auto": True,
+                            })
+                            for a in auto_result.get("assets") or []:
+                                if not isinstance(a, dict):
+                                    continue
+                                yield sse_frame("asset", {"turn_id": turn_id,
+                                                          "call_id": auto_call_id, **a})
+                                if a.get("id"):
+                                    attachment_records.append({
+                                        "asset_id": a["id"],
+                                        "kind": a.get("kind"),
+                                        "url": a.get("url"),
+                                        "provenance_json": {"tool": "apply_label", "auto": True},
+                                    })
+                            tool_records.append({
+                                "name": "apply_label", "args": auto_args,
+                                "result": auto_result,
+                                "status": "done" if auto_result.get("ok") else "error",
+                                "step_index": len(tool_records),
+                                "started_at": _now(), "ended_at": _now(), "auto": True,
+                            })
+
                 # AG-UI: a tool may declare an interactive card (title, rows,
                 # action). It is appended as a card part so the UI renders an
                 # actionable component, not plain text.
@@ -872,6 +938,39 @@ def _attachment_line(atts: List[Dict[str, Any]]) -> str:
         parts.append(" — ".join([bits[0], ", ".join(bits[1:])]) if len(bits) > 1
                      else bits[0])
     return "; ".join(parts)
+
+
+# A label brief needs the structured print pass, not just a render. Measured
+# 2026-10-28: 21 turns mentioned a label, 3 called apply_label (0.14).
+_LABEL_BRIEF_RE = re.compile(
+    r"\b(label|labels|labelling|labeling|pouch|pouches|bag|bags|sachet|dieline|"
+    r"wraparound|printed on)\b", re.I)
+# Only a double-quoted phrase counts as an explicit title. An apostrophe does
+# not, or "Lion's Mane" would be read as a quoted string.
+_QUOTED_TITLE_RE = re.compile(r"[\"“”]([^\"“”]{2,60})[\"“”]")
+
+
+def label_brief(text: str) -> bool:
+    """True when the turn asks for print on a pack, not just a picture of one."""
+    return bool(_LABEL_BRIEF_RE.search(text or ""))
+
+
+def explicit_label_title(text: str, options: Optional[Dict[str, Any]] = None) -> Optional[str]:
+    """The product name, only when the turn actually states it.
+
+    Order: an explicit option, then a double-quoted phrase in the brief. Never
+    inferred from the picture or from a noun phrase — wrong copy on a package is
+    worse than asking once.
+    """
+    o = options or {}
+    for key in ("product_name", "title"):
+        value = o.get(key)
+        if isinstance(value, str) and 1 <= len(value.strip()) <= 60:
+            return value.strip()
+    match = _QUOTED_TITLE_RE.search(text or "")
+    if match:
+        return match.group(1).strip()[:60] or None
+    return None
 
 
 def turn_directive(options: Optional[Dict[str, Any]],
