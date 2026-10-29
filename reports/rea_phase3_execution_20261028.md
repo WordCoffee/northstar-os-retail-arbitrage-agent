@@ -620,7 +620,7 @@ refused.
 | pack output | placements + copy only | **+ variants / keepIn** (or UNKNOWN) |
 | harness | - | `social_variants_ok` = 1 (gated) |
 
-**Commits:** `a6d1f7c9` (module + pack + test), `1dbd8e3f` (harness gate).
+**Commits:** `09a2a8df` (module + pack + test), `6bcf31c4` (harness gate).
 **Tests:** 14 node checks, `npm run build` 0 errors.
 **UNVERIFIED:** the matrix is not yet used by the Social workspace UI (the pack
 consumes it; the canvas does not); no real master asset was run through it - the
