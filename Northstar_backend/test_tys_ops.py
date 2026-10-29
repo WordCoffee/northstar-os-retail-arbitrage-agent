@@ -544,6 +544,13 @@ def test_repair_json_handles_trailing_commas_only():
     assert selfheal.repair_json("{not json") is None
 
 
+def test_repair_json_does_not_rewrite_smart_quotes_inside_strings():
+    payload = '{"note": "the seller\u2019s \u201chero\u201d shot"}'
+    repaired = selfheal.repair_json(payload)
+    assert repaired is not None
+    assert json.loads(repaired) == {"note": "the seller\u2019s \u201chero\u201d shot"}
+
+
 def test_atomic_write_rolls_back_on_failed_verification(tmp_path):
     target = tmp_path / "state.json"
     target.write_text('{"ok": true}', encoding="utf-8")

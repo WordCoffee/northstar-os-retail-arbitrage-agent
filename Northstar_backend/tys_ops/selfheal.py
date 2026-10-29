@@ -281,10 +281,14 @@ def atomic_write(path: str, content: str, *,
 
 
 def repair_json(text: str) -> Optional[str]:
-    """Conservative repair: trailing commas and smart quotes only."""
-    candidate = (text.replace("\u201c", '"').replace("\u201d", '"')
-                 .replace("\u2018", "'").replace("\u2019", "'"))
-    candidate = candidate.replace("\ufeff", "")
+    """Conservative repair: a BOM and trailing commas only.
+
+    Smart quotes are **not** rewritten: ``json.loads`` accepts them as ordinary
+    characters inside a string, and turning a curly quote into ``"`` would
+    terminate that string and corrupt the document. A repair that can invent
+    new syntax is not a repair.
+    """
+    candidate = (text or "").replace("\ufeff", "")
     candidate = _strip_trailing_commas(candidate)
     try:
         json.loads(candidate)
