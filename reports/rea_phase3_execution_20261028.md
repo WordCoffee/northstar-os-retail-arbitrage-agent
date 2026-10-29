@@ -372,3 +372,117 @@ stills, it does not generate footage.
 - L2-L5, S3-S6, B2-B7, U2/U3/U5-U8, V2-V6: second pass.
 - 00_STATE.json merge still refused by permission; block parked in
   reports/rea_program_state_pending_00_STATE.json.
+
+---
+
+# WAVE 2 (2026-10-29) - L3/L4, B3/B4/B5
+
+## L3 - feather derived from the measured residual
+
+**Changed** (`mockup_compositor.py`, `pouch_label.py`): `feather_sigma(residual_px,
+lo=1.0, hi=12.0, per_px=2.5)` maps the measured edge residual to an edge ramp;
+`warp_panel(edge_feather=...)` applies it as an **inward** ramp from the panel
+border. `compose()` passes `feather_sigma(geom_residual_px)` on every call.
+
+Why inward: the halo probe measured that outward paint is the entire bleed
+(1 px overshoot = 57.013 lum = 28.5 % of panel contrast; feathering alone = 0.000).
+An inward ramp cannot paint outside the true edge, so it softens the print without
+manufacturing the artefact the constant was hiding.
+
+| Metric | Before | After |
+|---|---|---|
+| feather source | constant (26.0 in `erase_rect`, none on the panel edge) | **derived**: `residual * 2.5`, clamped 1.0-12.0 px |
+| Mogra plate (residual 0.238 px) | no edge ramp | **1.0 px** ramp (clean fit needs none) |
+| bleed outside the true edge (1 px overshoot, probe) | 57.013 lum | 57.013 lum (unchanged: geometry, not feather) |
+| dark-fringe regression guard | none | new test asserts no pixel between background and panel is darker than background |
+
+**Commit:** `9fe0b04c` - **Tests:** `test_plate_geometry.py::test_feather_follows_the_residual_and_clamps`,
+`::test_edge_feather_softens_the_edge_without_a_grey_fringe`; 34 passed across
+plate-geometry + compositor + placement + realism.
+**UNVERIFIED:** the ramp on a *new* operator plate through the chat tool (only
+`compose()` was exercised directly).
+
+## L4 - per-plate fit cache
+
+**Changed** (`pouch_label.py`): `plate_key()` (sha256 of the plate bytes),
+`load_plate_geometry()`, `save_plate_geometry()`, and `compose(reuse_geometry=True)`.
+A fit is stored only when it passes the existing residual guard, and only keyed to
+that exact plate, so a new render can never inherit an old fit.
+
+| Metric | Before | After |
+|---|---|---|
+| `measure_face` calls for two composes of the same plate | 2 | **1** |
+| Mogra plate, second compose | re-measured | `geometry_reused: true`, identical quad, same feather |
+| a different plate | n/a | cache MISS (content hash differs) |
+| a bad fit (residual > 1.5 px) | n/a | **not cached** |
+
+**Commit:** `9fe0b04c` - **Tests:** 4 in `test_plate_geometry.py` (round trip, bad
+fit refused, cross-plate isolation, reuse, `reuse_geometry=False`).
+**UNVERIFIED:** cache growth/eviction over many plates (no size cap yet - it is a
+small JSON of quads, but it is unbounded by design for now).
+
+## B3 - the RAM-heavy lanes refuse an engine started without --cache-none
+
+**Changed** (`studio_generation.py`, `scripts/launch_alpha.ps1`,
+`tools/start_comfyui.ps1`): both launchers write
+`Northstar_backend/data/comfyui_launch.json` with `cache_none: true`;
+`comfyui_cache_none()` returns True/False/None; `require_cache_none(lane)` raises
+`comfyui_cache_none_required` **only** when the marker positively says false.
+`generate_edit` and `generate_video` call it; `generate_image` does not (it is the
+lane that fits).
+
+| Metric | Before | After |
+|---|---|---|
+| edit/video on an engine started without the flag | runs, then dies at ~20 GB RAM with no traceback | **refuses with the reason and the fix** |
+| engine started by a launcher | no record | **marker written**, with argv and timestamp |
+| marker absent | indistinguishable from "flag missing" | **None = unknown**, never blocks |
+
+**Commit:** `8d571d9d` + `f07428f6` - **Tests:** 3 in `test_generation_guards.py`
+(true allows / false refuses / absent-and-broken is unknown, plus the two lanes
+actually call the guard). Both launchers parse clean under the PowerShell parser.
+**UNVERIFIED:** a real edit render against a live engine (no GPU job was fired);
+the marker is only as good as the launcher - a hand-started `python main.py` still
+produces "unknown", by design.
+
+## B4 - the turn says why chat will be slow after a render
+
+**Changed** (`studio_generation.py`, `chat_router.py`): `unload_brain()` records
+the model ids it evicted and when; `generate_image()` returns `brain_evicted`;
+the turn emits `notice {code: brain_evicted_for_render}` naming them.
+
+| Metric | Before | After |
+|---|---|---|
+| evictions recorded | none | **ids + UTC timestamp** |
+| operator-visible cause for the post-render stall | none | one notice naming the models |
+| notice when nothing was resident | n/a | **not emitted** (no false alarm) |
+
+**Commit:** `8d571d9d` - **Tests:** 2 in `test_generation_guards.py` (records the
+evicted ids; records nothing when nothing was resident).
+**UNVERIFIED:** not observed on a live turn (needs a resident model plus a render).
+
+## B5 - the render lock's wait is a number now
+
+**Changed** (`studio_generation.py`, `ops_status.py`): `acquire()` times every
+attempt; `render_lock_stats()` exposes `attempts`, `timeouts`, `total_wait_s`,
+`last_wait_s`, `max_wait_s`; `ops_status.render_lock_status()` publishes it.
+
+| Metric | Before | After |
+|---|---|---|
+| concurrent render wait | invisible | **measured** (attempts / last / max / total) |
+| lock timeouts | indistinguishable from slow renders | **counted** |
+| status surface | none | `ops_status.render_lock_status()` |
+
+**Commit:** `8d571d9d`. **Tests:** `test_render_lock_counts_attempts_and_waits`
+(real second lock, real 0.4 s timeout, asserts the wait is recorded).
+**UNVERIFIED:** the counters are process-local and reset on restart; they are a
+live signal, not history.
+
+## Harness after wave 2
+
+    python tools/rea_regress.py --quick
+    PASS: every measured metric is at or better than baseline.
+
+Full run (with probes) was green immediately before this wave; no metric in the
+baseline measures feather radius or cache hits yet, so those two rows above are
+new evidence rather than regression gates. Adding them to `rea_regress.py` is the
+next small step.
