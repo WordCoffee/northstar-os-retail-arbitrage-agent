@@ -15,7 +15,7 @@ from .model import Acceptance, Budget, Node, Plan, PermissionRule
 from .policy import Policy
 from .session import CheckpointStore, Journal
 
-VALID_LANES = ("inspect", "coding", "browser", "creative")
+VALID_LANES = ("inspect", "coding", "graphics", "browser", "creative")
 
 
 def make_workspace_acceptance(workspace: str, spec: Optional[Dict[str, Any]] = None):

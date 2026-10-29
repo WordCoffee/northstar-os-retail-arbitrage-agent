@@ -35,5 +35,7 @@ __all__ = [
     "budgets",
     "selfheal",
     "ui",
+    "routing",
+    "graphics",
     "stress",
 ]

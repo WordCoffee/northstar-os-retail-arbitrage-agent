@@ -1,0 +1,23 @@
+{
+  "tys_routing_20261029": {
+    "label": "Tys Assistant routing: visual work intercepted to FLUX 3; coding stays on the coding model",
+    "policy": "Northstar_backend/tys_ops/routing.py",
+    "graphics_lane": "Northstar_backend/tys_ops/graphics.py",
+    "lanes": ["inspect", "coding", "graphics", "browser", "creative"],
+    "intercepts": [
+      "visual graphics",
+      "UI styling",
+      "image generation",
+      "rendering"
+    ],
+    "never_for_visual": ["coding", "creative"],
+    "graphics_engine": "FLUX 3 Image Klein via a direct endpoint (FLUX3_SERVER_URL); ComfyUI is not launched",
+    "gpu_discipline": "availability check first, then suspend the MoE coding worker and unload Ollama, then the shared GPU lock",
+    "audit": "routing_intercepted event on submission and on planner output rewrite",
+    "comfy_note": "creative lane remains for video/animation only; image work is refused there with visual_requires_graphics_lane",
+    "tests": "Northstar_backend/test_tys_routing.py",
+    "test_count": 175,
+    "blocker": "FLUX 3 weights are not installed on this machine (STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, STUDIO_FLUX3_VAE unset) and no standalone FLUX 3 endpoint answers at FLUX3_SERVER_URL; visual steps block with flux3_weights_not_installed until the operator installs the weights or points the endpoint at a running FLUX 3 server.",
+    "quality_claim": false
+  }
+}

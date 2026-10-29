@@ -15,7 +15,7 @@ PLAN_STATES = ("draft", "proposed", "approved", "active",
                "superseded", "complete", "abandoned")
 NODE_STATES = ("pending", "ready", "running", "verifying", "done",
                "failed", "skipped", "blocked")
-NODE_KINDS = ("inspect", "coding", "browser", "creative", "human")
+NODE_KINDS = ("inspect", "coding", "graphics", "browser", "creative", "human")
 EVIDENCE_RESULTS = ("pass", "fail", "unknown")
 EFFECTS = ("deny", "ask", "allow")
 

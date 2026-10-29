@@ -24,7 +24,8 @@ from .verify import VerifyContext, VerifierRegistry
 
 Executor = Callable[[Node, Plan], Dict[str, Any]]
 
-LANE_TOOL = {"inspect": "read", "coding": "edit", "browser": "browser_click",
+LANE_TOOL = {"inspect": "read", "coding": "edit", "graphics": "graphics_generate",
+             "browser": "browser_click",
              "creative": "creative_generate", "human": "ask"}
 
 

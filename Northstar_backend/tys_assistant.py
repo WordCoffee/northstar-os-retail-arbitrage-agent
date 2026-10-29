@@ -14,8 +14,13 @@ the `"assistant"` role — that is a wire-format name, not a persona).
 |-----------|--------------------------------------------|---------------------------|
 | `inspect` | this process (bounded file reads)          | deterministic, no model   |
 | `coding`  | the Qwen3.8-27B IQ3_XXS llama.cpp worker   | GPU-only, started on demand |
+| `graphics`| FLUX 3 Image Klein, direct (no ComfyUI)    | visual work only; owns the GPU for the render |
 | `browser` | Chrome Connect controller (policy + gate)  | never a raw browser handle |
-| `creative`| existing studio/ComfyUI services           | serialized on one GPU     |
+| `creative`| existing studio/ComfyUI services           | motion media only         |
+
+Visual requests — graphics, UI styling, image generation, rendering — are
+intercepted by `tys_ops.routing` and routed to `graphics` before anything else
+sees them. They never reach the coding model and never launch ComfyUI.
 
 Orchestration itself (deciding the plan) uses the **small persistent local CPU
 model** — Bojo via Ollama, which is pinned to CPU by its own model definition
@@ -58,7 +63,7 @@ AGENT_SURFACE = "admin"          # never "customer"
 #: future edit cannot "helpfully" rename it to `tys` and break every client.
 CHAT_PROTOCOL_ROLE_UNCHANGED = "assistant"
 
-LANES = ("inspect", "coding", "browser", "creative")
+LANES = ("inspect", "coding", "graphics", "browser", "creative")
 
 #: Defaults chosen so a single `run()` is always short enough to observe and
 #: always leaves a resumable checkpoint behind.
@@ -404,6 +409,20 @@ class Adapter:
         raise NotImplementedError
 
 
+def _route_decision(step: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The routing verdict for a step, or ``None`` when tys_ops is unavailable."""
+    try:
+        from tys_ops import routing  # noqa: WPS433
+
+        text = str(step.get("objective") or "")
+        prompt = (step.get("params") or {}).get("prompt")
+        if isinstance(prompt, str):
+            text = f"{text} {prompt}"
+        return routing.classify(text)
+    except Exception:  # noqa: BLE001 - routing must never break a lane
+        return None
+
+
 class InspectAdapter(Adapter):
     """Bounded, deterministic file inspection. No model, no network, no shell.
 
@@ -592,6 +611,13 @@ class CodingWorkerAdapter(Adapter):
         return "\n".join(parts)
 
     def run_step(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
+        routed = _route_decision(step)
+        if routed and routed.get("lane") == "graphics":
+            return StepResult(
+                False, "visual work is routed to the graphics lane",
+                detail="visual_requires_graphics_lane",
+                blocked=True, retriable=True,
+                evidence={"routing": routed})
         params = step.get("params") or {}
         context = list(params.get("_context_files") or [])
         prompt = self._prompt(step, context)
@@ -913,6 +939,12 @@ class CreativeWorkerAdapter(Adapter):
             return {"adapter": self.name, "available": False, "detail": str(e)}
 
     def run_step(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
+        routed = _route_decision(step)
+        if routed and routed.get("lane") == "graphics":
+            return StepResult(
+                False, "image work is routed to the graphics lane, not ComfyUI",
+                detail="visual_requires_graphics_lane", blocked=True,
+                evidence={"routing": routed})
         params = step.get("params") or {}
         prompt = str(params.get("prompt") or step.get("objective") or "").strip()
         if not prompt:
@@ -942,6 +974,106 @@ class CreativeWorkerAdapter(Adapter):
                 assets.extend(str(a) for a in out[key])
         return StepResult(True, "creative render completed", evidence={"engine": "comfyui"},
                           artifacts=assets, detail=json.dumps(out, default=str)[:800])
+
+
+class GraphicsAdapter(Adapter):
+    """Visual work goes to FLUX 3 directly. Never ComfyUI, never coding.
+
+    Before a render the lane suspends the competing engines (the MoE coding
+    worker and anything Ollama has resident) and then takes the shared GPU lock.
+    It never starts ComfyUI; a missing FLUX 3 endpoint is a blocked step with a
+    stable code, not a silent fallback to a different model.
+    """
+
+    name = "graphics"
+
+    def __init__(self, generator: Optional[Callable[..., Dict[str, Any]]] = None):
+        # `generator` is the test injection point: (prompt, **params) -> dict.
+        self._generator = generator
+
+    def available(self) -> Dict[str, Any]:
+        try:
+            from tys_ops import graphics  # noqa: WPS433
+
+            return graphics.status()
+        except Exception as exc:  # noqa: BLE001 - availability probe
+            return {"adapter": self.name, "available": False,
+                    "engine": "flux3", "detail": str(exc)}
+
+    def run_step(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
+        params = step.get("params") or {}
+        prompt = str(params.get("prompt") or step.get("objective") or "").strip()
+        if not prompt:
+            return StepResult(False, "graphics step has no prompt",
+                              detail="params.prompt required", blocked=True)
+
+        if self._generator is not None:
+            try:
+                out = self._generator(prompt=prompt, width=params.get("width"),
+                                      height=params.get("height"),
+                                      steps=params.get("steps"),
+                                      seed=params.get("seed"))
+            except Exception as exc:  # noqa: BLE001
+                return StepResult(False, "flux 3 render failed", detail=str(exc),
+                                  retriable=True)
+            return StepResult(
+                True, "flux 3 render completed (injected)",
+                evidence={"engine": "flux3", "injected": True,
+                          "suspension": {"skipped": "injected generator"}},
+                artifacts=[str(a) for a in (out.get("artifacts") or [])],
+                detail=str(out)[:600])
+
+        from tys_ops import graphics  # noqa: WPS433
+
+        # Availability first: never stop the coding worker to discover that the
+        # graphics endpoint was never up.
+        ready = graphics.status()
+        if not ready.get("available"):
+            return StepResult(False, "flux 3 is not available",
+                              detail=str(ready.get("detail") or "flux3_unavailable"),
+                              blocked=True, retriable=True,
+                              evidence={"engine": "flux3", "status": ready})
+
+        suspension = graphics.suspend_competing_engines()
+        lock = graphics.gpu_lock()
+        acquired = False
+        if lock is not None:
+            acquired = bool(lock.acquire(timeout=float(params.get("lock_timeout_s") or 120)))
+            if not acquired:
+                return StepResult(False, "gpu busy — another heavy job owns the card",
+                                  detail="gpu_lock_timeout", blocked=True,
+                                  retriable=True,
+                                  evidence={"suspension": suspension,
+                                            "lock": "render_session"})
+        try:
+            out = graphics.generate(
+                prompt,
+                width=int(params.get("width") or 1024),
+                height=int(params.get("height") or 1024),
+                steps=int(params.get("steps") or 28),
+                seed=params.get("seed"),
+            )
+        except graphics.GraphicsError as exc:
+            return StepResult(
+                False, "flux 3 render not possible",
+                detail=f"{exc.code}: {exc.detail}",
+                blocked=exc.code in ("flux3_unavailable", "prompt_required"),
+                retriable=exc.code not in ("prompt_required",),
+                evidence={"engine": "flux3", "error": exc.as_dict(),
+                          "suspension": suspension})
+        finally:
+            if acquired:
+                lock.release()
+
+        return StepResult(
+            True, "flux 3 render completed",
+            evidence={"engine": "flux3", "model": out.get("model"),
+                      "width": out.get("width"), "height": out.get("height"),
+                      "steps": out.get("steps"), "seed": out.get("seed"),
+                      "suspension": suspension},
+            artifacts=list(out.get("artifacts") or []),
+            detail=json.dumps({k: v for k, v in out.items() if k != "artifacts"},
+                              default=str)[:800])
 
 
 def _gpu_lock():
@@ -1189,6 +1321,7 @@ class TysAssistant:
         self.adapters: Dict[str, Adapter] = adapters or {
             "inspect": InspectAdapter(),
             "coding": CodingWorkerAdapter(),
+            "graphics": GraphicsAdapter(),
             "browser": ChromeConnectAdapter(),
             "creative": CreativeWorkerAdapter(),
         }
@@ -1218,9 +1351,15 @@ class TysAssistant:
             "routing": {
                 "inspect": "this process (bounded file reads)",
                 "coding": "Qwen3.8-27B IQ3_XXS llama.cpp worker (GPU-only, on demand)",
+                "graphics": "FLUX 3 Image Klein, direct endpoint (no ComfyUI)",
                 "browser": "Chrome Connect controller (policy + gate enforced by the controller)",
-                "creative": "existing studio/ComfyUI services",
+                "creative": "existing studio/ComfyUI services (motion media only)",
                 "orchestrator": f"local CPU model {self.orchestrator.MODEL}",
+            },
+            "interception": {
+                "visual": "graphics",
+                "never_for_visual": ["coding", "creative"],
+                "policy": "tys_ops.routing",
             },
             "gates": ["owner approval before spend", "owner approval before Amazon",
                       "Chrome Connect policy + profile lease"],
@@ -1231,8 +1370,15 @@ class TysAssistant:
         by_status: Dict[str, int] = {}
         for t in tasks:
             by_status[t["status"]] = by_status.get(t["status"], 0) + 1
+        try:
+            from tys_ops import routing  # noqa: WPS433
+
+            routing_policy = routing.policy_summary()
+        except Exception:  # noqa: BLE001 - a policy summary is not worth a 500
+            routing_policy = {}
         return {
             "identity": self.identity(),
+            "routing_policy": routing_policy,
             "queue": {
                 "total": len(tasks),
                 "by_status": by_status,
@@ -1274,6 +1420,16 @@ class TysAssistant:
         gate = _touches_owner_gate(objective)
         if gate:
             raise TysError(gate, "this objective needs the owner's explicit approval first")
+
+        # Visual work is intercepted here, before any lane sees it: the order is
+        # rewritten onto the graphics lane and the reason is recorded.
+        interceptions: List[Dict[str, Any]] = []
+        try:
+            from tys_ops import routing  # noqa: WPS433
+
+            work_order, interceptions = routing.route_work_order(work_order)
+        except Exception:  # noqa: BLE001 - routing must never block a submission
+            interceptions = []
 
         scope_in = work_order.get("scope") or {}
         lanes = [l for l in (scope_in.get("lanes") or list(LANES)) if l in LANES]
@@ -1346,6 +1502,12 @@ class TysAssistant:
             "limits": limits, "steps": len(steps), "planning": task["_planning"],
             "owner": task["owner"],
         })
+        if interceptions:
+            task["routing"] = interceptions
+            self.store.event(task["id"], "routing_intercepted", {
+                "policy": "visual->graphics",
+                "interceptions": interceptions,
+            })
         return task
 
     # -- execution ---------------------------------------------------------
@@ -1380,6 +1542,7 @@ class TysAssistant:
                  "limits": task.get("limits") or {}}
         grants = [grant("edit", minutes=240, why="approved work order"),
                   grant("browser_click", minutes=240, why="approved work order"),
+                  grant("graphics_generate", minutes=240, why="approved work order"),
                   grant("creative_generate", minutes=240, why="approved work order")]
         coding_factory = None
         if coding_agent:
@@ -1455,6 +1618,25 @@ class TysAssistant:
                 self.store.event(task_id, "blocked", task["blockers"][-1])
                 return self.store.save(task)
             task["steps"] = steps
+            # A plan can still name `coding` for a visual objective; the routing
+            # policy rewrites it here so the planner cannot bypass the rule.
+            try:
+                from tys_ops import routing  # noqa: WPS433
+
+                steps, hits = routing.apply_to_steps(
+                    steps, str(task.get("objective") or ""))
+                if hits:
+                    lane_set = set((task.get("scope") or {}).get("lanes") or [])
+                    lane_set.update(hit["to"] for hit in hits)
+                    task.setdefault("scope", {})["lanes"] = [
+                        lane for lane in LANES if lane in lane_set]
+                    task["steps"] = steps
+                    self.store.event(task_id, "routing_intercepted", {
+                        "policy": "visual->graphics", "stage": "plan",
+                        "interceptions": hits,
+                    })
+            except Exception:  # noqa: BLE001 - routing must never break a run
+                pass
             self.store.event(task_id, "plan_accepted", {"steps": steps})
             task["next_action"] = "run"
 

@@ -14,6 +14,8 @@ Northstar_backend/tys_ops/
   budgets.py     token/VRAM throttling, hyperparameter tuner, feedback router
   selfheal.py    diagnostics, safe pid checks, atomic write + rollback
   ui.py          adaptive component tree (tys.ui.v1)
+  routing.py     intent interception: visual -> graphics, code -> coding
+  graphics.py    FLUX 3 lane, direct endpoint, engine suspension, no ComfyUI
   stress.py      the multi-profile stress harness
 ```
 
@@ -51,6 +53,35 @@ plus real command exit codes — and records `self_report_outranked` when the
 executor claimed success and the workspace disagreed. `check_patch` prefers
 `agent_kernel.content.validate_patch` so the CLI, the work order and the
 benchmark share one definition of a usable diff.
+
+## Routing: visual work goes to FLUX 3
+
+`tys_ops.routing` intercepts before any lane sees the work order:
+
+| request | lane | executor |
+|---|---|---|
+| images, graphics, UI styling, rendering | `graphics` | FLUX 3 Image Klein, direct |
+| code, tests, refactors, repository edits | `coding` | Qwen3.8-27B llama.cpp worker |
+| video, animation, motion | `creative` | existing studio/ComfyUI services |
+
+* The rewrite applies to explicit steps **and** to planner output, so the
+  orchestrator cannot route visual work to the coding model.
+* `scope.lanes` gains `graphics` when a visual step is intercepted; the step is
+  never an escalation outside its own order.
+* Every interception is recorded as a `routing_intercepted` event with `from`,
+  `to`, matched signals and a sentence of reason.
+* Defence in depth: the coding lane refuses a visual step
+  (`visual_requires_graphics_lane`) and the creative lane refuses image work,
+  so a hand-written order cannot bypass the policy either.
+* The graphics lane checks FLUX 3 availability **before** suspending anything.
+  When it is ready it suspends the MoE coding worker and unloads Ollama, takes
+  the shared GPU lock, renders, and releases. It never starts ComfyUI.
+* Coaching a missing engine is explicit, not a fallback: no FLUX 3 endpoint or
+  weights means a blocked step (`flux3_unavailable`,
+  `flux3_weights_not_installed`), not a silent render on another model.
+
+Classifier precedence is graded: strong visual terms beat code words, strong
+code terms beat context words like "render lane", and video wins over both.
 
 ## State endpoint under load
 
