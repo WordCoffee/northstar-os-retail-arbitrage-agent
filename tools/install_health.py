@@ -352,7 +352,7 @@ def harness_proj_bench_dry() -> None:
 
 @check
 def state_fragment_applies() -> None:
-    frag = ROOT / "backups" / "state" / "fragment_20261029_install_health.json"
+    frag = ROOT / "state" / "fragments" / "20261029_install_health.json"
     assert frag.is_file(), f"missing fragment {frag}"
     out = subprocess.run([sys.executable, str(ROOT / "tools/state_fragment.py"),
                           "--check", str(frag)], cwd=str(ROOT),

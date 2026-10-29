@@ -4,11 +4,11 @@
 may rewrite it. That deny is a guardrail, not an obstacle: this tool lets the
 registry stay accurate without anyone bypassing it.
 
-    python tools/state_fragment.py --check backups/state/fragment_X.json
+    python tools/state_fragment.py --check state/fragments/20261029_install_health.json
         read-only: validates the fragment, refuses on a key clash, prints the
         exact keys that would be added and the resulting file size.
 
-    python tools/state_fragment.py --apply backups/state/fragment_X.json
+    python tools/state_fragment.py --apply state/fragments/20261029_install_health.json
         operator only. Takes a timestamped backup, writes atomically, re-parses
         the result, and prints what changed.
 

@@ -1,0 +1,19 @@
+{
+  "install_health_20261029": {
+    "status": "installed — pending operator merge into 00_STATE.json",
+    "what": "Ty's Assistant kernel: engine alignment, one synchronous task contract, p01/p03 remediation, semantic validators, 20-brief benchmark runner.",
+    "commits": ["dcf348b1", "b26ec1e9"],
+    "engine_alignment": "shared/model-suite.json named the llama.cpp ALIAS northstaros-qwen3.8:27b as the LOCAL model for T1/T2/T3; it is not an Ollama tag, so every local text tier resolved to a model Ollama did not have. Fixed: local -> bojo + local_engine, the never-installed qwen3:14b alternates removed, resolve(installed=...) reports local_model_not_installed, catalog gains text_local_status and local_engines.",
+    "measured_profile": "Ty = Qwen3.8-27B IQ3_XXS + MTP on llama.cpp, -ngl 99, n_ctx_slot 65536, KV q4_0, ~13 GB VRAM, on demand, NOT an Ollama model. Bojo = qwen3.5 1.9B Q8_0 on Ollama, num_gpu 0, ctx 8192, 0 VRAM / ~2.7 GB RAM, serves T1-T3. Live worker log 2026-10-29: 10.5-17.6 ms/token (57-95 tok/s), MTP draft acceptance 0.36-0.83.",
+    "task_contract": "POST /api/admin/tys/tasks/{id}/run is the only execution path: synchronous, admin-gated, 200 with the completed work order plus the kernel evidence as `kernel`. No engine param, no 202, no SSE. docs/TASK_EXECUTION.md.",
+    "p01": "Root cause was acceptance weaker than the scored bar AND a kernel-side circularity: tys_adapter collapsed a step that declared params.acceptance into a single executor_ok assertion, so the lane graded itself. Fixed in three places: _derive_acceptance builds artifact_exists + command verifiers from the work order; _verify_node lets passing acceptance supersede the executor self-report (still fail-closed with no acceptance); coding_agent re-checks after the step budget and reports acceptance_recovered.",
+    "p03": "Workspace.write is atomic (chunked temp -> flush -> fsync -> os.replace) and bounded by write_timeout_s (default 15 s); a stall is a tool error with the target untouched. Step pressure now clears when the declared artifact exists on disk however it was produced.",
+    "write_denylist": "Every lane refuses .env / .env.* / config/chromecontrol_policy_owner.json / config/chromecontrol.json / fixtures/** / tests/fixtures/**. .env.example stays writable.",
+    "semantic_validators": "agent_kernel/content.py: patch hunk arithmetic, required JSON keys, placeholder markers (TODO/TBD/FIXME/XXX), sentence floors, required headings, and unchanged-from-seed. The per-brief spec lives in tools/tys_kernel_bench.py SEMANTICS; eval/projects/ns_proj_20.json was NOT edited.",
+    "benchmark": "tools/tys_kernel_bench.py --all: 20 briefs through run_kernel(coding_agent=True) with JSONL evidence (validator tree, command output, artifact and tree hashes). Measured 19/20, 18/20, 18/20 on isolated sweeps. p01 fails on a miscounted hunk header, p07 on a missing required term — model limits, not validator bugs. 3 briefs (p11/p13/p14) are deterministic tool producers and are recorded as lane=tool.",
+    "verification": "231 passed across kernel/coding/tys/model-router/chat/provider/chromeconnect/bojo suites; 12 new semantic tests; proj_bench harness validation 20/20 evidence 1.0 resume pass; rea_regress --quick PASS; no-amazon 2276 passed 0 failed; chromeconnect 38 passed.",
+    "gates_held": "No Amazon, no spend, no installs, no credential reads, no policy or allowlist change. Worker stopped after every run.",
+    "state_registry_note": "00_STATE.json carries an operator `edit` deny in opencode.json. This entry was therefore written as a fragment and is merged only by the operator (tools/state_fragment.py --apply). The deny was not bypassed.",
+    "reports": ["reports/master_prompt_alignment_20261029.md", "reports/brief_exec_06_20_20261029.md", "reports/spec_reconciliation_engine_tiering_20261029.md"]
+  }
+}

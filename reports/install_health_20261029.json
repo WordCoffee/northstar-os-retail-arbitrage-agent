@@ -1,7 +1,7 @@
 {
   "verdict": "HEALTHY",
-  "checks": 21,
-  "critical": 17,
+  "checks": 20,
+  "critical": 16,
   "critical_failed": 0,
   "failed": [],
   "informational": [
@@ -178,14 +178,7 @@
       "critical": false,
       "detail": "fragment validates; would add ['install_health_20261029'] (operator runs --apply; agents may not rewrite 00_STATE.json)",
       "data": null
-    },
-    {
-      "check": "tests.core_suites",
-      "ok": true,
-      "critical": true,
-      "detail": "180 passed, 1 warning in 4.45s",
-      "data": null
     }
   ],
-  "checked_at": "2026-10-29T19:35:12+00:00"
+  "checked_at": "2026-10-29T19:35:46+00:00"
 }
