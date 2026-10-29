@@ -280,6 +280,7 @@ def baseline_values() -> dict:
         "feather_policy_ok": g("guards", "feather_policy_ok"),
         "logo_tool_present": g("guards", "logo_tool_present"),
         "social_validator_ok": g("guards", "social_validator_ok"),
+        "social_variants_ok": g("guards", "social_variants_ok"),
     }
 
 
