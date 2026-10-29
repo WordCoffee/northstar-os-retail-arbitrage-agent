@@ -34,6 +34,31 @@ const ANON = {
   flags: getFlags(),
   ownerTestMode: false,
   ownerTestModeBanner: null,
+  authMethod: null,
+}
+
+// Owner-authorized dev-only exception: a Vite dev build never blocks on
+// sign-in. If the backend cannot resolve a session (unreachable, or a temp
+// store without the demo membership), the provider adopts the same demo
+// identity the loopback shim uses. Production builds are compile-time
+// unaffected (LOCAL_DEV is false and the branch is eliminated).
+const DEV_DEMO_SESSION = {
+  userId: 'demo-t2',
+  organizations: [{ id: 'org-t2', name: 'T2 Holdings LLC', role: 'operator' }],
+  activeOrganizationId: 'org-t2',
+  role: 'operator',
+  environment: 'development',
+  permissions: ['approve', 'draft', 'preview', 'request_refresh', 'run_local',
+                'view', 'view_approvals', 'view_audit', 'view_ledger', 'view_providers'],
+  isPreview: false,
+  preview: null,
+  ownerTestMode: false,
+  ownerTestModeBanner: null,
+  authMethod: 'dev_shim',
+}
+
+function devBypassSession() {
+  return { ...ANON, ...DEV_DEMO_SESSION, loaded: true, authenticated: true }
 }
 
 export function SessionProvider({ children }) {
@@ -73,6 +98,10 @@ export function SessionProvider({ children }) {
         foundationApi.environment(),
         foundationApi.previewActive().catch(() => ({ active: false, preview: null })),
       ])
+      if (!me.user_id && LOCAL_DEV) {
+        setSession(devBypassSession())
+        return { authenticated: true, userId: DEV_DEMO_SESSION.userId, devBypass: true }
+      }
       setSession((s) => ({
         ...s,
         loaded: true,
@@ -90,12 +119,17 @@ export function SessionProvider({ children }) {
         preview: active.active ? active.preview : null,
         ownerTestMode: !!env.owner_test_mode,
         ownerTestModeBanner: env.owner_test_mode_banner || null,
+        authMethod: env.auth_method || null,
       }))
       return { authenticated: !!me.user_id, userId: me.user_id || '', suspended: false }
     } catch (e) {
       // 401 → signed out / expired / revoked session.
       if (e.status === 401) {
         setToken('')
+        if (LOCAL_DEV) {
+          setSession(devBypassSession())
+          return { authenticated: true, userId: DEV_DEMO_SESSION.userId, devBypass: true }
+        }
         setSession((s) => ({ ...ANON, loaded: true, authenticated: false }))
         return { authenticated: false, userId: '', status: e.status }
       }
@@ -118,6 +152,10 @@ export function SessionProvider({ children }) {
       if (retriable && attempt < 1) {
         await new Promise((resolve) => setTimeout(resolve, 900))
         return refresh(attempt + 1)
+      }
+      if (LOCAL_DEV) {
+        setSession(devBypassSession())
+        return { authenticated: true, userId: DEV_DEMO_SESSION.userId, devBypass: true }
       }
       setSession((s) => ({ ...s, loaded: true, error: e }))
       return { authenticated: false, userId: '', error: e, status: e.status, retriable: true }

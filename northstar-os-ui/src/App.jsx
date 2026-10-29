@@ -256,7 +256,7 @@ function Shell() {
           {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
         </div>
       )}
-      {LOCAL_DEV && (
+      {(LOCAL_DEV || session.authMethod === 'dev_shim') && (
         <div data-testid="dev-banner" role="status"
           // Same paint-order fix as the owner-test banner above: `.cosmic-canvas`
           // is position:fixed/z-index:0, so a static banner is painted underneath

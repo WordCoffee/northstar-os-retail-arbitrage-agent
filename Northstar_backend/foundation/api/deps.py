@@ -27,6 +27,12 @@ from ..authn import (
 )
 from .state import FoundationState
 
+# Owner-authorized dev-only loopback exception (AGENTS capsule): when the API
+# runs in development posture on loopback, a request with no session resolves to
+# this demo identity instead of 401. Production and remote clients never reach
+# it (dev_shim_enabled() is ENVIRONMENT==development; is_local checks the peer).
+DEV_DEMO_USER_ID = "demo-t2"
+
 
 def get_state(request: Request) -> FoundationState:
     return request.app.state.foundation
@@ -167,9 +173,20 @@ def get_context(
                     "code": "csrf_failed", "message": "CSRF validation failed"})
     else:
         # --- Dev shim path: local development only ---
-        if dev_shim_enabled() and is_local and x_user_id:
+        # Owner-authorized dev-only loopback exception: with no session at all,
+        # a loopback client on a development-posture API resolves the demo
+        # identity. An explicit X-User-Id still wins when supplied. This can
+        # never apply in production (dev_shim_enabled is false) or to a remote
+        # client (is_local is false), and startup refuses a remote bind while
+        # the shim is active.
+        # Explicit X-User-Id wins; otherwise the REAL application entry point
+        # (main.py) opts in via app.state.dev_auto_session after it provisions
+        # the demo identity. The isolated foundation app used by the security
+        # tests does not set that flag, so its fail-closed contract is intact.
+        auto_demo = bool(getattr(request.app.state, "dev_auto_session", False))
+        if dev_shim_enabled() and is_local and (x_user_id or auto_demo):
             method = "dev_shim"
-            user_id = x_user_id
+            user_id = x_user_id or DEV_DEMO_USER_ID
         else:
             raise _auth_401("authentication_required")
 

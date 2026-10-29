@@ -2671,6 +2671,23 @@ try:
     app.state.foundation = _FoundationState.build(
         os.environ.get("FOUNDATION_DB_PATH") or None
     )
+    # Dev-only loopback exception (AGENTS capsule): make the demo identity
+    # (demo-t2 / org-t2 / operator) exist in the store THIS process is using, so
+    # a local launcher that did not pin FOUNDATION_DB_PATH still has a usable
+    # session instead of a temp-DB 403. No-op outside development posture or
+    # when the store is PostgreSQL. app.state.dev_auto_session is what lets the
+    # auth dependency resolve the demo identity for a no-header loopback request;
+    # main.py is the real entry point (the isolated foundation app never opts in).
+    _dev_identity_ok = False
+    try:
+        if (os.environ.get("ENVIRONMENT") or "development").strip().lower() == "development":
+            from foundation.dev_identity import ensure_dev_identity
+            _dev_identity_ok = bool(ensure_dev_identity(app.state.foundation))
+    except Exception as _dev_ident_exc:  # pragma: no cover - dev-only convenience
+        import logging as _logging
+        _logging.getLogger("northstar.foundation").warning(
+            "dev demo identity not provisioned: %s", _dev_ident_exc)
+    app.state.dev_auto_session = _dev_identity_ok
     app.include_router(_foundation_router)
 except Exception as _foundation_exc:  # pragma: no cover - defensive mount
     import logging as _logging
