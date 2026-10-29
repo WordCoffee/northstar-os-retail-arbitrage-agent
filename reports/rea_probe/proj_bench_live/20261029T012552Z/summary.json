@@ -1,0 +1,1402 @@
+{
+  "programme": "NS-PROJ-20",
+  "mode": "live-text-lane-baseline",
+  "label": "live text-lane baseline",
+  "project_result": false,
+  "quality_claim": false,
+  "run_at": "20261029T012552Z",
+  "briefs": 20,
+  "complete": 20,
+  "valid_plans": 20,
+  "mean_evidence_coverage": 1.0,
+  "total_interventions": 0,
+  "model_calls": 60,
+  "model_chars": 57678,
+  "fence_stripped": 13,
+  "node_seconds_p50": 4.82,
+  "node_seconds_p95": 14.08,
+  "resume_mechanics": {
+    "first_status": "needs_human",
+    "second_status": "complete",
+    "calls": [
+      "a",
+      "b"
+    ],
+    "no_duplicate": true,
+    "resumed": true
+  },
+  "results": [
+    {
+      "id": "p01",
+      "title": "Fix a failing unit test",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 10.411,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.35,
+          "chars": 556,
+          "finish": "stop",
+          "completion_tokens": 122,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 1.77,
+          "chars": 157,
+          "finish": "stop",
+          "completion_tokens": 64,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 5.24,
+          "chars": 839,
+          "finish": "stop",
+          "completion_tokens": 222,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.35,
+        1.77,
+        5.24
+      ],
+      "model_chars": 1552
+    },
+    {
+      "id": "p02",
+      "title": "Add a small API endpoint",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 25.166,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 4.06,
+          "chars": 790,
+          "finish": "stop",
+          "completion_tokens": 168,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 16.23,
+          "chars": 2777,
+          "finish": "length",
+          "completion_tokens": 700,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.82,
+          "chars": 688,
+          "finish": "stop",
+          "completion_tokens": 198,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        4.06,
+        16.23,
+        4.82
+      ],
+      "model_chars": 4255
+    },
+    {
+      "id": "p03",
+      "title": "Refactor a module",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 24.783,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.57,
+          "chars": 731,
+          "finish": "stop",
+          "completion_tokens": 144,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 10.06,
+          "chars": 1743,
+          "finish": "stop",
+          "completion_tokens": 427,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 11.11,
+          "chars": 1737,
+          "finish": "stop",
+          "completion_tokens": 474,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.57,
+        10.06,
+        11.11
+      ],
+      "model_chars": 4211
+    },
+    {
+      "id": "p04",
+      "title": "Wire a config flag",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 15.778,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.23,
+          "chars": 592,
+          "finish": "stop",
+          "completion_tokens": 130,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 7.74,
+          "chars": 1369,
+          "finish": "stop",
+          "completion_tokens": 325,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.77,
+          "chars": 659,
+          "finish": "stop",
+          "completion_tokens": 189,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.23,
+        7.74,
+        4.77
+      ],
+      "model_chars": 2620
+    },
+    {
+      "id": "p05",
+      "title": "Repair a broken build",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 15.172,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.56,
+          "chars": 552,
+          "finish": "stop",
+          "completion_tokens": 130,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 4.24,
+          "chars": 254,
+          "finish": "stop",
+          "completion_tokens": 153,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 7.32,
+          "chars": 1002,
+          "finish": "stop",
+          "completion_tokens": 302,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.56,
+        4.24,
+        7.32
+      ],
+      "model_chars": 1808
+    },
+    {
+      "id": "p06",
+      "title": "Audit an admin setting",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 15.774,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.05,
+          "chars": 534,
+          "finish": "stop",
+          "completion_tokens": 118,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 2.62,
+          "chars": 249,
+          "finish": "stop",
+          "completion_tokens": 100,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 10.06,
+          "chars": 1317,
+          "finish": "stop",
+          "completion_tokens": 426,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.05,
+        2.62,
+        10.06
+      ],
+      "model_chars": 2100
+    },
+    {
+      "id": "p07",
+      "title": "Prepare a safe browser run",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 19.572,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.91,
+          "chars": 577,
+          "finish": "stop",
+          "completion_tokens": 113,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 9.71,
+          "chars": 1668,
+          "finish": "stop",
+          "completion_tokens": 409,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 6.9,
+          "chars": 1125,
+          "finish": "stop",
+          "completion_tokens": 289,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        2.91,
+        9.71,
+        6.9
+      ],
+      "model_chars": 3370
+    },
+    {
+      "id": "p08",
+      "title": "Recover a blocked run",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 26.103,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.77,
+          "chars": 580,
+          "finish": "stop",
+          "completion_tokens": 108,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 14.6,
+          "chars": 1340,
+          "finish": "stop",
+          "completion_tokens": 620,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 8.7,
+          "chars": 1251,
+          "finish": "stop",
+          "completion_tokens": 364,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        2.77,
+        14.6,
+        8.7
+      ],
+      "model_chars": 3171
+    },
+    {
+      "id": "p09",
+      "title": "Verify an external change",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 14.362,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.89,
+          "chars": 527,
+          "finish": "stop",
+          "completion_tokens": 112,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 1.83,
+          "chars": 149,
+          "finish": "stop",
+          "completion_tokens": 67,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 9.6,
+          "chars": 1247,
+          "finish": "stop",
+          "completion_tokens": 401,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        2.89,
+        1.83,
+        9.6
+      ],
+      "model_chars": 1923
+    },
+    {
+      "id": "p10",
+      "title": "Produce a weekly ops digest",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 14.6,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 4.06,
+          "chars": 818,
+          "finish": "stop",
+          "completion_tokens": 161,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 4.07,
+          "chars": 628,
+          "finish": "stop",
+          "completion_tokens": 163,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 6.42,
+          "chars": 842,
+          "finish": "stop",
+          "completion_tokens": 266,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        4.06,
+        4.07,
+        6.42
+      ],
+      "model_chars": 2288
+    },
+    {
+      "id": "p11",
+      "title": "Build a pouch label",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 33.423,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 4.19,
+          "chars": 788,
+          "finish": "stop",
+          "completion_tokens": 167,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 16.6,
+          "chars": 1943,
+          "finish": "length",
+          "completion_tokens": 700,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 12.59,
+          "chars": 1667,
+          "finish": "stop",
+          "completion_tokens": 503,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        4.19,
+        16.6,
+        12.59
+      ],
+      "model_chars": 4398
+    },
+    {
+      "id": "p12",
+      "title": "Correct a package back panel",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 14.517,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.45,
+          "chars": 592,
+          "finish": "stop",
+          "completion_tokens": 125,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 1.91,
+          "chars": 270,
+          "finish": "stop",
+          "completion_tokens": 63,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 9.11,
+          "chars": 1242,
+          "finish": "stop",
+          "completion_tokens": 381,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.45,
+        1.91,
+        9.11
+      ],
+      "model_chars": 2104
+    },
+    {
+      "id": "p13",
+      "title": "Generate a social canvas set",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 19.373,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.29,
+          "chars": 591,
+          "finish": "stop",
+          "completion_tokens": 129,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 5.14,
+          "chars": 550,
+          "finish": "stop",
+          "completion_tokens": 211,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 10.9,
+          "chars": 1398,
+          "finish": "stop",
+          "completion_tokens": 453,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.29,
+        5.14,
+        10.9
+      ],
+      "model_chars": 2539
+    },
+    {
+      "id": "p14",
+      "title": "Assemble a 15-second ad",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 21.668,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.44,
+          "chars": 557,
+          "finish": "stop",
+          "completion_tokens": 134,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 4.1,
+          "chars": 481,
+          "finish": "stop",
+          "completion_tokens": 165,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 14.08,
+          "chars": 2114,
+          "finish": "stop",
+          "completion_tokens": 566,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.44,
+        4.1,
+        14.08
+      ],
+      "model_chars": 3152
+    },
+    {
+      "id": "p15",
+      "title": "Audit a listing",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 14.984,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.24,
+          "chars": 389,
+          "finish": "stop",
+          "completion_tokens": 83,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 2.46,
+          "chars": 230,
+          "finish": "stop",
+          "completion_tokens": 88,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 10.24,
+          "chars": 1411,
+          "finish": "stop",
+          "completion_tokens": 428,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        2.24,
+        2.46,
+        10.24
+      ],
+      "model_chars": 2030
+    },
+    {
+      "id": "p16",
+      "title": "Plan a two-lane campaign",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 28.665,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.24,
+          "chars": 670,
+          "finish": "stop",
+          "completion_tokens": 127,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 12.46,
+          "chars": 1824,
+          "finish": "stop",
+          "completion_tokens": 494,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 12.93,
+          "chars": 1709,
+          "finish": "stop",
+          "completion_tokens": 511,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.24,
+        12.46,
+        12.93
+      ],
+      "model_chars": 4203
+    },
+    {
+      "id": "p17",
+      "title": "Recover from a failed verification",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 16.528,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.61,
+          "chars": 712,
+          "finish": "stop",
+          "completion_tokens": 142,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 5.37,
+          "chars": 660,
+          "finish": "stop",
+          "completion_tokens": 220,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 7.5,
+          "chars": 935,
+          "finish": "stop",
+          "completion_tokens": 300,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.61,
+        5.37,
+        7.5
+      ],
+      "model_chars": 2307
+    },
+    {
+      "id": "p18",
+      "title": "Hand off across a compaction",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 24.338,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 4.36,
+          "chars": 857,
+          "finish": "stop",
+          "completion_tokens": 164,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 10.99,
+          "chars": 1844,
+          "finish": "stop",
+          "completion_tokens": 459,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 8.94,
+          "chars": 1218,
+          "finish": "stop",
+          "completion_tokens": 373,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        4.36,
+        10.99,
+        8.94
+      ],
+      "model_chars": 3919
+    },
+    {
+      "id": "p19",
+      "title": "Apply a per-hunk diff",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 13.739,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.48,
+          "chars": 645,
+          "finish": "stop",
+          "completion_tokens": 138,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 1.77,
+          "chars": 151,
+          "finish": "stop",
+          "completion_tokens": 65,
+          "fence_stripped": true
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 8.45,
+          "chars": 1069,
+          "finish": "stop",
+          "completion_tokens": 352,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.48,
+        1.77,
+        8.45
+      ],
+      "model_chars": 1865
+    },
+    {
+      "id": "p20",
+      "title": "Close a project with evidence",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 28.0,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.73,
+          "chars": 726,
+          "finish": "stop",
+          "completion_tokens": 140,
+          "fence_stripped": false
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 13.5,
+          "chars": 1685,
+          "finish": "stop",
+          "completion_tokens": 523,
+          "fence_stripped": false
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 10.72,
+          "chars": 1452,
+          "finish": "stop",
+          "completion_tokens": 417,
+          "fence_stripped": false
+        }
+      ],
+      "model_seconds": [
+        3.73,
+        13.5,
+        10.72
+      ],
+      "model_chars": 3863
+    }
+  ],
+  "note": "Live text-lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
+  "thresholds_from_this_run": {
+    "completion_rate": 1.0,
+    "evidence_coverage": 1.0,
+    "node_seconds_p50": 4.82,
+    "node_seconds_p95": 14.08,
+    "quality_thresholds": "not set \u2014 machine content validators are not implemented"
+  },
+  "pinned_settings": {
+    "mtp": false,
+    "context": 8192,
+    "kv_cache": "q8_0",
+    "reason": "MTP runs aborted at 46 and 49 calls; no-MTP completed 60"
+  },
+  "format_audit": {
+    "valid": 18,
+    "total": 20,
+    "rate": 0.9,
+    "markdown_fenced": 1,
+    "rows": [
+      {
+        "id": "p01",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p02",
+        "format_valid": true,
+        "markdown_fence": true
+      },
+      {
+        "id": "p03",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p04",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p05",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p06",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p07",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p08",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p09",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p10",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p11",
+        "format_valid": false,
+        "markdown_fence": false
+      },
+      {
+        "id": "p12",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p13",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p14",
+        "format_valid": false,
+        "markdown_fence": false
+      },
+      {
+        "id": "p15",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p16",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p17",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p18",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p19",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p20",
+        "format_valid": true,
+        "markdown_fence": false
+      }
+    ]
+  },
+  "quality_audit": {
+    "folder": "reports\\rea_probe\\proj_bench_live\\20261029T012552Z",
+    "valid": 17,
+    "total": 20,
+    "rate": 0.85,
+    "rows": [
+      {
+        "id": "p01",
+        "artifact": "fix.patch",
+        "kind": "patch",
+        "valid": true,
+        "checks": {
+          "has_minus_file": true,
+          "has_plus_file": true,
+          "has_hunk": true
+        },
+        "detail": "unified diff shape"
+      },
+      {
+        "id": "p02",
+        "artifact": "endpoint.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 2778,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "route": true,
+            "endpoint": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p03",
+        "artifact": "refactor.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1743,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "refactor": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p04",
+        "artifact": "flag.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1369,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "default": true,
+            "off": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p05",
+        "artifact": "build.log",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 254,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "build": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p06",
+        "artifact": "audit.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p07",
+        "artifact": "runbook.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1668,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "host": true,
+            "expiry": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p08",
+        "artifact": "resume.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p09",
+        "artifact": "state.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p10",
+        "artifact": "digest.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 628,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "digest": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p11",
+        "artifact": "label.png",
+        "kind": "label",
+        "valid": false,
+        "checks": {
+          "png_magic": false
+        },
+        "detail": "not a PNG"
+      },
+      {
+        "id": "p12",
+        "artifact": "back.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 270,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "back": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p13",
+        "artifact": "canvases.json",
+        "kind": "social",
+        "valid": false,
+        "checks": {
+          "entries": 4,
+          "formats": {
+            "": false
+          }
+        },
+        "detail": "format + documented size"
+      },
+      {
+        "id": "p14",
+        "artifact": "ad.mp4",
+        "kind": "ad",
+        "valid": false,
+        "checks": {},
+        "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 0000024903fb0100] moov atom not found\nreports\\rea_probe\\proj_bench_live\\20261029T012552Z\\p14\\ad.mp4: Invalid data found when processing input\n"
+      },
+      {
+        "id": "p15",
+        "artifact": "listing_audit.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p16",
+        "artifact": "campaign.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1825,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "gate": true,
+            "lane": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p17",
+        "artifact": "replan.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p18",
+        "artifact": "handoff.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1845,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "handoff": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p19",
+        "artifact": "applied.diff",
+        "kind": "patch",
+        "valid": true,
+        "checks": {
+          "has_minus_file": true,
+          "has_plus_file": true,
+          "has_hunk": true
+        },
+        "detail": "unified diff shape"
+      },
+      {
+        "id": "p20",
+        "artifact": "project.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      }
+    ]
+  }
+}

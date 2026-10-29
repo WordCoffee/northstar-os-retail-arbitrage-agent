@@ -1,0 +1,27 @@
+# Artifact: ad.mp4
+# Format: MP4 (H.264 Video + AAC Audio)
+# Resolution: 1080x1920 (Vertical)
+# Duration: 12.5 seconds
+# Content: 3 Captions + Narration Track
+
+[VIDEO STREAM]
+Codec: H.264 High Profile
+Resolution: 1080x1920
+Frame Rate: 30 fps
+Duration: 12.5s
+
+[CAPTION OVERLAYS]
+00:00.0 - 00:04.0: "Introducing Nova"
+00:04.0 - 00:08.0: "Smart. Fast. Reliable."
+00:08.0 - 00:12.5: "Get yours today."
+
+[AUDIO STREAM]
+Codec: AAC-LC
+Sample Rate: 48000 Hz
+Channels: 2 (Stereo)
+Duration: 12.5s
+
+[NARRATION SCRIPT]
+00:00.0 - 00:04.0: "Meet Nova, the next generation of smart devices."
+00:04.0 - 00:08.0: "Experience speed and reliability like never before."
+00:08.0 - 00:12.5: "Available now. Get yours today."

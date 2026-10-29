@@ -1,0 +1,18 @@
+[
+  {
+    "check": "File 'flag.md' exists and is not empty.",
+    "type": "file_exists"
+  },
+  {
+    "check": "File 'flag.md' contains the phrase 'default-off' or 'default off' (case-insensitive).",
+    "type": "content_contains"
+  },
+  {
+    "check": "File 'flag.md' contains a code block or test snippet that verifies the feature is disabled by default (e.g., asserting false or checking initial state).",
+    "type": "content_pattern"
+  },
+  {
+    "check": "File 'flag.md' contains a code block or test snippet that verifies the feature is enabled when the flag is set (e.g., asserting true or checking enabled state).",
+    "type": "content_pattern"
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "previous_version": 1,
+  "trigger": "assertion_failure",
+  "failed_assertion": "step_3_validation",
+  "replan_strategy": "adaptive_retry",
+  "actions": [
+    {
+      "id": "action_1",
+      "type": "rollback",
+      "target": "step_3",
+      "description": "Revert state to checkpoint before step_3"
+    },
+    {
+      "id": "action_2",
+      "type": "diagnose",
+      "target": "step_3",
+      "description": "Analyze failure cause and adjust parameters"
+    },
+    {
+      "id": "action_3",
+      "type": "retry",
+      "target": "step_3",
+      "description": "Execute step_3 with corrected parameters"
+    }
+  ],
+  "status": "pending"
+}

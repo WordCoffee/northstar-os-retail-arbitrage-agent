@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "REA Phase 3 items 0-1 COMPLETE: MAX_EDGE_PX=2048 recorded; L2 per-side mesh residual 0.238 px on the Mogra plate; OCR ok, prepress printable (TAC 254.9%), readiness retail_ready. Agent kernel v0.1 BUILT (12 capability modules, 46 tests) + NS-PROJ-20 harness validation 20/20 (not a project result) with resume. Phase B harvest: 1,500 scored / 100 README reads / 12 deep. Bojo plan_project tool shipped. Live NS-PROJ-20 lane baseline run 2026-10-29 (20/20 artifacts, 18/20 format-valid; not a quality claim). Remaining: full Ty-as-is baseline, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE: MAX_EDGE_PX=2048 recorded; L2 per-side mesh residual 0.238 px on the Mogra plate; OCR ok, prepress printable (TAC 254.9%), readiness retail_ready. Agent kernel v0.1 BUILT (12 capability modules, 48 tests) + NS-PROJ-20 harness validation 20/20 (not a project result) with resume. Phase B harvest: 1,500 scored / 100 README reads / 12 deep. Bojo plan_project tool shipped. Live text-lane baseline run 3x 2026-10-29 (20/20 artifacts, 18/20 format-valid, content 17/20; not a quality claim). Tool lane: p11/p14 valid, p13 still invalid. Remaining: full Ty-as-is baseline, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -2038,7 +2038,7 @@
     "path": "Northstar_backend/agent_kernel",
     "spec": "research/assistant_intelligence_20261028/KERNEL_SPEC.md",
     "clone_ledger": "research/assistant_intelligence_20261028/CLONE_LEDGER.md",
-    "tests": 46,
+    "tests": 48,
     "test_file": "Northstar_backend/test_agent_kernel.py",
     "benchmark": "eval/projects/ns_proj_20.json",
     "harness": "tools/proj_bench.py",
@@ -2064,7 +2064,7 @@
   },
   "ns_proj_20_live_20261029": {
     "status": "complete",
-    "label": "live lane baseline — not a quality claim",
+    "label": "live text-lane baseline — not a quality claim",
     "run": "reports/rea_probe/proj_bench_live/20261029T000941Z/summary.json",
     "report": "reports/ns_proj_20_live_baseline_20261029.md",
     "briefs": 20,
@@ -2094,11 +2094,136 @@
     "thresholds": {
       "completion_rate_min": 1.0,
       "evidence_coverage_min": 1.0,
-      "p50_max_s": 8.0,
-      "p95_max_s": 15.0,
+      "node_seconds_p50_max": 7.5,
+      "node_seconds_p95_max": 16.9,
       "format_validity_min": 0.9,
-      "quality": "not set — machine content validators not implemented"
+      "quality_min": 0.85,
+      "quality_note": "Set only after content validators ran on all three baseline runs; p11/p13/p14 are the stable text-lane failures."
     },
-    "quality_claim": false
+    "quality_claim": false,
+    "pinned_settings": {
+      "mtp": false,
+      "context": 8192,
+      "kv_cache": "q8_0",
+      "reason": "MTP runs aborted at 46 and 49 calls; no-MTP completed 60"
+    },
+    "fence_policy": "strip Markdown fences at persistence; 13 fenced nodes rerun; 0 fenced after",
+    "tool_lane": {
+      "p11": "valid (real PNG; OCR + prepress)",
+      "p14": "valid (12 s 1080x1920 MP4 with audio)",
+      "p13": "still invalid (social JSON shape)",
+      "quality_after_tool": {
+        "valid": 19,
+        "total": 20,
+        "rate": 0.95,
+        "failed": [
+          "p13"
+        ]
+      }
+    },
+    "runs": [
+      {
+        "folder": "20261029T000941Z",
+        "complete": 20,
+        "p50": 6.27,
+        "p95": 11.17,
+        "format_rate": 0.9,
+        "quality_rate": 0.85,
+        "fence_stripped": 0
+      },
+      {
+        "folder": "20261029T012552Z",
+        "complete": 20,
+        "p50": 4.82,
+        "p95": 14.08,
+        "format_rate": 0.9,
+        "quality_rate": 0.85,
+        "fence_stripped": 13
+      },
+      {
+        "folder": "20261029T013245Z",
+        "complete": 20,
+        "p50": 6.11,
+        "p95": 11.97,
+        "format_rate": 0.9,
+        "quality_rate": 0.85,
+        "fence_stripped": 12
+      }
+    ],
+    "spread": {
+      "complete": {
+        "values": [
+          20,
+          20,
+          20
+        ],
+        "min": 20,
+        "max": 20,
+        "median": 20,
+        "mean": 20
+      },
+      "p50": {
+        "values": [
+          6.27,
+          4.82,
+          6.11
+        ],
+        "min": 4.82,
+        "max": 6.27,
+        "median": 6.11,
+        "mean": 5.73
+      },
+      "p95": {
+        "values": [
+          11.17,
+          14.08,
+          11.97
+        ],
+        "min": 11.17,
+        "max": 14.08,
+        "median": 11.97,
+        "mean": 12.41
+      },
+      "format_rate": {
+        "values": [
+          0.9,
+          0.9,
+          0.9
+        ],
+        "min": 0.9,
+        "max": 0.9,
+        "median": 0.9,
+        "mean": 0.9
+      },
+      "quality_rate": {
+        "values": [
+          0.85,
+          0.85,
+          0.85
+        ],
+        "min": 0.85,
+        "max": 0.85,
+        "median": 0.85,
+        "mean": 0.85
+      }
+    },
+    "quality_audit_text_lane": {
+      "valid": 17,
+      "total": 20,
+      "rate": 0.85,
+      "failed": [
+        "p11",
+        "p13",
+        "p14"
+      ]
+    },
+    "quality_audit_after_tool": {
+      "valid": 19,
+      "total": 20,
+      "rate": 0.95,
+      "failed": [
+        "p13"
+      ]
+    }
   }
 }

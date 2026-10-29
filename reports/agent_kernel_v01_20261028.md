@@ -13,7 +13,7 @@ has not been run.
 
 | Piece | Where | Evidence |
 |---|---|---|
-| 12-capability kernel | `Northstar_backend/agent_kernel/` | 46 tests in `test_agent_kernel.py` |
+| 12-capability kernel | `Northstar_backend/agent_kernel/` | 48 tests in `test_agent_kernel.py` |
 | Ty opt-in path | `TysAssistant.run_kernel()` + `agent_kernel/tys_adapter.py` | `test_tys_kernel_integration.py` (2 tests) + a real inspect smoke run |
 | Bojo project plan | `plan_project` tool in `chat_tools.py` | `test_plan_project_tool.py` (4 tests) |
 | NS-PROJ-20 | `eval/projects/ns_proj_20.json`, `tools/proj_bench.py` | harness validation 20/20 (not a project result), evidence 1.0, resume pass |
@@ -29,7 +29,7 @@ denies, expiring grants), `plan_mode`, `todos`, `graph` (DAG), `memory`
 passes), `subagents` (hash-checked reports), `diff`, `skills`, `budget`,
 `journal`, `kernel`, `tys_adapter`.
 
-**46 tests** cover: invalid plans, cycles, gates, policy precedence, bare-tool
+**48 tests** cover: invalid plans, cycles, gates, policy precedence, bare-tool
 removal, grant expiry, the single-`in_progress` todo rule, budget stops, journal
 replay, file checkpoint/restore, symlink skip, memory imports, compaction
 anchors, diff hunk selection, unknown verifiers, subagent hash mismatch, kernel
@@ -84,14 +84,17 @@ This validates the *harness*: plans are valid, every node has evidence, a gate
 blocks once, and resume does not repeat the completed node. It is **not** a
 statement that Ty completes 20 projects; the live baseline is separate.
 
-### 4.1 Live lane baseline — 2026-10-29 (separate from the harness validation)
+### 4.1 Live text-lane baseline — 2026-10-29 (separate from the harness validation)
 
 The live run used the local 27B to write each node's text; the harness persisted
-it. Result: **20/20 artifacts**, 18/20 format-valid, p50 **6.27 s**, p95
-**11.17 s**, 60 model calls. It is **not a quality claim**; 13 artifacts carry
-Markdown fences and the two binary briefs (`label.png`, `ad.mp4`) are invalid.
-Two MTP attempts aborted at 46–49 calls; the final no-MTP run completed all 60.
-Report: `reports/ns_proj_20_live_baseline_20261029.md`.
+it. Three runs: **20/20 artifacts each**, **18/20 format-valid** each, p50
+**4.82–6.27 s**, p95 **11.17–14.08 s**, 180 model calls total. Content validators
+put the text lane at **17/20 (0.85)** each run (p11 label, p13 social, p14 ad).
+Fences are stripped at persistence; the 13 fenced nodes from run 1 were rerun and
+none remain. Tool nodes make p11 and p14 valid (tool-lane content **19/20**); p13
+remains invalid. **MTP off** is pinned because the MTP runs aborted at 46 and 49
+calls. It is **not a quality claim**. Report:
+`reports/ns_proj_20_live_baseline_20261029.md`.
 
 ## 5. Phase B — 1,500 / 100 / 12
 
@@ -125,7 +128,7 @@ python tools/rea_regress.py --quick --with-tests
 
 | Item | Why it is not done |
 |---|---|
-| Live 20-brief Ty baseline | **Run 2026-10-29** — 20/20 artifacts, 18/20 format-valid, quality unverified; see `reports/ns_proj_20_live_baseline_20261029.md` |
+| Live 20-brief text-lane baseline | **3 runs 2026-10-29** — 20/20 artifacts, 18/20 format-valid, content 17/20 each; tool lane makes p11/p14 valid; thresholds set from the spread |
 | Two operator windows (Claude Code, Cowork) | Requires the operator present; no unattended substitute |
 | Phase 3 U1 (auto-chain `apply_label`) | Not built; it changes the chat turn contract and needs a live UI check |
 | Phase 3 V1 (`studio_video_assemble.py`) | The probe proves the FFmpeg chain; the production module is not promoted yet |

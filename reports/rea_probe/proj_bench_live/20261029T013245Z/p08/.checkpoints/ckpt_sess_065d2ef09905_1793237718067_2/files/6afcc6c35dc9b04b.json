@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'resume.json' file exists and is valid JSON.",
+    "command": "test -f resume.json && python3 -c \"import json; json.load(open('resume.json'))\"",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the 'resume.json' contains a 'completed_steps' array with at least one entry.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert isinstance(data.get('completed_steps'), list) and len(data['completed_steps']) > 0\"",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the 'resume.json' specifies a 'next_step' that is not in the 'completed_steps' list.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert data.get('next_step') not in data.get('completed_steps', [])\"",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the 'resume.json' contains a 'gate_status' field indicating the operator gate has been cleared.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert data.get('gate_status') == 'cleared' or data.get('gate_status') == 'approved'",
+    "expected_result": "exit code 0"
+  }
+]

@@ -1,0 +1,62 @@
+{
+  "name": "three-node-project",
+  "version": "1.0.0",
+  "description": "A three-node project designed to run end-to-end with passing evidence for each node.",
+  "nodes": [
+    {
+      "id": "node-1",
+      "name": "Initialization",
+      "description": "Initializes the project state and sets up necessary resources.",
+      "actions": [
+        "Create project directory",
+        "Initialize configuration files",
+        "Set up logging"
+      ],
+      "evidence": {
+        "status": "passed",
+        "output": "Project initialized successfully",
+        "timestamp": "2023-10-01T12:00:00Z"
+      }
+    },
+    {
+      "id": "node-2",
+      "name": "Processing",
+      "description": "Processes the core logic of the project.",
+      "actions": [
+        "Load input data",
+        "Execute transformation logic",
+        "Validate intermediate results"
+      ],
+      "evidence": {
+        "status": "passed",
+        "output": "Processing completed with all validations passed",
+        "timestamp": "2023-10-01T12:05:00Z"
+      }
+    },
+    {
+      "id": "node-3",
+      "name": "Finalization",
+      "description": "Finalizes the project and generates final output.",
+      "actions": [
+        "Generate final report",
+        "Archive results",
+        "Verify final state"
+      ],
+      "evidence": {
+        "status": "passed",
+        "output": "Finalization completed, all checks passed",
+        "timestamp": "2023-10-01T12:10:00Z"
+      }
+    }
+  ],
+  "plan": {
+    "status": "complete",
+    "steps": [
+      "Execute node-1",
+      "Execute node-2",
+      "Execute node-3",
+      "Verify all evidence"
+    ],
+    "completion_timestamp": "2023-10-01T12:10:00Z"
+  }
+}

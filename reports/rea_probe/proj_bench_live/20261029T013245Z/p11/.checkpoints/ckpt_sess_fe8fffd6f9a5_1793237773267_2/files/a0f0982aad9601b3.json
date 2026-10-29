@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check_01",
+    "description": "Verify that the file 'label.png' exists in the project root and is a valid PNG image.",
+    "type": "file_exists",
+    "target": "label.png",
+    "criteria": "File exists and has a valid PNG header (89 50 4E 47)."
+  },
+  {
+    "id": "check_02",
+    "description": "Ensure the image dimensions match the specified measured pouch plate size.",
+    "type": "image_dimensions",
+    "target": "label.png",
+    "criteria": "Width and height must exactly match the required plate dimensions (e.g., 300x200 pixels or as defined in project config)."
+  },
+  {
+    "id": "check_03",
+    "description": "Validate that the label contains legible text suitable for OCR extraction.",
+    "type": "ocr_validation",
+    "target": "label.png",
+    "criteria": "Running an OCR engine on the image must return a non-empty string containing the expected label identifier or product name."
+  },
+  {
+    "id": "check_04",
+    "description": "Confirm the image is in a prepress-ready color mode and resolution.",
+    "type": "prepress_check",
+    "target": "label.png",
+    "criteria": "Image must be in RGB or CMYK mode (not indexed/palette) and have a DPI of at least 300."
+  },
+  {
+    "id": "check_05",
+    "description": "Verify that the label includes a scannable barcode or QR code for readiness verification.",
+    "type": "barcode_detection",
+    "target": "label.png",
+    "criteria": "A barcode detection library must successfully locate and decode at least one barcode/QR code within the image."
+  }
+]

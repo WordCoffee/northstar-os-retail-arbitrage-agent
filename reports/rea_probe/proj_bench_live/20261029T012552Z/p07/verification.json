@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the runbook explicitly defines a per-host grant mechanism, ensuring that access is restricted to specific hostnames rather than global or wildcard domains.",
+    "type": "string_contains",
+    "pattern": "per-host grant",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-2",
+    "description": "Confirm that the runbook includes a defined expiry mechanism for the access grant, such as a timestamp or duration limit.",
+    "type": "string_contains",
+    "pattern": "expiry",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-3",
+    "description": "Ensure the runbook specifies that the browser task is read-only, explicitly prohibiting write operations or state modifications.",
+    "type": "string_contains",
+    "pattern": "read-only",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the runbook contains a section or step detailing the planning phase for the browser task, including prerequisites or setup instructions.",
+    "type": "string_contains",
+    "pattern": "plan",
+    "case_sensitive": false
+  }
+]

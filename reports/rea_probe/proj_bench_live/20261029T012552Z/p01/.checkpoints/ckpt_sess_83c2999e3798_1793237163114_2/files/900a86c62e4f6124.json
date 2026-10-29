@@ -1,0 +1,22 @@
+[
+  {
+    "id": "test_passes",
+    "description": "The specific failing unit test must pass after applying the patch.",
+    "check": "Run the test suite and verify that the previously failing test now passes."
+  },
+  {
+    "id": "no_new_failures",
+    "description": "No other unit tests should fail as a result of the fix.",
+    "check": "Run the full test suite and ensure all other tests continue to pass."
+  },
+  {
+    "id": "assertion_integrity",
+    "description": "The assertion in the failing test must remain unchanged.",
+    "check": "Diff the test file before and after the patch to confirm the assertion line is identical."
+  },
+  {
+    "id": "patch_validity",
+    "description": "The patch must be a valid, applicable diff.",
+    "check": "Apply the patch to the repository and ensure it applies cleanly without errors."
+  }
+]

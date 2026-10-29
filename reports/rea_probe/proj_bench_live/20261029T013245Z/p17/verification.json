@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the replan.json file exists and is valid JSON.",
+    "command": "test -f replan.json && python3 -c \"import json; json.load(open('replan.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure replan.json contains a 'plan' key with a non-empty list of steps.",
+    "command": "python3 -c \"import json; d=json.load(open('replan.json')); assert isinstance(d.get('plan'), list) and len(d['plan']) > 0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the replan.json includes a 'reason' field explaining why the previous attempt failed.",
+    "command": "python3 -c \"import json; d=json.load(open('replan.json')); assert 'reason' in d and isinstance(d['reason'], str) and len(d['reason']) > 0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that each step in the plan has a 'name' and 'action' field.",
+    "command": "python3 -c \"import json; d=json.load(open('replan.json')); assert all('name' in s and 'action' in s for s in d['plan'])\"",
+    "expected": "exit code 0"
+  }
+]

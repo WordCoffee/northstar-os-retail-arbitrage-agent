@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that replan.json exists and is valid JSON",
+    "command": "test -f replan.json && jq . replan.json > /dev/null",
+    "expected": "success"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure replan.json contains a 'replan' key with a non-empty array of steps",
+    "command": "jq -e '.replan | type == \"array\" and length > 0' replan.json",
+    "expected": "true"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the replan steps reference the failed assertion context",
+    "command": "jq -e '.replan | map(select(.reason != null)) | length > 0' replan.json",
+    "expected": "true"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that no step in replan.json is a blind retry (i.e., each step has a distinct action or condition)",
+    "command": "jq -e '.replan | map(.action) | unique | length == length' replan.json",
+    "expected": "true"
+  }
+]

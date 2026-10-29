@@ -1,0 +1,28 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'digest.md' exists in the current directory.",
+    "type": "file_exists",
+    "target": "digest.md"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that 'digest.md' is not empty and contains at least one non-whitespace character.",
+    "type": "file_not_empty",
+    "target": "digest.md"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that 'digest.md' does not contain any placeholder text such as 'TODO', 'FIXME', or 'PLACEHOLDER'.",
+    "type": "regex_absence",
+    "target": "digest.md",
+    "pattern": "(TODO|FIXME|PLACEHOLDER)"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure that 'digest.md' contains at least one section header (e.g., starting with '#').",
+    "type": "regex_presence",
+    "target": "digest.md",
+    "pattern": "^#"
+  }
+]

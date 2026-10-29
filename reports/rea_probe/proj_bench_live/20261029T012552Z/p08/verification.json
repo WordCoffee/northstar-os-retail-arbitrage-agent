@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'resume.json' file exists and is valid JSON.",
+    "command": "test -f resume.json && python3 -c \"import json; json.load(open('resume.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the 'resume.json' contains a 'completed_steps' array that is not empty.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert isinstance(data.get('completed_steps'), list) and len(data['completed_steps']) > 0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the 'resume.json' contains a 'next_step' field with a non-empty string value.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert isinstance(data.get('next_step'), str) and len(data['next_step'].strip()) > 0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Confirm that the 'next_step' is not present in the 'completed_steps' list to prevent repeating completed work.",
+    "command": "python3 -c \"import json; data=json.load(open('resume.json')); assert data['next_step'] not in data['completed_steps']\"",
+    "expected": "exit code 0"
+  }
+]

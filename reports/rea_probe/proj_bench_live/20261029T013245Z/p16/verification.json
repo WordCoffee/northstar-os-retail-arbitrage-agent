@@ -1,0 +1,36 @@
+[
+  {
+    "id": "check_01",
+    "description": "Verify that the file 'campaign.md' exists in the current directory.",
+    "type": "file_exists",
+    "target": "campaign.md"
+  },
+  {
+    "id": "check_02",
+    "description": "Ensure the document contains a section explicitly defining the 'Inspect' phase.",
+    "type": "content_contains",
+    "target": "campaign.md",
+    "pattern": "(?i)inspect"
+  },
+  {
+    "id": "check_03",
+    "description": "Ensure the document contains a section explicitly defining the 'Browser' phase.",
+    "type": "content_contains",
+    "target": "campaign.md",
+    "pattern": "(?i)browser"
+  },
+  {
+    "id": "check_04",
+    "description": "Verify that a 'Human Gate' or 'Manual Approval' step is defined between the inspect and browser lanes.",
+    "type": "content_contains",
+    "target": "campaign.md",
+    "pattern": "(?i)(human gate|manual approval|human review)"
+  },
+  {
+    "id": "check_05",
+    "description": "Confirm that the workflow order places 'Inspect' before 'Browser' and includes the gate in between.",
+    "type": "logical_order",
+    "target": "campaign.md",
+    "logic": "inspect_index < gate_index < browser_index"
+  }
+]

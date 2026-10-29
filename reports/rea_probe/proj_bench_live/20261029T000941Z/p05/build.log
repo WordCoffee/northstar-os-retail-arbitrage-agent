@@ -1,7 +1,4 @@
-```
-[2023-10-27 10:01:02] Starting build...
-[2023-10-27 10:01:03] Compiling src/main.c
-[2023-10-27 10:01:04] Error: src/main.c:15:5: error: implicit declaration of function 'calculate_sum'
-[2023-10-27 10:01:04] Error: src/main.c:15:5: note: 'calculate_sum' was declared in 'src/utils.h'
-[2023-10-27 10:01:04] Build failed.
-```
+[2023-10-27 10:00:01] INFO: Starting build...
+[2023-10-27 10:00:02] INFO: Compiling module 'core'...
+[2023-10-27 10:00:03] ERROR: core/utils.py:15: NameError: name 'json' is not defined
+[2023-10-27 10:00:03] INFO: Build failed.

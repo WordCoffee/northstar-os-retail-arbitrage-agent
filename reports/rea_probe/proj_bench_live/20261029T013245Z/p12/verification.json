@@ -1,0 +1,29 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the back panel contains the required legal disclaimer text.",
+    "type": "string_contains",
+    "target": "back.md",
+    "value": "This product is not intended to be a substitute for professional medical advice."
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure the front panel content is not modified by checking for a unique front-panel identifier.",
+    "type": "string_contains",
+    "target": "front.md",
+    "value": "FRONT_PANEL_UNIQUE_ID_12345"
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the back panel does not contain any placeholder text like 'TODO' or 'FIXME'.",
+    "type": "string_not_contains",
+    "target": "back.md",
+    "value": "TODO"
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the back panel file exists and is not empty.",
+    "type": "file_exists_and_non_empty",
+    "target": "back.md"
+  }
+]

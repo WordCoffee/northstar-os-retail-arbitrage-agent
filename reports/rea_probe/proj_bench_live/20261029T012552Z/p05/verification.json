@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines matching the regex 'error' (case-insensitive).",
+    "type": "regex_absence",
+    "pattern": "error",
+    "case_sensitive": false
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the build log contains no lines matching the regex 'fatal' (case-insensitive).",
+    "type": "regex_absence",
+    "pattern": "fatal",
+    "case_sensitive": false
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the build log contains a line matching the regex 'Build succeeded' or 'Build finished' (case-insensitive).",
+    "type": "regex_presence",
+    "pattern": "(Build succeeded|Build finished)",
+    "case_sensitive": false
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the build log does not contain any lines starting with 'make: ***' or 'gmake: ***' (indicating make errors).",
+    "type": "regex_absence",
+    "pattern": "^(make|gmake): \\*\\*\\*",
+    "case_sensitive": true
+  }
+]

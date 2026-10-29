@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file no longer exists or has been renamed, and that two new module files have been created.",
+    "command": "ls -l original_module.js new_module_a.js new_module_b.js",
+    "expected": "original_module.js not found; new_module_a.js and new_module_b.js exist"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that all public exports from the original module are still available in the new modules (no missing exports).",
+    "command": "node -e \"const a = require('./new_module_a'); const b = require('./new_module_b'); const orig = require('./original_module'); const keys = Object.keys(orig); const newKeys = [...Object.keys(a), ...Object.keys(b)]; console.log(keys.every(k => newKeys.includes(k)));\"",
+    "expected": "true"
+  },
+  {
+    "id": "check_3",
+    "description": "Run the existing test suite to confirm no behavioral changes.",
+    "command": "npm test",
+    "expected": "All tests pass (exit code 0)"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that no circular dependencies were introduced between the two new modules.",
+    "command": "npx madge --circular new_module_a.js new_module_b.js",
+    "expected": "No circular dependencies detected (exit code 0)"
+  }
+]

@@ -1,36 +1,28 @@
-```json
 {
   "canvases": [
     {
       "name": "default",
       "width": 800,
       "height": 600,
-      "source": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width"
+      "source": "project_config.json"
     },
     {
       "name": "mobile",
       "width": 375,
-      "height": 667,
-      "source": "https://developer.apple.com/design/resources/download/"
+      "height": 812,
+      "source": "project_config.json"
     },
     {
       "name": "tablet",
       "width": 768,
       "height": 1024,
-      "source": "https://developer.apple.com/design/resources/download/"
+      "source": "project_config.json"
     },
     {
       "name": "desktop",
       "width": 1920,
       "height": 1080,
-      "source": "https://www.w3.org/TR/CSS2/visufx.html"
-    },
-    {
-      "name": "4k",
-      "width": 3840,
-      "height": 2160,
-      "source": "https://en.wikipedia.org/wiki/4K_resolution"
+      "source": "project_config.json"
     }
   ]
 }
-```

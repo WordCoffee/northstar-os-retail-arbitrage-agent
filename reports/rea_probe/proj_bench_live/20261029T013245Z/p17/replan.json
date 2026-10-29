@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "previous_version": 1,
+  "status": "replanned",
+  "trigger": "assertion_failure",
+  "failed_assertion": {
+    "id": "assert_001",
+    "description": "Expected response status 200, got 500",
+    "timestamp": "2023-10-27T10:00:00Z"
+  },
+  "actions": [
+    {
+      "step": 1,
+      "action": "inspect_error_logs",
+      "target": "service/api/v1/users",
+      "expected_outcome": "identify root cause of 500 error"
+    },
+    {
+      "step": 2,
+      "action": "update_config",
+      "target": "config/database.yaml",
+      "change": "increase connection pool size from 10 to 20",
+      "expected_outcome": "resolve potential connection timeout"
+    },
+    {
+      "step": 3,
+      "action": "rerun_test",
+      "target": "test/api/users_test.py",
+      "expected_outcome": "assertion passes with status 200"
+    }
+  ],
+  "rollback_plan": {
+    "trigger": "if step 3 fails again",
+    "action": "revert config changes and escalate to manual investigation"
+  }
+}

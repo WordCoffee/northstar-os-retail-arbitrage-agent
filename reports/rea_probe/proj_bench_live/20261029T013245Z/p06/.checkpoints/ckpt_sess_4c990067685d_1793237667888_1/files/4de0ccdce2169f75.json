@@ -1,0 +1,14 @@
+{
+  "artifact": "audit.json",
+  "action": "inspect",
+  "target": "admin_panel",
+  "mode": "read-only",
+  "result": {
+    "value": "12345",
+    "evidence": "Retrieved from admin_panel.config.json, line 42: 'api_key': '12345'",
+    "integrity_check": {
+      "value_quoted": true,
+      "no_change_made": true
+    }
+  }
+}

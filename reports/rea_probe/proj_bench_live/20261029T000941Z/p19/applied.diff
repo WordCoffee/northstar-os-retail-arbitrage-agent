@@ -1,13 +1,16 @@
-```diff
---- a/src/utils.py
-+++ b/src/utils.py
-@@ -1,5 +1,6 @@
- def add(a, b):
-     return a + b
+--- a/src/utils.js
++++ b/src/utils.js
+@@ -1,5 +1,5 @@
+ function add(a, b) {
+-  return a + b;
++  return a + b + 1;
+ }
  
-+def subtract(a, b):
-+    return a - b
-+
- def multiply(a, b):
-     return a * b
-```
+ function subtract(a, b) {
+@@ -10,5 +10,5 @@
+ function multiply(a, b) {
+-  return a * b;
++  return a * b * 2;
+ }
+ 
+ function divide(a, b) {

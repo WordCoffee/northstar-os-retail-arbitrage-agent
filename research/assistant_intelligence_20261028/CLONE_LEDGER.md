@@ -1,7 +1,7 @@
 # Clone Ledger — Agent Kernel
 
 **Status:** Phase C v0.1. All 12 modules exist in
-`Northstar_backend/agent_kernel/` and are covered by 46 tests. The table records
+`Northstar_backend/agent_kernel/` and are covered by 48 tests. The table records
 the source method; `built` means the module exists, not that a vendor product was
 copied.
 **Rule:** every row records the source, the licence/ToS position, the method, our

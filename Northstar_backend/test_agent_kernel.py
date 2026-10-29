@@ -315,6 +315,16 @@ def test_file_min_bytes_verifier(tmp_path):
     assert ok.result == "pass" and bad.result == "fail"
 
 
+def test_markdown_fence_is_stripped_only_when_it_wraps_the_payload():
+    from agent_kernel.artifacts import strip_markdown_fence
+    text, stripped = strip_markdown_fence("```diff\n--- a/x\n+++ b/x\n```")
+    assert stripped is True and text.startswith("--- a/x")
+    same, stripped2 = strip_markdown_fence("--- a/x\n+++ b/x")
+    assert stripped2 is False and same.startswith("--- a/x")
+    partial, stripped3 = strip_markdown_fence("```json\n{\"a\": 1}")
+    assert stripped3 is False and partial.startswith("```json")
+
+
 def test_unknown_verifier_is_unknown_not_pass():
     ev = VerifierRegistry().verify(Acceptance("x", "does_not_exist"),
                                    VerifyContext("s", "n"))

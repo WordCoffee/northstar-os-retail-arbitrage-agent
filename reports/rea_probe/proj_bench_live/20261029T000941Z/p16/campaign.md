@@ -1,50 +1,43 @@
-```markdown
-# Campaign: Inspect-Then-Browser
+# Campaign: Inspect-then-Browser
 
 ## Objective
-Execute a two-lane campaign where Lane A performs static inspection of target assets, and Lane B performs dynamic browser interaction. A mandatory human gate separates the lanes to ensure inspection findings are validated before proceeding to browser actions.
+Execute a two-lane campaign where Lane A performs static inspection and Lane B performs dynamic browsing, separated by a mandatory human gate.
 
 ## Lanes
 
-### Lane A: Inspect
-- **Scope**: Static analysis of target URLs, headers, and metadata.
+### Lane A: Inspection
+- **Scope**: Static analysis of target artifacts (code, configs, logs).
 - **Actions**:
-  - Fetch target URLs.
-  - Record HTTP status codes and headers.
-  - Extract metadata (e.g., titles, descriptions).
-  - Log findings to `inspect_results.json`.
-- **Exit Condition**: All targets inspected and results logged.
+  1. Parse and validate target files.
+  2. Generate inspection report.
+  3. Flag anomalies for review.
+- **Output**: `inspection_report.json`
 
-### Gate: Human Validation
-- **Requirement**: A human must review `inspect_results.json` and explicitly approve proceeding to Lane B.
-- **Action**:
-  - Review findings for anomalies or risks.
-  - Set `gate_approved = true` in `campaign_state.json`.
-- **Exit Condition**: `gate_approved` is `true`.
+### Gate: Human Review
+- **Trigger**: After Lane A completes.
+- **Action**: Human reviews `inspection_report.json`.
+- **Decision**:
+  - **Approve**: Proceed to Lane B.
+  - **Reject**: Halt campaign; return to Lane A for re-inspection.
+- **Status**: `pending_human_approval`
 
-### Lane B: Browser
-- **Scope**: Dynamic interaction with approved targets.
+### Lane B: Browsing
+- **Scope**: Dynamic interaction with target environment (web, API, UI).
 - **Actions**:
-  - Launch browser session.
-  - Navigate to approved targets.
-  - Perform scripted interactions (e.g., clicks, form submissions).
-  - Capture screenshots and console logs.
-  - Log results to `browser_results.json`.
-- **Exit Condition**: All approved targets processed and results logged.
+  1. Initialize browser session.
+  2. Execute predefined navigation paths.
+  3. Capture screenshots and logs.
+  4. Validate expected states.
+- **Output**: `browsing_log.json`, `screenshots/`
 
 ## Workflow
-1. **Start Lane A**: Execute inspection tasks.
-2. **Gate**: Pause campaign. Human reviews `inspect_results.json` and sets `gate_approved = true`.
-3. **Start Lane B**: Execute browser tasks only if `gate_approved` is `true`.
-
-## State Management
-- `campaign_state.json`:
-  - `lane_a_status`: "pending" | "completed"
-  - `gate_approved`: false
-  - `lane_b_status`: "pending" | "completed"
+1. **Start Lane A** → Generate inspection report.
+2. **Gate** → Human approves or rejects.
+3. **If Approved** → Start Lane B.
+4. **If Rejected** → Return to Lane A.
+5. **End** → Compile final report from both lanes.
 
 ## Constraints
-- Lane B must not start until the gate is approved.
-- Lane A and Lane B are strictly scoped to their respective actions.
-- All results must be logged to JSON files for auditability.
-```
+- Lane B **must not** start without explicit human approval at the gate.
+- Lane A and Lane B are strictly scoped: Lane A does not browse; Lane B does not inspect.
+- All outputs are versioned and timestamped.

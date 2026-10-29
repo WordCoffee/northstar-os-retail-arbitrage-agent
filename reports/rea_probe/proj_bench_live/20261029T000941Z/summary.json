@@ -1,7 +1,7 @@
 {
   "programme": "NS-PROJ-20",
-  "mode": "live-lane-baseline",
-  "label": "live lane baseline \u2014 harness persists model text; content quality unverified",
+  "mode": "live-text-lane-baseline",
+  "label": "live text-lane baseline",
   "project_result": false,
   "quality_claim": false,
   "run_at": "20261029T000941Z",
@@ -966,7 +966,7 @@
       "model_chars": 3376
     }
   ],
-  "note": "Live lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
+  "note": "Live text-lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
   "thresholds_from_this_run": {
     "completion_rate_min": 1.0,
     "evidence_coverage_min": 1.0,
@@ -979,194 +979,109 @@
     "valid": 18,
     "total": 20,
     "rate": 0.9,
-    "markdown_fenced": 13,
-    "binary_briefs": [
-      "p11",
-      "p14"
-    ],
+    "markdown_fenced": 0,
     "rows": [
       {
         "id": "p01",
-        "artifact": "fix.patch",
-        "bytes": 180,
-        "kind": "patch",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```diff\r --- a/src/calculator.py\r +++ b/src/calculator.py\r @@ -1,6 +1,6 @@\r  def"
+        "markdown_fence": false
       },
       {
         "id": "p02",
-        "artifact": "endpoint.md",
-        "bytes": 1585,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Endpoint: Get User Profile\r \r ## Overview\r This document describe"
+        "markdown_fence": false
       },
       {
         "id": "p03",
-        "artifact": "refactor.md",
-        "bytes": 971,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Refactor Plan: Split `core.py`\r \r ## Objective\r Split the oversiz"
+        "markdown_fence": false
       },
       {
         "id": "p04",
-        "artifact": "flag.md",
-        "bytes": 1356,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Feature Flag: `enable_new_feature`\r \r ## Description\r A default-o"
+        "markdown_fence": false
       },
       {
         "id": "p05",
-        "artifact": "build.log",
-        "bytes": 334,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```\r [2023-10-27 10:01:02] Starting build...\r [2023-10-27 10:01:03] Compiling sr"
+        "markdown_fence": false
       },
       {
         "id": "p06",
-        "artifact": "audit.json",
-        "bytes": 271,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "{\r   \"artifact\": \"audit.json\",\r   \"content\": {\r     \"target\": \"admin_panel\",\r   "
+        "markdown_fence": false
       },
       {
         "id": "p07",
-        "artifact": "runbook.md",
-        "bytes": 1194,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Runbook: Read-Only Browser Task\r \r ## Objective\r Execute a read-o"
+        "markdown_fence": false
       },
       {
         "id": "p08",
-        "artifact": "resume.json",
-        "bytes": 1082,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```json\r {\r   \"run_id\": \"run-20231027-001\",\r   \"status\": \"resumed\",\r   \"checkpoi"
+        "markdown_fence": false
       },
       {
         "id": "p09",
-        "artifact": "state.json",
-        "bytes": 158,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "{\r   \"status\": \"pending\",\r   \"last_updated\": \"2023-10-27T10:00:00Z\",\r   \"checks\""
+        "markdown_fence": false
       },
       {
         "id": "p10",
-        "artifact": "digest.md",
-        "bytes": 1182,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "# Project Digest\r \r ## Executive Summary\r This digest summarizes the current sta"
+        "markdown_fence": false
       },
       {
         "id": "p11",
-        "artifact": "label.png",
-        "bytes": 2737,
-        "kind": "binary image",
         "format_valid": false,
-        "markdown_fence": false,
-        "head": "I can't generate a binary PNG file directly in this interface. Below is a comple"
+        "markdown_fence": false
       },
       {
         "id": "p12",
-        "artifact": "back.md",
-        "bytes": 564,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Back Panel\r \r **Legal Notice**\r \r This product is sold \"as is\" wi"
+        "markdown_fence": false
       },
       {
         "id": "p13",
-        "artifact": "canvases.json",
-        "bytes": 820,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```json\r {\r   \"canvases\": [\r     {\r       \"name\": \"default\",\r       \"width\": 800"
+        "markdown_fence": false
       },
       {
         "id": "p14",
-        "artifact": "ad.mp4",
-        "bytes": 771,
-        "kind": "binary video",
         "format_valid": false,
-        "markdown_fence": true,
-        "head": "```\r # Artifact: ad.mp4\r # Type: Video\r # Resolution: 1080x1920\r # Duration: 14."
+        "markdown_fence": false
       },
       {
         "id": "p15",
-        "artifact": "listing_audit.json",
-        "bytes": 239,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```json\r {\r   \"listing_id\": \"LST-2023-001\",\r   \"rubric_cited\": \"Standard Listing"
+        "markdown_fence": false
       },
       {
         "id": "p16",
-        "artifact": "campaign.md",
-        "bytes": 1988,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```markdown\r # Campaign: Inspect-Then-Browser\r \r ## Objective\r Execute a two-lan"
+        "markdown_fence": false
       },
       {
         "id": "p17",
-        "artifact": "replan.json",
-        "bytes": 328,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "{\r   \"plan_version\": 2,\r   \"previous_version\": 1,\r   \"trigger\": \"assertion_failu"
+        "markdown_fence": false
       },
       {
         "id": "p18",
-        "artifact": "handoff.md",
-        "bytes": 2608,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "# Project Handoff: `handoff.md`\r \r ## 1. Goal\r **Primary Objective:** Create a p"
+        "markdown_fence": false
       },
       {
         "id": "p19",
-        "artifact": "applied.diff",
-        "bytes": 195,
-        "kind": "text",
         "format_valid": true,
-        "markdown_fence": true,
-        "head": "```diff\r --- a/src/utils.py\r +++ b/src/utils.py\r @@ -1,5 +1,6 @@\r  def add(a, b)"
+        "markdown_fence": false
       },
       {
         "id": "p20",
-        "artifact": "project.json",
-        "bytes": 1537,
-        "kind": "json",
         "format_valid": true,
-        "markdown_fence": false,
-        "head": "{\r   \"name\": \"three-node-project\",\r   \"version\": \"1.0.0\",\r   \"description\": \"A t"
+        "markdown_fence": false
       }
-    ],
-    "note": "File existence is not artifact validity. Binary briefs cannot be produced by a text-only lane; several text artifacts carry markdown fences."
+    ]
   },
   "server": {
     "binary": "%USERPROFILE%\\.config\\northstar-llm\\bin\\llama-server.exe",
@@ -1198,5 +1113,520 @@
       "status": "completed"
     }
   },
-  "not_a_quality_claim": true
+  "not_a_quality_claim": true,
+  "fence_rerun": {
+    "policy": "strip Markdown fences at persistence; record the event",
+    "nodes": 13,
+    "repaired": [
+      {
+        "id": "p01",
+        "artifact": "fix.patch",
+        "before_bytes": 180,
+        "after_bytes": 165,
+        "fence_stripped": true
+      },
+      {
+        "id": "p02",
+        "artifact": "endpoint.md",
+        "before_bytes": 1585,
+        "after_bytes": 939,
+        "fence_stripped": true
+      },
+      {
+        "id": "p03",
+        "artifact": "refactor.md",
+        "before_bytes": 971,
+        "after_bytes": 1167,
+        "fence_stripped": true
+      },
+      {
+        "id": "p04",
+        "artifact": "flag.md",
+        "before_bytes": 1356,
+        "after_bytes": 2043,
+        "fence_stripped": true
+      },
+      {
+        "id": "p05",
+        "artifact": "build.log",
+        "before_bytes": 334,
+        "after_bytes": 232,
+        "fence_stripped": true
+      },
+      {
+        "id": "p07",
+        "artifact": "runbook.md",
+        "before_bytes": 1194,
+        "after_bytes": 1046,
+        "fence_stripped": true
+      },
+      {
+        "id": "p08",
+        "artifact": "resume.json",
+        "before_bytes": 1082,
+        "after_bytes": 682,
+        "fence_stripped": true
+      },
+      {
+        "id": "p12",
+        "artifact": "back.md",
+        "before_bytes": 564,
+        "after_bytes": 271,
+        "fence_stripped": true
+      },
+      {
+        "id": "p13",
+        "artifact": "canvases.json",
+        "before_bytes": 820,
+        "after_bytes": 520,
+        "fence_stripped": true
+      },
+      {
+        "id": "p14",
+        "artifact": "ad.mp4",
+        "before_bytes": 771,
+        "after_bytes": 1217,
+        "fence_stripped": true
+      },
+      {
+        "id": "p15",
+        "artifact": "listing_audit.json",
+        "before_bytes": 239,
+        "after_bytes": 277,
+        "fence_stripped": true
+      },
+      {
+        "id": "p16",
+        "artifact": "campaign.md",
+        "before_bytes": 1988,
+        "after_bytes": 1535,
+        "fence_stripped": true
+      },
+      {
+        "id": "p19",
+        "artifact": "applied.diff",
+        "before_bytes": 195,
+        "after_bytes": 275,
+        "fence_stripped": true
+      }
+    ]
+  },
+  "pinned_settings": {
+    "mtp": false,
+    "context": 8192,
+    "kv_cache": "q8_0",
+    "reason": "MTP runs aborted at 46 and 49 calls; no-MTP completed 60"
+  },
+  "quality_audit": {
+    "folder": "reports\\rea_probe\\proj_bench_live\\20261029T000941Z",
+    "valid": 17,
+    "total": 20,
+    "rate": 0.85,
+    "rows": [
+      {
+        "id": "p01",
+        "artifact": "fix.patch",
+        "kind": "patch",
+        "valid": true,
+        "checks": {
+          "has_minus_file": true,
+          "has_plus_file": true,
+          "has_hunk": true
+        },
+        "detail": "unified diff shape"
+      },
+      {
+        "id": "p02",
+        "artifact": "endpoint.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 899,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "route": true,
+            "endpoint": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p03",
+        "artifact": "refactor.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1128,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "refactor": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p04",
+        "artifact": "flag.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1988,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "default": true,
+            "off": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p05",
+        "artifact": "build.log",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 228,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "build": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p06",
+        "artifact": "audit.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p07",
+        "artifact": "runbook.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1021,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "host": true,
+            "expiry": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p08",
+        "artifact": "resume.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p09",
+        "artifact": "state.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p10",
+        "artifact": "digest.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1156,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "digest": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p11",
+        "artifact": "label.png",
+        "kind": "label",
+        "valid": false,
+        "checks": {
+          "png_magic": false
+        },
+        "detail": "not a PNG"
+      },
+      {
+        "id": "p12",
+        "artifact": "back.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 264,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "back": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p13",
+        "artifact": "canvases.json",
+        "kind": "social",
+        "valid": false,
+        "checks": {
+          "entries": 4,
+          "formats": {
+            "": false
+          }
+        },
+        "detail": "format + documented size"
+      },
+      {
+        "id": "p14",
+        "artifact": "ad.mp4",
+        "kind": "ad",
+        "valid": false,
+        "checks": {},
+        "detail": "[mov,mp4,m4a,3gp,3g2,mj2 @ 000001d048a2fc80] moov atom not found\nreports\\rea_probe\\proj_bench_live\\20261029T000941Z\\p14\\ad.mp4: Invalid data found when processing input\n"
+      },
+      {
+        "id": "p15",
+        "artifact": "listing_audit.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p16",
+        "artifact": "campaign.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 1482,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "gate": true,
+            "lane": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p17",
+        "artifact": "replan.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      },
+      {
+        "id": "p18",
+        "artifact": "handoff.md",
+        "kind": "text",
+        "valid": true,
+        "checks": {
+          "chars": 2557,
+          "min_chars": 120,
+          "long_enough": true,
+          "terms": {
+            "handoff": true
+          }
+        },
+        "detail": "length + required terms"
+      },
+      {
+        "id": "p19",
+        "artifact": "applied.diff",
+        "kind": "patch",
+        "valid": true,
+        "checks": {
+          "has_minus_file": true,
+          "has_plus_file": true,
+          "has_hunk": true
+        },
+        "detail": "unified diff shape"
+      },
+      {
+        "id": "p20",
+        "artifact": "project.json",
+        "kind": "json",
+        "valid": true,
+        "checks": {},
+        "detail": "parsed dict"
+      }
+    ]
+  },
+  "tool_lane_rerun": {
+    "policy": "tool-calling node instead of the text lane",
+    "p11": {
+      "before_bytes": 2737,
+      "after_bytes": 1965681,
+      "before_valid": false,
+      "after_valid": true,
+      "why": "pouch_label.compose produced a real PNG; OCR + prepress passed",
+      "checks": {
+        "png_magic": true,
+        "ocr_status": "ok",
+        "ocr_terms": {
+          "ORGANIC LION'S MANE": true,
+          "MUSHROOM POWDER": true,
+          "6 oz": true
+        },
+        "prepress_assessed": true,
+        "prepress_verdict": "printable",
+        "printable": true
+      }
+    },
+    "p14": {
+      "before_bytes": 1217,
+      "after_bytes": 2737719,
+      "before_valid": false,
+      "after_valid": true,
+      "why": "FFmpeg probe clip is a real 12 s 1080x1920 MP4 with audio",
+      "checks": {
+        "video_stream": true,
+        "audio_stream": true,
+        "duration_s": 12.0,
+        "duration_12_15": true,
+        "width": 1080,
+        "height": 1920,
+        "vertical_1080x1920": true
+      }
+    }
+  },
+  "format_audit_after_tool": {
+    "valid": 20,
+    "total": 20,
+    "rate": 1.0,
+    "rows": [
+      {
+        "id": "p01",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p02",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p03",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p04",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p05",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p06",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p07",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p08",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p09",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p10",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p11",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p12",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p13",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p14",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p15",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p16",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p17",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p18",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p19",
+        "format_valid": true,
+        "markdown_fence": false
+      },
+      {
+        "id": "p20",
+        "format_valid": true,
+        "markdown_fence": false
+      }
+    ]
+  },
+  "quality_audit_after_tool": {
+    "valid": 19,
+    "total": 20,
+    "rate": 0.95,
+    "failed": [
+      "p13"
+    ]
+  },
+  "thresholds": {
+    "completion_rate_min": 1.0,
+    "evidence_coverage_min": 1.0,
+    "node_seconds_p50_max": 7.5,
+    "node_seconds_p95_max": 16.9,
+    "format_validity_min": 0.9,
+    "quality_min": 0.85,
+    "quality_note": "Set only after content validators ran on all three baseline runs; p11/p13/p14 are the stable text-lane failures."
+  }
 }

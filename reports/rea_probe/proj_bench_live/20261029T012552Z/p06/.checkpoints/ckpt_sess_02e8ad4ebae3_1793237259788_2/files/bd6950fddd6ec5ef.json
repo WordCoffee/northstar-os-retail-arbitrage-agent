@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_01",
+    "description": "Verify that the audit.json file exists and is valid JSON.",
+    "command": "test -f audit.json && jq . audit.json > /dev/null",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_02",
+    "description": "Ensure the audit.json contains a 'value' field with a non-null string value.",
+    "command": "jq -e '.value | type == \"string\" and length > 0' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_03",
+    "description": "Ensure the audit.json contains an 'evidence' field with a non-null string value.",
+    "command": "jq -e '.evidence | type == \"string\" and length > 0' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_04",
+    "description": "Verify that the 'evidence' field contains a reference to the admin panel source (e.g., URL, API endpoint, or log snippet).",
+    "command": "jq -e '.evidence | test(\"(http|api|panel|admin|log)\")' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_05",
+    "description": "Confirm that the audit.json does not contain any write operations or mutation keywords (e.g., 'POST', 'PUT', 'DELETE', 'update', 'create').",
+    "command": "jq -e '.evidence | test(\"(POST|PUT|DELETE|update|create)\", \"i\") | not' audit.json",
+    "expected": "exit code 0"
+  }
+]

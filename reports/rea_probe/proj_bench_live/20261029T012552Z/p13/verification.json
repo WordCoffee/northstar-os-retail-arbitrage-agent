@@ -1,0 +1,50 @@
+[
+  {
+    "id": "check_01",
+    "description": "Verify that the file 'canvases.json' exists and is valid JSON.",
+    "type": "file_exists_and_valid_json",
+    "target": "canvases.json"
+  },
+  {
+    "id": "check_02",
+    "description": "Ensure the root element of 'canvases.json' is a JSON array.",
+    "type": "json_structure",
+    "target": "canvases.json",
+    "expected_type": "array"
+  },
+  {
+    "id": "check_03",
+    "description": "Verify that the array contains between 3 and 5 items inclusive.",
+    "type": "array_length",
+    "target": "canvases.json",
+    "min_length": 3,
+    "max_length": 5
+  },
+  {
+    "id": "check_04",
+    "description": "Ensure each item in the array is an object containing 'width' and 'height' as integers.",
+    "type": "schema_validation",
+    "target": "canvases.json",
+    "schema": {
+      "type": "object",
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" }
+      }
+    }
+  },
+  {
+    "id": "check_05",
+    "description": "Ensure each item in the array contains a 'source' field with a non-empty string value to document provenance.",
+    "type": "schema_validation",
+    "target": "canvases.json",
+    "schema": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+]

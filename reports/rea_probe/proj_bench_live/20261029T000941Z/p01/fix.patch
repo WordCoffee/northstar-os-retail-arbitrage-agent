@@ -1,11 +1,9 @@
-```diff
 --- a/src/calculator.py
 +++ b/src/calculator.py
-@@ -1,6 +1,6 @@
+@@ -1,5 +1,5 @@
  def add(a, b):
 -    return a - b
 +    return a + b
- 
+
  def subtract(a, b):
      return a - b
-```

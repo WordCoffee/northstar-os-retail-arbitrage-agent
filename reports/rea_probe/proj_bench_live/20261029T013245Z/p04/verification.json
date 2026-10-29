@@ -1,0 +1,29 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'flag.md' exists in the repository root.",
+    "type": "file_exists",
+    "path": "flag.md"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the file 'flag.md' contains the phrase 'default-off' or 'default: off' (case-insensitive).",
+    "type": "content_contains",
+    "path": "flag.md",
+    "pattern": "(?i)default[- ]?off"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the file 'flag.md' contains a section or description mentioning 'test' or 'verification' for both states.",
+    "type": "content_contains",
+    "path": "flag.md",
+    "pattern": "(?i)(test|verification|proof).*(both|on|off)"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the file 'flag.md' explicitly mentions the 'on' state and the 'off' state.",
+    "type": "content_contains",
+    "path": "flag.md",
+    "pattern": "(?i)(on|enabled|true).*(off|disabled|false)"
+  }
+]

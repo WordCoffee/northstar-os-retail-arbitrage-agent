@@ -1,7 +1,7 @@
 {
   "programme": "NS-PROJ-20",
-  "mode": "live-lane-baseline",
-  "label": "live lane baseline \u2014 harness persists model text; content quality unverified",
+  "mode": "live-text-lane-baseline",
+  "label": "live text-lane baseline",
   "project_result": false,
   "quality_claim": false,
   "run_at": "20261029T000510Z",
@@ -819,7 +819,7 @@
       "model_chars": 0
     }
   ],
-  "note": "Live lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
+  "note": "Live text-lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
   "thresholds_from_this_run": {
     "completion_rate": 0.4,
     "evidence_coverage": 0.617,

@@ -1,0 +1,26 @@
+[
+  {
+    "check_id": "CHK-001",
+    "description": "Verify that the runbook explicitly defines a 'read-only' scope for the browser task, ensuring no write operations (e.g., form submissions, file uploads, or state-changing API calls) are permitted.",
+    "type": "static_analysis",
+    "criteria": "The document must contain a section or explicit constraint stating that the task is strictly read-only and prohibits any mutating actions."
+  },
+  {
+    "check_id": "CHK-002",
+    "description": "Confirm that the runbook specifies a per-host grant mechanism, detailing how permissions are scoped to specific domains or hosts rather than being global.",
+    "type": "static_analysis",
+    "criteria": "The document must include configuration or procedural steps that define host-specific access controls (e.g., allow-lists, domain-scoped tokens, or per-host session policies)."
+  },
+  {
+    "check_id": "CHK-003",
+    "description": "Ensure that the runbook includes a defined expiry mechanism for the access grant, specifying a time limit or TTL after which the permissions automatically revoke.",
+    "type": "static_analysis",
+    "criteria": "The document must explicitly mention an expiry timestamp, TTL duration, or automatic revocation policy tied to the per-host grant."
+  },
+  {
+    "check_id": "CHK-004",
+    "description": "Validate that the runbook provides a clear, step-by-step procedure for executing the browser task within the defined constraints, including how to verify the read-only status and host scope during execution.",
+    "type": "process_validation",
+    "criteria": "The document must contain an actionable workflow that integrates the read-only constraint, per-host grant, and expiry check into the task execution steps."
+  }
+]

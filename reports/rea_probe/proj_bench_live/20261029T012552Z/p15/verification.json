@@ -1,0 +1,43 @@
+[
+  {
+    "id": "check_1",
+    "name": "Listing Title Length",
+    "description": "Verifies that the listing title is between 10 and 60 characters in length.",
+    "type": "numeric_range",
+    "target_field": "title",
+    "min_value": 10,
+    "max_value": 60
+  },
+  {
+    "id": "check_2",
+    "name": "Price Format Validity",
+    "description": "Ensures the price field is a valid positive number and formatted with exactly two decimal places.",
+    "type": "regex",
+    "target_field": "price",
+    "pattern": "^\\d+\\.\\d{2}$"
+  },
+  {
+    "id": "check_3",
+    "name": "Required Category Presence",
+    "description": "Checks that the listing includes a non-empty category field from the predefined list of valid categories.",
+    "type": "enum",
+    "target_field": "category",
+    "allowed_values": ["Electronics", "Home & Garden", "Fashion", "Automotive", "Books"]
+  },
+  {
+    "id": "check_4",
+    "name": "Description Minimum Word Count",
+    "description": "Validates that the description contains at least 50 words to ensure sufficient detail.",
+    "type": "word_count",
+    "target_field": "description",
+    "min_words": 50
+  },
+  {
+    "id": "check_5",
+    "name": "Image URL Accessibility",
+    "description": "Confirms that all provided image URLs are valid HTTP/HTTPS links and return a 200 status code.",
+    "type": "http_status",
+    "target_field": "images",
+    "expected_status": 200
+  }
+]

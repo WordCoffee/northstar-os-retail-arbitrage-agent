@@ -1,0 +1,18 @@
+[
+  {
+    "check": "The file 'endpoint.md' must exist in the repository root.",
+    "type": "file_exists"
+  },
+  {
+    "check": "The file 'endpoint.md' must contain the string 'GET /api/health' or 'GET /health' to define the read-only endpoint.",
+    "type": "content_contains"
+  },
+  {
+    "check": "The file 'endpoint.md' must contain a section or description mentioning 'test' or 'unit test' to ensure the endpoint is tested.",
+    "type": "content_contains"
+  },
+  {
+    "check": "The file 'endpoint.md' must NOT contain any SQL migration commands (e.g., 'ALTER TABLE', 'CREATE TABLE', 'MIGRATION') to ensure no schema migration is involved.",
+    "type": "content_not_contains"
+  }
+]

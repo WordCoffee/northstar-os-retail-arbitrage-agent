@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines matching the regex 'error' (case-insensitive).",
+    "type": "regex",
+    "pattern": "(?i)error",
+    "expected": "no_match"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the build log contains no lines matching the regex 'fatal' (case-insensitive).",
+    "type": "regex",
+    "pattern": "(?i)fatal",
+    "expected": "no_match"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the build log contains a line matching the regex 'Build succeeded' or 'BUILD SUCCESSFUL' (case-insensitive).",
+    "type": "regex",
+    "pattern": "(?i)(build succeeded|build successful)",
+    "expected": "match"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the build log does not contain any lines starting with 'ERROR:' or 'FATAL:'.",
+    "type": "regex",
+    "pattern": "^(ERROR|FATAL):",
+    "expected": "no_match"
+  }
+]

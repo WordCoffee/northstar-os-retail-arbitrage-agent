@@ -1,39 +1,39 @@
-```markdown
 # Refactor Plan: Split `core.py`
 
 ## Objective
-Split the oversized `core.py` module into two focused modules without changing behaviour.
+Split the oversized `core.py` module into two modules (`core.py` and `core_utils.py`) without changing behavior.
 
-## Current State
-- `core.py` contains:
-  - `Config` class
-  - `Logger` class
-  - `DataProcessor` class
-  - `utils` functions
-
-## Proposed Structure
-1. `config.py`
-   - `Config` class
-2. `logging.py`
-   - `Logger` class
-3. `processor.py`
-   - `DataProcessor` class
-4. `utils.py`
-   - Utility functions
-
-## Public API
-- `core.py` will re-export all public symbols to maintain backward compatibility.
+## Constraints
+1. **Tests Green**: All existing unit tests must pass.
+2. **Public API Unchanged**: The public interface of `core.py` must remain identical.
 
 ## Steps
-1. Create `config.py` with `Config` class.
-2. Create `logging.py` with `Logger` class.
-3. Create `processor.py` with `DataProcessor` class.
-4. Create `utils.py` with utility functions.
-5. Update `core.py` to import and re-export all public symbols.
-6. Run tests to ensure green.
-7. Verify public API unchanged.
 
-## Verification
-- All tests pass.
-- Public API unchanged.
-```
+### 1. Identify Public API
+- List all public functions, classes, and constants in `core.py`.
+- Ensure these remain accessible from `core.py`.
+
+### 2. Identify Internal Utilities
+- Identify helper functions, constants, and classes that are not part of the public API.
+- Move these to `core_utils.py`.
+
+### 3. Update Imports
+- In `core.py`, import necessary items from `core_utils.py`.
+- Ensure no circular dependencies.
+
+### 4. Update Tests
+- Update test imports if they directly reference internal utilities.
+- Ensure tests still pass.
+
+### 5. Verify
+- Run all tests.
+- Confirm public API is unchanged.
+
+## Files to Modify
+- `core.py`
+- `core_utils.py` (new)
+- `tests/test_core.py` (if needed)
+
+## Rollback Plan
+- If tests fail, revert changes.
+- If public API changes, revert and re-evaluate split.

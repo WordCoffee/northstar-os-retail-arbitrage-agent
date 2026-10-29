@@ -1,0 +1,12 @@
+{
+  "artifact": "audit.json",
+  "action": "inspect",
+  "target": "admin_panel",
+  "mode": "read-only",
+  "value": "12345",
+  "evidence": "Retrieved from /api/v1/admin/status",
+  "checks": {
+    "value_quoted": true,
+    "no_change_made": true
+  }
+}

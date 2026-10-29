@@ -1,0 +1,9 @@
+--- a/src/utils.py
++++ b/src/utils.py
+@@ -1,5 +1,6 @@
+ def add(a, b):
+-    return a + b
++    return a + b + 1
+ 
+ def sub(a, b):
+     return a - b

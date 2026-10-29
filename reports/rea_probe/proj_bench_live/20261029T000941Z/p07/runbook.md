@@ -1,28 +1,25 @@
-```markdown
 # Runbook: Read-Only Browser Task
 
 ## Objective
-Execute a read-only browsing session against a specific host with a time-limited access grant.
+Execute a read-only browsing task against a specific host with a time-limited access grant.
 
 ## Prerequisites
-1. **Host Identification**: The target host must be explicitly named in the task configuration.
-2. **Expiry Configuration**: A specific expiry timestamp (ISO 8601) must be set for the access grant.
-3. **Authentication Constraint**: The session must be strictly read-only; no login credentials or authentication tokens are permitted.
+- Target host name is explicitly defined.
+- Expiry timestamp is set for the access grant.
+- No login or authentication credentials are required or used.
 
-## Execution Steps
-1. **Validate Configuration**:
-   - Confirm the `host` field is populated.
-   - Confirm the `expiry` field is set and in the future.
-   - Confirm no `login` or `credentials` fields are present.
-2. **Initiate Session**:
-   - Launch the browser instance targeting the specified `host`.
-   - Apply the read-only policy (disable form submissions, file uploads, and state-changing actions).
-3. **Monitor Expiry**:
-   - Track the current time against the `expiry` timestamp.
-   - Terminate the session automatically upon reaching the expiry time.
+## Steps
+1. **Define Host**: Specify the exact host name for the target resource.
+2. **Set Expiry**: Configure the access grant to expire at a specific timestamp.
+3. **Initiate Session**: Open a browser session to the host in read-only mode.
+4. **Verify Constraints**:
+   - Confirm the host name matches the defined target.
+   - Confirm the session expires at the set time.
+   - Confirm no login prompt or credential entry is required.
+5. **Execute Task**: Perform the read-only browsing actions within the grant window.
+6. **Terminate**: Close the session upon task completion or expiry.
 
-## Verification
-- [ ] Host is named.
-- [ ] Expiry is set.
-- [ ] No login mechanism is active.
-```
+## Checks
+- [ ] Host name is explicitly named.
+- [ ] Expiry timestamp is set.
+- [ ] No login is required or performed.

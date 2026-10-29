@@ -1,0 +1,30 @@
+[
+  {
+    "id": "no_invented_numbers",
+    "description": "Verify that all numerical values in digest.md are present in the source evidence files.",
+    "check_type": "string_match",
+    "target": "digest.md",
+    "logic": "Extract all numbers from digest.md and assert each exists in the union of all local evidence files."
+  },
+  {
+    "id": "file_existence",
+    "description": "Ensure digest.md exists in the project root.",
+    "check_type": "file_exists",
+    "target": "digest.md",
+    "logic": "Check if the file path 'digest.md' is valid and readable."
+  },
+  {
+    "id": "non_empty_content",
+    "description": "Ensure digest.md is not empty.",
+    "check_type": "content_length",
+    "target": "digest.md",
+    "logic": "Assert that the file size is greater than 0 bytes."
+  },
+  {
+    "id": "source_citation",
+    "description": "Verify that digest.md references at least one local evidence file.",
+    "check_type": "regex_match",
+    "target": "digest.md",
+    "logic": "Check for the presence of file paths or filenames from the evidence directory within the digest content."
+  }
+]

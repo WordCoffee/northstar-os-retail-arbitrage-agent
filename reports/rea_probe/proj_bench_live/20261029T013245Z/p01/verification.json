@@ -1,0 +1,22 @@
+[
+  {
+    "check": "The patch file 'fix.patch' exists in the repository root.",
+    "type": "file_exists",
+    "path": "fix.patch"
+  },
+  {
+    "check": "The patch file 'fix.patch' is a valid unified diff format.",
+    "type": "format_validation",
+    "command": "git apply --check fix.patch"
+  },
+  {
+    "check": "Applying the patch does not modify any test files (e.g., files ending in .test.js, .spec.js, or inside a tests/ directory).",
+    "type": "content_constraint",
+    "command": "git apply --stat fix.patch | grep -E '\\.(test|spec)\\.(js|ts|jsx|tsx)$|tests/'"
+  },
+  {
+    "check": "After applying the patch, the previously failing unit test passes.",
+    "type": "functional_test",
+    "command": "git apply fix.patch && npm test"
+  }
+]

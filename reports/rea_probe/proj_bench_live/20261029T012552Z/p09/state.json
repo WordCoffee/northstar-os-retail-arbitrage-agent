@@ -1,0 +1,8 @@
+{
+  "status": "pending",
+  "last_updated": "2023-10-27T10:00:00Z",
+  "checks": {
+    "assertion_recorded": false,
+    "unknown_not_pass": false
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the audit.json file exists and is valid JSON.",
+    "command": "test -f audit.json && cat audit.json | jq . > /dev/null",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the audit.json file contains a 'value' field with a non-empty string.",
+    "command": "jq -e '.value | select(type == \"string\" and length > 0)' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure the audit.json file contains an 'evidence' field with a non-empty string.",
+    "command": "jq -e '.evidence | select(type == \"string\" and length > 0)' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the 'value' field matches the expected read-only admin panel value (e.g., 'System Status: Operational').",
+    "command": "jq -e '.value == \"System Status: Operational\"' audit.json",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_5",
+    "description": "Ensure the 'evidence' field contains a reference to the admin panel URL or API endpoint used for inspection.",
+    "command": "jq -e '.evidence | select(test(\"admin\"))' audit.json",
+    "expected": "exit code 0"
+  }
+]

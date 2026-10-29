@@ -1,0 +1,4 @@
+1. **Define the Artifact**: Create a structured "State Snapshot" document containing the core goal, finalized architectural decisions, and key evidence (logs, test results, or data points) required to validate the work.
+2. **Encode Context**: Write the snapshot using a rigid, machine-readable format (e.g., YAML or JSON) to ensure that critical variables and constraints are preserved without ambiguity during context compaction.
+3. **Establish Resume Triggers**: Define specific conditions or checkpoints in the plan that indicate when the agent should load the snapshot and verify the current state against the saved evidence before proceeding.
+4. **Execute and Verify**: Perform the task, continuously updating the snapshot with new decisions and evidence, and run a final check to confirm the goal, decisions, and evidence remain intact and consistent.

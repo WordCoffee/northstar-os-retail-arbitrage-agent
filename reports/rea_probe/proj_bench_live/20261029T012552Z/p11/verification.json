@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check_ocr_accuracy",
+    "description": "Verify that the text content in label.png is correctly recognized by an OCR engine with a confidence score above 95%.",
+    "type": "ocr",
+    "command": "tesseract label.png stdout --psm 6 | grep -q \"ExpectedLabelText\"",
+    "expected": "OCR output matches the intended label text exactly."
+  },
+  {
+    "id": "check_image_resolution",
+    "description": "Ensure the label.png resolution is at least 300 DPI to meet prepress quality standards.",
+    "type": "prepress",
+    "command": "identify -format \"%[resolution]\" label.png | awk '{print $1}' | bc -l | grep -q \"^[3-9][0-9]\\+\\|^1[0-9][0-9]\\+\"",
+    "expected": "Resolution is >= 300 DPI."
+  },
+  {
+    "id": "check_color_mode",
+    "description": "Confirm that the image is in CMYK color mode, which is standard for print prepress.",
+    "type": "prepress",
+    "command": "identify -format \"%[colorspace]\" label.png | grep -q \"CMYK\"",
+    "expected": "Color space is CMYK."
+  },
+  {
+    "id": "check_file_format",
+    "description": "Validate that the artifact is a valid PNG file with correct magic bytes.",
+    "type": "format",
+    "command": "file label.png | grep -q \"PNG image data\"",
+    "expected": "File is identified as a valid PNG image."
+  },
+  {
+    "id": "check_dimensions",
+    "description": "Verify that the label dimensions match the specified pouch plate size (e.g., 100x50 pixels or equivalent physical size).",
+    "type": "dimensions",
+    "command": "identify -format \"%w %h\" label.png | grep -q \"^100 50$\"",
+    "expected": "Image dimensions are exactly 100x50 pixels (adjustable based on actual spec)."
+  }
+]

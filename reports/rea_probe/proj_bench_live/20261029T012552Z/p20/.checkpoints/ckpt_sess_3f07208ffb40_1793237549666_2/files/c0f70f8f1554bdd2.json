@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that project.json is valid JSON and contains exactly three node definitions.",
+    "command": "python3 -c \"import json; data = json.load(open('project.json')); assert len(data['nodes']) == 3, 'Expected 3 nodes'; print('PASS')\"",
+    "expected_output": "PASS"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure all three nodes have unique IDs and valid status fields.",
+    "command": "python3 -c \"import json; data = json.load(open('project.json')); ids = [n['id'] for n in data['nodes']]; assert len(set(ids)) == 3, 'IDs must be unique'; assert all(n.get('status') in ['pending', 'running', 'completed'] for n in data['nodes']), 'Invalid status'; print('PASS')\"",
+    "expected_output": "PASS"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the project execution log indicates all three nodes completed successfully.",
+    "command": "grep -c 'status: completed' execution.log | awk '{exit ($1 == 3 ? 0 : 1)}'",
+    "expected_output": ""
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that no error or failure messages are present in the execution log.",
+    "command": "! grep -iE 'error|fail|exception' execution.log",
+    "expected_output": ""
+  },
+  {
+    "id": "check_5",
+    "description": "Verify that the final output artifact contains the expected success marker.",
+    "command": "grep -q 'SUCCESS' final_output.txt",
+    "expected_output": ""
+  }
+]

@@ -1,0 +1,33 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the artifact 'endpoint.md' exists and is not empty.",
+    "type": "file_exists",
+    "path": "endpoint.md",
+    "expected": true
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the endpoint is defined as read-only (GET method) in the documentation.",
+    "type": "content_contains",
+    "path": "endpoint.md",
+    "pattern": "GET",
+    "case_sensitive": true
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the documentation explicitly states no schema migration is required.",
+    "type": "content_contains",
+    "path": "endpoint.md",
+    "pattern": "no schema migration",
+    "case_sensitive": false
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that a test case or test description is included in the documentation.",
+    "type": "content_contains",
+    "path": "endpoint.md",
+    "pattern": "test",
+    "case_sensitive": false
+  }
+]

@@ -1,48 +1,37 @@
-```json
 {
   "run_id": "run-20231027-001",
   "status": "resumed",
   "checkpoint": {
-    "last_completed_step": "step_04_validate_inputs",
-    "timestamp": "2023-10-27T14:32:00Z",
-    "state_hash": "a1b2c3d4e5f6"
+    "last_completed_step": 4,
+    "timestamp": "2023-10-27T14:32:10Z",
+    "state": "operator_gate_passed"
   },
-  "resume_action": {
-    "skip_completed_steps": true,
-    "start_from_step": "step_05_execute_transform",
-    "operator_gate_bypassed": true
-  },
+  "next_step": 5,
   "steps": [
     {
-      "id": "step_01_init",
-      "status": "completed",
-      "skipped_on_resume": true
+      "id": 1,
+      "name": "init",
+      "status": "completed"
     },
     {
-      "id": "step_02_load_data",
-      "status": "completed",
-      "skipped_on_resume": true
+      "id": 2,
+      "name": "validate_inputs",
+      "status": "completed"
     },
     {
-      "id": "step_03_preprocess",
-      "status": "completed",
-      "skipped_on_resume": true
+      "id": 3,
+      "name": "preprocess",
+      "status": "completed"
     },
     {
-      "id": "step_04_validate_inputs",
-      "status": "completed",
-      "skipped_on_resume": true
+      "id": 4,
+      "name": "operator_gate",
+      "status": "completed"
     },
     {
-      "id": "step_05_execute_transform",
-      "status": "pending",
-      "skipped_on_resume": false
-    },
-    {
-      "id": "step_06_finalize",
-      "status": "pending",
-      "skipped_on_resume": false
+      "id": 5,
+      "name": "execute_core",
+      "status": "pending"
     }
   ]
 }
-```

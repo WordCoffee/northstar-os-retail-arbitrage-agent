@@ -1,0 +1,5 @@
+[2023-10-27 10:00:01] Starting build...
+[2023-10-27 10:00:02] Compiling src/main.cpp
+[2023-10-27 10:00:03] src/main.cpp:15:5: error: expected ';' before '}' token
+[2023-10-27 10:00:03] make: *** [build/main.o] Error 1
+[2023-10-27 10:00:03] Build failed.

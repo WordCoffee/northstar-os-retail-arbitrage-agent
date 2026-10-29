@@ -1,0 +1,18 @@
+[
+  {
+    "check": "The file 'applied.diff' must exist and be a valid unified diff format.",
+    "type": "file_exists_and_valid_format"
+  },
+  {
+    "check": "The diff must contain exactly one hunk (i.e., exactly one '@@' header line).",
+    "type": "hunk_count"
+  },
+  {
+    "check": "The applied diff must not contain any lines starting with '+' or '-' that are not part of the single selected hunk (i.e., no extraneous changes from other hunks).",
+    "type": "content_integrity"
+  },
+  {
+    "check": "The diff must be applicable to the original file without errors (e.g., `git apply --check` succeeds).",
+    "type": "applicability"
+  }
+]

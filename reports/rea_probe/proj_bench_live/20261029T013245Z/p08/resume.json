@@ -1,0 +1,27 @@
+{
+  "run_id": "run-8842",
+  "status": "resuming",
+  "checkpoint": {
+    "last_completed_step": 4,
+    "timestamp": "2023-10-27T14:32:00Z",
+    "state_hash": "a1b2c3d4e5f6"
+  },
+  "resume_from": 5,
+  "steps": [
+    {
+      "id": 5,
+      "name": "validate_outputs",
+      "status": "pending"
+    },
+    {
+      "id": 6,
+      "name": "deploy",
+      "status": "pending"
+    }
+  ],
+  "operator_gate": {
+    "status": "cleared",
+    "cleared_by": "operator-01",
+    "timestamp": "2023-10-27T14:35:00Z"
+  }
+}

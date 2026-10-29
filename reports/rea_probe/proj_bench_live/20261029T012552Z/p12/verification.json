@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the front panel section (e.g., lines 1-10 or a specific header block) remains byte-for-byte identical to the original artifact.",
+    "type": "structural_integrity",
+    "command": "diff <(head -n 10 back.md) <(head -n 10 original_back.md)"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that the specific legal copy defect (e.g., incorrect jurisdiction, missing disclaimer, or typo in legal term) is corrected in the body text.",
+    "type": "content_correction",
+    "command": "grep -q \"corrected_legal_term\" back.md && ! grep -q \"original_defective_term\" back.md"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that no new lines have been added or removed outside the specific legal copy section, preserving overall file structure.",
+    "type": "structural_integrity",
+    "command": "wc -l back.md && diff <(tail -n +11 back.md) <(tail -n +11 original_back.md) | grep -v \"^>\\|^<\""
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the file remains valid Markdown with no broken syntax or formatting errors.",
+    "type": "format_validation",
+    "command": "npx markdownlint back.md --disable MD003,MD013,MD026,MD033,MD036,MD041"
+  }
+]

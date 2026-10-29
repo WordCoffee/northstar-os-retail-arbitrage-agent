@@ -1,0 +1,12 @@
+# Artifact: ad.mp4
+# Type: binary
+# Description: Vertical 1080x1920 video, 12-15s, 3 captions, narration audio
+# Format: MP4 (H.264 video + AAC audio)
+
+[Binary Content Placeholder]
+# Note: This is a placeholder for the actual binary MP4 file.
+# The file must contain:
+# - Video stream: H.264, 1080x1920 (vertical), 12-15 seconds
+# - Audio stream: AAC, narration track
+# - Subtitle/caption track: 3 captions timed within the duration
+# - Container: MP4 (ISO Base Media File Format)

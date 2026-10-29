@@ -27,6 +27,7 @@ sys.path.insert(0, str(ROOT / "Northstar_backend"))
 
 from agent_kernel import (Acceptance, Budget, Kernel, Node, Policy,  # noqa: E402
                           grant, validate_plan)
+from agent_kernel.artifacts import strip_markdown_fence  # noqa: E402
 from agent_kernel.session import CheckpointStore, Journal  # noqa: E402
 
 BRIEFS = ROOT / "eval/projects/ns_proj_20.json"
@@ -83,11 +84,16 @@ class LiveExecutor:
         if not text:
             return {"ok": False, "detail": "the model returned no content",
                     "data": {"finish": choice.get("finish_reason")}}
+        clean, fenced = strip_markdown_fence(text)
         path = self.project_dir / rel
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(text + "\n", encoding="utf-8")
-        return {"ok": True, "detail": text[:300], "files": [str(path)],
-                "data": {"seconds": seconds, "chars": len(text), "usage": usage}}
+        path.write_text(clean + ("\n" if clean and not clean.endswith("\n") else ""),
+                        encoding="utf-8")
+        self.calls[-1]["fence_stripped"] = fenced
+        self.calls[-1]["chars"] = len(clean)
+        return {"ok": True, "detail": clean[:300], "files": [str(path)],
+                "data": {"seconds": seconds, "chars": len(clean),
+                         "fence_stripped": fenced, "usage": usage}}
 
     def _prompt(self, node: Node) -> str:
         goal = str(self.brief.get("goal") or "")
@@ -289,8 +295,8 @@ def main() -> int:
     chars = sum(int(r.get("model_chars") or 0) for r in results)
     summary = {
         "programme": "NS-PROJ-20",
-        "mode": "live-lane-baseline" if args.executor == "live" else "harness-validation",
-        "label": ("live lane baseline — harness persists model text; content "
+        "mode": "live-text-lane-baseline" if args.executor == "live" else "harness-validation",
+        "label": ("live text-lane baseline — harness persists model text; content "
                   "quality unverified" if args.executor == "live"
                   else "harness validation — not a project result"),
         "project_result": False,
@@ -304,12 +310,14 @@ def main() -> int:
         "total_interventions": sum(r["interventions"] for r in results),
         "model_calls": len(secs),
         "model_chars": chars,
+        "fence_stripped": sum(1 for r in results for c in r.get("model_calls", [])
+                              if c.get("fence_stripped")),
         "node_seconds_p50": _pct(secs, 50),
         "node_seconds_p95": _pct(secs, 95),
         "resume_mechanics": resume,
         "results": [{k: v for k, v in r.items() if k != "plan"} for r in results],
-        "note": ("Live lane baseline only: the local 27B produced text and the "
-                 "harness persisted it. Artifact existence is checked; content "
+        "note": ("Live text-lane baseline only: the local 27B produced text and "
+                 "the harness persisted it. Artifact existence is checked; content "
                  "quality is not." if args.executor == "live"
                  else "Harness validation only. Not a claim about Ty's project ability."),
     }

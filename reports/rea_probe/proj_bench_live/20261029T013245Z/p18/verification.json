@@ -1,0 +1,27 @@
+[
+  {
+    "id": "file_exists",
+    "description": "Verify that the file 'handoff.md' exists in the current directory.",
+    "command": "test -f handoff.md"
+  },
+  {
+    "id": "non_empty_content",
+    "description": "Ensure the file is not empty and contains at least 10 characters.",
+    "command": "test $(wc -c < handoff.md) -gt 10"
+  },
+  {
+    "id": "contains_context_section",
+    "description": "Check that the file contains a section header or keyword indicating context preservation (e.g., 'Context', 'State', or 'Resume').",
+    "command": "grep -qi -E '(context|state|resume)' handoff.md"
+  },
+  {
+    "id": "contains_next_steps",
+    "description": "Verify that the file includes instructions for next steps or actions to be taken upon resumption.",
+    "command": "grep -qi -E '(next steps|todo|actions|resume)' handoff.md"
+  },
+  {
+    "id": "valid_markdown_structure",
+    "description": "Ensure the file contains at least one Markdown heading (line starting with #).",
+    "command": "grep -q '^#' handoff.md"
+  }
+]

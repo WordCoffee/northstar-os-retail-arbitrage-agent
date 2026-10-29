@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check-01",
+    "description": "Verify that the campaign.md file exists and contains a section explicitly defining the 'Inspect' lane and the 'Browser' lane.",
+    "type": "file_content",
+    "target": "campaign.md",
+    "pattern": "(?i)(inspect|browser).*lane|lane.*(inspect|browser)"
+  },
+  {
+    "id": "check-02",
+    "description": "Ensure there is a defined 'Human Gate' or 'Manual Approval' step that occurs between the Inspect and Browser lanes.",
+    "type": "file_content",
+    "target": "campaign.md",
+    "pattern": "(?i)(human gate|manual approval|human review|gate).*?(inspect|browser)|(?i)(inspect|browser).*?(human gate|manual approval|human review|gate)"
+  },
+  {
+    "id": "check-03",
+    "description": "Confirm that the workflow order is explicitly stated as Inspect -> Human Gate -> Browser.",
+    "type": "file_content",
+    "target": "campaign.md",
+    "pattern": "(?i)inspect.*gate.*browser"
+  },
+  {
+    "id": "check-04",
+    "description": "Verify that the document includes a definition or description of what 'Inspect' entails (e.g., static analysis, code review, unit tests).",
+    "type": "file_content",
+    "target": "campaign.md",
+    "pattern": "(?i)inspect.*(static|analysis|review|test|code)|(?i)(static|analysis|review|test|code).*inspect"
+  },
+  {
+    "id": "check-05",
+    "description": "Verify that the document includes a definition or description of what 'Browser' entails (e.g., E2E tests, UI automation, Selenium, Cypress).",
+    "type": "file_content",
+    "target": "campaign.md",
+    "pattern": "(?i)browser.*(e2e|end-to-end|ui|automation|selenium|cypress|playwright)|(?i)(e2e|end-to-end|ui|automation|selenium|cypress|playwright).*browser"
+  }
+]

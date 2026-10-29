@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'state.json' file exists and is valid JSON.",
+    "command": "test -f state.json && python3 -c \"import json; json.load(open('state.json'))\"",
+    "expected": "exit_code_0"
+  },
+  {
+    "id": "check_2",
+    "description": "Assert that the 'status' field in state.json is set to 'updated'.",
+    "command": "python3 -c \"import json; data = json.load(open('state.json')); assert data['status'] == 'updated', 'Status is not updated'\"",
+    "expected": "exit_code_0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the 'timestamp' field in state.json is a valid ISO 8601 string.",
+    "command": "python3 -c \"import json, re; data = json.load(open('state.json')); assert re.match(r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z?$', data['timestamp']), 'Invalid timestamp format'\"",
+    "expected": "exit_code_0"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure that the 'version' field in state.json is an integer greater than 0.",
+    "command": "python3 -c \"import json; data = json.load(open('state.json')); assert isinstance(data['version'], int) and data['version'] > 0, 'Version must be a positive integer'\"",
+    "expected": "exit_code_0"
+  }
+]

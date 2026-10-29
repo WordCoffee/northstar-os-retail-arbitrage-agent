@@ -1,0 +1,99 @@
+{
+  "label": "live text-lane baseline",
+  "runs": [
+    {
+      "folder": "20261029T000941Z",
+      "complete": 20,
+      "p50": 6.27,
+      "p95": 11.17,
+      "format_rate": 0.9,
+      "quality_rate": 0.85,
+      "fence_stripped": 0
+    },
+    {
+      "folder": "20261029T012552Z",
+      "complete": 20,
+      "p50": 4.82,
+      "p95": 14.08,
+      "format_rate": 0.9,
+      "quality_rate": 0.85,
+      "fence_stripped": 13
+    },
+    {
+      "folder": "20261029T013245Z",
+      "complete": 20,
+      "p50": 6.11,
+      "p95": 11.97,
+      "format_rate": 0.9,
+      "quality_rate": 0.85,
+      "fence_stripped": 12
+    }
+  ],
+  "spread": {
+    "complete": {
+      "values": [
+        20,
+        20,
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "median": 20,
+      "mean": 20
+    },
+    "p50": {
+      "values": [
+        6.27,
+        4.82,
+        6.11
+      ],
+      "min": 4.82,
+      "max": 6.27,
+      "median": 6.11,
+      "mean": 5.73
+    },
+    "p95": {
+      "values": [
+        11.17,
+        14.08,
+        11.97
+      ],
+      "min": 11.17,
+      "max": 14.08,
+      "median": 11.97,
+      "mean": 12.41
+    },
+    "format_rate": {
+      "values": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "min": 0.9,
+      "max": 0.9,
+      "median": 0.9,
+      "mean": 0.9
+    },
+    "quality_rate": {
+      "values": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "min": 0.85,
+      "max": 0.85,
+      "median": 0.85,
+      "mean": 0.85
+    }
+  },
+  "thresholds": {
+    "completion_rate_min": 1.0,
+    "evidence_coverage_min": 1.0,
+    "node_seconds_p50_max": 7.5,
+    "node_seconds_p95_max": 16.9,
+    "format_validity_min": 0.9,
+    "quality_min": 0.85,
+    "quality_note": "Set only after content validators ran on all three baseline runs; p11/p13/p14 are the stable text-lane failures."
+  },
+  "note": "Thresholds use max + 20% for latency and the observed minimum for rates; they are not quality claims."
+}

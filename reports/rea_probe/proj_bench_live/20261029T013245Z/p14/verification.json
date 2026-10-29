@@ -1,0 +1,35 @@
+[
+  {
+    "id": "check_file_exists",
+    "description": "Verify that the output file 'ad.mp4' exists in the working directory.",
+    "type": "file_exists",
+    "target": "ad.mp4"
+  },
+  {
+    "id": "check_video_duration",
+    "description": "Ensure the video duration is between 5 and 30 seconds, suitable for a vertical clip.",
+    "type": "video_duration_range",
+    "target": "ad.mp4",
+    "min_seconds": 5,
+    "max_seconds": 30
+  },
+  {
+    "id": "check_audio_track",
+    "description": "Confirm that the video contains at least one audio track for the narration.",
+    "type": "has_audio_track",
+    "target": "ad.mp4"
+  },
+  {
+    "id": "check_aspect_ratio",
+    "description": "Verify the video has a vertical aspect ratio (height > width).",
+    "type": "aspect_ratio_vertical",
+    "target": "ad.mp4"
+  },
+  {
+    "id": "check_caption_count",
+    "description": "Ensure the video contains exactly three distinct caption segments.",
+    "type": "caption_count",
+    "target": "ad.mp4",
+    "expected_count": 3
+  }
+]

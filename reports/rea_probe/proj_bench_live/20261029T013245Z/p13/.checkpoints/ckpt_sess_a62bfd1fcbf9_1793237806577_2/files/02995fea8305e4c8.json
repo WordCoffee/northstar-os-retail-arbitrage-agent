@@ -1,0 +1,54 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'canvases.json' exists and is valid JSON.",
+    "type": "file_exists_and_valid_json",
+    "target": "canvases.json"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the JSON root is an array containing between 3 and 5 items.",
+    "type": "json_schema",
+    "target": "canvases.json",
+    "schema": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5
+    }
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that each item in the array contains required fields: 'name' (string), 'width' (integer), 'height' (integer), and 'source' (string).",
+    "type": "json_schema",
+    "target": "canvases.json",
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "width", "height", "source"],
+        "properties": {
+          "name": { "type": "string" },
+          "width": { "type": "integer" },
+          "height": { "type": "integer" },
+          "source": { "type": "string" }
+        }
+      }
+    }
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure that 'width' and 'height' values are positive integers.",
+    "type": "json_schema",
+    "target": "canvases.json",
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "width": { "type": "integer", "minimum": 1 },
+          "height": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+]

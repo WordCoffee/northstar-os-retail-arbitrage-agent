@@ -1,7 +1,7 @@
 # Agent Kernel Specification — Ty's Assistant, Bojo, Autothink
 
 **Status:** **BUILT v0.1** · 2026-10-28. Operator approved ("full approval");
-the kernel is implemented in `Northstar_backend/agent_kernel/` and covered by 46
+the kernel is implemented in `Northstar_backend/agent_kernel/` and covered by 48
 tests. This document remains the contract, not a description of the model.
 **Scope:** Phase A specification + Phase C build. Ty's default runner is
 unchanged; the kernel is opt-in via `TysAssistant.run_kernel`. Bojo exposes

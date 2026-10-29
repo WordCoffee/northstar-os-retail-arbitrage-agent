@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the applied.diff file contains exactly one hunk header (e.g., @@ ... @@).",
+    "type": "regex",
+    "pattern": "(?m)^@@.*@@\n(?!.*@@.*@@)",
+    "expected": "match"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the diff does not contain any lines starting with '+++' or '--+' that indicate a second hunk or file header beyond the first.",
+    "type": "regex",
+    "pattern": "(?m)^(\\+\\+\\+|---)\\s",
+    "expected": "no_match"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the diff contains at least one added line starting with '+' and at least one removed line starting with '-' (excluding the header lines).",
+    "type": "regex",
+    "pattern": "(?m)^\\+[^+].*\n.*^\\-[^-].*",
+    "expected": "match"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the diff is a valid unified diff format by checking for the presence of a file header (--- or +++) at the beginning.",
+    "type": "regex",
+    "pattern": "(?m)^(---|\\+\\+\\+)\\s",
+    "expected": "match"
+  }
+]

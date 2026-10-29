@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file no longer exists or has been renamed/split, and that two new module files are present in the repository.",
+    "type": "file_structure",
+    "command": "ls -la src/ | grep -E '(moduleA|moduleB)\\.py' && ! test -f src/original_module.py",
+    "expected_result": "Success (exit code 0)"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that all public functions/classes from the original module are accessible from the new modules without import errors.",
+    "type": "import_test",
+    "command": "python -c \"import moduleA, moduleB; print('Imports successful')\"",
+    "expected_result": "Output contains 'Imports successful'"
+  },
+  {
+    "id": "check_3",
+    "description": "Run the existing test suite to confirm that no behavioral changes occurred during the split.",
+    "type": "test_execution",
+    "command": "pytest tests/ -v",
+    "expected_result": "All tests pass (exit code 0)"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that no circular imports were introduced between the two new modules.",
+    "type": "static_analysis",
+    "command": "python -m pyflakes src/moduleA.py src/moduleB.py | grep -i 'circular' || echo 'No circular imports detected'",
+    "expected_result": "Output contains 'No circular imports detected'"
+  },
+  {
+    "id": "check_5",
+    "description": "Confirm that the refactor.md document accurately describes the split, including the names of the new modules and the rationale for the split.",
+    "type": "documentation_check",
+    "command": "grep -q 'moduleA' refactor.md && grep -q 'moduleB' refactor.md && grep -qi 'split' refactor.md",
+    "expected_result": "Success (exit code 0)"
+  }
+]

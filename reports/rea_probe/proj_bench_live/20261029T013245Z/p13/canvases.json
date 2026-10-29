@@ -1,0 +1,22 @@
+{
+  "canvases": [
+    {
+      "name": "default",
+      "width": 1024,
+      "height": 768,
+      "source": "project_config.yaml:default_canvas"
+    },
+    {
+      "name": "mobile",
+      "width": 375,
+      "height": 812,
+      "source": "project_config.yaml:mobile_canvas"
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024,
+      "source": "project_config.yaml:tablet_canvas"
+    }
+  ]
+}
