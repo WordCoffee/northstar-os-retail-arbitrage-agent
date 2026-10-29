@@ -118,6 +118,53 @@ async def require_admin(user: dict = Depends(get_current_user)) -> dict:
     return user
 
 
+def _dev_shim_identity(request: Request) -> Optional[dict]:
+    """Resolve the local-development identity shim, or None.
+
+    Honoured only when the process runs in development and the *effective*
+    client is loopback. An explicit ``X-User-Id`` is used when present; with no
+    header the REAL app (main.py) may opt in via ``app.state.dev_auto_session``
+    (set after it provisions the demo identity), in which case the demo identity
+    is returned. Everything else returns None so ``require_session`` fails
+    closed: a hosted process, a forwarded/remote client, or an isolated app that
+    did not opt in never reaches this branch.
+    """
+    try:
+        from foundation.authn import (
+            dev_shim_enabled,
+            effective_client_host,
+            is_loopback_host,
+        )
+    except Exception:  # noqa: BLE001 - no foundation module available => no shim
+        return None
+    if not dev_shim_enabled():
+        return None
+    user_id = (request.headers.get("X-User-Id") or "").strip()
+    auto_demo = bool(getattr(getattr(getattr(request, "app", None), "state", None),
+                            "dev_auto_session", False))
+    if not user_id:
+        if not auto_demo:
+            return None
+        user_id = "demo-t2"
+    if not is_loopback_host(effective_client_host(request)):
+        return None
+    role = (request.headers.get("X-Role") or "").strip()
+    if not auth.is_valid_role(role):
+        role = auth.ROLE_MEMBER
+    org_id = (request.headers.get("X-Org-Id") or "").strip()
+    if not org_id:
+        org_id = "org-t2" if user_id == "demo-t2" else user_id
+    return {
+        "id": user_id,
+        "email": "",
+        "plan": "foundation",
+        "role": role,
+        "tenant_id": org_id,
+        "is_demo": True,
+        "dev_shim": True,
+    }
+
+
 async def require_session(request: Request) -> dict:
     """STRICT session dependency: no anonymous fallback, ever.
 
@@ -145,6 +192,21 @@ async def require_session(request: Request) -> dict:
     if not token:
         token = request.cookies.get(_SESSION_COOKIE_NAME) or None
     if not token:
+        # Dev-only identity shim. The Foundation router already honours the
+        # X-User-Id shim in local development (foundation/api/deps.py), but the
+        # legacy strict dependency did not, so Design Studio, the shell and every
+        # other require_session route returned "Authentication required." to a
+        # dev session that the rest of the app had already accepted. That split
+        # is what put the browser in a sign-in loop on /home.
+        #
+        # The guard is deliberately identical to the Foundation one and narrow:
+        # ENVIRONMENT=development AND a loopback peer AND an explicit header.
+        # A hosted/production process, or any forwarded/remote client, still
+        # fails closed below and never sees this branch. This is also exactly
+        # the documented DEV-ONLY LOCALHOST EXCEPTION in AGENTS.md.
+        shim = _dev_shim_identity(request)
+        if shim is not None:
+            return shim
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required.",
