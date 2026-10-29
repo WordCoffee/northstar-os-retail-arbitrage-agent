@@ -120,6 +120,7 @@ class CodingAgent:
             '{"tool":"read","args":{"path":"calc.py"}}\n'
             '{"tool":"grep","args":{"pattern":"assert","path":"."}}\n'
             '{"tool":"write","args":{"path":"fix.patch","content":"..."}}\n'
+            '{"tool":"apply_patch","args":{"patch":"--- a/calc.py\\n+++ b/calc.py\\n@@ -1,3 +1,3 @@\\n context\\n-old line\\n+new line\\n context\\n"}}\n'
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
         )

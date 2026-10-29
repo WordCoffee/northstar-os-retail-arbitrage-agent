@@ -13,6 +13,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
+from .patch_tool import APPLY_TIMEOUT_S, MAX_PATCH_BYTES, apply_unified_diff
+
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist",
              "build", ".pytest_cache"}
 TEXT_EXT = {".py", ".js", ".jsx", ".ts", ".tsx", ".md", ".txt", ".json",
@@ -33,12 +35,16 @@ class ToolResult:
 
 class Workspace:
     def __init__(self, root: str | Path, *, max_read_bytes: int = 120_000,
-                 max_write_bytes: int = 200_000, run_timeout_s: float = 180.0):
+                 max_write_bytes: int = 200_000, run_timeout_s: float = 180.0,
+                 max_patch_bytes: int = MAX_PATCH_BYTES,
+                 patch_timeout_s: float = APPLY_TIMEOUT_S):
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.max_read_bytes = max_read_bytes
         self.max_write_bytes = max_write_bytes
         self.run_timeout_s = run_timeout_s
+        self.max_patch_bytes = max_patch_bytes
+        self.patch_timeout_s = patch_timeout_s
         self.run_allowlist = (
             ("python", "-m", "pytest"),
             ("python", "-m", "py_compile"),
@@ -120,6 +126,20 @@ class Workspace:
         p.write_bytes(data)
         return ToolResult(True, f"wrote {len(data)} bytes", files=[str(p)])
 
+    def apply_patch(self, patch: str) -> ToolResult:
+        """Apply a unified diff inside the workspace with `git apply`.
+
+        Paths are validated against the root before git runs, the patch is staged
+        in a temp file that is always removed, and git's stderr is the error.
+        """
+        outcome = apply_unified_diff(self.root, patch,
+                                    max_bytes=self.max_patch_bytes,
+                                    timeout_s=self.patch_timeout_s)
+        return ToolResult(bool(outcome.get("ok")),
+                          str(outcome.get("output") or ""),
+                          str(outcome.get("error") or ""),
+                          [str(f) for f in (outcome.get("files") or [])])
+
     def run(self, cmd: Iterable[str]) -> ToolResult:
         args = [str(c) for c in (cmd or [])]
         if not args:
@@ -146,6 +166,8 @@ class Workspace:
                 return self.grep(args["pattern"], args.get("path", "."))
             if tool == "write":
                 return self.write(args["path"], args.get("content", ""))
+            if tool == "apply_patch":
+                return self.apply_patch(args.get("patch", ""))
             if tool == "run":
                 return self.run(args.get("cmd") or [])
         except KeyError as exc:
