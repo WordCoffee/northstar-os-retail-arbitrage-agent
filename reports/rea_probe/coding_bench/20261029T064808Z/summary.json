@@ -1,0 +1,55 @@
+{
+  "mode": "coding-agent-pilot",
+  "briefs": 3,
+  "ok": 2,
+  "rows": [
+    {
+      "id": "p01",
+      "ok": true,
+      "agent_ok": true,
+      "content_valid": true,
+      "extra": true,
+      "steps": 6,
+      "seconds": 9.4,
+      "summary": "Fixed bug in calc.py: changed 'return a - b' to 'return a + b' in the add function. Test test_add now passes (1 passed in 0.01s). Wrote unified diff to fix.patch containing ---, +++, and @@ lines.",
+      "detail": "unified diff shape; calc_fixed=True; pytest=0",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p01\\calc.py",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p01\\fix.patch",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p01\\test_calc.py"
+      ],
+      "error": ""
+    },
+    {
+      "id": "p02",
+      "ok": true,
+      "agent_ok": true,
+      "content_valid": true,
+      "extra": true,
+      "steps": 3,
+      "seconds": 6.0,
+      "summary": "Added a read-only endpoint design to endpoint.md specifying the route /api/v1/items/{item_id}, the GET method, and the JSON response shape with id, name, created_at, and updated_at fields, plus status codes 200 and 404.",
+      "detail": "length + required terms",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p02\\endpoint.md"
+      ],
+      "error": ""
+    },
+    {
+      "id": "p05",
+      "ok": false,
+      "agent_ok": false,
+      "content_valid": true,
+      "extra": true,
+      "steps": 12,
+      "seconds": 10.2,
+      "summary": "step budget exhausted",
+      "detail": "length + required terms; py_compile=0",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p05\\broken.py",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064808Z\\p05\\build.log"
+      ],
+      "error": "max_steps"
+    }
+  ]
+}

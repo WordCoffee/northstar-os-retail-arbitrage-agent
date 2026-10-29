@@ -1,0 +1,55 @@
+{
+  "mode": "coding-agent-pilot",
+  "briefs": 3,
+  "ok": 3,
+  "rows": [
+    {
+      "id": "p01",
+      "ok": true,
+      "agent_ok": true,
+      "content_valid": true,
+      "extra": true,
+      "steps": 7,
+      "seconds": 9.2,
+      "summary": "acceptance passed after write",
+      "detail": "unified diff shape; calc_fixed=True; pytest=0",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p01\\calc.py",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p01\\fix.patch",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p01\\test_calc.py"
+      ],
+      "error": ""
+    },
+    {
+      "id": "p02",
+      "ok": true,
+      "agent_ok": true,
+      "content_valid": true,
+      "extra": true,
+      "steps": 1,
+      "seconds": 2.9,
+      "summary": "acceptance passed after write",
+      "detail": "length + required terms",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p02\\endpoint.md"
+      ],
+      "error": ""
+    },
+    {
+      "id": "p05",
+      "ok": true,
+      "agent_ok": true,
+      "content_valid": true,
+      "extra": true,
+      "steps": 5,
+      "seconds": 4.7,
+      "summary": "acceptance passed after write",
+      "detail": "length + required terms; py_compile=0",
+      "files": [
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p05\\broken.py",
+        "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\coding_bench\\20261029T064907Z\\p05\\build.log"
+      ],
+      "error": ""
+    }
+  ]
+}

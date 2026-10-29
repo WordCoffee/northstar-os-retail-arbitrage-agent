@@ -1,0 +1,1 @@
+Build evidence: python -m py_compile broken.py completed successfully with exit code 0. The file broken.py contains a valid Python function definition 'def f(): return 1' with no syntax errors. Compilation produced no output, confirming clean build.

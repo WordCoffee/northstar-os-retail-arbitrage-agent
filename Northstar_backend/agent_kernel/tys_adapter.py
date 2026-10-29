@@ -68,7 +68,8 @@ def work_order_to_plan(order: Dict[str, Any], *, session_id: str = "") -> Plan:
 
 
 def executors_for(assistant: Any, order: Dict[str, Any],
-                  *, task: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+                  *, task: Optional[Dict[str, Any]] = None,
+                  coding_factory: Optional[Any] = None) -> Dict[str, Any]:
     """Map Ty's lanes onto kernel executors.
 
     `assistant` only needs `_execute_step(task, step)` returning an object with
@@ -98,7 +99,10 @@ def executors_for(assistant: Any, order: Dict[str, Any],
                 "files": list(out.get("artifacts") or []),
                 "data": out.get("evidence") or {}}
 
-    return {lane: _wrap for lane in VALID_LANES}
+    mapping = {lane: _wrap for lane in VALID_LANES}
+    if coding_factory is not None:
+        mapping["coding"] = coding_factory
+    return mapping
 
 
 def run_order(assistant: Any, order: Dict[str, Any], *,
@@ -106,14 +110,16 @@ def run_order(assistant: Any, order: Dict[str, Any], *,
               grants: Sequence[PermissionRule] = (),
               journal_path: Optional[str] = None,
               checkpoint_root: Optional[str] = None,
-              task: Optional[Dict[str, Any]] = None) -> RunResult:
+              task: Optional[Dict[str, Any]] = None,
+              coding_factory: Optional[Any] = None) -> RunResult:
     plan = work_order_to_plan(order)
     policy = Policy(mode="dontAsk")
     kernel = Kernel(
         policy=policy,
         journal=Journal(journal_path),
         checkpoints=CheckpointStore(checkpoint_root),
-        executors=executors_for(assistant, order, task=task),
+        executors=executors_for(assistant, order, task=task,
+                                coding_factory=coding_factory),
     )
     kernel.submit(plan)
     kernel.approve(plan.plan_id, approve_by)

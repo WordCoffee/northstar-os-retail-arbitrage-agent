@@ -232,17 +232,18 @@ re-renders state and evidence.
 | # | Capability | Module (planned) | Phase A status |
 |---|---|---|---|
 | 1 | Plan mode | `agent_kernel/plan_mode.py` | **spec'd** from public docs |
-| 2 | Todo state machine | `agent_kernel/todos.py` | planned |
-| 3 | Task DAG | `agent_kernel/graph.py` | planned |
-| 4 | Subagents | `agent_kernel/subagents.py` | planned |
-| 5 | Context engineering | `agent_kernel/context.py` | planned |
+| 2 | Todo state machine | `agent_kernel/todos.py` | built v0.1 |
+| 3 | Task DAG | `agent_kernel/graph.py` | built v0.1 |
+| 4 | Subagents | `agent_kernel/subagents.py` | built v0.1 |
+| 5 | Context engineering | `agent_kernel/context.py` | built v0.1 |
 | 6 | Project memory | `agent_kernel/memory.py` | **spec'd** from public docs |
 | 7 | Checkpoint / rewind | `agent_kernel/session.py` | **spec'd** from public docs |
 | 8 | Permissions / hooks | `agent_kernel/policy.py` | **spec'd** from public docs |
-| 9 | Diff review | `agent_kernel/diff.py` | planned |
-| 10 | Verification loop | `agent_kernel/verify.py` | planned |
-| 11 | Skills | `agent_kernel/skills.py` | planned |
-| 12 | Budget & replay | `agent_kernel/budget.py`, `journal.py` | planned |
+| 9 | Diff review | `agent_kernel/diff.py` | built v0.1 |
+| 10 | Verification loop | `agent_kernel/verify.py` | built v0.1 |
+| 11 | Skills | `agent_kernel/skills.py` | built v0.1 |
+| 12 | Budget & replay | `agent_kernel/budget.py`, `journal.py` | built v0.1 |
+| 13 | Bounded coding tool loop | `coding_tools.py`, `coding_agent.py`, `coding_executor.py` | built; pilot 3/3 |
 
 Build order for the first implementation wave: **8 → 1 → 7 → 6 → 2 → 3 → 10**
 (policy before plan, because a plan without enforcement is a suggestion).

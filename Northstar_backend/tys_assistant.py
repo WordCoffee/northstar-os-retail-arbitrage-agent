@@ -1322,7 +1322,8 @@ class TysAssistant:
 
     # -- execution ---------------------------------------------------------
 
-    def run_kernel(self, task_id: str, *, approve_by: str = "operator") -> Dict[str, Any]:
+    def run_kernel(self, task_id: str, *, approve_by: str = "operator",
+                   coding_agent: bool = False) -> Dict[str, Any]:
         """Execute a work order through the agent kernel (opt-in).
 
         The default `run()` is unchanged. This path gives the order a visible
@@ -1347,7 +1348,35 @@ class TysAssistant:
         grants = [grant("edit", minutes=240, why="approved work order"),
                   grant("browser_click", minutes=240, why="approved work order"),
                   grant("creative_generate", minutes=240, why="approved work order")]
-        res = run_order(self, order, approve_by=approve_by, grants=grants, task=task)
+        coding_factory = None
+        if coding_agent:
+            workspace = str((task.get("scope") or {}).get("workspace") or "").strip()
+            if not workspace:
+                raise TysError("workspace_required",
+                               "coding_agent needs scope.workspace")
+            from agent_kernel.coding_executor import CodingAgentExecutor
+            base = CodingWorkerAdapter.BASE.rstrip("/")
+            model_name = CodingWorkerAdapter.MODEL
+
+            def _model(prompt: str) -> str:
+                body = json.dumps({
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": 700, "temperature": 0.2, "stream": False,
+                    "chat_template_kwargs": {"enable_thinking": False},
+                }).encode()
+                req = urllib.request.Request(
+                    f"{base}/v1/chat/completions", data=body,
+                    headers={"Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=300) as r:
+                    out = json.loads(r.read().decode("utf-8"))
+                return str((out.get("choices") or [{}])[0].get("message", {})
+                           .get("content") or "")
+
+            coding_factory = lambda node: CodingAgentExecutor(
+                _model, workspace, task=node.title, max_steps=12)
+        res = run_order(self, order, approve_by=approve_by, grants=grants,
+                        task=task, coding_factory=coding_factory)
         task["status"] = "done" if res.status == "complete" else res.status
         self.store.save(task)
         self.store.event(task_id, "kernel_result", res.to_dict())

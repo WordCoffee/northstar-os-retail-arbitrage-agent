@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE; agent kernel v0.1 built (48 tests) with content validators enforced. Live text-lane baseline: 3 runs 20/20 file existence, enforced run 17/20 content (p50 5.08 s/p95 12.90 s), tool lane 20/20 (p11/p13/p14). Ty-as-is baseline: 0/20 content-valid because its coding lane has no tools/context. Remaining: give Ty a write-capable lane, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend. Coding-agent pilot: 3/3 (p01/p02/p05) with read/write/grep/run tools, a real pytest pass and py_compile pass; Ty adapter opt-in via run_kernel(coding_agent=True).",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -2311,6 +2311,46 @@
     "content_valid": 0,
     "content_rate": 0.0,
     "reason": "CodingWorkerAdapter has no tools and is told to use only supplied file contents; none were supplied, so it refused. It also cannot write artifacts.",
+    "quality_claim": false
+  },
+  "coding_agent_pilot_20261029": {
+    "label": "coding-agent capability pilot (3 briefs; not the full benchmark)",
+    "run": "reports/rea_probe/coding_bench/20261029T064907Z/summary.json",
+    "report": "reports/coding_agent_pilot_20261029.md",
+    "briefs": 3,
+    "ok": 3,
+    "rows": {
+      "p01": {
+        "steps": 7,
+        "seconds": 9.2,
+        "pytest": "pass",
+        "fix_patch": "valid"
+      },
+      "p02": {
+        "steps": 1,
+        "seconds": 2.9,
+        "endpoint_md": "valid"
+      },
+      "p05": {
+        "steps": 5,
+        "seconds": 4.7,
+        "py_compile": "pass",
+        "build_log": "valid"
+      }
+    },
+    "tools": [
+      "list",
+      "read",
+      "grep",
+      "write",
+      "run(allowlist)"
+    ],
+    "limits": {
+      "max_steps": 12,
+      "max_repairs": 1,
+      "workspace_escape": "rejected"
+    },
+    "ty_adapter": "TysAssistant.run_kernel(coding_agent=True) requires scope.workspace",
     "quality_claim": false
   }
 }
