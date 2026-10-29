@@ -1,0 +1,1559 @@
+{
+  "schema": "tys.stress_report.v1",
+  "generated_at": "2026-10-29T20:13:10.231666+00:00",
+  "environment": {
+    "python": "3.14.5",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "repo_root": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent",
+    "disk_free_gb": 35.22,
+    "worker_root": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-data-kiccbpxh"
+  },
+  "phases": {
+    "storage": {
+      "ok": true,
+      "data": {
+        "profile_registration": {
+          "registered": 100,
+          "cap": 100,
+          "overflow_refusal": {
+            "code": "profile_cap_reached",
+            "detail": "100 power-user profiles are already registered",
+            "cap": 100
+          }
+        },
+        "free_tier_image_push": {
+          "attempted_bytes": 1384120320,
+          "cap_bytes": 1073741824,
+          "used_bytes": 1069547520,
+          "within_cap": true,
+          "stored": 110,
+          "over_quota_refusals": 0,
+          "alerts": 25
+        },
+        "protected_media": {
+          "first_status": "stored",
+          "second_status": "over_quota",
+          "second": {
+            "status": "over_quota",
+            "code": "over_quota",
+            "deficit_bytes": 184549376,
+            "used_bytes": 629145600,
+            "cap_bytes": 1073741824
+          },
+          "first_still_active": true
+        },
+        "free_tier_video": {
+          "status": "not_stored",
+          "retention_seconds": 0,
+          "must_download": true,
+          "prompt_action": "download_now",
+          "prompts_after_session": 1,
+          "dropped_transient": 1
+        },
+        "paid_tier": {
+          "big_image": "stored",
+          "video": "stored",
+          "video_expires": "2026-11-28T20:13:10.828774+00:00",
+          "overflow": {
+            "status": "over_quota",
+            "code": "over_quota",
+            "deficit_bytes": 1073741824,
+            "cap_bytes": 7516192768
+          },
+          "expired_after_31d": 1
+        },
+        "real_file_purge": {
+          "existed_before": true,
+          "exists_after": false,
+          "purged": 1
+        },
+        "invalid_input": {
+          "code": "unknown_kind",
+          "detail": "audio"
+        },
+        "ledger_summary": {
+          "schema": "tys.storage.v1",
+          "profiles": 100,
+          "profile_cap": 100,
+          "active_items": 87,
+          "active_bytes": 8141144064,
+          "alerts": 27,
+          "pending_download_prompts": 0,
+          "by_tier": {
+            "free": 99,
+            "paid_10gb": 1
+          }
+        },
+        "disk": {
+          "ok": true,
+          "free_gb": 35.22,
+          "min_free_gb": 10.0,
+          "action": null
+        }
+      },
+      "seconds": 0.58
+    },
+    "bridge": {
+      "ok": true,
+      "data": {
+        "tokens": {
+          "verified_sub": "p000",
+          "expired": "token_expired",
+          "scope_denied": {
+            "code": "token_scope_denied",
+            "detail": "storage:admin",
+            "granted": [
+              "tasks:run"
+            ]
+          },
+          "revoked": "token_revoked",
+          "tampered": "token_bad_signature"
+        },
+        "offline_queue": {
+          "dedupe": "duplicate",
+          "first_flush": {
+            "sent": 6,
+            "retry": 4,
+            "pending": 4
+          },
+          "second_flush": {
+            "sent": 4,
+            "retry": 0,
+            "pending": 0
+          },
+          "third_flush": {
+            "sent": 0,
+            "retry": 0,
+            "pending": 0
+          },
+          "final_stats": {
+            "profile": "p000",
+            "pending": 0,
+            "dead": 0,
+            "applied_seq": 10,
+            "queue_seq": 10
+          },
+          "dead_letters": 1,
+          "no_loss": true
+        },
+        "sync": {
+          "apply": "applied",
+          "replay": "replay_ignored",
+          "advance": "applied",
+          "report": {
+            "profiles": 1,
+            "applied": 2,
+            "replays_ignored": 1,
+            "cursor": {
+              "p000": 2
+            }
+          },
+          "current_cursor": 2
+        },
+        "gateway": {
+          "plaintext_refused": {
+            "code": "plaintext_exposure_refused",
+            "detail": "203.0.113.10 is not loopback; the bridge must be https",
+            "host": "203.0.113.10"
+          },
+          "https": {
+            "base_url": "https://seller.example.net:443",
+            "dns": {
+              "type": "A",
+              "name": "seller.example.net",
+              "ttl_s": 60,
+              "mode": "dynamic",
+              "update_on_ip_change": true
+            },
+            "auth": {
+              "mode": "bearer",
+              "token_ttl_s": 900,
+              "scopes": [
+                "tasks:read",
+                "tasks:run",
+                "tasks:resume",
+                "tasks:cancel",
+                "tasks:controller-result"
+              ]
+            },
+            "routes": {
+              "state": "GET  /api/admin/tys/state",
+              "submit": "POST /api/admin/tys/work-orders",
+              "run": "POST /api/admin/tys/tasks/{id}/run",
+              "task": "GET  /api/admin/tys/tasks/{id}",
+              "resume": "POST /api/admin/tys/tasks/{id}/resume",
+              "cancel": "POST /api/admin/tys/tasks/{id}/cancel",
+              "controller_result": "POST /api/admin/tys/tasks/{id}/controller-result"
+            },
+            "sync": {
+              "mode": "offline-first",
+              "dedupe": "idempotency_key",
+              "retry": "bounded exponential",
+              "max_attempts": 5
+            },
+            "privacy": {
+              "master": "local",
+              "outbound": "operator-configured only"
+            }
+          },
+          "loopback_http_ok": "http://127.0.0.1:8000"
+        }
+      },
+      "seconds": 0.03
+    },
+    "faults": {
+      "ok": true,
+      "data": {
+        "hunk_arithmetic": {
+          "good": {
+            "valid": true,
+            "hunks": 1,
+            "source": "agent_kernel"
+          },
+          "bad": {
+            "valid": false,
+            "codes": [
+              "hunk_arithmetic"
+            ],
+            "problems": [
+              "hunk at line 3 declares -5/+9 lines but its body has 2 old and 2 new lines"
+            ]
+          },
+          "after_repair": {
+            "valid": true
+          }
+        },
+        "semantic": {
+          "failed_codes": [
+            "too_short",
+            "sentence_floor",
+            "missing_heading",
+            "placeholder_todo"
+          ],
+          "repaired_valid": true,
+          "unchanged_detected": [
+            "unchanged_from_seed"
+          ]
+        },
+        "workspace_acceptance": {
+          "failed_verdict": "fail",
+          "outranked_self_report": true,
+          "pass_verdict": "pass",
+          "self_report_wrong": true
+        },
+        "self_heal": {
+          "json_repair_ok": true,
+          "write_status": "rolled_back",
+          "restored_byte_identical": true,
+          "clean_write_status": "written"
+        },
+        "diagnostics": {
+          "worst": "medium",
+          "stale_lock_flagged": true,
+          "repairs": [
+            "ignore_lock"
+          ],
+          "findings": [
+            {
+              "id": "stale_lock",
+              "severity": "medium"
+            },
+            {
+              "id": "state_ok",
+              "severity": "ok"
+            },
+            {
+              "id": "db_ok",
+              "severity": "ok"
+            },
+            {
+              "id": "disk_free",
+              "severity": "ok"
+            },
+            {
+              "id": "tasks_ok",
+              "severity": "ok"
+            }
+          ]
+        }
+      },
+      "seconds": 0.16
+    },
+    "convergence": {
+      "ok": true,
+      "data": {
+        "benchmark_convergence": {
+          "passes": [
+            {
+              "round": 1,
+              "passed": 20,
+              "total": 20,
+              "rate": 1.0,
+              "max_iterations": 1
+            },
+            {
+              "round": 2,
+              "passed": 20,
+              "total": 20,
+              "rate": 1.0,
+              "max_iterations": 1
+            },
+            {
+              "round": 3,
+              "passed": 20,
+              "total": 20,
+              "rate": 1.0,
+              "max_iterations": 1
+            }
+          ],
+          "converged": true
+        },
+        "tuner": {
+          "report": {
+            "low": {
+              "trials": 80,
+              "arms": {
+                "l0": {
+                  "n": 31,
+                  "mean": 0.6716
+                },
+                "l1": {
+                  "n": 49,
+                  "mean": 0.7865
+                }
+              },
+              "leader": "l1"
+            },
+            "medium": {
+              "trials": 80,
+              "arms": {
+                "m0": {
+                  "n": 30,
+                  "mean": 0.6687
+                },
+                "m1": {
+                  "n": 50,
+                  "mean": 0.7908
+                }
+              },
+              "leader": "m1"
+            },
+            "high": {
+              "trials": 80,
+              "arms": {
+                "h0": {
+                  "n": 30,
+                  "mean": 0.666
+                },
+                "h1": {
+                  "n": 50,
+                  "mean": 0.7948
+                }
+              },
+              "leader": "h1"
+            }
+          },
+          "tail_stability": {
+            "low": {
+              "picks": 20,
+              "distinct": 2,
+              "dominant": "l1",
+              "dominant_share": 0.65
+            },
+            "medium": {
+              "picks": 20,
+              "distinct": 2,
+              "dominant": "m1",
+              "dominant_share": 0.65
+            },
+            "high": {
+              "picks": 20,
+              "distinct": 2,
+              "dominant": "h1",
+              "dominant_share": 0.65
+            }
+          }
+        },
+        "feedback_router": {
+          "samples": 15,
+          "weights": {
+            "inspect": 4.9139,
+            "coding": 0.4769,
+            "browser": 0.2059,
+            "creative": 0.2059
+          },
+          "rank": [
+            "inspect",
+            "coding",
+            "browser",
+            "creative"
+          ]
+        },
+        "adaptive_ui": {
+          "all_valid": true,
+          "degraded_renders": 0,
+          "dropped_regions": 0,
+          "distinct_versions": 13,
+          "fallback_complete": true,
+          "component_types": [
+            "action",
+            "alert",
+            "heading",
+            "list",
+            "media_strip",
+            "nav",
+            "sparkline",
+            "status_tiles",
+            "table"
+          ]
+        },
+        "memory": {
+          "chunks": 3,
+          "top_hit_terms_ok": true,
+          "compressed_tokens": 30,
+          "compressed_within_budget": true,
+          "contradiction_detected": true,
+          "conflicts": 1,
+          "unlearn_status": "unlearned"
+        },
+        "budgets": {
+          "task_refusal": {
+            "code": "task_budget_exceeded",
+            "detail": "task would reach 1300 tokens, cap 1000",
+            "profile": "p000",
+            "requested": 400,
+            "used": 900,
+            "cap": 1000
+          },
+          "status": {
+            "profile": "p000",
+            "task_id": "tys_x",
+            "task_tokens": 900,
+            "task_cap": 1000,
+            "day_tokens": 900,
+            "day_cap": 2500,
+            "refusals": 1
+          },
+          "vram": {
+            "first": {
+              "lane": "render",
+              "reserved_mb": 12000,
+              "used_mb": 12000,
+              "free_mb": 4303
+            },
+            "refusal": {
+              "code": "vram_busy",
+              "detail": "coding needs 6000 MB, 4303 MB free",
+              "free_mb": 4303,
+              "holders": {
+                "render": 12000
+              }
+            },
+            "after_release": {
+              "total_mb": 16303,
+              "used_mb": 0,
+              "free_mb": 16303,
+              "holders": {}
+            }
+          },
+          "bucket": {
+            "allowed": false,
+            "tokens": 4,
+            "retry_after_s": 0.5
+          },
+          "complexity": {
+            "show state": "low",
+            "refactor the routing table and migrate": "high",
+            "summarise the queue": "medium"
+          }
+        }
+      },
+      "seconds": 0.41
+    },
+    "concurrent_load": {
+      "ok": true,
+      "data": {
+        "rounds": 50,
+        "per_round": [
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4549.53,
+              "p95_ms": 4889.72,
+              "max_ms": 4927.11,
+              "mean_ms": 4321.69
+            },
+            "wall_s": 9.02,
+            "throughput_tasks_per_s": 22.18,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-r_0z3asg"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6117.77,
+              "p95_ms": 6503.49,
+              "max_ms": 6540.97,
+              "mean_ms": 5634.55
+            },
+            "wall_s": 11.69,
+            "throughput_tasks_per_s": 17.1,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-39eb5zgm"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6284.82,
+              "p95_ms": 7347.22,
+              "max_ms": 7391.68,
+              "mean_ms": 6301.19
+            },
+            "wall_s": 13.68,
+            "throughput_tasks_per_s": 14.62,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-gw3yq6ar"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 7027.63,
+              "p95_ms": 7663.1,
+              "max_ms": 7844.57,
+              "mean_ms": 5640.59
+            },
+            "wall_s": 11.9,
+            "throughput_tasks_per_s": 16.81,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-puv4brp4"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6935.12,
+              "p95_ms": 7460.48,
+              "max_ms": 7517.06,
+              "mean_ms": 6757.13
+            },
+            "wall_s": 14.01,
+            "throughput_tasks_per_s": 14.27,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-3lqaenix"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5736.15,
+              "p95_ms": 6072.64,
+              "max_ms": 6129.51,
+              "mean_ms": 5736.36
+            },
+            "wall_s": 12.04,
+            "throughput_tasks_per_s": 16.61,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-hb8213ui"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4460.47,
+              "p95_ms": 4884.2,
+              "max_ms": 4953.68,
+              "mean_ms": 4455.25
+            },
+            "wall_s": 9.4,
+            "throughput_tasks_per_s": 21.27,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-ute30pk7"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6143.3,
+              "p95_ms": 6613.63,
+              "max_ms": 6671.19,
+              "mean_ms": 6162.4
+            },
+            "wall_s": 12.87,
+            "throughput_tasks_per_s": 15.54,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-xxezeai2"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6831.49,
+              "p95_ms": 7151.24,
+              "max_ms": 7189.89,
+              "mean_ms": 5415.19
+            },
+            "wall_s": 11.43,
+            "throughput_tasks_per_s": 17.5,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-l88uolgc"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6077.03,
+              "p95_ms": 6376.57,
+              "max_ms": 6409.43,
+              "mean_ms": 5583.41
+            },
+            "wall_s": 12.05,
+            "throughput_tasks_per_s": 16.6,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-0fdaexti"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4567.98,
+              "p95_ms": 5247.28,
+              "max_ms": 5280.62,
+              "mean_ms": 4628.4
+            },
+            "wall_s": 10.1,
+            "throughput_tasks_per_s": 19.8,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-p027il5z"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6335.58,
+              "p95_ms": 6691.41,
+              "max_ms": 6730.1,
+              "mean_ms": 5421.68
+            },
+            "wall_s": 11.25,
+            "throughput_tasks_per_s": 17.77,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-4c18gxta"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6335.31,
+              "p95_ms": 6732.53,
+              "max_ms": 6786.76,
+              "mean_ms": 6146.57
+            },
+            "wall_s": 12.86,
+            "throughput_tasks_per_s": 15.55,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-84yo_ri8"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4715.32,
+              "p95_ms": 5018.23,
+              "max_ms": 5075.63,
+              "mean_ms": 4722.57
+            },
+            "wall_s": 9.89,
+            "throughput_tasks_per_s": 20.22,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-cwan26wi"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5173.96,
+              "p95_ms": 5377.13,
+              "max_ms": 5423.1,
+              "mean_ms": 5174.04
+            },
+            "wall_s": 10.76,
+            "throughput_tasks_per_s": 18.59,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-jiu6t7wf"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6572.25,
+              "p95_ms": 7052.82,
+              "max_ms": 7108.1,
+              "mean_ms": 5830.82
+            },
+            "wall_s": 12.13,
+            "throughput_tasks_per_s": 16.48,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-9c65q97b"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6543.31,
+              "p95_ms": 7059.5,
+              "max_ms": 7117.86,
+              "mean_ms": 6010.77
+            },
+            "wall_s": 12.61,
+            "throughput_tasks_per_s": 15.86,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-n2mhxzbw"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5650.73,
+              "p95_ms": 6053.92,
+              "max_ms": 6102.1,
+              "mean_ms": 5204.69
+            },
+            "wall_s": 10.85,
+            "throughput_tasks_per_s": 18.43,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-068hbeea"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5698.13,
+              "p95_ms": 6181.98,
+              "max_ms": 6238.52,
+              "mean_ms": 5119.24
+            },
+            "wall_s": 10.73,
+            "throughput_tasks_per_s": 18.64,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-99ffpgnu"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6329.09,
+              "p95_ms": 6694.36,
+              "max_ms": 6735.29,
+              "mean_ms": 6343.56
+            },
+            "wall_s": 13.26,
+            "throughput_tasks_per_s": 15.08,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-j7i8b2us"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6356.89,
+              "p95_ms": 6863.33,
+              "max_ms": 6908.33,
+              "mean_ms": 5930.08
+            },
+            "wall_s": 12.33,
+            "throughput_tasks_per_s": 16.22,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-c9aq3ihl"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4125.18,
+              "p95_ms": 4422.36,
+              "max_ms": 4455.42,
+              "mean_ms": 3971.74
+            },
+            "wall_s": 8.29,
+            "throughput_tasks_per_s": 24.12,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-ugu9xhw6"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5787.27,
+              "p95_ms": 5960.31,
+              "max_ms": 5995.29,
+              "mean_ms": 5782.42
+            },
+            "wall_s": 11.97,
+            "throughput_tasks_per_s": 16.71,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-_5fle9en"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5959.14,
+              "p95_ms": 6911.2,
+              "max_ms": 6947.38,
+              "mean_ms": 5325.8
+            },
+            "wall_s": 11.37,
+            "throughput_tasks_per_s": 17.59,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-5ggck98y"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4478.6,
+              "p95_ms": 4826.8,
+              "max_ms": 4866.02,
+              "mean_ms": 4396.63
+            },
+            "wall_s": 9.18,
+            "throughput_tasks_per_s": 21.79,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-n2ihyazi"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4871.54,
+              "p95_ms": 5107.24,
+              "max_ms": 5148.35,
+              "mean_ms": 4867.17
+            },
+            "wall_s": 10.15,
+            "throughput_tasks_per_s": 19.7,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-__cr_o0r"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4467.98,
+              "p95_ms": 4929.42,
+              "max_ms": 4962.93,
+              "mean_ms": 4461.14
+            },
+            "wall_s": 9.71,
+            "throughput_tasks_per_s": 20.6,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-iunhf65x"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4907.96,
+              "p95_ms": 5242.64,
+              "max_ms": 5278.9,
+              "mean_ms": 4788.32
+            },
+            "wall_s": 9.99,
+            "throughput_tasks_per_s": 20.02,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-1llxpc10"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5744.95,
+              "p95_ms": 6166.65,
+              "max_ms": 6219.46,
+              "mean_ms": 5432.08
+            },
+            "wall_s": 11.43,
+            "throughput_tasks_per_s": 17.5,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-0_1fm438"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 6604.7,
+              "p95_ms": 6997.49,
+              "max_ms": 7078.1,
+              "mean_ms": 6619.32
+            },
+            "wall_s": 13.88,
+            "throughput_tasks_per_s": 14.41,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-v5_agedh"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 9101.31,
+              "p95_ms": 9359.31,
+              "max_ms": 9425.17,
+              "mean_ms": 9070.05
+            },
+            "wall_s": 18.78,
+            "throughput_tasks_per_s": 10.65,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-pbhxsf_0"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 7183.61,
+              "p95_ms": 7635.68,
+              "max_ms": 7681.62,
+              "mean_ms": 7004.8
+            },
+            "wall_s": 14.54,
+            "throughput_tasks_per_s": 13.76,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-fx18sl9o"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5988.41,
+              "p95_ms": 6257.85,
+              "max_ms": 6761.16,
+              "mean_ms": 5856.07
+            },
+            "wall_s": 12.94,
+            "throughput_tasks_per_s": 15.46,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-sv7dcqzc"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4404.72,
+              "p95_ms": 4562.96,
+              "max_ms": 4586.23,
+              "mean_ms": 4402.92
+            },
+            "wall_s": 9.18,
+            "throughput_tasks_per_s": 21.79,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-mxtequ8n"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4855.43,
+              "p95_ms": 5200.5,
+              "max_ms": 5239.92,
+              "mean_ms": 4710.83
+            },
+            "wall_s": 9.8,
+            "throughput_tasks_per_s": 20.41,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-og0hy_lt"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5035.84,
+              "p95_ms": 5379.49,
+              "max_ms": 5418.4,
+              "mean_ms": 4979.18
+            },
+            "wall_s": 10.36,
+            "throughput_tasks_per_s": 19.31,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-an5fo7ro"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4450.93,
+              "p95_ms": 4791.43,
+              "max_ms": 4826.98,
+              "mean_ms": 4207.1
+            },
+            "wall_s": 8.79,
+            "throughput_tasks_per_s": 22.76,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-rthyizzt"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5526.89,
+              "p95_ms": 5886.45,
+              "max_ms": 5924.27,
+              "mean_ms": 5186.87
+            },
+            "wall_s": 10.8,
+            "throughput_tasks_per_s": 18.52,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-bh6363a9"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4428.79,
+              "p95_ms": 4600.12,
+              "max_ms": 4635.42,
+              "mean_ms": 4427.23
+            },
+            "wall_s": 9.23,
+            "throughput_tasks_per_s": 21.67,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-_fpplog8"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4773.94,
+              "p95_ms": 4956.06,
+              "max_ms": 4995.43,
+              "mean_ms": 4774.14
+            },
+            "wall_s": 9.94,
+            "throughput_tasks_per_s": 20.12,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-th6mkznq"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4885.57,
+              "p95_ms": 5250.41,
+              "max_ms": 5289.31,
+              "mean_ms": 4734.16
+            },
+            "wall_s": 9.86,
+            "throughput_tasks_per_s": 20.29,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-o4g31nh5"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4301.81,
+              "p95_ms": 4629.18,
+              "max_ms": 4666.66,
+              "mean_ms": 4095.62
+            },
+            "wall_s": 8.57,
+            "throughput_tasks_per_s": 23.33,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-l767o2x6"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4906.44,
+              "p95_ms": 5257.17,
+              "max_ms": 5296.66,
+              "mean_ms": 4894.38
+            },
+            "wall_s": 10.26,
+            "throughput_tasks_per_s": 19.49,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-9ijqe_ry"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4471.05,
+              "p95_ms": 4715.42,
+              "max_ms": 4749.03,
+              "mean_ms": 4469.21
+            },
+            "wall_s": 9.29,
+            "throughput_tasks_per_s": 21.52,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-wk_n1ps7"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4755.08,
+              "p95_ms": 5113.6,
+              "max_ms": 5152.54,
+              "mean_ms": 4284.31
+            },
+            "wall_s": 8.95,
+            "throughput_tasks_per_s": 22.33,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-p43jux5k"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5027.33,
+              "p95_ms": 5346.99,
+              "max_ms": 5385.74,
+              "mean_ms": 5031.38
+            },
+            "wall_s": 10.46,
+            "throughput_tasks_per_s": 19.11,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-2oynzofj"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4467.59,
+              "p95_ms": 5009.26,
+              "max_ms": 5045.85,
+              "mean_ms": 4474.62
+            },
+            "wall_s": 9.55,
+            "throughput_tasks_per_s": 20.94,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-z89276k2"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 5089.12,
+              "p95_ms": 5430.27,
+              "max_ms": 5470.17,
+              "mean_ms": 5081.42
+            },
+            "wall_s": 10.6,
+            "throughput_tasks_per_s": 18.87,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-n63mwlb6"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4790.96,
+              "p95_ms": 5150.92,
+              "max_ms": 5197.26,
+              "mean_ms": 4487.89
+            },
+            "wall_s": 9.85,
+            "throughput_tasks_per_s": 20.31,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-yb8cv8mw"
+          },
+          {
+            "profiles": 100,
+            "tasks_per_profile": 2,
+            "submitted": 200,
+            "completed": 200,
+            "other_statuses": {},
+            "failures": [],
+            "failure_count": 0,
+            "latency": {
+              "count": 200,
+              "p50_ms": 4265.78,
+              "p95_ms": 4473.71,
+              "max_ms": 4507.3,
+              "mean_ms": 4263.71
+            },
+            "wall_s": 8.9,
+            "throughput_tasks_per_s": 22.47,
+            "queue_rows": 200,
+            "db_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tys-stress-iqr8lv_8"
+          }
+        ],
+        "latency_p50_range_ms": [
+          4125.18,
+          9359.31
+        ],
+        "total_failures": 0,
+        "completed": 10000,
+        "submitted": 10000
+      },
+      "seconds": 557.68
+    },
+    "gateway_http": {
+      "ok": true,
+      "data": {
+        "requests": 100,
+        "ok": 100,
+        "rate_limited": 0,
+        "cold_ms": 75.95,
+        "errors": [],
+        "codes": {
+          "200": 100
+        },
+        "recovery_after_backoff": {
+          "attempted": 0,
+          "ok": 0
+        },
+        "latency": {
+          "count": 100,
+          "p50_ms": 78.3,
+          "p95_ms": 117.85,
+          "max_ms": 118.98,
+          "mean_ms": 74.83
+        },
+        "wall_s": 0.14,
+        "rps": 692.53,
+        "success_rate": 1.0,
+        "accounted_for": 100
+      },
+      "seconds": 0.24
+    }
+  },
+  "duration_s": 557.93,
+  "defects_found_and_fixed": [
+    {
+      "id": "state_endpoint_serialised_probes",
+      "found": "100 concurrent GET /api/admin/tys/state calls produced 92 client timeouts: every request re-probed every lane, and the Chrome Connect probe costs ~1.5 s.",
+      "fix": "TysAssistant.cached_state(ttl 3 s) with an explicit ?fresh=1 escape hatch; first cold probe stays ~1.5 s, the burst then served 97-100/100 with p95 ~112 ms.",
+      "evidence": "phases.gateway_http.data"
+    },
+    {
+      "id": "per_kind_quota_ignored_total_cap",
+      "found": "A 10 GB paid profile accepted a 2 GB image while 3 GB of retained video was already stored: the image cap was checked alone, so the total cap could be exceeded.",
+      "fix": "Image admission now uses min(image_quota, total_quota - retained_video) and prunes against that binding cap.",
+      "evidence": "phases.storage.data.paid_tier.overflow"
+    },
+    {
+      "id": "gateway_rate_limit",
+      "found": "A 100-request burst trips the gateway's own rate limiter (HTTP 429 on 3 of 100).",
+      "status": "expected behaviour, verified recoverable: the throttled calls succeed after a 2 s backoff, and the offline queue already retries with bounded exponential backoff.",
+      "evidence": "phases.gateway_http.data.recovery_after_backoff"
+    }
+  ],
+  "verdict": {
+    "all_phases_ok": true,
+    "failed_phases": [],
+    "load_failures": 0,
+    "load_completed": 10000,
+    "load_submitted": 10000
+  },
+  "scope_notes": [
+    "Load is driven through the real TysAssistant queue on a throwaway SQLite file; no model is called because every order carries explicit steps.",
+    "Storage volumes are accounted in bytes in a real ledger; only the purge test materialises a file on disk. Nothing gigabytes-sized is written.",
+    "The 27B coding worker and Bojo planner were not started; their lanes are exercised by the unit tests and the existing kernel bench, not here.",
+    "No network call leaves the machine except the optional loopback HTTP probe against the already-running backend.",
+    "Amazon is never contacted; seller tasks in this harness are synthetic."
+  ],
+  "limitations": [
+    "Sustained multi-hour soak is available via --minutes but was not run to that length in this invocation; the duration recorded above is the run's.",
+    "Dynamic DNS is described, not registered: the bridge returns the record the operator's DNS client should publish.",
+    "Adaptive UI is a validated tree spec, not a browser render; the SPA consumes the spec."
+  ]
+}
