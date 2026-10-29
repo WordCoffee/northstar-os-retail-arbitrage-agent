@@ -69,25 +69,22 @@ def has(p):
     return f.exists() and f.stat().st_size > 1_000_000
 
 
-def t_klein():
-    if not has("unet/flux-2-klein-4b-Q8_0.gguf") or not has("vae/flux2-vae" + ".safetensors"):
-        return {"test": "klein", "ok": None, "skipped": "files not staged yet"}
+def t_flux3():
+    if not has("diffusion_models/flux3-image-klein-nvfp4.safetensors") or not has("text_encoders/qwen3vl_4b_int8_convrot.safetensors") or not has("vae/flux2-vae" + ".safetensors"):
+        return {"test": "flux3", "ok": None, "skipped": "files not staged yet"}
     g = {
-        "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": "flux-2-klein-4b-Q8_0.gguf"}},
-        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen_3_4b_fp8_mixed.safetensors", "type": "flux2", "device": "default"}},
+        "1": {"class_type": "UNETLoader", "inputs": {"unet_name": "flux3-image-klein-nvfp4.safetensors", "weight_dtype": "default"}},
+        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "qwen3vl_4b_int8_convrot.safetensors", "type": "flux3", "device": "default"}},
         "3": {"class_type": "VAELoader", "inputs": {"vae_name": "flux2-vae" + ".safetensors"}},
         "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": "Professional studio photo of a matte black electric kettle on a slate countertop with steam rising, dramatic side lighting, fine droplets, photorealistic product photography"}},
-        "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
+        "5": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": ""}},
         "6": {"class_type": "EmptyFlux2LatentImage", "inputs": {"width": 1024, "height": 1024, "batch_size": 1}},
-        "7": {"class_type": "CFGGuider", "inputs": {"model": ["1", 0], "positive": ["4", 0], "negative": ["5", 0], "cfg": 1}},
-        "8": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
-        "9": {"class_type": "Flux2Scheduler", "inputs": {"steps": 4, "width": 1024, "height": 1024}},
-        "10": {"class_type": "RandomNoise", "inputs": {"noise_seed": 42}},
-        "11": {"class_type": "SamplerCustomAdvanced", "inputs": {"noise": ["10", 0], "guider": ["7", 0], "sampler": ["8", 0], "sigmas": ["9", 0], "latent_image": ["6", 0]}},
-        "12": {"class_type": "VAEDecode", "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
-        "13": {"class_type": "SaveImage", "inputs": {"images": ["12", 0], "filename_prefix": "ns-smoke-klein"}},
+        "7": {"class_type": "ModelSamplingFlux", "inputs": {"model": ["1", 0], "max_shift": 2.77259, "base_shift": 2.77259, "width": 1024, "height": 1024}},
+        "8": {"class_type": "KSampler", "inputs": {"model": ["7", 0], "seed": 42, "steps": 16, "cfg": 1.0, "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0, "positive": ["4", 0], "negative": ["5", 0], "latent_image": ["6", 0]}},
+        "9": {"class_type": "VAEDecode", "inputs": {"samples": ["8", 0], "vae": ["3", 0]}},
+        "10": {"class_type": "SaveImage", "inputs": {"images": ["9", 0], "filename_prefix": "ns-smoke-flux3"}},
     }
-    return run_graph("klein", g, timeout_s=1800)
+    return run_graph("flux3", g, timeout_s=1800)
 
 
 def t_seedvr2():
@@ -145,12 +142,13 @@ def inventory():
         "test": "inventory",
         "ok": True,
         "models": {
-            "klein_q8": stat("unet/flux-2-klein-4b-Q8_0.gguf"),
+            "flux3_nvfp4": stat("diffusion_models/flux3-image-klein-nvfp4.safetensors"),
+            "flux3_te": stat("text_encoders/qwen3vl_4b_int8_convrot.safetensors"),
             "seedvr2_3b": stat("diffusion_models/seedvr2_3b_fp8_e4m3fn.safetensors"),
             "wan_5b": stat("unet/Wan2.2-TI2V-5B-Q5_K_M.gguf"),
             "umt5": stat("text_encoders/umt5-xxl-encoder-Q5_K_M.gguf"),
             "wan_vae": stat("vae/wan2.2_vae" + ".safetensors"),
-            "flux2_vae": stat("vae/flux2-vae" + ".safetensors"),
+            "flux_vae": stat("vae/flux2-vae" + ".safetensors"),
             "seedvr2_vae": stat("vae/seedvr2_ema_vae_fp16.safetensors"),
         },
         "tts": sorted(p.name for p in (COMFY / "models" / "TTS" / "Qwen3-TTS").glob("*")) if (COMFY / "models" / "TTS" / "Qwen3-TTS").exists() else [],
@@ -172,7 +170,7 @@ def t_tts():
 def main():
     want = set(sys.argv[1:]) if len(sys.argv) > 1 else None
     results = [inventory()]
-    for name, fn in (("klein", t_klein), ("seedvr2", t_seedvr2), ("wan", t_wan), ("tts", t_tts)):
+    for name, fn in (("flux3", t_flux3), ("seedvr2", t_seedvr2), ("wan", t_wan), ("tts", t_tts)):
         if want and name not in want:
             continue
         try:

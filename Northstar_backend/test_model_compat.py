@@ -1,11 +1,16 @@
-"""Model / text-encoder compatibility tests.
+"""Model compatibility tests after the FLUX 3 migration.
 
-A FLUX.2 Klein 4B UNet must use the 4B Qwen3 encoder; a 9B UNet must use the
-8B encoder. Pairing them the other way fails at dispatch with a shape mismatch
-(512x12288 vs 7680x3072). These tests reject an incompatible pairing *before*
-any graph is submitted.
+FLUX 2 Klein and its text-correcting vision models were deleted on 2026-10-29.
+What matters now:
+
+* the configured image model is FLUX 3 and its encoder exists;
+* the FLUX 3 graph uses the official nodes (UNETLoader, CLIPLoader type
+  ``flux3``, ``EmptyFlux2LatentImage``, ``ModelSamplingFlux``, CFG 1.0);
+* asking for an encoder that is not on disk fails **before** dispatch.
+
+The old 4B/9B pairing rules remain in the module for any Klein weights an
+operator might add later, but they are no longer the production path.
 """
-
 from __future__ import annotations
 
 import os
@@ -18,79 +23,63 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import studio_generation as sg  # noqa: E402
 
 
-@pytest.fixture(autouse=True)
-def _pretend_installed(monkeypatch):
-    # Unit tests do not depend on the host's model directory layout.
-    monkeypatch.setattr(sg, "_encoder_on_disk", lambda name: True)
-
-
-def test_4b_model_accepts_4b_encoder():
-    assert sg.resolve_text_encoder(
-        "flux-2-klein-4b-Q8_0.gguf", "qwen_3_4b_fp8_mixed.safetensors"
-    ) == "qwen_3_4b_fp8_mixed.safetensors"
-
-
-def test_4b_model_defaults_to_4b_encoder():
-    assert sg.resolve_text_encoder("flux-2-klein-4b-Q8_0.gguf") == \
-        "qwen_3_4b_fp8_mixed.safetensors"
-
-
-def test_9b_model_accepts_8b_encoder():
-    assert sg.resolve_text_encoder(
-        "Flux-2-Klein-9B-KV-Q8_0.gguf", "qwen_3_8b_fp8mixed.safetensors"
-    ) == "qwen_3_8b_fp8mixed.safetensors"
-
-
-def test_9b_model_defaults_to_8b_encoder():
-    assert sg.resolve_text_encoder("Flux-2-Klein-9B-KV-Q8_0.gguf") == \
-        "qwen_3_8b_fp8mixed.safetensors"
-
-
-def test_4b_model_rejects_8b_encoder():
-    with pytest.raises(ValueError) as exc:
-        sg.resolve_text_encoder(
-            "flux-2-klein-4b-Q8_0.gguf", "qwen_3_8b_fp8mixed.safetensors")
-    assert "incompatible_encoder_pairing" in str(exc.value)
-
-
-def test_9b_model_rejects_4b_encoder():
-    with pytest.raises(ValueError) as exc:
-        sg.resolve_text_encoder(
-            "Flux-2-Klein-9B-KV-Q8_0.gguf", "qwen_3_4b_fp8_mixed.safetensors")
-    assert "incompatible_encoder_pairing" in str(exc.value)
-
-
-def test_missing_encoder_is_rejected(monkeypatch):
-    monkeypatch.setattr(sg, "_encoder_on_disk", lambda name: False)
-    with pytest.raises(ValueError) as exc:
-        sg.resolve_text_encoder("flux-2-klein-4b-Q8_0.gguf")
-    assert "encoder_not_installed" in str(exc.value)
-
-
-def test_unknown_model_family_is_passed_through():
-    # FLUX 3 and other families have no size token; do not block them here.
-    assert sg.resolve_text_encoder("flux3-klein.safetensors", "qwen3vl.safetensors") == \
-        "qwen3vl.safetensors"
-
-
-def test_klein_graph_uses_resolved_encoder(monkeypatch):
-    monkeypatch.setattr(sg, "IMAGE_MODEL_FILE", "flux-2-klein-4b-Q8_0.gguf")
-    monkeypatch.setattr(sg, "TEXT_ENCODER_FILE", "qwen_3_4b_fp8_mixed.safetensors")
-    graph = sg._klein_graph("a matte stand-up pouch", 512, 512, 4, 1234)
-    assert graph["2"]["inputs"]["clip_name"] == "qwen_3_4b_fp8_mixed.safetensors"
-
-
-def test_klein_graph_rejects_bad_pairing_before_dispatch(monkeypatch):
-    monkeypatch.setattr(sg, "IMAGE_MODEL_FILE", "flux-2-klein-4b-Q8_0.gguf")
-    monkeypatch.setattr(sg, "TEXT_ENCODER_FILE", "qwen_3_8b_fp8mixed.safetensors")
-    with pytest.raises(ValueError) as exc:
-        sg._klein_graph("a matte stand-up pouch", 512, 512, 4, 1234)
-    assert "incompatible_encoder_pairing" in str(exc.value)
+def test_default_image_model_is_flux3():
+    model = sg.IMAGE_MODEL_FILE.lower()
+    assert "flux3" in model or "flux-3" in model
+    assert "qwen3vl" in sg.TEXT_ENCODER_FILE.lower()
 
 
 def test_configured_pairing_is_valid_on_this_host():
-    """The production configuration must be a supported pairing."""
     report = sg.validate_configured_pairing()
     assert report["ok"] is True, report
-    assert "klein-4b" in str(report["model"]).lower() or \
-        "klein-9b" in str(report["model"]).lower()
+    assert "flux3" in str(report["model"]).lower() or \
+        "flux-3" in str(report["model"]).lower()
+
+
+def test_unknown_family_requires_the_encoder_on_disk(monkeypatch):
+    monkeypatch.setattr(sg, "_any_model_on_disk", lambda name: False)
+    with pytest.raises(ValueError) as exc:
+        sg.resolve_text_encoder("flux3-image-klein-int8-convrot.safetensors")
+    assert "encoder_not_installed" in str(exc.value)
+
+
+def test_flux3_graph_is_the_official_graph():
+    graph = sg._flux3_klein_graph("a matte stand-up pouch", 1024, 1024, 16, 7)
+    assert graph["1"]["class_type"] in ("UNETLoader", "UnetLoaderGGUF")
+    assert graph["2"]["class_type"] == "CLIPLoader"
+    assert graph["2"]["inputs"]["type"] == "flux3"
+    assert graph["6"]["class_type"] == "EmptyFlux2LatentImage"
+    assert graph["7"]["class_type"] == "ModelSamplingFlux"
+    assert graph["8"]["inputs"]["cfg"] == 1.0
+    assert graph["8"]["inputs"]["steps"] == 16
+    assert graph["8"]["inputs"]["sampler_name"] == "euler"
+
+
+def test_flux3_graph_has_no_flux2_scheduler():
+    graph = sg._flux3_klein_graph("pouch", 512, 512, 8, 1)
+    classes = {node["class_type"] for node in graph.values()}
+    assert "Flux2Scheduler" not in classes
+    assert "CFGGuider" not in classes
+    assert graph["3"]["inputs"]["vae_name"] == sg.FLUX3_VAE_FILE
+
+
+def test_edit_lane_is_removed_with_the_text_models(monkeypatch):
+    monkeypatch.setattr(sg, "media_live_armed", lambda: True)
+    with pytest.raises(RuntimeError) as exc:
+        sg.generate_edit(b"\x89PNG\r\n\x1a\n", "make it warmer")
+    assert "edit_lane_removed" in str(exc.value)
+
+
+@pytest.mark.parametrize("name,expected", [
+    ("flux-2-klein-4b-Q8_0.gguf", "qwen_3_4b"),
+    ("Flux-2-Klein-9B-KV-Q8_0.gguf", "qwen_3_8b"),
+])
+def test_legacy_klein_pairing_rules_are_still_enforced(name, expected, monkeypatch):
+    """If Klein weights are ever re-added, the pairing guard still applies."""
+    monkeypatch.setattr(sg, "_encoder_on_disk", lambda _: True)
+    assert expected in sg.resolve_text_encoder(name)
+    with pytest.raises(ValueError):
+        sg.resolve_text_encoder(
+            name,
+            "qwen_3_8b_fp8mixed.safetensors" if "4b" in name
+            else "qwen_3_4b_fp8_mixed.safetensors")

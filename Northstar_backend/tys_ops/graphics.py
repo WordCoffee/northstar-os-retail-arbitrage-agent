@@ -41,6 +41,13 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 CODING_PORT = int(os.environ.get("TYS_CODING_PORT", "8080"))
 MODEL_ID = os.environ.get("FLUX3_MODEL_ID", "flux-3-image-klein")
 
+#: Defaults match the installed FLUX 3 bundle (see tools/flux3_gateway.py).
+DEFAULT_UNET = os.environ.get("FLUX3_UNET") or "flux3-image-klein-nvfp4.safetensors"
+DEFAULT_TEXT_ENCODER = (os.environ.get("FLUX3_TEXT_ENCODER")
+                        or "qwen3vl_4b_int8_convrot.safetensors")
+DEFAULT_VAE = os.environ.get("FLUX3_VAE") or "flux2-vae.safetensors"
+MODELS_ROOT = os.environ.get("COMFYUI_MODELS") or r"C:\Users\T2Hol\ComfyUI\models"
+
 #: Processes the suspension step must never touch.
 _PROTECTED = ("comfy", "uvicorn", "northstar", "chrome", "python -m uvicorn")
 
@@ -75,13 +82,20 @@ def _port_open(host: str, port: int, timeout: float = 0.5) -> bool:
 def weights_present() -> Dict[str, Any]:
     """FLUX 3 needs all three files; a half-installed model is not installed."""
     keys = {
-        "model": os.environ.get("STUDIO_FLUX3_MODEL", ""),
-        "text_encoder": os.environ.get("STUDIO_FLUX3_TEXT_ENCODER", ""),
-        "vae": os.environ.get("STUDIO_FLUX3_VAE", ""),
+        "model": (os.environ.get("STUDIO_FLUX3_MODEL") or DEFAULT_UNET,
+                  "diffusion_models"),
+        "text_encoder": (os.environ.get("STUDIO_FLUX3_TEXT_ENCODER") or DEFAULT_TEXT_ENCODER,
+                         "text_encoders"),
+        "vae": (os.environ.get("STUDIO_FLUX3_VAE") or DEFAULT_VAE, "vae"),
     }
-    missing = [name for name, path in keys.items() if not path or not os.path.isfile(path)]
-    return {"present": not missing, "missing": missing,
-            "paths": {k: v for k, v in keys.items() if v}}
+    missing: List[str] = []
+    paths: Dict[str, str] = {}
+    for name, (value, folder) in keys.items():
+        path = value if os.path.isabs(value) else os.path.join(MODELS_ROOT, folder, value)
+        paths[name] = path
+        if not os.path.isfile(path):
+            missing.append(name)
+    return {"present": not missing, "missing": missing, "paths": paths}
 
 
 def status(timeout: float = 0.6) -> Dict[str, Any]:
@@ -101,12 +115,12 @@ def status(timeout: float = 0.6) -> Dict[str, Any]:
         except Exception as exc:  # noqa: BLE001 - availability is a report, not a crash
             detail = f"{type(exc).__name__}: {exc}"
 
-    available = listening and healthy
+    available = bool(listening and healthy and weights["present"])
     if available:
         reason = "flux3 endpoint healthy"
     elif not weights["present"]:
-        reason = ("flux3_weights_not_installed: set STUDIO_FLUX3_MODEL, "
-                  "STUDIO_FLUX3_TEXT_ENCODER and STUDIO_FLUX3_VAE")
+        reason = ("flux3_weights_not_installed: missing "
+                  + ", ".join(weights["missing"]))
     elif not listening:
         reason = f"flux3_endpoint_unreachable: nothing listening at {url}"
     else:

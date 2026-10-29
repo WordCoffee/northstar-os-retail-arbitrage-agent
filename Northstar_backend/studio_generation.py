@@ -32,97 +32,20 @@ from typing import Dict, List, Optional
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8188"  # ComfyUI's own default; override with COMFYUI_URL
 
-# FLUX 3 Image Klein (intended default) — FLUX Kommunity License: Qualifying User only.
-# Not for customer-facing use without a BFL commercial license.
-# FLUX 3 UNet: set STUDIO_FLUX3_MODEL to the official FLUX 3 Image Klein checkpoint (ComfyUI safetensors) when available.
-# FLUX3_MODEL_FILE = os.environ.get("STUDIO_FLUX3_MODEL")
-# FLUX3_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX3_TEXT_ENCODER")
-# FLUX3_VAE_FILE = os.environ.get("STUDIO_FLUX3_VAE")
+# FLUX 3 Image Klein is the only image model on this machine (2026-10-29).
+# FLUX 2 Klein and the text-correcting vision models were removed with it; there
+# is deliberately no fallback, because a silent fallback is how the wrong model
+# ends up rendering a paid deliverable.
+# Licence: FLUX Kommunity License, Qualifying User only. The owner recorded
+# T2 Holdings as under $5M annual revenue on 2026-10-28.
+FLUX3_MODEL_FILE = (os.environ.get("STUDIO_FLUX3_MODEL")
+                    or "flux3-image-klein-nvfp4.safetensors")
+FLUX3_TEXT_ENCODER_FILE = (os.environ.get("STUDIO_FLUX3_TEXT_ENCODER")
+                           or "qwen3vl_4b_int8_convrot.safetensors")
+FLUX3_VAE_FILE = os.environ.get("STUDIO_FLUX3_VAE") or "flux2-vae.safetensors"
 
-# FLUX.2 Klein (fallback) — Apache-2.0, commercial-ok.
-# Kept for UltraTex pipeline which requires the FLUX.2 Klein 9B weights.
-FLUX2_MODEL_FILE = os.environ.get("STUDIO_FLUX2_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
-FLUX2_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX2_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
-
-# Default image model: FLUX 3 (distilled when available). Set STUDIO_USE_FLUX2=1 to force FLUX.2.
-# FLUX 3 model is NOT available until the official FLUX 3 Image Klein weights are downloaded.
-# Auto-fallback to FLUX.2 if FLUX 3 model file is not found.
-def _model_file_exists(model_file: str) -> bool:
-    import pathlib
-    base = pathlib.Path(r"C:\Users\T2Hol\ComfyUI\models\diffusion_models")
-    return (base / model_file).exists()
-
-# FLUX 3 Image Klein (intended default) — FLUX Kommunity License: Qualifying User only.
-# Not for customer-facing use without a BFL commercial license.
-_DEFAULT_FLUX3_MODEL = None  # Set from STUDIO_FLUX3_MODEL env if FLUX 3 weights are available
-_DEFAULT_FLUX3_TEXT_ENCODER = None
-_DEFAULT_FLUX3_VAE = None
-
-def _get_flux3_model_file() -> str:
-    """Get FLUX 3 model file path from environment or raise if not available.
-    
-    Returns the FLUX 3 model file path from STUDIO_FLUX3_MODEL.
-    If not set, raises RuntimeError indicating FLUX 3 weights are not installed.
-    """
-    model_file = os.environ.get("STUDIO_FLUX3_MODEL")
-    if not model_file:
-        raise RuntimeError(
-            f"FLUX 3 weights not installed. Set STUDIO_FLUX3_MODEL environment variable "
-            f"to the path of the FLUX 3 model file, "
-            f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
-        )
-    return model_file
-
-def _get_flux3_text_encoder_file() -> str:
-    """Get FLUX 3 text encoder file path from environment or raise if not available.
-    
-    Returns the FLUX 3 text encoder file path from STUDIO_FLUX3_TEXT_ENCODER.
-    If not set, raises RuntimeError indicating FLUX 3 weights are not installed.
-    """
-    text_encoder_file = os.environ.get("STUDIO_FLUX3_TEXT_ENCODER")
-    if not text_encoder_file:
-        raise RuntimeError(
-            f"FLUX 3 weights not installed. Set STUDIO_FLUX3_TEXT_ENCODER environment variable "
-            f"to the path of the FLUX 3 text encoder file, "
-            f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
-        )
-    return text_encoder_file
-
-def _get_flux3_vae_file() -> str:
-    """Get FLUX 3 VAE file path from environment or raise if not available.
-    
-    Returns the FLUX 3 VAE file path from STUDIO_FLUX3_VAE.
-    If not set, raises RuntimeError indicating FLUX 3 weights are not installed.
-    """
-    vae_file = os.environ.get("STUDIO_FLUX3_VAE")
-    if not vae_file:
-        raise RuntimeError(
-            f"FLUX 3 weights not installed. Set STUDIO_FLUX3_VAE environment variable "
-            f"to the path of the FLUX 3 VAE file, "
-            f"or set STUDIO_USE_FLUX2=1 to use FLUX.2 as fallback."
-        )
-    return vae_file
-
-# FLUX 2 Klein (fallback) — Apache-2.0, commercial-ok.
-# Kept for UltraTex pipeline which requires the FLUX.2 Klein 9B weights.
-FLUX2_MODEL_FILE = os.environ.get("STUDIO_FLUX2_MODEL") or "Flux-2-Klein-9B-KV-Q8_0.gguf"
-FLUX2_TEXT_ENCODER_FILE = os.environ.get("STUDIO_FLUX2_TEXT_ENCODER") or "qwen_3_8b_fp8mixed.safetensors"
-
-# Default image model: FLUX 2 is default. Set STUDIO_USE_FLUX2=1 to force FLUX.2.
-# FLUX 3 is available only when STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, and STUDIO_FLUX3_VAE
-# environment variables are set with valid FLUX 3 weight files.
-_USE_FLUX2 = str(os.environ.get("STUDIO_USE_FLUX2", "") or "").strip() == "1"
-if not _USE_FLUX2:
-    try:
-        _DEFAULT_FLUX3_MODEL = _get_flux3_model_file()
-        _DEFAULT_FLUX3_TEXT_ENCODER = _get_flux3_text_encoder_file()
-        _DEFAULT_FLUX3_VAE = _get_flux3_vae_file()
-        _USE_FLUX2 = False  # Use FLUX 3 when weights are available
-    except RuntimeError:
-        _USE_FLUX2 = True  # Auto-fallback to FLUX.2 if FLUX 3 weights not installed
-
-IMAGE_MODEL_FILE = FLUX2_MODEL_FILE if _USE_FLUX2 else _DEFAULT_FLUX3_MODEL
-TEXT_ENCODER_FILE = FLUX2_TEXT_ENCODER_FILE if _USE_FLUX2 else _DEFAULT_FLUX3_TEXT_ENCODER
+IMAGE_MODEL_FILE = FLUX3_MODEL_FILE
+TEXT_ENCODER_FILE = FLUX3_TEXT_ENCODER_FILE
 VIDEO_MODEL_FILE = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 
 # --- Model / text-encoder compatibility (single source of truth) -----------
@@ -160,6 +83,17 @@ def _encoder_on_disk(filename: str) -> bool:
     return False
 
 
+def _any_model_on_disk(name: str) -> bool:
+    """True when *name* exists in any ComfyUI model subfolder this app uses."""
+    if not name:
+        return False
+    for sub in ("unet", "diffusion_models", "text_encoders", "clip", "vae",
+                "loras", "checkpoints"):
+        if os.path.isfile(os.path.join(r"C:\Users\T2Hol\ComfyUI\models", sub, name)):
+            return True
+    return False
+
+
 def resolve_text_encoder(model_file: str, encoder_file: Optional[str] = None) -> str:
     """Return a compatible text encoder for *model_file*, or raise ValueError.
 
@@ -168,8 +102,14 @@ def resolve_text_encoder(model_file: str, encoder_file: Optional[str] = None) ->
     """
     size = _model_size_token(model_file)
     if not size:
-        # Non-Klein family (e.g. FLUX 3) — nothing to validate here.
-        return encoder_file or TEXT_ENCODER_FILE
+        # FLUX 3 (and anything else that is not a `*4b`/`*9b` Klein family)
+        # has no encoder-size pairing rule, but the file must still exist.
+        chosen = encoder_file or TEXT_ENCODER_FILE
+        if not _any_model_on_disk(chosen):
+            raise ValueError(
+                "encoder_not_installed: %s (needed for %s)"
+                % (chosen, os.path.basename(str(model_file))))
+        return chosen
     family, default = _ENCODER_BY_MODEL_SIZE[size]
     chosen = encoder_file or default
     if family not in os.path.basename(str(chosen)).lower():
@@ -245,7 +185,8 @@ def engine_status() -> dict:
         "reachable": up,
         "armed": bool(live and up),
         "models": {"image": IMAGE_MODEL_FILE, "video": VIDEO_MODEL_FILE,
-                   "edit": EDIT_MODEL_FILE},
+                   "edit": (EDIT_MODEL_FILE if _any_model_on_disk(EDIT_MODEL_FILE)
+                            else None)},
         "note": (
             "The local engine is armed: renders run on this machine's GPU (ComfyUI)."
             if (live and up) else
@@ -590,26 +531,43 @@ def _klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) ->
 
 
 def _flux3_klein_graph(prompt: str, width: int, height: int, steps: int, seed: int) -> dict:
-    """FLUX 3 Image Klein graph — FLUX Kommunity License: Qualifying User only.
-    
-    Not for customer-facing use without a BFL commercial license.
-    Uses Qwen3-VL-4B text encoder, the FLUX 3 VAE, and FLUX 3 native nodes.
-    This function should only be called when FLUX 3 weights are available.
+    """FLUX 3 Image Klein text-to-image graph (official int8 template).
+
+    One UNET, the Qwen3-VL text encoder loaded as ``flux3``, the FLUX VAE,
+    ``ModelSamplingFlux`` and a 16-step euler/simple sampler at CFG 1.0 — the
+    same graph the checkpoint repository ships. No GGUF loader and no FLUX 2
+    node is involved.
     """
+    loader = ("UnetLoaderGGUF" if str(IMAGE_MODEL_FILE).lower().endswith(".gguf")
+              else "UNETLoader")
+    unet_inputs = {"unet_name": IMAGE_MODEL_FILE}
+    if loader == "UNETLoader":
+        unet_inputs["weight_dtype"] = "default"
     return {
-        "1": {"class_type": "UnetLoaderGGUF", "inputs": {"unet_name": IMAGE_MODEL_FILE}},
-        "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux3", "device": "default"}},
-        "3": {"class_type": "VAELoader", "inputs": {"vae_name": _DEFAULT_FLUX3_VAE}},
-        "4": {"class_type": "CLIPTextEncode", "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
-        "5": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["4", 0]}},
-        "6": {"class_type": "EmptyLatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}},
-        "7": {"class_type": "CFGGuider", "inputs": {"model": ["1", 0], "positive": ["4", 0], "negative": ["5", 0], "cfg": 3.5}},
-        "8": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
-        "9": {"class_type": "BasicScheduler", "inputs": {"steps": steps, "width": width, "height": height, "scheduler": "simple"}},
-        "10": {"class_type": "RandomNoise", "inputs": {"noise_seed": seed}},
-        "11": {"class_type": "SamplerCustomAdvanced", "inputs": {"noise": ["10", 0], "guider": ["7", 0], "sampler": ["8", 0], "sigmas": ["9", 0], "latent_image": ["6", 0]}},
-        "12": {"class_type": "VAEDecode", "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
-        "13": {"class_type": "SaveImage", "inputs": {"images": ["12", 0], "filename_prefix": "ns-studio-flux3"}},
+        "1": {"class_type": loader, "inputs": unet_inputs},
+        "2": {"class_type": "CLIPLoader",
+              "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux3",
+                         "device": "default"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": FLUX3_VAE_FILE}},
+        "4": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["2", 0], "text": prompt + _STYLE_SUFFIX}},
+        "5": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["2", 0], "text": ""}},
+        "6": {"class_type": "EmptyFlux2LatentImage",
+              "inputs": {"width": width, "height": height, "batch_size": 1}},
+        "7": {"class_type": "ModelSamplingFlux",
+              "inputs": {"model": ["1", 0], "max_shift": 2.77259,
+                         "base_shift": 2.77259, "width": width, "height": height}},
+        "8": {"class_type": "KSampler",
+              "inputs": {"model": ["7", 0], "positive": ["4", 0],
+                         "negative": ["5", 0], "latent_image": ["6", 0],
+                         "seed": seed, "steps": steps, "cfg": 1.0,
+                         "sampler_name": "euler", "scheduler": "simple",
+                         "denoise": 1.0}},
+        "9": {"class_type": "VAEDecode",
+              "inputs": {"samples": ["8", 0], "vae": ["3", 0]}},
+        "10": {"class_type": "SaveImage",
+               "inputs": {"images": ["9", 0], "filename_prefix": "ns-studio-flux3"}},
     }
 
 
@@ -686,7 +644,8 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     req_w = int(width) if width not in (None, "") else 1024
     req_h = int(height) if height not in (None, "") else 1024
     w, h = _fit_box(req_w, req_h)
-    steps = 8 if str(tier).lower() == "final" else 4
+    # FLUX 3 official graph: 16 steps. A "final" tier gets a little more.
+    steps = 24 if str(tier).lower() == "final" else 16
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
     # Serialize renders and run the RAM stop/restore lifecycle. The lock is
     # cross-process, so two workers cannot drive the GPU at once.
@@ -698,8 +657,9 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
             on_progress(0, "queued on the local engine")
         session.mark_render_started()
         try:
-            # Use FLUX 2 by default (FLUX 3 weights not yet available), FLUX 3 as fallback when weights are present
-            graph = _flux3_klein_graph(prompt, w, h, steps, seed) if not _USE_FLUX2 else _klein_graph(prompt, w, h, steps, seed)
+            # FLUX 3 is the only image engine. There is no FLUX 2 branch: the
+            # weights were removed on 2026-10-29 and a fallback would hide that.
+            graph = _flux3_klein_graph(prompt, w, h, steps, seed)
             files = _run_graph_guarded(graph, timeout_s=1800, on_progress=on_progress)
             session.check_timeout()
         except RuntimeError as exc:
@@ -791,6 +751,15 @@ def generate_edit(image_bytes: bytes, prompt: str, *, tier: str = "draft", seed=
     """
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    # The Qwen-Image-Edit weights and its vision encoder were removed with the
+    # FLUX 2 cleanup on 2026-10-29. Fail with the reason instead of dispatching a
+    # graph against files that no longer exist.
+    missing = [name for name in (EDIT_MODEL_FILE, EDIT_TEXT_ENCODER_FILE, EDIT_VAE_FILE)
+               if not _any_model_on_disk(name)]
+    if missing:
+        raise RuntimeError(
+            "edit_lane_removed: the text-faithful edit lane was removed with the "
+            "FLUX 2 text-correcting models (missing: " + ", ".join(missing) + ")")
     require_cache_none("edit")
     if not unload_brain():
         raise RuntimeError(

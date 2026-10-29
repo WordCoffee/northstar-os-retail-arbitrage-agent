@@ -1,0 +1,53 @@
+{
+  "flux3_install_20261029": {
+    "label": "FLUX 3 Image Klein installed; FLUX 2 and text-correcting vision models removed",
+    "report": "reports/flux3_migration_20261029.md",
+    "gateway": "tools/flux3_gateway.py",
+    "installed": {
+      "diffusion": "C:\\Users\\T2Hol\\ComfyUI\\models\\diffusion_models\\flux3-image-klein-nvfp4.safetensors",
+      "diffusion_gb": 4.92,
+      "text_encoder": "C:\\Users\\T2Hol\\ComfyUI\\models\\text_encoders\\qwen3vl_4b_int8_convrot.safetensors",
+      "text_encoder_gb": 4.52,
+      "vae": "C:\\Users\\T2Hol\\ComfyUI\\models\\vae\\flux2-vae.safetensors",
+      "licence": "FLUX Kommunity License - Qualifying User only; owner attested under $5M revenue 2026-10-28",
+      "source": "public mirror ml-resources/flux-3-image-klein-comfy (official BFL repo is gated)"
+    },
+    "removed": {
+      "bytes": 57187600000,
+      "total_gb": 53.27,
+      "manifest": "backups/models/flux2_removal_20261029T181115Z.json",
+      "items": [
+        "Flux-2-Klein-9B-KV-Q8_0.gguf",
+        "flux-2-klein-4b-Q8_0.gguf",
+        "flux-2-klein-base-9b-Q6_K.gguf",
+        "qwen_3_8b_fp8mixed.safetensors",
+        "qwen_3_4b_fp8_mixed.safetensors",
+        "qwen_2.5_vl_7b_nvfp4.safetensors",
+        "qwen-image-edit-2511-Q4_K_M.gguf",
+        "qwen_image_vae.safetensors",
+        "ultratex_flux2*.safetensors",
+        "flux2_klein_4b_refcontrol_depth.safetensors",
+        "ultratex_flux2_decoder.pt"
+      ],
+      "kept": "vae/flux2-vae.safetensors (FLUX 3 uses this VAE)"
+    },
+    "failed_quant_paths": [
+      "int8-convrot: hostbuf_file_reader_read failed (comfy-aimdo)",
+      "GGUF Q6_K: ComfyUI-GGUF unpatch_model stalls on ComfyUI 0.43"
+    ],
+    "runtime": {
+      "comfyui_from": "e0a32bce",
+      "comfyui_to": "fd7639f4",
+      "reason": "FLUX 3 image support (#17064) landed in between",
+      "rollback": "git -C C:\\Users\\T2Hol\\ComfyUI reset --hard e0a32bce"
+    },
+    "verification": {
+      "gateway_render": "flux3_00001_.png 1024x1024 1.54MB",
+      "studio_render": "356525 bytes 512x512",
+      "tys_task": "tys_1227cbdfc638 done, artifact flux3_00002_.png 1024x1024",
+      "tests": 193,
+      "free_gb_after": 64.65
+    },
+    "quality_claim": false
+  }
+}

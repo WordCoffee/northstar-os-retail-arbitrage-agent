@@ -200,15 +200,20 @@ def test_graphics_adapter_requires_a_prompt(assistant):
     assert result.blocked is True
 
 
-def test_flux3_status_is_honest_when_not_installed(monkeypatch):
-    monkeypatch.delenv("STUDIO_FLUX3_MODEL", raising=False)
-    monkeypatch.delenv("STUDIO_FLUX3_TEXT_ENCODER", raising=False)
-    monkeypatch.delenv("STUDIO_FLUX3_VAE", raising=False)
+def test_flux3_status_is_honest_when_weights_are_missing(monkeypatch):
+    monkeypatch.setattr(graphics, "DEFAULT_UNET", "not-installed.safetensors")
     monkeypatch.setenv("FLUX3_SERVER_URL", "http://127.0.0.1:9")
     report = graphics.status()
     assert report["available"] is False
     assert report["weights"]["present"] is False
     assert "flux3_" in report["detail"]
+
+
+def test_flux3_status_reports_the_installed_bundle():
+    """On this host the FLUX 3 bundle is installed; the endpoint is separate."""
+    report = graphics.status()
+    assert report["weights"]["present"] is True
+    assert report["model"].startswith("flux-3")
 
 
 def test_generate_refuses_without_falling_back_to_comfy(monkeypatch):

@@ -76,6 +76,13 @@ benchmark share one definition of a usable diff.
 * The graphics lane checks FLUX 3 availability **before** suspending anything.
   When it is ready it suspends the MoE coding worker and unloads Ollama, takes
   the shared GPU lock, renders, and releases. It never starts ComfyUI.
+* Runtime: this box has no CUDA PyTorch outside ComfyUI's venv, so
+  `tools/flux3_gateway.py` serves `/generate` and uses ComfyUI purely as the
+  local inference runtime. The gateway never launches ComfyUI; if it is down,
+  the step blocks (`flux3_endpoint_unreachable`).
+* Installed checkpoint: `flux3-image-klein-nvfp4.safetensors` (NVFP4, 4.92 GB)
+  with `qwen3vl_4b_int8_convrot.safetensors` and `flux2-vae.safetensors`.
+  The int8-convrot and GGUF quants fail on this runtime and are not kept.
 * Coaching a missing engine is explicit, not a fallback: no FLUX 3 endpoint or
   weights means a blocked step (`flux3_unavailable`,
   `flux3_weights_not_installed`), not a silent render on another model.
