@@ -26,7 +26,9 @@ import time
 import urllib.parse
 import urllib.request
 import uuid
-from typing import Optional
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List, Optional
 
 DEFAULT_COMFYUI_URL = "http://127.0.0.1:8188"  # ComfyUI's own default; override with COMFYUI_URL
 
@@ -428,6 +430,58 @@ def _evict(model: str) -> None:
             continue
 
 
+# ── B4: what the last render evicted ────────────────────────────────────────
+# A render evicts the brain to free VRAM. That is correct behaviour, but the
+# operator then sees a slow chat reply with no stated cause. This records it so
+# the turn can say why.
+_LAST_EVICTION: dict = {"models": [], "at": None}
+
+
+# B5: the render lock serialises every job silently. These counters make the wait
+# visible instead of leaving "the second render just took longer" unexamined.
+_RENDER_LOCK_STATS: dict = {"attempts": 0, "timeouts": 0, "total_wait_s": 0.0,
+                            "last_wait_s": 0.0, "max_wait_s": 0.0}
+
+
+def render_lock_stats() -> dict:
+    """Attempts, timeouts and wait times for the cross-process render lock."""
+    return dict(_RENDER_LOCK_STATS)
+
+
+def last_brain_eviction() -> dict:
+    """Models evicted by the most recent unload_brain() call (empty if none)."""
+    return {"models": list(_LAST_EVICTION.get("models") or []),
+            "at": _LAST_EVICTION.get("at")}
+
+
+# ── B3: the editor lane needs ComfyUI started with --cache-none ─────────────
+# 2026-10-22: without the flag, qwen-image-edit + its text encoder peak at ~20 GB
+# against 15.4 GB RAM and the process is killed with no traceback. The launcher
+# writes a marker; the lanes read it. Unknown (no marker) never blocks — it is
+# reported as unknown, because "no marker" is not the same as "flag missing".
+CACHE_NONE_MARKER = Path(__file__).resolve().parent / "data" / "comfyui_launch.json"
+
+
+def comfyui_cache_none() -> Optional[bool]:
+    """True/False when the launcher recorded the flag, None when unknown."""
+    try:
+        data = json.loads(CACHE_NONE_MARKER.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - absent or corrupt marker = unknown
+        return None
+    value = data.get("cache_none")
+    return bool(value) if isinstance(value, bool) else None
+
+
+def require_cache_none(lane: str) -> None:
+    """Refuse a RAM-heavy lane only when the marker positively says otherwise."""
+    if comfyui_cache_none() is False:
+        raise RuntimeError(
+            f"comfyui_cache_none_required: the {lane} lane needs ComfyUI started with "
+            "--cache-none, or it exhausts system RAM and is killed without a traceback. "
+            "The launcher recorded cache_none=false. Restart with tools/start_comfyui.ps1 "
+            "or scripts/launch_alpha.ps1.")
+
+
 def unload_brain(wait_s: float = 45.0) -> bool:
     """Evict EVERY locally resident model from VRAM before a render, then VERIFY.
 
@@ -445,15 +499,21 @@ def unload_brain(wait_s: float = 45.0) -> bool:
     """
     forced = os.environ.get("NORTHSTAR_BRAIN_MODEL")
     deadline = time.time() + max(0.0, float(wait_s))
+    evicted: List[str] = []
     while True:
         resident = _resident_models()
         if resident is None:
             return True  # verification unavailable: never block renders on a failed check
         targets = [forced] if forced else resident
         if not resident or (forced and not any(forced.split(":")[0] in r for r in resident)):
+            if evicted:
+                _LAST_EVICTION["models"] = evicted
+                _LAST_EVICTION["at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
             return True
         for name in targets:
             _evict(name)
+            if name not in evicted:
+                evicted.append(str(name))
         if time.time() >= deadline:
             remaining = _resident_models() or []
             if forced:
@@ -680,6 +740,7 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
         "engine_max_edge_px": MAX_EDGE_PX,
         "duration_seconds": None,
         "ram_gate": _ram_gate,
+        "brain_evicted": last_brain_eviction()["models"],
     }
 
 
@@ -730,6 +791,7 @@ def generate_edit(image_bytes: bytes, prompt: str, *, tier: str = "draft", seed=
     """
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    require_cache_none("edit")
     if not unload_brain():
         raise RuntimeError(
             "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
@@ -866,6 +928,7 @@ def generate_video(prompt: str, width=None, height=None, tier: str = "draft", se
     narration cannot be produced the render still returns, with ``audio.error``
     set to the real reason - a silent clip is never passed off as a narrated one.
     """
+    require_cache_none("video")
     if not media_live_armed():
         raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
     if not unload_brain():  # one 16 GB GPU: make room, then VERIFY it actually freed
@@ -1320,6 +1383,21 @@ class _CrossProcessRenderLock:
         return False
 
     def acquire(self, timeout: float = 10.0) -> bool:
+        # B5: time the wait so a serialised render has a number, not a vibe.
+        _t0 = time.perf_counter()
+        ok = self._acquire_inner(timeout)
+        _waited = time.perf_counter() - _t0
+        _RENDER_LOCK_STATS["attempts"] += 1
+        _RENDER_LOCK_STATS["total_wait_s"] = round(
+            _RENDER_LOCK_STATS["total_wait_s"] + _waited, 4)
+        _RENDER_LOCK_STATS["last_wait_s"] = round(_waited, 4)
+        if _waited > _RENDER_LOCK_STATS["max_wait_s"]:
+            _RENDER_LOCK_STATS["max_wait_s"] = round(_waited, 4)
+        if not ok:
+            _RENDER_LOCK_STATS["timeouts"] += 1
+        return ok
+
+    def _acquire_inner(self, timeout: float = 10.0) -> bool:
         # Guard the same-process race first.
         if not self._thread_lock.acquire(timeout=max(0.1, timeout)):
             return False

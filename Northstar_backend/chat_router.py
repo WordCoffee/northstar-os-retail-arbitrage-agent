@@ -551,6 +551,20 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "error": result.get("error"),
                     "assets": result.get("assets") or [],
                 })
+                # B4: a render frees VRAM by evicting the local brain. That is the
+                # right trade, but it leaves the operator with a slow reply and no
+                # cause. Say it once, with the model ids that went.
+                evicted = (result.get("brain_evicted")
+                           or (result.get("data") or {}).get("brain_evicted")
+                           or [])
+                if evicted:
+                    yield sse_frame("notice", {
+                        "turn_id": turn_id,
+                        "code": "brain_evicted_for_render",
+                        "detail": ("Freed VRAM by unloading "
+                                   + ", ".join(str(e) for e in evicted)
+                                   + " before this render. Chat will be slow until it reloads."),
+                    })
                 for a in result.get("assets") or []:
                     if not isinstance(a, dict):
                         continue

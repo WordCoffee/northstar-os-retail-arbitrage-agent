@@ -139,6 +139,22 @@ def lane_status(db=None, *, window: int = 500) -> Dict[str, Any]:
                 "reason": f"{type(exc).__name__}: {exc}"[:200]}
 
 
+# ── render lock (B5) ─────────────────────────────────────────────────────────
+
+def render_lock_status() -> Dict[str, Any]:
+    """How long renders waited on the cross-process lock, and how often they gave up.
+
+    A serialised render previously looked identical to a slow one. These counters
+    are process-local and reset on restart; they are a live signal, not history.
+    """
+    try:
+        import studio_generation as sg
+        stats = sg.render_lock_stats()
+        return {"available": True, **stats}
+    except Exception as exc:  # noqa: BLE001
+        return {"available": False, "reason": f"{type(exc).__name__}: {exc}"[:200]}
+
+
 # ── local models ─────────────────────────────────────────────────────────────
 
 def model_status(ps_probe: Optional[Callable[[], Any]] = None) -> Dict[str, Any]:

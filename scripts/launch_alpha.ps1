@@ -254,6 +254,23 @@ if ($NoComfy) {
             Write-Host "ComfyUI: starting on :8188 (--cache-none)..."
             $cp = Start-Process -FilePath $comfyPy -ArgumentList "main.py", "--port", "8188", "--listen", "127.0.0.1", "--cache-none" -WorkingDirectory $comfyHome -PassThru -WindowStyle Minimized
             $launched += @{ name = "comfyui"; id = $cp.Id }
+            # B3: record how the engine was started. The RAM-heavy lanes read this
+            # marker and refuse to run against an engine started WITHOUT the flag
+            # (that is the 2026-10-22 RAM kill with no traceback). A missing marker
+            # means "unknown", never "false".
+            try {
+                $markerDir = Join-Path $repo "Northstar_backend\data"
+                New-Item -ItemType Directory -Force -Path $markerDir | Out-Null
+                $marker = @{
+                    cache_none = $true
+                    pid        = $cp.Id
+                    started_at = (Get-Date).ToUniversalTime().ToString("o")
+                    argv       = "main.py --port 8188 --listen 127.0.0.1 --cache-none"
+                } | ConvertTo-Json
+                Set-Content -Path (Join-Path $markerDir "comfyui_launch.json") -Value $marker -Encoding utf8
+            } catch {
+                Write-Host "ComfyUI: could not write the launch marker (heavy lanes will report cache_none=unknown)." -ForegroundColor Yellow
+            }
         } else {
             Write-Host "ComfyUI: not found at $comfyHome - renders will report the engine as unreachable." -ForegroundColor Yellow
         }
