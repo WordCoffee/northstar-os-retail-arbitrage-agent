@@ -1324,11 +1324,16 @@ class TysAssistant:
     # -- execution ---------------------------------------------------------
 
     def run_kernel(self, task_id: str, *, approve_by: str = "operator",
-                   coding_agent: bool = True) -> Dict[str, Any]:
+                   coding_agent: bool = True,
+                   coding_max_steps: int = 12) -> Dict[str, Any]:
         """Execute a work order through the agent kernel (opt-in).
 
         The default `run()` is unchanged. This path gives the order a visible
         plan, a policy check per lane, evidence per step and a checkpoint.
+
+        `coding_max_steps` is the bounded repair budget for the coding tool loop.
+        Callers may raise it (the benchmark harness uses 15) but the loop stays
+        bounded either way.
         """
         from agent_kernel.policy import grant
         from agent_kernel.tys_adapter import make_workspace_acceptance, run_order
@@ -1384,7 +1389,7 @@ class TysAssistant:
                 required_artifact=next(iter(
                     ((node.inputs or {}).get("acceptance") or {}).get(
                         "required_files") or []), ""),
-                max_steps=12)
+                max_steps=max(1, int(coding_max_steps)))
         res = run_order(self, order, approve_by=approve_by, grants=grants,
                         task=task, coding_factory=coding_factory)
         task["status"] = "done" if res.status == "complete" else res.status

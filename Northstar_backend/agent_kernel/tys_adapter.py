@@ -54,6 +54,34 @@ def make_workspace_acceptance(workspace: str, spec: Optional[Dict[str, Any]] = N
     return check
 
 
+def _derive_acceptance(step: Dict[str, Any],
+                       scope: Dict[str, Any]) -> List[Acceptance]:
+    """Turn a step's workspace acceptance spec into kernel-side verifiers.
+
+    A step that declares ``params.acceptance = {commands, required_files}`` used
+    to fall through to a single ``executor_ok`` assertion — the lane grading
+    itself. That is defect **p01** at the kernel level: a node could be blocked
+    because the loop stopped, with the files written and the commands green. The
+    kernel now checks the workspace: the artifact must exist and every command
+    must exit 0.
+    """
+    spec = dict((step.get("params") or {}).get("acceptance") or {})
+    if not spec:
+        return []
+    workspace = str(spec.get("workspace") or scope.get("workspace") or "").strip()
+    out: List[Acceptance] = []
+    for rel in spec.get("required_files") or []:
+        path = str(Path(workspace) / str(rel)) if workspace else str(rel)
+        out.append(Acceptance(f"{rel} exists", "artifact_exists", {"path": path}))
+    for cmd in spec.get("commands") or []:
+        args = [str(c) for c in cmd]
+        params: Dict[str, Any] = {"cmd": args, "expect_exit": 0}
+        if workspace:
+            params["cwd"] = workspace
+        out.append(Acceptance(" ".join(args) + " exits 0", "command", params))
+    return out
+
+
 def work_order_to_plan(order: Dict[str, Any], *, session_id: str = "") -> Plan:
     objective = str(order.get("objective") or "").strip()
     if not objective:
@@ -75,6 +103,7 @@ def work_order_to_plan(order: Dict[str, Any], *, session_id: str = "") -> Plan:
         raw_accept = step.get("acceptance") or []
         acceptance = ([a if isinstance(a, Acceptance) else Acceptance.from_dict(a)
                        for a in raw_accept]
+                      or _derive_acceptance(step, scope)
                       or [Acceptance("the lane executor reports success", "executor_ok")])
         node_id = str(step.get("node_id") or f"n{i}")
         depends = list(step.get("depends_on") or ([] if prev is None else [prev]))
