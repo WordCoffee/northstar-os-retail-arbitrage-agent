@@ -565,3 +565,64 @@ dependency override instead of using credentials (no credential was read).
 
 14 gating metrics now. Wave 3 added three of them, so the guards themselves can
 regress.
+
+---
+
+# REA-FIRST PASS - S5 (2026-10-29)
+
+Method change per your instruction: reverse-engineer the reference before writing
+code. Both sources were read before a line was written.
+
+## What was reverse-engineered
+
+| Source | What it contributed |
+|---|---|
+| Cloudinary "Image resizing and cropping" (fetched 2026-10-29) | the vocabulary and the rule: `fill` = cover (scale until the shorter side fits, crop the longer one); what survives is decided by a **gravity** point; `fit`/`pad` are the non-cropping modes; gravity is compass, auto, or explicit coordinates |
+| `specRegistry.js` `SAFE_ZONES` (in-repo, 2026-10-10) | the discipline: boxes in **normalised 0..1**, BOTH documented figures kept, and the **stricter union** applied - never a single convenient number |
+| `presets.js` + `social_validate.py` | the target canvases and their sourced sizes |
+
+The transfer: SAFE_ZONES answers "where must I NOT put things". S5 needed the
+inverse - "what survives every crop" - so the same stricter-union rule is applied
+to the **intersection** of the crop windows instead of the union of keep-outs.
+
+## Built
+
+`northstar-os-ui/src/studio/engine/variants.js`:
+- `cropFor(master, target, focal)` - cover scale, crop rect in px and normalised,
+  `upscale` flag, gravity recorded.
+- `keepInIntersection(crops)` - the shared region, with `areaPct` and `empty`.
+- `buildVariantMatrix({master, targets, focal})` - the matrix plus
+  `ok`/`reason`. It returns `ok:false` when the targets cannot share an anchor,
+  and when no targets are selected - an outage is stated, never passed.
+
+Wired into `outputPacks.buildSocialAssetPack`, so the downloadable pack carries
+the matrix (or says UNKNOWN when the master/targets were not recorded).
+
+## Numbers (from `tools/test_social_variants.mjs`)
+
+Master 1440x1800 (IG portrait), targets ig-post / pin / x-post / tiktok:
+
+| Target | Crop (normalised) | Note |
+|---|---|---|
+| ig-post 4:5 | full frame | no crop |
+| x-post 1.91:1 | w 1.000, h **0.419** | the tightest crop |
+| tiktok 9:16 | w 0.703, h 1.000 | upscales 1.07x (flagged) |
+| **keep-in intersection** | **h 0.419**, area ~41.9 % | the band that survives all four |
+
+Also asserted: gravity 0 pins left, gravity 1 pins right, upscale is disclosed,
+an empty intersection is refused with a reason, and an empty target list is
+refused.
+
+| Metric | Before | After |
+|---|---|---|
+| one-master variant matrix | none | 4 targets, per-crop rects + keep-in box |
+| contradictory anchors | would silently "work" | **refused**, reason stated |
+| pack output | placements + copy only | **+ variants / keepIn** (or UNKNOWN) |
+| harness | - | `social_variants_ok` = 1 (gated) |
+
+**Commits:** `a6d1f7c9` (module + pack + test), `1dbd8e3f` (harness gate).
+**Tests:** 14 node checks, `npm run build` 0 errors.
+**UNVERIFIED:** the matrix is not yet used by the Social workspace UI (the pack
+consumes it; the canvas does not); no real master asset was run through it - the
+fixture is the IG portrait; crop *aesthetics* (where the product lands) remain an
+operator judgement, not a computed one.
