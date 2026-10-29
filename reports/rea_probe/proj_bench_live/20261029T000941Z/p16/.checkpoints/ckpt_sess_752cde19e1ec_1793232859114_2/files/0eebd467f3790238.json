@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'campaign.md' exists in the current directory.",
+    "command": "test -f campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the campaign plan explicitly defines a 'human gate' or 'manual approval' step between the inspect and browser lanes.",
+    "command": "grep -qi \"human gate\\|manual approval\\|human-in-the-loop\" campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the document contains distinct sections or labels for 'inspect' and 'browser' phases.",
+    "command": "grep -qi \"inspect\" campaign.md && grep -qi \"browser\" campaign.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the workflow order places the inspect phase before the browser phase, with the gate in between.",
+    "command": "python3 -c \"import re; content=open('campaign.md').read(); i_inspect=re.search(r'inspect', content, re.I).start(); i_gate=re.search(r'human gate|manual approval|human-in-the-loop', content, re.I).start(); i_browser=re.search(r'browser', content, re.I).start(); assert i_inspect < i_gate < i_browser, 'Order violation'\"",
+    "expected": "exit code 0"
+  }
+]

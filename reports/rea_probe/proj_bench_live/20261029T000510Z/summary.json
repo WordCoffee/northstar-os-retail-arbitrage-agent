@@ -1,0 +1,830 @@
+{
+  "programme": "NS-PROJ-20",
+  "mode": "live-lane-baseline",
+  "label": "live lane baseline \u2014 harness persists model text; content quality unverified",
+  "project_result": false,
+  "quality_claim": false,
+  "run_at": "20261029T000510Z",
+  "briefs": 20,
+  "complete": 8,
+  "valid_plans": 20,
+  "mean_evidence_coverage": 0.617,
+  "total_interventions": 0,
+  "model_calls": 49,
+  "model_chars": 23848,
+  "node_seconds_p50": 2.05,
+  "node_seconds_p95": 6.23,
+  "resume_mechanics": {
+    "first_status": "needs_human",
+    "second_status": "complete",
+    "calls": [
+      "a",
+      "b"
+    ],
+    "no_duplicate": true,
+    "resumed": true
+  },
+  "results": [
+    {
+      "id": "p01",
+      "title": "Fix a failing unit test",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 8.517,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.28,
+          "chars": 807,
+          "finish": "stop",
+          "completion_tokens": 161
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 1.58,
+          "chars": 249,
+          "finish": "stop",
+          "completion_tokens": 100
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 3.61,
+          "chars": 880,
+          "finish": "stop",
+          "completion_tokens": 269
+        }
+      ],
+      "model_seconds": [
+        3.28,
+        1.58,
+        3.61
+      ],
+      "model_chars": 1936
+    },
+    {
+      "id": "p02",
+      "title": "Add a small API endpoint",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 12.955,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.79,
+          "chars": 754,
+          "finish": "stop",
+          "completion_tokens": 149
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 6.23,
+          "chars": 1795,
+          "finish": "stop",
+          "completion_tokens": 475
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 3.89,
+          "chars": 973,
+          "finish": "stop",
+          "completion_tokens": 282
+        }
+      ],
+      "model_seconds": [
+        2.79,
+        6.23,
+        3.89
+      ],
+      "model_chars": 3522
+    },
+    {
+      "id": "p03",
+      "title": "Refactor a module",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 16.054,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.58,
+          "chars": 1022,
+          "finish": "stop",
+          "completion_tokens": 193
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 8.09,
+          "chars": 2665,
+          "finish": "length",
+          "completion_tokens": 700
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.34,
+          "chars": 1196,
+          "finish": "stop",
+          "completion_tokens": 344
+        }
+      ],
+      "model_seconds": [
+        3.58,
+        8.09,
+        4.34
+      ],
+      "model_chars": 4883
+    },
+    {
+      "id": "p04",
+      "title": "Wire a config flag",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 13.682,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 1.68,
+          "chars": 510,
+          "finish": "stop",
+          "completion_tokens": 116
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 9.21,
+          "chars": 3021,
+          "finish": "stop",
+          "completion_tokens": 693
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 2.75,
+          "chars": 724,
+          "finish": "stop",
+          "completion_tokens": 207
+        }
+      ],
+      "model_seconds": [
+        1.68,
+        9.21,
+        2.75
+      ],
+      "model_chars": 4255
+    },
+    {
+      "id": "p05",
+      "title": "Repair a broken build",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 9.225,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.29,
+          "chars": 646,
+          "finish": "stop",
+          "completion_tokens": 149
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 2.76,
+          "chars": 348,
+          "finish": "stop",
+          "completion_tokens": 191
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.14,
+          "chars": 984,
+          "finish": "stop",
+          "completion_tokens": 311
+        }
+      ],
+      "model_seconds": [
+        2.29,
+        2.76,
+        4.14
+      ],
+      "model_chars": 1978
+    },
+    {
+      "id": "p06",
+      "title": "Audit an admin setting",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 7.739,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.08,
+          "chars": 577,
+          "finish": "stop",
+          "completion_tokens": 116
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 2.02,
+          "chars": 378,
+          "finish": "stop",
+          "completion_tokens": 152
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 3.6,
+          "chars": 1030,
+          "finish": "stop",
+          "completion_tokens": 304
+        }
+      ],
+      "model_seconds": [
+        2.08,
+        2.02,
+        3.6
+      ],
+      "model_chars": 1985
+    },
+    {
+      "id": "p07",
+      "title": "Prepare a safe browser run",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 9.937,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 1.95,
+          "chars": 554,
+          "finish": "stop",
+          "completion_tokens": 110
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 3.59,
+          "chars": 960,
+          "finish": "stop",
+          "completion_tokens": 232
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.35,
+          "chars": 1092,
+          "finish": "stop",
+          "completion_tokens": 312
+        }
+      ],
+      "model_seconds": [
+        1.95,
+        3.59,
+        4.35
+      ],
+      "model_chars": 2606
+    },
+    {
+      "id": "p08",
+      "title": "Recover a blocked run",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 9.663,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 2.94,
+          "chars": 830,
+          "finish": "stop",
+          "completion_tokens": 150
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 3.0,
+          "chars": 516,
+          "finish": "stop",
+          "completion_tokens": 230
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 3.68,
+          "chars": 944,
+          "finish": "stop",
+          "completion_tokens": 240
+        }
+      ],
+      "model_seconds": [
+        2.94,
+        3.0,
+        3.68
+      ],
+      "model_chars": 2290
+    },
+    {
+      "id": "p09",
+      "title": "Verify an external change",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 1,
+      "evidence_nodes": 2,
+      "evidence_coverage": 0.667,
+      "interventions": 0,
+      "checkpoints": 2,
+      "events": 20,
+      "duration_s": 9.119,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 1.6,
+          "chars": 393,
+          "finish": "stop",
+          "completion_tokens": 86
+        },
+        {
+          "node": "build",
+          "ok": false,
+          "seconds": 5.46,
+          "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+        },
+        {
+          "node": "build",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        1.6,
+        5.46,
+        2.04
+      ],
+      "model_chars": 393
+    },
+    {
+      "id": "p10",
+      "title": "Produce a weekly ops digest",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.077,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.05,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.02,
+        2.05
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p11",
+      "title": "Build a pouch label",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.054,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.03,
+        2.02
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p12",
+      "title": "Correct a package back panel",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.079,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.04,
+        2.03
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p13",
+      "title": "Generate a social canvas set",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.083,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.05,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.03,
+        2.05
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p14",
+      "title": "Assemble a 15-second ad",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.105,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.05,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.05,
+        2.04
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p15",
+      "title": "Audit a listing",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.096,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.05,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.04,
+        2.05
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p16",
+      "title": "Plan a two-lane campaign",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.07,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.04,
+        2.03
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p17",
+      "title": "Recover from a failed verification",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.066,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.04,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.02,
+        2.04
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p18",
+      "title": "Hand off across a compaction",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.075,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.05,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.02,
+        2.05
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p19",
+      "title": "Apply a per-hunk diff",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.061,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.03,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.03,
+        2.03
+      ],
+      "model_chars": 0
+    },
+    {
+      "id": "p20",
+      "title": "Close a project with evidence",
+      "plan_valid": true,
+      "status": "needs_human",
+      "reason": "verification failed: the lane executor reports it completed; artifact present and non-trivial",
+      "nodes": 3,
+      "nodes_done": 0,
+      "evidence_nodes": 1,
+      "evidence_coverage": 0.333,
+      "interventions": 0,
+      "checkpoints": 1,
+      "events": 14,
+      "duration_s": 4.052,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        },
+        {
+          "node": "plan",
+          "ok": false,
+          "seconds": 2.02,
+          "error": "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"
+        }
+      ],
+      "model_seconds": [
+        2.02,
+        2.02
+      ],
+      "model_chars": 0
+    }
+  ],
+  "note": "Live lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
+  "thresholds_from_this_run": {
+    "completion_rate": 0.4,
+    "evidence_coverage": 0.617,
+    "node_seconds_p50": 2.05,
+    "node_seconds_p95": 6.23,
+    "quality_thresholds": "not set \u2014 machine content validators are not implemented"
+  }
+}

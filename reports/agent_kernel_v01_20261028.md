@@ -82,7 +82,16 @@ resume: first needs_human -> second complete, no duplicate step
 
 This validates the *harness*: plans are valid, every node has evidence, a gate
 blocks once, and resume does not repeat the completed node. It is **not** a
-statement that Ty completes 20 projects; the live baseline is still owed.
+statement that Ty completes 20 projects; the live baseline is separate.
+
+### 4.1 Live lane baseline — 2026-10-29 (separate from the harness validation)
+
+The live run used the local 27B to write each node's text; the harness persisted
+it. Result: **20/20 artifacts**, 18/20 format-valid, p50 **6.27 s**, p95
+**11.17 s**, 60 model calls. It is **not a quality claim**; 13 artifacts carry
+Markdown fences and the two binary briefs (`label.png`, `ad.mp4`) are invalid.
+Two MTP attempts aborted at 46–49 calls; the final no-MTP run completed all 60.
+Report: `reports/ns_proj_20_live_baseline_20261029.md`.
 
 ## 5. Phase B — 1,500 / 100 / 12
 
@@ -116,7 +125,7 @@ python tools/rea_regress.py --quick --with-tests
 
 | Item | Why it is not done |
 |---|---|
-| Live 20-brief Ty baseline | Needs the 27B coding worker / creative lane and GPU time; the dry harness is not a substitute |
+| Live 20-brief Ty baseline | **Run 2026-10-29** — 20/20 artifacts, 18/20 format-valid, quality unverified; see `reports/ns_proj_20_live_baseline_20261029.md` |
 | Two operator windows (Claude Code, Cowork) | Requires the operator present; no unattended substitute |
 | Phase 3 U1 (auto-chain `apply_label`) | Not built; it changes the chat turn contract and needs a live UI check |
 | Phase 3 V1 (`studio_video_assemble.py`) | The probe proves the FFmpeg chain; the production module is not promoted yet |

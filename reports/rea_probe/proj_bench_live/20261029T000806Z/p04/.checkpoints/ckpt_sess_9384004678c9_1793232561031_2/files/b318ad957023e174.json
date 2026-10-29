@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'flag.md' exists in the repository root.",
+    "command": "test -f flag.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the file 'flag.md' contains the string 'default-off' or 'default: off' (case-insensitive).",
+    "command": "grep -qi 'default.*off' flag.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the file 'flag.md' contains a section or mention of 'test' proving both states (e.g., 'test', 'verification', 'proof').",
+    "command": "grep -qi 'test\\|proof\\|verification' flag.md",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the file 'flag.md' contains references to both 'on' and 'off' states.",
+    "command": "grep -qi 'on' flag.md && grep -qi 'off' flag.md",
+    "expected": "exit code 0"
+  }
+]

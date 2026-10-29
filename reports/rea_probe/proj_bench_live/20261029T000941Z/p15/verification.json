@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check_1",
+    "name": "Listing Title Length Constraint",
+    "description": "Verifies that the listing title is between 10 and 60 characters in length.",
+    "machine_checkable": true,
+    "rubric_dimension": "Title Optimization"
+  },
+  {
+    "id": "check_2",
+    "name": "Price Format Validation",
+    "description": "Ensures the price field is a valid positive number formatted with exactly two decimal places (e.g., 19.99).",
+    "machine_checkable": true,
+    "rubric_dimension": "Pricing Accuracy"
+  },
+  {
+    "id": "check_3",
+    "name": "Image Count Minimum",
+    "description": "Confirms that the listing contains at least 3 distinct image URLs.",
+    "machine_checkable": true,
+    "rubric_dimension": "Visual Presentation"
+  },
+  {
+    "id": "check_4",
+    "name": "Description Keyword Density",
+    "description": "Checks that the description contains at least 5 unique keywords from the provided category-specific keyword list.",
+    "machine_checkable": true,
+    "rubric_dimension": "SEO Relevance"
+  },
+  {
+    "id": "check_5",
+    "name": "Shipping Policy Presence",
+    "description": "Validates that a non-empty shipping policy string is provided and contains the word 'free' or 'shipping'.",
+    "machine_checkable": true,
+    "rubric_dimension": "Logistics Transparency"
+  }
+]

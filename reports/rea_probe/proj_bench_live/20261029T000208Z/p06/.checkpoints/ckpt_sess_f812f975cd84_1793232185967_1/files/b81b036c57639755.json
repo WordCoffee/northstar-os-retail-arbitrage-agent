@@ -1,0 +1,19 @@
+```json
+{
+  "artifact": "audit.json",
+  "action": "inspect",
+  "target": "admin_panel",
+  "mode": "read-only",
+  "checks": {
+    "value_quoted": true,
+    "no_change_made": true
+  },
+  "evidence": {
+    "source": "admin_panel",
+    "field": "value",
+    "observed_value": "\"example_value\"",
+    "timestamp": "2023-10-05T12:00:00Z",
+    "method": "read-only inspection"
+  }
+}
+```

@@ -1,0 +1,8 @@
+```
+[2023-10-27 14:02:11] Starting build...
+[2023-10-27 14:02:12] Compiling src/main.c
+[2023-10-27 14:02:13] src/main.c:42:5: error: implicit declaration of function 'calculate_sum'
+[2023-10-27 14:02:13] src/main.c:42:5: error: incompatible pointer type
+[2023-10-27 14:02:13] make: *** [build/main.o] Error 1
+[2023-10-27 14:02:13] Build failed.
+```

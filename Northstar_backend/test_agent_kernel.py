@@ -302,6 +302,19 @@ def test_file_hash_verifier(tmp_path):
     assert ev.result == "pass" and ev.sha256
 
 
+def test_file_min_bytes_verifier(tmp_path):
+    f = tmp_path / "a.txt"
+    f.write_text("x" * 10, encoding="utf-8")
+    reg = VerifierRegistry()
+    ok = reg.verify(Acceptance("min", "file_min_bytes",
+                               {"path": str(f), "min_bytes": 10}),
+                    VerifyContext("s", "n"))
+    bad = reg.verify(Acceptance("min", "file_min_bytes",
+                                {"path": str(f), "min_bytes": 11}),
+                     VerifyContext("s", "n"))
+    assert ok.result == "pass" and bad.result == "fail"
+
+
 def test_unknown_verifier_is_unknown_not_pass():
     ev = VerifierRegistry().verify(Acceptance("x", "does_not_exist"),
                                    VerifyContext("s", "n"))

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the 'status' field in state.json is set to 'completed'.",
+    "type": "assertion",
+    "target": "state.json",
+    "condition": "status == 'completed'"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the 'timestamp' field is a valid ISO 8601 string and is not null.",
+    "type": "validation",
+    "target": "state.json",
+    "condition": "timestamp is not null and matches ISO 8601 format"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the 'version' field is an integer and has been incremented from the previous known state.",
+    "type": "assertion",
+    "target": "state.json",
+    "condition": "version is an integer and version > previous_version"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the 'data' object contains all required keys defined in the schema.",
+    "type": "schema_check",
+    "target": "state.json",
+    "condition": "data contains keys: ['id', 'name', 'active']"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "file_exists",
+    "description": "Verify that the file 'flag.md' exists in the repository root.",
+    "command": "test -f flag.md",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "flag_default_off",
+    "description": "Ensure the feature flag is explicitly defined as default-off in the documentation.",
+    "command": "grep -qi \"default.*off\\|off.*default\" flag.md",
+    "expected_exit_code": 0
+  },
+  {
+    "id": "test_both_states",
+    "description": "Verify that the documentation includes a test or verification step proving both enabled and disabled states.",
+    "command": "grep -qi \"test.*both\\|both.*states\\|enabled.*disabled\\|disabled.*enabled\" flag.md",
+    "expected_exit_code": 0
+  }
+]

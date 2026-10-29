@@ -1,0 +1,32 @@
+[
+  {
+    "id": "test_passes",
+    "description": "The previously failing unit test must pass after applying the patch.",
+    "command": "npm test -- --testPathPattern=<failing_test_file> --testNamePattern=<failing_test_name>",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "assertion_unchanged",
+    "description": "The assertion in the failing test must not be modified.",
+    "command": "git diff --unified=0 -- <failing_test_file> | grep -E '^[-+]\\s*(expect|assert|assertEqual|assertThrows)'",
+    "expected": "no output (empty)"
+  },
+  {
+    "id": "no_new_tests",
+    "description": "No new test cases should be added to the failing test file.",
+    "command": "git diff --unified=0 -- <failing_test_file> | grep -cE '^\\+\\s*(it|test|describe)\\s*\\('",
+    "expected": "0"
+  },
+  {
+    "id": "patch_applies",
+    "description": "The patch must apply cleanly to the repository.",
+    "command": "git apply --check fix.patch",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "no_other_tests_broken",
+    "description": "All other existing unit tests must continue to pass.",
+    "command": "npm test",
+    "expected": "exit code 0"
+  }
+]

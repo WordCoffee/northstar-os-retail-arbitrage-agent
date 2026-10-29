@@ -1,0 +1,10 @@
+{
+  "artifact": "audit.json",
+  "content": {
+    "target": "admin_panel",
+    "action": "read_only_inspection",
+    "value_quoted": "true",
+    "evidence": "GET /admin/status returned 200 OK; payload field 'status' = 'active'",
+    "change_made": "false"
+  }
+}

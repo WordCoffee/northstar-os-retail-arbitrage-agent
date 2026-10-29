@@ -1,0 +1,22 @@
+[
+  {
+    "check": "grep -q 'error' build.log",
+    "description": "Verify that the build log contains no lines with the word 'error' (case-sensitive).",
+    "expected": "Exit code 1 (no match found)"
+  },
+  {
+    "check": "grep -q 'Build succeeded' build.log",
+    "description": "Verify that the build log explicitly states a successful build.",
+    "expected": "Exit code 0 (match found)"
+  },
+  {
+    "check": "test -s build.log",
+    "description": "Verify that the build log file exists and is not empty.",
+    "expected": "Exit code 0 (file exists and has content)"
+  },
+  {
+    "check": "grep -q 'fatal' build.log",
+    "description": "Verify that the build log contains no fatal errors.",
+    "expected": "Exit code 1 (no match found)"
+  }
+]

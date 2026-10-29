@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file no longer exists or has been renamed, and that two new module files are present.",
+    "command": "test ! -f original_module.py && test -f module_a.py && test -f module_b.py",
+    "expected": "success"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that the total number of public functions/classes in the two new modules matches the count in the original module.",
+    "command": "python -c \"import ast, sys; f1=ast.parse(open('module_a.py').read()); f2=ast.parse(open('module_b.py').read()); c1=len([n for n in ast.walk(f1) if isinstance(n, (ast.FunctionDef, ast.ClassDef))]); c2=len([n for n in ast.walk(f2) if isinstance(n, (ast.FunctionDef, ast.ClassDef))]); assert c1 + c2 == 10, f'Count mismatch: {c1}+{c2} != 10'\"",
+    "expected": "success"
+  },
+  {
+    "id": "check_3",
+    "description": "Run the existing test suite to confirm no behavioral changes.",
+    "command": "pytest tests/ -v",
+    "expected": "success"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that no circular imports exist between the two new modules.",
+    "command": "python -c \"import module_a, module_b; print('No circular imports detected')\"",
+    "expected": "success"
+  }
+]

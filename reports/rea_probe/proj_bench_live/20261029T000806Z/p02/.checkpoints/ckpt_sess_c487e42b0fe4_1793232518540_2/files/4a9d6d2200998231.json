@@ -1,0 +1,22 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the endpoint.md file exists and contains a valid HTTP method (GET) and path definition.",
+    "type": "file_content"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that the endpoint.md file explicitly states that the endpoint is read-only and does not involve any database schema changes.",
+    "type": "file_content"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the endpoint.md file includes a section or reference to a test case for the new endpoint.",
+    "type": "file_content"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the endpoint.md file does not contain any SQL migration scripts or schema alteration commands.",
+    "type": "file_content"
+  }
+]

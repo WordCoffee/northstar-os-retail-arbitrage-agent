@@ -1,0 +1,18 @@
+[
+  {
+    "check": "The file 'fix.patch' exists and is a valid unified diff.",
+    "type": "file_exists_and_valid_diff"
+  },
+  {
+    "check": "The patch does not modify any lines containing 'assert' or 'expect' within test files.",
+    "type": "no_assertion_modification"
+  },
+  {
+    "check": "Applying the patch to the repository results in the previously failing unit test passing.",
+    "type": "test_passes_after_patch"
+  },
+  {
+    "check": "All other previously passing unit tests continue to pass after applying the patch.",
+    "type": "no_regression"
+  }
+]

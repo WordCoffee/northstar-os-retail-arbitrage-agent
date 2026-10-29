@@ -1,0 +1,12 @@
+```json
+{
+  "listing_id": "LST-2023-001",
+  "rubric_cited": "Standard Listing Quality Rubric v2.1",
+  "score": 85,
+  "unmeasured_dimensions": [
+    "Accessibility Compliance",
+    "SEO Metadata",
+    "Image Alt Text"
+  ]
+}
+```

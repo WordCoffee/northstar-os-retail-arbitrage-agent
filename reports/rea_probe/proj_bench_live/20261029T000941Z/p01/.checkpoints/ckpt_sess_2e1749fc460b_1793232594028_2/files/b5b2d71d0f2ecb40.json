@@ -1,0 +1,26 @@
+[
+  {
+    "id": "test_passes",
+    "description": "The previously failing unit test must now pass.",
+    "command": "npm test -- --testPathPattern=<failing_test_file> --testNamePattern=<failing_test_name>",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "assertion_unchanged",
+    "description": "The assertion in the failing test must remain identical to the original.",
+    "command": "git diff HEAD -- <failing_test_file> | grep -E '^(\\+|-).*expect\\('",
+    "expected": "no output (empty)"
+  },
+  {
+    "id": "patch_applies",
+    "description": "The fix.patch must apply cleanly to the repository.",
+    "command": "git apply --check fix.patch",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "no_test_modification",
+    "description": "The patch must not modify the failing test file.",
+    "command": "git apply --stat fix.patch | grep <failing_test_file>",
+    "expected": "no output (empty)"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the artifact file 'audit.json' exists in the current working directory.",
+    "command": "test -f audit.json",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that 'audit.json' is valid JSON and can be parsed without errors.",
+    "command": "python3 -c \"import json; json.load(open('audit.json'))\"",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the JSON object contains a key named 'value' which holds the reported data.",
+    "command": "python3 -c \"import json; data=json.load(open('audit.json')); assert 'value' in data\"",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the JSON object contains a key named 'evidence' which documents the source of the value.",
+    "command": "python3 -c \"import json; data=json.load(open('audit.json')); assert 'evidence' in data\"",
+    "expected_result": "exit code 0"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'canvases.json' exists and is valid JSON.",
+    "type": "file_exists_and_valid_json",
+    "target": "canvases.json"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the JSON root is an array containing between 3 and 5 elements.",
+    "type": "json_schema",
+    "target": "canvases.json",
+    "schema": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5
+    }
+  },
+  {
+    "id": "check_3",
+    "description": "Each item in the array must be an object containing 'width' and 'height' as positive integers, and 'source' as a non-empty string.",
+    "type": "json_schema",
+    "target": "canvases.json",
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["width", "height", "source"],
+        "properties": {
+          "width": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the 'source' field for each canvas entry is a valid URL or file path string (basic format check).",
+    "type": "regex_match",
+    "target": "canvases.json",
+    "path": "$[*].source",
+    "pattern": "^(https?://|file://|/|[A-Za-z0-9._-]+\\.(png|jpg|jpeg|webp|svg))"
+  }
+]

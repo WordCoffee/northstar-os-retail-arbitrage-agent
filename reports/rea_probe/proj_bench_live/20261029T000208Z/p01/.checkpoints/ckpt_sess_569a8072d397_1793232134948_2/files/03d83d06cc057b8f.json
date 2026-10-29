@@ -1,0 +1,22 @@
+[
+  {
+    "id": "patch_validity",
+    "description": "The file 'fix.patch' must exist and be a valid unified diff format.",
+    "check": "test -f fix.patch && git apply --check fix.patch"
+  },
+  {
+    "id": "test_passes",
+    "description": "After applying the patch, the previously failing unit test must pass.",
+    "check": "git apply fix.patch && npm test -- --testPathPattern=<failing_test_path>"
+  },
+  {
+    "id": "assertion_integrity",
+    "description": "The patch must not modify the assertion logic in the failing test file.",
+    "check": "git diff fix.patch -- <failing_test_file> | grep -E 'expect|assert|should' | grep -v 'expect.*toBe|assert.*equal' || true"
+  },
+  {
+    "id": "no_new_failures",
+    "description": "Applying the patch must not introduce new failing tests in the suite.",
+    "check": "git apply fix.patch && npm test -- --ci"
+  }
+]

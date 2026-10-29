@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file no longer exists or has been renamed, and that two new module files exist with the expected names.",
+    "command": "test -f 'module_a.py' && test -f 'module_b.py' && ! test -f 'original_module.py'",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that all public functions/classes from the original module are now defined in either module_a or module_b, with no duplicates.",
+    "command": "python -c \"import module_a, module_b; names_a = set(dir(module_a)); names_b = set(dir(module_b)); assert not (names_a & names_b) - {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__'}\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Run the existing test suite to confirm that behavior has not changed after the split.",
+    "command": "pytest tests/ -v",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that no circular imports exist between the two new modules.",
+    "command": "python -c \"import module_a; import module_b; import sys; assert 'module_a' not in sys.modules.get('module_b', {}).get('__dict__', {}) and 'module_b' not in sys.modules.get('module_a', {}).get('__dict__', {})\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_5",
+    "description": "Confirm that the refactor.md file documents the split, including the names of the two new modules and a brief rationale.",
+    "command": "grep -q 'module_a' refactor.md && grep -q 'module_b' refactor.md && grep -qi 'split' refactor.md",
+    "expected": "exit code 0"
+  }
+]

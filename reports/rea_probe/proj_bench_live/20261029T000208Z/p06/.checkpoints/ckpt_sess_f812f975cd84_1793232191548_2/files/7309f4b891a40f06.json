@@ -1,0 +1,32 @@
+[
+  {
+    "id": "check_01",
+    "description": "Verify that the audit.json file exists and is valid JSON.",
+    "command": "test -f audit.json && python3 -c \"import json; json.load(open('audit.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_02",
+    "description": "Ensure the audit.json contains a 'value' field with a non-empty string.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert isinstance(d.get('value'), str) and len(d['value'])>0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_03",
+    "description": "Ensure the audit.json contains an 'evidence' field with a non-empty string.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert isinstance(d.get('evidence'), str) and len(d['evidence'])>0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_04",
+    "description": "Verify that the 'evidence' field contains a reference to the admin panel source (e.g., 'admin' or 'panel').",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert 'admin' in d['evidence'].lower() or 'panel' in d['evidence'].lower()\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_05",
+    "description": "Ensure the audit.json does not contain any write operations or mutation keywords in the evidence.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); ev=d['evidence'].lower(); assert not any(k in ev for k in ['write', 'update', 'delete', 'create', 'modify'])\"",
+    "expected": "exit code 0"
+  }
+]

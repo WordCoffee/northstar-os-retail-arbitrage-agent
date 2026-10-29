@@ -1,0 +1,34 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the front panel section (e.g., 'Front Panel' or 'Panel') is not present in the artifact.",
+    "type": "absence",
+    "target": "back.md",
+    "pattern": "front panel",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure that the legal copy section contains the required disclaimer or liability statement.",
+    "type": "presence",
+    "target": "back.md",
+    "pattern": "disclaimer",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the artifact does not contain any placeholder text like 'TODO' or 'FIXME'.",
+    "type": "absence",
+    "target": "back.md",
+    "pattern": "TODO|FIXME",
+    "case_sensitive": false
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the file ends with a newline character.",
+    "type": "format",
+    "target": "back.md",
+    "pattern": "\\n$",
+    "case_sensitive": true
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the applied diff contains exactly one hunk header (e.g., @@ ... @@).",
+    "type": "regex",
+    "pattern": "(?m)^@@.*@@\n(?!.*^@@.*@@)"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the diff does not contain any lines starting with '+++' or '---' other than the file header lines, indicating no unintended context or deletion/addition markers from the unselected hunk.",
+    "type": "regex",
+    "pattern": "(?m)^(?!(\\+\\+\\+|---))"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the diff starts with a valid file header line (e.g., '--- a/file' or '+++ b/file').",
+    "type": "regex",
+    "pattern": "(?m)^(---|\\+\\+\\+)\\s"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that the diff ends with a newline character to ensure proper formatting.",
+    "type": "regex",
+    "pattern": "\\n$"
+  }
+]

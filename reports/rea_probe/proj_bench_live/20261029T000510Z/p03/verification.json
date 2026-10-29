@@ -1,0 +1,37 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file is no longer present in the repository.",
+    "type": "file_existence",
+    "target": "src/original_module.py",
+    "expected": false
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the two new module files exist in the repository.",
+    "type": "file_existence",
+    "target": ["src/module_a.py", "src/module_b.py"],
+    "expected": true
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the total number of public functions/classes in the new modules matches the original module.",
+    "type": "symbol_count",
+    "target": ["src/module_a.py", "src/module_b.py"],
+    "expected": "matches_original"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that all imports from the original module in other files have been updated to import from the new modules.",
+    "type": "import_check",
+    "target": "src/",
+    "expected": "no_imports_from_original_module"
+  },
+  {
+    "id": "check_5",
+    "description": "Verify that the test suite passes without any modifications to test files.",
+    "type": "test_execution",
+    "target": "tests/",
+    "expected": "all_tests_pass"
+  }
+]

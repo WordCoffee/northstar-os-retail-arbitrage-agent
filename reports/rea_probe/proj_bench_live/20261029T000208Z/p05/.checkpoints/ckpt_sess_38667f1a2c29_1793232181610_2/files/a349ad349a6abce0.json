@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines starting with 'error' (case-insensitive).",
+    "command": "grep -i '^error' build.log",
+    "expected_result": "No output (exit code 1)"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that the build log contains no lines containing 'fatal' (case-insensitive).",
+    "command": "grep -i 'fatal' build.log",
+    "expected_result": "No output (exit code 1)"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the build log ends with a successful completion message (e.g., 'Build succeeded' or 'Done').",
+    "command": "tail -n 1 build.log | grep -iE '(build succeeded|done|success)'",
+    "expected_result": "Output matches the success pattern (exit code 0)"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the build log does not contain any 'warning' lines that are treated as errors (optional, but ensures clean build).",
+    "command": "grep -i 'warning' build.log",
+    "expected_result": "No output (exit code 1) OR only non-critical warnings present"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "test_passes",
+    "description": "The specific failing unit test must pass after applying the patch.",
+    "command": "pytest tests/test_target.py::test_failing_case -v",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "no_assertion_change",
+    "description": "The patch must not modify the assertion logic in the failing test file.",
+    "command": "git diff --no-color fix.patch | grep -E \"^\\+.*assert\" | grep -v \"^\\+\\s*#\"",
+    "expected": "no output (empty)"
+  },
+  {
+    "id": "patch_applies",
+    "description": "The patch must apply cleanly to the repository.",
+    "command": "git apply --check fix.patch",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "no_new_failures",
+    "description": "Applying the patch must not introduce new failures in the existing test suite.",
+    "command": "pytest tests/ -v",
+    "expected": "exit code 0"
+  }
+]

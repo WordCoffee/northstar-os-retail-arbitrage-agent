@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the original module file no longer exists or has been renamed, and that two new module files exist.",
+    "command": "ls -la src/ | grep -E '(moduleA|moduleB)'",
+    "expected": "Two distinct files corresponding to the split modules are present."
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that the total number of exported functions/classes in the two new modules matches the count in the original module.",
+    "command": "grep -c 'export' src/moduleA.js src/moduleB.js",
+    "expected": "Sum of exports equals the original export count."
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that no circular dependencies were introduced between the two new modules.",
+    "command": "npx madge --circular src/moduleA.js src/moduleB.js",
+    "expected": "No circular dependency errors reported."
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that all existing unit tests still pass after the refactor.",
+    "command": "npm test",
+    "expected": "All tests pass with exit code 0."
+  }
+]

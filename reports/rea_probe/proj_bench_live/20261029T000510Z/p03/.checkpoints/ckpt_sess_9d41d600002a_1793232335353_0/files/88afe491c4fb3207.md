@@ -1,0 +1,5 @@
+1. **Isolate Dependencies**: Identify all internal functions and variables used by the target module. Create a new module containing these extracted components, ensuring no circular imports exist between the original and new modules.
+2. **Refactor Original Module**: Update the original module to import the extracted components from the new module. Remove the moved code from the original file, keeping only the public API surface and orchestration logic.
+3. **Verify Public API**: Confirm that the original module’s exported functions, classes, and signatures remain identical. Ensure no new public symbols are exposed unintentionally.
+4. **Run Test Suite**: Execute the full test suite to verify that all tests pass and behavior remains unchanged. Address any failures by adjusting imports or internal references, not by altering public behavior.
+5. **Final Review**: Perform a code review to ensure clean separation, no dead code, and consistent style. Confirm that the build process correctly includes the new module.

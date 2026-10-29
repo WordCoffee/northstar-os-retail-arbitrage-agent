@@ -1,0 +1,30 @@
+[
+  {
+    "check_id": "CH-01",
+    "description": "Verify that the runbook explicitly defines a 'read-only' scope for the browser task, ensuring no write, delete, or modify actions are permitted.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "expected_value": "read-only"
+  },
+  {
+    "check_id": "CH-02",
+    "description": "Confirm that the runbook specifies a per-host grant mechanism, limiting access to specific hostnames rather than global or wildcard domains.",
+    "type": "regex_match",
+    "target": "runbook.md",
+    "pattern": "per-host|host-specific|specific host"
+  },
+  {
+    "check_id": "CH-03",
+    "description": "Ensure that an explicit expiry or expiration date/time is defined for the access grant.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "expected_value": "expiry"
+  },
+  {
+    "check_id": "CH-04",
+    "description": "Validate that the runbook includes a section or step detailing how to revoke or handle the grant upon expiry.",
+    "type": "string_contains",
+    "target": "runbook.md",
+    "expected_value": "revoke"
+  }
+]

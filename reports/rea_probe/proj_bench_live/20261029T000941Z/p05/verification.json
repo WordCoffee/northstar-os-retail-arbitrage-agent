@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Build Log Exists and is Non-Empty",
+    "description": "Verify that the file 'build.log' exists in the current directory and contains at least one line of output.",
+    "command": "test -s build.log",
+    "expected": "exit code 0"
+  },
+  {
+    "name": "No Build Errors in Log",
+    "description": "Ensure the build log does not contain the string 'error' (case-insensitive), indicating a successful build without compilation errors.",
+    "command": "! grep -i 'error' build.log",
+    "expected": "exit code 0"
+  },
+  {
+    "name": "Build Completion Message Present",
+    "description": "Verify that the build log contains a success indicator such as 'Build succeeded' or 'Finished' to confirm the build process completed.",
+    "command": "grep -E 'Build succeeded|Finished' build.log",
+    "expected": "exit code 0"
+  },
+  {
+    "name": "No Warnings in Log",
+    "description": "Ensure the build log does not contain the string 'warning' (case-insensitive), indicating a clean build without warnings.",
+    "command": "! grep -i 'warning' build.log",
+    "expected": "exit code 0"
+  }
+]

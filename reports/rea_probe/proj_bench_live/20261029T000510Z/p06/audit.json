@@ -1,0 +1,20 @@
+```json
+{
+  "artifact": "audit.json",
+  "content": {
+    "action": "inspect",
+    "target": "admin_panel",
+    "mode": "read-only",
+    "value": "42",
+    "evidence": {
+      "source": "admin_panel.read()",
+      "timestamp": "2023-10-27T10:00:00Z",
+      "hash": "sha256:abc123..."
+    },
+    "checks": {
+      "value_quoted": true,
+      "no_change_made": true
+    }
+  }
+}
+```

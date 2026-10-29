@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check-1",
+    "description": "Verify that the runbook explicitly defines a per-host grant mechanism (e.g., specific domains or IP addresses) rather than a global or wildcard permission.",
+    "type": "string_contains",
+    "value": "per-host"
+  },
+  {
+    "id": "check-2",
+    "description": "Ensure the runbook includes a defined expiry mechanism or timestamp for the read-only access token or session.",
+    "type": "string_contains",
+    "value": "expiry"
+  },
+  {
+    "id": "check-3",
+    "description": "Confirm that the task is explicitly described as 'read-only' to prevent any write or modify operations.",
+    "type": "string_contains",
+    "value": "read-only"
+  },
+  {
+    "id": "check-4",
+    "description": "Validate that the runbook specifies the use of a browser-based interface or client for the task.",
+    "type": "string_contains",
+    "value": "browser"
+  }
+]

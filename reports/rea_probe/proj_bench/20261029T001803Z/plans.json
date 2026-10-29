@@ -1,0 +1,242 @@
+{
+  "p01": {
+    "plan_id": "plan_0d71e787ae9d",
+    "session_id": "sess_acaebc7e932d",
+    "goal": "Diagnose and fix one failing unit test without changing its assertion.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "harness validation",
+      "no model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p01\\plan.md"
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Fix a failing unit test\n\nGoal: Diagnose and fix one failing unit test without changing its assertion.\n\n- [ ] test passes\n- [ ] no assertion edited"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_777efa97c548",
+          "ev_6d036f2d839b"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p01\\fix.patch"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "fix.patch",
+          "content": "artifact for p01: Diagnose and fix one failing unit test without changing its assertion."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_15139e102672",
+          "ev_722713d6a139"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p01\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p01\",\n  \"checks\": [\n    \"test passes\",\n    \"no assertion edited\"\n  ],\n  \"artifact\": \"fix.patch\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_bdf921c1370f",
+          "ev_6657e5c72a90"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 120,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T00:18:03Z",
+    "approved_at": "2026-10-29T00:18:03Z",
+    "approved_by": "bench"
+  },
+  "p02": {
+    "plan_id": "plan_a1ea6622315c",
+    "session_id": "sess_a5b7e6921559",
+    "goal": "Add one read-only endpoint with a test and no schema migration.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "harness validation",
+      "no model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p02\\plan.md"
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Add a small API endpoint\n\nGoal: Add one read-only endpoint with a test and no schema migration.\n\n- [ ] route registered\n- [ ] test present\n- [ ] no migration"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_4bcd91012ca8",
+          "ev_f6947fb0775c"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p02\\endpoint.md"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "endpoint.md",
+          "content": "artifact for p02: Add one read-only endpoint with a test and no schema migration."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_5f1cc06b1c9a",
+          "ev_460de225afeb"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T001803Z\\p02\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p02\",\n  \"checks\": [\n    \"route registered\",\n    \"test present\",\n    \"no migration\"\n  ],\n  \"artifact\": \"endpoint.md\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_59e914415279",
+          "ev_066a49d538cd"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 120,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T00:18:03Z",
+    "approved_at": "2026-10-29T00:18:03Z",
+    "approved_by": "bench"
+  }
+}

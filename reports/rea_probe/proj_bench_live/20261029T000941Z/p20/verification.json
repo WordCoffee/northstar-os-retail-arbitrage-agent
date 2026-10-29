@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that project.json exists and is valid JSON.",
+    "command": "test -f project.json && python3 -c \"import json; json.load(open('project.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Verify that project.json contains exactly 3 nodes.",
+    "command": "python3 -c \"import json; data=json.load(open('project.json')); assert len(data.get('nodes', [])) == 3, 'Expected 3 nodes'\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that all 3 nodes have a 'status' field set to 'passing'.",
+    "command": "python3 -c \"import json; data=json.load(open('project.json')); nodes=data.get('nodes', []); assert all(node.get('status') == 'passing' for node in nodes), 'All nodes must have status passing'\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the project has a 'completed' flag set to true.",
+    "command": "python3 -c \"import json; data=json.load(open('project.json')); assert data.get('completed') is True, 'Project must be marked as completed'\"",
+    "expected": "exit code 0"
+  }
+]

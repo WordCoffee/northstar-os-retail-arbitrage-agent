@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the endpoint is defined as read-only (GET method) and does not modify database state.",
+    "command": "grep -E \"GET|read-only\" endpoint.md | grep -v \"POST|PUT|PATCH|DELETE\"",
+    "expected": "success"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure that no schema migration files or SQL DDL statements are present in the artifact.",
+    "command": "! grep -E \"ALTER TABLE|CREATE TABLE|DROP TABLE|schema.*migration\" endpoint.md",
+    "expected": "success"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that a test case or test description is included in the documentation.",
+    "command": "grep -i \"test\" endpoint.md",
+    "expected": "success"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the endpoint returns a single, specific resource or list without side effects.",
+    "command": "grep -E \"returns|response|GET /\" endpoint.md",
+    "expected": "success"
+  }
+]

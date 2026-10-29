@@ -1,0 +1,272 @@
+{
+  "programme": "NS-PROJ-20",
+  "mode": "live-lane-baseline",
+  "label": "live lane baseline \u2014 harness persists model text; content quality unverified",
+  "project_result": false,
+  "quality_claim": false,
+  "run_at": "20261029T000806Z",
+  "briefs": 5,
+  "complete": 5,
+  "valid_plans": 5,
+  "mean_evidence_coverage": 1.0,
+  "total_interventions": 0,
+  "model_calls": 15,
+  "model_chars": 14269,
+  "node_seconds_p50": 4.97,
+  "node_seconds_p95": 10.14,
+  "resume_mechanics": {
+    "first_status": "needs_human",
+    "second_status": "complete",
+    "calls": [
+      "a",
+      "b"
+    ],
+    "no_duplicate": true,
+    "resumed": true
+  },
+  "results": [
+    {
+      "id": "p01",
+      "title": "Fix a failing unit test",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 11.188,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.67,
+          "chars": 637,
+          "finish": "stop",
+          "completion_tokens": 137
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 3.61,
+          "chars": 413,
+          "finish": "stop",
+          "completion_tokens": 149
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 3.84,
+          "chars": 566,
+          "finish": "stop",
+          "completion_tokens": 160
+        }
+      ],
+      "model_seconds": [
+        3.67,
+        3.61,
+        3.84
+      ],
+      "model_chars": 1616
+    },
+    {
+      "id": "p02",
+      "title": "Add a small API endpoint",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 20.802,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.18,
+          "chars": 657,
+          "finish": "stop",
+          "completion_tokens": 130
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 12.6,
+          "chars": 2206,
+          "finish": "stop",
+          "completion_tokens": 545
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 4.97,
+          "chars": 762,
+          "finish": "stop",
+          "completion_tokens": 209
+        }
+      ],
+      "model_seconds": [
+        3.18,
+        12.6,
+        4.97
+      ],
+      "model_chars": 3625
+    },
+    {
+      "id": "p03",
+      "title": "Refactor a module",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 19.9,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.05,
+          "chars": 552,
+          "finish": "stop",
+          "completion_tokens": 123
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 9.85,
+          "chars": 1782,
+          "finish": "stop",
+          "completion_tokens": 421
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 6.96,
+          "chars": 1078,
+          "finish": "stop",
+          "completion_tokens": 295
+        }
+      ],
+      "model_seconds": [
+        3.05,
+        9.85,
+        6.96
+      ],
+      "model_chars": 3412
+    },
+    {
+      "id": "p04",
+      "title": "Wire a config flag",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 22.591,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 5.19,
+          "chars": 961,
+          "finish": "stop",
+          "completion_tokens": 216
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 10.14,
+          "chars": 2043,
+          "finish": "stop",
+          "completion_tokens": 437
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 7.22,
+          "chars": 924,
+          "finish": "stop",
+          "completion_tokens": 306
+        }
+      ],
+      "model_seconds": [
+        5.19,
+        10.14,
+        7.22
+      ],
+      "model_chars": 3928
+    },
+    {
+      "id": "p05",
+      "title": "Repair a broken build",
+      "plan_valid": true,
+      "status": "complete",
+      "reason": "",
+      "nodes": 3,
+      "nodes_done": 3,
+      "evidence_nodes": 3,
+      "evidence_coverage": 1.0,
+      "interventions": 0,
+      "checkpoints": 4,
+      "events": 23,
+      "duration_s": 13.486,
+      "model_calls": [
+        {
+          "node": "plan",
+          "ok": true,
+          "seconds": 3.55,
+          "chars": 596,
+          "finish": "stop",
+          "completion_tokens": 145
+        },
+        {
+          "node": "build",
+          "ok": true,
+          "seconds": 4.58,
+          "chars": 342,
+          "finish": "stop",
+          "completion_tokens": 190
+        },
+        {
+          "node": "verify",
+          "ok": true,
+          "seconds": 5.32,
+          "chars": 750,
+          "finish": "stop",
+          "completion_tokens": 223
+        }
+      ],
+      "model_seconds": [
+        3.55,
+        4.58,
+        5.32
+      ],
+      "model_chars": 1688
+    }
+  ],
+  "note": "Live lane baseline only: the local 27B produced text and the harness persisted it. Artifact existence is checked; content quality is not.",
+  "thresholds_from_this_run": {
+    "completion_rate": 1.0,
+    "evidence_coverage": 1.0,
+    "node_seconds_p50": 4.97,
+    "node_seconds_p95": 10.14,
+    "quality_thresholds": "not set \u2014 machine content validators are not implemented"
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "check_resume_structure",
+    "description": "Verify that resume.json is a valid JSON object containing the required keys: 'run_id', 'completed_steps', and 'pending_steps'.",
+    "type": "schema_validation"
+  },
+  {
+    "id": "check_no_completed_repetition",
+    "description": "Ensure that the 'pending_steps' array does not contain any step IDs that are present in the 'completed_steps' array.",
+    "type": "logic_validation"
+  },
+  {
+    "id": "check_gate_resolution",
+    "description": "Confirm that the specific operator gate step that caused the block is marked as 'resolved' or 'approved' in the metadata, allowing the run to proceed.",
+    "type": "state_check"
+  },
+  {
+    "id": "check_step_order_integrity",
+    "description": "Validate that the sequence of 'pending_steps' respects the original workflow dependency order and does not skip any mandatory intermediate steps.",
+    "type": "workflow_validation"
+  }
+]

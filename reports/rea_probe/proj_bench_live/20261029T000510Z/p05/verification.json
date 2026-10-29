@@ -1,0 +1,30 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the build log contains no lines indicating a fatal error or build failure.",
+    "type": "regex",
+    "pattern": "(?i)(error|fatal|failed|build failed)",
+    "expectation": "no_match"
+  },
+  {
+    "id": "check_2",
+    "description": "Confirm that the build process completed successfully by checking for a success indicator.",
+    "type": "regex",
+    "pattern": "(?i)(build succeeded|success|exit code 0|clean build)",
+    "expectation": "match"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure that no compilation errors are present in the log.",
+    "type": "regex",
+    "pattern": "(?i)\\berror\\b.*\\bcompilation\\b|\\bcompilation\\b.*\\berror\\b",
+    "expectation": "no_match"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that the log ends with a successful termination message.",
+    "type": "regex",
+    "pattern": "(?i)(success|succeeded|done|completed).*\\s*$",
+    "expectation": "match"
+  }
+]

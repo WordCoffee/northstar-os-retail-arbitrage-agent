@@ -1,0 +1,18 @@
+[
+  {
+    "check": "File 'flag.md' exists and is not empty.",
+    "type": "file_exists"
+  },
+  {
+    "check": "The file 'flag.md' contains the phrase 'default-off' or 'default off'.",
+    "type": "string_contains"
+  },
+  {
+    "check": "The file 'flag.md' contains a code block or test snippet demonstrating the flag being false by default.",
+    "type": "string_contains"
+  },
+  {
+    "check": "The file 'flag.md' contains a code block or test snippet demonstrating the flag being true when enabled.",
+    "type": "string_contains"
+  }
+]

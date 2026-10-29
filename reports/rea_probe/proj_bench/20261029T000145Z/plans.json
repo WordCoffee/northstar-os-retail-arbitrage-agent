@@ -1,0 +1,122 @@
+{
+  "p01": {
+    "plan_id": "plan_29fbbe0d3220",
+    "session_id": "sess_09369fa5917d",
+    "goal": "Diagnose and fix one failing unit test without changing its assertion.",
+    "version": 1,
+    "supersedes": null,
+    "constraints": [
+      "harness validation",
+      "no model"
+    ],
+    "acceptance": [
+      {
+        "text": "every node done with evidence",
+        "verifier": "plan_complete",
+        "params": {}
+      }
+    ],
+    "nodes": [
+      {
+        "node_id": "plan",
+        "kind": "inspect",
+        "title": "write the plan",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T000145Z\\p01\\plan.md"
+            }
+          }
+        ],
+        "depends_on": [],
+        "lane": "inspect",
+        "inputs": {
+          "write": "plan.md",
+          "content": "# Fix a failing unit test\n\nGoal: Diagnose and fix one failing unit test without changing its assertion.\n\n- [ ] test passes\n- [ ] no assertion edited"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_337a396fe217",
+          "ev_4274fc5bb1ab"
+        ]
+      },
+      {
+        "node_id": "build",
+        "kind": "coding",
+        "title": "produce the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T000145Z\\p01\\fix.patch"
+            }
+          }
+        ],
+        "depends_on": [
+          "plan"
+        ],
+        "lane": "coding",
+        "inputs": {
+          "write": "fix.patch",
+          "content": "artifact for p01: Diagnose and fix one failing unit test without changing its assertion."
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_01be93a16248",
+          "ev_61f99247d0ad"
+        ]
+      },
+      {
+        "node_id": "verify",
+        "kind": "inspect",
+        "title": "verify the artifact",
+        "acceptance": [
+          {
+            "text": "artifact present and non-trivial",
+            "verifier": "artifact_exists",
+            "params": {
+              "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\proj_bench\\20261029T000145Z\\p01\\verification.json"
+            }
+          }
+        ],
+        "depends_on": [
+          "build"
+        ],
+        "lane": "inspect",
+        "inputs": {
+          "write": "verification.json",
+          "content": "{\n  \"brief\": \"p01\",\n  \"checks\": [\n    \"test passes\",\n    \"no assertion edited\"\n  ],\n  \"artifact\": \"fix.patch\"\n}"
+        },
+        "outputs": [],
+        "max_attempts": 2,
+        "state": "done",
+        "attempts": 0,
+        "evidence_ids": [
+          "ev_689cd7dde73f",
+          "ev_d0aa7f4bfc83"
+        ]
+      }
+    ],
+    "edges": [],
+    "gates": [],
+    "budget": {
+      "max_steps": 12,
+      "max_wall_s": 120,
+      "max_attempts_per_node": 2,
+      "max_tokens": null
+    },
+    "state": "complete",
+    "created_at": "2026-10-29T00:01:45Z",
+    "approved_at": "2026-10-29T00:01:45Z",
+    "approved_by": "bench"
+  }
+}

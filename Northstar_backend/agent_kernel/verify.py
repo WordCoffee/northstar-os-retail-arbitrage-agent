@@ -32,6 +32,7 @@ class VerifierRegistry:
         self.register("file_hash", _file_hash)
         self.register("file_contains", _file_contains)
         self.register("artifact_exists", _artifact_exists)
+        self.register("file_min_bytes", _file_min_bytes)
         self.register("command", _command)
         self.register("ocr_contains", _ocr_contains)
         self.register("prepress_printable", _prepress_printable)
@@ -108,6 +109,18 @@ def _artifact_exists(p: Dict[str, Any]) -> Dict[str, Any]:
     return {"result": "pass" if ok else "fail", "path": str(path),
             "sha256": _sha(path) if ok else None,
             "detail": "artifact present" if ok else "artifact missing or empty"}
+
+
+def _file_min_bytes(p: Dict[str, Any]) -> Dict[str, Any]:
+    path = Path(str(p.get("path") or ""))
+    if not path.is_file():
+        return {"result": "fail", "detail": "file missing", "path": str(path)}
+    size = path.stat().st_size
+    floor = int(p.get("min_bytes") or 1)
+    ok = size >= floor
+    return {"result": "pass" if ok else "fail", "path": str(path),
+            "sha256": _sha(path),
+            "detail": f"{size} bytes (floor {floor})"}
 
 
 def _command(p: Dict[str, Any]) -> Dict[str, Any]:

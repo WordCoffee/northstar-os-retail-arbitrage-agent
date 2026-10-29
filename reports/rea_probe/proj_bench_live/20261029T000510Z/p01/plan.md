@@ -1,0 +1,4 @@
+1. **Reproduce the Failure**: Run the specific failing unit test in isolation to capture the exact error message, stack trace, and assertion output.
+2. **Isolate the Root Cause**: Analyze the stack trace to identify the specific function or module causing the failure; inspect the code logic against the test's expected behavior to determine if the issue is a bug in the implementation or an environmental dependency.
+3. **Implement the Fix**: Modify the source code logic to satisfy the test's existing assertion without altering the test file itself; ensure the fix addresses the root cause rather than masking the error.
+4. **Verify and Regression Check**: Re-run the target test to confirm it passes, then execute the full test suite to ensure the fix has not introduced regressions in other components.

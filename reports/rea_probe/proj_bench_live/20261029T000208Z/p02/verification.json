@@ -1,0 +1,29 @@
+[
+  {
+    "check": "Verify that the file 'endpoint.md' exists in the repository root.",
+    "type": "file_exists",
+    "path": "endpoint.md"
+  },
+  {
+    "check": "Ensure that the file 'endpoint.md' contains the string 'GET /api/health' or a similar read-only endpoint definition.",
+    "type": "content_contains",
+    "path": "endpoint.md",
+    "pattern": "GET /api/health"
+  },
+  {
+    "check": "Confirm that no SQL migration files (e.g., .sql, .migration) have been added or modified in the recent commit history.",
+    "type": "git_diff",
+    "filter": "*.sql,*.migration"
+  },
+  {
+    "check": "Verify that a test file exists (e.g., test_endpoint.py or endpoint_test.js) that includes a test case for the new endpoint.",
+    "type": "file_exists",
+    "path": "tests/test_endpoint.py"
+  },
+  {
+    "check": "Ensure that the endpoint implementation code does not contain any write operations (POST, PUT, DELETE) for the specified endpoint.",
+    "type": "code_analysis",
+    "path": "app/routes.py",
+    "pattern": "def health"
+  }
+]

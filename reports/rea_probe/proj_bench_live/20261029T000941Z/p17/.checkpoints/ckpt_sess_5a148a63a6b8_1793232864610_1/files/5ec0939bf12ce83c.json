@@ -1,0 +1,14 @@
+{
+  "plan_version": 2,
+  "previous_version": 1,
+  "trigger": "assertion_failure",
+  "failed_assertion": "test_user_login",
+  "replan_strategy": "investigate_and_adjust",
+  "actions": [
+    "log_failure_details",
+    "inspect_test_environment",
+    "update_test_data",
+    "rerun_test"
+  ],
+  "status": "pending"
+}

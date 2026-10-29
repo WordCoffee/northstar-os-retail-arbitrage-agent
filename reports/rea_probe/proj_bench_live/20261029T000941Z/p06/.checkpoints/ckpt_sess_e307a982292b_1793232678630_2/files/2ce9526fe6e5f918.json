@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the artifact file 'audit.json' exists in the project root.",
+    "command": "test -f audit.json",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure 'audit.json' is valid JSON syntax.",
+    "command": "python3 -c \"import json; json.load(open('audit.json'))\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm the JSON object contains a non-empty 'value' field.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert d.get('value') is not None and d.get('value') != ''\"",
+    "expected_result": "exit_code_0"
+  },
+  {
+    "id": "check_4",
+    "description": "Confirm the JSON object contains a non-empty 'evidence' field.",
+    "command": "python3 -c \"import json; d=json.load(open('audit.json')); assert d.get('evidence') is not None and d.get('evidence') != ''\"",
+    "expected_result": "exit_code_0"
+  }
+]

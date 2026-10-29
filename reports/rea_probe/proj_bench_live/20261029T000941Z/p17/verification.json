@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that replan.json exists and is valid JSON",
+    "command": "python3 -c \"import json; json.load(open('replan.json'))\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure replan.json contains a 'steps' array with at least one element",
+    "command": "python3 -c \"import json; data=json.load(open('replan.json')); assert isinstance(data.get('steps'), list) and len(data['steps']) > 0\"",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Confirm that the first step in replan.json is not identical to the failed assertion step (to ensure re-planning occurred)",
+    "command": "python3 -c \"import json; data=json.load(open('replan.json')); steps=data['steps']; assert len(steps) >= 1 and steps[0].get('action') != 'retry_failed_assertion'",
+    "expected": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Validate that each step in replan.json has required fields: 'action', 'description', and 'expected_outcome'",
+    "command": "python3 -c \"import json; data=json.load(open('replan.json')); steps=data['steps']; assert all(all(k in s for k in ['action','description','expected_outcome']) for s in steps)\"",
+    "expected": "exit code 0"
+  }
+]

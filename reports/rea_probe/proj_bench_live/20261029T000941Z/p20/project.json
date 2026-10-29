@@ -1,0 +1,64 @@
+{
+  "name": "three-node-project",
+  "version": "1.0.0",
+  "description": "A three-node project with end-to-end execution and passing evidence",
+  "nodes": [
+    {
+      "id": "node-1",
+      "name": "Initialization",
+      "type": "init",
+      "config": {
+        "entry": "init.js",
+        "timeout": 5000
+      },
+      "evidence": {
+        "status": "passed",
+        "output": "Node 1 initialized successfully",
+        "timestamp": "2024-01-15T10:00:00Z"
+      }
+    },
+    {
+      "id": "node-2",
+      "name": "Processing",
+      "type": "process",
+      "config": {
+        "entry": "process.js",
+        "timeout": 10000
+      },
+      "evidence": {
+        "status": "passed",
+        "output": "Node 2 processed data successfully",
+        "timestamp": "2024-01-15T10:00:05Z"
+      }
+    },
+    {
+      "id": "node-3",
+      "name": "Finalization",
+      "type": "finalize",
+      "config": {
+        "entry": "finalize.js",
+        "timeout": 5000
+      },
+      "evidence": {
+        "status": "passed",
+        "output": "Node 3 finalized successfully",
+        "timestamp": "2024-01-15T10:00:10Z"
+      }
+    }
+  ],
+  "plan": {
+    "status": "complete",
+    "steps": [
+      "Initialize node-1",
+      "Process node-2",
+      "Finalize node-3"
+    ],
+    "completed_at": "2024-01-15T10:00:10Z"
+  },
+  "execution": {
+    "status": "completed",
+    "start_time": "2024-01-15T10:00:00Z",
+    "end_time": "2024-01-15T10:00:10Z",
+    "result": "success"
+  }
+}

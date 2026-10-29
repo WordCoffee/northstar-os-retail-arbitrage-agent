@@ -1,0 +1,22 @@
+[
+  {
+    "id": "file_exists",
+    "description": "Verify that the artifact 'label.png' exists in the project directory.",
+    "check": "test -f label.png"
+  },
+  {
+    "id": "ocr_text_match",
+    "description": "Verify that the label contains the expected text 'POUCH PLATE 100x100' via OCR.",
+    "check": "tesseract label.png stdout | grep -q 'POUCH PLATE 100x100'"
+  },
+  {
+    "id": "image_dimensions",
+    "description": "Verify that the label image has the correct dimensions (e.g., 1000x1000 pixels) for prepress readiness.",
+    "check": "identify -format '%w %h' label.png | grep -q '^1000 1000$'"
+  },
+  {
+    "id": "color_mode",
+    "description": "Verify that the image is in CMYK or RGB mode suitable for print prepress.",
+    "check": "identify -format '%[colorspace]' label.png | grep -Eq '^(CMYK|RGB)$'"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that the file 'endpoint.md' exists in the repository root.",
+    "command": "test -f endpoint.md",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure the endpoint.md file contains the string 'GET' to indicate a read-only method.",
+    "command": "grep -q 'GET' endpoint.md",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_3",
+    "description": "Verify that the endpoint.md file contains the word 'test' or 'Test' to confirm a test is included.",
+    "command": "grep -qi 'test' endpoint.md",
+    "expected_result": "exit code 0"
+  },
+  {
+    "id": "check_4",
+    "description": "Ensure the endpoint.md file does NOT contain the word 'migration' or 'schema' to confirm no schema migration is involved.",
+    "command": "! grep -qi 'migration\\|schema' endpoint.md",
+    "expected_result": "exit code 0"
+  }
+]

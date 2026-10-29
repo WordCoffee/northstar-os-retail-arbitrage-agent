@@ -6,7 +6,7 @@
     "updated_at": "2026-09-22",
     "phase": "Phase I in progress â€” UI overhaul (design system v2, app chrome, naming pass, Prospector/Auctioneer densified, Ledger built)"
   },
-  "current_phase": "REA Phase 3 items 0-1 COMPLETE: MAX_EDGE_PX=2048 recorded; L2 per-side mesh residual 0.238 px on the Mogra plate; OCR ok, prepress printable (TAC 254.9%), readiness retail_ready. Agent kernel v0.1 BUILT (12 capability modules, 46 tests) + NS-PROJ-20 harness validation 20/20 (not a project result) with resume. Phase B harvest: 1,500 scored / 100 README reads / 12 deep. Bojo plan_project tool shipped. Remaining: live Ty baseline, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
+  "current_phase": "REA Phase 3 items 0-1 COMPLETE: MAX_EDGE_PX=2048 recorded; L2 per-side mesh residual 0.238 px on the Mogra plate; OCR ok, prepress printable (TAC 254.9%), readiness retail_ready. Agent kernel v0.1 BUILT (12 capability modules, 46 tests) + NS-PROJ-20 harness validation 20/20 (not a project result) with resume. Phase B harvest: 1,500 scored / 100 README reads / 12 deep. Bojo plan_project tool shipped. Live NS-PROJ-20 lane baseline run 2026-10-29 (20/20 artifacts, 18/20 format-valid; not a quality claim). Remaining: full Ty-as-is baseline, two operator capture windows, Phase 3 U1/V1. No Amazon, no spend.",
   "provider_suite": {
     "shipped_at": "2026-10-21",
     "branch": "feature/v4.1-mesh",
@@ -2061,5 +2061,44 @@
       "resume": true,
       "note": "Validates plan schema, evidence coverage, gate release and resume. It is not a claim that Ty completes 20 projects."
     }
+  },
+  "ns_proj_20_live_20261029": {
+    "status": "complete",
+    "label": "live lane baseline — not a quality claim",
+    "run": "reports/rea_probe/proj_bench_live/20261029T000941Z/summary.json",
+    "report": "reports/ns_proj_20_live_baseline_20261029.md",
+    "briefs": 20,
+    "artifacts": 20,
+    "format_valid": 18,
+    "format_validity": 0.9,
+    "evidence_coverage": 1.0,
+    "model_calls": 60,
+    "p50_s": 6.27,
+    "p95_s": 11.17,
+    "interventions": 0,
+    "aborted_attempts": [
+      {
+        "config": "8K + MTP",
+        "calls": 46,
+        "complete": 6,
+        "cause": "server connection reset/refused"
+      },
+      {
+        "config": "8K + MTP",
+        "calls": 49,
+        "complete": 8,
+        "cause": "server connection reset/refused"
+      }
+    ],
+    "final_config": "8K context, q8_0 KV, MTP disabled",
+    "thresholds": {
+      "completion_rate_min": 1.0,
+      "evidence_coverage_min": 1.0,
+      "p50_max_s": 8.0,
+      "p95_max_s": 15.0,
+      "format_validity_min": 0.9,
+      "quality": "not set — machine content validators not implemented"
+    },
+    "quality_claim": false
   }
 }

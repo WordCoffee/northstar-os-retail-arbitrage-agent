@@ -1,0 +1,36 @@
+[
+  {
+    "id": "check_1",
+    "description": "Verify that handoff.md exists and is not empty",
+    "type": "file_exists_and_non_empty",
+    "target": "handoff.md"
+  },
+  {
+    "id": "check_2",
+    "description": "Ensure handoff.md contains a section titled 'Context Summary' or 'State'",
+    "type": "string_contains",
+    "target": "handoff.md",
+    "pattern": "(?i)(context summary|state)"
+  },
+  {
+    "id": "check_3",
+    "description": "Ensure handoff.md contains a section titled 'Next Steps' or 'Action Items'",
+    "type": "string_contains",
+    "target": "handoff.md",
+    "pattern": "(?i)(next steps|action items)"
+  },
+  {
+    "id": "check_4",
+    "description": "Verify that handoff.md includes at least one concrete file path or code reference",
+    "type": "regex_match",
+    "target": "handoff.md",
+    "pattern": "(\\./|/|src/|lib/|app/|\\.py|\\.js|\\.ts|\\.md)"
+  },
+  {
+    "id": "check_5",
+    "description": "Ensure handoff.md contains a timestamp or date to indicate when the handoff was created",
+    "type": "regex_match",
+    "target": "handoff.md",
+    "pattern": "\\d{4}-\\d{2}-\\d{2}|\\d{1,2}/\\d{1,2}/\\d{4}|\\d{1,2}:\\d{2}"
+  }
+]
