@@ -11,6 +11,8 @@
 // summary and states plainly that rendering is out of scope.
 // ═══════════════════════════════════════════════════════════════════════════
 
+import { buildVariantMatrix } from './variants.js'
+
 const UNKNOWN = (what) => `UNKNOWN - ${what}`
 
 function preflightOf(report = {}) {
@@ -78,12 +80,19 @@ export function buildStoryboardPack({ spec, meta = {}, report = {} } = {}) {
 
 // ── Social: asset pack ────────────────────────────────────────────────────
 export function buildSocialAssetPack({ spec, meta = {}, report = {} } = {}) {
+  const targets = Array.isArray(meta.targets) ? meta.targets : []
   return {
     ...base('social', spec, meta, report, 'social_asset_pack'),
     placements: [
       { slot: 'primary', size: spec ? `${spec.w}x${spec.h}` : UNKNOWN('no format selected'), asset: fieldOrUnknown(meta, 'filename', 'no filename recorded') },
       { slot: 'alt_text', text: fieldOrUnknown(meta, 'altText', 'write the alt text'), required: true },
     ],
+    // One master, every placement: the matrix says what each crop keeps and what
+    // survives all of them. With no master/targets recorded it says so rather
+    // than inventing a safe region.
+    variants: (meta.master && targets.length)
+      ? buildVariantMatrix({ master: meta.master, targets, focal: meta.focal })
+      : UNKNOWN('record the master canvas (meta.master) and target placements (meta.targets)'),
     copy: {
       caption: fieldOrUnknown(meta, 'caption', 'write the caption'),
       link_title: fieldOrUnknown(meta, 'linkTitle', 'write the link title'),

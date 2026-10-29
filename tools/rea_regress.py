@@ -63,6 +63,8 @@ SPEC = [
      "why": "U3: the logo gap had no tool at all"},
     {"id": "social_validator_ok", "direction": HIGHER, "tol": 0.0,
      "why": "S4: a correct asset passes, a wrong ratio blocks"},
+    {"id": "social_variants_ok", "direction": HIGHER, "tol": 0.0,
+     "why": "S5: crop matrix + keep-in intersection must hold"},
 ]
 
 
@@ -238,6 +240,12 @@ def m_guards() -> dict:
     except Exception as exc:  # noqa: BLE001
         out["social_validator_ok"] = 0
         out["_social_error"] = type(exc).__name__
+    try:
+        code, _ = _run(["node", "tools/test_social_variants.mjs"])
+        out["social_variants_ok"] = 1 if code == 0 else 0
+    except Exception as exc:  # noqa: BLE001
+        out["social_variants_ok"] = 0
+        out["_variants_error"] = type(exc).__name__
     return out
 
 
