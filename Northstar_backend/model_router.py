@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 # --- tiers ------------------------------------------------------------------
 
@@ -142,6 +142,16 @@ def cloud_key_present() -> bool:
     return bool(str(os.getenv("OPENROUTER_API_KEY", "") or "").strip())
 
 
+def _norm_tag(name: str) -> str:
+    """`bojo` and `bojo:latest` are the same model to Ollama."""
+    text = str(name or "").strip().lower()
+    return text[:-7] if text.endswith(":latest") else text
+
+
+def _is_installed(model: str, installed: Sequence[str]) -> bool:
+    return any(_norm_tag(model) == _norm_tag(i) for i in installed)
+
+
 @dataclass(frozen=True)
 class Resolution:
     provider: str
@@ -179,7 +189,7 @@ def resolve(provider: str, tier: str, model: Optional[str] = None, *,
         chosen = model or LOCAL_MODELS.get(tier)
         if not chosen:
             return Resolution(provider, tier, None, weight, False, "no_local_model_for_tier")
-        if installed is not None and tier in TEXT_TIERS and chosen not in installed:
+        if installed is not None and tier in TEXT_TIERS and not _is_installed(chosen, installed):
             return Resolution(provider, tier, chosen, weight, False,
                               "local_model_not_installed")
         return Resolution(provider, tier, chosen, weight, True, "ok")
@@ -257,7 +267,7 @@ def resolve_vision(tier: str, provider: str = "cloud", role: str = "generate",
         backend = "local" if provider == "local" else u.get("cloud_provider", "openrouter")
         if not model:
             return VisionResolution(tier, provider, role, backend, None, None, False, "no_understanding_model")
-        if provider == "local" and installed is not None and model not in installed:
+        if provider == "local" and installed is not None and not _is_installed(model, installed):
             return VisionResolution(tier, provider, role, backend, model, None, False,
                                     "local_model_not_installed")
         armed = provider_armed(backend)

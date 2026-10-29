@@ -46,6 +46,13 @@ def test_local_text_tier_reports_a_missing_model(tmp_path):
     assert ok.available is True and ok.reason == "ok"
 
 
+def test_installed_matching_ignores_ollama_latest_tag():
+    """Ollama reports `bojo:latest`; the suite names `bojo`. Same model."""
+    r = mr.resolve("local", "T2", installed=["bojo:latest", "qwen2.5vl:7b"])
+    assert r.available is True and r.reason == "ok"
+    assert mr.resolve("local", "V1", installed=["qwen2.5vl:7b"]).available is True
+
+
 def test_no_local_alternate_is_advertised():
     """The old qwen3:14b fallback was never on disk."""
     assert mr.LOCAL_ALTERNATES == {}

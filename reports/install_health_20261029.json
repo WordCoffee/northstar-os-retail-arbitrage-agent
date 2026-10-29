@@ -1,0 +1,191 @@
+{
+  "verdict": "HEALTHY",
+  "checks": 21,
+  "critical": 17,
+  "critical_failed": 0,
+  "failed": [],
+  "informational": [
+    {
+      "check": "guard.state_registry_is_operator_gated",
+      "detail": "00_STATE.json edits are denied to agents; fragments are merged by the operator"
+    },
+    {
+      "check": "engine.ty_worker_state",
+      "detail": "idle (on demand) \u2014 start with scripts/start-northstar-llm.ps1"
+    },
+    {
+      "check": "harness.last_evidence",
+      "detail": "20 records parse with full provenance; last sweep 18/20 (20261029T190955Z) \u2014 the rate is the benchmark's result, not a health gate"
+    },
+    {
+      "check": "state.fragment_applies",
+      "detail": "fragment validates; would add ['install_health_20261029'] (operator runs --apply; agents may not rewrite 00_STATE.json)"
+    }
+  ],
+  "results": [
+    {
+      "check": "route.run_endpoint",
+      "ok": true,
+      "critical": true,
+      "detail": "POST /api/admin/tys/tasks/{task_id}/run \u2014 sync 200, admin-gated, params={max_steps}",
+      "data": null
+    },
+    {
+      "check": "route.related_routes",
+      "ok": true,
+      "critical": true,
+      "detail": "4 read/resume/cancel/controller routes present",
+      "data": null
+    },
+    {
+      "check": "route.no_speculative_params",
+      "ok": true,
+      "critical": true,
+      "detail": "no engine= or stream= parameter anywhere",
+      "data": null
+    },
+    {
+      "check": "validators.patch_arithmetic",
+      "ok": true,
+      "critical": true,
+      "detail": "correct diff accepted; header/body mismatch rejected",
+      "data": null
+    },
+    {
+      "check": "validators.json_keys",
+      "ok": true,
+      "critical": true,
+      "detail": "required keys enforced",
+      "data": null
+    },
+    {
+      "check": "validators.text_structure",
+      "ok": true,
+      "critical": true,
+      "detail": "placeholders, headings and sentence floor enforced",
+      "data": null
+    },
+    {
+      "check": "validators.seed_unchanged",
+      "ok": true,
+      "critical": true,
+      "detail": "a byte-identical stub is rejected",
+      "data": null
+    },
+    {
+      "check": "kernel.acceptance_derivation",
+      "ok": true,
+      "critical": true,
+      "detail": "workspace spec -> artifact_exists + command; executor_ok retired",
+      "data": null
+    },
+    {
+      "check": "kernel.acceptance_outranks_self_report",
+      "ok": true,
+      "critical": true,
+      "detail": "executor said not-ok; passing acceptance still completes the node",
+      "data": null
+    },
+    {
+      "check": "guard.write_denylist",
+      "ok": true,
+      "critical": true,
+      "detail": "secrets, operator policy and fixtures are read-only to every lane",
+      "data": null
+    },
+    {
+      "check": "guard.amazon_policy",
+      "ok": true,
+      "critical": true,
+      "detail": "Amazon hosts deny before any grant is read",
+      "data": null
+    },
+    {
+      "check": "guard.state_registry_is_operator_gated",
+      "ok": true,
+      "critical": false,
+      "detail": "00_STATE.json edits are denied to agents; fragments are merged by the operator",
+      "data": null
+    },
+    {
+      "check": "engine.ollama_and_bojo",
+      "ok": true,
+      "critical": true,
+      "detail": "Ollama reachable; bojo installed",
+      "data": [
+        "bojo:gpu-orig",
+        "bojo:latest",
+        "qwen2.5vl:7b",
+        "qwen3-embedding:0.6b",
+        "qwen3.5:2b"
+      ]
+    },
+    {
+      "check": "engine.model_router_agrees_with_disk",
+      "ok": true,
+      "critical": true,
+      "detail": "every local text tier resolves to an installed model (bojo)",
+      "data": {
+        "T1": "ok",
+        "T2": "ok",
+        "T3": "ok"
+      }
+    },
+    {
+      "check": "engine.documented_profile",
+      "ok": true,
+      "critical": true,
+      "detail": "Ty 65536/q4_0/-ngl 99/~13 GB on demand; Bojo CPU, 8192, 0 VRAM",
+      "data": null
+    },
+    {
+      "check": "engine.ty_worker_state",
+      "ok": null,
+      "critical": false,
+      "detail": "idle (on demand) \u2014 start with scripts/start-northstar-llm.ps1",
+      "data": {
+        "listening": false
+      }
+    },
+    {
+      "check": "harness.benchmark_wiring",
+      "ok": true,
+      "critical": true,
+      "detail": "20 briefs; 14 carry a domain spec; patch bar in acceptance",
+      "data": null
+    },
+    {
+      "check": "harness.last_evidence",
+      "ok": true,
+      "critical": false,
+      "detail": "20 records parse with full provenance; last sweep 18/20 (20261029T190955Z) \u2014 the rate is the benchmark's result, not a health gate",
+      "data": {
+        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel_bench\\20261029T190955Z\\evidence.jsonl",
+        "passed": 18,
+        "rows": 20
+      }
+    },
+    {
+      "check": "harness.proj_bench_dry",
+      "ok": true,
+      "critical": true,
+      "detail": "harness validation 20/20, evidence 1.0, resume True",
+      "data": null
+    },
+    {
+      "check": "state.fragment_applies",
+      "ok": true,
+      "critical": false,
+      "detail": "fragment validates; would add ['install_health_20261029'] (operator runs --apply; agents may not rewrite 00_STATE.json)",
+      "data": null
+    },
+    {
+      "check": "tests.core_suites",
+      "ok": true,
+      "critical": true,
+      "detail": "180 passed, 1 warning in 4.45s",
+      "data": null
+    }
+  ],
+  "checked_at": "2026-10-29T19:35:12+00:00"
+}
