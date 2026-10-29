@@ -1,0 +1,11 @@
+{
+  "run_id": "run-2026-10-27-a",
+  "checkpoint_used": "ckpt-0003",
+  "resumed_from_step": 3,
+  "steps_skipped": [1, 2],
+  "steps_to_execute": [3, 4],
+  "blocked_on": "operator_gate:spend_approval",
+  "gate_resolution": "Awaiting fresh operator approval for paid credit spend before step 3 can proceed",
+  "goal": "Publish the weekly ops digest to the finance channel",
+  "status": "resumed_pending_approval"
+}

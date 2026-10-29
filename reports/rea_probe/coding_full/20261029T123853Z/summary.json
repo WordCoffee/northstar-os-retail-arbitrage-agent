@@ -1,0 +1,209 @@
+{
+  "mode": "hybrid-coding-tool-pilot",
+  "briefs": 20,
+  "ok": 18,
+  "rate": 0.9,
+  "rows": [
+    {
+      "id": "p01",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 12,
+      "seconds": 25.6,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p02",
+      "ok": false,
+      "content_valid": false,
+      "detail": "length + required terms",
+      "steps": 11,
+      "seconds": 24.1,
+      "agent_ok": false,
+      "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+    },
+    {
+      "id": "p03",
+      "ok": false,
+      "content_valid": false,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 11.8,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p04",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 1,
+      "seconds": 5.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p05",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 7,
+      "seconds": 10.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p06",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 6.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p07",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 4,
+      "seconds": 7.1,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p08",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 2,
+      "seconds": 4.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p09",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 7.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p10",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 4,
+      "seconds": 10.0,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p11",
+      "ok": true,
+      "content_valid": true,
+      "detail": "OCR terms + prepress",
+      "steps": 1,
+      "seconds": 6.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p12",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 5,
+      "seconds": 8.5,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p13",
+      "ok": true,
+      "content_valid": true,
+      "detail": "format + documented size",
+      "steps": 1,
+      "seconds": 0.2,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p14",
+      "ok": true,
+      "content_valid": true,
+      "detail": "ffprobe",
+      "steps": 1,
+      "seconds": 0.1,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p15",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 5,
+      "seconds": 27.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p16",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 3,
+      "seconds": 10.4,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p17",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 3,
+      "seconds": 15.8,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p18",
+      "ok": true,
+      "content_valid": true,
+      "detail": "length + required terms",
+      "steps": 12,
+      "seconds": 10.0,
+      "agent_ok": false,
+      "error": "max_steps"
+    },
+    {
+      "id": "p19",
+      "ok": true,
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "steps": 5,
+      "seconds": 5.3,
+      "agent_ok": true,
+      "error": ""
+    },
+    {
+      "id": "p20",
+      "ok": true,
+      "content_valid": true,
+      "detail": "parsed",
+      "steps": 2,
+      "seconds": 5.6,
+      "agent_ok": true,
+      "error": ""
+    }
+  ],
+  "note": "Coding agent for text/code, tools for p11/p13/p14."
+}

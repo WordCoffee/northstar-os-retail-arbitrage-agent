@@ -1,0 +1,53 @@
+{
+  "rubric_cited": "rubric.md (v1)",
+  "scores": {
+    "Title": {
+      "score": 4,
+      "weight": "20%",
+      "evidence": "Title: Mogra Organics Organic Lion's Mane Mushroom Powder - 6 oz, 85 Servings",
+      "notes": "Primary keyword present, under 200 chars, no promos; brand name precedes keyword slightly."
+    },
+    "Bullets": {
+      "score": 5,
+      "weight": "20%",
+      "evidence": "Five bullets each with concrete numbers (85 servings, 2 g, 6 oz, every batch, 5 of 7 slots).",
+      "notes": "Benefit-led with specific quantities."
+    },
+    "Description": {
+      "score": 4,
+      "weight": "15%",
+      "evidence": "Description: Mogra Organics Organic Lion's Mane Mushroom Powder is a single-ingredient extract made from whole fruiting bodies...",
+      "notes": "Answers key buyer questions (what it is, how to use, serving size); no disease claims."
+    },
+    "Keywords": {
+      "score": 4,
+      "weight": "10%",
+      "evidence": "Keywords: lion's mane powder, organic mushroom powder, lion mane supplement",
+      "notes": "Present in copy, no obvious stuffing."
+    },
+    "Images": {
+      "score": 3,
+      "weight": "15%",
+      "evidence": "Images: 5 of 7 slots filled.",
+      "notes": "Two slots empty; no explicit scale reference mentioned."
+    },
+    "A+ content": {
+      "score": 0,
+      "weight": "10%",
+      "evidence": "A+ content: none.",
+      "notes": "No modules present."
+    },
+    "Compliance": {
+      "score": 4,
+      "weight": "10%",
+      "evidence": "USDA ORGANIC: certified organic, non-GMO, vegan, gluten free. THIRD-PARTY TESTED: every batch, heavy metals and microbials.",
+      "notes": "No disease claims; weights consistent (6 oz, 85 servings at 2 g). Disclaimer not explicitly present."
+    }
+  },
+  "unmeasured_dimensions": [
+    "Price competitiveness (no price in the fixture)",
+    "BSR / sales velocity (no live data, and no live call is authorised)",
+    "Review count and rating (no live data)",
+    "Conversion rate (needs live traffic)"
+  ]
+}

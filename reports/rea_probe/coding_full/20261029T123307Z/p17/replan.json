@@ -1,0 +1,49 @@
+{
+  "plan_version": 2,
+  "status": "planned",
+  "goal": "Assemble a 15-second vertical ad and verify it before reporting done",
+  "failed_assertion": {
+    "check": "duration_12_15",
+    "evidence": "ffprobe format.duration=18.4",
+    "expected": "12-15",
+    "node": "n3",
+    "observed_seconds": 18.4
+  },
+  "diagnosis": "The source timeline is 18.4s, exceeding the 12-15s window. Retrying the same plan will keep failing; the timeline must be shortened before re-verification.",
+  "nodes": [
+    {
+      "id": "n1",
+      "action": "scale the plate to 1080x1920",
+      "status": "done"
+    },
+    {
+      "id": "n2",
+      "action": "mux the narration track onto the clip",
+      "status": "done"
+    },
+    {
+      "id": "n3",
+      "action": "ffprobe the result against the checks",
+      "status": "failed"
+    },
+    {
+      "id": "n4",
+      "action": "trim the timeline to 14.0s (within 12-15s) using -t 14.0 on the muxed clip",
+      "status": "pending"
+    },
+    {
+      "id": "n5",
+      "action": "re-run ffprobe on the trimmed clip and assert duration is within 12-15s",
+      "status": "pending"
+    }
+  ],
+  "retained_from_v1": {
+    "plan_version": 1,
+    "status": "failed",
+    "nodes": [
+      {"id": "n1", "action": "scale the plate to 1080x1920", "status": "done"},
+      {"id": "n2", "action": "mux the narration track onto the clip", "status": "done"},
+      {"id": "n3", "action": "ffprobe the result against the checks", "status": "failed"}
+    ]
+  }
+}

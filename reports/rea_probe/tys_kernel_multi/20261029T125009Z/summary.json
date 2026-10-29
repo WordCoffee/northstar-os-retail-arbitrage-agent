@@ -1,0 +1,25 @@
+{
+  "mode": "ty-as-is + kernel coding tool loop (multi-brief pilot)",
+  "label": "ty-as-is + kernel coding tool loop (multi-brief pilot)",
+  "project_result": false,
+  "briefs": 2,
+  "ok": 2,
+  "rows": [
+    {
+      "id": "p03",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 24.7,
+      "reason": ""
+    },
+    {
+      "id": "p05",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 18.0,
+      "reason": ""
+    }
+  ]
+}

@@ -101,13 +101,13 @@ Reports: `reports/ns_proj_20_live_baseline_20261029.md` and
 
 **Coding-tool run (2026-10-29):** the read-only lane was replaced by a bounded
 `list/read/grep/write/apply_patch/run` loop. The 3-brief pilot was 3/3
-(p01/p02/p05; real `pytest` and `py_compile` passes), then the hybrid 20-brief run
-was **20/20 content-valid** — coding loop for text/code, tools for p11/p13/p14.
-Ty end-to-end p01 with literal `run_kernel(coding_agent=True)` is **complete**
-(calc fixed, pytest 0, valid patch). Reports:
-`reports/coding_agent_pilot_20261029.md` and
-`reports/coding_hybrid_20_20261029.md`. Ty requires an explicit
-`scope.workspace`; the default path is unchanged.
+(p01/p02/p05; real `pytest` and `py_compile` passes), then the hybrid 20-brief
+runs scored **20/20, 19/20 and 18/20** (p50 7.3–8.5 s, p95 15.7–25.6 s; thresholds
+p50 10.2 s, p95 30.7 s, completion 0.90). Ty p01–p05 is **5/5 content-valid**;
+p01’s Ty status is `needs_human` on a retry assertion even though its artifact is
+valid. Reports: `reports/coding_agent_pilot_20261029.md` and
+`reports/coding_hybrid_20_20261029.md`. `run_kernel(coding_agent=True)` is the
+default when `scope.workspace` is set; without it the old lane is used.
 
 ## 5. Phase B — 1,500 / 100 / 12
 

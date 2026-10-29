@@ -27,10 +27,16 @@ def make_workspace_acceptance(workspace: str, spec: Optional[Dict[str, Any]] = N
     spec = dict(spec or {})
     commands = list(spec.get("commands") or [])
     required = list(spec.get("required_files") or [])
+    min_bytes = dict(spec.get("min_bytes") or {})
     root = Path(workspace)
 
     def check():
-        missing = [f for f in required if not (root / f).is_file()]
+        missing = []
+        for f in required:
+            p = root / f
+            floor = int(min_bytes.get(f) or 1)
+            if not p.is_file() or p.stat().st_size < floor:
+                missing.append(f"{f} (min {floor} bytes)")
         failures: List[str] = []
         for cmd in commands:
             try:

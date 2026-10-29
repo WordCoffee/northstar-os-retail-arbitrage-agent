@@ -1,0 +1,49 @@
+{
+  "mode": "ty-as-is + kernel coding tool loop (multi-brief pilot)",
+  "label": "ty-as-is + kernel coding tool loop (multi-brief pilot)",
+  "project_result": false,
+  "briefs": 5,
+  "ok": 5,
+  "rows": [
+    {
+      "id": "p01",
+      "ty_status": "needs_human",
+      "content_valid": true,
+      "detail": "unified diff shape",
+      "seconds": 40.5,
+      "reason": "verification failed: the lane executor reports it completed; the lane executor reports success"
+    },
+    {
+      "id": "p02",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 4.6,
+      "reason": ""
+    },
+    {
+      "id": "p03",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 8.7,
+      "reason": ""
+    },
+    {
+      "id": "p04",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 7.7,
+      "reason": ""
+    },
+    {
+      "id": "p05",
+      "ty_status": "complete",
+      "content_valid": true,
+      "detail": "length + required terms",
+      "seconds": 18.5,
+      "reason": ""
+    }
+  ]
+}

@@ -1324,7 +1324,7 @@ class TysAssistant:
     # -- execution ---------------------------------------------------------
 
     def run_kernel(self, task_id: str, *, approve_by: str = "operator",
-                   coding_agent: bool = False) -> Dict[str, Any]:
+                   coding_agent: bool = True) -> Dict[str, Any]:
         """Execute a work order through the agent kernel (opt-in).
 
         The default `run()` is unchanged. This path gives the order a visible
@@ -1353,8 +1353,11 @@ class TysAssistant:
         if coding_agent:
             workspace = str((task.get("scope") or {}).get("workspace") or "").strip()
             if not workspace:
-                raise TysError("workspace_required",
-                               "coding_agent needs scope.workspace")
+                # No workspace means the old read-only lane is the only safe
+                # path. A work order opts into the tool loop by naming its
+                # workspace, so the default never writes into an unnamed tree.
+                coding_agent = False
+        if coding_agent:
             from agent_kernel.coding_executor import CodingAgentExecutor
             base = CodingWorkerAdapter.BASE.rstrip("/")
             model_name = CodingWorkerAdapter.MODEL

@@ -1,0 +1,63 @@
+{
+  "label": "hybrid coding/tool run \u2014 3-run spread",
+  "runs": [
+    {
+      "folder": "20261029T071520Z",
+      "ok": 20,
+      "rate": 1.0,
+      "p50": 7.3,
+      "p95": 15.7
+    },
+    {
+      "folder": "20261029T123307Z",
+      "ok": 19,
+      "rate": 0.95,
+      "p50": 7.3,
+      "p95": 17.8
+    },
+    {
+      "folder": "20261029T123853Z",
+      "ok": 18,
+      "rate": 0.9,
+      "p50": 8.5,
+      "p95": 25.6
+    }
+  ],
+  "spread": {
+    "ok": {
+      "values": [
+        20,
+        19,
+        18
+      ],
+      "min": 18,
+      "max": 20,
+      "median": 19
+    },
+    "p50": {
+      "values": [
+        7.3,
+        7.3,
+        8.5
+      ],
+      "min": 7.3,
+      "max": 8.5
+    },
+    "p95": {
+      "values": [
+        15.7,
+        17.8,
+        25.6
+      ],
+      "min": 15.7,
+      "max": 25.6
+    }
+  },
+  "thresholds": {
+    "completion_rate_min": 0.9,
+    "p50_max_s": 10.2,
+    "p95_max_s": 30.7,
+    "quality_min": 0.9
+  },
+  "note": "Post-fix runs only. p03 stalled twice; p02 lost one server. Thresholds are baseline values, not quality claims."
+}
