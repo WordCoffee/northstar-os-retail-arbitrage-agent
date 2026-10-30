@@ -1,0 +1,63 @@
+/* Notification centre (item 19). Bottom-right on desktop, above the thumb reach
+   zone on phones so it never covers the composer. */
+.toast-viewport {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--reach-bottom) * 0.55);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--density-pad-y) var(--density-pad-x);
+  border-radius: var(--radius);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--elev-3);
+  color: var(--ink);
+  animation: toast-in var(--dur-enter) var(--ease-spring);
+}
+
+.toast__dot {
+  width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; flex: 0 0 auto;
+  background: var(--ink-faint);
+}
+.toast--success .toast__dot { background: var(--status-ok); }
+.toast--warning .toast__dot { background: var(--status-warn); }
+.toast--error   .toast__dot { background: var(--status-error); }
+.toast--info    .toast__dot { background: var(--spark); }
+
+.toast__body { flex: 1; min-width: 0; }
+.toast__msg { margin: 0; font-size: var(--text-sm); color: var(--ink); }
+.toast__count {
+  display: inline-block; margin-top: 2px; font-size: var(--text-xs);
+  color: var(--ink-soft); font-variant-numeric: tabular-nums;
+}
+
+.toast__action,
+.toast__close {
+  background: none; border: 0; cursor: pointer; color: var(--ink-soft);
+  font: inherit; line-height: 1; padding: 4px 6px; border-radius: var(--radius-sm);
+  transition: color var(--dur-quick) var(--ease-out), background var(--dur-quick) var(--ease-out);
+}
+.toast__action { color: var(--pine); font-size: var(--text-xs); font-weight: 600; }
+.toast__action:hover { background: var(--forest-glow); }
+.toast__close { font-size: 16px; }
+.toast__close:hover { color: var(--ink); background: var(--surface-hover); }
+.toast__action:focus-visible,
+.toast__close:focus-visible { outline: none; box-shadow: var(--focus-ring-shadow); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}

@@ -26,7 +26,7 @@
   --pine-light: #4a7a4a;
   --ink: #1a1a1a;
   --ink-mid: #5a5a4a;
-  --ink-soft: #8a8a7a;
+  --ink-soft: #6e6e61;   /* was #8a8a7a - 3.09:1 on paper, below AA; now 4.55:1 */
   --ink-faint: #b0afa0;
 
   /* â”€â”€ ACCENTS â”€â”€ */
@@ -44,7 +44,7 @@
   /* â”€â”€ STATUS â”€â”€ */
   --status-ok: #2d6a2d;
   --status-ok-soft: rgba(45, 106, 45, 0.12);
-  --status-warn: #b8860b;
+  --status-warn: #8e6708;   /* was #b8860b - 2.87:1 on paper, below AA; now 4.52:1 */
   --status-warn-soft: rgba(184, 134, 11, 0.12);
   --status-error: #a04020;
   --status-error-soft: rgba(160, 64, 32, 0.12);
@@ -63,16 +63,24 @@
   --font-ui: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
-  /* Scale */
-  --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
-  --text-base: 0.875rem;
-  --text-lg: 1rem;
-  --text-xl: 1.125rem;
-  --text-2xl: 1.375rem;
-  --text-3xl: 1.75rem;
-  --text-4xl: 2.25rem;
-  --text-5xl: 3rem;
+  /* Scale — FLUID (item 1). Each line still resolves to the old px size at
+     ~1440px, so nothing shifts on the desktop that is already designed; type
+     now breathes down to 1024 and up to 1920 instead of stepping at breakpoints.
+     Anchors: min @1024, max @1920, midpoint @1440. */
+  --text-xs:   clamp(0.6975rem, 0.5432rem + 0.2411vw, 0.8325rem);   /* 12px */
+  --text-sm:   clamp(0.7556rem, 0.5885rem + 0.2612vw, 0.9019rem);   /* 13px */
+  --text-base: clamp(0.8138rem, 0.6338rem + 0.2812vw, 0.9713rem);   /* 14px */
+  --text-lg:   clamp(0.9300rem, 0.7243rem + 0.3214vw, 1.1100rem);   /* 16px */
+  --text-xl:   clamp(1.0463rem, 0.8148rem + 0.3616vw, 1.2488rem);   /* 18px */
+  --text-2xl:  clamp(1.2788rem, 0.9959rem + 0.4420vw, 1.5263rem);   /* 22px */
+  --text-3xl:  clamp(1.5750rem, 1.0750rem + 0.7812vw, 2.0125rem);   /* 28px */
+  --text-4xl:  clamp(2.0250rem, 1.3821rem + 1.0045vw, 2.5875rem);   /* 36px */
+  --text-5xl:  clamp(2.7000rem, 1.8429rem + 1.3393vw, 3.4500rem);   /* 48px */
+  /* Display sizes stay fixed: clamp() on a hero headline causes a visible
+     reflow mid-scroll and the hero already has its own container queries. */
+  --text-display: 3.75rem;
+  --leading-tight: 1.2;
+  --leading-body: 1.6;
 
   /* â”€â”€ SPACING â”€â”€ */
   --space-1: 4px;
@@ -85,6 +93,13 @@
   --space-8: 40px;
   --space-9: 48px;
   --space-10: 56px;
+  --space-11: 64px;
+  --space-12: 72px;
+  --space-13: 80px;
+  /* Half-step kept deliberately: 4px is the only sub-8 value allowed, and it is
+     reserved for icon-to-label gaps. Everything else lands on the 8pt ramp. */
+  --space-half: 4px;
+  --space-1x: 8px;
 
   /* â”€â”€ LAYOUT â”€â”€ */
   --nav-w: 260px;
@@ -107,9 +122,103 @@
   --nav-h: 56px;
 
   /* â”€â”€ TRANSITIONS â”€â”€ */
-  --t-fast: 150ms ease;
-  --t-normal: 220ms ease;
-  --t-slow: 350ms ease;
+  --t-fast: 150ms cubic-bezier(0.22, 1, 0.36, 1);
+  --t-normal: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  --t-slow: 350ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* MOTION (item 6): one overshoot curve for anything the pointer touches, one
+     decelerating curve for anything that arrives on its own. Linear is banned
+     for UI transitions - it reads as jank at 60 fps. */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-tap: 90ms;
+  --dur-quick: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 350ms;
+  --dur-enter: 260ms;
+
+  /* ELEVATION (item 2): depth from layered low-opacity shadows plus a surface
+     tint, never from a 1px border. --elev-rgb flips with the theme so the same
+     four steps work on paper and on the dark media scope. */
+  --elev-rgb: 26, 46, 26;
+  --elev-tint: rgba(255, 255, 255, 0.55);
+  --elev-0: none;
+  --elev-1: 0 1px 1px rgba(var(--elev-rgb), 0.04), 0 1px 3px rgba(var(--elev-rgb), 0.06);
+  --elev-2: 0 2px 4px rgba(var(--elev-rgb), 0.05), 0 4px 10px rgba(var(--elev-rgb), 0.07);
+  --elev-3: 0 4px 8px rgba(var(--elev-rgb), 0.06), 0 10px 24px rgba(var(--elev-rgb), 0.10);
+  --elev-4: 0 8px 16px rgba(var(--elev-rgb), 0.08), 0 20px 48px rgba(var(--elev-rgb), 0.14);
+
+  /* FOCUS RING (item 11) - AAA: 3px ring + 2px offset plus a contrasting inner
+     halo so the ring stays visible on a same-hue surface. `outline: none`
+     without a replacement is now a bug. */
+  --focus-ring-w: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: #0b5d1e;
+  --focus-ring-halo: rgba(255, 255, 255, 0.9);
+  --focus-ring-shadow: 0 0 0 var(--focus-ring-offset) var(--focus-ring-halo),
+                       0 0 0 calc(var(--focus-ring-offset) + var(--focus-ring-w)) var(--focus-ring-color);
+
+  /* GLASS (item 4) - one recipe so every floating surface blurs identically. */
+  --glass-blur: 12px;
+  --glass-saturate: 140%;
+  --glass-bg: rgba(250, 248, 244, 0.72);
+  --glass-border: rgba(26, 46, 26, 0.10);
+
+  /* DENSITY (item 14) - driven by [data-density] on <html>. Components consume
+     these four values instead of hard-coding padding, so Compact /
+     Comfortable / Spacious is one attribute, not a component rewrite. */
+  --density-pad-y: 12px;
+  --density-pad-x: 16px;
+  --density-gap: 12px;
+  --density-row: 44px;
+  --density-font: 1;
+
+  /* REACH ZONE (item 15) - thumb arc on a phone: bottom 96px, inset 16px. */
+  --reach-bottom: 96px;
+  --reach-inset: 16px;
+  --fab-size: 56px;
+}
+
+/* DENSITY MODES (item 14) ------------------------------------------------- */
+html[data-density="compact"] {
+  --density-pad-y: 6px; --density-pad-x: 10px; --density-gap: 6px;
+  --density-row: 32px; --density-font: 0.94;
+}
+html[data-density="comfortable"] {
+  --density-pad-y: 12px; --density-pad-x: 16px; --density-gap: 12px;
+  --density-row: 44px; --density-font: 1;
+}
+html[data-density="spacious"] {
+  --density-pad-y: 20px; --density-pad-x: 24px; --density-gap: 20px;
+  --density-row: 56px; --density-font: 1.04;
+}
+
+/* Dark surfaces (media scope + explicit dark theme) invert the shadow colour:
+   a black shadow on a near-black surface is invisible, so depth there comes
+   from the lift in the surface tint instead. */
+html[data-theme="dark"],
+[data-theme-scope="media"] {
+  --elev-rgb: 0, 0, 0;
+  --elev-tint: rgba(255, 255, 255, 0.06);
+  --glass-bg: rgba(18, 20, 22, 0.62);
+  --glass-border: rgba(242, 237, 229, 0.14);
+  --focus-ring-color: #7fd4a0;
+  --focus-ring-halo: rgba(0, 0, 0, 0.85);
+}
+
+/* Reduced motion: kill durations, keep end states (item 6 + a11y). */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-tap: 0ms; --dur-quick: 0ms; --dur-base: 0ms;
+    --dur-slow: 0ms; --dur-enter: 0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* â”€â”€ BASE RESET â”€â”€ */
@@ -137,7 +246,7 @@ body {
 /* â”€â”€ LINK STYLE â”€â”€ */
 a { color: var(--pine); text-decoration: none; transition: color var(--t-fast); }
 a:hover { color: var(--forest); text-decoration: underline; }
-a:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
+a:focus-visible { outline: none; box-shadow: var(--focus-ring-shadow); border-radius: 2px; }
 
 /* â”€â”€ TYPOGRAPHY â”€â”€ */
 h1, h2, h3, h4, h5 { font-family: var(--font-serif); color: var(--pine-deep); line-height: 1.3; }
@@ -169,8 +278,8 @@ p { color: var(--ink-mid); }
   box-shadow: var(--shadow-sm);
 }
 .btn:hover { background: var(--surface-hover); border-color: var(--divider-strong); box-shadow: var(--shadow); }
-.btn:active { transform: scale(0.98); }
-.btn:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
+.btn:active { transform: scale(0.97); transition-duration: var(--dur-tap); }
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring-shadow); }
 .btn-primary {
   background: var(--forest); color: #fff; border-color: var(--forest);
 }
@@ -419,4 +528,62 @@ html[data-theme="light"] {
   --spark-soft: rgba(47, 111, 237, 0.12);
   --spark-mid: rgba(47, 111, 237, 0.30);
   --chat-col-max: 780px;
+}
+
+/* ===========================================================================
+   PRIMITIVES - work order UI-20, phase 1
+   Shared recipes. Components consume tokens; these are the four that were
+   duplicated across surfaces and are now single-source.
+   =========================================================================== */
+
+/* Item 11 - focus ring. Zero-specificity so component rules win, and every
+   keyboard-reachable element gets the same AAA ring by default. */
+:where(a, button, [role="button"], [role="tab"], [role="menuitem"], input,
+       select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+/* Item 4 - glass. One recipe: 12px blur, 140% saturation. */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+}
+
+/* Item 2 - elevation steps. */
+.elev-1 { box-shadow: var(--elev-1); }
+.elev-2 { box-shadow: var(--elev-2); }
+.elev-3 { box-shadow: var(--elev-3); }
+.elev-4 { box-shadow: var(--elev-4); }
+
+/* Item 5 - skeleton. Structure is mimicked by the caller's block sizes. */
+.skel { position: relative; overflow: hidden; background: var(--divider); border-radius: var(--radius-sm); }
+.skel::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--elev-tint), transparent);
+  animation: skel-sweep 1.4s var(--ease-out) infinite;
+}
+.skel-line { height: 0.75em; margin: 0.35em 0; }
+.skel-block { aspect-ratio: 16 / 9; }
+.skel-avatar { width: 32px; height: 32px; border-radius: 50%; }
+@keyframes skel-sweep { to { transform: translateX(100%); } }
+
+/* Item 7 - tactile press. Feedback must land inside 50 ms, so the press uses
+   the short duration and the release uses the spring. */
+.tap { transition: transform var(--dur-tap) var(--ease-spring), box-shadow var(--dur-quick) var(--ease-out); }
+.tap:active { transform: scale(0.97); }
+
+/* Item 14 - density helpers. */
+.density-pad { padding: var(--density-pad-y) var(--density-pad-x); }
+.density-row { min-height: var(--density-row); }
+
+/* Item 15 - thumb-reach FAB. Phones only; desktop keeps its toolbar. */
+@media (max-width: 640px) {
+  .fab-reach {
+    position: fixed; right: var(--reach-inset); bottom: var(--reach-bottom);
+    width: var(--fab-size); height: var(--fab-size); border-radius: 50%;
+    z-index: 40;
+  }
 }

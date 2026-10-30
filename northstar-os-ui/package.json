@@ -7,7 +7,10 @@
   "scripts": {
     "dev": "vite --port 8101 --strictPort",
     "build": "vite build",
-    "preview": "vite preview --port 8101 --strictPort"
+    "preview": "vite preview --port 8101 --strictPort",
+    "test:ui": "node --test \"src/lib/*.test.js\"",
+    "test:contrast": "node scripts/check-contrast.mjs",
+    "test": "npm run test:ui && npm run test:contrast"
   },
   "dependencies": {
     "react": "^18.3.1",

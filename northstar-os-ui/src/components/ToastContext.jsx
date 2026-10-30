@@ -1,23 +1,24 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+/**
+ * Compat shim (work order UI-20, item 19).
+ *
+ * The old provider pattern is superseded by the module bus, because nothing in
+ * the app ever mounted TOAST_PROVIDER and a notification system that only works
+ * inside one tree is not a notification system. Both names are kept so any
+ * existing import keeps compiling; new code should call `toast` directly.
+ */
+import { useSyncExternalStore } from 'react'
+import { toast as busToast, dismiss, subscribe, getToasts } from '../lib/toastBus.js'
 
-const ToastContext = createContext(null)
+export const toast = busToast
 
 export function useToast() {
-  const ctx = useContext(ToastContext)
-  if (!ctx) throw new Error('useToast must be used within TOAST_PROVIDER')
-  return ctx
+  const toasts = useSyncExternalStore(subscribe, getToasts, getToasts)
+  return { toasts, toast: busToast, dismiss }
 }
 
+/** Retained for imports; it no longer needs to wrap anything. */
 export function TOAST_PROVIDER({ children }) {
-  const [toasts, setToasts] = useState([])
-  const toast = useCallback((msg, tone = 'ok') => {
-    const id = Date.now() + Math.random()
-    setToasts(prev => [...prev.slice(-4), { id, msg, tone }])
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200)
-  }, [])
-  return (
-    <ToastContext.Provider value={{ toasts, toast }}>
-      {children}
-    </ToastContext.Provider>
-  )
+  return children
 }
+
+export default { useToast, toast, TOAST_PROVIDER }

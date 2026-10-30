@@ -13,6 +13,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatSurface from '../chat/ChatSurface.jsx'
 import GalacticBackdrop from './GalacticBackdrop.jsx'
+import Announcer from '../components/Announcer.jsx'
+import ToastCenter from '../components/ToastCenter.jsx'
+import DensityToggle from '../components/DensityToggle.jsx'
+import CommandMenu from './CommandMenu.jsx'
 import { resolveVariant } from './galacticVariants.js'
 import '../styles/celestial.css'
 import { vistaForToday } from './vistas.js'
@@ -62,6 +66,20 @@ export default function MasterBrainShell() {
   const location = useLocation()
   const [busy, setBusy] = useState(false)
   const [hwOpen, setHwOpen] = useState(false)
+  const [cmdOpen, setCmdOpen] = useState(false)
+
+  // Cmd/Ctrl+K (item 17). Capture phase so a focused input cannot swallow it,
+  // and "/" is not bound: people type in this app.
+  useEffect(() => {
+    const onKey = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setCmdOpen((open) => !open)
+      }
+    }
+    window.addEventListener('keydown', onKey, { capture: true })
+    return () => window.removeEventListener('keydown', onKey, { capture: true })
+  }, [])
 
   // Theme variant: ?galactic=<id|1..10>, then the stored pick, then the default.
   const variant = useMemo(() => {
@@ -98,6 +116,9 @@ export default function MasterBrainShell() {
     <div className="mb-shell" data-testid="mb-shell" data-vista={vistaForToday().id}>
       <GalacticBackdrop themeId={shell.focusId} variant={variant} />
       <div className="mb-scrim" aria-hidden="true" />
+      <Announcer />
+      <ToastCenter />
+      <CommandMenu open={cmdOpen} onClose={() => setCmdOpen(false)} />
       <div className="mb-vista-annotation" aria-hidden="true">
         {vistaForToday().name} · vista {vistaForToday().id} of 7
       </div>
@@ -133,6 +154,7 @@ export default function MasterBrainShell() {
               {hw.text}
             </button>
             <span className="mb-chip" title={`Plan: ${planLabel}`}>{planLabel}</span>
+            <DensityToggle compact />
             {shell.offline && <span className="mb-chip warn" title={shell.offlineReason}>Shell context offline</span>}
             {advancedAllowed && (
               <button type="button" className="btn btn-sm btn-ghost"

@@ -210,7 +210,15 @@ body {
 .mobile-bottom-nav {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 56px; background: var(--surface); border-top: 1px solid var(--divider);
+  /* Thumb reach + notched home indicator (item 15): the bar sits in the natural
+     thumb arc and grows by the device safe-area instead of being clipped by it. */
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  box-shadow: var(--elev-3);
+  border-top: 1px solid var(--divider);
   z-index: 50;
 }
 .mobile-bottom-nav-item {
