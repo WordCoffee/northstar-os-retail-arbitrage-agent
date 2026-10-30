@@ -75,12 +75,31 @@ class CodingAgent:
         files: set[str] = set()
         repairs = 0
         written = False
+        # A failed acceptance run cannot change by running it again. Track it so the
+        # loop refuses a no-op re-run: measured 2026-10-29, 17 of 24 steps were bare
+        # `run` calls ("exit 2") with no edit between them, and the build never moved.
+        failed_run = False
+        changed_since_run = True
+        stalls = 0
         for step in range(1, self.max_steps + 1):
             pressure = bool(self.required_artifact) and not written and step > 2
-            prompt = self._prompt(task, history, pressure=pressure)
+            prompt = self._prompt(task, history, pressure=pressure, stall=stalls > 0)
             try:
                 raw = self.model(prompt)
             except Exception as exc:  # noqa: BLE001
+                # Acceptance is the authority, even when the model call itself
+                # fails: the work may already be on disk and green.
+                if self.acceptance is not None:
+                    try:
+                        ok, detail = self.acceptance()
+                    except Exception as check_exc:  # noqa: BLE001
+                        ok, detail = False, str(check_exc)[:300]
+                    if ok:
+                        history.append({"role": "observation", "tool": "acceptance",
+                                        "output": "PASS: " + str(detail)[:1000]})
+                        return CodingResult(True, "acceptance passed after model error",
+                                            step, sorted(files), history, "",
+                                            acceptance_recovered=True)
                 return CodingResult(False, "model call failed", step, sorted(files),
                                     history, str(exc)[:300])
             call = parse_tool_call(raw)
@@ -104,8 +123,22 @@ class CodingAgent:
                     return CodingResult(False, "acceptance failed after repairs", step,
                                         sorted(files), history, str(detail)[:300])
                 continue
+            if tool == "run" and failed_run and not changed_since_run:
+                stalls += 1
+                history.append({"role": "observation", "tool": "verify_stall",
+                                "output": "Refused: acceptance already failed and no file "
+                                          "has changed since. Running it again returns the "
+                                          "same error. Edit a file first (write/write_many), "
+                                          "then run it."})
+                continue
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
+            if tool == "run":
+                failed_run = not result.ok
+                changed_since_run = False
+            elif tool in ("write", "write_many", "apply_patch"):
+                failed_run = False
+                changed_since_run = True
             # The artifact clears the pressure, however it was produced: a `write`,
             # an `apply_patch`, or a command that generated it. Keying this off the
             # write tool alone kept the prompt in write-only pressure mode after a
@@ -118,7 +151,7 @@ class CodingAgent:
             # The artifact is the goal. If a write or a verification command
             # already satisfies acceptance, stop instead of burning the rest of
             # the step budget waiting for a `finish` the model may forget.
-            if self.acceptance is not None and tool in ("write", "run") and result.ok:
+            if self.acceptance is not None and tool in ("write", "write_many", "run") and result.ok:
                 ok, detail = self.acceptance()
                 if ok:
                     history.append({"role": "observation", "tool": "acceptance",
@@ -157,12 +190,13 @@ class CodingAgent:
             return False
 
     def _prompt(self, task: str, history: List[Dict[str, Any]],
-                *, pressure: bool = False) -> str:
+                *, pressure: bool = False, stall: bool = False) -> str:
         schema = (
             '{"tool":"list","args":{"path":"."}}\n'
             '{"tool":"read","args":{"path":"calc.py"}}\n'
             '{"tool":"grep","args":{"pattern":"assert","path":"."}}\n'
             '{"tool":"write","args":{"path":"fix.patch","content":"..."}}\n'
+            '{"tool":"write_many","args":{"files":[{"path":"a.ts","content":"..."},{"path":"b.ts","content":"..."}]}}\n'
             '{"tool":"apply_patch","args":{"patch":"--- a/calc.py\\n+++ b/calc.py\\n@@ -1,3 +1,3 @@\\n context\\n-old line\\n+new line\\n context\\n"}}\n'
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
@@ -188,13 +222,19 @@ class CodingAgent:
             "- Before `finish`, the artifact and any test/build evidence must exist.\n"
             "- Write the declared artifact within the first two steps. An absent "
             "artifact is an automatic failure; improve it afterwards.\n"
-            "- If acceptance fails, read the failure and repair; do not repeat the same write.\n\n"
+            "- If acceptance fails, read the failure and repair; do not repeat the same write.\n"
+            "- On a FAIL observation, first `read` every file named in the error, then "
+            "rewrite those files with write_many. The error text is authoritative.\n\n"
             f"TASK:\n{task}\n\n"
             + (f"REQUIRED ARTIFACT: {self.required_artifact}\n"
                if self.required_artifact else "")
             + (f"STEP PRESSURE: you have not written `{self.required_artifact}` yet. "
                "Only write and finish are available now. Write the artifact in your "
                "next JSON object.\n" if pressure else "")
+            + ("VERIFY STALL: acceptance already failed and nothing changed since. "
+               "Re-running it returns the same error, so it is refused. The only way "
+               "forward is to change files: reply with write_many containing every "
+               "file you are fixing, complete.\n" if stall else "")
             + f"WORKSPACE FILES:\n{self.tools.tree(60)}\n\n"
             "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
             "Next JSON object:"

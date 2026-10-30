@@ -136,6 +136,26 @@ def test_required_artifact_pressure_after_two_steps(tmp_path):
     assert any("STEP PRESSURE" in p for p in prompts)
 
 
+def test_repeated_acceptance_run_after_failure_is_refused(tmp_path):
+    """A failing `run` cannot change by repeating it: the loop must refuse the re-run
+    and push the model back to editing (measured 17-of-24 steps lost to bare runs)."""
+    ws = Workspace(tmp_path / "ws")
+    ws.write("a.txt", "x")
+    prompts = []
+
+    def model(prompt):
+        prompts.append(prompt)
+        return '{"tool":"run","args":{"cmd":["python","-c","import sys; sys.exit(2)"]}}'
+
+    agent = CodingAgent(ws, model, max_steps=4,
+                        acceptance=lambda: ((tmp_path / "ws" / "a.txt").is_file(), "exists"))
+    result = agent.run("x")
+    stalls = [h for h in result.transcript if h.get("tool") == "verify_stall"]
+    assert stalls, "the second bare run must be refused"
+    assert "VERIFY STALL" in prompts[-1]
+    assert len(stalls) == 3  # step 1 really runs, steps 2-4 are refused
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):
