@@ -12,7 +12,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatSurface from '../chat/ChatSurface.jsx'
-import CelestialBackdrop from './CelestialBackdrop.jsx'
+import GalacticBackdrop from './GalacticBackdrop.jsx'
+import { resolveVariant } from './galacticVariants.js'
 import '../styles/celestial.css'
 import { vistaForToday } from './vistas.js'
 import HardwareModal from './HardwareModal.jsx'
@@ -62,6 +63,15 @@ export default function MasterBrainShell() {
   const [busy, setBusy] = useState(false)
   const [hwOpen, setHwOpen] = useState(false)
 
+  // Theme variant: ?galactic=<id|1..10>, then the stored pick, then the default.
+  const variant = useMemo(() => {
+    let stored = ''
+    try { stored = window.localStorage.getItem('ns-galactic-variant') || '' } catch { /* private mode */ }
+    const chosen = resolveVariant(window.location.search, stored)
+    try { window.localStorage.setItem('ns-galactic-variant', chosen.id) } catch { /* private mode */ }
+    return chosen
+  }, [])
+
   // Deep links select the matching focus (rooms are focuses in Simple mode).
   useEffect(() => {
     const hit = PATH_FOCUS.find(([re]) => re.test(location.pathname))
@@ -86,7 +96,7 @@ export default function MasterBrainShell() {
 
   return (
     <div className="mb-shell" data-testid="mb-shell" data-vista={vistaForToday().id}>
-      <CelestialBackdrop />
+      <GalacticBackdrop themeId={shell.focusId} variant={variant} />
       <div className="mb-scrim" aria-hidden="true" />
       <div className="mb-vista-annotation" aria-hidden="true">
         {vistaForToday().name} · vista {vistaForToday().id} of 7

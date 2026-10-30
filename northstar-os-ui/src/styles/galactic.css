@@ -1,0 +1,167 @@
+/* ═════════════════════════════════════════════════════════════════════════════
+   GALACTIC — the Simple-shell visual layer.
+
+   This file replaces the CSS-only celestial scene as the PRIMARY look. The
+   photoreal backdrop is now a WebGL plate (see shell/galacticShader.js); what
+   remains here is:
+
+     1. the plate's motion — a slow Ken Burns drift, because re-rendering the
+        geodesic frame every animation frame would fight ComfyUI for the GPU;
+     2. film grain and the vignette that seat the plate in the panel;
+     3. the CSS scene kept as the documented fallback when WebGL is unavailable
+        (it is not dead code — it is what a lost context shows);
+     4. obsidian + cosmic-glass surface refinements for the shell chrome.
+
+   Loaded AFTER simple.css and celestial.css so it wins without !important
+   where possible. Sizes, spacing and type scale are untouched on purpose:
+   a backdrop change must never cost legibility.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.galactic {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #05070d;
+}
+
+/* ── the rendered plate ─────────────────────────────────────────────────── */
+.galactic-plate {
+  position: absolute;
+  inset: -6%;
+  width: 112%;
+  height: 112%;
+  display: block;
+  transform-origin: 62% 42%;
+  animation: galactic-drift 96s ease-in-out infinite alternate;
+  transition: opacity 640ms ease;
+  will-change: transform;
+}
+
+/* theme swap: dip, repaint, come back — never a hard cut */
+.galactic-plate.gb-swapping { opacity: 0.45; }
+
+@keyframes galactic-drift {
+  from { transform: scale(1.0) translate3d(0, 0, 0); }
+  to   { transform: scale(1.06) translate3d(-1.6%, 1.1%, 0); }
+}
+
+/* Once the GPU plate has painted, the CSS scene underneath is redundant paint
+   work. :has() is supported on this box's Chrome; if it is not, the CSS scene
+   simply stays behind an opaque canvas. */
+.galactic:has(canvas[data-galactic-render="final"]) .celestial {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+/* ── film grain: 4-step flicker, never smooth noise (that reads as video) ── */
+.galactic-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+  animation: galactic-grain 0.8s steps(4) infinite;
+}
+
+@keyframes galactic-grain {
+  0%   { background-position: 0 0; }
+  25%  { background-position: -37px 21px; }
+  50%  { background-position: 24px -42px; }
+  75%  { background-position: -18px -9px; }
+  100% { background-position: 0 0; }
+}
+
+/* ── vignette: seats the plate, and keeps the reading column quiet ───────── */
+.galactic-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 62% 44%, transparent 38%, rgba(3, 5, 10, 0.55) 78%, rgba(2, 3, 7, 0.86) 100%),
+    linear-gradient(180deg, rgba(3, 5, 10, 0.55) 0%, transparent 18%, transparent 76%, rgba(3, 5, 10, 0.62) 100%);
+}
+
+/* ── obsidian + cosmic glass on the shell chrome ──────────────────────────
+   Every value here is a custom property published by galacticVariants.js, so
+   the ten variants differ without a single per-variant selector. */
+.mb-shell .chat-shell {
+  background: var(--gal-panel);
+  border: 1px solid var(--gal-border);
+  border-radius: var(--gal-radius);
+  box-shadow:
+    0 1px 0 var(--gal-sheen) inset,
+    0 30px 90px -40px rgba(0, 0, 0, 0.95),
+    0 0 70px -18px var(--gal-glow);
+  backdrop-filter: blur(var(--gal-blur)) saturate(1.18);
+  -webkit-backdrop-filter: blur(var(--gal-blur)) saturate(1.18);
+  grid-template-columns: var(--gal-rail) minmax(0, 1fr);
+}
+
+.mb-shell .chat-shell.rail-hidden { grid-template-columns: 0 minmax(0, 1fr); }
+
+.mb-shell .mb-header {
+  justify-content: var(--gal-align);
+  gap: calc(14px * var(--gal-density));
+}
+
+.mb-shell .mb-chip,
+.mb-shell .mb-focus-chip {
+  background: rgba(10, 14, 24, 0.48);
+  border-color: var(--gal-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+html[data-galactic-chip="rect"] .mb-shell .mb-focus-chip,
+html[data-galactic-chip="rect"] .mb-shell .mb-chip {
+  border-radius: 4px;
+}
+
+.mb-shell .mb-focus-chip.active {
+  color: #0a0d14;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gal-accent) 88%, white),
+    color-mix(in srgb, var(--gal-accent) 72%, black));
+  border-color: color-mix(in srgb, var(--gal-accent) 60%, white);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14) inset,
+    0 0 26px -6px var(--gal-glow);
+}
+
+.mb-shell .chat-send,
+.mb-shell .btn-primary {
+  background: color-mix(in srgb, var(--gal-accent) 82%, black);
+  border-color: color-mix(in srgb, var(--gal-accent) 55%, white);
+  color: #080a10;
+}
+
+.mb-shell .chat-head,
+.mb-shell .chat-stream,
+.mb-shell .chat-composer {
+  background: transparent;
+}
+
+/* a nebula hairline instead of a flat rule */
+.mb-shell .chat-composer {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg,
+    transparent 0%,
+    var(--gal-border) 22%,
+    color-mix(in srgb, var(--gal-accent) 30%, transparent) 60%,
+    transparent 100%) 1;
+}
+
+/* ── reduced motion: no drift, no grain flicker, one static frame ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .galactic-plate { animation: none; }
+  .galactic-grain { animation: none; }
+}
+
+/* ── the fallback also has to look deliberate, not broken ───────────────── */
+html[data-galactic-fallback="1"] .galactic-plate { display: none; }
+
+@media (max-width: 900px) {
+  .galactic-plate { inset: -10%; width: 120%; height: 120%; }
+}
