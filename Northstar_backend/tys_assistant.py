@@ -529,7 +529,7 @@ class CodingWorkerAdapter(Adapter):
 
     name = "coding"
     BASE = os.environ.get("TYS_CODING_URL", "http://127.0.0.1:8080")
-    MODEL = os.environ.get("TYS_CODING_MODEL", "northstaros-qwen3.8:27b")
+    MODEL = os.environ.get("TYS_CODING_MODEL", "northstaros-27b-coder")
     LAUNCHER = os.environ.get("TYS_CODING_LAUNCHER", "scripts/start-northstar-llm.ps1")
     START_TIMEOUT_S = float(os.environ.get("TYS_CODING_START_TIMEOUT_S", "180"))
 
@@ -619,6 +619,8 @@ class CodingWorkerAdapter(Adapter):
                 blocked=True, retriable=True,
                 evidence={"routing": routed})
         params = step.get("params") or {}
+        if str(params.get("mode") or "").lower() == "agent":
+            return self.run_agent(step, task)
         context = list(params.get("_context_files") or [])
         prompt = self._prompt(step, context)
 
@@ -727,6 +729,74 @@ class CodingWorkerAdapter(Adapter):
         finally:
             if started_here:
                 # On demand means on demand: nothing stays resident after the task.
+                report = self._stop()
+                _unload_ollama_brain()
+                setattr(self, "_last_stop", report)
+            if gpu is not None:
+                try:
+                    gpu.release()
+                except Exception:
+                    pass
+
+    def run_agent(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
+        """Run the bounded tool loop (list/read/grep/write/apply_patch/run).
+
+        The loop owns the workspace, the tool allowlist and the acceptance check;
+        this adapter only supplies the model callable's transport lifecycle and
+        maps the result onto Ty's StepResult. Selected per step with
+        ``params.mode = "agent"``; the single-shot path is unchanged.
+        """
+        from agent_kernel.coding_runner import CodingTask, run_coding_task
+
+        params = dict(step.get("params") or {})
+        scope = dict(task.get("scope") or {})
+        workspace = str(params.get("workspace") or scope.get("workspace") or "").strip()
+        if not workspace:
+            return StepResult(
+                False, "coding agent needs a workspace",
+                detail="params.workspace or scope.workspace is required",
+                blocked=True, retriable=True)
+        spec = CodingTask(
+            objective=str(step.get("objective") or task.get("objective") or ""),
+            workspace=workspace,
+            commands=[list(c) for c in (params.get("acceptance_commands") or [])],
+            required_files=[str(f) for f in (params.get("acceptance_files") or [])],
+            max_steps=int(params.get("max_steps") or 12),
+            max_repairs=int(params.get("max_repairs") or 1),
+            required_artifact=str(params.get("required_artifact") or ""),
+            builder=bool(params.get("builder")),
+            scaffold=bool(params.get("scaffold")),
+        )
+
+        gpu = _gpu_lock()
+        if gpu is not None and not gpu.acquire(timeout=5):
+            return StepResult(False, "gpu busy — another heavy job owns the GPU",
+                              detail="gpu_lock_timeout", blocked=True, retriable=True,
+                              evidence={"lock": "render_session"})
+        started_here = False
+        try:
+            if not _port_open("127.0.0.1", 8080):
+                ok, why = self._start()
+                if not ok:
+                    return StepResult(False, "coding worker unavailable", detail=why,
+                                      blocked=True, retriable=True,
+                                      evidence={"launcher": self.LAUNCHER, "reason": why})
+                started_here = True
+            result = run_coding_task(spec)
+            data = result.to_dict()
+            return StepResult(
+                ok=bool(result.ok),
+                summary=(result.summary or "coding agent finished")[:200],
+                detail=(result.error or result.summary or "")[:4000],
+                retriable=not result.ok,
+                artifacts=list(result.files or []),
+                evidence={"agent": data, "worker": self.MODEL, "workspace": workspace},
+            )
+        except Exception as e:  # noqa: BLE001 - surfaced as a step failure
+            return StepResult(False, "coding agent failed", detail=str(e)[:600],
+                              retriable=True)
+        finally:
+            if started_here:
                 report = self._stop()
                 _unload_ollama_brain()
                 setattr(self, "_last_stop", report)
@@ -1382,7 +1452,10 @@ class TysAssistant:
             "queue": {
                 "total": len(tasks),
                 "by_status": by_status,
-                "next": (tasks[0]["id"] if tasks else None),
+                # `next` is the next runnable/resumable task, not merely the
+                # oldest row: a cancelled or done task must never be advertised
+                # as the queue head (it misled an overnight readiness check).
+                "next": ((self.store.next_queued() or {}).get("id")),
             },
             "recovered_on_start": self.recovered,
             "lanes": {name: a.available() for name, a in self.adapters.items()},

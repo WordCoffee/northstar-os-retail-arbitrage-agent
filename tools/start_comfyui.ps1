@@ -16,10 +16,21 @@
 
 param(
     [int]$Port = 8188,
-    [string]$Root = "C:\Users\T2Hol\ComfyUI"
+    [string]$Root = "C:\Users\T2Hol\ComfyUI",
+    # The documented invocation is `tools/start_comfyui.ps1 --cache-none`, but the
+    # flag is always applied below. Accept it (rather than fail parameter binding)
+    # so docs and reality agree; anything else unknown is still refused.
+    [switch]$CacheNone,
+    [Parameter(ValueFromRemainingArguments = $true)][string[]]$Rest
 )
 
 $ErrorActionPreference = "Stop"
+
+$unexpected = @($Rest | Where-Object { $_ -notin @("--cache-none", "-cache-none") })
+if ($unexpected.Count -gt 0) {
+    Write-Error ("Unknown argument(s): {0}. Usage: tools/start_comfyui.ps1 [-Port 8188] [-Root <dir>] [--cache-none]" -f ($unexpected -join " "))
+    exit 2
+}
 $url = "http://127.0.0.1:$Port"
 
 if (Test-NetConnection 127.0.0.1 -Port $Port -InformationLevel Quiet -WarningAction SilentlyContinue) {
