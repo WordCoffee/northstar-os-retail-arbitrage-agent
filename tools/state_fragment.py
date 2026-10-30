@@ -105,7 +105,9 @@ def apply(fragment: Path, overwrite: bool = False) -> int:
         print(f"FAIL: {exc}")
         return 1
 
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    # Microsecond precision: an operator applying several fragments in one
+    # second must not overwrite the previous pre-apply snapshot.
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     BACKUPS.mkdir(parents=True, exist_ok=True)
     backup = BACKUPS / f"00_STATE_{stamp}.json"
     shutil.copy2(STATE, backup)

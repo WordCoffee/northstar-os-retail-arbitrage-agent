@@ -1,4 +1,4 @@
-﻿{
+{
   "test_baseline": {
     "python": "2348 passed, 2 known failures (pre-existing protected-hash drift), 3 skipped, 48 subtests; 2026-09-30 foundation full-suite re-run: 3423 passed, 65 skipped, 1 known failure (test_frozen_file_boundary_is_a_static_rule, pre-existing protected-hash drift), 48 subtests. Item 4 local completion: foundation suite 757 passed / 59 skipped / 48 subtests; admin/tenant/audit/migration/e2e subset 92/0; backup-restore drill test_backup_restore_drill.py 2/0. Full `Northstar_backend` tree re-run 3410 passed / 62 skipped / 23 failed (all 23 failures are PRE-EXISTING in test_proof_batch.py + test_proof_batch_run.py â€” FileNotFoundError: data/scanner-search-cache.json missing fixture file in this env; those two test files are unmodified/clean in git, NOT Item 4 regressions). npm run build: 0 errors.",
     "golden_goose": "511 passed, 0 failures (module suite)",
@@ -2477,6 +2477,161 @@
     "targeted_result": "2/2",
     "postfix_full": "reports/rea_probe/coding_full/20261029T135154Z/summary.json",
     "postfix_result": "20/20",
+    "quality_claim": false
+  },
+  "flux3_install_20261029": {
+    "label": "FLUX 3 Image Klein installed; FLUX 2 and text-correcting vision models removed",
+    "report": "reports/flux3_migration_20261029.md",
+    "gateway": "tools/flux3_gateway.py",
+    "installed": {
+      "diffusion": "C:\\Users\\T2Hol\\ComfyUI\\models\\diffusion_models\\flux3-image-klein-nvfp4.safetensors",
+      "diffusion_gb": 4.92,
+      "text_encoder": "C:\\Users\\T2Hol\\ComfyUI\\models\\text_encoders\\qwen3vl_4b_int8_convrot.safetensors",
+      "text_encoder_gb": 4.52,
+      "vae": "C:\\Users\\T2Hol\\ComfyUI\\models\\vae\\flux2-vae.safetensors",
+      "licence": "FLUX Kommunity License - Qualifying User only; owner attested under $5M revenue 2026-10-28",
+      "source": "public mirror ml-resources/flux-3-image-klein-comfy (official BFL repo is gated)"
+    },
+    "removed": {
+      "bytes": 57187600000,
+      "total_gb": 53.27,
+      "manifest": "backups/models/flux2_removal_20261029T181115Z.json",
+      "items": [
+        "Flux-2-Klein-9B-KV-Q8_0.gguf",
+        "flux-2-klein-4b-Q8_0.gguf",
+        "flux-2-klein-base-9b-Q6_K.gguf",
+        "qwen_3_8b_fp8mixed.safetensors",
+        "qwen_3_4b_fp8_mixed.safetensors",
+        "qwen_2.5_vl_7b_nvfp4.safetensors",
+        "qwen-image-edit-2511-Q4_K_M.gguf",
+        "qwen_image_vae.safetensors",
+        "ultratex_flux2*.safetensors",
+        "flux2_klein_4b_refcontrol_depth.safetensors",
+        "ultratex_flux2_decoder.pt"
+      ],
+      "kept": "vae/flux2-vae.safetensors (FLUX 3 uses this VAE)"
+    },
+    "failed_quant_paths": [
+      "int8-convrot: hostbuf_file_reader_read failed (comfy-aimdo)",
+      "GGUF Q6_K: ComfyUI-GGUF unpatch_model stalls on ComfyUI 0.43"
+    ],
+    "runtime": {
+      "comfyui_from": "e0a32bce",
+      "comfyui_to": "fd7639f4",
+      "reason": "FLUX 3 image support (#17064) landed in between",
+      "rollback": "git -C C:\\Users\\T2Hol\\ComfyUI reset --hard e0a32bce"
+    },
+    "verification": {
+      "gateway_render": "flux3_00001_.png 1024x1024 1.54MB",
+      "studio_render": "356525 bytes 512x512",
+      "tys_task": "tys_1227cbdfc638 done, artifact flux3_00002_.png 1024x1024",
+      "tests": 193,
+      "free_gb_after": 64.65
+    },
+    "quality_claim": false
+  },
+  "install_health_20261029": {
+    "status": "installed — pending operator merge into 00_STATE.json",
+    "what": "Ty's Assistant kernel: engine alignment, one synchronous task contract, p01/p03 remediation, semantic validators, 20-brief benchmark runner.",
+    "commits": [
+      "dcf348b1",
+      "b26ec1e9"
+    ],
+    "engine_alignment": "shared/model-suite.json named the llama.cpp ALIAS northstaros-qwen3.8:27b as the LOCAL model for T1/T2/T3; it is not an Ollama tag, so every local text tier resolved to a model Ollama did not have. Fixed: local -> bojo + local_engine, the never-installed qwen3:14b alternates removed, resolve(installed=...) reports local_model_not_installed, catalog gains text_local_status and local_engines.",
+    "measured_profile": "Ty = Qwen3.8-27B IQ3_XXS + MTP on llama.cpp, -ngl 99, n_ctx_slot 65536, KV q4_0, ~13 GB VRAM, on demand, NOT an Ollama model. Bojo = qwen3.5 1.9B Q8_0 on Ollama, num_gpu 0, ctx 8192, 0 VRAM / ~2.7 GB RAM, serves T1-T3. Live worker log 2026-10-29: 10.5-17.6 ms/token (57-95 tok/s), MTP draft acceptance 0.36-0.83.",
+    "task_contract": "POST /api/admin/tys/tasks/{id}/run is the only execution path: synchronous, admin-gated, 200 with the completed work order plus the kernel evidence as `kernel`. No engine param, no 202, no SSE. docs/TASK_EXECUTION.md.",
+    "p01": "Root cause was acceptance weaker than the scored bar AND a kernel-side circularity: tys_adapter collapsed a step that declared params.acceptance into a single executor_ok assertion, so the lane graded itself. Fixed in three places: _derive_acceptance builds artifact_exists + command verifiers from the work order; _verify_node lets passing acceptance supersede the executor self-report (still fail-closed with no acceptance); coding_agent re-checks after the step budget and reports acceptance_recovered.",
+    "p03": "Workspace.write is atomic (chunked temp -> flush -> fsync -> os.replace) and bounded by write_timeout_s (default 15 s); a stall is a tool error with the target untouched. Step pressure now clears when the declared artifact exists on disk however it was produced.",
+    "write_denylist": "Every lane refuses .env / .env.* / config/chromecontrol_policy_owner.json / config/chromecontrol.json / fixtures/** / tests/fixtures/**. .env.example stays writable.",
+    "semantic_validators": "agent_kernel/content.py: patch hunk arithmetic, required JSON keys, placeholder markers (TODO/TBD/FIXME/XXX), sentence floors, required headings, and unchanged-from-seed. The per-brief spec lives in tools/tys_kernel_bench.py SEMANTICS; eval/projects/ns_proj_20.json was NOT edited.",
+    "benchmark": "tools/tys_kernel_bench.py --all: 20 briefs through run_kernel(coding_agent=True) with JSONL evidence (validator tree, command output, artifact and tree hashes). Measured 19/20, 18/20, 18/20 on isolated sweeps. p01 fails on a miscounted hunk header, p07 on a missing required term — model limits, not validator bugs. 3 briefs (p11/p13/p14) are deterministic tool producers and are recorded as lane=tool.",
+    "verification": "231 passed across kernel/coding/tys/model-router/chat/provider/chromeconnect/bojo suites; 12 new semantic tests; proj_bench harness validation 20/20 evidence 1.0 resume pass; rea_regress --quick PASS; no-amazon 2276 passed 0 failed; chromeconnect 38 passed.",
+    "gates_held": "No Amazon, no spend, no installs, no credential reads, no policy or allowlist change. Worker stopped after every run.",
+    "state_registry_note": "00_STATE.json carries an operator `edit` deny in opencode.json. This entry was therefore written as a fragment and is merged only by the operator (tools/state_fragment.py --apply). The deny was not bypassed.",
+    "reports": [
+      "reports/master_prompt_alignment_20261029.md",
+      "reports/brief_exec_06_20_20261029.md",
+      "reports/spec_reconciliation_engine_tiering_20261029.md"
+    ]
+  },
+  "moe_install_bench_20261029": {
+    "status": "installed + benchmarked — fragment, pending operator merge into 00_STATE.json",
+    "hardware": "RTX 5080 Laptop 16GB VRAM (16303 MiB, 896 GB/s), 16 GB RAM (2x8). Disk 45.8 -> 21.3 GiB free after install.",
+    "removed": "northstaros-qwen3.8:27b (Qwen3.8-27B GSQ-RCO IQ3_XXS-mtp, 9.73 GiB) + .cache. llama-server PID 29288 stopped first. Ollama models untouched (bojo, qwen3.5:2b, qwen2.5vl:7b vision, qwen3-embedding).",
+    "installed": {
+      "coder": "models/northstar-moe/Tiel-Coder-35B-A3B-MTP-UD-IQ3_S.gguf 13.10 GiB, MIT, 35B-A3B + MTP",
+      "creative": "models/northstar-moe/Qwen3.6-35B-A3B-UD-IQ3_S.gguf 14.29 GiB, Apache-2.0, 35B-A3B + MTP"
+    },
+    "architecture_fact": "35B total / ~3B active, 40 layers = 30 linear + 10 full attention, 2 KV heads x 256. KV at 64K q4_0 = 0.35 GiB; 128K adds only 0.35 GiB more.",
+    "config": "scripts/start-northstar-moe.ps1 -Lane coder|creative: -ngl 99 -c 65536 -fa on -ctk q4_0 -ctv q4_0 -np 1 --jinja -b 2048 -ub 512 --spec-type draft-mtp --spec-draft-n-max 8 --spec-draft-p-min 0.8 --temp 0.35. Measured creative peak 14.76 GiB VRAM -> 1.5 GiB headroom.",
+    "bench": "architect prompt (tests/bench/architect_prompt.txt), temp 0.2, n_predict 8192. Thinking ON: 111.5 (coder) / 137.6 (creative) t/s but all 8192 tokens consumed as reasoning -> empty answer. Thinking OFF: coder 123.8 t/s decode / 436.3 pp / 3836 tok; creative 131.2 t/s / 256.4 pp / 4630 tok.",
+    "quality": "Coder delivered partial core (CircuitBreaker, ExponentialBackoff, BoundedQueue) and self-admitted missing worker IPC + placeholder retry loop. Creative delivered an architecture doc with 2 code blocks only. Neither met the fully-implemented/no-placeholder/Jest bar in one shot; needs multi-turn agentic delivery with larger budget.",
+    "ops_findings": "Qwen3.6 instruct model returns stop_type=eos on raw /completion (needs /v1/chat/completions). Harness must read message.reasoning_content separately from message.content.",
+    "artifacts": [
+      "scripts/start-northstar-moe.ps1",
+      "scripts/bench-northstar-moe.ps1",
+      "tests/bench/architect_prompt.txt",
+      "%USERPROFILE%/models/northstar-moe/out_*.md",
+      "reports/moe_migration_bench_20261029.md"
+    ],
+    "agentic_build": "4-round multi-turn build on the coder lane (tools/moe_agentic_build.py, 64K, MTP, thinking off): 15 files / 1,918 lines / 68.9 KB in 2m50s at 106-131 t/s. Validation: npx tsc --noEmit exit 2 - 1 syntax error + 11 strict-type errors (hallucinated receiveMessageOnParentPort, Atomics/SharedArrayBuffer imported from worker_threads, missing RingQueue.isEmpty, Omit<PoolConfig,'workerCount'> then config.workerCount, MockPool/WorkerPool mismatch). Design flaw: queue stores JS object refs via setBigInt64 in SharedArrayBuffer - invalid. 2 placeholder hits. Jest suite (~50 blocks) cannot run because sources do not compile. Verdict: fast, well-shaped, not correct - needs a compile+test gate in any future lane.",
+    "repair_loop": "Generate->tsc->repair loop (tools/moe_repair_loop.py, 3 attempts) on a fresh workspace: generation 127-135 t/s, 15 files; tsc initial 12 errors; repair 1 emitted no files (87 tok), repair 2 fixed 2/12 (6,869 tok), repair 3 emitted no files (202 tok). ATTEMPT_LIMIT_REACHED with 10 errors. No green build. Same failure family: hallucinated worker_threads APIs, import.meta under commonjs, Atomics typed-array mismatch, read-only sharedBuffer.",
+    "repair_loop_perfile": "Per-file isolation run (tools/moe_repair_perfile.py, 6 attempts): 10 errors -> 7 (worker.ts) -> 5 (queue.ts), then attempts 3-6 re-emitted a byte-identical queue.ts (9,802 chars / 2,696 tokens) and stalled. ATTEMPT_LIMIT_REACHED with 5 errors (pool import.meta, queue Atomics import, Number.isPow2, Uint8Array.writeUInt32LE, read-only sharedBuffer). Partial convergence, no green build. Harness note: model drops the '=== FILE:' header on multi-error prompts; parser now falls back to the largest fence.",
+    "repair_loop_v2": "Deterministic fix table (7 patches: sharedBuffer option, Atomics import, isPow2, DataView, ctor SAB, worker passthrough, import.meta->__dirname) took 5->2 errors; 6 model attempts oscillated 2-3 errors (reintroduced Atomics.wait(this.tail) in TaskProcessor); one manual 1ms-sleep replacement => tsc exit 0 GREEN. Jest: backoff+circuit-breaker 22 passed / 6 failed in 1.06s; queue.test and pipeline.test hang (blocking Atomics.wait on main thread, killed at 90s); pool.test exit 1. Verdict: usable only as a draft generator under a repair harness, not self-verifying.",
+    "gates_held": "No Amazon, no spend, no credential reads, no policy/allowlist changes. Download provenance: Tiel (MIT), Qwen3.6-35B-A3B (Apache-2.0), both local-lane."
+  },
+  "tys_ops_20261029": {
+    "label": "Tys Assistant operations layer: hybrid storage, cloud bridge, validation, memory, budgets, self-healing, adaptive UI",
+    "module": "Northstar_backend/tys_ops/",
+    "tests": "Northstar_backend/test_tys_ops.py",
+    "report": "reports/master_execution_stress_test_report.json",
+    "summary": "reports/tys_ops_stress_20261029.md",
+    "components": {
+      "storage": "local-master ledger, free 1GB images + zero video retention, paid 10GB tier, pruning of unprotected media only, mandatory download prompts, session purge",
+      "bridge": "HMAC bearer tokens (TTL + scopes + revocation), offline queue with idempotency and bounded retry, dead letters, monotonic sync envelopes, https-only gateway descriptor",
+      "validators": "headings/sentence floor/placeholders/unchanged-from-seed, JSON keys, unified-diff hunk arithmetic (agent_kernel first), workspace acceptance that outranks self-report",
+      "memory": "hashed 256-dim index with cosine retrieval, extractive budgeted compression, epistemic facts with supersession, conflicts and unlearn",
+      "budgets": "token caps per task/day, VRAM reservation that refuses, UCB1 hyperparameter tuner, feedback router",
+      "selfheal": "read-only diagnostics, safe pid liveness, stale locks, atomic write with verified rollback, conservative JSON repair",
+      "ui": "validated tys.ui.v1 component tree, personalisation by usage, degraded render never drops regions",
+      "stress": "100-profile concurrent load on the real queue, storage thresholds, fault injection, convergence, live gateway burst"
+    },
+    "api_additions": [
+      "GET /api/admin/tys/state?fresh=1 (3s snapshot by default)",
+      "GET /api/admin/tys/ui",
+      "GET /api/admin/tys/storage"
+    ],
+    "test_count": 145,
+    "quality_claim": false
+  },
+  "tys_routing_20261029": {
+    "label": "Tys Assistant routing: visual work intercepted to FLUX 3; coding stays on the coding model",
+    "policy": "Northstar_backend/tys_ops/routing.py",
+    "graphics_lane": "Northstar_backend/tys_ops/graphics.py",
+    "lanes": [
+      "inspect",
+      "coding",
+      "graphics",
+      "browser",
+      "creative"
+    ],
+    "intercepts": [
+      "visual graphics",
+      "UI styling",
+      "image generation",
+      "rendering"
+    ],
+    "never_for_visual": [
+      "coding",
+      "creative"
+    ],
+    "graphics_engine": "FLUX 3 Image Klein via a direct endpoint (FLUX3_SERVER_URL); ComfyUI is not launched",
+    "gpu_discipline": "availability check first, then suspend the MoE coding worker and unload Ollama, then the shared GPU lock",
+    "audit": "routing_intercepted event on submission and on planner output rewrite",
+    "comfy_note": "creative lane remains for video/animation only; image work is refused there with visual_requires_graphics_lane",
+    "tests": "Northstar_backend/test_tys_routing.py",
+    "test_count": 175,
+    "blocker": "FLUX 3 weights are not installed on this machine (STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, STUDIO_FLUX3_VAE unset) and no standalone FLUX 3 endpoint answers at FLUX3_SERVER_URL; visual steps block with flux3_weights_not_installed until the operator installs the weights or points the endpoint at a running FLUX 3 server.",
     "quality_claim": false
   }
 }
