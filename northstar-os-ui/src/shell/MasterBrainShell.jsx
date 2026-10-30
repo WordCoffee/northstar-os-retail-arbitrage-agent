@@ -12,7 +12,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatSurface from '../chat/ChatSurface.jsx'
-import CosmicCanvas from './CosmicCanvas.jsx'
+import CelestialBackdrop from './CelestialBackdrop.jsx'
+import '../styles/celestial.css'
 import { vistaForToday } from './vistas.js'
 import HardwareModal from './HardwareModal.jsx'
 import { useShell } from './ShellContext.jsx'
@@ -85,7 +86,7 @@ export default function MasterBrainShell() {
 
   return (
     <div className="mb-shell" data-testid="mb-shell" data-vista={vistaForToday().id}>
-      <CosmicCanvas active={busy} maxDpr={canvasDpr} themeId={shell.focusId} />
+      <CelestialBackdrop />
       <div className="mb-scrim" aria-hidden="true" />
       <div className="mb-vista-annotation" aria-hidden="true">
         {vistaForToday().name} · vista {vistaForToday().id} of 7
