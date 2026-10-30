@@ -1,0 +1,102 @@
+{
+  "command-deck": {
+    "status": "ok",
+    "name": "Command Deck",
+    "file": "reports\\theme_review\\flux\\01-command-deck.png",
+    "seed": 20261030,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 41.7,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. A dense mission-control dashboard: slim icon rail on the far left, a row of six service tabs across the top (Auto, Create, Grow, Research, Operate, Infrastructure), and a wide central viewport framing a photorealistic lensed black hole with a brilliant gold accretion disc arcing over its shadow. Right column of stacked telemetry cards with tiny sparklines and thin rules. Deep obsidian background, warm gold accent, hairline borders, restrained type. Cinematic, serious, expensive."
+  },
+  "split-cockpit": {
+    "status": "ok",
+    "name": "Split Cockpit",
+    "file": "reports\\theme_review\\flux\\02-split-cockpit.png",
+    "seed": 20261031,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.5,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Three-column layout: left conversation list, centre chat column, right inspector panel with sliders and toggles. Above the columns a wide hero band showing a spiral galaxy seen face-on, cool teal and ice blue, dust lanes dark against luminous arms. Frosted glass panels floating over deep space, soft inner glows, generous white space, thin cyan accent lines, modern sans-serif. Calm and precise."
+  },
+  "bento-services": {
+    "status": "ok",
+    "name": "Bento Services",
+    "file": "reports\\theme_review\\flux\\03-bento-services.png",
+    "seed": 20261032,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.6,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. A bento grid of twelve rounded cards of different sizes on a near-black canvas, each card a service tile with a small icon, a number and a one-line status. Behind the grid, a vast starfield with a distant edge-on galaxy glowing amber across the lower third. Cards are dark smoked glass with 1px light borders and subtle warm rim light. Rounded 20px corners, tight typographic scale. Clean, contemporary, SaaS."
+  },
+  "terminal-observatory": {
+    "status": "ok",
+    "name": "Terminal Observatory",
+    "file": "reports\\theme_review\\flux\\04-terminal-observatory.png",
+    "seed": 20261033,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.5,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Minimal console aesthetic: monospaced type, a thin single-column log stream down the left two thirds, and a narrow right gutter of plain numeric readouts. Almost no chrome, no rounded corners. A restrained starfield with one small bright photon ring in the upper right corner, pale blue-white on true black. Charts rendered as thin single-pixel lines. Quiet, technical, instrument-like, no decoration."
+  },
+  "full-bleed-cinema": {
+    "status": "ok",
+    "name": "Full Bleed Cinema",
+    "file": "reports\\theme_review\\flux\\05-full-bleed-cinema.png",
+    "seed": 20261034,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.5,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. No panels at all: an immersive full-screen black hole, enormous, centred and slightly low, with a razor-thin accretion disc and a hot white photon ring. A single elegant serif headline sits high in the frame with two short lines beneath it, and one slim translucent input bar floats at the bottom centre. Tiny monochrome status text in the corners. Poster composition, vast negative space, dramatic, editorial."
+  },
+  "orbital-map": {
+    "status": "ok",
+    "name": "Orbital Map",
+    "file": "reports\\theme_review\\flux\\06-orbital-map.png",
+    "seed": 20261035,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.4,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Radial interface: a large circular orbital diagram at centre with concentric rings, and eight service nodes placed around the rings connected by thin curved lines. The orbit centre is a small dark sphere with a glowing accretion ring. Left edge has a compact vertical label column; bottom edge a horizontal timeline. Deep indigo palette with violet and pearl highlights, delicate geometry, scientific instrument feel, generous darkness."
+  },
+  "chat-first": {
+    "status": "ok",
+    "name": "Chat First",
+    "file": "reports\\theme_review\\flux\\07-chat-first.png",
+    "seed": 20261036,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.4,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. A chat-first assistant interface: one tall centred conversation column with soft rounded message bubbles, a large multi-line composer pinned at the bottom with an attach icon and a send button, and a narrow left history rail. The background is a deep space field with a soft nebula bloom in magenta and indigo bleeding in from the right edge. Bubbles are dark glass with faint borders, the composer glows softly. Friendly, modern, spacious."
+  },
+  "editorial-atlas": {
+    "status": "ok",
+    "name": "Editorial Atlas",
+    "file": "reports\\theme_review\\flux\\08-editorial-atlas.png",
+    "seed": 20261037,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.4,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Magazine-style layout on a warm near-black background: a very large elegant serif headline on the left half, a narrow column of body text beneath it, and a tall portrait image of a spiral galaxy on the right half with a thin gold rule framing it. A horizontal index bar of numbered sections runs across the top. Print-inspired typography, wide margins, generous leading, muted cream text, one gold accent. Cultured, expensive, calm."
+  },
+  "mission-board": {
+    "status": "ok",
+    "name": "Mission Board",
+    "file": "reports\\theme_review\\flux\\09-mission-board.png",
+    "seed": 20261038,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.4,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Kanban board across the whole frame: five columns of task cards with priority dots and small avatars, a top bar with search and filter chips, and a narrow left navigation rail with icons. Behind everything, a dark nebula field in burnt orange and rust with a small black hole silhouette low and to the right. Cards are charcoal with thin warm borders and 8px corners. Dense, operational, confident."
+  },
+  "glass-layers": {
+    "status": "ok",
+    "name": "Glass Layers",
+    "file": "reports\\theme_review\\flux\\10-glass-layers.png",
+    "seed": 20261039,
+    "size": "1216x688",
+    "steps": 26,
+    "seconds": 27.4,
+    "prompt": "Professional desktop application user interface design, full-bleed screenshot, flat orthographic front view, no device frame, high-end product design, precise alignment, realistic UI chrome, vector-crisp panels, legible small labels. Layered frosted-glass composition: three large translucent panels overlapping at slight offsets, each with a blurred luminous galaxy visible through it, creating depth. Top panel holds a compact toolbar, middle panel a wide content area, bottom panel a media strip of thumbnails. Magenta, lavender and pale cyan light bleeds through the glass with strong bokeh and refraction. Very soft edges, high blur, 28px radii, futuristic and elegant."
+  }
+}
