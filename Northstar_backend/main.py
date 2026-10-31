@@ -1162,6 +1162,101 @@ async def live_status():
     }, service="status")
 
 
+@app.get("/api/v1/galactic/state")
+async def galactic_state():
+    """Galactic deck telemetry: real local lanes, KV capacity and hardware.
+
+    Returned values are read from the local model suite and a short health
+    probe. A lane that is down is reported as idle/offline. Context *usage* is
+    null unless llama-server's /slots endpoint supplies it; the deck hatches
+    unknown rows rather than inventing a percentage.
+    """
+    import json as _json
+    import urllib.request as _url
+    from pathlib import Path as _Path
+
+    root = _Path(__file__).resolve().parent.parent
+    try:
+        suite = _json.loads((root / "shared" / "model-suite.json").read_text(encoding="utf-8"))
+        engines = suite.get("local_engines", {}) or {}
+    except Exception:
+        engines = {}
+    try:
+        import lane_policy as _lp
+        lanes = _lp.describe()
+    except Exception:
+        lanes = {}
+
+    def _health(url: str) -> bool:
+        try:
+            with _url.urlopen(url, timeout=0.7) as response:
+                return 200 <= int(getattr(response, "status", 200)) < 300
+        except Exception:
+            return False
+
+    ty_up = _health("http://127.0.0.1:8080/health")
+    flux_up = _health("http://127.0.0.1:8188/system_stats")
+    ty_used = None
+    try:
+        with _url.urlopen("http://127.0.0.1:8080/slots", timeout=0.8) as response:
+            slots = _json.loads(response.read().decode("utf-8"))
+        if isinstance(slots, list):
+            for slot in slots:
+                if isinstance(slot, dict) and isinstance(slot.get("n_past"), int):
+                    ty_used = slot["n_past"]
+                    break
+    except Exception:
+        ty_used = None
+
+    try:
+        import hardware_guard as _hg
+        hw = _hg.snapshot()
+        gpu = {"ok": hw.ok, "used_mb": hw.used_mb, "total_mb": hw.total_mb,
+               "temp_c": hw.temp_c, "ratio": hw.ratio, "reason": hw.reason}
+    except Exception:
+        gpu = {"ok": False, "reason": "hardware guard unavailable"}
+
+    ty = engines.get("ty", {}) or {}
+    bojo = engines.get("bojo", {}) or {}
+    ty_context = int(ty.get("context_tokens") or 0) or None
+    bojo_context = int(bojo.get("context_tokens") or 0) or None
+    nodes = [
+        {"id": "master", "label": "Master Brain", "role": "orchestrator",
+         "status": "ready", "model": "orchestrator"},
+        {"id": "ty", "label": "Ty's Assistant", "role": "compute",
+         "status": "ready" if ty_up else "idle",
+         "model": ty.get("alias") or "northstaros-27b-coder",
+         "context_tokens": ty_context, "kv_cache": ty.get("kv_cache")},
+        {"id": "bojo", "label": "Bojo", "role": "worker",
+         "status": "installed", "model": bojo.get("model") or "bojo",
+         "context_tokens": bojo_context},
+        {"id": "flux", "label": "FLUX 3 Klein", "role": "media",
+         "status": "ready" if flux_up else "offline", "model": "flux3"},
+        {"id": "chrome", "label": "Chrome Connect", "role": "browser",
+         "status": "gated", "model": "controller"},
+        {"id": "memory", "label": "Memory Bank", "role": "memory",
+         "status": "ready", "model": "context"},
+        {"id": "ast", "label": "AST Engine", "role": "worker",
+         "status": "ready", "model": "symbol edit"},
+    ]
+    links = [["master", "ty"], ["master", "bojo"], ["master", "flux"],
+             ["master", "chrome"], ["master", "memory"], ["master", "ast"],
+             ["ty", "ast"]]
+    kv = [
+        {"id": "ty", "label": "Ty 27B", "role": "compute",
+         "context_total": ty_context, "context_used": ty_used,
+         "kv_cache": ty.get("kv_cache")},
+        {"id": "bojo", "label": "Bojo", "role": "worker",
+         "context_total": bojo_context, "context_used": None,
+         "kv_cache": bojo.get("kv_cache")},
+    ]
+    return _bff({"telemetry": "live" if (ty_up or flux_up) else "offline",
+                 "nodes": nodes, "links": links, "kv": kv,
+                 "lanes": lanes, "hardware": {"gpu": gpu},
+                 "source": "shared/model-suite.json + local health probes"},
+                service="galactic")
+
+
 @app.get("/api/v1/catalog/stocked")
 async def catalog_stocked(limit: int = 100):
     """List fresh live-stocked products from the warehouse (offline read)."""

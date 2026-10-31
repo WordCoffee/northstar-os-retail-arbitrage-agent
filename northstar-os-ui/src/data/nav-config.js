@@ -37,6 +37,14 @@ const RAW_GROUPS = [
     { id: 'master-brain', label: 'Master Brain', route: '/master-brain', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'improvement', label: 'Improvement', route: '/improvement', roles: ['operator', 'platform_admin'], status: 'Internal' },
     { id: 'gilded-void', label: 'Gilded Void', route: '/baroque', roles: ['operator', 'platform_admin'], status: 'Internal' },
+
+    {
+      id: 'galactic-deck',
+      label: 'Galactic Deck',
+      route: '/galactic',
+      roles: ['operator', 'platform_admin'],
+      status: 'Internal',
+    }
   ]},
   { id: 'role-specific', label: 'Account & Admin', icon: 'users', sections: [
     { id: 'customer-workspace', label: 'Customer Workspace', route: '/customer-workspace', roles: ['customer'] },

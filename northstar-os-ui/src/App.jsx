@@ -56,6 +56,7 @@ import AccountSuspended from './pages/customer/Suspended.jsx'
 import AccountDowngraded from './pages/customer/Downgraded.jsx'
 import CustomerReaccept from './pages/customer/Reaccept.jsx'
 import NotFound from './pages/NotFound.jsx'
+import GalacticDeck from './pages/internal/GalacticDeck.jsx'
 
 // The session carries a BACKEND role (organization_owner, operator,
 // internal_platform_admin...). The shell's checks below compare against the UI
@@ -138,6 +139,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/provider-adapters" element={<ProviderAdapters />} />
       <Route path="/master-brain" element={<MasterBrain />} />
       <Route path="/improvement" element={<Improvement />} />
+      <Route path="/galactic" element={<GalacticDeck />} />
       <Route path="/baroque" element={<GildedVoid />} />
       <Route path="/customer-workspace" element={<CustomerWorkspace />} />
       <Route path="/beta-ops" element={<BetaOpsOverview />} />
@@ -189,6 +191,8 @@ const SIMPLE_KEEP_ADVANCED = [
   // The Gilded Void is a visual-system surface, not a room — it keeps its
   // real page in Simple mode like the account/legal/admin surfaces above.
   /^\/baroque(\/|$)/,
+
+  new RegExp("^/galactic(/|$)"),
 ]
 
 function ModeGate({ children }) {

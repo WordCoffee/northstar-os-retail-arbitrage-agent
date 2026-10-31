@@ -283,6 +283,8 @@ def _apply_edit(source: str, edit: Edit) -> str:
         stmts = _parse_block(edit.source, label=op)
         rendered = _indent(textwrap.dedent(str(edit.source)).strip("\n"), indent)
         at = start - 1 if op == "add_before" else end
+        if op == "add_after" and at > 0 and lines[at - 1].strip():
+            rendered = "\n" + rendered
         if at < len(lines) and lines[at].strip():
             rendered = rendered + "\n\n"
         out = "".join(_insert(lines, at, rendered))

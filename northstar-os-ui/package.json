@@ -10,7 +10,8 @@
     "preview": "vite preview --port 8101 --strictPort",
     "test:ui": "node --test \"src/lib/*.test.js\"",
     "test:contrast": "node scripts/check-contrast.mjs",
-    "test": "npm run test:ui && npm run test:contrast"
+    "test": "npm run test:ui && npm run test:contrast && npm run verify:galactic",
+    "verify:galactic": "node scripts/verify-galactic-deck.cjs"
   },
   "dependencies": {
     "react": "^18.3.1",
