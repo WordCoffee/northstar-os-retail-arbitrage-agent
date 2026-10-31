@@ -358,7 +358,54 @@ def _box_face(mask: np.ndarray, gray: np.ndarray, *, inset_x: float,
 
 # ── bottle / tube ───────────────────────────────────────────────────────────
 
-def _cylinder_band(mask: np.ndarray, kind: str, *, wrap_fraction: float,
+def _horizontal_seams(gray: np.ndarray, mask: np.ndarray,
+                      band_top: int, band_bottom: int
+                      ) -> Tuple[Optional[int], Optional[int]]:
+    """Strong horizontal seams near the ends of a cylinder band.
+
+    A cap or a crimp can have almost the same diameter as the body, so width
+    alone cannot find the boundary. The seam is still a horizontal luminance
+    step, and it is exactly what must stop the label. Only the outer quarter of
+    the band is searched, so a mid-body crease cannot split the printable area.
+    """
+    height = band_bottom - band_top
+    if height < 32:
+        return None, None
+    gy = np.abs(np.diff(gray, axis=0))
+    mid = band_top + height // 2
+    xs = np.flatnonzero(mask[mid])
+    if xs.size < 20:
+        return None, None
+    lo = int(xs[0] + 0.20 * (xs[-1] - xs[0]))
+    hi = int(xs[-1] - 0.20 * (xs[-1] - xs[0]))
+    if hi - lo < 12:
+        return None, None
+    prof = gy[:, lo:hi].sum(axis=1)
+    quarter = max(8, int(height * 0.25))
+
+    def _peak(a: int, b: int) -> Optional[int]:
+        a, b = max(0, a), min(prof.size, b)
+        if b - a < 8:
+            return None
+        seg = prof[a:b]
+        med = float(np.median(seg))
+        peak = float(seg.max())
+        if peak < max(4.0 * med, 0.03 * float(seg.sum() or 1.0)):
+            return None
+        row = a + int(np.argmax(seg))
+        # A seam is a line, not a gradual ramp: require separation from the rest.
+        rest = np.delete(seg, np.arange(max(0, row - a - 3),
+                                        min(seg.size, row - a + 4)))
+        if rest.size and peak < 2.0 * float(np.median(rest)):
+            return None
+        return row
+
+    top = _peak(band_top, band_top + quarter)
+    bottom = _peak(band_bottom - quarter, band_bottom)
+    return top, bottom
+
+
+def _cylinder_band(mask: np.ndarray, gray: np.ndarray, kind: str, *, wrap_fraction: float,
                    inset_top: float, inset_bottom: float,
                    band_tol: float = 0.035) -> Dict[str, Any]:
     """Find the longest near-constant-width band of a bottle/tube silhouette.
@@ -415,6 +462,27 @@ def _cylinder_band(mask: np.ndarray, kind: str, *, wrap_fraction: float,
         run_start, run_end = best
     if run_start < 0 or (run_end - run_start + 1) < max(24, int(height * MIN_BAND_SHARE)):
         raise SurfaceNotMeasurable("no stable cylindrical band long enough to label")
+
+    # A cap or a crimp can sit inside the stable width run when its diameter is
+    # close to the body's. A width STEP is still a step: split the run there and
+    # keep the longer side, so the label cannot climb onto the cap.
+    raw_diff = np.abs(np.diff(width))
+    step = np.nan_to_num(raw_diff, nan=0.0)
+    inner = [int(j) for j in np.flatnonzero(step > max(2.0, 0.02 * median_w))
+             if run_start + 8 < int(j) < run_end - 8]
+    if inner:
+        cut = max(inner, key=lambda j: float(step[j]))
+        left, right = (run_start, cut - 1), (cut, run_end)
+        run_start, run_end = max((left, right), key=lambda s: s[1] - s[0])
+
+    if kind == "tube":
+        # A tube's cap can share the body's diameter; a bottle's base is part of
+        # the printable body, so only tubes get the horizontal-seam trim.
+        seam_top, seam_bottom = _horizontal_seams(gray, mask, run_start, run_end)
+        if seam_top is not None and seam_top + 8 < run_end:
+            run_start = seam_top + 2
+        if seam_bottom is not None and seam_bottom - 8 > run_start:
+            run_end = seam_bottom - 2
 
     rows = np.arange(run_start, run_end + 1)
     lfit = _fit_robust(rows.astype(float), left[rows], degree=1)
@@ -563,7 +631,7 @@ def measure_surface(plate: Any, kind: str = "pouch", *,
                         inset_bottom=inset_bottom)
         factor = 0.90 if out["method"] == "box-front" else 1.0
     else:
-        out = _cylinder_band(mask, fmt, wrap_fraction=wrap_fraction,
+        out = _cylinder_band(mask, gray, fmt, wrap_fraction=wrap_fraction,
                              inset_top=inset_top, inset_bottom=inset_bottom,
                              band_tol=band_tol)
         factor = 0.95 if out.get("convexity") is None else 1.0
