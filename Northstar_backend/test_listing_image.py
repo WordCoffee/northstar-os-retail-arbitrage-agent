@@ -63,6 +63,18 @@ def test_shadow_darkens_under_the_subject_but_not_the_corners():
     assert px[0, 0] == (255, 255, 255)
 
 
+def test_shadow_is_soft_not_a_solid_blob():
+    png = hero_on_white(_cutout(), size=600, shadow=True)
+    img = Image.open(BytesIO(png)).convert("RGB")
+    px = img.load()
+    w, h = img.size
+    column = [px[w // 2, y][0] for y in range(int(h * 0.82), int(h * 0.99))]
+    tones = set(column)
+    # A sticker has two tones; a real contact shadow has a ramp and stays light.
+    assert len(tones) >= 4, sorted(tones)
+    assert 190 <= min(column) < 245, min(column)
+
+
 def test_empty_input_is_refused_not_papered_over():
     blank = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
     buf = BytesIO()

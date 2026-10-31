@@ -10,6 +10,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import SectionWorkspace from './SectionWorkspace.jsx'
 import IndexingRegister from './IndexingRegister.jsx'
+import AplusLayoutPreview from './AplusLayoutPreview.jsx'
 import { SPEC_GROUPS, AMAZON_CAPS } from '../../../studio/engine/specRegistry.js'
 
 const GROUPS = SPEC_GROUPS.filter(g => ['A+ Basic', 'A+ Premium', 'Brand Story'].includes(g.id))
@@ -64,17 +65,22 @@ const SLOTS = [
 export default function APlus() {
   const location = useLocation()
   const navigate = useNavigate()
-  const view = new URLSearchParams(location.search).get('view') === 'indexing' ? 'indexing' : 'modules'
-  const go = (v) => navigate(`/design-studio?section=aplus${v === 'indexing' ? '&view=indexing' : ''}`, { replace: true })
+  const view = new URLSearchParams(location.search).get('view') === 'indexing'
+    ? 'indexing'
+    : new URLSearchParams(location.search).get('view') === 'layout' ? 'layout' : 'modules'
+  const go = (v) => navigate(`/design-studio?section=aplus${v === 'modules' ? '' : `&view=${v}`}`, { replace: true })
 
   return (
     <>
       <div style={{ display: 'flex', gap: 8, padding: '10px 0 0' }}>
         <button className={`btn btn-sm ${view === 'modules' ? 'btn-primary' : ''}`} onClick={() => go('modules')}>Modules</button>
+        <button className={`btn btn-sm ${view === 'layout' ? 'btn-primary' : ''}`} onClick={() => go('layout')} data-testid="sub-aplus-layout">Module layout</button>
         <button className={`btn btn-sm ${view === 'indexing' ? 'btn-primary' : ''}`} onClick={() => go('indexing')} data-testid="sub-indexing-register">Indexing claims</button>
       </div>
       {view === 'indexing' ? (
         <IndexingRegister />
+      ) : view === 'layout' ? (
+        <AplusLayoutPreview />
       ) : (
         <SectionWorkspace
           title="A+ / Brand Story"

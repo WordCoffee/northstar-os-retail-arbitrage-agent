@@ -67,6 +67,11 @@ def hero_on_white(
     subject = subject.resize((sw, sh), Image.LANCZOS)
 
     if shadow:
+        # Lift the subject so its contact shadow has room to fall BELOW it.
+        # Centred with no lift, the shadow is hidden behind the product and the
+        # "shadow" only reads as a cropped band at the bottom of the frame.
+        lift = int(size * 0.03)
+        y0, y1 = y0 - lift, y1 - lift
         canvas = _with_shadow(canvas, (x0, y0, x1, y1), strength=shadow_strength)
 
     canvas.paste(subject, (x0, y0), subject)
@@ -81,34 +86,40 @@ def _with_shadow(
     *,
     strength: float = 0.55,
 ) -> Image.Image:
-    """Soft ellipse under the product's footprint. Never reaches the corners."""
+    """Soft contact shadow under the product's footprint. Never reaches the corners.
+
+    Drawn as a heavily blurred BLACK alpha layer composited onto white - that
+    gives a real gradient. An opaque grey ellipse reads as a sticker, which is
+    what the first end-to-end run produced.
+    """
     x0, y0, x1, y1 = box
     w, h = x1 - x0, y1 - y0
     cx = (x0 + x1) // 2
-    cy = y1 - max(1, h // 40)
-    rx = int(w * 0.46)
-    ry = max(4, int(h * 0.05))
+    cy = y1 - max(2, h // 50)
+    rx = max(8, int(w * 0.40))
+    ry = max(3, int(h * 0.03))
 
     layer = Image.new("L", canvas.size, 0)
-    draw = ImageDraw.Draw(layer)
-    draw.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=int(140 * max(0.0, min(1.0, strength))))
-    layer = layer.filter(ImageFilter.GaussianBlur(max(4, ry)))
+    ImageDraw.Draw(layer).ellipse(
+        (cx - rx, cy - ry, cx + rx, cy + ry),
+        fill=int(70 * max(0.0, min(1.0, strength))),
+    )
+    layer = layer.filter(ImageFilter.GaussianBlur(max(6, int(rx * 0.30))))
 
     # A blurred ellipse has long tails. Zero the outer border so a corner sample
     # can never find a grey pixel - the listing rule is about the CORNERS.
-    border = max(6, ry // 2)
+    border = 8
     zero = ImageDraw.Draw(layer)
     zero.rectangle((0, 0, canvas.size[0] - 1, border), fill=0)
     zero.rectangle((0, 0, border, canvas.size[1] - 1), fill=0)
     zero.rectangle((canvas.size[0] - border, 0, canvas.size[0] - 1, canvas.size[1] - 1), fill=0)
     zero.rectangle((0, canvas.size[1] - border, canvas.size[0] - 1, canvas.size[1] - 1), fill=0)
 
-    # Multiply only where the blur exists; the corners receive 0 and stay 255.
-    grey = Image.new("RGB", canvas.size, WHITE)
-    grey.putalpha(layer)
-    shadowed = Image.composite(Image.new("RGB", canvas.size, (215, 215, 215)), canvas, layer.point(lambda v: 255 if v > 6 else 0))
-    # Blend the soft edge back in so the shadow has a gradient, not a hard rim.
-    return Image.blend(canvas, shadowed, 0.9)
+    shade = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    shade.putalpha(layer)
+    base = canvas.convert("RGBA")
+    base.alpha_composite(shade)
+    return base.convert("RGB")
 
 
 def audit_white(png_bytes: bytes, *, corners: int = 8) -> dict:
