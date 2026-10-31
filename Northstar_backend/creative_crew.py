@@ -113,9 +113,13 @@ def llm():
         return None
     try:
         from crewai import LLM  # type: ignore
-        return LLM(model=os.environ.get("CREW_MODEL", "openai/northstaros-27b-coder"),
+        model = (os.environ.get("CREW_MODEL")
+                 or os.environ.get("CREW_MODEL_NAME")
+                 or "openai/northstaros-27b-coder")
+        return LLM(model=model,
                    base_url=base.rstrip("/"),
-                   api_key=os.environ.get("CREW_API_KEY", "local"))
+                   api_key=(os.environ.get("CREW_API_KEY")
+                            or os.environ.get("OPENAI_API_KEY") or "local"))
     except Exception:  # noqa: BLE001
         return None
 
@@ -180,6 +184,25 @@ def main(argv: Optional[List[str]] = None) -> int:
             "tools": [t.name for t in tools()],
             "llm_configured": llm() is not None,
         }, indent=2))
+        return 0
+    if "--author" in args:
+        brief = args[args.index("--author") + 1] if len(args) > args.index("--author") + 1 else "{}"
+        if not available():
+            print(json.dumps({"error": "crewai_not_installed"}))
+            return 2
+        architect, _evaluator = build_prompt_crew()
+        task = Task(
+            description=("Write ONE FLUX 3 prompt for a pristine, UNPRINTED packaging plate. "
+                         "Brief JSON: " + brief + ". No brand name, no net weight, no legal "
+                         "copy, no lettering of any kind. Describe only form, material, light "
+                         "and background. Under 60 words."),
+            expected_output="One prompt sentence-block, under 60 words.",
+            agent=architect,
+        )
+        crew = Crew(agents=[architect], tasks=[task], process=Process.sequential,
+                    memory=False, cache=False, verbose=False)
+        out = crew.kickoff()
+        print(json.dumps({"ok": True, "prompt": str(out).strip()[:800]}, indent=2))
         return 0
     if not available():
         print(json.dumps({"error": "crewai_not_installed"}))

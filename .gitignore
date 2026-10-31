@@ -94,3 +94,6 @@ tests/e2e/storageState/
 # The CSV keeps the URL and a read note; the files are not redistributed.
 research/assistant_intelligence_20261028/readmes/
 
+
+# snapshot local manifests (full untracked path lists; never committed)
+state/snapshots/*.local.json

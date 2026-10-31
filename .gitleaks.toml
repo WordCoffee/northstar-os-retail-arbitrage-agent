@@ -27,3 +27,6 @@ paths = ['''docs[\\/]API_REFERENCE\.md$''']
 [[allowlists]]
 description = "FP: retired creative_pipeline.py model-registry keys (e.g. \"key\": \"<model-id>\")"
 paths = ['''creative_pipeline\.py$''']
+[[allowlists]]
+description = "FP: creative_crew.py reads the OpenAI API-key env var NAME to pass it to a local llama.cpp endpoint; the value is never present in the file and defaults to a literal 'local'"
+paths = ['''Northstar_backend[\\/]creative_crew\.py$''']

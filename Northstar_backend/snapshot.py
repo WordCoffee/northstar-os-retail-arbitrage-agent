@@ -72,10 +72,19 @@ def snapshot(root: Path | str, label: str = "loop") -> Dict[str, object]:
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "root": str(root),
     }
-    record["untracked"] = manifest(_untracked(root))
+    # The full path list is written beside the record but kept OUT of it: a
+    # 1.4 MB manifest of every untracked path does not belong in a committed
+    # state file (and trips the secret scanner on fixture names).
+    untracked = _untracked(root)
+    record["untracked_count"] = len(untracked)
+    record["untracked_digest"] = hashlib.sha256(
+        "\n".join(sorted(untracked)).encode("utf-8")).hexdigest()
     out_dir = root / SNAPSHOT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"{label}.json").write_text(json.dumps(record, indent=2), encoding="utf-8")
+    if untracked:
+        (out_dir / f"{label}.local.json").write_text(
+            json.dumps({"label": label, "untracked": untracked}, indent=2), encoding="utf-8")
     return record
 
 

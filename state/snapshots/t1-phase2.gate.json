@@ -1,0 +1,17 @@
+{
+  "label": "t1-phase2",
+  "snapshot": "18f5b6ca7b30c666ff83011c162cf707f6603dff",
+  "ok": true,
+  "results": [
+    {
+      "command": "python -m pytest Northstar_backend/test_snapshot.py -q",
+      "exit": 0,
+      "seconds": 3.7,
+      "tail": [
+        "...........                                                              [100%]",
+        "11 passed in 2.50s"
+      ]
+    }
+  ],
+  "rolled_back": false
+}
