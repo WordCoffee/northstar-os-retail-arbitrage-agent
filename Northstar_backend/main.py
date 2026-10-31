@@ -1294,6 +1294,41 @@ async def galactic_events(request: Request):
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
 
+class HitlDecision(BaseModel):
+    operator: str = "operator"
+    note: str = ""
+
+
+def _hitl_root() -> Path:
+    """The local approval queue root. Never taken from the request."""
+    return Path(__file__).resolve().parent.parent
+
+
+@app.get("/api/v1/hitl/pending")
+async def hitl_pending():
+    import agent_kernel.hitl as _hitl
+    return _bff({"requests": _hitl.pending(_hitl_root())}, service="hitl")
+
+
+@app.post("/api/v1/hitl/{request_id}/approve")
+async def hitl_approve(request_id: str, body: HitlDecision):
+    import agent_kernel.hitl as _hitl
+    try:
+        record = _hitl.approve(_hitl_root(), request_id, body.operator, body.note)
+    except _hitl.ApprovalRequired as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return _bff({"request": record}, service="hitl")
+
+
+@app.post("/api/v1/hitl/{request_id}/deny")
+async def hitl_deny(request_id: str, body: HitlDecision):
+    import agent_kernel.hitl as _hitl
+    try:
+        record = _hitl.deny(_hitl_root(), request_id, body.operator, body.note)
+    except _hitl.ApprovalRequired as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return _bff({"request": record}, service="hitl")
+
 
 @app.get("/api/v1/catalog/stocked")
 async def catalog_stocked(limit: int = 100):

@@ -13,6 +13,7 @@ const files = [
   'src/galactic/NodeTopology.jsx',
   'src/galactic/KVCacheHeatmap.jsx',
   'src/galactic/EventStream.jsx',
+  'src/galactic/HitlQueue.jsx',
   'src/pages/internal/GalacticDeck.jsx',
   'src/lib/galacticState.js',
   'src/App.jsx',
@@ -66,7 +67,7 @@ for (const symbol of ['createEventBus', 'layoutTopology', 'heatmapCells', 'pulse
 check(!state.includes('fetch('), 'galacticState stays pure (no fetch)')
 
 const css = fs.readFileSync(path.join(ROOT, 'src/galactic/galactic.css'), 'utf8')
-for (const selector of ['.gx-topology', '.gx-heatmap', '.gx-events', '.gx-node', '.gx-cell']) {
+for (const selector of ['.gx-topology', '.gx-heatmap', '.gx-events', '.gx-node', '.gx-cell', '.gx-hitl']) {
   check(css.includes(selector), `CSS defines ${selector}`)
 }
 check(css.includes('prefers-reduced-motion: reduce'), 'CSS honours reduced motion')
@@ -78,6 +79,12 @@ check(deck.includes('/api/v1/galactic/events'), 'deck targets the SSE endpoint')
 check(deck.includes('new EventSource'), 'deck subscribes to the SSE stream')
 check(deck.includes("stream === 'open'"), 'deck falls back to polling when SSE is down')
 check(deck.includes('createEventBus()'), 'deck owns a unified event bus')
+
+const hitl = fs.readFileSync(path.join(ROOT, 'src/galactic/HitlQueue.jsx'), 'utf8')
+check(hitl.includes('/api/v1/hitl/pending'), 'HITL panel reads the pending queue')
+check(hitl.includes("`/api/v1/hitl/${encodeURIComponent(request.id)}/${action}`"),
+  'HITL panel posts approve/deny')
+check(hitl.includes('hitl.${action}'), 'HITL decisions publish to the event bus')
 
 console.log(failures === 0
   ? 'GALACTIC DECK VERIFIER: all checks pass'

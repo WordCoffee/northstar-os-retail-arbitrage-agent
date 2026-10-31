@@ -131,13 +131,15 @@
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.9fr);
   grid-template-areas:
     "topology detail"
-    "heat events";
+    "heat hitl"
+    "events events";
   gap: 16px;
 }
 
 .gx-panel--topology { grid-area: topology; }
 .gx-panel--detail { grid-area: detail; }
 .gx-panel--heat { grid-area: heat; }
+.gx-panel--hitl { grid-area: hitl; }
 .gx-panel--events { grid-area: events; }
 
 .gx-panel {
@@ -327,6 +329,26 @@
 .gx-cell.is-partial { background: linear-gradient(90deg, var(--gx-violet) 50%, rgba(126, 160, 255, 0.10) 50%); }
 .gx-cell.is-unknown { background: repeating-linear-gradient(45deg, rgba(143, 167, 200, 0.45) 0 2px, transparent 2px 5px); }
 
+/* ── HITL queue ─────────────────────────────────────────────────────────── */
+.gx-hitl { position: relative; z-index: 1; }
+.gx-hitl-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 10px 0; }
+.gx-hitl-count { color: var(--gx-muted); font-family: var(--font-mono, monospace); font-size: 10px; }
+.gx-hitl-list { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow: auto; }
+.gx-hitl-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(126, 160, 255, 0.09);
+}
+.gx-hitl-body { min-width: 0; }
+.gx-hitl-body strong { display: block; color: var(--gx-ink); font-size: 12px; overflow-wrap: anywhere; }
+.gx-hitl-body span { color: var(--gx-faint); font-family: var(--font-mono, monospace); font-size: 10px; }
+.gx-hitl-actions { display: flex; gap: 6px; flex: none; }
+.gx-hitl-actions .gx-btn { min-height: 28px; padding: 4px 9px; font-size: 11px; }
+.gx-hitl-error { color: var(--gx-rose); font-size: 11px; }
+
 /* ── event stream ───────────────────────────────────────────────────────── */
 .gx-events { position: relative; z-index: 1; }
 .gx-events-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
@@ -396,7 +418,7 @@
 @media (max-width: 1040px) {
   .gx-grid {
     grid-template-columns: 1fr;
-    grid-template-areas: "topology" "detail" "heat" "events";
+    grid-template-areas: "topology" "detail" "heat" "hitl" "events";
   }
   .gx-header { align-items: flex-start; flex-direction: column; }
   .gx-status-row { justify-content: flex-start; }

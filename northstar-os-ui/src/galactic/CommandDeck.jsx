@@ -3,6 +3,7 @@ import { createEventBus, pulseFor } from '../lib/galacticState.js'
 import NodeTopology from './NodeTopology.jsx'
 import KVCacheHeatmap from './KVCacheHeatmap.jsx'
 import EventStream from './EventStream.jsx'
+import HitlQueue from './HitlQueue.jsx'
 import './galactic.css'
 
 // Fallback is deliberately labelled: the deck still renders offline, but it
@@ -249,6 +250,16 @@ export default function CommandDeck() {
             </div>
           </div>
           <KVCacheHeatmap kv={snapshot.kv || []} />
+        </section>
+
+        <section className="gx-panel gx-panel--hitl" aria-labelledby="gx-hitl-title">
+          <div className="gx-panel-head">
+            <div>
+              <span className="gx-eyebrow">Operator gate</span>
+              <h3 id="gx-hitl-title">HITL approvals</h3>
+            </div>
+          </div>
+          <HitlQueue bus={bus} />
         </section>
 
         <section className="gx-panel gx-panel--events" aria-labelledby="gx-events-title">

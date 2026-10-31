@@ -16,6 +16,7 @@ GalacticDeck (page, /galactic)
    ├─ NodeTopology              SVG; orchestrator centre, workers on a ring
    ├─ SelectedNodePanel         role/model/context/KV + Focus/Pulse/Replay
    ├─ KVCacheHeatmap            one row per lane; unknown usage is hatched
+   ├─ HitlQueue                local approval queue; approve/deny
    └─ EventStream               filterable ordered bus view
 ```
 
@@ -48,6 +49,13 @@ one `snapshot` event every 8 s. `CommandDeck` subscribes with `EventSource` and
 only falls back to the 8 s poll when EventSource is unavailable or the stream
 errors. Both paths publish into the same in-browser bus, so the event audit view
 has one source of truth.
+
+The HITL panel reads `GET /api/v1/hitl/pending` and posts
+`POST /api/v1/hitl/{id}/approve|deny` against the local queue
+(`agent_kernel.hitl`). The queue root is the repo, never a path from the
+request. A decision is final; the panel refreshes and publishes
+`hitl.approve`/`hitl.deny` to the bus. Matrix/AgentTeams is not installed, so
+this is the local command surface, not a room bridge.
 
 The backend endpoint is read-only and fast: model-suite read, lane-policy
 describe, a 0.7 s health probe for Ty (`:8080`) and FLUX (`:8188`), an optional
@@ -101,8 +109,9 @@ without changing the components.
 3. `npm run verify:galactic` — every new JSX/JS parses, route/nav/state/CSS
    contracts present, no `fetch` in the pure module.
 4. `npm run build` — 0 errors.
-5. `pytest Northstar_backend/test_galactic_state.py` — endpoint shape, real
-   lanes, KV capacity, null-or-int usage, GPU block, and the first SSE frame.
+5. `pytest Northstar_backend/test_galactic_state.py Northstar_backend/test_hitl_api.py`
+   — endpoint shape, real lanes, KV capacity, null-or-int usage, GPU block,
+   first SSE frame, and the HITL pending/approve/deny roundtrip.
 
 ## Known limits (next cycles)
 
