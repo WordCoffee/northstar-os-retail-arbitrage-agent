@@ -1,11 +1,14 @@
 {
-  "schema": "northstar.continuous_loop.v1",
+  "schema": "northstar.continuous_loop.v2",
   "updated_at": "2026-10-31T00:00:00Z",
-  "notes": "A task is selected in array order. Completed ids live in state/continuous_loop_state.json; the registry itself is never rewritten by the loop. blocked=true tasks are skipped until an operator removes the flag.",
+  "notes": "A task is selected in array order. Explicit authorization (authorized=true), low/medium risk, dependencies, scope, checks and commit paths are enforced. Completed/failed/interrupted state lives in state/continuous_loop_state.json; the registry is not rewritten. blocked is a reason string or true.",
   "tasks": [
     {
       "id": "cycle6-continuous-loop",
       "name": "Continuous loop supervisor + evaluation ledger",
+      "authorized": true,
+      "risk": "low",
+      "execution": "prebuilt",
       "commit_message": "chore(loop): activate continuous loop supervisor",
       "commit_paths": [
         "config/continuous_loop_tasks.json",
@@ -16,12 +19,12 @@
       "checks": [
         {
           "name": "Python syntax",
-          "cmd": ["python", "-m", "py_compile", "scripts/continuous_loop.py", "Northstar_backend/test_continuous_loop.py"],
+          "cmd": ["python", "-m", "py_compile", "scripts/continuous_loop.py", "scripts/ty_task_runner.py", "Northstar_backend/test_continuous_loop.py"],
           "cwd": "."
         },
         {
           "name": "Continuous-loop self-tests",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_continuous_loop.py", "-q"],
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_continuous_loop.py", "Northstar_backend/test_continuous_loop_rollback.py", "-q"],
           "cwd": "."
         },
         {
@@ -49,13 +52,53 @@
     {
       "id": "cycle7-token-sse",
       "name": "Token-level SSE event stream",
-      "blocked": true,
+      "authorized": false,
+      "risk": "medium",
+      "execution": "ty",
+      "blocked": "token-level streaming requires a request-scoped model stream and a UI consumer action; not implemented in this bridge and broader than the current authorized scope",
       "commit_paths": [
         "Northstar_backend/main.py",
         "northstar-os-ui/src/galactic/CommandDeck.jsx",
         "northstar-os-ui/scripts/verify-galactic-deck.cjs"
       ],
-      "checks": []
+      "write_paths": [
+        "Northstar_backend/main.py",
+        "northstar-os-ui/src/galactic/CommandDeck.jsx",
+        "northstar-os-ui/scripts/verify-galactic-deck.cjs"
+      ],
+      "acceptance_commands": []
+    },
+    {
+      "id": "demo-hitl-counts",
+      "name": "Add HITL queue counts helper",
+      "authorized": true,
+      "risk": "low",
+      "execution": "ty",
+      "objective": "Create ONE new file, modify none: Northstar_backend/agent_kernel/hitl_counts.py. It must define hitl_counts(root) using only the standard library: scan (Path(root)/'state'/'hitl').glob('hitl_*.json'), load each JSON object, count status values pending/approved/denied, ignore unreadable files, and return {'pending': int, 'approved': int, 'denied': int, 'total': int}. If the directory is missing, return all zeros. Do not create a test file; the acceptance command will exercise the function.",
+      "dependencies": ["cycle6-continuous-loop"],
+      "write_paths": [
+        "Northstar_backend/agent_kernel/hitl_counts.py"
+      ],
+      "read_paths": [],
+      "acceptance_commands": [
+        ["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_20260101T000000_deadbeef.json').write_text(json.dumps({'status':'pending'})); (h/'hitl_20260101T000001_deadbeef.json').write_text(json.dumps({'status':'approved'})); r=hitl_counts(d); assert r=={'pending':1,'approved':1,'denied':0,'total':2}, r"]
+      ],
+      "checks": [
+        {
+          "name": "HITL counts function",
+          "cmd": ["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_20260101T000000_deadbeef.json').write_text(json.dumps({'status':'pending'})); (h/'hitl_20260101T000001_deadbeef.json').write_text(json.dumps({'status':'approved'})); r=hitl_counts(d); assert r=={'pending':1,'approved':1,'denied':0,'total':2}, r"],
+          "cwd": "."
+        }
+      ],
+      "commit_paths": [
+        "Northstar_backend/agent_kernel/hitl_counts.py"
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 0,
+      "max_steps": 6,
+      "required_artifact": "Northstar_backend/agent_kernel/hitl_counts.py",
+      "provider": "ollama",
+      "model": "bojo"
     }
   ]
 }

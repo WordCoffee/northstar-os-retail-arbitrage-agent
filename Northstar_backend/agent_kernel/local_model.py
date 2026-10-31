@@ -131,10 +131,77 @@ class LlamaCppModel:
                 continue
         raise last or ModelError("worker returned no content")
 
+class OllamaChatModel:
+    """Prompt -> JSON text over Ollama's native /api/chat.
 
-def make_local_model(**overrides: Any) -> LlamaCppModel:
-    """Build a model callable from TYS_CODING_* env vars plus explicit overrides."""
-    params: Dict[str, Any] = {
+    Ollama's OpenAI-compatible /v1 route ignores `format: json`; the native chat
+    route honours it. The coding agent only needs one JSON object per turn, so
+    this adapter asks for JSON explicitly and retries once with a wider budget if
+    the model spends the whole first budget on reasoning.
+    """
+
+    def __init__(self, base_url: str = "http://127.0.0.1:11434",
+                 model: str = "bojo", *, timeout_s: float = 600.0,
+                 max_tokens: int = 4096, temperature: float = 0.1,
+                 retries: int = 1):
+        self.base_url = base_url.rstrip("/")
+        self.model = model
+        self.timeout_s = float(timeout_s)
+        self.max_tokens = int(max_tokens)
+        self.temperature = float(temperature)
+        self.retries = max(0, int(retries))
+
+    def payload(self, prompt: str) -> Dict[str, Any]:
+        return {
+            "model": self.model,
+            "messages": [{"role": "user", "content": str(prompt)}],
+            "stream": False,
+            "format": "json",
+            "think": False,
+            "options": {"num_predict": self.max_tokens,
+                        "temperature": self.temperature},
+        }
+
+    def __call__(self, prompt: str) -> str:
+        url = f"{self.base_url}/api/chat"
+        last: Optional[Exception] = None
+        for attempt in range(self.retries + 1):
+            try:
+                out = _post_json(url, self.payload(prompt), self.timeout_s)
+            except urllib.error.URLError as exc:
+                last = exc
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"Ollama worker unreachable at {url}: {exc}") from exc
+            message = out.get("message") or {}
+            text = str(message.get("content") or "").strip()
+            if text:
+                return text
+            last = ModelError("Ollama returned no content")
+            if attempt < self.retries:
+                self.max_tokens = min(16384, self.max_tokens * 2)
+                continue
+        raise last or ModelError("Ollama returned no content")
+
+
+def make_local_model(**overrides: Any):
+    """Build a model callable from TYS_CODING_* env vars plus explicit overrides.
+
+    TYS_CODING_PROVIDER=ollama selects the native Ollama chat adapter (JSON mode);
+    the default remains the OpenAI-compatible llama.cpp lane.
+    """
+    provider = str(overrides.pop("provider", os.environ.get("TYS_CODING_PROVIDER", "compat"))).lower()
+    if provider == "ollama":
+        overrides.pop("schema", None)
+        params: Dict[str, Any] = {
+            "base_url": os.environ.get("TYS_CODING_URL", "http://127.0.0.1:11434"),
+            "model": os.environ.get("TYS_CODING_MODEL", "bojo"),
+            "timeout_s": float(os.environ.get("TYS_CODING_TIMEOUT_S", "600")),
+            "max_tokens": int(os.environ.get("TYS_CODING_MAX_TOKENS", "4096")),
+        }
+        params.update(overrides)
+        return OllamaChatModel(**params)
+    params = {
         "base_url": os.environ.get("TYS_CODING_URL", DEFAULT_BASE_URL),
         "model": os.environ.get("TYS_CODING_MODEL", DEFAULT_MODEL),
         "timeout_s": float(os.environ.get("TYS_CODING_TIMEOUT_S", "600")),

@@ -1,7 +1,9 @@
-"""Continuous-loop supervisor: task selection, safety filters, ledger."""
+"""Continuous-loop supervisor: task selection, contract validation, safety, state."""
 from __future__ import annotations
 
 import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -13,21 +15,58 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import continuous_loop as cl
 
 
+def _task(task_id: str, **extra):
+    base = {
+        "id": task_id,
+        "name": task_id,
+        "authorized": True,
+        "risk": "low",
+        "execution": "prebuilt",
+        "commit_paths": [f"docs/{task_id}.md"],
+        "checks": [],
+    }
+    base.update(extra)
+    return base
+
+
 def _tasks():
     return {"tasks": [
-        {"id": "a", "name": "first"},
-        {"id": "b", "name": "second", "blocked": True},
-        {"id": "c", "name": "third"},
+        _task("a"),
+        _task("b", blocked="not authorized yet"),
+        _task("c", dependencies=["a"]),
     ]}
 
 
-def test_select_task_picks_first_pending_and_skips_completed_or_blocked():
+def test_select_task_picks_first_eligible_and_skips_blocked_or_dependent():
     tasks = _tasks()
-    state = {"completed": {"a": {"commit": "abc"}}}
+    state = {"tasks": {}, "completed": {}}
+    assert cl.select_task(tasks, state)["id"] == "a"
+    state["tasks"]["a"] = {"status": "completed"}
     assert cl.select_task(tasks, state)["id"] == "c"
-    assert cl.select_task(tasks, {"completed": {}})["id"] == "a"
-    assert cl.select_task(tasks, {"completed": {}}, "b") is None
-    assert cl.select_task(tasks, {"completed": {"a": {}}}, "a") is None
+    assert cl.select_task(tasks, state, "b") is None
+    assert cl.select_task(tasks, state, "a") is None
+
+
+def test_dependency_must_be_completed_not_merely_present():
+    tasks = _tasks()
+    state = {"tasks": {"a": {"status": "failed"}}, "completed": {}}
+    assert cl.blocked_reason(tasks["tasks"][2], state) == "dependency 'a' is failed"
+
+
+def test_contract_requires_explicit_authorization_and_low_risk():
+    bad = _task("x", authorized=False)
+    assert any("authorized" in e for e in cl.validate_task(bad))
+    high = _task("y", risk="high")
+    assert any("risk" in e for e in cl.validate_task(high))
+    ty = _task("z", execution="ty", write_paths=[], acceptance_commands=[])
+    assert any("objective" in e or "write_paths" in e for e in cl.validate_task(ty))
+
+
+def test_contract_rejects_forbidden_commands_and_escape_paths():
+    bad = _task("x", checks=[{"name": "bad", "cmd": ["python", "amazon_search.py"]}])
+    assert any("forbidden" in e for e in cl.validate_task(bad))
+    escape = _task("y", commit_paths=["../outside.md"])
+    assert any("refused" in e for e in cl.validate_task(escape))
 
 
 def test_commit_paths_allowlist_and_denylist():
@@ -52,12 +91,20 @@ def test_commit_paths_allowlist_and_denylist():
     assert any("allowlist" in r for r in refused)
 
 
-def test_forbidden_command_tokens():
+def test_forbidden_command_tokens_and_executables():
     assert cl.check_command(["python", "-m", "pytest"]) is None
     assert cl.check_command(["npm", "run", "test:ui"]) is None
     assert "amazon" in (cl.check_command(["python", "amazon_search.py"]) or "")
     assert "chrome" in (cl.check_command(["node", "chromeconnect.js"]) or "")
-    assert "openrouter" in (cl.check_command(["curl", "https://openrouter.ai"]) or "")
+    assert "not allowed" in (cl.check_command(["powershell", "Get-Item", "."]) or "")
+
+
+def test_recover_interrupted_marks_stale_running_task(tmp_path, monkeypatch):
+    monkeypatch.setattr(cl, "STATE_PATH", tmp_path / "state.json")
+    state = {"completed": {}, "tasks": {"x": {"status": "running", "pid": 999999}}}
+    recovered = cl.recover_interrupted(state)
+    assert recovered and state["tasks"]["x"]["status"] == "interrupted"
+    assert "stale" in state["tasks"]["x"]["reason"]
 
 
 def test_scrub_redacts_secret_shaped_text():
@@ -77,15 +124,70 @@ def test_append_ledger_is_jsonl(tmp_path):
     assert [r["cycle"] for r in rows] == ["one", "two"]
 
 
-def test_status_reports_completed_and_pending(tmp_path):
-    tasks = _tasks()
-    state = {"completed": {"a": {"commit": "abc123"}}}
-    ledger = tmp_path / "ledger.jsonl"
-    ledger.write_text(json.dumps({"cycle": "a", "status": "ok"}) + "\n", encoding="utf-8")
-    out = cl.status(tasks, state, ledger)
-    assert out["pending"] == ["c"]
-    assert out["tasks"][0]["status"] == "completed"
-    assert out["last_cycles"][0]["cycle"] == "a"
+def test_status_separates_eligible_blocked_completed_and_failed(tmp_path):
+    tasks = {"tasks": [_task("a"), _task("b", blocked="needs operator"),
+                       _task("c"), _task("d")]}
+    state = {"completed": {}, "tasks": {
+        "a": {"status": "completed"},
+        "c": {"status": "failed", "reason": "acceptance"},
+        "d": {"status": "interrupted", "reason": "stale"},
+    }}
+    out = cl.status_report(tasks, state, tmp_path / "no-ledger.jsonl")
+    assert out["buckets"]["completed"] == ["a"]
+    assert out["buckets"]["failed"][0]["id"] == "c"
+    assert out["buckets"]["interrupted"][0]["id"] == "d"
+    assert out["buckets"]["blocked"][0]["id"] == "b"
+    assert "a" not in out["buckets"]["eligible"]
+
+
+def test_execute_prebuilt_failure_is_recorded_not_completed(tmp_path, monkeypatch):
+    monkeypatch.setattr(cl, "STATE_PATH", tmp_path / "state.json")
+    task = _task("fail", checks=[{"name": "fail", "cmd": ["python", "-c", "raise SystemExit(1)"]}])
+    state = {"completed": {}, "tasks": {}}
+    result = cl.execute_task(task, state)
+    assert result["status"] == "failed"
+    assert state["tasks"]["fail"]["status"] == "failed"
+    assert "acceptance failed" in state["tasks"]["fail"]["reason"]
+
+
+def test_execute_prebuilt_success_marks_completed(tmp_path, monkeypatch):
+    monkeypatch.setattr(cl, "STATE_PATH", tmp_path / "state.json")
+    task = _task("pass", checks=[{"name": "pass", "cmd": ["python", "-c", "print('ok')"]}])
+    state = {"completed": {}, "tasks": {}}
+    result = cl.execute_task(task, state, no_commit=True)
+    assert result["status"] == "completed"
+    assert state["tasks"]["pass"]["status"] == "completed"
+
+
+def test_commit_task_preserves_pre_existing_staged_work(tmp_path, monkeypatch):
+    git = shutil.which("git")
+    if not git:
+        pytest.skip("git required")
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run([git, "init", "-q"], cwd=repo, check=True)
+    subprocess.run([git, "config", "user.email", "loop@northstar.invalid"], cwd=repo, check=True)
+    subprocess.run([git, "config", "user.name", "loop test"], cwd=repo, check=True)
+    (repo / "user.txt").write_text("base\n", encoding="utf-8")
+    subprocess.run([git, "add", "user.txt"], cwd=repo, check=True)
+    subprocess.run([git, "commit", "-m", "base"], cwd=repo, check=True)
+    # The operator has staged an unrelated edit before the task runs.
+    (repo / "user.txt").write_text("operator staged work\n", encoding="utf-8")
+    subprocess.run([git, "add", "user.txt"], cwd=repo, check=True)
+    (repo / "docs").mkdir()
+    (repo / "docs" / "task.md").write_text("task output\n", encoding="utf-8")
+    monkeypatch.setattr(cl, "ROOT", repo)
+    result = cl.commit_task({"commit_paths": ["docs/task.md"],
+                             "commit_message": "task commit"},
+                            {"docs/task.md"}, {})
+    assert result["ok"] and result["committed"], result
+    head = subprocess.run([git, "show", "--name-only", "--format=", "HEAD"],
+                          cwd=repo, capture_output=True, text=True, check=True).stdout
+    assert "docs/task.md" in head
+    assert "user.txt" not in head
+    staged = subprocess.run([git, "diff", "--cached", "--name-only"],
+                            cwd=repo, capture_output=True, text=True, check=True).stdout
+    assert "user.txt" in staged
 
 
 def test_dry_run_command_does_not_execute(tmp_path):

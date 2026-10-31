@@ -16,7 +16,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
-from .patch_tool import APPLY_TIMEOUT_S, MAX_PATCH_BYTES, apply_unified_diff
+from .patch_tool import (APPLY_TIMEOUT_S, MAX_PATCH_BYTES, PatchError,
+                         apply_unified_diff, patch_paths, validate_path)
 from .ast_edit import AstEditError, apply_batch, apply_to_file
 
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist",
@@ -117,7 +118,10 @@ class Workspace:
                  max_patch_bytes: int = MAX_PATCH_BYTES,
                  patch_timeout_s: float = APPLY_TIMEOUT_S,
                  write_timeout_s: float = DEFAULT_WRITE_TIMEOUT_S,
-                 deny_paths: Sequence[str] = ()):
+                 deny_paths: Sequence[str] = (),
+                 allow_paths: Sequence[str] = (),
+                 read_paths: Sequence[str] = (),
+                 run_allowlist: Optional[Sequence[Sequence[str]]] = None):
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.max_read_bytes = max_read_bytes
@@ -127,17 +131,21 @@ class Workspace:
         self.patch_timeout_s = patch_timeout_s
         self.write_timeout_s = float(write_timeout_s)
         self.deny_paths = tuple(deny_paths or ())
-        self.run_allowlist = (
-            ("python", "-m", "pytest"),
-            ("python", "-m", "py_compile"),
-            ("pytest",),
-            ("npm", "test"),
-            ("npm", "run"),
-            ("npx", "tsc"),
-            ("npx", "jest"),
-            ("git", "status"),
-            ("git", "diff"),
-        )
+        self.allow_paths = tuple(str(p).replace("\\", "/").strip("/") for p in (allow_paths or ()))
+        self.read_paths = tuple(str(p).replace("\\", "/").strip("/") for p in (read_paths or ()))
+        self.run_allowlist = tuple(
+            tuple(str(c) for c in cmd) for cmd in
+            (run_allowlist if run_allowlist is not None else (
+                ("python", "-m", "pytest"),
+                ("python", "-m", "py_compile"),
+                ("pytest",),
+                ("npm", "test"),
+                ("npm", "run"),
+                ("npx", "tsc"),
+                ("npx", "jest"),
+                ("git", "status"),
+                ("git", "diff"),
+            )))
 
     # ── path safety ─────────────────────────────────────────────────────────
     def resolve(self, rel: str) -> Path:
@@ -145,6 +153,30 @@ class Workspace:
         if p != self.root and self.root not in p.parents:
             raise ValueError(f"path escapes the workspace: {rel}")
         return p
+
+    def _rel(self, path: Path) -> str:
+        return path.resolve().relative_to(self.root).as_posix()
+
+    def _in_scope(self, path: Path, scopes: Sequence[str]) -> bool:
+        if not scopes:
+            return True
+        rel = self._rel(path)
+        return any(rel == scope or rel.startswith(scope.rstrip("/") + "/")
+                   for scope in scopes)
+
+    def _write_scope_error(self, path: Path) -> Optional[str]:
+        if self._in_scope(path, self.allow_paths):
+            return None
+        if self.allow_paths:
+            return f"write outside the task scope: {self._rel(path)}"
+        return None
+
+    def _read_scope_error(self, path: Path) -> Optional[str]:
+        if self._in_scope(path, self.read_paths):
+            return None
+        if self.read_paths:
+            return f"read outside the task scope: {self._rel(path)}"
+        return None
 
     # ── tools ───────────────────────────────────────────────────────────────
     def list(self, path: str = ".") -> ToolResult:
@@ -168,6 +200,9 @@ class Workspace:
             return ToolResult(False, error=str(exc))
         if not p.is_file():
             return ToolResult(False, error=f"not a file: {path}")
+        scope_error = self._read_scope_error(p)
+        if scope_error:
+            return ToolResult(False, error=scope_error)
         raw = p.read_bytes()[: self.max_read_bytes]
         return ToolResult(True, raw.decode("utf-8", errors="replace"),
                           files=[str(p)])
@@ -187,6 +222,8 @@ class Workspace:
             if not p.is_file() or p.suffix.lower() not in TEXT_EXT:
                 continue
             if any(part in SKIP_DIRS for part in p.parts):
+                continue
+            if self.read_paths and not self._in_scope(p, self.read_paths):
                 continue
             try:
                 for n, line in enumerate(p.read_text(encoding="utf-8",
@@ -215,6 +252,9 @@ class Workspace:
             return ToolResult(
                 False, error=f"refusing to write a protected path: {rel} "
                              "(secrets, operator policy and fixtures are read-only)")
+        scope_error = self._write_scope_error(p)
+        if scope_error:
+            return ToolResult(False, error=scope_error)
         data = str(content or "").encode("utf-8")
         if len(data) > self.max_write_bytes:
             return ToolResult(False, error=f"content exceeds {self.max_write_bytes} bytes")
@@ -246,6 +286,14 @@ class Workspace:
         Paths are validated against the root before git runs, the patch is staged
         in a temp file that is always removed, and git's stderr is the error.
         """
+        try:
+            for rel in patch_paths(patch):
+                target = validate_path(rel, self.root)
+                scope_error = self._write_scope_error(target)
+                if scope_error:
+                    return ToolResult(False, error=scope_error)
+        except PatchError as exc:
+            return ToolResult(False, error=str(exc))
         outcome = apply_unified_diff(self.root, patch,
                                     max_bytes=self.max_patch_bytes,
                                     timeout_s=self.patch_timeout_s)
@@ -258,6 +306,12 @@ class Workspace:
                  name: str = "") -> ToolResult:
         """Edit a Python file by symbol name, not by line-number diff."""
         try:
+            scope_error = self._write_scope_error(self.resolve(path))
+        except ValueError as exc:
+            return ToolResult(False, error=str(exc))
+        if scope_error:
+            return ToolResult(False, error=scope_error)
+        try:
             out = apply_to_file(self.root, path,
                                 [{"op": op, "target": target,
                                   "source": source, "name": name}])
@@ -267,6 +321,14 @@ class Workspace:
 
     def ast_edit_batch(self, batch: Any) -> ToolResult:
         """Apply a list of {path, edits:[...]} atomically across files."""
+        for item in batch or []:
+            try:
+                target = self.resolve(str(item.get("path") or ""))
+            except (ValueError, AttributeError) as exc:
+                return ToolResult(False, error=str(exc))
+            scope_error = self._write_scope_error(target)
+            if scope_error:
+                return ToolResult(False, error=scope_error)
         try:
             out = apply_batch(self.root, batch or [])
         except AstEditError as exc:
