@@ -250,7 +250,7 @@ def _box_face(mask: np.ndarray, gray: np.ndarray, *, inset_x: float,
         central = col[lo:hi]
         med = float(np.median(central)) if central.size else 0.0
         peak = float(central.max()) if central.size else 0.0
-        if peak > max(3.5 * med, 1e-6) and peak > 0.05 * float(central.sum() or 1.0):
+        if peak > max(3.5 * med, 1e-6) and peak > 0.01 * float(central.sum() or 1.0):
             x_split = lo + int(np.argmax(central))
             # Refine the interior edge per row: the corner is rarely vertical.
             peaks_y, peaks_x = [], []

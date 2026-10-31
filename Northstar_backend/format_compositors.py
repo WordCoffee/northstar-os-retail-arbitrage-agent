@@ -34,6 +34,40 @@ def _feather_mask(size: Tuple[int, int], quad: Quad, feather: int = 2) -> Image.
     return mask.filter(ImageFilter.GaussianBlur(max(0, int(feather))))
 
 
+def _homography(src: Sequence[Sequence[float]],
+                dst: Sequence[Sequence[float]]) -> np.ndarray:
+    """3x3 homography mapping src -> dst (four point correspondences)."""
+    a, b = [], []
+    for (x, y), (u, v) in zip(src, dst):
+        a.append([x, y, 1, 0, 0, 0, -u * x, -u * y])
+        b.append(u)
+        a.append([0, 0, 0, x, y, 1, -v * x, -v * y])
+        b.append(v)
+    h = np.linalg.solve(np.asarray(a, dtype=float), np.asarray(b, dtype=float))
+    return np.append(h, 1.0).reshape(3, 3)
+
+
+def _warp_to_quad(src: Image.Image, quad: Quad, size: Tuple[int, int]) -> Image.Image:
+    """Map the whole label rectangle onto the measured quad (perspective).
+
+    PIL's PERSPECTIVE transform samples the source through an OUTPUT -> INPUT
+    homography, so the inverse of the label -> quad mapping is what it wants.
+    The earlier QUAD call passed the source corners in the wrong winding and
+    stretched the label to the plate instead of warping it onto the face.
+    """
+    w, h = size
+    src_pts = [(0.0, 0.0), (float(src.width), 0.0),
+               (float(src.width), float(src.height)), (0.0, float(src.height))]
+    forward = _homography(src_pts, [(float(x), float(y)) for x, y in quad])
+    try:
+        inverse = np.linalg.inv(forward)
+    except np.linalg.LinAlgError as exc:
+        raise ValueError("degenerate quad: the four corners are collinear") from exc
+    inverse = inverse / inverse[2, 2]
+    coeffs = tuple(float(c) for c in inverse.flatten()[:8])
+    return src.transform((w, h), Image.PERSPECTIVE, coeffs, resample=Image.BICUBIC)
+
+
 def box_composite(plate: Any, label: Any, quad: Quad, *,
                   feather: int = 2, shade: float = 0.18) -> Dict[str, Any]:
     """Perspective-warp the label onto four measured corners of a box face."""
@@ -44,10 +78,7 @@ def box_composite(plate: Any, label: Any, quad: Quad, *,
     if len(pts) != 4:
         raise ValueError("box_composite needs exactly 4 corner points (TL, TR, BR, BL)")
 
-    # PIL's QUAD transform maps the OUTPUT quad back to the source rectangle.
-    warped = src.transform((w, h), Image.QUAD,
-                           (0, 0, src.width, 0, src.width, src.height, 0, src.height),
-                           resample=Image.BICUBIC)
+    warped = _warp_to_quad(src, pts, (w, h))
     mask = _feather_mask((w, h), pts, feather)
     base.paste(warped, (0, 0), mask)
 

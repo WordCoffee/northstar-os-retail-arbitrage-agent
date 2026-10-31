@@ -6,7 +6,7 @@ from io import BytesIO
 from pathlib import Path
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageDraw
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -77,6 +77,28 @@ def test_dispatch_and_unknown_format():
     assert fc.composite("box", _plate(), _label(), QUAD)["warp"] == "perspective-quad"
     with pytest.raises(KeyError):
         fc.composite("sachet", _plate(), _label(), QUAD)
+
+
+def _quadrant_label(w=240, h=300):
+    img = Image.new("RGB", (w, h), (255, 255, 255))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, w // 2, h // 2], fill=(220, 30, 30))       # TL red
+    d.rectangle([w // 2, 0, w, h // 2], fill=(30, 180, 30))       # TR green
+    d.rectangle([0, h // 2, w // 2, h], fill=(30, 30, 220))       # BL blue
+    buf = BytesIO(); img.save(buf, format="PNG"); return buf.getvalue()
+
+
+def test_box_warp_keeps_the_label_upright_and_unflipped():
+    out = fc.box_composite(_plate(), _quadrant_label(), QUAD, shade=0)
+    img = _img(out["bytes"])
+    tl = img.getpixel((90, 110))
+    tr = img.getpixel((310, 110))
+    bl = img.getpixel((90, 390))
+    br = img.getpixel((310, 390))
+    assert tl[0] > 150 and tl[1] < 100 and tl[2] < 100       # red top-left
+    assert tr[1] > 120 and tr[0] < 100 and tr[2] < 100       # green top-right
+    assert bl[2] > 150 and bl[0] < 100 and bl[1] < 100       # blue bottom-left
+    assert min(br) > 180                                      # white bottom-right
 
 
 def test_box_shading_never_touches_the_background_above_the_face():
