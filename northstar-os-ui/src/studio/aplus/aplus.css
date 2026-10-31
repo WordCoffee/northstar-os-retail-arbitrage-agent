@@ -1,0 +1,61 @@
+/* A+ modules (Phase 1, item 1). The canvas is exact-sized and scaled as a block. */
+.aplus-frame {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #ffffff;
+  box-shadow: var(--elev-1);
+}
+.aplus-canvas {
+  position: relative;
+  transform-origin: top left;
+  overflow: hidden;
+  background: #ffffff;
+}
+.aplus-plate {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 90% at 30% 20%, rgba(196, 148, 26, 0.10), transparent 60%),
+    linear-gradient(135deg, #f4f1ea 0%, #e9e4d8 100%);
+}
+.aplus-plate--tile { inset: 0; }
+.aplus-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.aplus-copy {
+  position: absolute;
+  display: flex; flex-direction: column; justify-content: center; gap: 14px;
+  padding: 40px 32px;
+  box-sizing: border-box;
+}
+.aplus-copy--right { align-items: flex-end; text-align: right; }
+.aplus-h {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1.15; color: #14210f; margin: 0;
+}
+.aplus-p { font-size: 18px; line-height: 1.6; color: #3a4636; margin: 0; max-width: 44ch; }
+
+.aplus-tile { position: absolute; overflow: hidden; border-radius: 4px; }
+.aplus-tile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.aplus-tile-label {
+  position: absolute; left: 12px; right: 12px; bottom: 10px;
+  font-size: 14px; font-weight: 600; color: #14210f;
+  background: rgba(255, 255, 255, 0.86); border-radius: 3px; padding: 4px 8px;
+}
+
+.aplus-comp-header {
+  position: absolute; display: flex; align-items: center;
+  background: #14210f;
+}
+.aplus-comp-title {
+  position: absolute; color: #f5f0e8; font-weight: 700; font-size: 20px;
+  text-align: center;
+}
+.aplus-comp-row { position: absolute; left: 0; right: 0; display: flex; align-items: center; }
+.aplus-comp-row:nth-child(odd) { background: #f7f4ee; }
+.aplus-comp-label {
+  position: absolute; padding-left: 24px; font-weight: 600; font-size: 17px; color: #2a3526;
+}
+.aplus-comp-cell {
+  position: absolute; text-align: center; font-size: 17px; color: #3a4636;
+}
