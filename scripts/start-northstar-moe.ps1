@@ -6,22 +6,28 @@
 # Optional: -Ctx 131072 (coder has ~1.3 GiB headroom at 128K), -Ncmoe 2 (spill experts to RAM if OOM)
 param(
   [ValidateSet("coder","creative")] [string]$Lane = "creative",
-  [int]$Ctx = 65536,
+  [int]$Ctx = 17408,
   [int]$Ncmoe = 0,
   [int]$MtpNmax = 8,
   [double]$MtpPmin = 0.8,
+  [int]$Port = 8080,
   [string]$Kv = "",
   [switch]$Restart
 )
 $ErrorActionPreference = "Stop"
+
+# Quantized KV cache + FlashAttention for any Ollama backend on this host.
+# This lane is CUDA, so q8_0 is the default; use -Kv q4_0 for >32K context.
+$env:OLLAMA_KV_CACHE_TYPE = "q8_0"
+$env:OLLAMA_FLASH_ATTENTION = "1"
 
 $srv = "$env:USERPROFILE\.config\northstar-llm\bin\llama-server.exe"
 if (-not (Test-Path $srv)) { $srv = "$env:USERPROFILE\tools\llama-cuda\llama-server.exe" }
 $dir = "$env:USERPROFILE\models\northstar-moe"
 
 $lanes = @{
-  coder    = @{ file = "Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf"; alias = "coder-27b" }
-  creative = @{ file = "Qwen3.8-27B-GSQ-RCO-IQ3_S-mtp.gguf";   alias = "creative-27b" }
+  coder    = @{ file = "Qwen3.8-27B-IQ4_XS_4BPW.gguf"; alias = "northstaros-27b-coder" }
+  creative = @{ file = "Qwen3.8-27B-IQ4_XS_4BPW.gguf"; alias = "northstaros-thinking" }
 }
 $m = $lanes[$Lane]
 $mpath = Join-Path $dir $m.file
@@ -43,7 +49,7 @@ foreach ($hog in @("SoundTune","MSI.TerminalServer","LEDKeeper2","DCv2","msedgew
   Get-Process -Name $hog -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 }
 
-$kv = if ($Kv) { $Kv } elseif ($Lane -eq "coder") { "q8_0" } else { "q4_0" }
+$kv = if ($Kv) { $Kv } else { "q8_0" }
 $argv = @(
   "-m", $mpath,
   "--alias", $m.alias,
@@ -57,18 +63,18 @@ $argv = @(
   "--spec-type", "draft-mtp",
   "--spec-draft-n-max", "$MtpNmax",
   "--spec-draft-p-min", "$MtpPmin",
-  "--temp", "0.35",
-  "--host", "127.0.0.1", "--port", "8080"
+  "--temp", "0.1",
+  "--host", "127.0.0.1", "--port", "$Port"
 )
 if ($Ncmoe -gt 0) { $argv += @("--n-cpu-moe", "$Ncmoe") }
 
 # An earlier instance holds ~14 GB of VRAM; a second load then dies with
 # "cudaMalloc failed: out of memory" even though nvidia-smi shows free memory.
 try {
-  $h = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 3 "http://127.0.0.1:8080/health").Content
+  $h = (Invoke-WebRequest -UseBasicParsing -TimeoutSec 3 "http://127.0.0.1:$Port/health").Content
 } catch { $h = "" }
 if ($h -match "ok" -and -not $Restart) {
-  Write-Host "already serving on 127.0.0.1:8080 (use -Restart to reload)"; exit 0
+  Write-Host "already serving on 127.0.0.1:$Port (use -Restart to reload)"; exit 0
 }
 if ($Restart) {
   Get-Process -Name "llama-server" -ErrorAction SilentlyContinue | Stop-Process -Force
@@ -95,9 +101,9 @@ for ($i = 0; $i -lt 180; $i++) {
     throw "server exited (code $($p.ExitCode)) - see $errLog`n$tail"
   }
   try {
-    if ((Invoke-WebRequest -UseBasicParsing -TimeoutSec 3 "http://127.0.0.1:8080/health").Content -match "ok") {
+    if ((Invoke-WebRequest -UseBasicParsing -TimeoutSec 3 "http://127.0.0.1:$Port/health").Content -match "ok") {
       $sw.Stop()
-      Write-Host ("ready on http://127.0.0.1:8080  pid={0}  ctx={1}  ({2:N0}s)" -f $p.Id, $Ctx, $sw.Elapsed.TotalSeconds)
+      Write-Host ("ready on http://127.0.0.1:{0}  pid={1}  ctx={2}  ({3:N0}s)" -f $Port, $p.Id, $Ctx, $sw.Elapsed.TotalSeconds)
       exit 0
     }
   } catch {}

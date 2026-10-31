@@ -954,6 +954,46 @@ async def provider_suite_catalog(provider: Optional[str] = None):
     }
 
 
+class ModelRouteRequest(BaseModel):
+    intent: Optional[str] = None
+    text: str = ""
+    has_code: bool = False
+    path: Optional[str] = None
+
+
+@app.get("/api/v1/model-router")
+async def model_router_catalog():
+    """The routing policy and which lanes are actually installed (no secrets)."""
+    import lane_policy as _mr
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": _mr.describe(),
+        "error": None,
+        "meta": {"service": "brain", "version": "v1"},
+    }
+
+
+@app.post("/api/v1/model-router/route")
+async def model_router_route(body: ModelRouteRequest):
+    """Route one request. A missing specialised lane returns an explicit fallback."""
+    import lane_policy as _mr
+    try:
+        data = _mr.route(body.intent, body.text, has_code=body.has_code,
+                         path=body.path)
+    except _mr.NoModelAvailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": data,
+        "error": None,
+        "meta": {"service": "brain", "version": "v1"},
+    }
+
+
 # --- Memory Bank + Learning loop routes (Phase A / A0) ----------------------
 
 class MemoryIngestRequest(BaseModel):

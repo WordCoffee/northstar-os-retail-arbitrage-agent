@@ -62,7 +62,10 @@ def test_no_local_alternate_is_advertised():
 def test_local_engines_are_documented_from_the_measured_profile():
     engines = mr.catalog(["bojo"])["local_engines"]
     ty, bojo = engines["ty"], engines["bojo"]
-    assert ty["context_tokens"] == 65536 and ty["kv_cache"].startswith("q4_0")
+    # The measured profile is authoritative: the current launcher runs 17408
+    # context with q8_0 KV. The old 65536/q4_0 line was a target, not the
+    # running config (the suite description says so).
+    assert ty["context_tokens"] == 17408 and ty["kv_cache"].startswith("q8_0")
     assert ty["residency"].startswith("on demand")
     assert bojo["gpu_layers"] == 0 and bojo["context_tokens"] == 8192
 

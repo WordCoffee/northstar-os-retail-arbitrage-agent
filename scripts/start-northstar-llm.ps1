@@ -7,8 +7,8 @@
 # - Builder: llama.cpp b11889 CUDA at %USERPROFILE%\.config\northstar-llm\bin
 # - Model: ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp (10.4GB)
 # - MTP speculative decoding: --spec-type draft-mtp --spec-draft-n-max 4
-# - Context: -c 65536 (fits in 16GB with q4_0 KV cache)
-# - KV cache: q4_0 (K and V) - required for 64K on 16GB; q8_0 caps at ~32K
+# - Context: -c 17408 (17K; q8_0 KV fits 16GB). For 64K use -ctk q4_0 -ctv q4_0.
+# - KV cache: q8_0 (K and V); q4_0 for >32K.
 # - GPU: full offload -ngl 99 (10.4GB model + ~2.6GB CUDA/MTP overhead = ~13GB, fits 16GB)
 # - Decode: ~69 tok/s with MTP, ~47 tok/s without; prompt eval ~70 tok/s
 # - Pre-launch: kills background GPU processes (MSI Center, Edge WebView, etc.)
@@ -17,11 +17,15 @@
 #   Add: --mmproj $mmproj
 
 $ErrorActionPreference = "Stop"
+# Quantized KV cache + FlashAttention for any Ollama backend on this host.
+# llama.cpp receives the same policy as -fa on -ctk q8_0 -ctv q8_0 below.
+$env:OLLAMA_KV_CACHE_TYPE = "q8_0"
+$env:OLLAMA_FLASH_ATTENTION = "1"
 $cudaServer = "$env:USERPROFILE\.config\northstar-llm\bin\llama-server.exe"
 $srvFallback = "$env:USERPROFILE\tools\llama-cuda\llama-server.exe"
 $srv = if (Test-Path $cudaServer) { $cudaServer } else { $srvFallback }
-$model = "$env:USERPROFILE\models\northstaros-qwen3.8\Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf"
-$mmproj = "$env:USERPROFILE\models\northstaros-qwen3.8\mmproj-Qwen3.8-27B-BF16.gguf"
+$model = "$env:USERPROFILE\models\northstar-moe\Qwen3.8-27B-IQ4_XS_4BPW.gguf"
+$mmproj = "$env:USERPROFILE\models\northstar-moe\mmproj-Qwen3.8-27B-BF16.gguf"
 
 # --- Free the GPU: drain EVERY resident Ollama model + kill background GPU processes ---
 # This used to evict one hard-coded id ("northstaros-qwen3.8:27b") that no longer
@@ -53,11 +57,11 @@ Write-Host "Background GPU processes cleared."
 
 & $srv `
   -m $model `
-  --alias "northstaros-qwen3.8:27b" `
+  --alias "northstaros-27b-coder" `
   -ngl 99 `
-  -c 65536 -fa on `
-  -ctk q4_0 -ctv q4_0 `
+  -c 17408 -fa on `
+  -ctk q8_0 -ctv q8_0 `
   -np 1 --jinja `
   --spec-type draft-mtp --spec-draft-n-max 4 `
   --host 127.0.0.1 --port 8080 `
-  --temp 0.35
+  --temp 0.1

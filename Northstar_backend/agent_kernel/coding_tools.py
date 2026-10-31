@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import subprocess
 import threading
 import uuid
@@ -16,6 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 from .patch_tool import APPLY_TIMEOUT_S, MAX_PATCH_BYTES, apply_unified_diff
+from .ast_edit import AstEditError, apply_batch, apply_to_file
 
 SKIP_DIRS = {".git", "node_modules", "__pycache__", ".venv", "venv", "dist",
              "build", ".pytest_cache"}
@@ -130,6 +132,9 @@ class Workspace:
             ("python", "-m", "py_compile"),
             ("pytest",),
             ("npm", "test"),
+            ("npm", "run"),
+            ("npx", "tsc"),
+            ("npx", "jest"),
             ("git", "status"),
             ("git", "diff"),
         )
@@ -249,6 +254,26 @@ class Workspace:
                           str(outcome.get("error") or ""),
                           [str(f) for f in (outcome.get("files") or [])])
 
+    def ast_edit(self, path: str, op: str, target: str = "", source: str = "",
+                 name: str = "") -> ToolResult:
+        """Edit a Python file by symbol name, not by line-number diff."""
+        try:
+            out = apply_to_file(self.root, path,
+                                [{"op": op, "target": target,
+                                  "source": source, "name": name}])
+        except AstEditError as exc:
+            return ToolResult(False, error=str(exc)[:1000])
+        return ToolResult(True, f"AST {op} applied to {path}", files=[out["path"]])
+
+    def ast_edit_batch(self, batch: Any) -> ToolResult:
+        """Apply a list of {path, edits:[...]} atomically across files."""
+        try:
+            out = apply_batch(self.root, batch or [])
+        except AstEditError as exc:
+            return ToolResult(False, error=str(exc)[:1000])
+        return ToolResult(True, f"AST batch: {out['edits']} edit(s) in "
+                                f"{len(out['files'])} file(s)", files=out["files"])
+
     def run(self, cmd: Iterable[str]) -> ToolResult:
         args = [str(c) for c in (cmd or [])]
         if not args:
@@ -257,6 +282,12 @@ class Workspace:
             allowed = "; ".join(" ".join(p) for p in self.run_allowlist)
             return ToolResult(False, error=f"command not allowlisted; allowed: {allowed}")
         try:
+            # Windows resolves `npx`/`npm` as .cmd shims; subprocess without a
+            # shell cannot execute the bare name. Resolve the real path first so
+            # the allowlist stays exact while the command actually runs.
+            exe = shutil.which(args[0])
+            if exe:
+                args[0] = exe
             r = subprocess.run(args, cwd=str(self.root), capture_output=True,
                                text=True, timeout=self.run_timeout_s)
         except subprocess.TimeoutExpired:
@@ -264,6 +295,32 @@ class Workspace:
         out = (r.stdout or "") + (("\n" + r.stderr) if r.stderr else "")
         return ToolResult(r.returncode == 0, out[-6000:],
                           error="" if r.returncode == 0 else f"exit {r.returncode}")
+
+    def write_many(self, files: Any) -> ToolResult:
+        """Write several files in one tool call.
+
+        One file per turn makes a multi-file build spend its whole step budget on
+        writes plus verification. This batches them, keeping each write's atomic
+        swap and protected-path check.
+        """
+        items = files or []
+        if not isinstance(items, list):
+            return ToolResult(False, error="files must be a list of {path, content}")
+        written: List[str] = []
+        errors: List[str] = []
+        for item in items:
+            if not isinstance(item, dict):
+                errors.append("entry is not an object")
+                continue
+            path = str(item.get("path") or "")
+            result = self.write(path, item.get("content", ""))
+            if result.ok:
+                written.extend(result.files)
+            else:
+                errors.append(f"{path or '(no path)'}: {result.error}")
+        if errors:
+            return ToolResult(False, "\n".join(written), "; ".join(errors)[:1000], written)
+        return ToolResult(True, f"wrote {len(written)} file(s)", files=written)
 
     def execute(self, tool: str, args: Dict[str, Any]) -> ToolResult:
         try:
@@ -275,8 +332,17 @@ class Workspace:
                 return self.grep(args["pattern"], args.get("path", "."))
             if tool == "write":
                 return self.write(args["path"], args.get("content", ""))
+            if tool == "write_many":
+                return self.write_many(args.get("files") or [])
             if tool == "apply_patch":
                 return self.apply_patch(args.get("patch", ""))
+            if tool == "ast_edit":
+                return self.ast_edit(args["path"], args["op"],
+                                     args.get("target", ""),
+                                     args.get("source", ""),
+                                     args.get("name", ""))
+            if tool == "ast_edit_batch":
+                return self.ast_edit_batch(args.get("batch") or [])
             if tool == "run":
                 return self.run(args.get("cmd") or [])
         except KeyError as exc:

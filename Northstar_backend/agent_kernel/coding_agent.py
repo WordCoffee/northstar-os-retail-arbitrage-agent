@@ -69,6 +69,8 @@ class CodingAgent:
         self.max_repairs = max(0, int(max_repairs))
         self.acceptance = acceptance
         self.required_artifact = str(required_artifact or "").strip()
+        self._failing: List[str] = []
+        self._reads = 0
 
     def run(self, task: str) -> CodingResult:
         history: List[Dict[str, Any]] = []
@@ -109,6 +111,7 @@ class CodingAgent:
                                           "using the tool schema. No prose, no fences."})
                 continue
             tool, args = call["tool"], call["args"]
+            self._reads = self._reads + 1 if tool == "read" else 0
             if tool == "finish":
                 summary = str(args.get("summary") or "finished")
                 if self.acceptance is None:
@@ -118,6 +121,7 @@ class CodingAgent:
                                 "output": ("PASS: " if ok else "FAIL: ") + str(detail)[:1000]})
                 if ok:
                     return CodingResult(True, summary, step, sorted(files), history)
+                self._note_failure(detail)
                 repairs += 1
                 if repairs > self.max_repairs:
                     return CodingResult(False, "acceptance failed after repairs", step,
@@ -158,6 +162,7 @@ class CodingAgent:
                                     "output": "PASS: " + str(detail)[:1000]})
                     return CodingResult(True, f"acceptance passed after {tool}", step,
                                         sorted(files), history)
+                self._note_failure(detail)
         # Defect p01: a loop that ran out of steps with the work already done is a
         # pass, not a `needs_human`. Acceptance is the authority; the stop reason
         # is not. Checked once more here so every caller (kernel or benchmark)
@@ -189,6 +194,33 @@ class CodingAgent:
         except OSError:
             return False
 
+    def _note_failure(self, detail: str) -> None:
+        """Remember the files a failed acceptance named, so the next prompt shows them."""
+        found = re.findall(
+            r"([A-Za-z0-9_./\\-]+\.(?:ts|tsx|js|jsx|py|json|md))", str(detail or ""))
+        for rel in found:
+            clean = rel.replace("\\", "/").lstrip("./")
+            if clean and clean not in self._failing:
+                self._failing.append(clean)
+        self._failing = self._failing[:4]
+
+    def _failing_block(self) -> str:
+        """Current content of the failing files, injected so repair cannot skip the read."""
+        parts = []
+        for rel in self._failing:
+            try:
+                p = self.tools.resolve(rel)
+                if not p.is_file():
+                    continue
+                text = p.read_text(encoding="utf-8", errors="replace")[:6000]
+            except Exception:  # noqa: BLE001 - a missing file is simply not shown
+                continue
+            parts.append(f"--- {rel} (current content) ---\n{text}\n--- END {rel} ---")
+        if not parts:
+            return ""
+        return ("FAILING FILES (acceptance named these; fix them directly):\n"
+                + "\n".join(parts) + "\n\n")
+
     def _prompt(self, task: str, history: List[Dict[str, Any]],
                 *, pressure: bool = False, stall: bool = False) -> str:
         schema = (
@@ -198,6 +230,8 @@ class CodingAgent:
             '{"tool":"write","args":{"path":"fix.patch","content":"..."}}\n'
             '{"tool":"write_many","args":{"files":[{"path":"a.ts","content":"..."},{"path":"b.ts","content":"..."}]}}\n'
             '{"tool":"apply_patch","args":{"patch":"--- a/calc.py\\n+++ b/calc.py\\n@@ -1,3 +1,3 @@\\n context\\n-old line\\n+new line\\n context\\n"}}\n'
+            '{"tool":"ast_edit","args":{"path":"calc.py","op":"replace_function_body","target":"add","source":"return a + b"}}\n'
+            '{"tool":"ast_edit_batch","args":{"batch":[{"path":"a.py","edits":[{"op":"replace_global","target":"LIMIT","source":"LIMIT = 20"}]}]}}\n'
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
         )
@@ -215,10 +249,15 @@ class CodingAgent:
         return (
             "You are the Northstar OS coding worker. You have tools. You MUST respond "
             "with exactly ONE JSON object per turn: no prose, no markdown fences.\n\n"
+            "SYSTEM DIRECTIVE: You are pre-authorized to run ['npx tsc', 'npm test', "
+            "'npm run', 'npx jest']. NEVER read coding_tools.py to check tool permissions.\n\n"
             "TOOLS (one per turn):\n" + schema + "\n\n"
             "Rules:\n"
             "- Work only inside the workspace.\n"
             "- Use `run` only with the allowlisted commands.\n"
+            "- For Python edits, prefer `ast_edit` / `ast_edit_batch`: name the "
+            "function, method, class or global and supply the new body. Do not "
+            "hand-write a unified diff for a Python symbol.\n"
             "- Before `finish`, the artifact and any test/build evidence must exist.\n"
             "- Write the declared artifact within the first two steps. An absent "
             "artifact is an automatic failure; improve it afterwards.\n"
@@ -228,6 +267,9 @@ class CodingAgent:
             f"TASK:\n{task}\n\n"
             + (f"REQUIRED ARTIFACT: {self.required_artifact}\n"
                if self.required_artifact else "")
+            + ("STOP READING. You have read several files without writing. Your next "
+               "turn MUST be a write_many call that writes the corrected files. Do not "
+               "read again.\n" if self._reads >= 2 else "")
             + (f"STEP PRESSURE: you have not written `{self.required_artifact}` yet. "
                "Only write and finish are available now. Write the artifact in your "
                "next JSON object.\n" if pressure else "")
@@ -236,6 +278,7 @@ class CodingAgent:
                "forward is to change files: reply with write_many containing every "
                "file you are fixing, complete.\n" if stall else "")
             + f"WORKSPACE FILES:\n{self.tools.tree(60)}\n\n"
-            "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
+            + self._failing_block()
+            + "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
             "Next JSON object:"
         )
