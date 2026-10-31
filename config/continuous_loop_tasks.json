@@ -1,0 +1,61 @@
+{
+  "schema": "northstar.continuous_loop.v1",
+  "updated_at": "2026-10-31T00:00:00Z",
+  "notes": "A task is selected in array order. Completed ids live in state/continuous_loop_state.json; the registry itself is never rewritten by the loop. blocked=true tasks are skipped until an operator removes the flag.",
+  "tasks": [
+    {
+      "id": "cycle6-continuous-loop",
+      "name": "Continuous loop supervisor + evaluation ledger",
+      "commit_message": "chore(loop): activate continuous loop supervisor",
+      "commit_paths": [
+        "config/continuous_loop_tasks.json",
+        "docs/CONTINUOUS_LOOP.md",
+        "scripts/continuous_loop.py",
+        "Northstar_backend/test_continuous_loop.py"
+      ],
+      "checks": [
+        {
+          "name": "Python syntax",
+          "cmd": ["python", "-m", "py_compile", "scripts/continuous_loop.py", "Northstar_backend/test_continuous_loop.py"],
+          "cwd": "."
+        },
+        {
+          "name": "Continuous-loop self-tests",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_continuous_loop.py", "-q"],
+          "cwd": "."
+        },
+        {
+          "name": "UI unit",
+          "cmd": ["npm", "run", "test:ui"],
+          "cwd": "northstar-os-ui"
+        },
+        {
+          "name": "UI contrast",
+          "cmd": ["npm", "run", "test:contrast"],
+          "cwd": "northstar-os-ui"
+        },
+        {
+          "name": "Galactic static contract",
+          "cmd": ["npm", "run", "verify:galactic"],
+          "cwd": "northstar-os-ui"
+        },
+        {
+          "name": "UI build",
+          "cmd": ["npm", "run", "build"],
+          "cwd": "northstar-os-ui"
+        }
+      ]
+    },
+    {
+      "id": "cycle7-token-sse",
+      "name": "Token-level SSE event stream",
+      "blocked": true,
+      "commit_paths": [
+        "Northstar_backend/main.py",
+        "northstar-os-ui/src/galactic/CommandDeck.jsx",
+        "northstar-os-ui/scripts/verify-galactic-deck.cjs"
+      ],
+      "checks": []
+    }
+  ]
+}
