@@ -1,4 +1,4 @@
-"""Deterministic creative Flow (Ty's Assistant, creative lane).
+﻿"""Deterministic creative Flow (Ty's Assistant, creative lane).
 
 The orchestrator is a STATE MACHINE, not an LLM: every step is a function with a
 named input and a recorded output, resumable from JSON, and every irreversible
@@ -77,7 +77,7 @@ class CreativeFlow:
         self.score = score
         self.prompt_author = prompt_author
 
-    # ── persistence ──────────────────────────────────────────────────────────
+    # â”€â”€ persistence â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     def _save(self) -> None:
         self.out.mkdir(parents=True, exist_ok=True)
         (self.out / "flow_state.json").write_text(
@@ -93,7 +93,7 @@ class CreativeFlow:
                                    "started_at", "finished_at") if k in data})
         return flow
 
-    # ── steps ────────────────────────────────────────────────────────────────
+    # â”€â”€ steps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     def step_intake(self) -> None:
         if not self.job.product.get("id"):
             self.state.blocked.append("product_id_missing")
@@ -204,7 +204,7 @@ class CreativeFlow:
         self._save()
 
     def step_memory(self) -> None:
-        brand = brand_memory.extract(self.job.product.get("brand") or {})
+        brand = brand_memory.extract(self.job.product)  # extract() expects the PROFILE, not the brand sub-dict
         doc = brand_memory.propose(brand, account_id=str(self.job.product.get("account") or "default"))
         self.state.steps["memory"] = {"status": doc["status"], "count": doc["count"],
                                       "persisted": doc["persisted"]}
@@ -227,7 +227,7 @@ class CreativeFlow:
         self.state.steps["report"] = {"path": str(self.out / "flow_report.json")}
         self._save()
 
-    # ── driver ───────────────────────────────────────────────────────────────
+    # â”€â”€ driver â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     def run(self) -> Dict[str, Any]:
         self.out.mkdir(parents=True, exist_ok=True)
         self.state.status = "running"
@@ -243,3 +243,4 @@ class CreativeFlow:
 
 
 __all__ = ["CreativeFlow", "CreativeJob", "FlowState", "STEPS"]
+
