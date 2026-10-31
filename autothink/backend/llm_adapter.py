@@ -471,7 +471,8 @@ class UnifiedLLMAdapter:
                     num_ctx: Optional[int] = None,
                     num_predict: Optional[int] = None,
                     tools: Optional[List[Dict]] = None,
-                    num_gpu: Optional[int] = None):
+                    num_gpu: Optional[int] = None,
+                    keep_alive: Optional[str] = None):
         """Stream a chat turn as events (S1, ADDITIVE — `generate()` unchanged).
 
         Yields dicts: {"type": "thinking"|"content", "delta": str},
@@ -498,6 +499,10 @@ class UnifiedLLMAdapter:
             "stream": True,
             "options": options,
         }
+        if keep_alive:
+            # Ollama keeps the model resident for this duration; an operator
+            # can set CHAT_KEEP_ALIVE=0 to unload between turns.
+            body["keep_alive"] = str(keep_alive)
         if think is not None:
             # Explicit on the wire: with think=False a model whose DEFAULT is
             # thinking would otherwise burn the whole token budget inside its

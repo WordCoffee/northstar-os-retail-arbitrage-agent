@@ -151,6 +151,16 @@ def test_adaptive_num_predict_caps_short_asks_and_keeps_long_form():
         [{"role": "user", "content": "hi"}], default=1024) == 1024
 
 
+def test_stream_chat_passes_keep_alive_to_ollama():
+    response = _FakeResponse(lines=_ndjson(
+        {"message": {"content": "hi"}, "done": True, "prompt_eval_count": 3, "eval_count": 1}))
+    with mock.patch("autothink.backend.llm_adapter.requests.post",
+                    return_value=response) as post:
+        list(UnifiedLLMAdapter().stream_chat(
+            [{"role": "user", "content": "x"}], keep_alive="10m"))
+    assert post.call_args.kwargs["json"]["keep_alive"] == "10m"
+
+
 def test_stream_chat_think_fallback_retries_once():
     first = _FakeResponse(status_code=400, text='{"error":"model does not support thinking"}')
     second = _FakeResponse(status_code=200, lines=_ndjson(

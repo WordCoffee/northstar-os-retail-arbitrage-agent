@@ -246,6 +246,8 @@ def _adaptive_num_predict(messages: List[Dict[str, str]],
         return max(CHAT_NUM_PREDICT_SHORT, min(default, CHAT_NUM_PREDICT_LONG))
     return min(default, CHAT_NUM_PREDICT_SHORT)
 
+CHAT_KEEP_ALIVE = os.environ.get("CHAT_KEEP_ALIVE", "10m")
+
 def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
                 think: Any = True, should_cancel=None, tools=None,
                 auto_recover: bool = True):
@@ -272,6 +274,7 @@ def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
         num_predict=_adaptive_num_predict(messages),
         tools=tools,
         num_gpu=CHAT_NUM_GPU,
+        keep_alive=CHAT_KEEP_ALIVE,
     ))
 
 
