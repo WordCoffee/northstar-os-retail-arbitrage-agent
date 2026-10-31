@@ -99,6 +99,25 @@
       "required_artifact": "Northstar_backend/agent_kernel/hitl_counts.py",
       "provider": "ollama",
       "model": "bojo"
+    },
+    {
+      "id": "post-demo-test",
+      "name": "Commit the HITL counts regression test",
+      "authorized": true,
+      "risk": "low",
+      "execution": "prebuilt",
+      "dependencies": ["demo-hitl-counts"],
+      "checks": [
+        {
+          "name": "HITL counts regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_hitl_counts.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "commit_paths": [
+        "Northstar_backend/test_hitl_counts.py"
+      ],
+      "commit_message": "test(hitl): regression for the Ty-generated counts helper"
     }
   ]
 }

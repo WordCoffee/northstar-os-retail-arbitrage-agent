@@ -127,8 +127,9 @@ per check is capped at 1,200 chars.
 | task | status |
 |---|---|
 | `cycle6-continuous-loop` | completed |
-| `demo-hitl-counts` | completed (Ty created `agent_kernel/hitl_counts.py`) |
-| `cycle7-token-sse` | blocked — token-level streaming needs a request-scoped model stream and a UI consumer action; broader than this bridge |
+| `demo-hitl-counts` | completed (Ty created `agent_kernel/hitl_counts.py`; commit `96be935d`) |
+| `post-demo-test` | completed (prebuilt regression task) |
+| `cycle7-token-sse` | blocked - token-level streaming needs a request-scoped model stream and a UI consumer action; broader than this bridge |
 
 The loop stops with `pending: []` when only blocked work remains. It does not
 invent tasks.

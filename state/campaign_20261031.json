@@ -1,0 +1,71 @@
+{
+  "campaign_id": "bounded-20261031",
+  "status": "completed",
+  "started_at": "2026-10-31T23:15:00Z",
+  "finished_at": "2026-10-31T23:16:00Z",
+  "deadline_minutes": 90,
+  "max_implementation_tasks": 3,
+  "implementation_tasks_dispatched": 1,
+  "external_spend_usd": 0,
+  "external_network_operations": 0,
+  "contract_sha256": "66a08920bb3ebf26698edc2e7f105d3d88300899f5d597eaf0be13a7ed70b39f",
+  "tasks": [
+    {
+      "id": "cycle6-continuous-loop",
+      "status": "completed",
+      "authorized": true,
+      "risk": "low",
+      "execution": "prebuilt",
+      "blocked": null,
+      "commit_paths": [
+        "config/continuous_loop_tasks.json",
+        "docs/CONTINUOUS_LOOP.md",
+        "scripts/continuous_loop.py",
+        "Northstar_backend/test_continuous_loop.py"
+      ]
+    },
+    {
+      "id": "cycle7-token-sse",
+      "status": "blocked",
+      "authorized": false,
+      "risk": "medium",
+      "execution": "ty",
+      "blocked": "token-level streaming requires a request-scoped model stream and a UI consumer action; not implemented in this bridge and broader than the current authorized scope",
+      "commit_paths": [
+        "Northstar_backend/main.py",
+        "northstar-os-ui/src/galactic/CommandDeck.jsx",
+        "northstar-os-ui/scripts/verify-galactic-deck.cjs"
+      ]
+    },
+    {
+      "id": "demo-hitl-counts",
+      "status": "completed",
+      "authorized": true,
+      "risk": "low",
+      "execution": "ty",
+      "blocked": null,
+      "commit_paths": [
+        "Northstar_backend/agent_kernel/hitl_counts.py"
+      ]
+    },
+    {
+      "id": "post-demo-test",
+      "status": "completed",
+      "authorized": true,
+      "risk": "low",
+      "execution": "prebuilt",
+      "blocked": null,
+      "commit_paths": [
+        "Northstar_backend/test_hitl_counts.py"
+      ]
+    }
+  ],
+  "evidence": [
+    "reports/evaluation_ledger.jsonl",
+    "reports/continuous_loop_failure_demo_20261031.json",
+    "reports/continuous_loop_campaign_20261031.md",
+    "state/continuous_loop_state.json",
+    "state/continuous_loop_heartbeat.json"
+  ],
+  "notes": "Ty implementation task demo-hitl-counts committed 96be935d; the campaign then advanced to post-demo-test and stopped because cycle7-token-sse is the only remaining task and is explicitly blocked. No background process is left running; the lock is released."
+}

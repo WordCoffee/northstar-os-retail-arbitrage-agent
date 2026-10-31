@@ -1,0 +1,15 @@
+{
+  "continuous_loop_execution_20261031": {
+    "bridge_commit": "58b79cb3",
+    "ty_commit": "96be935d",
+    "starting_head": "21bae7da",
+    "capabilities": "VERIFIED: supervisor dispatches Ty and Ty edits real files; workspace write/read scope enforced; byte baseline restore on acceptance failure; pre-existing staged work preserved with git commit --only; lock/heartbeat/interrupted recovery; bounded campaign. BLOCKED: token-level SSE (cycle7), Matrix/AgentTeams HITL. NOT USED: 27B lane (RAM floor), background service.",
+    "implementation": "scripts/continuous_loop.py task contracts (authorized/risk/dependencies/write_paths/read_paths/acceptance/checks/commit_paths/timeout/max_repairs), Ty dispatch via scripts/ty_task_runner.py, lifecycle pending/running/verifying/completed/failed/blocked/interrupted, exclusive lock, heartbeat, STOP/timeout process-tree kill, --resume, byte baseline/restore, out-of-scope rejection, git commit --only, campaign max 3 tasks / 90 min. Workspace allow_paths/read_paths/run_allowlist. Ollama native JSON adapter (format=json, think=false).",
+    "demos": "A: disposable worktree at 58b79cb3; Ty wrote Northstar_backend/sandbox_target.py; intentional acceptance exit 1; restoration removed file and verified; state failed; evidence reports/continuous_loop_failure_demo_20261031.json. B: demo-hitl-counts; Ty created Northstar_backend/agent_kernel/hitl_counts.py; acceptance passed; commit 96be935d only that file; supervisor advanced to post-demo-test.",
+    "campaign": "state/campaign_20261031.json: completed, 90-minute deadline, max 3 implementation tasks, 1 Ty implementation task, $0 spend, 0 external network operations, lock released, heartbeat finished, no background process.",
+    "verification": "69 passed across test_continuous_loop (18), test_continuous_loop_rollback (2), test_local_model_ollama (3), test_hitl_counts (2), test_hitl (4), test_hitl_api (2), test_coding_agent (22), test_coding_guardrails (14), test_galactic_state (2). UI baseline 73 unit / 11 contrast / 34 static / build 0 errors unchanged.",
+    "blocked": "cycle7-token-sse: token-level streaming requires a request-scoped model stream and a UI consumer action; not implemented and broader than this bridge. Matrix/AgentTeams absent. 27B lane not used because it left less than the 3 GB free-RAM floor; Bojo used, no download.",
+    "report": "reports/continuous_loop_execution_20261031.md",
+    "no_spend": "No Amazon request, no Chrome/browser automation, no paid provider call, no credential read, no downloads."
+  }
+}

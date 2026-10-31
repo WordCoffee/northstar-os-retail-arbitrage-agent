@@ -27,7 +27,7 @@ ROOT = Path(os.environ.get("NORTHSTAR_LOOP_ROOT")
             or Path(__file__).resolve().parents[1]).resolve()
 sys.path.insert(0, str(ROOT / "Northstar_backend"))
 
-from agent_kernel.coding_runner import CodingTask, run_coding_task  # noqa: E402
+from agent_kernel.coding_agent import CodingAgent  # noqa: E402
 from agent_kernel.coding_tools import Workspace  # noqa: E402
 from agent_kernel.local_model import make_local_model  # noqa: E402
 from agent_kernel.tys_adapter import make_workspace_acceptance  # noqa: E402
@@ -98,18 +98,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         heartbeat("model")
         return model(prompt)
 
-    task = CodingTask(
-        objective=objective,
-        workspace=str(root),
-        commands=commands,
-        required_files=required,
-        max_steps=int(spec.get("max_steps") or 10),
-        max_repairs=int(spec.get("max_repairs") or 0),
-        required_artifact=str(spec.get("required_artifact") or ""),
-    )
     try:
-        result = run_coding_task(task, model=guarded_model, acceptance=acceptance,
-                                 workspace=workspace)
+        agent = CodingAgent(
+            workspace,
+            guarded_model,
+            max_steps=int(spec.get("max_steps") or 10),
+            max_repairs=int(spec.get("max_repairs") or 0),
+            acceptance=acceptance,
+            required_artifact=str(spec.get("required_artifact") or ""),
+        )
+        result = agent.run(objective)
         payload = result.to_dict()
         payload["ok"] = bool(result.ok or result.acceptance_recovered)
         payload["acceptance_recovered"] = bool(result.acceptance_recovered)

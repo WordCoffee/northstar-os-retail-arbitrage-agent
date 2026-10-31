@@ -1,0 +1,22 @@
+{
+  "sandbox": "temporary git worktree, detached at 58b79cb3",
+  "task": "failure-demo",
+  "objective": "Create Northstar_backend/sandbox_target.py with VALUE = 1",
+  "ty_edit": "wrote 9 bytes to Northstar_backend/sandbox_target.py",
+  "acceptance": "intentional `python -c raise SystemExit(1)` failed",
+  "file_after_restore": false,
+  "state_status": "failed",
+  "state_reason": "missing=[]; failures=['python -c raise SystemExit(1) exit 1: ']",
+  "restoration": {
+    "sha": "aaa3a87218ff173e21cda29d4976f999d8b6a91e",
+    "restored": [],
+    "removed": [
+      "Northstar_backend/sandbox_target.py"
+    ],
+    "dry_run": false,
+    "verified": true,
+    "count": 1
+  },
+  "ledger_status": "failed",
+  "ledger_error": "missing=[]; failures=['python -c raise SystemExit(1) exit 1: ']"
+}

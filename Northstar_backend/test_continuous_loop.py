@@ -190,6 +190,39 @@ def test_commit_task_preserves_pre_existing_staged_work(tmp_path, monkeypatch):
     assert "user.txt" in staged
 
 
+def test_lock_refuses_a_live_owner_and_reclaims_a_dead_one(tmp_path, monkeypatch):
+    lock = tmp_path / "loop.lock"
+    monkeypatch.setattr(cl, "LOCK_PATH", lock)
+    lock.write_text(json.dumps({"pid": __import__("os").getpid(), "created_ts": __import__("time").time()}),
+                    encoding="utf-8")
+    with pytest.raises(cl.LoopError):
+        cl.acquire_lock("run-1")
+    lock.write_text(json.dumps({"pid": 999999, "created_ts": 0}), encoding="utf-8")
+    record = cl.acquire_lock("run-2")
+    assert record["run_id"] == "run-2"
+    cl.release_lock()
+
+
+def test_stop_blocks_dispatch(tmp_path, monkeypatch):
+    monkeypatch.setattr(cl, "STOP_PATH", tmp_path / "STOP")
+    (tmp_path / "STOP").write_text("stop", encoding="utf-8")
+    with pytest.raises(cl.LoopError):
+        cl.execute_task(_task("stop"), {"completed": {}, "tasks": {}})
+
+
+def test_command_timeout_is_reported():
+    result = cl.run_command(["python", "-c", "import time; time.sleep(2)"], timeout=0.2)
+    assert result["ok"] is False
+    assert "timeout" in result["error"]
+
+
+def test_commit_task_refuses_out_of_scope_changes(tmp_path, monkeypatch):
+    monkeypatch.setattr(cl, "ROOT", tmp_path)
+    result = cl.commit_task(_task("scope"), {"Northstar_backend/evil.py"}, {})
+    assert result["ok"] is False
+    assert "outside commit_paths" in result["error"]
+
+
 def test_dry_run_command_does_not_execute(tmp_path):
     out = cl.run_command(["python", "-c", "raise SystemExit(1)"],
                          cwd=tmp_path, dry_run=True)
