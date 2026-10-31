@@ -37,14 +37,23 @@ def metrics(png: bytes) -> Dict[str, float]:
 
     white = np.all(a >= WHITE, axis=-1)
     purity = float(white.mean())
+    h, w = a.shape[:2]
+    b = max(2, int(min(w, h) * 0.06))
+    ring = np.zeros((h, w), dtype=bool)
+    ring[:b, :] = True
+    ring[-b:, :] = True
+    ring[:, :b] = True
+    ring[:, -b:] = True
+    background_purity = float(white[ring].mean()) if ring.any() else 1.0
 
     subject = ~white
     if subject.sum() < 50:
         return {"contrast": 0.0, "fill": 0.0, "balance": 0.0,
-                "hook_density": 0.0, "purity": round(purity, 4), "subject_px": 0}
+                "hook_density": 0.0, "purity": round(purity, 4),
+                "background_purity": round(background_purity, 4),
+                "subject_px": 0}
 
     ys, xs = np.where(subject)
-    h, w = a.shape[:2]
     box_w = (xs.max() - xs.min() + 1) / w
     box_h = (ys.max() - ys.min() + 1) / h
     fill = float(max(box_w, box_h))          # longest side, the conservative reading
@@ -64,7 +73,9 @@ def metrics(png: bytes) -> Dict[str, float]:
 
     return {"contrast": round(contrast, 4), "fill": round(fill, 4),
             "balance": round(balance, 4), "hook_density": round(hook_density, 4),
-            "purity": round(purity, 4), "subject_px": int(subject.sum())}
+            "purity": round(purity, 4),
+            "background_purity": round(background_purity, 4),
+            "subject_px": int(subject.sum())}
 
 
 def legibility(png: bytes, expected: Optional[list] = None) -> Dict[str, Any]:
@@ -88,6 +99,7 @@ def legibility(png: bytes, expected: Optional[list] = None) -> Dict[str, Any]:
 def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
     m = metrics(png)
     leg = legibility(png, expected_copy)
+    bg = m.get("background_purity", m["purity"])
 
     fill_penalty = abs(m["fill"] - TARGET_FILL)
     composite = (
@@ -96,10 +108,10 @@ def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str,
         + m["balance"] * 10
         + m["hook_density"] * 15
         + leg["legibility"] * 20
-        + m["purity"] * 10
+        + bg * 10
     )
     defects = []
-    if m["purity"] < 0.35:
+    if bg < 0.35:
         defects.append("background_not_white_enough")
     if m["fill"] < 0.6:
         defects.append("subject_too_small")
@@ -136,11 +148,17 @@ HOOK_MIN = 0.25
 
 
 def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
-    """Strict compliance: pure white, product fills 80-92%, nothing else."""
+    """Strict compliance: pure white background, product fills 80-92%, nothing else.
+
+    Background purity is measured on the outer ring, not the whole frame: a
+    product at the 85% fill target cannot leave 90% of the image white, so the
+    whole-image share is the wrong statistic for a background rule.
+    """
     m = metrics(png)
     leg = legibility(png, expected_copy)
+    bg = m.get("background_purity", m["purity"])
     defects = []
-    if m["purity"] < LISTING_PURITY:
+    if bg < LISTING_PURITY:
         defects.append("background_not_white_enough")
     if m["fill"] < LISTING_FILL[0]:
         defects.append("subject_too_small")
@@ -150,11 +168,11 @@ def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[s
         defects.append("subject_off_centre")
     if leg["legibility"] < 0.5:
         defects.append("copy_not_readable")
-    if m["purity"] < 0.5 and "contact_shadow_or_floor" not in defects:
+    if bg < 0.90 and "contact_shadow_or_floor" not in defects:
         defects.append("contact_shadow_or_floor")
 
     composite = (
-        min(1.0, m["purity"] / LISTING_PURITY) * 40
+        min(1.0, bg / LISTING_PURITY) * 40
         + max(0.0, 1.0 - abs(m["fill"] - 0.86) * 8) * 30
         + m["balance"] * 10
         + leg["legibility"] * 20
@@ -166,7 +184,7 @@ def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[s
         "legibility": leg,
         "defects": defects,
         "verdict": "pass" if not defects else "revise",
-        "rubric": "listing: purity>=%.2f, fill 80-92%%, balance, OCR legibility" % LISTING_PURITY,
+        "rubric": "listing: background purity>=%.2f, fill 80-92%%, balance, OCR legibility" % LISTING_PURITY,
     }
 
 

@@ -61,9 +61,9 @@ def _cutout(b: bytes) -> bytes:
     buf = BytesIO(); img.save(buf, format="PNG"); return buf.getvalue()
 
 
-def _flow(tmp_path, kind: str, *, render=None) -> CreativeFlow:
-    dims = dict(FORMATS[kind])
-    if kind == "pouch":
+def _flow(tmp_path, kind: str, *, render=None, dims=None) -> CreativeFlow:
+    dims = dict(dims or FORMATS[kind])
+    if kind == "pouch" and "require_print_dpi" not in dims:
         dims["require_print_dpi"] = False
     job = CreativeJob(job_id=f"fmt-{kind}", product={"id": "p", "target_price": 34, "unit_cost": 11},
                       pricing={"target_price": 34, "unit_cost": 11}, keywords=["lion mane"],
@@ -72,9 +72,13 @@ def _flow(tmp_path, kind: str, *, render=None) -> CreativeFlow:
     return CreativeFlow(job, root=tmp_path, auto_revert=False,
                         render=render or (lambda p, w, h: _plate(kind)),
                         cutout=_cutout,
-                        compose=lambda path, **kw: {"bytes": path.read_bytes(),
-                                                    "geom_residual_px": 0.1,
-                                                    "neutralized": {"neutralized": True}})
+                        compose=lambda path, **kw: {
+                            "bytes": path.read_bytes(),
+                            "geom_residual_px": 0.1,
+                            "quad": [[100, 100], [320, 100], [320, 420], [100, 420]],
+                            "measured": {"quad": [[100, 100], [320, 100],
+                                                  [320, 420], [100, 420]]},
+                            "neutralized": {"neutralized": True}})
 
 
 @pytest.fixture(autouse=True)
@@ -96,6 +100,10 @@ def test_every_format_completes_the_flow(tmp_path, kind):
     assert "error" not in geo
     assert state["steps"]["aplus"]["valid"] is True
     assert Path(state["steps"]["report"]["path"]).exists()
+    dieline = state["steps"]["compose"].get("dieline") or {}
+    assert dieline.get("path"), dieline
+    assert Path(dieline["path"]).is_file()
+    assert "dpi" in dieline and "print_ready" in dieline
 
 
 @pytest.mark.parametrize("kind", ["box", "bottle", "tube"])
@@ -122,6 +130,25 @@ def test_unmeasurable_plate_blocks_instead_of_guessing(tmp_path):
     state = flow.run()
     assert "surface_unmeasurable" in state["blocked"]
     assert state["steps"]["compose"]["status"] == "refused"
+
+
+def test_print_required_low_res_blocks_and_records_sidecar(tmp_path):
+    dims = dict(FORMATS["box"])
+    dims["require_print_dpi"] = True
+    flow = _flow(tmp_path, "box", dims=dims)
+    state = flow.run()
+    assert "resolution_below_300dpi" in state["blocked"]
+    compose = state["steps"]["compose"]
+    assert compose["dieline"]["print_ready"] is False
+    assert "print_dpi_below_target" in compose["print_error"]
+
+
+def test_print_required_small_face_passes(tmp_path):
+    dims = {"width": 10, "depth": 5, "height": 20, "require_print_dpi": True}
+    flow = _flow(tmp_path, "box", dims=dims)
+    state = flow.run()
+    assert "resolution_below_300dpi" not in state["blocked"]
+    assert state["steps"]["compose"]["dieline"]["print_ready"] is True
 
 
 def test_rollback_is_recorded_when_blocked(tmp_path):

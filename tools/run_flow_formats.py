@@ -37,7 +37,9 @@ import numpy as np  # noqa: E402
 from PIL import Image, ImageDraw  # noqa: E402
 
 import creative_flow  # noqa: E402
+import hardware_guard  # noqa: E402
 import pouch_label  # noqa: E402
+import prompt_author  # noqa: E402
 import surface_measure  # noqa: E402
 
 FORMATS = ("pouch", "box", "bottle", "tube")
@@ -142,6 +144,7 @@ def _summary(state: Dict[str, Any]) -> Dict[str, Any]:
             keep[name] = {k: step.get(k) for k in
                           ("status", "residual_px", "bytes", "error")}
             keep[name]["surface"] = step.get("surface")
+            keep[name]["dieline"] = step.get("dieline")
         elif name == "bind":
             keep[name] = {"geometry": step.get("geometry"),
                           "tier": step.get("tier"), "margin": step.get("margin")}
@@ -158,22 +161,93 @@ def _summary(state: Dict[str, Any]) -> Dict[str, Any]:
             "steps": keep}
 
 
-def run_format(kind: str, out_root: Path, *, dry_run: bool, width: int,
-               height: int) -> Dict[str, Any]:
-    import studio_generation as sg
-
-    out_dir = out_root / kind
-    prompt = PROMPTS[kind]
-    job = creative_flow.CreativeJob(
+def _job(kind: str, out_dir: Path) -> "creative_flow.CreativeJob":
+    return creative_flow.CreativeJob(
         job_id=f"formats-{kind}",
         product={"id": f"lions-mane-6oz-{kind}", "target_price": 34.0,
-                 "unit_cost": 11.5,
+                 "unit_cost": 11.5, "category": "supplement",
+                 "substrate": "matte kraft" if kind in ("pouch", "box", "tube")
+                 else "amber glass",
                  "brand": {"colors": ["#1d4a1d"], "fonts": {"heading": "Playfair Display"}}},
         pricing={"target_price": 34.0, "unit_cost": 11.5},
         keywords=["lion's mane powder", "fruiting body mushroom"],
         copy=COPY, geometry=kind, geometry_dims=DIMS[kind],
         out_dir=str(out_dir),
     )
+
+
+def _stop_lane(wait_s: int = 60) -> None:
+    import subprocess
+    subprocess.run(["taskkill", "/F", "/IM", "llama-server.exe"],
+                   capture_output=True, text=True, timeout=30, check=False)
+    deadline = time.time() + wait_s
+    while time.time() < deadline:
+        hw = hardware_guard.snapshot()
+        if hw.ratio is None or hw.ratio < 0.40:
+            return
+        time.sleep(2)
+
+
+def _warmup_lane(timeout: float = 60.0) -> None:
+    """One tiny completion after /health: the first POST can be reset mid-load."""
+    import urllib.error
+    import urllib.request
+    body = {
+        "model": "northstaros-27b-coder",
+        "messages": [{"role": "user", "content": "Reply with the single word ready."}],
+        "max_tokens": 16,
+        "stream": False,
+    }
+    req = urllib.request.Request(
+        "http://127.0.0.1:8080/v1/chat/completions",
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Content-Type": "application/json"}, method="POST")
+    last: Optional[Exception] = None
+    for _ in range(10):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+            if payload.get("choices"):
+                return
+        except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+            last = exc
+        time.sleep(2)
+    raise prompt_author.PromptAuthorUnavailable(
+        f"local_author_warmup_failed: {last}")
+
+
+def _author_all(formats: List[str], out_root: Path, timeout: float) -> Dict[str, Dict[str, Any]]:
+    """Author every prompt on the local 27B, then free the GPU for FLUX."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import northstar_lane_router as lane
+    if not lane.ensure("northstaros-27b-coder"):
+        raise prompt_author.PromptAuthorUnavailable(
+            "local_author_lane_not_started (llama-server / model missing)")
+    # /health is up before the first slot is ready; a POST in that window is
+    # reset. Give the slot a moment, then warm it with one tiny completion.
+    time.sleep(5)
+    results: Dict[str, Dict[str, Any]] = {}
+    try:
+        _warmup_lane()
+        for kind in formats:
+            print(f"[formats] author {kind} ...", flush=True)
+            job = _job(kind, out_root / kind)
+            brief = prompt_author.build_brief(job)
+            results[kind] = prompt_author.author_prompt(brief, timeout=timeout)
+            print(f"[formats] author {kind}: ok", flush=True)
+    finally:
+        _stop_lane()
+    return results
+
+
+def run_format(kind: str, out_root: Path, *, dry_run: bool, width: int,
+               height: int, prompt: Optional[str] = None,
+               author: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    import studio_generation as sg
+
+    out_dir = out_root / kind
+    prompt = prompt or PROMPTS[kind]
+    job = _job(kind, out_dir)
     seed = SEEDS[kind]
     if dry_run:
         render = lambda p, w, h: _synthetic(kind, width, height)
@@ -207,7 +281,8 @@ def run_format(kind: str, out_root: Path, *, dry_run: bool, width: int,
     labelled_path = out_dir / "02_labelled.png"
     hero_path = out_dir / "03_hero.png"
     record: Dict[str, Any] = {
-        "kind": kind, "seed": seed, "prompt": prompt, "duration_s": elapsed,
+        "kind": kind, "seed": seed, "prompt": prompt, "author": author,
+        "duration_s": elapsed,
         "error": error, "summary": _summary(state),
         "artefacts": {
             "plate": str(plate_path) if plate_path.exists() else None,
@@ -235,6 +310,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--size", type=int, nargs=2, default=[1024, 1024],
                     metavar=("W", "H"))
     ap.add_argument("--out", default="", help="output directory")
+    ap.add_argument("--no-author", action="store_true",
+                    help="use the built-in prompts instead of the local 27B author")
+    ap.add_argument("--author-timeout", type=float, default=240.0)
     args = ap.parse_args(argv)
 
     stamp = time.strftime("%Y%m%dT%H%M%SZ")
@@ -252,12 +330,33 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(json.dumps(report, indent=2)[:2000])
             return 2
 
+    authored: Dict[str, Dict[str, Any]] = {}
+    if not args.dry_run and not args.no_author:
+        print("[formats] authoring prompts on the local 27B ...", flush=True)
+        try:
+            authored = _author_all(list(args.formats), out_root,
+                                   float(args.author_timeout))
+        except Exception as exc:  # noqa: BLE001 - no author, no render
+            report["author_error"] = f"{type(exc).__name__}: {exc}"[:500]
+            report["status"] = "author_unavailable"
+            report["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+            (out_root / "run_report.json").write_text(
+                json.dumps(report, indent=2), encoding="utf-8")
+            print(json.dumps(report, indent=2)[:2000])
+            return 2
+        report["author"] = {
+            kind: {"model": rec.get("model"), "warnings": rec.get("warnings"),
+                   "prompt": rec.get("prompt"), "url": rec.get("url")}
+            for kind, rec in authored.items()}
+
     failed = []
     for kind in args.formats:
         print(f"[formats] {kind} ...", flush=True)
         try:
             rec = run_format(kind, out_root, dry_run=bool(args.dry_run),
-                             width=int(args.size[0]), height=int(args.size[1]))
+                             width=int(args.size[0]), height=int(args.size[1]),
+                             prompt=(authored.get(kind) or {}).get("prompt"),
+                             author=authored.get(kind))
         except Exception as exc:  # noqa: BLE001 - circuit breaker, no retry
             rec = {"kind": kind, "error": f"{type(exc).__name__}: {exc}"[:400],
                    "summary": {"status": "failed"}}

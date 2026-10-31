@@ -129,10 +129,12 @@ class CreativeFlow:
             # 300 DPI is a PRINT requirement. A render plate is a mockup, so a
             # shortfall is recorded, not enforced - unless the job asks for print.
             if not geo["dpi_check"]["ok"]:
-                if (self.job.geometry_dims or {}).get("require_print_dpi"):
-                    self.state.blocked.append("resolution_below_300dpi")
-                else:
-                    self.state.steps["bind"]["geometry"]["dpi_warning"] = "below 300 DPI equivalent"
+                # The profile's nominal px_per_mm is a design input, not the
+                # rendered plate. The actual face is measured at compose time
+                # and the print gate runs against that measurement.
+                self.state.steps["bind"]["geometry"]["dpi_warning"] = (
+                    "nominal profile is below 300 DPI equivalent; actual plate "
+                    "checked at compose")
         except (KeyError, ValueError) as exc:
             self.state.steps["bind"]["geometry"] = {"error": str(exc)[:160]}
             self.state.blocked.append("geometry_invalid")
@@ -248,6 +250,43 @@ class CreativeFlow:
                                        "surface": surface or None,
                                        "neutralized": (res.get("neutralized") or {}).get("neutralized"),
                                        "bytes": len(self.labelled)}
+        # Prepress: emit the measured dieline sidecar and, for a print-required
+        # job, gate on the ACTUAL rendered face rather than the nominal profile.
+        import geometry_profiles
+        import print_prep
+        from io import BytesIO
+        from PIL import Image
+        _dims = {k: v for k, v in (self.job.geometry_dims or {}).items()
+                 if k != "require_print_dpi"}
+        try:
+            geo = geometry_profiles.profile(kind, **_dims)
+        except (KeyError, ValueError):
+            geo = {}
+        quad = surface.get("quad") or res.get("quad")
+        image_size = Image.open(BytesIO(self.labelled)).size
+        if geo and quad:
+            sidecar_path = self.out / "02_labelled.dieline.json"
+            try:
+                sidecar = print_prep.emit_sidecar(
+                    sidecar_path, kind=kind, profile=geo, image_size=image_size,
+                    quad=quad,
+                    method=surface.get("method") or res.get("warp") or "",
+                    residual_px=(surface.get("geom_residual_px") if kind != "pouch"
+                                 else res.get("geom_residual_px")),
+                    source_plate=self.out / "01_plate.png",
+                    extra={"warnings": surface.get("warnings") or []})
+                self.state.steps["compose"]["dieline"] = {
+                    "path": str(sidecar_path),
+                    "print_ready": sidecar["print_ready"],
+                    "dpi": sidecar["dpi"]["worst"]}
+            except (KeyError, ValueError, OSError) as exc:
+                self.state.steps["compose"]["dieline"] = {"error": str(exc)[:200]}
+            if (self.job.geometry_dims or {}).get("require_print_dpi"):
+                try:
+                    print_prep.validate_print(geo, image_size, quad)
+                except print_prep.PrintDPIError as exc:
+                    self.state.blocked.append("resolution_below_300dpi")
+                    self.state.steps["compose"]["print_error"] = str(exc)[:300]
         self._save()
 
     def step_hero(self) -> None:
@@ -256,7 +295,9 @@ class CreativeFlow:
             self._save()
             return
         cut = self.cutout(self.labelled)
-        hero = listing_image.hero_on_white(cut, size=2000, fill=0.85, shadow=True)
+        hero = listing_image.hero_on_white(cut, size=2000,
+                                           fill=listing_image.DEFAULT_FILL,
+                                           shadow=True)
         (self.out / "03_hero.png").write_bytes(hero)
         self.hero_audit = listing_image.audit_white(hero)
         self.state.steps["hero"] = dict(self.hero_audit)

@@ -68,6 +68,40 @@ def _warp_to_quad(src: Image.Image, quad: Quad, size: Tuple[int, int]) -> Image.
     return src.transform((w, h), Image.PERSPECTIVE, coeffs, resample=Image.BICUBIC)
 
 
+def _luminance(img: Image.Image) -> np.ndarray:
+    a = np.asarray(img.convert("RGB"), dtype=np.float32)
+    return 0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2]
+
+
+def _apply_luminance(label: Image.Image, plate: Image.Image, mask: Image.Image,
+                     strength: float) -> Image.Image:
+    """Multiply a label by the plate's own luminance, normalized to its median.
+
+    A flat label pasted on a cylinder reads as a sticker. The plate already
+    carries the vessel's specular highlight and ambient falloff; reusing that
+    map makes the print sit in the same light. The factor is normalized by the
+    median under the label, so a cream field stays cream and only the relative
+    light/shade is transferred.
+    """
+    if strength <= 0:
+        return label
+    lum = _luminance(plate)
+    m = np.asarray(mask.convert("L")) > 0
+    if not m.any():
+        return label
+    med = float(np.median(lum[m]))
+    if med <= 1.0:
+        return label
+    factor = 1.0 + float(strength) * (lum / med - 1.0)
+    factor = np.clip(factor, 1.0 - float(strength), 1.0 + float(strength))
+    if factor.shape[:2] != (label.height, label.width):
+        small = Image.fromarray(np.clip(factor * 127.0, 0, 255).astype(np.uint8))
+        factor = np.asarray(small.resize(label.size, Image.BILINEAR),
+                            dtype=np.float32) / 127.0
+    arr = np.asarray(label.convert("RGB"), dtype=np.float32) * factor[..., None]
+    return Image.fromarray(arr.clip(0, 255).astype(np.uint8))
+
+
 def box_composite(plate: Any, label: Any, quad: Quad, *,
                   feather: int = 2, shade: float = 0.18) -> Dict[str, Any]:
     """Perspective-warp the label onto four measured corners of a box face."""
@@ -106,7 +140,7 @@ def box_composite(plate: Any, label: Any, quad: Quad, *,
 
 def bottle_composite(plate: Any, label: Any, quad: Quad, *,
                      wrap_fraction: float = 0.92, seam_gap_px: int = 6,
-                     shade: float = 0.22) -> Dict[str, Any]:
+                     shade: float = 0.22, surface_shading: float = 0.35) -> Dict[str, Any]:
     """Cylindrical resample: vertical strips compress toward the silhouette."""
     base = _as_image(plate)
     src = _as_image(label).resize((max(2, int((quad[1][0] - quad[0][0]))),
@@ -139,6 +173,9 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
         d = ImageDraw.Draw(mask)
         d.rectangle((0, 0, seam_gap_px, src.height), fill=0)
         d.rectangle((src.width - seam_gap_px, 0, src.width, src.height), fill=0)
+    if surface_shading > 0:
+        crop = base.crop((x0, y0, x0 + out.width, y0 + out.height))
+        out = _apply_luminance(out, crop, mask, surface_shading)
     base.paste(out, (x0, y0), mask)
 
     if shade:
@@ -169,7 +206,8 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
 
 def tube_composite(plate: Any, label: Any, quad: Quad, *,
                    crimp_top: int = 8, crimp_bottom: int = 8,
-                   taper: Optional[float] = None, shade: float = 0.16) -> Dict[str, Any]:
+                   taper: Optional[float] = None, shade: float = 0.16,
+                   surface_shading: float = 0.35) -> Dict[str, Any]:
     """Warp the label onto the measured tube quad (which carries the taper).
 
     A tube's printable area is a trapezoid: the body can be wider at the top
@@ -198,6 +236,8 @@ def tube_composite(plate: Any, label: Any, quad: Quad, *,
             d.rectangle((0, max(0, y1 - crimp_bottom), w, h), fill=0)
         mask = Image.composite(mask, Image.new("L", (w, h), 0), band)
 
+    if surface_shading > 0:
+        warped = _apply_luminance(warped, base, mask, surface_shading)
     base.paste(warped, (0, 0), mask)
     if shade:
         xs = [p[0] for p in pts]

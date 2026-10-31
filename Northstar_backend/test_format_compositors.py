@@ -157,6 +157,47 @@ def test_tube_shading_stays_inside_the_label_box():
     assert img.getpixel((395, 495)) == plate
 
 
+def _gradient_plate(w=400, h=500):
+    import numpy as np
+    arr = np.zeros((h, w, 3), dtype=np.uint8)
+    ramp = np.linspace(60, 220, w).astype(np.uint8)
+    arr[:, :, 0] = ramp
+    arr[:, :, 1] = ramp
+    arr[:, :, 2] = ramp
+    buf = BytesIO(); Image.fromarray(arr, "RGB").save(buf, format="PNG"); return buf.getvalue()
+
+
+def _flat_label(w=240, h=300, value=180):
+    img = Image.new("RGB", (w, h), (value, value, value))
+    buf = BytesIO(); img.save(buf, format="PNG"); return buf.getvalue()
+
+
+def test_bottle_luminance_shading_follows_the_plate_light():
+    out = fc.bottle_composite(_gradient_plate(), _flat_label(), QUAD,
+                              shade=0, seam_gap_px=0, surface_shading=0.5)
+    img = _img(out["bytes"])
+    left = img.getpixel((110, 250))[0]
+    right = img.getpixel((290, 250))[0]
+    assert left < right - 8, (left, right)
+
+
+def test_tube_luminance_shading_follows_the_plate_light():
+    out = fc.tube_composite(_gradient_plate(), _flat_label(), QUAD,
+                            shade=0, crimp_top=0, crimp_bottom=0,
+                            surface_shading=0.5)
+    img = _img(out["bytes"])
+    left = img.getpixel((110, 250))[0]
+    right = img.getpixel((290, 250))[0]
+    assert left < right - 8, (left, right)
+
+
+def test_luminance_shading_off_leaves_a_flat_label_flat():
+    out = fc.bottle_composite(_gradient_plate(), _flat_label(), QUAD,
+                              shade=0, seam_gap_px=0, surface_shading=0)
+    img = _img(out["bytes"])
+    assert img.getpixel((110, 250)) == img.getpixel((290, 250))
+
+
 def test_every_compositor_returns_png_bytes_and_a_size():
     for kind in ("box", "bottle", "tube"):
         out = fc.composite(kind, _plate(), _label(), QUAD)
