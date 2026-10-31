@@ -1,0 +1,12 @@
+{
+  "bojo_keepalive_cycle5_20261031": {
+    "cycle": "Cycle 5 - Bojo keep-alive",
+    "change": "UnifiedLLMAdapter.stream_chat accepts keep_alive and writes it to the Ollama body when provided; chat_adapter defaults CHAT_KEEP_ALIVE=10m (env override, 0 unloads); stream_turn passes it. No model/prompt change. Applied with agent_kernel.ast_edit.replace_function and add_before.",
+    "verification": "test_chat_core 17 passed including the wire-payload keep_alive test; UI checks unchanged (73 unit, 11 contrast, 34 static, build 0 errors). autothink/tests/test_llm_adapter.py has 4 unrelated local/cloud probe failures; stream_chat is covered by test_chat_core.",
+    "limits": "10m pins Bojo in memory; set CHAT_KEEP_ALIVE=0 if ComfyUI needs the RAM/VRAM. No wall-clock reload benchmark; wire contract only.",
+    "next_cycle": "Cycle 6 - local evaluation ledger (JSONL/rollup of cycle commands, pass/fail counts and commits) to select the next task from evidence. OpenJudge/AgentScope remain uninstalled.",
+    "report": "reports/bojo_keepalive_cycle5_20261031.md",
+    "commit": "a9adbd58",
+    "no_spend": "No Amazon request, no paid provider call, no credential read."
+  }
+}
