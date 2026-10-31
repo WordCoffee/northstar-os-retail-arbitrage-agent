@@ -70,7 +70,8 @@ class CreativeFlow:
                  cutout: Optional[Callable[[bytes], bytes]] = None,
                  compose: Optional[Callable[..., Dict[str, Any]]] = None,
                  score: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None,
-                 prompt_author: Optional[Callable[[Dict[str, Any]], str]] = None):
+                 prompt_author: Optional[Callable[[Dict[str, Any]], str]] = None,
+                 auto_revert: bool = True):
         self.job = job
         self.root = Path(root).resolve()
         self.out = Path(job.out_dir) if job.out_dir else self.root / "exports" / f"flow_{job.job_id}"
@@ -81,6 +82,7 @@ class CreativeFlow:
         self.compose = compose
         self.score = score
         self.prompt_author = prompt_author
+        self.auto_revert = bool(auto_revert)
 
     # â”€â”€ persistence â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     def _save(self) -> None:
@@ -117,7 +119,9 @@ class CreativeFlow:
         self.state.blocked.extend(brief.blocked)
         try:
             import geometry_profiles
-            geo = geometry_profiles.profile(self.job.geometry, **(self.job.geometry_dims or {}))
+            _dims = {k: v for k, v in (self.job.geometry_dims or {}).items()
+                     if k != "require_print_dpi"}
+            geo = geometry_profiles.profile(self.job.geometry, **_dims)
             self.state.steps["bind"]["geometry"] = {
                 "kind": geo["kind"], "usable_height_mm": geo.get("usable_height_mm"),
                 "quad_px": geo.get("quad"), "dpi_ok": geo["dpi_check"]["ok"],
@@ -186,7 +190,30 @@ class CreativeFlow:
             self.state.steps["compose"] = {"status": "skipped"}
             self._save()
             return
-        res = self.compose(self.out / "01_plate.png", **self.job.copy)
+        kind = str(getattr(self.job, "geometry", "pouch") or "pouch").lower()
+        if kind == "pouch":
+            res = self.compose(self.out / "01_plate.png", **self.job.copy)
+        else:
+            # Format compositors take a rendered PANEL, not a pouch face.
+            import format_compositors
+            import geometry_profiles
+            import pouch_label
+            from io import BytesIO
+            from PIL import Image
+            panel = pouch_label.render_label(**{k: v for k, v in self.job.copy.items()
+                                                if k in ("title", "subtitle", "weight", "bullets")})
+            plate_bytes = (self.out / "01_plate.png").read_bytes()
+            _dims = {k: v for k, v in (self.job.geometry_dims or {}).items()
+                     if k != "require_print_dpi"}
+            geo = geometry_profiles.profile(kind, **_dims)
+            w, h = Image.open(BytesIO(plate_bytes)).size
+            quad = geo.get("quad") or [[0, 0], [w, 0], [w, h], [0, h]]
+            mx = max(float(p[0]) for p in quad) or 1.0
+            my = max(float(p[1]) for p in quad) or 1.0
+            scale = min(1.0, (w * 0.8) / mx, (h * 0.8) / my)
+            quad = [[round(float(p[0]) * scale, 2), round(float(p[1]) * scale, 2)]
+                    for p in quad]
+            res = format_compositors.composite(kind, plate_bytes, panel, quad)
         self.labelled = res["bytes"]
         (self.out / "02_labelled.png").write_bytes(self.labelled)
         self.state.steps["compose"] = {"residual_px": res.get("geom_residual_px"),
@@ -279,6 +306,19 @@ class CreativeFlow:
             if self.state.blocked and name in ("intake", "bind", "plate", "gate"):
                 break
         self.state.status = "blocked" if self.state.blocked else "ok"
+        # T1 self-healing: a blocked run restores only the tracked paths it could
+        # have touched, then continues. Artefacts are untracked, so a failed
+        # render is never deleted by this.
+        if self.state.blocked and self.auto_revert and getattr(self, "snapshot_sha", ""):
+            try:
+                rb = snapshot.rollback_if_red(
+                    self.root, self.snapshot_sha, gate_ok=False,
+                    paths=["Northstar_backend", "northstar-os-ui", "tools"])
+                self.state.steps["rollback"] = {"rolled_back": rb.get("rolled_back"),
+                                                "restored": (rb.get("restored") or [])[:12],
+                                                "reason": "gate red"}
+            except snapshot.SnapshotError as exc:
+                self.state.steps["rollback"] = {"error": str(exc)[:200]}
         self.step_report()
         self.state.status = "blocked" if self.state.blocked else "ok"
         self._save()

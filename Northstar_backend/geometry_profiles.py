@@ -38,7 +38,7 @@ def _check_positive(**kw: float) -> None:
 
 def rigid_box(*, width: float, depth: float, height: float,
               glue_tab: float = 15.0, bleed: float = 3.0,
-              tuck: float = 12.0) -> Dict[str, Any]:
+              tuck: float = 12.0, px_per_mm: float = 6.0) -> Dict[str, Any]:
     """Straight tuck box: four panels + glue tab, bleed on the outside.
 
     The dieline perimeter is 2*(w+d) + glue_tab; corner bleed exists because a
@@ -67,6 +67,11 @@ def rigid_box(*, width: float, depth: float, height: float,
         },
         "panels": panels,
         "face": {"w": width, "h": height},          # printable front panel
+        # NOMINAL front-face quad at px_per_mm. A real plate must supply a
+        # MEASURED quad; this is the default the compositor scales to fit.
+        "quad": _q([(0.0, 0.0), (px(width, px_per_mm), 0.0),
+                    (px(width, px_per_mm), px(height, px_per_mm)),
+                    (0.0, px(height, px_per_mm))]),
         "clearances": {
             "corner_bleed_mm": bleed,
             "tuck_top_mm": tuck,
