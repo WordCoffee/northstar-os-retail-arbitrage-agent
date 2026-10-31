@@ -29,15 +29,15 @@
       "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field"
     },
     "snapshot": {
-      "sha": "4e70c765d334913c3b647e146e2923b8a17daa4d",
+      "sha": "fc1e8a9f5797f2d7e99e711a7e25e6665cecea9f",
       "clean": false
     },
     "plate": {
       "vram_ratio": 0.019,
-      "temp_c": 54.0,
+      "temp_c": 60.0,
       "allowed": 1,
-      "guard": "1 of 1 (vram 2%, 54C)",
-      "bytes": 1345791
+      "guard": "1 of 1 (vram 2%, 60C)",
+      "bytes": 1520862
     },
     "gate": {
       "status": "clean",
@@ -46,9 +46,9 @@
       "min_score": 0.5
     },
     "compose": {
-      "residual_px": 0.281,
+      "residual_px": 0.088,
       "neutralized": true,
-      "bytes": 854441
+      "bytes": 878835
     },
     "hero": {
       "corners_pure_white": true,
@@ -94,7 +94,7 @@
           255
         ]
       ],
-      "pure_white_ratio": 0.4011,
+      "pure_white_ratio": 0.1938,
       "size": [
         2000,
         2000
@@ -109,11 +109,30 @@
       "valid": true
     },
     "evaluate": {
-      "status": "skipped"
+      "score": 57.9,
+      "metrics": {
+        "contrast": 0.1701,
+        "fill": 0.8495,
+        "balance": 0.9474,
+        "hook_density": 0.1182,
+        "purity": 0.3279,
+        "subject_px": 2688345
+      },
+      "legibility": {
+        "legibility": 0.75,
+        "hits": 3,
+        "boxes": 8
+      },
+      "defects": [
+        "background_not_white_enough",
+        "low_thumb_stop_energy"
+      ],
+      "verdict": "revise",
+      "rubric": "offline: contrast/fill/balance/hook_density/legibility/purity"
     },
     "memory": {
       "status": "proposed",
-      "count": 0,
+      "count": 2,
       "persisted": false
     },
     "report": {

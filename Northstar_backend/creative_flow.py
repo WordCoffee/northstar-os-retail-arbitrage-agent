@@ -196,11 +196,25 @@ class CreativeFlow:
         self._save()
 
     def step_evaluate(self) -> None:
-        if self.score is None:
-            self.state.steps["evaluate"] = {"status": "skipped"}
-            self._save()
-            return
-        self.state.steps["evaluate"] = self.score(self.state.steps)
+        """Score the hero with the offline rubric unless a scorer was injected.
+
+        The rubric is code, not a model's opinion: contrast, fill, balance, hook
+        density, OCR legibility and background purity, each 0-1, composited to
+        0-100 with named defects.
+        """
+        hero = self.out / "03_hero.png"
+        if self.score is not None:
+            self.state.steps["evaluate"] = self.score(self.state.steps)
+        elif hero.exists():
+            import asset_rubric
+            copy = self.job.copy or {}
+            expected = [w.strip(".,") for w in
+                        f"{copy.get('title', '')} {copy.get('subtitle', '')}".split()
+                        if len(w) > 3][:4]
+            self.state.steps["evaluate"] = asset_rubric.score_hero(
+                hero.read_bytes(), expected_copy=expected or None)
+        else:
+            self.state.steps["evaluate"] = {"status": "skipped", "reason": "no hero artefact"}
         self._save()
 
     def step_memory(self) -> None:
