@@ -117,10 +117,18 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
     out = Image.new("RGB", src.size, (255, 255, 255))
     src_a = np.asarray(src, dtype=np.float32)
     res = np.zeros_like(src_a)
+    # The visible width of a cylinder is its diameter, but a flat label maps to
+    # the arc by x = sin(theta). Sampling the source through the INVERSE of that
+    # projection keeps the label continuous and compresses it toward the
+    # silhouette; the first version sampled (1 - sin) and mirrored the artwork
+    # around the centre, which produced two half-labels and a hard seam.
+    theta_max = max(1e-3, float(wrap_fraction) * np.pi / 2.0)
+    sin_max = np.sin(theta_max)
     for x in range(cols):
-        theta = (x / max(1, cols - 1)) * np.pi * wrap_fraction
-        # gain = sin(theta): full width at the centre of the arc, zero at the edge
-        sx = int(round((1 - np.sin(theta)) * 0.5 * (cols - 1)))
+        v = x / max(1, cols - 1)
+        s = float(np.clip((2.0 * v - 1.0) * sin_max, -1.0, 1.0))
+        u = 0.5 + float(np.arcsin(s)) / (2.0 * theta_max)
+        sx = int(round(float(np.clip(u, 0.0, 1.0)) * (cols - 1)))
         res[:, x] = src_a[:, sx]
     out = Image.fromarray(res.clip(0, 255).astype(np.uint8))
 
@@ -161,36 +169,56 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
 
 def tube_composite(plate: Any, label: Any, quad: Quad, *,
                    crimp_top: int = 8, crimp_bottom: int = 8,
-                   taper: float = 0.06, shade: float = 0.16) -> Dict[str, Any]:
-    """Trapezoid taper (tubes narrow toward the crimp) + crimp-zone masking."""
+                   taper: Optional[float] = None, shade: float = 0.16) -> Dict[str, Any]:
+    """Warp the label onto the measured tube quad (which carries the taper).
+
+    A tube's printable area is a trapezoid: the body can be wider at the top
+    than the base (or the reverse, depending on camera height). Warping to the
+    four measured corners follows that shape; the old fixed taper inset only
+    narrowed the top and could not represent a negative taper at all.
+    """
     base = _as_image(plate)
     src = _as_image(label)
     w, h = base.size
-    x0, y0 = int(quad[0][0]), int(quad[0][1])
-    x1, y1 = int(quad[1][0]), int(quad[2][1])
-    tw, th = max(2, x1 - x0), max(2, y1 - y0)
+    pts = [(float(p[0]), float(p[1])) for p in quad]
+    if len(pts) != 4:
+        raise ValueError("tube_composite needs exactly 4 corner points (TL, TR, BR, BL)")
 
-    inset = int(tw * max(0.0, min(0.4, taper)))
-    warped = src.resize((tw, th), Image.LANCZOS)
-    warped = warped.transform((tw, th), Image.QUAD,
-                              (inset, 0, tw - inset, 0, tw, th, 0, th),
-                              resample=Image.BICUBIC)
-
-    mask = Image.new("L", (tw, th), 255)
+    warped = _warp_to_quad(src, pts, (w, h))
+    mask = _feather_mask((w, h), pts, 2)
     from PIL import ImageDraw
-    d = ImageDraw.Draw(mask)
-    if crimp_top > 0:
-        d.rectangle((0, 0, tw, min(crimp_top, th)), fill=0)
-    if crimp_bottom > 0:
-        d.rectangle((0, max(0, th - crimp_bottom), tw, th), fill=0)
-    mask = mask.filter(ImageFilter.GaussianBlur(1))
+    ys = [p[1] for p in pts]
+    y0, y1 = min(ys), max(ys)
+    if crimp_top > 0 or crimp_bottom > 0:
+        band = Image.new("L", (w, h), 255)
+        d = ImageDraw.Draw(band)
+        if crimp_top > 0:
+            d.rectangle((0, 0, w, min(h, y0 + crimp_top)), fill=0)
+        if crimp_bottom > 0:
+            d.rectangle((0, max(0, y1 - crimp_bottom), w, h), fill=0)
+        mask = Image.composite(mask, Image.new("L", (w, h), 0), band)
 
-    base.paste(warped, (x0, y0), mask)
+    base.paste(warped, (0, 0), mask)
     if shade:
-        arr = np.asarray(base, dtype=np.float32)
-        ramp = np.linspace(1.0, 1.0 - shade, max(1, tw // 3)) if tw > 3 else np.array([1.0])
-        arr[y0:y0 + th, x0:x0 + len(ramp)] *= ramp[None, :, None]
-        base = Image.fromarray(arr.clip(0, 255).astype(np.uint8))
+        xs = [p[0] for p in pts]
+        x0, x1 = max(0, int(min(xs))), min(w, int(max(xs)))
+        arr = np.zeros((h, w), dtype=np.uint8)
+        if x1 > x0:
+            arr[:, x0:x1] = np.linspace(0, int(255 * shade),
+                                        x1 - x0).astype(np.uint8)
+        ramp = Image.fromarray(arr, mode="L").filter(ImageFilter.GaussianBlur(2))
+        ramp = Image.composite(ramp, Image.new("L", (w, h), 0),
+                               _feather_mask((w, h), pts, 2))
+        # The crimp bands are masked out of the label; they must not be shaded
+        # either, or a sealed zone reads as printed.
+        ramp = Image.composite(ramp, Image.new("L", (w, h), 0), mask)
+        base = Image.composite(Image.new("RGB", (w, h), (0, 0, 0)), base,
+                               ramp.point(lambda v: int(v * 0.5)))
+
+    if taper is None:
+        top_w = float(np.hypot(pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]))
+        bot_w = float(np.hypot(pts[2][0] - pts[3][0], pts[2][1] - pts[3][1]))
+        taper = 1.0 - top_w / max(1.0, bot_w)
 
     buf = BytesIO()
     base.save(buf, format="PNG")

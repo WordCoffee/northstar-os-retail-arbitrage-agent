@@ -112,6 +112,11 @@ def bottle(*, diameter: float, height: float, label_height: float,
         "diameter_mm": diameter,
         "circumference_mm": round(circumference, 3),
         "wrap_fraction": round(wrap_fraction, 4),
+        # Physical coverage and VISIBLE coverage are different numbers. The
+        # label may wrap 97% of the circumference, but a 97%-wide label puts
+        # its text on the edge-on silhouette. The compositor uses the visible
+        # share so type stays legible on the front of the bottle.
+        "render_wrap_fraction": 0.75,
         "usable_height_mm": round(usable_h, 3),
         "px_per_mm": px_per_mm,
         "radius_px": r,

@@ -455,7 +455,7 @@ def _cylinder_band(mask: np.ndarray, kind: str, *, wrap_fraction: float,
     if kind == "bottle" and abs(taper) > 0.12:
         raise SurfaceNotMeasurable(
             f"the bottle body tapers {taper:.0%}; that is a shoulder, not a label band")
-    if kind == "tube" and not (-0.08 <= taper <= MAX_CYLINDER_TAPER):
+    if kind == "tube" and not (-MAX_CYLINDER_TAPER <= taper <= MAX_CYLINDER_TAPER):
         raise SurfaceNotMeasurable(
             f"the tube taper {taper:.0%} is outside the printable range")
 

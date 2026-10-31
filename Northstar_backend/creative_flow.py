@@ -219,7 +219,7 @@ class CreativeFlow:
             try:
                 measured = surface_measure.measure_surface(
                     plate, kind,
-                    wrap_fraction=float(geo.get("wrap_fraction") or 0.92))
+                    wrap_fraction=float(geo.get("render_wrap_fraction") or 0.75))
             except surface_measure.SurfaceNotMeasurable as exc:
                 self.state.blocked.append("surface_unmeasurable")
                 self.state.steps["compose"] = {"status": "refused", "kind": kind,
@@ -233,12 +233,10 @@ class CreativeFlow:
             kw: Dict[str, Any] = {}
             if kind == "bottle":
                 kw["wrap_fraction"] = float(measured.get("wrap_fraction")
-                                            or geo.get("wrap_fraction") or 0.92)
+                                            or geo.get("render_wrap_fraction") or 0.75)
             elif kind == "tube":
-                # The measured quad already excludes the crimp zones, so the
-                # compositor must not inset them a second time. The warp taper
-                # is the measured taper, not a constant.
-                kw["taper"] = min(0.35, max(0.0, float(measured.get("taper") or 0.0)))
+                # The measured quad already carries the taper and excludes the
+                # crimp zones; the compositor warps to those four corners.
                 kw["crimp_top"] = 0
                 kw["crimp_bottom"] = 0
             res = format_compositors.composite(kind, plate_bytes, panel,

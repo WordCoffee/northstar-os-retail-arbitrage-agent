@@ -88,6 +88,16 @@ def _quadrant_label(w=240, h=300):
     buf = BytesIO(); img.save(buf, format="PNG"); return buf.getvalue()
 
 
+def _gradient_label(w=240, h=300):
+    import numpy as np
+    arr = np.zeros((h, w, 3), dtype=np.uint8)
+    ramp = np.linspace(0, 255, w).astype(np.uint8)
+    arr[:, :, 0] = ramp
+    arr[:, :, 1] = ramp
+    arr[:, :, 2] = ramp
+    buf = BytesIO(); Image.fromarray(arr, "RGB").save(buf, format="PNG"); return buf.getvalue()
+
+
 def test_box_warp_keeps_the_label_upright_and_unflipped():
     out = fc.box_composite(_plate(), _quadrant_label(), QUAD, shade=0)
     img = _img(out["bytes"])
@@ -116,6 +126,27 @@ def test_bottle_shading_stays_inside_the_label_box():
     assert img.getpixel((5, 5)) == plate
     assert img.getpixel((395, 5)) == plate
     assert img.getpixel((200, 250)) != plate        # the label is still painted
+
+
+def test_bottle_resample_is_continuous_not_mirrored():
+    import numpy as np
+    out = fc.bottle_composite(_plate(), _gradient_label(), QUAD, shade=0,
+                              seam_gap_px=0)
+    img = np.asarray(_img(out["bytes"]), dtype=int)
+    row = img[250, 82:318, 0]
+    assert (np.diff(row) >= -2).all()          # monotonic: one label, not two
+    assert row[0] < 40 and row[-1] > 215
+
+
+def test_tube_warp_follows_a_measured_trapezoid():
+    plate = (205, 180, 150)
+    quad = [[100, 100], [300, 100], [280, 400], [120, 400]]   # top wider
+    out = fc.tube_composite(_plate(), _quadrant_label(), quad, shade=0,
+                            crimp_top=0, crimp_bottom=0)
+    img = _img(out["bytes"])
+    assert img.getpixel((110, 110)) != plate      # top-left is inside
+    assert img.getpixel((130, 390)) != plate      # bottom-left is inside
+    assert img.getpixel((100, 250)) == plate      # left of the slanted edge
 
 
 def test_tube_shading_stays_inside_the_label_box():
