@@ -135,7 +135,11 @@ def build_prompt_crew(render_llm=None) -> Any:
               "correct geometry, material and lighting, and no typography of any kind."),
         backstory=("You have shipped print packaging for a decade and you know that image models "
                    "cannot draw type. You therefore describe material, light and form only, and "
-                   "you treat any mention of a brand name as a defect."),
+                   "you treat any mention of a brand name as a defect. "
+                   "HARD BAN: never write the words emblem, badge, icon, mark, logo, stamp, crest "
+                   "or monogram - this model draws lettering when invited. Always say instead: "
+                   "'pristine plain surface', 'unprinted uniform texture', 'flat continuous matte "
+                   "material'."),
         tools=tools() if CREWAI else [],
         llm=model, verbose=False, allow_delegation=False, max_iter=3,
     )

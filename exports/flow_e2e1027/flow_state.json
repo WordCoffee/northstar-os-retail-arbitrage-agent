@@ -1,0 +1,109 @@
+{
+  "job_id": "e2e1027",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field"
+    },
+    "snapshot": {
+      "sha": "4e70c765d334913c3b647e146e2923b8a17daa4d",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 54.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 54C)",
+      "bytes": 1345791
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.281,
+      "neutralized": true,
+      "bytes": 854441
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.4011,
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "status": "skipped"
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 0,
+      "persisted": false
+    },
+    "report": {
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\flow_e2e1027\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T00:33:24",
+  "finished_at": "2026-10-31T00:34:04"
+}
