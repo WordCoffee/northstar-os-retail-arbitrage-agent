@@ -1,0 +1,259 @@
+{
+  "job_id": "formats-pouch",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "pouch",
+        "usable_height_mm": 158.0,
+        "quad_px": [
+          [
+            0.0,
+            72.0
+          ],
+          [
+            600.0,
+            72.0
+          ],
+          [
+            600.0,
+            1020.0
+          ],
+          [
+            0.0,
+            1020.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+      }
+    },
+    "snapshot": {
+      "sha": "97bacdd4fc8638349d498ebf0af75e5582fa4b15",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 61.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 61C)",
+      "bytes": 1382574
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.281,
+      "surface": {
+        "kind": "pouch",
+        "method": "pouch-measure_face",
+        "quad": [
+          [
+            297.8,
+            292.0
+          ],
+          [
+            766.4,
+            292.0
+          ],
+          [
+            739.9,
+            831.0
+          ],
+          [
+            329.8,
+            831.0
+          ]
+        ],
+        "geom_residual_px": 0.281,
+        "confidence": null,
+        "measured": {
+          "quad": [
+            [
+              297.8,
+              292.0
+            ],
+            [
+              766.4,
+              292.0
+            ],
+            [
+              739.9,
+              831.0
+            ],
+            [
+              329.8,
+              831.0
+            ]
+          ],
+          "face": {
+            "top": 138,
+            "bottom": 908,
+            "left": 268,
+            "right": 797
+          },
+          "background": [
+            204,
+            200,
+            197
+          ],
+          "coverage": 0.3713,
+          "geom_residual_px": 0.281,
+          "geom_residual_by_side": {
+            "left": 0.309,
+            "right": 0.251
+          },
+          "bow_x_px": -4.218,
+          "bow_left_px": -5.005,
+          "bow_right_px": -3.431,
+          "fit": {
+            "left": "quadratic",
+            "right": "quadratic"
+          },
+          "fit_residual_px": {
+            "left": 0.269,
+            "right": 0.24
+          }
+        }
+      },
+      "neutralized": true,
+      "bytes": 961757,
+      "dieline": {
+        "path": "exports\\flow_formats_live_final_20261031\\pouch\\02_labelled.dieline.json",
+        "print_ready": false,
+        "dpi": 86.78
+      }
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.5513,
+      "background_purity": 1.0,
+      "subject_bbox": [
+        422,
+        181,
+        1579,
+        1861
+      ],
+      "margins": [
+        0.211,
+        0.0905,
+        0.2105,
+        0.0695
+      ],
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 95.1,
+      "metrics": {
+        "contrast": 0.3327,
+        "fill": 0.84,
+        "balance": 0.9942,
+        "hook_density": 0.0847,
+        "purity": 0.5513,
+        "background_purity": 1.0,
+        "subject_px": 1794757
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [],
+      "verdict": "pass",
+      "rubric": "listing: background purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 43.7,
+        "metrics": {
+          "contrast": 0.4042,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.212,
+          "purity": 0.0,
+          "background_purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_final_20261031\\pouch\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T11:44:10",
+  "finished_at": "2026-10-31T11:44:53"
+}

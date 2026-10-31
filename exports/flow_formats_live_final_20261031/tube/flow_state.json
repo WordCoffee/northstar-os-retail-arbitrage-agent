@@ -1,0 +1,233 @@
+{
+  "job_id": "formats-tube",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "tube",
+        "usable_height_mm": 124.0,
+        "quad_px": [
+          [
+            0.0,
+            168.0
+          ],
+          [
+            240.0,
+            168.0
+          ],
+          [
+            240.0,
+            912.0
+          ],
+          [
+            0.0,
+            912.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+      }
+    },
+    "snapshot": {
+      "sha": "366649ac4141c5bd3ca901e1927db9454f63f593",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 60.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 60C)",
+      "bytes": 1427670
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.121,
+      "surface": {
+        "kind": "tube",
+        "method": "tube-band",
+        "quad": [
+          [
+            349.31,
+            397.0
+          ],
+          [
+            686.32,
+            397.0
+          ],
+          [
+            686.21,
+            880.0
+          ],
+          [
+            348.62,
+            880.0
+          ]
+        ],
+        "geom_residual_px": 0.121,
+        "confidence": 0.96,
+        "face": {
+          "top": 397,
+          "bottom": 880,
+          "left": 292,
+          "right": 742
+        },
+        "band": {
+          "top": 365,
+          "bottom": 912,
+          "height_px": 548
+        },
+        "taper": 0.0017,
+        "crimp_top_px": 293,
+        "crimp_bottom_px": 46,
+        "face_share": null,
+        "convexity": 0.994,
+        "width_px": {
+          "top": 449.34,
+          "bottom": 450.12,
+          "median": 447.8
+        },
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 1281850,
+      "dieline": {
+        "path": "exports\\flow_formats_live_final_20261031\\tube\\02_labelled.dieline.json",
+        "print_ready": false,
+        "dpi": 98.94
+      }
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.6821,
+      "background_purity": 1.0,
+      "subject_bbox": [
+        575,
+        181,
+        1423,
+        1861
+      ],
+      "margins": [
+        0.2875,
+        0.0905,
+        0.2885,
+        0.0695
+      ],
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 95.0,
+      "metrics": {
+        "contrast": 0.4401,
+        "fill": 0.84,
+        "balance": 0.9816,
+        "hook_density": 0.0913,
+        "purity": 0.6821,
+        "background_purity": 1.0,
+        "subject_px": 1271726
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [],
+      "verdict": "pass",
+      "rubric": "listing: background purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 39.1,
+        "metrics": {
+          "contrast": 0.2973,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.1946,
+          "purity": 0.0,
+          "background_purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_final_20261031\\tube\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T11:46:17",
+  "finished_at": "2026-10-31T11:46:56"
+}

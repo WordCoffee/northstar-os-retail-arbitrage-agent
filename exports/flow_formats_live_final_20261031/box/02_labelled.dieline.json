@@ -1,0 +1,82 @@
+{
+  "schema": "northstar.dieline.v1",
+  "kind": "box",
+  "created_at": "2026-10-31T16:45:25+00:00",
+  "asset": {
+    "image": "02_labelled",
+    "image_size": [
+      1024,
+      1024
+    ]
+  },
+  "quad": [
+    [
+      247.88,
+      191.39
+    ],
+    [
+      840.06,
+      193.99
+    ],
+    [
+      843.68,
+      827.36
+    ],
+    [
+      248.11,
+      863.82
+    ]
+  ],
+  "face_px": {
+    "width": 594.435,
+    "height": 652.905
+  },
+  "physical_mm": {
+    "width": 80.0,
+    "height": 180.0
+  },
+  "scale_factors": {
+    "px_per_mm_x": 7.4304,
+    "px_per_mm_y": 3.6272,
+    "target_px_per_mm": 11.811
+  },
+  "dpi": {
+    "target": 300,
+    "x": 188.73,
+    "y": 92.13,
+    "worst": 92.13,
+    "ok": false,
+    "px_per_mm": {
+      "x": 7.4304,
+      "y": 3.6272,
+      "target": 11.811
+    },
+    "required_px": {
+      "width": 944.9,
+      "height": 2126.0
+    },
+    "deficit_px": {
+      "width": 350.4,
+      "height": 1473.1
+    },
+    "image_size": [
+      1024,
+      1024
+    ]
+  },
+  "color_profile": {
+    "working": "RGB",
+    "target": "CMYK",
+    "icc": null,
+    "note": "metadata only; no ICC transform is applied by this emitter"
+  },
+  "method": "box-quad",
+  "residual_px": 0.215,
+  "print_ready": false,
+  "source_plate_sha256": "770a7fbfc22fcc5d9b0c1b8d5823be96c2db28450ca9d2bd681151213f60d69c",
+  "notes": [
+    "quad measured from the rendered plate, not a converter die drawing",
+    "confirm panel geometry and bleed with the converter before print"
+  ],
+  "warnings": []
+}

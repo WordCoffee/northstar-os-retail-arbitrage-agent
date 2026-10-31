@@ -1,0 +1,240 @@
+{
+  "job_id": "formats-box",
+  "status": "ok",
+  "blocked": [],
+  "listing": {
+    "product_id": "lions-mane-6oz-box",
+    "hero_image": "exports\\flow_formats_live_final_20261031\\box\\03_hero.png",
+    "hero_aspect": "1:1",
+    "secondary_images": [],
+    "secondary_meta": [],
+    "keywords": [
+      "lion's mane powder",
+      "fruiting body mushroom"
+    ],
+    "alt_text": "lion's mane powder photograph on a pure white background",
+    "blocked": [],
+    "ready": true,
+    "material_tier": "premium",
+    "environment": "studio-white"
+  },
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "box",
+        "usable_height_mm": null,
+        "quad_px": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            480.0,
+            0.0
+          ],
+          [
+            480.0,
+            1080.0
+          ],
+          [
+            0.0,
+            1080.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+      }
+    },
+    "snapshot": {
+      "sha": "ecd5c49b175c31536e35881ef848cc2418cb5a1a",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 59.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 59C)",
+      "bytes": 1520930
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.215,
+      "surface": {
+        "kind": "box",
+        "method": "box-quad",
+        "quad": [
+          [
+            247.88,
+            191.39
+          ],
+          [
+            840.06,
+            193.99
+          ],
+          [
+            843.68,
+            827.36
+          ],
+          [
+            248.11,
+            863.82
+          ]
+        ],
+        "geom_residual_px": 0.215,
+        "confidence": 0.928,
+        "face": {
+          "top": 147,
+          "bottom": 895,
+          "left": 208,
+          "right": 883
+        },
+        "band": null,
+        "taper": null,
+        "crimp_top_px": null,
+        "crimp_bottom_px": null,
+        "face_share": 0.8476,
+        "convexity": null,
+        "width_px": null,
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 857215,
+      "dieline": {
+        "path": "exports\\flow_formats_live_final_20261031\\box\\02_labelled.dieline.json",
+        "print_ready": false,
+        "dpi": 92.13
+      }
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.3618,
+      "background_purity": 1.0,
+      "subject_bbox": [
+        181,
+        209,
+        1820,
+        1832
+      ],
+      "margins": [
+        0.0905,
+        0.1045,
+        0.09,
+        0.084
+      ],
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 90.1,
+      "metrics": {
+        "contrast": 0.3523,
+        "fill": 0.8195,
+        "balance": 0.9779,
+        "hook_density": 0.1166,
+        "purity": 0.3618,
+        "background_purity": 1.0,
+        "subject_px": 2552903
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [],
+      "verdict": "pass",
+      "rubric": "listing: background purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 38.3,
+        "metrics": {
+          "contrast": 0.2162,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.2388,
+          "purity": 0.0,
+          "background_purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy",
+          "flat_contrast"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_final_20261031\\box\\flow_report.json"
+    }
+  }
+}

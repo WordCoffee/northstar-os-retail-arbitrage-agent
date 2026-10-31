@@ -1,0 +1,233 @@
+{
+  "job_id": "formats-bottle",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "bottle",
+        "usable_height_mm": 169.0,
+        "quad_px": [
+          [
+            0.0,
+            180.0
+          ],
+          [
+            360.0,
+            180.0
+          ],
+          [
+            360.0,
+            660.0
+          ],
+          [
+            0.0,
+            660.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+      }
+    },
+    "snapshot": {
+      "sha": "898279fe1a42149dd070bdeae6bd55132e67e2d0",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 59.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 59C)",
+      "bytes": 1154676
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.311,
+      "surface": {
+        "kind": "bottle",
+        "method": "bottle-band",
+        "quad": [
+          [
+            374.41,
+            386.0
+          ],
+          [
+            639.78,
+            386.0
+          ],
+          [
+            639.96,
+            872.0
+          ],
+          [
+            373.75,
+            872.0
+          ]
+        ],
+        "geom_residual_px": 0.311,
+        "confidence": 0.896,
+        "face": {
+          "top": 386,
+          "bottom": 872,
+          "left": 329,
+          "right": 684
+        },
+        "band": {
+          "top": 353,
+          "bottom": 905,
+          "height_px": 553
+        },
+        "taper": 0.0032,
+        "crimp_top_px": 170,
+        "crimp_bottom_px": 29,
+        "face_share": null,
+        "convexity": 0.998,
+        "width_px": {
+          "top": 353.83,
+          "bottom": 354.95,
+          "median": 353.6
+        },
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 1062048,
+      "dieline": {
+        "path": "exports\\flow_formats_live_final_20261031\\bottle\\02_labelled.dieline.json",
+        "print_ready": false,
+        "dpi": 36.99
+      }
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.7533,
+      "background_purity": 1.0,
+      "subject_bbox": [
+        642,
+        181,
+        1358,
+        1861
+      ],
+      "margins": [
+        0.321,
+        0.0905,
+        0.321,
+        0.0695
+      ],
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 94.1,
+      "metrics": {
+        "contrast": 0.784,
+        "fill": 0.84,
+        "balance": 0.8882,
+        "hook_density": 0.0615,
+        "purity": 0.7533,
+        "background_purity": 1.0,
+        "subject_px": 986894
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [],
+      "verdict": "pass",
+      "rubric": "listing: background purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 46.3,
+        "metrics": {
+          "contrast": 0.6094,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.1097,
+          "purity": 0.0,
+          "background_purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_final_20261031\\bottle\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T11:45:37",
+  "finished_at": "2026-10-31T11:46:15"
+}

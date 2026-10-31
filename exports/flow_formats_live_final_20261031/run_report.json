@@ -1,0 +1,1250 @@
+{
+  "started_at": "2026-10-31T11:43:10",
+  "dry_run": false,
+  "formats": {
+    "pouch": {
+      "kind": "pouch",
+      "seed": 4242,
+      "prompt": "Matte kraft stand-up pouch, 200mm tall, flat continuous matte material, pristine plain surface, unprinted uniform texture, sealed top weld, reinforced bottom gusset, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "author": {
+        "ok": true,
+        "prompt": "Matte kraft stand-up pouch, 200mm tall, flat continuous matte material, pristine plain surface, unprinted uniform texture, sealed top weld, reinforced bottom gusset, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+        "model": "northstaros-27b-coder",
+        "url": "http://127.0.0.1:8080/v1",
+        "warnings": [],
+        "brief": {
+          "format": "pouch",
+          "geometry": {
+            "kind": "pouch",
+            "height_mm": 200.0,
+            "usable_height_mm": 158.0,
+            "clearances": {
+              "top_weld_mm": 12.0,
+              "bottom_gusset_mm": 30.0
+            }
+          },
+          "product": {
+            "category": "supplement",
+            "substrate": "matte kraft"
+          },
+          "brand_facts": {
+            "colors": [
+              "#1d4a1d"
+            ],
+            "fonts": {
+              "heading": "Playfair Display"
+            },
+            "logo": false
+          },
+          "memory_context": "",
+          "lighting": "soft diffused studio key light from upper-left, gentle fill, no hard specular",
+          "camera": "85mm product lens, eye-level three-quarter view, subject fully in frame",
+          "background": "seamless neutral light-grey studio background, no visible floor, no horizon",
+          "constraints": [
+            "pristine, unprinted, blank plate",
+            "no brand name, product name, net weight or legal copy",
+            "no lettering, logo, emblem, badge, icon, stamp, crest or monogram",
+            "describe the packaging form, material, light and background only",
+            "single prompt block, under 70 words"
+          ]
+        }
+      },
+      "duration_s": 42.5,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "pouch",
+              "usable_height_mm": 158.0,
+              "quad_px": [
+                [
+                  0.0,
+                  72.0
+                ],
+                [
+                  600.0,
+                  72.0
+                ],
+                [
+                  600.0,
+                  1020.0
+                ],
+                [
+                  0.0,
+                  1020.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "97bacdd4fc8638349d498ebf0af75e5582fa4b15",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1382574,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 61C)",
+            "vram_ratio": 0.019,
+            "temp_c": 61.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.281,
+            "bytes": 961757,
+            "error": null,
+            "surface": {
+              "kind": "pouch",
+              "method": "pouch-measure_face",
+              "quad": [
+                [
+                  297.8,
+                  292.0
+                ],
+                [
+                  766.4,
+                  292.0
+                ],
+                [
+                  739.9,
+                  831.0
+                ],
+                [
+                  329.8,
+                  831.0
+                ]
+              ],
+              "geom_residual_px": 0.281,
+              "confidence": null,
+              "measured": {
+                "quad": [
+                  [
+                    297.8,
+                    292.0
+                  ],
+                  [
+                    766.4,
+                    292.0
+                  ],
+                  [
+                    739.9,
+                    831.0
+                  ],
+                  [
+                    329.8,
+                    831.0
+                  ]
+                ],
+                "face": {
+                  "top": 138,
+                  "bottom": 908,
+                  "left": 268,
+                  "right": 797
+                },
+                "background": [
+                  204,
+                  200,
+                  197
+                ],
+                "coverage": 0.3713,
+                "geom_residual_px": 0.281,
+                "geom_residual_by_side": {
+                  "left": 0.309,
+                  "right": 0.251
+                },
+                "bow_x_px": -4.218,
+                "bow_left_px": -5.005,
+                "bow_right_px": -3.431,
+                "fit": {
+                  "left": "quadratic",
+                  "right": "quadratic"
+                },
+                "fit_residual_px": {
+                  "left": 0.269,
+                  "right": 0.24
+                }
+              }
+            },
+            "dieline": {
+              "path": "exports\\flow_formats_live_final_20261031\\pouch\\02_labelled.dieline.json",
+              "print_ready": false,
+              "dpi": 86.78
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.5513,
+            "background_purity": 1.0,
+            "subject_bbox": [
+              422,
+              181,
+              1579,
+              1861
+            ],
+            "margins": [
+              0.211,
+              0.0905,
+              0.2105,
+              0.0695
+            ],
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 95.1,
+            "grade": null,
+            "defects": [],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_final_20261031\\pouch\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_final_20261031\\pouch\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_final_20261031\\pouch\\03_hero.png",
+        "report": "exports\\flow_formats_live_final_20261031\\pouch\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 246228,
+        "inside_quad_px": 235297,
+        "outside_quad_px": 10931,
+        "inside_share": 0.9556
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruiting body only",
+            "Third-party tested",
+            "60servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "box": {
+      "kind": "box",
+      "seed": 4243,
+      "prompt": "Flat die-cut box layout in matte kraft, pristine plain surface, unprinted uniform texture, flat continuous matte material, visible fold creases and tuck flaps, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "author": {
+        "ok": true,
+        "prompt": "Flat die-cut box layout in matte kraft, pristine plain surface, unprinted uniform texture, flat continuous matte material, visible fold creases and tuck flaps, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+        "model": "northstaros-27b-coder",
+        "url": "http://127.0.0.1:8080/v1",
+        "warnings": [],
+        "brief": {
+          "format": "box",
+          "geometry": {
+            "kind": "box",
+            "face": {
+              "w": 80.0,
+              "h": 180.0
+            },
+            "panels": [
+              {
+                "name": "front",
+                "w": 80.0,
+                "h": 180.0,
+                "x": 0.0
+              },
+              {
+                "name": "right",
+                "w": 40.0,
+                "h": 180.0,
+                "x": 80.0
+              },
+              {
+                "name": "back",
+                "w": 80.0,
+                "h": 180.0,
+                "x": 120.0
+              },
+              {
+                "name": "left",
+                "w": 40.0,
+                "h": 180.0,
+                "x": 200.0
+              },
+              {
+                "name": "glue",
+                "w": 15.0,
+                "h": 180.0,
+                "x": 240.0
+              }
+            ],
+            "height_mm": 180.0,
+            "clearances": {
+              "corner_bleed_mm": 3.0,
+              "tuck_top_mm": 12.0,
+              "tuck_bottom_mm": 12.0,
+              "glue_tab_mm": 15.0
+            }
+          },
+          "product": {
+            "category": "supplement",
+            "substrate": "matte kraft"
+          },
+          "brand_facts": {
+            "colors": [
+              "#1d4a1d"
+            ],
+            "fonts": {
+              "heading": "Playfair Display"
+            },
+            "logo": false
+          },
+          "memory_context": "",
+          "lighting": "soft diffused studio key light from upper-left, gentle fill, no hard specular",
+          "camera": "85mm product lens, eye-level three-quarter view, subject fully in frame",
+          "background": "seamless neutral light-grey studio background, no visible floor, no horizon",
+          "constraints": [
+            "pristine, unprinted, blank plate",
+            "no brand name, product name, net weight or legal copy",
+            "no lettering, logo, emblem, badge, icon, stamp, crest or monogram",
+            "describe the packaging form, material, light and background only",
+            "single prompt block, under 70 words"
+          ]
+        }
+      },
+      "duration_s": 39.6,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "box",
+              "usable_height_mm": null,
+              "quad_px": [
+                [
+                  0.0,
+                  0.0
+                ],
+                [
+                  480.0,
+                  0.0
+                ],
+                [
+                  480.0,
+                  1080.0
+                ],
+                [
+                  0.0,
+                  1080.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "ecd5c49b175c31536e35881ef848cc2418cb5a1a",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1520930,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 59C)",
+            "vram_ratio": 0.019,
+            "temp_c": 59.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.215,
+            "bytes": 857215,
+            "error": null,
+            "surface": {
+              "kind": "box",
+              "method": "box-quad",
+              "quad": [
+                [
+                  247.88,
+                  191.39
+                ],
+                [
+                  840.06,
+                  193.99
+                ],
+                [
+                  843.68,
+                  827.36
+                ],
+                [
+                  248.11,
+                  863.82
+                ]
+              ],
+              "geom_residual_px": 0.215,
+              "confidence": 0.928,
+              "face": {
+                "top": 147,
+                "bottom": 895,
+                "left": 208,
+                "right": 883
+              },
+              "band": null,
+              "taper": null,
+              "crimp_top_px": null,
+              "crimp_bottom_px": null,
+              "face_share": 0.8476,
+              "convexity": null,
+              "width_px": null,
+              "warnings": []
+            },
+            "dieline": {
+              "path": "exports\\flow_formats_live_final_20261031\\box\\02_labelled.dieline.json",
+              "print_ready": false,
+              "dpi": 92.13
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.3618,
+            "background_purity": 1.0,
+            "subject_bbox": [
+              181,
+              209,
+              1820,
+              1832
+            ],
+            "margins": [
+              0.0905,
+              0.1045,
+              0.09,
+              0.084
+            ],
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 90.1,
+            "grade": null,
+            "defects": [],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_final_20261031\\box\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_final_20261031\\box\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_final_20261031\\box\\03_hero.png",
+        "report": "exports\\flow_formats_live_final_20261031\\box\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 395523,
+        "inside_quad_px": 388332,
+        "outside_quad_px": 7191,
+        "inside_share": 0.9818
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruitingbodyonly",
+            "Third-partytested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "bottle": {
+      "kind": "bottle",
+      "seed": 4244,
+      "prompt": "Amber glass bottle, 60mm diameter, 200mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "author": {
+        "ok": true,
+        "prompt": "Amber glass bottle, 60mm diameter, 200mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+        "model": "northstaros-27b-coder",
+        "url": "http://127.0.0.1:8080/v1",
+        "warnings": [],
+        "brief": {
+          "format": "bottle",
+          "geometry": {
+            "kind": "bottle",
+            "diameter_mm": 60.0,
+            "height_mm": 200.0,
+            "usable_height_mm": 169.0,
+            "label_height_mm": 80.0,
+            "clearances": {
+              "cap_mm": 25.0,
+              "seam_mm": 6.0,
+              "label_top_mm": 30.0,
+              "label_bottom_mm": 84.0
+            },
+            "wrap_fraction": 0.9682
+          },
+          "product": {
+            "category": "supplement",
+            "substrate": "amber glass"
+          },
+          "brand_facts": {
+            "colors": [
+              "#1d4a1d"
+            ],
+            "fonts": {
+              "heading": "Playfair Display"
+            },
+            "logo": false
+          },
+          "memory_context": "",
+          "lighting": "soft diffused studio key light from upper-left, gentle fill, no hard specular",
+          "camera": "85mm product lens, eye-level three-quarter view, subject fully in frame",
+          "background": "seamless neutral light-grey studio background, no visible floor, no horizon",
+          "constraints": [
+            "pristine, unprinted, blank plate",
+            "no brand name, product name, net weight or legal copy",
+            "no lettering, logo, emblem, badge, icon, stamp, crest or monogram",
+            "describe the packaging form, material, light and background only",
+            "single prompt block, under 70 words"
+          ]
+        }
+      },
+      "duration_s": 38.8,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "bottle",
+              "usable_height_mm": 169.0,
+              "quad_px": [
+                [
+                  0.0,
+                  180.0
+                ],
+                [
+                  360.0,
+                  180.0
+                ],
+                [
+                  360.0,
+                  660.0
+                ],
+                [
+                  0.0,
+                  660.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "898279fe1a42149dd070bdeae6bd55132e67e2d0",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1154676,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 59C)",
+            "vram_ratio": 0.019,
+            "temp_c": 59.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.311,
+            "bytes": 1062048,
+            "error": null,
+            "surface": {
+              "kind": "bottle",
+              "method": "bottle-band",
+              "quad": [
+                [
+                  374.41,
+                  386.0
+                ],
+                [
+                  639.78,
+                  386.0
+                ],
+                [
+                  639.96,
+                  872.0
+                ],
+                [
+                  373.75,
+                  872.0
+                ]
+              ],
+              "geom_residual_px": 0.311,
+              "confidence": 0.896,
+              "face": {
+                "top": 386,
+                "bottom": 872,
+                "left": 329,
+                "right": 684
+              },
+              "band": {
+                "top": 353,
+                "bottom": 905,
+                "height_px": 553
+              },
+              "taper": 0.0032,
+              "crimp_top_px": 170,
+              "crimp_bottom_px": 29,
+              "face_share": null,
+              "convexity": 0.998,
+              "width_px": {
+                "top": 353.83,
+                "bottom": 354.95,
+                "median": 353.6
+              },
+              "warnings": []
+            },
+            "dieline": {
+              "path": "exports\\flow_formats_live_final_20261031\\bottle\\02_labelled.dieline.json",
+              "print_ready": false,
+              "dpi": 36.99
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.7533,
+            "background_purity": 1.0,
+            "subject_bbox": [
+              642,
+              181,
+              1358,
+              1861
+            ],
+            "margins": [
+              0.321,
+              0.0905,
+              0.321,
+              0.0695
+            ],
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 94.1,
+            "grade": null,
+            "defects": [],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_final_20261031\\bottle\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_final_20261031\\bottle\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_final_20261031\\bottle\\03_hero.png",
+        "report": "exports\\flow_formats_live_final_20261031\\bottle\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 122958,
+        "inside_quad_px": 122958,
+        "outside_quad_px": 0,
+        "inside_share": 1.0
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "CRGANICMUSHROOMPOWDER",
+            "Fruiting body anly",
+            "Third-party tested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "tube": {
+      "kind": "tube",
+      "seed": 4245,
+      "prompt": "Matte kraft paper tube, 40mm diameter, 160mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "author": {
+        "ok": true,
+        "prompt": "Matte kraft paper tube, 40mm diameter, 160mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+        "model": "northstaros-27b-coder",
+        "url": "http://127.0.0.1:8080/v1",
+        "warnings": [],
+        "brief": {
+          "format": "tube",
+          "geometry": {
+            "kind": "tube",
+            "diameter_mm": 40.0,
+            "height_mm": 160.0,
+            "usable_height_mm": 124.0,
+            "clearances": {
+              "crimp_top_mm": 8.0,
+              "crimp_bottom_mm": 8.0,
+              "cap_mm": 20.0
+            }
+          },
+          "product": {
+            "category": "supplement",
+            "substrate": "matte kraft"
+          },
+          "brand_facts": {
+            "colors": [
+              "#1d4a1d"
+            ],
+            "fonts": {
+              "heading": "Playfair Display"
+            },
+            "logo": false
+          },
+          "memory_context": "",
+          "lighting": "soft diffused studio key light from upper-left, gentle fill, no hard specular",
+          "camera": "85mm product lens, eye-level three-quarter view, subject fully in frame",
+          "background": "seamless neutral light-grey studio background, no visible floor, no horizon",
+          "constraints": [
+            "pristine, unprinted, blank plate",
+            "no brand name, product name, net weight or legal copy",
+            "no lettering, logo, emblem, badge, icon, stamp, crest or monogram",
+            "describe the packaging form, material, light and background only",
+            "single prompt block, under 70 words"
+          ]
+        }
+      },
+      "duration_s": 38.7,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "tube",
+              "usable_height_mm": 124.0,
+              "quad_px": [
+                [
+                  0.0,
+                  168.0
+                ],
+                [
+                  240.0,
+                  168.0
+                ],
+                [
+                  240.0,
+                  912.0
+                ],
+                [
+                  0.0,
+                  912.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "nominal profile is below 300 DPI equivalent; actual plate checked at compose"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "366649ac4141c5bd3ca901e1927db9454f63f593",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1427670,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 60C)",
+            "vram_ratio": 0.019,
+            "temp_c": 60.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.121,
+            "bytes": 1281850,
+            "error": null,
+            "surface": {
+              "kind": "tube",
+              "method": "tube-band",
+              "quad": [
+                [
+                  349.31,
+                  397.0
+                ],
+                [
+                  686.32,
+                  397.0
+                ],
+                [
+                  686.21,
+                  880.0
+                ],
+                [
+                  348.62,
+                  880.0
+                ]
+              ],
+              "geom_residual_px": 0.121,
+              "confidence": 0.96,
+              "face": {
+                "top": 397,
+                "bottom": 880,
+                "left": 292,
+                "right": 742
+              },
+              "band": {
+                "top": 365,
+                "bottom": 912,
+                "height_px": 548
+              },
+              "taper": 0.0017,
+              "crimp_top_px": 293,
+              "crimp_bottom_px": 46,
+              "face_share": null,
+              "convexity": 0.994,
+              "width_px": {
+                "top": 449.34,
+                "bottom": 450.12,
+                "median": 447.8
+              },
+              "warnings": []
+            },
+            "dieline": {
+              "path": "exports\\flow_formats_live_final_20261031\\tube\\02_labelled.dieline.json",
+              "print_ready": false,
+              "dpi": 98.94
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.6821,
+            "background_purity": 1.0,
+            "subject_bbox": [
+              575,
+              181,
+              1423,
+              1861
+            ],
+            "margins": [
+              0.2875,
+              0.0905,
+              0.2885,
+              0.0695
+            ],
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 95.0,
+            "grade": null,
+            "defects": [],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_final_20261031\\tube\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_final_20261031\\tube\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_final_20261031\\tube\\03_hero.png",
+        "report": "exports\\flow_formats_live_final_20261031\\tube\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 168770,
+        "inside_quad_px": 163834,
+        "outside_quad_px": 4936,
+        "inside_share": 0.9708
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruiting body only",
+            "Third-party tested",
+            "60 servings",
+            "(6 OZL) Zo 9"
+          ],
+          "error": null
+        }
+      }
+    }
+  },
+  "status": "ok",
+  "engine": {
+    "engine": "comfyui",
+    "url": "http://127.0.0.1:8188",
+    "url_configured": false,
+    "gate": true,
+    "reachable": true,
+    "armed": true,
+    "models": {
+      "image": "flux3-image-klein-nvfp4.safetensors",
+      "video": "Wan2.2-TI2V-5B-Q5_K_M.gguf",
+      "edit": null
+    },
+    "note": "The local engine is armed: renders run on this machine's GPU (ComfyUI)."
+  },
+  "author": {
+    "pouch": {
+      "model": "northstaros-27b-coder",
+      "warnings": [],
+      "prompt": "Matte kraft stand-up pouch, 200mm tall, flat continuous matte material, pristine plain surface, unprinted uniform texture, sealed top weld, reinforced bottom gusset, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "url": "http://127.0.0.1:8080/v1"
+    },
+    "box": {
+      "model": "northstaros-27b-coder",
+      "warnings": [],
+      "prompt": "Flat die-cut box layout in matte kraft, pristine plain surface, unprinted uniform texture, flat continuous matte material, visible fold creases and tuck flaps, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "url": "http://127.0.0.1:8080/v1"
+    },
+    "bottle": {
+      "model": "northstaros-27b-coder",
+      "warnings": [],
+      "prompt": "Amber glass bottle, 60mm diameter, 200mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "url": "http://127.0.0.1:8080/v1"
+    },
+    "tube": {
+      "model": "northstaros-27b-coder",
+      "warnings": [],
+      "prompt": "Matte kraft paper tube, 40mm diameter, 160mm height, pristine plain surface, unprinted uniform texture, flat continuous matte material, soft diffused studio key light from upper-left, gentle fill, no hard specular, 85mm product lens, eye-level three-quarter view, subject fully in frame, seamless neutral light-grey studio background, no visible floor, no horizon",
+      "url": "http://127.0.0.1:8080/v1"
+    }
+  },
+  "finished_at": "2026-10-31T11:46:58"
+}

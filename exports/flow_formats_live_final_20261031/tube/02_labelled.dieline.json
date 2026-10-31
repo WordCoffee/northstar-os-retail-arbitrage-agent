@@ -1,0 +1,82 @@
+{
+  "schema": "northstar.dieline.v1",
+  "kind": "tube",
+  "created_at": "2026-10-31T16:46:47+00:00",
+  "asset": {
+    "image": "02_labelled",
+    "image_size": [
+      1024,
+      1024
+    ]
+  },
+  "quad": [
+    [
+      349.31,
+      397.0
+    ],
+    [
+      686.32,
+      397.0
+    ],
+    [
+      686.21,
+      880.0
+    ],
+    [
+      348.62,
+      880.0
+    ]
+  ],
+  "face_px": {
+    "width": 337.3,
+    "height": 483.0
+  },
+  "physical_mm": {
+    "width": 40.0,
+    "height": 124.0
+  },
+  "scale_factors": {
+    "px_per_mm_x": 8.4325,
+    "px_per_mm_y": 3.8952,
+    "target_px_per_mm": 11.811
+  },
+  "dpi": {
+    "target": 300,
+    "x": 214.19,
+    "y": 98.94,
+    "worst": 98.94,
+    "ok": false,
+    "px_per_mm": {
+      "x": 8.4325,
+      "y": 3.8952,
+      "target": 11.811
+    },
+    "required_px": {
+      "width": 472.4,
+      "height": 1464.6
+    },
+    "deficit_px": {
+      "width": 135.1,
+      "height": 981.6
+    },
+    "image_size": [
+      1024,
+      1024
+    ]
+  },
+  "color_profile": {
+    "working": "RGB",
+    "target": "CMYK",
+    "icc": null,
+    "note": "metadata only; no ICC transform is applied by this emitter"
+  },
+  "method": "tube-band",
+  "residual_px": 0.121,
+  "print_ready": false,
+  "source_plate_sha256": "23e137fcec612913bb1649cd4b1860680f433ca1c8b19b465f317a1b0a948df1",
+  "notes": [
+    "quad measured from the rendered plate, not a converter die drawing",
+    "confirm panel geometry and bleed with the converter before print"
+  ],
+  "warnings": []
+}
