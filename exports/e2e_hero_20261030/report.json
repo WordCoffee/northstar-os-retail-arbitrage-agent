@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-10-30T20:34:40",
+  "out_dir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\e2e_hero_20261030",
+  "hardware_before": {
+    "ok": true,
+    "used_mb": 286,
+    "total_mb": 16303,
+    "ratio": 0.0175,
+    "temp_c": 53.0,
+    "allowed_batch": 1,
+    "reason": "1 of 1 (vram 2%, 53C)"
+  },
+  "render": {
+    "bytes": 1489070,
+    "seconds": 24.2,
+    "model": "flux3-image-klein-nvfp4",
+    "seed": 4242,
+    "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\e2e_hero_20261030\\01_render.png"
+  },
+  "text_gate": {
+    "first": {
+      "status": "ok",
+      "contains_text": true,
+      "boxes": 8,
+      "engine": "rapidocr"
+    },
+    "after_clean": {
+      "status": "ok",
+      "contains_text": false,
+      "boxes": 0
+    },
+    "cleared": 8,
+    "cleaned_bytes": 1295149,
+    "passed": true
+  },
+  "cutout": {
+    "bytes": 1522028,
+    "seconds": 4.1,
+    "model": "birefnet.safetensors",
+    "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\e2e_hero_20261030\\02_cutout.png"
+  },
+  "hero": {
+    "bytes": 1942981,
+    "seconds": 0.6,
+    "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\e2e_hero_20261030\\03_hero.png",
+    "corners_pure_white": true,
+    "corner_values": [
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ]
+    ],
+    "pure_white_ratio": 0.4607,
+    "size": [
+      2000,
+      2000
+    ]
+  },
+  "brief": {
+    "product_id": "e2e-lions-mane-6oz",
+    "material_tier": "premium",
+    "target_price": 34.0,
+    "unit_cost": 11.5,
+    "margin_pct": 0.6618,
+    "keywords": [
+      "lion's mane powder",
+      "fruiting body mushroom",
+      "6 oz pouch"
+    ],
+    "must_not": [
+      "text or lettering of any kind",
+      "supplier watermarks",
+      "added logos not supplied by the owner",
+      "price, promotion or shipping claims"
+    ],
+    "environment": "studio-white",
+    "blocked": [],
+    "materials": {
+      "substrate": "matte kraft with soft-touch lamination",
+      "finish": "embossed foil stamping, spot UV on the wordmark",
+      "lighting": "soft studio lighting, 85mm lens, shallow depth of field"
+    },
+    "ready": true
+  },
+  "listing_payload": {
+    "product_id": "e2e-lions-mane-6oz",
+    "hero_image": "03_hero.png",
+    "hero_aspect": "1:1",
+    "secondary_images": [
+      "01_render.png"
+    ],
+    "secondary_meta": [
+      {
+        "url": "01_render.png",
+        "role": "detail",
+        "aspect": "1:1"
+      }
+    ],
+    "keywords": [
+      "lion's mane powder",
+      "fruiting body mushroom",
+      "6 oz pouch"
+    ],
+    "alt_text": "lion's mane powder photograph on a pure white background",
+    "blocked": [],
+    "ready": true,
+    "material_tier": "premium",
+    "environment": "studio-white"
+  },
+  "hardware_after": {
+    "used_mb": 286,
+    "ratio": 0.0175,
+    "temp_c": 60.0
+  },
+  "status": "ok"
+}

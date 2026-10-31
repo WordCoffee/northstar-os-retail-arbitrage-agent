@@ -1,0 +1,16 @@
+{
+  "e2e_hero_20261030": {
+    "verdict": "The pipeline is PROVEN end-to-end; the artefact it produced is NOT listing-ready. Both are measured; the second matters more.",
+    "stack": "ComfyUI up on :8188 (--cache-none); FLUX 3 gateway up on :8190 with status ok and all three weights present; hardware_guard consulted before the render and wired into POST /generate.",
+    "aplus_mounted": "/design-studio?section=aplus&view=layout renders HeaderModule (970x600, 44% copy band, 24px inset), ThreeFeature (970x300, 300x300 tiles at x=15/335/655) and ComparisonChart (970x600, 90px header, 250px label column, two 360px columns, 4 rows) at exact canvas, scaled as one block by ResizeObserver, with live copy editing.",
+    "measured_run": "hardware before 1.75% VRAM of 16,303 MiB at 53C, allowed batch 1; FLUX 3 1024x1024 16 steps in 24.2 s (flux3-image-klein-nvfp4); BiRefNet cutout 4.1 s; hero compositing 0.7 s -> 2000x2000 with corners pure white and pure-white ratio 0.46; hardware after 1.75% at 60C; margin 66.2% -> premium tier; listing payload ready, hero 1:1, alt text present.",
+    "defect_1_text": "FLUX 3 painted 8 OCR boxes of garbled lettering (9RGIA1NIIC, Musriroom, Mutlnofliar, Povder) despite an explicit no-text negative. The pipeline now runs text_fidelity.check_text_in_image -> clean_text_regions -> re-check and refuses to ship if lettering survives. This run: 8 boxes -> 8 cleared -> 0 boxes.",
+    "defect_2_shadow": "The first contact shadow was an opaque grey ellipse that read as a sticker because the subject was centred with no room beneath it. Rewritten as a heavily blurred black alpha layer composite with the subject lifted 3%, plus a regression test asserting a soft ramp (>=4 tones, darkest 190-245).",
+    "defect_3_open": "THE ARTEFACT IS NOT SHIPPABLE. clean_text_regions reconstructs glyph zones from their surroundings, which on textured kraft leaves visible soft smudge patches, and one small low-contrast string (the 6-oz weight line) is still legible to the eye even though the OCR gate reports 0 boxes at its 0.35 confidence floor. The gate passes; the eye does not. Correct fix is the repo's existing composite path (render a blank plate, draw real copy via mockup_compositor/apply_label) instead of erase-after-render.",
+    "validation": "npm run build 0 errors 1.35 s; npm test 63 assertions + 11 contrast pairs; pytest 75 passed across aplus_layout, listing_image, render_bind, asset_handoff, brand_memory, hardware_guard.",
+    "next": "1) switch the hero step to the composite path and drop erase-after-render; 2) raise the OCR min_score floor for listing heroes and add a low-contrast second pass; 3) run 03_hero.png through prepress + package_readiness so the hero carries a print verdict as well as a background verdict.",
+    "report": "reports/e2e_hero_20261030.md",
+    "evidence": "exports/e2e_hero_20261030/{01_render.png,01b_render_cleaned.png,02_cutout.png,03_hero.png,report.json}",
+    "no_spend": "No spend, no Amazon request, no credential read. Render was local FLUX 3 at 0.00 cost."
+  }
+}
