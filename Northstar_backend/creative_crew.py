@@ -139,7 +139,10 @@ def build_prompt_crew(render_llm=None) -> Any:
                    "HARD BAN: never write the words emblem, badge, icon, mark, logo, stamp, crest "
                    "or monogram - this model draws lettering when invited. Always say instead: "
                    "'pristine plain surface', 'unprinted uniform texture', 'flat continuous matte "
-                   "material'."),
+                   "material'. FLOOR-FREE MODE for main images: always end with "
+                   "'photographed on a pure white seamless background, no visible floor, no "
+                   "horizon line, no cast shadow, no surface reflection' - a listing hero must "
+                   "score at least 0.90 background purity, and any floor or contact shadow fails it."),
         tools=tools() if CREWAI else [],
         llm=model, verbose=False, allow_delegation=False, max_iter=3,
     )
@@ -199,7 +202,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             description=("Write ONE FLUX 3 prompt for a pristine, UNPRINTED packaging plate. "
                          "Brief JSON: " + brief + ". No brand name, no net weight, no legal "
                          "copy, no lettering of any kind. Describe only form, material, light "
-                         "and background. Under 60 words."),
+                         "and background. For a main image, append the FLOOR-FREE clause "
+                         "verbatim: 'photographed on a pure white seamless background, no "
+                         "visible floor, no horizon line, no cast shadow, no surface "
+                         "reflection'. Under 60 words."),
             expected_output="One prompt sentence-block, under 60 words.",
             agent=architect,
         )

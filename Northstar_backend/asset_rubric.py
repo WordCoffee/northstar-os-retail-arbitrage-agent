@@ -122,4 +122,93 @@ def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str,
     }
 
 
-__all__ = ["metrics", "legibility", "score_hero", "TARGET_FILL"]
+__all__ = ["metrics", "legibility", "score_listing", "score_hook", "score", "score_hero", "CLASSES", "TARGET_FILL"]
+
+# â”€â”€ artifact-class scoring (split) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# A listing main image and an ad creative are judged by OPPOSITE criteria: the
+# listing wants a calm, pure-white, product-only frame; the ad wants energy and
+# a hook. One score for both forced a false verdict ("revise" on a compliant
+# hero because its thumb-stop energy was low). Two functions, one router.
+
+LISTING_PURITY = 0.90
+LISTING_FILL = (0.80, 0.92)
+HOOK_MIN = 0.25
+
+
+def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
+    """Strict compliance: pure white, product fills 80-92%, nothing else."""
+    m = metrics(png)
+    leg = legibility(png, expected_copy)
+    defects = []
+    if m["purity"] < LISTING_PURITY:
+        defects.append("background_not_white_enough")
+    if m["fill"] < LISTING_FILL[0]:
+        defects.append("subject_too_small")
+    if m["fill"] > LISTING_FILL[1]:
+        defects.append("subject_touching_frame")
+    if m["balance"] < 0.6:
+        defects.append("subject_off_centre")
+    if leg["legibility"] < 0.5:
+        defects.append("copy_not_readable")
+    if m["purity"] < 0.5 and "contact_shadow_or_floor" not in defects:
+        defects.append("contact_shadow_or_floor")
+
+    composite = (
+        min(1.0, m["purity"] / LISTING_PURITY) * 40
+        + max(0.0, 1.0 - abs(m["fill"] - 0.86) * 8) * 30
+        + m["balance"] * 10
+        + leg["legibility"] * 20
+    )
+    return {
+        "class": "listing",
+        "score": round(min(100.0, composite), 1),
+        "metrics": m,
+        "legibility": leg,
+        "defects": defects,
+        "verdict": "pass" if not defects else "revise",
+        "rubric": "listing: purity>=%.2f, fill 80-92%%, balance, OCR legibility" % LISTING_PURITY,
+    }
+
+
+def score_hook(png: bytes) -> Dict[str, Any]:
+    """Ad / A+ band: energy, contrast and a stop-the-thumb read. Purity ignored."""
+    m = metrics(png)
+    defects = []
+    if m["hook_density"] < HOOK_MIN:
+        defects.append("low_thumb_stop_energy")
+    if m["contrast"] < 0.25:
+        defects.append("flat_contrast")
+    if m["subject_px"] == 0:
+        defects.append("no_subject")
+
+    composite = (m["hook_density"] * 45 + m["contrast"] * 35
+                 + m["balance"] * 10 + min(1.0, m["fill"]) * 10)
+    return {
+        "class": "hook",
+        "score": round(min(100.0, composite), 1),
+        "metrics": m,
+        "defects": defects,
+        "verdict": "pass" if not defects else "revise",
+        "rubric": "hook: edge energy>=%.2f, contrast>=0.25, subject present" % HOOK_MIN,
+    }
+
+
+CLASSES = {"listing": score_listing, "hero": score_listing,
+           "ad": score_hook, "aplus": score_hook, "social": score_hook}
+
+
+def score(png: bytes, artifact_class: str = "listing", *,
+          expected_copy: Optional[list] = None) -> Dict[str, Any]:
+    """Route by artefact class. Unknown classes are refused, never defaulted."""
+    key = str(artifact_class or "").strip().lower()
+    if key not in CLASSES:
+        raise KeyError(f"unknown artifact class {artifact_class!r}; known: {sorted(CLASSES)}")
+    if key in ("listing", "hero"):
+        return score_listing(png, expected_copy=expected_copy)
+    return score_hook(png)
+
+
+def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
+    """Back-compat alias: a hero IS a listing image."""
+    return score_listing(png, expected_copy=expected_copy)
+

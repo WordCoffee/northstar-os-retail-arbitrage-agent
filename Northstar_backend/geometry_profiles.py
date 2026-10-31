@@ -184,13 +184,22 @@ def pouch(*, width: float, height: float, top_weld: float = 12.0,
 
 PROFILES = {"box": rigid_box, "bottle": bottle, "tube": tube, "pouch": pouch}
 
+#: Field defaults so a job can name a format without restating industry-standard dims.
+DEFAULT_DIMS: Dict[str, Dict[str, float]] = {
+    "pouch": {"width": 100.0, "height": 200.0},
+    "box": {"width": 80.0, "depth": 40.0, "height": 180.0},
+    "bottle": {"diameter": 60.0, "height": 200.0, "label_height": 80.0, "label_top_offset": 30.0},
+    "tube": {"diameter": 40.0, "height": 160.0},
+}
+
 
 def profile(kind: str, **dims: Any) -> Dict[str, Any]:
     """Dispatch by format name. Unknown formats are refused, never defaulted."""
     fn = PROFILES.get(str(kind or "").strip().lower())
     if fn is None:
         raise KeyError(f"unknown packaging format {kind!r}; known: {sorted(PROFILES)}")
-    out = fn(**dims)
+    merged = {**DEFAULT_DIMS.get(str(kind or "").strip().lower(), {}), **(dims or {})}
+    out = fn(**merged)
     out["dpi_check"] = {
         "required_px_per_mm": required_px_per_mm(MIN_DPI),
         "configured_px_per_mm": out.get("px_per_mm"),

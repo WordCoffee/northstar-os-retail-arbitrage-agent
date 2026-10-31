@@ -1,4 +1,4 @@
-﻿"""Deterministic creative Flow (Ty's Assistant, creative lane).
+"""Deterministic creative Flow (Ty's Assistant, creative lane).
 
 The orchestrator is a STATE MACHINE, not an LLM: every step is a function with a
 named input and a recorded output, resumable from JSON, and every irreversible
@@ -41,6 +41,11 @@ class CreativeJob:
     lifestyle: bool = False
     copy: Dict[str, Any] = field(default_factory=dict)
     aplus_kinds: List[str] = field(default_factory=lambda: ["header", "three_tiles", "comparison"])
+    # Artefact class decides the rubric: listing/hero = strict purity, ad/aplus = hook energy.
+    artifact_class: str = "listing"
+    # Packaging format decides the geometry profile (box/bottle/tube/pouch).
+    geometry: str = "pouch"
+    geometry_dims: Dict[str, Any] = field(default_factory=dict)
     out_dir: str = ""
 
 
@@ -110,6 +115,23 @@ class CreativeFlow:
                                     "blocked": list(brief.blocked),
                                     "prompt_suffix": render_bind.prompt_suffix(brief)}
         self.state.blocked.extend(brief.blocked)
+        try:
+            import geometry_profiles
+            geo = geometry_profiles.profile(self.job.geometry, **(self.job.geometry_dims or {}))
+            self.state.steps["bind"]["geometry"] = {
+                "kind": geo["kind"], "usable_height_mm": geo.get("usable_height_mm"),
+                "quad_px": geo.get("quad"), "dpi_ok": geo["dpi_check"]["ok"],
+            }
+            # 300 DPI is a PRINT requirement. A render plate is a mockup, so a
+            # shortfall is recorded, not enforced - unless the job asks for print.
+            if not geo["dpi_check"]["ok"]:
+                if (self.job.geometry_dims or {}).get("require_print_dpi"):
+                    self.state.blocked.append("resolution_below_300dpi")
+                else:
+                    self.state.steps["bind"]["geometry"]["dpi_warning"] = "below 300 DPI equivalent"
+        except (KeyError, ValueError) as exc:
+            self.state.steps["bind"]["geometry"] = {"error": str(exc)[:160]}
+            self.state.blocked.append("geometry_invalid")
         self._save()
 
     def step_snapshot(self) -> None:
@@ -211,8 +233,15 @@ class CreativeFlow:
             expected = [w.strip(".,") for w in
                         f"{copy.get('title', '')} {copy.get('subtitle', '')}".split()
                         if len(w) > 3][:4]
-            self.state.steps["evaluate"] = asset_rubric.score_hero(
-                hero.read_bytes(), expected_copy=expected or None)
+            cls = str(getattr(self.job, "artifact_class", "listing") or "listing")
+            self.state.steps["evaluate"] = asset_rubric.score(
+                hero.read_bytes(), cls, expected_copy=expected or None)
+            # The plate itself is judged as a MOCKUP: purity is irrelevant there,
+            # so its score uses the hook rubric rather than the listing one.
+            plate = self.out / "01_plate.png"
+            if plate.exists():
+                self.state.steps["evaluate"]["plate_mockup"] = asset_rubric.score_hook(
+                    plate.read_bytes())
         else:
             self.state.steps["evaluate"] = {"status": "skipped", "reason": "no hero artefact"}
         self._save()
@@ -257,4 +286,5 @@ class CreativeFlow:
 
 
 __all__ = ["CreativeFlow", "CreativeJob", "FlowState", "STEPS"]
+
 

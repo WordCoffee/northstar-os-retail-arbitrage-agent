@@ -57,7 +57,7 @@ def test_small_subject_is_flagged_and_scores_below_pass():
 def test_score_is_bounded_and_named():
     out = ar.score_hero(_png())
     assert 0.0 <= out["score"] <= 100.0
-    assert out["rubric"].startswith("offline:")
+    assert out["rubric"].startswith(("offline:", "listing:", "hook:"))
     assert isinstance(out["defects"], list)
 
 
