@@ -38,7 +38,17 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 COMFY = (os.environ.get("COMFYUI_URL") or "http://127.0.0.1:8188").rstrip("/")
-# The int8 "convrot" checkpoint hits a host-buffer read failure on this box's
+
+# Hardware guardrail (Phase II). Fail-closed: if the probe cannot answer, the
+# render is refused rather than attempted. Import failure must not stop the
+# gateway from starting, so it degrades to "no guard" and says so in /health.
+try:
+    _BACKEND = Path(__file__).resolve().parents[1] / "Northstar_backend"
+    if str(_BACKEND) not in sys.path:
+        sys.path.insert(0, str(_BACKEND))
+    from hardware_guard import plan as plan_render  # noqa: E402
+except Exception:  # noqa: BLE001 - a missing guard must not break the gateway
+    plan_render = None# The int8 "convrot" checkpoint hits a host-buffer read failure on this box's
 # comfy-aimdo runtime and the GGUF quant stalls ComfyUI-GGUF's patcher on 0.43,
 # so the native nvfp4 checkpoint (Blackwell) is the working path.
 UNET = os.environ.get("FLUX3_UNET") or "flux3-image-klein-nvfp4.safetensors"
@@ -208,6 +218,16 @@ class Handler(BaseHTTPRequestHandler):
         if not prompt:
             self._send(400, {"error": "prompt_required"})
             return
+        if plan_render is not None:
+            batch, reason, hw = plan_render(1)
+            if batch == 0:
+                self._send(503, {
+                    "error": "hardware_guard",
+                    "reason": reason,
+                    "vram_ratio": hw.ratio,
+                    "temp_c": hw.temp_c,
+                })
+                return
         try:
             result = generate(
                 prompt,

@@ -1,6 +1,7 @@
 {
   "$schema": "subscription-plans-v4",
-  "catalog_version": 4,
+  "catalog_version": 5,
+  "revision_note_20261030": "v5 restricts the advanced_view UI gate to the AutoThinK tier only. Keystone previously carried it; the Advanced inspector is now a top-tier capability, per the owner's Phase II reconciliation (2026-10-30). ui_gates remain presentation only and still arm no live action.",
   "description": "Northstar OS subscription plan catalog — SINGLE SOURCE OF TRUTH. v4 (V3 shell, 2026-10-18) adds `ui_gates`: UI-SURFACE capabilities (e.g. advanced_view, the dev-level room shell). ui_gates are presentation/routing only — they never arm a live/paid action, which is why gates_always_off (applies to live gates) stays true. v3 (Phase H/H6) set DISPLAY NAMES, PRICES, and service coverage to the frozen alpha ladder (Whetstone/Mainstay/Keystone/AutothinK at 39/79/129/179). Plan ids remain stable (foundation/scout/mover/autothink) per the naming scope rule — display labels are cosmetic; ids, gate ids, and routes do not change until a scheduled revision. Entitled (live) gate arrays are UNCHANGED from v2: a plan never flips a live gate; every live action additionally requires a fresh, named operator approval per action. Per-tier action caps live in shared/usage-caps.json (enforcement) and credits are the display meter.",
   "gates_always_off": true,
   "currency": "USD",
@@ -60,7 +61,7 @@
       "price_usd_month": 129,
       "services": ["sourcescout", "listingforge", "adpilot", "socialpulse", "goldengoose", "thewatch", "rankledger", "rivalboard", "theledger"],
       "description": "Power brand — pro creatives, competitor monitoring, profitability",
-      "ui_gates": ["advanced_view"],
+      "ui_gates": [],
       "entitled_gates": [
         "sourcescout_live_pull",
         "sourcescout_enrich",

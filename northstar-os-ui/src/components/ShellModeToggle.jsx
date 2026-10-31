@@ -1,30 +1,49 @@
-// Global Simple | Advanced shell switch (S0, V3). Lives in the top nav; every
-// room reads the same state via useMode(). Distinct testid so harnesses can
-// address it without colliding with the per-room studio ModeToggle.
+// Shell view switch (S0; renamed 2026-10-30).
 //
-// V3: the Advanced option only renders when the backend granted the
-// `advanced_view` ui gate (Keystone/AutothinK tiers, platform admins). Lower
-// tiers see a single "Simple" pill — honest, not a dead control.
+// The product brief bans reductive "Simple" from user-visible copy: the default
+// view is not a dumbed-down mode, it is THE view. The internal mode id stays
+// 'simple' because routes, gates and stored preference keys depend on it -
+// renaming state to rename a label is how you break a shell.
+//
+// V3 entitlement rule: the Advanced option only renders when the backend granted
+// `advanced_view` (AutothinK tier / platform admins). Lower tiers get a static
+// "Standard" chip - honest, not a dead control.
+//
+// Lives in the Settings dialog since 2026-10-30 (it is a preference, not a
+// primary action). Testid unchanged so harnesses keep working.
 import { useMode } from '../context/ModeContext.jsx'
 
 export default function ShellModeToggle() {
   const { mode, advancedAllowed, toggleMode } = useMode()
-  const next = mode === 'simple' ? 'Advanced' : 'Simple'
+  const isAdvanced = mode !== 'simple'
+
+  if (!advancedAllowed) {
+    return (
+      <span
+        className="shell-mode-toggle"
+        data-testid="ns-shell-mode"
+        data-mode={mode}
+        data-advanced-allowed="0"
+        title="Standard view. The Advanced inspector needs a qualifying plan."
+      >
+        <span className="shell-mode-opt is-on">Standard</span>
+      </span>
+    )
+  }
+
   return (
     <button
       type="button"
       className="shell-mode-toggle"
       data-testid="ns-shell-mode"
       data-mode={mode}
-      data-advanced-allowed={advancedAllowed ? '1' : '0'}
-      onClick={advancedAllowed ? toggleMode : undefined}
-      title={advancedAllowed ? `Switch to ${next} mode` : 'Simple view — the Advanced dev view needs a qualifying plan'}
-      aria-label={advancedAllowed
-        ? `Shell mode: ${mode}. Switch to ${next}.`
-        : 'Shell mode: simple (Advanced view requires a qualifying plan)'}
+      data-advanced-allowed="1"
+      onClick={toggleMode}
+      title={isAdvanced ? 'Switch to the standard view' : 'Switch to the Advanced inspector'}
+      aria-label={`View: ${isAdvanced ? 'Advanced' : 'Standard'}. Activate to switch.`}
     >
-      <span className="shell-mode-opt">Simple</span>
-      {advancedAllowed && <span className="shell-mode-opt">Advanced</span>}
+      <span className={`shell-mode-opt ${isAdvanced ? '' : 'is-on'}`}>Standard</span>
+      <span className={`shell-mode-opt ${isAdvanced ? 'is-on' : ''}`}>Advanced</span>
     </button>
   )
 }

@@ -14,7 +14,7 @@ export function ModeToggle({ mode, onChange }) {
   return (
     <div className="sp-mode" role="tablist" aria-label="Editing mode">
       {[
-        { id: 'simple', label: 'Simple', note: 'Curated controls — fast, safe edits.' },
+        { id: 'simple', label: 'Standard', note: 'Curated controls - fast, safe edits.' },
         { id: 'advanced', label: 'Advanced', note: 'Full inspector, layer geometry, guides and raw prompt fields.' },
       ].map(m => (
         <button key={m.id} role="tab" aria-selected={mode === m.id}

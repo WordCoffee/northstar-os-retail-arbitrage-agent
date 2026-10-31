@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { useSession } from '../foundation/session.jsx'
-import ShellModeToggle from './ShellModeToggle.jsx'
+import SettingsModal from '../shell/SettingsModal.jsx'
 import { useMode } from '../context/ModeContext.jsx'
 
 // Display scale is a SIMPLE-SHELL setting (Simple and AutothinK share the same
@@ -21,7 +21,7 @@ function DisplayScaleControl() {
       className="top-nav-scale"
       role="group"
       aria-label="Display scale"
-      title="Display scale (Simple and AutothinK)"
+      title="Display scale (Standard and AutothinK)"
       data-testid="ns-display-scale"
     >
       {['90', '100', '115', '130'].map((v) => (
@@ -45,6 +45,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
   const session = useSession()
   const { mode } = useMode()
   const [menu, setMenu] = useState('') // '' | 'notifications' | 'create'
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const toggle = (name) => setMenu((m) => (m === name ? '' : name))
 
@@ -71,7 +72,20 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
           />
         </div>
 
-        <ShellModeToggle />
+        {/* The view switch moved into Settings (2026-10-30): it is a preference,
+            not a primary action, and its label is entitlement-dependent. */}
+        <div className="top-nav-action">
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            aria-label="Settings"
+            aria-haspopup="dialog"
+            data-testid="ns-settings-open"
+            onClick={() => setSettingsOpen(true)}
+          >
+            <Icon name="settings" size={15} />
+          </button>
+        </div>
         {mode === 'simple' && <DisplayScaleControl />}
 
         <div className="top-nav-action">
@@ -143,6 +157,7 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
           {session.authenticated && session.userId ? session.userId[0].toUpperCase() : '?'}
         </button>
       </div>
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </header>
   )
 }

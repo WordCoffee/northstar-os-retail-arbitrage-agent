@@ -362,3 +362,54 @@
 }
 @keyframes cmd-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes cmd-rise { from { opacity: 0; transform: translateY(-8px) scale(0.99); } to { opacity: 1; transform: none; } }
+
+/* Settings dialog (2026-10-30). The view switch and density moved out of the
+   top navigation: preferences, not primary actions. */
+.settings-backdrop {
+  position: fixed; inset: 0; z-index: 130;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-4);
+  background: rgba(10, 14, 12, 0.45);
+  animation: cmd-fade var(--dur-quick) var(--ease-out);
+}
+.settings-panel {
+  width: min(520px, 100%);
+  max-height: min(78vh, 640px);
+  display: flex; flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--elev-4);
+  overflow: hidden;
+  animation: cmd-rise var(--dur-enter) var(--ease-spring);
+}
+.settings-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--divider);
+}
+.settings-title { font-family: var(--font-serif); font-size: var(--text-xl); color: var(--pine-deep); margin: 0; }
+.settings-close {
+  border: 0; background: transparent; cursor: pointer; color: var(--ink-soft);
+  padding: 6px; border-radius: var(--radius-sm);
+  transition: color var(--dur-quick) var(--ease-out), background var(--dur-quick) var(--ease-out);
+}
+.settings-close:hover { color: var(--ink); background: var(--surface-hover); }
+.settings-close:focus-visible { outline: none; box-shadow: var(--focus-ring-shadow); }
+
+.settings-tabs { display: flex; gap: 2px; padding: var(--space-2) var(--space-4) 0; }
+.settings-tab {
+  border: 0; background: transparent; cursor: pointer; font: inherit;
+  font-size: var(--text-sm); font-weight: 600; color: var(--ink-soft);
+  padding: 8px 12px; border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.settings-tab.is-active { color: var(--pine); background: var(--surface-active); }
+.settings-tab:focus-visible { outline: none; box-shadow: var(--focus-ring-shadow); }
+
+.settings-body { padding: var(--space-4); overflow-y: auto; }
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding: var(--density-pad-y) 0;
+}
+.settings-row + .settings-row { border-top: 1px solid var(--divider); }
+.settings-row-title { margin: 0 0 2px; font-size: var(--text-sm); font-weight: 600; color: var(--ink); }
+.settings-row-hint { margin: 0; font-size: var(--text-xs); color: var(--ink-soft); max-width: 30ch; }

@@ -282,7 +282,7 @@ function RichText({ text }) {
 export default function ChatSurface({
   focus,
   heading = 'Master Brain',
-  sub = 'Simple view',
+  sub = 'Standard view',
   onOpenAdvanced = null,
   onBusyChange = null,
 }) {
