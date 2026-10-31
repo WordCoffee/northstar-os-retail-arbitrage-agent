@@ -1,0 +1,15 @@
+{
+  "self_improvement_cycle1_20261031": {
+    "cycle": "Phase 1 / cycle 1 - Ty's Assistant prompt history + Bojo output budget",
+    "objective": "Analyze Ty's Assistant and Bojo for inference/prompt-handling latency, apply a precise incremental improvement with the AST engine, verify, and commit.",
+    "analysis": "Ty's coding prompt injected the last 6 tool observations at 1800 chars each (~10.8k chars of history) every turn. Bojo sent a flat num_predict=16384 ceiling for every chat turn, including one-word asks. The AST engine applied edits by unparsing the whole module, which reformatted and erased comments outside the target; that had to be fixed before using it on the assistant source.",
+    "changes": "1) ast_edit.py now splices only the target source span (replace_function/body, add_method, add_before/after, delete, imports, globals) and validates the result; comments/formatting outside the edited node survive byte-for-byte, BOM/CRLF preserved. 2) coding_agent.py: PROMPT_HISTORY_TURNS=4, PROMPT_OBS_CHARS=1200, PROMPT_ERROR_CHARS=1800; _compact_history() dedupes (tool, output[:400]) and keeps more error/traceback text. 3) chat_adapter.py: _adaptive_num_predict() caps short asks at 2048 and long-form/large prompts at 8192, bounded by CHAT_NUM_PREDICT; truncation_notice names both env knobs. Applied via agent_kernel.ast_edit.apply_to_file, not a text-diff tool.",
+    "measurement": "Ty synthetic 6-turn history: prompt 12,763 -> 6,748 chars (~3,191 -> ~1,687 tokens, -47.1%, -1,504 tokens/turn). At the lane's measured ~385 tok/s prompt-eval rate this is roughly 3.9 s less prefill per turn; it is a prompt-size estimate, not a wall-clock A/B. Bojo ceiling: 16,384 -> 2,048 short (-87.5%) / 8,192 long (-50%); answers that already stop at EOS are unchanged.",
+    "verification": "pytest 207 passed across test_ast_edit (18), test_coding_agent (21), test_coding_runner (4), test_coding_guardrails (14), test_chat_core (16), test_chatter (10), test_chat_router_intent (6), test_agent_kernel (48), test_tys_kernel_integration (2), test_tys_routing (30), test_gateway (18), test_lane_policy (10), test_self_heal (10). All edits UTF-8 no BOM.",
+    "caveats": "The Ty measurement is synthetic prompt size, not a live build benchmark. The Bojo change bounds worst-case generation; it does not speed up turns that already stop early. chat_adapter.py already carried local auto-recover/offline-categorization edits before this cycle and the commit includes them. No Docker/Bubblewrap was used; self-heal apply remains refused by design. No Amazon request, no paid provider call, no credential read.",
+    "next": "Measure real TTFT/tok-s with a 6-turn vs 4-turn history; add Ollama keep_alive to avoid Bojo reloads; cache-friendly prompt ordering; separate num_predict for read/list/run vs write/write_many turns.",
+    "report": "reports/self_improvement_cycle1_20261031.md",
+    "commit": "b132931c",
+    "no_spend": "No Amazon request, no paid provider call, no credential read. Deterministic local edits and pytest only."
+  }
+}
