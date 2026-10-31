@@ -1,0 +1,15 @@
+{
+  "galactic_ui_cycle2_20261031": {
+    "cycle": "Phase 2 / cycle 2 - Galactic UI & Immersive Experience Engine",
+    "architecture": "docs/GALACTIC_DECK_ARCHITECTURE.md: GalacticDeck page -> CelestialBackdrop + CommandDeck -> StatusRail, NodeTopology (SVG), SelectedNodePanel, KVCacheHeatmap, EventStream. Pure state in src/lib/galacticState.js: event bus ring buffer, deterministic topology layout, KV heatmap cells with explicit unknown usage, pulse mapping, event summary, context formatting.",
+    "modules": "src/galactic/{CommandDeck,NodeTopology,KVCacheHeatmap,EventStream}.jsx + galactic.css; src/pages/internal/GalacticDeck.jsx; src/lib/galacticState.js + test. CommandDeck polls GET /api/v1/galactic/state every 8 s, merges telemetry into the unified bus, supports node focus/pulse/replay. NodeTopology is keyboard accessible; EventStream is filterable and aria-live; CSS honours prefers-reduced-motion.",
+    "backend": "GET /api/v1/galactic/state inserted into main.py with agent_kernel.ast_edit.add_after. Returns real local model-suite nodes (master, Ty 27B at 17408 q8_0, Bojo at 8192, FLUX, Chrome, Memory Bank, AST), links, KV capacity, lane_policy installed/missing lanes, hardware_guard GPU block, and Ty /slots usage when available. context_used is null, never invented.",
+    "structural_edits": "Python AST engine for main.py. New scripts/ast_edit_js.cjs uses @babel/parser AST offsets + re-parse for App.jsx (import, /galactic route, SIMPLE_KEEP_ADVANCED) and nav-config.js (Admin & Systems -> Galactic Deck). New JSX files are additive; no existing component rewritten.",
+    "verification": "npm run test:ui: 73 passed / 0 failed. npm run test:contrast: 11/11 WCAG AA. npm run verify:galactic: 28/28 static checks. npm run build: 0 errors, 1.32 s. pytest test_galactic_state.py: 1 passed. npm test now chains unit + contrast + galactic verifier.",
+    "limits": "The bus is poll + local events, not token-level SSE. Bojo KV usage is not instrumented by Ollama (hatched unknown). No browser screenshot in this cycle. Python AST engine is Python-only; JSX uses the Babel AST counterpart.",
+    "next_cycle": "Cycle 3 - GET /api/v1/galactic/events SSE + EventSource subscription in CommandDeck, poll fallback, reconnect/cleanup tests. HITL Matrix remains blocked on AgentTeams/Matrix.",
+    "report": "reports/galactic_ui_cycle2_20261031.md",
+    "commit": "511f3fd2",
+    "no_spend": "No Amazon request, no paid provider call, no credential read. Local Vite/node/pytest only."
+  }
+}
