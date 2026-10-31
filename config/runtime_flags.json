@@ -1,0 +1,9 @@
+{
+  "applied_at": "2026-10-31T18:02:01+00:00",
+  "process_env": {
+    "OLLAMA_KV_CACHE_TYPE": "q8_0",
+    "OLLAMA_FLASH_ATTENTION": "1"
+  },
+  "kv_cache": "q8_0",
+  "note": "process-scoped; persistent changes belong to the operator"
+}
