@@ -1,0 +1,13 @@
+{
+  "galactic_ui_cycle4_20261031": {
+    "cycle": "Phase 2 / cycle 4 - HITL approval panel",
+    "backend": "GET /api/v1/hitl/pending plus POST /api/v1/hitl/{id}/approve|deny over agent_kernel.hitl. Repo-root scoped (no path input), final decisions, 409 on unknown/decided IDs. Inserted with agent_kernel.ast_edit.add_after. test_hitl_api covers pending/approve/deny and the 409 path against tmp_path.",
+    "frontend": "NEW src/galactic/HitlQueue.jsx: 10 s pending poll, action/requested_by/created_at, Approve/Deny posts, hitl.approve/deny published to the unified bus, honest queue-unavailable state. Mounted in CommandDeck next to KV heatmap; grid areas updated (topology/detail, heat/hitl, events full width) and responsive.",
+    "verification": "npm run test:ui 73 passed; npm run test:contrast 11/11; npm run verify:galactic 34/34 static checks; npm run build 0 errors; pytest test_hitl_api + test_galactic_state 4 passed.",
+    "limits": "Local queue only; Matrix/AgentTeams absent, hitl.publish remains the bridge hook. Panel polls, not SSE. Decisions are final.",
+    "next_cycle": "Cycle 5 - Bojo keep_alive on the local chat stream: env override, payload test, no model change.",
+    "report": "reports/galactic_ui_cycle4_20261031.md",
+    "commit": "31bd8a69",
+    "no_spend": "No Amazon request, no paid provider call, no credential read."
+  }
+}
