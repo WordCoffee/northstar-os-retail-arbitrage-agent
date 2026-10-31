@@ -84,6 +84,7 @@ def test_build_brief_carries_format_geometry_and_constraints():
     )
     brief = pa.build_brief(job)
     assert brief["format"] == "bottle"
+    assert "bottle" in brief["form"]
     assert brief["geometry"]["diameter_mm"] == 60
     assert brief["geometry"]["label_height_mm"] == 80
     assert any("unprinted" in c for c in brief["constraints"])

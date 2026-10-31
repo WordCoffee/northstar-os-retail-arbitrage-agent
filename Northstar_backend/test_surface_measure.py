@@ -117,6 +117,17 @@ def test_blank_plate_is_refused_not_guessed():
         sm.measure_surface(_canvas(), "box")
 
 
+def test_cylinder_band_refuses_a_mask_that_misses_the_body(monkeypatch):
+    import numpy as np
+    mask = np.zeros((640, 512), dtype=bool)
+    mask[100:140, 50:460] = True      # a wide top the mask latched onto
+    mask[140:540, 220:290] = True     # the real body, much narrower
+    monkeypatch.setattr(sm.pl, "_foreground_mask", lambda *a, **k: mask)
+    img = Image.new("RGB", (512, 640), BG)
+    with pytest.raises(sm.SurfaceNotMeasurable, match="mask likely missed the body"):
+        sm.measure_surface(img, "tube")
+
+
 def test_unknown_format_is_refused():
     with pytest.raises(KeyError):
         sm.measure_surface(_box_front(), "sachet")

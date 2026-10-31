@@ -431,6 +431,11 @@ def _cylinder_band(mask: np.ndarray, gray: np.ndarray, kind: str, *, wrap_fracti
     median_w = float(np.median(central))
     if median_w < 8:
         raise SurfaceNotMeasurable("the product silhouette is too narrow to label")
+    widest = float(np.nanpercentile(width[valid], 95)) if valid.any() else 0.0
+    if widest > 0 and median_w < 0.55 * widest:
+        raise SurfaceNotMeasurable(
+            f"the cylindrical band is only {median_w / widest:.0%} of the widest "
+            "silhouette row; the mask likely missed the body")
 
     # A bottle's body is near-constant width; a tube's body is a linear taper.
     # Both are measured against their own model, never against a fixed box.
@@ -625,6 +630,19 @@ def measure_surface(plate: Any, kind: str = "pouch", *,
     if coverage < 0.02:
         raise SurfaceNotMeasurable(
             f"no product silhouette found: foreground covers {coverage:.1%} of the plate")
+    # A low-contrast product (light grey on light grey) makes the colour mask
+    # absorb the background; its bbox then touches the frame on most sides. A
+    # product photographed "fully in frame" cannot legitimately do that, so this
+    # is a segmentation failure, not a surface. Refuse rather than print on it.
+    ys_m, xs_m = np.nonzero(mask)
+    h_m, w_m = mask.shape
+    sides = sum((int(xs_m.min()) <= 1, int(xs_m.max()) >= w_m - 2,
+                 int(ys_m.min()) <= 1, int(ys_m.max()) >= h_m - 2))
+    if sides >= 3:
+        raise SurfaceNotMeasurable(
+            "silhouette_touches_frame: the colour mask absorbed the background "
+            "(low-contrast product). Use a plate whose product is visibly "
+            "separated from the background.")
     gray = np.asarray(img.convert("L"), dtype=np.float32)
     if fmt == "box":
         out = _box_face(mask, gray, inset_x=inset_x, inset_top=inset_top,

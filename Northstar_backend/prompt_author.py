@@ -31,6 +31,15 @@ DEFAULT_LIGHTING = "soft diffused studio key light from upper-left, gentle fill,
 DEFAULT_CAMERA = "85mm product lens, eye-level three-quarter view, subject fully in frame"
 DEFAULT_BACKGROUND = "seamless neutral light-grey studio background, no visible floor, no horizon"
 
+#: A verbal form note per format. The geometry dict carries millimetres; the
+#: model also needs the SHAPE, or a "tube" can come back as an open cylinder.
+FORM_NOTES = {
+    "pouch": "stand-up pouch with a sealed top weld/zipper header and a bottom gusset",
+    "box": "straight tuck box with a front panel, side panels and folded tuck flaps",
+    "bottle": "cylindrical bottle with a shoulder, a narrow neck and a screw cap",
+    "tube": "cosmetic tube with a flat heat-sealed crimp at one end and a cap at the other",
+}
+
 SYSTEM = (
     "You are the Recursive Packaging Prompt Architect for Northstar OS. "
     "Write ONE FLUX 3 prompt for a PRISTINE, UNPRINTED packaging plate. "
@@ -92,6 +101,7 @@ def build_brief(job: Any, *, lighting: str = DEFAULT_LIGHTING,
     facts = _brand_facts(job)
     return {
         "format": kind,
+        "form": FORM_NOTES.get(kind, kind),
         "geometry": {k: geo.get(k) for k in
                      ("kind", "face", "panels", "diameter_mm", "height_mm",
                       "usable_height_mm", "label_height_mm", "clearances",
