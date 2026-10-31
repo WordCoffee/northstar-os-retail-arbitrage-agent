@@ -1,0 +1,13 @@
+{
+  "galactic_ui_cycle3_20261031": {
+    "cycle": "Phase 2 / cycle 3 - Unified event bus SSE",
+    "backend": "GET /api/v1/galactic/events: async SSE stream, one snapshot frame every 8 s, reuses galactic_state telemetry, disconnect-aware, offline payload on telemetry error, Cache-Control no-cache + X-Accel-Buffering no. Inserted with agent_kernel.ast_edit.add_after.",
+    "frontend": "CommandDeck opens EventSource('/api/v1/galactic/events'), merges snapshot frames into the unified bus (transport: sse), shows live sse/poll, and runs the 8 s fetch poll only when the stream is not open. Bad frames publish telemetry.stream.bad_frame; onopen/onerror publish stream.open/stream.error.",
+    "verification": "npm run test:ui 73 passed; npm run test:contrast 11/11; npm run verify:galactic 31/31 static checks; npm run build 0 errors; pytest test_galactic_state 2 passed including the first SSE frame.",
+    "limits": "Snapshot-level stream, not token-level agent events. Each snapshot probes /health and /slots; read-only but not zero-cost. No browser screenshot.",
+    "next_cycle": "Cycle 4 - HITL approval panel on the local hitl.py queue: GET pending, POST approve/deny, repo-root scoped, mounted in CommandDeck. Matrix/AgentTeams remains blocked.",
+    "report": "reports/galactic_ui_cycle3_20261031.md",
+    "commit": "4dd9f1d0",
+    "no_spend": "No Amazon request, no paid provider call, no credential read."
+  }
+}
