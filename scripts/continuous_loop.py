@@ -272,7 +272,9 @@ def run_cycle(task: Dict[str, Any], *, dry_run: bool = False,
         cwd = (ROOT / str(spec.get("cwd") or ".")).resolve()
         timeout = float(spec.get("timeout") or 900.0)
         result = run_command(cmd, cwd=cwd, timeout=timeout, dry_run=dry_run)
-        checks.append({"name": name, **result})
+        detail = dict(result)
+        detail["output"] = str(detail.get("output") or "")[:1200]
+        checks.append({"name": name, **detail})
         if not result["ok"]:
             record = {"cycle": cycle_id, "task": task.get("id"), "name": task.get("name"),
                       "started_at": started, "finished_at": _now(), "status": "failed",

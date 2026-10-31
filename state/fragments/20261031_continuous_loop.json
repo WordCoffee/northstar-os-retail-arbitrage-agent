@@ -1,0 +1,14 @@
+{
+  "continuous_loop_20261031": {
+    "cycle": "Continuous loop activation",
+    "harness": "scripts/continuous_loop.py: supervisor that reads config/continuous_loop_tasks.json + state/continuous_loop_state.json, runs argv-only checks, commits only task-declared validated paths, appends JSONL evidence, and advances. Commands: --status, --once, --max-cycles N (0=all), --task, --dry-run, --no-commit. Never git add ., never writes 00_STATE.json.",
+    "safety": "STOP file, protected branch, 10 GB disk, 3 GB RAM, forbidden Amazon/Chrome/paid-provider command tokens, commit-path allowlist/denylist, git diff --cached --check, secret-shaped output redaction, no auto-retry.",
+    "first_run": "python scripts/continuous_loop.py --task cycle6-continuous-loop -> 6 checks ok, committed docs 4109d158, state marked completed, ledger record written, pending [] (cycle7 blocked). Checks: py_compile, 7 self-tests, 73 UI unit, 11 contrast, 34 static, UI build 0 errors.",
+    "registry": "config/continuous_loop_tasks.json: cycle6 completed; cycle7 token-level SSE blocked until implemented. Loop stops cleanly rather than inventing work.",
+    "verification": "Northstar_backend/test_continuous_loop.py 7 passed; the supervisor's own run passed all 6 declared checks.",
+    "limits": "Supervisor does not write code; no automatic repair; Matrix/AgentTeams absent; no Amazon/spend/credential read.",
+    "report": "reports/continuous_loop_activation_20261031.md",
+    "commits": "423bd9cb harness; 4109d158 docs committed by the supervisor; activation report/state/ledger follow.",
+    "no_spend": "No Amazon request, no paid provider call, no credential read."
+  }
+}
