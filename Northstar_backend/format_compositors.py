@@ -53,14 +53,17 @@ def box_composite(plate: Any, label: Any, quad: Quad, *,
 
     if shade:
         # The face darkens away from the light: a linear ramp across the quad.
+        # The ramp is masked to the quad, so background above/below the box is
+        # never darkened (a full-height ramp was the first version's defect).
         xs = [p[0] for p in pts]
         x0, x1 = max(0, int(min(xs))), min(w, int(max(xs)))
-        ramp = Image.new("L", (w, h), 0)
         arr = np.zeros((h, w), dtype=np.uint8)
         if x1 > x0:
             row = np.linspace(0, int(255 * shade), x1 - x0).astype(np.uint8)
             arr[:, x0:x1] = row
-        ramp = Image.fromarray(arr, mode="L").filter(ImageFilter.GaussianBlur(6))
+        ramp = Image.fromarray(arr, mode="L").filter(ImageFilter.GaussianBlur(2))
+        ramp = Image.composite(ramp, Image.new("L", (w, h), 0),
+                               _feather_mask((w, h), pts, feather))
         dark = Image.new("RGB", (w, h), (0, 0, 0))
         base = Image.composite(dark, base, ramp.point(lambda v: int(v * 0.5)))
 
@@ -100,9 +103,22 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
     base.paste(out, (x0, y0), mask)
 
     if shade:
+        # Shade the label's own left/right edges, never the plate around it and
+        # never the seam gap (the gap must keep the plate's own colour).
         arr = np.asarray(base, dtype=np.float32)
-        band = np.linspace(1.0, 1.0 - shade, max(1, x0 // 4)) if x0 else np.array([1.0])
-        arr[:, :len(band)] *= band[None, :, None]
+        x1 = min(w, x0 + src.width)
+        y1 = min(h, y0 + src.height)
+        edge = max(1, src.width // 5)
+        ramp = np.linspace(1.0, 1.0 - shade, edge)
+        gap = max(0, int(seam_gap_px))
+        left_start, left_end = x0 + gap, min(x1, x0 + gap + edge)
+        right_end, right_start = x1 - gap, max(x0, x1 - gap - edge)
+        if left_end > left_start and y1 > y0:
+            width_l = left_end - left_start
+            arr[y0:y1, left_start:left_end] *= ramp[::-1][:width_l][None, :, None]
+        if right_end > right_start and y1 > y0:
+            width_r = right_end - right_start
+            arr[y0:y1, right_start:right_end] *= ramp[:width_r][None, :, None]
         base = Image.fromarray(arr.clip(0, 255).astype(np.uint8))
 
     buf = BytesIO()

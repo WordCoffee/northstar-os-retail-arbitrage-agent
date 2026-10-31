@@ -79,6 +79,31 @@ def test_dispatch_and_unknown_format():
         fc.composite("sachet", _plate(), _label(), QUAD)
 
 
+def test_box_shading_never_touches_the_background_above_the_face():
+    plate = (205, 180, 150)
+    out = fc.box_composite(_plate(), _label(), QUAD, shade=0.5)
+    img = _img(out["bytes"])
+    assert img.getpixel((10, 10)) == plate          # outside the quad
+    assert img.getpixel((200, 20)) == plate         # above the face, same columns
+
+
+def test_bottle_shading_stays_inside_the_label_box():
+    plate = (205, 180, 150)
+    out = fc.bottle_composite(_plate(), _label(), QUAD, shade=0.5)
+    img = _img(out["bytes"])
+    assert img.getpixel((5, 5)) == plate
+    assert img.getpixel((395, 5)) == plate
+    assert img.getpixel((200, 250)) != plate        # the label is still painted
+
+
+def test_tube_shading_stays_inside_the_label_box():
+    plate = (205, 180, 150)
+    out = fc.tube_composite(_plate(), _label(), QUAD, shade=0.5)
+    img = _img(out["bytes"])
+    assert img.getpixel((5, 5)) == plate
+    assert img.getpixel((395, 495)) == plate
+
+
 def test_every_compositor_returns_png_bytes_and_a_size():
     for kind in ("box", "bottle", "tube"):
         out = fc.composite(kind, _plate(), _label(), QUAD)

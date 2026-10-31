@@ -191,13 +191,22 @@ class CreativeFlow:
             self._save()
             return
         kind = str(getattr(self.job, "geometry", "pouch") or "pouch").lower()
+        surface: Dict[str, Any] = {}
         if kind == "pouch":
             res = self.compose(self.out / "01_plate.png", **self.job.copy)
+            surface = {"kind": "pouch", "method": "pouch-measure_face",
+                       "quad": res.get("quad"),
+                       "geom_residual_px": res.get("geom_residual_px"),
+                       "confidence": res.get("confidence"),
+                       "measured": res.get("measured")}
         else:
-            # Format compositors take a rendered PANEL, not a pouch face.
+            # Format compositors take a rendered PANEL, not a pouch face. The
+            # quad is MEASURED from the plate; a nominal quad is never used as a
+            # fallback because that is the defect this step exists to remove.
             import format_compositors
             import geometry_profiles
             import pouch_label
+            import surface_measure
             from io import BytesIO
             from PIL import Image
             panel = pouch_label.render_label(**{k: v for k, v in self.job.copy.items()
@@ -206,17 +215,39 @@ class CreativeFlow:
             _dims = {k: v for k, v in (self.job.geometry_dims or {}).items()
                      if k != "require_print_dpi"}
             geo = geometry_profiles.profile(kind, **_dims)
-            w, h = Image.open(BytesIO(plate_bytes)).size
-            quad = geo.get("quad") or [[0, 0], [w, 0], [w, h], [0, h]]
-            mx = max(float(p[0]) for p in quad) or 1.0
-            my = max(float(p[1]) for p in quad) or 1.0
-            scale = min(1.0, (w * 0.8) / mx, (h * 0.8) / my)
-            quad = [[round(float(p[0]) * scale, 2), round(float(p[1]) * scale, 2)]
-                    for p in quad]
-            res = format_compositors.composite(kind, plate_bytes, panel, quad)
+            plate = Image.open(BytesIO(plate_bytes)).convert("RGB")
+            try:
+                measured = surface_measure.measure_surface(
+                    plate, kind,
+                    wrap_fraction=float(geo.get("wrap_fraction") or 0.92))
+            except surface_measure.SurfaceNotMeasurable as exc:
+                self.state.blocked.append("surface_unmeasurable")
+                self.state.steps["compose"] = {"status": "refused", "kind": kind,
+                                               "error": str(exc)[:300]}
+                self._save()
+                return
+            surface = {k: measured.get(k) for k in
+                       ("kind", "method", "quad", "geom_residual_px", "confidence",
+                        "face", "band", "taper", "crimp_top_px", "crimp_bottom_px",
+                        "face_share", "convexity", "width_px", "warnings")}
+            kw: Dict[str, Any] = {}
+            if kind == "bottle":
+                kw["wrap_fraction"] = float(measured.get("wrap_fraction")
+                                            or geo.get("wrap_fraction") or 0.92)
+            elif kind == "tube":
+                # The measured quad already excludes the crimp zones, so the
+                # compositor must not inset them a second time. The warp taper
+                # is the measured taper, not a constant.
+                kw["taper"] = min(0.35, max(0.0, float(measured.get("taper") or 0.0)))
+                kw["crimp_top"] = 0
+                kw["crimp_bottom"] = 0
+            res = format_compositors.composite(kind, plate_bytes, panel,
+                                               measured["quad"], **kw)
         self.labelled = res["bytes"]
         (self.out / "02_labelled.png").write_bytes(self.labelled)
-        self.state.steps["compose"] = {"residual_px": res.get("geom_residual_px"),
+        self.state.steps["compose"] = {"residual_px": res.get("geom_residual_px")
+                                       if kind == "pouch" else surface.get("geom_residual_px"),
+                                       "surface": surface or None,
                                        "neutralized": (res.get("neutralized") or {}).get("neutralized"),
                                        "bytes": len(self.labelled)}
         self._save()
