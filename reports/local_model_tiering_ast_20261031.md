@@ -49,9 +49,10 @@ process env now: OLLAMA_KV_CACHE_TYPE=q4_0 (running Ollama)
 expected:        OLLAMA_KV_CACHE_TYPE=q8_0
 ```
 
-The running Ollama server still has `q4_0`; the launchers export `q8_0`, but the
-already-running process keeps its old value until Ollama is restarted. That is
-an operator action, not a silent kill.
+The running Ollama server still has `q4_0`; the launchers export `q8_0`, and
+`tools/runtime_flags.py --apply --kv q8_0` wrote the process-scoped record at
+`config/runtime_flags.json`. The already-running server keeps its old value until
+Ollama is restarted. That is an operator action, not a silent kill.
 
 ## 2. Dual-model lane policy
 
@@ -193,3 +194,12 @@ router itself was not changed.
    approve/deny.
 4. Wire `lane_policy.route` into the chat adapter once more than one lane is
    actually resident.
+
+## Commits
+
+```
+30df451f  AST editing, lane policy, runtime flags, sandbox, self-heal, HITL
+b34bbe61  local tiering/AST/sandbox report + state fragment
+cb356643  record q8_0 KV + FlashAttention process flags
+```
+
