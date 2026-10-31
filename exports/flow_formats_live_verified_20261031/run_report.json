@@ -1,0 +1,944 @@
+{
+  "started_at": "2026-10-31T03:43:37",
+  "dry_run": false,
+  "formats": {
+    "pouch": {
+      "kind": "pouch",
+      "seed": 4242,
+      "prompt": "A pristine blank unprinted kraft stand-up pouch, plain uniform matte kraft stock, standing upright, no label, no printing, no text, no logo, no graphics, soft diffused studio lighting, seamless neutral light-grey background, photorealistic product shot",
+      "duration_s": 41.1,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "pouch",
+              "usable_height_mm": 158.0,
+              "quad_px": [
+                [
+                  0.0,
+                  72.0
+                ],
+                [
+                  600.0,
+                  72.0
+                ],
+                [
+                  600.0,
+                  1020.0
+                ],
+                [
+                  0.0,
+                  1020.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "below 300 DPI equivalent"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "22a8724fc04fc2933496d1b899f6e0bb477dd3f9",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1487314,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 49C)",
+            "vram_ratio": 0.019,
+            "temp_c": 49.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.366,
+            "bytes": 982468,
+            "error": null,
+            "surface": {
+              "kind": "pouch",
+              "method": "pouch-measure_face",
+              "quad": [
+                [
+                  264.9,
+                  253.0
+                ],
+                [
+                  757.3,
+                  253.0
+                ],
+                [
+                  722.3,
+                  861.0
+                ],
+                [
+                  299.3,
+                  861.0
+                ]
+              ],
+              "geom_residual_px": 0.366,
+              "confidence": null,
+              "measured": {
+                "quad": [
+                  [
+                    264.9,
+                    253.0
+                  ],
+                  [
+                    757.3,
+                    253.0
+                  ],
+                  [
+                    722.3,
+                    861.0
+                  ],
+                  [
+                    299.3,
+                    861.0
+                  ]
+                ],
+                "face": {
+                  "top": 80,
+                  "bottom": 947,
+                  "left": 234,
+                  "right": 800
+                },
+                "background": [
+                  217,
+                  212,
+                  209
+                ],
+                "coverage": 0.4467,
+                "geom_residual_px": 0.366,
+                "geom_residual_by_side": {
+                  "left": 0.31,
+                  "right": 0.432
+                },
+                "bow_left_px": -4.576,
+                "bow_right_px": 11.645,
+                "fit": {
+                  "left": "quadratic",
+                  "right": "quadratic"
+                },
+                "fit_residual_px": {
+                  "left": 0.284,
+                  "right": 0.286
+                }
+              }
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.4541,
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 68.1,
+            "grade": null,
+            "defects": [
+              "background_not_white_enough",
+              "subject_touching_frame"
+            ],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_verified_20261031\\pouch\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_verified_20261031\\pouch\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_verified_20261031\\pouch\\03_hero.png",
+        "report": "exports\\flow_formats_live_verified_20261031\\pouch\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 291863,
+        "inside_quad_px": 279139,
+        "outside_quad_px": 12724,
+        "inside_share": 0.9564
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'SMANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruiting body only",
+            "Third-party tested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "box": {
+      "kind": "box",
+      "seed": 4243,
+      "prompt": "A pristine blank unprinted kraft folding carton box, straight tuck box, standing upright, plain uniform matte kraft board, no label, no printing, no text, no logo, no graphics, soft diffused studio lighting, seamless neutral light-grey background, photorealistic product shot",
+      "duration_s": 39.0,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "box",
+              "usable_height_mm": null,
+              "quad_px": [
+                [
+                  0.0,
+                  0.0
+                ],
+                [
+                  480.0,
+                  0.0
+                ],
+                [
+                  480.0,
+                  1080.0
+                ],
+                [
+                  0.0,
+                  1080.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "below 300 DPI equivalent"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "1a6536fa642929bf60349ab34f6921c180564f1a",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1391795,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 55C)",
+            "vram_ratio": 0.019,
+            "temp_c": 55.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.159,
+            "bytes": 910821,
+            "error": null,
+            "surface": {
+              "kind": "box",
+              "method": "box-quad",
+              "quad": [
+                [
+                  397.14,
+                  169.01
+                ],
+                [
+                  817.21,
+                  164.89
+                ],
+                [
+                  816.01,
+                  820.79
+                ],
+                [
+                  397.06,
+                  873.1
+                ]
+              ],
+              "geom_residual_px": 0.159,
+              "confidence": 0.947,
+              "face": {
+                "top": 121,
+                "bottom": 901,
+                "left": 369,
+                "right": 845
+              },
+              "band": null,
+              "taper": null,
+              "crimp_top_px": null,
+              "crimp_bottom_px": null,
+              "face_share": 0.7166,
+              "convexity": null,
+              "width_px": null,
+              "warnings": []
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.3355,
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 63.0,
+            "grade": null,
+            "defects": [
+              "background_not_white_enough",
+              "subject_touching_frame",
+              "contact_shadow_or_floor"
+            ],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_verified_20261031\\box\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_verified_20261031\\box\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_verified_20261031\\box\\03_hero.png",
+        "report": "exports\\flow_formats_live_verified_20261031\\box\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 292507,
+        "inside_quad_px": 285899,
+        "outside_quad_px": 6608,
+        "inside_share": 0.9774
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruiting body only",
+            "Third-party tested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "bottle": {
+      "kind": "bottle",
+      "seed": 4244,
+      "prompt": "A pristine blank unprinted matte amber glass supplement bottle with a plain white cap, standing upright, no label, no printing, no text, no logo, no graphics, soft diffused studio lighting, seamless neutral light-grey background, photorealistic product shot",
+      "duration_s": 38.9,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "bottle",
+              "usable_height_mm": 169.0,
+              "quad_px": [
+                [
+                  0.0,
+                  180.0
+                ],
+                [
+                  360.0,
+                  180.0
+                ],
+                [
+                  360.0,
+                  660.0
+                ],
+                [
+                  0.0,
+                  660.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "below 300 DPI equivalent"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "e98352eece7d53b153e5a520c4a3c87cf99e5440",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1006390,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 57C)",
+            "vram_ratio": 0.019,
+            "temp_c": 57.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.208,
+            "bytes": 864057,
+            "error": null,
+            "surface": {
+              "kind": "bottle",
+              "method": "bottle-band",
+              "quad": [
+                [
+                  374.51,
+                  376.0
+                ],
+                [
+                  647.86,
+                  376.0
+                ],
+                [
+                  647.8,
+                  844.0
+                ],
+                [
+                  374.07,
+                  844.0
+                ]
+              ],
+              "geom_residual_px": 0.208,
+              "confidence": 0.931,
+              "face": {
+                "top": 376,
+                "bottom": 844,
+                "left": 328,
+                "right": 693
+              },
+              "band": {
+                "top": 345,
+                "bottom": 875,
+                "height_px": 531
+              },
+              "taper": 0.0014,
+              "crimp_top_px": 31,
+              "crimp_bottom_px": 28,
+              "face_share": null,
+              "convexity": 0.996,
+              "width_px": {
+                "top": 364.46,
+                "bottom": 364.99,
+                "median": 363.8
+              },
+              "warnings": []
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.6009,
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 77.3,
+            "grade": null,
+            "defects": [
+              "background_not_white_enough"
+            ],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_verified_20261031\\bottle\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_verified_20261031\\bottle\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_verified_20261031\\bottle\\03_hero.png",
+        "report": "exports\\flow_formats_live_verified_20261031\\bottle\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 122148,
+        "inside_quad_px": 122148,
+        "outside_quad_px": 0,
+        "inside_share": 1.0
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANICMUSHROOM POWDER",
+            "Fruiting bodly only",
+            "Third-party tested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    },
+    "tube": {
+      "kind": "tube",
+      "seed": 4245,
+      "prompt": "A pristine blank unprinted matte kraft cosmetic tube with a flat crimped top, standing upright, no label, no printing, no text, no logo, no graphics, soft diffused studio lighting, seamless neutral light-grey background, photorealistic product shot",
+      "duration_s": 38.4,
+      "error": null,
+      "summary": {
+        "status": "ok",
+        "blocked": [],
+        "steps": {
+          "bind": {
+            "geometry": {
+              "kind": "tube",
+              "usable_height_mm": 124.0,
+              "quad_px": [
+                [
+                  0.0,
+                  168.0
+                ],
+                [
+                  240.0,
+                  168.0
+                ],
+                [
+                  240.0,
+                  912.0
+                ],
+                [
+                  0.0,
+                  912.0
+                ]
+              ],
+              "dpi_ok": false,
+              "dpi_warning": "below 300 DPI equivalent"
+            },
+            "tier": "premium",
+            "margin": 0.6618
+          },
+          "snapshot": {
+            "sha": "a1282e07d20053d440953b8b755fe372814e2dbc",
+            "clean": false
+          },
+          "plate": {
+            "bytes": 1328458,
+            "allowed": 1,
+            "guard": "1 of 1 (vram 2%, 58C)",
+            "vram_ratio": 0.019,
+            "temp_c": 58.0
+          },
+          "gate": {
+            "status": "clean",
+            "checked": true,
+            "boxes": 0,
+            "min_score": 0.5
+          },
+          "compose": {
+            "status": null,
+            "residual_px": 0.255,
+            "bytes": 1077292,
+            "error": null,
+            "surface": {
+              "kind": "tube",
+              "method": "tube-band",
+              "quad": [
+                [
+                  369.74,
+                  319.0
+                ],
+                [
+                  653.97,
+                  319.0
+                ],
+                [
+                  627.43,
+                  795.0
+                ],
+                [
+                  392.75,
+                  795.0
+                ]
+              ],
+              "geom_residual_px": 0.255,
+              "confidence": 0.915,
+              "face": {
+                "top": 319,
+                "bottom": 795,
+                "left": 322,
+                "right": 701
+              },
+              "band": {
+                "top": 287,
+                "bottom": 827,
+                "height_px": 541
+              },
+              "taper": -0.2111,
+              "crimp_top_px": null,
+              "crimp_bottom_px": 132,
+              "face_share": null,
+              "convexity": 0.994,
+              "width_px": {
+                "top": 378.97,
+                "bottom": 312.91,
+                "median": 350.22
+              },
+              "warnings": []
+            }
+          },
+          "hero": {
+            "corners_pure_white": true,
+            "corner_values": [
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ],
+              [
+                255,
+                255,
+                255
+              ]
+            ],
+            "pure_white_ratio": 0.6284,
+            "size": [
+              2000,
+              2000
+            ]
+          },
+          "aplus": {
+            "modules": [
+              "header",
+              "three_tiles",
+              "comparison"
+            ],
+            "valid": true
+          },
+          "evaluate": {
+            "score": 78.3,
+            "grade": null,
+            "defects": [
+              "background_not_white_enough"
+            ],
+            "legibility": {
+              "legibility": 1.0,
+              "hits": 4,
+              "boxes": 6
+            },
+            "fill": null,
+            "contrast": null,
+            "balance": null,
+            "background": null
+          },
+          "memory": {
+            "status": "proposed",
+            "count": 2,
+            "persisted": false
+          }
+        }
+      },
+      "artefacts": {
+        "plate": "exports\\flow_formats_live_verified_20261031\\tube\\01_plate.png",
+        "labelled": "exports\\flow_formats_live_verified_20261031\\tube\\02_labelled.png",
+        "hero": "exports\\flow_formats_live_verified_20261031\\tube\\03_hero.png",
+        "report": "exports\\flow_formats_live_verified_20261031\\tube\\flow_report.json"
+      },
+      "paint": {
+        "changed_px": 128493,
+        "inside_quad_px": 124213,
+        "outside_quad_px": 4280,
+        "inside_share": 0.9667
+      },
+      "ocr": {
+        "mode": "text_safe",
+        "verdict": "text_present_matches_expected",
+        "expected_terms": [
+          "LION'S MANE"
+        ],
+        "matched_terms": [
+          "LION'S MANE"
+        ],
+        "check": {
+          "engine": "rapidocr",
+          "status": "ok",
+          "contains_text": true,
+          "boxes": 6,
+          "words": [
+            "LION'S MANE",
+            "ORGANIC MUSHROOM POWDER",
+            "Fruiting body onily",
+            "Third-party tested",
+            "60 servings",
+            "6 oz (170 g)"
+          ],
+          "error": null
+        }
+      }
+    }
+  },
+  "status": "ok",
+  "engine": {
+    "engine": "comfyui",
+    "url": "http://127.0.0.1:8188",
+    "url_configured": false,
+    "gate": true,
+    "reachable": true,
+    "armed": true,
+    "models": {
+      "image": "flux3-image-klein-nvfp4.safetensors",
+      "video": "Wan2.2-TI2V-5B-Q5_K_M.gguf",
+      "edit": null
+    },
+    "note": "The local engine is armed: renders run on this machine's GPU (ComfyUI)."
+  },
+  "finished_at": "2026-10-31T03:46:23"
+}

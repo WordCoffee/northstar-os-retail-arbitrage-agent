@@ -1,0 +1,199 @@
+{
+  "header": {
+    "kind": "header",
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 600
+    },
+    "safe": {
+      "x": 24,
+      "y": 24,
+      "w": 922,
+      "h": 552
+    },
+    "image": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 600
+    },
+    "tiles": [],
+    "comparison": null,
+    "copy": {
+      "x": 24,
+      "y": 0,
+      "w": 426,
+      "h": 600,
+      "align": "left",
+      "valign": "middle",
+      "max_chars": 90
+    },
+    "responsive": {
+      "desktop": {
+        "width": 970,
+        "height": 600,
+        "scale": 1.0,
+        "gutter": 0
+      },
+      "tablet": {
+        "width": 970,
+        "height": 600,
+        "scale": 0.7505,
+        "gutter": 16
+      },
+      "mobile": {
+        "width": 970,
+        "height": 600,
+        "scale": 0.3381,
+        "gutter": 16
+      },
+      "object_fit": "cover",
+      "min_scale": 0.3
+    },
+    "valid": true
+  },
+  "three_tiles": {
+    "kind": "three_tiles",
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 300
+    },
+    "safe": {
+      "x": 24,
+      "y": 24,
+      "w": 922,
+      "h": 252
+    },
+    "image": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 300
+    },
+    "tiles": [
+      {
+        "x": 15,
+        "y": 0,
+        "w": 300,
+        "h": 300
+      },
+      {
+        "x": 335,
+        "y": 0,
+        "w": 300,
+        "h": 300
+      },
+      {
+        "x": 655,
+        "y": 0,
+        "w": 300,
+        "h": 300
+      }
+    ],
+    "comparison": null,
+    "copy": null,
+    "responsive": {
+      "desktop": {
+        "width": 970,
+        "height": 300,
+        "scale": 1.0,
+        "gutter": 0
+      },
+      "tablet": {
+        "width": 970,
+        "height": 300,
+        "scale": 0.7505,
+        "gutter": 16
+      },
+      "mobile": {
+        "width": 970,
+        "height": 300,
+        "scale": 0.3381,
+        "gutter": 16
+      },
+      "object_fit": "cover",
+      "min_scale": 0.3
+    },
+    "valid": true
+  },
+  "comparison": {
+    "kind": "comparison",
+    "canvas": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 600
+    },
+    "safe": {
+      "x": 24,
+      "y": 24,
+      "w": 922,
+      "h": 552
+    },
+    "image": {
+      "x": 0,
+      "y": 0,
+      "w": 970,
+      "h": 600
+    },
+    "tiles": [],
+    "comparison": {
+      "header": {
+        "x": 0,
+        "y": 0,
+        "w": 970,
+        "h": 90
+      },
+      "label_col": {
+        "x": 0,
+        "y": 90,
+        "w": 250,
+        "h": 510
+      },
+      "columns": [
+        {
+          "x": 250,
+          "y": 90,
+          "w": 360,
+          "h": 510
+        },
+        {
+          "x": 610,
+          "y": 90,
+          "w": 360,
+          "h": 510
+        }
+      ],
+      "row_h": 127,
+      "rows": 4
+    },
+    "copy": null,
+    "responsive": {
+      "desktop": {
+        "width": 970,
+        "height": 600,
+        "scale": 1.0,
+        "gutter": 0
+      },
+      "tablet": {
+        "width": 970,
+        "height": 600,
+        "scale": 0.7505,
+        "gutter": 16
+      },
+      "mobile": {
+        "width": 970,
+        "height": 600,
+        "scale": 0.3381,
+        "gutter": 16
+      },
+      "object_fit": "cover",
+      "min_scale": 0.3
+    },
+    "valid": true
+  }
+}

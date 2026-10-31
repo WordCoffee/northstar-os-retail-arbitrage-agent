@@ -1,0 +1,223 @@
+{
+  "job_id": "formats-box",
+  "status": "ok",
+  "blocked": [],
+  "listing": {
+    "product_id": "lions-mane-6oz-box",
+    "hero_image": "exports\\flow_formats_live_verified_20261031\\box\\03_hero.png",
+    "hero_aspect": "1:1",
+    "secondary_images": [],
+    "secondary_meta": [],
+    "keywords": [
+      "lion's mane powder",
+      "fruiting body mushroom"
+    ],
+    "alt_text": "lion's mane powder photograph on a pure white background",
+    "blocked": [],
+    "ready": true,
+    "material_tier": "premium",
+    "environment": "studio-white"
+  },
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "box",
+        "usable_height_mm": null,
+        "quad_px": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            480.0,
+            0.0
+          ],
+          [
+            480.0,
+            1080.0
+          ],
+          [
+            0.0,
+            1080.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "below 300 DPI equivalent"
+      }
+    },
+    "snapshot": {
+      "sha": "1a6536fa642929bf60349ab34f6921c180564f1a",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 55.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 55C)",
+      "bytes": 1391795
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.159,
+      "surface": {
+        "kind": "box",
+        "method": "box-quad",
+        "quad": [
+          [
+            397.14,
+            169.01
+          ],
+          [
+            817.21,
+            164.89
+          ],
+          [
+            816.01,
+            820.79
+          ],
+          [
+            397.06,
+            873.1
+          ]
+        ],
+        "geom_residual_px": 0.159,
+        "confidence": 0.947,
+        "face": {
+          "top": 121,
+          "bottom": 901,
+          "left": 369,
+          "right": 845
+        },
+        "band": null,
+        "taper": null,
+        "crimp_top_px": null,
+        "crimp_bottom_px": null,
+        "face_share": 0.7166,
+        "convexity": null,
+        "width_px": null,
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 910821
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.3355,
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 63.0,
+      "metrics": {
+        "contrast": 0.3331,
+        "fill": 0.9245,
+        "balance": 0.9617,
+        "hook_density": 0.1032,
+        "purity": 0.4246,
+        "subject_px": 2301431
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [
+        "background_not_white_enough",
+        "subject_touching_frame",
+        "contact_shadow_or_floor"
+      ],
+      "verdict": "revise",
+      "rubric": "listing: purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 38.3,
+        "metrics": {
+          "contrast": 0.289,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.1827,
+          "purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_verified_20261031\\box\\flow_report.json"
+    }
+  }
+}

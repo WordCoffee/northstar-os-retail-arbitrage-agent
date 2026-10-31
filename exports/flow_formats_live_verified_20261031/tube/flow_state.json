@@ -1,0 +1,215 @@
+{
+  "job_id": "formats-tube",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "tube",
+        "usable_height_mm": 124.0,
+        "quad_px": [
+          [
+            0.0,
+            168.0
+          ],
+          [
+            240.0,
+            168.0
+          ],
+          [
+            240.0,
+            912.0
+          ],
+          [
+            0.0,
+            912.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "below 300 DPI equivalent"
+      }
+    },
+    "snapshot": {
+      "sha": "a1282e07d20053d440953b8b755fe372814e2dbc",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 58.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 58C)",
+      "bytes": 1328458
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.255,
+      "surface": {
+        "kind": "tube",
+        "method": "tube-band",
+        "quad": [
+          [
+            369.74,
+            319.0
+          ],
+          [
+            653.97,
+            319.0
+          ],
+          [
+            627.43,
+            795.0
+          ],
+          [
+            392.75,
+            795.0
+          ]
+        ],
+        "geom_residual_px": 0.255,
+        "confidence": 0.915,
+        "face": {
+          "top": 319,
+          "bottom": 795,
+          "left": 322,
+          "right": 701
+        },
+        "band": {
+          "top": 287,
+          "bottom": 827,
+          "height_px": 541
+        },
+        "taper": -0.2111,
+        "crimp_top_px": null,
+        "crimp_bottom_px": 132,
+        "face_share": null,
+        "convexity": 0.994,
+        "width_px": {
+          "top": 378.97,
+          "bottom": 312.91,
+          "median": 350.22
+        },
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 1077292
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.6284,
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 78.3,
+      "metrics": {
+        "contrast": 0.4259,
+        "fill": 0.909,
+        "balance": 0.9309,
+        "hook_density": 0.0877,
+        "purity": 0.6911,
+        "subject_px": 1235439
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [
+        "background_not_white_enough"
+      ],
+      "verdict": "revise",
+      "rubric": "listing: purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 39.3,
+        "metrics": {
+          "contrast": 0.32,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.1812,
+          "purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_verified_20261031\\tube\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T03:45:43",
+  "finished_at": "2026-10-31T03:46:21"
+}

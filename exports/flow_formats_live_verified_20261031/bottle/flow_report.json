@@ -1,0 +1,229 @@
+{
+  "job_id": "formats-bottle",
+  "status": "ok",
+  "blocked": [],
+  "listing": {
+    "product_id": "lions-mane-6oz-bottle",
+    "hero_image": "exports\\flow_formats_live_verified_20261031\\bottle\\03_hero.png",
+    "hero_aspect": "1:1",
+    "secondary_images": [],
+    "secondary_meta": [],
+    "keywords": [
+      "lion's mane powder",
+      "fruiting body mushroom"
+    ],
+    "alt_text": "lion's mane powder photograph on a pure white background",
+    "blocked": [],
+    "ready": true,
+    "material_tier": "premium",
+    "environment": "studio-white"
+  },
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "bottle",
+        "usable_height_mm": 169.0,
+        "quad_px": [
+          [
+            0.0,
+            180.0
+          ],
+          [
+            360.0,
+            180.0
+          ],
+          [
+            360.0,
+            660.0
+          ],
+          [
+            0.0,
+            660.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "below 300 DPI equivalent"
+      }
+    },
+    "snapshot": {
+      "sha": "e98352eece7d53b153e5a520c4a3c87cf99e5440",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 57.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 57C)",
+      "bytes": 1006390
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.208,
+      "surface": {
+        "kind": "bottle",
+        "method": "bottle-band",
+        "quad": [
+          [
+            374.51,
+            376.0
+          ],
+          [
+            647.86,
+            376.0
+          ],
+          [
+            647.8,
+            844.0
+          ],
+          [
+            374.07,
+            844.0
+          ]
+        ],
+        "geom_residual_px": 0.208,
+        "confidence": 0.931,
+        "face": {
+          "top": 376,
+          "bottom": 844,
+          "left": 328,
+          "right": 693
+        },
+        "band": {
+          "top": 345,
+          "bottom": 875,
+          "height_px": 531
+        },
+        "taper": 0.0014,
+        "crimp_top_px": 31,
+        "crimp_bottom_px": 28,
+        "face_share": null,
+        "convexity": 0.996,
+        "width_px": {
+          "top": 364.46,
+          "bottom": 364.99,
+          "median": 363.8
+        },
+        "warnings": []
+      },
+      "neutralized": null,
+      "bytes": 864057
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.6009,
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 77.3,
+      "metrics": {
+        "contrast": 0.829,
+        "fill": 0.908,
+        "balance": 0.9912,
+        "hook_density": 0.0613,
+        "purity": 0.6506,
+        "subject_px": 1397404
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [
+        "background_not_white_enough"
+      ],
+      "verdict": "revise",
+      "rubric": "listing: purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 46.6,
+        "metrics": {
+          "contrast": 0.6451,
+          "fill": 1.0,
+          "balance": 0.9987,
+          "hook_density": 0.0903,
+          "purity": 0.0001,
+          "subject_px": 1048490
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_verified_20261031\\bottle\\flow_report.json"
+    }
+  }
+}

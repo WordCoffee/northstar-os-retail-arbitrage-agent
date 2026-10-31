@@ -1,0 +1,241 @@
+{
+  "job_id": "formats-pouch",
+  "status": "ok",
+  "steps": {
+    "intake": {
+      "ok": true
+    },
+    "bind": {
+      "tier": "premium",
+      "margin": 0.6618,
+      "blocked": [],
+      "prompt_suffix": "matte kraft with soft-touch lamination; embossed foil stamping, spot UV on the wordmark; soft studio lighting, 85mm lens, shallow depth of field",
+      "geometry": {
+        "kind": "pouch",
+        "usable_height_mm": 158.0,
+        "quad_px": [
+          [
+            0.0,
+            72.0
+          ],
+          [
+            600.0,
+            72.0
+          ],
+          [
+            600.0,
+            1020.0
+          ],
+          [
+            0.0,
+            1020.0
+          ]
+        ],
+        "dpi_ok": false,
+        "dpi_warning": "below 300 DPI equivalent"
+      }
+    },
+    "snapshot": {
+      "sha": "22a8724fc04fc2933496d1b899f6e0bb477dd3f9",
+      "clean": false
+    },
+    "plate": {
+      "vram_ratio": 0.019,
+      "temp_c": 49.0,
+      "allowed": 1,
+      "guard": "1 of 1 (vram 2%, 49C)",
+      "bytes": 1487314
+    },
+    "gate": {
+      "status": "clean",
+      "checked": true,
+      "boxes": 0,
+      "min_score": 0.5
+    },
+    "compose": {
+      "residual_px": 0.366,
+      "surface": {
+        "kind": "pouch",
+        "method": "pouch-measure_face",
+        "quad": [
+          [
+            264.9,
+            253.0
+          ],
+          [
+            757.3,
+            253.0
+          ],
+          [
+            722.3,
+            861.0
+          ],
+          [
+            299.3,
+            861.0
+          ]
+        ],
+        "geom_residual_px": 0.366,
+        "confidence": null,
+        "measured": {
+          "quad": [
+            [
+              264.9,
+              253.0
+            ],
+            [
+              757.3,
+              253.0
+            ],
+            [
+              722.3,
+              861.0
+            ],
+            [
+              299.3,
+              861.0
+            ]
+          ],
+          "face": {
+            "top": 80,
+            "bottom": 947,
+            "left": 234,
+            "right": 800
+          },
+          "background": [
+            217,
+            212,
+            209
+          ],
+          "coverage": 0.4467,
+          "geom_residual_px": 0.366,
+          "geom_residual_by_side": {
+            "left": 0.31,
+            "right": 0.432
+          },
+          "bow_left_px": -4.576,
+          "bow_right_px": 11.645,
+          "fit": {
+            "left": "quadratic",
+            "right": "quadratic"
+          },
+          "fit_residual_px": {
+            "left": 0.284,
+            "right": 0.286
+          }
+        }
+      },
+      "neutralized": true,
+      "bytes": 982468
+    },
+    "hero": {
+      "corners_pure_white": true,
+      "corner_values": [
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "pure_white_ratio": 0.4541,
+      "size": [
+        2000,
+        2000
+      ]
+    },
+    "aplus": {
+      "modules": [
+        "header",
+        "three_tiles",
+        "comparison"
+      ],
+      "valid": true
+    },
+    "evaluate": {
+      "class": "listing",
+      "score": 68.1,
+      "metrics": {
+        "contrast": 0.3494,
+        "fill": 0.922,
+        "balance": 0.9458,
+        "hook_density": 0.0857,
+        "purity": 0.5299,
+        "subject_px": 1880327
+      },
+      "legibility": {
+        "legibility": 1.0,
+        "hits": 4,
+        "boxes": 6
+      },
+      "defects": [
+        "background_not_white_enough",
+        "subject_touching_frame"
+      ],
+      "verdict": "revise",
+      "rubric": "listing: purity>=0.90, fill 80-92%, balance, OCR legibility",
+      "plate_mockup": {
+        "class": "hook",
+        "score": 44.7,
+        "metrics": {
+          "contrast": 0.4072,
+          "fill": 1.0,
+          "balance": 0.9986,
+          "hook_density": 0.2315,
+          "purity": 0.0,
+          "subject_px": 1048576
+        },
+        "defects": [
+          "low_thumb_stop_energy"
+        ],
+        "verdict": "revise",
+        "rubric": "hook: edge energy>=0.25, contrast>=0.25, subject present"
+      }
+    },
+    "memory": {
+      "status": "proposed",
+      "count": 2,
+      "persisted": false
+    },
+    "report": {
+      "path": "exports\\flow_formats_live_verified_20261031\\pouch\\flow_report.json"
+    }
+  },
+  "blocked": [],
+  "started_at": "2026-10-31T03:43:37",
+  "finished_at": "2026-10-31T03:44:19"
+}
