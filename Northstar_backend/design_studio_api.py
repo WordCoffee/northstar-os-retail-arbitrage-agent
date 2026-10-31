@@ -2028,3 +2028,50 @@ def get_asset_file(aid: str, acct: str = Depends(studio_account)):
     if not path.is_file():
         raise HTTPException(status_code=404, detail="Asset file not found")
     return _FileResponse(str(path), media_type=asset.get("mime_type") or "application/octet-stream")
+
+# ── Phase 3 operating-loop routes (mount points for render_bind / handoff / memory) ──
+from pydantic import BaseModel as _BM
+
+
+class RenderBriefIn(_BM):
+    product: dict
+    pricing: dict = {}
+    keywords: list = []
+    buyer: dict = {}
+    lifestyle: bool = False
+
+
+class HandoffIn(_BM):
+    brief: dict
+    assets: list = []
+
+
+class BrandMemoryIn(_BM):
+    profile: dict = {}
+    account_id: str = "default"
+
+
+@router.post("/render-brief")
+def render_brief_route(body: RenderBriefIn) -> dict:
+    """Margin -> material binding for a render. Pure; no GPU, no spend."""
+    import render_bind
+    brief = render_bind.bind(body.product, pricing=body.pricing, keywords=body.keywords,
+                             buyer=body.buyer, lifestyle=body.lifestyle)
+    out = brief.to_dict()
+    out["prompt_suffix"] = render_bind.prompt_suffix(brief)
+    return out
+
+
+@router.post("/listing-handoff")
+def listing_handoff_route(body: HandoffIn) -> dict:
+    """Asset manifest + brief -> Listing Forge payload. Refuses a non-white hero."""
+    import asset_handoff
+    return asset_handoff.handoff(body.brief, body.assets)
+
+
+@router.post("/brand-memory/propose")
+def brand_memory_propose_route(body: BrandMemoryIn) -> dict:
+    """Extract brand tokens as a PROPOSAL. Never writes: status is always proposed."""
+    import brand_memory
+    return brand_memory.propose(brand_memory.extract(body.profile),
+                                account_id=body.account_id)

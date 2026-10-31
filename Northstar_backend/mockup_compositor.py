@@ -617,3 +617,56 @@ def compose_mockup(*, template_id: str, plate_path: Path, logo_path: Path,
                 "soft-light, specular, grain, tonal match). Text is composited, "
                 "never generated.",
     }
+
+# ── Base-plate neutralisation (blank-plate architecture) ─────────────────────
+def neutralize_quad(img: Image.Image, quad: Sequence[Sequence[float]], *,
+                    feather: int = 10, inset: float = 0.78) -> Tuple[Image.Image, Dict[str, Any]]:
+    """Flatten everything under the label target BEFORE any realism pass.
+
+    The compositor deliberately modulates print with the plate's own luminance so
+    a label inherits creases. That same mechanism lets text the image model burned
+    into the plate bleed THROUGH the label - measured 2026-10-30: a garbled
+    '8551/0m0' and a ghosted logo survived `field_alpha=255`.
+
+    This fills the label polygon with the plate's own median field colour, feathered
+    so no seam shows. After it, the region has no edges for the realism pass to
+    re-introduce.
+
+    Returns (image, info) where info records the sampled colour and area.
+    """
+    base = img.convert("RGB").copy()
+    pts = [(float(p[0]), float(p[1])) for p in quad]
+    if len(pts) < 3:
+        return base, {"neutralized": False, "reason": "quad_too_small"}
+
+    mask = Image.new("L", base.size, 0)
+    ImageDraw.Draw(mask).polygon(pts, fill=255)
+
+    cx = sum(p[0] for p in pts) / len(pts)
+    cy = sum(p[1] for p in pts) / len(pts)
+    inner = [(cx + (x - cx) * inset, cy + (y - cy) * inset) for x, y in pts]
+    inner_mask = Image.new("L", base.size, 0)
+    ImageDraw.Draw(inner_mask).polygon(inner, fill=255)
+
+    arr = np.asarray(base)
+    sel = np.asarray(inner_mask) > 0
+    if int(sel.sum()) < 200:
+        sel = np.asarray(mask) > 0
+        inner_used = False
+    else:
+        inner_used = True
+    if int(sel.sum()) < 50:
+        return base, {"neutralized": False, "reason": "region_too_small"}
+
+    field = np.median(arr[sel], axis=0).astype(int)
+    fill = Image.new("RGB", base.size, tuple(int(v) for v in field))
+    soft = mask.filter(ImageFilter.GaussianBlur(max(1, int(feather))))
+    out = Image.composite(fill, base, soft)
+
+    return out, {
+        "neutralized": True,
+        "field_rgb": [int(v) for v in field],
+        "area_px": int((np.asarray(mask) > 0).sum()),
+        "sampled_inner": inner_used,
+        "feather_px": int(feather),
+    }

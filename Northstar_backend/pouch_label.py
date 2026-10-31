@@ -768,6 +768,11 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
 
     try:
         import compositor_realism as cr
+        # Blank-plate architecture: flatten the label target BEFORE the realism
+        # pass. The realism pass modulates print with the plate's luminance (so a
+        # label inherits creases) - which also let burned-in plate text ghost
+        # through the label. After this the region has no edges to re-introduce.
+        plate, _neutralized = mc.neutralize_quad(plate, q, feather=10)
         maps = cr.build_surface_maps(plate)
         # Packaging-grade integration. The earlier recipe was tuned too low: the
         # print landed as a flat opaque card because soft-light (0.30) and tonal
@@ -812,6 +817,7 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
         "size": list(out.size),
         "quad": q,
         "measured": measured,
+        "neutralized": _neutralized,
         "geom_residual_px": residual,
         "bow_x_px": round(bow, 3),
         "bow_left_px": round(bow_l, 3),

@@ -506,3 +506,36 @@ def text_check_asset(asset_id: str, acct: str = Depends(studio_account)):
         raise HTTPException(status_code=404, detail="Asset file not found")
     result = verify_asset_text(path.read_bytes(), brief=None, text_safe=False)
     return {"asset_id": asset_id, "name": asset.get("name"), "text_fidelity": result}
+
+# ── Plate refusal gate (blank-plate architecture) ────────────────────────────
+class PlateNotClean(RuntimeError):
+    """Raised when a generated base plate still carries OCR-detectable text."""
+
+    def __init__(self, boxes: int, words: List[str], floor: float):
+        self.boxes = boxes
+        self.words = words
+        self.floor = floor
+        super().__init__(
+            f"plate_not_clean: {boxes} OCR box(es) survived cleaning at min_score {floor} "
+            f"({', '.join(words[:5]) or 'no words'}). A blank plate must carry no text "
+            "before deterministic composition - compositing onto a dirty plate ghosts "
+            "the burned-in lettering through the label."
+        )
+
+
+def assert_plate_clean(image_bytes: bytes, *, min_score: float = 0.5,
+                       min_len: int = 2) -> Dict[str, Any]:
+    """HALT if any text survives on a base plate. Raises PlateNotClean.
+
+    Deliberately a refusal, not a warning: the 2026-10-30 runs proved that
+    scrubbing leaves residue the realism pass can re-introduce, so a plate that
+    is not clean must never reach the compositor.
+    """
+    parsed, err = _ocr_boxes(image_bytes, min_score=min_score, min_len=min_len)
+    if parsed is None:
+        return {"status": "unavailable", "checked": False, "error": err}
+    _img, boxes = parsed
+    words = [b[4] for b in boxes][:8]
+    if boxes:
+        raise PlateNotClean(len(boxes), words, min_score)
+    return {"status": "clean", "checked": True, "boxes": 0, "min_score": min_score}

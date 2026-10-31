@@ -57,6 +57,10 @@ def ocr_words(png: bytes) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=4242)
+    # Accepted for CLI parity with tools/start_comfyui.ps1; ComfyUI owns the cache,
+    # so the gateway path has nothing to disable here. It is NOT a no-op promise:
+    # --cache-none is enforced where the ComfyUI process is started.
+    ap.add_argument("--cache-none", action="store_true", help="accepted for start parity")
     args = ap.parse_args()
 
     OUT.mkdir(parents=True, exist_ok=True)
@@ -80,9 +84,8 @@ def main() -> int:
                        "model": render.get("model"), "seed": args.seed,
                        "ocr": ocr_words(plate)}
 
-    # 2. the model still prints. Scrub, then verify the scrub, then let the label
-    #    cover the panel anyway - the scrub exists so no garbage survives outside
-    #    the label area.
+    # 2. the model still prints. Scrub, then REFUSE if anything survives.
+    #    A plate that is not clean must never reach the compositor.
     if report["plate"]["ocr"]["contains_text"]:
         scrub = text_fidelity.clean_text_regions(plate)
         if scrub.get("image"):
@@ -91,6 +94,19 @@ def main() -> int:
         report["plate_scrub"] = {"cleared": scrub.get("cleared"),
                                  "status": scrub.get("status"),
                                  "ocr_after": ocr_words(plate)}
+        try:
+            report["plate_gate"] = text_fidelity.assert_plate_clean(plate)
+        except text_fidelity.PlateNotClean as exc:
+            report["plate_gate"] = {"status": "refused", "error": str(exc),
+                                    "boxes": getattr(exc, "boxes", None),
+                                    "words": getattr(exc, "words", None)}
+            report["status"] = "refused_dirty_plate"
+            (OUT / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+            print(json.dumps({k: report[k] for k in ("status", "plate_gate", "plate_scrub")},
+                             indent=2))
+            return 4
+    else:
+        report["plate_gate"] = {"status": "clean", "checked": True, "boxes": 0}
 
     # 3. deterministic typography
     t1 = time.time()
