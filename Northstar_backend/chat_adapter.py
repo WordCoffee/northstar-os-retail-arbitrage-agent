@@ -22,6 +22,10 @@ from autothink.backend.llm_adapter import (  # noqa: E402
     DEFAULT_LOCAL_MODEL,
     UnifiedLLMAdapter,
     iter_ollama_chat_events,
+    _ollama_is_running_local,
+    _start_ollama_if_needed,
+    _categorize_error,
+    _model_exists,
 )
 
 CHAT_MODEL = os.environ.get("CHAT_MODEL") or DEFAULT_LOCAL_MODEL
@@ -224,27 +228,64 @@ def strip_preamble_events(events):
         yield {"type": "content", "delta": pending}
 
 
+# Short conversational turns do not need the full output budget; long-form
+# asks keep a middle budget. This cuts Bojo's CPU generation time on quick asks
+# without truncating reports.
+CHAT_NUM_PREDICT_SHORT = int(os.environ.get("CHAT_NUM_PREDICT_SHORT", "2048"))
+CHAT_NUM_PREDICT_LONG = int(os.environ.get("CHAT_NUM_PREDICT_LONG", "8192"))
+_LONG_FORM = re.compile(
+    r"\b(write|draft|report|plan|essay|summary|analy[sz]e|code|implement|"
+    r"explain in detail|step by step|design|compare|review)\b", re.IGNORECASE)
+
+
+def _adaptive_num_predict(messages: List[Dict[str, str]],
+                          default: int = CHAT_NUM_PREDICT) -> int:
+    """Cap short asks at 2K tokens; long-form asks keep up to 8K."""
+    text = " ".join(str(m.get("content") or "") for m in (messages or [])[-4:])
+    if len(text) > 1200 or _LONG_FORM.search(text):
+        return max(CHAT_NUM_PREDICT_SHORT, min(default, CHAT_NUM_PREDICT_LONG))
+    return min(default, CHAT_NUM_PREDICT_SHORT)
+
 def stream_turn(messages: List[Dict[str, str]], *, model: Optional[str] = None,
-                think: Any = True, should_cancel=None, tools=None):
-    """Thin seam over UnifiedLLMAdapter.stream_chat (mockable in tests)."""
+                think: Any = True, should_cancel=None, tools=None,
+                auto_recover: bool = True):
+    """Thin seam over UnifiedLLMAdapter.stream_chat (mockable in tests).
+
+    Before streaming, performs a lightweight health check on Ollama's
+    /api/version endpoint. When Ollama is unreachable and we are on Windows
+    (and auto_recover is enabled), attempts to start the Ollama application
+    via `ollama serve` and waits up to 20 s for it to become healthy.
+    Never spawns duplicate instances.
+    """
     adapter = UnifiedLLMAdapter()
+    if auto_recover and not _ollama_is_running_local():
+        # Ping the /api/version endpoint once before considering startup.
+        if not UnifiedLLMAdapter.check_health(timeout=3):
+            _start_ollama_if_needed(max_wait_s=20, check_interval_s=2)
+
     yield from strip_preamble_events(adapter.stream_chat(
         messages,
         model=model or CHAT_MODEL,
         think=think,
         should_cancel=should_cancel,
         num_ctx=CHAT_NUM_CTX,
-        num_predict=CHAT_NUM_PREDICT,
+        num_predict=_adaptive_num_predict(messages),
         tools=tools,
         num_gpu=CHAT_NUM_GPU,
     ))
 
 
 def offline_notice(reason: str) -> str:
-    """The honest fallback text persisted when a turn produced zero tokens."""
+    """The honest fallback text persisted when a turn produced zero tokens.
+
+    Categorizes the reason so the operator knows whether the server was
+    unreachable (unavailable), the model ran out of memory (oom), the port
+    was occupied (port), or the host was misconfigured (host).
+    """
+    cat = _categorize_error(reason)
     return (
-        "[LOCAL FALLBACK] Ollama is unavailable (%s). Start it with: "
-        "ollama serve — then resend this message." % (reason or "unknown")
+        "[LOCAL FALLBACK] Ollama is unavailable (%s: %s). Start it with: "
+        "ollama serve — then resend this message." % (cat, reason or "unknown")
     )
 
 
@@ -261,5 +302,5 @@ def truncation_notice(usage: Optional[Dict[str, Any]] = None) -> str:
         "[BUDGET REACHED] The model spent its entire output budget reasoning"
         f"{spent} and never wrote the answer. This is a token-limit stop, not an "
         "outage — the thinking above is real. Ask a narrower question, or raise "
-        "CHAT_NUM_PREDICT for this lane."
+        "CHAT_NUM_PREDICT / CHAT_NUM_PREDICT_LONG for this lane."
     )

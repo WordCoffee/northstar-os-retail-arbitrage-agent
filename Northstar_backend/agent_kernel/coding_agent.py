@@ -58,6 +58,12 @@ def parse_tool_call(text: str) -> Optional[Dict[str, Any]]:
     return {"tool": obj["tool"], "args": args}
 
 
+# Prompt-history budget: fewer, shorter observations keep TTFT down on the
+# 27B lane while error/failure text keeps a larger slice.
+PROMPT_HISTORY_TURNS = 4
+PROMPT_OBS_CHARS = 1200
+PROMPT_ERROR_CHARS = 1800
+
 class CodingAgent:
     def __init__(self, workspace: Workspace | str, model: Model, *,
                  max_steps: int = 12, max_repairs: int = 2,
@@ -241,11 +247,7 @@ class CodingAgent:
                 '","content":"..."}}\n'
                 '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
             )
-        recent = history[-6:]
-        observed = []
-        for h in recent:
-            text = str(h.get("output") or "")[:1800]
-            observed.append(f"[{h.get('tool')}] {text}")
+        observed = self._compact_history(history)
         return (
             "You are the Northstar OS coding worker. You have tools. You MUST respond "
             "with exactly ONE JSON object per turn: no prose, no markdown fences.\n\n"
@@ -282,3 +284,21 @@ class CodingAgent:
             + "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
             "Next JSON object:"
         )
+
+    def _compact_history(self, history: List[Dict[str, Any]]) -> List[str]:
+        """Last N observations, deduped, with failure text given more room."""
+        recent = list(history or [])[-PROMPT_HISTORY_TURNS:]
+        observed: List[str] = []
+        seen = set()
+        for h in recent:
+            tool = str(h.get("tool") or "")
+            text = str(h.get("output") or "")
+            key = (tool, text[:400])
+            if key in seen:
+                continue
+            seen.add(key)
+            low = text.lower()
+            limit = (PROMPT_ERROR_CHARS if any(w in low for w in
+                     ("error", "traceback", "fail", "exception")) else PROMPT_OBS_CHARS)
+            observed.append(f"[{tool}] {text[:limit]}")
+        return observed

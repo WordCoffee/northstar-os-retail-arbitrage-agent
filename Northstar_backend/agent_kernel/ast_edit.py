@@ -13,10 +13,11 @@ rate approaches 100%. This module edits the SYNTAX TREE by symbol name instead:
     replace_imports         replace the top-level import block
     replace_global          replace a module-level assignment
 
-Every edit is parsed, applied in memory, re-parsed, and only then written. A
-batch is all-or-nothing: one bad edit writes nothing. Comments and blank-line
-layout inside a replaced node are not preserved (ast.unparse is the serializer);
-the module docstring, imports and all untouched nodes are.
+Every edit is parsed, applied to the SOURCE SPAN of the target only, re-parsed,
+and only then written. Comments and formatting outside the edited span survive
+byte-for-byte; comments inside a replaced node do not (ast.unparse is the
+serializer for the new node). A batch is all-or-nothing: one bad edit writes
+nothing.
 """
 from __future__ import annotations
 
@@ -60,7 +61,6 @@ def _find(node: ast.AST, target: str) -> Tuple[ast.AST, List[ast.stmt], int]:
     if not parts:
         raise AstEditError("an AST edit needs a target symbol name")
     body = getattr(node, "body", [])
-    parent = node
     current = None
     for depth, part in enumerate(parts):
         current = None
@@ -74,7 +74,6 @@ def _find(node: ast.AST, target: str) -> Tuple[ast.AST, List[ast.stmt], int]:
         if depth < len(parts) - 1:
             if not isinstance(current, ast.ClassDef):
                 raise AstEditError(f"target {target!r}: {part!r} is not a class")
-            parent = current
             body = current.body
     assert current is not None
     return current, body, body.index(current)
@@ -109,39 +108,110 @@ def _replace_body(node: ast.AST, new_body: List[ast.stmt]) -> None:
     node.body = list(new_body)
 
 
-def _apply_one(tree: ast.Module, edit: Edit) -> ast.Module:
+def _render(nodes: Sequence[ast.stmt]) -> str:
+    module = ast.Module(body=list(nodes), type_ignores=[])
+    ast.fix_missing_locations(module)
+    return ast.unparse(module)
+
+
+def _lines(source: str) -> List[str]:
+    return source.splitlines(keepends=True)
+
+
+def _with_newline(text: str) -> str:
+    return text if text.endswith("\n") else text + "\n"
+
+
+def _indent(text: str, prefix: str) -> str:
+    return "\n".join((prefix + line) if line.strip() else line
+                     for line in text.splitlines())
+
+
+def _node_start(node: ast.AST) -> int:
+    decorators = getattr(node, "decorator_list", []) or []
+    return min([getattr(d, "lineno", node.lineno) for d in decorators] + [node.lineno])
+
+
+def _node_end(node: ast.AST) -> int:
+    return int(getattr(node, "end_lineno", node.lineno))
+
+
+def _indent_at(lines: Sequence[str], lineno: int) -> str:
+    raw = lines[lineno - 1] if 0 < lineno <= len(lines) else ""
+    return raw[:len(raw) - len(raw.lstrip(" \t"))]
+
+
+def _splice(lines: List[str], start: int, end: int, text: str) -> List[str]:
+    """Replace 1-based inclusive [start, end] with rendered text."""
+    block = [line + "\n" for line in text.splitlines()]
+    if not block:
+        block = [""]
+    return lines[:start - 1] + block + lines[end:]
+
+
+def _insert(lines: List[str], index: int, text: str) -> List[str]:
+    block = [line + "\n" for line in text.splitlines()]
+    return lines[:index] + block + lines[index:]
+
+
+def _find_global(tree: ast.Module, name: str) -> Optional[ast.stmt]:
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == name for t in node.targets):
+            return node
+        if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name) \
+                and node.target.id == name:
+            return node
+    return None
+
+
+def _import_insert_index(tree: ast.Module) -> int:
+    """0-based line index after the docstring and existing imports."""
+    lines = tree.body
+    index = 0
+    if lines and _is_docstring(lines[0]):
+        index = _node_end(lines[0])
+    while index < len(lines) and isinstance(lines[index], (ast.Import, ast.ImportFrom)):
+        index = _node_end(lines[index])
+    return index
+
+
+def _apply_edit(source: str, edit: Edit) -> str:
     op = str(edit.op or "").strip().lower()
     if op not in OPS:
         raise AstEditError(f"unknown AST op {edit.op!r}; known: {', '.join(OPS)}")
+    tree = _parse_module(source)
+    lines = _lines(source)
 
     if op == "add_import":
-        stmt = _parse_block(edit.source or edit.name, label="import")
-        if len(stmt) != 1 or not isinstance(stmt[0], (ast.Import, ast.ImportFrom)):
+        stmts = _parse_block(edit.source or edit.name, label="import")
+        if len(stmts) != 1 or not isinstance(stmts[0], (ast.Import, ast.ImportFrom)):
             raise AstEditError("add_import source must be one import statement")
-        new = stmt[0]
+        new = stmts[0]
         for existing in tree.body:
             if isinstance(existing, (ast.Import, ast.ImportFrom)) and ast.dump(existing) == ast.dump(new):
-                return tree
-        insert_at = 0
-        if tree.body and _is_docstring(tree.body[0]):
-            insert_at = 1
-        while insert_at < len(tree.body) and isinstance(tree.body[insert_at], (ast.Import, ast.ImportFrom)):
-            insert_at += 1
-        tree.body.insert(insert_at, new)
-        return tree
+                return source
+        at = _import_insert_index(tree)
+        rendered = textwrap.dedent(str(edit.source or edit.name)).strip("\n")
+        out = "".join(_insert(lines, at, rendered))
+        _parse_module(out, label="edited source")
+        return out
 
     if op == "replace_imports":
         stmts = _parse_block(edit.source, label="imports")
         imports = [s for s in stmts if isinstance(s, (ast.Import, ast.ImportFrom))]
         if not imports or len(imports) != len(stmts):
             raise AstEditError("replace_imports source may contain only import statements")
-        doc = tree.body[0] if tree.body and _is_docstring(tree.body[0]) else None
-        kept: List[ast.stmt] = [doc] if doc is not None else []
-        kept.extend(imports)
-        kept.extend(s for s in tree.body
-                    if not isinstance(s, (ast.Import, ast.ImportFrom)) and s is not doc)
-        tree.body = kept
-        return tree
+        existing = [s for s in tree.body if isinstance(s, (ast.Import, ast.ImportFrom))]
+        rendered = textwrap.dedent(str(edit.source)).strip("\n")
+        if existing:
+            out = "".join(_splice(lines, _node_start(existing[0]),
+                                  _node_end(existing[-1]), rendered))
+        else:
+            at = _import_insert_index(tree)
+            out = "".join(_insert(lines, at, rendered))
+        _parse_module(out, label="edited source")
+        return out
 
     if op == "replace_global":
         name = str(edit.target or edit.name or "").strip()
@@ -150,24 +220,36 @@ def _apply_one(tree: ast.Module, edit: Edit) -> ast.Module:
         stmts = _parse_block(edit.source, label="global")
         if len(stmts) != 1 or not isinstance(stmts[0], (ast.Assign, ast.AnnAssign)):
             raise AstEditError("replace_global source must be one assignment")
-        for i, existing in enumerate(tree.body):
-            if isinstance(existing, ast.Assign) and any(
-                    isinstance(t, ast.Name) and t.id == name for t in existing.targets):
-                tree.body[i] = stmts[0]
-                return tree
-            if isinstance(existing, ast.AnnAssign) and isinstance(existing.target, ast.Name) \
-                    and existing.target.id == name:
-                tree.body[i] = stmts[0]
-                return tree
-        raise AstEditError(f"module-level assignment {name!r} not found")
+        node = _find_global(tree, name)
+        if node is None:
+            raise AstEditError(f"module-level assignment {name!r} not found")
+        rendered = textwrap.dedent(str(edit.source)).strip("\n")
+        out = "".join(_splice(lines, _node_start(node), _node_end(node), rendered))
+        _parse_module(out, label="edited source")
+        return out
 
     node, body, index = _find(tree, edit.target)
+    start, end = _node_start(node), _node_end(node)
+    indent = _indent_at(lines, node.lineno)
 
     if op == "replace_function_body":
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             raise AstEditError("replace_function_body target must be a function/method")
-        _replace_body(node, _parse_block(edit.source, label="function body"))
-        return tree
+        old_body = list(node.body)
+        if not old_body:
+            raise AstEditError("replace_function_body target has no body")
+        body_indent = _indent_at(lines, old_body[0].lineno)
+        new_text = textwrap.dedent(str(edit.source)).strip("\n")
+        new_stmts = _parse_block(new_text, label="function body")
+        old_doc = old_body[0] if _is_docstring(old_body[0]) else None
+        if old_doc is not None and not _is_docstring(new_stmts[0]):
+            doc_text = ast.get_source_segment(source, old_doc) or '""'
+            doc_text = textwrap.dedent(" " * old_doc.col_offset + doc_text)
+            new_text = doc_text + "\n" + new_text
+        out = "".join(_splice(lines, _node_start(old_body[0]), _node_end(old_body[-1]),
+                              _indent(new_text, body_indent)))
+        _parse_module(out, label="edited source")
+        return out
 
     if op == "replace_function":
         new = _parse_one_def(edit.source, label="replacement")
@@ -176,8 +258,10 @@ def _apply_one(tree: ast.Module, edit: Edit) -> ast.Module:
             raise AstEditError("replace_function target is a function; replacement must be a def")
         if isinstance(node, ast.ClassDef) and not isinstance(new, ast.ClassDef):
             raise AstEditError("replace_function target is a class; replacement must be a class")
-        body[index] = new
-        return tree
+        rendered = textwrap.dedent(str(edit.source)).strip("\n")
+        out = "".join(_splice(lines, start, end, _indent(rendered, indent)))
+        _parse_module(out, label="edited source")
+        return out
 
     if op == "add_method":
         if not isinstance(node, ast.ClassDef):
@@ -185,39 +269,45 @@ def _apply_one(tree: ast.Module, edit: Edit) -> ast.Module:
         new = _parse_one_def(edit.source, label="method")
         if not isinstance(new, (ast.FunctionDef, ast.AsyncFunctionDef)):
             raise AstEditError("add_method source must be a def")
-        node.body.append(new)
-        return tree
+        body_indent = _indent_at(lines, node.body[0].lineno) if node.body else indent + "    "
+        insert_at = _node_end(node.body[-1]) if node.body else _node_end(node)
+        rendered = textwrap.dedent(str(edit.source)).strip("\n")
+        rendered = _indent(rendered, body_indent)
+        if insert_at > 0 and lines[insert_at - 1].strip():
+            rendered = "\n" + rendered
+        out = "".join(_insert(lines, insert_at, rendered))
+        _parse_module(out, label="edited source")
+        return out
 
     if op in ("add_before", "add_after"):
         stmts = _parse_block(edit.source, label=op)
-        at = index if op == "add_before" else index + 1
-        for offset, stmt in enumerate(stmts):
-            body.insert(at + offset, stmt)
-        return tree
+        rendered = _indent(textwrap.dedent(str(edit.source)).strip("\n"), indent)
+        at = start - 1 if op == "add_before" else end
+        if at < len(lines) and lines[at].strip():
+            rendered = rendered + "\n\n"
+        out = "".join(_insert(lines, at, rendered))
+        _parse_module(out, label="edited source")
+        return out
 
     if op == "delete":
-        body.pop(index)
-        return tree
+        out = "".join(lines[:start - 1] + lines[end:])
+        _parse_module(out, label="edited source")
+        return out
 
     raise AstEditError(f"unhandled AST op {op!r}")
 
 
 def apply_edit(source: str, edit: Dict[str, Any] | Edit) -> str:
-    """Apply one edit to source text; return validated, unparsed Python."""
+    """Apply one edit to source text; return validated Python with untouched
+    spans preserved verbatim."""
     e = edit if isinstance(edit, Edit) else Edit(
         op=str(edit.get("op") or ""),
         target=str(edit.get("target") or ""),
         source=str(edit.get("source") or ""),
         name=str(edit.get("name") or ""))
-    tree = _parse_module(source)
-    tree = _apply_one(tree, e)
-    ast.fix_missing_locations(tree)
-    try:
-        rendered = ast.unparse(tree)
-    except Exception as exc:  # noqa: BLE001 - serializer failure is a refusal
-        raise AstEditError(f"could not serialize the edited tree: {exc}") from exc
-    _parse_module(rendered, label="edited source")
-    return rendered + ("\n" if not rendered.endswith("\n") else "")
+    out = _apply_edit(source, e)
+    _parse_module(out, label="edited source")
+    return out if out.endswith("\n") else out + "\n"
 
 
 def apply_edits(source: str, edits: Iterable[Dict[str, Any] | Edit]) -> str:
@@ -294,10 +384,8 @@ def apply_batch(root: Path | str, batch: Sequence[Dict[str, Any]]) -> Dict[str, 
             seen[path] = source
             prepared.append((path, source, encoding, crlf))
         seen[path] = apply_edits(seen[path], item.get("edits") or [])
-    # Every file is valid before the first write.
     for path, _old, _encoding, _crlf in prepared:
-        final = seen[path]
-        _parse_module(final, label=str(path))
+        _parse_module(seen[path], label=str(path))
     for path, _old, encoding, crlf in prepared:
         _write_atomic(path, seen[path], encoding, crlf)
     return {"ok": True, "files": [str(p) for p, _s, _e, _c in prepared],

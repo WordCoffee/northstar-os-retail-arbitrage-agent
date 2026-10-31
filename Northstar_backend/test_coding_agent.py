@@ -32,6 +32,26 @@ def _init_repo(root: Path) -> None:
     _git(root, "config", "user.name", "northstar test")
 
 
+def test_prompt_history_is_compacted_to_four_observations(tmp_path):
+    ws = Workspace(tmp_path / "ws")
+    ws.write("calc.py", "def add(a, b):\n    return a - b\n")
+    agent = CodingAgent(ws, lambda p: "{}")
+    history = [{"tool": "read", "output": f"{i}-" + "x" * 1800} for i in range(6)]
+    prompt = agent._prompt("fix the failing add function", history)
+    assert prompt.count("[read]") == 4
+    assert len(prompt) < 9000
+
+
+def test_prompt_history_dedupes_and_keeps_error_detail(tmp_path):
+    agent = CodingAgent(Workspace(tmp_path / "ws"), lambda p: "{}")
+    duplicate = [{"tool": "read", "output": "same"}] * 2
+    assert len(agent._compact_history(duplicate)) == 1
+    observed = agent._compact_history([{"tool": "run", "output": "Error: " + "e" * 2500}])
+    assert len(observed[0]) > 1200          # error text keeps the larger slice
+    plain = agent._compact_history([{"tool": "read", "output": "p" * 2500}])
+    assert len(plain[0]) <= 1200 + len("[read] ")
+
+
 def test_path_cannot_escape_the_workspace(tmp_path):
     ws = Workspace(tmp_path / "ws")
     with pytest.raises(ValueError):

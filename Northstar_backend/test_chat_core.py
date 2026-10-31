@@ -138,6 +138,19 @@ class _FakeResponse:
         return iter(self._lines)
 
 
+def test_adaptive_num_predict_caps_short_asks_and_keeps_long_form():
+    assert chat_adapter._adaptive_num_predict(
+        [{"role": "user", "content": "hi"}]) == chat_adapter.CHAT_NUM_PREDICT_SHORT
+    assert chat_adapter._adaptive_num_predict(
+        [{"role": "user", "content": "write a detailed report"}]) == \
+        chat_adapter.CHAT_NUM_PREDICT_LONG
+    assert chat_adapter._adaptive_num_predict(
+        [{"role": "user", "content": "x" * 1300}]) == \
+        chat_adapter.CHAT_NUM_PREDICT_LONG
+    assert chat_adapter._adaptive_num_predict(
+        [{"role": "user", "content": "hi"}], default=1024) == 1024
+
+
 def test_stream_chat_think_fallback_retries_once():
     first = _FakeResponse(status_code=400, text='{"error":"model does not support thinking"}')
     second = _FakeResponse(status_code=200, lines=_ndjson(

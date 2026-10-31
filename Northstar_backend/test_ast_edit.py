@@ -176,6 +176,29 @@ def test_apply_batch_is_all_or_nothing(tmp_path):
     assert "VALUE = 2" in b.read_text(encoding="utf-8")
 
 
+def test_untouched_comments_survive_a_surgical_edit():
+    source = (
+        "# module comment\nimport os\n\n"
+        "# before f\ndef f():\n    # inside f\n    return 1\n\n"
+        "# tail comment\ndef g():\n    return 2\n"
+    )
+    out = apply_edit(source, {"op": "replace_function_body", "target": "g",
+                              "source": "return 3"})
+    assert "# module comment" in out
+    assert "# before f" in out
+    assert "# inside f" in out
+    assert "# tail comment" in out
+    assert "return 3" in out
+
+
+def test_replace_function_preserves_comments_outside_the_node():
+    source = "# keep me\nimport os\n\n\ndef f():\n    return 1\n"
+    out = apply_edit(source, {"op": "replace_function", "target": "f",
+                              "source": "def f():\n    return 2"})
+    assert "# keep me" in out
+    assert "return 2" in out
+
+
 def test_workspace_exposes_ast_tools(tmp_path):
     from agent_kernel.coding_tools import Workspace
     (tmp_path / "m.py").write_text(SRC, encoding="utf-8")
