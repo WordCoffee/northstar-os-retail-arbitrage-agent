@@ -35,12 +35,19 @@ Pure logic lives in `src/lib/galacticState.js` (no React, no DOM, no network):
 
 ```
 shared/model-suite.json ─┐
-lane_policy.describe()  ─┼─> GET /api/v1/galactic/state ──> CommandDeck (8 s poll)
+lane_policy.describe()  ─┼─> GET /api/v1/galactic/state ──> CommandDeck (poll fallback)
 hardware_guard.snapshot()┤                                      │
 /health probes           ┘                                      ├─> snapshot state
                                                                 └─> bus.publish("telemetry.snapshot")
+GET /api/v1/galactic/events (SSE) ──> EventSource ──> same snapshot/bus path
 UI actions ──> bus.publish("deck.focus" / "deck.pulse") ──> EventStream + pulse layer
 ```
+
+The preferred transport is a Server-Sent Events stream (`/api/v1/galactic/events`):
+one `snapshot` event every 8 s. `CommandDeck` subscribes with `EventSource` and
+only falls back to the 8 s poll when EventSource is unavailable or the stream
+errors. Both paths publish into the same in-browser bus, so the event audit view
+has one source of truth.
 
 The backend endpoint is read-only and fast: model-suite read, lane-policy
 describe, a 0.7 s health probe for Ty (`:8080`) and FLUX (`:8188`), an optional
@@ -48,10 +55,10 @@ describe, a 0.7 s health probe for Ty (`:8080`) and FLUX (`:8188`), an optional
 `context_used` is `null` when `/slots` does not answer; the heatmap renders that
 lane as **unknown**, never as 0%.
 
-The bus is the in-browser event bus. It is deliberately not a fake websocket:
-the 8 s snapshot is merged into the same ordered stream as UI events, so the
-audit view has one source of truth. A future SSE endpoint can publish into the
-same bus without changing the components.
+The bus is the in-browser event bus. The SSE snapshot and UI events share the
+same ordered stream, so the audit view has one source of truth. The stream is
+snapshot-level; token-level agent events can be added to the same bus later
+without changing the components.
 
 ## Interaction and accessibility
 
@@ -95,11 +102,11 @@ same bus without changing the components.
    contracts present, no `fetch` in the pure module.
 4. `npm run build` — 0 errors.
 5. `pytest Northstar_backend/test_galactic_state.py` — endpoint shape, real
-   lanes, KV capacity, null-or-int usage, GPU block.
+   lanes, KV capacity, null-or-int usage, GPU block, and the first SSE frame.
 
 ## Known limits (next cycles)
 
-- No SSE stream yet; the bus merges a poll, not token-level agent events.
+- The SSE stream is snapshot-level, not token-level agent events.
 - `/slots` is optional; Bojo context usage is not instrumented by Ollama's API.
 - The deck does not yet render A+ modules or creative assets; it is the
   systems/agent view.

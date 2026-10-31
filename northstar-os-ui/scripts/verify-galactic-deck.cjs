@@ -74,6 +74,9 @@ check(css.includes('grid-template-areas'), 'CSS has the command-deck grid')
 
 const deck = fs.readFileSync(path.join(ROOT, 'src/galactic/CommandDeck.jsx'), 'utf8')
 check(deck.includes('/api/v1/galactic/state'), 'deck polls the galactic state endpoint')
+check(deck.includes('/api/v1/galactic/events'), 'deck targets the SSE endpoint')
+check(deck.includes('new EventSource'), 'deck subscribes to the SSE stream')
+check(deck.includes("stream === 'open'"), 'deck falls back to polling when SSE is down')
 check(deck.includes('createEventBus()'), 'deck owns a unified event bus')
 
 console.log(failures === 0

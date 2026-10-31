@@ -1256,6 +1256,44 @@ async def galactic_state():
                  "source": "shared/model-suite.json + local health probes"},
                 service="galactic")
 
+async def galactic_event_stream(request: Request):
+    """SSE snapshot stream for the Galactic deck.
+
+    One `snapshot` event every 8 s, using the same read-only telemetry as
+    /api/v1/galactic/state. The client keeps its poll as a fallback when
+    EventSource is unavailable; this endpoint is the preferred transport.
+    """
+    import asyncio
+    import json as _json
+
+    seq = 0
+    while True:
+        try:
+            if await request.is_disconnected():
+                break
+        except Exception:
+            break
+        try:
+            state = await galactic_state()
+            payload = state.get("data", {}) if isinstance(state, dict) else {}
+        except Exception as exc:
+            payload = {"telemetry": "offline", "error": str(exc)[:200]}
+        seq += 1
+        body = _json.dumps(payload)
+        yield f"id: sse_{seq}\nevent: snapshot\ndata: {body}\n\n"
+        await asyncio.sleep(8)
+
+
+@app.get("/api/v1/galactic/events")
+async def galactic_events(request: Request):
+    """Server-Sent Events stream for the Galactic command deck."""
+    from fastapi.responses import StreamingResponse
+    return StreamingResponse(
+        galactic_event_stream(request),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
 
 @app.get("/api/v1/catalog/stocked")
 async def catalog_stocked(limit: int = 100):

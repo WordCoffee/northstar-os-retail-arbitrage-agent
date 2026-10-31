@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import sys
 from pathlib import Path
 
@@ -28,3 +29,22 @@ def test_galactic_state_has_topology_kv_lanes_and_hardware():
     assert "lanes" in data and "routes" in data["lanes"]
     assert "gpu" in data["hardware"]
     assert data["telemetry"] in ("live", "offline")
+
+
+def test_galactic_event_stream_emits_a_snapshot_sse_frame():
+    class FakeRequest:
+        async def is_disconnected(self):
+            return False
+
+    async def first_frame():
+        stream = main.galactic_event_stream(FakeRequest())
+        frame = await stream.__anext__()
+        await stream.aclose()
+        return frame
+
+    frame = asyncio.run(first_frame())
+    assert frame.startswith("id: sse_1\nevent: snapshot\ndata: ")
+    payload = json.loads(frame.split("data: ", 1)[1].strip())
+    assert "nodes" in payload and "kv" in payload
+    assert payload["telemetry"] in ("live", "offline")
+

@@ -49,13 +49,65 @@ export default function CommandDeck() {
   const [events, setEvents] = useState(() => bus.replay(40))
   const [selected, setSelected] = useState('master')
   const [pulse, setPulse] = useState(0)
+  const [stream, setStream] = useState('connecting')
 
   useEffect(() => bus.subscribe((event) => {
     setEvents((previous) => [...previous.slice(-79), event])
     setPulse((value) => value + 1)
   }), [bus])
 
+  // Preferred transport: one SSE snapshot every 8 s. The poll below remains a
+  // fallback for browsers without EventSource or when the stream errors; the
+  // SSE snapshot is merged into the same bus as UI events.
   useEffect(() => {
+    if (typeof EventSource === 'undefined') {
+      setStream('unsupported')
+      return undefined
+    }
+    let closed = false
+    const source = new EventSource('/api/v1/galactic/events')
+    const onSnapshot = (event) => {
+      if (closed) return
+      try {
+        const payload = JSON.parse(event.data)
+        if (!payload || !Array.isArray(payload.nodes)) return
+        setSnapshot({ ...FALLBACK, ...payload, telemetry: 'live' })
+        setStream('open')
+        bus.publish('telemetry.snapshot', {
+          nodes: payload.nodes.length,
+          kv: Array.isArray(payload.kv) ? payload.kv.length : 0,
+          transport: 'sse',
+        }, { severity: 'ok', source: 'telemetry' })
+      } catch (error) {
+        if (!closed) {
+          bus.publish('telemetry.stream.bad_frame', { error: String(error?.message || error) }, {
+            severity: 'warn', source: 'telemetry',
+          })
+        }
+      }
+    }
+    source.addEventListener('snapshot', onSnapshot)
+    source.onopen = () => {
+      if (!closed) {
+        setStream('open')
+        bus.publish('telemetry.stream.open', {}, { severity: 'ok', source: 'telemetry' })
+      }
+    }
+    source.onerror = () => {
+      if (!closed) {
+        setStream('error')
+        bus.publish('telemetry.stream.error', {}, { severity: 'warn', source: 'telemetry' })
+      }
+    }
+    return () => {
+      closed = true
+      source.removeEventListener('snapshot', onSnapshot)
+      source.close()
+    }
+  }, [bus])
+
+  useEffect(() => {
+    if (stream === 'open') return undefined
     let alive = true
     let timer = null
     async function load() {
@@ -95,7 +147,7 @@ export default function CommandDeck() {
       alive = false
       if (timer) clearTimeout(timer)
     }
-  }, [bus])
+  }, [bus, stream])
 
   const nodes = snapshot.nodes || []
   const selectedNode = useMemo(
@@ -141,7 +193,9 @@ export default function CommandDeck() {
               <span className="gx-eyebrow">Stellar node topology</span>
               <h3 id="gx-topology-title">Agent cluster</h3>
             </div>
-            <span className={`gx-telemetry gx-telemetry--${snapshot.telemetry}`}>{snapshot.telemetry}</span>
+            <span className={`gx-telemetry gx-telemetry--${snapshot.telemetry}`}>
+              {snapshot.telemetry}{stream === 'open' ? ' · sse' : stream === 'error' ? ' · poll' : ''}
+            </span>
           </div>
           <NodeTopology
             nodes={nodes}
