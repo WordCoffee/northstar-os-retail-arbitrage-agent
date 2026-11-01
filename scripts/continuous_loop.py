@@ -1618,8 +1618,7 @@ def status_report(tasks: Dict[str, Any], state: Dict[str, Any],
         campaign = {}
     running = campaign.get("status") == "running"
     current = campaign.get("current_task") or ""
-    remaining = [t.get("id") for t in tasks.get("tasks") or []
-                 if task_status(state, str(t.get("id"))) == "pending"]
+    remaining = list(buckets["eligible"])
     return {
         "running": running,
         "campaign": campaign,
