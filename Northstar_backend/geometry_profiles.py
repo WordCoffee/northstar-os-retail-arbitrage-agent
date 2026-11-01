@@ -102,6 +102,10 @@ def bottle(*, diameter: float, height: float, label_height: float,
         raise ValueError(
             f"label_height {label_height}mm exceeds usable height {usable_h:.1f}mm "
             f"(height {height} - cap {cap_height} - seam {seam_clearance})")
+    if label_top_offset + label_height > height - seam_clearance:
+        raise ValueError(
+            "label extends into the bottom seam clearance "
+            f"({label_top_offset} + {label_height} > {height - seam_clearance})")
     if label_top_offset < cap_height:
         raise ValueError("label_top_offset starts inside the cap clearance zone")
 
