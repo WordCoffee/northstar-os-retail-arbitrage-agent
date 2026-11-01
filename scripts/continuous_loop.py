@@ -248,11 +248,14 @@ def resolve_lane(task: Optional[Dict[str, Any]] = None, *,
                 "reason": (f"no installed chat lane fits: free RAM {free:.2f} GB, "
                            f"headroom {MODEL_RAM_HEADROOM_GB:.2f} GB"),
                 "free_ram_gb": free, "installed": candidates}
+    post_headroom = round(free - float(chosen["estimated_ram_gb"]), 2)
     return {"ok": True, "provider": "ollama", "model": chosen["model"],
             "reason": (f"{chosen['model']} is installed, proven for the Ty tool loop, "
                        f"and estimated at {chosen['estimated_ram_gb']:.2f} GB; "
-                       f"free RAM {free:.2f} GB at dispatch"),
-            "free_ram_gb": free, "installed": candidates}
+                       f"free RAM {free:.2f} GB at dispatch; estimated post-load "
+                       f"headroom {post_headroom:.2f} GB"),
+            "free_ram_gb": free, "post_load_headroom_gb": post_headroom,
+            "installed": candidates}
 
 
 def _copy_sqlite(src: Path, dest: Path) -> None:
