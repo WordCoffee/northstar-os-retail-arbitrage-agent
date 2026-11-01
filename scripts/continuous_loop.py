@@ -554,7 +554,19 @@ def readiness_gate(*, make_checkpoint: bool = True,
         "repair snapshot/restore before campaign")
 
     tags = _ollama_tags()
-    lane = resolve_lane({"execution": "ty", "model": ""}, tags=tags, free_ram_gb=ram)
+    # The lane that matters is the one the authorized queue will actually run, not
+    # a default the campaign never dispatches.
+    queue_models: List[str] = []
+    try:
+        for task in (load_tasks().get("tasks") or []):
+            if (task.get("authorized") is True
+                    and str(task.get("execution") or "") == "ty"
+                    and task.get("model") and str(task["model"]) not in queue_models):
+                queue_models.append(str(task["model"]))
+    except Exception:  # noqa: BLE001 - the queue is advisory for this check
+        pass
+    lane = resolve_lane({"execution": "ty", "model": (queue_models[0] if queue_models else "")},
+                        tags=tags, free_ram_gb=ram)
     add("model-lane", lane.get("ok", False),
         lane.get("reason", "") + (f" | {lane.get('model')}" if lane.get("model") else ""),
         "start local Ollama (`ollama serve`) and keep a chat lane installed; no downloads are allowed")
@@ -568,14 +580,9 @@ def readiness_gate(*, make_checkpoint: bool = True,
     models: List[str] = []
     if lane.get("ok") and lane.get("provider") == "ollama" and lane.get("model"):
         models.append(str(lane["model"]))
-    try:
-        for task in (load_tasks().get("tasks") or []):
-            if (task.get("authorized") is True
-                    and str(task.get("execution") or "") == "ty"
-                    and task.get("model") and str(task["model"]) not in models):
-                models.append(str(task["model"]))
-    except Exception:  # noqa: BLE001 - the queue is advisory for this check
-        pass
+    for model in queue_models:
+        if model not in models:
+            models.append(model)
     models = models[:3]
     if models:
         measured = [measure_model_resident(m) for m in models]
