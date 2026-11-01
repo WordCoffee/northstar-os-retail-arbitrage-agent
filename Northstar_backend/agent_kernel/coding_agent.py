@@ -169,6 +169,11 @@ class CodingAgent:
                     return CodingResult(True, f"acceptance passed after {tool}", step,
                                         sorted(files), history)
                 self._note_failure(detail)
+                # The model must SEE the verdict. Without this the loop reported
+                # only "wrote 1 file(s)", so a model that cannot infer the failure
+                # rewrote the same file blindly until the step budget ran out.
+                history.append({"role": "observation", "tool": "acceptance", "ok": False,
+                                "output": "FAIL: " + str(detail)[:1200]})
         # Defect p01: a loop that ran out of steps with the work already done is a
         # pass, not a `needs_human`. Acceptance is the authority; the stop reason
         # is not. Checked once more here so every caller (kernel or benchmark)
@@ -264,6 +269,8 @@ class CodingAgent:
             "- Write the declared artifact within the first two steps. An absent "
             "artifact is an automatic failure; improve it afterwards.\n"
             "- If acceptance fails, read the failure and repair; do not repeat the same write.\n"
+            "- Files outside your write scope are READ-ONLY. A refused write is never "
+            "retried: to check your work, call `run` with the acceptance command.\n"
             "- On a FAIL observation, first `read` every file named in the error, then "
             "rewrite those files with write_many. The error text is authoritative.\n\n"
             f"TASK:\n{task}\n\n"

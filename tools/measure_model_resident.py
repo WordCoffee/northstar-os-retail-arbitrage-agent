@@ -29,8 +29,8 @@ from typing import Any, Dict, List, Optional
 OLLAMA = "http://127.0.0.1:11434"
 
 PROMPT = (
-    "Reply with exactly one short sentence naming the three primary colors. "
-    "No preamble."
+    "Write six short numbered sentences describing how a person makes pour-over "
+    "coffee, one per line. No preamble."
 )
 
 
@@ -106,7 +106,7 @@ def measure(model: str, *, prompt: str = PROMPT, num_ctx: Optional[int] = None,
     error = ""
     payload: Dict[str, Any] = {"model": model, "prompt": prompt, "stream": True,
                               "keep_alive": keep_alive}
-    opts: Dict[str, Any] = {}
+    opts: Dict[str, Any] = {"num_predict": 160}
     if num_ctx:
         opts["num_ctx"] = int(num_ctx)
     if num_gpu is not None:
@@ -136,6 +136,11 @@ def measure(model: str, *, prompt: str = PROMPT, num_ctx: Optional[int] = None,
     sampler.join(timeout=3.0)
 
     resident_during = sampler.resident
+    # The model stays loaded for `keep_alive` after the stream ends, so one
+    # sample taken now is the most reliable evidence that it was resident at all.
+    after = _resident(model)
+    if after:
+        resident_during = after
     if unload:
         try:
             _post("/api/generate", {"model": model, "keep_alive": 0, "prompt": ""})
@@ -177,10 +182,13 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     rec = measure(args.model, prompt=args.prompt, num_ctx=args.num_ctx,
                   num_gpu=args.num_gpu)
+    # A verdict needs a resident sample AND a real cost. A model that answers
+    # before the /api/ps poll ever sees it is NOT measured - that is how a
+    # "FLOOR-MET" can be reported from an empty sample.
     if rec["error"] or not rec["tokens"]:
         rec["verdict"] = "UNMEASURED"
         code = 2
-    elif rec["min_available_gb"] is None:
+    elif rec["min_available_gb"] is None or not rec["resident_during"]:
         rec["verdict"] = "UNMEASURED"
         code = 2
     elif rec["min_available_gb"] >= args.floor:
