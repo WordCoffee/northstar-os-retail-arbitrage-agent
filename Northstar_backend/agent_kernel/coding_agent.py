@@ -308,12 +308,12 @@ class CodingAgent:
                 *, pressure: bool = False, stall: bool = False) -> str:
         schema = (
             '{"tool":"list","args":{"path":"."}}\n'
-            '{"tool":"read","args":{"path":"calc.py"}}\n'
+            '{"tool":"read","args":{"path":"your_file.py"}}\n'
             '{"tool":"grep","args":{"pattern":"assert","path":"."}}\n'
             '{"tool":"write","args":{"path":"fix.patch","content":"..."}}\n'
             '{"tool":"write_many","args":{"files":[{"path":"a.ts","content":"..."},{"path":"b.ts","content":"..."}]}}\n'
             '{"tool":"apply_patch","args":{"patch":"--- a/calc.py\\n+++ b/calc.py\\n@@ -1,3 +1,3 @@\\n context\\n-old line\\n+new line\\n context\\n"}}\n'
-            '{"tool":"ast_edit","args":{"path":"calc.py","op":"replace_function_body","target":"add","source":"return a + b"}}\n'
+            '{"tool":"ast_edit","args":{"path":"your_file.py","op":"replace_function_body","target":"the_symbol_you_read","source":"the new body"}}\n'
             '{"tool":"ast_edit_batch","args":{"batch":[{"path":"a.py","edits":[{"op":"replace_global","target":"LIMIT","source":"LIMIT = 20"}]}]}}\n'
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
@@ -331,8 +331,9 @@ class CodingAgent:
             # (whole-file write of an existing source). The full action list stays;
             # only the instruction becomes urgent.
             schema = schema + (
-                '\n{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
-                '"target":"func","source":"return a + b"}}')
+                '\n{"tool":"ast_edit","args":{"path":"your_file.py",'
+                '"op":"replace_function_body","target":"the_symbol_you_read",'
+                '"source":"the new body"}}')
         observed = self._compact_history(history)
         if self.allowed_tools:
             # Task-scoped protocol: a small lane gets the actions it can use, four

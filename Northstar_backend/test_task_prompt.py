@@ -34,6 +34,15 @@ def test_compact_prompt_asks_for_the_read_first(tmp_path):
     assert "Start by reading the task's file" in agent._prompt("fix it", [])
 
 
+def test_the_schema_examples_do_not_leak_a_symbol_name(tmp_path):
+    """A small lane copies example tokens; 'add' sent it to edit a symbol it never saw."""
+    agent = _agent(tmp_path, [["python", "p.py"]])
+    prompt = agent._prompt("fix it", [])
+    assert '"target":"the_symbol_you_read"' in prompt
+    assert '"target":"add"' not in prompt
+    assert '"path":"calc.py"' not in prompt
+
+
 def test_actions_are_limited_to_the_declared_set(tmp_path):
     agent = _agent(tmp_path, [["python", "p.py"]], tools=("read", "finish"))
     prompt = agent._prompt("fix it", [])
