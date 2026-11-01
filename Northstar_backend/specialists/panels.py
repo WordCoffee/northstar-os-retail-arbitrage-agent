@@ -264,11 +264,15 @@ def validate_panels(spec: Dict[str, Any]) -> Dict[str, Any]:
     if not spec.get("country_of_origin"):
         missing.append("country of origin")
     warnings: List[str] = []
+    fmt = str(spec.get("format") or "pouch").strip().lower()
+    unknown_format = fmt not in ("pouch", "box", "bottle", "tube")
+    if unknown_format:
+        warnings.append(f"unknown package format {fmt!r}; expected pouch, box, bottle or tube")
     dims = spec.get("dims") or {}
     # The 1.2-1.9 ratio is a pouch heuristic. A carton, bottle label or tube
     # legitimately has a different face ratio; warning on those trains the
     # operator to ignore validation.
-    if str(spec.get("format") or "pouch").strip().lower() == "pouch":
+    if fmt == "pouch":
         if dims.get("width_mm") and dims.get("height_mm"):
             ratio = float(dims["height_mm"]) / float(dims["width_mm"])
             if not (1.2 <= ratio <= 1.9):
@@ -279,4 +283,5 @@ def validate_panels(spec: Dict[str, Any]) -> Dict[str, Any]:
         warnings.append(
             "claims are rendered as supplied — screen each one for disease/treatment "
             "language before print (see docs/decisions.md, compliance gate)")
-    return {"ready_for_print": not missing, "missing": missing, "warnings": warnings}
+    return {"ready_for_print": not missing and not unknown_format,
+            "missing": missing, "warnings": warnings}
