@@ -174,3 +174,88 @@ One of these, none available under this directive:
 
 Until then the honest capability is: **the automation detects and refuses bad model
 output precisely; the installed 3B/1.9B lanes cannot yet author an accepted fix.**
+
+---
+
+## 9. 8.3B GPU LANE — evaluated and rejected (2026-11-01, later)
+
+The operator directed a qualification of the installed 8.3B lane on the GPU. It was
+identified, measured on the GPU, and screened. **It is unusable**: no tool interface
+and degenerate output, on the GPU and on the CPU alike.
+
+### Identity (from the Ollama API, not from notes)
+
+```text
+tag        qwen2.5vl:7b
+digest     5ced39dfa4bac325dc183dd1e4febaa1c46b3ea28bce48896c8e69c1e79611cc
+parameter  8.3B          quant Q4_K_M        size 5.56 GB      family qwen25vl
+manifest   temperature 0.0001 (no num_ctx, no system prompt, no tools template)
+runtime    Ollama 127.0.0.1:11434 -> llama.cpp; campaign-scoped serve, GPU backend
+```
+
+It is the only 8.3B class model installed, so the identity is unambiguous.
+
+### Interface
+
+`capabilities: completion, vision` — **no `tools`**. A native tool request returns
+**HTTP 400**. The directive's "modern native tool interface" is therefore not
+available on this lane; any work would fall back to the JSON-text protocol.
+
+### Resource measurement (GPU, campaign-scoped profile)
+
+The operator's user environment (`OLLAMA_LLM_LIBRARY=cpu`, `OLLAMA_NUM_GPU=0`) was
+left untouched. For the measurement only, a campaign-scoped `ollama serve` was
+started with those two variables cleared, and the operator's app was restarted
+afterwards (verified: `env=cpu`, 0 resident models).
+
+| Measure | Value |
+|---|---|
+| Host RAM before load | **7.312 GB** available |
+| Host RAM low-water during generation | **6.468 GB** (drop 0.844 GB) |
+| Resident placement | **5.169 GB VRAM / 0.0 GB reported system** (`/api/ps`) |
+| GPU used while loaded (nvidia-smi, default ctx) | **7,720 MiB used / 8,284 MiB free** |
+| Context used for the measurement | `num_ctx=8192` (request option) |
+| Resident floor (3.0 GB) | **FLOOR-MET** (6.468 GB available) |
+
+Note for the record: `/api/ps` reporting `0.0 GB system` does **not** mean zero host
+cost — the host lost 0.844 GB during the load. The floor is judged on the host
+figure, which is why it is sampled directly.
+
+### Capability — the lane produces degenerate text
+
+Two independent prompts, both on the GPU:
+
+```text
+"Reply with one short sentence: what is a Python function?"
+  -> "Rencontre Rencontre Rencontre Rencontre Rencontre ..."   (28 tokens)
+
+"Write six short numbered sentences describing how a person makes pour-over coffee"
+  -> "1\n 1. Rencontre Rencontre Rencontre ..."                (20 tokens)
+```
+
+That is a broken model installation (weights or template), not a weak coder: it
+cannot follow the simplest instruction.
+
+### Disposable screen (one valid attempt, disposable workspace)
+
+| Attempt | Steps | Protocol refusals | Result |
+|---|---:|---:|---|
+| 1 | 9 | 9 (`not_json` ×9) | `protocol_failed: not_json`, 33.6 s |
+
+It never produced a single JSON action, so it could not read, identify a symbol, or
+edit. No second attempt was warranted: the model fails a trivial prompt.
+
+### Verdict for the lane
+
+**REJECTED — CANDIDATE UNUSABLE (interface + output).** Not a resource failure: the
+GPU profile meets the 3.0 GB host floor with 6.47 GB to spare and uses the GPU as
+expected. The lane cannot be qualified for Ty engineering, and per the directive
+the qualification, soak and repair campaign do not run.
+
+### Harness changes made alongside (independent of the lane)
+
+* `470576e6` — purpose-aware read discipline: bounded reads per path (4), a changed
+  hash/mtime, a post-edit verification read and one reread after a failed edit are
+  allowed; refusals carry path, sha256, mtime and the count; the budget never blocks
+  an edit or a finish. Five regression cases.
+* `3442fd92` — the floor mislabel correction in §8 above.

@@ -1,0 +1,45 @@
+{
+  "ty_83b_gpu_evaluation_20261101": {
+    "verdict": "BLOCKED - the only installed 8.3B lane is unusable for engineering: no native tool interface and degenerate output on any prompt, on the GPU and on the CPU alike. The resource profile itself passes.",
+    "lane": {
+      "tag": "qwen2.5vl:7b",
+      "digest": "5ced39dfa4bac325dc183dd1e4febaa1c46b3ea28bce48896c8e69c1e79611cc",
+      "parameters": "8.3B",
+      "quantization": "Q4_K_M",
+      "size_gb": 5.56,
+      "family": "qwen25vl",
+      "runtime": "Ollama 127.0.0.1:11434 -> llama.cpp, campaign-scoped GPU backend",
+      "manifest_parameters": "temperature 0.0001 only (no num_ctx, no system prompt)",
+      "capabilities": ["completion", "vision"],
+      "native_tools": "unsupported - HTTP 400 on a /api/chat tools request"
+    },
+    "resource": {
+      "profile": "qwen2.5vl:7b, num_ctx=8192, GPU backend (campaign-scoped serve)",
+      "host_before_gb": 7.312,
+      "host_min_gb": 6.468,
+      "host_drop_gb": 0.844,
+      "resident_vram_gb": 5.169,
+      "nvidia_smi_during_default_ctx": "7720 MiB used / 8284 MiB free",
+      "floor_gb": 3.0,
+      "verdict": "FLOOR-MET",
+      "operator_env_untouched": "OLLAMA_LLM_LIBRARY=cpu / OLLAMA_NUM_GPU=0 left as-is; restored after the session (verified env=cpu, 0 resident)"
+    },
+    "capability": {
+      "prompt_1": "\"Reply with one short sentence: what is a Python function?\" -> \"Rencontre Rencontre Rencontre ...\" (28 tokens)",
+      "prompt_2": "\"Write six short numbered sentences about pour-over coffee\" -> \"1\\n 1. Rencontre Rencontre ...\" (20 tokens)",
+      "interpretation": "broken installation (weights or template), not a weak coder: it cannot follow a trivial instruction"
+    },
+    "screen": {
+      "tool": "tools/screen_lane.py (disposable workspace, independent behavioural check)",
+      "attempts": [{"n": 1, "steps": 9, "protocol_errors": 9, "codes": ["not_json x9"], "result": "protocol_failed: not_json", "elapsed_s": 33.6, "valid": true}],
+      "second_attempt": "not run - the lane fails a trivial prompt, so a second screen would not be informative"
+    },
+    "not_run": ["real three-fix qualification", "120-minute soak", "Northstar repair campaign"],
+    "harness_commits": {
+      "470576e6": "purpose-aware read discipline: bounded reads (4/path), post-edit verification allowed, reread after failed edit allowed, refusals carry path+sha256+mtime+count, budget never blocks an edit",
+      "3442fd92": "floor mislabel correction (2.443 GB is FLOOR-MISSED for bojo CPU) in the lane report + superseding fragment"
+    },
+    "state": "operator daemon restored to CPU-only; 0 resident models; no lock, no STOP, no worker",
+    "report": "reports/ty_lane_evaluation_20261101.md (section 9)"
+  }
+}
