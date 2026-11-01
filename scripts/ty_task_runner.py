@@ -92,6 +92,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         model_overrides["provider"] = spec["provider"]
     if spec.get("num_ctx"):
         model_overrides["num_ctx"] = int(spec["num_ctx"])
+    if spec.get("native_tools"):
+        model_overrides["native_tools"] = True
+        model_overrides["tool_names"] = list(spec.get("allowed_tools") or [])
     model = make_local_model(**model_overrides)
 
     def guarded_model(prompt: str) -> str:

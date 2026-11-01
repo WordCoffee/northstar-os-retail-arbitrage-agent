@@ -147,7 +147,9 @@ class OllamaChatModel:
     def __init__(self, base_url: str = "http://127.0.0.1:11434",
                  model: str = "bojo", *, timeout_s: float = 600.0,
                  max_tokens: int = 4096, temperature: float = 0.1,
-                 retries: int = 1, num_ctx: Optional[int] = None):
+                 retries: int = 1, num_ctx: Optional[int] = None,
+                 native_tools: bool = False,
+                 tool_names: Optional[Sequence[str]] = None):
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout_s = float(timeout_s)
@@ -158,18 +160,30 @@ class OllamaChatModel:
         # model's 32k default for a one-file task, and a smaller KV cache leaves
         # more host RAM free. This is a request option, not an environment change.
         self.num_ctx = int(num_ctx) if num_ctx else None
+        # Native tool calling: Ollama's /api/chat accepts a `tools` array and can
+        # return structured `message.tool_calls`. Forcing every model through a
+        # JSON-text prompt discards that interface - and `bojo` advertises it while
+        # the coder lane does not produce it reliably.
+        self.native_tools = bool(native_tools)
+        self.tool_names = list(tool_names or ())
 
     def payload(self, prompt: str) -> Dict[str, Any]:
-        return {
+        body: Dict[str, Any] = {
             "model": self.model,
             "messages": [{"role": "user", "content": str(prompt)}],
             "stream": False,
-            "format": "json",
-            "think": False,
             "options": {"num_predict": self.max_tokens,
                         "temperature": self.temperature,
                         **({"num_ctx": self.num_ctx} if self.num_ctx else {})},
         }
+        if self.native_tools:
+            from . import tool_protocol as _tp
+            body["tools"] = _tp.json_schemas(self.tool_names or None)
+            body["think"] = False
+        else:
+            body["format"] = "json"
+            body["think"] = False
+        return body
 
     def __call__(self, prompt: str) -> str:
         url = f"{self.base_url}/api/chat"
@@ -201,6 +215,22 @@ class OllamaChatModel:
                     continue
                 raise ModelError(f"Ollama worker unreachable at {url}: {exc}") from exc
             message = out.get("message") or {}
+            calls = message.get("tool_calls") or []
+            if self.native_tools and calls:
+                call = calls[0] or {}
+                fn = call.get("function") or {}
+                name = str(fn.get("name") or "").strip()
+                args = fn.get("arguments")
+                if isinstance(args, str):
+                    try:
+                        args = json.loads(args)
+                    except ValueError:
+                        args = {"__unparsed__": args}
+                if not isinstance(args, dict):
+                    args = {"__unparsed__": args}
+                # Hand the call back as the SAME one-JSON-action string the JSON
+                # path produces, so a single validator judges both interfaces.
+                return json.dumps({"tool": name, "args": args})
             text = str(message.get("content") or "").strip()
             if text:
                 return text

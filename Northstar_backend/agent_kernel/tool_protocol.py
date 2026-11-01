@@ -405,6 +405,31 @@ def _validate_command(cmd: Any, workspace: Any) -> list:
     return argv
 
 
+def json_schemas(names: Optional[Sequence[str]] = None) -> list:
+    """OpenAI/Ollama-style tool definitions built from the one schema table.
+
+    One source of truth: a native tool call and a JSON action are validated by the
+    same ``_SCHEMA``, so the two interfaces cannot drift.
+    """
+    _types = {str: "string", int: "integer", list: "array", dict: "object"}
+    out = []
+    for name in (names or CANONICAL_ACTIONS):
+        if name not in _SCHEMA:
+            continue
+        props = {}
+        required = []
+        for arg, (want, req) in _SCHEMA[name].items():
+            props[arg] = {"type": _types.get(want, "string")}
+            if req:
+                required.append(arg)
+        out.append({"type": "function", "function": {
+            "name": name,
+            "description": f"Northstar action {name}",
+            "parameters": {"type": "object", "properties": props,
+                           "required": required}}})
+    return out
+
+
 def rejection_kind(error: ActionError) -> str:
     """Map a code to the two buckets the ledger distinguishes.
 
