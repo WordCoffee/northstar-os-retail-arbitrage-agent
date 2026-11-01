@@ -14,6 +14,7 @@ artefact is deterministic and local; no model is called here.
 from __future__ import annotations
 
 import json
+import math
 import uuid
 from io import BytesIO
 from pathlib import Path
@@ -85,14 +86,18 @@ def _dieline(kind: str, dims: Dict[str, Any]) -> Dict[str, Any]:
             "tuck_end", dims["width_mm"], dims["depth_mm"], dims["height_mm"],
             bleed_mm=float(dims.get("bleed_mm") or 3.0))
     elif kind == "bottle":
+        # A label wraps the circumference, not the visible diameter. Leave a
+        # 3% seam gap; the converter supplies the final seam allowance.
+        wrap_width = math.pi * float(dims["diameter"]) * 0.97
         build = dsp.build_label(
-            "rounded_rectangle", dims["diameter"], dims["label_height"],
+            "rounded_rectangle", wrap_width, dims["label_height"],
             bleed_mm=float(dims.get("bleed_mm") or 3.0))
     else:  # tube
         usable = float(dims.get("usable_height_mm")
                        or dims["height"] - 2 * float(dims.get("crimp_mm") or 8.0))
+        wrap_width = math.pi * float(dims["diameter"]) * 0.97
         build = dsp.build_label(
-            "rounded_rectangle", dims["diameter"], usable,
+            "rounded_rectangle", wrap_width, usable,
             bleed_mm=float(dims.get("bleed_mm") or 3.0))
     return {
         "svg": dsp.render_svg(build),

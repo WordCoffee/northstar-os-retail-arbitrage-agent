@@ -103,6 +103,11 @@ def test_four_formats_build_and_save(kind, tmp_path):
     assert {"front", "back", "side", "sheet", "mockup"} <= set(result["panels"])
     assert result["dieline"]["svg"].startswith("<svg")
     assert result["dieline"]["pdf"].startswith(b"%PDF")
+    # Cylindrical labels are cut for the circumference, not the diameter.
+    if kind == "bottle":
+        assert result["dieline"]["flat_width_mm"] > 150
+    if kind == "tube":
+        assert result["dieline"]["flat_width_mm"] > 100
     assert result.get("mockup_quad") and len(result["mockup_quad"]) == 4
     assert result.get("mockup_method")
     assert result.get("quality", {}).get("verdict")
