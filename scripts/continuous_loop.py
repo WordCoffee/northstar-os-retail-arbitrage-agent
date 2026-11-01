@@ -644,8 +644,10 @@ def recover_interrupted(state: Dict[str, Any]) -> List[Dict[str, Any]]:
         run_id = str(record.get("run_id") or "")
         if run_id:
             worker = _load_json(RUN_DIR / run_id / "worker.json", {}) or {}
-            worker_pid = int(worker.get("pid") or 0)
-        if worker_pid and _is_pid_alive(worker_pid):
+            apply_worker = _load_json(RUN_DIR / run_id / "apply_worker.json", {}) or {}
+            worker_pid = int(worker.get("pid") or apply_worker.get("pid") or 0)
+        was_alive = bool(worker_pid and _is_pid_alive(worker_pid))
+        if was_alive:
             _terminate_pid(worker_pid)
         record["status"] = "interrupted"
         record["reason"] = "stale heartbeat or dead owner process"
@@ -653,7 +655,7 @@ def recover_interrupted(state: Dict[str, Any]) -> List[Dict[str, Any]]:
         record["orphan_worker_pid"] = worker_pid
         recovered.append({"task": task_id, "pid": pid, "heartbeat_age": age,
                           "worker_pid": worker_pid,
-                          "worker_terminated": bool(worker_pid and _is_pid_alive(worker_pid))})
+                          "worker_terminated": was_alive})
     if recovered:
         _save_json(STATE_PATH, state)
     return recovered
@@ -1135,12 +1137,53 @@ def run_checks(task: Dict[str, Any], *, dry_run: bool = False) -> List[Dict[str,
     return results
 
 
+def run_command_tracked(cmd: Sequence[str], *, cwd: Path = ROOT, timeout: float = 900.0,
+                        pid_path: Optional[Path] = None, dry_run: bool = False) -> Dict[str, Any]:
+    """Run an apply command and record its PID so a crashed supervisor can kill it."""
+    reason = check_command(cmd)
+    if reason:
+        return {"ok": False, "argv": list(cmd), "cwd": str(cwd), "exit": None,
+                "duration_s": 0.0, "error": reason, "output": ""}
+    exe = shutil.which(str(cmd[0]))
+    argv = [exe or str(cmd[0])] + [str(c) for c in cmd[1:]]
+    if dry_run:
+        return {"ok": True, "argv": argv, "cwd": str(cwd), "exit": 0,
+                "duration_s": 0.0, "error": "", "output": "[dry-run]"}
+    started = time.time()
+    flags = getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+    proc = subprocess.Popen(argv, cwd=str(cwd), stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, text=True, shell=False,
+                            creationflags=flags)
+    if pid_path is not None:
+        _save_json(pid_path, {"pid": proc.pid, "started_at": _now(),
+                              "argv": list(cmd)})
+    try:
+        output, _ = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        _terminate_tree(proc)
+        return {"ok": False, "argv": argv, "cwd": str(cwd), "exit": None,
+                "duration_s": round(time.time() - started, 3),
+                "error": f"timeout after {timeout}s", "output": ""}
+    finally:
+        if pid_path is not None:
+            pid_path.unlink(missing_ok=True)
+    return {"ok": proc.returncode == 0, "argv": argv, "cwd": str(cwd),
+            "exit": proc.returncode, "duration_s": round(time.time() - started, 3),
+            "error": "" if proc.returncode == 0 else f"exit {proc.returncode}",
+            "output": _scrub(output or "")}
+
+
 def run_task_commands(task: Dict[str, Any], key: str, *,
-                      dry_run: bool = False) -> List[Dict[str, Any]]:
+                      dry_run: bool = False,
+                      pid_path: Optional[Path] = None) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for cmd in task.get(key) or []:
-        res = run_command(cmd, timeout=float(task.get("timeout_seconds") or 600),
-                          dry_run=dry_run)
+        if key == "apply_commands" and pid_path is not None:
+            res = run_command_tracked(cmd, timeout=float(task.get("timeout_seconds") or 600),
+                                      pid_path=pid_path, dry_run=dry_run)
+        else:
+            res = run_command(cmd, timeout=float(task.get("timeout_seconds") or 600),
+                              dry_run=dry_run)
         out.append({"cmd": list(cmd), "ok": res.get("ok"), "exit": res.get("exit"),
                     "duration_s": res.get("duration_s"), "error": res.get("error"),
                     "output": (res.get("output") or "")[-800:]})
@@ -1201,7 +1244,8 @@ def execute_task(task: Dict[str, Any], state: Dict[str, Any], *,
             raise LoopError("precheck failed: " + str(prechecks.get("detail")))
         if task.get("apply_commands"):
             write_heartbeat(run_id, task_id, "apply")
-            applied = run_task_commands(task, "apply_commands")
+            applied = run_task_commands(task, "apply_commands",
+                                        pid_path=run_dir / "apply_worker.json")
             if not all(r["ok"] for r in applied):
                 failed = next(r for r in applied if not r["ok"])
                 raise LoopError(f"apply command failed: {failed.get('error')}")

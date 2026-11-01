@@ -18,8 +18,10 @@ python scripts/continuous_loop.py --max-cycles 0 --max-tasks 3 --deadline-minute
 python scripts/continuous_loop.py --resume <task-id>
 ```
 
-`--max-cycles 0` still stops at `--max-tasks` (default 3 Ty tasks) and the
-90-minute campaign deadline. A cycle is successful only when every check exits 0.
+`--max-cycles 0` still stops at `--max-tasks` (default 8 total attempts) and
+the 90-minute campaign deadline. Both limits are mandatory. A cycle is
+successful only when every check exits 0, and the campaign also halts after
+`--max-consecutive-failures` (default 2).
 A failure stops the loop, never retries, never commits, and appends scrubbed
 evidence to `reports/evaluation_ledger.jsonl`.
 
@@ -124,11 +126,23 @@ per check is capped at 1,200 chars.
 
 ## Current registry
 
+The 2026-10-31 long campaign ran eight independent, prechecked engineering
+tasks and committed each one. The historical bridge tasks remain completed.
+
 | task | status |
 |---|---|
 | `cycle6-continuous-loop` | completed |
 | `demo-hitl-counts` | completed (Ty created `agent_kernel/hitl_counts.py`; commit `96be935d`) |
 | `post-demo-test` | completed (prebuilt regression task) |
+| `hitl-pathlike` | completed (commit `b42171c5c332`) |
+| `format-quad-guard` | completed (commit `ca29ceea6f44`) |
+| `geometry-bottom-guard` | completed (commit `03da4b07a6a0`) |
+| `print-quad-guard` | completed (commit `190c8e456fb8`) |
+| `surface-wrap-guard` | completed (commit `ff4985247a12`) |
+| `panels-format-guard` | completed (commit `48daca5b0fc4`) |
+| `dead-code-cleanup` | completed (commit `558eceb947ab`) |
+| `docs-autonomy` | completed (commit `74c7d49c7f64`) |
+| `blocked-auth-text-check` | blocked-not-authorized (auth route) |
 | `cycle7-token-sse` | blocked - token-level streaming needs a request-scoped model stream and a UI consumer action; broader than this bridge |
 
 The loop stops with `pending: []` when only blocked work remains. It does not
