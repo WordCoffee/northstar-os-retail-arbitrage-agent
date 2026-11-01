@@ -132,6 +132,35 @@ campaign, six dispatches spent, no eligible work without an operator decision.
 
 ---
 
+## 8. CORRECTION (2026-11-01, later) — a floor verdict was mislabelled
+
+The resource table in §3 above contains an error that is corrected here. The
+original row is preserved, not overwritten.
+
+| Claim in §3 | Corrected fact |
+|---|---|
+| `bojo:gpu-orig`, cold load, 2.443 GB min → `FLOOR-MET` | **`FLOOR-MISSED`**. The floor is **3.0 GB**; 2.443 < 3.0. The label was wrong, not the number. |
+| warm 4.215 GB min presented as a normal measurement | the model was **already resident** for that sample (baseline 4.272 → min 4.215, a drop of 0.057 GB). It shows headroom *with* the lane loaded; it is **not** a cold-load measurement and must not be read as one. |
+
+Raw evidence, unedited:
+
+```text
+state/evidence/model_resident_bojo_20261101.json            3.930 -> 1.192 GB  FLOOR-MISSED
+state/evidence/model_resident_bojo_cpu_restored_20261101.json 3.563 -> 1.457 GB  FLOOR-MISSED
+state/evidence/model_resident_bojo_ctx8192_20261101.json    4.272 -> 4.215 GB  FLOOR-MET (warm: model already resident, -0.057 GB)
+```
+
+**Corrected conclusion:** `bojo:gpu-orig` on the CPU runtime **never** met the
+3.0 GB resident floor — every cold sample left 1.19–2.44 GB. The CPU lane was not
+resource-qualified at any point; it was exercised under the gate only because the
+*gate* refused, and the one `GO` in this programme belongs to
+`qwen2.5-coder:3b` (cold 6.99 → 5.056 GB), not to `bojo`.
+
+Consequence: nothing in this report authorises a CPU-lane campaign, and the 8.3B
+GPU evaluation starts from a corrected baseline rather than a carried-over error.
+
+---
+
 ## 8. WHAT WOULD UNBLOCK IT
 
 One of these, none available under this directive:

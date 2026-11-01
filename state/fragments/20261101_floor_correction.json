@@ -1,0 +1,17 @@
+{
+  "ty_lane_evaluation_20261101_correction": {
+    "issued": "2026-11-01, after operator review",
+    "what": "Corrects a resource verdict in reports/ty_lane_evaluation_20261101.md section 3 and in the fragment ty_lane_evaluation_20261101. The original observations and raw evidence are preserved; nothing was overwritten or deleted.",
+    "errors": {
+      "mislabelled_floor": "bojo:gpu-orig cold load 2.443 GB min was written as FLOOR-MET. The floor is 3.0 GB, so 2.443 GB is FLOOR-MISSED. The number was right; the label was wrong.",
+      "warm_sample_misread": "the 4.215 GB sample (baseline 4.272) was presented as a measurement. The model was already resident for it (drop 0.057 GB), so it shows headroom WITH the lane loaded, not a cold-load result."
+    },
+    "raw_evidence": {
+      "state/evidence/model_resident_bojo_20261101.json": "3.930 -> 1.192 GB, FLOOR-MISSED",
+      "state/evidence/model_resident_bojo_cpu_restored_20261101.json": "3.563 -> 1.457 GB, FLOOR-MISSED",
+      "state/evidence/model_resident_bojo_ctx8192_20261101.json": "4.272 -> 4.215 GB, FLOOR-MET but WARM (model already resident)"
+    },
+    "corrected_conclusion": "bojo:gpu-orig on the CPU runtime never met the 3.0 GB resident floor. The only GO in this programme belongs to qwen2.5-coder:3b (cold 6.99 -> 5.056 GB, FLOOR-MET). No CPU-lane campaign is authorised by the corrected record.",
+    "process": "report section '8. CORRECTION' added (original section 3 left intact); this fragment supersedes the affected keys; the original fragment file is unchanged."
+  }
+}
