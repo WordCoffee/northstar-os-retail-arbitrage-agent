@@ -154,11 +154,26 @@ def validate_plan(modules: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def validate_module_image(path: str | Path, module_id: str) -> Dict[str, Any]:
-    """Size, weight and format for one rendered module tile."""
+    """Size, weight and format for one rendered module tile.
+
+    The expected size comes from ``aplus_layout.CANVAS`` when it is importable,
+    because that is the file the renderers draw into. ``MODULES`` cannot answer
+    this question on its own: for ``three_tiles``/``four_tiles`` its w/h is the
+    TILE, so a correct 970-wide row image would be rejected as "300x300
+    expected", and ``comparison`` is not in MODULES at all.
+    """
     from PIL import Image
 
     m = MODULES.get(module_id)
-    if not m:
+    expected = None
+    try:                                    # lazy: keeps this module import-free of Pillow paths
+        import aplus_layout as _geo
+        expected = _geo.CANVAS.get(module_id)
+    except Exception:  # noqa: BLE001 - a missing sibling must not break validation
+        expected = None
+    if expected is None and m:
+        expected = (m["w"], m["h"])
+    if expected is None:
         return {"ok": False, "problems": [f"unknown module {module_id!r}"], "metrics": {}}
     p = Path(path)
     if not p.is_file():
@@ -166,8 +181,9 @@ def validate_module_image(path: str | Path, module_id: str) -> Dict[str, Any]:
     size_bytes = p.stat().st_size
     img = Image.open(p)
     problems: List[str] = []
-    if (img.width, img.height) != (m["w"], m["h"]):
-        problems.append(f"{img.width}x{img.height} does not match the {m['w']}x{m['h']} module")
+    if (img.width, img.height) != tuple(expected):
+        problems.append(f"{img.width}x{img.height} does not match the "
+                        f"{expected[0]}x{expected[1]} module")
     if size_bytes > MAX_MODULE_BYTES:
         problems.append(f"{size_bytes / 1_048_576:.2f} MB exceeds the 2 MB limit")
     if (img.format or "").upper() not in ("JPEG", "JPG", "PNG"):

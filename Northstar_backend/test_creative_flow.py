@@ -88,3 +88,116 @@ def test_report_carries_the_listing_payload(tmp_path):
     assert report["job_id"] == "j1"
     assert "listing" in report
     assert report["steps"]["memory"]["status"] == "proposed"   # never applied
+
+
+# ── A+ assets are rendered, not just described ─────────────────────────────
+
+def test_aplus_step_renders_upload_ready_assets_from_the_plate(tmp_path):
+    from PIL import Image
+
+    flow = _flow(tmp_path)
+    flow.out.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (1400, 1400), (245, 242, 235)).save(flow.out / "01_plate.png")
+    flow.step_aplus()
+
+    step = flow.state.steps["aplus"]
+    assert step["valid"] is True
+    assert step["upload_ready"] is True, step["render"]["problems"]
+    assert (flow.out / "aplus" / "aplus_01_header.png").exists()
+    assert (flow.out / "aplus" / "aplus_preview.png").exists()
+    kinds = [a["kind"] for a in step["render"]["assets"]]
+    assert kinds == ["header", "three_tiles", "comparison"]
+
+
+def test_aplus_step_records_a_defect_instead_of_shipping_a_bad_plate(tmp_path):
+    from PIL import Image
+
+    flow = _flow(tmp_path)
+    flow.out.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (120, 120), (245, 242, 235)).save(flow.out / "01_plate.png")
+    flow.step_aplus()
+
+    step = flow.state.steps["aplus"]
+    assert step["valid"] is True                 # geometry is still fine
+    assert step["upload_ready"] is False         # but the assets are not sellable
+    assert any("too small" in p for p in step["render"]["problems"])
+    assert flow.state.status != "blocked"        # a copy/plate defect is not a code rollback
+
+
+def test_aplus_step_is_skipped_without_a_plate(tmp_path):
+    flow = _flow(tmp_path)
+    flow.step_aplus()
+    assert flow.state.steps["aplus"]["rendered"].startswith("skipped")
+    assert "upload_ready" not in flow.state.steps["aplus"]
+
+
+# ── the finished package is measured, not assumed ──────────────────────────
+
+def _face_png(tmp_path, w=600, h=800):
+    from PIL import Image
+    from io import BytesIO
+
+    buf = BytesIO()
+    Image.new("RGB", (w, h), (240, 236, 226)).save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def test_face_legibility_needs_a_measured_quad(tmp_path):
+    import creative_flow
+
+    res = creative_flow.face_legibility(_face_png(tmp_path), None, ["LION'S"])
+    assert res["status"] == "skipped"
+    res = creative_flow.face_legibility(_face_png(tmp_path), [[0, 0], [10, 0], [10, 10], [0, 10]], [])
+    assert res["status"] == "skipped"
+
+
+def test_face_legibility_crops_the_quad_and_asks_for_the_copy(tmp_path, monkeypatch):
+    import asset_rubric
+    import creative_flow
+
+    seen = {}
+
+    def fake_legibility(png, expected=None):
+        from io import BytesIO
+
+        from PIL import Image
+
+        img = Image.open(BytesIO(png))
+        seen["size"] = img.size
+        seen["expected"] = list(expected or [])
+        return {"legibility": 0.75, "hits": 3, "boxes": 12}
+
+    monkeypatch.setattr(asset_rubric, "legibility", fake_legibility)
+    quad = [[100, 200], [400, 190], [410, 600], [95, 610]]
+    res = creative_flow.face_legibility(_face_png(tmp_path), quad,
+                                        ["LION'S", "MANE", "ORGANIC", "POWDER", "SIXTH"])
+    assert res["status"] == "checked"
+    assert res["legibility"] == 0.75
+    assert res["crop"] == [87, 182, 418, 618]          # quad bbox padded by 8
+    assert seen["size"] == (331 * 2, 436 * 2)          # cropped, then 2x for OCR
+    assert seen["expected"] == ["LION'S", "MANE", "ORGANIC", "POWDER"]   # capped at 4
+
+
+def test_face_legibility_reports_ocr_absence_instead_of_faking_zero(tmp_path, monkeypatch):
+    import asset_rubric
+    import creative_flow
+
+    monkeypatch.setattr(asset_rubric, "legibility",
+                        lambda png, expected=None: {"legibility": 0.0, "ocr": "unavailable: RuntimeError"})
+    quad = [[10, 10], [200, 10], [200, 300], [10, 300]]
+    res = creative_flow.face_legibility(_face_png(tmp_path), quad, ["LION'S"])
+    assert res["ocr"] == "unavailable: RuntimeError"
+
+
+def test_compose_records_an_illegible_label_as_a_defect(tmp_path, monkeypatch):
+    import creative_flow
+
+    flow = _flow(tmp_path, compose=lambda *a, **k: {"bytes": _face_png(tmp_path),
+                                                    "geom_residual_px": 0.4,
+                                                    "quad": [[10, 10], [200, 10], [200, 300], [10, 300]]})
+    flow.out.mkdir(parents=True, exist_ok=True)
+    (flow.out / "01_plate.png").write_bytes(_face_png(tmp_path))
+    monkeypatch.setattr(creative_flow, "face_legibility",
+                        lambda *a, **k: {"status": "checked", "legibility": 0.0})
+    flow.step_compose()
+    assert flow.state.steps["compose"]["defects"] == ["label_illegible"]

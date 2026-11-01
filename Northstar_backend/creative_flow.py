@@ -17,7 +17,7 @@ import json
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Sequence
 
 import asset_handoff
 import brand_memory
@@ -29,6 +29,51 @@ import text_fidelity
 
 STEPS = ("intake", "bind", "snapshot", "plate", "gate", "compose", "hero",
          "aplus", "evaluate", "memory", "report")
+
+
+def face_legibility(png: bytes, quad: Optional[Sequence[Sequence[float]]],
+                    words: Optional[Sequence[str]], *, pad: int = 8,
+                    upscale: int = 2) -> Dict[str, Any]:
+    """OCR the finished label inside its MEASURED quad.
+
+    A package is not finished when the warp is geometrically correct; it is
+    finished when the words on the front can still be read at render size. The
+    face is cropped, padded, resampled and handed to the same OCR gate the listing
+    lane uses, so "readable" has one definition in the product.
+
+    Never invents a verdict: no quad means ``skipped``, no OCR means ``unavailable``.
+    """
+    if not quad or not words:
+        return {"status": "skipped", "reason": "no measured quad or no expected copy"}
+    try:
+        from io import BytesIO
+
+        from PIL import Image
+
+        import asset_rubric
+    except Exception as exc:  # noqa: BLE001 - a missing dep is reported, not hidden
+        return {"status": "unavailable", "reason": type(exc).__name__}
+
+    xs = [float(p[0]) for p in quad]
+    ys = [float(p[1]) for p in quad]
+    img = Image.open(BytesIO(png))
+    x0 = max(0, int(min(xs)) - pad)
+    y0 = max(0, int(min(ys)) - pad)
+    x1 = min(img.width, int(max(xs)) + pad)
+    y1 = min(img.height, int(max(ys)) + pad)
+    if x1 - x0 < 8 or y1 - y0 < 8:
+        return {"status": "skipped", "reason": "measured face is degenerate"}
+    crop = img.crop((x0, y0, x1, y1)).convert("RGB")
+    if upscale > 1:
+        crop = crop.resize((crop.width * upscale, crop.height * upscale), Image.LANCZOS)
+    buf = BytesIO()
+    crop.save(buf, format="PNG")
+    res = asset_rubric.legibility(buf.getvalue(), list(words)[:4])
+    out = {"status": "checked", "words": list(words)[:4], "crop": [x0, y0, x1, y1],
+           "legibility": res.get("legibility"), "hits": res.get("hits")}
+    if res.get("ocr"):
+        out["ocr"] = res["ocr"]
+    return out
 
 
 @dataclass
@@ -250,6 +295,19 @@ class CreativeFlow:
                                        "surface": surface or None,
                                        "neutralized": (res.get("neutralized") or {}).get("neutralized"),
                                        "bytes": len(self.labelled)}
+        # The warp can be perfect and the type still unreadable once it is on a
+        # curved face at render size. Measure it, and record the defect instead
+        # of calling the package finished because the geometry passed.
+        _copy = self.job.copy or {}
+        _words = [w.strip(".,") for w in
+                  f"{_copy.get('title', '')} {_copy.get('subtitle', '')}".split()
+                  if len(w) > 3][:4]
+        _quad = surface.get("quad") or res.get("quad")
+        _leg = face_legibility(self.labelled, _quad, _words)
+        self.state.steps["compose"]["legibility"] = _leg
+        if (_leg.get("status") == "checked" and _words
+                and float(_leg.get("legibility") or 0.0) <= 0.0):
+            self.state.steps["compose"]["defects"] = ["label_illegible"]
         # Prepress: emit the measured dieline sidecar and, for a print-required
         # job, gate on the ACTUAL rendered face rather than the nominal profile.
         import geometry_profiles
@@ -304,6 +362,7 @@ class CreativeFlow:
         self._save()
 
     def step_aplus(self) -> None:
+        self.out.mkdir(parents=True, exist_ok=True)
         try:
             import aplus_layout
             specs = {k: aplus_layout.pixel_plan(k) for k in self.job.aplus_kinds}
@@ -312,6 +371,48 @@ class CreativeFlow:
             self.state.steps["aplus"] = {"modules": list(specs), "valid": True}
         except (KeyError, ValueError) as exc:
             self.state.steps["aplus"] = {"error": str(exc)[:200]}
+            self._save()
+            return
+
+        # Geometry alone is not A+ content. When a plate exists, render the real
+        # assets at the exact module sizes and judge them by measurement - a
+        # module that fails QA is recorded as a defect, never shipped silently.
+        plate = self.out / "01_plate.png"
+        copy = dict(self.job.copy or {})
+        if not plate.exists() or not copy:
+            self.state.steps["aplus"]["rendered"] = "skipped: no plate or no copy"
+            self._save()
+            return
+        try:
+            import aplus_render
+            brand = self.job.product.get("brand") or {}
+            # The flow's copy uses label keys (title/subtitle); A+ uses its own.
+            # Map explicitly instead of letting a module render with no headline.
+            aplus_copy = {
+                "headline": copy.get("headline") or copy.get("title") or "",
+                "sub": copy.get("sub") or copy.get("subtitle") or "",
+                "kicker": copy.get("kicker") or "",
+                "tiles": copy.get("tiles") or [],
+                "columns": copy.get("columns") or [],
+                "rows": copy.get("rows") or [],
+            }
+            page = aplus_render.render_page(
+                [{"kind": k, "copy": aplus_copy} for k in self.job.aplus_kinds],
+                brand=brand, image=plate, tiles=[plate],
+                out_dir=self.out / "aplus")
+            self.state.steps["aplus"]["upload_ready"] = page["ok"]
+            self.state.steps["aplus"]["render"] = {
+                "ok": page["ok"], "problems": page["problems"][:12],
+                "assets": [{"kind": m["kind"], "path": m.get("path"),
+                            "bytes": m["bytes"], "copy_mode": m["copy_mode"],
+                            "min_contrast": m["qa"]["min_contrast"],
+                            "warnings": m["qa"]["warnings"]}
+                           for m in page["modules"]],
+                "preview": page["preview"],
+            }
+        except (KeyError, ValueError, OSError) as exc:
+            self.state.steps["aplus"]["upload_ready"] = False
+            self.state.steps["aplus"]["render"] = {"error": str(exc)[:240]}
         self._save()
 
     def step_evaluate(self) -> None:
