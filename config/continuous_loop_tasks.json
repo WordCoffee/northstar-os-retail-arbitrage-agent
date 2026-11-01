@@ -557,7 +557,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the dpi_report function in Northstar_backend/print_prep.py, using the ast_edit tool with op=replace_function_body and target=dpi_report. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate image_size first - it must be a list or tuple of exactly two numbers, both greater than zero, otherwise raise ValueError; (2) after px = face_pixels(quad), raise ValueError when the measured face width is greater than image_size[0] or its height is greater than image_size[1]; (3) keep the existing return dict unchanged. Do not rewrite the whole file. state/probes/t1_dpi_image_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t1_dpi_image_guard.py and repair from its output.",
+      "objective": "Edit ONLY the dpi_report function in Northstar_backend/print_prep.py, using the ast_edit tool with op=replace_function_body and target=dpi_report. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate image_size first - it must be a list or tuple of exactly two numbers, both greater than zero, otherwise raise ValueError; (2) after px = face_pixels(quad), raise ValueError when the measured face width is greater than image_size[0] or its height is greater than image_size[1]; (3) keep the existing return dict unchanged. Do not rewrite the whole file. state/probes/t1_dpi_image_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t1_dpi_image_guard.py to check your change; if it fails, edit the source file - never the probe.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/print_prep.py"
@@ -603,7 +603,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the frame_on_white function in Northstar_backend/image_prep.py, using the ast_edit tool with op=replace_function_body and target=frame_on_white. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate fill first - it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; (2) after product = trim_to_alpha(rgba), raise ValueError with the text empty_subject when the product has no visible pixels; (3) keep the rest of the existing behaviour. Do not rewrite the whole file. state/probes/t2_frame_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t2_frame_fill_guard.py and repair from its output.",
+      "objective": "Edit ONLY the frame_on_white function in Northstar_backend/image_prep.py, using the ast_edit tool with op=replace_function_body and target=frame_on_white. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate fill first - it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; (2) after product = trim_to_alpha(rgba), raise ValueError with the text empty_subject when the product has no visible pixels; (3) keep the rest of the existing behaviour. Do not rewrite the whole file. state/probes/t2_frame_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t2_frame_fill_guard.py to check your change; if it fails, edit the source file - never the probe.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/image_prep.py"
@@ -649,7 +649,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the hero_on_white function in Northstar_backend/listing_image.py, using the ast_edit tool with op=replace_function_body and target=hero_on_white. The source you supply is the function body WITHOUT the def line. The new body must validate fill first: it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; keep the rest of the existing behaviour, including the empty-subject refusal. Do not rewrite the whole file. state/probes/t3_hero_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t3_hero_fill_guard.py and repair from its output.",
+      "objective": "Edit ONLY the hero_on_white function in Northstar_backend/listing_image.py, using the ast_edit tool with op=replace_function_body and target=hero_on_white. The source you supply is the function body WITHOUT the def line. The new body must validate fill first: it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; keep the rest of the existing behaviour, including the empty-subject refusal. Do not rewrite the whole file. state/probes/t3_hero_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t3_hero_fill_guard.py to check your change; if it fails, edit the source file - never the probe.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/listing_image.py"
@@ -749,7 +749,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Northstar_backend/agent_kernel/hitl_counts.py silently skips a corrupt or unreadable hitl_*.json with a bare continue, so an operator sees a smaller queue than exists with no signal. Read the file and fix hitl_counts so every unreadable record is counted in a new 'skipped' key, while pending/approved/denied/total keep their meaning (total is the number of counted statuses, not files on disk) and the missing-directory behaviour is unchanged. The read-only probe state/probes/t5_hitl_corrupt.py is the contract - run it and repair from its output. Change only that file.",
+      "objective": "Northstar_backend/agent_kernel/hitl_counts.py silently skips a corrupt or unreadable hitl_*.json with a bare continue, so an operator sees a smaller queue than exists with no signal. Read the file and fix hitl_counts so every unreadable record is counted in a new 'skipped' key, while pending/approved/denied/total keep their meaning (total is the number of counted statuses, not files on disk) and the missing-directory behaviour is unchanged. The read-only probe state/probes/t5_hitl_corrupt.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/agent_kernel/hitl_counts.py"
@@ -802,7 +802,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Northstar_backend/agent_kernel/diff.py has one behavioural defect: select_hunks joins only the hunk bodies and drops the '--- a/file' and '+++ b/file' header lines, so a selected-hunk diff names no target file and cannot be applied. Read the file and fix select_hunks so the file headers from the input stay ahead of the selected hunks, the selection order is kept, an empty selection returns an empty string, and parse_diff/review/stats are unchanged. The read-only probe state/probes/t6_diff_select_headers.py is the contract - run it and repair from its output. Change only that file.",
+      "objective": "Northstar_backend/agent_kernel/diff.py has one behavioural defect: select_hunks joins only the hunk bodies and drops the '--- a/file' and '+++ b/file' header lines, so a selected-hunk diff names no target file and cannot be applied. Read the file and fix select_hunks so the file headers from the input stay ahead of the selected hunks, the selection order is kept, an empty selection returns an empty string, and parse_diff/review/stats are unchanged. The read-only probe state/probes/t6_diff_select_headers.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/agent_kernel/diff.py"
@@ -855,7 +855,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Northstar_backend/agent_kernel/artifacts.py has one behavioural defect: artifact_kind recognises PNG and MP4 by magic bytes but has no JPEG branch, so a valid .jpg is labelled 'binary' and the evidence cannot tell a rendered module from an opaque blob. Read the file and fix artifact_kind so a JPEG (magic FF D8 FF ... FF D9) is 'image_jpeg' and a .jpg with wrong magic is 'jpeg_invalid'; leave every other kind unchanged. The read-only probe state/probes/t7_artifact_jpeg.py is the contract - run it and repair from its output. Change only that file.",
+      "objective": "Northstar_backend/agent_kernel/artifacts.py has one behavioural defect: artifact_kind recognises PNG and MP4 by magic bytes but has no JPEG branch, so a valid .jpg is labelled 'binary' and the evidence cannot tell a rendered module from an opaque blob. Read the file and fix artifact_kind so a JPEG (magic FF D8 FF ... FF D9) is 'image_jpeg' and a .jpg with wrong magic is 'jpeg_invalid'; leave every other kind unchanged. The read-only probe state/probes/t7_artifact_jpeg.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/agent_kernel/artifacts.py"

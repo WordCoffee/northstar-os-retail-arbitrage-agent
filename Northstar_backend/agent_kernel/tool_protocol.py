@@ -365,8 +365,10 @@ def _normalise_path(rel: str, candidates: Sequence[str]) -> Tuple[str, Optional[
 def _check_write(rel: str, workspace: Any, *, bounded_edit: bool) -> None:
     error = workspace.write_scope_error(rel)
     if error:
+        allowed = ", ".join(list(getattr(workspace, "allow_paths", ()) or [])[:4])
         raise ActionError("out_of_scope", error,
-                          "write only the task's declared path")
+                          f"the only writable path(s): {allowed}" if allowed
+                          else "write only the task's declared path")
     if not bounded_edit:
         return
     try:
