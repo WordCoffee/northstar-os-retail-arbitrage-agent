@@ -1,0 +1,18 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 5.795,
+  "min_available_gb": 4.975,
+  "drop_gb": 0.82,
+  "samples": 10,
+  "resident_during": [],
+  "resident_total_gb": 0.0,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 0.0,
+  "tokens": 60,
+  "elapsed_s": 1.93,
+  "tok_per_s": 31.09,
+  "reply_head": "1. Pour water over the grounds and let it brew for a few minutes.\n2. Pour a bit more water over the grounds and let it b",
+  "error": "",
+  "verdict": "UNMEASURED",
+  "floor_gb": 3.0
+}

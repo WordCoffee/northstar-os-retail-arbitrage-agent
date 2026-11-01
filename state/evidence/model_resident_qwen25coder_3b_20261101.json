@@ -1,0 +1,18 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 4.991,
+  "min_available_gb": 4.991,
+  "drop_gb": 0.0,
+  "samples": 13,
+  "resident_during": [],
+  "resident_total_gb": 0.0,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 0.0,
+  "tokens": 12,
+  "elapsed_s": 2.58,
+  "tok_per_s": 4.65,
+  "reply_head": "Red, Blue, and Yellow are the primary colors.",
+  "error": "",
+  "verdict": "FLOOR-MET",
+  "floor_gb": 3.0
+}

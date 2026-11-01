@@ -1,0 +1,24 @@
+{
+  "model": "bojo:gpu-orig",
+  "baseline_available_gb": 3.93,
+  "min_available_gb": 1.192,
+  "drop_gb": 2.738,
+  "samples": 90,
+  "resident_during": [
+    {
+      "name": "bojo:gpu-orig",
+      "size_gb": 2.253,
+      "vram_gb": 0.0
+    }
+  ],
+  "resident_total_gb": 2.253,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 2.253,
+  "tokens": 384,
+  "elapsed_s": 18.28,
+  "tok_per_s": 21.01,
+  "reply_head": "Red, blue, and yellow are the three primary colors.",
+  "error": "",
+  "verdict": "FLOOR-MISSED",
+  "floor_gb": 3.0
+}

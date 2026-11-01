@@ -1,0 +1,42 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "started_at": "2026-11-01T01:50:19",
+  "scenarios": {
+    "one_step": {
+      "raw_head": "{\"tool\":\"read\",\"args\":{\"path\":\"North}}..{\"}      }",
+      "elapsed_s": 3.52,
+      "accepted": false,
+      "code": "out_of_scope"
+    },
+    "two_step": {
+      "elapsed_s": 2.22,
+      "first_head": "{\"tool\":\"read\",\"args\":{\"path\":\"NorthNorthcontent_type\" }}",
+      "second_head": "{\"tool\":\"ast_edit\",\"args\":{\"path\":\"Northstar_backend/calc.py\",\"op\":\"replace_function_body\",\"target\":\"add\",\"source\":\"retu",
+      "edit_ok": true,
+      "edit_error": "",
+      "accepted_tools": [
+        "ast_edit"
+      ],
+      "rejected_codes": [
+        "out_of_scope"
+      ],
+      "add_returns_sum": true
+    },
+    "invalid_repair": {
+      "prose_head": "{\"function\": \"A Python function is is a reusable block\\n\\n\\nA Python function is a reusable block of",
+      "first_accepted": false,
+      "code": "missing_tool",
+      "repair_head": "{\"tool\":\"read\",\"args\":{\"path\":\"Northstar_backend/c/write.py\"}}",
+      "recovered": false,
+      "repair_code": "out_of_scope"
+    },
+    "timeout": {
+      "budget_s": 1.5,
+      "elapsed_s": 0.12,
+      "timed_out": false,
+      "daemon_alive_after": true
+    }
+  },
+  "finished_at": "2026-11-01T01:50:27",
+  "tokens_approx": 277
+}

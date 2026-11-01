@@ -1,0 +1,24 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 4.546,
+  "min_available_gb": 2.576,
+  "drop_gb": 1.97,
+  "samples": 25,
+  "resident_during": [
+    {
+      "name": "qwen2.5-coder:3b",
+      "size_gb": 2.052,
+      "vram_gb": 0.0
+    }
+  ],
+  "resident_total_gb": 2.052,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 2.052,
+  "tokens": 98,
+  "elapsed_s": 5.12,
+  "tok_per_s": 19.14,
+  "reply_head": "1.1. Begin with a fresh cup and freshly brewed coffee.\n\n2. Slow pour the coffee into the cup at a steady pace.\n\n3.. Allo",
+  "error": "",
+  "verdict": "FLOOR-MISSED",
+  "floor_gb": 3.0
+}

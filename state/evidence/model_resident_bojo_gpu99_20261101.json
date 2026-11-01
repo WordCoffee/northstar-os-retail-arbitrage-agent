@@ -1,0 +1,24 @@
+{
+  "model": "bojo:gpu-orig",
+  "baseline_available_gb": 4.291,
+  "min_available_gb": 0.894,
+  "drop_gb": 3.397,
+  "samples": 374,
+  "resident_during": [
+    {
+      "name": "bojo:gpu-orig",
+      "size_gb": 2.253,
+      "vram_gb": 0.0
+    }
+  ],
+  "resident_total_gb": 2.253,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 2.253,
+  "tokens": 2048,
+  "elapsed_s": 76.23,
+  "tok_per_s": 26.87,
+  "reply_head": "",
+  "error": "",
+  "verdict": "FLOOR-MISSED",
+  "floor_gb": 3.0
+}

@@ -1,0 +1,24 @@
+{
+  "model": "qwen2.5vl:7b",
+  "baseline_available_gb": 5.069,
+  "min_available_gb": 4.008,
+  "drop_gb": 1.061,
+  "samples": 133,
+  "resident_during": [
+    {
+      "name": "qwen2.5vl:7b",
+      "size_gb": 6.14,
+      "vram_gb": 6.14
+    }
+  ],
+  "resident_total_gb": 6.14,
+  "resident_vram_gb": 6.14,
+  "resident_system_gb": 0.0,
+  "tokens": 1,
+  "elapsed_s": 26.98,
+  "tok_per_s": 0.04,
+  "reply_head": "",
+  "error": "",
+  "verdict": "FLOOR-MET",
+  "floor_gb": 3.0
+}

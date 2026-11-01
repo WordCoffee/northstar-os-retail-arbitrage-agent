@@ -1,0 +1,24 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 5.314,
+  "min_available_gb": 3.131,
+  "drop_gb": 2.183,
+  "samples": 33,
+  "resident_during": [
+    {
+      "name": "qwen2.5-coder:3b",
+      "size_gb": 2.336,
+      "vram_gb": 0.0
+    }
+  ],
+  "resident_total_gb": 2.336,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 2.336,
+  "tokens": 68,
+  "elapsed_s": 6.62,
+  "tok_per_s": 10.27,
+  "reply_head": "1. 1. Brew hot water in a kettle.\n\n2. Place a coffee filter into a coffee maker or directly into a mug. pour the hot wat",
+  "error": "",
+  "verdict": "FLOOR-MET",
+  "floor_gb": 3.0
+}

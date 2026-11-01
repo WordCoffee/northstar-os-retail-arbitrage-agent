@@ -1,0 +1,24 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 5.726,
+  "min_available_gb": 4.935,
+  "drop_gb": 0.791,
+  "samples": 11,
+  "resident_during": [
+    {
+      "name": "qwen2.5-coder:3b",
+      "size_gb": 2.328,
+      "vram_gb": 2.328
+    }
+  ],
+  "resident_total_gb": 2.328,
+  "resident_vram_gb": 2.328,
+  "resident_system_gb": 0.0,
+  "tokens": 102,
+  "elapsed_s": 2.14,
+  "tok_per_s": 47.66,
+  "reply_head": "1. Turn on the coffee machine and press the \"brew\" button.\n2. Add the required amount of water to the reservoir and adju",
+  "error": "",
+  "verdict": "FLOOR-MET",
+  "floor_gb": 3.0
+}

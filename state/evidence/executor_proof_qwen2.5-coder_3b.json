@@ -1,0 +1,52 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "task": "fix add(a,b) to return a + b",
+  "ok": true,
+  "acceptance_after_run": {
+    "ok": true,
+    "detail": "add(2, 3) == 5"
+  },
+  "steps": 6,
+  "protocol_errors": 5,
+  "scope_rejections": 0,
+  "error": "",
+  "elapsed_s": 15.8,
+  "module_after": "\"\"\"Arithmetic helpers used by the executor proof.\"\"\"\n\n\ndef add(a, b):\n    \"\"\"Return the sum of two numbers.\"\"\"\n    return a + b\n\n\ndef double(n):\n    \"\"\"Return twice n.\"\"\"\n    return add(n, n)\n",
+  "transcript": [
+    {
+      "tool": "protocol",
+      "ok": false,
+      "output": "PROTOCOL missing_tool: no tool name Hint: one of list, read, grep, write, write_many, apply_patch, ast_edit, ast_edit_batch, run, finish"
+    },
+    {
+      "tool": "protocol",
+      "ok": false,
+      "output": "PROTOCOL unknown_argument: ast_edit has no argument ',' Hint: allowed: op, path, source, target"
+    },
+    {
+      "tool": "protocol",
+      "ok": false,
+      "output": "PROTOCOL unknown_tool: unknown tool 'ast' Hint: one of list, read, grep, write, write_many, apply_patch, ast_edit, ast_edit_batch, run, finish"
+    },
+    {
+      "tool": "ast_edit",
+      "ok": true,
+      "output": "AST replace_function_body applied to Northstar_backend/calc.py"
+    },
+    {
+      "tool": "protocol",
+      "ok": false,
+      "output": "PROTOCOL unknown_tool: unknown tool 'PROTOCOL unknown_TOOL: UNKNOWN_TOOL PROTOCOL' Hint: one of list, read, grep, write, write_many, apply_patch, ast_edit, ast_edit_batch, run, finish"
+    },
+    {
+      "tool": "protocol",
+      "ok": false,
+      "output": "PROTOCOL invalid_json: JSON did not parse (Expecting ',' delimiter) Hint: one complete JSON object, no trailing text"
+    },
+    {
+      "tool": "acceptance",
+      "ok": null,
+      "output": "PASS: add(2, 3) == 5"
+    }
+  ]
+}
