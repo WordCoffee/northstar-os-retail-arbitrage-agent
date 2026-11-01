@@ -1,0 +1,41 @@
+{
+  "ty_executor_20261101": {
+    "verdict": "Executor implemented and live-proven; the repository task is BLOCKED by host RAM on the restored CPU configuration. Not ready for a bounded model-authored campaign, and not claimed.",
+    "executor": {
+      "module": "Northstar_backend/agent_kernel/tool_protocol.py",
+      "refusals": "more than one JSON object; unknown action; unknown/extra/wrong-typed arguments; out-of-scope path before any execution; non-argv or control-character commands; a whole-file write of any EXISTING source file (ast_edit/apply_patch required); non-atomic batches",
+      "normalisation": "one fence, case + alias table, commentary appended to the tool name, double-encoded args string, args lifted to top level, empty-string arg key, single unknown key for a one-argument action, truncated/basename/doubled-extension paths when exactly one in-scope path matches, mangled AST op names; every change recorded as a note",
+      "bounded_repair": "one PROTOCOL observation per refusal; protocol_failed after max_protocol_errors; protocol_errors and scope_rejections counted separately in the task evidence",
+      "task_scoped": "allowed_tools limits the prompt to the actions a task may use and names the only commands that will execute; pressure mode no longer hides ast_edit",
+      "adapter": "HTTP 5xx on the JSON-constrained path retries the same prompt without the constraint; num_ctx carried per task as a request option",
+      "commit": "3669f651",
+      "tests": "test_tool_protocol.py 28 cases; 132 passed across t ool-protocol, coding-agent, kernel, loop, readiness, recovery and supervisor-crash suites"
+    },
+    "lanes": {
+      "resolved_via_api": "qwen2.5-coder:3b f72c60cabf62...6225 3.1B Q4_K_M 1.8 GB; bojo:gpu-orig 5f1256d250e9...a48 1.9B Q8_0 2.5 GB; qwen3.5:2b 0689d44085e0...30a; qwen2.5vl:7b 5ced39dfa4ba...1cc 8.3B 5.56 GB",
+      "runtime": "operator config unchanged: OLLAMA_LLM_LIBRARY=cpu (User scope), OLLAMA_NUM_GPU=0, inference compute id=cpu. No env/service/backend change.",
+      "cpu_residency": "qwen2.5-coder:3b ctx32768: 5.31 GB free -> min 3.13 GB (FLOOR-MET). ctx8192: 4.55 -> 2.58 (FLOOR-MISSED). At dispatch 4.65 -> 2.39 (FLOOR-MISSED). bojo: 5.08 -> 2.44 (FLOOR-MISSED). Drop is a stable ~2.0-2.3 GB; the verdict flips on host free RAM, not on the model."
+    },
+    "live_proof": {
+      "tool": "tools/executor_proof.py --model qwen2.5-coder:3b",
+      "result": "ok true; acceptance add(2,3)==5; 6 steps; 5 protocol errors recovered; 15.9 s; module authored by the model (return a + b)",
+      "evidence": "state/evidence/executor_proof_qwen2.5-coder_3b.json",
+      "diagnostics": "state/evidence/lane_protocol_qwen25coder_3b_20261101b.json - one-step envelope rejected; two-step ast_edit accepted and executed; invalid-output repair failed at unknown_argument; timeout not exercised"
+    },
+    "repo_task": {
+      "id": "ty-budget-stop",
+      "probe": "state/probes/t4_budget_stop.py (fails on HEAD)",
+      "attempt_1": "qwen2.5-coder:3b, 6 steps, protocol_errors 2, scope_rejections 1, then Ollama HTTP 500; file restored byte-for-byte; no commit",
+      "attempt_2": "refused before dispatch: readiness_no_go (measured 2.39 GB < 3.0 floor)"
+    },
+    "not_ready_because": [
+      "host RAM on the restored CPU configuration: measured resident headroom 2.39-2.58 GB against the 3 GB floor (it passed once at 3.13 GB when the host was quieter)",
+      "envelope reliability of the 3B lane is roughly half its turns under a task prompt; bounded repair absorbs it but convergence in 8 steps is not guaranteed",
+      "two HTTP 500s from /api/chat after ~9 s on identical prompts, with and without the JSON constraint; not diagnosed further"
+    ],
+    "next": "~1 GB more free host RAM, or a lane whose resident cost is under ~1.5 GB, makes the gate pass reliably and a second bounded attempt viable. That is an operator resource decision, not a code change.",
+    "boundaries": "no Amazon, spend, credentials, external network, browser, production data, downloads or persistence; policies, authorization, guards and acceptance untouched; 3 GB floor unchanged; no parallel supervisor/executor framework.",
+    "commits": ["dbf85b8e", "8ad91edd", "bf5893d2", "3669f651"],
+    "report": "reports/ty_executor_20261101.md"
+  }
+}
