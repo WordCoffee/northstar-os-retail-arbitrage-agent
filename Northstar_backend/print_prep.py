@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence
@@ -41,8 +42,12 @@ def face_pixels(quad: Sequence[Sequence[float]]) -> Dict[str, float]:
     if len(quad) != 4:
         raise ValueError("a dieline quad needs exactly four corners")
     tl, tr, br, bl = quad
+    if not all(math.isfinite(float(c)) for point in quad for c in point):
+        raise ValueError("dieline quad corners must be finite numbers")
     width = (_dist(tl, tr) + _dist(bl, br)) / 2.0
     height = (_dist(tl, bl) + _dist(tr, br)) / 2.0
+    if width <= 0 or height <= 0:
+        raise ValueError("dieline quad has zero or negative face dimensions")
     return {"width": round(width, 3), "height": round(height, 3)}
 
 
