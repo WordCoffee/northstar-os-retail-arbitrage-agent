@@ -590,7 +590,7 @@
       "timeout_seconds": 900,
       "max_repairs": 1,
       "max_steps": 12,
-      "model": "bojo:gpu-orig",
+      "model": "qwen2.5-coder:3b",
       "provider": "ollama"
     },
     {
@@ -635,7 +635,7 @@
       "timeout_seconds": 900,
       "max_repairs": 1,
       "max_steps": 12,
-      "model": "bojo:gpu-orig",
+      "model": "qwen2.5-coder:3b",
       "provider": "ollama"
     },
     {
@@ -680,7 +680,7 @@
       "timeout_seconds": 900,
       "max_repairs": 1,
       "max_steps": 12,
-      "model": "bojo:gpu-orig",
+      "model": "qwen2.5-coder:3b",
       "provider": "ollama"
     }
   ]
