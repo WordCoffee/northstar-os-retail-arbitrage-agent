@@ -611,6 +611,8 @@ def measure_surface(plate: Any, kind: str = "pouch", *,
     fmt = str(kind or "").strip().lower()
     if fmt not in ("pouch", "box", "bottle", "tube"):
         raise KeyError(f"unknown packaging format {kind!r}; known: pouch, box, bottle, tube")
+    if not 0.0 < float(wrap_fraction) <= 1.0:
+        raise ValueError("wrap_fraction must be in (0, 1]")
 
     if fmt == "pouch":
         try:
