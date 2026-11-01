@@ -1,0 +1,23 @@
+{
+  "ty_autonomy_final_run_20261101": {
+    "verdict": "PARTIALLY READY - stopped at gate 1. The operator's >=6 GB idle precondition was not in force when the gate ran (4.14 GB available), so model work was not dispatched and the floor was not touched.",
+    "gates": {
+      "gate_1_resident_ram": {
+        "status": "FAIL",
+        "probe_task_ctx": "baseline 4.096 GB free, min 2.478 GB while resident, resident 2.052 GB system, FLOOR-MISSED (floor 3.0), evidence state/evidence/model_resident_coder_gate1_20261101.json",
+        "ready_gate": "pre-load 4.43 GB free, measured min 2.085 GB at the model default context, FLOOR-MISSED; verdict NO-GO at 2026-11-01T17:20:49Z; evidence state/evidence/autonomy_readiness_20261101T172049Z.json",
+        "host": "15.42 GB total, 4.14 GB available, 11.28 GB used, 0 models resident; top consumers opencode 1.39 GB (two processes), MemCompression 0.50, msedgewebview2 0.35, MsMpEng 0.34, one python 0.33 - no single reclaimable block",
+        "note": "The gate measures at the model default context while the task runs at 8192; both figures are below the floor, so the verdict does not depend on that difference. Nothing was changed to pass."
+      },
+      "gate_2_repo_task": "BLOCKED - ty-budget-stop not dispatched: readiness NO-GO. Task state pending, budget.py clean, no commit.",
+      "gate_3_campaign": "BLOCKED - gated on gate 2",
+      "gate_4_soak": "BLOCKED - gated on gate 3",
+      "gate_5_regression_batch": "PASS - 132 passed in 5.62s across tool_protocol, coding_agent, agent_kernel, continuous_loop, autonomy_readiness, autonomy_recovery, autonomy_supervisor_crash"
+    },
+    "what_would_clear_gate_1": "the CPU lane costs 1.62 GB at num_ctx=8192 and 2.35 GB at the default context, so it needs about 5.2 GB / 5.4 GB free AT DISPATCH. The declared >=6 GB precondition clears either figure if it holds when the gate re-measures.",
+    "unchanged_capability": "executor 3669f651; live model-authored fix add(2,3)==5 in a disposable workspace (state/evidence/executor_proof_qwen2.5-coder_3b.json); STOP, crash->interrupted->resume and acceptance restore verified",
+    "boundaries": "no Amazon, spend, credentials, external network, browser, production data, downloads or persistence; no process stopped, no memory freed, no Ollama service/backend change, no policy/task/acceptance edit; 3 GB floor unchanged",
+    "report": "reports/ty_autonomy_final_run_20261101.md",
+    "baseline_commit": "3669f651"
+  }
+}

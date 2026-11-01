@@ -1,0 +1,24 @@
+{
+  "model": "qwen2.5-coder:3b",
+  "baseline_available_gb": 4.096,
+  "min_available_gb": 2.478,
+  "drop_gb": 1.618,
+  "samples": 21,
+  "resident_during": [
+    {
+      "name": "qwen2.5-coder:3b",
+      "size_gb": 2.052,
+      "vram_gb": 0.0
+    }
+  ],
+  "resident_total_gb": 2.052,
+  "resident_vram_gb": 0.0,
+  "resident_system_gb": 2.052,
+  "tokens": 22,
+  "elapsed_s": 4.12,
+  "tok_per_s": 5.34,
+  "reply_head": "Red, Blue, and Yellow. the primary colors of light and the basis of all colors we see.",
+  "error": "",
+  "verdict": "FLOOR-MISSED",
+  "floor_gb": 3.0
+}

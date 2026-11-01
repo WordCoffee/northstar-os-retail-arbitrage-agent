@@ -1,0 +1,352 @@
+{
+  "schema": "northstar.autonomy_readiness.v1",
+  "verdict": "NO-GO",
+  "ok": false,
+  "checked_at": "2026-11-01T17:20:49+00:00",
+  "branch": "worktree/ty-autonomy",
+  "checkpoint": {
+    "schema": "northstar.rollback_checkpoint.v1",
+    "label": "ready",
+    "created_at": "2026-11-01T17:20:43+00:00",
+    "dir": "state\\checkpoints\\20261101T172042Z-ready",
+    "head": "a864498bf44c2e8097a9519dc15d680713995cf3",
+    "branch": "worktree/ty-autonomy",
+    "snapshot_sha": "208d78d690b5a646d1afcc51c090f3e6b68a5a4e",
+    "snapshot_clean": false,
+    "files": {
+      "Northstar_backend/data/northstar.db": "dac2b1104ef5754042f600e4c1adba1d2875ca11b733837f087e77ba3cd2e901",
+      "config/continuous_loop_tasks.json": "69a8aaecb992ef601b9b67f2f7c3c62f8d8d7d630ea770b94f96e4f808d775f2",
+      "config/provider_config.example.json": "03b0a8ebb0a5e53ca6a098186de74c9cb1a86de1ee1df9cc06d1c991693fcb35",
+      "config/runtime_flags.json": "476d5205504b3d4fb8895d9c17bad03b922eb8f14b49869491cde8cd4a2cbdc0"
+    },
+    "errors": [],
+    "model_manifest": {
+      "ok": true,
+      "models": [
+        {
+          "name": "qwen2.5-coder:3b",
+          "size_bytes": 1929912626,
+          "size_gb": 1.8,
+          "modified_at": "2026-11-01T01:22:10.2491958-05:00"
+        },
+        {
+          "name": "bojo:latest",
+          "size_bytes": 2683397062,
+          "size_gb": 2.5,
+          "modified_at": "2026-10-27T22:50:54.405918-05:00"
+        },
+        {
+          "name": "bojo:gpu-orig",
+          "size_bytes": 2683397050,
+          "size_gb": 2.5,
+          "modified_at": "2026-10-27T22:50:44.9286912-05:00"
+        },
+        {
+          "name": "qwen3.5:2b",
+          "size_bytes": 2683396812,
+          "size_gb": 2.5,
+          "modified_at": "2026-10-27T19:17:37.3471843-05:00"
+        },
+        {
+          "name": "qwen2.5vl:7b",
+          "size_bytes": 5969245856,
+          "size_gb": 5.56,
+          "modified_at": "2026-10-22T02:38:48.1357834-05:00"
+        },
+        {
+          "name": "qwen3-embedding:0.6b",
+          "size_bytes": 639150858,
+          "size_gb": 0.6,
+          "modified_at": "2026-10-18T14:59:40.1630881-05:00"
+        }
+      ],
+      "error": ""
+    },
+    "uncommitted_patch_bytes": 82777,
+    "staged_paths": []
+  },
+  "model_lane": {
+    "ok": true,
+    "provider": "ollama",
+    "model": "qwen2.5-coder:3b",
+    "reason": "qwen2.5-coder:3b is installed and proven for the Ty tool loop; free RAM 4.43 GB at dispatch; the 1.62 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+    "free_ram_gb": 4.432,
+    "post_load_headroom_gb": 2.81,
+    "estimate_not_measurement": true,
+    "installed": [
+      {
+        "model": "bojo:gpu-orig",
+        "rank": 28,
+        "estimated_ram_gb": 2.25,
+        "fits": true
+      },
+      {
+        "model": "qwen3.5:2b",
+        "rank": 22,
+        "estimated_ram_gb": 2.25,
+        "fits": true
+      },
+      {
+        "model": "qwen2.5vl:7b",
+        "rank": 10,
+        "estimated_ram_gb": 5.0,
+        "fits": false
+      },
+      {
+        "model": "qwen3-embedding:0.6b",
+        "rank": 1,
+        "estimated_ram_gb": 0.54,
+        "fits": true
+      },
+      {
+        "model": "qwen2.5-coder:3b",
+        "rank": 1,
+        "estimated_ram_gb": 1.62,
+        "fits": true
+      },
+      {
+        "model": "bojo:latest",
+        "rank": 1,
+        "estimated_ram_gb": 2.25,
+        "fits": true
+      }
+    ]
+  },
+  "model_tags": {
+    "ok": true,
+    "models": [
+      {
+        "name": "qwen2.5-coder:3b",
+        "size_bytes": 1929912626,
+        "size_gb": 1.8,
+        "modified_at": "2026-11-01T01:22:10.2491958-05:00"
+      },
+      {
+        "name": "bojo:latest",
+        "size_bytes": 2683397062,
+        "size_gb": 2.5,
+        "modified_at": "2026-10-27T22:50:54.405918-05:00"
+      },
+      {
+        "name": "bojo:gpu-orig",
+        "size_bytes": 2683397050,
+        "size_gb": 2.5,
+        "modified_at": "2026-10-27T22:50:44.9286912-05:00"
+      },
+      {
+        "name": "qwen3.5:2b",
+        "size_bytes": 2683396812,
+        "size_gb": 2.5,
+        "modified_at": "2026-10-27T19:17:37.3471843-05:00"
+      },
+      {
+        "name": "qwen2.5vl:7b",
+        "size_bytes": 5969245856,
+        "size_gb": 5.56,
+        "modified_at": "2026-10-22T02:38:48.1357834-05:00"
+      },
+      {
+        "name": "qwen3-embedding:0.6b",
+        "size_bytes": 639150858,
+        "size_gb": 0.6,
+        "modified_at": "2026-10-18T14:59:40.1630881-05:00"
+      }
+    ],
+    "error": ""
+  },
+  "model_resident": {
+    "ok": false,
+    "models": [
+      {
+        "ok": false,
+        "record": {
+          "model": "qwen2.5-coder:3b",
+          "baseline_available_gb": 4.191,
+          "min_available_gb": 2.085,
+          "drop_gb": 2.106,
+          "samples": 14,
+          "resident_during": [],
+          "resident_total_gb": 0.0,
+          "resident_vram_gb": 0.0,
+          "resident_system_gb": 0.0,
+          "tokens": 13,
+          "elapsed_s": 2.74,
+          "tok_per_s": 4.74,
+          "reply_head": "The three primary colors are red, green, and blue.",
+          "error": "",
+          "verdict": "FLOOR-MISSED",
+          "floor_gb": 3.0
+        },
+        "evidence": "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\state\\evidence\\model_resident_qwen2_5_coder_3b_20261101T172044Z.json",
+        "floor_gb": 3.0,
+        "command": [
+          "python",
+          "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\tools\\measure_model_resident.py",
+          "--model",
+          "qwen2.5-coder:3b",
+          "--floor",
+          "3.0",
+          "--json",
+          "--out",
+          "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\state\\evidence\\model_resident_qwen2_5_coder_3b_20261101T172044Z.json"
+        ],
+        "raw_output": "{\n  \"model\": \"qwen2.5-coder:3b\",\n  \"baseline_available_gb\": 4.191,\n  \"min_available_gb\": 2.085,\n  \"drop_gb\": 2.106,\n  \"samples\": 14,\n  \"resident_during\": [],\n  \"resident_total_gb\": 0.0,\n  \"resident_vram_gb\": 0.0,\n  \"resident_system_gb\": 0.0,\n  \"tokens\": 13,\n  \"elapsed_s\": 2.74,\n  \"tok_per_s\": 4.74,\n  \"reply_head\": \"The three primary colors are red, green, and blue.\",\n  \"error\": \"\",\n  \"verdict\": \"FLOOR-MISSED\",\n  \"floor_gb\": 3.0\n}\n"
+      }
+    ],
+    "reason": "qwen2.5-coder:3b: FLOOR-MISSED min 2.085 GB"
+  },
+  "policy_fingerprint": {
+    "ok": true,
+    "files": [
+      {
+        "path": "AGENTS.md",
+        "working": "e2de2c3706576c757b56344f0f5375b7728af5211e17c8ac2aa53084de5e5cfb",
+        "approved": "e2de2c3706576c757b56344f0f5375b7728af5211e17c8ac2aa53084de5e5cfb",
+        "match": true
+      },
+      {
+        "path": "config/continuous_loop_tasks.json",
+        "working": "69a8aaecb992ef601b9b67f2f7c3c62f8d8d7d630ea770b94f96e4f808d775f2",
+        "approved": "69a8aaecb992ef601b9b67f2f7c3c62f8d8d7d630ea770b94f96e4f808d775f2",
+        "match": true
+      },
+      {
+        "path": "scripts/continuous_loop.py",
+        "working": "5d75cdb1b972212b0ddbd8a84e2b50c4fa41ea54aa7f5bce3cac4ae3d495302a",
+        "approved": "5d75cdb1b972212b0ddbd8a84e2b50c4fa41ea54aa7f5bce3cac4ae3d495302a",
+        "match": true
+      },
+      {
+        "path": "scripts/ty_task_runner.py",
+        "working": "c8053f37e6efe0e33f073737b006e78c838c327ed001946aa24482e4eb8428c2",
+        "approved": "c8053f37e6efe0e33f073737b006e78c838c327ed001946aa24482e4eb8428c2",
+        "match": true
+      },
+      {
+        "path": "tools/autonomy_patches.py",
+        "working": "5bdbd8b3164bde637fb51295c74d0ef0d6516c5cfad77608c45f17f0ca983840",
+        "approved": "5bdbd8b3164bde637fb51295c74d0ef0d6516c5cfad77608c45f17f0ca983840",
+        "match": true
+      }
+    ],
+    "digest": "a626924f25968d7297e72fa6c8c6d634a0dc326d697005d4bb21fccc718d6ded"
+  },
+  "checks": [
+    {
+      "name": "stop-file",
+      "ok": true,
+      "detail": "STOP absent",
+      "remediation": ""
+    },
+    {
+      "name": "stop-mechanism",
+      "ok": true,
+      "detail": "STOP blocked dispatch in isolated probe",
+      "remediation": ""
+    },
+    {
+      "name": "disk-floor",
+      "ok": true,
+      "detail": "74.71 GB free",
+      "remediation": ""
+    },
+    {
+      "name": "ram-floor",
+      "ok": true,
+      "detail": "4.43 GB free",
+      "remediation": ""
+    },
+    {
+      "name": "state-writable",
+      "ok": true,
+      "detail": "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\state",
+      "remediation": ""
+    },
+    {
+      "name": "reports-writable",
+      "ok": true,
+      "detail": "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\reports",
+      "remediation": ""
+    },
+    {
+      "name": "ledger-writable",
+      "ok": true,
+      "detail": "C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt\\reports\\evaluation_ledger.jsonl",
+      "remediation": ""
+    },
+    {
+      "name": "policy-fingerprint",
+      "ok": true,
+      "detail": "5/5 policy files match HEAD",
+      "remediation": ""
+    },
+    {
+      "name": "git-present",
+      "ok": true,
+      "detail": "git executable found",
+      "remediation": ""
+    },
+    {
+      "name": "branch",
+      "ok": true,
+      "detail": "worktree/ty-autonomy",
+      "remediation": ""
+    },
+    {
+      "name": "working-tree-recorded",
+      "ok": true,
+      "detail": "git status captured",
+      "remediation": ""
+    },
+    {
+      "name": "lock",
+      "ok": true,
+      "detail": "no lock",
+      "remediation": ""
+    },
+    {
+      "name": "stale-lock-recovery",
+      "ok": true,
+      "detail": "stale lock reclaim is covered by test_lock_refuses_a_live_owner_and_reclaims_a_dead_one",
+      "remediation": ""
+    },
+    {
+      "name": "rollback-checkpoint",
+      "ok": true,
+      "detail": "state\\checkpoints\\20261101T172042Z-ready (4 files)",
+      "remediation": ""
+    },
+    {
+      "name": "sandbox-restore",
+      "ok": true,
+      "detail": "{\"ok\": true, \"bytes_match\": true, \"created_removed\": true, \"sha\": \"473fe5a2b6330ce5f7a90da6bebda3391740afd2\"}",
+      "remediation": ""
+    },
+    {
+      "name": "model-lane",
+      "ok": true,
+      "detail": "qwen2.5-coder:3b is installed and proven for the Ty tool loop; free RAM 4.43 GB at dispatch; the 1.62 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number | qwen2.5-coder:3b",
+      "remediation": ""
+    },
+    {
+      "name": "model-resident",
+      "ok": false,
+      "detail": "qwen2.5-coder:3b: FLOOR-MISSED min 2.085 GB",
+      "remediation": "the 3 GB floor is not lowered: free RAM, run the lane on the GPU, or install a smaller lane, then re-run --ready"
+    },
+    {
+      "name": "commit-and-redaction-tests",
+      "ok": true,
+      "detail": "...                                                                      [100%]\n3 passed in 0.55s\n",
+      "remediation": ""
+    }
+  ],
+  "failures": [
+    {
+      "name": "model-resident",
+      "ok": false,
+      "detail": "qwen2.5-coder:3b: FLOOR-MISSED min 2.085 GB",
+      "remediation": "the 3 GB floor is not lowered: free RAM, run the lane on the GPU, or install a smaller lane, then re-run --ready"
+    }
+  ]
+}
