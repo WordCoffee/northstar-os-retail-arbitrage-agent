@@ -557,7 +557,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Fix print_prep.dpi_report so the reported DPI cannot be produced from a quad that does not belong to the image it is given. Today the function measures the quad and ignores image_size completely, so a quad measured on a large render replayed against a tiny file still reports a printable DPI. Raise ValueError when image_size is not two positive numbers and when the measured face is wider or taller than the image. Keep the normal path working: a valid image that contains the quad must still return a report. Only Northstar_backend/print_prep.py may change.",
+      "objective": "Edit ONLY the dpi_report function in Northstar_backend/print_prep.py, using the ast_edit tool with op=replace_function_body and target=dpi_report. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate image_size first - it must be a list or tuple of exactly two numbers, both greater than zero, otherwise raise ValueError; (2) after px = face_pixels(quad), raise ValueError when the measured face width is greater than image_size[0] or its height is greater than image_size[1]; (3) keep the existing return dict unchanged. Do not rewrite the whole file. state/probes/t1_dpi_image_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t1_dpi_image_guard.py and repair from its output.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/print_prep.py"
@@ -602,7 +602,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Fix image_prep.frame_on_white so it cannot silently emit a broken listing image. Today fill=0, fill<0 and fill>1 are accepted: the product is scaled past the frame and clipped, or vanishes. A fully transparent cutout is also accepted and returns a blank white square, while listing_image.hero_on_white already refuses the same input. Raise ValueError when fill is not a finite number in (0, 1], and raise ValueError for an empty cutout. Keep fill=0.85 and fill=1.0 working for a normal cutout. Only Northstar_backend/image_prep.py may change.",
+      "objective": "Edit ONLY the frame_on_white function in Northstar_backend/image_prep.py, using the ast_edit tool with op=replace_function_body and target=frame_on_white. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate fill first - it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; (2) after product = trim_to_alpha(rgba), raise ValueError with the text empty_subject when the product has no visible pixels; (3) keep the rest of the existing behaviour. Do not rewrite the whole file. state/probes/t2_frame_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t2_frame_fill_guard.py and repair from its output.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/image_prep.py"
@@ -647,7 +647,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Fix listing_image.hero_on_white so an impossible fill cannot ship a cropped MAIN image. Today fill=0, negative fills, fill>1, NaN and inf are accepted: the subject is scaled beyond the canvas and cut off, or disappears. Raise ValueError when fill is not a finite number in (0, 1]. Keep the normal path: fill=0.85 and fill=1.0 on a normal cutout must still return a square PNG with the subject visible, and an empty subject must still raise ValueError. Only Northstar_backend/listing_image.py may change.",
+      "objective": "Edit ONLY the hero_on_white function in Northstar_backend/listing_image.py, using the ast_edit tool with op=replace_function_body and target=hero_on_white. The source you supply is the function body WITHOUT the def line. The new body must validate fill first: it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; keep the rest of the existing behaviour, including the empty-subject refusal. Do not rewrite the whole file. state/probes/t3_hero_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t3_hero_fill_guard.py and repair from its output.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/listing_image.py"
