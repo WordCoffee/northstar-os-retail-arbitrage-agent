@@ -1,4 +1,4 @@
-{
+﻿{
   "ty_executor_20261101": {
     "verdict": "Executor implemented and live-proven; the repository task is BLOCKED by host RAM on the restored CPU configuration. Not ready for a bounded model-authored campaign, and not claimed.",
     "executor": {
@@ -9,7 +9,7 @@
       "task_scoped": "allowed_tools limits the prompt to the actions a task may use and names the only commands that will execute; pressure mode no longer hides ast_edit",
       "adapter": "HTTP 5xx on the JSON-constrained path retries the same prompt without the constraint; num_ctx carried per task as a request option",
       "commit": "3669f651",
-      "tests": "test_tool_protocol.py 28 cases; 132 passed across t ool-protocol, coding-agent, kernel, loop, readiness, recovery and supervisor-crash suites"
+      "tests": "test_tool_protocol.py 28 cases; 132 passed across tool-protocol, coding-agent, kernel, loop, readiness, recovery and supervisor-crash suites"
     },
     "lanes": {
       "resolved_via_api": "qwen2.5-coder:3b f72c60cabf62...6225 3.1B Q4_K_M 1.8 GB; bojo:gpu-orig 5f1256d250e9...a48 1.9B Q8_0 2.5 GB; qwen3.5:2b 0689d44085e0...30a; qwen2.5vl:7b 5ced39dfa4ba...1cc 8.3B 5.56 GB",
