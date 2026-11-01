@@ -209,6 +209,24 @@ def test_edit_requires_a_prior_read_of_that_file(tmp_path):
     assert "return 2" in (tmp_path / "ws" / "src.py").read_text(encoding="utf-8")
 
 
+def test_a_repeated_read_without_an_edit_is_refused(tmp_path):
+    ws = Workspace(tmp_path / "ws", allow_paths=["src.py"], read_paths=["src.py"])
+    (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
+    turns = iter(['{"tool":"read","args":{"path":"src.py"}}',
+                  '{"tool":"read","args":{"path":"src.py"}}',   # refused: already read
+                  '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+                  '"target":"f","source":"return 2"}}',
+                  '{"tool":"finish","args":{}}'])
+    result = CodingAgent(ws, lambda p: next(turns), max_steps=5, max_protocol_errors=3,
+                         acceptance=lambda: ("return 2" in
+                                             (tmp_path / "ws" / "src.py").read_text(encoding="utf-8"),
+                                             "ok")).run("x")
+    assert result.ok is True
+    assert any("already_read" in str(h.get("output")) for h in result.transcript)
+    # after a successful edit a fresh read is legitimate again
+    assert result.protocol_errors == 1
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):

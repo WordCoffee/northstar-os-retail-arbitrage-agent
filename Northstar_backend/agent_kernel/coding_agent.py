@@ -93,6 +93,9 @@ class CodingAgent:
         self._failing: List[str] = []
         self._reads = 0
         self._read_seen: set[str] = set()
+        # A lane can loop on `read`. Reading the same file again without an edit
+        # in between is refused, because the content is already in the prompt.
+        self._read_since_edit: set[str] = set()
 
     def run(self, task: str) -> CodingResult:
         history: List[Dict[str, Any]] = []
@@ -153,6 +156,16 @@ class CodingAgent:
                                 f"protocol_failed: {exc.code}")
                 continue
             tool, args = action.tool, action.args
+            if tool == "read" and str(args.get("path") or "") in self._read_since_edit:
+                protocol_errors += 1
+                history.append({"role": "observation", "tool": "protocol", "ok": False,
+                                "output": (f"PROTOCOL already_read: {args.get('path')!r} "
+                                           "is in the conversation above. Hint: edit it with "
+                                           "ast_edit (name the symbol you saw) or finish.")})
+                if protocol_errors > self.max_protocol_errors:
+                    return _out(False, "protocol_failed", step, sorted(files), history,
+                                "protocol_failed: already_read")
+                continue
             # A bounded edit needs the current file in front of it. A small lane
             # otherwise guesses a symbol name and "edits" a function that does not
             # exist (observed: target 'count_corrupt_records' not found). Reading is
@@ -195,7 +208,13 @@ class CodingAgent:
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
             if tool == "read" and result.ok:
-                self._read_seen.add(str(args.get("path") or ""))
+                rel = str(args.get("path") or "")
+                self._read_seen.add(rel)
+                self._read_since_edit.add(rel)
+            elif tool in ("write", "write_many", "apply_patch", "ast_edit",
+                          "ast_edit_batch") and result.ok:
+                # A change makes a fresh read legitimate again.
+                self._read_since_edit.clear()
             if tool == "run":
                 failed_run = not result.ok
                 changed_since_run = False
@@ -340,7 +359,10 @@ class CodingAgent:
                 "- `run` takes an argv list; the only commands that will execute are: "
                 + ("; ".join(commands) if commands else "(none)") + "\n"
                 "- Start by reading the task's file, then edit it, then run the check.\n"
-                "- Stop with `finish` once the behaviour is correct.\n\n"
+                + ("STOP READING: the file is already in the conversation. Your next JSON "
+                   "object MUST be an ast_edit naming a symbol you saw. Do not read again.\n"
+                   if self._reads >= 2 else "")
+                + "- Stop with `finish` once the behaviour is correct.\n\n"
                 f"TASK:\n{task}\n\n"
                 + (self._failing_block()[:600] if self._failing else "")
                 + "RECENT RESULTS:\n" + ("\n".join(observed[-2:]) or "(none)") + "\n\n"
