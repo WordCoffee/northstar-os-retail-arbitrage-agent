@@ -12,6 +12,7 @@ Pure PIL/numpy, no GPU, no model. The pouch compositor already proved the
 """
 from __future__ import annotations
 
+import math
 from io import BytesIO
 from typing import Any, Dict, Optional, Sequence, Tuple
 
@@ -19,6 +20,15 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 Quad = Sequence[Sequence[float]]
+
+
+def _quad_points(quad: Quad) -> list:
+    pts = [(float(p[0]), float(p[1])) for p in (quad or [])]
+    if len(pts) != 4:
+        raise ValueError("quad needs exactly 4 corner points (TL, TR, BR, BL)")
+    if not all(math.isfinite(x) and math.isfinite(y) for x, y in pts):
+        raise ValueError("quad corners must be finite numbers")
+    return pts
 
 
 def _as_image(value: Any) -> Image.Image:
@@ -105,6 +115,7 @@ def _apply_luminance(label: Image.Image, plate: Image.Image, mask: Image.Image,
 def box_composite(plate: Any, label: Any, quad: Quad, *,
                   feather: int = 2, shade: float = 0.18) -> Dict[str, Any]:
     """Perspective-warp the label onto four measured corners of a box face."""
+    quad = _quad_points(quad)
     base = _as_image(plate)
     src = _as_image(label)
     w, h = base.size
@@ -142,6 +153,7 @@ def bottle_composite(plate: Any, label: Any, quad: Quad, *,
                      wrap_fraction: float = 0.92, seam_gap_px: int = 6,
                      shade: float = 0.22, surface_shading: float = 0.35) -> Dict[str, Any]:
     """Cylindrical resample: vertical strips compress toward the silhouette."""
+    quad = _quad_points(quad)
     base = _as_image(plate)
     src = _as_image(label).resize((max(2, int((quad[1][0] - quad[0][0]))),
                                    max(2, int((quad[2][1] - quad[0][1])))), Image.LANCZOS)
@@ -215,6 +227,7 @@ def tube_composite(plate: Any, label: Any, quad: Quad, *,
     four measured corners follows that shape; the old fixed taper inset only
     narrowed the top and could not represent a negative taper at all.
     """
+    quad = _quad_points(quad)
     base = _as_image(plate)
     src = _as_image(label)
     w, h = base.size
