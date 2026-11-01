@@ -1878,6 +1878,12 @@ def main(argv: Optional[List[str]] = None) -> int:
         except LoopError as exc:
             print(json.dumps({"ok": False, "error": str(exc)}))
             return 2
+        # An explicit resume REPAIRS state; it must not silently start an
+        # unattended campaign over whatever else happens to be queued. That is
+        # how `--resume ty-dpi-image-guard` once dispatched an unrelated task.
+        print(json.dumps({"ok": True, "resumed": args.resume,
+                          "next": "start a campaign explicitly (--task/--once/--max-tasks)"}))
+        return 0
 
     max_tasks = 1 if args.once else max(0, int(args.max_tasks))
     max_cycles = 1 if args.once else max(0, int(args.max_cycles))
