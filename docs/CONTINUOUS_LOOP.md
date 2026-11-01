@@ -141,3 +141,33 @@ invent tasks.
 - `00_STATE.json` is read-only to the loop (operator-apply only).
 - Matrix/AgentTeams is not installed; HITL is the local queue.
 - No Amazon request, no paid provider call, no credential read.
+
+
+## Autonomy readiness and long campaigns
+
+Run the full GO/NO-GO preflight before a campaign:
+
+```powershell
+python scripts/continuous_loop.py --ready
+```
+
+The gate creates a checkpoint under `state/checkpoints/`, records the working
+tree and uncommitted patch, copies the DBs/configs/model manifest, proves a
+sandbox restore byte-for-byte, checks the policy envelope against `HEAD`, and
+resolves the installed model lane. Any failure prints `NO-GO` with a
+remediation; a campaign refuses to start.
+
+A long campaign enforces both bounds and stops on consecutive failures:
+
+```powershell
+python scripts/continuous_loop.py --max-tasks 8 --deadline-minutes 180 --max-consecutive-failures 2
+python scripts/continuous_loop.py --status
+Get-Content reports/autonomy_log_YYYYMMDD.log -Tail 40 -Wait
+python scripts/continuous_loop.py --stop
+python scripts/continuous_loop.py --resume <task-id>
+```
+
+The campaign heartbeat is `state/continuous_loop_campaign.json`; the final
+manifest is `state/campaigns/<run-id>.json` and a report copy under `reports/`.
+The live log is scrubbed and one line per phase transition. There is no service
+or scheduler: the campaign runs in the foreground until termination.
