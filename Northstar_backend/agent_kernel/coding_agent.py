@@ -368,9 +368,10 @@ class CodingAgent:
             f"TASK:\n{task}\n\n"
             + (f"REQUIRED ARTIFACT: {self.required_artifact}\n"
                if self.required_artifact else "")
-            + ("STOP READING. You have read several files without writing. Your next "
-               "turn MUST be a write_many call that writes the corrected files. Do not "
-               "read again.\n" if self._reads >= 2 else "")
+            + ("STOP READING. You have read the file and the content is above. Your next "
+               "turn MUST be an ast_edit on the function you saw - name the symbol "
+               "exactly as it appears in the file. Do not read again.\n"
+               if self._reads >= 2 else "")
             + (f"STEP PRESSURE: you have not produced `{self.required_artifact}` yet. "
                "Use ast_edit / apply_patch for an existing file; a whole-file write of a "
                "source file is refused. Then finish.\n" if pressure else "")
