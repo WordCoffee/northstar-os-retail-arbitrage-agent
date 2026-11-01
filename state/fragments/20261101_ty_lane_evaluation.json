@@ -1,0 +1,55 @@
+{
+  "ty_lane_evaluation_20261101": {
+    "verdict": "BLOCKED - MODEL/INTERFACE CAPABILITY. Adapter defects were fixed (native tool calling, read discipline, decontaminated examples), but no installed lane can author an accepted fix. No Ty commit. Qualification/soak/repair not run.",
+    "adapter_findings": {
+      "path": "POST /api/chat with format=json and a JSON-text prompt; Ollama's tools interface was never used",
+      "probe": "bojo:gpu-orig emitted a correct native tool_call (read Northstar_backend/calc.py); qwen2.5-coder:3b returned malformed text; qwen2.5vl:7b has no tools capability (HTTP 400)",
+      "classification": "B/C - adapter-transformed and schema-induced, not model-only",
+      "harness_commits": {
+        "1da7cade": "native tool calling; one validator judges native calls and JSON actions (tool_protocol.json_schemas)",
+        "366f0a66": "stop-reading nudge names ast_edit, not write_many",
+        "3b5e88ef": "already_read refusal: a repeated read with no edit is refused; an edit clears the guard",
+        "ea6b4dc1": "neutral placeholders in action examples (a lane edited the example symbol 'add')"
+      }
+    },
+    "candidates": {
+      "qwen2.5-coder:3b": "3.1B Q4_K_M f72c60ca...6225 - rejected: malformed text under native tools; JSON path already failed 6/6 in the closed campaign",
+      "bojo:gpu-orig": "1.9B Q8_0 qwen35 5f1256d2...a48 - best candidate (native tools work), screened out: reads the file then edits 'add' from the prompt example instead of the symbol it read",
+      "qwen2.5vl:7b": "8.3B Q4_K_M 5ced39df...1cc - rejected: no tools capability and CPU-resident weights would break the 3 GB floor",
+      "bojo:latest/qwen3.5:2b": "same 1.9B family, not stronger"
+    },
+    "resources": {
+      "free_before_screen_gb": 7.11,
+      "bojo_cold_cpu": "5.08 -> 2.443 GB min, resident 2.253 GB system, FLOOR-MET",
+      "bojo_warm_cpu": "4.272 -> 4.215 GB min with the model resident",
+      "placement": "CPU (OLLAMA_LLM_LIBRARY=cpu), GPU idle; no setting changed",
+      "preload_gb": 6.0,
+      "floor_gb": 3.0
+    },
+    "screen": {
+      "tool": "tools/screen_lane.py (disposable, objective + independent behavioural check)",
+      "attempts": [
+        {"n": 1, "result": "5 reads, no edit", "voided_by": "task-scoped prompt had no read pressure"},
+        {"n": 2, "result": "9 reads, no edit", "voided_by": "same harness defect"},
+        {"n": 3, "result": "read ok -> ast_edit target 'add' (example token) -> 7 refused reads", "valid": true}
+      ],
+      "evidence": ["state/evidence/screen_bojo_gpu_orig_1.json", "state/evidence/screen_bojo_gpu_orig_2.json", "state/evidence/screen_bojo_gpu_orig_3.json"]
+    },
+    "qualification": "NOT RUN - no candidate screened; the previous 6/6 failure history and task states are preserved",
+    "probes_still_failing": {
+      "t5_hitl_corrupt.py": "FAIL (1)",
+      "t6_diff_select_headers.py": "FAIL (2)",
+      "t7_artifact_jpeg.py": "FAIL (2)"
+    },
+    "soak": "NOT RUN",
+    "repair_campaign": "NOT RUN",
+    "regression": "161 passed in 5.19s across 11 suites",
+    "state": "nothing running; no lock, STOP, worker or resident model; HEAD ea6b4dc1",
+    "unblock_options": [
+      "an installed 7B+ coder lane that fits the CPU envelope (~7.5 GB pre-load at this floor)",
+      "authority to run the existing 8.3B lane on the GPU (measured 6.14 GB VRAM, 0 GB system)",
+      "accept that a first model-authored fix needs a lane that holds a symbol across two turns"
+    ],
+    "report": "reports/ty_lane_evaluation_20261101.md"
+  }
+}
