@@ -247,6 +247,11 @@ def test_campaign_refuses_a_ty_task_without_measured_residency(tmp_path, monkeyp
 def test_campaign_dispatches_a_ty_task_only_with_fresh_residency(tmp_path, monkeypatch):
     _campaign_paths(tmp_path, monkeypatch)
     _evidence(tmp_path, monkeypatch, min_free=4.09)
+    # The lane choice itself is exercised elsewhere; this case is about the
+    # residency evidence, so pin the lane instead of depending on today's free RAM.
+    monkeypatch.setattr(cl, "resolve_lane", lambda *a, **k: {
+        "ok": True, "provider": "ollama", "model": "bojo:gpu-orig",
+        "reason": "pinned for the residency test"})
     seen = {}
 
     def fake_execute(task, state, **kw):
