@@ -6,6 +6,7 @@ acceptance function; a failure becomes an observation, not a pass.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from dataclasses import dataclass, field
@@ -93,9 +94,14 @@ class CodingAgent:
         self._failing: List[str] = []
         self._reads = 0
         self._read_seen: set[str] = set()
-        # A lane can loop on `read`. Reading the same file again without an edit
-        # in between is refused, because the content is already in the prompt.
-        self._read_since_edit: set[str] = set()
+        # Purpose-aware read discipline: a path may be read a bounded number of
+        # times; a changed file, a post-edit verification, or a reread after a
+        # failed edit are all legitimate. Only an identical reread with no new
+        # state is refused, and the refusal carries the file's hash and mtime.
+        self._read_state: Dict[str, Dict[str, Any]] = {}
+        self._edited: set[str] = set()
+        self._purpose_change: set[str] = set()
+        self.read_budget_per_path = 4
 
     def run(self, task: str) -> CodingResult:
         history: List[Dict[str, Any]] = []
@@ -156,16 +162,16 @@ class CodingAgent:
                                 f"protocol_failed: {exc.code}")
                 continue
             tool, args = action.tool, action.args
-            if tool == "read" and str(args.get("path") or "") in self._read_since_edit:
-                protocol_errors += 1
-                history.append({"role": "observation", "tool": "protocol", "ok": False,
-                                "output": (f"PROTOCOL already_read: {args.get('path')!r} "
-                                           "is in the conversation above. Hint: edit it with "
-                                           "ast_edit (name the symbol you saw) or finish.")})
-                if protocol_errors > self.max_protocol_errors:
-                    return _out(False, "protocol_failed", step, sorted(files), history,
-                                "protocol_failed: already_read")
-                continue
+            if tool == "read":
+                verdict = self._read_verdict(str(args.get("path") or ""))
+                if verdict is not None:
+                    protocol_errors += 1
+                    history.append({"role": "observation", "tool": "protocol", "ok": False,
+                                    "output": verdict})
+                    if protocol_errors > self.max_protocol_errors:
+                        return _out(False, "protocol_failed", step, sorted(files), history,
+                                    "protocol_failed: read_discipline")
+                    continue
             # A bounded edit needs the current file in front of it. A small lane
             # otherwise guesses a symbol name and "edits" a function that does not
             # exist (observed: target 'count_corrupt_records' not found). Reading is
@@ -207,14 +213,14 @@ class CodingAgent:
                 continue
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
+            rel = str(args.get("path") or "")
             if tool == "read" and result.ok:
-                rel = str(args.get("path") or "")
-                self._read_seen.add(rel)
-                self._read_since_edit.add(rel)
-            elif tool in ("write", "write_many", "apply_patch", "ast_edit",
-                          "ast_edit_batch") and result.ok:
-                # A change makes a fresh read legitimate again.
-                self._read_since_edit.clear()
+                self._note_read(rel)
+            elif tool in ("write", "ast_edit") and rel:
+                self._note_edit(rel, result.ok)
+            elif tool in ("write_many", "apply_patch", "ast_edit_batch"):
+                # A batch changes at least one file; any fresh read is legitimate.
+                self._read_state.clear()
             if tool == "run":
                 failed_run = not result.ok
                 changed_since_run = False
@@ -263,6 +269,62 @@ class CodingAgent:
                             acceptance_recovered=True)
         return _out(False, "step budget exhausted", self.max_steps,
                     sorted(files), history, "max_steps")
+
+    def _file_fingerprint(self, rel: str) -> Dict[str, Any]:
+        """(sha256 prefix, mtime) of the file a read is about, for refusal evidence."""
+        try:
+            path = self.tools.resolve(rel)
+            if not path.is_file():
+                return {"sha": "", "mtime": 0.0}
+            data = path.read_bytes()[:200_000]
+            return {"sha": hashlib.sha256(data).hexdigest()[:12],
+                    "mtime": round(path.stat().st_mtime, 3)}
+        except Exception:  # noqa: BLE001 - a fingerprint never blocks the tool
+            return {"sha": "", "mtime": 0.0}
+
+    def _read_verdict(self, rel: str) -> Optional[str]:
+        """None = allow the read. Otherwise the refusal text."""
+        prior = self._read_state.get(rel)
+        now = self._file_fingerprint(rel)
+        if prior is None:
+            return None
+        evidence = (f"path={rel} sha256={now['sha'] or 'unreadable'} "
+                    f"mtime={now['mtime']} reads={int(prior.get('count') or 0)}/"
+                    f"{self.read_budget_per_path}")
+        # The budget caps successful reads of one path for the whole task. It is
+        # checked first so a lane cannot verify its way past it, and it never
+        # blocks an edit or a finish.
+        if int(prior.get("count") or 0) >= self.read_budget_per_path:
+            return (f"PROTOCOL read_budget_exhausted: {evidence}. That file has been read "
+                    "the maximum number of times for this task. Hint: edit it with "
+                    "ast_edit (name a symbol you saw) or finish.")
+        # A changed file is a new question; so is the first read after a successful
+        # edit (verification) and the first reread after a failed edit.
+        if now["sha"] and now["sha"] != prior.get("sha"):
+            return None
+        if rel in self._edited:
+            return None
+        if rel in self._purpose_change:
+            return None
+        return (f"PROTOCOL duplicate_read: {evidence}. The content is already in the "
+                "conversation and the file has not changed. Hint: edit it with ast_edit "
+                "or finish; read again only after an edit or a failed edit.")
+
+    def _note_read(self, rel: str) -> None:
+        now = self._file_fingerprint(rel)
+        prior = self._read_state.get(rel) or {"count": 0}
+        self._read_state[rel] = {"count": int(prior.get("count") or 0) + 1, **now}
+        self._read_seen.add(rel)
+        self._edited.discard(rel)
+        self._purpose_change.discard(rel)
+
+    def _note_edit(self, rel: str, ok: bool) -> None:
+        if ok:
+            self._edited.add(rel)
+            self._purpose_change.discard(rel)
+        else:
+            # A failed edit is a new purpose: one more read of the same file is fair.
+            self._purpose_change.add(rel)
 
     def _artifact_present(self) -> bool:
         """True when the declared artifact exists on disk and is not empty."""

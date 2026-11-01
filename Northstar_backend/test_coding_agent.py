@@ -209,22 +209,71 @@ def test_edit_requires_a_prior_read_of_that_file(tmp_path):
     assert "return 2" in (tmp_path / "ws" / "src.py").read_text(encoding="utf-8")
 
 
-def test_a_repeated_read_without_an_edit_is_refused(tmp_path):
+def _read_agent(tmp_path, turns, *, budget=4, max_steps=8):
     ws = Workspace(tmp_path / "ws", allow_paths=["src.py"], read_paths=["src.py"])
     (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
+    agent = CodingAgent(ws, lambda p: next(turns), max_steps=max_steps,
+                        max_protocol_errors=budget + 3,
+                        acceptance=lambda: (True, "ok"))
+    agent.read_budget_per_path = budget
+    return agent, ws
+
+
+def test_a_duplicate_read_with_no_change_is_refused_with_evidence(tmp_path):
     turns = iter(['{"tool":"read","args":{"path":"src.py"}}',
-                  '{"tool":"read","args":{"path":"src.py"}}',   # refused: already read
+                  '{"tool":"read","args":{"path":"src.py"}}',
+                  '{"tool":"finish","args":{}}'])
+    agent, _ = _read_agent(tmp_path, turns)
+    result = agent.run("x")
+    refusal = next(h for h in result.transcript if h.get("tool") == "protocol")
+    assert "duplicate_read" in refusal["output"]
+    assert "sha256=" in refusal["output"] and "mtime=" in refusal["output"]
+
+
+def test_a_post_edit_verification_read_is_allowed(tmp_path):
+    turns = iter(['{"tool":"read","args":{"path":"src.py"}}',
                   '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
                   '"target":"f","source":"return 2"}}',
+                  '{"tool":"read","args":{"path":"src.py"}}',   # verification
                   '{"tool":"finish","args":{}}'])
-    result = CodingAgent(ws, lambda p: next(turns), max_steps=5, max_protocol_errors=3,
-                         acceptance=lambda: ("return 2" in
-                                             (tmp_path / "ws" / "src.py").read_text(encoding="utf-8"),
-                                             "ok")).run("x")
+    agent, _ = _read_agent(tmp_path, turns)
+    result = agent.run("x")
     assert result.ok is True
-    assert any("already_read" in str(h.get("output")) for h in result.transcript)
-    # after a successful edit a fresh read is legitimate again
-    assert result.protocol_errors == 1
+    assert not any("duplicate_read" in str(h.get("output")) for h in result.transcript)
+    assert sum(1 for h in result.transcript if h.get("tool") == "read") == 2
+
+
+def test_a_reread_after_a_failed_edit_is_allowed_once(tmp_path):
+    turns = iter(['{"tool":"read","args":{"path":"src.py"}}',
+                  '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+                  '"target":"does_not_exist","source":"return 2"}}',   # fails
+                  '{"tool":"read","args":{"path":"src.py"}}',          # new purpose: allowed
+                  '{"tool":"read","args":{"path":"src.py"}}',          # now a duplicate
+                  '{"tool":"finish","args":{}}'])
+    agent, _ = _read_agent(tmp_path, turns)
+    result = agent.run("x")
+    reads = [h for h in result.transcript if h.get("tool") == "read"]
+    codes = [str(h.get("output")) for h in result.transcript if h.get("tool") == "protocol"]
+    assert len(reads) == 2                 # the reread after the failure was allowed
+    assert len(codes) == 1 and "duplicate_read" in codes[0]
+
+
+def test_read_budget_bounds_rereads_but_never_blocks_the_edit(tmp_path):
+    turns = iter([
+        '{"tool":"read","args":{"path":"src.py"}}',
+        '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+        '"target":"f","source":"return 2"}}',
+        '{"tool":"read","args":{"path":"src.py"}}',      # verification (count 2)
+        '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+        '"target":"f","source":"return 3"}}',
+        '{"tool":"read","args":{"path":"src.py"}}',      # budget 2 reached: refused
+        '{"tool":"finish","args":{}}'])
+    agent, ws = _read_agent(tmp_path, turns, budget=2, max_steps=8)
+    result = agent.run("x")
+    codes = [str(h.get("output")) for h in result.transcript if h.get("tool") == "protocol"]
+    assert any("read_budget_exhausted" in c for c in codes)
+    assert "return 3" in (tmp_path / "ws" / "src.py").read_text(encoding="utf-8")
+    assert result.ok is True
 
 
 # ── apply_patch ─────────────────────────────────────────────────────────────
