@@ -25,14 +25,19 @@ Commands are argv lists, never shell strings. The ledger is scrubbed and capped.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
 import shutil
 import signal
+import sqlite3
 import subprocess
 import sys
+import tempfile
 import time
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
@@ -46,14 +51,29 @@ LOCK_PATH = ROOT / "state" / "continuous_loop.lock"
 HEARTBEAT_PATH = ROOT / "state" / "continuous_loop_heartbeat.json"
 RUN_DIR = ROOT / "state" / "runs"
 STOP_PATH = ROOT / "STOP"
+CAMPAIGN_HEARTBEAT_PATH = ROOT / "state" / "continuous_loop_campaign.json"
+READINESS_PATH = ROOT / "state" / "autonomy_readiness.json"
+CHECKPOINT_ROOT = ROOT / "state" / "checkpoints"
+AUTONOMY_LOG_DIR = ROOT / "reports"
+CAMPAIGN_MANIFEST_DIR = ROOT / "state" / "campaigns"
 MIN_FREE_DISK_GB = 10.0
 MIN_FREE_RAM_GB = 3.0
 MAX_TASK_TIMEOUT_S = 900
 MAX_REPAIRS = 1
-MAX_IMPLEMENTATION_TASKS = 3
+MAX_IMPLEMENTATION_TASKS = 8
 CAMPAIGN_DEADLINE_MIN = 90
+MAX_CONSECUTIVE_FAILURES = 2
 STALE_LOCK_S = 300
 HEARTBEAT_STALE_S = 120
+OLLAMA_TAGS_URL = "http://127.0.0.1:11434/api/tags"
+POLICY_PATHS = (
+    "AGENTS.md",
+    "config/continuous_loop_tasks.json",
+    "scripts/continuous_loop.py",
+    "scripts/ty_task_runner.py",
+    "tools/autonomy_patches.py",
+)
+MODEL_RAM_HEADROOM_GB = 1.0
 PROTECTED_BRANCHES = {"main", "master", "release", "hotfix"}
 ALLOWED_RISK = {"low", "medium"}
 ALLOWED_EXECUTABLES = {"python", "python3", "pytest", "npm", "npx", "node"}
@@ -104,6 +124,405 @@ def _save_json(path: Path, data: Any) -> None:
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(json.dumps(data, indent=2), encoding="utf-8")
     os.replace(tmp, path)
+
+
+def _sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _policy_bytes(data: bytes) -> bytes:
+    # Windows checkouts may carry CRLF while the git blob carries LF. A policy
+    # fingerprint must compare content, not the checkout's line ending.
+    return data.replace(b"\r\n", b"\n")
+
+
+def _sha256_file(path: Path) -> Optional[str]:
+    try:
+        return _sha256_bytes(_policy_bytes(path.read_bytes()))
+    except OSError:
+        return None
+
+
+def _git_show(rel: str, rev: str = "HEAD") -> Optional[bytes]:
+    git = shutil.which("git") or "git"
+    proc = subprocess.run([git, "show", f"{rev}:{rel}"], cwd=str(ROOT),
+                          capture_output=True, timeout=60)
+    return proc.stdout if proc.returncode == 0 else None
+
+
+def policy_fingerprint(paths: Sequence[str] = POLICY_PATHS) -> Dict[str, Any]:
+    """Compare the working policy/registry bytes with the committed envelope.
+
+    The approved fingerprint is the committed HEAD copy, never a value the
+    running agent writes for itself. A policy or registry edit must be committed
+    (and therefore reviewed) before a campaign can start.
+    """
+    files = []
+    match = True
+    for rel in paths:
+        p = ROOT / rel
+        if not p.is_file():
+            continue
+        working = _sha256_file(p)
+        approved_blob = _git_show(rel)
+        approved = (_sha256_bytes(_policy_bytes(approved_blob))
+                    if approved_blob is not None else None)
+        same = bool(working and approved and working == approved)
+        match = match and same
+        files.append({"path": rel, "working": working, "approved": approved,
+                      "match": same})
+    if not files:
+        match = False
+    digest = _sha256_bytes(json.dumps(files, sort_keys=True).encode("utf-8"))
+    return {"ok": match, "files": files, "digest": digest}
+
+
+def _ollama_tags(timeout: float = 5.0) -> Dict[str, Any]:
+    """Read the installed model set from the local Ollama daemon only."""
+    try:
+        with urllib.request.urlopen(OLLAMA_TAGS_URL, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, OSError, json.JSONDecodeError) as exc:
+        return {"ok": False, "error": f"local Ollama unavailable: {exc}", "models": []}
+    models = []
+    for row in data.get("models") or []:
+        name = str(row.get("name") or "").strip()
+        if not name:
+            continue
+        models.append({
+            "name": name,
+            "size_bytes": int(row.get("size") or 0),
+            "size_gb": round(float(row.get("size") or 0) / (1024 ** 3), 2),
+            "modified_at": row.get("modified_at"),
+        })
+    return {"ok": True, "models": models, "error": ""}
+
+
+def _free_ram_gb() -> Optional[float]:
+    try:
+        import psutil  # type: ignore
+        return round(psutil.virtual_memory().available / (1024 ** 3), 3)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def resolve_lane(task: Optional[Dict[str, Any]] = None, *,
+                 tags: Optional[Dict[str, Any]] = None,
+                 free_ram_gb: Optional[float] = None) -> Dict[str, Any]:
+    """Pick the best installed chat lane that fits, re-checked at dispatch.
+
+    `bojo` is the proven Ty tool-loop lane and the smallest chat model present;
+    larger vision/7B lanes are not selected while they would crowd the RAM
+    floor. The model is never downloaded and no paid provider is considered.
+    """
+    task = task or {}
+    if str(task.get("execution") or "prebuilt") != "ty":
+        return {"ok": True, "provider": "prebuilt", "model": "", "reason":
+                "prebuilt task; no model call", "free_ram_gb": free_ram_gb,
+                "installed": []}
+    tags = tags if tags is not None else _ollama_tags()
+    if not tags.get("ok"):
+        return {"ok": False, "reason": tags.get("error") or "no local model lane",
+                "free_ram_gb": free_ram_gb, "installed": []}
+    free = float(free_ram_gb if free_ram_gb is not None else (_free_ram_gb() or 0.0))
+    installed = {m["name"]: m for m in tags.get("models") or []}
+    requested = str(task.get("model") or "").strip()
+    # Capability rank, not disk order. Bojo is the proven JSON/tool-call lane.
+    rank = {"bojo": 30, "bojo:gpu-orig": 28, "qwen3.5:2b": 22,
+            "qwen2.5vl:7b": 10}
+    candidates = []
+    for name, info in installed.items():
+        if name not in rank and not requested:
+            continue
+        estimate = max(0.1, float(info.get("size_gb") or 0) * 0.9)
+        fits = estimate <= max(0.0, free - MODEL_RAM_HEADROOM_GB)
+        candidates.append({"model": name, "rank": rank.get(name, 1),
+                           "estimated_ram_gb": round(estimate, 2),
+                           "fits": fits})
+    candidates.sort(key=lambda c: (c["rank"], -c["estimated_ram_gb"]), reverse=True)
+    chosen = next((c for c in candidates if c["fits"] and (not requested or c["model"] == requested)), None)
+    if chosen is None and requested:
+        chosen = next((c for c in candidates if c["fits"]), None)
+    if chosen is None:
+        return {"ok": False,
+                "reason": (f"no installed chat lane fits: free RAM {free:.2f} GB, "
+                           f"headroom {MODEL_RAM_HEADROOM_GB:.2f} GB"),
+                "free_ram_gb": free, "installed": candidates}
+    return {"ok": True, "provider": "ollama", "model": chosen["model"],
+            "reason": (f"{chosen['model']} is installed, proven for the Ty tool loop, "
+                       f"and estimated at {chosen['estimated_ram_gb']:.2f} GB; "
+                       f"free RAM {free:.2f} GB at dispatch"),
+            "free_ram_gb": free, "installed": candidates}
+
+
+def _copy_sqlite(src: Path, dest: Path) -> None:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    src_conn = sqlite3.connect(str(src), timeout=30)
+    try:
+        dst_conn = sqlite3.connect(str(dest))
+        try:
+            src_conn.backup(dst_conn)
+        finally:
+            dst_conn.close()
+    finally:
+        src_conn.close()
+
+
+def _checkpoint_targets() -> List[Path]:
+    out: List[Path] = []
+    for pattern in ("Northstar_backend/data/*.db", "data/*.db"):
+        out.extend(sorted(ROOT.glob(pattern)))
+    out.extend(sorted((ROOT / "config").glob("*.json")))
+    return [p for p in out if p.is_file()]
+
+
+def create_rollback_checkpoint(label: str = "ready") -> Dict[str, Any]:
+    """Fresh checkpoint from the current working tree, DBs, configs and models."""
+    sys.path.insert(0, str(ROOT / "Northstar_backend"))
+    from snapshot import snapshot  # noqa: E402
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out_dir = CHECKPOINT_ROOT / f"{stamp}-{label}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rec = snapshot(ROOT, f"ready-{stamp}")
+    git = shutil.which("git") or "git"
+    head = subprocess.run([git, "rev-parse", "HEAD"], cwd=str(ROOT),
+                          capture_output=True, text=True, timeout=60).stdout.strip()
+    branch = _branch()
+    status = subprocess.run([git, "status", "--porcelain=v1", "--untracked-files=all"],
+                            cwd=str(ROOT), capture_output=True, text=True, timeout=60)
+    staged = subprocess.run([git, "diff", "--cached", "--name-only"], cwd=str(ROOT),
+                            capture_output=True, text=True, timeout=60)
+    patch = subprocess.run([git, "diff", "--binary", "HEAD"], cwd=str(ROOT),
+                           capture_output=True, text=True, timeout=120)
+    (out_dir / "working_tree.txt").write_text(status.stdout or "", encoding="utf-8")
+    (out_dir / "staged_paths.txt").write_text(staged.stdout or "", encoding="utf-8")
+    (out_dir / "uncommitted.patch").write_text(patch.stdout or "", encoding="utf-8")
+    files = {}
+    errors = []
+    for target in _checkpoint_targets():
+        rel = target.relative_to(ROOT).as_posix()
+        dest = out_dir / "files" / rel
+        try:
+            if target.suffix.lower() == ".db":
+                _copy_sqlite(target, dest)
+            else:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(target, dest)
+            files[rel] = _sha256_file(dest)
+        except (OSError, sqlite3.Error) as exc:
+            errors.append({"path": rel, "error": str(exc)[:300]})
+    tags = _ollama_tags()
+    (out_dir / "model_manifest.json").write_text(json.dumps(tags, indent=2), encoding="utf-8")
+    record = {
+        "schema": "northstar.rollback_checkpoint.v1",
+        "label": label, "created_at": _now(), "dir": str(out_dir.relative_to(ROOT)),
+        "head": head, "branch": branch, "snapshot_sha": rec.get("sha"),
+        "snapshot_clean": rec.get("clean_tree"), "files": files, "errors": errors,
+        "model_manifest": {"ok": tags.get("ok"), "models": tags.get("models") or [],
+                           "error": tags.get("error") or ""},
+        "uncommitted_patch_bytes": len((out_dir / "uncommitted.patch").read_bytes()),
+        "staged_paths": [x for x in (staged.stdout or "").splitlines() if x.strip()],
+    }
+    _save_json(out_dir / "checkpoint.json", record)
+    return record
+
+
+def sandbox_restore_demo() -> Dict[str, Any]:
+    """Disposable git repo: modify/delete/create, restore, compare bytes."""
+    sys.path.insert(0, str(ROOT / "Northstar_backend"))
+    from snapshot import restore, snapshot  # noqa: E402
+    with tempfile.TemporaryDirectory(prefix="northstar-loop-ready-") as tmp:
+        root = Path(tmp)
+        git = shutil.which("git") or "git"
+        def g(*args: str) -> subprocess.CompletedProcess:
+            return subprocess.run([git, "-c", "core.autocrlf=false", *args], cwd=str(root),
+                                  capture_output=True, text=True, timeout=60)
+        if g("init", "-q").returncode != 0:
+            return {"ok": False, "error": "git init failed"}
+        g("config", "user.email", "loop@northstar.invalid")
+        g("config", "user.name", "loop readiness")
+        (root / "keep.txt").write_text("keep-original\n", encoding="utf-8")
+        (root / "gone.txt").write_text("gone-original\n", encoding="utf-8")
+        g("add", "keep.txt", "gone.txt")
+        if g("commit", "-m", "base").returncode != 0:
+            return {"ok": False, "error": "git commit failed"}
+        sha = snapshot(root, "ready-sandbox")["sha"]
+        before = {p.name: p.read_bytes() for p in (root / "keep.txt", root / "gone.txt")}
+        (root / "keep.txt").write_text("broken\n", encoding="utf-8")
+        (root / "gone.txt").unlink()
+        (root / "created.txt").write_text("new\n", encoding="utf-8")
+        restore(root, sha, ["keep.txt", "gone.txt"], remove_created=["created.txt"])
+        after = {p.name: p.read_bytes() for p in (root / "keep.txt", root / "gone.txt")}
+        return {"ok": before == after and not (root / "created.txt").exists(),
+                "bytes_match": before == after,
+                "created_removed": not (root / "created.txt").exists(),
+                "sha": sha}
+
+def _stop_probe() -> Dict[str, Any]:
+    """Prove the STOP file actually blocks dispatch, without touching the real STOP."""
+    global STOP_PATH
+    old = STOP_PATH
+    try:
+        with tempfile.TemporaryDirectory(prefix="northstar-stop-") as tmp:
+            STOP_PATH = Path(tmp) / "STOP"
+            STOP_PATH.write_text("stop", encoding="utf-8")
+            try:
+                execute_task({"id": "stop-probe", "execution": "prebuilt",
+                              "authorized": True, "risk": "low",
+                              "commit_paths": [], "checks": []},
+                             {"completed": {}, "tasks": {}})
+            except LoopError as exc:
+                return {"ok": "STOP" in str(exc), "detail": str(exc)[:200]}
+            return {"ok": False, "detail": "STOP did not block dispatch"}
+    finally:
+        STOP_PATH = old
+
+
+def _probe_writable(path: Path) -> Dict[str, Any]:
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+        probe = path / ".autonomy_ready_probe"
+        probe.write_text("ok", encoding="utf-8")
+        probe.unlink(missing_ok=True)
+        return {"ok": True, "detail": str(path)}
+    except OSError as exc:
+        return {"ok": False, "detail": str(exc)[:300]}
+
+
+def readiness_gate(*, make_checkpoint: bool = True,
+                   run_tests: bool = True) -> Dict[str, Any]:
+    """Full GO/NO-GO preflight. Every failure names its remediation."""
+    checks: List[Dict[str, Any]] = []
+
+    def add(name: str, ok: bool, detail: str, remediation: str = "") -> None:
+        checks.append({"name": name, "ok": bool(ok), "detail": detail,
+                       "remediation": "" if ok else remediation})
+
+    stop_absent = not (ROOT / "STOP").is_file()
+    add("stop-file", stop_absent, "STOP absent" if stop_absent else "STOP present",
+        "remove STOP only when you intend to allow dispatch")
+    stop = _stop_probe()
+    add("stop-mechanism", stop["ok"], stop.get("detail") or "",
+        "restore the STOP check in execute_task before launching")
+
+    disk = shutil.disk_usage(ROOT).free / (1024 ** 3)
+    add("disk-floor", disk >= MIN_FREE_DISK_GB, f"{disk:.2f} GB free",
+        f"free at least {MIN_FREE_DISK_GB:.0f} GB on the repo volume")
+    ram = _free_ram_gb()
+    add("ram-floor", ram is not None and ram >= MIN_FREE_RAM_GB,
+        f"{ram:.2f} GB free" if ram is not None else "RAM probe unavailable",
+        f"free at least {MIN_FREE_RAM_GB:.0f} GB RAM (stop background models/apps)")
+    state_probe = _probe_writable(ROOT / "state")
+    add("state-writable", state_probe["ok"], state_probe.get("detail") or "",
+        "grant write access to state/")
+    reports_probe = _probe_writable(ROOT / "reports")
+    add("reports-writable", reports_probe["ok"], reports_probe.get("detail") or "",
+        "grant write access to reports/")
+    ledger_ok = True
+    try:
+        LEDGER_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(LEDGER_PATH, "a", encoding="utf-8") as fh:
+            fh.write("")
+    except OSError:
+        ledger_ok = False
+    add("ledger-writable", ledger_ok, str(LEDGER_PATH),
+        "make reports/evaluation_ledger.jsonl writable")
+
+    fp = policy_fingerprint()
+    add("policy-fingerprint", fp["ok"],
+        f"{sum(1 for f in fp['files'] if f['match'])}/{len(fp['files'])} policy files match HEAD",
+        "commit the reviewed policy/registry/code envelope first (working copy must equal HEAD)")
+    add("git-present", bool(shutil.which("git")),
+        "git executable found" if shutil.which("git") else "git missing",
+        "install git and retry")
+
+    branch = _branch()
+    add("branch", branch not in PROTECTED_BRANCHES and not branch.startswith("release/"),
+        branch or "(unknown branch)", "switch to a dev/feature branch; protected branches are refused")
+
+    status_probe = _git(["status", "--porcelain=v1", "--untracked-files=all"])
+    add("working-tree-recorded", status_probe.get("ok", False),
+        "git status captured" if status_probe.get("ok") else status_probe.get("output", "")[:300],
+        "make git status work in this repository")
+
+    lock = _read_lock()
+    lock_ok = True
+    lock_detail = "no lock"
+    if lock:
+        pid = int(lock.get("pid") or 0)
+        if _is_pid_alive(pid):
+            lock_ok = False
+            lock_detail = f"live supervisor pid {pid}"
+        else:
+            lock_detail = f"stale lock from dead pid {pid}; reclaimable"
+    add("lock", lock_ok, lock_detail,
+        "wait for the live supervisor or remove only a proven-stale lock")
+    add("stale-lock-recovery", True,
+        "stale lock reclaim is covered by test_lock_refuses_a_live_owner_and_reclaims_a_dead_one",
+        "")
+
+    checkpoint = None
+    if make_checkpoint:
+        try:
+            checkpoint = create_rollback_checkpoint("ready")
+            cp_ok = not checkpoint.get("errors")
+            add("rollback-checkpoint", cp_ok,
+                f"{checkpoint['dir']} ({len(checkpoint.get('files') or {})} files)",
+                "close DB handles and fix checkpoint copy errors: " +
+                json.dumps(checkpoint.get("errors"))[:300])
+        except Exception as exc:  # noqa: BLE001
+            add("rollback-checkpoint", False, str(exc)[:300],
+                "ensure .git and state/checkpoints are writable")
+    demo = sandbox_restore_demo()
+    add("sandbox-restore", demo.get("ok", False), json.dumps(demo)[:300],
+        "repair snapshot/restore before campaign")
+
+    tags = _ollama_tags()
+    lane = resolve_lane({"execution": "ty", "model": ""}, tags=tags, free_ram_gb=ram)
+    add("model-lane", lane.get("ok", False),
+        lane.get("reason", "") + (f" | {lane.get('model')}" if lane.get("model") else ""),
+        "start local Ollama (`ollama serve`) and keep a chat lane installed; no downloads are allowed")
+
+    tests_ok = True
+    test_detail = "not run"
+    if run_tests:
+        test_cmd = ["python", "-m", "pytest",
+                    "Northstar_backend/test_continuous_loop.py::test_commit_paths_allowlist_and_denylist",
+                    "Northstar_backend/test_continuous_loop.py::test_scrub_redacts_secret_shaped_text",
+                    "Northstar_backend/test_continuous_loop.py::test_commit_task_preserves_pre_existing_staged_work",
+                    "-q"]
+        res = run_command(test_cmd, timeout=180)
+        tests_ok = bool(res.get("ok"))
+        test_detail = (res.get("output") or "")[-500:]
+    add("commit-and-redaction-tests", tests_ok, test_detail,
+        "fix the failing commit-path or secret-redaction test before launch")
+
+    result = {
+        "schema": "northstar.autonomy_readiness.v1",
+        "verdict": "GO" if all(c["ok"] for c in checks) else "NO-GO",
+        "ok": all(c["ok"] for c in checks),
+        "checked_at": _now(), "branch": branch,
+        "checkpoint": checkpoint, "model_lane": lane, "model_tags": tags,
+        "policy_fingerprint": fp, "checks": checks,
+        "failures": [c for c in checks if not c["ok"]],
+    }
+    _save_json(READINESS_PATH, result)
+    return result
+
+
+def render_readiness(result: Dict[str, Any], as_json: bool = False) -> str:
+    if as_json:
+        return json.dumps(result, indent=2)
+    lines = [f"{result.get('verdict', 'NO-GO')} — autonomy readiness"]
+    for c in result.get("checks") or []:
+        lines.append(f"  [{'PASS' if c['ok'] else 'FAIL'}] {c['name']}: {c['detail']}")
+        if not c["ok"]:
+            lines.append(f"         remediation: {c.get('remediation') or 'none given'}")
+    cp = result.get("checkpoint") or {}
+    lines.append(f"checkpoint: {cp.get('dir') or 'none'}")
+    lane = result.get("model_lane") or {}
+    lines.append(f"lane: {lane.get('provider')}/{lane.get('model') or '-'} — {lane.get('reason')}")
+    return "\n".join(lines)
 
 
 def load_tasks(path: Path = TASKS_PATH) -> Dict[str, Any]:
@@ -198,6 +617,19 @@ def heartbeat_age() -> Optional[float]:
     return time.time() - float(data["last_seen_ts"])
 
 
+def _terminate_pid(pid: int) -> None:
+    if pid <= 0 or not _is_pid_alive(pid):
+        return
+    if os.name == "nt":
+        subprocess.run(["taskkill", "/T", "/F", "/PID", str(pid)],
+                       capture_output=True, text=True, timeout=30)
+    else:
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except OSError:
+            pass
+
+
 def recover_interrupted(state: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Mark a stale running/verifying task interrupted. Never auto-replays it."""
     recovered = []
@@ -208,10 +640,20 @@ def recover_interrupted(state: Dict[str, Any]) -> List[Dict[str, Any]]:
         age = heartbeat_age()
         if _is_pid_alive(pid) and (age is None or age < HEARTBEAT_STALE_S):
             continue
+        worker_pid = 0
+        run_id = str(record.get("run_id") or "")
+        if run_id:
+            worker = _load_json(RUN_DIR / run_id / "worker.json", {}) or {}
+            worker_pid = int(worker.get("pid") or 0)
+        if worker_pid and _is_pid_alive(worker_pid):
+            _terminate_pid(worker_pid)
         record["status"] = "interrupted"
         record["reason"] = "stale heartbeat or dead owner process"
         record["interrupted_at"] = _now()
-        recovered.append({"task": task_id, "pid": pid, "heartbeat_age": age})
+        record["orphan_worker_pid"] = worker_pid
+        recovered.append({"task": task_id, "pid": pid, "heartbeat_age": age,
+                          "worker_pid": worker_pid,
+                          "worker_terminated": bool(worker_pid and _is_pid_alive(worker_pid))})
     if recovered:
         _save_json(STATE_PATH, state)
     return recovered
@@ -304,6 +746,27 @@ def validate_task(task: Dict[str, Any]) -> List[str]:
             errors.append("ty task needs an objective")
         if not task.get("write_paths"):
             errors.append("ty task needs write_paths")
+    apply_commands = task.get("apply_commands") or []
+    precheck_commands = task.get("precheck_commands") or []
+    if apply_commands and not task.get("write_paths"):
+        errors.append("an apply task needs write_paths")
+    if apply_commands and not precheck_commands:
+        errors.append("an apply task needs at least one precheck_commands (fails before the fix)")
+    for cmd in apply_commands:
+        reason = check_command(cmd)
+        if reason:
+            errors.append(f"apply command: {reason}")
+    for cmd in precheck_commands:
+        reason = check_command(cmd)
+        if reason:
+            errors.append(f"precheck command: {reason}")
+    if int(task.get("schema_version") or 1) >= 2:
+        if not str(task.get("authorization_note") or "").strip():
+            errors.append("v2 task needs an authorization_note")
+        if not str(task.get("objective") or "").strip():
+            errors.append("v2 task needs an objective")
+        if not str(task.get("risk_class") or task.get("risk") or "").strip():
+            errors.append("v2 task needs a risk class")
     _, refused = validate_scope_paths(task.get("write_paths") or [])
     if refused:
         errors.append("write_paths refused: " + "; ".join(refused))
@@ -474,7 +937,10 @@ def take_baseline(task: Dict[str, Any], run_id: str) -> Dict[str, Any]:
         dest = backup_root / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dest)
-        backups[rel] = str(dest.relative_to(ROOT))
+        try:
+            backups[rel] = str(dest.relative_to(ROOT))
+        except ValueError:
+            backups[rel] = str(dest)
     return {
         "sha": rec["sha"],
         "label": rec["label"],
@@ -503,10 +969,13 @@ def restore_baseline(baseline: Dict[str, Any], paths: Optional[Sequence[str]] = 
     for rel in task_targets:
         dest = ROOT / rel
         backup = byte_backup.get(rel)
-        if backup and (ROOT / backup).is_file():
+        backup_path = Path(backup) if backup else None
+        if backup_path is not None and not backup_path.is_absolute():
+            backup_path = ROOT / backup_path
+        if backup_path is not None and backup_path.is_file():
             if not dry_run:
                 dest.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(ROOT / backup, dest)
+                shutil.copy2(backup_path, dest)
             restored.append(rel)
         elif dest.exists():
             if not dry_run:
@@ -596,7 +1065,7 @@ def _terminate_tree(proc: subprocess.Popen) -> None:
 
 
 def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
-                timeout_s: int) -> Dict[str, Any]:
+                timeout_s: int, runner_script: Optional[Path] = None) -> Dict[str, Any]:
     task_path = run_dir / "task.json"
     result_path = run_dir / "result.json"
     heartbeat_path = run_dir / "heartbeat.json"
@@ -615,12 +1084,15 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
     })
     log = open(run_dir / "ty.log", "w", encoding="utf-8")
     flags = getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+    runner = Path(runner_script) if runner_script else (ROOT / "scripts" / "ty_task_runner.py")
     proc = subprocess.Popen(
-        [sys.executable, str(ROOT / "scripts" / "ty_task_runner.py"),
+        [sys.executable, str(runner),
          "--task", str(task_path), "--result", str(result_path),
          "--heartbeat", str(heartbeat_path), "--root", str(ROOT)],
         cwd=str(ROOT), stdout=log, stderr=subprocess.STDOUT, text=True,
         creationflags=flags)
+    _save_json(run_dir / "worker.json", {"pid": proc.pid, "task": task.get("id"),
+                                         "started_at": _now()})
     deadline = time.time() + timeout_s
     stopped = ""
     try:
@@ -663,8 +1135,147 @@ def run_checks(task: Dict[str, Any], *, dry_run: bool = False) -> List[Dict[str,
     return results
 
 
+def run_task_commands(task: Dict[str, Any], key: str, *,
+                      dry_run: bool = False) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for cmd in task.get(key) or []:
+        res = run_command(cmd, timeout=float(task.get("timeout_seconds") or 600),
+                          dry_run=dry_run)
+        out.append({"cmd": list(cmd), "ok": res.get("ok"), "exit": res.get("exit"),
+                    "duration_s": res.get("duration_s"), "error": res.get("error"),
+                    "output": (res.get("output") or "")[-800:]})
+        if not dry_run and key == "apply_commands" and not res.get("ok"):
+            break
+    return out
+
+
+def run_prechecks(task: Dict[str, Any], *, dry_run: bool = False) -> Dict[str, Any]:
+    """A precheck must FAIL before the fix. An always-green precheck is refused."""
+    commands = task.get("precheck_commands") or []
+    if not commands:
+        return {"ok": True, "commands": [], "expected": "none"}
+    results = run_task_commands(task, "precheck_commands", dry_run=dry_run)
+    if dry_run:
+        return {"ok": True, "commands": results, "expected": "fail"}
+    all_failed = bool(results) and all(not r["ok"] for r in results)
+    return {"ok": all_failed, "commands": results, "expected": "fail",
+            "detail": ("all prechecks failed as required" if all_failed
+                       else "a precheck passed before the fix; task is a no-op")}
+
+
 def execute_task(task: Dict[str, Any], state: Dict[str, Any], *,
-                 dry_run: bool = False, no_commit: bool = False) -> Dict[str, Any]:
+                 dry_run: bool = False, no_commit: bool = False,
+                 lane: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    task_id = str(task.get("id"))
+    if STOP_PATH.is_file():
+        raise LoopError("STOP present before dispatch")
+    if dry_run:
+        return {"status": "dry_run", "checks": run_checks(task, dry_run=True),
+                "prechecks": run_prechecks(task, dry_run=True),
+                "commit": None, "changed": [], "lane": lane or resolve_lane(task)}
+    started = time.time()
+    run_id = f"{task_id}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
+    run_dir = RUN_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+    record = state["tasks"].setdefault(task_id, {})
+    lane = lane or resolve_lane(task)
+    record.update({"status": "running", "run_id": run_id, "pid": os.getpid(),
+                   "started_at": _now(), "reason": "", "lane": lane})
+    _save_json(STATE_PATH, state)
+    write_heartbeat(run_id, task_id, "dispatch")
+    baseline = None
+    changed: Set[str] = set()
+    checks: List[Dict[str, Any]] = []
+    prechecks: Dict[str, Any] = {"ok": True, "commands": [], "expected": "none"}
+    applied: List[Dict[str, Any]] = []
+    result: Dict[str, Any] = {"ok": False, "error": "not run"}
+    try:
+        if task.get("write_paths") or task.get("apply_commands") or task.get("execution") == "ty":
+            baseline = take_baseline(task, run_id)
+            record["baseline"] = baseline
+            _save_json(STATE_PATH, state)
+        prechecks = run_prechecks(task)
+        record["prechecks"] = prechecks
+        _save_json(STATE_PATH, state)
+        if not prechecks.get("ok"):
+            raise LoopError("precheck failed: " + str(prechecks.get("detail")))
+        if task.get("apply_commands"):
+            write_heartbeat(run_id, task_id, "apply")
+            applied = run_task_commands(task, "apply_commands")
+            if not all(r["ok"] for r in applied):
+                failed = next(r for r in applied if not r["ok"])
+                raise LoopError(f"apply command failed: {failed.get('error')}")
+        if task.get("execution") == "ty":
+            if not lane.get("ok"):
+                raise LoopError("model lane unavailable: " + str(lane.get("reason")))
+            worker_task = dict(task)
+            worker_task["model"] = lane.get("model") or ""
+            worker_task["provider"] = lane.get("provider") or ""
+            write_heartbeat(run_id, task_id, "ty")
+            result = run_ty_task(worker_task, run_id, run_dir,
+                                 int(task.get("timeout_seconds") or 600))
+            record["status"] = "verifying"
+            _save_json(STATE_PATH, state)
+            if not result.get("ok"):
+                raise LoopError(str(result.get("error") or "Ty task failed"))
+            after_status = _status_set()
+            changed = _changed_since(baseline["sha"], set(baseline["status"]))
+            out_of_scope = changed - set(baseline["write_paths"])
+            if out_of_scope:
+                raise LoopError("out-of-scope edits: " + ", ".join(sorted(out_of_scope)[:8]))
+        write_heartbeat(run_id, task_id, "checks")
+        checks = run_checks(task, dry_run=dry_run)
+        if not all(c["ok"] for c in checks):
+            failed = next(c for c in checks if not c["ok"])
+            raise LoopError(f"acceptance failed: {failed['name']}: {failed.get('error')}")
+        if baseline is not None:
+            changed = _changed_since(baseline["sha"], set(baseline["status"]))
+            outside = changed - set(baseline["write_paths"])
+            if outside:
+                raise LoopError("out-of-scope edits: " + ", ".join(sorted(outside)[:8]))
+        if not no_commit:
+            commit = commit_task(task, changed, baseline or {}, dry_run=dry_run)
+            if not commit.get("ok"):
+                raise LoopError("commit failed: " + str(commit.get("error")))
+        else:
+            commit = {"ok": True, "committed": False, "reason": "no-commit"}
+        duration = round(time.time() - started, 3)
+        record.update({"status": "completed", "finished_at": _now(),
+                       "commit": commit.get("sha") or "", "reason": "",
+                       "duration_s": duration, "lane": lane,
+                       "prechecks": prechecks, "apply": applied})
+        _save_json(STATE_PATH, state)
+        return {"status": "completed", "checks": checks, "commit": commit,
+                "changed": sorted(changed), "ty": result, "lane": lane,
+                "prechecks": prechecks, "apply": applied, "duration_s": duration}
+    except Exception as exc:  # noqa: BLE001 - restore, record, stop
+        reason = str(exc)[:1000]
+        restoration = None
+        if baseline is not None:
+            try:
+                changed = _changed_since(baseline["sha"], set(baseline["status"]))
+                restoration = restore_baseline(
+                    baseline, paths=sorted(set(baseline["write_paths"]) | changed))
+            except Exception as restore_exc:  # noqa: BLE001
+                reason += f"; RESTORATION FAILED: {restore_exc}"
+                record.update({"status": "failed", "finished_at": _now(),
+                               "reason": reason, "restoration": "failed",
+                               "duration_s": round(time.time() - started, 3),
+                               "lane": lane, "prechecks": prechecks, "apply": applied})
+                _save_json(STATE_PATH, state)
+                return {"status": "failed", "error": reason, "checks": checks,
+                        "prechecks": prechecks, "apply": applied, "lane": lane,
+                        "restoration": "failed"}
+        record.update({"status": "failed", "finished_at": _now(),
+                       "reason": reason, "restoration": "ok" if restoration else "not-needed",
+                       "duration_s": round(time.time() - started, 3),
+                       "lane": lane, "prechecks": prechecks, "apply": applied})
+        _save_json(STATE_PATH, state)
+        return {"status": "failed", "error": reason, "checks": checks,
+                "prechecks": prechecks, "apply": applied, "lane": lane,
+                "restoration": restoration, "ty": result}
+    finally:
+        write_heartbeat(run_id, task_id, "finished")
     task_id = str(task.get("id"))
     if STOP_PATH.is_file():
         raise LoopError("STOP present before dispatch")
@@ -743,6 +1354,237 @@ def execute_task(task: Dict[str, Any], state: Dict[str, Any], *,
         write_heartbeat(run_id, task_id, "finished")
 
 
+def autonomy_log_path(day: Optional[str] = None) -> Path:
+    stamp = day or datetime.now(timezone.utc).strftime("%Y%m%d")
+    return AUTONOMY_LOG_DIR / f"autonomy_log_{stamp}.log"
+
+
+def log_event(run_id: str, message: str) -> None:
+    path = autonomy_log_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(f"{_now()} [{run_id}] {_scrub(message)}\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+
+
+def write_campaign_heartbeat(*, run_id: str, status: str, started_at: str,
+                             deadline_at: str, current_task: str = "",
+                             phase: str = "", attempted: int = 0,
+                             completed: int = 0, failed: int = 0,
+                             blocked: int = 0, remaining: int = 0,
+                             consecutive_failures: int = 0,
+                             active_lane: Optional[Dict[str, Any]] = None,
+                             stop_reason: str = "") -> None:
+    _save_json(CAMPAIGN_HEARTBEAT_PATH, {
+        "schema": "northstar.campaign_heartbeat.v1",
+        "run_id": run_id, "status": status, "started_at": started_at,
+        "deadline_at": deadline_at, "updated_at": _now(),
+        "updated_ts": time.time(), "current_task": current_task,
+        "phase": phase, "attempted": attempted, "completed": completed,
+        "failed": failed, "blocked": blocked, "remaining": remaining,
+        "consecutive_failures": consecutive_failures,
+        "active_lane": active_lane or {}, "stop_reason": stop_reason,
+        "ram_free_gb": _free_ram_gb(),
+        "disk_free_gb": round(shutil.disk_usage(ROOT).free / (1024 ** 3), 3),
+    })
+
+
+def write_campaign_manifest(*, run_id: str, started_at: str, finished_at: str,
+                            stop_reason: str, results: List[Dict[str, Any]],
+                            readiness: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    CAMPAIGN_MANIFEST_DIR.mkdir(parents=True, exist_ok=True)
+    counts = {"completed": 0, "failed": 0, "dry_run": 0}
+    for row in results:
+        counts[row.get("status", "failed")] = counts.get(row.get("status", "failed"), 0) + 1
+    manifest = {
+        "schema": "northstar.campaign_manifest.v1",
+        "run_id": run_id, "started_at": started_at, "finished_at": finished_at,
+        "stop_reason": stop_reason, "counts": counts,
+        "readiness": {k: readiness.get(k) for k in ("verdict", "ok", "checked_at",
+                                                    "model_lane", "branch")}
+        if readiness else None,
+        "tasks": results,
+    }
+    path = CAMPAIGN_MANIFEST_DIR / f"{run_id}.json"
+    _save_json(path, manifest)
+    try:
+        report = AUTONOMY_LOG_DIR / f"campaign_{run_id}.json"
+        _save_json(report, manifest)
+        manifest["report_path"] = str(report)
+    except OSError:
+        pass
+    return manifest
+
+
+def _remaining_count(tasks: Dict[str, Any], state: Dict[str, Any]) -> int:
+    return sum(1 for t in tasks.get("tasks") or []
+               if task_status(state, str(t.get("id"))) == "pending")
+
+
+def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
+                 max_tasks: int = MAX_IMPLEMENTATION_TASKS,
+                 deadline_minutes: float = CAMPAIGN_DEADLINE_MIN,
+                 max_cycles: int = 0,
+                 max_consecutive_failures: int = MAX_CONSECUTIVE_FAILURES,
+                 dry_run: bool = False, no_commit: bool = False,
+                 task_id: str = "", readiness: Optional[Dict[str, Any]] = None,
+                 execute: Any = None) -> Dict[str, Any]:
+    """Bounded foreground campaign; both task and time limits are mandatory."""
+    started = time.time()
+    started_at = _now()
+    deadline_s = max(0.0, float(deadline_minutes) * 60.0)
+    deadline_at = datetime.fromtimestamp(started + deadline_s, timezone.utc).isoformat(timespec="seconds")
+    max_tasks = max(0, int(max_tasks))
+    max_consecutive = max(1, int(max_consecutive_failures))
+    run_id = f"campaign-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
+    execute = execute or execute_task
+    readiness = readiness if readiness is not None else (
+        {"ok": True, "verdict": "SKIPPED", "checks": []} if dry_run else readiness_gate())
+    results: List[Dict[str, Any]] = []
+    attempted = completed = failed = consecutive = implementation = 0
+    stop_reason = ""
+    lock = None
+    active_lane: Dict[str, Any] = {}
+    try:
+        if not dry_run and not readiness.get("ok"):
+            stop_reason = "readiness_no_go"
+            log_event(run_id, "refused launch: readiness NO-GO")
+            manifest = write_campaign_manifest(
+                run_id=run_id, started_at=started_at, finished_at=_now(),
+                stop_reason=stop_reason, results=results, readiness=readiness)
+            return {"ok": False, "run_id": run_id, "stop_reason": stop_reason,
+                    "readiness": readiness, "results": results, "manifest": manifest}
+        if not dry_run:
+            lock = acquire_lock(run_id)
+        log_event(run_id, f"campaign start max_tasks={max_tasks} "
+                          f"deadline_minutes={deadline_minutes} "
+                          f"max_consecutive_failures={max_consecutive}")
+        while True:
+            if time.time() - started >= deadline_s:
+                stop_reason = "deadline_minutes"
+                break
+            remaining = _remaining_count(tasks, state)
+            write_campaign_heartbeat(
+                run_id=run_id, status="running", started_at=started_at,
+                deadline_at=deadline_at, attempted=attempted, completed=completed,
+                failed=failed, blocked=sum(1 for t in tasks.get("tasks") or []
+                                           if blocked_reason(t, state)),
+                remaining=remaining, consecutive_failures=consecutive,
+                active_lane=active_lane)
+            if time.time() - started > deadline_s:
+                stop_reason = "deadline_minutes"
+                break
+            if attempted >= max_tasks:
+                stop_reason = "max_tasks"
+                break
+            if max_cycles and attempted >= max_cycles:
+                stop_reason = "max_cycles"
+                break
+            if STOP_PATH.is_file():
+                stop_reason = "stop_file"
+                break
+            task = select_task(tasks, state, task_id or None)
+            if task is None:
+                stop_reason = "queue_exhausted" if remaining == 0 else "queue_blocked"
+                break
+            active_lane = resolve_lane(task)
+            tid = str(task.get("id"))
+            log_event(run_id, f"dispatch task={tid} lane={active_lane.get('model') or 'prebuilt'} "
+                              f"phase=precheck")
+            write_campaign_heartbeat(
+                run_id=run_id, status="running", started_at=started_at,
+                deadline_at=deadline_at, current_task=tid, phase="precheck",
+                attempted=attempted, completed=completed, failed=failed,
+                remaining=remaining, consecutive_failures=consecutive,
+                active_lane=active_lane)
+            result = execute(task, state, dry_run=dry_run, no_commit=no_commit,
+                             lane=active_lane)
+            attempted += 1
+            status = str(result.get("status") or "failed")
+            results.append({"task": tid, "name": task.get("name"), "status": status,
+                            "commit": (result.get("commit") or {}).get("sha") or "",
+                            "duration_s": result.get("duration_s"),
+                            "lane": result.get("lane") or active_lane,
+                            "prechecks": result.get("prechecks"),
+                            "apply": result.get("apply"),
+                            "error": _scrub(str(result.get("error") or "")),
+                            "restoration": result.get("restoration")})
+            log_event(run_id, f"{status} task={tid} commit="
+                              f"{(result.get('commit') or {}).get('sha') or '-'} "
+                              f"duration={result.get('duration_s')}")
+            if dry_run:
+                stop_reason = "dry_run"
+                break
+            try:
+                append_ledger({
+                    "run_id": run_id, "task": tid, "name": task.get("name"),
+                    "status": status, "started_at": _now(), "finished_at": _now(),
+                    "duration_s": result.get("duration_s"),
+                    "lane": result.get("lane") or active_lane,
+                    "checks": result.get("checks"),
+                    "prechecks": result.get("prechecks"),
+                    "apply": result.get("apply"),
+                    "commit": result.get("commit"),
+                    "changed": result.get("changed"),
+                    "restoration": result.get("restoration"),
+                    "error": _scrub(str(result.get("error") or "")),
+                })
+            except OSError as exc:
+                log_event(run_id, f"ledger write failed: {exc}")
+            if status == "completed":
+                completed += 1
+                consecutive = 0
+                if task.get("execution") == "ty":
+                    implementation += 1
+            else:
+                failed += 1
+                consecutive += 1
+                if consecutive >= max_consecutive:
+                    stop_reason = "max_consecutive_failures"
+                    log_event(run_id, f"halt: {consecutive} consecutive failures")
+                    break
+            if task_id:
+                stop_reason = "single_task"
+                break
+        if not stop_reason:
+            stop_reason = "queue_exhausted"
+        write_campaign_heartbeat(
+            run_id=run_id, status="finished", started_at=started_at,
+            deadline_at=deadline_at, attempted=attempted, completed=completed,
+            failed=failed, remaining=_remaining_count(tasks, state),
+            consecutive_failures=consecutive, active_lane=active_lane,
+            stop_reason=stop_reason)
+        log_event(run_id, f"campaign stop reason={stop_reason} attempted={attempted} "
+                          f"completed={completed} failed={failed}")
+        manifest = write_campaign_manifest(
+            run_id=run_id, started_at=started_at, finished_at=_now(),
+            stop_reason=stop_reason, results=results, readiness=readiness)
+        return {"ok": (dry_run or failed == 0) and stop_reason not in ("readiness_no_go",),
+                "run_id": run_id, "stop_reason": stop_reason,
+                "attempted": attempted, "completed": completed, "failed": failed,
+                "implementation_tasks": implementation,
+                "manifest": manifest, "results": results,
+                "readiness": readiness}
+    except LoopError as exc:
+        stop_reason = f"loop_error: {exc}"
+        log_event(run_id, f"halt: {stop_reason}")
+        return {"ok": False, "run_id": run_id, "stop_reason": stop_reason,
+                "error": str(exc), "results": results, "readiness": readiness}
+    finally:
+        if lock is not None:
+            release_lock()
+        try:
+            write_campaign_heartbeat(
+                run_id=run_id, status="finished", started_at=started_at,
+                deadline_at=deadline_at, attempted=attempted, completed=completed,
+                failed=failed, remaining=_remaining_count(tasks, state),
+                consecutive_failures=consecutive, active_lane=active_lane,
+                stop_reason=stop_reason or "unknown")
+        except OSError:
+            pass
+
+
 def status_report(tasks: Dict[str, Any], state: Dict[str, Any],
                   ledger_path: Path = LEDGER_PATH) -> Dict[str, Any]:
     rows = []
@@ -771,9 +1613,49 @@ def status_report(tasks: Dict[str, Any], state: Dict[str, Any],
             buckets["pending"].append(tid)
         else:
             buckets["pending"].append(tid)
-    return {"tasks": [{"id": t.get("id"), "status": task_status(state, str(t.get("id"))),
-                       "reason": blocked_reason(t, state)} for t in tasks.get("tasks") or []],
-            "buckets": buckets, "last_cycles": rows}
+    campaign = _load_json(CAMPAIGN_HEARTBEAT_PATH, {}) or {}
+    if not isinstance(campaign, dict):
+        campaign = {}
+    running = campaign.get("status") == "running"
+    current = campaign.get("current_task") or ""
+    remaining = [t.get("id") for t in tasks.get("tasks") or []
+                 if task_status(state, str(t.get("id"))) == "pending"]
+    return {
+        "running": running,
+        "campaign": campaign,
+        "current": current,
+        "phase": campaign.get("phase") or "",
+        "finished": buckets["completed"],
+        "failed": buckets["failed"],
+        "interrupted": buckets["interrupted"],
+        "remaining": remaining,
+        "blocked": buckets["blocked"],
+        "tasks": [{"id": t.get("id"), "status": task_status(state, str(t.get("id"))),
+                   "reason": blocked_reason(t, state)} for t in tasks.get("tasks") or []],
+        "buckets": buckets, "last_cycles": rows,
+    }
+
+
+def render_status(report: Dict[str, Any]) -> str:
+    camp = report.get("campaign") or {}
+    lines = [
+        f"RUNNING: {'yes' if report.get('running') else 'no'}  "
+        f"run={camp.get('run_id') or '-'}  stop={camp.get('stop_reason') or '-'}",
+        f"NOW: {report.get('current') or '-'}  phase={report.get('phase') or '-'}  "
+        f"lane={(camp.get('active_lane') or {}).get('model') or '-'}",
+        f"COUNTS: completed={len(report.get('finished') or [])} "
+        f"failed={len(report.get('failed') or [])} "
+        f"interrupted={len(report.get('interrupted') or [])} "
+        f"remaining={len(report.get('remaining') or [])} "
+        f"blocked={len(report.get('blocked') or [])}",
+        f"RAM={camp.get('ram_free_gb') or '?'}GB DISK={camp.get('disk_free_gb') or '?'}GB "
+        f"updated={camp.get('updated_at') or '-'}",
+    ]
+    for row in report.get("failed") or []:
+        lines.append(f"FAILED {row.get('id')}: {row.get('reason') or ''}")
+    for row in report.get("blocked") or []:
+        lines.append(f"BLOCKED {row.get('id')}: {row.get('reason') or ''}")
+    return "\n".join(lines)
 
 
 def resume_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
@@ -791,29 +1673,44 @@ def resume_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any]) -> D
 
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--ready", action="store_true", help="run the full GO/NO-GO preflight")
+    ap.add_argument("--status", action="store_true", help="one-screen campaign/task status")
+    ap.add_argument("--json", action="store_true", help="machine-readable output")
     ap.add_argument("--task", default="", help="run one task id")
     ap.add_argument("--once", action="store_true", help="run at most one task")
     ap.add_argument("--max-cycles", type=int, default=0,
                     help="0 = all eligible (still bounded by --max-tasks/deadline)")
     ap.add_argument("--max-tasks", type=int, default=MAX_IMPLEMENTATION_TASKS,
-                    help="maximum Ty implementation tasks (default 3)")
+                    help="maximum tasks attempted in this campaign (default 8)")
     ap.add_argument("--deadline-minutes", type=float, default=CAMPAIGN_DEADLINE_MIN)
+    ap.add_argument("--max-consecutive-failures", type=int,
+                    default=MAX_CONSECUTIVE_FAILURES,
+                    help="halt after N consecutive failed tasks (default 2)")
     ap.add_argument("--dry-run", action="store_true", help="print commands, write nothing")
     ap.add_argument("--no-commit", action="store_true", help="verify only")
     ap.add_argument("--resume", default="", help="explicitly resume a failed/interrupted task id")
-    ap.add_argument("--status", action="store_true")
+    ap.add_argument("--stop", action="store_true", help="create STOP for a safe stop")
     args = ap.parse_args(argv)
+
+    if args.ready:
+        result = readiness_gate()
+        print(render_readiness(result, as_json=args.json))
+        return 0 if result.get("ok") else 2
+    if args.stop:
+        STOP_PATH.write_text(f"operator stop {_now()}\n", encoding="utf-8")
+        print(f"STOP created at {STOP_PATH}")
+        return 0
 
     tasks = load_tasks()
     state = load_state()
     recover_interrupted(state)
     if args.status:
-        print(json.dumps(status_report(tasks, state), indent=2))
+        report = status_report(tasks, state)
+        if args.json:
+            print(json.dumps(report, indent=2))
+        else:
+            print(render_status(report))
         return 0
-    guard = guardrails()
-    if not guard["ok"] and not args.dry_run:
-        print(json.dumps({"ok": False, "guardrails": guard}, indent=2))
-        return 2
     if args.resume:
         try:
             resume_task(args.resume, tasks, state)
@@ -821,64 +1718,25 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(json.dumps({"ok": False, "error": str(exc)}))
             return 2
 
-    started = time.time()
-    deadline_s = max(1.0, float(args.deadline_minutes) * 60.0)
-    max_tasks = max(1, int(args.max_tasks))
-    limit = 1 if args.once else max(0, int(args.max_cycles))
-    implementation_done = 0
-    completed = 0
-    run_id = f"campaign-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-    lock = None
-    try:
-        if not args.dry_run:
-            lock = acquire_lock(run_id)
-        while True:
-            if time.time() - started > deadline_s:
-                print(json.dumps({"ok": False, "error": "campaign deadline reached"}))
-                break
-            if limit and completed >= limit:
-                break
-            task = select_task(tasks, state, args.task or None)
-            if task is None:
-                break
-            if task.get("execution") == "ty" and implementation_done >= max_tasks:
-                print(json.dumps({"ok": False, "error": "implementation task budget reached",
-                                  "max_tasks": max_tasks}))
-                break
-            print(f"[*] cycle {task.get('id')}: {task.get('name')}")
-            result = execute_task(task, state, dry_run=args.dry_run,
-                                  no_commit=args.no_commit)
-            print(f"    {result.get('status')} ({len(result.get('checks') or [])} checks)")
-            if args.dry_run:
-                print(json.dumps(result, indent=2)[:4000])
-                return 0
-            if not args.dry_run:
-                append_ledger({"run_id": run_id, "task": task.get("id"),
-                               "name": task.get("name"), "status": result.get("status"),
-                               "started_at": _now(), "finished_at": _now(),
-                               "checks": result.get("checks"), "commit": result.get("commit"),
-                               "changed": result.get("changed"),
-                               "restoration": result.get("restoration"),
-                               "error": _scrub(str(result.get("error") or ""))})
-            if result.get("status") != "completed":
-                print(json.dumps(result, indent=2)[:4000])
-                return 1
-            if task.get("execution") == "ty":
-                implementation_done += 1
-            completed += 1
-            if args.task:
-                break
-    except LoopError as exc:
-        print(json.dumps({"ok": False, "error": str(exc)}))
-        return 2
-    finally:
-        if lock is not None and not args.dry_run:
-            release_lock()
-    report = status_report(tasks, state)
-    print(json.dumps({"ok": True, "completed": completed,
-                      "implementation_tasks": implementation_done,
-                      "buckets": report["buckets"]}, indent=2))
-    return 0
+    max_tasks = 1 if args.once else max(0, int(args.max_tasks))
+    max_cycles = 1 if args.once else max(0, int(args.max_cycles))
+    result = run_campaign(
+        tasks, state, max_tasks=max_tasks,
+        deadline_minutes=args.deadline_minutes, max_cycles=max_cycles,
+        max_consecutive_failures=max(1, int(args.max_consecutive_failures)),
+        dry_run=args.dry_run, no_commit=args.no_commit,
+        task_id=args.task)
+    if args.json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(render_status(status_report(tasks, state)))
+        print(json.dumps({"ok": result.get("ok"), "run_id": result.get("run_id"),
+                          "stop_reason": result.get("stop_reason"),
+                          "attempted": result.get("attempted"),
+                          "completed": result.get("completed"),
+                          "failed": result.get("failed"),
+                          "manifest": (result.get("manifest") or {}).get("run_id")}, indent=2))
+    return 0 if result.get("ok") else 1
 
 
 if __name__ == "__main__":

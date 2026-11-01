@@ -1,123 +1,328 @@
 {
   "schema": "northstar.continuous_loop.v2",
   "updated_at": "2026-10-31T00:00:00Z",
-  "notes": "A task is selected in array order. Explicit authorization (authorized=true), low/medium risk, dependencies, scope, checks and commit paths are enforced. Completed/failed/interrupted state lives in state/continuous_loop_state.json; the registry is not rewritten. blocked is a reason string or true.",
+  "notes": "Authorized, offline-only queue for the long-campaign bridge. Every runnable task has an apply command and a precheck that MUST fail before the fix. Discovery may append proposed entries; it may never set authorized=true. Anything touching auth, payments, browser, credentials, Amazon or external I/O is blocked-not-authorized.",
   "tasks": [
     {
-      "id": "cycle6-continuous-loop",
-      "name": "Continuous loop supervisor + evaluation ledger",
+      "id": "hitl-pathlike",
+      "name": "HITL counts accepts path-like roots",
+      "schema_version": 2,
       "authorized": true,
+      "authorization_note": "Local-only defensive fix requested by the 2026-10-31 autonomy directive; no auth, payment, browser, credential or external I/O.",
       "risk": "low",
+      "risk_class": "low",
       "execution": "prebuilt",
-      "commit_message": "chore(loop): activate continuous loop supervisor",
-      "commit_paths": [
-        "config/continuous_loop_tasks.json",
-        "docs/CONTINUOUS_LOOP.md",
-        "scripts/continuous_loop.py",
-        "Northstar_backend/test_continuous_loop.py"
-      ],
-      "checks": [
-        {
-          "name": "Python syntax",
-          "cmd": ["python", "-m", "py_compile", "scripts/continuous_loop.py", "scripts/ty_task_runner.py", "Northstar_backend/test_continuous_loop.py"],
-          "cwd": "."
-        },
-        {
-          "name": "Continuous-loop self-tests",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_continuous_loop.py", "Northstar_backend/test_continuous_loop_rollback.py", "-q"],
-          "cwd": "."
-        },
-        {
-          "name": "UI unit",
-          "cmd": ["npm", "run", "test:ui"],
-          "cwd": "northstar-os-ui"
-        },
-        {
-          "name": "UI contrast",
-          "cmd": ["npm", "run", "test:contrast"],
-          "cwd": "northstar-os-ui"
-        },
-        {
-          "name": "Galactic static contract",
-          "cmd": ["npm", "run", "verify:galactic"],
-          "cwd": "northstar-os-ui"
-        },
-        {
-          "name": "UI build",
-          "cmd": ["npm", "run", "build"],
-          "cwd": "northstar-os-ui"
-        }
-      ]
-    },
-    {
-      "id": "cycle7-token-sse",
-      "name": "Token-level SSE event stream",
-      "authorized": false,
-      "risk": "medium",
-      "execution": "ty",
-      "blocked": "token-level streaming requires a request-scoped model stream and a UI consumer action; not implemented in this bridge and broader than the current authorized scope",
-      "commit_paths": [
-        "Northstar_backend/main.py",
-        "northstar-os-ui/src/galactic/CommandDeck.jsx",
-        "northstar-os-ui/scripts/verify-galactic-deck.cjs"
-      ],
+      "objective": "Make agent_kernel.hitl_counts accept str/PathLike roots instead of requiring a Path; the function currently calls root.exists() directly and raises AttributeError for a string.",
+      "dependencies": [],
       "write_paths": [
-        "Northstar_backend/main.py",
-        "northstar-os-ui/src/galactic/CommandDeck.jsx",
-        "northstar-os-ui/scripts/verify-galactic-deck.cjs"
-      ],
-      "acceptance_commands": []
-    },
-    {
-      "id": "demo-hitl-counts",
-      "name": "Add HITL queue counts helper",
-      "authorized": true,
-      "risk": "low",
-      "execution": "ty",
-      "objective": "Create ONE new file, modify none: Northstar_backend/agent_kernel/hitl_counts.py. It must define hitl_counts(root) using only the standard library: scan (Path(root)/'state'/'hitl').glob('hitl_*.json'), load each JSON object, count status values pending/approved/denied, ignore unreadable files, and return {'pending': int, 'approved': int, 'denied': int, 'total': int}. If the directory is missing, return all zeros. Do not create a test file; the acceptance command will exercise the function.",
-      "dependencies": ["cycle6-continuous-loop"],
-      "write_paths": [
-        "Northstar_backend/agent_kernel/hitl_counts.py"
+        "Northstar_backend/agent_kernel/hitl_counts.py",
+        "Northstar_backend/test_autonomy_hitl_pathlike.py"
       ],
       "read_paths": [],
-      "acceptance_commands": [
-        ["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_20260101T000000_deadbeef.json').write_text(json.dumps({'status':'pending'})); (h/'hitl_20260101T000001_deadbeef.json').write_text(json.dumps({'status':'approved'})); r=hitl_counts(d); assert r=={'pending':1,'approved':1,'denied':0,'total':2}, r"]
-      ],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "hitl-pathlike"]],
+      "precheck_commands": [["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_a.json').write_text(json.dumps({'status':'pending'})); assert hitl_counts(str(d))['total']==1"]],
       "checks": [
         {
-          "name": "HITL counts function",
-          "cmd": ["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_20260101T000000_deadbeef.json').write_text(json.dumps({'status':'pending'})); (h/'hitl_20260101T000001_deadbeef.json').write_text(json.dumps({'status':'approved'})); r=hitl_counts(d); assert r=={'pending':1,'approved':1,'denied':0,'total':2}, r"],
+          "name": "HITL path-like regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_hitl_pathlike.py", "-q"],
           "cwd": "."
         }
       ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_hitl_pathlike.py", "-q"]],
       "commit_paths": [
-        "Northstar_backend/agent_kernel/hitl_counts.py"
+        "Northstar_backend/agent_kernel/hitl_counts.py",
+        "Northstar_backend/test_autonomy_hitl_pathlike.py"
       ],
-      "timeout_seconds": 600,
+      "commit_message": "fix(hitl): accept path-like roots in hitl_counts",
+      "timeout_seconds": 300,
       "max_repairs": 0,
-      "max_steps": 6,
-      "required_artifact": "Northstar_backend/agent_kernel/hitl_counts.py",
-      "provider": "ollama",
-      "model": "bojo"
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
     },
     {
-      "id": "post-demo-test",
-      "name": "Commit the HITL counts regression test",
+      "id": "format-quad-guard",
+      "name": "Reject malformed quads in bottle/tube compositors",
+      "schema_version": 2,
       "authorized": true,
+      "authorization_note": "Local-only defensive compositor validation; no external I/O or provider call.",
       "risk": "low",
+      "risk_class": "low",
       "execution": "prebuilt",
-      "dependencies": ["demo-hitl-counts"],
+      "objective": "Validate exactly four finite quad points in bottle_composite and tube_composite so malformed geometry raises ValueError instead of IndexError or a silent bad transform.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/format_compositors.py",
+        "Northstar_backend/test_autonomy_format_quad_guard.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "format-quad-guard"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"]],
       "checks": [
         {
-          "name": "HITL counts regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_hitl_counts.py", "-q"],
+          "name": "Quad guard regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"],
           "cwd": "."
         }
       ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"]],
       "commit_paths": [
-        "Northstar_backend/test_hitl_counts.py"
+        "Northstar_backend/format_compositors.py",
+        "Northstar_backend/test_autonomy_format_quad_guard.py"
       ],
-      "commit_message": "test(hitl): regression for the Ty-generated counts helper"
+      "commit_message": "fix(creative): validate quads in bottle and tube compositors",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "geometry-bottom-guard",
+      "name": "Reject bottle labels that run into the bottom seam",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only geometry validation; no external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Validate label_top_offset + label_height against the bottom seam clearance in geometry_profiles.bottle; the existing check only compares label_height with usable height.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/geometry_profiles.py",
+        "Northstar_backend/test_autonomy_geometry_bottom_guard.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "geometry-bottom-guard"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"]],
+      "checks": [
+        {
+          "name": "Bottle bottom-seam regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"]],
+      "commit_paths": [
+        "Northstar_backend/geometry_profiles.py",
+        "Northstar_backend/test_autonomy_geometry_bottom_guard.py"
+      ],
+      "commit_message": "fix(creative): reject bottle labels past the bottom seam",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "print-quad-guard",
+      "name": "Reject degenerate dieline quads",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only prepress validation; no print action or external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Make print_prep.face_pixels refuse zero-area or non-finite quads instead of returning a zero face that later divides by zero.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/print_prep.py",
+        "Northstar_backend/test_autonomy_print_quad_guard.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "print-quad-guard"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"]],
+      "checks": [
+        {
+          "name": "Dieline quad regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"]],
+      "commit_paths": [
+        "Northstar_backend/print_prep.py",
+        "Northstar_backend/test_autonomy_print_quad_guard.py"
+      ],
+      "commit_message": "fix(prepress): refuse degenerate dieline quads",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "surface-wrap-guard",
+      "name": "Validate the visible wrap fraction",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only surface measurement validation; no external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Refuse wrap_fraction outside (0, 1] in surface_measure.measure_surface so a bad caller cannot silently produce a nonsensical cylinder fit.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/surface_measure.py",
+        "Northstar_backend/test_autonomy_surface_wrap_guard.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "surface-wrap-guard"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"]],
+      "checks": [
+        {
+          "name": "Wrap fraction regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"]],
+      "commit_paths": [
+        "Northstar_backend/surface_measure.py",
+        "Northstar_backend/test_autonomy_surface_wrap_guard.py"
+      ],
+      "commit_message": "fix(creative): validate the visible wrap fraction",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "panels-format-guard",
+      "name": "Unknown package formats are not print-ready",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only validation; no external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Make specialists.panels.validate_panels report ready_for_print=false for an unknown format instead of silently applying pouch rules.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/specialists/panels.py",
+        "Northstar_backend/test_autonomy_panels_format_guard.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "panels-format-guard"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"]],
+      "checks": [
+        {
+          "name": "Package format regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"]],
+      "commit_paths": [
+        "Northstar_backend/specialists/panels.py",
+        "Northstar_backend/test_autonomy_panels_format_guard.py"
+      ],
+      "commit_message": "fix(package): refuse unknown formats as print-ready",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "dead-code-cleanup",
+      "name": "Remove unused imports from the new creative modules",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only dead-code cleanup with an AST regression test; no behavior or external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Remove the unused Sequence/Tuple typing imports from package_art and the unused uuid import from package_pipeline, proven by an AST test.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/package_art.py",
+        "Northstar_backend/package_pipeline.py",
+        "Northstar_backend/test_autonomy_dead_code.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "dead-code-cleanup"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"]],
+      "checks": [
+        {
+          "name": "Dead-code regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"]],
+      "commit_paths": [
+        "Northstar_backend/package_art.py",
+        "Northstar_backend/package_pipeline.py",
+        "Northstar_backend/test_autonomy_dead_code.py"
+      ],
+      "commit_message": "chore(creative): remove unused imports",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "docs-autonomy",
+      "name": "Document the readiness gate and long-campaign controls",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only documentation for the new bridge controls; no policy or external I/O change.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "prebuilt",
+      "objective": "Document --ready, --max-consecutive-failures, --status, the live log and the foreground-only limitation in docs/CONTINUOUS_LOOP.md.",
+      "dependencies": [],
+      "write_paths": [
+        "docs/CONTINUOUS_LOOP.md",
+        "Northstar_backend/test_autonomy_docs.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [["python", "tools/autonomy_patches.py", "docs-autonomy"]],
+      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"]],
+      "checks": [
+        {
+          "name": "Autonomy docs regression",
+          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"],
+          "cwd": "."
+        }
+      ],
+      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"]],
+      "commit_paths": [
+        "docs/CONTINUOUS_LOOP.md",
+        "Northstar_backend/test_autonomy_docs.py"
+      ],
+      "commit_message": "docs(loop): document readiness and long campaigns",
+      "timeout_seconds": 300,
+      "max_repairs": 0,
+      "max_steps": 1,
+      "model": "bojo",
+      "provider": "ollama"
+    },
+    {
+      "id": "blocked-auth-text-check",
+      "name": "Design Studio text-check auth/404 repair",
+      "schema_version": 2,
+      "authorized": false,
+      "authorization_note": "Discovery-only proposal. The failing test touches route authentication; the autonomy directive forbids auth work without a separate operator approval.",
+      "risk": "medium",
+      "risk_class": "medium",
+      "execution": "prebuilt",
+      "blocked": "blocked-not-authorized: touches authentication/route guards (test_text_fidelity.py::test_text_check_endpoint_auth_and_404); requires a separate operator authorization",
+      "objective": "Investigate the 401-vs-404 auth contract failure without changing auth, payments, browser, credentials or external I/O.",
+      "dependencies": [],
+      "write_paths": [],
+      "read_paths": ["Northstar_backend/test_text_fidelity.py"],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [],
+      "acceptance_commands": [],
+      "commit_paths": [],
+      "timeout_seconds": 60,
+      "max_repairs": 0,
+      "max_steps": 1
     }
   ]
 }
