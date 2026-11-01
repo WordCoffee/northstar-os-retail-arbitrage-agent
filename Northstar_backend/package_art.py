@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import re
-from typing import Any, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, Optional
 
 from PIL import Image, ImageDraw
 

@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import json
 import math
-import uuid
 from io import BytesIO
 from pathlib import Path
 from typing import Any, Dict, Optional
