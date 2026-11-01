@@ -97,7 +97,9 @@ def test_compose_refuses_when_the_measured_edge_is_not_consistent(tmp_path, monk
         "face": None, "background": None, "coverage": None,
     })
     with pytest.raises(ValueError) as exc:
-        pl.compose(plate, title="TEST")
+        # This assertion is about a fresh measurement; a cache entry written by
+        # an earlier test with the same fixture image would hide the bad fit.
+        pl.compose(plate, title="TEST", reuse_geometry=False)
     assert "residual" in str(exc.value).lower()
     assert "operator quad" in str(exc.value).lower()
 

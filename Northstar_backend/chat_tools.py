@@ -697,17 +697,21 @@ def _t_place_logo(args, ctx) -> dict:
 
 
 def _t_build_package(args, ctx) -> dict:
-    """Complete package: panels + dieline + mockup, gated on real inputs."""
-    from specialists import package_designer as pd
+    """Complete package: designed panels + dieline + mockup, gated on real inputs."""
+    import package_pipeline as pp
 
     db = ctx.get("db")
     acct = ctx.get("account_id")
+    fmt = str(args.get("format") or "pouch").strip().lower()
     spec = {k: args.get(k) for k in (
         "title", "subtitle", "weight", "ingredients", "supplement_facts",
         "suggested_use", "warnings", "company", "address", "country_of_origin",
-        "lot_code", "claims", "icons") if args.get(k) not in (None, "", [])}
-    dims = {k: args[k] for k in ("width_mm", "height_mm", "gusset_mm")
-            if args.get(k) not in (None, "")}
+        "lot_code", "claims", "icons", "brand", "theme", "design", "servings",
+        "organic_certified") if args.get(k) not in (None, "", [])}
+    spec["format"] = fmt
+    dim_keys = ("width_mm", "height_mm", "gusset_mm", "depth_mm", "diameter",
+                "label_height", "label_top_offset", "usable_height_mm")
+    dims = {k: args[k] for k in dim_keys if args.get(k) not in (None, "")}
     if dims:
         spec["dims"] = dims
 
@@ -718,9 +722,11 @@ def _t_build_package(args, ctx) -> dict:
         _r, logo_path = _resolve_asset(db, acct, args["logo_asset_id"])
 
     try:
-        out = pd.build_package(spec, plate_path=plate_path, logo_path=logo_path,
+        out = pp.build_package(spec, format=fmt, plate_path=plate_path,
+                               logo_path=logo_path,
+                               out_dir=_out_dir(),
                                allow_incomplete=bool(args.get("allow_incomplete")))
-    except ValueError as exc:
+    except (ValueError, KeyError) as exc:
         return {"ok": False, "summary": "The package could not be built.",
                 "error": str(exc)[:400], "assets": []}
     if not out.get("ok"):
@@ -731,8 +737,7 @@ def _t_build_package(args, ctx) -> dict:
                 "data": {"questions": out.get("questions") or []},
                 "assets": []}
 
-    pd.save_package(out, _out_dir())
-    files = out.get("files") or {}
+    files = pp.save_package(out, _out_dir())
     assets = []
     if db is not None and acct:
         for key, label in (("sheet", "panel sheet"), ("front", "front panel"),
@@ -1982,8 +1987,22 @@ TOOLS: Dict[str, dict] = {    "system_status": {
                 "title": {"type": "string", "maxLength": 60, "description": "Product name exactly as it must appear."},
                 "subtitle": {"type": "string", "maxLength": 80},
                 "weight": {"type": "string", "maxLength": 40, "description": "e.g. NET WT 6 OZ (170 g)"},
+                "format": {"type": "string", "enum": ["pouch", "box", "bottle", "tube"],
+                           "default": "pouch",
+                           "description": "The physical package format; dimensions differ per format."},
                 "width_mm": {"type": "number"}, "height_mm": {"type": "number"},
-                "gusset_mm": {"type": "number"},
+                "gusset_mm": {"type": "number"}, "depth_mm": {"type": "number"},
+                "diameter": {"type": "number"}, "label_height": {"type": "number"},
+                "label_top_offset": {"type": "number"},
+                "usable_height_mm": {"type": "number"},
+                "brand": {"type": "string", "maxLength": 80},
+                "theme": {"type": "string", "maxLength": 30,
+                          "description": "Design palette: forest, midnight, kraft, bone, clay, sage or slate."},
+                "design": {"type": "string", "maxLength": 40,
+                           "description": "Optional catalogue design key; omit for a dynamic brand design."},
+                "servings": {"type": "string", "maxLength": 20},
+                "organic_certified": {"type": "boolean", "default": False,
+                                      "description": "Render an organic seal only when certification is substantiated."},
                 "ingredients": {"type": "array", "items": {"type": "string", "maxLength": 300}, "maxItems": 20},
                 "supplement_facts": {"type": "array", "items": {"type": "string", "maxLength": 200}, "maxItems": 30},
                 "suggested_use": {"type": "string", "maxLength": 300},

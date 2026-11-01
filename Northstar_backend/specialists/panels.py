@@ -265,12 +265,16 @@ def validate_panels(spec: Dict[str, Any]) -> Dict[str, Any]:
         missing.append("country of origin")
     warnings: List[str] = []
     dims = spec.get("dims") or {}
-    if dims.get("width_mm") and dims.get("height_mm"):
-        ratio = float(dims["height_mm"]) / float(dims["width_mm"])
-        if not (1.2 <= ratio <= 1.9):
-            warnings.append(
-                f"height/width ratio {ratio:.2f} is outside the usual 1.2-1.9 "
-                f"stand-up-pouch band; confirm with the converter")
+    # The 1.2-1.9 ratio is a pouch heuristic. A carton, bottle label or tube
+    # legitimately has a different face ratio; warning on those trains the
+    # operator to ignore validation.
+    if str(spec.get("format") or "pouch").strip().lower() == "pouch":
+        if dims.get("width_mm") and dims.get("height_mm"):
+            ratio = float(dims["height_mm"]) / float(dims["width_mm"])
+            if not (1.2 <= ratio <= 1.9):
+                warnings.append(
+                    f"height/width ratio {ratio:.2f} is outside the usual 1.2-1.9 "
+                    f"stand-up-pouch band; confirm with the converter")
     if spec.get("claims"):
         warnings.append(
             "claims are rendered as supplied — screen each one for disease/treatment "

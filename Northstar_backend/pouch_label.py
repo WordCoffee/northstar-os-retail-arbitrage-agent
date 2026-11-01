@@ -720,6 +720,7 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
             quad: Optional[Sequence] = None,
             panels: Optional[Dict[str, Any]] = None,
             panel_split: bool = True,
+            label_panel: Optional[Image.Image] = None,
             mesh: bool = True,
             reuse_geometry: bool = True) -> Dict[str, Any]:
     """Composite a label onto a rendered pouch. Returns PNG bytes + what was fitted."""
@@ -757,7 +758,7 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
             if mesh and max(abs(bow_l), abs(bow_r)) >= MIN_BOW_PX else None)
 
     logo = load_logo(Path(logo_path)) if logo_path else None
-    panel = render_label(
+    panel = label_panel if label_panel is not None else render_label(
         title=title, subtitle=subtitle, weight=weight, bullets=bullets,
         logo=logo, icons=icons,
         field=tuple(field) if field else FIELD,
@@ -765,6 +766,8 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
         accent=tuple(accent) if accent else ACCENT,
         field_alpha=int(field_alpha),
     )
+    if panel.width < 2 or panel.height < 2:
+        raise ValueError("label_panel must be a non-empty image")
 
     try:
         import compositor_realism as cr
