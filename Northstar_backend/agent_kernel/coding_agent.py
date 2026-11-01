@@ -301,6 +301,7 @@ class CodingAgent:
             # Task-scoped protocol: a small lane gets the actions it can use, four
             # rules and the last two results - nothing else to dilute them.
             allowed = ", ".join(self.allowed_tools)
+            commands = [" ".join(c) for c in (getattr(self.tools, "run_allowlist", ()) or ())][:3]
             return (
                 "You are the Northstar OS coding worker. Reply with exactly ONE JSON "
                 "object per turn. No prose, no markdown fences.\n\n"
@@ -308,7 +309,8 @@ class CodingAgent:
                 "RULES:\n"
                 "- Use the exact action names and argument names above.\n"
                 "- Never rewrite an existing source file: use ast_edit or apply_patch.\n"
-                "- `run` takes an argv list and only allowlisted commands.\n"
+                "- `run` takes an argv list; the only commands that will execute are: "
+                + ("; ".join(commands) if commands else "(none)") + "\n"
                 "- Stop with `finish` once the behaviour is correct.\n\n"
                 f"TASK:\n{task}\n\n"
                 + (self._failing_block()[:600] if self._failing else "")

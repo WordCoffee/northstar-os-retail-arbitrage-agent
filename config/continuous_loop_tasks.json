@@ -736,7 +736,8 @@
         "run",
         "finish"
       ],
-      "max_protocol_errors": 6
+      "max_protocol_errors": 6,
+      "num_ctx": 8192
     },
     {
       "id": "ty-hitl-skip-report",

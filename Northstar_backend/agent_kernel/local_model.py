@@ -83,6 +83,10 @@ class LlamaCppModel:
         self.temperature = float(temperature)
         self.disable_thinking = bool(disable_thinking)
         self.retries = max(0, int(retries))
+        # Per-request context: a small model on a small box does not need the
+        # model's 32k default for a one-file task, and a smaller KV cache leaves
+        # more host RAM free. This is a request option, not an environment change.
+        self.num_ctx = int(num_ctx) if num_ctx else None
         self.schema = schema
 
     def payload(self, prompt: str) -> Dict[str, Any]:
@@ -143,13 +147,17 @@ class OllamaChatModel:
     def __init__(self, base_url: str = "http://127.0.0.1:11434",
                  model: str = "bojo", *, timeout_s: float = 600.0,
                  max_tokens: int = 4096, temperature: float = 0.1,
-                 retries: int = 1):
+                 retries: int = 1, num_ctx: Optional[int] = None):
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout_s = float(timeout_s)
         self.max_tokens = int(max_tokens)
         self.temperature = float(temperature)
         self.retries = max(0, int(retries))
+        # Per-request context: a small model on a small box does not need the
+        # model's 32k default for a one-file task, and a smaller KV cache leaves
+        # more host RAM free. This is a request option, not an environment change.
+        self.num_ctx = int(num_ctx) if num_ctx else None
 
     def payload(self, prompt: str) -> Dict[str, Any]:
         return {
@@ -159,7 +167,8 @@ class OllamaChatModel:
             "format": "json",
             "think": False,
             "options": {"num_predict": self.max_tokens,
-                        "temperature": self.temperature},
+                        "temperature": self.temperature,
+                        **({"num_ctx": self.num_ctx} if self.num_ctx else {})},
         }
 
     def __call__(self, prompt: str) -> str:
