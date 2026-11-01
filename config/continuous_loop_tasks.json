@@ -695,7 +695,7 @@
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Fix Northstar_backend/agent_kernel/budget.py so a hard budget stops AT its limit. BudgetTracker._check currently compares with > after incrementing, so max_steps=3 permits a fourth step and max_tokens=100 permits 101 tokens; the module contract is 'a limit is a stop, not a warning'. Change the step and token comparisons so reaching the limit sets state.stopped. Keep the wall-clock check, remaining(), snapshot() and every other behaviour unchanged. state/probes/t4_budget_stop.py is READ-ONLY: never write it. Run it with python state/probes/t4_budget_stop.py and repair from its output.",
+      "objective": "Northstar_backend/agent_kernel/budget.py has one behavioural defect: a hard budget stops one step late. With max_steps=3 the tracker still reports itself usable after three steps, and with max_tokens=100 it does the same after 100 tokens. The module contract is that a limit is a stop, not a warning. Read the file, fix the tracker so reaching the limit stops it, run the read-only probe state/probes/t4_budget_stop.py, and finish. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/agent_kernel/budget.py"
@@ -727,9 +727,16 @@
       "required_artifact": "Northstar_backend/agent_kernel/budget.py",
       "timeout_seconds": 600,
       "max_repairs": 1,
-      "max_steps": 10,
+      "max_steps": 8,
       "model": "qwen2.5-coder:3b",
-      "provider": "ollama"
+      "provider": "ollama",
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "max_protocol_errors": 6
     },
     {
       "id": "ty-hitl-skip-report",

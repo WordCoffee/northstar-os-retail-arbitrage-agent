@@ -165,9 +165,27 @@ class OllamaChatModel:
     def __call__(self, prompt: str) -> str:
         url = f"{self.base_url}/api/chat"
         last: Optional[Exception] = None
+        strict_json = True
         for attempt in range(self.retries + 1):
+            payload = self.payload(prompt)
+            if not strict_json:
+                # The server-side JSON-constrained path can fail (observed: HTTP
+                # 500 after ~100 tokens, twice, on the same prompt). Falling back
+                # to the same prompt WITHOUT the constraint keeps the protocol the
+                # same - the executor still validates the reply - and does not
+                # generate any content on the model's behalf.
+                payload.pop("format", None)
+                payload.pop("think", None)
             try:
-                out = _post_json(url, self.payload(prompt), self.timeout_s)
+                out = _post_json(url, payload, self.timeout_s)
+            except urllib.error.HTTPError as exc:
+                last = exc
+                if exc.code >= 500 and attempt < self.retries:
+                    strict_json = False
+                    continue
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"Ollama returned HTTP {exc.code} at {url}") from exc
             except urllib.error.URLError as exc:
                 last = exc
                 if attempt < self.retries:
