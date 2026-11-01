@@ -1,0 +1,32 @@
+{
+  "ty_qualification_20261101": {
+    "verdict": "PARTIALLY READY - resource/profile readiness PASSED on measured evidence; model qualification FAILED. Six of six authorised dispatches spent, zero accepted model-authored fixes, zero Ty commits. The limiter is the installed 3B lane's multi-turn protocol behaviour, not memory and not the executor.",
+    "gates": {
+      "gate_1_resources": "PASS - launcher GO at 6.587 GB free (19:03:22Z); final readiness 6.99 GB pre-load, measured min 5.056 GB while resident (2.052 GB system), ctx 8192, FLOOR-MET (GO 19:25:41Z). One correct refusal at 5.00 GB caused by a campaign-owned resident model, released as authorised.",
+      "gate_2_first_fix": "FAIL - 0 accepted, 0 commits",
+      "gate_3_three_fix": "FAIL - 0/3, attempt budget 6/6 exhausted",
+      "gate_4_soak": "NOT RUN - gated on 3",
+      "gate_5_regression": "PASS - 152 passed in 4.93s",
+      "gate_6_repair_campaign": "NOT RUN - gated on 2-3"
+    },
+    "dispatches": [
+      {"run": "A", "task": "ty-hitl-skip-report", "steps": 8, "protocol": 2, "scope": 2, "result": "max_steps"},
+      {"run": "A", "task": "ty-diff-select-headers", "steps": 8, "protocol": 5, "scope": 1, "result": "max_steps", "campaign_s": 53},
+      {"run": "B", "task": "ty-hitl-skip-report", "steps": 8, "protocol": 3, "scope": 2, "result": "max_steps"},
+      {"run": "B", "task": "ty-diff-select-headers", "steps": 7, "protocol": 7, "scope": 0, "result": "protocol_failed", "campaign_s": 219},
+      {"run": "C", "task": "ty-artifact-jpeg", "steps": 8, "protocol": 1, "scope": 4, "result": "max_steps", "campaign_s": 213},
+      {"run": "D", "task": "ty-hitl-skip-report", "steps": 8, "protocol": 4, "scope": 4, "result": "max_steps", "campaign_s": 32}
+    ],
+    "capability_limit": "the installed qwen2.5-coder:3b lane never issued a successful read of its target and never executed an ast_edit on it: it copies example paths from the schema (src.py, calc.py), guesses symbol names (count_corrupt_records), and its JSON envelope degrades about one turn in two. The executor refused 22 bad turns with precise codes; no out-of-scope write executed.",
+    "harness_fixes": {
+      "24427069": "task-scoped run example is the real allowlisted command",
+      "c7ed8936": "ast_edit requires a prior read of that file (read_required); protocol budget 8",
+      "654839ac": "scope refusal names the writable path; objectives say run the probe, never edit it"
+    },
+    "not_done": "no soak, no repair campaign, no product claim; budget.py control repaired as bootstrap maintenance (blocked as a model task) and excluded from the count",
+    "state": "nothing running; no lock, no STOP, no worker, no resident model; all three tasks failed; 6/6 attempts spent; no eligible work without an operator decision",
+    "operator_action": "decision, not a command: authorise a stronger installed lane (download not permitted here) or accept the demonstrated limit. Status: python scripts/continuous_loop.py --status | --ready",
+    "report": "reports/ty_qualification_20261101.md",
+    "tests": "152 passed in 4.93s across protocol, coding agent, kernel, loop, readiness, recovery, supervisor crash, launcher, budget and task-prompt suites"
+  }
+}
