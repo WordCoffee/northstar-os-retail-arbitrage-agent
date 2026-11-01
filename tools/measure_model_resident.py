@@ -150,6 +150,7 @@ def measure(model: str, *, prompt: str = PROMPT, num_ctx: Optional[int] = None,
     min_ram = min(sampler.ram) if sampler.ram else None
     return {
         "model": model,
+        "num_ctx": int(num_ctx) if num_ctx else None,
         "baseline_available_gb": baseline,
         "min_available_gb": min_ram,
         "drop_gb": (round(baseline - min_ram, 3)

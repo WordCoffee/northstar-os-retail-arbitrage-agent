@@ -173,15 +173,22 @@ def test_todo_cannot_finish_without_evidence():
 # ── budget ──────────────────────────────────────────────────────────────────
 def test_budget_stops_on_steps_and_wall_clock():
     t = BudgetTracker(Budget(max_steps=2, max_wall_s=10), clock=lambda: 0)
-    t.step(); t.step()
+    t.step()
     assert not t.exhausted
     t.step()
-    assert t.state.stopped == "max_steps"
+    # The limit is a stop: after the last permitted step the tracker is spent.
+    assert t.exhausted and t.state.stopped == "max_steps"
+    assert t.remaining()["steps"] == 0
     now = [0.0]
     t2 = BudgetTracker(Budget(max_steps=99, max_wall_s=5), clock=lambda: now[0])
     now[0] = 6.0
     t2.step()
     assert t2.state.stopped == "max_wall_s"
+    t3 = BudgetTracker(Budget(max_steps=99, max_wall_s=10, max_tokens=100), clock=lambda: 0)
+    t3.tokens(99)
+    assert not t3.exhausted
+    t3.tokens(1)
+    assert t3.exhausted and t3.state.stopped == "max_tokens"
 
 
 # ── journal / checkpoints ───────────────────────────────────────────────────

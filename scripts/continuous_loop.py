@@ -58,6 +58,12 @@ AUTONOMY_LOG_DIR = ROOT / "reports"
 CAMPAIGN_MANIFEST_DIR = ROOT / "state" / "campaigns"
 MIN_FREE_DISK_GB = 10.0
 MIN_FREE_RAM_GB = 3.0
+#: Pre-load precondition per execution profile. An uncharacterised profile gets the
+#: conservative default: never load a model into a host that cannot hold it plus the
+#: resident floor. Measured, this box needs ~1.6-2.4 GB for the qwen lane, so 6.0 GB
+#: leaves a real margin. Lowering this to make a reading pass is not allowed.
+MIN_PRELOAD_RAM_GB_BY_PROFILE = {"qwen2.5-coder:3b": 6.0}
+MIN_PRELOAD_RAM_GB_DEFAULT = 6.0
 MODEL_RESIDENT_EVIDENCE = ROOT / "state" / "evidence"
 RESIDENT_EVIDENCE_MAX_AGE_MIN = 60
 MAX_TASK_TIMEOUT_S = 900
@@ -208,6 +214,74 @@ def _free_ram_gb() -> Optional[float]:
         return None
 
 
+def queue_profiles() -> List[Dict[str, Any]]:
+    """Distinct (model, num_ctx) execution profiles the authorized queue will use.
+
+    Readiness must measure the profile a task will actually run, not a different
+    default: a 32768-context probe and an 8192-context dispatch are not the same
+    memory claim.
+    """
+    profiles: List[Dict[str, Any]] = []
+    try:
+        for task in (load_tasks().get("tasks") or []):
+            if (task.get("authorized") is True
+                    and str(task.get("execution") or "") == "ty"
+                    and task.get("model")):
+                profile = {"model": str(task["model"]),
+                           "num_ctx": int(task.get("num_ctx") or 0)}
+                if profile not in profiles:
+                    profiles.append(profile)
+    except Exception:  # noqa: BLE001 - an unreadable queue is reported by the gate
+        pass
+    return profiles[:3]
+
+
+def evaluate_profiles(profiles: List[Dict[str, Any]], *, free_gb: float,
+                      measure: Any = None) -> Dict[str, Any]:
+    """Pre-load gate then resident measurement, per execution profile.
+
+    A profile whose pre-load precondition is not met is NOT loaded: measuring it
+    anyway would be a pointless load on a host that cannot hold it, and a NO-GO
+    reading from a starved host proves nothing.
+    """
+    measure = measure or measure_model_resident
+    free_gb = float(free_gb or 0.0)
+    preload_ok = True
+    details: List[str] = []
+    out_profiles: List[Dict[str, Any]] = []
+    for profile in profiles:
+        need = MIN_PRELOAD_RAM_GB_BY_PROFILE.get(profile["model"],
+                                                 MIN_PRELOAD_RAM_GB_DEFAULT)
+        entry = dict(profile, preload_min_gb=need)
+        if free_gb < need:
+            preload_ok = False
+            entry["measured"] = {"ok": False, "evidence": "", "record": {
+                "model": profile["model"], "num_ctx": profile.get("num_ctx") or None,
+                "verdict": "PRELOAD-MISSED", "min_available_gb": None}}
+            details.append(f"{profile['model']} ctx{profile.get('num_ctx') or 'default'}: "
+                           f"pre-load {free_gb:.2f} GB < {need:.1f} GB required - probe not run")
+        else:
+            entry["measured"] = measure(profile["model"],
+                                        num_ctx=(profile.get("num_ctx") or None))
+            rec = entry["measured"].get("record") or {}
+            details.append(f"{profile['model']} ctx{profile.get('num_ctx') or 'default'}: "
+                           f"min {rec.get('min_available_gb')} GB "
+                           f"({rec.get('resident_system_gb')} GB system) {rec.get('verdict')}")
+        out_profiles.append(entry)
+    resident_ok = preload_ok and all(
+        ((p["measured"].get("record") or {}).get("verdict") == "FLOOR-MET")
+        for p in out_profiles)
+    return {"ok": resident_ok, "preload_ok": preload_ok,
+            "profiles": out_profiles, "reason": "; ".join(details)}
+
+
+def ram_floor_breached(free_gb: Optional[float], consecutive: int, *,
+                       floor: float = MIN_FREE_RAM_GB, needed: int = 2) -> bool:
+    """Two consecutive sub-floor samples end a model task; one is not enough."""
+    return bool(free_gb is not None and free_gb < floor
+                and (consecutive + 1) >= max(1, int(needed)))
+
+
 def model_slug(model: str) -> str:
     """A filesystem-safe fragment of a model id (`bojo:gpu-orig` -> `bojo_gpu_orig`)."""
     out = "".join(ch if ch.isalnum() else "_" for ch in str(model or ""))
@@ -215,7 +289,8 @@ def model_slug(model: str) -> str:
 
 
 def measure_model_resident(model: str, *, floor: Optional[float] = None,
-                           timeout: float = 300.0) -> Dict[str, Any]:
+                           timeout: float = 300.0,
+                           num_ctx: Optional[int] = None) -> Dict[str, Any]:
     """Load the lane, generate, and record the LOWEST free RAM while it was resident.
 
     The gate must never decide from pre-load RAM: `bojo:gpu-orig` is 2.25 GB on
@@ -225,9 +300,13 @@ def measure_model_resident(model: str, *, floor: Optional[float] = None,
     floor = MIN_FREE_RAM_GB if floor is None else float(floor)
     MODEL_RESIDENT_EVIDENCE.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    out_path = MODEL_RESIDENT_EVIDENCE / f"model_resident_{model_slug(model)}_{stamp}.json"
+    ctx_tag = f"ctx{int(num_ctx)}" if num_ctx else "ctxdefault"
+    out_path = MODEL_RESIDENT_EVIDENCE / (
+        f"model_resident_{model_slug(model)}_{ctx_tag}_{stamp}.json")
     cmd = ["python", str(ROOT / "tools" / "measure_model_resident.py"),
            "--model", str(model), "--floor", f"{floor}", "--json", "--out", str(out_path)]
+    if num_ctx:
+        cmd.extend(["--num-ctx", str(int(num_ctx))])
     res = run_command(cmd, timeout=timeout)
     text = str(res.get("output") or "")
     record: Dict[str, Any] = {}
@@ -244,13 +323,14 @@ def measure_model_resident(model: str, *, floor: Optional[float] = None,
             "floor_gb": floor, "command": cmd, "raw_output": text[-600:]}
 
 
-def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_AGE_MIN
-                      ) -> Dict[str, Any]:
-    """The newest measured residency record for `model`, and whether it is fresh."""
+def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_AGE_MIN,
+                      num_ctx: Optional[int] = None) -> Dict[str, Any]:
+    """The newest measured residency record for `model` (and context), fresh or not."""
     if not model:
         return {"ok": False, "reason": "no model lane resolved", "age_min": None}
     newest: Optional[Path] = None
     newest_mtime = 0.0
+    newest_record: Dict[str, Any] = {}
     if MODEL_RESIDENT_EVIDENCE.is_dir():
         for path in MODEL_RESIDENT_EVIDENCE.glob("model_resident_*.json"):
             try:
@@ -261,6 +341,8 @@ def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_
             except OSError:
                 continue
             if str(record.get("model") or "") != str(model):
+                continue
+            if num_ctx is not None and int(record.get("num_ctx") or 0) != int(num_ctx):
                 continue
             newest, newest_mtime, newest_record = path, mtime, record
     if newest is None:
@@ -273,7 +355,8 @@ def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_
           and age_min <= float(max_age_min))
     reason = (f"measured {verdict}: min free {newest_record.get('min_available_gb')} GB "
               f"(floor {MIN_FREE_RAM_GB}), resident {newest_record.get('resident_total_gb')} GB "
-              f"({newest_record.get('resident_system_gb')} GB system), {age_min} min old")
+              f"({newest_record.get('resident_system_gb')} GB system), ctx "
+              f"{newest_record.get('num_ctx') or 'default'}, {age_min} min old")
     return {"ok": ok, "reason": reason, "age_min": age_min,
             "path": str(newest), "record": newest_record}
 
@@ -556,15 +639,8 @@ def readiness_gate(*, make_checkpoint: bool = True,
     tags = _ollama_tags()
     # The lane that matters is the one the authorized queue will actually run, not
     # a default the campaign never dispatches.
-    queue_models: List[str] = []
-    try:
-        for task in (load_tasks().get("tasks") or []):
-            if (task.get("authorized") is True
-                    and str(task.get("execution") or "") == "ty"
-                    and task.get("model") and str(task["model"]) not in queue_models):
-                queue_models.append(str(task["model"]))
-    except Exception:  # noqa: BLE001 - the queue is advisory for this check
-        pass
+    profiles = queue_profiles()
+    queue_models = [p["model"] for p in profiles]
     lane = resolve_lane({"execution": "ty", "model": (queue_models[0] if queue_models else "")},
                         tags=tags, free_ram_gb=ram)
     add("model-lane", lane.get("ok", False),
@@ -576,26 +652,22 @@ def readiness_gate(*, make_checkpoint: bool = True,
     # "post-load headroom" was reported while the measured figure was 1.19 GB.
     # EVERY model the authorized queue names is measured: a campaign dispatches
     # tasks, not a default lane.
-    resident: Dict[str, Any] = {"ok": False, "reason": "no lane to measure", "models": []}
-    models: List[str] = []
-    if lane.get("ok") and lane.get("provider") == "ollama" and lane.get("model"):
-        models.append(str(lane["model"]))
-    for model in queue_models:
-        if model not in models:
-            models.append(model)
-    models = models[:3]
-    if models:
-        measured = [measure_model_resident(m) for m in models]
-        resident = {"ok": all(m["ok"] for m in measured), "models": measured,
-                    "reason": "; ".join(
-                        f"{(m.get('record') or {}).get('model') or '?'}: "
-                        f"{(m.get('record') or {}).get('verdict') or 'UNMEASURED'} "
-                        f"min {((m.get('record') or {}).get('min_available_gb'))} GB"
-                        for m in measured)}
+    resident: Dict[str, Any] = {"ok": False, "reason": "no lane to measure", "profiles": []}
+    if profiles:
+        free_now = float(ram if ram is not None else (_free_ram_gb() or 0.0))
+        resident = evaluate_profiles(profiles, free_gb=free_now)
+        add("model-preload", resident["preload_ok"],
+            f"free {free_now:.2f} GB; " + "; ".join(
+                f"{p['model']} needs {p['preload_min_gb']:.1f}"
+                for p in resident["profiles"]),
+            "close the interactive session or free RAM before loading a model; "
+            "the precondition is not lowered to make a reading pass")
         add("model-resident", resident["ok"], resident["reason"],
             (f"the {MIN_FREE_RAM_GB:.0f} GB floor is not lowered: free RAM, run the lane on "
              f"the GPU, or install a smaller lane, then re-run --ready"))
     else:
+        add("model-preload", False, resident.get("reason", "no ollama lane resolved"),
+            "resolve a model lane first")
         add("model-resident", False, resident.get("reason", "no ollama lane resolved"),
             "resolve a model lane first; a Ty campaign cannot start without measured residency")
 
@@ -1217,6 +1289,7 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
                                          "started_at": _now()})
     deadline = time.time() + timeout_s
     stopped = ""
+    ram_breaches = 0
     try:
         while proc.poll() is None:
             if STOP_PATH.is_file():
@@ -1227,6 +1300,23 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
                 stopped = f"task timeout after {timeout_s}s"
                 _terminate_tree(proc)
                 break
+            if str(task.get("execution") or "") == "ty":
+                # Keep the resident floor active during model work. Two consecutive
+                # one-second samples are required so a single noisy reading does not
+                # kill a healthy task; the threshold itself is unchanged.
+                free = _free_ram_gb()
+                if ram_floor_breached(free, ram_breaches):
+                    ram_breaches += 1
+                    write_heartbeat(run_id, str(task.get("id")),
+                                    f"ram_floor_watch:{free:.2f}GB")
+                    stopped = (f"ram_floor_breach: {free:.2f} GB free "
+                               f"< {MIN_FREE_RAM_GB:.1f} GB floor")
+                    _terminate_tree(proc)
+                    break
+                if free is not None and free < MIN_FREE_RAM_GB:
+                    ram_breaches += 1          # one sample: warn, do not kill
+                else:
+                    ram_breaches = 0
             write_heartbeat(run_id, str(task.get("id")), "ty")
             time.sleep(1)
         if proc.poll() is None:
@@ -1658,10 +1748,19 @@ def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
             # MEASURED residency, refreshing it when the evidence is stale, and
             # stops the campaign rather than falling back to a pre-load guess.
             if str(task.get("execution") or "prebuilt") == "ty" and not dry_run:
-                evidence = resident_evidence(active_lane.get("model") or "")
+                want_model = str(task.get("model") or active_lane.get("model") or "")
+                want_ctx = int(task.get("num_ctx") or 0)
+                if active_lane.get("model") and want_model != str(active_lane["model"]):
+                    stop_reason = "profile_mismatch"
+                    log_event(run_id, f"refused dispatch task={tid} reason=profile_mismatch "
+                                      f"lane={active_lane.get('model')} task={want_model}")
+                    break
+                evidence = resident_evidence(want_model, num_ctx=(want_ctx or None))
                 if not evidence.get("ok"):
-                    refreshed = measure_model_resident(active_lane.get("model") or "")
-                    evidence = resident_evidence(active_lane.get("model") or "") if refreshed["ok"] \
+                    refreshed = measure_model_resident(
+                        want_model, num_ctx=(want_ctx or None))
+                    evidence = resident_evidence(
+                        want_model, num_ctx=(want_ctx or None)) if refreshed["ok"] \
                         else {"ok": False, "reason": (refreshed.get("record") or {}).get(
                             "verdict") or refreshed.get("raw_output") or "measurement failed"}
                 if not evidence.get("ok"):

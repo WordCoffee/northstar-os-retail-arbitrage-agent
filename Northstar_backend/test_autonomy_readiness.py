@@ -271,6 +271,90 @@ def test_campaign_dispatches_a_ty_task_only_with_fresh_residency(tmp_path, monke
     assert result["ok"] is True
 
 
+# ── profile-aware readiness and runtime floor ──────────────────────────────
+
+def test_preload_shortfall_refuses_before_loading(monkeypatch):
+    called = {"n": 0}
+
+    def must_not_measure(*a, **k):
+        called["n"] += 1
+        raise AssertionError("a low-memory host must not be loaded")
+
+    out = cl.evaluate_profiles([{"model": "qwen2.5-coder:3b", "num_ctx": 8192}],
+                               free_gb=4.5, measure=must_not_measure)
+    assert out["ok"] is False
+    assert out["preload_ok"] is False
+    assert called["n"] == 0
+    assert "pre-load 4.50 GB < 6.0 GB required" in out["reason"]
+
+
+def test_preload_met_measures_with_the_profile_context(monkeypatch):
+    seen = {}
+
+    def fake_measure(model, *, num_ctx=None, **kw):
+        seen.update({"model": model, "num_ctx": num_ctx})
+        return {"ok": True, "evidence": "x", "record": {
+            "model": model, "num_ctx": num_ctx, "verdict": "FLOOR-MET",
+            "min_available_gb": 3.4, "resident_system_gb": 2.0}}
+
+    out = cl.evaluate_profiles([{"model": "qwen2.5-coder:3b", "num_ctx": 8192}],
+                               free_gb=6.5, measure=fake_measure)
+    assert out["ok"] is True
+    assert seen == {"model": "qwen2.5-coder:3b", "num_ctx": 8192}
+
+
+def test_resident_shortfall_refuses_go(monkeypatch):
+    def fake_measure(model, *, num_ctx=None, **kw):
+        return {"ok": False, "evidence": "x", "record": {
+            "model": model, "num_ctx": num_ctx, "verdict": "FLOOR-MISSED",
+            "min_available_gb": 2.1, "resident_system_gb": 2.0}}
+
+    out = cl.evaluate_profiles([{"model": "qwen2.5-coder:3b", "num_ctx": 8192}],
+                               free_gb=6.5, measure=fake_measure)
+    assert out["ok"] is False
+    assert out["preload_ok"] is True
+    assert "FLOOR-MISSED" in out["reason"]
+
+
+def test_resident_evidence_is_context_scoped(tmp_path, monkeypatch):
+    evidence_dir = tmp_path / "evidence"
+    evidence_dir.mkdir()
+    monkeypatch.setattr(cl, "MODEL_RESIDENT_EVIDENCE", evidence_dir)
+    record = {"model": "qwen2.5-coder:3b", "num_ctx": 8192, "verdict": "FLOOR-MET",
+              "min_available_gb": 3.4, "resident_total_gb": 2.0,
+              "resident_system_gb": 2.0}
+    (evidence_dir / "model_resident_qwen_ctx8192.json").write_text(
+        json.dumps(record), encoding="utf-8")
+    assert cl.resident_evidence("qwen2.5-coder:3b", num_ctx=8192)["ok"] is True
+    # A 32768-context dispatch must not ride an 8192-context measurement.
+    assert cl.resident_evidence("qwen2.5-coder:3b", num_ctx=32768)["ok"] is False
+
+
+def test_campaign_refuses_a_lane_that_does_not_match_the_task(monkeypatch, tmp_path):
+    _campaign_paths(tmp_path, monkeypatch)
+    _evidence(tmp_path, monkeypatch, min_free=4.0)
+    monkeypatch.setattr(cl, "measure_model_resident",
+                        lambda *a, **k: {"ok": False, "record": {"verdict": "UNMEASURED"}})
+    ty = _task("ty-mismatch", execution="ty", model="qwen2.5-coder:3b",
+               write_paths=["Northstar_backend/x.py"],
+               acceptance_commands=[["python", "-c", "print(1)"]])
+    monkeypatch.setattr(cl, "resolve_lane", lambda *a, **k: {
+        "ok": True, "provider": "ollama", "model": "bojo:gpu-orig", "reason": "pinned"})
+    result = cl.run_campaign({"tasks": [ty]}, {"tasks": {}, "completed": {}},
+                             max_tasks=1, deadline_minutes=1,
+                             readiness={"ok": True, "verdict": "GO", "checks": []},
+                             execute=lambda *a, **k: pytest.fail("must not execute"))
+    assert result["stop_reason"] == "profile_mismatch"
+    assert result["results"] == []
+
+
+def test_ram_floor_breach_needs_two_samples():
+    assert cl.ram_floor_breached(2.9, 0) is False      # first reading: warn only
+    assert cl.ram_floor_breached(2.9, 1) is True       # second: stop
+    assert cl.ram_floor_breached(3.0, 1) is False      # exactly at the floor is fine
+    assert cl.ram_floor_breached(None, 5) is False
+
+
 def test_deadline_is_enforced_even_with_task_budget_left(tmp_path, monkeypatch):
     _campaign_paths(tmp_path, monkeypatch)
     tasks = {"tasks": [_task("t0")]}

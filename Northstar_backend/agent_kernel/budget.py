@@ -35,11 +35,14 @@ class BudgetTracker:
         self._check()
 
     def _check(self) -> None:
-        if self.state.steps > self.budget.max_steps:
+        # `>=` not `>`: a limit is a stop, not a warning. With `>` the tracker
+        # reported itself usable after the last permitted step, so a caller that
+        # checks `exhausted` between steps got one extra step of work.
+        if self.state.steps >= self.budget.max_steps:
             self.state.stopped = "max_steps"
         if self.elapsed_s() > self.budget.max_wall_s:
             self.state.stopped = "max_wall_s"
-        if self.budget.max_tokens and self.state.tokens > self.budget.max_tokens:
+        if self.budget.max_tokens and self.state.tokens >= self.budget.max_tokens:
             self.state.stopped = "max_tokens"
 
     def elapsed_s(self) -> float:
