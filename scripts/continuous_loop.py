@@ -375,7 +375,8 @@ def _stop_probe() -> Dict[str, Any]:
                               "commit_paths": [], "checks": []},
                              {"completed": {}, "tasks": {}})
             except LoopError as exc:
-                return {"ok": "STOP" in str(exc), "detail": str(exc)[:200]}
+                return {"ok": "STOP" in str(exc),
+                        "detail": "STOP blocked dispatch in isolated probe"}
             return {"ok": False, "detail": "STOP did not block dispatch"}
     finally:
         STOP_PATH = old
