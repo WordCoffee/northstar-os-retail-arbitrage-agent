@@ -1,6 +1,6 @@
 {
   "schema": "northstar.continuous_loop.v2",
-  "updated_at": "2026-10-31T00:00:00Z",
+  "updated_at": "2026-11-01",
   "notes": "Authorized, offline-only queue for the long-campaign bridge. Every runnable task has an apply command and a precheck that MUST fail before the fix. Discovery may append proposed entries; it may never set authorized=true. Anything touching auth, payments, browser, credentials, Amazon or external I/O is blocked-not-authorized.",
   "tasks": [
     {
@@ -19,16 +19,42 @@
         "Northstar_backend/test_autonomy_hitl_pathlike.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "hitl-pathlike"]],
-      "precheck_commands": [["python", "-c", "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_a.json').write_text(json.dumps({'status':'pending'})); assert hitl_counts(str(d))['total']==1"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "hitl-pathlike"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-c",
+          "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_a.json').write_text(json.dumps({'status':'pending'})); assert hitl_counts(str(d))['total']==1"
+        ]
+      ],
       "checks": [
         {
           "name": "HITL path-like regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_hitl_pathlike.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_hitl_pathlike.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_hitl_pathlike.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_hitl_pathlike.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/agent_kernel/hitl_counts.py",
         "Northstar_backend/test_autonomy_hitl_pathlike.py"
@@ -56,16 +82,44 @@
         "Northstar_backend/test_autonomy_format_quad_guard.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "format-quad-guard"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "format-quad-guard"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_format_quad_guard.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Quad guard regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_format_quad_guard.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_format_quad_guard.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_format_quad_guard.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/format_compositors.py",
         "Northstar_backend/test_autonomy_format_quad_guard.py"
@@ -93,16 +147,44 @@
         "Northstar_backend/test_autonomy_geometry_bottom_guard.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "geometry-bottom-guard"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "geometry-bottom-guard"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_geometry_bottom_guard.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Bottle bottom-seam regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_geometry_bottom_guard.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_geometry_bottom_guard.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_geometry_bottom_guard.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/geometry_profiles.py",
         "Northstar_backend/test_autonomy_geometry_bottom_guard.py"
@@ -130,16 +212,44 @@
         "Northstar_backend/test_autonomy_print_quad_guard.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "print-quad-guard"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "print-quad-guard"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_print_quad_guard.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Dieline quad regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_print_quad_guard.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_print_quad_guard.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_print_quad_guard.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/print_prep.py",
         "Northstar_backend/test_autonomy_print_quad_guard.py"
@@ -167,16 +277,44 @@
         "Northstar_backend/test_autonomy_surface_wrap_guard.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "surface-wrap-guard"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "surface-wrap-guard"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_surface_wrap_guard.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Wrap fraction regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_surface_wrap_guard.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_surface_wrap_guard.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_surface_wrap_guard.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/surface_measure.py",
         "Northstar_backend/test_autonomy_surface_wrap_guard.py"
@@ -204,16 +342,44 @@
         "Northstar_backend/test_autonomy_panels_format_guard.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "panels-format-guard"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "panels-format-guard"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_panels_format_guard.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Package format regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_panels_format_guard.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_panels_format_guard.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_panels_format_guard.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/specialists/panels.py",
         "Northstar_backend/test_autonomy_panels_format_guard.py"
@@ -242,16 +408,44 @@
         "Northstar_backend/test_autonomy_dead_code.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "dead-code-cleanup"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "dead-code-cleanup"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_dead_code.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Dead-code regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_dead_code.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_dead_code.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_dead_code.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "Northstar_backend/package_art.py",
         "Northstar_backend/package_pipeline.py",
@@ -280,16 +474,44 @@
         "Northstar_backend/test_autonomy_docs.py"
       ],
       "read_paths": [],
-      "apply_commands": [["python", "tools/autonomy_patches.py", "docs-autonomy"]],
-      "precheck_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"]],
+      "apply_commands": [
+        [
+          "python",
+          "tools/autonomy_patches.py",
+          "docs-autonomy"
+        ]
+      ],
+      "precheck_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_docs.py",
+          "-q"
+        ]
+      ],
       "checks": [
         {
           "name": "Autonomy docs regression",
-          "cmd": ["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"],
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_autonomy_docs.py",
+            "-q"
+          ],
           "cwd": "."
         }
       ],
-      "acceptance_commands": [["python", "-m", "pytest", "Northstar_backend/test_autonomy_docs.py", "-q"]],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_autonomy_docs.py",
+          "-q"
+        ]
+      ],
       "commit_paths": [
         "docs/CONTINUOUS_LOOP.md",
         "Northstar_backend/test_autonomy_docs.py"
@@ -314,7 +536,9 @@
       "objective": "Investigate the 401-vs-404 auth contract failure without changing auth, payments, browser, credentials or external I/O.",
       "dependencies": [],
       "write_paths": [],
-      "read_paths": ["Northstar_backend/test_text_fidelity.py"],
+      "read_paths": [
+        "Northstar_backend/test_text_fidelity.py"
+      ],
       "apply_commands": [],
       "precheck_commands": [],
       "checks": [],
@@ -323,6 +547,138 @@
       "timeout_seconds": 60,
       "max_repairs": 0,
       "max_steps": 1
+    },
+    {
+      "id": "ty-dpi-image-guard",
+      "name": "Print gate refuses an impossible image/quad pairing",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "Fix print_prep.dpi_report so the reported DPI cannot be produced from a quad that does not belong to the image it is given. Today the function measures the quad and ignores image_size completely, so a quad measured on a large render replayed against a tiny file still reports a printable DPI. Raise ValueError when image_size is not two positive numbers and when the measured face is wider or taller than the image. Keep the normal path working: a valid image that contains the quad must still return a report. Only Northstar_backend/print_prep.py may change.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/print_prep.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/print_prep.py"
+      ],
+      "checks": [
+        {
+          "name": "dpi image guard probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t1_dpi_image_guard.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t1_dpi_image_guard.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/print_prep.py"
+      ],
+      "commit_message": "fix(print): refuse a dieline quad that cannot belong to the image",
+      "required_artifact": "Northstar_backend/print_prep.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "bojo:gpu-orig",
+      "provider": "ollama"
+    },
+    {
+      "id": "ty-frame-fill-guard",
+      "name": "Framing a cutout refuses an impossible fill and an empty subject",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "Fix image_prep.frame_on_white so it cannot silently emit a broken listing image. Today fill=0, fill<0 and fill>1 are accepted: the product is scaled past the frame and clipped, or vanishes. A fully transparent cutout is also accepted and returns a blank white square, while listing_image.hero_on_white already refuses the same input. Raise ValueError when fill is not a finite number in (0, 1], and raise ValueError for an empty cutout. Keep fill=0.85 and fill=1.0 working for a normal cutout. Only Northstar_backend/image_prep.py may change.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/image_prep.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/image_prep.py"
+      ],
+      "checks": [
+        {
+          "name": "frame fill guard probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t2_frame_fill_guard.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t2_frame_fill_guard.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/image_prep.py"
+      ],
+      "commit_message": "fix(image): refuse an impossible fill and an empty cutout when framing",
+      "required_artifact": "Northstar_backend/image_prep.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "bojo:gpu-orig",
+      "provider": "ollama"
+    },
+    {
+      "id": "ty-hero-fill-guard",
+      "name": "Listing hero refuses an impossible fill fraction",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "Fix listing_image.hero_on_white so an impossible fill cannot ship a cropped MAIN image. Today fill=0, negative fills, fill>1, NaN and inf are accepted: the subject is scaled beyond the canvas and cut off, or disappears. Raise ValueError when fill is not a finite number in (0, 1]. Keep the normal path: fill=0.85 and fill=1.0 on a normal cutout must still return a square PNG with the subject visible, and an empty subject must still raise ValueError. Only Northstar_backend/listing_image.py may change.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/listing_image.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/listing_image.py"
+      ],
+      "checks": [
+        {
+          "name": "hero fill guard probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t3_hero_fill_guard.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t3_hero_fill_guard.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/listing_image.py"
+      ],
+      "commit_message": "fix(listing): refuse an impossible fill fraction on the hero image",
+      "required_artifact": "Northstar_backend/listing_image.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "bojo:gpu-orig",
+      "provider": "ollama"
     }
   ]
 }

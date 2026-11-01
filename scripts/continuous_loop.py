@@ -58,6 +58,8 @@ AUTONOMY_LOG_DIR = ROOT / "reports"
 CAMPAIGN_MANIFEST_DIR = ROOT / "state" / "campaigns"
 MIN_FREE_DISK_GB = 10.0
 MIN_FREE_RAM_GB = 3.0
+MODEL_RESIDENT_EVIDENCE = ROOT / "state" / "evidence"
+RESIDENT_EVIDENCE_MAX_AGE_MIN = 60
 MAX_TASK_TIMEOUT_S = 900
 MAX_REPAIRS = 1
 MAX_IMPLEMENTATION_TASKS = 8
@@ -206,8 +208,77 @@ def _free_ram_gb() -> Optional[float]:
         return None
 
 
-def resolve_lane(task: Optional[Dict[str, Any]] = None, *,
-                 tags: Optional[Dict[str, Any]] = None,
+def model_slug(model: str) -> str:
+    """A filesystem-safe fragment of a model id (`bojo:gpu-orig` -> `bojo_gpu_orig`)."""
+    out = "".join(ch if ch.isalnum() else "_" for ch in str(model or ""))
+    return out.strip("_") or "model"
+
+
+def measure_model_resident(model: str, *, floor: Optional[float] = None,
+                           timeout: float = 300.0) -> Dict[str, Any]:
+    """Load the lane, generate, and record the LOWEST free RAM while it was resident.
+
+    The gate must never decide from pre-load RAM: `bojo:gpu-orig` is 2.25 GB on
+    disk and, when the backend runs it on the CPU, it takes 2.7 GB of system RAM
+    with it. Only a measurement during generation answers the question.
+    """
+    floor = MIN_FREE_RAM_GB if floor is None else float(floor)
+    MODEL_RESIDENT_EVIDENCE.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out_path = MODEL_RESIDENT_EVIDENCE / f"model_resident_{model_slug(model)}_{stamp}.json"
+    cmd = ["python", str(ROOT / "tools" / "measure_model_resident.py"),
+           "--model", str(model), "--floor", f"{floor}", "--json", "--out", str(out_path)]
+    res = run_command(cmd, timeout=timeout)
+    text = str(res.get("output") or "")
+    record: Dict[str, Any] = {}
+    start, end = text.find("{"), text.rfind("}")
+    if start >= 0 and end > start:
+        try:
+            record = json.loads(text[start:end + 1])
+        except ValueError:
+            record = {}
+    ok = bool(record.get("verdict") == "FLOOR-MET"
+              and float(record.get("min_available_gb") or 0.0) >= floor
+              and int(record.get("tokens") or 0) > 0)
+    return {"ok": ok, "record": record, "evidence": str(out_path),
+            "floor_gb": floor, "command": cmd, "raw_output": text[-600:]}
+
+
+def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_AGE_MIN
+                      ) -> Dict[str, Any]:
+    """The newest measured residency record for `model`, and whether it is fresh."""
+    if not model:
+        return {"ok": False, "reason": "no model lane resolved", "age_min": None}
+    newest: Optional[Path] = None
+    newest_mtime = 0.0
+    if MODEL_RESIDENT_EVIDENCE.is_dir():
+        for path in MODEL_RESIDENT_EVIDENCE.glob("model_resident_*.json"):
+            try:
+                mtime = path.stat().st_mtime
+                if mtime <= newest_mtime:
+                    continue
+                record = _load_json(path, None) or {}
+            except OSError:
+                continue
+            if str(record.get("model") or "") != str(model):
+                continue
+            newest, newest_mtime, newest_record = path, mtime, record
+    if newest is None:
+        return {"ok": False, "reason": "no measured residency on record",
+                "age_min": None}
+    age_min = round((time.time() - newest_mtime) / 60.0, 1)
+    verdict = str(newest_record.get("verdict") or "")
+    ok = (verdict == "FLOOR-MET"
+          and float(newest_record.get("min_available_gb") or 0.0) >= MIN_FREE_RAM_GB
+          and age_min <= float(max_age_min))
+    reason = (f"measured {verdict}: min free {newest_record.get('min_available_gb')} GB "
+              f"(floor {MIN_FREE_RAM_GB}), resident {newest_record.get('resident_total_gb')} GB "
+              f"({newest_record.get('resident_system_gb')} GB system), {age_min} min old")
+    return {"ok": ok, "reason": reason, "age_min": age_min,
+            "path": str(newest), "record": newest_record}
+
+
+def resolve_lane(task: Optional[Dict[str, Any]] = None, *,                 tags: Optional[Dict[str, Any]] = None,
                  free_ram_gb: Optional[float] = None) -> Dict[str, Any]:
     """Pick the best installed chat lane that fits, re-checked at dispatch.
 
@@ -250,11 +321,12 @@ def resolve_lane(task: Optional[Dict[str, Any]] = None, *,
                 "free_ram_gb": free, "installed": candidates}
     post_headroom = round(free - float(chosen["estimated_ram_gb"]), 2)
     return {"ok": True, "provider": "ollama", "model": chosen["model"],
-            "reason": (f"{chosen['model']} is installed, proven for the Ty tool loop, "
-                       f"and estimated at {chosen['estimated_ram_gb']:.2f} GB; "
-                       f"free RAM {free:.2f} GB at dispatch; estimated post-load "
-                       f"headroom {post_headroom:.2f} GB"),
+            "reason": (f"{chosen['model']} is installed and proven for the Ty tool loop; "
+                       f"free RAM {free:.2f} GB at dispatch; the {chosen['estimated_ram_gb']:.2f} GB "
+                       f"figure is a PRE-LOAD estimate only - residency is gated by the "
+                       f"measured `model-resident` check, not by this number"),
             "free_ram_gb": free, "post_load_headroom_gb": post_headroom,
+            "estimate_not_measurement": True,
             "installed": candidates}
 
 
@@ -487,6 +559,26 @@ def readiness_gate(*, make_checkpoint: bool = True,
         lane.get("reason", "") + (f" | {lane.get('model')}" if lane.get("model") else ""),
         "start local Ollama (`ollama serve`) and keep a chat lane installed; no downloads are allowed")
 
+    # Residency is measured, never inferred. The lane above is chosen from
+    # pre-load free RAM and a disk-size estimate; that is exactly how a 2.09 GB
+    # "post-load headroom" was reported while the measured figure was 1.19 GB.
+    resident: Dict[str, Any] = {"ok": False, "reason": "no lane to measure"}
+    if lane.get("ok") and lane.get("provider") == "ollama" and lane.get("model"):
+        resident = measure_model_resident(str(lane["model"]))
+        rec = resident.get("record") or {}
+        add("model-resident", resident["ok"],
+            (f"measured while resident: min free {rec.get('min_available_gb')} GB "
+             f"(floor {MIN_FREE_RAM_GB}), resident {rec.get('resident_total_gb')} GB "
+             f"({rec.get('resident_system_gb')} GB system / {rec.get('resident_vram_gb')} GB VRAM), "
+             f"{rec.get('tokens')} tokens in {rec.get('elapsed_s')} s; "
+             f"evidence {resident.get('evidence')}")
+            if rec else "measurement produced no record",
+            (f"the {MIN_FREE_RAM_GB:.0f} GB floor is not lowered: free RAM, run the lane on "
+             f"the GPU, or install a smaller lane, then re-run --ready"))
+    else:
+        add("model-resident", False, resident.get("reason", "no ollama lane resolved"),
+            "resolve a model lane first; a Ty campaign cannot start without measured residency")
+
     tests_ok = True
     test_detail = "not run"
     if run_tests:
@@ -507,6 +599,7 @@ def readiness_gate(*, make_checkpoint: bool = True,
         "ok": all(c["ok"] for c in checks),
         "checked_at": _now(), "branch": branch,
         "checkpoint": checkpoint, "model_lane": lane, "model_tags": tags,
+        "model_resident": resident,
         "policy_fingerprint": fp, "checks": checks,
         "failures": [c for c in checks if not c["ok"]],
     }
@@ -1538,6 +1631,27 @@ def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
                 break
             active_lane = resolve_lane(task)
             tid = str(task.get("id"))
+            # A Ty task spends RAM on a resident model. The dispatch gate uses the
+            # MEASURED residency, refreshing it when the evidence is stale, and
+            # stops the campaign rather than falling back to a pre-load guess.
+            if str(task.get("execution") or "prebuilt") == "ty" and not dry_run:
+                evidence = resident_evidence(active_lane.get("model") or "")
+                if not evidence.get("ok"):
+                    refreshed = measure_model_resident(active_lane.get("model") or "")
+                    evidence = resident_evidence(active_lane.get("model") or "") if refreshed["ok"] \
+                        else {"ok": False, "reason": (refreshed.get("record") or {}).get(
+                            "verdict") or refreshed.get("raw_output") or "measurement failed"}
+                if not evidence.get("ok"):
+                    stop_reason = "model_resident_no_go"
+                    log_event(run_id, f"refused dispatch task={tid} reason=model_resident_no_go "
+                                      f"detail={str(evidence.get('reason'))[:160]}")
+                    write_campaign_heartbeat(
+                        run_id=run_id, status="stopped", started_at=started_at,
+                        deadline_at=deadline_at, attempted=attempted, completed=completed,
+                        failed=failed, remaining=remaining,
+                        consecutive_failures=consecutive, active_lane=active_lane,
+                        stop_reason=stop_reason)
+                    break
             log_event(run_id, f"dispatch task={tid} lane={active_lane.get('model') or 'prebuilt'} "
                               f"phase=precheck")
             write_campaign_heartbeat(

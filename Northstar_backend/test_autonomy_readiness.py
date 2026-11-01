@@ -149,8 +149,11 @@ def test_campaign_refuses_readiness_no_go(tmp_path, monkeypatch):
 def test_authorized_queue_has_eight_apply_tasks_and_a_blocked_auth_proposal():
     queue = json.loads((ROOT / "config" / "continuous_loop_tasks.json").read_text(encoding="utf-8"))
     runnable = [t for t in queue["tasks"] if t.get("authorized") is True]
-    assert len(runnable) >= 8
-    for task in runnable:
+    prebuilt = [t for t in runnable if str(t.get("execution") or "prebuilt") == "prebuilt"]
+    model_tasks = [t for t in runnable if str(t.get("execution")) == "ty"]
+    # The 2026-10-31 campaign proved eight prebuilt apply tasks; they remain.
+    assert len(prebuilt) >= 8
+    for task in prebuilt:
         assert task["schema_version"] == 2
         assert task["authorization_note"]
         assert task["apply_commands"]
@@ -158,8 +161,109 @@ def test_authorized_queue_has_eight_apply_tasks_and_a_blocked_auth_proposal():
         assert task["checks"]
         assert task["commit_paths"]
         assert not cl.validate_task(task)
+    # Model-authored work is a separate contract: no prebuilt apply, but an
+    # objective, a writable scope, an independent acceptance probe and a model.
+    for task in model_tasks:
+        assert task["schema_version"] == 2
+        assert task["authorization_note"]
+        assert task["objective"].strip()
+        assert task["write_paths"] and task["commit_paths"]
+        assert task["acceptance_commands"] and task["checks"]
+        assert task.get("model") and task.get("provider") == "ollama"
+        assert not task.get("apply_commands"), "a ty task must not ship a prebuilt patch"
+        assert not cl.validate_task(task)
     blocked = [t for t in queue["tasks"] if t.get("authorized") is False]
     assert any("auth" in str(t.get("blocked") or "").lower() for t in blocked)
+
+
+# ── measured residency, not a pre-load guess ───────────────────────────────
+
+def _evidence(tmp_path, monkeypatch, *, model="bojo:gpu-orig", verdict="FLOOR-MET",
+              min_free=4.09, age_min=1.0, resident_system=0.0):
+    evidence_dir = tmp_path / "evidence"
+    evidence_dir.mkdir(exist_ok=True)
+    monkeypatch.setattr(cl, "MODEL_RESIDENT_EVIDENCE", evidence_dir)
+    record = {"model": model, "verdict": verdict, "min_available_gb": min_free,
+              "resident_total_gb": 2.24, "resident_system_gb": resident_system,
+              "resident_vram_gb": 2.24, "tokens": 456, "elapsed_s": 37.8}
+    path = evidence_dir / f"model_resident_{cl.model_slug(model)}_20261101T000000Z.json"
+    path.write_text(json.dumps(record), encoding="utf-8")
+    stamp = time.time() - age_min * 60.0
+    import os
+    os.utime(path, (stamp, stamp))
+    return path
+
+
+def test_resident_evidence_must_be_fresh_and_meet_the_floor(tmp_path, monkeypatch):
+    _evidence(tmp_path, monkeypatch, min_free=4.09)
+    fresh = cl.resident_evidence("bojo:gpu-orig")
+    assert fresh["ok"] is True and "FLOOR-MET" in fresh["reason"]
+
+    stale = cl.resident_evidence("bojo:gpu-orig", max_age_min=0.001)
+    assert stale["ok"] is False
+    assert "min old" in stale["reason"]
+
+    _evidence(tmp_path, monkeypatch, verdict="FLOOR-MISSED", min_free=1.19)
+    missed = cl.resident_evidence("bojo:gpu-orig")
+    assert missed["ok"] is False
+    assert "FLOOR-MISSED" in missed["reason"]
+
+
+def test_resident_evidence_is_scoped_to_the_model(tmp_path, monkeypatch):
+    _evidence(tmp_path, monkeypatch, model="bojo:gpu-orig")
+    other = cl.resident_evidence("qwen3.5:2b")
+    assert other["ok"] is False
+    assert "no measured residency" in other["reason"]
+
+
+def test_resident_evidence_without_any_record_is_not_ok(tmp_path, monkeypatch):
+    empty = tmp_path / "evidence"
+    empty.mkdir()
+    monkeypatch.setattr(cl, "MODEL_RESIDENT_EVIDENCE", empty)
+    out = cl.resident_evidence("bojo:gpu-orig")
+    assert out["ok"] is False and out["age_min"] is None
+
+
+def test_campaign_refuses_a_ty_task_without_measured_residency(tmp_path, monkeypatch):
+    _campaign_paths(tmp_path, monkeypatch)
+    empty = tmp_path / "evidence"
+    empty.mkdir()
+    monkeypatch.setattr(cl, "MODEL_RESIDENT_EVIDENCE", empty)
+    # Any real measurement would fail to reach Ollama here; make it explicit.
+    monkeypatch.setattr(cl, "measure_model_resident",
+                        lambda model, *a, **k: {"ok": False, "record": {"verdict": "UNMEASURED"},
+                                                "raw_output": "offline", "evidence": ""})
+    ty_task = _task("ty-needs-model", execution="ty",
+                    write_paths=["Northstar_backend/x.py"],
+                    acceptance_commands=[["python", "-c", "print(1)"]])
+    result = cl.run_campaign({"tasks": [ty_task]}, {"tasks": {}, "completed": {}},
+                             max_tasks=1, deadline_minutes=1,
+                             readiness={"ok": True, "verdict": "GO", "checks": []},
+                             execute=lambda *a, **k: pytest.fail("must not execute"))
+    assert result["stop_reason"] == "model_resident_no_go"
+    assert result["results"] == []
+
+
+def test_campaign_dispatches_a_ty_task_only_with_fresh_residency(tmp_path, monkeypatch):
+    _campaign_paths(tmp_path, monkeypatch)
+    _evidence(tmp_path, monkeypatch, min_free=4.09)
+    seen = {}
+
+    def fake_execute(task, state, **kw):
+        seen["id"] = task["id"]
+        return {"status": "completed", "task": task["id"],
+                "commit": {"sha": "abc123"}, "duration_s": 0.01,
+                "lane": {"provider": "ollama", "model": "bojo:gpu-orig"},
+                "checks": [], "changed": []}
+
+    ty_task = _task("ty-ok", execution="ty", write_paths=["Northstar_backend/x.py"],
+                    acceptance_commands=[["python", "-c", "print(1)"]])
+    result = cl.run_campaign({"tasks": [ty_task]}, {"tasks": {}, "completed": {}},
+                             max_tasks=1, deadline_minutes=1,
+                             readiness={"ok": True, "verdict": "GO", "checks": []},
+                             execute=fake_execute)
+    assert seen["id"] == "ty-ok"
+    assert result["ok"] is True
 
 
 def test_deadline_is_enforced_even_with_task_budget_left(tmp_path, monkeypatch):
