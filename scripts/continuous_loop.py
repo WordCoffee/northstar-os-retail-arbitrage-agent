@@ -554,7 +554,19 @@ def readiness_gate(*, make_checkpoint: bool = True,
         "repair snapshot/restore before campaign")
 
     tags = _ollama_tags()
-    lane = resolve_lane({"execution": "ty", "model": ""}, tags=tags, free_ram_gb=ram)
+    # The lane that matters is the one the authorized queue will actually run, not
+    # a default the campaign never dispatches.
+    queue_models: List[str] = []
+    try:
+        for task in (load_tasks().get("tasks") or []):
+            if (task.get("authorized") is True
+                    and str(task.get("execution") or "") == "ty"
+                    and task.get("model") and str(task["model"]) not in queue_models):
+                queue_models.append(str(task["model"]))
+    except Exception:  # noqa: BLE001 - the queue is advisory for this check
+        pass
+    lane = resolve_lane({"execution": "ty", "model": (queue_models[0] if queue_models else "")},
+                        tags=tags, free_ram_gb=ram)
     add("model-lane", lane.get("ok", False),
         lane.get("reason", "") + (f" | {lane.get('model')}" if lane.get("model") else ""),
         "start local Ollama (`ollama serve`) and keep a chat lane installed; no downloads are allowed")
@@ -562,17 +574,25 @@ def readiness_gate(*, make_checkpoint: bool = True,
     # Residency is measured, never inferred. The lane above is chosen from
     # pre-load free RAM and a disk-size estimate; that is exactly how a 2.09 GB
     # "post-load headroom" was reported while the measured figure was 1.19 GB.
-    resident: Dict[str, Any] = {"ok": False, "reason": "no lane to measure"}
+    # EVERY model the authorized queue names is measured: a campaign dispatches
+    # tasks, not a default lane.
+    resident: Dict[str, Any] = {"ok": False, "reason": "no lane to measure", "models": []}
+    models: List[str] = []
     if lane.get("ok") and lane.get("provider") == "ollama" and lane.get("model"):
-        resident = measure_model_resident(str(lane["model"]))
-        rec = resident.get("record") or {}
-        add("model-resident", resident["ok"],
-            (f"measured while resident: min free {rec.get('min_available_gb')} GB "
-             f"(floor {MIN_FREE_RAM_GB}), resident {rec.get('resident_total_gb')} GB "
-             f"({rec.get('resident_system_gb')} GB system / {rec.get('resident_vram_gb')} GB VRAM), "
-             f"{rec.get('tokens')} tokens in {rec.get('elapsed_s')} s; "
-             f"evidence {resident.get('evidence')}")
-            if rec else "measurement produced no record",
+        models.append(str(lane["model"]))
+    for model in queue_models:
+        if model not in models:
+            models.append(model)
+    models = models[:3]
+    if models:
+        measured = [measure_model_resident(m) for m in models]
+        resident = {"ok": all(m["ok"] for m in measured), "models": measured,
+                    "reason": "; ".join(
+                        f"{(m.get('record') or {}).get('model') or '?'}: "
+                        f"{(m.get('record') or {}).get('verdict') or 'UNMEASURED'} "
+                        f"min {((m.get('record') or {}).get('min_available_gb'))} GB"
+                        for m in measured)}
+        add("model-resident", resident["ok"], resident["reason"],
             (f"the {MIN_FREE_RAM_GB:.0f} GB floor is not lowered: free RAM, run the lane on "
              f"the GPU, or install a smaller lane, then re-run --ready"))
     else:
@@ -1178,6 +1198,9 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
         "max_steps": task.get("max_steps") or 10,
         "max_repairs": task.get("max_repairs") or 0,
         "required_artifact": task.get("required_artifact") or "",
+        "max_protocol_errors": task.get("max_protocol_errors") or 3,
+        "num_ctx": task.get("num_ctx") or 0,
+        "allowed_tools": task.get("allowed_tools") or [],
         "model": task.get("model") or "",
         "provider": task.get("provider") or "",
     })

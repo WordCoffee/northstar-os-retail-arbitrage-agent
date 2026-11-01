@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from .coding_tools import ToolResult, Workspace
+from . import tool_protocol as protocol
 
 Model = Callable[[str], str]
 Acceptance = Callable[[], Tuple[bool, str]]
@@ -28,11 +29,17 @@ class CodingResult:
     # True when the loop stopped without success but acceptance passed anyway
     # (p01). Callers surface this instead of re-deriving it from the summary.
     acceptance_recovered: bool = False
+    # Rejections are evidence, not noise: a model that never produced a usable
+    # action is a different failure from one the executor refused on scope.
+    protocol_errors: int = 0
+    scope_rejections: int = 0
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "summary": self.summary, "steps": self.steps,
                 "files": self.files, "error": self.error,
                 "acceptance_recovered": self.acceptance_recovered,
+                "protocol_errors": self.protocol_errors,
+                "scope_rejections": self.scope_rejections,
                 "transcript": self.transcript[-20:]}
 
 
@@ -68,13 +75,21 @@ class CodingAgent:
     def __init__(self, workspace: Workspace | str, model: Model, *,
                  max_steps: int = 12, max_repairs: int = 2,
                  acceptance: Optional[Acceptance] = None,
-                 required_artifact: str = ""):
+                 required_artifact: str = "",
+                 max_protocol_errors: int = 3,
+                 allowed_tools: Optional[Sequence[str]] = None):
         self.tools = workspace if isinstance(workspace, Workspace) else Workspace(workspace)
         self.model = model
         self.max_steps = max(1, int(max_steps))
         self.max_repairs = max(0, int(max_repairs))
         self.acceptance = acceptance
         self.required_artifact = str(required_artifact or "").strip()
+        # Bounded repair: a turn that is not one usable action is answered once
+        # with a protocol observation, and the run fails cleanly after N of them
+        # instead of burning the whole step budget on malformed output.
+        self.max_protocol_errors = max(0, int(max_protocol_errors))
+        tools = [str(t) for t in (allowed_tools or ()) if str(t)]
+        self.allowed_tools = tuple(t for t in tools if t in protocol.CANONICAL_ACTIONS) or None
         self._failing: List[str] = []
         self._reads = 0
 
@@ -83,12 +98,21 @@ class CodingAgent:
         files: set[str] = set()
         repairs = 0
         written = False
+        protocol_errors = 0
+        scope_rejections = 0
+        last_protocol = ""
         # A failed acceptance run cannot change by running it again. Track it so the
         # loop refuses a no-op re-run: measured 2026-10-29, 17 of 24 steps were bare
         # `run` calls ("exit 2") with no edit between them, and the build never moved.
         failed_run = False
         changed_since_run = True
         stalls = 0
+        def _out(ok, summary, step, files_, history_, error='', acceptance_recovered=False):
+            return CodingResult(ok, summary, step, files_, history_, error,
+                                acceptance_recovered=acceptance_recovered,
+                                protocol_errors=protocol_errors,
+                                scope_rejections=scope_rejections)
+
         for step in range(1, self.max_steps + 1):
             pressure = bool(self.required_artifact) and not written and step > 2
             prompt = self._prompt(task, history, pressure=pressure, stall=stalls > 0)
@@ -105,32 +129,43 @@ class CodingAgent:
                     if ok:
                         history.append({"role": "observation", "tool": "acceptance",
                                         "output": "PASS: " + str(detail)[:1000]})
-                        return CodingResult(True, "acceptance passed after model error",
+                        return _out(True, "acceptance passed after model error",
                                             step, sorted(files), history, "",
                                             acceptance_recovered=True)
-                return CodingResult(False, "model call failed", step, sorted(files),
+                return _out(False, "model call failed", step, sorted(files),
                                     history, str(exc)[:300])
-            call = parse_tool_call(raw)
-            if call is None:
-                history.append({"role": "observation", "tool": "protocol",
-                                "output": "Invalid response. Reply with ONE JSON object "
-                                          "using the tool schema. No prose, no fences."})
+            # One strict action per turn: parse, validate against the task scope and
+            # policy, then execute. A refusal is answered once, then bounded.
+            try:
+                action = protocol.validate_action(protocol.parse_action(raw),
+                                                  workspace=self.tools)
+            except protocol.ActionError as exc:
+                if protocol.rejection_kind(exc) == "model":
+                    protocol_errors += 1
+                else:
+                    scope_rejections += 1
+                last_protocol = exc.code
+                history.append({"role": "observation", "tool": "protocol", "ok": False,
+                                "output": exc.observation()})
+                if protocol_errors > self.max_protocol_errors:
+                    return _out(False, "protocol_failed", step, sorted(files), history,
+                                f"protocol_failed: {exc.code}")
                 continue
-            tool, args = call["tool"], call["args"]
+            tool, args = action.tool, action.args
             self._reads = self._reads + 1 if tool == "read" else 0
             if tool == "finish":
                 summary = str(args.get("summary") or "finished")
                 if self.acceptance is None:
-                    return CodingResult(True, summary, step, sorted(files), history)
+                    return _out(True, summary, step, sorted(files), history)
                 ok, detail = self.acceptance()
                 history.append({"role": "observation", "tool": "acceptance",
                                 "output": ("PASS: " if ok else "FAIL: ") + str(detail)[:1000]})
                 if ok:
-                    return CodingResult(True, summary, step, sorted(files), history)
+                    return _out(True, summary, step, sorted(files), history)
                 self._note_failure(detail)
                 repairs += 1
                 if repairs > self.max_repairs:
-                    return CodingResult(False, "acceptance failed after repairs", step,
+                    return _out(False, "acceptance failed after repairs", step,
                                         sorted(files), history, str(detail)[:300])
                 continue
             if tool == "run" and failed_run and not changed_since_run:
@@ -166,7 +201,7 @@ class CodingAgent:
                 if ok:
                     history.append({"role": "observation", "tool": "acceptance",
                                     "output": "PASS: " + str(detail)[:1000]})
-                    return CodingResult(True, f"acceptance passed after {tool}", step,
+                    return _out(True, f"acceptance passed after {tool}", step,
                                         sorted(files), history)
                 self._note_failure(detail)
                 # The model must SEE the verdict. Without this the loop reported
@@ -186,11 +221,11 @@ class CodingAgent:
             if ok:
                 history.append({"role": "observation", "tool": "acceptance",
                                 "output": "PASS: " + str(detail)[:1000]})
-                return CodingResult(True, "acceptance passed after the step budget",
-                                    self.max_steps, sorted(files), history,
-                                    acceptance_recovered=True)
-        return CodingResult(False, "step budget exhausted", self.max_steps,
-                            sorted(files), history, "max_steps")
+                return _out(True, "acceptance passed after the step budget",
+                            self.max_steps, sorted(files), history,
+                            acceptance_recovered=True)
+        return _out(False, "step budget exhausted", self.max_steps,
+                    sorted(files), history, "max_steps")
 
     def _artifact_present(self) -> bool:
         """True when the declared artifact exists on disk and is not empty."""
@@ -246,13 +281,41 @@ class CodingAgent:
             '{"tool":"run","args":{"cmd":["python","-m","pytest","-q"]}}\n'
             '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
         )
+        if self.allowed_tools:
+            # A small lane does better with the three actions its task can use than
+            # with the whole vocabulary. Unknown names are impossible when they are
+            # never offered.
+            lines = [ln for ln in schema.splitlines()
+                     if any(f'"tool":"{name}"' in ln for name in self.allowed_tools)]
+            schema = "\n".join(lines)
         if pressure:
-            schema = (
-                '{"tool":"write","args":{"path":"' + self.required_artifact +
-                '","content":"..."}}\n'
-                '{"tool":"finish","args":{"summary":"what changed and what passed"}}'
-            )
+            # Pressure used to shrink the schema to write/finish. That steered a
+            # bounded-edit task straight into the one action the executor refuses
+            # (whole-file write of an existing source). The full action list stays;
+            # only the instruction becomes urgent.
+            schema = schema + (
+                '\n{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+                '"target":"func","source":"return a + b"}}')
         observed = self._compact_history(history)
+        if self.allowed_tools:
+            # Task-scoped protocol: a small lane gets the actions it can use, four
+            # rules and the last two results - nothing else to dilute them.
+            allowed = ", ".join(self.allowed_tools)
+            commands = [" ".join(c) for c in (getattr(self.tools, "run_allowlist", ()) or ())][:3]
+            return (
+                "You are the Northstar OS coding worker. Reply with exactly ONE JSON "
+                "object per turn. No prose, no markdown fences.\n\n"
+                f"ACTIONS (only these are accepted: {allowed}):\n" + schema + "\n\n"
+                "RULES:\n"
+                "- Use the exact action names and argument names above.\n"
+                "- Never rewrite an existing source file: use ast_edit or apply_patch.\n"
+                "- `run` takes an argv list; the only commands that will execute are: "
+                + ("; ".join(commands) if commands else "(none)") + "\n"
+                "- Stop with `finish` once the behaviour is correct.\n\n"
+                f"TASK:\n{task}\n\n"
+                + (self._failing_block()[:600] if self._failing else "")
+                + "RECENT RESULTS:\n" + ("\n".join(observed[-2:]) or "(none)") + "\n\n"
+                "Next JSON object:")
         return (
             "You are the Northstar OS coding worker. You have tools. You MUST respond "
             "with exactly ONE JSON object per turn: no prose, no markdown fences.\n\n"
@@ -279,9 +342,9 @@ class CodingAgent:
             + ("STOP READING. You have read several files without writing. Your next "
                "turn MUST be a write_many call that writes the corrected files. Do not "
                "read again.\n" if self._reads >= 2 else "")
-            + (f"STEP PRESSURE: you have not written `{self.required_artifact}` yet. "
-               "Only write and finish are available now. Write the artifact in your "
-               "next JSON object.\n" if pressure else "")
+            + (f"STEP PRESSURE: you have not produced `{self.required_artifact}` yet. "
+               "Use ast_edit / apply_patch for an existing file; a whole-file write of a "
+               "source file is refused. Then finish.\n" if pressure else "")
             + ("VERIFY STALL: acceptance already failed and nothing changed since. "
                "Re-running it returns the same error, so it is refused. The only way "
                "forward is to change files: reply with write_many containing every "

@@ -90,6 +90,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         model_overrides["model"] = spec["model"]
     if spec.get("provider"):
         model_overrides["provider"] = spec["provider"]
+    if spec.get("num_ctx"):
+        model_overrides["num_ctx"] = int(spec["num_ctx"])
     model = make_local_model(**model_overrides)
 
     def guarded_model(prompt: str) -> str:
@@ -106,6 +108,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             max_repairs=int(spec.get("max_repairs") or 0),
             acceptance=acceptance,
             required_artifact=str(spec.get("required_artifact") or ""),
+            max_protocol_errors=int(spec.get("max_protocol_errors") or 3),
+            allowed_tools=spec.get("allowed_tools") or None,
         )
         result = agent.run(objective)
         payload = result.to_dict()

@@ -178,6 +178,20 @@ class Workspace:
             return f"read outside the task scope: {self._rel(path)}"
         return None
 
+    # Public, path-string scope checks. The protocol layer validates an action
+    # BEFORE any tool runs, so a rejected batch never half-executes.
+    def write_scope_error(self, rel: str) -> Optional[str]:
+        try:
+            return self._write_scope_error(self.resolve(rel))
+        except ValueError as exc:
+            return str(exc)
+
+    def read_scope_error(self, rel: str) -> Optional[str]:
+        try:
+            return self._read_scope_error(self.resolve(rel))
+        except ValueError as exc:
+            return str(exc)
+
     # ── tools ───────────────────────────────────────────────────────────────
     def list(self, path: str = ".") -> ToolResult:
         try:

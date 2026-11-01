@@ -83,6 +83,10 @@ class LlamaCppModel:
         self.temperature = float(temperature)
         self.disable_thinking = bool(disable_thinking)
         self.retries = max(0, int(retries))
+        # Per-request context: a small model on a small box does not need the
+        # model's 32k default for a one-file task, and a smaller KV cache leaves
+        # more host RAM free. This is a request option, not an environment change.
+        self.num_ctx = int(num_ctx) if num_ctx else None
         self.schema = schema
 
     def payload(self, prompt: str) -> Dict[str, Any]:
@@ -143,13 +147,17 @@ class OllamaChatModel:
     def __init__(self, base_url: str = "http://127.0.0.1:11434",
                  model: str = "bojo", *, timeout_s: float = 600.0,
                  max_tokens: int = 4096, temperature: float = 0.1,
-                 retries: int = 1):
+                 retries: int = 1, num_ctx: Optional[int] = None):
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout_s = float(timeout_s)
         self.max_tokens = int(max_tokens)
         self.temperature = float(temperature)
         self.retries = max(0, int(retries))
+        # Per-request context: a small model on a small box does not need the
+        # model's 32k default for a one-file task, and a smaller KV cache leaves
+        # more host RAM free. This is a request option, not an environment change.
+        self.num_ctx = int(num_ctx) if num_ctx else None
 
     def payload(self, prompt: str) -> Dict[str, Any]:
         return {
@@ -159,15 +167,34 @@ class OllamaChatModel:
             "format": "json",
             "think": False,
             "options": {"num_predict": self.max_tokens,
-                        "temperature": self.temperature},
+                        "temperature": self.temperature,
+                        **({"num_ctx": self.num_ctx} if self.num_ctx else {})},
         }
 
     def __call__(self, prompt: str) -> str:
         url = f"{self.base_url}/api/chat"
         last: Optional[Exception] = None
+        strict_json = True
         for attempt in range(self.retries + 1):
+            payload = self.payload(prompt)
+            if not strict_json:
+                # The server-side JSON-constrained path can fail (observed: HTTP
+                # 500 after ~100 tokens, twice, on the same prompt). Falling back
+                # to the same prompt WITHOUT the constraint keeps the protocol the
+                # same - the executor still validates the reply - and does not
+                # generate any content on the model's behalf.
+                payload.pop("format", None)
+                payload.pop("think", None)
             try:
-                out = _post_json(url, self.payload(prompt), self.timeout_s)
+                out = _post_json(url, payload, self.timeout_s)
+            except urllib.error.HTTPError as exc:
+                last = exc
+                if exc.code >= 500 and attempt < self.retries:
+                    strict_json = False
+                    continue
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"Ollama returned HTTP {exc.code} at {url}") from exc
             except urllib.error.URLError as exc:
                 last = exc
                 if attempt < self.retries:
