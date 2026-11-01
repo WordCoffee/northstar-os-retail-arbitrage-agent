@@ -21,7 +21,7 @@
 // GPU is idle while the operator reads.
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import CelestialBackdrop from './CelestialBackdrop.jsx'
 import { FRAG, VERT } from './galacticShader.js'
 import { variantById, applyVariant } from './galacticVariants.js'
@@ -45,6 +45,55 @@ function tintFor(id) {
   return GALACTIC_THEMES[id] || GALACTIC_THEMES.auto
 }
 
+// Deterministic meteor placement: the same theme looks the same on every load,
+// but each theme gets a different field and a different fall direction.
+function seeded(seed) {
+  let s = seed >>> 0
+  return () => {
+    s = (s * 1664525 + 1013904223) >>> 0
+    return s / 4294967296
+  }
+}
+
+function MeteorField({ variant }) {
+  const motion = variant?.motion || {}
+  const meteors = useMemo(() => {
+    const count = Math.max(0, Math.min(40, Number(motion.meteors) || 0))
+    const seed = String(variant?.id || 'cosmos').split('').reduce((a, c) => a + c.charCodeAt(0), 7)
+    const rand = seeded(seed)
+    return Array.from({ length: count }, (_, i) => ({
+      id: `${variant?.id || 'cosmos'}-${i}`,
+      x: Math.round(rand() * 120 - 10),
+      y: Math.round(rand() * 76 - 8),
+      delay: (rand() * 14).toFixed(2),
+      duration: (Number(motion.speed) || 16) * (0.62 + rand() * 0.85),
+      len: Math.round((Number(motion.length) || 160) * (0.55 + rand() * 0.9)),
+      opacity: (0.35 + rand() * 0.55).toFixed(2),
+      angle: (Number(motion.angle) || 28) + (rand() * 10 - 5),
+    }))
+  }, [variant, motion])
+  if (!meteors.length) return null
+  return (
+    <div className="galactic-meteors" aria-hidden="true" data-meteor-count={meteors.length}>
+      {meteors.map((m) => (
+        <span
+          key={m.id}
+          className="galactic-meteor"
+          style={{
+            '--mx': `${m.x}%`,
+            '--my': `${m.y}%`,
+            '--mdelay': `${m.delay}s`,
+            '--mdur': `${m.duration}s`,
+            '--mlen': `${m.len}px`,
+            '--mopacity': m.opacity,
+            '--mangle': `${m.angle}deg`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 function compile(gl, type, src) {
   const sh = gl.createShader(type)
   gl.shaderSource(sh, src)
@@ -62,13 +111,14 @@ function compile(gl, type, src) {
 export default function GalacticBackdrop({ themeId = 'auto', maxDpr = 1.25, variant }) {
   const canvasRef = useRef(null)
   const themeRef = useRef(themeId)
-  const variantRef = useRef(variant || variantById('event-horizon'))
+  const variantRef = useRef(variant || variantById('orion-nursery'))
   const dprRef = useRef(maxDpr)
   const tintRef = useRef([...tintFor(themeId)])
   const stateRef = useRef(null)
   themeRef.current = themeId
-  variantRef.current = variant || variantById('event-horizon')
+  variantRef.current = variant || variantById('orion-nursery')
   dprRef.current = maxDpr
+  const hasImage = !!variant?.image
 
   const paint = useCallback((theme) => {
     const st = stateRef.current
@@ -120,6 +170,7 @@ export default function GalacticBackdrop({ themeId = 'auto', maxDpr = 1.25, vari
   }, [])
 
   useEffect(() => {
+    if (hasImage) return undefined
     const canvas = canvasRef.current
     if (!canvas) return undefined
 
@@ -212,12 +263,12 @@ export default function GalacticBackdrop({ themeId = 'auto', maxDpr = 1.25, vari
       stateRef.current = null
       try { gl.deleteProgram(prog) } catch { /* context may already be gone */ }
     }
-  }, [paint])
+  }, [paint, hasImage])
 
   // A different variant is a different scene: repaint, and publish its CSS
   // custom properties so the surface material follows on the same tick.
   useEffect(() => {
-    const v = variant || variantById('event-horizon')
+    const v = variant || variantById('orion-nursery')
     applyVariant(v)
     paint(themeRef.current)
   }, [variant, paint])
@@ -257,12 +308,32 @@ export default function GalacticBackdrop({ themeId = 'auto', maxDpr = 1.25, vari
     return () => cancelAnimationFrame(raf)
   }, [themeId, paint])
 
+  const active = variant || variantById('orion-nursery')
+  const motion = active.motion || {}
   return (
-    <div className="galactic" data-testid="celestial-backdrop" aria-hidden="true">
+    <div className={`galactic ${hasImage ? 'galactic--image' : ''}`}
+         data-testid="galactic-backdrop" data-galactic-variant={active.id} aria-hidden="true">
       {/* The CSS scene is not dead code: it is the documented fallback when the
           GPU path is unavailable, and it shows through a lost context. */}
       <CelestialBackdrop />
-      <canvas ref={canvasRef} className="galactic-plate" data-testid="galactic-plate" />
+      {hasImage ? (
+        <img
+          className="galactic-cluster"
+          src={active.image}
+          alt=""
+          draggable="false"
+          style={{
+            '--cluster-zoom': motion.zoom || 1.06,
+            '--cluster-x': motion.x || '0%',
+            '--cluster-y': motion.y || '0%',
+            '--cluster-duration': `${motion.duration || 100}s`,
+            '--cluster-origin': motion.origin || '50% 50%',
+          }}
+        />
+      ) : (
+        <canvas ref={canvasRef} className="galactic-plate" data-testid="galactic-plate" />
+      )}
+      <MeteorField variant={active} />
       <div className="galactic-grain" />
       <div className="galactic-vignette" />
     </div>

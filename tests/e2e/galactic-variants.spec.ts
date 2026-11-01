@@ -6,16 +6,16 @@ import path from 'node:path'
 // the one case where Playwright Test is the default browser path rather than
 // Chrome Connect.
 //
-// The Galactic plate is a one-shot WebGL render, so each shot waits for
-// data-galactic-render="final" and for the variant id to match, instead of
-// sleeping. A fixed sleep would race a slow GPU and capture a half-painted
-// frame from the previous variant.
+// The 2026-10-31 theme set is ten FLUX 3 cluster plates. Each look is an image
+// with a slow CSS camera drift and a CSS meteor field, so the test waits for
+// the plate image and the variant marker instead of a WebGL "final" state.
 
 const OUT = path.resolve('reports', 'theme_review')
 
 const VARIANTS = [
-  'event-horizon', 'gargantua', 'sagittarius', 'andromeda', 'photon-ring',
-  'nebula-bloom', 'quasar', 'void-architecture', 'solar-ash', 'observatory',
+  'orion-nursery', 'pleiades-veil', 'carina-cliffs', 'crab-pulsar',
+  'andromeda-spiral', 'globular-core', 'magellanic-reef', 'black-hole-disk',
+  'meteor-rain', 'rose-galaxy',
 ]
 
 test.beforeAll(() => {
@@ -25,20 +25,22 @@ test.beforeAll(() => {
 async function shoot(page, variantId, index) {
   await page.goto(`/ui/?galactic=${variantId}`, { waitUntil: 'domcontentloaded' })
   await expect(page.getByTestId('mb-shell')).toBeVisible({ timeout: 30000 })
-  const plate = page.locator('canvas[data-testid="galactic-plate"]')
-  await expect(plate).toBeVisible({ timeout: 15000 })
-  await expect(plate).toHaveAttribute('data-galactic-render', 'final', { timeout: 40000 })
-  await expect(plate).toHaveAttribute('data-galactic-variant', variantId, { timeout: 20000 })
-  await page.waitForTimeout(600)
+  const backdrop = page.getByTestId('galactic-backdrop')
+  await expect(backdrop).toHaveAttribute('data-galactic-variant', variantId, { timeout: 20000 })
+  const plate = page.locator('img.galactic-cluster')
+  await expect(plate).toBeVisible({ timeout: 20000 })
+  await expect(plate).toHaveAttribute('src', /\/assets\/.*\.webp/)
+  expect(await page.locator('.galactic-meteor').count()).toBeGreaterThan(0)
+  await page.waitForTimeout(500)
   const file = path.join(OUT, `${String(index + 1).padStart(2, '0')}-${variantId}.png`)
   await page.screenshot({ path: file, fullPage: false })
 }
 
-test('capture the shipped theme (event horizon)', async ({ page }) => {
+test('capture the shipped theme (Orion’s Cradle)', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
-  await shoot(page, 'event-horizon', 0)
+  await shoot(page, 'orion-nursery', 0)
   fs.copyFileSync(
-    path.join(OUT, '01-event-horizon.png'),
+    path.join(OUT, '01-orion-nursery.png'),
     path.join(OUT, '00-current.png'),
   )
 })

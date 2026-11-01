@@ -165,3 +165,68 @@ html[data-galactic-fallback="1"] .galactic-plate { display: none; }
 @media (max-width: 900px) {
   .galactic-plate { inset: -10%; width: 120%; height: 120%; }
 }
+
+/* ── FLUX 3 cluster plates (2026-10-31) ─────────────────────────────────────
+   Ten different generated scenes. The image is the plate; motion is a slow
+   camera drift, and the meteors are CSS so the GPU is idle between frames. */
+.galactic--image .celestial,
+.galactic--image .galactic-plate { display: none; }
+
+.galactic-cluster {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  display: block;
+  object-fit: cover;
+  object-position: var(--cluster-origin, 50% 50%);
+  transform-origin: var(--cluster-origin, 50% 50%);
+  animation: galactic-cluster-drift var(--cluster-duration, 100s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes galactic-cluster-drift {
+  from { transform: scale(1.0) translate3d(0, 0, 0); }
+  to {
+    transform: scale(var(--cluster-zoom, 1.06))
+      translate3d(var(--cluster-x, 0%), var(--cluster-y, 0%), 0);
+  }
+}
+
+.galactic-meteors {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.galactic-meteor {
+  position: absolute;
+  top: var(--my, 10%);
+  left: var(--mx, 10%);
+  width: var(--mlen, 160px);
+  height: 1px;
+  border-radius: 999px;
+  opacity: 0;
+  transform-origin: left center;
+  transform: translate3d(0, 0, 0) rotate(var(--mangle, 28deg));
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.92) 72%,
+    rgba(255, 255, 255, 0.98) 100%);
+  filter: drop-shadow(0 0 3px rgba(190, 225, 255, 0.85));
+  animation: galactic-meteor var(--mdur, 16s) linear var(--mdelay, 0s) infinite;
+}
+
+@keyframes galactic-meteor {
+  0% { opacity: 0; transform: translate3d(-10vw, -10vh, 0) rotate(var(--mangle, 28deg)) scaleX(0.15); }
+  4% { opacity: var(--mopacity, 0.75); }
+  13% { opacity: var(--mopacity, 0.75); }
+  26%, 100% { opacity: 0; transform: translate3d(28vw, 28vh, 0) rotate(var(--mangle, 28deg)) scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galactic-cluster { animation: none; }
+  .galactic-meteor { animation: none; opacity: 0; }
+}

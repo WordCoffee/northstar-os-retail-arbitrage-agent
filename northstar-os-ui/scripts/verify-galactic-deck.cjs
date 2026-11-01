@@ -73,6 +73,20 @@ for (const selector of ['.gx-topology', '.gx-heatmap', '.gx-events', '.gx-node',
 check(css.includes('prefers-reduced-motion: reduce'), 'CSS honours reduced motion')
 check(css.includes('grid-template-areas'), 'CSS has the command-deck grid')
 
+const variants = fs.readFileSync(path.join(ROOT, 'src/shell/galacticVariants.js'), 'utf8')
+const variantIds = [...variants.matchAll(/^\s{4}id: '([^']+)'/gm)].map((m) => m[1])
+check(variantIds.length === 10, 'galacticVariants defines exactly ten looks',
+  `found ${variantIds.length}`)
+check((variants.match(/^\s{4}image: /gm) || []).length === 10,
+  'each Galactic look has its own FLUX 3 plate')
+const backdrop = fs.readFileSync(path.join(ROOT, 'src/shell/GalacticBackdrop.jsx'), 'utf8')
+check(backdrop.includes('MeteorField'), 'backdrop renders the meteor field')
+check(backdrop.includes('galactic-cluster'), 'backdrop renders the cluster plate')
+const galacticCss = fs.readFileSync(path.join(ROOT, 'src/styles/galactic.css'), 'utf8')
+check(galacticCss.includes('galactic-cluster-drift'), 'cluster plates drift')
+check(galacticCss.includes('galactic-meteor'), 'shooting-star animation is present')
+check(galacticCss.includes('prefers-reduced-motion: reduce'), 'cluster motion honours reduced motion')
+
 const deck = fs.readFileSync(path.join(ROOT, 'src/galactic/CommandDeck.jsx'), 'utf8')
 check(deck.includes('/api/v1/galactic/state'), 'deck polls the galactic state endpoint')
 check(deck.includes('/api/v1/galactic/events'), 'deck targets the SSE endpoint')
