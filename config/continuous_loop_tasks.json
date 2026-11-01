@@ -563,7 +563,8 @@
         "Northstar_backend/print_prep.py"
       ],
       "read_paths": [
-        "Northstar_backend/print_prep.py"
+        "Northstar_backend/print_prep.py",
+        "state/probes/t1_dpi_image_guard.py"
       ],
       "checks": [
         {
@@ -588,7 +589,7 @@
       "required_artifact": "Northstar_backend/print_prep.py",
       "timeout_seconds": 900,
       "max_repairs": 1,
-      "max_steps": 8,
+      "max_steps": 12,
       "model": "bojo:gpu-orig",
       "provider": "ollama"
     },
@@ -607,7 +608,8 @@
         "Northstar_backend/image_prep.py"
       ],
       "read_paths": [
-        "Northstar_backend/image_prep.py"
+        "Northstar_backend/image_prep.py",
+        "state/probes/t2_frame_fill_guard.py"
       ],
       "checks": [
         {
@@ -632,7 +634,7 @@
       "required_artifact": "Northstar_backend/image_prep.py",
       "timeout_seconds": 900,
       "max_repairs": 1,
-      "max_steps": 8,
+      "max_steps": 12,
       "model": "bojo:gpu-orig",
       "provider": "ollama"
     },
@@ -651,7 +653,8 @@
         "Northstar_backend/listing_image.py"
       ],
       "read_paths": [
-        "Northstar_backend/listing_image.py"
+        "Northstar_backend/listing_image.py",
+        "state/probes/t3_hero_fill_guard.py"
       ],
       "checks": [
         {
@@ -676,7 +679,7 @@
       "required_artifact": "Northstar_backend/listing_image.py",
       "timeout_seconds": 900,
       "max_repairs": 1,
-      "max_steps": 8,
+      "max_steps": 12,
       "model": "bojo:gpu-orig",
       "provider": "ollama"
     }
