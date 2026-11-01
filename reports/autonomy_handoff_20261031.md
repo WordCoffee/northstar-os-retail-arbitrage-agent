@@ -5,7 +5,7 @@
 | Capability | Status | Evidence |
 |---|---|---|
 | Full GO/NO-GO readiness gate | **VERIFIED** | `python scripts/continuous_loop.py --ready` → GO; 17 checks |
-| Rollback checkpoint: git ref, DBs, configs, model manifest, uncommitted patch | **VERIFIED** | `state/checkpoints/20261101T020633Z-ready/`; 7 files, patch 34.3 MB |
+| Rollback checkpoint: git ref, DBs, configs, model manifest, uncommitted patch | **VERIFIED** | `state/checkpoints/20261101T021052Z-ready/`; 7 files, patch 34.3 MB |
 | Disposable byte-for-byte restore demo | **VERIFIED** | sandbox `bytes_match=true`, `created_removed=true` |
 | Policy fingerprint vs committed envelope | **VERIFIED** | 5/5 policy files match HEAD; mismatch is NO-GO |
 | Working-tree/staged-work preservation | **VERIFIED** | recorded status/staged paths; `test_commit_task_preserves_pre_existing_staged_work` |
@@ -30,11 +30,11 @@
 
 ## 2. Final readiness gate
 
-`verdict: GO` at `2026-11-01T02:06:33Z`.
+`verdict: GO` at `2026-11-01T02:10:52Z`.
 
 - 17/17 checks pass.
-- Checkpoint: `state/checkpoints/20261101T020633Z-ready`
-- Lane: `ollama/bojo:gpu-orig`; free RAM 4.42 GB at dispatch; estimated post-load headroom **2.17 GB**.
+- Checkpoint: `state/checkpoints/20261101T021052Z-ready`
+- Lane: `ollama/bojo:gpu-orig`; free RAM 4.34 GB at dispatch; estimated post-load headroom **2.09 GB**.
 - Policy fingerprint: 5/5 committed files match HEAD.
 - No lock; STOP absent; sandbox restore byte-for-byte.
 - `state/autonomy_readiness.json` contains the full check list and remediations.
@@ -130,7 +130,7 @@ Get-Content state\campaigns\campaign-<run-id>.json
    terminal stops the supervisor. Upgrade evidence: install a service wrapper,
    run a 6-hour soak, kill/restart the host, and verify the same checkpoint,
    lock and resume path.
-2. **Post-load RAM headroom is 2.17 GB.** `bojo:gpu-orig` fits at dispatch and
+2. **Post-load RAM headroom is 2.09 GB.** `bojo:gpu-orig` fits at dispatch and
    is the smallest installed chat lane, but after load it is below the 3 GB
    advisory floor. The 7 B and 27 B lanes do not fit. Free at least ~5.25 GB or
    install a smaller lane before a long Ty campaign.
