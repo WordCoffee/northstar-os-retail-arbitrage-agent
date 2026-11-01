@@ -52,6 +52,20 @@ def test_prompt_history_dedupes_and_keeps_error_detail(tmp_path):
     assert len(plain[0]) <= 1200 + len("[read] ")
 
 
+def test_workspace_allow_paths_blocks_out_of_scope_writes_reads_and_patches(tmp_path):
+    ws = Workspace(tmp_path, allow_paths=["src/"], read_paths=["src/"])
+    assert ws.write("src/ok.py", "VALUE = 1\n").ok
+    assert not ws.write("outside.py", "VALUE = 2\n").ok
+    assert not ws.write("../escape.py", "VALUE = 3\n").ok
+    (tmp_path / "secret.txt").write_text("private", encoding="utf-8")
+    assert not ws.read("secret.txt").ok
+    assert not ws.ast_edit("outside.py", "replace_global", "VALUE", "VALUE = 9").ok
+    patch = ("--- /dev/null\n+++ b/outside.txt\n@@ -0,0 +1 @@\n+no\n")
+    result = ws.execute("apply_patch", {"patch": patch})
+    assert not result.ok
+    assert "scope" in result.error.lower()
+
+
 def test_path_cannot_escape_the_workspace(tmp_path):
     ws = Workspace(tmp_path / "ws")
     with pytest.raises(ValueError):
@@ -174,6 +188,25 @@ def test_repeated_acceptance_run_after_failure_is_refused(tmp_path):
     assert stalls, "the second bare run must be refused"
     assert "VERIFY STALL" in prompts[-1]
     assert len(stalls) == 3  # step 1 really runs, steps 2-4 are refused
+
+
+def test_edit_requires_a_prior_read_of_that_file(tmp_path):
+    """A small lane guesses a symbol name and edits a function that does not exist."""
+    ws = Workspace(tmp_path / "ws", allow_paths=["src.py"], read_paths=["src.py"])
+    (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
+    turns = iter(['{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+                  '"target":"nope","source":"return 2"}}',
+                  '{"tool":"read","args":{"path":"src.py"}}',
+                  '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+                  '"target":"f","source":"return 2"}}',
+                  '{"tool":"finish","args":{}}'])
+    result = CodingAgent(ws, lambda p: next(turns), max_steps=6,
+                         max_protocol_errors=3,
+                         acceptance=lambda: ("return 2" in (tmp_path / "ws" / "src.py")
+                                             .read_text(encoding="utf-8"), "ok")).run("x")
+    assert result.ok is True
+    assert any("read_required" in str(h.get("output")) for h in result.transcript)
+    assert "return 2" in (tmp_path / "ws" / "src.py").read_text(encoding="utf-8")
 
 
 # ── apply_patch ─────────────────────────────────────────────────────────────

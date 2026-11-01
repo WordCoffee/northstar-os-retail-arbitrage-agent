@@ -92,6 +92,7 @@ class CodingAgent:
         self.allowed_tools = tuple(t for t in tools if t in protocol.CANONICAL_ACTIONS) or None
         self._failing: List[str] = []
         self._reads = 0
+        self._read_seen: set[str] = set()
 
     def run(self, task: str) -> CodingResult:
         history: List[Dict[str, Any]] = []
@@ -152,6 +153,21 @@ class CodingAgent:
                                 f"protocol_failed: {exc.code}")
                 continue
             tool, args = action.tool, action.args
+            # A bounded edit needs the current file in front of it. A small lane
+            # otherwise guesses a symbol name and "edits" a function that does not
+            # exist (observed: target 'count_corrupt_records' not found). Reading is
+            # one step; guessing costs the whole budget.
+            if tool == "ast_edit" and str(args.get("path") or "") not in self._read_seen:
+                protocol_errors += 1
+                history.append({"role": "observation", "tool": "protocol", "ok": False,
+                                "output": (f"PROTOCOL read_required: read "
+                                           f"{args.get('path')!r} before editing it. "
+                                           "Hint: call read first, then ast_edit with the "
+                                           "symbol you actually saw.")})
+                if protocol_errors > self.max_protocol_errors:
+                    return _out(False, "protocol_failed", step, sorted(files), history,
+                                "protocol_failed: read_required")
+                continue
             self._reads = self._reads + 1 if tool == "read" else 0
             if tool == "finish":
                 summary = str(args.get("summary") or "finished")
@@ -178,6 +194,8 @@ class CodingAgent:
                 continue
             result: ToolResult = self.tools.execute(tool, args)
             files.update(result.files)
+            if tool == "read" and result.ok:
+                self._read_seen.add(str(args.get("path") or ""))
             if tool == "run":
                 failed_run = not result.ok
                 changed_since_run = False
