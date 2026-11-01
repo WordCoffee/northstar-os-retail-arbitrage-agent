@@ -17,7 +17,8 @@ import Announcer from '../components/Announcer.jsx'
 import ToastCenter from '../components/ToastCenter.jsx'
 import DensityToggle from '../components/DensityToggle.jsx'
 import CommandMenu from './CommandMenu.jsx'
-import { resolveVariant } from './galacticVariants.js'
+import { resolveVariant, variantById } from './galacticVariants.js'
+import { SIMPLE_DESIGNS, resolveSimpleDesign } from './simpleDesigns.js'
 import '../styles/celestial.css'
 import { vistaForToday } from './vistas.js'
 import HardwareModal from './HardwareModal.jsx'
@@ -67,6 +68,21 @@ export default function MasterBrainShell() {
   const [busy, setBusy] = useState(false)
   const [hwOpen, setHwOpen] = useState(false)
   const [cmdOpen, setCmdOpen] = useState(false)
+  const [designOpen, setDesignOpen] = useState(false)
+
+  const initialDesign = useMemo(() => {
+    let stored = ''
+    try { stored = window.localStorage.getItem('ns-simple-design') || '' } catch { /* private mode */ }
+    return resolveSimpleDesign(window.location.search, stored)
+  }, [])
+  const [design, setDesign] = useState(initialDesign)
+  const [variant, setVariant] = useState(() => {
+    try {
+      const search = window.location.search || ''
+      if (/[?&]galactic=/.test(search)) return resolveVariant(search, '')
+    } catch { /* private mode */ }
+    return variantById(initialDesign.backdrop)
+  })
 
   // Cmd/Ctrl+K (item 17). Capture phase so a focused input cannot swallow it,
   // and "/" is not bound: people type in this app.
@@ -81,14 +97,17 @@ export default function MasterBrainShell() {
     return () => window.removeEventListener('keydown', onKey, { capture: true })
   }, [])
 
-  // Theme variant: ?galactic=<id|1..10>, then the stored pick, then the default.
-  const variant = useMemo(() => {
-    let stored = ''
-    try { stored = window.localStorage.getItem('ns-galactic-variant') || '' } catch { /* private mode */ }
-    const chosen = resolveVariant(window.location.search, stored)
-    try { window.localStorage.setItem('ns-galactic-variant', chosen.id) } catch { /* private mode */ }
-    return chosen
-  }, [])
+  const chooseDesign = (next) => {
+    setDesign(next)
+    setVariant(variantById(next.backdrop))
+    setDesignOpen(false)
+    try { window.localStorage.setItem('ns-simple-design', next.id) } catch { /* private mode */ }
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set('simple', next.id)
+      window.history.replaceState({}, '', url)
+    } catch { /* private mode */ }
+  }
 
   // Deep links select the matching focus (rooms are focuses in Simple mode).
   useEffect(() => {
@@ -113,7 +132,8 @@ export default function MasterBrainShell() {
   const reserveOk = shell.hardware?.governor?.reserve_ok
 
   return (
-    <div className="mb-shell" data-testid="mb-shell" data-vista={vistaForToday().id}>
+    <div className="mb-shell" data-testid="mb-shell" data-vista={vistaForToday().id}
+         data-simple-design={design.id}>
       <GalacticBackdrop themeId={shell.focusId} variant={variant} />
       <div className="mb-scrim" aria-hidden="true" />
       <Announcer />
@@ -153,6 +173,17 @@ export default function MasterBrainShell() {
             >
               {hw.text}
             </button>
+            <button
+              type="button"
+              className="mb-chip mb-design-trigger"
+              aria-expanded={designOpen}
+              aria-controls="simple-design-picker"
+              onClick={() => setDesignOpen((open) => !open)}
+              title={`Simple mode design: ${design.name}`}
+              data-testid="simple-design-trigger"
+            >
+              Design · {design.name}
+            </button>
             <span className="mb-chip" title={`Plan: ${planLabel}`}>{planLabel}</span>
             <DensityToggle compact />
             {shell.offline && <span className="mb-chip warn" title={shell.offlineReason}>Shell context offline</span>}
@@ -164,6 +195,35 @@ export default function MasterBrainShell() {
             )}
           </div>
         </div>
+        {designOpen && (
+          <div className="mb-design-picker" id="simple-design-picker" role="dialog"
+               aria-label="Choose a Simple mode design">
+            <div className="mb-design-picker-head">
+              <div>
+                <span className="mb-design-kicker">SIMPLE MODE</span>
+                <strong>Choose a design</strong>
+              </div>
+              <button type="button" className="mb-design-close" aria-label="Close design picker"
+                      onClick={() => setDesignOpen(false)}>×</button>
+            </div>
+            <div className="mb-design-grid">
+              {SIMPLE_DESIGNS.map((item, index) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  className={`mb-design-card ${item.id === design.id ? 'is-active' : ''}`}
+                  onClick={() => chooseDesign(item)}
+                  data-testid={`simple-design-${item.id}`}
+                >
+                  <span className="mb-design-index">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="mb-design-name">{item.name}</span>
+                  <span className="mb-design-note">{item.note}</span>
+                  <span className="mb-design-pick">{item.id === design.id ? 'Active' : 'Use design'}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <ChatSurface
           focus={shell.focus}
           heading="Bojo"

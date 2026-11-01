@@ -1,0 +1,239 @@
+/* ── Simple-mode design catalogue (2026-11-01) ─────────────────────────────
+   Ten compositions over one real chat surface. Only .mb-shell is touched; the
+   Advanced rooms and the auth/public shells keep the V4.2 system unchanged. */
+
+/* Shared picker chrome. */
+.mb-design-trigger { cursor: pointer; }
+.mb-design-picker {
+  position: fixed;
+  top: 76px;
+  right: 28px;
+  z-index: 120;
+  width: min(780px, calc(100vw - 32px));
+  max-height: min(76vh, 720px);
+  overflow: auto;
+  padding: 18px;
+  border-radius: 20px;
+  color: #f7f3ec;
+  background: rgba(7, 12, 20, 0.94);
+  border: 1px solid rgba(247, 243, 236, 0.18);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(26px) saturate(1.2);
+}
+.mb-design-picker-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 16px;
+}
+.mb-design-kicker { display: block; margin-bottom: 4px; color: #f0b46a; font-size: 10px; letter-spacing: .22em; }
+.mb-design-picker-head strong { font-family: var(--font-serif); font-size: 24px; font-weight: 500; }
+.mb-design-close {
+  width: 30px; height: 30px; border-radius: 999px; cursor: pointer;
+  color: #f7f3ec; background: rgba(247, 243, 236, 0.08);
+  border: 1px solid rgba(247, 243, 236, 0.18); font-size: 20px; line-height: 1;
+}
+.mb-design-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.mb-design-card {
+  display: grid; gap: 5px; padding: 13px 14px; text-align: left; cursor: pointer;
+  color: rgba(247, 243, 236, 0.82); background: rgba(247, 243, 236, 0.045);
+  border: 1px solid rgba(247, 243, 236, 0.14); border-radius: 12px;
+}
+.mb-design-card:hover, .mb-design-card.is-active {
+  color: #fff; border-color: rgba(240, 180, 106, 0.65);
+  background: rgba(240, 180, 106, 0.10);
+}
+.mb-design-index { color: rgba(247, 243, 236, 0.38); font-family: var(--font-mono); font-size: 10px; }
+.mb-design-name { font-family: var(--font-serif); font-size: 18px; }
+.mb-design-note { color: rgba(247, 243, 236, 0.52); font-size: 12px; line-height: 1.4; }
+.mb-design-pick { margin-top: 4px; color: #f0b46a; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* 01 — Hearth: warm, centered reading room with a left index. */
+.mb-shell[data-simple-design="hearth"] .mb-content { max-width: 1660px; margin-inline: auto; }
+.mb-shell[data-simple-design="hearth"] .chat-shell {
+  max-width: 1180px; margin-inline: auto; border-radius: 24px;
+  background: rgba(12, 19, 30, 0.92); padding: 24px 26px 18px;
+}
+.mb-shell[data-simple-design="hearth"] .chat-rail { padding-right: 18px; }
+.mb-shell[data-simple-design="hearth"] .chat-head h2 { font-size: 30px; }
+
+/* 02 — Zen: no rail, no status noise, one calm column. */
+.mb-shell[data-simple-design="zen"] .mb-header { flex-direction: column; align-items: center; gap: 12px; }
+.mb-shell[data-simple-design="zen"] .mb-status { display: none; }
+.mb-shell[data-simple-design="zen"] .mb-focus { justify-content: center; }
+.mb-shell[data-simple-design="zen"] .chat-shell {
+  grid-template-columns: minmax(0, 1fr); max-width: 900px; margin-inline: auto;
+  border-radius: 30px; background: rgba(8, 14, 24, 0.80); padding: 34px clamp(22px, 5vw, 58px) 22px;
+  box-shadow: 0 36px 120px rgba(0, 0, 0, 0.42);
+}
+.mb-shell[data-simple-design="zen"] .chat-rail { display: none; }
+.mb-shell[data-simple-design="zen"] .chat-head { justify-content: center; text-align: center; border-bottom: 0; padding: 0 0 8px; }
+.mb-shell[data-simple-design="zen"] .chat-stream { padding: 30px 4px; }
+.mb-shell[data-simple-design="zen"] .chat-msg.user { max-width: 70%; }
+.mb-shell[data-simple-design="zen"] .chat-composer {
+  margin-top: auto; border-top: 0; border-radius: 20px; padding: 10px;
+  background: rgba(247, 243, 236, 0.06); border: 1px solid rgba(247, 243, 236, 0.12);
+}
+
+/* 03 — Observatory: the index goes right; the reading column takes the left. */
+.mb-shell[data-simple-design="observatory"] .mb-content { max-width: 1500px; margin-inline: auto; }
+.mb-shell[data-simple-design="observatory"] .chat-shell {
+  grid-template-columns: minmax(0, 1fr) 310px; max-width: 1420px; margin-inline: auto;
+  border-radius: 6px; background: rgba(11, 18, 29, 0.90); padding: 20px;
+}
+.mb-shell[data-simple-design="observatory"] .chat-col { order: 1; }
+.mb-shell[data-simple-design="observatory"] .chat-rail {
+  order: 2; border-left: 1px solid rgba(247, 243, 236, 0.14);
+  padding: 2px 0 2px 22px; padding-right: 0;
+}
+.mb-shell[data-simple-design="observatory"] .mb-status { margin-left: 0; }
+
+/* 04 — Constellation: sky-first, focus tabs above a bottom composer. */
+.mb-shell[data-simple-design="constellation"] .mb-header {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.mb-shell[data-simple-design="constellation"] .mb-status { order: 0; align-self: flex-end; margin-left: 0; }
+.mb-shell[data-simple-design="constellation"] .mb-focus {
+  order: 1; padding: 6px; border-radius: 999px; background: rgba(7, 12, 20, 0.42);
+  border: 1px solid rgba(247, 243, 236, 0.12);
+}
+.mb-shell[data-simple-design="constellation"] .chat-shell {
+  grid-template-columns: minmax(0, 1fr); max-width: 1520px; margin-inline: auto;
+  border-radius: 12px; background: rgba(7, 14, 24, 0.54); padding: 20px 24px 14px;
+}
+.mb-shell[data-simple-design="constellation"] .chat-rail { display: none; }
+.mb-shell[data-simple-design="constellation"] .chat-head { border-bottom: 0; justify-content: center; }
+.mb-shell[data-simple-design="constellation"] .chat-composer {
+  margin-top: auto; border-top: 0; padding: 10px 0 2px;
+}
+.mb-shell[data-simple-design="constellation"] .chat-composer-box {
+  border-radius: 999px; background: rgba(5, 10, 18, 0.74);
+  border-color: rgba(247, 243, 236, 0.22); padding: 7px 10px 7px 18px;
+}
+
+/* 05 — Split Deck: a dark index plate joined to a light reading plate. */
+.mb-shell[data-simple-design="split"] .chat-shell {
+  grid-template-columns: 300px minmax(0, 1fr); max-width: 1400px; margin-inline: auto;
+  gap: 0; padding: 0; border-radius: 20px; border: 1px solid rgba(247, 243, 236, 0.12);
+  overflow: hidden; background: transparent;
+}
+.mb-shell[data-simple-design="split"] .chat-rail {
+  padding: 26px 20px; background: rgba(6, 10, 18, 0.78);
+  border-right: 1px solid rgba(247, 243, 236, 0.12);
+}
+.mb-shell[data-simple-design="split"] .chat-col {
+  padding: 22px 26px 18px; background: rgba(20, 27, 40, 0.86);
+}
+.mb-shell[data-simple-design="split"] .chat-head h2 { font-size: 28px; }
+
+/* 06 — Instrument: square technical panel, compact labels, visible rails. */
+.mb-shell[data-simple-design="instrument"] .mb-content { --simple-msg: 15.5px; --simple-ui: 13px; max-width: 1600px; margin-inline: auto; }
+.mb-shell[data-simple-design="instrument"] .chat-shell {
+  max-width: 1500px; margin-inline: auto; border-radius: 0; padding: 14px;
+  grid-template-columns: 224px minmax(0, 1fr);
+  background: rgba(3, 9, 11, 0.90); border: 1px solid rgba(125, 232, 214, 0.26);
+  box-shadow: 0 0 0 1px rgba(125, 232, 214, 0.08) inset;
+}
+.mb-shell[data-simple-design="instrument"] .chat-rail { border-right: 1px dashed rgba(125, 232, 214, 0.22); padding-right: 14px; }
+.mb-shell[data-simple-design="instrument"] .chat-head h2 { font-family: var(--font-mono); font-size: 19px; text-transform: uppercase; letter-spacing: .08em; }
+.mb-shell[data-simple-design="instrument"] .mb-focus-chip,
+.mb-shell[data-simple-design="instrument"] .mb-chip,
+.mb-shell[data-simple-design="instrument"] .chat-bubble,
+.mb-shell[data-simple-design="instrument"] .chat-composer-box,
+.mb-shell[data-simple-design="instrument"] .chat-card,
+.mb-shell[data-simple-design="instrument"] .chat-asset-card { border-radius: 0; }
+.mb-shell[data-simple-design="instrument"] .mb-focus-chip { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.mb-shell[data-simple-design="instrument"] .chat-bubble { background: rgba(247, 243, 236, 0.035); border-color: rgba(125, 232, 214, 0.14); }
+.mb-shell[data-simple-design="instrument"] .chat-msg.user .chat-bubble { background: rgba(125, 232, 214, 0.90); color: #04100d; }
+
+/* 07 — Magazine: oversized editorial title, index rail, long measure. */
+.mb-shell[data-simple-design="magazine"] .mb-content { max-width: 1640px; margin-inline: auto; }
+.mb-shell[data-simple-design="magazine"] .chat-shell {
+  grid-template-columns: 286px minmax(0, 1fr); max-width: 1540px; margin-inline: auto;
+  gap: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+}
+.mb-shell[data-simple-design="magazine"] .chat-rail {
+  padding: 32px 22px 24px 0; background: rgba(7, 12, 18, 0.34);
+  border-right: 1px solid rgba(247, 243, 236, 0.14);
+}
+.mb-shell[data-simple-design="magazine"] .chat-col {
+  padding: 36px 44px 24px; background: rgba(10, 15, 22, 0.86);
+  border-left: 1px solid rgba(247, 243, 236, 0.10);
+}
+.mb-shell[data-simple-design="magazine"] .chat-head { align-items: flex-end; border-bottom: 3px double rgba(247, 243, 236, 0.26); padding-bottom: 18px; }
+.mb-shell[data-simple-design="magazine"] .chat-head h2 { font-size: clamp(36px, 4vw, 58px); letter-spacing: -0.035em; }
+.mb-shell[data-simple-design="magazine"] .chat-bubble { background: transparent; border: 0; border-left: 2px solid rgba(240, 180, 106, 0.48); border-radius: 0; padding: 4px 0 4px 20px; }
+.mb-shell[data-simple-design="magazine"] .chat-msg.user .chat-bubble { background: rgba(247, 243, 236, 0.92); border-left: 0; padding: 14px 18px; }
+
+/* 08 — Theater: no rail, one floating glass card, the art stays visible. */
+.mb-shell[data-simple-design="theater"] .mb-content { max-width: 1560px; margin-inline: auto; }
+.mb-shell[data-simple-design="theater"] .chat-shell {
+  grid-template-columns: minmax(0, 1fr); max-width: 1040px;
+  margin-left: auto; margin-right: clamp(0px, 5vw, 90px); margin-top: 2vh;
+  min-height: 72vh; padding: 30px 34px 22px; border-radius: 30px;
+  background: rgba(5, 10, 17, 0.54); border: 1px solid rgba(255, 255, 255, 0.20);
+  box-shadow: 0 46px 140px rgba(0, 0, 0, 0.48); backdrop-filter: blur(28px) saturate(1.25);
+}
+.mb-shell[data-simple-design="theater"] .chat-rail { display: none; }
+.mb-shell[data-simple-design="theater"] .chat-head { border-bottom: 0; }
+.mb-shell[data-simple-design="theater"] .chat-composer { margin-top: auto; border-top: 0; }
+.mb-shell[data-simple-design="theater"] .chat-composer-box { background: rgba(4, 9, 16, 0.58); border-color: rgba(255, 255, 255, 0.24); }
+
+/* 09 — Workbench: sessions are a horizontal strip above the full-width chat. */
+.mb-shell[data-simple-design="workbench"] .mb-content { max-width: 1700px; margin-inline: auto; }
+.mb-shell[data-simple-design="workbench"] .chat-shell {
+  display: flex; flex-direction: column; max-width: 1600px; margin-inline: auto;
+  gap: 12px; padding: 16px 18px 14px; border-radius: 14px;
+  background: rgba(8, 14, 22, 0.91);
+}
+.mb-shell[data-simple-design="workbench"] .chat-rail {
+  display: flex; flex-direction: row; align-items: flex-start; width: auto;
+  max-height: 78px; overflow-x: auto; overflow-y: hidden;
+  gap: 10px; padding: 0 0 10px; border-right: 0;
+  border-bottom: 1px solid rgba(247, 243, 236, 0.14);
+}
+.mb-shell[data-simple-design="workbench"] .chat-rail-head { flex: 0 0 156px; }
+.mb-shell[data-simple-design="workbench"] .chat-rail-search { display: none; }
+.mb-shell[data-simple-design="workbench"] .chat-rail-list { flex-direction: row; gap: 7px; overflow: visible; }
+.mb-shell[data-simple-design="workbench"] .chat-rail-row { flex: 0 0 auto; }
+.mb-shell[data-simple-design="workbench"] .chat-rail-item { white-space: nowrap; padding: 8px 11px; }
+.mb-shell[data-simple-design="workbench"] .chat-hint { display: none; }
+.mb-shell[data-simple-design="workbench"] .chat-col { flex: 1; min-height: 0; }
+
+/* 10 — Terminal: operator console, square everything, green signal. */
+.mb-shell[data-simple-design="terminal"] .mb-content {
+  --ink: #dfffe9; --ink-mid: #b8e9c5; --ink-soft: #8cba99; --ink-faint: #6f947a;
+  --surface-focus: #6ef3a6; --spark: #6ef3a6;
+  max-width: 1540px; margin-inline: auto;
+}
+.mb-shell[data-simple-design="terminal"] .chat-shell {
+  max-width: 1460px; margin-inline: auto; grid-template-columns: 226px minmax(0, 1fr);
+  border-radius: 0; padding: 14px; background: rgba(2, 8, 5, 0.92);
+  border: 1px solid rgba(110, 243, 166, 0.30);
+  box-shadow: 0 0 60px rgba(40, 220, 120, 0.08) inset;
+}
+.mb-shell[data-simple-design="terminal"] .chat-rail { border-right: 1px dashed rgba(110, 243, 166, 0.25); padding-right: 14px; }
+.mb-shell[data-simple-design="terminal"] .chat-head h2 { font-family: var(--font-mono); font-size: 19px; text-transform: uppercase; letter-spacing: .08em; }
+.mb-shell[data-simple-design="terminal"] .chat-head { border-bottom: 1px solid rgba(110, 243, 166, 0.22); }
+.mb-shell[data-simple-design="terminal"] .chat-bubble,
+.mb-shell[data-simple-design="terminal"] .chat-composer-box,
+.mb-shell[data-simple-design="terminal"] .chat-card,
+.mb-shell[data-simple-design="terminal"] .chat-asset-card,
+.mb-shell[data-simple-design="terminal"] .mb-focus-chip,
+.mb-shell[data-simple-design="terminal"] .mb-chip { border-radius: 0; }
+.mb-shell[data-simple-design="terminal"] .chat-bubble { background: rgba(5, 22, 12, 0.72); border-color: rgba(110, 243, 166, 0.18); border-left: 2px solid #6ef3a6; }
+.mb-shell[data-simple-design="terminal"] .chat-msg.user .chat-bubble { background: rgba(110, 243, 166, 0.88); color: #031008; border-left: 0; }
+.mb-shell[data-simple-design="terminal"] .mb-focus-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+/* Small screens: the picker stacks; layouts keep a usable single column. */
+@media (max-width: 860px) {
+  .mb-design-picker { top: 66px; right: 12px; max-height: 82vh; padding: 14px; }
+  .mb-design-grid { grid-template-columns: 1fr; }
+  .mb-shell[data-simple-design="observatory"] .chat-shell,
+  .mb-shell[data-simple-design="split"] .chat-shell,
+  .mb-shell[data-simple-design="magazine"] .chat-shell,
+  .mb-shell[data-simple-design="instrument"] .chat-shell,
+  .mb-shell[data-simple-design="terminal"] .chat-shell { grid-template-columns: minmax(0, 1fr); }
+  .mb-shell[data-simple-design="observatory"] .chat-rail { order: 0; border-left: 0; padding: 0 0 10px; }
+  .mb-shell[data-simple-design="theater"] .chat-shell { margin-right: auto; min-height: 64vh; }
+  .mb-shell[data-simple-design="workbench"] .chat-rail { max-height: 96px; }
+  .mb-shell[data-simple-design="magazine"] .chat-col { padding: 26px 20px; }
+}
