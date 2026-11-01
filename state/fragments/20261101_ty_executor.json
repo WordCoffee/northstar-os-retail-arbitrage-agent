@@ -1,4 +1,4 @@
-﻿{
+{
   "ty_executor_20261101": {
     "verdict": "Executor implemented and live-proven; the repository task is BLOCKED by host RAM on the restored CPU configuration. Not ready for a bounded model-authored campaign, and not claimed.",
     "executor": {
