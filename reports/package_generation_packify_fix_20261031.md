@@ -89,8 +89,10 @@ This is a substantial tranche, not a claim of pixel-for-pixel parity:
 2. Back/side panels are legally complete but visually plain; they need a designed legal layout.
 3. Mockups are measured from 1024 px plates, so the preview DPI is 38–105. The label artwork is 300 DPI
    and the dieline is vector; a print mockup would need a larger plate or an operator photo.
-4. Dielines remain draft geometry until confirmed with the converter.
-5. No operator visual sign-off / physical proof has been run.
+4. Bottle/tube dielines are now cut for the **full wrap circumference**, but the designed panel is the
+   visible face; a full-wrap artwork composition (front + flanking panels) is still needed for production.
+5. Dielines remain draft geometry until confirmed with the converter.
+6. No operator visual sign-off / physical proof has been run.
 
 ## Reproduction
 
