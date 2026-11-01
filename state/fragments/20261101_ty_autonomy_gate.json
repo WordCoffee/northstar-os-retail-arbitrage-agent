@@ -1,0 +1,39 @@
+{
+  "ty_autonomy_gate_20261101": {
+    "verdict": "2 of 6 gates closed. Resident-RAM gate and recovery proof are done; model-authored fixes are BLOCKED on local lane capability; campaign and soak were not run because the directive gates them on the preceding gates.",
+    "gate_2_resident_ram": {
+      "root_cause": "The user environment forces OLLAMA_LLM_LIBRARY=cpu and OLLAMA_NUM_GPU=0 (verified User scope), so llama.cpp never sees the GPU: server.log shows 'inference compute id=cpu library=cpu' and 'no usable GPU found'. Every lane is paid for out of 15.4 GB of system RAM.",
+      "measured_cpu": "bojo:gpu-orig resident 2.253 GB, all system RAM, min free 1.192 / 1.457 / 2.443 GB -> FLOOR-MISSED (floor 3.0)",
+      "measured_gpu_session": "bojo:gpu-orig resident 2.244 GB VRAM, 0 GB system, min free 3.777 / 4.092 / 4.642 GB -> FLOOR-MET; qwen2.5-coder:3b 2.328 GB VRAM, 0 system, 4.935 GB free -> FLOOR-MET",
+      "tool": "tools/measure_model_resident.py samples available RAM every 200 ms and /api/ps every second during generation, samples again after the stream, and returns UNMEASURED when no resident sample exists (a fast model must not pass from an empty sample).",
+      "enforcement": "--ready gains a model-resident check that RUNS the probe; campaign dispatch refuses a ty task without fresh (<=60 min) FLOOR-MET evidence (stop_reason=model_resident_no_go); resolve_lane marks its figure estimate_not_measurement.",
+      "current_verdict": "python scripts/continuous_loop.py --ready -> NO-GO: ram-floor PASS 5.08 GB, model-resident FAIL min free 2.443 GB (2.253 GB system / 0.0 GB VRAM). The session-scoped GPU backend measured 3.78-4.94 GB -> GO. The floor was not lowered.",
+      "commit": "dbf85b8e"
+    },
+    "gate_3_model_fixes": {
+      "status": "BLOCKED - no model-authored fix committed",
+      "tasks_filed": ["ty-budget-stop", "ty-hitl-skip-report", "ty-diff-select-headers", "ty-dpi-image-guard", "ty-frame-fill-guard", "ty-hero-fill-guard"],
+      "probes": "six independent behavioural probes under state/probes/ (t1..t6), all confirmed FAILING on HEAD before dispatch, all outside the model write scope so they cannot be edited",
+      "attempts": "bojo:gpu-orig 2B: 3 attempts on ty-dpi-image-guard, all max_steps (63.8/37.7/28.2 s). qwen2.5-coder:3b: ty-budget-stop 2 attempts max_steps; ty-hitl-skip-report 2 attempts max_steps; ty-dpi-image-guard 1 attempt Ollama HTTP 500. qwen2.5vl:7b direct edit probe: non-JSON garbage.",
+      "diagnosis": "The 2B lane can produce a correct replace_function_body when given one function, one tool and one contract in isolation, but inside the loop it rewrites whole files and repeatedly tries to edit the read-only probe. The 3B coder lane emits valid single tool calls but degrades to malformed responses in the multi-turn loop. The 7B vision lane is not a coder. Blocked on lane capability, not harness.",
+      "harness_fixes": ["--resume no longer falls through into an unattended campaign", "a post-write acceptance FAIL is now an observation the model must answer", "the prompt states a refused write is never retried", "residency probe requires a resident sample", "a task restoration can revert a commit made during the run - recorded hazard"],
+      "commit": "8ad91edd"
+    },
+    "gate_4_recovery": {
+      "stop_mid_model_run": "worker pid 17916 running ty-hitl-skip-report; STOP written; task reason 'STOP requested'; restoration ok; no commit; worker tree count 0; HEAD unchanged",
+      "supervisor_crash": "supervisor 25460 killed -9 while worker 18496 ran ty-budget-stop; worker survived as an orphan; next --status marked the task interrupted ('stale heartbeat or dead owner process') and terminated the orphan; --resume returned it to pending with the file clean and no commit",
+      "acceptance_failure_restore": "every failed attempt restored its task-owned file byte-for-byte (git status empty, restoration=ok, commit=null)",
+      "environment": "disposable worktree C:\\Users\\T2Hol\\Desktop\\NS-autonomy-wt on branch worktree/ty-autonomy"
+    },
+    "gate_5_campaign_and_soak": "NOT RUN. The bounded campaign and the 120-minute soak are gated on the preceding gates by the directive; deterministic prebuilt patches are explicitly not a substitute for model-work proof.",
+    "creative_test_failure": {
+      "test_mockup_compositor.py::test_compose_endpoints": "expects 401 for an unauthenticated POST /api/design-studio/compose/mockup, gets 422 (plate_asset_id min_length) - FastAPI validates the body before the studio_account dependency can raise 401",
+      "test_text_fidelity.py::test_text_check_endpoint_auth_and_404": "expects 401, gets 404 {'detail':'Asset not found'} - the endpoint's asset lookup answers before the session is required",
+      "baseline_evidence": "both fail identically on commit 846d9ba8 with the A+ work stashed (git stash push --include-untracked), so neither is caused by the A+ renderer; they are the auth-ordering defect the registry already blocks as blocked-auth-text-check"
+    },
+    "boundaries": "no Amazon, no browser, no paid provider, no credential read, no spend, no persistence installed. One model download: qwen2.5-coder:3b (Apache-2.0, 1.9 GB, local, 38 s). The operator's Ollama configuration was restored (manual GPU serve stopped, ollama app restarted); the same measurement now returns FLOOR-MISSED, confirming the persistent CPU-only setting is in force again.",
+    "commits": ["dbf85b8e", "8ad91edd", "worktree/ty-autonomy: f945abc1 ecff21da 1b9937cb 54fb80c8 fe98d687"],
+    "report": "reports/ty_autonomy_gate_20261101.md",
+    "state_fragment": "state/fragments/20261101_ty_autonomy_gate.json"
+  }
+}
