@@ -301,7 +301,17 @@ class CodingAgent:
             # Task-scoped protocol: a small lane gets the actions it can use, four
             # rules and the last two results - nothing else to dilute them.
             allowed = ", ".join(self.allowed_tools)
-            commands = [" ".join(c) for c in (getattr(self.tools, "run_allowlist", ()) or ())][:3]
+            allowlist = list(getattr(self.tools, "run_allowlist", ()) or ())
+            commands = [" ".join(c) for c in allowlist][:3]
+            # The schema example must show a command that will actually execute. A
+            # 3B copies the example verbatim; advertising pytest on a task whose only
+            # permitted command is a probe burned the first step of every task.
+            if allowlist and "run" in self.allowed_tools:
+                example = json.dumps(list(allowlist[0]))
+                schema = "\n".join(
+                    (f'{{"tool":"run","args":{{"cmd":{example}}}}}' if '"tool":"run"' in ln
+                     else ln)
+                    for ln in schema.splitlines())
             return (
                 "You are the Northstar OS coding worker. Reply with exactly ONE JSON "
                 "object per turn. No prose, no markdown fences.\n\n"
@@ -311,6 +321,7 @@ class CodingAgent:
                 "- Never rewrite an existing source file: use ast_edit or apply_patch.\n"
                 "- `run` takes an argv list; the only commands that will execute are: "
                 + ("; ".join(commands) if commands else "(none)") + "\n"
+                "- Start by reading the task's file, then edit it, then run the check.\n"
                 "- Stop with `finish` once the behaviour is correct.\n\n"
                 f"TASK:\n{task}\n\n"
                 + (self._failing_block()[:600] if self._failing else "")
