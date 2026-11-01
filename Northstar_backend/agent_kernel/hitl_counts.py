@@ -4,6 +4,7 @@ import json
 
 def hitl_counts(root):
     """Count hitl statuses in state directory."""
+    root = Path(root)
     if not root.exists():
         return {'pending': 0, 'approved': 0, 'denied': 0, 'total': 0}
     
