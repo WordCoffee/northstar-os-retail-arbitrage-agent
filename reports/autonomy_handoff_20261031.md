@@ -55,9 +55,19 @@ Run `campaign-20261101T015753Z`, 8/8 completed, 0 failed, stop `max_tasks` after
 | `docs-autonomy` | completed | `74c7d49c7f64` | 5.458 s | failed as required | pass |
 | `blocked-auth-text-check` | blocked-not-authorized | — | — | — | — |
 
-The `hitl-pathlike` precheck is the required real behavior failure: the old
-function called `root.exists()` on a string and raised `AttributeError`; after
-the patch it accepts path-like roots and the regression test passes.
+The `hitl-pathlike` precheck is a real behavior failure: the old function
+called `root.exists()` on a string and raised `AttributeError`; after the patch
+it accepts path-like roots and the regression test passes.
+
+A separate pre-fix replay proved the non-helper behavior change in
+`format-quad-guard`: against parent `e111977e`, a 3-point bottle quad produced
+**no `ValueError`** (exit 1, silent bad transform); against the current commit it
+returns `ValueError` (exit 0). Command output:
+
+```text
+PRE-FIX exit 1 FAIL no ValueError
+POST-FIX exit 0 PASS ValueError
+```
 
 ## 4. Recovery results
 
