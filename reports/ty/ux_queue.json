@@ -5,40 +5,36 @@
   "baseline_tag": "ns-ux-baseline",
   "baseline_commit": "a2d12f5e",
   "spend_cap_tokens": 5000000,
-  "tokens_used_estimate": 180000,
-  "note": "Token numbers are estimates (chars/4 of the work diff plus context), recorded per unit as the order asks. They are not billing figures.",
+  "tokens_used_estimate": 300000,
+  "note": "Token numbers are estimates (chars/4 of the work diff plus context). Not billing figures.",
   "environment": {
     "dev_server": "BLOCKED - scripts/dev-start.ps1 refuses: tailscale serve proxies 127.0.0.1:8000 on the tailnet. See needs_you.md #1.",
-    "consequence": "backend suite and Playwright runs are unavailable until the tunnel is closed; UI units are code+unit-tested and marked done with verification_pending"
+    "consequence": "backend suite and Playwright runs are unavailable until the tunnel is closed. UI units are code+unit-tested; nothing is claimed VERIFIED without a browser run."
   },
   "baseline": {
-    "backend": {
-      "command": "cd Northstar_backend && python -m pytest -q -p no:cacheprovider",
-      "measured_at": "2026-11-02T10:59:00",
-      "result": "30 failed, 5763 passed, 117 skipped, 2 xfailed, 88 subtests passed in 635.85s"
-    },
-    "e2e": {
-      "command": "npx playwright test --project=chromium-desktop --reporter=line",
-      "measured_at": "2026-11-02T11:20:00",
-      "result": "41 passed, 2 failed, 1 did not run (4.3m)",
-      "failures": [
-        "smoke.spec.ts:31 sign-in page loads (LOCAL_DEV redirects /sign-in to /home by design)",
-        "acceptance-mogra.spec.ts live chat reply expectation"
-      ],
-      "attribution": "Both reproduce with the dashboard change stashed; pre-existing."
-    },
-    "ui_unit": {"command": "cd northstar-os-ui && npm run test:ui", "measured_at": "2026-11-02T12:10:00", "result": "82 passed, 0 failed"}
+    "backend": {"command": "cd Northstar_backend && python -m pytest -q -p no:cacheprovider",
+                "measured_at": "2026-11-02T10:59:00",
+                "result": "30 failed, 5763 passed, 117 skipped, 2 xfailed, 88 subtests passed in 635.85s"},
+    "e2e": {"command": "npx playwright test --project=chromium-desktop --reporter=line",
+            "measured_at": "2026-11-02T11:20:00",
+            "result": "41 passed, 2 failed, 1 did not run (4.3m)",
+            "attribution": "both failures reproduce with the change stashed; pre-existing"},
+    "ui_unit": {"command": "cd northstar-os-ui && npm run test:ui",
+                "measured_at": "2026-11-02T12:10:00", "result": "82 passed, 0 failed"}
   },
   "units": [
-    {"id": "U0", "title": "Baseline and rollback", "status": "done", "attempts": 1,
-     "tag": "ns-ux-U0", "tokens": 60000,
-     "evidence": "baseline recorded above; tag ns-ux-baseline = a2d12f5e; dev-start refused by the safety gate (recorded)"},
-    {"id": "U1", "title": "Naming: Northstar, not Simple", "status": "done", "attempts": 1,
-     "tag": "ns-ux-U1", "tokens": 120000,
-     "evidence": "node --test: 82 passed (7 new shellMode tests); vite build 1.30s 0 errors; grep leaves only deliberate mentions (the rule itself, the migration note, the test name); AGENTS.md appended 647 chars, diff shown",
-     "verification": "unit tests + build; browser pass pending (server blocked)"},
-    {"id": "U2", "title": "Service registry and gate stub", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
-    {"id": "U3", "title": "The shell [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U0", "title": "Baseline and rollback", "status": "done", "attempts": 1, "tag": "ns-ux-U0",
+     "tokens": 60000, "evidence": "tag ns-ux-baseline = a2d12f5e; baselines above; dev-start refusal recorded"},
+    {"id": "U1", "title": "Naming: Northstar, not Simple", "status": "done", "attempts": 1, "tag": "ns-ux-U1",
+     "tokens": 120000,
+     "evidence": "npm run test:ui 82/82 (7 new shellMode tests); vite build 1.31s; grep leaves only deliberate mentions; AGENTS.md appended 647 chars",
+     "verification": "unit + build; browser pass pending"},
+    {"id": "U2", "title": "Service registry and gate stub", "status": "done", "attempts": 1, "tag": "ns-ux-U2",
+     "tokens": 120000,
+     "evidence": "npm run test:ui 94/94 (12 new registry/gate tests); vite build 1.31s; registry = nav catalogue + 10 app-route services, every entry carries scene/theme/workspaceType/tools/entitlementKey",
+     "verification": "unit + build; browser pass pending"},
+    {"id": "U3", "title": "The shell [MAX-GRADE]", "status": "blocked", "attempts": 0, "tag": null, "tokens": 0,
+     "blocked_by": "dev server refused by the safety gate; click-path tests on both targets cannot run"},
     {"id": "U4", "title": "Theme system and glass kit", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
     {"id": "U5", "title": "Scene engine [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
     {"id": "U6", "title": "Design Studio scene", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
