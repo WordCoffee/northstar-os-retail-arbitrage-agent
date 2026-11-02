@@ -1,42 +1,57 @@
 # UX rebuild — handoff
 
-**State:** U0 and U1 complete. U2 next.
+**State:** U0–U2 complete (unit-verified). **U3 blocked** by the dev-server safety gate; U4–U15 not
+started. Final report for this run: `reports/ty/ux_20261102.md`.
 
 ## Done
 
-- **U0** — `ns-ux-baseline` tagged at `a2d12f5e`; baselines recorded in `ux_queue.json` from this
-  session's runs (backend 5763/30; e2e 41/2/1, both failures pre-existing by stash attribution;
-  UI unit 82/0). Queue, decisions, needs-you and this file created.
-- **U1** — Naming rule landed. `src/lib/shellMode.js` owns the vocabulary: internal ids stay
-  `simple`/`advanced`, display names are **Northstar** / **Advanced view**, and `normaliseMode`
-  migrates legacy stored values (`northstar`, `standard`, `default`, `advanced view`, `autothink`).
-  `ModeContext` reads through it; the visible strings in `MasterBrainShell` and `ShellModeToggle`
-  now say Northstar; comments in the touched files were swept; `AGENTS.md` gained the naming rule
-  as a 647-char append (no rewrite). 7 new unit tests in `src/lib/shellMode.test.js`; suite 82/82;
-  build green.
+- **U0** — `ns-ux-baseline` at `a2d12f5e`; baselines in `ux_queue.json` (backend 5763/30 at 10:59;
+  e2e 41/2/1 at 11:20 with both failures pre-existing; UI unit 82/0).
+- **U1** — `src/lib/shellMode.js` owns the vocabulary: ids stay `simple`/`advanced`, display names
+  are **Northstar** / **Advanced view**, `normaliseMode` migrates `northstar|standard|default|
+  advanced view|autothink`. ModeContext reads through it; visible strings in `MasterBrainShell` and
+  `ShellModeToggle` say Northstar; comments swept; `AGENTS.md` appended (647 chars, append-only).
+- **U2** — `src/data/serviceRegistry.js`: 34 services (nav catalogue + 10 routed rooms marked
+  `source: 'app-route'`), each with `scene`, `theme`, `workspaceType`, `tools`, `entitlementKey`.
+  `src/lib/serviceGate.js`: `canUseService` open in dev with a named reason, production branch
+  (credit / explicit entitlement) exercisable via `enforceBilling`.
 
-## Blocker that shapes the session
+Tests at handoff: `cd northstar-os-ui && npm run test:ui` → **94 passed, 0 failed**; `npm run build`
+→ **✓ built in 1.31s**.
 
-`scripts/dev-start.ps1` is **refused by the safety gate** — `tailscale serve` proxies
-`127.0.0.1:8000` on the tailnet, so the dev login bypass would be shared. Queued in
-`needs_you.md #1`. Consequence: **no dev server, no backend suite, no Playwright** until it is
-closed. UI units are code+unit-tested and marked `done` with a `verification` note; nothing is
-claimed VERIFIED without a browser run.
+## Blocker
 
-## Next session must know
+`scripts/dev-start.ps1` exits 2 before starting anything:
 
-- Read `reports/ty/ux_queue.json` first; continue at U2 (registry), then U3 (shell).
-- Work order: `reports/ty/ux_work_order.md`.
-- `ModeContext` now imports from `src/lib/shellMode.js`. Do not rename the internal ids.
-- `SIMPLE_KEEP_ADVANCED` in `App.jsx` controls which paths keep their real page in Northstar;
-  `/design-studio` is in it (added earlier today so the studio is reachable at free tier).
-- Playwright: `chromium-desktop` + `chromium-mobile` (WebKit/iPhone 12, binary installed).
-  Base URL `http://127.0.0.1:8101`, routes under `/ui/`.
-- UI unit tests: `cd northstar-os-ui && npm run test:ui` (node --test over `src/lib/*.test.js`).
+```
+REFUSING dev bypass - one or more exposure conditions detected:
+ - tailscale funnel status is non-empty
+ - tailscale serve config targets port 8000
+```
 
-## Open hazards
+`tailscale serve status` shows `https://msi.tail4b3dfd.ts.net → http://127.0.0.1:8000` (tailnet
+only). Until that is closed, there is no backend, no e2e, and **no honest way to mark a UI unit
+VERIFIED**. Queued in `needs_you.md #1`.
 
-- Killing old `uvicorn`/`vite` also killed a `powershell -NoExit` window; use
-  `Get-CimInstance Win32_Process` filtered by CommandLine.
-- Token numbers are estimates (chars/4), labelled as such.
-- `AGENTS.md` must stay append-only.
+## Next session
+
+1. Read `reports/ty/ux_queue.json`; next unit is **U3 (the shell, [MAX-GRADE])**.
+2. If the tunnel is still live, do not start the stack another way — build what is unit-testable,
+   keep marking `verification` honestly, and stop before claiming a screen works.
+3. If it is closed: `scripts/dev-start.ps1` (background), then `npx playwright test
+   --project=chromium-desktop` and `--project=chromium-mobile`.
+
+## Files a next session must not break
+
+- `src/lib/shellMode.js` — ids are load-bearing (`html[data-shell-mode="simple"]`, stored key).
+- `SIMPLE_KEEP_ADVANCED` in `App.jsx` — keeps `/design-studio`, `/account`, `/legal` as real pages
+  in Northstar.
+- `src/data/serviceRegistry.js` — the single place to add a service.
+- `AGENTS.md` — append-only.
+
+## Hazards
+
+- Kill servers with `Get-CimInstance Win32_Process` filtered by CommandLine; a `powershell -NoExit`
+  window died with the old stack once.
+- Playwright routes live under `/ui/`; wait for `**/ui/home`, not `/home`.
+- Token figures are estimates (chars/4), not billing.
