@@ -1973,6 +1973,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--dry-run", action="store_true", help="print commands, write nothing")
     ap.add_argument("--no-commit", action="store_true", help="verify only")
     ap.add_argument("--resume", default="", help="explicitly resume a failed/interrupted task id")
+    ap.add_argument("--author-open", default="", metavar="TASK",
+                    help="take the baseline and publish the external author's permitted scope")
+    ap.add_argument("--author-close", default="", metavar="TASK",
+                    help="audit, verify and commit (or restore) the external author's work")
     ap.add_argument("--stop", action="store_true", help="create STOP for a safe stop")
     args = ap.parse_args(argv)
 
@@ -1984,6 +1988,22 @@ def main(argv: Optional[List[str]] = None) -> int:
         STOP_PATH.write_text(f"operator stop {_now()}\n", encoding="utf-8")
         print(f"STOP created at {STOP_PATH}")
         return 0
+
+    if args.author_open or args.author_close:
+        import author_lane
+        tasks = load_tasks()
+        state = load_state()
+        try:
+            if args.author_open:
+                out = author_lane.open_task(args.author_open, tasks, state)
+            else:
+                out = author_lane.close_task(args.author_close, tasks, state,
+                                             no_commit=args.no_commit)
+        except author_lane.AuthorError as exc:
+            print(json.dumps({"ok": False, "error": str(exc)}, indent=2))
+            return 2
+        print(json.dumps(out, indent=2))
+        return 0 if out.get("status") in (None, "completed") else 1
 
     tasks = load_tasks()
     state = load_state()

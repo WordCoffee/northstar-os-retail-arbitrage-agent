@@ -1,0 +1,30 @@
+{
+  "ty_deepseek_author_20261102": {
+    "verdict": "READY, scoped to DeepSeek-authored, Ty-supervised autonomous repair. 3 of 3 defects fixed and committed, each probe flipped fail->pass, each commit task-only. The learning store is live but no learning gain is demonstrated.",
+    "author_lane": {
+      "model": "DeepSeek V4.1 Flash via the operator OpenCode Go session",
+      "transport": "two-phase supervisor handoff (author-open / author-close); 0 API requests, 0 spend",
+      "why_not_remote": "the auth store holds an openrouter credential, but any programmatic call is per-token spend; the directive forbids new spend and silent substitution",
+      "supervisor_controls": "baseline, scope audit, independent probe, regression, task-only commit, byte restore",
+      "per_task_latency": "about 1 minute open->close"
+    },
+    "queue": [
+      {"task": "ty-artifact-jpeg", "commit": "9e8e2cdb", "probe": "FAIL(2)->PASS", "files": ["Northstar_backend/agent_kernel/artifacts.py"]},
+      {"task": "ty-diff-select-headers", "commit": "e1585917", "probe": "FAIL(2)->PASS", "files": ["Northstar_backend/agent_kernel/diff.py"]},
+      {"task": "ty-hitl-skip-report", "commit": "883a7fed", "probe": "FAIL(1)->PASS", "files": ["Northstar_backend/agent_kernel/hitl_counts.py"]}
+    ],
+    "learning": {
+      "store": "state/fix_patterns/<class>.jsonl, 3 trajectories (reads, edits, self-revisions, probe, commit)",
+      "experiment": "3 fixtures x cold/informed, 6 local runs, 32.4 s",
+      "cold": {"pass": 1, "mean_steps": 5.33, "protocol_errors": 0},
+      "informed": {"pass": 0, "mean_steps": 8.0, "protocol_errors": 0},
+      "delta": "-1 pass, +2.67 steps -> no improvement; the informed arm was worse on this sample",
+      "evidence": "state/evidence/learning_experiment_20261102.json"
+    },
+    "regression": "186 passed in 8.95 s across 15 suites, including 4 author-lane cases",
+    "state": "no lock, STOP, worker or resident model; operator daemon restored (cpu/q4_0, GPU 0 MiB); campaign Ty profiles keep f16",
+    "backlog_pass": "NOT RUN - qualification and the learning measurement consumed the budget; no contracts were invented",
+    "next_decision": "authorise the backlog pass (up to 5 further frozen contracts) or stop",
+    "report": "reports/ty_deepseek_author_20261101.md"
+  }
+}

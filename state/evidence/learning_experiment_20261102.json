@@ -1,0 +1,87 @@
+{
+  "runs": [
+    {
+      "fixture": "inventory",
+      "informed": false,
+      "behavioural_pass": false,
+      "agent_ok": false,
+      "steps": 5,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 1,
+      "detail": "returned tuple",
+      "elapsed_s": 4.85
+    },
+    {
+      "fixture": "inventory",
+      "informed": true,
+      "behavioural_pass": false,
+      "agent_ok": false,
+      "steps": 8,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 4,
+      "detail": "NameError: name 'is_valid' is not defined",
+      "elapsed_s": 6.43
+    },
+    {
+      "fixture": "events",
+      "informed": false,
+      "behavioural_pass": true,
+      "agent_ok": true,
+      "steps": 3,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 1,
+      "detail": "{\"open\": 1, \"close\": 1, \"skipped\": 2}",
+      "elapsed_s": 1.99
+    },
+    {
+      "fixture": "events",
+      "informed": true,
+      "behavioural_pass": false,
+      "agent_ok": false,
+      "steps": 8,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 3,
+      "detail": "returned tuple",
+      "elapsed_s": 6.41
+    },
+    {
+      "fixture": "sensors",
+      "informed": false,
+      "behavioural_pass": false,
+      "agent_ok": false,
+      "steps": 8,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 3,
+      "detail": "returned tuple",
+      "elapsed_s": 6.18
+    },
+    {
+      "fixture": "sensors",
+      "informed": true,
+      "behavioural_pass": false,
+      "agent_ok": false,
+      "steps": 8,
+      "protocol_errors": 0,
+      "scope_rejections": 0,
+      "edits_applied": 3,
+      "detail": "returned tuple",
+      "elapsed_s": 6.41
+    }
+  ],
+  "cold": {
+    "pass": 1,
+    "mean_steps": 5.33,
+    "protocol_errors": 0
+  },
+  "informed": {
+    "pass": 0,
+    "mean_steps": 8.0,
+    "protocol_errors": 0
+  },
+  "hint_used": true
+}
