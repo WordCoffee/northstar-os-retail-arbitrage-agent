@@ -54,6 +54,7 @@ Return ONLY this JSON object, no prose:
   "form": "pouch" | "box" | "bottle" | "tube" | "jar" | "other",
   "layout": {"balanced": true or false, "note": "max 120 characters"},
   "typography": {"text_visible": true or false, "legible": true or false or null, "note": "max 120 characters"},
+  "garbled_text": true or false,
   "material": {"finish": "matte" | "gloss" | "kraft" | "metallic" | "soft_touch" | "unknown", "note": "max 120 characters"},
   "design_note": "max 160 characters"
 }
@@ -61,7 +62,9 @@ Return ONLY this JSON object, no prose:
 subject_matches is false when the image is not the product the brief describes.
 layout.balanced is false when the composition is cut off, crowded, or off-centre.
 typography.legible is false when letters are garbled, warped or unreadable, and
-null when no text is visible at all."""
+null when no text is visible at all.
+garbled_text is true when ANY lettering anywhere in the image is unreadable
+gibberish - background text, side panels, fine print - not only the main label."""
 
 
 def _post(url: str, payload: Dict[str, Any], timeout: float) -> Dict[str, Any]:
@@ -101,6 +104,7 @@ def _parse(raw: str) -> Dict[str, Any]:
         "layout_note": str(layout.get("note") or "")[:120],
         "text_visible": typo.get("text_visible"),
         "legible": typo.get("legible"),
+        "garbled_text": data.get("garbled_text"),
         "typography_note": str(typo.get("note") or "")[:120],
         "material_finish": str(material.get("finish") or "unknown")[:24],
         "material_note": str(material.get("note") or "")[:120],
@@ -169,7 +173,8 @@ def term_coverage(expected: Optional[Sequence[str]], ocr_words: Sequence[str]) -
 
 def _typography_axis(ocr: Dict[str, Any], *, text_requested: bool,
                      legible: Optional[bool], note: str,
-                     expected_terms: Optional[Sequence[str]] = None) -> Dict[str, Any]:
+                     expected_terms: Optional[Sequence[str]] = None,
+                     garbled_text: Optional[bool] = None) -> Dict[str, Any]:
     present = ocr.get("contains_text")
     if not text_requested:
         if present is True:
@@ -191,6 +196,10 @@ def _typography_axis(ocr: Dict[str, Any], *, text_requested: bool,
                      engine=ocr.get("engine"))
     if legible is False:
         return _axis("fail", reason="typography_illegible", detail=note or "letters unreadable",
+                     boxes=ocr.get("boxes"), words=ocr.get("words"), engine=ocr.get("engine"))
+    if garbled_text is True:
+        return _axis("fail", reason="typography_garbled",
+                     detail=note or "unreadable gibberish lettering elsewhere in the frame",
                      boxes=ocr.get("boxes"), words=ocr.get("words"), engine=ocr.get("engine"))
     coverage = term_coverage(expected_terms, ocr.get("words") or [])
     if coverage.get("applicable") and coverage["coverage"] < 0.5:
@@ -248,13 +257,16 @@ def score(png: bytes, *, brief: str, requested_form: str, text_requested: bool,
               detail="the vision lane did not answer layout.balanced"))
     axes["typography"] = _typography_axis(
         ocr, text_requested=text_requested, legible=observed.get("legible"),
-        note=observed.get("typography_note") or "", expected_terms=expected_terms)
+        note=observed.get("typography_note") or "", expected_terms=expected_terms,
+        garbled_text=observed.get("garbled_text"))
     axes["material"] = _axis("recorded", finish=observed.get("material_finish"),
                              detail=observed.get("material_note"),
                              detail_note="descriptive only; finish is not verifiable from a PNG")
     text_visible = observed.get("text_visible")
     if text_visible is not None:
         axes["typography"]["vision_text_visible"] = text_visible
+    if observed.get("garbled_text") is not None:
+        axes["typography"]["vision_garbled"] = observed["garbled_text"]
     return {"available": True, "model": model, "seconds": observed.get("seconds"),
             "axes": axes, "ocr": ocr}
 

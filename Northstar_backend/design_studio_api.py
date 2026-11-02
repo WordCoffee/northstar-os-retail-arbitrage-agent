@@ -1927,6 +1927,9 @@ class GenerateIn(BaseModel):
     #: When true, a render that passes the form-adherence gate is written as a
     #: deliverable package (folder + manifest) in the same request.
     deliver: bool = False
+    #: Placement canvas: square (1:1), story (9:16) or wide (16:9). A format fixes
+    #: width/height; passing a contradictory pair is refused, not overridden.
+    format: Optional[str] = Field(default=None, max_length=20)
 
 
 @router.get("/engine")
@@ -1937,6 +1940,16 @@ def engine_status(acct: str = Depends(studio_account)):
 
 @router.post("/generate")
 def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
+    # Placement validation happens before anything else: a contradictory canvas
+    # is a 422 whether or not the engine is armed, and costs no GPU time.
+    import ad_formats as _af
+    try:
+        ad_format = _af.resolve(body.format, body.width, body.height)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    width = ad_format["width"] if ad_format else body.width
+    height = ad_format["height"] if ad_format else body.height
+
     import studio_generation as sg
     st = sg.engine_status()
     if not st["armed"]:
@@ -1963,15 +1976,17 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "cost_preview": {"provider": "local", "cost": 0,
                          "note": "Local compute on the operator's GPU; nothing paid."},
         "params": {"purpose": body.purpose, "tier": body.tier, "brief": body.brief,
-                   "width": body.width, "height": body.height, "seed": body.seed},
+                   "width": width, "height": height, "seed": body.seed,
+                   **({"format": ad_format["format"],
+                       "ratio": ad_format["ratio"]} if ad_format else {})},
         "started_at": now,
         "credits_used": 0,
     })
     def _render(prompt: str):
         if body.kind == "video":
-            return sg.generate_video(prompt=prompt, width=body.width, height=body.height,
+            return sg.generate_video(prompt=prompt, width=width, height=height,
                                      tier=body.tier, seed=body.seed)
-        return sg.generate_image(prompt=prompt, width=body.width, height=body.height,
+        return sg.generate_image(prompt=prompt, width=width, height=height,
                                  tier=body.tier, seed=body.seed)
     # The requested container form is stated at the head AND the tail of the brief.
     # Observed drift: a bottle and a tube brief both rendered as a rigid box when the
@@ -2068,7 +2083,13 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
                     "dieline": {"built": False,
                                 "reason": "mockup render; no print dieline was generated"},
                     "color_profile": {"working": "RGB", "target": "CMYK",
-                                      "converted": False}})
+                                      "converted": False},
+                    **({"format": ad_format["format"],
+                        "canvas": {"width": ad_format["width"],
+                                   "height": ad_format["height"]},
+                        "ratio": ad_format["ratio"],
+                        "placements": ad_format["placements"]}
+                       if ad_format else {})})
     return {
         "job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
         "asset": {**(asset or {}), "file_url": f"/api/design-studio/assets/{aid}/file"},
@@ -2076,8 +2097,16 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "text_fidelity": tf_result,
         "adherence": adherence,
         "quality": quality,
+        "ad_format": ad_format,
         "deliverable": deliverable,
     }
+
+
+@router.get("/ad-formats")
+def ad_formats_route(acct: str = Depends(studio_account)):
+    """The placement canvases: 1:1 feed, 9:16 story/reel/short, 16:9 banner."""
+    import ad_formats as _af
+    return _af.describe()
 
 
 @router.get("/deliverables")

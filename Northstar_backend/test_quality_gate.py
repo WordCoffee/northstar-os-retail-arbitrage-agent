@@ -237,3 +237,25 @@ def test_without_expected_terms_the_axis_does_not_claim_coverage(wired):
           ocr={"contains_text": True, "boxes": 1, "words": ["ANYTHING"]})
     result = qg.score(PNG, brief="b", requested_form="pouch", text_requested=True)
     assert "coverage" not in result["axes"]["typography"]
+
+
+# --- gibberish anywhere in the frame blocks the ad ---------------------------
+
+def test_garbled_lettering_elsewhere_blocks_even_when_the_label_is_clean(wired):
+    wired(vision={"text_visible": True, "legible": True, "garbled_text": True},
+          ocr={"contains_text": True, "boxes": 9,
+               "words": ["LION MANE", "MSNHES CIRSIE TUION", "MORIA ILIIP RGEHET"]})
+    verdict = qg.verdict(qg.score(PNG, brief="b", requested_form="pouch",
+                                  text_requested=True,
+                                  expected_terms=["LION MANE"]))
+    assert verdict["ok"] is False
+    assert verdict["reasons"][0]["reason"] == "typography_garbled"
+
+
+def test_a_clean_frame_reports_garbled_false_and_passes(wired):
+    wired(vision={"text_visible": True, "legible": True, "garbled_text": False},
+          ocr={"contains_text": True, "boxes": 2, "words": ["LION MANE", "6 oz"]})
+    result = qg.score(PNG, brief="b", requested_form="pouch", text_requested=True,
+                      expected_terms=["LION MANE"])
+    assert result["axes"]["typography"]["status"] == "pass"
+    assert result["axes"]["typography"]["vision_garbled"] is False
