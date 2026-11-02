@@ -1,0 +1,166 @@
+{
+  "campaign": "creative-service-packify-quality",
+  "recorded_at": "2026-11-02T08:05:00",
+  "units": {
+    "ty-dieline-geometry": {
+      "commit": "86e59278",
+      "module": "Northstar_backend/dieline_geometry.py",
+      "invariants": [
+        "bleed_missing",
+        "bleed_exceeds_face",
+        "safe_missing",
+        "safe_inverted",
+        "safe_outside_trim",
+        "element_outside_bleed",
+        "panels_invalid",
+        "panel_outside_trim",
+        "panels_overlap",
+        "tab_deeper_than_body",
+        "face_below_min",
+        "no_trim"
+      ],
+      "artwork_rule": "art_boxes returns one safe box per panel; audit_artwork refuses a rect that leaves the box (fold straddle, bleed margin)",
+      "defect_found_on_first_run": {
+        "template": "doypack",
+        "symptom": "panel_outside_trim: back panel ended 6mm (one weld) past the trim line",
+        "cause": "y_back added a third weld that the sheet-height formula did not include",
+        "before": {
+          "back_panel_y": 319.0,
+          "back_panel_end": 529.0,
+          "trim_bottom": 523.0
+        },
+        "after": {
+          "back_panel_y": 313.0,
+          "back_panel_end": 523.0,
+          "trim_bottom": 523.0
+        },
+        "was_clamping_before": "label safe margin wider than the face was clamped to 0.5mm"
+      },
+      "tests": {
+        "new": 18,
+        "existing_print_suite": 27,
+        "result": "pass"
+      }
+    },
+    "ty-quality-gate": {
+      "commit": "d746667b",
+      "module": "Northstar_backend/quality_gate.py",
+      "blocking_axes": [
+        "form",
+        "design_alignment",
+        "layout",
+        "typography"
+      ],
+      "recorded_not_blocking": [
+        "material"
+      ],
+      "typography_rules": [
+        "text-free brief + lettering present -> typography_unwanted_text",
+        "text brief + no lettering -> typography_missing",
+        "text brief + unreadable lettering -> typography_illegible",
+        "text brief + under 50% of requested copy -> typography_text_mismatch",
+        "text brief + OCR unavailable -> typography_unverified (fail closed)"
+      ],
+      "manifest_block": "quality (axes, verdict, ocr, model, seconds), dieline, color_profile",
+      "live_runs": [
+        {
+          "case": "text-free brief",
+          "verdict": "3/3 pass",
+          "typography": "n/a (no_text_requested)",
+          "ocr": {
+            "engine": "rapidocr",
+            "contains_text": false
+          },
+          "vision_seconds": 20.5,
+          "manifest_keys": 16,
+          "box": "821a2623-3b1a-43e8-bc87-00614e63213b"
+        },
+        {
+          "case": "label brief 'LION MANE'",
+          "verdict": "4/4 pass",
+          "ocr_words": [
+            "LION MANE",
+            "6 oz"
+          ],
+          "legibility_source": "vision",
+          "box": "dd5d5ca8-5855-408d-88c3-85951d9ba4c8"
+        },
+        {
+          "case": "label brief, 4pt pangram",
+          "verdict": "4/4 pass",
+          "ocr_words": [
+            "THE QUICK BROWN FOX",
+            "JUMPS OVER THE LAZY DOG",
+            "0123456789"
+          ],
+          "box": "3f8b9197-bcac-4c7d-9f8d-6b4b2fbdbc68"
+        },
+        {
+          "case": "label brief 'LION MANE', later run",
+          "verdict": "3/4 BLOCKED",
+          "failed_axis": "typography",
+          "reason": "typography_illegible",
+          "detail": "Body text is garbled/placeholder text; only 'LION MANE' is clear.",
+          "deliverable": null,
+          "folders_before": 5,
+          "folders_after": 5
+        }
+      ],
+      "defects_found_while_proving": [
+        {
+          "defect": "OLLAMA_HOST is a server-side bare host:port; urllib needs a scheme",
+          "observed": "URLError: unknown url type: 0.0.0.0",
+          "fix": "local_vision.normalise_host, including 0.0.0.0 -> 127.0.0.1 for clients",
+          "tests": 6
+        },
+        {
+          "defect": "no think=False -> model spends the budget reasoning and returns an empty reply",
+          "observed": "34.6s, 0 chars, format=json",
+          "fix": "think=false added to the quality-gate payload",
+          "tests": "live"
+        }
+      ],
+      "tests": {
+        "new": 22,
+        "result": "pass"
+      }
+    }
+  },
+  "combined_regression": {
+    "files": 9,
+    "passed": 127,
+    "failed": 0
+  },
+  "dieline_in_manifest": {
+    "state": "explicitly not built for a mockup render",
+    "value": {
+      "built": false,
+      "reason": "mockup render; no print dieline was generated"
+    },
+    "reason": "the run has no dimensions, so inventing a dieline spec would be fabrication"
+  },
+  "not_done": [
+    "material/lighting workflows in ComfyUI (matte laminate, foil, UV spot, kraft, soft-touch) - no workflow change was made",
+    "dieline spec inside the deliverable manifest for a real print hand-off (needs a dimensions step first)"
+  ],
+  "full_suite": {
+    "before": {
+      "passed": 5639,
+      "failed": 34
+    },
+    "after": {
+      "passed": 5689,
+      "failed": 30,
+      "skipped": 117,
+      "xfailed": 2,
+      "seconds": 635.18
+    },
+    "new_failures": 0,
+    "delta_passing": 50
+  },
+  "ui": {
+    "build_errors": 0,
+    "panel_shows": "verdict score and typography n/a state",
+    "browser_run": false
+  }
+}

@@ -82,6 +82,11 @@ export default function Deliverables() {
                   {' → '}
                   {row.adherence?.observed || 'unknown'}
                 </div>
+                <div className="text-low" style={{ fontSize: 12, marginTop: 4 }}>
+                  {row.quality?.verdict?.score
+                    ? `quality ${row.quality.verdict.score} · ${row.quality.verdict.not_applicable?.length ? 'typography n/a' : 'all axes scored'}`
+                    : 'quality not recorded'}
+                </div>
               </div>
             </div>
             <div className="text-low" style={{ fontSize: 12, marginTop: 8 }}>
