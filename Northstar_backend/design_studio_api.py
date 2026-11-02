@@ -2183,6 +2183,77 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
             "manifest": packaged.get("manifest")}
 
 
+class RelightIn(BaseModel):
+    asset_id: str = Field(..., min_length=3, max_length=80)
+    prompt: str = Field("", max_length=600)
+    width: int = Field(1024, ge=256, le=1536)
+    height: int = Field(1024, ge=256, le=1536)
+    steps: int = Field(25, ge=4, le=60)
+    cfg: float = Field(2.0, ge=1.0, le=12.0)
+    denoise: float = Field(0.9, ge=0.3, le=1.0)
+    seed: int = 1
+
+
+@router.post("/relight")
+def relight_asset(body: RelightIn, acct: str = Depends(studio_account)):
+    """IC-Light relight of a stored asset; refuses noise and refuses to pretend."""
+    import relight as _rl
+    import studio_generation as _sg
+    import uuid as _uuid
+    from pathlib import Path
+
+    state = _rl.availability()
+    if not state["available"]:
+        raise HTTPException(status_code=422, detail={
+            "code": "relight_unavailable", "message": state["reason"],
+            "missing": state["missing"], "partial": state["partial"]})
+    st = _sg.engine_status()
+    if not st["armed"]:
+        raise HTTPException(status_code=409, detail={
+            "code": "engine_not_armed", "engine": st})
+    db = get_northstar_db()
+    asset = db.design_studio.assets.get_by_id(body.asset_id, account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=404, detail="Asset not found")
+    path = Path(__file__).resolve().parent / "data" / "studio_generated" / Path(
+        str(asset["storage_key"])).name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Asset file not found on disk")
+
+    try:
+        result = _rl.relight(path.read_bytes(), prompt=body.prompt or _rl.DEFAULT_PROMPT,
+                             width=body.width, height=body.height, steps=body.steps,
+                             cfg=body.cfg, seed=body.seed, denoise=body.denoise)
+        packaged = _rl.package(result, source_asset_id=body.asset_id,
+                               brief=body.prompt or _rl.DEFAULT_PROMPT)
+    except _rl.RelightUnavailable as exc:
+        raise HTTPException(status_code=502, detail={
+            "code": "relight_output_is_noise", "message": str(exc)[:400]})
+    except (ValueError, RuntimeError, TimeoutError) as exc:
+        raise HTTPException(status_code=502, detail={
+            "code": "relight_failed", "message": str(exc)[:400]})
+
+    out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
+    name = f"relit_{_uuid.uuid4().hex}.png"
+    (out_dir / name).write_bytes(result["png"])
+    base = asset.get("name") or "asset"
+    aid = db.design_studio.assets.create({
+        "account_id": acct, "project_id": asset.get("project_id"),
+        "name": f"{base} (relit)", "asset_type": "relight",
+        "mime_type": "image/png", "storage_key": name,
+        "width": result["size"][0], "height": result["size"][1],
+        "size_bytes": len(result["png"]),
+        "metadata": {"relight": {"source_asset_id": body.asset_id,
+                                 "base_checkpoint": result["base_checkpoint"],
+                                 "noise_metric": result["noise_metric"]}},
+    })
+    return {"ok": packaged["verdict"]["ok"], "asset_id": aid,
+            "file_url": f"/api/design-studio/assets/{aid}/file",
+            "verdict": packaged["verdict"], "folder": packaged["folder"],
+            "seconds": result["seconds"], "noise_metric": result["noise_metric"],
+            "manifest": packaged.get("manifest")}
+
+
 @router.get("/assets/{aid}/file")
 def get_asset_file(aid: str, acct: str = Depends(studio_account)):
     """Stream a generated asset file. Account-scoped; the served path is always
