@@ -2128,6 +2128,61 @@ def deliverable_final_route(run_id: str, acct: str = Depends(studio_account)):
     return _Response(content=data, media_type="image/png")
 
 
+class ShortsIn(BaseModel):
+    asset_id: str = Field(..., min_length=3, max_length=80)
+    prompt: str = Field("", max_length=600)
+    width: int = Field(480, ge=256, le=1280)
+    height: int = Field(832, ge=256, le=1280)
+    length: int = Field(33, ge=9, le=121)
+    steps: int = Field(20, ge=4, le=60)
+    cfg: float = Field(5.0, ge=1.0, le=12.0)
+    seed: int = 1
+    fps: int = Field(16, ge=8, le=30)
+    text_requested: bool = False
+
+
+@router.post("/shorts")
+def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
+    """9:16 image-to-video on Wan 2.2 TI2V 5B, gated on a decoded frame."""
+    import shorts as _sh
+    import text_fidelity as _tf
+    import studio_generation as _sg
+    from pathlib import Path
+
+    st = _sg.engine_status()
+    if not st["armed"]:
+        raise HTTPException(status_code=409, detail={
+            "code": "engine_not_armed", "engine": st,
+            "message": "the local media engine is not armed (MEDIA_GEN_LIVE / ComfyUI)"})
+    db = get_northstar_db()
+    asset = db.design_studio.assets.get_by_id(body.asset_id, account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=404, detail="Asset not found")
+    path = Path(__file__).resolve().parent / "data" / "studio_generated" / Path(
+        str(asset["storage_key"])).name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Asset file not found on disk")
+
+    prompt = body.prompt or _sh.DEFAULT_PROMPT
+    expected = _tf.extract_expected_terms(prompt) if body.text_requested else []
+    try:
+        result = _sh.generate(path.read_bytes(), prompt=prompt, width=body.width,
+                              height=body.height, length=body.length, steps=body.steps,
+                              cfg=body.cfg, seed=body.seed, fps=body.fps)
+        packaged = _sh.package_render(result, brief=prompt,
+                                      text_requested=body.text_requested,
+                                      expected_terms=expected)
+    except (ValueError, RuntimeError, TimeoutError) as exc:
+        raise HTTPException(status_code=502, detail={
+            "code": "shorts_failed", "message": str(exc)[:400]})
+    return {"ok": packaged["verdict"]["ok"], "verdict": packaged["verdict"],
+            "folder": packaged["folder"],
+            "frame_count": result.get("frame_count"), "fps": result.get("fps"),
+            "size": result.get("size"), "seconds": result.get("seconds"),
+            "video_bytes": result.get("video_bytes"), "model": result.get("model"),
+            "manifest": packaged.get("manifest")}
+
+
 @router.get("/assets/{aid}/file")
 def get_asset_file(aid: str, acct: str = Depends(studio_account)):
     """Stream a generated asset file. Account-scoped; the served path is always

@@ -822,6 +822,63 @@ class PrepressIn(BaseModel):
     persist_cmyk: bool = False      # write a CMYK TIFF (+ soft proof PNG) asset
 
 
+class PrintMasterIn(BaseModel):
+    asset_id: str = Field(..., min_length=3, max_length=80)
+    width_mm: float = Field(..., gt=0, le=2000)
+    height_mm: float = Field(..., gt=0, le=2000)
+    target_dpi: int = Field(300, ge=72, le=1200)
+
+
+@router.post("/master")
+def print_master_route(body: PrintMasterIn, acct: str = Depends(studio_account)):
+    """Upscale an asset to a measured print master, or refuse with the shortfall."""
+    import print_master as pm
+    db = get_northstar_db()
+    asset = db.design_studio.assets.get_by_id(body.asset_id, account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=404, detail="Asset not found")
+    path = _out_dir() / Path(str(asset["storage_key"])).name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Asset file not found on disk")
+    try:
+        master = pm.make_master(path.read_bytes(), width_mm=body.width_mm,
+                                height_mm=body.height_mm, target_dpi=body.target_dpi)
+    except pm.PrintMasterShortfall as exc:
+        raise HTTPException(status_code=422, detail={
+            "code": "print_master_shortfall",
+            "message": str(exc),
+            "report": exc.report,
+            "needed_factor": round(exc.needed_factor, 2),
+        })
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+
+    out = _out_dir()
+    name = f"master_{uuid.uuid4().hex}.png"
+    (out / name).write_bytes(master["png"])
+    base = asset.get("name") or "artwork"
+    master_id = db.design_studio.assets.create({
+        "account_id": acct,
+        "project_id": asset.get("project_id"),
+        "name": f"{base} (print master {master['report']['worst']:.0f} dpi)",
+        "asset_type": "print_master",
+        "mime_type": "image/png",
+        "storage_key": name,
+        "width": master["size"][0], "height": master["size"][1],
+        "size_bytes": len(master["png"]),
+        "metadata": {"print_master": {"source_asset_id": body.asset_id,
+                                      "physical_mm": master["report"]["physical_mm"],
+                                      "dpi": master["report"]["worst"]}},
+    })
+    packaged = pm.package(master, run_id=f"print_{uuid.uuid4().hex[:12]}",
+                          asset_id=master_id)
+    return {"ok": True, "asset_id": master_id,
+            "file_url": f"/api/design-studio/assets/{master_id}/file",
+            "source_size": master["source_size"], "master_size": master["size"],
+            "factor": master["factor"], "report": master["report"],
+            "deliverable": packaged}
+
+
 @router.get("/prepress/profiles")
 def prepress_profiles(acct: str = Depends(studio_account)):
     import prepress as pp
