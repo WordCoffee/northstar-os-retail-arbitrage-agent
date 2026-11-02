@@ -1,0 +1,64 @@
+{
+  "run": "northstar-ux-rebuild",
+  "owner": "Tyrone (T2 Holdings)",
+  "started_at": "2026-11-02",
+  "baseline_tag": "ns-ux-baseline",
+  "baseline_commit": "a2d12f5e",
+  "spend_cap_tokens": 5000000,
+  "tokens_used_estimate": 0,
+  "note": "Token numbers are estimates (chars/4 of the work diff plus context), recorded per unit as the order asks. They are not billing figures.",
+  "baseline": {
+    "backend": {
+      "command": "cd Northstar_backend && python -m pytest -q -p no:cacheprovider",
+      "measured_at": "2026-11-02T10:59:00",
+      "result": "30 failed, 5763 passed, 117 skipped, 2 xfailed, 88 subtests passed in 635.85s",
+      "failures": [
+        "foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
+        "test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root",
+        "test_autothink_auth_boundary.py::AutothinkAuthBoundaryTests::test_two_tenants_have_isolated_usage",
+        "test_autothink_auth_boundary.py::AutothinkAuthBoundaryTests::test_valid_session_reaches_the_route",
+        "test_autothink_routes.py (8 tests, ImportError build_system_prompt_with_context)",
+        "test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact",
+        "test_generation_guards.py::test_the_edit_and_video_lanes_call_the_guard",
+        "test_hitl_counts.py::test_counts_pending_approved_denied",
+        "test_local_model.py (5 tests, NameError num_ctx)",
+        "test_provider_suite.py::test_provider_suite_endpoint_envelope",
+        "test_session_cookie_contract.py::DevShimSessionTests (5 tests, KeyError 'app')",
+        "test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only",
+        "test_shell_modes.py::test_user_ui_gates_read_plan",
+        "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves",
+        "test_ui_route_contract.py::UiRouteLiveProbeTests::test_no_ui_route_404s (subfailed)"
+      ]
+    },
+    "e2e": {
+      "command": "npx playwright test --project=chromium-desktop --reporter=line",
+      "measured_at": "2026-11-02T11:20:00",
+      "result": "41 passed, 2 failed, 1 did not run (4.3m)",
+      "failures": [
+        "smoke.spec.ts:31 sign-in page loads (LOCAL_DEV redirects /sign-in to /home by design)",
+        "acceptance-mogra.spec.ts live chat reply expectation (waits on an assistant reply)"
+      ],
+      "attribution": "Both reproduce with the dashboard change stashed, so they are pre-existing."
+    }
+  },
+  "units": [
+    {"id": "U0", "title": "Baseline and rollback", "status": "done", "attempts": 1,
+     "tag": "ns-ux-U0", "tokens": 0, "evidence": "baseline recorded above; tag ns-ux-baseline = a2d12f5e",
+     "hazard": "dev-start.ps1 refused by the safety gate: tailscale serve proxies 8000 (tailnet). Queued to needs_you.md; no dev server started this session."},
+    {"id": "U1", "title": "Naming: Northstar, not Simple", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U2", "title": "Service registry and gate stub", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U3", "title": "The shell [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U4", "title": "Theme system and glass kit", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U5", "title": "Scene engine [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U6", "title": "Design Studio scene", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U7", "title": "Design Studio workspace [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U8", "title": "Studio and Bojo integration", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U9", "title": "PPC scene and workspace", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U10", "title": "Research scene and workspace", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U11", "title": "Golden Goose scene and workspace", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U12", "title": "Remaining services loop", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U13", "title": "Moments and polish", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U14", "title": "Verification and handoff [MAX-GRADE]", "status": "todo", "attempts": 0, "tag": null, "tokens": 0},
+    {"id": "U15", "title": "Optional suite-green", "status": "todo", "attempts": 0, "tag": null, "tokens": 0}
+  ]
+}
