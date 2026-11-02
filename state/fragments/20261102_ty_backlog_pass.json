@@ -1,0 +1,38 @@
+{
+  "ty_backlog_pass_20261102": {
+    "verdict": "READY, scoped to operator-ferried, DeepSeek-authored, Ty-supervised autonomous repair. Three contracts frozen, three committed, every probe flipped FAIL->PASS, every commit task-only, no restore needed.",
+    "queue": {
+      "frozen": ["ty-dpi-image-guard", "ty-frame-fill-guard", "ty-hero-fill-guard"],
+      "predispatch_probe_exit": {"t1_dpi_image_guard.py": 1, "t2_frame_fill_guard.py": 1, "t3_hero_fill_guard.py": 1},
+      "surplus_proposal_no_contract": "cost_model.ppc_fee/refund boundary defects (negative credit count returns a refund larger than paid; NaN spend) - billing logic, excluded by the directive"
+    },
+    "tasks": [
+      {"task": "ty-dpi-image-guard", "class": "validator-ignores-input", "commit": "d5ba3ced", "probe": "FAIL(3)->PASS", "file": "Northstar_backend/print_prep.py"},
+      {"task": "ty-frame-fill-guard", "class": "missing-input-validation", "commit": "9f692f21", "probe": "FAIL(4)->PASS", "file": "Northstar_backend/image_prep.py"},
+      {"task": "ty-hero-fill-guard", "class": "missing-input-validation", "commit": "fa46b397", "probe": "FAIL(5)->PASS", "file": "Northstar_backend/listing_image.py"}
+    ],
+    "handoff": {
+      "document": "state/author_handoffs/BACKLOG_HANDOFF_20261102.md",
+      "operator_ferries": 1,
+      "open_close_pairs": 3,
+      "friction": "one self-caught defect: a missing math import surfaced by running the probe before submitting",
+      "leftover_handoffs": 0
+    },
+    "regression": "240 passed, 1 skipped in 11.54 s across 20 suites",
+    "learning": {
+      "trajectories_total": 6,
+      "next_measurement_at": 10,
+      "experiment": "not re-run; the negative cold-vs-informed delta stands"
+    },
+    "state": {
+      "task_commits": ["d5ba3ced", "9f692f21", "fa46b397"],
+      "session_total": ["883a7fed", "9e8e2cdb", "e1585917", "d5ba3ced", "9f692f21", "fa46b397"],
+      "tasks_used_of_cap": "6 of 8",
+      "no_lock_stop_worker_or_resident": true,
+      "operator_env": "cpu/q4_0 untouched, GPU 0 MiB; no model loaded during this pass",
+      "probes_at_head": "t1 t2 t3 t5 t6 t7 all exit 0"
+    },
+    "next_decision": "authorise unattended dispatch through the paid OpenRouter API, or stop - billing is a standing gate, not taken",
+    "report": "reports/ty_backlog_pass_20261102.md"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "schema": "northstar.continuous_loop.v2",
-  "updated_at": "2026-11-01",
+  "updated_at": "2026-11-02",
   "notes": "Qualification queue frozen 2026-11-01: three app-level tasks (artifact JPEG, HITL corrupt records, diff headers). The worker's own budget control is bootstrap maintenance, not a model task.",
   "tasks": [
     {
@@ -552,12 +552,12 @@
       "id": "ty-dpi-image-guard",
       "name": "Print gate refuses an impossible image/quad pairing",
       "schema_version": 2,
-      "authorized": false,
-      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "authorized": true,
+      "authorization_note": "Local-only behavioural fix frozen by the 2026-11-02 backlog pass. No auth, tenancy, billing, security, provider or external I/O. The probe is read-only and outside the author's write scope.",
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the dpi_report function in Northstar_backend/print_prep.py, using the ast_edit tool with op=replace_function_body and target=dpi_report. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate image_size first - it must be a list or tuple of exactly two numbers, both greater than zero, otherwise raise ValueError; (2) after px = face_pixels(quad), raise ValueError when the measured face width is greater than image_size[0] or its height is greater than image_size[1]; (3) keep the existing return dict unchanged. Do not rewrite the whole file. state/probes/t1_dpi_image_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t1_dpi_image_guard.py to check your change; if it fails, edit the source file - never the probe.",
+      "objective": "Northstar_backend/print_prep.py has one behavioural defect: dpi_report() measures the quad and ignores image_size completely, so a quad measured on a large render replayed against a tiny file still reports a printable DPI and the 300 DPI print gate can be satisfied by a file that could never print. Read the file and fix dpi_report so it raises ValueError when image_size is not two positive numbers and when the measured face is wider or taller than the image; a consistent pair must still return the report. The read-only probe state/probes/t1_dpi_image_guard.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/print_prep.py"
@@ -568,7 +568,7 @@
       ],
       "checks": [
         {
-          "name": "dpi image guard probe",
+          "name": "ty-dpi-image-guard",
           "cwd": ".",
           "cmd": [
             "python",
@@ -587,23 +587,32 @@
       ],
       "commit_message": "fix(print): refuse a dieline quad that cannot belong to the image",
       "required_artifact": "Northstar_backend/print_prep.py",
-      "timeout_seconds": 900,
+      "timeout_seconds": 600,
       "max_repairs": 1,
-      "max_steps": 12,
-      "model": "qwen2.5-coder:3b",
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
       "provider": "ollama",
-      "blocked": "superseded: 16 KB module; replaced by the smaller app tasks"
+      "contract_version": 1,
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (supervisor handoff)"
     },
     {
       "id": "ty-frame-fill-guard",
       "name": "Framing a cutout refuses an impossible fill and an empty subject",
       "schema_version": 2,
-      "authorized": false,
-      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "authorized": true,
+      "authorization_note": "Local-only behavioural fix frozen by the 2026-11-02 backlog pass. No auth, tenancy, billing, security, provider or external I/O. The probe is read-only and outside the author's write scope.",
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the frame_on_white function in Northstar_backend/image_prep.py, using the ast_edit tool with op=replace_function_body and target=frame_on_white. The source you supply is the function body WITHOUT the def line. The new body must: (1) validate fill first - it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; (2) after product = trim_to_alpha(rgba), raise ValueError with the text empty_subject when the product has no visible pixels; (3) keep the rest of the existing behaviour. Do not rewrite the whole file. state/probes/t2_frame_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t2_frame_fill_guard.py to check your change; if it fails, edit the source file - never the probe.",
+      "objective": "Northstar_backend/image_prep.py has one behavioural defect: frame_on_white() accepts fill=0, negative fills and fill>1, so the product is scaled past the frame and clipped, and it accepts a fully transparent cutout and returns a blank white square as if it were a product. Read the file and fix frame_on_white so a non-finite fill or one outside (0, 1] raises ValueError, and an empty cutout raises ValueError; a normal cutout at fill 0.85 and 1.0 must still frame. The read-only probe state/probes/t2_frame_fill_guard.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/image_prep.py"
@@ -614,7 +623,7 @@
       ],
       "checks": [
         {
-          "name": "frame fill guard probe",
+          "name": "ty-frame-fill-guard",
           "cwd": ".",
           "cmd": [
             "python",
@@ -633,23 +642,32 @@
       ],
       "commit_message": "fix(image): refuse an impossible fill and an empty cutout when framing",
       "required_artifact": "Northstar_backend/image_prep.py",
-      "timeout_seconds": 900,
+      "timeout_seconds": 600,
       "max_repairs": 1,
-      "max_steps": 12,
-      "model": "qwen2.5-coder:3b",
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
       "provider": "ollama",
-      "blocked": "superseded: 10 KB module; replaced by the smaller app tasks"
+      "contract_version": 1,
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (supervisor handoff)"
     },
     {
       "id": "ty-hero-fill-guard",
       "name": "Listing hero refuses an impossible fill fraction",
       "schema_version": 2,
-      "authorized": false,
-      "authorization_note": "Local-only defensive fix for the 2026-11-01 Ty autonomy directive. No auth, no payment, no browser, no credential, no external I/O. The acceptance probe is independent of the implementation and is not writable by the model.",
+      "authorized": true,
+      "authorization_note": "Local-only behavioural fix frozen by the 2026-11-02 backlog pass. No auth, tenancy, billing, security, provider or external I/O. The probe is read-only and outside the author's write scope.",
       "risk": "low",
       "risk_class": "low",
       "execution": "ty",
-      "objective": "Edit ONLY the hero_on_white function in Northstar_backend/listing_image.py, using the ast_edit tool with op=replace_function_body and target=hero_on_white. The source you supply is the function body WITHOUT the def line. The new body must validate fill first: it must be a finite number with 0 < fill <= 1, otherwise raise ValueError; keep the rest of the existing behaviour, including the empty-subject refusal. Do not rewrite the whole file. state/probes/t3_hero_fill_guard.py is READ-ONLY: never write it. When done, call run with python state/probes/t3_hero_fill_guard.py to check your change; if it fails, edit the source file - never the probe.",
+      "objective": "Northstar_backend/listing_image.py has one behavioural defect: hero_on_white() accepts fill=0, negative fills, fill>1, NaN and inf, so the MAIN image is cropped with the product cut off or invisible. Read the file and fix hero_on_white so a non-finite fill or one outside (0, 1] raises ValueError; keep the existing empty-subject refusal and the normal path (fill 0.85 and 1.0 on a normal cutout still return a square PNG with the subject visible). The read-only probe state/probes/t3_hero_fill_guard.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
       "dependencies": [],
       "write_paths": [
         "Northstar_backend/listing_image.py"
@@ -660,7 +678,7 @@
       ],
       "checks": [
         {
-          "name": "hero fill guard probe",
+          "name": "ty-hero-fill-guard",
           "cwd": ".",
           "cmd": [
             "python",
@@ -679,12 +697,21 @@
       ],
       "commit_message": "fix(listing): refuse an impossible fill fraction on the hero image",
       "required_artifact": "Northstar_backend/listing_image.py",
-      "timeout_seconds": 900,
+      "timeout_seconds": 600,
       "max_repairs": 1,
-      "max_steps": 12,
-      "model": "qwen2.5-coder:3b",
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
       "provider": "ollama",
-      "blocked": "superseded: 15 KB module; replaced by the smaller app tasks"
+      "contract_version": 1,
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (supervisor handoff)"
     },
     {
       "id": "ty-budget-stop",
