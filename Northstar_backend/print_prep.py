@@ -78,8 +78,27 @@ def physical_face(profile: Dict[str, Any]) -> Dict[str, float]:
 def dpi_report(profile: Dict[str, Any], image_size: Sequence[int],
                quad: Sequence[Sequence[float]], *,
                target_dpi: int = TARGET_DPI) -> Dict[str, Any]:
-    """Measure the face and report whether it reaches the print target."""
+    """Measure the face and report whether it reaches the print target.
+
+    The quad is expressed in pixels OF THIS IMAGE, so the image the caller passes is
+    part of the measurement, not decoration. A quad measured on a large render and
+    replayed against a small file must be refused: otherwise the gate reports a
+    printable DPI for a file that could never print.
+    """
+    try:
+        width_px = int(image_size[0])
+        height_px = int(image_size[1])
+    except (TypeError, ValueError, IndexError, KeyError) as exc:
+        raise ValueError("image_size must be a (width, height) pair of numbers") from exc
+    if width_px <= 0 or height_px <= 0:
+        raise ValueError(f"image_size must be positive, got {width_px}x{height_px}")
+
     px = face_pixels(quad)
+    if px["width"] > width_px or px["height"] > height_px:
+        raise ValueError(
+            f"the measured face {px['width']}x{px['height']} px cannot belong to a "
+            f"{width_px}x{height_px} image")
+
     mm = physical_face(profile)
     px_per_mm_x = px["width"] / max(1e-9, mm["width"])
     px_per_mm_y = px["height"] / max(1e-9, mm["height"])
