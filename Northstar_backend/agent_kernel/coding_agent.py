@@ -93,6 +93,11 @@ class CodingAgent:
         self.allowed_tools = tuple(t for t in tools if t in protocol.CANONICAL_ACTIONS) or None
         self._failing: List[str] = []
         self._reads = 0
+        # Every read ACTION counts, including one the discipline refuses: a lane
+        # stuck on refused reads never reached the accepted-read counter, so the
+        # STOP READING nudge never appeared and it looped until the protocol budget
+        # ran out (observed on ty-artifact-jpeg: six refusals in a row).
+        self._read_actions = 0
         self._read_seen: set[str] = set()
         # Purpose-aware read discipline: a path may be read a bounded number of
         # times; a changed file, a post-edit verification, or a reread after a
@@ -163,6 +168,7 @@ class CodingAgent:
                 continue
             tool, args = action.tool, action.args
             if tool == "read":
+                self._read_actions += 1
                 verdict = self._read_verdict(str(args.get("path") or ""))
                 if verdict is not None:
                     protocol_errors += 1
@@ -428,7 +434,7 @@ class CodingAgent:
                 "- Start by reading the task's file, then edit it, then run the check.\n"
                 + ("STOP READING: the file is already in the conversation. Your next JSON "
                    "object MUST be an ast_edit naming a symbol you saw. Do not read again.\n"
-                   if self._reads >= 2 else "")
+                   if max(self._reads, self._read_actions) >= 2 else "")
                 + "- Stop with `finish` once the behaviour is correct.\n\n"
                 f"TASK:\n{task}\n\n"
                 + (self._failing_block()[:600] if self._failing else "")
@@ -460,7 +466,7 @@ class CodingAgent:
             + ("STOP READING. You have read the file and the content is above. Your next "
                "turn MUST be an ast_edit on the function you saw - name the symbol "
                "exactly as it appears in the file. Do not read again.\n"
-               if self._reads >= 2 else "")
+               if max(self._reads, self._read_actions) >= 2 else "")
             + (f"STEP PRESSURE: you have not produced `{self.required_artifact}` yet. "
                "Use ast_edit / apply_patch for an existing file; a whole-file write of a "
                "source file is refused. Then finish.\n" if pressure else "")

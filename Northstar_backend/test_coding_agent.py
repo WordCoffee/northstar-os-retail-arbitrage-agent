@@ -296,6 +296,19 @@ def test_ast_edit_clears_the_verify_stall_so_the_check_can_run_again(tmp_path):
     assert len(runs) == 2
 
 
+def test_the_read_pressure_appears_even_when_reads_are_refused(tmp_path):
+    """A lane stuck on refused reads must still be told to stop reading."""
+    ws = Workspace(tmp_path / "ws", allow_paths=["src.py"], read_paths=["src.py"])
+    (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
+    agent = CodingAgent(ws, lambda p: '{"tool":"read","args":{"path":"src.py"}}',
+                        max_steps=3, max_protocol_errors=2, acceptance=lambda: (True, "ok"))
+    prompts = []
+    agent.model = lambda prompt: (prompts.append(prompt) or
+                                  '{"tool":"read","args":{"path":"src.py"}}')
+    agent.run("x")
+    assert any("STOP READING" in p for p in prompts)
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):
