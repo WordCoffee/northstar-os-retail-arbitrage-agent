@@ -192,6 +192,12 @@ const SIMPLE_KEEP_ADVANCED = [
   // real page in Simple mode like the account/legal/admin surfaces above.
   /^\/baroque(\/|$)/,
 
+  // The Design Studio is a tool workspace with its own sections (dielines,
+  // packaging, A+ modules, the asset dashboard), not a chat focus. Replacing it
+  // with the chat shell made every creative lane unreachable on the free tier,
+  // where advanced_view is false — found by the dashboard e2e test.
+  /^\/design-studio(\/|$)/,
+
   new RegExp("^/galactic(/|$)"),
 ]
 
