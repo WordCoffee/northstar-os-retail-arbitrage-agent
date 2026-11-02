@@ -73,9 +73,10 @@ TASK = (
     "src/limits.py has one behavioural defect: summarise() silently drops rows it "
     "cannot use, so the caller cannot tell a clean file from a damaged one. Read the "
     "file, then make summarise() also report how many rows it skipped and the total it "
-    "counted: the result must keep approved/denied counts, add 'skipped' for every "
-    "unusable row, and add 'total' as the number of counted rows. Run "
-    "`python check.py` to verify - it is read-only. Change only src/limits.py.")
+    "counted. The result must keep the approved/denied counts, add 'skipped' for every "
+    "unusable row, and add 'total' = approved + denied - that is, the COUNTED rows only, "
+    "so skipped rows are NOT included in 'total'. Run `python check.py` to verify - it is "
+    "read-only. Change only src/limits.py.")
 
 
 def summarise_verdict(got):

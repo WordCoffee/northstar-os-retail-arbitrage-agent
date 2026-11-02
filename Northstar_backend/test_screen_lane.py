@@ -25,6 +25,13 @@ def test_a_partial_result_fails():
     assert ok is False
 
 
+def test_a_total_that_counts_skipped_rows_fails():
+    """The real app contract counts statuses, not rows on disk."""
+    ok, detail = sl.summarise_verdict({"approved": 2, "denied": 1, "skipped": 3,
+                                       "total": 6})
+    assert ok is False and detail["total"] == 6
+
+
 def test_the_acceptance_reports_a_raising_module(tmp_path):
     mod = tmp_path / "limits.py"
     mod.write_text("def summarise(rows):\n    raise RuntimeError('boom')\n", encoding="utf-8")
