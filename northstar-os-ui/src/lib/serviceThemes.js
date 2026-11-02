@@ -21,13 +21,13 @@ export const AA_UI = 3
 
 export const BASE_TOKENS = {
   ink: '#f2f6fb',
-  inkDim: '#c3cfdd',
+  inkDim: '#d7e1ec',
   surface: '#161d27',
   surface2: '#1d2633',
-  // 0.82 over a pure-white frame still leaves the ink at ~8.4:1, so the glass
-  // never needs a solid fallback to stay readable.
-  glassAlpha: 0.82,
-  glass2Alpha: 0.88,
+  // 0.72 keeps the scene legible behind the glass while ink stays above AA even
+  // over the brightest frame (see the contrast test: worst pixel, not average).
+  glassAlpha: 0.72,
+  glass2Alpha: 0.8,
   line: 'rgba(255, 255, 255, 0.12)',
 }
 

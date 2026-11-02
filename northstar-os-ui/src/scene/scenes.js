@@ -1,0 +1,32 @@
+// Scene factory (U5/U6).
+//
+// One entry point so the shell never imports a renderer directly: adding a scene
+// is one line here plus one registry entry. Unbuilt scenes fall back to the
+// default starfield instead of rendering nothing.
+
+import { createStarfield } from './starfield.js'
+import { createGasGiant, GAS_GIANT_MAX_COLOR } from './gasGiant.js'
+
+/** The brightest colour each scene may paint. Read by the contrast test. */
+export const SCENE_MAX_COLOR = {
+  default: '#e8eef7',
+  studio: GAS_GIANT_MAX_COLOR,
+  // U9-U11 replace these fallbacks with their own palettes.
+  ppc: '#e8eef7',
+  research: '#e8eef7',
+  goose: '#e8eef7',
+}
+
+const BUILDERS = {
+  default: createStarfield,
+  studio: createGasGiant,
+}
+
+export function createScene(sceneId, options = {}) {
+  const build = BUILDERS[sceneId] || createStarfield
+  return build(options)
+}
+
+export function sceneMaxColor(sceneId) {
+  return SCENE_MAX_COLOR[sceneId] || SCENE_MAX_COLOR.default
+}

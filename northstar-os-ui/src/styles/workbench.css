@@ -97,6 +97,12 @@
   border: 1px solid var(--wb-line); border-radius: 14px; overflow: auto;
   background: var(--wb-surface);
 }
+
+/* Legacy workspaces were written for a paper surface; their headings use the
+   dark pine that disappears on glass (measured 1.28:1 for the studio h1). The
+   shell owns the frame until that workspace is rebuilt, so it owns the heading
+   ink. Body copy and controls already pass (measured 8-16:1). */
+.wb-outlet :is(h1, h2) { color: var(--wb-ink, #f2f6fb); }
 .wb-panel { min-height: 100%; }
 .wb-panel[hidden] { display: none !important; }
 

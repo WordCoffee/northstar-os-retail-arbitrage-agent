@@ -176,7 +176,7 @@ export default function WorkbenchShell() {
           </div>
         )}
 
-        <div className="wb-outlet glass glass-panel-canvas" data-testid="wb-outlet">
+        <div className="wb-outlet glass" data-testid="wb-outlet">
           {tabs.map(({ id, service }) => {
             const Component = WORKSPACES[id]
             return (

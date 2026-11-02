@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import { chooseTier, FPS_CAP, probeEnvironment } from '../lib/sceneTiers.js'
 import { modeForEvent, sceneBus } from '../lib/sceneBus.js'
 import { createSceneController, bindVisibility } from './sceneController.js'
-import { createStarfield } from './starfield.js'
+import { createScene } from './scenes.js'
 import './scene.css'
 
 export default function SceneHost({ sceneId = 'default' }) {
@@ -38,7 +38,7 @@ export default function SceneHost({ sceneId = 'default' }) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return undefined
 
-    const field = createStarfield({
+    const field = createScene(sceneId, {
       width: window.innerWidth,
       height: window.innerHeight,
       density: tier === 'cinematic' ? 9000 : 16000,
@@ -95,7 +95,7 @@ export default function SceneHost({ sceneId = 'default' }) {
       controllerRef.current = null
       if (import.meta.env.DEV) delete window.__northstarScene
     }
-  }, [tier])
+  }, [tier, sceneId])
 
   return (
     <div className="wb-scene" data-testid="scene-host" data-scene={sceneId}

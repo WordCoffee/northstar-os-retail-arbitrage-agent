@@ -85,3 +85,20 @@ test('workspace events re-tone the scene and unmounting stops it', async ({ page
   await expect(page.getByTestId('workbench-shell')).toHaveCount(0)
   expect(await page.evaluate(() => typeof window.__northstarScene)).toBe('undefined')
 })
+
+test('the design studio tab loads the ringed gas giant scene', async ({ page }) => {
+  await page.goto(WORKBENCH)
+  const host = page.getByTestId('scene-host')
+  await expect(host).toBeVisible({ timeout: 30000 })
+  await expect(host).toHaveAttribute('data-scene', 'studio')
+
+  // Evidence screenshot (U6 pass criterion), taken while the studio is active.
+  await page.waitForTimeout(600)
+  await page.screenshot({ path: `reports/ty/shots/u6-studio-${test.info().project.name}.png` })
+
+  // A different service swaps the renderer on the same single canvas.
+  await page.getByTestId('wb-add').click()
+  await page.getByTestId('wb-open-golden-goose').click()
+  await expect(host).toHaveAttribute('data-scene', 'goose')
+  await expect(page.locator('canvas')).toHaveCount(1)
+})
