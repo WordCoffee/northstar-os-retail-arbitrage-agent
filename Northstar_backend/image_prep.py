@@ -19,6 +19,7 @@ Pure PIL + numpy. Local, deterministic, no network.
 from __future__ import annotations
 
 import io
+import math
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -62,8 +63,20 @@ def frame_on_white(rgba: Image.Image, *, fill: float = MAIN_MIN_FILL,
     wants, and the product is never upscaled beyond the source pixels by more
     than necessary - that is the caller's trade-off, surfaced in the return of
     ``frame_on_white_bytes``.
+
+    A fill outside (0, 1] would scale the product past the frame and clip it, and an
+    empty cutout would produce a blank white square presented as a product. Both are
+    refused here rather than shipped, matching ``listing_image.hero_on_white``.
     """
+    try:
+        fill_value = float(fill)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"fill must be a number in (0, 1], got {fill!r}") from exc
+    if not math.isfinite(fill_value) or not (0.0 < fill_value <= 1.0):
+        raise ValueError(f"fill must be a finite number in (0, 1], got {fill_value!r}")
     product = trim_to_alpha(rgba)
+    if alpha_bbox(product) is None:
+        raise ValueError("empty_subject: the cutout has no visible pixels")
     side = int(size)
     if square:
         canvas_w = canvas_h = side
