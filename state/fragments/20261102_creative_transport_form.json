@@ -1,0 +1,38 @@
+{
+  "creative_transport_form_20261102": {
+    "verdict": "ADVANCING - 2 of 3 units shipped. Transport root-caused and fixed (symbol extraction, 24 KB module round-trips in 3.2 s); form adherence measured 1/4 -> 4/4 with a vision gate. Unit 3 (label/mockup deliverable) not started.",
+    "transport": {
+      "matrix": "1/8/16/24/32 KB stdin prompts all completed in 1.9-6.1 s on the Go CLI",
+      "root_cause": "the lane sent whole 22-24 KB modules, so replies were whole-module replacements and the loop retried them at 300 s each (25-30 min apparent hang)",
+      "fix": "AST excerpt of the function named in the objective (6 KB cap, whole-file fallback), per-call timeout rc=124, 600 s task deadline",
+      "evidence": "state/evidence/go_transport_matrix.json; state/evidence/transport_synthetic.json (24,124 B module, 767 B prompt, 3.2 s, edit applied)"
+    },
+    "form_adherence": {
+      "before": "1 of 4 (bottle and tube rendered as boxes; box read as 'none of these')",
+      "after": "4 of 4 (pouch/box/bottle/tube all match)",
+      "mechanism": "GenerateIn.form schema field + clause stated at head and tail of the brief",
+      "gate": "local vision model qwen3.5:4b classifies the rendered image, not the prompt",
+      "evidence": "state/evidence/form_adherence.json",
+      "contract_tests": "test_generate_form.py 4 passed: form survives the sanitizer twice, field is bounded optional, the suppression phrase names no container"
+    },
+    "unit_3": "NOT STARTED - gated behind the Unit 2 gate, which flipped late in the session",
+    "spend": {
+      "transport_matrix_estimate_usd": 0.01,
+      "earlier_hung_turns_usd": 0.0022,
+      "probes_usd": 0.0035,
+      "window": "5h $0.0157 of $7.20 halt",
+      "renders": "8 local ComfyUI runs, $0"
+    },
+    "decisions": [
+      "measured the pipe before changing it - all sizes pass, so the fix is prompt size",
+      "send the symbol not the module (24 KB prompt begets 24 KB reply)",
+      "the requested form is data (schema field), not prose",
+      "the adherence gate reads the render, not the prompt",
+      "stopped at two units instead of starting an unfinished third"
+    ],
+    "regressions": "test_go_author + test_generate_form + test_text_fidelity + test_author_lane: 45 passed, 1 failed (PRE-EXISTING auth-ordering test)",
+    "state": "commits 6f069143, eb53fd63, 932ac936; backend restarted via launcher and armed; no lock, STOP, worker or resident model; Ollama daemon untouched (q4_0); learning store 7 trajectories",
+    "next_decision": "run Unit 3 (ty-simple-mode-labeled): accepted render -> label/mockup step -> deliverable folder with brief, adherence verdict, template citations and a populated manifest",
+    "report": "reports/creative_transport_form_20261102.md"
+  }
+}
