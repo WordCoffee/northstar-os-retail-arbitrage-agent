@@ -13,6 +13,7 @@ import './styles/celestial.css' // §11B.2 celestial backdrop — after simple.c
 import './styles/galactic.css'  // Galactic plate + obsidian surfaces — after celestial
 import './styles/baroque.css'   // "The Gilded Void" Baroque theme — after celestial
 import './styles/workbench.css' // U3 workbench shell — last, scoped to .wb-*
+import './styles/kit.css'      // U4 glass kit — reads the theme variables
 
 const root = createRoot(document.getElementById('root'))
 root.render(createElement(App))

@@ -1,0 +1,137 @@
+/* Glass kit (U4)
+   Every surface reads the --wb-* variables a theme emits. No literal colour
+   appears below except the white/black shadow values, so switching a service
+   re-skins the cockpit without touching a component. */
+
+.glass {
+  position: relative;
+  background: var(--wb-glass, rgba(22, 29, 39, 0.82));
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  color: var(--wb-ink, #f2f6fb);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+/* The neutral zone: content that must read accurately (the studio canvas) is
+   never placed on the glass or the scene. Flat, opaque, no blur. */
+.glass-panel-neutral,
+.glass-panel-canvas {
+  background: var(--wb-solid, #161d27);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.glass-panel-raised { background: var(--wb-glass-2, rgba(29, 38, 51, 0.88)); }
+
+/* --- tabs --------------------------------------------------------------- */
+.glass-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--wb-ink-dim, #c3cfdd);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.glass-tab:hover { color: var(--wb-ink, #f2f6fb); background: color-mix(in srgb, var(--wb-accent, #7fb0ff) 10%, transparent); }
+.glass-tab.is-active {
+  color: var(--wb-ink, #f2f6fb);
+  border-color: var(--wb-accent, #7fb0ff);
+  background: color-mix(in srgb, var(--wb-accent, #7fb0ff) 16%, transparent);
+}
+.glass-tab:focus-visible { outline: 2px solid var(--wb-accent, #7fb0ff); outline-offset: 2px; }
+
+/* --- buttons ------------------------------------------------------------ */
+.glass-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  background: transparent;
+  color: var(--wb-ink, #f2f6fb);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.glass-btn.is-ghost:hover { border-color: var(--wb-accent, #7fb0ff); background: var(--wb-accent-soft, #1d2a44); }
+.glass-btn.is-primary {
+  background: var(--wb-accent, #7fb0ff);
+  border-color: var(--wb-accent, #7fb0ff);
+  color: var(--wb-accent-ink, #08111f);
+  font-weight: 600;
+}
+.glass-btn:focus-visible { outline: 2px solid var(--wb-accent, #7fb0ff); outline-offset: 2px; }
+.glass-btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* --- inputs ------------------------------------------------------------- */
+.glass-input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  background: var(--wb-glass-2, rgba(29, 38, 51, 0.88));
+  color: var(--wb-ink, #f2f6fb);
+  font: inherit;
+}
+.glass-input::placeholder { color: var(--wb-ink-dim, #c3cfdd); opacity: 0.8; }
+.glass-input:focus { outline: none; border-color: var(--wb-accent, #7fb0ff); box-shadow: 0 0 0 3px color-mix(in srgb, var(--wb-accent, #7fb0ff) 28%, transparent); }
+
+/* --- tool rail ---------------------------------------------------------- */
+.glass-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border-right: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+}
+.glass-rail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--wb-ink-dim, #c3cfdd);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.glass-rail-item:hover { color: var(--wb-ink, #f2f6fb); background: var(--wb-accent-soft, #1d2a44); }
+.glass-rail-item.is-active {
+  color: var(--wb-ink, #f2f6fb);
+  border-color: var(--wb-accent, #7fb0ff);
+  background: color-mix(in srgb, var(--wb-accent, #7fb0ff) 14%, transparent);
+}
+.glass-rail-item:focus-visible { outline: 2px solid var(--wb-accent, #7fb0ff); outline-offset: 2px; }
+
+/* --- the switch --------------------------------------------------------- */
+.wb-shell.is-shifting .wb-dock,
+.wb-shell.is-shifting .wb-tabbar,
+.wb-shell.is-shifting .wb-outlet,
+.wb-shell.is-shifting .wb-picker {
+  transition:
+    background-color var(--wb-shift-ms, 600ms) ease,
+    border-color var(--wb-shift-ms, 600ms) ease,
+    box-shadow var(--wb-shift-ms, 600ms) ease;
+}
+.wb-shell.is-shifting .wb-tabbar { border-color: var(--wb-accent, #7fb0ff); }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass, .glass-tab, .glass-btn, .glass-rail-item { transition: none; }
+  .wb-shell.is-shifting .wb-dock,
+  .wb-shell.is-shifting .wb-tabbar,
+  .wb-shell.is-shifting .wb-outlet,
+  .wb-shell.is-shifting .wb-picker { transition: none; }
+}

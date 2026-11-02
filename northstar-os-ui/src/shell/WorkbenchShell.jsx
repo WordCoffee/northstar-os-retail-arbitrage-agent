@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom'
 
 import ChatSurface from '../chat/ChatSurface.jsx'
 import { INTERACTIVE_SERVICES, getService } from '../data/serviceRegistry.js'
+import { themeVars } from '../lib/serviceThemes.js'
+import { useThemeShift } from '../kit/useThemeShift.js'
 import { useWorkspace } from './WorkspaceTabs.jsx'
 
 import DesignStudio from '../pages/internal/DesignStudio.jsx'
@@ -65,6 +67,10 @@ export default function WorkbenchShell() {
   const [sheet, setSheet] = useState('peek')
   const navigate = useNavigate()
 
+  // The sports-car shift: the active service's theme re-skins the cockpit.
+  const themeId = activeService?.theme || 'neutral'
+  const shifting = useThemeShift(themeId)
+
   // Phone layout: the dock is replaced by a bottom sheet, and the dock's own
   // ChatSurface is not rendered at all. CSS-hiding it left its effects running
   // and made the phone view slow enough to time out.
@@ -101,9 +107,10 @@ export default function WorkbenchShell() {
   )
 
   return (
-    <div className={`wb-shell ${dockOpen ? 'dock-open' : 'dock-closed'}`} data-testid="workbench-shell">
+    <div className={`wb-shell ${dockOpen ? 'dock-open' : 'dock-closed'} ${shifting ? 'is-shifting' : ''}`}
+         data-testid="workbench-shell" data-wb-theme={themeId} style={themeVars(themeId)}>
       {!narrow && (
-      <aside className="wb-dock" data-testid="bojo-dock" data-collapsed={dockOpen ? '0' : '1'}>
+      <aside className="wb-dock glass" data-testid="bojo-dock" data-collapsed={dockOpen ? '0' : '1'}>
         <div className="wb-dock-head">
           <span className="wb-dock-title">Bojo</span>
           <button type="button" className="btn btn-ghost btn-sm" data-testid="wb-dock-toggle"
@@ -125,7 +132,7 @@ export default function WorkbenchShell() {
       )}
 
       <section className="wb-main">
-        <div className="wb-tabbar" data-testid="wb-tabbar">
+        <div className="wb-tabbar glass" data-testid="wb-tabbar">
           <button type="button" className="btn btn-sm wb-switcher" data-testid="wb-switcher"
                   aria-expanded={tabsOpen}
                   aria-label={`Workspace tabs: ${activeService?.label || 'Workspace'}`}
@@ -154,7 +161,7 @@ export default function WorkbenchShell() {
         </div>
 
         {pickerOpen && (
-          <div className="wb-picker" role="menu" data-testid="wb-picker">
+          <div className="wb-picker glass glass-panel-raised" role="menu" data-testid="wb-picker">
             {available.length === 0 && <div className="wb-muted">Every service is already open.</div>}
             {available.map((service) => (
               <button key={service.id} type="button" className="wb-picker-item" role="menuitem"
@@ -167,7 +174,7 @@ export default function WorkbenchShell() {
           </div>
         )}
 
-        <div className="wb-outlet" data-testid="wb-outlet">
+        <div className="wb-outlet glass glass-panel-canvas" data-testid="wb-outlet">
           {tabs.map(({ id, service }) => {
             const Component = WORKSPACES[id]
             return (
