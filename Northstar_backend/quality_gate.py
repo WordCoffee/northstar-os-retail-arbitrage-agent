@@ -234,11 +234,17 @@ def score(png: bytes, *, brief: str, requested_form: str, text_requested: bool,
     ocr = tf.check_text_in_image(png)
     axes: Dict[str, Any] = {}
     form_observed = observed.get("form")
-    axes["form"] = (_axis("pass", observed=form_observed)
-                    if requested_form and form_observed == requested_form else
-                    _axis("fail", reason="form_mismatch",
-                          requested=requested_form, observed=form_observed,
-                          detail=observed.get("form_raw")))
+    if not str(requested_form or "").strip():
+        # A clip or a composited module has no container to compare against; saying
+        # "form mismatch" there would contradict the verdict in the same document.
+        axes["form"] = _axis("not_applicable", reason="no_form_requested",
+                             observed=form_observed)
+    else:
+        axes["form"] = (_axis("pass", observed=form_observed)
+                        if form_observed == requested_form else
+                        _axis("fail", reason="form_mismatch",
+                              requested=requested_form, observed=form_observed,
+                              detail=observed.get("form_raw")))
     axes["design_alignment"] = (
         _axis("pass", detail=observed.get("design_note"))
         if observed.get("subject_matches") is True else

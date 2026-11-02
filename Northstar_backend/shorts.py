@@ -150,15 +150,6 @@ def package_render(result: Dict[str, Any], *, brief: str, text_requested: bool,
     scored = qg.score(probe, brief=brief, requested_form="", text_requested=text_requested,
                       expected_terms=expected_terms or [])
     verdict = qg.verdict(scored)
-    # `form` is not meaningful for a clip of an existing product; the still lane
-    # already verified the container before the clip was made.
-    for axis in ("form",):
-        if axis in verdict["failed"]:
-            verdict["failed"].remove(axis)
-            verdict["reasons"] = [r for r in verdict["reasons"] if r["axis"] != axis]
-    verdict["ok"] = not verdict["failed"]
-    verdict["not_applicable"] = sorted(set(verdict["not_applicable"]) | {"form"})
-    verdict["score"] = f"{len(verdict['passed'])}/{len(qg.BLOCKING) - len(verdict['not_applicable'])}"
 
     rid = re.sub(r"[^A-Za-z0-9._-]+", "_", str(run_id or f"short_{int(time.time())}"))
     folder = root / rid

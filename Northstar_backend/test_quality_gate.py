@@ -259,3 +259,13 @@ def test_a_clean_frame_reports_garbled_false_and_passes(wired):
                       expected_terms=["LION MANE"])
     assert result["axes"]["typography"]["status"] == "pass"
     assert result["axes"]["typography"]["vision_garbled"] is False
+
+
+def test_no_requested_form_is_not_applicable_not_a_mismatch(wired):
+    wired()
+    result = qg.score(PNG, brief="b", requested_form="", text_requested=False)
+    assert result["axes"]["form"]["status"] == "not_applicable"
+    verdict = qg.verdict(result)
+    assert verdict["ok"] is True
+    assert "form" in verdict["not_applicable"]
+    assert verdict["failed"] == []
