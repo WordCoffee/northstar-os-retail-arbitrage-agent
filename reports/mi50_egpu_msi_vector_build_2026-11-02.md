@@ -111,15 +111,75 @@ the MI50 and never touches the 5080.
 
 ---
 
-## Bill of materials (Route B)
+## Bill of materials (Route B) — FINAL, OCuLink
 
 | Item | Cost | Note |
 |---|---|---|
 | AMD Instinct MI50 32GB | $280–330 | AliExpress, confirm 32 GB variant at checkout |
-| OCuLink M.2 adapter + cable | $35–60 | Gen4 slot |
-| Open-frame dock + 750 W SFX PSU | $120–200 | 2× 8-pin mandatory |
-| Blower shroud + 92 mm fan | $30–60 | card is passive; will throttle without it |
-| **Total** | **$465–650** | |
+| M.2 M-key → OCuLink SFF-8612 adapter (JEYI PH47A or ADT-Link equivalent) | $40–60 | laptop has no native OCuLink port |
+| Minisforum **DEG1** OCuLink dock (PCIe 4.0 x4, ATX/SFX 24-pin input) | **$109** | store.minisforum.com; £95 UK, ¥14,399 JP |
+| SFX PSU 650–750 W, **2× 8-pin PCIe** | $80–110 | DEG1 takes a standard ATX/SFX 24-pin |
+| Blower shroud + 92 mm fan | $30–60 | card is passive; throttles without it |
+| **Total** | **$540–690** | |
+
+Use the **Gen4 M.2 slot** for the OCuLink adapter (OCuLink is Gen4-rated) and keep the **Gen5** slot for
+your SSD. OCuLink does not hot-plug — connect before boot, power down before removing.
+
+---
+
+## CORRECTION: don't split CUDA + Vulkan — run **both cards on Vulkan**
+
+The earlier plan said "one build with CUDA + Vulkan". That is the hard way. The documented working
+path for mixing NVIDIA and AMD in one llama.cpp process is to put **both** cards on the **Vulkan**
+backend. Vulkan enumerates every capable device regardless of vendor, so you get one scheduler,
+one split, no cross-backend bridging.
+
+Setup:
+
+```bash
+# NVIDIA proprietary driver with Vulkan ICD, plus Mesa RADV for the MI50
+sudo apt install mesa-vulkan-drivers vulkan-tools
+vulkaninfo --summary          # expect: NVIDIA RTX 5080 Laptop + AMD RADV VEGA20 (MI50)
+
+cmake -B build -DGGML_VULKAN=ON
+cmake --build build -j
+
+./build/bin/llama-server -m model.gguf \
+  --list-devices              # note exact names/order first
+```
+
+Then, with 16 GB + 32 GB:
+
+```bash
+./build/bin/llama-server -m model-70b-q4.gguf \
+  -dev Vulkan0,Vulkan1 \      # order matters: -ts follows --device order
+  -sm layer -ts 1,2 \         # 1:2 because the cards are 16GB:32GB
+  -ngl 999 \
+  --main-gpu 1 \              # put output/scratch on the MI50
+  -ctk q8_0 -ctv q8_0 -fa on  # smaller KV cache, flash attention
+  -c 8192
+```
+
+Notes that decide whether this works:
+- `-ts` values are **proportions, not GB** — 16:32 is `1,2`, not `16,32`.
+- `-sm layer` is the right mode here. The KV cache for layer *l* lives on the card owning layer *l*,
+  so it spreads automatically.
+- `--split-mode tensor` is **CUDA-only in practice**; on Vulkan it is ~70% slower. Do not use it.
+- If everything lands on one card, fix device order with `-dev` and/or `VK_ICD_FILENAMES`; Vulkan
+  multi-GPU detection is the known weak spot.
+- Faster card waits on slower card in layer split — but 5080 laptop (~900 GB/s) and MI50 (1,024 GB/s)
+  are well matched, so this pool is unusually balanced for a mixed rig.
+
+### Model classes that fit the 48 GB pool
+| Class | Size at Q4 | Where it runs |
+|---|---|---|
+| 32B dense | ~19 GB | **MI50 alone** — no split, fastest path |
+| 70B dense | ~40 GB | split 1:2, ~25–30 tok/s class |
+| MoE (e.g. Qwen3-30B-A3B, gpt-oss-20b) | 12–20 GB | MI50 alone; MoE activates few params → very fast |
+| 120B MoE | ~60 GB | does not fit — needs host RAM spill or more VRAM |
+
+MoE models are the smart fit for this box: large total capacity, small active parameter count, so a
+22–24 GB working set runs at dense-8B speeds. That is the "inference mode" worth building around.
 
 ## Pre-purchase checks
 
