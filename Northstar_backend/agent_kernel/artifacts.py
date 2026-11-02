@@ -41,6 +41,20 @@ def artifact_kind(path: str | Path) -> str:
     raw = p.read_bytes()[:16] if p.is_file() else b""
     if suffix == ".png":
         return "label_png" if raw.startswith(b"\x89PNG\r\n\x1a\n") else "png_invalid"
+    if suffix in (".jpg", ".jpeg"):
+        # JPEG: SOI FF D8 FF, and an EOI marker in the tail. The EOI is searched in
+        # the last 64 bytes rather than required as the final two, because real
+        # files carry trailing padding and those are still valid images.
+        if not raw.startswith(b"\xff\xd8\xff"):
+            return "jpeg_invalid"
+        try:
+            size = p.stat().st_size
+            with open(p, "rb") as fh:
+                fh.seek(max(0, size - 64))
+                tail = fh.read()
+        except OSError:
+            return "jpeg_invalid"
+        return "image_jpeg" if b"\xff\xd9" in tail else "jpeg_invalid"
     if suffix in (".mp4", ".mov"):
         return "ad_video" if len(raw) >= 8 and raw[4:8] == b"ftyp" else "video_invalid"
     if suffix == ".json":
