@@ -1,0 +1,39 @@
+{
+  "ty_go_unattended_20261102": {
+    "verdict": "READY - UNATTENDED, scoped to supervised DeepSeek-authored repair dispatched through the OpenCode Go subscription. QUOTA-BOUNDED by the conservative window shares. One task ran end to end and was committed; a multi-task campaign was not exercised.",
+    "lane": {
+      "transport": "opencode run --model opencode-go/deepseek-v4.1-flash --format json (CLI on the Go subscription), prompt via stdin",
+      "model_id": "opencode-go/deepseek-v4.1-flash",
+      "pricing": "0.15/M input, 0.60/M output, 0.003/M cache read (harness catalogue)",
+      "key_handling": "the local config has no opencode-go endpoint or key; no key was read, passed or logged; prompts and ledger asserted key-free in tests",
+      "openrouter": "present in the auth store, never used - per-token billing not authorised",
+      "usage_fields": "step_finish reports cost and tokens{input,output,reasoning,cache{read,write}}; absent sometimes, so an estimate fallback applies",
+      "probe_evidence": {"interface": "9663 in / 8 out / 512 cache read / $0.001456", "edit_shape": "$0.002 estimate"}
+    },
+    "accounting": {
+      "ledger": "state/go_usage_ledger.jsonl (append-only, per request, source=cli|estimate)",
+      "windows_now": "5h $0.0035 of $7.20 halt; week $0.0035 of $15; month $0.0035 of $30",
+      "limits": {"5h": 12.0, "week": 30.0, "month": 60.0},
+      "halt_shares": {"5h": 0.6, "week": 0.5, "month": 0.5},
+      "halt_behaviour": "preflight refuses to open a task that would cross a share; a CLI quota/429 yields status=quota, the task stays incomplete, no retry",
+      "tests": "13 cases: arithmetic, rollover, estimate-vs-actual, quota halt, no key leakage"
+    },
+    "decisions": [
+      "CLI on the existing subscription instead of building an API client (no opencode-go endpoint/key exists locally)",
+      "never touched the OpenRouter key (per-token billing not authorised)",
+      "search/replace edit blocks instead of full-file rewrites",
+      "first target: print_prep.face_pixels accepted a collinear quad as a 5.0x10.0 face",
+      "rejected cost_model ppc_fee/refund - billing logic, excluded"
+    ],
+    "tasks": [
+      {"task": "ty-quad-area-guard", "class": "geometry-degenerate-quad", "probe": "t8 FAIL(1)->PASS", "commit": "c0111fde", "files": ["Northstar_backend/print_prep.py"], "envelope_rejections": 6, "trajectory": "state/fix_patterns/geometry-degenerate-quad.jsonl"}
+    ],
+    "fixes_accepted_session_total": 7,
+    "regression": "253 passed, 1 skipped in 12.15 s across 21 suites",
+    "learning": {"trajectories": 7, "next_measurement_at": 10, "experiment": "not re-run; the negative delta stands"},
+    "state": "no lock, STOP, worker or resident model; daemon untouched (cpu/q4_0); OpenRouter unused",
+    "not_exercised": "multi-task campaign (max 20 tasks / 8 h) - one task proven, endurance untested",
+    "next_decision": "authorise a multi-task unattended campaign, or stop at the single-task proof",
+    "report": "reports/ty_go_unattended_20261102.md"
+  }
+}

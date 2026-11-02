@@ -934,6 +934,60 @@
       "contract_version": 2,
       "supersedes": "ty-artifact-jpeg contract v1 (max_steps=8, two failed dispatches)",
       "budget_note": "step budget raised 8 -> 20 by the 2026-11-01 bounded requalification; scope, probe, acceptance, commit paths, tools and limits unchanged"
+    },
+    {
+      "id": "ty-quad-area-guard",
+      "name": "A degenerate dieline quad is refused",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only behavioural fix discovered and frozen during the 2026-11-02 unattended campaign. No auth, tenancy, billing, security, provider or external I/O. The probe is read-only and outside the author's write scope.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Northstar_backend/print_prep.py has one behavioural defect: face_pixels() measures the face as the mean of opposite edges, so a COLLINEAR quad (all four corners on one line) yields a positive width and height even though the shape has zero area, and the print gate then reports a face no die can cut. Read the file and fix face_pixels so a quad whose corners are collinear - or whose computed area is zero - raises ValueError, while a valid quad still returns its width and height. The read-only probe state/probes/t8_quad_area.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
+      "write_paths": [
+        "Northstar_backend/print_prep.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/print_prep.py",
+        "state/probes/t8_quad_area.py"
+      ],
+      "checks": [
+        {
+          "name": "quad area probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t8_quad_area.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t8_quad_area.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/print_prep.py"
+      ],
+      "commit_message": "fix(print): refuse a degenerate dieline quad instead of measuring it",
+      "required_artifact": "Northstar_backend/print_prep.py",
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
     }
   ]
 }
