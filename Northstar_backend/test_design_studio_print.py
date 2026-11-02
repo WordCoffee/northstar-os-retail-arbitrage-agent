@@ -203,8 +203,15 @@ def _client():
 
 def test_prepress_check_requires_auth_and_404s_on_unknown_asset(monkeypatch):
     app, client = _client()
-    r = client.post("/api/design-studio/print/prepress/check", json={"asset_id": "x"})
-    assert r.status_code == 401
+    # Loopback TestClient is handed the dev demo session unless the shim is off;
+    # assert the hosted fail-closed path (see test_text_fidelity).
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        r = client.post("/api/design-studio/print/prepress/check", json={"asset_id": "x"})
+        assert r.status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
 
     import design_studio_api
     app.dependency_overrides[design_studio_api.studio_account] = lambda: "org-pp"

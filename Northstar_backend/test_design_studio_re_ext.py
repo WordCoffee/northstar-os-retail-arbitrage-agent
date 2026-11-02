@@ -28,8 +28,14 @@ def _clear():
 
 
 def test_print_templates_requires_session():
-    r = TestClient(app).get("/api/design-studio/print/templates")
-    assert r.status_code == 401
+    # See test_text_fidelity: assert the hosted path with the dev shim off.
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        r = TestClient(app).get("/api/design-studio/print/templates")
+        assert r.status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
 
 
 def test_print_health_and_dieline_roundtrip():
@@ -100,6 +106,11 @@ def test_generate_model_accepts_long_design_briefs():
 
 
 def test_generate_async_requires_session_before_engine_gate():
-    r = TestClient(app).post("/api/design-studio/generate-async",
-                             json={"brief": "a matte black box"})
-    assert r.status_code == 401
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        r = TestClient(app).post("/api/design-studio/generate-async",
+                                 json={"brief": "a matte black box"})
+        assert r.status_code == 401
+    finally:
+        app.state.dev_auto_session = previous

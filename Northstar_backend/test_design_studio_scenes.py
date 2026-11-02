@@ -47,8 +47,13 @@ def _clear():
 
 
 def test_scenes_requires_session():
-    r = TestClient(app).get("/api/design-studio/scenes")
-    assert r.status_code == 401
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        r = TestClient(app).get("/api/design-studio/scenes")
+        assert r.status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
 
 
 def test_mockup_plan_roundtrip():
