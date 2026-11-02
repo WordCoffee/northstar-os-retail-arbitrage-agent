@@ -28,6 +28,8 @@
 
 /* --- Bojo dock ------------------------------------------------------------ */
 .wb-dock {
+  position: relative;
+  z-index: 1;               /* above the fixed scene layer, below the tab bar */
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -155,7 +157,7 @@
 }
 
 .wb-back {
-  position: absolute; right: 14px; top: 8px;
+  position: absolute; right: 14px; top: 8px; z-index: 3;
   border: 1px solid var(--wb-line); border-radius: 999px; background: var(--wb-surface);
   color: var(--wb-ink-dim); font: inherit; padding: 2px 10px; cursor: pointer;
 }

@@ -1,0 +1,24 @@
+/* Scene layer (U5). Fixed under the cockpit, never interactive: the scene may
+   not swallow a click, so it is pointer-events:none and sits at z-index 0 while
+   every panel is positioned at z-index 1 or above. */
+
+.wb-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--wb-solid, #161d27);
+  overflow: hidden;
+}
+
+.wb-scene-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The still tier re-paints on resize only; fade it in so a static frame does not
+   pop against the shell. */
+.wb-scene[data-tier="still"] {
+  transition: opacity 240ms ease;
+}

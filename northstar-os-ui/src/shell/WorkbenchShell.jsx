@@ -13,6 +13,7 @@ import ChatSurface from '../chat/ChatSurface.jsx'
 import { INTERACTIVE_SERVICES, getService } from '../data/serviceRegistry.js'
 import { themeVars } from '../lib/serviceThemes.js'
 import { useThemeShift } from '../kit/useThemeShift.js'
+import SceneHost from '../scene/SceneHost.jsx'
 import { useWorkspace } from './WorkspaceTabs.jsx'
 
 import DesignStudio from '../pages/internal/DesignStudio.jsx'
@@ -109,6 +110,7 @@ export default function WorkbenchShell() {
   return (
     <div className={`wb-shell ${dockOpen ? 'dock-open' : 'dock-closed'} ${shifting ? 'is-shifting' : ''}`}
          data-testid="workbench-shell" data-wb-theme={themeId} style={themeVars(themeId)}>
+      <SceneHost sceneId={activeService?.scene || 'default'} />
       {!narrow && (
       <aside className="wb-dock glass" data-testid="bojo-dock" data-collapsed={dockOpen ? '0' : '1'}>
         <div className="wb-dock-head">
