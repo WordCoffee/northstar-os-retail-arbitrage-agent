@@ -282,11 +282,12 @@ def test_ast_edit_clears_the_verify_stall_so_the_check_can_run_again(tmp_path):
     (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
     turns = iter([
         '{"tool":"run","args":{"cmd":["python","-c","import sys; sys.exit(2)"]}}',
+        '{"tool":"read","args":{"path":"src.py"}}',
         '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
         '"target":"f","source":"return 2"}}',
         '{"tool":"run","args":{"cmd":["python","-c","import sys; sys.exit(2)"]}}',
         '{"tool":"finish","args":{}}'])
-    agent = CodingAgent(ws, lambda p: next(turns), max_steps=5, max_protocol_errors=3,
+    agent = CodingAgent(ws, lambda p: next(turns), max_steps=6, max_protocol_errors=3,
                         acceptance=lambda: (True, "ok"))
     result = agent.run("x")
     stalls = [h for h in result.transcript if h.get("tool") == "verify_stall"]
