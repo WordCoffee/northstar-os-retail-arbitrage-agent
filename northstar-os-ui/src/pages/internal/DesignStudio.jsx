@@ -119,15 +119,27 @@ export default function DesignStudio() {
   const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
-  const requested = new URLSearchParams(location.search).get('section') || ''
+  // The studio also renders inside the workbench (U3), where it does NOT own the
+  // URL. Embedded, its section lives in component state; on its own route it
+  // stays driven by ?section=. Without this split, mounting the studio in a tab
+  // navigated the whole shell to /design-studio.
+  const embedded = !location.pathname.startsWith('/design-studio')
+  const [embeddedSection, setEmbeddedSection] = useState('')
+  const requested = embedded ? embeddedSection
+    : (new URLSearchParams(location.search).get('section') || '')
   const sectionId = SECTIONS.some(s => s.id === requested) ? requested : 'projects'
   const section = useMemo(() => SECTIONS.find(s => s.id === sectionId), [sectionId])
 
   const setSection = (id) => {
+    if (embedded) {
+      setEmbeddedSection(id)
+      return
+    }
     navigate(`/design-studio?section=${id}`, { replace: true })
   }
 
   useEffect(() => {
+    if (embedded) return
     if (sectionId !== requested) {
       // Preserve the rest of the query (the merged pre-view rooms carry their
       // sub-view in ?view=; dropping it would silently reset the tab).
@@ -135,7 +147,7 @@ export default function DesignStudio() {
       params.set('section', sectionId)
       navigate(`/design-studio?${params.toString()}`, { replace: true })
     }
-  }, [requested, sectionId, navigate, location.search])
+  }, [embedded, requested, sectionId, navigate, location.search])
 
   // Opt-in engine hook for browser harnesses (?engine=1).
   useEffect(() => { attachEngineHook() }, [])

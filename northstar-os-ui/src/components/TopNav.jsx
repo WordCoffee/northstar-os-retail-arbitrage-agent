@@ -72,6 +72,19 @@ export default function TopNav({ role, paletteOpen, setPaletteOpen }) {
           />
         </div>
 
+        {/* The workbench: one shell with Bojo docked and services as tabs (U3). */}
+        <div className="top-nav-action">
+          <button
+            type="button"
+            className="btn btn-ghost btn-sm"
+            aria-label="Workbench"
+            data-testid="ns-workbench-open"
+            onClick={() => navigate('/workbench')}
+          >
+            <Icon name="workflow" size={15} />
+          </button>
+        </div>
+
         {/* The view switch moved into Settings (2026-10-30): it is a preference,
             not a primary action, and its label is entitlement-dependent. */}
         <div className="top-nav-action">

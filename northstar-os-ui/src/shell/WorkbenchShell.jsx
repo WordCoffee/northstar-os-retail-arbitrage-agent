@@ -1,0 +1,200 @@
+// The workbench shell — Bojo docked on the left, service tabs across the top, one
+// workspace swapping underneath.
+//
+// Tabs stay mounted and are hidden with `hidden`, so a workspace keeps its local
+// state when the user flips to another service and back. The scene layer, theme
+// tokens and per-service workspaces land in U4–U12; this unit is the frame those
+// units hang on.
+
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import ChatSurface from '../chat/ChatSurface.jsx'
+import { INTERACTIVE_SERVICES, getService } from '../data/serviceRegistry.js'
+import { useWorkspace } from './WorkspaceTabs.jsx'
+
+import DesignStudio from '../pages/internal/DesignStudio.jsx'
+import ProductFinder from '../pages/internal/ProductFinder.jsx'
+import GoldenGooseDesk from '../pages/internal/GoldenGoose.jsx'
+import ListingGuardian from '../pages/internal/ListingGuardian.jsx'
+import ListingForge from '../pages/internal/ListingForge.jsx'
+import AdPilot from '../pages/internal/AdPilot.jsx'
+import SocialPulse from '../pages/internal/SocialPulse.jsx'
+import ProfitabilityDashboard from '../pages/internal/ProfitabilityDashboard.jsx'
+import KeywordTracker from '../pages/internal/KeywordTracker.jsx'
+import CompetitorMonitor from '../pages/internal/CompetitorMonitor.jsx'
+
+// Service id -> the page component that already implements it. A service without
+// an entry renders an honest placeholder that names what is missing; it never
+// renders a blank panel.
+const WORKSPACES = {
+  'design-studio': DesignStudio,
+  'product-finder': ProductFinder,
+  'golden-goose': GoldenGooseDesk,
+  listings: ListingGuardian,
+  listingforge: ListingForge,
+  adpilot: AdPilot,
+  socialpulse: SocialPulse,
+  profitability: ProfitabilityDashboard,
+  'keyword-tracker': KeywordTracker,
+  'competitor-monitor': CompetitorMonitor,
+}
+
+function NotWired({ service }) {
+  return (
+    <div className="wb-empty" data-testid="wb-not-wired">
+      <h2>{service.label}</h2>
+      <p>
+        This service is registered ({service.workspaceType}) but its workspace is not
+        wired into the workbench yet. It still opens from the room shell.
+      </p>
+      <p className="wb-muted">Route: {service.route}</p>
+    </div>
+  )
+}
+
+export default function WorkbenchShell() {
+  const { open, active, activeService, openService, activate, close } = useWorkspace()
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [dockOpen, setDockOpen] = useState(true)
+  const [sheet, setSheet] = useState('peek')
+  const navigate = useNavigate()
+
+  // Phone layout: the dock is replaced by a bottom sheet, and the dock's own
+  // ChatSurface is not rendered at all. CSS-hiding it left its effects running
+  // and made the phone view slow enough to time out.
+  const [narrow, setNarrow] = useState(() => (
+    typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(max-width: 760px)').matches
+      : false
+  ))
+  useEffect(() => {
+    if (!window.matchMedia) return undefined
+    const mq = window.matchMedia('(max-width: 760px)')
+    const onChange = (e) => setNarrow(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  // A tab mounts the first time it is opened, then stays mounted (hidden when
+  // inactive) so its state survives a switch. Mounting every open tab up front
+  // made the shell unusable: two heavy workspaces started their effects at once.
+  const [visited, setVisited] = useState(() => new Set([active]))
+  if (!visited.has(active)) {
+    const next = new Set(visited)
+    next.add(active)
+    setVisited(next)
+  }
+
+  const tabs = useMemo(
+    () => open.map((id) => ({ id, service: getService(id) })).filter((t) => t.service),
+    [open],
+  )
+  const available = useMemo(
+    () => INTERACTIVE_SERVICES.filter((s) => !open.includes(s.id)),
+    [open],
+  )
+
+  return (
+    <div className={`wb-shell ${dockOpen ? 'dock-open' : 'dock-closed'}`} data-testid="workbench-shell">
+      {!narrow && (
+      <aside className="wb-dock" data-testid="bojo-dock" data-collapsed={dockOpen ? '0' : '1'}>
+        <div className="wb-dock-head">
+          <span className="wb-dock-title">Bojo</span>
+          <button type="button" className="btn btn-ghost btn-sm" data-testid="wb-dock-toggle"
+                  aria-expanded={dockOpen}
+                  onClick={() => setDockOpen((v) => !v)}>
+            {dockOpen ? 'Collapse' : 'Expand'}
+          </button>
+        </div>
+        {dockOpen && (
+          <div className="wb-dock-body" data-testid="bojo-dock-body">
+            <ChatSurface
+              heading="Bojo"
+              sub={`Northstar · ${activeService?.label || 'workspace'}`}
+              onOpenAdvanced={null}
+            />
+          </div>
+        )}
+      </aside>
+      )}
+
+      <section className="wb-main">
+        <div className="wb-tabbar" data-testid="wb-tabbar">
+          <button type="button" className="btn btn-sm wb-switcher" data-testid="wb-switcher"
+                  aria-expanded={pickerOpen}
+                  onClick={() => setPickerOpen((v) => !v)}>
+            {activeService?.label || 'Workspace'} ▾
+          </button>
+          <div className={`wb-tabs ${pickerOpen ? 'is-open' : ''}`} data-testid="wb-tabs">
+            {tabs.map(({ id, service }) => (
+              <div key={id} className={`wb-tab ${id === active ? 'is-active' : ''}`}>
+                <button type="button" className="wb-tab-btn" data-testid={`wb-tab-${id}`}
+                        aria-current={id === active ? 'page' : undefined}
+                        onClick={() => { activate(id); setPickerOpen(false) }}>
+                  {service.label}
+                </button>
+                <button type="button" className="wb-tab-close" data-testid={`wb-close-${id}`}
+                        aria-label={`Close ${service.label}`}
+                        onClick={() => close(id)}>×</button>
+              </div>
+            ))}
+          </div>
+          <button type="button" className="btn btn-sm wb-add" data-testid="wb-add"
+                  aria-haspopup="menu" aria-expanded={pickerOpen}
+                  onClick={() => setPickerOpen((v) => !v)}>
+            + Service
+          </button>
+        </div>
+
+        {pickerOpen && (
+          <div className="wb-picker" role="menu" data-testid="wb-picker">
+            {available.length === 0 && <div className="wb-muted">Every service is already open.</div>}
+            {available.map((service) => (
+              <button key={service.id} type="button" className="wb-picker-item" role="menuitem"
+                      data-testid={`wb-open-${service.id}`}
+                      onClick={() => { openService(service.id); setPickerOpen(false) }}>
+                <span>{service.label}</span>
+                <span className="wb-muted">{service.group} · {service.workspaceType}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="wb-outlet" data-testid="wb-outlet">
+          {tabs.map(({ id, service }) => {
+            const Component = WORKSPACES[id]
+            return (
+              <div key={id} className="wb-panel" hidden={id !== active}
+                   data-testid={`wb-panel-${id}`} data-service={id}>
+                {Component && visited.has(id) ? <Component /> : (Component ? null : <NotWired service={service} />)}
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      <button type="button" className="wb-sheet-toggle" data-testid="wb-sheet-toggle"
+              onClick={() => setSheet((s) => (s === 'peek' ? 'half' : s === 'half' ? 'full' : 'peek'))}>
+        Bojo · {sheet}
+      </button>
+
+      <div className={`wb-sheet is-${sheet}`} data-testid="wb-sheet" data-state={sheet}>
+        <div className="wb-sheet-head">
+          <span>Bojo</span>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => setSheet('peek')}>
+            Close
+          </button>
+        </div>
+        {sheet !== 'peek' && (
+          <div className="wb-sheet-body">
+            <ChatSurface heading="Bojo" sub={`Northstar · ${activeService?.label || 'workspace'}`}
+                         onOpenAdvanced={null} />
+          </div>
+        )}
+      </div>
+
+      <button type="button" className="wb-back" onClick={() => navigate('/home')}>← Home</button>
+    </div>
+  )
+}

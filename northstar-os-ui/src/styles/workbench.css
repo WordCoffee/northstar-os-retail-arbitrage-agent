@@ -1,0 +1,148 @@
+/* Workbench shell (U3)
+   Frame only: dock, tab bar, outlet. Scene + theme tokens arrive in U4–U6 and are
+   layered on top of these class names. Every surface here is a solid colour so
+   text contrast does not depend on a scene that is not built yet. */
+
+.wb-shell {
+  --wb-dock-w: 380px;
+  --wb-bg: #0f141b;
+  --wb-surface: #161d27;
+  --wb-surface-2: #1d2633;
+  --wb-line: rgba(255, 255, 255, 0.10);
+  --wb-ink: #e8eef7;
+  --wb-ink-dim: #9fb0c6;
+  --wb-accent: #7fb0ff;
+
+  position: relative;
+  z-index: 2;               /* above .cosmic-canvas (fixed, z-index 0) */
+  display: grid;
+  grid-template-columns: var(--wb-dock-w) minmax(0, 1fr);
+  gap: 12px;
+  min-height: calc(100vh - 120px);
+  padding: 12px;
+  background: var(--wb-bg);
+  color: var(--wb-ink);
+}
+
+.wb-shell.dock-closed { --wb-dock-w: 56px; }
+
+/* --- Bojo dock ------------------------------------------------------------ */
+.wb-dock {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--wb-line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--wb-surface), var(--wb-surface-2));
+  overflow: hidden;
+}
+.wb-dock-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--wb-line);
+}
+.wb-dock-title { font-weight: 700; letter-spacing: 0.04em; }
+.wb-dock-body { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.wb-shell.dock-closed .wb-dock-title { display: none; }
+
+/* --- main column ---------------------------------------------------------- */
+.wb-main { display: flex; flex-direction: column; min-width: 0; }
+
+.wb-tabbar {
+  position: relative;
+  z-index: 4;               /* a workspace must never paint over the tab bar */
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 6px 8px; border: 1px solid var(--wb-line); border-radius: 12px;
+  background: var(--wb-surface);
+}
+.wb-tabs { display: flex; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.wb-tab {
+  display: inline-flex; align-items: center; gap: 2px;
+  border: 1px solid transparent; border-radius: 999px;
+  background: transparent; color: var(--wb-ink-dim);
+}
+.wb-tab.is-active { background: rgba(127, 176, 255, 0.14); border-color: var(--wb-accent); color: var(--wb-ink); }
+.wb-tab-btn {
+  border: 0; background: transparent; color: inherit; cursor: pointer;
+  padding: 4px 10px; font: inherit; border-radius: 999px;
+}
+.wb-tab-close {
+  border: 0; background: transparent; color: inherit; cursor: pointer;
+  padding: 0 8px 2px; font-size: 16px; line-height: 1; opacity: 0.75;
+}
+.wb-tab-close:hover { opacity: 1; }
+
+.wb-switcher { display: none; }
+.wb-add { margin-left: auto; }
+
+.wb-picker {
+  position: relative;
+  z-index: 5;
+  margin-top: 8px; padding: 8px; border: 1px solid var(--wb-line); border-radius: 12px;
+  background: var(--wb-surface); display: grid; gap: 4px;
+  max-height: 320px; overflow: auto;
+}
+.wb-picker-item {
+  display: flex; justify-content: space-between; gap: 12px; width: 100%;
+  padding: 8px 10px; border: 0; border-radius: 8px; cursor: pointer;
+  background: transparent; color: var(--wb-ink); font: inherit; text-align: left;
+}
+.wb-picker-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+.wb-outlet {
+  position: relative;
+  z-index: 1;
+  isolation: isolate; flex: 1 1 auto; min-height: 0; margin-top: 10px;
+  border: 1px solid var(--wb-line); border-radius: 14px; overflow: auto;
+  background: var(--wb-surface);
+}
+.wb-panel { min-height: 100%; }
+.wb-panel[hidden] { display: none !important; }
+
+.wb-empty { padding: 28px; max-width: 560px; }
+.wb-empty h2 { margin: 0 0 8px; }
+.wb-muted { color: var(--wb-ink-dim); }
+
+/* --- phone: dock becomes a sheet, tabs become a switcher ------------------ */
+.wb-sheet, .wb-sheet-toggle { display: none; }
+
+@media (max-width: 760px) {
+  .wb-shell { grid-template-columns: minmax(0, 1fr); padding: 8px; }
+  .wb-dock { display: none; }
+  .wb-switcher { display: inline-flex; }
+  .wb-tabs { display: none; }
+  .wb-tabs.is-open {
+    display: grid; width: 100%; padding-top: 8px;
+  }
+  .wb-tabs.is-open .wb-tab { justify-content: space-between; }
+
+  /* Opening a service must work on a phone too; the switcher only replaces the
+     tab strip, not the ability to add one. */
+  .wb-add { display: inline-flex; }
+
+  .wb-sheet-toggle {
+    display: inline-flex; position: fixed; right: 14px; bottom: 14px; z-index: 40;
+    padding: 8px 14px; border-radius: 999px; border: 1px solid var(--wb-line);
+    background: var(--wb-surface-2); color: var(--wb-ink); font: inherit;
+  }
+  .wb-sheet {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 41;
+    background: var(--wb-surface-2); border-top: 1px solid var(--wb-line);
+    border-radius: 16px 16px 0 0; overflow: hidden;
+    transition: height 180ms ease;
+  }
+  .wb-sheet.is-peek { height: 0; }
+  .wb-sheet.is-half { height: 52vh; }
+  .wb-sheet.is-full { height: 92vh; }
+  .wb-sheet-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; border-bottom: 1px solid var(--wb-line);
+  }
+  .wb-sheet-body { height: calc(100% - 44px); overflow: auto; }
+}
+
+.wb-back {
+  position: absolute; right: 14px; top: 8px;
+  border: 1px solid var(--wb-line); border-radius: 999px; background: var(--wb-surface);
+  color: var(--wb-ink-dim); font: inherit; padding: 2px 10px; cursor: pointer;
+}
+@media (max-width: 760px) { .wb-back { display: none; } }

@@ -16,6 +16,8 @@ import MasterBrainShell from './shell/MasterBrainShell.jsx'
 import CommandCenter from './pages/internal/CommandCenter.jsx'
 import ProductFinder from './pages/internal/ProductFinder.jsx'
 import DesignStudio from './pages/internal/DesignStudio.jsx'
+import WorkbenchShell from './shell/WorkbenchShell.jsx'
+import { WorkspaceProvider } from './shell/WorkspaceTabs.jsx'
 import GoldenGooseDesk from './pages/internal/GoldenGoose.jsx'
 import ListingGuardian from './pages/internal/ListingGuardian.jsx'
 import KeywordTracker from './pages/internal/KeywordTracker.jsx'
@@ -116,6 +118,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/product-finder" element={<ProductFinder />} />
       <Route path="/product-finder/:id" element={<ProductFinder />} />
       <Route path="/design-studio/*" element={<DesignStudio />} />
+      <Route path="/workbench" element={<WorkspaceProvider><WorkbenchShell /></WorkspaceProvider>} />
       <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
 <Route path="/packify-design" element={<PackifyDesign />} />
       <Route path="/creative-studio" element={<LegacyStudioRedirect section="projects" />} />
@@ -197,6 +200,9 @@ const SIMPLE_KEEP_ADVANCED = [
   // with the chat shell made every creative lane unreachable on the free tier,
   // where advanced_view is false — found by the dashboard e2e test.
   /^\/design-studio(\/|$)/,
+
+  // The workbench is the shell itself: Bojo docked, services as tabs.
+  /^\/workbench(\/|$)/,
 
   new RegExp("^/galactic(/|$)"),
 ]
