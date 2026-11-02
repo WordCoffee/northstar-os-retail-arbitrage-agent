@@ -45,3 +45,7 @@ Once mobile is green: tag `ns-ux-U3` **done**, then start U4 (theme system + gla
 - Tabs must stay mounted when hidden; that is the state-preservation contract.
 - `.wb-shell`/`.wb-tabbar` z-index layering exists because the fixed cosmic canvas covers clicks.
 - Dev servers: `scripts/dev-start.ps1` only (gate is clear now; the operator exited Tailscale).
+
+## Server state at handoff
+
+dev-start.ps1's wrapper process exited (its PowerShell host ended) but the two children it spawned are still listening: backend 127.0.0.1:8000 and UI 127.0.0.1:8101. `dev-start.pids` may be stale; verify with `Get-NetTCPConnection` before starting another stack.
