@@ -71,8 +71,9 @@ def classify_form(png: bytes, *, model: str = VISION_MODEL) -> Dict[str, Any]:
 def adherence_verdict(requested: str, observed: Dict[str, Any]) -> Dict[str, Any]:
     """Pass only when the vision lane is available AND the form matches."""
     if not observed.get("available"):
-        return {"ok": False, "reason": "vision lane unavailable", "requested": requested,
-                "observed": observed.get("observed")}
+        return {"ok": False, "reason": "vision lane unavailable",
+                "detail": observed.get("reason"),
+                "requested": requested, "observed": observed.get("observed")}
     ok = bool(requested) and observed.get("observed") == requested
     return {"ok": ok, "requested": requested, "observed": observed.get("observed"),
             "answer": observed.get("answer"), "model": observed.get("model")}
@@ -117,7 +118,9 @@ def write_deliverable(run_id: str, *, brief: str, final_png: bytes,
         "adherence": {"ok": bool(adherence.get("ok")),
                       "requested": adherence.get("requested"),
                       "observed": adherence.get("observed"),
-                      "model": adherence.get("model")},
+                      "model": adherence.get("model"),
+                      **({"reason": adherence["reason"]} if adherence.get("reason") else {}),
+                      **({"detail": adherence["detail"]} if adherence.get("detail") else {})},
         "files": sorted([p.name for p in folder.iterdir() if p.is_file()] + ["manifest.json"]),
         "bytes": len(final_png),
         "citations": cites,

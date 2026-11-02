@@ -66,8 +66,11 @@ def test_unknown_extras_are_omitted_not_nulled(store):
 
 
 def test_the_verdict_requires_a_vision_answer():
-    verdict = dl.adherence_verdict("pouch", {"available": False, "reason": "offline"})
+    verdict = dl.adherence_verdict("pouch", {"available": False,
+                                            "reason": "URLError: connection refused"})
     assert verdict["ok"] is False and "unavailable" in verdict["reason"]
+    # the underlying cause travels with the verdict, or the operator cannot diagnose it
+    assert "connection refused" in (verdict["detail"] or "")
 
 
 def test_the_verdict_fails_on_the_wrong_form():
