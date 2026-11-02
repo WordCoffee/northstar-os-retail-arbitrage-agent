@@ -166,7 +166,7 @@
   },
   "tests": {
     "touched_group": {
-      "passed": 116,
+      "passed": 125,
       "failed": 0
     },
     "new_files": {
@@ -176,7 +176,7 @@
       "test_discovery_queue": 8,
       "test_geometry_handoff": 12
     },
-    "new_suites_total": 37
+    "new_suites_total": 38
   },
   "downloads": 0,
   "full_suite": {
@@ -193,5 +193,15 @@
     },
     "new_failures": 0,
     "delta_passing": 36
-  }
+  },
+  "closing_defects": [
+    {
+      "defect": "the form-axis fix was left uncommitted while the report described it",
+      "fix": "commit 08bd1860"
+    },
+    {
+      "defect": "test_design_studio_aplus called the route, which packaged every page into state/deliverables; nine aplus_* folders accumulated across suite runs",
+      "fix": "autouse fixture points aplus_manifest.DELIVERABLES at tmp_path (commit 6ba1de79); nine artifacts deleted"
+    }
+  ]
 }

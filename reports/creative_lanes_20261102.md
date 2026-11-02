@@ -116,6 +116,19 @@ PATH or in Program Files, and bpy is not importable"), so `bake_plan` refuses be
 anything. Generation additionally needs a 3D pack and weights that are not installed. **No downloads
 were made**, so E is a contract plus a probe, not a working 3D pipeline.
 
+### Closing defects (found while tidying)
+
+Two things surfaced only when the work was finished, and both are the kind that
+would have quietly eroded trust in the numbers:
+
+1. **The form-axis fix was uncommitted.** The report described it and the code sat dirty; committed
+   as `08bd1860` before anything else.
+2. **The A+ service test wrote user deliverables.** The route packages every page, and the test calls
+   the route, so each suite run left an `aplus_*` folder in `state/deliverables` — **nine** by the end
+   of the day. An autouse fixture now points `aplus_manifest.DELIVERABLES` at `tmp_path` (`6ba1de79`);
+   the eight route tests still pass and the folder count no longer moves. The nine artifacts were
+   deleted; the one live page stays.
+
 ---
 
 ## REGRESSION SUITE
@@ -131,12 +144,12 @@ Previous campaign closed at `30 failed, 5711 passed`. **+36 passing, 0 new failu
 `local_model` `num_ctx` 5, dev-shim `KeyError: 'app'` 5, stale fixtures 8, order-dependent
 `provider_suite` 1).
 
-**New suites this campaign:** 37 tests, all passing —
-`test_shorts` 5 · `test_relight` 4 · `test_print_master` 8 · `test_discovery_queue` 8 ·
-`test_geometry_handoff` 12.
+**New suites this campaign:** 37 tests in five new files, plus one in the existing quality
+gate, all passing — `test_shorts` 5 · `test_relight` 4 · `test_print_master` 8 ·
+`test_discovery_queue` 8 · `test_geometry_handoff` 12 · `test_quality_gate` +1.
 
 **Touched-area group** (the five new suites plus quality gate, deliverables, A+, ad formats,
-print, lanes, generate): **117 passed, 0 failed**.
+print, lanes, generate): **125 passed, 0 failed**.
 
 ---
 
@@ -147,7 +160,8 @@ print, lanes, generate): **117 passed, 0 failed**.
 - **GPU:** local only. Renders this campaign: 1 shorts clip (46.2 s), 1 print master (6.4 s),
   1 cutout (3.7 s), 3 relight probes (~12 s each, discarded as noise). All at **$0**.
 - **Downloads: 0.**
-- **Residue:** probe PNGs and the WEBM removed from the repo root; `state/proposals/` holds 5
+- **Residue:** probe PNGs and the WEBM removed from the repo root; nine test-authored A+
+  packages deleted (with a fixture so they stop appearing); `state/proposals/` holds 5
   proposal JSONs (the queue's intended output, committed); deliverable folders now include the
   clip and the print master. Backend on 8000 still `armed: true`; ComfyUI and Ollama untouched.
 
