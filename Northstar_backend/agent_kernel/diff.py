@@ -50,10 +50,49 @@ def parse_diff(text: str) -> List[Hunk]:
 
 
 def select_hunks(text: str, indices: Sequence[int]) -> str:
-    """Return a diff containing only the selected hunks (for an apply step)."""
+    """Return a diff containing only the selected hunks (for an apply step).
+
+    The file headers (`--- a/file`, `+++ b/file`) are kept: a hunk body without
+    them names no target file, so the result could not be applied by the kernel's
+    editor or by `git apply`. Each kept hunk carries the header of the file it came
+    from, in the input order, and a hunk from the same file does not repeat it.
+    """
     keep = set(int(i) for i in indices)
-    parts = [h.text() for h in parse_diff(text) if h.index in keep]
-    return "\n".join(parts) + ("\n" if parts else "")
+    if not keep:
+        return ""
+    headers: List[List[str]] = []
+    current: List[str] = []
+    for line in text.splitlines():
+        if line.startswith("--- "):
+            current = [line]
+        elif line.startswith("+++ ") and current:
+            current = current + [line]
+            headers.append(current)
+    # Map hunk index -> the header pair that precedes it in the input.
+    per_hunk: List[List[str]] = []
+    hunk_i = -1
+    current_header: List[str] = []
+    for line in text.splitlines():
+        if line.startswith("--- "):
+            current_header = [line]
+        elif line.startswith("+++ ") and current_header:
+            current_header = current_header + [line]
+        elif line.startswith("@@"):
+            hunk_i += 1
+            per_hunk.append(current_header)
+
+    out: List[str] = []
+    last_header: List[str] = []
+    for hunk in parse_diff(text):
+        if hunk.index not in keep:
+            continue
+        header = per_hunk[hunk.index] if hunk.index < len(per_hunk) else []
+        if header and header != last_header:
+            out.extend(header)
+            last_header = header
+        out.append(hunk.header)
+        out.extend(hunk.lines)
+    return "\n".join(out) + ("\n" if out else "")
 
 
 def review(text: str) -> List[dict]:
