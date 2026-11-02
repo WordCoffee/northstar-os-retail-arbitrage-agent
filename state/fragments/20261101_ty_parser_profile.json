@@ -1,0 +1,28 @@
+{
+  "ty_parser_profile_20261101": {
+    "verdict": "BLOCKED - the authorized parser profile does not yield structured tool calls for qwen2.5-coder:7b. PARSER is stored in the alias manifest but the output is byte-identical to the stock model (0/3 structured calls); the control model with a native RENDERER/PARSER returned 3/3 on the same serve. No screen, no real tasks, no soak.",
+    "model_decision": {
+      "base": "qwen2.5-coder:7b digest dae161e2..., 4.7 GB, unchanged weights, no re-download",
+      "alias": "qwen2.5-coder:7b-parser-f16 digest 577c810f2253, same blobs",
+      "modelfile": "state/profiles/qwen2.5-coder-7b-parser-f16.Modelfile (FROM qwen2.5-coder:7b, PARSER qwen2.5, PARAMETER temperature 0, PARAMETER num_ctx 8192)",
+      "runtime": "campaign-scoped ollama serve, GPU backend, OLLAMA_KV_CACHE_TYPE=f16, OLLAMA_CONTEXT_LENGTH=8192",
+      "fallback": "qwen3:8b NOT retried; its screen failure stands"
+    },
+    "parser_detection": {
+      "alias_manifest": "PARSER qwen2.5 stored (ollama show --modelfile)",
+      "alias_tool_calls": "0 of 3 structured tool_calls",
+      "stock_tool_calls": "0 of 3, output identical",
+      "control_bojo": "3 of 3 structured tool_calls on the same serve (its manifest carries RENDERER/PARSER qwen3.5)",
+      "serialization_test": "asked to repeat a <tool_call> block verbatim without a tools array, the model returned the block stripped of tags -> the parser has nothing to parse",
+      "conclusion": "the failure is upstream of parsing; another parser name cannot fix it"
+    },
+    "screen": "not run - directive stops the campaign when PARSER is not applied",
+    "regression": "169 passed in 5.34s across 12 suites in the same campaign",
+    "probes_still_failing": {"t5_hitl_corrupt": 1, "t6_diff_select_headers": 2, "t7_artifact_jpeg": 2},
+    "resources": "no gate exercised (interface failed before load); campaign serve had 8.35 GB host free, 0 MiB VRAM used",
+    "real_tasks": "not dispatched; no Ty commits; six-dispatch history and failed states preserved",
+    "cleanup": "operator daemon restored (cpu/q4_0, 0 resident, GPU 0 MiB); alias left installed (shares weights; 'ollama rm qwen2.5-coder:7b-parser-f16' removes only the alias layer)",
+    "next_operator_action": "a new model decision: choose an artifact whose Ollama manifest ships its own RENDERER/PARSER (qwen3.5 class parsed 3/3 here) rather than a coder artifact needing a parser added",
+    "report": "reports/ty_parser_profile_20261101.md"
+  }
+}

@@ -1,0 +1,4 @@
+FROM qwen2.5-coder:7b
+PARSER qwen2.5
+PARAMETER temperature 0
+PARAMETER num_ctx 8192
