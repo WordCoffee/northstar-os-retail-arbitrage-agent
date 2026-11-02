@@ -6,11 +6,39 @@
 // the choice, and the note in the API says so.
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { LOCAL_DEV } from '../../../foundation/dev.js'
 
 const API = '/api/design-studio/dashboard'
 
+// Same transport rules as the rest of the suite: same-origin, cookie auth,
+// CSRF double-submit, dev identity shim gated on the compile-time LOCAL_DEV
+// constant. The shim matters here: without X-User-Id the backend files these
+// calls under the anonymous 30/min bucket, and a normal studio session tripped
+// 429s that the dashboard reported as "no assets found".
+function headers(method, extra = {}) {
+  const h = { 'Content-Type': 'application/json', ...extra }
+  if (LOCAL_DEV) {
+    try {
+      const s = JSON.parse(localStorage.getItem('ns-dev-session') || 'null')
+      if (s && s.userId) {
+        h['X-User-Id'] = s.userId
+        if (s.orgId) h['X-Org-Id'] = s.orgId
+        if (s.role) h['X-Role'] = s.role
+      }
+    } catch { /* storage unavailable - hosted cookie auth is used */ }
+  }
+  const unsafe = ['POST', 'PUT', 'PATCH', 'DELETE'].includes((method || 'GET').toUpperCase())
+  if (unsafe) {
+    try {
+      const m = document.cookie.match(/(^|;)\s*ns_csrf\s*=\s*([^;]+)/)
+      if (m) h['X-CSRF-Token'] = decodeURIComponent(m[2])
+    } catch { /* no cookies */ }
+  }
+  return h
+}
+
 async function getJSON(url) {
-  const res = await fetch(url, { credentials: 'same-origin' })
+  const res = await fetch(url, { credentials: 'same-origin', headers: headers('GET') })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(body.detail?.message || body.detail || `HTTP ${res.status}`)
   return body
@@ -20,7 +48,7 @@ async function postJSON(url, payload) {
   const res = await fetch(url, {
     method: 'POST',
     credentials: 'same-origin',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers('POST'),
     body: JSON.stringify(payload),
   })
   const body = await res.json().catch(() => ({}))
@@ -126,15 +154,43 @@ export default function AssetDashboard() {
   }, [])
 
   const loadAssets = useCallback(async () => {
-    try {
-      const data = await getJSON('/api/design-studio/assets')
-      const rows = (data.assets || []).slice(0, 40)
-      setAssets(rows)
-      if (!assetId && rows.length) setAssetId(rows[0].id)
-    } catch {
-      setAssets([])
+    // The lane picker must not say "no assets found" for the life of the tab.
+    // A stalled keep-alive (seen on WebKit through the Vite proxy) never rejects
+    // and a throttled call returns 429, so every attempt has a hard 4 s ceiling
+    // and a 429 is retried after the server's own Retry-After.
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 4000) : null
+      try {
+        const res = await fetch('/api/design-studio/assets', {
+          credentials: 'same-origin',
+          headers: headers('GET'),
+          signal: ctrl ? ctrl.signal : undefined,
+        })
+        if (!res.ok) {
+          const err = new Error(`HTTP ${res.status}`)
+          err.status = res.status
+          err.retryAfter = Number(res.headers.get('Retry-After') || 0)
+          throw err
+        }
+        const data = await res.json().catch(() => ({}))
+        const rows = (data.assets || []).slice(0, 40)
+        setAssets(rows)
+        // Pick a default once, without re-running this callback (and the fetch
+        // it performs) every time the selection changes.
+        if (rows.length) setAssetId(prev => prev || rows[0].id)
+        return
+      } catch (err) {
+        if (attempt === 3) setAssets([])
+        else {
+          const wait = err && err.retryAfter ? err.retryAfter * 1000 : 600 * (attempt + 1)
+          await new Promise(resolve => setTimeout(resolve, Math.min(wait, 5000)))
+        }
+      } finally {
+        if (timer) clearTimeout(timer)
+      }
     }
-  }, [assetId])
+  }, [])
 
   useEffect(() => { loadPackages(); loadProposals(); loadAssets() }, [loadPackages, loadProposals, loadAssets])
 

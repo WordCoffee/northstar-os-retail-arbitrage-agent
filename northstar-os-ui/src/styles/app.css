@@ -247,6 +247,12 @@ body {
   .top-nav-search input { width: 100px; }
   .top-nav-brand-name { font-size: 15px; }
   .top-nav-avatar { width: 26px; height: 26px; font-size: 10px; }
+  /* At 390 px the four-button display-scale control is ~130 px of the action
+     row and pushes the right-hand actions (Workbench first among them) past the
+     clipped edge of the bar. 100% is the phone default and the preference still
+     lives in Settings, so the control is dropped on phones — the Workbench
+     entry has to stay tappable, not scrolled-to. */
+  .top-nav .top-nav-scale { display: none; }
 }
 
 /* â”€â”€ SHARED COMPONENTS â”€â”€ */

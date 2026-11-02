@@ -56,6 +56,11 @@ function NotWired({ service }) {
 export default function WorkbenchShell() {
   const { open, active, activeService, openService, activate, close } = useWorkspace()
   const [pickerOpen, setPickerOpen] = useState(false)
+  // On a phone the tab strip is collapsed behind the switcher, so "show my tabs"
+  // and "add a service" are two different panels. They used to share one flag,
+  // which meant tapping + Service also opened the tab strip and tapping the
+  // switcher rendered the picker underneath it.
+  const [tabsOpen, setTabsOpen] = useState(false)
   const [dockOpen, setDockOpen] = useState(true)
   const [sheet, setSheet] = useState('peek')
   const navigate = useNavigate()
@@ -122,16 +127,17 @@ export default function WorkbenchShell() {
       <section className="wb-main">
         <div className="wb-tabbar" data-testid="wb-tabbar">
           <button type="button" className="btn btn-sm wb-switcher" data-testid="wb-switcher"
-                  aria-expanded={pickerOpen}
-                  onClick={() => setPickerOpen((v) => !v)}>
+                  aria-expanded={tabsOpen}
+                  aria-label={`Workspace tabs: ${activeService?.label || 'Workspace'}`}
+                  onClick={() => { setTabsOpen((v) => !v); setPickerOpen(false) }}>
             {activeService?.label || 'Workspace'} ▾
           </button>
-          <div className={`wb-tabs ${pickerOpen ? 'is-open' : ''}`} data-testid="wb-tabs">
+          <div className={`wb-tabs ${tabsOpen ? 'is-open' : ''}`} data-testid="wb-tabs">
             {tabs.map(({ id, service }) => (
               <div key={id} className={`wb-tab ${id === active ? 'is-active' : ''}`}>
                 <button type="button" className="wb-tab-btn" data-testid={`wb-tab-${id}`}
                         aria-current={id === active ? 'page' : undefined}
-                        onClick={() => { activate(id); setPickerOpen(false) }}>
+                        onClick={() => { activate(id); setPickerOpen(false); setTabsOpen(false) }}>
                   {service.label}
                 </button>
                 <button type="button" className="wb-tab-close" data-testid={`wb-close-${id}`}
@@ -142,7 +148,7 @@ export default function WorkbenchShell() {
           </div>
           <button type="button" className="btn btn-sm wb-add" data-testid="wb-add"
                   aria-haspopup="menu" aria-expanded={pickerOpen}
-                  onClick={() => setPickerOpen((v) => !v)}>
+                  onClick={() => { setPickerOpen((v) => !v); setTabsOpen(false) }}>
             + Service
           </button>
         </div>

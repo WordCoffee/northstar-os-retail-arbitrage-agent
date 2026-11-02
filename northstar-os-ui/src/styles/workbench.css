@@ -106,21 +106,35 @@
 .wb-sheet, .wb-sheet-toggle { display: none; }
 
 @media (max-width: 760px) {
-  .wb-shell { grid-template-columns: minmax(0, 1fr); padding: 8px; }
+  .wb-shell {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 8px;
+    padding-bottom: 72px;      /* clear the fixed mobile bottom nav */
+  }
   .wb-dock { display: none; }
-  .wb-switcher { display: inline-flex; }
+  .wb-switcher { display: inline-flex; min-height: 40px; }
   .wb-tabs { display: none; }
   .wb-tabs.is-open {
-    display: grid; width: 100%; padding-top: 8px;
+    display: grid; gap: 4px; width: 100%; padding-top: 8px;
+    order: 3;                  /* wraps under the switcher and + Service row */
   }
-  .wb-tabs.is-open .wb-tab { justify-content: space-between; }
+  .wb-tabs.is-open .wb-tab {
+    justify-content: space-between; width: 100%;
+    border-color: var(--wb-line); background: var(--wb-surface-2);
+  }
+  .wb-tabs.is-open .wb-tab.is-active { border-color: var(--wb-accent); }
+  .wb-tabs.is-open .wb-tab-btn {
+    flex: 1 1 auto; text-align: left; min-height: 40px; padding-left: 12px;
+  }
+  .wb-tabs.is-open .wb-tab-close { min-width: 40px; min-height: 40px; }
 
   /* Opening a service must work on a phone too; the switcher only replaces the
      tab strip, not the ability to add one. */
-  .wb-add { display: inline-flex; }
+  .wb-add { display: inline-flex; min-height: 40px; }
+  .wb-picker-item { min-height: 44px; }
 
   .wb-sheet-toggle {
-    display: inline-flex; position: fixed; right: 14px; bottom: 14px; z-index: 40;
+    display: inline-flex; position: fixed; right: 14px; bottom: 64px; z-index: 40;
     padding: 8px 14px; border-radius: 999px; border: 1px solid var(--wb-line);
     background: var(--wb-surface-2); color: var(--wb-ink); font: inherit;
   }
