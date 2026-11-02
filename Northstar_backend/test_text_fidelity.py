@@ -251,8 +251,17 @@ def test_guard_preserves_raw_render_before_cleanup():
 # ── endpoint ────────────────────────────────────────────────────────────────
 
 def test_text_check_endpoint_auth_and_404():
-    r = TestClient(app).post("/api/design-studio/text-check/whatever")
-    assert r.status_code == 401
+    # The dev-only loopback shim (AGENTS.md DEV-ONLY LOCALHOST EXCEPTION) mints a
+    # demo session for a loopback TestClient when the app sets dev_auto_session, so
+    # the "no session" assertion only holds with the shim off - which is exactly the
+    # hosted/production behaviour this test is about.
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        r = TestClient(app).post("/api/design-studio/text-check/whatever")
+        assert r.status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
 
     app.dependency_overrides[design_studio_api.studio_account] = lambda: "org-tf"
     try:

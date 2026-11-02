@@ -191,9 +191,16 @@ def _tiny_logo_data_url() -> str:
 
 
 def test_compose_endpoints(monkeypatch):
-    assert TestClient(app).post("/api/design-studio/compose/mockup",
-                                json={"template_id": "mogra-forest-dusk",
-                                      "plate_asset_id": "x"}).status_code == 401
+    # Same shim note as test_text_fidelity: a loopback TestClient is handed the demo
+    # session unless dev_auto_session is off, which is the hosted path under test.
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        assert TestClient(app).post("/api/design-studio/compose/mockup",
+                                    json={"template_id": "mogra-forest-dusk",
+                                          "plate_asset_id": "x"}).status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
     _as_org()
     try:
         c = TestClient(app)
