@@ -4,26 +4,27 @@
 **Date:** 2026-11-02
 **Author:** DeepSeek V4.1 Flash (opencode-go, operator session) · local: ComfyUI, `qwen3.5:4b`, `rapidocr`
 **Instruction:** the operator asked for A through E explicitly; the previous 2-unit cap is superseded.
-**Downloads: 0.** Everything below runs on weights already on this disk.
+**Downloads: 1** — the SD1.5 base checkpoint relight needs, recorded in `provenance.csv`.
+Everything else runs on weights already on this disk.
 
 ---
 
 ## VERDICT
 
-**PARTIALLY READY — three lanes ship and are verified live, one is built but refuses its own output,
-one is a tested contract whose two dependencies are absent.**
+**PARTIALLY READY — four of five items are complete and verified live; E is a tested contract whose
+two dependencies are absent.**
 
 | | Item | State |
 |---|---|---|
 | **A** | Shorts / Reels motion (9:16) | **Complete** — Wan 2.2 TI2V 5B, live clip, frame-gated, packaged |
-| **B** | Cutout + relight | **Cutout complete** (verified, 3.7 s). **Relight refuses**: the graph runs but decodes to noise, and the lane now detects that instead of returning it |
+| **B** | Cutout + relight | **Complete** — cutout verified (3.7 s); relight now works after the base-checkpoint bug was found (`c4adefa5`, follow-up commit) |
 | **C** | Print master at 300 DPI | **Complete** — Real-ESRGAN 4×, measured 1040 DPI at 100 mm, manifest carries a real dieline block |
 | **D** | Autonomous discovery | **Complete as a proposal queue** — never installs; a test asserts it |
 | **E** | 3D generation + Blender bake | **Contract complete, generation/bake blocked** — no 3D pack, no Blender on this machine, and both are named |
 
-The honest summary: the *creative* half of the brief is real and running, the *autonomy* half is
-deliberately narrower than asked (no auto-install), and the *3D* half needs downloads the
-campaign did not authorise.
+The honest summary: the *creative* half of the brief is real and running (still, print, motion,
+relight, cutout), the *autonomy* half is deliberately narrower than asked (no auto-install), and
+the *3D* half needs a 3D pack and Blender, neither of which is installed.
 
 ---
 
@@ -54,23 +55,43 @@ the clip re-rendered. The regenerated manifest now reads
 versus 3.6 for a still render, and a mean absolute difference of 21.97 between frame 0 and frame 2
 — it moves.
 
-### B — Cutout + relight (`c4adefa5`)
+### B — Cutout + relight (`c4adefa5`, follow-up)
 
 **Cutout: already shipped, now measured.** `POST /lanes/cutout` (BiRefNet) → 3.7 s, 2000 px framed,
 fill 0.879 longest side / 0.4975 area, verdict `compliant`. No work needed beyond verification.
 
-**Relight: built, and refused.** IC-Light SD1.5 unets + CLIP + VAE are installed, and the graph
-runs — three times it produced *success* and *colour noise*:
+**Relight: now works, and the first failure was instructive.** `ICLightApply` does **not** take the
+IC-Light unet as its model. Reading `ic_light_nodes.py` shows it clones a **base SD1.5 checkpoint**
+and patches the IC-Light weights into it:
 
-| Attempt | Wiring | Result |
-|---|---|---|
-| 1 | concat latent → sampler, euler/simple | 2.06 MB of noise |
-| 2 | empty latent at 768 | tensor size mismatch (the IC-Lora prep canvas is 1600 wide) |
-| 3 | concat latent, dpmpp_2m/karras | noise again |
+```python
+work_model = model.clone()
+work_model.add_patches({("diffusion_model." + k): ("diff", [v, ...])
+                        for k, v in ic_model.model.diffusion_model.state_dict().items()})
+```
 
-The lane now measures its own output: high-frequency energy is **3.6** for a real render and
-**58.98** for the noise, threshold 25. `RelightUnavailable` carries the metric, and **no endpoint
-calls the lane** — the code says what it cannot do instead of shipping it.
+Passing the IC-Light unet as both `model` and `ic_model` is a valid graph and a meaningless
+computation — which is exactly what "success with colour noise" looks like.
+
+Behind that mistake sat a missing dependency: **no SD1.5 checkpoint on this box** (only SDXL).
+`Realistic_Vision_V6.0_NV_B1_fp16.safetensors` was downloaded (2.13 GB, 74 s,
+**CreativeML OpenRAIL-M**, sha256 `c48bfd15…`), appended to `provenance.csv` and tagged
+`local-lane`.
+
+The corrected graph follows the pack's own `examples/fg.json`: LoadImage → ImageScale →
+BiRefNet mask → `ICLightApplyMaskGrey` → `VAEEncodeArgMax` (c_concat) → `CheckpointLoaderSimple` +
+`UNETLoader(iclight)` → `ICLightApply` → `EmptyLatentImage` → KSampler (`dpmpp_2m_sde`/`karras`,
+denoise 0.9) → VAEDecode → SaveImage.
+
+Two further defects on the way: the source must be rescaled to the canvas, or the concat latent
+(1024/8 = 128) and the empty latent (768/8 = 96) disagree — the "Expected size 96 but got size 128"
+error; and the new route used `uuid` where the module imports it as `_uuid`, which surfaced as a
+live HTTP 500.
+
+**Live.** `POST /relight` on the pouch: 768×768, 20 steps, **9.3 s**, noise metric **4.31**,
+verdict **2/2**, folder `state/deliverables/relight_1793635344`, 18-key manifest, material
+recorded as `matte`. The noise guard stays: it is what made "the graph ran" and "the image is
+real" two different statements.
 
 ### C — Print master (`ef0d0944`)
 
@@ -133,23 +154,23 @@ would have quietly eroded trust in the numbers:
 
 ## REGRESSION SUITE
 
-**Full backend suite** (`python -m pytest -q` from `Northstar_backend`, 655.88 s):
+**Full backend suite** (`python -m pytest -q` from `Northstar_backend`, 649.26 s):
 
 ```
-30 failed, 5747 passed, 117 skipped, 2 xfailed, 88 subtests passed
+30 failed, 5753 passed, 117 skipped, 2 xfailed, 88 subtests passed
 ```
 
-Previous campaign closed at `30 failed, 5711 passed`. **+36 passing, 0 new failures by name** — the
+Previous campaign closed at `30 failed, 5711 passed`. **+42 passing, 0 new failures by name** — the
 30 are the same tests, in the same four pre-existing root causes (`autothink` import 11,
 `local_model` `num_ctx` 5, dev-shim `KeyError: 'app'` 5, stale fixtures 8, order-dependent
 `provider_suite` 1).
 
-**New suites this campaign:** 37 tests in five new files, plus one in the existing quality
-gate, all passing — `test_shorts` 5 · `test_relight` 4 · `test_print_master` 8 ·
-`test_discovery_queue` 8 · `test_geometry_handoff` 12 · `test_quality_gate` +1.
+**New suites this campaign:** 42 tests across five new files plus the quality gate —
+`test_shorts` 5 · `test_relight` 9 · `test_print_master` 8 · `test_discovery_queue` 8 ·
+`test_geometry_handoff` 12 · `test_quality_gate` +1 (the form-axis fix).
 
-**Touched-area group** (the five new suites plus quality gate, deliverables, A+, ad formats,
-print, lanes, generate): **125 passed, 0 failed**.
+**Touched-area group** (all of the above plus deliverables, A+, ad formats, print, lanes,
+generate): **130 passed, 0 failed**.
 
 ---
 
@@ -157,9 +178,10 @@ print, lanes, generate): **125 passed, 0 failed**.
 
 - **Cloud spend: $0.00.** No `opencode run` this campaign; ledger unchanged at **11 entries /
   $0.005656** (0.08 % of the $7.20 / 5 h share).
-- **GPU:** local only. Renders this campaign: 1 shorts clip (46.2 s), 1 print master (6.4 s),
-  1 cutout (3.7 s), 3 relight probes (~12 s each, discarded as noise). All at **$0**.
-- **Downloads: 0.**
+- **GPU:** local only. Renders this campaign: 1 shorts clip (46.2 s + 48.6 s re-render),
+  1 print master (6.4 s), 1 cutout (3.7 s), 3 discarded relight probes and 2 relights that
+  passed (9.1 s / 9.3 s). All at **$0**.
+- **Downloads: 1** — the SD1.5 base checkpoint above, licence and sha256 recorded.
 - **Residue:** probe PNGs and the WEBM removed from the repo root; nine test-authored A+
   packages deleted (with a fixture so they stop appearing); `state/proposals/` holds 5
   proposal JSONs (the queue's intended output, committed); deliverable folders now include the

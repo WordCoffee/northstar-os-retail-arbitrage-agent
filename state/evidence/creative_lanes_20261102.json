@@ -71,21 +71,35 @@
       "verdict": "compliant"
     },
     "relight": {
-      "commit": "c4adefa5",
-      "module": "Northstar_backend/relight.py",
-      "status": "graph runs, output refused",
-      "live": {
-        "seconds": 12.1,
-        "bytes": 2064938,
-        "noise_metric": 58.98,
-        "limit": 25.0,
-        "attempts": [
-          "concat latent + euler/simple -> noise",
-          "empty latent at 768 -> tensor size error (prep canvas is 1600 wide)",
-          "concat latent + dpmpp_2m/karras -> noise"
-        ]
+      "status": "complete",
+      "root_cause": "ICLightApply patches a base SD1.5 checkpoint with the ic_model state dict; passing the IC-Light unet as the base model produced valid graph + colour noise",
+      "missing_dependency": {
+        "file": "Realistic_Vision_V6.0_NV_B1_fp16.safetensors",
+        "bytes": 2132625894,
+        "licence": "CreativeML OpenRAIL-M",
+        "sha256": "c48bfd159cd7a6507b128685e963c398fa72399cefafaf603781df50ce836cc7",
+        "download_seconds": 74,
+        "provenance": "provenance.csv row appended, tagged local-lane"
       },
-      "decision": "the lane is not wired to any endpoint; RelightUnavailable names the metric"
+      "graph": "LoadImage -> ImageScale -> BiRefNet -> ICLightApplyMaskGrey -> VAEEncodeArgMax; CheckpointLoaderSimple + UNETLoader -> ICLightApply; EmptyLatentImage -> KSampler (dpmpp_2m_sde/karras, denoise 0.9) -> VAEDecode",
+      "defects": [
+        "latent size mismatch (96 vs 128) until the source is rescaled to the canvas",
+        "route raised NameError uuid -> HTTP 500 (module imports uuid as _uuid)"
+      ],
+      "live": {
+        "size": [
+          768,
+          768
+        ],
+        "steps": 20,
+        "seconds": 9.3,
+        "noise_metric": 4.31,
+        "verdict": "2/2",
+        "folder": "state/deliverables/relight_1793635344",
+        "manifest_keys": 18,
+        "material": "matte",
+        "asset_id": "f26ccdab-a2ce-4ac6-bea7-6489c759bd5f"
+      }
     }
   },
   "C_print_master": {
@@ -166,7 +180,7 @@
   },
   "tests": {
     "touched_group": {
-      "passed": 125,
+      "passed": 130,
       "failed": 0
     },
     "new_files": {
@@ -176,23 +190,23 @@
       "test_discovery_queue": 8,
       "test_geometry_handoff": 12
     },
-    "new_suites_total": 38
+    "new_suites_total": 42
   },
-  "downloads": 0,
+  "downloads": 1,
   "full_suite": {
     "before": {
       "passed": 5711,
       "failed": 30
     },
     "after": {
-      "passed": 5747,
+      "passed": 5753,
       "failed": 30,
       "skipped": 117,
       "xfailed": 2,
-      "seconds": 655.88
+      "seconds": 649.26
     },
     "new_failures": 0,
-    "delta_passing": 36
+    "delta_passing": 42
   },
   "closing_defects": [
     {

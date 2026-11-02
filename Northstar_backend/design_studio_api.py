@@ -2224,8 +2224,6 @@ def relight_asset(body: RelightIn, acct: str = Depends(studio_account)):
         result = _rl.relight(path.read_bytes(), prompt=body.prompt or _rl.DEFAULT_PROMPT,
                              width=body.width, height=body.height, steps=body.steps,
                              cfg=body.cfg, seed=body.seed, denoise=body.denoise)
-        packaged = _rl.package(result, source_asset_id=body.asset_id,
-                               brief=body.prompt or _rl.DEFAULT_PROMPT)
     except _rl.RelightUnavailable as exc:
         raise HTTPException(status_code=502, detail={
             "code": "relight_output_is_noise", "message": str(exc)[:400]})
@@ -2233,6 +2231,8 @@ def relight_asset(body: RelightIn, acct: str = Depends(studio_account)):
         raise HTTPException(status_code=502, detail={
             "code": "relight_failed", "message": str(exc)[:400]})
 
+    # Register the asset BEFORE packaging: a failure after the folder is written
+    # leaves an orphan package with no asset (observed once, a 500 on uuid).
     out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
     name = f"relit_{_uuid.uuid4().hex}.png"
     (out_dir / name).write_bytes(result["png"])
@@ -2247,6 +2247,8 @@ def relight_asset(body: RelightIn, acct: str = Depends(studio_account)):
                                  "base_checkpoint": result["base_checkpoint"],
                                  "noise_metric": result["noise_metric"]}},
     })
+    packaged = _rl.package(result, source_asset_id=body.asset_id,
+                           brief=body.prompt or _rl.DEFAULT_PROMPT)
     return {"ok": packaged["verdict"]["ok"], "asset_id": aid,
             "file_url": f"/api/design-studio/assets/{aid}/file",
             "verdict": packaged["verdict"], "folder": packaged["folder"],
