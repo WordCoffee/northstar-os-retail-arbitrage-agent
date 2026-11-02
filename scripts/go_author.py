@@ -33,6 +33,7 @@ import go_usage as usage          # noqa: E402
 MODEL = "opencode-go/deepseek-v4.1-flash"
 MAX_TURNS = 3                     # envelope repair turns, bounded
 MAX_PROBE_REPAIRS = 1
+TASK_DEADLINE_S = 600             # hard wall clock for one unattended task
 
 
 def _opencode_command() -> List[str]:
@@ -62,8 +63,14 @@ def _run(prompt: str, *, session: str, timeout: float = 300.0) -> Dict[str, Any]
     # The prompt goes on stdin: a 16 KB contract file exceeds the Windows
     # command-line limit, and the CLI reads the message from stdin when none is
     # given. No credentials are involved on either side.
-    proc = subprocess.run(argv, cwd=str(cl.ROOT), capture_output=True, text=True,
-                          timeout=timeout, input=prompt)
+    try:
+        proc = subprocess.run(argv, cwd=str(cl.ROOT), capture_output=True, text=True,
+                              timeout=timeout, input=prompt)
+    except subprocess.TimeoutExpired as exc:
+        # A stalled CLI must become a failed turn, never a dead campaign process.
+        return {"text": "", "tokens": {}, "cost_usd": 0.0, "session_id": "",
+                "elapsed_s": round(time.time() - started, 2), "returncode": 124,
+                "stderr": f"timeout after {timeout}s: {exc}"}
     text_parts: List[str] = []
     tokens: Dict[str, Any] = {}
     cost = 0.0
@@ -183,6 +190,9 @@ def author_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any],
     started = time.time()
 
     for _ in range(MAX_TURNS):
+        if time.time() - started > TASK_DEADLINE_S:
+            error = f"task deadline {TASK_DEADLINE_S}s exceeded before a usable edit"
+            break
         target = cl.ROOT / path
         content = target.read_text(encoding="utf-8")
         prompt_text = _prompt(objective, path, content, error)

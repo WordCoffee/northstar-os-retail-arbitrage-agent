@@ -1153,7 +1153,13 @@ def restore_baseline(baseline: Dict[str, Any], paths: Optional[Sequence[str]] = 
     before_status = {p for p in (baseline.get("status") or [])
                      if not _is_supervisor_path(p)}
     current = {p for p in _status_set() if not _is_supervisor_path(p)}
-    changed = sorted((current - before_status) | set(requested))
+    if paths is not None:
+        # An explicit path list is the contract: only those paths may be restored or
+        # removed. Without this, a file another process created during the window was
+        # swept into "changed" and deleted.
+        changed = sorted(set(requested))
+    else:
+        changed = sorted((current - before_status) | set(requested))
     restored: List[str] = []
     removed: List[str] = []
     byte_backup = dict(baseline.get("byte_backup") or {})

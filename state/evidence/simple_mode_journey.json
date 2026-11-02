@@ -1,0 +1,30 @@
+{
+  "brief": "A 6 oz stand-up pouch of organic lion's mane mushroom powder on a warm neutral background, soft studio light, premium packaging photography, no text, no lettering",
+  "tier": "draft",
+  "ok": true,
+  "stages": {
+    "health": {
+      "ok": true,
+      "status": 200
+    },
+    "engine_armed": {
+      "ok": true,
+      "status": 200,
+      "armed": true,
+      "reachable": true
+    },
+    "generate": {
+      "ok": true,
+      "status": 200,
+      "elapsed_s": 26.0,
+      "asset_id": "a07603ae-616d-40fa-813e-bc38c26f9772",
+      "error": null
+    },
+    "deliverable": {
+      "ok": true,
+      "status": 200,
+      "bytes": 1204994
+    }
+  },
+  "checked_at": "2026-11-02T01:51:25"
+}

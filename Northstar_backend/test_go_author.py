@@ -109,6 +109,36 @@ def test_a_usage_less_reply_is_estimated_not_zero_marker():
     pass
 
 
+def test_a_stalled_cli_turn_fails_instead_of_hanging(monkeypatch):
+    def boom(*a, **k):
+        raise __import__("subprocess").TimeoutExpired(cmd="opencode", timeout=300)
+    monkeypatch.setattr(ga.subprocess, "run", boom)
+    turn = ga._run("prompt", session="t")
+    assert turn["returncode"] == 124 and "timeout" in turn["stderr"]
+
+
+def test_the_task_deadline_stops_before_another_turn(monkeypatch, tmp_path):
+    monkeypatch.setattr(ga.cl, "ROOT", tmp_path)
+    (tmp_path / "a.py").write_text("x = 1\n", encoding="utf-8")
+    task = {"id": "t", "write_paths": ["a.py"], "objective": "x"}
+    monkeypatch.setattr(ga.usage, "preflight", lambda est: {"ok": True, "windows": {}})
+    monkeypatch.setattr(ga.al, "open_task", lambda *a, **k: {"write_paths": ["a.py"]})
+    calls = {"n": 0}
+
+    def fake_run(prompt, session):
+        calls["n"] += 1
+        return {"text": "no json", "tokens": {}, "cost_usd": 0.0, "session_id": "",
+                "elapsed_s": 1.0, "returncode": 0, "stderr": ""}
+
+    monkeypatch.setattr(ga, "_run", fake_run)
+    monkeypatch.setattr(ga, "_log", lambda *a, **k: None)
+    monkeypatch.setattr(ga, "TASK_DEADLINE_S", 0)
+    monkeypatch.setattr(ga.al, "close_task", lambda *a, **k: {"status": "failed"})
+    out = ga.author_task("t", {"tasks": [task]}, {"tasks": {}})
+    assert out["status"] == "failed" and "deadline" in out["error"]
+    assert calls["n"] == 0
+
+
 def test_quota_gate_halts_before_opening_any_task(monkeypatch):
     monkeypatch.setattr(ga.usage, "preflight",
                         lambda est: {"ok": False, "window": "5h",

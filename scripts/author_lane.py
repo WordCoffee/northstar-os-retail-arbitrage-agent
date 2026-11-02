@@ -90,24 +90,30 @@ def close_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any],
     detail: Dict[str, Any] = {"task_id": task_id, "changed": sorted(changed),
                               "write_paths": sorted(write_paths)}
 
-    def fail(reason: str) -> Dict[str, Any]:
+    def fail(reason: str, *, outside: Optional[List[str]] = None) -> Dict[str, Any]:
+        # Only task-owned bytes are restored. A file another process created during
+        # the handoff window is NOT ours to delete - an earlier version removed one
+        # and destroyed an unrelated improvement report.
         restoration = None
         try:
-            restoration = cl.restore_baseline(
-                baseline, paths=sorted(write_paths | changed))
+            restoration = cl.restore_baseline(baseline, paths=sorted(write_paths))
         except Exception as exc:  # noqa: BLE001
             reason += f"; RESTORATION FAILED: {exc}"
         record.update({"status": "failed", "finished_at": _now(),
                        "reason": reason[:1000], "lane": AUTHOR,
                        "restoration": "failed" if "RESTORATION FAILED" in reason else "ok",
                        "duration_s": round(time.time() - started, 3)})
+        if outside:
+            record["out_of_scope_left"] = sorted(outside)[:20]
         cl._save_json(cl.STATE_PATH, state)
         return {**detail, "status": "failed", "error": reason,
-                "restoration": restoration}
+                "restoration": restoration,
+                "out_of_scope_left": sorted(outside or [])[:20]}
 
     outside = changed - write_paths
     if outside:
-        return fail("out-of-scope edits: " + ", ".join(sorted(outside)[:8]))
+        return fail("out-of-scope edits (left untouched): "
+                    + ", ".join(sorted(outside)[:8]), outside=sorted(outside))
 
     checks = cl.run_checks(task)
     detail["checks"] = checks

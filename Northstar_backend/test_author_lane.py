@@ -71,7 +71,8 @@ def test_open_hands_only_the_permitted_context(tmp_path, monkeypatch):
     assert state["tasks"]["t"]["status"] == "authoring"
 
 
-def test_close_refuses_and_restores_an_out_of_scope_edit(tmp_path, monkeypatch):
+def test_close_refuses_an_out_of_scope_edit_and_leaves_it_untouched(tmp_path, monkeypatch):
+    """A file another process created during the handoff is not ours to delete."""
     repo = _repo(tmp_path, monkeypatch)
     tasks = {"tasks": [_task()]}
     state = {"tasks": {}, "completed": {}}
@@ -80,7 +81,9 @@ def test_close_refuses_and_restores_an_out_of_scope_edit(tmp_path, monkeypatch):
     (repo / "extra.py").write_text("x = 1\n", encoding="utf-8")     # out of scope
     out = al.close_task("t", tasks, state)
     assert out["status"] == "failed" and "out-of-scope" in out["error"]
-    assert not (repo / "extra.py").exists()
+    assert (repo / "extra.py").exists(), "an unrelated file must never be deleted"
+    assert out["out_of_scope_left"] == ["extra.py"]
+    # the task-owned file is still restored
     assert (repo / TARGET).read_text(encoding="utf-8") == "def f():\n    return 1\n"
 
 

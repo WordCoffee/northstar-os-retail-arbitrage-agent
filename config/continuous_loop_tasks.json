@@ -988,6 +988,114 @@
         "finish"
       ],
       "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-feather-sigma-guard",
+      "name": "A failed warp fit is refused, not blurred",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only behavioural fix from the 2026-11-02 production register. No auth, tenancy, billing, security, provider or external I/O; the probe is read-only and outside the author's write scope.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Northstar_backend/mockup_compositor.py has one behavioural defect: feather_sigma() turns the measured residual of a warp fit into a feather width, but a NON-FINITE residual (nan, inf, -inf) is silently mapped to the default clamp instead of being refused - so a failed geometry fit produces a normal-looking composite with a hard edge. Read the file and fix feather_sigma so a non-finite residual raises ValueError while a finite one still clamps into [lo, hi] monotonically. The read-only probe state/probes/t9_feather_sigma.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
+      "write_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/mockup_compositor.py",
+        "state/probes/t9_feather_sigma.py"
+      ],
+      "checks": [
+        {
+          "name": "feather sigma probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t9_feather_sigma.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t9_feather_sigma.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "commit_message": "fix(compositor): refuse a non-finite warp residual instead of feathering it",
+      "required_artifact": "Northstar_backend/mockup_compositor.py",
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-suppression-subject",
+      "name": "The text suppressor must not choose the subject",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only creative-quality fix from the 2026-11-02 simple-mode campaign. No auth, tenancy, billing, security, provider or external I/O; the probe is read-only and outside the author's write scope.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Northstar_backend/text_fidelity.py has one behavioural defect with a visible consequence: every text-safe render appends SUPPRESSION_PHRASE to the brief, and that constant ends with 'botanical illustration only', so a product-pouch brief is rendered as a herbarium drawing (observed live: a 6 oz pouch request returned a botanical plate). Read the file and fix SUPPRESSION_PHRASE so it still forbids lettering, words, typography, logos, barcodes, QR codes, captions and watermarks, but no longer names a subject or medium. Do not change the sanitizer's rules, the router, or anything else in the file. The read-only probe state/probes/t10_suppression_phrase.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
+      "write_paths": [
+        "Northstar_backend/text_fidelity.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/text_fidelity.py",
+        "state/probes/t10_suppression_phrase.py"
+      ],
+      "checks": [
+        {
+          "name": "suppression phrase probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t10_suppression_phrase.py"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t10_suppression_phrase.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/text_fidelity.py"
+      ],
+      "commit_message": "fix(text-fidelity): the suppressor forbids lettering, not a subject",
+      "required_artifact": "Northstar_backend/text_fidelity.py",
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 8,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
     }
   ]
 }

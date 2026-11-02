@@ -1,0 +1,54 @@
+{
+  "autonomous_creative_20261102": {
+    "verdict": "ADVANCING - the simple-mode journey completes end to end on the live backend and the defect that turned every text-safe render into a botanical plate is fixed with a probe that failed at HEAD. Not STABLE: product-form adherence is open, the mockup step is unrun, and no browser pass was possible.",
+    "audit": {
+      "chat_surface": "VERIFIED - northstar-os-ui/src/chat/ChatSurface.jsx; /ui/ serves; asset list API 200",
+      "generate_api": "VERIFIED - POST /api/design-studio/generate 200, asset in 26 s",
+      "comfyui": "VERIFIED - 127.0.0.1:8188 reachable, flux3-image-klein-nvfp4",
+      "engine_gate": "DEFECT->FIXED - live server was a bare uvicorn, armed=false; launcher restart -> armed=true",
+      "suppression_phrase": "DEFECT->FIXED - see unit",
+      "deliverable_fetch": "VERIFIED - asset file 1.2-1.7 MB PNG 1024x1024",
+      "mockup_label": "NOT RUN",
+      "aplus_render": "VERIFIED earlier (reports/aplus_render_20261031.md)",
+      "theme": "NOT STARTED - gated behind journey stability",
+      "journey_rate": "1 of 1 completes"
+    },
+    "unit": {
+      "id": "ty-suppression-subject",
+      "defect": "SUPPRESSION_PHRASE carried two positive scene instructions ('blank unprinted matte packaging surface', 'botanical illustration only') and overrode the user's brief",
+      "before": "botanical herbarium plate for a 6 oz pouch brief",
+      "intermediate": "blank framed grey panel after removing only the botanical clause",
+      "after": "kraft packaging photographed on white",
+      "fix": "phrase is now purely prohibitive: no lettering, words, typography, logo, barcode, QR code, captions, watermark",
+      "probe": "state/probes/t10_suppression_phrase.py (failed at HEAD before the fix)",
+      "commit": "6f069143fe01",
+      "open": "render returned a carton, not a stand-up pouch - prompt adherence at draft tier, separate unit"
+    },
+    "failed_path": {
+      "unattended_lane": "hung 25-30 minutes twice on large-file contracts (24 KB / 22 KB), leaving tasks in authoring; supervisor restored cleanly",
+      "hardening": "per-turn timeout -> returncode 124; 600 s task deadline",
+      "restore_fix": "restore_baseline now honours an explicit path list; an out-of-scope file is reported in out_of_scope_left and left untouched",
+      "incident": "one unrelated improvement report (reports/improvement/cycles/20261102-010002-3e6ad4.md) was deleted by the old restore behaviour before the fix"
+    },
+    "spend": {
+      "interface_probe_usd": 0.001456,
+      "edit_shape_probe_usd": 0.002,
+      "hung_turns_estimate_usd": 0.0022,
+      "window_now": "5h $0.0057 of $7.20; week and month correspondingly",
+      "creative_renders": "0 - local ComfyUI on the operator GPU"
+    },
+    "decisions": [
+      "diagnosed the journey as a disarmed engine (bare uvicorn), not a UI bug",
+      "restarted through launch_alpha.ps1 with -NoTunnel -NoAutothink -NoComfy",
+      "treated the text-safe phrase as a defect, not guidance",
+      "made the phrase purely prohibitive and taught the probe to enforce it",
+      "fixed the restore path before using the lane further",
+      "shipped via the supervised handoff after two unattended hangs"
+    ],
+    "learning": {"trajectories": 7, "threshold": 10, "experiment": "not fired; negative delta stands"},
+    "regression": "test_text_fidelity.py 1 failed (PRE-EXISTING auth-ordering) / 19 passed; test_go_author + test_author_lane 19 passed",
+    "state": "backend restarted via the launcher and armed; no lock, STOP, worker or resident model",
+    "next_decision": "authorise the subject-adherence unit (draft tier honours the requested product form, render-level check) or move to the mockup/label step first",
+    "report": "reports/autonomous_creative_20261102.md"
+  }
+}
