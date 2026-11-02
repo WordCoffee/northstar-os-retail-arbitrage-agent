@@ -1,0 +1,84 @@
+{
+  "task": "ty-simple-mode-labeled",
+  "recorded_at": "2026-11-02T06:58:00",
+  "code": {
+    "commits": ["64a0f3af", "PENDING-diagnostics-fix"],
+    "module": "Northstar_backend/deliverables.py",
+    "endpoint_handoff": "POST /api/design-studio/generate {deliver:true, form:<form>}",
+    "read_back": [
+      "GET /api/design-studio/deliverables",
+      "GET /api/design-studio/deliverables/{run_id}/final"
+    ],
+    "ui_section": "northstar-os-ui/src/pages/internal/design-studio/Deliverables.jsx (Design Studio > Deliverables)"
+  },
+  "scripted_gate": {
+    "probe": "state/probes/t11_simple_mode_deliverable.py",
+    "result": "PASS",
+    "elapsed_seconds": 72.9,
+    "checks": 7,
+    "ui_check": "static: built bundle contains the panel; no browser run"
+  },
+  "accepted_run": {
+    "run_id": "3b0f8baf-2f66-4b0a-a836-1aefd2473b3f",
+    "created_at": "2026-11-02T06:57:01",
+    "requested_form": "pouch",
+    "adherence": {
+      "ok": true,
+      "requested": "pouch",
+      "observed": "pouch",
+      "model": "qwen3.5:4b"
+    },
+    "image_size": [1024, 1024],
+    "bytes": 944146,
+    "seed": 821042013,
+    "asset_id": "57e52356-fb10-4188-8234-41e5aaecc5be",
+    "files": ["adherence.json", "brief.txt", "citations.json", "final.png", "manifest.json"],
+    "manifest_key_count": 13
+  },
+  "first_accepted_run": {
+    "run_id": "f36e7458-4348-4f5f-b417-9def0b0bbc41",
+    "bytes": 1387263,
+    "end_to_end_seconds": 44.3
+  },
+  "refused_run": {
+    "requested_form": "jar",
+    "observed_form": "bottle",
+    "adherence_ok": false,
+    "deliverable": null,
+    "folders_before": 1,
+    "folders_after": 1,
+    "asset_still_created": "14a29dce-18cd-49a8-889c-bf9b11bebd60",
+    "note": "the render is kept as an asset; only the package is withheld"
+  },
+  "vision_lane_outage": {
+    "at": "2026-11-02T06:52",
+    "symptom": "probe run 1 failed with adherence.ok=false, observed=null",
+    "cause": "Ollama was not listening on 11434 (no process, no socket) - it had stopped since the 06:37 accepted run",
+    "gate_behaviour": "correctly refused and wrote no folder",
+    "defect_found": "the refusal dropped the underlying cause; adherence_verdict now carries detail",
+    "recovery": "started the existing local ollama binary; no download, no model pull"
+  },
+  "read_back_proof": {
+    "preview_status": 200,
+    "content_type": "image/png",
+    "bytes": 1448787,
+    "png_magic_ok": true,
+    "unknown_run_status": 404
+  },
+  "manifest_rules": {
+    "placeholder_words_scanned": ["todo", "tbd", "placeholder", "lorem", "xxx"],
+    "nulls": "none permitted; probe walks the manifest and fails on any null",
+    "unresolved_fields": "omitted, never nulled",
+    "asserted_by": "Northstar_backend/test_deliverables.py + state/probes/t11_simple_mode_deliverable.py"
+  },
+  "tests": {
+    "file": "Northstar_backend/test_deliverables.py",
+    "count": 10,
+    "result": "pass"
+  },
+  "ui": {
+    "build": "npm run build",
+    "errors": 0,
+    "data_source": "GET /api/design-studio/deliverables only; empty list states so, no seeded rows"
+  }
+}
