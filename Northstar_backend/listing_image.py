@@ -20,6 +20,7 @@ Pure PIL + numpy, no model, no network.
 """
 from __future__ import annotations
 
+import math
 from io import BytesIO
 from typing import Optional, Tuple
 
@@ -126,9 +127,19 @@ def hero_on_white(
 ) -> bytes:
     """Cutout -> compliant main image with a normalized contact shadow.
 
-    Raises ValueError('empty_subject') when the input has no visible pixels -
-    an honest refusal is better than a white square presented as a product.
+    Raises ValueError('empty_subject') when the input has no visible pixels - an
+    honest refusal is better than a white square presented as a product.
+
+    ``fill`` is the share of the frame the subject occupies. A value outside (0, 1]
+    scales the subject past the canvas and crops the product out of the MAIN image,
+    so it is refused before any pixels are drawn.
     """
+    try:
+        fill_value = float(fill)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"fill must be a number in (0, 1], got {fill!r}") from exc
+    if not math.isfinite(fill_value) or not (0.0 < fill_value <= 1.0):
+        raise ValueError(f"fill must be a finite number in (0, 1], got {fill_value!r}")
     rgba = Image.open(BytesIO(png_bytes)).convert("RGBA")
     subject, (x0, y0, x1, y1) = _fit_subject(rgba, size, fill)
     canvas = Image.new("RGB", (size, size), WHITE)
