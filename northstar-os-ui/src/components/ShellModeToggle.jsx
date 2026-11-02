@@ -1,6 +1,6 @@
 // Shell view switch (S0; renamed 2026-10-30).
 //
-// The product brief bans reductive "Simple" from user-visible copy: the default
+// The naming rule drops "Simple" from user-visible copy: the default
 // view is not a dumbed-down mode, it is THE view. The internal mode id stays
 // 'simple' because routes, gates and stored preference keys depend on it -
 // renaming state to rename a label is how you break a shell.
@@ -24,9 +24,9 @@ export default function ShellModeToggle() {
         data-testid="ns-shell-mode"
         data-mode={mode}
         data-advanced-allowed="0"
-        title="Standard view. The Advanced inspector needs a qualifying plan."
+        title="Northstar view. The Advanced view needs a qualifying plan."
       >
-        <span className="shell-mode-opt is-on">Standard</span>
+        <span className="shell-mode-opt is-on">Northstar</span>
       </span>
     )
   }
@@ -39,10 +39,10 @@ export default function ShellModeToggle() {
       data-mode={mode}
       data-advanced-allowed="1"
       onClick={toggleMode}
-      title={isAdvanced ? 'Switch to the standard view' : 'Switch to the Advanced inspector'}
-      aria-label={`View: ${isAdvanced ? 'Advanced' : 'Standard'}. Activate to switch.`}
+      title={isAdvanced ? 'Switch to Northstar' : 'Switch to the Advanced view'}
+      aria-label={`View: ${isAdvanced ? 'Advanced view' : 'Northstar'}. Activate to switch.`}
     >
-      <span className={`shell-mode-opt ${isAdvanced ? '' : 'is-on'}`}>Standard</span>
+      <span className={`shell-mode-opt ${isAdvanced ? '' : 'is-on'}`}>Northstar</span>
       <span className={`shell-mode-opt ${isAdvanced ? 'is-on' : ''}`}>Advanced</span>
     </button>
   )

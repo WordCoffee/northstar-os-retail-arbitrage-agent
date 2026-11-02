@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// GALACTIC BACKDROP — Interstellar scene for the Simple shell.
+// GALACTIC BACKDROP — Interstellar scene for the Northstar shell.
 //
 // Replaces the CSS-only backdrop that was live before. The shader in
 // galacticShader.js integrates real null geodesics, so the black hole is lensed

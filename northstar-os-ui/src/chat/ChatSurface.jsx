@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // CHAT SURFACE (V3) — the universal Master Brain chat.
 //
-// One component backs every Simple-mode surface:
+// One component backs every Northstar surface:
 //   • NorthstarOS shell  → focus "auto" (or whatever the operator picked)
 //   • Creative Studio    → focus "create"
 //   • AutothinK surface  → focus "autothink"
@@ -1102,7 +1102,7 @@ export default function ChatSurface({
       }
     }
     rec.start()
-    // Simple energy VAD: stop after speech followed by ~900 ms of quiet, or 15 s.
+    // Energy VAD: stop after speech followed by ~900 ms of quiet, or 15 s.
     let heard = false
     let quiet = 0
     const t0 = Date.now()

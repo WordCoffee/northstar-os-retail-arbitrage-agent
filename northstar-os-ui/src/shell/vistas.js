@@ -1,4 +1,4 @@
-// VISTA LIBRARY — daily celestial vista rotation (Simple Mode plan §2.2).
+// VISTA LIBRARY — daily celestial vista rotation (Northstar plan §2.2).
 // Deterministic daily seed: hash of UTC date + account, so a user sees the
 // same vista all day and a different one tomorrow. Never random per reload.
 export const VISTAS = [

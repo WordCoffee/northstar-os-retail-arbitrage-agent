@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// GLOBAL SHELL MODE — Simple | Advanced (S0, V3 rework 2026-10-18)
+// GLOBAL SHELL MODE — Northstar | Advanced view (S0, V3 rework 2026-10-18)
 //
-// V3: Simple is the PRODUCT DEFAULT (main view); Advanced is the dev-level
+// V3: Northstar is the PRODUCT DEFAULT (main view); Advanced view is the dev-level
 // room shell offered on certain subscription tiers (or to platform admins).
 // The gate is resolved by the backend (`/api/shell/context` →
 // `capabilities.advanced_view`) and enforced here for presentation/routing.
@@ -15,24 +15,29 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  DEFAULT_MODE,
+  MODE_KEY,
+  SHELL_MODES,
+  normaliseMode as canonicalMode,
+} from '../lib/shellMode.js'
 
-export const MODE_KEY = 'ns-shell-mode'
-export const SHELL_MODES = ['simple', 'advanced']
-export const DEFAULT_MODE = 'simple'
+export { MODE_KEY, SHELL_MODES, DEFAULT_MODE }
 export const SHELL_PARAM = 'shell'
+export { displayName as shellDisplayName, normaliseMode } from '../lib/shellMode.js'
 
 function readMode(advancedAllowed) {
   // advancedAllowed === null means "capability not resolved yet" (the shell
   // context is still loading): honor the stored/preferred mode and let the
   // resolving effect enforce the gate, so an entitled operator is not demoted
-  // to Simple on first paint.
+  // to Northstar on first paint.
   const allowed = (m) => (m === 'advanced' ? advancedAllowed !== false : SHELL_MODES.includes(m))
   try {
-    const q = new URLSearchParams(window.location.search).get(SHELL_PARAM)
+    const q = canonicalMode(new URLSearchParams(window.location.search).get(SHELL_PARAM))
     if (SHELL_MODES.includes(q) && allowed(q)) return q
   } catch { /* no URL */ }
   try {
-    const v = localStorage.getItem(MODE_KEY)
+    const v = canonicalMode(localStorage.getItem(MODE_KEY))
     if (SHELL_MODES.includes(v) && allowed(v)) return v
   } catch { /* storage unavailable */ }
   return DEFAULT_MODE

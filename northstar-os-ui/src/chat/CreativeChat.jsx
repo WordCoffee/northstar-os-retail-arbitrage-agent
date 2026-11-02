@@ -1,4 +1,4 @@
-// Creative Studio's Simple-mode surface (S1) — now a thin wrapper over the
+// Creative Studio's Northstar surface (S1) — now a thin wrapper over the
 // universal ChatSurface (V3) with the "create" focus. The studio's simple
 // branch (CreativeStudio.jsx) renders this component unchanged.
 import { useNavigate } from 'react-router-dom'

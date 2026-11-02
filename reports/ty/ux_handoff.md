@@ -1,39 +1,42 @@
 # UX rebuild — handoff
 
-**State:** U0 complete. U1 next.
+**State:** U0 and U1 complete. U2 next.
 
 ## Done
 
-- **U0** — `ns-ux-baseline` tagged at `a2d12f5e`; baseline recorded in `ux_queue.json` from this
-  session's runs (backend 5763 passed / 30 failed; e2e 41 passed / 2 failed / 1 did not run, both
-  failures pre-existing by stash attribution). Queue, decisions, needs-you and this file created.
+- **U0** — `ns-ux-baseline` tagged at `a2d12f5e`; baselines recorded in `ux_queue.json` from this
+  session's runs (backend 5763/30; e2e 41/2/1, both failures pre-existing by stash attribution;
+  UI unit 82/0). Queue, decisions, needs-you and this file created.
+- **U1** — Naming rule landed. `src/lib/shellMode.js` owns the vocabulary: internal ids stay
+  `simple`/`advanced`, display names are **Northstar** / **Advanced view**, and `normaliseMode`
+  migrates legacy stored values (`northstar`, `standard`, `default`, `advanced view`, `autothink`).
+  `ModeContext` reads through it; the visible strings in `MasterBrainShell` and `ShellModeToggle`
+  now say Northstar; comments in the touched files were swept; `AGENTS.md` gained the naming rule
+  as a 647-char append (no rewrite). 7 new unit tests in `src/lib/shellMode.test.js`; suite 82/82;
+  build green.
 
 ## Blocker that shapes the session
 
 `scripts/dev-start.ps1` is **refused by the safety gate** — `tailscale serve` proxies
 `127.0.0.1:8000` on the tailnet, so the dev login bypass would be shared. Queued in
-`needs_you.md`. Consequence: **no dev server, no backend suite, no Playwright runs** until it is
-closed. UI units are built and unit-tested, then marked `verification_pending`.
-
-Starting a server by another route (launch_alpha, bare uvicorn) would sidestep the gate that
-exists for this exact condition. Not doing that.
+`needs_you.md #1`. Consequence: **no dev server, no backend suite, no Playwright** until it is
+closed. UI units are code+unit-tested and marked `done` with a `verification` note; nothing is
+claimed VERIFIED without a browser run.
 
 ## Next session must know
 
-- Read `reports/ty/ux_queue.json` first; continue at the first unit not `done`/`quarantined`.
-- The work order is saved at `reports/ty/ux_work_order.md`.
-- The repo already has: `DesignStudio.jsx` with a section picker and an Asset Dashboard,
-  `ModeContext` (`ns-shell-mode`), `SHELL_MODES = ['simple','advanced']`, and a guard
-  `SIMPLE_KEEP_ADVANCED` in `App.jsx` that keeps `/design-studio`, `/account`, `/legal` as real
-  pages in the default mode.
-- Playwright: two projects (`chromium-desktop`, `chromium-mobile` → WebKit/iPhone 12). WebKit is
-  installed. Base URL `http://127.0.0.1:8101`, routes live under `/ui/`.
-- `test-results/` and `playwright-report/` are gitignored.
-- Model: DeepSeek V4.1 Flash this session. Every `[MAX-GRADE]` unit needs the extra self-review
-  pass and the U14 independent verifier.
+- Read `reports/ty/ux_queue.json` first; continue at U2 (registry), then U3 (shell).
+- Work order: `reports/ty/ux_work_order.md`.
+- `ModeContext` now imports from `src/lib/shellMode.js`. Do not rename the internal ids.
+- `SIMPLE_KEEP_ADVANCED` in `App.jsx` controls which paths keep their real page in Northstar;
+  `/design-studio` is in it (added earlier today so the studio is reachable at free tier).
+- Playwright: `chromium-desktop` + `chromium-mobile` (WebKit/iPhone 12, binary installed).
+  Base URL `http://127.0.0.1:8101`, routes under `/ui/`.
+- UI unit tests: `cd northstar-os-ui && npm run test:ui` (node --test over `src/lib/*.test.js`).
 
 ## Open hazards
 
-- Killing the old `uvicorn`/`vite` processes also killed a `powershell -NoExit` window; use
-  `Get-CimInstance Win32_Process` filtered by CommandLine, as the order says.
-- `report/ty/ux_queue.json` token numbers are estimates (chars/4), labelled as such.
+- Killing old `uvicorn`/`vite` also killed a `powershell -NoExit` window; use
+  `Get-CimInstance Win32_Process` filtered by CommandLine.
+- Token numbers are estimates (chars/4), labelled as such.
+- `AGENTS.md` must stay append-only.

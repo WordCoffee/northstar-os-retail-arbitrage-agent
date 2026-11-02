@@ -134,3 +134,13 @@ Per-account knowledge store — facts, preferences, experiences, AI-derived lear
 1. Full constitution (`docs/OPERATING_CONSTITUTION.md`), 2. resolved user profile (refinements only), 3. benchmark/CI baseline, 4. batch files, 5. this capsule's guardrails as interpreted against the constitution. Nothing below loosens credential hygiene, real-money approval, or git safety.
 
 Execution workflow: `docs/CONTINUOUS_EXECUTION_PROTOCOL.md` governs the continuous build loop (workflow only; no new permissions).
+
+## Naming rule — Northstar (appended 2026-11-02, UX rebuild U1)
+
+The default experience is called **Northstar**. It was formerly called "Simple Mode"; the word
+"Simple" is dropped from every user-facing string, doc and comment. The only other named surface is
+**advanced view** (the room shell). Internal identifiers keep their ids as aliases so sessions,
+routes and CSS scope do not break: the `ns-shell-mode` storage key, the `simple`/`advanced` mode
+values, `html[data-shell-mode="simple"]`, and constants such as `SIMPLE_KEEP_ADVANCED`. Display
+names and the migration of legacy stored values live in
+`northstar-os-ui/src/lib/shellMode.js`.

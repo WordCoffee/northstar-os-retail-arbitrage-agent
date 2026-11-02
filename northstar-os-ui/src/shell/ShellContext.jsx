@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 // SHELL CONTEXT (V3) — plan capabilities, focus modes, hardware telemetry.
 //
-// One provider for the Simple shell:
+// One provider for the Northstar shell:
 //   • fetches /api/shell/context (capabilities + server-owned focus catalogue)
 //   • owns the ACTIVE FOCUS state (persisted; switching re-points the chat)
 //   • polls /api/shell/hardware (real local readings; honest ok:false)

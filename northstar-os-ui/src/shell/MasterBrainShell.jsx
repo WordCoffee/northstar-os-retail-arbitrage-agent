@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// MASTER BRAIN SHELL (V3 S4/S6) — the Simple view that is now the main
+// MASTER BRAIN SHELL (V3 S4/S6) — the Northstar view that is now the main
 // NorthstarOS surface: full-bleed procedural cosmic canvas, the focus rail
 // (Auto · Create · Grow · Research · Operate · AutothinK), real hardware
 // telemetry, and the universal chat surface underneath.
 //
-// Rooms become FOCUSES: navigating to a room route in Simple mode selects the
+// Rooms become FOCUSES: navigating to a room route in Northstar selects the
 // matching focus instead of rendering the room (the room itself lives in the
 // Advanced view, which qualifying tiers can open from here).
 // ═══════════════════════════════════════════════════════════════════════════
@@ -109,7 +109,7 @@ export default function MasterBrainShell() {
     } catch { /* private mode */ }
   }
 
-  // Deep links select the matching focus (rooms are focuses in Simple mode).
+  // Deep links select the matching focus (rooms are focuses in Northstar).
   useEffect(() => {
     const hit = PATH_FOCUS.find(([re]) => re.test(location.pathname))
     if (hit && hit[1] !== shell.focusId && !shell.focuses.find((f) => f.id === hit[1])?.locked) {
@@ -118,7 +118,7 @@ export default function MasterBrainShell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
-  // Mark the document while the Simple shell is mounted so the shared chrome
+  // Mark the document while the Northstar shell is mounted so the shared chrome
   // (the top bar) can follow it into the dark without touching Advanced rooms.
   useEffect(() => {
     const root = document.documentElement
@@ -179,7 +179,7 @@ export default function MasterBrainShell() {
               aria-expanded={designOpen}
               aria-controls="simple-design-picker"
               onClick={() => setDesignOpen((open) => !open)}
-              title={`Simple mode design: ${design.name}`}
+              title={`Northstar design: ${design.name}`}
               data-testid="simple-design-trigger"
             >
               Design · {design.name}
@@ -197,10 +197,10 @@ export default function MasterBrainShell() {
         </div>
         {designOpen && (
           <div className="mb-design-picker" id="simple-design-picker" role="dialog"
-               aria-label="Choose a Simple mode design">
+               aria-label="Choose a Northstar design">
             <div className="mb-design-picker-head">
               <div>
-                <span className="mb-design-kicker">SIMPLE MODE</span>
+                <span className="mb-design-kicker">NORTHSTAR</span>
                 <strong>Choose a design</strong>
               </div>
               <button type="button" className="mb-design-close" aria-label="Close design picker"

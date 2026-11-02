@@ -180,7 +180,7 @@ const MOBILE_ACTIVE = [
   { path: '/profitability', tab: 'profitability' },
 ]
 
-// In Simple mode these surfaces keep their real pages: account/legal/admin
+// In Northstar (the default view) these surfaces keep their real pages: account/legal/admin
 // surfaces are not rooms, and the public entry points must never be replaced
 // by the chat shell. Everything else becomes a focus inside the shell.
 const SIMPLE_KEEP_ADVANCED = [
@@ -189,7 +189,7 @@ const SIMPLE_KEEP_ADVANCED = [
   /^\/sign-in(\/|$)/, /^\/recovery(\/|$)/, /^\/beta(\/|$)/, /^\/suspended(\/|$)/,
   /^\/downgraded(\/|$)/, /^\/reaccept(\/|$)/,
   // The Gilded Void is a visual-system surface, not a room — it keeps its
-  // real page in Simple mode like the account/legal/admin surfaces above.
+  // real page in Northstar like the account/legal/admin surfaces above.
   /^\/baroque(\/|$)/,
 
   // The Design Studio is a tool workspace with its own sections (dielines,
@@ -209,7 +209,7 @@ function ModeGate({ children }) {
   return <ModeProvider advancedAllowed={advancedAllowed}>{children}</ModeProvider>
 }
 
-// The Simple view replaces the internal rooms, so it must carry the SAME auth
+// The Northstar view replaces the internal rooms, so it must carry the SAME auth
 // gate GuardedRoutes enforces — a signed-out visitor hitting /golden-goose is
 // redirected to sign-in, never shown the shell.
 function SimpleShellRoutes({ role, authenticated, loaded }) {
@@ -245,7 +245,7 @@ function Shell() {
   const path = location.pathname
   const mobileTab = MOBILE_ACTIVE.find(m => path === m.path || path.startsWith(m.path + '/'))
   const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
-  // V3: Simple is the main view; Advanced is the room shell (tier-gated).
+  // V3: Northstar is the main view; Advanced view is the room shell (tier-gated).
   const simpleMode = mode !== 'advanced'
   const keepAdvanced = SIMPLE_KEEP_ADVANCED.some(re => re.test(path))
 

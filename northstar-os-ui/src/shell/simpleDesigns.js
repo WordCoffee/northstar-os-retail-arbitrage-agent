@@ -1,4 +1,4 @@
-// Ten Simple-mode compositions. This is a layout catalogue, not a palette
+// Ten Northstar compositions. This is a layout catalogue, not a palette
 // catalogue: each design changes where the session rail, focus tabs, reading
 // column and composer sit. Backgrounds are paired from the FLUX 3 Galactic set
 // so a design reads as one complete room.
