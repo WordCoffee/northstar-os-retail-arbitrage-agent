@@ -81,10 +81,17 @@ def wired(monkeypatch, tmp_path):
 
 
 def test_lanes_require_auth():
-    c = TestClient(app)
-    assert c.get("/api/design-studio/lanes/status").status_code == 401
-    assert c.post("/api/design-studio/lanes/upscale",
-                  json={"asset_id": "src"}).status_code == 401
+    # Loopback TestClient is handed the dev demo session unless the shim is off,
+    # so assert the hosted fail-closed path explicitly (see test_text_fidelity).
+    previous = getattr(app.state, "dev_auto_session", False)
+    app.state.dev_auto_session = False
+    try:
+        c = TestClient(app)
+        assert c.get("/api/design-studio/lanes/status").status_code == 401
+        assert c.post("/api/design-studio/lanes/upscale",
+                      json={"asset_id": "src"}).status_code == 401
+    finally:
+        app.state.dev_auto_session = previous
 
 
 def test_status_reports_each_lane_honestly(wired):
