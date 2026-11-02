@@ -51,6 +51,9 @@ reports/video_scan/batch/*
 state/improvement/
 reports/improvement/loop.log
 
+# Deliverable packages are user output (renders + manifests), not source
+state/deliverables/
+
 # Local service launch logs (runtime)
 reports/api_launch*.log
 

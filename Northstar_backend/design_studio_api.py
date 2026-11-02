@@ -1924,6 +1924,9 @@ class GenerateIn(BaseModel):
     #: The container form the user asked for. A schema field, not a phrase buried in
     #: prose: the generator drifts to boxes when the form rides only in the brief.
     form: Optional[str] = Field(default=None, max_length=20)
+    #: When true, a render that passes the form-adherence gate is written as a
+    #: deliverable package (folder + manifest) in the same request.
+    deliver: bool = False
 
 
 @router.get("/engine")
@@ -2026,12 +2029,49 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "finished_at": datetime.now(timezone.utc).isoformat(),
     }, account_id=acct)
     asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
+    # Automation hand-off: a render that passes the form-adherence gate becomes a
+    # deliverable folder without a second manual step. A failed verdict writes
+    # nothing and says why.
+    deliverable = None
+    adherence = None
+    if body.deliver:
+        import deliverables as _dl
+        observed = _dl.classify_form(out["bytes"])
+        adherence = _dl.adherence_verdict(str(body.form or ""), observed)
+        if adherence.get("ok"):
+            deliverable = _dl.write_deliverable(
+                job_id, brief=body.brief, final_png=out["bytes"],
+                adherence=adherence, extra={
+                    "model": out.get("model"), "tier": body.tier,
+                    "seed": out.get("seed"), "asset_id": aid,
+                    "requested_form": body.form})
     return {
         "job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
         "asset": {**(asset or {}), "file_url": f"/api/design-studio/assets/{aid}/file"},
         "engine": st,
         "text_fidelity": tf_result,
+        "adherence": adherence,
+        "deliverable": deliverable,
     }
+
+
+@router.get("/deliverables")
+def list_deliverables_route(acct: str = Depends(studio_account)):
+    """Deliverable packages a user can reopen: manifest + file list per run."""
+    import deliverables as _dl
+    rows = _dl.list_deliverables()
+    return {"count": len(rows), "deliverables": rows}
+
+
+@router.get("/deliverables/{run_id}/final")
+def deliverable_final_route(run_id: str, acct: str = Depends(studio_account)):
+    """The packaged render itself, so a returning user can preview what shipped."""
+    import deliverables as _dl
+    from fastapi import Response as _Response
+    data = _dl.read_final(run_id)
+    if data is None:
+        raise HTTPException(status_code=404, detail="Deliverable not found")
+    return _Response(content=data, media_type="image/png")
 
 
 @router.get("/assets/{aid}/file")
