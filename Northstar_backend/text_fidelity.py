@@ -38,8 +38,8 @@ from design_studio_api import studio_account
 router = APIRouter(prefix="/api/design-studio", tags=["design-studio-text"])
 
 SUPPRESSION_PHRASE = (
-    "Blank unprinted matte packaging surface shown as pure material, finish and "
-    "botanical illustration only: no lettering, no words, no typography, no logo, "
+    "Blank unprinted matte packaging surface shown as pure material and finish, "
+    "no lettering, no words, no typography, no logo, "
     "no barcode, no QR code, no captions, no watermark of any kind"
 )
 
