@@ -75,7 +75,7 @@ const SECTIONS = [
   { id: 'social', label: 'Social', icon: 'users', note: 'Social posts, carousels and stories', built: true },
   { id: 'packaging', label: 'Packaging & Mockups', icon: 'package', note: 'Packaging dielines and mockup renders', built: true },
   { id: 'dielines', label: 'Dielines & Print', icon: 'grid', note: 'Parametric dielines: layered SVG, PDF and project ZIP export', built: true },
-  { id: 'deliverables', label: 'Deliverables', icon: 'folder', note: 'Accepted renders with brief, verdict, citations and manifest', built: true },
+  { id: 'deliverables', label: 'Asset Dashboard', icon: 'folder', note: 'Every package on disk with previews, lane triggers and the proposal queue', built: true },
   { id: '3d-scene', label: '3D Product Scene', icon: 'cube', note: 'Real 3D product scene composer', built: true },
 ]
 

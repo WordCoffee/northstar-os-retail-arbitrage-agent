@@ -138,6 +138,13 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_STUDIO_LANES = False
 
+# Studio dashboard (2026-11-02) — packages on disk, proposals, safe file serving.
+try:
+    from studio_dashboard import router as studio_dashboard_router
+    _HAS_STUDIO_DASHBOARD = True
+except ImportError:  # pragma: no cover
+    _HAS_STUDIO_DASHBOARD = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -354,6 +361,10 @@ if _HAS_DESIGN_STUDIO_EXT:
     app.include_router(design_studio_text_router)
     app.include_router(design_studio_compose_router)
     app.include_router(design_studio_aplus_router)
+
+# Studio dashboard — packages on disk, proposals, safe file serving (2026-11-02)
+if _HAS_STUDIO_DASHBOARD:
+    app.include_router(studio_dashboard_router)
 
 # Chat core (S1/S2/S3) — Simple-mode Master Brain chat (SSE) + voice intake
 if _HAS_CHAT:
