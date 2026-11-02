@@ -78,17 +78,29 @@ TASK = (
     "`python check.py` to verify - it is read-only. Change only src/limits.py.")
 
 
+def summarise_verdict(got):
+    """Score the candidate's result. A non-dict (or a raise) is a failure, not a crash."""
+    if not isinstance(got, dict):
+        return False, {"result": repr(got)[:120],
+                       "reason": f"returned {type(got).__name__}, expected dict"}
+    ok = (got.get("approved") == 2 and got.get("denied") == 1
+          and got.get("skipped") == 3 and got.get("total") == 3)
+    return ok, got
+
+
 def _accept(path: Path):
     def check():
-        spec = importlib.util.spec_from_file_location("screen_limits", path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        rows = [{"state": "approved"}, {"state": "approved"}, {"state": "denied"},
-                "not-a-row", {"state": None}, {}]
-        got = module.summarise(rows)
-        ok = (got.get("approved") == 2 and got.get("denied") == 1
-              and got.get("skipped") == 3 and got.get("total") == 3)
-        return ok, json.dumps(got)
+        try:
+            spec = importlib.util.spec_from_file_location("screen_limits", path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            rows = [{"state": "approved"}, {"state": "approved"}, {"state": "denied"},
+                    "not-a-row", {"state": None}, {}]
+            got = module.summarise(rows)
+        except Exception as exc:  # noqa: BLE001 - a broken candidate is a failed check
+            return False, json.dumps({"error": f"{type(exc).__name__}: {str(exc)[:120]}"})
+        ok, detail = summarise_verdict(got)
+        return ok, json.dumps(detail)
     return check
 
 
