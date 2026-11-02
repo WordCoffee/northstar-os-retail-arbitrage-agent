@@ -29,7 +29,33 @@
        "hit_tests": "elementFromPoint asserted on ns-workbench-open, wb-add, wb-open-*, wb-tab-*, wb-close-* - each must be the top element at its own centre"
      },
      "notes": "Phone: the tab strip is revealed by the switcher (its own state now, not shared with the service picker), 40 px tap targets, and the display-scale control is dropped from the 390 px top nav so the Workbench entry is not pushed off the bar. Desktop paths unchanged."},
-    {"id": "U4", "status": "in_progress", "blocked_by": null, "tag": null, "tokens": 0},
+    {"id": "U4", "status": "done", "tag": "ns-ux-U4", "tokens": 140000,
+     "evidence": {
+       "unit": "108/108 (14 new: 9 theme/contrast + 5 shift)",
+       "contrast": "every theme clears AA text (>=4.5:1) and UI (>=3:1) against glass-over-worst-frame; ink on a pure-white frame is still ~8.4:1",
+       "snapshot": "src/lib/serviceThemes.snapshot.json - one entry per registry service",
+       "e2e": "workbench + workbench-theme: desktop 7 passed (5.0s), mobile 7 passed; repeat-each 2 -> 14/14 both targets",
+       "build": "1.33s"
+     },
+     "notes": "src/lib/serviceThemes.js (tokens + WCAG math), src/kit/Glass.jsx, src/kit/useThemeShift.js, src/styles/kit.css. The shell sets data-wb-theme + --wb-* vars from the active tab; unknown themes fall back to neutral."},
+    {"id": "U5", "status": "done", "tag": "ns-ux-U5", "tokens": 200000,
+     "evidence": {
+       "unit": "131/131 (23 new: tiers 8, bus 3, controller/scene 12)",
+       "e2e": "workbench-scene: desktop 3 passed (3.2s) + repeat 6/6; mobile 3 passed + repeat 6/6; full workbench trio 10/10 on both targets",
+       "frame_cost": "Chromium 1280x720 cinematic: 121 frames / 2008 ms = 60.3 fps (cap 60). Chromium 390x844 reduced: 60 frames / 2015 ms = 29.8 fps (cap 30). Headless WebKit iPhone 12: ~3.9 fps - a headless rAF throttling artifact, not a device number; recorded so it is not mistaken for performance.",
+       "build": "1.35s"
+     },
+     "notes": "src/scene/{SceneHost.jsx,sceneController.js,starfield.js}, src/lib/{sceneTiers,sceneBus}.js. One canvas, one frame handle, pointer-events:none, pauses on visibilitychange, still tier paints one frame and repaints on resize. Workspaces emit idle|working|done|error on the bus."},
+    {"id": "U6", "status": "done", "tag": "ns-ux-U6", "tokens": 180000,
+     "evidence": {
+       "unit": "140/140 (9 new: scene contrast 5, gas giant 4)",
+       "contrast": "every scene's brightest pixel, composited under 0.72 glass, still clears AA text (>=4.5:1); studio accent >=3:1 on the warm highlight; the gas giant's bands are proven not brighter than its declared max",
+       "e2e": "workbench trio 11/11 desktop (10.7s) and 11/11 mobile (33.7s)",
+       "screenshots": "reports/ty/shots/u6-studio-chromium-desktop.png and -chromium-mobile.png",
+       "build": "1.34s"
+     },
+     "notes": "src/scene/gasGiant.js + scenes.js factory. Glass alpha lowered 0.82 -> 0.72 with a brighter dim ink so the scene is actually visible; the contrast test proves AA at the worst pixel. Legacy workspace h1/h2 in the outlet are re-inked (studio h1 measured 1.28:1 before, 17.03:1 after)."},
+    {"id": "U7", "status": "todo", "blocked_by": null, "tag": null, "tokens": 0},
     {"id": "U5", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U6", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U7", "status": "todo", "tag": null, "tokens": 0},
