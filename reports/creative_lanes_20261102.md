@@ -134,7 +134,7 @@ and an undeclared unit system is refused rather than assumed to be millimetres.
 
 **Blocker, named.** `blender_probe()` answers **false** on this machine ("no blender executable on
 PATH or in Program Files, and bpy is not importable"), so `bake_plan` refuses before it costs
-anything. Generation additionally needs a 3D pack and weights that are not installed. **No downloads
+anything. Generation additionally needs a 3D pack and weights that are not installed. **No 3D downloads
 were made**, so E is a contract plus a probe, not a working 3D pipeline.
 
 ### Closing defects (found while tidying)
@@ -201,11 +201,11 @@ generate): **130 passed, 0 failed**.
 4. **Name the blocker with its number.** "3D blocked" is useless; "no Blender on PATH, bpy not
    importable, 3D pack absent" is actionable in one step.
 
-**NEXT DECISION — one operator choice.**
+**NEXT DECISION - one operator choice.**
 
 | Option | What it buys |
 |---|---|
-| **A. Finish relight** (recommended) | Debug the IC-Light wiring against a known-good workflow (the IC-Lora prep canvas is the suspect), with the noise guard already in place to catch failure. No downloads needed. |
-| B. 3D unblock | Authorise the install batch: Blender 4.x + a 3D pack (TripoSR/InstantMesh) and weights. The contract and probe are ready to receive them. |
-| C. Wire the new lanes into the UI | Shorts, print master and the proposal queue are API-only today. |
-| D. Suite green | Fix the `autothink` import (11) and `local_model` `num_ctx` (5): 30 failures → 14. |
+| **A. Wire the new lanes into the UI** (recommended) | Shorts, relight, print master and the proposal queue are API-only. Four working capabilities nobody can reach from the app is the largest gap between what exists and what ships. |
+| B. 3D unblock | Authorise the install batch (Blender 4.x + a 3D pack and weights) and turn E's contract into a pipeline. The largest new capability, and the only item still blocked. |
+| C. Suite green | Fix the utothink import (11) and local_model 
+um_ctx (5): 30 failures to 14. |
