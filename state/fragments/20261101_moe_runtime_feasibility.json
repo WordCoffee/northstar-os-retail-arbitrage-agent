@@ -1,0 +1,39 @@
+{
+  "moe_runtime_feasibility_20261101": {
+    "verdict": "NO-GO for a 20B-35B MoE engineering runtime on this laptop as configured. The blocker is host RAM, measured: a 12.95 GB model leaves 0.11-0.13 GB free against the 3.0 GB floor. The already installed llama.cpp build does expose the expert-offload controls a Strata-like runtime needs - the runtime is not the obstacle, the machine is.",
+    "runtimes": {
+      "llama_cpp_installed": "llama-server 0.7.0-dev build 11889 (commit d854d98ba), ~/.config/northstar-llm/bin/llama-server.exe; supports --cpu-moe, --n-cpu-moe N, --override-tensor",
+      "strata": "UNKNOWN - not installed, no local copy or manifest; no permitted research path in this prompt",
+      "maya": "UNKNOWN - not installed",
+      "baseline": "Ollama 0.40.4 (cpu/q4_0), Ty lane qwen3.5:4b"
+    },
+    "measured_27b": {
+      "artifact": "C:/Users/T2Hol/models/northstar-moe/Qwen3.8-27B-IQ4_XS_4BPW.gguf",
+      "architecture": "qwen35, 65 blocks, embedding 5120, ffn 17408, ctx 262144, 866 tensors",
+      "expert_count": "ABSENT - dense 27B, not MoE",
+      "profile": "-ngl 99 -c 4096 -fa on",
+      "ready_s": 21.7,
+      "host_before_gb": 7.31,
+      "host_after_load_gb": 0.13,
+      "host_during_gen_gb": 0.11,
+      "pp_tok_s": 17.5,
+      "tg_tok_s": 38.34,
+      "cleanup": "terminated, host 8.31 GB, GPU 0 MiB",
+      "warning": "blk.64.* tensors unused - GGUF has one block more than this build consumes",
+      "evidence": ["state/evidence/llamacpp_27b_server.log", "tmp-probe/llamacpp_27b_probe.py", "tmp-probe/gguf_meta.py"]
+    },
+    "decision_answers": {
+      "30b_moe_useful_here": "no - a 30B A3B Q4 is ~18 GB against 15.42 GB host RAM (about 8 free)",
+      "survives_ty_context": "no evidence - 4k already left 0.11 GB; Ty needs 8k plus tool history",
+      "floor_cleanup_stop": "the runtime cleaned up correctly (GPU 0, host restored); the profile cannot hold the floor",
+      "mature": "no - 0.7.0-dev build that warns about unused tensors for this exact GGUF",
+      "vs_20b_or_9b": "qwen3.5:4b stays the only lane inside every floor; a 20B-class model does not fit this host",
+      "native_tools_without_adapter": "no - Ty speaks Ollama /api/chat; llama-server would need a new adapter",
+      "path_if_pursued": "MoE GGUF <= ~8 GB, --n-cpu-moe tuned to keep host >=3 GB, release-tag build, Ollama-compatible adapter, fresh qualification - none authorized or locally possible today"
+    },
+    "conditions": ["host RAM >= 32 GB or a MoE artifact small enough to leave >=3 GB resident", "MoE GGUF verified locally with its expert count from metadata", "release-tag build without unused-tensor warnings", "an Ollama-compatible adapter before any Ty task"],
+    "next_step": "do not test 20B GPT-OSS under Ollama first - same host-RAM wall; the useful next step is an operator hardware/RAM decision (>=32 GB) or an under-8 GB MoE artifact",
+    "state": "nothing installed, downloaded or switched; probe server terminated (GPU 0 MiB, host 8.31 GB); Ollama untouched (cpu/q4_0, 0 resident); no lock, STOP or worker",
+    "report": "reports/moe_runtime_feasibility_20261101.md"
+  }
+}
