@@ -1,57 +1,47 @@
 # UX rebuild — handoff
 
-**State:** U0–U2 complete (unit-verified). **U3 blocked** by the dev-server safety gate; U4–U15 not
-started. Final report for this run: `reports/ty/ux_20261102.md`.
+**State:** U0–U2 done. **U3 built and desktop-verified; the iPhone/WebKit profile still fails the
+nav entry and tab flows, so U3 is `verification_pending`, not done.** U4+ wait behind it.
 
 ## Done
 
-- **U0** — `ns-ux-baseline` at `a2d12f5e`; baselines in `ux_queue.json` (backend 5763/30 at 10:59;
-  e2e 41/2/1 at 11:20 with both failures pre-existing; UI unit 82/0).
-- **U1** — `src/lib/shellMode.js` owns the vocabulary: ids stay `simple`/`advanced`, display names
-  are **Northstar** / **Advanced view**, `normaliseMode` migrates `northstar|standard|default|
-  advanced view|autothink`. ModeContext reads through it; visible strings in `MasterBrainShell` and
-  `ShellModeToggle` say Northstar; comments swept; `AGENTS.md` appended (647 chars, append-only).
-- **U2** — `src/data/serviceRegistry.js`: 34 services (nav catalogue + 10 routed rooms marked
-  `source: 'app-route'`), each with `scene`, `theme`, `workspaceType`, `tools`, `entitlementKey`.
-  `src/lib/serviceGate.js`: `canUseService` open in dev with a named reason, production branch
-  (credit / explicit entitlement) exercisable via `enforceBilling`.
+- **U0** — `ns-ux-baseline` at `a2d12f5e`; baselines in `ux_queue.json`.
+- **U1** — `src/lib/shellMode.js`: ids stay `simple`/`advanced`, display names **Northstar** /
+  **Advanced view**, legacy values migrate. `AGENTS.md` appended (647 chars).
+- **U2** — `src/data/serviceRegistry.js` (34 services) + `src/lib/serviceGate.js`.
+- **U3 (pending mobile)** — `src/shell/WorkbenchShell.jsx` + `WorkspaceTabs.jsx` + `workbench.css`,
+  route `/workbench`, top-nav entry, `tests/e2e/workbench.spec.ts`.
 
-Tests at handoff: `cd northstar-os-ui && npm run test:ui` → **94 passed, 0 failed**; `npm run build`
-→ **✓ built in 1.31s**.
+## Evidence at handoff
 
-## Blocker
+| Check | Result |
+|---|---|
+| `npm run test:ui` | **94 passed, 0 failed** |
+| `npm run build` | **✓ built in 1.34s** |
+| `npx playwright test tests/e2e/workbench.spec.ts --project=chromium-desktop` | **5 passed (5.2s)** |
+| `… --project=chromium-mobile` | **2 passed, 3 failed (4.3m)** |
 
-`scripts/dev-start.ps1` exits 2 before starting anything:
+Mobile failures by name: *the workbench opens from the top nav and shows the shell*; *a second
+service opens as a tab and the first keeps its state*; *closing a tab never leaves the shell empty*.
 
-```
-REFUSING dev bypass - one or more exposure conditions detected:
- - tailscale funnel status is non-empty
- - tailscale serve config targets port 8000
-```
+## Next session: finish U3 on the phone profile
 
-`tailscale serve status` shows `https://msi.tail4b3dfd.ts.net → http://127.0.0.1:8000` (tailnet
-only). Until that is closed, there is no backend, no e2e, and **no honest way to mark a UI unit
-VERIFIED**. Queued in `needs_you.md #1`.
+Likely causes, in order of probability:
 
-## Next session
+1. The top-nav **Workbench** button is not reachable at 390 px (the phone chrome hides it), so both
+   the nav test and everything downstream fail at the first step. Fix by exposing the entry in the
+   mobile nav/tools sheet, or by driving the route directly in the mobile spec *after* the entry is
+   proven separately.
+2. The tab picker (`wb-picker`) may sit under the bottom sheet / mobile nav at 390 px; check
+   `elementFromPoint` on `wb-open-*` before assuming the click works.
+3. WebKit lacks something the shell assumes (`matchMedia` is guarded; `sessionStorage` is wrapped).
 
-1. Read `reports/ty/ux_queue.json`; next unit is **U3 (the shell, [MAX-GRADE])**.
-2. If the tunnel is still live, do not start the stack another way — build what is unit-testable,
-   keep marking `verification` honestly, and stop before claiming a screen works.
-3. If it is closed: `scripts/dev-start.ps1` (background), then `npx playwright test
-   --project=chromium-desktop` and `--project=chromium-mobile`.
+Once mobile is green: tag `ns-ux-U3` **done**, then start U4 (theme system + glass kit).
 
-## Files a next session must not break
+## Rules that must not slip
 
-- `src/lib/shellMode.js` — ids are load-bearing (`html[data-shell-mode="simple"]`, stored key).
-- `SIMPLE_KEEP_ADVANCED` in `App.jsx` — keeps `/design-studio`, `/account`, `/legal` as real pages
-  in Northstar.
-- `src/data/serviceRegistry.js` — the single place to add a service.
-- `AGENTS.md` — append-only.
-
-## Hazards
-
-- Kill servers with `Get-CimInstance Win32_Process` filtered by CommandLine; a `powershell -NoExit`
-  window died with the old stack once.
-- Playwright routes live under `/ui/`; wait for `**/ui/home`, not `/home`.
-- Token figures are estimates (chars/4), not billing.
+- `simple`/`advanced` ids are load-bearing (`html[data-shell-mode="simple"]`, `ns-shell-mode`).
+- `AGENTS.md` append-only.
+- Tabs must stay mounted when hidden; that is the state-preservation contract.
+- `.wb-shell`/`.wb-tabbar` z-index layering exists because the fixed cosmic canvas covers clicks.
+- Dev servers: `scripts/dev-start.ps1` only (gate is clear now; the operator exited Tailscale).
