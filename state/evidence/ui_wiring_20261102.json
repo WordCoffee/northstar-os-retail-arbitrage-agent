@@ -1,0 +1,109 @@
+{
+  "campaign": "local-ui-wiring",
+  "recorded_at": "2026-11-02T10:55:00",
+  "unit": {
+    "commit": "38ec58e8",
+    "backend": "Northstar_backend/studio_dashboard.py",
+    "frontend": "northstar-os-ui/src/pages/internal/design-studio/Deliverables.jsx",
+    "section": "Design Studio > Asset Dashboard (id kept as 'deliverables')",
+    "routes": [
+      "GET  /api/design-studio/dashboard/packages",
+      "GET  /api/design-studio/dashboard/packages/{run_id}",
+      "GET  /api/design-studio/dashboard/packages/{run_id}/manifest",
+      "GET  /api/design-studio/dashboard/packages/{run_id}/file/{name}",
+      "GET  /api/design-studio/dashboard/proposals",
+      "POST /api/design-studio/dashboard/proposals/{id}/decide"
+    ]
+  },
+  "live": {
+    "packages_listed": 11,
+    "packages_after_trigger": 12,
+    "ui_page": {
+      "status": 200,
+      "content_type": "text/html",
+      "bytes": 1092
+    },
+    "previews": {
+      "webm": {
+        "status": 200,
+        "content_type": "video/webm",
+        "bytes": 48651
+      },
+      "png": {
+        "status": 200,
+        "content_type": "image/png",
+        "bytes": 724028
+      },
+      "manifest": {
+        "status": 200,
+        "content_type": "application/json",
+        "bytes": 1398
+      }
+    },
+    "trigger": {
+      "endpoint": "POST /api/design-studio/print/master",
+      "payload": {
+        "asset_id": "57e52356-fb10-4188-8234-41e5aaecc5be",
+        "width_mm": 80,
+        "height_mm": 80
+      },
+      "result": {
+        "run_id": "print_188df00c038c",
+        "master_px": [
+          4096,
+          4096
+        ],
+        "dpi": 1300.48,
+        "listed_as_newest": true,
+        "preview": "image"
+      }
+    },
+    "proposals": {
+      "listed": 5,
+      "decided_by_agent": 0,
+      "note": "the queue is the operator's to review; nothing was approved or rejected"
+    }
+  },
+  "rules": {
+    "path_safety": "names must match ^[A-Za-z0-9_@-][A-Za-z0-9._@-]*$ and resolve inside the package folder",
+    "invalid_package": "listed and flagged; detail endpoint returns 422 with the reason",
+    "decisions": "recorded in the JSON then moved to approved/ or rejected/; second decision is 409",
+    "installs": "never - the response says installing remains a separate approved step"
+  },
+  "self_review_catches": [
+    "app.routes inspection said 'not mounted' while TestClient returned 200 - verify through the interface",
+    "decide_proposal raised ValueError on target.relative_to(ROOT) outside the repo (would 500 in tests and overrides)",
+    "_safe_name accepted dotfiles; the pattern now requires an alphanumeric first character",
+    "a manifest-less folder is listed and flagged instead of hidden"
+  ],
+  "tests": {
+    "file": "Northstar_backend/test_studio_dashboard.py",
+    "count": 10,
+    "result": "pass"
+  },
+  "spend": {
+    "cloud_usd": 0.0,
+    "downloads": 0,
+    "gpu": "one print-master trigger, 6-7 s"
+  },
+  "residue": {
+    "deliverable_packages": 12,
+    "undecided_proposals": 5,
+    "scratch_files": 0
+  },
+  "full_suite": {
+    "before": {
+      "passed": 5753,
+      "failed": 30
+    },
+    "after": {
+      "passed": 5763,
+      "failed": 30,
+      "skipped": 117,
+      "xfailed": 2,
+      "seconds": 635.85
+    },
+    "new_failures": 0,
+    "delta_passing": 10
+  }
+}
