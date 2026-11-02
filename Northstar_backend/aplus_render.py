@@ -1143,7 +1143,12 @@ def render_page(modules: Sequence[Any], *, brand: Optional[Dict[str, Any]] = Non
             copy_style=str(spec.get("copy_style") or copy_style))
         entry = {"index": i, "kind": kind, "format": res["format"],
                  "size": res["size"], "bytes": len(res["png"]),
-                 "qa": res["qa"], "copy_mode": res["copy_mode"]}
+                 "qa": res["qa"], "copy_mode": res["copy_mode"],
+                 # The strings the renderer actually drew, so a verifier can read
+                 # them back out of the pixels instead of trusting the request.
+                 "copy_texts": [str(r.get("text")) for r in res.get("texts") or []
+                                if r.get("text") and float(r.get("size") or 0) > 0
+                                and str(r.get("text")).strip().lower() != "logo"]}
         if out_path:
             ext = "png" if res["format"] == "PNG" else "jpg"
             p = out_path / f"aplus_{i:02d}_{kind}.{ext}"

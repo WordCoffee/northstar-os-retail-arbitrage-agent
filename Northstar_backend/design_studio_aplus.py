@@ -1,4 +1,4 @@
-﻿"""Design Studio — A+ asset service.
+"""Design Studio — A+ asset service.
 
 `aplus_layout` owns the geometry and `aplus_render` owns the pixels. This module
 is the product surface over them: it takes a saved plate, the copy for each
@@ -185,6 +185,12 @@ def aplus_render_route(body: AplusRenderIn, acct: str = Depends(studio_account))
                                    "page_ok": page["ok"]}},
         })
 
+    # The page becomes a deliverable package: modules + measured QA + OCR
+    # read-back of the copy that was actually drawn. A failed verdict leaves
+    # nothing on disk.
+    import aplus_manifest as _am
+    deliverable = _am.package(page, requested_kinds=[m.kind for m in modules])
+
     return {
         "ok": page["ok"],
         "problems": page["problems"],
@@ -194,6 +200,7 @@ def aplus_render_route(body: AplusRenderIn, acct: str = Depends(studio_account))
                         if preview_id else None),
         "bytes_total": page["bytes_total"],
         "plate_asset_id": body.plate_asset_id,
+        "deliverable": deliverable,
     }
 
 
