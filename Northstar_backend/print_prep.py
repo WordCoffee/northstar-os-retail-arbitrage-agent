@@ -46,6 +46,19 @@ def face_pixels(quad: Sequence[Sequence[float]]) -> Dict[str, float]:
         raise ValueError("dieline quad corners must be finite numbers")
     width = (_dist(tl, tr) + _dist(bl, br)) / 2.0
     height = (_dist(tl, bl) + _dist(tr, br)) / 2.0
+    pts = [(float(p[0]), float(p[1])) for p in quad]
+    doubled_area = 0.0
+    for i in range(4):
+        x0, y0 = pts[i]
+        x1, y1 = pts[(i + 1) % 4]
+        doubled_area += x0 * y1 - x1 * y0
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    span = max(max(xs) - min(xs), max(ys) - min(ys))
+    area = abs(doubled_area) / 2.0
+    if span <= 0.0 or area <= 1e-9 * span * span:
+        raise ValueError(
+            "dieline quad is degenerate: corners are collinear or enclose zero area")
     if width <= 0 or height <= 0:
         raise ValueError("dieline quad has zero or negative face dimensions")
     return {"width": round(width, 3), "height": round(height, 3)}
