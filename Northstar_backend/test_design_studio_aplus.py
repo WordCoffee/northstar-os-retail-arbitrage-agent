@@ -11,6 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+import pytest
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -19,6 +20,18 @@ import aplus_render as ar
 import design_studio_aplus as svc
 
 ACCT = "acct-test"
+
+
+@pytest.fixture(autouse=True)
+def _deliverables_go_to_tmp(tmp_path, monkeypatch):
+    """The route packages every page; a test must not write user deliverables.
+
+    Without this the suite created aplus_* folders under state/deliverables on
+    every run (observed 2026-11-02: nine of them).
+    """
+    import aplus_manifest
+    monkeypatch.setattr(aplus_manifest, "DELIVERABLES", tmp_path / "deliverables")
+    return tmp_path / "deliverables"
 
 
 class _Assets:
