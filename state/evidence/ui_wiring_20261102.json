@@ -105,5 +105,35 @@
     },
     "new_failures": 0,
     "delta_passing": 10
+  },
+  "browser": {
+    "spec": "tests/e2e/asset_dashboard.spec.ts",
+    "commit": "55a6dcaf",
+    "results": {
+      "chromium_desktop": "4/4 passed (6.8 s)",
+      "webkit_mobile": "4/4 passed (9.6 s)"
+    },
+    "full_desktop_e2e": {
+      "passed": 41,
+      "failed": 2,
+      "did_not_run": 1,
+      "failures_pre_existing": true,
+      "names": [
+        "smoke.spec.ts: sign-in page loads (LOCAL_DEV redirects /sign-in)",
+        "acceptance-mogra.spec.ts: live chat reply expectation"
+      ]
+    },
+    "finding": {
+      "symptom": "the dashboard and the whole studio were unreachable on the free tier",
+      "cause": "shell context returned capabilities.advanced_view=false; Simple mode replaced /design-studio with the chat shell",
+      "fix": "/design-studio added to SIMPLE_KEEP_ADVANCED in App.jsx",
+      "why_http_missed_it": "every API endpoint answered 200; only the rendered route was wrong"
+    },
+    "install": {
+      "component": "ms-playwright/webkit-2370",
+      "bytes": 63111168,
+      "licence": "Apache-2.0",
+      "provenance": "provenance.csv row appended"
+    }
   }
 }
