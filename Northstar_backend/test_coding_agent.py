@@ -276,6 +276,25 @@ def test_read_budget_bounds_rereads_but_never_blocks_the_edit(tmp_path):
     assert result.ok is True
 
 
+def test_ast_edit_clears_the_verify_stall_so_the_check_can_run_again(tmp_path):
+    """ast_edit is an edit: the next run must not be refused as a bare re-run."""
+    ws = Workspace(tmp_path / "ws", allow_paths=["src.py"], read_paths=["src.py"])
+    (tmp_path / "ws" / "src.py").write_text("def f():\n    return 1\n", encoding="utf-8")
+    turns = iter([
+        '{"tool":"run","args":{"cmd":["python","-c","import sys; sys.exit(2)"]}}',
+        '{"tool":"ast_edit","args":{"path":"src.py","op":"replace_function_body",'
+        '"target":"f","source":"return 2"}}',
+        '{"tool":"run","args":{"cmd":["python","-c","import sys; sys.exit(2)"]}}',
+        '{"tool":"finish","args":{}}'])
+    agent = CodingAgent(ws, lambda p: next(turns), max_steps=5, max_protocol_errors=3,
+                        acceptance=lambda: (True, "ok"))
+    result = agent.run("x")
+    stalls = [h for h in result.transcript if h.get("tool") == "verify_stall"]
+    runs = [h for h in result.transcript if h.get("tool") == "run"]
+    assert stalls == [], "a run after ast_edit is a verification, not a stall"
+    assert len(runs) == 2
+
+
 # ── apply_patch ─────────────────────────────────────────────────────────────
 @needs_git
 def test_apply_patch_applies_a_real_unified_diff(tmp_path):

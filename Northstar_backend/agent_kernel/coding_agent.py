@@ -224,7 +224,11 @@ class CodingAgent:
             if tool == "run":
                 failed_run = not result.ok
                 changed_since_run = False
-            elif tool in ("write", "write_many", "apply_patch"):
+            elif tool in ("write", "write_many", "apply_patch", "ast_edit",
+                          "ast_edit_batch"):
+                # ast_edit is the primary edit tool in a scoped task; omitting it
+                # here made every post-edit verification look like a bare re-run
+                # and the stall guard refused it.
                 failed_run = False
                 changed_since_run = True
             # The artifact clears the pressure, however it was produced: a `write`,
