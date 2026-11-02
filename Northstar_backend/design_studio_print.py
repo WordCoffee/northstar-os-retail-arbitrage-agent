@@ -41,6 +41,7 @@ from pydantic import BaseModel, Field
 
 from data_layer import get_northstar_db
 from design_studio_api import studio_account
+import dieline_geometry as _dg
 
 router = APIRouter(prefix="/api/design-studio/print", tags=["design-studio-print"])
 
@@ -126,6 +127,15 @@ def build_label(shape: str, width_mm: float, height_mm: float, *,
     b, s = float(bleed_mm), float(safe_mm)
     if w <= 0 or h <= 0:
         raise ValueError("width_mm and height_mm must be positive")
+    # No clamping: a safe margin wider than the label is a bad spec, and the audit
+    # at the end of this builder refuses it. Silently shrinking it to 0.5mm used to
+    # produce a printable-looking drawing whose type sat on the trim line.
+    if min(w, h) - 2 * s <= 0:
+        raise _dg.DielineGeometryError([{
+            "code": "safe_inverted",
+            "detail": (f"safe margin {s:.1f}mm inverts on a {w:.1f}x{h:.1f}mm face; "
+                       "reduce the margin or enlarge the label"),
+            "mm": round(s, 2)}])
 
     layers: List[dict] = []
     total_w, total_h = w + 2 * b, h + 2 * b
@@ -137,7 +147,7 @@ def build_label(shape: str, width_mm: float, height_mm: float, *,
         cx, cy = b + rx, b + ry
         layers.append(_ellipse(cx, cy, rx, ry, "trim"))
         layers.append(_ellipse(cx, cy, rx + b, ry + b, "bleed"))
-        sr_x, sr_y = max(rx - s, 0.5), max(ry - s, 0.5)
+        sr_x, sr_y = rx - s, ry - s
         layers.append(_ellipse(cx, cy, sr_x, sr_y, "safe"))
     else:
         r = 0.0
@@ -148,7 +158,7 @@ def build_label(shape: str, width_mm: float, height_mm: float, *,
             raise ValueError("square requires width_mm == height_mm")
         layers.append(_rect(b, b, w, h, "trim", radius=r))
         layers.append(_rect(0, 0, total_w, total_h, "bleed", radius=r + b))
-        layers.append(_rect(b + s, b + s, max(w - 2 * s, 0.5), max(h - 2 * s, 0.5),
+        layers.append(_rect(b + s, b + s, w - 2 * s, h - 2 * s,
                             "safe", radius=max(r - s, 0.0)))
 
     layers += _info_block(b, total_h - 1.0, [
@@ -161,7 +171,7 @@ def build_label(shape: str, width_mm: float, height_mm: float, *,
              "meta": {"kind": "label", "shape": shape, "width_mm": _round(w),
                       "height_mm": _round(h), "bleed_mm": _round(b),
                       "safe_mm": _round(s), "radius_mm": _round(radius_mm or 0)}}
-    return _stamp(build, f"Label — {shape} {_round(w)}x{_round(h)}mm")
+    return _dg.require_valid(_stamp(build, f"Label — {shape} {_round(w)}x{_round(h)}mm"))
 
 
 # ── Carton builders ─────────────────────────────────────────────────────────
@@ -310,7 +320,10 @@ def build_doypack(width_mm: float, height_mm: float, gusset_mm: float = 40.0, *,
     y_gusset_mid = y_seal_1 + G / 2.0
     y_gusset_end = y_seal_1 + G
     y_seal_2 = y_gusset_end + w
-    y_back = y_seal_2 + w                  # back panel runs to the sheet trim
+    # The second weld IS the top of the back panel: adding another weld thickness
+    # here pushed the back panel `w` mm past the trim line (found by
+    # dieline_geometry.audit: panel_outside_trim on a 150x210+80 pouch).
+    y_back = y_seal_2
     y_back_end = y_back + H
 
     # side weld zones (the film edges that become the pouch's side seams)
@@ -450,7 +463,9 @@ def build_carton(template: str, length_mm: float, width_mm: float, height_mm: fl
                               "width_mm": _round(W), "height_mm": _round(H),
                               "glue_mm": _round(g)})
         build = _stamp(build, f"Sleeve {_round(L)}x{_round(W)}x{_round(H)}mm")
-    return build
+    # Same gate as the labels: no carton leaves this function with a flap deeper
+    # than its body, a non-positive panel, or art outside the bleed box.
+    return _dg.require_valid(build)
 
 
 # ── Renderers ───────────────────────────────────────────────────────────────
@@ -626,22 +641,26 @@ def sanitize_params(template_id: str, params: Optional[Dict[str, Any]]) -> Dict[
 def build_from_template(template_id: str, params: Optional[Dict[str, Any]]) -> dict:
     clean = sanitize_params(template_id, params)
     if template_id.startswith("label_"):
-        return build_label(
+        build = build_label(
             template_id.replace("label_", ""), clean["width_mm"], clean["height_mm"],
             bleed_mm=clean.get("bleed_mm", 3.0), safe_mm=clean.get("safe_mm", 3.0),
             radius_mm=clean.get("radius_mm"))
-    if template_id == "doypack":
-        return build_doypack(
+    elif template_id == "doypack":
+        build = build_doypack(
             clean["width_mm"], clean["height_mm"], clean.get("gusset_mm", 40.0),
             weld_mm=clean.get("weld_mm", 6.0), top_weld_mm=clean.get("top_weld_mm", 8.0),
             zip_offset_mm=clean.get("zip_offset_mm", 25.0),
             bleed_mm=clean.get("bleed_mm", 3.0), safe_mm=clean.get("safe_mm", 5.0),
             fill_g=(clean.get("fill_g") or None))
-    return build_carton(
-        template_id, clean["length_mm"], clean["width_mm"], clean["height_mm"],
-        flap_mm=clean.get("flap_mm"), glue_mm=clean.get("glue_mm", 15.0),
-        tuck_mm=clean.get("tuck_mm"), dust_mm=clean.get("dust_mm"),
-        bleed_mm=clean.get("bleed_mm", 3.0))
+    else:
+        build = build_carton(
+            template_id, clean["length_mm"], clean["width_mm"], clean["height_mm"],
+            flap_mm=clean.get("flap_mm"), glue_mm=clean.get("glue_mm", 15.0),
+            tuck_mm=clean.get("tuck_mm"), dust_mm=clean.get("dust_mm"),
+            bleed_mm=clean.get("bleed_mm", 3.0))
+    # One gate for every template: a dieline that cannot be printed is refused
+    # here, before an SVG is rendered or an asset is persisted.
+    return _dg.require_valid(build)
 
 
 # ── Persistence ─────────────────────────────────────────────────────────────
