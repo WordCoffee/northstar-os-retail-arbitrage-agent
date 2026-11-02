@@ -155,3 +155,20 @@ def test_engines_reports_the_device_it_would_use(monkeypatch):
     assert info["available"] is True
     assert info["would_use"] == "cpu"
     assert info["keep_alive"] == 0
+
+
+# --- Ollama host normalisation ----------------------------------------------
+# The server-side env var is a bare host:port; urllib needs a scheme. With the
+# operator's OLLAMA_HOST=0.0.0.0:11434 every vision call failed with
+# "unknown url type" while the server was listening.
+
+@pytest.mark.parametrize("raw,expected", [
+    ("0.0.0.0:11434", "http://127.0.0.1:11434"),
+    ("127.0.0.1:11434", "http://127.0.0.1:11434"),
+    ("http://127.0.0.1:11434/", "http://127.0.0.1:11434"),
+    ("", "http://127.0.0.1:11434"),
+    (None, "http://127.0.0.1:11434"),
+    ("localhost:11434", "http://localhost:11434"),
+])
+def test_ollama_host_is_normalised_for_urllib(raw, expected):
+    assert lv.normalise_host(raw) == expected

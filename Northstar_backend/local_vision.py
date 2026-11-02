@@ -33,7 +33,27 @@ import urllib.request
 from typing import Any, Callable, Dict, Optional
 
 DEFAULT_MODEL = os.environ.get("VISION_QC_MODEL", "qwen2.5vl:7b")
-OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
+
+
+def normalise_host(value: Optional[str]) -> str:
+    """Ollama's own env var is a bare `host:port`; urllib needs a scheme.
+
+    `OLLAMA_HOST=0.0.0.0:11434` is the documented server-side setting, and with it
+    every urlopen in this module and in the quality gate failed with
+    "unknown url type: 0.0.0.0" while the server was in fact listening.
+    """
+    host = (value or "").strip().rstrip("/")
+    if not host:
+        return "http://127.0.0.1:11434"
+    if "://" not in host:
+        host = f"http://{host}"
+    # 0.0.0.0 is a bind address, not a destination: connect over loopback.
+    if host.startswith("http://0.0.0.0"):
+        host = host.replace("0.0.0.0", "127.0.0.1", 1)
+    return host
+
+
+OLLAMA_HOST = normalise_host(os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434"))
 #: GPU is only used when at least this much VRAM is free (the 7B VL model needs ~6 GB).
 GPU_HEADROOM_MB = int(os.environ.get("VISION_QC_GPU_HEADROOM_MB", "7000"))
 #: Long side of the frame sent to the model. Smaller = fewer tokens = less work.

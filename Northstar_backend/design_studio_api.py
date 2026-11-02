@@ -2029,28 +2029,53 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "finished_at": datetime.now(timezone.utc).isoformat(),
     }, account_id=acct)
     asset = db.design_studio.assets.get_by_id(aid, account_id=acct)
-    # Automation hand-off: a render that passes the form-adherence gate becomes a
+    # Automation hand-off: a render that passes the quality gate becomes a
     # deliverable folder without a second manual step. A failed verdict writes
-    # nothing and says why.
+    # nothing and says which axis failed and why.
     deliverable = None
     adherence = None
+    quality = None
     if body.deliver:
         import deliverables as _dl
-        observed = _dl.classify_form(out["bytes"])
-        adherence = _dl.adherence_verdict(str(body.form or ""), observed)
-        if adherence.get("ok"):
+        import quality_gate as _qg
+        import text_fidelity as _tf
+        text_requested = (not body.text_safe) or bool((tf_result or {}).get("expected_terms"))
+        expected = list((tf_result or {}).get("expected_terms") or [])
+        if not expected and text_requested:
+            expected = _tf.extract_expected_terms(body.brief)
+        scored = _qg.score(out["bytes"], brief=body.brief,
+                           requested_form=str(body.form or ""),
+                           text_requested=text_requested,
+                           expected_terms=expected)
+        verdict = _qg.verdict(scored)
+        quality = verdict
+        form_axis = (scored.get("axes") or {}).get("form") or {}
+        adherence = {"ok": bool(verdict.get("ok")),
+                     "requested": str(body.form or ""),
+                     "observed": form_axis.get("observed"),
+                     "model": scored.get("model"),
+                     "score": verdict.get("score"),
+                     "failed_axes": verdict.get("failed"),
+                     "reasons": verdict.get("reasons")}
+        if verdict.get("ok"):
             deliverable = _dl.write_deliverable(
                 job_id, brief=body.brief, final_png=out["bytes"],
                 adherence=adherence, extra={
                     "model": out.get("model"), "tier": body.tier,
                     "seed": out.get("seed"), "asset_id": aid,
-                    "requested_form": body.form})
+                    "requested_form": body.form,
+                    "quality": _qg.manifest_block(scored, verdict),
+                    "dieline": {"built": False,
+                                "reason": "mockup render; no print dieline was generated"},
+                    "color_profile": {"working": "RGB", "target": "CMYK",
+                                      "converted": False}})
     return {
         "job": db.design_studio.jobs.get_by_id(job_id, account_id=acct),
         "asset": {**(asset or {}), "file_url": f"/api/design-studio/assets/{aid}/file"},
         "engine": st,
         "text_fidelity": tf_result,
         "adherence": adherence,
+        "quality": quality,
         "deliverable": deliverable,
     }
 

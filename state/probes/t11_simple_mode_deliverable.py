@@ -26,7 +26,8 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = "http://127.0.0.1:8000/api/design-studio"
 HEADERS = {"X-User-Id": "demo-t2", "Content-Type": "application/json"}
 PLACEHOLDERS = ("todo", "tbd", "placeholder", "lorem", "xxx", "none")
-REQUIRED = {"run_id", "created_at", "brief", "adherence", "files", "bytes", "citations"}
+REQUIRED = {"run_id", "created_at", "brief", "adherence", "files", "bytes", "citations",
+            "quality", "dieline", "color_profile"}
 BRIEF = ("a 6 oz stand-up pouch of organic lion's mane mushroom powder on a warm "
          "neutral background, soft studio light, premium packaging photography, "
          "no text, no lettering")
@@ -97,6 +98,18 @@ def main() -> int:
         return fail("manifest verdict does not match the acceptance", manifest["adherence"])
     if manifest["bytes"] <= 0 or (folder / "final.png").stat().st_size != manifest["bytes"]:
         return fail("manifest byte count does not match final.png")
+
+    quality = manifest["quality"]
+    axes = quality.get("axes") or {}
+    expected_axes = {"form", "design_alignment", "layout", "typography", "material"}
+    if set(axes) != expected_axes:
+        return fail("quality block does not carry the five axes", sorted(axes))
+    if quality.get("verdict", {}).get("ok") is not True:
+        return fail("a deliverable was written with a failing quality verdict",
+                    quality.get("verdict"))
+    if manifest["dieline"].get("built") is not False:
+        return fail("the manifest claims a print dieline that was not built",
+                    manifest["dieline"])
 
     runs = json.loads(_get(f"{BASE}/deliverables").decode())
     if manifest["run_id"] not in [row.get("run_id") for row in runs.get("deliverables", [])]:

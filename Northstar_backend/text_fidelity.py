@@ -80,6 +80,15 @@ def _extract_expected_terms(brief: str) -> List[str]:
     return terms[:12]
 
 
+def extract_expected_terms(brief: str) -> List[str]:
+    """Public wrapper: the brand/product strings a brief expects to SEE.
+
+    Shared by the text-safe lane and the quality gate, so "which words should be
+    on this pack" has one answer.
+    """
+    return _extract_expected_terms(brief)
+
+
 def _hard_scrub(text: str) -> str:
     """Aggressive retry pass: leave ONLY lowercase art language + hexes.
 
