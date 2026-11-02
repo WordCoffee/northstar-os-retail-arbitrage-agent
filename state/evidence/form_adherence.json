@@ -1,0 +1,40 @@
+{
+  "model": "qwen3.5:4b",
+  "tier": "draft",
+  "rows": [
+    {
+      "requested": "pouch",
+      "observed": "stand-up pouch",
+      "match": true,
+      "asset_id": "c4497d72-b078-4213-9c56-42a93dc4fb27",
+      "bytes": 1166041,
+      "render_s": 28.2
+    },
+    {
+      "requested": "box",
+      "observed": "rigid box",
+      "match": true,
+      "asset_id": "ba2050e2-1967-4e07-a70f-16f14c79f99e",
+      "bytes": 1373156,
+      "render_s": 26.4
+    },
+    {
+      "requested": "bottle",
+      "observed": "bottle",
+      "match": true,
+      "asset_id": "4fd71d48-5ea8-4ce1-88c2-993f7dca7e68",
+      "bytes": 822560,
+      "render_s": 26.4
+    },
+    {
+      "requested": "tube",
+      "observed": "squeeze tube",
+      "match": true,
+      "asset_id": "cf7a94bd-da3c-49cd-8972-307d40e46866",
+      "bytes": 982214,
+      "render_s": 26.3
+    }
+  ],
+  "matched": 4,
+  "of": 4
+}

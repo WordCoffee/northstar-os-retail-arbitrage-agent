@@ -1900,6 +1900,17 @@ def studio_status(acct: str = Depends(studio_account)):
 # ComfyUI answers at COMFYUI_URL. Jobs are recorded like every other studio
 # action; credits_used stays 0 because nothing paid is ever called here.
 
+#: The container forms the generator can be asked for. A schema field, so the form
+#: is not left to prose the model may ignore.
+FORM_CLAUSES = {
+    "pouch": "a stand-up pouch",
+    "box": "a rigid folding carton box",
+    "bottle": "a plastic bottle with a screw cap",
+    "tube": "a squeeze tube",
+    "jar": "a wide-mouth jar",
+}
+
+
 class GenerateIn(BaseModel):
     kind: str = Field(default="image")            # image | video
     purpose: Optional[str] = None
@@ -1910,6 +1921,9 @@ class GenerateIn(BaseModel):
     height: Optional[int] = None
     project_id: Optional[str] = None
     seed: Optional[int] = None
+    #: The container form the user asked for. A schema field, not a phrase buried in
+    #: prose: the generator drifts to boxes when the form rides only in the brief.
+    form: Optional[str] = Field(default=None, max_length=20)
 
 
 @router.get("/engine")
@@ -1956,8 +1970,15 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
                                      tier=body.tier, seed=body.seed)
         return sg.generate_image(prompt=prompt, width=body.width, height=body.height,
                                  tier=body.tier, seed=body.seed)
+    # The requested container form is stated at the head AND the tail of the brief.
+    # Observed drift: a bottle and a tube brief both rendered as a rigid box when the
+    # form existed only once, mid-sentence.
+    brief = str(body.brief)
+    form_clause = FORM_CLAUSES.get(str(body.form or "").strip().lower())
+    if form_clause:
+        brief = f"The product container is {form_clause}. {brief}\nOnly a {form_clause} is shown."
     try:
-        guarded = render_with_text_guard(render_fn=_render, brief=body.brief,
+        guarded = render_with_text_guard(render_fn=_render, brief=brief,
                                          text_safe=text_safe)
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
         db.design_studio.jobs.update(job_id, {

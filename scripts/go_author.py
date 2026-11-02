@@ -121,6 +121,41 @@ def _log(task_id: str, turn: Dict[str, Any], *, prompt: str = "",
     })
 
 
+def _excerpt(path: Path, objective: str, *, cap: int = 6000) -> str:
+    """The target function(s) named in the objective, not the whole module.
+
+    A 24 KB module in the prompt makes the model emit a 24 KB replacement; the lane
+    then spends minutes per turn. Sending only the symbol the objective names keeps
+    the prompt small and the reply applicable. Falls back to the head of the file when
+    no function is named.
+    """
+    import ast
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    if len(text) <= cap:
+        return text
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return text[:cap]
+    names = [n.name for n in tree.body if isinstance(n, ast.FunctionDef)]
+    wanted = [n for n in names if n and n in objective]
+    if not wanted:
+        return text[:cap]
+    pieces = []
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef) and node.name in wanted:
+            seg = ast.get_source_segment(text, node) or ""
+            if seg:
+                pieces.append(seg)
+    if not pieces:
+        return text[:cap]
+    body = "\n\n".join(pieces)
+    return body[:cap] + f"\n\n# (the file is {len(text)} bytes; only the function(s) above may change)"
+
+
 def _prompt(objective: str, path: str, content: str, error: str = "") -> str:
     body = (
         "You are the author for exactly one bounded fix. You cannot run tools, read "
@@ -194,7 +229,7 @@ def author_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any],
             error = f"task deadline {TASK_DEADLINE_S}s exceeded before a usable edit"
             break
         target = cl.ROOT / path
-        content = target.read_text(encoding="utf-8")
+        content = _excerpt(target, objective)
         prompt_text = _prompt(objective, path, content, error)
         turn = _run(prompt_text, session=task_id)
         _log(task_id, turn, prompt=prompt_text, reply=turn.get("text") or "")
@@ -224,7 +259,7 @@ def author_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any],
         probe = next((c for c in (task.get("checks") or [])), {})
         first = (out.get("checks") or [{}])[0]
         repair_prompt = _prompt(
-            objective, path, (cl.ROOT / path).read_text(encoding="utf-8"),
+            objective, path, _excerpt(cl.ROOT / path, objective),
             f"the independent probe failed:\n{str(first.get('output') or '')[-600:]}")
         turn = _run(repair_prompt, session=task_id)
         _log(task_id, turn, prompt=repair_prompt, reply=turn.get("text") or "")

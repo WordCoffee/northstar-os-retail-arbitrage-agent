@@ -139,6 +139,33 @@ def test_the_task_deadline_stops_before_another_turn(monkeypatch, tmp_path):
     assert calls["n"] == 0
 
 
+def test_a_large_module_sends_only_the_named_function(tmp_path):
+    """A 24 KB module must not become a 24 KB prompt."""
+    path = tmp_path / "big.py"
+    body = ["def helper_a(x):\n    return 1\n\n", "def helper_b(x):\n    return 2\n\n"]
+    body.append("def target_fn(value):\n    return value\n")
+    body.extend("# filler\n" * 3000)
+    path.write_text("".join(body), encoding="utf-8")
+    assert path.stat().st_size > 20_000
+    ex = ga._excerpt(path, "make target_fn clamp the value")
+    assert "def target_fn" in ex
+    assert "def helper_a" not in ex
+    assert len(ex) < 4000
+
+
+def test_a_small_module_is_sent_whole(tmp_path):
+    path = tmp_path / "small.py"
+    path.write_text("def a():\n    return 1\n", encoding="utf-8")
+    assert ga._excerpt(path, "anything") == path.read_text(encoding="utf-8")
+
+
+def test_no_named_function_falls_back_to_the_head(tmp_path):
+    path = tmp_path / "big.py"
+    path.write_text("def only():\n    return 1\n" + "# pad\n" * 3000, encoding="utf-8")
+    ex = ga._excerpt(path, "a different objective")
+    assert ex.startswith("def only()") and len(ex) <= 6000
+
+
 def test_quota_gate_halts_before_opening_any_task(monkeypatch):
     monkeypatch.setattr(ga.usage, "preflight",
                         lambda est: {"ok": False, "window": "5h",

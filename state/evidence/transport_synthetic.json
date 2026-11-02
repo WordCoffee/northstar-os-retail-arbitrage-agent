@@ -1,0 +1,12 @@
+{
+  "file_bytes": 24124,
+  "prompt_bytes": 767,
+  "elapsed_s": 3.2,
+  "rc": 0,
+  "cost_usd": 0.0,
+  "reply_head": "{\"path\":\"state/tmp_transport/synthetic.py\",\"search\":\"def clamp_max(value):\\n    \\\"\\\"\\\"Return the value clamped to at most 10.\\\"\\\"\\\"\\n    return value\",\"replace\"",
+  "apply_error": "",
+  "applied": true,
+  "under_90s": true,
+  "ok": true
+}

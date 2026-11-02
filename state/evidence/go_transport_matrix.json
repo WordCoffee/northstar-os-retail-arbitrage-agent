@@ -1,0 +1,47 @@
+[
+  {
+    "bytes": 1024,
+    "hang": false,
+    "elapsed_s": 1.8,
+    "rc": 0,
+    "answer": "pong",
+    "cost_usd": 0.0,
+    "stderr": ""
+  },
+  {
+    "bytes": 8192,
+    "hang": false,
+    "elapsed_s": 6.1,
+    "rc": 0,
+    "answer": "pong",
+    "cost_usd": 0.0,
+    "stderr": ""
+  },
+  {
+    "bytes": 16384,
+    "hang": false,
+    "elapsed_s": 2.3,
+    "rc": 0,
+    "answer": "pong",
+    "cost_usd": 0.0,
+    "stderr": ""
+  },
+  {
+    "bytes": 24576,
+    "hang": false,
+    "elapsed_s": 1.9,
+    "rc": 0,
+    "answer": "pong",
+    "cost_usd": 0.0,
+    "stderr": ""
+  },
+  {
+    "bytes": 32768,
+    "hang": false,
+    "elapsed_s": 2.3,
+    "rc": 0,
+    "answer": "pong",
+    "cost_usd": 0.0,
+    "stderr": ""
+  }
+]
