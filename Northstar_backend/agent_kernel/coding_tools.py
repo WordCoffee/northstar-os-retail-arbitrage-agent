@@ -39,6 +39,36 @@ PROTECTED_PATHS = ("config/chromecontrol_policy_owner.json",
 PROTECTED_DIR_PARTS = {"fixtures"}
 
 
+def _strip_included_def(source: str, target: str) -> "tuple[Optional[str], str]":
+    """Return (body, note) when a model passes `def target(...)` as the body.
+
+    `replace_function_body` wants the BODY. Every lane tested so far occasionally
+    sends the whole function, which would nest a second def inside the original and
+    leave the outer function returning None - the exact "returns None" failure seen
+    in the screens. Stripping the identical def line is a deterministic repair of
+    the envelope, not of the content; a different symbol is refused.
+    """
+    lines = str(source or "").replace("\r\n", "\n").split("\n")
+    first = next((i for i, line in enumerate(lines)
+                  if line.strip() and not line.strip().startswith("#")), None)
+    if first is None:
+        return source, ""
+    head = lines[first].strip()
+    if not (head.startswith("def ") or head.startswith("async def ")):
+        return source, ""
+    name = (head.split("def ", 1)[1].split("(", 1)[0].strip()
+            if "def " in head else "")
+    if name != str(target or "").strip():
+        return None, ""
+    body = [ln for i, ln in enumerate(lines) if i != first]
+    # Drop the blank line a def usually leaves behind and dedent one level.
+    while body and not body[0].strip():
+        body.pop(0)
+    indent = min((len(ln) - len(ln.lstrip()) for ln in body if ln.strip()), default=0)
+    body = [ln[indent:] if len(ln) >= indent else ln for ln in body]
+    return "\n".join(body), " (stripped an included def line)"
+
+
 def _is_protected_rel(rel: str, extra: Sequence[str] = ()) -> bool:
     """True when a workspace-relative POSIX path is write-protected."""
     low = rel.replace("\\", "/").lower().strip("/")
@@ -325,13 +355,21 @@ class Workspace:
             return ToolResult(False, error=str(exc))
         if scope_error:
             return ToolResult(False, error=scope_error)
+        note = ""
+        if op == "replace_function_body" and source:
+            body, note = _strip_included_def(source, target)
+            if body is None:
+                return ToolResult(False, error=(
+                    f"source must be the BODY of {target!r}, but it defines a different "
+                    "symbol. Drop the def line and pass only the indented body."))
+            source = body
         try:
             out = apply_to_file(self.root, path,
                                 [{"op": op, "target": target,
                                   "source": source, "name": name}])
         except AstEditError as exc:
             return ToolResult(False, error=str(exc)[:1000])
-        return ToolResult(True, f"AST {op} applied to {path}", files=[out["path"]])
+        return ToolResult(True, f"AST {op} applied to {path}{note}", files=[out["path"]])
 
     def ast_edit_batch(self, batch: Any) -> ToolResult:
         """Apply a list of {path, edits:[...]} atomically across files."""
