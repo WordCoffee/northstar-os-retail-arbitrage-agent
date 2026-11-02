@@ -1,0 +1,37 @@
+{
+  "ty_coder_install_20261101": {
+    "verdict": "BLOCKED - no installed lane authors an accepted fix. Primary rejected on the native tool interface; fallback passed integrity and the resource gate but failed the disposable engineering screen, so the three real tasks were not dispatched.",
+    "model_decision": {
+      "primary": {"tag": "qwen2.5-coder:7b", "digest": "dae161e27b0e", "size_gb": 4.7, "capabilities": ["completion","tools","insert"], "verdict": "REJECTED - 0 of 3 structured tool_calls; the model emits the correct call as content and Ollama 0.40.4 does not parse it (custom PARSER Modelfile forbidden)"},
+      "fallback": {"tag": "qwen3:8b", "digest": "500a1f067a9f", "size_gb": 5.2, "capabilities": ["completion","tools","thinking"], "verdict": "integrity PASS, native tools 3/3, resources FLOOR-MET, screen FAILED"},
+      "installs": "2 of 2 allowed; disk 54.9 GB free; no existing model altered",
+      "runtime_finding": "under the operator's OLLAMA_KV_CACHE_TYPE=q4_0 qwen2.5-coder:7b produced corrupted repetition; with a campaign-scoped f16 KV serve the same artifact produced clean prose and exact JSON. Any Ty lane needs an f16 profile. Operator env restored (cpu / q4_0)."
+    },
+    "integrity": {
+      "qwen3_8b_sentence": "A Python function is a block of organized, reusable code that performs a specific task.",
+      "qwen3_8b_json": "{\"ok\": true, \"color\": \"blue\"}",
+      "qwen3_8b_native_tools": "3 of 3 structured tool_calls, name read_file, path Northstar_backend/calc.py"
+    },
+    "resources_qwen3_8b_gpu_ctx8192": {
+      "host_before_gb": 8.467,
+      "host_min_gb": 7.519,
+      "host_drop_gb": 0.948,
+      "vram_gb": 5.879,
+      "nvidia_smi_during": "6262 MiB",
+      "tok_per_s": 30.3,
+      "floor_gb": 3.0,
+      "verdict": "FLOOR-MET"
+    },
+    "screen": {
+      "attempts": [
+        {"n": 1, "valid": false, "why": "acceptance raised AttributeError on a None return - harness defect, fixed with 5 tests (cb8b91a0)"},
+        {"n": 2, "valid": true, "result": "read ok, ast_edit on the correct symbol summarise, first body invalid Python, two applied edits removed the return -> summarise() returns None -> behavioural check failed; 9 steps, 1 protocol error"}
+      ]
+    },
+    "not_run": ["three real tasks", "120-minute soak", "Northstar repair campaign"],
+    "probes_still_failing": {"t5_hitl_corrupt": 1, "t6_diff_select_headers": 2, "t7_artifact_jpeg": 2},
+    "cleanup": "operator daemon restored (ollama app, 8 models, 0 resident, cpu/q4_0, GPU 0 MiB); two campaign-owned llama-server orphans (5.6 GB host RAM) stopped; no lock, no STOP, no worker",
+    "tests": "169 passed in 5.11s across 12 suites",
+    "report": "reports/ty_coder_install_20261101.md"
+  }
+}
