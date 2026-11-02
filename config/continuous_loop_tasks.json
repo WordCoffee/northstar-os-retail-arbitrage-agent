@@ -781,17 +781,18 @@
       "required_artifact": "Northstar_backend/agent_kernel/hitl_counts.py",
       "timeout_seconds": 600,
       "max_repairs": 1,
-      "model": "qwen2.5-coder:3b",
+      "model": "qwen3.5:4b",
       "provider": "ollama",
       "num_ctx": 8192,
-      "max_steps": 8,
+      "max_steps": 10,
       "max_protocol_errors": 8,
       "allowed_tools": [
         "read",
         "ast_edit",
         "run",
         "finish"
-      ]
+      ],
+      "native_tools": true
     },
     {
       "id": "ty-diff-select-headers",
@@ -834,17 +835,18 @@
       "required_artifact": "Northstar_backend/agent_kernel/diff.py",
       "timeout_seconds": 600,
       "max_repairs": 1,
-      "model": "qwen2.5-coder:3b",
+      "model": "qwen3.5:4b",
       "provider": "ollama",
       "num_ctx": 8192,
-      "max_steps": 8,
+      "max_steps": 10,
       "max_protocol_errors": 8,
       "allowed_tools": [
         "read",
         "ast_edit",
         "run",
         "finish"
-      ]
+      ],
+      "native_tools": true
     },
     {
       "id": "ty-artifact-jpeg",
@@ -887,17 +889,18 @@
       "required_artifact": "Northstar_backend/agent_kernel/artifacts.py",
       "timeout_seconds": 600,
       "max_repairs": 1,
-      "model": "qwen2.5-coder:3b",
+      "model": "qwen3.5:4b",
       "provider": "ollama",
       "num_ctx": 8192,
-      "max_steps": 8,
+      "max_steps": 10,
       "max_protocol_errors": 8,
       "allowed_tools": [
         "read",
         "ast_edit",
         "run",
         "finish"
-      ]
+      ],
+      "native_tools": true
     }
   ]
 }
