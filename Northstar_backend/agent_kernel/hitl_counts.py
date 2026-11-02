@@ -7,13 +7,13 @@ def hitl_counts(root):
     root = Path(root)
     if not root.exists():
         return {'pending': 0, 'approved': 0, 'denied': 0, 'total': 0}
-    
+
     state_path = Path(root) / 'state' / 'hitl'
-    pending = approved = denied = 0
-    
+    pending = approved = denied = skipped = 0
+
     if not state_path.exists():
         return {'pending': 0, 'approved': 0, 'denied': 0, 'total': 0}
-    
+
     for hitl_file in state_path.glob('hitl_*.json'):
         try:
             with open(hitl_file, 'r', encoding='utf-8') as f:
@@ -27,7 +27,7 @@ def hitl_counts(root):
                 elif status == 'denied':
                     denied += 1
         except (json.JSONDecodeError, IOError):
-            continue
-    
+            skipped += 1
+
     total = pending + approved + denied
-    return {'pending': pending, 'approved': approved, 'denied': denied, 'total': total}
+    return {'pending': pending, 'approved': approved, 'denied': denied, 'skipped': skipped, 'total': total}
