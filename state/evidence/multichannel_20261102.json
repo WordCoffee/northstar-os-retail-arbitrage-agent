@@ -1,0 +1,171 @@
+{
+  "campaign": "multichannel-creative-expansion",
+  "recorded_at": "2026-11-02T07:52:00",
+  "units": {
+    "ty-ad-formats": {
+      "commit": "515d48fa",
+      "module": "Northstar_backend/ad_formats.py",
+      "formats": {
+        "square": {
+          "size": [
+            1024,
+            1024
+          ],
+          "ratio": "1:1",
+          "placements": [
+            "amazon-main",
+            "meta-feed"
+          ]
+        },
+        "story": {
+          "size": [
+            864,
+            1536
+          ],
+          "ratio": "9:16",
+          "placements": [
+            "ig-story",
+            "reels",
+            "tiktok",
+            "shorts"
+          ]
+        },
+        "wide": {
+          "size": [
+            1536,
+            864
+          ],
+          "ratio": "16:9",
+          "placements": [
+            "sponsored-brand",
+            "display",
+            "youtube-banner"
+          ]
+        }
+      },
+      "rules": [
+        "an unknown format is a 422 with ad_format_unknown",
+        "format + contradictory width/height is a 422 with ad_format_dimension_conflict",
+        "every canvas is a multiple of the 8-pixel latent step",
+        "validation runs before the engine check, so a bad request costs no GPU time"
+      ],
+      "gate_change": {
+        "field_added": "garbled_text",
+        "reason": "the first story-ad run carried a wall of fake background lettering, OCR returned 11 boxes including 'MSNHES CIRSIE TUION', and the gate passed because the requested words were present",
+        "blocking_reason": "typography_garbled"
+      },
+      "live_runs": [
+        {
+          "case": "story ad, text-free brief",
+          "verdict": "3/3 pass",
+          "canvas": [
+            864,
+            1536
+          ],
+          "ratio": "9:16",
+          "manifest_keys": 20,
+          "typography": "not_applicable (no_text_requested) verified by OCR contains_text=false",
+          "box": "0b8ab20c-f97e-4ad2-bad5-8c75c1f7a0c6"
+        },
+        {
+          "case": "story ad with label copy",
+          "verdict": "3/4 BLOCKED",
+          "reason": "typography_illegible",
+          "detail": "Main text is clear but secondary text below is garbled.",
+          "deliverable": null,
+          "folders_before": 7,
+          "folders_after": 7
+        },
+        {
+          "case": "story ad with label copy, earlier run",
+          "verdict": "4/4 pass before the garbled_text rule",
+          "action": "package deleted after the rule tightened; the render it accepted contains the gibberish the rule now refuses",
+          "box": "13c48ded-5e2a-4c20-8f45-06baa149bf3c"
+        }
+      ]
+    },
+    "ty-aplus-verified": {
+      "commit": "48ff4e78",
+      "module": "Northstar_backend/aplus_manifest.py",
+      "evidence_kinds": [
+        "requested module kinds",
+        "drawn strings recorded by the renderer",
+        "OCR read-back of the finished PNG"
+      ],
+      "axes": {
+        "typography": "OCR coverage of the drawn copy, threshold 0.8",
+        "layout": "renderer QA (contrast, fit, container, canvas)",
+        "design_alignment": "requested vs rendered module kinds",
+        "form": "not applicable",
+        "material": "not applicable"
+      },
+      "live_page": {
+        "modules": [
+          "header",
+          "three_tiles",
+          "comparison"
+        ],
+        "text_blocks_drawn": 14,
+        "coverage_per_module": {
+          "header": 1.0,
+          "three_tiles": 1.0,
+          "comparison": 1.0
+        },
+        "verdict": "3/3",
+        "coverage_threshold": 0.8,
+        "box": "aplus_1793627450",
+        "qa": "clean on all three modules"
+      },
+      "defects_found_while_proving": [
+        {
+          "defect": "render_page used res['records'] but the renderer returns the record list as res['texts']",
+          "symptom": "every module reported copy_texts=[] and the page scored 2/2 with typography n/a",
+          "fix": "read res['texts']; re-ran and got 1.0 coverage on 14 blocks",
+          "cleanup": "two packages written before the fix were deleted so the deliverable list only holds verified pages"
+        },
+        {
+          "defect": "design_studio_aplus.py carried a UTF-8 BOM and a merged line after an edit",
+          "symptom": "pytest could not import the module",
+          "fix": "BOM stripped, statement split; 92 aplus tests pass"
+        }
+      ],
+      "tests": {
+        "aplus_manifest": 7,
+        "aplus_suite_total": 92,
+        "result": "pass"
+      }
+    }
+  },
+  "deliverables_on_disk": {
+    "count": 7,
+    "verified_typography": 3,
+    "text_free_verified_by_ocr": 2,
+    "pre_quality_gate_runs": 2,
+    "note": "the two pre-gate packages show 'quality not recorded' in the UI rather than a fabricated score"
+  },
+  "not_done": [
+    "motion sequences for Shorts/Reels/TikTok (vertical stills are delivered; no ComfyUI video workflow was built or tuned)",
+    "material finish presets (matte, foil, kraft, soft-touch) as workflow inputs",
+    "a UI selector for the ad formats: the endpoint and manifest carry them, the Ads page is still a requirements page"
+  ],
+  "full_suite": {
+    "before": {
+      "passed": 5689,
+      "failed": 30
+    },
+    "after": {
+      "passed": 5711,
+      "failed": 30,
+      "skipped": 117,
+      "xfailed": 2,
+      "seconds": 630.31
+    },
+    "new_failures": 0,
+    "delta_passing": 22
+  },
+  "touched_area_suites": {
+    "files": 13,
+    "passed": 214,
+    "failed": 0
+  }
+}

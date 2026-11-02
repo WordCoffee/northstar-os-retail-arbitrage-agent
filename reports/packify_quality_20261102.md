@@ -4,7 +4,7 @@
 **Date:** 2026-11-02
 **Author:** DeepSeek V4.1 Flash (opencode-go, operator session); local vision `qwen3.5:4b`
 **Branch:** `feature/chrome-connect-3.0` — rollback tag `rollback/pre-packify-20261102-070637`
-**Units:** 2 of 2 used · wall clock ≈ 1 h 30 m of the 4 h cap · 0 failed attempts
+**Units:** 2 of 2 used · wall clock ≈ 45 min of the 4 h cap · 0 failed attempts
 
 ---
 
