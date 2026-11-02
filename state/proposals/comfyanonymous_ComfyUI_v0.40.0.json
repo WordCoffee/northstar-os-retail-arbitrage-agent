@@ -1,0 +1,15 @@
+{
+  "key": "comfyanonymous/ComfyUI@v0.40.0",
+  "repo": "comfyanonymous/ComfyUI",
+  "tag": "v0.40.0",
+  "name": "v0.40.0",
+  "why": "core nodes and sampler fixes",
+  "licence": "unverified",
+  "licence_known": false,
+  "lane": "local-lane",
+  "eligible": false,
+  "status": "proposed",
+  "source": "https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.40.0",
+  "proposed_at": "2026-11-02T08:30:42",
+  "next_step": "licence must be recorded before this can be approved"
+}

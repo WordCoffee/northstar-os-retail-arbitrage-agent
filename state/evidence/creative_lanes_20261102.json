@@ -1,0 +1,197 @@
+{
+  "campaign": "multimodal-architecture-a-to-e",
+  "recorded_at": "2026-11-02T09:25:00",
+  "instruction": "operator asked for A-E explicitly; the 2-unit cap from the previous campaign is superseded by that instruction",
+  "inventory_verified": {
+    "custom_nodes": [
+      "comfyui_controlnet_aux",
+      "ComfyUI_IPAdapter_plus",
+      "ComfyUI-GGUF",
+      "ComfyUI-IC-Light-Native",
+      "ComfyUI-KJNodes",
+      "ComfyUI-Manager",
+      "ComfyUI-QwenTTS",
+      "ComfyUI-UltraTex"
+    ],
+    "models": {
+      "wan_ti2v": "Wan2.2-TI2V-5B-Q5_K_M.gguf (3.5 GB)",
+      "wan_vae": "wan2.2_vae.safetensors (1.3 GB)",
+      "wan_text_encoder": "umt5-xxl-encoder-Q5_K_M.gguf (3.9 GB)",
+      "iclight": "iclight_sd15_fc_unet_ldm.safetensors (1.6 GB) + fbc variant",
+      "birefnet": "birefnet.safetensors (0.4 GB)",
+      "upscaler": "RealESRGAN_x4plus.pth (0.1 GB)",
+      "flux": "flux1-dev-fp8 (11.1 GB), flux3-image-klein-nvfp4 (4.9 GB), z_image_turbo_nvfp4 (4.2 GB)"
+    },
+    "hardware": {
+      "gpu": "RTX 5080 Laptop 16 GB",
+      "disk_free_gb": 62.3
+    }
+  },
+  "A_shorts_motion": {
+    "commit": "f445fbf5",
+    "module": "Northstar_backend/shorts.py",
+    "endpoint": "POST /api/design-studio/shorts",
+    "live": {
+      "size": [
+        480,
+        832
+      ],
+      "frames": 17,
+      "fps": 16,
+      "duration_seconds": 1.06,
+      "render_seconds": 46.2,
+      "video_bytes": 48651,
+      "verdict": "2/2",
+      "folder": "state/deliverables/short_1793631223",
+      "manifest_keys": 17,
+      "frame_noise_metric": 4.6,
+      "still_reference_noise_metric": 3.6,
+      "frame0_vs_frame2_mean_abs_diff": 21.97,
+      "form_axis": {
+        "status": "not_applicable",
+        "reason": "no_form_requested",
+        "observed": "pouch"
+      }
+    },
+    "design": [
+      "frame count snaps to the Wan 4n+1 lattice",
+      "three decoded frames kept for the gate",
+      "middle frame scored by the same five-axis gate",
+      "form marked not-applicable (verified before the clip)"
+    ]
+  },
+  "B_cutout_and_relight": {
+    "cutout": {
+      "status": "already shipped, verified live",
+      "endpoint": "POST /api/design-studio/lanes/cutout",
+      "seconds": 3.7,
+      "framed_px": 2000,
+      "fill_longest_side": 0.879,
+      "fill_area": 0.4975,
+      "verdict": "compliant"
+    },
+    "relight": {
+      "commit": "c4adefa5",
+      "module": "Northstar_backend/relight.py",
+      "status": "graph runs, output refused",
+      "live": {
+        "seconds": 12.1,
+        "bytes": 2064938,
+        "noise_metric": 58.98,
+        "limit": 25.0,
+        "attempts": [
+          "concat latent + euler/simple -> noise",
+          "empty latent at 768 -> tensor size error (prep canvas is 1600 wide)",
+          "concat latent + dpmpp_2m/karras -> noise"
+        ]
+      },
+      "decision": "the lane is not wired to any endpoint; RelightUnavailable names the metric"
+    }
+  },
+  "C_print_master": {
+    "commit": "ef0d0944",
+    "module": "Northstar_backend/print_master.py",
+    "endpoint": "POST /api/design-studio/print/master",
+    "live": {
+      "source": [
+        1024,
+        1024
+      ],
+      "master": [
+        4096,
+        4096
+      ],
+      "factor": 4.0,
+      "seconds": 6.4,
+      "dpi_at_100mm": 1040.38,
+      "target": 300,
+      "folder": "state/deliverables/print_d48b35923e67",
+      "manifest_keys": 12,
+      "dieline_built": true
+    },
+    "guard": {
+      "code": "print_master_source_too_large",
+      "reason": "the x4 model aborted ComfyUI on a 1216px input (recorded known issue); 1024 measured working"
+    }
+  },
+  "D_discovery_queue": {
+    "commit": "e99e4e67",
+    "module": "Northstar_backend/discovery_queue.py",
+    "live": {
+      "proposals_written": 5,
+      "errors": [],
+      "rerun_written": 0,
+      "rerun_skipped": 5,
+      "folder": "state/proposals"
+    },
+    "rules": [
+      "no subprocess / pip / git clone / os.system (asserted by test)",
+      "unknown licence -> ineligible",
+      "prerelease -> never eligible",
+      "dedupe by repo@tag, never overwrite"
+    ],
+    "limitation": "only repositories that publish GitHub releases yield candidates; tag-only repos return none"
+  },
+  "E_3d_handoff": {
+    "commit": "a5ad7ace",
+    "module": "Northstar_backend/geometry_handoff.py",
+    "contract": [
+      "verts",
+      "faces",
+      "uv_faces",
+      "non_manifold_edges",
+      "tris",
+      "bbox_mm",
+      "units declared"
+    ],
+    "refusal_codes": [
+      "no_geometry",
+      "no_faces",
+      "missing_uv",
+      "non_manifold_edges",
+      "polycount_over_budget",
+      "bbox_degenerate",
+      "bbox_unknown",
+      "units_unspecified"
+    ],
+    "blender_probe": {
+      "available": false,
+      "reason": "no blender executable on PATH or in Program Files, and bpy is not importable"
+    },
+    "status": "contract complete and tested; generation and bake blocked on two named dependencies",
+    "blocked_by": [
+      "a 3D generation pack + weights (not installed, would need downloads)",
+      "Blender 4.x (not installed)"
+    ]
+  },
+  "tests": {
+    "touched_group": {
+      "passed": 116,
+      "failed": 0
+    },
+    "new_files": {
+      "test_shorts": 5,
+      "test_relight": 4,
+      "test_print_master": 8,
+      "test_discovery_queue": 8,
+      "test_geometry_handoff": 12
+    },
+    "new_suites_total": 37
+  },
+  "downloads": 0,
+  "full_suite": {
+    "before": {
+      "passed": 5711,
+      "failed": 30
+    },
+    "after": {
+      "passed": 5747,
+      "failed": 30,
+      "skipped": 117,
+      "xfailed": 2,
+      "seconds": 655.88
+    },
+    "new_failures": 0,
+    "delta_passing": 36
+  }
+}
