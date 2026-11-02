@@ -1,0 +1,36 @@
+{
+  "model": "qwen3.5:4b",
+  "native_tools": true,
+  "attempt": 4,
+  "screened": true,
+  "agent_ok": true,
+  "behaviour_ok": true,
+  "behaviour": "{\"approved\": 2, \"denied\": 1, \"skipped\": 3, \"total\": 3}",
+  "steps": 3,
+  "protocol_errors": 0,
+  "scope_rejections": 0,
+  "error": "",
+  "elapsed_s": 5.1,
+  "transcript": [
+    {
+      "tool": "read",
+      "ok": true,
+      "output": "\"\"\"Inventory limits used by the screen.\"\"\"\r\n\r\n\r\ndef summarise(rows):\r\n    \"\"\"Count usable rows by state.\r\n\r\n    A row is usable when it is a dict with a string 'state'. Unusable ro"
+    },
+    {
+      "tool": "ast_edit",
+      "ok": true,
+      "output": "AST replace_function_body applied to src/limits.py (stripped an included def line)"
+    },
+    {
+      "tool": "run",
+      "ok": true,
+      "output": "{\"ok\": true, \"result\": {\"approved\": 2, \"denied\": 1, \"skipped\": 3, \"total\": 3}}\n"
+    },
+    {
+      "tool": "acceptance",
+      "ok": null,
+      "output": "PASS: {\"approved\": 2, \"denied\": 1, \"skipped\": 3, \"total\": 3}"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "ty_qwen35_4b_qualification_20261101": {
+    "verdict": "PARTIALLY READY - the qwen3.5:4b lane is installed, resource-safe on the GPU with an f16 KV profile, uses native tool calls cleanly, passed the disposable screen, and authored ONE accepted task-owned fix (commit 883a7fed). Qualification is 1 of 3: the two remaining defects exhaust the step budget without converging.",
+    "model": {
+      "tag": "qwen3.5:4b",
+      "digest": "d8b0f5e9760cd1682034f292d7ef72ec46f432149be0df7574bf2d6e92e38c04",
+      "size_gb": 3.1,
+      "parameters": "4.2B",
+      "quantization": "Q4_K_M",
+      "family": "qwen35",
+      "capabilities": ["completion", "vision", "tools", "thinking"],
+      "manifest": "RENDERER qwen3.5 + PARSER qwen3.5 (native, no alias)",
+      "install": "ollama pull qwen3.5:4b, 29.7 s",
+      "bojo_fallback": "not installed - qwen3.5:2b already present",
+      "qwen3.5_9b": "not downloaded - the 4B passed the native-tool and screen gates"
+    },
+    "resource": {
+      "profile": "GPU, num_ctx=8192, KV f16 (campaign-scoped serve)",
+      "host_before_gb": 8.188,
+      "host_min_gb": 7.084,
+      "host_drop_gb": 1.104,
+      "resident_vram_gb": 3.134,
+      "tok_per_s": 42.3,
+      "floor_gb": 3.0,
+      "verdict": "FLOOR-MET"
+    },
+    "interface": {
+      "structured_tool_calls": "3 of 3 on the raw probe; 0 protocol refusals across the screen and the accepted task",
+      "schema_validation": "through the existing executor",
+      "custom_alias_needed": false
+    },
+    "screen": {
+      "attempts": [
+        {"n": 1, "valid": false, "why": "verify-stall guard did not treat ast_edit as a change (83d2474d, 6bda9739)"},
+        {"n": 2, "valid": false, "why": "an included def line was nested instead of stripped, guaranteeing return None (61c5adb6)"},
+        {"n": 3, "valid": false, "why": "screen wording ambiguous on 'total' (02ed2abe)"},
+        {"n": 4, "valid": true, "result": "PASS in 3 steps, 0 refusals, {'approved':2,'denied':1,'skipped':3,'total':3}"}
+      ]
+    },
+    "qualification": {
+      "dispatches_used": 5,
+      "dispatches_allowed": 6,
+      "halt": "max_consecutive_failures (2), as contracted",
+      "tasks": {
+        "ty-hitl-skip-report": {"result": "completed", "commit": "883a7fed", "steps": 5, "protocol_errors": 0, "probe_after": "t5 PASS"},
+        "ty-artifact-jpeg": {"result": "failed twice", "reason": "max_steps; its edits broke the module (probe traceback)", "restored": true, "commit": null},
+        "ty-diff-select-headers": {"result": "failed twice", "reason": "max_steps after 5-7 real in-scope edits", "restored": true, "commit": null}
+      }
+    },
+    "accepted_fix": "Northstar_backend/agent_kernel/hitl_counts.py +7/-7: initialise skipped, increment it in the except branch, return it; total stays counted statuses",
+    "harness_fixes": ["83d2474d", "6bda9739", "61c5adb6", "02ed2abe", "63c90e73"],
+    "cleanup": "operator daemon restored (cpu/q4_0, 0 resident, GPU 0 MiB, 10 models); no lock, STOP or worker; 175 tests pass in 6.82 s",
+    "next_action": "authorise one further bounded run of the two remaining tasks on this lane (both failed on max_steps after real edits - the specific change to test is an 18-20 step budget), or accept 1/3",
+    "report": "reports/ty_qwen35_4b_qualification_20261101.md"
+  }
+}

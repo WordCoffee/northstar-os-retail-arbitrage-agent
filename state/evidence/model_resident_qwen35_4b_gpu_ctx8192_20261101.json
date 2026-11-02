@@ -1,0 +1,25 @@
+{
+  "model": "qwen3.5:4b",
+  "num_ctx": 8192,
+  "baseline_available_gb": 8.188,
+  "min_available_gb": 7.084,
+  "drop_gb": 1.104,
+  "samples": 19,
+  "resident_during": [
+    {
+      "name": "qwen3.5:4b",
+      "size_gb": 3.134,
+      "vram_gb": 3.134
+    }
+  ],
+  "resident_total_gb": 3.134,
+  "resident_vram_gb": 3.134,
+  "resident_system_gb": 0.0,
+  "tokens": 160,
+  "elapsed_s": 3.78,
+  "tok_per_s": 42.33,
+  "reply_head": "",
+  "error": "",
+  "verdict": "FLOOR-MET",
+  "floor_gb": 3.0
+}
