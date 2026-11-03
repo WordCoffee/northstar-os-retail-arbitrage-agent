@@ -120,3 +120,6 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Video ad - One bounded linear gain correction runs after loudnorm; two-pass loudnorm alone missed -16 LUFS on a short clip, and the correction is re-measured, never assumed.
 2026-11-03 - Video ad - The caption plate is opaque (232 alpha); at 178 the product's net weight showed through and the caption read as a clash.
 2026-11-03 - Video ad - The live proof is 3s and says so; the 15s/30s plans are proven, the 15s render is not. That distinction is in the report, not a footnote.
+2026-11-03 - Loop integrity - A task with no checks is not a verified task: run_checks now falls back to acceptance_commands and refuses when both are empty, and the three creative tasks declare their probes as checks.
+2026-11-03 - Loop budget - The two historical tasks still pin 20 steps; every other ty task is bounded by a 40-step ceiling and any budget at or above 20 must carry an owner note. The old 'nothing else may reach 20' snapshot was stale, not a guard worth keeping literally.
+2026-11-03 - Full suite - 16 -> 13 failures; all 13 are in the adjudicated pre-existing list. The three fixed were stale task contracts, not product regressions. test_v3_shell_invariants is left failing on purpose; its number is not bumped.
