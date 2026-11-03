@@ -86,11 +86,6 @@ def pytest_configure(config):  # noqa: ANN001
     _snapshot.update(_scrub_credential_env())
 
 
-def pytest_collection_finish(session):  # noqa: ANN001
-    """Scrub after collection: test-module imports may have run load_dotenv()."""
-    _snapshot.update(_scrub_credential_env())
-
-
 def pytest_unconfigure(config):  # noqa: ANN001
     """Defensive: restore at shutdown for any external tooling reusing the env."""
     _restore_env(_snapshot)
@@ -144,7 +139,14 @@ def _restore_generated() -> None:
 
 
 def pytest_collection_finish(session):  # noqa: ANN001
-    """Restore after collection — test-module imports may mutate the cache."""
+    """After collection: scrub credentials AND restore generated artifacts.
+
+    This hook used to be defined twice - once for the credential scrub and once
+    for the generated-cache restore - so the second definition silently replaced
+    the first and the post-collection credential scrub never ran. One hook, both
+    jobs, in the order that leaves no secret in the environment for a test body.
+    """
+    _snapshot.update(_scrub_credential_env())
     _restore_generated()
 
 

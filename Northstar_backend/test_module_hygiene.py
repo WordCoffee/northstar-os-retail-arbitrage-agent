@@ -22,6 +22,7 @@ GUARDED = (
     "product_picture.py",
     "mogra_label_art.py",
     "mockup_quality.py",
+    "conftest.py",
 )
 
 
@@ -43,3 +44,16 @@ def test_studio_generation_keeps_the_optional_psutil_fallback():
     assert "_psutil = None" in src, "the optional-psutil fallback was removed"
     assert src.count("import psutil as _psutil") == 1, (
         "a second unconditional psutil import would defeat the fallback")
+
+
+def test_the_conftest_collection_hook_does_both_jobs(monkeypatch):
+    """A duplicate pytest hook silently replaced the credential scrub."""
+    import conftest  # the live plugin module pytest loaded
+
+    calls = []
+    monkeypatch.setattr(conftest, "_scrub_credential_env",
+                        lambda: calls.append("scrub") or {})
+    monkeypatch.setattr(conftest, "_restore_generated",
+                        lambda: calls.append("restore"))
+    conftest.pytest_collection_finish(None)
+    assert calls == ["scrub", "restore"]
