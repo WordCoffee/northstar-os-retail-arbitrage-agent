@@ -58,8 +58,8 @@ from typing import Any, Dict, Optional
 
 import requests
 from requests.exceptions import RequestException
-from dotenv import load_dotenv
 
+from env_bootstrap import load_project_env
 from bright_data_client import get_product_detail
 from brightdata_client import enrich_product, get_offer_data
 from easyparser_client import get_easyparser_offers
@@ -71,7 +71,7 @@ import market_snapshot_store
 from pricing import estimate_fba_fee
 import competition_analytics
 
-load_dotenv()
+load_project_env()
 
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 

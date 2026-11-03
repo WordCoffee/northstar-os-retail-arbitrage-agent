@@ -47,13 +47,15 @@ from urllib.parse import quote
 
 import requests
 from requests.exceptions import RequestException
-from dotenv import load_dotenv
 
+from env_bootstrap import load_project_env
 from kirkland_filter import is_genuine_kirkland_candidate
 from pricing import estimate_fba_fee
 from amazon_seller_extract import extract_seller_data
 
-load_dotenv()
+# Repo-root .env is authoritative (see env_bootstrap); a bare load_dotenv()
+# here used to bind Northstar_backend/.env and shadow rotated keys.
+load_project_env()
 
 BRIGHTDATA_UNLOCKER_API_KEY = os.getenv("BRIGHTDATA_UNLOCKER_API_KEY")
 BRIGHTDATA_UNLOCKER_ZONE = os.getenv("BRIGHTDATA_UNLOCKER_ZONE", "northstaros")

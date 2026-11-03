@@ -459,6 +459,30 @@
       "id": "chrome_connect_profile_binding_20261027",
       "status": "open",
       "description": "Chrome Connect cannot prove isolated signed-out profile; bound to business Default/T2. See reports/real-verify-2026-10-26/R2_ACCEPTANCE_20261027.md."
+    },
+    {
+      "id": "brightdata_unlocker_zone_deleted_20261102",
+      "status": "open",
+      "discovered_at": "2026-11-02T18:40:00Z",
+      "description": "BRIGHTDATA_UNLOCKER_ZONE in the repo-root .env is 'northstaros', but /zone/get_all_zones on the rotated token reports northstaros status=deleted (and retailarbitrage deleted); the only active zone is web_unlocker1 (type unblocker). The token authenticates (HTTP 200), so the failure mode is zone resolution, not credentials. Every Web Unlocker request will fail until the zone name is corrected.",
+      "owner_action": "Set .env line 39 BRIGHTDATA_UNLOCKER_ZONE=web_unlocker1, or recreate a northstaros zone in the Bright Data console.",
+      "requires": "operator (agent .env edit is permission-denied)"
+    },
+    {
+      "id": "chocodata_zero_credits_20261102",
+      "status": "open",
+      "discovered_at": "2026-11-02T18:40:00Z",
+      "description": "CHOCODATA_API_KEY authenticates (GET /api/v1/usage -> 200) but the workspace is plan=free with credits_remaining=0, so every scrape returns HTTP 402 INSUFFICIENT_CREDITS. Key rotation succeeded; the provider is unusable until the balance is restored. Also note this account's key carries no asa_live_ / cd_test_ prefix, unlike the documented key format.",
+      "owner_action": "Top up / replan the ChocoData workspace (spend gate: needs fresh operator approval).",
+      "requires": "operator (money gate)"
+    },
+    {
+      "id": "brightdata_datasets_api_not_provisioned_20261102",
+      "status": "open",
+      "discovered_at": "2026-11-02T18:40:00Z",
+      "description": "Both Bright Data env vars hold the same token and authenticate (200 on /zone/get_all_zones), but every /datasets/v3/* list endpoint returns 404 and /customer/balance returns 403 'API key lacks the required permissions'. The Datasets API lane (BRIGHTDATA_DATASET_ID) therefore remains unavailable - unchanged from the 2026-10-09 note in lions_mane_pull.py. Web Unlocker is the working Bright Data lane once the zone is fixed.",
+      "owner_action": "If dataset jobs are needed, enable Datasets API + token permissions in the Bright Data console.",
+      "requires": "operator"
     }
   ],
   "completed_batches": [
@@ -812,7 +836,7 @@
       "latency": "14B Q4_K_M on RTX 5080 16GB; probe prompts 2.6-26.3s incl. cold load"
     }
   },
-  "last_updated": "2026-10-27",
+  "last_updated": "2026-11-02",
   "history": [
     {
       "ts": "2026-10-16T06:10:00Z",
@@ -1577,6 +1601,24 @@
       "blocks": "full agent-scan analysis",
       "safe_default": "local inspect only",
       "status": "DEFERRED"
+    },
+    {
+      "id": "OA-12",
+      "card": "PROVIDER-KEYS",
+      "need": "Set BRIGHTDATA_UNLOCKER_ZONE=web_unlocker1 in repo-root .env line 39 (northstaros zone is deleted; token itself is valid)",
+      "when": "before any Bright Data Web Unlocker run",
+      "blocks": "all Bright Data Web Unlocker calls",
+      "safe_default": "provider reported BLOCKED by scripts/verify_provider_keys.py",
+      "status": "OPEN"
+    },
+    {
+      "id": "OA-13",
+      "card": "PROVIDER-KEYS",
+      "need": "Top up or replan the ChocoData workspace (0 credits; key authenticates)",
+      "when": "before any ChocoData search/enrichment run",
+      "blocks": "all ChocoData calls (402 INSUFFICIENT_CREDITS)",
+      "safe_default": "route search to Bright Data / Rainforest",
+      "status": "OPEN"
     }
   ],
   "activity": [
@@ -1902,6 +1944,14 @@
       "activity": "autothink_send_path",
       "batch": "ACCEPTANCE-FOLLOWUP",
       "summary": "AUTOTHINK SEND PATH BUILT (was: scope() offered a priced handoff with 'say send it to Autothink to proceed' and nothing carried it - offer existed, delivery did not). NEW specialists/autothink_transport.py: build_packet() produces the exact brief while the decision to hand off stays in router.scope (one place decides what is engineering work); send() makes ONE attempt. Every refusal happens BEFORE any network call - approval_required (requires_user_approval is not advisory), not_configured (no endpoint or AUTOTHINK_LIVE != 1), no_charge_ceiling, charge_exceeds_ceiling, already_sent (packet id with a successful receipt, so no double charge). A failure writes a receipt (ts, endpoint host, approver, charge, HTTP status, response id) and is NEVER retried; sending again is a second decision. The bearer token is redacted out of every receipt and error string. NEW chat tool handoff_to_autothink: without confirm it prepares the brief and sends nothing; with confirm it needs an account to attribute the approval to, so the tool cannot approve itself; it lives in CORE_TOOLS so every focus reaches it (O-02 lesson). Tests: 17 new + 134 neighbouring passed; commit fc63176e. HONEST STATE: no AUTOTHINK_ENDPOINT configured and the lane is not armed, so a send returns not_configured naming both blockers - the path exists and is tested, what it lacks is an endpoint (a provider decision, not code)."
+    },
+    {
+      "ts": "2026-11-02T18:45:00Z",
+      "activity": "provider_keys_rotated_verify_and_env_bootstrap",
+      "batch": "PROVIDER-KEYS-VERIFY",
+      "summary": "Operator rotated the Bright Data / ChocoData / Rainforest keys in the repo-root .env. Verified all four credential names live with ZERO credits and ZERO Amazon traffic (Bright Data /zone/get_all_zones, ChocoData /api/v1/usage, Rainforest /account). RESULTS: BRIGHTDATA_UNLOCKER_API_KEY + BRIGHTDATA_API_KEY both 200 (same token; /datasets/v3/* 404 = Datasets API not provisioned on this account); CHOCODATA_API_KEY 200 but workspace plan=free credits_remaining=0 so every scrape returns 402 INSUFFICIENT_CREDITS; RAINFOREST_API_KEY 200, plan Free, 100 credits remaining, resets 2026-12-03. BRIGHT DATA ZONE: account zones are retailarbitrage(deleted), northstaros(DELETED), web_unlocker1(active) while the project config points BRIGHTDATA_UNLOCKER_ZONE at northstaros, so Web Unlocker calls would fail on zone resolution despite a valid token. VISIBILITY BUG FOUND AND FIXED: bright_data_client / amazon_search / offer_enrichment / rainforest_client called a bare load_dotenv(), which python-dotenv resolves to Northstar_backend/.env (stale 2026-10-09 copy, and no RAINFOREST_API_KEY at all). Measured before the fix: standalone imports returned the backend digests (758d/023c) and RainforestClient.from_env().configured was False. NEW Northstar_backend/env_bootstrap.py implements the already-resolved decision option (c) (root .env authoritative, backend file only fills gaps, override=False everywhere, values never returned/logged) and is wired into those four modules. After the fix standalone imports and the API process both report source=root for all three keys and Rainforest configured=True. NEW scripts/verify_provider_keys.py = repeatable secret-safe checker (presence + public prefix + HTTP status + account figures, --json mode, exit 0 only when auth OK and unblocked). Tests: targeted provider surface 147 passed; full suite 5762 passed / 31 failed / 117 skipped / 2 xfailed and the 31 failures were PROVEN pre-existing by stashing the four edited modules and re-running the same failing tests (identical failures: autothink routes/auth, agent_kernel local_model, session-cookie contract, shell modes, UI route contracts - all in files already dirty before this session). No .env value read into output, written, copied or committed; .env edit was permission-denied so the zone line is reported as an operator action.",
+      "evidence": "python scripts/verify_provider_keys.py (JSON-able, zero-credit); digest comparison root vs Northstar_backend/.env; subprocess import probe of bright_data_client/amazon_search/rainforest_client before and after the fix; import main + env_bootstrap.env_source_report -> root for all three keys; pytest 147 passed; full suite 5762/31/117/2 with stash-based pre-existing-failure proof. Report: reports/provider_keys_verification_20261102.md",
+      "next_action": "Operator: (1) set BRIGHTDATA_UNLOCKER_ZONE=web_unlocker1 in the repo-root .env line 39 (or recreate the northstaros zone) - no key change needed; (2) top up or replan the ChocoData workspace (0 credits; spend gate); (3) optional 1-credit end-to-end proof per provider needs fresh approval since any data request spends credits."
     }
   ],
   "flux3_default_20261025": {
@@ -2578,6 +2628,15 @@
     "repair_loop": "Generate->tsc->repair loop (tools/moe_repair_loop.py, 3 attempts) on a fresh workspace: generation 127-135 t/s, 15 files; tsc initial 12 errors; repair 1 emitted no files (87 tok), repair 2 fixed 2/12 (6,869 tok), repair 3 emitted no files (202 tok). ATTEMPT_LIMIT_REACHED with 10 errors. No green build. Same failure family: hallucinated worker_threads APIs, import.meta under commonjs, Atomics typed-array mismatch, read-only sharedBuffer.",
     "repair_loop_perfile": "Per-file isolation run (tools/moe_repair_perfile.py, 6 attempts): 10 errors -> 7 (worker.ts) -> 5 (queue.ts), then attempts 3-6 re-emitted a byte-identical queue.ts (9,802 chars / 2,696 tokens) and stalled. ATTEMPT_LIMIT_REACHED with 5 errors (pool import.meta, queue Atomics import, Number.isPow2, Uint8Array.writeUInt32LE, read-only sharedBuffer). Partial convergence, no green build. Harness note: model drops the '=== FILE:' header on multi-error prompts; parser now falls back to the largest fence.",
     "repair_loop_v2": "Deterministic fix table (7 patches: sharedBuffer option, Atomics import, isPow2, DataView, ctor SAB, worker passthrough, import.meta->__dirname) took 5->2 errors; 6 model attempts oscillated 2-3 errors (reintroduced Atomics.wait(this.tail) in TaskProcessor); one manual 1ms-sleep replacement => tsc exit 0 GREEN. Jest: backoff+circuit-breaker 22 passed / 6 failed in 1.06s; queue.test and pipeline.test hang (blocking Atomics.wait on main thread, killed at 90s); pool.test exit 1. Verdict: usable only as a draft generator under a repair harness, not self-verifying.",
+    "swap_to_27b": "Replaced both 35B-A3B MoE lanes with Qwen3.8-27B GSQ-RCO: coder IQ3_XXS-mtp 9.73 GiB, creative IQ3_S-mtp 11.29 GiB (Apache-2.0, 64K, MTP n=8/p-min 0.8). Measured VRAM: 12,782 / 14,342 MiB. Architect bench: 76.1 / 76.3 t/s decode, 231 / 267 pp, 8,192 tokens, outputs 30.4K/29.7K chars with 10/6 TS blocks and 0 tool calls. Harness: chat completions triggers tool_call blocks on these agent-tuned models even with a no-tools system message; /completion raw is the working path (thinking inline).",
+    "coding_agent_loop": "Built the tool-executing agent loop and wired it to Tys Assistant. New: agent_kernel/local_model.py (LlamaCppModel -> :8080 chat completions, thinking off, retry on reasoning-only), agent_kernel/coding_runner.py (CodingTask/run_coding_task), write_many batched writes, npx tsc/jest + npm run in the tool allowlist, Windows .cmd resolution in both tool and acceptance, tys_assistant.CodingWorkerAdapter.run_agent + params.mode=agent routing, launcher points at Qwen3.8-27B IQ3_XXS-mtp, model-suite ty updated (10.44GB weights, 12.8GB VRAM, 76 tok/s), tools/run_coding_agent.py CLI. Tests: 116 passed. E2E: scoped task green in 3 steps; architect build in exports/agent_arch2 green after write_many (14 steps) + 2-step repair, 9 strict-TS files, independent tsc exit 0.",
+    "coding_agent_v2": "Schema-constrained output (response_format json_schema, tool enum) verified; coder lane moved to q8_0 KV (measured 13.83 GiB at 64K); builder profile + TS scaffold added; acceptance now checked when the model call raises; failing files injected into the repair prompt; read-streak guard; acceptance detail 300->2000 chars. Tests: 180 passed. Architect v2: arch4 wrote 9/9 files in one write_many, stopped at 16 steps with 6 TS2300 duplicate-identifier errors in pipeline.ts - the model declares a field and a constructor parameter property with the same name and repeats it. Harness complete; remaining gap is model class, not wiring.",
+    "opencode_local_models": "Ollama tags for the 27B crashed (0xc0000409 / std::bad_alloc in the CUDA runner) and fell back to 100% CPU, so OpenCode could not use them. Removed both tags. OpenCode now points at the llama.cpp lanes: ollama-local -> 127.0.0.1:8080/v1 model northstaros-27b-coder (alias northstaros-27b-coder), new provider northstar-thinking -> 127.0.0.1:8081/v1 model northstaros-thinking. Launcher gained -Port and the new aliases; only one lane resident at a time (coder 13.8 GiB, thinking 14.0 GiB). Verified: coder OK 0.8s, thinking OK 0.9s. Config backup opencode.json.bak.20261029.",
+    "opencode_lane_router": "Both 27B models now appear under one OpenCode provider named 'Ollama' (id ollama-local) via tools/northstar_lane_router.py on 127.0.0.1:8090/v1: it lists northstaros-27b-coder and northstaros-thinking, stops the resident lane, starts the requested one and forwards. Verified: thinking OK 0.7s resident; coder OK 16.5s after a lane switch, 14,380 MiB VRAM. Start with scripts/start-northstar-router.ps1. Real Ollama provider renamed 'Ollama (bojo/vision)'. Do not run start-northstar-moe.ps1 while the router owns the lanes.",
+    "opencode_400_fix": "OpenCode 400/500 traced to reasoning_effort:'high' (template accepts only xhigh/medium/low) and empty messages; router also masked upstream errors. Fixed: OpenCode variants now low/medium/xhigh, router maps high/max->xhigh and none/minimal/off->low, empty messages returns explicit 400, upstream error bodies forwarded verbatim, request shape logged (path/model/keys). Verified 200 for effort_high, normal, tool-history and content-parts payloads.",
+    "ctx_corrected_16k": "Measured /props showed 65536 on both lanes (64K); the 16K figure existed only in the deleted Ollama Modelfiles. Set launcher -Ctx default 16384, router -c 16384, model-suite context_tokens 16384. Verified after reload: coder n_ctx=16384 (12,322 MiB), thinking n_ctx=16384 (13,664 MiB), ~1.5-1.8 GiB VRAM saved per lane.",
+    "iq4_upgrade": "Swapped both lanes to Qwen3.8-27B IQ4_XS + MTP (Bucoid, 12.95 GiB, Apache-2.0, base Qwen3.8-27B, MTP in-file). Measured at 16K q4_0 KV, 512 tok same prompt: IQ3_XXS 62.2 t/s/12,080 MiB vs IQ4 64.9 t/s/15,068 MiB. Burst 112.8 novel, 95.4 copy. Quality: architect 9-file strict-TS build green in 3 steps/119.7 s (tsc exit 0 verified), vs IQ3_XXS 16 steps/6 TS2300 errors. Both model ids share one server on :8080 (no reload switching). model-suite updated (13.9 GB weights, 14.7 GiB VRAM, 65 tok/s). IQ3 files kept for rollback.",
+    "old_quants_removed": "Deleted IQ3_XXS-mtp (9.73 GiB) and IQ3_S-mtp (11.29 GiB); disk 54.6 -> 75.6 GiB free; only Qwen3.8-27B-IQ4_XS_4BPW.gguf remains. start-northstar-llm.ps1 repointed at IQ4 (alias northstaros-27b-coder, -c 16384) so Tys's on-demand launcher cannot break. Verified after removal: router restarted, coder OK in 37.3 s including load, n_ctx=16384, 15,068 MiB. Rollback = hf download ISTA-DASLab IQ3_XXS-mtp / IQ3_S-mtp.",
     "gates_held": "No Amazon, no spend, no credential reads, no policy/allowlist changes. Download provenance: Tiel (MIT), Qwen3.6-35B-A3B (Apache-2.0), both local-lane."
   },
   "tys_ops_20261029": {
@@ -2633,5 +2692,18 @@
     "test_count": 175,
     "blocker": "FLUX 3 weights are not installed on this machine (STUDIO_FLUX3_MODEL, STUDIO_FLUX3_TEXT_ENCODER, STUDIO_FLUX3_VAE unset) and no standalone FLUX 3 endpoint answers at FLUX3_SERVER_URL; visual steps block with flux3_weights_not_installed until the operator installs the weights or points the endpoint at a running FLUX 3 server.",
     "quality_claim": false
+  },
+  "coder_lane_17k_green_20261029": {
+    "outcome": "GREEN. `npx tsc --noEmit` exit 0 on the 9-file concurrency spec (SharedArrayBuffer ring queue, Atomics in the worker only, pool, backoff, breaker, telemetry) with ZERO deterministic patches. 28 model steps total: 24-step build reached 1 error, a 2-step scoped repair closed it. The FIXES table in tools/moe_repair_v2.py was not used.",
+    "lane": "Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp, llama.cpp b11889-d854d98ba, -c 17408 (17K), -ngl 99, -fa on, -ctk/-ctv q8_0, MTP draft-mtp n=8 p-min 0.8. Model config otherwise unchanged (owner: do not lower context; 17K was the owner's explicit instruction).",
+    "four_runs": "64K no-gate: 5+12 steps, 7 errors, queue gutted to a plain Task[]. 17K no-gate: 24 steps, 7 errors, spec intact, 17/24 steps were bare `run` calls. 17K + rewrite gate: 24 steps, 1 error, gate fired 5x. 17K + gate + scoped repair: 2 steps, 0 errors.",
+    "harness_fix": "Northstar_backend/agent_kernel/coding_agent.py now refuses a `run` when acceptance already failed and no file changed since (returns a verify_stall observation, injects VERIFY STALL into the next prompt, clears on write/write_many/apply_patch). Regression test test_repeated_acceptance_run_after_failure_is_refused. 28 passed across test_coding_agent + test_coding_runner + test_local_model.",
+    "hardware": "17K measured 12,152/16,303 MiB VRAM (3,852 free) vs 14,158 at 64K (1,846 free). At 64K with ComfyUI resident, commit free fell to 0.70 GB and `npx tsc` died 0xC0000409; at 17K tsc ran repeatedly during the build with ~8.5 GB commit free and ComfyUI did not need to be stopped. 17K is the working point on this box; 64K is fine as pure inference and fatal as a co-resident build environment.",
+    "limits": "n=1 per configuration - these are single samples, not pass@k; run 1 gutting the queue vs run 2 keeping it may be sampling noise. Step 4 (both lanes through tools/flux3_gateway.py) not reached; the gateway itself is healthy (:8190 status ok, three FLUX 3 weights present). Creative lane IQ3_S-mtp still unproven for full un-truncated file output. No Jest suite exists in any generated workspace (package.json carries only typescript + @types/node). A read-loop replaced the run-loop as the remaining waste pattern (queue.ts read 5x, tsconfig 3x) and is not yet gated. ComfyUI (pid 23772) was stopped for the 64K test and NOT restarted: at 17K only 3,852 MiB VRAM is free, below the 4.92 GB FLUX 3 transformer; start it with tools/start_comfyui.ps1 once the lane is stopped.",
+    "next": "Run the same spec 3x for a real pass@3, then the creative lane on the same harness, then Step 4 through the FLUX 3 gateway.",
+    "report": "reports/coder_lane_17k_green_20261029.md",
+    "evidence": "exports/pass1_coder_17k_20261029/run_stdout.txt (7 errors); exports/pass1_coder_17k_v2_20261029/run_stdout.txt (1 error, 5 refusals); exports/pass1_coder_17k_v2_20261029/repair_one_stdout.txt (green, 2 steps); exports/pass1_coder_17k_v2_20261029/src/*.ts (green tree, queue.ts still SharedArrayBuffer).",
+    "provenance": "provenance.csv rows for both GGUF files, licence apache-2.0 read from the GGUF header (general.license), quantizer ISTA-DASLab, base Qwen/Qwen3.8-27B.",
+    "no_spend": "No spend, no Amazon request, no cloud call, no credential read, no change to either lane's model config."
   }
 }

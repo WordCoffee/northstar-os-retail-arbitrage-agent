@@ -51,9 +51,12 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Protocol
 
 try:  # dotenv is present across the repo; tolerate its absence in tests.
-    from dotenv import load_dotenv
+    from env_bootstrap import load_project_env
 
-    load_dotenv()
+    # Repo-root .env is authoritative (see env_bootstrap). A bare load_dotenv()
+    # here would bind Northstar_backend/.env, which does not carry
+    # RAINFOREST_API_KEY, and the adapter would report NOT_CONFIGURED.
+    load_project_env()
 except Exception:  # noqa: BLE001
     pass
 

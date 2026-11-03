@@ -34,14 +34,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 from urllib.parse import quote
 import requests
-from dotenv import load_dotenv
 
+from env_bootstrap import load_project_env
 import bright_data_client
 import scavio_client
 import live_gate
 from kirkland_filter import is_genuine_kirkland_candidate
 
-load_dotenv()
+load_project_env()
 
 _BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -182,13 +182,13 @@ from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 from urllib.parse import quote
 import requests
-from dotenv import load_dotenv
 
+from env_bootstrap import load_project_env
 import bright_data_client
 import scavio_client
 from kirkland_filter import is_genuine_kirkland_candidate
 
-load_dotenv()
+load_project_env()
 
 SCANNER_SEARCH_SOURCE = os.getenv("SCANNER_SEARCH_SOURCE", "BRIGHTDATA").upper()
 SCANNER_SEARCH_FALLBACK = os.getenv("SCANNER_SEARCH_FALLBACK", "").upper()
