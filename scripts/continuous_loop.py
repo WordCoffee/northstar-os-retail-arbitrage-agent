@@ -978,6 +978,30 @@ def write_backlog_proposals(proposals: list, path: Optional[Path] = None) -> Dic
     return payload
 
 
+def release_model(model: str, *, timeout: float = 60.0) -> Dict[str, Any]:
+    """Unload the lane at the end of a campaign.
+
+    A campaign loads the model; Ollama keeps it for its keep_alive window, so the
+    NEXT campaign meets a RAM floor it just failed (measured 2026-11-03: 3.5 GB
+    free, preload needs 6.0 -> `readiness_no_go` on the very next run). Releasing
+    the lane on exit is what makes back-to-back campaigns possible on 16 GB.
+    """
+    name = str(model or "").strip()
+    if not name:
+        return {"ok": False, "reason": "no model to release"}
+    exe = shutil.which("ollama")
+    if not exe:
+        return {"ok": False, "reason": "ollama CLI not found", "model": name}
+    try:
+        proc = subprocess.run([exe, "stop", name], capture_output=True, text=True,
+                              timeout=timeout)
+        ok = proc.returncode == 0
+        return {"ok": ok, "model": name, "returncode": proc.returncode,
+                "detail": (proc.stderr or proc.stdout or "").strip()[:200]}
+    except Exception as exc:  # noqa: BLE001 - releasing is best effort, never fatal
+        return {"ok": False, "model": name, "reason": str(exc)[:200]}
+
+
 def heartbeat_age() -> Optional[float]:
     data = _load_json(HEARTBEAT_PATH, None)
     if not isinstance(data, dict) or not data.get("last_seen_ts"):
@@ -2069,6 +2093,14 @@ def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
     finally:
         if lock is not None:
             release_lock()
+        # Hand the model back to the host: the next campaign must be able to pass
+        # the same RAM floor this one needed.
+        try:
+            if active_lane.get("model"):
+                rel = release_model(str(active_lane["model"]))
+                log_event(run_id, f"lane released model={active_lane['model']} ok={rel.get('ok')}")
+        except Exception:  # noqa: BLE001
+            pass
         try:
             write_campaign_heartbeat(
                 run_id=run_id, status="finished", started_at=started_at,
