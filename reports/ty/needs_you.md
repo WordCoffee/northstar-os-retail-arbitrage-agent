@@ -59,10 +59,10 @@ picture does not need them final; a print order does.
 
 
 
-## 7. A 15 s video render is a time commitment, not a blocker (2026-11-03)
+## 7. ~~A 15 s video render is a time commitment~~ — DELIVERED 2026-11-03
 
-The video ad lane is proven end to end on a **3 s** clip (4 min wall clock on this box). A 15 s
-TikTok plans as 5 scenes / 8 sampler clips and takes roughly 20 minutes of local GPU/CPU time.
-POST /api/design-studio/video-ad/plan shows the cost first; POST /render with confirm: true
-starts it. Say the word if you want the 15 s master rendered; the loop will not spend 20 minutes of
-render time on a guess.
+The 15 s TikTok master is rendered and checked: `renders/mogra_lions_mane/video_15s/video_ad.mp4`
+(7,772,276 B, 15.0 s, 450 frames, 1080×1920, h264+aac, -16.0 LUFS, captions OCR-checked, 12.3 min
+wall clock). It used the item-0 product picture as the source. Nothing is left on you; if you want a
+different script, hook or scene count, say so and it becomes the next render. `POST
+/api/design-studio/video-ad/plan` still shows the cost before a render.
