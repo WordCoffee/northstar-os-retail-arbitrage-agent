@@ -1,0 +1,29 @@
+{
+  "video_stitch_20261103": {
+    "status": "DONE - stitch + ffprobe contract, /shorts platform requests now checked; fragment pending operator merge",
+    "commit": "435d0033",
+    "work_order": "reports/ty/creative_scan_20261103.md item 1",
+    "entry_point": "POST /api/design-studio/shorts {platform, seconds} -> stitched MP4; GET /video-formats for the contracts",
+    "module": "Northstar_backend/video_stitch.py (normalise -> concat -> trim -> H.264 MP4 -> ffprobe checks)",
+    "probe": {
+      "state/probes/t13_video_stitch.py": "PASS",
+      "measured": {"clips": 6, "frames_per_clip": 77, "duration_s": 15.0, "frames": 450, "canvas": [1080, 1920], "codec": "h264", "bytes": 6121413, "platform": "tiktok"}
+    },
+    "checks": ["duration within one frame", "exact target frame count", "exact canvas", "exact fps", "h264", "mp4", "size under cap", "audio when requested"],
+    "endpoint_change": "platform requests always go through shorts.generate_stitched (chained clips); a failed picture gate deletes the file and returns the verdict. The old 422 video_needs_stitch is gone because the capability exists.",
+    "tests": {
+      "test_video_stitch.py": "4 passed (planner target, empty refusal, 2-clip 90-frame deliverable, wrong canvas refusal)",
+      "test_shorts_stitch.py": "3 passed (sampler canvas, multi-clip orchestration, failed gate deletes file)",
+      "combined_shorts_video_run": "20 passed"
+    },
+    "gaps": [
+      "captions, audio (voiceover/music/ducking) and the script->scenes planner are not built",
+      "a no-platform /shorts request still returns the legacy WEBM path, unchecked against a deliverable contract",
+      "464x832 -> 1080x1920 upscale is soft; the sampler ceiling is the limit",
+      "Amazon ad-video presets remain verified:false (standing gate)",
+      "the picture gate samples decoded frames, not every frame"
+    ],
+    "gates_held": "No Amazon, no spend, no provider call. ffmpeg/ffprobe local; synthetic clips in the probe, no engine render required.",
+    "report": "reports/ty/video_stitch_20261103.md"
+  }
+}

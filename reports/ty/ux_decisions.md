@@ -97,3 +97,8 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Hygiene - The conftest duplicate is fixed as one hook that scrubs credentials AND restores generated artifacts, scrub first: the scrub is the safety job and must not be lost to a later hook definition again.
 2026-11-03 - Hygiene - The stale edit-lane guard test was corrected, not deleted: the FLUX 2 edit lane is removed and says so, and the video lane's cache-marker guard keeps its assertion. The test still proves a guard.
 2026-11-03 - Hygiene - A duplicate is only removed after its two copies are compared; where the later copy was the intended alias (score_hero), the dead body went, not the alias.
+2026-11-03 - Video - A platform request now always returns a stitched MP4 checked by ffprobe (duration within one frame, exact canvas, h264, mp4, size under cap); the old 'needs stitch' refusal was honest but is no longer the deliverable.
+2026-11-03 - Video - Clips are chained on the previous clip's last decoded frame so motion continues; restarting the motion at every cut is a visible defect.
+2026-11-03 - Video - Every clip is normalised to the placement canvas before concatenation, and the sampler is asked for 464x832 (its 832 px ceiling), not 1080x1920; the upscale is recorded as a quality limit rather than hidden.
+2026-11-03 - Video - One bounded bitrate retry, then a refusal with the measured byte count: a file over the platform cap is never returned as a success.
+2026-11-03 - Video - A failed picture gate deletes the stitched MP4. A file that exists but failed the gate is worse than no file.
