@@ -152,6 +152,42 @@ export function resizeDesign(doc, contentTypeId) {
   }
 }
 
+// ── Package panels (U8) ─────────────────────────────────────────────────────
+// A document can hold several panels. `doc.layers` is always the ACTIVE panel;
+// the others live in `doc.panelLayers`. Switching is a document change (so it is
+// undoable and autosaved) but it never clears the history stack, and each panel
+// keeps its own layer tree.
+export const PANEL_IDS = ['front', 'back', 'gusset']
+
+function blankPanel() {
+  return [{ id: layerId('BG'), kind: KIND.BG, name: 'Background', fill: '#f5f0e8' }]
+}
+
+export function switchPanel(doc, panelId) {
+  const current = doc.activePanel || 'front'
+  if (!PANEL_IDS.includes(panelId) || panelId === current) return doc
+  const panelLayers = { ...(doc.panelLayers || {}), [current]: doc.layers }
+  const target = panelLayers[panelId]
+  return {
+    ...doc,
+    activePanel: panelId,
+    panelLayers,
+    layers: Array.isArray(target) && target.length ? target : blankPanel(),
+    updatedAt: new Date().toISOString(),
+  }
+}
+
+/** How many layers each panel holds, for the switcher's labels. */
+export function panelCounts(doc) {
+  const active = doc.activePanel || 'front'
+  const out = {}
+  for (const id of PANEL_IDS) {
+    const layers = id === active ? doc.layers : (doc.panelLayers || {})[id]
+    out[id] = Array.isArray(layers) ? layers.length : 0
+  }
+  return out
+}
+
 // ── Snapping ────────────────────────────────────────────────────────────────
 // Canva-style guides: an edge or a centre lines up with the canvas edge or the
 // canvas centre. `snapAxis` returns the value it would use and which guide fired,

@@ -36,9 +36,13 @@ import {
   createDesign, addText, addImage, addShape, lastLayerId, resizeDesign, TEXT_PRESETS,
   initHistory, currentValue, pushHistory, undoHistory, redoHistory, canUndo, canRedo,
   serialiseDesign, parseDesign, assetsWithinBudget, exportFileName, base64ToBytes, pdfFromJpeg,
+  switchPanel, panelCounts,
   DESIGN_STORE_KEY, MAX_ASSET_CHARS,
 } from '../../../lib/studioCanvas.js'
 import { parseInstruction, applyInstruction, describeCanvas } from '../../../lib/canvasCommands.js'
+import {
+  PANELS, GUIDE_KINDS, panelSize, guidesForPanel, describeOverlay,
+} from '../../../lib/dielineOverlay.js'
 import { useWorkspaceOptional } from '../../../shell/WorkspaceTabs.jsx'
 
 const ZOOM_MIN = 0.2
@@ -119,6 +123,12 @@ export default function CanvasWorkspace({ onNavigateSection }) {
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [guides, setGuides] = useState([])
   const [showGuides, setShowGuides] = useState(true)
+  // U8: package panels + the dieline overlay. The overlay is DOM-only, so it can
+  // never reach an exported PNG/PDF (the export path renders the document only).
+  const [dieline, setDieline] = useState(null)
+  const [showDieline, setShowDieline] = useState(true)
+  const [guideKinds, setGuideKinds] = useState(GUIDE_KINDS.map((k) => k.id))
+  const [loadingDieline, setLoadingDieline] = useState(false)
   const [exporting, setExporting] = useState('')
   const [lastExport, setLastExport] = useState(null)
   const [saveState, setSaveState] = useState(
@@ -362,6 +372,79 @@ export default function CanvasWorkspace({ onNavigateSection }) {
     toast(`${contentTypeLabel(id)} - ${next.w}x${next.h}. Layers keep their relative positions.`, 'info')
   }
 
+  // ── U8: dieline overlay + package panels ─────────────────────────────────
+  const loadDieline = async () => {
+    setLoadingDieline(true)
+    try {
+      const send = () => fetch('/api/design-studio/print/dielines/geometry', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(import.meta.env.DEV ? { 'X-User-Id': 'demo-t2' } : {}) },
+        body: JSON.stringify({
+          template_id: 'doypack',
+          params: { width_mm: 150, height_mm: 210, gusset_mm: 40 },
+        }),
+      })
+      let res = await send()
+      // Anonymous callers sit in a 30/min bucket; one bounded retry, then say so.
+      if (res.status === 429) {
+        const wait = Math.min(2000, Math.max(400, (Number(res.headers.get('Retry-After')) || 1) * 1000))
+        await new Promise((resolve) => setTimeout(resolve, wait))
+        res = await send()
+      }
+      if (!res.ok) {
+        throw new Error(res.status === 429
+          ? 'the API is rate-limiting this browser (30 calls a minute); wait a moment and try again'
+          : `HTTP ${res.status}`)
+      }
+      const geometry = await res.json()
+      if (!geometry || geometry.ok === false) throw new Error(geometry?.detail || 'the print lane refused')
+      setDieline({ geometry })
+      setShowDieline(true)
+      const size = panelSize(geometry, currentValue(history).activePanel || 'front')
+      if (size) applyDoc({ ...currentValue(history), w: size.w, h: size.h })
+      toast(`Dieline attached: ${describeOverlay(geometry, 'front')}. Guides are never exported.`, 'info')
+    } catch (e) {
+      toast(`Could not load the dieline: ${e.message}. Nothing was attached.`, 'warn')
+    } finally {
+      setLoadingDieline(false)
+    }
+  }
+
+  const switchToPanel = (panelId) => {
+    const base = currentValue(history)
+    let next = switchPanel(base, panelId)
+    if (next === base) return
+    if (dieline) {
+      const size = panelSize(dieline.geometry, panelId)
+      if (size) next = { ...next, w: size.w, h: size.h }
+    }
+    applyDoc(next)
+    setSelected('')
+  }
+
+  const toggleGuideKind = (kind) => {
+    setGuideKinds((prev) => (prev.includes(kind) ? prev.filter((k) => k !== kind) : [...prev, kind]))
+  }
+
+  const activePanel = doc.activePanel || 'front'
+  const dielineGuides = dieline ? guidesForPanel(dieline.geometry, activePanel, { kinds: guideKinds }) : null
+  const dielineOverlay = (dieline && showDieline && dielineGuides) ? (
+    <svg className="cw-dieline" data-testid="cw-dieline" viewBox="0 0 1 1"
+         preserveAspectRatio="none" aria-hidden="true">
+      {dielineGuides.rects.map((r, i) => (
+        <rect key={`r${i}`} x={r.x} y={r.y} width={r.w} height={r.h} fill="none"
+              stroke={(GUIDE_KINDS.find((k) => k.id === r.kind) || GUIDE_KINDS[1]).colour}
+              strokeWidth="1" vectorEffect="non-scaling-stroke" />
+      ))}
+      {dielineGuides.lines.map((l, i) => (
+        <line key={`l${i}`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+              stroke={(GUIDE_KINDS.find((k) => k.id === l.kind) || GUIDE_KINDS[2]).colour}
+              strokeWidth="1" strokeDasharray="4 3" vectorEffect="non-scaling-stroke" />
+      ))}
+    </svg>
+  ) : null
+
   // ── export ───────────────────────────────────────────────────────────────
   const doExport = async (kind) => {
     if (exporting) return
@@ -458,6 +541,24 @@ export default function CanvasWorkspace({ onNavigateSection }) {
           })}
         </div>
         <div className="cw-actions">
+          {doc.contentType === 'package' && (
+            <div className="cw-panels" role="tablist" aria-label="Package panel">
+              {PANELS.map((p) => (
+                <button key={p.id} type="button" role="tab" aria-selected={activePanel === p.id}
+                        className={`glass-tab ${activePanel === p.id ? 'is-active' : ''}`}
+                        data-testid={`cw-panel-${p.id}`} onClick={() => switchToPanel(p.id)}>
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          )}
+          <button type="button" className={`glass-btn is-ghost cw-icon ${showDieline ? 'is-on' : ''}`}
+                  data-testid="cw-dieline-toggle" aria-pressed={showDieline}
+                  disabled={!dieline} onClick={() => setShowDieline((v) => !v)}
+                  title={dieline ? 'Show the dieline guides (never exported)' : 'Load a dieline first'}
+                  aria-label="Dieline guides">
+            <Icon name="grid" size={14} />
+          </button>
           <button type="button" className="glass-btn is-ghost cw-icon" data-testid="cw-undo"
                   onClick={undo} disabled={!canUndo(history)} title="Undo (Ctrl+Z)" aria-label="Undo">
             <Icon name="rotate" size={14} />
@@ -592,6 +693,7 @@ export default function CanvasWorkspace({ onNavigateSection }) {
               snap={showGuides}
               onGuides={setGuides}
               guides={showGuides ? guides : []}
+              overlay={dielineOverlay}
               minHeight={260}
               maxHeight={640}
               footer={(
@@ -627,6 +729,30 @@ export default function CanvasWorkspace({ onNavigateSection }) {
                 <div className="cw-readonly" data-testid="cw-doc-size">
                   {doc.w}x{doc.h} · {doc.channel || 'no channel'} · {type.registrySource || 'registry'} {type.registryId}
                 </div>
+              </div>
+
+              <div className="cw-field">
+                <span>Dieline</span>
+                <div className="cw-readonly" data-testid="cw-dieline-state">
+                  {dieline ? describeOverlay(dieline.geometry, activePanel) : 'No dieline attached.'}
+                </div>
+                <div className="cw-dieline-actions">
+                  <button type="button" className="glass-btn is-ghost" data-testid="cw-load-dieline"
+                          onClick={loadDieline} disabled={loadingDieline}>
+                    {loadingDieline ? 'Loading...' : dieline ? 'Reload the dieline' : 'Attach a doypack dieline'}
+                  </button>
+                  {dieline && GUIDE_KINDS.map((k) => (
+                    <button key={k.id} type="button"
+                            className={`cw-guide-chip ${guideKinds.includes(k.id) ? 'is-on' : ''}`}
+                            data-testid={`cw-guide-${k.id}`} aria-pressed={guideKinds.includes(k.id)}
+                            onClick={() => toggleGuideKind(k.id)} title={`${k.label} guides`}>
+                      <span className="cw-guide-dot" style={{ background: k.colour }} /> {k.label}
+                    </button>
+                  ))}
+                </div>
+                <span className="cw-note">
+                  Guides are drawn on the artboard only — they are never rasterised into the PNG or PDF.
+                </span>
               </div>
 
               {!selectedLayer && (

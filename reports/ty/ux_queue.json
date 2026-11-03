@@ -67,16 +67,17 @@
        "zone_proof": "cw-canvas-zone background rgb(22,29,39) = --wb-solid, backdrop-filter none, exactly 1 canvas inside it (the artboard), topmost at its centre"
      },
      "notes": "CanvasWorkspace.jsx + lib/studioCanvas.js + styles/canvas.css. Six content types resolve through presets.js/specRegistry.js. Undo/redo, snapping with drawn guides, autosave (versioned, TTL, validated), PNG export and a real PDF 1.4 (DCTDecode, xref verified in the unit test). Fixed a layout defect U7 exposed: WorkbenchShell's tab panel reused the class `.wb-panel`, which chat.css owns as a fixed 372px floating aside - every workspace was a floating box. Renamed to `.wb-tabpanel`; the workbench-scene canvas assertion was scoped to the scene host because the studio artboard is now a second, legitimate canvas."},
-    {"id": "U8", "status": "partial", "tag": "ns-ux-U8b", "tokens": 420000,
+    {"id": "U8", "status": "done", "tag": "ns-ux-U8-complete", "tokens": 520000,
      "evidence": {
-       "unit": "179/179 (11 new in canvasCommands.test.js)",
-       "backend": "pytest test_canvas_edit_tool.py 6 passed (registered schema, no-canvas refusal, missing layer, empty instruction, no mutation)",
-       "e2e_bojo": "bojo-canvas.spec.ts: desktop 1 passed - typing 'make the headline bigger' at Bojo moves the headline 9.0% -> 10.8%, read back from the properties panel; a refusal changes nothing. Mobile SKIPPED with the reason (phone sheet composer unreachable headlessly); the command layer itself is covered on both targets in studio-canvas.spec.ts",
-       "e2e_canvas": "studio-canvas.spec.ts desktop 5 passed + 1 skipped, mobile 6 passed",
-       "batch": "workbench trio + studio-canvas + ppc-harvest + bojo-canvas -> 36 passed, 2 skipped, 4 failed only because the dev servers died mid-run; ppc-harvest re-ran 4/4 with both /health endpoints at 200",
-       "build": "1.50s"
+       "unit": "189/189 (11 canvasCommands + 10 dielineOverlay/panels new)",
+       "backend": "pytest test_canvas_edit_tool.py 6 passed; pytest test_dieline_geometry_api.py 3 passed",
+       "e2e_panels": "package-panels.spec.ts 2 passed on BOTH targets: Front/Rear keep their own layers across a round trip; the dieline overlay draws >2 guide shapes, is pointer-events:none, and the exported PNG byte count is IDENTICAL with the overlay on and off",
+       "e2e_bojo": "bojo-canvas.spec.ts desktop passed (headline 9.0% -> 10.8% via Bojo, read back from the panel); mobile skipped with the reason in the test",
+       "batch": "7 specs x 2 targets -> 44 passed, 2 skipped, 0 failed (1.7m)",
+       "screenshot": "reports/ty/shots/u8-package-desktop.png (package panel, guides, dieline state)",
+       "build": "1.42s"
      },
-     "notes": "DONE: lib/canvasCommands.js (bounded parse+apply), WorkspaceTabs publishing (summary.canvas + one registered command entry point), CanvasWorkspace registering it, the backend canvas_edit tool (chat_tools.TOOLS) that refuses without a canvas, TurnIn.canvas -> options -> worker_ctx plumbing, ChatSurface sending the canvas, applying a canvas_edit tool result, and a local fast path so an unambiguous canvas sentence is executed without waiting on the model. ALSO FIXED: the Bojo dock/sheet chat shell kept its 236px rail inside a 380px dock, squeezing the composer input to ZERO width - the rail is now an overlay in both containers. NOT DONE: package mode (front/rear panels with the dieline overlay)."},
+     "notes": "DONE: canvas command layer + publishing + backend canvas_edit tool + turn plumbing + local fast path (U8b), then package mode: switchPanel keeps per-panel layer trees without clearing history, and a dieline overlay draws bleed/trim/fold/safe from the SAME builder the print lane uses (POST /api/design-studio/print/dielines/geometry, added to design_studio_print.py). The overlay is DOM-only, so it cannot reach an export - proven by identical PNG bytes with it on and off. Guides toggle per kind; the artboard takes the panel size at 4 px/mm. ALSO FIXED in this unit: the Bojo dock/sheet composer was 0px wide (chat rail inside a 380px dock)."},
     {"id": "U9", "status": "done", "tag": "ns-ux-U9", "tokens": 260000,
      "evidence": {
        "unit": "179/179 (5 new asteroidField, 6 new ppcCsv)",

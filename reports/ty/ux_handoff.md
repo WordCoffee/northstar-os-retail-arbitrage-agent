@@ -1,40 +1,39 @@
 # UX rebuild — handoff
 
-**State:** U0–U7 and U9 done and verified on both targets. **U8 is PARTIAL**: the canvas command
-layer, the publishing, the backend `canvas_edit` tool and the Bojo click path are done and tested;
-**package mode (front/rear panels with the dieline overlay) is not built.** Last tag `ns-ux-U8b`.
-Dev servers are up from `scripts/dev-start.ps1` after `tailscale serve status` returned
-**No serve config**.
+**State:** U0–U9 done and verified on both targets. **U8 is complete** (`ns-ux-U8-complete`).
+Last tag `ns-ux-U8-complete`. Dev servers are up from `scripts/dev-start.ps1` after
+`tailscale serve status` returned **No serve config**.
 
-**Next action:** U8's package mode, then U10 (Research scene + workspace).
+**Next action:** U10 (Research scene + workspace).
 
-## U8 — the model-facing half is done; package mode is not
+## U8 — done
 
-Done (committed, tested):
+**Bojo on the canvas.** `lib/canvasCommands.js` (bounded parse + apply); the workspace publishes
+`summary.canvas` and registers one command entry point; the backend `canvas_edit` tool checks the
+open canvas can satisfy an instruction (it never mutates) and `TurnIn.canvas` travels to
+`worker_ctx`; `ChatSurface` sends the canvas, applies a tool result, and applies an unambiguous
+sentence locally before the model (so it works even when the model lane is down). Proven:
+"make the headline bigger" at Bojo moves the headline 9.0% → 10.8%, read back from the panel.
 
-- `src/lib/canvasCommands.js` — `parseInstruction` + `applyInstruction` (`set_text`, `scale_text`,
-  `add_text`, `select`, `swap_asset`); every refusal names the reason.
-- `WorkspaceTabs` publishes `summary.canvas` and registers exactly one command entry point;
-  `CanvasWorkspace` registers it; `WorkbenchShell` mirrors `data-canvas-id/-layers`.
-- **Backend:** `chat_tools.TOOLS["canvas_edit"]` — it only CHECKS that the open canvas can satisfy
-  the instruction and refuses when there is no canvas or no such layer. `TurnIn.canvas` travels to
-  `options` and into `worker_ctx`. `ChatSurface` sends the canvas, applies a `canvas_edit` tool
-  result, and applies an unambiguous canvas sentence locally (before the model) so the feature works
-  even when the model lane is down. `recognised:false` falls through, so a question is never hijacked.
-- **Fixed:** the Bojo dock/sheet composer was 0 px wide (the chat shell kept its 236 px rail inside a
-  380 px dock). The rail is an overlay in the dock and the phone sheet now.
-- Tests: `bojo-canvas.spec.ts` desktop — typing "make the headline bigger" at Bojo moves the headline
-  9.0% → 10.8%, read back from the properties panel; a refusal changes nothing. `test_canvas_edit_tool.py`
-  6 passed. `studio-canvas.spec.ts` covers the same command layer on both targets.
+**Package mode.** `switchPanel` keeps a layer tree per panel (`front` / `back` / `gusset`) without
+clearing history; switching is an undoable, autosaved document change. The dieline overlay draws
+bleed / trim / fold / safe from the SAME builder the print lane uses
+(`POST /api/design-studio/print/dielines/geometry`), sizes the artboard to the panel at 4 px/mm,
+toggles per guide kind, and is `pointer-events:none`.
 
-Not done — the rest of U8:
+**The overlay cannot be exported.** It is an SVG in the DOM, never a canvas draw, so the export path
+cannot see it — proven by exporting a PNG with the overlay on and off and asserting the byte counts
+are identical.
 
-1. **Package mode.** With the `package` content type, show front and rear panels with the dieline
-   overlay, reusing `Dielines.jsx`'s SVG output and the print formats in `presets.js`. Do not
-   re-implement the dieline geometry.
+**Also fixed:** the Bojo dock/sheet composer was 0 px wide (the chat shell kept its 236 px rail
+inside a 380 px dock). The rail is an overlay in both containers now.
 
-Known limit: the phone's Bojo sheet composer is not reachable in the headless iPhone profile (it sits
-under the fixed bottom nav), so `bojo-canvas.spec.ts` skips mobile with that reason in the test.
+Evidence: unit 189/189, backend 9 passed (`test_canvas_edit_tool` 6 + `test_dieline_geometry_api` 3),
+7 e2e specs × 2 targets → 44 passed / 2 skipped / 0 failed, screenshot
+`reports/ty/shots/u8-package-desktop.png`, build 1.42s.
+
+Known limit: the phone's Bojo sheet composer is not reachable in the headless iPhone profile (under
+the fixed bottom nav), so `bojo-canvas.spec.ts` skips mobile with that reason in the test.
 
 ## U9 — done
 

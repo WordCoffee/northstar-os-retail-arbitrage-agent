@@ -726,6 +726,39 @@ def list_templates(acct: str = Depends(studio_account)):
             ]}
 
 
+@router.post("/dielines/geometry")
+def dieline_geometry_view(body: DielineIn, acct: str = Depends(studio_account)):
+    """Guide geometry for the studio overlay (U8), in millimetres.
+
+    The SAME builder the print lane uses, so an overlay can never disagree with
+    the dieline it is drawn over. Only the guide layers are returned; the artwork
+    layers stay in the print lane.
+    """
+    try:
+        build = build_from_template(body.template_id, body.params)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    guides: Dict[str, list] = {}
+    for el in build.get("layers") or []:
+        kind = str(el.get("layer") or "")
+        if kind in ("bleed", "trim", "safe", "fold"):
+            guides.setdefault(kind, []).append(el)
+    meta = build.get("meta") or {}
+    return {
+        "ok": True,
+        "template": meta.get("template"),
+        "title": build.get("title"),
+        "width_mm": build.get("width_mm"),
+        "height_mm": build.get("height_mm"),
+        "bleed_mm": meta.get("bleed_mm"),
+        "safe_mm": meta.get("safe_mm"),
+        "panels": meta.get("panels") or {},
+        "confidence": meta.get("confidence"),
+        "note": build.get("note"),
+        "guides": guides,
+    }
+
+
 @router.post("/dielines")
 def create_dieline(body: DielineIn, acct: str = Depends(studio_account)):
     """Build a layered dieline. persist=True writes SVG+PDF assets; the response

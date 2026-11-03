@@ -39,6 +39,7 @@ export default function Stage({
   snap = false,
   onGuides,
   guides = [],
+  overlay = null,
 }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
@@ -205,6 +206,7 @@ export default function Stage({
               ? <div key={`gx${i}`} className="stage-guide stage-guide-x" style={{ left: `${g.at * 100}%` }} />
               : <div key={`gy${i}`} className="stage-guide stage-guide-y" style={{ top: `${g.at * 100}%` }} />
           ))}
+          {overlay}
           {selected && selected.kind !== 'bg' && (
             <div
               className="stage-sel"
