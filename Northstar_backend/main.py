@@ -71,6 +71,7 @@ try:
     from text_fidelity import router as design_studio_text_router
     from design_studio_compose import router as design_studio_compose_router
     from design_studio_aplus import router as design_studio_aplus_router
+    from product_picture_api import router as design_studio_product_picture_router
     _HAS_DESIGN_STUDIO_EXT = True
 except ImportError:
     _HAS_DESIGN_STUDIO_EXT = False
@@ -368,6 +369,7 @@ if _HAS_DESIGN_STUDIO_EXT:
     app.include_router(design_studio_text_router)
     app.include_router(design_studio_compose_router)
     app.include_router(design_studio_aplus_router)
+    app.include_router(design_studio_product_picture_router)
 
 # Studio dashboard — packages on disk, proposals, safe file serving (2026-11-02)
 if _HAS_STUDIO_DASHBOARD:

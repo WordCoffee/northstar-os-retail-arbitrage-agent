@@ -76,8 +76,11 @@ if (-not $comfyUp -and -not $NoComfy) {
         Write-Host "flux3: ComfyUI is down and tools/start_comfyui.ps1 is missing"; exit 2
     }
     Write-Host "flux3: starting ComfyUI on :$ComfyPort"
+    # The repo path contains a space ("Northstar OS ..."), and Start-Process joins
+    # -ArgumentList with spaces without quoting. Unquoted, `-File` receives only
+    # "C:\Users\T2Hol\Desktop\Northstar" and ComfyUI silently never starts.
     $comfy = Start-Process -FilePath "powershell" `
-        -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",$starter,"--cache-none" `
+        -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",("`"$starter`""),"--cache-none" `
         -WindowStyle Hidden -PassThru
     # start_comfyui.ps1 already blocks until ComfyUI answers and then exits: wait for
     # ITS verdict rather than guessing a timeout. A cold start after a hard kill can
