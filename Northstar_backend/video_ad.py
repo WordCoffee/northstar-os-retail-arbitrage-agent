@@ -56,7 +56,8 @@ def produce(product: Dict[str, Any], *, platform: str,
             render_scene: Optional[Callable[[Dict[str, Any], int], bytes]] = None,
             steps: int = 24, cfg: float = 5.0, seed: int = 0,
             music: Optional[Union[str, Path]] = None,
-            voice: Optional[str] = None) -> Dict[str, Any]:
+            voice: Optional[str] = None,
+            voiceover_text: Optional[str] = None) -> Dict[str, Any]:
     """Produce the full video. Returns the manifest; raises on a stage refusal."""
     plan = video_script.plan_scenes(product, platform=platform, seconds=seconds,
                                     seed=seed)
@@ -122,7 +123,7 @@ def produce(product: Dict[str, Any], *, platform: str,
             raise VideoAdError("video_ad_caption_failed: " + str(captioned.get("reason")))
 
         # 4. audio ---------------------------------------------------------
-        script = " ".join(s["voiceover"] for s in plan["scenes"])
+        script = voiceover_text or " ".join(s["voiceover"] for s in plan["scenes"])
         voiced = video_audio.add_audio(
             Path(captioned["file"]), tmp_dir / "final.mp4", script=script,
             voice=voice, music=music)
@@ -138,7 +139,12 @@ def produce(product: Dict[str, Any], *, platform: str,
             "audio_checked": bool(voiced.get("ok")),
             "has_audio": bool(final.get("has_audio")),
             "canvas_exact": (final["width"], final["height"]) == (width, height),
-            "frames_exact": final["nb_frames"] == plan["target_frames"],
+            # The stitch stage proved the exact frame count. The caption burn
+            # re-encodes the picture, so the final check is the one-frame
+            # duration tolerance, not a container frame count that AAC muxing
+            # may omit (probe then derives it from duration, which can round).
+            "duration_within_one_frame": abs(final["duration"] - plan["seconds"])
+            <= 1.0 / plan["fps"] + 1e-3,
         }
         failed = [k for k, ok in checks.items() if not ok]
         manifest = {
@@ -150,6 +156,7 @@ def produce(product: Dict[str, Any], *, platform: str,
             "canvas": [width, height],
             "fps": plan["fps"],
             "render_canvas": [render_w, render_h],
+            "final": final,
             "scenes": plan["scenes"],
             "clips": clip_records,
             "stitch": {"checks": stitched["checks"], "final": stitched["final"],

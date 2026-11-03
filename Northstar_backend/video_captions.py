@@ -172,7 +172,7 @@ def render_cue(text: str, *, width: int, height: int, preset: Dict[str, Any],
     d = ImageDraw.Draw(layer)
     radius = int(size * 0.22)
     d.rounded_rectangle([x0, y0, x0 + block_w, y1], radius=radius,
-                        fill=(8, 10, 9, 178))
+                        fill=(8, 10, 9, 232))
     ty = y0 + pad_y
     for line in lines:
         line_w = measure.textlength(line, font=font)

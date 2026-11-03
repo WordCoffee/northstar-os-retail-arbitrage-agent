@@ -59,3 +59,12 @@ def test_a_silent_request_is_refused(tmp_path):
 def test_a_missing_voice_file_is_refused(tmp_path):
     with pytest.raises(va.AudioError, match="voice_missing"):
         va.mix(tmp_path / "nope.wav", None, tmp_path / "x.wav")
+
+def test_a_short_line_does_not_shorten_the_picture(tmp_path):
+    """sidechaincompress/amix can follow the shorter input; the mix is padded."""
+    source = _clip(tmp_path / "src.mp4", 3.0)
+    out = tmp_path / "out.mp4"
+    result = va.add_audio(source, out, script="Hi.")
+    assert result["ok"] is True, result
+    assert result["probe"]["duration"] == pytest.approx(3.0, abs=1 / 30 + 1e-3)
+    assert result["probe"]["nb_frames"] >= 89

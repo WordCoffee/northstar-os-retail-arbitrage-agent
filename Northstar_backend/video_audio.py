@@ -129,13 +129,22 @@ def volume(path: Union[str, Path]) -> Dict[str, float]:
 def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
         out_wav: Union[str, Path], *, music_gain: float = 0.32,
         duck_threshold: float = 0.03, duck_ratio: float = 6.0,
-        sample_rate: int = 44100) -> Dict[str, Any]:
-    """Mix voice over a ducked bed, then two-pass loudness-normalise."""
+        sample_rate: int = 44100,
+        total_seconds: Optional[float] = None) -> Dict[str, Any]:
+    """Mix voice over a ducked bed, then two-pass loudness-normalise.
+
+    `total_seconds` pads the voice with silence before the sidechain and trims
+    the mix to the picture's length. Without it a short line ends the ducked bed
+    early (sidechaincompress follows its shortest input), the mix comes out
+    shorter than the video, and `-shortest` silently drops the last frames.
+    """
     voice = Path(voice_wav)
     if not voice.is_file():
         raise AudioError(f"voice_missing: {voice}")
     out = Path(out_wav)
     out.parent.mkdir(parents=True, exist_ok=True)
+    pad = f",apad=whole_dur={float(total_seconds):.3f}" if total_seconds else ""
+    trim = f",atrim=0:{float(total_seconds):.3f}" if total_seconds else ""
 
     with tempfile.TemporaryDirectory(prefix="ns-mix-") as tmp:
         tmp_dir = Path(tmp)
@@ -147,17 +156,21 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
             graph = (
                 f"[1:a]volume={float(music_gain):.3f},"
                 f"aformat=sample_rates={sample_rate}:channel_layouts=stereo[bed];"
-                f"[bed][0:a]sidechaincompress=threshold={float(duck_threshold):.3f}:"
+                f"[0:a]aformat=sample_rates={sample_rate}:channel_layouts=stereo{pad},"
+                f"asplit=2[voice_mix][voice_sc];"
+                f"[bed][voice_sc]sidechaincompress=threshold={float(duck_threshold):.3f}:"
                 f"ratio={float(duck_ratio):.1f}:attack=5:release=280:makeup=1[ducked];"
-                f"[0:a]aformat=sample_rates={sample_rate}:channel_layouts=stereo[voice];"
-                f"[voice][ducked]amix=inputs=2:duration=longest:dropout_transition=0:"
-                f"normalize=0[mix]"
+                f"[voice_mix][ducked]amix=inputs=2:duration=longest:dropout_transition=0:"
+                f"normalize=0[mix0];[mix0]anull{trim}[mix]"
             )
             argv = [video_stitch.FFMPEG, "-y", "-i", str(voice), "-i", str(music),
                     "-filter_complex", graph, "-map", "[mix]", "-ac", "2",
                     "-ar", str(sample_rate), str(raw)]
         else:
-            argv = [video_stitch.FFMPEG, "-y", "-i", str(voice), "-ac", "2",
+            graph = (f"[0:a]aformat=sample_rates={sample_rate}:channel_layouts=stereo"
+                     f"{pad}{trim}[mix]")
+            argv = [video_stitch.FFMPEG, "-y", "-i", str(voice),
+                    "-filter_complex", graph, "-map", "[mix]", "-ac", "2",
                     "-ar", str(sample_rate), str(raw)]
         result = _run(argv)
         if result.returncode != 0:
@@ -182,11 +195,27 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
                              + (result.stderr.strip().splitlines() or [""])[-1][:400])
 
     final = loudness(out)
+    # A two-pass loudnorm is close, not exact, on very short or very dynamic
+    # material. One bounded linear correction (never a limiter) puts the
+    # integrated level on target; the value is re-measured afterwards.
+    delta = float(TARGET_LUFS) - float(final.get("input_i", TARGET_LUFS))
+    corrected = False
+    if abs(delta) > 0.5:
+        corrected = True
+        delta = max(-12.0, min(12.0, delta))
+        fixed = out.with_suffix(".gain.wav")
+        result = _run([video_stitch.FFMPEG, "-y", "-i", str(out),
+                       "-af", f"volume={delta:.2f}dB", "-ac", "2",
+                       "-ar", str(sample_rate), str(fixed)])
+        if result.returncode == 0:
+            fixed.replace(out)
+            final = loudness(out)
     vol = volume(out)
     return {
         "ok": True, "file": str(out), "music": bool(music_wav),
         "ducked": bool(music_wav), "measured_input": measured,
         "measured_final": final, "volume": vol,
+        "gain_correction_db": round(delta, 2) if corrected else 0.0,
         "target_lufs": TARGET_LUFS,
     }
 
@@ -292,8 +321,9 @@ def add_audio(video: Union[str, Path], out_path: Union[str, Path], *,
             music_wav = tmp_dir / "bed.wav"
             music_wav.write_bytes(ambient_bed(seconds))
         mixed = tmp_dir / "mix.wav"
+        duration = float(video_stitch.probe(video_path).get("duration") or 0.0) or None
         mix_result = mix(voice_wav or music_wav, music_wav if voice_wav else None,
-                         mixed, music_gain=music_gain)
+                         mixed, music_gain=music_gain, total_seconds=duration)
         verified = mux(video_path, mixed, out_path)
     verified["mix"] = mix_result
     verified["script"] = script

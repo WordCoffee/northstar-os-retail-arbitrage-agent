@@ -79,7 +79,8 @@ def probe(path: Union[str, Path]) -> Dict[str, Any]:
 
     duration = float(fmt.get("duration") or video.get("duration") or 0.0)
     fps = _fraction(video.get("avg_frame_rate") or video.get("r_frame_rate") or "0/1")
-    nb_frames = int(video.get("nb_frames") or 0) or int(round(duration * fps))
+    declared = int(video.get("nb_frames") or 0)
+    nb_frames = declared or int(round(duration * fps))
     return {
         "path": str(path),
         "bytes": int(fmt.get("size") or Path(path).stat().st_size),
@@ -88,6 +89,7 @@ def probe(path: Union[str, Path]) -> Dict[str, Any]:
         "height": int(video.get("height") or 0),
         "fps": round(fps, 4),
         "nb_frames": nb_frames,
+        "nb_frames_source": "container" if declared else "derived",
         "codec": video.get("codec_name"),
         "pix_fmt": video.get("pix_fmt"),
         "container": fmt.get("format_name"),
