@@ -49,6 +49,13 @@ def _chunks(frames: int, max_frames: int = video_formats.MAX_FRAMES_PER_CLIP
     return [_wan_frames(base + (1 if i < extra else 0)) for i in range(count)]
 
 
+def scene_chunks(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Public view of the clip plan, for a dry run or a progress estimate."""
+    return [{"scene": int(s["index"]), "beat": s["beat"],
+             "chunks": _chunks(int(s["frames"]))}
+            for s in plan.get("scenes") or []]
+
+
 def produce(product: Dict[str, Any], *, platform: str,
             seconds: Optional[float] = None,
             out_dir: Union[str, Path],
@@ -57,10 +64,21 @@ def produce(product: Dict[str, Any], *, platform: str,
             steps: int = 24, cfg: float = 5.0, seed: int = 0,
             music: Optional[Union[str, Path]] = None,
             voice: Optional[str] = None,
-            voiceover_text: Optional[str] = None) -> Dict[str, Any]:
+            voiceover_text: Optional[str] = None,
+            on_progress: Optional[Callable[[str, Dict[str, Any]], None]] = None
+            ) -> Dict[str, Any]:
     """Produce the full video. Returns the manifest; raises on a stage refusal."""
+    def emit(stage: str, **detail: Any) -> None:
+        if on_progress is None:
+            return
+        try:
+            on_progress(stage, detail)
+        except Exception:  # noqa: BLE001 - progress must never break the render
+            pass
+
     plan = video_script.plan_scenes(product, platform=platform, seconds=seconds,
                                     seed=seed)
+    emit("script", scenes=len(plan["scenes"]), seconds=plan["seconds"])
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     final_path = out / FINAL_NAME
@@ -82,6 +100,8 @@ def produce(product: Dict[str, Any], *, platform: str,
         clip_records: List[Dict[str, Any]] = []
         for scene in plan["scenes"]:
             for piece, frames in enumerate(_chunks(scene["frames"])):
+                emit("clip", scene=scene["index"], beat=scene["beat"],
+                     piece=piece, frames=frames)
                 if render_scene is not None:
                     payload = render_scene(scene, frames)
                 else:
@@ -104,6 +124,7 @@ def produce(product: Dict[str, Any], *, platform: str,
             raise VideoAdError("video_ad_no_clips: the script produced no clips")
 
         # 2. stitch --------------------------------------------------------
+        emit("stitch", clips=len(clip_paths))
         stitched = video_stitch.stitch_clips(
             clip_paths, tmp_dir / "stitched.mp4", platform=plan["platform"],
             seconds=plan["seconds"])
@@ -116,6 +137,7 @@ def produce(product: Dict[str, Any], *, platform: str,
                  "text": s["on_screen_text"],
                  "words": [w for w in s["on_screen_text"].split() if w]}
                 for s in plan["scenes"]]
+        emit("captions", cues=len(cues))
         captioned = video_captions.burn_captions(
             stitched_path, cues, tmp_dir / "captioned.mp4",
             platform=plan["platform"])
@@ -124,6 +146,7 @@ def produce(product: Dict[str, Any], *, platform: str,
 
         # 4. audio ---------------------------------------------------------
         script = voiceover_text or " ".join(s["voiceover"] for s in plan["scenes"])
+        emit("audio", script_chars=len(script))
         voiced = video_audio.add_audio(
             Path(captioned["file"]), tmp_dir / "final.mp4", script=script,
             voice=voice, music=music)
@@ -174,9 +197,10 @@ def produce(product: Dict[str, Any], *, platform: str,
             final_path.unlink(missing_ok=True)
         (out / "video_ad_manifest.json").write_text(
             json.dumps(manifest, indent=2), encoding="utf-8")
+        emit("done", ok=not failed, file=str(final_path))
     if not manifest["ok"]:
         raise VideoAdError(manifest["reason"])
     return manifest
 
 
-__all__ = ["produce", "VideoAdError", "FINAL_NAME"]
+__all__ = ["produce", "VideoAdError", "FINAL_NAME", "scene_chunks"]
