@@ -41,6 +41,31 @@ listing lettered: listing_image_refused: text_free
 t17 still frames: OK
 ```
 
+## API
+
+`POST /api/design-studio/social-frames/render` takes a product picture as a data URL, a placement,
+the copy and a palette; it returns the measured boxes, contrast, OCR words, a PNG data URL and the
+saved path. `GET /api/design-studio/social-frames/placements` returns the eight contracts.
+
+A frame that fails its own check is saved as `rejected_*` and returned as a **422** with the candidate
+path and the reason — it is never presented as a deliverable. `amazon-main` refuses copy by contract.
+
+Live run (real `product_front.png`, TikTok):
+
+```
+ok: true
+file: Northstar_backend/data/studio_generated/tiktok_e445423614.png
+canvas: [864, 1536]
+boxes: headline [51,749,708,1001], subline [51,1028,708,1081],
+       cta [51,1108,310,1183], product [180,122,580,722]
+contrast: 11.14 / 11.14 / 7.41
+checks: ocr_available, headline_read, cta_read, inside_safe_area, contrast_aa -> all true
+compliance: verified true (TikTok)
+```
+
+The endpoint writes no database row: it returns the image and its path so the caller's own asset flow
+decides where it lives. That keeps the account-scoped storage out of a stateless render.
+
 ## Honest gaps
 
 - **The frames use a synthetic product picture in the probe.** The renderer is real; the photograph

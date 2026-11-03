@@ -1,0 +1,31 @@
+{
+  "social_frames_api_20261103": {
+    "status": "DONE - social frame endpoint live; fragment pending operator merge",
+    "commit": "a3bd53f8",
+    "routes": ["GET /api/design-studio/social-frames/placements", "POST /api/design-studio/social-frames/render"],
+    "module": "Northstar_backend/social_frames_api.py",
+    "live": {
+      "placement": "tiktok",
+      "source": "renders/mogra_lions_mane/product_front.png",
+      "canvas": [864, 1536],
+      "boxes": {"headline": [51, 749, 708, 1001], "subline": [51, 1028, 708, 1081], "cta": [51, 1108, 310, 1183], "product": [180, 122, 580, 722]},
+      "contrast": {"headline": 11.14, "subline": 11.14, "cta": 7.41},
+      "checks": {"ocr_available": true, "headline_read": true, "cta_read": true, "inside_safe_area": true, "contrast_aa": true},
+      "file": "Northstar_backend/data/studio_generated/tiktok_e445423614.png",
+      "compliance": {"verified": true, "source": "TikTok recommendations (public help docs, checked 2026-11-03)"}
+    },
+    "behaviour": {
+      "refusal": "a frame that fails a check is saved as rejected_* and returned as 422 with the candidate and reason",
+      "no_text": "amazon-main refuses copy by contract",
+      "storage": "no DB row; returns a data URL and the saved path"
+    },
+    "tests": "5 passed (render, no-text refusal, unknown placement, failed-check candidate, placements)",
+    "gaps": [
+      "the product picture is placed as a rectangular card; background keying/cutout is not implemented",
+      "the frame has no clickable CTA (it is drawn copy)",
+      "no UI wiring yet"
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read; the endpoint used the documented loopback dev shim.",
+    "report": "reports/ty/still_frames_20261103.md"
+  }
+}
