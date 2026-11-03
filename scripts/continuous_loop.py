@@ -1530,8 +1530,16 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
                 # Keep the resident floor active during model work. Two consecutive
                 # one-second samples are required so a single noisy reading does not
                 # kill a healthy task; the threshold itself is unchanged.
+                #
+                # A model this task already has RESIDENT is not extra pressure: the
+                # RAM is spent, the lane is up, and the floor was designed to stop a
+                # NEW load from crowding the host. Measured 2026-11-03: the second
+                # task of a campaign died at 2.94 GB free purely because the first
+                # task's model was still loaded - the lane it needed was already there.
                 free = _free_ram_gb()
-                if ram_floor_breached(free, ram_breaches):
+                resident_ok = str(task.get("model") or "") in (
+                    _ollama_resident().get("models") or [])
+                if not resident_ok and ram_floor_breached(free, ram_breaches):
                     ram_breaches += 1
                     write_heartbeat(run_id, str(task.get("id")),
                                     f"ram_floor_watch:{free:.2f}GB")
