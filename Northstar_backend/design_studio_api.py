@@ -2113,6 +2113,13 @@ def ad_formats_route(acct: str = Depends(studio_account)):
     return _af.describe()
 
 
+@router.get("/video-formats")
+def video_formats_route(acct: str = Depends(studio_account)):
+    """Video placement contracts, each flagged verified or working-assumption."""
+    import video_formats as _vf
+    return {"formats": _vf.describe(), "ad_lengths": list(_vf.AD_LENGTHS)}
+
+
 @router.get("/deliverables")
 def list_deliverables_route(acct: str = Depends(studio_account)):
     """Deliverable packages a user can reopen: manifest + file list per run."""
@@ -2143,6 +2150,11 @@ class ShortsIn(BaseModel):
     seed: int = 1
     fps: int = Field(16, ge=8, le=30)
     text_requested: bool = False
+    #: Optional platform contract. When set, the duration/canvas/fps come from
+    #: `video_formats.plan()` instead of the loose width/height/length fields, and a
+    #: duration that needs stitching is refused rather than silently truncated.
+    platform: str = Field("", max_length=40)
+    seconds: Optional[float] = Field(None, ge=1, le=600)
 
 
 @router.post("/shorts")
@@ -2152,6 +2164,29 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
     import text_fidelity as _tf
     import studio_generation as _sg
     from pathlib import Path
+
+    # Platform contract FIRST: a bad placement request is a 422 whether or not the
+    # GPU is armed, and a window that needs stitching is refused before any work.
+    plan = None
+    width, height, length, fps = body.width, body.height, body.length, body.fps
+    if body.platform:
+        import video_formats as _vf
+        try:
+            plan = _vf.plan(body.platform, body.seconds)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail={
+                "code": "video_format_invalid", "message": str(exc)[:300]})
+        if plan["clips"] > 1:
+            raise HTTPException(status_code=422, detail={
+                "code": "video_needs_stitch",
+                "platform": plan["platform"], "seconds": plan["seconds"],
+                "clips": plan["clips"], "frames_per_clip": plan["frames_per_clip"],
+                "message": ("this route renders ONE sampler call; "
+                            f"{plan['seconds']:g}s needs {plan['clips']} clips "
+                            f"of {plan['frames_per_clip']} frames to be stitched, "
+                            "which is not built yet")})
+        width, height, length, fps = (plan["width"], plan["height"],
+                                      plan["frames_per_clip"], plan["fps"])
 
     st = _sg.engine_status()
     if not st["armed"]:
@@ -2170,9 +2205,9 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
     prompt = body.prompt or _sh.DEFAULT_PROMPT
     expected = _tf.extract_expected_terms(prompt) if body.text_requested else []
     try:
-        result = _sh.generate(path.read_bytes(), prompt=prompt, width=body.width,
-                              height=body.height, length=body.length, steps=body.steps,
-                              cfg=body.cfg, seed=body.seed, fps=body.fps)
+        result = _sh.generate(path.read_bytes(), prompt=prompt, width=width,
+                              height=height, length=length, steps=body.steps,
+                              cfg=body.cfg, seed=body.seed, fps=fps)
         packaged = _sh.package_render(result, brief=prompt,
                                       text_requested=body.text_requested,
                                       expected_terms=expected)
@@ -2184,6 +2219,7 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
             "frame_count": result.get("frame_count"), "fps": result.get("fps"),
             "size": result.get("size"), "seconds": result.get("seconds"),
             "video_bytes": result.get("video_bytes"), "model": result.get("model"),
+            **({"format": plan} if plan else {}),
             "manifest": packaged.get("manifest")}
 
 
