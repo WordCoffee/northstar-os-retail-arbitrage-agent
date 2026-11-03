@@ -108,7 +108,7 @@
        "build": "1.55s"
      },
      "notes": "Scene: src/scene/comet.js (nucleus + glow, a 120-particle tapering tail, stars, wrap-around pass) registered for goose; every registered scene now has its own renderer, so sceneContrast asserts the fallback with an id nothing claims. Workspace: the existing GoldenGooseDesk is unchanged and reused; the spec proves it renders and never fabricates a queue."},
-    {"id": "U12", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U12", "status": "done", "tag": "ns-ux-U12", "tokens": 90000, "evidence": {"e2e": "service-coverage.spec.ts 1 passed on BOTH targets: the picker list is read from the DOM and all 24 interactive services are opened one by one; each panel renders >40 chars of text, and an unwired service must carry the honest notice with its own id", "desktop": "5.1s", "mobile": "38.6s"}, "notes": "Scenes stay the registrys own assignment (studio/ppc/research/goose/default) because all five are built; every service that HAS a page is wired (12 incl. autothink). The 13 catalogue-only ids (hub, ledger, prospector, goldengoose, offerchisel, towncrier, auctioneer, thewatch, rankledger, rivalboard, foundation, jobs, keywords) have no route in App.jsx, so inventing pages would be fabrication - the notice now says exactly that (source: catalogue vs app-route) instead of claiming the room shell still opens it."},
     {"id": "U13", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U14", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U15", "status": "todo", "tag": null, "tokens": 0}

@@ -46,14 +46,29 @@ const WORKSPACES = {
 }
 
 function NotWired({ service }) {
+  // A catalogue entry is not a page: `source: 'app-route'` entries have a real
+  // route in App.jsx, the rest are names the catalogue carries without one.
+  const hasPage = service.source === 'app-route'
   return (
-    <div className="wb-empty" data-testid="wb-not-wired">
+    <div className="wb-empty" data-testid="wb-not-wired" data-service-id={service.id}>
       <h2>{service.label}</h2>
-      <p>
-        This service is registered ({service.workspaceType}) but its workspace is not
-        wired into the workbench yet. It still opens from the room shell.
-      </p>
-      <p className="wb-muted">Route: {service.route}</p>
+      {hasPage ? (
+        <>
+          <p>
+            This service is registered ({service.workspaceType}) but its workspace is not
+            wired into the workbench yet. It still opens from the room shell.
+          </p>
+          <p className="wb-muted">Route: {service.route}</p>
+        </>
+      ) : (
+        <>
+          <p>
+            {service.label} is a catalogue entry ({service.workspaceType}) with no page of its
+            own yet. Nothing is hidden: there is nothing here to show.
+          </p>
+          <p className="wb-muted">Planned route: {service.route} · scene: {service.scene}</p>
+        </>
+      )}
     </div>
   )
 }
