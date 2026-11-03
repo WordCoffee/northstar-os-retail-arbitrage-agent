@@ -1,0 +1,41 @@
+{
+  "video_ad_20261103": {
+    "status": "DONE - one command produces a checked vertical video; live 3s proof passed; 15s render not attempted",
+    "commits": ["8d4dd259 (capstone)", "a637cd2f (length + plate fixes)"],
+    "tag": "ns-video-ad-20261103",
+    "module": "Northstar_backend/video_ad.py",
+    "probe": "state/probes/t18_video_ad.py PASS",
+    "live_run": {
+      "file": "renders/mogra_lions_mane/video_live/video_ad.mp4",
+      "platform": "tiktok",
+      "seconds": 3,
+      "frames": 90,
+      "canvas": [1080, 1920],
+      "codec": "h264",
+      "audio": "aac",
+      "integrated_lufs": -16.0,
+      "peak_db": -2.8,
+      "bytes": 1410483,
+      "elapsed_s": 256,
+      "checks": {"stitch_contract": true, "captions_checked": true, "audio_checked": true, "has_audio": true, "canvas_exact": true, "duration_within_one_frame": true},
+      "source": "renders/mogra_lions_mane/product_front.png, local Wan 2.2 TI2V 5B, 16 steps, seed 20261103"
+    },
+    "defect_found_by_the_live_run": "the first attempt produced 2.844s/84 frames: the ducked bed ended with the voice, the mix followed it, and -shortest dropped six frames. Pad the voice to the picture duration before the sidechain, trim the mix to it, and apply one bounded gain correction after loudnorm.",
+    "tests": {
+      "video_files_combined": "35 passed (stitch, shorts stitch, captions, audio, script, video_ad, formats)",
+      "test_video_audio": "6 passed x3 consecutive runs after the padding + gain correction",
+      "probes": "t13/t14/t15/t16/t18 PASS"
+    },
+    "gaps": [
+      "the live proof is 3s; a 15s render is ~5x the work and was not attempted",
+      "3s windows compress five beats to 0.57s each; a short-window beat count is not implemented",
+      "voiceover is continuous, not cut-aligned; overruns are flagged",
+      "captions cover the label net weight (opaque plate, readable, but top placement would preserve it)",
+      "480x832 Wan upscaled to 1080x1920",
+      "no HTTP endpoint / progress channel yet",
+      "Amazon presets remain verified:false (standing gate)"
+    ],
+    "gates_held": "No Amazon, no spend, no credential read. Wan and Piper are local; FLUX plate came from the earlier local render.",
+    "report": "reports/ty/video_ad_20261103.md"
+  }
+}

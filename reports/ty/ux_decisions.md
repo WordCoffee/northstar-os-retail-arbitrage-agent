@@ -115,3 +115,8 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Stills - A text-free listing image is correct, so copy is graded only when expected_copy is supplied; the old rubric failed every correct main image.
 2026-11-03 - Stills - Placement safe zones are verified:true only where they come from the checked video presets; Amazon and the working estimates are verified:false with the reason in the source string.
 2026-11-03 - Stills - Social frames check contrast and OCR on the drawn boxes; a frame whose headline or CTA cannot be read is refused, not shipped because the PNG exists.
+2026-11-03 - Video ad - The capstone returns a file only when every stage's own contract passes; the final is deleted on a stage failure, so a partial render cannot be mistaken for a deliverable.
+2026-11-03 - Video ad - The voice is padded to the picture duration before the sidechain and the mix is trimmed to it; the first live run lost six frames because the ducked bed ended with the voice.
+2026-11-03 - Video ad - One bounded linear gain correction runs after loudnorm; two-pass loudnorm alone missed -16 LUFS on a short clip, and the correction is re-measured, never assumed.
+2026-11-03 - Video ad - The caption plate is opaque (232 alpha); at 178 the product's net weight showed through and the caption read as a clash.
+2026-11-03 - Video ad - The live proof is 3s and says so; the 15s/30s plans are proven, the 15s render is not. That distinction is in the report, not a footnote.
