@@ -1,0 +1,28 @@
+{
+  "still_frames_20261103": {
+    "status": "DONE - placement contracts, social frame renderer/check, listing prompt pack + gate; fragment pending operator merge",
+    "commit": "5e144b18",
+    "work_order": "reports/ty/creative_scan_20261103.md item 5 (style packs) and the still-placement gap",
+    "modules": ["Northstar_backend/social_frames.py", "Northstar_backend/ad_formats.py (PLACEMENTS)", "Northstar_backend/asset_rubric.py (listing copy fix)"],
+    "probe": "state/probes/t17_still_frames.py PASS",
+    "measured": {
+      "meta_feed": {"canvas": [1024, 1024], "headline_contrast": 11.14, "cta_contrast": 7.41, "ocr": ["LION'S MANE", "MUSHROOM POWDER", "SHOP NOW"]},
+      "tiktok": {"canvas": [864, 1536], "ocr": ["LION'S", "MANE", "MUSHROOMPOWDER", "SHOP NOW"]},
+      "sponsored_brand": {"canvas": [1536, 864], "ocr": ["LION'S MANE", "MUSHROOMPOWDER", "SHOP NOW"]},
+      "listing_white": {"rubric_pass": true, "text_free": true, "score": 99.9},
+      "listing_grey": "refused: listing_rubric_pass",
+      "listing_lettered": "refused: text_free"
+    },
+    "defect_found": "score_listing added copy_not_readable whenever OCR found no copy, even when no copy was expected; every text-free main image failed. Copy is now graded only when expected_copy is supplied.",
+    "placements": ["amazon-main", "meta-feed", "ig-story", "reels", "tiktok", "shorts", "sponsored-brand", "display"],
+    "tests": "7 passed (placements declare canvas/safe zones, amazon-main refuses copy, frames inside safe area + OCR, pack text-safe, text-free listing passes, grey refused, lettering refused)",
+    "gaps": [
+      "probe uses a synthetic product picture; a live frame needs a FLUX plate or an item-0 picture",
+      "meta/ig/display safe zones are working estimates (verified:false)",
+      "no HTTP endpoint yet",
+      "the CTA pill is drawn copy, not a clickable element"
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read. Amazon main-image spec NOT read; the rule is a declared placement property.",
+    "report": "reports/ty/still_frames_20261103.md"
+  }
+}

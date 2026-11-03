@@ -111,3 +111,7 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Script - The hook is capped at five complete words and a cut phrase loses its trailing stopword; a hook that ends on 'you' or 'for' is not a hook.
 2026-11-03 - Script - Every scene prompt is lower-case, digit-free art direction and is proven to survive text_fidelity.sanitize_brief_for_render with expected_terms empty; asking diffusion for words is the defect this avoids.
 2026-11-03 - Script - The planner reports voice_fits_scene instead of stretching the audio to fit; an overrun is a flag for the operator, not a silent time-stretch.
+2026-11-03 - Stills - amazon-main is declared a no-text placement and render_social_frame REFUSES copy for it; the main image rule is not left to a caller's memory.
+2026-11-03 - Stills - A text-free listing image is correct, so copy is graded only when expected_copy is supplied; the old rubric failed every correct main image.
+2026-11-03 - Stills - Placement safe zones are verified:true only where they come from the checked video presets; Amazon and the working estimates are verified:false with the reason in the source string.
+2026-11-03 - Stills - Social frames check contrast and OCR on the drawn boxes; a frame whose headline or CTA cannot be read is refused, not shipped because the PNG exists.
