@@ -76,7 +76,14 @@
        "build": "1.40s"
      },
      "notes": "DONE: lib/canvasCommands.js (bounded parse+apply: set/scale/add/select/swap, every refusal named), the canvas publishes itself through WorkspaceTabs (summary.canvas + registerCanvasCommand/runCanvasCommand), CanvasWorkspace registers the single instruction entry point, and a DEV-gated window.__northstarCanvas hook for harnesses. NOT DONE: the backend chat tool (chat_tools.TOOLS + chat_router ctx) that lets the MODEL emit canvas_edit, and package mode front/rear panels with the dieline overlay. The e2e proves the edit path through the same entry point the shell registers, not a live model turn - that is stated in the test."},
-    {"id": "U9", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U9", "status": "partial", "tag": "ns-ux-U9", "tokens": 90000,
+     "evidence": {
+       "unit": "173/173 (5 new in asteroidField.test.js; the contrast test now covers the ppc palette)",
+       "contrast": "#cfc4b4 clears AA against 0.72 glass, measured by the existing scene-contrast test",
+       "e2e": "workbench-scene.spec.ts both targets 10 passed - the PPC tab swaps the single canvas to data-scene=ppc and still holds exactly one scene canvas",
+       "build": "1.41s"
+     },
+     "notes": "DONE: src/scene/asteroidField.js (deterministic field, far/near belts, dust, mode-reactive speed, cached background) registered in scenes.js for the ppc scene and palette; the AdPilot service already carries scene:'ppc' so the swap is live. NOT DONE: the workspace half - upload the requested report, show keyword/bid changes, download the new ads bulk file (reuse specialists/ppc_bulk.py + AdPilot.jsx; no Amazon tie-in)."},
     {"id": "U10", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U11", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U12", "status": "todo", "tag": null, "tokens": 0},

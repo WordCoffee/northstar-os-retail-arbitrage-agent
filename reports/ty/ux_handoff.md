@@ -1,10 +1,10 @@
 # UX rebuild — handoff
 
-**State:** U0–U7 done and verified on both targets. **U8 is PARTIAL** (client half done and tested;
-the model-facing tool and package front/rear mode are not). Last tag `ns-ux-U8`. Dev servers are up
-from `scripts/dev-start.ps1` after `tailscale serve status` returned **No serve config**.
+**State:** U0–U7 done and verified on both targets. **U8 and U9 are PARTIAL** (each has its real,
+tested half committed; the remainder is listed below). Last tag `ns-ux-U9`. Dev servers are up from
+`scripts/dev-start.ps1` after `tailscale serve status` returned **No serve config**.
 
-**Next action:** finish U8's remaining half (below), then U9 (PPC scene + workspace).
+**Next action:** finish U8's model-facing tool, then U9's workspace, then U10 (Research).
 
 ## U8 — what is done, what is not
 
@@ -34,6 +34,28 @@ Not done — the remaining half of U8:
 2. **Package mode.** When the content type is `package`, show front and rear panels with the dieline
    overlay, reusing `Dielines.jsx`'s SVG output and the print formats in `presets.js`. Do not
    re-implement the dieline geometry.
+
+## U9 — what is done, what is not
+
+Done (committed, tested on both targets):
+
+- `src/scene/asteroidField.js` — a deterministic field: 46 far rocks, 4 near rocks, dust, mode-reactive
+  speed (`calm 1 / intense 2.2 / flare 1.7 / subdued 0.3`), a background gradient cached per size and
+  mode, and `ASTEROID_MAX_COLOR = #cfc4b4` as the declared ceiling.
+- `scenes.js` now maps `ppc -> createAsteroidField`; the AdPilot service already declares
+  `scene: 'ppc'`, so opening it swaps the single canvas. `sceneContrast.test.js` covers the new
+  palette automatically (it iterates `SCENE_MAX_COLOR`) and now uses `research` as its unbuilt-scene
+  fallback.
+- Test: `workbench-scene.spec.ts` — "the PPC tab loads the asteroid field on the same canvas" (both
+  targets, 10 passed).
+
+Not done — the remaining half of U9:
+
+1. **The PPC workspace.** Upload the requested report, show the keyword and bid changes, and download
+   the new ads bulk upload file. Reuse `Northstar_backend/specialists/ppc_bulk.py` (already tested by
+   `test_ppc_bulk.py`) and the existing `AdPilot.jsx` surface; there is no Amazon API tie-in and none
+   may be added. Pass test: upload-to-download click path on fixtures.
+
 
 
 ## Done

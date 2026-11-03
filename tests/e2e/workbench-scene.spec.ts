@@ -105,3 +105,17 @@ test('the design studio tab loads the ringed gas giant scene', async ({ page }) 
   await expect(host).toHaveAttribute('data-scene', 'goose')
   await expect(page.locator('[data-testid="scene-host"] canvas')).toHaveCount(1)
 })
+
+// U9 — the PPC service swaps the same single canvas to the asteroid field.
+test('the PPC tab loads the asteroid field on the same canvas', async ({ page }) => {
+  await page.goto(WORKBENCH)
+  const host = page.getByTestId('scene-host')
+  await expect(host).toBeVisible({ timeout: 30000 })
+
+  await page.getByTestId('wb-add').click()
+  await page.getByTestId('wb-open-adpilot').click()
+  await expect(host).toHaveAttribute('data-scene', 'ppc', { timeout: 30000 })
+
+  // Still exactly one scene canvas: the renderer swapped, the context did not leak.
+  await expect(page.locator('[data-testid="scene-host"] canvas')).toHaveCount(1)
+})

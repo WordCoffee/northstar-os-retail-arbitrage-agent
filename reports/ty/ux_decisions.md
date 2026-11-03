@@ -48,3 +48,6 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-02 · U8 · Publishing is gated on a JSON signature of the description · the shell re-renders on every publish, and a keystroke must not re-render the dock.
 2026-11-02 · U8 · The e2e drives the shell's registered command entry point, not a live model turn · the local model is not in the loop in this environment, and claiming a model round-trip would be a false pass. The backend tool is recorded as the remaining half.
 2026-11-02 · U8 · status partial, tagged anyway · the client half is real and tested; the model-facing tool and package front/rear mode are not, and the queue says so.
+2026-11-02 · U9 · The PPC scene is a procedural asteroid field with its own declared maximum colour · the contrast test iterates SCENE_MAX_COLOR, so a new palette cannot ship without proving AA against 0.72 glass.
+2026-11-02 · U9 · `sceneContrast.test.js` now uses `research` as the unbuilt-scene fallback instead of `ppc` · the assertion was true only while PPC had no renderer; the fallback behaviour it protects is unchanged.
+2026-11-02 · U9 · The AdPilot service already declared `scene: 'ppc'`, so no registry edit was needed · the registry was the source of truth and the renderer was the missing half.
