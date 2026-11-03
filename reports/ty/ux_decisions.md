@@ -51,3 +51,9 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-02 · U9 · The PPC scene is a procedural asteroid field with its own declared maximum colour · the contrast test iterates SCENE_MAX_COLOR, so a new palette cannot ship without proving AA against 0.72 glass.
 2026-11-02 · U9 · `sceneContrast.test.js` now uses `research` as the unbuilt-scene fallback instead of `ppc` · the assertion was true only while PPC had no renderer; the fallback behaviour it protects is unchanged.
 2026-11-02 · U9 · The AdPilot service already declared `scene: 'ppc'`, so no registry edit was needed · the registry was the source of truth and the renderer was the missing half.
+2026-11-02 · U9 · The PPC lane is an API over `specialists.ppc_agent` + `ppc_bulk`, not a second analyser · the thresholds, the validator and the sheet writer already existed and are already tested; reimplementing them in JS would let the two drift.
+2026-11-02 · U9 · The report is parsed in the browser and only ROWS are posted · the file never leaves the machine as a file, and the analysis still happens in the tested Python specialist.
+2026-11-02 · U9 · `ppcCsv.parseCsv` refuses a table it cannot read exactly (ragged row, repeated/empty header) · a wrong parse becomes a wrong bid, so a refusal is cheaper than a repair.
+2026-11-02 · U9 · AdPilot keeps its subview in component state when embedded in a workbench tab · RoomTabs navigates to /adpilot?view=…, which would have thrown the user out of the shell (the U3 lesson, applied to the second room).
+2026-11-02 · U9 · The lane retries once behind Retry-After, then says it is rate-limited · the API files anonymous callers in a 30/min bucket and a batch of rooms trips it; "HTTP 429" is not an explanation.
+2026-11-02 · U9 · The bulk sheet says its column layout is Northstar's own · `ppc_bulk` has never verified the layout against a current Amazon template, and the panel repeats that next to the download.

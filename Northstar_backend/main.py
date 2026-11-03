@@ -145,6 +145,13 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_STUDIO_DASHBOARD = False
 
+# AdPilot PPC lane (U9) — search-term report in, validated bulk file out.
+try:
+    from adpilot_api import router as adpilot_router
+    _HAS_ADPILOT = True
+except ImportError:  # pragma: no cover
+    _HAS_ADPILOT = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -365,6 +372,10 @@ if _HAS_DESIGN_STUDIO_EXT:
 # Studio dashboard — packages on disk, proposals, safe file serving (2026-11-02)
 if _HAS_STUDIO_DASHBOARD:
     app.include_router(studio_dashboard_router)
+
+# AdPilot PPC lane (U9) — report in, validated bulk file out
+if _HAS_ADPILOT:
+    app.include_router(adpilot_router)
 
 # Chat core (S1/S2/S3) — Simple-mode Master Brain chat (SSE) + voice intake
 if _HAS_CHAT:

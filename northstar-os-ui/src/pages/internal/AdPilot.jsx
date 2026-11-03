@@ -13,11 +13,13 @@ import { buildAdDoc, adFormat, AD_PLACEMENTS } from '../../studio/engine/adDoc.j
 import { useAssetStore, useDecodedAssets } from '../../studio/engine/assets.js'
 import { useRoom } from '../../studio/engine/store.js'
 import { DEFAULT_BRAND_KITS } from '../../studio/engine/presets.js'
+import PpcHarvest from './ppc/PpcHarvest.jsx'
 
 const TABS = [
   { id: 'campaigns', label: 'Campaigns', count: 8 },
   { id: 'detail', label: 'Campaign Detail' },
   { id: 'terms', label: 'Search Terms' },
+  { id: 'harvest', label: 'Harvest' },
   { id: 'planner', label: 'Planner' },
   { id: 'creatives', label: 'Creatives' },
   { id: 'placements', label: 'Placements' },
@@ -336,9 +338,18 @@ export default function AdPilot() {
   const kit = kits.find(k => k.id === activeKitId) || kits[0] || DEFAULT_BRAND_KITS[0]
   const evidence = useImportedAdEvidence()
   const [selectedCampaign, setSelectedCampaign] = useState(null)
+  const embedded = !location.pathname.startsWith('/adpilot')
+  const [embeddedView, setEmbeddedView] = useState('campaigns')
 
-  const requested = new URLSearchParams(location.search).get('view') || ''
+  const requested = embedded ? embeddedView : (new URLSearchParams(location.search).get('view') || '')
   const view = TABS.some(t => t.id === requested) ? requested : 'campaigns'
+  // Inside the workbench the room does not own the URL, so a subview switch must
+  // not navigate the whole shell to /adpilot (the same trap U3 fixed for the
+  // studio). On its own route the search param stays the source of truth.
+  const selectView = (id) => {
+    if (embedded) setEmbeddedView(id)
+    else navigate(`/adpilot?view=${id}`)
+  }
   const campaigns = evidence.phase === 'ready' ? evidence.campaigns : []
 
   return (
@@ -347,7 +358,7 @@ export default function AdPilot() {
       subtitle="Advertising operations workbench — campaign health, budget, placements, performance, and a real creative renderer."
       actions={<>
         <ModeToggle mode={mode} onChange={setMode} />
-        <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=planner')}>Create Campaign</button>
+        <button className="btn btn-sm" onClick={() => selectView('planner')}>Create Campaign</button>
         <button className="btn btn-sm btn-ghost" onClick={() => toast('Bulk actions operate on the local campaign records below — nothing is sent to an ad platform.', 'info')}>Bulk Actions</button>
       </>}
     >
@@ -370,7 +381,18 @@ export default function AdPilot() {
         </DataNotice>
       )}
 
-      <RoomTabs tabs={TABS} base="/adpilot" />
+      {embedded
+        ? (
+          <nav className="room-tabs" aria-label="Service navigation">
+            {TABS.map((t) => (
+              <button key={t.id} className={`room-tab ${t.id === view ? 'active' : ''}`}
+                      data-testid={`ap-tab-${t.id}`} onClick={() => selectView(t.id)}>
+                <span className="room-tab-label">{t.label}</span>
+              </button>
+            ))}
+          </nav>
+        )
+        : <RoomTabs tabs={TABS} base="/adpilot" />}
 
       <MasterBrainPanel title="Studio evidence for ads (read-only)" />
 
@@ -400,7 +422,7 @@ export default function AdPilot() {
                 { key: 'acos', label: 'ACoS (derived)', render: (v) => v === 'UNKNOWN' ? <span className="pill pill-unknown">UNKNOWN</span> : v },
                 { key: 'clicks', label: 'Clicks', render: (v) => v == null ? <span className="pill pill-unknown">UNKNOWN</span> : v },
                 { key: 'open', label: '', render: (v, row) => (
-                  <button className="btn btn-sm" onClick={() => { setSelectedCampaign(row); navigate('/adpilot?view=detail') }}>Open</button>
+                  <button className="btn btn-sm" onClick={() => { setSelectedCampaign(row); selectView('detail') }}>Open</button>
                 ) },
               ]} rows={campaigns} />
             )}
@@ -446,7 +468,7 @@ export default function AdPilot() {
           {!selectedCampaign && (
             <div className="card">
               <p style={{ fontSize: 13, marginBottom: 10 }}>Open a campaign from the Campaigns tab to see its observed detail here.</p>
-              <button className="btn btn-sm" onClick={() => navigate('/adpilot?view=campaigns')}>Back to campaigns</button>
+              <button className="btn btn-sm" onClick={() => selectView('campaigns')}>Back to campaigns</button>
             </div>
           )}
           {selectedCampaign && (
@@ -544,6 +566,8 @@ export default function AdPilot() {
         </div>
       )}
 
+      {view === 'harvest' && <PpcHarvest />}
+
       {view === 'creatives' && (
         <AdCreatives copy={adCopy} setCopy={setAdCopy} attachedAssetId={attachedAssetId}
           setAttachedAssetId={setAttachedAssetId} store={store} kit={kit} />
@@ -564,7 +588,7 @@ export default function AdPilot() {
               {AD_PLACEMENTS.map(p => {
                 const f = adFormat(p.id)
                 return (
-                  <button key={p.id} className="sp-format" onClick={() => navigate('/adpilot?view=creatives')} title={`${p.note} Renders the current creative at ${f.w}×${f.h}.`}>
+                  <button key={p.id} className="sp-format" onClick={() => selectView('creatives')} title={`${p.note} Renders the current creative at ${f.w}×${f.h}.`}>
                     <span className="sp-format-box ar-wide" style={{ aspectRatio: `${f.w} / ${f.h}` }} />
                     <span className="sp-format-label">{p.label}</span>
                     <span className="text-mono sp-format-dims">{f.w}×{f.h}</span>

@@ -1,10 +1,11 @@
 # UX rebuild — handoff
 
-**State:** U0–U7 done and verified on both targets. **U8 and U9 are PARTIAL** (each has its real,
-tested half committed; the remainder is listed below). Last tag `ns-ux-U9`. Dev servers are up from
-`scripts/dev-start.ps1` after `tailscale serve status` returned **No serve config**.
+**State:** U0–U7 and U9 done and verified on both targets. **U8 is PARTIAL** (its client half is
+committed and tested; the model-facing tool and package front/rear mode are not). Last tag
+`ns-ux-U9`. Dev servers are up from `scripts/dev-start.ps1` after `tailscale serve status` returned
+**No serve config**.
 
-**Next action:** finish U8's model-facing tool, then U9's workspace, then U10 (Research).
+**Next action:** finish U8's model-facing tool, then U10 (Research scene + workspace).
 
 ## U8 — what is done, what is not
 
@@ -35,26 +36,28 @@ Not done — the remaining half of U8:
    overlay, reusing `Dielines.jsx`'s SVG output and the print formats in `presets.js`. Do not
    re-implement the dieline geometry.
 
-## U9 — what is done, what is not
-
-Done (committed, tested on both targets):
+## U9 — done
 
 - `src/scene/asteroidField.js` — a deterministic field: 46 far rocks, 4 near rocks, dust, mode-reactive
   speed (`calm 1 / intense 2.2 / flare 1.7 / subdued 0.3`), a background gradient cached per size and
-  mode, and `ASTEROID_MAX_COLOR = #cfc4b4` as the declared ceiling.
-- `scenes.js` now maps `ppc -> createAsteroidField`; the AdPilot service already declares
-  `scene: 'ppc'`, so opening it swaps the single canvas. `sceneContrast.test.js` covers the new
-  palette automatically (it iterates `SCENE_MAX_COLOR`) and now uses `research` as its unbuilt-scene
-  fallback.
-- Test: `workbench-scene.spec.ts` — "the PPC tab loads the asteroid field on the same canvas" (both
-  targets, 10 passed).
+  mode, and `ASTEROID_MAX_COLOR = #cfc4b4` as the declared ceiling. `scenes.js` maps `ppc` to it.
+- `Northstar_backend/adpilot_api.py` — `/api/adpilot/analyze`, `/bulk`, `/status` over the EXISTING
+  `specialists.ppc_agent` + `ppc_bulk`. A wrong report is rejected with the missing column names; a
+  malformed analysis is a refusal, not a 500; the bulk sheet is validated before it is encoded.
+- `src/lib/ppcCsv.js` — the browser parser (quoted fields, BOM, CRLF). It refuses a ragged row or a
+  repeated/empty header instead of repairing it.
+- `src/pages/internal/ppc/PpcHarvest.jsx` — the lane: choose a CSV, see the change log (harvest /
+  negate, each with its source row), build and download the validated `.xlsx`. Wired as an AdPilot
+  subview (`?view=harvest` on its own route, `ap-tab-harvest` inside a workbench tab).
+- AdPilot now keeps its subview in component state when embedded in a tab, so switching subviews no
+  longer navigates the shell to `/adpilot`.
 
-Not done — the remaining half of U9:
+Evidence: unit 179/179, backend `test_adpilot_api.py` 6 passed, `ppc-harvest` 2 passed on both
+targets (upload → change log → download, plus the rejection path), batch with the workbench trio +
+studio-canvas green on both targets.
 
-1. **The PPC workspace.** Upload the requested report, show the keyword and bid changes, and download
-   the new ads bulk upload file. Reuse `Northstar_backend/specialists/ppc_bulk.py` (already tested by
-   `test_ppc_bulk.py`) and the existing `AdPilot.jsx` surface; there is no Amazon API tie-in and none
-   may be added. Pass test: upload-to-download click path on fixtures.
+Honest limits: the bulk column layout is Northstar's own, not a verified Amazon template (said next
+to the download); nothing is uploaded to any ad platform and no Amazon API is contacted.
 
 
 

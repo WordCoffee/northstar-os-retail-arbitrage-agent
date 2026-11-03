@@ -76,14 +76,17 @@
        "build": "1.40s"
      },
      "notes": "DONE: lib/canvasCommands.js (bounded parse+apply: set/scale/add/select/swap, every refusal named), the canvas publishes itself through WorkspaceTabs (summary.canvas + registerCanvasCommand/runCanvasCommand), CanvasWorkspace registers the single instruction entry point, and a DEV-gated window.__northstarCanvas hook for harnesses. NOT DONE: the backend chat tool (chat_tools.TOOLS + chat_router ctx) that lets the MODEL emit canvas_edit, and package mode front/rear panels with the dieline overlay. The e2e proves the edit path through the same entry point the shell registers, not a live model turn - that is stated in the test."},
-    {"id": "U9", "status": "partial", "tag": "ns-ux-U9", "tokens": 90000,
+    {"id": "U9", "status": "done", "tag": "ns-ux-U9", "tokens": 260000,
      "evidence": {
-       "unit": "173/173 (5 new in asteroidField.test.js; the contrast test now covers the ppc palette)",
-       "contrast": "#cfc4b4 clears AA against 0.72 glass, measured by the existing scene-contrast test",
-       "e2e": "workbench-scene.spec.ts both targets 10 passed - the PPC tab swaps the single canvas to data-scene=ppc and still holds exactly one scene canvas",
-       "build": "1.41s"
+       "unit": "179/179 (5 new asteroidField, 6 new ppcCsv)",
+       "backend": "python -m pytest test_adpilot_api.py -> 6 passed (analyze, rejection, bulk xlsx, malformed analysis, status)",
+       "contrast": "#cfc4b4 clears AA against 0.72 glass (existing scene-contrast test)",
+       "e2e_scene": "workbench-scene both targets 10/10 - the PPC tab swaps the single canvas to data-scene=ppc",
+       "e2e_click_path": "ppc-harvest both targets: upload a fixture CSV -> change log (1 harvest, 1 negative, the undecidable term in neither) -> build+download a validated .xlsx (2 rows); a wrong report is rejected with the missing column names",
+       "batch": "workbench trio + studio-canvas + ppc-harvest: desktop 19 passed/1 skipped, mobile 18 passed",
+       "build": "1.44s"
      },
-     "notes": "DONE: src/scene/asteroidField.js (deterministic field, far/near belts, dust, mode-reactive speed, cached background) registered in scenes.js for the ppc scene and palette; the AdPilot service already carries scene:'ppc' so the swap is live. NOT DONE: the workspace half - upload the requested report, show keyword/bid changes, download the new ads bulk file (reuse specialists/ppc_bulk.py + AdPilot.jsx; no Amazon tie-in)."},
+     "notes": "Scene: src/scene/asteroidField.js registered for ppc. Workspace: NEW Northstar_backend/adpilot_api.py (/api/adpilot/analyze, /bulk, /status) over the EXISTING specialists.ppc_agent + ppc_bulk (no reimplementation, no Amazon API), NEW src/lib/ppcCsv.js (browser parser, refuses a table it cannot read exactly), NEW ppc/PpcHarvest.jsx wired as an AdPilot subview. AdPilot now keeps its subview in component state when embedded in a workbench tab (the U3 lesson) so a tab switch no longer navigates the shell to /adpilot. The lane retries once behind Retry-After because the API files anonymous callers in a 30/min bucket."},
     {"id": "U10", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U11", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U12", "status": "todo", "tag": null, "tokens": 0},
