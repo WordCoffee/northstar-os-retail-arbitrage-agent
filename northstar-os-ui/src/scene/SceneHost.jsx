@@ -21,6 +21,12 @@ export default function SceneHost({ sceneId = 'default' }) {
     typeof window === 'undefined' ? 'still' : chooseTier(probeEnvironment())
   ))
   const [mode, setMode] = useState('calm')
+  // U13: a completed major job earns one nova. Rate-limited to one a minute so
+  // it stays a reward, and skipped entirely under reduced motion (a reward that
+  // animates is motion).
+  const [nova, setNova] = useState(false)
+  const lastNovaRef = useRef(0)
+  const novaTimer = useRef(null)
 
   // Workspace events re-tone the scene. Subscribed once, unsubscribed on unmount.
   useEffect(() => {
@@ -28,8 +34,23 @@ export default function SceneHost({ sceneId = 'default' }) {
       const next = modeForEvent(event)
       modeRef.current = next
       setMode(next)
+
+      if (event === 'done') {
+        const reduced = typeof window.matchMedia === 'function'
+          && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const now = Date.now()
+        if (!reduced && now - lastNovaRef.current > 60_000) {
+          lastNovaRef.current = now
+          setNova(true)
+          if (novaTimer.current) clearTimeout(novaTimer.current)
+          novaTimer.current = setTimeout(() => setNova(false), 1500)
+        }
+      }
     })
-    return unsubscribe
+    return () => {
+      unsubscribe()
+      if (novaTimer.current) clearTimeout(novaTimer.current)
+    }
   }, [])
 
   useEffect(() => {
@@ -99,8 +120,9 @@ export default function SceneHost({ sceneId = 'default' }) {
 
   return (
     <div className="wb-scene" data-testid="scene-host" data-scene={sceneId}
-         data-tier={tier} data-mode={mode} aria-hidden="true">
+         data-tier={tier} data-mode={mode} data-nova={nova ? '1' : '0'} aria-hidden="true">
       <canvas ref={canvasRef} className="wb-scene-canvas" data-testid="scene-canvas" />
+      {nova && <span className="wb-scene-nova" data-testid="scene-nova" />}
     </div>
   )
 }

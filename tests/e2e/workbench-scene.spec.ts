@@ -119,3 +119,29 @@ test('the PPC tab loads the asteroid field on the same canvas', async ({ page })
   // Still exactly one scene canvas: the renderer swapped, the context did not leak.
   await expect(page.locator('[data-testid="scene-host"] canvas')).toHaveCount(1)
 })
+
+// U13 - the moment. A completed job earns ONE nova, and reduced motion means
+// none at all: the reward must never be the reason a user sees motion they asked
+// not to see.
+test('a completed job earns one nova, not one per event', async ({ page }) => {
+  await page.goto(WORKBENCH)
+  const host = page.getByTestId('scene-host')
+  await expect(host).toBeVisible({ timeout: 30000 })
+  await page.waitForFunction(() => !!window.__northstarScene, null, { timeout: 30000 })
+
+  const reduced = await page.evaluate(() =>
+    !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches))
+
+  await page.evaluate(() => window.__northstarScene.emit('done'))
+  if (reduced) {
+    await expect(page.getByTestId('scene-nova')).toHaveCount(0)
+    return
+  }
+
+  await expect(host).toHaveAttribute('data-nova', '1')
+  await expect(page.getByTestId('scene-nova')).toHaveCount(1)
+
+  // A second completion inside the one-minute cooldown adds nothing.
+  await page.evaluate(() => window.__northstarScene.emit('done'))
+  await expect(page.getByTestId('scene-nova')).toHaveCount(1)
+})

@@ -17,6 +17,32 @@
   height: 100%;
 }
 
+/* U13 — the nova. One expanding ring when a major job completes, rate-limited in
+   SceneHost so it stays a reward. It lives inside the pointer-events:none scene
+   layer, so it can never swallow a click. */
+.wb-scene-nova {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40vmin;
+  height: 40vmin;
+  margin: -20vmin 0 0 -20vmin;
+  border-radius: 50%;
+  border: 2px solid rgba(232, 238, 247, 0.75);
+  box-shadow: 0 0 60px 18px rgba(232, 238, 247, 0.22);
+  animation: wb-nova 1400ms ease-out forwards;
+}
+
+@keyframes wb-nova {
+  0% { transform: scale(0.18); opacity: 0.85; }
+  70% { opacity: 0.35; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-scene-nova { animation: none; opacity: 0; }
+}
+
 /* The still tier re-paints on resize only; fade it in so a static frame does not
    pop against the shell. */
 .wb-scene[data-tier="still"] {

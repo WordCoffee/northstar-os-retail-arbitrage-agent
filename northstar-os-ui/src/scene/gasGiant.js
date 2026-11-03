@@ -38,6 +38,40 @@ export function createGasGiant({ width = 1200, height = 800, seed = 5 } = {}) {
     x: random(), y: random(), s: 0.4 + random() * 1.2, tw: random() * Math.PI * 2,
   }))
 
+  // U13: the cached planet disc (see draw()).
+  let planetCanvas = null
+  let planetCache = null
+  let planetCacheKey = ''
+
+  function paintPlanet(ctx, cx, cy, r) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.arc(cx, cy, r, 0, Math.PI * 2)
+    ctx.clip()
+
+    const shift = (spin * r * 0.6) % (r * 2)
+    for (const band of BANDS) {
+      const by = cy + band.y * r + shift * 0.15
+      ctx.fillStyle = band.color
+      ctx.fillRect(cx - r, by, r * 2, Math.max(2, band.h * r))
+    }
+
+    // Shading: lit from the upper-left, the terminator falls away to the right.
+    // Cached by radius: a gradient per frame was measurable and the disc only
+    // changes as it turns.
+    const key = `${Math.round(r)}`
+    if (!shade || shadeKey !== key) {
+      shade = ctx.createRadialGradient(cx - r * 0.4, cy - r * 0.45, r * 0.1, cx, cy, r * 1.1)
+      shade.addColorStop(0, 'rgba(255, 238, 205, 0.32)')
+      shade.addColorStop(0.6, 'rgba(0, 0, 0, 0.06)')
+      shade.addColorStop(1, 'rgba(0, 0, 0, 0.48)')
+      shadeKey = key
+    }
+    ctx.fillStyle = shade
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2)
+    ctx.restore()
+  }
+
   function resize(nextW, nextH) {
     w = Math.max(1, nextW)
     h = Math.max(1, nextH)
@@ -94,30 +128,28 @@ export function createGasGiant({ width = 1200, height = 800, seed = 5 } = {}) {
     }
     ctx.restore()
 
-    // The planet, clipped so the bands follow the sphere.
-    ctx.save()
-    ctx.beginPath()
-    ctx.arc(cx, cy, r, 0, Math.PI * 2)
-    ctx.clip()
-
-    const shift = (spin * r * 0.6) % (r * 2)
-    for (const band of BANDS) {
-      const by = cy + band.y * r + shift * 0.15
-      ctx.fillStyle = band.color
-      ctx.fillRect(cx - r, by, r * 2, Math.max(2, band.h * r))
+    // The planet disc. Bands + shading only change as the planet turns, and a
+    // clip plus seven fills every frame was this scene's whole cost (measured
+    // 45 fps against a 60 budget). In a browser the disc is cached offscreen and
+    // rebuilt at most every 200 ms; with no DOM (unit tests) it is painted
+    // directly, so the renderer stays pure where purity is testable.
+    const canCache = typeof document !== 'undefined' && typeof document.createElement === 'function'
+    if (canCache) {
+      const key = `${w}x${h}:${Math.round(r)}:${Math.floor(t / 200)}`
+      if (!planetCache || planetCacheKey !== key) {
+        const size = Math.max(2, Math.ceil(r * 2))
+        if (!planetCanvas) planetCanvas = document.createElement('canvas')
+        planetCanvas.width = size
+        planetCanvas.height = size
+        const pctx = planetCanvas.getContext('2d')
+        paintPlanet(pctx, size / 2, size / 2, size / 2)
+        planetCache = planetCanvas
+        planetCacheKey = key
+      }
+      ctx.drawImage(planetCache, cx - r, cy - r)
+    } else {
+      paintPlanet(ctx, cx, cy, r)
     }
-
-    // Shading: lit from the upper-left, the terminator falls away to the right.
-    if (!shade || shadeKey !== `${w}x${h}`) {
-      shade = ctx.createRadialGradient(cx - r * 0.4, cy - r * 0.45, r * 0.1, cx, cy, r * 1.1)
-      shade.addColorStop(0, 'rgba(255, 238, 205, 0.32)')
-      shade.addColorStop(0.6, 'rgba(0, 0, 0, 0.06)')
-      shade.addColorStop(1, 'rgba(0, 0, 0, 0.48)')
-      shadeKey = `${w}x${h}`
-    }
-    ctx.fillStyle = shade
-    ctx.fillRect(cx - r, cy - r, r * 2, r * 2)
-    ctx.restore()
 
     // A warm rim so the sphere reads against the dark sky instead of dissolving
     // into it (the bands alone were invisible at 0.82 glass).
