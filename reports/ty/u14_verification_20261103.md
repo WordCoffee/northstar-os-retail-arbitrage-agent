@@ -125,6 +125,11 @@ cannot enter a visual baseline, and shoots the whole shell per service. **24 ser
 `reports/ty/shots/services/{chromium-desktop,chromium-mobile}/` + `manifest.json`** (bytes + sha256).
 2 passed, 1.8m.
 
+Note on versioning: `.gitignore:80` excludes `reports/**/*.png`, a pre-existing policy that also keeps
+the u6/u7/u8/u10 shots out of the repo. The PNGs therefore live on disk and the **committed** record
+is `manifest.json` (service list, size, sha256) — so the baseline can be verified against the tree
+without putting ~9.4 MB of images into history.
+
 ## Backend suite: run, and it found something
 
 `5926 collected → 15 failed, 5792 passed, 117 skipped, 2 xfailed (666 s)` against the recorded U0
