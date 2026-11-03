@@ -921,6 +921,63 @@ def write_heartbeat(run_id: str, task_id: str, stage: str) -> None:
     })
 
 
+_FAILED_LINE = re.compile(r"^FAILED\s+(\S+?)(?:\s+-\s+(.*))?$", re.M)
+BACKLOG_PATH = ROOT / "state" / "backlog" / "proposals.json"
+
+
+def proposals_from_pytest_report(path: Path, *, limit: int = 20,
+                                 model: str = "qwen3.5:4b") -> list:
+    """Named work from failing tests - PROPOSED, never auto-dispatched.
+
+    A failing test is a real acceptance oracle, which is why it belongs in the
+    queue. What it is NOT is a write scope: the node id says nothing about which
+    source file owns the defect, and guessing from a traceback is how an
+    autonomous loop starts editing the wrong file - or the test that grades it.
+    So every proposal is `authorized: false` with a `blocked` reason naming what
+    an author must supply (`write_paths`, and a reward check that the test file is
+    excluded from them). The loop then reports them as blocked work instead of
+    running unattended on a guess.
+    """
+    text = Path(path).read_text(encoding="utf-8", errors="replace")
+    seen, out = set(), []
+    for nodeid, message in _FAILED_LINE.findall(text)[:limit]:
+        nodeid = nodeid.strip()
+        if not nodeid or nodeid in seen:
+            continue
+        seen.add(nodeid)
+        slug = re.sub(r"[^a-z0-9]+", "-", nodeid.lower()).strip("-")[:70]
+        out.append({
+            "id": f"fix-{slug}",
+            "name": f"Make {nodeid} pass",
+            "schema_version": 2,
+            "authorized": False,
+            "blocked": (f"needs_author: name the write scope for {nodeid} "
+                        f"(source file only - the test that grades it must be excluded)"),
+            "authorization_note": (f"proposed from {path}; not authorized until an "
+                                   f"author supplies write_paths and a regression check"),
+            "risk": "low", "risk_class": "low", "execution": "ty",
+            "objective": (f"{nodeid} fails: {(message or 'see the report').strip()[:300]}. "
+                          f"Read the source it exercises, fix the defect, and keep the "
+                          f"test unchanged - editing the test is not a fix."),
+            "write_paths": [], "read_paths": [], "commit_paths": [],
+            "dependencies": [], "checks": [],
+            "apply_commands": [], "precheck_commands": [],
+            "acceptance_commands": [["python", "-m", "pytest", nodeid, "-q"]],
+            "timeout_seconds": 600, "max_repairs": 1, "max_steps": 20,
+            "model": model,
+            "evidence": {"report": str(path), "message": (message or "")[:300]},
+        })
+    return out
+
+
+def write_backlog_proposals(proposals: list, path: Optional[Path] = None) -> Dict[str, Any]:
+    path = BACKLOG_PATH if path is None else path
+    payload = {"schema": "northstar.backlog_proposals.v1", "updated_at": _now(),
+               "count": len(proposals), "proposals": proposals}
+    _save_json(path, payload)
+    return payload
+
+
 def heartbeat_age() -> Optional[float]:
     data = _load_json(HEARTBEAT_PATH, None)
     if not isinstance(data, dict) or not data.get("last_seen_ts"):
@@ -2134,6 +2191,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--author-close", default="", metavar="TASK",
                     help="audit, verify and commit (or restore) the external author's work")
     ap.add_argument("--stop", action="store_true", help="create STOP for a safe stop")
+    ap.add_argument("--backlog", default="", metavar="PYTEST_REPORT",
+                    help="turn failing test node ids from a pytest report into a "
+                         "PROPOSED work queue (never auto-dispatched)")
+    ap.add_argument("--backlog-out", default="",
+                    help="where to write the proposals (default state/backlog/proposals.json)")
     args = ap.parse_args(argv)
 
     if args.ready:
@@ -2143,6 +2205,24 @@ def main(argv: Optional[List[str]] = None) -> int:
     if args.stop:
         STOP_PATH.write_text(f"operator stop {_now()}\n", encoding="utf-8")
         print(f"STOP created at {STOP_PATH}")
+        return 0
+
+    if args.backlog:
+        report = Path(args.backlog)
+        if not report.is_file():
+            print(f"backlog: no such report: {report}", file=sys.stderr)
+            return 2
+        proposals = proposals_from_pytest_report(report)
+        out = Path(args.backlog_out) if args.backlog_out else BACKLOG_PATH
+        payload = write_backlog_proposals(proposals, out)
+        if args.json:
+            print(json.dumps(payload, indent=2, ensure_ascii=False))
+        else:
+            print(f"BACKLOG proposals: {payload['count']} (authorized: 0)")
+            for p in proposals[:12]:
+                print(f"  {p['id']}")
+            print(f"  -> {out}")
+            print("  every proposal is PROPOSED: it needs write_paths before it may run")
         return 0
 
     if args.author_open or args.author_close:

@@ -1,0 +1,547 @@
+{
+  "schema": "northstar.backlog_proposals.v1",
+  "updated_at": "2026-11-03T19:21:24+00:00",
+  "count": 15,
+  "proposals": [
+    {
+      "id": "fix-foundation-tests-test-frontend-gate-py-test-v3-shell-invariants",
+      "name": "Make foundation/tests/test_frontend_gate.py::test_v3_shell_invariants pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for foundation/tests/test_frontend_gate.py::test_v3_shell_invariants (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "foundation/tests/test_frontend_gate.py::test_v3_shell_invariants fails: Ass.... Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": "Ass..."
+      }
+    },
+    {
+      "id": "fix-test-autonomy-hitl-pathlike-py-test-hitl-counts-accepts-a-string-root",
+      "name": "Make test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-coding-guardrails-py-test-pressure-clears-when-a-non-write-tool-c",
+      "name": "Make test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-generation-guards-py-test-the-edit-and-video-lanes-call-the-guard",
+      "name": "Make test_generation_guards.py::test_the_edit_and_video_lanes_call_the_guard pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_generation_guards.py::test_the_edit_and_video_lanes_call_the_guard (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_generation_guards.py::test_the_edit_and_video_lanes_call_the_guard fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_generation_guards.py::test_the_edit_and_video_lanes_call_the_guard",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-hitl-counts-py-test-counts-pending-approved-denied",
+      "name": "Make test_hitl_counts.py::test_counts_pending_approved_denied pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_hitl_counts.py::test_counts_pending_approved_denied (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_hitl_counts.py::test_counts_pending_approved_denied fails: AssertionEr.... Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_hitl_counts.py::test_counts_pending_approved_denied",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": "AssertionEr..."
+      }
+    },
+    {
+      "id": "fix-test-provider-suite-py-test-provider-suite-endpoint-envelope",
+      "name": "Make test_provider_suite.py::test_provider_suite_endpoint_envelope pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_provider_suite.py::test_provider_suite_endpoint_envelope (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_provider_suite.py::test_provider_suite_endpoint_envelope fails: Attrib.... Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_provider_suite.py::test_provider_suite_endpoint_envelope",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": "Attrib..."
+      }
+    },
+    {
+      "id": "fix-test-session-cookie-contract-py-devshimsessiontests-test-forwarded-hea",
+      "name": "Make test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_header_from_untrusted_peer_is_refused pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_header_from_untrusted_peer_is_refused (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_header_from_untrusted_peer_is_refused fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_header_from_untrusted_peer_is_refused",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-session-cookie-contract-py-devshimsessiontests-test-forwarded-loo",
+      "name": "Make test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_loopback_through_the_trusted_dev_proxy_is_allowed pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_loopback_through_the_trusted_dev_proxy_is_allowed (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_loopback_through_the_trusted_dev_proxy_is_allowed fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_session_cookie_contract.py::DevShimSessionTests::test_forwarded_loopback_through_the_trusted_dev_proxy_is_allowed",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-session-cookie-contract-py-devshimsessiontests-test-loopback-dev-",
+      "name": "Make test_session_cookie_contract.py::DevShimSessionTests::test_loopback_dev_headers_resolve_to_the_dev_identity pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_session_cookie_contract.py::DevShimSessionTests::test_loopback_dev_headers_resolve_to_the_dev_identity (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_session_cookie_contract.py::DevShimSessionTests::test_loopback_dev_headers_resolve_to_the_dev_identity fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_session_cookie_contract.py::DevShimSessionTests::test_loopback_dev_headers_resolve_to_the_dev_identity",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-session-cookie-contract-py-devshimsessiontests-test-no-header-is-",
+      "name": "Make test_session_cookie_contract.py::DevShimSessionTests::test_no_header_is_refused_even_in_development pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_session_cookie_contract.py::DevShimSessionTests::test_no_header_is_refused_even_in_development (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_session_cookie_contract.py::DevShimSessionTests::test_no_header_is_refused_even_in_development fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_session_cookie_contract.py::DevShimSessionTests::test_no_header_is_refused_even_in_development",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-session-cookie-contract-py-devshimsessiontests-test-remote-client",
+      "name": "Make test_session_cookie_contract.py::DevShimSessionTests::test_remote_client_is_refused_even_in_development pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_session_cookie_contract.py::DevShimSessionTests::test_remote_client_is_refused_even_in_development (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_session_cookie_contract.py::DevShimSessionTests::test_remote_client_is_refused_even_in_development fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_session_cookie_contract.py::DevShimSessionTests::test_remote_client_is_refused_even_in_development",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-shell-modes-py-test-ui-gates-are-advanced-view-on-top-tiers-only",
+      "name": "Make test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    },
+    {
+      "id": "fix-test-shell-modes-py-test-user-ui-gates-read-plan",
+      "name": "Make test_shell_modes.py::test_user_ui_gates_read_plan pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_shell_modes.py::test_user_ui_gates_read_plan (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_shell_modes.py::test_user_ui_gates_read_plan fails: AssertionError: as.... Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_shell_modes.py::test_user_ui_gates_read_plan",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": "AssertionError: as..."
+      }
+    },
+    {
+      "id": "fix-test-shell-role-contract-py-test-no-undefined-jsx-components",
+      "name": "Make test_shell_role_contract.py::test_no_undefined_jsx_components pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_shell_role_contract.py::test_no_undefined_jsx_components (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_shell_role_contract.py::test_no_undefined_jsx_components fails: Assert.... Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_shell_role_contract.py::test_no_undefined_jsx_components",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": "Assert..."
+      }
+    },
+    {
+      "id": "fix-test-ui-route-contract-py-uiroutecontracttests-test-every-ui-api-path-",
+      "name": "Make test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves pass",
+      "schema_version": 2,
+      "authorized": false,
+      "blocked": "needs_author: name the write scope for test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves (source file only - the test that grades it must be excluded)",
+      "authorization_note": "proposed from reports\\ty\\e2e_adjudication\\backend_head.txt; not authorized until an author supplies write_paths and a regression check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "objective": "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves fails: see the report. Read the source it exercises, fix the defect, and keep the test unchanged - editing the test is not a fix.",
+      "write_paths": [],
+      "read_paths": [],
+      "commit_paths": [],
+      "dependencies": [],
+      "checks": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves",
+          "-q"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 20,
+      "model": "qwen3.5:4b",
+      "evidence": {
+        "report": "reports\\ty\\e2e_adjudication\\backend_head.txt",
+        "message": ""
+      }
+    }
+  ]
+}
