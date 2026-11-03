@@ -97,41 +97,8 @@ def legibility(png: bytes, expected: Optional[list] = None) -> Dict[str, Any]:
 
 
 def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
-    m = metrics(png)
-    leg = legibility(png, expected_copy)
-    bg = m.get("background_purity", m["purity"])
-
-    fill_penalty = abs(m["fill"] - TARGET_FILL)
-    composite = (
-        m["contrast"] * 20
-        + max(0.0, 1.0 - fill_penalty * 3) * 25
-        + m["balance"] * 10
-        + m["hook_density"] * 15
-        + leg["legibility"] * 20
-        + bg * 10
-    )
-    defects = []
-    if bg < 0.35:
-        defects.append("background_not_white_enough")
-    if m["fill"] < 0.6:
-        defects.append("subject_too_small")
-    if m["fill"] > 0.95:
-        defects.append("subject_touching_frame")
-    if m["balance"] < 0.6:
-        defects.append("subject_off_centre")
-    if leg["legibility"] < 0.5:
-        defects.append("copy_not_readable")
-    if m["hook_density"] < 0.25:
-        defects.append("low_thumb_stop_energy")
-
-    return {
-        "score": round(min(100.0, composite), 1),
-        "metrics": m,
-        "legibility": leg,
-        "defects": defects,
-        "verdict": "pass" if composite >= 70 and not defects else "revise",
-        "rubric": "offline: contrast/fill/balance/hook_density/legibility/purity",
-    }
+    """Back-compat alias: a hero IS a listing image."""
+    return score_listing(png, expected_copy=expected_copy)
 
 
 __all__ = ["metrics", "legibility", "score_listing", "score_hook", "score", "score_hero", "CLASSES", "TARGET_FILL"]
@@ -224,9 +191,4 @@ def score(png: bytes, artifact_class: str = "listing", *,
     if key in ("listing", "hero"):
         return score_listing(png, expected_copy=expected_copy)
     return score_hook(png)
-
-
-def score_hero(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[str, Any]:
-    """Back-compat alias: a hero IS a listing image."""
-    return score_listing(png, expected_copy=expected_copy)
 

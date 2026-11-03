@@ -48,10 +48,6 @@ def _now_iso() -> str:
     return utcnow().isoformat()
 
 
-def _now_iso() -> str:
-    return utcnow().isoformat()
-
-
 def _dec(value, default: Optional[Decimal] = None) -> Optional[Decimal]:
     if value is None:
         return default

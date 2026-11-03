@@ -24,6 +24,8 @@ GUARDED = (
     "mockup_quality.py",
     "conftest.py",
     "design_studio_api.py",
+    "asset_rubric.py",
+    "foundation/jobs_durable.py",
 )
 
 
@@ -49,12 +51,17 @@ def test_studio_generation_keeps_the_optional_psutil_fallback():
 
 def test_the_conftest_collection_hook_does_both_jobs(monkeypatch):
     """A duplicate pytest hook silently replaced the credential scrub."""
-    import conftest  # the live plugin module pytest loaded
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "northstar_conftest_probe", BACKEND / "conftest.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)          # noqa: SLF001 - a private probe module
 
     calls = []
-    monkeypatch.setattr(conftest, "_scrub_credential_env",
+    monkeypatch.setattr(module, "_scrub_credential_env",
                         lambda: calls.append("scrub") or {})
-    monkeypatch.setattr(conftest, "_restore_generated",
+    monkeypatch.setattr(module, "_restore_generated",
                         lambda: calls.append("restore"))
-    conftest.pytest_collection_finish(None)
+    module.pytest_collection_finish(None)
     assert calls == ["scrub", "restore"]

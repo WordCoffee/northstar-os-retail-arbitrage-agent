@@ -71,3 +71,9 @@ def test_pass_requires_a_clean_sheet():
     out = ar.score_hero(_png())
     if out["defects"]:
         assert out["verdict"] == "revise"
+
+def test_score_hero_is_the_listing_rubric():
+    """The alias must be the code that runs, not a dead earlier implementation."""
+    out = ar.score_hero(_png())
+    assert out["class"] == "listing"
+    assert out["rubric"].startswith("listing:")
