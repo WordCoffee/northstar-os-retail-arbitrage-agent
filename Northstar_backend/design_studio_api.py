@@ -1183,6 +1183,7 @@ class ListingRecordIn(BaseModel):
     description: Optional[str] = None
     images: Optional[List[Any]] = None
     aplus_modules: Optional[List[str]] = None
+    source: Optional[str] = None
     observed_at: Optional[str] = None
     legacy_key: Optional[str] = None
 
@@ -1229,19 +1230,6 @@ def list_listing_records(acct: str = Depends(studio_account)):
         "counts": {"total": len(rows)},
         "note": "Scoped to the calling account. Migrated from the browser-local ListingForge records; the server copy is the primary source.",
     }
-
-
-class ListingRecordIn(BaseModel):
-    asin: Optional[str] = None
-    title: Optional[str] = None
-    bullets: Optional[List[str]] = None
-    backend_terms: Optional[str] = None
-    description: Optional[str] = None
-    images: Optional[List[Any]] = None
-    aplus_modules: Optional[List[str]] = None
-    source: Optional[str] = None
-    observed_at: Optional[str] = None
-    legacy_key: Optional[str] = None
 
 
 class ListingRecordPatch(BaseModel):

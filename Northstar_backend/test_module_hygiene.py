@@ -23,6 +23,7 @@ GUARDED = (
     "mogra_label_art.py",
     "mockup_quality.py",
     "conftest.py",
+    "design_studio_api.py",
 )
 
 
