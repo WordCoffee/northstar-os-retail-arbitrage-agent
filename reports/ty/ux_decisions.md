@@ -125,3 +125,5 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Full suite - 16 -> 13 failures; all 13 are in the adjudicated pre-existing list. The three fixed were stale task contracts, not product regressions. test_v3_shell_invariants is left failing on purpose; its number is not bumped.
 2026-11-03 - Stills API - The social-frame endpoint writes no DB row: it returns the image data URL and the path, so a stateless render cannot get account-scoped storage wrong; the caller's asset flow persists it.
 2026-11-03 - Stills API - A refused frame is a 422 with the saved candidate path, not a 200 with a bad image: the caller can inspect what failed without the product treating it as shipped.
+2026-11-03 - Video API - The plan route is separate from render and render requires confirm=true; a 15s request is 8 sampler clips and roughly 20 minutes, so a typo must not start it.
+2026-11-03 - Video API - A background job records every stage and fails with the reason; a done job always has a file and a manifest, never a status without evidence.

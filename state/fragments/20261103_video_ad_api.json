@@ -1,0 +1,27 @@
+{
+  "video_ad_api_20261103": {
+    "status": "DONE - plan + confirm-gated background render over the API; fragment pending operator merge",
+    "commit": "ff6cb8bf",
+    "routes": [
+      "POST /api/design-studio/video-ad/plan",
+      "POST /api/design-studio/video-ad/render (confirm=true, 202 job)",
+      "GET /api/design-studio/video-ad/jobs/{id}",
+      "GET /api/design-studio/video-ad/jobs"
+    ],
+    "live_plan": {"platform": "tiktok", "seconds": 15, "scenes": 5, "sampler_clips": 8, "sum_seconds": 15.0, "scene_chunks": [[73], [57, 57], [53, 49], [53, 49], [73]], "compliance_verified": true},
+    "behaviour": {
+      "plan": "no GPU work; returns scenes, chunks, clip count and compliance",
+      "render": "requires confirm=true, a plate (asset or data URL) and an armed/reachable lane; 400/422/503 otherwise",
+      "jobs": "background thread; status/stage/reason/manifest persisted per job; a failed stage is failed, never done"
+    },
+    "tests": "7 passed (plan, invalid format, confirm gate, plate required, done job, failed reason, 404)",
+    "gaps": [
+      "no UI wiring",
+      "progress is stage-level, not per diffusion step",
+      "a process restart leaves a running job file at its last stage (not marked interrupted automatically)",
+      "the live end-to-end proof is the 3s CLI run, not a 15s API job"
+    ],
+    "gates_held": "No Amazon, no spend, no credential read. The live plan used the documented loopback dev shim; no render was started.",
+    "report": "reports/ty/video_ad_20261103.md"
+  }
+}

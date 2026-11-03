@@ -58,3 +58,11 @@ the values you stated; the panel carries `DRAFT · VERIFY BEFORE PRINT` for that
 picture does not need them final; a print order does.
 
 
+
+## 7. A 15 s video render is a time commitment, not a blocker (2026-11-03)
+
+The video ad lane is proven end to end on a **3 s** clip (4 min wall clock on this box). A 15 s
+TikTok plans as 5 scenes / 8 sampler clips and takes roughly 20 minutes of local GPU/CPU time.
+POST /api/design-studio/video-ad/plan shows the cost first; POST /render with confirm: true
+starts it. Say the word if you want the 15 s master rendered; the loop will not spend 20 minutes of
+render time on a guess.
