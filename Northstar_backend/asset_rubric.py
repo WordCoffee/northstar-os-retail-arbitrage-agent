@@ -133,7 +133,11 @@ def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[s
         defects.append("subject_touching_frame")
     if m["balance"] < 0.6:
         defects.append("subject_off_centre")
-    if leg["legibility"] < 0.5:
+    # A main listing image is a TEXT-FREE surface: absence of copy is correct,
+    # not a defect. Only grade copy when the caller actually asked for it.
+    copy_expected = bool(expected_copy)
+    copy_score = float(leg["legibility"]) if copy_expected else 1.0
+    if copy_expected and leg["legibility"] < 0.5:
         defects.append("copy_not_readable")
     if bg < 0.90 and "contact_shadow_or_floor" not in defects:
         defects.append("contact_shadow_or_floor")
@@ -142,13 +146,14 @@ def score_listing(png: bytes, *, expected_copy: Optional[list] = None) -> Dict[s
         min(1.0, bg / LISTING_PURITY) * 40
         + max(0.0, 1.0 - abs(m["fill"] - 0.86) * 8) * 30
         + m["balance"] * 10
-        + leg["legibility"] * 20
+        + copy_score * 20
     )
     return {
         "class": "listing",
         "score": round(min(100.0, composite), 1),
         "metrics": m,
         "legibility": leg,
+        "copy_expected": copy_expected,
         "defects": defects,
         "verdict": "pass" if not defects else "revise",
         "rubric": "listing: background purity>=%.2f, fill 80-92%%, balance, OCR legibility" % LISTING_PURITY,
