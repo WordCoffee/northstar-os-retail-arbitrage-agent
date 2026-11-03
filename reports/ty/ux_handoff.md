@@ -1,8 +1,40 @@
 # UX rebuild — handoff
 
-**State:** U0–U7 done and verified on both targets. **U8 (Studio and Bojo integration) is next and
-not started.** Last tag `ns-ux-U7`. Dev servers are up from `scripts/dev-start.ps1` after
-`tailscale serve status` returned **No serve config**.
+**State:** U0–U7 done and verified on both targets. **U8 is PARTIAL** (client half done and tested;
+the model-facing tool and package front/rear mode are not). Last tag `ns-ux-U8`. Dev servers are up
+from `scripts/dev-start.ps1` after `tailscale serve status` returned **No serve config**.
+
+**Next action:** finish U8's remaining half (below), then U9 (PPC scene + workspace).
+
+## U8 — what is done, what is not
+
+Done (committed, tested on both targets):
+
+- `src/lib/canvasCommands.js` — `parseInstruction` + `applyInstruction`: `set_text`, `scale_text`
+  (±20% or an explicit %, clamped to 1–20% of the canvas height), `add_text`, `select`,
+  `swap_asset`. Every refusal names the reason; nothing it does not understand is approximated.
+- `src/shell/WorkspaceTabs.jsx` — the workspace publishes `summary.canvas` and registers exactly
+  one command function (`registerCanvasCommand` / `runCanvasCommand`). Publishing is gated on a JSON
+  signature so a keystroke does not re-render the dock.
+- `CanvasWorkspace` registers that entry point, and exposes a DEV-gated
+  `window.__northstarCanvas = { instruct, view }` for harnesses (same contract as `?engine=1`).
+- `WorkbenchShell` mirrors `data-canvas-id` / `data-canvas-layers` for observability.
+- Test: `studio-canvas.spec.ts` — "a canvas instruction edits the open document, read back from the
+  DOM": 9.0% → 10.8% in the properties panel, an unknown sentence changes nothing, undo restores it.
+
+Not done — the remaining half of U8:
+
+1. **The model-facing tool.** `Northstar_backend/chat_tools.py` needs a `canvas_edit` spec + handler
+   (validate the op against a canvas passed in `ctx`, return `{ok, summary, edit}`; it must NOT
+   mutate). `chat_router.py` builds `worker_ctx` at ~line 507 — the canvas has to travel from the
+   request into that dict, and `turn_directive` has to describe the canvas so the model knows what it
+   may touch. `ChatSurface` then applies the returned edit through `runCanvasCommand`.
+   Watch out: the local model must be reachable for a real round-trip test; if it is not, keep the
+   test at the command layer and say so.
+2. **Package mode.** When the content type is `package`, show front and rear panels with the dieline
+   overlay, reusing `Dielines.jsx`'s SVG output and the print formats in `presets.js`. Do not
+   re-implement the dieline geometry.
+
 
 ## Done
 

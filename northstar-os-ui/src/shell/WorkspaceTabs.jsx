@@ -6,7 +6,7 @@
 // sessionStorage, wrapped in try/catch, and a corrupt or empty value degrades to
 // a single default tab rather than an empty shell.
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { getService } from '../data/serviceRegistry.js'
 
 export const TABS_KEY = 'ns-ux-tabs'
@@ -37,6 +37,10 @@ const WorkspaceContext = createContext(null)
 
 export function WorkspaceProvider({ children, initialState = null }) {
   const [state, setState] = useState(() => initialState || readStored() || defaultState())
+  // U8: what the open workspace tells Bojo, and the single entry point a turn
+  // may use to act on it. The workspace owns both; the shell only relays them.
+  const [canvas, setCanvas] = useState(null)
+  const commandRef = useRef(null)
 
   useEffect(() => {
     try {
@@ -85,12 +89,24 @@ export function WorkspaceProvider({ children, initialState = null }) {
         label: activeService?.label || state.active,
         tabCount: state.open.length,
         workspaceType: activeService?.workspaceType || null,
+        canvas,
+      },
+      // U8: the canvas publishes itself here and registers the one function a
+      // chat turn may call. `null` when the active workspace has no canvas.
+      publishCanvas: (next) => setCanvas(next),
+      registerCanvasCommand: (fn) => { commandRef.current = fn },
+      runCanvasCommand: (instruction) => {
+        const fn = commandRef.current
+        if (typeof fn !== 'function') {
+          return { ok: false, error: 'The open workspace has no canvas to edit.' }
+        }
+        try { return fn(instruction) } catch (e) { return { ok: false, error: String(e.message || e) } }
       },
       openService: open,
       activate,
       close,
     }
-  }, [state, open, activate, close])
+  }, [state, open, activate, close, canvas])
 
   return <WorkspaceContext.Provider value={value}>{children}</WorkspaceContext.Provider>
 }
@@ -99,4 +115,13 @@ export function useWorkspace() {
   const ctx = useContext(WorkspaceContext)
   if (!ctx) throw new Error('useWorkspace must be used inside WorkspaceProvider')
   return ctx
+}
+
+/**
+ * The same context, but `null` outside the workbench. The studio also renders on
+ * its own route (/design-studio), where no provider exists; a workspace that
+ * only wants to PUBLISH must not throw there.
+ */
+export function useWorkspaceOptional() {
+  return useContext(WorkspaceContext)
 }

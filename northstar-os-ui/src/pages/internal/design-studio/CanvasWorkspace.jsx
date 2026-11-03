@@ -38,6 +38,8 @@ import {
   serialiseDesign, parseDesign, assetsWithinBudget, exportFileName, base64ToBytes, pdfFromJpeg,
   DESIGN_STORE_KEY, MAX_ASSET_CHARS,
 } from '../../../lib/studioCanvas.js'
+import { parseInstruction, applyInstruction, describeCanvas } from '../../../lib/canvasCommands.js'
+import { useWorkspaceOptional } from '../../../shell/WorkspaceTabs.jsx'
 
 const ZOOM_MIN = 0.2
 const ZOOM_MAX = 4
@@ -90,6 +92,8 @@ const SHAPES = [
 
 export default function CanvasWorkspace({ onNavigateSection }) {
   const { toast } = useToast()
+  // Present inside the workbench, null on /design-studio (no provider there).
+  const workspace = useWorkspaceOptional()
 
   // One read of the autosave record decides the whole first render: document,
   // assets, content type and the message the status line shows.
@@ -123,6 +127,24 @@ export default function CanvasWorkspace({ onNavigateSection }) {
 
   const type = useMemo(() => resolveContentType(doc.contentType), [doc.contentType])
   const selectedLayer = doc.layers.find((l) => l.id === selected) || null
+
+  // Always-current snapshot for the harness hook, so `view()` never reports a
+  // document from a previous render. Declared after every useState: an
+  // initialiser that reads `selected` before its own useState is a TDZ crash.
+  const liveRef = useRef({ doc, selected, assets })
+  liveRef.current = { doc, selected, assets }
+
+  // ── U8: what Bojo is told about this canvas ──────────────────────────────
+  // Published only when the description actually changes: the shell re-renders
+  // on every publish, and a keystroke must not re-render the whole dock.
+  const canvasView = useMemo(() => describeCanvas(doc, { selected, assets }), [doc, selected, assets])
+  const viewKey = useMemo(() => (canvasView ? JSON.stringify(canvasView) : ''), [canvasView])
+  const publishCanvas = workspace && workspace.publishCanvas
+
+  useEffect(() => {
+    if (typeof publishCanvas !== 'function') return
+    publishCanvas(canvasView)
+  }, [viewKey, publishCanvas])
 
   // ── assets → decoded images (the renderer wants elements, not URLs) ──────
   useEffect(() => {
@@ -221,6 +243,45 @@ export default function CanvasWorkspace({ onNavigateSection }) {
     draftRef.current = null
     setDraft(null)
     setHistory(redoHistory)
+  }, [])
+
+  // ── U8: one instruction, one bounded edit ────────────────────────────────
+  // This is the only entry point a chat turn may use. It parses, applies and
+  // reports; a sentence it does not understand changes nothing.
+  const instruct = useCallback((text) => {
+    const instruction = parseInstruction(text)
+    if (!instruction) {
+      return { ok: false, error: 'I did not understand that as a canvas instruction. Nothing was changed.' }
+    }
+    const result = applyInstruction(doc, instruction, { selected, assets })
+    if (!result.ok) return { ok: false, error: result.error }
+    if (result.doc !== doc) applyDoc(result.doc)
+    if (result.layerId) setSelected(result.layerId)
+    return { ok: true, summary: result.summary, layerId: result.layerId || '' }
+  }, [doc, selected, assets, applyDoc])
+
+  const instructRef = useRef(instruct)
+  instructRef.current = instruct
+  const registerCommand = workspace && workspace.registerCanvasCommand
+
+  useEffect(() => {
+    if (typeof registerCommand !== 'function') return undefined
+    registerCommand((text) => instructRef.current(text))
+    return () => registerCommand(null)
+  }, [registerCommand])
+
+  // Opt-in harness hook, same contract as ?engine=1 in DesignStudio: dev and
+  // test builds only, folded out of production.
+  useEffect(() => {
+    if (!(import.meta.env.DEV || import.meta.env.VITE_TEST_HOOKS === '1')) return undefined
+    window.__northstarCanvas = {
+      instruct: (text) => instructRef.current(text),
+      view: () => {
+        const live = liveRef.current
+        return describeCanvas(live.doc, { selected: live.selected, assets: live.assets })
+      },
+    }
+    return () => { delete window.__northstarCanvas }
   }, [])
 
   // ── keyboard: undo / redo ────────────────────────────────────────────────
@@ -584,7 +645,7 @@ export default function CanvasWorkspace({ onNavigateSection }) {
                                onChange={(e) => patchLayer(selectedLayer.id, { text: e.target.value })} />
                       </label>
                       <label className="cw-field">
-                        <span>Size ({(selectedLayer.size * 100).toFixed(1)}% of height = {Math.round((selectedLayer.size || 0) * doc.h)} px)</span>
+                        <span data-testid="cw-text-size">Size ({(selectedLayer.size * 100).toFixed(1)}% of height = {Math.round((selectedLayer.size || 0) * doc.h)} px)</span>
                         <input type="range" min="0.01" max="0.2" step="0.002"
                                value={selectedLayer.size || 0.03}
                                onChange={(e) => patchLayer(selectedLayer.id, { size: Number(e.target.value) })} />

@@ -57,7 +57,7 @@ function NotWired({ service }) {
 }
 
 export default function WorkbenchShell() {
-  const { open, active, activeService, openService, activate, close } = useWorkspace()
+  const { open, active, activeService, summary, openService, activate, close } = useWorkspace()
   const [pickerOpen, setPickerOpen] = useState(false)
   // On a phone the tab strip is collapsed behind the switcher, so "show my tabs"
   // and "add a service" are two different panels. They used to share one flag,
@@ -109,7 +109,9 @@ export default function WorkbenchShell() {
 
   return (
     <div className={`wb-shell ${dockOpen ? 'dock-open' : 'dock-closed'} ${shifting ? 'is-shifting' : ''}`}
-         data-testid="workbench-shell" data-wb-theme={themeId} style={themeVars(themeId)}>
+         data-testid="workbench-shell" data-wb-theme={themeId} style={themeVars(themeId)}
+         data-canvas-id={summary.canvas?.id || ''}
+         data-canvas-layers={summary.canvas ? String(summary.canvas.layers.length) : ''}>
       <SceneHost sceneId={activeService?.scene || 'default'} />
       {!narrow && (
       <aside className="wb-dock glass" data-testid="bojo-dock" data-collapsed={dockOpen ? '0' : '1'}>

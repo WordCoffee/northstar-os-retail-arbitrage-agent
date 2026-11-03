@@ -221,3 +221,37 @@ test('the phone layout does not overflow', async ({ page }) => {
     document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow).toBeLessThanOrEqual(1)
 })
+
+// U8 — the canvas instruction layer. The sentence goes through the SAME entry
+// point the workbench registers for a chat turn (useWorkspace.runCanvasCommand);
+// the model is not in this loop, so this test proves the edit path, not a live
+// model turn. What it asserts is the part that must not drift: the document
+// changes, the change is readable back from the DOM, and an unknown sentence
+// changes nothing.
+test('a canvas instruction edits the open document, read back from the DOM', async ({ page }) => {
+  await openStudio(page)
+  await page.getByTestId('cw-add-text').click()
+  await openPanel(page)
+  await page.getByTestId('cw-panel-properties').click()
+  await expect(page.getByTestId('cw-text-size')).toContainText('9.0%')
+
+  // Bojo can see the canvas: the shell publishes the open document.
+  await expect(page.getByTestId('workbench-shell')).toHaveAttribute('data-canvas-layers', '2')
+
+  const result = await page.evaluate(() => window.__northstarCanvas.instruct('make the headline bigger'))
+  expect(result.ok).toBe(true)
+  expect(result.summary).toMatch(/bigger/)
+
+  // The DOM is the proof: the panel reads the real size back.
+  await expect(page.getByTestId('cw-text-size')).toContainText('10.8%')
+
+  // A sentence that is not a canvas instruction changes nothing.
+  const refused = await page.evaluate(() => window.__northstarCanvas.instruct('what is my ROI on this ASIN?'))
+  expect(refused.ok).toBe(false)
+  await expect(page.getByTestId('cw-text-size')).toContainText('10.8%')
+
+  // And the edit is a normal document change: undo takes it back.
+  await expectTopmost(page, 'cw-undo')
+  await page.getByTestId('cw-undo').click()
+  await expect(page.getByTestId('cw-text-size')).toContainText('9.0%')
+})

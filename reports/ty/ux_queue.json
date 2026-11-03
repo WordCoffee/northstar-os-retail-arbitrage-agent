@@ -67,7 +67,15 @@
        "zone_proof": "cw-canvas-zone background rgb(22,29,39) = --wb-solid, backdrop-filter none, exactly 1 canvas inside it (the artboard), topmost at its centre"
      },
      "notes": "CanvasWorkspace.jsx + lib/studioCanvas.js + styles/canvas.css. Six content types resolve through presets.js/specRegistry.js. Undo/redo, snapping with drawn guides, autosave (versioned, TTL, validated), PNG export and a real PDF 1.4 (DCTDecode, xref verified in the unit test). Fixed a layout defect U7 exposed: WorkbenchShell's tab panel reused the class `.wb-panel`, which chat.css owns as a fixed 372px floating aside - every workspace was a floating box. Renamed to `.wb-tabpanel`; the workbench-scene canvas assertion was scoped to the scene host because the studio artboard is now a second, legitimate canvas."},
-    {"id": "U8", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U8", "status": "partial", "tag": "ns-ux-U8", "tokens": 150000,
+     "evidence": {
+       "unit": "168/168 (11 new in canvasCommands.test.js: parse/apply/refuse)",
+       "e2e": "studio-canvas.spec.ts desktop 5 passed + 1 skipped, mobile 6 passed (the instruction test runs on both)",
+       "read_back": "'make the headline bigger' -> 9.0% -> 10.8% read from the properties panel; an unknown sentence changes nothing; undo restores 9.0%",
+       "visibility": "the shell publishes the open canvas: data-canvas-layers on wb-shell, summary.canvas in the workspace context",
+       "build": "1.40s"
+     },
+     "notes": "DONE: lib/canvasCommands.js (bounded parse+apply: set/scale/add/select/swap, every refusal named), the canvas publishes itself through WorkspaceTabs (summary.canvas + registerCanvasCommand/runCanvasCommand), CanvasWorkspace registers the single instruction entry point, and a DEV-gated window.__northstarCanvas hook for harnesses. NOT DONE: the backend chat tool (chat_tools.TOOLS + chat_router ctx) that lets the MODEL emit canvas_edit, and package mode front/rear panels with the dieline overlay. The e2e proves the edit path through the same entry point the shell registers, not a live model turn - that is stated in the test."},
     {"id": "U9", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U10", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U11", "status": "todo", "tag": null, "tokens": 0},
