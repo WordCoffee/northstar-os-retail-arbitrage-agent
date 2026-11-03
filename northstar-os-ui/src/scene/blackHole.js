@@ -81,7 +81,7 @@ export function createBlackHole({ width = 1200, height = 800, seed = 17 } = {}) 
     if (!disk || diskKey !== diskKeyNow) {
       disk = ctx.createLinearGradient(cx - r * 2.4, 0, cx + r * 2.4, 0)
       disk.addColorStop(0, mode === 'subdued' ? 'rgba(160, 130, 90, 0.10)' : 'rgba(214, 170, 110, 0.30)')
-      disk.addColorStop(0.5, mode === 'flare' ? 'rgba(255, 236, 198, 0.55)' : 'rgba(240, 220, 180, 0.38)')
+      disk.addColorStop(0.5, mode === 'flare' ? 'rgba(240, 220, 180, 0.55)' : 'rgba(240, 220, 180, 0.38)')
       disk.addColorStop(1, 'rgba(214, 170, 110, 0.14)')
       diskKey = diskKeyNow
     }

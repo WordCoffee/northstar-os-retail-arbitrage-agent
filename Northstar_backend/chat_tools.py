@@ -1789,6 +1789,8 @@ def _t_service_catalog(args, ctx) -> dict:
     }
 
 
+_CANVAS_VERBS = ('set ', 'change ', 'rename ', 'make ', 'add ', 'select ', 'swap ', 'replace ', 'switch ', 'scale ', 'resize ')
+
 _CANVAS_ROLE_WORDS = {
     "headline": "headline", "title": "headline", "heading": "headline",
     "subhead": "subhead", "subheading": "subhead", "subtitle": "subhead",
@@ -1816,6 +1818,14 @@ def _t_canvas_edit(args, ctx):
     layers = canvas.get("layers") or []
     text_roles = {str(l.get("role") or "") for l in layers if l.get("kind") == "text"}
     words = instruction.lower()
+    # Only the verbs the browser's parser can actually apply. "delete the
+    # headline" names a real layer but is not an edit this path performs, and a
+    # tool that answers ok:true to it invites a false success claim.
+    if not words.startswith(_CANVAS_VERBS):
+        return {"ok": False, "summary": "Not a canvas edit this path performs.",
+                "error": (f'"{instruction}" is not one of the edits the canvas applies '
+                          f"(set, scale, add, select, swap). Nothing was changed."),
+                "assets": []}
     for word, role in _CANVAS_ROLE_WORDS.items():
         if word in words and role not in text_roles:
             return {"ok": False, "summary": f"No {role} layer on the canvas.",

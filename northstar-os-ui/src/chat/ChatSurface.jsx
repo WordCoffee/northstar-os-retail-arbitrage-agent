@@ -656,13 +656,24 @@ export default function ChatSurface({
           // same command entry point the fast path uses.
           if (data.name === 'canvas_edit' && data.ok) {
             const ws2 = workspaceRef.current
+            // Use the instruction the tool actually proposed, not the user's
+            // sentence: the model may have rephrased it into a form the parser
+            // understands. Falls back to the turn's own words.
+            const call = (m.tools || []).find((tj) => tj.call_id === data.call_id)
+            let instruction = content
+            try {
+              const args = typeof call?.args === 'string' ? JSON.parse(call.args) : call?.args
+              if (args && typeof args.instruction === 'string' && args.instruction.trim()) {
+                instruction = args.instruction
+              }
+            } catch { /* keep the user's sentence */ }
             const applied = ws2 && typeof ws2.runCanvasCommand === 'function'
-              ? ws2.runCanvasCommand(content)
+              ? ws2.runCanvasCommand(instruction)
               : null
             if (applied && applied.recognised && applied.ok) {
-              patchBot((m) => ({
-                ...m,
-                content: `${m.content || ''}${m.content ? '\n\n' : ''}${applied.summary}`.trim(),
+              patchBot((m2) => ({
+                ...m2,
+                content: `${m2.content || ''}${m2.content ? '\n\n' : ''}${applied.summary}`.trim(),
               }))
             }
           }
