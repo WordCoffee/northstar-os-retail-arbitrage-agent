@@ -58,10 +58,13 @@ def test_an_absent_or_broken_marker_is_unknown_not_false(marker):
     sg.require_cache_none("video")
 
 
-def test_the_edit_and_video_lanes_call_the_guard(monkeypatch, marker):
+def test_the_video_lane_calls_the_cache_guard(monkeypatch, marker):
+    """The edit lane was removed with the FLUX 2 models (2026-10-29); it now says
+    so before the cache guard. The video lane, which still exists, must still be
+    gated by the marker."""
     marker.write_text(json.dumps({"cache_none": False}), encoding="utf-8")
     monkeypatch.setattr(sg, "media_live_armed", lambda: True)
-    with pytest.raises(RuntimeError, match="comfyui_cache_none_required"):
+    with pytest.raises(RuntimeError, match="edit_lane_removed"):
         sg.generate_edit(b"x", "make it blue")
     with pytest.raises(RuntimeError, match="comfyui_cache_none_required"):
         sg.generate_video("a pouch")
