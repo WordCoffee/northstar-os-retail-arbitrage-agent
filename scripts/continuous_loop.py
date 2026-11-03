@@ -1192,14 +1192,24 @@ def select_task(tasks: Dict[str, Any], state: Dict[str, Any],
                 return None
             return task
         return None
+    candidates = []
     for task in rows:
         tid = str(task.get("id") or "")
-        if task_status(state, tid) not in retryable:
+        status = task_status(state, tid)
+        if status not in retryable:
             continue
         if blocked_reason(task, state, history):
             continue
-        return task
-    return None
+        # New work before retries. A previously-failed task sitting earlier in the
+        # registry used to be dispatched ahead of never-tried tasks, so two old
+        # failures could spend the whole campaign before it reached the queue the
+        # operator actually asked for (measured 2026-11-03: campaign ran
+        # ty-feather-sigma-guard twice while the three mockup tasks waited).
+        candidates.append((0 if status == "pending" else 1, task))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda pair: pair[0])
+    return candidates[0][1]
 
 
 def append_ledger(record: Dict[str, Any], path: Path = LEDGER_PATH) -> None:
