@@ -1,0 +1,33 @@
+{
+  "autonomy_hardening_20261103": {
+    "status": "PARTIAL - code fixes landed, evaluator still missing (fragment, pending operator merge)",
+    "instruction": "owner, 2026-11-03: 'Ok let's fix it so it's fully autonomous'",
+    "commits": ["5c102e64 (outcome memory)", "lane-selection fix", "backlog proposals"],
+    "defects_fixed": {
+      "no_outcome_memory": "state/continuous_loop_state.json is reset as tasks are retried, so the two tasks this lane has never once passed were re-dispatched every campaign (1 completed of 10 over the last six campaigns). Now state/task_history.json holds a durable record keyed by a hash of the task SPEC: 3 attempts with 0 passes -> blocked 'never_solved ... needs_author'; a changed brief/acceptance/lane reopens the door; one pass clears it; --resume clears it. select_task retries 'failed' tasks and lets the memory decide when retrying is pointless.",
+      "silent_lane_substitution": "campaign 20261103T191733Z refused dispatch with profile_mismatch lane=qwen3-embedding:0.6b task=qwen3.5:4b after the first task loaded the model and free RAM dipped. resolve_lane fell back to the smallest model that fit - an embedding model that cannot run a tool call. Now: embed-only models are never candidates; a model Ollama already holds is resident and needs no extra RAM; a requested lane that is missing or does not fit is a refusal with a reason, never a substitution.",
+      "no_work_supply": "--status shows remaining=0 blocked=2: the queue is drained. New --backlog reads a pytest short summary and emits one PROPOSED task per failing node id (objective + acceptance = that test). Measured on the real 15-failure report: 15 proposals, 0 authorized, each validate_task() reporting the two things an author must supply (explicit authorization + write_paths)."
+    },
+    "why_not_auto_dispatched": "a node id is not a write scope; guessing the owning source file from a traceback is how an autonomous loop edits the wrong file or the test that grades it. Turning this step autonomous needs an evaluator, not more steps: candidate patches scored against the failing test + the regression suite + agent_kernel/content.py + a steward/reviewer verdict from a separate session, with best-of-N selection.",
+    "capacity_envelope_measured": {
+      "flux3_and_ty_model_resident": "free RAM 2.9 GB -> readiness NO-GO (ram-floor, model-preload needs 6.0 GB)",
+      "after_ollama_stop_and_stopping_comfyui": "free RAM 7.88 GB -> readiness GO, 0 failing checks",
+      "conclusion": "on 16 GB the image lane and the code lane cannot be resident together. FLUX 3 stays armed via MEDIA_GEN_LIVE=1 and starts on demand through scripts/start-flux3.ps1 (~1-2 min; the gateway answers 503 until then). A campaign needs the inverse: release the image lane and the resident model first - a scheduler task.",
+      "note": "qwen3.5:4b runs 100% CPU in Ollama (3.2 GB RAM, ctx 8192), which is why a Ty step costs minutes and why the 27B llama.cpp lane is the escalation target"
+    },
+    "readiness": "GO with 0 failing checks at handoff; policy fingerprint 5/5 (changed policy files are committed, not just on disk)",
+    "tests": {
+      "test_autonomy_task_history.py": "6 passed (spec hash, 3-strike block, one pass clears, changed spec reopens, select_task skips, campaign does not halt on a never-solved task)",
+      "test_autonomy_lane_selection.py": "6 passed (requested lane honoured, no substitution, embedding never a candidate, resident fits, best-ranked without a request, prebuilt needs no model)"
+    },
+    "still_needed_for_fully_autonomous": [
+      "author/evaluator unit: best-of-N candidate patches + rubric + regression + independent reviewer verdict (the 'creative' half)",
+      "lane scheduler: release image lane + resident model before a campaign, restart on demand for renders",
+      "nightly supply loop: re-run the test evidence, refresh proposals, and let an authorized backlog feed the campaign",
+      "keep the two standing gates (Amazon, spend) - they are charter, not gaps"
+    ],
+    "report": "reports/ty/autonomy_20261103.md",
+    "gates_held": "No Amazon, no spend, no paid credits, no credential read. Model lane and image lane are local; both were unloaded/left unloaded to satisfy the RAM floor.",
+    "quality_claim": false
+  }
+}
