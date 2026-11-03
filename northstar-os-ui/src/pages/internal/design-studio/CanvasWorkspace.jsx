@@ -251,13 +251,17 @@ export default function CanvasWorkspace({ onNavigateSection }) {
   const instruct = useCallback((text) => {
     const instruction = parseInstruction(text)
     if (!instruction) {
-      return { ok: false, error: 'I did not understand that as a canvas instruction. Nothing was changed.' }
+      return {
+        ok: false,
+        recognised: false,
+        error: 'I did not understand that as a canvas instruction. Nothing was changed.',
+      }
     }
     const result = applyInstruction(doc, instruction, { selected, assets })
-    if (!result.ok) return { ok: false, error: result.error }
+    if (!result.ok) return { ok: false, recognised: true, error: result.error }
     if (result.doc !== doc) applyDoc(result.doc)
     if (result.layerId) setSelected(result.layerId)
-    return { ok: true, summary: result.summary, layerId: result.layerId || '' }
+    return { ok: true, recognised: true, summary: result.summary, layerId: result.layerId || '' }
   }, [doc, selected, assets, applyDoc])
 
   const instructRef = useRef(instruct)

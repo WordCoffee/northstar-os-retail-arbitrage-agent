@@ -114,6 +114,27 @@
 .wb-empty h2 { margin: 0 0 8px; }
 .wb-muted { color: var(--wb-ink-dim); }
 
+/* The chat shell was built for the full column (236px rail + conversation). In a
+   380px dock that grid squeezed the conversation to 122px and the composer input
+   to ZERO width — visible, focusable in the DOM, and impossible to type into.
+   Inside the dock the rail becomes an overlay and the conversation keeps the
+   width. (Found by the U8 Bojo click path, which could not reach the composer.) */
+.wb-dock-body .chat-shell,
+.wb-dock-body .chat-shell.rail-open,
+.wb-dock-body .chat-shell.rail-hidden,
+.wb-sheet-body .chat-shell,
+.wb-sheet-body .chat-shell.rail-open,
+.wb-sheet-body .chat-shell.rail-hidden { grid-template-columns: minmax(0, 1fr); position: relative; }
+.wb-dock-body .chat-shell.rail-open .chat-rail,
+.wb-sheet-body .chat-shell.rail-open .chat-rail {
+  position: absolute; inset: 0 auto 0 0; width: 250px; z-index: 3;
+  background: var(--wb-surface-2);
+  box-shadow: 10px 0 26px rgba(0, 0, 0, 0.45);
+}
+.wb-dock-body .chat-col, .wb-sheet-body .chat-col { min-width: 0; }
+.wb-dock-body .chat-composer,
+.wb-dock-body .chat-composer-box { min-width: 0; }
+
 /* --- phone: dock becomes a sheet, tabs become a switcher ------------------ */
 .wb-sheet, .wb-sheet-toggle { display: none; }
 

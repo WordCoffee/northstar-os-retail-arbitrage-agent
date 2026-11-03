@@ -1,40 +1,40 @@
 # UX rebuild — handoff
 
-**State:** U0–U7 and U9 done and verified on both targets. **U8 is PARTIAL** (its client half is
-committed and tested; the model-facing tool and package front/rear mode are not). Last tag
-`ns-ux-U9`. Dev servers are up from `scripts/dev-start.ps1` after `tailscale serve status` returned
+**State:** U0–U7 and U9 done and verified on both targets. **U8 is PARTIAL**: the canvas command
+layer, the publishing, the backend `canvas_edit` tool and the Bojo click path are done and tested;
+**package mode (front/rear panels with the dieline overlay) is not built.** Last tag `ns-ux-U8b`.
+Dev servers are up from `scripts/dev-start.ps1` after `tailscale serve status` returned
 **No serve config**.
 
-**Next action:** finish U8's model-facing tool, then U10 (Research scene + workspace).
+**Next action:** U8's package mode, then U10 (Research scene + workspace).
 
-## U8 — what is done, what is not
+## U8 — the model-facing half is done; package mode is not
 
-Done (committed, tested on both targets):
+Done (committed, tested):
 
-- `src/lib/canvasCommands.js` — `parseInstruction` + `applyInstruction`: `set_text`, `scale_text`
-  (±20% or an explicit %, clamped to 1–20% of the canvas height), `add_text`, `select`,
-  `swap_asset`. Every refusal names the reason; nothing it does not understand is approximated.
-- `src/shell/WorkspaceTabs.jsx` — the workspace publishes `summary.canvas` and registers exactly
-  one command function (`registerCanvasCommand` / `runCanvasCommand`). Publishing is gated on a JSON
-  signature so a keystroke does not re-render the dock.
-- `CanvasWorkspace` registers that entry point, and exposes a DEV-gated
-  `window.__northstarCanvas = { instruct, view }` for harnesses (same contract as `?engine=1`).
-- `WorkbenchShell` mirrors `data-canvas-id` / `data-canvas-layers` for observability.
-- Test: `studio-canvas.spec.ts` — "a canvas instruction edits the open document, read back from the
-  DOM": 9.0% → 10.8% in the properties panel, an unknown sentence changes nothing, undo restores it.
+- `src/lib/canvasCommands.js` — `parseInstruction` + `applyInstruction` (`set_text`, `scale_text`,
+  `add_text`, `select`, `swap_asset`); every refusal names the reason.
+- `WorkspaceTabs` publishes `summary.canvas` and registers exactly one command entry point;
+  `CanvasWorkspace` registers it; `WorkbenchShell` mirrors `data-canvas-id/-layers`.
+- **Backend:** `chat_tools.TOOLS["canvas_edit"]` — it only CHECKS that the open canvas can satisfy
+  the instruction and refuses when there is no canvas or no such layer. `TurnIn.canvas` travels to
+  `options` and into `worker_ctx`. `ChatSurface` sends the canvas, applies a `canvas_edit` tool
+  result, and applies an unambiguous canvas sentence locally (before the model) so the feature works
+  even when the model lane is down. `recognised:false` falls through, so a question is never hijacked.
+- **Fixed:** the Bojo dock/sheet composer was 0 px wide (the chat shell kept its 236 px rail inside a
+  380 px dock). The rail is an overlay in the dock and the phone sheet now.
+- Tests: `bojo-canvas.spec.ts` desktop — typing "make the headline bigger" at Bojo moves the headline
+  9.0% → 10.8%, read back from the properties panel; a refusal changes nothing. `test_canvas_edit_tool.py`
+  6 passed. `studio-canvas.spec.ts` covers the same command layer on both targets.
 
-Not done — the remaining half of U8:
+Not done — the rest of U8:
 
-1. **The model-facing tool.** `Northstar_backend/chat_tools.py` needs a `canvas_edit` spec + handler
-   (validate the op against a canvas passed in `ctx`, return `{ok, summary, edit}`; it must NOT
-   mutate). `chat_router.py` builds `worker_ctx` at ~line 507 — the canvas has to travel from the
-   request into that dict, and `turn_directive` has to describe the canvas so the model knows what it
-   may touch. `ChatSurface` then applies the returned edit through `runCanvasCommand`.
-   Watch out: the local model must be reachable for a real round-trip test; if it is not, keep the
-   test at the command layer and say so.
-2. **Package mode.** When the content type is `package`, show front and rear panels with the dieline
+1. **Package mode.** With the `package` content type, show front and rear panels with the dieline
    overlay, reusing `Dielines.jsx`'s SVG output and the print formats in `presets.js`. Do not
    re-implement the dieline geometry.
+
+Known limit: the phone's Bojo sheet composer is not reachable in the headless iPhone profile (it sits
+under the fixed bottom nav), so `bojo-canvas.spec.ts` skips mobile with that reason in the test.
 
 ## U9 — done
 
@@ -99,30 +99,11 @@ The click path is the pass criterion and it runs end to end: create → add text
 image through the real file input → undo → export PNG → wait for the autosave record to hold the
 post-undo document → reload → the text is back and the undone image is gone.
 
-## Next: U8 (Studio and Bojo integration) [MAX-GRADE]
+## Next: U10 (Research scene + workspace)
 
-What exists to build on — do not invent a second router:
-
-- Bojo is `src/chat/ChatSurface.jsx`; routing is the Master Brain (`Northstar_backend/chat_router.py`,
-  `chat_adapter.py`, `turn_directive`), and tools are declared in `chat_tools.TOOLS`.
-- `src/shell/WorkspaceTabs.jsx` already publishes `summary` (serviceId, label, tabCount,
-  workspaceType) through `useWorkspace()`; it is the intended channel for "what is open".
-- `CanvasWorkspace` holds the whole design state: `doc` (normalised layers), `assets`, `selected`,
-  `history`. Nothing publishes it yet.
-
-Plan that fits the order:
-
-1. Publish the canvas to the workspace context: extend `summary` with the document id, content
-   type, size and layer list (names + kinds + ids), and a stable way to apply a command
-   (`setHeadline`, `resizeLayer`, `placeAsset`, `select`). A small reducer/command module in
-   `src/lib/` is the honest shape — the same one U7's `mutate` already uses.
-2. Add the backend side: a chat tool that reads the published canvas summary and returns a bounded
-   edit (e.g. `canvas_edit` with `layer_id`, `op`, `value`), validated against the same rules the
-   workspace enforces. No new router.
-3. Package mode: front/rear panels with the dieline overlay, reusing `Dielines.jsx`'s SVG output and
-   `presets.js` print formats.
-4. Pass test: a Bojo instruction changes canvas state, read back through the DOM (headline text,
-   layer size) — not through the API alone.
+U8's only remaining item is package mode (above). U10 is the next unit in the order: a black hole
+with accretion-disk lensing at the edges, a research workspace (query, sources panel, depth modes)
+reusing the existing research module, and a click path plus a contrast check.
 
 ## Hazards found this session (do not rediscover)
 

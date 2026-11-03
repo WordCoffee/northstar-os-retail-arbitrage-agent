@@ -509,6 +509,9 @@ def turn_event_stream(db, account_id: str, session: Dict[str, Any], user_content
                     "session_id": session.get("id"),
                     "project_id": session.get("ds_project_id"),
                     "progress": _progress, "cancel": cancel_event,
+                    # U8: the canvas the operator has open, if any. The
+                    # canvas_edit tool refuses rather than guessing when absent.
+                    "canvas": (options or {}).get("canvas"),
                 }
                 box: Dict[str, Any] = {}
                 args_payload = call.get("obj_args") if call.get("obj_args") is not None else call.get("raw_args")
@@ -803,6 +806,9 @@ class TurnIn(BaseModel):
     # creative diverges, standard answers, thinking verifies.
     mode: str = Field("standard", pattern="^(creative|standard|thinking)$")
     attachments: List[str] = Field(default_factory=list, max_length=12)
+    # U8: the open canvas, published by the workbench. Optional and additive —
+    # a turn from anywhere else simply has no canvas to act on.
+    canvas: Optional[Dict[str, Any]] = Field(default=None)
 
 
 # The switches are model-side instructions, never written into the transcript: the
@@ -1158,7 +1164,7 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
                            len(body.attachments), body.mode), model=body.model,
         options={"media": body.media, "thinking": body.thinking,
                  "style": body.style, "mode": body.mode,
-                 "attachments": body.attachments})
+                 "attachments": body.attachments, "canvas": body.canvas})
     return StreamingResponse(
         generator,
         media_type="text/event-stream",

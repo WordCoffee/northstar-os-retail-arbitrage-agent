@@ -28,6 +28,7 @@ import Icon from '../components/Icon.jsx'
 import WorkbenchPanel from './WorkbenchPanel.jsx'
 import { chatApi, chatVoice, streamTurn, assetFileUrl } from './api.js'
 import { useAssetSrc, saveAsset } from './assetUrl.js'
+import { useWorkspaceOptional } from '../shell/WorkspaceTabs.jsx'
 
 const DEFAULT_SUGGESTIONS = [
   'What should I focus on today across my brands?',
@@ -371,6 +372,11 @@ export default function ChatSurface({
   const inputRef = useRef(null)
   const focusRef = useRef(focus)
   focusRef.current = focus
+  // U8: the workbench publishes the open canvas and ONE command entry point.
+  // Optional — on the standalone home there is no provider and no canvas.
+  const workspace = useWorkspaceOptional()
+  const workspaceRef = useRef(workspace)
+  workspaceRef.current = workspace
 
   // One-time load: engine health + voice status + session list.
   useEffect(() => {
@@ -566,6 +572,30 @@ export default function ChatSurface({
 
   const runTurn = useCallback(async (content) => {
     const startedAt = Date.now()
+
+    // U8: a concrete instruction about the OPEN canvas is applied here, through
+    // the workspace's one command entry point, instead of being sent to the
+    // model. The parser only recognises a narrow grammar (set/scale/add/select/
+    // swap); anything it does not understand returns recognised:false and falls
+    // through to the normal turn, so a general question is never hijacked.
+    const ws = workspaceRef.current
+    if (ws && typeof ws.runCanvasCommand === 'function') {
+      const applied = ws.runCanvasCommand(content)
+      if (applied && applied.recognised) {
+        const reply = applied.ok
+          ? `${applied.summary || 'Done.'} Undo is in the canvas toolbar.`
+          : applied.error
+        setMessages((prev) => [
+          ...prev,
+          { id: `local-u-${startedAt}`, role: 'user', content, thinking: '', status: 'done' },
+          { id: `local-a-${startedAt}`, role: 'assistant', content: reply, thinking: '',
+            status: applied.ok ? 'done' : 'error', startedAt, endedAt: Date.now() },
+        ])
+        setPinned(true)
+        return
+      }
+    }
+
     const botId = `local-a-${startedAt}`
     setMessages((prev) => [
       ...prev,
@@ -589,6 +619,7 @@ export default function ChatSurface({
         mode,
         style,
         attachments: attachments.map((a) => a.id),
+        canvas: workspaceRef.current?.summary?.canvas || undefined,
       }, ({ event, data }) => {
         if (event === 'start') {
           setTurnId(data.turn_id || '')
@@ -620,6 +651,21 @@ export default function ChatSurface({
                   summary: data.summary, error: data.error }
               : tj)),
           }))
+          // U8: the model proposed a canvas edit and the backend confirmed the
+          // canvas can satisfy it. The BROWSER performs the edit, through the
+          // same command entry point the fast path uses.
+          if (data.name === 'canvas_edit' && data.ok) {
+            const ws2 = workspaceRef.current
+            const applied = ws2 && typeof ws2.runCanvasCommand === 'function'
+              ? ws2.runCanvasCommand(content)
+              : null
+            if (applied && applied.recognised && applied.ok) {
+              patchBot((m) => ({
+                ...m,
+                content: `${m.content || ''}${m.content ? '\n\n' : ''}${applied.summary}`.trim(),
+              }))
+            }
+          }
         } else if (event === 'card') {
           // A card the server built without the model (e.g. the deterministic
           // creative-plan router). Same shape the transcript loader builds from

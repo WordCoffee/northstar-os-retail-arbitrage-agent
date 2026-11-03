@@ -98,9 +98,9 @@ export function WorkspaceProvider({ children, initialState = null }) {
       runCanvasCommand: (instruction) => {
         const fn = commandRef.current
         if (typeof fn !== 'function') {
-          return { ok: false, error: 'The open workspace has no canvas to edit.' }
+          return { ok: false, recognised: false, error: 'The open workspace has no canvas to edit.' }
         }
-        try { return fn(instruction) } catch (e) { return { ok: false, error: String(e.message || e) } }
+        try { return fn(instruction) } catch (e) { return { ok: false, recognised: true, error: String(e.message || e) } }
       },
       openService: open,
       activate,

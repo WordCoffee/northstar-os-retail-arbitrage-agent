@@ -1789,10 +1789,62 @@ def _t_service_catalog(args, ctx) -> dict:
     }
 
 
+_CANVAS_ROLE_WORDS = {
+    "headline": "headline", "title": "headline", "heading": "headline",
+    "subhead": "subhead", "subheading": "subhead", "subtitle": "subhead",
+    "body": "body", "copy": "body",
+}
+
+
+def _t_canvas_edit(args, ctx):
+    """Propose one bounded edit to the canvas the operator has open (U8).
+
+    It does not mutate anything: the browser applies the instruction through the
+    same command layer the workbench registers, so the edit semantics live in one
+    place. This handler only checks that the canvas CAN satisfy it, and refuses
+    with the reason when it cannot.
+    """
+    canvas = (ctx or {}).get("canvas") or None
+    instruction = str((args or {}).get("instruction") or "").strip()
+    if not canvas:
+        return {"ok": False, "summary": "No canvas is open.",
+                "error": ("The workbench has not published a canvas to this turn, so there is "
+                          "nothing to edit."), "assets": []}
+    if not instruction:
+        return {"ok": False, "summary": "No instruction.", "error": "instruction is empty", "assets": []}
+
+    layers = canvas.get("layers") or []
+    text_roles = {str(l.get("role") or "") for l in layers if l.get("kind") == "text"}
+    words = instruction.lower()
+    for word, role in _CANVAS_ROLE_WORDS.items():
+        if word in words and role not in text_roles:
+            return {"ok": False, "summary": f"No {role} layer on the canvas.",
+                    "error": (f"This canvas has no {role} layer. Add one in the canvas "
+                              f"workspace first."), "assets": []}
+    return {"ok": True,
+            "summary": f'Applying to "{canvas.get("name") or "the open design"}": {instruction}',
+            "instruction": instruction, "assets": []}
+
+
 TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "handler": _t_system_status,
+    },
+    "canvas_edit": {
+        "description": ("Apply one concrete instruction to the design canvas the operator has "
+                        "open (headline text, text size, selection, image swap). The browser "
+                        "performs the edit; this tool checks it is possible and refuses when the "
+                        "canvas is absent or the named layer does not exist."),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "instruction": {"type": "string", "minLength": 3, "maxLength": 240,
+                                "description": "The instruction, in the operator's own words."},
+            },
+            "required": ["instruction"],
+        },
+        "handler": _t_canvas_edit,
     },
     "plan_project": {
         "description": ("Build a validated, visible project plan (steps, lanes, "
