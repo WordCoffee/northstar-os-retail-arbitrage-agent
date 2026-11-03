@@ -34,7 +34,9 @@ def test_feather_follows_the_residual_and_clamps():
     assert mc.feather_sigma(10.0) == 12.0          # hi clamp: beyond this we refuse
     assert mc.feather_sigma(0) == 1.0
     assert mc.feather_sigma(None) == 1.0
-    assert mc.feather_sigma(float("nan")) == 1.0
+    # A non-finite residual is a FAILED fit, not a default: t9 pins the refusal.
+    with pytest.raises(ValueError):
+        mc.feather_sigma(float("nan"))
 
 
 def _hard_panel():

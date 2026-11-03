@@ -19,8 +19,9 @@ No provider calls, no network, no cost. Pure PIL + numpy.
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
@@ -370,12 +371,20 @@ def feather_sigma(residual_px: float, *, lo: float = 1.0, hi: float = 12.0,
     error is already there. So the feather must follow the residual — a 0.2 px
     fit needs no softening, a 2 px fit needs a few pixels of ramp, and past the
     hi clamp the label is not trustworthy and `compose()` refuses instead.
+
+    A NON-FINITE residual is not a measurement: it means the fit itself failed.
+    Returning the default clamp here hid that failure and produced a normal-
+    looking composite with a hard edge, so it is refused instead.
     """
     try:
         residual = float(residual_px)
     except (TypeError, ValueError):
         return float(lo)
-    if residual != residual or residual <= 0:      # NaN or no measurement
+    if not math.isfinite(residual):
+        raise ValueError(
+            f"residual_px must be a finite measurement, got {residual_px!r} "
+            "(the warp fit failed; refusing to feather it)")
+    if residual <= 0:                               # zero or no useful signal
         return float(lo)
     return float(min(hi, max(lo, residual * float(per_px))))
 
@@ -402,7 +411,11 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
     shading-only blend (kept for callers that have no plate access).
     """
     PW, PH = panel.size
-    H = _homography([(0, 0), (PW, 0), (PW, PH), (0, PH)], list(quad))
+    # Pixel-centre convention: panel pixel (0,0) is the CENTRE of the first
+    # pixel and must land on the quad's top-left corner. Using PW/PH here mapped
+    # the panel's outer EDGE to the corner, which shifted the print half a pixel
+    # and dropped the last row/column from the face.
+    H = _homography([(0, 0), (PW - 1, 0), (PW - 1, PH - 1), (0, PH - 1)], list(quad))
     Hinv = np.linalg.inv(H)
     W, Hpx = photo.size
     xs = [p[0] for p in quad]
@@ -440,7 +453,13 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
                     max(np.abs(du).max(), np.abs(dv).max()) / max(scale_u, scale_v))
 
     pa = np.asarray(panel, dtype=np.float32)
-    valid = (u >= 0) & (u <= PW - 1) & (v >= 0) & (v <= PH - 1)
+    # A pixel whose centre lands exactly on the quad boundary is INSIDE the
+    # printed face; the inverse homography returns -1e-13 there because the fit
+    # is numeric, not symbolic. Without an epsilon that boundary row/column is
+    # rejected and a 1 px line of plate shows along every edge of the label.
+    eps = 1e-6
+    valid = ((u >= -eps) & (u <= PW - 1 + eps)
+             & (v >= -eps) & (v <= PH - 1 + eps))
     uc = np.clip(u, 0, PW - 1)
     vc = np.clip(v, 0, PH - 1)
     u0 = np.floor(uc).astype(int)
@@ -457,8 +476,12 @@ def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
         # showed outward paint is the entire bleed (1 px overshoot = 28 % of the
         # panel's contrast); an inward ramp cannot create one, it only softens
         # the print where it meets the surface.
+        # + half the ramp at the boundary gives the geometric edge 50 %
+        # coverage (an anti-aliased edge) instead of erasing it, so a corner
+        # that lands exactly on the quad is still painted.
         inside = np.minimum(np.minimum(u, PW - 1 - u), np.minimum(v, PH - 1 - v))
-        ramp = np.clip(inside / max(1e-6, float(edge_feather)), 0.0, 1.0)
+        ramp = np.clip((inside + 0.5 * float(edge_feather)) / max(1e-6, float(edge_feather)),
+                       0.0, 1.0)
         samp[..., 3] = samp[..., 3] * ramp
     base = np.array(photo, dtype=np.float32)
     region = base[y0:y1, x0:x1]
@@ -517,6 +540,125 @@ def warp_cylinder(photo: Image.Image, panel: Image.Image, rect: Sequence,
     alpha = (samp[..., 3:4] / 255.0) * valid[..., None]
     region[:] = np.clip(ink * alpha + region * (1 - alpha), 0, 255)
     return Image.fromarray(out.astype("uint8"), "RGB")
+
+
+# ── panel composite + plate face detection ──────────────────────────────────
+
+def _quad_area(quad: Sequence) -> float:
+    """Shoelace area of a 4-point polygon, in px^2."""
+    pts = [(float(p[0]), float(p[1])) for p in quad]
+    s = 0.0
+    for i in range(len(pts)):
+        x0, y0 = pts[i]
+        x1, y1 = pts[(i + 1) % len(pts)]
+        s += x0 * y1 - x1 * y0
+    return abs(s) / 2.0
+
+
+def composite_panel_onto_quad(plate: Image.Image, panel: Image.Image,
+                              quad: Sequence[Sequence[float]], *,
+                              feather: Optional[float] = 1.5,
+                              shading: float = 0.0,
+                              realism: Optional[Dict[str, Any]] = None,
+                              maps: Optional[Any] = None,
+                              grid: Optional[Any] = None,
+                              crop_to_content: bool = True) -> Image.Image:
+    """Warp a designed RGBA panel onto a plate's four-corner face quad.
+
+    This is the product-picture primitive: the plate is a photograph of the
+    package, the panel is the artwork that belongs on its face, and the result
+    is the plate at its own size. The panel's own corners are mapped exactly to
+    `quad` (a 4-point homography), so registration does not depend on a guess;
+    pixels whose panel coordinate falls outside the artwork are left as the
+    photograph, so nothing is painted outside the face.
+
+    `crop_to_content` removes a transparent trim margin before the warp: a
+    designed panel exported at a fixed canvas often carries a few transparent
+    pixels of bleed, and those must not consume part of the printed face.
+
+    `shading` (0..1) and `realism` opt into the surface pass in
+    :func:`warp_panel`; the default 0 is a pure composite, which is what a
+    contract check wants and what a flat plate needs.
+    """
+    if plate is None or not isinstance(plate, Image.Image):
+        raise TypeError("plate must be a PIL Image")
+    if panel is None or not isinstance(panel, Image.Image):
+        raise TypeError("panel must be a PIL Image")
+    if quad is None or len(quad) != 4:
+        raise ValueError("quad must have four (x, y) corners")
+    if _quad_area(quad) < 4.0:
+        raise ValueError("quad area is degenerate; refusing to composite")
+
+    base = plate.convert("RGB")
+    art = panel.convert("RGBA")
+
+    if crop_to_content:
+        alpha = art.getchannel("A").point(lambda v: 255 if v > 8 else 0)
+        box = alpha.getbbox()
+        if box is not None:
+            bw, bh = box[2] - box[0], box[3] - box[1]
+            if bw >= 4 and bh >= 4 and (bw * bh) >= 0.25 * art.width * art.height:
+                art = art.crop(box)
+
+    if shading and maps is None:
+        maps = cr.build_surface_maps(base)
+
+    return warp_panel(base, art, quad, shading=shading, realism=realism,
+                      maps=maps, grid=grid, edge_feather=feather)
+
+
+def find_panel_quad(image: Union[Image.Image, str, Path], *,
+                    inset_x: float = 0.075, inset_top: float = 0.20,
+                    inset_bottom: float = 0.10,
+                    threshold: float = 26.0) -> List[List[float]]:
+    """Find the printable front face of the package in a plate, or refuse.
+
+    The measurement is the one `pouch_label.measure_face` already uses (chroma
+    segmentation, sub-pixel side edges, RANSAC quadratic fit, inset from the
+    weld and the base). A plate with no package in it is a refusal, never a
+    guess: compositing artwork onto a flat studio shot is exactly how a label
+    gets delivered when a product picture was asked for.
+
+    Raises ``ValueError('plate_face_not_found: …')`` when there is no face, and
+    ``ValueError('plate_face_unreliable: …')`` when a face was measured but its
+    geometry residual is too large to print on.
+    """
+    if isinstance(image, Image.Image):
+        img = image.convert("RGB")
+    else:
+        try:
+            img = Image.open(image).convert("RGB")
+        except Exception as exc:  # noqa: BLE001 - an unreadable plate is a refusal
+            raise ValueError(f"plate_face_not_found: cannot open plate ({exc})") from exc
+
+    try:
+        import pouch_label  # local import: pouch_label imports this module
+    except Exception as exc:  # noqa: BLE001
+        raise ValueError(f"plate_face_not_found: face measurement unavailable ({exc})") from exc
+
+    try:
+        measured = pouch_label.measure_face(
+            img, inset_x=inset_x, inset_top=inset_top,
+            inset_bottom=inset_bottom, threshold=threshold)
+    except ValueError as exc:
+        raise ValueError(f"plate_face_not_found: {exc}") from exc
+    except Exception as exc:  # noqa: BLE001
+        raise ValueError(f"plate_face_not_found: measurement failed ({exc})") from exc
+
+    quad = measured.get("quad") if isinstance(measured, dict) else None
+    if not quad or len(quad) != 4:
+        raise ValueError("plate_face_not_found: measurement returned no quad")
+    if _quad_area(quad) < 0.02 * img.width * img.height:
+        raise ValueError(
+            "plate_face_not_found: the measured face covers less than 2% of the "
+            f"plate ({_quad_area(quad):.0f} px^2)")
+
+    residual = measured.get("geom_residual_px")
+    if residual is not None and float(residual) > pouch_label.MAX_GEOM_RESIDUAL_PX:
+        raise ValueError(
+            f"plate_face_unreliable: edge/mesh residual {float(residual):.2f} px "
+            f"exceeds {pouch_label.MAX_GEOM_RESIDUAL_PX:.1f} px")
+    return [[float(p[0]), float(p[1])] for p in quad]
 
 
 # ── presets ─────────────────────────────────────────────────────────────────
