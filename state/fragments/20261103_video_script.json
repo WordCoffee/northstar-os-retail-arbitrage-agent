@@ -1,0 +1,25 @@
+{
+  "video_script_20261103": {
+    "status": "DONE - scene planner with exact durations and text-safe prompts; fragment pending operator merge",
+    "commit": "386b7305",
+    "work_order": "reports/ty/creative_scan_20261103.md item 4",
+    "module": "Northstar_backend/video_script.py",
+    "probe": "state/probes/t16_video_script.py PASS",
+    "measured": {
+      "tiktok_15s": {"scenes": 5, "sum_seconds": 15.0, "frames": 450, "hook": "the pouch you reach for"},
+      "tiktok_30s": {"scenes": 5, "sum_seconds": 30.0, "frames": 900},
+      "shorts_15s": {"scenes": 5, "sum_seconds": 15.0, "frames": 450},
+      "amazon_ad_16x9_15s": {"scenes": 5, "sum_seconds": 15.0, "frames": 450, "compliance_verified": false}
+    },
+    "contract": "durations sum to the window; frames sum to the preset target; hook 3-5 complete words; prompts survive text_fidelity.sanitize_brief_for_render with no expected terms; every scene has on-screen and voiceover copy",
+    "tests": "5 passed (exact sum, complete hook, text-safe prompts, explicit hook/cta, compliance flag)",
+    "gaps": [
+      "not yet wired to shorts.generate_stitched (one prompt per clip today)",
+      "on-screen lines are caption candidates, not burned captions",
+      "voice timing is an estimate; overruns are flagged, not aligned",
+      "claims are rendered as supplied and still need the compliance screen"
+    ],
+    "gates_held": "No Amazon, no spend, no download, no credential read. Deterministic local planner.",
+    "report": "reports/ty/video_script_20261103.md"
+  }
+}

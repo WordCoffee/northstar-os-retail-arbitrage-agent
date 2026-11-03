@@ -107,3 +107,7 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Audio - The music bed is generated locally (a soft pad) rather than downloaded; a real licensed track is accepted with music= and the generated bed is labelled as what it is.
 2026-11-03 - Audio - Ducking is a sidechain compressor under the voice, not a fixed volume reduction: the bed must move with the speech.
 2026-11-03 - Audio - Loudness is two-pass loudnorm to -16 LUFS and then MEASURED on the muxed file; a one-pass claim is not evidence.
+2026-11-03 - Script - Scene durations are frame-quantised and the largest scene absorbs the residual, so the sum equals the window exactly; a 15 s plan cannot render as 14.9 s.
+2026-11-03 - Script - The hook is capped at five complete words and a cut phrase loses its trailing stopword; a hook that ends on 'you' or 'for' is not a hook.
+2026-11-03 - Script - Every scene prompt is lower-case, digit-free art direction and is proven to survive text_fidelity.sanitize_brief_for_render with expected_terms empty; asking diffusion for words is the defect this avoids.
+2026-11-03 - Script - The planner reports voice_fits_scene instead of stretching the audio to fit; an overrun is a flag for the operator, not a silent time-stretch.
