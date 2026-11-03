@@ -59,7 +59,8 @@ the mode gate.
 
 Silence means (b) is implemented as a spec-alignment task, not a product change.
 
-Meanwhile the two `asset_dashboard` lane-trigger failures are **not** this: at HEAD the lane is
-reachable and reports `media_generation_disarmed (MEDIA_GEN_LIVE is not 1)`. It needs you to arm the
-media lane (a spend decision) before that test can see `done`.
+Meanwhile the two `asset_dashboard` lane-trigger failures are **not** this: at HEAD the lane was
+reachable and reported `media_generation_disarmed (MEDIA_GEN_LIVE is not 1)`. **Resolved 2026-11-03** —
+you asked for FLUX 3 to be armed, the lane is now armed and both tests pass without the spec changing.
+See `docs/FLUX3_LANE.md`. Nothing is left on you for that one.
 

@@ -67,9 +67,12 @@ were already stale at U0 and the rebuild did not touch them.
 fired. At HEAD the control exists, the lane fires, and the panel reports the honest refusal:
 `Cutout: failed — media_generation_disarmed (MEDIA_GEN_LIVE is not 1)`, while the spec waits 120 s
 for the text `done`. So the rebuild moved this test from "the surface is missing" to "the feature is
-reachable and tells you it is not armed", and the remaining failure is the standing generation gate
-(`MEDIA_GEN_LIVE`), not a canvas or dashboard regression. Arming that lane is an operator decision
-that was not taken in this run (no spend, no live generation).
+reachable and tells you it is not armed", and the remaining failure was the standing generation gate
+(`MEDIA_GEN_LIVE`), not a canvas or dashboard regression.
+
+**Update 2026-11-03 (owner instruction: arm FLUX 3):** the lane is now armed and both tests **pass**
+(`2 passed, 11.7s`). This failure is closed by configuration, not by editing the test — the spec has
+not changed.
 
 **`celestial10` and `chatlab` on the phone profile (tests 10, 14).** Both drive the design-lab pages
 on `127.0.0.1:8124` through ten tabs and hit the 45 s test budget only on `chromium-mobile`. Desktop

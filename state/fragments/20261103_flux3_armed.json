@@ -1,0 +1,46 @@
+{
+  "flux3_armed_20261103": {
+    "status": "ARMED and integrated - fragment, pending operator merge into 00_STATE.json",
+    "instruction": "owner, 2026-11-03: 'Flux 3 should be fully integrated and armed, used when needed by the system.'",
+    "commit": "2e2e6d00",
+    "arming": {
+      "flag": "MEDIA_GEN_LIVE=1 in repo-root .env (non-secret routing flag; written by tools/arm_media_lane.py, which edits only that line and prints no file content)",
+      "why_it_persists": "main.py loads the repo-root .env once with override=False, so every backend start is armed"
+    },
+    "lifecycle": {
+      "script": "scripts/start-flux3.ps1 (new) - idempotent; runtime first (ComfyUI :8188 via tools/start_comfyui.ps1 --cache-none), then the gateway (:8190); writes flux3.pids; -Stop reverses it",
+      "dev_stack": "scripts/dev-start.ps1 now starts the lane with the stack and stops it in its finally; NORTHSTAR_NO_MEDIA=1 opts out",
+      "floors": "refuses before loading a model if free disk < 10 GB or free RAM < 3 GB; the gateway adds its own VRAM/temperature guard"
+    },
+    "surfaces": [
+      "POST /api/design-studio/generate (provider local:comfyui, cost 0, credits 0)",
+      "chat_tools.generate_image (refuses with media_generation_disarmed when unarmed)",
+      "tys_ops.routing intercepts visual requests to the graphics lane",
+      "tys_ops.graphics against FLUX3_SERVER_URL (default 127.0.0.1:8190)"
+    ],
+    "measured": {
+      "gateway_health": "status ok, weights present (nvfp4 UNET 4.92 GB + qwen3vl-4b encoder 4.52 GB + flux2-vae), comfyui reachable",
+      "gateway_generate": "1024x1024 @16 steps, 27.2 s, flux3_00024_.png",
+      "studio_generate_rich": "24.4 s, job done, cost 0, credits 0, asset + file_url returned",
+      "studio_generate_text_safe": "25.6 s, verdict text_free, RapidOCR contains_text=false, 0 boxes, blank kraft pouch plate",
+      "engine_status": "armed true, reachable true, gate true, model flux3-image-klein-nvfp4.safetensors",
+      "e2e_side_effect": "npx playwright test asset_dashboard -g 'lane trigger' -> 2 passed (11.7 s); two pre-existing failures closed by configuration, spec untouched"
+    },
+    "defect_fixed": {
+      "symptom": "a one-clause text_safe brief ('...matte kraft pouch..., no text or logos') lost its subject; the render prompt became the suppression phrase alone and FLUX 3 returned an unrelated object (wheel hub)",
+      "cause": "sanitize_brief_for_render dropped the whole clause whenever _DEMAND_LINE matched",
+      "fix": "strip the negative lettering PHRASE (including 'no text OR logos' list tails) and keep the art direction; a positive demand still drops the clause; if nothing remains, TextSafeBriefEmpty -> HTTP 422 text_safe_brief_empty instead of a render",
+      "tests": "tests/test_text_fidelity.py +3 (subject survives, positive demand drops, empty brief renders nothing) -> 23 passed"
+    },
+    "stale_tests_replaced": "tests/test_flux3_failure.py and tests/test_flux3_enhanced.py imported _USE_FLUX2 / FLUX2_MODEL_FILE / _get_flux3_model_file, all deleted with FLUX.2 on 2026-10-29, so they could not import. Rewritten to the current contract (fail closed when disarmed, no silent model substitution, encoder pairing, box fit): 9 passed across the three flux3 files.",
+    "limits": [
+      "text-to-image only on this endpoint (models.edit is null); edit/cutout/upscale are separate lanes",
+      "rich (non text_safe) briefs paint invented lettering - listing and packaging renders must use text_safe and composite copy as vector text",
+      "shared 16 GB GPU: the local brain is unloaded first or the render refuses with vram_busy",
+      "local only - nothing billed, nothing leaves the machine; the hosted deployment cannot use this lane"
+    ],
+    "docs": ["docs/FLUX3_LANE.md", "reports/ty/flux3_armed_20261103.md"],
+    "gates_held": "No Amazon, no spend, no paid credits, no credential read or print. GPU work ran only after the disk/RAM floors were checked.",
+    "quality_claim": false
+  }
+}
