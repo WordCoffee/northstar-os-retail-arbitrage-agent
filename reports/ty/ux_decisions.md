@@ -102,3 +102,8 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Video - Every clip is normalised to the placement canvas before concatenation, and the sampler is asked for 464x832 (its 832 px ceiling), not 1080x1920; the upscale is recorded as a quality limit rather than hidden.
 2026-11-03 - Video - One bounded bitrate retry, then a refusal with the measured byte count: a file over the platform cap is never returned as a success.
 2026-11-03 - Video - A failed picture gate deletes the stitched MP4. A file that exists but failed the gate is worse than no file.
+2026-11-03 - Captions - The caption box is computed in Python and checked against the same safe-zone numbers that drew it; handing layout to libass would make the safe-zone claim untestable.
+2026-11-03 - Captions - A cue is refused when the box enters the platform strip or the frame OCR cannot read it; a file that exists but cannot be read is not a caption.
+2026-11-03 - Audio - The music bed is generated locally (a soft pad) rather than downloaded; a real licensed track is accepted with music= and the generated bed is labelled as what it is.
+2026-11-03 - Audio - Ducking is a sidechain compressor under the voice, not a fixed volume reduction: the bed must move with the speech.
+2026-11-03 - Audio - Loudness is two-pass loudnorm to -16 LUFS and then MEASURED on the muxed file; a one-pass claim is not evidence.

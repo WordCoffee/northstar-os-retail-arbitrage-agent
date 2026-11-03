@@ -1,0 +1,30 @@
+{
+  "video_captions_audio_20261103": {
+    "status": "DONE - library modules, probes and tests; endpoint wiring is the next unit; fragment pending operator merge",
+    "commits": ["b868bda1 (captions)", "095cae65 (audio)"],
+    "work_order": "reports/ty/creative_scan_20261103.md items 2 and 3",
+    "captions": {
+      "module": "Northstar_backend/video_captions.py",
+      "probe": "state/probes/t14_video_captions.py PASS",
+      "measured": {"duration_s": 3.0, "frames": 90, "canvas": [1080, 1920], "codec": "h264", "bytes": 2695126, "safe_zone": {"top": 154, "bottom": 1498, "right": 886}, "cue_boxes": [[219, 1322, 709, 1468], [206, 1322, 722, 1468]], "ocr": ["LION'S MANE", "SIX OZ POUCH"]},
+      "contract": "cue boxes inside the platform safe area; OCR of a cue-midpoint frame reads the words; a box under the strip or unreadable text is refused",
+      "tests": "6 passed"
+    },
+    "audio": {
+      "module": "Northstar_backend/video_audio.py",
+      "probe": "state/probes/t15_video_audio.py PASS",
+      "measured": {"duration_s": 3.0, "canvas": [1080, 1920], "audio_codec": "aac", "integrated_lufs": -16.41, "peak_db": -3.1, "bed_peak_db": -14.9, "ducked": true},
+      "contract": "voice via local Piper/SAPI, generated royalty-free bed or supplied track, sidechain ducking, two-pass loudnorm -16 LUFS, AAC mux with the picture copied, measured not silent",
+      "tests": "5 passed"
+    },
+    "gaps": [
+      "no HTTP endpoint yet for captions or audio",
+      "transcription is segment-timed; word timings are estimated by character length and labelled",
+      "the generated bed is a pad, not a licensed song; music= accepts a real track",
+      "ducking is verified by the applied filter + measured mix, not a spectral A/B",
+      "captions are OCR-checked one frame per cue"
+    ],
+    "gates_held": "No Amazon, no spend, no download, no credential read. Piper and ffmpeg are local.",
+    "report": "reports/ty/video_captions_audio_20261103.md"
+  }
+}
