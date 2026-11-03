@@ -742,6 +742,85 @@ def task_status(state: Dict[str, Any], task_id: str) -> str:
                ("completed" if task_id in (state.get("completed") or {}) else "pending"))
 
 
+# ── outcome memory ───────────────────────────────────────────────────────────
+# What this lane has ACTUALLY achieved, per task and per task spec. The campaign
+# state cannot hold this: it is reset as tasks are retried, so a task that has
+# never once passed kept being dispatched and halted the campaign on the same wall
+# every night (measured 2026-11-02: 1 completed of 10 attempted, both recent
+# campaigns dead on two known-unsolvable tasks). A brief/acceptance/lane change is
+# a NEW question, so the door reopens when the spec hash changes.
+HISTORY_PATH = STATE_PATH.parent / "task_history.json"
+MAX_ATTEMPTS_BEFORE_AUTHOR = 3
+
+_SPEC_FIELDS = ("id", "objective", "execution", "write_paths", "read_paths",
+                "acceptance_commands", "required_files", "required_artifact",
+                "model", "provider", "max_steps", "max_repairs", "timeout_seconds")
+
+
+def task_spec_hash(task: Dict[str, Any]) -> str:
+    spec = {k: task.get(k) for k in _SPEC_FIELDS}
+    return _sha256_bytes(json.dumps(spec, sort_keys=True).encode("utf-8"))
+
+
+def load_history(path: Optional[Path] = None) -> Dict[str, Any]:
+    path = HISTORY_PATH if path is None else path
+    data = _load_json(path, None)
+    if not isinstance(data, dict) or not isinstance(data.get("tasks"), dict):
+        data = {"schema": "northstar.task_history.v1", "tasks": {}}
+    return data
+
+
+def save_history(history: Dict[str, Any], path: Optional[Path] = None) -> None:
+    path = HISTORY_PATH if path is None else path
+    history["schema"] = "northstar.task_history.v1"
+    history["updated_at"] = _now()
+    _save_json(path, history)
+
+
+def record_attempt(task: Dict[str, Any], *, run_id: str, status: str,
+                   error: str = "", path: Optional[Path] = None) -> Dict[str, Any]:
+    """Record one dispatch outcome. Never raises into the caller's finally block."""
+    history = load_history(path)
+    tid = str(task.get("id") or "")
+    spec = task_spec_hash(task)
+    row = history["tasks"].setdefault(tid, {"attempts": 0, "completed": 0, "failed": 0,
+                                            "spec_hash": spec})
+    if row.get("spec_hash") != spec:
+        row.update({"attempts": 0, "completed": 0, "failed": 0,
+                    "reset_reason": "spec_changed"})
+        row["spec_hash"] = spec
+    row["attempts"] = int(row.get("attempts") or 0) + 1
+    if status == "completed":
+        row["completed"] = int(row.get("completed") or 0) + 1
+        row["last_ok_at"] = _now()
+        row["last_error"] = ""
+    else:
+        row["failed"] = int(row.get("failed") or 0) + 1
+        row["last_error"] = _scrub(str(error or ""))[:400]
+    row["last_status"] = status
+    row["last_run_id"] = run_id
+    row["last_attempt_at"] = _now()
+    save_history(history, path)
+    return row
+
+
+def history_block(task: Dict[str, Any], history: Optional[Dict[str, Any]] = None, *,
+                  max_attempts: Optional[int] = None) -> Optional[str]:
+    """A task this lane has never once passed must stop being dispatched."""
+    history = load_history() if history is None else history
+    row = (history.get("tasks") or {}).get(str(task.get("id") or "")) or {}
+    if not row:
+        return None
+    if row.get("spec_hash") and row.get("spec_hash") != task_spec_hash(task):
+        return None
+    limit = int(max_attempts or MAX_ATTEMPTS_BEFORE_AUTHOR)
+    attempts = int(row.get("attempts") or 0)
+    if int(row.get("completed") or 0) == 0 and attempts >= limit:
+        return (f"never_solved: {attempts} attempts, 0 passes for this brief - "
+                f"needs_author (change the brief, the acceptance or the lane)")
+    return None
+
+
 def _is_pid_alive(pid: int) -> bool:
     if pid <= 0:
         return False
@@ -982,7 +1061,8 @@ def validate_task(task: Dict[str, Any]) -> List[str]:
     return errors
 
 
-def blocked_reason(task: Dict[str, Any], state: Dict[str, Any]) -> Optional[str]:
+def blocked_reason(task: Dict[str, Any], state: Dict[str, Any],
+                   history: Optional[Dict[str, Any]] = None) -> Optional[str]:
     if str(task.get("blocked") or "").strip():
         return str(task.get("blocked"))
     errors = validate_task(task)
@@ -991,27 +1071,32 @@ def blocked_reason(task: Dict[str, Any], state: Dict[str, Any]) -> Optional[str]
     for dep in task.get("dependencies") or []:
         if task_status(state, str(dep)) != "completed":
             return f"dependency {dep!r} is {task_status(state, str(dep))}"
-    return None
+    return history_block(task, history)
 
 
 def select_task(tasks: Dict[str, Any], state: Dict[str, Any],
-                task_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
+                task_id: Optional[str] = None,
+                history: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
     rows = tasks.get("tasks") or []
+    history = load_history() if history is None else history
+    # "failed" is retryable: the reason it failed may have been transient, and the
+    # outcome memory above decides when retrying stops being sensible.
+    retryable = ("pending", "failed")
     if task_id:
         for task in rows:
             if task.get("id") != task_id:
                 continue
-            if task_status(state, task_id) in ("running", "completed", "failed", "interrupted"):
+            if task_status(state, task_id) not in retryable:
                 return None
-            if blocked_reason(task, state):
+            if blocked_reason(task, state, history):
                 return None
             return task
         return None
     for task in rows:
         tid = str(task.get("id") or "")
-        if task_status(state, tid) != "pending":
+        if task_status(state, tid) not in retryable:
             continue
-        if blocked_reason(task, state):
+        if blocked_reason(task, state, history):
             continue
         return task
     return None
@@ -1612,6 +1697,14 @@ def execute_task(task: Dict[str, Any], state: Dict[str, Any], *,
         return {"status": "failed", "error": reason, "checks": checks,
                 "restoration": restoration, "ty": result}
     finally:
+        # The outcome memory is why the next campaign can be smarter than this one:
+        # it survives the per-task state reset.
+        try:
+            record_attempt(task, run_id=run_id,
+                           status="completed" if record.get("status") == "completed" else "failed",
+                           error=str(record.get("reason") or ""))
+        except Exception:  # noqa: BLE001 - bookkeeping must never mask the task result
+            pass
         write_heartbeat(run_id, task_id, "finished")
 
 
@@ -1680,7 +1773,7 @@ def write_campaign_manifest(*, run_id: str, started_at: str, finished_at: str,
 
 def _remaining_count(tasks: Dict[str, Any], state: Dict[str, Any]) -> int:
     return sum(1 for t in tasks.get("tasks") or []
-               if task_status(state, str(t.get("id"))) == "pending")
+               if task_status(state, str(t.get("id"))) in ("pending", "failed"))
 
 
 def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
@@ -1726,11 +1819,12 @@ def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
                 stop_reason = "deadline_minutes"
                 break
             remaining = _remaining_count(tasks, state)
+            history = load_history()
             write_campaign_heartbeat(
                 run_id=run_id, status="running", started_at=started_at,
                 deadline_at=deadline_at, attempted=attempted, completed=completed,
                 failed=failed, blocked=sum(1 for t in tasks.get("tasks") or []
-                                           if blocked_reason(t, state)),
+                                           if blocked_reason(t, state, history)),
                 remaining=remaining, consecutive_failures=consecutive,
                 active_lane=active_lane)
             if time.time() - started > deadline_s:
@@ -1745,7 +1839,7 @@ def run_campaign(tasks: Dict[str, Any], state: Dict[str, Any], *,
             if STOP_PATH.is_file():
                 stop_reason = "stop_file"
                 break
-            task = select_task(tasks, state, task_id or None)
+            task = select_task(tasks, state, task_id or None, history)
             if task is None:
                 stop_reason = "queue_exhausted" if remaining == 0 else "queue_blocked"
                 break
@@ -1958,6 +2052,19 @@ def resume_task(task_id: str, tasks: Dict[str, Any], state: Dict[str, Any]) -> D
     record["status"] = "pending"
     record["reason"] = "operator resume"
     _save_json(STATE_PATH, state)
+    # An explicit resume is the operator saying "try this again": clear the
+    # never_solved door for the current spec, otherwise the task would be blocked
+    # the moment the campaign looks at it.
+    try:
+        task = next((t for t in tasks.get("tasks") or [] if t.get("id") == task_id), None)
+        if task is not None:
+            history = load_history()
+            row = (history.get("tasks") or {}).get(task_id)
+            if row:
+                row.update({"attempts": 0, "failed": 0, "reset_reason": "operator_resume"})
+                save_history(history)
+    except Exception:  # noqa: BLE001 - resume must not fail on bookkeeping
+        pass
     return record
 
 
