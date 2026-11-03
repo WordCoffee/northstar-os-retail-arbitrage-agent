@@ -16,11 +16,15 @@ lane, does not touch video, and runs one model: FLUX 3.
 
 Environment:
     COMFYUI_URL        default http://127.0.0.1:8188
-    FLUX3_UNET         default flux3-image-klein-int8-convrot.safetensors
+    FLUX3_UNET         default flux3-image-klein-nvfp4.safetensors
     FLUX3_TEXT_ENCODER default qwen3vl_4b_int8_convrot.safetensors
     FLUX3_VAE          default flux2-vae.safetensors
     FLUX3_WIDTH/HEIGHT default 1024
     FLUX3_STEPS        default 16
+
+(The docstring above used to name the int8-convrot UNET as the default. That
+quantisation fails on this host - `hostbuf_file_reader_read failed` - so the code
+and this note now agree on the nvfp4 file that is actually installed.)
 """
 
 from __future__ import annotations

@@ -53,6 +53,23 @@ _DEMAND_LINE = re.compile(
 )
 
 _QUOTED = re.compile(r"[\"“”'‘’][^\"“”'‘’]{2,80}[\"“”'‘’]")
+
+# A NEGATIVE lettering demand ("no text or logos", "without any lettering"): the
+# model must not paint it, but it says nothing about the product, so the clause
+# around it still carries art direction and must survive. Stripped at PHRASE
+# level. (2026-11-03: the whole-clause rule threw away the subject of a
+# one-clause brief and the lane rendered an unrelated object.)
+_NEGATED_LETTERING = re.compile(
+    r"(?i)\b(?:with\s+|and\s+|plus\s+)?(?:no|without|zero|free\s+of)\s+(?:any\s+|the\s+)?"
+    r"(?-i:(?:[a-z][a-z-]*\s+){0,3}?)"
+    r"(?:text|lettering|letters|words|typography|type\b|fonts?|logos?|barcodes?|"
+    r"qr\s*codes?|watermarks?|captions?)"
+    # "no text OR LOGOS": keep consuming the list, or the tail survives the strip
+    r"(?:\s*(?:,|\bor\b|\band\b)\s*(?:any\s+|the\s+)?(?:[a-z][a-z-]*\s+){0,2}?"
+    r"(?:text|lettering|letters|words|typography|fonts?|logos?|barcodes?|"
+    r"qr\s*codes?|watermarks?|captions?))*"
+)
+
 _ALL_CAPS_RUN = re.compile(r"\b(?:[A-Z][A-Z0-9'&.\-]*\s+){1,4}[A-Z][A-Z0-9'&.\-]*\b")
 _BRAND_SUFFIX_RUN = re.compile(
     r"\b[A-Z][a-z']{2,}\s+(?:Organics|Foods|Naturals|Botanicals|Brands|Labs|Company|LLC|Inc|Co)\b")
@@ -147,6 +164,18 @@ def sanitize_brief_for_render(brief: str, hard: bool = False) -> Dict[str, Any]:
             if not seg:
                 continue
             if _DEMAND_LINE.search(seg):
+                # Negative lettering ("no text or logos") is stripped as a PHRASE
+                # and the art direction around it is kept. A POSITIVE demand
+                # ("must read X", "headline sized to read") still drops the whole
+                # clause: the model would paint it, which is the defect the guard
+                # exists to prevent.
+                stripped = _NEGATED_LETTERING.sub(" ", seg)
+                stripped = re.sub(r"\s{2,}", " ", stripped).strip(" ,;.-—")
+                if stripped and not _DEMAND_LINE.search(stripped):
+                    cleaned = _clean_segment(stripped, expected)
+                    if len(cleaned) >= 12:
+                        kept.append(cleaned)
+                        continue
                 suppressed.append(seg[:160])
                 continue
             cleaned = _clean_segment(seg, expected)
@@ -169,7 +198,20 @@ def sanitize_brief_for_render(brief: str, hard: bool = False) -> Dict[str, Any]:
         "kept_count": len(kept),
         "expected_terms": expected,
         "hard": hard,
+        # No art direction survived: the only thing left to render is the
+        # suppression phrase, which made a diffusion model invent an unrelated
+        # object (observed 2026-11-03). Callers must refuse rather than render.
+        "brief_empty": not body,
     }
+
+
+class TextSafeBriefEmpty(ValueError):
+    """text_safe was asked for a brief whose only content was the demand itself.
+
+    Rendering it would hand the model nothing but "no lettering, no words..." and
+    it answers with an arbitrary object, which is worse than a refusal because it
+    looks like a product shot.
+    """
 
 
 def prepare_render_brief(brief: str, text_safe: bool, hard: bool = False) -> Dict[str, Any]:
@@ -185,6 +227,7 @@ def prepare_render_brief(brief: str, text_safe: bool, hard: bool = False) -> Dic
             "kept_count": tf["kept_count"],
             "expected_terms": tf["expected_terms"],
             "render_prompt": tf["render_prompt"],
+            "brief_empty": tf["brief_empty"],
         },
     }
 
@@ -433,6 +476,11 @@ def render_with_text_guard(*, render_fn, brief: str, text_safe: bool,
     retry's result is returned with an honest record of both attempts.
     """
     prep = prepare_render_brief(brief, text_safe)
+    if text_safe and prep["text_fidelity"].get("brief_empty"):
+        raise TextSafeBriefEmpty(
+            "text_safe_brief_empty: the brief carried no art direction once the lettering "
+            "demand was removed, so there is nothing to draw. Describe the product, the "
+            "surface and the light - the typography is added afterwards as vector text.")
     out = render_fn(prep["brief"])
     used = prep["brief"]  # overwritten by the hardened brief if the retry branch runs
     if not text_safe:

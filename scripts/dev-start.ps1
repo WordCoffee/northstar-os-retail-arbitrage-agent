@@ -34,6 +34,30 @@ $ui = Start-Process -FilePath "npm.cmd" -ArgumentList "run","dev" -WorkingDirect
 $pids += $ui.Id
 Write-Host "ui PID=$($ui.Id)"
 
+# The FLUX 3 media lane ships WITH the stack. Arming a lane (MEDIA_GEN_LIVE=1)
+# that nothing starts is how "generate" quietly stays unavailable, so the dev
+# stack brings up ComfyUI + the :8190 gateway and stops them with everything else.
+# Skip it with NORTHSTAR_NO_MEDIA=1 (headless test runs that never generate).
+$flux3 = Join-Path $root "scripts\start-flux3.ps1"
+if ((Test-Path $flux3) -and ($env:NORTHSTAR_NO_MEDIA -ne "1")) {
+    Write-Host "starting the FLUX 3 media lane (scripts/start-flux3.ps1)"
+    $sf = Start-Process -FilePath "powershell" `
+        -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",$flux3 `
+        -WindowStyle Hidden -PassThru
+    $null = $sf.WaitForExit(240000)
+    $fpidFile = Join-Path $root "flux3.pids"
+    if (Test-Path $fpidFile) {
+        $fpids = (Get-Content $fpidFile -Raw).Trim().Split(",") |
+            Where-Object { $_ } | ForEach-Object { [int]$_ }
+        $pids += $fpids
+        Write-Host "flux3 PIDs: $($fpids -join ', ')"
+    } else {
+        Write-Host "flux3: not started (see reports\flux3_gateway.err.log); the designer reports UNARMED"
+    }
+} else {
+    Write-Host "flux3: skipped (NORTHSTAR_NO_MEDIA=1)"
+}
+
 # Record PIDs
 $pids -join "," | Out-File -FilePath $pidFile -Encoding UTF8
 Write-Host "PIDs recorded in $pidFile"

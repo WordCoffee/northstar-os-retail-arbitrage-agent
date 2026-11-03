@@ -1999,11 +1999,15 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         guarded = render_with_text_guard(render_fn=_render, brief=brief,
                                          text_safe=text_safe)
     except Exception as exc:  # noqa: BLE001 - recorded on the job, surfaced to the caller
+        from text_fidelity import TextSafeBriefEmpty
         db.design_studio.jobs.update(job_id, {
             "status": "failed", "logs": str(exc)[:2000],
             "finished_at": datetime.now(timezone.utc).isoformat(),
         }, account_id=acct)
-        raise HTTPException(status_code=502, detail={"code": "generation_failed", "message": str(exc)[:400]})
+        raise HTTPException(status_code=422 if isinstance(exc, TextSafeBriefEmpty) else 502,
+                            detail={"code": "text_safe_brief_empty" if isinstance(exc, TextSafeBriefEmpty)
+                                    else "generation_failed",
+                                    "message": str(exc)[:400]})
 
     out = guarded["out"]
     tf_result = guarded["text_fidelity"]

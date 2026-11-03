@@ -327,3 +327,50 @@ def test_compare_text_unavailable_never_fakes_a_pass(monkeypatch):
     assert out["verdict"] == "unverified"
     assert out["preserves_copy"] is None
     assert "UNVERIFIED" in out["note"]
+
+# -- 2026-11-03: the negative-demand fix + the fail-closed guard -------------
+
+NEGATIVE_ONE_CLAUSE = (
+    "Product main image: a matte kraft-paper pouch of mushroom coffee, standing "
+    "upright, centred on pure white, soft daylight from the left, faint contact "
+    "shadow, no text or logos")
+
+
+def test_a_negative_lettering_demand_does_not_eat_the_subject():
+    """Regression: a one-clause brief that says "no text" used to be discarded whole.
+
+    The render prompt became the suppression phrase alone, so FLUX 3 answered with
+    an unrelated object (a wheel hub for a coffee pouch). The subject must survive.
+    """
+    r = tf.sanitize_brief_for_render(NEGATIVE_ONE_CLAUSE)
+    body = r["render_prompt"].replace(tf.SUPPRESSION_PHRASE, "")
+    assert "kraft-paper pouch of mushroom coffee" in body
+    assert "soft daylight" in body
+    assert "no text" not in body.lower() and "logos" not in body.lower()
+    assert r["brief_empty"] is False
+    assert r["suppressed_count"] == 0, "a negative demand is a phrase, not a dropped clause"
+
+
+def test_a_positive_demand_still_drops_the_whole_clause():
+    r = tf.sanitize_brief_for_render(
+        "A matte kraft pouch on white. The label must read ORGANIC LION'S MANE in a serif.")
+    body = r["render_prompt"].replace(tf.SUPPRESSION_PHRASE, "")
+    assert "matte kraft pouch" in body
+    assert "must read" not in body.lower()
+    assert "serif" not in body.lower()
+
+
+def test_text_safe_refuses_a_brief_with_no_art_direction():
+    called = []
+
+    def fake_render(prompt, **_):
+        called.append(prompt)
+        return {"bytes": b"", "ext": "png", "mime": "image/png", "model": "fake", "seed": 1}
+
+    prep = tf.prepare_render_brief("no text or logos", True)
+    assert prep["text_fidelity"]["brief_empty"] is True
+    import pytest
+    with pytest.raises(tf.TextSafeBriefEmpty) as err:
+        tf.render_with_text_guard(render_fn=fake_render, brief="no text or logos", text_safe=True)
+    assert "text_safe_brief_empty" in str(err.value)
+    assert called == [], "nothing may be rendered when the brief has no art direction"
