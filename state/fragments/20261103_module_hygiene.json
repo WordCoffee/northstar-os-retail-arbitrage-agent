@@ -1,0 +1,27 @@
+{
+  "module_hygiene_20261103": {
+    "status": "DONE - duplicate definitions removed or unified; fragment pending operator merge",
+    "commits": ["beffb826 (studio_generation Phase R block)", "0f07957a (conftest collection hook)", "72edcb35 (ListingRecordIn unify)", "824e4284 (score_hero dead body + _now_iso)"],
+    "defects": {
+      "studio_generation_duplicate_phase_r": "five functions defined twice; the later block won and its unconditional psutil import defeated the optional-psutil fallback. Removed; stop_for_render returns [] without psutil.",
+      "conftest_duplicate_hook": "pytest_collection_finish was defined twice (credential scrub, generated-cache restore). The second replaced the first, so the post-collection credential scrub never ran. Now one hook does both, scrub first.",
+      "listing_record_model": "ListingRecordIn was defined twice; the bulk migration captured the no-source class while single create used the source class. Unified; source is accepted on both routes.",
+      "score_hero_dead_body": "an older implementation was overridden by a back-compat alias; removed the dead body and pinned the alias behaviour.",
+      "jobs_durable_now_iso": "identical duplicate removed."
+    },
+    "guard": "test_module_hygiene.py reads the AST of studio_generation, mockup_compositor, product_picture, mogra_label_art, mockup_quality, conftest, design_studio_api, asset_rubric and foundation/jobs_durable; it fails on any duplicate top-level function/class.",
+    "tests": {
+      "test_module_hygiene.py": "9 passed",
+      "focused_studio_and_model_run": "60 passed",
+      "design_studio_re_ext + openapi + listing schema + asset rubric + hygiene": "33 passed",
+      "foundation jobs selection": "103 passed, 15 skipped",
+      "app_import": "main imports, 125 routes"
+    },
+    "limits": [
+      "the AST scan is scoped to the guarded modules, not the whole tree; vendor venvs are excluded",
+      "the stale edit-lane guard test was corrected to the removed lane, not deleted"
+    ],
+    "gates_held": "No Amazon, no spend, no credential read. No guard was weakened; the conftest fix restores a scrub that was documented but not running.",
+    "report": "reports/ty/module_hygiene_20261103.md"
+  }
+}
