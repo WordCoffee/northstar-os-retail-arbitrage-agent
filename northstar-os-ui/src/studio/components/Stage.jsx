@@ -9,6 +9,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { renderDoc } from '../engine/doc.js'
+import { snapBox } from '../../lib/studioCanvas.js'
 
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 4
@@ -31,6 +32,13 @@ export default function Stage({
   emptyHint,
   minHeight = 260,
   maxHeight = 620,
+  // U7: optional Canva-style snapping. Off by default, so the sections that
+  // shipped before this unit keep their exact drag behaviour. `onGuides` is
+  // called with the guides that actually fired, so the caller draws the line it
+  // snapped to rather than a decorative one.
+  snap = false,
+  onGuides,
+  guides = [],
 }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
@@ -112,14 +120,24 @@ export default function Stage({
     if (!p) return
     const dx = p.x - drag.startX
     const dy = p.y - drag.startY
-    onChangeLayer && onChangeLayer(drag.id, {
-      x: clamp(drag.ox + dx, -0.4, 1.2),
-      y: clamp(drag.oy + dy, -0.4, 1.2),
-    })
+    const rawX = clamp(drag.ox + dx, -0.4, 1.2)
+    const rawY = clamp(drag.oy + dy, -0.4, 1.2)
+    if (snap) {
+      const layer = doc.layers.find(l => l.id === drag.id)
+      const box = snapBox(rawX, rawY, layer?.w ?? 0.2, layer?.h ?? 0.2)
+      onChangeLayer && onChangeLayer(drag.id, { x: box.x, y: box.y })
+      onGuides && onGuides(box.guides)
+      return
+    }
+    onChangeLayer && onChangeLayer(drag.id, { x: rawX, y: rawY })
   }
 
   const endDrag = () => {
-    if (drag) { onCommitLayer && onCommitLayer(drag.id); setDrag(null) }
+    if (drag) {
+      onCommitLayer && onCommitLayer(drag.id)
+      setDrag(null)
+      onGuides && onGuides([])
+    }
   }
 
   const handleResize = (e) => {
@@ -182,6 +200,11 @@ export default function Stage({
             onPointerUp={endDrag}
             onPointerCancel={endDrag}
           />
+          {guides.map((g, i) => (
+            g.axis === 'x'
+              ? <div key={`gx${i}`} className="stage-guide stage-guide-x" style={{ left: `${g.at * 100}%` }} />
+              : <div key={`gy${i}`} className="stage-guide stage-guide-y" style={{ top: `${g.at * 100}%` }} />
+          ))}
           {selected && selected.kind !== 'bg' && (
             <div
               className="stage-sel"

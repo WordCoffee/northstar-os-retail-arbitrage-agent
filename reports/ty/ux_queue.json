@@ -3,7 +3,7 @@
   "baseline_tag": "ns-ux-baseline",
   "baseline_commit": "a2d12f5e",
   "spend_cap_tokens": 5000000,
-  "tokens_used_estimate": 620000,
+  "tokens_used_estimate": 880000,
   "note": "Token numbers are estimates (chars/4). Not billing figures.",
   "environment": {
     "dev_server": "CLEAR - `tailscale serve status` returned 'No serve config' at session start; scripts/dev-start.ps1 gate passed and both servers are up (backend 127.0.0.1:8000, UI 127.0.0.1:8101).",
@@ -55,10 +55,18 @@
        "build": "1.34s"
      },
      "notes": "src/scene/gasGiant.js + scenes.js factory. Glass alpha lowered 0.82 -> 0.72 with a brighter dim ink so the scene is actually visible; the contrast test proves AA at the worst pixel. Legacy workspace h1/h2 in the outlet are re-inked (studio h1 measured 1.28:1 before, 17.03:1 after)."},
-    {"id": "U7", "status": "todo", "blocked_by": null, "tag": null, "tokens": 0},
-    {"id": "U5", "status": "todo", "tag": null, "tokens": 0},
-    {"id": "U6", "status": "todo", "tag": null, "tokens": 0},
-    {"id": "U7", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U7", "status": "done", "tag": "ns-ux-U7", "tokens": 260000,
+     "evidence": {
+       "unit": "157/157 (17 new: content types 3, layers 2, snapping 3, history 2, autosave 4, export 3)",
+       "click_path_desktop": "npx playwright test studio-canvas.spec.ts --project=chromium-desktop -> 4 passed, 1 skipped (phone-only case)",
+       "click_path_mobile": "npx playwright test studio-canvas.spec.ts --project=chromium-mobile -> 5 passed",
+       "stress": "--repeat-each 2 both targets -> 18 passed, 2 skipped (58.9s)",
+       "regression": "workbench trio + canvas, both targets -> 31 passed, 1 skipped (1.2m); trio alone 11/11 per target",
+       "build": "1.48s",
+       "screenshots": "reports/ty/shots/u7-canvas-desktop.png, u7-canvas-mobile.png",
+       "zone_proof": "cw-canvas-zone background rgb(22,29,39) = --wb-solid, backdrop-filter none, exactly 1 canvas inside it (the artboard), topmost at its centre"
+     },
+     "notes": "CanvasWorkspace.jsx + lib/studioCanvas.js + styles/canvas.css. Six content types resolve through presets.js/specRegistry.js. Undo/redo, snapping with drawn guides, autosave (versioned, TTL, validated), PNG export and a real PDF 1.4 (DCTDecode, xref verified in the unit test). Fixed a layout defect U7 exposed: WorkbenchShell's tab panel reused the class `.wb-panel`, which chat.css owns as a fixed 372px floating aside - every workspace was a floating box. Renamed to `.wb-tabpanel`; the workbench-scene canvas assertion was scoped to the scene host because the studio artboard is now a second, legitimate canvas."},
     {"id": "U8", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U9", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U10", "status": "todo", "tag": null, "tokens": 0},

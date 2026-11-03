@@ -31,6 +31,7 @@ import Social from './design-studio/Social.jsx'
 import Packaging from './design-studio/Packaging.jsx'
 import Dielines from './design-studio/Dielines.jsx'
 import Deliverables from './design-studio/Deliverables.jsx'
+import CanvasWorkspace from './design-studio/CanvasWorkspace.jsx'
 import { migrateLocalStorage, migrationDone } from '../../studio/engine/migrate.js'
 
 // Opt-in test surface. Adding ?engine=1 to a Design Studio URL exposes the
@@ -66,6 +67,7 @@ async function attachEngineHook() {
 }
 
 const SECTIONS = [
+  { id: 'canvas', label: 'Canvas', icon: 'brush', note: 'The design surface: content types, layers, snapping, autosave, PNG and PDF export', built: true },
   { id: 'projects', label: 'Projects', icon: 'stack', note: 'Project board and asset library', built: true },
   { id: 'listing-images', label: 'Listing Images', icon: 'image', note: 'Main, lifestyle, infographic modules', built: true },
   { id: 'aplus', label: 'A+ / Brand Story', icon: 'list', note: 'Amazon A+ modules and Brand Story cards', built: true },
@@ -127,7 +129,7 @@ export default function DesignStudio() {
   const [embeddedSection, setEmbeddedSection] = useState('')
   const requested = embedded ? embeddedSection
     : (new URLSearchParams(location.search).get('section') || '')
-  const sectionId = SECTIONS.some(s => s.id === requested) ? requested : 'projects'
+  const sectionId = SECTIONS.some(s => s.id === requested) ? requested : 'canvas'
   const section = useMemo(() => SECTIONS.find(s => s.id === sectionId), [sectionId])
 
   const setSection = (id) => {
@@ -192,6 +194,7 @@ export default function DesignStudio() {
           </div>
         </div>
       )}
+      {sectionId === 'canvas' && <CanvasWorkspace onNavigateSection={setSection} />}
       {sectionId === 'projects' && <CreativeStudio />}
       {sectionId === 'listing-images' && <ListingImages />}
       {sectionId === 'aplus' && <APlus />}

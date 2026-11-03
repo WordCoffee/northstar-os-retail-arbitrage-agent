@@ -103,8 +103,12 @@
    shell owns the frame until that workspace is rebuilt, so it owns the heading
    ink. Body copy and controls already pass (measured 8-16:1). */
 .wb-outlet :is(h1, h2) { color: var(--wb-ink, #f2f6fb); }
-.wb-panel { min-height: 100%; }
-.wb-panel[hidden] { display: none !important; }
+/* The outlet's tab panels. NOT `.wb-panel`: chat.css already owns that name for
+   the floating AutothinK workbench aside (position:fixed, 372px wide), and U3
+   reusing it made every workspace a fixed 372px box floating over the outlet.
+   U7's screenshot caught it; the layout probe now proves the panel fills. */
+.wb-tabpanel { min-height: 100%; min-width: 0; }
+.wb-tabpanel[hidden] { display: none !important; }
 
 .wb-empty { padding: 28px; max-width: 560px; }
 .wb-empty h2 { margin: 0 0 8px; }

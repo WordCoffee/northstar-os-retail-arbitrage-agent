@@ -14,6 +14,7 @@ import './styles/galactic.css'  // Galactic plate + obsidian surfaces — after 
 import './styles/baroque.css'   // "The Gilded Void" Baroque theme — after celestial
 import './styles/workbench.css' // U3 workbench shell — last, scoped to .wb-*
 import './styles/kit.css'      // U4 glass kit — reads the theme variables
+import './styles/canvas.css'   // U7 studio canvas workspace — after the kit
 
 const root = createRoot(document.getElementById('root'))
 root.render(createElement(App))

@@ -18,7 +18,10 @@ test('exactly one scene canvas is mounted and it declares a valid tier', async (
   await expect(page.getByTestId('workbench-shell')).toBeVisible({ timeout: 30000 })
   await expect(page.getByTestId('scene-host')).toBeVisible()
 
-  await expect(page.locator('canvas')).toHaveCount(1)
+  // Exactly one SCENE canvas. Scoped to the scene host on purpose: since U7 the
+  // studio's artboard is a canvas of its own, and a page-wide count would have
+  // called a correct artboard a leaked WebGL context.
+  await expect(page.locator('[data-testid="scene-host"] canvas')).toHaveCount(1)
   const tier = await page.getByTestId('scene-host').getAttribute('data-tier')
   expect(['cinematic', 'reduced', 'still']).toContain(tier)
 
@@ -100,5 +103,5 @@ test('the design studio tab loads the ringed gas giant scene', async ({ page }) 
   await page.getByTestId('wb-add').click()
   await page.getByTestId('wb-open-golden-goose').click()
   await expect(host).toHaveAttribute('data-scene', 'goose')
-  await expect(page.locator('canvas')).toHaveCount(1)
+  await expect(page.locator('[data-testid="scene-host"] canvas')).toHaveCount(1)
 })

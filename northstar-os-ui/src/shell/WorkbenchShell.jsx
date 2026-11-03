@@ -180,7 +180,7 @@ export default function WorkbenchShell() {
           {tabs.map(({ id, service }) => {
             const Component = WORKSPACES[id]
             return (
-              <div key={id} className="wb-panel" hidden={id !== active}
+              <div key={id} className="wb-tabpanel" hidden={id !== active}
                    data-testid={`wb-panel-${id}`} data-service={id}>
                 {Component && visited.has(id) ? <Component /> : (Component ? null : <NotWired service={service} />)}
               </div>

@@ -1,0 +1,343 @@
+/* Design Studio canvas workspace (U7)
+   Every colour here is a --wb-* token, so the service theme re-skins the whole
+   surface. The one rule that must never slip: the canvas zone is FLAT
+   `--wb-solid`. It is the place where colours are judged, so the scene never
+   paints behind it and no blur sits between the operator and the pixels. */
+
+.cw-root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  color: var(--wb-ink, #f2f6fb);
+  font-family: var(--font-ui);
+}
+
+/* --- top bar -------------------------------------------------------------- */
+.cw-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+}
+.cw-types {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.cw-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.cw-icon { padding: 6px 8px; }
+.cw-icon.is-on { border-color: var(--wb-accent, #7fb0ff); color: var(--wb-ink, #f2f6fb); }
+.cw-panel-toggle { display: none; }
+
+/* --- body ----------------------------------------------------------------- */
+.cw-body {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr) 300px;
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+}
+
+/* --- tool rail + its body ------------------------------------------------- */
+.cw-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+.cw-side .glass-rail {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px;
+  border-right: 0;
+  border-bottom: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+}
+.cw-side .glass-rail-item {
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  font-size: 11px;
+}
+.cw-side .glass-rail-label { font-size: 10px; letter-spacing: 0.02em; }
+.cw-tool-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  min-width: 0;
+}
+.cw-tool { display: flex; flex-direction: column; gap: 8px; }
+.cw-tool-title {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-note {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-file {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-file input[type="file"] { color: var(--wb-ink, #f2f6fb); font-size: 11px; max-width: 100%; }
+.cw-asset {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+.cw-asset.is-static { cursor: default; }
+.cw-asset:hover { border-color: var(--wb-accent, #7fb0ff); }
+.cw-asset img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #000;
+}
+.cw-asset-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11.5px;
+}
+.cw-asset-dims {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+
+/* --- the neutral canvas zone ---------------------------------------------- */
+.cw-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 420px;
+  padding: 12px;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  border-radius: 14px;
+  /* Flat, opaque, no blur, never the scene: colours must read accurately. */
+  background: var(--wb-solid, #161d27);
+  overflow: hidden;
+  touch-action: none;
+}
+.cw-zone-inner { width: 100%; min-width: 0; }
+
+/* The Stage was written for a paper surface; inside the cockpit it borrows the
+   zone's neutral ground instead of painting its own green gradient. */
+.cw-zone .stage {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.cw-zone .stage-bar {
+  background: transparent;
+  border-bottom: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-zone .stage-dims,
+.cw-zone .stage-zoom-val { color: var(--wb-ink-dim, #c3cfdd); }
+.cw-zone .stage-zoom-btn {
+  background: transparent;
+  border-color: var(--wb-line, rgba(255, 255, 255, 0.12));
+  color: var(--wb-ink, #f2f6fb);
+}
+.cw-zone .stage-zoom-btn:hover { background: var(--wb-accent-soft, #1d2a44); }
+.cw-zone .stage-canvas-pane { padding: 14px; }
+.cw-zone .stage-checker {
+  background: transparent;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.cw-zone .stage-foot {
+  background: transparent;
+  border-top: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-stage-foot { font-size: 11px; }
+
+/* Snap guides: drawn only for the guide that actually fired. */
+.stage-guide {
+  position: absolute;
+  pointer-events: none;
+  background: var(--wb-accent, #7fb0ff);
+  opacity: 0.85;
+}
+.stage-guide-x { top: 0; bottom: 0; width: 1px; }
+.stage-guide-y { left: 0; right: 0; height: 1px; }
+
+/* --- properties / layers panel -------------------------------------------- */
+.cw-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: 760px;
+  overflow: hidden;
+}
+.cw-panel-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+}
+.cw-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  overflow: auto;
+  min-width: 0;
+}
+.cw-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--wb-ink-dim, #c3cfdd);
+  min-width: 0;
+}
+.cw-field input[type="text"],
+.cw-field input[type="number"],
+.cw-field select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  background: var(--wb-glass-2, rgba(29, 38, 51, 0.88));
+  color: var(--wb-ink, #f2f6fb);
+  font: inherit;
+  font-size: 12px;
+  min-width: 0;
+  width: 100%;
+}
+.cw-field input[type="color"] {
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  background: none;
+}
+.cw-field input[type="range"] { accent-color: var(--wb-accent, #7fb0ff); }
+.cw-readonly {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--wb-ink, #f2f6fb);
+  overflow-wrap: anywhere;
+}
+.cw-boxrow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+.cw-selected {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+}
+.cw-selected-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--wb-ink, #f2f6fb);
+  min-width: 0;
+}
+.cw-layer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 0;
+}
+.cw-layer:hover { border-color: var(--wb-line, rgba(255, 255, 255, 0.12)); }
+.cw-layer.is-active {
+  border-color: var(--wb-accent, #7fb0ff);
+  background: color-mix(in srgb, var(--wb-accent, #7fb0ff) 14%, transparent);
+}
+.cw-layer-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11.5px;
+}
+.cw-mini {
+  border: 1px solid var(--wb-line, rgba(255, 255, 255, 0.12));
+  background: transparent;
+  color: var(--wb-ink-dim, #c3cfdd);
+  border-radius: 6px;
+  padding: 2px 5px;
+  font-size: 10px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.cw-mini:hover { color: var(--wb-ink, #f2f6fb); border-color: var(--wb-accent, #7fb0ff); }
+
+/* --- status --------------------------------------------------------------- */
+.cw-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 2px 4px;
+  font-size: 11px;
+  color: var(--wb-ink-dim, #c3cfdd);
+}
+.cw-status-sep { opacity: 0.5; }
+
+/* --- narrower screens ----------------------------------------------------- */
+@media (max-width: 1180px) {
+  .cw-body { grid-template-columns: 210px minmax(0, 1fr); }
+  .cw-panel { grid-column: 1 / -1; max-height: none; }
+}
+
+@media (max-width: 760px) {
+  .cw-body { grid-template-columns: minmax(0, 1fr); }
+  .cw-side { order: 1; }
+  .cw-zone { order: 2; min-height: 340px; padding: 8px; }
+  .cw-panel { order: 3; display: none; }
+  .cw-panel.is-open { display: flex; }
+  .cw-panel-toggle { display: inline-flex; }
+  .cw-types { flex: 1 1 100%; }
+  .cw-actions { margin-left: 0; }
+  .cw-side .glass-rail-item { min-height: 44px; min-width: 52px; }
+  .cw-asset { min-height: 48px; }
+  .cw-zone .stage-canvas-pane { padding: 6px; }
+}
