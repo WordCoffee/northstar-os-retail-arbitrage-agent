@@ -57,8 +57,14 @@ def _as_png_bytes(image: Union[Image.Image, bytes, bytearray]) -> bytes:
 
 
 def _normalise(text: str) -> str:
-    """Uppercase alphanumerics only, so '6 oz (170 g)' matches '6oz170g'."""
-    return re.sub(r"[^A-Z0-9]+", "", text.upper())
+    """Uppercase alphanumerics only, with OCR's O/0 confusion folded.
+
+    OCR reads the 'O' in 'OZ' as a zero ('6 0Z') often enough that a strict
+    comparison would refuse a legible picture. Folding O to 0 keeps the check
+    about whether the weight was READ, not about which glyph the engine chose.
+    """
+    s = re.sub(r"[^A-Z0-9]+", "", text.upper())
+    return s.replace("O", "0")
 
 
 def _laplacian_variance(gray: np.ndarray) -> float:
