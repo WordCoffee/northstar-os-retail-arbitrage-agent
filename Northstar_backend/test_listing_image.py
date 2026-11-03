@@ -1,90 +1,113 @@
-"""Listing hero isolation + contact shadow (Phase 1, item 3)."""
+"""Listing image pipeline: text-safe render -> matching gate."""
 from __future__ import annotations
 
-import sys
-from io import BytesIO
-from pathlib import Path
+import io
 
 import pytest
-from PIL import Image
+from fastapi import HTTPException
+from PIL import Image, ImageDraw
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+import listing_image
+import listing_image_api as api
+import social_frames as sf
 
-from listing_image import audit_white, hero_on_white
+
+def _image(bg=(255, 255, 255), margin=72) -> Image.Image:
+    img = Image.new("RGB", (1024, 1024), bg)
+    ImageDraw.Draw(img).rectangle([margin, margin, 1024 - margin, 1024 - margin],
+                                  fill=(213, 167, 122))
+    return img
 
 
-def _cutout(size=400, colour=(190, 60, 40, 255), inset=80):
-    """An opaque square on a transparent field - a stand-in for a real cutout."""
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    for x in range(inset, size - inset):
-        for y in range(inset, size - inset):
-            img.putpixel((x, y), colour)
-    buf = BytesIO()
+def _bytes(img: Image.Image) -> bytes:
+    buf = io.BytesIO()
     img.save(buf, format="PNG")
     return buf.getvalue()
 
 
-def test_output_is_pure_white_at_every_corner():
-    png = hero_on_white(_cutout(), size=600)
-    audit = audit_white(png)
-    assert audit["corners_pure_white"] is True
-    assert audit["corner_values"] == [(255, 255, 255)] * 8
+def _render(img):
+    def inner(prompt, *, width, height, tier):
+        return _bytes(img)
+    return inner
 
 
-def test_output_is_the_requested_square_size():
-    png = hero_on_white(_cutout(), size=512)
-    assert audit_white(png)["size"] == [512, 512]
+def test_a_white_background_main_image_passes():
+    out = listing_image.generate("white-bg", "a kraft pouch", render=_render(_image()))
+    assert out["ok"] is True, out
+    assert out["main_image"] is True
+    assert out["gate"]["checks"]["text_free"] is True
+    assert out["gate"]["checks"]["listing_rubric_pass"] is True
 
 
-def test_background_stays_mostly_pure_white():
-    png = hero_on_white(_cutout(), size=600, fill=0.40, shadow=False)
-    audit = audit_white(png)
-    assert audit["pure_white_ratio"] > 0.5
+def test_a_grey_background_is_normalised_to_pure_white():
+    """The main-image pass crops the subject onto white; the gate then passes."""
+    out = listing_image.generate("white-bg", render=_render(_image(bg=(200, 200, 200))))
+    assert out["ok"] is True, out
+    assert out["gate"]["score"]["metrics"]["background_purity"] >= 0.90
 
 
-def test_subject_fills_about_the_requested_fraction():
-    png = hero_on_white(_cutout(inset=100), size=600, fill=0.8, shadow=False)
-    img = Image.open(BytesIO(png)).convert("RGB")
-    px = img.load()
-    w = img.size[0]
-    dark = [x for x in range(w) if px[x, w // 2] != (255, 255, 255)]
-    span = (max(dark) - min(dark) + 1) / w if dark else 0
-    assert 0.70 <= span <= 0.90, span
+def test_a_blank_render_is_refused():
+    blank = Image.new("RGB", (1024, 1024), (255, 255, 255))
+    out = listing_image.generate("white-bg", render=_render(blank))
+    assert out["ok"] is False
+    assert "listing_rubric_pass" in out["reason"]
 
 
-def test_shadow_darkens_under_the_subject_but_not_the_corners():
-    png = hero_on_white(_cutout(), size=600, shadow=True)
-    img = Image.open(BytesIO(png)).convert("RGB")
-    px = img.load()
-    w, h = img.size
-    # Just under the subject's lower edge, somewhere near the centre column.
-    under = [px[w // 2, y] for y in range(int(h * 0.86), int(h * 0.93))]
-    assert any(sum(p) < 750 for p in under), "expected a contact shadow"
-    assert px[0, 0] == (255, 255, 255)
+def test_fit_main_image_hits_the_fill_band():
+    small = Image.new("RGB", (1024, 1024), (255, 255, 255))
+    ImageDraw.Draw(small).rectangle([110, 110, 914, 914], fill=(213, 167, 122))
+    fitted = listing_image.fit_main_image(_bytes(small))
+    gate = sf.listing_gate(fitted, main_image=True)
+    assert gate["ok"] is True, gate
+    assert 0.80 <= gate["score"]["metrics"]["fill"] <= 0.92
 
 
-def test_shadow_is_soft_not_a_solid_blob():
-    png = hero_on_white(_cutout(), size=600, shadow=True)
-    img = Image.open(BytesIO(png)).convert("RGB")
-    px = img.load()
-    w, h = img.size
-    column = [px[w // 2, y][0] for y in range(int(h * 0.82), int(h * 0.99))]
-    tones = set(column)
-    # A sticker has two tones; a real contact shadow has a ramp and stays light.
-    assert len(tones) >= 4, sorted(tones)
-    assert 190 <= min(column) < 245, min(column)
+def test_a_secondary_style_uses_the_hook_rubric():
+    out = listing_image.generate("lifestyle", "a pouch on a counter",
+                                 render=_render(_image()))
+    assert out["main_image"] is False
+    assert out["gate"]["checks"]["text_free"] is True
 
 
-def test_empty_input_is_refused_not_papered_over():
-    blank = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
-    buf = BytesIO()
-    blank.save(buf, format="PNG")
-    with pytest.raises(ValueError, match="empty_subject"):
-        hero_on_white(buf.getvalue())
+def test_an_unknown_style_raises():
+    with pytest.raises(ValueError, match="listing_style_unknown"):
+        listing_image.generate("billboard", render=_render(_image()))
 
 
-def test_audit_reports_the_sampled_values():
-    png = hero_on_white(_cutout(), size=400, shadow=False)
-    audit = audit_white(png)
-    assert len(audit["corner_values"]) == 8
-    assert 0.0 <= audit["pure_white_ratio"] <= 1.0
+def test_the_api_saves_a_passing_image(tmp_path, monkeypatch):
+    monkeypatch.setattr(api, "OUT_DIR", tmp_path)
+
+    def fake(style, brief, **kw):
+        return {"ok": True, "style": style, "main_image": True,
+                "prompt": "p", "used_brief": "p", "text_fidelity": {"verdict": "text_free"},
+                "bytes": _bytes(_image()), "gate": {"ok": True, "checks": {}},
+                "reason": ""}
+
+    monkeypatch.setattr(listing_image, "generate", fake)
+    out = api.create_listing_image(api.ListingImageIn(style="white-bg"), acct="test")
+    assert out["ok"] is True
+    assert out["size"] == [1024, 1024]
+    assert out["data_url"].startswith("data:image/png;base64,")
+
+
+def test_the_api_saves_a_rejected_candidate(tmp_path, monkeypatch):
+    monkeypatch.setattr(api, "OUT_DIR", tmp_path)
+
+    def fake(style, brief, **kw):
+        return {"ok": False, "style": style, "main_image": True,
+                "prompt": "p", "used_brief": "p", "text_fidelity": {},
+                "bytes": _bytes(_image(bg=(200, 200, 200))),
+                "gate": {"ok": False, "checks": {"listing_rubric_pass": False}},
+                "reason": "listing_image_refused: listing_rubric_pass"}
+
+    monkeypatch.setattr(listing_image, "generate", fake)
+    with pytest.raises(HTTPException) as err:
+        api.create_listing_image(api.ListingImageIn(style="white-bg"), acct="test")
+    assert err.value.status_code == 422
+    assert err.value.detail["code"] == "listing_image_refused"
+    assert "candidate" in err.value.detail
+
+
+def test_the_styles_endpoint_returns_the_pack():
+    out = api.styles(acct="test")
+    assert len(out["styles"]) == 5

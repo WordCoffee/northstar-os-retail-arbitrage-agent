@@ -44,8 +44,9 @@ PALETTES: Dict[str, Dict[str, Tuple[int, int, int]]] = {
 LISTING_STYLES: Dict[str, Dict[str, Any]] = {
     "white-bg": {
         "prompt": ("a single kraft stand-up pouch on a pure white seamless sweep, "
-                   "centred, filling most of the frame, soft even studio light, no "
-                   "props, photoreal commercial product photography, sharp focus"),
+                   "centred with a clean white margin on every side, occupying about "
+                   "eighty-five percent of the frame, soft even studio light, no props, "
+                   "photoreal commercial product photography, sharp focus"),
         "text_allowed": False,
     },
     "lifestyle": {
@@ -295,25 +296,33 @@ def listing_prompt_pack() -> Dict[str, Any]:
                      "text-free and the listing rubric checks background purity and fill.")}
 
 
-def listing_gate(image: Any) -> Dict[str, Any]:
-    """Refuse a listing image that carries lettering or fails the listing rubric."""
+def listing_gate(image: Any, *, main_image: bool = True) -> Dict[str, Any]:
+    """Refuse a listing image that carries lettering or fails its rubric.
+
+    `main_image=True` applies the white-background/fill rubric (the marketplace
+    main-image rules). A secondary style (lifestyle, flat-lay, macro, scale) is
+    not a white-background image, so it is graded on the hook rubric instead -
+    but diffusion lettering is still a defect on every listing image.
+    """
     if isinstance(image, Image.Image):
         buf = io.BytesIO()
         image.convert("RGB").save(buf, format="PNG")
         payload = buf.getvalue()
     else:
         payload = bytes(image)
-    scored = asset_rubric.score_listing(payload)
+    scored = (asset_rubric.score_listing(payload) if main_image
+              else asset_rubric.score_hook(payload))
     text = text_fidelity.verify_asset_text(payload, brief=None, text_safe=True)
     verdict = text.get("verdict")
     checks = {
-        "listing_rubric_pass": scored.get("verdict") == "pass",
+        "listing_rubric_pass" if main_image else "hook_rubric_pass":
+            scored.get("verdict") == "pass",
         "text_free": verdict == "text_free",
         "ocr_available": (text.get("check") or {}).get("status") == "ok",
     }
     failed = [k for k, ok in checks.items() if not ok]
-    return {"ok": not failed, "checks": checks, "score": scored,
-            "text": text, "reason": "" if not failed else
+    return {"ok": not failed, "checks": checks, "main_image": main_image,
+            "score": scored, "text": text, "reason": "" if not failed else
             "listing_image_refused: " + ", ".join(failed)}
 
 

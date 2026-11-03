@@ -74,6 +74,7 @@ try:
     from product_picture_api import router as design_studio_product_picture_router
     from social_frames_api import router as design_studio_social_frames_router
     from video_ad_api import router as design_studio_video_ad_router
+    from listing_image_api import router as design_studio_listing_image_router
     _HAS_DESIGN_STUDIO_EXT = True
 except ImportError:
     _HAS_DESIGN_STUDIO_EXT = False
@@ -374,6 +375,7 @@ if _HAS_DESIGN_STUDIO_EXT:
     app.include_router(design_studio_product_picture_router)
     app.include_router(design_studio_social_frames_router)
     app.include_router(design_studio_video_ad_router)
+    app.include_router(design_studio_listing_image_router)
 
 # Studio dashboard — packages on disk, proposals, safe file serving (2026-11-02)
 if _HAS_STUDIO_DASHBOARD:
