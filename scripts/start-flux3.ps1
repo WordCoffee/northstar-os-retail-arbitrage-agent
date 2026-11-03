@@ -79,15 +79,19 @@ if (-not $comfyUp -and -not $NoComfy) {
     $comfy = Start-Process -FilePath "powershell" `
         -ArgumentList "-NoProfile","-ExecutionPolicy","Bypass","-File",$starter,"--cache-none" `
         -WindowStyle Hidden -PassThru
-    $deadline = (Get-Date).AddSeconds(180)
+    # start_comfyui.ps1 already blocks until ComfyUI answers and then exits: wait for
+    # ITS verdict rather than guessing a timeout. A cold start after a hard kill can
+    # spend ~2-3 min importing torch and the custom nodes, which is why the old fixed
+    # 180 s poll gave up while ComfyUI was still coming up.
+    $null = $comfy.WaitForExit(240000)
+    $deadline = (Get-Date).AddSeconds(60)
     while ((Get-Date) -lt $deadline) {
-        Start-Sleep -Seconds 3
         try {
             $null = Invoke-WebRequest -Uri "http://127.0.0.1:$ComfyPort/system_stats" -TimeoutSec 3 -UseBasicParsing
             $comfyUp = $true; break
-        } catch { }
+        } catch { Start-Sleep -Seconds 3 }
     }
-    if (-not $comfyUp) { Write-Host "flux3: ComfyUI did not answer on :$ComfyPort within 180 s"; exit 2 }
+    if (-not $comfyUp) { Write-Host "flux3: ComfyUI did not answer on :$ComfyPort (see $Root\comfyui-restart.log)"; exit 2 }
 } elseif (-not $comfyUp) {
     Write-Host "flux3: -NoComfy given and ComfyUI is down; the gateway will report 503 by design"
 }
