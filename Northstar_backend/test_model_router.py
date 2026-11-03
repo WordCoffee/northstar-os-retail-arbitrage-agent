@@ -237,6 +237,7 @@ def test_catalog_vision_local_status_tracks_installed():
 
 
 def test_media_armed_requires_gate(monkeypatch):
+    monkeypatch.delenv("MEDIA_GEN_LIVE", raising=False)
     assert mr.media_live_armed() is False
     monkeypatch.setenv("MEDIA_GEN_LIVE", "1")
     assert mr.media_live_armed() is True

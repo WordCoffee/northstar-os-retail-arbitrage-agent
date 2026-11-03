@@ -1106,6 +1106,7 @@
       "risk_class": "low",
       "execution": "ty",
       "model": "qwen3.5:4b",
+      "provider": "ollama",
       "authorization_note": "Owner-flagged 2026-11-03: the creative lane delivered flat label art when a designed product picture was requested. Local, no I/O.",
       "objective": "Northstar_backend/mockup_compositor.py has no composite_panel_onto_quad. Add it: warp an RGBA panel onto a plate's four-corner quad with a homography (the module already has _homography) and feather the edge so it does not read as a sticker. Return an Image the size of the plate, painting nothing outside the quad. The contract is state/probes/t10_pouch_mockup.py - run it; if it fails, edit the source, never the probe.",
       "dependencies": [],
@@ -1120,7 +1121,16 @@
       ],
       "apply_commands": [],
       "precheck_commands": [],
-      "checks": [],
+      "checks": [
+        {
+          "name": "pouch mockup probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t10_pouch_mockup.py"
+          ]
+        }
+      ],
       "acceptance_commands": [
         [
           "python",
@@ -1141,6 +1151,7 @@
       "risk_class": "low",
       "execution": "ty",
       "model": "qwen3.5:4b",
+      "provider": "ollama",
       "authorization_note": "Owner-flagged 2026-11-03: 'labels that don't even look good'. The measurable half is legibility. Local OCR only.",
       "objective": "Create Northstar_backend/mockup_quality.py with assert_legible(image_bytes_or_Image) -> {'ok': bool, 'reason': str, 'words': [...]}. Use text_fidelity.check_text_in_image (RapidOCR, local). ok=True only when the wordmark and the net weight are read; a blurred or downscaled picture returns ok=False with a named reason. The contract is state/probes/t11_mockup_legibility.py - make it pass without editing the probe.",
       "dependencies": [
@@ -1157,7 +1168,16 @@
       ],
       "apply_commands": [],
       "precheck_commands": [],
-      "checks": [],
+      "checks": [
+        {
+          "name": "mockup legibility probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t11_mockup_legibility.py"
+          ]
+        }
+      ],
       "acceptance_commands": [
         [
           "python",
@@ -1178,6 +1198,7 @@
       "risk_class": "low",
       "execution": "ty",
       "model": "qwen3.5:4b",
+      "provider": "ollama",
       "authorization_note": "Owner-flagged 2026-11-03: the flat-art delivery should have been refused by the pipeline instead of being handed over. Local.",
       "objective": "Northstar_backend/mockup_compositor.py needs find_panel_quad(image) -> list of four (x, y) corners. When the plate has no findable pouch face it must raise ValueError('plate_face_not_found: ...') rather than return a guess. Reuse the edge/mask helpers already in pouch_label.py where they fit. The contract is state/probes/t12_plate_pair.py - make it pass without editing the probe.",
       "dependencies": [],
@@ -1192,7 +1213,16 @@
       ],
       "apply_commands": [],
       "precheck_commands": [],
-      "checks": [],
+      "checks": [
+        {
+          "name": "plate pair probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t12_plate_pair.py"
+          ]
+        }
+      ],
       "acceptance_commands": [
         [
           "python",

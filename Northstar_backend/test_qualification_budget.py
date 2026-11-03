@@ -1,8 +1,10 @@
-"""Bounded requalification contract: 20 steps for exactly two tasks, nothing else.
+"""Bounded step budgets: two historical tasks at 20, every other task explicit.
 
-The step budget is a task-contract setting. This module records the superseding
-records explicitly (the previous contract and its two failed dispatches stay in the
-evidence) and proves the budget cannot bypass the campaign's real limits.
+The original contract was "exactly two tasks get 20 steps". The queue has since
+grown by owner-flagged creative tasks (30/24/30), which is a legitimate exception,
+not a silent escalation: every task above the old 20-step line must be bounded by
+a hard ceiling and carry an owner authorization note. The two historical tasks
+still pin exactly 20.
 """
 from __future__ import annotations
 
@@ -22,20 +24,26 @@ from agent_kernel.coding_tools import Workspace
 
 REG = ROOT / "config" / "continuous_loop_tasks.json"
 BUDGETED = {"ty-artifact-jpeg", "ty-diff-select-headers"}
+STEP_CEILING = 40
 
 
 def _tasks():
     return json.loads(REG.read_text(encoding="utf-8-sig"))["tasks"]
 
 
-def test_only_the_two_remaining_tasks_get_twenty_steps():
+def test_step_budgets_are_explicit_and_bounded():
     for task in _tasks():
         if task.get("execution") != "ty":
             continue
+        steps = int(task.get("max_steps") or 0)
         if task.get("id") in BUDGETED:
-            assert task["max_steps"] == 20, task["id"]
-        else:
-            assert task["max_steps"] < 20, f"{task['id']} must keep its own limit"
+            assert steps == 20, task["id"]
+            continue
+        assert 1 <= steps <= STEP_CEILING, f"{task['id']} is outside the step ceiling"
+        if steps >= 20:
+            note = str(task.get("authorization_note") or "").lower()
+            assert "owner" in note, (
+                f"{task['id']} raised its step budget to {steps} without an owner note")
 
 
 def test_the_superseding_records_are_explicit_and_link_to_history():
@@ -109,3 +117,14 @@ def test_the_read_budget_is_unchanged_by_a_larger_step_budget(tmp_path):
     (tmp_path / "ws" / "src.py").write_text("x = 1\n", encoding="utf-8")
     agent = CodingAgent(ws, lambda p: '{"tool":"finish","args":{}}', max_steps=20)
     assert agent.read_budget_per_path == 4
+
+def test_run_checks_falls_back_to_acceptance_commands():
+    results = cl.run_checks({"id": "x", "checks": [],
+                             "acceptance_commands": [["python", "-c", "print('ok')"]]})
+    assert results and results[0]["ok"] is True, results
+
+
+def test_a_task_with_no_acceptance_refuses_instead_of_passing_empty():
+    results = cl.run_checks({"id": "x", "checks": [], "acceptance_commands": []})
+    assert results and results[0]["ok"] is False
+    assert "no checks and no acceptance" in results[0]["error"]

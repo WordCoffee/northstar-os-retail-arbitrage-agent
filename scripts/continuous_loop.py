@@ -1568,7 +1568,19 @@ def run_ty_task(task: Dict[str, Any], run_id: str, run_dir: Path,
 
 def run_checks(task: Dict[str, Any], *, dry_run: bool = False) -> List[Dict[str, Any]]:
     results = []
-    for spec in task.get("checks") or []:
+    # A task with an empty `checks` list used to verify NOTHING and still pass
+    # (`all([])` is True). Fall back to the acceptance commands, and fail closed
+    # when a task declares neither.
+    specs = list(task.get("checks") or [])
+    if not specs:
+        specs = [{"name": Path(str(cmd[-1])).name if cmd else "acceptance",
+                  "cmd": cmd} for cmd in (task.get("acceptance_commands") or [])]
+    if not specs:
+        return [{"name": "acceptance", "ok": False, "argv": [],
+                 "cwd": str(ROOT), "exit": None, "duration_s": 0.0,
+                 "error": "task has no checks and no acceptance_commands",
+                 "output": ""}]
+    for spec in specs:
         name = str(spec.get("name") or "check")
         cmd = spec.get("cmd") or []
         cwd = (ROOT / str(spec.get("cwd") or ".")).resolve()
