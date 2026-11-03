@@ -110,7 +110,8 @@ def build_page(product: Dict[str, Any], *, image: Optional[Image.Image] = None,
         "product": product,
         "modules": [{"kind": r["kind"], "size": r["size"], "qa": r["qa"],
                      "bytes": len(r["png"]), "copy_mode": r.get("copy_mode"),
-                     "sha256": hashlib.sha256(r["png"]).hexdigest()}
+                     "sha256": hashlib.sha256(r["png"]).hexdigest(),
+                     "png": r["png"]}
                     for r in rendered],
         "page": page,
     }
