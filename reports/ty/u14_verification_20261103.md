@@ -86,3 +86,77 @@ The four findings left open at the verdict were closed immediately after it:
 Re-verified after the fixes: unit **202/202**, `research-desk` + `studio-canvas` **15 passed /
 1 skipped** on both targets, build 1.46s. The 13 full-suite failures remain **unadjudicated** — they
 are the only part of U14 that is still not clean.
+
+---
+
+# U14 completion (2026-11-03)
+
+The adjudication is done, the screenshots exist, and the backend suite has now actually been run.
+This section supersedes the "PARTIAL" verdict above; the verdict text is left in place so the change
+is visible rather than rewritten.
+
+## The 13 e2e failures: 13/13 pre-existing
+
+Method: a `git worktree` pinned to the U0 baseline commit `a2d12f5e`, served on its own port (8102)
+next to this tree (8101), with the identical grep, `--timeout=45000` and the same two projects. The
+current tree was never stashed or re-pointed.
+
+| | Baseline `a2d12f5e` | HEAD |
+|---|---|---|
+| Same 16 runs | 2 passed / 14 not passing | 4 passed / 12 not passing |
+| Verdict | — | **13/13 pre-existing** |
+
+- **2 now pass** (`asset_dashboard` "lists packages", both targets). The mobile one was in the
+  original 13, so the full-suite run also had one flake; it is recorded as a flake, not a fix.
+- **1 was caused by U1**: `simple-designs` asked for a dialog named `Choose a Simple mode design`,
+  which the naming rule replaced with `Choose a Northstar design`. The expectation was corrected and
+  the test passes on both targets (2 passed, 12.9s); every other assertion in it is unchanged.
+- **10 remain**, named with causes in `reports/ty/e2e_adjudication/README.md`: 6 stale chat-surface
+  specs (they wait for `chat-input` on `/design-studio`, a surface that stopped carrying the chat
+  shell before U0), 2 waiting on `MEDIA_GEN_LIVE` (the cutout lane reports the honest refusal
+  `media_generation_disarmed` at HEAD, where at baseline the control did not render at all), and 2
+  phone-profile timeouts on the 8124 design-lab pages.
+
+## Screenshots: captured
+
+`tests/e2e/service-screens.spec.ts` walks the picker's list **and the default-open tab** (the first
+run captured 23 of 24 for exactly that reason), masks the dev banner and toasts so a commit hash
+cannot enter a visual baseline, and shoots the whole shell per service. **24 services × 2 targets →
+`reports/ty/shots/services/{chromium-desktop,chromium-mobile}/` + `manifest.json`** (bytes + sha256).
+2 passed, 1.8m.
+
+## Backend suite: run, and it found something
+
+`5926 collected → 15 failed, 5792 passed, 117 skipped, 2 xfailed (666 s)` against the recorded U0
+baseline of `30 failed / 5763 passed`. Of the 15, **nine reproduce at the baseline commit**, **five
+come from an uncommitted test file in the working tree** (not this run), and **one was ours**:
+
+`tools/check-jsx-imports.py` reported `kit/Glass.jsx: <Tag>` as an undefined component and failed the
+build. `Tag` is bound by destructuring (`{ as: Tag = 'section' }`), a legitimate `as`-prop pattern, so
+the guard was wrong. The checker now resolves destructured bindings, and
+`test_shell_role_contract.py` gained a two-sided regression test (`Tag` counts as a binding **and** an
+unbound `<Ghost />` is still reported) → **9 passed**, checker exit 0 across 148 `.jsx` files.
+
+That is exactly the class of failure the owned-unit runs could not see, and the reason the "backend
+suite not re-run" line in the original verdict was a real gap rather than a formality.
+
+## Numbers at completion
+
+| Check | Result |
+|---|---|
+| `npm run test:ui` | 201 passed, 0 failed (re-counted per file; the verdict's 202 counted one more) |
+| `npm run build` | ✓ 1.54s |
+| Bundle guard | 14 passed, 0 failed (1242 KB prod + 991 KB test) |
+| Full e2e, adjudicated | 13/13 pre-existing; 2 now pass; 1 fixed (rename); 10 named |
+| Full backend | 15 failed / 5792 passed → 14 after the `<Tag>` fix (derived) |
+| Service screenshots | 24 × 2 targets + manifest |
+| AutothinK/local-model (U15) | 50 passed (was 15 failed / 35 passed) |
+
+## Still not clean (blunt)
+
+1. 10 pre-existing e2e failures, 6 of them blocked on the owner decision in `needs_you.md`.
+2. 9 pre-existing backend failures that reproduce at the baseline commit.
+3. 5 backend failures from an **uncommitted** test file belonging to another session; I did not touch
+   it.
+4. The studio scene still runs ~45 fps against a 60 budget (U13's recorded lever: bake the backdrop).
+

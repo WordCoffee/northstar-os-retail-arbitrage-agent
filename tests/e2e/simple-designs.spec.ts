@@ -35,7 +35,7 @@ test('design picker switches composition', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 })
   await page.goto('/ui/', { waitUntil: 'domcontentloaded' })
   await page.getByTestId('simple-design-trigger').click()
-  await expect(page.getByRole('dialog', { name: 'Choose a Simple mode design' })).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'Choose a Northstar design' })).toBeVisible()
   await page.getByTestId('simple-design-terminal').click()
   await expect(page.getByTestId('mb-shell')).toHaveAttribute('data-simple-design', 'terminal')
 })

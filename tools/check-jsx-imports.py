@@ -32,11 +32,41 @@ IMPORT_NAMED = re.compile(r"import\s*\{([^}]*)\}\s*from", re.S)
 IMPORT_DEFAULT = re.compile(r"import\s+([A-Za-z0-9_]+)\s*(?:,\s*\{([^}]*)\})?\s*from", re.S)
 DECLARED = re.compile(r"^\s*(?:export\s+)?(?:function|const|class|let|var)\s+([A-Z][A-Za-z0-9_]*)", re.M)
 
+# A capitalised name BOUND by destructuring, e.g. `{ as: Tag = 'section' }` in a
+# parameter list or `const { row: Cell } = props`. The kit's `as`-prop pattern is
+# legitimate React and the first version of this checker reported it as a crash
+# (kit/Glass.jsx: <Tag>), so the scan now resolves destructured aliases too.
+DESTRUCTURE_ALIAS = re.compile(
+    r"(?:^|[{,\s])([A-Za-z_$][\w$]*)\s*:\s*([A-Z][A-Za-z0-9_]*)\s*(?:=[^,}]*)?(?:,|\})")
+PARAM_BLOCK = re.compile(r"\(([^()]*)\)", re.S)
+CONST_DESTRUCTURE = re.compile(r"(?:const|let|var)\s*\{([^{}]*)\}", re.S)
+
 REACT_BUILTINS = {"Fragment", "Suspense", "StrictMode", "Profiler", "Memo"}
 
 # A truthy `.length` test (a string satisfies it) combined with `.map(` on the
 # same expression, without an Array.isArray guard.
 UNSAFE_LENGTH_MAP = re.compile(r"&&\s*[A-Za-z_$][A-Za-z0-9_$.]*\.length\s*\)")
+
+
+def destructured_aliases(source: str) -> set[str]:
+    """Capitalised names bound by destructuring, which are local bindings.
+
+    Scans parenthesised blocks (parameter lists) and `const/let/var {…}`
+    declarations. The trade-off is deliberate: an object literal passed inside a
+    call, `f({ key: Ghost })`, is also counted as a binding, because the two are
+    indistinguishable without a parser. That can only miss a component that is
+    referenced as a *value* - which is a ReferenceError at module load, the
+    loudest possible failure - while it removes a false positive that blocked a
+    correct build (kit/Glass.jsx).
+    """
+    found: set[str] = set()
+    blocks = list(PARAM_BLOCK.findall(source)) + list(CONST_DESTRUCTURE.findall(source))
+    for block in blocks:
+        if "{" not in block:
+            continue
+        for match in DESTRUCTURE_ALIAS.finditer(block):
+            found.add(match.group(2))
+    return found
 
 
 def names_from(source: str) -> set[str]:
@@ -62,6 +92,7 @@ def names_from(source: str) -> set[str]:
                     found.add(part)
     for match in DECLARED.finditer(source):
         found.add(match.group(1))
+    found |= destructured_aliases(source)
     return found
 
 

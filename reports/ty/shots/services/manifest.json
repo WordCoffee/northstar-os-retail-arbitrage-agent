@@ -1,0 +1,261 @@
+{
+ "captured_by": "tests/e2e/service-screens.spec.ts",
+ "viewport": "1440x900 desktop / iPhone 12 mobile (Playwright devices)",
+ "masked": [
+  "dev-banner",
+  "toasts"
+ ],
+ "note": "The Bojo dock is captured as rendered, including local session titles - same policy as the u6/u7/u8 shots already in this repo. Nothing here leaves the machine.",
+ "projects": {
+  "chromium-desktop": {
+   "count": 24,
+   "files": [
+    {
+     "service": "adpilot",
+     "bytes": 246504,
+     "sha256": "fe000e8c14950fc06d9242aa22f90d80b579510bdc73903fc6f0a993808c36ce"
+    },
+    {
+     "service": "auctioneer",
+     "bytes": 296006,
+     "sha256": "ee9792a90aafa5ac9f4c0fba9d373ecf6f6a2e99cd81f44aa3c2b89fb537c199"
+    },
+    {
+     "service": "autothink",
+     "bytes": 257994,
+     "sha256": "16b76debcb789014658912405f84cb09a798eb0e0d322d828f3393dccfced599"
+    },
+    {
+     "service": "competitor-monitor",
+     "bytes": 115365,
+     "sha256": "bea6a5d74aa7ea73a5aa0c9b3914761d09e0df8090df8867c731370bf216ca75"
+    },
+    {
+     "service": "design-studio",
+     "bytes": 192445,
+     "sha256": "ffb584cd62a4861e9ce63c948f1a30f3141d56a23bf9ee944b7afd6f076b4e91"
+    },
+    {
+     "service": "foundation",
+     "bytes": 100748,
+     "sha256": "140fa5ef1f1b9740a6aecc9945218c415c095e97dd68c2442635bf37eddd0c86"
+    },
+    {
+     "service": "golden-goose",
+     "bytes": 225843,
+     "sha256": "cfd013d515bd82368bc9a6d1e9eeb4bcd47933610fa396d26f354d6a7dd5e038"
+    },
+    {
+     "service": "goldengoose",
+     "bytes": 252352,
+     "sha256": "a23c25df414937d252e5077c4ff4dcfeaa206347254af2c050f3e4370be4829b"
+    },
+    {
+     "service": "hub",
+     "bytes": 100677,
+     "sha256": "fb95f6858ef866838e922522e95ed2e66de1721e682443b86e1ad6d75f19d960"
+    },
+    {
+     "service": "jobs",
+     "bytes": 100980,
+     "sha256": "bc42404a0f9a96a0bb58eea05a394e00776021d05d5e73d0ad8ee18ba9cf897b"
+    },
+    {
+     "service": "keyword-tracker",
+     "bytes": 117842,
+     "sha256": "3b73fb8692395f8ff46266630f99929d156adfa600c927e2f627aedc2823edc0"
+    },
+    {
+     "service": "keywords",
+     "bytes": 101127,
+     "sha256": "145dabb793a3f76fec89c9091d1bf7355c286c451b06ed5e7fbe25511569e2a7"
+    },
+    {
+     "service": "ledger",
+     "bytes": 100372,
+     "sha256": "df4a90fb8131db2d9b47041c3198c83428544a774c6654ea3393fd8348f4e838"
+    },
+    {
+     "service": "listingforge",
+     "bytes": 122029,
+     "sha256": "c9d9770a25c52cd4316c2423508b7785a4a02aa309d5231b87d23a82643fb55f"
+    },
+    {
+     "service": "listings",
+     "bytes": 117353,
+     "sha256": "4e99ccda70f7eefd81a74836938ee1393149cfb38b9c71bfe1e060e83659b388"
+    },
+    {
+     "service": "offerchisel",
+     "bytes": 100450,
+     "sha256": "bbabde383940e6fe7b044eaf8c652fd5d1994744fc258dbd2381b7230bdddc32"
+    },
+    {
+     "service": "product-finder",
+     "bytes": 222132,
+     "sha256": "3d69d81b83b2e8afbdfcc0a288b6bce803e340fa3bcd4e89a75221ea39d7d57e"
+    },
+    {
+     "service": "profitability",
+     "bytes": 119971,
+     "sha256": "06b50eff4096e85249d6f94976d9a99e39468f46d75b2b3b61d83812be7e4970"
+    },
+    {
+     "service": "prospector",
+     "bytes": 251973,
+     "sha256": "191ed83c4bfa529db75bda363e2da8d1680cb5abf840cfbbe0a73bccc80737a4"
+    },
+    {
+     "service": "rankledger",
+     "bytes": 100588,
+     "sha256": "ec6562507f9494aef8b728a27e913fb6cca072ae74df53817471962b52bec789"
+    },
+    {
+     "service": "rivalboard",
+     "bytes": 100669,
+     "sha256": "68c8659076df0fae38de4aa0834b2b2e0ed5465bedeb310cfbc713c45f5ce189"
+    },
+    {
+     "service": "socialpulse",
+     "bytes": 125613,
+     "sha256": "102bdee24dfe45d72172a810fdc3b4ff1c6573b31d11f96d20458b30227c0bfa"
+    },
+    {
+     "service": "thewatch",
+     "bytes": 100375,
+     "sha256": "6445cee6c8fd13df15b77ee41e33ad5246cb853781101e3ee6b83c81a9e1a2fd"
+    },
+    {
+     "service": "towncrier",
+     "bytes": 100534,
+     "sha256": "711f41783aef247755a30a393d05f29b8369d915fffe3babf4663d908495fb5b"
+    }
+   ]
+  },
+  "chromium-mobile": {
+   "count": 24,
+   "files": [
+    {
+     "service": "adpilot",
+     "bytes": 438581,
+     "sha256": "886ffc57c73579b7091d299127292efefec8db3f5e19b79712866fc579df0341"
+    },
+    {
+     "service": "auctioneer",
+     "bytes": 516718,
+     "sha256": "d72da9010912346431bb57abfa2fbab40230d7ec58e0bf013cf1cac2eb38105f"
+    },
+    {
+     "service": "autothink",
+     "bytes": 274812,
+     "sha256": "6e9e04871f2c5b56ca9cd9aa733e5b7c398bad2d8fc3de2fe8dcd18ab58f77d9"
+    },
+    {
+     "service": "competitor-monitor",
+     "bytes": 218753,
+     "sha256": "b2cc59d1a7d95256debaa925db974e08db4b3017dc5eca02bb4f905baafe823b"
+    },
+    {
+     "service": "design-studio",
+     "bytes": 318755,
+     "sha256": "69f0f6ffbc901dfd14d035e972f3b6016a69fd4303791210baee36119b96399b"
+    },
+    {
+     "service": "foundation",
+     "bytes": 156668,
+     "sha256": "626c9b0f76565b581104bf791065f66780d87c6f592dabb7d9982a657fe67829"
+    },
+    {
+     "service": "golden-goose",
+     "bytes": 382331,
+     "sha256": "98b7adf422e27f13f55680a045f4c3aa7f070f72df3f2a31ffa549c6cb4416ad"
+    },
+    {
+     "service": "goldengoose",
+     "bytes": 309438,
+     "sha256": "49495a46c5b993d694c09b3e8ea1d46de38865321b38e60584cc56ff91b1c809"
+    },
+    {
+     "service": "hub",
+     "bytes": 155579,
+     "sha256": "7e11d79074fb9e18a5df6c3f48e70f879b3f06733127ec449e7aba80811bde71"
+    },
+    {
+     "service": "jobs",
+     "bytes": 157373,
+     "sha256": "9fc357fa6fbf59c761fc1e378156c357348c44cbd57948d0d858ca2da9e19d1d"
+    },
+    {
+     "service": "keyword-tracker",
+     "bytes": 220932,
+     "sha256": "ce0f6ba8464d99758b9e0b0f1a03ce75ea54d4ae904a351f2870cc02fc6f1b67"
+    },
+    {
+     "service": "keywords",
+     "bytes": 159683,
+     "sha256": "41e0b7b55ac5552c64c6f2e3765c221d3a4fab1fad095b592bc61facc70b842c"
+    },
+    {
+     "service": "ledger",
+     "bytes": 152282,
+     "sha256": "f352a696ddaa8e816e19979fbd275606a689b803d603f10f4e526f12ef9c197d"
+    },
+    {
+     "service": "listingforge",
+     "bytes": 223585,
+     "sha256": "cf44c5f1886cf96dc682f10a1797dd940b96500ce6526b89e6385ab1c2d7fd9b"
+    },
+    {
+     "service": "listings",
+     "bytes": 199232,
+     "sha256": "833bcecf2f8f3254fb89cc687dd496fa38bba538dfc47b4d945a692a5e20b53d"
+    },
+    {
+     "service": "offerchisel",
+     "bytes": 154297,
+     "sha256": "4dfde1a83813b2e9702d1d9089936333bbbb00278e2c5b1448dfc4b7e8ce22b6"
+    },
+    {
+     "service": "product-finder",
+     "bytes": 334212,
+     "sha256": "93761ad7327686aa1bd86073e0c0a64be88a2535a55e0a3fc2b0036f6c5b77ba"
+    },
+    {
+     "service": "profitability",
+     "bytes": 233803,
+     "sha256": "3f873ecb7b97c62aef6db12e9926f02e21d125cf3844e12b377b5d451f305b53"
+    },
+    {
+     "service": "prospector",
+     "bytes": 307685,
+     "sha256": "bc7fddc62fe6546007e265d7ad18e8ffc1de7eeb31928099fc770ae881931fbc"
+    },
+    {
+     "service": "rankledger",
+     "bytes": 154858,
+     "sha256": "72667795d2c23762692f5e70cf7a6b5e31bbc193080117e3bf7363ff87f1c668"
+    },
+    {
+     "service": "rivalboard",
+     "bytes": 155590,
+     "sha256": "050cba36bcab1976bb0a55d00433f481d63cd7db30c71636829645ce06b3a72e"
+    },
+    {
+     "service": "socialpulse",
+     "bytes": 247966,
+     "sha256": "88e8d3d034718f00cd54ce72dc69703719796811cc7457c3491d01b7df327f12"
+    },
+    {
+     "service": "thewatch",
+     "bytes": 153010,
+     "sha256": "552dd28eb65820eb7a2eed8de91c79c824443e1bd6bab13735d7ef21c5c5c32a"
+    },
+    {
+     "service": "towncrier",
+     "bytes": 153619,
+     "sha256": "2e7743c257239afe487482ca4a71cdc8b5f7299a44d9a68cf2e1002767a06869"
+    }
+   ]
+  }
+ }
+}

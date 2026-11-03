@@ -1,0 +1,1265 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--grep",
+      "T-auth|asset picker shows a loading state|chat composer holds a stable box|design picker switches composition|the dashboard lists packages that exist on disk|a lane trigger fires the local endpoint|ten production compositions render without overlap|ten complete chat interfaces",
+      "--timeout=45000",
+      "--reporter=json"
+    ],
+    "configFile": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\playwright.config.ts",
+    "rootDir": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-mobile",
+        "name": "chromium-mobile",
+        "testDir": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-desktop",
+        "testDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8101",
+          "trace": "on-first-retry",
+          "screenshot": "only-on-failure",
+          "video": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-mobile",
+        "testDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8101",
+          "trace": "on-first-retry",
+          "screenshot": "only-on-failure",
+          "video": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Mobile/15E148 Safari/604.1",
+          "viewport": {
+            "width": 390,
+            "height": 664
+          },
+          "screen": {
+            "width": 390,
+            "height": 844
+          },
+          "deviceScaleFactor": 3,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "cd northstar-os-ui && npm run dev",
+      "url": "http://127.0.0.1:8101",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "acceptance-mogra.spec.ts",
+      "file": "acceptance-mogra.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "T-auth: the authenticated workspace loads with the chat box",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 46019,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                        "column": 48,
+                        "line": 26
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  24 | async function openStudio(page) {\n  25 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 26 |   await expect(page.getByTestId('chat-input')).toBeVisible({ timeout: 45000 });\n     |                                                ^\n  27 |   // The dev-only identity banner proves which posture we are testing under.\n  28 |   await expect(page.getByText('DEV: AUTH DISABLED')).toBeVisible();\n  29 |   await expect(page.locator('body')).not.toContainText('Authentication required');\n    at openStudio (C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts:26:48)\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts:54:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T07:56:29.144Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-desktop\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-desktop\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-desktop\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "26cd46e96e00223ecb05-e567cde020a9c46ec6f6",
+          "file": "acceptance-mogra.spec.ts",
+          "line": 53,
+          "column": 5
+        },
+        {
+          "title": "T-auth: the authenticated workspace loads with the chat box",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 46031,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                        "column": 48,
+                        "line": 26
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  24 | async function openStudio(page) {\n  25 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 26 |   await expect(page.getByTestId('chat-input')).toBeVisible({ timeout: 45000 });\n     |                                                ^\n  27 |   // The dev-only identity banner proves which posture we are testing under.\n  28 |   await expect(page.getByText('DEV: AUTH DISABLED')).toBeVisible();\n  29 |   await expect(page.locator('body')).not.toContainText('Authentication required');\n    at openStudio (C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts:26:48)\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts:54:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:01:06.662Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\acceptance-mogra.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\acceptance-mogra-T-auth-th-0f772-ace-loads-with-the-chat-box-chromium-mobile\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "26cd46e96e00223ecb05-351350dec325ce03657d",
+          "file": "acceptance-mogra.spec.ts",
+          "line": 53,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "asset_dashboard.spec.ts",
+      "file": "asset_dashboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the dashboard lists packages that exist on disk",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 468,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T07:57:15.521Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f48607c91d30a1bada9a-aa994d0afc7a6f7efec4",
+          "file": "asset_dashboard.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "a lane trigger fires the local endpoint and reports back",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 122717,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    238 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    238 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts:68:25",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                      "column": 25,
+                      "line": 68
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m   \u001b[36mconst\u001b[39m lastRun \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'dash-last-run'\u001b[39m)\n \u001b[90m 67 |\u001b[39m   \u001b[36mawait\u001b[39m expect(lastRun)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Cutout'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m   \u001b[36mawait\u001b[39m expect(lastRun)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'done'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m120000\u001b[39m })\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m })\n \u001b[90m 70 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                        "column": 25,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    238 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n\n\n  66 |   const lastRun = page.getByTestId('dash-last-run')\n  67 |   await expect(lastRun).toContainText('Cutout', { timeout: 15000 })\n> 68 |   await expect(lastRun).toContainText('done', { timeout: 120000 })\n     |                         ^\n  69 | })\n  70 |\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts:68:25"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T07:57:16.064Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-desktop\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-desktop\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-desktop\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                    "column": 25,
+                    "line": 68
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f48607c91d30a1bada9a-646f71d89328d45846fb",
+          "file": "asset_dashboard.spec.ts",
+          "line": 57,
+          "column": 5
+        },
+        {
+          "title": "the dashboard lists packages that exist on disk",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1681,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:01:53.228Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f48607c91d30a1bada9a-570f30e6c0121573840d",
+          "file": "asset_dashboard.spec.ts",
+          "line": 15,
+          "column": 5
+        },
+        {
+          "title": "a lane trigger fires the local endpoint and reports back",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 124198,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    235 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    235 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts:68:25",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                      "column": 25,
+                      "line": 68
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m   \u001b[36mconst\u001b[39m lastRun \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'dash-last-run'\u001b[39m)\n \u001b[90m 67 |\u001b[39m   \u001b[36mawait\u001b[39m expect(lastRun)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Cutout'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m   \u001b[36mawait\u001b[39m expect(lastRun)\u001b[33m.\u001b[39mtoContainText(\u001b[32m'done'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m120000\u001b[39m })\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m })\n \u001b[90m 70 |\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                        "column": 25,
+                        "line": 68
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('dash-last-run')\nExpected substring: \u001b[32m\"done\"\u001b[39m\nReceived string:    \u001b[31m\"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('dash-last-run') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('dash-last-run')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: running</div>\u001b[22m\n\u001b[2m    - unexpected value \"Cutout: running\"\u001b[22m\n\u001b[2m    235 +ù locator resolved to <div class=\"text-low\" data-testid=\"dash-last-run\">Cutout: failed GÇö media_generation_disarmed (MEDIAGÇª</div>\u001b[22m\n\u001b[2m        - unexpected value \"Cutout: failed GÇö media_generation_disarmed (MEDIA_GEN_LIVE is not 1)\"\u001b[22m\n\n\n  66 |   const lastRun = page.getByTestId('dash-last-run')\n  67 |   await expect(lastRun).toContainText('Cutout', { timeout: 15000 })\n> 68 |   await expect(lastRun).toContainText('done', { timeout: 120000 })\n     |                         ^\n  69 | })\n  70 |\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts:68:25"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:01:54.984Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_dashboard-a-lane-tri-e829b-l-endpoint-and-reports-back-chromium-mobile\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_dashboard.spec.ts",
+                    "column": 25,
+                    "line": 68
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f48607c91d30a1bada9a-6d3c3563a5a8c3cdb5fa",
+          "file": "asset_dashboard.spec.ts",
+          "line": 57,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "asset_picker.spec.ts",
+      "file": "asset_picker.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the asset picker shows a loading state then real assets",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 46296,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts:12:48",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                      "column": 48,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m   test\u001b[33m.\u001b[39msetTimeout(\u001b[35m120000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 11 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://127.0.0.1:8101/ui/design-studio'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-input'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m45000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m\n \u001b[90m 14 |\u001b[39m   \u001b[36mconst\u001b[39m toggle \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-asset-picker-toggle'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m   \u001b[36mawait\u001b[39m toggle\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                        "column": 48,
+                        "line": 12
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  10 |   test.setTimeout(120000);\n  11 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 12 |   await expect(page.getByTestId('chat-input')).toBeVisible({ timeout: 45000 });\n     |                                                ^\n  13 |\n  14 |   const toggle = page.getByTestId('chat-asset-picker-toggle');\n  15 |   await toggle.click();\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts:12:48"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T07:59:19.092Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-desktop\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-desktop\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-desktop\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                    "column": 48,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1c415cd785d29bffab17-ad5745bf7c40dd259b70",
+          "file": "asset_picker.spec.ts",
+          "line": 9,
+          "column": 5
+        },
+        {
+          "title": "the asset picker shows a loading state then real assets",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 46627,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts:12:48",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                      "column": 48,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m   test\u001b[33m.\u001b[39msetTimeout(\u001b[35m120000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 11 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://127.0.0.1:8101/ui/design-studio'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-input'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m45000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m\n \u001b[90m 14 |\u001b[39m   \u001b[36mconst\u001b[39m toggle \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-asset-picker-toggle'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 15 |\u001b[39m   \u001b[36mawait\u001b[39m toggle\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                        "column": 48,
+                        "line": 12
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('chat-input')\nExpected: visible\nTimeout: 45000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('chat-input') with timeout 45000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  10 |   test.setTimeout(120000);\n  11 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 12 |   await expect(page.getByTestId('chat-input')).toBeVisible({ timeout: 45000 });\n     |                                                ^\n  13 |\n  14 |   const toggle = page.getByTestId('chat-asset-picker-toggle');\n  15 |   await toggle.click();\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts:12:48"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:03:59.576Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\asset_picker-the-asset-pic-8206c-ding-state-then-real-assets-chromium-mobile\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\asset_picker.spec.ts",
+                    "column": 48,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "1c415cd785d29bffab17-86a8aaf31919e4c732b8",
+          "file": "asset_picker.spec.ts",
+          "line": 9,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "celestial10.spec.ts",
+      "file": "celestial10.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ten production compositions render without overlap",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:00:05.915Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bb3dcd318d5d02f4c133-c6bb421d0b0751ca1b35",
+          "file": "celestial10.spec.ts",
+          "line": 9,
+          "column": 5
+        },
+        {
+          "title": "ten production compositions render without overlap",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 46772,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\celestial10.spec.ts",
+                        "column": 60,
+                        "line": 15
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tabs button:nth-child(7)')\u001b[22m\n\u001b[2m    - locator resolved to <button>07 Eclipse</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  13 |   await expect(page.locator('main > .view')).toHaveCount(10)\n  14 |   for (const [i, id] of IDS.entries()) {\n> 15 |     await page.locator(`#tabs button:nth-child(${i + 1})`).click()\n     |                                                            ^\n  16 |     await expect(page.locator('body')).toHaveAttribute('data-view', id)\n  17 |     const active = page.locator('main > .view.on')\n  18 |     await expect(active).toHaveCount(1)\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\celestial10.spec.ts:15:60"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:04:46.698Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\celestial10-ten-production-5696c-ions-render-without-overlap-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\celestial10-ten-production-5696c-ions-render-without-overlap-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\celestial10-ten-production-5696c-ions-render-without-overlap-chromium-mobile\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bb3dcd318d5d02f4c133-a83913301829cd79f92d",
+          "file": "celestial10.spec.ts",
+          "line": 9,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "chat_composer_stability.spec.ts",
+      "file": "chat_composer_stability.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the chat composer holds a stable box across frames",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 46381,
+                  "error": {
+                    "message": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n",
+                    "stack": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts:26:40",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                      "column": 40,
+                      "line": 26
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m\n \u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://127.0.0.1:8101/ui/design-studio'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-input'\u001b[39m)\u001b[33m.\u001b[39mwaitFor({ state\u001b[33m:\u001b[39m \u001b[32m'attached'\u001b[39m\u001b[33m,\u001b[39m timeout\u001b[33m:\u001b[39m \u001b[35m45000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m\n \u001b[90m 29 |\u001b[39m   \u001b[90m// The gutter must be reserved on both shells, otherwise the oscillation\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                        "column": 40,
+                        "line": 26
+                      },
+                      "message": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  24 |\n  25 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 26 |   await page.getByTestId('chat-input').waitFor({ state: 'attached', timeout: 45000 });\n     |                                        ^\n  27 |   await page.waitForTimeout(2000);\n  28 |\n  29 |   // The gutter must be reserved on both shells, otherwise the oscillation\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts:26:40"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:00:10.350Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-desktop\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-desktop\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-desktop\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                    "column": 40,
+                    "line": 26
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cb8eb2780aaca1d8d0d6-235b6642b3c193e7c5dc",
+          "file": "chat_composer_stability.spec.ts",
+          "line": 22,
+          "column": 5
+        },
+        {
+          "title": "the chat composer holds a stable box across frames",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 46605,
+                  "error": {
+                    "message": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n",
+                    "stack": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts:26:40",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                      "column": 40,
+                      "line": 26
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m\n \u001b[90m 25 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://127.0.0.1:8101/ui/design-studio'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'chat-input'\u001b[39m)\u001b[33m.\u001b[39mwaitFor({ state\u001b[33m:\u001b[39m \u001b[32m'attached'\u001b[39m\u001b[33m,\u001b[39m timeout\u001b[33m:\u001b[39m \u001b[35m45000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m\n \u001b[90m 29 |\u001b[39m   \u001b[90m// The gutter must be reserved on both shells, otherwise the oscillation\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                        "column": 40,
+                        "line": 26
+                      },
+                      "message": "TimeoutError: locator.waitFor: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('chat-input')\u001b[22m\n\n\n  24 |\n  25 |   await page.goto('http://127.0.0.1:8101/ui/design-studio');\n> 26 |   await page.getByTestId('chat-input').waitFor({ state: 'attached', timeout: 45000 });\n     |                                        ^\n  27 |   await page.waitForTimeout(2000);\n  28 |\n  29 |   // The gutter must be reserved on both shells, otherwise the oscillation\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts:26:40"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:05:34.382Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chat_composer_stability-th-64914--a-stable-box-across-frames-chromium-mobile\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chat_composer_stability.spec.ts",
+                    "column": 40,
+                    "line": 26
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cb8eb2780aaca1d8d0d6-444d76c10ebdf40a5d8f",
+          "file": "chat_composer_stability.spec.ts",
+          "line": 22,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "chatlab.spec.ts",
+      "file": "chatlab.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "ten complete chat interfaces, each with a composer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2983,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\n  name: \u001b[32m'Observatory'\u001b[39m,\n  text: \u001b[32m'See the\\n'\u001b[39m +\n    \u001b[32m'whole sky.\\n'\u001b[39m +\n    \u001b[32m'Bojo\\n'\u001b[39m +\n    \u001b[32m'observing\\n'\u001b[39m +\n    \u001b[32m'I have the full field in view. Ask for a read, or point at a body.\\n'\u001b[39m +\n    \u001b[32m'Northstar +é-+ now\\n'\u001b[39m +\n    \u001b[32m'Compare the three strongest SKUs.\\n'\u001b[39m +\n    \u001b[32m'You +é-+ now\\n'\u001b[39m +\n    \u001b[32m'Aurora Turmeric leads on margin. Mogr'\u001b[39m,\n  sections: \u001b[33m10\u001b[39m\n}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:00:57.159Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "205b335de05e35b20c2d-bc210655410420f34832",
+          "file": "chatlab.spec.ts",
+          "line": 9,
+          "column": 5
+        },
+        {
+          "title": "ten complete chat interfaces, each with a composer",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 46681,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 45000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chatlab.spec.ts",
+                        "column": 60,
+                        "line": 14
+                      },
+                      "message": "Error: locator.click: Test timeout of 45000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#tabs button:nth-child(8)')\u001b[22m\n\u001b[2m    - locator resolved to <button>08 Halo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\n\n  12 |   await expect(page.locator('#tabs button')).toHaveCount(10)\n  13 |   for (const [i, id] of VIEWS.entries()) {\n> 14 |     await page.locator(`#tabs button:nth-child(${i + 1})`).click()\n     |                                                            ^\n  15 |     await expect(page.locator('body')).toHaveAttribute('data-view', id)\n  16 |     await expect(page.locator('main > .view.on')).toHaveCount(1)\n  17 |     if (i === 2) console.log(await page.locator('main > .view.on').evaluate((e) => ({ name: e.dataset.name, text: e.innerText.slice(0, 200), sections: document.querySelectorAll('main > .view').length })))\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\chatlab.spec.ts:14:60"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "{\n  name: \u001b[32m'Observatory'\u001b[39m,\n  text: \u001b[32m'See the\\n'\u001b[39m +\n    \u001b[32m'whole sky.\\n'\u001b[39m +\n    \u001b[32m'Bojo\\n'\u001b[39m +\n    \u001b[32m'observing\\n'\u001b[39m +\n    \u001b[32m'I have the full field in view. Ask for a read, or point at a body.\\n'\u001b[39m +\n    \u001b[32m'Northstar +é-+ now\\n'\u001b[39m +\n    \u001b[32m'Compare the three strongest SKUs.\\n'\u001b[39m +\n    \u001b[32m'You +é-+ now\\n'\u001b[39m +\n    \u001b[32m'Aurora Turmeric leads on margin. Mogr'\u001b[39m,\n  sections: \u001b[33m10\u001b[39m\n}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:06:21.476Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chatlab-ten-complete-chat-interfaces-each-with-a-composer-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chatlab-ten-complete-chat-interfaces-each-with-a-composer-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\chatlab-ten-complete-chat-interfaces-each-with-a-composer-chromium-mobile\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "205b335de05e35b20c2d-4d3ed4a498b57e9cf157",
+          "file": "chatlab.spec.ts",
+          "line": 9,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "simple-designs.spec.ts",
+      "file": "simple-designs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "design picker switches composition",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5962,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts:38:83",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                      "column": 83,
+                      "line": 38
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/ui/'\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\n \u001b[90m 37 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'simple-design-trigger'\u001b[39m)\u001b[33m.\u001b[39mclick()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Choose a Simple mode design'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'simple-design-terminal'\u001b[39m)\u001b[33m.\u001b[39mclick()\n \u001b[90m 40 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'mb-shell'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-simple-design'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'terminal'\u001b[39m)\n \u001b[90m 41 |\u001b[39m })\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                        "column": 83,
+                        "line": 38
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n\n\n  36 |   await page.goto('/ui/', { waitUntil: 'domcontentloaded' })\n  37 |   await page.getByTestId('simple-design-trigger').click()\n> 38 |   await expect(page.getByRole('dialog', { name: 'Choose a Simple mode design' })).toBeVisible()\n     |                                                                                   ^\n  39 |   await page.getByTestId('simple-design-terminal').click()\n  40 |   await expect(page.getByTestId('mb-shell')).toHaveAttribute('data-simple-design', 'terminal')\n  41 | })\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts:38:83"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:01:00.259Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-desktop\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-desktop\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-desktop\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                    "column": 83,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a6ef2c218d4676e148f6-488efb89c0ec80dccfda",
+          "file": "simple-designs.spec.ts",
+          "line": 34,
+          "column": 5
+        },
+        {
+          "title": "design picker switches composition",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12718,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts:38:83",
+                    "location": {
+                      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                      "column": 83,
+                      "line": 38
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 36 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/ui/'\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\n \u001b[90m 37 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'simple-design-trigger'\u001b[39m)\u001b[33m.\u001b[39mclick()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 38 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'dialog'\u001b[39m\u001b[33m,\u001b[39m { name\u001b[33m:\u001b[39m \u001b[32m'Choose a Simple mode design'\u001b[39m }))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 39 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'simple-design-terminal'\u001b[39m)\u001b[33m.\u001b[39mclick()\n \u001b[90m 40 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'mb-shell'\u001b[39m))\u001b[33m.\u001b[39mtoHaveAttribute(\u001b[32m'data-simple-design'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'terminal'\u001b[39m)\n \u001b[90m 41 |\u001b[39m })\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                        "column": 83,
+                        "line": 38
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Choose a Simple mode design' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Choose a Simple mode design' }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Choose a Simple mode design' })\u001b[22m\n\n\n  36 |   await page.goto('/ui/', { waitUntil: 'domcontentloaded' })\n  37 |   await page.getByTestId('simple-design-trigger').click()\n> 38 |   await expect(page.getByRole('dialog', { name: 'Choose a Simple mode design' })).toBeVisible()\n     |                                                                                   ^\n  39 |   await page.getByTestId('simple-design-terminal').click()\n  40 |   await expect(page.getByTestId('mb-shell')).toHaveAttribute('data-simple-design', 'terminal')\n  41 | })\n    at C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts:38:83"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T08:07:08.990Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-mobile\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-mobile\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\test-results\\simple-designs-design-picker-switches-composition-chromium-mobile\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\tests\\e2e\\simple-designs.spec.ts",
+                    "column": 83,
+                    "line": 38
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a6ef2c218d4676e148f6-8b337db16d94cf46a1d8",
+          "file": "simple-designs.spec.ts",
+          "line": 34,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-03T07:56:28.765Z",
+    "duration": 653783.768,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 12,
+    "flaky": 0
+  }
+}

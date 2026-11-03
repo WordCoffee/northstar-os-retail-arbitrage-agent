@@ -99,3 +99,15 @@ def test_product_designer_imports_what_it_renders():
 def test_socialpulse_imports_what_it_renders():
     text = _read("pages/internal/SocialPulse.jsx")
     assert "AssetThumb" in names_from(text)
+
+
+def test_destructured_component_aliases_are_bindings_not_crashes():
+    """`{ as: Tag = 'section' }` binds Tag; the guard must not call it undefined.
+
+    The first version of tools/check-jsx-imports.py reported kit/Glass.jsx as a
+    crash because <Tag> had no import - it is a destructured prop alias. Pin both
+    halves: the alias counts as a binding, and a genuinely unbound component is
+    still a problem.
+    """
+    assert "Tag" in names_from(_read("kit/Glass.jsx"))
+    assert "Ghost" not in names_from("export default function A(){ return <Ghost /> }")

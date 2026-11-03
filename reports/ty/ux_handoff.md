@@ -4,7 +4,8 @@
 U10 is complete (`ns-ux-U10`). Last tag `ns-ux-U10`. Dev servers are up from `scripts/dev-start.ps1`
 after `tailscale serve status` returned **No serve config**.
 
-**Next action:** U11 (Golden Goose scene + workspace).
+**Next action:** none - the queue is complete. U0-U15 are done; the last tag is `ns-ux-U15`.
+What is still red is named at the bottom of this file, and in `reports/ty/e2e_adjudication/README.md`.
 
 ## U8 â€” done
 
@@ -115,3 +116,42 @@ Evidence: unit 195/195 (7 new), `research-desk.spec.ts` 2/2 on both targets, 8 s
 - The canvas zone is flat `--wb-solid` â€” never the scene, never blurred.
 - Dev servers: `scripts/dev-start.ps1` only. `tailscale serve status` must say `No serve config`
   before launching; otherwise write the exact output to `needs_you.md` and stop.
+
+## U11-U15 (2026-11-03, resumed sessions)
+
+U11 comet + goose desk, U12 all 24 services reachable, U13 nova + per-scene frame numbers, U14
+verification, U15 suite-green work. Detail lives in the queue, `reports/ty/u14_verification_20261103.md`,
+`reports/ty/e2e_adjudication/README.md` and `reports/ty/u15_suite_green_20261103.md`.
+
+**How the U14 gap was closed.** The 13 e2e failures were adjudicated in a `git worktree` pinned to
+`a2d12f5e` (`ns-ux-baseline`) and served on its own port (8102) next to this tree (8101), same grep,
+same `--timeout=45000`, same two projects. Result: **13/13 pre-existing** (baseline 2 passed / 14 not
+passing, HEAD 4 passed / 12). Two now pass; one failed only because U1 renamed a dialog's accessible
+name and the spec was corrected. The worktree is disposable and has been removed.
+
+**Hazards found in these sessions (do not rediscover):**
+
+- **A second Vite can be run for a baseline comparison, but only on its own port.** The worktree's
+  `package.json` hardcodes `vite --port 8101 --strictPort`, so editing `vite.config.js` alone is not
+  enough; the `dev` script must be changed too. Port 8101 stays with the live tree, always.
+- **`npm run test:ui` counts tests per file.** Do not quote a total from memory: 201 now, and the U14
+  verdict's 202 was one more (most likely the contrast script). Re-count before writing a number down.
+- **The full backend suite catches what owned-unit runs cannot.** It found `<Tag>` in `kit/Glass.jsx`
+  reported as an undefined component: the tag is a destructured `as` prop alias, so the *checker* was
+  wrong. `tools/check-jsx-imports.py` now resolves destructured bindings and a two-sided test pins it.
+- **`foundation/tests/test_frontend_gate.py` cannot be run alone.** It imports `Northstar_backend`
+  and needs the repo root as rootdir: run it from the repo root (`python -m pytest
+  Northstar_backend/foundation/tests/...`) or as part of the full suite, never from `Northstar_backend`.
+- **`test_v3_shell_invariants` asserts a hard-coded route count (53).** It was already 57 at the U0
+  baseline and is 58 now. Pre-existing, brittle by construction; do not "fix" it by editing the number.
+- **A test that calls the local model will trip `test_network_guard`.** Any offline route smoke must
+  stub the model call; `test_autothink_routes.py` does.
+- **The working tree carries someone else's uncommitted work.** `test_session_cookie_contract.py`'s
+  new `DevShimSessionTests` fail with `KeyError: 'app'` (their `Request` scope has no `"app"`), and
+  `decision_layer.py`, `autothink_transport.py`, `usage_meter.py`, `cost_model.py` and `Icon.jsx` are
+  modified. None of it is this run's; leave it alone and do not commit it by sweeping `git add -A`.
+- **`asset_dashboard`'s lane trigger fails on a policy gate, not a bug.** At HEAD the lane runs and
+  says `media_generation_disarmed (MEDIA_GEN_LIVE is not 1)`. Arming it is an operator spend decision.
+- **Screenshots of the shell include the Bojo dock**, which shows local session titles. Same policy as
+  the u6/u7/u8 shots already committed; nothing leaves the machine.
+
