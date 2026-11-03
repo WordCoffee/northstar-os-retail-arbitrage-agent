@@ -50,12 +50,16 @@ test('the factory gives the studio its own renderer and falls back for unbuilt s
   assert.equal(studio.paletteMax, SCENE_MAX_COLOR.studio)
   assert.equal(typeof studio.draw, 'function')
 
-  // U9 built the PPC scene; research is still a fallback.
+  // U9 built PPC and U10 built Research; goose is still a fallback.
   const ppc = createScene('ppc', { width: 800, height: 600 })
   assert.equal(ppc.paletteMax, SCENE_MAX_COLOR.ppc)
   assert.equal(ppc.stars, undefined, 'the PPC scene is its own renderer now')
 
-  const fallback = createScene('research', { width: 800, height: 600 })
+  const research = createScene('research', { width: 800, height: 600 })
+  assert.equal(research.paletteMax, SCENE_MAX_COLOR.research)
+  assert.equal(research.stars, undefined, 'the research scene is its own renderer now')
+
+  const fallback = createScene('goose', { width: 800, height: 600 })
   assert.ok(Array.isArray(fallback.stars), 'unbuilt scenes use the starfield')
 })
 

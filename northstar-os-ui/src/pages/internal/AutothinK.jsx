@@ -5,9 +5,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
 import foundationApi from '../../foundation/api.js'
+import ResearchDesk from './research/ResearchDesk.jsx'
 
 const TABS = [
   { id: 'runs', label: 'Runs' },
+  { id: 'desk', label: 'Research Desk' },
   { id: 'composer', label: 'Composer' },
   { id: 'output', label: 'Output Detail' },
 ]
@@ -222,8 +224,15 @@ export default function AutothinK() {
   const navigate = useNavigate()
   const location = useLocation()
   const [lastResult, setLastResult] = useState(null)
-  const requested = new URLSearchParams(location.search).get('view') || ''
+  const embedded = !location.pathname.startsWith('/autothink')
+  const [embeddedView, setEmbeddedView] = useState('runs')
+  const requested = embedded ? embeddedView : (new URLSearchParams(location.search).get('view') || '')
   const view = TABS.some(t => t.id === requested) ? requested : 'runs'
+  // Inside a workbench tab the room does not own the URL (the U3 lesson).
+  const selectView = (id) => {
+    if (embedded) setEmbeddedView(id)
+    else navigate(`/autothink?view=${id}`)
+  }
 
   return (
     <PageLayout
@@ -239,7 +248,20 @@ export default function AutothinK() {
 
       <AutothinKStatus />
 
-      <RoomTabs tabs={TABS} base="/autothink" />
+      {embedded
+        ? (
+          <nav className="room-tabs" aria-label="Service navigation">
+            {TABS.map((t) => (
+              <button key={t.id} className={`room-tab ${t.id === view ? 'active' : ''}`}
+                      data-testid={`at-tab-${t.id}`} onClick={() => selectView(t.id)}>
+                <span className="room-tab-label">{t.label}</span>
+              </button>
+            ))}
+          </nav>
+        )
+        : <RoomTabs tabs={TABS} base="/autothink" />}
+
+      {view === 'desk' && <ResearchDesk />}
 
       {view === 'runs' && (
         <div className="subview">

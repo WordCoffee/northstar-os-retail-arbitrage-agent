@@ -62,12 +62,21 @@ test('a report uploads, shows the change log, and downloads a validated bulk fil
   // The undecidable term is in neither table.
   await expect(page.getByTestId('ppc-analysis')).not.toContainText('lion mane capsules')
 
-  // Download the bulk file and check the bytes are real.
+  // Download the bulk file and check the bytes are real. The API files
+  // anonymous callers in a 30/min bucket, so a batch run can legitimately hit
+  // it: the surface says so, and a second attempt after the window is what a
+  // person would do. The retry is bounded to one.
+  const status = page.getByTestId('ppc-bulk-status')
   const [download] = await Promise.all([
     page.waitForEvent('download', { timeout: 30000 }).catch(() => null),
     page.getByTestId('ppc-build-bulk').click(),
   ])
-  await expect(page.getByTestId('ppc-bulk-status')).toContainText('2 row(s)')
+  await expect(status).toBeVisible({ timeout: 30000 })
+  if (/rate-limit/i.test(await status.innerText())) {
+    await page.waitForTimeout(4000)
+    await page.getByTestId('ppc-build-bulk').click()
+  }
+  await expect(status).toContainText('2 row(s)', { timeout: 30000 })
 
   if (download) {
     expect(download.suggestedFilename()).toMatch(/\.xlsx$/)

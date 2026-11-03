@@ -89,7 +89,17 @@
        "build": "1.44s"
      },
      "notes": "Scene: src/scene/asteroidField.js registered for ppc. Workspace: NEW Northstar_backend/adpilot_api.py (/api/adpilot/analyze, /bulk, /status) over the EXISTING specialists.ppc_agent + ppc_bulk (no reimplementation, no Amazon API), NEW src/lib/ppcCsv.js (browser parser, refuses a table it cannot read exactly), NEW ppc/PpcHarvest.jsx wired as an AdPilot subview. AdPilot now keeps its subview in component state when embedded in a workbench tab (the U3 lesson) so a tab switch no longer navigates the shell to /adpilot. The lane retries once behind Retry-After because the API files anonymous callers in a 30/min bucket."},
-    {"id": "U10", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U10", "status": "done", "tag": "ns-ux-U10", "tokens": 190000,
+     "evidence": {
+       "unit": "195/195 (7 new blackHole; the contrast test now covers the research palette)",
+       "contrast": "#f0dcb4 clears AA against 0.72 glass (existing scene-contrast test iterates SCENE_MAX_COLOR)",
+       "e2e": "research-desk.spec.ts 2 passed on BOTH targets: the AutothinK tab swaps the single canvas to data-scene=research, the desk states its limits, depth modes change the limit, and a query returns sources with the API's own caveats or the honest empty state",
+       "live": "20 records returned for 'mushroom extract' at standard depth, 2 caveats shown",
+       "batch": "8 specs x 2 targets -> 48 passed, 2 skipped, 0 failed (1.9m)",
+       "screenshot": "reports/ty/shots/u10-research-desktop.png",
+       "build": "1.45s"
+     },
+     "notes": "Scene: src/scene/blackHole.js (event horizon, photon ring, accretion disk drawn far/near, two lensed arcs, stars pulled slightly toward the centre) registered for research. Workspace: NEW research/ResearchDesk.jsx over the EXISTING /api/corpus/search (depth modes quick/standard/deep change the record limit and say so; the API's caveats are shown verbatim; empty index and unreachable API are stated, never filled). AutothinK gains a 'Research Desk' subview and keeps it in component state when embedded in a workbench tab; AutothinK is now wired into the workbench (it was previously NotWired)."},
     {"id": "U11", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U12", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U13", "status": "todo", "tag": null, "tokens": 0},

@@ -26,6 +26,7 @@ import SocialPulse from '../pages/internal/SocialPulse.jsx'
 import ProfitabilityDashboard from '../pages/internal/ProfitabilityDashboard.jsx'
 import KeywordTracker from '../pages/internal/KeywordTracker.jsx'
 import CompetitorMonitor from '../pages/internal/CompetitorMonitor.jsx'
+import AutothinK from '../pages/internal/AutothinK.jsx'
 
 // Service id -> the page component that already implements it. A service without
 // an entry renders an honest placeholder that names what is missing; it never
@@ -41,6 +42,7 @@ const WORKSPACES = {
   profitability: ProfitabilityDashboard,
   'keyword-tracker': KeywordTracker,
   'competitor-monitor': CompetitorMonitor,
+  autothink: AutothinK,
 }
 
 function NotWired({ service }) {
