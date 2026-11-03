@@ -1,0 +1,41 @@
+{
+  "product_picture_20261103": {
+    "status": "DONE - item 0 produced by the product API and gated; fragment pending operator merge",
+    "instruction": "owner, 2026-11-03: 'a 6 oz stand-up pouch, front and back, fully designed, with a nutrition label' and item 0 in reports/ty/creative_scan_20261103.md",
+    "commits": ["4cf60335 (composite + legibility + plate refusal)", "91bee21a (product picture API + artwork + CLI)", "03df3301 (OZ/0Z OCR normalisation)"],
+    "entry_point": "python tools/render_product_picture.py --out renders/mogra_lions_mane --seed 20261103",
+    "api": "POST /api/design-studio/product-picture (+ GET /designs); renders on local FLUX 3, measures the face, composites the designed panel, OCR-gates the result",
+    "artifacts": {
+      "renders/mogra_lions_mane/product_front.png": {"size": [1024, 1536], "bytes": 1663119, "sha256_head": "ea54f3c7341925a1", "seed": 20261103, "gate": "ok", "ocr": ["MOGRA", "ORGANICS", "LION'S MANE", "NET WT. 6 oz (170 g)"], "median_sharpness": 5240.93},
+      "renders/mogra_lions_mane/product_back.png": {"size": [1024, 1536], "bytes": 1654848, "sha256_head": "6dd67974e5c874e4", "seed": 20261104, "gate": "ok", "ocr": ["MOGRA ORGANICS", "NET WT. 6 0Z (170 G)", "Supplement Facts"], "median_sharpness": 20297.94},
+      "renders/mogra_lions_mane/product_picture_manifest.json": "per-face quad, residual, seed, brief, text-safe attempts, gate report"
+    },
+    "probes": {
+      "t9_feather_sigma": "PASS (non-finite residual refused)",
+      "t10_pouch_mockup": "OK (plate-size output, corners painted, nothing outside the quad)",
+      "t11_mockup_legibility": "OK (sharp accepted, blurred refused with a reason)",
+      "t12_plate_pair": "OK (flat plate -> plate_face_not_found)"
+    },
+    "defects_found_and_fixed": {
+      "label_darkened_to_169": "the pouch_label realism defaults (fold_shadow 0.35 at threshold 0.05) treated kraft shading as creases and took cream 247 -> 169/255 on the first live plate. Tuned to 0.12 at 0.10 with matte specular.",
+      "specular_ghost": "surface maps are now measured before the label target is flattened; flattening first removed creases, flattening last let a photo highlight sit on the label.",
+      "flux_starter_path": "scripts/start-flux3.ps1 passed an unquoted repo path through Start-Process, so -File received 'C:\\Users\\T2Hol\\Desktop\\Northstar' and ComfyUI never started.",
+      "ocr_oz": "RapidOCR reads printed 'oz' as '0Z'; the gate folds O->0 before comparing, otherwise a readable picture is refused.",
+      "test_pinning_the_defect": "test_plate_geometry.py asserted feather_sigma(nan) == 1.0; corrected to the t9 contract (ValueError)."
+    },
+    "tests": {
+      "test_mockup_product_picture.py": "13 passed",
+      "test_product_picture.py": "8 passed (synthetic pouch gated end-to-end, no-package refusal, too-small refusal, engine-down refusal, invented-lettering refusal, out-dir confinement, both panels readable)",
+      "combined_mockup_pouch_creative": "89 passed"
+    },
+    "gaps": [
+      "front and back are two generations, so they are not the same physical pack; a true pair needs one plate rendered twice",
+      "cream label on kraft, not a full-bleed printed wrap",
+      "nutrition values, UPC and best-by are stated placeholders marked DRAFT",
+      "A+ / listing / social / video still need their own placement contracts and checks"
+    ],
+    "gates_held": "No Amazon request, no spend, no paid credits, no credential read. FLUX 3 is local ComfyUI; the API used the documented dev shim only on loopback.",
+    "quality_claim": false,
+    "report": "reports/ty/product_picture_20261103.md"
+  }
+}
