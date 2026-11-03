@@ -127,6 +127,8 @@ def plan(platform: str, seconds: Optional[float] = None, *,
         "aspect": preset["aspect"],
         "width": canvas_w, "height": canvas_h, "fps": use_fps,
         "seconds": round(want, 2),
+        #: exact deliverable length after the last clip is trimmed
+        "target_frames": int(round(want * use_fps)),
         "total_frames": per_clip * clips,
         "clips": clips,
         "frames_per_clip": per_clip,

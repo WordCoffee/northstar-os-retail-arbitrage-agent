@@ -18,7 +18,10 @@ the defaults here are deliberately small and the caller decides what to spend.
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, List, Optional
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
+
+import video_formats
 
 WAN_UNET = "Wan2.2-TI2V-5B-Q5_K_M.gguf"
 WAN_CLIP = "umt5-xxl-encoder-Q5_K_M.gguf"
@@ -37,6 +40,21 @@ def frame_count(length: int) -> int:
     """Round a requested frame count to the 4n+1 the Wan latent accepts."""
     n = max(9, int(length))
     return n - ((n - 1) % FRAME_STEP)
+
+
+def sampler_canvas(width: int, height: int, max_edge: int = 832) -> tuple:
+    """Largest 16-divisible canvas the sampler can render at this aspect.
+
+    A platform contract is 1080x1920, but Wan 2.2 TI2V on this box renders at a
+    832 px longest edge. Asking the sampler for the deliverable canvas either
+    fails or spends minutes on a frame the model cannot fill; render at the
+    sampler canvas and let the stitch pass scale to the contract (and report
+    both numbers).
+    """
+    scale = min(1.0, float(max_edge) / max(1, int(width), int(height)))
+    w = max(256, int(round(int(width) * scale / 16.0)) * 16)
+    h = max(256, int(round(int(height) * scale / 16.0)) * 16)
+    return w, h
 
 
 def build_graph(image_name: str, *, prompt: str = DEFAULT_PROMPT,
@@ -127,6 +145,63 @@ def generate(png: bytes, *, prompt: str = DEFAULT_PROMPT,
             "video_bytes": len(video or b"")}
 
 
+def generate_stitched(source_png: bytes, *, out_path, platform: str,
+                      seconds: Optional[float] = None, prompt: str = DEFAULT_PROMPT,
+                      steps: int = 20, cfg: float = 5.0, seed: int = 1,
+                      text_requested: bool = False,
+                      expected_terms: Optional[List[str]] = None,
+                      render: Optional[Callable[..., Dict[str, Any]]] = None
+                      ) -> Dict[str, Any]:
+    """Render the planned clips, stitch them, and gate a decoded frame.
+
+    The clips are chained: each render starts from the previous clip's last
+    decoded frame, so the motion continues instead of restarting. The stitch
+    pass owns the canvas/codec/duration checks; the quality gate owns the
+    picture. A failed gate deletes the MP4 and returns the verdict - a file that
+    exists but failed is worse than no file.
+    """
+    import video_stitch as vs
+
+    plan = video_formats.plan(platform, seconds)
+    render_w, render_h = sampler_canvas(plan["width"], plan["height"])
+    state: Dict[str, Any] = {"source": source_png, "frames": []}
+
+    def _render(index: int, frames: int) -> bytes:
+        out = (render or generate)(
+            state["source"], prompt=prompt, width=render_w, height=render_h,
+            length=frames, steps=steps, cfg=cfg, seed=seed + index,
+            fps=plan["fps"])
+        picked = out.get("frames") or []
+        if picked:
+            state["source"] = picked[-1]
+            state["frames"].append(picked[len(picked) // 2])
+        return out.get("video") or b""
+
+    stitched = vs.render_and_stitch(_render, out_path, platform=platform,
+                                    seconds=seconds)
+    result: Dict[str, Any] = {
+        **stitched,
+        "format": plan,
+        "render_canvas": [render_w, render_h],
+        "deliverable_canvas": [plan["width"], plan["height"]],
+        "quality": None,
+    }
+    if state["frames"]:
+        import quality_gate as qg
+        scored = qg.score(state["frames"][-1], brief=prompt, requested_form="",
+                          text_requested=text_requested,
+                          expected_terms=expected_terms or [])
+        verdict = qg.verdict(scored)
+        result["quality"] = {"verdict": verdict,
+                             "evidence": qg.manifest_block(scored, verdict)}
+        if not verdict.get("ok"):
+            Path(out_path).unlink(missing_ok=True)
+            result["ok"] = False
+            result["reason"] = ("video_quality_refused: "
+                                + str(verdict.get("reasons") or verdict)[:300])
+    return result
+
+
 def package_render(result: Dict[str, Any], *, brief: str, text_requested: bool,
                    expected_terms: Optional[List[str]] = None,
                    run_id: Optional[str] = None, out_root: Optional[Any] = None) -> Dict[str, Any]:
@@ -187,4 +262,5 @@ def package_render(result: Dict[str, Any], *, brief: str, text_requested: bool,
 
 
 __all__ = ["WAN_UNET", "WAN_CLIP", "WAN_VAE", "DEFAULT_FRAMES", "DEFAULT_FPS",
-           "frame_count", "build_graph", "generate", "package_render"]
+           "frame_count", "sampler_canvas", "build_graph", "generate",
+           "generate_stitched", "package_render"]

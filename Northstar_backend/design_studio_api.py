@@ -2139,8 +2139,8 @@ class ShortsIn(BaseModel):
     fps: int = Field(16, ge=8, le=30)
     text_requested: bool = False
     #: Optional platform contract. When set, the duration/canvas/fps come from
-    #: `video_formats.plan()` instead of the loose width/height/length fields, and a
-    #: duration that needs stitching is refused rather than silently truncated.
+    #: `video_formats.plan()`; the lane renders the planned clips, stitches them
+    #: and returns an ffprobe-checked MP4 at the platform canvas.
     platform: str = Field("", max_length=40)
     seconds: Optional[float] = Field(None, ge=1, le=600)
 
@@ -2164,15 +2164,8 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
         except ValueError as exc:
             raise HTTPException(status_code=422, detail={
                 "code": "video_format_invalid", "message": str(exc)[:300]})
-        if plan["clips"] > 1:
-            raise HTTPException(status_code=422, detail={
-                "code": "video_needs_stitch",
-                "platform": plan["platform"], "seconds": plan["seconds"],
-                "clips": plan["clips"], "frames_per_clip": plan["frames_per_clip"],
-                "message": ("this route renders ONE sampler call; "
-                            f"{plan['seconds']:g}s needs {plan['clips']} clips "
-                            f"of {plan['frames_per_clip']} frames to be stitched, "
-                            "which is not built yet")})
+        # A multi-clip window is not refused any more: the stitch branch below
+        # renders the planned clips and checks the MP4 against the contract.
         width, height, length, fps = (plan["width"], plan["height"],
                                       plan["frames_per_clip"], plan["fps"])
 
@@ -2192,6 +2185,32 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
 
     prompt = body.prompt or _sh.DEFAULT_PROMPT
     expected = _tf.extract_expected_terms(prompt) if body.text_requested else []
+
+    if plan:
+        # One sampler call per planned clip (one for a short window), chained on
+        # the last decoded frame, then an ffprobe-checked MP4 at the platform's
+        # canvas. The file is written only after the picture gate passes.
+        out_path = (Path(__file__).resolve().parent / "data" / "studio_generated"
+                    / f"short_stitched_{uuid.uuid4().hex[:10]}.mp4")
+        try:
+            stitched = _sh.generate_stitched(
+                path.read_bytes(), out_path=out_path, platform=body.platform,
+                seconds=body.seconds, prompt=prompt, steps=body.steps,
+                cfg=body.cfg, seed=body.seed, text_requested=body.text_requested,
+                expected_terms=expected)
+        except (ValueError, RuntimeError) as exc:
+            raise HTTPException(status_code=502, detail={
+                "code": "shorts_stitch_failed", "message": str(exc)[:400]})
+        if not stitched.get("ok"):
+            raise HTTPException(status_code=502, detail={
+                "code": "shorts_quality_refused",
+                "message": stitched.get("reason") or "the stitched video failed the gate",
+                "quality": stitched.get("quality"),
+                "format": plan})
+        return {"ok": True, "file": str(out_path), "format": plan,
+                "stitched": stitched, "quality": stitched.get("quality"),
+                "checks": stitched.get("checks"), "compliance": plan["compliance"]}
+
     try:
         result = _sh.generate(path.read_bytes(), prompt=prompt, width=width,
                               height=height, length=length, steps=body.steps,
