@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fastapi.testclient import TestClient  # noqa: E402
 
 import auth  # noqa: E402
-from main import app  # noqa: E402
+from main import app, _autothink_server  # noqa: E402
 
 c = TestClient(app)
 
@@ -65,18 +65,30 @@ def test_autothink_run_rejects_empty_query():
     assert r.status_code == 422
 
 
+# The no-session tests assert the HOSTED posture. In a local/unset environment
+# `foundation.authn.environment()` reports "development" and main.py opts into the
+# dev auto-session, so require_session deliberately answers with the demo identity
+# instead of 401 (the DEV-ONLY LOCALHOST EXCEPTION). Pinning ENVIRONMENT=production
+# for the duration of the call is the same posture test_autothink_auth_boundary.py
+# uses, and it is what proves the boundary rather than the dev convenience.
+_HOSTED = {"ENVIRONMENT": "production"}
+
+
 def test_autothink_models_refuses_without_a_session():
-    r = c.get("/api/autothink/models")
+    with patch.dict(os.environ, _HOSTED):
+        r = c.get("/api/autothink/models")
     assert r.status_code == 401, r.text
 
 
 def test_autothink_history_refuses_without_a_session():
-    r = c.get("/api/autothink/history?limit=5")
+    with patch.dict(os.environ, _HOSTED):
+        r = c.get("/api/autothink/history?limit=5")
     assert r.status_code == 401, r.text
 
 
 def test_autothink_run_refuses_without_a_session():
-    r = c.post("/api/autothink/run", json={"query": "hello", "provider": "local"})
+    with patch.dict(os.environ, _HOSTED):
+        r = c.post("/api/autothink/run", json={"query": "hello", "provider": "local"})
     assert r.status_code == 401, r.text
 
 
@@ -118,7 +130,18 @@ def test_autothink_job_missing_run_non_5xx():
 
 
 def test_autothink_run_non_5xx_on_empty_store():
-    with _as_tenant(tenant="tenant-empty4"):
+    """An empty store must not turn a run into a 500.
+
+    The model call is stubbed: this file is the offline route smoke (see the
+    module docstring), and a real local call is (a) a network attempt the suite's
+    guard refuses and (b) a slow, environment-dependent dependency for a route
+    assertion. Everything else - routing, context build, run registry, metering -
+    runs for real against the empty tenant store.
+    """
+    srv = _autothink_server()
+    stub = {"ok": True, "provider": "local", "model": "stub-model", "content": "stub"}
+    with _as_tenant(tenant="tenant-empty4"), \
+            patch.object(srv.adapter, "generate", return_value=stub):
         r = c.post("/api/autothink/run", json={"query": "hello", "provider": "local"},
                    headers={"Authorization": "Bearer " + _token("tenant-empty4")})
     assert r.status_code < 500, r.text

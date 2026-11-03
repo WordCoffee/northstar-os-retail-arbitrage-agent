@@ -69,6 +69,23 @@ SYSTEM_PROMPT = (
 )
 
 
+def build_system_prompt_with_context(context: Optional[Dict]) -> str:
+    """Extend the base system prompt with optional Northstar OS context
+    (e.g. inventory of available data sources). Kept pure and deterministic.
+
+    Restored 2026-11-03: 7ace8f0b rewrote this module for the bojo cutover and
+    dropped this helper while every caller in server.py kept importing it, so
+    the whole AutothinK app failed to import. The body is the pre-7ace8f0b
+    implementation, unchanged.
+    """
+    prompt = SYSTEM_PROMPT
+    if context:
+        data_sources = context.get("data_sources")
+        if data_sources:
+            prompt += "\n\nAvailable local data sources:\n- " + "\n- ".join(str(d) for d in data_sources)
+    return prompt
+
+
 def _is_windows() -> bool:
     """True when the process runs on a Windows NT family platform."""
     return sys.platform.startswith("win")
@@ -285,6 +302,19 @@ class UnifiedLLMAdapter:
     def cloud_live_armed() -> bool:
         """Cloud EXECUTION requires the live flag; presence alone never fires."""
         return str(os.environ.get("CLOUD_MODEL_LIVE", "")).strip() == "1"
+
+    def local_available(self) -> bool:
+        """True when a local engine answers. Delegates to the module function.
+
+        Restored 2026-11-03: 7ace8f0b made the probe module-level but kept
+        server.py calling the adapter, so /api/autothink/models raised
+        AttributeError and answered with an error body instead of models.
+        """
+        return local_available()
+
+    def list_local_models(self) -> List[str]:
+        """Installed local model names. Delegates to the module function."""
+        return list_local_models()
 
     # ------------------------------------------------------------------
     # Health check
@@ -591,6 +621,24 @@ class UnifiedLLMAdapter:
         # ... cloud execution path omitted for brevity; unchanged
         return {"ok": False, "provider": "cloud", "model": model,
                  "content": CLOUD_FALLBACK_MARK + " Cloud execution not implemented in this build."}
+
+    def _local_fallback(self, query: str, model: str, reason: str) -> Dict:
+        """Honest local fallback for an empty model response.
+
+        Restored 2026-11-03: 7ace8f0b dropped this method while _generate_local
+        kept calling it, so an empty response raised AttributeError instead of
+        returning the fallback the caller expects.
+        """
+        return {
+            "ok": False,
+            "provider": "local",
+            "model": model,
+            "content": (
+                f"[LOCAL FALLBACK] Ollama is unavailable ({reason}). "
+                "The AutothinK brain is still online — start it with: ollama serve"
+            ),
+            "reason": reason,
+        }
 
 
 # ------------------------------------------------------------------

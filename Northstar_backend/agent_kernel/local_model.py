@@ -75,6 +75,7 @@ class LlamaCppModel:
         disable_thinking: bool = True,
         retries: int = 1,
         schema: Optional[Dict[str, Any]] = None,
+        num_ctx: Optional[int] = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.model = model
@@ -83,9 +84,12 @@ class LlamaCppModel:
         self.temperature = float(temperature)
         self.disable_thinking = bool(disable_thinking)
         self.retries = max(0, int(retries))
-        # Per-request context: a small model on a small box does not need the
-        # model's 32k default for a one-file task, and a smaller KV cache leaves
-        # more host RAM free. This is a request option, not an environment change.
+        # Context size is a llama-server LAUNCH flag (-c), not a request option,
+        # so it is recorded here for callers and probes but deliberately kept off
+        # the wire: the OpenAI-compatible body has no field llama.cpp honours for
+        # it, and sending one would pretend to change a server-side setting.
+        # (This parameter exists because 3669f651 copied the OllamaChatModel line
+        # here without the argument, which raised NameError on construction.)
         self.num_ctx = int(num_ctx) if num_ctx else None
         self.schema = schema
 
