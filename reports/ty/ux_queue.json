@@ -100,7 +100,14 @@
        "build": "1.45s"
      },
      "notes": "Scene: src/scene/blackHole.js (event horizon, photon ring, accretion disk drawn far/near, two lensed arcs, stars pulled slightly toward the centre) registered for research. Workspace: NEW research/ResearchDesk.jsx over the EXISTING /api/corpus/search (depth modes quick/standard/deep change the record limit and say so; the API's caveats are shown verbatim; empty index and unreachable API are stated, never filled). AutothinK gains a 'Research Desk' subview and keeps it in component state when embedded in a workbench tab; AutothinK is now wired into the workbench (it was previously NotWired)."},
-    {"id": "U11", "status": "todo", "tag": null, "tokens": 0},
+    {"id": "U11", "status": "done", "tag": "ns-ux-U11", "tokens": 150000,
+     "evidence": {
+       "unit": "201/201 (7 new comet; the contrast test now covers every scene palette)",
+       "contrast": "#dff0ff clears AA against 0.72 glass (scene-contrast test iterates SCENE_MAX_COLOR)",
+       "e2e": "goose-desk.spec.ts 2 passed on BOTH targets: the golden-goose tab swaps the single canvas to data-scene=goose, the evaluate card and persisted queue render, and the queue states its basis (no fabricated rows)",
+       "build": "1.55s"
+     },
+     "notes": "Scene: src/scene/comet.js (nucleus + glow, a 120-particle tapering tail, stars, wrap-around pass) registered for goose; every registered scene now has its own renderer, so sceneContrast asserts the fallback with an id nothing claims. Workspace: the existing GoldenGooseDesk is unchanged and reused; the spec proves it renders and never fabricates a queue."},
     {"id": "U12", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U13", "status": "todo", "tag": null, "tokens": 0},
     {"id": "U14", "status": "todo", "tag": null, "tokens": 0},

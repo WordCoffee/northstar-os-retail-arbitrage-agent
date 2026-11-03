@@ -74,3 +74,5 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 · U10 · An empty corpus result says "not evidence that nothing exists" · an empty index is a fact about the index, not about the world.
 2026-11-03 · U10 · AutothinK is now wired into the workbench (it was NotWired) and keeps its subview in component state when embedded · the research workspace has to be reachable from the shell, and RoomTabs would have navigated the whole shell to /autothink.
 2026-11-03 · U10 · The PPC e2e retries a rate-limited bulk build once · the limiter is real and a long batch trips it; the surface already tells the operator to wait, so the test does what a person would rather than hiding the condition.
+2026-11-03 � U11 � The comet's tail is a tapering ribbon of particles rather than a polygon � a hard wedge edge would read as a shape behind the product list; particles fade out so text over the tail stays legible.
+2026-11-03 � U11 � The scene-contrast test now asserts the fallback with an id nothing claims � every registered scene has its own renderer, so 'unbuilt' needed a case that stays true.

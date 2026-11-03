@@ -8,6 +8,7 @@ import { createStarfield } from './starfield.js'
 import { createGasGiant, GAS_GIANT_MAX_COLOR } from './gasGiant.js'
 import { createAsteroidField, ASTEROID_MAX_COLOR } from './asteroidField.js'
 import { createBlackHole, BLACK_HOLE_MAX_COLOR } from './blackHole.js'
+import { createComet, COMET_MAX_COLOR } from './comet.js'
 
 /** The brightest colour each scene may paint. Read by the contrast test. */
 export const SCENE_MAX_COLOR = {
@@ -15,8 +16,7 @@ export const SCENE_MAX_COLOR = {
   studio: GAS_GIANT_MAX_COLOR,
   ppc: ASTEROID_MAX_COLOR,
   research: BLACK_HOLE_MAX_COLOR,
-  // U11 replaces this fallback with its own palette.
-  goose: '#e8eef7',
+  goose: COMET_MAX_COLOR,
 }
 
 const BUILDERS = {
@@ -24,6 +24,7 @@ const BUILDERS = {
   studio: createGasGiant,
   ppc: createAsteroidField,
   research: createBlackHole,
+  goose: createComet,
 }
 
 export function createScene(sceneId, options = {}) {
