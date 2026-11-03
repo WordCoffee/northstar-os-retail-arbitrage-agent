@@ -48,6 +48,27 @@ def _tiles(count: int = 3) -> List[Image.Image]:
     return out
 
 
+def _derived_tiles(plate: Image.Image, count: int = 3) -> List[Image.Image]:
+    """Square crops of the REAL plate, not placeholder art.
+
+    The tile module needs images; inventing gold circles would put a placeholder
+    on a page that claims to be a deliverable. Crop the supplied plate at
+    evenly spaced vertical positions instead, so every tile is the product.
+    """
+    img = plate.convert("RGB")
+    w, h = img.size
+    side = max(1, min(w, h))
+    max_y = max(0, h - side)
+    out: List[Image.Image] = []
+    for i in range(max(1, int(count))):
+        t = i / max(1, int(count) - 1) if count > 1 else 0.5
+        x = max(0, (w - side) // 2)
+        y = int(round(max_y * t))
+        crop = img.crop((x, y, x + side, y + side)).resize((600, 600), Image.LANCZOS)
+        out.append(crop)
+    return out
+
+
 def page_copy(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """The brief: one copy dict per module, from the declared product facts."""
     brand = str(product.get("brand") or "NORTHSTAR").strip()
@@ -88,7 +109,7 @@ def build_page(product: Dict[str, Any], *, image: Optional[Image.Image] = None,
                copy_style: str = "panel") -> Dict[str, Any]:
     """Render the page and refuse unless every module's QA is clean."""
     plate = image if image is not None else _gradient()
-    tile_images = list(tiles) if tiles is not None else _tiles(3)
+    tile_images = list(tiles) if tiles is not None else _derived_tiles(plate, 3)
     specs = page_copy(product)
     rendered: List[Dict[str, Any]] = []
     for spec in specs:

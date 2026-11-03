@@ -45,3 +45,13 @@ def test_the_brief_uses_the_declared_product_facts():
     header = next(s for s in specs if s["kind"] == "header")["copy"]
     assert header["headline"] == "LION'S MANE"
     assert header["kicker"] == "MOGRA"
+
+def test_three_tiles_use_the_real_plate_not_placeholder_art():
+    from PIL import Image, ImageDraw
+    a = Image.new("RGB", (1200, 900), (240, 236, 226))
+    ImageDraw.Draw(a).rectangle([100, 100, 500, 800], fill=(30, 80, 60))
+    b = Image.new("RGB", (1200, 900), (240, 236, 226))
+    ImageDraw.Draw(b).rectangle([100, 100, 500, 800], fill=(200, 90, 40))
+    first = {m["kind"]: m["sha256"] for m in ab.build_page(PRODUCT, image=a)["modules"]}
+    second = {m["kind"]: m["sha256"] for m in ab.build_page(PRODUCT, image=b)["modules"]}
+    assert first["three_tiles"] != second["three_tiles"]
