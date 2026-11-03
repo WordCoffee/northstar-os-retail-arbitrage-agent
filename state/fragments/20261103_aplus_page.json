@@ -1,0 +1,40 @@
+{
+  "aplus_page_20261103": {
+    "status": "DONE - six-module A+ page through the API, every module QA'd; fragment pending operator merge",
+    "commits": ["ebca86a7 (page brief + API)", "14605a9d (real tiles)"],
+    "routes": ["GET /api/design-studio/aplus-page/modules", "POST /api/design-studio/aplus-page"],
+    "probe": "state/probes/t19_aplus_page.py PASS",
+    "live_page": {
+      "modules": {
+        "header": {"size": [970, 600], "bytes": 361239, "qa": true},
+        "three_tiles": {"size": [970, 300], "bytes": 210650, "qa": true, "sha256_head": "00e1ad66116f"},
+        "comparison": {"size": [970, 600], "bytes": 33997, "qa": true},
+        "banner": {"size": [970, 300], "bytes": 186009, "qa": true},
+        "premium_desktop": {"size": [1464, 600], "bytes": 359313, "qa": true},
+        "logo": {"size": [600, 180], "bytes": 8299, "qa": true}
+      },
+      "page_ok": true,
+      "problems": [],
+      "bytes_total": 1159507,
+      "plate": "renders/mogra_lions_mane/product_front.png",
+      "output": "renders/mogra_lions_mane/aplus/*.png (gitignored)"
+    },
+    "defect_found_by_the_live_page": "three_tiles used a synthetic gold-circle placeholder when no tiles were passed. It now derives square crops from the supplied plate; two different plates produce different tile hashes.",
+    "behaviour": {
+      "qa": "every module passes assert_perfect: exact canvas, measured contrast, type >= 14 px, under 2 MB",
+      "prohibited_copy": "422 before a pixel is written (measured: 'cures')",
+      "determinism": "identical module hashes on a second build",
+      "storage": "data URLs + sha256 returned; no DB row"
+    },
+    "tests": {"test_aplus_brief.py": "5 passed", "test_aplus_page_api.py": "4 passed"},
+    "gaps": [
+      "a portrait plate is cropped hard in the header; a landscape/square plate composes better",
+      "tiles are three crops of one picture, not distinct scenes",
+      "single/sidebar modules are not in the default pack",
+      "no file storage or UI wiring",
+      "Amazon A+ module specs were not re-read; no compliance claim"
+    ],
+    "gates_held": "No Amazon, no spend, no credential read. Deterministic local rendering; no model call.",
+    "report": "reports/ty/aplus_page_20261103.md"
+  }
+}

@@ -127,3 +127,7 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Stills API - A refused frame is a 422 with the saved candidate path, not a 200 with a bad image: the caller can inspect what failed without the product treating it as shipped.
 2026-11-03 - Video API - The plan route is separate from render and render requires confirm=true; a 15s request is 8 sampler clips and roughly 20 minutes, so a typo must not start it.
 2026-11-03 - Video API - A background job records every stage and fails with the reason; a done job always has a file and a manifest, never a status without evidence.
+2026-11-03 - A+ - The page brief maps product facts to six beats and refuses unless every module's own QA passes; a page is a measured set, not a collection of PNGs.
+2026-11-03 - A+ - The three-tile module derives real crops from the supplied plate; synthetic placeholder art on a deliverable page is a defect the live run exposed.
+2026-11-03 - A+ - Prohibited copy is refused by the renderer's screen before a pixel is written, and the endpoint returns 422 with the reason; the pack cannot smuggle a claim.
+2026-11-03 - A+ - The page is deterministic (identical hashes on a second build), so a change in the output is a change in the inputs, not diffusion noise.
