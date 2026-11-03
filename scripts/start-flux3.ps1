@@ -39,14 +39,35 @@ function Test-Health([int]$p) {
     } catch { return $false }
 }
 
+function Get-ListenerPid([int]$p) {
+    $c = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue |
+        Select-Object -First 1
+    if ($c) { return [int]$c.OwningProcess }
+    return 0
+}
+
 if ($Stop) {
-    if (-not (Test-Path $pidFile)) { Write-Host "flux3: no pid file, nothing to stop"; exit 0 }
-    $pids = (Get-Content $pidFile -Raw).Trim().Split(",") | Where-Object { $_ }
-    foreach ($id in $pids) {
-        Stop-Process -Id ([int]$id) -Force -ErrorAction SilentlyContinue
-        Write-Host "flux3: stopped pid $id"
+    $stopped = $false
+    if (Test-Path $pidFile) {
+        $pids = (Get-Content $pidFile -Raw).Trim().Split(",") | Where-Object { $_ }
+        foreach ($id in $pids) {
+            Stop-Process -Id ([int]$id) -Force -ErrorAction SilentlyContinue
+            Write-Host "flux3: stopped pid $id"
+            $stopped = $true
+        }
+        Remove-Item $pidFile -ErrorAction SilentlyContinue
     }
-    Remove-Item $pidFile -ErrorAction SilentlyContinue
+    # The launcher PowerShell exits after ComfyUI answers, so its PID is dead by
+    # the time we stop; the process actually holding RAM is the listener. Stop
+    # that one too - this lane owns it and a campaign cannot start while it is
+    # resident (the RAM floor is measured, not assumed).
+    $comfyPid = Get-ListenerPid $ComfyPort
+    if ($comfyPid) {
+        Stop-Process -Id $comfyPid -Force -ErrorAction SilentlyContinue
+        Write-Host "flux3: stopped ComfyUI listener pid $comfyPid"
+        $stopped = $true
+    }
+    if (-not $stopped) { Write-Host "flux3: nothing to stop" }
     exit 0
 }
 
@@ -123,6 +144,11 @@ if (-not (Test-Health $Port)) {
 
 $pids = @($gw.Id)
 if ($comfyUp -and $comfy) { $pids += $comfy.Id }
+# Record the ComfyUI listener itself: the launcher PowerShell has already exited
+# by now, and only the listener holds the RAM a campaign needs.
+$listener = Get-ListenerPid $ComfyPort
+if ($listener) { $pids += $listener }
+$pids = $pids | Select-Object -Unique
 $pids -join "," | Out-File -FilePath $pidFile -Encoding UTF8
 
 $h = (Invoke-WebRequest -Uri "http://127.0.0.1:$Port/health" -TimeoutSec 5 -UseBasicParsing).Content
