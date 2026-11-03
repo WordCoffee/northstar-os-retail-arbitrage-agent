@@ -361,13 +361,36 @@ def resident_evidence(model: str, *, max_age_min: float = RESIDENT_EVIDENCE_MAX_
             "path": str(newest), "record": newest_record}
 
 
-def resolve_lane(task: Optional[Dict[str, Any]] = None, *,                 tags: Optional[Dict[str, Any]] = None,
-                 free_ram_gb: Optional[float] = None) -> Dict[str, Any]:
-    """Pick the best installed chat lane that fits, re-checked at dispatch.
+NON_CHAT_MODEL_HINTS = ("embed", "embedding", "bge-", "e5-")
+OLLAMA_PS_URL = "http://127.0.0.1:11434/api/ps"
 
-    `bojo` is the proven Ty tool-loop lane and the smallest chat model present;
-    larger vision/7B lanes are not selected while they would crowd the RAM
-    floor. The model is never downloaded and no paid provider is considered.
+
+def _ollama_resident(timeout: float = 5.0) -> Dict[str, Any]:
+    """Models Ollama currently holds. A resident model needs no extra RAM."""
+    try:
+        with urllib.request.urlopen(OLLAMA_PS_URL, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, OSError, json.JSONDecodeError) as exc:
+        return {"ok": False, "models": [], "error": str(exc)}
+    return {"ok": True, "models": [str(m.get("name") or m.get("model") or "")
+                                   for m in data.get("models") or []]}
+
+
+def resolve_lane(task: Optional[Dict[str, Any]] = None, *,                 tags: Optional[Dict[str, Any]] = None,
+                 free_ram_gb: Optional[float] = None,
+                 resident: Optional[Sequence[str]] = None) -> Dict[str, Any]:
+    """Pick the lane for a task: the task's OWN model, or the best that fits.
+
+    Two rules that took a broken campaign to learn (2026-11-03):
+
+    * an embedding model is never a candidate - `qwen3-embedding:0.6b` "fits" any
+      host and cannot run a single tool call, and picking it made the next
+      dispatch refuse with `profile_mismatch` and end the campaign;
+    * the requested model is never silently substituted. If it is installed but
+      does not fit, that is a refusal with a reason, not a quiet switch to
+      something smaller.
+
+    A model Ollama already holds is resident: it needs no extra RAM, so it fits.
     """
     task = task or {}
     if str(task.get("execution") or "prebuilt") != "ty":
@@ -379,6 +402,8 @@ def resolve_lane(task: Optional[Dict[str, Any]] = None, *,                 tags:
         return {"ok": False, "reason": tags.get("error") or "no local model lane",
                 "free_ram_gb": free_ram_gb, "installed": []}
     free = float(free_ram_gb if free_ram_gb is not None else (_free_ram_gb() or 0.0))
+    held = set(resident if resident is not None
+               else (_ollama_resident().get("models") or []))
     installed = {m["name"]: m for m in tags.get("models") or []}
     requested = str(task.get("model") or "").strip()
     # Capability rank, not disk order. Bojo is the proven JSON/tool-call lane.
@@ -386,23 +411,41 @@ def resolve_lane(task: Optional[Dict[str, Any]] = None, *,                 tags:
             "qwen2.5vl:7b": 10}
     candidates = []
     for name, info in installed.items():
+        if any(hint in name.lower() for hint in NON_CHAT_MODEL_HINTS):
+            continue  # embed-only: cannot run a tool loop, whatever its size
         if name not in rank and not requested:
             continue
         estimate = max(0.1, float(info.get("size_gb") or 0) * 0.9)
-        fits = estimate <= max(0.0, free - MODEL_RAM_HEADROOM_GB)
+        is_resident = name in held
+        fits = is_resident or estimate <= max(0.0, free - MODEL_RAM_HEADROOM_GB)
         candidates.append({"model": name, "rank": rank.get(name, 1),
                            "estimated_ram_gb": round(estimate, 2),
+                           "resident": is_resident,
                            "fits": fits})
     candidates.sort(key=lambda c: (c["rank"], -c["estimated_ram_gb"]), reverse=True)
-    chosen = next((c for c in candidates if c["fits"] and (not requested or c["model"] == requested)), None)
-    if chosen is None and requested:
+
+    if requested:
+        row = next((c for c in candidates if c["model"] == requested), None)
+        if row is None:
+            return {"ok": False,
+                    "reason": (f"requested lane {requested!r} is not installed locally "
+                               f"(or is embed-only)"),
+                    "free_ram_gb": free, "installed": candidates}
+        if not row["fits"]:
+            return {"ok": False,
+                    "reason": (f"requested lane {requested!r} does not fit right now: "
+                               f"free RAM {free:.2f} GB, needs ~{row['estimated_ram_gb']:.2f} GB "
+                               f"+ {MODEL_RAM_HEADROOM_GB:.2f} GB headroom and is not resident"),
+                    "free_ram_gb": free, "installed": candidates}
+        chosen = row
+    else:
         chosen = next((c for c in candidates if c["fits"]), None)
-    if chosen is None:
-        return {"ok": False,
-                "reason": (f"no installed chat lane fits: free RAM {free:.2f} GB, "
-                           f"headroom {MODEL_RAM_HEADROOM_GB:.2f} GB"),
-                "free_ram_gb": free, "installed": candidates}
-    post_headroom = round(free - float(chosen["estimated_ram_gb"]), 2)
+        if chosen is None:
+            return {"ok": False,
+                    "reason": (f"no installed chat lane fits: free RAM {free:.2f} GB, "
+                               f"headroom {MODEL_RAM_HEADROOM_GB:.2f} GB"),
+                    "free_ram_gb": free, "installed": candidates}
+    post_headroom = round(free - (0.0 if chosen.get("resident") else float(chosen["estimated_ram_gb"])), 2)
     return {"ok": True, "provider": "ollama", "model": chosen["model"],
             "reason": (f"{chosen['model']} is installed and proven for the Ty tool loop; "
                        f"free RAM {free:.2f} GB at dispatch; the {chosen['estimated_ram_gb']:.2f} GB "
