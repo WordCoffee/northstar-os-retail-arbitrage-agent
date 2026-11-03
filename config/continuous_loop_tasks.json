@@ -1096,6 +1096,113 @@
         "finish"
       ],
       "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-pouch-mockup",
+      "name": "Composite a designed panel onto a photographed pouch",
+      "schema_version": 2,
+      "authorized": true,
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "model": "qwen3.5:4b",
+      "authorization_note": "Owner-flagged 2026-11-03: the creative lane delivered flat label art when a designed product picture was requested. Local, no I/O.",
+      "objective": "Northstar_backend/mockup_compositor.py has no composite_panel_onto_quad. Add it: warp an RGBA panel onto a plate's four-corner quad with a homography (the module already has _homography) and feather the edge so it does not read as a sticker. Return an Image the size of the plate, painting nothing outside the quad. The contract is state/probes/t10_pouch_mockup.py - run it; if it fails, edit the source, never the probe.",
+      "dependencies": [],
+      "read_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "write_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "commit_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t10_pouch_mockup.py"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 30,
+      "commit_message": "feat(mockup): composite a designed panel onto a photographed pouch face"
+    },
+    {
+      "id": "ty-mockup-legibility",
+      "name": "Refuse a product picture nobody can read",
+      "schema_version": 2,
+      "authorized": true,
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "model": "qwen3.5:4b",
+      "authorization_note": "Owner-flagged 2026-11-03: 'labels that don't even look good'. The measurable half is legibility. Local OCR only.",
+      "objective": "Create Northstar_backend/mockup_quality.py with assert_legible(image_bytes_or_Image) -> {'ok': bool, 'reason': str, 'words': [...]}. Use text_fidelity.check_text_in_image (RapidOCR, local). ok=True only when the wordmark and the net weight are read; a blurred or downscaled picture returns ok=False with a named reason. The contract is state/probes/t11_mockup_legibility.py - make it pass without editing the probe.",
+      "dependencies": [
+        "ty-pouch-mockup"
+      ],
+      "read_paths": [
+        "Northstar_backend/text_fidelity.py"
+      ],
+      "write_paths": [
+        "Northstar_backend/mockup_quality.py"
+      ],
+      "commit_paths": [
+        "Northstar_backend/mockup_quality.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t11_mockup_legibility.py"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 30,
+      "commit_message": "feat(mockup): refuse a product picture whose copy cannot be read"
+    },
+    {
+      "id": "ty-plate-pair",
+      "name": "Refuse a plate with no pouch face",
+      "schema_version": 2,
+      "authorized": true,
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "model": "qwen3.5:4b",
+      "authorization_note": "Owner-flagged 2026-11-03: the flat-art delivery should have been refused by the pipeline instead of being handed over. Local.",
+      "objective": "Northstar_backend/mockup_compositor.py needs find_panel_quad(image) -> list of four (x, y) corners. When the plate has no findable pouch face it must raise ValueError('plate_face_not_found: ...') rather than return a guess. Reuse the edge/mask helpers already in pouch_label.py where they fit. The contract is state/probes/t12_plate_pair.py - make it pass without editing the probe.",
+      "dependencies": [],
+      "read_paths": [
+        "Northstar_backend/pouch_label.py"
+      ],
+      "write_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "commit_paths": [
+        "Northstar_backend/mockup_compositor.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t12_plate_pair.py"
+        ]
+      ],
+      "timeout_seconds": 600,
+      "max_repairs": 1,
+      "max_steps": 24,
+      "commit_message": "feat(mockup): refuse a plate with no findable pouch face"
     }
   ]
 }

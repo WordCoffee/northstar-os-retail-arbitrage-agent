@@ -60,3 +60,28 @@ Measured live: `GET /video-formats` → 5 contracts; `POST /shorts {platform: ti
 
 Nothing on that list needs a download or a paid service. Items 1–3 are what turn "a 2-second clip"
 into "a TikTok that ships".
+
+## 0. Owner-flagged gap (2026-11-03, highest priority): designed PRODUCT PICTURES
+
+The first real request was a **product picture of a 6 oz stand-up pouch, front and back, fully
+designed, with a nutrition label**. What was delivered was two flat label artworks. The information
+was right; the product was not there, and the artwork read as a form, not as a design.
+
+The scan above is a *pipeline* scan, and pipelines are not the deliverable. This item is, and every
+task below carries an acceptance the loop can execute offline:
+
+| Task | What it must produce | Acceptance |
+|---|---|---|
+| `ty-pouch-mockup` | `mockup_compositor.composite_panel_onto_quad(plate, panel, quad)` — warp a designed panel onto a photographed pouch face with sub-pixel corner registration and edge feathering | `state/probes/t10_pouch_mockup.py`: composites onto a synthetic plate, asserts output size, asserts the four panel corners land within 2 px of the quad, asserts the plate outside the quad is untouched |
+| `ty-mockup-legibility` | `mockup_quality.assert_legible(image)` — OCR the composited product picture and refuse it if the brand wordmark or the net weight is unreadable or blurred | `state/probes/t11_mockup_legibility.py`: a sharp composite passes; a deliberately blurred/downscaled one is refused with a named reason |
+| `ty-plate-pair` | `studio_generation` must produce a **front-facing and back-facing** pouch plate at the panel's aspect, through the text_safe lane, and refuse a plate whose face cannot be found | `state/probes/t12_plate_pair.py`: a plate with no detectable face is refused (`plate_face_not_found`), not silently composited |
+
+**Definition of done for this item:** a single command produces `renders/mogra_lions_mane/product_front.png`
+and `product_back.png` that (a) show a photoreal pouch, (b) carry the designed panels with correct
+perspective, (c) pass the legibility gate, and (d) are produced by the product's own API — not by a
+human at a shell prompt.
+
+Design quality is not a matter of taste here: the legibility gate, the corner registration, and the
+panel text being *rendered* rather than diffused are the measurable proxies. Anything beyond that is
+the operator's eye, and the loop must present candidates rather than pick silently.
+
