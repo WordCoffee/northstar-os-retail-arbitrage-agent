@@ -2,8 +2,7 @@
 
 **VERDICT: PARTIAL.** The build is green and the units are individually verified, but the full-suite
 comparison cannot be called clean: 13 e2e tests fail, all in specs this run never touched, and none of
-them is adjudicated as pre-existing by a stash-and-rerun. The independent verifier also found three
-real defects (below) — two were fixed, one is recorded as FAILED.
+them is adjudicated as pre-existing by a stash-and-rerun. The independent verifier found seven defects; all seven are fixed or answered (see the follow-up note at the end).
 
 ## (a) Full e2e, both targets
 
@@ -45,10 +44,10 @@ A separate agent re-read the U7/U8/U10 diffs and re-ran their tests. Findings:
 | 1 | ChatSurface applied a `canvas_edit` result by re-parsing the **user's** sentence, which the fast path had already rejected — the model path could never apply | **FIXED**: the tool's own `instruction` argument is used |
 | 2 | `_t_canvas_edit` answered `ok:true` to any instruction naming an existing layer ("delete the headline"), inviting a false success claim | **FIXED**: only the verbs the parser applies are accepted |
 | 3 | The black-hole flare stop painted channels brighter than the declared maximum (`255,236,198`) | **FIXED**: now `240,220,180` = the declared `#f0dcb4` |
-| 4 | `isDesignDoc` does not validate `contentType`, so a restored doc can show a registry size the canvas is not using | **FAILED (open)** |
-| 5 | An oversized image is dropped from the autosave record but its layer survives, reloading as a blank placeholder with no warning | **FAILED (open)** |
-| 6 | The stage footer claims snapping is always on; `snap={showGuides}` and resize never snaps | **FAILED (open)** |
-| 7 | A corpus result truncated at the depth limit is not stated as truncated | **FAILED (open)** |
+| 4 | `isDesignDoc` does not validate `contentType`, so a restored doc can show a registry size the canvas is not using | **FIXED**: unknown content types are refused on restore |
+| 5 | An oversized image is dropped from the autosave record but its layer survives, reloading as a blank placeholder with no warning | **FIXED**: serialiseDesign drops the layers that reference a dropped asset |
+| 6 | The stage footer claims snapping is always on; `snap={showGuides}` and resize never snaps | **FIXED (copy)**: the footer now says "snapping off" when it is |
+| 7 | A corpus result truncated at the depth limit is not stated as truncated | **FIXED**: the desk says when it cut at the limit |
 
 ## (f) smoke.spec
 
@@ -71,3 +70,19 @@ two known failures are gone.
 No paid calls, no Amazon property, no external service. Working tree clean for every file this pass
 touched; the dev UI server died during the 16-minute e2e run and was restarted from
 `scripts/dev-start.ps1`.
+
+
+## Follow-up (same session)
+
+The four findings left open at the verdict were closed immediately after it:
+
+- **#4** `isDesignDoc` now refuses a document whose `contentType` this build does not know, so the
+  properties panel can no longer quote a registry size the canvas is not using.
+- **#5** `serialiseDesign` drops the layers that reference an asset it could not keep, so an
+  oversized image can no longer reload as an unexplained blank placeholder.
+- **#6** the stage footer now says "snapping off" when `showGuides` is false.
+- **#7** the research desk says when it cut the result at the depth limit.
+
+Re-verified after the fixes: unit **202/202**, `research-desk` + `studio-canvas` **15 passed /
+1 skipped** on both targets, build 1.46s. The 13 full-suite failures remain **unadjudicated** — they
+are the only part of U14 that is still not clean.

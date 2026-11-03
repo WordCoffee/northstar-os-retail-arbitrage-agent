@@ -698,8 +698,9 @@ export default function CanvasWorkspace({ onNavigateSection }) {
               maxHeight={640}
               footer={(
                 <span className="cw-stage-foot">
-                  {doc.layers.length} layer{doc.layers.length === 1 ? '' : 's'} · drag to move, snaps to the
-                  centre and edges · {type.missing ? 'size unknown' : `${type.w}x${type.h} from ${type.registryId}`}
+                  {doc.layers.length} layer{doc.layers.length === 1 ? '' : 's'} ·{' '}
+                  {showGuides ? 'drag to move, snaps to the centre and edges' : 'drag to move (snapping off)'} ·{' '}
+                  {type.missing ? 'size unknown' : `${type.w}x${type.h} from ${type.registryId}`}
                 </span>
               )}
             />

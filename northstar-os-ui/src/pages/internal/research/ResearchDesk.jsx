@@ -146,6 +146,12 @@ export default function ResearchDesk() {
               rows={matches}
             />
           )}
+          {out.count >= mode.limit && (
+            <p className="text-low" style={{ fontSize: 11, marginTop: 8 }} data-testid="rd-truncated">
+              Cut at the {mode.label.toLowerCase()} limit of {mode.limit} records - there may be more in the
+              index. Raise the depth to see further.
+            </p>
+          )}
           {(out.caveats || []).length > 0 && (
             <ul className="text-low" style={{ fontSize: 11, marginTop: 10, paddingLeft: 18 }} data-testid="rd-caveats">
               {out.caveats.map((c, i) => <li key={i}>{c}</li>)}

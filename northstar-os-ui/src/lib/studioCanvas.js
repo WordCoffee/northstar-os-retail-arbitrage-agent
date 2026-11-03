@@ -275,6 +275,9 @@ export function isDesignDoc(doc) {
   if (typeof doc.id !== 'string' || !doc.id) return false
   if (!(Number(doc.w) > 0) || !(Number(doc.h) > 0)) return false
   if (!Array.isArray(doc.layers) || !doc.layers.length) return false
+  // A content type this build does not know would make the properties panel
+  // quote a registry size the canvas is not using. Refuse the record instead.
+  if (doc.contentType && !CONTENT_TYPES.some((t) => t.id === doc.contentType)) return false
   return doc.layers.every(isLayer)
 }
 
@@ -296,11 +299,18 @@ export function assetsWithinBudget(assets = []) {
 export function serialiseDesign(doc, assets = [], { now = Date.now() } = {}) {
   const kept = (Array.isArray(assets) ? assets : []).filter(isAsset)
   const { ok } = assetsWithinBudget(kept)
+  const safe = ok ? kept : kept.filter((a) => a.dataUrl.length <= MAX_ASSET_CHARS)
+  // An image too large to keep must not leave a layer pointing at nothing: the
+  // restored document would show a blank placeholder with no explanation.
+  const ids = new Set(safe.map((a) => a.id))
+  const keptDoc = safe.length === kept.length
+    ? doc
+    : { ...doc, layers: doc.layers.filter((l) => !l.assetId || ids.has(l.assetId)) }
   const body = {
     v: DESIGN_VERSION,
     savedAt: now,
-    doc,
-    assets: ok ? kept : kept.filter((a) => a.dataUrl.length <= MAX_ASSET_CHARS),
+    doc: keptDoc,
+    assets: safe,
   }
   return JSON.stringify(body)
 }
