@@ -1,0 +1,8 @@
+{
+  "platform": "gforum",
+  "requests": 10,
+  "rows": 500,
+  "queries": 10,
+  "unique": 475,
+  "finished_at": "2026-11-04T23:04:12Z"
+}

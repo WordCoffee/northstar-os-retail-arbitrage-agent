@@ -1,0 +1,17 @@
+{
+  "done": [
+    "ad creative in:name,description",
+    "amazon listing in:name,description",
+    "conversion rate in:name,description",
+    "document understanding in:name,description",
+    "function calling in:name,description",
+    "json schema in:name,description",
+    "knowledge graph in:name,description",
+    "layout analysis in:name,description",
+    "short video in:name,description",
+    "tool calling in:name,description",
+    "vector database in:name,description",
+    "virtual try-on in:name,description"
+  ],
+  "updated_at": "2026-11-04T23:07:39Z"
+}

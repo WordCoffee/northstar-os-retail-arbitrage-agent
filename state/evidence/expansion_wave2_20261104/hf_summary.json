@@ -1,0 +1,8 @@
+{
+  "platform": "huggingface",
+  "requests": 30,
+  "rows": 1090,
+  "queries": 30,
+  "unique": 1090,
+  "finished_at": "2026-11-04T23:01:56Z"
+}

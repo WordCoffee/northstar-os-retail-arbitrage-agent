@@ -1,0 +1,61 @@
+{
+  "expansion_wave2_20261104": {
+    "status": "DONE - second wave with new queries; 3,950 indexed / 3,895 unique; cumulative 14,011 / 13,686; fragment pending operator merge",
+    "wave1": {"commit": "bf648649", "rows": 10061, "unique": 9791},
+    "wave2_counts": {
+      "rows": 3950,
+      "unique": 3895,
+      "by_platform": {
+        "huggingface": {"rows": 1090, "unique": 1090},
+        "arxiv": {"rows": 748, "unique": 746},
+        "gforum": {"rows": 500, "unique": 475},
+        "youtube": {"rows": 89, "unique": 89},
+        "github": {"rows": 1523, "unique": 1495}
+      }
+    },
+    "cumulative": {"rows": 14011, "unique": 13686, "note": "cross-wave overlap not deduplicated"},
+    "blueprint_deltas": {
+      "B2": "add clovaai/donut @ 4cfcf97256 (MIT) and microsoft/table-transformer @ 16d124f616 (MIT); LayoutLMv3 weights excluded (CC-BY-NC-SA-4.0)",
+      "B3": "add facebookresearch/sam2 @ 2b90b9f5ce (Apache-2.0) for masks and LiheYoung/depth-anything @ 1d03336771 (Apache-2.0) for depth",
+      "B4": "add microsoft/TRELLIS @ 193e0502b5 (MIT) as the quality path; TencentARC/InstantMesh @ 08822c52fd (Apache-2.0) as middle; TripoSR stays fast fallback",
+      "B1_B5_B6_B7": "unchanged"
+    },
+    "new_candidates_notadopted": [
+      "QwenLM/Qwen-Agent (Apache-2.0)",
+      "aipotheosis-labs/aci (Apache-2.0)",
+      "IBM/mcp-context-forge (Apache-2.0)",
+      "colbymchenry/codegraph (MIT)",
+      "Graphify-Labs/graphify (Apache-2.0)"
+    ],
+    "rejected_on_licence": [
+      "microsoft/layoutlmv3-base (CC-BY-NC-SA-4.0) despite 776k downloads",
+      "tencent/Hunyuan3D-2 and 2.1 (other licence)",
+      "most virtual try-on models (CreativeML OpenRAIL / NC)"
+    ],
+    "creative_spec": {
+      "floors_unchanged": "A+ canvases, 86% listing fill, 1080x1920/30fps, -16 LUFS, OCR sharpness >=40, identity pHash<=24 + SSIM>=0.40, preference>=0.20, adherence>=18.0, 300 DPI",
+      "new_exclusions": "virtual try-on is not a lane yet (licence mix); LayoutLMv3 excluded",
+      "amazon": "untouched; presets verified:false"
+    },
+    "verification": {
+      "tests": "16 passed (test_ship_gate.py) baseline smoke",
+      "manifest_checks": {"json_parses": true, "every_platform_has_rows": true, "no_placeholders": true},
+      "product_code_changed": false
+    },
+    "decisions": [
+      "Licence beats popularity (LayoutLMv3/Hunyuan3D rejected).",
+      "B4 uses TRELLIS as the quality path and TripoSR as the fast path.",
+      "B2 stays multi-backbone; RapidOCR remains the OCR engine.",
+      "Wave 2 is evidence, not adoption.",
+      "Next unit remains B1 unless the owner chooses B4."
+    ],
+    "next_decision": "Approve B1 (JSON-schema -> GBNF from llama.cpp @ 6f1e654370) with tool-call parse-failure rate as acceptance; or say 'B4 first'.",
+    "artifacts": {
+      "report": "reports/expansion_wave2_20261104/README.md",
+      "manifest": "reports/expansion_wave2_20261104/manifest.json",
+      "evidence": "state/evidence/expansion_wave2_20261104/",
+      "wave1_blueprints": "reports/expansion_20261104/COMPONENT_BLUEPRINTS.md"
+    },
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference, no policy/allowlist change. Public GitHub/HF/arXiv/Discourse/YouTube endpoints only."
+  }
+}

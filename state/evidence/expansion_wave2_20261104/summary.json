@@ -1,0 +1,47 @@
+{
+  "wave": 2,
+  "platforms": {
+    "hf": {
+      "platform": "huggingface",
+      "requests": 30,
+      "rows": 1090,
+      "queries": 30,
+      "unique": 1090,
+      "finished_at": "2026-11-04T23:01:56Z"
+    },
+    "arxiv": {
+      "platform": "arxiv",
+      "requests": 25,
+      "rows": 748,
+      "queries": 25,
+      "unique": 746,
+      "finished_at": "2026-11-04T23:03:54Z"
+    },
+    "gforum": {
+      "platform": "gforum",
+      "requests": 10,
+      "rows": 500,
+      "queries": 10,
+      "unique": 475,
+      "finished_at": "2026-11-04T23:04:12Z"
+    },
+    "youtube": {
+      "platform": "youtube",
+      "channels": 11,
+      "rows": 89,
+      "channels_total": 12,
+      "unique": 89,
+      "finished_at": "2026-11-04T23:04:34Z"
+    },
+    "github": {
+      "platform": "github",
+      "requests": 20,
+      "rows": 1523,
+      "queries": 12,
+      "unique": 1495,
+      "finished_at": "2026-11-04T23:07:45Z"
+    }
+  },
+  "rows": 3950,
+  "unique": 3895
+}
