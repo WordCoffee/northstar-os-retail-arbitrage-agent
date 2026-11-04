@@ -44,7 +44,7 @@ Fixed in two places:
 All three tasks were then re-opened and re-closed; the output shows
 `"name": "pouch mockup probe", "ok": true, "status": "completed"` (and the same for t11/t12).
 
-## The 10 remaining failures (all pre-existing or out of this session's scope)
+## The 10 failures in the final full run (9 remain after the route-parser fix)
 
 | Failure | Why it is not this session's |
 |---|---|
@@ -52,7 +52,7 @@ All three tasks were then re-opened and re-closed; the output shows
 | `test_provider_suite.py::test_provider_suite_endpoint_envelope` | **passes alone**; order-dependent pollution in the full run |
 | `test_session_cookie_contract.py::DevShimSessionTests` (5) | uncommitted test file in the working tree (`KeyError: 'app'`), explicitly not this run's work |
 | `test_shell_modes.py` (2) | pre-existing UI-gate assertions |
-| `test_ui_route_contract.py::test_every_ui_api_path_resolves` | a static-parser false positive: `HitlQueue.jsx` calls `/api/v1/hitl/{id}/${action}` and the parser substitutes "sample" for both variables; the real routes are `/approve` and `/deny` |
+| `test_ui_route_contract.py::test_every_ui_api_path_resolves` | **fixed after the run**: the static parser filled `${action}` with "sample"; "approve" is a real action the UI sends. The file now passes (6 passed, 11 subtests) |
 
 `test_v3_shell_invariants` is deliberately **not** "fixed" by editing its number: the handoff says
 the count is brittle by construction and the number must not be bumped to force a pass.
@@ -71,5 +71,5 @@ The full suite is not green, and this report does not claim it is. What it claim
 failures caused by stale/absent contracts or inconsistent counts are fixed (three task-contract
 issues, the coding pressure wording, the HITL `skipped` inconsistency, and the accidental module
 overwrite), the loop no longer marks a task verified without running its acceptance, and the
-remaining 10 are pre-existing, order-dependent, a static-parser false positive, or the uncommitted
-DevShim test file.
+remaining 10 are pre-existing, order-dependent, or the uncommitted DevShim test file; the
+route-contract false positive was fixed after the run (so the expected count is 9).

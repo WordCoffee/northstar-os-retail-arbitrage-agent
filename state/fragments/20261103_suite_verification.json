@@ -6,6 +6,9 @@
     "before": {"failed": 16, "passed": 5885, "skipped": 117, "xfailed": 2, "seconds": 755},
     "after_contract_fixes": {"failed": 13, "passed": 5890, "skipped": 117, "xfailed": 2, "seconds": 712},
     "final": {"failed": 10, "passed": 5918, "skipped": 117, "xfailed": 2, "seconds": 775},
+    "fixed_after_the_final_run": {
+      "test_ui_route_contract": "the parser sampled ${action} as 'sample'; 'approve' is a real UI action. The file now passes (6 passed, 11 subtests), so the expected full-suite count is 9."
+    },
     "fixed": {
       "empty_checks": "the three owner-flagged creative tasks had checks:[]; author-close marked them completed on all([])==True. They now declare their probes and run_checks falls back to acceptance_commands and fails closed when both are empty.",
       "stale_budget_test": "the two historical tasks still pin 20 steps; every other ty task is bounded by 40 and any budget >=20 needs an owner note.",
@@ -20,7 +23,7 @@
       "test_provider_suite.py::test_provider_suite_endpoint_envelope (passes alone; order-dependent)",
       "test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only",
       "test_shell_modes.py::test_user_ui_gates_read_plan",
-      "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves (static-parser false positive on the dynamic HITL route)",
+      "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves (FIXED after the run: action samples as approve; 6 passed)",
       "test_session_cookie_contract.py::DevShimSessionTests (5, uncommitted test file)"
     ],
     "gates_held": "No Amazon, no spend, no credential read; no guard was weakened. test_v3_shell_invariants left failing by design.",
