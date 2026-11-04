@@ -50,8 +50,10 @@ final: 3.0s 1080x1920 audio=aac lufs=-16.41 peak=-3.1
 - **No endpoint yet.** Both modules are library + probe + tests; `/shorts` does not expose captions
   or audio. Wiring them needs a video asset path and a transcript, which is the next integration
   unit, not a claim made here.
-- **Transcription is segment-timed.** `local_transcribe` does not request word timestamps; the cue
-  builder distributes each segment's duration by character length and records `timing: "segment"`.
+- **Word timings are supported but the video still uses scene copy.** `local_transcribe` accepts
+  `word_timestamps=True` and the cue builder uses measured words when present (`timing: "word"`),
+  breaking at speech-segment boundaries. The 15 s video's captions are the scene lines, not a
+  transcript, so the labelled fallback is what runs there.
 - **The bed is a pad, not a licensed track.** Pass `music=` to use a real one; the generator exists so
   the lane is not blocked on a download or a licence.
 - **Ducking is verified by the filter being applied and the mix being measured**, not by a

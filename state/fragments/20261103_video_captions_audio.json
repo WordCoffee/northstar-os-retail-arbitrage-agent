@@ -19,7 +19,7 @@
     },
     "gaps": [
       "no HTTP endpoint yet for captions or audio",
-      "transcription is segment-timed; word timings are estimated by character length and labelled",
+      "transcription is segment-timed by default; word_timestamps=True is supported and used when present, but the 15s video's captions are scene copy, not a transcript",
       "the generated bed is a pad, not a licensed song; music= accepts a real track",
       "ducking is verified by the applied filter + measured mix, not a spectral A/B",
       "captions are OCR-checked one frame per cue"
