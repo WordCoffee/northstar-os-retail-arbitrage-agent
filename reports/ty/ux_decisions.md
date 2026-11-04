@@ -133,3 +133,6 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - A+ - The page is deterministic (identical hashes on a second build), so a change in the output is a change in the inputs, not diffusion noise.
 2026-11-03 - Video master - The 15s TikTok is rendered and checked rather than left as a plan: 450 frames, 1080x1920, h264+aac, -16.0 LUFS, captions OCR-checked, 12.3 min. The 3s run was the contract proof; this is the deliverable.
 2026-11-03 - Video master - The 15s master reuses one product picture for all five scenes; distinct shots are a plate problem, and the report says so instead of implying five different setups.
+2026-11-03 - Video framing - The camera varies per beat by cropping the SAME product picture (hook push-in, proof macro, wide product/cta), not by asking diffusion for a second pouch; a different-looking pack in each cut is a continuity defect.
+2026-11-03 - Video hook - The hook prompt is a camera push-in, not a hand lifting the pouch: Wan animated the still and invented a distorted hand at the seal. The re-render has no hand.
+2026-11-03 - Video candidate - The 15s varied master is presented as a candidate, not a finished ad: its hook/proof crops are tight and the captions repeat the label claims. That is the operator's eye; the mechanism is measured.
