@@ -41,6 +41,10 @@ _SAMPLE_VALUES = {
     "intent": "pricing",
     "file_name": "sample.csv",
     "name": "sample",
+    # HitlQueue decides with the literal "approve"/"deny"; the parser sees the
+    # parameter name, not its call sites. "approve" is a real action, so the
+    # filled path matches the served route instead of inventing /sample.
+    "action": "approve",
 }
 
 _DEFAULT_SAMPLE = "sample"
