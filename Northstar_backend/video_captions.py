@@ -53,6 +53,20 @@ def words_from_segments(segments: Sequence[Dict[str, Any]]) -> List[Dict[str, An
     for seg in segments:
         text = str(seg.get("text") or "").strip()
         start, end = float(seg.get("start") or 0.0), float(seg.get("end") or 0.0)
+        engine_words = seg.get("words") or []
+        exact = [w for w in engine_words
+                 if isinstance(w, dict) and str(w.get("word") or "").strip()
+                 and w.get("start") is not None and w.get("end") is not None]
+        if exact:
+            # The engine measured these; do not redistribute them.
+            for w in exact:
+                words.append({"word": str(w["word"]).strip(),
+                              "start": round(float(w["start"]), 3),
+                              "end": round(float(w["end"]), 3),
+                              "timing": "word"})
+            if words:
+                words[-1]["break_after"] = True
+            continue
         tokens = _split_words(text)
         if not tokens or end <= start:
             continue
@@ -65,6 +79,8 @@ def words_from_segments(segments: Sequence[Dict[str, Any]]) -> List[Dict[str, An
                           "end": round(min(end, cursor + span), 3),
                           "timing": "segment"})
             cursor += span
+        if words:
+            words[-1]["break_after"] = True
     return words
 
 
@@ -94,7 +110,7 @@ def cues_from_words(words: Sequence[Dict[str, Any]], *, max_chars: int = 32,
             flush()
             candidate = [word]
         current.append(word)
-        if re.search(r"[.!?]$", str(word["word"])):
+        if word.get("break_after") or re.search(r"[.!?]$", str(word["word"])):
             flush()
     flush()
     return cues

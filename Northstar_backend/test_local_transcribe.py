@@ -76,3 +76,33 @@ def test_transcribe_surfaces_a_missing_engine(monkeypatch):
     monkeypatch.setattr(lt, "_load", boom)
     with pytest.raises(ImportError):
         lt.transcribe(b"RIFF....")
+
+class _Word:
+    def __init__(self, start, end, word, probability=0.9):
+        self.start, self.end, self.word, self.probability = start, end, word, probability
+
+
+class _SegWithWords(_Seg):
+    def __init__(self, start, end, text, words):
+        super().__init__(start, end, text)
+        self.words = words
+
+
+def test_transcribe_requests_and_maps_word_timestamps(monkeypatch):
+    seen = {}
+
+    class _Engine:
+        def transcribe(self, path, **kwargs):
+            seen.update(kwargs)
+            return iter([_SegWithWords(0.0, 1.2, " six oz", [
+                _Word(0.0, 0.3, " six"), _Word(0.3, 0.6, " oz"),
+            ])]), _Info()
+
+    monkeypatch.setattr(lt, "_load", lambda *a, **k: _Engine())
+    out = lt.transcribe(b"RIFF....", word_timestamps=True)
+    assert seen["word_timestamps"] is True
+    assert out["word_timestamps"] is True
+    assert out["segments"][0]["words"] == [
+        {"start": 0.0, "end": 0.3, "word": "six", "probability": 0.9},
+        {"start": 0.3, "end": 0.6, "word": "oz", "probability": 0.9},
+    ]

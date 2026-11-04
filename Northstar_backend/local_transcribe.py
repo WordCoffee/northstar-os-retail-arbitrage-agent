@@ -68,8 +68,14 @@ def transcribe(audio_bytes: bytes, *, model: Optional[str] = None,
                language: Optional[str] = None, device: Optional[str] = None,
                compute_type: Optional[str] = None,
                beam_size: int = 1, vad_filter: bool = True,
+               word_timestamps: bool = False,
                timeout_s: Optional[float] = None) -> Dict[str, Any]:
     """Transcribe audio bytes locally. Returns text + timed segments.
+
+    `word_timestamps=True` asks faster-whisper for per-word start/end; when the
+    engine returns them, each segment carries a `words` list. Callers that need
+    exact caption cue boundaries should request them; segment timing alone is a
+    character-length distribution, not a measurement.
 
     `timeout_s` is advisory: it is checked between segments so a long file can
     stop early, but it never truncates a result without saying so.
@@ -89,13 +95,27 @@ def transcribe(audio_bytes: bytes, *, model: Optional[str] = None,
     try:
         engine = _load(model_name, dev, comp)
         segments, info = engine.transcribe(path, language=language,
-                                           beam_size=beam_size, vad_filter=vad_filter)
+                                           beam_size=beam_size, vad_filter=vad_filter,
+                                           word_timestamps=word_timestamps)
         out: List[Dict[str, Any]] = []
         truncated = False
         for seg in segments:
-            out.append({"start": round(float(seg.start), 2),
-                        "end": round(float(seg.end), 2),
-                        "text": (seg.text or "").strip()})
+            record: Dict[str, Any] = {
+                "start": round(float(seg.start), 2),
+                "end": round(float(seg.end), 2),
+                "text": (seg.text or "").strip(),
+            }
+            engine_words = getattr(seg, "words", None) or []
+            if engine_words:
+                record["words"] = [
+                    {"start": round(float(w.start), 2),
+                     "end": round(float(w.end), 2),
+                     "word": str(getattr(w, "word", "") or "").strip(),
+                     "probability": round(float(getattr(w, "probability", 0.0) or 0.0), 4)}
+                    for w in engine_words
+                    if str(getattr(w, "word", "") or "").strip()
+                ]
+            out.append(record)
             if timeout_s and (time.time() - t0) > float(timeout_s):
                 truncated = True
                 break
@@ -104,6 +124,7 @@ def transcribe(audio_bytes: bytes, *, model: Optional[str] = None,
             "ok": True,
             "text": text,
             "segments": out,
+            "word_timestamps": bool(word_timestamps),
             "language": getattr(info, "language", None) or language,
             "duration": round(float(getattr(info, "duration", 0.0) or 0.0), 2),
             "model": model_name, "device": dev, "compute_type": comp,

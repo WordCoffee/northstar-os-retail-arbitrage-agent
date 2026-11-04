@@ -91,3 +91,16 @@ def test_an_empty_cue_is_refused():
     with pytest.raises(vc.CaptionError, match="caption_empty"):
         vc.render_cue("   ", width=1080, height=1920,
                       preset=__import__("video_formats").FORMATS["tiktok"])
+
+def test_measured_word_timings_are_used_verbatim():
+    words = vc.words_from_segments([{
+        "start": 0.0, "end": 2.0, "text": "six oz pouch",
+        "words": [
+            {"word": "six", "start": 0.10, "end": 0.40},
+            {"word": "oz", "start": 0.40, "end": 0.70},
+            {"word": "pouch", "start": 0.90, "end": 1.60},
+        ],
+    }])
+    assert [w["timing"] for w in words] == ["word", "word", "word"]
+    assert [round(w["start"], 2) for w in words] == [0.10, 0.40, 0.90]
+    assert [round(w["end"], 2) for w in words] == [0.40, 0.70, 1.60]
