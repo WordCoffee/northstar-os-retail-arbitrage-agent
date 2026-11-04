@@ -54,3 +54,42 @@ def test_no_plate_and_no_renderer_is_refused(tmp_path):
     with pytest.raises(video_ad.VideoAdError, match="video_ad_plate_missing"):
         video_ad.produce(PRODUCT, platform="tiktok", seconds=3,
                          out_dir=tmp_path / "out")
+
+def _plate_png() -> bytes:
+    from PIL import Image, ImageDraw
+    img = Image.new("RGB", (512, 768), (235, 230, 219))
+    d = ImageDraw.Draw(img)
+    d.rectangle([120, 120, 392, 660], fill=(213, 167, 122))
+    d.rectangle([150, 300, 360, 430], fill=(247, 243, 235))
+    from io import BytesIO
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def test_scene_source_changes_the_camera_per_beat():
+    plate = _plate_png()
+    hook = video_ad.scene_source(plate, {"beat": "hook"})
+    proof = video_ad.scene_source(plate, {"beat": "proof"})
+    product = video_ad.scene_source(plate, {"beat": "product"})
+    assert hook != proof and hook != product and proof != product
+    assert video_ad.scene_source(plate, {"beat": "proof"}) == proof
+
+
+def test_vary_framing_records_a_distinct_source_per_beat(tmp_path):
+    def render(scene, frames):
+        path = tmp_path / f"clip_{scene['index']}_{frames}.mp4"
+        result = subprocess.run([
+            vs.FFMPEG, "-y", "-f", "lavfi",
+            "-i", "testsrc2=size=480x832:rate=30:duration=10",
+            "-frames:v", str(frames), "-c:v", "libx264", "-preset", "veryfast",
+            "-pix_fmt", "yuv420p", str(path)], capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr[-300:]
+        return path.read_bytes()
+
+    manifest = video_ad.produce(PRODUCT, platform="tiktok", seconds=3,
+                                out_dir=tmp_path / "out", plate_png=_plate_png(),
+                                render_scene=render, vary_framing=True)
+    hashes = {c["source_sha256"] for c in manifest["clips"]}
+    assert len(hashes) >= 3, hashes
+    assert manifest["vary_framing"] is True

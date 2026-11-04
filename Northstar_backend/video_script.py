@@ -59,9 +59,9 @@ _CTA = (
 )
 
 _PROMPTS = {
-    "hook": ("a close-up of a hand lifting a kraft stand-up pouch from a pale studio "
-             "sweep, soft diffused light, shallow depth of field, photoreal product "
-             "photography"),
+    "hook": ("a close-up of a kraft stand-up pouch on a pale studio sweep, camera "
+             "slowly pushing in, soft diffused light, shallow depth of field, "
+             "photoreal product photography"),
     "benefit": ("the pouch beside a spoon of finely milled mushroom powder on a stone "
                 "surface, soft morning light, shallow depth of field, photoreal"),
     "proof": ("a macro of the powder texture and the sealed top of a kraft pouch, "

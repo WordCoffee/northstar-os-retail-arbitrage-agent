@@ -15,11 +15,15 @@ Wan lane from a supplied product picture. No network, no provider call.
 """
 from __future__ import annotations
 
+import io
+import hashlib
 import json
 import math
 import tempfile
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Union
+
+from PIL import Image
 
 import shorts
 import video_audio
@@ -29,6 +33,43 @@ import video_script
 import video_stitch
 
 FINAL_NAME = "video_ad.mp4"
+
+#: Deterministic framing per beat: keep the SAME product, change the camera.
+#: One fixed plate for every scene makes a slideshow; inventing a new plate per
+#: scene risks a different pouch in each cut.
+_FRAMING = {
+    "hook": {"zoom": 1.35, "anchor_y": 0.18},
+    "benefit": {"zoom": 1.0, "anchor_y": 0.5},
+    "proof": {"zoom": 1.55, "anchor_y": 0.45},
+    "product": {"zoom": 1.0, "anchor_y": 0.5},
+    "cta": {"zoom": 1.12, "anchor_y": 0.55},
+}
+
+
+def scene_source(plate_png: bytes, scene: Dict[str, Any]) -> bytes:
+    """Crop the plate for this beat's framing; same product, different camera.
+
+    The crop is deterministic: a hook pushes in on the label, proof goes macro,
+    the product/benefit beats stay wide. This gives a cut its own shot without
+    asking a diffusion model to invent a second, different-looking pouch.
+    """
+    if not plate_png:
+        return plate_png
+    try:
+        img = Image.open(io.BytesIO(plate_png)).convert("RGB")
+    except Exception:  # noqa: BLE001 - an undecodable plate is the caller's error
+        return plate_png
+    spec = _FRAMING.get(str(scene.get("beat") or ""), {"zoom": 1.0, "anchor_y": 0.5})
+    zoom = max(1.0, float(spec["zoom"]))
+    w, h = img.size
+    cw, ch = max(16, int(round(w / zoom))), max(16, int(round(h / zoom)))
+    x0 = max(0, (w - cw) // 2)
+    centre = float(spec["anchor_y"]) * h
+    y0 = int(max(0, min(h - ch, centre - ch / 2)))
+    crop = img.crop((x0, y0, x0 + cw, y0 + ch)).resize((w, h), Image.LANCZOS)
+    buf = io.BytesIO()
+    crop.save(buf, format="PNG")
+    return buf.getvalue()
 
 
 class VideoAdError(RuntimeError):
@@ -65,6 +106,7 @@ def produce(product: Dict[str, Any], *, platform: str,
             music: Optional[Union[str, Path]] = None,
             voice: Optional[str] = None,
             voiceover_text: Optional[str] = None,
+            vary_framing: bool = False,
             on_progress: Optional[Callable[[str, Dict[str, Any]], None]] = None
             ) -> Dict[str, Any]:
     """Produce the full video. Returns the manifest; raises on a stage refusal."""
@@ -99,6 +141,8 @@ def produce(product: Dict[str, Any], *, platform: str,
         clip_paths: List[Path] = []
         clip_records: List[Dict[str, Any]] = []
         for scene in plan["scenes"]:
+            source = (scene_source(plate_png or b"", scene)
+                      if vary_framing and plate_png else plate_png)
             for piece, frames in enumerate(_chunks(scene["frames"])):
                 emit("clip", scene=scene["index"], beat=scene["beat"],
                      piece=piece, frames=frames)
@@ -106,7 +150,7 @@ def produce(product: Dict[str, Any], *, platform: str,
                     payload = render_scene(scene, frames)
                 else:
                     payload = shorts.generate(
-                        plate_png or b"", prompt=scene["prompt"], width=render_w,
+                        source or b"", prompt=scene["prompt"], width=render_w,
                         height=render_h, length=frames, steps=steps, cfg=cfg,
                         seed=seed + scene["index"] * 10 + piece,
                         fps=plan["fps"])["video"] or b""
@@ -119,6 +163,9 @@ def produce(product: Dict[str, Any], *, platform: str,
                 clip_paths.append(path)
                 clip_records.append({"scene": scene["index"], "piece": piece,
                                      "frames": frames, "bytes": len(payload),
+                                     "source_bytes": len(source or b""),
+                                     "source_sha256":
+                                         hashlib.sha256(source or b"").hexdigest()[:16],
                                      "prompt": scene["prompt"]})
         if not clip_paths:
             raise VideoAdError("video_ad_no_clips: the script produced no clips")
@@ -179,6 +226,7 @@ def produce(product: Dict[str, Any], *, platform: str,
             "canvas": [width, height],
             "fps": plan["fps"],
             "render_canvas": [render_w, render_h],
+            "vary_framing": bool(vary_framing),
             "final": final,
             "scenes": plan["scenes"],
             "clips": clip_records,
@@ -203,4 +251,4 @@ def produce(product: Dict[str, Any], *, platform: str,
     return manifest
 
 
-__all__ = ["produce", "VideoAdError", "FINAL_NAME", "scene_chunks"]
+__all__ = ["produce", "VideoAdError", "FINAL_NAME", "scene_chunks", "scene_source"]

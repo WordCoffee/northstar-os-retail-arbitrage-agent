@@ -88,6 +88,7 @@ class VideoAdIn(BaseModel):
     cfg: float = Field(5.0, ge=1.0, le=12.0)
     seed: int = Field(0, ge=0, le=2**31 - 1)
     voiceover_text: str = Field("", max_length=600)
+    vary_framing: bool = True
     confirm: bool = False
 
 
@@ -199,7 +200,7 @@ def _run_job(job_id: str, product: Dict[str, Any], body: VideoAdIn,
             product, platform=body.platform, seconds=body.seconds,
             out_dir=out_dir, plate_png=plate, steps=body.steps, cfg=body.cfg,
             seed=body.seed, voiceover_text=body.voiceover_text or None,
-            on_progress=progress)
+            vary_framing=body.vary_framing, on_progress=progress)
     except Exception as exc:  # noqa: BLE001 - the job records the reason
         _update(job_id, status="failed", stage="failed",
                 reason=f"{type(exc).__name__}: {exc}"[:800])
