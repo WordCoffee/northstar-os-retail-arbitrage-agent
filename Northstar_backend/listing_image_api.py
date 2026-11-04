@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 
 from design_studio_api import studio_account
 
-import listing_image
+import listing_render
 import social_frames as sf
 
 router = APIRouter(prefix="/api/design-studio/listing-images",
@@ -51,7 +51,7 @@ def create_listing_image(body: ListingImageIn, acct: str = Depends(studio_accoun
         raise HTTPException(status_code=422, detail={
             "code": "listing_style_unknown", "known": sorted(sf.LISTING_STYLES)})
     try:
-        result = listing_image.generate(
+        result = listing_render.generate(
             body.style, body.brief, width=body.width, height=body.height,
             tier=body.tier)
     except ValueError as exc:

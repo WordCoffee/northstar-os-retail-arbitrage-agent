@@ -7,7 +7,7 @@ import pytest
 from fastapi import HTTPException
 from PIL import Image, ImageDraw
 
-import listing_image
+import listing_render
 import listing_image_api as api
 import social_frames as sf
 
@@ -32,7 +32,7 @@ def _render(img):
 
 
 def test_a_white_background_main_image_passes():
-    out = listing_image.generate("white-bg", "a kraft pouch", render=_render(_image()))
+    out = listing_render.generate("white-bg", "a kraft pouch", render=_render(_image()))
     assert out["ok"] is True, out
     assert out["main_image"] is True
     assert out["gate"]["checks"]["text_free"] is True
@@ -41,14 +41,14 @@ def test_a_white_background_main_image_passes():
 
 def test_a_grey_background_is_normalised_to_pure_white():
     """The main-image pass crops the subject onto white; the gate then passes."""
-    out = listing_image.generate("white-bg", render=_render(_image(bg=(200, 200, 200))))
+    out = listing_render.generate("white-bg", render=_render(_image(bg=(200, 200, 200))))
     assert out["ok"] is True, out
     assert out["gate"]["score"]["metrics"]["background_purity"] >= 0.90
 
 
 def test_a_blank_render_is_refused():
     blank = Image.new("RGB", (1024, 1024), (255, 255, 255))
-    out = listing_image.generate("white-bg", render=_render(blank))
+    out = listing_render.generate("white-bg", render=_render(blank))
     assert out["ok"] is False
     assert "listing_rubric_pass" in out["reason"]
 
@@ -56,14 +56,14 @@ def test_a_blank_render_is_refused():
 def test_fit_main_image_hits_the_fill_band():
     small = Image.new("RGB", (1024, 1024), (255, 255, 255))
     ImageDraw.Draw(small).rectangle([110, 110, 914, 914], fill=(213, 167, 122))
-    fitted = listing_image.fit_main_image(_bytes(small))
+    fitted = listing_render.fit_main_image(_bytes(small))
     gate = sf.listing_gate(fitted, main_image=True)
     assert gate["ok"] is True, gate
     assert 0.80 <= gate["score"]["metrics"]["fill"] <= 0.92
 
 
 def test_a_secondary_style_uses_the_hook_rubric():
-    out = listing_image.generate("lifestyle", "a pouch on a counter",
+    out = listing_render.generate("lifestyle", "a pouch on a counter",
                                  render=_render(_image()))
     assert out["main_image"] is False
     assert out["gate"]["checks"]["text_free"] is True
@@ -71,7 +71,7 @@ def test_a_secondary_style_uses_the_hook_rubric():
 
 def test_an_unknown_style_raises():
     with pytest.raises(ValueError, match="listing_style_unknown"):
-        listing_image.generate("billboard", render=_render(_image()))
+        listing_render.generate("billboard", render=_render(_image()))
 
 
 def test_the_api_saves_a_passing_image(tmp_path, monkeypatch):
@@ -83,7 +83,7 @@ def test_the_api_saves_a_passing_image(tmp_path, monkeypatch):
                 "bytes": _bytes(_image()), "gate": {"ok": True, "checks": {}},
                 "reason": ""}
 
-    monkeypatch.setattr(listing_image, "generate", fake)
+    monkeypatch.setattr(listing_render, "generate", fake)
     out = api.create_listing_image(api.ListingImageIn(style="white-bg"), acct="test")
     assert out["ok"] is True
     assert out["size"] == [1024, 1024]
@@ -100,7 +100,7 @@ def test_the_api_saves_a_rejected_candidate(tmp_path, monkeypatch):
                 "gate": {"ok": False, "checks": {"listing_rubric_pass": False}},
                 "reason": "listing_image_refused: listing_rubric_pass"}
 
-    monkeypatch.setattr(listing_image, "generate", fake)
+    monkeypatch.setattr(listing_render, "generate", fake)
     with pytest.raises(HTTPException) as err:
         api.create_listing_image(api.ListingImageIn(style="white-bg"), acct="test")
     assert err.value.status_code == 422
