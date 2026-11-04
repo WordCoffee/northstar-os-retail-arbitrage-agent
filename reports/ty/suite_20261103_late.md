@@ -65,6 +65,18 @@ format-integration tests in the 13-failure run. The original was restored byte-f
 `1bb2a8ca^`; the new pipeline lives in `listing_render.py`. Lesson: check `git ls-files` for a module
 name before creating one. The final run is clean of those failures.
 
+## Supply loop: the backlog now reads the report the runner writes
+
+`--backlog` returned **0 proposals** from the real 10-failure report. The cause was not the queue: the
+parser read the report as UTF-8, while PowerShell's `Tee-Object` writes UTF-16LE on this box, so every
+`FAILED` line arrived as interleaved NULs. CRLF then left a `\r` before `$`, so lines without a
+" - reason" tail failed even after a UTF-8 decode.
+
+Fixed in `proposals_from_pytest_report`: honour a UTF-16/UTF-8 BOM and normalise CRLF before matching.
+On `backend_full_20261103_late4.txt` it now emits **10 proposals, 0 authorized**, each with
+`needs_author` because a node id is not a write scope. That is the supply loop working as designed,
+not silently auto-dispatching a guess.
+
 ## Honest note
 
 The full suite is not green, and this report does not claim it is. What it claims is measured: six
