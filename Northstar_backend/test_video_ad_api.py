@@ -70,13 +70,13 @@ def test_a_job_runs_the_producer_and_records_done(monkeypatch, tmp_path):
                 "checks": {"all": True}}
 
     monkeypatch.setattr(video_ad, "produce", fake_produce)
-    api._update("vad_test", status="queued", stage="queued")
-    api._run_job("vad_test", {"product": "x"}, _body(), b"PNG",
+    api._update("vad_0123456789ab", status="queued", stage="queued")
+    api._run_job("vad_0123456789ab", {"product": "x"}, _body(), b"PNG",
                  str(tmp_path / "out"))
-    job = api.get_job("vad_test", acct="test")
+    job = api.get_job("vad_0123456789ab", acct="test")
     assert job["status"] == "done"
     assert job["manifest"]["ok"] is True
-    assert (api.JOBS_DIR / "vad_test.json").is_file()
+    assert (api.JOBS_DIR / "vad_0123456789ab.json").is_file()
 
 
 def test_a_failed_job_keeps_the_reason(monkeypatch, tmp_path):
@@ -84,28 +84,33 @@ def test_a_failed_job_keeps_the_reason(monkeypatch, tmp_path):
         raise video_ad.VideoAdError("video_ad_contract_failed: duration_within_one_frame")
 
     monkeypatch.setattr(video_ad, "produce", boom)
-    api._update("vad_fail", status="queued")
-    api._run_job("vad_fail", {"product": "x"}, _body(), b"PNG", str(tmp_path / "out"))
-    job = api.get_job("vad_fail", acct="test")
+    api._update("vad_ba9876543210", status="queued")
+    api._run_job("vad_ba9876543210", {"product": "x"}, _body(), b"PNG", str(tmp_path / "out"))
+    job = api.get_job("vad_ba9876543210", acct="test")
     assert job["status"] == "failed"
     assert "duration_within_one_frame" in job["reason"]
 
 
 def test_an_unknown_job_is_404():
     with pytest.raises(HTTPException) as err:
-        api.get_job("vad_missing", acct="test")
+        api.get_job("vad_222222222222", acct="test")
     assert err.value.status_code == 404
 
 def test_a_job_left_running_is_marked_interrupted_on_recovery(tmp_path, monkeypatch):
     monkeypatch.setattr(api, "JOBS_DIR", tmp_path)
     monkeypatch.setattr(api, "_JOBS", {})
-    (tmp_path / "vad_stale.json").write_text(
-        json.dumps({"job_id": "vad_stale", "status": "running", "stage": "clip"}),
+    (tmp_path / "vad_111111111111.json").write_text(
+        json.dumps({"job_id": "vad_111111111111", "status": "running", "stage": "clip"}),
         encoding="utf-8")
     rows = api.recover_interrupted()
-    assert "vad_stale" in rows
-    job = api.get_job("vad_stale", acct="test")
+    assert "vad_111111111111" in rows
+    job = api.get_job("vad_111111111111", acct="test")
     assert job["status"] == "interrupted"
     assert "restarted" in job["reason"]
     # the replaced file is parseable, not a half-written one
-    json.loads((tmp_path / "vad_stale.json").read_text(encoding="utf-8"))
+    json.loads((tmp_path / "vad_111111111111.json").read_text(encoding="utf-8"))
+
+def test_a_job_id_that_is_a_path_is_refused():
+    with pytest.raises(HTTPException) as err:
+        api.get_job("../config", acct="test")
+    assert err.value.status_code == 404

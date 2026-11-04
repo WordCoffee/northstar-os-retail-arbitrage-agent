@@ -17,6 +17,7 @@ import binascii
 import io
 import json
 import os
+import re
 import threading
 import uuid
 from datetime import datetime, timezone
@@ -43,6 +44,8 @@ MAX_DATA_URL_BYTES = 24 * 1024 * 1024
 
 _JOBS: Dict[str, Dict[str, Any]] = {}
 _LOCK = threading.Lock()
+#: Job ids are generated; the route validates the shape before touching a path.
+_JOB_ID = re.compile(r"^vad_[a-f0-9]{12}$")
 
 
 def _now() -> str:
@@ -237,6 +240,10 @@ def _run_job(job_id: str, product: Dict[str, Any], body: VideoAdIn,
 
 @router.get("/jobs/{job_id}")
 def get_job(job_id: str, acct: str = Depends(studio_account)):
+    if not _JOB_ID.fullmatch(str(job_id or "")):
+        # A job id is generated, never a path fragment. Refuse a traversal
+        # attempt before it reaches _load's Path join.
+        raise HTTPException(status_code=404, detail="video-ad job not found")
     job = _JOBS.get(job_id) or _load(job_id)
     if not job:
         raise HTTPException(status_code=404, detail="video-ad job not found")
