@@ -66,3 +66,16 @@ The 15 s TikTok master is rendered and checked: `renders/mogra_lions_mane/video_
 wall clock). It used the item-0 product picture as the source. Nothing is left on you; if you want a
 different script, hook or scene count, say so and it becomes the next render. `POST
 /api/design-studio/video-ad/plan` still shows the cost before a render.
+
+## 8. Product decision: is advanced view gated to top tiers? (2026-11-03)
+
+Two pre-existing tests (	est_shell_modes.py) assert that mover (and above) carry the
+dvanced_view UI gate while foundation/scout do not. uth.PLAN_ENTITLEMENTS currently has
+ui_gates: [] for every plan, so the tests fail. Either restore the gate and name the plans, or tell
+me the current all-plans access is intended and I will align the tests. I will not guess a pricing
+decision.
+
+## Docs
+
+docs/CREATIVE_LANES.md is the operator-facing map of the surfaces, endpoints, contracts and gaps.
+eports/ty/SESSION_20261103.md is the index of this session's units, commits, probes and artifacts.
