@@ -115,8 +115,8 @@ def test_pressure_clears_when_a_non_write_tool_creates_the_artifact(tmp_path):
     res = agent.run("refactor the module")
 
     assert res.ok is True
-    assert "Only write and finish are available" in prompts[2]
-    assert "Only write and finish are available" not in prompts[3]
+    assert "STEP PRESSURE:" in prompts[2]
+    assert "STEP PRESSURE:" not in prompts[3]
 
 
 # ── p03: bounded, atomic writes ─────────────────────────────────────────────

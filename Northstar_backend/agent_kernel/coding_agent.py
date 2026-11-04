@@ -436,7 +436,9 @@ class CodingAgent:
                    "object MUST be an ast_edit naming a symbol you saw. Do not read again.\n"
                    if max(self._reads, self._read_actions) >= 2 else "")
                 + "- Stop with `finish` once the behaviour is correct.\n\n"
-                f"TASK:\n{task}\n\n"
+                + ("STEP PRESSURE: you have not produced the required artifact yet. "
+                   "Use write/ast_edit or apply_patch, then finish.\n\n" if pressure else "")
+                + f"TASK:\n{task}\n\n"
                 + (self._failing_block()[:600] if self._failing else "")
                 + "RECENT RESULTS:\n" + ("\n".join(observed[-2:]) or "(none)") + "\n\n"
                 "Next JSON object:")
@@ -460,7 +462,7 @@ class CodingAgent:
             "retried: to check your work, call `run` with the acceptance command.\n"
             "- On a FAIL observation, first `read` every file named in the error, then "
             "rewrite those files with write_many. The error text is authoritative.\n\n"
-            f"TASK:\n{task}\n\n"
+            + f"TASK:\n{task}\n\n"
             + (f"REQUIRED ARTIFACT: {self.required_artifact}\n"
                if self.required_artifact else "")
             + ("STOP READING. You have read the file and the content is above. Your next "
