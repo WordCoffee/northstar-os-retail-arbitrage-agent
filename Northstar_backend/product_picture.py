@@ -95,9 +95,30 @@ def plate_brief(face: str) -> str:
 
 
 def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
-                   seed: Optional[int]) -> Dict[str, Any]:
-    """Render a plate through the text-safe lane; never a raw model call."""
+                   seed: Optional[int], reference: Optional[bytes] = None
+                   ) -> Dict[str, Any]:
+    """Render a plate; never a raw model call.
+
+    Text-safe is the default: the model is asked for a blank package and the
+    lettering is drawn by the vector compositor. When a real product photo is
+    supplied the plate is reference-conditioned instead - identity comes from
+    the photo, and the designed panel still replaces the label area afterwards.
+    A reference plate is expected to contain lettering (the reference has it),
+    so it is not rejected by the text-free check; the composite + legibility
+    gate is what decides.
+    """
     import studio_generation as sg
+
+    if reference is not None:
+        out = sg.generate_reference(brief, reference, width=width, height=height,
+                                    tier=tier, seed=seed)
+        return {
+            "bytes": out["bytes"], "seed": out.get("seed"), "model": out.get("model"),
+            "width": out.get("width"), "height": out.get("height"),
+            "duration_seconds": out.get("duration_seconds"),
+            "used_brief": brief, "text_fidelity": None, "contains_text": None,
+            "mode": "reference",
+        }
 
     def _render(prompt: str) -> Dict[str, Any]:
         return sg.generate_image(prompt, width=width, height=height, tier=tier,
@@ -115,6 +136,7 @@ def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
         "used_brief": result.get("used_brief"),
         "text_fidelity": result.get("text_fidelity"),
         "contains_text": check.get("contains_text"),
+        "mode": "text_safe",
     }
 
 
@@ -156,6 +178,16 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
     }
 
 
+def _reference_for(reference: Any, face: str) -> Optional[bytes]:
+    """A single reference applies to every face; a mapping is per face."""
+    if reference is None:
+        return None
+    if isinstance(reference, dict):
+        value = reference.get(face)
+        return value if isinstance(value, (bytes, bytearray)) else None
+    return reference if isinstance(reference, (bytes, bytearray)) else None
+
+
 def build(design: Optional[Dict[str, Any]] = None, *,
           out_dir: Optional[str] = None,
           faces: Sequence[str] = ("front", "back"),
@@ -163,7 +195,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
           seed: Optional[int] = None,
           generator: Optional[Callable[..., Dict[str, Any]]] = None,
           shading: float = 0.45,
-          out_root: Optional[str] = None) -> Dict[str, Any]:
+          out_root: Optional[str] = None,
+          reference: Optional[bytes] = None) -> Dict[str, Any]:
     """Render the plates, compose the panels and gate every picture.
 
     ``generator(brief, width=…, height=…, tier=…, seed=…)`` is injectable so the
@@ -176,7 +209,6 @@ def build(design: Optional[Dict[str, Any]] = None, *,
     out.mkdir(parents=True, exist_ok=True)
     rejected = out / "_rejected"
     rejected.mkdir(parents=True, exist_ok=True)
-    gen = generator or _guarded_plate
 
     base_seed = int(seed) if seed is not None else None
     records: list = []
@@ -188,8 +220,13 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         brief = plate_brief(face)
         plate_record: Dict[str, Any] = {}
         try:
-            plate_record = gen(brief, width=width, height=height, tier=tier,
-                               seed=face_seed)
+            if generator is not None:
+                plate_record = generator(brief, width=width, height=height,
+                                         tier=tier, seed=face_seed)
+            else:
+                plate_record = _guarded_plate(
+                    brief, width=width, height=height, tier=tier, seed=face_seed,
+                    reference=_reference_for(reference, face))
         except Exception as exc:  # noqa: BLE001 - the engine state is the reason
             records.append({
                 "face": face, "ok": False, "stage": "plate",
@@ -221,6 +258,7 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             "used_brief": plate_record.get("used_brief"),
             "seed": plate_record.get("seed", face_seed),
             "model": plate_record.get("model"),
+            "plate_mode": plate_record.get("mode"),
             "plate_size": list(plate.size),
             "plate_text": {
                 "contains_text": plate_record.get("contains_text"),

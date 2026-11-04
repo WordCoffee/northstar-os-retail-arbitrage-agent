@@ -1107,11 +1107,11 @@ class GraphicsAdapter(Adapter):
             return None, {"status": "error", "reason": str(exc)[:300]}
         return report, ship_gate.manifest_block(report)
 
-    def _gated_result(self, out: Dict[str, Any], params: Dict[str, Any], prompt: str, *,
-                      summary: str, evidence: Dict[str, Any]) -> StepResult:
-        """Turn a render into a StepResult, refusing what the gate refuses."""
+    def _result_from(self, out: Dict[str, Any], report: Optional[Dict[str, Any]],
+                     gate: Dict[str, Any], *, summary: str,
+                     evidence: Dict[str, Any]) -> StepResult:
+        """Turn one chosen render into a StepResult, refusing what the gate refuses."""
         artifacts = [str(a) for a in (out.get("artifacts") or [])]
-        report, gate = self._ship_gate(out, params, prompt)
         evidence = {**evidence, "ship_gate": gate}
         if report is not None and report.get("status") == "refused":
             return StepResult(
@@ -1128,6 +1128,12 @@ class GraphicsAdapter(Adapter):
             summary += " - ship gate passed"
         return StepResult(True, summary, evidence=evidence, artifacts=artifacts,
                           detail=str(out)[:600] if report is None else "")
+
+    def _gated_result(self, out: Dict[str, Any], params: Dict[str, Any], prompt: str, *,
+                      summary: str, evidence: Dict[str, Any]) -> StepResult:
+        """Turn a render into a StepResult, refusing what the gate refuses."""
+        report, gate = self._ship_gate(out, params, prompt)
+        return self._result_from(out, report, gate, summary=summary, evidence=evidence)
 
     def run_step(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
         params = step.get("params") or {}
@@ -1172,31 +1178,92 @@ class GraphicsAdapter(Adapter):
                                   retriable=True,
                                   evidence={"suspension": suspension,
                                             "lock": "render_session"})
+        attempts = max(1, min(5, int(params.get("attempts") or 1)))
+        base_seed = params.get("seed")
+        reference_bytes = None
+        reference_path = params.get("reference") or params.get("reference_image") or (
+            (params.get("reference_assets") or [None])[0])
+        if reference_path:
+            from pathlib import Path as _Path
+            try:
+                reference_bytes = _Path(str(reference_path)).read_bytes()
+            except OSError as exc:
+                return StepResult(
+                    False, "the reference image could not be read",
+                    detail=f"{reference_path}: {exc}", blocked=True,
+                    evidence={"engine": "flux3", "reference": str(reference_path)})
+        candidates: List[Dict[str, Any]] = []
+        render_error = None
         try:
-            out = graphics.generate(
-                prompt,
-                width=int(params.get("width") or 1024),
-                height=int(params.get("height") or 1024),
-                steps=int(params.get("steps") or 28),
-                seed=params.get("seed"),
-            )
-        except graphics.GraphicsError as exc:
-            return StepResult(
-                False, "flux 3 render not possible",
-                detail=f"{exc.code}: {exc.detail}",
-                blocked=exc.code in ("flux3_unavailable", "prompt_required"),
-                retriable=exc.code not in ("prompt_required",),
-                evidence={"engine": "flux3", "error": exc.as_dict(),
-                          "suspension": suspension})
+            for index in range(attempts):
+                one_seed = (int(base_seed) + index * 7919
+                            if base_seed is not None else None)
+                try:
+                    one = graphics.generate(
+                        prompt,
+                        width=int(params.get("width") or 1024),
+                        height=int(params.get("height") or 1024),
+                        steps=int(params.get("steps") or 28),
+                        seed=one_seed,
+                        reference_image=reference_bytes,
+                    )
+                except graphics.GraphicsError as exc:
+                    render_error = exc
+                    candidates.append({"index": index, "seed": one_seed,
+                                       "out": None, "error": exc.as_dict()})
+                    if exc.code in ("flux3_unavailable", "prompt_required"):
+                        break
+                    continue
+                report_i, gate_i = self._ship_gate(one, params, prompt)
+                candidates.append({"index": index, "seed": one_seed, "out": one,
+                                   "report": report_i, "gate": gate_i})
         finally:
             if acquired:
                 lock.release()
 
+        if not any(c.get("out") for c in candidates):
+            exc = render_error
+            if exc is not None:
+                return StepResult(
+                    False, "flux 3 render not possible",
+                    detail=f"{exc.code}: {exc.detail}",
+                    blocked=exc.code in ("flux3_unavailable", "prompt_required"),
+                    retriable=exc.code not in ("prompt_required",),
+                    evidence={"engine": "flux3", "error": exc.as_dict(),
+                              "suspension": suspension})
+            return StepResult(False, "no candidate rendered",
+                              detail="every attempt failed without an engine error",
+                              evidence={"engine": "flux3", "suspension": suspension})
+
+        if attempts > 1:
+            import image_best_of as _best_of  # noqa: WPS433
+
+            best = _best_of.pick(candidates)
+            chosen = candidates[best]
+            evidence = {
+                "engine": "flux3", "model": chosen["out"].get("model"),
+                "width": chosen["out"].get("width"),
+                "height": chosen["out"].get("height"),
+                "steps": chosen["out"].get("steps"),
+                "seed": chosen["out"].get("seed"),
+                "mode": "reference" if reference_bytes else "text",
+                "suspension": suspension,
+                "best_of": {"attempts": attempts, "winner_index": best,
+                            "candidates": _best_of.summarise(candidates)},
+            }
+            return self._result_from(
+                chosen["out"], chosen.get("report"),
+                chosen.get("gate") or {"status": "unreviewed"},
+                summary="flux 3 render completed (best of %d)" % attempts,
+                evidence=evidence)
+
+        out = candidates[0]["out"]
         return self._gated_result(
             out, params, prompt, summary="flux 3 render completed",
             evidence={"engine": "flux3", "model": out.get("model"),
                       "width": out.get("width"), "height": out.get("height"),
                       "steps": out.get("steps"), "seed": out.get("seed"),
+                      "mode": "reference" if reference_bytes else "text",
                       "suspension": suspension})
 
 

@@ -152,6 +152,10 @@ CUTOUT_MODEL_FILE = os.environ.get("STUDIO_CUTOUT_MODEL") or "birefnet.safetenso
 UPSCALE_MODEL_FILE = os.environ.get("STUDIO_UPSCALE_MODEL") or "RealESRGAN_x4plus.pth"
 
 _STYLE_SUFFIX = ", professional commercial product photography, clean composition"
+#: Reference mode keeps identity in the image conditioning, so the text must not
+#: re-invent it. Stated once, positively, rather than a list of "do not" clauses.
+_REFERENCE_SUFFIX = (", the product in the reference image, identical package, "
+                     "identical label artwork, identical proportions and material")
 # Rich renders keep the operator's full art direction (lettering demands included).
 # Text-safe mode appends its own suppression phrase in text_fidelity.sanitize_brief_for_render.
 
@@ -633,6 +637,102 @@ def _wan_graph(prompt: str, width: int, height: int, frames: int, steps: int, se
 
 # ── Public generation entries ──────────────────────────────────────────────
 
+def _flux3_reference_graph(prompt: str, reference_name: str, width: int, height: int,
+                           steps: int, seed: int) -> dict:
+    """FLUX 3 Image Klein multi-image-to-image graph (reference-conditioned).
+
+    The reference image is VAE-encoded and attached to the positive conditioning
+    with ``ReferenceLatent``; the DiT attends to the reference tokens alongside
+    the text tokens (``comfy/model_base.Flux3.extra_conds`` consumes
+    ``reference_latents``). This is the graph the checkpoint repository ships as
+    ``mi2i`` - it is what makes the render *your* product instead of a plausible
+    stranger. One reference is used here; chain another ``ReferenceLatent`` node
+    for more (the model accepts up to ten).
+    """
+    loader = ("UnetLoaderGGUF" if str(IMAGE_MODEL_FILE).lower().endswith(".gguf")
+              else "UNETLoader")
+    unet_inputs = {"unet_name": IMAGE_MODEL_FILE}
+    if loader == "UNETLoader":
+        unet_inputs["weight_dtype"] = "default"
+    return {
+        "1": {"class_type": loader, "inputs": unet_inputs},
+        "2": {"class_type": "CLIPLoader",
+              "inputs": {"clip_name": TEXT_ENCODER_FILE, "type": "flux3",
+                         "device": "default"}},
+        "3": {"class_type": "VAELoader", "inputs": {"vae_name": FLUX3_VAE_FILE}},
+        "4": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["2", 0], "text": prompt + _REFERENCE_SUFFIX}},
+        "5": {"class_type": "CLIPTextEncode",
+              "inputs": {"clip": ["2", 0], "text": ""}},
+        "6": {"class_type": "LoadImage", "inputs": {"image": reference_name}},
+        "7": {"class_type": "VAEEncode",
+              "inputs": {"pixels": ["6", 0], "vae": ["3", 0]}},
+        "8": {"class_type": "ReferenceLatent",
+              "inputs": {"conditioning": ["4", 0], "latent": ["7", 0]}},
+        "9": {"class_type": "EmptyFlux2LatentImage",
+              "inputs": {"width": width, "height": height, "batch_size": 1}},
+        "10": {"class_type": "ModelSamplingFlux",
+               "inputs": {"model": ["1", 0], "max_shift": 2.77259,
+                          "base_shift": 2.77259, "width": width, "height": height}},
+        "11": {"class_type": "KSampler",
+               "inputs": {"model": ["10", 0], "positive": ["8", 0],
+                          "negative": ["5", 0], "latent_image": ["9", 0],
+                          "seed": seed, "steps": steps, "cfg": 1.0,
+                          "sampler_name": "euler", "scheduler": "simple",
+                          "denoise": 1.0}},
+        "12": {"class_type": "VAEDecode",
+               "inputs": {"samples": ["11", 0], "vae": ["3", 0]}},
+        "13": {"class_type": "SaveImage",
+               "inputs": {"images": ["12", 0], "filename_prefix": "ns-studio-ref"}},
+    }
+
+
+def prepare_reference(image_bytes: bytes, *, max_edge: int = 1024) -> bytes:
+    """Bound the reference tokens: one 1024px edge is ~4k latent tokens.
+
+    The VAE grid is 16px; a larger reference costs VRAM and attention for no
+    identity gain. RGBA is flattened onto white, never onto black.
+    """
+    from io import BytesIO
+    from PIL import Image
+
+    with Image.open(BytesIO(image_bytes)) as im:
+        if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
+            rgba = im.convert("RGBA")
+            background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+            img = Image.alpha_composite(background, rgba).convert("RGB")
+        else:
+            img = im.convert("RGB")
+        img.thumbnail((int(max_edge), int(max_edge)), Image.LANCZOS)
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        return buf.getvalue()
+
+
+def _run_image_session(graph: dict, *, on_progress=None, timeout_s: float = 1800):
+    """The shared render lifecycle: GPU lock, RAM gate, timeout, cache release."""
+    session = RenderSession(lane="image")
+    with session:
+        ram_gate = {"ok": True, "stopped": session.stopped,
+                    "needed_mb": SYSTEM_RAM_FLOOR_MB}
+        if on_progress is not None:
+            on_progress(0, "queued on the local engine")
+        session.mark_render_started()
+        try:
+            files = _run_graph_guarded(graph, timeout_s=timeout_s, on_progress=on_progress)
+            session.check_timeout()
+        except RuntimeError as exc:
+            if "render_timeout" not in str(exc):
+                release_models()  # never leave a crammed cache behind a failed render
+            raise
+        except Exception:
+            release_models()  # never leave a crammed cache behind a failed render
+            raise
+        else:
+            session.mark_render_finished()
+    return files, ram_gate
+
+
 def generate_image(prompt: str, width=None, height=None, tier: str = "draft", seed=None,
                    on_progress=None) -> dict:
     if not media_live_armed():
@@ -647,30 +747,10 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
     # FLUX 3 official graph: 16 steps. A "final" tier gets a little more.
     steps = 24 if str(tier).lower() == "final" else 16
     seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
-    # Serialize renders and run the RAM stop/restore lifecycle. The lock is
-    # cross-process, so two workers cannot drive the GPU at once.
-    session = RenderSession(lane="image")
-    with session:
-        _ram_gate = {"ok": True, "stopped": session.stopped,
-                     "needed_mb": SYSTEM_RAM_FLOOR_MB}
-        if on_progress is not None:
-            on_progress(0, "queued on the local engine")
-        session.mark_render_started()
-        try:
-            # FLUX 3 is the only image engine. There is no FLUX 2 branch: the
-            # weights were removed on 2026-10-29 and a fallback would hide that.
-            graph = _flux3_klein_graph(prompt, w, h, steps, seed)
-            files = _run_graph_guarded(graph, timeout_s=1800, on_progress=on_progress)
-            session.check_timeout()
-        except RuntimeError as exc:
-            if "render_timeout" not in str(exc):
-                release_models()  # never leave a crammed cache behind a failed render
-            raise
-        except Exception:
-            release_models()  # never leave a crammed cache behind a failed render
-            raise
-        else:
-            session.mark_render_finished()
+    # FLUX 3 is the only image engine. There is no FLUX 2 branch: the weights
+    # were removed on 2026-10-29 and a fallback would hide that.
+    files, ram_gate = _run_image_session(
+        _flux3_klein_graph(prompt, w, h, steps, seed), on_progress=on_progress)
     img = next((f for f in files if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
     if not img:
         raise RuntimeError("the render finished but produced no image output")
@@ -699,7 +779,63 @@ def generate_image(prompt: str, width=None, height=None, tier: str = "draft", se
         "exact_size_pass": snapped,
         "engine_max_edge_px": MAX_EDGE_PX,
         "duration_seconds": None,
-        "ram_gate": _ram_gate,
+        "ram_gate": ram_gate,
+        "brain_evicted": last_brain_eviction()["models"],
+    }
+
+
+def generate_reference(prompt: str, reference_bytes: bytes, *, width=None, height=None,
+                       tier: str = "draft", seed=None, on_progress=None,
+                       max_ref_edge: int = 1024) -> dict:
+    """Render with the real product photo as a reference (FLUX 3 ``mi2i``).
+
+    Identity comes from the reference, not from the prompt: the label, material
+    and silhouette are carried by the image conditioning. Text is still drawn by
+    the vector compositor downstream - diffusion is never asked to spell.
+    """
+    if not media_live_armed():
+        raise RuntimeError("media_generation_disarmed (MEDIA_GEN_LIVE is not 1)")
+    if not reference_bytes:
+        raise ValueError("generate_reference requires the reference image bytes")
+    if not unload_brain():
+        raise RuntimeError(
+            "vram_busy: the local brain is still resident on the GPU (Ollama /api/ps) "
+            "after waiting; refusing a render that would run out of memory. Retry shortly.")
+    req_w = int(width) if width not in (None, "") else 1024
+    req_h = int(height) if height not in (None, "") else 1024
+    w, h = _fit_box(req_w, req_h)
+    steps = 24 if str(tier).lower() == "final" else 16
+    seed = int(seed) if seed is not None else random.randrange(1, 2 ** 31)
+    reference_name = upload_image(prepare_reference(reference_bytes, max_edge=max_ref_edge),
+                                  filename=f"ns-ref-{seed}.png")
+    files, ram_gate = _run_image_session(
+        _flux3_reference_graph(prompt, reference_name, w, h, steps, seed),
+        on_progress=on_progress)
+    img = next((f for f in files if str(f.get("filename", "")).lower().endswith((".png", ".jpg", ".webp"))), None)
+    if not img:
+        raise RuntimeError("the reference render finished but produced no image output")
+    data = _fetch_output(img)
+    delivered = (w, h)
+    snapped = None
+    if ((w, h) != (req_w, req_h)
+            and req_w <= MAX_EDGE_PX and req_h <= MAX_EDGE_PX
+            and abs(w - req_w) <= 16 and abs(h - req_h) <= 16):
+        data = _exact_size_png(data, req_w, req_h)
+        delivered = (req_w, req_h)
+        snapped = {"engine": [w, h], "delivered": [req_w, req_h]}
+    release_models()
+    return {
+        "bytes": data, "ext": "png", "mime": "image/png",
+        "model": os.path.splitext(IMAGE_MODEL_FILE)[0], "provider": "comfyui",
+        "mode": "reference", "reference": reference_name,
+        "seed": seed, "width": delivered[0], "height": delivered[1],
+        "engine_width": w, "engine_height": h,
+        "requested": {"width": req_w, "height": req_h},
+        "fitted": (w, h) != (req_w, req_h),
+        "exact_size_pass": snapped,
+        "engine_max_edge_px": MAX_EDGE_PX,
+        "duration_seconds": None,
+        "ram_gate": ram_gate,
         "brain_evicted": last_brain_eviction()["models"],
     }
 

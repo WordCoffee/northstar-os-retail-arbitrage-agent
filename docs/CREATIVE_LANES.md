@@ -55,6 +55,12 @@ each face with `pouch_label.measure_face`, warps the designed panel with
 `mockup_quality.assert_legible` reads the wordmark and net weight. A plate with no package is
 `plate_face_not_found`, never composited.
 
+When a reference photo is supplied (`reference=` / `references={"front": id, "back": id}`), the plate
+is **reference-conditioned** (FLUX 3 mi2i: `LoadImage -> VAEEncode -> ReferenceLatent`) so the pouch
+is the real one, while the vector panel still replaces the label area: small print is drawn, never
+diffused. Live 2026-11-04: front and back both passed the OCR gate; the same prompt without the
+reference invented `AETICHIN ERMNICSES` on the label.
+
 Live: `renders/mogra_lions_mane/product_front.png`, `product_back.png` (1024×1536, OCR-gated).
 
 ### Social frames and listing images

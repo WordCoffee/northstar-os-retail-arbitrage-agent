@@ -1,0 +1,49 @@
+{
+  "image_quality_reference_20261104": {
+    "status": "DONE - reference-conditioned rendering live-verified; best-of-N and the identity fix wired; fragment pending operator merge",
+    "defect_fixed": "Text-to-image invented the product. FLUX 3 Klein supports multi-reference conditioning in this ComfyUI build (model_base.Flux3 + ReferenceLatent) but was never used.",
+    "live_pair_512_seed4242": {
+      "reference_conditioned": {"seconds": 42.8, "phash_distance": 22, "ssim": 0.4843, "identity": "pass"},
+      "text_only": {"seconds": 12.1, "phash_distance": 24, "ssim": 0.2306, "identity": "refused"},
+      "visual": "reference render carries MOGRA wordmark and net weight; text-only invents lettering"
+    },
+    "built": {
+      "studio_generation": "_flux3_reference_graph (LoadImage -> VAEEncode -> ReferenceLatent), prepare_reference (<=1024px, alpha on white), generate_reference, shared _run_image_session",
+      "product_picture": "build(reference=bytes|dict) and per-face _reference_for; reference plate + vector panel so small print is drawn, not diffused",
+      "gateway": "tools/flux3_gateway.py reference_image base64 -> multipart upload -> mi2i graph; mode in the response",
+      "tys": "tys_ops.graphics.generate(reference_image=...); GraphicsAdapter reads params.reference and blocks when missing; params.attempts 1-5 selects best-of-N",
+      "best_of": "Northstar_backend/image_best_of.py - render N, review each, keep winner, write rejects + manifest",
+      "generate_api": "reference_asset_ids, surface, review; ship-gate refusal blocks the deliverable"
+    },
+    "identity_fix": {
+      "bug": "min_ssim was recorded but never used; a text-only render passed on pHash alone",
+      "rule": "(phash_distance <= max AND ssim >= min) OR ssim >= 0.55",
+      "floors": {"max_phash_distance": 24, "min_ssim": 0.4, "calibration": "22/0.484 passes vs 24/0.231 refused"}
+    },
+    "live_results": {
+      "product_picture_front_seed778": "ok, OCR read MOGRA, LION'S MANE, NET WT. 6 0z (170 g), DRAFT notice",
+      "front_back_pair_seed780": "both faces ok, plate_mode=reference; back OCR read Supplement Facts and 2,000 mg",
+      "full_ship_gate_1536_seed777": "passed - identity 0/0.9329, preference 0.2314, adherence 20.75, legibility pass",
+      "artifacts": [
+        "renders/mogra_lions_mane/reference_check/",
+        "renders/mogra_lions_mane/reference_pp/",
+        "renders/mogra_lions_mane/reference_pair/"
+      ]
+    },
+    "verification": {
+      "tests_focused": "173 passed",
+      "tests_product_picture": "27 passed",
+      "probes": "t10/t11/t12/t21/t22 OK",
+      "after": "ComfyUI stopped, RAM 8.7 GB free, disk 34.9 GB free"
+    },
+    "limits": [
+      "reference-only scene renders still diffuse small print; route copy-bearing surfaces through the vector composite",
+      "back-face nutrition and UPC are still DRAFT/placeholder (owner data)",
+      "best-of-N is opt-in and costs N renders",
+      "gateway reference upload is structurally tested, not live-tested",
+      "identity floors provisional (one same-seed pair)"
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud call, no policy/allowlist change. ComfyUI was started for the renders and stopped afterwards.",
+    "report": "reports/image_quality_reference_20261104.md"
+  }
+}

@@ -44,11 +44,13 @@ Scorer = Optional[Callable[[bytes, str], float]]
 
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "image_review.json"
 
-#: Provisional identity floors. pHash is the primary signal because a render and
-#: the source photo legitimately differ in background; SSIM is recorded and can
-#: rescue a near-identical render whose hash drifted by a few bits.
-DEFAULT_MAX_PHASH_DISTANCE = 16
-DEFAULT_MIN_SSIM = 0.30
+#: Provisional identity floors, calibrated 2026-11-04 on a same-seed pair
+#: (reference-conditioned vs text-only, 512px): the reference render measured
+#: pHash 22 / SSIM 0.484, the invented one pHash 24 / SSIM 0.231. Both must clear
+#: the floor (phash distance AND ssim), or SSIM alone must be very high - a hash
+#: that drifts by a few bits on a legitimate re-light is not a different product.
+DEFAULT_MAX_PHASH_DISTANCE = 24
+DEFAULT_MIN_SSIM = 0.40
 #: SSIM at or above this passes even when the hash drifted (same picture, new
 #: light). Calibrate from the owner's reference set before tightening.
 SSIM_RESCUE = 0.55
@@ -259,7 +261,8 @@ def review_image(image: ImageLike, *, brief: str = "",
         ref = _load(reference)
         distance = phash_distance(img, ref)
         similarity = ssim(img, ref)
-        ok = distance <= int(max_phash_distance) or similarity >= SSIM_RESCUE
+        ok = ((distance <= int(max_phash_distance) and similarity >= float(min_ssim))
+              or similarity >= SSIM_RESCUE)
         axes["identity"] = _axis(
             "pass" if ok else "fail", blocking=True,
             phash_distance=distance, max_phash_distance=int(max_phash_distance),
@@ -267,8 +270,9 @@ def review_image(image: ImageLike, *, brief: str = "",
             rescue=SSIM_RESCUE)
         if not ok:
             reasons.append(
-                f"identity: phash distance {distance} > {max_phash_distance} and "
-                f"ssim {similarity:.2f} < {SSIM_RESCUE:.2f} against the reference")
+                f"identity: phash distance {distance} (max {max_phash_distance}) and "
+                f"ssim {similarity:.2f} (min {min_ssim:.2f}, rescue {SSIM_RESCUE:.2f}) "
+                f"against the reference")
     else:
         axes["identity"] = _axis("not_applicable", blocking=False,
                                  reason="no reference image supplied")

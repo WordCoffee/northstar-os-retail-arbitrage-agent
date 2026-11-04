@@ -1918,6 +1918,13 @@ class GenerateIn(BaseModel):
     #: Placement canvas: square (1:1), story (9:16) or wide (16:9). A format fixes
     #: width/height; passing a contradictory pair is refused, not overridden.
     format: Optional[str] = Field(default=None, max_length=20)
+    #: Review surface for the ship gate (product_picture, listing_image,
+    #: social_frame, default). Floors live in config/image_review.json.
+    surface: Optional[str] = Field(default=None, max_length=40)
+    #: Generated assets used as product references (FLUX 3 reference conditioning).
+    reference_asset_ids: Optional[list] = None
+    #: Score the render with the ship gate even when no deliverable is written.
+    review: bool = False
 
 
 @router.get("/engine")
@@ -1953,6 +1960,30 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     from text_fidelity import render_with_text_guard
     text_safe = bool(getattr(body, "text_safe", False))
 
+    from pathlib import Path
+    import uuid as _uuid
+    out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
+
+    reference_bytes = None
+    if body.reference_asset_ids:
+        if body.kind != "image":
+            raise HTTPException(status_code=422, detail={
+                "code": "reference_requires_image",
+                "message": "reference_asset_ids apply to image renders only"})
+        db_ref = get_northstar_db()
+        for aid in list(body.reference_asset_ids)[:2]:
+            asset = db_ref.design_studio.assets.get_by_id(str(aid), account_id=acct)
+            if not asset or not asset.get("storage_key"):
+                raise HTTPException(status_code=422, detail={
+                    "code": "reference_asset_not_found", "asset_id": str(aid)})
+            name = Path(str(asset["storage_key"])).name  # basename only
+            path = out_dir / name
+            if not path.is_file():
+                raise HTTPException(status_code=422, detail={
+                    "code": "reference_asset_missing_file", "asset_id": str(aid)})
+            reference_bytes = path.read_bytes()
+            break
+
     db = get_northstar_db()
     now = datetime.now(timezone.utc).isoformat()
     job_id = db.design_studio.jobs.create({
@@ -1974,6 +2005,10 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         if body.kind == "video":
             return sg.generate_video(prompt=prompt, width=width, height=height,
                                      tier=body.tier, seed=body.seed)
+        if reference_bytes is not None:
+            return sg.generate_reference(prompt=prompt, reference_bytes=reference_bytes,
+                                         width=width, height=height,
+                                         tier=body.tier, seed=body.seed)
         return sg.generate_image(prompt=prompt, width=width, height=height,
                                  tier=body.tier, seed=body.seed)
     # The requested container form is stated at the head AND the tail of the brief.
@@ -2000,9 +2035,6 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     out = guarded["out"]
     tf_result = guarded["text_fidelity"]
 
-    from pathlib import Path
-    import uuid as _uuid
-    out_dir = Path(__file__).resolve().parent / "data" / "studio_generated"
     out_dir.mkdir(parents=True, exist_ok=True)
     fname = f"{_uuid.uuid4().hex}.{out['ext']}"
     (out_dir / fname).write_bytes(out["bytes"])
@@ -2042,6 +2074,14 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
     deliverable = None
     adherence = None
     quality = None
+    review = None
+    review_block = None
+    if body.review or body.deliver:
+        import ship_gate as _sg
+        review = _sg.review_image(out["bytes"], brief=body.brief,
+                                  reference=reference_bytes,
+                                  surface=body.surface)
+        review_block = _sg.manifest_block(review)
     if body.deliver:
         import deliverables as _dl
         import quality_gate as _qg
@@ -2064,7 +2104,7 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
                      "score": verdict.get("score"),
                      "failed_axes": verdict.get("failed"),
                      "reasons": verdict.get("reasons")}
-        if verdict.get("ok"):
+        if verdict.get("ok") and not (review and review.get("status") == "refused"):
             deliverable = _dl.write_deliverable(
                 job_id, brief=body.brief, final_png=out["bytes"],
                 adherence=adherence, extra={
@@ -2089,6 +2129,11 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         "text_fidelity": tf_result,
         "adherence": adherence,
         "quality": quality,
+        "review": review_block,
+        "delivery_blocked": ("ship_gate_refused"
+                             if deliverable is None and review
+                             and review.get("status") == "refused" and body.deliver
+                             else None),
         "ad_format": ad_format,
         "deliverable": deliverable,
     }

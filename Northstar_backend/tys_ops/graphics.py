@@ -161,7 +161,8 @@ def _post(path: str, payload: Dict[str, Any], timeout: float) -> Dict[str, Any]:
 
 def generate(prompt: str, *, width: int = 1024, height: int = 1024,
              steps: int = 28, seed: Optional[int] = None,
-             timeout: float = 600.0) -> Dict[str, Any]:
+             timeout: float = 600.0,
+             reference_image: Optional[bytes] = None) -> Dict[str, Any]:
     """Render one image on FLUX 3. No fallback, no ComfyUI."""
     prompt = (prompt or "").strip()
     if not prompt:
@@ -178,6 +179,8 @@ def generate(prompt: str, *, width: int = 1024, height: int = 1024,
         "seed": None if seed is None else int(seed),
         "model": MODEL_ID,
     }
+    if reference_image:
+        payload["reference_image"] = base64.b64encode(reference_image).decode("ascii")
     raw = _post("/generate", payload, timeout)
     artifacts: List[str] = []
     if isinstance(raw.get("images"), list):
@@ -218,6 +221,7 @@ def generate(prompt: str, *, width: int = 1024, height: int = 1024,
         "height": int(height),
         "steps": int(steps),
         "seed": payload["seed"],
+        "mode": "reference" if reference_image else "text",
         "artifacts": artifacts,
         "raw": {k: v for k, v in raw.items() if k not in ("image_b64", "b64")},
     }

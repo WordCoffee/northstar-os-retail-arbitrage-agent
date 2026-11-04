@@ -3,7 +3,9 @@
 `tys_ops.graphics` speaks a tiny contract (`GET /health`, `POST /generate`).
 This process implements it with FLUX 3 Image Klein and nothing else: one UNET,
 one Qwen3-VL text encoder, the FLUX VAE, 16 steps, CFG 1.0 — the official
-text-to-image graph.
+text-to-image graph. It also accepts a reference image (`reference_image`, base64),
+which switches the graph to the FLUX 3 mi2i form: the reference is VAE-encoded and
+attached to the positive conditioning.
 
 Runtime note (stated, not hidden): this machine has no CUDA PyTorch outside
 ComfyUI's own virtualenv, so ComfyUI is used as the **local inference runtime**
@@ -30,6 +32,7 @@ and this note now agree on the nvfp4 file that is actually installed.)
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import sys
@@ -112,11 +115,12 @@ def health() -> Dict[str, Any]:
 
 
 def _graph(prompt: str, width: int, height: int, steps: int,
-           seed: int, negative: str = "") -> Dict[str, Any]:
+           seed: int, negative: str = "",
+           reference_name: Optional[str] = None) -> Dict[str, Any]:
     unet_inputs = {"unet_name": UNET}
     if UNET_LOADER == "UNETLoader":
         unet_inputs["weight_dtype"] = "default"
-    return {
+    graph = {
         "101": {"class_type": UNET_LOADER, "inputs": unet_inputs},
         "102": {"class_type": "CLIPLoader",
                 "inputs": {"clip_name": TEXT_ENCODER, "type": "flux3",
@@ -145,18 +149,53 @@ def _graph(prompt: str, width: int, height: int, steps: int,
                 "inputs": {"images": ["108", 0],
                            "filename_prefix": "flux3"}},
     }
+    if reference_name:
+        # FLUX 3 mi2i: the reference is VAE-encoded and attached to the positive
+        # conditioning; the DiT attends to its tokens (comfy Flux3.extra_conds).
+        graph["110"] = {"class_type": "LoadImage",
+                        "inputs": {"image": reference_name}}
+        graph["111"] = {"class_type": "VAEEncode",
+                        "inputs": {"pixels": ["110", 0], "vae": ["103", 0]}}
+        graph["112"] = {"class_type": "ReferenceLatent",
+                        "inputs": {"conditioning": ["104", 0], "latent": ["111", 0]}}
+        graph["107"]["inputs"]["positive"] = ["112", 0]
+    return graph
+
+
+def _upload_image(data: bytes, filename: str) -> str:
+    """Upload a reference to ComfyUI's input dir (multipart, stdlib only)."""
+    boundary = "----northstar" + uuid.uuid4().hex
+    head = (f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="image"; filename="{filename}"\r\n'
+            f"Content-Type: image/png\r\n\r\n").encode("utf-8")
+    tail = (f"\r\n--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="overwrite"\r\n\r\ntrue'
+            f"\r\n--{boundary}--\r\n").encode("utf-8")
+    req = urllib.request.Request(
+        COMFY + "/upload/image", data=head + data + tail,
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"})
+    with urllib.request.urlopen(req, timeout=180) as response:
+        info = json.loads(response.read().decode("utf-8") or "{}")
+    name = info.get("name") or filename
+    sub = (info.get("subfolder") or "").strip("/")
+    return f"{sub}/{name}" if sub else name
 
 
 def generate(prompt: str, width: int = DEFAULT_W, height: int = DEFAULT_H,
              steps: int = STEPS, seed: Optional[int] = None,
-             negative: str = "", timeout: float = 900.0) -> Dict[str, Any]:
+             negative: str = "", timeout: float = 900.0,
+             reference_image: Optional[bytes] = None) -> Dict[str, Any]:
     ready = health()
     if ready["status"] != "ok":
         raise RuntimeError(ready["detail"])
     seed = int(seed) if seed is not None else int.from_bytes(os.urandom(4), "big")
+    reference_name = None
+    if reference_image:
+        reference_name = _upload_image(reference_image, f"ref-{seed}.png")
     client_id = uuid.uuid4().hex
     queued = _json(COMFY + "/prompt",
-                   {"prompt": _graph(prompt, width, height, steps, seed, negative),
+                   {"prompt": _graph(prompt, width, height, steps, seed, negative,
+                                     reference_name),
                     "client_id": client_id})
     prompt_id = queued.get("prompt_id")
     if not prompt_id:
@@ -182,6 +221,8 @@ def generate(prompt: str, width: int = DEFAULT_W, height: int = DEFAULT_H,
             return {"status": "ok", "model": MODEL_ID, "prompt_id": prompt_id,
                     "seed": seed, "width": int(width), "height": int(height),
                     "steps": int(steps), "images": paths,
+                    "mode": "reference" if reference_name else "text",
+                    "reference": reference_name,
                     "path": paths[0]}
         time.sleep(1.0)
     raise RuntimeError("timed out waiting for the flux3 render")
@@ -233,6 +274,8 @@ class Handler(BaseHTTPRequestHandler):
                 })
                 return
         try:
+            reference = body.get("reference_image")
+            reference_bytes = base64.b64decode(str(reference)) if reference else None
             result = generate(
                 prompt,
                 width=int(body.get("width") or DEFAULT_W),
@@ -240,6 +283,7 @@ class Handler(BaseHTTPRequestHandler):
                 steps=int(body.get("steps") or STEPS),
                 seed=body.get("seed"),
                 negative=str(body.get("negative") or ""),
+                reference_image=reference_bytes,
             )
         except Exception as exc:  # noqa: BLE001 - reported as JSON
             self._send(500, {"error": f"{type(exc).__name__}: {exc}"})

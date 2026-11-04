@@ -37,6 +37,31 @@ class ProductPictureIn(BaseModel):
     tier: str = Field("final", pattern="^(draft|final)$")
     seed: Optional[int] = Field(None, ge=0, le=2**31 - 1)
     design: Optional[Dict[str, Any]] = None
+    #: A generated asset id used as the reference product photo (FLUX 3 mi2i).
+    #: The plate then carries the real pouch; the vector panel still replaces
+    #: the label area, so typography is drawn, never diffused.
+    reference_asset_id: Optional[str] = Field(None, max_length=80)
+    #: Per-face references, e.g. {"front": "<asset id>", "back": "<asset id>"}.
+    #: When both are given this wins over reference_asset_id.
+    references: Optional[Dict[str, str]] = None
+
+
+def _reference_bytes(asset_id: str, acct: str) -> bytes:
+    from pathlib import Path
+
+    from data_layer import get_northstar_db
+
+    asset = get_northstar_db().design_studio.assets.get_by_id(
+        str(asset_id), account_id=acct)
+    if not asset or not asset.get("storage_key"):
+        raise HTTPException(status_code=422, detail={
+            "code": "reference_asset_not_found", "asset_id": str(asset_id)})
+    name = Path(str(asset["storage_key"])).name  # basename only - no traversal
+    path = Path(__file__).resolve().parent / "data" / "studio_generated" / name
+    if not path.is_file():
+        raise HTTPException(status_code=422, detail={
+            "code": "reference_asset_missing_file", "asset_id": str(asset_id)})
+    return path.read_bytes()
 
 
 @router.get("/designs")
@@ -74,10 +99,22 @@ def create_product_picture(body: ProductPictureIn, acct: str = Depends(studio_ac
         raise HTTPException(status_code=422,
                             detail=f"unknown face(s) {unknown}; known: {list(pp.PLATE_BRIEFS)}")
 
+    reference = None
+    if body.references:
+        wanted = {str(face).lower(): str(aid) for face, aid in body.references.items() if aid}
+        unknown_refs = [face for face in wanted if face not in pp.PLATE_BRIEFS]
+        if unknown_refs:
+            raise HTTPException(status_code=422, detail={
+                "code": "unknown_reference_face", "faces": unknown_refs,
+                "known": list(pp.PLATE_BRIEFS)})
+        reference = {face: _reference_bytes(aid, acct) for face, aid in wanted.items()}
+    elif body.reference_asset_id:
+        reference = _reference_bytes(body.reference_asset_id, acct)
+
     try:
         result = pp.build(design, out_dir=body.out_dir, faces=faces,
                           width=body.width, height=body.height,
-                          tier=body.tier, seed=body.seed)
+                          tier=body.tier, seed=body.seed, reference=reference)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
     except RuntimeError as exc:  # engine refused (disarmed / VRAM busy)
