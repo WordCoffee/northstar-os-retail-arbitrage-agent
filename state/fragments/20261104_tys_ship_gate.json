@@ -1,0 +1,36 @@
+{
+  "tys_ship_gate_20261104": {
+    "status": "DONE - review gate wired into the Tys graphics lane; new-module wiring rule added to the loop; fragment pending operator merge",
+    "question": "Owner: Tys Assistant should have caught that generated images were presented without review. Why didn't it?",
+    "why_missed": {
+      "unit_probe_acceptance": "ty-mockup-legibility accepted on state/probes/t11_mockup_legibility.py alone; the probe imports the module, never the caller, so 'module works' and 'product uses it' look identical.",
+      "plan_was_prose": "The ship gate existed only as Phase 0 item 3 in reports/ty/creative_pipeline_plan_20261103.md. The loop dispatches only from config/continuous_loop_tasks.json; the backlog generator only reads pytest failures.",
+      "kernel_self_report": "agent_kernel/tys_adapter._derive_acceptance falls back to executor_ok when a work order declares no acceptance commands, so writing a document can satisfy a step.",
+      "no_evaluator": "The loop verifies a command, not whether the deliverable obeys the work order (autonomy_20261103 names this as the missing author/evaluator unit).",
+      "no_lane_gate": "GraphicsAdapter.run_step returned the FLUX 3 render as an artifact with no measurement at all."
+    },
+    "changed": {
+      "ship_gate": "Northstar_backend/ship_gate.py - identity (pHash + global SSIM vs reference), legibility (reuses mockup_quality.assert_legible), injected preference/adherence scorers with floors. Statuses passed/refused/needs_review/unscored; ok true only for passed; an unconfigured required scorer is needs_review, never a pass.",
+      "tys_wiring": "tys_assistant.GraphicsAdapter._ship_gate + _gated_result: a refused render fails the step; unscored/needs-review renders are labelled candidates; both paths carry manifest evidence.",
+      "probe": "state/probes/t21_image_ship_gate.py - five outcomes pinned.",
+      "loop_rule": "scripts/continuous_loop.py - for a ty task whose write path is a module absent at HEAD, validate_task requires wiring.imported_by naming an existing consumer, and verify_wiring() fails acceptance unless that consumer references the module. _SPEC_FIELDS includes wiring so a wiring change reopens the task."
+    },
+    "verification": {
+      "test_ship_gate": "12 passed",
+      "continuous_loop_ship_gate_routing": "64 passed",
+      "tys_assistant_product_picture_hygiene": "91 passed",
+      "probes": "t10 OK, t11 OK, t12 OK, t21 OK",
+      "task_contract_sweep": "22 tasks, 0 newly blocked (2 pre-existing: auth-adjacent, self-modification)",
+      "loop_status": "completed=20 failed=0 blocked=2, RAM 8.9 GB, disk 54.9 GB",
+      "historical_case": "validate_task(<ty-mockup-legibility as authored>) now returns the wiring error; with wiring.imported_by=['Northstar_backend/product_picture.py'] it passes and verify_wiring confirms the reference."
+    },
+    "limits": [
+      "PickScore/HPSv2 shapes are staged in ComfyUI/models/_incoming with provenance, but the service interpreter has no torch, so preference/adherence are unavailable and required-preference reports needs_review.",
+      "design_studio_api /generate still returns an unscored asset unless deliver:true (default False).",
+      "No plan-to-task coverage audit, so a work-order item with no task is still invisible to the loop.",
+      "No best-of-N selection yet."
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read, no policy/allowlist change, no download. All local tests.",
+    "report": "reports/tys_review_gate_20261104.md"
+  }
+}

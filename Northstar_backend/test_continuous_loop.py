@@ -228,3 +228,50 @@ def test_dry_run_command_does_not_execute(tmp_path):
                          cwd=tmp_path, dry_run=True)
     assert out["ok"] is True
     assert out["output"] == "[dry-run]"
+
+# ---------------------------------------------------------------------------
+# wiring: a new module nobody calls is not a completed task
+# ---------------------------------------------------------------------------
+
+def test_new_module_without_a_consumer_is_refused(monkeypatch):
+    monkeypatch.setattr(cl, "_git_show",
+                        lambda rel, rev="HEAD": b"x" if rel == "Northstar_backend/tys_assistant.py" else None)
+    task = _task("w", execution="ty", objective="build the thing",
+                 write_paths=["Northstar_backend/brand_new.py"],
+                 commit_paths=["Northstar_backend/brand_new.py"])
+    errors = cl.validate_task(task)
+    assert any("wiring" in e for e in errors), errors
+
+
+def test_new_module_with_a_named_consumer_validates(monkeypatch):
+    monkeypatch.setattr(cl, "_git_show",
+                        lambda rel, rev="HEAD": b"x" if rel == "Northstar_backend/tys_assistant.py" else None)
+    task = _task("w", execution="ty", objective="build the thing",
+                 write_paths=["Northstar_backend/brand_new.py"],
+                 commit_paths=["Northstar_backend/brand_new.py"],
+                 wiring={"imported_by": ["Northstar_backend/tys_assistant.py"]})
+    assert cl.validate_task(task) == []
+
+
+def test_wiring_consumer_must_already_exist(monkeypatch):
+    monkeypatch.setattr(cl, "_git_show",
+                        lambda rel, rev="HEAD": b"x" if rel == "Northstar_backend/tys_assistant.py" else None)
+    task = _task("w", execution="ty", objective="build the thing",
+                 write_paths=["Northstar_backend/brand_new.py"],
+                 commit_paths=["Northstar_backend/brand_new.py"],
+                 wiring={"imported_by": ["Northstar_backend/imaginary.py"]})
+    assert any("does not exist" in e for e in cl.validate_task(task))
+
+
+def test_wiring_verification_fails_when_the_consumer_never_calls_it(monkeypatch, tmp_path):
+    monkeypatch.setattr(cl, "_git_show", lambda rel, rev="HEAD": None)
+    consumer = tmp_path / "consumer.py"
+    consumer.write_text("print('unrelated')\n", encoding="utf-8")
+    task = {"write_paths": ["Northstar_backend/brand_new.py"],
+            "wiring": {"imported_by": ["consumer.py"]}}
+    report = cl.verify_wiring(task, root=tmp_path)
+    assert report["ok"] is False
+    assert "never imports or calls" in report["checks"][0]["detail"]
+
+    consumer.write_text("import brand_new\n", encoding="utf-8")
+    assert cl.verify_wiring(task, root=tmp_path)["ok"] is True

@@ -797,7 +797,8 @@ MAX_ATTEMPTS_BEFORE_AUTHOR = 3
 
 _SPEC_FIELDS = ("id", "objective", "execution", "write_paths", "read_paths",
                 "acceptance_commands", "required_files", "required_artifact",
-                "model", "provider", "max_steps", "max_repairs", "timeout_seconds")
+                "wiring", "model", "provider", "max_steps", "max_repairs",
+                "timeout_seconds")
 
 
 def task_spec_hash(task: Dict[str, Any]) -> str:
@@ -1135,6 +1136,72 @@ def validate_scope_paths(paths: Iterable[str]) -> Tuple[List[str], List[str]]:
     return validate_commit_paths(paths)
 
 
+# ---------------------------------------------------------------------------
+# wiring: a new module nobody calls is not a completed task
+#
+# Measured 2026-11-04: the `ty-mockup-legibility` task was completed on its
+# unit probe alone. `mockup_quality.assert_legible` existed and passed, but the
+# graphics lane - the path that actually presents an image - never called it.
+# A task that creates a module must name the existing consumer that will call
+# it, and the loop verifies the reference at acceptance time. A unit probe can
+# only ever prove the module works; it cannot prove the product uses it.
+# ---------------------------------------------------------------------------
+
+def new_modules(task: Dict[str, Any]) -> List[str]:
+    """Write paths that are modules and do not exist at HEAD."""
+    return [str(p).strip() for p in (task.get("write_paths") or [])
+            if str(p).strip().endswith(".py") and _git_show(str(p).strip()) is None]
+
+
+def wiring_errors(task: Dict[str, Any]) -> List[str]:
+    modules = new_modules(task)
+    if not modules:
+        return []
+    wiring = task.get("wiring")
+    if not isinstance(wiring, dict):
+        return [f"new module {modules[0]} needs wiring.imported_by: name the "
+                f"existing consumer that calls it (a unit probe cannot prove use)"]
+    imported_by = [str(p).strip() for p in (wiring.get("imported_by") or [])
+                   if str(p).strip()]
+    if not imported_by:
+        return [f"new module {modules[0]} needs wiring.imported_by: name the "
+                f"existing consumer that calls it"]
+    errors: List[str] = []
+    for consumer in imported_by:
+        if consumer in modules:
+            errors.append(f"wiring.imported_by {consumer} is itself a new module; "
+                          f"name a consumer that already exists")
+        elif _git_show(consumer) is None and not (ROOT / consumer).is_file():
+            errors.append(f"wiring.imported_by {consumer} does not exist")
+    return errors
+
+
+def verify_wiring(task: Dict[str, Any], root: Path = ROOT) -> Dict[str, Any]:
+    """Assert every named consumer actually references the new module."""
+    modules = new_modules(task)
+    wiring = task.get("wiring") or {}
+    consumers = [str(p).strip() for p in (wiring.get("imported_by") or [])
+                 if str(p).strip()]
+    checks: List[Dict[str, Any]] = []
+    for module in modules:
+        stem = Path(module).stem
+        for consumer in consumers:
+            path = (root / consumer)
+            text = ""
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+            except OSError as exc:
+                checks.append({"module": module, "consumer": consumer,
+                               "ok": False, "error": str(exc)})
+                continue
+            checks.append({"module": module, "consumer": consumer,
+                           "ok": stem in text,
+                           "detail": (f"{consumer} references {stem}" if stem in text
+                                      else f"{consumer} never imports or calls {stem}")})
+    return {"ok": all(c["ok"] for c in checks) if checks else True,
+            "checks": checks, "modules": modules, "consumers": consumers}
+
+
 def validate_task(task: Dict[str, Any]) -> List[str]:
     """Return contract errors; an empty list means the task may run."""
     errors: List[str] = []
@@ -1195,6 +1262,8 @@ def validate_task(task: Dict[str, Any]) -> List[str]:
         errors.append(f"timeout_seconds must be 1..{MAX_TASK_TIMEOUT_S}")
     if int(task.get("max_repairs") or 0) > MAX_REPAIRS:
         errors.append(f"max_repairs must be <= {MAX_REPAIRS}")
+    if execution == "ty":
+        errors.extend(wiring_errors(task))
     return errors
 
 
@@ -1741,6 +1810,14 @@ def execute_task(task: Dict[str, Any], state: Dict[str, Any], *,
         if not all(c["ok"] for c in checks):
             failed = next(c for c in checks if not c["ok"])
             raise LoopError(f"acceptance failed: {failed['name']}: {failed.get('error')}")
+        wiring = verify_wiring(task)
+        record["wiring"] = wiring
+        _save_json(STATE_PATH, state)
+        if not wiring.get("ok"):
+            failed = next(c for c in wiring["checks"] if not c["ok"])
+            raise LoopError(
+                f"wiring failed: {failed['module']} is not referenced by "
+                f"{failed['consumer']} - the module exists but the product does not use it")
         if baseline is not None:
             changed = _changed_since(baseline["sha"], set(baseline["status"]))
             outside = changed - set(baseline["write_paths"])

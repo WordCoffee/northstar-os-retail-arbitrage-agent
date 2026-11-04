@@ -1070,6 +1070,64 @@ class GraphicsAdapter(Adapter):
             return {"adapter": self.name, "available": False,
                     "engine": "flux3", "detail": str(exc)}
 
+    def _ship_gate(self, out: Dict[str, Any], params: Dict[str, Any],
+                   prompt: str) -> Tuple[Optional[Dict[str, Any]], Dict[str, Any]]:
+        """Review the render before it can be presented.
+
+        Returns ``(report, evidence)``. ``report`` is ``None`` when the file is
+        not on disk (nothing to review - the caller must not call that pass) or
+        when the measurement raised; an unreviewed render is never a deliverable.
+        """
+        from pathlib import Path
+
+        artifacts = [str(a) for a in (out.get("artifacts") or [])]
+        if not artifacts:
+            return None, {"status": "unreviewed", "reason": "no_artifact"}
+        missing = [a for a in artifacts if not Path(a).is_file()]
+        if missing:
+            return None, {"status": "unreviewed", "reason": "artifact_not_on_disk",
+                          "artifacts": missing[:4]}
+        try:
+            import ship_gate  # noqa: WPS433
+
+            report = ship_gate.review_image(
+                artifacts[0], brief=prompt,
+                reference=ship_gate.reference_from(params),
+                wordmark=params.get("wordmark"),
+                net_weight=params.get("net_weight"),
+                require_text=bool(params.get("require_text") or params.get("wordmark")
+                                  or params.get("net_weight")),
+                require_preference=bool(params.get("require_preference")),
+                preference_floor=params.get("preference_floor"),
+                require_adherence=bool(params.get("require_adherence")),
+                adherence_floor=params.get("adherence_floor"),
+            )
+        except Exception as exc:  # noqa: BLE001 - an unreviewed render is not a deliverable
+            return None, {"status": "error", "reason": str(exc)[:300]}
+        return report, ship_gate.manifest_block(report)
+
+    def _gated_result(self, out: Dict[str, Any], params: Dict[str, Any], prompt: str, *,
+                      summary: str, evidence: Dict[str, Any]) -> StepResult:
+        """Turn a render into a StepResult, refusing what the gate refuses."""
+        artifacts = [str(a) for a in (out.get("artifacts") or [])]
+        report, gate = self._ship_gate(out, params, prompt)
+        evidence = {**evidence, "ship_gate": gate}
+        if report is not None and report.get("status") == "refused":
+            return StepResult(
+                False, "the render failed the ship gate",
+                evidence=evidence, artifacts=artifacts,
+                detail="; ".join(report.get("reasons") or [])[:800])
+        if report is None:
+            summary += " - not reviewed"
+        elif report.get("status") == "needs_review":
+            summary += " - held for review"
+        elif report.get("status") == "unscored":
+            summary += " - candidate (unscored)"
+        elif report.get("status") == "passed":
+            summary += " - ship gate passed"
+        return StepResult(True, summary, evidence=evidence, artifacts=artifacts,
+                          detail=str(out)[:600] if report is None else "")
+
     def run_step(self, step: Dict[str, Any], task: Dict[str, Any]) -> StepResult:
         params = step.get("params") or {}
         prompt = str(params.get("prompt") or step.get("objective") or "").strip()
@@ -1086,12 +1144,10 @@ class GraphicsAdapter(Adapter):
             except Exception as exc:  # noqa: BLE001
                 return StepResult(False, "flux 3 render failed", detail=str(exc),
                                   retriable=True)
-            return StepResult(
-                True, "flux 3 render completed (injected)",
+            return self._gated_result(
+                out, params, prompt, summary="flux 3 render completed (injected)",
                 evidence={"engine": "flux3", "injected": True,
-                          "suspension": {"skipped": "injected generator"}},
-                artifacts=[str(a) for a in (out.get("artifacts") or [])],
-                detail=str(out)[:600])
+                          "suspension": {"skipped": "injected generator"}})
 
         from tys_ops import graphics  # noqa: WPS433
 
@@ -1135,15 +1191,12 @@ class GraphicsAdapter(Adapter):
             if acquired:
                 lock.release()
 
-        return StepResult(
-            True, "flux 3 render completed",
+        return self._gated_result(
+            out, params, prompt, summary="flux 3 render completed",
             evidence={"engine": "flux3", "model": out.get("model"),
                       "width": out.get("width"), "height": out.get("height"),
                       "steps": out.get("steps"), "seed": out.get("seed"),
-                      "suspension": suspension},
-            artifacts=list(out.get("artifacts") or []),
-            detail=json.dumps({k: v for k, v in out.items() if k != "artifacts"},
-                              default=str)[:800])
+                      "suspension": suspension})
 
 
 def _gpu_lock():
