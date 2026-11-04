@@ -1,0 +1,69 @@
+{
+  "github_scan_20261104": {
+    "status": "DONE - 12,135 unique repositories discovered; 12-candidate adoption plan; fragment pending operator merge",
+    "question": "Scan GitHub for ~10,000 things Northstar OS can use, focused on Bojo, Tys Assistant and the master brain.",
+    "method": {
+      "search_queries": 62,
+      "api_requests": 108,
+      "curated_lists": 23,
+      "search_limit": "unauthenticated 10 req/min; scan is resumable and sleeps on reset",
+      "tools": [
+        "tools/github_scan.py",
+        "tools/github_scan_awesome.py",
+        "tools/github_scan_enrich.py",
+        "tools/github_scan_merge.py"
+      ]
+    },
+    "scale": {
+      "unique_total": 12135,
+      "enriched": 5414,
+      "discovery_only": 6721,
+      "focus": {"bojo": 969, "tys": 7515, "brain": 3651},
+      "licence_classes": {"permissive": 3911, "copyleft": 395, "other": 71, "unknown": 7758}
+    },
+    "artifacts": {
+      "catalog": "reports/github_scan_20261104/merged_catalog.md",
+      "adoption_plan": "reports/github_scan_20261104/ADOPTION_PLAN.md",
+      "readme": "reports/github_scan_20261104/README.md",
+      "shortlist": "reports/github_scan_20261104/shortlist.json",
+      "raw": "state/evidence/github_scan_20261104/repos.jsonl + awesome_links.jsonl + summaries"
+    },
+    "top_picks": {
+      "bojo": [
+        "sqlite-vec + qwen3-embedding:0.6b (already installed) replacing the hashed 256-dim index in tys_ops/memory.py",
+        "dottxt-ai/outlines (Apache-2.0) / GBNF for the one-JSON action contract in agent_kernel/tool_protocol.py",
+        "mem0ai/mem0 (Apache-2.0) consolidation pipeline pattern; keep SQLite",
+        "AnswerDotAI/rerankers + qdrant/fastembed for local retrieval quality"
+      ],
+      "tys": [
+        "ast-grep/ast-grep (MIT) + tirth8205/code-review-graph (MIT) + yamadashy/repomix (MIT) for structural edits and repo maps",
+        "modelcontextprotocol/python-sdk (MIT) for a standard tool surface",
+        "builderz-labs/mission-control (MIT) for the run/spend/approval control plane",
+        "promptfoo/promptfoo (MIT) + UKGovernmentBEIS/inspect_ai (MIT) for agent evals",
+        "openlit/openlit (Apache-2.0) or OpenTelemetry for tracing",
+        "pydantic/pydantic-ai / 567-labs/instructor (MIT) retry-on-validation pattern"
+      ],
+      "brain": [
+        "docling-project/docling (MIT) for structure-preserving document ingestion",
+        "HKUDS/LightRAG (MIT) local graph retrieval; getzep/graphiti (Apache-2.0) temporal model as reference",
+        "cedar-policy/cedar (Apache-2.0) or open-policy-agent/opa (Apache-2.0) declarative standing gates",
+        "trustgraph-ai/trustgraph (Apache-2.0) governance/provenance reference",
+        "OpenLineage/OpenLineage (Apache-2.0) + treeverse/dvc (Apache-2.0) for lineage/versioning"
+      ]
+    },
+    "rejects": [
+      "daytonaio/daytona - no licence metadata",
+      "AGPL/SSPL in the cloud lane - local-lane only with review",
+      "Langfuse / Phoenix / LiteLLM - NOASSERTION (enterprise folders); evaluate, do not bake in",
+      "browser-use / OpenHands - reference architecture only; Chrome Connect and the kernel stay the controllers"
+    ],
+    "caveats": [
+      "stars are reach, not quality; several 2026 repos have six-figure stars on short histories",
+      "discovery-only rows have no licence metadata",
+      "4,600+ of the discoveries are MCP servers; most are thin wrappers",
+      "nothing was installed in this pass - adoption is the next unit, with a named measurement per candidate"
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud call, no policy/allowlist change. GitHub public API and raw READMEs only.",
+    "report": "reports/github_scan_20261104/README.md"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "scanned_at": "2026-11-04T18:47:55Z",
+  "queries_completed": 62,
+  "queries_total": 62,
+  "requests": 48,
+  "rows_written": 3343,
+  "unique_repos": 5414,
+  "focus_counts": {
+    "bojo": 859,
+    "tys": 2609,
+    "brain": 1946
+  },
+  "licence_classes": {
+    "permissive": 3911,
+    "copyleft": 395,
+    "restricted": 0,
+    "unknown": 1037,
+    "other": 71
+  }
+}

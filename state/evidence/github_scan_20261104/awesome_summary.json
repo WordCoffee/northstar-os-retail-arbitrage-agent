@@ -1,0 +1,28 @@
+{
+  "harvested_at": "2026-11-04T18:31:16Z",
+  "lists_reached": 22,
+  "lists_total": 23,
+  "unique_repos": 7217,
+  "by_list": {
+    "punkpeye/awesome-mcp-servers": 4629,
+    "awesome-selfhosted/awesome-selfhosted": 1128,
+    "EthicalML/awesome-production-machine-learning": 541,
+    "tensorchord/Awesome-LLMOps": 437,
+    "ollama/ollama": 125,
+    "e2b-dev/awesome-ai-agents": 116,
+    "kaushikb11/awesome-llm-agents": 109,
+    "jamesmurdza/awesome-ai-devtools": 89,
+    "eosphoros-ai/Awesome-Text2SQL": 78,
+    "janhq/awesome-local-ai": 55,
+    "corca-ai/awesome-llm-security": 46,
+    "visenger/awesome-mlops": 44,
+    "Sourcegraph/awesome-code-ai": 24,
+    "modelcontextprotocol/servers": 14,
+    "microsoft/RAG_Hack": 12,
+    "brexhq/prompt-engineering": 5,
+    "protectai/ai-exploits": 3,
+    "dair-ai/Prompt-Engineering-Guide": 1,
+    "guardrails-ai/guardrails": 1,
+    "aishwaryanr/awesome-generative-ai-guide": 1
+  }
+}

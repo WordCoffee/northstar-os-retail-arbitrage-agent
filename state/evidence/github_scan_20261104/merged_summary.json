@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-11-04T18:48:39Z",
+  "counts": {
+    "api": 5414,
+    "awesome_only": 6721,
+    "unique_total": 12135
+  },
+  "focus": {
+    "bojo": 969,
+    "tys": 7515,
+    "brain": 3651
+  },
+  "licence_classes": {
+    "copyleft": 395,
+    "permissive": 3911,
+    "unknown": 7758,
+    "other": 71
+  }
+}
