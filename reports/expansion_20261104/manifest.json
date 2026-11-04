@@ -1,0 +1,184 @@
+{
+  "generated_at": "2026-11-04T21:02:24Z",
+  "campaign": "NORTHSTAROS master expansion \u2014 secondary discovery",
+  "units": [
+    {
+      "unit": 1,
+      "name": "Hugging Face Hub scan",
+      "platform": "huggingface",
+      "quota": "50 req"
+    },
+    {
+      "unit": 2,
+      "name": "arXiv scan",
+      "platform": "arxiv",
+      "quota": "50 queries"
+    },
+    {
+      "unit": 3,
+      "name": "Google AI forum + YouTube",
+      "platform": "gforum+youtube",
+      "quota": "15 + 16"
+    },
+    {
+      "unit": 4,
+      "name": "GitHub extraction scan",
+      "platform": "github",
+      "quota": "60 req"
+    },
+    {
+      "unit": 5,
+      "name": "Blueprints, specs, report, manifest",
+      "platform": "synthesis",
+      "quota": "n/a"
+    }
+  ],
+  "platforms": {
+    "huggingface": {
+      "rows": 2784,
+      "unique": 2769,
+      "summary": "state\\evidence\\expansion_20261104\\hf_summary.json"
+    },
+    "arxiv": {
+      "rows": 646,
+      "unique": 641,
+      "summary": "state\\evidence\\expansion_20261104\\arxiv_summary.json"
+    },
+    "gforum": {
+      "rows": 750,
+      "unique": 702,
+      "summary": "state\\evidence\\expansion_20261104\\gforum_summary.json"
+    },
+    "youtube": {
+      "rows": 177,
+      "unique": 177,
+      "summary": "state\\evidence\\expansion_20261104\\youtube_summary.json"
+    },
+    "github": {
+      "rows": 5704,
+      "unique": 5502,
+      "summary": "state\\evidence\\expansion_20261104\\github_summary.json"
+    }
+  },
+  "totals": {
+    "rows": 10061,
+    "unique": 9791,
+    "platforms": 5,
+    "files": 21
+  },
+  "files": [
+    {
+      "path": "reports/expansion_20261104/COMPONENT_BLUEPRINTS.md",
+      "bytes": 10031,
+      "sha256": "00ca74dee25c3868a45f38a702c92028950df76a937d46f116be24e2649fd09d"
+    },
+    {
+      "path": "reports/expansion_20261104/CREATIVE_SPECS.md",
+      "bytes": 8456,
+      "sha256": "074eb707fe01a6a8ebce869f54f7c59d9baa2b9c0cb5ab34ccb9bc6528995709"
+    },
+    {
+      "path": "reports/expansion_20261104/README.md",
+      "bytes": 9859,
+      "sha256": "7f9b833057f95b93a1ae7af467950d2974520705534366762d3c24d3ac20b0c1"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/arxiv.jsonl",
+      "bytes": 1045623,
+      "sha256": "b4caa77939a8038614924e988dc885e6eef0d156ee32984a93a8e3f04308daa8"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/arxiv_done.json",
+      "bytes": 1734,
+      "sha256": "e75c6227d821633bf802319ffdab5e174e2f56f5af1f3664a8a7de10bba2d5cd"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/arxiv_summary.json",
+      "bytes": 140,
+      "sha256": "e4fcb24bd30c99bd44978d4c7077e295049db739ddbc0bb49e03f1d83b0900dc"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/blueprint_sources.json",
+      "bytes": 20089,
+      "sha256": "dc5da627250e72043873364d768f6b5dffecb67e7880eea1eeeba4cea4c66813"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/gforum.jsonl",
+      "bytes": 553353,
+      "sha256": "0777e4020e95c57b3609532fed81a1a710f90b82f52dce620db49713a54ed5c8"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/gforum_done.json",
+      "bytes": 337,
+      "sha256": "ff87e7da5707e1b7785da5be6fb1dcce00468bc7f6e435c6784a654be8a7410b"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/gforum_summary.json",
+      "bytes": 141,
+      "sha256": "e51c528e66aa8bc916eda194cdbe1198817e6ebbef6f506be6c0611d868fd7b7"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/github.jsonl",
+      "bytes": 5443671,
+      "sha256": "94b8eae3287c3aed0568852d350d9ffe6e2f4ee2a28d35322ca92f668aea2ade"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/github_done.json",
+      "bytes": 748,
+      "sha256": "c73d53bf7604f9c7bca270a6addc8dfb85da10f231cce201f5bd157d97d1fea1"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/github_summary.json",
+      "bytes": 143,
+      "sha256": "2ce05b1f24ed55862b128d5d1add3d454a5c4237087927617f665f9f8e8cd78b"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/hf.jsonl",
+      "bytes": 1708041,
+      "sha256": "18a8a05be77048bf24b89b4d1cfcbf269b816ba1963e049bfab503c0f108efa8"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/hf_done.json",
+      "bytes": 1503,
+      "sha256": "53212b3d9d289cd7020604427813742590cf561ae8806b8d29a94bbab3f2871b"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/hf_summary.json",
+      "bytes": 148,
+      "sha256": "e13a5b1389d734645a52abf9bd0091388c48876d208bc19f40d0c0aaa94229b0"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/summary.json",
+      "bytes": 293,
+      "sha256": "2e27b00afba95e08a9be43a247bff9db2e6df220c57ad0e69315ee29a23db5ab"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/youtube.jsonl",
+      "bytes": 64215,
+      "sha256": "72080f0d247264a675b0e2ca5d90affbe0ebed27ac4d2a9143c33f959a7f9d0c"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/youtube_channels.json",
+      "bytes": 725,
+      "sha256": "a1a09c989da8e94e3aa31da5121c25b5b4275a94acb31c53ef8c4d5a84af6ed4"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/youtube_done.json",
+      "bytes": 368,
+      "sha256": "459e8a1a78050e8d0c597a735070f996f04f3832f1719d6eaf036aee1645c2c3"
+    },
+    {
+      "path": "state/evidence/expansion_20261104/youtube_summary.json",
+      "bytes": 149,
+      "sha256": "a0d3d221c5bafcf57bea7248dbfb0080b1df590bdad3059aa41c64b77eca18aa"
+    }
+  ],
+  "checks": {
+    "json_parses": true,
+    "every_platform_has_rows": true,
+    "no_placeholders": true,
+    "problems": []
+  },
+  "placeholders": 0,
+  "gates_held": "No Amazon request, no spend, no credential read, no cloud inference. Public GitHub/HF/arXiv/Discourse/YouTube endpoints only."
+}

@@ -1,0 +1,20 @@
+{
+  "done": [
+    "ai edge",
+    "embeddings",
+    "fine-tuning",
+    "function calling",
+    "gemini api",
+    "gemma",
+    "grounding",
+    "json schema",
+    "litert",
+    "mediapipe",
+    "ocr",
+    "quantization",
+    "structured output",
+    "tool use",
+    "vision"
+  ],
+  "updated_at": "2026-11-04T20:46:30Z"
+}

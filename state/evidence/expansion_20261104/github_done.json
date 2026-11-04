@@ -1,0 +1,30 @@
+{
+  "done": [
+    "dieline packaging",
+    "topic:3d-generation",
+    "topic:3d-modeling",
+    "topic:3d-reconstruction",
+    "topic:advertising",
+    "topic:agent-memory",
+    "topic:computer-vision",
+    "topic:constrained-decoding",
+    "topic:design-tools",
+    "topic:dieline",
+    "topic:document-ai",
+    "topic:document-layout-analysis",
+    "topic:ecommerce",
+    "topic:generative-ai",
+    "topic:image-editing",
+    "topic:image-generation",
+    "topic:local-llm",
+    "topic:marketing",
+    "topic:ocr",
+    "topic:packaging",
+    "topic:product-design",
+    "topic:product-photography",
+    "topic:relighting",
+    "topic:retail",
+    "topic:table-recognition"
+  ],
+  "updated_at": "2026-11-04T21:01:25Z"
+}

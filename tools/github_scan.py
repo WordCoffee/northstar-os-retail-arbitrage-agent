@@ -137,6 +137,10 @@ FOCUS_KEYWORDS = {
     "brain": ["knowledge", "graph", "memory", "policy", "guard", "context",
               "orchestr", "state", "provenance", "lineage", "ingest", "vector",
               "retriev", "prompt", "schema", "govern", "audit", "cache", "gateway"],
+    # The creative lane: packaging, product imaging, relighting, 3D, ad stills.
+    "creative": ["packaging", "dieline", "label", "product", "photo", "relight",
+                 "render", "3d", "mesh", "image", "ad", "creative", "ecommerce",
+                 "mockup", "design", "texture", "material", "studio"],
 }
 
 

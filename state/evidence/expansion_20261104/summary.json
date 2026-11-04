@@ -1,0 +1,15 @@
+{
+  "platforms": {
+    "github": {
+      "platform": "github",
+      "requests": 10,
+      "rows": 1000,
+      "queries": 24,
+      "unique": 5502,
+      "finished_at": "2026-11-04T21:01:31Z"
+    }
+  },
+  "generated_at": "2026-11-04T21:01:31Z",
+  "rows": 1000,
+  "unique": 5502
+}

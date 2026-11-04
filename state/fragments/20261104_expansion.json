@@ -1,0 +1,73 @@
+{
+  "expansion_20261104": {
+    "status": "DONE - 6-source secondary discovery; 10,061 indexed targets; 7 extraction blueprints; creative spec; fragment pending operator merge",
+    "campaign": {
+      "units": 5,
+      "wall_clock_minutes": 31,
+      "stop_file": "absent before and after",
+      "failures": [
+        "GitHub adapter rejected the new creative focus (KeyError); scoring table extended and the leg rerun. One failure, not two consecutive."
+      ],
+      "quota": {
+        "github": "60 requests (50 + 10 supplemental)",
+        "huggingface": "49 requests",
+        "arxiv": "49 queries",
+        "gforum": "14 queries",
+        "youtube": "14 channels"
+      }
+    },
+    "counts": {
+      "indexed_rows": 10061,
+      "unique_new": 9791,
+      "by_platform": {
+        "huggingface": {"rows": 2784, "unique": 2769},
+        "arxiv": {"rows": 646, "unique": 641},
+        "gforum": {"rows": 750, "unique": 698},
+        "youtube": {"rows": 177, "unique": 177},
+        "github": {"rows": 5704, "unique": 5502}
+      },
+      "combined_with_primary_github": 21926,
+      "note": "10,061 indexed meets the 10,000 indexed target; 9,791 unique is 209 short and is reported, not rounded."
+    },
+    "blueprints": [
+      {"id": "B1", "target": "GBNF constrained tool calls", "source": "ggml-org/llama.cpp @ 6f1e654370 (MIT) + dottxt-ai/outlines @ c52af8472c (Apache-2.0)", "lands_in": "agent_kernel/tool_protocol.py, local_model.py"},
+      {"id": "B2", "target": "label/dieline/table layout", "source": "docling @ e3681a613e (MIT) + PaddleOCR @ dab3fe3537 (Apache-2.0); ONNX alternatives OnnxOCR/eynollah", "lands_in": "text_fidelity.py, pouch_label.py, mockup_quality.py"},
+      {"id": "B3", "target": "product-scene relighting", "source": "lllyasviel/IC-Light @ bcf3f29ca8 (Apache-2.0)", "lands_in": "relight.py, studio_generation.py"},
+      {"id": "B4", "target": "image-to-mesh packshots", "source": "VAST-AI-Research/TripoSR @ 107cefdc24 (MIT)", "lands_in": "geometry_handoff.py, new tys_ops/product3d.py"},
+      {"id": "B5", "target": "temporal memory graph", "source": "getzep/graphiti @ fb60e59d4a (Apache-2.0) + mem0 @ ed1f10fc87 (Apache-2.0)", "lands_in": "tys_ops/memory.py, memory_bank.py"},
+      {"id": "B6", "target": "browser action schema", "source": "browser-use @ b49a68e406 (MIT)", "lands_in": "chromeconnect_ai_loop.py, tools/browser_agent.py"},
+      {"id": "B7", "target": "agent evaluation harness", "source": "UKGovernmentBEIS/inspect_ai @ 572e288078 (MIT)", "lands_in": "tools/tys_kernel_bench.py, new tools/bojo_eval.py"}
+    ],
+    "creative_spec": {
+      "aplus_canvases": "header 970x600, three tiles 970x300 (300x300 tiles), comparison 970x600, banner 970x300, sidebar 300x400, premium 1464x600 / 600x450, logo 600x180",
+      "contrast": "4.5 body, 3.0 large (>=24px), 6.0 over photo",
+      "listings": "86% fill, pure white, text-free main, five shot types",
+      "video": "1080x1920 30fps; TikTok 21s / Shorts 30s / Reels 20s; safe zones 8/22/18, 10/18/12, 10/20/14; -16 LUFS",
+      "floors": "OCR sharpness >=40 on >=75% boxes, text height >=10px; identity pHash<=24 AND SSIM>=0.40 (or >=0.55); preference>=0.20; adherence>=18.0; 300 DPI",
+      "amazon": "no Amazon request; presets remain verified:false"
+    },
+    "compliance": {
+      "licence_exemption_refused": "Extraction does not change a licence. Only permissive sources are eligible; copyleft is local-lane only; non-commercial/proprietary excluded.",
+      "rejected": ["daytonaio/daytona (no licence metadata)", "creativeML/openrail dieline model (not permissive)", "CC-BY-NC relighting LoRAs"],
+      "no_product_code_changed": true,
+      "tests": "16 passed (test_ship_gate.py) as a baseline smoke"
+    },
+    "decisions": [
+      "Targeted extraction only; no licence bypass.",
+      "B1 (GBNF) is the first implementation unit; B5 (SQLite temporal memory) second.",
+      "Creative rules become config data, not prose.",
+      "No product code changed in this pass; baseline untouched.",
+      "Amazon stays behind the standing gate; presets stay verified:false."
+    ],
+    "next_decision": "Approve B1 (JSON-schema -> GBNF from llama.cpp @ 6f1e654370) with tool-call parse-failure rate as acceptance; or say 'B5 first'.",
+    "artifacts": {
+      "report": "reports/expansion_20261104/README.md",
+      "blueprints": "reports/expansion_20261104/COMPONENT_BLUEPRINTS.md",
+      "creative_specs": "reports/expansion_20261104/CREATIVE_SPECS.md",
+      "manifest": "reports/expansion_20261104/manifest.json",
+      "evidence": "state/evidence/expansion_20261104/"
+    },
+    "manifest_checks": {"json_parses": true, "every_platform_has_rows": true, "no_placeholders": true},
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference, no policy/allowlist change. Public GitHub/HF/arXiv/Discourse/YouTube endpoints only."
+  }
+}
