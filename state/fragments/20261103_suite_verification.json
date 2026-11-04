@@ -7,7 +7,8 @@
     "after_contract_fixes": {"failed": 13, "passed": 5890, "skipped": 117, "xfailed": 2, "seconds": 712},
     "final": {"failed": 10, "passed": 5918, "skipped": 117, "xfailed": 2, "seconds": 775},
     "fixed_after_the_final_run": {
-      "test_ui_route_contract": "the parser sampled ${action} as 'sample'; 'approve' is a real UI action. The file now passes (6 passed, 11 subtests), so the expected full-suite count is 9."
+      "test_ui_route_contract": "the parser sampled ${action} as 'sample'; 'approve' is a real UI action. The file now passes (6 passed, 11 subtests), so the expected full-suite count is 9.",
+      "backlog_utf16": "proposals_from_pytest_report read UTF-8 only; PowerShell Tee-Object writes UTF-16LE and CRLF. It now honours the BOM and normalises CRLF: 0 -> 10 proposals on the real report, 0 authorized."
     },
     "fixed": {
       "empty_checks": "the three owner-flagged creative tasks had checks:[]; author-close marked them completed on all([])==True. They now declare their probes and run_checks falls back to acceptance_commands and fails closed when both are empty.",
