@@ -143,3 +143,4 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Jobs - A video-ad job file is written atomically and a queued/running job from a dead process is marked interrupted on import; a poller must never wait forever on a restart.
 2026-11-03 - Jobs - Job ids are validated as vad_<12 hex> before any path join; a generated id is not a path fragment.
 2026-11-03 - A+ - Tile crops follow the longer plate axis and a near-square plate zooms to 80%; three identical crops are not three tiles.
+2026-11-03 - Captions - Cues use measured word timings when faster-whisper provides them and break at speech-segment boundaries; the character-length distribution is a labelled fallback, not a measurement.
