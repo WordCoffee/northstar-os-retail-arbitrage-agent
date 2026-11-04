@@ -3,16 +3,20 @@ from pathlib import Path
 import json
 
 def hitl_counts(root):
-    """Count hitl statuses in state directory."""
+    """Count hitl statuses in state directory.
+
+    `skipped` is the number of files that could not be read as JSON: a corrupt
+    record is reported, never silently counted as one of the three statuses.
+    """
     root = Path(root)
     if not root.exists():
-        return {'pending': 0, 'approved': 0, 'denied': 0, 'total': 0}
+        return {'pending': 0, 'approved': 0, 'denied': 0, 'skipped': 0, 'total': 0}
 
     state_path = Path(root) / 'state' / 'hitl'
     pending = approved = denied = skipped = 0
 
     if not state_path.exists():
-        return {'pending': 0, 'approved': 0, 'denied': 0, 'total': 0}
+        return {'pending': 0, 'approved': 0, 'denied': 0, 'skipped': 0, 'total': 0}
 
     for hitl_file in state_path.glob('hitl_*.json'):
         try:

@@ -15,5 +15,5 @@ def test_hitl_counts_accepts_a_string_root(tmp_path):
     (hitl / "hitl_20260101T000001_deadbeef.json").write_text(
         json.dumps({"status": "approved"}), encoding="utf-8")
     assert hitl_counts(str(root)) == {
-        "pending": 1, "approved": 1, "denied": 0, "total": 2,
+        "pending": 1, "approved": 1, "denied": 0, "skipped": 0, "total": 2,
     }
