@@ -110,3 +110,32 @@ Disk: 58 GB free; Phases 0â€“1 need ~9 GB, Phase 2 adds ~30 GB. Fits, with the 1
 Phase 0, this week, no downloads: reference conditioning + bbox + ship gate + the three probes already
 queued. The first measurable outcome is a `product_front.png` of **your** pouch â€” reference-conditioned,
 2000px, scored, with the vector label composited â€” instead of a plausible stranger.
+
+## Addendum (2026-11-04): LTX-2.3 investigated - it does not fit yet, and not because of disk
+
+Owner asked for LTX-2.3 anyway ("best we can get"). Research estimate said ~12 GB; the real model is
+**22B**, so that figure was the Q4 of a much smaller assumption. Measured from the HF API:
+
+| Piece | Repo | Size |
+|---|---|---|
+| distilled checkpoint Q4_K_M | `unsloth/LTX-2.3-GGUF` (`distilled-1.1/…-Q4_K_M.gguf`) | **13.22 GB** (Q4_K_S 12.07) |
+| text projection | `Kijai/LTX2.3_comfy` | 2.15 GB |
+| video VAE + audio VAE | `Kijai/LTX2.3_comfy` | 1.35 + 0.34 GB |
+| fp8 transformer (alternative) | `Kijai/LTX2.3_comfy` | 21.9-23.5 GB |
+| fp8 (official) | `Lightricks/LTX-2.3-fp8` | 27.5 GB |
+| **text encoder** | **not in any accessible repo** | — |
+
+`Comfy-Org/LTX-2_ComfyUI` (the repo that would carry the encoder and the audio path) returns **401 -
+gated**. `Comfy-Org/ltx-2.3` carries only LoRAs (6 files). So the minimal runnable set is ~16 GB of
+weights *plus* a Gemma-3-class text encoder that is not obtainable today without an HF token.
+
+Two independent blockers, neither of them the SSD:
+1. **Gated weights** - need an HF token with access, or a mirror.
+2. **16 GB system RAM** - a 13 GB checkpoint plus an 8-24 GB encoder cannot be resident; ComfyUI would
+   spend the render swapping. Disk is 31.1 GB free and would take the checkpoint, but a model that
+   cannot load is not "the best we can get", it is 16 GB of dead weight.
+
+**Decision:** do not fetch LTX-2.3 yet. Proceed with Wan 2.2 A14B chained shots (already downloaded,
+Apache-2.0) for video, and add **Stable Audio Open 1.1B (4.52 GB, Stability Community, <$1M rev)**
+for audio beds - that is the achievable version of "length + audio". Revisit LTX-2.3 when (a) an HF
+token unlocks the gated repo and (b) RAM is 32 GB or the model can stream from the new SSD.
