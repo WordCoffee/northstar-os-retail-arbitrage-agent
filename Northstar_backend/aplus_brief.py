@@ -58,12 +58,19 @@ def _derived_tiles(plate: Image.Image, count: int = 3) -> List[Image.Image]:
     img = plate.convert("RGB")
     w, h = img.size
     side = max(1, min(w, h))
-    max_y = max(0, h - side)
+    max_x, max_y = max(0, w - side), max(0, h - side)
+    if max(max_x, max_y) < side * 0.1:
+        # A square (or near-square) plate has no spare axis. Zoom to 80% and
+        # slide across it, otherwise all three "tiles" are the same crop.
+        side = max(16, int(min(w, h) * 0.8))
+        max_x, max_y = max(0, w - side), max(0, h - side)
     out: List[Image.Image] = []
     for i in range(max(1, int(count))):
         t = i / max(1, int(count) - 1) if count > 1 else 0.5
-        x = max(0, (w - side) // 2)
-        y = int(round(max_y * t))
+        if max_x >= max_y:
+            x, y = int(round(max_x * t)), max(0, (h - side) // 2)
+        else:
+            x, y = max(0, (w - side) // 2), int(round(max_y * t))
         crop = img.crop((x, y, x + side, y + side)).resize((600, 600), Image.LANCZOS)
         out.append(crop)
     return out

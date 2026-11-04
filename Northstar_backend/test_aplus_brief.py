@@ -55,3 +55,14 @@ def test_three_tiles_use_the_real_plate_not_placeholder_art():
     first = {m["kind"]: m["sha256"] for m in ab.build_page(PRODUCT, image=a)["modules"]}
     second = {m["kind"]: m["sha256"] for m in ab.build_page(PRODUCT, image=b)["modules"]}
     assert first["three_tiles"] != second["three_tiles"]
+
+def test_square_and_landscape_plates_get_three_distinct_tiles():
+    import hashlib
+    from PIL import Image, ImageDraw
+    for size in ((800, 800), (1200, 700)):
+        plate = Image.new("RGB", size, (240, 236, 226))
+        ImageDraw.Draw(plate).rectangle([50, 50, size[0] - 50, size[1] - 50],
+                                        fill=(40, 90, 70))
+        hashes = {hashlib.sha256(t.tobytes()).hexdigest()
+                  for t in ab._derived_tiles(plate, 3)}
+        assert len(hashes) == 3, (size, hashes)

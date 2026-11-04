@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import json
 import io
 
 import pytest
@@ -94,3 +95,17 @@ def test_an_unknown_job_is_404():
     with pytest.raises(HTTPException) as err:
         api.get_job("vad_missing", acct="test")
     assert err.value.status_code == 404
+
+def test_a_job_left_running_is_marked_interrupted_on_recovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(api, "JOBS_DIR", tmp_path)
+    monkeypatch.setattr(api, "_JOBS", {})
+    (tmp_path / "vad_stale.json").write_text(
+        json.dumps({"job_id": "vad_stale", "status": "running", "stage": "clip"}),
+        encoding="utf-8")
+    rows = api.recover_interrupted()
+    assert "vad_stale" in rows
+    job = api.get_job("vad_stale", acct="test")
+    assert job["status"] == "interrupted"
+    assert "restarted" in job["reason"]
+    # the replaced file is parseable, not a half-written one
+    json.loads((tmp_path / "vad_stale.json").read_text(encoding="utf-8"))

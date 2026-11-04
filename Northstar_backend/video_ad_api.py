@@ -16,6 +16,7 @@ import base64
 import binascii
 import io
 import json
+import os
 import threading
 import uuid
 from datetime import datetime, timezone
@@ -50,8 +51,33 @@ def _now() -> str:
 
 def _save(job: Dict[str, Any]) -> None:
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
-    (JOBS_DIR / f"{job['job_id']}.json").write_text(
-        json.dumps(job, indent=2, default=str), encoding="utf-8")
+    path = JOBS_DIR / f"{job['job_id']}.json"
+    tmp = path.with_suffix(".json.tmp")
+    # A poller may read while a stage update is being written; write-then-replace
+    # keeps the job file parseable at every instant.
+    tmp.write_text(json.dumps(job, indent=2, default=str), encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def recover_interrupted() -> List[str]:
+    """Mark jobs left queued/running by a previous process as interrupted.
+
+    A background thread cannot survive a restart, so leaving its file at
+    `running` is a lie a poller would wait on forever.
+    """
+    rows: List[str] = []
+    if not JOBS_DIR.is_dir():
+        return rows
+    for path in JOBS_DIR.glob("*.json"):
+        job = _load(path.stem)
+        if not job or job.get("status") not in ("queued", "running"):
+            continue
+        job.update({"status": "interrupted", "stage": "interrupted",
+                    "reason": "process restarted before the job finished",
+                    "updated_at": _now()})
+        _save(job)
+        rows.append(str(job.get("job_id") or path.stem))
+    return rows
 
 
 def _update(job_id: str, **fields: Any) -> Dict[str, Any]:
@@ -230,5 +256,12 @@ def list_jobs(acct: str = Depends(studio_account)):
     return {"jobs": rows}
 
 
+# A restart cannot keep a background thread alive; mark its job files honestly.
+try:
+    _RECOVERED_ON_IMPORT = recover_interrupted()
+except Exception:  # noqa: BLE001 - recovery must never prevent the app booting
+    _RECOVERED_ON_IMPORT = []
+
+
 __all__ = ["router", "VideoAdIn", "plan_only", "start_render", "get_job",
-           "list_jobs", "_run_job", "JOBS_DIR", "_JOBS"]
+           "list_jobs", "_run_job", "JOBS_DIR", "_JOBS", "recover_interrupted"]
