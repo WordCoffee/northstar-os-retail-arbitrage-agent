@@ -1,0 +1,20 @@
+{
+  "creative_hardening_20261103": {
+    "status": "DONE - job durability, job-id validation, plate-shape tiles; fragment pending operator merge",
+    "commits": ["f44b514e (atomic jobs, interrupted recovery, tile axis)", "453e6cfd (job id shape)"],
+    "items": {
+      "atomic_job_writes": "video-ad job files are written to a temp file and os.replace'd, so a poller never reads half a JSON during a stage update.",
+      "interrupted_recovery": "a job left queued/running by a previous process is marked interrupted with the reason on import; a restart cannot leave a lie a poller waits on.",
+      "job_id_validation": "get_job accepts only vad_<12 hex> before any Path join; a path-shaped id is a 404.",
+      "tile_axis": "A+ tiles vary along the longer plate axis; a near-square plate zooms to 80% and slides, so landscape/square plates no longer get three identical crops."
+    },
+    "tests": {"test_video_ad_api.py": "9 passed", "test_aplus_brief.py": "6 passed (including square/landscape distinct tiles)"},
+    "gaps": [
+      "stage-level progress only; no per-diffusion-step updates",
+      "no UI wiring",
+      "the A+ header still crops a portrait plate at the panel edge; a landscape plate composes better"
+    ],
+    "gates_held": "No Amazon, no spend, no credential read.",
+    "report": "reports/ty/SESSION_20261103.md"
+  }
+}

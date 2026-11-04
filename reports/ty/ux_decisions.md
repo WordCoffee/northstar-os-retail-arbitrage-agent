@@ -140,3 +140,6 @@ One line per decision, oldest first. Format: `date · unit · decision · why`.
 2026-11-03 - Verification - The full suite ended at 10 failed / 5918 passed; the 10 are pre-existing, order-dependent, a static-parser false positive, or the uncommitted DevShim test file. The route-count test is still failing by design.
 2026-11-03 - Route contract - The parser sampled \ as 'sample', inventing a missing /hitl/sample/sample route. Sampling a known action as 'approve' is the real value the UI sends; literal paths are still checked exactly.
 2026-11-03 - Supply loop - The backlog parser now reads the UTF-16LE/CRLF report PowerShell writes; a Windows report produced 0 proposals from 10 failures before, and 10 proposals after. Node ids remain PROPOSED with needs_author.
+2026-11-03 - Jobs - A video-ad job file is written atomically and a queued/running job from a dead process is marked interrupted on import; a poller must never wait forever on a restart.
+2026-11-03 - Jobs - Job ids are validated as vad_<12 hex> before any path join; a generated id is not a path fragment.
+2026-11-03 - A+ - Tile crops follow the longer plate axis and a near-square plate zooms to 80%; three identical crops are not three tiles.
