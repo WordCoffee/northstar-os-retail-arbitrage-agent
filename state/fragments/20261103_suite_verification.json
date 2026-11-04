@@ -2,24 +2,25 @@
   "suite_verification_20261103_late": {
     "status": "DONE - 16 -> 13 failures, all remaining pre-existing; fragment pending operator merge",
     "commit": "6f86055d",
-    "evidence": ["state/evidence/backend_full_20261103_late.txt", "state/evidence/backend_full_20261103_late2.txt"],
+    "evidence": ["state/evidence/backend_full_20261103_late.txt", "state/evidence/backend_full_20261103_late2.txt", "state/evidence/backend_full_20261103_late4.txt"],
     "before": {"failed": 16, "passed": 5885, "skipped": 117, "xfailed": 2, "seconds": 755},
-    "after": {"failed": 13, "passed": 5890, "skipped": 117, "xfailed": 2, "seconds": 712},
+    "after_contract_fixes": {"failed": 13, "passed": 5890, "skipped": 117, "xfailed": 2, "seconds": 712},
+    "final": {"failed": 10, "passed": 5918, "skipped": 117, "xfailed": 2, "seconds": 775},
     "fixed": {
       "empty_checks": "the three owner-flagged creative tasks had checks:[]; author-close marked them completed on all([])==True. They now declare their probes and run_checks falls back to acceptance_commands and fails closed when both are empty.",
       "stale_budget_test": "the two historical tasks still pin 20 steps; every other ty task is bounded by 40 and any budget >=20 needs an owner note.",
-      "media_env_pollution": "test_media_armed_requires_gate now clears MEDIA_GEN_LIVE first."
+      "media_env_pollution": "test_media_armed_requires_gate now clears MEDIA_GEN_LIVE first.",
+      "coding_pressure_wording": "the guardrail test expected a phrase the deliberate schema change removed; STEP PRESSURE is now visible in both prompt modes and the test asserts it.",
+      "hitl_skipped_key": "hitl_counts returned skipped on a real directory but not on empty paths; it is consistent now and a corrupt record is counted as skipped.",
+      "module_overwrite": "listing_image.py was overwritten by the new listing pipeline; restored byte-for-byte from 1bb2a8ca^, new pipeline renamed listing_render.py. Nine format-integration failures disappeared."
     },
     "reclosed_tasks": ["ty-pouch-mockup", "ty-plate-pair", "ty-mockup-legibility"],
     "remaining_pre_existing": [
-      "foundation/test_frontend_gate.py::test_v3_shell_invariants",
-      "test_autonomy_hitl_pathlike.py::test_hitl_counts_accepts_a_string_root",
-      "test_coding_guardrails.py::test_pressure_clears_when_a_non_write_tool_creates_the_artifact",
-      "test_hitl_counts.py::test_counts_pending_approved_denied",
-      "test_provider_suite.py::test_provider_suite_endpoint_envelope",
+      "foundation/test_frontend_gate.py::test_v3_shell_invariants (hard-coded UI route count; deliberately not bumped)",
+      "test_provider_suite.py::test_provider_suite_endpoint_envelope (passes alone; order-dependent)",
       "test_shell_modes.py::test_ui_gates_are_advanced_view_on_top_tiers_only",
       "test_shell_modes.py::test_user_ui_gates_read_plan",
-      "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves",
+      "test_ui_route_contract.py::UiRouteContractTests::test_every_ui_api_path_resolves (static-parser false positive on the dynamic HITL route)",
       "test_session_cookie_contract.py::DevShimSessionTests (5, uncommitted test file)"
     ],
     "gates_held": "No Amazon, no spend, no credential read; no guard was weakened. test_v3_shell_invariants left failing by design.",
