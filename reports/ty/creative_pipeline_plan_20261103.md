@@ -139,3 +139,32 @@ Two independent blockers, neither of them the SSD:
 Apache-2.0) for video, and add **Stable Audio Open 1.1B (4.52 GB, Stability Community, <$1M rev)**
 for audio beds - that is the achievable version of "length + audio". Revisit LTX-2.3 when (a) an HF
 token unlocks the gated repo and (b) RAM is 32 GB or the model can stream from the new SSD.
+
+## Correction (2026-11-04): I was wrong about FLUX 3, and the plan gets cheaper
+
+The operator challenged my claim. Research against BFL docs, the HF org and the Klein ComfyUI repo
+shows the claim was wrong in four ways:
+
+| I said | Actually |
+|---|---|
+| "only a 1024x1024 generator" | Klein is documented **up to 4K** - the `4k` tier is an equal-area class up to **16.8 MP** (w/h 64-6256). 1024 is only our template default. |
+| "no reference conditioning" | **Up to 10 reference images**, addressed positionally (`<ref_image_0>`...). The Klein ComfyUI repo ships `mi2i` (multi-image-to-image) graphs. |
+| "text-to-image only" | Repo ships `t2i`, `i2i` and `mi2i`, in int8 and bf16, for both klein and base - **12 workflow files**, plus 5 reference JPEGs. |
+| "FLUX 3 does no video" | **FLUX 3 Video** does t2v/i2v/v2v, 5-20 s, keyframes, synchronised audio - but it is **API/private weights only**, so not available on this box. |
+
+Verified directly: `black-forest-labs/flux-3-image-klein-comfy` (gated auto) contains
+`flux3_klein_int8_{t2i,i2i,mi2i}.json` and the bf16/base variants. Our installed 4.92 GiB nvfp4 file is
+the **DiT only**; the Qwen3-VL-4B encoder (4.86 GB int8) and FLUX.2 VAE are already on disk too.
+
+### What this changes
+
+- **Reference conditioning and 4K are available with the weights we already have.** The graph we built
+  is a text-to-image template; the capability was never missing. Phase 0 is: install the `mi2i` graph,
+  raise the canvas to a real 4K class, feed the product photo as `<ref_image_0>`, composite vector text.
+- **SeedVR2 is demoted for stills** (Klein renders native 4K); it stays useful for **video** upscale.
+- **Video remains Wan 2.2 locally.** FLUX 3 Video is the better model and the honest answer to "FLUX 3
+  does video" - it is simply not open-weights, so using it would mean a cloud lane and a spend gate.
+- The earlier "~12 GB LTX" note stands as corrected: LTX-2.3 is 22B and gated; that decision is unchanged.
+
+Lesson recorded: I generalised from a template we wrote to a claim about the model. Capability claims
+come from the model card and the shipped workflows, not from our own graph.
