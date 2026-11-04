@@ -938,7 +938,20 @@ def proposals_from_pytest_report(path: Path, *, limit: int = 20,
     excluded from them). The loop then reports them as blocked work instead of
     running unattended on a guess.
     """
-    text = Path(path).read_text(encoding="utf-8", errors="replace")
+    raw = Path(path).read_bytes()
+    # PowerShell's Tee-Object writes UTF-16LE by default on this box, and a
+    # UTF-8-only read turned every FAILED line into interleaved NULs, so the
+    # backlog returned 0 proposals from a real 10-failure report. Accept the
+    # BOMs the runners actually emit.
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        text = raw.decode("utf-16", errors="replace")
+    elif raw.startswith(b"\xef\xbb\xbf"):
+        text = raw.decode("utf-8-sig", errors="replace")
+    else:
+        text = raw.decode("utf-8", errors="replace")
+    # A CRLF report leaves a \r before `$`, so lines without a " - reason" tail
+    # silently failed to match; normalise once here.
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
     seen, out = set(), []
     for nodeid, message in _FAILED_LINE.findall(text)[:limit]:
         nodeid = nodeid.strip()
