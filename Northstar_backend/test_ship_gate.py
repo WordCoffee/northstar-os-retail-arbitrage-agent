@@ -65,7 +65,7 @@ def test_a_picture_with_no_measurable_axis_is_unscored_never_passed():
 
 def test_a_required_scorer_that_is_not_configured_needs_review():
     report = sg.review_image(_label(), wordmark="MOGRA", net_weight="6 oz",
-                             require_preference=True)
+                             require_preference=True, use_default_scorers=False)
     assert report["status"] == "needs_review"
     assert report["ok"] is False
     assert report["required_unavailable"] == ["preference"]
@@ -95,7 +95,8 @@ def test_identity_refuses_a_render_that_is_not_the_product():
 
 def test_injected_scorer_below_its_floor_refuses():
     report = sg.review_image(_label(), wordmark="MOGRA", net_weight="6 oz",
-                             require_preference=True, preference_floor=0.22,
+                             require_preference=True, use_default_scorers=False,
+                             preference_floor=0.22,
                              preference_scorer=lambda png, brief: 0.05)
     assert report["status"] == "refused"
     assert "preference" in report["failed_axes"]
@@ -103,7 +104,8 @@ def test_injected_scorer_below_its_floor_refuses():
 
 def test_injected_scorer_above_its_floor_passes_and_is_recorded():
     report = sg.review_image(_label(), wordmark="MOGRA", net_weight="6 oz",
-                             require_preference=True, preference_floor=0.22,
+                             require_preference=True, use_default_scorers=False,
+                             preference_floor=0.22,
                              preference_scorer=lambda png, brief: 0.41)
     assert report["status"] == "passed"
     assert report["axes"]["preference"]["score"] == 0.41
@@ -179,3 +181,31 @@ def test_graphics_lane_labels_an_unmeasured_render_a_candidate(monkeypatch, tmp_
     assert result.ok is True
     assert "candidate" in result.summary
     assert result.evidence["ship_gate"]["status"] == "unscored"
+
+# ---------------------------------------------------------------------------
+# configuration
+# ---------------------------------------------------------------------------
+
+def test_product_picture_surface_requires_both_scorers_from_config():
+    policy = sg.surface_policy("product_picture")
+    assert policy["require_scorers"] is True
+    assert policy["preference_floor"] == 0.2
+    assert policy["adherence_floor"] == 18.0
+
+
+def test_social_frames_record_but_do_not_block():
+    policy = sg.surface_policy("social_frame")
+    assert policy["require_scorers"] is False
+
+
+def test_configured_surface_without_scorers_is_needs_review():
+    report = sg.review_image(_label(), wordmark="MOGRA", net_weight="6 oz",
+                             surface="product_picture", use_default_scorers=False)
+    assert report["status"] == "needs_review"
+    assert set(report["required_unavailable"]) == {"adherence", "preference"}
+
+
+def test_a_recorded_only_score_does_not_make_an_image_deliverable():
+    report = sg.review_image(_label(), preference_scorer=lambda png, brief: 0.9)
+    assert report["status"] == "unscored"
+    assert report["axes"]["preference"]["status"] == "pass"

@@ -29,3 +29,10 @@ SeedVR2,main,Apache-2.0,https://huggingface.co/Comfy-Org/SeedVR2,local-lane,one-
 Wan2.2-I2V-A14B-GGUF,main,Apache-2.0,https://huggingface.co/QuantStack/Wan2.2-I2V-A14B-GGUF,local-lane,"image-to-video A14B high+low experts, start/end frame control",2026-11-03
 PickScore_v1,main,MIT,https://huggingface.co/yuvalkirstain/PickScore_v1,local-lane,prompt-adherence scoring for best-of-N and the ship gate,2026-11-03
 HPSv2,main,Apache-2.0,https://huggingface.co/xswu/HPSv2,local-lane,human-preference floor for the ship gate,2026-11-03
+torch,INSTALLED,https://download.pytorch.org/whl/cpu,BSD-3-Clause,northstar,"local-lane; 2.15.0+cpu; 128.6 MB wheel; CPU-only build (no CUDA libs); runtime for PickScore and HPSv2"
+transformers,INSTALLED,https://pypi.org/project/transformers/,Apache-2.0,northstar,"local-lane; 5.22.1; PickScore CLIPModel + CLIPProcessor"
+open_clip_torch,INSTALLED,https://pypi.org/project/open-clip-torch/,MIT,northstar,"local-lane; 3.3.0; HPSv2 ViT-H-14 tower"
+timm,INSTALLED,https://pypi.org/project/timm/,Apache-2.0,northstar,"local-lane; 1.0.31; open_clip dependency"
+torchvision,INSTALLED,https://pypi.org/project/torchvision/,BSD-3-Clause,northstar,"local-lane; 0.29.2; open_clip dependency"
+ftfy,INSTALLED,https://pypi.org/project/ftfy/,Apache-2.0,northstar,"local-lane; 6.3.1; open_clip text normalisation"
+safetensors,INSTALLED,https://pypi.org/project/safetensors/,Apache-2.0,northstar,"local-lane; 0.8.0; weights loader"

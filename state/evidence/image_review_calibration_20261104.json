@@ -1,0 +1,100 @@
+{
+  "calibrated_at": "2026-11-04T08:15:40Z",
+  "available": {
+    "ok": true,
+    "enabled": true,
+    "deps": {
+      "torch": true,
+      "transformers": true,
+      "open_clip": true
+    },
+    "files": {
+      "pickscore": true,
+      "hpsv2": true
+    },
+    "paths": {
+      "pickscore": "C:\\Users\\T2Hol\\ComfyUI\\models\\_incoming\\yuvalkirstain__PickScore_v1",
+      "hpsv2": "C:\\Users\\T2Hol\\ComfyUI\\models\\_incoming\\xswu__HPSv2\\HPS_v2.1_compressed.pt"
+    },
+    "detail": "ready"
+  },
+  "rows": [
+    {
+      "name": "product_front",
+      "path": "renders\\mogra_lions_mane\\product_front.png",
+      "text": "a product photograph of a matte kraft stand-up coffee pouch with a cream label, lion's mane mushroom coffee, front facing",
+      "adherence": 21.375,
+      "adherence_error": null,
+      "adherence_seconds": 9.8,
+      "preference": 0.2412,
+      "preference_error": null,
+      "preference_seconds": 13.2
+    },
+    {
+      "name": "product_back",
+      "path": "renders\\mogra_lions_mane\\product_back.png",
+      "text": "a product photograph of the back of a matte kraft stand-up coffee pouch with a cream nutrition label",
+      "adherence": 19.375,
+      "adherence_error": null,
+      "adherence_seconds": 9.9,
+      "preference": 0.2363,
+      "preference_error": null,
+      "preference_seconds": 13.2
+    },
+    {
+      "name": "tiktok_frame",
+      "path": "Northstar_backend\\data\\studio_generated\\tiktok_e445423614.png",
+      "text": "a vertical social frame of a kraft coffee pouch with the headline fuel your focus",
+      "adherence": 18.125,
+      "adherence_error": null,
+      "adherence_seconds": 9.8,
+      "preference": 0.1572,
+      "preference_error": null,
+      "preference_seconds": 13.3
+    },
+    {
+      "name": "listing_white_bg",
+      "path": "Northstar_backend\\data\\studio_generated\\white-bg_67b967d23c.png",
+      "text": "a product photograph of a kraft coffee pouch on a pure white background, centred, soft shadow",
+      "adherence": 23.25,
+      "adherence_error": null,
+      "adherence_seconds": 9.8,
+      "preference": 0.2559,
+      "preference_error": null,
+      "preference_seconds": 13.2
+    },
+    {
+      "name": "rejected_white_bg_a",
+      "path": "Northstar_backend\\data\\studio_generated\\rejected_white-bg_2086282da3.png",
+      "text": "a product photograph of a kraft coffee pouch on a pure white background, centred, soft shadow",
+      "adherence": 23.75,
+      "adherence_error": null,
+      "adherence_seconds": 10.1,
+      "preference": 0.2656,
+      "preference_error": null,
+      "preference_seconds": 13.3
+    },
+    {
+      "name": "rejected_white_bg_b",
+      "path": "Northstar_backend\\data\\studio_generated\\rejected_white-bg_b5b819fb85.png",
+      "text": "a product photograph of a kraft coffee pouch on a pure white background, centred, soft shadow",
+      "adherence": 23.625,
+      "adherence_error": null,
+      "adherence_seconds": 10.3,
+      "preference": 0.2637,
+      "preference_error": null,
+      "preference_seconds": 13.2
+    },
+    {
+      "name": "flat_label_art",
+      "path": "renders\\mogra_lions_mane\\mogra_lions_mane_front_label.png",
+      "text": "a product photograph of a kraft coffee pouch with a cream label",
+      "adherence": 19.0,
+      "adherence_error": null,
+      "adherence_seconds": 9.7,
+      "preference": 0.1514,
+      "preference_error": null,
+      "preference_seconds": 13.3
+    }
+  ]
+}

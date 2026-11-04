@@ -29,6 +29,7 @@ No provider call, no network, no cost.
 from __future__ import annotations
 
 import io
+import json
 import os
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Sequence, Tuple, Union
@@ -41,6 +42,8 @@ import mockup_quality as mq
 ImageLike = Union[Image.Image, bytes, bytearray, str, Path, None]
 Scorer = Optional[Callable[[bytes, str], float]]
 
+CONFIG_PATH = Path(__file__).resolve().parent.parent / "config" / "image_review.json"
+
 #: Provisional identity floors. pHash is the primary signal because a render and
 #: the source photo legitimately differ in background; SSIM is recorded and can
 #: rescue a near-identical render whose hash drifted by a few bits.
@@ -49,8 +52,49 @@ DEFAULT_MIN_SSIM = 0.30
 #: SSIM at or above this passes even when the hash drifted (same picture, new
 #: light). Calibrate from the owner's reference set before tightening.
 SSIM_RESCUE = 0.55
+#: Surface used when the caller names none.
+DEFAULT_SURFACE = "default"
 
 _SSIM_SIZE = 256
+
+
+def load_config(path: Path = CONFIG_PATH) -> Dict[str, Any]:
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def surface_policy(surface: Optional[str] = None,
+                   config: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Floors and requirements for one surface.
+
+    Calibration 2026-11-04 (state/evidence/image_review_calibration_20261104.json):
+    the product pictures scored HPSv2 0.236-0.241 / PickScore 19.4-21.4, while the
+    flat label artwork scored 0.151 / 19.0. Designed typography frames (a TikTok
+    frame) score low by nature, so they are recorded, not blocked.
+    """
+    cfg = config if config is not None else load_config()
+    surfaces = cfg.get("surfaces") or {}
+    policy = surfaces.get(str(surface or DEFAULT_SURFACE)) or surfaces.get(DEFAULT_SURFACE) or {}
+    return {
+        "preference_floor": policy.get("preference_floor"),
+        "adherence_floor": policy.get("adherence_floor"),
+        "require_scorers": bool(policy.get("require_scorers", False)),
+    }
+
+
+def _default_scorer(axis: str):
+    """The installed scorer for an axis, or None when it cannot run."""
+    try:
+        import image_review_scorers as scorers  # noqa: WPS433
+
+        if not scorers.available().get("ok"):
+            return None
+        return scorers.default_scorer(axis)
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -144,15 +188,22 @@ def review_image(image: ImageLike, *, brief: str = "",
                  wordmark: Optional[str] = None,
                  net_weight: Optional[str] = None,
                  require_text: bool = False,
-                 max_phash_distance: int = DEFAULT_MAX_PHASH_DISTANCE,
-                 min_ssim: float = DEFAULT_MIN_SSIM,
-                 require_preference: bool = False,
+                 surface: Optional[str] = None,
+                 max_phash_distance: Optional[int] = None,
+                 min_ssim: Optional[float] = None,
+                 require_preference: Optional[bool] = None,
                  preference_floor: Optional[float] = None,
                  preference_scorer: Scorer = None,
-                 require_adherence: bool = False,
+                 require_adherence: Optional[bool] = None,
                  adherence_floor: Optional[float] = None,
-                 adherence_scorer: Scorer = None) -> Dict[str, Any]:
+                 adherence_scorer: Scorer = None,
+                 use_default_scorers: bool = True) -> Dict[str, Any]:
     """Review one rendered image and say whether it may be delivered.
+
+    Thresholds and requirements come from ``config/image_review.json`` for the
+    named ``surface``; explicit arguments win. The scorers (PickScore, HPSv2)
+    are loaded per call in a child process when they are installed, unless
+    ``use_default_scorers`` is false (offline tests and the probe).
 
     ``status`` is one of:
 
@@ -161,6 +212,26 @@ def review_image(image: ImageLike, *, brief: str = "",
     * ``needs_review``- a required scorer is not configured (never a pass);
     * ``unscored``    - nothing blocking could be measured (a candidate only).
     """
+    policy = surface_policy(surface)
+    thresholds = load_config().get("thresholds") or {}
+    if max_phash_distance is None:
+        max_phash_distance = int(thresholds.get("max_phash_distance",
+                                                DEFAULT_MAX_PHASH_DISTANCE))
+    if min_ssim is None:
+        min_ssim = float(thresholds.get("min_ssim", DEFAULT_MIN_SSIM))
+    if require_preference is None:
+        require_preference = policy["require_scorers"]
+    if require_adherence is None:
+        require_adherence = policy["require_scorers"]
+    if preference_floor is None:
+        preference_floor = policy["preference_floor"]
+    if adherence_floor is None:
+        adherence_floor = policy["adherence_floor"]
+    if preference_scorer is None and use_default_scorers and require_preference:
+        preference_scorer = _default_scorer("preference")
+    if adherence_scorer is None and use_default_scorers and require_adherence:
+        adherence_scorer = _default_scorer("adherence")
+
     img = _load(image)
     png = _png_bytes(img)
     axes: Dict[str, Dict[str, Any]] = {}
@@ -211,16 +282,19 @@ def review_image(image: ImageLike, *, brief: str = "",
         required=require_adherence)
 
     blocking = [a for a in axes.values() if a.get("blocking")]
-    failed = [name for name, a in axes.items() if a.get("status") in ("fail", "error")]
+    failed = [name for name, a in axes.items()
+              if a.get("blocking") and a.get("status") in ("fail", "error")]
     unavailable_required = [name for name, a in axes.items()
                             if a.get("status") == "unavailable" and a.get("required")]
+    evaluated_blocking = [name for name, a in axes.items()
+                          if a.get("blocking") and a.get("status") in ("pass", "fail")]
     evaluated = [name for name, a in axes.items() if a.get("status") in ("pass", "fail")]
 
     if failed:
         status = "refused"
     elif unavailable_required:
         status = "needs_review"
-    elif not evaluated:
+    elif not evaluated_blocking:
         status = "unscored"
     else:
         status = "passed"
@@ -234,10 +308,14 @@ def review_image(image: ImageLike, *, brief: str = "",
         "failed_axes": failed,
         "required_unavailable": unavailable_required,
         "evaluated_axes": evaluated,
+        "evaluated_blocking_axes": evaluated_blocking,
         "blocking_axes": [name for name, a in axes.items() if a.get("blocking")],
+        "surface": str(surface or DEFAULT_SURFACE),
         "axes": axes,
         "thresholds": {"max_phash_distance": int(max_phash_distance),
                        "min_ssim": float(min_ssim), "ssim_rescue": SSIM_RESCUE,
+                       "preference_floor": preference_floor,
+                       "adherence_floor": adherence_floor,
                        "provisional": True},
         "measurement": {"width": img.width, "height": img.height},
     }
@@ -253,6 +331,7 @@ def manifest_block(report: Dict[str, Any]) -> Dict[str, Any]:
         "reasons": list(report.get("reasons") or []),
         "failed_axes": list(report.get("failed_axes") or []),
         "required_unavailable": list(report.get("required_unavailable") or []),
+        "surface": report.get("surface"),
         "axes": {name: {k: v for k, v in axis.items()
                         if k in ("status", "blocking", "score", "floor",
                                  "phash_distance", "ssim", "reason")}
@@ -275,4 +354,5 @@ def reference_from(params: Optional[Dict[str, Any]]) -> Optional[str]:
 
 
 __all__ = ["review_image", "manifest_block", "phash", "phash_distance", "ssim",
-           "reference_from", "DEFAULT_MAX_PHASH_DISTANCE", "DEFAULT_MIN_SSIM"]
+           "reference_from", "load_config", "surface_policy",
+           "DEFAULT_MAX_PHASH_DISTANCE", "DEFAULT_MIN_SSIM"]

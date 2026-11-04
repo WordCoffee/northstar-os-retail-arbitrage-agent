@@ -1,0 +1,17 @@
+# Image review scorers - local, CPU only. Installed and calibrated 2026-11-04.
+#
+# torch is the CPU build; it is NOT on the default PyPI index for +cpu wheels:
+#   pip install "torch==2.15.0+cpu" --index-url https://download.pytorch.org/whl/cpu
+# The rest:
+#   pip install -r requirements-image-review.txt
+#
+# Licences: torch BSD-3-Clause . transformers Apache-2.0 . open_clip_torch MIT .
+# timm Apache-2.0 . torchvision BSD-3-Clause . ftfy Apache-2.0 .
+# safetensors Apache-2.0. All local-lane; no cloud call, no paid credits.
+torch==2.15.0+cpu
+transformers==5.22.1
+open_clip_torch==3.3.0
+timm==1.0.31
+torchvision==0.29.2
+ftfy==6.3.1
+safetensors==0.8.0

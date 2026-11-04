@@ -1,0 +1,60 @@
+{
+  "image_scorers_20261104": {
+    "status": "DONE - torch CPU runtime, transformers and open_clip installed; PickScore + HPSv2 score locally; gate configured per surface; fragment pending operator merge",
+    "installed": {
+      "torch": "2.15.0+cpu (BSD-3-Clause, 128.6 MB wheel, https://download.pytorch.org/whl/cpu)",
+      "transformers": "5.22.1 (Apache-2.0)",
+      "open_clip_torch": "3.3.0 (MIT)",
+      "timm": "1.0.31 (Apache-2.0)",
+      "torchvision": "0.29.2 (BSD-3-Clause)",
+      "ftfy": "6.3.1 (Apache-2.0)",
+      "safetensors": "0.8.0 (Apache-2.0)",
+      "interpreter": "Python 3.14.5 (the service interpreter)",
+      "pins": "Northstar_backend/requirements-image-review.txt",
+      "provenance": "7 rows appended to provenance.csv, local-lane",
+      "disk": "31.1 -> 27.7 GB free"
+    },
+    "memory_decision": "Both ViT-H towers in one process measured 6.4 GB RSS and 0.7 GB free RAM. One axis per child process: PickScore bf16 2.47 GB, HPSv2 bf16 mmap 4.81 GB. Freed memory is not returned in-process (RSS stayed 6.36 GB after del), so the child exits.",
+    "calibration": {
+      "evidence": "state/evidence/image_review_calibration_20261104.json",
+      "product_front": {"adherence": 21.375, "preference": 0.2412},
+      "product_back": {"adherence": 19.375, "preference": 0.2363},
+      "listing_white_bg": {"adherence": 23.25, "preference": 0.2559},
+      "tiktok_frame": {"adherence": 18.125, "preference": 0.1572},
+      "flat_label_art": {"adherence": 19.0, "preference": 0.1514},
+      "rejected_white_bg": {"adherence": "23.75 / 23.625", "preference": "0.2656 / 0.2637"},
+      "finding": "preference separates product pictures from flat label art; it does NOT catch the listing-rubric defects (rejected renders score higher than the accepted one), so it does not replace the rubric."
+    },
+    "configuration": {
+      "file": "config/image_review.json",
+      "product_picture": {"preference_floor": 0.2, "adherence_floor": 18.0, "require_scorers": true},
+      "listing_image": {"preference_floor": 0.2, "adherence_floor": 18.0, "require_scorers": true},
+      "social_frame": {"require_scorers": false},
+      "default": {"require_scorers": false},
+      "identity": {"max_phash_distance": 16, "min_ssim": 0.3, "ssim_rescue": 0.55},
+      "rule": "a missing required scorer is needs_review, never passed; a recorded-only score can never make an image a deliverable"
+    },
+    "wiring": {
+      "module": "Northstar_backend/image_review_scorers.py (parent call + child CLI, no download at score time)",
+      "gate": "ship_gate.review_image reads the surface policy and loads installed scorers only when required",
+      "tys": "GraphicsAdapter passes params.surface through",
+      "probe": "state/probes/t22_image_scorers.py fails (not skips) when the stack is missing"
+    },
+    "verification": {
+      "tests": "143 passed (test_ship_gate, test_image_review_scorers, test_tys_routing, test_tys_assistant, test_continuous_loop, test_module_hygiene)",
+      "probes": "t10 OK, t11 OK, t12 OK, t21 OK, t22 OK",
+      "end_to_end": "real product_front.png with surface=product_picture and self-reference -> passed (identity 0, preference 0.2227 >= 0.20, adherence 20.75 >= 18.0, legibility pass)",
+      "cost": "~10 s PickScore + ~13 s HPSv2 per gated image",
+      "after": "27.7 GB disk free, 7.6 GB RAM free"
+    },
+    "limits": [
+      "scorers are proxies; they did not separate the rubric-rejected listing images",
+      "identity requires the caller to pass params.reference / reference_assets[0]",
+      "design_studio_api /generate still uses quality_gate + deliver:true, not ship_gate",
+      "floors are provisional, calibrated on 7 images",
+      "adds ~23 s per fully gated image"
+    ],
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud call, no policy/allowlist change. PyPI/PyTorch CPU index only; no model re-download.",
+    "report": "reports/image_scorers_install_20261104.md"
+  }
+}

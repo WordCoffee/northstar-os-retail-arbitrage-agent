@@ -22,6 +22,8 @@ GUARDED = (
     "product_picture.py",
     "mogra_label_art.py",
     "mockup_quality.py",
+    "ship_gate.py",
+    "image_review_scorers.py",
     "conftest.py",
     "design_studio_api.py",
     "asset_rubric.py",

@@ -53,7 +53,7 @@ def main() -> int:
     assert blank["status"] == "unscored" and blank["ok"] is False, blank["status"]
 
     required = review_image(_label(False), wordmark="MOGRA", net_weight="6 oz",
-                            require_preference=True)
+                            require_preference=True, use_default_scorers=False)
     assert required["status"] == "needs_review", required["status"]
     assert required["ok"] is False, "an unconfigured required scorer is never a pass"
 

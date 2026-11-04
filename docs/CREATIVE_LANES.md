@@ -14,6 +14,22 @@ an output that fails its own measurement. Nothing on this page contacts Amazon o
 4. **A candidate is not a shipped asset.** Where taste decides (framing, copy), the report presents
    candidates and names the choice as the operator's.
 
+## The review gate (every presented image)
+
+`Northstar_backend/ship_gate.review_image` runs on the Tys graphics lane before an image is
+returned. It measures, in order: **identity** (pHash distance + SSIM against the reference product
+photo), **legibility** (the OCR/sharpness contract, when text is expected), **preference** (HPSv2
+cosine) and **adherence** (PickScore logits). Four truthful outcomes: `passed` (deliverable),
+`refused` (with the failed axis and reason), `needs_review` (a required scorer is not installed -
+never a pass) and `unscored` (nothing blocking measured - a candidate only).
+
+Floors and per-surface policy live in `config/image_review.json`; they were calibrated on this
+box's own outputs on 2026-11-04. The scorers are local CPU models run one axis per child process:
+both resident measured 6.4 GB RSS and left 0.7 GB free, one at a time peaks at 2.5 GB (PickScore)
+and 4.8 GB (HPSv2). Measured: product pictures 0.236-0.241 preference / 19.4-21.4 adherence; flat
+label artwork 0.151 / 19.0 (refused on preference). Designed social frames score low by nature, so
+that surface records the score without blocking on it.
+
 ## Endpoints
 
 | Surface | Route | What it returns |

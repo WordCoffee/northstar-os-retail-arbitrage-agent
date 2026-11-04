@@ -1093,6 +1093,7 @@ class GraphicsAdapter(Adapter):
             report = ship_gate.review_image(
                 artifacts[0], brief=prompt,
                 reference=ship_gate.reference_from(params),
+                surface=params.get("surface"),
                 wordmark=params.get("wordmark"),
                 net_weight=params.get("net_weight"),
                 require_text=bool(params.get("require_text") or params.get("wordmark")

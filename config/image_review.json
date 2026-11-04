@@ -1,0 +1,55 @@
+{
+  "_doc": "Image review configuration. Floors are provisional, calibrated on this box's own outputs (state/evidence/image_review_calibration_20261104.json). A missing scorer is never a pass: require_scorers=true turns it into needs_review.",
+  "scorers": {
+    "enabled": true,
+    "timeout_s": 300,
+    "threads": 8
+  },
+  "models": {
+    "pickscore_dir": "C:\\Users\\T2Hol\\ComfyUI\\models\\_incoming\\yuvalkirstain__PickScore_v1",
+    "hpsv2_checkpoint": "C:\\Users\\T2Hol\\ComfyUI\\models\\_incoming\\xswu__HPSv2\\HPS_v2.1_compressed.pt"
+  },
+  "thresholds": {
+    "max_phash_distance": 16,
+    "min_ssim": 0.3,
+    "_doc": "pHash is primary; SSIM>=0.55 rescues the same picture under new light. Tighten from the owner's reference set, not from taste."
+  },
+  "surfaces": {
+    "product_picture": {
+      "preference_floor": 0.2,
+      "adherence_floor": 18.0,
+      "require_scorers": true,
+      "_doc": "front 0.2412/21.375, back 0.2363/19.375; flat label artwork 0.1514/19.0 is refused on preference."
+    },
+    "listing_image": {
+      "preference_floor": 0.2,
+      "adherence_floor": 18.0,
+      "require_scorers": true,
+      "_doc": "white-bg 0.2559/23.25. Note: the rubric-rejected white-bg renders score HIGH (0.2637/23.6), so preference does not replace the listing rubric; it only refuses a flat or off-brief render."
+    },
+    "social_frame": {
+      "preference_floor": null,
+      "adherence_floor": null,
+      "require_scorers": false,
+      "_doc": "designed typography frames score low by nature (tiktok 0.1572/18.125); recorded, never blocking."
+    },
+    "default": {
+      "preference_floor": null,
+      "adherence_floor": null,
+      "require_scorers": false,
+      "_doc": "an unnamed surface is measured but not blocked on preference; identity and legibility still block."
+    }
+  },
+  "calibration": {
+    "measured_at": "2026-11-04",
+    "evidence": "state/evidence/image_review_calibration_20261104.json",
+    "rows": [
+      {"name": "product_front", "adherence": 21.375, "preference": 0.2412},
+      {"name": "product_back", "adherence": 19.375, "preference": 0.2363},
+      {"name": "listing_white_bg", "adherence": 23.25, "preference": 0.2559},
+      {"name": "tiktok_frame", "adherence": 18.125, "preference": 0.1572},
+      {"name": "rejected_white_bg_a", "adherence": 23.75, "preference": 0.2656},
+      {"name": "flat_label_art", "adherence": 19.0, "preference": 0.1514}
+    ]
+  }
+}

@@ -75,6 +75,8 @@ verify: {'ok': True, ... 'detail': 'product_picture.py references mockup_quality
    (`ComfyUI/models/_incoming`, provenance rows 2026-11-03) but the service interpreter has no
    `torch` (`ModuleNotFoundError`). Until the runtime is installed, `require_preference` correctly
    yields `needs_review`; the gate does not pretend.
+   **Resolved 2026-11-04:** torch 2.15.0+cpu, transformers 5.22.1 and open_clip_torch 3.3.0 are
+   installed and both axes run (`reports/image_scorers_install_20261104.md`).
 2. **The design-studio API still returns an unscored asset** unless `deliver: true`
    (`design_studio_api.py` L1917, L2045). The next unit runs the same gate before the asset is
    returned and labels it there too.
