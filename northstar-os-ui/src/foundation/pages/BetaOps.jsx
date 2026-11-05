@@ -105,10 +105,10 @@ export default function BetaOps({ toast }) {
         <Card title="Filters & export" icon="gauge">
           <div className="stack">
             <div className="field-row">
-              <input className="field" placeholder="state (active|suspended|onboarding|…)"
+              <input aria-label="Filter by state" className="field" placeholder="state (active|suspended|onboarding|…)"
                      value={filters.state || ''}
                      onChange={(e) => setFilters({ ...filters, state: e.target.value })} />
-              <input className="field" placeholder="tier (free|trial|pro|team)"
+              <input aria-label="Filter by tier" className="field" placeholder="tier (free|trial|pro|team)"
                      value={filters.tier || ''}
                      onChange={(e) => setFilters({ ...filters, tier: e.target.value })} />
               <button className="btn" onClick={() => load()}>Filter</button>
@@ -141,9 +141,9 @@ export default function BetaOps({ toast }) {
           ) : (
             <div className="stack">
               <div className="field-row">
-                <input id="invite-email" className="field" placeholder="new-tester@example.com"
+                <input aria-label="Invite email" id="invite-email" className="field" placeholder="new-tester@example.com"
                        value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} />
-                <select id="invite-role" className="field" value={inviteRole}
+                <select aria-label="Invite role" id="invite-role" className="field" value={inviteRole}
                         onChange={(e) => setInviteRole(e.target.value)}>
                   <option value="organization_owner">organization_owner</option>
                   <option value="organization_admin">organization_admin</option>
@@ -208,7 +208,7 @@ export default function BetaOps({ toast }) {
                 <button className="btn btn-ghost" onClick={() => act('plan', { cohort: 'pro', reason: 'operator' })}>Plan: pro</button>
                 <button className="btn btn-ghost" onClick={() => addOverride('export_enabled', true)}>Override export</button>
               </div>
-              <input id="admin-note" className="field" placeholder="Internal note (never shown to testers)"
+              <input aria-label="Internal admin note" id="admin-note" className="field" placeholder="Internal note (never shown to testers)"
                      onKeyDown={(e) => e.key === 'Enter' && addNote(e.target.value)} />
               <div className="text-low" style={{ fontSize: 11 }}>
                 Internal notes and audit history are visible only to platform admins.

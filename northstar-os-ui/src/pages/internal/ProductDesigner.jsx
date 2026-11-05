@@ -829,7 +829,7 @@ export default function ProductDesigner() {
                   <span className="label">Palette</span>
                   <div className="inline-flex">
                     {kit.palette.map((c, i) => (
-                      <input key={i} type="color" value={/^#[0-9a-f]{6}$/i.test(c) ? c : '#000000'}
+                      <input aria-label={`Palette colour ${i + 1}`} key={i} type="color" value={/^#[0-9a-f]{6}$/i.test(c) ? c : '#000000'}
                         onChange={(e) => setKits(prev => prev.map(k => k.id === kit.id ? { ...k, palette: k.palette.map((p, j) => (j === i ? e.target.value : p)) } : k))}
                         style={{ width: 34, height: 34, border: '1px solid var(--divider-mid)', borderRadius: 6, background: 'none', padding: 0, cursor: 'pointer' }} />
                     ))}

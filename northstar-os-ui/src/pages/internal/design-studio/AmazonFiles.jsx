@@ -421,7 +421,7 @@ export default function AmazonFiles() {
                             {editableFields.map(f => r[f] ? `${f}=${r[f]} ` : '').join('') || '—'}
                           </td>
                           <td>
-                            <select className="field" style={{ minWidth: 100 }} value={edit.op} data-testid={`af-op-${i}`}
+                            <select aria-label="Edit operation" className="field" style={{ minWidth: 100 }} value={edit.op} data-testid={`af-op-${i}`}
                               onChange={e => patchEdit(i, { op: e.target.value })}>
                               {(selectedUpload.kind === 'listing_template'
                                 ? ['Create', 'Update', 'Archive']
@@ -430,7 +430,7 @@ export default function AmazonFiles() {
                           </td>
                           <td>
                             {editableFields.slice(0, 2).map(f => (
-                              <input key={f} className="field" style={{ width: 120, marginRight: 4 }} placeholder={f}
+                              <input aria-label={f} key={f} className="field" style={{ width: 120, marginRight: 4 }} placeholder={f}
                                 value={(edit.fields && edit.fields[f]) || ''}
                                 onChange={e => patchEdit(i, { fields: { [f]: e.target.value } })} />
                             ))}

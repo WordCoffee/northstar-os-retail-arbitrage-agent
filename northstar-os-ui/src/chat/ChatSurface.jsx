@@ -1687,7 +1687,7 @@ export default function ChatSurface({
                   : <Icon name="mic" size={17} />}
               </button>
             )}
-            <input ref={fileRef} type="file" hidden
+            <input aria-label="Attach a file" ref={fileRef} type="file" hidden
               accept="image/*,video/*,application/pdf,text/plain,text/csv"
               onChange={(e) => uploadFile(e.target.files && e.target.files[0])}
               data-testid="chat-file" />

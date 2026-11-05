@@ -95,7 +95,7 @@ export default function SpreadsheetLab() {
             <span className="pill pill-muted">{rows.length} rows · {columns.length} columns</span>
           </div>
           <ReasoningModelSelector value={selectedModel?.id} onChange={persist} />
-          <textarea
+          <textarea aria-label="Spreadsheet data"
             className="field"
             rows={12}
             value={raw}

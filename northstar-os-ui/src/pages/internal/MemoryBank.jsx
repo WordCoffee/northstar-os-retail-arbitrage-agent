@@ -73,7 +73,7 @@ function MemoryLive() {
           <span className={`pill pill-${st.phase === 'error' ? 'unknown' : 'muted'}`}>{st.phase === 'loading' ? 'Loading…' : st.phase === 'error' ? 'unavailable' : `${results.length} match${results.length === 1 ? '' : 'es'} · local`}</span>
         </div>
         <div className="inline-flex" style={{ gap: 8, marginBottom: 12 }}>
-          <input className="field" style={{ maxWidth: 320 }} value={intent} onChange={e => setIntent(e.target.value)} placeholder="Search intent (keyword)…" onKeyDown={e => { if (e.key === 'Enter') run(intent) }} />
+          <input aria-label="Search memory by intent" className="field" style={{ maxWidth: 320 }} value={intent} onChange={e => setIntent(e.target.value)} placeholder="Search intent (keyword)…" onKeyDown={e => { if (e.key === 'Enter') run(intent) }} />
           <button className="btn btn-sm" onClick={() => run(intent)}>Search</button>
         </div>
         {st.phase === 'error' && <p style={{ fontSize: 13 }}>Memory search unavailable{st.error && st.error.code ? ` (${st.error.code})` : ''}.</p>}

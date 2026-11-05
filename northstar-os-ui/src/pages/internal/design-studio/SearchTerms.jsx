@@ -499,8 +499,8 @@ export default function SearchTerms() {
       <div className="card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
           <strong style={{ fontSize: 13 }}>Imported terms</strong>
-          <input className="field" style={{ maxWidth: 220 }} placeholder="Search terms…" value={termQuery} onChange={e => setTermQuery(e.target.value)} />
-          <select className="field" style={{ maxWidth: 220 }} value={kindFilter} onChange={e => setKindFilter(e.target.value)}>
+          <input aria-label="Filter imported terms" className="field" style={{ maxWidth: 220 }} placeholder="Search terms…" value={termQuery} onChange={e => setTermQuery(e.target.value)} />
+          <select aria-label="Report kind" className="field" style={{ maxWidth: 220 }} value={kindFilter} onChange={e => setKindFilter(e.target.value)}>
             <option value="">Both report kinds</option>
             {KINDS.map(k => <option key={k.id} value={k.id}>{k.label}</option>)}
           </select>
@@ -755,7 +755,7 @@ export default function SearchTerms() {
                       {active && (
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
                           {['impressions', 'clicks', 'orders', 'spend', 'sales'].map(f => (
-                            <input key={f} className="field" style={{ width: 90 }} placeholder={f} value={metricForm[f]}
+                            <input aria-label={f} key={f} className="field" style={{ width: 90 }} placeholder={f} value={metricForm[f]}
                               onChange={e => setMetricForm({ ...metricForm, [f]: e.target.value })} />
                           ))}
                           <button className="btn btn-sm btn-primary" onClick={submitMetric}>Store</button>

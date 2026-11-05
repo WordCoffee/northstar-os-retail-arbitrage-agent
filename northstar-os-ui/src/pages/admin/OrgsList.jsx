@@ -80,7 +80,7 @@ function NoteDraft() {
   return (
     <div data-testid="org-note-draft" style={{ marginTop: 10 }}>
       <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>Draft internal note <span className="pill pill-muted" style={{ fontSize: 10 }}>local only · not posted</span></div>
-      <textarea className="field" value={text} onChange={e => setText(e.target.value)} placeholder="Draft a note… it stays in this browser and is not sent." rows={2} />
+      <textarea aria-label="Draft internal note" className="field" value={text} onChange={e => setText(e.target.value)} placeholder="Draft a note… it stays in this browser and is not sent." rows={2} />
       <div className="inline-flex" style={{ gap: 8, marginTop: 6, alignItems: 'center' }}>
         <button className="btn btn-sm btn-ghost" onClick={save}>Save local draft</button>
         <span className="pill pill-unknown" title="Drafting is local-only; posting is a real audited write requiring owner approval">not posted</span>
@@ -128,7 +128,7 @@ function LifecycleAction({ id, action, label, eligible, blockReason, auditEvent,
       {!eligible && blockReason && <div className="text-low" style={{ fontSize: 12, marginBottom: 6 }}>{blockReason}</div>}
       {eligible && consequence && <div className="text-low" style={{ fontSize: 12, marginBottom: 6 }}>{consequence}</div>}
       <form className="stack" style={{ gap: 8 }} onSubmit={submit}>
-        <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!eligible} />
+        <input aria-label="Reason for the change" className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!eligible} />
         <div className="check-row">
           <input type="checkbox" id={`lc-${action}-confirm`} checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!eligible} />
           <label htmlFor={`lc-${action}-confirm`}>I understand this {action === 'suspend' ? 'suspends' : 'resumes'} the organization.</label>
@@ -235,7 +235,7 @@ function GrantControl({ id, record, onDone }) {
       </div>
       {blockReason && <div className="text-low" style={{ fontSize: 12, marginBottom: 8 }}>{blockReason}</div>}
       <form className="stack" style={{ gap: 8 }} onSubmit={submit}>
-        <input className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!mandatoryPass} />
+        <input aria-label="Reason for the change" className="field" value={reason} onChange={e => setReason(e.target.value)} placeholder="Reason (optional)" disabled={!mandatoryPass} />
         <div className="check-row">
           <input type="checkbox" id="grant-confirm" checked={confirmed} onChange={e => setConfirmed(e.target.checked)} disabled={!mandatoryPass} />
           <label htmlFor="grant-confirm">I understand this admits the organization to the private beta and activates access.</label>

@@ -162,22 +162,22 @@ export default function BetaTester({ toast }) {
         <Card title="Support" icon="help">
           <div className="stack">
             <div className="field-row">
-              <select className="field" style={{ flex: 1 }} value={ticketForm.category}
+              <select aria-label="Ticket category" className="field" style={{ flex: 1 }} value={ticketForm.category}
                       onChange={(e) => setTicketForm({ ...ticketForm, category: e.target.value })}>
                 <option value="bug">Bug</option><option value="onboarding">Onboarding</option>
                 <option value="usability">Usability</option><option value="data_quality">Data quality</option>
                 <option value="billing_test_mode">Billing / test mode</option>
                 <option value="feature_request">Feature request</option><option value="other">Other</option>
               </select>
-              <select className="field" value={ticketForm.severity}
+              <select aria-label="Ticket severity" className="field" value={ticketForm.severity}
                       onChange={(e) => setTicketForm({ ...ticketForm, severity: e.target.value })}>
                 <option value="blocker">Blocker</option><option value="high">High</option>
                 <option value="medium">Medium</option><option value="low">Low</option>
               </select>
             </div>
-            <input className="field" placeholder="Subject" value={ticketForm.subject}
+            <input aria-label="Ticket subject" className="field" placeholder="Subject" value={ticketForm.subject}
                    onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })} />
-            <textarea className="field" rows={3} placeholder="Description"
+            <textarea aria-label="Ticket description" className="field" rows={3} placeholder="Description"
                       value={ticketForm.description}
                       onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })} />
             <div className="text-low" style={{ fontSize: 11 }}>
