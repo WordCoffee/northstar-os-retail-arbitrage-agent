@@ -240,3 +240,75 @@ async def drain_queue(
 ) -> Dict[str, Any]:
     """Advance the queue by at most `max_tasks` bounded runs (never a daemon)."""
     return {"ran": _assistant().drain(max_tasks=max_tasks)}
+
+
+# ---------------------------------------------------------------------------
+# Long-term memory (semantic when the local embedder answers)
+# ---------------------------------------------------------------------------
+
+_MEMORY: Optional[Any] = None
+
+
+def _memory_index():
+    """One process-wide memory index: 1024-d local embeddings + sqlite-vec.
+
+    Falls back to the hashed index if the embedder or the extension is
+    unavailable, and says so in `/memory/stats`.
+    """
+    global _MEMORY
+    if _MEMORY is None:
+        from pathlib import Path
+
+        from tys_ops import memory as tys_memory
+
+        path = Path(__file__).resolve().parent / "data" / "tys_memory.db"
+        _MEMORY = tys_memory.MemoryIndex(str(path), semantic=True)
+    return _MEMORY
+
+
+@router.get("/memory/stats")
+async def memory_stats(account: str = Query(default="operator"),
+                       _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    return _memory_index().stats(account)
+
+
+@router.post("/memory/text")
+async def memory_text(body: Dict[str, Any] = Body(...),
+                      _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    account = str(body.get("account") or "operator")
+    text = str(body.get("text") or "").strip()
+    if not text:
+        raise HTTPException(status_code=422, detail={"code": "memory_text_required"})
+    return _memory_index().remember_text(account, text,
+                                         source=str(body.get("source") or ""))
+
+
+@router.get("/memory/search")
+async def memory_search(q: str = Query(..., min_length=1),
+                        account: str = Query(default="operator"),
+                        k: int = Query(default=5, ge=1, le=20),
+                        _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    index = _memory_index()
+    return {"query": q, "account": account, "semantic": index.semantic,
+            "hits": index.search(account, q, k=k)}
+
+
+@router.post("/memory/facts")
+async def memory_assert_fact(body: Dict[str, Any] = Body(...),
+                             _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    required = ("subject", "predicate", "value")
+    if not all(str(body.get(key) or "").strip() for key in required):
+        raise HTTPException(status_code=422, detail={"code": "memory_fact_fields_required"})
+    return _memory_index().assert_fact(
+        str(body.get("account") or "operator"), str(body["subject"]),
+        str(body["predicate"]), str(body["value"]),
+        confidence=float(body.get("confidence") or 0.7),
+        source=str(body.get("source") or ""))
+
+
+@router.get("/memory/facts")
+async def memory_facts(account: str = Query(default="operator"),
+                       include_superseded: bool = Query(default=False),
+                       _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    return {"account": account,
+            "facts": _memory_index().facts(account, include_superseded=include_superseded)}

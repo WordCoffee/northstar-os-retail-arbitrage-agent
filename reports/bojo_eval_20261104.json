@@ -1,0 +1,127 @@
+{
+  "generated_at": "2026-11-05T00:10:19Z",
+  "suite": "bojo",
+  "tools": {
+    "cases": 8,
+    "correct": 8,
+    "accuracy": 1.0,
+    "rows": [
+      {
+        "case": "valid read",
+        "expected_parse": true,
+        "parsed": true,
+        "code": "",
+        "ok": true,
+        "tool": "read"
+      },
+      {
+        "case": "valid finish",
+        "expected_parse": true,
+        "parsed": true,
+        "code": "",
+        "ok": true,
+        "tool": "finish"
+      },
+      {
+        "case": "prose, no JSON",
+        "expected_parse": false,
+        "parsed": false,
+        "code": "not_json",
+        "ok": true,
+        "tool": null
+      },
+      {
+        "case": "two actions",
+        "expected_parse": false,
+        "parsed": false,
+        "code": "multiple_actions",
+        "ok": true,
+        "tool": null
+      },
+      {
+        "case": "unknown tool",
+        "expected_parse": false,
+        "parsed": false,
+        "code": "unknown_tool",
+        "ok": true,
+        "tool": null
+      },
+      {
+        "case": "missing required arg",
+        "expected_parse": false,
+        "parsed": false,
+        "code": "schema",
+        "ok": true,
+        "tool": "read"
+      },
+      {
+        "case": "truncated JSON",
+        "expected_parse": false,
+        "parsed": false,
+        "code": "invalid_json",
+        "ok": true,
+        "tool": null
+      },
+      {
+        "case": "extra top-level notes are allowed",
+        "expected_parse": true,
+        "parsed": true,
+        "code": "",
+        "ok": true,
+        "tool": "read"
+      }
+    ]
+  },
+  "memory": {
+    "queries": 6,
+    "hits": 6,
+    "recall_at_3": 1.0,
+    "semantic": true,
+    "semantic_reason": "",
+    "rows": [
+      {
+        "query": "which lane takes the GPU lock",
+        "expected": "gpu",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      },
+      {
+        "query": "does the free tier keep video",
+        "expected": "video",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      },
+      {
+        "query": "A+ header size",
+        "expected": "aplus",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      },
+      {
+        "query": "identity threshold",
+        "expected": "identity",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      },
+      {
+        "query": "who runs bounded campaigns",
+        "expected": "campaign",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      },
+      {
+        "query": "what resolves the user profile",
+        "expected": "brain",
+        "hit": true,
+        "hits": 3,
+        "semantic": true
+      }
+    ]
+  },
+  "seconds": 0.8
+}

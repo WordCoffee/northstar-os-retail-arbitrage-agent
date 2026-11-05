@@ -1719,6 +1719,7 @@ class TysAssistant:
         bounded either way.
         """
         from agent_kernel.policy import grant
+        from agent_kernel.tracing import span
         from agent_kernel.tys_adapter import make_workspace_acceptance, run_order
 
         task = self.store.get(task_id)
@@ -1774,8 +1775,11 @@ class TysAssistant:
                     ((node.inputs or {}).get("acceptance") or {}).get(
                         "required_files") or []), ""),
                 max_steps=max(1, int(coding_max_steps)))
-        res = run_order(self, order, approve_by=approve_by, grants=grants,
-                        task=task, coding_factory=coding_factory)
+        with span("tys.kernel", task_id=task_id,
+                  objective=str(order.get("objective") or "")[:200],
+                  coding_agent=coding_agent):
+            res = run_order(self, order, approve_by=approve_by, grants=grants,
+                            task=task, coding_factory=coding_factory)
         task["status"] = "done" if res.status == "complete" else res.status
         self.store.save(task)
         self.store.event(task_id, "kernel_result", res.to_dict())

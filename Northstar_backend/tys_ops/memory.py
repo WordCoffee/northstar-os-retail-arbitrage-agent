@@ -1,14 +1,20 @@
 """Long-term memory: context index, compression, retrieval, epistemic facts.
 
-Everything here is local: a SQLite file, a deterministic hashed embedding, no
-model call and no network. That is deliberate — memory must work when the GPU
-is busy with a render or the 27B worker is stopped.
+The default path is local and model-free: a SQLite file, a deterministic hashed
+embedding (256 dims), no network. That is deliberate — memory must work when the
+GPU is busy with a render or the 27B worker is stopped.
+
+An **opt-in semantic path** adds real embeddings from the local Ollama runner
+(`qwen3-embedding:0.6b`, 1024 dims) and a `sqlite-vec` KNN index beside the
+hashed one. It is off by default (`semantic=None` reads
+`NORTHSTAR_MEMORY_SEMANTIC`, default `0`), and any failure disables it for the
+rest of the process and falls back to the hashed index — memory never becomes
+unavailable because a model is.
 
 Three layers
 ------------
-**Context index**   chunked text with a hashed bag-of-words vector (256 dims,
-                    sublinear term frequency, L2 normalised). Cosine search is
-                    exact and cheap; there is no approximate index to drift.
+**Context index**   chunked text; hashed bag-of-words by default, semantic
+                    vectors when enabled. Hashed search is exact and cheap.
 **Compression**     extractive, query-aware, budgeted in tokens. It never
                     invents a sentence; it selects and orders real ones.
 **Epistemic facts** subject/predicate/value with confidence, source and a
@@ -27,10 +33,16 @@ import re
 import sqlite3
 import threading
 import time
+import urllib.error
+import urllib.request
 import uuid
 from typing import Any, Dict, Iterable, List, Optional
 
 DIM = 256
+SEMANTIC_DIM = 1024
+EMBED_MODEL = os.environ.get("NORTHSTAR_EMBED_MODEL", "qwen3-embedding:0.6b")
+EMBED_URL = os.environ.get("NORTHSTAR_EMBED_URL", "http://127.0.0.1:11434/api/embeddings")
+EMBED_TIMEOUT_S = float(os.environ.get("NORTHSTAR_EMBED_TIMEOUT", "30"))
 _WORD_RE = re.compile(r"[a-z0-9']+")
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
 
@@ -90,12 +102,44 @@ def _pack(vector: Iterable[float]) -> bytes:
                       separators=(",", ":")).encode("utf-8")
 
 
+def _pack_semantic(vector: List[float]) -> bytes:
+    """float32 little-endian, the layout sqlite-vec expects."""
+    import struct
+    return struct.pack(f"<{len(vector)}f", *[float(v) for v in vector])
+
+
 def _unpack(blob: bytes) -> List[float]:
     return json.loads(blob.decode("utf-8"))
 
 
 def _cosine(a: List[float], b: List[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
+
+
+def semantic_enabled_default() -> bool:
+    return os.environ.get("NORTHSTAR_MEMORY_SEMANTIC", "0").strip() == "1"
+
+
+class EmbeddingError(RuntimeError):
+    """The local embedding runner did not answer or returned a bad vector."""
+
+
+def embed_semantic(text: str, *, timeout: float = EMBED_TIMEOUT_S) -> List[float]:
+    """One 1024-d vector from the local Ollama runner. No cloud fallback."""
+    payload = json.dumps({"model": EMBED_MODEL, "prompt": str(text or "")}).encode("utf-8")
+    req = urllib.request.Request(EMBED_URL, data=payload,
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+        raise EmbeddingError(f"embedding_unavailable: {exc}") from exc
+    vector = data.get("embedding")
+    if not isinstance(vector, list) or len(vector) != SEMANTIC_DIM:
+        raise EmbeddingError(
+            f"embedding_bad_shape: expected {SEMANTIC_DIM}, got "
+            f"{len(vector) if isinstance(vector, list) else type(vector).__name__}")
+    return [float(v) for v in vector]
 
 
 def chunk_text(text: str, *, max_tokens: int = 220) -> List[str]:
@@ -174,16 +218,35 @@ def _score(sentence: str, query_terms: set, index: int, total: int) -> float:
 
 
 class MemoryIndex:
-    """SQLite-backed context + fact store. One lock, one connection."""
+    """SQLite-backed context + fact store. One lock, one connection.
 
-    def __init__(self, path: str):
+    ``semantic=True`` enables the local embedding path (qwen3-embedding +
+    sqlite-vec). A failure disables it for the process and falls back to the
+    hashed index; it never raises from a search because a model is down.
+    """
+
+    def __init__(self, path: str, *, semantic: Optional[bool] = None):
         self.path = path
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         self._lock = threading.RLock()
         self._conn = sqlite3.connect(path, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
+        self.semantic = semantic_enabled_default() if semantic is None else bool(semantic)
+        self.semantic_reason = "" if self.semantic else "disabled"
         with self._lock:
             self._conn.executescript(_SCHEMA)
+            if self.semantic:
+                try:
+                    import sqlite_vec
+                    self._conn.enable_load_extension(True)
+                    sqlite_vec.load(self._conn)
+                    self._conn.execute(
+                        "CREATE VIRTUAL TABLE IF NOT EXISTS chunk_vec USING vec0("
+                        "chunk_id TEXT PRIMARY KEY, embedding float[1024] "
+                        "distance_metric=cosine)")
+                except Exception as exc:  # noqa: BLE001 - fallback is the contract
+                    self.semantic = False
+                    self.semantic_reason = f"sqlite_vec_unavailable: {exc}"
             self._conn.commit()
 
     def close(self) -> None:
@@ -206,12 +269,70 @@ class MemoryIndex:
                     " source, created_at) VALUES (?,?,?,?,?,?,?,?)",
                     (chunk_id, account, session_id, piece, token_estimate(piece),
                      _pack(embed(piece)), source, stamp))
+                if self.semantic:
+                    try:
+                        self._conn.execute(
+                            "INSERT OR REPLACE INTO chunk_vec (chunk_id, embedding)"
+                            " VALUES (?, ?)",
+                            (chunk_id, _pack_semantic(embed_semantic(piece))))
+                    except Exception as exc:  # noqa: BLE001 - fall back, never fail the write
+                        self.semantic = False
+                        self.semantic_reason = str(exc)[:300]
                 ids.append(chunk_id)
             self._conn.commit()
-        return {"chunks": len(ids), "ids": ids}
+        return {"chunks": len(ids), "ids": ids, "semantic": self.semantic}
+
+    def _backfill_semantic(self, account: str, limit: int = 32) -> int:
+        """Embed chunks written before semantic mode was enabled, bounded per call."""
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT c.id, c.text FROM chunks c WHERE c.account=? AND NOT EXISTS"
+                " (SELECT 1 FROM chunk_vec v WHERE v.chunk_id = c.id) LIMIT ?",
+                (account, int(limit))).fetchall()
+        added = 0
+        for row in rows:
+            vector = embed_semantic(row["text"])
+            with self._lock:
+                self._conn.execute(
+                    "INSERT OR REPLACE INTO chunk_vec (chunk_id, embedding) VALUES (?, ?)",
+                    (row["id"], _pack_semantic(vector)))
+                self._conn.commit()
+            added += 1
+        return added
+
+    def _search_semantic(self, account: str, vector: List[float], k: int,
+                         min_score: float) -> List[Dict[str, Any]]:
+        fetch = max(int(k) * 8, 32)
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT v.chunk_id, v.distance, c.text, c.tokens, c.source,"
+                " c.created_at, c.account FROM chunk_vec v"
+                " JOIN chunks c ON c.id = v.chunk_id"
+                f" WHERE v.embedding MATCH ? AND v.k = {fetch}",
+                (_pack_semantic(vector),)).fetchall()
+        scored = []
+        for row in rows:
+            if row["account"] != account:
+                continue
+            score = max(0.0, 1.0 - float(row["distance"]))
+            if score >= min_score:
+                scored.append({"id": row["chunk_id"], "text": row["text"],
+                               "tokens": row["tokens"], "source": row["source"],
+                               "created_at": row["created_at"],
+                               "score": round(score, 4), "semantic": True})
+        scored.sort(key=lambda item: -item["score"])
+        return scored[:k]
 
     def search(self, account: str, query: str, *, k: int = 5,
                min_score: float = 0.05) -> List[Dict[str, Any]]:
+        if self.semantic:
+            try:
+                self._backfill_semantic(account)
+                return self._search_semantic(account, embed_semantic(query), k,
+                                             min_score)
+            except Exception as exc:  # noqa: BLE001 - fallback is the contract
+                self.semantic = False
+                self.semantic_reason = str(exc)[:300]
         target = embed(query)
         with self._lock:
             rows = self._conn.execute(
@@ -225,7 +346,7 @@ class MemoryIndex:
                 scored.append({"id": row["id"], "text": row["text"],
                                "tokens": row["tokens"], "source": row["source"],
                                "created_at": row["created_at"],
-                               "score": round(score, 4)})
+                               "score": round(score, 4), "semantic": False})
         scored.sort(key=lambda item: -item["score"])
         return scored[:k]
 
@@ -336,4 +457,5 @@ class MemoryIndex:
                 "SELECT COUNT(*) AS n FROM facts WHERE account=? AND status='live'",
                 (account,)).fetchone()
         return {"account": account, "chunks": chunks["n"], "chunk_tokens": chunks["t"],
-                "live_facts": live["n"]}
+                "live_facts": live["n"], "semantic": self.semantic,
+                "semantic_reason": self.semantic_reason}

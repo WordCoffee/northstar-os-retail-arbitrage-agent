@@ -1,0 +1,10 @@
+# Agent toolchain — installed 2026-11-04 for the approved Tier-0 items.
+# Local only; no cloud inference. Licences in provenance.csv.
+#
+#   pip install -r requirements-agent-tools.txt
+#   npm install -g repomix==1.18.1
+sqlite-vec==0.1.9
+mcp==2.1.1
+ast-grep-cli==0.51.1
+opentelemetry-sdk==1.45.2
+opentelemetry-exporter-otlp-proto-http==1.45.2

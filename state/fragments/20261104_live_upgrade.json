@@ -1,0 +1,47 @@
+{
+  "live_upgrade_20261104": {
+    "status": "DONE - semantic memory API, eval harness, tracing and Tier-0 toolchain installed and running; heavy model lanes deferred with reasons; fragment pending operator merge",
+    "live": {
+      "backend": "http://127.0.0.1:8000 (PID 1104), /health 200",
+      "ui": "http://127.0.0.1:8101 (PID 25196), 200",
+      "memory_api": "semantic=true, live write/search/stats verified; score 0.6629",
+      "service_profile": "ENVIRONMENT=development, loopback only, dev identity shim (demo-t2/operator)"
+    },
+    "changed": {
+      "memory": "Northstar_backend/tys_ops/memory.py - opt-in 1024-d Ollama embeddings + sqlite-vec cosine KNN, hashed fallback, lazy backfill of old chunks",
+      "api": "Northstar_backend/tys_api.py - /memory/text, /memory/search, /memory/facts (GET/POST), /memory/stats, admin-gated",
+      "tracing": "Northstar_backend/agent_kernel/tracing.py - OTel span, no-op unless NORTHSTAR_TRACE=1; run_kernel wrapped",
+      "eval": "tools/bojo_eval.py - tool-contract accuracy 1.0, memory recall@3 1.0 (semantic), baseline report",
+      "toolchain": "sqlite-vec 0.1.9, ast-grep-cli 0.51.1, repomix 1.18.1, mcp 2.1.1, opentelemetry-sdk 1.45.2 + OTLP HTTP exporter; pins in requirements-agent-tools.txt; provenance rows added",
+      "docs": "docs/TYS_MEMORY.md"
+    },
+    "already_operating": [
+      "B1 constrained tool calls: TOOL_CALL_SCHEMA as response_format json_schema in local_model; native tool schemas share _SCHEMA",
+      "image review gate, reference conditioning, scorers and best-of-N from a9c031e6/b214404a"
+    ],
+    "verification": {
+      "tests_suite": "195 passed",
+      "tests_semantic_after_backfill": "4 passed",
+      "live_health": 200,
+      "live_memory": "write 200, search 200 score 0.6629, stats semantic true",
+      "toolchain": "ast-grep 0.51.1, repomix 1.18.1",
+      "no_product_regressions": true
+    },
+    "not_in_pass": {
+      "B2_layout_ocr": "Docling pulls a second OCR stack/OpenCV/hub upgrade; needs measured A/B",
+      "B3_relighting": "needs SD15 weights and a GPU lane run",
+      "B4_3d": "TRELLIS/InstantMesh weights and reduced-res/offload plan",
+      "B6_browser_schema": "touches Chrome Connect policy surface",
+      "flux3_media": "ComfyUI stopped after the image pass; start + one gated render"
+    },
+    "decisions": [
+      "Enable semantic memory behind an explicit flag with a hard fallback; never make search depend on a model being up.",
+      "Keep the existing schema-constrained tool path; do not duplicate it with a second GBNF implementation.",
+      "Install only tools that do not fork the OCR/runtime stack; defer Docling until an A/B is measured.",
+      "Trace is opt-in and failure-proof; off by default to keep the service quiet."
+    ],
+    "rollback": "Kill PIDs 1104/25196; revert memory.py, tys_api.py, tracing.py, tys_assistant.py and the new tests; delete Northstar_backend/data/tys_memory.db; optional pip/npm uninstall.",
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference, no policy/allowlist change. Dev shim loopback only.",
+    "report": "reports/live_upgrade_20261104.md"
+  }
+}
