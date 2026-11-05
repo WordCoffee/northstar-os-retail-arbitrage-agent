@@ -1233,6 +1233,384 @@
       "max_repairs": 1,
       "max_steps": 24,
       "commit_message": "feat(mockup): refuse a plate with no findable pouch face"
+    },
+    {
+      "id": "ty-prompt-refine",
+      "name": "A prompt reaches the renderer already compliant",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only prompt-quality fix from the 2026-11-05 continuous-improvement work order (automated prompt-refinement before diffusion). No auth, tenancy, billing, security, provider or external I/O; the probe is read-only and outside the author's write scope.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Northstar_backend/prompt_author.py states a contract it does not enforce. SYSTEM requires that an authored prompt contain no type terms (logo, label, lettering, text, wordmark, emblem, badge, icon, stamp, crest, monogram, typography) and stay under 70 words, but author_prompt() only appends a warning and returns the violating string, so the renderer receives a prompt that invites the model to paint type onto the plate. Add MAX_PROMPT_WORDS = 70, a _CLAUSE_SEP pattern and refine_prompt(text) -> {'prompt': str, 'removed': list[str], 'words_before': int, 'words_after': int} that deterministically removes any comma/semicolon/period clause or ' with|and|featuring|displaying|showing|including ' clause containing a banned term, then trims trailing content past the word cap, and raises PromptAuthorUnavailable('refined_prompt_too_thin: ...') when fewer than 4 words survive or a banned term remains. It must never invent replacement copy. author_prompt must return the refined prompt as 'prompt', keep reporting the model's own violations in 'warnings', and add a 'refinement' record. Export refine_prompt and MAX_PROMPT_WORDS in __all__. Do not change the endpoint call, the brief, the sanitizer, or any other module. The read-only probe state/probes/t14_prompt_refine.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/prompt_author.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/prompt_author.py",
+        "state/probes/t14_prompt_refine.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "prompt refinement probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t14_prompt_refine.py"
+          ]
+        },
+        {
+          "name": "prompt author regression",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_prompt_author.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t14_prompt_refine.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/prompt_author.py"
+      ],
+      "commit_message": "feat(prompt): refine an authored prompt to the contract before it renders",
+      "required_artifact": "Northstar_backend/prompt_author.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 12,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-audio-overrun-guard",
+      "name": "A narration longer than the picture is refused, not cut",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local-only audio-alignment fix from the 2026-11-05 continuous-improvement work order (multi-clip video audio alignment). No auth, tenancy, billing, security, provider or external I/O; the probe is read-only, uses generated WAVs and local ffmpeg, and is outside the author's write scope.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Northstar_backend/video_audio.py has a silent-failure defect in mix(). When total_seconds is given it pads a short voice with apad and then cuts the mix with atrim=0:<picture>, which is correct for a short line and silently destroys a long one: the last words of the narration are dropped with no measurement and no error, and the delivered clip looks fine. Add VOICE_OVERRUN_TOLERANCE_S = 0.25 and a module-level _seconds(path) helper that reads format=duration with video_stitch.FFPROBE (audio-only files are valid; video_stitch.probe() refuses them). In mix(), when total_seconds is set, measure the voice first, compute overrun = voice_seconds - total_seconds, raise AudioError('voice_overruns_picture: voice X.XXs > picture Y.YYs by Z.ZZs (tolerance 0.25s) - shorten the script or extend the picture') when overrun > VOICE_OVERRUN_TOLERANCE_S, and add voice_seconds and overrun_s to the returned dict on every path. A voice that fits, or overruns by less than the tolerance, must still mix exactly as it does today. Do not change ambient_bed, loudness, volume, mux, verify, voiceover, add_audio, the filter graphs, or any other module. The read-only probe state/probes/t15_audio_overrun.py is the contract - run it to check your change; if it fails, edit the source file - never the probe. Change only that file.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/video_audio.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/video_audio.py",
+        "Northstar_backend/video_stitch.py",
+        "state/probes/t15_audio_overrun.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "audio overrun probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t15_audio_overrun.py"
+          ]
+        },
+        {
+          "name": "audio regression",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_video_audio.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t15_audio_overrun.py"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/video_audio.py"
+      ],
+      "commit_message": "fix(audio): refuse a narration that overruns the picture instead of trimming it",
+      "required_artifact": "Northstar_backend/video_audio.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 12,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-packify-credit-meter",
+      "name": "Package Design reads the credit ledger instead of inventing a balance",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "UI truthfulness fix from the 2026-11-05 continuous-improvement work order (UI/UX + standardised error states). Frontend only: no auth, tenancy, billing, security, provider or external I/O; no generation lane is armed or run by the checks.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "northstar-os-ui/src/pages/internal/PackifyDesign.jsx violates credit-ledger/v1 section 3 (C8): the client only DISPLAYS the balance and never computes cost logic. The page starts at a hardcoded credits=49 and subtracts 10 per run, so it shows a number the ledger has never seen, and its error state prints e.message verbatim (an operator gets 'http_500' with no next step). Fix it: add src/lib/creditMeter.js exporting AI_DESIGN_COST, normaliseMeter(payload), affordability(meter, cost), meterLine(meter, cost) and describeError(error); normaliseMeter accepts the bff/v1 envelope or a bare data object and returns ok:false with a named reason for anything without a finite non-negative balance, never a fabricated number; affordability blocks a run it cannot price; describeError maps status 0/401/403/429/5xx/other to {tone, action, message} with an action of retry, sign_in, top_up or edit. Add src/lib/creditMeter.test.js covering every branch with node:test. Add credits: () => get('/api/v1/credits/me') to src/services/signals.js. Rewrite PackifyDesign.jsx to load the meter on mount, gate Generate on affordability with the reason shown, render failures as a role=alert block with the action button (Retry / Sign in / Account and billing / Dismiss), and re-read the meter after a successful run instead of decrementing it. Keep the sessions list, the suggested prompts, the brief text and the result panel working as they do today. Do not change any other page, service or backend route.",
+      "dependencies": [],
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx",
+        "northstar-os-ui/src/services/signals.js",
+        "northstar-os-ui/src/lib/creditMeter.js",
+        "northstar-os-ui/src/lib/creditMeter.test.js"
+      ],
+      "read_paths": [
+        "northstar-os-ui/src/ui.jsx",
+        "northstar-os-ui/src/pages/internal/design-studio/Deliverables.jsx",
+        "Northstar_backend/main.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "npm",
+          "run",
+          "test:ui"
+        ]
+      ],
+      "commit_paths": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx",
+        "northstar-os-ui/src/services/signals.js",
+        "northstar-os-ui/src/lib/creditMeter.js",
+        "northstar-os-ui/src/lib/creditMeter.test.js"
+      ],
+      "commit_message": "fix(ui): Package Design reads the credit ledger and names every failure",
+      "required_artifact": "northstar-os-ui/src/lib/creditMeter.js",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 12,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-test-runner-parse",
+      "name": "The sanctioned test runner can read its own suite output",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Local test-harness repair from the 2026-11-05 continuous-improvement work order (maintain a trustworthy green baseline). No auth, tenancy, billing, security, provider or external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "scripts/run_all_tests.ps1 is the only thing that certifies the green baseline, and it could not read a green run. Its backend summary regex required '... skipped, <n> subtests passed' in that exact order, so the moment pytest emitted '117 skipped, 2 xfailed, 18 warnings, 89 subtests passed' the parse failed, the aggregate went RED and a fully passing suite was reported as unparsed. Extract the parse into a Parse-PytestSummary function that reads the last line containing a pass count and a duration and counts each token independently (passed, failed, error, skipped, subtests), returning $null when there is no summary. Add a param([switch]$SelfTest) at the top that runs that same function against six known summary shapes (green with xfailed, failures with xfailed, decorated summary, short suite with a warning token, errors counted as failures, nothing collected) and exits 0 only when all six match. The full run must behave exactly as before when -SelfTest is absent. Do not change any test, any baseline count, any other script, or the four non-backend suite blocks.",
+      "dependencies": [],
+      "write_paths": [
+        "scripts/run_all_tests.ps1"
+      ],
+      "read_paths": [
+        "tests/BASELINE.json",
+        "src/lib/dealsApi.js",
+        "Northstar_backend/test_functions_contract.cjs"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "runner parser self-test",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t16_runner_selftest.py"
+          ]
+        },
+        {
+          "name": "functions contract suite",
+          "cwd": "Northstar_backend",
+          "cmd": [
+            "node",
+            "test_functions_contract.cjs"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "state/probes/t16_runner_selftest.py"
+        ]
+      ],
+      "commit_paths": [
+        "scripts/run_all_tests.ps1"
+      ],
+      "commit_message": "fix(test-harness): the runner parses its own summary, and csv-parse is declared",
+      "required_artifact": "scripts/run_all_tests.ps1",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 12,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "ty-audio-overrun-caller",
+      "name": "The ad pipeline reports the narration it cannot fit",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Regression repair for ty-audio-overrun-guard (commit 6c17d73b), from the 2026-11-05 continuous-improvement work order. The new guard correctly refused a 10s narration on a 3s picture, which broke test_video_ad.py; the platform contract fixes the frame count, so the ad pipeline is the one caller that must opt out and report the measurement. Local only: no auth, tenancy, billing, security, provider or external I/O.",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Commit 6c17d73b added a correct guard to video_audio.mix(): a narration longer than the picture is refused instead of silently trimmed. That broke two tests in Northstar_backend/test_video_ad.py, because video_ad.produce is contractually bound to an exact frame count (90 frames at 30fps for a 3 second TikTok ad) and cannot grow the picture to fit a longer script. Resolve it without weakening the default: add strict_overrun: bool = True to video_audio.mix and to video_audio.add_audio, refuse only when it is True, pass it through from add_audio to mix, and surface overrun_s and voice_seconds at the top level of add_audio's result. In Northstar_backend/video_ad.py call add_audio with strict_overrun=False (with a comment saying why: the platform fixes the frame count) and add voice_seconds and overrun_s to the manifest's audio block. Add one test to Northstar_backend/test_video_ad.py, test_the_ad_reports_the_narration_it_could_not_fit, asserting that the manifest reports a positive overrun_s equal to voice_seconds minus 3.0 within 0.2s, and that the delivered picture is still 90 frames. The default must stay a refusal so every other caller fails closed. Do not change the probe, the tolerance, the filter graphs, the loudness logic, or any other module.",
+      "dependencies": [],
+      "write_paths": [
+        "Northstar_backend/video_audio.py",
+        "Northstar_backend/video_ad.py",
+        "Northstar_backend/test_video_ad.py"
+      ],
+      "read_paths": [
+        "Northstar_backend/video_audio.py",
+        "Northstar_backend/video_ad.py",
+        "Northstar_backend/test_video_ad.py",
+        "state/probes/t15_audio_overrun.py"
+      ],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "audio overrun probe",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "state/probes/t15_audio_overrun.py"
+          ]
+        },
+        {
+          "name": "video ad regression",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_video_ad.py",
+            "-q"
+          ]
+        },
+        {
+          "name": "video audio regression",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_video_audio.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_video_ad.py",
+          "Northstar_backend/test_video_audio.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "Northstar_backend/video_audio.py",
+        "Northstar_backend/video_ad.py",
+        "Northstar_backend/test_video_ad.py"
+      ],
+      "commit_message": "fix(audio): the ad pipeline opts out of the overrun refusal and reports the truncation",
+      "required_artifact": "Northstar_backend/video_ad.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 12,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
     }
   ]
 }
