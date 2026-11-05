@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-11-05T06:56:46Z",
+  "retries": [
+    {
+      "id": "ty-dpi-image-guard",
+      "previous_status": "failed",
+      "previous_run": "ty-dpi-image-guard-20261105T065354Z",
+      "previous_reason": "max_steps",
+      "at": "2026-11-05T06:56:46Z"
+    },
+    {
+      "id": "ty-frame-fill-guard",
+      "previous_status": "failed",
+      "previous_run": "ty-frame-fill-guard-author-20261105T064749Z",
+      "previous_reason": "out-of-scope edits (left untouched): Northstar_backend/_test_quota_tmp.json, Northstar_backend/data/discovery-manifest.json",
+      "at": "2026-11-05T06:56:46Z"
+    }
+  ],
+  "note": "statuses restored to completed because the acceptance probes pass at HEAD; failures kept in retry_failure"
+}

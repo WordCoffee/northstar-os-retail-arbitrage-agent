@@ -1,6 +1,6 @@
 {
   "schema": "northstar.backlog_proposals.v1",
-  "updated_at": "2026-11-04T01:03:54+00:00",
+  "updated_at": "2026-11-05T06:40:22Z",
   "count": 10,
   "proposals": [
     {
@@ -37,7 +37,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-provider-suite-py-test-provider-suite-endpoint-",
@@ -73,7 +76,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-session-cookie-contract-py-devshimsessiontests-",
@@ -109,7 +115,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-session-cookie-contract-py-devshimsessiontests-",
@@ -145,7 +154,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-session-cookie-contract-py-devshimsessiontests-",
@@ -181,7 +193,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-session-cookie-contract-py-devshimsessiontests-",
@@ -217,7 +232,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-session-cookie-contract-py-devshimsessiontests-",
@@ -253,7 +271,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-shell-modes-py-test-ui-gates-are-advanced-view-",
@@ -289,7 +310,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-shell-modes-py-test-user-ui-gates-read-plan",
@@ -325,7 +349,10 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": "..."
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     },
     {
       "id": "fix-northstar-backend-test-ui-route-contract-py-uiroutecontracttests-test-",
@@ -361,7 +388,11 @@
       "evidence": {
         "report": "state\\evidence\\backend_full_20261103_late4.txt",
         "message": ""
-      }
+      },
+      "resolved": true,
+      "resolved_at": "2026-11-05T06:40:22Z",
+      "resolution": "test passes at HEAD 20444f42; backlog entry was stale (the suite is green)"
     }
-  ]
+  ],
+  "resolved_count": 10
 }

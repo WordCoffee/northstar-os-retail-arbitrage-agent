@@ -5578,5 +5578,43 @@
     },
     "gates_held": "UI-only; no lane was run.",
     "report": "reports/v3_execution_20261105.md"
+  },
+  "automation_audit_20261105": {
+    "status": "DONE - automation queue audited and reconciled; 0 runnable tasks left; 2 policy-gated tasks deliberately remain blocked",
+    "queue": {
+      "completed": 20,
+      "failed": 0,
+      "blocked": 2,
+      "remaining": 0,
+      "blocked_ids": [
+        "blocked-auth-text-check",
+        "ty-budget-stop"
+      ],
+      "blocked_reasons": [
+        "auth/route-guard change requires a separate explicit operator authorization",
+        "budget.py is the worker's own step/time/token control; self-modification is forbidden"
+      ]
+    },
+    "backlog": {
+      "proposals_total": 10,
+      "resolved": 10,
+      "evidence": "all referenced tests pass at HEAD 20444f42; the proposals were stale",
+      "file": "state/backlog/proposals.json"
+    },
+    "retry_incident": {
+      "what": "go_author.py --max-tasks 5 was run in a dirty working tree while other processes were writing; ty-dpi-image-guard and ty-frame-fill-guard failed on out-of-scope edits / max_steps",
+      "acceptance": "state/probes/t1_dpi_image_guard.py and t2_frame_fill_guard.py pass at HEAD; the code was already correct",
+      "reconciliation": "statuses restored to completed; the failure is kept in each task's retry_failure field and in state/backlog/loop_retry_20261105.json",
+      "lesson": "run the loop only with a quiesced tree; the restoration verifier treats any concurrent writer as a task edit"
+    },
+    "verification": {
+      "loop_status": "completed=20 failed=0 interrupted=0 remaining=0 blocked=2",
+      "proposal_tests": "10 passed",
+      "probes": "t1/t2 and t4 pass",
+      "full_suite": "6105 passed / 0 failed (last run)"
+    },
+    "not_unblocked": "No policy change was made. The two blocked tasks need specific owner authorization; a generic 'run everything' is not treated as auth for auth-route or self-modification changes.",
+    "gates_held": "No Amazon, spend, credential read, cloud, or policy/allowlist change.",
+    "report": "reports/v3_execution_20261105.md"
   }
 }
