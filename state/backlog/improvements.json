@@ -1,7 +1,7 @@
 {
   "schema": "northstar.improvement_backlog.v1",
   "created_at": "2026-11-05T13:40:00Z",
-  "updated_at": "2026-11-05T15:38:59+00:00",
+  "updated_at": "2026-11-05T15:59:35+00:00",
   "purpose": "The standing queue of improvement requests for Ty's Assistant. The continuous loop executes task contracts and never invents scope, so an empty queue stops it. This file is where work is written down before it is runnable, so a campaign never starts from nothing.",
   "rules": {
     "statuses": {
@@ -15,12 +15,12 @@
     "evidence": "every item cites the file and line that shows the problem. An item without evidence is an opinion, not a request."
   },
   "counts": {
-    "total": 16,
+    "total": 18,
     "ready": 1,
-    "promoted": 4,
-    "needs-author": 5,
+    "promoted": 1,
+    "needs-author": 6,
     "blocked": 3,
-    "done": 3
+    "done": 7
   },
   "items": [
     {
@@ -28,20 +28,20 @@
       "theme": "creative",
       "priority": "P1",
       "status": "needs-author",
-      "title": "Wire the authored prompt into the render path",
-      "problem": "prompt_author.author_prompt() is contract-tested and now guarantees a compliant prompt, but nothing in production calls it. creative_flow accepts an injectable `prompt_author` callable that no live path supplies, so a render still uses whatever prompt string the caller happened to pass.",
+      "title": "The authored prompt reaches the evidence runners but not the API render path",
+      "problem": "CORRECTED 2026-11-05: the original entry claimed nothing calls prompt_author. That was wrong - tools/run_flow_formats.py authors per-format prompts through prompt_author.author_prompt and passes them into CreativeFlow, and tools/run_flow_e2e.py supplies a literal. The real gap is narrower: the API/studio render path (studio_generation.generate_image and its callers) builds prompts inline and never authors or refines them, so a user prompt that violates the plate contract is rendered as-is.",
       "evidence": [
-        "Northstar_backend/creative_flow.py:118 - constructor parameter prompt_author: Optional[Callable]",
-        "Northstar_backend/creative_flow.py:210 - prompt = self.prompt_author(...) if self.prompt_author else <fallback>",
-        "Northstar_backend/prompt_author.py:145 - refine_prompt exists and is unused outside its own module"
+        "tools/run_flow_formats.py:236 - prompt_author.author_prompt(brief, timeout=timeout) IS called",
+        "tools/run_flow_e2e.py:132 - prompt_author=lambda _brief: prompt (literal from CLI)",
+        "Northstar_backend/studio_generation.py:736 - generate_image(prompt, ...) takes the string as given"
       ],
-      "proposed_change": "Supply prompt_author.author_prompt at the live call site behind the existing seam, and fail closed (block the run) on PromptAuthorUnavailable instead of falling back to a template. Record the authored prompt and its refinement record in the render manifest.",
+      "proposed_change": "Decide the contract for the API path before wiring: a clean-plate render must refuse type terms, but a label/concept render legitimately contains them, so a single refinement cannot apply to both. Either add a plate-only refinement at the generate_image call sites that ask for blank plates, or leave the API unrefined and say so.",
       "write_paths": [
         "Northstar_backend/creative_flow.py"
       ],
       "verification": "test_creative_flow.py and test_prompt_author.py stay green; a new case proves a disarmed author blocks the run.",
       "risk": "medium",
-      "blocked": "author must settle the fail-closed behaviour at the live call site and which manifest records the authored prompt"
+      "blocked": "needs a decision on which render paths are plate-only, because refine_prompt would strip legitimate text from a label concept"
     },
     {
       "id": "imp-dieline-overlay-unused",
@@ -624,6 +624,151 @@
         }
       ],
       "commit_prefix": "feat(ui)"
+    },
+    {
+      "id": "imp-scanner-new-classes",
+      "theme": "reliability",
+      "priority": "P1",
+      "status": "done",
+      "title": "Widen the scanner to failures the UI hides",
+      "problem": "Once the first checks were clean the scanner stopped finding anything, which is not the same as the product being sound. Two classes of user-visible failure were invisible to it: an error state that is set and never rendered (the operator sees a page that simply did not change), and an icon-only button with no accessible name (a screen reader says 'button').",
+      "evidence": [
+        "northstar-os-ui/src/App.jsx:316 - mobile tools-sheet close button is icon-only with no name",
+        "northstar-os-ui/src/studio/engine/assets.js:179 - a hook returning error state, correctly not flagged"
+      ],
+      "proposed_change": "Add error-state-unrendered (setError called, state never read) and icon-button-unnamed (icon-only child, no aria-label/title). Both must refuse to guess: a hook with no JSX is not a component, and a {expr} child may render text so it is undecidable, not a finding.",
+      "write_paths": [
+        "tools/production_readiness_scan.py",
+        "Northstar_backend/test_production_readiness_scan.py",
+        "northstar-os-ui/src/App.jsx"
+      ],
+      "verification": "25 scanner tests green; scan reports 1 finding (the known dead module); build clean; ui 221; frontend gate 25.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "scanner tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_production_readiness_scan.py",
+            "-q"
+          ]
+        },
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(tools)",
+      "promoted_at": "2026-11-05T15:59:35+00:00",
+      "task_id": "imp-scanner-new-classes",
+      "commit": "0d91747e"
+    },
+    {
+      "id": "imp-expose-agent-tools",
+      "theme": "tooling",
+      "priority": "P1",
+      "status": "needs-author",
+      "title": "Expose subagents, todos and plan mode as callable tools",
+      "problem": "agent_kernel/subagents.py (run_subagents, merge), todos.py (Todos), plan_mode.py (PlanMode) and skills.py (SkillRegistry) are written and tested, and tool_protocol.py exposes none of them. The model has read/write/ast_edit/run and no way to fan out, track a todo list or propose a plan - the three things that most distinguish Claude Code from a script runner.",
+      "evidence": [
+        "Northstar_backend/agent_kernel/tool_protocol.py - tool keys are read/write/write_many/list/grep/ast_grep/ast_edit/ast_edit_batch/apply_patch/repo_pack/run/finish",
+        "Northstar_backend/agent_kernel/subagents.py - run_subagents and merge exist, unreferenced by the protocol",
+        "Northstar_backend/agent_kernel/todos.py - class Todos with start/verify/finish/fail/block"
+      ],
+      "proposed_change": "Add tool entries for todo, plan and subagent that delegate to the existing modules, with the same budget/policy limits the other tools obey. No new dependency, no gate, no licence question.",
+      "write_paths": [
+        "Northstar_backend/agent_kernel/tool_protocol.py"
+      ],
+      "verification": "a protocol test proves each new tool is declared, dispatchable and refused when the budget is exhausted.",
+      "risk": "medium",
+      "blocked": "author must decide the schema for subagent fan-out (how many, what scope) before it can be dispatched",
+      "checks": [
+        {
+          "name": "tool protocol tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_tool_protocol.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(agent)"
+    },
+    {
+      "id": "imp-mcp-client",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "Give Ty an MCP client so it can consume external tool servers",
+      "problem": "Ty serves MCP (tools/northstar_mcp_server.py, 6 read-only tools) but cannot consume any MCP server. Every MCP server in the ecosystem - filesystem, git, databases, docs - is unreachable.",
+      "evidence": [
+        "tools/northstar_mcp_server.py - server only",
+        "provider_suite --check mcp --provider local -> unknown_tool",
+        "upstream LICENSE: MIT (modelcontextprotocol/python-sdk)"
+      ],
+      "proposed_change": "Add a registry entry (lanes local+cloud, license MIT, network false for stdio servers) then wire a client into the tool protocol. shared/ is outside the loop commit allowlist.",
+      "write_paths": [],
+      "verification": "provider_suite --check mcp --provider local returns available; a test connects to a stdio server and calls one tool.",
+      "risk": "medium",
+      "blocked": "needs an operator registry entry for the mcp package (MIT)"
+    },
+    {
+      "id": "imp-web-research-tools",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "Give Ty search and page extraction with an Amazon refusal",
+      "problem": "Ty cannot read the web as a tool at all. Chrome Connect is a browser controller, not a research tool, and there is no fetch, no extract and no search in tool_protocol.py. This is the whole Perplexity Computer gap.",
+      "evidence": [
+        "Northstar_backend/agent_kernel/tool_protocol.py - no fetch/web/search tool",
+        "upstream LICENSE: trafilatura Apache-2.0, ddgs MIT",
+        "provider_suite --check trafilatura/ddgs --provider local -> unknown_tool"
+      ],
+      "proposed_change": "Register trafilatura (extract) and ddgs (search), then add fetch/search tools that refuse Amazon hosts and lookalikes BEFORE the request and log URL/timestamp/result to the same audit chain Chrome Connect uses.",
+      "write_paths": [],
+      "verification": "a test proves an Amazon host is refused before any request is made and that a non-Amazon fetch is audited.",
+      "risk": "medium",
+      "blocked": "needs registry entries plus sign-off on the Amazon refusal and audit design; without both this is a second unguarded path to the web"
+    },
+    {
+      "id": "imp-headroom-install",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "Install headroom for context compaction",
+      "problem": "Long agent sessions degrade because nothing compacts context. headroom is already registered (Apache-2.0) and marked not_installed.",
+      "evidence": [
+        "shared/provider-suite.json - headroom: Apache-2.0, installed=ready",
+        "provider_suite --check headroom --provider local -> not_installed"
+      ],
+      "proposed_change": "Install on the local lane, verify the installed marker, wire compaction into the context module.",
+      "write_paths": [],
+      "verification": "provider_suite --check headroom --provider local returns available; a test proves a long transcript is compacted under budget.",
+      "risk": "low",
+      "blocked": "install decision for an already-registered Apache-2.0 tool"
     }
   ]
 }
