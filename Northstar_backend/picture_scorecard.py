@@ -177,6 +177,7 @@ def score_case(*, image_bytes: bytes, case: Dict[str, Any],
     brief = str(case.get("brief") or case.get("prompt") or "")
     surface = str(case.get("surface") or "product_picture")
     out: Dict[str, Any] = {"case_id": case.get("id"), "surface": surface,
+                           "scenario": case.get("scenario") or "",
                            "dimensions": {}}
 
     # ---- marketplace compliance (programmatic, always available) -------------
@@ -376,32 +377,38 @@ def aggregate(rows: Sequence[Dict[str, Any]], *, cfg: Optional[Dict[str, Any]] =
     else:
         summary["compliance_rate"] = None
 
-    # Set consistency: pHash spread inside the set. A tight spread means the
-    # same product was photographed the same way twice.
-    hashes = [r.get("phash") for r in rows if r.get("phash") is not None]
-    if len(hashes) >= 3:
-        try:
-            import ship_gate
-
-            distances = []
-            for i in range(len(hashes)):
-                for j in range(i + 1, len(hashes)):
-                    a, b = int(hashes[i]), int(hashes[j])
-                    distances.append(bin(a ^ b).count("1"))
-            mean_distance = sum(distances) / len(distances)
-            summary["dimensions"]["set_consistency"] = {
-                "mean": round(_clamp(100.0 - mean_distance * 4.0), 1),
-                "measured": len(distances), "unavailable": 0,
-                "detail": {"mean_phash_distance": round(mean_distance, 2)},
-            }
-        except Exception as exc:  # noqa: BLE001
-            summary["dimensions"]["set_consistency"] = {
-                "mean": None, "measured": 0, "unavailable": len(hashes),
-                "detail": f"{type(exc).__name__}: {exc}"}
-    elif set_size or len(hashes) < 3:
+    # Set consistency: pHash spread *within a set*, not across unrelated
+    # scenarios. Comparing a lifestyle shot with a white packshot measures the
+    # brief, not consistency; the same product photographed twice measures it.
+    groups: Dict[str, List[int]] = {}
+    for row in rows:
+        if row.get("phash") is None:
+            continue
+        key = str(row.get("scenario") or row.get("case_id") or "default")
+        groups.setdefault(key, []).append(int(row["phash"]))
+    pairwise: List[int] = []
+    groups_used = 0
+    for key, hashes in groups.items():
+        if len(hashes) < 2:
+            continue
+        groups_used += 1
+        for i in range(len(hashes)):
+            for j in range(i + 1, len(hashes)):
+                pairwise.append(bin(hashes[i] ^ hashes[j]).count("1"))
+    if pairwise:
+        mean_distance = sum(pairwise) / len(pairwise)
         summary["dimensions"]["set_consistency"] = {
-            "mean": None, "measured": 0, "unavailable": len(hashes),
-            "detail": "needs at least three images in a set"}
+            "mean": round(_clamp(100.0 - mean_distance * 4.0), 1),
+            "measured": len(pairwise), "unavailable": 0,
+            "detail": {"mean_phash_distance": round(mean_distance, 2),
+                       "sets_compared": groups_used},
+        }
+    else:
+        summary["dimensions"]["set_consistency"] = {
+            "mean": None, "measured": 0,
+            "unavailable": sum(len(h) for h in groups.values()),
+            "detail": "needs at least two images of the same scenario"}
+    summary["sets"] = {k: len(v) for k, v in sorted(groups.items())}
 
     bar = cfg["bar"]
     passed = [d for d, block in summary["dimensions"].items()

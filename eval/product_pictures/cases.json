@@ -1,0 +1,863 @@
+{
+  "schema_version": 1,
+  "frozen": true,
+  "note": "Fixed before tuning. Do not regenerate after a change: a held-out set that moves is not held out. Split: dev for iteration, held_out for the bar.",
+  "modes": [
+    "from_scratch",
+    "stored_reference",
+    "uploaded_reference"
+  ],
+  "scenarios": [
+    "main_white",
+    "lifestyle_kitchen",
+    "infographic_callouts",
+    "scale_comparison",
+    "feature_closeup",
+    "multi_angle_set",
+    "bundle_variety",
+    "before_after",
+    "seasonal_variant",
+    "aplus_module",
+    "packaging_pouch_front",
+    "packaging_box_rear",
+    "background_swap",
+    "consistent_series_1",
+    "consistent_series_2",
+    "oversize_export",
+    "ingredient_detail",
+    "gift_pack",
+    "countertop_context",
+    "secondary_benefit"
+  ],
+  "cases": [
+    {
+      "id": "from-01-main_white",
+      "mode": "from_scratch",
+      "scenario": "main_white",
+      "surface": "main",
+      "brief": "studio product photograph of a matte kraft stand-up coffee pouch with a cream label, centred on a pure white seamless background, soft shadow, packshot lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-02-lifestyle_kitchen",
+      "mode": "from_scratch",
+      "scenario": "lifestyle_kitchen",
+      "surface": "lifestyle",
+      "brief": "lifestyle photograph of the same kraft coffee pouch on a wooden kitchen counter beside a ceramic mug, morning window light",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-03-infographic_callouts",
+      "mode": "from_scratch",
+      "scenario": "infographic_callouts",
+      "surface": "infographic",
+      "brief": "clean infographic product image of the kraft coffee pouch with three callout panels listing 2000 mg lion's mane, 85 servings, 2 g per serving",
+      "expected_terms": [
+        "2000 mg",
+        "85 servings"
+      ],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-04-scale_comparison",
+      "mode": "from_scratch",
+      "scenario": "scale_comparison",
+      "surface": "scale",
+      "brief": "product photograph of the kraft coffee pouch next to a standard 12 oz mug to show its size, plain background, even lighting",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-05-feature_closeup",
+      "mode": "from_scratch",
+      "scenario": "feature_closeup",
+      "surface": "closeup",
+      "brief": "macro photograph of the kraft pouch zip seal and the cream label edge, showing the material texture and print quality",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-06-multi_angle_set",
+      "mode": "from_scratch",
+      "scenario": "multi_angle_set",
+      "surface": "set",
+      "brief": "three-quarter angle product photograph of the kraft coffee pouch, same lighting as the front shot, plain background",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-07-bundle_variety",
+      "mode": "from_scratch",
+      "scenario": "bundle_variety",
+      "surface": "bundle",
+      "brief": "product photograph of three flavours of the kraft coffee pouch standing together, variety pack, plain background, even lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-08-before_after",
+      "mode": "from_scratch",
+      "scenario": "before_after",
+      "surface": "comparison",
+      "brief": "split comparison image: left the plain kraft pouch, right the pouch with its designed cream label, same angle and lighting, thin divider",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-09-seasonal_variant",
+      "mode": "from_scratch",
+      "scenario": "seasonal_variant",
+      "surface": "promotional",
+      "brief": "seasonal promotional photograph of the kraft coffee pouch with warm autumn leaves and a soft amber light, product unchanged",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-10-aplus_module",
+      "mode": "from_scratch",
+      "scenario": "aplus_module",
+      "surface": "aplus",
+      "brief": "A+ content module image: the kraft pouch on the left, a short ingredient story panel on the right, cream and forest-green palette",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-11-packaging_pouch_front",
+      "mode": "from_scratch",
+      "scenario": "packaging_pouch_front",
+      "surface": "packaging",
+      "brief": "packaging mockup of the stand-up pouch, front face, flat lay on a light surface, no text rendered by the model",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-12-packaging_box_rear",
+      "mode": "from_scratch",
+      "scenario": "packaging_box_rear",
+      "surface": "packaging",
+      "brief": "packaging mockup of the rear panel of a kraft box for the same product, flat lay, plain light surface",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-13-background_swap",
+      "mode": "from_scratch",
+      "scenario": "background_swap",
+      "surface": "edit",
+      "brief": "the same pouch re-shot on a pale linen backdrop instead of white, identical product, identical framing",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-14-consistent_series_1",
+      "mode": "from_scratch",
+      "scenario": "consistent_series_1",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, front, on pure white, for a consistent series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-15-consistent_series_2",
+      "mode": "from_scratch",
+      "scenario": "consistent_series_2",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, back label, on pure white, same framing and lighting as the front shot of the series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-16-oversize_export",
+      "mode": "from_scratch",
+      "scenario": "oversize_export",
+      "surface": "main",
+      "brief": "high resolution packshot of the kraft coffee pouch on pure white, centred, at least 2000 pixels on the longest side",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 2000,
+      "height": 2000
+    },
+    {
+      "id": "from-17-ingredient_detail",
+      "mode": "from_scratch",
+      "scenario": "ingredient_detail",
+      "surface": "closeup",
+      "brief": "close-up of a small pile of dried lion's mane mushroom beside the pouch, shallow depth of field",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-18-gift_pack",
+      "mode": "from_scratch",
+      "scenario": "gift_pack",
+      "surface": "bundle",
+      "brief": "gift presentation of the kraft pouch inside an open kraft gift box with tissue paper, product fully visible",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-19-countertop_context",
+      "mode": "from_scratch",
+      "scenario": "countertop_context",
+      "surface": "lifestyle",
+      "brief": "the kraft pouch on a cafe counter next to a barista tamping espresso, product in sharp focus in the foreground",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "from-20-secondary_benefit",
+      "mode": "from_scratch",
+      "scenario": "secondary_benefit",
+      "surface": "secondary",
+      "brief": "secondary listing image of the kraft pouch with a clean right-hand panel for benefit copy, product on the left third",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "id": "stor-01-main_white",
+      "mode": "stored_reference",
+      "scenario": "main_white",
+      "surface": "main",
+      "brief": "studio product photograph of a matte kraft stand-up coffee pouch with a cream label, centred on a pure white seamless background, soft shadow, packshot lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-02-lifestyle_kitchen",
+      "mode": "stored_reference",
+      "scenario": "lifestyle_kitchen",
+      "surface": "lifestyle",
+      "brief": "lifestyle photograph of the same kraft coffee pouch on a wooden kitchen counter beside a ceramic mug, morning window light",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-03-infographic_callouts",
+      "mode": "stored_reference",
+      "scenario": "infographic_callouts",
+      "surface": "infographic",
+      "brief": "clean infographic product image of the kraft coffee pouch with three callout panels listing 2000 mg lion's mane, 85 servings, 2 g per serving",
+      "expected_terms": [
+        "2000 mg",
+        "85 servings"
+      ],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-04-scale_comparison",
+      "mode": "stored_reference",
+      "scenario": "scale_comparison",
+      "surface": "scale",
+      "brief": "product photograph of the kraft coffee pouch next to a standard 12 oz mug to show its size, plain background, even lighting",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-05-feature_closeup",
+      "mode": "stored_reference",
+      "scenario": "feature_closeup",
+      "surface": "closeup",
+      "brief": "macro photograph of the kraft pouch zip seal and the cream label edge, showing the material texture and print quality",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-06-multi_angle_set",
+      "mode": "stored_reference",
+      "scenario": "multi_angle_set",
+      "surface": "set",
+      "brief": "three-quarter angle product photograph of the kraft coffee pouch, same lighting as the front shot, plain background",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-07-bundle_variety",
+      "mode": "stored_reference",
+      "scenario": "bundle_variety",
+      "surface": "bundle",
+      "brief": "product photograph of three flavours of the kraft coffee pouch standing together, variety pack, plain background, even lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-08-before_after",
+      "mode": "stored_reference",
+      "scenario": "before_after",
+      "surface": "comparison",
+      "brief": "split comparison image: left the plain kraft pouch, right the pouch with its designed cream label, same angle and lighting, thin divider",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-09-seasonal_variant",
+      "mode": "stored_reference",
+      "scenario": "seasonal_variant",
+      "surface": "promotional",
+      "brief": "seasonal promotional photograph of the kraft coffee pouch with warm autumn leaves and a soft amber light, product unchanged",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-10-aplus_module",
+      "mode": "stored_reference",
+      "scenario": "aplus_module",
+      "surface": "aplus",
+      "brief": "A+ content module image: the kraft pouch on the left, a short ingredient story panel on the right, cream and forest-green palette",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-11-packaging_pouch_front",
+      "mode": "stored_reference",
+      "scenario": "packaging_pouch_front",
+      "surface": "packaging",
+      "brief": "packaging mockup of the stand-up pouch, front face, flat lay on a light surface, no text rendered by the model",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-12-packaging_box_rear",
+      "mode": "stored_reference",
+      "scenario": "packaging_box_rear",
+      "surface": "packaging",
+      "brief": "packaging mockup of the rear panel of a kraft box for the same product, flat lay, plain light surface",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-13-background_swap",
+      "mode": "stored_reference",
+      "scenario": "background_swap",
+      "surface": "edit",
+      "brief": "the same pouch re-shot on a pale linen backdrop instead of white, identical product, identical framing",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-14-consistent_series_1",
+      "mode": "stored_reference",
+      "scenario": "consistent_series_1",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, front, on pure white, for a consistent series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-15-consistent_series_2",
+      "mode": "stored_reference",
+      "scenario": "consistent_series_2",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, back label, on pure white, same framing and lighting as the front shot of the series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-16-oversize_export",
+      "mode": "stored_reference",
+      "scenario": "oversize_export",
+      "surface": "main",
+      "brief": "high resolution packshot of the kraft coffee pouch on pure white, centred, at least 2000 pixels on the longest side",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 2000,
+      "height": 2000,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-17-ingredient_detail",
+      "mode": "stored_reference",
+      "scenario": "ingredient_detail",
+      "surface": "closeup",
+      "brief": "close-up of a small pile of dried lion's mane mushroom beside the pouch, shallow depth of field",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-18-gift_pack",
+      "mode": "stored_reference",
+      "scenario": "gift_pack",
+      "surface": "bundle",
+      "brief": "gift presentation of the kraft pouch inside an open kraft gift box with tissue paper, product fully visible",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-19-countertop_context",
+      "mode": "stored_reference",
+      "scenario": "countertop_context",
+      "surface": "lifestyle",
+      "brief": "the kraft pouch on a cafe counter next to a barista tamping espresso, product in sharp focus in the foreground",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "stor-20-secondary_benefit",
+      "mode": "stored_reference",
+      "scenario": "secondary_benefit",
+      "surface": "secondary",
+      "brief": "secondary listing image of the kraft pouch with a clean right-hand panel for benefit copy, product on the left third",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "brand": "mogra",
+        "product": "lions_mane",
+        "kind": "product_photo"
+      }
+    },
+    {
+      "id": "uplo-01-main_white",
+      "mode": "uploaded_reference",
+      "scenario": "main_white",
+      "surface": "main",
+      "brief": "studio product photograph of a matte kraft stand-up coffee pouch with a cream label, centred on a pure white seamless background, soft shadow, packshot lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-02-lifestyle_kitchen",
+      "mode": "uploaded_reference",
+      "scenario": "lifestyle_kitchen",
+      "surface": "lifestyle",
+      "brief": "lifestyle photograph of the same kraft coffee pouch on a wooden kitchen counter beside a ceramic mug, morning window light",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-03-infographic_callouts",
+      "mode": "uploaded_reference",
+      "scenario": "infographic_callouts",
+      "surface": "infographic",
+      "brief": "clean infographic product image of the kraft coffee pouch with three callout panels listing 2000 mg lion's mane, 85 servings, 2 g per serving",
+      "expected_terms": [
+        "2000 mg",
+        "85 servings"
+      ],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-04-scale_comparison",
+      "mode": "uploaded_reference",
+      "scenario": "scale_comparison",
+      "surface": "scale",
+      "brief": "product photograph of the kraft coffee pouch next to a standard 12 oz mug to show its size, plain background, even lighting",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-05-feature_closeup",
+      "mode": "uploaded_reference",
+      "scenario": "feature_closeup",
+      "surface": "closeup",
+      "brief": "macro photograph of the kraft pouch zip seal and the cream label edge, showing the material texture and print quality",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-06-multi_angle_set",
+      "mode": "uploaded_reference",
+      "scenario": "multi_angle_set",
+      "surface": "set",
+      "brief": "three-quarter angle product photograph of the kraft coffee pouch, same lighting as the front shot, plain background",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-07-bundle_variety",
+      "mode": "uploaded_reference",
+      "scenario": "bundle_variety",
+      "surface": "bundle",
+      "brief": "product photograph of three flavours of the kraft coffee pouch standing together, variety pack, plain background, even lighting",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-08-before_after",
+      "mode": "uploaded_reference",
+      "scenario": "before_after",
+      "surface": "comparison",
+      "brief": "split comparison image: left the plain kraft pouch, right the pouch with its designed cream label, same angle and lighting, thin divider",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-09-seasonal_variant",
+      "mode": "uploaded_reference",
+      "scenario": "seasonal_variant",
+      "surface": "promotional",
+      "brief": "seasonal promotional photograph of the kraft coffee pouch with warm autumn leaves and a soft amber light, product unchanged",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-10-aplus_module",
+      "mode": "uploaded_reference",
+      "scenario": "aplus_module",
+      "surface": "aplus",
+      "brief": "A+ content module image: the kraft pouch on the left, a short ingredient story panel on the right, cream and forest-green palette",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-11-packaging_pouch_front",
+      "mode": "uploaded_reference",
+      "scenario": "packaging_pouch_front",
+      "surface": "packaging",
+      "brief": "packaging mockup of the stand-up pouch, front face, flat lay on a light surface, no text rendered by the model",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-12-packaging_box_rear",
+      "mode": "uploaded_reference",
+      "scenario": "packaging_box_rear",
+      "surface": "packaging",
+      "brief": "packaging mockup of the rear panel of a kraft box for the same product, flat lay, plain light surface",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-13-background_swap",
+      "mode": "uploaded_reference",
+      "scenario": "background_swap",
+      "surface": "edit",
+      "brief": "the same pouch re-shot on a pale linen backdrop instead of white, identical product, identical framing",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-14-consistent_series_1",
+      "mode": "uploaded_reference",
+      "scenario": "consistent_series_1",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, front, on pure white, for a consistent series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-15-consistent_series_2",
+      "mode": "uploaded_reference",
+      "scenario": "consistent_series_2",
+      "surface": "series",
+      "brief": "product photograph of the kraft coffee pouch, back label, on pure white, same framing and lighting as the front shot of the series",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-16-oversize_export",
+      "mode": "uploaded_reference",
+      "scenario": "oversize_export",
+      "surface": "main",
+      "brief": "high resolution packshot of the kraft coffee pouch on pure white, centred, at least 2000 pixels on the longest side",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 2000,
+      "height": 2000,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-17-ingredient_detail",
+      "mode": "uploaded_reference",
+      "scenario": "ingredient_detail",
+      "surface": "closeup",
+      "brief": "close-up of a small pile of dried lion's mane mushroom beside the pouch, shallow depth of field",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-18-gift_pack",
+      "mode": "uploaded_reference",
+      "scenario": "gift_pack",
+      "surface": "bundle",
+      "brief": "gift presentation of the kraft pouch inside an open kraft gift box with tissue paper, product fully visible",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-19-countertop_context",
+      "mode": "uploaded_reference",
+      "scenario": "countertop_context",
+      "surface": "lifestyle",
+      "brief": "the kraft pouch on a cafe counter next to a barista tamping espresso, product in sharp focus in the foreground",
+      "expected_terms": [],
+      "split": "dev",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    },
+    {
+      "id": "uplo-20-secondary_benefit",
+      "mode": "uploaded_reference",
+      "scenario": "secondary_benefit",
+      "surface": "secondary",
+      "brief": "secondary listing image of the kraft pouch with a clean right-hand panel for benefit copy, product on the left third",
+      "expected_terms": [],
+      "split": "held_out",
+      "width": 1024,
+      "height": 1024,
+      "reference": {
+        "file": "renders/mogra_lions_mane/product_front.png"
+      }
+    }
+  ]
+}

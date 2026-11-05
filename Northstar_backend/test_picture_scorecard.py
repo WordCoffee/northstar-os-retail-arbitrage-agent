@@ -104,6 +104,29 @@ def test_aggregate_flags_a_dimension_below_the_bar():
     assert summary["production_ready"] is False
 
 
+def test_set_consistency_is_measured_inside_a_scenario_not_across_scenarios():
+    """A white packshot and a lifestyle shot are supposed to look different."""
+    same_a = {"case_id": "a", "scenario": "series", "phash": 0b11110000,
+              "dimensions": {}}
+    same_b = {"case_id": "b", "scenario": "series", "phash": 0b11110001,
+              "dimensions": {}}
+    other = {"case_id": "c", "scenario": "lifestyle",
+             "phash": 0b00001111, "dimensions": {}}
+    summary = ps.aggregate([same_a, same_b, other])
+    block = summary["dimensions"]["set_consistency"]
+    assert block["measured"] == 1              # only the pair inside "series"
+    assert block["detail"]["mean_phash_distance"] == 1.0
+    assert summary["sets"] == {"lifestyle": 1, "series": 2}
+
+
+def test_set_consistency_is_unmeasured_when_no_scenario_has_a_pair():
+    rows = [{"case_id": "a", "scenario": "one", "phash": 1, "dimensions": {}},
+            {"case_id": "b", "scenario": "two", "phash": 2, "dimensions": {}}]
+    block = ps.aggregate(rows)["dimensions"]["set_consistency"]
+    assert block["mean"] is None
+    assert "two images" in block["detail"]
+
+
 def test_config_overlay_changes_the_rule(tmp_path):
     cfg_file = tmp_path / "scorecard.json"
     cfg_file.write_text('{"marketplace": {"min_fill": 0.30}}', encoding="utf-8")
