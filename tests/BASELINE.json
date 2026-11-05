@@ -1,20 +1,21 @@
 {
   "schema_version": 1,
   "created": "2026-09-26T22:30:00Z",
-  "note": "S0 UI v3 rollout: retired legacy shell, rewired serving to northstar-os-ui (mount_ui). Foundation keyword tests fixed to be cwd-independent (harness runs pytest from Northstar_backend); KeywordImporter._resolve_path default base now derived from module location; protected_hashes re-baselined (data/scanner-search-cache.json + fee_engine.py had legitimately drifted since the e9aa691 snapshot, matching committed artifacts); csv-parse restored for the Cloudflare functions contract suite. All five suites green -> ZERO known failures.",
+  "updated": "2026-11-05T13:12:00Z",
+  "note": "S0 UI v3 rollout: retired legacy shell, rewired serving to northstar-os-ui (mount_ui). Foundation keyword tests fixed to be cwd-independent (harness runs pytest from Northstar_backend); KeywordImporter._resolve_path default base now derived from module location; protected_hashes re-baselined (data/scanner-search-cache.json + fee_engine.py had legitimately drifted since the e9aa691 snapshot, matching committed artifacts); csv-parse restored for the Cloudflare functions contract suite. All five suites green -> ZERO known failures. 2026-11-05 re-baseline: the counts below were never updated after the S0 rollout, so the runner compared a 6k-test suite against a 3k-test baseline and reported MISMATCH on every run regardless of the result - the canary was red by construction and could not detect a real regression. The counts now recorded are the measured output of scripts/run_all_tests.ps1 on 2026-11-05 at 13:11Z (reports/_baseline_run3_20261105.txt): 6154 backend passed / 0 failed / 117 skipped / 89 subtests, golden goose 511, ui 1122, shell 307, functions 31. No test was skipped, excluded or relaxed to reach this baseline.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE",
     "known_failures": [],
     "known_failures_reason": "NONE - S0 pre-existing breakage remediated (cwd-relative foundation paths, conftest import collision, stale protected hashes, missing csv-parse). Harness fully green.",
-    "harness_note": "scripts/run_all_tests.ps1 backend summary regex now tolerates both the zero-failure line and an optional 'N warnings,' token between skipped and subtests."
+    "harness_note": "scripts/run_all_tests.ps1 backend summary parse was replaced by Parse-PytestSummary on 2026-11-05 (commit c459bccc): the old single regex required '... skipped, <n> subtests passed' in that order and failed on any summary carrying an xfailed or warnings token. Run `scripts/run_all_tests.ps1 -SelfTest` to exercise the parser against six known summary shapes."
   },
   "baseline": {
     "backend": {
-      "passed": 3091,
+      "passed": 6154,
       "failed": 0,
-      "skipped": 64,
-      "subtests": 48
+      "skipped": 117,
+      "subtests": 89
     },
     "golden_goose": {
       "passed": 511,
