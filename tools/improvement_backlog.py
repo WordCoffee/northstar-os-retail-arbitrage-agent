@@ -115,7 +115,7 @@ def _card(item: Dict[str, Any]) -> Dict[str, Any]:
     if not checks:
         raise ValueError(f"{item['id']}: a ready item must name checks; "
                          "a verification sentence is not a command")
-    return {
+    card = {
         "id": item["id"],
         "name": item["title"],
         "schema_version": 2,
@@ -149,6 +149,11 @@ def _card(item: Dict[str, Any]) -> Dict[str, Any]:
         "allowed_tools": ["read", "ast_edit", "run", "finish"],
         "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)",
     }
+    # A new module must name the consumer the supervisor can verify (see
+    # continuous_loop.wiring_errors); pass the item's declaration straight through.
+    if item.get("wiring"):
+        card["wiring"] = item["wiring"]
+    return card
 
 
 def promote(item_id: str) -> Dict[str, Any]:
@@ -217,16 +222,55 @@ def render(data: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def scan_report(check: str = "") -> Dict[str, Any]:
+    """Run the production-readiness scan. The scanner's real consumer.
+
+    A scanner nothing calls is the same defect it exists to find, so the backlog
+    tool is its entry point: `--scan` prints the findings next to the queue, which
+    is where a finding has to land to become work.
+    """
+    sys.path.insert(0, str(ROOT / "tools"))
+    import production_readiness_scan as prs  # noqa: PLC0415 - deliberate late import
+    selected = [c.strip() for c in str(check or "").split(",") if c.strip()] or None
+    return prs.scan(selected)
+
+
+def render_scan(report: Dict[str, Any]) -> str:
+    lines = [f"READINESS SCAN  ({report['total']} finding(s))"]
+    for name, count in sorted(report["by_check"].items(), key=lambda kv: -kv[1]):
+        lines.append(f"  {name:<20} {count}")
+    if report.get("waivers"):
+        lines.append(f"  waived: {len(report['waivers'])} declared in-file")
+    lines.append("")
+    lines.append("  top hotspots")
+    for path, count in report["hotspots"][:8]:
+        lines.append(f"    {count:>3}  {path}")
+    lines.append("")
+    lines.append("  each finding is a candidate item; --promote needs write_paths and checks")
+    return "\n".join(lines)
+
+
 def main(argv: List[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--list", action="store_true")
     group.add_argument("--check", action="store_true")
+    group.add_argument("--scan", nargs="?", const="", metavar="CHECKS",
+                       help="run the production-readiness scan (optionally a comma-separated subset)")
     group.add_argument("--promote", metavar="ID")
     group.add_argument("--done", metavar="ID")
     ap.add_argument("--commit", default="", help="commit sha for --done")
     args = ap.parse_args(argv)
+
+    if args.scan is not None:
+        try:
+            report = scan_report(args.scan)
+        except (OSError, ValueError) as exc:
+            print(f"FAIL: {exc}")
+            return 1
+        print(json.dumps(report, indent=2) if args.scan else render_scan(report))
+        return 0
 
     try:
         data = load()
