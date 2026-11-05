@@ -256,6 +256,41 @@ VRAM for the assistant's brain; activation is one command, not a daemon.
 
 ---
 
+## Cycles 10–13 — production readiness sweep
+
+Full report: `reports/production_readiness_20261105.md`.
+
+Mandate: scan and improve the whole service until the UI is production-ready.
+The durable piece is `tools/production_readiness_scan.py` (16 tests), consumed by
+`improvement_backlog.py --scan` so a finding lands where work is queued.
+
+| commit | cycle | result |
+|---|---|---|
+| `e74f5520` | the scanner + its tests | 7 checks over UI and backend |
+| `caa3c2fb` | global controls | palette, command menu, drawer, Packify brief, 2 passthrough libs |
+| `3766d07d` | 9 admin/studio pages | 21 controls labelled, `input-unlabelled` → **0** |
+| `c0bdf34a` | scanner precision | 95 findings → **1** |
+
+The scanner had to be fixed before its findings meant anything: 95 findings, most
+wrong. Two `<img>` tags were inside comments; seven checkboxes had a label via a
+following `htmlFor`; two `'todo'` status strings read as TODO markers; 388
+"buttons without type" were outside any form; 52 broad `except` handlers were
+deliberate resilience. Each cause is now a check that does not repeat it, and the
+comment stripper no longer loses its place on an apostrophe in JSX text.
+
+**User-facing effect:** the ⌘K palette and the shell command menu — the two most
+used navigation surfaces — announced an unnamed text box to a screen reader. They
+now have accessible names, as do 33 other controls across the admin and studio
+pages.
+
+One finding is left on purpose: `serviceGate.js` is a per-service entitlement gate
+with no importer and no test, whose header claims the decision is enforced
+server-side. It is wireable (`api.entitlements()` exists) but that is a product
+decision, so it is filed as `imp-service-gate-decision` rather than deleted or
+wired blind.
+
+---
+
 ## Measured baseline (2026-11-05T13:11Z, confirmed GREEN at 13:26Z)
 
 | suite | passed | failed | skipped |

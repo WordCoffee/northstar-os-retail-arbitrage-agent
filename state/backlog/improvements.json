@@ -1,7 +1,7 @@
 {
   "schema": "northstar.improvement_backlog.v1",
   "created_at": "2026-11-05T13:40:00Z",
-  "updated_at": "2026-11-05T14:40:49+00:00",
+  "updated_at": "2026-11-05T15:38:59+00:00",
   "purpose": "The standing queue of improvement requests for Ty's Assistant. The continuous loop executes task contracts and never invents scope, so an empty queue stops it. This file is where work is written down before it is runnable, so a campaign never starts from nothing.",
   "rules": {
     "statuses": {
@@ -15,9 +15,9 @@
     "evidence": "every item cites the file and line that shows the problem. An item without evidence is an opinion, not a request."
   },
   "counts": {
-    "total": 12,
+    "total": 16,
     "ready": 1,
-    "promoted": 0,
+    "promoted": 4,
     "needs-author": 5,
     "blocked": 3,
     "done": 3
@@ -368,6 +368,262 @@
         }
       ],
       "commit_prefix": "docs(loop)"
+    },
+    {
+      "id": "imp-readiness-scanner",
+      "theme": "reliability",
+      "priority": "P1",
+      "status": "done",
+      "title": "A repeatable production-readiness scanner",
+      "problem": "\"Production ready\" was being judged by hand. Nothing turned it into checks that either find something or do not, so the same defects kept being discovered by accident: an unreachable module, an unlabelled control, a tag counted inside a comment.",
+      "evidence": [
+        "tools/production_readiness_scan.py - 7 checks over the UI and backend",
+        "state/probes and the dielineOverlay/serviceGate findings - both found by hand first"
+      ],
+      "proposed_change": "Ship the scanner and its tests: dead-module, button-no-type (form-scoped), input-unlabelled, img-no-alt, catch-swallowed, placeholder-copy, silent-except, plus declared per-file waivers with a written reason so a structural false positive is reviewable instead of permanent noise.",
+      "write_paths": [
+        "tools/production_readiness_scan.py",
+        "Northstar_backend/test_production_readiness_scan.py",
+        "tools/improvement_backlog.py"
+      ],
+      "verification": "16 scanner tests green; the scan runs clean on the real tree.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "scanner tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_production_readiness_scan.py",
+            "-q"
+          ]
+        },
+        {
+          "name": "scanner runs",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "tools/production_readiness_scan.py",
+            "--check",
+            "dead-module"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(tools)",
+      "wiring": {
+        "imported_by": [
+          "tools/improvement_backlog.py"
+        ]
+      },
+      "promoted_at": "2026-11-05T15:32:53+00:00",
+      "task_id": "imp-readiness-scanner",
+      "commit": "e74f5520"
+    },
+    {
+      "id": "imp-a11y-shared-controls",
+      "theme": "ui",
+      "priority": "P1",
+      "status": "done",
+      "title": "Give the global controls an accessible name",
+      "problem": "The command palette, the shell command menu, the pinned drawer, Package Design's brief field and the shared GlassInput/Fields controls had no accessible name. A screen reader announces an unnamed text box for the two most-used navigation surfaces in the app.",
+      "evidence": [
+        "northstar-os-ui/src/components/CommandPalette.jsx:30 - <input> with no label",
+        "northstar-os-ui/src/shell/CommandMenu.jsx:95 - combobox with no accessible name",
+        "northstar-os-ui/src/foundation/components/PinnedDrawer.jsx:65 - pin-note field unlabelled",
+        "scan: input-unlabelled 40 -> 28"
+      ],
+      "proposed_change": "Add aria-label to the standalone inputs, and declare a written waiver on the two passthrough component libraries (Fields.jsx, Glass.jsx) whose accessible name is supplied by the consumer - a waiver is visible in the scan report, so it is reviewable rather than silent.",
+      "write_paths": [
+        "northstar-os-ui/src/components/CommandPalette.jsx",
+        "northstar-os-ui/src/shell/CommandMenu.jsx",
+        "northstar-os-ui/src/foundation/components/PinnedDrawer.jsx",
+        "northstar-os-ui/src/kit/Glass.jsx",
+        "northstar-os-ui/src/studio/components/Fields.jsx",
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx"
+      ],
+      "verification": "scan input-unlabelled 40 -> 28 with 2 declared waivers; build clean; ui 221; frontend gate 25.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "fix(a11y)",
+      "promoted_at": "2026-11-05T15:31:29+00:00",
+      "task_id": "imp-a11y-shared-controls",
+      "commit": "caa3c2fb"
+    },
+    {
+      "id": "imp-a11y-form-controls",
+      "theme": "ui",
+      "priority": "P1",
+      "status": "done",
+      "title": "Label the remaining form controls across the admin and studio pages",
+      "problem": "21 form controls across 9 pages had no accessible name: the beta-ops filters, the invite form, the admin note, the tester ticket form, the org change reason fields, the memory search, the spreadsheet editor, the Amazon-file edit cells and the search-term filters. A screen reader announces each as an unnamed field.",
+      "evidence": [
+        "scan input-unlabelled 21 -> 0 across those 9 files",
+        "northstar-os-ui/src/pages/admin/OrgsList.jsx:131 - reason field with only a placeholder",
+        "northstar-os-ui/src/foundation/pages/BetaOps.jsx:108 - state filter with only a placeholder"
+      ],
+      "proposed_change": "Add aria-label to every remaining unlabelled control. Placeholders are not accessible names; a colour swatch and a metric cell get an interpolated name so each one is distinguishable.",
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/MemoryBank.jsx",
+        "northstar-os-ui/src/pages/internal/ProductDesigner.jsx",
+        "northstar-os-ui/src/pages/internal/SpreadsheetLab.jsx",
+        "northstar-os-ui/src/pages/internal/design-studio/AmazonFiles.jsx",
+        "northstar-os-ui/src/pages/internal/design-studio/SearchTerms.jsx",
+        "northstar-os-ui/src/chat/ChatSurface.jsx",
+        "northstar-os-ui/src/foundation/pages/BetaOps.jsx",
+        "northstar-os-ui/src/foundation/pages/BetaTester.jsx",
+        "northstar-os-ui/src/pages/admin/OrgsList.jsx"
+      ],
+      "verification": "scan input-unlabelled 21 -> 0; build clean; ui 221; frontend gate 25.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "fix(a11y)",
+      "promoted_at": "2026-11-05T15:37:31+00:00",
+      "task_id": "imp-a11y-form-controls",
+      "commit": "3766d07d"
+    },
+    {
+      "id": "imp-scanner-precision",
+      "theme": "reliability",
+      "priority": "P1",
+      "status": "done",
+      "title": "Make the readiness scanner stop reporting things that are not defects",
+      "problem": "The first scanner reported 95 findings, most of them wrong: two <img> tags inside comments, seven checkboxes that do have a label via htmlFor placed after the control, two 'todo' status strings read as TODO markers, and 52 broad except handlers that are deliberate resilience. A report that is mostly wrong is a report nobody reads.",
+      "evidence": [
+        "scan 95 -> 1 finding after the fixes; input-unlabelled 40 -> 0 over three cycles",
+        "northstar-os-ui/src/chat/ChatSurface.jsx:885 - <select> inside a comment",
+        "northstar-os-ui/src/pages/admin/OrgsList.jsx:133 - checkbox labelled by a following <label htmlFor>"
+      ],
+      "proposed_change": "Strip comments before matching tags (colon-guarded so http:// survives); resolve id/htmlFor pairs anywhere in the file; make TODO/FIXME case-sensitive; move silent-except to an opt-in triage list; keep per-file waivers with a written reason visible in the report.",
+      "write_paths": [
+        "tools/production_readiness_scan.py"
+      ],
+      "verification": "16 scanner tests green; default scan reports 1 finding (the known dead module).",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "scanner tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_production_readiness_scan.py",
+            "-q"
+          ]
+        },
+        {
+          "name": "scanner runs",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "tools/production_readiness_scan.py",
+            "--check",
+            "dead-module"
+          ]
+        }
+      ],
+      "commit_prefix": "fix(tools)",
+      "promoted_at": "2026-11-05T15:38:59+00:00",
+      "task_id": "imp-scanner-precision",
+      "commit": "c0bdf34a"
+    },
+    {
+      "id": "imp-service-gate-decision",
+      "theme": "ui",
+      "priority": "P2",
+      "status": "needs-author",
+      "title": "Decide whether the UI service gate is wired or removed",
+      "problem": "src/lib/serviceGate.js implements a per-service entitlement decision and is imported by nothing and tested by nothing. Its own header says the decision is enforced server-side, so the file currently looks like a safety control the UI does not have. api.entitlements() exists and serviceRegistry.js derives studio.<id> keys, so wiring it is feasible.",
+      "evidence": [
+        "northstar-os-ui/src/lib/serviceGate.js:1 - no importer, no serviceGate.test.js",
+        "northstar-os-ui/src/foundation/api.js:193 - entitlements() endpoint exists",
+        "northstar-os-ui/src/data/serviceRegistry.js:147 - entitlementKey: `studio.${entry.id}`"
+      ],
+      "proposed_change": "Either wire canUseService/serviceAccessMap into the service surface (the tab bar or service menu), with a defined denied state, and test it; or delete the module and record that the UI shows no entitlement state. Do not leave it unreachable.",
+      "write_paths": [
+        "northstar-os-ui/src/lib/serviceGate.js"
+      ],
+      "verification": "if wired: a test proves a denied service is not enterable and shows a reason; if removed: no references remain.",
+      "risk": "medium",
+      "blocked": "needs a product decision on which surface shows the gate and what a denied service looks like",
+      "checks": [
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(ui)"
     }
   ]
 }
