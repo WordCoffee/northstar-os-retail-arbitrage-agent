@@ -35,6 +35,8 @@ TARGET_LRA = 11.0
 #: A track quieter than this at its peak is treated as silence, not a mix.
 MIN_PEAK_DB = -30.0
 LOUDNESS_TOLERANCE_LU = 2.0
+#: How far a narration may run past the picture before the mix is refused.
+VOICE_OVERRUN_TOLERANCE_S = 0.25
 
 
 class AudioError(RuntimeError):
@@ -90,6 +92,24 @@ def _run(argv: Sequence[str], *, timeout: float = 900.0) -> subprocess.Completed
         raise AudioError(f"video_tool_missing: ffmpeg ({exc})") from exc
 
 
+def _seconds(path: Union[str, Path]) -> float:
+    """Measured duration of any media file.
+
+    `video_stitch.probe` refuses a file with no video stream, so an audio-only
+    voice track needs its own measurement. ffprobe reports the container
+    duration for WAV as well as MP4.
+    """
+    result = _run([video_stitch.FFPROBE, "-v", "error", "-show_entries",
+                   "format=duration", "-of", "json", str(path)], timeout=120.0)
+    if result.returncode != 0:
+        raise AudioError("duration_measure_failed: "
+                         + (result.stderr or "").strip()[-300:])
+    try:
+        return float(json.loads(result.stdout or "{}")["format"]["duration"])
+    except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+        raise AudioError(f"duration_measure_failed: {exc}") from exc
+
+
 def loudness(path: Union[str, Path]) -> Dict[str, float]:
     """Integrated loudness / true peak of a file, from loudnorm's analysis."""
     result = _run([video_stitch.FFMPEG, "-hide_banner", "-nostats",
@@ -141,6 +161,19 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
     voice = Path(voice_wav)
     if not voice.is_file():
         raise AudioError(f"voice_missing: {voice}")
+    # A narration longer than the picture is not a mix, it is a truncation: the
+    # atrim below would cut the last words with no measurement and no error, and
+    # the delivered clip would look fine. Measure first and refuse the overrun.
+    voice_seconds = _seconds(voice) if total_seconds else None
+    overrun_s = None
+    if total_seconds:
+        overrun_s = round(float(voice_seconds) - float(total_seconds), 3)
+        if overrun_s > VOICE_OVERRUN_TOLERANCE_S:
+            raise AudioError(
+                f"voice_overruns_picture: voice {float(voice_seconds):.2f}s > "
+                f"picture {float(total_seconds):.2f}s by {overrun_s:.2f}s "
+                f"(tolerance {VOICE_OVERRUN_TOLERANCE_S:.2f}s) - shorten the "
+                f"script or extend the picture")
     out = Path(out_wav)
     out.parent.mkdir(parents=True, exist_ok=True)
     pad = f",apad=whole_dur={float(total_seconds):.3f}" if total_seconds else ""
@@ -217,6 +250,8 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
         "measured_final": final, "volume": vol,
         "gain_correction_db": round(delta, 2) if corrected else 0.0,
         "target_lufs": TARGET_LUFS,
+        "voice_seconds": round(float(voice_seconds), 3) if voice_seconds else None,
+        "overrun_s": overrun_s,
     }
 
 
