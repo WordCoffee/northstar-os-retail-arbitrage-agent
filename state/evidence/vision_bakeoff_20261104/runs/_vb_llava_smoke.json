@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-11-05T02:11:47Z",
+  "threshold": {
+    "correct": 18,
+    "cases": 20,
+    "accuracy": 0.9
+  },
+  "manifest": "state\\evidence\\vision_bakeoff_20261104\\manifest.json",
+  "models": [
+    {
+      "model": "llava:7b",
+      "cases": 1,
+      "correct": 1,
+      "accuracy": 1.0,
+      "json_parse_rate": 1.0,
+      "mean_seconds": 19.0,
+      "seconds": 19.0,
+      "rows": [
+        {
+          "id": "v01",
+          "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+          "constraint": "a stand-up pouch is the main subject",
+          "expected": true,
+          "category": "pouch",
+          "parsed": true,
+          "pass": true,
+          "correct": true,
+          "format": "json",
+          "error": "",
+          "seconds": 19.0,
+          "raw": "{\"pass\": true, \"reasons\": [\"The image clearly shows a stand-up pouch as the main subject, with the product name and branding visible on the pouch.\"], \"confidence\": 1.0}"
+        }
+      ]
+    }
+  ],
+  "winner": "llava:7b",
+  "winner_accuracy": 1.0,
+  "threshold_met": true,
+  "stage2_unblocked": true,
+  "notes": [
+    "A parse failure counts as wrong; a model cannot clear the gate on guesses.",
+    "One model is loaded at a time; ollama stop runs after each model.",
+    "Images are downscaled to 640px and num_ctx=2048."
+  ]
+}

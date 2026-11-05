@@ -1,0 +1,207 @@
+{
+  "created_at": "2026-11-05T02:46:24Z",
+  "max_edge": 640,
+  "num_ctx": 2048,
+  "cases": [
+    {
+      "id": "v01",
+      "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+      "constraint": "a stand-up pouch is the main subject",
+      "expected": true,
+      "category": "pouch",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v02",
+      "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+      "constraint": "the brand wordmark MOGRA is visible",
+      "expected": true,
+      "category": "wordmark",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v03",
+      "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+      "constraint": "the net weight 6 oz is visible",
+      "expected": true,
+      "category": "net_weight",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v04",
+      "image": "renders/mogra_lions_mane/reference_pair/product_back.png",
+      "constraint": "a nutrition facts table is present",
+      "expected": true,
+      "category": "nutrition",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v05",
+      "image": "renders/mogra_lions_mane/reference_pair/product_back.png",
+      "constraint": "a barcode is visible",
+      "expected": true,
+      "category": "barcode",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v06",
+      "image": "renders/mogra_lions_mane/reference_check/reference_1536_seed777.png",
+      "constraint": "a stand-up pouch is visible",
+      "expected": true,
+      "category": "pouch",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v07",
+      "image": "Northstar_backend/data/studio_generated/tiktok_e445423614.png",
+      "constraint": "the image canvas is taller than it is wide",
+      "expected": true,
+      "category": "layout",
+      "width": 864,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v08",
+      "image": "Northstar_backend/data/studio_generated/tiktok_e445423614.png",
+      "constraint": "large on-screen text is present",
+      "expected": true,
+      "category": "layout",
+      "width": 864,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v09",
+      "image": "Northstar_backend/data/studio_generated/white-bg_67b967d23c.png",
+      "constraint": "the background is pure white",
+      "expected": true,
+      "category": "background",
+      "width": 1024,
+      "height": 1024,
+      "exists": true
+    },
+    {
+      "id": "v10",
+      "image": "Northstar_backend/data/studio_generated/white-bg_67b967d23c.png",
+      "constraint": "the image is square",
+      "expected": true,
+      "category": "layout",
+      "width": 1024,
+      "height": 1024,
+      "exists": true
+    },
+    {
+      "id": "v11",
+      "image": "renders/mogra_lions_mane/mogra_lions_mane_front_label.png",
+      "constraint": "the image is flat artwork rather than a photograph of a pouch",
+      "expected": true,
+      "category": "artwork",
+      "width": 1200,
+      "height": 1600,
+      "exists": true
+    },
+    {
+      "id": "v12",
+      "image": "renders/mogra_lions_mane/mogra_lions_mane_front_label.png",
+      "constraint": "a stand-up pouch is visible",
+      "expected": false,
+      "category": "pouch",
+      "width": 1200,
+      "height": 1600,
+      "exists": true
+    },
+    {
+      "id": "v13",
+      "image": "renders/mogra_lions_mane/mogra_lions_mane_back_label.png",
+      "constraint": "a nutrition facts table is present",
+      "expected": true,
+      "category": "nutrition",
+      "width": 1200,
+      "height": 1600,
+      "exists": true
+    },
+    {
+      "id": "v14",
+      "image": "renders/mogra_lions_mane/mogra_lions_mane_back_label.png",
+      "constraint": "a photograph of a pouch is visible",
+      "expected": false,
+      "category": "pouch",
+      "width": 1200,
+      "height": 1600,
+      "exists": true
+    },
+    {
+      "id": "v15",
+      "image": "state/evidence/vision_bakeoff_20261104/images/blurred_front.png",
+      "constraint": "the label text is readable",
+      "expected": false,
+      "category": "blur",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v16",
+      "image": "state/evidence/vision_bakeoff_20261104/images/blank.png",
+      "constraint": "a product pouch is visible",
+      "expected": false,
+      "category": "blank",
+      "width": 1024,
+      "height": 1024,
+      "exists": true
+    },
+    {
+      "id": "v17",
+      "image": "state/evidence/vision_bakeoff_20261104/images/cropped_front.png",
+      "constraint": "the entire pouch is visible",
+      "expected": false,
+      "category": "crop",
+      "width": 1024,
+      "height": 537,
+      "exists": true
+    },
+    {
+      "id": "v18",
+      "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+      "constraint": "a large rectangular printed area is visible on the package",
+      "expected": true,
+      "category": "label",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v19",
+      "image": "renders/mogra_lions_mane/reference_pair/product_back.png",
+      "constraint": "the brand wordmark MOGRA is visible",
+      "expected": true,
+      "category": "wordmark",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    },
+    {
+      "id": "v20",
+      "image": "renders/mogra_lions_mane/reference_check/reference_1536_seed777.png",
+      "constraint": "a human hand is holding the pouch",
+      "expected": false,
+      "category": "human",
+      "width": 1024,
+      "height": 1536,
+      "exists": true
+    }
+  ]
+}

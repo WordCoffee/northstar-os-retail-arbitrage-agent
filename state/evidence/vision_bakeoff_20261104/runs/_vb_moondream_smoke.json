@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-11-05T02:11:22Z",
+  "threshold": {
+    "correct": 18,
+    "cases": 20,
+    "accuracy": 0.9
+  },
+  "manifest": "state\\evidence\\vision_bakeoff_20261104\\manifest.json",
+  "models": [
+    {
+      "model": "moondream:latest",
+      "cases": 1,
+      "correct": 1,
+      "accuracy": 1.0,
+      "json_parse_rate": 1.0,
+      "mean_seconds": 7.3,
+      "seconds": 7.3,
+      "rows": [
+        {
+          "id": "v01",
+          "image": "renders/mogra_lions_mane/reference_pp/product_front.png",
+          "constraint": "a stand-up pouch is the main subject",
+          "expected": true,
+          "category": "pouch",
+          "parsed": true,
+          "pass": true,
+          "correct": true,
+          "format": "json",
+          "error": "",
+          "seconds": 7.3,
+          "raw": "{\"pass\": true, \"reasons\": [], \"confidence\": 0.0}"
+        }
+      ]
+    }
+  ],
+  "winner": "moondream:latest",
+  "winner_accuracy": 1.0,
+  "threshold_met": true,
+  "stage2_unblocked": true,
+  "notes": [
+    "A parse failure counts as wrong; a model cannot clear the gate on guesses.",
+    "One model is loaded at a time; ollama stop runs after each model.",
+    "Images are downscaled to 640px and num_ctx=2048."
+  ]
+}

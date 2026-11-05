@@ -1,0 +1,41 @@
+{
+  "vision_bakeoff_20261105": {
+    "status": "DONE - gemma3:4b wins at 18/20 with JSON parse 1.0; Ty's Vision Stage 2 unblocked; memory module graduated",
+    "threshold": {"required": 18, "cases": 20, "accuracy": 0.9},
+    "models": {
+      "gemma3:4b": {"accuracy": 0.9, "correct": 18, "json_parse_rate": 1.0, "mean_seconds": 15.4},
+      "moondream:latest": {"accuracy": 0.65, "correct": 13, "json_parse_rate": 1.0},
+      "llava:7b": {"accuracy": 0.6, "correct": 12, "json_parse_rate": 1.0},
+      "qwen2.5vl:7b": {"accuracy": 0.0, "correct": 0, "note": "degenerate/no JSON on every case; not rerun"}
+    },
+    "winner": "gemma3:4b",
+    "threshold_met": true,
+    "stage2_unblocked": true,
+    "graduation": {
+      "module": "Northstar_backend/tys_ops/memory.py",
+      "stage1": "passed",
+      "stage2": "passed",
+      "stage3": "passed",
+      "overall": "passed",
+      "report": "reports/v3_graduation_memory_20261105.json"
+    },
+    "fixture_corrections": [
+      "v15: Gaussian blur raised 8 -> 20; the first blurred control was still readable.",
+      "v07/v10: canvas wording clarified; v10 changed to 'the image is square' because 'canvas' still let the model judge the object.",
+      "v18: 'cream-colored label' replaced with 'a large rectangular printed area is visible on the package' (colour is subjective)."
+    ],
+    "caveats": [
+      "The two misses are a small barcode and a square-canvas judgement; OCR owns text/barcode, geometry owns canvas.",
+      "gemma3:4b is 3.4 GB and runs inside the 16 GB box at num_ctx 2048, max edge 640.",
+      "A parse failure counts as wrong; all four models were evaluated on the same v3 manifest (qwen on v1 only, where it failed every case)."
+    ],
+    "artifacts": {
+      "report": "reports/vision_bakeoff_results.json",
+      "manifest": "state/evidence/vision_bakeoff_20261104/manifest.json",
+      "runs": "state/evidence/vision_bakeoff_20261104/runs/",
+      "gate": "reports/v3_graduation_memory_20261105.json"
+    },
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference. Local Ollama models only; one model resident at a time.",
+    "report": "reports/vision_bakeoff_results.json"
+  }
+}

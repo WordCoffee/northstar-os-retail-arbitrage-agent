@@ -1,5 +1,17 @@
 # V3 readiness — measured baseline after the V2 close
 
+> **Addendum 2026-11-05 — bake-off complete.** `gemma3:4b` cleared the Stage 2 gate at **18/20**
+> with a **1.0 JSON parse rate**; `moondream` 13/20, `llava:7b` 12/20, `qwen2.5vl:7b` 0/20
+> (degenerate output). The memory module now graduates all three stages
+> (`reports/v3_graduation_memory_20261105.json`). The "blocked" findings below are the record of the
+> first pass; the final result is in `reports/vision_bakeoff_results.json`.
+
+> **Status 2026-11-04 (later the same day):** the three residual test failures listed in
+> §3, the Chrome parity condition in §5 and the 15 s Wan master in §7.4 are now closed.
+> Evidence: `reports/v3_readiness_closure_20261104.md`,
+> `reports/chrome_parity_20261104.{md,json}`, `reports/v3_master_video_20261104.json`.
+> The body below is the historical baseline as measured at the time and is not rewritten.
+
 **Date:** 2026-11-04 · **Scope:** the V2→V3 reconciliation, the human-feature guardrail, the
 three-stage graduation gate, and the first Ty's Vision implementation. No new feature lane was
 started.

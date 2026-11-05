@@ -1,9 +1,13 @@
 """Ty's Vision — local visual verification of a render or a screenshot.
 
 A design constraint is only met if it can be seen. This module asks the local
-vision model (qwen2.5vl by default) a single yes/no question about the image and
-returns a structured verdict. It never claims a pass when the model is
-unavailable: `available: false` is a failed verification, not a silent success.
+vision model a single yes/no question about the image and returns a structured
+verdict. It never claims a pass when the model is unavailable: `available: false`
+is a failed verification, not a silent success.
+
+The default model is the 2026-11-04 bake-off winner, `gemma3:4b` (18/20,
+JSON parse rate 1.0). The two misses were a small barcode and a square-canvas
+judgement; use OCR for barcode/text and geometry for canvas, not this model.
 
 The caller is injectable so the graduation gate and tests run without a GPU.
 """
@@ -15,9 +19,11 @@ import os
 import re
 from typing import Any, Callable, Dict, Optional
 
-MODEL = os.environ.get("NORTHSTAR_VISION_MODEL", "qwen2.5vl:7b")
+MODEL = os.environ.get("NORTHSTAR_VISION_MODEL", "gemma3:4b")
 URL = os.environ.get("NORTHSTAR_VISION_URL", "http://127.0.0.1:11434/api/chat")
 TIMEOUT_S = float(os.environ.get("NORTHSTAR_VISION_TIMEOUT", "180"))
+MAX_EDGE = 640
+NUM_CTX = 2048
 
 PROMPT = (
     "You are a strict visual verifier for an e-commerce product asset. "
@@ -54,8 +60,8 @@ def _parse(raw: str) -> Dict[str, Any]:
             "confidence": confidence}
 
 
-def _prepare_image(image_bytes: bytes, max_edge: int = 512) -> bytes:
-    """Bound the vision tokens: 512px is enough to judge a layout constraint."""
+def _prepare_image(image_bytes: bytes, max_edge: int = MAX_EDGE) -> bytes:
+    """Bound the vision tokens: 640px is the bake-off setting."""
     from io import BytesIO
 
     from PIL import Image
@@ -77,12 +83,11 @@ def _call_model(image_bytes: bytes, constraint: str) -> str:
         "messages": [{"role": "user", "content": PROMPT.format(constraint=constraint),
                       "images": [base64.b64encode(prepared).decode("ascii")]}],
         "stream": False,
-        # NOTE: `format: json` returns HTTP 500 with images on this Ollama
-        # runner (measured 2026-11-04); the prompt asks for JSON and the parser
-        # enforces it instead.
-        # The runner otherwise picks the model's 64K default; 4K is enough for
-        # one 512px image + one question and leaves system RAM for the box.
-        "options": {"temperature": 0.0, "num_ctx": 4096},
+        "keep_alive": "2m",
+        # `format: json` returns HTTP 500 with images on the qwen runner
+        # (measured 2026-11-04); gemma3 answers JSON from the prompt, and the
+        # parser enforces it. 2K ctx keeps the model inside the box's RAM.
+        "options": {"temperature": 0.0, "num_ctx": NUM_CTX},
     }
     req = urllib.request.Request(URL, data=json.dumps(body).encode("utf-8"),
                                  headers={"Content-Type": "application/json"})

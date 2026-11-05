@@ -11,7 +11,7 @@ disagree, the disagreement is named and the safe path is stated.
 
 | Owner claim | Reality | Evidence |
 |---|---|---|
-| Tys Assistant Vision established | **Not present.** No vision module existed; `agent_kernel/vision_verify.py` is the first implementation. The local `qwen2.5vl:7b` runner returns degenerate text/no parseable JSON on real product images, so Stage 2 is **blocked**, not passed. | `reports/v3_graduation_memory_20261104.json` |
+| Tys Assistant Vision established | **Not in V2; delivered in the V3 pass.** `agent_kernel/vision_verify.py` now uses the bake-off winner `gemma3:4b` (18/20, JSON parse 1.0); the memory module graduated all three stages. | `reports/vision_bakeoff_results.json`, `reports/v3_graduation_memory_20261105.json` |
 | Architecture stabilized, fragmented toolsets reduced | Partly. One kernel, one loop, one image gate, one memory API. Chrome Connect, the kernel and the studio still have separate tool surfaces by design. | `AGENTS.md`, `Northstar_backend/agent_kernel/` |
 | Chrome Connect to be retired | **Not executed.** Chrome Connect is still the browser controller and the policy/lease/Amazon enforcement point. | `lib/chromecontrol/`, `config/chromecontrol*.json` |
 | Wan 2.2 standard | **True.** `shorts.py` + `video_formats.py` use Wan 2.2; A14B Q4 experts are on disk. | `Northstar_backend/shorts.py`, `video_formats.py` |
@@ -55,7 +55,7 @@ Wan 2.2 is the only video engine. The human-feature guardrail is now implemented
 | Stage | Gate | Current status |
 |---|---|---|
 | 1 | AST symbol audit (no duplicate top-level symbols, no TODO/TBD/FIXME/XXX) + 100% passing test command | Implemented; memory module passes |
-| 2 | Ty's Vision verdict on a screenshot against a design constraint | **Blocked**: the local vision model is not reliable; gate fails closed |
+| 2 | Ty's Vision verdict on a screenshot against a design constraint | **Passes with `gemma3:4b`** (bake-off 18/20, JSON 1.0); the memory module graduated all three stages. Caveat: two misses are a small barcode and a square-canvas judgement — use OCR/geometry for those. |
 | 3 | End-to-end benchmark command exit 0 | Implemented (wired to the chosen benchmark) |
 
 A report is written per run (`reports/v3_graduation_<module>_<ts>.json`); no stage may be skipped.
@@ -64,7 +64,7 @@ A report is written per run (`reports/v3_graduation_<module>_<ts>.json`); no sta
 
 | Version | Focus | Deliverables | Acceptance |
 |---|---|---|---|
-| **V3.1** | Ty's Assistant Vision | Vision model bake-off (moondream2 / llava / qwen2.5vl) on 20 reference images; `vision_verify` reliability; DOM+screenshot observation inside the controller; Chrome parity checklist | ≥18/20 correct verdicts, 0 policy bypasses, browser benchmark ≥ current |
+| **V3.1** | Ty's Assistant Vision | **Model selected:** `gemma3:4b`, 18/20, JSON 1.0. Remaining: DOM+screenshot observation inside the controller; Chrome parity checklist | ≥18/20 correct verdicts (met), 0 policy bypasses, browser benchmark ≥ current |
 | **V3.2** | Wan 2.2 video | Guardrail (done), Wan A14B chained shots, SeedVR2 upscale, captions/audio; 15 s and 30 s product masters | ffprobe contract, OCR captions, −16 LUFS, human guardrail 100% interception |
 | **V3.3** | Packaging | Reference front/back pair, vector typography, per-face refs, print dieline, real nutrition/UPC | `product_front/back` pass identity+legibility; 300 DPI; no placeholder data |
 | **V3.4** | Stabilisation & onboarding | Full-suite green, graduation reports for every customer module, first-run flow, support docs | Stage 1 100%, Stage 2 pass for every shipped asset, Stage 3 E2E pass |
@@ -83,7 +83,7 @@ A report is written per run (`reports/v3_graduation_<module>_<ts>.json`); no sta
 
 | Blocker | Impact | Next action |
 |---|---|---|
-| Local vision model returns degenerate output (`qwen2.5vl:7b`) | Stage 2 cannot pass; "Tys Vision" not credible | Model bake-off on 20 fixed images; pick the smallest model that scores ≥90% and fits 16 GB |
+| Vision model caveat (`gemma3:4b`) | Two misses: a small barcode and a square-canvas judgement | Use OCR for barcode/text and geometry for canvas; keep the model on pouch/label/artwork/blank/crop/hand constraints |
 | Full-suite pass rate below 100% | Hard-freeze rule 1 blocks new lanes | Fix or quarantine the failures listed in `reports/v3_readiness_20261104.md` |
 | Chrome parity not proven | V3.1 migration cannot remove the controller | Build the parity harness; run the browser benchmark |
 | DRAFT nutrition/UPC | V3.3 print readiness | Owner supplies final values; replace the DRAFT watermark |
@@ -91,7 +91,7 @@ A report is written per run (`reports/v3_graduation_<module>_<ts>.json`); no sta
 ## 6. Decisions
 
 1. Accept the V3 direction; **do not** retire Chrome Connect until the six-point parity gate passes.
-2. Treat "Tys Vision" as V3.1 work, not a V2 achievement; the verifier is scaffolded and fails closed.
+2. Treat Ty's Vision as proven to the letter of the gate (`gemma3:4b`, 18/20) with named limits: no barcode/text reading and weak canvas orientation.
 3. Keep the Wan 2.2 + human guardrail; the override is explicit and logged.
 4. Adopt the three-stage graduation rubric as a merge gate, with the report as evidence.
 5. Hard freeze: no new feature lanes while Stage 1 is red.
