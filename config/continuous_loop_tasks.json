@@ -2242,6 +2242,171 @@
         "finish"
       ],
       "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "imp-scanner-new-classes",
+      "name": "Widen the scanner to failures the UI hides",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Promoted from state/backlog/improvements.json by tools/improvement_backlog.py. Evidence: northstar-os-ui/src/App.jsx:316 - mobile tools-sheet close button is icon-only with no name; northstar-os-ui/src/studio/engine/assets.js:179 - a hook returning error state, correctly not flagged",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "Once the first checks were clean the scanner stopped finding anything, which is not the same as the product being sound. Two classes of user-visible failure were invisible to it: an error state that is set and never rendered (the operator sees a page that simply did not change), and an icon-only button with no accessible name (a screen reader says 'button').\n\nCHANGE: Add error-state-unrendered (setError called, state never read) and icon-button-unnamed (icon-only child, no aria-label/title). Both must refuse to guess: a hook with no JSX is not a component, and a {expr} child may render text so it is undecidable, not a finding.\n\nVERIFICATION: 25 scanner tests green; scan reports 1 finding (the known dead module); build clean; ui 221; frontend gate 25.",
+      "dependencies": [],
+      "write_paths": [
+        "tools/production_readiness_scan.py",
+        "Northstar_backend/test_production_readiness_scan.py",
+        "northstar-os-ui/src/App.jsx"
+      ],
+      "read_paths": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "scanner tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_production_readiness_scan.py",
+            "-q"
+          ]
+        },
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_production_readiness_scan.py",
+          "-q"
+        ],
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/foundation/tests/test_frontend_gate.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "tools/production_readiness_scan.py",
+        "Northstar_backend/test_production_readiness_scan.py",
+        "northstar-os-ui/src/App.jsx"
+      ],
+      "commit_message": "feat(tools): Widen the scanner to failures the UI hides",
+      "required_artifact": "tools/production_readiness_scan.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 16,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "imp-osv-preinstall-check",
+      "name": "Vet a package against OSV before installing it",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Promoted from state/backlog/improvements.json by tools/improvement_backlog.py. Evidence: reports/rea_scan_tys_gaps_20261105.md - goose extension_malware_check.rs: OsvChecker.deny_if_malicious queries OSV and fails on MAL-* advisories; Northstar_backend/provider_suite.py - licence/lane/arming only, no supply-chain check",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "The adoption gate answers whether a lane MAY use a package (licence, lane, arming). Nothing answers whether the package is MALICIOUS. For an agent with free roam to install things from GitHub and Hugging Face, that is the missing precondition, not a nice-to-have.\n\nCHANGE: Add tools/vet_package.py: query the public OSV API for (name, ecosystem, version), refuse on any MAL-* advisory, print the advisory ids, and allow an OSV_ENDPOINT override for tests. No new dependency - OSV is HTTP. Wire it into the provenance step so every install records a verdict.\n\nVERIFICATION: tests cover: clean package passes, MAL-* refuses with the advisory id, unknown ecosystem is refused not assumed safe, endpoint override works offline.",
+      "dependencies": [],
+      "write_paths": [
+        "tools/vet_package.py",
+        "Northstar_backend/test_vet_package.py",
+        "tools/improvement_backlog.py"
+      ],
+      "read_paths": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "vet tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_vet_package.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_vet_package.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "tools/vet_package.py",
+        "Northstar_backend/test_vet_package.py",
+        "tools/improvement_backlog.py"
+      ],
+      "commit_message": "feat(tools): Vet a package against OSV before installing it",
+      "required_artifact": "tools/vet_package.py",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 16,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)",
+      "wiring": {
+        "imported_by": [
+          "tools/improvement_backlog.py"
+        ]
+      }
     }
   ]
 }

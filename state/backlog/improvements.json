@@ -1,7 +1,7 @@
 {
   "schema": "northstar.improvement_backlog.v1",
   "created_at": "2026-11-05T13:40:00Z",
-  "updated_at": "2026-11-05T15:59:35+00:00",
+  "updated_at": "2026-11-05T16:07:07+00:00",
   "purpose": "The standing queue of improvement requests for Ty's Assistant. The continuous loop executes task contracts and never invents scope, so an empty queue stops it. This file is where work is written down before it is runnable, so a campaign never starts from nothing.",
   "rules": {
     "statuses": {
@@ -15,12 +15,12 @@
     "evidence": "every item cites the file and line that shows the problem. An item without evidence is an opinion, not a request."
   },
   "counts": {
-    "total": 18,
+    "total": 24,
     "ready": 1,
     "promoted": 1,
-    "needs-author": 6,
-    "blocked": 3,
-    "done": 7
+    "needs-author": 7,
+    "blocked": 7,
+    "done": 8
   },
   "items": [
     {
@@ -769,6 +769,66 @@
       "verification": "provider_suite --check headroom --provider local returns available; a test proves a long transcript is compacted under budget.",
       "risk": "low",
       "blocked": "install decision for an already-registered Apache-2.0 tool"
+    },
+    {
+      "id": "imp-osv-preinstall-check",
+      "theme": "reliability",
+      "priority": "P1",
+      "status": "done",
+      "title": "Vet a package against OSV before installing it",
+      "problem": "The adoption gate answers whether a lane MAY use a package (licence, lane, arming). Nothing answers whether the package is MALICIOUS. For an agent with free roam to install things from GitHub and Hugging Face, that is the missing precondition, not a nice-to-have.",
+      "evidence": [
+        "reports/rea_scan_tys_gaps_20261105.md - goose extension_malware_check.rs: OsvChecker.deny_if_malicious queries OSV and fails on MAL-* advisories",
+        "Northstar_backend/provider_suite.py - licence/lane/arming only, no supply-chain check"
+      ],
+      "proposed_change": "Add tools/vet_package.py: query the public OSV API for (name, ecosystem, version), refuse on any MAL-* advisory, print the advisory ids, and allow an OSV_ENDPOINT override for tests. No new dependency - OSV is HTTP. Wire it into the provenance step so every install records a verdict.",
+      "write_paths": [
+        "tools/vet_package.py",
+        "Northstar_backend/test_vet_package.py",
+        "tools/improvement_backlog.py"
+      ],
+      "wiring": {
+        "imported_by": [
+          "tools/improvement_backlog.py"
+        ]
+      },
+      "verification": "tests cover: clean package passes, MAL-* refuses with the advisory id, unknown ecosystem is refused not assumed safe, endpoint override works offline.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "vet tests",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/test_vet_package.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(tools)",
+      "promoted_at": "2026-11-05T16:07:07+00:00",
+      "task_id": "imp-osv-preinstall-check",
+      "commit": "12655960"
+    },
+    {
+      "id": "imp-mcp-client-v2",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "Implement the MCP client surface Ty lacks",
+      "problem": "Ty serves MCP and consumes none. python-sdk defines the exact surface needed: ClientSession.initialize/list_tools/call_tool/list_resources/read_resource (session.py:388/651/1278/993/890/912) with StdioServerParameters (stdio.py:94).",
+      "evidence": [
+        "reports/rea_scan_tys_gaps_20261105.md finding 1",
+        "provider_suite --check mcp --provider local -> unknown_tool"
+      ],
+      "proposed_change": "Register the mcp package (MIT) and implement the client behind the existing tool protocol so external servers appear as tools.",
+      "write_paths": [],
+      "verification": "a test connects to a local stdio server and calls one tool end to end.",
+      "risk": "medium",
+      "blocked": "needs an operator registry entry for the mcp package (MIT)"
     }
   ]
 }
