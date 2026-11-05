@@ -38,14 +38,16 @@ UI_SRC = ROOT / "northstar-os-ui" / "src"
 BACKEND = ROOT / "Northstar_backend"
 
 CHECKS = ("dead-module", "button-no-type", "input-unlabelled", "img-no-alt",
-          "catch-swallowed", "placeholder-copy", "silent-except")
+          "catch-swallowed", "placeholder-copy", "silent-except",
+          "error-state-unrendered", "icon-button-unnamed")
 
 #: `silent-except` is a triage list, not a defect list: most broad handlers are
 #: deliberate resilience (poll a transient API, unload a model best-effort, kill a
 #: process). Flagging 52 of them in the default report is how a scanner teaches
 #: people to ignore it, so it is opt-in via --check silent-except.
 DEFAULT_CHECKS = ("dead-module", "button-no-type", "input-unlabelled", "img-no-alt",
-                  "catch-swallowed", "placeholder-copy")
+                  "catch-swallowed", "placeholder-copy",
+                  "error-state-unrendered", "icon-button-unnamed")
 
 
 def _ui_files() -> List[Path]:
@@ -259,6 +261,67 @@ def check_silent_except() -> List[Dict[str, Any]]:
     return out
 
 
+def check_error_state_unrendered() -> List[Dict[str, Any]]:
+    """An error state that is set but never rendered.
+
+    `const [error, setError] = useState('')` plus `setError(msg)` in a catch, and
+    then no `{error}` anywhere in the JSX: the failure is captured and thrown away.
+    The operator sees a page that simply did not change.
+    """
+    out = []
+    for path in _ui_files():
+        if "error-state-unrendered" in _waivers(path):
+            continue
+        text = _strip_comments(path.read_text(encoding="utf-8", errors="ignore"))
+        if "</" not in text:
+            continue      # no JSX: a hook/store returns state for its consumer to render
+        for match in re.finditer(
+                r"const\s*\[\s*(\w*[Ee]rror\w*)\s*,\s*(\w+)\s*\]\s*=\s*useState", text):
+            state, setter = match.group(1), match.group(2)
+            if not re.search(rf"\b{re.escape(setter)}\s*\(", text):
+                continue                      # never set, so nothing is being hidden
+            # Rendered means the value is read: `{error}` / `{error && ...}` /
+            # `error ?` / `title={error}`. A bare mention in a prop counts.
+            rendered = re.search(
+                rf"\{{{re.escape(state)}\b|\b{re.escape(state)}\s*[?&]|\b{re.escape(state)}\b\s*\}}",
+                text)
+            if not rendered:
+                out.append(_finding("error-state-unrendered", path,
+                                    _line_of(text, match.start()),
+                                    f"{state} is set but never rendered; the failure is invisible",
+                                    "high"))
+    return out
+
+
+def check_icon_buttons() -> List[Dict[str, Any]]:
+    """A button whose only child is an icon and which has no accessible name."""
+    out = []
+    for path in _ui_files():
+        if "icon-button-unnamed" in _waivers(path):
+            continue
+        text = _strip_comments(path.read_text(encoding="utf-8", errors="ignore"))
+        for match in re.finditer(r"<button\b", text):
+            tag = _tag_at(text, match.start())
+            if re.search(r"\baria-label|\baria-labelledby|\btitle\s*=", tag):
+                continue
+            close = text.find("</button>", match.start())
+            if close == -1:
+                continue
+            body = text[match.start() + len(tag):close]
+            if "<Icon" not in body and "<svg" not in body:
+                continue
+            # A `{expr}` child may render text (the rail renders {g.label}), so an
+            # expression means "cannot tell" - and cannot tell is not a finding.
+            if "{" in body:
+                continue
+            words = re.sub(r"<[^>]+>", " ", body)
+            if words.strip():
+                continue                      # there is visible text
+            out.append(_finding("icon-button-unnamed", path, _line_of(text, match.start()),
+                                "icon-only button has no accessible name", "medium"))
+    return out
+
+
 RUNNERS = {
     "dead-module": check_dead_modules,
     "button-no-type": check_buttons,
@@ -267,6 +330,8 @@ RUNNERS = {
     "catch-swallowed": check_swallowed_catches,
     "placeholder-copy": check_placeholder_copy,
     "silent-except": check_silent_except,
+    "error-state-unrendered": check_error_state_unrendered,
+    "icon-button-unnamed": check_icon_buttons,
 }
 
 

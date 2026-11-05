@@ -144,3 +144,77 @@ def test_placeholder_copy_is_found(tmp_path, monkeypatch):
     files = {"pages/A.jsx": "export const note = 'TODO: wire this up'\n"}
     found = _run(tmp_path, monkeypatch, files, prs.check_placeholder_copy)
     assert len(found) == 1
+
+
+# ── error state that is set but never shown ─────────────────────────────────
+
+def test_an_error_that_is_rendered_is_clean(tmp_path, monkeypatch):
+    files = {"pages/A.jsx":
+             "export default function A(){\n"
+             "  const [error, setError] = useState('')\n"
+             "  const go = () => setError('boom')\n"
+             "  return (<div><button type='button' onClick={go}>Go</button>{error}</div>)\n"
+             "}\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_error_state_unrendered) == []
+
+
+def test_an_error_that_is_never_rendered_is_a_defect(tmp_path, monkeypatch):
+    files = {"pages/A.jsx":
+             "export default function A(){\n"
+             "  const [error, setError] = useState('')\n"
+             "  const go = () => setError('boom')\n"
+             "  return (<div><button type='button' onClick={go}>Go</button></div>)\n"
+             "}\n"}
+    found = _run(tmp_path, monkeypatch, files, prs.check_error_state_unrendered)
+    assert len(found) == 1 and found[0]["severity"] == "high"
+
+
+def test_a_state_that_is_never_set_is_not_a_finding(tmp_path, monkeypatch):
+    files = {"pages/A.jsx":
+             "export default function A(){\n"
+             "  const [error, setError] = useState('')\n"
+             "  return (<div>{error}</div>)\n"
+             "}\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_error_state_unrendered) == []
+
+
+def test_a_hook_without_jsx_is_not_checked(tmp_path, monkeypatch):
+    """A store returns state for its consumer to render; it renders nothing itself."""
+    files = {"studio/engine/store.js":
+             "export function useStore(){\n"
+             "  const [error, setError] = useState('')\n"
+             "  const load = async () => { try { await go() } catch (e) { setError(e.message) } }\n"
+             "  return { error, load }\n"
+             "}\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_error_state_unrendered) == []
+
+
+# ── icon-only buttons ──────────────────────────────────────────────────────
+
+def test_an_icon_button_with_a_name_is_clean(tmp_path, monkeypatch):
+    files = {"pages/A.jsx":
+             "export default () => <button aria-label='Close'><svg /></button>\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_icon_buttons) == []
+
+
+def test_an_icon_button_without_a_name_is_a_defect(tmp_path, monkeypatch):
+    files = {"pages/A.jsx": "export default () => <button><svg /></button>\n"}
+    found = _run(tmp_path, monkeypatch, files, prs.check_icon_buttons)
+    assert len(found) == 1 and found[0]["check"] == "icon-button-unnamed"
+
+
+def test_an_icon_button_with_a_title_is_clean(tmp_path, monkeypatch):
+    files = {"pages/A.jsx": "export default () => <button title='Close'><svg /></button>\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_icon_buttons) == []
+
+
+def test_a_button_with_text_is_not_an_icon_button(tmp_path, monkeypatch):
+    files = {"pages/A.jsx": "export default () => <button><svg />Close</button>\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_icon_buttons) == []
+
+
+def test_an_expression_child_is_undecidable_not_a_finding(tmp_path, monkeypatch):
+    """The rail renders {g.label}: an expression may be text, so it cannot be flagged."""
+    files = {"pages/A.jsx":
+             "export default () => <button><svg /><span>{label}</span></button>\n"}
+    assert _run(tmp_path, monkeypatch, files, prs.check_icon_buttons) == []
