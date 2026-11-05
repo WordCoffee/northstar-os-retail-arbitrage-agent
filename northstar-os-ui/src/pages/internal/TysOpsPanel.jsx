@@ -4,7 +4,7 @@
 // performs is the two operator switches (assistant, then its eyes); it never
 // submits, runs or cancels a task. Every value comes from the API; an unavailable
 // endpoint is shown as unavailable, never as a fabricated row.
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Icon from '../../components/Icon.jsx'
 import { getDevSession } from '../../foundation/api.js'
 
@@ -282,6 +282,12 @@ export default function TysOpsPanel() {
   const [switchError, setSwitchError] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  // A panel that keeps showing yesterday's queue counts under a green pill is
+  // worse than one that admits it lost the feed. lastGoodAt is the last
+  // SUCCESSFUL read; tick forces a re-render each poll so the age keeps moving
+  // even when the error string is unchanged (React bails out of identical sets).
+  const [lastGoodAt, setLastGoodAt] = useState(0)
+  const [tick, setTick] = useState(0)
   const inFlight = useRef(false)
 
   const load = useCallback(async () => {
@@ -295,10 +301,12 @@ export default function TysOpsPanel() {
       setState(s)
       setTasks((t && t.tasks) || [])
       setError('')
+      setLastGoodAt(Date.now())
     } catch (err) {
       setError(`${err.status ? `HTTP ${err.status}: ` : ''}${err.message}`)
     } finally {
       setLoading(false)
+      setTick(n => n + 1)
       inFlight.current = false
     }
     try {
@@ -324,6 +332,18 @@ export default function TysOpsPanel() {
 
   const lanes = (state && state.lanes) || {}
 
+  const ageMs = useMemo(
+    () => (lastGoodAt ? Date.now() - lastGoodAt : null),
+    [lastGoodAt, tick])
+  const stale = ageMs !== null && ageMs > POLL_MS * 3
+  const statusLabel = loading ? 'connecting…' : error ? 'unavailable' : stale ? 'stale' : 'live'
+  const statusTone = error || stale ? 'pill-warn' : 'pill-ok'
+  const ageLabel = ageMs === null
+    ? 'no successful read yet'
+    : ageMs < 2000 ? 'updated just now'
+      : ageMs < 60000 ? `updated ${Math.round(ageMs / 1000)}s ago`
+        : `updated ${Math.round(ageMs / 60000)}m ago`
+
   const toggle = useCallback(async (patch) => {
     setSwitchBusy(true)
     setSwitchError('')
@@ -345,15 +365,18 @@ export default function TysOpsPanel() {
         <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Icon name="cpu" size={16} /> Tys Assistant
         </h3>
-        <span className={`pill ${error ? 'pill-warn' : 'pill-ok'}`}
+        <span className={`pill ${statusTone}`}
               aria-live="polite"
+              data-testid="tys-status-pill"
+              title={stale ? 'The last successful read is older than three polls.' : ''}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-          {!error && !loading && <span className="tys-live-dot" aria-hidden="true" />}
-          {loading ? 'connecting…' : error ? 'unavailable' : 'live'}
+          {!error && !stale && !loading && <span className="tys-live-dot" aria-hidden="true" />}
+          {statusLabel}
         </span>
       </div>
       <div className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
         Operator view: switches, queue, lanes, task progress and long-term memory. Polls every 5 s.
+        <span data-testid="tys-age" style={{ marginLeft: 6 }}>· {ageLabel}</span>
       </div>
 
       {error && (
