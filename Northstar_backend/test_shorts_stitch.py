@@ -76,3 +76,66 @@ def test_a_failed_picture_gate_deletes_the_stitched_file(tmp_path, monkeypatch):
     assert result["ok"] is False
     assert "video_quality_refused" in result["reason"]
     assert not out.exists()
+
+
+def test_the_shorts_endpoint_wires_the_stitched_branch(tmp_path, monkeypatch):
+    """The endpoint's stitched branch must actually run, not just the service.
+
+    The orchestration tests above passed while the endpoint raised
+    ``NameError: uuid`` on the first real multi-clip request: the branch had
+    never been executed. This drives the route itself with the engine stubbed,
+    so a missing import or a renamed helper fails here instead of after a
+    twenty-minute render.
+    """
+    import design_studio_api as api
+    import studio_generation as sg
+    from fastapi.testclient import TestClient
+    from main import app
+
+    media = tmp_path / "data" / "studio_generated"
+    media.mkdir(parents=True)
+    (media / "src.png").write_bytes(_frame_png())
+    # The route derives the asset directory from its own __file__; point that at
+    # tmp_path so the test never writes into the real data directory.
+    monkeypatch.setattr(api, "__file__", str(tmp_path / "design_studio_api.py"))
+
+    class _Assets:
+        def get_by_id(self, asset_id, account_id=None):
+            return {"storage_key": "src.png"}
+
+    class _DesignStudio:
+        assets = _Assets()
+
+    class _DB:
+        design_studio = _DesignStudio()
+
+    monkeypatch.setattr(api, "get_northstar_db", lambda: _DB())
+    monkeypatch.setattr(sg, "engine_status",
+                        lambda: {"armed": True, "reachable": True, "engine": "stub"})
+
+    captured = {}
+
+    def fake_stitched(source, *, out_path, platform, seconds=None, **kw):
+        captured.update({"platform": platform, "seconds": seconds,
+                         "bytes_in": len(source)})
+        Path(out_path).write_bytes(b"stub-mp4")
+        return {"ok": True, "checks": {"duration_ok": True},
+                "quality": {"verdict": {"ok": True}}, "seconds": 1.0,
+                "final": {"nb_frames": 462}}
+
+    monkeypatch.setattr(shorts, "generate_stitched", fake_stitched)
+    app.dependency_overrides[api.studio_account] = lambda: "org-t2"
+    try:
+        client = TestClient(app)
+        response = client.post("/api/design-studio/shorts", json={
+            "asset_id": "asset-1", "prompt": "the pouch rotates on a pale sweep",
+            "platform": "shorts", "seconds": 15, "steps": 20})
+    finally:
+        app.dependency_overrides = {}
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["ok"] is True
+    assert "short_stitched_" in Path(body["file"]).name
+    assert Path(body["file"]).name.endswith(".mp4")
+    assert body["format"]["clips"] == 6
+    assert captured == {"platform": "shorts", "seconds": 15.0, "bytes_in": len(_frame_png())}

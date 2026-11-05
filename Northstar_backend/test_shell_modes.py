@@ -1,8 +1,8 @@
 """V3 shell tests (2026-10-18) — capability gate, focus catalogue, hardware.
 
 Covers:
-  • the v4 plan catalog: `ui_gates` (advanced_view on Keystone/AutothinK only)
-    and the untouched live-gate arrays;
+  • the v4 plan catalog: `ui_gates` (advanced_view on AutoThinK only per the v5
+    catalog revision) and the untouched live-gate arrays;
   • `resolve_capabilities` (pure): admin → advanced; plan ui gate → advanced;
     anonymous/foundation → no advanced; hosted org advanced_reports → advanced;
   • the focus catalogue: ids, server-owned tool subsets filtered to registered
@@ -84,8 +84,15 @@ def test_ui_gates_are_advanced_view_on_top_tiers_only():
     plans = auth.PLAN_ENTITLEMENTS
     assert plans["foundation"]["ui_gates"] == []
     assert plans["scout"]["ui_gates"] == []
-    assert plans["mover"]["ui_gates"] == ["advanced_view"]
+    # Catalog v5 (owner Phase II reconciliation, 2026-10-30): advanced_view is a
+    # top-tier capability, so Keystone (mover) no longer carries it. Only
+    # AutoThinK does. This test reconciles the assertion with
+    # shared/subscription-plans.json instead of the retired v4 array.
+    assert plans["mover"]["ui_gates"] == []
     assert plans["autothink"]["ui_gates"] == ["advanced_view"]
+    # and the gate lives on exactly one tier
+    carriers = [pid for pid, p in plans.items() if "advanced_view" in p["ui_gates"]]
+    assert carriers == ["autothink"], carriers
 
 
 def test_live_gate_arrays_unchanged_by_v4():
@@ -112,8 +119,11 @@ def test_user_ui_gates_fail_closed_for_unknown_user():
 
 
 def test_user_ui_gates_read_plan():
+    # v5 catalog: mover (Keystone) has no ui_gates; autothink carries advanced_view.
     with mock.patch("auth.get_user", return_value={"plan": "mover"}):
-        assert auth.user_ui_gates("u1") == ["advanced_view"]
+        assert auth.user_ui_gates("u1") == []
+    with mock.patch("auth.get_user", return_value={"plan": "autothink"}):
+        assert auth.user_ui_gates("u3") == ["advanced_view"]
     with mock.patch("auth.get_user", return_value={"plan": "scout"}):
         assert auth.user_ui_gates("u2") == []
 

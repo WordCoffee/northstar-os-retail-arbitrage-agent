@@ -18,6 +18,7 @@ import io
 import json
 import os
 import sys
+import threading
 import time
 
 import pytest
@@ -387,29 +388,51 @@ def test_a_locked_screen_is_not_stored_and_not_asked_about(monkeypatch, db):
 
 
 def test_watcher_stops_after_bounded_consecutive_failures(monkeypatch):
+    """The failure budget must stop the loop at exactly N attempts.
+
+    Deterministic on purpose: the previous version polled `state()` against a
+    5 s wall-clock deadline, which failed under a loaded full-suite run merely
+    because the worker thread had not been scheduled twice yet. This joins the
+    worker thread (no deadline race in the assertion path) and asserts the exact
+    attempt count, so a genuine retry-budget regression still fails.
+    """
     watcher = agent.Watcher()
     monkeypatch.setattr(agent, "MAX_CONSECUTIVE_ERRORS", 2)
-    monkeypatch.setattr(agent, "sample",
-                        lambda **kw: {"ok": False, "error": "capture died"})
-    watcher.start(interval_s=0.01)
-    deadline = time.time() + 5
-    while time.time() < deadline and watcher.state()["thread_alive"]:
-        time.sleep(0.02)
+    attempts = []
+
+    def _fail(**kw):
+        attempts.append(1)
+        return {"ok": False, "error": "capture died"}
+
+    monkeypatch.setattr(agent, "sample", _fail)
+    watcher.start(interval_s=0.001)
+    watcher._thread.join(timeout=15)  # bounded so a hung loop still fails the test
+    assert not watcher._thread.is_alive(), "the watcher loop did not stop on its own"
     state = watcher.state()
     assert state["thread_alive"] is False
     assert state["running"] is False
     assert state["errors"] == 2
+    assert len(attempts) == 2, f"failure budget must stop sampling, got {len(attempts)} attempts"
     assert "error_budget_exhausted" in (state["stop_reason"] or "")
 
 
 def test_watcher_start_is_idempotent_and_stop_is_clean(monkeypatch):
     watcher = agent.Watcher()
-    monkeypatch.setattr(agent, "sample", lambda **kw: {"ok": True, "duplicate": False,
-                                                       "frame_id": 1})
+    first_sample = threading.Event()
+
+    def _sample(**kw):
+        first_sample.set()
+        return {"ok": True, "duplicate": False, "frame_id": 1}
+
+    monkeypatch.setattr(agent, "sample", _sample)
     watcher.start(interval_s=0.01)
     try:
         second = watcher.start(interval_s=0.01)
         assert second["started"] is False and second["already_running"] is True
+        # Wait for the worker to actually take a sample before stopping: setting
+        # the stop flag first is legal, but then "samples >= 1" is a scheduling
+        # race rather than a property of the watcher.
+        assert first_sample.wait(timeout=10), "the watcher never sampled"
     finally:
         state = watcher.stop("test")
     assert state["running"] is False and state["stop_reason"] == "test"

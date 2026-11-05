@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Icon from '../../components/Icon.jsx'
 import { PageHead, Card } from '../../ui.jsx'
-import { api } from '../../services/api.js'
+import { signals } from '../../services/signals.js'
 
 const SUGGESTED = [
   'Start a new packaging design from scratch',
@@ -26,7 +26,7 @@ export default function PackifyDesign({ toast }) {
     if (credits < 10) { toast('Insufficient credits — top up or upgrade', 'err'); return }
     setLoading(true); setErr(null)
     try {
-      const res = await api.autothinkRun({ query: `You are Packify, an AI packaging designer. Design a packaging concept for: "${base}". Return a short spec: template, colors (hex), typography, claims (max 3), and a 1-line dieline note.`, provider: 'local', tier: 'T2' })
+      const res = await signals.autothinkRun({ query: `You are Packify, an AI packaging designer. Design a packaging concept for: "${base}". Return a short spec: template, colors (hex), typography, claims (max 3), and a 1-line dieline note.`, provider: 'local', tier: 'T2' })
       const content = res.content || ''
       const sess = { id: Date.now(), prompt: base, content, model: res.model, at: new Date().toLocaleTimeString() }
       setSessions(s => [sess, ...s])

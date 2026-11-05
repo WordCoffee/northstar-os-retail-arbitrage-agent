@@ -2209,6 +2209,7 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
     import text_fidelity as _tf
     import studio_generation as _sg
     import video_guard as _vg
+    import uuid
     from pathlib import Path
 
     guard = _vg.check_prompt(body.prompt, acknowledged=body.human_features_ack)
