@@ -160,3 +160,12 @@ coverage), and a shorter run.
    exists for both positions (refusal and override), plus the measured cost of overriding.
 4. The video lane suppresses invented lettering by default (`shorts.TEXT_SUPPRESSION`); a
    video render never composes text.
+
+## 8. Open, and honestly not fixed here
+
+| Item | Why it is still open |
+|---|---|
+| `00_STATE.json` could not be updated | the edit tool is denied on that path. The record lives in `state/fragments/20261104_v3_readiness_closure.json` and needs folding into `00_STATE.json` on a permitted pass. |
+| Vision bake-off (§7.1) | out of scope for this task and still a separate decision — the memory graduation report's Stage 2 remains the gate. |
+| Four controller suites encode the pre-denylist allowlist contract | they live outside this repo. Editing guardrail tests from here would be exactly the quiet loosening the constitution forbids. Listed with causes in `reports/chrome_parity_20261104.md`. |
+| Master has no audio | by construction; no loudness claim is made. Narration is a separate lane (`local_voice`) and was not part of this render. |
