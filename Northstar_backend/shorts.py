@@ -162,6 +162,7 @@ def generate_stitched(source_png: bytes, *, out_path, platform: str,
                       steps: int = 20, cfg: float = 5.0, seed: int = 1,
                       text_requested: bool = False,
                       expected_terms: Optional[List[str]] = None,
+                      reanchor_every: int = 0,
                       render: Optional[Callable[..., Dict[str, Any]]] = None
                       ) -> Dict[str, Any]:
     """Render the planned clips, stitch them, and gate a decoded frame.
@@ -176,12 +177,18 @@ def generate_stitched(source_png: bytes, *, out_path, platform: str,
     render of packaging invents lettering unless the negative names it: the
     first 15 s master attempt failed the typography axis on an OCR hit
     ("RDOGiT") that neither the source plate nor the brief contained.
+
+    ``reanchor_every`` caps chained drift. A 12-clip 30 s master chain from the
+    previous frame on every call and the model slowly invented a hand, which the
+    layout gate refused on the final frame (measured 2026-11-04). Restarting the
+    chain from the original plate every N clips keeps the product stable; 0
+    disables it and preserves the short-clip behaviour exactly.
     """
     import video_stitch as vs
 
     plan = video_formats.plan(platform, seconds)
     render_w, render_h = sampler_canvas(plan["width"], plan["height"])
-    state: Dict[str, Any] = {"source": source_png, "frames": []}
+    state: Dict[str, Any] = {"source": source_png, "frames": [], "clips": 0}
 
     def _render(index: int, frames: int) -> bytes:
         out = (render or generate)(
@@ -193,6 +200,10 @@ def generate_stitched(source_png: bytes, *, out_path, platform: str,
         if picked:
             state["source"] = picked[-1]
             state["frames"].append(picked[len(picked) // 2])
+        state["clips"] += 1
+        if reanchor_every and state["clips"] % reanchor_every == 0:
+            # Drift control: the next clip starts from the plate again.
+            state["source"] = source_png
         return out.get("video") or b""
 
     stitched = vs.render_and_stitch(_render, out_path, platform=platform,

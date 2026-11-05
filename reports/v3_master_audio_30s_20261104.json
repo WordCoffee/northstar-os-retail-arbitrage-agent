@@ -1,0 +1,122 @@
+{
+  "contract": "master_audio/v1",
+  "started_at": "2026-11-05T00:36:23-0600",
+  "source_video": "Northstar_backend\\data\\studio_generated\\short_stitched_3ba2314fc3.mp4",
+  "script": "Mogra Organics Lion's Mane mushroom powder, six ounces per pouch. A fine, earthy powder that stirs easily into coffee, smoothies, soups and broth. Add one spoonful to your morning cup, or blend it into a shake for a smooth, savoury note. The stand-up pouch keeps the powder dry between uses, and reseals with a press. Mogra Organics, for the everyday ritual.",
+  "target_lufs": -16.0,
+  "source_probe": {
+    "ok": true,
+    "duration_s": 30.0,
+    "bytes": 17055572,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video": {
+      "codec": "h264",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30.0,
+      "frames": "900"
+    },
+    "audio": null
+  },
+  "narration": {
+    "ok": true,
+    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\studio_generated\\narration_1793860586.wav",
+    "engine": "piper",
+    "voice": "piper",
+    "bytes": 957484
+  },
+  "narration_probe": {
+    "ok": true,
+    "duration_s": 21.711,
+    "bytes": 957484,
+    "container": "wav",
+    "video": {
+      "codec": null,
+      "width": null,
+      "height": null,
+      "fps": null,
+      "frames": null
+    },
+    "audio": {
+      "codec": "pcm_s16le",
+      "channels": 1,
+      "sample_rate": "22050",
+      "bit_rate": "352800"
+    }
+  },
+  "mux": {
+    "ok": true,
+    "file": "Northstar_backend\\data\\studio_generated\\short_stitched_3ba2314fc3_master\\short_stitched_3ba2314fc3_narrated.mp4",
+    "reason": null
+  },
+  "loudness": {
+    "ok": true,
+    "analysis": {
+      "input_i": "-17.18",
+      "input_tp": "0.04",
+      "input_lra": "2.40",
+      "input_thresh": "-27.32",
+      "output_i": "-16.72",
+      "output_tp": "-1.50",
+      "output_lra": "1.50",
+      "output_thresh": "-26.86",
+      "normalization_type": "dynamic",
+      "target_offset": "0.72"
+    },
+    "applied": "loudnorm=I=-16.0:TP=-1.5:LRA=11:measured_I=-17.18:measured_TP=0.04:measured_LRA=2.40:measured_thresh=-27.32:offset=0.72:linear=true:print_format=json",
+    "verified": {
+      "ok": true,
+      "audio": true,
+      "integrated_lufs": -16.2,
+      "true_peak_dbfs": -1.4
+    }
+  },
+  "transcription": {
+    "ok": true,
+    "reason": null,
+    "model": "base",
+    "seconds": 2.9,
+    "text": "Magra Organics Lions main mushroom powder six ounces per pouch, a fine, earthy powder that stirs easily into coffee, smoothies, soups and broth. Add one spoonful to your morning cup, or blend it into a shake for a smooth, savoury note. The stand-up pouch keeps the powder dry between uses and seals with a press. Magra organics for the everyday ritual.",
+    "segments": 5
+  },
+  "captions": {
+    "file": "Northstar_backend\\data\\studio_generated\\short_stitched_3ba2314fc3_master\\short_stitched_3ba2314fc3.srt",
+    "cues": 5,
+    "source": "script_aligned",
+    "note": "timings measured from the narration; words from the approved script"
+  },
+  "final_probe": {
+    "ok": true,
+    "duration_s": 30.0,
+    "bytes": 17609086,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video": {
+      "codec": "h264",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30.0,
+      "frames": "900"
+    },
+    "audio": {
+      "codec": "aac",
+      "channels": 1,
+      "sample_rate": "96000",
+      "bit_rate": "141815"
+    }
+  },
+  "final_loudness": {
+    "ok": true,
+    "audio": true,
+    "integrated_lufs": -16.2,
+    "true_peak_dbfs": -1.4
+  },
+  "verdict": {
+    "audio_present": true,
+    "loudness_within_1db": true,
+    "true_peak_ok": true,
+    "captions_written": true,
+    "duration_preserved": true,
+    "all_ok": true
+  },
+  "finished_at": "2026-11-05T00:36:31-0600"
+}

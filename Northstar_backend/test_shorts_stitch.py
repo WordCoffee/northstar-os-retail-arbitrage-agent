@@ -78,6 +78,46 @@ def test_a_custom_negative_reaches_every_clip(tmp_path):
     assert seen == ["no lettering, no words", "no lettering, no words"]
 
 
+def test_reanchor_restarts_the_chain_from_the_plate(tmp_path):
+    """Long chains drift; re-anchoring must feed the ORIGINAL plate back in.
+
+    Measured failure it guards: the 12-clip 30 s master invented a hand by the
+    last clip, because every clip started from the previous clip's frame.
+    """
+    sources = []
+    PLATE = b"ORIGINAL-PLATE"
+
+    def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
+        sources.append(source)
+        clip = _lavfi_clip(tmp_path / f"r_{seed}.mp4", length)
+        # Each call returns a frame that is distinct from the plate, so a chained
+        # call must NOT receive the plate unless a re-anchor happened.
+        return {"video": clip.read_bytes(),
+                "frames": [b"FRAME-" + str(len(sources)).encode()]}
+
+    shorts.generate_stitched(PLATE, out_path=tmp_path / "r.mp4", platform="tiktok",
+                             seconds=9, reanchor_every=2, render=render)
+    # clip calls: 0 from plate, 1 from clip-0 frame, 2 re-anchored -> plate again
+    assert sources[0] == PLATE
+    assert sources[1] != PLATE
+    assert sources[2] == PLATE
+
+
+def test_without_reanchor_the_chain_never_returns_to_the_plate(tmp_path):
+    sources = []
+    PLATE = b"PLATE"
+
+    def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
+        sources.append(source)
+        clip = _lavfi_clip(tmp_path / f"c_{seed}.mp4", length)
+        return {"video": clip.read_bytes(), "frames": [b"FRAME-" + str(len(sources)).encode()]}
+
+    shorts.generate_stitched(PLATE, out_path=tmp_path / "c.mp4", platform="tiktok",
+                             seconds=9, render=render)
+    assert sources[0] == PLATE
+    assert all(s != PLATE for s in sources[1:])
+
+
 def test_a_failed_picture_gate_deletes_the_stitched_file(tmp_path, monkeypatch):
     def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
         clip = _lavfi_clip(tmp_path / f"clip_{seed}.mp4", length)

@@ -1,0 +1,191 @@
+{
+  "contract": "v3_master_video/v1",
+  "started_at": "2026-11-04T23:23:48-0600",
+  "prompt": "a plain stand-up pouch, front panel facing the camera, neutral studio background, soft studio light, matte kraft finish, slow steady camera orbit",
+  "request": {
+    "platform": "shorts",
+    "seconds": 30.0,
+    "steps": 20,
+    "cfg": 5.0,
+    "seed": 31,
+    "account": "org-t2"
+  },
+  "guardrail": {
+    "matched": [],
+    "requires_override": false,
+    "blocked_without_ack": false,
+    "blocked_with_ack": false,
+    "warning": "",
+    "acknowledged_override_used": false,
+    "note": "product-only prompt: the guardrail passes cleanly, so no override is required or used"
+  },
+  "plan": {
+    "platform": "shorts",
+    "label": "YouTube Shorts",
+    "aspect": "9:16",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "seconds": 30.0,
+    "target_frames": 900,
+    "total_frames": 924,
+    "clips": 12,
+    "frames_per_clip": 77,
+    "max_frames_per_clip": 81,
+    "frame_step": 4,
+    "container": "mp4",
+    "video_codec": "h264",
+    "max_bytes": 268435456,
+    "safe_zones": {
+      "top_pct": 10,
+      "bottom_pct": 18,
+      "right_pct": 12
+    },
+    "stitch_required": true,
+    "compliance": {
+      "verified": true,
+      "source": "YouTube Shorts upload limits (public help docs, checked 2026-11-03)",
+      "checked": "2026-11-03",
+      "note": "Numbers confirmed against the platform's published limits."
+    }
+  },
+  "negative": "static, blurry, distorted, text artefacts, watermark, flicker, lettering, letters, words, logo, label text, typography, gibberish text",
+  "source_asset": {
+    "id": "8d514293-f2a6-4a8b-8156-45fdb8fd32ab",
+    "name": "image - flux3-image-klein-nvfp4 - 2026-11-03T14:06 (MAIN 2000) (MAIN 2000)",
+    "storage_key": "listing_image_7dff91657c624c45ad7d802e1a6b0a3f.png",
+    "asset_type": "listing_image",
+    "bytes": 2285198
+  },
+  "refusal": {
+    "skipped": true,
+    "reason": "product-only prompt: the guard passes cleanly, so there is nothing to refuse and no override to acknowledge"
+  },
+  "render": {
+    "status_code": 502,
+    "seconds": 1713.7,
+    "detail": {
+      "code": "shorts_quality_refused",
+      "message": "video_quality_refused: [{'axis': 'layout', 'reason': 'layout_unbalanced', 'detail': 'Image is vertically cropped and off-center; hand intrudes into frame.'}]",
+      "quality": {
+        "verdict": {
+          "ok": false,
+          "passed": [
+            "design_alignment"
+          ],
+          "failed": [
+            "layout"
+          ],
+          "not_applicable": [
+            "form",
+            "typography"
+          ],
+          "reasons": [
+            {
+              "axis": "layout",
+              "reason": "layout_unbalanced",
+              "detail": "Image is vertically cropped and off-center; hand intrudes into frame."
+            }
+          ],
+          "score": "1/2",
+          "model": "qwen3.5:4b",
+          "available": true
+        },
+        "evidence": {
+          "axes": {
+            "form": {
+              "status": "not_applicable",
+              "reason": "no_form_requested",
+              "observed": "pouch"
+            },
+            "design_alignment": {
+              "status": "pass",
+              "detail": "Minimalist presentation; focus on material texture and form. Lighting is soft but uneven due to angle."
+            },
+            "layout": {
+              "status": "fail",
+              "reason": "layout_unbalanced",
+              "detail": "Image is vertically cropped and off-center; hand intrudes into frame."
+            },
+            "typography": {
+              "status": "not_applicable",
+              "reason": "no_text_requested",
+              "verified": true,
+              "engine": "rapidocr",
+              "detail": "OCR confirms no lettering",
+              "vision_text_visible": false,
+              "vision_garbled": false
+            },
+            "material": {
+              "status": "recorded",
+              "finish": "matte",
+              "detail": "Surface appears matte with subtle texture consistent with kraft paper or coated stock.",
+              "detail_note": "descriptive only; finish is not verifiable from a PNG"
+            }
+          },
+          "verdict": {
+            "ok": false,
+            "passed": [
+              "design_alignment"
+            ],
+            "failed": [
+              "layout"
+            ],
+            "not_applicable": [
+              "form",
+              "typography"
+            ],
+            "score": "1/2",
+            "reasons": [
+              {
+                "axis": "layout",
+                "reason": "layout_unbalanced",
+                "detail": "Image is vertically cropped and off-center; hand intrudes into frame."
+              }
+            ]
+          },
+          "model": "qwen3.5:4b",
+          "available": true,
+          "seconds": 22.0,
+          "ocr": {
+            "engine": "rapidocr",
+            "status": "ok",
+            "contains_text": false,
+            "boxes": 0
+          }
+        }
+      },
+      "format": {
+        "platform": "shorts",
+        "label": "YouTube Shorts",
+        "aspect": "9:16",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "seconds": 30.0,
+        "target_frames": 900,
+        "total_frames": 924,
+        "clips": 12,
+        "frames_per_clip": 77,
+        "max_frames_per_clip": 81,
+        "frame_step": 4,
+        "container": "mp4",
+        "video_codec": "h264",
+        "max_bytes": 268435456,
+        "safe_zones": {
+          "top_pct": 10,
+          "bottom_pct": 18,
+          "right_pct": 12
+        },
+        "stitch_required": true,
+        "compliance": {
+          "verified": true,
+          "source": "YouTube Shorts upload limits (public help docs, checked 2026-11-03)",
+          "checked": "2026-11-03",
+          "note": "Numbers confirmed against the platform's published limits."
+        }
+      }
+    }
+  },
+  "finished_at": "2026-11-04T23:52:23-0600"
+}

@@ -2270,6 +2270,10 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
                 # it; a video render never composes text here (the label lane
                 # does that separately), so unwanted glyphs are always refused.
                 negative=_sh.master_negative(),
+                # A long chain drifts: the 30 s master (12 clips) invented a
+                # hand by the last clip and the layout gate refused it. Re-anchor
+                # to the plate every 4 clips once a master needs more than 8.
+                reanchor_every=4 if plan["clips"] > 8 else 0,
                 steps=body.steps,
                 cfg=body.cfg, seed=body.seed, text_requested=body.text_requested,
                 expected_terms=expected)
