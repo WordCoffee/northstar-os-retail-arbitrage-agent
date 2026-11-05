@@ -1925,6 +1925,8 @@ class GenerateIn(BaseModel):
     reference_asset_ids: Optional[list] = None
     #: Score the render with the ship gate even when no deliverable is written.
     review: bool = False
+    #: Explicit acknowledgement of the human-feature warning for a video render.
+    human_features_ack: bool = False
 
 
 @router.get("/engine")
@@ -1944,6 +1946,14 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         raise HTTPException(status_code=422, detail=str(exc))
     width = ad_format["width"] if ad_format else body.width
     height = ad_format["height"] if ad_format else body.height
+
+    if str(body.kind) == "video":
+        import video_guard as _vg
+        guard = _vg.check_prompt(body.brief,
+                                 acknowledged=body.human_features_ack)
+        if guard["blocked"]:
+            raise HTTPException(status_code=422, detail=_vg.guard_detail(
+                body.brief, acknowledged=body.human_features_ack))
 
     import studio_generation as sg
     st = sg.engine_status()
@@ -2188,6 +2198,8 @@ class ShortsIn(BaseModel):
     #: and returns an ffprobe-checked MP4 at the platform canvas.
     platform: str = Field("", max_length=40)
     seconds: Optional[float] = Field(None, ge=1, le=600)
+    #: Explicit acknowledgement of the human-feature warning for this render.
+    human_features_ack: bool = False
 
 
 @router.post("/shorts")
@@ -2196,7 +2208,13 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
     import shorts as _sh
     import text_fidelity as _tf
     import studio_generation as _sg
+    import video_guard as _vg
     from pathlib import Path
+
+    guard = _vg.check_prompt(body.prompt, acknowledged=body.human_features_ack)
+    if guard["blocked"]:
+        raise HTTPException(status_code=422, detail=_vg.guard_detail(
+            body.prompt, acknowledged=body.human_features_ack))
 
     # Platform contract FIRST: a bad placement request is a 422 whether or not the
     # GPU is armed, and a window that needs stitching is refused before any work.

@@ -81,7 +81,7 @@ def test_from_provider_check_logs_unavailable_tool(db, monkeypatch):
             return ["fake_tool"]
     monkeypatch.setattr(blockers, "provider_suite", FakePS(), raising=False)
     import sys
-    sys.modules["provider_suite"] = FakePS()
+    monkeypatch.setitem(sys.modules, "provider_suite", FakePS())
     b = blockers.from_provider_check("fake_tool", "local")
     assert b is not None and b["newly_created"] is True
 
@@ -96,7 +96,7 @@ def test_from_provider_check_skips_usable_tool(db, monkeypatch):
             return FakeV()
     monkeypatch.setattr(blockers, "provider_suite", FakePS(), raising=False)
     import sys
-    sys.modules["provider_suite"] = FakePS()
+    monkeypatch.setitem(sys.modules, "provider_suite", FakePS())
     assert blockers.from_provider_check("ok_tool", "local") is None
 
 
@@ -113,7 +113,7 @@ def test_scan_suite_logs_only_unavailable(db, monkeypatch):
             return ["good", "bad"]
     monkeypatch.setattr(blockers, "provider_suite", FakePS(), raising=False)
     import sys
-    sys.modules["provider_suite"] = FakePS()
+    monkeypatch.setitem(sys.modules, "provider_suite", FakePS())
     out = None
     # invoke the scan logic directly
     logged = []

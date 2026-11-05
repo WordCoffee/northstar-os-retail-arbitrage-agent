@@ -235,6 +235,7 @@ def test_campaign_refuses_a_ty_task_without_measured_residency(tmp_path, monkeyp
                                                 "raw_output": "offline", "evidence": ""})
     ty_task = _task("ty-needs-model", execution="ty",
                     write_paths=["Northstar_backend/x.py"],
+                    wiring={"imported_by": ["Northstar_backend/tys_api.py"]},
                     acceptance_commands=[["python", "-c", "print(1)"]])
     result = cl.run_campaign({"tasks": [ty_task]}, {"tasks": {}, "completed": {}},
                              max_tasks=1, deadline_minutes=1,
@@ -262,6 +263,7 @@ def test_campaign_dispatches_a_ty_task_only_with_fresh_residency(tmp_path, monke
                 "checks": [], "changed": []}
 
     ty_task = _task("ty-ok", execution="ty", write_paths=["Northstar_backend/x.py"],
+                    wiring={"imported_by": ["Northstar_backend/tys_api.py"]},
                     acceptance_commands=[["python", "-c", "print(1)"]])
     result = cl.run_campaign({"tasks": [ty_task]}, {"tasks": {}, "completed": {}},
                              max_tasks=1, deadline_minutes=1,
@@ -337,6 +339,7 @@ def test_campaign_refuses_a_lane_that_does_not_match_the_task(monkeypatch, tmp_p
                         lambda *a, **k: {"ok": False, "record": {"verdict": "UNMEASURED"}})
     ty = _task("ty-mismatch", execution="ty", model="qwen2.5-coder:3b",
                write_paths=["Northstar_backend/x.py"],
+               wiring={"imported_by": ["Northstar_backend/tys_api.py"]},
                acceptance_commands=[["python", "-c", "print(1)"]])
     monkeypatch.setattr(cl, "resolve_lane", lambda *a, **k: {
         "ok": True, "provider": "ollama", "model": "bojo:gpu-orig", "reason": "pinned"})

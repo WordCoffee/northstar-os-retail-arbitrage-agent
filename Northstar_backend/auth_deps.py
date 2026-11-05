@@ -140,7 +140,10 @@ def _dev_shim_identity(request: Request) -> Optional[dict]:
     if not dev_shim_enabled():
         return None
     user_id = (request.headers.get("X-User-Id") or "").strip()
-    auto_demo = bool(getattr(getattr(getattr(request, "app", None), "state", None),
+    # A bare Request (tests, internal calls) has no ASGI "app" scope; a missing
+    # app means no auto-demo session, not a crash.
+    app = request.scope.get("app") if hasattr(request, "scope") else None
+    auto_demo = bool(getattr(getattr(app, "state", None),
                             "dev_auto_session", False))
     if not user_id:
         if not auto_demo:

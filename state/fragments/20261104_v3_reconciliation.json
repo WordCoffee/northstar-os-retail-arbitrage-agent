@@ -1,0 +1,50 @@
+{
+  "v3_reconciliation_20261104": {
+    "status": "DONE - V2 closed with corrections; human-feature guardrail and 3-stage graduation gate implemented; Ty's Vision blocked by the local model; fragment pending operator merge",
+    "v2_claims": {
+      "tys_vision": "NOT ESTABLISHED in V2. vision_verify.py is new; qwen2.5vl:7b returns degenerate text/no JSON on real images.",
+      "chrome_connect_retirement": "NOT EXECUTED. Still the browser controller and policy/lease/Amazon enforcement point.",
+      "wan22": "TRUE - shorts.py/video_formats.py; A14B Q4 on disk.",
+      "packaging": "TRUE for the reference lane (front/back OCR-gated); DRAFT nutrition/UPC remains."
+    },
+    "implemented": {
+      "human_guardrail": "Northstar_backend/video_guard.py; 422 human_features_warning on /shorts and /generate video before GPU work; human_features_ack is the only override; 6 tests",
+      "graduation_gate": "tools/v3_graduation.py - Stage 1 AST+100% tests, Stage 2 Ty's Vision, Stage 3 E2E; fail-closed; 6 tests",
+      "vision": "agent_kernel/vision_verify.py - local qwen2.5vl caller, injectable, 512px, num_ctx 4096, JSON-only verdict; returns available:false when the model is unusable",
+      "auth_fix": "auth_deps._dev_shim_identity no longer crashes on a Request with no ASGI app scope",
+      "test_isolation": "test_blockers uses monkeypatch.setitem for provider_suite; test_autonomy_readiness fixtures declare wiring"
+    },
+    "measured": {
+      "full_suite_before": "13 failed, 6045 passed, 117 skipped, 2 xfailed in 950.92s",
+      "fixed": 10,
+      "residual_known_failures": 3,
+      "residual_detail": [
+        "test_frontend_gate: PackifyDesign.jsx imports legacy services/api.js (V3.3)",
+        "test_shell_modes x2: advanced_view entitlement product decision"
+      ],
+      "flake": "test_local_screen watcher passes alone and in the 80-test file rerun",
+      "memory_graduation": {"stage1": "passed", "stage2": "failed - no JSON object in the vision answer", "stage3": "passed", "overall": "failed"},
+      "vision_live": "qwen2.5vl:7b: text works, 64px image works, real image returns degenerate text; format=json+image -> HTTP 500"
+    },
+    "decisions": [
+      "Do not retire Chrome Connect before the six-point parity gate passes.",
+      "Ty's Vision is unproven; Stage 2 remains fail-closed.",
+      "Adopt the graduation rubric as a merge gate.",
+      "Hard freeze while Stage 1 is red.",
+      "Human-feature override is explicit, logged and off by default."
+    ],
+    "next": [
+      "Vision bake-off (moondream2 / llava / qwen2.5vl) on 20 reference images",
+      "Migrate PackifyDesign off services/api.js; owner decision on advanced_view",
+      "Chrome parity harness",
+      "One 15 s Wan master through the guardrail"
+    ],
+    "artifacts": {
+      "plan": "docs/V3_MASTER_PLAN.md",
+      "readiness": "reports/v3_readiness_20261104.md",
+      "graduation": "reports/v3_graduation_memory_20261104.json"
+    },
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference, no policy/allowlist change. Chrome Connect untouched.",
+    "report": "reports/v3_readiness_20261104.md"
+  }
+}
