@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "summary": "acceptance passed after write",
+  "steps": 1,
+  "files": [
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\exports\\tys_self_improve_probe\\unit_convert.py"
+  ],
+  "error": "",
+  "acceptance_recovered": false,
+  "protocol_errors": 0,
+  "scope_rejections": 0,
+  "transcript": [
+    {
+      "role": "observation",
+      "tool": "write",
+      "ok": true,
+      "output": "wrote 181 bytes"
+    },
+    {
+      "role": "observation",
+      "tool": "acceptance",
+      "output": "PASS: missing=[]; failures=[]"
+    }
+  ],
+  "seconds": 1.5,
+  "artifact_exists": true,
+  "artifact_bytes": 181
+}

@@ -1,0 +1,45 @@
+{
+  "vision_code_probe_20261105": {
+    "status": "DONE - measured; Ty's Vision is a verdict oracle, not a code reader. No capability change, no new feature lane.",
+    "question": "Owner 2026-11-05: is Tys Vision able to see code as Tys Assistant programs, so it can help itself improve Northstar OS?",
+    "answer": {
+      "judge_code": "YES - 5/5 ground-truthed constraints correct on a 22-line screenshot of real source, ~13-18 s per verdict on gemma3:4b at 640 px.",
+      "read_code": "NO - free-form transcription of the same pixels scored 0.652 character similarity and invented lines; RapidOCR scored 0.786 and still drops backticks and brackets.",
+      "program": "NO - vision_verify has no file access, no tool calls and no write path. Its only two consumers on disk are tools/v3_graduation.py (Stage 2) and test_vision_verify.py."
+    },
+    "measured": {
+      "verdict_accuracy": 1.0,
+      "verdict_cases": 5,
+      "verdict_seconds_range": "13.0-18.2",
+      "freeform_char_ratio": 0.652,
+      "ocr_char_ratio": 0.786,
+      "model": "gemma3:4b",
+      "max_edge": 640,
+      "num_ctx": 2048,
+      "source_chars": 957,
+      "evidence": "state/evidence/vision_code_probe/result.json"
+    },
+    "coding_lane_live_test": {
+      "entry_point": "agent_kernel.coding_runner.run_coding_task (the same path TysAssistant.CodingWorkerAdapter.run_agent uses)",
+      "worker": "Qwen3.8-27B IQ4_XS on llama-server 127.0.0.1:8080, ready in 33 s (scripts/start-northstar-moe.ps1 -Lane coder)",
+      "objective": "write unit_convert.py with to_slug() plus KIB/MIB/GIB",
+      "acceptance": "independent inline python -c assertions in the workspace; the model could not edit them",
+      "result": "ok=true, 1 step, 1.5 s, 181-byte artifact, acceptance_recovered=false, protocol_errors=0, scope_rejections=0",
+      "independent_recheck": "the same assertions re-run by hand outside the loop: bad [] ints True, exit 0",
+      "evidence": "state/evidence/tys_self_improve_probe/result.json"
+    },
+    "tools_added": [
+      "tools/vision_code_probe.py - renders source to a screenshot and measures verdict accuracy, free-form transcription fidelity and OCR fidelity",
+      "tools/tys_self_improve_probe.py - bounded self-improvement probe with acceptance the model cannot edit"
+    ],
+    "known_issue": {
+      "id": "tys_vision_cannot_read_code_20261105",
+      "description": "Ty's Vision answers one yes/no question about an image. It reads meaning, not characters: fine code text is lost and unreadable details are confabulated. It must never be a code source or a code reader.",
+      "resolution": "Code reading stays with the coding lane, which reads source TEXT via agent_kernel.coding_tools.Workspace. Ty's Vision stays a verdict oracle for renders and screenshots (graduation Stage 2). A screenshot may be OCR'd to text for a human or a coder, but the vision model is never the source of that text.",
+      "rule": "Never feed vision-model output into a code edit. If a screenshot must inform a change, OCR it, treat the OCR text as untrusted data, and re-read the real file from disk before editing.",
+      "status": "documented"
+    },
+    "boundaries": "Local lane only. No Amazon request, no spend, no cloud inference, no credential read, no policy or allowlist change. GPU left idle (13 MiB used) and the worker stopped after the test.",
+    "report": "reports/vision_code_probe_20261105.md"
+  }
+}

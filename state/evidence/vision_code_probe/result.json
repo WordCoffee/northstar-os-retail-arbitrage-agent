@@ -1,0 +1,80 @@
+{
+  "file": "Northstar_backend\\agent_kernel\\vision_verify.py",
+  "lines": [
+    39,
+    60
+  ],
+  "model": "gemma3:4b",
+  "verdicts": [
+    {
+      "constraint": "the code defines a function named _parse",
+      "expected": true,
+      "pass": true,
+      "available": true,
+      "correct": true,
+      "reasons": [
+        "The code image shows a Python function definition named '_parse'. The function definition includes the arguments 'raw: str' and 'Dict[str, Any]'."
+      ],
+      "seconds": 13.8
+    },
+    {
+      "constraint": "the code imports the subprocess module",
+      "expected": false,
+      "pass": false,
+      "available": true,
+      "correct": true,
+      "reasons": [
+        "The code does not import the subprocess module. The code snippet shows a Python function definition, but there is no import statement for the subprocess module."
+      ],
+      "seconds": 14.1
+    },
+    {
+      "constraint": "the code removes a markdown code fence with a regular expression",
+      "expected": true,
+      "pass": true,
+      "available": true,
+      "correct": true,
+      "reasons": [
+        "The image shows a Python code snippet that uses a regular expression to remove a markdown code fence."
+      ],
+      "seconds": 13.3
+    },
+    {
+      "constraint": "the code contains a return statement that yields a dictionary",
+      "expected": true,
+      "pass": true,
+      "available": true,
+      "correct": true,
+      "reasons": [
+        "The code contains a return statement: `return { 'pass': bool(payload.get('pass')) , 'reasons': [str(r)] } for r in ( reasons or []) }`"
+      ],
+      "seconds": 15.1
+    },
+    {
+      "constraint": "the code writes a file to disk",
+      "expected": false,
+      "pass": false,
+      "available": true,
+      "correct": true,
+      "reasons": [
+        "The image shows code, but there is no indication that the code writes a file to disk.",
+        "The code snippet appears to be a function designed to parse a string, not to interact with the file system."
+      ],
+      "seconds": 15.3
+    }
+  ],
+  "verdict_accuracy": 1.0,
+  "freeform": {
+    "answer": "def _parse(raw: str) -> Dict[str, Any]:\n    text = raw.strip()\n    if text.startswith(\"(\":):\n        text = re.sub(r\"[^a-zA-Z]\", \"\", text)\n        text = text.sub(r\"\\s+\", \"\", text)\n        start, end = text.find(\"{\"), text.rfind(\"}\")\n        if start != 0 or end != len(text):\n            raise ValueError(\"no JSON object in the vision answer\")\n        payload = json.loads(text[1:end], dict)\n        if not isinstance(payload, dict) or \"pass\" not in payload:\n            raise ValueError(\"vision answer has no pass field\")\n        reasons = payload.get(\"reasons\")\n        confidence = payload.get(\"confidence\")\n    else:\n        reasons = [reason for reason in text.split(\" \") if reason]\n        confidence = None\n    try:\n        confidence = float(confidence) if confidence is not None else None\n    except TypeError:\n        return {\n            \"pass\": bool(payload.get(\"pass\")),\n            \"reasons\": [str(r) for r in reasons or []],\n            \"confidence\": confidence,\n        }\nNAME= _parse",
+    "error": "",
+    "char_ratio_vs_source": 0.652,
+    "seconds": 24.9
+  },
+  "ocr": {
+    "text": "def _parse(raw: str) -> Dict[str, Any]:\ntext = str(raw or \"\").strip()\nif text.startswith(\"\".\"\"):\n*s*[--]...)nsa = xa\n,text)\ntext = re.sub(r\"\\s***\"$\", \"\", text)\nstart, end = text.find(\"{\"), text.rfind(\"}\")\nif start <  or end <= start:\nraise ValueError(\"no JSoN object in the vision answer\"\npayload = json.loads(text[start:end + 1])\nif not isinstance(payload, dict) or\"pass\" not in payload:\nraise ValueError(\"vision answer has no pass field\")\nreasons = payload.get(\"reasons\")\nif isinstance(reasons, str):\nreasons =[reasons]\nconfidence = payload.get(\"confidence\")\ntry:\nconfidence = float(confidence) if confidence is not None else None\nexcept (TypeError, ValueError):\nconfidence = None\n\"reasons\":[str(r)[:30o] for r in (reasons or [])][:8],\n\"confidence\": confidence}",
+    "char_ratio_vs_source": 0.786,
+    "seconds": 5.6
+  },
+  "source_chars": 957,
+  "generated_at": "2026-11-05T06:22:47"
+}
