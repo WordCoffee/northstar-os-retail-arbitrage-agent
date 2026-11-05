@@ -20,7 +20,71 @@
 # Exit code 0 = GREEN (baseline match, known failures only) ; 1 = regression / mismatch.
 # No CI integration — local runner only. Nothing is committed by this script.
 
+# -SelfTest runs the pytest-summary parser against known summary shapes and
+# exits. The parser is the canary's only measuring instrument: when it failed to
+# read a green suite the whole aggregate went RED and nobody could tell a real
+# regression from a parsing bug. It is exercised here instead of trusted.
+param([switch]$SelfTest)
+
 $ErrorActionPreference = "Stop"
+
+function Parse-PytestSummary($text) {
+    # The summary is the LAST line that reports a pass count with a duration.
+    # Counting the tokens independently is deliberate: a single regex that
+    # assumed "passed, skipped, <n> subtests passed" silently failed the moment
+    # pytest inserted anything between them (an xfailed count, an error count, a
+    # warnings count), which is exactly what happened on 2026-11-05.
+    $line = ($text -split "`r?`n" |
+        Where-Object { $_ -match '\bpassed\b' -and $_ -match ' in \d' } |
+        Select-Object -Last 1)
+    if (-not $line) { return $null }
+    $count = {
+        param($pattern, $default)
+        $m = [regex]::Match($line, $pattern)
+        if ($m.Success) { return [int]$m.Groups[1].Value }
+        return $default
+    }
+    return @{
+        passed   = (& $count '(\d+)\s+passed' 0)
+        failed   = (& $count '(\d+)\s+failed' 0)
+        errors   = (& $count '(\d+)\s+error' 0)
+        skipped  = (& $count '(\d+)\s+skipped' 0)
+        subtests = (& $count '(\d+)\s+subtests\s+passed' 0)
+        line     = $line
+    }
+}
+
+if ($SelfTest) {
+    $cases = @(
+        @{ name = "green with xfailed"; text = "6105 passed, 117 skipped, 2 xfailed, 18 warnings, 89 subtests passed in 956.78s (0:15:56)"; passed = 6105; failed = 0; skipped = 117; subtests = 89 },
+        @{ name = "failures and xfailed"; text = "5918 passed, 10 failed, 117 skipped, 2 xfailed, 89 subtests passed in 774.83s"; passed = 5918; failed = 10; skipped = 117; subtests = 89 },
+        @{ name = "decorated summary"; text = "===== 42 passed, 3 skipped in 1.20s ====="; passed = 42; failed = 0; skipped = 3; subtests = 0 },
+        @{ name = "short suite, warning token"; text = "3 passed, 1 warning in 0.42s"; passed = 3; failed = 0; skipped = 0; subtests = 0 },
+        @{ name = "errors are failures"; text = "7 passed, 2 errors in 3.10s"; passed = 7; failed = 2; skipped = 0; subtests = 0 },
+        @{ name = "nothing collected"; text = "no tests ran in 0.12s"; passed = $null; failed = $null; skipped = $null; subtests = $null }
+    )
+    $bad = 0
+    foreach ($case in $cases) {
+        $got = Parse-PytestSummary $case.text
+        $ok = $true
+        if ($null -eq $case.passed) {
+            $ok = ($null -eq $got)
+        } elseif ($null -eq $got) {
+            $ok = $false
+        } else {
+            # failed and errors are summed the same way the runner does it.
+            $ok = ($got.passed -eq $case.passed) -and
+                  (($got.failed + $got.errors) -eq $case.failed) -and
+                  ($got.skipped -eq $case.skipped) -and ($got.subtests -eq $case.subtests)
+        }
+        if ($ok) { Write-Host ("PASS  " + $case.name) }
+        else { Write-Host ("FAIL  " + $case.name) -ForegroundColor Red; $bad = $bad + 1 }
+    }
+    if ($bad -eq 0) { Write-Host "RUNNER SELF-TEST OK"; exit 0 }
+    Write-Host ("RUNNER SELF-TEST FAILED: $bad case(s)") -ForegroundColor Red
+    exit 1
+}
+
 $Root        = (Get-Item (Join-Path $PSScriptRoot "..")).FullName
 $BaselinePath = Join-Path $Root "tests\BASELINE.json"
 $BackendDir  = Join-Path $Root "Northstar_backend"
@@ -83,17 +147,19 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
 $r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider"
-$sm = [regex]::Match($r.text, "(?:(\d+)\s+failed,\s+)?(\d+)\s+passed,\s+(\d+)\s+skipped,\s+(?:\d+\s+warnings?,\s+)?(\d+)\s+subtests\s+passed")
-if (-not $sm.Success) {
+# Parsed by Parse-PytestSummary (defined above and exercised by -SelfTest):
+# a missing token is 0, and the line may carry xfailed/warning tokens.
+$sm = Parse-PytestSummary $r.text
+if (-not $sm) {
     $bParsed = $false
     Write-Host "  ERROR: could not parse backend summary (pytest exit code $($r.code))" -ForegroundColor Red
     $unrun = $unrun + 1
 } else {
     $bParsed = $true
-    $bFailed  = if ($sm.Groups[1].Success) { [int]$sm.Groups[1].Value } else { 0 }
-    $bPassed  = [int]$sm.Groups[2].Value
-    $bSkipped = [int]$sm.Groups[3].Value
-    $bSub     = [int]$sm.Groups[4].Value
+    $bFailed  = $sm.failed + $sm.errors
+    $bPassed  = $sm.passed
+    $bSkipped = $sm.skipped
+    $bSub     = $sm.subtests
     $bIds     = @(Parse-FailIds $r.text)
     $unexpected = @()
     foreach ($id in $bIds) {
@@ -119,7 +185,7 @@ if (-not $sm.Success) {
 Write-Host "== [2/4] Golden Goose module suite (pytest) =="
 $r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider agents\golden_goose_finder\tests"
 $gm = [regex]::Match($r.text, "(\d+)\s+passed")
-if ($gm -eq $null) {
+if (-not $gm.Success) {
     Write-Host "  ERROR: could not parse GG summary (exit $($r.code))" -ForegroundColor Red
     $unrun = $unrun + 1
 } else {
