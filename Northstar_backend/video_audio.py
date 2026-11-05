@@ -150,13 +150,20 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
         out_wav: Union[str, Path], *, music_gain: float = 0.32,
         duck_threshold: float = 0.03, duck_ratio: float = 6.0,
         sample_rate: int = 44100,
-        total_seconds: Optional[float] = None) -> Dict[str, Any]:
+        total_seconds: Optional[float] = None,
+        strict_overrun: bool = True) -> Dict[str, Any]:
     """Mix voice over a ducked bed, then two-pass loudness-normalise.
 
     `total_seconds` pads the voice with silence before the sidechain and trims
     the mix to the picture's length. Without it a short line ends the ducked bed
     early (sidechaincompress follows its shortest input), the mix comes out
     shorter than the video, and `-shortest` silently drops the last frames.
+
+    A voice longer than the picture is a different case: the trim would cut the
+    last words with no measurement. That is refused by default. A caller that
+    must hit a fixed platform length (the ad pipeline, where the frame count is
+    part of the contract) passes `strict_overrun=False` and gets `overrun_s`
+    back, so the truncation is measured and reported instead of hidden.
     """
     voice = Path(voice_wav)
     if not voice.is_file():
@@ -168,7 +175,7 @@ def mix(voice_wav: Union[str, Path], music_wav: Optional[Union[str, Path]],
     overrun_s = None
     if total_seconds:
         overrun_s = round(float(voice_seconds) - float(total_seconds), 3)
-        if overrun_s > VOICE_OVERRUN_TOLERANCE_S:
+        if overrun_s > VOICE_OVERRUN_TOLERANCE_S and strict_overrun:
             raise AudioError(
                 f"voice_overruns_picture: voice {float(voice_seconds):.2f}s > "
                 f"picture {float(total_seconds):.2f}s by {overrun_s:.2f}s "
@@ -331,7 +338,8 @@ def add_audio(video: Union[str, Path], out_path: Union[str, Path], *,
               voice: Optional[str] = None,
               music: Optional[Union[str, Path]] = None,
               bed_seconds: Optional[float] = None,
-              music_gain: float = 0.32) -> Dict[str, Any]:
+              music_gain: float = 0.32,
+              strict_overrun: bool = True) -> Dict[str, Any]:
     """Voice + optional bed + ducking + loudness + mux + verification.
 
     A music bed is generated when `music` is not supplied; pass a licensed file
@@ -358,9 +366,14 @@ def add_audio(video: Union[str, Path], out_path: Union[str, Path], *,
         mixed = tmp_dir / "mix.wav"
         duration = float(video_stitch.probe(video_path).get("duration") or 0.0) or None
         mix_result = mix(voice_wav or music_wav, music_wav if voice_wav else None,
-                         mixed, music_gain=music_gain, total_seconds=duration)
+                         mixed, music_gain=music_gain, total_seconds=duration,
+                         strict_overrun=strict_overrun)
         verified = mux(video_path, mixed, out_path)
     verified["mix"] = mix_result
+    # Surface the alignment measurement at the top level: a caller that opted out
+    # of the refusal still has to be able to report what it truncated.
+    verified["overrun_s"] = mix_result.get("overrun_s")
+    verified["voice_seconds"] = mix_result.get("voice_seconds")
     verified["script"] = script
     verified["voice"] = voice
     verified["music_source"] = str(music) if music else "procedural-ambient-bed"

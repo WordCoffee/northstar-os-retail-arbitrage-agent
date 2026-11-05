@@ -93,3 +93,28 @@ def test_vary_framing_records_a_distinct_source_per_beat(tmp_path):
     hashes = {c["source_sha256"] for c in manifest["clips"]}
     assert len(hashes) >= 3, hashes
     assert manifest["vary_framing"] is True
+
+
+def test_the_ad_reports_the_narration_it_could_not_fit(tmp_path):
+    """The platform contract fixes the frame count, so the script may overrun.
+
+    The picture cannot grow to fit the narration, so the ad pipeline opts out of
+    the overrun refusal - but the truncation must be MEASURED and reported in the
+    manifest. Before the guard it was silent: the last words were dropped and the
+    delivered clip looked fine.
+    """
+    def render(scene, frames):
+        scene = {**scene, "_tmp": str(tmp_path)}
+        return _fake_render(scene, frames)
+
+    manifest = video_ad.produce(PRODUCT, platform="tiktok", seconds=3,
+                                out_dir=tmp_path / "out", render_scene=render,
+                                seed=5)
+    audio = manifest["audio"]
+    assert audio["voice_seconds"] is not None, audio
+    assert audio["voice_seconds"] > 3.0, audio
+    assert audio["overrun_s"] == pytest.approx(audio["voice_seconds"] - 3.0, abs=0.2)
+    assert audio["overrun_s"] > 1.0, audio
+    # the delivered picture is still exactly the contracted length
+    assert manifest["stitch"]["final"]["nb_frames"] == 90
+

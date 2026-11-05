@@ -196,7 +196,11 @@ def produce(product: Dict[str, Any], *, platform: str,
         emit("audio", script_chars=len(script))
         voiced = video_audio.add_audio(
             Path(captioned["file"]), tmp_dir / "final.mp4", script=script,
-            voice=voice, music=music)
+            voice=voice, music=music,
+            # The platform contract fixes the frame count, so the picture cannot
+            # grow to fit the narration. Opt out of the overrun refusal here and
+            # report the measured truncation in the manifest instead of hiding it.
+            strict_overrun=False)
         if not voiced.get("ok"):
             raise VideoAdError("video_ad_audio_failed: " + str(voiced.get("reason")))
         payload = Path(voiced["file"]).read_bytes()
@@ -237,7 +241,9 @@ def produce(product: Dict[str, Any], *, platform: str,
             "audio": {"checks": voiced.get("checks"),
                       "integrated_lufs": voiced.get("integrated_lufs"),
                       "volume": voiced.get("volume"),
-                      "music_source": voiced.get("music_source")},
+                      "music_source": voiced.get("music_source"),
+                      "voice_seconds": voiced.get("voice_seconds"),
+                      "overrun_s": voiced.get("overrun_s")},
             "checks": checks,
             "reason": "" if not failed else "video_ad_contract_failed: " + ", ".join(failed),
         }
