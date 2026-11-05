@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-05T21:40:00Z",
+  "updated": "2026-11-05T22:30:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -16,60 +16,64 @@
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
-      "id": "init-1",
-      "kind": "init",
-      "title": "Save work order + scaffolding files",
-      "status": "done"
+      "id": "W0-c1",
+      "kind": "self",
+      "title": "Author/evaluator: turn a failing test into an authorized, scoped task with a best-of-N patch loop",
+      "status": "pending",
+      "priority": 1000,
+      "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
     },
     {
-      "id": "init-2",
-      "kind": "init",
-      "title": "Tag autonomy-baseline + measured full test run",
-      "status": "done",
-      "note": "Measured post-Phase-B run 2026-11-05T21:51Z: backend 6247 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. tests/BASELINE.json written from that run.",
-      "evidence": "reports/ty/_baseline_measured_20261105_final.txt"
+      "id": "R-E1",
+      "kind": "experiment",
+      "workstream": "W1",
+      "title": "Identity by editing: FLUX 3 scene + Qwen-Image-Edit-2511 (Apache-2.0) with the real product as the edit source",
+      "priority": 900,
+      "status": "pending",
+      "hypothesis": "Editing preserves identity where conditioning drifts (measured ssim 0.010-0.323 today)",
+      "acceptance": "subject-crop ssim >= 0.55 and pHash <= 24 on the 12-case dev set",
+      "licence": "Apache-2.0 (installed, Q4_K_M)",
+      "write_paths": [
+        "Northstar_backend/studio_generation.py",
+        "Northstar_backend/picture_scorecard.py",
+        "tools/run_picture_bench.py"
+      ]
     },
     {
-      "id": "A-a4",
-      "kind": "probe",
-      "title": "A4 web research (was MISSING: unknown_tool)",
-      "status": "done",
-      "fixed_by": "GRANT 01 f029dd2b + tools/web_research.py"
+      "id": "R-E2",
+      "kind": "experiment",
+      "workstream": "W1",
+      "title": "Deterministic composite fallback: BiRefNet cutout of the real product + generated scene + matched shadow",
+      "priority": 880,
+      "status": "pending",
+      "acceptance": "identity preserved by construction; text_accuracy 100% on reference cases",
+      "licence": "MIT (installed)"
     },
     {
-      "id": "A-a6",
-      "kind": "probe",
-      "title": "A6 MCP client (was MISSING)",
-      "status": "done",
-      "fixed_by": "GRANT 01 f029dd2b + tools/mcp_client.py"
+      "id": "R-E5",
+      "kind": "experiment",
+      "workstream": "W0",
+      "title": "Expose subagents, todos, plan_mode and skills as callable kernel tools (they exist and are unreachable)",
+      "priority": 860,
+      "status": "pending",
+      "acceptance": "each module callable through the kernel tool protocol, with tests",
+      "licence": "in-repo, no dependency",
+      "write_paths": [
+        "Northstar_backend/agent_kernel/tool_protocol.py",
+        "Northstar_backend/agent_kernel/kernel.py",
+        "Northstar_backend/test_agent_kernel.py"
+      ]
     },
     {
-      "id": "A-a7",
-      "kind": "probe",
-      "title": "A7 context compaction (was PARTIAL: unwired, estimator blind)",
-      "status": "done",
-      "fixed_by": "b19582e0"
-    },
-    {
-      "id": "A-a9",
-      "kind": "probe",
-      "title": "A9 vision QA (was MISSING: qwen2.5vl returns garbage)",
-      "status": "done",
-      "fixed_by": "GRANT 02 4e69f0f1 (gemma3:4b + json mode + fallback)"
-    },
-    {
-      "id": "A-a10",
-      "kind": "probe",
-      "title": "A10 reference generation (PARTIAL: both paths render, library now exists, not wired to API)",
+      "id": "UX-a11y-1",
+      "kind": "workstream",
+      "workstream": "W8",
+      "title": "UX scorecard found: color-contrast failures (18-31 nodes/page), scrollable-region-focusable, and /ui + /ui/home titled 'Bojo'",
+      "priority": 780,
       "status": "partial",
-      "next": "W1-cycle-3: accept a reference id in /api/design-studio/*"
-    },
-    {
-      "id": "A-a3",
-      "kind": "probe",
-      "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
-      "status": "partial",
-      "next": "W0: author/evaluator for backlog proposals"
+      "evidence": "state/evidence/ux_scorecard_chromium-desktop_*.json",
+      "fixed_so_far": "global hidden h1 removed; page headings now resolve to the page title",
+      "next": "1) give the workspace a real page h1 and demote the Bojo dock to h2; 2) raise translucent-panel contrast to 4.5:1 against the worst scene frame; 3) tabIndex on the two scrollable regions"
     },
     {
       "id": "W2-c1",
@@ -127,6 +131,26 @@
       "blocked_by": "W1-c2"
     },
     {
+      "id": "R-E3",
+      "kind": "experiment",
+      "workstream": "W7",
+      "title": "Parametric packaging families (packbox MIT pattern): box, pouch, sleeve as parameters, not templates",
+      "priority": 640,
+      "status": "pending",
+      "acceptance": "5 sizes generate valid SVG+PDF with bleed/safe zones and pass prepress at TAC<=300",
+      "licence": "MIT (pattern port, not vendored)"
+    },
+    {
+      "id": "R-E4",
+      "kind": "experiment",
+      "workstream": "W4",
+      "title": "Per-claim citations in research (hyperresearch MIT pattern); refuse a claim with no source",
+      "priority": 620,
+      "status": "pending",
+      "acceptance": "100% of emitted claims carry a URL + quote; 0 unsourced claims",
+      "licence": "MIT (pattern port)"
+    },
+    {
       "id": "W4-c1",
       "kind": "workstream",
       "workstream": "W4",
@@ -134,6 +158,16 @@
       "status": "pending",
       "priority": 600,
       "dwell": "bounded 6"
+    },
+    {
+      "id": "R-E6",
+      "kind": "experiment",
+      "workstream": "W4",
+      "title": "Demand/keyword layer over our own fixtures (Jungle Scout parity without Amazon)",
+      "priority": 540,
+      "status": "pending",
+      "acceptance": "every number carries source + n; unmeasured is reported unmeasured",
+      "licence": "in-repo + public aggregate stats"
     },
     {
       "id": "W5-c1",
@@ -189,19 +223,19 @@
       "dwell": "bounded 4"
     },
     {
-      "id": "W9-c1",
+      "id": "W12-c1",
       "kind": "workstream",
-      "workstream": "W9",
-      "title": "Security: automate the production-bundle dev-bypass assertion",
+      "workstream": "W12",
+      "title": "Observability: injected-fault detection rate",
       "status": "pending",
       "priority": 300,
       "dwell": "bounded 3"
     },
     {
-      "id": "W12-c1",
+      "id": "W9-c1",
       "kind": "workstream",
-      "workstream": "W12",
-      "title": "Observability: injected-fault detection rate",
+      "workstream": "W9",
+      "title": "Security: automate the production-bundle dev-bypass assertion",
       "status": "pending",
       "priority": 300,
       "dwell": "bounded 3"
@@ -225,12 +259,60 @@
       "dwell": "bounded 2"
     },
     {
-      "id": "W0-c1",
-      "kind": "self",
-      "title": "Author/evaluator: turn a failing test into an authorized, scoped task with a best-of-N patch loop",
-      "status": "pending",
-      "priority": 1000,
-      "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
+      "id": "A-a10",
+      "kind": "probe",
+      "title": "A10 reference generation (PARTIAL: both paths render, library now exists, not wired to API)",
+      "status": "partial",
+      "next": "W1-cycle-3: accept a reference id in /api/design-studio/*"
+    },
+    {
+      "id": "A-a3",
+      "kind": "probe",
+      "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
+      "status": "partial",
+      "next": "W0: author/evaluator for backlog proposals"
+    },
+    {
+      "id": "A-a4",
+      "kind": "probe",
+      "title": "A4 web research (was MISSING: unknown_tool)",
+      "status": "done",
+      "fixed_by": "GRANT 01 f029dd2b + tools/web_research.py"
+    },
+    {
+      "id": "A-a6",
+      "kind": "probe",
+      "title": "A6 MCP client (was MISSING)",
+      "status": "done",
+      "fixed_by": "GRANT 01 f029dd2b + tools/mcp_client.py"
+    },
+    {
+      "id": "A-a7",
+      "kind": "probe",
+      "title": "A7 context compaction (was PARTIAL: unwired, estimator blind)",
+      "status": "done",
+      "fixed_by": "b19582e0"
+    },
+    {
+      "id": "A-a9",
+      "kind": "probe",
+      "title": "A9 vision QA (was MISSING: qwen2.5vl returns garbage)",
+      "status": "done",
+      "fixed_by": "GRANT 02 4e69f0f1 (gemma3:4b + json mode + fallback)"
+    },
+    {
+      "id": "init-1",
+      "kind": "init",
+      "title": "Save work order + scaffolding files",
+      "status": "done"
+    },
+    {
+      "id": "init-2",
+      "kind": "init",
+      "title": "Tag autonomy-baseline + measured full test run",
+      "status": "done",
+      "note": "Measured post-Phase-B run 2026-11-05T21:51Z: backend 6247 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. tests/BASELINE.json written from that run.",
+      "evidence": "reports/ty/_baseline_measured_20261105_final.txt"
     }
   ],
   "parked": [
@@ -243,7 +325,9 @@
     "A scorecard dimension that is 'unavailable' must never be averaged in as a pass; and a dimension that is 'not_applicable' is not a gap.",
     "Set consistency compares images inside a scenario, never across scenarios.",
     "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot.",
-    "FLUX 3 mi2i reference conditioning does not preserve product identity on this box: ssim 0.01-0.32, phash 26-28 vs the reference. Identity must come from a composite, not from conditioning (measured 2026-11-05, re-scored artifacts)."
+    "FLUX 3 mi2i reference conditioning does not preserve product identity on this box: ssim 0.01-0.32, phash 26-28 vs the reference. Identity must come from a composite, not from conditioning (measured 2026-11-05, re-scored artifacts).",
+    "GitHub search rate-limits at 10 req/min unauthenticated; a rate-limited sweep must be reported as a transport failure, never as \"no results\".",
+    "The competitor gap that matters most is identity: every competitor that does product photography preserves the product; our conditioning path does not, and we now measure that."
   ],
   "baseline": {
     "backend": {
@@ -257,5 +341,6 @@
     "shell": 307,
     "functions": 31,
     "measured_at": "2026-11-05T21:51:00Z"
-  }
+  },
+  "research": "reports/ty/research_20261105.md"
 }

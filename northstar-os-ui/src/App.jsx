@@ -298,7 +298,11 @@ function Shell() {
       <div className="body-layout">
         {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
         <main className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
-          <h1 style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</h1>
+          {/* The app name is not the page heading. This used to be an <h1>, which
+              meant every route announced "Northstar OS" as its heading to a
+              screen reader and the real page <h1> was the second one in the DOM.
+              Measured by tests/e2e/ux_scorecard.spec.ts on 2026-11-05. */}
+          <p className="sr-only" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</p>
           {session.suspended
             ? <AccountSuspended />
             : simpleMode && !keepAdvanced
