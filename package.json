@@ -32,6 +32,11 @@
     "not dead"
   ],
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
     "@termly-dev/cli": "^1.9.5"
+  },
+  "dependencies": {
+    "csv-parse": "^7.0.3"
   }
 }
