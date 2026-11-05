@@ -78,10 +78,10 @@
       "commercial_ok": true,
       "network": false,
       "cost": "free_local",
-      "installed": "installed",
+      "installed": "weights_missing",
       "gate": "MEDIA_GEN_LIVE",
       "unlocks": "Text-faithful edit/refine of a real image under the OCR drift gate.",
-      "notes": "The text-fidelity gate (text_fidelity.verify_edit_preserves_copy) blocks any edit that rewrites the label copy."
+      "notes": "CORRECTED 2026-11-05: the registry said 'installed' and the weights are NOT on disk. tools/experiment_identity.py measured it: 'edit_lane_removed: missing qwen-image-edit-2511-Q4_K_M.gguf, qwen_2.5_vl_7b_nvfp4.safetensors, qwen_image_vae.safetensors'. The lane is dead until those files exist, and re-downloading them needs about 12 GB with 9.5 GB free (below the 10 GB operational floor). Recorded honestly instead of leaving a lane that looks available and refuses at call time. Identity now comes from product_composite.py (deterministic paste of the BiRefNet cutout), which needs no weights. The text-fidelity gate (text_fidelity.verify_edit_preserves_copy) is unchanged and still applies if the lane returns."
     },
     "birefnet": {
       "name": "BiRefNet cutout",

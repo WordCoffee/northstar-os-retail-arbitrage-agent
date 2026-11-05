@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-05T22:30:00Z",
+  "updated": "2026-11-05T22:20:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 2,
+  "cycle": 3,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -29,7 +29,7 @@
       "workstream": "W1",
       "title": "Identity by editing: FLUX 3 scene + Qwen-Image-Edit-2511 (Apache-2.0) with the real product as the edit source",
       "priority": 900,
-      "status": "pending",
+      "status": "blocked",
       "hypothesis": "Editing preserves identity where conditioning drifts (measured ssim 0.010-0.323 today)",
       "acceptance": "subject-crop ssim >= 0.55 and pHash <= 24 on the 12-case dev set",
       "licence": "Apache-2.0 (installed, Q4_K_M)",
@@ -37,7 +37,9 @@
         "Northstar_backend/studio_generation.py",
         "Northstar_backend/picture_scorecard.py",
         "tools/run_picture_bench.py"
-      ]
+      ],
+      "blocked_by": "weights not on disk (measured) + 9.5 GB free vs ~12 GB needed; below the 10 GB operational floor",
+      "evidence": "state/evidence/identity_experiment_20261105T220650Z.json"
     },
     {
       "id": "R-E2",
@@ -45,9 +47,11 @@
       "workstream": "W1",
       "title": "Deterministic composite fallback: BiRefNet cutout of the real product + generated scene + matched shadow",
       "priority": 880,
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": "identity preserved by construction; text_accuracy 100% on reference cases",
-      "licence": "MIT (installed)"
+      "licence": "MIT (installed)",
+      "landed": "Northstar_backend/product_composite.py + 7 CPU tests (placement, clamping, shadow, empty-cutout refusal, identity_check)",
+      "next": "generate a scene canvas, BiRefNet the real photo, compose, score the 12-case dev set; needs the GPU lane and RAM >= 4 GB"
     },
     {
       "id": "R-E5",
@@ -327,7 +331,9 @@
     "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot.",
     "FLUX 3 mi2i reference conditioning does not preserve product identity on this box: ssim 0.01-0.32, phash 26-28 vs the reference. Identity must come from a composite, not from conditioning (measured 2026-11-05, re-scored artifacts).",
     "GitHub search rate-limits at 10 req/min unauthenticated; a rate-limited sweep must be reported as a transport failure, never as \"no results\".",
-    "The competitor gap that matters most is identity: every competitor that does product photography preserves the product; our conditioning path does not, and we now measure that."
+    "The competitor gap that matters most is identity: every competitor that does product photography preserves the product; our conditioning path does not, and we now measure that.",
+    "A registry that says \"installed\" while the weights are gone is worse than a missing lane: it fails at call time, after the operator has planned around it. provider-suite now says weights_missing for qwen_image_edit.",
+    "Disk, not GPU, is currently the binding constraint for the identity fix: 9.5 GB free against roughly 12 GB of edit weights."
   ],
   "baseline": {
     "backend": {
