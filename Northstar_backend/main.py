@@ -157,6 +157,14 @@ try:
 except ImportError:  # pragma: no cover
     _HAS_ADPILOT = False
 
+# Local screen companion (2026-11-04) — local-only desktop awareness + voice.
+# Own guard: a capture/OCR problem must never boot-fail the product.
+try:
+    from local_screen_api import router as local_screen_router
+    _HAS_LOCAL_SCREEN = True
+except ImportError:  # pragma: no cover
+    _HAS_LOCAL_SCREEN = False
+
 # Phase 6: Production infrastructure
 from logging_config import setup_logging, get_logger
 from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
@@ -386,6 +394,10 @@ if _HAS_STUDIO_DASHBOARD:
 # AdPilot PPC lane (U9) — report in, validated bulk file out
 if _HAS_ADPILOT:
     app.include_router(adpilot_router)
+
+# Local screen companion — desktop awareness + local voice (operator only)
+if _HAS_LOCAL_SCREEN:
+    app.include_router(local_screen_router)
 
 # Chat core (S1/S2/S3) — Simple-mode Master Brain chat (SSE) + voice intake
 if _HAS_CHAT:
