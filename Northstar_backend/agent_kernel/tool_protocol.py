@@ -29,8 +29,8 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional, Sequence, Tuple
 
 CANONICAL_ACTIONS: Tuple[str, ...] = (
-    "list", "read", "grep", "write", "write_many", "apply_patch",
-    "ast_edit", "ast_edit_batch", "run", "finish",
+    "list", "read", "grep", "ast_grep", "repo_pack", "write", "write_many",
+    "apply_patch", "ast_edit", "ast_edit_batch", "run", "finish",
 )
 
 #: small, explicit aliases. Nothing is inferred from prose.
@@ -57,6 +57,9 @@ _SCHEMA: Dict[str, Dict[str, Tuple[type, bool]]] = {
     "list": {"path": (str, False)},
     "read": {"path": (str, True)},
     "grep": {"pattern": (str, True), "path": (str, False), "max_hits": (int, False)},
+    "ast_grep": {"pattern": (str, True), "path": (str, False),
+                 "lang": (str, False), "max_hits": (int, False)},
+    "repo_pack": {"path": (str, False), "max_chars": (int, False)},
     "write": {"path": (str, True), "content": (str, True)},
     "write_many": {"files": (list, True)},
     "apply_patch": {"patch": (str, True)},
@@ -68,7 +71,8 @@ _SCHEMA: Dict[str, Dict[str, Tuple[type, bool]]] = {
 }
 
 _PATH_ARG = {"read": "path", "write": "path", "ast_edit": "path",
-             "apply_patch": None, "list": "path", "grep": "path"}
+             "apply_patch": None, "list": "path", "grep": "path",
+             "ast_grep": "path", "repo_pack": "path"}
 
 #: Argument-name aliases a small lane actually emits. Only names that map to an
 #: existing schema key are accepted; anything else is still rejected.

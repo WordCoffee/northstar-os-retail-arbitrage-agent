@@ -1,0 +1,42 @@
+{
+  "v3_execution_20261105": {
+    "status": "DONE - state merged, idle systems wired, audit live; A14B 30s and official nutrition/UPC blocked on missing weights/data",
+    "state": {
+      "pending_fragments_merged": 59,
+      "registry_keys_before": 39,
+      "registry_keys_after": 98,
+      "backup": "backups/state/00_STATE_20261105T050724884861Z.json",
+      "correction": "the flat 20261104_v3_readiness_closure.json was wrapped as v3_readiness_closure_20261104; the 12 junk metadata keys it produced were removed by restoring the pre-merge backup and re-merging only valid entries"
+    },
+    "wiring": {
+      "memory_lifecycle": "TysAssistant.memory; submit attaches scope.memory_context, completion writes the outcome; failures never block; 3 tests",
+      "mcp_server": "tools/northstar_mcp_server.py, 6 read-only tools over stdio; 3 tests",
+      "coding_lane": "Workspace.ast_grep + Workspace.repo_pack, schema/path-scope wired; 3 tests",
+      "override_audit": "video_guard.audit_override -> state/audit/human_features_overrides.jsonl; 7 video-guard tests"
+    },
+    "video": {
+      "15s_master": "existing Wan 2.2 5B master, silent by construction",
+      "30s_a14b": "BLOCKED - Q4_K_M experts staged in ComfyUI/models/_incoming, not in diffusion_models; no A14B graph; disk headroom would fall below the 10 GB floor if both are copied",
+      "audio": "no 30s audio bed/voice track produced; no loudness claim"
+    },
+    "packaging": {
+      "dieline": "renders/mogra_lions_mane/print/dieline_6oz.{svg,pdf} + dieline_manifest.json",
+      "status": "dieline_ready_data_blocked",
+      "blocker": "official UPC/GTIN and Supplement Facts values are not in the repo; the current label carries DRAFT and a placeholder barcode",
+      "required": ["UPC/GTIN + symbology", "Supplement Facts rows and %DV", "ingredients/allergens/warnings", "lot/best-by and distributor block", "converter dimensions/material confirmation"]
+    },
+    "heavy_lanes": {
+      "report": "reports/heavy_lanes_readiness_20261105.json",
+      "docs": "docs/HEAVY_LANES.md",
+      "ready": ["b3_relight"],
+      "blocked": ["b2_layout_ocr", "b4_image_to_3d", "video_a14b"]
+    },
+    "verification": {
+      "focused_suite": "184 passed",
+      "new_tests": {"memory_lifecycle": 3, "mcp": 3, "video_guard": 7, "coding_toolchain": 3},
+      "full_suite": "6105 passed, 117 skipped, 2 xfailed, 0 failed in 15:57 (logs/v3_full_suite_timeout.log)"
+    },
+    "gates_held": "No Amazon request, no spend, no credential read, no cloud inference, no policy/allowlist change.",
+    "report": "reports/v3_execution_20261105.md"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-11-05T05:13:18Z",
+  "comfy_root": "C:\\Users\\T2Hol\\ComfyUI",
+  "lanes": [
+    {
+      "lane": "b2_layout_ocr",
+      "purpose": "Docling/Paddle layout + table structure for labels and dielines",
+      "status": "missing_packages",
+      "integrated": false,
+      "missing_packages": [
+        "docling",
+        "paddleocr"
+      ],
+      "missing_weights": [],
+      "missing_comfy_weights": [],
+      "missing_nodes": [],
+      "note": "Install in a staging venv first; it pulls a second OCR stack."
+    },
+    {
+      "lane": "b3_relight",
+      "purpose": "IC-Light foreground relighting for product scenes",
+      "status": "ready_for_validation",
+      "integrated": true,
+      "missing_packages": [],
+      "missing_weights": [],
+      "missing_comfy_weights": [],
+      "missing_nodes": [],
+      "note": "SD15-class base + the IC-Light node; run after FLUX, never beside it."
+    },
+    {
+      "lane": "b4_image_to_3d",
+      "purpose": "TRELLIS / InstantMesh image-to-mesh packshots",
+      "status": "weights_not_installed",
+      "integrated": false,
+      "missing_packages": [],
+      "missing_weights": [
+        "C:\\Users\\T2Hol\\models\\trellis\\TRELLIS-image-large\\model.safetensors",
+        "C:\\Users\\T2Hol\\models\\instantmesh\\instantmesh.safetensors"
+      ],
+      "missing_comfy_weights": [],
+      "missing_nodes": [],
+      "note": "No TRELLIS/InstantMesh weights on disk yet; 4B-class VRAM plan required."
+    },
+    {
+      "lane": "video_a14b",
+      "purpose": "Wan 2.2 A14B chained 30 s master",
+      "status": "weights_not_installed",
+      "integrated": false,
+      "missing_packages": [],
+      "missing_weights": [],
+      "missing_comfy_weights": [
+        "C:\\Users\\T2Hol\\ComfyUI\\models\\diffusion_models\\Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf",
+        "C:\\Users\\T2Hol\\ComfyUI\\models\\diffusion_models\\Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf"
+      ],
+      "missing_nodes": [],
+      "note": "Weights are staged in _incoming; ComfyUI has no A14B graph and cannot see them."
+    }
+  ],
+  "ready": [
+    "b3_relight"
+  ],
+  "blocked": [
+    "b2_layout_ocr",
+    "b4_image_to_3d",
+    "video_a14b"
+  ]
+}

@@ -280,6 +280,67 @@ class Workspace:
                 continue
         return ToolResult(True, "\n".join(hits) or "no matches")
 
+    def _cli(self, argv: List[str], *, timeout: float = 60.0) -> ToolResult:
+        """Run a read-only CLI inside the workspace; paths never leave it."""
+        exe = shutil.which(argv[0])
+        if not exe:
+            return ToolResult(False, error=f"{argv[0]} is not installed")
+        try:
+            proc = subprocess.run([exe] + argv[1:], cwd=str(self.root),
+                                  capture_output=True, text=True, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            return ToolResult(False, error=f"{argv[0]} timed out after {timeout}s")
+        except OSError as exc:
+            return ToolResult(False, error=f"{argv[0]} failed: {exc}")
+        output = (proc.stdout or "") + (proc.stderr or "")
+        if proc.returncode != 0:
+            return ToolResult(False, error=output[-1200:] or f"exit {proc.returncode}")
+        return ToolResult(True, output)
+
+    def ast_grep(self, pattern: str, path: str = ".", lang: str = "python",
+                 max_hits: int = 60) -> ToolResult:
+        """Structural search via ast-grep (read-only, workspace-scoped)."""
+        try:
+            root = self.resolve(path)
+        except ValueError as exc:
+            return ToolResult(False, error=str(exc))
+        try:
+            rel = str(root.relative_to(self.root)).replace("\\", "/") or "."
+        except ValueError:
+            return ToolResult(False, error="path outside workspace")
+        scope_error = self.read_scope_error(rel)
+        if scope_error:
+            return ToolResult(False, error=scope_error)
+        result = self._cli(["ast-grep", "run", "--pattern", str(pattern),
+                            "--lang", str(lang), rel], timeout=45)
+        if not result.ok:
+            return result
+        lines = (result.output or "").splitlines()
+        return ToolResult(True, "\n".join(lines[:max(1, int(max_hits))]) or "no matches")
+
+    def repo_pack(self, path: str = ".", max_chars: int = 20000) -> ToolResult:
+        """Pack the workspace into a bounded context block via repomix."""
+        try:
+            root = self.resolve(path)
+        except ValueError as exc:
+            return ToolResult(False, error=str(exc))
+        try:
+            rel = str(root.relative_to(self.root)).replace("\\", "/") or "."
+        except ValueError:
+            return ToolResult(False, error="path outside workspace")
+        scope_error = self.read_scope_error(rel)
+        if scope_error:
+            return ToolResult(False, error=scope_error)
+        result = self._cli(["repomix", "--stdout", "--style", "plain", "--quiet", rel],
+                           timeout=90)
+        if not result.ok:
+            return result
+        text = (result.output or "").strip()
+        limit = max(1000, min(int(max_chars), 120000))
+        if len(text) > limit:
+            text = text[:limit] + f"\n... [truncated at {limit} chars]"
+        return ToolResult(True, text or "no files packed")
+
     def write(self, path: str, content: str) -> ToolResult:
         """Write one text file: protected-path check, atomic swap, bounded wait.
 
@@ -444,6 +505,13 @@ class Workspace:
                 return self.read(args["path"])
             if tool == "grep":
                 return self.grep(args["pattern"], args.get("path", "."))
+            if tool == "ast_grep":
+                return self.ast_grep(args["pattern"], args.get("path", "."),
+                                     args.get("lang", "python"),
+                                     args.get("max_hits", 60))
+            if tool == "repo_pack":
+                return self.repo_pack(args.get("path", "."),
+                                      args.get("max_chars", 20000))
             if tool == "write":
                 return self.write(args["path"], args.get("content", ""))
             if tool == "write_many":

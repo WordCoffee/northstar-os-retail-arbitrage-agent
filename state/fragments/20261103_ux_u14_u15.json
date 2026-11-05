@@ -1,0 +1,68 @@
+{
+  "ux_rebuild_u14_u15_20261103": {
+    "status": "U0-U15 COMPLETE - fragment, pending operator merge into 00_STATE.json",
+    "commits": {
+      "u14_complete": "7f45df79",
+      "u15": "72c33dd4",
+      "tags": ["ns-ux-U14-complete", "ns-ux-U15"]
+    },
+    "u14_adjudication": {
+      "verdict": "13/13 of the full-suite e2e failures are PRE-EXISTING",
+      "method": "git worktree at ns-ux-baseline a2d12f5e, own Vite on 127.0.0.1:8102 with its own node_modules copy, same backend, identical grep/timeout/projects; current tree never stashed (worktree removed afterwards)",
+      "result": "baseline 2 passed / 14 not passing, HEAD 4 passed / 12 on the same 16 runs",
+      "now_passing": "asset_dashboard 'lists packages' on both targets (the mobile one was in the original 13, so that run had one flake)",
+      "fixed_by_spec_correction": "simple-designs design picker asserted the dialog name 'Choose a Simple mode design', which U1's naming rule replaced with 'Choose a Northstar design' - expectation corrected, 2 passed, other assertions unchanged",
+      "remaining": "10 pre-existing failures: 6 stale chat-surface specs waiting for chat-input on /design-studio (that route left the chat shell before U0), 2 asset_dashboard lane triggers blocked by MEDIA_GEN_LIVE (at HEAD the lane renders and reports media_generation_disarmed), 2 phone-profile timeouts on the 8124 lab pages",
+      "evidence": [
+        "reports/ty/e2e_adjudication/README.md",
+        "reports/ty/e2e_adjudication/head.json",
+        "reports/ty/e2e_adjudication/baseline.json"
+      ]
+    },
+    "u14_screenshots": {
+      "spec": "tests/e2e/service-screens.spec.ts",
+      "coverage": "24 services x 2 targets (chromium-desktop, chromium-mobile)",
+      "location": "reports/ty/shots/services/{project}/ + manifest.json (bytes + sha256)",
+      "run": "2 passed (1.8m)",
+      "git_note": ".gitignore:80 excludes reports/**/*.png (pre-existing policy, also keeps the u6/u7/u8/u10 shots out), so the committed record is the manifest"
+    },
+    "backend_full_suite": {
+      "head": "5926 collected -> 15 failed, 5792 passed, 117 skipped, 2 xfailed (666 s)",
+      "u0_recorded_baseline": "5912 collected -> 30 failed, 5763 passed, 117 skipped, 2 xfailed",
+      "attribution": "9 of 15 also fail at a2d12f5e; 5 are DevShimSessionTests from an UNCOMMITTED working-tree test file (KeyError: 'app', not this run); 1 was ours and is fixed",
+      "our_regression_fixed": "tools/check-jsx-imports.py flagged kit/Glass.jsx <Tag> - a destructured { as: Tag } prop alias, so the guard was wrong. Checker now resolves capitalised destructured bindings; test_shell_role_contract gains a two-sided regression test (Tag counts as a binding AND an unbound <Ghost /> is still reported). 9 passed, checker exit 0 across 148 .jsx files.",
+      "after_fix": "14 failed (derived from the single fixed test; the full suite was not re-run)",
+      "evidence": [
+        "reports/ty/e2e_adjudication/backend_head.txt",
+        "reports/ty/e2e_adjudication/backend_baseline.txt"
+      ]
+    },
+    "u15": {
+      "scope": "the 11 autothink + 5 local_model failures",
+      "before": "15 failed, 35 passed",
+      "after": "50 passed, 0 failed (+ 39 passed across test_coding_agent / test_coding_runner / test_local_model)",
+      "defects": [
+        "autothink/backend/llm_adapter.py lost build_system_prompt_with_context in 7ace8f0b (2026-10-27) while server.py:53 kept importing it -> the whole AutothinK app failed to import; restored verbatim",
+        "the same commit dropped UnifiedLLMAdapter.local_available / .list_local_models / ._local_fallback (server.py:168-169, llm_adapter.py:435); restored, the two probes delegate to the module functions the rewrite made canonical",
+        "agent_kernel/local_model.py read num_ctx that was never a parameter (3669f651 copied the OllamaChatModel line) -> NameError on construction; accepted and recorded, deliberately not put on the wire"
+      ],
+      "live_proof": "after restarting through scripts/dev-start.ps1, GET /api/autothink/models returns local_available true and the installed models instead of the AttributeError body; cloud_live_armed stays false",
+      "report": "reports/ty/u15_suite_green_20261103.md"
+    },
+    "numbers": {
+      "ui_unit": "201 passed (npm run test:ui, re-counted per file; the U14 verdict's 202 counted one more)",
+      "build": "1.54 s",
+      "bundle_guard": "14 passed, 0 failed",
+      "e2e_owned_after_fix": "simple-designs picker 2 passed; service-screens 2 passed"
+    },
+    "open": [
+      "10 pre-existing e2e failures (named in reports/ty/e2e_adjudication/README.md)",
+      "9 pre-existing backend failures that reproduce at the baseline commit",
+      "5 backend failures from another session's uncommitted test file - not touched",
+      "owner decision queued in reports/ty/needs_you.md: does the Design Studio keep its own chat box, or do the three stale specs move to /ui/workbench (default if silent)?",
+      "U13 studio scene still ~45 fps against a 60 budget; the recorded lever is baking the full-screen backdrop"
+    ],
+    "gates_held": "No Amazon, no spend, no paid credits, no credential read or print, no policy/allowlist change. One dev-stack restart via scripts/dev-start.ps1 (loopback only, tailscale serve status = No serve config).",
+    "quality_claim": false
+  }
+}

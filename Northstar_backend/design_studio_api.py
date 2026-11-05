@@ -1951,6 +1951,9 @@ def generate_media(body: GenerateIn, acct: str = Depends(studio_account)):
         import video_guard as _vg
         guard = _vg.check_prompt(body.brief,
                                  acknowledged=body.human_features_ack)
+        if guard["requires_override"]:
+            _vg.audit_override(acct, "generate", body.brief, guard["matched"],
+                               body.human_features_ack)
         if guard["blocked"]:
             raise HTTPException(status_code=422, detail=_vg.guard_detail(
                 body.brief, acknowledged=body.human_features_ack))
@@ -2213,6 +2216,9 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
     from pathlib import Path
 
     guard = _vg.check_prompt(body.prompt, acknowledged=body.human_features_ack)
+    if guard["requires_override"]:
+        _vg.audit_override(acct, "shorts", body.prompt, guard["matched"],
+                           body.human_features_ack)
     if guard["blocked"]:
         raise HTTPException(status_code=422, detail=_vg.guard_detail(
             body.prompt, acknowledged=body.human_features_ack))

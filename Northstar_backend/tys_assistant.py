@@ -1506,9 +1506,13 @@ class TysAssistant:
         orchestrator: Optional[OllamaOrchestrator] = None,
         adapters: Optional[Dict[str, Adapter]] = None,
         evidence_dir: Optional[str] = None,
+        memory: Optional[Any] = None,
     ):
         self.store = store or TysStore()
         self.orchestrator = orchestrator or OllamaOrchestrator()
+        # Long-term memory is optional: tests and read-only tools can omit it,
+        # and a memory failure must never block a task.
+        self.memory = memory
         self.adapters: Dict[str, Adapter] = adapters or {
             "inspect": InspectAdapter(),
             "coding": CodingWorkerAdapter(),
@@ -1690,6 +1694,14 @@ class TysAssistant:
             "finished_at": None,
             "_planning": str(work_order.get("planning") or "orchestrator"),
         }
+        if self.memory is not None:
+            try:
+                context = self.memory.context(task["owner"] or "operator",
+                                              objective, budget_tokens=400)
+                if context.get("text"):
+                    task["scope"]["memory_context"] = context
+            except Exception:  # noqa: BLE001 - memory never blocks submission
+                pass
         task = self.store.save(task)
         self.store.event(task["id"], "task_created", {
             "title": task["title"], "objective": objective, "scope": scope,
@@ -1783,6 +1795,7 @@ class TysAssistant:
         task["status"] = "done" if res.status == "complete" else res.status
         self.store.save(task)
         self.store.event(task_id, "kernel_result", res.to_dict())
+        self._remember_outcome(task, res.status, getattr(res, "summary", ""))
         self._checkpoint(task)
         return res.to_dict()
 
@@ -1917,7 +1930,21 @@ class TysAssistant:
             "status": task["status"], "stop_reason": task["stop_reason"],
             "cursor": task["cursor"], "of": len(task["steps"]),
         })
+        self._remember_outcome(task, task["status"], task["stop_reason"])
         return task
+
+    def _remember_outcome(self, task: Dict[str, Any], status: str,
+                          detail: str = "") -> None:
+        """Store the bounded task outcome; a memory failure never fails the task."""
+        if self.memory is None:
+            return
+        try:
+            text = (f"Task {task.get('id')}: {task.get('objective')}\n"
+                    f"Outcome: {status}. {detail or ''}").strip()
+            self.memory.remember_text(task.get("owner") or "operator",
+                                      text[:4000], source=f"task:{task.get('id')}")
+        except Exception:  # noqa: BLE001 - memory is best-effort
+            pass
 
     def _execute_step(self, task: Dict[str, Any], step: Dict[str, Any]) -> StepResult:
         lane = step["lane"]
@@ -2128,7 +2155,16 @@ def default_assistant() -> TysAssistant:
     global _DEFAULT
     with _DEFAULT_LOCK:
         if _DEFAULT is None:
-            _DEFAULT = TysAssistant()
+            memory = None
+            try:
+                from tys_ops.memory import MemoryIndex
+
+                path = os.environ.get("TYS_MEMORY_DB") or os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), "data", "tys_memory.db")
+                memory = MemoryIndex(path, semantic=True)
+            except Exception:  # noqa: BLE001 - memory is optional
+                memory = None
+            _DEFAULT = TysAssistant(memory=memory)
         return _DEFAULT
 
 
