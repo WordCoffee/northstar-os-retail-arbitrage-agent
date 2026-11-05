@@ -21,7 +21,7 @@ import os
 import re
 import urllib.error
 import urllib.request
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import geometry_profiles
 
@@ -132,6 +132,97 @@ def _clean(text: str) -> str:
     return text[:800]
 
 
+#: SYSTEM says "under 70 words"; the authored prompt is held to the same number.
+MAX_PROMPT_WORDS = 70
+
+#: Below this, refinement left nothing renderable and the caller must re-author.
+MIN_PROMPT_WORDS = 2
+
+#: Where a banned type term hides: a clause boundary. Splitting on these lets the
+#: refinement drop the clause that names a logo without touching the rest.
+_CLAUSE_SEP = re.compile(
+    r"([,;.]|\s+(?:with|and|featuring|displaying|showing|including)\s+)",
+    re.IGNORECASE)
+
+
+def refine_prompt(text: str) -> Dict[str, Any]:
+    """Make an authored prompt satisfy the SYSTEM contract before it renders.
+
+    The author is a language model and can ignore its own contract: it returns
+    "a blank carton with a small logo", the caller warns, and the renderer still
+    receives a prompt that invites type onto the plate. Warning and rendering
+    anyway is not compliance.
+
+    This pass is deterministic and additive-nothing: it removes the clause that
+    carries a banned term, trims trailing content past the word cap, and refuses
+    when too little survives to render. It never invents replacement copy - a
+    prompt it cannot make compliant is a prompt the caller must re-author.
+
+    Returns ``{"prompt", "removed", "words_before", "words_after"}``.
+    Raises :class:`PromptAuthorUnavailable` when nothing usable survives.
+    """
+    raw = str(text or "").strip()
+    words_before = len(raw.split())
+
+    parts = _CLAUSE_SEP.split(raw)
+    kept: List[Any] = []
+    removed: List[str] = []
+    pending = ""
+    for index, part in enumerate(parts):
+        if index % 2 == 1:          # a separator, held until its clause decides
+            pending = part
+            continue
+        clause = part.strip()
+        if not clause:
+            continue
+        if _BANNED.search(clause):
+            removed.append(clause)
+            pending = ""
+            continue
+        kept.append((pending, clause))
+        pending = ""
+
+    out = ""
+    for sep, clause in kept:
+        if not out:
+            out = clause
+            continue
+        token = sep.strip()
+        if token in (",", ";", "."):
+            out += token + " " + clause
+        elif token:
+            out += " " + token + " " + clause
+        else:
+            out += " " + clause
+    if raw.endswith(".") and out and not out.endswith("."):
+        out += "."
+
+    if len(out.split()) > MAX_PROMPT_WORDS:
+        sentences = [s for s in re.split(r"(?<=[.;])\s+", out) if s.strip()]
+        trimmed = ""
+        for sentence in sentences:
+            candidate = (trimmed + " " + sentence).strip()
+            if len(candidate.split()) > MAX_PROMPT_WORDS:
+                break
+            trimmed = candidate
+        if not trimmed:
+            trimmed = " ".join(out.split()[:MAX_PROMPT_WORDS]).rstrip(",;:") + "."
+        removed.append(f"{len(out.split()) - len(trimmed.split())} words beyond the "
+                       f"{MAX_PROMPT_WORDS}-word cap")
+        out = trimmed
+
+    out = re.sub(r"\s+", " ", out).strip()
+    words_after = len(out.split())
+    if words_after < MIN_PROMPT_WORDS:
+        raise PromptAuthorUnavailable(
+            "refined_prompt_too_thin: nothing usable survived refinement "
+            f"({words_before} words in, {len(removed)} clause(s) removed)")
+    if _BANNED.search(out):
+        raise PromptAuthorUnavailable("refined_prompt_still_mentions_type_terms")
+    return {"prompt": out, "removed": removed,
+            "words_before": words_before, "words_after": words_after}
+
+
 def author_prompt(brief: Dict[str, Any], *, url: Optional[str] = None,
                   model: Optional[str] = None, timeout: float = 240.0) -> Dict[str, Any]:
     """Ask the local 27B for the plate prompt. Never returns a template."""
@@ -177,8 +268,14 @@ def author_prompt(brief: Dict[str, Any], *, url: Optional[str] = None,
         warnings.append("prompt_mentions_type_terms: " + ", ".join(banned))
     if len(text.split()) > 90:
         warnings.append("prompt_over_90_words")
-    return {"ok": True, "prompt": text, "model": payload.get("model") or model_id,
-            "url": endpoint, "warnings": warnings, "brief": brief}
+    # The renderer only ever sees a prompt that satisfies the SYSTEM contract.
+    # `warnings` still reports what the model actually wrote, so a model that
+    # keeps violating the brief is visible instead of silently corrected.
+    refined = refine_prompt(text)
+    return {"ok": True, "prompt": refined["prompt"],
+            "model": payload.get("model") or model_id,
+            "url": endpoint, "warnings": warnings, "refinement": refined,
+            "brief": brief}
 
 
 def main(argv: Optional[list] = None) -> int:
@@ -202,5 +299,5 @@ if __name__ == "__main__":
     raise SystemExit(main())
 
 
-__all__ = ["author_prompt", "build_brief", "PromptAuthorUnavailable",
-           "DEFAULT_URL", "DEFAULT_MODEL", "SYSTEM"]
+__all__ = ["author_prompt", "build_brief", "refine_prompt", "PromptAuthorUnavailable",
+           "MAX_PROMPT_WORDS", "DEFAULT_URL", "DEFAULT_MODEL", "SYSTEM"]
