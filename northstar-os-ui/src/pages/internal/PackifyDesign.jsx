@@ -17,6 +17,20 @@ import {
   meterLine,
   normaliseMeter,
 } from '../../lib/creditMeter.js'
+import {
+  PACKIFY_SESSIONS_KEY,
+  contentFor,
+  decodeSessions,
+  encodeSessions,
+} from '../../lib/packifySessions.js'
+
+function readSessions() {
+  try {
+    return decodeSessions(window.localStorage.getItem(PACKIFY_SESSIONS_KEY))
+  } catch {
+    return { sessions: [], active: null }
+  }
+}
 
 const SUGGESTED = [
   'Start a new packaging design from scratch',
@@ -34,11 +48,20 @@ export default function PackifyDesign({ toast }) {
   const [prompt, setPrompt] = useState('')
   const [meter, setMeter] = useState(() => normaliseMeter(null))
   const [meterLoading, setMeterLoading] = useState(true)
-  const [sessions, setSessions] = useState([])
-  const [active, setActive] = useState(null)
+  const [restored] = useState(readSessions)
+  const [sessions, setSessions] = useState(restored.sessions)
+  const [active, setActive] = useState(restored.active)
   const [loading, setLoading] = useState(false)
   const [failure, setFailure] = useState(null)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(() => contentFor(restored.sessions, restored.active))
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(PACKIFY_SESSIONS_KEY, encodeSessions(sessions, active))
+    } catch {
+      /* storage blocked or full: the sessions simply stay in memory */
+    }
+  }, [sessions, active])
 
   const loadMeter = useCallback(async () => {
     setMeterLoading(true)
