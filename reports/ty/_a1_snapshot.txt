@@ -1,0 +1,52 @@
+﻿# A1 system snapshot 2026-11-05T14:01:40.6441019-06:00
+## RAM
+TotalMB=15791 FreeMB=4648
+## DISK
+C: total=926.5GB free=10.6GB
+## GPU
+NVIDIA GeForce RTX 5080 Laptop GPU, 16303 MiB, 0 MiB, 16003 MiB, 0 %
+## TOP PROCESSES (by WS)
+claude pid=19052 ws=482MB
+Memory Compression pid=3888 ws=480MB
+opencode pid=10316 ws=396MB
+MsMpEng pid=5620 ws=376MB
+claude pid=11428 ws=328MB
+python pid=7236 ws=303MB
+explorer pid=4136 ws=300MB
+msedgewebview2 pid=15816 ws=299MB
+chrome pid=17860 ws=289MB
+claude pid=1028 ws=245MB
+opencode pid=27508 ws=218MB
+dwm pid=2512 ws=171MB
+## LISTENING PORTS
+:::135 pid=2256
+0.0.0.0:135 pid=2256
+169.254.83.107:139 pid=4
+192.168.1.170:139 pid=4
+100.101.52.118:443 pid=7512
+fd7a:115c:a1e0::e401:34ec:443 pid=7512
+:::445 pid=4
+:::1462 pid=4
+127.0.0.1:4097 pid=10316
+0.0.0.0:5040 pid=10652
+:::5357 pid=4
+127.0.0.1:9080 pid=5216
+:::11434 pid=16060
+127.0.0.1:13508 pid=4
+127.0.0.1:14630 pid=5452
+127.0.0.1:26822 pid=27908
+127.0.0.1:32683 pid=10592
+127.0.0.1:33683 pid=10592
+::1:42050 pid=25432
+:::49664 pid=1508
+0.0.0.0:49664 pid=1508
+:::49665 pid=1932
+0.0.0.0:49665 pid=1932
+:::49666 pid=2932
+0.0.0.0:49666 pid=2932
+:::49667 pid=3688
+0.0.0.0:49667 pid=3688
+:::49668 pid=4608
+0.0.0.0:49668 pid=4608
+:::49669 pid=1988
+0.0.0.0:49669 pid=1988

@@ -1,115 +1,245 @@
 {
-  "schema_version": 1,
-  "updated": "2026-11-05T00:00:00Z",
+  "schema_version": 2,
+  "updated": "2026-11-05T21:30:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
-  "phase": "A",
+  "phase": "C",
   "work_order": "reports/ty/autonomy_work_order.md",
+  "plan": "reports/ty/production_plan.md",
+  "probe": "reports/ty/capability_probe.md",
   "caps": {
     "token_cap_per_day": 3000000,
-    "tokens_used_today": 0,
+    "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
+  "cycle": 1,
+  "last_measured": "2026-11-05T21:16:58Z",
   "items": [
     {
       "id": "init-1",
       "kind": "init",
       "title": "Save work order + scaffolding files",
-      "status": "done",
-      "done_at": "2026-11-05"
+      "status": "done"
     },
     {
       "id": "init-2",
       "kind": "init",
-      "title": "Tag autonomy-baseline + measured full test run -> tests/BASELINE.json",
-      "status": "in_progress",
-      "write_paths": ["tests/BASELINE.json", "reports/ty/"]
+      "title": "Tag autonomy-baseline + measured full test run",
+      "status": "done",
+      "note": "Pre-change measured run 2026-11-05T14:00Z: backend 6196 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. BASELINE.json update deferred to the post-Phase-B run because this run predates 45 new tests.",
+      "evidence": "reports/ty/_baseline_autonomy_20261105.txt"
     },
     {
-      "id": "A1",
+      "id": "A-a4",
       "kind": "probe",
-      "title": "Whole-system awareness",
-      "status": "pending"
+      "title": "A4 web research (was MISSING: unknown_tool)",
+      "status": "done",
+      "fixed_by": "GRANT 01 f029dd2b + tools/web_research.py"
     },
     {
-      "id": "A2",
+      "id": "A-a6",
       "kind": "probe",
-      "title": "Persistent planning (disk-only resume)",
-      "status": "pending"
+      "title": "A6 MCP client (was MISSING)",
+      "status": "done",
+      "fixed_by": "GRANT 01 f029dd2b + tools/mcp_client.py"
     },
     {
-      "id": "A3",
+      "id": "A-a7",
       "kind": "probe",
-      "title": "Unattended loop (improvement_backlog + supervisor)",
-      "status": "pending"
+      "title": "A7 context compaction (was PARTIAL: unwired, estimator blind)",
+      "status": "done",
+      "fixed_by": "b19582e0"
     },
     {
-      "id": "A4",
+      "id": "A-a9",
       "kind": "probe",
-      "title": "Web and repo research (GitHub + HF + README + license)",
-      "status": "pending"
+      "title": "A9 vision QA (was MISSING: qwen2.5vl returns garbage)",
+      "status": "done",
+      "fixed_by": "GRANT 02 4e69f0f1 (gemma3:4b + json mode + fallback)"
     },
     {
-      "id": "A5",
+      "id": "A-a10",
       "kind": "probe",
-      "title": "Package vetting (vet_package.py, transport failure refuses)",
-      "status": "pending"
+      "title": "A10 reference generation (PARTIAL: both paths render, library now exists, not wired to API)",
+      "status": "partial",
+      "next": "W1-cycle-3: accept a reference id in /api/design-studio/*"
     },
     {
-      "id": "A6",
+      "id": "A-a3",
       "kind": "probe",
-      "title": "MCP client (consume one local MCP server)",
-      "status": "pending"
+      "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
+      "status": "partial",
+      "next": "W0: author/evaluator for backlog proposals"
     },
     {
-      "id": "A7",
-      "kind": "probe",
-      "title": "Context management at 70% (compaction / handoff)",
-      "status": "pending"
+      "id": "W2-c1",
+      "kind": "workstream",
+      "workstream": "W2",
+      "title": "Listing optimization: build the scorecard, measure the current output",
+      "status": "pending",
+      "priority": 720,
+      "dwell": "until-production-ready",
+      "write_paths": [
+        "Northstar_backend/specialists/listing_optimizer.py",
+        "Northstar_backend/listing_scorecard.py",
+        "Northstar_backend/test_listing_scorecard.py",
+        "eval/listings/"
+      ],
+      "acceptance": "listing scorecard exists, 40 held-out listings scored, claim-safety measured"
     },
     {
-      "id": "A8",
-      "kind": "probe",
-      "title": "Local image generation via ComfyUI (stop/restore cycle)",
-      "status": "pending"
+      "id": "W2-c2",
+      "kind": "workstream",
+      "workstream": "W2",
+      "title": "Listing optimization: close the largest scorecard gap",
+      "status": "pending",
+      "priority": 720,
+      "blocked_by": "W2-c1"
     },
     {
-      "id": "A9",
-      "kind": "probe",
-      "title": "Vision QA (qwen2.5vl rubric -> valid JSON)",
-      "status": "pending"
+      "id": "W3-c1",
+      "kind": "workstream",
+      "workstream": "W3",
+      "title": "PPC: scorecard over three historical search-term reports",
+      "status": "pending",
+      "priority": 680,
+      "dwell": "bounded 6"
     },
     {
-      "id": "A10",
-      "kind": "probe",
-      "title": "Reference-based generation (stored ref + uploaded ref)",
-      "status": "pending"
+      "id": "W1-c2",
+      "kind": "workstream",
+      "workstream": "W1",
+      "title": "Product pictures: fidelity measured on the product region, not the whole frame; enable instruction+quality axes on a 12-case run",
+      "status": "pending",
+      "priority": 650,
+      "dwell": "until-production-ready",
+      "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%"
     },
     {
-      "id": "A11",
-      "kind": "probe",
-      "title": "UI verification (Chromium + iPhone 12 WebKit screenshots)",
-      "status": "pending"
+      "id": "W1-c3",
+      "kind": "workstream",
+      "workstream": "W1",
+      "title": "Product pictures: reference id in the API contract; text-safe guard on the reference path",
+      "status": "pending",
+      "priority": 650,
+      "blocked_by": "W1-c2"
     },
     {
-      "id": "A12",
-      "kind": "probe",
-      "title": "Scorecard evals (numeric score for a workstream)",
-      "status": "pending"
+      "id": "W4-c1",
+      "kind": "workstream",
+      "workstream": "W4",
+      "title": "Research: freshness + completeness scorecard on fixtures",
+      "status": "pending",
+      "priority": 600,
+      "dwell": "bounded 6"
     },
     {
-      "id": "A13",
-      "kind": "probe",
-      "title": "Rollback (tag -> change -> restore -> identical)",
-      "status": "pending"
+      "id": "W5-c1",
+      "kind": "workstream",
+      "workstream": "W5",
+      "title": "Golden Goose: precision/recall on 120 labelled fixtures",
+      "status": "pending",
+      "priority": 480,
+      "dwell": "bounded 5"
     },
     {
-      "id": "A14",
-      "kind": "probe",
-      "title": "Self-model (self_assessment.md)",
-      "status": "pending"
+      "id": "W7-c1",
+      "kind": "workstream",
+      "workstream": "W7",
+      "title": "Packaging: readiness verdict correctness on 10 hand-made packs",
+      "status": "pending",
+      "priority": 440,
+      "dwell": "bounded 5"
+    },
+    {
+      "id": "W13-parked",
+      "kind": "workstream",
+      "workstream": "W13",
+      "title": "Billing stubs: parked on an owner-configured processor",
+      "status": "needs-owner",
+      "priority": 420
+    },
+    {
+      "id": "W6-c1",
+      "kind": "workstream",
+      "workstream": "W6",
+      "title": "Design studio: print round-trip on a real die drawing",
+      "status": "pending",
+      "priority": 405,
+      "dwell": "until-production-ready"
+    },
+    {
+      "id": "W10-c1",
+      "kind": "workstream",
+      "workstream": "W10",
+      "title": "Performance: enforce p95 budgets for render/listing/scan",
+      "status": "pending",
+      "priority": 360,
+      "dwell": "bounded 4"
+    },
+    {
+      "id": "W11-c1",
+      "kind": "workstream",
+      "workstream": "W11",
+      "title": "Onboarding: steps-to-first-artifact on a scripted journey",
+      "status": "pending",
+      "priority": 350,
+      "dwell": "bounded 4"
+    },
+    {
+      "id": "W9-c1",
+      "kind": "workstream",
+      "workstream": "W9",
+      "title": "Security: automate the production-bundle dev-bypass assertion",
+      "status": "pending",
+      "priority": 300,
+      "dwell": "bounded 3"
+    },
+    {
+      "id": "W12-c1",
+      "kind": "workstream",
+      "workstream": "W12",
+      "title": "Observability: injected-fault detection rate",
+      "status": "pending",
+      "priority": 300,
+      "dwell": "bounded 3"
+    },
+    {
+      "id": "W14-c1",
+      "kind": "workstream",
+      "workstream": "W14",
+      "title": "Docs: fresh-clone-to-green runbook check",
+      "status": "pending",
+      "priority": 160,
+      "dwell": "bounded 2"
+    },
+    {
+      "id": "W8-c1",
+      "kind": "workstream",
+      "workstream": "W8",
+      "title": "UX: three scripted journeys as a held-out regression set",
+      "status": "pending",
+      "priority": 140,
+      "dwell": "bounded 2"
+    },
+    {
+      "id": "W0-c1",
+      "kind": "self",
+      "title": "Author/evaluator: turn a failing test into an authorized, scoped task with a best-of-N patch loop",
+      "status": "pending",
+      "priority": 1000,
+      "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
     }
   ],
-  "workstreams": [],
-  "lesons": []
+  "parked": [
+    "W13 billing (owner-configured processor)",
+    "real-esrgan model upscaling (known hazard, not worth another attempt yet)"
+  ],
+  "lessons": [
+    "A measurement instrument can be the defect: qwen2.5vl answered 'unparsed' for every image, so no vision verdict from before 2026-11-05 can be trusted.",
+    "The image lane is RAM-blocked before it is model-blocked: 2368 MB free refused a render that succeeded at 4679 MB.",
+    "A scorecard dimension that is 'unavailable' must never be averaged in as a pass; and a dimension that is 'not_applicable' is not a gap.",
+    "Set consistency compares images inside a scenario, never across scenarios.",
+    "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot."
+  ]
 }

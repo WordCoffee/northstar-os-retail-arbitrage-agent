@@ -79,3 +79,39 @@ decision.
 
 docs/CREATIVE_LANES.md is the operator-facing map of the surfaces, endpoints, contracts and gaps.
 eports/ty/SESSION_20261103.md is the index of this session's units, commits, probes and artifacts.
+
+
+---
+
+# Autonomy program — needs you (2026-11-05)
+
+Five owner actions. None of them block the program; each is the one thing only you can do.
+
+## A1. A reference set of your *preferred* listing style (blocks W2's held-out set)
+
+The listing workstream (rank 1 by impact x gap) can be measured mechanically — length, claim
+safety, keyword coverage — but "is this a good listing" needs a target. Please give me 10-40
+listings you consider good (your own, or published ones you admire). Without them W2 can only clear
+the mechanical bar, and I will say so in every report rather than call it production ready.
+
+## A2. The current Amazon ad-video spec, as a document
+
+The two Amazon video presets stay `verified: false` because reading Amazon's own pages is a standing
+gate. Upload the spec (or paste the requirements) and the presets flip to verified with a checked
+date. No Amazon request is made by the loop either way.
+
+## A3. Final nutrition values, UPC and best-by format
+
+Needed for print, not for pictures. The panel currently carries `DRAFT · VERIFY BEFORE PRINT`.
+
+## A4. A top-up payment processor (parks W13)
+
+Stripe or equivalent, a merchant account, and a price table. Until then the credit ledger runs in
+meter-only mode and the billing workstream stays parked.
+
+## A5. The product-picture design call
+
+`renders/mogra_lions_mane/product_front.png` / `product_back.png` are service-produced: FLUX 3 plate,
+designed panel, OCR gate passed. What only you can judge is whether the *design* is right. Say what
+to change and it becomes the next design task; silence leaves the current artwork as the declared
+design.
