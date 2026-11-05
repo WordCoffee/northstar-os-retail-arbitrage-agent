@@ -42,8 +42,8 @@ type PageResult = {
   ms: number
   pageErrors: string[]
   consoleErrors: string[]
-  criticalViolations: { id: string; nodes: number; help: string }[]
-  seriousViolations: { id: string; nodes: number; help: string }[]
+  criticalViolations: { id: string; nodes: number; help: string; targets?: string[]; evidence?: string[] }[]
+  seriousViolations: { id: string; nodes: number; help: string; targets?: string[]; evidence?: string[] }[]
   reason?: string
 }
 
@@ -65,6 +65,12 @@ async function measurePage(page: any, route: string): Promise<PageResult> {
   try {
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' })
     await expect(page.locator('main')).toBeVisible({ timeout: 45000 })
+    // Let the 300 ms entry fade finish before measuring. `.fade-in` animates
+    // opacity, and measuring a heading mid-fade reported #cccbc1 on paper
+    // (1.43:1) for a heading that is actually near-black — a false positive.
+    // A fixed wait, not getAnimations(): the celestial scene animates forever,
+    // so waiting for "no running animations" never resolves.
+    await page.waitForTimeout(450)
     const heading = page.locator('h1, h2').first()
     result.heading = (await heading.textContent({ timeout: 15000 }).catch(() => ''))?.trim() || ''
     result.ms = Date.now() - started
@@ -81,12 +87,21 @@ async function measurePage(page: any, route: string): Promise<PageResult> {
   if (result.ok) {
     try {
       const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()
+      const shape = (v: any) => ({
+        id: v.id,
+        nodes: v.nodes.length,
+        help: v.help.slice(0, 120),
+        // The selector is what makes a violation fixable without guessing, and
+        // the summary carries the measured fg/bg/ratio for a contrast failure.
+        targets: v.nodes.slice(0, 3).map((n: any) => String(n.target?.[0] || '').slice(0, 120)),
+        evidence: v.nodes.slice(0, 2).map((n: any) => String(n.failureSummary || '').slice(0, 200)),
+      })
       result.criticalViolations = axe.violations
         .filter((v) => v.impact === 'critical')
-        .map((v) => ({ id: v.id, nodes: v.nodes.length, help: v.help.slice(0, 120) }))
+        .map(shape)
       result.seriousViolations = axe.violations
         .filter((v) => v.impact === 'serious')
-        .map((v) => ({ id: v.id, nodes: v.nodes.length, help: v.help.slice(0, 120) }))
+        .map(shape)
     } catch (err: any) {
       result.reason = `axe_failed: ${String(err?.message || err).slice(0, 200)}`
     }

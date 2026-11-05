@@ -11,8 +11,13 @@
   --surface-active: #ece6da;
   --ink: #1a1a1a;
   --ink-mid: #5a5a4a;
-  --ink-soft: #8a8a7a;
-  --ink-faint: #b0af9a;
+  /* Measured 2026-11-05 with axe on the real pages: #8a8a7a on --paper is
+     2.93:1 and #b0af9a is 1.9:1, so muted copy and placeholders failed WCAG AA.
+     #6b6b5c is 4.77:1 and #6f6e5f is 4.62:1 on --paper, and both keep the
+     warm-grey character. The dark shells override these tokens in chat.css and
+     simple.css, so only light surfaces move. */
+  --ink-soft: #6b6b5c;
+  --ink-faint: #6f6e5f;
   --pine-deep: #1a2e1a;
   --pine: #1d4a1d;
   --pine-mid: #2d5a2d;
