@@ -30,6 +30,7 @@ export default function CommandPalette({ onClose }) {
           <input
             ref={inputRef}
             type="text"
+            aria-label="Search rooms and services"
             placeholder="Search rooms, services…"
             value={query}
             onChange={e => { setQuery(e.target.value); setFocused(0) }}

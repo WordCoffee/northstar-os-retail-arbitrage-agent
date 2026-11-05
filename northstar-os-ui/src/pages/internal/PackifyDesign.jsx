@@ -144,7 +144,7 @@ export default function PackifyDesign({ toast }) {
         <div>
           <Card>
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-              <input value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="What would you like to design?" style={{ flex: 1, padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'inherit' }} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); run() } }} />
+              <input aria-label="Describe the product to design" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="What would you like to design?" style={{ flex: 1, padding: '8px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'inherit' }} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); run() } }} />
               <button type="button" className="btn btn-primary" onClick={() => run()} disabled={loading} title={verdict.ok ? '' : verdict.message}>{loading ? 'Designing…' : 'Generate'}</button>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>

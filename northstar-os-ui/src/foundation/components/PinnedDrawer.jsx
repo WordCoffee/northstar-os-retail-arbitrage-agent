@@ -62,7 +62,7 @@ export default function PinnedDrawer({ toast }) {
             ))
           )}
           <div className="fs-drawer-add">
-            <input className="field" placeholder="Pin a note…" value={note}
+            <input className="field" aria-label="Pin a note" placeholder="Pin a note…" value={note}
                    onChange={(e) => setNote(e.target.value)}
                    onKeyDown={(e) => e.key === 'Enter' && addNote()} />
             <button className="btn btn-primary" onClick={addNote}>Pin</button>

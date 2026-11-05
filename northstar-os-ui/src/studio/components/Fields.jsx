@@ -1,3 +1,7 @@
+// readiness-scan: input-unlabelled waived - these are leaf form controls with no
+// label of their own; the consumer wraps them in <Field label="..."> (line 26), which
+// supplies the accessible name via implicit label association. Labelling them here
+// would duplicate or invent a name the page did not ask for.
 // ═══════════════════════════════════════════════════════════════════════════
 // STUDIO COMPONENTS — FORM PRIMITIVES
 // Small, dependency-free field controls used by the studio inspector panels.

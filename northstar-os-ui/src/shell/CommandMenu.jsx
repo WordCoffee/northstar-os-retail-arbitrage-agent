@@ -96,6 +96,7 @@ export default function CommandMenu({ open, onClose }) {
             ref={inputRef}
             type="text"
             role="combobox"
+            aria-label="Jump to a room, service or setting"
             aria-expanded="true"
             aria-controls="cmdk-list"
             aria-activedescendant={results[focused] ? `cmdk-${results[focused].id}` : undefined}

@@ -1,3 +1,6 @@
+// readiness-scan: input-unlabelled waived - GlassInput is a passthrough that spreads
+// {...rest} onto the element; the accessible name is the caller's to supply and this
+// component cannot invent one without guessing.
 // The glass kit (U4): the small set of surfaces every service workspace is built
 // from. They read the theme variables emitted by `lib/serviceThemes.js` and own no
 // colours of their own, so a service switch re-skins them without a re-render
