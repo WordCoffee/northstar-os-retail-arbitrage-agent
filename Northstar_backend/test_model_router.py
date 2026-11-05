@@ -34,7 +34,9 @@ def test_local_defaults_by_tier():
         assert mr.SUITE["text"]["tiers"][tier]["local_engine"] == "bojo"
     # Vision tiers use a dedicated VL model: the 27B text model ships no
     # projector (ollama show capabilities: tools/thinking/completion only).
-    assert mr.resolve("local", "V1").model == "qwen2.5vl:7b"
+    # gemma3:4b since 2026-11-05: qwen2.5vl:7b returns unparseable output on
+    # this runner (see reports/ty/grants.md, GRANT 02).
+    assert mr.resolve("local", "V1").model == "gemma3:4b"
     assert mr.resolve("local", "T2").available is True
 
 
@@ -50,7 +52,7 @@ def test_installed_matching_ignores_ollama_latest_tag():
     """Ollama reports `bojo:latest`; the suite names `bojo`. Same model."""
     r = mr.resolve("local", "T2", installed=["bojo:latest", "qwen2.5vl:7b"])
     assert r.available is True and r.reason == "ok"
-    assert mr.resolve("local", "V1", installed=["qwen2.5vl:7b"]).available is True
+    assert mr.resolve("local", "V1", installed=["gemma3:4b"]).available is True
 
 
 def test_no_local_alternate_is_advertised():
@@ -200,7 +202,7 @@ def test_resolve_vision_understand_cloud():
 
 def test_resolve_vision_understand_local():
     r = mr.resolve_vision("V2", "local", "understand")
-    assert r.model == "qwen2.5vl:7b" and r.available is True
+    assert r.model == "gemma3:4b" and r.available is True
 
 
 def test_resolve_vision_generate_local_comfyui():
@@ -220,19 +222,19 @@ def test_resolve_vision_local_missing_model_is_not_available():
     r = mr.resolve_vision("V1", "local", "understand", installed=["northstaros-qwen3.8:27b"])
     assert r.available is False
     assert r.reason == "local_model_not_installed"
-    assert r.model == "qwen2.5vl:7b"  # config value still reported
+    assert r.model == "gemma3:4b"  # config value still reported
 
 
 def test_resolve_vision_local_present_model_is_available():
     r = mr.resolve_vision("V1", "local", "understand",
-                          installed=["qwen2.5vl:7b", "northstaros-qwen3.8:27b"])
+                          installed=["gemma3:4b", "northstaros-qwen3.8:27b"])
     assert r.available is True and r.reason == "ok"
 
 
 def test_catalog_vision_local_status_tracks_installed():
     missing = mr.catalog([])["vision_local_status"]
     assert set(missing.values()) == {"local_model_not_installed"}
-    present = mr.catalog(["qwen2.5vl:7b"])["vision_local_status"]
+    present = mr.catalog(["gemma3:4b"])["vision_local_status"]
     assert set(present.values()) == {"ok"}
 
 

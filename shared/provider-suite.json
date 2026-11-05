@@ -567,7 +567,7 @@
       "name": "MCP client (modelcontextprotocol python-sdk)",
       "kind": "protocol",
       "runtime": "python",
-      "lanes": ["local", "cloud"],
+      "lanes": ["local"],
       "license": "MIT",
       "commercial_ok": true,
       "network": false,
@@ -575,7 +575,7 @@
       "installed": "installed",
       "source": "https://github.com/modelcontextprotocol/python-sdk",
       "unlocks": "Let Ty CONSUME MCP servers (filesystem, git, docs, databases) instead of only serving them. tools/mcp_client.py: initialize/list_tools/call_tool over stdio with a hard timeout and an audit log.",
-      "notes": "GRANTED 2026-11-05 (Ty autonomy work order). Licence read from the upstream LICENSE file (Apache License header is not present; the README and the PyPI metadata both say MIT, and the repo LICENSE file is MIT). Installed as mcp 2.1.1 in the backend's own Python 3.14. network:false is about the *client library*; an individual server it connects to may itself use the network, and that is the server's own gate, not this one. Every call is journaled to logs/mcp_client.jsonl. Verified: connected to tests/fixtures/mcp_echo_server.py, listed 2 tools, called add(2,3) -> 5."
+      "notes": "GRANTED 2026-11-05 (Ty autonomy work order). Licence read from the upstream LICENSE file (Apache License header is not present; the README and the PyPI metadata both say MIT, and the repo LICENSE file is MIT). Installed as mcp 2.1.1 in the backend's own Python 3.14. LOCAL LANE ONLY, deliberately: the library is MIT and carries no network of its own, but on the cloud lane it would hand a customer-facing process an unvetted external-tool surface, and the cloud lane's rule is that every tool is separately reviewed and armed. network:false is about the *client library*; a server it connects to may itself use the network, and that is the server's own gate. Every call is journaled to logs/mcp_client.jsonl. Verified: connected to tests/fixtures/mcp_echo_server.py, listed 2 tools, called add(2,3) -> 5."
     },
     "web_research_trafilatura": {
       "name": "Trafilatura page extraction",
