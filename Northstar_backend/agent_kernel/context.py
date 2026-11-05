@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 from dataclasses import dataclass
@@ -113,7 +114,13 @@ class Compactor:
                 *, limit_tokens: int = 8000) -> CompactionResult:
         """Keep anchors + the most recent messages, and say what was dropped."""
         anchors = list(anchors)
-        used = sum(self.estimate_tokens(str(m.get("content", ""))) for m in messages)
+        # Estimate from the whole message, not just a "content" key: a coding
+        # transcript stores its observations under "output", and estimating only
+        # "content" made a 6000-character history read as zero tokens, so the
+        # threshold could never fire (found 2026-11-05 by the first test that
+        # actually called this with a real transcript).
+        used = sum(self.estimate_tokens(json.dumps(m, default=str))
+                   for m in messages)
         if not self.should_compact(used, limit_tokens):
             return CompactionResult(list(messages), 0, len(anchors), "below threshold")
         keep_recent = 4

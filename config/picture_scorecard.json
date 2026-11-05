@@ -1,0 +1,30 @@
+{
+  "_doc": "Product-picture scorecard. The marketplace block holds commonly cited values, not confirmed rules; confirm with the owner before treating compliance as a guarantee.",
+  "marketplace": {
+    "pure_white_rgb": [255, 255, 255],
+    "white_tolerance": 2,
+    "min_fill": 0.85,
+    "min_side_px": 1000,
+    "preferred_side_px": 2000,
+    "allow_text_on_main": false
+  },
+  "quality": {
+    "preference_floor": 0.15,
+    "preference_good": 0.30,
+    "sharpness_floor": 40.0,
+    "sharpness_good": 220.0
+  },
+  "identity": {
+    "max_phash_distance": 24,
+    "min_ssim": 0.40,
+    "good_ssim": 0.55
+  },
+  "speed": {
+    "good_seconds": 75.0,
+    "fail_seconds": 300.0
+  },
+  "bar": {
+    "min_dimension": 85,
+    "required_compliance": 100
+  }
+}

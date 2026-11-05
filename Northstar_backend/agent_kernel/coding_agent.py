@@ -14,6 +14,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from .coding_tools import ToolResult, Workspace
 from . import tool_protocol as protocol
+from .context import Compactor, write_handoff
 
 Model = Callable[[str], str]
 Acceptance = Callable[[], Tuple[bool, str]]
@@ -34,6 +35,10 @@ class CodingResult:
     # action is a different failure from one the executor refused on scope.
     protocol_errors: int = 0
     scope_rejections: int = 0
+    # How many times the transcript was compacted to stay inside the window.
+    # A compaction is announced to the model and recorded in the handoff, so a
+    # long run degrades visibly instead of silently losing its early evidence.
+    compactions: int = 0
 
     def to_dict(self) -> dict:
         return {"ok": self.ok, "summary": self.summary, "steps": self.steps,
@@ -41,6 +46,7 @@ class CodingResult:
                 "acceptance_recovered": self.acceptance_recovered,
                 "protocol_errors": self.protocol_errors,
                 "scope_rejections": self.scope_rejections,
+                "compactions": self.compactions,
                 "transcript": self.transcript[-20:]}
 
 
@@ -78,7 +84,10 @@ class CodingAgent:
                  acceptance: Optional[Acceptance] = None,
                  required_artifact: str = "",
                  max_protocol_errors: int = 3,
-                 allowed_tools: Optional[Sequence[str]] = None):
+                 allowed_tools: Optional[Sequence[str]] = None,
+                 context_limit_tokens: int = 8000,
+                 compact_at: float = 0.70,
+                 handoff_path: Optional[str] = None):
         self.tools = workspace if isinstance(workspace, Workspace) else Workspace(workspace)
         self.model = model
         self.max_steps = max(1, int(max_steps))
@@ -91,6 +100,15 @@ class CodingAgent:
         self.max_protocol_errors = max(0, int(max_protocol_errors))
         tools = [str(t) for t in (allowed_tools or ()) if str(t)]
         self.allowed_tools = tuple(t for t in tools if t in protocol.CANONICAL_ACTIONS) or None
+        # Context management: the transcript is the thing that grows without
+        # bound in a long run, and an agent that silently loses its early
+        # evidence makes repairs blind. At `compact_at` of the window the
+        # oldest observations are collapsed, the model is told, and a durable
+        # handoff is written so the dropped context is still on disk.
+        self.context_limit_tokens = max(256, int(context_limit_tokens))
+        self.compact_at = min(0.95, max(0.3, float(compact_at)))
+        self.handoff_path = str(handoff_path or "").strip() or None
+        self.compactions = 0
         self._failing: List[str] = []
         self._reads = 0
         # Every read ACTION counts, including one the discipline refuses: a lane
@@ -126,9 +144,11 @@ class CodingAgent:
             return CodingResult(ok, summary, step, files_, history_, error,
                                 acceptance_recovered=acceptance_recovered,
                                 protocol_errors=protocol_errors,
-                                scope_rejections=scope_rejections)
+                                scope_rejections=scope_rejections,
+                                compactions=self.compactions)
 
         for step in range(1, self.max_steps + 1):
+            history = self._maybe_compact(task, history, step)
             pressure = bool(self.required_artifact) and not written and step > 2
             prompt = self._prompt(task, history, pressure=pressure, stall=stalls > 0)
             try:
@@ -481,6 +501,48 @@ class CodingAgent:
             + "RECENT TOOL RESULTS:\n" + ("\n".join(observed) or "(none)") + "\n\n"
             "Next JSON object:"
         )
+
+    def _context_tokens(self, history: List[Dict[str, Any]]) -> int:
+        return Compactor.estimate_tokens(json.dumps(history or [], default=str))
+
+    def _maybe_compact(self, task: str, history: List[Dict[str, Any]],
+                       step: int) -> List[Dict[str, Any]]:
+        """Collapse the oldest observations once the window is 70 percent full.
+
+        Returns the history to use this turn. When compaction happens the model
+        is handed an explicit marker (so it knows evidence was summarised, not
+        lost) and a handoff file is written to disk. No summary is invented: the
+        anchors, the task and the surviving observations are the summary.
+        """
+        if not history:
+            return history
+        used = self._context_tokens(history)
+        if used / float(self.context_limit_tokens) < self.compact_at:
+            return history
+        anchor = {"role": "system",
+                  "content": "TASK ANCHOR: " + str(task or "")[:600]}
+        result = Compactor(threshold=self.compact_at).compact(
+            history, [anchor], limit_tokens=self.context_limit_tokens)
+        if not result.dropped:
+            return history
+        self.compactions += 1
+        if self.handoff_path:
+            try:
+                write_handoff(
+                    self.handoff_path,
+                    goal=str(task or "")[:400],
+                    constraints=["compacted at step %d (%d tokens of %d)"
+                                 % (step, used, self.context_limit_tokens)],
+                    decisions=["dropped %d older observations; anchors kept"
+                               % result.dropped,
+                               "files touched so far: " + (", ".join(sorted(self._edited)) or "none")],
+                    evidence_paths=sorted(self._edited))
+            except OSError:
+                # A handoff that cannot be written must not kill the run, but it
+                # is recorded in the transcript rather than swallowed.
+                result.messages.append({"role": "observation", "tool": "handoff",
+                                        "output": "ERROR: handoff not writable"})
+        return list(result.messages)
 
     def _compact_history(self, history: List[Dict[str, Any]]) -> List[str]:
         """Last N observations, deduped, with failure text given more room."""
