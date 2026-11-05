@@ -1236,7 +1236,7 @@ export default function ChatSurface({
                 <>
                   <button type="button" className="chat-rail-item"
                     onClick={() => loadSession(s.id)}>
-                    {s.title || 'New chat'}
+                    <span className="chat-rail-title">{s.title || 'New chat'}</span>
                     <span className="chat-rail-meta">{relTime(s.updated_at)}</span>
                   </button>
                   <button type="button" className="chat-rail-edit" aria-label="Rename session"

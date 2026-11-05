@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-05T23:05:00Z",
+  "updated": "2026-11-06T00:05:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -76,9 +76,9 @@
       "priority": 780,
       "status": "in_progress",
       "evidence": "state/evidence/ux_scorecard_chromium-desktop_*.json",
-      "fixed_so_far": "global hidden h1 removed (pages now announce their own title); muted/placeholder tokens darkened for AA (#8a8a7a 2.93:1 -> #6b6b5c 4.77:1; #b0af9a -> #6f6e5f 4.62:1); scorecard waits for the entry fade so it stops measuring half-transparent text.",
-      "next": "1) tabIndex on the two scrollable regions (main, .stage-canvas-pane); 2) documents page contrast (h1 + subtitle still fail on its own surface); 3) workspace heading: /ui and /ui/home still resolve to \"Bojo\" as the first heading - give the workspace a page h1 and demote the dock to h2.",
-      "measured": "20 page-measurements across desktop Chromium + iPhone 12 WebKit: 20/20 render, 0 critical a11y, 0 console errors, 2 remaining serious patterns (documents contrast, scrollable-region-focusable)."
+      "fixed_so_far": "page h1 is the page title (app-name h1 removed); muted/placeholder ink clears AA; dev banner no longer alarm-red; session titles clamp to two lines with an ellipsis instead of clipping mid-word; starter prompts are full-width rows with an arrow affordance; main is a focusable scroll region; the scorecard waits out the entry fade and records selectors + measured fg/bg ratios.",
+      "next": "1) .mb-shell .chat-empty h3 is NOT visible in the Northstar shell (screenshot reports/ty/shots/ux_chromium-desktop_first_run_ui_home.png) - the greeting heading is missing or scrolled out while the paragraph renders; find why before touching spacing. 2) The shell suggestion grid still renders 2+1 because simple.css overrides .chat-suggestions with a grid (simple.css:287, :719) - stack it or use an even 3-up. 3) The status chip row still clips the last theme name (\"Concept Spacious'\"). 4) documents page contrast + .stage-canvas-pane focus.",
+      "measured": "20 page-measurements over desktop Chromium + iPhone 12 WebKit: 20/20 render, 0 critical a11y, 0 console errors. Gates green together with smoke.spec (10/10)."
     },
     {
       "id": "W2-c1",

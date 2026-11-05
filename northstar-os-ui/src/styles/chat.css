@@ -40,8 +40,15 @@
 .chat-rail-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
 .chat-rail-item {
   text-align: left; border: 1px solid transparent; border-radius: var(--radius-sm);
-  background: transparent; padding: 8px 10px; cursor: pointer; color: var(--ink-mid);
+  background: transparent; padding: 9px 10px; cursor: pointer; color: var(--ink-mid);
   font-size: 12.5px; line-height: 1.35;
+}
+/* A session title is a sentence, not a code field: wrap it to two lines and
+   ellipsis the rest. The old row clipped mid-word ("...now by calling genera")
+   with no signal that anything was missing. */
+.chat-rail-title {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; overflow-wrap: anywhere;
 }
 .chat-rail-item:hover { background: var(--surface-hover); }
 .chat-rail-item.active { background: var(--surface-active); border-color: var(--divider-mid); color: var(--ink); }
@@ -116,16 +123,22 @@
 .chat-queue-note .spark { color: var(--spark); font-weight: 600; }
 .chat-hint { font-size: 11px; color: var(--ink-faint); padding: 2px 4px; }
 
-.chat-empty { max-width: 640px; margin: 6vh auto 0; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
-.chat-empty h3 { margin: 0; font-family: var(--font-serif); font-size: 30px; font-weight: 700; color: var(--ink); }
-.chat-empty p { margin: 0; color: var(--ink-mid); font-size: 13.5px; line-height: 1.65; }
+.chat-empty { max-width: 640px; margin: 0 auto; padding: 24px 0 8px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; min-height: 100%; }
+.chat-empty h3 { margin: 0; font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--ink); }
+.chat-empty p { margin: 0; color: var(--ink-mid); font-size: 13.5px; line-height: 1.65; max-width: 58ch; }
 .chat-empty .chat-empty-rule { width: 64px; height: 3px; background: var(--spark); border-radius: 2px; }
-.chat-suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+/* Starter prompts read as a short list, not a wrapping card grid: one column,
+   left-aligned, full width. Scanning three rows is faster than reading a 2+1
+   grid whose last card leaves a hole. */
+.chat-suggestions { display: flex; flex-direction: column; gap: 8px; width: min(560px, 100%); }
 .chat-suggestion {
-  border: 1px solid var(--divider-mid); background: var(--surface); border-radius: 999px;
-  padding: 6px 14px; font-size: 12.5px; color: var(--ink-mid); cursor: pointer;
+  border: 1px solid var(--divider-mid); background: var(--surface); border-radius: 12px;
+  padding: 12px 14px; font-size: 13px; color: var(--ink); cursor: pointer;
+  text-align: left; width: 100%; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; line-height: 1.45;
 }
-.chat-suggestion:hover { border-color: var(--pine); color: var(--pine); }
+.chat-suggestion::after { content: '\2192'; color: var(--ink-soft); flex: none; }
+.chat-suggestion:hover { background: var(--surface-hover); border-color: var(--pine-light); }
 
 /* Media scope — cinematic dark ONLY where media lives (artifact previews,
    voice overlay). Set data-theme-scope="media" on any subtree. */

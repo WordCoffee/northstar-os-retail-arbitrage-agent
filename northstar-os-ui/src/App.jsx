@@ -285,7 +285,10 @@ function Shell() {
           // it. Measured 2026-10-28: the banner occupied (0,0,1760x33) with
           // background rgb(180,67,47) and elementFromPoint at its centre still
           // returned CANVAS.cosmic-canvas — present in the DOM, invisible on screen.
-          style={{ position: 'relative', zIndex: 10, background: '#b4432f', color: '#fff', textAlign: 'center', padding: '6px 12px', fontSize: 14, fontWeight: 700, letterSpacing: 0.5 }}>
+          // Restyled 2026-11-05: it is an environment notice, not an error. The
+          // alarm red made every page look broken on first load; the text is
+          // unchanged (the smoke test and the rules both depend on it).
+          style={{ position: 'relative', zIndex: 10, background: '#232a2e', color: '#e6e1d8', textAlign: 'center', padding: '5px 12px', fontSize: 12.5, fontWeight: 600, letterSpacing: 0.2, borderBottom: '1px solid #39434a' }}>
           DEV: AUTH DISABLED — local loopback only
         </div>
       )}
@@ -297,7 +300,7 @@ function Shell() {
       />
       <div className="body-layout">
         {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
-        <main className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
+        <main tabIndex={0} className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
           {/* The app name is not the page heading. This used to be an <h1>, which
               meant every route announced "Northstar OS" as its heading to a
               screen reader and the real page <h1> was the second one in the DOM.
