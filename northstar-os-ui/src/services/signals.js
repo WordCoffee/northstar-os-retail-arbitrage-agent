@@ -69,6 +69,9 @@ export const signals = {
   autothinkModels: () => get('/api/autothink/models'),
   autothinkHistory: (limit = 20) => get(`/api/autothink/history?limit=${limit}`),
   autothinkRun: (body) => postJson('/api/autothink/run', body),
+  // Credit ledger read (bff/v1, credit-ledger/v1 §3): display-only balance.
+  // The client never computes cost logic; it reads and shows this value.
+  credits: () => get('/api/v1/credits/me'),
   brainModels: () => get('/api/v1/models'),
   // Provider-scoped tool suite (local bench vs cloud customer lane).
   providerSuite: (provider) => get(`/api/v1/provider-suite${provider ? `?provider=${encodeURIComponent(provider)}` : ''}`),
