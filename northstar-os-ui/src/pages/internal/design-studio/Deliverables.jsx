@@ -162,6 +162,7 @@ export default function AssetDashboard() {
   const [busy, setBusy] = useState('')
   const [lastRun, setLastRun] = useState(null)
   const [manifest, setManifest] = useState(null)
+  const [query, setQuery] = useState('')
 
   const loadPackages = useCallback(async () => {
     setPackages(s => ({ ...s, loading: true, error: '' }))
@@ -260,6 +261,12 @@ export default function AssetDashboard() {
   }, [loadProposals])
 
   const assetLabel = useMemo(() => new Map(assets.map(a => [a.id, a.name || a.id])), [assets])
+  const filteredPackages = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return packages.rows
+    return packages.rows.filter(row =>
+      `${row.run_id} ${row.kind || ''} ${row.created_at || ''}`.toLowerCase().includes(q))
+  }, [packages.rows, query])
 
   return (
     <div className="stack" style={{ gap: 14 }} data-testid="asset-dashboard">
@@ -280,9 +287,23 @@ export default function AssetDashboard() {
         {!packages.loading && !packages.error && packages.rows.length === 0 && (
           <div className="text-low" style={{ marginTop: 10 }}>No packages yet.</div>
         )}
+        {packages.rows.length > 0 && (
+          <div className="field-group" style={{ marginTop: 12, maxWidth: 360 }}>
+            <label className="label" htmlFor="dash-filter">Filter packages</label>
+            <input id="dash-filter" className="field" type="search"
+                   placeholder="run id, kind or date" value={query}
+                   onChange={e => setQuery(e.target.value)}
+                   data-testid="dash-filter" />
+          </div>
+        )}
+        {query && filteredPackages.length === 0 && (
+          <div className="text-low" style={{ marginTop: 10 }}>
+            No package matches “{query}”.
+          </div>
+        )}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
                       gap: 12, marginTop: 12 }}>
-          {packages.rows.map(row => <PackageCard key={row.run_id} row={row} onOpenManifest={openManifest} />)}
+          {filteredPackages.map(row => <PackageCard key={row.run_id} row={row} onOpenManifest={openManifest} />)}
         </div>
       </div>
 

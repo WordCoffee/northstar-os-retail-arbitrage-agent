@@ -1,0 +1,14 @@
+{
+  "dashboard_filter_20261105": {
+    "status": "DONE - asset dashboard filter for commercial-scale package lists",
+    "what": "Filter packages by run id, kind or date; an explicit no-match state replaces a silently empty grid. Complements per-file sizes, total package size and manifest JSON copy/download.",
+    "files": ["northstar-os-ui/src/pages/internal/design-studio/Deliverables.jsx"],
+    "verification": {
+      "build": "npm run build, 0 errors",
+      "npm_test": "ui + contrast + galactic verifier pass",
+      "frontend_gate": "25 passed"
+    },
+    "gates_held": "UI-only; no lane was run.",
+    "report": "reports/v3_execution_20261105.md"
+  }
+}
