@@ -29,8 +29,38 @@ f029dd2b GRANT: register the MCP client and the research lane
 Tags: `autonomy-baseline` (e61ba173), `autonomy-grant-01-pre`, `autonomy-grant-02-pre`,
 `autonomy-cycle-01-pre`.
 
+## Creative + UX are now the front of the queue (owner directive 2026-11-05 22:1x)
+
+The owner said to start creative features and the UI/UX immediately, and to keep
+deep-researching against Packify, Perplexity Computer, Claude Code, Jungle Scout,
+Helium 10, tryholo and Canva until told to stop. So the ranking changed:
+
+- **UX is measured now, not "16/16 units done"**: `tests/e2e/ux_scorecard.spec.ts`
+  walks three journeys (first run, creative, research) on desktop Chromium and
+  iPhone 12 WebKit, runs axe on every page, and writes
+  `state/evidence/ux_scorecard_<project>_<journey>.json`.
+  Measured: **20/20 page-measurements render, 0 critical a11y, 0 console errors,
+  2 serious patterns left.** Fixed already: the app name was the `<h1>` on every
+  route (now each page announces its own title) and muted ink failed AA
+  (2.93:1 -> 4.77:1). Left: `tabIndex` on two scroll regions, the documents page's
+  own contrast, and `/ui` + `/ui/home` still having "Bojo" as their first heading.
+- **Creative identity is the top experiment** (`reports/ty/research_20261105.md`).
+  E1 (Qwen-Image-Edit-2511) is BLOCKED: the weights are not on disk and 12 GB is
+  needed against 9.5 GB free. The registry now says `weights_missing` instead of
+  lying. E2 (deterministic composite) landed as
+  `Northstar_backend/product_composite.py` with 7 CPU tests; its render step is
+  the next GPU job.
+
 ## Do this next, in order
 
+0. **UX** (`UX-a11y-1`): add `tabIndex={0}` to `main` and `.stage-canvas-pane`,
+   fix the documents page's own heading/subtitle contrast, and give `/ui` +
+   `/ui/home` a real page h1 (the Bojo dock becomes h2). Re-run
+   `npx playwright test tests/e2e/ux_scorecard.spec.ts` on both projects.
+1. **Creative** (`R-E2`): generate a scene canvas, BiRefNet the real photo,
+   `product_composite.place_product`, then score the 12-case dev set. This is the
+   run that should move `product_fidelity` off 0 for reference mode — the
+   competitor gap that matters most (tryholo-class identity).
 1. **W1-c2** — fix product fidelity: compare the product region, not the whole
    frame. Right now a correct lifestyle render scores 0 against a front
    packshot, which makes the dimension meaningless outside one scenario.
