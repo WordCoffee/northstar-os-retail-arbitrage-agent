@@ -1,0 +1,62 @@
+{
+  "overall": "failed",
+  "ok": false,
+  "module": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\routing.py",
+  "stage1": {
+    "ok": true,
+    "symbols": {
+      "ok": true,
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\routing.py",
+      "symbols": 9,
+      "duplicates": [],
+      "placeholders": []
+    },
+    "tests": {
+      "ok": true,
+      "exit": 0,
+      "seconds": 6.6,
+      "cmd": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_routing.py",
+        "-q"
+      ],
+      "output": "..............................                                           [100%]\n30 passed in 3.03s\n"
+    }
+  },
+  "stage2": {
+    "ok": false,
+    "status": "not_verified",
+    "reason": "no screenshot supplied; visual verification cannot pass"
+  },
+  "stage3": {
+    "ok": true,
+    "exit": 0,
+    "seconds": 2.7,
+    "cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ],
+    "output": "..                                                                       [100%]\n2 passed in 0.70s\n",
+    "status": "passed"
+  },
+  "graduated_at": "2026-11-05T05:27:17Z",
+  "plan": {
+    "tests_refs": [
+      "Northstar_backend/test_tys_routing.py"
+    ],
+    "stage2_applicable": false,
+    "e2e_cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ]
+  },
+  "report_file": "reports/v3_graduation_routing_20261104.json"
+}

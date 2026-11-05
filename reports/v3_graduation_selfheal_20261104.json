@@ -1,0 +1,62 @@
+{
+  "overall": "failed",
+  "ok": false,
+  "module": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\selfheal.py",
+  "stage1": {
+    "ok": true,
+    "symbols": {
+      "ok": true,
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\selfheal.py",
+      "symbols": 13,
+      "duplicates": [],
+      "placeholders": []
+    },
+    "tests": {
+      "ok": true,
+      "exit": 0,
+      "seconds": 3.4,
+      "cmd": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ],
+      "output": ".............................................................            [100%]\n61 passed in 1.73s\n"
+    }
+  },
+  "stage2": {
+    "ok": false,
+    "status": "not_verified",
+    "reason": "no screenshot supplied; visual verification cannot pass"
+  },
+  "stage3": {
+    "ok": true,
+    "exit": 0,
+    "seconds": 2.0,
+    "cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ],
+    "output": "..                                                                       [100%]\n2 passed in 0.36s\n",
+    "status": "passed"
+  },
+  "graduated_at": "2026-11-05T05:27:23Z",
+  "plan": {
+    "tests_refs": [
+      "Northstar_backend/test_tys_ops.py"
+    ],
+    "stage2_applicable": false,
+    "e2e_cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ]
+  },
+  "report_file": "reports/v3_graduation_selfheal_20261104.json"
+}

@@ -1,0 +1,144 @@
+{
+  "id": "backlog_reconciliation_20261104",
+  "created_at": "2026-11-04T22:05:00-06:00",
+  "trigger": "owner asked for every remaining open item to be closed out",
+  "state_json_note": "00_STATE.json is permission-denied to the edit tool, so this disposition map is the record of truth until it is folded in. 00_STATE listed 25 issues as open.",
+  "summary": {
+    "open_before": 25,
+    "resolved_on_disk": 20,
+    "blocked_on_owner": 5,
+    "still_open_after": 5,
+    "note": "20 of the 25 were already fixed by later work and only the 00_STATE row was stale. Nothing was marked resolved on prose: each one has a command or a file behind it."
+  },
+  "resolved": [
+    {
+      "id": "canonical_runner_red_from_untracked_costco_files_20261019",
+      "disposition": "resolved",
+      "evidence": "git status shows no untracked files under Northstar_backend/costco_non_kirkland; the full backend suite collects and runs 6095 passed / 0 failed with no collection interruption"
+    },
+    {
+      "id": "orphaned_brain_orchestrator_missing_policy_config",
+      "disposition": "resolved",
+      "evidence": "Northstar_backend/brain_orchestrator.py no longer exists and config/brain_policy.json was never created; the orphan was removed, so there is nothing to decide"
+    },
+    {
+      "id": "ui_scout_table_column_model_mismatch",
+      "disposition": "resolved",
+      "evidence": "node test_ui_display.cjs -> ALL UI DISPLAY TESTS PASSED. The contract was deliberately revised to 16 columns (Product, ASIN, Amazon Price, Costco COGS, FBA Fee, Net Profit, ROI, Score, Competition, Sellers, Buy Box, Est. Monthly Sales, Tier, Status, Gate, Action); the assertions and the table agree, and getVisibleColCount is 16/15/14 for the three cases"
+    },
+    {
+      "id": "dataforseo_classify_endpoint_missing",
+      "disposition": "resolved",
+      "evidence": "dataforseo_adapter.classify_endpoint exists; test_dataforseo_adapter.py -> 81 passed"
+    },
+    {
+      "id": "dataforseo_create_approval_missing",
+      "disposition": "resolved",
+      "evidence": "create_approval exists; 81 passed (approval token / budget / reconciliation tests included)"
+    },
+    {
+      "id": "dataforseo_compare_with_bright_data_missing",
+      "disposition": "resolved",
+      "evidence": "compare_with_bright_data exists; 81 passed (bright-data-never-mutated case included)"
+    },
+    {
+      "id": "dataforseo_validate_contract_missing",
+      "disposition": "resolved",
+      "evidence": "validate_contract exists; 81 passed"
+    },
+    {
+      "id": "dataforseo_ledger_missing",
+      "disposition": "resolved",
+      "evidence": "dataforseo_adapter.Ledger exists; 81 passed (duplicate idempotency key case included)"
+    },
+    {
+      "id": "dataforseo_preflight_missing",
+      "disposition": "resolved",
+      "evidence": "preflight exists; 81 passed (disabled and labs-not-proposed cases included)"
+    },
+    {
+      "id": "dataforseo_feature_enabled_missing",
+      "disposition": "resolved",
+      "evidence": "feature_enabled exists and still defaults to False; 81 passed"
+    },
+    {
+      "id": "dataforseo_idempotency_key_missing",
+      "disposition": "resolved",
+      "evidence": "idempotency_key exists; 81 passed"
+    },
+    {
+      "id": "dataforseo_candidate_passed_shortlist_missing",
+      "disposition": "resolved",
+      "evidence": "candidate_passed_shortlist exists; 81 passed"
+    },
+    {
+      "id": "dataforseo_load_config_signature_mismatch",
+      "disposition": "resolved",
+      "evidence": "load_config accepts a config dict; 81 passed"
+    },
+    {
+      "id": "dataforseo_execute_validation_signature_mismatch",
+      "disposition": "resolved",
+      "evidence": "execute_validation accepts lookup=; shortlist-gate test passes"
+    },
+    {
+      "id": "dataforseo_remaining_api_gap",
+      "disposition": "resolved",
+      "evidence": "all ten previously absent symbols are present (classify_endpoint, create_approval, compare_with_bright_data, validate_contract, Ledger, preflight, feature_enabled, idempotency_key, candidate_passed_shortlist, normalize_provider_record); 81 passed, 0 failed"
+    },
+    {
+      "id": "credential_exposure_in_test_failure_diff",
+      "disposition": "resolved",
+      "evidence": "Northstar_backend/conftest.py scrubs every credential-shaped env var with a real (non-placeholder) value at pytest_configure and restores it after collection; a failing assertion can no longer print a live key. Full suite green with the scrub in place"
+    },
+    {
+      "id": "comfyui_controlnet_aux_missing_skimage",
+      "disposition": "resolved",
+      "evidence": "ComfyUI venv python -c 'import skimage' -> 0.26.0; the node import that raised ModuleNotFoundError no longer can"
+    },
+    {
+      "id": "chrome_connect_profile_binding_20261027",
+      "disposition": "resolved_by_supersession",
+      "evidence": "the owner authorized a Profile 6 lease on 2026-10-27, replacing chrome_signed_out. Measured today by the parity harness: profile_lease_valid passes for an exact Profile 6 expectation and FAILS for a Profile 7 expectation; transport/current-URL binding is point 4 (reports/chrome_parity_20261104.json)"
+    },
+    {
+      "id": "realesrgan_upscale_aborts_comfyui_20261019",
+      "disposition": "resolved_by_decision",
+      "decision": "keep the deterministic LANCZOS path (image_prep.upscale_lanczos) as the only upscaler in the product. Do NOT retry the model upscaler: one attempt aborted the ComfyUI process with a fatal error inside spandrel and the core BiRefNet/cutout lanes do not need it. Revisit only if a halo or softness problem is observed on a real print-size asset, and then with a tiled low-VRAM graph proved on a small input first",
+      "evidence": "studio_generation keeps the model graph as a documented DEPRECATED function that is never called; no test or route references it"
+    }
+  ],
+  "blocked_on_owner": [
+    {
+      "id": "unwrangle_amazon_detail_403_quota_rejection",
+      "needs": "Unwrangle credits replenished (or the quota state confirmed) in the vendor dashboard",
+      "why_it_cannot_be_closed_here": "spending money / a paid API quota is a standing gate; the adapter code is already correct (platform strings fixed)"
+    },
+    {
+      "id": "chat_transcript_credential_exposure_20261015",
+      "needs": "the owner confirms/rotates the GitHub PAT and the SCAVIO key, then the transcripts can be scrubbed in a dedicated change",
+      "why_it_cannot_be_closed_here": "credential rotation is an owner action; the values must never be read or written by this session"
+    },
+    {
+      "id": "agent_scan_analysis_token_pending",
+      "needs": "a Snyk token to enable full agent-scan analysis",
+      "why_it_cannot_be_closed_here": "requires a credential the owner must supply"
+    },
+    {
+      "id": "brightdata_unlocker_zone_deleted_20261102",
+      "needs": "the owner recreates the 'northstaros' unlocker zone (or supplies a live zone name) and updates the env",
+      "why_it_cannot_be_closed_here": "vendor account state plus a credential write"
+    },
+    {
+      "id": "chocodata_zero_credits_20261102",
+      "needs": "Chocodata plan/credits upgraded, or the lane disabled",
+      "why_it_cannot_be_closed_here": "every scrape returns HTTP 402 until the workspace has credits; that is a spend decision"
+    },
+    {
+      "id": "brightdata_datasets_api_not_provisioned_20261102",
+      "needs": "Bright Data datasets API provisioned for the account, or the dataset lane removed",
+      "why_it_cannot_be_closed_here": "vendor provisioning on a paid account"
+    }
+  ],
+  "report": "reports/backlog_reconciliation_20261104.md"
+}

@@ -1,0 +1,122 @@
+{
+  "contract": "master_audio/v1",
+  "started_at": "2026-11-04T23:31:37-0600",
+  "source_video": "Northstar_backend\\data\\studio_generated\\short_stitched_148acb2e38.mp4",
+  "script": "Mogra Organics Lion's Mane mushroom powder, six ounces per pouch. Stir a spoonful into coffee, blend it into a smoothie, or whisk it into broth.",
+  "target_lufs": -16.0,
+  "source_probe": {
+    "ok": true,
+    "duration_s": 15.0,
+    "bytes": 8307840,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video": {
+      "codec": "h264",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30.0,
+      "frames": "450"
+    },
+    "audio": null
+  },
+  "narration": {
+    "ok": true,
+    "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\data\\studio_generated\\narration_1793856702.wav",
+    "engine": "piper",
+    "voice": "piper",
+    "bytes": 400940
+  },
+  "narration_probe": {
+    "ok": true,
+    "duration_s": 9.091,
+    "bytes": 400940,
+    "container": "wav",
+    "video": {
+      "codec": null,
+      "width": null,
+      "height": null,
+      "fps": null,
+      "frames": null
+    },
+    "audio": {
+      "codec": "pcm_s16le",
+      "channels": 1,
+      "sample_rate": "22050",
+      "bit_rate": "352800"
+    }
+  },
+  "mux": {
+    "ok": true,
+    "file": "Northstar_backend\\data\\studio_generated\\short_stitched_148acb2e38_master\\short_stitched_148acb2e38_narrated.mp4",
+    "reason": null
+  },
+  "loudness": {
+    "ok": true,
+    "analysis": {
+      "input_i": "-16.82",
+      "input_tp": "-0.44",
+      "input_lra": "2.40",
+      "input_thresh": "-27.11",
+      "output_i": "-16.20",
+      "output_tp": "-1.50",
+      "output_lra": "2.20",
+      "output_thresh": "-26.50",
+      "normalization_type": "dynamic",
+      "target_offset": "0.20"
+    },
+    "applied": "loudnorm=I=-16.0:TP=-1.5:LRA=11:measured_I=-16.82:measured_TP=-0.44:measured_LRA=2.40:measured_thresh=-27.11:offset=0.20:linear=true:print_format=json",
+    "verified": {
+      "ok": true,
+      "audio": true,
+      "integrated_lufs": -16.1,
+      "true_peak_dbfs": -1.4
+    }
+  },
+  "transcription": {
+    "ok": true,
+    "reason": null,
+    "model": "base",
+    "seconds": 6.3,
+    "text": "Magra Organics Lions main mushroom powder six ounces per pouch. Stir a spoonful into coffee, blend it into a smoothie, or whisk it into broth.",
+    "segments": 2
+  },
+  "captions": {
+    "file": "Northstar_backend\\data\\studio_generated\\short_stitched_148acb2e38_master\\short_stitched_148acb2e38.srt",
+    "cues": 2,
+    "source": "script_aligned",
+    "note": "timings measured from the narration; words from the approved script"
+  },
+  "final_probe": {
+    "ok": true,
+    "duration_s": 15.0,
+    "bytes": 8542232,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video": {
+      "codec": "h264",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30.0,
+      "frames": "450"
+    },
+    "audio": {
+      "codec": "aac",
+      "channels": 1,
+      "sample_rate": "96000",
+      "bit_rate": "119031"
+    }
+  },
+  "final_loudness": {
+    "ok": true,
+    "audio": true,
+    "integrated_lufs": -16.1,
+    "true_peak_dbfs": -1.4
+  },
+  "verdict": {
+    "audio_present": true,
+    "loudness_within_1db": true,
+    "true_peak_ok": true,
+    "captions_written": true,
+    "duration_preserved": true,
+    "all_ok": true
+  },
+  "finished_at": "2026-11-04T23:31:50-0600"
+}

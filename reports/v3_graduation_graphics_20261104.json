@@ -1,0 +1,81 @@
+{
+  "overall": "passed",
+  "ok": true,
+  "module": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\graphics.py",
+  "stage1": {
+    "ok": true,
+    "symbols": {
+      "ok": true,
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\tys_ops\\graphics.py",
+      "symbols": 14,
+      "duplicates": [],
+      "placeholders": []
+    },
+    "tests": {
+      "ok": true,
+      "exit": 0,
+      "seconds": 16.6,
+      "cmd": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_image_best_of.py",
+        "Northstar_backend/test_reference_wiring.py",
+        "Northstar_backend/test_ship_gate.py",
+        "Northstar_backend/test_tys_routing.py",
+        "-q"
+      ],
+      "output": "...........................................................              [100%]\n============================== warnings summary ===============================\nNorthstar_backend\\design_studio_api.py:1395\n  C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\design_studio_api.py:1395: UserWarning: Field name \"copy\" in \"APlusPackIn\" shadows an attribute in parent \"BaseModel\"\n    class APlusPackIn(BaseModel):\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n59 passed, 1 warning in 14.99s\n"
+    }
+  },
+  "stage2": {
+    "ok": true,
+    "status": "passed",
+    "verdict": {
+      "ok": true,
+      "pass": true,
+      "available": true,
+      "reason": "",
+      "reasons": [
+        "The image clearly shows a stand-up pouch.",
+        "The pouch has a large printed front panel displaying the product name, brand, and other details.",
+        "The product, 'Lion's Mane Mushroom Powder,' is the main subject of the image."
+      ],
+      "confidence": 0.95,
+      "model": "gemma3:4b",
+      "constraint": "a stand-up pouch with a large printed front panel is the main subject"
+    }
+  },
+  "stage3": {
+    "ok": true,
+    "exit": 0,
+    "seconds": 4.1,
+    "cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ],
+    "output": "..                                                                       [100%]\n2 passed in 0.83s\n",
+    "status": "passed"
+  },
+  "graduated_at": "2026-11-05T05:26:25Z",
+  "plan": {
+    "tests_refs": [
+      "Northstar_backend/test_image_best_of.py",
+      "Northstar_backend/test_reference_wiring.py",
+      "Northstar_backend/test_ship_gate.py",
+      "Northstar_backend/test_tys_routing.py"
+    ],
+    "stage2_applicable": true,
+    "e2e_cmd": [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_tys_kernel_integration.py",
+      "-q"
+    ]
+  },
+  "report_file": "reports/v3_graduation_graphics_20261104.json"
+}

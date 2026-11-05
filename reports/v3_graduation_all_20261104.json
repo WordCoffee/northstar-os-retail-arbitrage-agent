@@ -1,0 +1,144 @@
+{
+  "contract": "v3_graduation_all/v1",
+  "generated_at": "2026-11-04T23:27:41-0600",
+  "modules": [
+    {
+      "module": "bridge",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "budgets",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "graphics",
+      "overall": "passed",
+      "stage1": "passed",
+      "stage2": "passed",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_image_best_of.py",
+        "Northstar_backend/test_reference_wiring.py",
+        "Northstar_backend/test_ship_gate.py",
+        "Northstar_backend/test_tys_routing.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "memory",
+      "overall": "passed",
+      "stage1": "passed",
+      "stage2": "passed",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_semantic_memory.py",
+        "Northstar_backend/test_tys_memory_api.py",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "routing",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_routing.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "selfheal",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "storage",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "ui",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    },
+    {
+      "module": "validators",
+      "overall": "failed",
+      "stage1": "passed",
+      "stage2": "not_verified",
+      "stage3": "passed",
+      "tests": [
+        "python",
+        "-m",
+        "pytest",
+        "Northstar_backend/test_tys_ops.py",
+        "-q"
+      ]
+    }
+  ],
+  "graduated": [
+    "graphics",
+    "memory"
+  ],
+  "graduated_count": 2,
+  "total": 9,
+  "note": "Stage 2 is applicable only to modules with a visual surface. A module without one is reported not_verified rather than given a decorative screenshot."
+}
