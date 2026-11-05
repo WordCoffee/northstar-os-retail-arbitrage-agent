@@ -148,6 +148,10 @@ def test_empty_image_is_rejected():
 # --- engine report ----------------------------------------------------------
 
 def test_engines_reports_the_device_it_would_use(monkeypatch):
+    # The assertion is about behaviour, not about which model happens to be the
+    # default: pin the default to the installed id, then prove the lane reports
+    # it as available and says which model the fallback would be.
+    monkeypatch.setattr(lv, "DEFAULT_MODEL", "qwen2.5vl:7b")
     monkeypatch.setattr(lv, "vram_free_mb", lambda: 1000)
     monkeypatch.setattr(lv.urllib.request, "urlopen",
                         lambda *a, **k: io.BytesIO(b'{"models":[{"name":"qwen2.5vl:7b"}]}'))
@@ -155,6 +159,50 @@ def test_engines_reports_the_device_it_would_use(monkeypatch):
     assert info["available"] is True
     assert info["would_use"] == "cpu"
     assert info["keep_alive"] == 0
+
+
+def test_default_model_is_the_one_that_can_answer_json():
+    """Measured 2026-11-05: qwen2.5vl:7b returns garbage on this runner."""
+    assert lv.DEFAULT_MODEL == "gemma3:4b"
+    assert lv.FALLBACK_MODEL and lv.FALLBACK_MODEL != lv.DEFAULT_MODEL
+
+
+def test_an_unparsed_reply_is_retried_on_the_fallback_model():
+    calls = []
+
+    def poster(_url, payload, _timeout):
+        calls.append(payload["model"])
+        if payload["model"] == "primary":
+            return {"response": "```\\begin{document}```", "eval_count": 9}
+        return {"response": '{"matches_brief": true, "confidence": 0.8, "issues": []}',
+                "eval_count": 30}
+
+    out = lv.qc_image(_png(), "brief", model="primary", poster=poster,
+                      vram_reader=lambda: 1000)
+    assert calls == ["primary", "llava:7b"]
+    assert out["ok"] is True
+    assert out["fell_back_from"] == "primary"
+    assert out["first_attempt"]["verdict"] == "unparsed"
+
+
+def test_fallback_that_also_fails_reports_unparsed_not_a_pass():
+    out = lv.qc_image(_png(), "brief", model="primary",
+                      poster=lambda *a: {"response": "no json here"},
+                      vram_reader=lambda: 1000)
+    assert out["ok"] is False
+    assert out["verdict"] == "unparsed"
+    assert out["fell_back_from"] == "primary"
+
+
+def test_json_mode_is_requested_from_the_model():
+    seen = {}
+
+    def poster(_url, payload, _timeout):
+        seen.update(payload)
+        return {"response": '{"matches_brief": true}'}
+
+    lv.qc_image(_png(), "brief", poster=poster, vram_reader=lambda: 1000)
+    assert seen.get("format") == "json"
 
 
 # --- Ollama host normalisation ----------------------------------------------

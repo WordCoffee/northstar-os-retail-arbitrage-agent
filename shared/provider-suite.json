@@ -173,17 +173,17 @@
       "notes": "WIRED + PREFERRED 2026-10-22: a real neural voice (en_US-lessac-medium, 60 MB) sits at C:/Users/T2Hol/models/piper and is auto-discovered, so piper is now the lane's first engine and SAPI is the fallback. Verified live: 145,452-byte WAV, 22.05 kHz mono PCM, 3.30 s. Fully offline; nothing leaves the machine. Point PIPER_MODEL / PIPER_MODEL_DIR elsewhere to swap voices."
     },
     "local_vision_qc": {
-      "name": "Local vision QC (qwen2.5vl:7b)",
+      "name": "Local vision QC (gemma3:4b, llava:7b fallback)",
       "kind": "qc",
       "runtime": "python",
       "lanes": ["local"],
-      "license": "Apache-2.0",
+      "license": "Gemma Terms of Use",
       "commercial_ok": true,
       "network": false,
       "cost": "free_local",
       "installed": "installed",
       "unlocks": "Asks the local VL model whether a render matches the brief and returns a structured verdict (matches_brief, issues, confidence).",
-      "notes": "WIRED 2026-10-22: Northstar_backend/local_vision.py + POST /api/design-studio/lanes/qc. Built VRAM-shy on purpose: it reads free VRAM first and runs on the CPU (num_gpu 0) unless there is real headroom (VISION_QC_GPU_HEADROOM_MB, default 7000), it always sends keep_alive 0 so the model never stays resident, and it downscales the frame to 768 px before it becomes vision tokens. Verified live in CPU mode at 2598 MB free VRAM: 36.9 s, verdict matches_brief true with an accurate description. An unparseable reply is reported as 'unparsed' - never invented."
+      "notes": "WIRED 2026-10-22 as qwen2.5vl:7b; REPLACED 2026-11-05 after a measured failure. On this runner (Ollama 0.40.4, Windows) qwen2.5vl:7b returns backslash/brace garbage for a JSON rubric prompt (eval_count 200, done_reason length, unparseable), while gemma3:4b returned valid JSON in 16.9 s and llava:7b in 17.5 s for the same frame and prompt. local_vision.py now defaults to gemma3:4b, requests format=json, and retries once on llava:7b before reporting unparsed. The 27B text lane is not involved. GPU is used only above VISION_QC_GPU_HEADROOM_MB (default 7000) and keep_alive is 0, so the model never stays resident. Evidence: state/evidence/vision_model_probe.json, renders/autonomy_probe/a9.json."
     },
     "sapi_voice": {
       "name": "Northstar local voice service (Windows SAPI)",

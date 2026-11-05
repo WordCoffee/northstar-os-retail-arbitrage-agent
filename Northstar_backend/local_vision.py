@@ -32,7 +32,11 @@ import time
 import urllib.request
 from typing import Any, Callable, Dict, Optional
 
-DEFAULT_MODEL = os.environ.get("VISION_QC_MODEL", "qwen2.5vl:7b")
+DEFAULT_MODEL = os.environ.get("VISION_QC_MODEL", "gemma3:4b")
+#: Used once when the primary model returns an unparsed reply. Measured on this
+#: runner (2026-11-05): qwen2.5vl:7b produces garbage, gemma3:4b and llava:7b
+#: both return valid JSON in ~17 s. A broken model is reported, never trusted.
+FALLBACK_MODEL = os.environ.get("VISION_QC_FALLBACK_MODEL", "llava:7b")
 
 
 def normalise_host(value: Optional[str]) -> str:
@@ -157,11 +161,19 @@ def _parse_verdict(raw: str) -> Dict[str, Any]:
 def qc_image(image_bytes: bytes, brief: str, *, model: Optional[str] = None,
              max_side: Optional[int] = None, allow_gpu: Optional[bool] = None,
              timeout: float = 600.0, poster: Optional[Poster] = None,
-             vram_reader: Optional[VramReader] = None) -> Dict[str, Any]:
+             vram_reader: Optional[VramReader] = None,
+             fallback: bool = True) -> Dict[str, Any]:
     """Ask the local VL model whether a render matches the brief.
 
     Returns a dict that always carries `mode` ('gpu'|'cpu'), `seconds`, and the
     VRAM reading before/after, so the cost of the check is visible.
+
+    A model that cannot answer in JSON is a broken instrument, not a verdict.
+    Measured 2026-11-05 on this runner: qwen2.5vl:7b emits backslash/brace
+    garbage where gemma3:4b and llava:7b return valid JSON for the same frame
+    and prompt. So an unparsed reply is retried once on the fallback model, and
+    the result says which model actually answered. Nothing is invented: if both
+    fail, the report is `unparsed` with the raw head.
     """
     if not image_bytes:
         raise ValueError("image is required")
@@ -172,38 +184,58 @@ def qc_image(image_bytes: bytes, brief: str, *, model: Optional[str] = None,
 
     before = read_vram()
     mode = choose_mode(before, allow_gpu)
+    frame = base64.b64encode(_downscale(image_bytes, side)).decode("ascii")
 
-    payload: Dict[str, Any] = {
-        "model": mdl,
-        "prompt": f"{_PROMPT}\n\nBrief: {brief.strip()[:600] or '(no brief given)'}",
-        "images": [base64.b64encode(_downscale(image_bytes, side)).decode("ascii")],
-        "stream": False,
-        "keep_alive": 0,  # never leave the QC model resident
-        "options": {"temperature": 0.1, "num_predict": 220},
-    }
-    if mode == "cpu":
-        payload["options"]["num_gpu"] = 0
+    def _ask(model_name: str) -> Dict[str, Any]:
+        payload: Dict[str, Any] = {
+            "model": model_name,
+            "prompt": f"{_PROMPT}\n\nBrief: {brief.strip()[:600] or '(no brief given)'}",
+            "images": [frame],
+            "stream": False,
+            "keep_alive": 0,  # never leave the QC model resident
+            # JSON mode, not just a JSON-shaped instruction: without it a model
+            # may answer in prose or in code fences.
+            "format": "json",
+            "options": {"temperature": 0.1, "num_predict": 220},
+        }
+        if mode == "cpu":
+            payload["options"]["num_gpu"] = 0
+        started = time.time()
+        try:
+            resp = post(f"{OLLAMA_HOST}/api/generate", payload, timeout)
+        except Exception as exc:  # noqa: BLE001 - report, never fabricate a verdict
+            return {"ok": False, "error": f"{type(exc).__name__}: {exc}"[:300],
+                    "mode": mode, "model": model_name,
+                    "seconds": round(time.time() - started, 1),
+                    "vram_free_mb_before": before, "vram_free_mb_after": read_vram()}
+        verdict = _parse_verdict(str(resp.get("response", "")))
+        verdict.update({
+            "ok": verdict.get("verdict") == "ok",
+            "mode": mode,
+            "model": model_name,
+            "max_side": side,
+            "seconds": round(time.time() - started, 1),
+            "vram_free_mb_before": before,
+            "vram_free_mb_after": read_vram(),
+            "eval_count": resp.get("eval_count"),
+        })
+        return verdict
 
-    t0 = time.time()
-    try:
-        resp = post(f"{OLLAMA_HOST}/api/generate", payload, timeout)
-    except Exception as exc:  # noqa: BLE001 - report, never fabricate a verdict
-        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"[:300],
-                "mode": mode, "model": mdl, "seconds": round(time.time() - t0, 1),
-                "vram_free_mb_before": before, "vram_free_mb_after": read_vram()}
-
-    verdict = _parse_verdict(str(resp.get("response", "")))
-    verdict.update({
-        "ok": verdict.get("verdict") == "ok",
-        "mode": mode,
-        "model": mdl,
-        "max_side": side,
-        "seconds": round(time.time() - t0, 1),
-        "vram_free_mb_before": before,
-        "vram_free_mb_after": read_vram(),
-        "eval_count": resp.get("eval_count"),
-    })
-    return verdict
+    result = _ask(mdl)
+    if (fallback and not result.get("ok") and FALLBACK_MODEL
+            and FALLBACK_MODEL != mdl):
+        second = _ask(FALLBACK_MODEL)
+        second["fell_back_from"] = mdl
+        second["first_attempt"] = {"model": mdl,
+                                   "verdict": result.get("verdict"),
+                                   "seconds": result.get("seconds"),
+                                   "raw": str(result.get("raw") or "")[:200],
+                                   "error": result.get("error")}
+        # The fallback is the answer only if it actually answered.
+        if second.get("ok"):
+            return second
+        result = second
+    return result
 
 
 def qc_file(path: str, brief: str, **kwargs) -> Dict[str, Any]:

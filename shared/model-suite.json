@@ -54,18 +54,18 @@
     "description": "The two local engines, measured on this machine (RTX 5080 Laptop 16 GB, 15.4 GB system RAM). Nothing here is a target - each value was read off the running server or its launch line. docs/LOCAL_ENGINES.md is the prose copy.",
     "ty": {
       "role": "orchestrator + coding worker (Ty's Assistant)",
-      "model": "Qwen3.8-27B GSQ-RCO IQ3_XXS + MTP",
+      "model": "Qwen3.8-27B IQ4_XS + MTP (Bucoid 4bpw)",
       "backend": "llama.cpp (llama-server, CUDA)",
       "endpoint": "http://127.0.0.1:8080/v1",
-      "alias": "northstaros-qwen3.8:27b",
-      "weights_gb": 10.4,
+      "alias": "northstaros-27b-coder",
+      "weights_gb": 13.9,
       "gpu_layers": 99,
-      "context_tokens": 65536,
-      "kv_cache": "q4_0 (K and V)",
+      "context_tokens": 17408,
+      "kv_cache": "q8_0 (K and V)",
       "flash_attention": true,
-      "vram_gb": 13,
-      "throughput_tok_s": 69,
-      "ms_per_token": 14.5,
+      "vram_gb": 14.7,
+      "throughput_tok_s": 65,
+      "ms_per_token": 15.4,
       "throughput_without_mtp_tok_s": 47,
       "residency": "on demand - not a service, not an Ollama model",
       "launcher": "scripts/start-northstar-llm.ps1",
@@ -91,7 +91,7 @@
       "V1": {
         "label": "V1 Lite — screenshots, OCR, browser-control, volume drafts",
         "understand": {
-          "local": "qwen2.5vl:7b",
+          "local": "gemma3:4b",
           "cloud": "qwen/qwen3.7-flash",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.03,
@@ -114,7 +114,7 @@
       "V2": {
         "label": "V2 Standard — presentations, brand decks, product stills",
         "understand": {
-          "local": "qwen2.5vl:7b",
+          "local": "gemma3:4b",
           "cloud": "qwen/qwen3-vl-235b-a22b-instruct",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.21,
@@ -142,7 +142,7 @@
       "V3": {
         "label": "V3 Premium — ad visuals, A+ content, UGC, text-heavy graphics",
         "understand": {
-          "local": "qwen2.5vl:7b",
+          "local": "gemma3:4b",
           "cloud": "xiaomi/mimo-v2.6-pro",
           "cloud_provider": "openrouter",
           "cost_per_1m_in": 0.435,
