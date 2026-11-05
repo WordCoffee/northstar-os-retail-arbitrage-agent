@@ -26,8 +26,8 @@
       "kind": "init",
       "title": "Tag autonomy-baseline + measured full test run",
       "status": "done",
-      "note": "Pre-change measured run 2026-11-05T14:00Z: backend 6196 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. BASELINE.json update deferred to the post-Phase-B run because this run predates 45 new tests.",
-      "evidence": "reports/ty/_baseline_autonomy_20261105.txt"
+      "note": "Measured post-Phase-B run 2026-11-05T21:51Z: backend 6247 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. tests/BASELINE.json written from that run.",
+      "evidence": "reports/ty/_baseline_measured_20261105_final.txt"
     },
     {
       "id": "A-a4",
@@ -244,5 +244,18 @@
     "Set consistency compares images inside a scenario, never across scenarios.",
     "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot.",
     "FLUX 3 mi2i reference conditioning does not preserve product identity on this box: ssim 0.01-0.32, phash 26-28 vs the reference. Identity must come from a composite, not from conditioning (measured 2026-11-05, re-scored artifacts)."
-  ]
+  ],
+  "baseline": {
+    "backend": {
+      "passed": 6247,
+      "failed": 0,
+      "skipped": 117,
+      "subtests": 89
+    },
+    "golden_goose": 511,
+    "ui": 1122,
+    "shell": 307,
+    "functions": 31,
+    "measured_at": "2026-11-05T21:51:00Z"
+  }
 }
