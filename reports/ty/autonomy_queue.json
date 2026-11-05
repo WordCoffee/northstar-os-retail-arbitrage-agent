@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-05T00:00:00Z",
+  "owner": "Tyrone (T2 Holdings)",
+  "program": "Ty Autonomy Program",
+  "phase": "A",
+  "work_order": "reports/ty/autonomy_work_order.md",
+  "caps": {
+    "token_cap_per_day": 3000000,
+    "tokens_used_today": 0,
+    "max_cycle_wall_clock_minutes": 180
+  },
+  "items": [
+    {
+      "id": "init-1",
+      "kind": "init",
+      "title": "Save work order + scaffolding files",
+      "status": "done",
+      "done_at": "2026-11-05"
+    },
+    {
+      "id": "init-2",
+      "kind": "init",
+      "title": "Tag autonomy-baseline + measured full test run -> tests/BASELINE.json",
+      "status": "in_progress",
+      "write_paths": ["tests/BASELINE.json", "reports/ty/"]
+    },
+    {
+      "id": "A1",
+      "kind": "probe",
+      "title": "Whole-system awareness",
+      "status": "pending"
+    },
+    {
+      "id": "A2",
+      "kind": "probe",
+      "title": "Persistent planning (disk-only resume)",
+      "status": "pending"
+    },
+    {
+      "id": "A3",
+      "kind": "probe",
+      "title": "Unattended loop (improvement_backlog + supervisor)",
+      "status": "pending"
+    },
+    {
+      "id": "A4",
+      "kind": "probe",
+      "title": "Web and repo research (GitHub + HF + README + license)",
+      "status": "pending"
+    },
+    {
+      "id": "A5",
+      "kind": "probe",
+      "title": "Package vetting (vet_package.py, transport failure refuses)",
+      "status": "pending"
+    },
+    {
+      "id": "A6",
+      "kind": "probe",
+      "title": "MCP client (consume one local MCP server)",
+      "status": "pending"
+    },
+    {
+      "id": "A7",
+      "kind": "probe",
+      "title": "Context management at 70% (compaction / handoff)",
+      "status": "pending"
+    },
+    {
+      "id": "A8",
+      "kind": "probe",
+      "title": "Local image generation via ComfyUI (stop/restore cycle)",
+      "status": "pending"
+    },
+    {
+      "id": "A9",
+      "kind": "probe",
+      "title": "Vision QA (qwen2.5vl rubric -> valid JSON)",
+      "status": "pending"
+    },
+    {
+      "id": "A10",
+      "kind": "probe",
+      "title": "Reference-based generation (stored ref + uploaded ref)",
+      "status": "pending"
+    },
+    {
+      "id": "A11",
+      "kind": "probe",
+      "title": "UI verification (Chromium + iPhone 12 WebKit screenshots)",
+      "status": "pending"
+    },
+    {
+      "id": "A12",
+      "kind": "probe",
+      "title": "Scorecard evals (numeric score for a workstream)",
+      "status": "pending"
+    },
+    {
+      "id": "A13",
+      "kind": "probe",
+      "title": "Rollback (tag -> change -> restore -> identical)",
+      "status": "pending"
+    },
+    {
+      "id": "A14",
+      "kind": "probe",
+      "title": "Self-model (self_assessment.md)",
+      "status": "pending"
+    }
+  ],
+  "workstreams": [],
+  "lesons": []
+}

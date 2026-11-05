@@ -562,6 +562,48 @@
       "source": "https://docs.typesafe.ai/introduction",
       "unlocks": "Fast calibrated typed decisions (copy_audit, listing_tier, duplicate, blocker_escalation, respond_now) with confidence + probabilities; covers kinds the rules backend abstains on (e.g. duplicate).",
       "notes": "Cloud-lane only, metered ($0.042/M input tokens, output free, $5 min credits). Requires JEV_API_URL + JEV_API_KEY (or TYPESAFE_API_KEY). Endpoint/schema must be verified against TypeSafe docs before live use; until then the seam degrades to rules. Opt-in via backend='jev' in decision_layer.decide(). Never a silent substitute for rules. The jev-ultrafast browser agent is NOT registered here (blocked by Chrome Connect). Commercial terms to be verified before arming."
+    },
+    "mcp_client": {
+      "name": "MCP client (modelcontextprotocol python-sdk)",
+      "kind": "protocol",
+      "runtime": "python",
+      "lanes": ["local", "cloud"],
+      "license": "MIT",
+      "commercial_ok": true,
+      "network": false,
+      "cost": "free_local",
+      "installed": "installed",
+      "source": "https://github.com/modelcontextprotocol/python-sdk",
+      "unlocks": "Let Ty CONSUME MCP servers (filesystem, git, docs, databases) instead of only serving them. tools/mcp_client.py: initialize/list_tools/call_tool over stdio with a hard timeout and an audit log.",
+      "notes": "GRANTED 2026-11-05 (Ty autonomy work order). Licence read from the upstream LICENSE file (Apache License header is not present; the README and the PyPI metadata both say MIT, and the repo LICENSE file is MIT). Installed as mcp 2.1.1 in the backend's own Python 3.14. network:false is about the *client library*; an individual server it connects to may itself use the network, and that is the server's own gate, not this one. Every call is journaled to logs/mcp_client.jsonl. Verified: connected to tests/fixtures/mcp_echo_server.py, listed 2 tools, called add(2,3) -> 5."
+    },
+    "web_research_trafilatura": {
+      "name": "Trafilatura page extraction",
+      "kind": "research",
+      "runtime": "python",
+      "lanes": ["local"],
+      "license": "Apache-2.0",
+      "commercial_ok": true,
+      "network": true,
+      "cost": "free_local",
+      "installed": "installed",
+      "source": "https://github.com/adbar/trafilatura",
+      "unlocks": "Fetch a page and get its main text, without a browser. The fetch half of the research lane.",
+      "notes": "GRANTED 2026-11-05 (Ty autonomy work order). Licence read from upstream (Apache-2.0). trafilatura 2.3.1 was already present in the backend Python. It is NOT a browser and does not bypass Chrome Connect: it is an HTTP client plus a parser. The adoption condition from reports/tys_capability_gap_20261105.md is implemented in tools/web_research.py - the hardcoded Amazon blocklist is evaluated BEFORE any request leaves the machine, and every fetch is appended to logs/web_research.jsonl with URL, timestamp, byte count and SHA-256."
+    },
+    "web_research_ddgs": {
+      "name": "ddgs web search",
+      "kind": "research",
+      "runtime": "python",
+      "lanes": ["local"],
+      "license": "MIT",
+      "commercial_ok": true,
+      "network": true,
+      "cost": "free_local",
+      "installed": "installed",
+      "source": "https://github.com/deedy5/ddgs",
+      "unlocks": "Real web search results with no API key and no account. The search half of the research lane.",
+      "notes": "GRANTED 2026-11-05 (Ty autonomy work order). Vetted with tools/vet_package.py against OSV first (clear), then pip installed ddgs 9.16.1. Same governance as trafilatura: Amazon hosts are refused before the request and every query is journaled. A search result whose URL resolves to a blocked host is dropped and the drop is logged, so a denylist cannot be laundered through a search engine."
     }
   }
 }

@@ -42,3 +42,6 @@ mcp,INSTALLED,https://pypi.org/project/mcp/,MIT,northstar,"local-lane; 2.1.1; Mo
 opentelemetry-sdk,INSTALLED,https://pypi.org/project/opentelemetry-sdk/,Apache-2.0,northstar,"local-lane; 1.45.2; optional agent tracing"
 opentelemetry-exporter-otlp-proto-http,INSTALLED,https://pypi.org/project/opentelemetry-exporter-otlp-proto-http/,Apache-2.0,northstar,"local-lane; 1.45.2; OTLP HTTP exporter for local collectors"
 repomix,INSTALLED,https://www.npmjs.com/package/repomix,MIT,northstar,"local-lane; 1.18.1; repository context packing for coding tasks"
+"tools/mcp_client.py (mcp python-sdk 2.1.1)","INSTALLED","https://github.com/modelcontextprotocol/python-sdk","MIT","ty-autonomy","MCP client half - Ty could only serve MCP before. Vetted, registered, verified: listed 2 tools, called add(2,3)=5."
+"tools/web_research.py (trafilatura 2.3.1)","INSTALLED","https://github.com/adbar/trafilatura","Apache-2.0","ty-autonomy","Page extraction. Amazon blocklist evaluated before any request; every fetch journaled to logs/web_research.jsonl."
+"tools/web_research.py (ddgs 9.16.1)","INSTALLED","https://github.com/deedy5/ddgs","MIT","ty-autonomy","Web search, no key. OSV-vetted clear before install; blocked-host results are dropped and the drop is logged."
