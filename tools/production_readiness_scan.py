@@ -40,6 +40,13 @@ BACKEND = ROOT / "Northstar_backend"
 CHECKS = ("dead-module", "button-no-type", "input-unlabelled", "img-no-alt",
           "catch-swallowed", "placeholder-copy", "silent-except")
 
+#: `silent-except` is a triage list, not a defect list: most broad handlers are
+#: deliberate resilience (poll a transient API, unload a model best-effort, kill a
+#: process). Flagging 52 of them in the default report is how a scanner teaches
+#: people to ignore it, so it is opt-in via --check silent-except.
+DEFAULT_CHECKS = ("dead-module", "button-no-type", "input-unlabelled", "img-no-alt",
+                  "catch-swallowed", "placeholder-copy")
+
 
 def _ui_files() -> List[Path]:
     return sorted(p for p in UI_SRC.rglob("*")
@@ -50,47 +57,24 @@ def _line_of(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
 
+_LINE_COMMENT = re.compile(r"(?<!:)\/\/[^\n]*")
+_BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+
+
 def _strip_comments(text: str) -> str:
     """Blank out comments, preserving every offset and newline.
 
     A scanner that counts `<img>` inside a comment is a scanner that cries wolf.
-    Offsets are preserved (comment text becomes spaces) so line numbers still map
-    to the real file, and string literals are respected so `https://` is not
-    mistaken for the start of a comment.
+    The first version tracked string literals to decide what a `//` meant, and an
+    apostrophe in JSX text ("don't") flipped its state so the rest of the file
+    stopped being recognised as code. This version does not guess: a `//` that
+    follows a colon is a URL (http://), everything else starts a comment, and
+    block comments are matched non-greedily.
     """
-    out = list(text)
-    i, n = 0, len(text)
-    quote = ""
-    while i < n:
-        ch = text[i]
-        if quote:
-            if ch == "\\":
-                i += 2
-                continue
-            if ch == quote:
-                quote = ""
-            i += 1
-            continue
-        if ch in ("'", '"', "`"):
-            quote = ch
-            i += 1
-            continue
-        if ch == "/" and i + 1 < n and text[i + 1] == "/":
-            while i < n and text[i] != "\n":
-                out[i] = " "
-                i += 1
-            continue
-        if ch == "/" and i + 1 < n and text[i + 1] == "*":
-            while i < n and not (text[i] == "*" and i + 1 < n and text[i + 1] == "/"):
-                if text[i] != "\n":
-                    out[i] = " "
-                i += 1
-            if i < n:
-                out[i] = out[i + 1] = " "
-                i += 2
-            continue
-        i += 1
-    return "".join(out)
+    def blank(match: "re.Match[str]") -> str:
+        return "".join("\n" if ch == "\n" else " " for ch in match.group(0))
+
+    return _LINE_COMMENT.sub(blank, _BLOCK_COMMENT.sub(blank, text))
 
 
 def _tag_at(text: str, offset: int) -> str:
@@ -203,8 +187,14 @@ def check_inputs() -> List[Dict[str, Any]]:
             tag = _tag_at(text, match.start())
             if re.search(r"\baria-label", tag) or re.search(r"\baria-labelledby", tag):
                 continue
+            # An explicit <label htmlFor="x"> may sit anywhere, including after
+            # the control; matching on the id is exact, a line window is not.
+            id_match = re.search(r"""\bid\s*=\s*["']([^"']+)["']""", tag)
+            if id_match and re.search(
+                    r"""htmlFor\s*=\s*["'{`][^"'}]*%s""" % re.escape(id_match.group(1)), text):
+                continue
             line = _line_of(text, match.start())
-            window = "\n".join(lines[max(0, line - 5):line])
+            window = "\n".join(lines[max(0, line - 5):line + 1])
             if "<label" in window or "htmlFor" in window:
                 continue
             out.append(_finding("input-unlabelled", path, line,
@@ -240,7 +230,9 @@ def check_swallowed_catches() -> List[Dict[str, Any]]:
 
 def check_placeholder_copy() -> List[Dict[str, Any]]:
     out = []
-    pattern = re.compile(r"\b(TODO|FIXME|XXX|coming soon|lorem ipsum)\b", re.IGNORECASE)
+    # TODO/FIXME/XXX are case-sensitive markers; `'todo'` is also an ordinary
+    # status value ("done" vs "todo") and matched the old check twice.
+    pattern = re.compile(r"\b(TODO|FIXME|XXX)\b|(?i:coming soon|lorem ipsum)")
     for path in _ui_files():
         text = path.read_text(encoding="utf-8", errors="ignore")
         for match in pattern.finditer(text):
@@ -279,7 +271,7 @@ RUNNERS = {
 
 
 def scan(selected: List[str] | None = None) -> Dict[str, Any]:
-    wanted = selected or list(CHECKS)
+    wanted = selected or list(DEFAULT_CHECKS)
     findings: List[Dict[str, Any]] = []
     for name in wanted:
         if name not in RUNNERS:
@@ -340,7 +332,8 @@ def main(argv: List[str] | None = None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--check", default="",
-                    help="comma-separated subset: " + ",".join(CHECKS))
+                    help="comma-separated subset: " + ",".join(CHECKS)
+                         + " (default: " + ",".join(DEFAULT_CHECKS) + ")")
     args = ap.parse_args(argv)
     selected = [c.strip() for c in args.check.split(",") if c.strip()] or None
     try:
