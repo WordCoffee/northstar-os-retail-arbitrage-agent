@@ -235,6 +235,18 @@ def scan_report(check: str = "") -> Dict[str, Any]:
     return prs.scan(selected)
 
 
+def vet_report(name: str, ecosystem: str, version: str = "") -> Dict[str, Any]:
+    """Vet a package against OSV. The supply-chain check the adoption gate lacks.
+
+    provider_suite answers "may this lane use it" (licence, lane, arming). It
+    cannot answer "is it malicious". Before an item that installs something is
+    promoted, this is the check that runs.
+    """
+    sys.path.insert(0, str(ROOT / "tools"))
+    import vet_package as vp  # noqa: PLC0415 - deliberate late import
+    return vp.vet(name, ecosystem, version or None)
+
+
 def render_scan(report: Dict[str, Any]) -> str:
     lines = [f"READINESS SCAN  ({report['total']} finding(s))"]
     for name, count in sorted(report["by_check"].items(), key=lambda kv: -kv[1]):
@@ -258,10 +270,22 @@ def main(argv: List[str] | None = None) -> int:
     group.add_argument("--check", action="store_true")
     group.add_argument("--scan", nargs="?", const="", metavar="CHECKS",
                        help="run the production-readiness scan (optionally a comma-separated subset)")
+    group.add_argument("--vet", metavar="NAME",
+                       help="vet a package against OSV before promoting an install item")
     group.add_argument("--promote", metavar="ID")
     group.add_argument("--done", metavar="ID")
     ap.add_argument("--commit", default="", help="commit sha for --done")
+    ap.add_argument("--ecosystem", default="PyPI", help="ecosystem for --vet")
+    ap.add_argument("--version", default="", help="version for --vet")
     args = ap.parse_args(argv)
+
+    if args.vet:
+        try:
+            print(json.dumps(vet_report(args.vet, args.ecosystem, args.version), indent=2))
+        except (OSError, ValueError) as exc:
+            print(f"REFUSED (check incomplete, never a pass): {exc}")
+            return 1
+        return 0
 
     if args.scan is not None:
         try:
