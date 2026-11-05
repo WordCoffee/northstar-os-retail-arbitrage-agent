@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-05T21:30:00Z",
+  "updated": "2026-11-05T21:40:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,8 +12,8 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 1,
-  "last_measured": "2026-11-05T21:16:58Z",
+  "cycle": 2,
+  "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
       "id": "init-1",
@@ -109,11 +109,13 @@
       "id": "W1-c2",
       "kind": "workstream",
       "workstream": "W1",
-      "title": "Product pictures: fidelity measured on the product region, not the whole frame; enable instruction+quality axes on a 12-case run",
-      "status": "pending",
+      "title": "Product pictures: fidelity now compares the subject crop; it proves reference conditioning does NOT preserve the product",
+      "status": "partial",
       "priority": 650,
       "dwell": "until-production-ready",
-      "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%"
+      "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%",
+      "finding": "Re-scored the same 12 bench artifacts with subject-crop comparison (picture_bench_rescore_20261105T213059Z.json): reference-conditioned renders score ssim 0.010-0.323 and phash distance 26-28 against the reference, i.e. a different pouch. The instrument is now correct; the generation path is the defect.",
+      "next": "Replace FLUX 3 mi2i reference conditioning for product identity with a deterministic composite: BiRefNet cutout of the real product + generated scene + matched shadow, so identity is preserved by construction. Keep mi2i for style-only references."
     },
     {
       "id": "W1-c3",
@@ -240,6 +242,7 @@
     "The image lane is RAM-blocked before it is model-blocked: 2368 MB free refused a render that succeeded at 4679 MB.",
     "A scorecard dimension that is 'unavailable' must never be averaged in as a pass; and a dimension that is 'not_applicable' is not a gap.",
     "Set consistency compares images inside a scenario, never across scenarios.",
-    "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot."
+    "Whole-image pHash/SSIM is the wrong instrument for a lifestyle scene against a packshot.",
+    "FLUX 3 mi2i reference conditioning does not preserve product identity on this box: ssim 0.01-0.32, phash 26-28 vs the reference. Identity must come from a composite, not from conditioning (measured 2026-11-05, re-scored artifacts)."
   ]
 }

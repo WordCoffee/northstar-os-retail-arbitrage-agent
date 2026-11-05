@@ -162,6 +162,27 @@ def _vision_verdict(image_bytes: bytes, brief: str) -> Optional[Dict[str, Any]]:
         return None
 
 
+def _subject_png(image_bytes: bytes, *, max_side: int = 320) -> Optional[bytes]:
+    """The product alone, cropped out of whatever scene it is standing in."""
+    try:
+        from PIL import Image
+
+        import listing_render as lr
+
+        with Image.open(BytesIO(image_bytes)) as im:
+            rgb = im.convert("RGB")
+            box = lr.subject_bbox(rgb)
+            if not box:
+                return None
+            crop = rgb.crop(box)
+            crop.thumbnail((max_side, max_side))
+            buf = BytesIO()
+            crop.save(buf, format="PNG")
+            return buf.getvalue()
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def score_case(*, image_bytes: bytes, case: Dict[str, Any],
                reference_bytes: Optional[bytes] = None,
                seconds: Optional[float] = None,
@@ -233,23 +254,47 @@ def score_case(*, image_bytes: bytes, case: Dict[str, Any],
         try:
             import ship_gate
 
-            ident = ship_gate.review_image(
-                image_bytes, brief=brief, reference=reference_bytes,
-                surface=None, use_default_scorers=False)
-            axis = (ident.get("axes") or {}).get("identity", {})
-            distance = axis.get("phash_distance")
-            ssim = axis.get("ssim")
             ik = cfg["identity"]
-            if ssim is None and distance is None:
-                out["dimensions"]["product_fidelity"] = _dim(
-                    None, status="unavailable", detail=axis or ident)
+            candidate_subject = _subject_png(image_bytes)
+            reference_subject = _subject_png(reference_bytes)
+            if candidate_subject and reference_subject:
+                # Compare the product with the product. A lifestyle scene and a
+                # packshot differ in framing by design; comparing frames scores
+                # a correct render as a total failure (measured: 0.0 on every
+                # scene, 99.4 on the one comparable frame).
+                ident = ship_gate.review_image(
+                    candidate_subject, brief=brief, reference=reference_subject,
+                    surface=None, use_default_scorers=False)
+                compared = "subject_crop"
+            elif str(surface) in ("main", "main_image", "listing_image", "series",
+                                  "secondary"):
+                ident = ship_gate.review_image(
+                    image_bytes, brief=brief, reference=reference_bytes,
+                    surface=None, use_default_scorers=False)
+                compared = "whole_frame"
             else:
-                ssim = float(ssim or 0.0)
-                score = _scale(ssim, float(ik["min_ssim"]), float(ik["good_ssim"]))
-                if distance is not None and int(distance) > int(ik["max_phash_distance"]):
-                    score = min(score, 40.0)
                 out["dimensions"]["product_fidelity"] = _dim(
-                    score, detail={"phash_distance": distance, "ssim": round(ssim, 4)})
+                    None, status="not_applicable",
+                    detail="subject could not be separated from the scene, and this "
+                           "surface changes framing by design")
+                ident = None
+                compared = ""
+            if ident is not None:
+                axis = (ident.get("axes") or {}).get("identity", {})
+                distance = axis.get("phash_distance")
+                ssim = axis.get("ssim")
+                if ssim is None and distance is None:
+                    out["dimensions"]["product_fidelity"] = _dim(
+                        None, status="unavailable", detail=axis or ident)
+                else:
+                    ssim = float(ssim or 0.0)
+                    score = _scale(ssim, float(ik["min_ssim"]), float(ik["good_ssim"]))
+                    if distance is not None and int(distance) > int(ik["max_phash_distance"]):
+                        score = min(score, 40.0)
+                    out["dimensions"]["product_fidelity"] = _dim(
+                        score, detail={"phash_distance": distance,
+                                       "ssim": round(ssim, 4),
+                                       "compared": compared})
         except Exception as exc:  # noqa: BLE001
             out["dimensions"]["product_fidelity"] = _dim(
                 None, status="unavailable", detail=f"{type(exc).__name__}: {exc}")

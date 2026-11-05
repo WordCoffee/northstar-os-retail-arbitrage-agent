@@ -127,6 +127,35 @@ def test_set_consistency_is_unmeasured_when_no_scenario_has_a_pair():
     assert "two images" in block["detail"]
 
 
+def test_fidelity_compares_the_subject_not_the_frame():
+    """A correct product in a different scene must not score zero."""
+    from io import BytesIO
+
+    from PIL import Image
+
+    def scene(bg, box, size=(512, 512)):
+        im = Image.new("RGB", size, bg)
+        px = im.load()
+        x0, y0, x1, y1 = box
+        for x in range(x0, x1):
+            for y in range(y0, y1):
+                px[x, y] = (190, 160, 120)
+        buf = BytesIO()
+        im.save(buf, format="PNG")
+        return buf.getvalue()
+
+    reference = scene((255, 255, 255), (150, 120, 360, 400))
+    lifestyle = scene((90, 100, 110), (60, 40, 300, 470))
+    row = ps.score_case(
+        image_bytes=lifestyle,
+        case={"id": "s1", "surface": "lifestyle", "scenario": "lifestyle"},
+        reference_bytes=reference, scoring=False)
+    block = row["dimensions"]["product_fidelity"]
+    assert block["status"] == "measured"
+    assert block["score"] > 0
+    assert block["detail"]["compared"] == "subject_crop"
+
+
 def test_config_overlay_changes_the_rule(tmp_path):
     cfg_file = tmp_path / "scorecard.json"
     cfg_file.write_text('{"marketplace": {"min_fill": 0.30}}', encoding="utf-8")

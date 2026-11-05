@@ -47,6 +47,17 @@ def _subject_bbox(img: Image.Image, threshold: int = 18) -> Optional[tuple]:
     return int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
 
 
+def subject_bbox(img: Image.Image, threshold: int = 18) -> Optional[tuple]:
+    """Public name for the subject box.
+
+    A product photographed in a lifestyle scene is still the same product; the
+    only way to compare it with a packshot is to compare the subject, not the
+    frame. This is the same detector fit_main_image uses, exposed so the review
+    and scorecard paths do not import a private symbol.
+    """
+    return _subject_bbox(img, threshold=threshold)
+
+
 def fit_main_image(payload: bytes, *, target_fill: float = 0.86,
                    size: tuple = (1024, 1024)) -> bytes:
     """Crop the rendered subject and place it at the marketplace fill target.

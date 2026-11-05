@@ -63,11 +63,16 @@ speed, failure recovery. Bar: **every measured dimension >= 85 and compliance
 | photographic quality | unmeasured | unmeasured |
 | stored-reference cases | 4 failed (`reference_missing`) | 4 rendered |
 
-**Known defects to fix next:** fidelity is measured whole-image, so a lifestyle
-scene against a front packshot scores 0 by construction — it must compare the
-product region, or only score where framing is comparable; text is drawn by the
-model on reference renders (`KERT& SLATE`); instruction fidelity and photographic
-quality need the model axes enabled (`--models`) and a second run.
+**Known defects to fix next:** **reference conditioning does not preserve the
+product** — re-scoring the same artifacts with subject-crop comparison gives
+ssim 0.010-0.323 and pHash distance 26-28 against the reference, i.e. a different
+pouch (the stored-reference render visibly reads `KERT& SLATE`). The instrument
+is now correct; the generation path is the defect, so identity must come from a
+deterministic composite (BiRefNet cutout + generated scene + matched shadow)
+rather than from conditioning. Text is likewise drawn by the model on reference
+renders, so the text-safe/vector layer has to run on that path too. Instruction
+fidelity and photographic quality still need the model axes enabled (`--models`)
+for a second run.
 
 **Dependencies:** ComfyUI + gateway up; >= 4 GB free RAM before each render;
 reference library seeded. **write_paths:** `Northstar_backend/picture_scorecard.py`,
