@@ -10,6 +10,28 @@ import { LOCAL_DEV } from '../../../foundation/dev.js'
 
 const API = '/api/design-studio/dashboard'
 
+function formatBytes(n) {
+  const value = Number(n || 0)
+  if (value < 1024) return `${value} B`
+  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`
+  return `${(value / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function downloadJSON(name, data) {
+  try {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = name
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    return true
+  } catch { return false }
+}
+
 // Same transport rules as the rest of the suite: same-origin, cookie auth,
 // CSRF double-submit, dev identity shim gated on the compile-time LOCAL_DEV
 // constant. The shim matters here: without X-User-Id the backend files these
@@ -107,9 +129,13 @@ function PackageCard({ row, onOpenManifest }) {
       </div>
       <div style={{ marginTop: 10 }}><Preview file={row.preview} /></div>
       <div className="text-low" style={{ fontSize: 12, marginTop: 8 }}>
-        {row.files.map(f => f.name).join(' · ')}
+        {row.files.map(f => `${f.name} (${formatBytes(f.bytes)})`).join(' · ')}
       </div>
-      <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+      <div className="text-low" style={{ fontSize: 11, marginTop: 4 }}>
+        {row.files.length} file{row.files.length === 1 ? '' : 's'} ·{' '}
+        {formatBytes(row.files.reduce((sum, f) => sum + Number(f.bytes || 0), 0))}
+      </div>
+      <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {row.files.filter(f => f.kind === 'image' || f.kind === 'video').slice(0, 3).map(f => (
           <a key={f.name} className="btn btn-sm" href={f.url} target="_blank" rel="noreferrer">
             {f.kind === 'video' ? 'video' : 'image'}
@@ -119,6 +145,10 @@ function PackageCard({ row, onOpenManifest }) {
                 data-testid="dash-manifest">
           manifest
         </button>
+        {row.manifest_url && (
+          <a className="btn btn-sm" href={row.manifest_url} download
+             data-testid="dash-manifest-download">download json</a>
+        )}
       </div>
     </div>
   )
@@ -336,9 +366,27 @@ export default function AssetDashboard() {
 
       {manifest && (
         <div className="card" style={{ padding: 16 }} data-testid="dash-manifest-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
             <h3 style={{ margin: 0, fontSize: 16 }}>Manifest · {manifest.run_id}</h3>
-            <button type="button" className="btn btn-sm" onClick={() => setManifest(null)}>Close</button>
+            <div className="inline-flex" style={{ gap: 6 }}>
+              {manifest.data && (
+                <>
+                  <button type="button" className="btn btn-sm"
+                          data-testid="dash-manifest-copy"
+                          onClick={() => navigator.clipboard?.writeText(
+                            JSON.stringify(manifest.data, null, 2))}>
+                    Copy JSON
+                  </button>
+                  <button type="button" className="btn btn-sm"
+                          data-testid="dash-manifest-save"
+                          onClick={() => downloadJSON(`${manifest.run_id}_manifest.json`,
+                                                       manifest.data)}>
+                    Download
+                  </button>
+                </>
+              )}
+              <button type="button" className="btn btn-sm" onClick={() => setManifest(null)}>Close</button>
+            </div>
           </div>
           <pre style={{ marginTop: 10, maxHeight: 360, overflow: 'auto', fontSize: 12 }}>
             {manifest.error ? manifest.error : JSON.stringify(manifest.data, null, 2)}

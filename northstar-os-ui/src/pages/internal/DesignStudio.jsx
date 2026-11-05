@@ -83,12 +83,14 @@ const SECTIONS = [
 
 function SectionPicker({ active, onChange }) {
   return (
-    <div className="ds-section-picker" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+    <div className="ds-section-picker" role="group" aria-label="Design Studio sections" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
       {SECTIONS.map(s => (
         <button
           key={s.id}
+          type="button"
           className={`btn btn-sm ${active === s.id ? 'btn-primary' : ''}`}
           title={s.note}
+          aria-pressed={active === s.id}
           onClick={() => onChange(s.id)}
           style={{ opacity: s.built ? 1 : 0.7 }}
         >

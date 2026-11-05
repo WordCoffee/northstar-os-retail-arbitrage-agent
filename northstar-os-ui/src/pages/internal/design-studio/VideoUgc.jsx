@@ -27,6 +27,9 @@ const RULES = [
   { label: 'Mute-first', tone: 'flag', detail: 'Videos launch muted. Rely on visuals over narration, add closed captions, and end on the brand logo. Amazon auto-loops the video.', source: 'SB video specs ? 2026-10-10' },
   { label: 'Safe areas', tone: 'flag', detail: 'Critical content must not obstruct the interface. No text in the bottom-right corner, and keep captions out of the platform UI strip.', source: 'SB video specs ? 2026-10-10' },
   { label: 'No black bars', tone: 'flag', detail: 'Amazon ad policy prohibits letterbox and pillar-box formatting, and video must not abruptly end or truncate.', source: 'Ads overview ? 2026-10-10' },
+  { label: 'Human-feature guardrail', tone: 'flag',
+    detail: 'Faces, hands and bodies are intercepted before a render with the warning: "Generations with human features and hands may generate poor results. We recommend ads that do not have these types of generations for a better overall product." An explicit human_features_ack is the only override, and it is audited.',
+    source: 'video_guard ? 2026-11-05' },
   { label: 'Generation is unarmed', tone: 'flag', detail: 'No provider is connected. This workspace plans, checks and exports your own footage. Nothing is generated here.', source: 'provider boundary ? 2026-10-10' },
 ]
 

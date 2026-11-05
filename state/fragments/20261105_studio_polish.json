@@ -1,0 +1,22 @@
+{
+  "studio_polish_20261105": {
+    "status": "DONE - asset dashboard export/integrity polish, human guardrail rule, section accessibility",
+    "what": {
+      "deliverables": "Per-file sizes and total package size; manifest JSON copy + download; manifest download link on each package card.",
+      "video_ugc": "Visible human-feature guardrail rule with the exact owner warning and the audited human_features_ack override.",
+      "design_studio": "Section picker exposes aria-pressed and explicit button type; active section remains visually primary."
+    },
+    "files": [
+      "northstar-os-ui/src/pages/internal/design-studio/Deliverables.jsx",
+      "northstar-os-ui/src/pages/internal/design-studio/VideoUgc.jsx",
+      "northstar-os-ui/src/pages/internal/DesignStudio.jsx"
+    ],
+    "verification": {
+      "build": "npm run build, 0 errors",
+      "npm_test": "ui + contrast + galactic verifier pass",
+      "frontend_gate": "25 passed"
+    },
+    "gates_held": "UI-only; no generation lane was armed or run.",
+    "report": "reports/v3_execution_20261105.md"
+  }
+}
