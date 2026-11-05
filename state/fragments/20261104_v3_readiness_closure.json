@@ -1,0 +1,52 @@
+{
+  "id": "v3_readiness_closure_20261104",
+  "created_at": "2026-11-04T21:40:00-06:00",
+  "trigger": "reports/v3_readiness_20261104.md §7 — the remaining V3 action items",
+  "state_json_note": "00_STATE.json could not be updated: the edit tool is denied on that path. This fragment carries the record instead; fold it into 00_STATE.json on the next permitted pass.",
+  "full_suite": {
+    "result": "6095 passed, 117 skipped, 2 xfailed, 89 subtests, 0 failed in 885.20s",
+    "evidence": "reports/v3_full_suite_20261104.txt",
+    "previous_baseline": "13 failed, 6045 passed, 117 skipped, 2 xfailed, 89 subtests in 950.92s"
+  },
+  "packifydesign": {
+    "change": "northstar-os-ui/src/pages/internal/PackifyDesign.jsx imports services/signals.js (signals.autothinkRun) instead of the deprecated services/api.js",
+    "evidence": "test_frontend_gate 25 passed; npm run build 0 errors; no v3 module imports the legacy client"
+  },
+  "advanced_view": {
+    "finding": "not an open decision: owner Phase II reconciliation 2026-10-30 set catalog v5 (advanced_view on AutoThinK only, mover == [])",
+    "action": "reconciled the two stale v4 test assertions to the recorded decision and added an exactly-one-tier assertion; the decision was not moved to fit the tests"
+  },
+  "watcher_tests": {
+    "races_removed": [
+      "failure-budget test polled a 5 s wall-clock deadline -> now joins the worker thread (bounded 15 s) and asserts the exact attempt count",
+      "idempotent-start test could stop the worker before its first tick -> now waits on a threading.Event set by the fake sample"
+    ],
+    "evidence": "test_shell_modes + test_local_screen = 82 passed"
+  },
+  "chrome_parity_harness": {
+    "tool": "tools/chrome_parity_harness.py",
+    "tests": "Northstar_backend/test_chrome_parity_harness.py — 31 passed",
+    "contract": "chrome_parity/v1; fail-closed per point (verified | failed | not_verified); pass requires all six verified; missing input is not_verified, never a pass; explicit --root that is not a controller returns controller_not_found rather than measuring another deployment",
+    "verdict": "OVERALL PASS — 6 verified / 0 failed / 0 not_verified",
+    "evidence": ["reports/chrome_parity_20261104.json", "reports/chrome_parity_20261104.md"],
+    "controller": "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project",
+    "not_done": "Chrome Connect is NOT retired. Four of the controller's own suites still encode the pre-2026-10-28 allowlist contract and fail for that reason; they were not edited from this repo and are listed in the report."
+  },
+  "master_video": {
+    "file": "Northstar_backend/data/studio_generated/short_stitched_148acb2e38.mp4",
+    "measured": "15.000 s, 1080x1920, 30 fps, 450 frames, h264 yuv420p, 8,307,840 bytes, no audio stream, OCR contains_text false / 0 boxes",
+    "quality": "layout pass, typography not_applicable (OCR confirms no lettering), design_alignment pass",
+    "guardrail_runs": "run 1: 422 human_features_warning without ack, then a real 1052.2 s six-clip render WITH human_features_ack true, refused 0/3 (OCR read invented 'RDOGiT', layout cropped by hands). run 2: 931.8 s, layout+typography pass, design_alignment fail. run 3: 200 OK (shipping master).",
+    "defects_fixed": [
+      "NameError: uuid in the /shorts stitched branch — the multi-clip path had never executed; fixed with an endpoint-level regression test",
+      "generate_stitched did not thread a negative prompt, so Wan painted lettering onto packaging; negative= now reaches every clip and shorts.master_negative() is the single source of truth"
+    ],
+    "evidence": ["reports/v3_master_video_20261104.json", "reports/v3_master_video_attempt1_guardrail_override.json"],
+    "limits": "Silent master by construction, so no EBU R128 loudness figure is claimed."
+  },
+  "other_fixes": [
+    "tools/start_comfyui.ps1 refused to start when invoked with no arguments (an empty $Rest element counted as unknown); now filtered",
+    "tools/generate_master_video.py always persists its evidence file, including on a refused render"
+  ],
+  "report": "reports/v3_readiness_closure_20261104.md"
+}

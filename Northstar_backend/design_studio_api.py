@@ -2259,7 +2259,12 @@ def make_shorts(body: ShortsIn, acct: str = Depends(studio_account)):
         try:
             stitched = _sh.generate_stitched(
                 path.read_bytes(), out_path=out_path, platform=body.platform,
-                seconds=body.seconds, prompt=prompt, steps=body.steps,
+                seconds=body.seconds, prompt=prompt,
+                # Wan paints lettering onto packaging unless the negative names
+                # it; a video render never composes text here (the label lane
+                # does that separately), so unwanted glyphs are always refused.
+                negative=_sh.master_negative(),
+                steps=body.steps,
                 cfg=body.cfg, seed=body.seed, text_requested=body.text_requested,
                 expected_terms=expected)
         except (ValueError, RuntimeError) as exc:

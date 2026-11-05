@@ -30,6 +30,17 @@ WAN_VAE = "wan2.2_vae.safetensors"
 DEFAULT_PROMPT = "the product rotates slowly, soft studio lighting, premium packaging film"
 DEFAULT_NEGATIVE = "static, blurry, distorted, text artefacts, watermark, flicker"
 
+#: Wan paints lettering onto packaging unless the negative names it. Measured
+#: 2026-11-04: the first 15 s master failed the typography axis on an OCR hit
+#: ("RDOGiT") that neither the source plate nor the brief contained.
+TEXT_SUPPRESSION = ("lettering, letters, words, logo, label text, typography, "
+                    "gibberish text")
+
+
+def master_negative() -> str:
+    """The negative prompt a video master renders with (single source of truth)."""
+    return f"{DEFAULT_NEGATIVE}, {TEXT_SUPPRESSION}"
+
 #: Wan counts frames as 4n+1; 33 frames at 16 fps is a two-second vertical clip.
 FRAME_STEP = 4
 DEFAULT_FRAMES = 33
@@ -147,6 +158,7 @@ def generate(png: bytes, *, prompt: str = DEFAULT_PROMPT,
 
 def generate_stitched(source_png: bytes, *, out_path, platform: str,
                       seconds: Optional[float] = None, prompt: str = DEFAULT_PROMPT,
+                      negative: str = DEFAULT_NEGATIVE,
                       steps: int = 20, cfg: float = 5.0, seed: int = 1,
                       text_requested: bool = False,
                       expected_terms: Optional[List[str]] = None,
@@ -159,6 +171,11 @@ def generate_stitched(source_png: bytes, *, out_path, platform: str,
     pass owns the canvas/codec/duration checks; the quality gate owns the
     picture. A failed gate deletes the MP4 and returns the verdict - a file that
     exists but failed is worse than no file.
+
+    ``negative`` is threaded through to every clip. It exists because a Wan
+    render of packaging invents lettering unless the negative names it: the
+    first 15 s master attempt failed the typography axis on an OCR hit
+    ("RDOGiT") that neither the source plate nor the brief contained.
     """
     import video_stitch as vs
 
@@ -168,7 +185,8 @@ def generate_stitched(source_png: bytes, *, out_path, platform: str,
 
     def _render(index: int, frames: int) -> bytes:
         out = (render or generate)(
-            state["source"], prompt=prompt, width=render_w, height=render_h,
+            state["source"], prompt=prompt, negative=negative,
+            width=render_w, height=render_h,
             length=frames, steps=steps, cfg=cfg, seed=seed + index,
             fps=plan["fps"])
         picked = out.get("frames") or []

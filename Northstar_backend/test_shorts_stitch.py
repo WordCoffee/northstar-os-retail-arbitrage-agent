@@ -43,8 +43,9 @@ def test_sampler_canvas_caps_the_long_edge_at_832():
 def test_a_multi_clip_request_is_stitched_from_the_plan(tmp_path):
     calls = []
 
-    def render(source, *, prompt, width, height, length, steps, cfg, seed, fps):
-        calls.append({"w": width, "h": height, "frames": length, "seed": seed})
+    def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
+        calls.append({"w": width, "h": height, "frames": length, "seed": seed,
+                      "negative": negative})
         clip = _lavfi_clip(tmp_path / f"clip_{len(calls)}.mp4", length)
         return {"video": clip.read_bytes(), "frames": []}
 
@@ -55,14 +56,30 @@ def test_a_multi_clip_request_is_stitched_from_the_plan(tmp_path):
     assert len(calls) == 2
     assert {c["frames"] for c in calls} == {45}
     assert {c["seed"] for c in calls} == {1, 2}
+    assert {c["negative"] for c in calls} == {shorts.DEFAULT_NEGATIVE}
     assert (calls[0]["w"], calls[0]["h"]) == (464, 832)
     assert result["render_canvas"] == [464, 832]
     assert result["final"]["nb_frames"] == 90
     assert out.is_file()
 
 
+def test_a_custom_negative_reaches_every_clip(tmp_path):
+    """The negative must survive the stitch loop, not just the first clip."""
+    seen = []
+
+    def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
+        seen.append(negative)
+        clip = _lavfi_clip(tmp_path / f"n_{seed}.mp4", length)
+        return {"video": clip.read_bytes(), "frames": []}
+
+    shorts.generate_stitched(b"PNG", out_path=tmp_path / "n.mp4", platform="tiktok",
+                             seconds=3, negative="no lettering, no words",
+                             render=render)
+    assert seen == ["no lettering, no words", "no lettering, no words"]
+
+
 def test_a_failed_picture_gate_deletes_the_stitched_file(tmp_path, monkeypatch):
-    def render(source, *, prompt, width, height, length, steps, cfg, seed, fps):
+    def render(source, *, prompt, negative, width, height, length, steps, cfg, seed, fps):
         clip = _lavfi_clip(tmp_path / f"clip_{seed}.mp4", length)
         return {"video": clip.read_bytes(), "frames": [_frame_png()]}
 
@@ -115,9 +132,9 @@ def test_the_shorts_endpoint_wires_the_stitched_branch(tmp_path, monkeypatch):
 
     captured = {}
 
-    def fake_stitched(source, *, out_path, platform, seconds=None, **kw):
+    def fake_stitched(source, *, out_path, platform, seconds=None, negative="", **kw):
         captured.update({"platform": platform, "seconds": seconds,
-                         "bytes_in": len(source)})
+                         "bytes_in": len(source), "negative": negative})
         Path(out_path).write_bytes(b"stub-mp4")
         return {"ok": True, "checks": {"duration_ok": True},
                 "quality": {"verdict": {"ok": True}}, "seconds": 1.0,
@@ -138,4 +155,9 @@ def test_the_shorts_endpoint_wires_the_stitched_branch(tmp_path, monkeypatch):
     assert "short_stitched_" in Path(body["file"]).name
     assert Path(body["file"]).name.endswith(".mp4")
     assert body["format"]["clips"] == 6
-    assert captured == {"platform": "shorts", "seconds": 15.0, "bytes_in": len(_frame_png())}
+    assert captured["platform"] == "shorts"
+    assert captured["seconds"] == 15.0
+    assert captured["bytes_in"] == len(_frame_png())
+    # The endpoint must suppress invented lettering on every video clip.
+    assert shorts.TEXT_SUPPRESSION in captured["negative"]
+    assert "text artefacts" in captured["negative"]
