@@ -1611,6 +1611,274 @@
         "finish"
       ],
       "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "imp-dieline-overlay-unused",
+      "name": "Show the dieline guides that are already implemented",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Promoted from state/backlog/improvements.json by tools/improvement_backlog.py. Evidence: northstar-os-ui/src/lib/dielineOverlay.js:70 - guidesForPanel(geometry, panelId); northstar-os-ui/src/lib/dielineOverlay.test.js - the only file that references the module; northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx:16 - imports do not include the overlay",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "src/lib/dielineOverlay.js implements multi-panel geometry and normalised bleed/trim/fold/safe guides, with a passing test, and no page imports it. Dielines.jsx renders the dieline SVG with no guides at all, so the operator cannot see where bleed and folds land.\n\nCHANGE: Render guidesForPanel() over the dieline preview in Dielines.jsx, DOM-only, so a guide can never reach the exported SVG or PDF (the module's own contract). Add a toggle and keep the existing download paths byte-identical when it is off.\n\nVERIFICATION: npm run build 0 errors; npm run test:ui green; test_frontend_gate.py green; exported SVG bytes unchanged with the overlay off.",
+      "dependencies": [],
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx"
+      ],
+      "read_paths": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "run",
+          "test:ui"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/foundation/tests/test_frontend_gate.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx"
+      ],
+      "commit_message": "feat(ui): Show the dieline guides that are already implemented",
+      "required_artifact": "northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 16,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "imp-tys-panel-staleness",
+      "name": "Say when the Ty panel data was last good",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Promoted from state/backlog/improvements.json by tools/improvement_backlog.py. Evidence: northstar-os-ui/src/pages/internal/TysOpsPanel.jsx:11 - const POLL_MS = 5000; northstar-os-ui/src/pages/internal/TysOpsPanel.jsx:348 - the status pill renders live / unavailable only",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "TysOpsPanel polls /api/admin/tys/* every 5 s and shows a live/unavailable pill, but never says when the data on screen was fetched. If polling fails after a successful load, stale queue counts keep rendering under a pill that only flips once the error state is set, and there is no age shown at any point.\n\nCHANGE: Record the last successful fetch time, render 'updated Ns ago', and mark the panel stale after three missed polls while keeping the last values visible and clearly aged.\n\nVERIFICATION: npm run build 0 errors; npm run test:ui green; test_frontend_gate.py green.",
+      "dependencies": [],
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx"
+      ],
+      "read_paths": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "run",
+          "test:ui"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/foundation/tests/test_frontend_gate.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx"
+      ],
+      "commit_message": "feat(ui): Say when the Ty panel data was last good",
+      "required_artifact": "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 16,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
+    },
+    {
+      "id": "imp-packify-sessions-persist",
+      "name": "Keep Package Design sessions across navigation",
+      "schema_version": 2,
+      "authorized": true,
+      "authorization_note": "Promoted from state/backlog/improvements.json by tools/improvement_backlog.py. Evidence: northstar-os-ui/src/pages/internal/PackifyDesign.jsx - sessions live in useState with no storage or fetch",
+      "risk": "low",
+      "risk_class": "low",
+      "execution": "ty",
+      "contract_version": 1,
+      "objective": "PackifyDesign holds its session list in component state only. Leaving the page discards every generated concept, so an operator who generates three designs and clicks into Design Studio comes back to an empty workspace.\n\nCHANGE: Persist sessions through the existing workspace state helper (src/lib/workspaceState.js) or a local store keyed by account, and restore them on mount. Never fabricate a session that was not generated.\n\nVERIFICATION: npm run build 0 errors; npm run test:ui green with a new case covering restore and the empty state.\n\nSCOPE NOTE: the pure storage half lives in src/lib/packifySessions.js with src/lib/packifySessions.test.js so it is covered by npm run test:ui; the component only wires it to localStorage and the panel.",
+      "dependencies": [],
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx",
+        "northstar-os-ui/src/lib/packifySessions.js",
+        "northstar-os-ui/src/lib/packifySessions.test.js"
+      ],
+      "read_paths": [],
+      "apply_commands": [],
+      "precheck_commands": [],
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "acceptance_commands": [
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "run",
+          "test:ui"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/foundation/tests/test_frontend_gate.py",
+          "-q"
+        ]
+      ],
+      "commit_paths": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx",
+        "northstar-os-ui/src/lib/packifySessions.js",
+        "northstar-os-ui/src/lib/packifySessions.test.js"
+      ],
+      "commit_message": "feat(ui): Keep Package Design sessions across navigation",
+      "required_artifact": "northstar-os-ui/src/pages/internal/PackifyDesign.jsx",
+      "timeout_seconds": 900,
+      "max_repairs": 1,
+      "max_steps": 16,
+      "model": "qwen3.5:4b",
+      "provider": "ollama",
+      "num_ctx": 8192,
+      "native_tools": true,
+      "allowed_tools": [
+        "read",
+        "ast_edit",
+        "run",
+        "finish"
+      ],
+      "author_lane": "opencode-go/deepseek-v4.1-flash (unattended CLI)"
     }
   ]
 }

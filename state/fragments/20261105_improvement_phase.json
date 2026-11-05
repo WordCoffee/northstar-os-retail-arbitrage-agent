@@ -1,0 +1,55 @@
+{
+  "improvement_phase_20261105": {
+    "status": "ACTIVE - baseline green, standing backlog created, 3 UI cycles shipped, creative lane activated and proven",
+    "baseline_verified": {
+      "runner": "scripts/run_all_tests.ps1 -> GREEN, exit 0",
+      "backend": "6154 passed, 0 failed, 117 skipped, 89 subtests",
+      "golden_goose": 511,
+      "ui_contract": 1122,
+      "shell": 307,
+      "functions": 31,
+      "total_passing": 8125,
+      "evidence": "reports/_baseline_final_20261105.txt"
+    },
+    "standing_backlog": {
+      "file": "state/backlog/improvements.json",
+      "tool": "tools/improvement_backlog.py",
+      "test": "Northstar_backend/test_improvement_backlog.py (10 passed)",
+      "schema": "northstar.improvement_backlog.v1",
+      "counts": {"total": 12, "ready": 1, "promoted": 0, "needs-author": 5, "blocked": 3, "done": 3},
+      "why": "the loop executes contracts and never invents scope, so a drained queue is a stopped loop; this is the durable queue it draws from",
+      "guarantees": "a ready item must name write_paths inside the loop commit allowlist and a verification; promotion validates the generated card with continuous_loop.validate_task before the config is touched"
+    },
+    "ui_cycles_shipped": [
+      {
+        "commit": "ff0b83b7",
+        "id": "imp-dieline-overlay-unused",
+        "what": "Dielines.jsx draws the bleed/trim/fold/safe guides from /print/dielines/geometry; the module existed and was tested but no page imported it",
+        "verification": "real doypack geometry (front box 9,11,150,210; 1 bleed, 1 trim, 8 fold, 3 safe; viewBox 0 0 168 486) run through the real overlay module in node; all coords finite, normalised, inside the artboard; build clean; ui 211; frontend gate 25"
+      },
+      {
+        "commit": "9b716830",
+        "id": "imp-tys-panel-staleness",
+        "what": "TysOpsPanel reports last-good age and a third pill state, stale, after three missed polls instead of showing stale counts as live",
+        "verification": "build clean; ui 211; frontend gate 25"
+      },
+      {
+        "commit": "976ace59",
+        "id": "imp-packify-sessions-persist",
+        "what": "Package Design sessions survive navigation through src/lib/packifySessions.js on the versioned workspace serializer; a restored session is always one that was really generated",
+        "verification": "packifySessions.test.js 10 passed; ui 221; build clean; frontend gate 25"
+      }
+    ],
+    "creative_activation": {
+      "report": "reports/creative_activation_20261105.md",
+      "blocker": "not licence, gate logic or weights - the lane was simply not started (MEDIA_GEN_LIVE unset, ComfyUI down, GPU idle)",
+      "image": {"model": "flux3-image-klein-nvfp4", "size": "512x512", "seed": 424242, "seconds": 30.2, "bytes": 343069, "verified": "Pillow: PNG 512x512 RGB, mean (201.1,185.9,173.3), std (26.0,36.4,49.8); visually a clean unprinted kraft stand-up pouch"},
+      "video": {"model": "wan2.2-ti2v-5b-q5", "canvas": "512x480", "frames": 49, "duration_s": 2.0417, "seconds": 68.6, "bytes": 87028, "verified": "ffprobe: h264, 512x480, 49 frames, 2.041667s"},
+      "artifacts": "reports/creative_activation_20261105/",
+      "registry_staleness": "shared/provider-suite.json says flux3_klein weights_missing; gateway reports weights present and a real render succeeded - recorded as imp-flux3-registry-marker (blocked: shared/ is outside the commit allowlist)",
+      "state": "lane stopped after the proofs to release VRAM for the assistant brain; activation is one command (scripts/start-flux3.ps1) plus MEDIA_GEN_LIVE=1 for the render process"
+    },
+    "gates_held": "no Amazon, no spend, no paid credit, no credential read, no policy or allowlist edit, no external provider call; MEDIA_GEN_LIVE was set only inside the render processes and was not persisted",
+    "report": "reports/continuous_improvement_log.md"
+  }
+}

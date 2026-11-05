@@ -173,6 +173,89 @@ excluded or relaxed.
 
 ---
 
+## Cycle 7 — the dieline guides that were already implemented
+
+**Commit** `ff0b83b7` · `northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx` (+127 / −5)
+
+**Defect.** `src/lib/dielineOverlay.js` implements multi-panel geometry and
+normalised bleed/trim/fold/safe guides, with a passing test, and **no page
+imported it**. The Dielines page rendered the art with no guides at all, so an
+operator could not see where bleed and folds land.
+
+**Change.** The page now fetches `/print/dielines/geometry` (the same builder the
+print lane uses, so a guide cannot disagree with the art), draws the guides in the
+dieline's own `viewBox`, and offers a toggle plus a panel picker. The overlay is
+DOM-only: `Download SVG` and `Download PDF` still hand out the untouched `svg`
+string, so a guide can never reach an exported file.
+
+**Evidence.** Real endpoint, real geometry, real viewBox — `doypack` returns
+panels `front/back/gusset`, guides `1 bleed, 1 trim, 8 fold, 3 safe`, viewBox
+`0 0 168 486`. Ran the actual overlay module in node against that payload: every
+panel box finite and inside the artboard, every normalised coordinate in `[0,1]`
+(`front box=[9,11,150,210] rects=4 lines=8`). Build clean, `npm run test:ui` 211,
+frontend gate 25. Commit `ff0b83b7`.
+
+---
+
+## Cycle 8 — say when the Ty panel data was last good
+
+**Commit** `9b716830` · `TysOpsPanel.jsx` (+27 / −4)
+
+**Defect.** The panel polls every 5 s and shows a live/unavailable pill, but never
+says when the data on screen was fetched. A poll failure after a good load leaves
+stale queue counts rendering with no age on them.
+
+**Change.** `lastGoodAt` records the last successful read; a `tick` counter forces
+a re-render each poll (React bails out of identical `setState`, so the age would
+otherwise freeze); the pill gains a third state, `stale`, after three missed
+polls, and the header shows `updated Ns ago` / `no successful read yet`.
+
+**Evidence.** Build clean, `npm run test:ui` 211, frontend gate 25. Commit
+`9b716830`.
+
+---
+
+## Cycle 9 — Package Design keeps its sessions
+
+**Commit** `976ace59` · 3 files (+194 / −3)
+
+**Defect.** Sessions lived in component state only, so navigating away discarded
+every generated concept.
+
+**Change.** New `src/lib/packifySessions.js` — the pure half, so it is testable:
+`sanitiseSessions` drops anything that is not a session, `encodeSessions`/
+`decodeSessions` go through the existing versioned, TTL'd, corrupt-safe workspace
+serializer, and `active` falls back to the newest session when the stored id no
+longer exists. The component only wires it to `localStorage`. A restored session
+is always one that was really generated.
+
+**Evidence.** `packifySessions.test.js` 10/10 (round-trip, corrupt JSON, expiry,
+unknown active id, cap, truncation, empty state); `npm run test:ui` **221**;
+build clean; frontend gate 25. Commit `976ace59`.
+
+---
+
+## Creative services — activated and proven
+
+Full evidence: `reports/creative_activation_20261105.md`.
+
+The lane was not blocked by licence, gate logic or weights — it was **not
+started**. `scripts/start-flux3.ps1` brought up ComfyUI `:8188` and the gateway
+`:8190`; the gateway reported `weights.present: true, missing: []`, which makes
+the registry's `weights_missing` marker stale.
+
+| render | model | measured | wall clock |
+|---|---|---|---|
+| image 512×512, seed 424242 | `flux3-image-klein-nvfp4` | PNG, mean RGB (201,186,173), std (26,36,50) | **30.2 s** |
+| video 512×480, 49 frames | `wan2.2-ti2v-5b-q5` | ffprobe: h264, 49 frames, 2.0417 s | **68.6 s** |
+
+Both verified with Pillow and ffprobe rather than trusted from the return value.
+The image is a clean unprinted kraft stand-up pouch on seamless grey — no
+lettering, no logo, exactly the brief. The lane was stopped afterwards to release
+VRAM for the assistant's brain; activation is one command, not a daemon.
+
+---
+
 ## Measured baseline (2026-11-05T13:11Z, confirmed GREEN at 13:26Z)
 
 | suite | passed | failed | skipped |
@@ -204,6 +287,24 @@ pending the spend gate.
 
 ---
 
+## The standing backlog
+
+The loop executes contracts and never invents scope, so a drained queue is a
+stopped loop. `state/backlog/improvements.json` is now the standing queue:
+**12 items** — 1 ready, 5 needs-author, 3 blocked, 3 done.
+
+```
+python tools/improvement_backlog.py --list
+python tools/improvement_backlog.py --check      # refuses an untrustworthy item
+python tools/improvement_backlog.py --promote <id>
+```
+
+`--check` is load-bearing: it refuses an item with no evidence, a `ready` item
+whose write path the supervisor would refuse, and a duplicate id. `--promote`
+validates the generated card with `continuous_loop.validate_task` **before**
+touching the config, so a promotion cannot create a task the supervisor rejects.
+The tool is covered by `Northstar_backend/test_improvement_backlog.py` (10 tests).
+
 ## Gates held across every cycle
 
 No Amazon request. No spend or paid credit. No credential read. No policy,
@@ -213,9 +314,21 @@ was verified by an independent probe or test before it was committed.
 
 ## Open items for the next cycles
 
-- `prompt_author` is still not wired into the live render path; `creative_flow`
-  takes an injectable callable. Wiring it is the next prompt-fidelity step.
-- The ad pipeline reports its overrun but does not yet align or re-time the
-  script — the honest next step is fitting the copy to the beat plan.
-- Docling needs an operator decision to add a registry entry before any import.
-- `PackifyDesign` sessions are still in-memory only.
+Tracked in `state/backlog/improvements.json`, not just here:
+
+- `imp-prompt-author-unwired` (P1, needs-author) — the authored prompt is still
+  not wired into the live render path; `creative_flow` takes an injectable
+  callable that no production path supplies.
+- `imp-ad-copy-fit` (P2, needs-author) — the ad pipeline reports its overrun but
+  does not yet fit the copy to the beat plan.
+- `imp-image-parameter-tuning` (P2, needs-author) — `generate_image` hardcodes
+  steps and CFG 1.0; `image_best_of.py` exists but is not on the render path.
+- `imp-credit-meter-consume` (P2, needs-author) — `/api/v1/credits/me` always
+  returns `consumed: 0`, so the balance can never move.
+- `imp-error-state-standard` (P3, needs-author) — `describeError` is the new
+  standard but only Package Design uses it.
+- `imp-media-lane-startup-doc` (P3, ready) — document that piping
+  `start-flux3.ps1` blocks on its children.
+- `imp-docling-registry`, `imp-surya-ingestion`, `imp-flux3-registry-marker`
+  (blocked) — each needs an operator decision or an edit to `shared/`, which is
+  outside the loop's commit allowlist.

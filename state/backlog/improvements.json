@@ -1,0 +1,373 @@
+{
+  "schema": "northstar.improvement_backlog.v1",
+  "created_at": "2026-11-05T13:40:00Z",
+  "updated_at": "2026-11-05T14:40:49+00:00",
+  "purpose": "The standing queue of improvement requests for Ty's Assistant. The continuous loop executes task contracts and never invents scope, so an empty queue stops it. This file is where work is written down before it is runnable, so a campaign never starts from nothing.",
+  "rules": {
+    "statuses": {
+      "ready": "write_paths and a verification are named; tools/improvement_backlog.py --promote can turn it into a loop task contract",
+      "needs-author": "a real defect with evidence, but the write scope or the design is not settled; an author must finish it before it can run",
+      "blocked": "waiting on an operator decision, a spend gate, or a file outside the loop's commit allowlist",
+      "done": "shipped and verified; keep the entry with its commit",
+      "promoted": "already written into config/continuous_loop_tasks.json; the supervisor owns it now"
+    },
+    "promotion": "only 'ready' items may be promoted. Promotion writes a card into config/continuous_loop_tasks.json and validates it with continuous_loop.validate_task before the file is touched.",
+    "evidence": "every item cites the file and line that shows the problem. An item without evidence is an opinion, not a request."
+  },
+  "counts": {
+    "total": 12,
+    "ready": 1,
+    "promoted": 0,
+    "needs-author": 5,
+    "blocked": 3,
+    "done": 3
+  },
+  "items": [
+    {
+      "id": "imp-prompt-author-unwired",
+      "theme": "creative",
+      "priority": "P1",
+      "status": "needs-author",
+      "title": "Wire the authored prompt into the render path",
+      "problem": "prompt_author.author_prompt() is contract-tested and now guarantees a compliant prompt, but nothing in production calls it. creative_flow accepts an injectable `prompt_author` callable that no live path supplies, so a render still uses whatever prompt string the caller happened to pass.",
+      "evidence": [
+        "Northstar_backend/creative_flow.py:118 - constructor parameter prompt_author: Optional[Callable]",
+        "Northstar_backend/creative_flow.py:210 - prompt = self.prompt_author(...) if self.prompt_author else <fallback>",
+        "Northstar_backend/prompt_author.py:145 - refine_prompt exists and is unused outside its own module"
+      ],
+      "proposed_change": "Supply prompt_author.author_prompt at the live call site behind the existing seam, and fail closed (block the run) on PromptAuthorUnavailable instead of falling back to a template. Record the authored prompt and its refinement record in the render manifest.",
+      "write_paths": [
+        "Northstar_backend/creative_flow.py"
+      ],
+      "verification": "test_creative_flow.py and test_prompt_author.py stay green; a new case proves a disarmed author blocks the run.",
+      "risk": "medium",
+      "blocked": "author must settle the fail-closed behaviour at the live call site and which manifest records the authored prompt"
+    },
+    {
+      "id": "imp-dieline-overlay-unused",
+      "theme": "ui",
+      "priority": "P1",
+      "status": "done",
+      "title": "Show the dieline guides that are already implemented",
+      "problem": "src/lib/dielineOverlay.js implements multi-panel geometry and normalised bleed/trim/fold/safe guides, with a passing test, and no page imports it. Dielines.jsx renders the dieline SVG with no guides at all, so the operator cannot see where bleed and folds land.",
+      "evidence": [
+        "northstar-os-ui/src/lib/dielineOverlay.js:70 - guidesForPanel(geometry, panelId)",
+        "northstar-os-ui/src/lib/dielineOverlay.test.js - the only file that references the module",
+        "northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx:16 - imports do not include the overlay"
+      ],
+      "proposed_change": "Render guidesForPanel() over the dieline preview in Dielines.jsx, DOM-only, so a guide can never reach the exported SVG or PDF (the module's own contract). Add a toggle and keep the existing download paths byte-identical when it is off.",
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/design-studio/Dielines.jsx"
+      ],
+      "verification": "npm run build 0 errors; npm run test:ui green; test_frontend_gate.py green; exported SVG bytes unchanged with the overlay off.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(ui)",
+      "promoted_at": "2026-11-05T14:29:25+00:00",
+      "task_id": "imp-dieline-overlay-unused",
+      "done_at": "2026-11-05T14:40:49+00:00",
+      "commit": "ff0b83b7"
+    },
+    {
+      "id": "imp-tys-panel-staleness",
+      "theme": "ui",
+      "priority": "P2",
+      "status": "done",
+      "title": "Say when the Ty panel data was last good",
+      "problem": "TysOpsPanel polls /api/admin/tys/* every 5 s and shows a live/unavailable pill, but never says when the data on screen was fetched. If polling fails after a successful load, stale queue counts keep rendering under a pill that only flips once the error state is set, and there is no age shown at any point.",
+      "evidence": [
+        "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx:11 - const POLL_MS = 5000",
+        "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx:348 - the status pill renders live / unavailable only"
+      ],
+      "proposed_change": "Record the last successful fetch time, render 'updated Ns ago', and mark the panel stale after three missed polls while keeping the last values visible and clearly aged.",
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/TysOpsPanel.jsx"
+      ],
+      "verification": "npm run build 0 errors; npm run test:ui green; test_frontend_gate.py green.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(ui)",
+      "promoted_at": "2026-11-05T14:29:26+00:00",
+      "task_id": "imp-tys-panel-staleness",
+      "done_at": "2026-11-05T14:40:49+00:00",
+      "commit": "9b716830"
+    },
+    {
+      "id": "imp-packify-sessions-persist",
+      "theme": "ui",
+      "priority": "P3",
+      "status": "done",
+      "title": "Keep Package Design sessions across navigation",
+      "problem": "PackifyDesign holds its session list in component state only. Leaving the page discards every generated concept, so an operator who generates three designs and clicks into Design Studio comes back to an empty workspace.",
+      "evidence": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx - sessions live in useState with no storage or fetch"
+      ],
+      "proposed_change": "Persist sessions through the existing workspace state helper (src/lib/workspaceState.js) or a local store keyed by account, and restore them on mount. Never fabricate a session that was not generated.",
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/PackifyDesign.jsx"
+      ],
+      "verification": "npm run build 0 errors; npm run test:ui green with a new case covering restore and the empty state.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "ui build",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "build"
+          ]
+        },
+        {
+          "name": "ui lib tests",
+          "cwd": "northstar-os-ui",
+          "cmd": [
+            "npm",
+            "run",
+            "test:ui"
+          ]
+        },
+        {
+          "name": "frontend gate",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-m",
+            "pytest",
+            "Northstar_backend/foundation/tests/test_frontend_gate.py",
+            "-q"
+          ]
+        }
+      ],
+      "commit_prefix": "feat(ui)",
+      "promoted_at": "2026-11-05T14:29:26+00:00",
+      "task_id": "imp-packify-sessions-persist",
+      "done_at": "2026-11-05T14:40:49+00:00",
+      "commit": "976ace59"
+    },
+    {
+      "id": "imp-image-parameter-tuning",
+      "theme": "creative",
+      "priority": "P2",
+      "status": "needs-author",
+      "title": "Parameter tuning and best-of-N on the render path",
+      "problem": "generate_image hardcodes steps (16 draft / 24 final) and a fixed CFG of 1.0 in the FLUX 3 graph. image_best_of.py exists and scores candidates, but only tys_assistant.py uses it. A render is a single draw at a random seed with no sweep and no selection.",
+      "evidence": [
+        "Northstar_backend/studio_generation.py:748 - steps = 24 if tier == final else 16",
+        "Northstar_backend/studio_generation.py:568 - \"cfg\": 1.0 in the FLUX 3 graph",
+        "Northstar_backend/image_best_of.py - scoring exists, not referenced by studio_generation"
+      ],
+      "proposed_change": "Expose steps/cfg/seed as bounded parameters and add an opt-in best-of-N that reuses image_best_of scoring, with N capped so a 16 GB card cannot be asked for an unbounded sweep.",
+      "write_paths": [
+        "Northstar_backend/studio_generation.py"
+      ],
+      "verification": "test_studio_generate_contract.py green; a new case proves N is capped and that a single-render call is unchanged.",
+      "risk": "medium",
+      "blocked": "author must bound N for a 16 GB card and name the selection threshold before any sweep is allowed to run"
+    },
+    {
+      "id": "imp-ad-copy-fit",
+      "theme": "creative",
+      "priority": "P2",
+      "status": "needs-author",
+      "title": "Fit the ad copy to the beat plan instead of truncating it",
+      "problem": "The ad pipeline now measures and reports overrun_s, which makes the truncation visible, but it still drops the tail of the narration. A 3 s ad carrying a 10.4 s script delivers 3 s of speech and says so in the manifest - honest, not fixed.",
+      "evidence": [
+        "Northstar_backend/video_ad.py - strict_overrun=False with overrun_s recorded in the audio block",
+        "Northstar_backend/video_audio.py:39 - VOICE_OVERRUN_TOLERANCE_S = 0.25"
+      ],
+      "proposed_change": "Fit the script to the picture before synthesis: trim to a sentence boundary using the same words-per-second estimate video_script already uses, re-measure, and record both the requested and delivered word counts.",
+      "write_paths": [
+        "Northstar_backend/video_ad.py"
+      ],
+      "verification": "test_video_ad.py green including the overrun report; a new case proves a long script is fitted and the delivered overrun is inside tolerance.",
+      "risk": "medium",
+      "blocked": "author must choose the words-per-second estimator and whether a fitted script is re-synthesised or the beat plan is re-cut"
+    },
+    {
+      "id": "imp-credit-meter-consume",
+      "theme": "backend",
+      "priority": "P2",
+      "status": "needs-author",
+      "title": "Record credit consumption so the meter can move",
+      "problem": "/api/v1/credits/me returns consumed:0 and balance == allotment on every call, by design (\"offline alpha: no consumption tracked yet\"). Nothing debits the ledger, so the balance is decorative and the affordability gate in Package Design can never actually stop a run.",
+      "evidence": [
+        "Northstar_backend/main.py:2404 - \"Offline alpha: no consumption tracked yet; balance == allotment\"",
+        "Northstar_backend/credit_ledger.py:114 - CreditLedger exists with reservations and entries"
+      ],
+      "proposed_change": "Debit through CreditLedger on the priced actions (AI Design, render, video) and return the real consumed/balance from the endpoint. Keep the existing envelope and the display-only client contract.",
+      "write_paths": [
+        "Northstar_backend/main.py",
+        "Northstar_backend/credit_ledger.py"
+      ],
+      "verification": "test_credit_ledger.py green; a new case proves a priced action reduces the balance and an unaffordable one is refused before it runs.",
+      "risk": "medium",
+      "blocked": "author must name every priced action and the reservation/commit semantics before anything debits a ledger"
+    },
+    {
+      "id": "imp-error-state-standard",
+      "theme": "ui",
+      "priority": "P3",
+      "status": "needs-author",
+      "title": "Apply the error-state standard to the remaining pages",
+      "problem": "creditMeter.describeError() now maps a transport failure to a named tone and an action, but only Package Design uses it. Improvement.jsx still calls setError(e.message) and renders the raw string, so an operator sees 'Failed to fetch' with no next step.",
+      "evidence": [
+        "northstar-os-ui/src/pages/internal/Improvement.jsx:94 - setError(e.message)",
+        "northstar-os-ui/src/pages/internal/Improvement.jsx:109 - setError(e.message)",
+        "northstar-os-ui/src/lib/creditMeter.js:105 - describeError maps 0/401/403/429/5xx to an action"
+      ],
+      "proposed_change": "Move describeError into a shared lib (it is not credit-specific), then adopt it in Improvement.jsx and any page still rendering a raw message, with a role=alert block and the action button.",
+      "write_paths": [
+        "northstar-os-ui/src/pages/internal/Improvement.jsx"
+      ],
+      "verification": "npm run build 0 errors; npm run test:ui green; test_frontend_gate.py green.",
+      "risk": "low",
+      "blocked": "author must move describeError out of creditMeter.js into a shared lib without breaking its 10 tests"
+    },
+    {
+      "id": "imp-docling-registry",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "Decide on Docling for supplier-document ingestion",
+      "problem": "Docling is MIT, local and fills the supplier catalogue / spec sheet ingestion gap that is currently manual. It is absent from shared/provider-suite.json, so the gate refuses it as unknown_tool and no lane may import it.",
+      "evidence": [
+        "reports/emerging_tools_evaluation_20261105.md - licence read from the upstream LICENSE file",
+        "Northstar_backend/provider_suite.py --check docling --provider local -> NOT available on local - unknown_tool"
+      ],
+      "proposed_change": "Operator decision: add a registry entry (lanes local, license MIT, network false) then re-run the gate. shared/ is outside the loop commit allowlist, so the loop cannot do this itself.",
+      "write_paths": [],
+      "verification": "provider_suite.py --check docling --provider local returns available before any import.",
+      "risk": "low",
+      "blocked": "operator decision to add a shared/provider-suite.json entry; the file is outside the loop commit allowlist"
+    },
+    {
+      "id": "imp-surya-ingestion",
+      "theme": "tooling",
+      "priority": "P3",
+      "status": "blocked",
+      "title": "Install Surya for layout and table extraction",
+      "problem": "surya is registered in the provider suite but marked not_installed. It is the ingestion counterpart to RapidOCR: RapidOCR checks text already on a render, Surya reads tables and reading order out of a supplier PDF.",
+      "evidence": [
+        "shared/provider-suite.json - surya: installed=not_installed, license Apache-2.0, lanes local",
+        "shared/provider-suite.json - rapidocr note: 'for the render check, not for ingestion'"
+      ],
+      "proposed_change": "Install into the local lane, verify the licence and the installed marker, then wire it into document ingestion. Requires an install decision and a shared/ edit.",
+      "write_paths": [],
+      "verification": "provider_suite.py --check surya --provider local returns available; an ingestion case parses a table.",
+      "risk": "medium",
+      "blocked": "install decision plus a shared/provider-suite.json marker update, both outside the loop commit allowlist"
+    },
+    {
+      "id": "imp-flux3-registry-marker",
+      "theme": "tooling",
+      "priority": "P2",
+      "status": "blocked",
+      "title": "The provider suite says FLUX 3 weights are missing; they are not",
+      "problem": "shared/provider-suite.json marks flux3_klein as installed=\"weights_missing\", but the gateway reports weights present and a real 512x512 render completed in 30.2 s on 2026-11-05. A stale marker makes the image lane look unavailable and invites a duplicate download or a false refusal.",
+      "evidence": [
+        "shared/provider-suite.json - flux3_klein: installed=weights_missing",
+        "reports/creative_activation_20261105.md - gateway /health reports weights.present=true, missing=[]; render succeeded"
+      ],
+      "proposed_change": "Set installed to \"installed\" for flux3_klein and re-run provider_suite.py --check flux3_klein --provider local. shared/ is outside the loop commit allowlist, so this needs an operator edit.",
+      "write_paths": [],
+      "verification": "provider_suite.py --check flux3_klein --provider local reports installed.",
+      "risk": "low",
+      "blocked": "shared/provider-suite.json is outside the loop commit allowlist"
+    },
+    {
+      "id": "imp-media-lane-startup-doc",
+      "theme": "reliability",
+      "priority": "P3",
+      "status": "ready",
+      "title": "Document how to start the media lane without hanging the caller",
+      "problem": "scripts/start-flux3.ps1 starts ComfyUI and the gateway and returns, but a caller that pipes its output (... | Select-Object) waits forever because the children inherit the pipe handle. That looked like a hang for ten minutes during the 2026-11-05 activation and would look like one to the next operator.",
+      "evidence": [
+        "scripts/start-flux3.ps1 - Start-Process for ComfyUI and the gateway, then writes flux3.pids at the end",
+        "reports/creative_activation_20261105.md - the pipeline held for 600 s while the services were already healthy"
+      ],
+      "proposed_change": "Add the operational note to docs/CONTINUOUS_LOOP.md's sibling runbook (or the script header): redirect with *> file, never a pipe; include the start, health-check and stop sequence.",
+      "write_paths": [
+        "docs/CONTINUOUS_LOOP.md"
+      ],
+      "verification": "the note is present and the start/stop sequence matches scripts/start-flux3.ps1.",
+      "risk": "low",
+      "blocked": "",
+      "checks": [
+        {
+          "name": "docs present",
+          "cwd": ".",
+          "cmd": [
+            "python",
+            "-c",
+            "import pathlib,sys; t=pathlib.Path('docs/CONTINUOUS_LOOP.md').read_text(encoding='utf-8'); sys.exit(0 if 'start-flux3.ps1' in t and '*>' in t else 1)"
+          ]
+        }
+      ],
+      "commit_prefix": "docs(loop)"
+    }
+  ]
+}
