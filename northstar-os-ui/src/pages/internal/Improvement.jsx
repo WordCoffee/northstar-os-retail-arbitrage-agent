@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import TysOpsPanel from './TysOpsPanel.jsx'
 
 // Improvement room — the operator's view of the continuous improvement engine.
 // Read-mostly: the only actions are "dry run", "run one cycle", and the stop
@@ -140,6 +141,8 @@ export default function Improvement() {
       <p style={{ fontSize: 14, opacity: 0.7, marginTop: 0 }}>
         What Bojo learned, what it is missing, and the exact rollback for every change.
       </p>
+
+      <TysOpsPanel />
 
       <div style={{ ...card, ...row }}>
         <button style={stopped ? btn : btnDanger} disabled={!!busy}

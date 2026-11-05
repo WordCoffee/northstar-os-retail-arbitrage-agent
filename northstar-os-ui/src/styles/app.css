@@ -516,3 +516,19 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* â€” Compact notices â€” */
 .notice-compact { padding: 10px 14px; }
 .notice-compact .alert-text { font-size: 12px; }
+
+/* Tys Assistant live indicator */
+.tys-live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  display: inline-block; background: currentColor;
+  box-shadow: 0 0 0 0 currentColor;
+  animation: tysPulse 1.8s ease-out infinite;
+}
+@keyframes tysPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(62, 92, 70, 0.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(62, 92, 70, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(62, 92, 70, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tys-live-dot { animation: none; }
+}

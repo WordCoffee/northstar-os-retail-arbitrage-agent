@@ -1,6 +1,7 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import { useState, useEffect } from 'react'
 import signals, { settle } from '../../services/signals.js'
+import TysOpsPanel from './TysOpsPanel.jsx'
 
 // ═══ Live readiness / provider presence (real reads) ═══
 function AdminLiveStatus() {
@@ -86,6 +87,8 @@ export default function InternalAdmin() {
       </DataNotice>
 
       <AdminLiveStatus />
+
+      <TysOpsPanel />
 
       <div className="grid-2" style={{ marginBottom: 20 }}>
         <div className="card">

@@ -204,6 +204,11 @@ const SIMPLE_KEEP_ADVANCED = [
   // The workbench is the shell itself: Bojo docked, services as tabs.
   /^\/workbench(\/|$)/,
 
+  // The Improvement room carries the live Tys Assistant panel (queue, lanes,
+  // task progress, memory). Replacing it with chat in Northstar hid the
+  // operator's own automation state.
+  /^\/improvement(\/|$)/,
+
   new RegExp("^/galactic(/|$)"),
 ]
 
