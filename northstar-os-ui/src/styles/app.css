@@ -532,3 +532,35 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) {
   .tys-live-dot { animation: none; }
 }
+
+/* Ty's eyes: a cobalt ring around the whole screen while vision is armed.
+   Opacity-only animation on a fixed, pointer-events:none overlay, so it costs
+   one compositor layer and nothing else. No ring means the eyes are NOT on. */
+.vision-ring {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+}
+.vision-ring-line {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px rgba(47, 111, 237, 0.45);
+}
+.vision-ring-glow {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px rgba(47, 111, 237, 0.9),
+              inset 0 0 20px 2px rgba(47, 111, 237, 0.45);
+  opacity: 0.4;
+  will-change: opacity;
+  animation: visionRingBreath 3.2s ease-in-out infinite;
+}
+@keyframes visionRingBreath {
+  0%   { opacity: 0.35; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vision-ring-glow { animation: none; opacity: 0.55; }
+}

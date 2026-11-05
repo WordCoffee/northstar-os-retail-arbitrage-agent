@@ -46,6 +46,7 @@ class VerifierRegistry:
         self.register("text_valid", _text_valid)
         self.register("social_valid", _social_valid)
         self.register("aplus_valid", _aplus_valid)
+        self.register("vision", _vision)
 
     def register(self, name: str, fn: Verifier) -> None:
         self._registry[name] = fn
@@ -264,6 +265,39 @@ def _aplus_valid(p: Dict[str, Any]) -> Dict[str, Any]:
     from .content import validate_aplus
     path = Path(str(p.get("path") or ""))
     return _wrap_content(validate_aplus(path), path)
+
+
+def _vision(p: Dict[str, Any]) -> Dict[str, Any]:
+    """Ty's Eye as an acceptance check: the image must satisfy the constraint.
+
+    Three outcomes, and `unknown` is the honest one when the eyes are off:
+
+    * ``pass``    the eye read the image and the verdict was a pass
+    * ``fail``    the eye read the image and the verdict was a fail
+    * ``unknown`` eyes disabled, no image, no constraint, model down, or an
+                  unparseable answer. Unknown is never upgraded to pass — a node
+                  does not become done because the supervisor could not look.
+    """
+    path = Path(str(p.get("path") or ""))
+    if not path.is_file():
+        return {"result": "fail", "kind": "vision", "path": str(path),
+                "detail": "image missing"}
+    if not bool(p.get("enabled")):
+        return {"result": "unknown", "kind": "vision", "path": str(path),
+                "detail": "vision disabled by operator"}
+    from .eye import DISABLED, OFF_TRACK, ON_TRACK, TyEye
+
+    eye = TyEye(enabled=True, caller=p.get("caller"), journal=p.get("journal"))
+    look = eye.look(str(p.get("goal") or ""), image_path=str(path),
+                    constraint=str(p.get("constraint") or ""),
+                    step=str(p.get("step") or ""))
+    status = look.get("status")
+    mapped = "pass" if status == ON_TRACK else "fail" if status == OFF_TRACK else "unknown"
+    detail = (look.get("guidance") or look.get("reason")
+              or ("on track" if status == ON_TRACK else DISABLED))
+    return {"result": mapped, "kind": "vision", "path": str(path),
+            "sha256": look.get("image_sha256"),
+            "detail": str(detail)[:400]}
 
 
 def page_state_verifier(expected: Dict[str, Any]):

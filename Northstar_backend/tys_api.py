@@ -90,6 +90,52 @@ async def get_identity(_user: Dict[str, Any] = Depends(require_tys_admin)) -> Di
     return _assistant().identity()
 
 
+# ---------------------------------------------------------------------------
+# Operator switches: the assistant, then its eyes
+# ---------------------------------------------------------------------------
+
+@router.get("/switches")
+async def get_switches(_user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    """Both switches, plus the dependency between them."""
+    assistant = _assistant()
+    return {"switches": assistant.switches(), "eyes": assistant.eyes_status()}
+
+
+@router.post("/switches")
+async def set_switches(body: Dict[str, Any] = Body(...),
+                       _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    """Turn Tys Assistant on/off, then its vision on/off.
+
+    The order matters and is enforced server-side: vision cannot be armed while
+    the assistant is off, and switching the assistant off disarms vision.
+    """
+    assistant = _assistant()
+    unknown = set(body) - {"assistant", "vision"}
+    if unknown:
+        raise HTTPException(status_code=400, detail={
+            "code": "unknown_switch", "detail": sorted(unknown)})
+    try:
+        switches = assistant.set_switches(
+            assistant=(None if body.get("assistant") is None else bool(body["assistant"])),
+            vision=(None if body.get("vision") is None else bool(body["vision"])),
+        )
+    except tys.TysError as exc:
+        raise _http_error(exc) from exc
+    return {"switches": switches, "eyes": assistant.eyes_status()}
+
+
+@router.get("/voice")
+async def get_voice(limit: int = Query(default=6, ge=1, le=50),
+                    _user: Dict[str, Any] = Depends(require_tys_admin)) -> Dict[str, Any]:
+    """What the assistant says about itself: its eyes, its learning lanes, and
+    the one-line narration of its most recent looks.
+
+    Only real journal records produce a line — an assistant that has not looked
+    at anything says nothing about having seen anything.
+    """
+    return _assistant().voice(limit=limit)
+
+
 @router.get("/ui")
 async def get_ui(
     profile: str = Query(default="operator"),

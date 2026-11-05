@@ -65,6 +65,86 @@ CHAT_PROTOCOL_ROLE_UNCHANGED = "assistant"
 
 LANES = ("inspect", "coding", "graphics", "browser", "creative")
 
+#: Operator switches, stored in `tys_settings`. The assistant defaults ON so
+#: existing deployments behave exactly as before; its eyes default OFF because
+#: enabling a supervisor is a decision the owner makes, not a default.
+SETTING_ASSISTANT_ENABLED = "assistant.enabled"
+SETTING_VISION_ENABLED = "vision.enabled"
+
+#: How Tys Assistant describes itself, in its own voice. Every claim here is
+#: bounded by what the machine can actually do — the eyes judge appearance, the
+#: coding lane reads text, and REA goes through the sanctioned paths only.
+PERSONA_TEXT = (
+    "I am Tys Assistant, the operator automation agent of Northstar OS. "
+    "I plan bounded work orders, route each step to a lane, record evidence and "
+    "checkpoint. My eyes are Ty's Vision: after I build something visible I look "
+    "at it and judge whether it matches the goal. The eyes judge appearance — a "
+    "label, a layout, a missing subject. They do not read code and they do not "
+    "guess: fine print goes to OCR, and source code is read from disk by my "
+    "coding lane. When a look cannot happen I call it unverified, never on track. "
+    "When my eyes are armed, a cobalt ring sits around the screen; no ring means "
+    "I am not looking. I learn by REA — reverse-engineering analysis of a live "
+    "product or page — only through sanctioned paths: the corpus learner for "
+    "public signed-out breadth, Chrome Connect for read-only live capture, and "
+    "the Tool Execution Gateway for audited tool calls. Patterns and provenance "
+    "go into the knowledge plane; assets are not copied, credentials are not "
+    "touched, and the controller is never bypassed."
+)
+
+#: What the eyes are for and, just as importantly, what they are not for.
+EYES_CONTRACT = {
+    "judges": ["renders", "product shots", "label artwork", "screenshots",
+               "UI captures"],
+    "does_not": ["read source code", "transcribe fine print", "edit files",
+                 "decide that a build is done"],
+    "on_unavailable": "unverified (never on_track)",
+    "measured": "5/5 constraint verdicts on a code screenshot; 0.652 character "
+                "similarity when asked to transcribe it (2026-11-05)",
+}
+
+#: The sanctioned learning lanes, named so the agent recommends the right one.
+LEARNING_LANES = {
+    "rea_breadth": {
+        "tool": "Northstar_backend/corpus_learner.py",
+        "use": "public, signed-out pages; robots.txt honoured; provenance kept",
+        "never": "login, credential, CAPTCHA, or a page robots disallows",
+    },
+    "rea_live": {
+        "tool": "Chrome Connect (chromeconnect_run, read-only)",
+        "use": "observing a live product's behaviour under operator-approved policy",
+        "never": "raw Playwright, credential entry, purchase or external state change",
+    },
+    "rea_tools": {
+        "tool": "Northstar_backend/tool_gateway.py",
+        "use": "audited tool calls, every attempt appended to the gateway audit log",
+        "never": "bypassing the gateway to reach a tool directly",
+    },
+    "rea_gate": {
+        "tool": "tools/verify-rea.ps1",
+        "use": "fails a regression or a lost metric after a pattern is adopted",
+        "never": "claiming an adoption without the gate result",
+    },
+}
+
+
+def eyes_sentence(look: Optional[Dict[str, Any]]) -> str:
+    """One first-person sentence about a look. Empty when there was no look."""
+    if not look:
+        return ""
+    status = str(look.get("status") or "")
+    image = os.path.basename(str(look.get("image_path") or "")) or "the result"
+    if status == "on_track":
+        return f"My eyes checked {image}: on track."
+    if status == "off_track":
+        reasons = "; ".join(str(r).rstrip(". ") for r in (look.get("reasons") or [])) \
+            or str(look.get("reason") or "")
+        return f"My eyes flagged {image} off goal: {reasons}. That is what I fix next."
+    if status == "disabled":
+        return ""
+    reason = str(look.get("reason") or "no verdict")
+    return f"I could not look at {image} ({reason}). Unverified, not a pass."
+
+
 #: Defaults chosen so a single `run()` is always short enough to observe and
 #: always leaves a resumable checkpoint behind.
 DEFAULT_LIMITS: Dict[str, Any] = {
@@ -108,6 +188,15 @@ class TysError(RuntimeError):
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def _count_statuses(records: Iterable[Dict[str, Any]]) -> Dict[str, int]:
+    """How many looks ended on_track / off_track / unverified / disabled."""
+    counts: Dict[str, int] = {}
+    for record in records or []:
+        status = str((record or {}).get("status") or "unknown")
+        counts[status] = counts.get(status, 0) + 1
+    return counts
 
 
 def _repo_root() -> str:
@@ -190,6 +279,11 @@ CREATE TABLE IF NOT EXISTS tys_tasks (
     updated_at TEXT NOT NULL,
     started_at TEXT,
     finished_at TEXT
+);
+CREATE TABLE IF NOT EXISTS tys_settings (
+    key TEXT PRIMARY KEY,
+    value_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS tys_events (
     seq INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -340,6 +434,32 @@ class TysStore:
     def close(self) -> None:
         with self._lock:
             self._conn.close()
+
+    # -- settings (operator switches) --------------------------------------
+
+    def get_setting(self, key: str, default: Any = None) -> Any:
+        """Read one operator switch. An unreadable value returns `default`."""
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT value_json FROM tys_settings WHERE key=?", (str(key),)
+            ).fetchone()
+        if row is None:
+            return default
+        try:
+            return json.loads(row["value_json"])
+        except json.JSONDecodeError:
+            return default
+
+    def set_setting(self, key: str, value: Any) -> Any:
+        with self._lock:
+            self._conn.execute(
+                "INSERT INTO tys_settings (key, value_json, updated_at) VALUES (?,?,?) "
+                "ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json, "
+                "updated_at=excluded.updated_at",
+                (str(key), json.dumps(value, default=str), _now()),
+            )
+            self._conn.commit()
+        return value
 
 
 def _row_to_task(row: sqlite3.Row) -> Dict[str, Any]:
@@ -1532,6 +1652,69 @@ class TysAssistant:
         self._state_cache_lock = threading.Lock()
         # Any task a previous process left `running` is resumable, not running.
         self.recovered = self.store.mark_interrupted()
+        # The eye re-reads its switch on every look, so an operator toggle takes
+        # effect on the next step without rebuilding the agent. If the kernel is
+        # unavailable the assistant still runs — with no eyes, which is reported
+        # as `unverified`, never as `on_track`.
+        self.eye: Optional[Any] = None
+        try:
+            from agent_kernel.eye import TyEye
+
+            self.eye = TyEye(enabled=self.vision_enabled)
+        except Exception:  # noqa: BLE001 - no eyes is a state, not a crash
+            self.eye = None
+
+    # -- operator switches -------------------------------------------------
+
+    def assistant_enabled(self) -> bool:
+        return bool(self.store.get_setting(SETTING_ASSISTANT_ENABLED, True))
+
+    def vision_enabled(self) -> bool:
+        """The eyes are on only when the assistant is on AND the owner armed them."""
+        if not self.assistant_enabled():
+            return False
+        return bool(self.store.get_setting(SETTING_VISION_ENABLED, False))
+
+    def switches(self) -> Dict[str, Any]:
+        return {
+            "assistant": self.assistant_enabled(),
+            "vision": self.vision_enabled(),
+            "vision_armed": bool(self.store.get_setting(SETTING_VISION_ENABLED, False)),
+            "dependent": "vision requires assistant",
+        }
+
+    def set_switches(self, *, assistant: Optional[bool] = None,
+                     vision: Optional[bool] = None) -> Dict[str, Any]:
+        """Turn the assistant and its eyes on or off.
+
+        The dependency is enforced in both directions: the eyes cannot be armed
+        while the assistant is off, and switching the assistant off disarms them.
+        A supervisor is a part of the agent, not a peer of it.
+        """
+        if assistant is not None:
+            self.store.set_setting(SETTING_ASSISTANT_ENABLED, bool(assistant))
+            if not assistant:
+                self.store.set_setting(SETTING_VISION_ENABLED, False)
+        if vision is not None:
+            if vision and not self.assistant_enabled():
+                raise TysError("vision_requires_assistant",
+                               "enable Tys Assistant before enabling its vision")
+            self.store.set_setting(SETTING_VISION_ENABLED, bool(vision))
+        return self.switches()
+
+    def eyes_status(self) -> Dict[str, Any]:
+        armed = self.vision_enabled()
+        recent = self.eye.recent(20) if self.eye is not None else []
+        return {
+            "available": self.eye is not None,
+            "enabled": armed,
+            "armed": bool(self.store.get_setting(SETTING_VISION_ENABLED, False)),
+            "assistant_enabled": self.assistant_enabled(),
+            "model": getattr(self.eye, "model", "") if self.eye is not None else "",
+            "looks_recorded": len(recent),
+            "last": recent[-1] if recent else None,
+            "counts": _count_statuses(recent),
+        }
 
     # -- identity / state --------------------------------------------------
 
@@ -1558,6 +1741,28 @@ class TysAssistant:
             },
             "gates": ["owner approval before spend", "owner approval before Amazon",
                       "Chrome Connect policy + profile lease"],
+            "persona": PERSONA_TEXT,
+            "eyes": {
+                "enabled": self.vision_enabled(),
+                "contract": EYES_CONTRACT,
+                "status": "eyes" if self.vision_enabled() else "eyes off",
+            },
+            "learning": LEARNING_LANES,
+        }
+
+    def voice(self, limit: int = 6) -> Dict[str, Any]:
+        """What the assistant says about itself and its most recent looks.
+
+        The sentences are derived from real journal records, never composed from
+        intent: an empty look list produces no claim about seeing anything.
+        """
+        recent = self.eye.recent(limit) if self.eye is not None else []
+        return {
+            "persona": PERSONA_TEXT,
+            "eyes_contract": EYES_CONTRACT,
+            "learning": LEARNING_LANES,
+            "lines": [s for s in (eyes_sentence(r) for r in recent) if s],
+            "enabled": self.vision_enabled(),
         }
 
     def state(self) -> Dict[str, Any]:
@@ -1574,6 +1779,8 @@ class TysAssistant:
         return {
             "identity": self.identity(),
             "routing_policy": routing_policy,
+            "switches": self.switches(),
+            "eyes": self.eyes_status(),
             "queue": {
                 "total": len(tasks),
                 "by_status": by_status,
@@ -1804,6 +2011,9 @@ class TysAssistant:
         task = self.store.get(task_id)
         if not task:
             raise TysError("task_not_found", task_id)
+        if not self.assistant_enabled():
+            raise TysError("assistant_disabled",
+                           "Tys Assistant is switched off; enable it before running work")
         if task["status"] in ("done", "cancelled"):
             return task
 
@@ -1977,6 +2187,28 @@ class TysAssistant:
                                 retriable=True)
         elapsed_ms = int((time.time() - started) * 1000)
 
+        # The eye looks at what the step produced, and the verdict travels with
+        # the evidence. Advisory by default: an `off_track` look is guidance, not
+        # a verdict reversal, unless the work order set `params.eyes.enforce`.
+        look = self._look_at_step(task, step, result)
+        if look is not None:
+            result.evidence = dict(result.evidence or {})
+            result.evidence["eyes"] = look
+            if look.get("guidance"):
+                result.evidence["guidance"] = look["guidance"]
+            self.store.event(task["id"], "eyes_look", {
+                "status": look.get("status"), "reason": look.get("reason"),
+                "guidance": look.get("guidance"), "image": look.get("image_path"),
+                "constraint": look.get("constraint"),
+                "derived_constraint": look.get("derived_constraint"),
+                "seconds": look.get("seconds"),
+            })
+            if look.get("status") == "off_track" and bool(
+                    (step.get("params") or {}).get("eyes_enforce")):
+                result.ok = False
+                result.retriable = True
+                result.detail = (look.get("guidance") or "off goal")[:1500]
+
         record = {
             "index": task["cursor"], "lane": lane, "objective": step["objective"][:200],
             "ok": result.ok, "summary": result.summary, "detail": result.detail[:1500],
@@ -1992,6 +2224,34 @@ class TysAssistant:
         self.store.event(task["id"], "step_result", record)
         self._write_evidence(task["id"], record)
         return result
+
+    def _look_at_step(self, task: Dict[str, Any], step: Dict[str, Any],
+                      result: "StepResult") -> Optional[Dict[str, Any]]:
+        """Ask the eye about the image this step produced, if any.
+
+        A step with no visible output gets no look — the eye judges appearance,
+        and inventing a verdict about text it has not seen is exactly the failure
+        measured on 2026-11-05. Steps that build files are judged by their
+        acceptance command, not by the eye.
+        """
+        if self.eye is None or not self.vision_enabled():
+            return None
+        params = step.get("params") or {}
+        declared = params.get("eyes") if isinstance(params.get("eyes"), dict) else {}
+        target = str(declared.get("image") or "").strip()
+        if target and not os.path.isabs(target):
+            target = os.path.join(_repo_root(), target)
+        if not target:
+            images = self.eye.artifacts(list(result.artifacts or []))
+            if not images:
+                return None
+            target = images[0]
+        return self.eye.look(
+            str(task.get("objective") or ""),
+            image_path=target,
+            constraint=str(declared.get("constraint") or ""),
+            step=str(step.get("objective") or ""),
+        )
 
     def _context_with_text(self, task: Dict[str, Any], files: Iterable[str]) -> List[Dict[str, Any]]:
         """Read the named files for a coding prompt.

@@ -1,0 +1,38 @@
+{
+  "tys_eyes_20261105": {
+    "status": "DONE - Tys Assistant and Ty's Vision are enabled independently and work together: the eye looks at what a step produced, records a verdict, and hands the assistant guidance it can act on. Cobalt ring while armed. 32 new tests + 274 regression, UI build green, live model verified.",
+    "owner_brief": "Owner wants Tys Assistant enabled first, then its Vision, with the two working together as the assistant's eyes - judging whether it is staying on track and helping it learn (REA) and improve.",
+    "built": {
+      "eye": "Northstar_backend/agent_kernel/eye.py - TyEye.look(goal, image, constraint) -> on_track / off_track / unverified / disabled + guidance; append-only JSONL journal; never raises; enabled may be a callable so a toggle applies without a rebuild",
+      "acceptance_kind": "agent_kernel/verify.py registered verifier 'vision' - pass / fail / unknown; unknown never upgraded to pass",
+      "wiring": "tys_assistant._look_at_step - every step that produced an image gets one look; verdict + guidance attached to step evidence and written as an eyes_look event; steps with no image get no look and no invented verdict",
+      "enforcement": "step.params.eyes_enforce (off by default) lets an off_track look fail the step as retriable so the assistant repairs it; step.params.eyes.constraint names the exact thing that must be visible",
+      "switches": "tys_settings table + settings API; assistant.enabled default true (unchanged behaviour), vision.enabled default false; vision refuses to arm while the assistant is off and the assistant switching off disarms vision",
+      "api": "GET/POST /api/admin/tys/switches, GET /api/admin/tys/voice; unknown switch names refused; admin-only",
+      "ring": "northstar-os-ui/src/components/VisionRing.jsx + app.css - fixed full-viewport cobalt ring, pointer-events none, opacity-only compositor animation, 15 s poll paused when hidden, stops on 401/403/404, honours prefers-reduced-motion",
+      "voice": "PERSONA_TEXT + EYES_CONTRACT + LEARNING_LANES in tys_assistant, served in identity()/state and GET /voice; eyes_sentence() narrates only real journal records; panel shows the persona and the last look"
+    },
+    "live_measurements": {
+      "on_goal": {"constraint": "a stand-up pouch with a printed front label is visible", "status": "on_track", "seconds": 18.38, "confidence": 0.95},
+      "off_goal": {"constraint": "a human hand is holding the pouch", "status": "off_track", "seconds": 12.57, "reasons": "the pouch sits on a surface with no visible hand"},
+      "enforced": "eyes_enforce=true -> ok=False, retriable=True, detail carries the guidance",
+      "model": "gemma3:4b via Ollama on 127.0.0.1:11434"
+    },
+    "tests": {
+      "test_tys_eyes.py": "32 passed",
+      "vision_wired_regression": "177 passed (test_tys_routing, test_tys_ops, test_agent_kernel, test_tys_kernel_integration, test_vision_verify) + 97 passed (test_tys_assistant, test_continuous_loop, test_module_hygiene, test_tys_memory_lifecycle)",
+      "ui_build": "npm run build - built in 1.61s"
+    },
+    "design_rules": [
+      "unverified is never upgraded to on_track",
+      "a step with no image gets no look and no invented verdict",
+      "the eye judges appearance, never source code; fine print goes to OCR and code is read from disk",
+      "enforcement is opt-in per step so a 4B model cannot silently block a build by default",
+      "the ring is driven by the server switch, not local state",
+      "learning recommendations name only the four sanctioned REA paths and their hard never"
+    ],
+    "freeze_reconciliation": "V3 hard-freeze rule 1: this is an owner-requested capability, admin/operator only, no customer-facing surface; tests for the touched modules are green. Recorded so the freeze is not quietly reinterpreted.",
+    "boundaries": "Local lane only. No Amazon request, no spend, no cloud inference, no credential read, no policy or allowlist change. GPU idle after the live looks.",
+    "report": "reports/tys_eyes_20261105.md"
+  }
+}

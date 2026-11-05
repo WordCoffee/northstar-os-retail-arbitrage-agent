@@ -6,6 +6,7 @@ import { fromBackendRole } from './data/roles.js'
 import SuiteRail from './components/SuiteRail.jsx'
 import TopNav from './components/TopNav.jsx'
 import MobileBottomNav from './components/MobileBottomNav.jsx'
+import VisionRing from './components/VisionRing.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
 import { LOCAL_DEV } from './foundation/dev.js'
 import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
@@ -340,6 +341,7 @@ function Shell() {
         <CommandPalette onClose={() => setPaletteOpen(false)} />
       )}
       <ToastContainer />
+      <VisionRing />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 // Tys Assistant — live operator panel.
 //
-// Read-only: it polls the admin state, the task list and memory stats. It never
+// It polls the admin state, the task list and memory stats. The only write it
+// performs is the two operator switches (assistant, then its eyes); it never
 // submits, runs or cancels a task. Every value comes from the API; an unavailable
 // endpoint is shown as unavailable, never as a fabricated row.
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -29,6 +30,24 @@ async function getJSON(path) {
     try { detail = (await res.json()).detail } catch { /* non-JSON */ }
     const err = new Error((detail && (detail.message || detail.code)) || `HTTP ${res.status}`)
     err.status = res.status
+    throw err
+  }
+  return res.json()
+}
+
+async function postJSON(path, body) {
+  const res = await fetch(path, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...devHeaders() },
+    body: JSON.stringify(body || {}),
+  })
+  if (!res.ok) {
+    let detail = null
+    try { detail = (await res.json()).detail } catch { /* non-JSON */ }
+    const err = new Error((detail && (detail.message || detail.code)) || `HTTP ${res.status}`)
+    err.status = res.status
+    err.code = detail && detail.code
     throw err
   }
   return res.json()
@@ -140,11 +159,127 @@ function TaskRow({ task }) {
   )
 }
 
+function SwitchesCard({ switches, eyes, busy, error, onToggle }) {
+  const assistantOn = Boolean(switches && switches.assistant)
+  const visionOn = Boolean(switches && switches.vision)
+  const counts = (eyes && eyes.counts) || {}
+  const last = (eyes && eyes.last) || null
+  return (
+    <div className="card" style={{ padding: 16 }} data-testid="tys-switches">
+      <div className="card-head">
+        <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Icon name="eye" size={16} /> Tys Assistant &amp; its eyes
+        </h3>
+        <span className="pill pill-muted">{visionOn ? 'eyes on' : 'eyes off'}</span>
+      </div>
+
+      <div className="inline-flex" style={{ gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+        <button
+          type="button"
+          className={`pill ${assistantOn ? 'pill-ok' : 'pill-muted'}`}
+          aria-pressed={assistantOn}
+          disabled={busy}
+          onClick={() => onToggle({ assistant: !assistantOn })}
+          data-testid="tys-toggle-assistant"
+          title="Turn Tys Assistant itself on or off"
+        >
+          Tys Assistant: {assistantOn ? 'on' : 'off'}
+        </button>
+        <button
+          type="button"
+          className={`pill ${visionOn ? 'pill-ok' : 'pill-muted'}`}
+          aria-pressed={visionOn}
+          disabled={busy || !assistantOn}
+          onClick={() => onToggle({ vision: !visionOn })}
+          data-testid="tys-toggle-vision"
+          title={assistantOn
+            ? 'Turn Ty’s Vision (the eyes) on or off — a cobalt ring appears while it is on'
+            : 'Enable Tys Assistant first: the eyes are part of it'}
+          style={visionOn ? { boxShadow: '0 0 0 1px var(--spark, #2f6fed)' } : undefined}
+        >
+          Ty’s Vision: {visionOn ? 'on' : 'off'}
+        </button>
+      </div>
+
+      {error && (
+        <div className="text-low" style={{ fontSize: 12, color: 'var(--warn)', marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
+
+      <div className="text-low" style={{ fontSize: 11, lineHeight: 1.5 }}>
+        The eyes judge appearance — renders, product shots, screenshots — and never
+        claim a pass they did not see. ARM: {visionOn ? 'a cobalt ring sits around the screen.' : 'no ring, no looking.'}
+      </div>
+
+      {eyes && eyes.model && (
+        <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+          model {eyes.model} · looks {eyes.looks_recorded || 0}
+          {Object.keys(counts).length > 0 && (
+            <> · {Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(' · ')}</>
+          )}
+        </div>
+      )}
+
+      {last && (
+        <div style={{ marginTop: 8, fontSize: 12 }} data-testid="tys-eye-last">
+          <strong>My eyes, last look:</strong>{' '}
+          {last.status === 'on_track' && 'on track.'}
+          {last.status === 'off_track' && (
+            <>off goal — {((last.reasons || []).map(r => String(r).replace(/[. ]+$/, '')).join('; ')
+              || last.reason || 'constraint not met')}.
+              {' '}That is what I fix next.</>
+          )}
+          {last.status === 'unverified' && (
+            <>could not look ({last.reason || 'no verdict'}). Unverified, not a pass.</>
+          )}
+          <span className="text-low" style={{ fontSize: 11 }}>
+            {' '}{last.image_path ? String(last.image_path).split(/[\\/]/).pop() : ''}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function VoiceCard({ identity }) {
+  if (!identity) return null
+  const learning = identity.learning || {}
+  const eyes = identity.eyes || {}
+  return (
+    <div className="card" style={{ padding: 16 }} data-testid="tys-voice">
+      <div className="card-head">
+        <h3 className="card-title">In its own words</h3>
+        <span className="pill pill-muted">{eyes.enabled ? 'eyes on' : 'eyes off'}</span>
+      </div>
+      <p style={{ fontSize: 12, lineHeight: 1.6, marginTop: 0 }}>{identity.persona}</p>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 6 }}>
+        Judges: {(eyes.contract?.judges || []).join(', ')}. Does not: {(eyes.contract?.does_not || []).join(', ')}.
+        Unavailable reads as <strong>{eyes.contract?.on_unavailable || 'unverified'}</strong>.
+      </div>
+      <div className="text-low" style={{ fontSize: 11, marginBottom: 4 }}>How it learns (REA)</div>
+      <div className="stack" style={{ gap: 4 }}>
+        {Object.entries(learning).map(([key, lane]) => (
+          <div key={key} style={{ fontSize: 11, lineHeight: 1.5 }}>
+            <span className="pill pill-muted" style={{ marginRight: 6 }}>{key}</span>
+            <code>{lane.tool}</code>
+            <span className="text-low"> — {lane.use}. Never: {lane.never}.</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function TysOpsPanel() {
   const [state, setState] = useState(null)
   const [tasks, setTasks] = useState([])
   const [memory, setMemory] = useState(null)
   const [memoryError, setMemoryError] = useState('')
+  const [switches, setSwitches] = useState(null)
+  const [eyes, setEyes] = useState(null)
+  const [switchBusy, setSwitchBusy] = useState(false)
+  const [switchError, setSwitchError] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const inFlight = useRef(false)
@@ -167,6 +302,11 @@ export default function TysOpsPanel() {
       inFlight.current = false
     }
     try {
+      const sw = await getJSON('/api/admin/tys/switches')
+      setSwitches(sw.switches || null)
+      setEyes(sw.eyes || null)
+    } catch { /* the state card already reports an unavailable API */ }
+    try {
       setMemory(await getJSON('/api/admin/tys/memory/stats?account=operator'))
       setMemoryError('')
     } catch (err) {
@@ -183,6 +323,22 @@ export default function TysOpsPanel() {
   }, [load])
 
   const lanes = (state && state.lanes) || {}
+
+  const toggle = useCallback(async (patch) => {
+    setSwitchBusy(true)
+    setSwitchError('')
+    try {
+      const res = await postJSON('/api/admin/tys/switches', patch)
+      setSwitches(res.switches || null)
+      setEyes(res.eyes || null)
+    } catch (err) {
+      setSwitchError(err.code === 'vision_requires_assistant'
+        ? 'Enable Tys Assistant before enabling its eyes.'
+        : `${err.status ? `HTTP ${err.status}: ` : ''}${err.message}`)
+    } finally {
+      setSwitchBusy(false)
+    }
+  }, [])
   return (
     <div className="card" data-testid="tys-ops" style={{ marginBottom: 20, padding: 18 }}>
       <div className="card-head">
@@ -197,7 +353,7 @@ export default function TysOpsPanel() {
         </span>
       </div>
       <div className="text-low" style={{ fontSize: 12, marginBottom: 12 }}>
-        Read-only operator view: queue, lanes, task progress and long-term memory. Polls every 5 s.
+        Operator view: switches, queue, lanes, task progress and long-term memory. Polls every 5 s.
       </div>
 
       {error && (
@@ -209,6 +365,15 @@ export default function TysOpsPanel() {
 
       {state && (
         <>
+          <div style={{ marginBottom: 12 }}>
+            <SwitchesCard
+              switches={switches || state.switches}
+              eyes={eyes || state.eyes}
+              busy={switchBusy}
+              error={switchError}
+              onToggle={toggle}
+            />
+          </div>
           <div className="grid-3" style={{ gap: 12, marginBottom: 12 }}>
             <QueueCard state={state} />
             <MemoryCard memory={memory} error={memoryError} />
@@ -221,6 +386,10 @@ export default function TysOpsPanel() {
                 <span className="pill pill-muted">{state.identity?.name || 'Tys'}</span>
               </div>
             </div>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <VoiceCard identity={state.identity} />
           </div>
 
           <div style={{ marginBottom: 12 }}>
