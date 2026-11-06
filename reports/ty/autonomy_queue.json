@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T02:45:00Z",
+  "updated": "2026-11-06T03:15:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 5,
+  "cycle": 6,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -137,6 +137,16 @@
       "blocked_by": "W2-c1"
     },
     {
+      "id": "W1-text-guard",
+      "kind": "workstream",
+      "workstream": "W1",
+      "title": "Main images carry model-drawn text: add and wire a verify-clean guard (done this cycle)",
+      "priority": 700,
+      "status": "done",
+      "evidence": "state/evidence/text_guard_measurement.json",
+      "note": "Residual: a few soft smudges remain inside the label panel after cleaning. Acceptable for a clean plate that gets real type composited on top, but a future pass should grade \"plate cleanliness\" visually, not only by OCR."
+    },
+    {
       "id": "W3-c1",
       "kind": "workstream",
       "workstream": "W3",
@@ -150,12 +160,13 @@
       "kind": "workstream",
       "workstream": "W1",
       "title": "Product pictures: fidelity now compares the subject crop; it proves reference conditioning does NOT preserve the product",
-      "status": "partial",
+      "status": "in_progress",
       "priority": 650,
       "dwell": "until-production-ready",
       "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%",
       "finding": "Re-scored the same 12 bench artifacts with subject-crop comparison (picture_bench_rescore_20261105T213059Z.json): reference-conditioned renders score ssim 0.010-0.323 and phash distance 26-28 against the reference, i.e. a different pouch. The instrument is now correct; the generation path is the defect.",
-      "next": "Replace FLUX 3 mi2i reference conditioning for product identity with a deterministic composite: BiRefNet cutout of the real product + generated scene + matched shadow, so identity is preserved by construction. Keep mi2i for style-only references."
+      "next": "Replace FLUX 3 mi2i reference conditioning for product identity with a deterministic composite: BiRefNet cutout of the real product + generated scene + matched shadow, so identity is preserved by construction. Keep mi2i for style-only references.",
+      "text_guard": "render_text_guard.ensure_text_free wired into the bench and into listing_render.generate for main images. Measured on the real bench artifact renders/autonomy_probe/bench/from-01-main_white_a1.png: 10 OCR boxes -> 0 in one pass, text_accuracy 0.0 -> 100.0 (state/evidence/text_guard_measurement.json). The cleaned plate looks right: the label panel is blank, ready for the vector type layer."
     },
     {
       "id": "W1-c3",
@@ -369,7 +380,8 @@
     "A style file that grows by appending overrides will eventually define the same selector 4 times; the fix is a canonical layer with attribute-selector specificity, not another override at the bottom.",
     "Flex centering a block taller than its container clips the START of the content: on a phone the greeting was pushed above the scroll origin. Top-align and let it scroll.",
     "A contrast measurement must composite the alpha chain; reading a raw rgba() reported a 5% white card over a dark scene as near-white and produced a false 1.45:1.",
-    "document.fonts.check() is false for a declared-but-unfetched face under font-display: swap; use document.fonts.load() before asserting a font is available."
+    "document.fonts.check() is false for a declared-but-unfetched face under font-display: swap; use document.fonts.load() before asserting a font is available.",
+    "OCR is a gate, not a guarantee: cleaning then RE-detecting is what turns \"the model probably drew text\" into \"the delivered file has zero text boxes\"."
   ],
   "baseline": {
     "backend": {

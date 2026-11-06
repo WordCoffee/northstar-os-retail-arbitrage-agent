@@ -115,8 +115,23 @@ def generate(style: str, brief: str = "", *, render: Optional[Callable[..., Any]
     guarded = tf.render_with_text_guard(render_fn=_render, brief=prompt, text_safe=True)
     image_bytes = guarded["out"]["bytes"]
     main_image = style == "white-bg"
+    text_free: Dict[str, Any] = {"applied": False}
     if main_image:
         image_bytes = fit_main_image(image_bytes, size=(width, height))
+        # Last mile: a main image must ship with no glyphs at all. The brief
+        # sanitiser stops the model being *asked* to spell; this removes what it
+        # draws anyway and re-verifies with OCR. Measured on the bench artifact
+        # 2026-11-06: 10 boxes -> 0, text accuracy 0 -> 100.
+        try:
+            import render_text_guard as rtg
+
+            free = rtg.ensure_text_free(image_bytes)
+            image_bytes = free["bytes"]
+            text_free = {"applied": True,
+                         **{k: free[k] for k in ("cleaned", "passes",
+                                                 "boxes_before", "boxes_after", "reason")}}
+        except Exception as exc:  # noqa: BLE001 - a failed guard is reported, not hidden
+            text_free = {"applied": False, "reason": f"{type(exc).__name__}: {exc}"}
     gate = sf.listing_gate(image_bytes, main_image=main_image)
     return {
         "ok": bool(gate["ok"]),
@@ -125,6 +140,7 @@ def generate(style: str, brief: str = "", *, render: Optional[Callable[..., Any]
         "prompt": prompt,
         "used_brief": guarded.get("used_brief"),
         "text_fidelity": guarded.get("text_fidelity"),
+        "text_free": text_free,
         "bytes": image_bytes,
         "gate": gate,
         "reason": "" if gate["ok"] else gate["reason"],

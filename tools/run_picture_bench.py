@@ -111,6 +111,19 @@ def _render(case: Dict[str, Any], *, seed: int) -> Dict[str, Any]:
         except Exception as exc:  # noqa: BLE001 - a failed fit is recorded
             result["main_fit_applied"] = False
             result["main_fit_error"] = f"{type(exc).__name__}: {exc}"
+        # A main image must ship without text. The model draws it anyway; the
+        # guard detects, cleans and re-verifies, and reports what it did.
+        try:
+            import render_text_guard as guard
+
+            free = guard.ensure_text_free(result["bytes"])
+            result["bytes"] = free["bytes"]
+            result["text_guard"] = {k: free[k] for k in
+                                    ("cleaned", "passes", "boxes_before",
+                                     "boxes_after", "reason")}
+        except Exception as exc:  # noqa: BLE001
+            result["text_guard"] = {"cleaned": False,
+                                    "reason": f"{type(exc).__name__}: {exc}"}
     return result
 
 
