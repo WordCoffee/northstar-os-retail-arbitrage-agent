@@ -7,9 +7,14 @@ SellerAmp snapshots or approved exports.
 
 `assert_no_amazon_direct_scan()` is the enforcement point: any code path that
 would open an Amazon.com URL raises `AmazonDirectScanProhibited`.
+
+T1-amazon-guard (2026-11-06): the guard used to inspect `url=` only, while both
+production callers pass `asin=`, so it never fired. It now inspects the `asin`
+argument too - see `assert_no_amazon_direct_scan`.
 """
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, Optional
 
 
@@ -26,6 +31,11 @@ AMAZON_DIRECT_HOSTS = (
 # Documented authorized Amazon-market sources (approved providers/exports only).
 AUTHORIZED_AMAZON_MARKET_SOURCES = ("selleramp", "approved_amazon_export")
 
+# A bare ASIN is an *identity token*, never a fetch target: 5-20 alphanumerics
+# and nothing else. Anything carrying a scheme, host, slash, dot, space or
+# query string is a locator that could be fetched, so it is refused.
+_BARE_ASIN_RE = re.compile(r"^[A-Za-z0-9]{5,20}$")
+
 
 def is_amazon_direct_url(url: Optional[str]) -> bool:
     """True if the URL points at an Amazon marketplace page."""
@@ -39,15 +49,44 @@ def is_amazon_direct_url(url: Optional[str]) -> bool:
 
 
 def assert_no_amazon_direct_scan(url: Optional[str] = None, *, asin: Optional[str] = None) -> None:
-    """Enforce the no-direct-Amazon-scan policy.
+    """Enforce the no-direct-Amazon-scan policy, before any request is made.
 
-    Raises AmazonDirectScanProhibited if a direct Amazon URL is supplied.
-    `asin` is accepted (Amazon-market identity) but never used to build a fetch URL.
+    Refused (raises `AmazonDirectScanProhibited`):
+
+    * a `url` that points at an Amazon marketplace host, and
+    * an `asin` that is not a *bare* ASIN identity - a URL, a share link, a
+      host, or a `/dp/` path. A provider column or a manifest item labelled
+      "asin" is exactly where a direct-scan target would be smuggled into
+      `adapter.fetch(asin)`, so the locator form is refused on this argument
+      too, not only on `url=`.
+
+    Allowed: `asin=None`, an empty/whitespace value, and a bare ASIN.
+
+    Why a bare ASIN is still allowed (decision, 2026-11-06): both production
+    callers pass `asin=` for every row of an *authorized* input -
+    `pipeline.py:383` (manifest items fetched through an approved provider
+    adapter) and `provider_imports/selleramp_importer.py:67` (rows of an
+    approved SellerAmp export). Those are the sanctioned path; refusing every
+    ASIN would raise on 100% of sanctioned rows, i.e. disable the permitted
+    workflow instead of blocking the prohibited one. The ASIN is only ever
+    used as an identity key for the provider lookup, never to build an
+    amazon.com URL (see this module's contract above), and
+    `tests/test_signin_disallowed_guard.py::test_assert_allows_provider_deep_link`
+    pins that behaviour. What was actually broken - and is now fixed - is that
+    a *locator* arriving through `asin=` was waved straight through.
     """
     if is_amazon_direct_url(url):
         raise AmazonDirectScanProhibited(
             "Direct Amazon.com page access is prohibited for this pipeline. "
             "Use approved SellerAmp snapshots or exports only.")
+    if asin is not None:
+        ident = str(asin).strip()
+        if ident and not _BARE_ASIN_RE.match(ident):
+            raise AmazonDirectScanProhibited(
+                "Direct Amazon page access is prohibited for this pipeline: "
+                f"asin={ident[:80]!r} is a URL/host/path, not a bare ASIN. "
+                "Pass the ASIN identity from an approved SellerAmp snapshot or "
+                "export; never a fetchable locator.")
     return None
 
 
