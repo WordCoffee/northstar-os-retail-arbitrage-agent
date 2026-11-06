@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T11:10:00Z",
+  "updated": "2026-11-06T11:20:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -210,13 +210,19 @@
       "id": "M2-worker-lane",
       "kind": "automation",
       "priority": 1120,
-      "status": "pending",
+      "status": "done",
       "title": "opencode run --agent tys returns output + model provenance reliably",
       "next": "Capture JSONL events and the session model; if the CLI cannot return text headlessly, record that and use the local lane instead - do not pretend.",
       "write_paths": [
         "tools/tys_launcher.py"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "updated_at": "2026-11-06T22:38:38+00:00",
+      "evidence": [
+        "reports/ty/A17_worker_lane.md"
+      ],
+      "done_by": "A17 subagent",
+      "note": "opencode run --agent tys returns text + session model; 21 tests pass; live proof in report"
     },
     {
       "id": "M3-intel-I0",
@@ -261,6 +267,109 @@
       "depends_on": [
         "M3-intel-I2"
       ]
+    },
+    {
+      "id": "W10-scanner-csv",
+      "kind": "workstream",
+      "workstream": "W10",
+      "priority": 1075,
+      "status": "pending",
+      "title": "scanner p95 6.6 s: the Costco CSV is re-read and fuzzy-matched per candidate, per request",
+      "next": "Load and parse the Costco catalog once (module-level cache keyed on file mtime+size), and replace the all-rows SequenceMatcher sweep with a prefilter (rapidfuzz or an exact/normalised index) before scoring. Target: p95 under 1 s for 89 candidates.",
+      "write_paths": [
+        "Northstar_backend/costco_client.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_costco_client.py"
+        ]
+      ],
+      "measured": "6,623 ms p95; 89 candidates; 80,932 SequenceMatcher.ratio() calls = 84% of the request (costco_client.py:487-489 re-reads the CSV every call, :516 the sweep).",
+      "evidence": [
+        "reports/ty/perf_baseline_20261106.md"
+      ],
+      "tier": "T1"
+    },
+    {
+      "id": "W10-lanes-status",
+      "kind": "workstream",
+      "workstream": "W10",
+      "priority": 1070,
+      "status": "pending",
+      "title": "lanes/status p95 418 ms: spawns PowerShell + nvidia-smi + two HTTP probes on every request",
+      "next": "Cache the component results with a short TTL (5-10 s) and compute in one pass; keep the response shape identical. Target p95 under 50 ms warm.",
+      "write_paths": [
+        "Northstar_backend/design_studio_api.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_design_studio_api.py"
+        ]
+      ],
+      "measured": "418 ms p95; components: System.Speech PowerShell 215 ms (local_voice.py:42), nvidia-smi 47 ms (local_vision.py:92), two HTTP probes; uncached.",
+      "evidence": [
+        "reports/ty/perf_baseline_20261106.md"
+      ],
+      "tier": "T1"
+    },
+    {
+      "id": "W10-bundle-split",
+      "kind": "workstream",
+      "workstream": "W10",
+      "priority": 1065,
+      "status": "pending",
+      "title": "Entry chunk is 1,088 kB (gzip 296 kB); the first paint downloads the whole app",
+      "next": "Split the entry bundle by route with lazy imports plus manualChunks for vendor/studio. Target: entry under 300 kB, no chunk over 500 kB, build still 0 errors.",
+      "write_paths": [
+        "northstar-os-ui/vite.config.js",
+        "northstar-os-ui/src/App.jsx"
+      ],
+      "acceptance_commands": [
+        [
+          "npm",
+          "run",
+          "build"
+        ]
+      ],
+      "measured": "dist 4.28 MB; index 1,088.55 kB; vendor 163.69 kB; studio 43.58 kB.",
+      "evidence": [
+        "reports/ty/perf_baseline_20261106.md"
+      ],
+      "tier": "T1"
+    },
+    {
+      "id": "T1-env-default",
+      "kind": "workstream",
+      "workstream": "W9",
+      "priority": 1060,
+      "status": "pending",
+      "title": "environment reports production on a dev box because X-Env defaults to production",
+      "next": "Default the reported environment to the process ENVIRONMENT (or 'unknown') instead of production; keep the header override. Add a test that a dev process reports development.",
+      "write_paths": [
+        "Northstar_backend/foundation/api/deps.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_foundation_api.py"
+        ]
+      ],
+      "measured": "deps.py:208-210 defaults X-Env to production while auth_method is dev_shim.",
+      "evidence": [
+        "reports/ty/perf_baseline_20261106.md"
+      ],
+      "tier": "T1"
     },
     {
       "id": "W0-c1",
@@ -850,7 +959,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-06T14:33:00+00:00",
+  "updated_at": "2026-11-06T22:38:38+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
-  "ordering_note": "T0 incidents outrank the automation gate: a live SSRF or a boundary bypass is fixed before new automation work. This is the plan's own tier ladder, not an exception."
+  "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory."
 }
