@@ -123,8 +123,9 @@ $ python tools\tys_launcher.py --worker deepseek --max-cycles 0 --max-hours 0.01
 
 ## 5. Cost, stated plainly
 
-Nine real dispatches this unit (5 candidates + 1 probe + 1 live worker proof + 2 development
-probes). Every one reported `cost: 0` in its `step_finish` event; the session store shows
+Eight real dispatches this unit (1 probe, 1 npm-shim check, 5 candidates, 1 live worker proof).
+The two failed invocations before them never reached the CLI, so they cost nothing. Every one
+reported `cost: 0` in its `step_finish` event; the session store shows
 `cost ≈ 1.2e-05` USD per short turn, i.e. well under one US cent in total, on the existing
 `opencode-go` subscription. No new provider, key or paid credit was touched.
 
