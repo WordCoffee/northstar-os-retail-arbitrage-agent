@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T03:15:00Z",
+  "updated": "2026-11-06T04:40:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 6,
+  "cycle": 8,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -22,6 +22,24 @@
       "status": "pending",
       "priority": 1000,
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
+    },
+    {
+      "id": "W6-aplus-tiles",
+      "kind": "workstream",
+      "workstream": "W6",
+      "priority": 960,
+      "status": "pending",
+      "title": "A+ tile rows reuse one photograph - derive distinct detail crops (ingredient, seal, label) from the product renders",
+      "evidence": "renders/aplus_live_20261031/aplus_preview.png"
+    },
+    {
+      "id": "W6-aplus-consistency",
+      "kind": "workstream",
+      "workstream": "W6",
+      "priority": 940,
+      "status": "pending",
+      "title": "A+ page shipped Shiitake artwork under a Lion's Mane headline - add a copy-vs-plate OCR consistency guard",
+      "evidence": "aplus_preview.png vs the plate OCR"
     },
     {
       "id": "R-E1",
@@ -52,6 +70,15 @@
       "note": "Two attempted fixes (/ui/... and /fonts/...) both failed and were reverted; the cause is base handling, so fix it in vite.config.js or by serving the font CSS from src/ instead of public/.",
       "fixed": "font stylesheet is imported through the bundler (src/styles/fonts.css) instead of linked from public/; the link resolved to /ui/ui/fonts/fonts.css under the dev server base and WebKit refused it as a non-CSS MIME type.",
       "gate": "tests/e2e/ux_scorecard.spec.ts asserts document.fonts.load() for both families on both viewports"
+    },
+    {
+      "id": "W6-aplus-hero-crop",
+      "kind": "workstream",
+      "workstream": "W6",
+      "priority": 900,
+      "status": "pending",
+      "title": "A+ hero cover-crop slices the product at the frame edge - use subject-aware cropping",
+      "evidence": "aplus_preview.png module 01"
     },
     {
       "id": "R-E2",
@@ -385,7 +412,8 @@
     "document.fonts.check() is false for a declared-but-unfetched face under font-display: swap; use document.fonts.load() before asserting a font is available.",
     "OCR is a gate, not a guarantee: cleaning then RE-detecting is what turns \"the model probably drew text\" into \"the delivered file has zero text boxes\".",
     "A composite proves identity only if the check compares product pixels: an unmasked crop reported a correct composite as drifted.",
-    "The GPU lane is RAM-gated at 4096 MB and the box sat at 3830 MB after two renders; a ComfyUI restart is the routine fix."
+    "The GPU lane is RAM-gated at 4096 MB and the box sat at 3830 MB after two renders; a ComfyUI restart is the routine fix.",
+    "An A+ page can pass every mechanical QA check and still not be shippable: repeated tile imagery and a copy/asset mismatch are quality defects no contrast gate catches."
   ],
   "baseline": {
     "backend": {
