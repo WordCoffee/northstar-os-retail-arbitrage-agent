@@ -62,8 +62,10 @@
       "status": "in_progress",
       "acceptance": "identity preserved by construction; text_accuracy 100% on reference cases",
       "licence": "MIT (installed)",
-      "landed": "Northstar_backend/product_composite.py + 7 CPU tests (placement, clamping, shadow, empty-cutout refusal, identity_check)",
-      "next": "generate a scene canvas, BiRefNet the real photo, compose, score the 12-case dev set; needs the GPU lane and RAM >= 4 GB"
+      "landed": "product_composite.py + 7 tests; tools/experiment_composite.py; live composite of the real MOGRA pouch on a FLUX 3 scene (renders/autonomy_probe/composite/lifestyle_linen_composite.png)",
+      "next": "product_fidelity scores 0 because subject_bbox picks the wall/table boundary; accept a known product box or use the alpha region. Then re-run the 12-case dev set.",
+      "fixed_this_cycle": "product no longer sliced at the frame edge (2% margin); identity check masks by cutout alpha instead of comparing scene pixels",
+      "evidence": "state/evidence/composite_experiment_20261106T035558Z.json"
     },
     {
       "id": "R-E5",
@@ -381,7 +383,9 @@
     "Flex centering a block taller than its container clips the START of the content: on a phone the greeting was pushed above the scroll origin. Top-align and let it scroll.",
     "A contrast measurement must composite the alpha chain; reading a raw rgba() reported a 5% white card over a dark scene as near-white and produced a false 1.45:1.",
     "document.fonts.check() is false for a declared-but-unfetched face under font-display: swap; use document.fonts.load() before asserting a font is available.",
-    "OCR is a gate, not a guarantee: cleaning then RE-detecting is what turns \"the model probably drew text\" into \"the delivered file has zero text boxes\"."
+    "OCR is a gate, not a guarantee: cleaning then RE-detecting is what turns \"the model probably drew text\" into \"the delivered file has zero text boxes\".",
+    "A composite proves identity only if the check compares product pixels: an unmasked crop reported a correct composite as drifted.",
+    "The GPU lane is RAM-gated at 4096 MB and the box sat at 3830 MB after two renders; a ComfyUI restart is the routine fix."
   ],
   "baseline": {
     "backend": {

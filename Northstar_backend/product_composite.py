@@ -94,11 +94,14 @@ def place_product(scene_png: bytes, cutout_png: bytes, *,
 
     ax = max(0.0, min(1.0, float(anchor[0])))
     ay = max(0.0, min(1.0, float(anchor[1])))
+    margin = int(min(sw, sh) * 0.02)
     left = int(sw * ax - target_w / 2)
     top = int(sh * ay - target_h / 2)
-    # Keep the whole product inside the frame: a cropped product is not a product.
-    left = max(0, min(sw - target_w, left))
-    top = max(0, min(sh - target_h, top))
+    # Keep the whole product inside the frame with a small margin: a product
+    # sliced by the bottom edge reads as a crop, not a product shot. Measured
+    # 2026-11-06: anchor 0.72 put a 716px pouch flush to y=1024.
+    left = max(margin, min(sw - target_w - margin, left))
+    top = max(margin, min(sh - target_h - margin, top))
 
     out = scene.copy()
     if shadow:
@@ -139,15 +142,23 @@ def identity_check(composite_png: bytes, cutout_png: bytes,
 
     out = _open_rgba(composite_png)
     product = trim_to_alpha(_open_rgba(cutout_png))
-    region = out.crop(tuple(int(v) for v in product_box)).convert("RGB")
-    region.thumbnail((size, size))
-    product_rgb = product.convert("RGB")
-    product_rgb.thumbnail((size, size))
-    if region.size != product_rgb.size:
-        product_rgb = product_rgb.resize(region.size, 1)
+    region = out.crop(tuple(int(v) for v in product_box))
+    # Compare only the pixels the product actually owns. The crop's corners are
+    # scene, and including them made a correct composite score 0.93 ("drifted")
+    # purely because the background differed.
+    mask = product.resize(region.size, 1).getchannel("A")
+    region_rgb = region.convert("RGB")
+    product_rgb = product.convert("RGB").resize(region.size, 1)
 
-    a = np.asarray(region, dtype=np.float64) / 255.0
+    a = np.asarray(region_rgb, dtype=np.float64) / 255.0
     b = np.asarray(product_rgb, dtype=np.float64) / 255.0
+    m = np.asarray(mask, dtype=np.float64) / 255.0 > 0.5
+    if m.sum() < 64:
+        return {"ssim": None, "region": list(region.size),
+                "verdict": "unmeasurable", "note": "no opaque product pixels in the box"}
+    a = a[m]
+    b = b[m]
+
     mu_a, mu_b = a.mean(), b.mean()
     va, vb = a.var(), b.var()
     cov = ((a - mu_a) * (b - mu_b)).mean()
@@ -156,4 +167,5 @@ def identity_check(composite_png: bytes, cutout_png: bytes,
                                                        * (va + vb + c2))
     return {"ssim": round(float(ssim), 4),
             "region": list(region.size),
+            "masked_pixels": int(m.sum()),
             "verdict": "identity_preserved" if ssim >= 0.95 else "identity_drifted"}
