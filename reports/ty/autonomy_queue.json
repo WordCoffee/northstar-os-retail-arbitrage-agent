@@ -24,7 +24,8 @@
       "next": "Implement tools/token_meter.py: estimate from a session transcript or text (chars/4, labelled as an estimate), body reported by the launcher and summed by tys_runner._add_tokens; cap stops at 90%.",
       "write_paths": [
         "tools/token_meter.py",
-        "tools/tys_launcher.py"
+        "tools/tys_launcher.py",
+        "Northstar_backend/test_token_meter.py"
       ],
       "acceptance_commands": [
         [
@@ -32,7 +33,7 @@
           "-m",
           "pytest",
           "-q",
-          "test_token_meter.py"
+          "Northstar_backend/test_token_meter.py"
         ]
       ],
       "depends_on": []
