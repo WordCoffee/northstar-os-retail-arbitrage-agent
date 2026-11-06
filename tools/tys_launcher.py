@@ -113,57 +113,124 @@ def default_worker(task_path: Path, result_path: Path) -> int:
     return proc.returncode
 
 
-def deepseek_worker(task_path: Path, result_path: Path) -> int:
-    """The owner's coding model (DeepSeek V4.1 Flash on OpenCode), not a local 3B.
+def _opencode_exe() -> str:
+    """CreateProcess cannot run the .ps1 shim that `which` prefers on Windows."""
+    import shutil
 
-    The worker is told what to change and which files it may touch, and nothing
-    else: it does not decide the scope and it does not grade itself. The launcher
-    runs the acceptance commands afterwards. That split is the point - a model
-    that both writes the patch and judges it is not a verification.
+    exe = shutil.which("opencode") or shutil.which("opencode.cmd") or "opencode"
+    if str(exe).lower().endswith(".ps1"):
+        candidate = Path(str(exe)[:-4] + ".cmd")
+        if candidate.is_file():
+            return str(candidate)
+    return str(exe)
+
+
+def _session_model(session_id: str) -> Optional[Dict[str, Any]]:
+    """Which model actually answered? Read the session store, never assume."""
+    db = Path(os.environ.get("USERPROFILE", "")) / ".local" / "share" / "opencode" / "opencode.db"
+    if not session_id or not db.is_file():
+        return None
+    try:
+        import sqlite3
+
+        conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True, timeout=5)
+        try:
+            row = conn.execute(
+                "SELECT agent, model, cost FROM session_v2 WHERE id=?", (session_id,)).fetchone()
+        finally:
+            conn.close()
+    except Exception:  # noqa: BLE001 - provenance is best effort, absence is reported
+        return None
+    if not row:
+        return None
+    try:
+        model = json.loads(row[1]) if row[1] else {}
+    except (TypeError, ValueError):
+        model = {}
+    return {"agent": row[0], "model_id": model.get("id"),
+            "provider": model.get("providerID"), "variant": model.get("variant"),
+            "cost": row[2]}
+
+
+def deepseek_worker(task_path: Path, result_path: Path) -> int:
+    """The owner's coding model (DeepSeek V4.1 Flash on OpenCode), via `run`.
+
+    Measured 2026-11-06 on opencode v2.2.5: the TUI flag `--prompt` cannot select
+    an agent and does not return usable output, so the worker uses
+    `opencode run --agent <lane> --format json` and sends the prompt on **stdin**
+    (a 16 KB contract exceeds the Windows command line).
+
+    The model is told what to change and which files it may touch. The launcher
+    runs the acceptance commands afterwards; the worker never grades itself.
     """
+    import shutil
+
     task = json.loads(task_path.read_text(encoding="utf-8"))
+    lane = os.environ.get("TY_WORKER_AGENT", "tys")
     allowed = ", ".join(task.get("write_paths") or []) or "(none - refuse)"
     checks = "; ".join(" ".join(c) for c in (task.get("acceptance_commands") or []))
     prompt = (
-        "You are the implementation worker for one Northstar OS task. Work only in "
-        f"this repository. You may modify ONLY: {allowed}. Do not touch any other file, "
-        "do not change tests, and do not commit.\n\n"
+        "You are the Northstar OS autonomy worker. Work only in this repository. "
+        f"You may modify ONLY: {allowed}. Do not touch any other file, do not edit tests, "
+        "do not commit, and do not grade your own work.\n\n"
         f"TASK: {task.get('objective')}\n\n"
-        f"ACCEPTANCE (must pass, run by the launcher afterwards): {checks}\n\n"
-        "Make the smallest correct change that satisfies the acceptance check. If the "
-        "check cannot pass without touching a file outside the allowlist, change nothing "
-        "and state why in one line. When finished, stop."
+        f"ACCEPTANCE (the launcher runs this afterwards): {checks}\n\n"
+        "Make the smallest correct change that satisfies the check. If it cannot pass "
+        "without touching a file outside the allowlist, change nothing and say why in one "
+        "line. When finished, stop."
     )
-    cmd = ["opencode", "--prompt", prompt, "--auto"]
+    exe = _opencode_exe()
+    cmd = [exe, "run", "--agent", lane, "--format", "json", "--auto"]
     started = time.time()
+    events: List[Dict[str, Any]] = []
+    text: List[str] = []
+    session_id = ""
     try:
-        import shutil
-
-        exe = shutil.which("opencode") or shutil.which("opencode.cmd") or "opencode"
-        # No --standalone: measured 2026-11-06, `--prompt ... --standalone` starts a
-        # private server and never returns, which would hang every cycle. The model
-        # is pinned in opencode.jsonc instead ("model": opencode-go/deepseek-v4.1-flash).
-        extra = ["--prompt", prompt, "--auto"]
-        if str(exe).lower().endswith((".cmd", ".bat")):
-            cmd = ["cmd", "/c", str(exe)] + extra
-        else:
-            cmd = [str(exe)] + extra
         proc = subprocess.run(cmd, cwd=str(ROOT), timeout=WORKER_TIMEOUT_S,
-                              capture_output=True, text=True)
+                              capture_output=True, text=True, input=prompt)
         code = proc.returncode
-        tail = (proc.stdout or "")[-2000:]
+        for line in (proc.stdout or "").splitlines():
+            line = line.strip()
+            if not line.startswith("{"):
+                continue
+            try:
+                event = json.loads(line)
+            except ValueError:
+                continue
+            events.append(event)
+            session_id = str(event.get("sessionID") or session_id)
+            if event.get("type") == "text":
+                chunk = event.get("text") or event.get("content") or ""
+                if isinstance(chunk, str):
+                    text.append(chunk)
+        stderr_tail = (proc.stderr or "")[-800:]
     except subprocess.TimeoutExpired:
-        code, tail = 124, "worker timeout"
+        code, stderr_tail = 124, "worker timeout"
     except OSError as exc:
-        code, tail = 127, f"opencode_not_runnable: {exc}"
+        code, stderr_tail = 127, f"opencode_not_runnable: {exc}"
+
+    errors = [e.get("error") for e in events if e.get("type") == "error"]
+    provenance = _session_model(session_id)
+    ok = code == 0 and not errors
     result_path.write_text(json.dumps({
-        "ok": code == 0, "steps": 1, "worker": "opencode/deepseek",
-        "seconds": round(time.time() - started, 1), "tail": tail,
+        "ok": ok,
+        "steps": 1,
+        "worker": "opencode/run",
+        "lane": lane,
+        "session_id": session_id,
+        "model": provenance,
+        "seconds": round(time.time() - started, 1),
+        "events": len(events),
+        "errors": errors[:3],
+        "text": "".join(text)[:4000],
+        "stderr": stderr_tail,
         "objective": task.get("objective"),
     }, indent=2), encoding="utf-8")
-    _append(JOURNAL, {"event": "deepseek_worker", "code": code,
+    _append(JOURNAL, {"event": "deepseek_worker", "code": code, "lane": lane,
+                      "session": session_id,
+                      "model": (provenance or {}).get("model_id"),
                       "seconds": round(time.time() - started, 1),
-                      "tail": tail[-300:]})
+                      "errors": errors[:2]})
     return code
 
 
