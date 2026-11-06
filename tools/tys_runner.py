@@ -122,24 +122,45 @@ def load_queue() -> Dict[str, Any]:
 
 
 def select_next(queue: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-    """Highest priority active item that is not deferred, then fewest attempts.
+    """Highest priority item whose declared dependencies are all done.
 
-    A reverted item is deferred for two cycles instead of jumping straight back
-    to the front: retrying the same wall three times in a row is how a loop
-    spins. If every active item is deferred, the oldest one is taken anyway so
-    the queue can never deadlock on its own deferrals.
+    `depends_on` is enforced, not advisory: "work in order, no skipping" has to be
+    a property of the selector, because a queue that merely *lists* an order is an
+    order the loop can ignore. A reverted item is also deferred for two cycles so
+    the same wall is not retried three times in a row.
     """
     queue = queue or load_queue()
     cycle = int(queue.get("cycle") or 0)
-    rows = [i for i in queue.get("items", []) if str(i.get("status")) in ACTIVE]
+    items = queue.get("items", [])
+    done = {str(i.get("id")) for i in items if str(i.get("status")) == "done"}
+    rows = [i for i in items if str(i.get("status")) in ACTIVE]
     if not rows:
         return None
-    ready = [i for i in rows if int(i.get("defer_until_cycle") or 0) <= cycle]
-    pool = ready or rows
+    unblocked = [i for i in rows
+                 if all(str(dep) in done for dep in (i.get("depends_on") or []))]
+    if not unblocked:
+        return None
+    ready = [i for i in unblocked if int(i.get("defer_until_cycle") or 0) <= cycle]
+    pool = ready or unblocked
     pool.sort(key=lambda i: (-(int(i.get("priority") or 0)),
                              int(i.get("attempts") or 0),
                              str(i.get("id"))))
     return pool[0]
+
+
+def blocked_by_dependencies(queue: Optional[Dict[str, Any]] = None) -> list:
+    """Active items that cannot run yet, with the dependency that holds them."""
+    queue = queue or load_queue()
+    items = queue.get("items", [])
+    done = {str(i.get("id")) for i in items if str(i.get("status")) == "done"}
+    out = []
+    for item in items:
+        if str(item.get("status")) not in ACTIVE:
+            continue
+        missing = [str(d) for d in (item.get("depends_on") or []) if str(d) not in done]
+        if missing:
+            out.append({"id": item.get("id"), "waiting_on": missing})
+    return out
 
 
 def mark(queue: Dict[str, Any], item_id: str, status: str, **extra: Any) -> None:
@@ -154,9 +175,37 @@ def mark(queue: Dict[str, Any], item_id: str, status: str, **extra: Any) -> None
 
 
 # ------------------------------------------------------------------- lease/lock
+def _pid_alive(pid: int) -> bool:
+    if not pid:
+        return False
+    try:
+        import ctypes
+
+        SYNCHRONIZE = 0x00100000
+        handle = ctypes.windll.kernel32.OpenProcess(SYNCHRONIZE, False, int(pid))
+        if not handle:
+            return False
+        ctypes.windll.kernel32.CloseHandle(handle)
+        return True
+    except Exception:  # noqa: BLE001 - unknown means "do not assume alive"
+        return False
+
+
 def _lease() -> Optional[Dict[str, Any]]:
     lease = _read(LEASE, None)
     if not lease:
+        return None
+    # A TTL alone leaves a dead session's lease blocking the queue for hours
+    # (measured: a killed launcher held cycle 21 for 6 h). The holder's pid is the
+    # honest liveness test; the TTL is the backstop for a stuck-but-alive holder.
+    holder = int(lease.get("pid") or 0)
+    if not holder:
+        # A lease written before the pid field existed cannot prove who holds it,
+        # so it is unverifiable and therefore reclaimed rather than obeyed.
+        _clear_lease("legacy_lease_no_pid")
+        return None
+    if not _pid_alive(holder):
+        _clear_lease("holder_pid_dead")
         return None
     if time.time() - float(lease.get("taken_ts") or 0) > LEASE_TTL_S:
         _clear_lease("expired")
@@ -176,7 +225,7 @@ def _clear_lease(reason: str = "") -> None:
 
 def _take_lease(cycle: int, item_id: str) -> None:
     _write(LEASE, {"cycle": cycle, "item": item_id, "taken_at": _now(),
-                   "taken_ts": time.time()})
+                   "taken_ts": time.time(), "pid": os.getpid()})
 
 
 # -------------------------------------------------------------------- commands

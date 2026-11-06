@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T09:10:00Z",
+  "updated": "2026-11-06T10:30:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -15,6 +15,199 @@
   "cycle": 37,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
+    {
+      "id": "M0.3b-token-meter",
+      "kind": "automation",
+      "priority": 1200,
+      "status": "pending",
+      "title": "Token metering: estimate tokens per cycle so the daily cap is real",
+      "next": "Implement tools/token_meter.py: estimate from a session transcript or text (chars/4, labelled as an estimate), body reported by the launcher and summed by tys_runner._add_tokens; cap stops at 90%.",
+      "write_paths": [
+        "tools/token_meter.py",
+        "tools/tys_launcher.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_token_meter.py"
+        ]
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "M0.5-spike",
+      "kind": "automation",
+      "priority": 1190,
+      "status": "pending",
+      "title": "Coding-lane spike: 5 real problems x 3 candidates -> local / hybrid / stop",
+      "next": "Run reports/ty/M0.5_spike_plan.md and write reports/ty/spike_coding_lane.md with the matrix.",
+      "write_paths": [
+        "reports/ty/spike_coding_lane.md",
+        "state/evidence/spike/"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-c",
+          "import pathlib,sys; sys.exit(0 if pathlib.Path('reports/ty/spike_coding_lane.md').exists() else 1)"
+        ]
+      ],
+      "depends_on": [
+        "M0.3b-token-meter"
+      ]
+    },
+    {
+      "id": "M1c-evaluator",
+      "kind": "automation",
+      "priority": 1180,
+      "status": "pending",
+      "title": "tools/tys_evaluator.py: scope, well-formedness, target-green, check-not-tampered",
+      "next": "Implement the four deterministic gates over a frozen diff + contract; no model verdicts.",
+      "write_paths": [
+        "tools/tys_evaluator.py",
+        "Northstar_backend/test_tys_evaluator.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_tys_evaluator.py"
+        ]
+      ],
+      "depends_on": [
+        "M0.5-spike"
+      ]
+    },
+    {
+      "id": "M1d-artifacts",
+      "kind": "automation",
+      "priority": 1170,
+      "status": "pending",
+      "title": "Freeze per-candidate diff + verdict under state/author/<item>/cand_<k>",
+      "write_paths": [
+        "tools/tys_launcher.py",
+        "tools/tys_evaluator.py"
+      ],
+      "depends_on": [
+        "M1c-evaluator"
+      ]
+    },
+    {
+      "id": "M1e-rejections",
+      "kind": "automation",
+      "priority": 1160,
+      "status": "pending",
+      "title": "Rejection ledger by fingerprint; 3 on one gate -> needs_author",
+      "write_paths": [
+        "tools/tys_evaluator.py",
+        "tools/tys_runner.py"
+      ],
+      "depends_on": [
+        "M1d-artifacts"
+      ]
+    },
+    {
+      "id": "M1f-scope-deriver",
+      "kind": "automation",
+      "priority": 1150,
+      "status": "pending",
+      "title": "Derive write_paths from a real traceback; no artifact -> no scope",
+      "write_paths": [
+        "tools/tys_author.py"
+      ],
+      "depends_on": [
+        "M1c-evaluator"
+      ]
+    },
+    {
+      "id": "M1g-contract-writer",
+      "kind": "automation",
+      "priority": 1140,
+      "status": "pending",
+      "title": "Write the authored contract into the queue atomically + validate_contract",
+      "write_paths": [
+        "tools/tys_author.py",
+        "tools/tys_runner.py"
+      ],
+      "depends_on": [
+        "M1f-scope-deriver"
+      ]
+    },
+    {
+      "id": "M2-work-generator",
+      "kind": "automation",
+      "priority": 1130,
+      "status": "pending",
+      "title": "The T0-T5 ladder: the queue never runs empty",
+      "write_paths": [
+        "tools/tys_generator.py"
+      ],
+      "depends_on": [
+        "M1e-rejections",
+        "M1g-contract-writer"
+      ]
+    },
+    {
+      "id": "M2-worker-lane",
+      "kind": "automation",
+      "priority": 1120,
+      "status": "pending",
+      "title": "opencode run --agent tys returns output + model provenance reliably",
+      "next": "Capture JSONL events and the session model; if the CLI cannot return text headlessly, record that and use the local lane instead - do not pretend.",
+      "write_paths": [
+        "tools/tys_launcher.py"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "M3-intel-I0",
+      "kind": "automation",
+      "priority": 1110,
+      "status": "pending",
+      "title": "Intel plane I0: source registry + collectors",
+      "depends_on": [
+        "M2-work-generator"
+      ],
+      "write_paths": [
+        "tools/intel_collect.py",
+        "state/intel/sources.json"
+      ]
+    },
+    {
+      "id": "M3-intel-I1",
+      "kind": "automation",
+      "priority": 1100,
+      "status": "pending",
+      "title": "Intel plane I1: normaliser + effective-licence engine",
+      "depends_on": [
+        "M3-intel-I0"
+      ]
+    },
+    {
+      "id": "M3-intel-I2",
+      "kind": "automation",
+      "priority": 1090,
+      "status": "pending",
+      "title": "Intel plane I2: REA extractor (file:line, timestamps)",
+      "depends_on": [
+        "M3-intel-I1"
+      ]
+    },
+    {
+      "id": "M3-intel-I3",
+      "kind": "automation",
+      "priority": 1080,
+      "status": "pending",
+      "title": "Intel plane I3: gap matcher + hypothesis + yield",
+      "depends_on": [
+        "M3-intel-I2"
+      ]
+    },
     {
       "id": "W0-c1",
       "kind": "self",
@@ -59,7 +252,10 @@
       "commits": [
         "ab2e26b0"
       ],
-      "updated_at": "2026-11-06T14:40:00+00:00"
+      "updated_at": "2026-11-06T14:40:00+00:00",
+      "depends_on": [
+        "M2-worker-lane"
+      ]
     },
     {
       "id": "S1-cancel-race",
@@ -93,7 +289,10 @@
       "last_cycle": 25,
       "last_result": "reverted",
       "attempts": 3,
-      "defer_until_cycle": 27
+      "defer_until_cycle": 27,
+      "depends_on": [
+        "M2-worker-lane"
+      ]
     },
     {
       "id": "T0-callback-ssrf",
@@ -126,7 +325,10 @@
       "commits": [
         "7570b18e"
       ],
-      "updated_at": "2026-11-06T14:40:00+00:00"
+      "updated_at": "2026-11-06T14:40:00+00:00",
+      "depends_on": [
+        "M2-worker-lane"
+      ]
     },
     {
       "id": "W6-aplus-hero-key",
@@ -181,7 +383,7 @@
       "kind": "workstream",
       "workstream": "W9",
       "priority": 900,
-      "status": "pending",
+      "status": "done",
       "title": "dataforseo_adapter.classify_endpoint validates the path but never the host",
       "next": "Done 2026-11-06: classify_endpoint reads parsed.hostname and accepts only https to api.dataforseo.com; any other host (Amazon, IP literal, lookalike, missing) is refused before the path is examined.",
       "write_paths": [
@@ -200,11 +402,13 @@
       "evidence": [
         "reports/ty/egress_map_20261106.md"
       ],
-      "status": "done",
       "fixed": "Added DATAFORSEO_HOST = api.dataforseo.com and a scheme+hostname check that runs before the path allowlist, so https://attacker.test/v3/merchant/amazon/products/task_post is no longer accepted as a DataForSEO endpoint.",
       "verified": "python -m pytest -q test_dataforseo_adapter.py -> 85 passed",
       "commits": [
         "96b5d83c"
+      ],
+      "depends_on": [
+        "M2-worker-lane"
       ]
     },
     {
@@ -592,5 +796,6 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-06T14:33:00+00:00"
+  "updated_at": "2026-11-06T14:33:00+00:00",
+  "gate": "reports/ty/AUTOMATION_GATE.md"
 }
