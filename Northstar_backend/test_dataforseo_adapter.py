@@ -336,6 +336,40 @@ class DataForSEOAdapterTests(unittest.TestCase):
             df.classify_endpoint(
                 "https://api.dataforseo.com/v3/merchant/amazon/products/task_get", "GET")
 
+    # --- Section 2b: the host is checked, not only the path --------------
+    # Measured 2026-11-06: classify_endpoint read parsed.path and never looked at
+    # the host, so any host serving a DataForSEO-shaped path was accepted.
+
+    def test_foreign_host_with_an_allowed_path_is_refused(self):
+        with self.assertRaises(GuardError) as ctx:
+            df.classify_endpoint(
+                "https://attacker.test/v3/merchant/amazon/products/task_post", "POST")
+        self.assertIn("attacker.test", str(ctx.exception))
+
+    def test_amazon_host_is_refused_even_with_an_allowed_path(self):
+        for host in ("www.amazon.com", "api.dataforseo.com.evil.test",
+                     "amazon.co.uk"):
+            with self.assertRaises(GuardError):
+                df.classify_endpoint(
+                    f"https://{host}/v3/merchant/amazon/products/task_post", "POST")
+
+    def test_ip_literal_and_plain_http_are_refused(self):
+        with self.assertRaises(GuardError):
+            df.classify_endpoint(
+                "https://127.0.0.1/v3/merchant/amazon/products/task_post", "POST")
+        with self.assertRaises(GuardError):
+            df.classify_endpoint(
+                "http://api.dataforseo.com/v3/merchant/amazon/products/task_post", "POST")
+
+    def test_allowed_host_against_the_hostname_not_the_netloc(self):
+        # A port on the right host is still the right host; the reason it passes
+        # is parsed.hostname, which drops the port.
+        self.assertEqual(
+            df.classify_endpoint(
+                "https://api.dataforseo.com:443/v3/merchant/amazon/asin/task_post",
+                "POST"),
+            "task_post")
+
     # --- Section 3: bounded contract -------------------------------------
     def test_contract_accepts_single_candidate(self):
         c = df.validate_contract({

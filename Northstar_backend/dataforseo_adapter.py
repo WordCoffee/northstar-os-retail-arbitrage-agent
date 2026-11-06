@@ -90,6 +90,10 @@ ASIN_PATTERN = re.compile(r"^[A-Za-z0-9]{10}$")
 MAX_POLL_SECONDS = 120
 POLL_INTERVAL_SECONDS = 5
 
+#: The only host this adapter will call. Checked before the endpoint path, so a
+#: path-shaped URL on another host is refused instead of treated as allowed.
+DATAFORSEO_HOST = "api.dataforseo.com"
+
 # Default budgets (cents). First-ever approved run is a 1-cent canary; every
 # later run gets the full default ceiling.
 DATAFORSEO_FIRST_RUN_BUDGET_CENTS = 1
@@ -249,6 +253,12 @@ def validate_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
 def classify_endpoint(url: str, method: str = "GET") -> str:
     """Classify an absolute DataForSEO URL into an allowed class.
 
+    The HOST is checked before the path. Validating only the path let a URL like
+    ``https://attacker.test/v3/merchant/amazon/products/task_post`` pass as a
+    DataForSEO endpoint, which is how a path allowlist becomes a credential and
+    egress leak. Only the documented DataForSEO API host over HTTPS is accepted;
+    Amazon hosts are refused with the rest.
+
     Allowed (Merchant Standard async):
       .../v3/merchant/amazon/{products|asin|sellers}/task_post        POST
       .../v3/merchant/amazon/{products|asin|sellers}/task_get/advanced/{id}  GET
@@ -260,6 +270,17 @@ def classify_endpoint(url: str, method: str = "GET") -> str:
     if not isinstance(url, str) or not url.strip():
         raise GuardError("empty DataForSEO endpoint URL")
     parsed = urlparse(url.strip())
+    if parsed.scheme.lower() != "https":
+        raise GuardError(
+            f"dataforseo endpoint refused (scheme {parsed.scheme or 'missing'}: "
+            "only https to the DataForSEO API host is allowed)")
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if host != DATAFORSEO_HOST:
+        # Covers Amazon (always refused), IP literals, lookalike domains
+        # (api.dataforseo.com.evil.test) and a bare relative path (no host).
+        raise GuardError(
+            f"dataforseo endpoint refused (host {host or 'missing'}: "
+            f"only {DATAFORSEO_HOST} is allowed)")
     parts = [p for p in parsed.path.split("/") if p]
     if len(parts) >= 4 and parts[0] == "v3" and parts[1] == "dataforseo_labs":
         if parts[2] == "amazon" and len(parts) == 5 and parts[4] == "live":
