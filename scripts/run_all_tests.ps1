@@ -149,8 +149,8 @@ Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
 # Name-based regression guard (M0.2): the run emits junit so a test can be
 # compared BY NAME. Counting alone made the canary go RED whenever the loop
 # added a test, which would have had it "fixing" its own new tests.
-$JunitPath = Join-Path $TmpDir ("ns_junit_" + $PID + ".xml")
-$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider --junitxml=`"$JunitPath`""
+$JunitPath = Join-Path $TmpDir ("ns_ids_" + $PID + ".json")
+$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider -p pytest_idlist --idlist=`"$JunitPath`""
 # Parsed by Parse-PytestSummary (defined above and exercised by -SelfTest):
 # a missing token is 0, and the line may carry xfailed/warning tokens.
 $sm = Parse-PytestSummary $r.text
@@ -191,7 +191,7 @@ if (-not $sm) {
 # Name-based regression guard (M0.2). Additions are fine; a removed test or a
 # failing test blocks, by name, with the junit the run just produced.
 if (Test-Path $JunitPath) {
-    $nr = Run-Suite $Root "python tools\check_regression.py --junit `"$JunitPath`""
+    $nr = Run-Suite $Root "python tools\check_regression.py --idlist `"$JunitPath`""
     $nameLine = ($nr.text -split "`r?`n" | Where-Object { $_ -match 'tests, baseline' } | Select-Object -Last 1)
     if ($nr.code -eq 0) {
         Write-Host ("  by name: {0}" -f $nameLine)

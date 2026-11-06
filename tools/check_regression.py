@@ -42,8 +42,23 @@ def _ids_from_collect(text: str) -> Set[str]:
     return ids
 
 
+def _from_idlist(path: Path) -> Dict[str, str]:
+    """Exact ids from the pytest_idlist plugin (preferred over junit)."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    status = dict(data.get("status") or {})
+    out: Dict[str, str] = {}
+    for node_id in data.get("ids") or []:
+        out[str(node_id)] = str(status.get(str(node_id), "passed"))
+    return out
+
+
 def _from_junit(path: Path) -> Dict[str, str]:
-    """id -> 'passed' | 'failed' | 'skipped' | 'error'."""
+    """id -> 'passed' | 'failed' | 'skipped' | 'error'.
+
+    Kept for completeness, but note the identity mismatch described in the module
+    docstring: junit classnames are dotted, collection ids are paths. Prefer
+    --idlist.
+    """
     tree = ET.parse(path)
     out: Dict[str, str] = {}
     for case in tree.iter("testcase"):
@@ -95,28 +110,36 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--collect", action="store_true",
                         help="read ids from stdin (pytest --collect-only -q output)")
     parser.add_argument("--junit", default="", help="junit xml from a run to check")
+    parser.add_argument("--idlist", default="",
+                        help="idlist JSON from the pytest_idlist plugin (preferred)")
     parser.add_argument("--json", action="store_true")
     ns = parser.parse_args(argv)
 
     if ns.write:
-        if not ns.collect:
-            print("refusing: --write needs --collect (pipe pytest --collect-only -q)",
-                  file=sys.stderr)
+        if ns.idlist:
+            source = Path(ns.idlist)
+            if not source.is_file():
+                print(f"idlist not found: {source}", file=sys.stderr)
+                return 2
+            ids = set(_from_idlist(source))
+        elif ns.collect:
+            ids = _ids_from_collect(sys.stdin.read())
+        else:
+            print("refusing: --write needs --idlist <file> or --collect", file=sys.stderr)
             return 2
-        ids = _ids_from_collect(sys.stdin.read())
         if not ids:
-            print("refusing: no test ids parsed from the collect output", file=sys.stderr)
+            print("refusing: no test ids found in the source", file=sys.stderr)
             return 2
         result = write_baseline(ids)
         print(json.dumps(result, indent=2))
         return 0
 
-    if not ns.junit:
-        print("usage: --junit <xml> or --write --collect", file=sys.stderr)
+    if not ns.junit and not ns.idlist:
+        print("usage: --idlist <json> | --junit <xml> | --write --collect", file=sys.stderr)
         return 2
-    junit = Path(ns.junit)
-    if not junit.is_file():
-        print(f"junit not found: {junit}", file=sys.stderr)
+    source = Path(ns.idlist or ns.junit)
+    if not source.is_file():
+        print(f"run report not found: {source}", file=sys.stderr)
         return 2
     if not BASELINE.is_file():
         print(f"baseline not found: {BASELINE} (run --write --collect first)",
@@ -124,7 +147,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 2
 
     baseline = set(json.loads(BASELINE.read_text(encoding="utf-8"))["tests"])
-    current = _from_junit(junit)
+    current = _from_idlist(source) if ns.idlist else _from_junit(source)
     # A partial run is not a regression. Refusing avoids the worst false alarm
     # available to this tool: "6039 tests removed" because someone ran one file.
     if baseline and len(current) < max(20, int(len(baseline) * 0.5)):

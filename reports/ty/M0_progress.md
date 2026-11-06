@@ -95,3 +95,21 @@ failure the runner has to survive, and it is now visible instead of silent.**
 - M0.3b: transcript-based token estimation (±20 % is acceptable if labelled).
 - M0.5: lane leases (GPU / CPU / browser) with deferral instead of failure.
 - M0.5-spike: 5 real failures × 3 candidates to decide the author/evaluator design.
+
+## Correction to M0.2 (found by the canary, 2026-11-06)
+
+The first wiring used pytest's junit XML. Junit reports identities as **dotted
+classnames** (gents.golden_goose_finder.tests.test_x.TestGate) while collection
+uses **paths** (gents/.../test_x.py::TestGate), so the comparison found zero
+overlap and reported every test as removed: +6055 new, -6039 removed.
+
+Replaced with Northstar_backend/pytest_idlist.py, a plugin that writes pytest's own
+node ids and outcomes:
+
+`
+pytest -q -p pytest_idlist --idlist=run_ids.json
+`
+
+Baseline regenerated from that format: **6,419 ids**, and a collect-vs-baseline check
+now reports +0 new, -0 removed, 0 failing (exit 0). Junit support remains in the
+checker but is marked as the inferior path.

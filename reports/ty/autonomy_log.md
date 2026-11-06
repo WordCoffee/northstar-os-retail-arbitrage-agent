@@ -16,3 +16,4 @@ One line per cycle. Format:
 - 2026-11-06T05:20Z | W6 A+ / design identity | cycle 9 | design_registry (new-vs-same semantics, 6 tests) + aplus_from_design (7 distinct views, contained hero) -> preview 616 KB, problems [] ; still: hero ghost patch, logo floating, invented competitor column | tag autonomy-cycle-09-pre | ~0.66M tokens
 - 2026-11-06T05:15Z | M0 foundations | M0.1 runner (11 tests), M0.2 name-based guard (7 tests, 6039 ids), M0.4 disk reclaim (7 tests, 9.74 -> 14.21 GB, 3.86 GB freed) | tag autonomy-m0 | ~0.70M tokens
 - 2026-11-06T05:17Z | M0.5 lanes | 9 tests; gpu lease defers on ram_below_floor (2850<3000) instead of failing a render
+- 2026-11-06T05:50Z | M0.2 correction | junit classnames are dotted, collection ids are paths -> zero overlap; replaced with pytest_idlist plugin (6419 ids, +0/-0)
