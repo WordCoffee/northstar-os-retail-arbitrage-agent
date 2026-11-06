@@ -51,7 +51,20 @@ from 6,402 collected; parametrised cases collapse to their base id).
 `scripts/run_all_tests.ps1` now emits junit and calls the checker; the old count equality
 became a floor (`passed >= baseline`) because identity is checked by name.
 
-## M0.3 — Token ledger — PARTIAL
+## M0.5 - Lane leases - DONE
+
+`tools/lanes.py` (9 tests). One holder per lane, TTL expiry, and a **deferral**
+instead of a failure when the box cannot serve it:
+
+- `gpu` needs 4096 MB VRAM free **and** 3000 MB RAM; unknown VRAM is a refusal,
+  not a guess
+- a busy lane returns `lane_held` with the holder; an expired lease is reclaimable
+- an unreadable lease file is treated as free (a stuck file must not block the loop)
+
+Live: `gpu defer: ram_below_floor (2850 < 3000)` - the honest answer on this box
+right now.
+
+## M0.3 - Token ledger - PARTIAL
 
 The ledger and the cap enforcement exist in the runner (`ledger.json`, per day, 90 % stop).
 What is missing is the **measurement**: the worker reports `tokens` in its result and the
