@@ -73,7 +73,11 @@ def _serve(status: int):
     return srv
 
 
-def test_webhook_delivered_on_success():
+def test_webhook_delivered_on_success(monkeypatch):
+    # The test server is a loopback literal, which the SSRF policy refuses unless
+    # the operator/dev opts in explicitly. That is the point of the guard: this
+    # test is the one place that opts in, and it proves opt-in still delivers.
+    monkeypatch.setenv("DESIGN_CALLBACK_ALLOW_LOOPBACK", "1")
     srv = _serve(200)
     try:
         url = f"http://127.0.0.1:{srv.server_port}/hook"
@@ -85,7 +89,8 @@ def test_webhook_delivered_on_success():
         srv.shutdown()
 
 
-def test_webhook_retries_then_gives_up_bounded():
+def test_webhook_retries_then_gives_up_bounded(monkeypatch):
+    monkeypatch.setenv("DESIGN_CALLBACK_ALLOW_LOOPBACK", "1")
     srv = _serve(500)
     try:
         url = f"http://127.0.0.1:{srv.server_port}/hook"

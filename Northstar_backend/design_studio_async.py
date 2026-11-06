@@ -29,8 +29,11 @@ no provider is called, no money is spent.
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
+import re
+import sys
 import time
 import urllib.request
 import uuid
@@ -38,6 +41,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
+from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel  # noqa: F401  (kept for type context in docstrings)
@@ -100,14 +104,159 @@ def _engine_status() -> dict:
 
 
 # ── Webhooks ────────────────────────────────────────────────────────────────
+#
+# `callback_url` is caller-supplied and ends up in `urllib.request.urlopen`, so
+# it is an SSRF surface, not just a convenience: without a check an authenticated
+# caller could point the server at its own cloud metadata IP, at a loopback admin
+# port, or at Amazon. The policy below is applied twice - when the job is
+# submitted (so the caller gets a 422 instead of a silently failed delivery) and
+# again inside `deliver_webhook` before the first request is built.
+#
+# Deliberate limits, stated so nobody over-trusts the check:
+#   * no DNS resolution happens here, so a hostname that resolves to a private
+#     address is not caught by this function; the transport-level guard in
+#     `tools/egress_guard.py` is what covers Amazon calls everywhere else
+#   * IP literals (v4 and v6, including the decimal spellings) are refused
+#     outright, so loopback/link-local/private/metadata targets never reach a socket
+
+CALLBACK_SCHEMES = ("http", "https")
+
+#: Comma-separated host suffixes. When set, a callback host must match one of them.
+CALLBACK_ALLOW_HOSTS_ENV = "DESIGN_CALLBACK_ALLOWED_HOSTS"
+#: Explicit operator/dev opt-in. Loopback is refused by default and allowed only here.
+CALLBACK_ALLOW_LOOPBACK_ENV = "DESIGN_CALLBACK_ALLOW_LOOPBACK"
+
+_CALLBACK_MAX_LEN = 2048
+_LOOPBACK_NAMES = ("localhost", "localhost.localdomain", "ip6-localhost", "ip6-loopback")
+#: Decimal (127.1, 2130706433) and hex (0x7f.1) spellings of an IPv4 address.
+_NUMERIC_HOST = re.compile(r"^(0x[0-9a-f]+|[0-9]+)(\.(0x[0-9a-f]+|[0-9]+))*$")
+
+_TOOLS_DIR = Path(__file__).resolve().parents[1] / "tools"
+_EGRESS: Any = None
+
+
+class CallbackRefused(ValueError):
+    """A callback URL the service will not deliver to. Never a delivery result."""
+
+
+def _egress() -> Any:
+    """`tools/egress_guard.py` (Amazon list + journal), imported by path."""
+    global _EGRESS
+    if _EGRESS is None:
+        if str(_TOOLS_DIR) not in sys.path:
+            sys.path.append(str(_TOOLS_DIR))
+        import egress_guard  # noqa: PLC0415 - local-lane tool module
+        _EGRESS = egress_guard
+    return _EGRESS
+
+
+def _flag(name: str, default: bool = False) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in ("1", "true", "yes", "on")
+
+
+def validate_callback_url(url: Any, *, allow_hosts: Optional[list] = None,
+                          allow_loopback: Optional[bool] = None) -> str:
+    """Return the URL when it is a legal callback target, else raise CallbackRefused.
+
+    Order matters: the Amazon refusal runs first (it is the hard standing gate),
+    then the SSRF rules, then the optional operator allowlist.
+    """
+    text = "" if url is None else str(url).strip()
+    if not text:
+        raise CallbackRefused("callback_refused: empty_url")
+    if len(text) > _CALLBACK_MAX_LEN:
+        raise CallbackRefused(f"callback_refused: url_too_long({len(text)})")
+
+    try:
+        parsed = urlsplit(text)
+        host = (parsed.hostname or "").lower().rstrip(".")
+        port = parsed.port
+    except ValueError as exc:
+        raise CallbackRefused(f"callback_refused: unparseable_url({exc})")
+
+    scheme = (parsed.scheme or "").lower()
+    if scheme not in CALLBACK_SCHEMES:
+        raise CallbackRefused(f"callback_refused: scheme_{scheme or 'missing'}")
+    if not host:
+        raise CallbackRefused("callback_refused: missing_host")
+    if parsed.username or parsed.password:
+        raise CallbackRefused("callback_refused: credentials_in_url")
+    if port is not None and not (1 <= port <= 65535):
+        raise CallbackRefused(f"callback_refused: bad_port({port})")
+
+    # Amazon first: a hardcoded, non-overridable refusal shared with the transport.
+    try:
+        guard = _egress()
+    except Exception as exc:  # noqa: BLE001 - fail closed, never fail open
+        raise CallbackRefused(f"callback_refused: egress_guard_unavailable({exc})")
+    try:
+        guard.check(text, caller="design_studio_async:validate_callback_url")
+    except guard.EgressRefused:
+        raise CallbackRefused(f"callback_refused: amazon_host({host})")
+
+    if allow_loopback is None:
+        allow_loopback = _flag(CALLBACK_ALLOW_LOOPBACK_ENV)
+
+    # IP literals: refused outright. Loopback/link-local/unspecified get a precise
+    # reason so the journal and the 422 say what was attempted.
+    ip = None
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        ip = None
+    if ip is not None:
+        if ip.is_loopback and allow_loopback:
+            return text
+        if ip.is_loopback:
+            reason = "loopback_ip"
+        elif ip.is_link_local:
+            reason = "link_local_ip"
+        elif ip.is_unspecified:
+            reason = "unspecified_ip"
+        elif ip.is_private:
+            reason = "private_ip"
+        elif ip.is_multicast or ip.is_reserved:
+            reason = "reserved_ip"
+        else:
+            reason = "ip_literal"
+        raise CallbackRefused(f"callback_refused: {reason}({ip})")
+
+    if not host:
+        raise CallbackRefused("callback_refused: missing_host")
+    if _NUMERIC_HOST.match(host):
+        raise CallbackRefused(f"callback_refused: numeric_host({host})")
+
+    for name in _LOOPBACK_NAMES:
+        if host == name or host.endswith("." + name):
+            if allow_loopback:
+                return text
+            raise CallbackRefused(f"callback_refused: loopback_host({host})")
+
+    allowed = allow_hosts
+    if allowed is None:
+        raw = os.environ.get(CALLBACK_ALLOW_HOSTS_ENV, "")
+        allowed = [h.strip().lower().rstrip(".") for h in raw.split(",") if h.strip()]
+    if allowed:
+        if not any(host == a or host.endswith("." + a) for a in allowed):
+            raise CallbackRefused(f"callback_refused: host_not_allowed({host})")
+    return text
+
 
 def deliver_webhook(url: str, payload: Dict[str, Any], *, attempts: int = 3,
                     timeout: float = 10.0, opener=None) -> Dict[str, Any]:
     """POST JSON to a callback URL with bounded retries. Success = HTTP 2xx.
 
+    The URL is validated first: a refused callback raises `CallbackRefused`
+    before a request object exists, so no socket is opened and the caller sees a
+    refusal rather than a retry loop.
+
     Retry policy (Packify-style, bounded): immediate -> 1s -> 4s backoff.
-    Never raises; returns the delivery record that is stored on the job.
+    Never raises on delivery; returns the delivery record stored on the job.
     """
+    url = validate_callback_url(url)
     delays = [0.0, 1.0, 4.0]
     data = json.dumps(payload).encode("utf-8")
     last: Dict[str, Any] = {"ok": False, "status": None, "error": None, "attempts": 0}
@@ -137,11 +286,19 @@ def deliver_webhook(url: str, payload: Dict[str, Any], *, attempts: int = 3,
 
 def _notify_callback(db, acct: str, job_id: str, body: Dict[str, Any],
                      payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Deliver the job webhook (if a callback was registered) and record it."""
+    """Deliver the job webhook (if a callback was registered) and record it.
+
+    A refused callback is recorded on the job and never breaks the job: the
+    artifact is already persisted by the time this runs.
+    """
     url = (body or {}).get("callback_url")
     if not url:
         return None
-    result = deliver_webhook(url, payload)
+    try:
+        result = deliver_webhook(url, payload)
+    except CallbackRefused as exc:
+        result = {"ok": False, "status": None, "error": str(exc)[:200],
+                  "attempts": 0, "refused": True}
     try:
         db.design_studio.jobs.update(
             job_id, {"params": {**{k: v for k, v in body.items() if k != "callback_url"},
@@ -254,6 +411,14 @@ def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str =
     """Create the queued job (+reservation) and schedule it. Raises HTTPException on gates."""
     if kind not in ("image", "video"):
         raise ValueError("kind must be image or video")
+    if callback_url:
+        try:
+            callback_url = validate_callback_url(callback_url)
+        except CallbackRefused as exc:
+            raise HTTPException(status_code=422, detail={
+                "code": "callback_url_refused", "message": str(exc),
+                "note": ("A callback must be an http(s) URL on a named host; IP literals, "
+                         "loopback and Amazon hosts are refused.")})
     st = _engine_status()
     if not st.get("armed"):
         raise HTTPException(status_code=409, detail={
@@ -464,6 +629,14 @@ def submit_assembly(acct: str, *, images, captions=None, narration: Optional[str
                     callback_url: Optional[str] = None,
                     name: Optional[str] = None) -> Dict[str, Any]:
     """Queue a video assembly. Raises HTTPException when FFmpeg is absent."""
+    if callback_url:
+        try:
+            callback_url = validate_callback_url(callback_url)
+        except CallbackRefused as exc:
+            raise HTTPException(status_code=422, detail={
+                "code": "callback_url_refused", "message": str(exc),
+                "note": ("A callback must be an http(s) URL on a named host; IP literals, "
+                         "loopback and Amazon hosts are refused.")})
     st = assembly_available()
     if not st["ready"]:
         raise HTTPException(status_code=409, detail={

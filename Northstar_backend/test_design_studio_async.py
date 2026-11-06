@@ -147,6 +147,132 @@ def test_run_generation_job_failure_releases_reservation(tmp_path, monkeypatch):
     assert failed["status"] == "failed" and failed["credits_used"] == 0
 
 
+# ── callback_url is an SSRF surface, not a convenience ──────────────────────
+#
+# `case` below returns the reason token the refusal must name, so a refusal for
+# the wrong reason (e.g. "unparseable" instead of "loopback") cannot pass.
+
+@pytest.mark.parametrize("url,reason", [
+    ("https://www.amazon.com/dp/X", "amazon_host"),
+    ("https://amzn.eu/d/x", "amazon_host"),
+    ("http://127.0.0.1:8080/hook", "loopback_ip"),
+    ("http://[::1]/hook", "loopback_ip"),
+    ("http://localhost/hook", "loopback_host"),
+    ("http://api.localhost/hook", "loopback_host"),
+    ("http://169.254.169.254/latest/meta-data/", "link_local_ip"),
+    ("http://10.0.0.5/hook", "private_ip"),
+    ("http://0.0.0.0/hook", "unspecified_ip"),
+    ("http://2130706433/hook", "numeric_host"),      # integer form of 127.0.0.1
+    ("http://127.1/hook", "numeric_host"),           # short form of 127.0.0.1
+    ("file:///etc/passwd", "scheme_file"),
+    ("ftp://example.com/hook", "scheme_ftp"),
+    ("http:///hook", "missing_host"),
+    ("http://user:pw@example.com/hook", "credentials_in_url"),
+    ("", "empty_url"),
+])
+def test_malicious_callback_urls_are_refused_with_a_reason(url, reason):
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url(url)
+    assert reason in str(ei.value)
+
+
+@pytest.mark.parametrize("url", [
+    "https://hooks.example.com/northstar/job",
+    "http://example.com:8080/cb",
+    "https://api.example.co.uk/webhook?x=1",
+])
+def test_named_host_callbacks_still_pass(url):
+    assert dsa.validate_callback_url(url) == url
+
+
+def test_refusal_happens_before_any_request_is_made():
+    """The regression this item exists for: no socket, no opener call, no retry loop."""
+    calls = {"n": 0}
+
+    def counting_opener(*_a, **_k):
+        calls["n"] += 1
+        raise AssertionError("a refused callback must never reach the transport")
+
+    with pytest.raises(dsa.CallbackRefused):
+        dsa.deliver_webhook("http://127.0.0.1:9/hook", {"job_id": "j1"},
+                            opener=counting_opener)
+    assert calls["n"] == 0
+
+
+def test_loopback_needs_an_explicit_opt_in_and_link_local_is_still_refused(monkeypatch):
+    monkeypatch.setenv(dsa.CALLBACK_ALLOW_LOOPBACK_ENV, "1")
+    assert dsa.validate_callback_url("http://127.0.0.1:8765/hook")
+    assert dsa.validate_callback_url("http://localhost:8765/hook")
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("http://169.254.169.254/latest/meta-data/")
+    assert "link_local_ip" in str(ei.value)
+
+
+def test_operator_allowlist_can_pin_the_callback_hosts(monkeypatch):
+    monkeypatch.setenv(dsa.CALLBACK_ALLOW_HOSTS_ENV, "hooks.example.com")
+    assert dsa.validate_callback_url("https://hooks.example.com/x")
+    assert dsa.validate_callback_url("https://eu.hooks.example.com/x")
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://evil.test/x")
+    assert "host_not_allowed" in str(ei.value)
+
+
+def test_submit_generation_refuses_a_malicious_callback_before_creating_a_job(monkeypatch):
+    from fastapi import HTTPException
+
+    monkeypatch.setattr(dsa, "_engine_status", lambda: {"armed": True, "note": "test"})
+    monkeypatch.setattr(dsa, "credits_enforced", lambda: False)
+    db = _DB()
+    monkeypatch.setattr(dsa, "get_northstar_db", lambda: db)
+
+    class _InlineExecutor:
+        def __init__(self):
+            self.calls = []
+
+        def submit(self, fn, **kw):
+            self.calls.append((fn, kw))
+
+    ex = _InlineExecutor()
+    monkeypatch.setattr(dsa, "_EXECUTOR", ex)
+
+    with pytest.raises(HTTPException) as ei:
+        dsa.submit_generation("org-a", brief="ssrf me",
+                              callback_url="http://169.254.169.254/latest/meta-data/")
+    assert ei.value.status_code == 422
+    assert ei.value.detail["code"] == "callback_url_refused"
+    assert db.design_studio.jobs.created is None
+    assert ex.calls == []
+
+
+def test_a_refused_callback_is_recorded_on_the_job_and_never_fails_it(monkeypatch, tmp_path):
+    import studio_generation as sg
+
+    monkeypatch.setattr(sg, "generate_image", lambda **kw: {
+        "bytes": b"fake-png-bytes", "ext": "png", "mime": "image/png",
+        "model": "test-model", "width": 64, "height": 64, "seed": 7,
+    })
+
+    def counting_opener(*_a, **_k):
+        raise AssertionError("a refused callback must never reach the transport")
+
+    monkeypatch.setattr(dsa.urllib.request, "urlopen", counting_opener)
+
+    db = _DB()
+    out = dsa.run_generation_job(
+        job_id="job-cb", acct="org-a",
+        body={"kind": "image", "brief": "with a bad callback",
+              "callback_url": "https://www.amazon.com/dp/X"},
+        db=db, ledger=None, out_dir=tmp_path,
+    )
+    assert out["status"] == "done"          # the artifact is what the job is for
+    webhook = None
+    for _job_id, patch in db.design_studio.jobs.updates:
+        if "params" in patch and "webhook" in patch["params"]:
+            webhook = patch["params"]["webhook"]
+    assert webhook is not None and webhook["refused"] is True
+    assert webhook["attempts"] == 0 and "amazon_host" in webhook["error"]
+
+
 # ── API gates + scheduling ──────────────────────────────────────────────────
 
 def test_submit_generation_refuses_unarmed_engine(monkeypatch):
