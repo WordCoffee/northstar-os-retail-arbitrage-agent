@@ -298,40 +298,49 @@ def start_model(wait_s: float = 240.0) -> bool:
     return False
 
 
-def _snapshot(paths: List[str]) -> Dict[str, Optional[bytes]]:
-    """Bytes of every declared write path, so a failed attempt can be undone.
+def _git(*args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=str(ROOT), capture_output=True, text=True)
 
-    Measured gap (2026-11-06): a failed cycle marked the queue item pending and
-    left the worker's edits on disk. The next candidate then scored on the
-    previous candidate's wreckage. A revert that only touches the queue is not a
-    revert.
+
+def _dirty(paths: List[str]) -> List[str]:
+    """Declared paths that already differ from HEAD. A dirty target is refused."""
+    if not paths:
+        return []
+    out = _git("status", "--porcelain", "--", *paths)
+    return [line[3:].strip() for line in (out.stdout or "").splitlines() if line.strip()]
+
+
+def _tracked() -> set:
+    out = _git("ls-tree", "-r", "--name-only", "HEAD")
+    return {line.strip() for line in (out.stdout or "").splitlines() if line.strip()}
+
+
+def _restore(paths: List[str]) -> List[str]:
+    """Undo a failed attempt with git, not with an in-memory snapshot.
+
+    The snapshot version was dangerous (measured 2026-11-06): a path that was
+    absent when the snapshot was taken was *deleted* on restore, which removed a
+    committed file that another session had just created. Git knows what belongs
+    in the tree; a memory image does not.
     """
-    snap: Dict[str, Optional[bytes]] = {}
-    for rel in paths:
-        path = ROOT / rel
-        try:
-            snap[rel] = path.read_bytes() if path.is_file() else None
-        except OSError:
-            snap[rel] = None
-    return snap
-
-
-def _restore(snap: Dict[str, Optional[bytes]]) -> List[str]:
     restored: List[str] = []
-    for rel, data in snap.items():
+    if not paths:
+        return restored
+    tracked = _tracked()
+    source = [p for p in paths if p in tracked]
+    if source:
+        _git("checkout", "--", *source)
+        restored.extend(source)
+    for rel in paths:
+        if rel in tracked:
+            continue
         path = ROOT / rel
-        try:
-            if data is None:
-                if path.exists():
-                    path.unlink()
-                    restored.append(rel)
-            else:
-                if not path.is_file() or path.read_bytes() != data:
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_bytes(data)
-                    restored.append(rel)
-        except OSError as exc:
-            _append(JOURNAL, {"event": "restore_failed", "path": rel, "error": str(exc)})
+        if path.is_file():
+            try:
+                path.unlink()
+                restored.append(rel)
+            except OSError as exc:
+                _append(JOURNAL, {"event": "restore_failed", "path": rel, "error": str(exc)})
     return restored
 
 
@@ -376,7 +385,18 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
         return {"ok": True, "skipped": True, "item": item.get("id"),
                 "reason": "check_already_green"}
 
-    snap = _snapshot(list(contract.get("write_paths") or []))
+    snap = list(contract.get("write_paths") or [])
+    dirty = _dirty(snap)
+    if dirty:
+        # A dirty target means somebody else owns these bytes (an operator edit or
+        # a parallel lane). Restore would overwrite their work, so refuse instead.
+        runner.mark(runner.load_queue(), str(item.get("id")), "pending",
+                    blocked_reason=f"targets_dirty: {', '.join(dirty[:3])}",
+                    defer_until_cycle=int(brief["cycle"]) + 1)
+        runner._clear_lease("dirty targets")
+        _append(JOURNAL, {"event": "targets_dirty", "item": item.get("id"), "paths": dirty[:5]})
+        return {"ok": True, "skipped": True, "item": item.get("id"),
+                "reason": "targets_dirty"}
     task_path.write_text(json.dumps(contract, indent=2), encoding="utf-8")
     if result_path.exists():
         result_path.unlink()

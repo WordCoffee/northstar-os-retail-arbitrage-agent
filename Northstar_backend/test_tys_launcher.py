@@ -55,6 +55,16 @@ def root(tmp_path, monkeypatch):
     monkeypatch.setattr(L, "HEARTBEAT", tmp_path / "state/tys_runner/heartbeat.json")
     monkeypatch.setattr(L, "JOURNAL", tmp_path / "state/tys_runner/launcher.jsonl")
     monkeypatch.setattr(L, "BRIEF", tmp_path / "reports/ty/cycle_handoff.json")
+    # A real git repo, because the restore path uses git rather than a memory
+    # snapshot (a snapshot deleted files it had never seen).
+    import subprocess as sp
+
+    def g(*a):
+        sp.run(["git", *a], cwd=str(tmp_path), capture_output=True, text=True)
+
+    g("init")
+    g("add", "-A")
+    g("-c", "user.email=t@example.test", "-c", "user.name=test", "commit", "-m", "base")
     return tmp_path
 
 
@@ -108,6 +118,11 @@ def test_a_failed_worker_restores_the_bytes_it_wrote(root):
     target = root / "Northstar_backend" / "x.py"
     target.parent.mkdir(parents=True)
     target.write_text("original\n", encoding="utf-8")
+    import subprocess as sp
+
+    sp.run(["git", "add", "-A"], cwd=str(root), capture_output=True)
+    sp.run(["git", "-c", "user.email=t@example.test", "-c", "user.name=test",
+            "commit", "-m", "x"], cwd=str(root), capture_output=True)
 
     def worker(task_path, result_path):
         target.write_text("damaged by the worker\n", encoding="utf-8")
