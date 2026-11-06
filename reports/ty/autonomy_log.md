@@ -26,3 +26,4 @@ One line per cycle. Format:
 - 2026-11-06T08:30Z | practice | parallel lanes adopted as standing policy (AGENTS.md appended): read-only always parallel, writers on disjoint paths only, verification serialised, max 4 lanes
 - 2026-11-06T08:45Z | verifier agree | egress guard confirmed before key/cache/network; fixed 2 uncaught paths (amazon_search, offer_enrichment) so a refusal is a skip not a 500; guard now doubles-transport-aware (tests can patch requests.post); 173 passed
 - 2026-11-06T09:10Z | egress map | no global hook; 44 unguarded caller-URL sites; T0 (transport hook), T0 (callback SSRF), T1 (dataforseo host) queued; launcher now reverts bytes + refuses an already-green check (26 tests)
+- 2026-11-06T09:25Z | persistence | scripts/tys-watchdog.ps1 keeps exactly one launcher alive (restart on exit, backoff on model_lane_down, STOP respected); start-tys.ps1 detached; scheduled task NorthstarTysWatchdog at logon; verified restart after kill
