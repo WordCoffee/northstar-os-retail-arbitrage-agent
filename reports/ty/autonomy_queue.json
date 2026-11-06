@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T04:40:00Z",
+  "updated": "2026-11-06T05:20:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 8,
+  "cycle": 9,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -24,13 +24,22 @@
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
     },
     {
-      "id": "W6-aplus-tiles",
+      "id": "W6-aplus-hero-key",
       "kind": "workstream",
       "workstream": "W6",
-      "priority": 960,
+      "priority": 950,
       "status": "pending",
-      "title": "A+ tile rows reuse one photograph - derive distinct detail crops (ingredient, seal, label) from the product renders",
-      "evidence": "renders/aplus_live_20261031/aplus_preview.png"
+      "title": "Hero cutout leaves a ghost backdrop patch in the top-right - use BiRefNet instead of the deterministic chroma key for a hero",
+      "evidence": "renders/aplus_design/aplus_preview.png (hero, top-right)"
+    },
+    {
+      "id": "W6-aplus-logo",
+      "kind": "workstream",
+      "workstream": "W6",
+      "priority": 945,
+      "status": "pending",
+      "title": "Logo module is still the brand name in serif, large and floating - needs a real lockup (mark + wordmark + rule) or the brand logo in the design record",
+      "evidence": "renders/aplus_design/aplus_preview.png (footer module)"
     },
     {
       "id": "W6-aplus-consistency",
@@ -174,6 +183,15 @@
       "status": "done",
       "evidence": "state/evidence/text_guard_measurement.json",
       "note": "Residual: a few soft smudges remain inside the label panel after cleaning. Acceptable for a clean plate that gets real type composited on top, but a future pass should grade \"plate cleanliness\" visually, not only by OCR."
+    },
+    {
+      "id": "W6-aplus-competitor-col",
+      "kind": "workstream",
+      "workstream": "W6",
+      "priority": 700,
+      "status": "pending",
+      "title": "Comparison module invents the competitor column; unsourced claims must not render",
+      "evidence": "renders/aplus_design/aplus_preview.png (comparison module)"
     },
     {
       "id": "W3-c1",
@@ -413,7 +431,9 @@
     "OCR is a gate, not a guarantee: cleaning then RE-detecting is what turns \"the model probably drew text\" into \"the delivered file has zero text boxes\".",
     "A composite proves identity only if the check compares product pixels: an unmasked crop reported a correct composite as drifted.",
     "The GPU lane is RAM-gated at 4096 MB and the box sat at 3830 MB after two renders; a ComfyUI restart is the routine fix.",
-    "An A+ page can pass every mechanical QA check and still not be shippable: repeated tile imagery and a copy/asset mismatch are quality defects no contrast gate catches."
+    "An A+ page can pass every mechanical QA check and still not be shippable: repeated tile imagery and a copy/asset mismatch are quality defects no contrast gate catches.",
+    "A deterministic background key is fine for a tile and not good enough for a hero: it left a ghost patch of backdrop in the 970x600 header.",
+    "A design needs its logo as an asset, not as a string: without it every page falls back to the brand name set in serif, which reads as a floating label rather than a mark."
   ],
   "baseline": {
     "backend": {
