@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 29,
+  "cycle": 37,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -22,21 +22,22 @@
       "status": "pending",
       "priority": 1000,
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties",
-      "updated_at": "2026-11-06T13:48:25+00:00",
+      "updated_at": "2026-11-06T14:33:00+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 29
+      "defer_until_cycle": 37
     },
     {
       "id": "T0-egress-hook",
       "kind": "workstream",
       "workstream": "W9",
       "priority": 995,
-      "status": "pending",
+      "status": "done",
       "title": "One transport-level egress hook: refuse Amazon before the request, journal it",
-      "next": "Add tools/egress_guard.py that wraps requests/httpx/urllib for the service entrypoint and the tools that make requests, refusing Amazon hosts and writing {url, host, caller} to logs/egress.jsonl. Prove a call site with no explicit check still refuses.",
+      "next": "Done 2026-11-06 by the callback-SSRF session: tools/egress_guard.py is installed from Northstar_backend/main.py lifespan before the first startup request, and refuses the boot if it cannot install.",
       "write_paths": [
         "tools/egress_guard.py",
-        "Northstar_backend/main.py"
+        "Northstar_backend/main.py",
+        "Northstar_backend/test_egress_hook_startup.py"
       ],
       "acceptance_commands": [
         [
@@ -44,13 +45,21 @@
           "-m",
           "pytest",
           "-q",
-          "test_egress_guard.py"
+          "test_egress_guard.py",
+          "test_egress_hook_startup.py"
         ]
       ],
       "why": "44 caller-supplied egress sites have no Amazon check; seven per-site checks cannot cover them.",
       "evidence": [
-        "reports/ty/egress_map_20261106.md"
-      ]
+        "reports/ty/egress_map_20261106.md",
+        "reports/ty/SESSION_RESUME_20261106.md"
+      ],
+      "fixed": "main.install_egress_guard() is called first in lifespan(); a guard that cannot install raises EGRESS GUARD VIOLATION instead of running unprotected. Northstar_backend/test_egress_hook_startup.py proves an unchecked call site refuses Amazon with 0 transport calls, and that the startup path installs the guard before the Ollama probe.",
+      "verified": "python -m pytest -q test_egress_guard.py test_egress_hook_startup.py -> 18 passed",
+      "commits": [
+        "ab2e26b0"
+      ],
+      "updated_at": "2026-11-06T14:40:00+00:00"
     },
     {
       "id": "S1-cancel-race",
@@ -91,11 +100,13 @@
       "kind": "workstream",
       "workstream": "W9",
       "priority": 990,
-      "status": "pending",
+      "status": "done",
       "title": "design_studio_async callback_url is an unvalidated urlopen of an API-supplied URL",
-      "next": "In design_studio_async.py, validate callback_url before the request: scheme http/https only, no IP literals, no loopback/link-local, Amazon refused, and a documented host allowlist or explicit operator opt-in.",
+      "next": "Done 2026-11-06: validate_callback_url() refuses a callback before any request (http/https only, named host, no IP literals, no loopback/link-local, Amazon refused via tools/egress_guard.py, optional operator allowlist + explicit loopback opt-in).",
       "write_paths": [
-        "Northstar_backend/design_studio_async.py"
+        "Northstar_backend/design_studio_async.py",
+        "Northstar_backend/test_design_studio_async.py",
+        "Northstar_backend/test_design_studio_openapi.py"
       ],
       "acceptance_commands": [
         [
@@ -103,12 +114,19 @@
           "-m",
           "pytest",
           "-q",
-          "test_design_studio_async.py"
+          "test_design_studio_async.py",
+          "test_design_studio_openapi.py"
         ]
       ],
       "evidence": [
         "reports/ty/egress_map_20261106.md"
-      ]
+      ],
+      "fixed": "CallbackRefused + validate_callback_url() run at submit (HTTP 422, no job created) and again inside deliver_webhook before the Request object exists; a refused callback is recorded on the job params and never fails a finished job. The two legacy webhook-delivery tests that targeted 127.0.0.1 now opt in explicitly via DESIGN_CALLBACK_ALLOW_LOOPBACK.",
+      "verified": "python -m pytest -q test_design_studio_async.py test_design_studio_openapi.py -> 52 passed",
+      "commits": [
+        "7570b18e"
+      ],
+      "updated_at": "2026-11-06T14:40:00+00:00"
     },
     {
       "id": "W6-aplus-hero-key",
@@ -165,9 +183,10 @@
       "priority": 900,
       "status": "pending",
       "title": "dataforseo_adapter.classify_endpoint validates the path but never the host",
-      "next": "Read parsed.hostname and refuse anything outside the DataForSEO host (and Amazon always).",
+      "next": "Done 2026-11-06: classify_endpoint reads parsed.hostname and accepts only https to api.dataforseo.com; any other host (Amazon, IP literal, lookalike, missing) is refused before the path is examined.",
       "write_paths": [
-        "Northstar_backend/dataforseo_adapter.py"
+        "Northstar_backend/dataforseo_adapter.py",
+        "Northstar_backend/test_dataforseo_adapter.py"
       ],
       "acceptance_commands": [
         [
@@ -180,6 +199,12 @@
       ],
       "evidence": [
         "reports/ty/egress_map_20261106.md"
+      ],
+      "status": "done",
+      "fixed": "Added DATAFORSEO_HOST = api.dataforseo.com and a scheme+hostname check that runs before the path allowlist, so https://attacker.test/v3/merchant/amazon/products/task_post is no longer accepted as a DataForSEO endpoint.",
+      "verified": "python -m pytest -q test_dataforseo_adapter.py -> 85 passed",
+      "commits": [
+        "96b5d83c"
       ]
     },
     {
@@ -548,7 +573,10 @@
     "An A+ page can pass every mechanical QA check and still not be shippable: repeated tile imagery and a copy/asset mismatch are quality defects no contrast gate catches.",
     "A deterministic background key is fine for a tile and not good enough for a hero: it left a ghost patch of backdrop in the 970x600 header.",
     "A design needs its logo as an asset, not as a string: without it every page falls back to the brand name set in serif, which reads as a floating label rather than a mark.",
-    "There is no global egress hook: the Amazon boundary is seven per-site checks over at least 44 caller-supplied URLs. A boundary that depends on each call site remembering is not a control."
+    "There is no global egress hook: the Amazon boundary is seven per-site checks over at least 44 caller-supplied URLs. A boundary that depends on each call site remembering is not a control.",
+    "A revert is a write. Measured 2026-11-06: autonomy cycle 35 failed and restored the bytes of its declared write_paths, which DELETED tools/egress_guard.py - a file already committed at HEAD. A rollback must restore tracked bytes with 'git checkout --', never by writing a captured 'absent' state, or a failed cycle silently destroys committed work.",
+    "A path allowlist without a host check is not an allowlist: 'https://attacker.test/v3/merchant/amazon/products/task_post' passed classify_endpoint because only parsed.path was read. Check the host first, then the path.",
+    "Validating an SSRF field at one end is half a fix: callback_url must be refused at submit (so the caller gets a 422 and no job is created) and again at the transport (so a job row written before the check cannot deliver)."
   ],
   "baseline": {
     "backend": {
@@ -564,5 +592,5 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-06T13:48:25+00:00"
+  "updated_at": "2026-11-06T14:33:00+00:00"
 }
