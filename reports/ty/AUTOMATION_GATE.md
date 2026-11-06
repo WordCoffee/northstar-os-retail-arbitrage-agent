@@ -28,7 +28,7 @@ dependency chain is what prevents skipping.
 | A14 | **`M1f-scope-deriver`** | derive `write_paths` from a real traceback; no artifact → no scope | **todo** | A11 |
 | A15 | **`M1g-contract-writer`** | write the authored contract into the queue atomically + `validate_contract` | **todo** | A14 |
 | A16 | **`M2-work-generator`** | the T0–T5 ladder, never returns empty | **todo** | A13, A15 |
-| A17 | **`M2-worker-lane`** | `opencode run --agent tys` returns output + model provenance reliably | **todo** | A5 |
+| A17 | **`M2-worker-lane`** | `opencode run --agent tys` returns output + model provenance reliably — CLI was fine; the reader was not (`part.text`, assistant-message model). Report: `reports/ty/A17_worker_lane.md` | **done** | A5 |
 | A18 | `M3-intel-I0` | source registry + collectors (GitHub, HF, PyPI reuse `web_research`) | **todo** | A16 |
 | A19 | `M3-intel-I1` | normaliser + effective-licence engine + refusal log | **todo** | A18 |
 | A20 | `M3-intel-I2` | REA extractor: repo `file:line`, video timestamps, screenshots | **todo** | A19 |

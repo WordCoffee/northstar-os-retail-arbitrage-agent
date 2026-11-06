@@ -114,57 +114,149 @@ def default_worker(task_path: Path, result_path: Path) -> int:
 
 
 def _opencode_exe() -> str:
-    """CreateProcess cannot run the .ps1 shim that `which` prefers on Windows."""
+    """Resolve the real CLI binary, not the npm shell shim.
+
+    Measured 2026-11-06 on opencode v2.2.5: `shutil.which("opencode")` returns
+    ``opencode.CMD``, which only works because CreateProcess happens to hand it to
+    cmd.exe, and every argument (including a prompt) is re-parsed by a shell. The
+    package ships a real executable one directory down; use it.
+    """
     import shutil
 
-    exe = shutil.which("opencode") or shutil.which("opencode.cmd") or "opencode"
-    if str(exe).lower().endswith(".ps1"):
-        candidate = Path(str(exe)[:-4] + ".cmd")
-        if candidate.is_file():
-            return str(candidate)
-    return str(exe)
+    override = os.environ.get("TY_OPENCODE_EXE", "").strip()
+    if override:
+        return override
+    shim = shutil.which("opencode") or shutil.which("opencode.cmd")
+    if shim:
+        shim_dir = Path(shim).parent
+        packaged = shim_dir / "node_modules" / "@opencode" / "cli" / "bin" / "opencode.exe"
+        if packaged.is_file():
+            return str(packaged)
+        if Path(shim).suffix.lower() in (".cmd", ".bat", ".ps1"):
+            # No packaged binary: fall back to the shim through cmd.exe, which is
+            # the only thing that can execute it.
+            return shim
+        return shim
+    return "opencode"
 
 
-def _session_model(session_id: str) -> Optional[Dict[str, Any]]:
-    """Which model actually answered? Read the session store, never assume."""
-    db = Path(os.environ.get("USERPROFILE", "")) / ".local" / "share" / "opencode" / "opencode.db"
-    if not session_id or not db.is_file():
+def _session_db() -> Path:
+    return (Path(os.environ.get("USERPROFILE", ""))
+            / ".local" / "share" / "opencode" / "opencode.db")
+
+
+def _session_model(session_id: str,
+                   db_path: Optional[Path] = None) -> Optional[Dict[str, Any]]:
+    """Which model actually answered? Read the session store, never assume.
+
+    Measured 2026-11-06: an ``opencode run`` session leaves ``session_v2.model``
+    NULL - the model is written on the assistant ``session_message`` row instead.
+    Reading only ``session_v2`` reported provenance as null on every dispatch, so
+    the assistant row is now the primary source and session_v2 the fallback.
+    """
+    if not session_id:
         return None
+    db = Path(db_path) if db_path else _session_db()
+    if not db.is_file():
+        return None
+    info: Dict[str, Any] = {"agent": None, "model_id": None, "provider": None,
+                            "variant": None, "cost": None, "tokens": None,
+                            "source": None}
     try:
         import sqlite3
 
         conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True, timeout=5)
         try:
             row = conn.execute(
-                "SELECT agent, model, cost FROM session_v2 WHERE id=?", (session_id,)).fetchone()
+                "SELECT agent, model, cost FROM session_v2 WHERE id=?",
+                (session_id,)).fetchone()
+            if row:
+                info["agent"], info["cost"] = row[0], row[2]
+                if row[1]:
+                    try:
+                        model = json.loads(row[1])
+                    except (TypeError, ValueError):
+                        model = {}
+                    info["model_id"] = model.get("id")
+                    info["provider"] = model.get("providerID")
+                    info["variant"] = model.get("variant")
+                    info["source"] = "session_v2"
+            try:
+                msg = conn.execute(
+                    "SELECT data FROM session_message WHERE session_id=? AND type='assistant' "
+                    "ORDER BY seq DESC LIMIT 1", (session_id,)).fetchone()
+            except sqlite3.Error:
+                msg = None
+            if msg and msg[0]:
+                data = json.loads(msg[0])
+                model = data.get("model") or {}
+                info["model_id"] = info["model_id"] or model.get("id")
+                info["provider"] = info["provider"] or model.get("providerID")
+                info["variant"] = info["variant"] or model.get("variant")
+                info["agent"] = info["agent"] or data.get("agent")
+                info["tokens"] = data.get("tokens")
+                if data.get("cost") is not None:
+                    info["cost"] = data.get("cost")
+                if info["model_id"]:
+                    info["source"] = "session_message"
         finally:
             conn.close()
     except Exception:  # noqa: BLE001 - provenance is best effort, absence is reported
         return None
-    if not row:
+    if not (info["model_id"] or info["agent"]):
         return None
-    try:
-        model = json.loads(row[1]) if row[1] else {}
-    except (TypeError, ValueError):
-        model = {}
-    return {"agent": row[0], "model_id": model.get("id"),
-            "provider": model.get("providerID"), "variant": model.get("variant"),
-            "cost": row[2]}
+    return info
+
+
+def _read_run_stream(stdout: str) -> Dict[str, Any]:
+    """Parse `opencode run --format json` JSONL into text, session and errors.
+
+    Measured line shape (v2.2.5):
+        {"type":"text","sessionID":"ses_...","part":{"type":"text","text":"pong"}}
+    The text lives in ``part.text``; an earlier reader looked only at
+    ``event["text"]``, so every dispatch recorded ``text: ""`` and the launcher
+    had no captured output even though the CLI had answered.
+    """
+    events: List[Dict[str, Any]] = []
+    text: List[str] = []
+    session_id = ""
+    for line in (stdout or "").splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        events.append(event)
+        part = event.get("part") if isinstance(event.get("part"), dict) else {}
+        session_id = str(event.get("sessionID") or part.get("sessionID") or session_id)
+        if event.get("type") == "text":
+            chunk = part.get("text") or event.get("text") or event.get("content") or ""
+            if isinstance(chunk, str) and chunk:
+                text.append(chunk)
+    errors = []
+    for event in events:
+        if event.get("type") == "error":
+            err = event.get("error") or event.get("message") or "error"
+            errors.append(err if isinstance(err, str) else json.dumps(err)[:400])
+    return {"events": events, "text": "".join(text), "session_id": session_id,
+            "errors": errors}
 
 
 def deepseek_worker(task_path: Path, result_path: Path) -> int:
     """The owner's coding model (DeepSeek V4.1 Flash on OpenCode), via `run`.
 
-    Measured 2026-11-06 on opencode v2.2.5: the TUI flag `--prompt` cannot select
-    an agent and does not return usable output, so the worker uses
-    `opencode run --agent <lane> --format json` and sends the prompt on **stdin**
-    (a 16 KB contract exceeds the Windows command line).
+    Transport measured 2026-11-06 on opencode v2.2.5 (see
+    reports/ty/A17_worker_lane.md): ``opencode run --agent <lane> --format json
+    --auto`` with the prompt on **stdin** exits 0 in ~1.5 s and streams JSONL;
+    a positional prompt, ``--format default``, ``-s <session>`` and an explicit
+    ``--model`` all work too. The prompt stays on stdin because a 16 KB contract
+    would exceed the Windows command line.
 
     The model is told what to change and which files it may touch. The launcher
     runs the acceptance commands afterwards; the worker never grades itself.
     """
-    import shutil
-
     task = json.loads(task_path.read_text(encoding="utf-8"))
     lane = os.environ.get("TY_WORKER_AGENT", "tys")
     allowed = ", ".join(task.get("write_paths") or []) or "(none - refuse)"
@@ -181,35 +273,32 @@ def deepseek_worker(task_path: Path, result_path: Path) -> int:
     )
     exe = _opencode_exe()
     cmd = [exe, "run", "--agent", lane, "--format", "json", "--auto"]
+    model_override = (task.get("model") or os.environ.get("TY_WORKER_MODEL") or "").strip()
+    if model_override:
+        cmd[4:4] = ["--model", model_override]
     started = time.time()
     events: List[Dict[str, Any]] = []
-    text: List[str] = []
-    session_id = ""
+    parsed: Dict[str, Any] = {"text": "", "session_id": "", "errors": []}
+    stderr_tail = ""
     try:
         proc = subprocess.run(cmd, cwd=str(ROOT), timeout=WORKER_TIMEOUT_S,
                               capture_output=True, text=True, input=prompt)
         code = proc.returncode
-        for line in (proc.stdout or "").splitlines():
-            line = line.strip()
-            if not line.startswith("{"):
-                continue
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            events.append(event)
-            session_id = str(event.get("sessionID") or session_id)
-            if event.get("type") == "text":
-                chunk = event.get("text") or event.get("content") or ""
-                if isinstance(chunk, str):
-                    text.append(chunk)
+        parsed = _read_run_stream(proc.stdout)
+        events = parsed["events"]
         stderr_tail = (proc.stderr or "")[-800:]
     except subprocess.TimeoutExpired:
         code, stderr_tail = 124, "worker timeout"
     except OSError as exc:
         code, stderr_tail = 127, f"opencode_not_runnable: {exc}"
 
-    errors = [e.get("error") for e in events if e.get("type") == "error"]
+    errors: List[str] = list(parsed["errors"])
+    text = parsed["text"]
+    if code == 0 and not text:
+        # The exact failure this unit exists to remove: a silent empty answer that
+        # looked like success. Say it out loud instead.
+        errors.append("empty_text: opencode run exited 0 but streamed no text")
+    session_id = parsed["session_id"]
     provenance = _session_model(session_id)
     ok = code == 0 and not errors
     result_path.write_text(json.dumps({
@@ -219,18 +308,21 @@ def deepseek_worker(task_path: Path, result_path: Path) -> int:
         "lane": lane,
         "session_id": session_id,
         "model": provenance,
+        "model_provenance_ok": bool((provenance or {}).get("model_id")),
         "seconds": round(time.time() - started, 1),
         "events": len(events),
         "errors": errors[:3],
-        "text": "".join(text)[:4000],
+        "text": text[:4000],
+        "exe": exe,
         "stderr": stderr_tail,
         "objective": task.get("objective"),
     }, indent=2), encoding="utf-8")
     _append(JOURNAL, {"event": "deepseek_worker", "code": code, "lane": lane,
                       "session": session_id,
                       "model": (provenance or {}).get("model_id"),
+                      "text_chars": len(text),
                       "seconds": round(time.time() - started, 1),
-                      "errors": errors[:2]})
+                      "errors": errors[:3]})
     return code
 
 
@@ -296,6 +388,23 @@ def start_model(wait_s: float = 240.0) -> bool:
             return True
         time.sleep(5)
     return False
+
+
+def deepseek_lane_up(timeout_s: float = 60.0) -> bool:
+    """Is the OpenCode CLI actually runnable from this process?
+
+    `model_up()` asks llama.cpp / Ollama for a heartbeat; it says nothing about a
+    CLI lane, and a deepseek dispatch must not be refused because a local server
+    the worker never calls happens to be down (or passed because it is up).
+    """
+    exe = _opencode_exe()
+    try:
+        proc = subprocess.run([exe, "--version"], cwd=str(ROOT), timeout=timeout_s,
+                              capture_output=True, text=True)
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    out = ((proc.stdout or "") + (proc.stderr or "")).lower()
+    return proc.returncode == 0 and "opencode" in out
 
 
 def _git(*args: str) -> subprocess.CompletedProcess:
@@ -488,22 +597,33 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     heartbeat(state="starting", dry_run=ns.dry_run, max_cycles=ns.max_cycles,
               max_hours=ns.max_hours)
-    if not ns.dry_run and ns.worker == "ty" and not model_up():
-        # A dead model lane is not a failed cycle: burning an attempt per cycle
-        # against a refused connection teaches nothing and quietly ages the queue.
-        _append(JOURNAL, {"event": "model_lane_down", "base_url": MODEL_BASE_URL})
-        if ns.start_model and start_model():
-            _append(JOURNAL, {"event": "model_lane_started", "base_url": MODEL_BASE_URL})
+    lane = "deepseek" if ns.worker == "deepseek" else "ty"
+    if not ns.dry_run:
+        # Preflight the lane the worker will actually use. Before this, a deepseek
+        # dispatch was gated on llama.cpp's health endpoint - a process the worker
+        # never calls - so the launcher reported the lane down while `opencode run`
+        # was fine.
+        if lane == "deepseek":
+            ready, label, hint = (deepseek_lane_up(), _opencode_exe(),
+                                  "set TY_OPENCODE_EXE or install the opencode CLI")
         else:
-            heartbeat(state="stopped", reason="model_lane_down",
-                      cycles=0, base_url=MODEL_BASE_URL)
-            _append(JOURNAL, {"event": "launcher_stopped",
-                              "reason": "model_lane_down", "cycles": 0})
-            print(json.dumps({"stopped": True, "reason": "model_lane_down",
-                              "base_url": MODEL_BASE_URL,
-                              "hint": "run scripts/start-northstar-llm.ps1 or pass --start-model"},
-                             indent=2))
-            return 0
+            ready, label, hint = (model_up(), MODEL_BASE_URL,
+                                  "run scripts/start-northstar-llm.ps1 or pass --start-model")
+        if not ready:
+            # A dead lane is not a failed cycle: burning an attempt per cycle
+            # against a refused connection teaches nothing and quietly ages the queue.
+            _append(JOURNAL, {"event": "model_lane_down", "lane": lane, "target": label})
+            if lane == "ty" and ns.start_model and start_model():
+                _append(JOURNAL, {"event": "model_lane_started", "base_url": MODEL_BASE_URL})
+            else:
+                heartbeat(state="stopped", reason="model_lane_down", lane=lane,
+                          cycles=0, target=label)
+                _append(JOURNAL, {"event": "launcher_stopped",
+                                  "reason": "model_lane_down", "lane": lane, "cycles": 0})
+                print(json.dumps({"stopped": True, "reason": "model_lane_down",
+                                  "lane": lane, "target": label, "hint": hint},
+                                 indent=2))
+                return 0
     while cycles < ns.max_cycles:
         if time.time() >= deadline:
             reason = "max_hours"

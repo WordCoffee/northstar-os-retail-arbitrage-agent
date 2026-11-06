@@ -260,3 +260,154 @@ def test_max_cycles_is_respected(root, monkeypatch):
     lines = (root / "state/tys_runner/launcher.jsonl").read_text(encoding="utf-8").splitlines()
     events = [json.loads(l)["event"] for l in lines]
     assert "launcher_stopped" in events
+
+
+def test_a_dead_deepseek_lane_stops_without_asking_llama_cpp(root, monkeypatch, capsys):
+    """The deepseek lane is a CLI, so the local model server is not its preflight."""
+    monkeypatch.setattr(L, "model_up", lambda *a, **k: False)      # llama.cpp is down
+    monkeypatch.setattr(L, "deepseek_lane_up", lambda *a, **k: True)
+    monkeypatch.setattr(L, "deepseek_worker", _worker({}))
+    assert L.main(["--worker", "deepseek", "--max-cycles", "1", "--max-hours", "1"]) == 0
+    hb = json.loads((root / "state/tys_runner/heartbeat.json").read_text(encoding="utf-8"))
+    assert hb["reason"] != "model_lane_down"
+    events = [json.loads(l)["event"] for l in
+              (root / "state/tys_runner/launcher.jsonl").read_text(
+                  encoding="utf-8").splitlines()]
+    assert "model_lane_down" not in events
+
+
+# ------------------------------------------------------------------ deepseek lane
+STREAM = "\n".join([
+    json.dumps({"type": "step_start", "sessionID": "ses_test",
+                "part": {"type": "step-start"}}),
+    json.dumps({"type": "text", "sessionID": "ses_test",
+                "part": {"type": "text", "text": "pong"}}),
+    json.dumps({"type": "step_finish", "sessionID": "ses_test",
+                "part": {"reason": "stop", "cost": 0}}),
+])
+
+
+class _FakeCompleted:
+    def __init__(self, stdout="", stderr="", returncode=0):
+        self.stdout, self.stderr, self.returncode = stdout, stderr, returncode
+
+
+def _fake_transport(monkeypatch, stdout=STREAM, stderr="", returncode=0):
+    """Stand in for `opencode run`; records the command and the stdin it received."""
+    seen = {}
+
+    def run(cmd, **kwargs):
+        seen["cmd"] = cmd
+        seen["input"] = kwargs.get("input")
+        return _FakeCompleted(stdout, stderr, returncode)
+
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(L, "subprocess", SimpleNamespace(run=run))
+    return seen
+
+
+def _task(root):
+    path = root / "state" / "tys_runner" / "task.json"
+    path.write_text(json.dumps({
+        "objective": "make the check pass",
+        "write_paths": ["Northstar_backend/x.py"],
+        "acceptance_commands": [["python", "-c", "print(1)"]],
+    }), encoding="utf-8")
+    return path
+
+
+def test_the_worker_records_the_text_the_transport_returned(root, monkeypatch):
+    """The regression this unit exists for: exit 0 with `text: ""`.
+
+    `opencode run --format json` puts the answer in `part.text`; a reader that
+    only looked at `event["text"]` recorded nothing, and the launcher shipped a
+    dispatch with no captured output.
+    """
+    seen = _fake_transport(monkeypatch)
+    monkeypatch.setattr(L, "_session_model", lambda sid, *a, **k: {
+        "agent": "tys", "model_id": "deepseek-v4.1-flash",
+        "provider": "opencode-go", "variant": None, "cost": 0.0,
+        "tokens": None, "source": "session_message"})
+    result = root / "state" / "worker_result.json"
+    code = L.deepseek_worker(_task(root), result)
+    out = json.loads(result.read_text(encoding="utf-8"))
+    assert code == 0
+    assert out["text"] == "pong"
+    assert out["ok"] is True and out["errors"] == []
+    assert out["session_id"] == "ses_test"
+    assert out["model"]["model_id"] == "deepseek-v4.1-flash"
+    assert out["model_provenance_ok"] is True
+    assert out["seconds"] >= 0
+    # the prompt goes on stdin, and the agent/format flags are on the command
+    assert "-agent" not in seen["input"] and "Northstar OS autonomy worker" in seen["input"]
+    assert "--agent" in seen["cmd"] and "--format" in seen["cmd"]
+    assert out["exe"]
+
+
+def test_an_empty_answer_is_a_failure_not_a_silent_pass(root, monkeypatch):
+    _fake_transport(monkeypatch, stdout="")
+    monkeypatch.setattr(L, "_session_model", lambda sid, *a, **k: None)
+    result = root / "state" / "worker_result.json"
+    code = L.deepseek_worker(_task(root), result)
+    out = json.loads(result.read_text(encoding="utf-8"))
+    assert code == 0                      # the CLI exited 0 ...
+    assert out["ok"] is False             # ... but that is not a usable answer
+    assert out["errors"][0].startswith("empty_text")
+    assert out["model_provenance_ok"] is False
+
+
+def test_a_transport_error_event_is_reported(root, monkeypatch):
+    stream = json.dumps({"type": "error", "sessionID": "ses_test",
+                         "error": "model_not_found"})
+    _fake_transport(monkeypatch, stdout=stream)
+    monkeypatch.setattr(L, "_session_model", lambda sid, *a, **k: None)
+    result = root / "state" / "worker_result.json"
+    L.deepseek_worker(_task(root), result)
+    out = json.loads(result.read_text(encoding="utf-8"))
+    assert out["ok"] is False and "model_not_found" in out["errors"]
+
+
+def test_provenance_comes_from_the_assistant_message_row(root, tmp_path):
+    """Measured 2026-11-06: `session_v2.model` is NULL for `run` sessions."""
+    import sqlite3
+
+    db = tmp_path / "opencode.db"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE session_v2 (id TEXT, agent TEXT, model TEXT, cost REAL)")
+    conn.execute("CREATE TABLE session_message "
+                 "(id TEXT, session_id TEXT, type TEXT, seq INT, data TEXT)")
+    conn.execute("INSERT INTO session_v2 VALUES ('ses_x','tys',NULL,1.2e-05)")
+    conn.execute("INSERT INTO session_message VALUES ('m1','ses_x','assistant',6,?)", (json.dumps({
+        "agent": "tys", "cost": 0,
+        "model": {"id": "deepseek-v4.1-flash", "providerID": "opencode-go"},
+        "tokens": {"input": 11063, "output": 4}}),))
+    conn.commit()
+    conn.close()
+
+    info = L._session_model("ses_x", db)
+    assert info["model_id"] == "deepseek-v4.1-flash"
+    assert info["provider"] == "opencode-go"
+    assert info["source"] == "session_message"
+    assert L._session_model("ses_missing", db) is None
+
+
+def test_the_packaged_exe_is_preferred_over_the_npm_shim(tmp_path, monkeypatch):
+    """A .cmd shim re-parses arguments through a shell; the real exe does not."""
+    import sys as _sys
+
+    if _sys.platform != "win32":
+        pytest.skip("npm shim layout is Windows-specific")
+    bin_dir = tmp_path / "cli" / "bin"
+    bin_dir.mkdir(parents=True)
+    (bin_dir / "opencode.exe").write_text("", encoding="utf-8")
+    shim_dir = tmp_path / "npm"
+    shim_dir.mkdir()
+    (shim_dir / "opencode.cmd").write_text("@echo off\n", encoding="utf-8")
+    monkeypatch.delenv("TY_OPENCODE_EXE", raising=False)
+    monkeypatch.setenv("PATH", str(shim_dir) + ";" + str(tmp_path / "cli"))
+    # the packaged layout the test describes: <shim dir>/node_modules/@opencode/cli/bin
+    packaged = shim_dir / "node_modules" / "@opencode" / "cli" / "bin"
+    packaged.mkdir(parents=True)
+    (packaged / "opencode.exe").write_text("", encoding="utf-8")
+    assert L._opencode_exe().endswith("opencode.exe")
