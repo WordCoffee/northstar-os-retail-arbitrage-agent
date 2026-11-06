@@ -7,8 +7,13 @@ import './styles/studio.css'
 import './foundation/foundation.css'
 import './styles/chat.css'
 import './styles/shell.css'
-import './styles/simple.css'   // V4.2 Simple-mode rebuild — must load last
+import './styles/simple.css'   // V4.2 Simple-mode rebuild - must load last
 import './styles/simple-designs.css' // Ten Simple-mode compositions, after simple.css
+// Canonical overrides for the empty state and the status row: simple.css and
+// simple-designs.css define the same selectors more than once, so the winner
+// depended on source order. Loading this after both makes one block the source
+// of truth. See the header comment in canonical.css.
+import './styles/canonical.css'
 import './styles/celestial.css' // §11B.2 celestial backdrop — after simple.css
 import './styles/galactic.css'  // Galactic plate + obsidian surfaces — after celestial
 import './styles/baroque.css'   // "The Gilded Void" Baroque theme — after celestial

@@ -1,0 +1,162 @@
+﻿
+/* ===========================================================================
+   CANONICAL LAYER (2026-11-06) - fixes the style-layering defect at the root.
+
+   `simple.css` grew by appending override blocks, so the same three selectors
+   were defined three or four times (`.chat-empty` at 279/712/920,
+   `.chat-suggestions` at 287/509/719). The winner depended on source order and
+   on which vista design was active, which is why the greeting heading could be
+   scrolled out of view and the starter prompts rendered 2+1 instead of 3-up.
+   This block is the single source of truth for that surface. Rules use an
+   attribute selector (`.mb-shell[data-simple-design]`) so they also beat the
+   per-design overrides without touching each design.
+
+   Rules here are additive only: nothing above is deleted, because other
+   surfaces still rely on it.
+   =========================================================================== */
+
+/* The empty state must fit the stream. `margin: 7vh auto 0` + a 43px heading +
+   three cards was taller than the stream at 720px, so the stream auto-scrolled
+   to the bottom and the greeting sat above the fold. */
+.mb-shell[data-simple-design] .chat-empty {
+  margin: 0 auto;
+  min-height: 0;
+  max-width: 980px;
+  padding: 8px 0 4px;
+  /* No `justify-content: center`: when the empty state is taller than the
+     stream (a phone), centering overflows BOTH ends and clips the greeting off
+     the top. Top-aligned with a little padding reads the same on desktop and
+     never hides the heading. Measured 2026-11-06 on iPhone 12 WebKit. */
+  justify-content: flex-start;
+}
+
+.mb-shell[data-simple-design] .chat-empty h3 {
+  font-size: clamp(26px, 2.6vw, 38px);
+  line-height: 1.15;
+}
+
+.mb-shell[data-simple-design] .chat-empty p {
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+/* Three starter prompts across, one under ~1000px. No 2+1 hole. */
+.mb-shell[data-simple-design] .chat-suggestions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+  align-items: stretch;
+}
+
+@media (max-width: 1000px) {
+  .mb-shell[data-simple-design] .chat-suggestions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mb-shell[data-simple-design] .chat-suggestion {
+  height: 100%;
+  align-items: flex-start;
+}
+
+/* The status row never clips. A design may hide it (`[data-simple-design="zen"]`
+   does) but no design may cut a chip in half at the right edge. */
+.mb-shell[data-simple-design] .mb-header {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.mb-shell[data-simple-design] .mb-status {
+  flex-wrap: wrap;
+  row-gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.mb-shell[data-simple-design] .mb-status > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  .mb-shell[data-simple-design] .mb-status {
+    justify-content: flex-start;
+  }
+  .mb-shell[data-simple-design] .mb-focus {
+    flex-wrap: wrap;
+  }
+}
+
+/* Measured 2026-11-06 by the scene-readability dimension: the status chips
+   composited to #848484 behind #f7f3ec text = 3.38:1, below AA for 12.5px. The
+   base rule is dark glass, but a vista override lightened the surface beneath
+   it. Give the chip its own dark backing so it is readable over any scene,
+   rather than depending on what happens to be behind it. */
+.mb-shell[data-simple-design] .mb-chip {
+  background: rgba(10, 13, 18, 0.78);
+  color: rgba(247, 243, 236, 0.96);
+  border-color: rgba(242, 237, 229, 0.3);
+}
+
+.mb-shell[data-simple-design] .mb-chip:hover,
+.mb-shell[data-simple-design] .mb-chip-btn:hover {
+  color: #ffffff;
+  border-color: rgba(242, 237, 229, 0.55);
+}
+
+/* The status/header chain clipped its last chip instead of wrapping it. Measured
+   2026-11-06: no element extended past the viewport, yet "Concept Spacious" was
+   cut, so the cut came from an ancestor with `overflow: hidden`. Restore overflow
+   so the wrap rule above can actually take effect. */
+.mb-shell[data-simple-design] .mb-content,
+.mb-shell[data-simple-design] .mb-header,
+.mb-shell[data-simple-design] .mb-status {
+  overflow: visible;
+}
+
+/* Phone layout, measured 2026-11-06 on iPhone 12 WebKit: the chat stream was
+   collapsing to 24px, so the whole message area was a sliver while the empty
+   state overflowed to 830px. The column needs to own its height and the stream
+   needs a floor. */
+@media (max-width: 760px) {
+  .mb-shell[data-simple-design] .chat-shell,
+  .mb-shell[data-simple-design] .chat-col {
+    min-height: 0;
+  }
+
+  .mb-shell[data-simple-design] .chat-stream {
+    flex: 1 1 auto;
+    min-height: 46vh;
+  }
+
+  .mb-shell[data-simple-design] .chat-empty {
+    padding-top: 4px;
+  }
+}
+@media (max-height: 780px) {
+  .mb-shell[data-simple-design] .chat-empty {
+    gap: 10px;
+  }
+
+  .mb-shell[data-simple-design] .chat-empty h3 {
+    font-size: 26px;
+  }
+
+  .mb-shell[data-simple-design] .chat-empty p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .mb-shell[data-simple-design] .chat-empty .chat-empty-rule {
+    height: 2px;
+  }
+
+  .mb-shell[data-simple-design] .chat-suggestion {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}

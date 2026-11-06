@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T00:05:00Z",
+  "updated": "2026-11-06T02:10:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 3,
+  "cycle": 4,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -42,6 +42,16 @@
       "evidence": "state/evidence/identity_experiment_20261105T220650Z.json"
     },
     {
+      "id": "UX-fonts-mobile",
+      "kind": "workstream",
+      "workstream": "W8",
+      "title": "Fonts never load on iPhone/Safari: WebKit refuses /ui/ui/fonts/fonts.css (non CSS MIME types are not allowed) - Vite base doubling in the dev server",
+      "priority": 900,
+      "status": "pending",
+      "evidence": "state/evidence/ux_coverage_chromium-mobile.json (consoleSamples)",
+      "note": "Two attempted fixes (/ui/... and /fonts/...) both failed and were reverted; the cause is base handling, so fix it in vite.config.js or by serving the font CSS from src/ instead of public/."
+    },
+    {
       "id": "R-E2",
       "kind": "experiment",
       "workstream": "W1",
@@ -69,6 +79,24 @@
       ]
     },
     {
+      "id": "UX-service-headings",
+      "kind": "workstream",
+      "workstream": "W8",
+      "title": "8 of 10 service pages have \"Bojo\" as their only heading - no page-level title inside the shell",
+      "priority": 860,
+      "status": "pending",
+      "evidence": "state/evidence/ux_coverage_chromium-desktop.json (heading column)"
+    },
+    {
+      "id": "UX-tabbar",
+      "kind": "workstream",
+      "workstream": "W8",
+      "title": "Workbench tab bar (wb-tabbar) is not built on /ui/workbench; tab-state cannot be measured",
+      "priority": 840,
+      "status": "pending",
+      "note": "Flip TABS_EXPECTED to true in tests/e2e/ux_scorecard.spec.ts when it ships."
+    },
+    {
       "id": "UX-a11y-1",
       "kind": "workstream",
       "workstream": "W8",
@@ -76,9 +104,10 @@
       "priority": 780,
       "status": "in_progress",
       "evidence": "state/evidence/ux_scorecard_chromium-desktop_*.json",
-      "fixed_so_far": "page h1 is the page title (app-name h1 removed); muted/placeholder ink clears AA; dev banner no longer alarm-red; session titles clamp to two lines with an ellipsis instead of clipping mid-word; starter prompts are full-width rows with an arrow affordance; main is a focusable scroll region; the scorecard waits out the entry fade and records selectors + measured fg/bg ratios.",
+      "fixed_so_far": "root-caused the simple.css layering (same selectors defined 3-4 times at lines 279/712/920 and 287/509/719) with a new canonical.css layer; greeting heading was scrolled out (stream 239 vs 267) and the auto-pin now skips an empty stream; starter prompts 3-up not 2+1; status chips no longer clipped (overflow visible on the header chain) and chip contrast fixed (3.38:1 -> AA); mobile chat stream 24px -> 299px; dev notice asserted on every route.",
       "next": "1) .mb-shell .chat-empty h3 is NOT visible in the Northstar shell (screenshot reports/ty/shots/ux_chromium-desktop_first_run_ui_home.png) - the greeting heading is missing or scrolled out while the paragraph renders; find why before touching spacing. 2) The shell suggestion grid still renders 2+1 because simple.css overrides .chat-suggestions with a grid (simple.css:287, :719) - stack it or use an even 3-up. 3) The status chip row still clips the last theme name (\"Concept Spacious'\"). 4) documents page contrast + .stage-canvas-pane focus.",
-      "measured": "20 page-measurements over desktop Chromium + iPhone 12 WebKit: 20/20 render, 0 critical a11y, 0 console errors. Gates green together with smoke.spec (10/10)."
+      "measured": "12/12 UX gates over desktop Chromium + iPhone 12 WebKit. Coverage 10/10 routes, dev notice 100% of routes, 0 critical a11y over 20 page-measurements, 0 text below AA (worst 8.43:1).",
+      "shell": "CONFIRMED: the Northstar rebuild shell (.mb-shell, data-shell-mode=\"simple\", data-simple-design=\"hearth\"), not the legacy room shell. Evidence: state/evidence/inspect_empty_state.json"
     },
     {
       "id": "W2-c1",
@@ -334,7 +363,10 @@
     "GitHub search rate-limits at 10 req/min unauthenticated; a rate-limited sweep must be reported as a transport failure, never as \"no results\".",
     "The competitor gap that matters most is identity: every competitor that does product photography preserves the product; our conditioning path does not, and we now measure that.",
     "A registry that says \"installed\" while the weights are gone is worse than a missing lane: it fails at call time, after the operator has planned around it. provider-suite now says weights_missing for qwen_image_edit.",
-    "Disk, not GPU, is currently the binding constraint for the identity fix: 9.5 GB free against roughly 12 GB of edit weights."
+    "Disk, not GPU, is currently the binding constraint for the identity fix: 9.5 GB free against roughly 12 GB of edit weights.",
+    "A style file that grows by appending overrides will eventually define the same selector 4 times; the fix is a canonical layer with attribute-selector specificity, not another override at the bottom.",
+    "Flex centering a block taller than its container clips the START of the content: on a phone the greeting was pushed above the scroll origin. Top-align and let it scroll.",
+    "A contrast measurement must composite the alpha chain; reading a raw rgba() reported a 5% white card over a dark scene as near-white and produced a false 1.45:1."
   ],
   "baseline": {
     "backend": {

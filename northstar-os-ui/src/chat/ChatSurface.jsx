@@ -497,10 +497,12 @@ export default function ChatSurface({
     loadSession(sid, { remember: false })
   }, [focusId, sessions, loadSession])
 
-  // Auto-pin the stream only while the reader is at the bottom.
+  // Auto-pin the stream only while the reader is at the bottom, and never when
+  // there is nothing to read: pinning an empty state scrolled its greeting out
+  // of view (measured 2026-11-06: the 43px heading sat above the fold on load).
   useEffect(() => {
     const el = scrollRef.current
-    if (!el || !pinned) return
+    if (!el || !pinned || messages.length === 0) return
     el.scrollTop = el.scrollHeight
   }, [messages, streaming, pinned])
 
