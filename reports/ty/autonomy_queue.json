@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T11:20:00Z",
+  "updated": "2026-11-06T11:45:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -222,7 +222,10 @@
         "reports/ty/A17_worker_lane.md"
       ],
       "done_by": "A17 subagent",
-      "note": "opencode run --agent tys returns text + session model; 21 tests pass; live proof in report"
+      "note": "opencode run --agent tys returns text + session model; 21 tests pass; live proof in report",
+      "commit": "de2f6f2c",
+      "verification": "live: opencode run --agent tys --format json -> ok:true, text 'pong', model deepseek-v4.1-flash (source session_message), 3.5 s; pytest test_tys_launcher.py -> 21 passed",
+      "finding": "The CLI was never broken. Text arrives at event.part.text (we read event.text), and session_v2.model is NULL for run sessions so provenance must come from the assistant session_message row. The deepseek preflight also wrongly required llama.cpp on 8080."
     },
     {
       "id": "M3-intel-I0",
@@ -961,5 +964,20 @@
   "research": "reports/ty/research_20261105.md",
   "updated_at": "2026-11-06T22:38:38+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
-  "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory."
+  "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
+  "gate_state": {
+    "done": [
+      "M0.1",
+      "M0.2",
+      "M0.4",
+      "M0.5",
+      "M2-launcher",
+      "M2-watchdog",
+      "M1-revert",
+      "M1-red-gate",
+      "M0.3b-token-meter",
+      "M2-worker-lane"
+    ],
+    "next_in_gate": "M0.5-spike"
+  }
 }
