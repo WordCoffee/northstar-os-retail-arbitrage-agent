@@ -145,9 +145,18 @@ def test_token_estimate_is_reported_not_invented():
 def test_runner_stops_on_the_stop_marker(root, monkeypatch):
     (root / "STOP").write_text("stop\n", encoding="utf-8")
     monkeypatch.setattr(L, "default_worker", _worker({}))
-    assert L.main(["--max-cycles", "3", "--max-hours", "0.01"]) == 0
+    assert L.main(["--max-cycles", "3", "--max-hours", "0.01", "--dry-run"]) == 0
     hb = json.loads((root / "state/tys_runner/heartbeat.json").read_text(encoding="utf-8"))
     assert hb["reason"] == "STOP"
+
+
+def test_a_dead_model_lane_stops_without_burning_a_cycle(root, monkeypatch, capsys):
+    monkeypatch.setattr(L, "model_up", lambda *a, **k: False)
+    assert L.main(["--max-cycles", "3", "--max-hours", "0.01"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["reason"] == "model_lane_down"
+    item = next(i for i in r.load_queue()["items"] if i["id"] == "runnable")
+    assert item["status"] == "pending" and not item.get("attempts")
 
 
 def test_max_cycles_is_respected(root, monkeypatch):

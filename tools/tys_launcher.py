@@ -115,6 +115,38 @@ def default_worker(task_path: Path, result_path: Path) -> int:
 
 Worker = Callable[[Path, Path], int]
 
+MODEL_BASE_URL = os.environ.get("TY_WORKER_BASE_URL", "http://127.0.0.1:8080")
+
+
+def model_up(timeout_s: float = 3.0) -> bool:
+    """The coding lane speaks to llama-server on 8080; a dead lane is not a cycle."""
+    import urllib.error
+    import urllib.request
+
+    try:
+        with urllib.request.urlopen(MODEL_BASE_URL.rstrip("/") + "/health",
+                                    timeout=timeout_s) as resp:
+            return 200 <= resp.status < 300
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
+def start_model(wait_s: float = 240.0) -> bool:
+    """Start the local LLM lane and wait for its health endpoint."""
+    script = ROOT / "scripts" / "start-northstar-llm.ps1"
+    if not script.is_file():
+        return False
+    subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
+                      "-File", str(script)], cwd=str(ROOT),
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                     creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    deadline = time.time() + wait_s
+    while time.time() < deadline:
+        if model_up():
+            return True
+        time.sleep(5)
+    return False
+
 
 def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str, Any]:
     """One cycle: reserve, run the worker, validate, complete."""
@@ -205,6 +237,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--max-token-budget", type=int, default=0,
                         help="stop after this many estimated tokens this run")
+    parser.add_argument("--start-model", action="store_true",
+                        help="start the local LLM lane if its health endpoint is down")
     ns = parser.parse_args(argv)
 
     started = time.time()
@@ -216,6 +250,22 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     heartbeat(state="starting", dry_run=ns.dry_run, max_cycles=ns.max_cycles,
               max_hours=ns.max_hours)
+    if not ns.dry_run and not model_up():
+        # A dead model lane is not a failed cycle: burning an attempt per cycle
+        # against a refused connection teaches nothing and quietly ages the queue.
+        _append(JOURNAL, {"event": "model_lane_down", "base_url": MODEL_BASE_URL})
+        if ns.start_model and start_model():
+            _append(JOURNAL, {"event": "model_lane_started", "base_url": MODEL_BASE_URL})
+        else:
+            heartbeat(state="stopped", reason="model_lane_down",
+                      cycles=0, base_url=MODEL_BASE_URL)
+            _append(JOURNAL, {"event": "launcher_stopped",
+                              "reason": "model_lane_down", "cycles": 0})
+            print(json.dumps({"stopped": True, "reason": "model_lane_down",
+                              "base_url": MODEL_BASE_URL,
+                              "hint": "run scripts/start-northstar-llm.ps1 or pass --start-model"},
+                             indent=2))
+            return 0
     while cycles < ns.max_cycles:
         if time.time() >= deadline:
             reason = "max_hours"

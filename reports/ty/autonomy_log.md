@@ -18,3 +18,4 @@ One line per cycle. Format:
 - 2026-11-06T05:17Z | M0.5 lanes | 9 tests; gpu lease defers on ram_below_floor (2850<3000) instead of failing a render
 - 2026-11-06T05:50Z | M0.2 correction | junit classnames are dotted, collection ids are paths -> zero overlap; replaced with pytest_idlist plugin (6419 ids, +0/-0)
 - 2026-11-06T06:35Z | M2-lite launcher | 9 tests; next->worker->complete with heartbeat, runnable-if-checkable rule, evidence record, 6 stop reasons, dry-run
+- 2026-11-06T06:40Z | M2-lite launcher | 11 tests; first real dispatch S1-cancel-race -> model_lane_down (precise), item reverted+deferred, zero cycles burned; preflight added
