@@ -363,6 +363,27 @@ test('ux: scene readability', async ({ page }, testInfo) => {
     }
   })
   fs.writeFileSync(path.join(EVIDENCE, `ux_layout_${project}.json`), JSON.stringify(layout, null, 2))
+  // Font loading: the serif must actually be available, not silently falling
+  // back. WebKit refused the font stylesheet for months while nobody noticed.
+  const fonts = await page.evaluate(async () => {
+    const wanted = ['Libre Baskerville', 'DM Sans']
+    const state: Record<string, boolean> = {}
+    for (const family of wanted) {
+      // `check()` reports false for a face that is declared but not yet fetched
+      // (font-display: swap). `load()` requests it and waits, which is what
+      // "the font is available" actually means. Measured flake 2026-11-06:
+      // desktop said false and mobile true for the same build.
+      try {
+        await document.fonts.load(`16px "${family}"`)
+      } catch { /* recorded below as false */ }
+      state[family] = document.fonts.check(`16px "${family}"`)
+    }
+    await document.fonts.ready
+    const h1 = document.querySelector('h1, h2')
+    return { checked: state, headingFamily: h1 ? getComputedStyle(h1).fontFamily : null }
+  })
+  fs.writeFileSync(path.join(EVIDENCE, `ux_fonts_${project}.json`), JSON.stringify(fonts, null, 2))
+  expect(fonts.checked['Libre Baskerville'], `serif not loaded: ${JSON.stringify(fonts)}`).toBe(true)
   expect(layout.clipped, `clipped status chips: ${JSON.stringify(layout.clipped)}`).toHaveLength(0)
   expect(layout.stream_scroll_top, 'the empty state must not be scrolled away on load').toBe(0)
   expect(layout.greeting_visible, 'the greeting heading must be inside the stream viewport').toBe(true)

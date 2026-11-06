@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T02:10:00Z",
+  "updated": "2026-11-06T02:45:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 4,
+  "cycle": 5,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -47,9 +47,11 @@
       "workstream": "W8",
       "title": "Fonts never load on iPhone/Safari: WebKit refuses /ui/ui/fonts/fonts.css (non CSS MIME types are not allowed) - Vite base doubling in the dev server",
       "priority": 900,
-      "status": "pending",
-      "evidence": "state/evidence/ux_coverage_chromium-mobile.json (consoleSamples)",
-      "note": "Two attempted fixes (/ui/... and /fonts/...) both failed and were reverted; the cause is base handling, so fix it in vite.config.js or by serving the font CSS from src/ instead of public/."
+      "status": "done",
+      "evidence": "state/evidence/ux_fonts_chromium-mobile.json -> Libre Baskerville true, DM Sans true; ux_coverage_chromium-mobile.json console errors 10-16 per page -> 0",
+      "note": "Two attempted fixes (/ui/... and /fonts/...) both failed and were reverted; the cause is base handling, so fix it in vite.config.js or by serving the font CSS from src/ instead of public/.",
+      "fixed": "font stylesheet is imported through the bundler (src/styles/fonts.css) instead of linked from public/; the link resolved to /ui/ui/fonts/fonts.css under the dev server base and WebKit refused it as a non-CSS MIME type.",
+      "gate": "tests/e2e/ux_scorecard.spec.ts asserts document.fonts.load() for both families on both viewports"
     },
     {
       "id": "R-E2",
@@ -366,7 +368,8 @@
     "Disk, not GPU, is currently the binding constraint for the identity fix: 9.5 GB free against roughly 12 GB of edit weights.",
     "A style file that grows by appending overrides will eventually define the same selector 4 times; the fix is a canonical layer with attribute-selector specificity, not another override at the bottom.",
     "Flex centering a block taller than its container clips the START of the content: on a phone the greeting was pushed above the scroll origin. Top-align and let it scroll.",
-    "A contrast measurement must composite the alpha chain; reading a raw rgba() reported a 5% white card over a dark scene as near-white and produced a false 1.45:1."
+    "A contrast measurement must composite the alpha chain; reading a raw rgba() reported a 5% white card over a dark scene as near-white and produced a false 1.45:1.",
+    "document.fonts.check() is false for a declared-but-unfetched face under font-display: swap; use document.fonts.load() before asserting a font is available."
   ],
   "baseline": {
     "backend": {

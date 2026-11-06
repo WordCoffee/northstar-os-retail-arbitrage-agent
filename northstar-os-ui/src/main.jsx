@@ -1,6 +1,11 @@
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
+// Fonts are imported through the bundler, not linked from public/. Linking
+// `/ui/fonts/fonts.css` produced `/ui/ui/fonts/fonts.css` under the dev server's
+// base and WebKit refused it as a non-CSS MIME type, so the serif never loaded
+// on an iPhone (measured 2026-11-06). Importing lets Vite own the URL.
+import './styles/fonts.css'
 import './styles/tokens.css'
 import './styles/app.css'
 import './styles/studio.css'
