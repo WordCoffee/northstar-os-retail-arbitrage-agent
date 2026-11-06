@@ -104,9 +104,12 @@ def plan(*, run_days: float = 7.0, keep_checkpoints: int = 5) -> List[Dict[str, 
 
     checkpoints = ROOT / "state" / "checkpoints"
     if checkpoints.is_dir():
+        # Sort by the NEWEST file inside each checkpoint, not the directory's own
+        # mtime: a directory's mtime is when it was last written to, which is
+        # "now" for a checkpoint that was just touched. Sorting on it kept an
+        # arbitrary set (caught by the full-suite run, not the isolated test).
         kids = sorted((p for p in checkpoints.iterdir() if p.is_dir()),
-                      key=lambda p: p.stat().st_mtime if p.exists() else 0,
-                      reverse=True)
+                      key=lambda p: _newest_mtime(p), reverse=True)
         for child in kids[max(1, keep_checkpoints):]:
             add(child, f"checkpoint beyond the newest {keep_checkpoints}")
 
