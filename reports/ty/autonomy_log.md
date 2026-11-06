@@ -30,3 +30,4 @@ One line per cycle. Format:
 - 2026-11-06T09:35Z | T0 egress hook | tools/egress_guard.py installs one transport-level Amazon refusal over urllib+requests, journals every decision with caller file:line; 14 tests (refusal before the socket, allowed path unaffected, idempotent, uninstall restores)
 - 2026-11-06T09:55Z | revert bug fixed | the snapshot restore deleted files it had never seen (killed tools/egress_guard.py, reverted main.py twice); now git-based checkout for tracked paths + scoped delete for untracked, and a dirty target refuses dispatch; 15 tests
 - 2026-11-06T10:30Z | automation gate | strict order encoded as depends_on and ENFORCED in select_next; 21 automation units ordered A1-A21; product/security items blocked behind M2-worker-lane; next = M0.3b-token-meter
+- 2026-11-06T10:40Z | A17-adjacent | MCP client egress guarded (3324b71f): shell-wrapper refused, URL arguments refused before stdio_client is constructed, 23 tests
