@@ -173,9 +173,14 @@ class SearchProductsTests(_CacheIsolated):
         self.assertEqual(result[0]["asin"], "B000000006")
 
     def test_missing_api_key_raises_value_error(self):
-        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
-            with self.assertRaises(ValueError):
-                bright_data_client.search_products("kirkland", 1)
+        # The key contract is tested with the transport doubled, because on the
+        # real transport the Amazon boundary refuses these URLs first (by design:
+        # the boundary runs before the key check).
+        with patch.object(bright_data_client.requests, "post",
+                          side_effect=AssertionError("no network in tests")):
+            with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
+                with self.assertRaises(ValueError):
+                    bright_data_client.search_products("kirkland", 1)
 
     def test_non_200_returns_empty_with_error(self):
         result = self._run([self._response("blocked", status_code=403)])
@@ -334,9 +339,11 @@ class ProductDetailTests(_CacheIsolated):
         self.assertEqual(result, {})
 
     def test_detail_missing_api_key_raises_value_error(self):
-        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
-            with self.assertRaises(ValueError):
-                bright_data_client.get_product_detail("B000000001")
+        with patch.object(bright_data_client.requests, "post",
+                          side_effect=AssertionError("no network in tests")):
+            with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", ""):
+                with self.assertRaises(ValueError):
+                    bright_data_client.get_product_detail("B000000001")
 
     def test_detail_non_200_returns_empty_with_error(self):
         result = self._run([self._response("blocked", status_code=403)])

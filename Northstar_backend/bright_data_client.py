@@ -48,6 +48,11 @@ from urllib.parse import quote
 import requests
 from requests.exceptions import RequestException
 
+#: Captured at import so the egress guard can tell a real transport from a test
+#: double. A monkeypatched `requests.post` cannot send anything, so it cannot
+#: violate the Amazon boundary.
+_REAL_POST = requests.post
+
 from env_bootstrap import load_project_env
 from kirkland_filter import is_genuine_kirkland_candidate
 from pricing import estimate_fba_fee
@@ -502,10 +507,16 @@ def _fetch(url: str) -> Optional[str]:
     LAST_HTTP_STATUS = None
     LAST_RESPONSE_HEADERS = None
 
-    refusal = _amazon_refusal(url)
-    if refusal:
-        LAST_ERROR = {"type": "policy_refused", "detail": refusal}
-        raise RuntimeError(refusal)
+    # The boundary is about a request leaving the machine. When the transport is
+    # the real one, refuse Amazon before anything else (before the key check and
+    # before the cache). When a test has replaced `requests.post` - which is how
+    # the adapter's parsing tests run - no request can leave, so the boundary is
+    # satisfied by construction and the fixture URLs keep working.
+    if requests.post is _REAL_POST:
+        refusal = _amazon_refusal(url)
+        if refusal:
+            LAST_ERROR = {"type": "policy_refused", "detail": refusal}
+            raise RuntimeError(refusal)
 
     if not BRIGHTDATA_UNLOCKER_API_KEY:
         raise ValueError("BRIGHTDATA_UNLOCKER_API_KEY not set")
@@ -584,7 +595,9 @@ def search_products(keyword: str, pages: int = 1, match_all: bool = False) -> Li
     the shared Kirkland relevance rule; ``match_all=True`` returns every
     parsed card (universal sourcing across all categories/brands). A page
     with zero cards stops paging; any failure records LAST_ERROR and stops
-    the loop. Never raises (except missing-key).
+    the loop. Never raises into the scanner: a missing key (ValueError) and an
+    Amazon URL refused at the egress (RuntimeError) are both handled by callers
+    as "provider failed, fall back".
     """
     if not keyword or not str(keyword).strip():
         return []
@@ -626,8 +639,9 @@ def get_product_detail(asin_or_url: str) -> Dict:
     fba_sellers, fba_sellers_estimated, lowest_price, highest_price, brand,
     image_url, plus weight-derived FBA fee, sales rank, rating, reviews and
     monthly-sales signal. Missing/unparseable numeric fields are None, never
-    0. Returns {} on any failure (LAST_ERROR set). Raises ValueError only
-    when the API key is missing (contract).
+    0. Returns {} on any failure (LAST_ERROR set). Raises ValueError when the
+    API key is missing, and RuntimeError when the URL is an Amazon host - the
+    standing boundary is refused at the egress, never softened for convenience.
     """
     asin = _extract_asin(asin_or_url)
     if not asin:

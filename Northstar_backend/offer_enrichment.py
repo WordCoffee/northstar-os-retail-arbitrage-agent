@@ -938,7 +938,10 @@ def _fetch_live_offer(identifier: Optional[str], asin: Optional[str], mode: str)
             return _offline_offer(identifier, "invalid_asin")
         try:
             data = get_product_detail(identifier)
-        except ValueError as e:
+        except (ValueError, RuntimeError) as e:
+            # A policy refusal (Amazon boundary at the egress) is handled exactly
+            # like a missing key: skip this provider and continue. Letting it
+            # escape turned a refusal into a 500 further up the stack.
             print(f"[Bright Data] enrichment skipped: {e}")
             data = {}
         return _map_brightdata_offer(data, asin)

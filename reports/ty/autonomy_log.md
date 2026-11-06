@@ -24,3 +24,4 @@ One line per cycle. Format:
 - 2026-11-06T08:05Z | worker fixed | opencode run --agent tys --format json, prompt on stdin, session model provenance from session_v2 (verified); .CMD shim resolved
 - 2026-11-06T08:20Z | T0 Amazon gate | bright_data_client._fetch refused Amazon before any request (was a live egress hole via amazon_adapters); 15 tests; baseline ids 6453
 - 2026-11-06T08:30Z | practice | parallel lanes adopted as standing policy (AGENTS.md appended): read-only always parallel, writers on disjoint paths only, verification serialised, max 4 lanes
+- 2026-11-06T08:45Z | verifier agree | egress guard confirmed before key/cache/network; fixed 2 uncaught paths (amazon_search, offer_enrichment) so a refusal is a skip not a 500; guard now doubles-transport-aware (tests can patch requests.post); 173 passed

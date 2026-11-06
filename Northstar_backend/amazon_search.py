@@ -263,7 +263,11 @@ def _search_brightdata(
             if LAST_SEARCH_ERROR:
                 print(f"[Bright Data] keyword='{keyword}' error: {LAST_SEARCH_ERROR}")
                 break
-    except ValueError as e:
+    except (ValueError, RuntimeError) as e:
+        # RuntimeError here is the Amazon boundary refusing at the egress
+        # (bright_data_client._fetch). It must land in the same graceful path as a
+        # missing key: skip the provider, keep LAST_SEARCH_ERROR, let the caller
+        # fall back, and never turn a policy refusal into a 500 on a UI route.
         LAST_SEARCH_ERROR = str(e)
         print(f"[Bright Data] {e}")
 
