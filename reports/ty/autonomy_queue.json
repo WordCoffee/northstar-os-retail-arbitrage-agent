@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T10:30:00Z",
+  "updated": "2026-11-06T11:10:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -15,6 +15,59 @@
   "cycle": 37,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
+    {
+      "id": "T0-callback-dns",
+      "kind": "incident",
+      "priority": 1300,
+      "status": "pending",
+      "title": "Live SSRF: callback_url pointing at a DNS name that resolves to loopback is allowed",
+      "next": "Resolve the hostname before the decision (socket.getaddrinfo, injectable for tests) and refuse when ANY resolved address is loopback, link-local, private or unspecified. Keep the existing literal checks; add the resolution step and a test with a fake resolver.",
+      "write_paths": [
+        "Northstar_backend/design_studio_async.py",
+        "Northstar_backend/test_design_studio_async.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_design_studio_async.py"
+        ]
+      ],
+      "why": "Verifier probe 2026-11-06: http://127.0.0.1.nip.io/ and http://169.254.169.254.nip.io/ are ALLOWED because the guard is IP-literal-only and never resolves. nip.io wildcard-resolves those to loopback / link-local.",
+      "evidence": [
+        "Northstar_backend/design_studio_async.py:115-118 (documented limit)",
+        "reports/ty/egress_map_20261106.md"
+      ],
+      "tier": "T0"
+    },
+    {
+      "id": "T0-mcp-wsl",
+      "kind": "incident",
+      "priority": 1290,
+      "status": "pending",
+      "title": "MCP shell control is defeated by an interpreter one hop away (wsl -e bash) and misses embedded URLs",
+      "next": "Refuse launcher commands that are interpreters/shells one hop away: wsl, docker, env, python -c, node -e, bash -c, cmd /c. Screen URL-shaped substrings anywhere in an argument (host-only forms and //host), not only ^https?://.",
+      "write_paths": [
+        "tools/mcp_client.py",
+        "Northstar_backend/test_mcp_client_policy.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_mcp_client_policy.py"
+        ]
+      ],
+      "why": "Verifier probe 2026-11-06: list_tools('wsl', ['-e','bash','-lc','curl ... amazon']) and python -c with a urllib fetch both pass the screen; embedded URLs are invisible because the pattern is anchored at ^https?://.",
+      "evidence": [
+        "tools/mcp_client.py (ABSOLUTE_URL, _command_stem)"
+      ],
+      "tier": "T0"
+    },
     {
       "id": "M0.3b-token-meter",
       "kind": "automation",
@@ -798,5 +851,6 @@
   },
   "research": "reports/ty/research_20261105.md",
   "updated_at": "2026-11-06T14:33:00+00:00",
-  "gate": "reports/ty/AUTOMATION_GATE.md"
+  "gate": "reports/ty/AUTOMATION_GATE.md",
+  "ordering_note": "T0 incidents outrank the automation gate: a live SSRF or a boundary bypass is fixed before new automation work. This is the plan's own tier ladder, not an exception."
 }
