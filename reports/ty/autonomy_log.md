@@ -17,3 +17,4 @@ One line per cycle. Format:
 - 2026-11-06T05:15Z | M0 foundations | M0.1 runner (11 tests), M0.2 name-based guard (7 tests, 6039 ids), M0.4 disk reclaim (7 tests, 9.74 -> 14.21 GB, 3.86 GB freed) | tag autonomy-m0 | ~0.70M tokens
 - 2026-11-06T05:17Z | M0.5 lanes | 9 tests; gpu lease defers on ram_below_floor (2850<3000) instead of failing a render
 - 2026-11-06T05:50Z | M0.2 correction | junit classnames are dotted, collection ids are paths -> zero overlap; replaced with pytest_idlist plugin (6419 ids, +0/-0)
+- 2026-11-06T06:35Z | M2-lite launcher | 9 tests; next->worker->complete with heartbeat, runnable-if-checkable rule, evidence record, 6 stop reasons, dry-run

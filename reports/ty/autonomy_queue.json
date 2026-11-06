@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T05:20:00Z",
+  "updated": "2026-11-06T06:30:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 9,
+  "cycle": 13,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -21,7 +21,44 @@
       "title": "Author/evaluator: turn a failing test into an authorized, scoped task with a best-of-N patch loop",
       "status": "pending",
       "priority": 1000,
-      "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties"
+      "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties",
+      "updated_at": "2026-11-06T12:32:10+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": 13
+    },
+    {
+      "id": "S1-cancel-race",
+      "kind": "workstream",
+      "workstream": "W9",
+      "title": "Cooperative cancel races: worker can reach SUCCEEDED after a cancel request",
+      "status": "pending",
+      "priority": 990,
+      "next": "Make cancel_requested terminal for the worker: in foundation/jobs_durable.py and foundation/jobs_state.py, a transition to SUCCEEDED from cancel_requested must be rejected inside the worker path and reported as cancelled, so test_cancel_leased_job_cooperative cannot race.",
+      "write_paths": [
+        "Northstar_backend/foundation/jobs_durable.py",
+        "Northstar_backend/foundation/jobs_state.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "foundation/tests/test_jobs_durable_lifecycle.py",
+          "-k",
+          "cancel"
+        ]
+      ],
+      "acceptance": "the cancel test passes, and the full suite stays green by name",
+      "why": "Measured 2026-11-06: under full-suite load the worker thread loses the 10 ms race and raises JobStateError: illegal transition cancel_requested -> succeeded. Green in isolation, so it is a real ordering bug, not a flake to ignore.",
+      "evidence": [
+        "reports/ty/_m02_full_20261106.txt"
+      ],
+      "updated_at": "2026-11-06T12:33:18+00:00",
+      "last_cycle": 13,
+      "last_result": "reverted",
+      "attempts": 1,
+      "defer_until_cycle": 15
     },
     {
       "id": "W6-aplus-hero-key",
@@ -448,5 +485,6 @@
     "functions": 31,
     "measured_at": "2026-11-05T21:51:00Z"
   },
-  "research": "reports/ty/research_20261105.md"
+  "research": "reports/ty/research_20261105.md",
+  "updated_at": "2026-11-06T12:33:18+00:00"
 }
