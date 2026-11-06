@@ -20,3 +20,4 @@ One line per cycle. Format:
 - 2026-11-06T06:35Z | M2-lite launcher | 9 tests; next->worker->complete with heartbeat, runnable-if-checkable rule, evidence record, 6 stop reasons, dry-run
 - 2026-11-06T06:40Z | M2-lite launcher | 11 tests; first real dispatch S1-cancel-race -> model_lane_down (precise), item reverted+deferred, zero cycles burned; preflight added
 - 2026-11-06T07:05Z | worker model | pinned opencode-go/deepseek-v4.1-flash in opencode.jsonc; --standalone hangs (measured, 10 min no output) so removed; first deepseek worker run killed at 14 min during probing
+- 2026-11-06T07:25Z | agent lanes + guard | 3 named lanes (tys/verifier/research) pinned to deepseek-v4.1-flash, read-only lanes locked; tools/guard_agents.py (8 tests) refuses refusal-surrendering prompts, off-model lanes and writable read-only lanes
