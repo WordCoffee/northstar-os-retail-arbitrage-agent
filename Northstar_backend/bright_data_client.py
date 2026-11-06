@@ -457,6 +457,34 @@ def _parse_product_page(html: str, asin: str) -> Dict:
     }
 
 
+def _amazon_refusal(url: str) -> Optional[str]:
+    """The Amazon boundary, evaluated before any request leaves the machine.
+
+    Found 2026-11-06 by the boundary-mapping review: `_fetch` posted whatever URL
+    it was given straight to the provider. `amazon_adapters.py:428-438` builds
+    `https://www.amazon.com/dp/{asin}` and hands it here, so a live Amazon fetch
+    was one call away with no gate. This is a hard owner boundary, so the check
+    lives in code next to the egress, not in a docstring somewhere else.
+    """
+    try:
+        from urllib.parse import urlsplit
+
+        host = (urlsplit(url).hostname or "").lower().rstrip(".")
+    except ValueError:
+        return "no_host"
+    if not host:
+        return "no_host"
+    if host == "amazon" or host.endswith(".amazon") or "amazon" in host.split("."):
+        return f"amazon_refused: {host}"
+    short = ("amzn.to", "amzn.com", "a.co", "amazon-adsystem.com",
+             "media-amazon.com", "images-amazon.com", "ssl-images-amazon.com")
+    if any(host == s or host.endswith("." + s) for s in short):
+        return f"amazon_refused: {host}"
+    if host.endswith("amazon.com") or ".amazon." in host:
+        return f"amazon_refused: {host}"
+    return None
+
+
 def _fetch(url: str) -> Optional[str]:
     """Fetch one URL through the Web Unlocker; returns raw HTML or None.
 
@@ -473,6 +501,11 @@ def _fetch(url: str) -> Optional[str]:
 
     LAST_HTTP_STATUS = None
     LAST_RESPONSE_HEADERS = None
+
+    refusal = _amazon_refusal(url)
+    if refusal:
+        LAST_ERROR = {"type": "policy_refused", "detail": refusal}
+        raise RuntimeError(refusal)
 
     if not BRIGHTDATA_UNLOCKER_API_KEY:
         raise ValueError("BRIGHTDATA_UNLOCKER_API_KEY not set")

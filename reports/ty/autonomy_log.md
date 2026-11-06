@@ -22,3 +22,4 @@ One line per cycle. Format:
 - 2026-11-06T07:05Z | worker model | pinned opencode-go/deepseek-v4.1-flash in opencode.jsonc; --standalone hangs (measured, 10 min no output) so removed; first deepseek worker run killed at 14 min during probing
 - 2026-11-06T07:25Z | agent lanes + guard | 3 named lanes (tys/verifier/research) pinned to deepseek-v4.1-flash, read-only lanes locked; tools/guard_agents.py (8 tests) refuses refusal-surrendering prompts, off-model lanes and writable read-only lanes
 - 2026-11-06T08:05Z | worker fixed | opencode run --agent tys --format json, prompt on stdin, session model provenance from session_v2 (verified); .CMD shim resolved
+- 2026-11-06T08:20Z | T0 Amazon gate | bright_data_client._fetch refused Amazon before any request (was a live egress hole via amazon_adapters); 15 tests; baseline ids 6453
