@@ -298,6 +298,43 @@ def start_model(wait_s: float = 240.0) -> bool:
     return False
 
 
+def _snapshot(paths: List[str]) -> Dict[str, Optional[bytes]]:
+    """Bytes of every declared write path, so a failed attempt can be undone.
+
+    Measured gap (2026-11-06): a failed cycle marked the queue item pending and
+    left the worker's edits on disk. The next candidate then scored on the
+    previous candidate's wreckage. A revert that only touches the queue is not a
+    revert.
+    """
+    snap: Dict[str, Optional[bytes]] = {}
+    for rel in paths:
+        path = ROOT / rel
+        try:
+            snap[rel] = path.read_bytes() if path.is_file() else None
+        except OSError:
+            snap[rel] = None
+    return snap
+
+
+def _restore(snap: Dict[str, Optional[bytes]]) -> List[str]:
+    restored: List[str] = []
+    for rel, data in snap.items():
+        path = ROOT / rel
+        try:
+            if data is None:
+                if path.exists():
+                    path.unlink()
+                    restored.append(rel)
+            else:
+                if not path.is_file() or path.read_bytes() != data:
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(data)
+                    restored.append(rel)
+        except OSError as exc:
+            _append(JOURNAL, {"event": "restore_failed", "path": rel, "error": str(exc)})
+    return restored
+
+
 def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str, Any]:
     """One cycle: reserve, run the worker, validate, complete."""
     brief_out = runner.cmd_next(write_brief=True)
@@ -324,7 +361,23 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
 
     task_path = STATE / "task.json"
     result_path = STATE / "worker_result.json"
-    task_path.write_text(json.dumps(task_contract(item, brief), indent=2), encoding="utf-8")
+    contract = task_contract(item, brief)
+    checks = contract.get("acceptance_commands") or []
+
+    # Pre-run red gate: a check that is already green cannot prove anything a
+    # worker did. Without this, a cycle "ships" by running a passing test.
+    before = run_acceptance(checks)
+    if before.get("ok"):
+        runner.mark(runner.load_queue(), str(item.get("id")), "pending",
+                    check_already_green=True,
+                    defer_until_cycle=int(brief["cycle"]) + 2)
+        runner._clear_lease("check already green")
+        _append(JOURNAL, {"event": "check_already_green", "item": item.get("id")})
+        return {"ok": True, "skipped": True, "item": item.get("id"),
+                "reason": "check_already_green"}
+
+    snap = _snapshot(list(contract.get("write_paths") or []))
+    task_path.write_text(json.dumps(contract, indent=2), encoding="utf-8")
     if result_path.exists():
         result_path.unlink()
     started = time.time()
@@ -342,10 +395,16 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     # The launcher judges the patch by running the declared checks itself. A model
     # that writes and grades is not a verification; ty_task_runner may also report
     # its own acceptance, but the launcher's run is the authority.
-    acceptance = run_acceptance(task_contract(item, brief).get("acceptance_commands") or [])
+    acceptance = run_acceptance(checks)
     shipped = bool(acceptance.get("ok")) and int(code or 0) == 0 \
         and bool(worker_out.get("ok", True))
     worker_out["acceptance"] = acceptance
+    worker_out["before_green"] = before.get("ok")
+    if not shipped:
+        restored = _restore(snap)
+        if restored:
+            _append(JOURNAL, {"event": "reverted_bytes", "item": item.get("id"),
+                              "paths": restored})
     evidence_paths: List[str] = [str(p) for p in (worker_out.get("evidence") or [])]
     if shipped and not evidence_paths:
         # The runner refuses a shipped cycle with no evidence, and it is right to:

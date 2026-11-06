@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T06:30:00Z",
+  "updated": "2026-11-06T09:10:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 13,
+  "cycle": 29,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -22,16 +22,42 @@
       "status": "pending",
       "priority": 1000,
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties",
-      "updated_at": "2026-11-06T12:32:10+00:00",
+      "updated_at": "2026-11-06T13:48:25+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 13
+      "defer_until_cycle": 29
+    },
+    {
+      "id": "T0-egress-hook",
+      "kind": "workstream",
+      "workstream": "W9",
+      "priority": 995,
+      "status": "pending",
+      "title": "One transport-level egress hook: refuse Amazon before the request, journal it",
+      "next": "Add tools/egress_guard.py that wraps requests/httpx/urllib for the service entrypoint and the tools that make requests, refusing Amazon hosts and writing {url, host, caller} to logs/egress.jsonl. Prove a call site with no explicit check still refuses.",
+      "write_paths": [
+        "tools/egress_guard.py",
+        "Northstar_backend/main.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_egress_guard.py"
+        ]
+      ],
+      "why": "44 caller-supplied egress sites have no Amazon check; seven per-site checks cannot cover them.",
+      "evidence": [
+        "reports/ty/egress_map_20261106.md"
+      ]
     },
     {
       "id": "S1-cancel-race",
       "kind": "workstream",
       "workstream": "W9",
       "title": "Cooperative cancel races: worker can reach SUCCEEDED after a cancel request",
-      "status": "pending",
+      "status": "in_progress",
       "priority": 990,
       "next": "Make cancel_requested terminal for the worker: in foundation/jobs_durable.py and foundation/jobs_state.py, a transition to SUCCEEDED from cancel_requested must be rejected inside the worker path and reported as cancelled, so test_cancel_leased_job_cooperative cannot race.",
       "write_paths": [
@@ -54,11 +80,35 @@
       "evidence": [
         "reports/ty/_m02_full_20261106.txt"
       ],
-      "updated_at": "2026-11-06T12:33:18+00:00",
-      "last_cycle": 13,
+      "updated_at": "2026-11-06T13:48:25+00:00",
+      "last_cycle": 25,
       "last_result": "reverted",
-      "attempts": 1,
-      "defer_until_cycle": 15
+      "attempts": 3,
+      "defer_until_cycle": 27
+    },
+    {
+      "id": "T0-callback-ssrf",
+      "kind": "workstream",
+      "workstream": "W9",
+      "priority": 990,
+      "status": "pending",
+      "title": "design_studio_async callback_url is an unvalidated urlopen of an API-supplied URL",
+      "next": "In design_studio_async.py, validate callback_url before the request: scheme http/https only, no IP literals, no loopback/link-local, Amazon refused, and a documented host allowlist or explicit operator opt-in.",
+      "write_paths": [
+        "Northstar_backend/design_studio_async.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_design_studio_async.py"
+        ]
+      ],
+      "evidence": [
+        "reports/ty/egress_map_20261106.md"
+      ]
     },
     {
       "id": "W6-aplus-hero-key",
@@ -67,7 +117,10 @@
       "priority": 950,
       "status": "pending",
       "title": "Hero cutout leaves a ghost backdrop patch in the top-right - use BiRefNet instead of the deterministic chroma key for a hero",
-      "evidence": "renders/aplus_design/aplus_preview.png (hero, top-right)"
+      "evidence": "renders/aplus_design/aplus_preview.png (hero, top-right)",
+      "updated_at": "2026-11-06T13:48:25+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": 28
     },
     {
       "id": "W6-aplus-logo",
@@ -104,6 +157,30 @@
       ],
       "blocked_by": "weights not on disk (measured) + 9.5 GB free vs ~12 GB needed; below the 10 GB operational floor",
       "evidence": "state/evidence/identity_experiment_20261105T220650Z.json"
+    },
+    {
+      "id": "T1-dataforseo-host",
+      "kind": "workstream",
+      "workstream": "W9",
+      "priority": 900,
+      "status": "pending",
+      "title": "dataforseo_adapter.classify_endpoint validates the path but never the host",
+      "next": "Read parsed.hostname and refuse anything outside the DataForSEO host (and Amazon always).",
+      "write_paths": [
+        "Northstar_backend/dataforseo_adapter.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_dataforseo_adapter.py"
+        ]
+      ],
+      "evidence": [
+        "reports/ty/egress_map_20261106.md"
+      ]
     },
     {
       "id": "UX-fonts-mobile",
@@ -470,7 +547,8 @@
     "The GPU lane is RAM-gated at 4096 MB and the box sat at 3830 MB after two renders; a ComfyUI restart is the routine fix.",
     "An A+ page can pass every mechanical QA check and still not be shippable: repeated tile imagery and a copy/asset mismatch are quality defects no contrast gate catches.",
     "A deterministic background key is fine for a tile and not good enough for a hero: it left a ghost patch of backdrop in the 970x600 header.",
-    "A design needs its logo as an asset, not as a string: without it every page falls back to the brand name set in serif, which reads as a floating label rather than a mark."
+    "A design needs its logo as an asset, not as a string: without it every page falls back to the brand name set in serif, which reads as a floating label rather than a mark.",
+    "There is no global egress hook: the Amazon boundary is seven per-site checks over at least 44 caller-supplied URLs. A boundary that depends on each call site remembering is not a control."
   ],
   "baseline": {
     "backend": {
@@ -486,5 +564,5 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-06T12:33:18+00:00"
+  "updated_at": "2026-11-06T13:48:25+00:00"
 }

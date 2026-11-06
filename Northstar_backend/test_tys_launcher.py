@@ -27,7 +27,10 @@ def root(tmp_path, monkeypatch):
             {"id": "runnable", "title": "do a thing", "status": "pending", "priority": 900,
              "next": "make the check pass",
              "write_paths": ["Northstar_backend/x.py"],
-             "acceptance_commands": [["python", "-m", "pytest", "-q", "test_x.py"]]},
+             "acceptance_commands": [[
+                 "python", "-c",
+                 "import pathlib,sys; sys.exit(0 if pathlib.Path('done.flag').exists() else 1)",
+             ]]},
             {"id": "no_checks", "title": "vague", "status": "pending", "priority": 800,
              "write_paths": ["Northstar_backend/y.py"]},
         ],
@@ -58,6 +61,11 @@ def root(tmp_path, monkeypatch):
 def _worker(result, *, ok=True, steps=3, evidence=None):
     def run(task_path, result_path):
         json.loads(task_path.read_text(encoding="utf-8"))
+        if ok:
+            # STATE is <root>/state/tys_runner, so parents[2] is the root the
+            # launcher runs acceptance commands in.
+            root = Path(task_path).resolve().parents[2]
+            (root / "done.flag").write_text("done", encoding="utf-8")
         payload = {"ok": ok, "steps": steps, "evidence": evidence or [],
                    "files": ["Northstar_backend/x.py"]}
         result_path.write_text(json.dumps(payload), encoding="utf-8")
@@ -94,6 +102,76 @@ def test_a_successful_worker_closes_the_cycle(root):
     assert out["ok"] is True and out["shipped"] is True
     item = next(i for i in r.load_queue()["items"] if i["id"] == "runnable")
     assert item["status"] == "done"
+
+
+def test_a_failed_worker_restores_the_bytes_it_wrote(root):
+    target = root / "Northstar_backend" / "x.py"
+    target.parent.mkdir(parents=True)
+    target.write_text("original\n", encoding="utf-8")
+
+    def worker(task_path, result_path):
+        target.write_text("damaged by the worker\n", encoding="utf-8")
+        result_path.write_text(json.dumps({"ok": False, "steps": 1}), encoding="utf-8")
+        return 0
+
+    out = L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+    assert out["shipped"] is False
+    assert target.read_text(encoding="utf-8") == "original\n"
+
+
+def test_a_new_file_from_a_failed_worker_is_deleted(root):
+    target = root / "Northstar_backend" / "created.py"
+    queue = r.load_queue()
+    for item in queue["items"]:
+        if item["id"] == "runnable":
+            item["write_paths"] = ["Northstar_backend/x.py", "Northstar_backend/created.py"]
+    (root / "reports" / "ty" / "autonomy_queue.json").write_text(json.dumps(queue), encoding="utf-8")
+
+    def worker(task_path, result_path):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("junk\n", encoding="utf-8")
+        result_path.write_text(json.dumps({"ok": False, "steps": 1}), encoding="utf-8")
+        return 0
+
+    L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+    assert not target.exists()
+
+
+def test_a_file_created_outside_the_declared_scope_is_not_silently_restored(root):
+    """Out-of-scope writes are a scope violation, not a revert case.
+
+    `_snapshot` only knows the declared `write_paths`; anything else the worker
+    creates is invisible to it. That is deliberate - a restore that guesses at
+    paths would delete files nobody declared - and it is why the evaluator's
+    scope gate exists.
+    """
+    target = root / "Northstar_backend" / "sneaky.py"
+
+    def worker(task_path, result_path):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("x\n", encoding="utf-8")
+        result_path.write_text(json.dumps({"ok": False, "steps": 1}), encoding="utf-8")
+        return 0
+
+    L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+    assert target.exists()          # stays until the scope gate reports it
+
+
+def test_a_check_that_is_already_green_never_reaches_the_worker(root):
+    queue = r.load_queue()
+    for item in queue["items"]:
+        if item["id"] == "runnable":
+            item["acceptance_commands"] = [["python", "-c", "print('green')"]]
+    (root / "reports" / "ty" / "autonomy_queue.json").write_text(json.dumps(queue), encoding="utf-8")
+    called = {"n": 0}
+
+    def worker(_t, _r):
+        called["n"] += 1
+        return 0
+
+    out = L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+    assert out["skipped"] is True and out["reason"] == "check_already_green"
+    assert called["n"] == 0
 
 
 def test_a_failed_worker_reverts_and_defers(root):
