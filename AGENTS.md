@@ -144,3 +144,23 @@ routes and CSS scope do not break: the `ns-shell-mode` storage key, the `simple`
 values, `html[data-shell-mode="simple"]`, and constants such as `SIMPLE_KEEP_ADVANCED`. Display
 names and the migration of legacy stored values live in
 `northstar-os-ui/src/lib/shellMode.js`.
+
+## Parallel lanes — standing practice (appended 2026-11-06)
+
+Multiple sessions and agents run in parallel by default, because reading is cheap and
+verification is not. The rules that make that safe:
+
+1. **Read-only lanes are always parallel.** Research, exploration, licence reads, code
+   mapping, independent review. They never write, never install, never run package managers.
+2. **Writers are parallel only on disjoint `write_paths`, one git worktree each.** Two
+   sessions editing the same tree fight over the index and each other's tests.
+3. **Verification and rendering are serialised to one lane.** On this box the binding
+   constraint is RAM/VRAM, not thinking speed: a 16-minute suite took 36 minutes and hung at
+   2.7 GB free, and the render lane refuses below 4096 MB. Parallel pytest runs produce
+   parallel red herrings.
+4. **Every lane reports evidence**: the command and its real output, or `file:line`. A lane
+   that returns prose without a citation is not done.
+5. **The independent verifier is always a separate session from the author.** A model that
+   writes a change and grades it has not verified anything.
+6. **Fan-out has a budget.** At most 4 concurrent lanes; each gets one question and one
+   deliverable. A lane that cannot state its deliverable in one line does not get spawned.
