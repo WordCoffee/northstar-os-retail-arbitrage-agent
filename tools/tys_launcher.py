@@ -113,19 +113,102 @@ def default_worker(task_path: Path, result_path: Path) -> int:
     return proc.returncode
 
 
+def deepseek_worker(task_path: Path, result_path: Path) -> int:
+    """The owner's coding model (DeepSeek V4.1 Flash on OpenCode), not a local 3B.
+
+    The worker is told what to change and which files it may touch, and nothing
+    else: it does not decide the scope and it does not grade itself. The launcher
+    runs the acceptance commands afterwards. That split is the point - a model
+    that both writes the patch and judges it is not a verification.
+    """
+    task = json.loads(task_path.read_text(encoding="utf-8"))
+    allowed = ", ".join(task.get("write_paths") or []) or "(none - refuse)"
+    checks = "; ".join(" ".join(c) for c in (task.get("acceptance_commands") or []))
+    prompt = (
+        "You are the implementation worker for one Northstar OS task. Work only in "
+        f"this repository. You may modify ONLY: {allowed}. Do not touch any other file, "
+        "do not change tests, and do not commit.\n\n"
+        f"TASK: {task.get('objective')}\n\n"
+        f"ACCEPTANCE (must pass, run by the launcher afterwards): {checks}\n\n"
+        "Make the smallest correct change that satisfies the acceptance check. If the "
+        "check cannot pass without touching a file outside the allowlist, change nothing "
+        "and state why in one line. When finished, stop."
+    )
+    cmd = ["opencode", "--prompt", prompt, "--auto"]
+    started = time.time()
+    try:
+        import shutil
+
+        exe = shutil.which("opencode") or shutil.which("opencode.cmd") or "opencode"
+        # No --standalone: measured 2026-11-06, `--prompt ... --standalone` starts a
+        # private server and never returns, which would hang every cycle. The model
+        # is pinned in opencode.jsonc instead ("model": opencode-go/deepseek-v4.1-flash).
+        extra = ["--prompt", prompt, "--auto"]
+        if str(exe).lower().endswith((".cmd", ".bat")):
+            cmd = ["cmd", "/c", str(exe)] + extra
+        else:
+            cmd = [str(exe)] + extra
+        proc = subprocess.run(cmd, cwd=str(ROOT), timeout=WORKER_TIMEOUT_S,
+                              capture_output=True, text=True)
+        code = proc.returncode
+        tail = (proc.stdout or "")[-2000:]
+    except subprocess.TimeoutExpired:
+        code, tail = 124, "worker timeout"
+    except OSError as exc:
+        code, tail = 127, f"opencode_not_runnable: {exc}"
+    result_path.write_text(json.dumps({
+        "ok": code == 0, "steps": 1, "worker": "opencode/deepseek",
+        "seconds": round(time.time() - started, 1), "tail": tail,
+        "objective": task.get("objective"),
+    }, indent=2), encoding="utf-8")
+    _append(JOURNAL, {"event": "deepseek_worker", "code": code,
+                      "seconds": round(time.time() - started, 1),
+                      "tail": tail[-300:]})
+    return code
+
+
+def run_acceptance(commands: List[List[str]]) -> Dict[str, Any]:
+    """The launcher's own verdict. The model never grades its own patch."""
+    results = []
+    ok = True
+    for cmd in commands:
+        if not cmd:
+            continue
+        started = time.time()
+        try:
+            proc = subprocess.run([str(c) for c in cmd], cwd=str(ROOT),
+                                  timeout=WORKER_TIMEOUT_S, capture_output=True, text=True)
+            passed = proc.returncode == 0
+            detail = ((proc.stdout or "") + (proc.stderr or ""))[-1200:]
+        except subprocess.TimeoutExpired:
+            passed, detail = False, "acceptance timeout"
+        ok = ok and passed
+        results.append({"cmd": " ".join(str(c) for c in cmd), "passed": passed,
+                        "seconds": round(time.time() - started, 1),
+                        "detail": detail})
+    return {"ok": ok, "checks": results}
+
+
 Worker = Callable[[Path, Path], int]
 
-MODEL_BASE_URL = os.environ.get("TY_WORKER_BASE_URL", "http://127.0.0.1:8080")
+MODEL_BASE_URL = os.environ.get("TY_WORKER_BASE_URL", "http://127.0.0.1:8080")#: The worker can speak to llama.cpp (OpenAI-compatible, 8080) or to Ollama's
+#: native adapter (11434). The preflight must check the one the worker will use,
+#: otherwise a healthy Ollama lane is reported as "down".
+MODEL_PROVIDER = os.environ.get("TYS_CODING_PROVIDER", "compat").lower()
+OLLAMA_BASE_URL = os.environ.get("TYS_CODING_URL", "http://127.0.0.1:11434")
 
 
 def model_up(timeout_s: float = 3.0) -> bool:
-    """The coding lane speaks to llama-server on 8080; a dead lane is not a cycle."""
+    """Is the lane the worker will actually use reachable?"""
     import urllib.error
     import urllib.request
 
+    if MODEL_PROVIDER == "ollama":
+        url = OLLAMA_BASE_URL.rstrip("/") + "/api/tags"
+    else:
+        url = MODEL_BASE_URL.rstrip("/") + "/health"
     try:
-        with urllib.request.urlopen(MODEL_BASE_URL.rstrip("/") + "/health",
-                                    timeout=timeout_s) as resp:
+        with urllib.request.urlopen(url, timeout=timeout_s) as resp:
             return 200 <= resp.status < 300
     except (urllib.error.URLError, OSError, ValueError):
         return False
@@ -189,7 +272,13 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
             worker_out = json.loads(result_path.read_text(encoding="utf-8"))
         except ValueError:
             worker_out = {}
-    shipped = bool(worker_out.get("ok")) and int(worker_out.get("steps") or 0) > 0
+    # The launcher judges the patch by running the declared checks itself. A model
+    # that writes and grades is not a verification; ty_task_runner may also report
+    # its own acceptance, but the launcher's run is the authority.
+    acceptance = run_acceptance(task_contract(item, brief).get("acceptance_commands") or [])
+    shipped = bool(acceptance.get("ok")) and int(code or 0) == 0 \
+        and bool(worker_out.get("ok", True))
+    worker_out["acceptance"] = acceptance
     evidence_paths: List[str] = [str(p) for p in (worker_out.get("evidence") or [])]
     if shipped and not evidence_paths:
         # The runner refuses a shipped cycle with no evidence, and it is right to:
@@ -239,18 +328,21 @@ def main(argv: Optional[List[str]] = None) -> int:
                         help="stop after this many estimated tokens this run")
     parser.add_argument("--start-model", action="store_true",
                         help="start the local LLM lane if its health endpoint is down")
+    parser.add_argument("--worker", choices=("ty", "deepseek"), default="ty",
+                        help="ty = local coding lane; deepseek = OpenCode CLI (owner's model)")
     ns = parser.parse_args(argv)
 
     started = time.time()
     deadline = started + ns.max_hours * 3600
     cycles = 0
     failures = 0
+    skips = 0
     tokens = 0
     reason = "max_cycles"
 
     heartbeat(state="starting", dry_run=ns.dry_run, max_cycles=ns.max_cycles,
               max_hours=ns.max_hours)
-    if not ns.dry_run and not model_up():
+    if not ns.dry_run and ns.worker == "ty" and not model_up():
         # A dead model lane is not a failed cycle: burning an attempt per cycle
         # against a refused connection teaches nothing and quietly ages the queue.
         _append(JOURNAL, {"event": "model_lane_down", "base_url": MODEL_BASE_URL})
@@ -274,7 +366,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             reason = "STOP"
             break
         before = runner._tokens_today()
-        out = _run_cycle(worker=default_worker, dry_run=ns.dry_run,
+        out = _run_cycle(worker=(deepseek_worker if ns.worker == "deepseek" else default_worker),
+                         dry_run=ns.dry_run,
                          cycle_budget=ns.max_cycles - cycles)
         if out.get("stop"):
             reason = out.get("reason", "stop")
@@ -283,9 +376,18 @@ def main(argv: Optional[List[str]] = None) -> int:
         cycles += 1
         tokens += max(0, runner._tokens_today() - before)
         if out.get("skipped"):
+            # A skipped item is not a cycle: it means the queue surfaced work that
+            # cannot be dispatched (no checks, no write scope). Counting it as a
+            # cycle would let the loop burn its whole budget on unrunnable items.
+            cycles -= 1
+            skips += 1
+            if skips >= 40:
+                reason = "no_runnable_items"
+                break
             failures = 0
         elif out.get("ok"):
             failures = 0
+            skips = 0
         else:
             failures += 1
             if failures >= MAX_FAILURE_STREAK:
@@ -295,7 +397,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             reason = "token_budget"
             break
         heartbeat(state="running", cycles=cycles, tokens_estimate=tokens,
-                  last=out, failures=failures)
+                  last=out, failures=failures, skips=skips)
 
     heartbeat(state="stopped", reason=reason, cycles=cycles,
               tokens_estimate=tokens, seconds=round(time.time() - started, 1))

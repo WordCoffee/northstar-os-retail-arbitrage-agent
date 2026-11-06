@@ -34,6 +34,11 @@
 
   "$schema": "https://opencode.ai/config.json",
 
+  // The autonomy worker must run on the owner's coding model, not a default and
+  // never a free/router fallback. Pinned 2026-11-06 so `opencode --prompt` (used
+  // by tools/tys_launcher.py --worker deepseek) uses exactly this model.
+  "model": "opencode-go/deepseek-v4.1-flash",
+
   "provider": {
     "openrouter": {
       "models": {

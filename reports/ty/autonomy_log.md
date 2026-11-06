@@ -19,3 +19,4 @@ One line per cycle. Format:
 - 2026-11-06T05:50Z | M0.2 correction | junit classnames are dotted, collection ids are paths -> zero overlap; replaced with pytest_idlist plugin (6419 ids, +0/-0)
 - 2026-11-06T06:35Z | M2-lite launcher | 9 tests; next->worker->complete with heartbeat, runnable-if-checkable rule, evidence record, 6 stop reasons, dry-run
 - 2026-11-06T06:40Z | M2-lite launcher | 11 tests; first real dispatch S1-cancel-race -> model_lane_down (precise), item reverted+deferred, zero cycles burned; preflight added
+- 2026-11-06T07:05Z | worker model | pinned opencode-go/deepseek-v4.1-flash in opencode.jsonc; --standalone hangs (measured, 10 min no output) so removed; first deepseek worker run killed at 14 min during probing
