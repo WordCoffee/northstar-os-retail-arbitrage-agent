@@ -146,7 +146,11 @@ $hasFunctions = ($null -ne $base.baseline.functions)
 
 # ---------- 1. backend sanitized full suite ----------
 Write-Host "== [1/4] Backend sanitized full suite (pytest) =="
-$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider"
+# Name-based regression guard (M0.2): the run emits junit so a test can be
+# compared BY NAME. Counting alone made the canary go RED whenever the loop
+# added a test, which would have had it "fixing" its own new tests.
+$JunitPath = Join-Path $TmpDir ("ns_junit_" + $PID + ".xml")
+$r = Run-Suite $BackendDir "python -m pytest -q -p no:cacheprovider --junitxml=`"$JunitPath`""
 # Parsed by Parse-PytestSummary (defined above and exercised by -SelfTest):
 # a missing token is 0, and the line may carry xfailed/warning tokens.
 $sm = Parse-PytestSummary $r.text
@@ -168,17 +172,40 @@ if (-not $sm) {
         if (-not $k) { $unexpected += $id }
     }
     $bExp = $base.baseline.backend
-    $bOk = ($bPassed -eq [int]$bExp.passed) -and ($bSkipped -eq [int]$bExp.skipped) -and ($bSub -eq [int]$bExp.subtests) -and ($bFailed -eq [int]$bExp.failed) -and ($unexpected.Count -eq 0)
+    # M0.2: identity is checked BY NAME (below, from junit). Counting is now only a
+    # floor - "we did not lose tests" - because the loop adds tests every cycle and
+    # strict equality turned the canary red on its own progress.
+    $bOk = ($bPassed -ge [int]$bExp.passed) -and ($bFailed -eq [int]$bExp.failed) -and ($unexpected.Count -eq 0)
     $bLabel = if ($bOk) { "OK" } else { "MISMATCH" }
     Write-Host ("  {0} passed, {1} known pre-existing failures, {2} unexpected | skipped {3} | subtests {4} | {5}" -f $bPassed, $bFailed, $unexpected.Count, $bSkipped, $bSub, $bLabel)
     if (-not $bOk) {
         $mismatch = $mismatch + 1
-        if ($bPassed -ne [int]$bExp.passed) { Write-Host ("    diff: backend passed {0} != baseline {1}" -f $bPassed, $bExp.passed) -ForegroundColor Yellow }
-        if ($bSkipped -ne [int]$bExp.skipped) { Write-Host ("    diff: backend skipped {0} != baseline {1}" -f $bSkipped, $bExp.skipped) -ForegroundColor Yellow }
-        if ($bSub -ne [int]$bExp.subtests) { Write-Host ("    diff: backend subtests {0} != baseline {1}" -f $bSub, $bExp.subtests) -ForegroundColor Yellow }
+        if ($bPassed -lt [int]$bExp.passed) { Write-Host ("    diff: backend passed {0} < baseline {1} (tests lost?)" -f $bPassed, $bExp.passed) -ForegroundColor Yellow }
+        if ($bSkipped -ne [int]$bExp.skipped) { Write-Host ("    note: skipped {0} vs baseline {1} (informational)" -f $bSkipped, $bExp.skipped) -ForegroundColor DarkGray }
+        if ($bSub -ne [int]$bExp.subtests) { Write-Host ("    note: subtests {0} vs baseline {1} (informational)" -f $bSub, $bExp.subtests) -ForegroundColor DarkGray }
         if ($bFailed -ne [int]$bExp.failed) { Write-Host ("    diff: backend failed {0} != baseline {1}" -f $bFailed, $bExp.failed) -ForegroundColor Yellow }
         foreach ($u in $unexpected) { Write-Host "    UNEXPECTED FAILURE: $u" -ForegroundColor Red }
     }
+}
+
+# Name-based regression guard (M0.2). Additions are fine; a removed test or a
+# failing test blocks, by name, with the junit the run just produced.
+if (Test-Path $JunitPath) {
+    $nr = Run-Suite $Root "python tools\check_regression.py --junit `"$JunitPath`""
+    $nameLine = ($nr.text -split "`r?`n" | Where-Object { $_ -match 'tests, baseline' } | Select-Object -Last 1)
+    if ($nr.code -eq 0) {
+        Write-Host ("  by name: {0}" -f $nameLine)
+    } else {
+        Write-Host ("  by name: REGRESSION - {0}" -f $nameLine) -ForegroundColor Red
+        foreach ($l in ($nr.text -split "`r?`n" | Where-Object { $_ -match 'REMOVED|FAILED' } | Select-Object -First 10)) {
+            Write-Host ("    " + $l.Trim()) -ForegroundColor Red
+        }
+        $mismatch = $mismatch + 1
+    }
+    try { Remove-Item $JunitPath -Force } catch {}
+} else {
+    Write-Host "  by name: SKIPPED (no junit produced)" -ForegroundColor Yellow
+    $unrun = $unrun + 1
 }
 
 # ---------- 2. golden goose module suite ----------
