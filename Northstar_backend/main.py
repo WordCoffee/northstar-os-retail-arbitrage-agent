@@ -213,6 +213,39 @@ class ScanResponse(BaseModel):
 BASE_DIR = Path(__file__).resolve().parent
 
 
+def install_egress_guard() -> Dict[str, Any]:
+    """Install the transport-level egress guard once, before the first request.
+
+    W9 / T0-egress-hook: the Amazon boundary must not depend on 44 call sites each
+    remembering a check. `tools/egress_guard.py` wraps `urllib.request.urlopen`
+    and the `requests` entry points so a request to Amazon is refused before a
+    socket opens, and journals `{url, host, caller}` to `logs/egress.jsonl`.
+
+    Fails closed: a guard that cannot install refuses startup, on the same
+    reasoning as the posture asserts below - a security control that silently
+    did not run is worse than a service that did not start.
+    """
+    try:
+        import sys as _sys
+        _tools = str(BASE_DIR.parent / "tools")
+        if _tools not in _sys.path:
+            _sys.path.append(_tools)
+        import egress_guard
+        result: Dict[str, Any] = dict(egress_guard.install())
+        result["audit"] = str(egress_guard.AUDIT)
+    except Exception as exc:  # noqa: BLE001 - converted into a refused boot
+        logger.critical("EGRESS GUARD VIOLATION: could not install (%s)", exc)
+        raise RuntimeError(
+            "EGRESS GUARD VIOLATION: tools/egress_guard.py could not be installed, "
+            f"so no request would be checked against the Amazon refusal: {exc}"
+        )
+    if result.get("installed") or result.get("already"):
+        logger.info("Egress guard active: %s", result.get("audit"))
+    else:  # pragma: no cover - install() either installs or raises
+        logger.warning("Egress guard reported no clients: %s", result)
+    return result
+
+
 def _ollama_base_url() -> str:
     """Local LLM base URL — configurable so the local lane is not anchored to
     Ollama's default port. Ollama today; any OpenAI-compatible server later."""
@@ -228,6 +261,11 @@ async def lifespan(app):
     """Startup / shutdown lifecycle."""
     logger.info("Northstar OS v1.0.0 starting up")
     logger.info(f"Base directory: {BASE_DIR}")
+
+    # W9 / T0-egress-hook: install the Amazon refusal at the transport before any
+    # startup request is made (the Ollama probe below is a request). This is the
+    # only place the guard is installed for the service process.
+    install_egress_guard()
 
     # Phase F/S6: assert the production rate-limiter posture at startup.
     from rate_limiter import assert_prod_posture
