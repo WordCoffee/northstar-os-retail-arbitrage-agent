@@ -43,6 +43,15 @@ ADS_ENDPOINTS = {
 }
 
 
+class AmazonLinkageDisabled(RuntimeError):
+    """Amazon token refresh refused: account linkage is disabled by architecture.
+
+    Raised from `AdsAPIAuth._refresh` BEFORE any request, so a caller that
+    builds the auth class directly (not through `AdsAPIImporter`) is stopped
+    too.
+    """
+
+
 class AdsAPIAuth:
     """OAuth2 token management for Amazon Ads API.
 
@@ -75,7 +84,18 @@ class AdsAPIAuth:
         return datetime.now(timezone.utc) >= self._token_expiry
 
     def _refresh(self):
-        """Refresh the OAuth access token."""
+        """Refresh the OAuth access token.
+
+        Refuses before any request unless the Amazon-linkage gate is on. The
+        gate used to live only on the importer's public methods, so any caller
+        holding a bare `AdsAPIAuth` could still reach the Amazon OAuth token
+        endpoint.
+        """
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
+
+        if not linkage_enabled():
+            raise AmazonLinkageDisabled(linkage_refusal_reason())
+
         try:
             import httpx
 

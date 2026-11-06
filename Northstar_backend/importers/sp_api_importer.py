@@ -32,6 +32,14 @@ SP_API_ENDPOINTS = {
 }
 
 
+class AmazonLinkageDisabled(RuntimeError):
+    """Amazon token refresh refused: account linkage is disabled by architecture.
+
+    Raised from `SPAPIAuth._refresh` BEFORE any request, so a caller that builds
+    the auth class directly (not through `SPAPIImporter`) is stopped too.
+    """
+
+
 class SPAPIAuth:
     """LWA token management with automatic refresh."""
 
@@ -58,7 +66,17 @@ class SPAPIAuth:
         return datetime.now(timezone.utc) >= self._token_expiry
 
     def _refresh(self):
-        """Refresh the LWA access token."""
+        """Refresh the LWA access token.
+
+        Refuses before any request unless the Amazon-linkage gate is on. The
+        gate used to live only on the importer's public methods, so any caller
+        holding a bare `SPAPIAuth` could still reach api.amazon.com.
+        """
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
+
+        if not linkage_enabled():
+            raise AmazonLinkageDisabled(linkage_refusal_reason())
+
         try:
             import httpx
             resp = httpx.post(
