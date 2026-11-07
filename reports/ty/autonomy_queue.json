@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 37,
+  "cycle": 44,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -324,7 +324,7 @@
       "kind": "workstream",
       "workstream": "W10",
       "priority": 1075,
-      "status": "pending",
+      "status": "needs_author",
       "title": "scanner p95 6.6 s: the Costco CSV is re-read and fuzzy-matched per candidate, per request",
       "next": "Load and parse the Costco catalog once (module-level cache keyed on file mtime+size), and replace the all-rows SequenceMatcher sweep with a prefilter (rapidfuzz or an exact/normalised index) before scoring. Target: p95 under 1 s for 89 candidates.",
       "write_paths": [
@@ -346,14 +346,21 @@
       "tier": "T1",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:45:44+00:00",
+      "last_cycle": 44,
+      "last_result": "reverted",
+      "attempts": 3,
+      "defer_until_cycle": null,
+      "needs_author": "acceptance pytest Northstar_backend/test_costco_client.py passes today (42 tests) and the path in the item did not resolve. A perf target needs a check that FAILS today: e.g. a test asserting scanner p95 < 1.0s over the shuffled fixture.",
+      "contract_defect": "check_cannot_be_red"
     },
     {
       "id": "W10-lanes-status",
       "kind": "workstream",
       "workstream": "W10",
       "priority": 1070,
-      "status": "pending",
+      "status": "needs_author",
       "title": "lanes/status p95 418 ms: spawns PowerShell + nvidia-smi + two HTTP probes on every request",
       "next": "Cache the component results with a short TTL (5-10 s) and compute in one pass; keep the response shape identical. Target p95 under 50 ms warm.",
       "write_paths": [
@@ -375,14 +382,19 @@
       "tier": "T1",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:34:05+00:00",
+      "blocked_reason": "targets_dirty: Northstar_backend/design_studio_api.py",
+      "defer_until_cycle": null,
+      "needs_author": "acceptance Northstar_backend/test_design_studio_api.py does not exist in the tree. Author a check that reproduces the 418 ms lanes/status cost and fails.",
+      "contract_defect": "check_cannot_be_red"
     },
     {
       "id": "W10-bundle-split",
       "kind": "workstream",
       "workstream": "W10",
       "priority": 1065,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Entry chunk is 1,088 kB (gzip 296 kB); the first paint downloads the whole app",
       "next": "Split the entry bundle by route with lazy imports plus manualChunks for vendor/studio. Target: entry under 300 kB, no chunk over 500 kB, build still 0 errors.",
       "write_paths": [
@@ -403,14 +415,18 @@
       "tier": "T1",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:34:05+00:00",
+      "needs_author": "acceptance is npm run build, which neither runs from the repo root nor proves the 1,088 kB entry budget. Author a bundle-size assertion that fails at the current size.",
+      "defer_until_cycle": null,
+      "contract_defect": "check_cannot_be_red"
     },
     {
       "id": "T1-env-default",
       "kind": "workstream",
       "workstream": "W9",
       "priority": 1060,
-      "status": "pending",
+      "status": "needs_author",
       "title": "environment reports production on a dev box because X-Env defaults to production",
       "next": "Default the reported environment to the process ENVIRONMENT (or 'unknown') instead of production; keep the header override. Add a test that a dev process reports development.",
       "write_paths": [
@@ -432,7 +448,10 @@
       "tier": "T1",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "needs_author": "acceptance test_foundation_api.py does not exist in the tree. Author a check that fails while X-Env defaults to production.",
+      "defer_until_cycle": null,
+      "contract_defect": "check_cannot_be_red"
     },
     {
       "id": "W0-c1",
@@ -491,7 +510,7 @@
       "kind": "workstream",
       "workstream": "W9",
       "title": "Cooperative cancel races: worker can reach SUCCEEDED after a cancel request",
-      "status": "in_progress",
+      "status": "needs_author",
       "priority": 990,
       "next": "Make cancel_requested terminal for the worker: in foundation/jobs_durable.py and foundation/jobs_state.py, a transition to SUCCEEDED from cancel_requested must be rejected inside the worker path and reported as cancelled, so test_cancel_leased_job_cooperative cannot race.",
       "write_paths": [
@@ -518,11 +537,13 @@
       "last_cycle": 25,
       "last_result": "reverted",
       "attempts": 3,
-      "defer_until_cycle": 27,
+      "defer_until_cycle": null,
       "depends_on": [
         "M2-worker-lane",
         "M2-work-generator"
-      ]
+      ],
+      "needs_author": "acceptance Northstar_backend/foundation/tests/test_jobs_durable_lifecycle.py passes today (25 tests), so it cannot prove the cancel race. Author a check that reproduces SUCCEEDED-after-cancel and fails.",
+      "contract_defect": "check_cannot_be_red"
     },
     {
       "id": "T0-callback-ssrf",
@@ -1145,6 +1166,47 @@
         "M2-work-generator"
       ],
       "source": "reports/ty/A16_generator_spec.md side finding (scan report shape)"
+    },
+    {
+      "id": "gen-pytest-northstar-backend-foundation-tests-test-f-6d97de",
+      "kind": "automation",
+      "tier": "T1",
+      "generated_by": "tys_generator",
+      "dedupe_key": "pytest:Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
+      "source": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\backlog\\proposals.json",
+      "title": "Red check: Make Northstar_backend\\foundation\\tests\\test_frontend_gate.py::test_v3_shell_invariants pass",
+      "status": "needs_author",
+      "priority": 900,
+      "attempts": 0,
+      "first_seen": "2026-11-07T14:25:42+00:00",
+      "generated_at": "2026-11-07T14:25:42+00:00",
+      "depends_on": [],
+      "objective": "Red check: Make Northstar_backend\\foundation\\tests\\test_frontend_gate.py::test_v3_shell_invariants pass",
+      "nodeid": "Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
+      "fixable_by": "worker",
+      "needs_author": "proposal surface still reports pytest:Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
+      "last_generated_at": "2026-11-07T14:30:15+00:00"
+    },
+    {
+      "id": "gen-probe-tys-launcher-tests-d7dd9e",
+      "kind": "automation",
+      "tier": "T1",
+      "generated_by": "tys_generator",
+      "dedupe_key": "probe:tys-launcher-tests",
+      "source": "tools/tys_probes.py",
+      "title": "Probe red: tys-launcher-tests",
+      "status": "needs_author",
+      "priority": 900,
+      "attempts": 0,
+      "first_seen": "2026-11-07T14:35:43+00:00",
+      "generated_at": "2026-11-07T14:35:43+00:00",
+      "depends_on": [],
+      "objective": "Probe red: tys-launcher-tests",
+      "probe_id": "tys-launcher-tests",
+      "fixable_by": "worker",
+      "why": "the launcher is the engine; a red cycle judgement is work nobody else will notice",
+      "needs_author": "probe tys-launcher-tests is still red: the launcher is the engine; a red cycle judgement is work nobody else will notice",
+      "last_generated_at": "2026-11-07T14:40:38+00:00"
     }
   ],
   "parked": [
@@ -1191,7 +1253,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-07T08:00:00Z",
+  "updated_at": "2026-11-07T08:55:00Z",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {
