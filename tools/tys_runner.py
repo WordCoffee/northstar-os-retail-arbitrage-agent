@@ -524,10 +524,13 @@ def validate_contract(item: Dict[str, Any]) -> List[str]:
         problems.append(why)
 
     commands = item.get("acceptance_commands")
-    if commands is None:
-        return problems
-    if isinstance(commands, str):
-        return problems + ["acceptance_commands is a shell string, not argv lists"]
+    if commands is None or isinstance(commands, str):
+        # The shape problem is reported even when ``runnable`` already refused the
+        # item: relying on the earlier refusal would hide *why* the shape is wrong.
+        return problems + [
+            "acceptance_commands is a shell string, not argv lists"
+            if isinstance(commands, str) else
+            "acceptance_commands must be a list of argv lists"]
     if not isinstance(commands, (list, tuple)):
         return problems + ["acceptance_commands must be a list of argv lists"]
 

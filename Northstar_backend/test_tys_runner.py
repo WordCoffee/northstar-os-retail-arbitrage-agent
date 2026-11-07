@@ -155,8 +155,11 @@ def test_a_contract_without_scope_or_checks_names_the_gap():
     assert r.validate_contract({"id": "x",
                                 "acceptance_commands": [["python", "-c", "print(1)"]]}
                                ) == ["no write_paths declared"]
+    # Both facts are reported: the item has no commands *and* the shape is wrong.
+    # Returning early on ``None`` hid the second half behind ``runnable``'s refusal.
     assert r.validate_contract({"id": "x", "write_paths": ["a.py"]}) == [
-        "no acceptance_commands declared"]
+        "no acceptance_commands declared",
+        "acceptance_commands must be a list of argv lists"]
 
 
 def test_a_shell_string_or_a_network_command_is_refused():
