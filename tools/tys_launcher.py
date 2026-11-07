@@ -785,11 +785,14 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     item = next((i for i in queue.get("items", []) if i.get("id") == brief["item"]), {})
     ok, why = runnable(item)
     if not ok:
-        runner.mark(queue, str(item.get("id")), "pending",
-                    needs_author=why, defer_until_cycle=int(brief["cycle"]) + 1)
+        # A status change, not a field plus a soft deferral: the C3 run measured 40
+        # skips in half a minute because a pending item with a needs_author note is
+        # still ACTIVE, so the selector handed it straight back.
+        runner.mark(queue, str(item.get("id")), "needs_author",
+                    needs_author=why, defer_until_cycle=None)
         runner._clear_lease("not runnable")
         _append(JOURNAL, {"event": "skipped_not_runnable", "item": item.get("id"),
-                          "reason": why})
+                          "reason": why, "parked": True})
         return {"ok": True, "skipped": True, "item": item.get("id"), "reason": why}
 
     # ``runnable`` only asks whether the two lists are non-empty. A contract that is
@@ -798,8 +801,8 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     problems = runner.validate_contract(item)
     if problems:
         detail = "; ".join(problems[:3])
-        runner.mark(queue, str(item.get("id")), "pending",
-                    needs_author=detail, defer_until_cycle=int(brief["cycle"]) + 1)
+        runner.mark(queue, str(item.get("id")), "needs_author",
+                    needs_author=detail, defer_until_cycle=None)
         runner._clear_lease("invalid contract")
         _append(JOURNAL, {"event": "skipped_invalid_contract",
                           "item": item.get("id"), "problems": problems[:5]})

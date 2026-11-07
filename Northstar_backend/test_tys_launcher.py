@@ -114,7 +114,9 @@ def test_a_malformed_contract_is_refused_at_dispatch_not_by_a_crash(root):
     assert out["skipped"] is True
     assert out["reason"] == "invalid_contract"
     after = r.load_queue()
-    assert next(i for i in after["items"] if i["id"] == "runnable")["status"] == "pending"
+    # A status change, not a note on a pending item: C3 measured 40 skips in 30 s
+    # from items that stayed ACTIVE after being refused.
+    assert next(i for i in after["items"] if i["id"] == "runnable")["status"] == "needs_author"
     assert not r.LEASE.exists()
 
 
