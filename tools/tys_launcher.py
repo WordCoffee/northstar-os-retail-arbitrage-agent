@@ -22,6 +22,12 @@ Stop conditions (each recorded in the heartbeat with its reason):
 Every step appends to ``state/tys_runner/launcher.jsonl`` and rewrites
 ``state/tys_runner/heartbeat.json`` so another process (or a human) can see what
 it is doing and how long it has been doing it.
+
+Token accounting is *measured*: after a worker run the launcher asks
+``token_meter.estimate_session(session_id)`` what the session spent and puts that
+in the completion payload the runner's daily cap is enforced from. Only when the
+store cannot answer does it fall back to a labelled payload estimate, so the cap
+is no longer fed by arithmetic over the launcher's own summary file.
 """
 from __future__ import annotations
 
@@ -39,6 +45,7 @@ ROOT = Path(os.environ.get("NORTHSTAR_TY_ROOT")
             or Path(__file__).resolve().parents[1]).resolve()
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import token_meter as meter  # noqa: E402
 import tys_runner as runner  # noqa: E402
 
 STATE = ROOT / "state" / "tys_runner"
@@ -96,9 +103,47 @@ def runnable(item: Dict[str, Any]) -> tuple[bool, str]:
 
 
 def estimate_tokens(payload: Any) -> int:
-    """Rough accounting, labelled as such: 4 characters per token."""
+    """Last-resort accounting: 4 characters per token.
+
+    Kept for callers that need a number out of an arbitrary object. It is **not**
+    the cycle figure any more -- `measure_cycle_tokens` asks the session store
+    first, because this arithmetic under-reported real spend by ~80x when it was
+    applied to the launcher's own small result file instead of the session.
+    """
     text = json.dumps(payload, default=str) if not isinstance(payload, str) else payload
     return max(0, len(text) // 4)
+
+
+def measure_cycle_tokens(worker_out: Dict[str, Any]) -> Dict[str, Any]:
+    """What did this cycle actually spend? Store first, payload estimate second.
+
+    Measured 2026-11-06: one real deepseek session cost 180,803 tokens while the
+    launcher recorded 2,162, because completion["tokens"] was chars/4 over the
+    launcher's own ``worker_result.json``. The session store already holds the
+    real number; counting the launcher's summary of it measured the wrapper, not
+    the work, and left the 3M/day cap soft.
+
+    Returns ``{"tokens": int, "source": str, "session_id": str|None}`` where
+    ``source`` is the meter's own label (``session_v2`` -- real counters,
+    ``session_message`` -- stored message lengths) or ``payload_estimate`` when
+    the store could answer nothing and ``estimate_payload`` stood in. A meter
+    failure is never allowed to kill a cycle: it degrades to the estimate and
+    says so, because an unmeasured cycle must still be a completed cycle.
+    """
+    session_id = str((worker_out or {}).get("session_id") or "").strip()
+    if session_id:
+        try:
+            got = meter.estimate_session(session_id) or {}
+        except Exception:  # noqa: BLE001 - the meter is documented total; trust but verify
+            got = {}
+        tokens = got.get("tokens")
+        if tokens is not None:
+            return {"tokens": max(0, int(tokens)),
+                    "source": str(got.get("source") or "session"),
+                    "session_id": session_id}
+    return {"tokens": meter.estimate_payload(worker_out or {}),
+            "source": "payload_estimate",
+            "session_id": session_id or None}
 
 
 # ------------------------------------------------------------------------ worker
@@ -529,6 +574,10 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
         and bool(worker_out.get("ok", True))
     worker_out["acceptance"] = acceptance
     worker_out["before_green"] = before.get("ok")
+    measured = measure_cycle_tokens(worker_out)
+    _append(JOURNAL, {"event": "tokens_measured", "item": brief["item"],
+                      "tokens": measured["tokens"], "source": measured["source"],
+                      "session": measured["session_id"]})
     if not shipped:
         restored = _restore(snap)
         if restored:
@@ -546,6 +595,7 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
             "item": brief["item"], "cycle": brief["cycle"],
             "task": json.loads(task_path.read_text(encoding="utf-8")),
             "worker": worker_out, "worker_exit": code, "seconds": elapsed,
+            "tokens": measured["tokens"], "tokens_source": measured["source"],
             "at": _now(),
         }, indent=2, default=str), encoding="utf-8")
         evidence_paths = [str(ev_file.relative_to(ROOT)).replace("\\", "/")]
@@ -555,7 +605,11 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
         "shipped": shipped,
         "tag": brief.get("rollback_tag") if shipped else "",
         "evidence": evidence_paths,
-        "tokens": estimate_tokens(worker_out) + estimate_tokens(brief),
+        # The number the daily cap is enforced with. Session measurement when the
+        # store has one, payload estimate (labelled) when it does not; never 0 by
+        # accident, because 0 reads as "this cycle was free".
+        "tokens": measured["tokens"],
+        "tokens_source": measured["source"],
         "before": worker_out.get("before") or {},
         "after": worker_out.get("after") or {},
         "worker_exit": code,
@@ -571,6 +625,7 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
                           "worker": worker_out})
     return {"ok": rc == 0, "item": brief["item"], "shipped": shipped,
             "cycle": brief["cycle"], "seconds": elapsed, "worker_exit": code,
+            "tokens": measured["tokens"], "tokens_source": measured["source"],
             "complete_exit": rc}
 
 

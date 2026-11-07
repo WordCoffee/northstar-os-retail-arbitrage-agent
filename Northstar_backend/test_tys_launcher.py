@@ -235,6 +235,84 @@ def test_token_estimate_is_reported_not_invented():
     assert L.estimate_tokens({"a": "b"}) >= 1
 
 
+# ------------------------------------------------------------- token accounting
+def _session_worker(session_id="ses_test", **extra):
+    """A worker whose result names the session the model actually ran in."""
+    def run(task_path, result_path):
+        root = Path(task_path).resolve().parents[2]
+        (root / "done.flag").write_text("done", encoding="utf-8")
+        payload = {"ok": True, "steps": 3, "evidence": [],
+                   "session_id": session_id, "text": "did the thing", **extra}
+        result_path.write_text(json.dumps(payload), encoding="utf-8")
+        return 0
+    return run
+
+
+def _completion(root):
+    return json.loads((root / "state" / "tys_runner" / "completion.json")
+                      .read_text(encoding="utf-8"))
+
+
+def test_the_session_estimate_is_what_the_cap_counts(root, monkeypatch):
+    """Measured 2026-11-06: a real session was 180,803 tokens; the guess said 2,162."""
+    monkeypatch.setattr(L.meter, "estimate_session", lambda sid, *a, **k: {
+        "tokens": 180803, "source": "session_v2", "session_id": sid})
+    out = L._run_cycle(worker=_session_worker(), dry_run=False, cycle_budget=3)
+    assert out["shipped"] is True
+    done = _completion(root)
+    assert done["tokens"] == 180803
+    assert done["tokens_source"] == "session_v2"
+    evidence = list((root / "state" / "evidence").glob("cycle_*.json"))
+    row = json.loads(evidence[0].read_text(encoding="utf-8"))
+    assert row["tokens"] == 180803 and row["tokens_source"] == "session_v2"
+
+
+def test_the_payload_estimate_is_the_fallback_when_the_store_answers_none(root, monkeypatch):
+    """A missing measurement must not read as free, and must say it is an estimate."""
+    monkeypatch.setattr(L.meter, "estimate_session", lambda sid, *a, **k: {
+        "tokens": None, "source": "unavailable", "session_id": sid})
+    out = L._run_cycle(worker=_session_worker(), dry_run=False, cycle_budget=3)
+    assert out["shipped"] is True
+    done = _completion(root)
+    assert done["tokens_source"] == "payload_estimate"
+    assert done["tokens"] > 0
+    assert done["tokens"] != 180803          # not the session figure it never got
+
+
+def test_a_meter_that_blows_up_degrades_to_the_labelled_estimate(monkeypatch):
+    def boom(sid, *a, **k):
+        raise RuntimeError("store locked")
+
+    monkeypatch.setattr(L.meter, "estimate_session", boom)
+    payload = {"session_id": "ses_x", "text": "abc"}
+    got = L.measure_cycle_tokens(payload)
+    assert got["source"] == "payload_estimate"
+    assert got["tokens"] == L.meter.estimate_payload(payload) > 0
+
+
+def test_the_measurement_prefers_the_store_and_labels_what_it_used(monkeypatch):
+    monkeypatch.setattr(L.meter, "estimate_session", lambda sid, *a, **k: {
+        "tokens": 180803, "source": "session_message", "session_id": sid})
+    got = L.measure_cycle_tokens({"session_id": "ses_x", "text": "abc"})
+    assert got == {"tokens": 180803, "source": "session_message", "session_id": "ses_x"}
+
+
+def test_the_completion_payload_carries_a_positive_token_count(root, monkeypatch):
+    """The runner's cap reads completion["tokens"]; a zero there is a soft cap."""
+    monkeypatch.setattr(L.meter, "estimate_session", lambda sid, *a, **k: {
+        "tokens": None, "source": "unavailable", "session_id": sid})
+    L._run_cycle(worker=_worker({}), dry_run=False, cycle_budget=3)   # no session_id
+    done = _completion(root)
+    assert done["tokens"] > 0
+    assert done["tokens_source"] == "payload_estimate"
+    events = [json.loads(l) for l in
+              (root / "state" / "tys_runner" / "launcher.jsonl")
+              .read_text(encoding="utf-8").splitlines()]
+    measured = [e for e in events if e["event"] == "tokens_measured"]
+    assert measured and measured[-1]["tokens"] == done["tokens"]
+
+
+
 def test_runner_stops_on_the_stop_marker(root, monkeypatch):
     (root / "STOP").write_text("stop\n", encoding="utf-8")
     monkeypatch.setattr(L, "default_worker", _worker({}))
