@@ -76,7 +76,7 @@
       "id": "M0.3b-token-meter",
       "kind": "automation",
       "priority": 1200,
-      "status": "pending",
+      "status": "done",
       "title": "Token metering: estimate tokens per cycle so the daily cap is real",
       "next": "Implement tools/token_meter.py: estimate from a session transcript or text (chars/4, labelled as an estimate), body reported by the launcher and summed by tys_runner._add_tokens; cap stops at 90%.",
       "write_paths": [
@@ -93,7 +93,9 @@
           "Northstar_backend/test_token_meter.py"
         ]
       ],
-      "depends_on": []
+      "depends_on": [],
+      "verification": "A9/A9b landed earlier: tools/tys_launcher.estimate_tokens + measure_cycle_tokens, wired so the ledger records measured session tokens (real: 80,834 tokens vs the 5-token guess). Row was stale in AUTOMATION_GATE.md.",
+      "completed_at": "2026-11-07T07:40:00Z"
     },
     {
       "id": "M0.5-spike",
@@ -333,7 +335,10 @@
       "evidence": [
         "reports/ty/perf_baseline_20261106.md"
       ],
-      "tier": "T1"
+      "tier": "T1",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W10-lanes-status",
@@ -359,7 +364,10 @@
       "evidence": [
         "reports/ty/perf_baseline_20261106.md"
       ],
-      "tier": "T1"
+      "tier": "T1",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W10-bundle-split",
@@ -384,7 +392,10 @@
       "evidence": [
         "reports/ty/perf_baseline_20261106.md"
       ],
-      "tier": "T1"
+      "tier": "T1",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "T1-env-default",
@@ -410,7 +421,10 @@
       "evidence": [
         "reports/ty/perf_baseline_20261106.md"
       ],
-      "tier": "T1"
+      "tier": "T1",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W0-c1",
@@ -421,7 +435,10 @@
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties",
       "updated_at": "2026-11-06T14:33:00+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 37
+      "defer_until_cycle": 37,
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "T0-egress-hook",
@@ -495,7 +512,8 @@
       "attempts": 3,
       "defer_until_cycle": 27,
       "depends_on": [
-        "M2-worker-lane"
+        "M2-worker-lane",
+        "M2-work-generator"
       ]
     },
     {
@@ -544,7 +562,10 @@
       "evidence": "renders/aplus_design/aplus_preview.png (hero, top-right)",
       "updated_at": "2026-11-06T13:48:25+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 28
+      "defer_until_cycle": 28,
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W6-aplus-logo",
@@ -553,7 +574,10 @@
       "priority": 945,
       "status": "pending",
       "title": "Logo module is still the brand name in serif, large and floating - needs a real lockup (mark + wordmark + rule) or the brand logo in the design record",
-      "evidence": "renders/aplus_design/aplus_preview.png (footer module)"
+      "evidence": "renders/aplus_design/aplus_preview.png (footer module)",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W6-aplus-consistency",
@@ -562,7 +586,10 @@
       "priority": 940,
       "status": "pending",
       "title": "A+ page shipped Shiitake artwork under a Lion's Mane headline - add a copy-vs-plate OCR consistency guard",
-      "evidence": "aplus_preview.png vs the plate OCR"
+      "evidence": "aplus_preview.png vs the plate OCR",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E1",
@@ -634,7 +661,10 @@
       "priority": 900,
       "status": "pending",
       "title": "A+ hero cover-crop slices the product at the frame edge - use subject-aware cropping",
-      "evidence": "aplus_preview.png module 01"
+      "evidence": "aplus_preview.png module 01",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E2",
@@ -648,7 +678,10 @@
       "landed": "product_composite.py + 7 tests; tools/experiment_composite.py; live composite of the real MOGRA pouch on a FLUX 3 scene (renders/autonomy_probe/composite/lifestyle_linen_composite.png)",
       "next": "product_fidelity scores 0 because subject_bbox picks the wall/table boundary; accept a known product box or use the alpha region. Then re-run the 12-case dev set.",
       "fixed_this_cycle": "product no longer sliced at the frame edge (2% margin); identity check masks by cutout alpha instead of comparing scene pixels",
-      "evidence": "state/evidence/composite_experiment_20261106T035558Z.json"
+      "evidence": "state/evidence/composite_experiment_20261106T035558Z.json",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E5",
@@ -663,6 +696,9 @@
         "Northstar_backend/agent_kernel/tool_protocol.py",
         "Northstar_backend/agent_kernel/kernel.py",
         "Northstar_backend/test_agent_kernel.py"
+      ],
+      "depends_on": [
+        "M2-work-generator"
       ]
     },
     {
@@ -672,7 +708,10 @@
       "title": "8 of 10 service pages have \"Bojo\" as their only heading - no page-level title inside the shell",
       "priority": 860,
       "status": "pending",
-      "evidence": "state/evidence/ux_coverage_chromium-desktop.json (heading column)"
+      "evidence": "state/evidence/ux_coverage_chromium-desktop.json (heading column)",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "UX-tabbar",
@@ -681,7 +720,10 @@
       "title": "Workbench tab bar (wb-tabbar) is not built on /ui/workbench; tab-state cannot be measured",
       "priority": 840,
       "status": "pending",
-      "note": "Flip TABS_EXPECTED to true in tests/e2e/ux_scorecard.spec.ts when it ships."
+      "note": "Flip TABS_EXPECTED to true in tests/e2e/ux_scorecard.spec.ts when it ships.",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "UX-a11y-1",
@@ -694,7 +736,10 @@
       "fixed_so_far": "root-caused the simple.css layering (same selectors defined 3-4 times at lines 279/712/920 and 287/509/719) with a new canonical.css layer; greeting heading was scrolled out (stream 239 vs 267) and the auto-pin now skips an empty stream; starter prompts 3-up not 2+1; status chips no longer clipped (overflow visible on the header chain) and chip contrast fixed (3.38:1 -> AA); mobile chat stream 24px -> 299px; dev notice asserted on every route.",
       "next": "1) .mb-shell .chat-empty h3 is NOT visible in the Northstar shell (screenshot reports/ty/shots/ux_chromium-desktop_first_run_ui_home.png) - the greeting heading is missing or scrolled out while the paragraph renders; find why before touching spacing. 2) The shell suggestion grid still renders 2+1 because simple.css overrides .chat-suggestions with a grid (simple.css:287, :719) - stack it or use an even 3-up. 3) The status chip row still clips the last theme name (\"Concept Spacious'\"). 4) documents page contrast + .stage-canvas-pane focus.",
       "measured": "12/12 UX gates over desktop Chromium + iPhone 12 WebKit. Coverage 10/10 routes, dev notice 100% of routes, 0 critical a11y over 20 page-measurements, 0 text below AA (worst 8.43:1).",
-      "shell": "CONFIRMED: the Northstar rebuild shell (.mb-shell, data-shell-mode=\"simple\", data-simple-design=\"hearth\"), not the legacy room shell. Evidence: state/evidence/inspect_empty_state.json"
+      "shell": "CONFIRMED: the Northstar rebuild shell (.mb-shell, data-shell-mode=\"simple\", data-simple-design=\"hearth\"), not the legacy room shell. Evidence: state/evidence/inspect_empty_state.json",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W2-c1",
@@ -710,7 +755,10 @@
         "Northstar_backend/test_listing_scorecard.py",
         "eval/listings/"
       ],
-      "acceptance": "listing scorecard exists, 40 held-out listings scored, claim-safety measured"
+      "acceptance": "listing scorecard exists, 40 held-out listings scored, claim-safety measured",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W2-c2",
@@ -719,7 +767,10 @@
       "title": "Listing optimization: close the largest scorecard gap",
       "status": "pending",
       "priority": 720,
-      "blocked_by": "W2-c1"
+      "blocked_by": "W2-c1",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W1-text-guard",
@@ -738,7 +789,10 @@
       "priority": 700,
       "status": "pending",
       "title": "Comparison module invents the competitor column; unsourced claims must not render",
-      "evidence": "renders/aplus_design/aplus_preview.png (comparison module)"
+      "evidence": "renders/aplus_design/aplus_preview.png (comparison module)",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W3-c1",
@@ -747,7 +801,10 @@
       "title": "PPC: scorecard over three historical search-term reports",
       "status": "pending",
       "priority": 680,
-      "dwell": "bounded 6"
+      "dwell": "bounded 6",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W1-c2",
@@ -760,7 +817,10 @@
       "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%",
       "finding": "Re-scored the same 12 bench artifacts with subject-crop comparison (picture_bench_rescore_20261105T213059Z.json): reference-conditioned renders score ssim 0.010-0.323 and phash distance 26-28 against the reference, i.e. a different pouch. The instrument is now correct; the generation path is the defect.",
       "next": "Replace FLUX 3 mi2i reference conditioning for product identity with a deterministic composite: BiRefNet cutout of the real product + generated scene + matched shadow, so identity is preserved by construction. Keep mi2i for style-only references.",
-      "text_guard": "render_text_guard.ensure_text_free wired into the bench and into listing_render.generate for main images. Measured on the real bench artifact renders/autonomy_probe/bench/from-01-main_white_a1.png: 10 OCR boxes -> 0 in one pass, text_accuracy 0.0 -> 100.0 (state/evidence/text_guard_measurement.json). The cleaned plate looks right: the label panel is blank, ready for the vector type layer."
+      "text_guard": "render_text_guard.ensure_text_free wired into the bench and into listing_render.generate for main images. Measured on the real bench artifact renders/autonomy_probe/bench/from-01-main_white_a1.png: 10 OCR boxes -> 0 in one pass, text_accuracy 0.0 -> 100.0 (state/evidence/text_guard_measurement.json). The cleaned plate looks right: the label panel is blank, ready for the vector type layer.",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W1-c3",
@@ -769,7 +829,10 @@
       "title": "Product pictures: reference id in the API contract; text-safe guard on the reference path",
       "status": "pending",
       "priority": 650,
-      "blocked_by": "W1-c2"
+      "blocked_by": "W1-c2",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E3",
@@ -779,7 +842,10 @@
       "priority": 640,
       "status": "pending",
       "acceptance": "5 sizes generate valid SVG+PDF with bleed/safe zones and pass prepress at TAC<=300",
-      "licence": "MIT (pattern port, not vendored)"
+      "licence": "MIT (pattern port, not vendored)",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E4",
@@ -789,7 +855,10 @@
       "priority": 620,
       "status": "pending",
       "acceptance": "100% of emitted claims carry a URL + quote; 0 unsourced claims",
-      "licence": "MIT (pattern port)"
+      "licence": "MIT (pattern port)",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W4-c1",
@@ -798,7 +867,10 @@
       "title": "Research: freshness + completeness scorecard on fixtures",
       "status": "pending",
       "priority": 600,
-      "dwell": "bounded 6"
+      "dwell": "bounded 6",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "R-E6",
@@ -808,7 +880,10 @@
       "priority": 540,
       "status": "pending",
       "acceptance": "every number carries source + n; unmeasured is reported unmeasured",
-      "licence": "in-repo + public aggregate stats"
+      "licence": "in-repo + public aggregate stats",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W5-c1",
@@ -817,7 +892,10 @@
       "title": "Golden Goose: precision/recall on 120 labelled fixtures",
       "status": "pending",
       "priority": 480,
-      "dwell": "bounded 5"
+      "dwell": "bounded 5",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W7-c1",
@@ -826,7 +904,10 @@
       "title": "Packaging: readiness verdict correctness on 10 hand-made packs",
       "status": "pending",
       "priority": 440,
-      "dwell": "bounded 5"
+      "dwell": "bounded 5",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W13-parked",
@@ -843,7 +924,10 @@
       "title": "Design studio: print round-trip on a real die drawing",
       "status": "pending",
       "priority": 405,
-      "dwell": "until-production-ready"
+      "dwell": "until-production-ready",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W10-c1",
@@ -852,7 +936,10 @@
       "title": "Performance: enforce p95 budgets for render/listing/scan",
       "status": "pending",
       "priority": 360,
-      "dwell": "bounded 4"
+      "dwell": "bounded 4",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W11-c1",
@@ -861,7 +948,10 @@
       "title": "Onboarding: steps-to-first-artifact on a scripted journey",
       "status": "pending",
       "priority": 350,
-      "dwell": "bounded 4"
+      "dwell": "bounded 4",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W12-c1",
@@ -870,7 +960,10 @@
       "title": "Observability: injected-fault detection rate",
       "status": "pending",
       "priority": 300,
-      "dwell": "bounded 3"
+      "dwell": "bounded 3",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W9-c1",
@@ -879,7 +972,10 @@
       "title": "Security: automate the production-bundle dev-bypass assertion",
       "status": "pending",
       "priority": 300,
-      "dwell": "bounded 3"
+      "dwell": "bounded 3",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W14-c1",
@@ -888,7 +984,10 @@
       "title": "Docs: fresh-clone-to-green runbook check",
       "status": "pending",
       "priority": 160,
-      "dwell": "bounded 2"
+      "dwell": "bounded 2",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "W8-c1",
@@ -897,7 +996,10 @@
       "title": "UX: three scripted journeys as a held-out regression set",
       "status": "pending",
       "priority": 140,
-      "dwell": "bounded 2"
+      "dwell": "bounded 2",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "A-a10",
@@ -971,7 +1073,10 @@
         "tools/tys_evaluator.py freeze()"
       ],
       "tier": "T1",
-      "blocking": "true"
+      "blocking": "true",
+      "depends_on": [
+        "M2-work-generator"
+      ]
     },
     {
       "id": "A12b-wire-evaluator",
@@ -1054,7 +1159,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-07T07:33:00Z",
+  "updated_at": "2026-11-07T07:42:00Z",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {
