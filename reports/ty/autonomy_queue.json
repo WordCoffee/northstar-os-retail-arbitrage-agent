@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T12:25:00Z",
+  "updated": "2026-11-06T12:35:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -173,14 +173,16 @@
       "id": "M1f-scope-deriver",
       "kind": "automation",
       "priority": 1150,
-      "status": "pending",
+      "status": "done",
       "title": "Derive write_paths from a real traceback; no artifact -> no scope",
       "write_paths": [
         "tools/tys_author.py"
       ],
       "depends_on": [
         "M1c-evaluator"
-      ]
+      ],
+      "commit": "04615b60",
+      "verification": "21 passed; real end-to-end derives pkg/calc.py from a source frame, drops test frames, refuses with scope_unproven and writes nothing when only tests appear"
     },
     {
       "id": "M1g-contract-writer",
