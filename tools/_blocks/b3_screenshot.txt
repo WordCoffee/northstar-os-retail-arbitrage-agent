@@ -1,0 +1,34 @@
+# ============================================================
+# SCREENSHOT HELPER — delegated to Chrome Connect
+# ============================================================
+
+async def take_screenshot(url: str = None, use_chrome: bool = False) -> str:
+    """Take a screenshot of a webpage, delegated to Chrome Connect.
+
+    2026-10-03: this used to launch its own Chromium and write a PNG from here.
+    It now delegates to Chrome Connect, which owns the browser and applies the
+    domain allowlist and the Amazon blocklist before anything is opened.
+
+    `use_chrome` is kept for call compatibility and no longer selects a profile.
+    """
+    if not url:
+        print("A URL is required. Chrome Connect will not open a blank window for you.")
+        return None
+
+    from chromeconnect_guard import cc_call
+
+    print(f"Delegating screenshot to Chrome Connect: {url}")
+    response = cc_call(
+        f"Open {url}, wait for it to render, then take a full-page screenshot. "
+        "Read-only. Do not sign in and do not submit anything.",
+        url=url,
+    )
+
+    shot = (response.get("data") or {}).get("screenshot_path")
+    if shot:
+        print(f"Screenshot saved: {shot}")
+        return str(shot)
+
+    print(f"No screenshot: {response.get('status')} / "
+          f"{response.get('stop_reason') or response.get('reason')}")
+    return None

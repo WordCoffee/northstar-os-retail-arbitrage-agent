@@ -1,0 +1,12 @@
+{
+  "agent": "image_aplus",
+  "required": [
+    "product",
+    "shot_list"
+  ],
+  "optional": [
+    "brand_key",
+    "keywords",
+    "plate_asset_id"
+  ]
+}

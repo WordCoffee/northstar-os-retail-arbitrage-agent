@@ -1,0 +1,27 @@
+{
+  "agent": "package_designer",
+  "outputs": [
+    "front panel",
+    "back panel",
+    "side panel",
+    "panel sheet",
+    "dieline SVG",
+    "dieline PDF",
+    "mockup"
+  ],
+  "validators": [
+    "panels_present",
+    "copy_present",
+    "barcode_reserved",
+    "dims_consistent"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

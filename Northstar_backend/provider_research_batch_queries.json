@@ -1,0 +1,138 @@
+[
+  {
+    "candidate_id": "csp_3f3fb592e3b1",
+    "brand": "Unitex",
+    "title": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+    "pack": "52 Count(s)",
+    "price": 22.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_01a3aab95350",
+    "brand": "VOLT",
+    "title": "VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+    "pack": "2 Pack(s)",
+    "price": 99.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_5a7b7944ebfb",
+    "brand": "Homedics",
+    "title": "Homedics Infrared & Red Light Pain Therapy Wrap",
+    "pack": "1 Pack(s)",
+    "price": 49.99,
+    "split_review": false
+  },
+  {
+    "candidate_id": "csp_98391ff681e9",
+    "brand": "Contractor's Select",
+    "title": "Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+    "pack": "32 Bag(s)",
+    "price": 17.49,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_22665be5a1b4",
+    "brand": "Tupperware",
+    "title": "Tupperware 6-piece Thatsa Bowl Set",
+    "pack": "6 Piece(s)",
+    "price": 34.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_4aa8ca1f0ea6",
+    "brand": "Tupperware",
+    "title": "Tupperware 40-piece Meal Prep Set",
+    "pack": "40 Piece(s)",
+    "price": 49.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_1a9c1ff63358",
+    "brand": "RICO",
+    "title": "RICO Baby Wipes, 720-count",
+    "pack": "720 Count(s)",
+    "price": 23.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_de30f44fdaa4",
+    "brand": "Homedics",
+    "title": "Homedics Infrared & Red Light Pain Therapy Wrap",
+    "pack": "1 Pack(s)",
+    "price": 49.99,
+    "split_review": false
+  },
+  {
+    "candidate_id": "csp_b82a88e4569c",
+    "brand": "Kleenex",
+    "title": "Kleenex Ultra Soft Facial Tissue, 3-Ply, 85-count, 12-pack",
+    "pack": "12 Pack(s)",
+    "price": 24.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_0f58d85f4c7e",
+    "brand": "furMe",
+    "title": "FurMe Professional Plus Pet Grooming Vacuum Kit with Carrying Case",
+    "pack": "1 Box(es)",
+    "price": 164.99,
+    "split_review": false
+  },
+  {
+    "candidate_id": "csp_cd9dc9e074e4",
+    "brand": "RTL",
+    "title": "RTL Premium Athletic Tape",
+    "pack": "32 Roll(s)",
+    "price": 69.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_4a95caa629cd",
+    "brand": "Ziploc",
+    "title": "Ziploc Slider Storage Bag, Variety Pack, 166-count",
+    "pack": "166 Bag(s)",
+    "price": 17.49,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_4b30cb62d0f1",
+    "brand": "Ziploc",
+    "title": "Ziploc Slider Storage Bag, Variety Pack, 144-count",
+    "pack": "144 Bag(s)",
+    "price": 14.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_a9e8d4c63104",
+    "brand": "Tide",
+    "title": "Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+    "pack": "138 oz.",
+    "price": 23.99,
+    "split_review": false
+  },
+  {
+    "candidate_id": "csp_53e1e9320f15",
+    "brand": "Marathon",
+    "title": "Marathon Jumbo Roll Bath Tissue, 2-Ply, 900 ft Rolls, 6 Rolls",
+    "pack": "6 Roll(s)",
+    "price": 27.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_f0b44428e700",
+    "brand": "Kangaroo",
+    "title": "Kangaroo Hanger 30-count Combo Pack",
+    "pack": "30 Pack(s)",
+    "price": 34.99,
+    "split_review": true
+  },
+  {
+    "candidate_id": "csp_c2dd1c935364",
+    "brand": "Real Feel Golf Mats",
+    "title": "Country Club Elite Golf Mats",
+    "pack": "5 ft. x 3 ft.",
+    "price": 279.99,
+    "split_review": false
+  }
+]

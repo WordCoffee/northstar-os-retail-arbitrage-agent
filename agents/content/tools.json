@@ -1,0 +1,8 @@
+{
+  "agent": "content",
+  "allowed_tools": [
+    "seo_check",
+    "knowledge_lookup"
+  ],
+  "needs_gpu": false
+}

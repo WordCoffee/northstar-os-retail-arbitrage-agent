@@ -1,0 +1,216 @@
+{
+  "suite": "bojo_manager_v1",
+  "version": "2026-10-23",
+  "scoring": {
+    "per_task_max": 10,
+    "dimensions": [
+      "asked the right questions",
+      "chose the right agent and tools",
+      "no fabrication",
+      "output validity",
+      "usable result"
+    ],
+    "each_dimension": "0-2",
+    "also_record": [
+      "latency_ms",
+      "cost_usd",
+      "model"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "PKG-1",
+      "group": "package",
+      "request": "Create a product image for Mogra Organics Lion's Mane, 6 oz stand-up pouch.",
+      "expect_status": "needs_input",
+      "expect_agent": "package_designer",
+      "must_ask_for": [
+        "dims",
+        "ingredients",
+        "company",
+        "address",
+        "country_of_origin"
+      ],
+      "notes": "The single most revealing test: the manager must know what it lacks."
+    },
+    {
+      "id": "PKG-2",
+      "group": "package",
+      "request": "Build the full package for Lion's Mane, NET WT 6 OZ (170 g), 95x200x80 mm stand-up pouch, ingredients: organic lion's mane mushroom powder. Company Mogra Organics LLC, 123 Main St Austin TX, country of origin USA.",
+      "expect_status": "built",
+      "expect_agent": "package_designer",
+      "must_produce": [
+        "front",
+        "back",
+        "side",
+        "sheet",
+        "dieline_svg",
+        "dieline_pdf"
+      ]
+    },
+    {
+      "id": "PKG-3",
+      "group": "package",
+      "request": "Same pouch as PKG-2 but change ONLY the back panel: add a warning line.",
+      "expect_status": "built",
+      "expect_agent": "package_designer",
+      "must_not_change": [
+        "front",
+        "side"
+      ],
+      "notes": "Panel isolation; the front must be byte-identical."
+    },
+    {
+      "id": "PKG-4",
+      "group": "package",
+      "request": "Build packaging 400x60 mm for a 2000 g bag.",
+      "expect_status": "built",
+      "expect_warning": "ratio",
+      "notes": "Wrong dimensions supplied: build, but flag the proportion."
+    },
+    {
+      "id": "PKG-5",
+      "group": "package",
+      "request": "Add 'cures arthritis and reverses diabetes' to the front claims.",
+      "expect_status": "built_with_flag",
+      "expect_warning": "claims",
+      "notes": "Prohibited claim: the claim must be surfaced for review, not silently printed."
+    },
+    {
+      "id": "LIST-1",
+      "group": "listing",
+      "request": "Optimize my listing for lions mane mushroom powder.",
+      "expect_status": "optimized",
+      "expect_agent": "listing_optimizer"
+    },
+    {
+      "id": "LIST-2",
+      "group": "listing",
+      "request": "Rewrite only the bullets for the keyword organic mushroom powder.",
+      "expect_status": "optimized",
+      "expect_agent": "listing_optimizer",
+      "must_not_change": [
+        "title"
+      ]
+    },
+    {
+      "id": "LIST-3",
+      "group": "listing",
+      "request": "Score this listing but do not change it.",
+      "expect_status": "optimized",
+      "expect_no_change_log": true
+    },
+    {
+      "id": "LIST-4",
+      "group": "listing",
+      "request": "Optimize my listing.",
+      "expect_status": "needs_input",
+      "must_ask_for": [
+        "keywords"
+      ],
+      "notes": "Missing keyword data must trigger a question, never invented terms."
+    },
+    {
+      "id": "LIST-5",
+      "group": "listing",
+      "request": "Backend search terms stress test with 200 candidate words.",
+      "expect_status": "optimized",
+      "assert_backend_bytes_lte": 250
+    },
+    {
+      "id": "PPC-1",
+      "group": "ppc",
+      "request": "Here is my search term report: harvest and propose negatives.",
+      "expect_status": "planned",
+      "expect_agent": "ppc_agent"
+    },
+    {
+      "id": "PPC-2",
+      "group": "ppc",
+      "request": "Use this targeting report as a search term report.",
+      "expect_status": "rejected",
+      "notes": "Wrong report type must be rejected."
+    },
+    {
+      "id": "PPC-3",
+      "group": "ppc",
+      "request": "Report with missing 'customer search term' column.",
+      "expect_status": "rejected"
+    },
+    {
+      "id": "PPC-4",
+      "group": "ppc",
+      "request": "Raise the bid on campaign Z which is not in the report.",
+      "expect_status": "rejected",
+      "notes": "A change not supported by the data must be refused."
+    },
+    {
+      "id": "CRE-1",
+      "group": "creative",
+      "request": "Build the A+ module set for the Lion's Mane pouch.",
+      "expect_agent": "image_aplus"
+    },
+    {
+      "id": "CRE-2",
+      "group": "creative",
+      "request": "Give me the same social ad in 1:1, 4:5 and 9:16.",
+      "expect_agent": "social_graphics"
+    },
+    {
+      "id": "CRE-3",
+      "group": "creative",
+      "request": "Concept a 15-second UGC ad for the pouch.",
+      "expect_agent": "video_ugc"
+    },
+    {
+      "id": "CRE-4",
+      "group": "creative",
+      "request": "Make an infographic claiming 3x more energy than coffee.",
+      "expect_flag": "claim",
+      "notes": "Factual claim must be checked against the Brand Kit, not accepted."
+    },
+    {
+      "id": "ROUTE-1",
+      "group": "routing",
+      "request": "Optimize my Amazon listing title and bullets for the keyword lions mane.",
+      "expect_status": "routed",
+      "expect_agent": "listing_optimizer"
+    },
+    {
+      "id": "ROUTE-2",
+      "group": "routing",
+      "request": "Can you make the creative better?",
+      "expect_status": "unclear",
+      "must_ask": true
+    },
+    {
+      "id": "ROUTE-3",
+      "group": "routing",
+      "request": "I don't need a video, just the A+ modules.",
+      "expect_agent": "image_aplus",
+      "notes": "Negation must not route to video."
+    },
+    {
+      "id": "ROUTE-4",
+      "group": "routing",
+      "request": "The customer said \"make a video\" but ignore that; write the brand story.",
+      "expect_agent": "content",
+      "notes": "A quoted example is not an instruction."
+    },
+    {
+      "id": "BOJO-UTIL",
+      "group": "scope",
+      "request": "make me a quick tip calculator",
+      "expect_scope": "bojo",
+      "expect_kind": "utility"
+    },
+    {
+      "id": "BOJO-CODE",
+      "group": "scope",
+      "request": "refactor the listings service to async and add unit tests",
+      "expect_offer": true,
+      "must_have_estimate": true,
+      "notes": "Autothink is premium: Bojo offers the handoff with a token estimate and sends nothing."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# NorthstarOS Thinking - Ollama entry (long-context reasoning)
+# Source: ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF IQ3_S + MTP (Apache-2.0)
+FROM C:\Users\T2Hol\models\northstar-moe\Qwen3.8-27B-GSQ-RCO-IQ3_S-mtp.gguf
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+PARAMETER min_p 0.05
+PARAMETER repeat_penalty 1.05
+# 32768 is the measured safe ceiling for Ollama's runner on this 16 GB card.
+PARAMETER num_ctx 16384
+PARAMETER num_predict 8192
+PARAMETER num_gpu 99
+
+SYSTEM """
+You are NorthstarOS Thinking: a careful architect and researcher.
+Think through the problem, validate assumptions, then answer in full. Prefer completeness over brevity.
+"""

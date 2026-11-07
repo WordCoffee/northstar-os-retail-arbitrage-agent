@@ -1,0 +1,10 @@
+{
+  "agent": "listing_optimizer",
+  "allowed_tools": [
+    "optimize_listing",
+    "listing_audit",
+    "seo_check",
+    "knowledge_lookup"
+  ],
+  "needs_gpu": false
+}

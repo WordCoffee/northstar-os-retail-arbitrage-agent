@@ -1,0 +1,48 @@
+{
+  "provider": "brightdata",
+  "mode": "schema_test_manifest",
+  "collector": {
+    "source_id": "gd_mkcbmac44j178pook",
+    "product": "Costco products \u2014 Collect by URL",
+    "input_type": "url"
+  },
+  "created_at": "2026-09-27T21:39:46.661850+00:00",
+  "max_items": 3,
+  "sample_size": 3,
+  "url_resolution_required": [],
+  "candidates": [
+    {
+      "source_product_id": "csp_3f3fb592e3b1",
+      "costco_item_number": "986654",
+      "url": "https://www.costco.com/.product.986654.html",
+      "url_status": "verified_source_url",
+      "brand": "Unitex",
+      "title": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "costco_price": 22.99,
+      "pack": "52 Count(s)"
+    },
+    {
+      "source_product_id": "csp_01a3aab95350",
+      "costco_item_number": "1884230",
+      "url": "https://www.costco.com/.product.1884230.html",
+      "url_status": "verified_source_url",
+      "brand": "VOLT",
+      "title": "VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+      "costco_price": 99.99,
+      "pack": "2 Pack(s)"
+    },
+    {
+      "source_product_id": "csp_5a7b7944ebfb",
+      "costco_item_number": "1900871",
+      "url": "https://www.costco.com/.product.1900871.html",
+      "url_status": "verified_source_url",
+      "brand": "Homedics",
+      "title": "Homedics Infrared & Red Light Pain Therapy Wrap",
+      "costco_price": 49.99,
+      "pack": "1 Pack(s)"
+    }
+  ],
+  "network_calls_made": 0,
+  "no_live_calls": true,
+  "note": "Display only. No Bright Data request is made until the exact URLs are approved."
+}

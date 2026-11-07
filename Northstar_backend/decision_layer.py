@@ -25,8 +25,15 @@ Backends
 * ``rules`` — deterministic, offline, always available. Default.
 * ``laya``  — the 421M local System-1 model (NandhaKishorM/laya). Not installed on
   this bench; ``auto`` reports ``laya_not_installed`` and uses rules. No network.
+* ``jev``   — TypeSafe Jev cloud decision model (opt-in, metered, network). Closed-label
+  choice with calibrated confidence + probabilities. Requires JEV_API_URL + JEV_API_KEY
+  (or TYPESAFE_API_KEY); ``auto`` does NOT use it unless JEV_AUTO=1. Never a silent
+  substitute for rules. Covers every kind, including ``duplicate`` (which has no rule
+  backend). The jev-ultrafast *browser* agent is deliberately NOT wired here — Chrome
+  Connect is Northstar's sole browser controller.
 
-No network, no writes, stdlib only.
+No network by default; ``jev`` is the one backend that touches the network, and only
+when explicitly requested. No writes.
 """
 
 from __future__ import annotations
@@ -256,6 +263,173 @@ def _laya_available() -> tuple[bool, str]:
     return True, "laya_ready"
 
 
+
+# --- TypeSafe Jev cloud decision backend ------------------------------------
+_JEV_API_URL_DEFAULT = ""
+
+
+def _jev_credentials():
+    url = (os.environ.get("JEV_API_URL") or _JEV_API_URL_DEFAULT).strip()
+    key = ""
+    for name in ("JEV_API_KEY", "TYPESAFE_API_KEY"):
+        val = (os.environ.get(name) or "").strip()
+        if val:
+            key = val
+            break
+    return url, key
+
+
+def _jev_available():
+    url, key = _jev_credentials()
+    if not url:
+        return False, "jev_not_configured"
+    if not key:
+        return False, "jev_api_key_missing"
+    return True, "jev_ready"
+
+
+def _jev_parse_choice(parsed, labels):
+    if not isinstance(parsed, dict):
+        return None
+    candidates = [parsed]
+    for wrapper in ("result", "data", "output", "response", "decision"):
+        sub = parsed.get(wrapper)
+        if isinstance(sub, dict):
+            candidates.append(sub)
+    for cand in candidates:
+        for keyname in ("value", "choice", "answer", "label", "decision", "result"):
+            val = cand.get(keyname)
+            if val in labels:
+                return val
+    return None
+
+
+def _jev_parse_confidence(parsed):
+    if not isinstance(parsed, dict):
+        return None
+    candidates = [parsed]
+    for wrapper in ("result", "data", "output", "response", "decision"):
+        sub = parsed.get(wrapper)
+        if isinstance(sub, dict):
+            candidates.append(sub)
+    for cand in candidates:
+        for keyname in ("confidence", "score", "probability", "answer_confidence"):
+            val = cand.get(keyname)
+            if isinstance(val, bool):
+                continue
+            if isinstance(val, (int, float)):
+                return float(val)
+    return None
+
+
+def _jev_parse_probabilities(parsed, labels):
+    if not isinstance(parsed, dict):
+        return None
+    candidates = [parsed]
+    for wrapper in ("result", "data", "output", "response", "decision"):
+        sub = parsed.get(wrapper)
+        if isinstance(sub, dict):
+            candidates.append(sub)
+    for cand in candidates:
+        for keyname in ("probabilities", "scores", "distribution", "probs"):
+            val = cand.get(keyname)
+            if isinstance(val, dict):
+                out = {}
+                for label in labels:
+                    v = val.get(label)
+                    if isinstance(v, bool):
+                        continue
+                    if isinstance(v, (int, float)):
+                        out[label] = round(float(v), 4)
+                if out:
+                    return out
+    return None
+
+
+def _jev_parse_usage(parsed):
+    """Best-effort token usage extraction. Returns None if not provided."""
+    if not isinstance(parsed, dict):
+        return None
+    candidates = [parsed]
+    for wrapper in ("result", "data", "output", "response", "usage", "meta"):
+        sub = parsed.get(wrapper)
+        if isinstance(sub, dict):
+            candidates.append(sub)
+    for cand in candidates:
+        u = cand.get("usage")
+        if isinstance(u, dict):
+            out = {}
+            for k in ("prompt_tokens", "input_tokens", "completion_tokens",
+                      "output_tokens", "total_tokens"):
+                v = u.get(k)
+                if isinstance(v, (int, float)) and not isinstance(v, bool):
+                    out[k] = int(v)
+            if out:
+                return out
+    # top-level fallback
+    out = {}
+    for k in ("prompt_tokens", "input_tokens", "completion_tokens",
+              "output_tokens", "total_tokens"):
+        v = parsed.get(k)
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            out[k] = int(v)
+    return out or None
+
+
+def _jev_decide(kind, text):
+    url, key = _jev_credentials()
+    ready, _ = _jev_available()
+    if not ready or kind not in KINDS:
+        return None
+    labels = KINDS[kind]
+    spec = DECISIONS.get(kind, {})
+    payload = {
+        "kind": kind,
+        "text": text,
+        "labels": labels,
+        "instructions": spec.get("instructions"),
+        "criteria": spec.get("criteria"),
+    }
+    model = (os.environ.get("JEV_MODEL") or "").strip()
+    if model:
+        payload["model"] = model
+    try:
+        import json as _json
+        import urllib.request
+        data = _json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(url, data=data, method="POST")
+        req.add_header("Content-Type", "application/json")
+        req.add_header("Authorization", "Bearer " + key)
+        req.add_header("Accept", "application/json")
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", errors="replace")
+        parsed = _json.loads(raw)
+    except Exception:
+        return None
+    choice = _jev_parse_choice(parsed, labels)
+    if choice not in labels:
+        return None
+    confidence = _jev_parse_confidence(parsed)
+    if confidence is None:
+        confidence = 0.5
+    confidence = max(0.0, min(1.0, confidence))
+    prob_map = _jev_parse_probabilities(parsed, labels)
+    if not prob_map:
+        prob_map = _distribution(labels, choice, confidence)
+    usage = _jev_parse_usage(parsed)
+    out = {
+        "value": choice,
+        "confidence": round(confidence, 4),
+        "abstained": False,
+        "flags": [],
+        "reason": "typesafe jev backend",
+        "probabilities": prob_map,
+    }
+    if usage:
+        out["usage"] = usage
+    return out
+
+
 def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
            backend: str = "auto", threshold: float = DEFAULT_THRESHOLD) -> Dict[str, Any]:
     """One typed decision. Never raises, never invents a label."""
@@ -277,6 +451,18 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
             chosen = "rules"
             if backend == "laya":
                 note = why
+    elif backend in ("jev", "typesafe"):
+        ready, why = _jev_available()
+        if ready:
+            chosen = "jev"
+        else:
+            chosen = "rules"
+            note = why
+    elif backend == "auto" and os.environ.get("JEV_AUTO", "").strip() == "1":
+        # Opt-in auto-use of the metered cloud backend; never the default.
+        ready, why = _jev_available()
+        if ready:
+            chosen = "jev"
 
     if kind == "copy_audit":
         out = _rules_copy_audit(text)
@@ -299,6 +485,14 @@ def decide(kind: str, text: str, facts: Optional[Dict[str, Any]] = None,
         else:
             chosen = "rules"
             note = "laya_unavailable"
+    elif chosen == "jev":
+        jev_out = _jev_decide(kind, text)
+        if jev_out is not None:
+            out = jev_out
+            chosen = "jev"
+        else:
+            chosen = "rules"
+            note = "jev_unavailable"
 
     if out["value"] not in labels:  # defensive: a backend may not invent a label
         out = {"value": labels[-1], "confidence": 0.0, "abstained": True,

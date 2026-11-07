@@ -1,0 +1,41 @@
+{
+  "selected_count": 3,
+  "eligible_candidates": 3,
+  "excluded": {
+    "excluded_prev": 4,
+    "no_brand": 0,
+    "no_price": 0,
+    "no_pack": 164,
+    "split_review": 10,
+    "no_url": 0
+  },
+  "selected": [
+    {
+      "id": "csp_0f58d85f4c7e",
+      "item": "1796047",
+      "brand": "furMe",
+      "title": "FurMe Professional Plus Pet Grooming Vacuum Kit with Carrying Case",
+      "price": 164.99,
+      "pack": "1 Box(es)",
+      "url": "https://www.costco.com/.product.1796047.html"
+    },
+    {
+      "id": "csp_c2dd1c935364",
+      "item": "745930",
+      "brand": "Real Feel Golf Mats",
+      "title": "Country Club Elite Golf Mats",
+      "price": 279.99,
+      "pack": "5 ft. x 3 ft.",
+      "url": "https://www.costco.com/.product.745930.html"
+    },
+    {
+      "id": "csp_a9e8d4c63104",
+      "item": "3160440",
+      "brand": "Tide",
+      "title": "Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+      "price": 23.99,
+      "pack": "138 oz.",
+      "url": "https://www.costco.com/.product.3160440.html"
+    }
+  ]
+}

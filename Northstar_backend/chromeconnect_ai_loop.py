@@ -209,6 +209,18 @@ class ChromeConnectLoop:
     def run(self) -> Dict[str, Any]:
         """Run the AI loop. Returns {result, gave_up_reason, steps, ...}."""
         self.state.start_time = time.monotonic()
+
+        # Auto-load page if empty (for fixture-based testing)
+        if not self.state.current_html:
+            try:
+                html_text = self.html_provider("fixture://page")
+                self.state.current_html = html_text
+                self.state.current_url = "fixture://page"
+                self.state.snapshot = obs.snapshot(html_text)
+                self.state.snapshot_hash = obs.snapshot_hash(html_text)
+            except Exception:
+                pass
+
         self._clean_state = self._snapshot_state()
 
         while True:
@@ -230,10 +242,25 @@ class ChromeConnectLoop:
                 self.give_up("decision function returned no action")
                 break
 
-            # Repeat-loop breaker
+            # Auto-finish: if extract already succeeded and model returns extract again
+            if (action.get("tool") == "extract"
+                    and any(a.get("tool") == "extract" and a.get("success")
+                            for a in self.state.action_history)):
+                last_extract = None
+                for a in reversed(self.state.action_history):
+                    if a.get("tool") == "extract" and a.get("success"):
+                        last_extract = a
+                        break
+                if last_extract:
+                    action = {"tool": "finish", "args": {"result": last_extract.get("output")}}
+
+            # Repeat-loop breaker (only on successful actions)
             action_key = json.dumps(action, sort_keys=True)
             state_hash = self.state.snapshot_hash
-            if action_key == self.state.last_action and state_hash == self.state.last_state_hash:
+            prev_success = True
+            if self.state.action_history:
+                prev_success = self.state.action_history[-1].get("success", True)
+            if action_key == self.state.last_action and state_hash == self.state.last_state_hash and prev_success:
                 if self.state.replan_count < MAX_REPLANS:
                     self.state.replan_count += 1
                     # Rollback to clean state and retry
@@ -260,6 +287,7 @@ class ChromeConnectLoop:
                 "success": tr.success,
                 "post_condition_met": tr.post_condition_met,
                 "error": tr.error,
+                "output": tr.output,
             })
 
             # Post-condition check
@@ -272,6 +300,13 @@ class ChromeConnectLoop:
                 else:
                     self.give_up(f"post-condition failed for {tool_name}: {tr.error}")
                     break
+
+            # Auto-populate finish result from last extract if missing
+            if tool_name == "finish" and not tr.output and self.state.action_history:
+                for a in reversed(self.state.action_history):
+                    if a.get("tool") == "extract" and a.get("success") and a.get("output"):
+                        self.state.result = a["output"]
+                        break
 
             # Check terminal
             if tool_name == "finish":

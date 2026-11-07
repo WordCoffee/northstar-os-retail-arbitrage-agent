@@ -1,0 +1,35 @@
+{
+  "batch": "SellerAmp candidate-ASIN Batch 02",
+  "date": "2026-10-01",
+  "session_method": "existing authenticated SellerAmp page (T2RetailArb); 5 paced lookups; >=30s pause; submission via input + Enter (Search button click is unstable)",
+  "lookups_completed": 5,
+  "amazon_retail_flag_summary": "Amazon Retail (AMZ) active on: Scotch-Brite Zero Scratch (9/36/6-pk), Scotch-Brite Heavy Duty (24-pk B000P58USY, 6-pk), Mr. Clean Magic Eraser (12/4/8-ct), Cuisinart tongs (unrelated). NOT active on: Cuisinart strainer (unrelated), Scotch-Brite HD 45-pk, KitchenAid targets (no brand match).",
+  "no_action_confirmation": "No logins, MFA, CAPTCHA, settings, exports, saved lists, alerts, imports, purchases, listings, or account changes. Candidate suggestions only; no automatic matching.",
+  "results": [
+    { "candidate_id": "SA2-01", "name": "Cuisinart 10-Pc Primary Tool & Gadget Set (CTG-00-10PTS)", "query": "Cuisinart CTG-00-10PTS", "exact_match": false, "candidates": [
+      { "asin": "B004YZEN0K", "title": "Cuisinart CTG-00-12TNG 12-Inch Tongs", "match": "NONE", "price": 16.99, "amazon_retail": "YES" },
+      { "asin": "B079NWGRNL", "title": "Cuisinart CTG-16-SMS Strainer", "match": "NONE", "price": 15.99, "amazon_retail": "NO" }
+    ]},
+    { "candidate_id": "SA2-02", "name": "Scotch-Brite Zero Scratch Scrub Sponges 24 ct", "query": "Scotch-Brite Zero Scratch Scrub Sponges 24 count", "exact_match": false, "candidates": [
+      { "asin": "B0043P0GRA", "title": "Zero Scratch Scrub Sponge, 9 Pack", "match": "WEAK", "price": 8.47, "amazon_retail": "YES" },
+      { "asin": "B093TQX9FR", "title": "Zero Scratch Non-Scratch Scrub Sponges, 36 Pack", "match": "WEAK", "price": 31.71, "amazon_retail": "YES" },
+      { "asin": "B0043P0IAK", "title": "Zero Scratch Scrub Sponge, 6 Pack", "match": "WEAK", "price": 5.99, "amazon_retail": "YES" },
+      { "asin": "B0D14WKM4D", "title": "Zero Scratch Scrub Sponge (Pack of 2)", "match": "WEAK", "price": null, "amazon_retail": "NO" }
+    ]},
+    { "candidate_id": "SA2-03", "name": "Scotch-Brite Heavy Duty Scrub Sponges 24 ct", "query": "Scotch-Brite Heavy Duty Scrub Sponges 24 count", "exact_match": "count-only", "candidates": [
+      { "asin": "B000P58USY", "title": "Heavy Duty Scrub Sponge, 24 Pack", "match": "STRONG(count)", "price": 18.99, "amazon_retail": "YES" },
+      { "asin": "B0FHX19GBZ", "title": "Heavy Duty Scrub Sponge, 45 Pack", "match": "WEAK", "price": 41.99, "amazon_retail": "NO" },
+      { "asin": "B004IR3044", "title": "Heavy Duty Scrub Sponge, 6 Pack", "match": "WEAK", "price": 5.97, "amazon_retail": "YES" }
+    ]},
+    { "candidate_id": "SA2-04", "name": "Mr. Clean Magic Eraser Whole Home Extra Durable 18 ct", "query": "Mr. Clean Magic Eraser Whole Home Extra Durable 18 count", "exact_match": false, "candidates": [
+      { "asin": "B0FX5LB87M", "title": "Whole Home Extra Durable, 12ct", "match": "WEAK", "price": 12.98, "amazon_retail": "YES" },
+      { "asin": "B0FX5J7PYL", "title": "Extra Durable, 4ct", "match": "WEAK", "price": 4.99, "amazon_retail": "YES" },
+      { "asin": "B0FX5HKTDD", "title": "Whole Home Extra Durable XL, 8ct", "match": "WEAK", "price": 12.94, "amazon_retail": "YES" }
+    ]},
+    { "candidate_id": "SA2-05", "name": "KitchenAid Dish Drying Mats Set of 2", "query": "KitchenAid Dish Drying Mats Set of 2", "exact_match": false, "note": "No KitchenAid-brand match surfaced; results were other-brand mats (FBA-only).", "candidates": [
+      { "asin": "B0D543DYN8", "title": "14.6x11.8 in Microfiber Dish Drying Mat, 2", "match": "NONE", "price": 6.95, "amazon_retail": "NO" },
+      { "asin": "B0F1MZ67NX", "title": "2 Pack Microfiber Dish Drying Mat, 24x17 in", "match": "NONE", "price": 9.99, "amazon_retail": "NO" },
+      { "asin": "B0F1MHN92T", "title": "2 Pack Microfiber Dish Drying Mat, 24 x 17 in", "match": "NONE", "price": 9.99, "amazon_retail": "NO" }
+    ]}
+  ]
+}

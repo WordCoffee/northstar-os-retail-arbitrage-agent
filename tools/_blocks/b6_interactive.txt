@@ -1,0 +1,30 @@
+# ============================================================
+# INTERACTIVE MODE — RETIRED 2026-10-03
+# ============================================================
+
+async def interactive_mode(model: str = None):
+    """RETIRED. browser_use.Agent is an autonomous driver, not a controlled tool.
+
+    It decided its own navigations with no Chrome Connect instruction in scope,
+    so the domain allowlist, the Amazon blocklist and the risk-class gates never
+    ran. That is the bypass this change closes.
+
+    The loop is not replaced by a narrower loop here: the controller owns
+    stepping, deciding and evaluating, so an interactive free-text loop over a
+    self-driving agent has no correct local equivalent. Hand tasks to Chrome
+    Connect instead.
+    """
+    print("\n=== INTERACTIVE MODE: RETIRED 2026-10-03 ===")
+    print(DIRECT_PLAYWRIGHT_REFUSED)
+    print()
+    print("browser_use.Agent is an autonomous agent that drives Playwright directly.")
+    print("It makes its own navigation decisions with no Chrome Connect instruction")
+    print("in scope, so the domain allowlist, the Amazon blocklist and the risk-class")
+    print("gates never ran. That is the bypass this change closes.")
+    print()
+    print("Hand the task to Chrome Connect instead:")
+    print('  node scripts/chromecontrol.js agent run --task "<your task>"')
+    print()
+    print("Chrome Connect plans the steps, evaluates each page, decides what to")
+    print("extract, stops at CAPTCHAs and logins, and writes every decision, tool")
+    print("call, URL, timestamp and result to the run journal.")

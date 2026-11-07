@@ -1,0 +1,9 @@
+Act as a Principal Software Architect and Systems Optimization Expert. We need a complete, production-ready refactor of an enterprise-grade concurrent task-processing pipeline.
+
+Requirements:
+1. Provide a robust TypeScript core engine using worker threads that handles dynamic load-balancing, asynchronous backpressure management, and lock-free queueing.
+2. Include a comprehensive error-recovery subsystem with exponential backoff, circuit breakers, and telemetry logging hooks.
+3. Write extensive unit and integration tests using Jest, covering edge cases like memory pressure spikes, race conditions, and thread starvation.
+4. Concurrently, write a detailed technical documentation markdown file explaining the architectural decisions, trade-offs, O-notation complexities for the queueing algorithms, and migration steps from the legacy system.
+
+Ensure the code is fully implemented without placeholders or "TODOs," and maintain strict type safety throughout.

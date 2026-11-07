@@ -6,6 +6,7 @@ caller opts in explicitly.
 """
 from __future__ import annotations
 
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
@@ -40,14 +41,18 @@ def make_workspace_acceptance(workspace: str, spec: Optional[Dict[str, Any]] = N
         failures: List[str] = []
         for cmd in commands:
             try:
-                r = subprocess.run([str(c) for c in cmd], cwd=str(root),
+                argv = [str(c) for c in cmd]
+                exe = shutil.which(argv[0])
+                if exe:
+                    argv[0] = exe
+                r = subprocess.run(argv, cwd=str(root),
                                    capture_output=True, text=True, timeout=180)
             except Exception as exc:  # noqa: BLE001
                 failures.append(f"{cmd}: {exc}")
                 continue
             if r.returncode != 0:
                 failures.append(f"{' '.join(str(c) for c in cmd)} exit "
-                                f"{r.returncode}: {(r.stderr or r.stdout)[-300:]}")
+                                f"{r.returncode}: {(r.stderr or r.stdout)[-2000:]}")
         return (not missing and not failures,
                 f"missing={missing}; failures={failures}")
 

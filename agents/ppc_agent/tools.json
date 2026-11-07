@@ -1,0 +1,9 @@
+{
+  "agent": "ppc_agent",
+  "allowed_tools": [
+    "ppc_plan",
+    "ads_math",
+    "knowledge_lookup"
+  ],
+  "needs_gpu": false
+}

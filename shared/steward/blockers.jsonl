@@ -1,0 +1,2 @@
+{"created_at":"2026-10-27T22:33:37.300037+00:00","description":"Close test","file_path":"test.py","id":"BLK-CLOSE-001","resolved_at":"2026-10-27T22:33:37.305220+00:00","status":"resolved","xfail_test":null}
+{"created_at":"2026-10-27T22:33:37.311047+00:00","description":"Test blocker","file_path":"test.py","id":"BLK-TEST-001","status":"open","xfail_test":null}

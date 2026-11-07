@@ -1,0 +1,27 @@
+# ============================================================
+# CDP TAKEOVER — REFUSED 2026-10-03
+# ============================================================
+
+async def connect_takeover(verbose: bool = True):
+    """REFUSED. Raw CDP takeover is no longer possible from this module.
+
+    This used to call `chromium.connect_over_cdp("http://127.0.0.1:9222")`
+    against the same port ChromeControl manages. That gave an unguarded caller a
+    handle on the operator's real Chrome profile with no domain allowlist, no
+    Amazon blocklist and no risk-class gate.
+
+    Two things now prevent it:
+      1. chromeconnect_guard refuses `import playwright` outside a Chrome Connect
+         instruction, so the attach cannot be constructed;
+      2. chromeconnect_guard holds an exclusive lock on port 9222, so only one
+         controller may drive that browser at a time.
+
+    Returns (None, None, None) and says why, rather than silently falling back to
+    launching a fresh browser. A silent fallback is how the bypass went unnoticed.
+    """
+    if verbose:
+        print(DIRECT_PLAYWRIGHT_REFUSED)
+        print("CDP port 9222 lock holder:", chromeconnect_guard.cdp_lock_holder())
+        print("To drive an already-open Chrome, use Chrome Connect:")
+        print('  node scripts/chromecontrol.js agent run --task "<task>"')
+    return None, None, None

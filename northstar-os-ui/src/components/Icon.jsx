@@ -72,6 +72,12 @@ const paths = {
   store: `<path d="M3 7h18v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" ${strokeAttr}/><path d="M3 7l3-4h12l3 4M6 11v6M18 11v6" ${strokeAttr}/>`,
   wand: `<path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M3 21l9-9M12.2 6.2L11 5" ${strokeAttr}/>`,
   send: `<line x1="22" y1="2" x2="11" y2="13" ${strokeAttr}/><polygon points="22 2 15 22 11 13 2 9 22 2" ${strokeAttr}/>`,
+  mic: `<rect x="9" y="2" width="6" height="11" rx="3" ${strokeAttr}/><path d="M5 10v1a7 7 0 0014 0v-1M12 18v4M8 22h8" ${strokeAttr}/>`,
+  volume: `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" ${strokeAttr}/><path d="M15.5 8.5a5 5 0 010 7M19 5a9 9 0 010 14" ${strokeAttr}/>`,
+  stop: `<rect x="6" y="6" width="12" height="12" rx="2" ${strokeAttr}/>`,
+  play: `<polygon points="6 3 20 12 6 21 6 3" ${strokeAttr}/>`,
+  pause: `<line x1="9" y1="4" x2="9" y2="20" ${strokeAttr}/><line x1="15" y1="4" x2="15" y2="20" ${strokeAttr}/>`,
+  paperclip: `<path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" ${strokeAttr}/>`,
 };
 
 export default function Icon({ name, size = 16, className }) {

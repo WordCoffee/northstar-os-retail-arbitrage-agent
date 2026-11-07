@@ -169,6 +169,15 @@ TERMINAL_STATES = frozenset({
     JobState.DEAD_LETTER.value,
 })
 
+# Cancellation is terminal FOR THE WORKER: once a cancel request is recorded the
+# worker must stop and acknowledge it, so a handler that finished successfully
+# can never drive ``cancel_requested -> succeeded``. The only transition a
+# worker may still make out of CANCEL_REQUESTED is the acknowledgement to
+# CANCELLED (the operator may also drive that acknowledgement).
+WORKER_TERMINAL_STATES = TERMINAL_STATES | frozenset({
+    JobState.CANCEL_REQUESTED.value,
+})
+
 RETRYABLE_STATES = frozenset({
     JobState.RETRY_WAIT.value,
     JobState.FAILED.value,
@@ -414,6 +423,16 @@ def is_terminal(state: str) -> bool:
     return state in TERMINAL_STATES
 
 
+def is_worker_terminal(state: str) -> bool:
+    """True when a worker must stop driving a job.
+
+    Terminal states are finished; CANCEL_REQUESTED is terminal for the worker
+    because a pending cancellation wins over the handler's own outcome. A
+    worker may only acknowledge that state (CANCEL_REQUESTED -> CANCELLED).
+    """
+    return state in WORKER_TERMINAL_STATES
+
+
 def is_cancellable(state: str) -> bool:
     return state in CANCELLABLE_STATES
 
@@ -534,6 +553,7 @@ def transition_metadata() -> dict:
             f"{prev}:{new}" for prev in LEGAL_TRANSITIONS
             for new in LEGAL_TRANSITIONS[prev]),
         "terminal_states": sorted(TERMINAL_STATES),
+        "worker_terminal_states": sorted(WORKER_TERMINAL_STATES),
         "retryable_states": sorted(RETRYABLE_STATES),
         "cancellable_states": sorted(CANCELLABLE_STATES),
         "lease_required_states": sorted(LEASE_REQUIRED_STATES),

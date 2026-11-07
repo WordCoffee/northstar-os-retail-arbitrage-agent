@@ -1,0 +1,21 @@
+{
+  "agent": "image_aplus",
+  "outputs": [
+    "image brief",
+    "renders",
+    "A+ module plan"
+  ],
+  "validators": [
+    "amazon_image_rules",
+    "no_invented_claims"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

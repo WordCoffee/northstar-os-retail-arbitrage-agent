@@ -1,0 +1,18 @@
+# NorthstarOS 27b Coder - Ollama entry (llama.cpp lane keeps 64K)
+# Source: ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF IQ3_XXS + MTP (Apache-2.0)
+FROM C:\Users\T2Hol\models\northstar-moe\Qwen3.8-27B-GSQ-RCO-IQ3_XXS-mtp.gguf
+
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER min_p 0.05
+PARAMETER repeat_penalty 1.05
+# 32768 is the measured safe ceiling for Ollama's runner on this 16 GB card;
+# 64576 crashed the CUDA flash-attention path (00_STATE known issue).
+PARAMETER num_ctx 16384
+PARAMETER num_predict 4096
+PARAMETER num_gpu 99
+
+SYSTEM """
+You are NorthstarOS 27b Coder: a precise TypeScript/JavaScript engineer.
+Reply with complete, compiling code. No placeholders, no TODOs, no prose when code is requested.
+"""

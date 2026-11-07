@@ -1,0 +1,2413 @@
+from contextlib import asynccontextmanager
+from pathlib import Path
+from fastapi import FastAPI, HTTPException, Depends, Request, Body, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+from typing import Any, Dict, List, Optional
+import os
+import json
+import re
+from datetime import datetime, timezone
+
+from pricing import compute_profit, estimate_fba_fee, estimate_financial_profile
+from product_analysis import analyze_kirkland_products
+import amazon_search
+import costco_client
+import costco_api_client
+import offer_enrichment
+import live_gate
+import completeness_score
+from canopy_client import get_canopy_product
+from ui_serving import mount_ui
+
+# Hosted reasoning provider for non-creative tasks (Phase H2 / Go integration)
+from adapters.reasoning_provider import (
+    GO_CHAT_ENDPOINT,
+    GO_PROVIDER_ID,
+    HOSTED_MODELS,
+    OpenCodeGoProvider,
+    ReasoningRequest,
+    get_reasoning_provider,
+)
+import adapters.reasoning_provider as reasoning_provider_module
+import reasoning_tasks as _reasoning_tasks
+
+# Golden Goose Finder — multi-pack breakdown arbitrage scanner
+try:
+    from agents.golden_goose_finder.main import router as golden_goose_router
+    _HAS_GOLDEN_GOOSE = True
+except ImportError:
+    _HAS_GOLDEN_GOOSE = False
+
+# Phase 6: Production infrastructure
+from logging_config import setup_logging, get_logger
+from security import SecurityHeadersMiddleware, RequestTracingMiddleware, get_cors_origins
+from rate_limiter import RateLimitMiddleware
+from bff_envelope import BffEnvelopeMiddleware
+from auth_deps import get_current_user, require_plan, require_role, require_admin, require_session
+
+# Initialize structured logging
+setup_logging()
+logger = get_logger("main")
+
+
+class ScanRequest(BaseModel):
+    asins: List[str] = []
+    source_profile: str = "dfw-costco"
+    min_profit: float = 11.0
+    min_velocity: int = 2000
+
+
+class ProductResult(BaseModel):
+    name: str
+    asin: str
+    monthly_sales: int
+    costco_cost: float
+    amazon_price: float
+    weight_lbs: float
+    net_profit: float
+    roi_pct: float
+    logistics_risk: str
+    verdict: str
+    projected_net_profit: Optional[float] = None
+    amazon_fees_total: Optional[float] = None
+    amazon_payout_before_inventory_costs: Optional[float] = None
+    landed_cost: Optional[float] = None
+    projected_roi_pct: Optional[float] = None
+    financial_status: Optional[str] = None
+    financial_data_gaps: List[str] = []
+
+
+class ScanResponse(BaseModel):
+    products: List[ProductResult]
+
+
+# --- Lifespan (startup / shutdown) ---
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
+def _ollama_base_url() -> str:
+    """Local LLM base URL — configurable so the local lane is not anchored to
+    Ollama's default port. Ollama today; any OpenAI-compatible server later."""
+    return (
+        os.environ.get("OLLAMA_BASE_URL")
+        or os.environ.get("OLLAMA_HOST")
+        or "http://localhost:11434"
+    ).rstrip("/")
+
+
+@asynccontextmanager
+async def lifespan(app):
+    """Startup / shutdown lifecycle."""
+    logger.info("Northstar OS v1.0.0 starting up")
+    logger.info(f"Base directory: {BASE_DIR}")
+
+    # Phase F/S6: assert the production rate-limiter posture at startup.
+    from rate_limiter import assert_prod_posture
+    # Phase 1 (2026-10-09): assert the live-provider posture at startup. A
+    # plain GET must never be able to spend money, so live mode is refused
+    # unless it is armed per-run with an explicit cost cap.
+    from live_gate import assert_live_posture
+    # Phase 3 (2026-10-09): refuse an ephemeral JWT secret in hosted mode.
+    from auth import assert_jwt_secret_posture
+    try:
+        assert_prod_posture()
+        assert_live_posture()
+        assert_jwt_secret_posture()
+    except RuntimeError as exc:
+        logger.critical(str(exc))
+        raise
+
+    try:
+        from data_layer import get_database
+        db = get_database()
+        logger.info(f"Database initialized: {db.db_type}")
+    except Exception as e:
+        logger.warning(f"Database init skipped: {e}")
+
+    try:
+        import httpx
+        resp = httpx.get(f"{_ollama_base_url()}/api/tags", timeout=3)
+        if resp.status_code == 200:
+            models = resp.json().get("models", [])
+            logger.info(f"Ollama: {len(models)} models available")
+        else:
+            logger.warning("Ollama not responding")
+    except Exception:
+        logger.warning("Ollama not reachable — AI features will use fallback")
+
+    logger.info("Northstar OS ready ✨")
+    yield
+    logger.info("Northstar OS shutting down")
+
+
+app = FastAPI(
+    title="Northstar OS API",
+    description=(
+        "AI-powered Amazon arbitrage intelligence platform. "
+        "Five services sharing a unified data layer with local-first AI."
+    ),
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+    lifespan=lifespan,
+)
+
+# AutothinK workspace (served at /autothink/ui/index.html — resolves the
+# shell's ../../autothink/ui/index.html iframe and new-tab link from
+# /static/northstar-os/index.html)
+AUTOTHINK_DIR = BASE_DIR.parent / "autothink"
+if AUTOTHINK_DIR.exists():
+    app.mount("/autothink", StaticFiles(directory=str(AUTOTHINK_DIR)), name="autothink")
+
+# Reference docs (markdown) served read-only at /reference — FastAPI owns /docs.
+_DOCS_DIR = BASE_DIR.parent / "docs"
+if _DOCS_DIR.exists():
+    app.mount("/reference", StaticFiles(directory=str(_DOCS_DIR)), name="reference")
+
+# Canonical React/Vite frontend (northstar-os-ui/dist) at /ui. No-op when the
+# build is absent, so offline/dev harnesses still start cleanly.
+mount_ui(app)
+
+
+@app.get("/", include_in_schema=False)
+def serve_root():
+    """Root always redirects to the canonical /ui frontend."""
+    return RedirectResponse(url="/ui", status_code=307)
+
+
+# --- Middleware stack (order matters: outermost runs first) ---
+
+# 1. Security headers
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 2. Request tracing (adds X-Request-ID and X-Response-Time)
+app.add_middleware(RequestTracingMiddleware)
+
+# 3. Rate limiting
+app.add_middleware(RateLimitMiddleware, window_seconds=60)
+
+# 3b. bff/v1 envelope on legacy endpoint prefixes (Phase F / D12)
+app.add_middleware(BffEnvelopeMiddleware)
+
+
+# 3c. Error-rate telemetry (Phase F/S4): feed the in-memory tracker with
+# status codes for /api/* responses. Pure/offline — delivery wiring is
+# operator-side later (see MONITORING_SETUP.md).
+from error_alerts import tracker as _error_rate_tracker
+
+
+@app.middleware("http")
+async def _record_error_rate(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/"):
+        _error_rate_tracker.record(response.status_code)
+    return response
+
+# 4. CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_cors_origins(),
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+)
+
+# 5. Private-alpha gate (Phase H / H1) — outermost so it blocks earliest.
+# Locked to NORTHSTAR_ALPHA_ALLOWLIST when NORTHSTAR_PRIVATE_ALPHA=1.
+from alpha_gate import AlphaGateMiddleware  # noqa: E402
+app.add_middleware(AlphaGateMiddleware)
+
+# Golden Goose Finder — multi-pack breakdown arbitrage scanner
+if _HAS_GOLDEN_GOOSE:
+    app.include_router(golden_goose_router)
+
+# Golden Goose Finder UI panel (standalone page; fetches /api/golden-goose/*)
+_GOOSE_STATIC = BASE_DIR / "agents" / "golden_goose_finder" / "static"
+if _GOOSE_STATIC.exists():
+    app.mount(
+        "/golden-goose/static",
+        StaticFiles(directory=str(_GOOSE_STATIC)),
+        name="golden-goose-static",
+    )
+
+
+@app.get("/golden-goose/", include_in_schema=False)
+@app.get("/golden-goose", include_in_schema=False)
+def serve_golden_goose():
+    return FileResponse(_GOOSE_STATIC / "golden-goose-panel.html")
+
+
+KIRKLAND_CATALOG = [
+    {
+        "name": "Kirkland Signature Organic K-Cups Variety Pack (120ct)",
+        "asin": "B0CS6Z9SRX",
+        "monthly_sales": 1500,
+        "costco_cost": 15.99,
+        "amazon_price": 48.87,
+        "weight_lbs": 3.5,
+    },
+    {
+        "name": "Kirkland Minoxidil Foam 6-Month Supply (6ct)",
+        "asin": "B01GRGIC9G",
+        "monthly_sales": 900,
+        "costco_cost": 34.00,
+        "amazon_price": 64.22,
+        "weight_lbs": 2.0,
+    },
+    {
+        "name": "Kirkland Signature House Decaf K-Cups (120ct)",
+        "asin": "B0734BGSKY",
+        "monthly_sales": 700,
+        "costco_cost": 15.99,
+        "amazon_price": 36.37,
+        "weight_lbs": 3.5,
+    },
+    {
+        "name": "Kirkland Signature Milk Chocolate Roasted Almonds (2x3lb)",
+        "asin": "B075QPSSHD",
+        "monthly_sales": 500,
+        "costco_cost": 18.99,
+        "amazon_price": 39.99,
+        "weight_lbs": 6.0,
+    },
+    {
+        "name": "Kirkland Signature Extra Strength Vitamin D3 (2pk 600ct)",
+        "asin": "B005D1K7CW",
+        "monthly_sales": 400,
+        "costco_cost": 13.99,
+        "amazon_price": 25.02,
+        "weight_lbs": 1.3,
+    },
+    {
+        "name": "Kirkland Signature Whole Almonds (3lb)",
+        "asin": "B07BFHBWP2",
+        "monthly_sales": 600,
+        "costco_cost": 12.99,
+        "amazon_price": 24.99,
+        "weight_lbs": 3.0,
+    },
+    {
+        "name": "Kirkland Signature Almond Butter",
+        "asin": "B01N9SOK2Y",
+        "monthly_sales": 350,
+        "costco_cost": 11.49,
+        "amazon_price": 21.99,
+        "weight_lbs": 2.0,
+    },
+    {
+        "name": "Kirkland Signature Vitamin D3 (600 softgels)",
+        "asin": "B00EXPV502",
+        "monthly_sales": 300,
+        "costco_cost": 9.49,
+        "amazon_price": 14.99,
+        "weight_lbs": 0.9,
+    },
+]
+
+
+def build_result(item: dict, min_profit: float, min_velocity: int) -> ProductResult:
+    fba_fee = estimate_fba_fee(item["weight_lbs"])
+    net_profit, roi_pct = compute_profit(
+        amazon_price=item["amazon_price"],
+        costco_cost=item["costco_cost"],
+        fba_fee=fba_fee,
+    )
+
+    if item["weight_lbs"] >= 15:
+        logistics_risk = "High bulk, heavy truck/pallet load"
+    elif item["weight_lbs"] >= 7:
+        logistics_risk = "Moderate bulk, watch truck space"
+    else:
+        logistics_risk = "Low bulk, good truck density"
+
+    if net_profit >= min_profit and item["monthly_sales"] >= min_velocity:
+        verdict = "Pass"
+    elif net_profit > 0:
+        verdict = "Hold"
+    else:
+        verdict = "Reject"
+
+    profile = estimate_financial_profile(
+        amazon_price=item["amazon_price"],
+        weight_lbs=item["weight_lbs"],
+        costco_cost=item["costco_cost"],
+    )
+
+    return ProductResult(
+        name=item["name"],
+        asin=item["asin"],
+        monthly_sales=item["monthly_sales"],
+        costco_cost=item["costco_cost"],
+        amazon_price=item["amazon_price"],
+        weight_lbs=item["weight_lbs"],
+        net_profit=round(net_profit, 2),
+        roi_pct=round(roi_pct, 1),
+        logistics_risk=logistics_risk,
+        verdict=verdict,
+        projected_net_profit=profile["projected_net_profit"],
+        amazon_fees_total=profile["amazon_fees_total"],
+        amazon_payout_before_inventory_costs=profile[
+            "amazon_payout_before_inventory_costs"
+        ],
+        landed_cost=profile["landed_cost"],
+        projected_roi_pct=profile["projected_roi_pct"],
+        financial_status=profile["financial_status"],
+        financial_data_gaps=profile["financial_data_gaps"],
+    )
+
+
+@app.post("/api/kirkland/scan", response_model=ScanResponse)
+def scan_kirkland(req: ScanRequest):
+    if req.asins:
+        wanted = {a.upper() for a in req.asins}
+        items = [i for i in KIRKLAND_CATALOG if i["asin"].upper() in wanted]
+    else:
+        items = KIRKLAND_CATALOG
+
+    results = [build_result(i, req.min_profit, req.min_velocity) for i in items]
+    results = [r for r in results if r.verdict == "Pass"]
+    results.sort(key=lambda r: -r.net_profit)
+
+    return ScanResponse(products=results)
+
+
+@app.get("/api/kirkland/live")
+def get_kirkland_live():
+    """Scanner analysis. Read-only: with SCANNER_LIVE_ALLOWED unset the
+    analysis is cache-only (zero provider calls); live data only when the
+    operator explicitly enabled the gate and runs an explicit refresh."""
+    return analyze_kirkland_products()
+
+
+@app.post("/api/kirkland/refresh")
+def refresh_kirkland_scan():
+    """Explicit live refresh — the ONLY route that may trigger live
+    provider searches, and only when SCANNER_LIVE_ALLOWED is an explicit
+    opt-in. Without the gate this returns 403 and never touches a
+    provider. Never called by the UI on page load (the UI reads
+    GET /api/kirkland/scanner, which is cache-only by default)."""
+    if not live_gate.live_enabled():
+        raise HTTPException(
+            status_code=403,
+            detail=live_gate.live_disabled_note(),
+        )
+    analysis = analyze_kirkland_products()
+    return {
+        "status": "ok",
+        "live_allowed": True,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "candidates_returned": len(analysis.get("all_results") or []),
+    }
+
+
+SCANNER_ALLOWED_KEYS = (
+    "name",
+    "asin",
+    "product_url",
+    "amazon_price",
+    "costco_cost",
+    "lowest_price",
+    "highest_price",
+    "fba_fee",
+    "net_profit",
+    "roi_pct",
+    "profit_tier",
+    "total_sellers",
+    "fba_sellers",
+    "monthly_sales_estimate",
+    "monthly_sales_estimated",
+    "sales_rank",
+    "offer_data_provider",
+    "enrichment_status",
+    "enriched_at",
+    "verdict",
+    # Versioned fee-engine economics (computed before the UI renders).
+    "amazon_category",
+    "browse_node_id",
+    "category_resolution_source",
+    "category_resolution_confidence",
+    "category_resolution_note",
+    "costco_cogs",
+    "costco_cost_basis",
+    "pack_match",
+    "cost_match_reason",
+    "cost_source",
+    "cost_is_purchase_authorized",
+    "referral_fee",
+    "referral_fee_rate",
+    "referral_fee_category",
+    "referral_fee_confidence",
+    "referral_fee_rule",
+    "referral_fee_tier",
+    "referral_fee_note",
+    "fba_base_fee",
+    "fba_fuel_logistics_surcharge",
+    "fba_size_tier",
+    "fba_fee_status",
+    "fba_fee_confidence",
+    "fba_fee_rule",
+    "fba_fee_note",
+    "fba_weight_basis_lbs",
+    "inbound_cost_per_unit",
+    "prep_cost_per_unit",
+    "packaging_cost_per_unit",
+    "return_reserve_rate",
+    "economics_confidence",
+    "economics_status",
+    "economics_note",
+    "roi_below_minimum",
+    # Opportunity analytics (cache-only, read-only; display + exports only).
+    "match_evidence",
+    "verification_tasks",
+    "primary_verification_task",
+    "match_readiness",
+    "data_completeness_score",
+    "opportunity_readiness",
+    "recommended_next_step",
+    "opportunity_score",
+    "opportunity_score_reasons",
+    "freshness_label",
+    "freshness_basis",
+    "freshness_as_of",
+    # Local market snapshot merge (read-only, cache-only mode only).
+    "snapshot_status",
+    "snapshot_source",
+    "snapshot_fetched_at",
+    "snapshot_observed_at",
+    "snapshot_freshness",
+    "snapshot_offers_complete",
+    "snapshot_offers_returned",
+    "snapshot_data_gaps",
+    "snapshot_fbm_sellers",
+    "snapshot_amazon_sellers",
+    "snapshot_buy_box_available",
+    "snapshot_buy_box_price",
+    "snapshot_buy_box_fulfillment",
+    "snapshot_buy_box_seller",
+    # Buy Box resolution for the Scout table (computed by the scanner
+    # endpoint): observed snapshot first, then market snapshot, then the
+    # local seller-offer cache — never a live call.
+    "buy_box_seller",
+    "buy_box_fulfillment",
+    "buy_box_source",
+    # Offline demand model (Phase 3, read-only, cache-only).
+    "estimated_monthly_sales",
+    "sales_estimate_low",
+    "sales_estimate_high",
+    "sales_estimation_method",
+    "sales_estimation_source",
+    "sales_estimation_confidence",
+    "bsr",
+    "bsr_category",
+    "bsr_observed_at",
+    "calibration_model_name",
+    "calibration_model_version",
+    # Observed seller competition (Phase 3, local snapshots only).
+    "observed_total_sellers",
+    "observed_fba_sellers",
+    "observed_fbm_sellers",
+    "observed_amazon_sellers",
+    "claimed_offer_count",
+    "offers_returned",
+    "offers_complete",
+    "offer_roster_reason",
+    "competition_data_gaps",
+    "observed_buy_box_available",
+    "observed_buy_box_price",
+    "observed_buy_box_shipping",
+    "observed_buy_box_landed_price",
+    "observed_buy_box_seller",
+    "observed_buy_box_fulfillment",
+    "observed_buy_box_condition",
+    "lowest_returned_offer_price",
+    "lowest_returned_landed_price",
+    "highest_returned_landed_price",
+    "returned_offer_price_spread",
+    "returned_offer_landed_spread",
+    "prime_offer_count",
+    "fulfilled_by_amazon_offer_count",
+    "estimated_units_per_observed_fba_seller",
+    "estimated_units_per_observed_fbm_seller",
+    "estimated_units_per_observed_seller",
+    "seller_share_confidence",
+    "seller_share_basis",
+    "offer_competition_note",
+    "seller_share_note",
+    # Portfolio planning (Phase 3, read-only).
+    "identity_completeness",
+    "cost_completeness",
+    "economics_completeness",
+    "demand_completeness",
+    "competition_completeness",
+    "freshness_completeness",
+    "total_completeness_score",
+    "portfolio_readiness",
+    "portfolio_next_step",
+    "portfolio_category",
+    "risk_flags",
+    "portfolio_score_reasons",
+    "estimated_monthly_revenue",
+    "monthly_revenue_basis",
+    "monthly_revenue_confidence",
+    "estimated_monthly_profit_pool",
+    "monthly_profit_pool_basis",
+    "monthly_profit_pool_confidence",
+    "estimated_fba_seller_monthly_profit",
+    "estimated_fbm_seller_monthly_profit",
+    "estimated_observed_seller_monthly_profit",
+    "seller_profit_basis",
+    "monthly_pool_note",
+    # ASIN completeness contract (null-first, additive only). Computed by
+    # completeness_score.compute_scanner_completeness from the full record.
+    "completeness",
+)
+
+
+def _is_number(value) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _clean_buy_box_value(value):
+    """Treat absent or literal 'Unknown' seller/fulfillment values as
+    missing — never display a fabricated value."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text or text.lower() == "unknown":
+        return None
+    return text
+
+
+_SCANNER_SELLER_CACHE = None
+
+
+def _buy_box_from_seller_cache(asin):
+    """Cache-only Buy Box fallback from data/seller-offer-cache.json.
+
+    Local snapshot only — zero network. Used when a scanner row carries no
+    observed/snapshot Buy Box winner so the Scout table can still show who
+    owns the Buy Box and under which fulfillment. The cache entry's
+    payload.buy_box is the normalized provider result from the last offline
+    probe run for that ASIN.
+    """
+    global _SCANNER_SELLER_CACHE
+    if _SCANNER_SELLER_CACHE is None:
+        try:
+            with open(offer_enrichment._seller_cache_path(), "r", encoding="utf-8") as f:
+                data = json.load(f)
+            _SCANNER_SELLER_CACHE = data if isinstance(data, dict) else {}
+        except (OSError, json.JSONDecodeError):
+            _SCANNER_SELLER_CACHE = {}
+    if not asin:
+        return None
+    entry = _SCANNER_SELLER_CACHE.get(asin) or {}
+    if not isinstance(entry, dict):
+        return None
+    payload = entry.get("payload") or {}
+    if not isinstance(payload, dict):
+        return None
+    buy_box = payload.get("buy_box") or {}
+    if not isinstance(buy_box, dict):
+        return None
+    seller = _clean_buy_box_value(buy_box.get("seller_name"))
+    if not seller:
+        return None
+    return {
+        "buy_box_seller": seller,
+        "buy_box_fulfillment": _clean_buy_box_value(buy_box.get("fulfillment")),
+        "buy_box_source": "seller_cache",
+    }
+
+
+def _resolve_buy_box(record: dict) -> dict:
+    """Buy Box winner for the Scout table: observed snapshot first, then
+    market snapshot, then the local seller-offer cache — never a live
+    call. Returns {buy_box_seller, buy_box_fulfillment, buy_box_source}."""
+    seller = _clean_buy_box_value(
+        record.get("observed_buy_box_seller") or record.get("snapshot_buy_box_seller")
+    )
+    if seller:
+        fulfillment = _clean_buy_box_value(
+            record.get("observed_buy_box_fulfillment")
+            or record.get("snapshot_buy_box_fulfillment")
+        )
+        return {
+            "buy_box_seller": seller,
+            "buy_box_fulfillment": fulfillment,
+            "buy_box_source": (
+                "observed"
+                if _clean_buy_box_value(record.get("observed_buy_box_seller"))
+                else "snapshot"
+            ),
+        }
+    return _buy_box_from_seller_cache(record.get("asin")) or {
+        "buy_box_seller": None,
+        "buy_box_fulfillment": None,
+        "buy_box_source": None,
+    }
+
+
+def _clean_scanner_product(record: dict) -> dict:
+    return {key: record.get(key) for key in SCANNER_ALLOWED_KEYS}
+
+
+def _economics_group(product: dict) -> int:
+    """Scout spec ordering: Estimated first, Provisional second,
+    Unavailable last (0/1/2). Unknown/missing confidence is treated as
+    Unavailable so it never outranks a real estimate."""
+    confidence = product.get("economics_confidence")
+    if confidence == "estimated":
+        return 0
+    if confidence == "provisional":
+        return 1
+    return 2
+
+
+def _scanner_sort_key(product: dict) -> tuple:
+    """Rank candidates per the Scout spec.
+
+    Grouped by economics tier (Estimated, then Provisional, then
+    Unavailable), then: 1. net profit desc, 2. ROI desc, 3. seller count
+    asc (less competition), 4. FBA seller count asc, 5. monthly-sales/
+    demand desc, 6. Buy Box price stability (narrower high-low spread)
+    asc. Nulls always sort last within their group.
+    """
+
+    def pair_desc(value):
+        if _is_number(value):
+            return (0, -float(value))
+        return (1, 0.0)
+
+    def pair_asc(value):
+        if _is_number(value):
+            return (0, float(value))
+        return (1, 0.0)
+
+    def price_stability(product):
+        low = product.get("lowest_price")
+        high = product.get("highest_price")
+        if _is_number(low) and _is_number(high) and high >= low:
+            return high - low
+        return None
+
+    return (
+        _economics_group(product),
+        *pair_desc(product.get("net_profit")),
+        *pair_desc(product.get("roi_pct")),
+        *pair_asc(product.get("total_sellers")),
+        *pair_asc(product.get("fba_sellers")),
+        *pair_desc(product.get("monthly_sales_estimate")),
+        *pair_asc(price_stability(product)),
+        str(product.get("name") or "").lower(),
+        str(product.get("asin") or "").lower(),
+    )
+
+
+@app.get("/api/monitoring/error-alerts")
+async def monitoring_error_alerts():
+    """Error-rate alert status (Phase F/S4).
+
+    Returns the in-memory ErrorRateTracker summary + a composed alert payload
+    (never delivered — the operator wires a channel later; see
+    MONITORING_SETUP.md). bff/v1 envelope.
+    """
+    from error_alerts import compose_alert, tracker
+    import secrets as _s
+    summary = tracker.summary()
+    alert = compose_alert(summary)
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + _s.token_hex(16),
+        "status": "ok" if not summary["breached"] else "ok",
+        "data": {"summary": summary, "alert": alert},
+        "error": None,
+        "meta": {"service": "monitoring", "version": "v1"},
+    }
+
+
+@app.get("/health")
+def health():
+    """Basic liveness probe — returns 200 when the server is up."""
+    return {"status": "ok", "service": "northstar-backend", "version": "1.0.0"}
+
+
+@app.get("/api/v1/models")
+async def list_models():
+    """Phase H/H2 — unified dual-engine Brain catalog (local + cloud + tiers).
+
+    Presence-only flags; never returns credential values.
+    """
+    import model_router
+    installed: list = []
+    try:
+        import httpx
+        resp = httpx.get(f"{_ollama_base_url()}/api/tags", timeout=2)
+        if resp.status_code == 200:
+            installed = [m.get("name", "") for m in resp.json().get("models", []) if m.get("name")]
+    except Exception:
+        installed = []
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": model_router.catalog(installed),
+        "error": None,
+        "meta": {"service": "brain", "version": "v1"},
+    }
+
+
+# --- Memory Bank + Learning loop routes (Phase A / A0) ----------------------
+
+class MemoryIngestRequest(BaseModel):
+    content: str
+    entry_type: str = "fact"
+    account_id: str = "default"
+    source: str = "chat"
+    confidence: float = 0.8
+    tags: Optional[list] = None
+    provenance: Optional[dict] = None
+
+
+class MemorySearchRequest(BaseModel):
+    intent: str
+    account_id: str = "default"
+    entry_type: Optional[str] = None
+    limit: int = 10
+
+
+class LearningCaptureRequest(BaseModel):
+    kind: str
+    task: str
+    account_id: str = "default"
+    task_class: Optional[str] = None
+    payload: Optional[dict] = None
+
+
+class LearningRouteRequest(BaseModel):
+    task: str
+    account_id: str = "default"
+    live: bool = False
+    profile_id: Optional[str] = None
+
+
+class LearningUnlearnRequest(BaseModel):
+    intent_signature: Optional[str] = None
+    topic: Optional[str] = None
+    account_id: str = "default"
+
+
+def _bff(data: Any, service: str = "memory") -> Dict[str, Any]:
+    return {
+        "contract": "bff/v1",
+        "request_id": "req_" + __import__("secrets").token_hex(16),
+        "status": "ok",
+        "data": data,
+        "error": None,
+        "meta": {"service": service, "version": "v1"},
+    }
+
+
+@app.post("/api/v1/memory/ingest")
+async def memory_ingest(req: MemoryIngestRequest):
+    """Ingest knowledge into the per-account Memory Bank (offline, local)."""
+    import memory_bank
+    eid = memory_bank.ingest(
+        content=req.content, entry_type=req.entry_type, account_id=req.account_id,
+        source=req.source, confidence=req.confidence, tags=req.tags, provenance=req.provenance,
+    )
+    return _bff({"id": eid}, service="memory")
+
+
+@app.post("/api/v1/memory/search")
+async def memory_search(req: MemorySearchRequest):
+    """Search the Memory Bank by intent; returns matches + injectable context."""
+    import memory_bank
+    results = memory_bank.search(req.intent, account_id=req.account_id,
+                                 entry_type=req.entry_type, limit=req.limit)
+    context = memory_bank.retrieve_context(req.intent, account_id=req.account_id)
+    return _bff({"results": results, "count": len(results), "context": context}, service="memory")
+
+
+@app.post("/api/v1/learning/capture")
+async def learning_capture(req: LearningCaptureRequest):
+    """Capture one learning signal (user_edit|outcome|model_choice|staleness)."""
+    import master_brain_learning as mbl
+    try:
+        record = mbl.record_experience(req.kind, req.task, account_id=req.account_id,
+                                       task_class=req.task_class, payload=req.payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return _bff({"record": record}, service="learning")
+
+
+@app.post("/api/v1/learning/route")
+async def learning_route(req: LearningRouteRequest):
+    """Route a request through L0->L1->L2->L3 (live/paid never auto-replayed)."""
+    import master_brain_learning as mbl
+    d = mbl.route_request(req.task, account_id=req.account_id, live=req.live, profile_id=req.profile_id)
+    return _bff({
+        "tier": d.tier, "action": d.action, "requires_approval": d.requires_approval,
+        "reason": d.reason, "model_hint": d.model_hint,
+        "fingerprint": d.fingerprint, "intent_signature": d.intent_signature,
+        "state_hash": d.state_hash, "playbook": d.playbook,
+    }, service="learning")
+
+
+@app.get("/api/v1/learning/playbooks")
+async def learning_playbooks(account_id: str = "default"):
+    """List distilled playbooks (optionally scoped to an account)."""
+    import master_brain_learning as mbl
+    books = mbl.load_playbooks()
+    if account_id:
+        books = {k: v for k, v in books.items() if v.get("account_id") == account_id}
+    return _bff({"playbooks": books, "count": len(books)}, service="learning")
+
+
+@app.post("/api/v1/learning/distill")
+async def learning_distill(account_id: str = "default"):
+    """Distill experience.jsonl into playbooks.json."""
+    import master_brain_learning as mbl
+    books = mbl.distill(account_id=account_id)
+    return _bff({"playbooks": len(books)}, service="learning")
+
+
+@app.post("/api/v1/learning/unlearn")
+async def learning_unlearn(req: LearningUnlearnRequest):
+    """Unlearn a playbook by intent signature, or every playbook matching a topic."""
+    import master_brain_learning as mbl
+    if req.intent_signature:
+        ok = mbl.unlearn_intent(req.intent_signature)
+        return _bff({"removed": req.intent_signature if ok else None}, service="learning")
+    if req.topic:
+        removed = mbl.unlearn_topic(req.topic, account_id=req.account_id)
+        return _bff({"removed": removed}, service="learning")
+    raise HTTPException(status_code=400, detail="intent_signature or topic required")
+
+
+# --- Live catalog routes (Phase B) ------------------------------------------
+
+class CatalogStockRequest(BaseModel):
+    queries: list
+    live: bool = False
+    ttl_seconds: Optional[int] = None
+
+
+class WholesaleStockRequest(BaseModel):
+    query: str
+    supplier: Optional[dict] = None
+    live: bool = False
+
+
+@app.get("/api/v1/status")
+async def live_status():
+    """Live-data status for the shell: warehouse counts + readiness + mode."""
+    import live_catalog
+    try:
+        db = live_catalog._db()
+        live_rows = db.products.count_live(fresh_only=False)
+        fresh_rows = db.products.count_live(fresh_only=True)
+        pulls = db.live_pulls.count()
+    except Exception:
+        live_rows = fresh_rows = pulls = 0
+    try:
+        import readiness
+        rep = readiness.check_all(live=False)
+        ready = rep["ready"]
+        services = {r["service"]: r["ready"] for r in rep["services"]}
+    except Exception:
+        ready = False
+        services = {}
+    return _bff({
+        "mode": "live" if live_rows > 0 else "demo",
+        "warehouse": {"live_rows": live_rows, "fresh_rows": fresh_rows, "pulls": pulls},
+        "readiness": {"ready": ready, "services": services},
+    }, service="status")
+
+
+@app.get("/api/v1/catalog/stocked")
+async def catalog_stocked(limit: int = 100):
+    """List fresh live-stocked products from the warehouse (offline read)."""
+    import live_catalog
+    rows = live_catalog.get_stocked(limit=limit)
+    return _bff({"rows": rows, "count": len(rows)}, service="catalog")
+
+
+@app.post("/api/v1/catalog/stock")
+async def catalog_stock(req: CatalogStockRequest):
+    """Stock live search results into the warehouse (§3 gated; offline if live=false)."""
+    import live_catalog
+    results = []
+    for q in req.queries:
+        kwargs = {"live": req.live}
+        if req.ttl_seconds:
+            kwargs["ttl_seconds"] = req.ttl_seconds
+        results.append({"query": q, **live_catalog.stock(q, **kwargs)})
+    return _bff({"results": results,
+                 "total_stocked": sum(r.get("stocked", 0) for r in results)}, service="catalog")
+
+
+@app.get("/api/v1/catalog/pull")
+async def catalog_pull(query: str, limit: int = 50, live: bool = False):
+    """Prospector pull path — stock-first; on a miss and ``live``, pull fresh (§3 gated)."""
+    import live_catalog
+    return _bff(live_catalog.get_or_pull(query, limit=limit, live=live), service="catalog")
+
+
+@app.post("/api/v1/catalog/wholesale/stock")
+async def catalog_wholesale_stock(req: WholesaleStockRequest):
+    """Stock a wholesaler catalog (Tundra) into supplier_products (§3 gated)."""
+    import wholesale_catalog
+    return _bff(wholesale_catalog.stock_wholesale(req.query, supplier=req.supplier, live=req.live),
+                service="catalog")
+
+
+@app.get("/api/v1/catalog/wholesale/products")
+async def catalog_wholesale_products(supplier_id: Optional[str] = None, limit: int = 200):
+    """List stocked wholesaler SKUs for Golden Goose scoring (offline read)."""
+    import wholesale_catalog
+    rows = wholesale_catalog.list_stocked_supplier_products(supplier_id, limit=limit)
+    return _bff({"rows": rows, "count": len(rows)}, service="catalog")
+
+
+# --- AutothinK workspace API (Batch 0: single-server integration) -----------
+# The AutothinK backend used to run as a separate process on :8100, which broke
+# the embedded workspace (its relative /api/autothink/* fetches hit this app and
+# 404'd). We now serve those routes here by delegating to the AutothinK module.
+
+class AutothinkRunRequest(BaseModel):
+    query: str
+    provider: str = "local"
+    model: Optional[str] = None
+    tier: Optional[str] = None
+    prev_tier: Optional[str] = None
+    idempotency_key: Optional[str] = None
+
+
+# --- Hosted reasoning API (OpenCode Go) -------------------------------------
+# Provider-neutral adapter for listing proposals, ad-copy proposals, spreadsheet
+# analysis, and generic reasoning. All calls are server-side, gated, and logged.
+
+class ReasoningModelsResponse(BaseModel):
+    models: List[Dict[str, Any]]
+    default_model: str
+    armed: bool
+    available: bool
+
+
+class ListingProposalRequest(BaseModel):
+    sku: str
+    title: str
+    bullets: List[str]
+    description: str
+    attributes: Optional[Dict[str, Any]] = None
+    keywords: Optional[List[str]] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
+
+
+class AdCopyProposalRequest(BaseModel):
+    product_facts: Dict[str, Any]
+    brand_tone: str = "professional"
+    format_hint: str = "Amazon Sponsored Products"
+    model: Optional[str] = None
+
+
+class SpreadsheetAnalysisRequest(BaseModel):
+    rows: List[Dict[str, Any]]
+    columns: Optional[List[str]] = None
+    file_name: Optional[str] = None
+    max_sample_rows: int = 50
+    model: Optional[str] = None
+
+
+class ReasoningRunRequest(BaseModel):
+    query: str
+    model: Optional[str] = None
+    system_prompt: Optional[str] = None
+
+
+def _autothink_server():
+    """Lazily import the AutothinK backend module (adds its dir to sys.path)."""
+    import importlib
+    import sys as _sys
+    at_dir = str(BASE_DIR.parent / "autothink")
+    if at_dir not in _sys.path:
+        _sys.path.insert(0, at_dir)
+    return importlib.import_module("backend.server")
+
+
+@app.get("/api/autothink/models")
+def autothink_models(session: dict = Depends(require_session)):
+    """Installed local models + provider availability for the workspace UI."""
+    try:
+        srv = _autothink_server()
+        return srv.models()
+    except Exception as exc:
+        return {"local_available": False, "cloud_available": False, "models": [],
+                "error": str(exc)}
+
+
+@app.post("/api/autothink/run")
+def autothink_run(req: AutothinkRunRequest, session: dict = Depends(require_session)):
+    """Route + generate an AutothinK response (local Ollama or cloud OpenRouter)."""
+    if not (req.query or "").strip():
+        raise HTTPException(status_code=422, detail="query is empty")
+    srv = _autothink_server()
+    try:
+        payload = srv.RunRequest(**req.model_dump())
+    except Exception as exc:  # pydantic validation (e.g. bad provider/tier)
+        raise HTTPException(status_code=422, detail=str(exc))
+    return srv.run(
+        payload,
+        org_id=session.get("tenant_id") or session.get("id"),
+        user_id=session.get("id"),
+    )
+
+
+@app.get("/api/autothink/history")
+def autothink_history(limit: int = 20, session: dict = Depends(require_session)):
+    """Session command history for the workspace (tenant-scoped)."""
+    srv = _autothink_server()
+    return srv.history(
+        limit,
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.post("/api/autothink/cancel")
+def autothink_cancel(body: Dict[str, Any] = Body(...),
+                     session: dict = Depends(require_session)):
+    """Cancel a mid-flight AutothinK run (tenant-scoped)."""
+    run_id = str((body or {}).get("run_id") or "").strip()
+    if not run_id:
+        raise HTTPException(status_code=422, detail="run_id is required")
+    srv = _autothink_server()
+    return srv.cancel(
+        srv.CancelRequest(run_id=run_id),
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.get("/api/autothink/jobs/{run_id}")
+def autothink_job(run_id: str, session: dict = Depends(require_session)):
+    """Run state for polling / resumability (tenant-scoped)."""
+    srv = _autothink_server()
+    return srv.job_state(
+        run_id,
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+@app.get("/api/autothink/usage")
+def autothink_usage(session: dict = Depends(require_session)):
+    """Per-tenant usage / metering summary (tenant-scoped)."""
+    srv = _autothink_server()
+    return srv.usage_summary(
+        org_id=session.get("tenant_id") or session.get("id"),
+    )
+
+
+# --- Hosted reasoning routes (OpenCode Go) ---------------------------------
+
+@app.get("/api/v1/reasoning/models")
+def reasoning_models():
+    """Selectable OpenCode Go models, with verified-runtime state.
+
+    For each model the response carries provider id, base URL, endpoint,
+    configured/enabled state, verified usability and intended role, so the UI
+    can distinguish configured vs verified vs the active default. No secret is
+    returned.
+    """
+    provider = OpenCodeGoProvider()
+    status = provider.status()
+    return {
+        **status,
+        "models": provider.models_status(),
+        "escalation_models": [
+            m for m in provider.models_status()
+            if m["intended_role"] == "escalation"
+        ],
+        "default_model": status["runtime_default_model"],
+        "available": status["configured"],
+        "armed": status["armed"],
+    }
+
+
+@app.post("/api/v1/reasoning/listing-proposal")
+def reasoning_listing_proposal(req: ListingProposalRequest):
+    """Generate a structured listing revision proposal. Owner review required."""
+    result = _reasoning_tasks.listing_proposal(
+        sku=req.sku,
+        title=req.title,
+        bullets=req.bullets,
+        description=req.description,
+        attributes=req.attributes,
+        keywords=req.keywords,
+        brand=req.brand,
+        model=req.model,
+    )
+    return {"proposal": result}
+
+
+@app.post("/api/v1/reasoning/ad-copy-proposal")
+def reasoning_ad_copy_proposal(req: AdCopyProposalRequest):
+    """Generate a structured ad-copy proposal. Never publishes anywhere."""
+    result = _reasoning_tasks.ad_copy_proposal(
+        product_facts=req.product_facts,
+        brand_tone=req.brand_tone,
+        format_hint=req.format_hint,
+        model=req.model,
+    )
+    return {"proposal": result}
+
+
+@app.post("/api/v1/reasoning/spreadsheet-analysis")
+def reasoning_spreadsheet_analysis(req: SpreadsheetAnalysisRequest):
+    """Analyze uploaded spreadsheet rows and return a structured report."""
+    result = _reasoning_tasks.spreadsheet_analysis(
+        rows=req.rows,
+        columns=req.columns,
+        file_name=req.file_name,
+        max_sample_rows=req.max_sample_rows,
+        model=req.model,
+    )
+    return {"analysis": result}
+
+
+@app.post("/api/v1/reasoning/run")
+def reasoning_run(req: ReasoningRunRequest):
+    """Generic hosted-reasoning completion (AutothinK-style)."""
+    if not (req.query or "").strip():
+        raise HTTPException(status_code=422, detail="query is empty")
+    result = _reasoning_tasks.reasoning_run(
+        query=req.query,
+        model=req.model,
+        system_prompt=req.system_prompt,
+    )
+    return result
+
+
+@app.get("/health/detailed")
+def health_detailed():
+    """Detailed readiness probe — checks data files, provider key presence,
+    and model availability. Used by Docker healthcheck and monitoring."""
+    checks = {}
+
+    # Data file presence
+    data_dir = BASE_DIR / "data"
+    for fname in ["costco-items.csv", "costco-api-catalog.json", "seller-offer-cache.json"]:
+        fpath = data_dir / fname
+        checks[f"file_{fname}"] = "ok" if fpath.exists() else "missing"
+
+    # Provider key presence (name only, never values)
+    provider_status = {}
+    provider_keys = {
+        "BRIGHTDATA_UNLOCKER_API_KEY": "bright_data",
+        "OPENWEBNINJA_API_KEY": "openwebninja",
+        "EASYPARSER_API_KEY": "easyparser",
+        "CHOCODATA_API_KEY": "chocodata",
+        "SCRAPE_DO_API_KEY": "scrapedo",
+        "FIRECRAWL_API_KEY": "firecrawl",
+        "BROWSERBASE_API_KEY": "browserbase",
+        "KEENABLE_API_KEY": "keenable",
+        "UNWRANGLE_API_KEY": "unwrangle",
+    }
+    for env_key, provider_name in provider_keys.items():
+        provider_status[provider_name] = "configured" if os.environ.get(env_key) else "not_configured"
+
+    # Scanner state
+    scanner_status = "cache_only"
+    try:
+        if live_gate.live_enabled():
+            scanner_status = "live_allowed"
+    except Exception:
+        pass
+
+    # Test suite status (read from last run if available)
+    test_status_file = BASE_DIR / "data" / ".last_test_status"
+    test_status = "unknown"
+    if test_status_file.exists():
+        try:
+            test_status = test_status_file.read_text().strip()
+        except Exception:
+            pass
+
+    # Data readiness (Phase A/A4) — per-service live-data readiness.
+    try:
+        import readiness
+        _ready_report = readiness.check_all(live=False)
+        readiness_summary = {
+            "ready": _ready_report["ready"],
+            "services": {
+                r["service"]: {"ready": r["ready"], "reason": r["reason"]}
+                for r in _ready_report["services"]
+            },
+        }
+    except Exception as exc:
+        readiness_summary = {"ready": False, "error": str(exc)}
+
+    return {
+        "status": "ok",
+        "service": "northstar-backend",
+        "version": "1.0.0",
+        "checks": checks,
+        "providers": provider_status,
+        "scanner_mode": scanner_status,
+        "test_status": test_status,
+        "readiness": readiness_summary,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@app.get("/api/kirkland/scanner")
+def get_kirkland_scanner():
+    """Clean, allowlisted scanner response for the Product Scout UI.
+
+    Products carry only the Scout data contract keys. Sorting is
+    net_profit desc, roi_pct desc, monthly_sales_estimate desc with
+    nulls last. Status is honest about empty versus unavailable data.
+    """
+    analysis = analyze_kirkland_products()
+    products = []
+    for r in (analysis["all_results"] or []):
+        p = _clean_scanner_product(r)
+        # Null-first completeness contract: score null when nothing is
+        # computable; genuine zero only from evaluated evidence; category
+        # scores null where category inputs are absent.
+        p["completeness"] = completeness_score.compute_scanner_completeness(r)
+        # Buy Box resolution (observed snapshot -> market snapshot ->
+        # local seller cache). Never a live call.
+        p.update(_resolve_buy_box(r))
+        products.append(p)
+    products.sort(key=_scanner_sort_key)
+
+    if not products:
+        status = (
+            "upstream_unavailable"
+            if amazon_search.LAST_SEARCH_ERROR
+            else "no_candidates"
+        )
+    else:
+        status = "ok"
+    error = str(amazon_search.LAST_SEARCH_ERROR or "").lower()
+    upstream_hint = None
+    if status == "upstream_unavailable" and (
+        "402" in error or "insufficient credits" in error
+    ):
+        billing_url = amazon_search.provider_billing_url()
+        upstream_hint = (
+            f"{amazon_search.provider_label()} is out of credits. "
+            "Top up at " + (billing_url or "the provider dashboard") + " and try again."
+        )
+    elif status == "upstream_unavailable" and (
+        "502" in error or "target_unreachable" in error
+    ):
+        upstream_hint = (
+            f"Amazon is temporarily blocking searches for {amazon_search.provider_label()}. "
+            "You were not charged — wait ~10 seconds and retry."
+        )
+    elif status == "upstream_unavailable" and amazon_search.active_search_source() == "BRIGHTDATA":
+        upstream_hint = (
+            "Bright Data search failed (" + str(amazon_search.LAST_SEARCH_ERROR) + "). "
+            "Switch SCANNER_SEARCH_SOURCE=CHOCODATA or SCAVIO in .env, "
+            "or check the Bright Data dashboard at https://www.brightdata.com."
+        )
+
+    cache_meta = amazon_search.cache_meta()
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "status": status,
+        "summary": {
+            "candidates_returned": len(products),
+            "tier_found": analysis.get("tier_found"),
+            "costco_catalog": costco_client.catalog_state(),
+            "costco_discovery": costco_api_client.last_run_status(),
+            "search_source": amazon_search.active_search_source(),
+            "enrichment_source": offer_enrichment._enrichment_mode(),
+            # Backward-compatible diagnostics: cache_only mode reads only
+            # the local candidate cache + Costco CSV — zero outbound calls.
+            # Missing/corrupt/stale cache is honest (cache_status) and
+            # never triggers a live fallback. status stays within the
+            # permitted ok|no_candidates|upstream_unavailable set.
+            "scanner_mode": (
+                "cache_only"
+                if offer_enrichment._enrichment_mode() == "OFF"
+                else "live"
+            ),
+            "live_allowed": live_gate.live_enabled(),
+            "cache_status": cache_meta.get("cache_status"),
+            "cache_fetched_at": cache_meta.get("cache_fetched_at"),
+            "cache_source": cache_meta.get("cache_source"),
+            "upstream_hint": upstream_hint,
+            # Null-first completeness contract version (additive).
+            "completeness_contract_version": 1,
+        },
+        "products": products,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Kirkland Discovery API — high-velocity product discovery with BSR-based
+# sales estimation, category filtering, and Costco cross-reference.
+# ---------------------------------------------------------------------------
+
+import kirkland_discovery as kd
+
+DISCOVERY_CACHE = os.path.join(BASE_DIR, "data", "kirkland-discovery.json")
+DISCOVERY_META_CACHE = os.path.join(BASE_DIR, "data", "kirkland-discovery-meta.json")
+
+
+class DiscoveryFilters(BaseModel):
+    min_monthly_sales: int = 500
+    categories: List[str] = []  # empty = all non-food
+    exclude_categories: List[str] = []
+    match_quality: List[str] = ["exact", "invoice_confirmed", "high_confidence", "candidate"]
+    cost_basis: List[str] = ["invoice_confirmed", "costco_online", "estimated", "candidate_match"]
+    min_profit: Optional[float] = None
+    min_roi: Optional[float] = None
+    max_price: Optional[float] = None
+
+
+@app.get("/api/kirkland/discovery")
+def get_kirkland_discovery(
+    min_monthly_sales: int = 500,
+    category: Optional[str] = None,
+    match_quality: Optional[str] = None,
+    cost_basis: Optional[str] = None,
+    min_profit: Optional[float] = None,
+    min_roi: Optional[float] = None,
+    max_price: Optional[float] = None,
+):
+    """
+    Get Kirkland product discovery results with filtering.
+    
+    All data is from cached discovery runs — zero live API calls.
+    Results auto-load from local JSON cache on server start.
+    """
+    # Load cached discovery
+    if not os.path.exists(DISCOVERY_CACHE):
+        raise HTTPException(
+            status_code=404,
+            detail="Discovery cache not found. Run discovery pipeline first (python kirkland_discovery.py)."
+        )
+    
+    with open(DISCOVERY_CACHE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    products = data.get("qualified_products", [])
+    all_products = data.get("all_kirkland_products", [])
+    
+    # Apply filters
+    filtered = []
+    for p in all_products:
+        # Monthly sales filter
+        sales = p.get("monthly_sales_estimate")
+        if sales is None or sales < min_monthly_sales:
+            continue
+        
+        # Category filter
+        if category:
+            p_cat = p.get("normalized_category") or p.get("category")
+            if not p_cat or p_cat != category:
+                continue
+        
+        # Match quality filter
+        if match_quality:
+            qualities = [q.strip() for q in match_quality.split(",")]
+            if p.get("match_quality") not in qualities:
+                continue
+        
+        # Cost basis filter
+        if cost_basis:
+            bases = [b.strip() for b in cost_basis.split(",")]
+            if p.get("costco_cost_basis") not in bases:
+                continue
+        
+        # Profit filter
+        if min_profit is not None:
+            profit = p.get("net_profit") or p.get("projected_net_profit")
+            if profit is None or profit < min_profit:
+                continue
+        
+        # ROI filter
+        if min_roi is not None:
+            roi = p.get("roi_pct") or p.get("projected_roi_pct")
+            if roi is None or roi < min_roi:
+                continue
+        
+        # Max price filter
+        if max_price is not None:
+            price = p.get("amazon_price")
+            if price is None or price > max_price:
+                continue
+        
+        filtered.append(p)
+    
+    # Sort by monthly sales desc
+    filtered.sort(key=lambda x: x.get("monthly_sales_estimate") or 0, reverse=True)
+    
+    # Get unique categories for filter UI
+    categories = sorted(set(
+        c for c in (
+            p.get("normalized_category") or p.get("category")
+            for p in all_products
+            if p.get("monthly_sales_estimate") and p.get("monthly_sales_estimate") >= min_monthly_sales
+            and not kd.is_food_category(p.get("category")) and not kd.is_food_by_title(p.get("name"))
+        )
+        if c
+    ))
+    
+    return {
+        "meta": data.get("meta", {}),
+        "filters_applied": {
+            "min_monthly_sales": min_monthly_sales,
+            "category": category,
+            "match_quality": match_quality,
+            "cost_basis": cost_basis,
+            "min_profit": min_profit,
+            "min_roi": min_roi,
+            "max_price": max_price,
+        },
+        "categories": categories,
+        "products": filtered,
+        "total_available": len(all_products),
+        "total_filtered": len(filtered),
+    }
+
+
+@app.post("/api/kirkland/discovery/run")
+def run_kirkland_discovery(filters: DiscoveryFilters):
+    """
+    Trigger a fresh discovery run with custom filters.
+    Uses cached scanner data only (zero live calls unless explicitly enabled).
+    """
+    result = kd.run_discovery(
+        use_cache_only=True,
+        min_sales=filters.min_monthly_sales,
+        excluded_cats=filters.exclude_categories,
+        included_cats=filters.categories,
+    )
+    return {
+        "status": "ok" if result.get("qualified_count", 0) > 0 else "completed",
+        "summary": result.get("meta", {}),
+    }
+
+
+@app.get("/api/kirkland/discovery/categories")
+def get_discovery_categories():
+    """Get all available categories from discovery cache for filter UI."""
+    if not os.path.exists(DISCOVERY_CACHE):
+        return {"categories": []}
+    
+    with open(DISCOVERY_CACHE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    all_products = data.get("all_kirkland_products", [])
+    categories = {}
+    
+    for p in all_products:
+        sales = p.get("monthly_sales_estimate")
+        if not sales or sales < 500:
+            continue
+        if kd.is_food_category(p.get("category")) or kd.is_food_by_title(p.get("name")):
+            continue
+        cat = p.get("normalized_category") or p.get("category") or "Unknown"
+        if cat not in categories:
+            categories[cat] = 0
+        categories[cat] += 1
+    
+    return {
+        "categories": [
+            {"name": cat, "count": count}
+            for cat, count in sorted(categories.items(), key=lambda x: -x[1])
+        ]
+    }
+
+
+@app.get("/api/kirkland/discovery/meta")
+def get_discovery_meta():
+    """Get discovery metadata (timestamp, counts, etc.) without full product list."""
+    if not os.path.exists(DISCOVERY_META_CACHE):
+        return {"status": "not_found"}
+    
+    with open(DISCOVERY_META_CACHE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@app.get("/api/products/{asin}/canopy")
+def get_product_canopy(asin: str) -> dict:
+    if not re.fullmatch(r"[A-Za-z0-9]{10}", asin):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid ASIN. Expected a 10-character alphanumeric Amazon ASIN.",
+        )
+
+    product = get_canopy_product(asin)
+
+    product["enrichment_source"] = "canopy"
+    product["enrichment_scope"] = "one_explicit_asin"
+    price = product.get("amazon_price")
+    product["live_price_verified"] = isinstance(price, (int, float)) and price > 0
+
+    return product
+
+
+@app.get("/api/products/{asin}/offers")
+def get_product_offers(asin: str) -> dict:
+    """On-demand seller/Buy Box detail for exactly one ASIN.
+
+    Called only when the user explicitly opens the Sellers & Buy Box panel
+    for one ASIN — never by the scanner, row rendering, filtering, sorting,
+    or page load. One provider request maximum per cache miss (Easyparser
+    OFFER), cached separately from the scanner enrichment cache. Invalid
+    ASINs are rejected before any provider call.
+    """
+    if not re.fullmatch(r"[A-Za-z0-9]{10}", asin):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid ASIN. Expected a 10-character alphanumeric Amazon ASIN.",
+        )
+
+    payload = offer_enrichment.get_seller_offer_contract(asin)
+    payload["enrichment_source"] = payload.get("offer_data_source") or "easyparser"
+    payload["enrichment_scope"] = "one_explicit_asin"
+
+    return payload
+
+
+# ---------------------------------------------------------------------------
+# DataForSEO Amazon Merchant secondary-validation adapter (offline by default)
+# ---------------------------------------------------------------------------
+
+from pydantic import BaseModel as _BaseModel
+
+import dataforseo_adapter as _df
+from proof_batch_contracts import GuardError as _GuardError
+
+
+class DataForSEOValidateRequest(_BaseModel):
+    asin: str = ""
+    marketplace: str = ""
+    bd_snapshot_ref: Optional[str] = None
+    bd_record_id: Optional[str] = None
+    approval_run_id: str = ""
+    approval_token: Optional[str] = None
+    task_types: Optional[List[str]] = None
+
+
+@app.post("/api/dataforseo/validate")
+def post_dataforseo_validate(req: DataForSEOValidateRequest):
+    """Guarded single-ASIN DataForSEO Standard-queue cross-check.
+
+    This is the ONLY route that may touch the DataForSEO adapter, and it
+    is fail-closed:
+
+    - DATAFORSEO_ENABLED must be an explicit opt-in (feature flag, false
+      by default). Otherwise returns 403 and never touches a provider.
+    - An explicit one-run approval token must be supplied in the POST body
+      (never a GET, never a UI toggle, never a page load). The token must
+      equal the approval_run_id exactly.
+    - The candidate must have passed the internal shortlist logic; the
+      contract rejects batches/lists/wildcards/keyword searches.
+    - The live transport is armed only by an explicit runtime opt-in:
+      DATAFORSEO_TRANSPORT_ENABLED exactly "true" plus configured
+      DATAFORSEO_LOGIN/DATAFORSEO_PASSWORD credentials. Without the arm,
+      even a fully authorized request refuses before any network call
+      (LIVE_CALLS_MADE=0); with the arm, the guarded Standard-queue
+      submission runs with the budget ledger enforced.
+
+    GET routes and normal page loads never invoke this adapter.
+    """
+    cfg = _df.load_config()
+    if not cfg.get("enabled"):
+        raise HTTPException(
+            status_code=403,
+            detail=(
+                "DataForSEO validation is disabled (DATAFORSEO_ENABLED not set "
+                "to an explicit opt-in). Returning no provider call."
+            ),
+        )
+    body: Dict[str, Any] = {
+        "asin": req.asin,
+        "marketplace": req.marketplace,
+        "bd_snapshot_ref": req.bd_snapshot_ref,
+        "bd_record_id": req.bd_record_id,
+        "approval_run_id": req.approval_run_id,
+        "approval_token": req.approval_token,
+    }
+    if req.task_types is not None:
+        body["task_types"] = req.task_types
+    try:
+        result = _df.execute_validation(
+            body, operator_token=req.approval_token)
+    except _GuardError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return result
+
+@app.get("/api/sourcescout")
+def get_sourcescout():
+    """Sourcescout: 180+ Kirkland products for the retail arbitrage dashboard."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    return {
+        "kind": data.get("kind", "sourcescout"),
+        "schema_version": data.get("schema_version", "1.0"),
+        "generated_at": data.get("generated_at"),
+        "count": data.get("count", len(data.get("items", []))),
+        "items": data.get("items", []),
+        "quantity_match_summary": data.get("quantity_match_summary", {})
+    }
+
+
+@app.get("/api/sourcescout/matches")
+def get_sourcescout_matches():
+    """Sourcescout: Only PASS items (Amazon quantity matches Costco SKU)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    matched = [item for item in items if item.get("quantity_match", {}).get("status") == "PASS"]
+    return {
+        "kind": "sourcescout_matches",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(matched),
+        "items": matched,
+    }
+
+
+@app.get("/api/sourcescout/mismatches")
+def get_sourcescout_mismatches():
+    """Sourcescout: FAIL items (Amazon quantity != Costco SKU quantity)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    mismatched = [item for item in items if item.get("quantity_match", {}).get("status") == "FAIL"]
+    return {
+        "kind": "sourcescout_mismatches",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(mismatched),
+        "items": mismatched,
+    }
+
+
+@app.get("/api/sourcescout/review")
+def get_sourcescout_review():
+    """Sourcescout: REVIEW items (Costco SKU not found or ambiguous)."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    items = data.get("items", [])
+    review = [item for item in items if item.get("quantity_match", {}).get("status") == "REVIEW"]
+    return {
+        "kind": "sourcescout_review",
+        "schema_version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(review),
+        "items": review,
+    }
+
+
+@app.get("/api/sourcescout/summary")
+def get_sourcescout_summary():
+    """Sourcescout: Quantity match validation summary."""
+    import json
+    from pathlib import Path
+    manifest_path = Path(__file__).parent / "data" / "catalog" / "sourcescout_manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=404, detail="Sourcescout manifest not found")
+    with open(manifest_path) as f:
+        data = json.load(f)
+    return data.get("quantity_match_summary", {
+        "total": 0,
+        "pass": 0,
+        "fail": 0,
+        "review": 0,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Auth routes (Phase 5)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/auth/register")
+def register_user(body: dict):
+    """Register a new user account.
+
+    In private alpha, registration is restricted to the allowlist so the
+    in-app gate is real access control (not just obscurity).
+    """
+    import auth
+    from alpha_gate import is_allowlisted, private_alpha_enabled, alpha_allowlist
+    email = body.get("email", "")
+    if private_alpha_enabled() and not is_allowlisted(email):
+        raise HTTPException(
+            status_code=403,
+            detail="Registration is restricted to authorized accounts during private alpha.",
+        )
+    result = auth.register_user(
+        email=email,
+        password=body.get("password", ""),
+        plan=body.get("plan", "foundation"),
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
+
+
+@app.post("/api/v1/auth/login")
+def login_user(body: dict):
+    """Authenticate and get access tokens."""
+    import auth
+    result = auth.login_user(
+        email=body.get("email", ""),
+        password=body.get("password", ""),
+    )
+    if "error" in result:
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
+
+
+@app.post("/api/v1/auth/refresh")
+def refresh_token(body: dict):
+    """Refresh an access token."""
+    import auth
+    result = auth.refresh_access_token(body.get("refresh_token", ""))
+    if "error" in result:
+        raise HTTPException(status_code=401, detail=result["error"])
+    return result
+
+
+@app.get("/api/v1/auth/me")
+async def get_me(user: dict = Depends(get_current_user)):
+    """Get current user info via JWT token."""
+    if user.get("is_demo"):
+        return {
+            "mode": "demo",
+            "user": user,
+            "message": "Unauthenticated demo access. Register for full features.",
+        }
+    return {
+        "id": user.get("id"),
+        "email": user.get("email"),
+        "plan": user.get("plan"),
+        "name": user.get("name"),
+    }
+
+
+@app.get("/api/v1/plans")
+def list_plans():
+    """List all subscription plans with entitlements."""
+    import auth
+    return {"plans": auth.PLAN_ENTITLEMENTS}
+
+
+@app.get("/api/v1/admin/accounts/{user_id}")
+async def admin_get_account(user_id: str, admin: dict = Depends(require_admin)):
+    """Least-privilege admin read (B4 boundary enforcement).
+
+    Requires the platform `admin` role and returns ONLY the whitelisted basic
+    account view (id, email, plan, created_at) — never password hashes, tokens,
+    session ids, or tenant product data. Unknown ids return 404 (fail closed).
+    """
+    import auth
+    target = auth.get_user(user_id)
+    if not target:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return {"account": auth.admin_account_view(target)}
+
+
+@app.get("/api/v1/credits/me")
+async def credits_me(request: Request):
+    """Credit meter read (B3 contract/C8) — read-only, offline, no cost logic.
+
+    Plan is resolved from the bearer token (B2 stub auth); demo = foundation.
+    Balance is seeded per the catalog plan allotment for the current period;
+    nothing is billed. The client only DISPLAYS this value — it never computes
+    cost logic (credit-ledger/v1 §3, C8).
+    """
+    try:
+        from credit_ledger import allotment_for_plan
+        import auth as _auth
+        plan = "foundation"
+        header = request.headers.get("authorization", "")
+        if header.lower().startswith("bearer "):
+            try:
+                payload = _auth.decode_token(header[7:].strip())
+                candidate = payload.get("plan", "foundation")
+                allotment_for_plan(candidate)  # validate against catalog
+                plan = candidate
+            except Exception:
+                plan = "foundation"
+        allotment = allotment_for_plan(plan)
+        # Offline alpha: no consumption tracked yet; balance == allotment.
+        return {
+            "contract": "bff/v1",
+            "status": "ok",
+            "data": {
+                "balance": allotment,
+                "allotment": allotment,
+                "consumed": 0,
+                "class": "compute",
+                "plan": plan,
+                "period": "month",
+            },
+            "error": None,
+            "meta": {"service": "credits", "version": "v1"},
+        }
+    except Exception:
+        raise HTTPException(status_code=500, detail="Credit ledger unavailable")
+
+
+# ---------------------------------------------------------------------------
+# Phase F/S8 — internal support queue (local only)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/support/tickets")
+async def support_create_ticket(body: dict = Body(...), user: dict = Depends(get_current_user)):
+    import support as support_mod
+    try:
+        ticket = support_mod.create_ticket(
+            user.get("id", "anonymous"),
+            str(body.get("subject", "")),
+            str(body.get("body", "")),
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ticket": ticket}
+
+
+@app.get("/api/v1/support")
+async def support_list_tickets(status_: Optional[str] = Query(None, alias="status"),
+                               admin: dict = Depends(require_admin)):
+    import support as support_mod
+    return {"tickets": support_mod.list_tickets(status_)}
+
+
+@app.patch("/api/v1/support/{ticket_id}")
+async def support_update_ticket(ticket_id: str, body: dict = Body(...),
+                                admin: dict = Depends(require_admin)):
+    import support as support_mod
+    try:
+        if "status" in body:
+            ticket = support_mod.set_status(ticket_id, str(body["status"]))
+        elif "assign" in body:
+            ticket = support_mod.assign(ticket_id, str(body["assign"]))
+        else:
+            raise HTTPException(status_code=400, detail="Nothing to update")
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown ticket")
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"ticket": ticket}
+
+
+# ---------------------------------------------------------------------------
+# Phase F/S7 — invite + onboarding flow (code only; email send is stubbed)
+# ---------------------------------------------------------------------------
+
+@app.post("/api/v1/invites")
+async def create_invite(body: dict = Body(...), admin: dict = Depends(require_admin)):
+    """Operator-only: create a founding-cohort invite code."""
+    import invites as invites_mod
+    try:
+        inv = invites_mod.create_invite(
+            str(body.get("cohort", "")), email=body.get("email") or None
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    return {"invite": inv}
+
+
+@app.get("/api/v1/invites/{code}")
+async def invite_lookup(code: str):
+    """Public: validate an invite code (no secrets in the response)."""
+    import invites as invites_mod
+    inv = invites_mod.get_invite(code)
+    if inv is None:
+        raise HTTPException(status_code=404, detail="Unknown invite code")
+    return {"invite": inv}
+
+
+@app.post("/api/v1/invites/redeem")
+async def redeem_invite(body: dict = Body(...), user: dict = Depends(get_current_user)):
+    """Authenticated: redeem an invite. Cohort/plan come from the row."""
+    import invites as invites_mod
+    code = str(body.get("code", ""))
+    try:
+        result = invites_mod.redeem_invite(code, user.get("id", "anonymous"))
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown invite code")
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return {"result": result}
+
+
+# ---------------------------------------------------------------------------
+# C9: legal document routes (serve the A6 docs/legal drafts; plain markdown).
+# ---------------------------------------------------------------------------
+
+_LEGAL_DOCS = {
+    "terms": "TERMS_OF_SERVICE.md",
+    "privacy": "PRIVACY_POLICY.md",
+    "refund": "REFUND_CANCELLATION.md",
+}
+
+
+@app.get("/legal/{name}")
+def serve_legal_doc(name: str):
+    """Serve a docs/legal draft as markdown (C9 embed; non-authoritative copy)."""
+    filename = _LEGAL_DOCS.get(name)
+    if not filename:
+        raise HTTPException(status_code=404, detail="Legal document not found")
+    from fastapi.responses import PlainTextResponse
+    from pathlib import Path as _P
+    path = _P(__file__).resolve().parent.parent / "docs" / "legal" / filename
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Legal document not found")
+    return PlainTextResponse(path.read_text(encoding="utf-8"),
+                             media_type="text/markdown")
+
+
+@app.get("/api/v1/plans/{plan_id}")
+def get_plan_by_id(plan_id: str):
+    """Get a single subscription plan by id (additive A2 endpoint).
+
+    Reads the same canonical catalog as GET /api/v1/plans
+    (auth.PLAN_ENTITLEMENTS, projected from shared/subscription-plans.json).
+    Unknown plan ids return 404 — never fabricated.
+    """
+    import auth
+    plan = auth.PLAN_ENTITLEMENTS.get(plan_id)
+    if plan is None:
+        raise HTTPException(status_code=404, detail=f"Unknown plan: {plan_id}")
+    return {"plan": plan}
+
+
+# ---------------------------------------------------------------------------
+# Supplier Intelligence + Universal Sourcing routes (Phase 1)
+#
+# All routes are offline-safe: discovery/ingestion default to the built-in
+# seed catalog / caller-supplied bytes. No live/paid outbound call is made
+# unless the operator has armed the matching named gate AND injected a
+# transport (see scrapers/*). Reading these routes never spends credits.
+# ---------------------------------------------------------------------------
+
+
+def _suppliers_db():
+    from data_layer import get_db, SuppliersDB
+    return SuppliersDB(get_db())
+
+
+def _logistics_warning(requires_liftgate) -> Optional[str]:
+    """Human-readable logistics warning for a supplier row."""
+    if not requires_liftgate:
+        return None
+    try:
+        from pathlib import Path as _Path
+        import json as _json
+        cfg = _Path(__file__).resolve().parent / "config" / "supplier_intelligence.json"
+        with open(cfg, "r", encoding="utf-8") as f:
+            data = _json.load(f)
+        return data.get("logistics", {}).get(
+            "warning_message",
+            "Delivery constraint: mechanical liftgate may be required.",
+        )
+    except (OSError, ValueError):
+        return "Delivery constraint: mechanical liftgate may be required."
+
+
+@app.get("/api/suppliers")
+def list_suppliers_route(
+    decision_flag: Optional[str] = None,
+    requires_liftgate: Optional[bool] = None,
+    category: Optional[str] = None,
+    limit: int = 200,
+):
+    """List known suppliers for the Find-a-Supplier dashboard."""
+    db = _suppliers_db()
+    rows = db.list_all(
+        decision_flag=decision_flag,
+        requires_liftgate=requires_liftgate,
+        category_slug=category,
+        limit=limit,
+    )
+    for r in rows:
+        r["logistics_warning"] = _logistics_warning(r.get("requires_liftgate"))
+        if r.get("categories_supplied"):
+            try:
+                r["categories_supplied"] = json.loads(r["categories_supplied"])
+            except (ValueError, TypeError):
+                pass
+    return {"suppliers": rows, "count": len(rows)}
+
+
+@app.get("/api/suppliers/analytics")
+def suppliers_analytics_route():
+    """Summary counts for the supplier dashboard tiles."""
+    db = _suppliers_db()
+    suppliers = db.list_all(limit=1000)
+    analyses = db.get_analyses(limit=2000)
+    counts = {"viable": 0, "marginal": 0, "reject": 0, "needs_manual_review": 0}
+    for a in analyses:
+        flag = a.get("decision_flag")
+        if flag in counts:
+            counts[flag] += 1
+    return {
+        "suppliers_total": len(suppliers),
+        "suppliers_liftgate": sum(1 for s in suppliers if s.get("requires_liftgate")),
+        "analyses_total": len(analyses),
+        "decision_counts": counts,
+    }
+
+
+@app.get("/api/suppliers/analyses")
+def supplier_analyses_route(
+    product_id: Optional[str] = None,
+    decision_flag: Optional[str] = None,
+    limit: int = 200,
+):
+    """List stored cost-benefit analysis rows."""
+    db = _suppliers_db()
+    rows = db.get_analyses(product_id=product_id, decision_flag=decision_flag, limit=limit)
+    return {"analyses": rows, "count": len(rows)}
+
+
+@app.post("/api/suppliers/discover")
+def discover_suppliers_route(body: dict):
+    """Discover wholesale suppliers for a category (offline seed by default).
+
+    ``live=true`` requires SUPPLIER_DISCOVERY_LIVE_OPERATOR_APPROVED=1 and an
+    injected transport; without both, offline results are returned and the
+    response records that no live call was made.
+    """
+    from scrapers.supplier_discovery import SupplierDiscoveryScraper
+    category = body.get("category") or body.get("category_slug") or ""
+    keywords = body.get("keywords") or []
+    requested_live = bool(body.get("live"))
+    scraper = SupplierDiscoveryScraper()
+    mode = "live" if requested_live else "offline"
+    profiles = scraper.discover(category, keywords, mode=mode)
+    persist = bool(body.get("persist"))
+    saved_ids: List[str] = []
+    if persist:
+        db = _suppliers_db()
+        for p in profiles:
+            try:
+                saved_ids.append(db.upsert(p.as_dict()))
+            except Exception as exc:  # duplicate name, etc. — do not 500
+                logger.warning(f"supplier persist skipped: {exc}")
+    effective_mode = mode if (mode == "offline" or profiles) else "offline"
+    return {
+        "mode": effective_mode,
+        "live_requested": requested_live,
+        "live_armed": scraper.live_armed(),
+        "error": scraper.last_error,
+        "suppliers": [p.as_dict() for p in profiles],
+        "persisted_ids": saved_ids,
+    }
+
+
+@app.post("/api/suppliers/analyze")
+def analyze_supplier_route(body: dict):
+    """Pre-account cost-benefit analysis of one supplier product."""
+    from analysis.supplier_cost_benefit import SupplierCostBenefitAnalyzer
+    product = body.get("supplier_product") or {}
+    match = body.get("amazon_match") or {}
+    if not product:
+        raise HTTPException(status_code=400, detail="supplier_product is required")
+    analyzer = SupplierCostBenefitAnalyzer(
+        min_roi_pct=body.get("min_roi_pct"),
+        min_profit_margin_pct=body.get("min_profit_margin_pct"),
+        min_net_profit_per_unit=body.get("min_net_profit_per_unit"),
+    )
+    result = analyzer.analyze(product, match or None)
+    return result.as_dict()
+
+
+@app.post("/api/suppliers")
+def upsert_supplier_route(body: dict):
+    """Create or update a supplier record."""
+    if not body.get("name"):
+        raise HTTPException(status_code=400, detail="name is required")
+    db = _suppliers_db()
+    sid = db.upsert(body)
+    return {"id": sid, "supplier": db.get_by_id(sid)}
+
+
+@app.post("/api/suppliers/import-csv")
+def import_supplier_csv_route(body: dict):
+    """Ingest a supplier CSV price list, persist products, run cost-benefit."""
+    supplier_id = body.get("supplier_id")
+    csv_text = body.get("csv_text") or body.get("csv")
+    if not supplier_id or csv_text is None:
+        raise HTTPException(status_code=400, detail="supplier_id and csv_text are required")
+    from data_layer import get_db, SuppliersDB
+    from scrapers.supplier_catalog_ingestion import parse_csv_bytes
+    from tasks.supplier_pipeline import SupplierPipeline
+
+    db = SuppliersDB(get_db())
+    if db.get_by_id(supplier_id) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{supplier_id}' not found")
+
+    ingest = parse_csv_bytes(
+        csv_text.encode("utf-8") if isinstance(csv_text, str) else csv_text,
+        supplier_id,
+        body.get("source_file"),
+    )
+    pipeline = SupplierPipeline(db=db)
+    result = pipeline.ingest_products(supplier_id, ingest.products)
+    return {
+        "supplier_id": supplier_id,
+        "rows_parsed": ingest.rows_parsed,
+        "rows_imported": ingest.rows_imported,
+        "rows_skipped": ingest.rows_skipped,
+        "skip_reasons": ingest.skip_reasons,
+        "pipeline": result.as_dict(),
+    }
+
+
+@app.get("/api/suppliers/{sid}")
+def get_supplier_route(sid: str):
+    """Supplier detail with products and their latest analyses."""
+    db = _suppliers_db()
+    supplier = db.get_by_id(sid)
+    if supplier is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    if supplier.get("categories_supplied"):
+        try:
+            supplier["categories_supplied"] = json.loads(supplier["categories_supplied"])
+        except (ValueError, TypeError):
+            pass
+    supplier["logistics_warning"] = _logistics_warning(supplier.get("requires_liftgate"))
+    products = db.get_products(sid, limit=500)
+    for p in products:
+        analyses = db.get_analyses(product_id=p["id"], limit=1)
+        p["latest_analysis"] = analyses[0] if analyses else None
+        if p["latest_analysis"] and p["latest_analysis"].get("notes"):
+            try:
+                p["latest_analysis"]["notes"] = json.loads(p["latest_analysis"]["notes"])
+            except (ValueError, TypeError):
+                pass
+    return {"supplier": supplier, "products": products, "product_count": len(products)}
+
+
+@app.delete("/api/suppliers/{sid}")
+def delete_supplier_route(sid: str):
+    """Delete a supplier and its products."""
+    db = _suppliers_db()
+    deleted = db.delete(sid)
+    if not deleted:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    return {"deleted": True, "id": sid}
+
+
+@app.get("/api/suppliers/{sid}/products")
+def get_supplier_products_route(sid: str, limit: int = 500):
+    """List a supplier's ingested products."""
+    db = _suppliers_db()
+    if db.get_by_id(sid) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    products = db.get_products(sid, limit=limit)
+    return {"supplier_id": sid, "products": products, "count": len(products)}
+
+
+@app.post("/api/suppliers/{sid}/products")
+def add_supplier_products_route(sid: str, body: dict):
+    """Add products to a supplier and optionally run cost-benefit analysis."""
+    db = _suppliers_db()
+    if db.get_by_id(sid) is None:
+        raise HTTPException(status_code=404, detail=f"Supplier '{sid}' not found")
+    products = body.get("products") or []
+    if not isinstance(products, list) or not products:
+        raise HTTPException(status_code=400, detail="products must be a non-empty list")
+    if body.get("replace"):
+        db.replace_products(sid, products)
+    else:
+        db.add_products(sid, products)
+
+    analyses = []
+    if body.get("analyze"):
+        from analysis.supplier_cost_benefit import SupplierCostBenefitAnalyzer
+        analyzer = SupplierCostBenefitAnalyzer()
+        prices = body.get("amazon_prices") or {}
+        for p in products:
+            match = None
+            price = prices.get(p.get("supplier_sku")) or p.get("amazon_price")
+            if price:
+                match = {"amazon_price": price}
+            result = analyzer.analyze(p, match)
+            analyses.append(result.as_dict())
+    return {
+        "supplier_id": sid,
+        "added": len(products),
+        "analyses": analyses,
+    }
+
+
+@app.post("/api/filters/universal/evaluate")
+def universal_filter_evaluate_route(body: dict):
+    """Apply the universal (Golden Goose) filter to a product dict."""
+    from filters.universal_filter import UniversalProductFilter
+    product = body.get("product") or {}
+    if not product:
+        raise HTTPException(status_code=400, detail="product is required")
+    filt = UniversalProductFilter(
+        min_roi_per_unit=body.get("min_roi_per_unit", 10.0),
+        min_monthly_sales=body.get("min_monthly_sales", 1000),
+        max_fba_sellers=body.get("max_fba_sellers", 2),
+        brand_blacklist=body.get("brand_blacklist"),
+    )
+    result = filt.apply(product)
+    return {
+        "passed": result.passed,
+        "reasons": result.reasons,
+        "passed_gates": result.passed_gates,
+        "thresholds": {
+            "min_roi_per_unit": filt.min_roi_per_unit,
+            "min_monthly_sales": filt.min_monthly_sales,
+            "preferred_max_weight_oz": filt.preferred_max_weight_oz,
+            "abs_max_weight_oz": filt.abs_max_weight_oz,
+            "max_fba_sellers": filt.max_fba_sellers,
+        },
+    }
+
+
+@app.get("/api/products/finder")
+def product_finder_route(
+    limit: int = 100,
+    min_roi_per_unit: float = 10.0,
+    min_monthly_sales: int = 1000,
+    max_fba_sellers: int = 2,
+):
+    """Universal Product Finder — candidates scored by the universal filter.
+
+    Stock-first: reads live-stocked rows from ProductsDB (Phase A/A3 warehouse),
+    then merges the local candidate cache. Zero provider calls by default; a
+    live refresh is an explicit, gated action."""
+    from filters.universal_filter import UniversalProductFilter
+    import live_catalog
+
+    def _stored_to_candidate(row: dict) -> dict:
+        return {
+            "asin": row.get("asin"),
+            "name": row.get("title") or "",
+            "brand": row.get("brand"),
+            "category": row.get("category"),
+            "amazon_price": row.get("amazon_price"),
+            "net_profit": row.get("net_profit"),
+            "roi_pct": row.get("roi_pct"),
+            "monthly_sales_estimate": row.get("monthly_sales_estimate"),
+            "weight_lbs": row.get("weight_lbs"),
+            "fba_sellers": row.get("seller_count"),
+            "data_kind": row.get("data_kind"),
+            "provider_id": row.get("provider_id"),
+            "fresh_until": row.get("fresh_until"),
+        }
+
+    stocked = [_stored_to_candidate(r) for r in live_catalog.get_stocked(limit=1000)]
+    cache = amazon_search.load_cached_candidates()
+
+    merged: list = []
+    seen = set()
+    for c in stocked + cache:
+        key = c.get("asin") or c.get("name")
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(c)
+
+    filt = UniversalProductFilter(
+        min_roi_per_unit=min_roi_per_unit,
+        min_monthly_sales=min_monthly_sales,
+        max_fba_sellers=max_fba_sellers,
+    )
+    evaluated = filt.filter_all(merged, keep_rejected=True)
+    passed = [e for e in evaluated if e.get("universal_filter_passed")]
+    evaluated.sort(key=lambda e: (not e.get("universal_filter_passed"),))
+    return {
+        "passed": passed[:limit],
+        "evaluated": evaluated[:limit],
+        "candidate_count": len(evaluated),
+        "passed_count": len(passed),
+        "stocked_count": len(stocked),
+        "filter_source": "stock+cache" if stocked else "cache-only",
+        "thresholds": {
+            "min_roi_per_unit": filt.min_roi_per_unit,
+            "min_monthly_sales": filt.min_monthly_sales,
+            "preferred_max_weight_oz": filt.preferred_max_weight_oz,
+            "abs_max_weight_oz": filt.abs_max_weight_oz,
+            "max_fba_sellers": filt.max_fba_sellers,
+        },
+    }
+
+
+# =============================================================================
+# Foundation (Phase 1B) — ADDITIVE, versioned namespace /api/v1/foundation/*
+# Shared P0 foundation: organizations/identity, canonical product identity,
+# provenance, provider registry, jobs, usage (shadow mode), audit, approvals.
+# No external provider execution; no production migration; no GET-triggered
+# provider activity. Mounted defensively so a foundation error can never break
+# the existing API surface.
+# =============================================================================
+try:
+    from foundation.api.state import FoundationState as _FoundationState
+    from foundation.api.router import router as _foundation_router
+    from foundation.authn import assert_startup_posture as _assert_auth_posture
+
+    _assert_auth_posture()
+    app.state.foundation = _FoundationState.build()
+    app.include_router(_foundation_router)
+    print("DEBUG include_router called, routes now:", len(app.routes))
+except Exception as _foundation_exc:  # pragma: no cover - defensive mount
+    import logging as _logging
+
+    _logging.getLogger("northstar.foundation").warning(
+        "foundation router not mounted: %s", _foundation_exc
+    )
+
+
+# =============================================================================
+# Non-creative read-only projections over the local SQLite data (products,
+# costco_* pipeline tables, keywords, listings, memory, audit, refresh metadata).
+# Read-only; no external calls; no secrets. Mounted defensively so a failure
+# here can never break the existing API surface.
+# =============================================================================
+try:
+    from noncreative_reads import router as _noncreative_router
+
+    app.include_router(_noncreative_router)
+except Exception as _noncreative_exc:  # pragma: no cover - defensive mount
+    import logging as _logging2
+
+    _logging2.getLogger("northstar.noncreative").warning(
+        "noncreative reads router not mounted: %s", _noncreative_exc
+    )
+
+
+
+

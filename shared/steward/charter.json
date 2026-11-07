@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "approved_by": "owner (Tyrone)",
+  "replaces": "AGENTS.md §2-§2B + docs/OPERATING_CONSTITUTION.md",
+  "immutable": true,
+  "rules_engine_file": "steward/rules_engine.py",
+  "watchdog_file": "steward/watchdog.py",
+  "audit_log_location": "shared/steward/ledger.jsonl",
+  "prevent_modification": [
+    "steward/", "watchdog.py", "audit.log.jsonl", "chromecontrol_policy_owner.json",
+    "AGENTS.md", "docs/OPERATING_CONSTITUTION.md"
+  ],
+  "caps": {
+    "wall_time_hours": 8,
+    "attempts_per_item": 3,
+    "daily_task_cap": 20,
+    "free_disk_gb_minimum": 20.0,
+    "free_disk_pause": 10.0
+  },
+  "isolation": {
+    "worktree_base_branch": "feature/chrome-connect-3.0",
+    "worktree_path_pattern": "northstar-build/{date}-{task}",
+    "never_commit_on": ["main", "release/*", "hotfix/*", "dev/*"]
+  },
+  "charter_classes": {
+    "A": "Steward approves alone",
+    "B": "Steward approves after owner acknowledges first digest",
+    "C": "Always queued for owner",
+    "D": "Always denied, never queued as approve"
+  },
+  "allowed_local_changes": [
+    "new tests",
+    "refactors",
+    "local commits on worktree branches",
+    "fixture and synthetic runs",
+    "report writing",
+    "installing MIT/Apache/BSD pinned packages >=14 days old with checksum"
+  ],
+  "blocked_actions": {
+    "money": false,
+    "secrets": false,
+    "external_irreversible": false,
+    "amazon_browser_access": false,
+    "watchdog_disable": false
+  }
+}

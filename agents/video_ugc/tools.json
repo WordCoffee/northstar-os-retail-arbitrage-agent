@@ -1,0 +1,8 @@
+{
+  "agent": "video_ugc",
+  "allowed_tools": [
+    "creative_plan",
+    "generate_image"
+  ],
+  "needs_gpu": true
+}

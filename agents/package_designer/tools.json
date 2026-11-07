@@ -1,0 +1,10 @@
+{
+  "agent": "package_designer",
+  "allowed_tools": [
+    "build_package",
+    "create_dieline",
+    "generate_image",
+    "apply_label"
+  ],
+  "needs_gpu": false
+}

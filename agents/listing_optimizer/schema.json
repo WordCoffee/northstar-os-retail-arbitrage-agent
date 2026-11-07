@@ -1,0 +1,24 @@
+{
+  "agent": "listing_optimizer",
+  "outputs": [
+    "before/after scores",
+    "issue list",
+    "rewritten listing",
+    "backend search terms within the byte limit",
+    "change log"
+  ],
+  "validators": [
+    "no_invented_keywords",
+    "byte_limit",
+    "scores_trace_to_engine"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

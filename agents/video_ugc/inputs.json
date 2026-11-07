@@ -1,0 +1,13 @@
+{
+  "agent": "video_ugc",
+  "required": [
+    "product",
+    "duration_seconds"
+  ],
+  "optional": [
+    "script",
+    "aspect",
+    "voice_id",
+    "claims"
+  ]
+}

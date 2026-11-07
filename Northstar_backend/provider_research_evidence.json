@@ -1,0 +1,483 @@
+{
+  "run_id": "seller-provider-pilot-2026-09-27",
+  "generated_at": "2026-09-27T20:41:44.189642+00:00",
+  "method": "selleramp_free_text_lookup (permitted); sellersprite product-research filters not usable for no-ASIN records",
+  "candidates": [
+    {
+      "candidate_id": "csp_3f3fb592e3b1",
+      "brand": "Unitex",
+      "costco_title": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "costco_pack": "52 Count(s)",
+      "costco_price": 22.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Unitex Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B00QSI19SA",
+          "upc": "881314137039",
+          "title": "52 Pack Green Lifestyle 14 X 17 100% Cotton Heavy Weight Wring Spun Soft Terry Loop Shop Towels 246",
+          "category": null,
+          "bsr": "108k",
+          "est_sales": "50+/mo",
+          "max_cost": "19.12",
+          "offers": "20",
+          "fba_sellers": "3",
+          "fbm_sellers": "17",
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_01a3aab95350",
+      "brand": "VOLT",
+      "costco_title": "VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+      "costco_pack": "2 Pack(s)",
+      "costco_price": 99.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "VOLT VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B083F4CNHX",
+          "upc": "842032115495",
+          "title": "VOLT - Max Spread 12V Solid Brass Path Light (25\" Tall, 9\" Shade), Bronze 194",
+          "category": null,
+          "bsr": "46k",
+          "est_sales": "100+/mo",
+          "max_cost": "47.96",
+          "offers": "1",
+          "fba_sellers": null,
+          "fbm_sellers": "1",
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_5a7b7944ebfb",
+      "brand": "Homedics",
+      "costco_title": "Homedics Infrared & Red Light Pain Therapy Wrap",
+      "costco_pack": "1 Pack(s)",
+      "costco_price": 49.99,
+      "split_pack_review": false,
+      "provider": "selleramp",
+      "provider_query": "Homedics Homedics Infrared & Red Light Pain Therapy Wrap",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0DPR18N3J",
+          "upc": "031262111760",
+          "title": "Homedics - Wireless Infrared + Red Light Pain Therapy Wrap 20",
+          "category": null,
+          "bsr": "321k",
+          "est_sales": "7/mo",
+          "max_cost": "36.08",
+          "offers": "1",
+          "fba_sellers": "1",
+          "fbm_sellers": null,
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_98391ff681e9",
+      "brand": "Contractor's Select",
+      "costco_title": "Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+      "costco_pack": "32 Bag(s)",
+      "costco_price": 17.49,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Contractor's Select Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B00DH4IUMQ",
+          "upc": "735692011583",
+          "title": "Ultrasac Contractor Trash Bags - (50 Pack/w Ties) - Heavy Duty 3 MIL Thick, 39\" x 32\", Shorter 33 Gallon Black Version 3,553",
+          "category": null,
+          "bsr": "19k",
+          "est_sales": "1k+/mo",
+          "max_cost": null,
+          "offers": null,
+          "fba_sellers": null,
+          "fbm_sellers": null,
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_22665be5a1b4",
+      "brand": "Tupperware",
+      "costco_title": "Tupperware 6-piece Thatsa Bowl Set",
+      "costco_pack": "6 Piece(s)",
+      "costco_price": 34.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Tupperware Tupperware 6-piece Thatsa Bowl Set",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0FX3F3VKG",
+          "upc": "810147377848",
+          "title": "Tupperware - Thatsa Bowl Collection 6 Bowl Food Storage Container Set in Fauna, Dishwasher Safe and BPA Free (6 Bowls, 6 lids) 69",
+          "category": null,
+          "bsr": "34k",
+          "est_sales": "100+/mo",
+          "max_cost": "51.16",
+          "offers": "1",
+          "fba_sellers": "1",
+          "fbm_sellers": null,
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_4aa8ca1f0ea6",
+      "brand": "Tupperware",
+      "costco_title": "Tupperware 40-piece Meal Prep Set",
+      "costco_pack": "40 Piece(s)",
+      "costco_price": 49.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Tupperware Tupperware 40-piece Meal Prep Set",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B08WR1P45C",
+          "upc": "071691533436",
+          "title": "Rubbermaid - Brilliance Meal Prep Containers, 2-Compartment, 5-Pack 59,716",
+          "category": null,
+          "bsr": "27",
+          "est_sales": "4k+/mo",
+          "max_cost": "12.09",
+          "offers": "2",
+          "fba_sellers": "1",
+          "fbm_sellers": "1",
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_1a9c1ff63358",
+      "brand": "RICO",
+      "costco_title": "RICO Baby Wipes, 720-count",
+      "costco_pack": "720 Count(s)",
+      "costco_price": 23.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "RICO RICO Baby Wipes, 720-count",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B07SCL613T",
+          "upc": "036000510799",
+          "title": "Huggies Natural Care Sensitive Baby Wipes, 12 Flip-Top Packs (768 Wipes) 194,390",
+          "category": null,
+          "bsr": "2",
+          "est_sales": "100k+/mo",
+          "max_cost": "5.68",
+          "offers": "4",
+          "fba_sellers": "1",
+          "fbm_sellers": "3",
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_de30f44fdaa4",
+      "brand": "Homedics",
+      "costco_title": "Homedics Infrared & Red Light Pain Therapy Wrap",
+      "costco_pack": "1 Pack(s)",
+      "costco_price": 49.99,
+      "split_pack_review": false,
+      "provider": "selleramp",
+      "provider_query": "Homedics Homedics Infrared & Red Light Pain Therapy Wrap",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0DPR18N3J",
+          "upc": "031262111760",
+          "title": "Homedics - Wireless Infrared + Red Light Pain Therapy Wrap 20",
+          "category": null,
+          "bsr": "321k",
+          "est_sales": "7/mo",
+          "max_cost": "36.08",
+          "offers": "1",
+          "fba_sellers": "1",
+          "fbm_sellers": null,
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_b82a88e4569c",
+      "brand": "Kleenex",
+      "costco_title": "Kleenex Ultra Soft Facial Tissue, 3-Ply, 85-count, 12-pack",
+      "costco_pack": "12 Pack(s)",
+      "costco_price": 24.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Kleenex Kleenex Ultra Soft Facial Tissue, 3-Ply, 85-count, 12-pack",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0040ZOD68",
+          "upc": "036000030761",
+          "title": "Kleenex - Professional Facial Tissue, Bulk, 12 Boxes x 125 Tissues (03076) 19,206",
+          "category": null,
+          "bsr": "898",
+          "est_sales": "10k+/mo",
+          "max_cost": "12.63",
+          "offers": "39",
+          "fba_sellers": "1",
+          "fbm_sellers": "22",
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_0f58d85f4c7e",
+      "brand": "furMe",
+      "costco_title": "FurMe Professional Plus Pet Grooming Vacuum Kit with Carrying Case",
+      "costco_pack": "1 Box(es)",
+      "costco_price": 164.99,
+      "split_pack_review": false,
+      "provider": "selleramp",
+      "provider_query": "furMe FurMe Professional Plus Pet Grooming Vacuum Kit with Carrying Case",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0D27MVNLM",
+          "upc": "850023971760",
+          "title": "FURME - Original Pet Grooming Vacuum Kit - Cat & Dog Grooming Kit 388",
+          "category": null,
+          "bsr": "15k",
+          "est_sales": "100+/mo",
+          "max_cost": "100.4",
+          "offers": null,
+          "fba_sellers": null,
+          "fbm_sellers": null,
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_cd9dc9e074e4",
+      "brand": "RTL",
+      "costco_title": "RTL Premium Athletic Tape",
+      "costco_pack": "32 Roll(s)",
+      "costco_price": 69.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "RTL RTL Premium Athletic Tape",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B0BL3R1GQG",
+          "upc": null,
+          "title": "ADMITRY Athletic Tape,5 Pack White Sports Tape 3,229",
+          "category": null,
+          "bsr": "646",
+          "est_sales": "10k+/mo",
+          "max_cost": "0.96",
+          "offers": "1",
+          "fba_sellers": "1",
+          "fbm_sellers": null,
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_4a95caa629cd",
+      "brand": "Ziploc",
+      "costco_title": "Ziploc Slider Storage Bag, Variety Pack, 166-count",
+      "costco_pack": "166 Bag(s)",
+      "costco_price": 17.49,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Ziploc Ziploc Slider Storage Bag, Variety Pack, 166-count",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0DGN4XJB9",
+          "upc": null,
+          "title": "Ziploc - Food Storage & Sandwich Bags Variety Pack, 190 Total Bags 1,826",
+          "category": null,
+          "bsr": "3k",
+          "est_sales": "10k+/mo",
+          "max_cost": "9.42",
+          "offers": "4",
+          "fba_sellers": "1",
+          "fbm_sellers": "3",
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_4b30cb62d0f1",
+      "brand": "Ziploc",
+      "costco_title": "Ziploc Slider Storage Bag, Variety Pack, 144-count",
+      "costco_pack": "144 Bag(s)",
+      "costco_price": 14.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Ziploc Ziploc Slider Storage Bag, Variety Pack, 144-count",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B07NQVYCG3",
+          "upc": null,
+          "title": "Ziploc - Slider Storage Bags with New Power Shield Technology, Gallon, 26 Count, Pack of 4 (104 Total Bags) 23,547",
+          "category": null,
+          "bsr": "591",
+          "est_sales": "8k+/mo",
+          "max_cost": "1.62",
+          "offers": "3",
+          "fba_sellers": "1",
+          "fbm_sellers": "2",
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_a9e8d4c63104",
+      "brand": "Tide",
+      "costco_title": "Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+      "costco_pack": "138 oz.",
+      "costco_price": 23.99,
+      "split_pack_review": false,
+      "provider": "selleramp",
+      "provider_query": "Tide Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0DTQ7LBXP",
+          "upc": "030772190517",
+          "title": "Tide - Ultra Oxi Boost Liquid Laundry Detergent, 148 fl oz, 105 Loads 10,828",
+          "category": null,
+          "bsr": "351",
+          "est_sales": "20k+/mo",
+          "max_cost": "5.98",
+          "offers": "4",
+          "fba_sellers": "1",
+          "fbm_sellers": null,
+          "amazon_retail_active": true,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_53e1e9320f15",
+      "brand": "Marathon",
+      "costco_title": "Marathon Jumbo Roll Bath Tissue, 2-Ply, 900 ft Rolls, 6 Rolls",
+      "costco_pack": "6 Roll(s)",
+      "costco_price": 27.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Marathon Marathon Jumbo Roll Bath Tissue, 2-Ply, 900 ft Rolls, 6 Rolls",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0786NT8XX",
+          "upc": "793066084793",
+          "title": "Marathon Bath Tissue, 2-Ply (6 Jumbo Rolls) 6,141,761,417,100",
+          "category": null,
+          "bsr": "107k",
+          "est_sales": "100+/mo",
+          "max_cost": "14.70",
+          "offers": "17",
+          "fba_sellers": null,
+          "fbm_sellers": "15",
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_f0b44428e700",
+      "brand": "Kangaroo",
+      "costco_title": "Kangaroo Hanger 30-count Combo Pack",
+      "costco_pack": "30 Pack(s)",
+      "costco_price": 34.99,
+      "split_pack_review": true,
+      "provider": "selleramp",
+      "provider_query": "Kangaroo Kangaroo Hanger 30-count Combo Pack",
+      "identity_status": "probable_match",
+      "leads": [
+        {
+          "asin": "B0DXQCQV3S",
+          "upc": "850061864680",
+          "title": "Kangaroo - Space Saving Suit Hangers for Men, 10 Pack w/Booklet 23",
+          "category": null,
+          "bsr": "198k",
+          "est_sales": "50+/mo",
+          "max_cost": null,
+          "offers": null,
+          "fba_sellers": null,
+          "fbm_sellers": null,
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": true
+        }
+      ]
+    },
+    {
+      "candidate_id": "csp_c2dd1c935364",
+      "brand": "Real Feel Golf Mats",
+      "costco_title": "Country Club Elite Golf Mats",
+      "costco_pack": "5 ft. x 3 ft.",
+      "costco_price": 279.99,
+      "split_pack_review": false,
+      "provider": "selleramp",
+      "provider_query": "Real Feel Golf Mats Country Club Elite Golf Mats",
+      "identity_status": "manual_review_required",
+      "leads": [
+        {
+          "asin": "B0048B1RAE",
+          "upc": null,
+          "title": "Country Club Elite 3x5-Foot Commercial Golf Practice Mat 186",
+          "category": null,
+          "bsr": "76k",
+          "est_sales": "100+/mo",
+          "max_cost": "171.60",
+          "offers": "2",
+          "fba_sellers": "1",
+          "fbm_sellers": "1",
+          "amazon_retail_active": false,
+          "no_new_offers": false,
+          "brand_match": false
+        }
+      ]
+    }
+  ]
+}

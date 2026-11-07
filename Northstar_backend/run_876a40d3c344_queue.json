@@ -1,0 +1,54 @@
+{
+  "run_id": "run_876a40d3c344",
+  "selected": 4,
+  "queue": [
+    {
+      "candidate_id": "csp_3f3fb592e3b1",
+      "source_product": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "source_name": "costco_discovery_catalog",
+      "source_sku": "986654",
+      "source_url": "https://www.costco.com/.product.986654.html",
+      "source_price": 22.99,
+      "source_pack": "52 Count(s)",
+      "source_upc": null,
+      "source_mpn": null,
+      "selection_reason": "lightweight, non-consumable, clear pack, non-Kirkland brand"
+    },
+    {
+      "candidate_id": "csp_01a3aab95350",
+      "source_product": "VOLT Premium Solid Brass Outdoor Solar Path Lights, 2-pack",
+      "source_name": "costco_discovery_catalog",
+      "source_sku": "1884230",
+      "source_url": "https://www.costco.com/.product.1884230.html",
+      "source_price": 99.99,
+      "source_pack": "2 Pack(s)",
+      "source_upc": null,
+      "source_mpn": null,
+      "selection_reason": "lightweight, non-consumable, clear pack, non-Kirkland brand"
+    },
+    {
+      "candidate_id": "csp_5a7b7944ebfb",
+      "source_product": "Homedics Infrared & Red Light Pain Therapy Wrap",
+      "source_name": "costco_discovery_catalog",
+      "source_sku": "1900871",
+      "source_url": "https://www.costco.com/.product.1900871.html",
+      "source_price": 49.99,
+      "source_pack": "1 Pack(s)",
+      "source_upc": null,
+      "source_mpn": null,
+      "selection_reason": "lightweight, non-consumable, clear pack, non-Kirkland brand"
+    },
+    {
+      "candidate_id": "csp_98391ff681e9",
+      "source_product": "Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+      "source_name": "costco_discovery_catalog",
+      "source_sku": "1597503",
+      "source_url": "https://www.costco.com/.product.1597503.html",
+      "source_price": 17.49,
+      "source_pack": "32 Bag(s)",
+      "source_upc": null,
+      "source_mpn": null,
+      "selection_reason": "lightweight, non-consumable, clear pack, non-Kirkland brand"
+    }
+  ]
+}

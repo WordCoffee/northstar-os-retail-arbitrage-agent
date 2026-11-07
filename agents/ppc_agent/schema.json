@@ -1,0 +1,24 @@
+{
+  "agent": "ppc_agent",
+  "outputs": [
+    "change log",
+    "negatives",
+    "bid moves",
+    "validated bulk rows"
+  ],
+  "validators": [
+    "report_columns",
+    "entity_operations_valid",
+    "row_traces_to_source",
+    "bid_budget_limits"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

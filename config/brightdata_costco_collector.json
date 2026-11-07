@@ -1,0 +1,39 @@
+{
+  "provider": "brightdata",
+  "product": "Costco products — Collect by URL",
+  "source_id": "gd_mkcbmac44j178pook",
+  "input_type": "url",
+  "url_template": "https://www.costco.com/.product.{item_id}.html",
+  "accepts_item_number_only": false,
+  "verified_response_fields": [
+    "url", "item_id", "variant_id", "gtin", "mpn", "title", "description",
+    "product_category", "category_tree", "brand", "image_url",
+    "additional_image_urls", "price", "sale_price", "availability", "group_id",
+    "listing_has_variations", "variant_attributes", "variants", "store_name",
+    "seller_url", "store_country", "category_urls", "specifications",
+    "review_count", "star_rating", "reviews"
+  ],
+  "known_limitations": [
+    "net_weight_not_shown",
+    "shipping_weight_not_shown",
+    "package_dimensions_not_shown",
+    "collector_requires_product_detail_url_not_item_number"
+  ],
+  "pricing": {
+    "per_record_usd": 0.0015,
+    "per_1000_records_usd": 1.50
+  },
+  "credits": {
+    "free_credits_total": 5000,
+    "free_credits_remaining": 3913
+  },
+  "authorization": {
+    "free_credits_only": true,
+    "do_not_add_funds": true,
+    "do_not_use_paid_balance": true,
+    "do_not_enable_auto_recharge": true,
+    "max_credits_this_run": 25,
+    "require_exact_url_approval_before_run": true
+  },
+  "secrets_note": "source_id is a collector identifier, not a credential; no API keys stored here."
+}

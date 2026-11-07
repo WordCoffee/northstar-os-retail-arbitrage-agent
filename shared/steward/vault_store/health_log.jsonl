@@ -1,0 +1,4 @@
+{"action":"store_secret","entry_hash":"41a4c653f2a11ff37681741e5f89f9b528f3e4d0cb57d068d9f097c7f0035d82","key":"test_key_1","scope":"read-only","service":"test_service","ts_utc":"2026-10-27T21:35:30.480272+00:00"}
+{"action":"store_secret","entry_hash":"5aa54e84cb1f45e746f32b161c5e327e063e047e03df4ba620310d4ccec60c39","key":"test_key_1","scope":"read-only","service":"test_service","ts_utc":"2026-10-27T21:37:10.279922+00:00"}
+{"action":"store_secret","entry_hash":"813dd59d4cbd3fd94ad73a90520d64321770bde4cf0214f5ce87c2fb48d3a6d7","key":"dummy_aws_key_test_12345","scope":"read-only","service":"aws","ts_utc":"2026-10-27T22:35:36.017893+00:00"}
+{"action":"store_secret","entry_hash":"31a4f712eb82d24445fe2c4043acddd4cb75c23d6d18561e44c1af4e51f68199","key":"dummy_aws_key_test_12345","scope":"read-only","service":"aws","ts_utc":"2026-10-27T22:37:07.308637+00:00"}

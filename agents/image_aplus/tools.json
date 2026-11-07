@@ -1,0 +1,9 @@
+{
+  "agent": "image_aplus",
+  "allowed_tools": [
+    "generate_image",
+    "apply_label",
+    "creative_plan"
+  ],
+  "needs_gpu": true
+}

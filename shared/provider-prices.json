@@ -1,0 +1,9 @@
+{
+  "_note": "Raw provider cost, USD. Local lanes are free (the operator's own hardware). Cloud entries are the numbers a real adapter must reconcile against its provider invoice (blueprint 11A.2).",
+  "providers": {
+    "local_ollama": { "unit": "1k_tokens", "input": 0.0, "output": 0.0 },
+    "local_voice":  { "unit": "1k_chars",  "input": 0.0, "output": 0.0 },
+    "comfyui":      { "unit": "gpu_second", "input": 0.0, "output": 0.0 },
+    "stub_cloud":   { "unit": "1k_tokens", "input": 0.0005, "output": 0.0015 }
+  }
+}

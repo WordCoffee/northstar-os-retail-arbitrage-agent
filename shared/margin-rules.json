@@ -1,0 +1,23 @@
+{
+  "_note": "Target margin 60-70% (blueprint 11A). charge = raw_cost / (1 - margin). Configurable per plan and per service.",
+  "default_margin": 0.65,
+  "floor_margin": 0.55,
+  "ceiling_margin": 0.75,
+  "by_plan": {
+    "foundation": 0.70,
+    "scout": 0.68,
+    "mover": 0.65,
+    "autothink": 0.62
+  },
+  "by_service": {
+    "chat": 0.62,
+    "package": 0.70,
+    "ppc": 0.70,
+    "aplus": 0.60
+  },
+  "user_caps": {
+    "_note": "Per-user spend ceilings in USD. A call that would cross the cap is refused before it runs.",
+    "daily_default": 25.0,
+    "monthly_default": 300.0
+  }
+}

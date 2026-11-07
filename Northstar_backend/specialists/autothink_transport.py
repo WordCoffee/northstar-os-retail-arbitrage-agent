@@ -26,21 +26,17 @@ import hashlib
 import json
 import os
 import time
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, Mapping, Optional, Tuple
+
+from gateway.adapters import TransportError, post_json
 
 DEFAULT_TIMEOUT_S = 30.0
 _DEFAULT_JOURNAL = Path(__file__).resolve().parent.parent / "data" / "autothink-handoffs.jsonl"
 
 # transport(url, payload, headers, timeout) -> (http_status, body_text)
 Transport = Callable[[str, Dict[str, Any], Dict[str, str], float], Tuple[int, str]]
-
-
-class TransportError(RuntimeError):
-    """A send attempt that never produced an HTTP response."""
 
 
 def _now() -> str:
@@ -153,19 +149,6 @@ def _write_receipt(path: Path, receipt: Dict[str, Any]) -> None:
         fh.write(json.dumps(receipt, ensure_ascii=False, sort_keys=True) + "\n")
 
 
-def _post_json(url: str, payload: Dict[str, Any], headers: Dict[str, str],
-               timeout: float) -> Tuple[int, str]:
-    body = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 - endpoint is operator-configured
-            return int(resp.status), resp.read(200_000).decode("utf-8", "replace")
-    except urllib.error.HTTPError as exc:
-        return int(exc.code), (exc.read(20_000).decode("utf-8", "replace") if exc.fp else "")
-    except Exception as exc:  # noqa: BLE001 - the message is scrubbed and reported, never swallowed
-        raise TransportError(str(exc)) from exc
-
-
 def send(packet: Dict[str, Any], *, approved_by: Optional[str],
          max_charge_usd: Optional[float], transport: Optional[Transport] = None,
          env: Optional[Mapping[str, str]] = None,
@@ -228,7 +211,7 @@ def send(packet: Dict[str, Any], *, approved_by: Optional[str],
         headers["Authorization"] = f"Bearer {token}"
 
     payload = {k: v for k, v in packet.items() if k != "status"}
-    send_it = transport or _post_json
+    send_it = transport or post_json
     receipt: Dict[str, Any] = {
         "ts": _now(), "packet_id": packet.get("packet_id"),
         "endpoint_host": _host(url), "approved_by": approval,

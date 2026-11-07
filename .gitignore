@@ -105,3 +105,36 @@ research/assistant_intelligence_20261028/readmes/
 
 # snapshot local manifests (full untracked path lists; never committed)
 state/snapshots/*.local.json
+# --- Worktree triage (2026-11-06) -------------------------------------------
+# Owner decision: commit the work, but never the generated artefacts that make a
+# commit unusable and a candidate freeze 79 MB. Everything below stays on disk;
+# it is only kept out of git. If any of it turns out to be wanted, remove the
+# line and commit that path deliberately.
+
+# Full build exports and one-off dumps (464 MB zip, 406 MB audio tree, 18 MB csv)
+exports/
+out_lions_mane/
+out_sb/
+
+# Scratch directories from probe sessions
+tmp-patterns/
+tmp-probe/
+
+# Large media: review videos, extracted audio, screenshots-by-ty captures
+screenshots by ty/
+*.mp4
+*.m4a
+*.zip
+
+# Runtime state (queue-adjacent, written every cycle)
+state/
+!state/.gitkeep
+
+# Generated research sweeps (raw repo/csv dumps, re-derivable)
+research/
+
+# The agent's own frozen candidates (A12) and rejection ledger (A13)
+state/author/
+
+# Owner downloads and loose documents, not source
+Downloads/

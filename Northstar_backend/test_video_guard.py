@@ -79,3 +79,17 @@ def test_an_acknowledged_prompt_is_not_blocked_by_the_guard(monkeypatch):
             response.json()["detail"].get("code") != "human_features_warning"
     finally:
         app.dependency_overrides = {}
+
+def test_human_override_is_audited(tmp_path):
+    record = video_guard.audit_override(
+        "op", "shorts", "a person holding the pouch", ["person"], True,
+        audit_dir=tmp_path)
+    assert record["written"] is True
+    lines = (tmp_path / "human_features_overrides.jsonl").read_text(
+        encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    import json
+    saved = json.loads(lines[0])
+    assert saved["acknowledged"] is True
+    assert saved["matched"] == ["person"]
+    assert saved["prompt_sha256"]

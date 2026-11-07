@@ -1,0 +1,45 @@
+
+CONTROLLED 2026-10-03 — CHROME CONNECT IS THE CONTROLLER
+------------------------------------------------------
+This script used to import `playwright.async_api` in four places and to attach
+to port 9222 with `chromium.connect_over_cdp(...)`. All of that bypassed Chrome
+Connect, which meant the domain allowlist, the Amazon blocklist and the
+risk-class gates in policy.js did not apply to anything it did.
+
+Now:
+  * importing `playwright` outside a Chrome Connect instruction RAISES;
+  * a raw CDP attach on port 9222 is REFUSED (one lock, one controller);
+  * browser work is delegated with `cc_call()`, and the controller decides,
+    evaluates and extracts;
+  * --signup-cloudflare is RETIRED. It entered credentials and created an
+    account, both of which policy.js prohibits unconditionally.
+
+Usage:
+    python tools/browser_agent.py --costco-search --query 'trash bags'
+    python tools/browser_agent.py --screenshot --url https://www.costco.com
+    python tools/browser_agent.py --list-models
+"""
+
+import os
+import sys
+import asyncio
+import json
+import argparse
+from pathlib import Path
+from datetime import datetime
+
+# Ensure project root is on path
+PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+# --- Chrome Connect guard: MUST be installed before any browser import. ---
+sys.path.insert(0, str(PROJECT_ROOT / "tools"))
+import chromeconnect_guard
+
+GUARD_STATUS = chromeconnect_guard.enforce(owner="tools/browser_agent.py")
+
+DIRECT_PLAYWRIGHT_REFUSED = (
+    "Refused: this module may no longer drive Playwright directly.\n"
+    "Chrome Connect is the controller; Playwright is only its tool.\n"
+    "Use chromeconnect_guard.cc_call('<task>') to hand the work over."
+)

@@ -1,0 +1,27 @@
+# ============================================================
+# CLOUDFLARE SIGNUP — RETIRED 2026-10-03
+# ============================================================
+
+async def cloudflare_signup(email: str, password: str, verbose: bool = True,
+                           use_chrome: bool = False) -> str:
+    """RETIRED. Credential entry and account creation are prohibited.
+
+    This function used to fill an email and a password into cloudflare.com and
+    click "Create account". policy.js lists `credentials`, `login_submit` and
+    `account_settings` in PROHIBITED_ACTIONS unconditionally, so the controller
+    refuses the same actions today. There is deliberately no flag, env var or
+    argument that brings it back.
+
+    Account creation is an owner action done by hand, in the operator's own
+    browser. Chrome Connect never enters credentials, never submits a sign-in,
+    never handles MFA or CAPTCHA, and never creates an account.
+
+    Note the arguments are retained so existing callers fail loudly rather than
+    with a TypeError. Their values are ignored and never logged.
+    """
+    if verbose:
+        print("\n=== CLOUDFLARE SIGNUP: RETIRED ===")
+        print("Refused. Credential entry and account creation are prohibited by policy.")
+        print("No browser was launched. No credential was read or transmitted.")
+        print("Create the account yourself in Chrome, then continue.")
+    return "REFUSED: credential_entry_and_account_creation_prohibited"

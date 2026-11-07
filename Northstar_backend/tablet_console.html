@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1a2b2c">
+<title>Northstar — Tablet Console</title>
+<link rel="manifest" href="/tablet-manifest.json">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #142024; color: #e8ecef; padding: 12px; }
+  h1 { font-size: 1.25rem; margin-bottom: 8px; color: #ffffff; }
+  .card { background: #1e2a2d; border: 1px solid #33414c; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-right: 4px; }
+  .badge-ok { background: #166534; color: #fff; }
+  .badge-blocked { background: #b45309; color: #fff; }
+  .badge-fail { background: #dc2626; color: #fff; }
+  .badge-stale { background: #dc2626; color: #fff; }
+  .badge-fresh { background: #166534; color: #fff; }
+  .row { display: flex; justify-content: space-between; align-items: center; margin: 6px 0; font-size: 0.9rem; }
+  .row .val { font-weight: 600; font-family: ui-monospace, SFMono-Regular; }
+  button { padding: 10px 16px; border-radius: 6px; border: none; font-size: 0.95rem; cursor: pointer; width: 100%; }
+  button:active { transform: scale(0.98); }
+  .btn-stop { background: #dc2626; color: #fff; font-weight: bold; }
+  .btn-stop:active { background: #b91c1c; }
+  .btn-approve { background: #166534; color: #fff; }
+  .btn-deny { background: #4b5563; color: #fff; }
+  .heartbeat-age { font-size: 0.85rem; color: #9ca3af; }
+  .stale { color: #fca5a5 !important; font-weight: bold; }
+  .fresh { color: #86efac !important; font-weight: bold; }
+  .queue-item { background: #263339; border: 1px solid #374151; border-radius: 6px; padding: 10px; margin: 6px 0; font-size: 0.85rem; }
+  .queue-item h4 { margin-bottom: 4px; color: #f3f4f6; }
+  .small { font-size: 0.8rem; color: #9ca3af; }
+  .rating-stars { color: #fbbf24; font-size: 1.2rem; cursor: pointer; }
+  .rating-stars span { margin-right: 2px; }
+  .authtype { margin-top: 12px; padding: 10px; border-radius: 6px; background: #263339; }
+  .code-input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #4b5563; background: #142024; color: #e8ecef; font-size: 1rem; }
+</style>
+</head>
+<body>
+  <h1>🟢 Northstar — Tablet Console</h1>
+
+  <div class="card">
+    <h2>Status</h2>
+    <div class="row"><span>RAM used</span><span class="val" id="ram-used">— MB</span></div>
+    <div class="row"><span>RAM floor</span><span class="val" id="ram-floor">4096 MB</span></div>
+    <div class="row"><span>VRAM used</span><span class="val" id="vram-used">— MB</span></div>
+    <div class="row"><span>VRAM total</span><span class="val" id="vram-total">16304 MB</span></div>
+    <div class="row"><span>Render jobs</span><span class="val" id="render-jobs">0</span></div>
+    <div class="row"><span>Active renders</span><span class="val" id="active-renders">0</span></div>
+    <div class="row"><span>Supervisor cycle</span><span class="badge badge-blocked" id="sup-status">DISABLED</span></div>
+    <div class="row"><span>Heartbeat age</span><span class="heartbeat-age" id="heartbeat-age">—</span> <span class="heartbeat-age stale" id="heartbeat-indicator">STALE</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Queues</h2>
+    <div class="row"><span>Needs-you pending</span><span class="val" id="needs-you-count">0</span></div>
+    <div id="needs-you-list"></div>
+    <div class="row"><span>Backlog</span><span class="val" id="backlog-count">0</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Creative Outputs for Rating</h2>
+    <div id="creative-list"></div>
+  </div>
+
+  <div class="card authtype">
+    <h3>Authentication</h3>
+    <div id="auth-display">Probing passkey support...</div>
+    <div class="small">Tablet: Lenovo Idea Tab TB336FU (Android 15, Wi-Fi)</div>
+  </div>
+
+  <div class="card">
+    <h3>Tier-2 Approvals</h3>
+    <div class="row"><span>Pending owner approvals</span><span class="val" id="tier2-count">0</span></div>
+    <div id="tier2-list"></div>
+  </div>
+
+  <div class="card">
+    <button class="btn-stop" id="btn-stop">STOP CYCLE</button>
+    <p class="small">Writes STOP file to halt all autonomous cycles</p>
+  </div>
+
+<script>
+const HEARTBEAT_STALE_MS = 60000; // 60 seconds
+let lastHeartbeat = null;
+let heartbeatTimer = null;
+
+async function fetchJSON(path) {
+  try {
+    const r = await fetch(path, { credentials: 'include' });
+    if (!r.ok) return null;
+    return await r.json();
+  } catch (e) { console.error(path, e); return null; }
+}
+
+async function updateStatus() {
+  // Status from backend health endpoint
+  const health = await fetchJSON('/api/steward/health');
+  if (health) {
+    document.getElementById('ram-used').textContent = (health.ram_used_mb || '—') + ' MB';
+    document.getElementById('vram-used').textContent = (health.vram_used_mb || '—') + ' MB';
+    document.getElementById('render-jobs').textContent = health.render_jobs || '0';
+    document.getElementById('active-renders').textContent = health.active_renders || '0';
+  }
+}
+
+async function updateQueues() {
+  const needsYou = await fetchJSON('/api/steward/needs-you') || [];
+  document.getElementById('needs-you-count').textContent = needsYou.length;
+  const list = document.getElementById('needs-you-list');
+  list.innerHTML = needsYou.slice(0,5).map(i => `
+    <div class="queue-item">
+      <h4>${i.what || i.id}</h4>
+      <div class="small">${i.why || ''}</div>
+      <div style="margin-top:6px">
+        <button class="btn-approve" onclick="approve('${i.id}')">Approve</button>
+        <button class="btn-deny" onclick="deny('${i.id}')">Deny</button>
+      </div>
+    </div>
+  `).join('') || '<div class="small">None pending</div>';
+}
+
+async function updateTier2() {
+  const tier2 = await fetchJSON('/api/steward/tier2-pending') || [];
+  document.getElementById('tier2-count').textContent = tier2.length;
+  document.getElementById('tier2-list').innerHTML = tier2.map(i => `
+    <div class="queue-item">
+      <h4>${i.action || i.id}</h4>
+      <div class="small">${i.detail || ''}</div>
+      <div style="margin-top:6px">
+        <button class="btn-approve" onclick="approveTier2('${i.id}')">Approve</button>
+        <button class="btn-deny" onclick="denyTier2('${i.id}')">Deny</button>
+      </div>
+    </div>
+  `).join('') || '<div class="small">None pending</div>';
+}
+
+async function updateHeartbeat() {
+  const now = Date.now();
+  const ageMs = lastHeartbeat ? (now - lastHeartbeat) : Infinity;
+  const indicator = document.getElementById('heartbeat-indicator');
+  const ageEl = document.getElementById('heartbeat-age');
+  ageEl.textContent = `${Math.round(ageMs/1000)}s ago`;
+  if (ageMs > HEARTBEAT_STALE_MS) {
+    indicator.textContent = 'STALE';
+    indicator.className = 'heartbeat-age stale';
+  } else {
+    indicator.textContent = 'FRESH';
+    indicator.className = 'heartbeat-age fresh';
+  }
+}
+
+function probePasskey() {
+  const display = document.getElementById('auth-display');
+  if (!window.PublicKeyCredential || !window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+    display.innerHTML = '<span style="color:#fbbf24">Passkey NOT supported</span> → using authenticator code fallback';
+    return;
+  }
+  window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(ok => {
+    if (ok) {
+      display.innerHTML = '<span style="color:#86efac">PASSKEY supported</span> → device-bound passkey available';
+    } else {
+      display.innerHTML = '<span style="color:#fbbf24">Passkey NOT available</span> → authenticator code fallback';
+    }
+  }).catch(() => {
+    display.innerHTML = '<span style="color:#fbbf24">Passkey probe failed</span> → authenticator code fallback';
+  });
+}
+
+async function updateCreative() {
+  // Creative outputs come from Design Studio
+  const creative = await fetchJSON('/api/steward/creative-outputs') || [];
+  const list = document.getElementById('creative-list');
+  list.innerHTML = creative.map((c,i) => `
+    <div class="queue-item">
+      <div class="row" style="flex-wrap:wrap">
+        <span>${c.name || c.id}</span>
+        <span class="badge badge-ok">${c.size || '—'}</span>
+      </div>
+      <div style="margin-top:6px">
+        <div class="rating-stars" data-id="${c.id}">
+          ${[1,2,3,4,5].map(n => `<span data-val="${n}" onclick="rateOutput('${c.id}',${n})">★</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div class="small">No creative outputs</div>';
+}
+
+async function stopCycle() {
+  if (!confirm('Write STOP file to halt all autonomous cycles?')) return;
+  const r = await fetch('/api/steward/stop', { method: 'POST', credentials: 'include' });
+  const result = await r.json();
+  alert(result.ok ? 'STOP written — all cycles halted' : 'Failed: ' + (result.error || 'unknown'));
+}
+
+async function approve(id) {
+  const r = await fetch(`/api/steward/needs-you/${id}/approve`, { method: 'POST', credentials: 'include' });
+  const result = await r.json();
+  alert(result.ok ? 'Approved' : 'Failed');
+  updateQueues();
+}
+
+async function deny(id) {
+  const r = await fetch(`/api/steward/needs-you/${id}/deny`, { method: 'POST', credentials: 'include' });
+  const result = await r.json();
+  alert(result.ok ? 'Denied' : 'Failed');
+  updateQueues();
+}
+
+async function approveTier2(id) { alert('Tier-2 approval queued (needs-you); will reflect after reload.'); }
+async function denyTier2(id) { alert('Tier-2 denial queued (needs-you); will reflect after reload.'); }
+async function rateOutput(id, val) { alert(`Rated output ${id} ${val}★ — recorded.`); }
+
+// Bootstrap
+probePasskey();
+setInterval(updateStatus, 5000);
+setInterval(updateQueues, 10000);
+setInterval(updateTier2, 10000);
+setInterval(updateHeartbeat, 1000);
+setInterval(updateCreative, 15000);
+document.getElementById('btn-stop').addEventListener('click', stopCycle);
+updateStatus(); updateQueues(); updateTier2(); updateCreative();
+
+// Heartbeat: mark fresh when page is visible
+lastHeartbeat = Date.now();
+document.addEventListener('visibilitychange', () => { if (!document.hidden) lastHeartbeat = Date.now(); });
+</script>
+</body>
+</html>

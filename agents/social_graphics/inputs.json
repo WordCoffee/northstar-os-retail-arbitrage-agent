@@ -1,0 +1,13 @@
+{
+  "agent": "social_graphics",
+  "required": [
+    "product",
+    "content_type"
+  ],
+  "optional": [
+    "brand_key",
+    "keywords",
+    "aspects",
+    "headline"
+  ]
+}

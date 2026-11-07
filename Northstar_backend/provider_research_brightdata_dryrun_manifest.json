@@ -1,0 +1,562 @@
+{
+  "provider": "brightdata",
+  "mode": "dry_run_manifest",
+  "dry_run": true,
+  "created_at": "2026-09-27T20:54:35.240127+00:00",
+  "sample_size": 25,
+  "requested_fields": [
+    "costco_item_number",
+    "brand",
+    "manufacturer",
+    "title",
+    "description",
+    "category_path",
+    "upc",
+    "ean",
+    "gtin",
+    "mpn",
+    "manufacturer_model",
+    "net_weight",
+    "shipping_weight",
+    "package_length",
+    "package_width",
+    "package_height",
+    "outer_pack_count",
+    "inner_unit_count",
+    "unit_count",
+    "unit_measure"
+  ],
+  "existing_local_identifier_coverage": {
+    "with_upc": 0,
+    "with_mpn": 0
+  },
+  "known_brightdata_field_availability": "unknown \u2014 must be validated on the approved live sample",
+  "approved_provider_configuration_status": "unavailable",
+  "network_calls_made": 0,
+  "items": [
+    {
+      "source_product_id": "csp_5eb1c3829264",
+      "costco_item_number": "1949305",
+      "brand": "adidas",
+      "title": "adidas Youth Hoodie",
+      "pack": null,
+      "costco_price": 9.97,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_7bd46a5c59a1",
+      "costco_item_number": "1969875",
+      "brand": "Adrianna Papell",
+      "title": "Adrianna Papell Women's Airflow Short",
+      "pack": null,
+      "costco_price": 9.97,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_460126d5698f",
+      "costco_item_number": "1962018",
+      "brand": "Hurley",
+      "title": "Hurley Youth Performance Pant",
+      "pack": null,
+      "costco_price": 9.97,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_068eeddf50b7",
+      "costco_item_number": "1890091",
+      "brand": "Champion",
+      "title": "Champion Youth Hoodie",
+      "pack": null,
+      "costco_price": 11.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_7d0cb26199a8",
+      "costco_item_number": "1143330",
+      "brand": "Ocean Spray",
+      "title": "Ocean Spray Craisins, Whole Dried Cranberries, 64 oz",
+      "pack": null,
+      "costco_price": 11.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_b95d616113b5",
+      "costco_item_number": "1143330",
+      "brand": "Ocean Spray",
+      "title": "Ocean Spray Craisins, Whole Dried Cranberries, 64 oz",
+      "pack": null,
+      "costco_price": 11.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_0d60be4adc43",
+      "costco_item_number": "1180361",
+      "brand": "Eurow",
+      "title": "Eurow Nouvelle Legende Placemats, 12-count",
+      "pack": null,
+      "costco_price": 13.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_1f0369e66757",
+      "costco_item_number": "1851899",
+      "brand": "Karen Neuburger",
+      "title": "Karen Neuburger Women's Notch Collar 2-piece PJ Set",
+      "pack": null,
+      "costco_price": 14.97,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_4b30cb62d0f1",
+      "costco_item_number": "1897234",
+      "brand": "Ziploc",
+      "title": "Ziploc Slider Storage Bag, Variety Pack, 144-count",
+      "pack": "144 Bag(s)",
+      "costco_price": 14.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": true,
+      "auto_identity_approval_eligible": false
+    },
+    {
+      "source_product_id": "csp_b4de7808a6be",
+      "costco_item_number": "2446023",
+      "brand": "Stanley Bostitch",
+      "title": "Bostitch Premium Desktop Stapler Value Pack",
+      "pack": null,
+      "costco_price": 14.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_3417cf1a520c",
+      "costco_item_number": "1907524",
+      "brand": "Jachs",
+      "title": "Jachs Men's Oxford Long Sleeve Button Up Shirt",
+      "pack": null,
+      "costco_price": 15.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_db1d2953a457",
+      "costco_item_number": "1907524",
+      "brand": "Jachs",
+      "title": "Jachs Men's Oxford Long Sleeve Button Up Shirt",
+      "pack": null,
+      "costco_price": 15.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_7d454aea46db",
+      "costco_item_number": "1814050",
+      "brand": "PUMA",
+      "title": "PUMA Women's No Show Sock, 10-pair",
+      "pack": null,
+      "costco_price": 15.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_98391ff681e9",
+      "costco_item_number": "1597503",
+      "brand": "Contractor's Select",
+      "title": "Contractor's Select Contractor Bags, Extra Thick, Black, 42 Gallon, 32-count",
+      "pack": "32 Bag(s)",
+      "costco_price": 17.49,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": true,
+      "auto_identity_approval_eligible": false
+    },
+    {
+      "source_product_id": "csp_4a95caa629cd",
+      "costco_item_number": "1183857",
+      "brand": "Ziploc",
+      "title": "Ziploc Slider Storage Bag, Variety Pack, 166-count",
+      "pack": "166 Bag(s)",
+      "costco_price": 17.49,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": true,
+      "auto_identity_approval_eligible": false
+    },
+    {
+      "source_product_id": "csp_33edf4e5a78d",
+      "costco_item_number": "1456660",
+      "brand": "Swiffer",
+      "title": "Swiffer Sweeper Heavy Duty Dry Sweeping Cloth Refills, 50-count",
+      "pack": null,
+      "costco_price": 18.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_c84c101c7954",
+      "costco_item_number": "1456660",
+      "brand": "Swiffer",
+      "title": "Swiffer Sweeper Heavy Duty Dry Sweeping Cloth Refills, 50-count",
+      "pack": null,
+      "costco_price": 18.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_552c7f473234",
+      "costco_item_number": "1993444",
+      "brand": "TubShroom",
+      "title": "TubShroom Universal Drain Protector & Hair Catcher Bundle",
+      "pack": null,
+      "costco_price": 19.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_7b690981606e",
+      "costco_item_number": "2037748",
+      "brand": "IcyHot",
+      "title": "Icy Hot Lidocaine Roll On, 3 pack, 6.5 fl oz Total",
+      "pack": null,
+      "costco_price": 21.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_4a7f949864f1",
+      "costco_item_number": "2218574",
+      "brand": "Swiffer",
+      "title": "Swiffer Sweeper Heavy Duty Wet Cloths, Lavender, 54-count",
+      "pack": null,
+      "costco_price": 22.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_3f3fb592e3b1",
+      "costco_item_number": "986654",
+      "brand": "Unitex",
+      "title": "Unitex 100% Cotton Towel, White, 14 in x 17 in, 52-count",
+      "pack": "52 Count(s)",
+      "costco_price": 22.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": true,
+      "auto_identity_approval_eligible": false
+    },
+    {
+      "source_product_id": "csp_c2d86a88f4fe",
+      "costco_item_number": "2218574",
+      "brand": "Swiffer",
+      "title": "Swiffer Sweeper Heavy Duty Wet Cloths, Lavender, 54-count",
+      "pack": null,
+      "costco_price": 22.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_d3e9a2fbfc79",
+      "costco_item_number": "2218574",
+      "brand": "Swiffer",
+      "title": "Swiffer Sweeper Heavy Duty Wet Cloths, Lavender, 54-count",
+      "pack": null,
+      "costco_price": 22.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    },
+    {
+      "source_product_id": "csp_1a9c1ff63358",
+      "costco_item_number": "1692255",
+      "brand": "RICO",
+      "title": "RICO Baby Wipes, 720-count",
+      "pack": "720 Count(s)",
+      "costco_price": 23.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "weight",
+        "dimensions"
+      ],
+      "split_review": true,
+      "auto_identity_approval_eligible": false
+    },
+    {
+      "source_product_id": "csp_a9e8d4c63104",
+      "costco_item_number": "3160440",
+      "brand": "Tide",
+      "title": "Tide Plus Advanced Power with Oxi Liquid Laundry Detergent, Original, 78 Loads, 138 fl oz",
+      "pack": "138 oz.",
+      "costco_price": 23.99,
+      "existing_identifiers": {
+        "upc": null,
+        "ean": null,
+        "gtin": null,
+        "mpn": null
+      },
+      "missing_identity_fields": [
+        "upc_ean_gtin_or_mpn",
+        "dimensions"
+      ],
+      "split_review": false,
+      "auto_identity_approval_eligible": true
+    }
+  ]
+}

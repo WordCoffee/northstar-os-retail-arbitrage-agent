@@ -1,0 +1,8 @@
+{
+  "agent": "social_graphics",
+  "allowed_tools": [
+    "generate_image",
+    "creative_plan"
+  ],
+  "needs_gpu": true
+}

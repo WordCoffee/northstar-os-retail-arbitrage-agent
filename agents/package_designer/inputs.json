@@ -1,0 +1,22 @@
+{
+  "agent": "package_designer",
+  "required": [
+    "title",
+    "weight",
+    "dims",
+    "ingredients",
+    "company",
+    "address",
+    "country_of_origin"
+  ],
+  "optional": [
+    "subtitle",
+    "claims",
+    "icons",
+    "suggested_use",
+    "warnings",
+    "supplement_facts",
+    "lot_code",
+    "keywords"
+  ]
+}

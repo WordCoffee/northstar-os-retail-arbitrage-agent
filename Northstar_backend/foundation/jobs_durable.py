@@ -31,7 +31,7 @@ from .jobs_handlers import (
 )
 from .jobs_state import (
     JobActor, JobState, JobStateError, transition as state_transition,
-    TERMINAL_STATES, is_cancellable,
+    TERMINAL_STATES, is_cancellable, is_worker_terminal,
 )
 from .models import (
     ApprovalRequest, JobRequest, JobRun, JobStateHistory, UsageEvent,
@@ -77,6 +77,23 @@ class RecheckFailure(Exception):
         self.state = state
         self.reason = reason
         self.code = code
+
+
+class JobStateConflict(RuntimeError):
+    """A concurrent actor moved the job before the worker could finish.
+
+    Raised when a transition or settlement guarded on ``expected_state`` loses
+    the race. The worker must never overwrite the winner: a pending
+    cancellation is terminal for the worker, so the caller either acknowledges
+    it (CANCEL_REQUESTED -> CANCELLED) or fails closed.
+    """
+
+    def __init__(self, expected: str, actual: Optional[str], *,
+                 job_id: Optional[str] = None) -> None:
+        super().__init__(f"expected job state {expected!r}, found {actual!r}")
+        self.expected = expected
+        self.actual = actual
+        self.job_id = job_id
 
 
 @dataclass
@@ -309,19 +326,34 @@ class DurableJobService:
 
     def cancel(self, ctx: RequestContext, job_id: str, *, reason: str) -> dict:
         job = self._owned_job(ctx, job_id)
-        current = job["state"]
-        if not is_cancellable(current):
-            raise JobValidationError("not_cancellable",
-                                     f"job state {current} is not cancellable",
-                                     job_id=job_id)
         run = self._current_run(job)
-        # Running/leased jobs get a cooperative cancel-request.
-        if current in (JobState.RUNNING.value, JobState.LEASED.value):
-            new_state = JobState.CANCEL_REQUESTED.value
+        # Recompute against the CURRENT state on each attempt so a concurrent
+        # claim/start cannot turn a valid cancel into an illegal transition:
+        # running/leased jobs get a cooperative cancel-request, anything else
+        # is cancelled outright. If the worker finishes first, the cancel is
+        # refused with the documented structured error.
+        for _ in range(3):
+            current = self._job_state(job)
+            if not is_cancellable(current):
+                raise JobValidationError(
+                    "not_cancellable", f"job state {current} is not cancellable",
+                    job_id=job_id)
+            if current in (JobState.RUNNING.value, JobState.LEASED.value):
+                new_state = JobState.CANCEL_REQUESTED.value
+            else:
+                new_state = JobState.CANCELLED.value
+            try:
+                self._transition(job=job, run=run, new_state=new_state,
+                                 actor=JobActor.OPERATOR.value, reason=reason,
+                                 expected_state=current)
+                break
+            except JobStateConflict:
+                continue  # the state moved under us; recompute
         else:
-            new_state = JobState.CANCELLED.value
-        self._transition(job=job, run=run, new_state=new_state,
-                         actor=JobActor.OPERATOR.value, reason=reason)
+            fresh_state = self._job_state(job)
+            raise JobValidationError(
+                "not_cancellable", f"job state {fresh_state} is not cancellable",
+                job_id=job_id)
         self._release_reservation_if_any(job, run, reason="cancelled")
         return self._job_view(self.repos.job_requests.get(job_id), ctx)
 
@@ -452,6 +484,13 @@ class DurableJobService:
             raise JobValidationError("lease_not_owned",
                                      "only the lease owner may execute", run_id=run_id)
         if job["state"] != JobState.LEASED.value:
+            if job["state"] in (JobState.CANCEL_REQUESTED.value,
+                                JobState.CANCELLED.value):
+                # A cancel request arrived between the claim and the start of
+                # execution. Cancellation is terminal for the worker: it must
+                # acknowledge the request, not fail the execution.
+                return self._finish_cancelled(job, run,
+                                              reason="cancellation acknowledged")
             raise JobValidationError("not_leased", f"job is {job['state']} not leased",
                                      job_id=job["id"], run_id=run_id)
 
@@ -459,6 +498,10 @@ class DurableJobService:
         try:
             self._runtime_rechecks(job, run)
         except RecheckFailure as exc:
+            if exc.state == JobState.CANCELLED.value:
+                # A pending cancellation is terminal for the worker: acknowledge
+                # it, release anything reserved, and never settle.
+                return self._finish_cancelled(job, run, reason=exc.reason)
             self._transition(job=job, run=run, new_state=exc.state,
                              actor=JobActor.WORKER.value, reason=exc.reason)
             self._release_reservation_if_any(job, run, reason=exc.reason)
@@ -471,36 +514,49 @@ class DurableJobService:
             return ExecutionOutcome(run_id=run_id, job_id=job["id"],
                                     state=exc.state)
 
-        # 2. cancellation observed
-        if job["state"] == JobState.CANCEL_REQUESTED.value:
-            self._transition(job=job, run=run, new_state=JobState.CANCELLED.value,
-                             actor=JobActor.WORKER.value,
-                             reason="cancellation acknowledged")
-            self._release_reservation_if_any(job, run, reason="cancelled")
-            return ExecutionOutcome(run_id=run_id, job_id=job["id"],
-                                    state=JobState.CANCELLED.value)
+        # 2. cancellation observed before execution starts. Fresh read: the
+        #    operator may have cancelled since the job was claimed. A pending
+        #    cancellation is terminal for the worker.
+        if is_worker_terminal(self._job_state(job)):
+            return self._finish_cancelled(job, run,
+                                          reason="cancellation acknowledged",
+                                          attempts=int(run.get("attempts") or 0))
 
         # 3. reserve usage (B09)
         spec = self.registry.spec(job["job_type"])
         est = _dec(job.get("estimated_cost"), Decimal("0.00")) or Decimal("0.00")
         reserved = self.reserve_usage(job, run, est, attempt=int(run.get("attempts") or 0) + 1)
 
-        # 4. start run
+        # 4. start run — guarded on LEASED: a cancel request that landed while
+        #    the reservation was being taken wins over RUNNING.
         attempt = int(run.get("attempts") or 0) + 1
         self.repos.db.conn.execute(
             "UPDATE job_runs SET attempts=? WHERE id=?",
             (attempt, run["id"]))
         self.repos.db.conn.commit()
         run["attempts"] = attempt
-        self._transition(job=job, run=run, new_state=JobState.RUNNING.value,
-                         actor=JobActor.WORKER.value, reason="execution started",
-                         correlation_id=job.get("correlation_id"))
+        try:
+            self._transition(job=job, run=run, new_state=JobState.RUNNING.value,
+                             actor=JobActor.WORKER.value, reason="execution started",
+                             correlation_id=job.get("correlation_id"),
+                             expected_state=JobState.LEASED.value)
+        except JobStateConflict as conflict:
+            if conflict.actual == JobState.CANCEL_REQUESTED.value:
+                return self._finish_cancelled(
+                    job, run, reason="cancellation acknowledged",
+                    attempts=attempt, reserved_cost=reserved)
+            raise
 
         try:
             handler = self.registry.handler(job["job_type"])
         except UnknownJobType as e:
-            self._transition(job=job, run=run, new_state=JobState.FAILED.value,
-                             actor=JobActor.WORKER.value, reason=str(e))
+            cancelled = self._after_run_transition(
+                job=job, run=run, new_state=JobState.FAILED.value,
+                actor=JobActor.WORKER.value, reason=str(e),
+                correlation_id=job.get("correlation_id"), attempts=attempt,
+                reserved_cost=reserved)
+            if cancelled is not None:
+                return cancelled
             return ExecutionOutcome(run_id=run_id, job_id=job["id"],
                                     state=JobState.FAILED.value,
                                     failure_class="unknown_job_type",
@@ -532,38 +588,60 @@ class DurableJobService:
         tolerance = max(Decimal("1.00"), est * Decimal("0.10"))
         variance_exceeded = actual > est + tolerance
 
+        # A cancellation observed at any point while the handler ran wins over
+        # the handler's own outcome: release, never settle, acknowledge once.
+        if is_worker_terminal(self._job_state(job)):
+            return self._finish_cancelled(job, run,
+                                          reason="cancellation acknowledged",
+                                          attempts=attempt, actual_cost=actual,
+                                          reserved_cost=reserved)
+
         if result.ok and not variance_exceeded:
             # EXACTLY-ONCE settlement: DB-level unique on the settle key +
-            # single transaction (balance + ledger) enforce one entry.
-            self.settle_usage(job, run, reserved, actual, attempt=attempt)
+            # single transaction (balance + ledger) enforce one entry. The
+            # settlement is guarded on RUNNING, so a cancel request that lands
+            # between the check above and the debit wins: nothing is charged
+            # and the job is acknowledged as cancelled instead of succeeding.
+            already_settled = self._settlement_exists(run, attempt)
+            try:
+                self.settle_usage(
+                    job, run, reserved, actual, attempt=attempt,
+                    expected_state=None if already_settled
+                    else JobState.RUNNING.value)
+            except JobStateConflict as conflict:
+                if conflict.actual == JobState.CANCEL_REQUESTED.value:
+                    return self._finish_cancelled(
+                        job, run, reason="cancellation acknowledged",
+                        attempts=attempt, actual_cost=actual,
+                        reserved_cost=reserved)
+                raise
             self._persist_output(job, run, result)
             self._transition(job=job, run=run, new_state=JobState.SUCCEEDED.value,
                              actor=JobActor.WORKER.value, reason="handler success",
-                             correlation_id=job.get("correlation_id"))
+                             correlation_id=job.get("correlation_id"),
+                             expected_state=JobState.RUNNING.value,
+                             state_applied=not already_settled)
             return ExecutionOutcome(run_id=run_id, job_id=job["id"],
                                     state=JobState.SUCCEEDED.value,
                                     attempts=attempt, actual_cost=actual,
                                     reserved_cost=reserved)
 
         if result.failure_class == "cancelled":
-            self.release_usage(job, run)
-            self._transition(job=job, run=run, new_state=JobState.CANCELLED.value,
-                             actor=JobActor.WORKER.value, reason="cancelled during run",
-                             correlation_id=job.get("correlation_id"))
-            return ExecutionOutcome(run_id=run_id, job_id=job["id"],
-                                    state=JobState.CANCELLED.value,
-                                    failure_class="cancelled",
-                                    attempts=attempt, actual_cost=actual,
-                                    reserved_cost=reserved)
+            return self._finish_cancelled(job, run, reason="cancelled during run",
+                                          attempts=attempt, actual_cost=actual,
+                                          reserved_cost=reserved)
 
         if variance_exceeded:
             self.release_usage(job, run)
             self._store_error(job, run, _VarResult(actual, est))
-            self._transition(job=job, run=run,
-                             new_state=JobState.BLOCKED_BUDGET.value,
-                             actor=JobActor.WORKER.value,
-                             reason="actual cost exceeds policy variance",
-                             correlation_id=job.get("correlation_id"))
+            cancelled = self._after_run_transition(
+                job=job, run=run, new_state=JobState.BLOCKED_BUDGET.value,
+                actor=JobActor.WORKER.value,
+                reason="actual cost exceeds policy variance",
+                correlation_id=job.get("correlation_id"), attempts=attempt,
+                actual_cost=actual, reserved_cost=reserved)
+            if cancelled is not None:
+                return cancelled
             return ExecutionOutcome(run_id=run_id, job_id=job["id"],
                                     state=JobState.BLOCKED_BUDGET.value,
                                     failure_class="budget_variance",
@@ -574,7 +652,16 @@ class DurableJobService:
                 attempt < spec.retry_policy.get("max_attempts", 3):
             # retryable failure: release this attempt's reservation, no ledger
             self.release_usage(job, run)
-            self._schedule_retry(job, run, result, attempt)
+            try:
+                self._schedule_retry(job, run, result, attempt,
+                                     expected_state=JobState.RUNNING.value)
+            except JobStateConflict as conflict:
+                if conflict.actual == JobState.CANCEL_REQUESTED.value:
+                    return self._finish_cancelled(
+                        job, run, reason="cancellation acknowledged",
+                        attempts=attempt, actual_cost=actual,
+                        reserved_cost=reserved)
+                raise
             return ExecutionOutcome(run_id=run_id, job_id=job["id"],
                                     state=JobState.RETRY_WAIT.value,
                                     failure_class=result.failure_class,
@@ -586,18 +673,20 @@ class DurableJobService:
         self._store_error(job, run, result)
         if attempt >= spec.retry_policy.get("max_attempts", 3) and \
                 is_retryable(result.failure_class):
-            self._transition(job=job, run=run, new_state=JobState.DEAD_LETTER.value,
-                             actor=JobActor.WORKER.value,
-                             reason="retries exhausted", correlation_id=job.get("correlation_id"))
-            outcome_state = JobState.DEAD_LETTER.value
+            new_state = JobState.DEAD_LETTER.value
+            reason = "retries exhausted"
         else:
-            self._transition(job=job, run=run, new_state=JobState.FAILED.value,
-                             actor=JobActor.WORKER.value,
-                             reason=result.failure_class or "failed",
-                             correlation_id=job.get("correlation_id"))
-            outcome_state = JobState.FAILED.value
+            new_state = JobState.FAILED.value
+            reason = result.failure_class or "failed"
+        cancelled = self._after_run_transition(
+            job=job, run=run, new_state=new_state,
+            actor=JobActor.WORKER.value, reason=reason,
+            correlation_id=job.get("correlation_id"), attempts=attempt,
+            actual_cost=actual, reserved_cost=reserved)
+        if cancelled is not None:
+            return cancelled
         return ExecutionOutcome(run_id=run_id, job_id=job["id"],
-                                state=outcome_state,
+                                state=new_state,
                                 failure_class=result.failure_class,
                                 attempts=attempt, actual_cost=actual,
                                 reserved_cost=reserved)
@@ -672,8 +761,9 @@ class DurableJobService:
             raise RecheckFailure(JobState.BLOCKED_BUDGET.value,
                                  "insufficient available balance",
                                  code="budget_insufficient")
-        # 8. cancellation not requested
-        if job["state"] == JobState.CANCEL_REQUESTED.value:
+        # 8. cancellation not requested — read FRESH: the operator may have
+        #    requested cancellation since the job was claimed.
+        if self._job_state(job) == JobState.CANCEL_REQUESTED.value:
             raise RecheckFailure(JobState.CANCELLED.value, "cancellation requested",
                                  code="cancelled")
         # 9. payload schema supported
@@ -764,7 +854,8 @@ class DurableJobService:
         return total
 
     def settle_usage(self, job: dict, run: dict, reserved: Decimal,
-                     actual: Decimal, *, attempt: int = 1) -> dict:
+                     actual: Decimal, *, attempt: int = 1,
+                     expected_state: Optional[str] = None) -> dict:
         """EXACTLY-ONCE settlement for a SUCCESSFUL attempt.
 
         The DB-level UNIQUE(idempotency_key) on ``settle:{run}:{attempt}`` plus
@@ -772,6 +863,11 @@ class DurableJobService:
         guarantee one successful job produces exactly one usage/ledger entry.
         Concurrent double-settlement attempts race to the unique index; the
         loser rolls back and returns the winner's entry.
+
+        ``expected_state`` optionally guards the settlement: the same
+        transaction moves the job to SUCCEEDED only while it still holds that
+        state. If a concurrent actor (a cancel request) moved it first, nothing
+        is debited and :class:`JobStateConflict` is raised.
         """
         org_id = job["organization_id"]
         actual = _dec(actual, Decimal("0.00")) or Decimal("0.00")
@@ -794,6 +890,24 @@ class DurableJobService:
                         "run_id": run["run_id"], "ok": True, "attempt": attempt})
         conn = self.repos.db.conn
         try:
+            if expected_state is not None:
+                # Guarded completion: the debit commits only while the worker
+                # still owns the expected state. A cancel request wins and the
+                # job is never charged.
+                cur = conn.execute(
+                    "UPDATE job_requests SET state=? WHERE id=? AND state=?",
+                    (JobState.SUCCEEDED.value, job["id"], expected_state))
+                if cur.rowcount == 0:
+                    conn.rollback()
+                    current = self.repos.job_requests.get(job["id"])
+                    raise JobStateConflict(
+                        expected_state, (current or {}).get("state"),
+                        job_id=job["id"])
+                # Mirror the run in the same transaction so job + run never
+                # disagree if the process dies right after the debit.
+                conn.execute(
+                    "UPDATE job_runs SET state=?, finished_at=? WHERE id=?",
+                    (JobState.SUCCEEDED.value, _now_iso(), run["id"]))
             # ONE transaction: balance + ledger + reserved-event release.
             conn.execute(
                 "UPDATE org_balances SET reserved = reserved - ?, "
@@ -807,6 +921,8 @@ class DurableJobService:
                  run["run_id"], UsageEventStatus.RESERVED.value))
             self.repos.db.insert_no_commit("usage_events", _event_dict(event))
             conn.commit()
+        except JobStateConflict:
+            raise
         except Exception:
             try:
                 conn.rollback()
@@ -873,7 +989,8 @@ class DurableJobService:
     # B10 — retry scheduling
     # ------------------------------------------------------------------
 
-    def _schedule_retry(self, job: dict, run: dict, result, attempt: int) -> None:
+    def _schedule_retry(self, job: dict, run: dict, result, attempt: int,
+                        *, expected_state: Optional[str] = None) -> None:
         spec = self.registry.spec(job["job_type"])
         backoff = self.backoff_seconds(spec.retry_policy, attempt)
         scheduled = (utcnow() + timedelta(seconds=backoff)).isoformat()
@@ -887,7 +1004,8 @@ class DurableJobService:
         self._transition(job=job, run=run, new_state=JobState.RETRY_WAIT.value,
                          actor=JobActor.WORKER.value,
                          reason=f"retryable {result.failure_class}",
-                         correlation_id=job.get("correlation_id"))
+                         correlation_id=job.get("correlation_id"),
+                         expected_state=expected_state)
 
     @staticmethod
     def backoff_seconds(policy: dict, attempt: int) -> int:
@@ -925,23 +1043,116 @@ class DurableJobService:
         run = self._current_run(job)
         return run["run_id"] if run else None
 
+    def _job_state(self, job: dict) -> str:
+        """Current persisted job state (never the caller's stale snapshot)."""
+        fresh = self.repos.job_requests.get(job["id"])
+        return ((fresh or job).get("state") or JobState.DRAFT.value)
+
+    def _settlement_exists(self, run: dict, attempt: int) -> bool:
+        key = f"settle:{run['run_id']}:{attempt}"
+        return self.repos.usage.find({"idempotency_key": key}) is not None
+
+    def _finish_cancelled(self, job: dict, run: dict, *, reason: str,
+                          attempts: int = 0,
+                          actual_cost: Optional[Decimal] = None,
+                          reserved_cost: Optional[Decimal] = None
+                          ) -> ExecutionOutcome:
+        """Acknowledge a worker-observed cancellation exactly once.
+
+        Cancellation is terminal for the worker: the reservation is released
+        (never settled, never debited) and the job moves CANCEL_REQUESTED ->
+        CANCELLED. Any other state fails closed rather than overwriting another
+        actor's outcome.
+        """
+        current = self._job_state(job)
+        if current not in (JobState.CANCEL_REQUESTED.value,
+                           JobState.CANCELLED.value):
+            # Fail closed BEFORE touching money: another actor already finished
+            # the job and the worker must not overwrite or refund it.
+            raise JobStateConflict(JobState.CANCEL_REQUESTED.value, current,
+                                   job_id=job["id"])
+        self.release_usage(job, run)
+        if current == JobState.CANCEL_REQUESTED.value:
+            self._transition(job=job, run=run,
+                             new_state=JobState.CANCELLED.value,
+                             actor=JobActor.WORKER.value, reason=reason,
+                             correlation_id=job.get("correlation_id"),
+                             expected_state=JobState.CANCEL_REQUESTED.value)
+        return ExecutionOutcome(run_id=run["run_id"], job_id=job["id"],
+                                state=JobState.CANCELLED.value,
+                                failure_class="cancelled", attempts=attempts,
+                                actual_cost=actual_cost,
+                                reserved_cost=reserved_cost)
+
+    def _after_run_transition(self, *, job: dict, run: dict, new_state: str,
+                              actor: str, reason: str,
+                              correlation_id: Optional[str] = None,
+                              attempts: int = 0,
+                              actual_cost: Optional[Decimal] = None,
+                              reserved_cost: Optional[Decimal] = None
+                              ) -> Optional[ExecutionOutcome]:
+        """Transition out of RUNNING, guarded so a cancel request wins.
+
+        Returns a CANCELLED outcome when a concurrent cancel request claimed
+        the job first; ``None`` when the requested transition was applied.
+        """
+        try:
+            self._transition(job=job, run=run, new_state=new_state,
+                             actor=actor, reason=reason,
+                             correlation_id=correlation_id,
+                             expected_state=JobState.RUNNING.value)
+            return None
+        except JobStateConflict as conflict:
+            if conflict.actual != JobState.CANCEL_REQUESTED.value:
+                raise
+            return self._finish_cancelled(
+                job, run, reason="cancellation acknowledged", attempts=attempts,
+                actual_cost=actual_cost, reserved_cost=reserved_cost)
+
     def _transition(self, *, job: dict, run: Optional[dict], new_state: str,
                     actor: str, reason: Optional[str],
                     correlation_id: Optional[str] = None,
                     approval_ref: Optional[str] = None,
-                    audit: bool = True) -> None:
+                    audit: bool = True,
+                    expected_state: Optional[str] = None,
+                    state_applied: bool = False) -> None:
+        if state_applied and not expected_state:
+            raise ValueError("state_applied requires expected_state")
         # The authoritative previous state is the CURRENT database state —
         # an operator may have concurrently requested cancellation, etc.
         fresh = self.repos.job_requests.get(job["id"])
-        prev = (fresh.get("state") if fresh else job.get("state")) \
+        actual = (fresh.get("state") if fresh else job.get("state")) \
             or JobState.DRAFT.value
-        ev = state_transition(
+        if state_applied:
+            # The caller already committed the state change atomically (in the
+            # settlement transaction); only the evidence is recorded here.
+            prev = expected_state
+            if actual != new_state:
+                raise JobStateConflict(expected_state, actual, job_id=job["id"])
+        else:
+            prev = actual
+            if expected_state is not None and prev != expected_state:
+                raise JobStateConflict(expected_state, prev, job_id=job["id"])
+        state_transition(
             job_id=job["id"], previous_state=prev, new_state=new_state,
             actor=actor, reason=reason,
             run_id=run.get("run_id") if run else None,
             correlation_id=correlation_id,
         )
         try:
+            if expected_state is not None and not state_applied:
+                # Guarded write: a concurrent actor (a cancel request, lease
+                # recovery) that moved the job first wins. The worker never
+                # overwrites it — cancellation is terminal for the worker.
+                cur = self.repos.db.conn.execute(
+                    "UPDATE job_requests SET state=? WHERE id=? AND state=?",
+                    (new_state, job["id"], expected_state))
+                if cur.rowcount == 0:
+                    self.repos.db.conn.rollback()
+                    current = self.repos.job_requests.get(job["id"])
+                    raise JobStateConflict(
+                        expected_state, (current or {}).get("state"),
+                        job_id=job["id"])
             history = JobStateHistory(
                 job_id=job["id"], run_id=run.get("run_id") if run else None,
                 previous_state=prev, new_state=new_state, actor=actor, reason=reason,
@@ -954,9 +1165,10 @@ class DurableJobService:
                     (new_state, _now_iso() if new_state in TERMINAL_STATES else None,
                      run["id"]))
                 run["state"] = new_state
-            self.repos.db.conn.execute(
-                "UPDATE job_requests SET state=? WHERE id=?",
-                (new_state, job["id"]))
+            if expected_state is None:
+                self.repos.db.conn.execute(
+                    "UPDATE job_requests SET state=? WHERE id=?",
+                    (new_state, job["id"]))
             self.repos.db.conn.commit()
             job["state"] = new_state
             if audit:
@@ -1012,8 +1224,7 @@ class DurableJobService:
         self.repos.db.conn.commit()
 
     def _cancellation_requested(self, job: dict) -> bool:
-        fresh = self.repos.job_requests.get(job["id"])
-        return bool(fresh and fresh.get("state") == JobState.CANCEL_REQUESTED.value)
+        return self._job_state(job) == JobState.CANCEL_REQUESTED.value
 
     def _require_active_membership(self, org_id: str, user_id: str) -> dict:
         rows = self.repos.memberships.list(

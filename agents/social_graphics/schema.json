@@ -1,0 +1,19 @@
+{
+  "agent": "social_graphics",
+  "outputs": [
+    "layouts per aspect ratio",
+    "copy variants"
+  ],
+  "validators": [
+    "brand_kit_applied"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

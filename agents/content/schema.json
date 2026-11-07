@@ -1,0 +1,20 @@
+{
+  "agent": "content",
+  "outputs": [
+    "copy variants",
+    "keyword coverage"
+  ],
+  "validators": [
+    "no_unverified_claims",
+    "keyword_coverage"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

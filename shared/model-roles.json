@@ -1,0 +1,11 @@
+{
+  "_note": "Role -> ordered provider chain. Agents ask for a ROLE, never a model. Swap local for cloud by editing this file only (blueprint 11A.1).",
+  "roles": {
+    "reasoning":     { "chain": ["local_ollama", "stub_cloud"], "local_model": "northstaros-qwen3.8:27b" },
+    "tool_calling":  { "chain": ["local_ollama", "stub_cloud"], "local_model": "northstaros-qwen3.8:27b" },
+    "image":         { "chain": ["comfyui", "stub_cloud"],      "local_model": "flux-2-klein-9b" },
+    "video":         { "chain": ["comfyui", "stub_cloud"],      "local_model": "wan2.2-ti2v-5b" },
+    "voice":         { "chain": ["local_voice", "stub_cloud"],  "local_model": "piper" },
+    "embeddings":    { "chain": ["local_ollama", "stub_cloud"], "local_model": "qwen3-embedding:0.6b" }
+  }
+}

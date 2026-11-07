@@ -1,0 +1,16 @@
+{
+  "agent": "listing_optimizer",
+  "required": [
+    "title",
+    "bullets",
+    "keywords"
+  ],
+  "optional": [
+    "description",
+    "backend_terms",
+    "competitors",
+    "brand_key",
+    "image_count",
+    "aplus"
+  ]
+}

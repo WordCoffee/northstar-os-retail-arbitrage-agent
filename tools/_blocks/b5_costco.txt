@@ -1,0 +1,79 @@
+# ============================================================
+# COSTCO BUSINESS DELIVERY SEARCH — delegated to Chrome Connect
+# ============================================================
+
+async def costco_search(query: str, verbose: bool = True,
+                        use_chrome: bool = False) -> str:
+    """Costco Business Delivery discovery, read-only, via Chrome Connect.
+
+    2026-10-03: this used to launch its own Chromium, guess a `/SearchDisplay`
+    URL pattern, fill the search box from a hard-coded selector list and hold the
+    window open for 15 seconds. All of that is now the controller's job.
+
+    The guessed URL pattern is deliberately gone. Opening the site root and
+    letting Chrome Connect use the site's own search box means the controller
+    decides how to navigate and evaluates what actually loaded, rather than this
+    function asserting a URL shape that was never verified.
+
+    DISCOVERY ONLY - not sourcing evidence. Nothing returned by this function is
+    a verified price, a verified spec or a verified supplier term. Fields the
+    page did not return stay null and must not be inferred downstream.
+
+    STOPS at search results: never carts, never lists, never buys. Those are
+    prohibited actions in policy.js and are refused before reaching Playwright.
+
+    `use_chrome` is kept for call compatibility; profile selection belongs to
+    the controller.
+    """
+    from chromeconnect_guard import cc_call
+
+    site = "https://www.costcobusinessdelivery.com/"
+
+    if verbose:
+        print("\n=== COSTCO BUSINESS DELIVERY DISCOVERY (via Chrome Connect) ===")
+        print(f"Query: {query}")
+        print("DISCOVERY ONLY - not sourcing evidence")
+        print("Read-only. No cart, no listing, no buy.\n")
+
+    response = cc_call(
+        f"Open {site} and use the site's own search box to search for {query!r}. "
+        "Read the results page and extract only what you can actually see: "
+        "product names, displayed prices, and item URLs. Leave every field the "
+        "page does not show as null. Do not open a product detail page, do not "
+        "add to cart, do not check out, do not sign in, do not change account "
+        "state. This is discovery only; the output is not sourcing evidence.",
+        url=site,
+    )
+
+    result_lines = ["DISCOVERY ONLY - not sourcing evidence"]
+
+    if not response.get("ok"):
+        result_lines.append(f"REFUSED: {response.get('reason', 'controller_error')}")
+        if verbose:
+            print(f"Chrome Connect did not run this: {response.get('reason')} "
+                  f"({response.get('detail', '')})")
+        return " | ".join(result_lines)
+
+    if response.get("status") == "BLOCKED":
+        result_lines.append(f"BLOCKED: {response.get('stop_reason')}")
+        if verbose:
+            print(f"Blocked by the controller: {response.get('stop_reason')}")
+            print("Chrome Connect will not work around a CAPTCHA or login wall.")
+        return " | ".join(result_lines)
+
+    data = response.get("data")
+    if data:
+        result_lines.append(f"discovery: {json.dumps(data)}")
+    else:
+        result_lines.append("data: null (nothing readable; fields left null)")
+
+    if verbose:
+        print("\n=== DISCOVERY DONE ===")
+        print("DISCOVERY ONLY - not sourcing evidence. Unread fields are null.")
+        print("STOPPED - read-only. No cart/listing/purchase executed.")
+        print(f"Controller run: {response.get('run_id')}  steps: {response.get('steps')}")
+        j = response.get("journal")
+        if j:
+            print(f"Journal: {j.get('name')}")
+
+    return " | ".join(result_lines)

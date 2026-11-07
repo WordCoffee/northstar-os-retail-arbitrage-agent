@@ -1,0 +1,22 @@
+{
+  "agent": "video_ugc",
+  "outputs": [
+    "script",
+    "storyboard",
+    "clip",
+    "captions"
+  ],
+  "validators": [
+    "duration_matches_spec",
+    "claims_screened"
+  ],
+  "status_values": [
+    "built",
+    "optimized",
+    "planned",
+    "needs_input",
+    "rejected",
+    "unclear",
+    "error"
+  ]
+}

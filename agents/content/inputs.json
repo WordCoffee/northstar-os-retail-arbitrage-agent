@@ -1,0 +1,12 @@
+{
+  "agent": "content",
+  "required": [
+    "product",
+    "surface"
+  ],
+  "optional": [
+    "brand_key",
+    "keywords",
+    "tone"
+  ]
+}

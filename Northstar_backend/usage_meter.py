@@ -23,6 +23,7 @@ ACTIONS = (
     "alert",
     "autothink_t2",
     "autothink_t3",
+    "jev_decision",
 )
 
 # Actions that are NOT metered (deterministic reads / showroom).

@@ -1,0 +1,11 @@
+{
+  "agent": "ppc_agent",
+  "required": [
+    "search_term_report"
+  ],
+  "optional": [
+    "targeting_report",
+    "placement_report",
+    "bulk_file"
+  ]
+}

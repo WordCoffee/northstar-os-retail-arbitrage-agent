@@ -168,5 +168,86 @@ class FoundationCookieResolutionTests(unittest.TestCase):
         state.close()
 
 
+class DevShimSessionTests(unittest.TestCase):
+    """The strict dependency must honour the SAME dev-only identity shim.
+
+    Regression for 2026-10-27: ``require_session`` refused the local dev
+    session that the Foundation router had already accepted, so /home and
+    Design Studio rendered "Authentication required." and the app looped
+    between /home and /sign-in. The shim is narrow (development + loopback +
+    explicit header) and must never apply in production or to a remote client.
+    """
+
+    def _request(self, headers=None, client=("127.0.0.1", 51234)):
+        from starlette.requests import Request
+        raw = [(k.lower().encode("latin-1"), str(v).encode("latin-1"))
+               for k, v in (headers or {}).items()]
+        return Request({
+            "type": "http", "method": "GET", "path": "/probe",
+            "headers": raw, "client": client, "scheme": "http",
+            "server": ("127.0.0.1", 8000), "query_string": b"",
+        })
+
+    def _resolve(self, request):
+        import asyncio
+        from auth_deps import require_session
+        return asyncio.run(require_session(request))
+
+    def test_loopback_dev_headers_resolve_to_the_dev_identity(self):
+        with patch.dict(os.environ, {"ENVIRONMENT": "development",
+                                     "NORTHSTAR_TRUSTED_PROXIES": ""}, clear=False):
+            user = self._resolve(self._request({
+                "X-User-Id": "demo-t2", "X-Org-Id": "org-t2",
+                "X-Role": "operator"}))
+        self.assertEqual(user["id"], "demo-t2")
+        self.assertEqual(user["tenant_id"], "org-t2")
+        self.assertEqual(user["role"], "operator")
+        self.assertTrue(user["dev_shim"])
+
+    def test_production_refuses_the_same_headers(self):
+        from fastapi import HTTPException
+        with patch.dict(os.environ, {"ENVIRONMENT": "production",
+                                     "NORTHSTAR_TRUSTED_PROXIES": ""}, clear=False):
+            with self.assertRaises(HTTPException) as ctx:
+                self._resolve(self._request({
+                    "X-User-Id": "demo-t2", "X-Org-Id": "org-t2"}))
+        self.assertEqual(ctx.exception.status_code, 401)
+
+    def test_no_header_is_refused_even_in_development(self):
+        from fastapi import HTTPException
+        with patch.dict(os.environ, {"ENVIRONMENT": "development",
+                                     "NORTHSTAR_TRUSTED_PROXIES": ""}, clear=False):
+            with self.assertRaises(HTTPException):
+                self._resolve(self._request({}))
+
+    def test_remote_client_is_refused_even_in_development(self):
+        from fastapi import HTTPException
+        with patch.dict(os.environ, {"ENVIRONMENT": "development",
+                                     "NORTHSTAR_TRUSTED_PROXIES": ""}, clear=False):
+            with self.assertRaises(HTTPException):
+                self._resolve(self._request(
+                    {"X-User-Id": "demo-t2", "X-Org-Id": "org-t2"},
+                    client=("192.168.1.50", 51000)))
+
+    def test_forwarded_header_from_untrusted_peer_is_refused(self):
+        from fastapi import HTTPException
+        with patch.dict(os.environ, {"ENVIRONMENT": "development",
+                                     "NORTHSTAR_TRUSTED_PROXIES": ""}, clear=False):
+            with self.assertRaises(HTTPException):
+                self._resolve(self._request({
+                    "X-User-Id": "demo-t2", "X-Org-Id": "org-t2",
+                    "X-Forwarded-For": "127.0.0.1"}))
+
+    def test_forwarded_loopback_through_the_trusted_dev_proxy_is_allowed(self):
+        """The real dev topology: Vite on 127.0.0.1 proxies to the backend."""
+        with patch.dict(os.environ, {
+                "ENVIRONMENT": "development",
+                "NORTHSTAR_TRUSTED_PROXIES": "127.0.0.1"}, clear=False):
+            user = self._resolve(self._request({
+                "X-User-Id": "demo-t2", "X-Org-Id": "org-t2",
+                "X-Forwarded-For": "127.0.0.1"}))
+        self.assertEqual(user["id"], "demo-t2")
+
+
 if __name__ == "__main__":
     unittest.main()

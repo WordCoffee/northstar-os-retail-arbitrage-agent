@@ -13,7 +13,10 @@ fails the build if any other module imports a network client.
 from __future__ import annotations
 
 import base64
+import json
 import os
+import urllib.error
+import urllib.request
 from typing import Any, Dict, Optional
 
 from gateway import roles
@@ -136,3 +139,22 @@ def registered() -> Dict[str, bool]:
 
 def encode(data: bytes) -> str:
     return base64.b64encode(data).decode("ascii")
+
+
+class TransportError(RuntimeError):
+    """A send attempt that never produced an HTTP response."""
+
+
+def post_json(url: str, payload: Dict[str, Any], headers: Dict[str, str],
+              timeout: float):
+    """One JSON POST, no retry. Lives here because this is the only module
+    allowed to import a network client (test_gateway enforces it)."""
+    body = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 - operator-configured
+            return int(resp.status), resp.read(200_000).decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        return int(exc.code), (exc.read(20_000).decode("utf-8", "replace") if exc.fp else "")
+    except Exception as exc:  # noqa: BLE001 - the message is scrubbed and reported, never swallowed
+        raise TransportError(str(exc)) from exc

@@ -1,0 +1,39 @@
+{
+  "name": "adapter_run_1793",
+  "version": "1.0.0",
+  "origin": "example.com",
+  "task": "extract title",
+  "selectors": {
+    "title": "auto_title"
+  },
+  "action_trace": [
+    {
+      "step": 1,
+      "tool": "extract",
+      "args": {
+        "schema": {
+          "title": "string"
+        }
+      }
+    },
+    {
+      "step": 2,
+      "tool": "finish",
+      "args": {
+        "result": {
+          "fields": {
+            "title": null
+          },
+          "source_url": "fixture://page",
+          "observed_at": null,
+          "confidence": 0.5
+        }
+      }
+    }
+  ],
+  "expected_output": null,
+  "status": "proposed",
+  "created_at": "2026-11-06T14:02:41.088934+00:00",
+  "compiled_from_run": "run_1793973761",
+  "fingerprint_map": {}
+}

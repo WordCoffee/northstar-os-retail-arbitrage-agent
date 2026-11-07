@@ -52,6 +52,47 @@ def test_laya_backend_reports_why_it_fell_back(monkeypatch):
     assert "laya_not_installed" in got["reason"]
 
 
+def test_jev_backend_reports_why_it_fell_back(monkeypatch):
+    monkeypatch.setattr(dl, "_jev_credentials", lambda: ("", ""))
+    got = dl.decide("copy_audit", "A perfectly ordinary product description of sixteen ounces.",
+                    backend="jev")
+    assert got["backend"] == "rules"
+    assert "jev_not_configured" in got["reason"]
+
+
+def test_jev_backend_reports_missing_key(monkeypatch):
+    monkeypatch.setattr(dl, "_jev_credentials", lambda: ("https://example.com/decide", ""))
+    got = dl.decide("copy_audit", "A perfectly ordinary product description of sixteen ounces.",
+                    backend="jev")
+    assert got["backend"] == "rules"
+    assert "jev_api_key_missing" in got["reason"]
+
+
+def test_jev_backend_is_not_auto_used_by_default(monkeypatch):
+    # Even when configured, auto must not spend the metered cloud backend.
+    monkeypatch.setattr(dl, "_jev_credentials", lambda: ("https://example.com/decide", "secret"))
+    monkeypatch.setattr(dl, "_jev_available", lambda: (True, "jev_ready"))
+    got = dl.decide("copy_audit", "A perfectly ordinary product description of sixteen ounces.",
+                    backend="auto")
+    assert got["backend"] != "jev"
+
+
+def test_jev_backend_can_decide_duplicate_kind(monkeypatch):
+    # Jev covers kinds the rules backend abstains on (e.g. duplicate).
+    payload = {"value": "same", "confidence": 0.88,
+               "probabilities": {"same": 0.88, "different": 0.07, "unsure": 0.05}}
+    monkeypatch.setattr(dl, "_jev_credentials", lambda: ("https://example.com/decide", "secret"))
+    monkeypatch.setattr(dl, "_jev_available", lambda: (True, "jev_ready"))
+    monkeypatch.setattr(dl, "_jev_decide", lambda kind, text: {
+        "value": "same", "confidence": 0.88, "abstained": False, "flags": [],
+        "reason": "typesafe jev backend", "probabilities": payload["probabilities"],
+    })
+    got = dl.decide("duplicate", "two listings", backend="jev")
+    assert got["value"] == "same"
+    assert got["backend"] == "jev"
+    assert got["abstained"] is False
+
+
 def test_laya_backend_is_available_on_this_bench():
     ready, why = dl._laya_available()
     assert ready is True and why == "laya_ready"

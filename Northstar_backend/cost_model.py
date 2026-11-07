@@ -60,6 +60,7 @@ def worst_case(plan: str, data: Optional[Dict] = None) -> TierCost:
     add("post", caps.get("post", 0) * u["post"])
     add("autothink_t2", caps.get("autothink_t2", 0) * u["autothink_t2"])
     add("autothink_t3", caps.get("autothink_t3", 0) * u["autothink_t3"])
+    add("jev_decision", caps.get("jev_decision", 0) * u.get("jev_decision", 0.0))
     add("rank_snapshot", caps.get("rank_snapshot", 0) * u["rank_snapshot"])
     add("alert", caps.get("alert", 0) * u["alert"])
 
