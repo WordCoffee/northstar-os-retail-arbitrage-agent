@@ -28,19 +28,19 @@ def root(tmp_path, monkeypatch):
     queue = {
         "phase": "C", "cycle": 0,
         "items": [
-            # `done.flag` is the product of the work and therefore part of the
-            # declared scope: the evaluator refuses a candidate that writes
-            # outside write_paths, so the fixture declares what the worker makes.
+            # Two products: the source file under a real source root, and a build
+            # flag under reports/ (also committable). The check watches the flag, so
+            # it is red before any work and green only when the worker writes it.
             {"id": "runnable", "title": "do a thing", "status": "pending", "priority": 900,
              "next": "make the check pass",
-             "write_paths": ["Northstar_backend/x.py", "done.flag"],
+             "write_paths": ["Northstar_backend/x.py", "reports/ty/done.flag"],
              # No ';' in the payload: the contract policy refuses a shell operator
              # anywhere in an argv token, and a fixture should use a contract the
              # loop would actually accept. A newline is not a shell operator.
              "acceptance_commands": [[
                  "python", "-c",
                  "import pathlib, sys\n"
-                 "sys.exit(0 if pathlib.Path('done.flag').exists() else 1)",
+                 "sys.exit(0 if pathlib.Path('reports/ty/done.flag').exists() else 1)",
              ]]},
             {"id": "no_checks", "title": "vague", "status": "pending", "priority": 800,
              "write_paths": ["Northstar_backend/y.py"]},
@@ -84,9 +84,13 @@ def _worker(result, *, ok=True, steps=3, evidence=None):
         json.loads(task_path.read_text(encoding="utf-8"))
         if ok:
             # STATE is <root>/state/tys_runner, so parents[2] is the root the
-            # launcher runs acceptance commands in.
+            # launcher runs acceptance commands in. The product lives under an
+            # allowed commit root: the loop's last arrow is a commit, and a scope
+            # outside the allowlist is correctly refused.
             root = Path(task_path).resolve().parents[2]
-            (root / "done.flag").write_text("done", encoding="utf-8")
+            (root / "Northstar_backend").mkdir(parents=True, exist_ok=True)
+            (root / "Northstar_backend" / "x.py").write_text("X = 1\n", encoding="utf-8")
+            (root / "reports" / "ty" / "done.flag").write_text("done", encoding="utf-8")
         payload = {"ok": ok, "steps": steps, "evidence": evidence or [],
                    "files": ["Northstar_backend/x.py"]}
         result_path.write_text(json.dumps(payload), encoding="utf-8")
@@ -120,7 +124,7 @@ def test_a_contract_is_built_only_from_declared_fields(root, capsys):
     item = next(i for i in r.load_queue()["items"] if i["id"] == brief["item"])
     contract = L.task_contract(item, brief)
     assert contract["objective"] == "make the check pass"
-    assert contract["write_paths"] == ["Northstar_backend/x.py", "done.flag"]
+    assert contract["write_paths"] == ["Northstar_backend/x.py", "reports/ty/done.flag"]
     assert contract["acceptance_commands"][0][0] == "python"
 
 
@@ -250,7 +254,7 @@ def test_a_cycle_that_edits_a_test_file_is_refused_out_of_scope(root):
         (root / "Northstar_backend").mkdir(parents=True, exist_ok=True)
         (root / "Northstar_backend" / "test_sneaky.py").write_text(
             "def test_sneaky():\n    assert True\n", encoding="utf-8")
-        (root / "done.flag").write_text("done", encoding="utf-8")
+        (root / "reports" / "ty" / "done.flag").write_text("done", encoding="utf-8")
         result_path.write_text(json.dumps({"ok": True, "steps": 1}), encoding="utf-8")
         return 0
 
@@ -380,6 +384,22 @@ def test_the_runner_refuses_a_shipped_cycle_with_no_evidence(root):
     assert item["status"] == "in_progress"   # unchanged, not silently accepted
 
 
+def test_a_shipped_cycle_commits_its_scope_and_tags_it(root):
+    """C3's last arrow. Before this, a green verdict marked the item done and left
+    the bytes uncommitted, so 'shipped' named a judgement with nothing behind it."""
+    import subprocess as sp
+
+    out = L._run_cycle(worker=_worker({}), dry_run=False, cycle_budget=3)
+
+    assert out["shipped"] is True, out
+    assert out["commit"], out
+    log = sp.run(["git", "log", "-1", "--format=%s"], cwd=str(root),
+                 capture_output=True, text=True).stdout.strip()
+    assert log.startswith("autonomy(cycle 1): runnable"), log
+    tags = sp.run(["git", "tag"], cwd=str(root), capture_output=True, text=True).stdout
+    assert "autonomy-cycle-01" in tags.split()
+
+
 def test_a_shipped_cycle_cites_an_evidence_record_the_launcher_wrote(root):
     out = L._run_cycle(worker=_worker({}, evidence=[]), dry_run=False, cycle_budget=3)
     assert out["ok"] is True and out["shipped"] is True
@@ -411,7 +431,9 @@ def _session_worker(session_id="ses_test", **extra):
     """A worker whose result names the session the model actually ran in."""
     def run(task_path, result_path):
         root = Path(task_path).resolve().parents[2]
-        (root / "done.flag").write_text("done", encoding="utf-8")
+        (root / "Northstar_backend").mkdir(parents=True, exist_ok=True)
+        (root / "Northstar_backend" / "x.py").write_text("X = 1\n", encoding="utf-8")
+        (root / "reports" / "ty" / "done.flag").write_text("done", encoding="utf-8")
         payload = {"ok": True, "steps": 3, "evidence": [],
                    "session_id": session_id, "text": "did the thing", **extra}
         result_path.write_text(json.dumps(payload), encoding="utf-8")

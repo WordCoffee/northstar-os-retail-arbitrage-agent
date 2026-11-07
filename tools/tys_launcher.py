@@ -673,6 +673,70 @@ def _restore(paths: List[str]) -> List[str]:
     return restored
 
 
+def _changed_in_scope(paths: List[str]) -> List[str]:
+    """The declared paths git actually reports as changed, normalised."""
+    changed: List[str] = []
+    for line in _dirty(paths):
+        rel = line.strip().strip('"')
+        if " -> " in rel:
+            rel = rel.split(" -> ", 1)[1]
+        if rel:
+            changed.append(rel.replace("\\", "/"))
+    return sorted(set(changed))
+
+
+def commit_shipped(*, contract: Dict[str, Any], cycle: Any, item_id: str) -> Dict[str, Any]:
+    """Commit exactly the in-scope paths a shipped cycle changed, and tag it.
+
+    The loop's product is a commit. Before this existed, a cycle could judge a patch
+    green, mark the item done, and leave the bytes uncommitted - so "shipped" named a
+    verdict with nothing behind it. C3 asks for author -> candidate -> evaluator ->
+    acceptance -> **commit**, and this is the last arrow.
+
+    Only ``write_paths`` are staged, and each one is re-checked against the
+    supervisor's commit allowlist. A scope that the allowlist refuses is a refused
+    ship, not a partial one.
+    """
+    out: Dict[str, Any] = {"ok": False, "committed": [], "refused": [],
+                           "commit": "", "tag": "", "detail": ""}
+    policy = runner._command_policy()
+    if policy is None:
+        out["detail"] = "the commit allowlist is unavailable at this code root"
+        return out
+    declared = [str(path) for path in (contract.get("write_paths") or [])]
+    changed = _changed_in_scope(declared)
+    allowed, refused = policy.validate_commit_paths(changed)
+    out.update(committed=allowed, refused=refused)
+    if refused:
+        out["detail"] = "refused by the commit allowlist: " + "; ".join(refused[:3])
+        return out
+    if not allowed:
+        out["detail"] = "nothing changed inside the declared scope"
+        return out
+
+    objective = str(contract.get("objective") or item_id)
+    message = f"autonomy(cycle {int(cycle)}): {item_id} - {objective[:120]}"
+    added = _git("add", "--", *allowed)
+    if added.returncode != 0:
+        out["detail"] = f"git add failed: {(added.stderr or '').strip()[:300]}"
+        return out
+    made = _git("-c", "user.name=Northstar Ty", "-c", "user.email=ty@northstaros.local",
+                "commit", "-q", "-m", message)
+    if made.returncode != 0:
+        out["detail"] = f"git commit failed: {(made.stderr or '').strip()[:300]}"
+        return out
+    sha = (_git("rev-parse", "HEAD").stdout or "").strip()
+    name = f"autonomy-cycle-{int(cycle):02d}"
+    tagged = _git("tag", name, sha)
+    if tagged.returncode != 0:
+        # A reset queue can reuse a cycle number; the commit still needs a name.
+        name = f"{name}-{sha[:7]}"
+        tagged = _git("tag", name, sha)
+    out.update(ok=True, commit=sha, tag=name if tagged.returncode == 0 else "",
+               detail=f"committed {len(allowed)} path(s) as {sha[:8]}")
+    return out
+
+
 def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str, Any]:
     """One cycle: reserve, run the worker, validate, complete."""
     brief_out = runner.cmd_next(write_brief=True)
@@ -795,10 +859,22 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
                                 "checks": judged.get("commands") or []}
     worker_out["verdict"] = judged
     worker_out["before_green"] = before.get("ok")
+    # A verdict is not a shipment. The commit is the loop's product, so a cycle that
+    # judged green but cannot commit its scope has not shipped.
+    committed: Dict[str, Any] = {}
+    if shipped:
+        committed = commit_shipped(contract=contract, cycle=brief.get("cycle"),
+                                   item_id=str(item.get("id")))
+        if not committed.get("ok"):
+            shipped = False
+            _append(JOURNAL, {"event": "commit_refused", "item": item.get("id"),
+                              "detail": committed.get("detail"),
+                              "refused": committed.get("refused")})
     _append(JOURNAL, {"event": "candidate_judged", "item": brief["item"],
                       "cycle": brief["cycle"], "gate": judged.get("gate"),
                       "ok": bool(judged.get("ok")), "frozen": judged.get("frozen"),
                       "live_gate": (judged.get("live") or {}).get("gate"),
+                      "commit": committed.get("commit") or "",
                       "detail": str(judged.get("detail") or "")[:600]})
     measured = measure_cycle_tokens(worker_out)
     _append(JOURNAL, {"event": "tokens_measured", "item": brief["item"],
@@ -829,7 +905,8 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
         "item": brief["item"],
         "cycle": brief["cycle"],
         "shipped": shipped,
-        "tag": brief.get("rollback_tag") if shipped else "",
+        "tag": (committed.get("tag") or "") if shipped else "",
+        "commit": committed.get("commit") or "",
         "evidence": evidence_paths,
         # The number the daily cap is enforced with. Session measurement when the
         # store has one, payload estimate (labelled) when it does not; never 0 by
@@ -858,7 +935,8 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
             "cycle": brief["cycle"], "seconds": elapsed, "worker_exit": code,
             "tokens": measured["tokens"], "tokens_source": measured["source"],
             "gate": judged.get("gate"), "detail": judged.get("detail"),
-            "frozen": judged.get("frozen"), "complete_exit": rc}
+            "frozen": judged.get("frozen"), "complete_exit": rc,
+            "commit": committed.get("commit") or ""}
 
 
 def main(argv: Optional[List[str]] = None) -> int:
