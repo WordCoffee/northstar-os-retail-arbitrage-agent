@@ -163,7 +163,7 @@
       "id": "M1e-rejections",
       "kind": "automation",
       "priority": 1160,
-      "status": "pending",
+      "status": "done",
       "title": "Rejection ledger by fingerprint; 3 on one gate -> needs_author",
       "write_paths": [
         "tools/tys_evaluator.py",
@@ -195,7 +195,10 @@
           "-q",
           "Northstar_backend/test_tys_runner.py"
         ]
-      ]
+      ],
+      "commit": "41fdceaf",
+      "verification": "14 passed in test_tys_rejections.py; 47 evaluator+runner, 59 launcher+author green. Material fingerprint ignores CRLF/reflow/line-shift, duplicate runs no command, three target_red park the item as needs_author, a different gate resets to 1, torn tail dropped and append continues, revival only on a signature change.",
+      "completed_at": "2026-11-07T07:33:00Z"
     },
     {
       "id": "M1f-scope-deriver",
@@ -1051,7 +1054,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-06T22:38:38+00:00",
+  "updated_at": "2026-11-07T07:33:00Z",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {

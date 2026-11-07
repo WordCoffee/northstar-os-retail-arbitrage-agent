@@ -127,6 +127,19 @@ def load_queue() -> Dict[str, Any]:
     return data
 
 
+def _dispatchable(item: Dict[str, Any]) -> bool:
+    """Would ``validate_contract`` accept this item right now?
+
+    Cheap enough to ask per selection (it is a string policy, not a subprocess), and
+    the answer is what keeps a queue full of ``needs_author`` rows from starving the
+    launcher: a non-dispatchable item is chosen last, not one-at-a-time-forever.
+    """
+    try:
+        return not validate_contract(item)
+    except Exception:  # noqa: BLE001 - an item that cannot be judged is not dispatchable
+        return False
+
+
 def select_next(queue: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
     """Highest priority item whose declared dependencies are all done.
 
@@ -134,6 +147,11 @@ def select_next(queue: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, An
     a property of the selector, because a queue that merely *lists* an order is an
     order the loop can ignore. A reverted item is also deferred for two cycles so
     the same wall is not retried three times in a row.
+
+    Dispatchable items come first. Without that, forty ``needs_author`` rows at the
+    top of the queue are walked one per cycle and the launcher ends the run at
+    ``no_runnable_items`` while real work sits below them. ``pool = ready or
+    unblocked`` is kept on purpose: the stall is still journalled, not hidden.
     """
     queue = queue or load_queue()
     cycle = int(queue.get("cycle") or 0)
@@ -148,7 +166,8 @@ def select_next(queue: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, An
         return None
     ready = [i for i in unblocked if int(i.get("defer_until_cycle") or 0) <= cycle]
     pool = ready or unblocked
-    pool.sort(key=lambda i: (-(int(i.get("priority") or 0)),
+    pool.sort(key=lambda i: (not _dispatchable(i),
+                             -(int(i.get("priority") or 0)),
                              int(i.get("attempts") or 0),
                              str(i.get("id"))))
     return pool[0]
@@ -596,23 +615,43 @@ def cmd_stop() -> int:
 
 
 def cmd_dry_run(cycles: int, per_session: int) -> int:
-    """Simulate the loop's bookkeeping. Writes nothing outside the temp state."""
+    """Simulate the loop's bookkeeping. Writes nothing outside the temp state.
+
+    The selector here is the real one: ``depends_on``, ``defer_until_cycle`` and
+    dispatchable-first ordering all apply. A trace that ignored them could show nine
+    cycles the real selector would have refused, which is worse than no trace.
+    """
     queue = load_queue()
     simulated: List[Dict[str, Any]] = []
     rotations = 0
     in_session = 0
-    remaining = {str(i["id"]): str(i.get("status")) for i in queue.get("items", [])}
+    status = {str(i["id"]): str(i.get("status")) for i in queue.get("items", [])}
+    cycle = int(queue.get("cycle") or 0)
     for n in range(1, max(1, cycles) + 1):
-        candidates = [i for i in queue.get("items", [])
-                      if remaining.get(str(i["id"])) in ACTIVE]
-        if not candidates:
+        cycle += 1
+        done = {key for key, value in status.items() if value == "done"}
+        rows = [i for i in queue.get("items", [])
+                if status.get(str(i["id"])) in ACTIVE]
+        if not rows:
             simulated.append({"cycle": n, "stopped": "queue_empty"})
             break
-        candidates.sort(key=lambda i: (-(int(i.get("priority") or 0)), str(i.get("id"))))
-        item = candidates[0]
+        unblocked = [i for i in rows
+                     if all(str(dep) in done for dep in (i.get("depends_on") or []))]
+        if not unblocked:
+            simulated.append({"cycle": n, "stopped": "no_runnable_items",
+                              "blocked": blocked_by_dependencies(queue)})
+            break
+        ready = [i for i in unblocked if int(i.get("defer_until_cycle") or 0) <= cycle]
+        pool = ready or unblocked
+        pool.sort(key=lambda i: (not _dispatchable(i),
+                                 -(int(i.get("priority") or 0)),
+                                 int(i.get("attempts") or 0),
+                                 str(i.get("id"))))
+        item = pool[0]
         in_session += 1
-        remaining[str(item["id"])] = "done"
+        status[str(item["id"])] = "done"
         simulated.append({"cycle": n, "item": item["id"],
+                          "dispatchable": _dispatchable(item),
                           "session_cycle": in_session})
         if in_session >= per_session:
             rotations += 1

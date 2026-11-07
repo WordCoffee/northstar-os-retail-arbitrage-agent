@@ -24,7 +24,7 @@ dependency chain is what prevents skipping.
 | A10 | **`M0.5-spike`** | 5 real problems × 3 candidates → decide local / hybrid / stop | **todo** | A9 |
 | A11 | **`M1c-evaluator`** | `tools/tys_evaluator.py`: scope, well-formedness, target-green, check-not-tampered | **todo** | A10, A7 |
 | A12 | **`M1d-artifacts`** | freeze `state/author/<item>/cand_<k>.{diff,json}` per candidate | **todo** | A11 |
-| A13 | **`M1e-rejections`** | fingerprint ledger; 3 rejections on one gate → `needs_author` | **todo** | A12 |
+| A13 | `M1e-rejections` | fingerprint ledger; 3 rejections on one gate → `needs_author` | **done** | A12 |
 | A14 | **`M1f-scope-deriver`** | derive `write_paths` from a real traceback; no artifact → no scope | **todo** | A11 |
 | A15 | **`M1g-contract-writer`** | write the authored contract into the queue atomically + `validate_contract` | **todo** | A14 |
 | A16 | **`M2-work-generator`** | the T0–T5 ladder, never returns empty | **todo** | A13, A15 |
