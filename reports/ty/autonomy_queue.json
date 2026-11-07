@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 44,
+  "cycle": 85,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -287,7 +287,10 @@
       "write_paths": [
         "tools/intel_collect.py",
         "state/intel/sources.json"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:48:49+00:00",
+      "needs_author": "no acceptance_commands declared",
+      "defer_until_cycle": 86
     },
     {
       "id": "M3-intel-I1",
@@ -1105,7 +1108,10 @@
       "blocking": "true",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:48:49+00:00",
+      "needs_author": "no acceptance_commands declared",
+      "defer_until_cycle": 85
     },
     {
       "id": "A12b-wire-evaluator",
@@ -1147,7 +1153,7 @@
       "id": "T1-scan-files-scanned",
       "kind": "product",
       "priority": 960,
-      "status": "pending",
+      "status": "done",
       "title": "The readiness scan report must say how many files it scanned",
       "why": "The work generator cannot tell an honest zero from a vacuous zero without this number, so every T2 discovery bootstrap depends on it.",
       "write_paths": [
@@ -1165,7 +1171,14 @@
       "depends_on": [
         "M2-work-generator"
       ],
-      "source": "reports/ty/A16_generator_spec.md side finding (scan report shape)"
+      "source": "reports/ty/A16_generator_spec.md side finding (scan report shape)",
+      "updated_at": "2026-11-07T14:47:59+00:00",
+      "last_cycle": 45,
+      "last_result": "shipped",
+      "attempts": 0,
+      "commit": "1f6e0e89",
+      "completed_at": "2026-11-07T14:48:00Z",
+      "verification": "Shipped unattended in cycle 45: red check -> worker (38s, 25,789 tokens) -> 5 gates green -> commit 1f6e0e89, tag autonomy-cycle-45. acceptance test now passes."
     },
     {
       "id": "gen-pytest-northstar-backend-foundation-tests-test-f-6d97de",
@@ -1185,7 +1198,7 @@
       "nodeid": "Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
       "fixable_by": "worker",
       "needs_author": "proposal surface still reports pytest:Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
-      "last_generated_at": "2026-11-07T14:30:15+00:00"
+      "last_generated_at": "2026-11-07T14:47:59+00:00"
     },
     {
       "id": "gen-probe-tys-launcher-tests-d7dd9e",

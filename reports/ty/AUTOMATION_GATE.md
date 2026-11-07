@@ -83,7 +83,7 @@ Before that fix the dry-run proved the leak — cycle 2 was `W10-scanner-csv`.
 | C3 | author -> candidate -> evaluator -> acceptance -> commit | **in progress** | cycle 38 ran the real worker for 23.5 min and was refused `out_of_scope` by a pre-existing dirty-test bug (`9cd8a12a`, fixed). Re-dispatch after the fix is the run in flight |
 | C4 | an already-green check produces `check_already_green`, never a ship | **green** | it now also parks the item (`needs_author`) instead of deferring, because soft deferral re-admitted it — measured 40 acceptance runs in 54 s |
 | C5 | watchdog restarts a killed launcher | **pending** | watchdog script has the starvation backoff; restart proof still to capture |
-| C6 | 8-hour unattended run, >=3 shipped bundles | **pending** | needs C3 green first |
+| C6 | 8-hour unattended run, >=3 shipped bundles | **one bundle shipped; supply diagnosis written** | cycle 45 shipped `T1-scan-files-scanned` unattended (tag `autonomy-cycle-45`, 38 s, 25,789 tokens). >=3 is not reachable today for a reason that is not the loop's: see *C6 supply diagnosis* below |
 | C7 | every refusal logged with its reason | **green** | `launcher.jsonl` records `skipped_invalid_contract`, `check_already_green`, `commit_refused`, `targets_dirty`; `sessions.jsonl` records `starvation` with the generator's per-tier numbers |
 
 ### What the C3 probe found, and what was done about it
@@ -99,6 +99,48 @@ Two remain **by design, not defects**: `defer_until_cycle` is deliberately soft
 (`pool = ready or unblocked`) — which is exactly why every hard stop is a status
 change — and the author lane cannot derive a scope from a test-only traceback,
 which is the A10 verdict stated as code.
+
+### C6 supply diagnosis — why one bundle, not three
+
+C6 allows a written diagnosis instead of the soak, and this is it. The loop is not
+the constraint; the queue is.
+
+**What shipped.** `T1-scan-files-scanned` (cycle 45): a real red check
+(`test_readiness_scan_report.py` failed because the report had no `files_scanned`),
+a 38-second worker run, five gates green, live drift green, commit `1f6e0e89`, tag
+`autonomy-cycle-45`, 25,789 tokens. No human touched the cycle.
+
+**Why there was no second item to run.** Every other active item was inspected after
+that cycle and none of them could be dispatched honestly:
+
+| item | defect | disposition |
+|---|---|---|
+| `W10-scanner-csv` | acceptance pointed at `test_costco_client.py` (wrong directory) and the suite passes today (42 tests) | parked, `needs_author` names the perf assertion it needs |
+| `W10-lanes-status` | acceptance names `test_design_studio_api.py`, which does not exist in the tree | parked |
+| `W10-bundle-split` | acceptance is `npm run build`, which does not run from the repo root and does not assert the 1,088 kB budget | parked |
+| `T1-env-default` | acceptance names `test_foundation_api.py`, which does not exist in the tree | parked |
+| `S1-cancel-race` | acceptance suite passes today (25 tests), so it cannot prove the cancel race | parked |
+| `gen-pytest-…-6d97de` | generator surfaced a proposal for `test_v3_shell_invariants`; the test now passes, so the record was stale | `needs_author`, re-emitted when it goes red again |
+| `gen-probe-tys-launcher-tests` | surfaced while the launcher suite was red mid-edit; it passes now (36) | `needs_author` |
+
+A check that is green before the worker starts cannot prove a patch — that is C4, and
+it is the rule that parked every one of them. The generator did find these surfaces;
+what it cannot do is invent the *check*, and that boundary is the A10 verdict, not a
+defect in the loop.
+
+**What would make the soak produce bundles.** Authoring, not engineering: one
+acceptance command per item that fails today. Concretely — a perf assertion for
+`W10-scanner-csv` (`p95 < 1.0 s` over the shuffled fixture), a reproduction of
+SUCCEEDED-after-cancel for `S1-cancel-race`, a bundle-size assertion for
+`W10-bundle-split`, a dev-default assertion for `T1-env-default`. Each is a test that
+does not exist yet; each is the human/DeepSeek half of "detect, scope, check, park,
+refill". Until one exists, an 8-hour soak measures starvation, and the starvation
+record says so with numbers.
+
+**One number that bounds the soak even when supply exists.** A real cycle measured
+25,789 tokens (the scan fix) and 83,710-127,914 tokens (the scanner work). The daily
+cap is 3,000,000 and the launcher stops at 90 % of it, so 20-30 real cycles per day
+is the ceiling — an 8-hour run is roughly 15-20 cycles at 25 minutes each.
 
 ### Remaining before the gate opens
 
