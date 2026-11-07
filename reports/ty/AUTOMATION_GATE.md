@@ -62,11 +62,47 @@ All of these, each with a command that shows it:
 
 When C1–C7 hold, the gate opens and product/UI work becomes the queue's front.
 
-## Live status (2026-11-06T13:00Z)
+## Live status (2026-11-07T08:30Z)
 
-15 of 17 automation units done. Done: runner, name guard, disk, lanes, launcher, watchdog, git revert, red gate, token meter, worker lane, A9b meter wiring, A11 evaluator, A14 scope deriver, A15 contract writer, plus both T0 incidents.
+**All 17 automation units are done.** A13 (rejection ledger) at `41fdceaf`; A16 (work
+generator) at `9d6bb3b4` with its four runner deltas at `603f73e7` and `8230b730`.
+A9's row was stale: the token meter and its A9b wiring landed in an earlier session
+(real measurement 80,834 tokens vs a 5-token guess) and the queue now records it.
 
-Running: A12 candidate artifacts, A10 coding-lane spike.
+The dependency gate opened: `select_next` now returns product work, and 34 product
+and perf items that carried `depends_on: null` were given the
+`M2-work-generator` dependency they were always supposed to have (`6158c001`).
+Before that fix the dry-run proved the leak — cycle 2 was `W10-scanner-csv`.
 
-Remaining: A12 -> A13 rejection ledger -> A16 work generator -> M3 intel I0-I3. Product and perf work stay blocked behind M2-work-generator.
+### Acceptance evidence (C1-C7), measured
+
+| # | claim | result | evidence |
+|---|---|---|---|
+| C1 | status coherent; killed holder recovered by pid | **green** | `python tools/tys_runner.py status` reports lease/caps/next/parks; `test_crash_recovery_keeps_the_reserved_item` and the new `--token` tests |
+| C2 | launcher dry-run 9 cycles / 3 rotations, no stray writes | **green** | `--dry-run --max-cycles 9 --per-session 3` on a redirected root: exit 0, `cycles 9`, 3 `session_ended` rows, real repo clean |
+| C3 | author -> candidate -> evaluator -> acceptance -> commit | **in progress** | cycle 38 ran the real worker for 23.5 min and was refused `out_of_scope` by a pre-existing dirty-test bug (`9cd8a12a`, fixed). Re-dispatch after the fix is the run in flight |
+| C4 | an already-green check produces `check_already_green`, never a ship | **green** | it now also parks the item (`needs_author`) instead of deferring, because soft deferral re-admitted it — measured 40 acceptance runs in 54 s |
+| C5 | watchdog restarts a killed launcher | **pending** | watchdog script has the starvation backoff; restart proof still to capture |
+| C6 | 8-hour unattended run, >=3 shipped bundles | **pending** | needs C3 green first |
+| C7 | every refusal logged with its reason | **green** | `launcher.jsonl` records `skipped_invalid_contract`, `check_already_green`, `commit_refused`, `targets_dirty`; `sessions.jsonl` records `starvation` with the generator's per-tier numbers |
+
+### What the C3 probe found, and what was done about it
+
+`reports/ty/C3_PROBE.md` (independent lane, 8 green / 5 red). Four were fixed
+(`896b7aaa`, `ebaa13d9`, `66f7c952`, `9cd8a12a`): the missing contract gate on
+dispatch, the policy module loaded from the state root instead of the code root, a
+lease token so a worker in another process can complete, `--per-session` on the
+launcher, a stale result cannot close a later cycle, the brief carries the check,
+and a shipped cycle is now committed and tagged rather than merely judged.
+
+Two remain **by design, not defects**: `defer_until_cycle` is deliberately soft
+(`pool = ready or unblocked`) — which is exactly why every hard stop is a status
+change — and the author lane cannot derive a scope from a test-only traceback,
+which is the A10 verdict stated as code.
+
+### Remaining before the gate opens
+
+C3 end-to-end with the real worker, C5's kill/restart proof, and the C6 soak.
+Product and perf work is dispatchable now; it is not blocked any more, only
+unproven.
 

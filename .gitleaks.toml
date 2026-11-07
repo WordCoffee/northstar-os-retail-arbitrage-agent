@@ -30,3 +30,27 @@ paths = ['''creative_pipeline\.py$''']
 [[allowlists]]
 description = "FP: creative_crew.py reads the OpenAI API-key env var NAME to pass it to a local llama.cpp endpoint; the value is never present in the file and defaults to a literal 'local'"
 paths = ['''Northstar_backend[\\/]creative_crew\.py$''']
+
+# ---------------------------------------------------------------------------
+# 2026-11-07  secret-scan triage (SECRET-SCAN TRIAGE lane)
+# Evidence: reports/ty/GITLEAKS_TRIAGE.md  |  inventory: reports/ty/gitleaks_triage.json
+#
+# These entries cover ONLY matches proven to be non-credentials in scraped
+# third-party page captures. Nothing classified likely_real or unknown is
+# allowlisted. Each entry is path-scoped AND regex-scoped (condition = "AND"),
+# so it cannot mask a differently-shaped secret in the same file.
+# ---------------------------------------------------------------------------
+
+[[allowlists]]
+description = "FP: reports/_wm_*.html are scraped Walmart page captures; these are Walmart's own front-end config keys in inline page JS (modularStackKey / endpointReviewImageUploadApiKey), not Northstar credentials"
+condition = "AND"
+paths = ['''reports[\\/]_wm_beeswax\.html$''', '''reports[\\/]_wm_unpaper\.html$''']
+regexTarget = "line"
+regexes = ['''modularStackKey''', '''endpointReviewImageUploadApiKey''']
+
+[[allowlists]]
+description = "FP: reports/_wm_*.html are scraped Walmart page captures; these Google API keys are published by Walmart in their own public page source (maps/fonts preconnect), third-party and not rotatable by us"
+condition = "AND"
+paths = ['''reports[\\/]_wm_beeswax\.html$''', '''reports[\\/]_wm_unpaper\.html$''']
+regexTarget = "line"
+regexes = ['''AIza[0-9A-Za-z_\-]{35}''']
