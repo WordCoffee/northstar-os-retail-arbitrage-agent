@@ -3,9 +3,13 @@
 Two separate controls, both applied *before* anything is spawned:
 
   * the server command must be an executable or a script path - ``cmd``,
-    ``powershell``, ``bash`` and ``sh`` are refused;
-  * every absolute ``http(s)://`` URL argument is screened by
-    ``tools/egress_guard.check()`` before the tool call is dispatched.
+    ``powershell``, ``bash`` and ``sh`` are refused, and so is anything one hop
+    from a shell (``wsl``, ``docker``, ``env``, ``xargs``, ``curl``) or an
+    executable handed a code flag (``-c``, ``-e``, ``/c``, ``-lc``, ``-Command``)
+    together with a URL-shaped or shell-shaped payload;
+  * every URL-shaped *substring* is screened by ``tools/egress_guard.check()``
+    before the tool call is dispatched - absolute, protocol-relative and bare
+    host forms alike, anywhere in an argument.
 
 The "nothing was spawned" proofs put a counter on the real spawn entry point
 (``mcp.client.stdio.stdio_client``), so a refusal that still launched a child
@@ -152,3 +156,113 @@ def test_fixture_server_still_lists_and_calls_a_tool(spawns):
     assert out["is_error"] is False
     assert "5" in str(out["content"])
     assert len(spawns) == 2, "the governed path must still launch a real server per call"
+
+
+# ---------------------------------------------------------------------------
+# T0-mcp-wsl (2026-11-06): the shell control was defeated one hop away, and an
+# embedded URL was invisible because the pattern was anchored at ``^https?://``.
+# Each of these six inputs is a request to reach Amazon; each must be refused
+# before a child process exists.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("label,command,args,arguments,reason", [
+    ("wsl -e bash -lc curl", "wsl",
+     ["-e", "bash", "-lc", "curl -s https://www.amazon.com/dp/X"], None,
+     "launcher_chain_refused"),
+    ("python -c urllib", sys.executable,
+     ["-c", "import urllib.request as u;u.urlopen('https://www.amazon.com/x')"], None,
+     "interpreter_payload_refused"),
+    ("embedded absolute url", sys.executable, [FIXTURE],
+     {"q": "fetch https://www.amazon.com/dp/X"}, "amazon_refused"),
+    ("bare www host", sys.executable, [FIXTURE],
+     {"q": "www.amazon.com/dp/X"}, "amazon_refused"),
+    ("protocol relative", sys.executable, [FIXTURE],
+     {"q": "//www.amazon.com/dp/X"}, "amazon_refused"),
+    ("bare host", sys.executable, [FIXTURE],
+     {"q": "amazon.com/dp/X"}, "amazon_refused"),
+    ("short link", sys.executable, [FIXTURE],
+     {"q": "amzn.to/3xA9Qq"}, "amazon_refused"),
+])
+def test_shell_one_hop_away_and_embedded_urls_are_refused(label, command, args,
+                                                          arguments, reason, spawns):
+    with pytest.raises(mc.McpRefused) as caught:
+        if arguments is None:
+            mc.list_tools(command, list(args), timeout=5)
+        else:
+            mc.call_tool("fetch_url", dict(arguments),
+                         command=command, args=list(args), timeout=5)
+    assert reason in str(caught.value), f"{label}: {caught.value}"
+    assert spawns == [], f"{label}: a refused input must not spawn a server"
+
+
+@pytest.mark.parametrize("command", [
+    "wsl",
+    "wsl.exe",
+    r"C:\Windows\System32\wsl.exe",
+    "docker",
+    "podman",
+    "env",
+    "xargs",
+    "curl",
+])
+def test_launchers_one_hop_from_a_shell_are_refused(command, spawns):
+    with pytest.raises(mc.McpRefused) as caught:
+        mc.list_tools(command, ["-e", "bash", "-lc", "curl -s https://www.amazon.com/dp/X"],
+                      timeout=5)
+    assert "launcher_chain_refused" in str(caught.value)
+    assert spawns == [], "a refused launcher must not spawn a server"
+
+
+@pytest.mark.parametrize("flag", ["-c", "/c", "-e", "-lc", "-Command", "-COMMAND"])
+def test_a_code_flag_with_a_url_payload_is_refused(flag, spawns):
+    with pytest.raises(mc.McpRefused) as caught:
+        mc.list_tools(sys.executable,
+                      [flag, "u.urlopen('https://www.amazon.com/x')"], timeout=5)
+    assert "interpreter_payload_refused" in str(caught.value)
+    assert spawns == []
+
+
+def test_a_code_flag_with_a_shell_payload_is_refused(spawns):
+    with pytest.raises(mc.McpRefused) as caught:
+        mc.list_tools(sys.executable, ["-c", "os.system('whoami')"], timeout=5)
+    assert "interpreter_payload_refused" in str(caught.value)
+    assert spawns == []
+
+
+def test_a_code_flag_without_a_payload_is_not_refused_before_spawn(spawns):
+    """The rule is code flag *plus* payload; a plain ``-m`` run is still an MCP server."""
+    with pytest.raises(mc.McpFailure) as caught:
+        mc.list_tools(sys.executable, ["-m", "does_not_exist_mcp_pkg"], timeout=30)
+    assert not isinstance(caught.value, mc.McpRefused), (
+        "a missing module is a transport failure, not an interception")
+
+
+def test_a_host_only_argument_is_screened_and_the_host_is_recorded(spawns):
+    with pytest.raises(mc.McpRefused):
+        mc.call_tool("fetch_url", {"q": "see www.amazon.com/dp/X for it"},
+                     command=sys.executable, args=[FIXTURE], timeout=5)
+    record = _last_audit()
+    assert record["status"] == "refused"
+    checked = record["arguments_checked"][0]
+    assert checked["path"] == "arguments.q"
+    assert checked["decision"] == "refused"
+    assert "amazon" in checked["reason"]
+    assert spawns == [], "a host-only argument must be refused before the spawn"
+
+
+def test_an_embedded_non_amazon_url_is_still_allowed(spawns):
+    out = mc.call_tool("echo", {"text": "see github.com/block/goose for the client"},
+                       command=sys.executable, args=[FIXTURE], timeout=120)
+    assert out["egress_checked"][0]["decision"] == "allowed"
+    assert out["egress_checked"][0]["host"] == "github.com"
+    assert len(spawns) == 1, "screening anything anywhere must not block ordinary calls"
+
+
+def test_an_ordinary_fixture_call_still_works(spawns):
+    """The widened control must leave a real server usable, not just refuse."""
+    out = mc.call_tool("add", {"a": 2, "b": 3},
+                       command=sys.executable, args=[FIXTURE], timeout=120)
+    assert out["called"] == "add"
+    assert out["is_error"] is False
+    assert "5" in str(out["content"])
+    assert len(spawns) == 1

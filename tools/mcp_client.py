@@ -21,15 +21,23 @@ This is an egress path, so it is governed before it spawns:
   * the server command must be an executable or a script path - ``cmd``,
     ``powershell``, ``bash`` and ``sh`` (any casing, any path, ``.exe`` or not)
     are refused, because a shell is not an MCP server;
-  * every argument that *is* an absolute ``http(s)://`` URL - in the command,
-    the server arguments or the tool arguments - is passed to
-    ``tools/egress_guard.check()`` before the tool call is dispatched;
+  * indirection **one hop from a shell** is refused too: ``wsl``, ``docker``,
+    ``podman``, ``env``, ``xargs`` and the like, plus any executable whose own
+    arguments carry a code flag (``-c``, ``-e``, ``/c``, ``-lc``, ``-Command``)
+    together with a URL-shaped or shell-shaped payload - because
+    ``python -c "urllib.request.urlopen(...)"`` is a shell in all but name;
+  * URL-shaped substrings are screened **anywhere** in an argument, not only at
+    the start: absolute (``https?://``), protocol-relative (``//host/path``) and
+    bare host forms (``www.amazon.com/dp/X``, ``amazon.com/...``,
+    ``amzn.to/...``) are all passed to ``tools/egress_guard.check()`` before the
+    tool call is dispatched;
   * the audit line records the tool and the argument paths that were screened,
     plus each decision, so a refusal is diagnosable after the fact.
 
-Stated limit, so nobody over-trusts it: this screens URLs passed *through* the
-client. It does not see, and does not claim to see, what the spawned server does
-on its own network stack - that is a separate control and not installed here.
+Stated limit, so nobody over-trusts it: this reads the *text* of an argument. It
+cannot read what a payload means - a base64 blob, a scheme assembled at runtime
+(``"ht" + "tps://host"``), or a server's own network stack are outside this
+control. The refusal set is a denylist at the client boundary, not a sandbox.
 
 CLI:
 
@@ -56,11 +64,59 @@ AUDIT_LOG = ROOT / "logs" / "mcp_client.jsonl"
 
 #: A server is an executable or a script. These are shells, so they are refused:
 #: a shell wrapper turns the client into an ungoverned "run anything" primitive.
-SHELL_WRAPPERS = frozenset({"cmd", "powershell", "pwsh", "bash", "sh"})
+SHELL_WRAPPERS = frozenset({"cmd", "powershell", "pwsh", "bash", "sh", "dash",
+                            "zsh", "ksh", "fish", "csh", "tcsh", "ash", "mksh",
+                            "busybox"})
 
-#: Only absolute URLs are screened. A string that merely *contains* a URL is
-#: not guessed at; the limit is stated in the module docstring.
-ABSOLUTE_URL = re.compile(r"^https?://", re.IGNORECASE)
+#: One hop from a shell, measured 2026-11-06: ``wsl -e bash -lc "curl ..."`` and
+#: ``docker run --rm curlimages/curl`` both reached the network while ``wsl`` and
+#: ``docker`` are not shells by name. These run another command line, so their
+#: arguments are code, not data, and the client cannot screen them as arguments.
+LAUNCHERS = frozenset({"wsl", "docker", "podman", "nerdctl", "env", "xargs",
+                       "sudo", "doas", "su", "runuser", "chroot", "nohup",
+                       "setsid", "nice", "timeout", "script", "expect", "ssh",
+                       "curl", "wget"})
+
+#: Flags that make the next argument a program or a snippet: a code flag plus a
+#: payload is an interpreter, which is a shell with extra steps.
+CODE_FLAGS = frozenset({"-c", "/c", "-e", "/e", "-lc", "-ic", "-ec", "-xc",
+                        "-eval", "/eval", "--eval", "--exec", "-exec",
+                        "-command", "/command", "-encodedcommand",
+                        "/encodedcommand"})
+
+#: Shell-shaped payload: command separators, substitution, or a shell/egress
+#: program named inside the string.
+SHELL_SHAPED = re.compile(
+    r"(?i)(?:&&|\|\||\$\(|`|\|\s|;\s*"
+    r"|\b(?:bash|sh|zsh|cmd|powershell|pwsh|wsl|docker|podman|env|xargs"
+    r"|curl|wget|nc|ncat|socat|subprocess|os\.system|shell=true)\b)")
+
+#: URL-shaped, matched **anywhere** in a string, because
+#: ``{"q": "fetch https://www.amazon.com/dp/X"}`` is the same request as
+#: ``{"url": "https://www.amazon.com/dp/X"}`` with the label filed off.
+_URL_LABEL = r"[a-z0-9](?:[a-z0-9_\-]{0,61}[a-z0-9])?"
+_URL_HOST = rf"(?:{_URL_LABEL}\.){{1,8}}[a-z]{{2,63}}"
+_SCHEME = r"[a-z][a-z0-9+.\-]*://"
+URL_SHAPED = re.compile(
+    rf"(?ix)"
+    rf"(?<![\w.\-\\/:])"                 # not mid-word, not mid-path, not after a dot
+    rf"(?:{_SCHEME}|//)?"                # absolute scheme, or protocol-relative
+    rf"{_URL_HOST}"                      # host: www.amazon.com, amazon.de, amzn.to
+    rf"(?::[0-9]{{1,5}})?"               # optional port
+    rf"(?:[/?#][^\s\"'<>()\[\]{{}}|\\^`]*)?")
+
+#: A bare candidate whose last label is one of these is a filename, not a host
+#: (``mcp_echo_server.py``), so it is not screened as a URL. Candidates *with* a
+#: path or a scheme are always screened, whatever their last label says.
+_FILE_EXTENSIONS = frozenset({
+    "py", "pyc", "pyi", "js", "mjs", "cjs", "jsx", "ts", "tsx", "json", "jsonl",
+    "md", "txt", "rst", "exe", "dll", "so", "dylib", "bat", "ps1", "whl", "egg",
+    "lock", "toml", "ini", "cfg", "yaml", "yml", "log", "html", "htm", "css",
+    "scss", "png", "jpg", "jpeg", "gif", "svg", "webp", "pdf", "csv", "zip",
+    "tar", "gz", "7z", "rar", "mp4", "mp3", "wav", "xlsx", "docx", "ipynb",
+    "sqlite", "db", "venv", "psm1", "psd1",
+})
+
 
 _EGRESS_GUARD: Any = None
 _EGRESS_GUARD_FAILED = False
@@ -106,8 +162,20 @@ def _command_stem(command: Any) -> str:
     return name.split(".")[0].lower()
 
 
-def _assert_launchable(command: Any) -> None:
-    """An MCP server is an executable or a script path, never an empty command."""
+def _assert_launchable(command: Any, args: Sequence[str] = ()) -> None:
+    """An MCP server is an executable or a script path, never a shell or a code payload.
+
+    Four refusals by name, all before anything is spawned:
+
+      * ``empty_command`` - there is nothing to run;
+      * ``shell_wrapper_refused`` - the program name *is* a shell;
+      * ``launcher_chain_refused`` - the program runs another command line
+        (``wsl``, ``docker``, ``env``, ``xargs``, ``curl``), so its arguments are
+        code and the client cannot screen them as arguments;
+      * ``interpreter_payload_refused`` - the program takes a code flag and one of
+        its own arguments carries a URL-shaped or shell-shaped payload, which is
+        an interpreter, which is a shell one hop away.
+    """
     if not str(command or "").strip():
         raise McpRefused("empty_command: an MCP server needs an executable or a script path")
     stem = _command_stem(command)
@@ -115,13 +183,66 @@ def _assert_launchable(command: Any) -> None:
         raise McpRefused(
             f"shell_wrapper_refused: {stem!r} is a shell, not an MCP server "
             f"(command={str(command)[:200]!r})")
+    if stem in LAUNCHERS:
+        raise McpRefused(
+            f"launcher_chain_refused: {stem!r} runs another command line, so its "
+            f"arguments are code, not data (command={str(command)[:200]!r})")
+
+    flow = [str(a) for a in (args or ())]
+    flag = next((a.strip() for a in flow if a.strip().lower() in CODE_FLAGS), None)
+    if flag is None:
+        return
+    payload = " ".join(a for a in flow if a.strip().lower() not in CODE_FLAGS)
+    urls = list(_iter_url_shaped(payload))
+    if urls:
+        # Report the strongest candidate: an explicit scheme or ``//host`` beats a
+        # dotted token that merely looks like one (``urllib.request``).
+        explicit = [u for u in urls if _is_absolute(u) or u.startswith("//")]
+        shown = (explicit or urls)[0]
+        raise McpRefused(
+            f"interpreter_payload_refused: {stem!r} {flag!r} carries a URL-shaped "
+            f"payload ({shown[:120]!r}); a code flag is a shell one hop away")
+    if SHELL_SHAPED.search(payload):
+        raise McpRefused(
+            f"interpreter_payload_refused: {stem!r} {flag!r} carries a shell-shaped "
+            f"payload ({payload[:120]!r}); a code flag is a shell one hop away")
+
+
+def _is_absolute(candidate: str) -> bool:
+    return bool(re.match(rf"(?i){_SCHEME}", candidate))
+
+
+def _iter_url_shaped(text: str) -> Iterator[str]:
+    """Every URL-shaped substring of ``text``: absolute, ``//host`` or bare host."""
+    for match in URL_SHAPED.finditer(str(text)):
+        candidate = match.group(0)
+        if not candidate:
+            continue
+        if not _is_absolute(candidate) and not candidate.startswith("//"):
+            host_head = candidate.split("/", 1)[0].rsplit(":", 1)[0]
+            last_label = host_head.rsplit(".", 1)[-1].lower()
+            if "/" not in candidate and last_label in _FILE_EXTENSIONS:
+                continue  # a path to a file, not a host
+        yield candidate
+
+
+def _screened_url(candidate: str) -> str:
+    """Give a scheme-less candidate a shape a host parser can read.
+
+    ``www.amazon.com/dp/X`` and ``//www.amazon.com/dp/X`` are the same request as
+    ``https://www.amazon.com/dp/X``; the guard sees the one form it parses.
+    """
+    text = candidate.strip()
+    if _is_absolute(text):
+        return text
+    return "https://" + text.lstrip("/")
 
 
 def _walk_urls(value: Any, path: str) -> Iterator[Tuple[str, str]]:
-    """Every string under ``value`` that is an absolute URL, with its path."""
+    """Every URL-shaped substring under ``value``, with the path that holds it."""
     if isinstance(value, str):
-        if ABSOLUTE_URL.match(value.strip()):
-            yield path, value
+        for candidate in _iter_url_shaped(value):
+            yield path, candidate
     elif isinstance(value, dict):
         for key, item in value.items():
             yield from _walk_urls(item, f"{path}.{key}")
@@ -132,37 +253,38 @@ def _walk_urls(value: Any, path: str) -> Iterator[Tuple[str, str]]:
 
 def _screen(command: Any, args: Sequence[str], arguments: Optional[Dict[str, Any]], *,
             caller: str) -> List[Dict[str, Any]]:
-    """Refuse the command, then screen every URL argument. Returns the decisions.
+    """Refuse the launcher, then screen every URL-shaped argument.
 
     Runs before the server process is spawned and before the tool is dispatched,
     so a refusal costs no child process and no request.
     """
-    _assert_launchable(command)
+    _assert_launchable(command, args)
 
     candidates: List[Tuple[str, str]] = []
-    if isinstance(command, str) and ABSOLUTE_URL.match(command.strip()):
-        candidates.append(("command", command))
+    if isinstance(command, str):
+        candidates.extend(("command", found) for found in _iter_url_shaped(command))
     for index, item in enumerate(args or ()):
         candidates.extend(_walk_urls(item, f"server_args[{index}]"))
     if arguments is not None:
         candidates.extend(_walk_urls(arguments, "arguments"))
 
     checks: List[Dict[str, Any]] = []
-    for path, url in candidates:
+    for path, raw in candidates:
         guard = _load_egress_guard()
         if guard is None:
-            checks.append({"path": path, "url": url.strip()[:400],
+            checks.append({"path": path, "url": raw.strip()[:400],
                            "decision": "refused", "reason": "egress_guard_unavailable"})
             raise McpRefused(
                 f"egress_guard_unavailable: cannot screen {path}; refusing to dispatch",
                 checks=checks)
+        url = _screened_url(raw)
         try:
-            guard.check(url.strip(), caller=caller)
+            guard.check(url, caller=caller)
         except guard.EgressRefused as exc:
-            checks.append({"path": path, "url": url.strip()[:400],
+            checks.append({"path": path, "url": raw.strip()[:400],
                            "decision": "refused", "reason": str(exc)})
             raise McpRefused(f"{exc} (argument {path})", checks=checks) from exc
-        checks.append({"path": path, "url": url.strip()[:400],
+        checks.append({"path": path, "url": raw.strip()[:400],
                        "host": guard.host_of(url), "decision": "allowed"})
     return checks
 
