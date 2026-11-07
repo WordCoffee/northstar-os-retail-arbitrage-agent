@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T14:00:00Z",
+  "updated": "2026-11-06T14:25:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -99,7 +99,7 @@
       "id": "M0.5-spike",
       "kind": "automation",
       "priority": 1190,
-      "status": "pending",
+      "status": "done",
       "title": "Coding-lane spike: 5 real problems x 3 candidates -> local / hybrid / stop",
       "next": "Run reports/ty/M0.5_spike_plan.md and write reports/ty/spike_coding_lane.md with the matrix.",
       "write_paths": [
@@ -115,7 +115,8 @@
       ],
       "depends_on": [
         "M0.3b-token-meter"
-      ]
+      ],
+      "commit": "e805f0d1"
     },
     {
       "id": "M1c-evaluator",
@@ -994,6 +995,16 @@
         "M1d-artifacts"
       ],
       "commit": "9147995a"
+    },
+    {
+      "id": "T1-spike-retest",
+      "kind": "workstream",
+      "workstream": "W0",
+      "priority": 1095,
+      "status": "needs-author",
+      "title": "Retest the coding lane under valid preconditions: GPU inference, symbol-adding vocabulary, red-before-fix cases",
+      "why": "A10 ran CPU-only (size_vram 0 on an idle GPU), the model could not emit the JSON protocol, and the S1 gate was void at a 1-in-100 repro",
+      "needs_author": "needs_author: name the target check and the symbol-adding tool before this runs"
     }
   ],
   "parked": [
