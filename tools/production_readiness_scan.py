@@ -55,6 +55,10 @@ def _ui_files() -> List[Path]:
                   if p.suffix in (".js", ".jsx") and ".test." not in p.name)
 
 
+def _backend_files() -> List[Path]:
+    return [p for p in sorted(BACKEND.glob("*.py")) if not p.name.startswith("test_")]
+
+
 def _line_of(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
@@ -349,9 +353,15 @@ def scan(selected: List[str] | None = None) -> Dict[str, Any]:
     by_check = Counter(f["check"] for f in findings)
     by_severity = Counter(f["severity"] for f in findings)
     by_file = Counter(f["file"] for f in findings)
+    # "0 findings" over 0 files and "0 findings" over 900 files are different
+    # claims; the report has to state which one it is making.
+    examined = set(_ui_files())
+    if "silent-except" in wanted:
+        examined.update(_backend_files())
     return {
         "schema": "northstar.readiness_scan.v1",
         "checks": wanted,
+        "files_scanned": len(examined),
         "total": len(findings),
         "by_check": dict(by_check),
         "by_severity": dict(by_severity),
@@ -362,7 +372,8 @@ def scan(selected: List[str] | None = None) -> Dict[str, Any]:
 
 
 def render(report: Dict[str, Any]) -> str:
-    lines = [f"PRODUCTION READINESS SCAN - {report['total']} finding(s)"]
+    lines = [f"PRODUCTION READINESS SCAN - {report['total']} finding(s)"
+             f" over {report.get('files_scanned', 'unknown')} file(s)"]
     for name in report["checks"]:
         count = report["by_check"].get(name, 0)
         lines.append(f"  {name:<20} {count}")
