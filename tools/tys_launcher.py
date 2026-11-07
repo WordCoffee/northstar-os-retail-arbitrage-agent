@@ -737,6 +737,40 @@ def commit_shipped(*, contract: Dict[str, Any], cycle: Any, item_id: str) -> Dic
     return out
 
 
+def _under(path: str, roots: Any) -> bool:
+    """Is ``path`` equal to, or inside, any of ``roots``?"""
+    text = str(path).replace("\\", "/")
+    for root in roots or ():
+        keep = str(root).replace("\\", "/").rstrip("/")
+        if keep and (text == keep or text.startswith(keep + "/")):
+            return True
+    return False
+
+
+#: Files the loop writes during a cycle. They are not the candidate's footprint and
+#: reverting them would undo the very bookkeeping the cycle just recorded.
+BOOKKEEPING = ("state/", "logs/", "reports/ty/autonomy_queue.json",
+               "reports/ty/cycle_handoff.json")
+
+
+def _revert_candidate(pre_changed: List[str], declared: List[str]) -> List[str]:
+    """Undo everything the candidate touched, not only what it declared.
+
+    The revert used to cover ``write_paths`` alone. A worker that wrote outside its
+    contract was refused by the evaluator but its bytes stayed on disk, and the next
+    dispatch snapshotted them as pre-existing - so the same out-of-scope edit became
+    permanently excused. The footprint is whatever changed after the dispatch
+    snapshot, minus the loop's own files.
+    """
+    before = [str(p).replace("\\", "/") for p in (pre_changed or []) if str(p).strip()]
+    touched: List[str] = []
+    for path in dispatch_snapshot():
+        if _under(path, before) or _under(path, BOOKKEEPING):
+            continue
+        touched.append(path)
+    return _restore(sorted(set(touched) | {str(p) for p in declared if str(p).strip()}))
+
+
 def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str, Any]:
     """One cycle: reserve, run the worker, validate, complete."""
     brief_out = runner.cmd_next(write_brief=True)
@@ -881,7 +915,7 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
                       "tokens": measured["tokens"], "source": measured["source"],
                       "session": measured["session_id"]})
     if not shipped:
-        restored = _restore(snap)
+        restored = _revert_candidate(pre_changed, snap)
         if restored:
             _append(JOURNAL, {"event": "reverted_bytes", "item": item.get("id"),
                               "paths": restored})

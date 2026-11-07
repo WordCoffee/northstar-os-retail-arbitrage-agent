@@ -322,13 +322,14 @@ def test_a_new_file_from_a_failed_worker_is_deleted(root):
     assert not target.exists()
 
 
-def test_a_file_created_outside_the_declared_scope_is_not_silently_restored(root):
-    """Out-of-scope writes are a scope violation, not a revert case.
+def test_a_file_created_outside_the_declared_scope_is_reverted(root):
+    """Reversal of the earlier rule, which was wrong in a way that compounded.
 
-    `_snapshot` only knows the declared `write_paths`; anything else the worker
-    creates is invisible to it. That is deliberate - a restore that guesses at
-    paths would delete files nobody declared - and it is why the evaluator's
-    scope gate exists.
+    The old test asserted that an out-of-scope file "stays until the scope gate
+    reports it". Measured on the real repo: the next dispatch snapshotted that file
+    as pre-existing, so every later cycle excused it and the stray edit became
+    permanent. A refused candidate's bytes are reverted now - the footprint is
+    whatever changed after the dispatch snapshot, minus the loop's own files.
     """
     target = root / "Northstar_backend" / "sneaky.py"
 
@@ -338,8 +339,11 @@ def test_a_file_created_outside_the_declared_scope_is_not_silently_restored(root
         result_path.write_text(json.dumps({"ok": False, "steps": 1}), encoding="utf-8")
         return 0
 
-    L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
-    assert target.exists()          # stays until the scope gate reports it
+    out = L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+
+    assert out["shipped"] is False
+    assert out["gate"] == "out_of_scope", out
+    assert not target.exists(), "an out-of-scope write must not survive the refusal"
 
 
 def test_a_check_that_is_already_green_never_reaches_the_worker(root):

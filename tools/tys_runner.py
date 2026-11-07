@@ -390,6 +390,12 @@ def _top_up(limit: int = LOW_WATER) -> Dict[str, Any]:
     """
     try:
         generator = _generator()
+        # Refill only the real queue. Under a redirected root the generator's probes
+        # would run against the code root and report on a tree this cycle never
+        # touched - and in a unit test it would start a real pytest inside one.
+        if Path(generator.QUEUE).resolve() != Path(QUEUE).resolve():
+            return {"skipped": "redirected_root",
+                    "generator_queue": str(generator.QUEUE)}
         forward = generator.needs_forward(load_queue())
     except Exception as exc:  # noqa: BLE001 - a refill must never fail a completion
         return {"skipped": "generator_unavailable", "detail": str(exc)}

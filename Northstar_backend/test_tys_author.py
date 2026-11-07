@@ -306,7 +306,11 @@ def test_a_derived_scope_turns_the_item_runnable(repo):
 
     before_item = json.loads(path.read_text(encoding="utf-8"))["items"][0]
     assert tys_launcher.runnable(before_item) == (False, "no acceptance_commands declared")
-    assert r.validate_contract(before_item) == ["no acceptance_commands declared"]
+    # Both the missing list and the wrong shape are named: validate_contract no
+    # longer hides the second behind runnable()'s refusal.
+    assert r.validate_contract(before_item) == [
+        "no acceptance_commands declared",
+        "acceptance_commands must be a list of argv lists"]
 
     out = a.write_contract(queue_path=path, item_id=ITEM, derived=derived,
                            objective="make add(1, 2) return 3")
