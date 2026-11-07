@@ -352,6 +352,40 @@ def cmd_status() -> int:
     return 0
 
 
+def _generator():
+    """The work generator, loaded late: ``tys_generator`` imports this module."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import tys_generator  # noqa: PLC0415 - late import avoids the cycle
+
+    return tys_generator
+
+
+LOW_WATER = 3
+
+
+def _top_up(limit: int = LOW_WATER) -> Dict[str, Any]:
+    """Refill before the lease is released when the dispatchable shelf is low.
+
+    Only when there is genuinely little work: asking the generator on every cycle
+    would make discovery the loop's most frequent action, and discovery is the part
+    that can be wrong. One item per call is the contract.
+    """
+    try:
+        generator = _generator()
+        forward = generator.needs_forward(load_queue())
+    except Exception as exc:  # noqa: BLE001 - a refill must never fail a completion
+        return {"skipped": "generator_unavailable", "detail": str(exc)}
+    if forward >= limit:
+        return {"skipped": "above_low_water", "dispatchable": forward}
+    try:
+        result = generator.generate(max_items=1)
+    except Exception as exc:  # noqa: BLE001
+        return {"skipped": "generator_error", "detail": str(exc)}
+    if isinstance(result, dict):
+        result["dispatchable_before"] = forward
+    return result
+
+
 def cmd_next(*, write_brief: bool = True) -> int:
     if STOP.exists():
         print(json.dumps({"ok": False, "stop": True,
@@ -381,10 +415,28 @@ def cmd_next(*, write_brief: bool = True) -> int:
     queue = load_queue()
     item = select_next(queue)
     if item is None:
-        print(json.dumps({"ok": False, "queue_empty": True,
-                          "parks": parks,
-                          "action": "generate work (tier T3/T4) before continuing"}))
-        return 6
+        # A16: an empty shelf is the generator's cue, not the loop's end. One call,
+        # guarded, because a discovery bug must not crash the reservation path.
+        generated: Dict[str, Any]
+        try:
+            generated = _generator().generate()
+        except Exception as exc:  # noqa: BLE001 - generation cannot be allowed to kill next
+            generated = {"ok": False, "reason": "generator_error", "detail": str(exc)}
+        queue = load_queue()
+        item = select_next(queue)
+        if item is None:
+            # Honest starvation: nothing is invented, and the record names every
+            # surface's number so the next reader knows what was checked.
+            _append(SESSIONS, {"at": _now(), "event": "starvation",
+                               "reason": generated.get("reason"),
+                               "detail": (generated.get("detail")
+                                          or generated.get("tiers")
+                                          or generated.get("state"))})
+            print(json.dumps({"ok": False, "queue_empty": True, "parks": parks,
+                              "starvation": generated,
+                              "action": "nothing to do; the starvation record names why"},
+                             indent=2))
+            return 6
 
     cycle = int(queue.get("cycle") or 0) + 1
     queue["cycle"] = cycle
@@ -581,7 +633,12 @@ def cmd_complete(result_path: str) -> int:
                         "shipped": bool(result.get("shipped")),
                         "next": (select_next(queue) or {}).get("id"),
                         "at": _now()})
-    _clear_lease("cycle complete")
+    # A16 delta 2: refill while the lease is still held, so a crash during
+    # generation cannot leave a live-pid lease behind. In ``finally`` on purpose.
+    try:
+        top_up = _top_up()
+    finally:
+        _clear_lease("cycle complete")
 
     cycles = _cycles_in_session()
     rotate = cycles >= CYCLES_PER_SESSION or bool(result.get("context_heavy"))
@@ -592,6 +649,7 @@ def cmd_complete(result_path: str) -> int:
                            else "cycles_per_session"})
     print(json.dumps({"ok": True, "item": item_id, "status": status,
                       "cycles_in_session": cycles, "rotate": rotate,
+                      "top_up": top_up,
                       "next": (select_next(queue) or {}).get("id")}, indent=2))
     return 0
 

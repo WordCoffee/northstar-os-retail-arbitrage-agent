@@ -57,14 +57,17 @@ while ($true) {
     $running = @(Get-Launcher)
     if ($running.Count -eq 0) {
         # Backoff after a fast failure: a dead model lane is not a reason to
-        # restart every 20 seconds.
+        # restart every 20 seconds, and a starving queue is not either - a
+        # generator that finds nothing will find nothing again ten seconds later,
+        # so a tight loop only burns the disk.
         $skip = $false
         if (Test-Path $heartbeat) {
             try {
                 $hb = Get-Content $heartbeat -Raw | ConvertFrom-Json
                 $ageMin = ((Get-Date) - [datetime]::Parse($hb.at)).TotalMinutes
-                if ($hb.state -eq "stopped" -and $hb.reason -eq "model_lane_down" -and $ageMin -lt $BackoffMinutes) {
-                    Write-Log ("launcher stopped: model_lane_down {0:N1}m ago; backing off" -f $ageMin)
+                $slowReasons = @("model_lane_down", "starvation", "token_cap", "no_runnable_items")
+                if ($hb.state -eq "stopped" -and ($slowReasons -contains $hb.reason) -and $ageMin -lt $BackoffMinutes) {
+                    Write-Log ("launcher stopped: {0} {1:N1}m ago; backing off" -f $hb.reason, $ageMin)
                     $skip = $true
                 }
             } catch { }

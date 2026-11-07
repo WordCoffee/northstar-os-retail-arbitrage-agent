@@ -672,9 +672,11 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     """One cycle: reserve, run the worker, validate, complete."""
     brief_out = runner.cmd_next(write_brief=True)
     if brief_out != 0:
+        # Exit 6 means the generator ran and found nothing: that is starvation, not
+        # "the queue file is empty". The watchdog backs off on the word.
         return {"ok": False, "stop": True, "code": brief_out,
                 "reason": {3: "STOP", 4: "token_cap", 5: "lease_held",
-                           6: "queue_empty"}.get(brief_out, f"next_exit_{brief_out}")}
+                           6: "starvation"}.get(brief_out, f"next_exit_{brief_out}")}
     brief = json.loads(BRIEF.read_text(encoding="utf-8"))["brief"]
     queue = runner.load_queue()
     item = next((i for i in queue.get("items", []) if i.get("id") == brief["item"]), {})
