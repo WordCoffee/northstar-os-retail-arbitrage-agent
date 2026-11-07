@@ -124,18 +124,34 @@ def _norm(path: str) -> str:
     return text
 
 
-def forbidden_reason(path: str) -> str:
-    """Why this changed path is off-limits even if the contract allows it, or ''."""
+def policy_reason(path: str) -> str:
+    """Why this path is off-limits *absolutely* - never excused by pre_changed.
+
+    The rules the loop runs under cannot be edited by a candidate, and a dispatch
+    snapshot cannot excuse them either: "somebody else changed the policy first" is
+    exactly the argument a compromised patch would make.
+    """
     rel = _norm(path)
     folded = rel.casefold()
-    parts = [p for p in folded.split("/") if p]
-
     for pattern in POLICY_PATHS:
         if fnmatch.fnmatchcase(folded, _norm(pattern).casefold()):
             return f"{rel} is a policy path (the loop cannot edit the rules it runs under)"
     if folded == "agents.md" or folded.endswith("/agents.md"):
         return "AGENTS.md is a policy file (append-only, never a candidate's target)"
+    return ""
 
+
+def test_reason(path: str) -> str:
+    """Why a *candidate's own edit* to this path is refused: it judges itself.
+
+    This one is excusable by pre_changed, and it has to be. This box carries dozens
+    of test files that were already dirty when a cycle started - other lanes' work.
+    Treating those as the candidate's edit refused every cycle with 40 forbidden
+    paths and made the loop unable to ship anything at all.
+    """
+    rel = _norm(path)
+    folded = rel.casefold()
+    parts = [p for p in folded.split("/") if p]
     # Any depth, so "pkg/tests/x.py" is refused as well as "tests/x.py".
     if any(part == "tests" for part in parts[:-1]):
         return f"{rel} is under tests/ - a candidate may not edit the suite that judges it"
@@ -145,6 +161,11 @@ def forbidden_reason(path: str) -> str:
     if name.startswith("test_") or name.endswith("_test.py"):
         return f"{rel} is a test module - the check must stay independent of the patch"
     return ""
+
+
+def forbidden_reason(path: str) -> str:
+    """Why this changed path is off-limits even if the contract allows it, or ''."""
+    return policy_reason(path) or test_reason(path)
 
 
 def within_scope(path: str, write_paths: Sequence[str]) -> bool:
@@ -461,13 +482,19 @@ def _gate_scope(judge: _Judge) -> Optional[Dict[str, Any]]:
     outside: List[str] = []
     forbidden: List[str] = []
     for rel in sorted(changes):
-        why = forbidden_reason(rel)
-        if why:
-            forbidden.append(why)
-        elif not judge.attributable(rel):
-            # Already dirty before the candidate started and outside its scope:
-            # somebody else's bytes, not the patch on trial.
+        policy = policy_reason(rel)
+        if policy:
+            # Never excused, not even by a dispatch snapshot.
+            forbidden.append(policy)
             continue
+        if not judge.attributable(rel):
+            # Already dirty before the candidate started: somebody else's bytes,
+            # not the patch on trial. That excuse covers test files too - otherwise
+            # another lane's dirty test refused every cycle on this box.
+            continue
+        check = test_reason(rel)
+        if check:
+            forbidden.append(check)
         elif not within_scope(rel, declared):
             outside.append(rel)
 

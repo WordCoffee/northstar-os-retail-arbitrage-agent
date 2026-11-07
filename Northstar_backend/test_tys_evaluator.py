@@ -169,6 +169,26 @@ def test_pre_changed_paths_are_not_blamed_on_the_candidate(repo):
     assert tolerant["ok"] is True, tolerant
 
 
+def test_a_pre_changed_test_file_is_not_blamed_on_the_candidate(repo):
+    """The box carries dozens of other lanes' dirty test files.
+
+    Measured on the real repo: one cycle was refused with 40 forbidden paths, all of
+    them test modules that were already dirty at dispatch. A candidate's *own* edit
+    to a test is still refused (see test_change_to_a_test_file_is_out_of_scope).
+    """
+    (repo / "pkg" / "test_mod.py").write_text("def test_x():\n    assert True\n",
+                                              encoding="utf-8")
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+
+    strict = E.evaluate(contract=card(["pkg/mod.py"]), repo=repo, run=FakeRun([0]))
+    assert strict["gate"] == "out_of_scope", strict
+
+    tolerant = E.evaluate(
+        contract=card(["pkg/mod.py"], pre_changed=["pkg/test_mod.py"]),
+        repo=repo, run=FakeRun([0]))
+    assert tolerant["ok"] is True, tolerant
+
+
 def test_pre_changed_never_excuses_a_policy_path(repo):
     (repo / "AGENTS.md").write_text("payload\n", encoding="utf-8")
 
