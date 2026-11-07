@@ -1,0 +1,31 @@
+{
+  "id": "spike-S3-c3",
+  "title": "S3 s3_documents_contrast",
+  "objective": "BUG: /ui/documents renders status pills and low-emphasis text below WCAG AA. northstar-os-ui/src/styles/app.css (loaded after tokens.css) hardcodes old colours that were already replaced in tokens.css: .pill-warn color #b8860b and .pill-unknown color #8a8a7a. tokens.css --ochre (#c4941a) is also used as pill text. All are below 4.5:1 on the surfaces they sit on.\nREQUIRED BEHAVIOUR: every text-bearing colour the Documents page uses must meet WCAG 2.1 AA against its real background (4.5:1 body, 3.0:1 for text >= 24px). Fix the colour VALUES (tokens and app.css), not the test. Keep the palette recognisably the same family: a darker ochre/unknown/warn, not black. Do not remove the pill classes. app.css must not reintroduce a hardcoded colour that tokens.css already fixed.\nCHECK: node northstar-os-ui/scripts/check-contrast.mjs",
+  "write_paths": [
+    "northstar-os-ui/src/styles"
+  ],
+  "read_paths": [
+    "northstar-os-ui/src/styles",
+    "northstar-os-ui/src/pages/customer",
+    "northstar-os-ui/src/components",
+    "northstar-os-ui/scripts",
+    "spike_check"
+  ],
+  "acceptance_commands": [
+    [
+      "node",
+      "spike_check/s3_check.mjs"
+    ],
+    [
+      "node",
+      "northstar-os-ui/scripts/check-contrast.mjs"
+    ]
+  ],
+  "required_files": [],
+  "max_steps": 12,
+  "max_repairs": 2,
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "num_ctx": 8192
+}

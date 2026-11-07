@@ -1,0 +1,35 @@
+{
+  "id": "spike-S1-c3",
+  "title": "S1 s1_cancel_race",
+  "objective": "BUG: a cooperative cancel is lost when it lands while a leased job is starting. In Northstar_backend/foundation/jobs_durable.py the worker (execute_claimed) can raise ValueError('job is cancel_requested not leased') or drive the job to SUCCEEDED after an operator has already requested cancellation, because the start transition is only guarded on LEASED and the success transition does not re-check for a pending cancel.\nREQUIRED BEHAVIOUR: once a cancel has been requested (JobState.CANCEL_REQUESTED), a pending cancellation is terminal for the worker. The worker must acknowledge it (CANCEL_REQUESTED -> CANCELLED via the existing _finish_cancelled path) and never raise, never retry into a guarded transition, and never land SUCCEEDED/FAILED/RETRY_WAIT after the request. An operator cancel that arrives after the worker has already reached a terminal state must still be refused as not_cancellable - do not make cancellation unconditionally succeed.\nCONSTRAINT: do not change the transition table in jobs_state.py to make an illegal transition legal; the worker must stop instead. Do not edit tests.\nCHECK: python -m pytest Northstar_backend/foundation/tests/test_jobs_durable_lifecycle.py -k test_cancel_leased_job_cooperative -x -q",
+  "write_paths": [
+    "Northstar_backend/foundation"
+  ],
+  "read_paths": [
+    "Northstar_backend/foundation",
+    "Northstar_backend/foundation/tests",
+    "spike_check"
+  ],
+  "acceptance_commands": [
+    [
+      "python",
+      "spike_check/s1_check.py"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/foundation/tests/test_jobs_durable_lifecycle.py",
+      "-k",
+      "test_cancel_leased_job_cooperative",
+      "-x",
+      "-q"
+    ]
+  ],
+  "required_files": [],
+  "max_steps": 12,
+  "max_repairs": 2,
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "num_ctx": 8192
+}

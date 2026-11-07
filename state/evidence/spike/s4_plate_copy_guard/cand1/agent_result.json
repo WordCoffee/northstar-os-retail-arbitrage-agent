@@ -1,0 +1,14 @@
+{
+  "ok": false,
+  "summary": "model call failed",
+  "steps": 1,
+  "files": [],
+  "error": "timed out",
+  "acceptance_recovered": false,
+  "protocol_errors": 0,
+  "scope_rejections": 0,
+  "compactions": 0,
+  "transcript": [],
+  "task_id": "spike-S4-c1",
+  "heartbeat_at": "2026-11-06T20:08:17"
+}

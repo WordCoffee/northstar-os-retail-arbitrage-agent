@@ -1,0 +1,29 @@
+{
+  "gate": "S2",
+  "box": [
+    279,
+    308,
+    744,
+    1024
+  ],
+  "with_box": {
+    "score": 0.0,
+    "status": "measured",
+    "detail": {
+      "phash_distance": 32,
+      "ssim": 0.0059,
+      "compared": "subject_crop"
+    }
+  },
+  "without_box": {
+    "score": 0.0,
+    "status": "measured",
+    "compared": "subject_crop"
+  },
+  "ok": false,
+  "reason": "product_fidelity was not measured at >= 85 with an explicit box"
+}
+
+--- stderr ---
+C:\Users\T2Hol\AppData\Local\Temp\ns-spike-wt\Northstar_backend\design_studio_api.py:1395: UserWarning: Field name "copy" in "APlusPackIn" shadows an attribute in parent "BaseModel"
+  class APlusPackIn(BaseModel):

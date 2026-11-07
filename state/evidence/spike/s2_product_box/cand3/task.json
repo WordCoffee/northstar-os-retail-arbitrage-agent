@@ -1,0 +1,33 @@
+{
+  "id": "spike-S2-c3",
+  "title": "S2 s2_product_box",
+  "objective": "BUG: picture_scorecard.score_case() measures product_fidelity by cropping both the candidate and the reference with listing_render.subject_bbox(). On a composited lifestyle plate the candidate's subject detector picks the linen background, so a correct composite scores 0.0.\nREQUIRED BEHAVIOUR: score_case must accept an explicit product box. When case['product_box'] is a sequence of four numbers [x0, y0, x1, y1] in candidate pixel coordinates, product_fidelity must compare THAT crop of the candidate against the reference's own product (trim the reference to its subject/alpha; do not re-run the background detector on the candidate).\nACCEPTANCE (hidden test):\n  composite = renders/autonomy_probe/composite/lifestyle_linen_composite.png\n  reference = renders/autonomy_probe/composite/lifestyle_linen_cutout.png\n  row = score_case(image_bytes=composite, case={'id':'e2','surface':\n        'lifestyle','product_box':[279,308,744,1024]},\n        reference_bytes=reference, scoring=False)\n  row['dimensions']['product_fidelity']['score'] >= 85, status 'measured'\nA measured ceiling with that box is 100.0, so the bar is reachable.\nCONSTRAINT: existing callers and behaviour must not change - Northstar_backend/test_picture_scorecard.py must stay green, and with no product_box the current subject-crop path must keep working.\nCHECK: python -m pytest Northstar_backend/test_picture_scorecard.py -x -q",
+  "write_paths": [
+    "Northstar_backend/picture_scorecard.py"
+  ],
+  "read_paths": [
+    "Northstar_backend",
+    "renders/autonomy_probe",
+    "config"
+  ],
+  "acceptance_commands": [
+    [
+      "python",
+      "spike_check/s2_check.py"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_picture_scorecard.py",
+      "-x",
+      "-q"
+    ]
+  ],
+  "required_files": [],
+  "max_steps": 12,
+  "max_repairs": 2,
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "num_ctx": 8192
+}

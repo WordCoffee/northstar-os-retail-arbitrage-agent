@@ -1,0 +1,32 @@
+{
+  "id": "spike-S4-c3",
+  "title": "S4 s4_plate_copy_guard",
+  "objective": "BUG: an A+ module can pair a plate showing 'SHIITAKE' with a Lion's Mane headline. Nothing compares what the plate says with what the copy says.\nREQUIRED BEHAVIOUR: add a pure decision function to Northstar_backend/aplus_render.py:\n  check_plate_agrees_with_copy(copy: str, plate_ocr: dict | None, *,\n                               detect=None) -> dict\nIt returns {'ok': bool, 'contradictions': [str], 'copy_terms': [str], 'plate_terms': [str], 'reason': str}.\nRules:\n * A species vocabulary is matched in the COPY and in the PLATE's OCR words ('words' key of plate_ocr): at minimum lions mane / lion's mane, shiitake, oyster, reishi, chaga, cordyceps, turkey tail, maitake.\n * If the copy names species A and the plate names species B and not A, ok is False and 'contradictions' names A and B.\n * If both name the same species, or the plate names no species, ok is True.\n * If plate_ocr is None, call detect(plate_png) when a detector is given; if no detector is given or the OCR failed, ok is False with a reason (an unreadable plate is not agreement).\n * Matching is case- and punctuation-insensitive; 'Lion's Mane' and 'lions mane' are the same term.\nCONSTRAINT: pure function, no network, no image decode unless detect is passed. Northstar_backend/test_aplus_render.py must stay green.\nCHECK: python -m pytest Northstar_backend/test_aplus_render.py -x -q",
+  "write_paths": [
+    "Northstar_backend/aplus_render.py"
+  ],
+  "read_paths": [
+    "Northstar_backend",
+    "spike_check"
+  ],
+  "acceptance_commands": [
+    [
+      "python",
+      "spike_check/s4_check.py"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_aplus_render.py",
+      "-x",
+      "-q"
+    ]
+  ],
+  "required_files": [],
+  "max_steps": 12,
+  "max_repairs": 2,
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "num_ctx": 8192
+}

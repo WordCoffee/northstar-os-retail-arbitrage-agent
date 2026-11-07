@@ -1,0 +1,40 @@
+{
+  "id": "spike-S5-c1",
+  "title": "S5 s5_plate_cleanliness",
+  "objective": "BUG: render_text_guard.ensure_text_free() reports cleaned=True as soon as OCR finds zero boxes, even when the clean pass left faint marks below the OCR threshold. A smeared plate ships as clean.\nREQUIRED BEHAVIOUR: add a plate-cleanliness measurement to Northstar_backend/render_text_guard.py:\n * module constant RESIDUAL_MARK_THRESHOLD = 0.002 (fraction of the plate's pixels a residual mark may occupy)\n * ensure_text_free(..., measure=None) where measure(png) -> dict with key 'residual_mark_fraction' (float 0..1); when measure is None the default measurement is used (it may return None when no instrument is available, and then cleanliness is 'unavailable' - never a pass).\n * the returned dict gains 'plate_clean' (True/False/None) and 'residuals' (the measure's dict, or a reason).\n * text-free and plate-clean are DIFFERENT facts: a plate with 0 OCR boxes but residual_mark_fraction above RESIDUAL_MARK_THRESHOLD has plate_clean False, keeps cleaned True (text was removed), and its reason names the residual marks.\n * below the threshold, plate_clean is True. No detector/measure result must never be reported as clean.\nCONSTRAINT: existing keys and behaviour must not change - Northstar_backend/test_render_text_guard.py must stay green.\nCHECK: python -m pytest Northstar_backend/test_render_text_guard.py -x -q",
+  "write_paths": [
+    "Northstar_backend/render_text_guard.py"
+  ],
+  "read_paths": [
+    "Northstar_backend",
+    "spike_check"
+  ],
+  "acceptance_commands": [
+    [
+      "python",
+      "spike_check/s5_check.py"
+    ],
+    [
+      "python",
+      "-m",
+      "pytest",
+      "Northstar_backend/test_render_text_guard.py",
+      "-x",
+      "-q"
+    ]
+  ],
+  "required_files": [],
+  "max_steps": 12,
+  "max_repairs": 2,
+  "provider": "ollama",
+  "model": "qwen3:8b",
+  "num_ctx": 8192,
+  "allowed_tools": [
+    "read",
+    "ast_edit",
+    "ast_edit_batch",
+    "apply_patch",
+    "run",
+    "finish"
+  ]
+}

@@ -1,0 +1,38 @@
+F
+================================== FAILURES ===================================
+_________________ test_main_image_with_good_fill_is_compliant _________________
+
+    def test_main_image_with_good_fill_is_compliant():
+>       row = ps.score_case(image_bytes=_png(fill=0.90),
+                            case={"id": "c1", "surface": "main", "brief": "x"},
+                            scoring=False)
+
+Northstar_backend\test_picture_scorecard.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+image_bytes = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x04\xb0\x00\x00\x04\xb0\x08\x02\x00\x00\x00dC$\x98\x00\x00\x1a\x97IDATx\...x10\x00\x00 J\x10\x02\x00\x00D\tB\x00\x00\x80(A\x08\x00\x00\xb0\x9a.k\x07\x12[o\x98$\xfe\x00\x00\x00\x00IEND\xaeB`\x82'
+case = {'id': 'c1', 'surface': 'main', 'brief': 'x'}, reference_bytes = None
+seconds = None, cfg = None, scoring = False
+
+    def score_case(*, image_bytes: bytes, case: Dict[str, Any],
+                   reference_bytes: Optional[bytes] = None,
+                   seconds: Optional[float] = None,
+                   cfg: Optional[Dict[str, Any]] = None,
+                   scoring: bool = True) -> Dict[str, Any]:
+        """Score a case by comparing the candidate and reference images."""
+    
+        # Extract product box from case
+        product_box = case.get('product_box')
+    
+        # Crop candidate image using product_box
+>       candidate_crop = crop_image(image_bytes, product_box)
+                         ^^^^^^^^^^
+E       NameError: name 'crop_image' is not defined
+
+Northstar_backend\picture_scorecard.py:197: NameError
+=========================== short test summary info ===========================
+FAILED Northstar_backend\test_picture_scorecard.py::test_main_image_with_good_fill_is_compliant
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.25s
+
+--- stderr ---

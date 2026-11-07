@@ -1,0 +1,13 @@
+{
+  "gate": "S2",
+  "box": [
+    279,
+    308,
+    744,
+    1024
+  ],
+  "ok": false,
+  "reason": "NameError: name 'crop_image' is not defined"
+}
+
+--- stderr ---

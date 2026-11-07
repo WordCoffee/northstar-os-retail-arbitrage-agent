@@ -1,0 +1,29 @@
+{
+  "case": "S2",
+  "slug": "s2_product_box",
+  "candidate": 2,
+  "model": "qwen3:8b",
+  "at": "2026-11-07T02:55:32+00:00",
+  "agent_elapsed_s": 280.9,
+  "agent_exit": 1,
+  "agent_timed_out": false,
+  "agent_stdout_tail": "",
+  "agent_stderr_tail": "",
+  "diff_bytes": 11237,
+  "diff_nonempty": true,
+  "diff_touches_target_module": [
+    "picture_scorecard.py"
+  ],
+  "new_files": [],
+  "gate_exit": 1,
+  "gate_timed_out": false,
+  "targeted_test_exit": 1,
+  "targeted_test_timed_out": false,
+  "solved": false,
+  "claimed_ok": false,
+  "agent_steps": 12,
+  "protocol_errors": 1,
+  "scope_rejections": 0,
+  "agent_summary": "step budget exhausted",
+  "agent_error": "max_steps"
+}

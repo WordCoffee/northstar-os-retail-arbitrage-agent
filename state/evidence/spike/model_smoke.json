@@ -1,0 +1,32 @@
+﻿[
+    {
+        "model":  "qwen2.5-coder:7b",
+        "latency_s":  9.31,
+        "parsed_tool":  null,
+        "raw":  "{\"\":\"ast_edit\",\n\"object\":{\n \"path\":\" \" \n}\n}"
+    },
+    {
+        "model":  "qwen2.5-coder:7b-parser-f16",
+        "latency_s":  8.31,
+        "parsed_tool":  null,
+        "raw":  "{\"\":\"ast_edit\",\n\"object\":{\n \"path\":\" \" \n}\n}"
+    },
+    {
+        "model":  "qwen3:8b",
+        "latency_s":  9.3,
+        "parsed_tool":  "read",
+        "raw":  "{\"tool\":\"read\",\"args\":{\"path\":\"sample.py\"}}"
+    },
+    {
+        "model":  "bojo",
+        "latency_s":  4.84,
+        "parsed_tool":  "read",
+        "raw":  "{\"tool\":\"read\",\"args\":{\"path\":\"sample.py\"}}"
+    },
+    {
+        "model":  "qwen3.5:4b",
+        "latency_s":  7.49,
+        "parsed_tool":  "ast_edit",
+        "raw":  "{\"tool\":\"ast_edit\",\"args\":{\"path\":\"sample.py\",\"op\":\"replace_function_body\",\"target\":\"add\",\"source\":\"return a + b + 1\"}}"
+    }
+]

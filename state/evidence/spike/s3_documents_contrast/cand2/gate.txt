@@ -1,0 +1,126 @@
+  PASS    12.77 (need 3)  documents h1 on paper
+  PASS     6.18 (need 4.5)  documents subtitle on paper
+  PASS    14.49 (need 4.5)  card heading on a card
+  PASS     7.01 (need 4.5)  documents body copy on a card
+  PASS     5.41 (need 4.5)  low-emphasis label on a card
+  PASS     7.09 (need 4.5)  pill text (live) on a card
+  PASS     5.49 (need 4.5)  pill text (accepted) on a card
+!!FAIL     2.48 (need 4.5)  pill text (action required) on a card
+  PASS     4.83 (need 4.5)  pill text (muted) on a card
+!!FAIL      3.1 (need 4.5)  pill text (unknown) on a card
+!!FAIL     2.86 (need 4.5)  pill text (warn) on a card
+{
+  "gate": "S3",
+  "pairs": 11,
+  "passed": 8,
+  "failed": 3,
+  "ok": false,
+  "failures": [
+    "pill text (action required) on a card: 2.48:1, need 4.5:1",
+    "pill text (unknown) on a card: 3.10:1, need 4.5:1",
+    "pill text (warn) on a card: 2.86:1, need 4.5:1"
+  ],
+  "rows": [
+    {
+      "label": "documents h1 on paper",
+      "selector": ".page-title",
+      "need": 3,
+      "color": "var(--pine-deep)",
+      "background": "--paper",
+      "contrast": 12.77,
+      "verdict": "PASS"
+    },
+    {
+      "label": "documents subtitle on paper",
+      "selector": ".page-subtitle",
+      "need": 4.5,
+      "color": "var(--ink-mid)",
+      "background": "--paper",
+      "contrast": 6.18,
+      "verdict": "PASS"
+    },
+    {
+      "label": "card heading on a card",
+      "selector": ".card-title",
+      "need": 4.5,
+      "color": "var(--pine-deep)",
+      "background": "--surface",
+      "contrast": 14.49,
+      "verdict": "PASS"
+    },
+    {
+      "label": "documents body copy on a card",
+      "selector": "p",
+      "need": 4.5,
+      "color": "var(--ink-mid)",
+      "background": "--surface",
+      "contrast": 7.01,
+      "verdict": "PASS"
+    },
+    {
+      "label": "low-emphasis label on a card",
+      "selector": ".text-low",
+      "need": 4.5,
+      "color": "var(--ink-soft)",
+      "background": "--surface",
+      "contrast": 5.41,
+      "verdict": "PASS"
+    },
+    {
+      "label": "pill text (live) on a card",
+      "selector": ".pill-forest",
+      "need": 4.5,
+      "color": "var(--forest)",
+      "background": "rgba(29,90,29,0.1)",
+      "contrast": 7.09,
+      "verdict": "PASS"
+    },
+    {
+      "label": "pill text (accepted) on a card",
+      "selector": ".pill-ok",
+      "need": 4.5,
+      "color": "#2d6a2d",
+      "background": "rgba(45,106,45,0.12)",
+      "contrast": 5.49,
+      "verdict": "PASS"
+    },
+    {
+      "label": "pill text (action required) on a card",
+      "selector": ".pill-ochre",
+      "need": 4.5,
+      "color": "var(--ochre)",
+      "background": "rgba(196,148,26,0.12)",
+      "contrast": 2.48,
+      "verdict": "FAIL"
+    },
+    {
+      "label": "pill text (muted) on a card",
+      "selector": ".pill-muted",
+      "need": 4.5,
+      "color": "var(--ink-soft)",
+      "background": "rgba(90,90,74,0.08)",
+      "contrast": 4.83,
+      "verdict": "PASS"
+    },
+    {
+      "label": "pill text (unknown) on a card",
+      "selector": ".pill-unknown",
+      "need": 4.5,
+      "color": "#8a8a7a",
+      "background": "rgba(138,138,122,0.12)",
+      "contrast": 3.1,
+      "verdict": "FAIL"
+    },
+    {
+      "label": "pill text (warn) on a card",
+      "selector": ".pill-warn",
+      "need": 4.5,
+      "color": "#b8860b",
+      "background": "rgba(184,134,11,0.12)",
+      "contrast": 2.86,
+      "verdict": "FAIL"
+    }
+  ]
+}
+
+--- stderr ---

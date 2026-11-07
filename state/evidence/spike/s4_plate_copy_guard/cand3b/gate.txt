@@ -1,0 +1,8 @@
+{
+  "gate": "S4",
+  "checks": [],
+  "ok": false,
+  "reason": "check_plate_agrees_with_copy is missing"
+}
+
+--- stderr ---

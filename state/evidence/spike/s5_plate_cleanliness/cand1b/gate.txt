@@ -1,0 +1,9 @@
+{
+  "gate": "S5",
+  "checks": [],
+  "ok": false,
+  "threshold": null,
+  "reason": "TypeError: ensure_text_free() got an unexpected keyword argument 'measure'"
+}
+
+--- stderr ---

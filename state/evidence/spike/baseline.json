@@ -1,0 +1,40 @@
+{
+  "root": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\ns-spike-wt",
+  "gates": {
+    "S1": {
+      "gate_exit": 0,
+      "gate_fails_at_baseline": false,
+      "gate_stdout": "{\n  \"gate\": \"S1\",\n  \"runs\": 20,\n  \"load\": 20,\n  \"total_seconds\": 55.7,\n  \"passed\": 20,\n  \"failed\": 0,\n  \"ok\": true,\n  \"failures\": []\n}\n",
+      "targeted_test_exit": 0,
+      "targeted_test_tail": ".........................                                                [100%]\n25 passed in 17.06s\n"
+    },
+    "S2": {
+      "gate_exit": 1,
+      "gate_fails_at_baseline": true,
+      "gate_stdout": "{\n  \"gate\": \"S2\",\n  \"box\": [\n    279,\n    308,\n    744,\n    1024\n  ],\n  \"with_box\": {\n    \"score\": 0.0,\n    \"status\": \"measured\",\n    \"detail\": {\n      \"phash_distance\": 32,\n      \"ssim\": 0.0059,\n      \"compared\": \"subject_crop\"\n    }\n  },\n  \"without_box\": {\n    \"score\": 0.0,\n    \"status\": \"measured\",\n    \"compared\": \"subject_crop\"\n  },\n  \"ok\": false,\n  \"reason\": \"product_fidelity was not measured at >= 85 with an explicit box\"\n}\n",
+      "targeted_test_exit": 0,
+      "targeted_test_tail": "ata\\Local\\Temp\\ns-spike-wt\\Northstar_backend\\design_studio_api.py:1395: UserWarning: Field name \"copy\" in \"APlusPackIn\" shadows an attribute in parent \"BaseModel\"\n    class APlusPackIn(BaseModel):\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n11 passed, 1 warning in 7.51s\n"
+    },
+    "S3": {
+      "gate_exit": 1,
+      "gate_fails_at_baseline": true,
+      "gate_stdout": ": \"documents h1 on paper\",\n      \"selector\": \".page-title\",\n      \"need\": 3,\n      \"color\": \"var(--pine-deep)\",\n      \"background\": \"--paper\",\n      \"contrast\": 12.77,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"documents subtitle on paper\",\n      \"selector\": \".page-subtitle\",\n      \"need\": 4.5,\n      \"color\": \"var(--ink-mid)\",\n      \"background\": \"--paper\",\n      \"contrast\": 6.18,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"card heading on a card\",\n      \"selector\": \".card-title\",\n      \"need\": 4.5,\n      \"color\": \"var(--pine-deep)\",\n      \"background\": \"--surface\",\n      \"contrast\": 14.49,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"documents body copy on a card\",\n      \"selector\": \"p\",\n      \"need\": 4.5,\n      \"color\": \"var(--ink-mid)\",\n      \"background\": \"--surface\",\n      \"contrast\": 7.01,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"low-emphasis label on a card\",\n      \"selector\": \".text-low\",\n      \"need\": 4.5,\n      \"color\": \"var(--ink-soft)\",\n      \"background\": \"--surface\",\n      \"contrast\": 5.41,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"pill text (live) on a card\",\n      \"selector\": \".pill-forest\",\n      \"need\": 4.5,\n      \"color\": \"var(--forest)\",\n      \"background\": \"rgba(29,90,29,0.1)\",\n      \"contrast\": 7.09,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"pill text (accepted) on a card\",\n      \"selector\": \".pill-ok\",\n      \"need\": 4.5,\n      \"color\": \"#2d6a2d\",\n      \"background\": \"rgba(45,106,45,0.12)\",\n      \"contrast\": 5.49,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"pill text (action required) on a card\",\n      \"selector\": \".pill-ochre\",\n      \"need\": 4.5,\n      \"color\": \"var(--ochre)\",\n      \"background\": \"rgba(196,148,26,0.12)\",\n      \"contrast\": 2.48,\n      \"verdict\": \"FAIL\"\n    },\n    {\n      \"label\": \"pill text (muted) on a card\",\n      \"selector\": \".pill-muted\",\n      \"need\": 4.5,\n      \"color\": \"var(--ink-soft)\",\n      \"background\": \"rgba(90,90,74,0.08)\",\n      \"contrast\": 4.83,\n      \"verdict\": \"PASS\"\n    },\n    {\n      \"label\": \"pill text (unknown) on a card\",\n      \"selector\": \".pill-unknown\",\n      \"need\": 4.5,\n      \"color\": \"#8a8a7a\",\n      \"background\": \"rgba(138,138,122,0.12)\",\n      \"contrast\": 3.1,\n      \"verdict\": \"FAIL\"\n    },\n    {\n      \"label\": \"pill text (warn) on a card\",\n      \"selector\": \".pill-warn\",\n      \"need\": 4.5,\n      \"color\": \"#b8860b\",\n      \"background\": \"rgba(184,134,11,0.12)\",\n      \"contrast\": 2.86,\n      \"verdict\": \"FAIL\"\n    }\n  ]\n}\n",
+      "targeted_test_exit": 0,
+      "targeted_test_tail": "ed 4.5)  body copy on a card\nPASS      7.01:1  (need 4.5)  paragraph on a card\nPASS      5.76:1  (need 4.5)  success text\nPASS      4.52:1  (need 4.5)  warning text\nPASS      5.70:1  (need 4.5)  error text\nPASS      8.29:1  (need 4.5)  primary button label\n\nCONTRAST GUARDRAIL: 11 pairs pass WCAG AA\n"
+    },
+    "S4": {
+      "gate_exit": 1,
+      "gate_fails_at_baseline": true,
+      "gate_stdout": "{\n  \"gate\": \"S4\",\n  \"checks\": [],\n  \"ok\": false,\n  \"reason\": \"check_plate_agrees_with_copy is missing\"\n}\n",
+      "targeted_test_exit": 0,
+      "targeted_test_tail": "................................................................         [100%]\n64 passed in 9.11s\n"
+    },
+    "S5": {
+      "gate_exit": 1,
+      "gate_fails_at_baseline": true,
+      "gate_stdout": "{\n  \"gate\": \"S5\",\n  \"checks\": [],\n  \"ok\": false,\n  \"threshold\": null,\n  \"reason\": \"TypeError: ensure_text_free() got an unexpected keyword argument 'measure'\"\n}\n",
+      "targeted_test_exit": 0,
+      "targeted_test_tail": "......                                                                   [100%]\n6 passed in 0.09s\n"
+    }
+  }
+}

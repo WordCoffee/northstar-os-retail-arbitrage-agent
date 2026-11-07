@@ -1,0 +1,15 @@
+PASS     15.34:1  (need 4.5)  body copy on paper
+PASS      6.18:1  (need 4.5)  paragraph on paper
+PASS      4.55:1  (need 4.5)  low-emphasis label on paper
+PASS     12.77:1  (need 3)  h1/h2 on paper
+PASS     10.25:1  (need 4.5)  link/heading on a card
+PASS     17.40:1  (need 4.5)  body copy on a card
+PASS      7.01:1  (need 4.5)  paragraph on a card
+PASS      5.76:1  (need 4.5)  success text
+PASS      4.52:1  (need 4.5)  warning text
+PASS      5.70:1  (need 4.5)  error text
+PASS      8.29:1  (need 4.5)  primary button label
+
+CONTRAST GUARDRAIL: 11 pairs pass WCAG AA
+
+--- stderr ---

@@ -1,0 +1,22 @@
+{
+  "case": "S4",
+  "slug": "s4_plate_copy_guard",
+  "candidate": 2,
+  "model": "qwen3:8b",
+  "at": "2026-11-07T03:17:52+00:00",
+  "agent_elapsed_s": 600.1,
+  "agent_exit": 1,
+  "agent_timed_out": true,
+  "agent_stdout_tail": "",
+  "agent_stderr_tail": "",
+  "diff_bytes": 0,
+  "diff_nonempty": false,
+  "diff_touches_target_module": [],
+  "new_files": [],
+  "gate_exit": 1,
+  "gate_timed_out": false,
+  "targeted_test_exit": 0,
+  "targeted_test_timed_out": false,
+  "solved": false,
+  "claimed_ok": null
+}

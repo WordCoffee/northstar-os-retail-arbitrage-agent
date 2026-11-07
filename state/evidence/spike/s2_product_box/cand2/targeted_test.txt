@@ -1,0 +1,10 @@
+...........                                                              [100%]
+============================== warnings summary ===============================
+test_picture_scorecard.py::test_main_image_with_good_fill_is_compliant
+  C:\Users\T2Hol\AppData\Local\Temp\ns-spike-wt\Northstar_backend\design_studio_api.py:1395: UserWarning: Field name "copy" in "APlusPackIn" shadows an attribute in parent "BaseModel"
+    class APlusPackIn(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+11 passed, 1 warning in 6.61s
+
+--- stderr ---

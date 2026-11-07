@@ -1,0 +1,12 @@
+{
+  "gate": "S1",
+  "runs": 20,
+  "load": 20,
+  "total_seconds": 56.7,
+  "passed": 20,
+  "failed": 0,
+  "ok": true,
+  "failures": []
+}
+
+--- stderr ---
