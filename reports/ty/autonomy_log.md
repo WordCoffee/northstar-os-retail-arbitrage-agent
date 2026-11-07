@@ -43,3 +43,4 @@ One line per cycle. Format:
 - 2026-11-06T12:35Z | A14 done | 04615b60: scope derived from a real traceback, test/policy frames dropped, uninterruptible refusals write nothing; 21 tests
 - 2026-11-06T12:45Z | A11 done | 8b0e848f: deterministic evaluator, 5 fail-fast gates, scope before execution, tamper gate with fail-closed resolution, regression via check_regression; 20 tests
 - 2026-11-06T13:00Z | A15 done | 9f29a718: authored contract written atomically with readback rollback, argv-only, shell and network tokens refused, needs_author cleared; runnable flips to True; 39 tests
+- 2026-11-06T13:20Z | A12 done | 84eda331: freeze + evaluate_frozen replay through the same gates, tamper seal, pre_changed honours directories, state/author gitignored; 33 tests. Finding: a frozen candidate is 79 MB because the worktree has ~975 dirty tracked files

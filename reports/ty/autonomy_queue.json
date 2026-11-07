@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T13:05:00Z",
+  "updated": "2026-11-06T13:20:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -147,7 +147,7 @@
       "id": "M1d-artifacts",
       "kind": "automation",
       "priority": 1170,
-      "status": "pending",
+      "status": "done",
       "title": "Freeze per-candidate diff + verdict under state/author/<item>/cand_<k>",
       "write_paths": [
         "tools/tys_launcher.py",
@@ -155,7 +155,8 @@
       ],
       "depends_on": [
         "M1c-evaluator"
-      ]
+      ],
+      "commit": "84eda331"
     },
     {
       "id": "M1e-rejections",
@@ -925,6 +926,23 @@
       "status": "done",
       "note": "Measured post-Phase-B run 2026-11-05T21:51Z: backend 6247 passed / 0 failed / 117 skipped / 89 subtests, GG 511, UI 1122, shell 307, functions 31. tests/BASELINE.json written from that run.",
       "evidence": "reports/ty/_baseline_measured_20261105_final.txt"
+    },
+    {
+      "id": "T1-worktree-triage",
+      "kind": "workstream",
+      "workstream": "W9",
+      "priority": 1085,
+      "status": "pending",
+      "title": "Worktree is 975 dirty tracked files + 10,099 untracked: a frozen candidate costs 79 MB",
+      "next": "Triage: commit or move the tracked dirt (db, data blobs, exports), decide on the untracked trees, then re-freeze. Until then every candidate freeze is 79 MB and scope judgement needs pre_changed.",
+      "write_paths": [
+        ".gitignore"
+      ],
+      "measured": "git diff --binary HEAD = 79 MB over ~975 dirty tracked files; 10,099 untracked; 3 candidates/item = 240 MB",
+      "evidence": [
+        "tools/tys_evaluator.py freeze()"
+      ],
+      "tier": "T1"
     }
   ],
   "parked": [
