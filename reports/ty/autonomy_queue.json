@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T13:20:00Z",
+  "updated": "2026-11-06T13:35:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -166,10 +166,34 @@
       "title": "Rejection ledger by fingerprint; 3 on one gate -> needs_author",
       "write_paths": [
         "tools/tys_evaluator.py",
-        "tools/tys_runner.py"
+        "tools/tys_runner.py",
+        "Northstar_backend/test_tys_rejections.py"
       ],
       "depends_on": [
         "M1d-artifacts"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "Northstar_backend/test_tys_rejections.py"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "Northstar_backend/test_tys_evaluator.py"
+        ],
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "Northstar_backend/test_tys_runner.py"
+        ]
       ]
     },
     {
@@ -943,6 +967,31 @@
         "tools/tys_evaluator.py freeze()"
       ],
       "tier": "T1"
+    },
+    {
+      "id": "A12b-wire-evaluator",
+      "kind": "automation",
+      "priority": 1195,
+      "status": "pending",
+      "title": "The evaluator is inert: the launcher never calls freeze/evaluate_frozen, and task_contract drops check_sha256",
+      "next": "Wire freeze -> evaluate_frozen into _run_cycle, pass check_sha256 through, record a dispatch-wide pre_changed snapshot.",
+      "write_paths": [
+        "tools/tys_launcher.py",
+        "Northstar_backend/test_tys_launcher.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_tys_launcher.py"
+        ]
+      ],
+      "why": "A13 review: no scope gate, tamper gate or ledger can fire in a real cycle until this seam exists.",
+      "depends_on": [
+        "M1d-artifacts"
+      ]
     }
   ],
   "parked": [
