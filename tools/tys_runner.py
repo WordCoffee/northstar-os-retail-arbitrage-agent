@@ -180,6 +180,74 @@ def mark(queue: Dict[str, Any], item_id: str, status: str, **extra: Any) -> None
     _write(QUEUE, queue)
 
 
+def reconcile_parks(queue: Optional[Dict[str, Any]] = None, *, apply: bool = False,
+                    repo: Optional[Path] = None) -> Dict[str, Any]:
+    """Park items whose material contract has earned three rejections; revive the changed.
+
+    Strikes are read from the append-only ledger, never from a stored counter, so a
+    hand-edited queue cannot un-park itself. Revival is a **signature change only**:
+    rewriting the identical contract (or bumping ``contract_written_at``) must not
+    un-park an item, or the loop's answer to a wall becomes "try the same thing".
+
+    Called twice on purpose: eagerly in ``cmd_complete`` and repaired at the top of
+    ``cmd_next``. A crash between evaluation and completion still parks, because the
+    ledger is already durable and this function only has to re-read it.
+    """
+    import tys_evaluator as evaluator  # noqa: PLC0415 - the evaluator imports nothing here
+
+    root = Path(repo or ROOT)
+    ledger_path = evaluator.rejections_path(root)
+    target = queue if queue is not None else load_queue()
+    cycle = int(target.get("cycle") or 0)
+    parked: List[Dict[str, Any]] = []
+    revived: List[Dict[str, Any]] = []
+    checked = 0
+    changed = False
+
+    for item in target.get("items", []):
+        status = str(item.get("status"))
+        if status in ACTIVE:
+            if not (item.get("write_paths") and item.get("acceptance_commands")):
+                continue
+            checked += 1
+            signature = evaluator.attempt_signature(item)
+            streak = evaluator.rejection_streak(str(item.get("id")), signature,
+                                                path=ledger_path)
+            if streak < evaluator.STRIKE_LIMIT:
+                continue
+            newest = evaluator.latest_rejection(str(item.get("id")), signature,
+                                                path=ledger_path)
+            gate = str(newest.get("gate") or "unknown")
+            parked.append({"id": item.get("id"), "gate": gate, "streak": streak})
+            if apply:
+                item["status"] = "needs_author"
+                item["needs_author"] = f"rejection_cap:{gate} x{streak}"
+                item["parked_signature"] = signature
+                item["parked_cycle"] = cycle
+                item["defer_until_cycle"] = None
+                item["updated_at"] = _now()
+                changed = True
+        elif status == "needs_author" and item.get("parked_signature"):
+            signature = evaluator.attempt_signature(item)
+            if signature == str(item.get("parked_signature")):
+                continue
+            revived.append({"id": item.get("id"), "signature": signature})
+            if apply:
+                item["status"] = "pending"
+                item.pop("needs_author", None)
+                item.pop("parked_signature", None)
+                item.pop("parked_cycle", None)
+                item["defer_until_cycle"] = None
+                item["updated_at"] = _now()
+                changed = True
+
+    if apply and changed:
+        target["updated_at"] = _now()
+        _write(QUEUE, target)
+    return {"parked": parked, "revived": revived, "checked": checked,
+            "ledger": str(ledger_path), "applied": bool(apply and changed)}
+
+
 # ------------------------------------------------------------------- lease/lock
 def _pid_alive(pid: int) -> bool:
     if not pid:
@@ -239,6 +307,10 @@ def cmd_status() -> int:
     queue = load_queue()
     nxt = select_next(queue)
     lease = _lease()
+    try:
+        parks = reconcile_parks(queue, apply=False)
+    except (OSError, ValueError) as exc:  # a broken ledger must not hide the status
+        parks = {"error": str(exc)}
     ledger = _ledger().get(_today()) or {}
     counts: Dict[str, int] = {}
     for item in queue.get("items", []):
@@ -251,6 +323,7 @@ def cmd_status() -> int:
         "next": (nxt or {}).get("id"),
         "next_title": (nxt or {}).get("title"),
         "lease": lease,
+        "parks": parks,
         "tokens_today": int(ledger.get("tokens") or 0),
         "token_cap": TOKEN_CAP_PER_DAY,
         "cycles_today": int(ledger.get("cycles") or 0),
@@ -277,10 +350,20 @@ def cmd_next(*, write_brief: bool = True) -> int:
                           "reason": "a cycle is already reserved; complete or release it"}))
         return 5
 
+    # A13: repair the queue before selecting, so an item that earned its third
+    # rejection in a cycle that then crashed is parked rather than retried.
+    try:
+        parks = reconcile_parks(apply=True)
+    except (OSError, ValueError) as exc:
+        _append(SESSIONS, {"at": _now(), "event": "reconcile_failed",
+                           "reason": str(exc)})
+        parks = {"error": str(exc)}
+
     queue = load_queue()
     item = select_next(queue)
     if item is None:
         print(json.dumps({"ok": False, "queue_empty": True,
+                          "parks": parks,
                           "action": "generate work (tier T3/T4) before continuing"}))
         return 6
 
@@ -445,7 +528,25 @@ def cmd_complete(result_path: str) -> int:
         "last_result": "shipped" if result.get("shipped") else "reverted",
         "attempts": int(current.get("attempts") or 0) + (0 if result.get("shipped") else 1),
     }
-    if not result.get("shipped"):
+    # A13: park eagerly, before ``mark`` writes the status, so a third rejection on
+    # this gate ends the item here instead of waiting for the next ``next``.
+    park: Dict[str, Any] = {}
+    try:
+        report = reconcile_parks(queue, apply=False)
+        park = next((row for row in report.get("parked") or []
+                     if str(row.get("id")) == item_id), {})
+    except (OSError, ValueError) as exc:
+        _append(SESSIONS, {"at": _now(), "event": "reconcile_failed",
+                           "reason": str(exc)})
+    if park:
+        import tys_evaluator as evaluator  # noqa: PLC0415 - late: avoids the cycle
+        status = "needs_author"
+        extra["needs_author"] = (f"rejection_cap:{park.get('gate')} "
+                                 f"x{park.get('streak')}")
+        extra["parked_signature"] = evaluator.attempt_signature(current)
+        extra["parked_cycle"] = int(result.get("cycle") or 0)
+        extra["defer_until_cycle"] = None
+    elif not result.get("shipped"):
         extra["defer_until_cycle"] = int(result.get("cycle") or 0) + 2
     if result.get("measurements") or result.get("after"):
         extra["measurements"] = result.get("after") or result.get("measurements")

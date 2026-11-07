@@ -855,6 +855,298 @@ def _artifact_fail(gate: str, detail: Any) -> Dict[str, Any]:
             "commands": []}
 
 
+# --------------------------------------------------------------- rejection ledger
+#: How many rejections on the same material contract, on the same gate, before the
+#: item leaves ACTIVE. Three, because one rejection can be noise, two can be a
+#: coincidence, and three is a wall the loop keeps walking into.
+STRIKE_LIMIT = 3
+
+REJECTION_SCHEMA = 1
+
+
+def rejections_path(repo: Optional[Path] = None) -> Path:
+    """The append-only ledger. ``state/`` is gitignored, so it can never trip a gate."""
+    return Path(repo or ROOT) / "state" / "author" / "rejections.jsonl"
+
+
+def _diff_line(line: str) -> str:
+    """Drop CR and trailing spaces; keep indentation and blank lines."""
+    return line.replace("\r", "").rstrip(" ")
+
+
+def patch_identity(diff_bytes: bytes) -> List[Dict[str, Any]]:
+    """The diff reduced to what makes two attempts the same question.
+
+    Line numbers, ``@@`` offsets and ``index`` hashes are dropped on purpose: a
+    reflowed, rebased or one-line-shifted patch is the same attempt, and a ledger
+    that keyed on bytes would let the loop retry a wall by moving it one line down.
+    """
+    text = diff_bytes.decode("utf-8", "replace")
+    files: List[Dict[str, Any]] = []
+    current: Optional[Dict[str, Any]] = None
+    for raw in text.split("\n"):
+        line = _diff_line(raw)
+        if line.startswith("diff --git "):
+            remainder = line[len("diff --git "):]
+            path = remainder.rsplit(" b/", 1)[1] if " b/" in remainder else ""
+            current = {"path": _norm(path), "status": "M",
+                       "added": [], "removed": [], "context": []}
+            files.append(current)
+            continue
+        if current is None:
+            continue
+        if line.startswith("new file mode"):
+            current["status"] = "A"
+            continue
+        if line.startswith("deleted file mode"):
+            current["status"] = "D"
+            continue
+        if line.startswith("rename from ") or line.startswith("rename to "):
+            current["status"] = "R"
+            continue
+        if line.startswith("--- "):
+            continue
+        if line.startswith("+++ "):
+            path = line[4:].strip()
+            if path and path != "/dev/null":
+                if path.startswith("b/"):
+                    path = path[2:]
+                current["path"] = _norm(path)
+            continue
+        if (line.startswith("@@") or line.startswith("index ")
+                or line.startswith("\\ No newline")
+                or line.startswith("old mode") or line.startswith("new mode")
+                or line.startswith("similarity index")):
+            continue
+        if line.startswith("Binary files "):
+            continue
+        if line.startswith("+"):
+            current["added"].append(line[1:])
+        elif line.startswith("-"):
+            current["removed"].append(line[1:])
+        elif line.startswith(" "):
+            current["context"].append(line[1:])
+        elif line == "":
+            current["context"].append("")
+        # Anything else is diff metadata this fingerprint deliberately ignores.
+    files.sort(key=lambda item: item["path"])
+    return files
+
+
+def attempt_signature(contract: Optional[Dict[str, Any]]) -> str:
+    """sha256 over the *material* contract - what must change to be a new question.
+
+    ``diff_sha256``, ``candidate_id``, ``frozen_at``, ``pre_changed``, ``objective``,
+    ``timeout_s``, ``model`` and the verdict are all excluded. Two attempts with the
+    same write paths, the same acceptance commands and the same pinned check are the
+    same attempt, however their bytes differ.
+    """
+    contract = contract if isinstance(contract, dict) else {}
+    paths = sorted({_norm(str(path)).casefold()
+                    for path in (contract.get("write_paths") or [])
+                    if str(path).strip()})
+    commands: List[Any] = []
+    for command in contract.get("acceptance_commands") or []:
+        if isinstance(command, str):
+            commands.append(command)
+        elif isinstance(command, (list, tuple)):
+            commands.append([str(token) for token in command])
+        else:
+            commands.append(str(command))
+    pin = contract.get("check_sha256")
+    if isinstance(pin, dict):
+        pin_material: Any = {str(key): str(value) for key, value in pin.items()}
+    elif pin:
+        pin_material = str(pin)
+    else:
+        pin_material = None
+    material = {"v": 1, "write_paths": paths,
+                "acceptance_commands": commands, "check_sha256": pin_material}
+    canonical = json.dumps(material, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def attempt_fingerprint(item_id: Any, contract: Optional[Dict[str, Any]],
+                        diff_bytes: bytes) -> str:
+    """The identity of one attempt: this item, this contract, these material changes."""
+    material = {"v": 1, "item": str(item_id),
+                "sig": attempt_signature(contract),
+                "files": patch_identity(diff_bytes)}
+    canonical = json.dumps(material, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def row_sha256(row: Dict[str, Any]) -> str:
+    """The row's own hash, with ``row_sha256`` itself excluded."""
+    body = {key: value for key, value in row.items() if key != "row_sha256"}
+    canonical = json.dumps(body, sort_keys=True, separators=(",", ":"),
+                           ensure_ascii=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def load_rejections(path: Optional[Path] = None) -> Dict[str, Any]:
+    """Read the ledger, dropping a torn tail and any row whose chain does not hold.
+
+    A half-written line is what a crash looks like, not what a rejection looks like.
+    ``torn`` names it, ``corrupt`` counts rows that failed their own hash and
+    ``chain_broken_at`` names the first index whose ``prev`` no longer matches.
+    """
+    target = Path(path or rejections_path())
+    out: Dict[str, Any] = {"rows": [], "torn": False, "corrupt": 0,
+                           "chain_broken_at": None, "path": str(target)}
+    try:
+        raw = target.read_bytes()
+    except OSError:
+        return out
+    if not raw:
+        return out
+    text = raw.decode("utf-8", "replace")
+    lines = text.split("\n")
+    if text and not text.endswith("\n"):
+        out["torn"] = True
+        lines = lines[:-1]
+    previous = ""
+    for index, line in enumerate(lines):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            out["corrupt"] += 1
+            if index == len(lines) - 1:
+                out["torn"] = True
+            continue
+        if not isinstance(row, dict):
+            out["corrupt"] += 1
+            continue
+        recorded = str(row.get("row_sha256") or "")
+        if not recorded or recorded.casefold() != row_sha256(row).casefold():
+            out["corrupt"] += 1
+            continue
+        if str(row.get("prev") or "") != previous:
+            out["corrupt"] += 1
+            if out["chain_broken_at"] is None:
+                out["chain_broken_at"] = len(out["rows"])
+            continue
+        out["rows"].append(row)
+        previous = recorded
+    return out
+
+
+def _sig_rows(item_id: Any, signature: str, path: Optional[Path]) -> List[Dict[str, Any]]:
+    ledger = load_rejections(path)
+    return [row for row in ledger["rows"]
+            if str(row.get("item_id")) == str(item_id)
+            and str(row.get("signature") or "").casefold() == str(signature).casefold()]
+
+
+def rejection_streak(item_id: Any, signature: str, *, gate: Optional[str] = None,
+                     path: Optional[Path] = None) -> int:
+    """Rejections in the current unbroken run - derived on demand, never accumulated.
+
+    Without ``gate``: the length of the trailing run of rows that share the newest
+    row's gate. With ``gate``: what the count *would* be if this gate were recorded
+    now - so a different gate resets the run to 1. ``target_red, target_red,
+    out_of_scope`` is 1, because a different gate is a different wall.
+    """
+    rows = _sig_rows(item_id, signature, path)
+    if not rows:
+        return 0 if gate is None else 1
+    newest = str(rows[-1].get("gate") or "")
+    trailing = 0
+    for row in reversed(rows):
+        if str(row.get("gate") or "") != newest:
+            break
+        trailing += 1
+    if gate is None:
+        return trailing
+    return trailing + 1 if str(gate) == newest else 1
+
+
+def latest_rejection(item_id: Any, signature: str, *,
+                     path: Optional[Path] = None) -> Dict[str, Any]:
+    """The newest row for this item and signature, or an empty dict."""
+    rows = _sig_rows(item_id, signature, path)
+    return rows[-1] if rows else {}
+
+
+def _truncate_torn_tail(path: Path) -> None:
+    """Repair a half-written last line. Valid rows are never rewritten."""
+    try:
+        raw = path.read_bytes()
+    except OSError:
+        return
+    if not raw or raw.endswith(b"\n"):
+        return
+    keep = raw.rfind(b"\n")
+    path.write_bytes(raw[:keep + 1] if keep >= 0 else b"")
+
+
+def record_rejection(*, item_id: Any, candidate_id: Any,
+                     contract: Optional[Dict[str, Any]], diff_bytes: bytes,
+                     gate: str, detail: Any = "", cycle: int = 0,
+                     artifact: str = "", payload_sha256: str = "",
+                     repo: Optional[Path] = None) -> Dict[str, Any]:
+    """Append one rejection row, or return the row already on disk.
+
+    Written only for a real gate (the five that judge the patch) and only once per
+    ``(item_id, candidate_id)``. Artifact gates and pre-run skips are not attempts
+    and never count - a candidate that could not be read was not judged.
+    """
+    if str(gate) not in GATES:
+        return {}
+    path = rejections_path(repo)
+    for row in load_rejections(path)["rows"]:
+        if (str(row.get("item_id")) == str(item_id)
+                and str(row.get("candidate_id")) == str(candidate_id)):
+            return row
+
+    signature = attempt_signature(contract)
+    fingerprint = attempt_fingerprint(item_id, contract, diff_bytes)
+    strike = rejection_streak(item_id, signature, gate=str(gate), path=path)
+    ledger = load_rejections(path)
+    previous = str(ledger["rows"][-1].get("row_sha256") or "") if ledger["rows"] else ""
+    row: Dict[str, Any] = {
+        "schema": REJECTION_SCHEMA,
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "item_id": str(item_id),
+        "candidate_id": str(candidate_id),
+        "cycle": int(cycle or 0),
+        "gate": str(gate),
+        "fingerprint": fingerprint,
+        "signature": signature,
+        "diff_sha256": hashlib.sha256(diff_bytes).hexdigest(),
+        "artifact": str(artifact or ""),
+        "payload_sha256": str(payload_sha256 or ""),
+        "strike": strike,
+        "detail": " ".join(str(detail or "").split())[:2000],
+        "prev": previous,
+    }
+    row["row_sha256"] = row_sha256(row)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    _truncate_torn_tail(path)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    return row
+
+
+def duplicate_rejection(item_id: Any, contract: Optional[Dict[str, Any]],
+                        diff_bytes: bytes, *, path: Optional[Path] = None
+                        ) -> Dict[str, Any]:
+    """A row for this exact attempt, if this attempt was already rejected."""
+    fingerprint = attempt_fingerprint(item_id, contract, diff_bytes)
+    for row in load_rejections(path)["rows"]:
+        if (str(row.get("item_id")) == str(item_id)
+                and str(row.get("fingerprint") or "").casefold()
+                == fingerprint.casefold()):
+            return row
+    return {}
+
+
 def evaluate_frozen(path_to_json: Path, *, repo: Path,
                     run: Callable[..., Any] = subprocess.run,
                     git: Optional[Callable[..., Any]] = None) -> Dict[str, Any]:
@@ -898,7 +1190,8 @@ def evaluate_frozen(path_to_json: Path, *, repo: Path,
     diff_path = _diff_file_for(path, record, repo_path)
     if not diff_path.is_file():
         return _artifact_fail("artifact_missing", f"the frozen diff is gone: {diff_path}")
-    digest = hashlib.sha256(diff_path.read_bytes()).hexdigest()
+    diff_bytes = diff_path.read_bytes()
+    digest = hashlib.sha256(diff_bytes).hexdigest()
     pinned = str(record.get("diff_sha256") or "").strip()
     if not pinned or digest.casefold() != pinned.casefold():
         return _artifact_fail(
@@ -913,6 +1206,28 @@ def evaluate_frozen(path_to_json: Path, *, repo: Path,
                           "instead of re-running this one",
                 "commands": []}
 
+    # A13: the same material attempt, already rejected, is not re-run. The check is
+    # after the artifact gates on purpose - an unreadable candidate was never judged,
+    # so it can neither be a duplicate nor earn a strike.
+    try:
+        duplicate = duplicate_rejection(record.get("item_id"), contract, diff_bytes,
+                                        path=rejections_path(repo_path))
+    except (OSError, ValueError):
+        duplicate = {}
+    if duplicate:
+        detail = (f"this attempt was already rejected at {duplicate.get('at')} "
+                  f"(gate {duplicate.get('gate')}, strike {duplicate.get('strike')}): "
+                  "the same material change on the same contract, so its checks are "
+                  "not run again")
+        record["scored"] = {
+            "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "ok": False, "gate": "duplicate_rejection",
+            "detail": detail, "commands": [],
+        }
+        _write_json(path, record)
+        return {"ok": False, "gate": "duplicate_rejection", "detail": detail,
+                "commands": [], "rejection": duplicate}
+
     verdict = evaluate(contract=contract, repo=repo_path, run=run,
                        git=_frozen_git(record, git or _repo_git(repo_path)))
     record["scored"] = {
@@ -924,6 +1239,32 @@ def evaluate_frozen(path_to_json: Path, *, repo: Path,
                       for key in ("cmd", "exit", "ok", "seconds")}
                      for command in verdict.get("commands") or []],
     }
+    # A13: a real rejection is written once, here, so the strike count survives the
+    # process that judged it. Artifact gates are excluded: they judge the record, not
+    # the attempt, and a torn file must not be able to park an item.
+    if not verdict["ok"] and str(verdict.get("gate")) in GATES:
+        try:
+            artifact = _norm(path.resolve().relative_to(repo_path).as_posix())
+        except (ValueError, OSError):
+            artifact = _norm(path.as_posix())
+        try:
+            cycle = int(contract.get("_cycle") or contract.get("cycle") or 0)
+        except (TypeError, ValueError):
+            cycle = 0
+        try:
+            rejection = record_rejection(
+                item_id=record.get("item_id"),
+                candidate_id=record.get("candidate_id"),
+                contract=contract, diff_bytes=diff_bytes,
+                gate=str(verdict["gate"]), detail=str(verdict.get("detail") or ""),
+                cycle=cycle, artifact=artifact,
+                payload_sha256=str(record.get("payload_sha256") or ""),
+                repo=repo_path)
+        except (OSError, ValueError) as exc:
+            rejection = {}
+            verdict["rejection_error"] = str(exc)
+        if rejection:
+            verdict["rejection"] = rejection
     _write_json(path, record)
     return verdict
 
