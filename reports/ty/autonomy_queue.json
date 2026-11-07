@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T12:45:00Z",
+  "updated": "2026-11-06T13:05:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -190,7 +190,7 @@
       "id": "M1g-contract-writer",
       "kind": "automation",
       "priority": 1140,
-      "status": "pending",
+      "status": "done",
       "title": "Write the authored contract into the queue atomically + validate_contract",
       "write_paths": [
         "tools/tys_author.py",
@@ -198,7 +198,8 @@
       ],
       "depends_on": [
         "M1f-scope-deriver"
-      ]
+      ],
+      "commit": "9f29a718"
     },
     {
       "id": "M2-work-generator",
