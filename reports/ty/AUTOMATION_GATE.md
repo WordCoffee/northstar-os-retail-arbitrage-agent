@@ -61,3 +61,12 @@ All of these, each with a command that shows it:
 7. Every refusal (licence, disk, RAM, gate) is in a log with its reason — no silent skips.
 
 When C1–C7 hold, the gate opens and product/UI work becomes the queue's front.
+
+## Live status (2026-11-06T13:00Z)
+
+15 of 17 automation units done. Done: runner, name guard, disk, lanes, launcher, watchdog, git revert, red gate, token meter, worker lane, A9b meter wiring, A11 evaluator, A14 scope deriver, A15 contract writer, plus both T0 incidents.
+
+Running: A12 candidate artifacts, A10 coding-lane spike.
+
+Remaining: A12 -> A13 rejection ledger -> A16 work generator -> M3 intel I0-I3. Product and perf work stay blocked behind M2-work-generator.
+
