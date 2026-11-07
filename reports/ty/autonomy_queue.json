@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T12:05:00Z",
+  "updated": "2026-11-06T12:15:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -19,7 +19,7 @@
       "id": "T0-callback-dns",
       "kind": "incident",
       "priority": 1300,
-      "status": "pending",
+      "status": "done",
       "title": "Live SSRF: callback_url pointing at a DNS name that resolves to loopback is allowed",
       "next": "Resolve the hostname before the decision (socket.getaddrinfo, injectable for tests) and refuse when ANY resolved address is loopback, link-local, private or unspecified. Keep the existing literal checks; add the resolution step and a test with a fake resolver.",
       "write_paths": [
@@ -40,7 +40,9 @@
         "Northstar_backend/design_studio_async.py:115-118 (documented limit)",
         "reports/ty/egress_map_20261106.md"
       ],
-      "tier": "T0"
+      "tier": "T0",
+      "commit": "050e4188",
+      "verification": "50 passed; live: nip.io -> 127.0.0.1 and 169.254.169.254 both refused by resolution; unresolvable fails closed; allowlist decided before lookup"
     },
     {
       "id": "T0-mcp-wsl",
