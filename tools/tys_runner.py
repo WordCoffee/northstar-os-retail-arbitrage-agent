@@ -33,6 +33,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import secrets
 import sys
 import time
 from datetime import datetime, timezone
@@ -42,10 +43,17 @@ from typing import Any, Dict, List, Optional
 ROOT = Path(os.environ.get("NORTHSTAR_TY_ROOT")
             or Path(__file__).resolve().parents[1]).resolve()
 
+#: Where this file's own code lives. ``ROOT`` is the state root and is redirected
+#: by tests and campaigns; the command policy is code and must not move with it.
+CODE_ROOT = Path(__file__).resolve().parents[1]
+
+#: Loaded policy modules, keyed by code root.
+_POLICY: Dict[str, Any] = {}
+
 # ``check_command`` is the supervisor's own command policy. A contract is only
 # dispatchable if it would also pass that policy, so the same module is imported
 # here rather than a second, drifting copy of the token list.
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(CODE_ROOT / "scripts"))
 
 QUEUE = ROOT / "reports" / "ty" / "autonomy_queue.json"
 STATE_DIR = ROOT / "state" / "tys_runner"
@@ -316,9 +324,19 @@ def _clear_lease(reason: str = "") -> None:
         _append(SESSIONS, {"at": _now(), "event": "lease_released", "reason": reason})
 
 
-def _take_lease(cycle: int, item_id: str) -> None:
+def _take_lease(cycle: int, item_id: str) -> str:
+    """Reserve one cycle and return the token that proves the reservation.
+
+    The pid answers "is the holder alive?" and that is the right question for
+    ``next``. It is the wrong question for ``complete``: a worker that runs as a
+    separate process from the one that reserved has a different pid, and a dead
+    launcher's reservation must still be completable by the worker it already
+    dispatched. The token is the authorisation; the pid stays the liveness test.
+    """
+    token = secrets.token_hex(8)
     _write(LEASE, {"cycle": cycle, "item": item_id, "taken_at": _now(),
-                   "taken_ts": time.time(), "pid": os.getpid()})
+                   "taken_ts": time.time(), "pid": os.getpid(), "token": token})
+    return token
 
 
 # -------------------------------------------------------------------- commands
@@ -441,7 +459,7 @@ def cmd_next(*, write_brief: bool = True) -> int:
     cycle = int(queue.get("cycle") or 0) + 1
     queue["cycle"] = cycle
     mark(queue, str(item["id"]), "in_progress")
-    _take_lease(cycle, str(item["id"]))
+    lease_token = _take_lease(cycle, str(item["id"]))
 
     brief = {
         "cycle": cycle,
@@ -453,6 +471,7 @@ def cmd_next(*, write_brief: bool = True) -> int:
         "acceptance": item.get("acceptance") or "",
         "next_action": item.get("next") or item.get("title"),
         "rollback_tag": f"autonomy-cycle-{cycle:02d}",
+        "lease_token": lease_token,
         "tokens_today": _tokens_today(),
         "cycle_of_session": (_read(SESSIONS, []) or []) and _cycles_in_session(),
         "cycles_per_session": CYCLES_PER_SESSION,
@@ -505,6 +524,34 @@ def _runnable(item: Dict[str, Any]) -> "tuple[bool, str]":
     return tys_launcher.runnable(item)
 
 
+def _command_policy():
+    """The supervisor's own command policy, loaded from the *code* root.
+
+    ``ROOT`` is the state root and can be redirected (``NORTHSTAR_TY_ROOT``) at a
+    test or a campaign. The policy is code, not state, so it is loaded from the
+    directory this file actually lives in. Loading it by ``import`` after a
+    module-level ``sys.path`` insert bound it to whichever root happened to be on
+    the path at first import; under a redirected root that import failed, the
+    selector swallowed the error, and every item silently became non-dispatchable.
+    """
+    key = str(CODE_ROOT)
+    cached = _POLICY.get(key)
+    if cached is not None:
+        return cached
+    import importlib.util  # noqa: PLC0415 - only needed once per process
+
+    path = CODE_ROOT / "scripts" / "continuous_loop.py"
+    if not path.is_file():
+        return None
+    spec = importlib.util.spec_from_file_location("continuous_loop_by_path", path)
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    _POLICY[key] = module
+    return module
+
+
 def validate_contract(item: Dict[str, Any]) -> List[str]:
     """Every reason this queue item cannot be dispatched as an authored contract.
 
@@ -514,8 +561,6 @@ def validate_contract(item: Dict[str, Any]) -> List[str]:
     supervisor's own ``check_command`` policy, so a contract written by the
     author lane cannot dispatch something the loop would refuse.
     """
-    import continuous_loop as cl  # noqa: PLC0415 - ROOT/scripts is on sys.path
-
     if not isinstance(item, dict):
         return ["item is not an object"]
     problems: List[str] = []
@@ -534,6 +579,11 @@ def validate_contract(item: Dict[str, Any]) -> List[str]:
     if not isinstance(commands, (list, tuple)):
         return problems + ["acceptance_commands must be a list of argv lists"]
 
+    policy = _command_policy()
+    if policy is None:
+        return problems + ["the command policy scripts/continuous_loop.py is missing "
+                           "from the code root, so no command can be judged"]
+
     for index, cmd in enumerate(commands):
         if isinstance(cmd, str):
             problems.append(f"command[{index}] is a shell string, not an argv list")
@@ -550,7 +600,7 @@ def validate_contract(item: Dict[str, Any]) -> List[str]:
             problems.append(f"command[{index}] carries shell operators: "
                             f"{operators[:3]!r}")
             continue
-        refusal = cl.check_command(argv)
+        refusal = policy.check_command(argv)
         if refusal:
             problems.append(f"command[{index}] refused: {refusal}")
     return problems
@@ -579,12 +629,18 @@ def validate_result(result: Dict[str, Any], item_id: str) -> List[str]:
     return problems
 
 
-def cmd_complete(result_path: str) -> int:
+def cmd_complete(result_path: str, token: str = "") -> int:
     result = _read(Path(result_path), None)
     if not isinstance(result, dict):
         print(json.dumps({"ok": False, "error": f"result unreadable: {result_path}"}))
         return 2
+    # Read the raw reservation before ``_lease()`` can reclaim it: a worker in a
+    # different process is not the holder's pid, and it is still the holder.
+    raw_lease = _read(LEASE, None)
     lease = _lease()
+    if not lease and token and isinstance(raw_lease, dict) \
+            and str(raw_lease.get("token") or "") == str(token):
+        lease = raw_lease
     if not lease:
         print(json.dumps({"ok": False, "error": "no lease held; nothing to complete"}))
         return 5
@@ -730,6 +786,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     sub.add_parser("next")
     p_complete = sub.add_parser("complete")
     p_complete.add_argument("--result", required=True)
+    p_complete.add_argument("--token", default="",
+                            help="the lease token from the cycle brief; lets a worker "
+                                 "in a different process complete the reservation")
     p_rotate = sub.add_parser("rotate")
     p_rotate.add_argument("--reason", default="")
     sub.add_parser("stop")
@@ -743,7 +802,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     if ns.cmd == "next":
         return cmd_next()
     if ns.cmd == "complete":
-        return cmd_complete(ns.result)
+        return cmd_complete(ns.result, ns.token)
     if ns.cmd == "rotate":
         return cmd_rotate(ns.reason)
     if ns.cmd == "stop":

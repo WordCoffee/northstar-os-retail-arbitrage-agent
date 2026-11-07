@@ -34,9 +34,13 @@ def root(tmp_path, monkeypatch):
             {"id": "runnable", "title": "do a thing", "status": "pending", "priority": 900,
              "next": "make the check pass",
              "write_paths": ["Northstar_backend/x.py", "done.flag"],
+             # No ';' in the payload: the contract policy refuses a shell operator
+             # anywhere in an argv token, and a fixture should use a contract the
+             # loop would actually accept. A newline is not a shell operator.
              "acceptance_commands": [[
                  "python", "-c",
-                 "import pathlib,sys; sys.exit(0 if pathlib.Path('done.flag').exists() else 1)",
+                 "import pathlib, sys\n"
+                 "sys.exit(0 if pathlib.Path('done.flag').exists() else 1)",
              ]]},
             {"id": "no_checks", "title": "vague", "status": "pending", "priority": 800,
              "write_paths": ["Northstar_backend/y.py"]},
@@ -88,6 +92,26 @@ def _worker(result, *, ok=True, steps=3, evidence=None):
         result_path.write_text(json.dumps(payload), encoding="utf-8")
         return 0
     return run
+
+
+def test_a_malformed_contract_is_refused_at_dispatch_not_by_a_crash(root):
+    """The C3 probe found this: a shell-string contract passed ``runnable``, reached
+    the pre-run gate and took the launcher down with FileNotFoundError."""
+    queue = r.load_queue()
+    item = next(i for i in queue["items"] if i["id"] == "runnable")
+    item["acceptance_commands"] = "python -m pytest -q"
+    r._write(r.QUEUE, queue)
+
+    def explode(*_args, **_kwargs):
+        raise AssertionError("a malformed contract must never reach the worker")
+
+    out = L._run_cycle(worker=explode, dry_run=False, cycle_budget=1)
+
+    assert out["skipped"] is True
+    assert out["reason"] == "invalid_contract"
+    after = r.load_queue()
+    assert next(i for i in after["items"] if i["id"] == "runnable")["status"] == "pending"
+    assert not r.LEASE.exists()
 
 
 def test_a_contract_is_built_only_from_declared_fields(root, capsys):

@@ -467,6 +467,11 @@ def pre_run_red_gate(commands: List[List[str]]) -> Dict[str, Any]:
             detail = ((proc.stdout or "") + (proc.stderr or ""))[-1200:]
         except subprocess.TimeoutExpired:
             passed, detail = False, "acceptance timeout"
+        except OSError as exc:
+            # A command the host cannot start is a red check, not a launcher crash.
+            # The C3 probe found a malformed contract reaching this point and taking
+            # the process down with FileNotFoundError.
+            passed, detail = False, f"could not start: {exc}"
         ok = ok and passed
         results.append({"cmd": " ".join(str(c) for c in cmd), "passed": passed,
                         "seconds": round(time.time() - started, 1),
@@ -689,10 +694,35 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
                           "reason": why})
         return {"ok": True, "skipped": True, "item": item.get("id"), "reason": why}
 
+    # ``runnable`` only asks whether the two lists are non-empty. A contract that is
+    # present but malformed (a shell string, a refused token) must be refused here,
+    # at dispatch, not discovered by the pre-run gate as a FileNotFoundError.
+    problems = runner.validate_contract(item)
+    if problems:
+        detail = "; ".join(problems[:3])
+        runner.mark(queue, str(item.get("id")), "pending",
+                    needs_author=detail, defer_until_cycle=int(brief["cycle"]) + 1)
+        runner._clear_lease("invalid contract")
+        _append(JOURNAL, {"event": "skipped_invalid_contract",
+                          "item": item.get("id"), "problems": problems[:5]})
+        return {"ok": True, "skipped": True, "item": item.get("id"),
+                "reason": "invalid_contract", "problems": problems[:5]}
+
     if dry_run:
-        runner._clear_lease("dry run")
-        _append(JOURNAL, {"event": "dry_run_cycle", "item": item.get("id")})
-        return {"ok": True, "dry_run": True, "item": item.get("id")}
+        # C2 is a claim about rotations, and a dry run that never completes can never
+        # show one. So the dry run exercises the real bookkeeping - reserve, record,
+        # rotate - against the redirected state root, and no worker is involved.
+        completion = {"item": brief["item"], "cycle": brief["cycle"],
+                      "shipped": False, "tokens": 0,
+                      "measurements": {"dry_run": True},
+                      "evidence": []}
+        path = STATE / "dry_completion.json"
+        path.write_text(json.dumps(completion, indent=2), encoding="utf-8")
+        rc = runner.cmd_complete(str(path))
+        _append(JOURNAL, {"event": "dry_run_cycle", "item": item.get("id"),
+                          "complete_exit": rc})
+        return {"ok": rc == 0, "dry_run": True, "item": item.get("id"),
+                "complete_exit": rc}
 
     task_path = STATE / "task.json"
     result_path = STATE / "worker_result.json"
@@ -834,7 +864,11 @@ def main(argv: Optional[List[str]] = None) -> int:
                         help="start the local LLM lane if its health endpoint is down")
     parser.add_argument("--worker", choices=("ty", "deepseek"), default="ty",
                         help="ty = local coding lane; deepseek = OpenCode CLI (owner's model)")
+    parser.add_argument("--per-session", type=int, default=runner.CYCLES_PER_SESSION,
+                        help="rotate the worker session after this many cycles "
+                             "(the gate's acceptance runs use it explicitly)")
     ns = parser.parse_args(argv)
+    runner.CYCLES_PER_SESSION = max(1, int(ns.per_session))
 
     started = time.time()
     deadline = started + ns.max_hours * 3600

@@ -110,6 +110,43 @@ def test_a_valid_completion_closes_the_cycle_and_rotates_at_the_limit(root, monk
     assert r._cycles_in_session() == 0      # a new session starts clean
 
 
+def test_a_worker_in_another_process_completes_with_the_lease_token(root, capsys):
+    """The C3 probe found the documented next/complete split was unusable: the
+    worker's pid is not the reserving pid, and a dead launcher's reservation has
+    to stay completable by the worker it already dispatched."""
+    assert r.cmd_next() == 0
+    brief = json.loads(capsys.readouterr().out)["brief"]
+    token = brief["lease_token"]
+    assert token
+
+    lease = json.loads(r.LEASE.read_text(encoding="utf-8"))
+    lease["pid"] = 999999                      # the launcher that reserved is gone
+    r.LEASE.write_text(json.dumps(lease), encoding="utf-8")
+
+    result = {"item": "high", "cycle": 1, "shipped": False}
+    path = root / "result.json"
+    path.write_text(json.dumps(result), encoding="utf-8")
+
+    assert r.cmd_complete(str(path)) == 5       # a stranger holding no token
+    assert not r.LEASE.exists()
+
+
+def test_the_lease_token_completes_a_reservation_whose_holder_died(root, capsys):
+    assert r.cmd_next() == 0
+    token = json.loads(capsys.readouterr().out)["brief"]["lease_token"]
+    lease = json.loads(r.LEASE.read_text(encoding="utf-8"))
+    lease["pid"] = 999999
+    r.LEASE.write_text(json.dumps(lease), encoding="utf-8")
+
+    result = {"item": "high", "cycle": 1, "shipped": False}
+    path = root / "result.json"
+    path.write_text(json.dumps(result), encoding="utf-8")
+
+    assert r.cmd_complete(str(path), token) == 0
+    assert not r.LEASE.exists()
+    assert next(i for i in r.load_queue()["items"] if i["id"] == "high")["status"] == "pending"
+
+
 def test_crash_recovery_keeps_the_reserved_item(root, capsys):
     r.cmd_next()
     # Simulate a dead session: the holder pid no longer exists.
