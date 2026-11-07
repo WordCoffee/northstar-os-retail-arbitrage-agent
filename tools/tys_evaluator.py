@@ -25,15 +25,35 @@ Gates, in order, fail fast - the first failure is the verdict:
                      idlist, when ``contract["idlist"]`` is set. Removed or failing
                      test ids are a regression; additions are allowed.
 
+Before any of those, ``evaluate_frozen`` answers about the artifact itself:
+``artifact_missing`` / ``artifact_invalid`` when it is absent or unreadable,
+``artifact_tampered`` when its seal no longer matches, and ``already_scored``
+when the candidate has already been judged. None of these runs a command.
+
+A verdict that cannot be reproduced from disk is not a verdict, so a candidate is
+**frozen** before it is judged. ``freeze`` captures the patch as bytes - the whole
+``git diff --binary HEAD`` plus the untracked files that belong to the candidate -
+and writes ``state/author/<item_id>/cand_<k>.{diff,json}``. ``evaluate_frozen``
+replays those bytes through the same gates and never asks the working tree what
+changed, so two verdicts over one candidate can be compared, diffed and audited.
+The record is hash-sealed: an edited diff or an edited contract is refused as
+``artifact_tampered`` rather than re-scored, and a candidate is scored once -
+a second attempt is ``already_scored`` and starts no command.
+
 Usage from the loop::
 
     verdict = evaluate(contract=card, repo=ROOT)
     if verdict["ok"]:
         ...
 
+    frozen = freeze(repo=ROOT, item_id="M1d", candidate_id="1", contract=card,
+                    pre_changed=dirty_at_dispatch)
+    verdict = evaluate_frozen(frozen["json"], repo=ROOT)
+
 Usage from a shell (evidence for an artifact / a rejection record)::
 
-    python tools/tys_evaluator.py --contract state/author/x/cand_1.json --repo .
+    python tools/tys_evaluator.py --contract card.json --item M1d --candidate 1 --freeze
+    python tools/tys_evaluator.py --frozen state/author/M1d/cand_1.json --repo .
 
 The return value is always::
 
@@ -51,6 +71,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -77,6 +98,21 @@ INTERPRETERS = frozenset({
 })
 
 GATES = ("out_of_scope", "malformed", "target_red", "check_tampered", "regression")
+
+#: Gates that judge the frozen artifact rather than the patch. A verdict that
+#: cannot be reproduced from disk is refused, never guessed at.
+ARTIFACT_GATES = ("artifact_missing", "artifact_invalid", "artifact_tampered",
+                  "already_scored")
+
+#: Fields sealed by ``payload_sha256``. The ``scored`` block is deliberately not
+#: among them: scoring appends a verdict, it never rewrites the evidence.
+FROZEN_FIELDS = (
+    "schema", "item_id", "candidate_id", "frozen_at", "contract",
+    "pre_changed_source", "pre_changed", "changes", "untracked",
+    "diff_sha256", "diff_bytes", "diff_path", "ignored",
+)
+
+FROZEN_SCHEMA = 1
 
 
 # ------------------------------------------------------------------- path rules
@@ -245,6 +281,7 @@ class _Judge:
         self.commands: List[Dict[str, Any]] = []
         self.changes_error = ""
         self._changes: Optional[Dict[str, List[str]]] = None
+        self._excused: Optional[Tuple[set, Tuple[str, ...]]] = None
 
     def _default_git(self, *args: str) -> subprocess.CompletedProcess:
         return subprocess.run(["git", *[str(a) for a in args]],
@@ -340,10 +377,34 @@ class _Judge:
             raw = [raw]
         return {_norm(str(path)).casefold() for path in raw if str(path).strip()}
 
+    def _pre_excuse(self) -> Tuple[set, Tuple[str, ...]]:
+        """The dirty set as exact paths plus directory roots.
+
+        ``git status --porcelain`` collapses an untracked tree to its directory, so
+        a dispatch snapshot legitimately names ``vendor/`` rather than each of the
+        ten thousand files under it. A directory entry covers its whole tree - it
+        says the tree was dirty before the worker started, which is true whether it
+        was listed file by file or not.
+        """
+        if self._excused is not None:
+            return self._excused
+        entries = self.pre_changed()
+        roots = tuple(sorted(entry for entry in entries
+                             if entry.endswith("/") or (self.repo / entry).is_dir()))
+        self._excused = (entries, roots)
+        return self._excused
+
     def attributable(self, path: str) -> bool:
         if within_scope(path, self.write_paths()):
             return True
-        return _norm(path).casefold() not in self.pre_changed()
+        target = _norm(path).casefold()
+        exact, roots = self._pre_excuse()
+        if target in exact:
+            return False
+        for root in roots:
+            if target.startswith(root.rstrip("/") + "/"):
+                return False
+        return True
 
     def named_check(self) -> str:
         """The file the acceptance command (or contract) names, repo-relative."""
@@ -570,22 +631,321 @@ def evaluate(*, contract: Dict[str, Any], repo: Path,
             return verdict
 
     changes = judge.changes()
-    shown = ", ".join(sorted(changes)[:5])
+    patch = {rel: statuses for rel, statuses in changes.items() if judge.attributable(rel)}
+    shown = ", ".join(sorted(patch)[:5])
     return {
         "ok": True,
         "gate": "pass",
-        "detail": f"{len(GATES)} gates green over {len(changes)} changed path(s): {shown}",
+        "detail": f"{len(GATES)} gates green over {len(patch)} changed path(s): {shown}",
         "commands": list(judge.commands),
     }
 
 
+def _slug(value: Any) -> str:
+    """A filesystem-safe id: ``cand_1`` and ``1`` both name ``cand_1.diff``."""
+    text = re.sub(r"[^A-Za-z0-9._-]+", "_", str(value).strip()).strip("._-")
+    text = text or "unnamed"
+    if text.startswith("cand_") and len(text) > 5:
+        text = text[5:]
+    return text
+
+
+def _repo_git(repo: Path) -> Callable[..., Any]:
+    """The fallback git runner: read-only questions the artifact does not answer."""
+    def call(*args: str) -> subprocess.CompletedProcess:
+        return subprocess.run(["git", *[str(a) for a in args]],
+                              cwd=str(repo), capture_output=True, text=True)
+    return call
+
+
+def _seal(record: Dict[str, Any]) -> str:
+    """sha256 over the frozen fields only, so appending ``scored`` stays legal."""
+    canonical = json.dumps({key: record.get(key) for key in FROZEN_FIELDS},
+                           sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _write_json(path: Path, payload: Dict[str, Any]) -> None:
+    """Atomic: a half-written artifact would read as a tampered one."""
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def _diff_bytes(judge: "_Judge") -> bytes:
+    """``git diff --binary HEAD`` with the unborn-HEAD fallback ``changes()`` uses.
+
+    ``--binary`` keeps a binary change base64 in the patch, which is what makes
+    the captured bytes ASCII and hashable; the bytes written are the bytes hashed.
+    """
+    code, text = judge._git_text("diff", "--binary", "HEAD")
+    if code != 0:
+        plain_code, plain = judge._git_text("diff", "--binary")
+        staged_code, staged = judge._git_text("diff", "--binary", "--cached")
+        if plain_code != 0 and staged_code != 0:
+            raise RuntimeError(f"cannot capture the diff: {(plain or staged).strip()}")
+        text = plain + "\n" + staged
+    return text.encode("utf-8")
+
+
+def freeze(*, repo: Path, item_id: str, candidate_id: str, contract: Dict[str, Any],
+           pre_changed: Optional[Sequence[str]] = None,
+           run: Callable[..., Any] = subprocess.run,
+           git: Optional[Callable[..., Any]] = None) -> Dict[str, Any]:
+    """Freeze one candidate to disk before it is judged, and return its paths.
+
+    Writes ``state/author/<item_id>/cand_<k>.diff`` (the bytes) and
+    ``cand_<k>.json`` (the contract, the diff's sha256, a timestamp, the
+    dispatch-time dirty set as ``pre_changed``, and the path set the gates read
+    back). The diff is captured against ``HEAD`` and the untracked list comes from
+    ``git ls-files --others``; a file that was already dirty at dispatch is
+    somebody else's bytes and is not stored as this candidate's change.
+
+    ``pre_changed`` is the dirty set snapshotted *before* the worker was
+    dispatched - read from ``contract["pre_changed"]``, or from this same keyword
+    when the caller keeps it beside the card. It matters: this box carries
+    thousands of untracked files, and only a dispatch-time snapshot can tell them
+    apart from the candidate's own additions. Without it, everything outside
+    ``write_paths`` is recorded as pre-existing - the honest default when freeze
+    cannot know what the tree looked like earlier. A policy path is never excused
+    either way.
+
+    Freezing is once per ``(item_id, candidate_id)``: re-freezing identical bytes
+    returns the existing artifact, and different bytes are refused rather than
+    overwriting evidence.
+    """
+    repo_path = Path(repo).resolve()
+    frozen_contract = dict(contract or {})
+    judge = _Judge(frozen_contract, repo_path, run=run, git=git)
+
+    changes = judge.changes()
+    if judge.changes_error:
+        raise RuntimeError(f"cannot freeze: {judge.changes_error}")
+
+    scope = judge.write_paths()
+    code, others = judge._git_text("ls-files", "--others", "--exclude-standard")
+    if code != 0:
+        raise RuntimeError(f"cannot list untracked files: {(others or '').strip()}")
+    untracked = sorted({_norm(line) for line in others.splitlines() if line.strip()})
+
+    if pre_changed is None and isinstance(contract, dict):
+        # The card is where the dispatcher puts its snapshot; a kwarg is for callers
+        # that keep the dispatch state beside the card.
+        pre_changed = contract.get("pre_changed")
+    if pre_changed is None:
+        source = "freeze-observed"
+        raw = [rel for rel in changes
+               if not within_scope(rel, scope) and not forbidden_reason(rel)]
+    else:
+        source = "dispatch"
+        raw = [pre_changed] if isinstance(pre_changed, str) else list(pre_changed)
+    before = sorted({_norm(str(path)) for path in raw if str(path).strip()})
+    frozen_contract["pre_changed"] = before
+
+    # Untracked files are the reason this list is filtered: store the candidate's
+    # additions, anything under write_paths, and anything a gate must still see
+    # (a policy path). A file that was dirty at dispatch - or under a directory that
+    # was - stays out of the artifact, or a ten-thousand-file worktree would be
+    # frozen into every candidate.
+    untracked_set = set(untracked)
+    kept_untracked = [rel for rel in untracked
+                      if within_scope(rel, scope) or forbidden_reason(rel)
+                      or judge.attributable(rel)]
+    tracked = {rel: list(statuses) for rel, statuses in changes.items()
+               if rel not in untracked_set}
+
+    diff_bytes = _diff_bytes(judge)
+    candidate = _slug(candidate_id)
+    directory = repo_path / "state" / "author" / _slug(item_id)
+    directory.mkdir(parents=True, exist_ok=True)
+    diff_path = directory / f"cand_{candidate}.diff"
+    json_path = directory / f"cand_{candidate}.json"
+
+    if diff_path.is_file() and json_path.is_file():
+        try:
+            previous = json.loads(json_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            previous = None
+        if isinstance(previous, dict) and diff_path.read_bytes() == diff_bytes:
+            return {"diff": str(diff_path), "json": str(json_path),
+                    "diff_sha256": str(previous.get("diff_sha256") or ""),
+                    "diff_bytes": int(previous.get("diff_bytes") or 0),
+                    "changed": len(previous.get("changes") or {})
+                    + len(previous.get("untracked") or []),
+                    "pre_changed": len(previous.get("pre_changed") or []),
+                    "ignored": bool(previous.get("ignored")), "reused": True}
+        raise RuntimeError(
+            f"{json_path.name} is already frozen with different content - "
+            "a candidate id is never reused (freeze a new one)")
+
+    diff_path.write_bytes(diff_bytes)
+    try:
+        rel_diff = _norm(diff_path.relative_to(repo_path).as_posix())
+    except ValueError:
+        rel_diff = _norm(diff_path.as_posix())
+    record: Dict[str, Any] = {
+        "schema": FROZEN_SCHEMA,
+        "item_id": str(item_id),
+        "candidate_id": str(candidate_id),
+        "frozen_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "contract": frozen_contract,
+        "pre_changed_source": source,
+        "pre_changed": before,
+        "changes": tracked,
+        "untracked": kept_untracked,
+        "diff_sha256": hashlib.sha256(diff_bytes).hexdigest(),
+        "diff_bytes": len(diff_bytes),
+        "diff_path": rel_diff,
+        "ignored": judge._git_text("check-ignore", "-q", "--", rel_diff)[0] == 0,
+    }
+    record["payload_sha256"] = _seal(record)
+    _write_json(json_path, record)
+
+    return {"diff": str(diff_path), "json": str(json_path),
+            "diff_sha256": record["diff_sha256"],
+            "diff_bytes": record["diff_bytes"],
+            "changed": len(tracked) + len(kept_untracked),
+            "pre_changed": len(before), "ignored": record["ignored"],
+            "reused": False}
+
+
+def _frozen_git(record: Dict[str, Any], fallback: Callable[..., Any]) -> Callable[..., Any]:
+    """A git runner that answers from the frozen record, not from the worktree.
+
+    ``changes()`` asks two questions - the tracked name-status list and the
+    untracked list - so those two are served from disk. Anything else
+    (``ls-files`` for basename resolution) is a read-only question the artifact
+    never captured and cannot change a verdict into a false pass.
+    """
+    changes = record.get("changes") or {}
+    untracked = [str(path) for path in (record.get("untracked") or [])]
+
+    def shim(*args: str) -> subprocess.CompletedProcess:
+        tokens = [str(part) for part in args]
+        if tokens[:2] == ["diff", "--name-status"]:
+            rows = "".join(f"{(changes[rel] or ['M'])[0]}\t{rel}\n"
+                           for rel in sorted(changes))
+            return subprocess.CompletedProcess(["git", *tokens], 0, rows, "")
+        if tokens[:2] == ["ls-files", "--others"]:
+            return subprocess.CompletedProcess(["git", *tokens], 0,
+                                               "".join(f"{path}\n" for path in untracked), "")
+        return fallback(*args)
+
+    return shim
+
+
+def _diff_file_for(json_path: Path, record: Dict[str, Any], repo: Path) -> Path:
+    """The recorded diff, resolved against the repo, else the sibling ``.diff``."""
+    candidates: List[Path] = []
+    rel = str(record.get("diff_path") or "").strip()
+    if rel:
+        candidate = Path(rel)
+        candidates.append(candidate if candidate.is_absolute() else Path(repo) / candidate)
+    candidates.append(json_path.with_suffix(".diff"))
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    return candidates[0]
+
+
+def _artifact_fail(gate: str, detail: Any) -> Dict[str, Any]:
+    return {"ok": False, "gate": gate,
+            "detail": " | ".join(line.strip() for line in str(detail).splitlines()
+                                 if line.strip())[:2000],
+            "commands": []}
+
+
+def evaluate_frozen(path_to_json: Path, *, repo: Path,
+                    run: Callable[..., Any] = subprocess.run,
+                    git: Optional[Callable[..., Any]] = None) -> Dict[str, Any]:
+    """Re-score a frozen candidate from disk. The same gates, the same contract.
+
+    Nothing here asks the worktree what changed: the name-status list and the
+    untracked list are read from the artifact, so the verdict is a function of the
+    bytes that were frozen. The acceptance commands still run - that is the gate -
+    but a candidate is judged once: the verdict is appended to the artifact and a
+    second call answers ``already_scored`` without starting anything.
+
+    Refusals are about the artifact, not the patch: a diff whose sha256 no longer
+    matches its record, or a record edited after it was sealed, is
+    ``artifact_tampered``. Re-scoring an edited candidate would launder it.
+    """
+    path = Path(path_to_json)
+    if not path.is_file():
+        return _artifact_fail("artifact_missing", f"no frozen artifact at {path}")
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return _artifact_fail("artifact_invalid", f"{path.name} is unreadable: {exc}")
+    if not isinstance(record, dict):
+        return _artifact_fail("artifact_invalid", f"{path.name} is not a JSON object")
+    absent = [field for field in FROZEN_FIELDS if field not in record]
+    if absent:
+        return _artifact_fail("artifact_invalid",
+                              f"{path.name} is missing {', '.join(absent)}")
+    sealed = str(record.get("payload_sha256") or "")
+    actual = _seal(record)
+    if sealed and actual.casefold() != sealed.casefold():
+        return _artifact_fail(
+            "artifact_tampered",
+            f"{path.name} was edited after it was frozen "
+            f"(seal is {actual[:12]}, recorded {sealed[:12]})")
+    contract = record.get("contract")
+    if not isinstance(contract, dict):
+        return _artifact_fail("artifact_invalid", f"{path.name} has no usable contract")
+
+    repo_path = Path(repo).resolve()
+    diff_path = _diff_file_for(path, record, repo_path)
+    if not diff_path.is_file():
+        return _artifact_fail("artifact_missing", f"the frozen diff is gone: {diff_path}")
+    digest = hashlib.sha256(diff_path.read_bytes()).hexdigest()
+    pinned = str(record.get("diff_sha256") or "").strip()
+    if not pinned or digest.casefold() != pinned.casefold():
+        return _artifact_fail(
+            "artifact_tampered",
+            f"{diff_path.name} is {digest[:12]}, frozen as {(pinned or '(unpinned)')[:12]}")
+
+    scored = record.get("scored")
+    if isinstance(scored, dict) and scored.get("at"):
+        return {"ok": bool(scored.get("ok")), "gate": "already_scored",
+                "detail": f"already scored at {scored['at']} (gate {scored.get('gate')}); "
+                          "a frozen candidate is judged once - freeze the next candidate "
+                          "instead of re-running this one",
+                "commands": []}
+
+    verdict = evaluate(contract=contract, repo=repo_path, run=run,
+                       git=_frozen_git(record, git or _repo_git(repo_path)))
+    record["scored"] = {
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "ok": bool(verdict["ok"]),
+        "gate": verdict["gate"],
+        "detail": verdict["detail"],
+        "commands": [{key: command.get(key)
+                      for key in ("cmd", "exit", "ok", "seconds")}
+                     for command in verdict.get("commands") or []],
+    }
+    _write_json(path, record)
+    return verdict
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Deterministic candidate-patch gates.")
-    parser.add_argument("--contract", required=True, help="task card JSON")
+    parser.add_argument("--contract", help="task card JSON (live evaluation, or --freeze)")
+    parser.add_argument("--frozen", help="a frozen cand_<k>.json - replay its verdict")
+    parser.add_argument("--item", help="queue item id, for --freeze")
+    parser.add_argument("--candidate", help="candidate id, for --freeze")
+    parser.add_argument("--freeze", action="store_true",
+                        help="capture the contract's candidate to state/author/ first")
     parser.add_argument("--repo", default=str(ROOT), help="worktree the diff lives in")
-    parser.add_argument("--json", action="store_true", help="print the verdict (default)")
     ns = parser.parse_args(argv)
 
+    if ns.frozen:
+        verdict = evaluate_frozen(Path(ns.frozen), repo=Path(ns.repo))
+        print(json.dumps(verdict, indent=2))
+        return 0 if verdict["ok"] else 1
+
+    if not ns.contract:
+        parser.error("--contract is required unless --frozen is given")
     path = Path(ns.contract)
     try:
         contract = json.loads(path.read_text(encoding="utf-8"))
@@ -595,9 +955,23 @@ def main(argv: Optional[List[str]] = None) -> int:
     if not isinstance(contract, dict):
         print("contract must be a JSON object", file=sys.stderr)
         return 2
+
+    if ns.freeze:
+        if not (ns.item and ns.candidate):
+            parser.error("--freeze needs --item and --candidate")
+        try:
+            frozen = freeze(repo=Path(ns.repo), item_id=ns.item,
+                            candidate_id=ns.candidate, contract=contract)
+        except RuntimeError as exc:
+            print(f"not frozen: {exc}", file=sys.stderr)
+            return 2
+        print(json.dumps(frozen, indent=2))
+        return 0
+
     verdict = evaluate(contract=contract, repo=Path(ns.repo))
     print(json.dumps(verdict, indent=2))
     return 0 if verdict["ok"] else 1
+
 
 
 if __name__ == "__main__":

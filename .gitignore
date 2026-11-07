@@ -51,6 +51,11 @@ reports/video_scan/batch/*
 state/improvement/
 reports/improvement/loop.log
 
+# Automation candidate artifacts (A12/M1d): frozen diffs and their verdicts are
+# runtime evidence, not source. Ignored here so a frozen candidate never shows up
+# as an untracked path and trips out_of_scope on the next one.
+state/author/
+
 # Deliverable packages are user output (renders + manifests), not source
 state/deliverables/
 

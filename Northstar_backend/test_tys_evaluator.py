@@ -55,6 +55,9 @@ def repo(tmp_path: Path) -> Path:
     root = tmp_path / "repo"
     (root / "pkg").mkdir(parents=True)
     (root / "pkg" / "mod.py").write_text("VALUE = 1\n", encoding="utf-8")
+    # The production rule (A12), so a frozen artifact written into the repo is not
+    # itself an untracked change that trips the next candidate's scope gate.
+    (root / ".gitignore").write_text("state/author/\n", encoding="utf-8")
     git(root, "init", "-q")
     for key, value in (("user.email", "tester@example.test"), ("user.name", "tester"),
                        ("commit.gpgsign", "false"), ("core.autocrlf", "false")):
@@ -174,6 +177,22 @@ def test_pre_changed_never_excuses_a_policy_path(repo):
 
     assert verdict["gate"] == "out_of_scope"
     assert "AGENTS.md" in verdict["detail"]
+
+
+def test_a_pre_changed_directory_covers_its_tree(repo):
+    """`git status --porcelain` collapses an untracked tree to its directory.
+
+    A dispatch snapshot that names `vendor/` means everything under it was dirty
+    before the worker started, so none of it is this candidate's change.
+    """
+    (repo / "vendor").mkdir()
+    (repo / "vendor" / "dep.py").write_text("X = 1\n", encoding="utf-8")
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+
+    verdict = E.evaluate(contract=card(["pkg/mod.py"], pre_changed=["vendor"]),
+                         repo=repo, run=FakeRun([0]))
+
+    assert verdict["gate"] == "pass", verdict
 
 
 def test_deletion_inside_scope_is_well_formed(repo):
@@ -357,3 +376,202 @@ def test_missing_idlist_fails_closed(repo):
 
     assert verdict["gate"] == "regression"
     assert "not found" in verdict["detail"]
+
+
+# ------------------------------------------------- frozen artifacts (A12 / M1d)
+def _frozen_record(frozen) -> dict:
+    return json.loads(Path(frozen["json"]).read_text(encoding="utf-8"))
+
+
+def _without_wall_clock(verdict: dict) -> dict:
+    """The verdict minus its stopwatch: seconds are evidence, not identity.
+
+    Two runs of the same command on the same bytes must agree on every judgement;
+    the elapsed time is the one field that legitimately differs between them.
+    """
+    copy = json.loads(json.dumps(verdict))
+    for command in copy.get("commands") or []:
+        command["seconds"] = 0.0
+    return copy
+
+
+def test_freeze_then_evaluate_frozen_gives_the_same_verdict(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    (repo / "pkg" / "added.py").write_text("NEW = 1\n", encoding="utf-8")
+    contract = card(["pkg/mod.py", "pkg/added.py"], pre_changed=[])
+
+    live = E.evaluate(contract=contract, repo=repo, run=FakeRun([0]))
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="1", contract=contract)
+    replay = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([0]))
+
+    assert live["gate"] == "pass", live
+    assert replay["gate"] == "pass", replay
+    assert _without_wall_clock(replay) == _without_wall_clock(live)
+    assert Path(frozen["diff"]).is_file() and Path(frozen["json"]).is_file()
+    assert _frozen_record(frozen)["diff_sha256"] == frozen["diff_sha256"]
+    # The artifact holds the patch itself, not a summary of it.
+    assert "VALUE = 2" in Path(frozen["diff"]).read_text(encoding="utf-8")
+
+
+def test_freeze_names_its_artifacts_cand_k(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+
+    frozen = E.freeze(repo=repo, item_id="M1d-artifacts", candidate_id="cand_2",
+                      contract=card(["pkg/mod.py"]))
+
+    assert Path(frozen["diff"]).name == "cand_2.diff"
+    assert Path(frozen["json"]).name == "cand_2.json"
+    assert Path(frozen["json"]).parent.name == "M1d-artifacts"
+    record = _frozen_record(frozen)
+    assert record["schema"] == E.FROZEN_SCHEMA
+    assert record["candidate_id"] == "cand_2"
+    assert record["frozen_at"].endswith("Z")
+    assert record["changes"] == {"pkg/mod.py": ["M"]}
+    assert record["diff_bytes"] == Path(frozen["diff"]).stat().st_size
+
+
+def test_scoring_one_frozen_candidate_twice_is_already_scored(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="2",
+                      contract=card(["pkg/mod.py"], pre_changed=[]))
+
+    first = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([0]))
+    second_runner = FakeRun([0])
+    second = E.evaluate_frozen(frozen["json"], repo=repo, run=second_runner)
+
+    assert first["gate"] == "pass", first
+    assert second["gate"] == "already_scored"
+    assert second["ok"] is True
+    assert second["commands"] == []
+    assert second_runner.calls == [], "a candidate that was already judged runs nothing"
+    assert _frozen_record(frozen)["scored"]["gate"] == "pass"
+
+
+def test_a_second_score_does_not_launder_a_failure(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="3",
+                      contract=card(["pkg/mod.py"], pre_changed=[]))
+
+    first = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([1]))
+    second = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([0]))
+
+    assert first["gate"] == "target_red"
+    assert second["gate"] == "already_scored"
+    assert second["ok"] is False, "re-running must not turn a red verdict green"
+
+
+def test_a_tampered_frozen_diff_is_refused(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="4",
+                      contract=card(["pkg/mod.py"], pre_changed=[]))
+    diff = Path(frozen["diff"])
+    diff.write_text(diff.read_text(encoding="utf-8").replace("VALUE = 2", "VALUE = 999"),
+                    encoding="utf-8")
+    runner = FakeRun([0])
+
+    verdict = E.evaluate_frozen(frozen["json"], repo=repo, run=runner)
+
+    assert verdict["ok"] is False
+    assert verdict["gate"] == "artifact_tampered"
+    assert "cand_4.diff" in verdict["detail"]
+    assert runner.calls == [], "a tampered artifact is refused before anything runs"
+    assert "scored" not in _frozen_record(frozen)
+
+
+def test_an_edited_frozen_record_is_refused(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="5",
+                      contract=card(["pkg/mod.py"], pre_changed=[]))
+    path = Path(frozen["json"])
+    record = json.loads(path.read_text(encoding="utf-8"))
+    record["contract"]["write_paths"] = ["pkg/mod.py", "pkg/everything.py"]
+    path.write_text(json.dumps(record), encoding="utf-8")
+
+    verdict = E.evaluate_frozen(path, repo=repo, run=FakeRun([0]))
+
+    assert verdict["gate"] == "artifact_tampered"
+    assert "edited after it was frozen" in verdict["detail"]
+
+
+def test_a_missing_frozen_diff_is_refused(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="6",
+                      contract=card(["pkg/mod.py"]))
+    Path(frozen["diff"]).unlink()
+
+    verdict = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([0]))
+
+    assert verdict["gate"] == "artifact_missing"
+    assert "diff is gone" in verdict["detail"]
+
+
+def test_pre_changed_is_not_attributed_but_policy_paths_still_are(repo):
+    (repo / "AGENTS.md").write_text("the rules\n", encoding="utf-8")
+    commit(repo, "policy file")
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    (repo / "other_lane.py").write_text("X = 1\n", encoding="utf-8")
+    (repo / "AGENTS.md").write_text("the rules, rewritten by the worker\n", encoding="utf-8")
+    contract = card(["pkg/mod.py"], pre_changed=["other_lane.py", "AGENTS.md"])
+
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="7", contract=contract)
+    record = _frozen_record(frozen)
+    assert record["pre_changed"] == ["AGENTS.md", "other_lane.py"]
+    assert record["pre_changed_source"] == "dispatch"
+    assert "other_lane.py" not in record["untracked"]
+
+    verdict = E.evaluate_frozen(frozen["json"], repo=repo, run=FakeRun([0]))
+
+    assert verdict["gate"] == "out_of_scope"
+    assert "AGENTS.md" in verdict["detail"], "a policy path is never excused"
+    assert "policy" in verdict["detail"]
+    assert "other_lane.py" not in verdict["detail"], "another lane's file is not this patch"
+
+
+def test_freeze_without_a_snapshot_records_the_foreign_dirty_set(repo):
+    """Freeze cannot know the earlier tree, so it names what is not this candidate's."""
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    (repo / "other_lane.py").write_text("X = 1\n", encoding="utf-8")
+
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="8",
+                      contract=card(["pkg/mod.py"]))
+    record = _frozen_record(frozen)
+
+    assert record["pre_changed_source"] == "freeze-observed"
+    assert record["pre_changed"] == ["other_lane.py"]
+    assert E.evaluate_frozen(frozen["json"], repo=repo,
+                             run=FakeRun([0]))["gate"] == "pass"
+
+
+def test_a_candidate_id_is_never_refrozen_over_new_bytes(repo):
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    E.freeze(repo=repo, item_id="A12", candidate_id="9", contract=card(["pkg/mod.py"]))
+    (repo / "pkg" / "mod.py").write_text("VALUE = 3\n", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="already frozen"):
+        E.freeze(repo=repo, item_id="A12", candidate_id="9",
+                 contract=card(["pkg/mod.py"]))
+
+
+def test_frozen_artifacts_never_trip_the_next_candidates_scope(repo):
+    """The whole point of the .gitignore rule: artifacts are evidence, not changes."""
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+    frozen = E.freeze(repo=repo, item_id="A12", candidate_id="10",
+                      contract=card(["pkg/mod.py"]))
+    assert frozen["ignored"] is True
+
+    (repo / "pkg" / "next.py").write_text("NEXT = 1\n", encoding="utf-8")
+    verdict = E.evaluate(contract=card(["pkg/next.py"], pre_changed=["pkg/mod.py"]),
+                         repo=repo, run=FakeRun([0]))
+
+    assert verdict["gate"] == "pass", verdict
+    listed = git(repo, "ls-files", "--others", "--exclude-standard").stdout
+    assert "state/author" not in listed
+    assert "pkg/next.py" in listed
+
+
+def test_the_repository_ignores_frozen_artifacts():
+    root = Path(__file__).resolve().parents[1]
+    rules = [line.strip() for line in
+             (root / ".gitignore").read_text(encoding="utf-8").splitlines()]
+    assert "state/author/" in rules
+
