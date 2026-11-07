@@ -1121,6 +1121,30 @@
       "title": "Retest the coding lane under valid preconditions: GPU inference, symbol-adding vocabulary, red-before-fix cases",
       "why": "A10 ran CPU-only (size_vram 0 on an idle GPU), the model could not emit the JSON protocol, and the S1 gate was void at a 1-in-100 repro",
       "needs_author": "needs_author: name the target check and the symbol-adding tool before this runs"
+    },
+    {
+      "id": "T1-scan-files-scanned",
+      "kind": "product",
+      "priority": 960,
+      "status": "pending",
+      "title": "The readiness scan report must say how many files it scanned",
+      "why": "The work generator cannot tell an honest zero from a vacuous zero without this number, so every T2 discovery bootstrap depends on it.",
+      "write_paths": [
+        "tools/production_readiness_scan.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "Northstar_backend/test_readiness_scan_report.py"
+        ]
+      ],
+      "depends_on": [
+        "M2-work-generator"
+      ],
+      "source": "reports/ty/A16_generator_spec.md side finding (scan report shape)"
     }
   ],
   "parked": [
@@ -1167,7 +1191,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-07T07:50:00Z",
+  "updated_at": "2026-11-07T08:00:00Z",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {
