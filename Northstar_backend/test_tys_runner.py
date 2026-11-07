@@ -147,6 +147,16 @@ def test_the_lease_token_completes_a_reservation_whose_holder_died(root, capsys)
     assert next(i for i in r.load_queue()["items"] if i["id"] == "high")["status"] == "pending"
 
 
+def test_a_result_for_another_cycle_is_refused(root):
+    """A stale result file must not close a later reservation (C3 probe, link 37)."""
+    r.cmd_next()
+    result = {"item": "high", "cycle": 99, "shipped": False}
+    path = root / "result.json"
+    path.write_text(json.dumps(result), encoding="utf-8")
+    assert r.cmd_complete(str(path)) == 7
+    assert r.LEASE.exists(), "a refused completion must not release the reservation"
+
+
 def test_crash_recovery_keeps_the_reserved_item(root, capsys):
     r.cmd_next()
     # Simulate a dead session: the holder pid no longer exists.

@@ -469,6 +469,7 @@ def cmd_next(*, write_brief: bool = True) -> int:
         "priority": item.get("priority"),
         "write_paths": item.get("write_paths") or [],
         "acceptance": item.get("acceptance") or "",
+        "acceptance_commands": item.get("acceptance_commands") or [],
         "next_action": item.get("next") or item.get("title"),
         "rollback_tag": f"autonomy-cycle-{cycle:02d}",
         "lease_token": lease_token,
@@ -606,13 +607,19 @@ def validate_contract(item: Dict[str, Any]) -> List[str]:
     return problems
 
 
-def validate_result(result: Dict[str, Any], item_id: str) -> List[str]:
+def validate_result(result: Dict[str, Any], item_id: str,
+                    expected_cycle: Any = None) -> List[str]:
     """A completion is only valid with evidence a stranger could check."""
     problems: List[str] = []
     if str(result.get("item")) != str(item_id):
         problems.append(f"item mismatch: {result.get('item')} != {item_id}")
     if not isinstance(result.get("cycle"), int):
         problems.append("cycle missing")
+    elif expected_cycle is not None and int(result["cycle"]) != int(expected_cycle):
+        # A stale result file must not close a later reservation. The C3 probe
+        # completed a cycle reserved at 94 with a result written for cycle 1.
+        problems.append(f"cycle mismatch: result says {result['cycle']}, "
+                        f"the lease reserved {expected_cycle}")
     if "shipped" not in result:
         problems.append("shipped missing")
     for path in result.get("evidence") or []:
@@ -644,7 +651,8 @@ def cmd_complete(result_path: str, token: str = "") -> int:
     if not lease:
         print(json.dumps({"ok": False, "error": "no lease held; nothing to complete"}))
         return 5
-    problems = validate_result(result, str(lease["item"]))
+    problems = validate_result(result, str(lease["item"]),
+                               expected_cycle=lease.get("cycle"))
     if problems:
         print(json.dumps({"ok": False, "handoff_invalid": problems}, indent=2))
         return 7

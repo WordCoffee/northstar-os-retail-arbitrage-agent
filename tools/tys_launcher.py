@@ -739,11 +739,19 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     # a dispatch guard, not the verdict - the verdict is the evaluator's.
     before = pre_run_red_gate(checks)
     if before.get("ok"):
-        runner.mark(runner.load_queue(), str(item.get("id")), "pending",
+        # A check that is green before the worker runs cannot prove a fix. That is a
+        # mis-scoped contract, not a coincidence to retry: deferring it two cycles
+        # only re-admits it immediately (deferral is soft by design), and the C3
+        # probe measured 40 acceptance runs in 54 s from exactly that loop. The stop
+        # has to be a status change, the same rule A13 applies to rejections.
+        runner.mark(runner.load_queue(), str(item.get("id")), "needs_author",
                     check_already_green=True,
-                    defer_until_cycle=int(brief["cycle"]) + 2)
+                    needs_author=("check_already_green: the check passes before any "
+                                  "work, so it cannot prove a patch"),
+                    defer_until_cycle=None)
         runner._clear_lease("check already green")
-        _append(JOURNAL, {"event": "check_already_green", "item": item.get("id")})
+        _append(JOURNAL, {"event": "check_already_green", "item": item.get("id"),
+                          "parked": True})
         return {"ok": True, "skipped": True, "item": item.get("id"),
                 "reason": "check_already_green"}
 

@@ -353,6 +353,11 @@ def test_a_check_that_is_already_green_never_reaches_the_worker(root):
     out = L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
     assert out["skipped"] is True and out["reason"] == "check_already_green"
     assert called["n"] == 0
+    # And it is parked, not deferred: a soft deferral re-admits it immediately and
+    # the probe measured 40 acceptance runs in 54 s from that loop.
+    item = next(i for i in r.load_queue()["items"] if i["id"] == "runnable")
+    assert item["status"] == "needs_author"
+    assert item["needs_author"].startswith("check_already_green:")
 
 
 def test_a_failed_worker_reverts_and_defers(root):
