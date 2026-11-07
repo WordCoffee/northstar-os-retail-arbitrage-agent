@@ -15,6 +15,16 @@ checks is marked ``needs-author`` and skipped - the launcher never invents a
 pass criterion, because an invented criterion is how an autonomous loop ships
 broken work.
 
+Judgement: the launcher no longer decides whether a patch is good. A cycle is
+judged by ``tys_evaluator``: the candidate is **frozen** to
+``state/author/<item>/cand_<k>.{diff,json}``, the frozen bytes are replayed
+through the five gates by ``evaluate_frozen``, and ``evaluate`` is then run over
+the live tree as a drift check. Until A12b the launcher ran the checks itself
+and called that a verdict, which meant the scope gate, the tamper gate and the
+rejection record could never fire in a real cycle. The launcher keeps exactly one
+check of its own: the **pre-run red gate** (a check that is already green proves
+nothing a worker did), which is a dispatch guard, not a verdict.
+
 Stop conditions (each recorded in the heartbeat with its reason):
     STOP file · token cap · queue empty · max-cycles · max-hours · worker failure
     streak (3) · handoff invalid (2)
@@ -46,6 +56,7 @@ ROOT = Path(os.environ.get("NORTHSTAR_TY_ROOT")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import token_meter as meter  # noqa: E402
+import tys_evaluator as evaluator  # noqa: E402
 import tys_runner as runner  # noqa: E402
 
 STATE = ROOT / "state" / "tys_runner"
@@ -54,6 +65,16 @@ JOURNAL = STATE / "launcher.jsonl"
 BRIEF = ROOT / "reports" / "ty" / "cycle_handoff.json"
 WORKER_TIMEOUT_S = int(os.environ.get("TY_WORKER_TIMEOUT_S", "1800"))
 MAX_FAILURE_STREAK = 3
+
+#: Files this process writes during a cycle. They are dirty or untracked by the
+#: time a candidate is judged and no candidate declares them, so a judge that
+#: counted them as the patch would refuse every cycle. They are recorded in the
+#: dispatch snapshot because they are the launcher's bytes, never the worker's.
+LAUNCHER_PATHS = (
+    "state/tys_runner/task.json",
+    "state/tys_runner/worker_result.json",
+    "state/tys_runner/completion.json",
+)
 
 
 def _now() -> str:
@@ -75,23 +96,77 @@ def heartbeat(**fields: Any) -> None:
 
 
 # --------------------------------------------------------------------- contracts
-def task_contract(item: Dict[str, Any], brief: Dict[str, Any]) -> Dict[str, Any]:
-    """The task JSON `ty_task_runner.py` consumes, built only from declared fields."""
+def dispatch_snapshot() -> List[str]:
+    """Every path already dirty in the *whole* tree, before the worker is dispatched.
+
+    Both halves of git's answer are needed. ``git status --porcelain`` collapses an
+    untracked directory to one entry (``state/probes/`` stands for its whole tree),
+    while ``git ls-files --others --exclude-standard`` names the files. The
+    evaluator excuses a path only when the dispatch snapshot names it (or a
+    directory that contains it), and this box runs parallel lanes whose edits and
+    untracked scratch must not be recorded against a candidate that never touched
+    them.
+
+    Taken at dispatch, before ``task.json`` exists, so the snapshot is a picture of
+    the tree the worker is about to receive.
+    """
+    found: List[str] = []
+    out = _git("status", "--porcelain")
+    for line in (out.stdout or "").splitlines():
+        text = line.rstrip()
+        if len(text) < 4:
+            continue
+        entry = text[3:].strip()
+        if " -> " in entry:                       # a rename names both ends
+            old, new = entry.split(" -> ", 1)
+            found.extend([old.strip().strip('"'), new.strip().strip('"')])
+        elif entry:
+            found.append(entry.strip('"'))
+    out = _git("ls-files", "--others", "--exclude-standard")
+    for line in (out.stdout or "").splitlines():
+        rel = line.strip()
+        if rel:
+            found.append(rel)
+    return sorted({p.replace("\\", "/") for p in found if p.strip()})
+
+
+def task_contract(item: Dict[str, Any], brief: Dict[str, Any],
+                  pre_changed: Optional[List[str]] = None) -> Dict[str, Any]:
+    """The task JSON `ty_task_runner.py` consumes, plus what the evaluator reads.
+
+    The item is spread in rather than re-listed field by field. The field-by-field
+    version silently dropped whatever it did not name, and what it dropped was
+    ``check_sha256`` - so the tamper gate could never fire, however carefully the
+    item pinned its check.
+
+    ``pre_changed`` is the dispatch snapshot (plus the launcher's own runtime
+    files). It is the only way the evaluator can tell another lane's dirty file
+    from this candidate's work, so it travels with the contract and is frozen
+    beside it.
+    """
     commands = item.get("acceptance_commands") or []
     if isinstance(commands, str):
         commands = [[commands]]
-    return {
+    snapshot = pre_changed if pre_changed is not None else item.get("pre_changed")
+    if isinstance(snapshot, str):
+        snapshot = [snapshot]
+    contract: Dict[str, Any] = {**item}
+    contract.update({
         "id": item.get("id"),
         "objective": item.get("next") or item.get("title") or "",
-        "write_paths": item.get("write_paths") or [],
-        "read_paths": item.get("read_paths") or [],
+        "write_paths": list(item.get("write_paths") or []),
+        "read_paths": list(item.get("read_paths") or []),
         "acceptance_commands": commands,
-        "required_files": item.get("required_files") or [],
+        "required_files": list(item.get("required_files") or []),
         "max_steps": int(item.get("max_steps") or 12),
         "max_repairs": int(item.get("max_repairs") or 2),
         "model": item.get("model") or os.environ.get("TY_WORKER_MODEL", ""),
+        "pre_changed": sorted({str(p).replace("\\", "/")
+                               for p in (snapshot or []) if str(p).strip()}),
+        "pre_changed_source": "dispatch",
         "_cycle": brief.get("cycle"),
-    }
+    })
+    return contract
 
 
 def runnable(item: Dict[str, Any]) -> tuple[bool, str]:
@@ -371,8 +446,14 @@ def deepseek_worker(task_path: Path, result_path: Path) -> int:
     return code
 
 
-def run_acceptance(commands: List[List[str]]) -> Dict[str, Any]:
-    """The launcher's own verdict. The model never grades its own patch."""
+def pre_run_red_gate(commands: List[List[str]]) -> Dict[str, Any]:
+    """Is the declared check red *before* the worker runs?
+
+    This is the only check the launcher still runs itself, and it is not a verdict.
+    A check that is already green cannot prove anything a worker did, so a cycle
+    whose check starts green is deferred instead of dispatched. Whether the patch
+    then deserves to ship is `tys_evaluator`'s answer, not this function's.
+    """
     results = []
     ok = True
     for cmd in commands:
@@ -391,6 +472,95 @@ def run_acceptance(commands: List[List[str]]) -> Dict[str, Any]:
                         "seconds": round(time.time() - started, 1),
                         "detail": detail})
     return {"ok": ok, "checks": results}
+
+
+def _frozen_rel(path_text: str) -> str:
+    try:
+        return Path(path_text).resolve().relative_to(Path(ROOT).resolve()).as_posix()
+    except (ValueError, OSError):
+        return str(path_text)
+
+
+def judge_cycle(*, contract: Dict[str, Any], item_id: str, candidate_id: str,
+                repo: Path) -> Dict[str, Any]:
+    """Freeze the candidate, replay the frozen bytes, then judge the live tree.
+
+    The order is the design, and each step answers a different question:
+
+    ``freeze``          what exactly is on trial? The patch as bytes, the dispatch
+                        snapshot and the contract are written to
+                        ``state/author/<item>/cand_<k>.{diff,json}`` and sealed, so
+                        a verdict can be re-derived from disk months later.
+    ``evaluate_frozen`` the verdict. Scope, malformed, target, tamper and
+                        regression gates, over the frozen bytes rather than over
+                        whatever the worktree says now.
+    ``evaluate``        drift. Does the tree that is about to be called shipped
+                        still look like the candidate that was judged?
+
+    Returns the evaluator's verdict shape (``ok``/``gate``/``detail``/``commands``)
+    plus ``frozen`` (the artifact), ``verdict`` (the frozen replay) and ``live``
+    (the drift check). A candidate that cannot be frozen is ``freeze_failed``: an
+    unjudged patch is never a shipped patch.
+
+    The live contract excuses the artifact directory itself. Freeze writes into
+    ``state/author/``; in this repo that path is gitignored, but a judge that
+    depended on a ``.gitignore`` line would refuse every cycle the day somebody
+    dropped it.
+    """
+    repo_path = Path(repo).resolve()
+    pre_changed = contract.get("pre_changed") or []
+    base = str(candidate_id)
+
+    frozen: Dict[str, Any] = {}
+    verdict: Dict[str, Any] = {}
+    problem = ""
+    for attempt in (base, f"{base}-b"):
+        try:
+            frozen = evaluator.freeze(repo=repo_path, item_id=str(item_id),
+                                      candidate_id=attempt, contract=contract,
+                                      pre_changed=pre_changed)
+        except (RuntimeError, OSError) as exc:
+            problem = str(exc)
+            continue
+        verdict = evaluator.evaluate_frozen(Path(frozen["json"]), repo=repo_path)
+        if verdict.get("gate") != "already_scored":
+            break
+        # A cycle number that repeats (a reset queue) finds a candidate already
+        # judged. Freezing under a second id keeps the evidence append-only and
+        # still forces a fresh run of the gates.
+        problem = str(verdict.get("detail") or "already scored")
+    else:
+        return {"ok": False, "gate": "freeze_failed",
+                "detail": f"the candidate could not be frozen or re-judged: {problem}"[:2000],
+                "commands": [], "frozen": "", "verdict": {}, "live": {}}
+
+    out: Dict[str, Any] = {
+        "ok": bool(verdict.get("ok")),
+        "gate": str(verdict.get("gate") or "artifact_invalid"),
+        "detail": str(verdict.get("detail") or ""),
+        "commands": list(verdict.get("commands") or []),
+        "frozen": _frozen_rel(str(frozen.get("json") or "")),
+        "verdict": verdict,
+        "live": {},
+    }
+    if not out["ok"]:
+        return out
+
+    excused = list(pre_changed)
+    try:
+        excused.append(Path(frozen["json"]).resolve().parent
+                       .relative_to(repo_path).as_posix() + "/")
+    except ValueError:
+        pass
+    live_contract = {**contract, "pre_changed": sorted({str(p) for p in excused})}
+    live = evaluator.evaluate(contract=live_contract, repo=repo_path)
+    out["live"] = live
+    if not live.get("ok"):
+        out.update(ok=False, gate=f"live_{live.get('gate')}",
+                   detail=("the live tree no longer matches the frozen candidate: "
+                           + str(live.get("detail") or ""))[:2000],
+                   commands=out["commands"] + list(live.get("commands") or []))
+    return out
 
 
 Worker = Callable[[Path, Path], int]
@@ -524,12 +694,18 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
 
     task_path = STATE / "task.json"
     result_path = STATE / "worker_result.json"
-    contract = task_contract(item, brief)
+    # Snapshot the tree before the worker (and before task.json exists). Every
+    # path already dirty here is somebody else's - another lane's edit, an
+    # operator's scratch, this launcher's own runtime files - and the evaluator
+    # must not read it as the candidate's patch.
+    pre_changed = sorted(set(dispatch_snapshot()) | set(LAUNCHER_PATHS))
+    contract = task_contract(item, brief, pre_changed=pre_changed)
     checks = contract.get("acceptance_commands") or []
 
     # Pre-run red gate: a check that is already green cannot prove anything a
-    # worker did. Without this, a cycle "ships" by running a passing test.
-    before = run_acceptance(checks)
+    # worker did. Without this, a cycle "ships" by running a passing test. This is
+    # a dispatch guard, not the verdict - the verdict is the evaluator's.
+    before = pre_run_red_gate(checks)
     if before.get("ok"):
         runner.mark(runner.load_queue(), str(item.get("id")), "pending",
                     check_already_green=True,
@@ -566,14 +742,24 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
             worker_out = json.loads(result_path.read_text(encoding="utf-8"))
         except ValueError:
             worker_out = {}
-    # The launcher judges the patch by running the declared checks itself. A model
-    # that writes and grades is not a verification; ty_task_runner may also report
-    # its own acceptance, but the launcher's run is the authority.
-    acceptance = run_acceptance(checks)
-    shipped = bool(acceptance.get("ok")) and int(code or 0) == 0 \
+    # The verdict is not the launcher's to give. A model that writes and grades is
+    # not a verification, and neither is a launcher that re-runs the same command
+    # and calls the exit code a judgement: freeze the candidate, replay the frozen
+    # bytes through the five gates, then check the live tree against it.
+    judged = judge_cycle(contract=contract, item_id=str(item.get("id")),
+                         candidate_id=f"{int(brief.get('cycle') or 0):04d}", repo=ROOT)
+    shipped = bool(judged.get("ok")) and int(code or 0) == 0 \
         and bool(worker_out.get("ok", True))
-    worker_out["acceptance"] = acceptance
+    worker_out["acceptance"] = {"ok": bool(judged.get("ok")),
+                                "gate": judged.get("gate"),
+                                "checks": judged.get("commands") or []}
+    worker_out["verdict"] = judged
     worker_out["before_green"] = before.get("ok")
+    _append(JOURNAL, {"event": "candidate_judged", "item": brief["item"],
+                      "cycle": brief["cycle"], "gate": judged.get("gate"),
+                      "ok": bool(judged.get("ok")), "frozen": judged.get("frozen"),
+                      "live_gate": (judged.get("live") or {}).get("gate"),
+                      "detail": str(judged.get("detail") or "")[:600]})
     measured = measure_cycle_tokens(worker_out)
     _append(JOURNAL, {"event": "tokens_measured", "item": brief["item"],
                       "tokens": measured["tokens"], "source": measured["source"],
@@ -614,6 +800,11 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
         "after": worker_out.get("after") or {},
         "worker_exit": code,
         "seconds": elapsed,
+        # Which gate judged the candidate and where the frozen bytes live. A
+        # rejection is only useful if it names the gate that produced it.
+        "verdict": {"gate": judged.get("gate"), "ok": bool(judged.get("ok")),
+                    "detail": str(judged.get("detail") or "")[:600],
+                    "frozen": judged.get("frozen") or ""},
     }
     completion_path = STATE / "completion.json"
     completion_path.write_text(json.dumps(completion, indent=2), encoding="utf-8")
@@ -626,7 +817,8 @@ def _run_cycle(*, worker: Worker, dry_run: bool, cycle_budget: int) -> Dict[str,
     return {"ok": rc == 0, "item": brief["item"], "shipped": shipped,
             "cycle": brief["cycle"], "seconds": elapsed, "worker_exit": code,
             "tokens": measured["tokens"], "tokens_source": measured["source"],
-            "complete_exit": rc}
+            "gate": judged.get("gate"), "detail": judged.get("detail"),
+            "frozen": judged.get("frozen"), "complete_exit": rc}
 
 
 def main(argv: Optional[List[str]] = None) -> int:

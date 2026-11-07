@@ -21,12 +21,19 @@ import tys_runner as r  # noqa: E402
 def root(tmp_path, monkeypatch):
     (tmp_path / "reports" / "ty").mkdir(parents=True)
     (tmp_path / "state" / "tys_runner").mkdir(parents=True)
+    # The runtime tree is never a candidate's work: production ignores
+    # state/author/ and writes under state/tys_runner/, so the fixture repo does
+    # the same. Without this, every cycle would look like it wrote its own log.
+    (tmp_path / ".gitignore").write_text("state/\n__pycache__/\n", encoding="utf-8")
     queue = {
         "phase": "C", "cycle": 0,
         "items": [
+            # `done.flag` is the product of the work and therefore part of the
+            # declared scope: the evaluator refuses a candidate that writes
+            # outside write_paths, so the fixture declares what the worker makes.
             {"id": "runnable", "title": "do a thing", "status": "pending", "priority": 900,
              "next": "make the check pass",
-             "write_paths": ["Northstar_backend/x.py"],
+             "write_paths": ["Northstar_backend/x.py", "done.flag"],
              "acceptance_commands": [[
                  "python", "-c",
                  "import pathlib,sys; sys.exit(0 if pathlib.Path('done.flag').exists() else 1)",
@@ -89,8 +96,143 @@ def test_a_contract_is_built_only_from_declared_fields(root, capsys):
     item = next(i for i in r.load_queue()["items"] if i["id"] == brief["item"])
     contract = L.task_contract(item, brief)
     assert contract["objective"] == "make the check pass"
-    assert contract["write_paths"] == ["Northstar_backend/x.py"]
+    assert contract["write_paths"] == ["Northstar_backend/x.py", "done.flag"]
     assert contract["acceptance_commands"][0][0] == "python"
+
+
+def test_the_contract_carries_the_check_pin_it_used_to_drop():
+    """A12 dropped check_sha256 by re-listing fields; that disabled the tamper gate."""
+    item = {"id": "pin", "next": "pin the check", "write_paths": ["pkg/check.py"],
+            "acceptance_commands": [["python", "pkg/check.py"]],
+            "check_sha256": "a" * 64}
+    contract = L.task_contract(item, {"cycle": 7}, pre_changed=["other/lane.py"])
+    assert contract["check_sha256"] == "a" * 64
+    assert contract["pre_changed"] == ["other/lane.py"]
+    assert contract["pre_changed_source"] == "dispatch"
+    assert contract["_cycle"] == 7
+
+
+# ------------------------------------------------------- the evaluator is the judge
+@pytest.fixture()
+def repo_with_scope(tmp_path, monkeypatch):
+    """A real git repo where `pkg/x.py` is in scope and `pkg/test_x.py` is not."""
+    import subprocess as sp
+
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "x.py").write_text("original\n", encoding="utf-8")
+    (tmp_path / "pkg" / "test_x.py").write_text("def test_x():\n    assert True\n",
+                                                encoding="utf-8")
+    (tmp_path / "pkg" / "check.py").write_text("raise SystemExit(1)\n", encoding="utf-8")
+    (tmp_path / ".gitignore").write_text("state/\n__pycache__/\n", encoding="utf-8")
+    sp.run(["git", "init"], cwd=str(tmp_path), capture_output=True, text=True)
+    sp.run(["git", "add", "-A"], cwd=str(tmp_path), capture_output=True, text=True)
+    sp.run(["git", "-c", "user.email=t@example.test", "-c", "user.name=test",
+            "commit", "-m", "base"], cwd=str(tmp_path), capture_output=True, text=True)
+    monkeypatch.setattr(L, "ROOT", tmp_path)
+    return tmp_path
+
+
+def _contract(write_paths=None, **extra):
+    base = {"id": "c", "write_paths": write_paths or ["pkg/x.py"],
+            "acceptance_commands": [["python", "-c", "print('ok')"]],
+            "pre_changed": [], "pre_changed_source": "dispatch"}
+    base.update(extra)
+    return base
+
+
+def test_a_candidate_that_edits_only_write_paths_passes_scope(repo_with_scope):
+    repo = repo_with_scope
+    (repo / "pkg" / "x.py").write_text("changed\n", encoding="utf-8")
+    out = L.judge_cycle(contract=_contract(), item_id="c1", candidate_id="1", repo=repo)
+    assert out["ok"] is True and out["gate"] == "pass"
+    assert out["live"]["gate"] == "pass"
+    assert out["frozen"].endswith(".json")
+
+
+def test_a_candidate_that_edits_a_test_file_is_out_of_scope(repo_with_scope):
+    """Declared or not, a candidate may not edit the suite that judges it."""
+    repo = repo_with_scope
+    (repo / "pkg" / "test_x.py").write_text("def test_x():\n    assert True  # weakened\n",
+                                            encoding="utf-8")
+    out = L.judge_cycle(contract=_contract(["pkg/x.py", "pkg/test_x.py"]),
+                        item_id="c2", candidate_id="1", repo=repo)
+    assert out["ok"] is False and out["gate"] == "out_of_scope"
+    assert "test module" in out["detail"]
+
+
+def test_a_frozen_contract_carries_the_check_pin_and_the_dispatch_source(repo_with_scope):
+    """The pin must survive into the artifact, or the tamper gate cannot fire."""
+    import hashlib
+
+    repo = repo_with_scope
+    pinned = hashlib.sha256((repo / "pkg" / "check.py").read_bytes()).hexdigest()
+    contract = _contract(["pkg/check.py"],
+                         acceptance_commands=[["python", "pkg/check.py"]],
+                         check_sha256=pinned,
+                         pre_changed=["someone/else.py"])
+    # the candidate rewrites the check so the check passes
+    (repo / "pkg" / "check.py").write_text("raise SystemExit(0)\n", encoding="utf-8")
+    out = L.judge_cycle(contract=contract, item_id="pin", candidate_id="1", repo=repo)
+    assert out["gate"] == "check_tampered"
+    record = json.loads(next((repo / "state" / "author" / "pin").glob("cand_*.json"))
+                        .read_text(encoding="utf-8"))
+    assert record["contract"]["check_sha256"] == pinned
+    assert record["pre_changed_source"] == "dispatch"
+    assert record["pre_changed"] == ["someone/else.py"]
+
+
+def test_another_lanes_dirty_file_is_excused_by_the_dispatch_snapshot(repo_with_scope):
+    repo = repo_with_scope
+    (repo / "pkg" / "other_lane.py").write_text("someone else's work\n", encoding="utf-8")
+    (repo / "pkg" / "x.py").write_text("changed\n", encoding="utf-8")
+
+    refused = L.judge_cycle(contract=_contract(), item_id="strict",
+                            candidate_id="1", repo=repo)
+    assert refused["gate"] == "out_of_scope"          # nobody excused it
+
+    excused = L.judge_cycle(contract=_contract(pre_changed=["pkg/other_lane.py"]),
+                            item_id="excused", candidate_id="1", repo=repo)
+    assert excused["ok"] is True and excused["gate"] == "pass"
+
+
+def test_the_dispatch_snapshot_names_the_whole_dirty_tree(repo_with_scope):
+    repo = repo_with_scope
+    (repo / "pkg" / "x.py").write_text("dirty before dispatch\n", encoding="utf-8")
+    (repo / "pkg" / "new_lane").mkdir()
+    (repo / "pkg" / "new_lane" / "scratch.py").write_text("x\n", encoding="utf-8")
+    (repo / "state" / "tys_runner").mkdir(parents=True, exist_ok=True)
+    (repo / "state" / "tys_runner" / "lease.json").write_text("{}", encoding="utf-8")
+
+    snap = L.dispatch_snapshot()
+    assert "pkg/x.py" in snap                  # a dirty tracked file
+    assert "pkg/new_lane/scratch.py" in snap    # untracked, listed by ls-files
+    assert not [p for p in snap if p.startswith("state/")]   # ignored runtime state
+
+
+def test_a_cycle_is_judged_by_the_evaluator_not_by_the_launcher(root):
+    out = L._run_cycle(worker=_worker({}), dry_run=False, cycle_budget=3)
+    assert out["shipped"] is True
+    assert out["gate"] == "pass"
+    frozen = list((root / "state" / "author" / "runnable").glob("cand_*.json"))
+    assert frozen, "a cycle must freeze its candidate before it is judged"
+    record = json.loads(frozen[0].read_text(encoding="utf-8"))
+    assert record["pre_changed_source"] == "dispatch"
+    assert record["scored"]["gate"] == "pass"
+    assert record["contract"]["pre_changed_source"] == "dispatch"
+
+
+def test_a_cycle_that_edits_a_test_file_is_refused_out_of_scope(root):
+    def worker(task_path, result_path):
+        (root / "Northstar_backend").mkdir(parents=True, exist_ok=True)
+        (root / "Northstar_backend" / "test_sneaky.py").write_text(
+            "def test_sneaky():\n    assert True\n", encoding="utf-8")
+        (root / "done.flag").write_text("done", encoding="utf-8")
+        result_path.write_text(json.dumps({"ok": True, "steps": 1}), encoding="utf-8")
+        return 0
+
+    out = L._run_cycle(worker=worker, dry_run=False, cycle_budget=3)
+    assert out["shipped"] is False
+    assert out["gate"] == "out_of_scope"
 
 
 def test_an_item_without_checks_is_skipped_not_run(root, monkeypatch):
