@@ -83,17 +83,27 @@ test → scope (`9cd8a12a`).
   verdict: authoring stays human/DeepSeek; the loop is detect → scope → check →
   park → refill.
 
-## Gate acceptance (C1–C7): what is proven, what is not
+## Gate acceptance (C1–C7): final state
 
 | # | claim | state |
 |---|---|---|
-| C1 | status coherent; killed holder recovered by pid | green — status output + `test_crash_recovery_keeps_the_reserved_item` |
-| C2 | 9 cycles / 3 rotations / no stray writes | green — measured on a redirected root, real repo clean |
-| C3 | author → candidate → evaluator → acceptance → commit | in flight — cycle 38 was the first real attempt; fixed bug, re-dispatch running |
-| C4 | already-green → `check_already_green`, never a ship | green — and it now parks instead of re-running |
-| C5 | watchdog restarts a killed launcher | pending — restart proof to capture |
-| C6 | 8-hour unattended, ≥3 shipped | pending — needs C3 |
-| C7 | every refusal logged with its reason | green — `launcher.jsonl` + `sessions.jsonl` starvation rows |
+| C1 | status coherent; killed holder recovered by pid | **green** — `status` reports lease/caps/next/parks; `test_crash_recovery_keeps_the_reserved_item`; a dead-pid lease is reclaimed and a live token completes |
+| C2 | 9 cycles / 3 rotations / no stray writes | **green** — measured on a redirected root: exit 0, `cycles 9`, 3 `session_ended` rows, real repo clean |
+| C3 | author → candidate → evaluator → acceptance → commit | **green** — cycle 45 shipped `T1-scan-files-scanned` unattended: red check → 38 s worker → five gates → live drift → commit `1f6e0e89`, tag `autonomy-cycle-45`, 25,789 tokens. Rejected candidates before it are on disk with their gate and detail (`state/author/W10-scanner-csv/cand_0044.json`, `rejections.jsonl`) |
+| C4 | already-green → `check_already_green`, never a ship | **green** — and it parks the item, because soft deferral re-admitted it (measured: 40 acceptance runs in 54 s) |
+| C5 | watchdog restarts a killed launcher | **green** — `started launcher pid=9452`, killed, `started launcher pid=3668` five seconds later |
+| C6 | 8-hour unattended, ≥3 shipped | **soak running; diagnosis written** — one bundle shipped, and the *C6 supply diagnosis* in `AUTOMATION_GATE.md` names every remaining item and the check it lacks |
+| C7 | every refusal logged with its reason | **green** — `launcher.jsonl`: `skipped_not_runnable`, `skipped_invalid_contract`, `check_already_green`, `targets_dirty`, `commit_refused`, `reverted_bytes`; `sessions.jsonl`: `starvation` with the generator's per-tier numbers |
+
+Verification: `164 passed in 31.5s` across the seven gate-surface test files.
+
+## The one honest caveat
+
+The loop is finished. The *work* is not. Every remaining queue item has an
+acceptance command that either points at a path that does not exist or at a suite
+that is already green, and a green check cannot prove a patch. Making the soak
+produce bundles needs authored checks — a perf assertion, a bug reproduction, a
+bundle-size assertion — not more loop engineering.
 
 ## Numbers worth knowing before the soak
 
