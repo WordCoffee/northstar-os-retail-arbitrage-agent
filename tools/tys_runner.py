@@ -41,6 +41,12 @@ from typing import Any, Dict, List, Optional
 
 ROOT = Path(os.environ.get("NORTHSTAR_TY_ROOT")
             or Path(__file__).resolve().parents[1]).resolve()
+
+# ``check_command`` is the supervisor's own command policy. A contract is only
+# dispatchable if it would also pass that policy, so the same module is imported
+# here rather than a second, drifting copy of the token list.
+sys.path.insert(0, str(ROOT / "scripts"))
+
 QUEUE = ROOT / "reports" / "ty" / "autonomy_queue.json"
 STATE_DIR = ROOT / "state" / "tys_runner"
 LEDGER = STATE_DIR / "ledger.json"
@@ -317,6 +323,80 @@ def _cycles_in_session() -> int:
         if row.get("event") == "cycle_completed":
             n += 1
     return n
+
+
+# ------------------------------------------------------------------ contracts
+# A shell operator inside an argv token means the token is really a command
+# line. Nothing here spawns through a shell, so a token like "a; b" is either a
+# mistake or an attempt to smuggle a second command past the allowlist.
+_SHELL_OPERATORS = (";", "|", "&", ">", "<", "`", "$(")
+
+
+def _shell_operator(token: str) -> Optional[str]:
+    for operator in _SHELL_OPERATORS:
+        if operator in str(token):
+            return operator
+    return None
+
+
+def _runnable(item: Dict[str, Any]) -> "tuple[bool, str]":
+    """tys_launcher owns the definition of dispatchable; ask it, do not copy it.
+
+    The import is late on purpose: ``tys_launcher`` imports this module at
+    module level, so importing it at module level here would be circular.
+    """
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import tys_launcher  # noqa: PLC0415 - late import avoids the cycle
+
+    return tys_launcher.runnable(item)
+
+
+def validate_contract(item: Dict[str, Any]) -> List[str]:
+    """Every reason this queue item cannot be dispatched as an authored contract.
+
+    ``runnable`` asks only whether the two lists are non-empty. That is
+    necessary and not sufficient: the commands must be real argv (a shell string
+    re-parses after every allowlist has seen it) and they must survive the
+    supervisor's own ``check_command`` policy, so a contract written by the
+    author lane cannot dispatch something the loop would refuse.
+    """
+    import continuous_loop as cl  # noqa: PLC0415 - ROOT/scripts is on sys.path
+
+    if not isinstance(item, dict):
+        return ["item is not an object"]
+    problems: List[str] = []
+    ok, why = _runnable(item)
+    if not ok:
+        problems.append(why)
+
+    commands = item.get("acceptance_commands")
+    if commands is None:
+        return problems
+    if isinstance(commands, str):
+        return problems + ["acceptance_commands is a shell string, not argv lists"]
+    if not isinstance(commands, (list, tuple)):
+        return problems + ["acceptance_commands must be a list of argv lists"]
+
+    for index, cmd in enumerate(commands):
+        if isinstance(cmd, str):
+            problems.append(f"command[{index}] is a shell string, not an argv list")
+            continue
+        if not isinstance(cmd, (list, tuple)) or not cmd:
+            problems.append(f"command[{index}] is not a non-empty argv list")
+            continue
+        if not all(isinstance(token, str) and token.strip() for token in cmd):
+            problems.append(f"command[{index}] has an empty or non-string token")
+            continue
+        argv = list(cmd)
+        operators = [token for token in argv if _shell_operator(token)]
+        if operators:
+            problems.append(f"command[{index}] carries shell operators: "
+                            f"{operators[:3]!r}")
+            continue
+        refusal = cl.check_command(argv)
+        if refusal:
+            problems.append(f"command[{index}] refused: {refusal}")
+    return problems
 
 
 def validate_result(result: Dict[str, Any], item_id: str) -> List[str]:

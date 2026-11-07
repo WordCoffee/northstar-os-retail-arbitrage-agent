@@ -26,11 +26,26 @@ paths and the sha256 of the check file. The sha is the evaluator's tamper gate:
 the check the acceptance command names must still hash the same when the
 candidate is graded.
 
+Deriving a scope is only half the contract. ``write_contract`` is the other
+half: it turns a *proven* derivation into the queue item the launcher can
+dispatch - ``write_paths``, ``acceptance_commands`` (argv lists, never a shell
+string), ``objective``, ``check_sha256``, ``scope_derivation`` and
+``forbidden_paths`` - clears ``needs_author``/``blocked_reason``, writes the
+queue atomically, and re-reads it to prove the bytes on disk are what it
+claims. A derivation that failed, or one with no paths, is refused: there is no
+code path here that writes a scope it was not given.
+
 Contract::
 
     derive(*, item_id, acceptance_commands, run=subprocess.run, repo=Path)
       -> {"ok": bool, "write_paths": list[str], "check_sha256": str | None,
           "artifact": str, "reason": str}
+
+    write_contract(*, queue_path, item_id, derived, objective, read_paths=None)
+      -> {"ok": bool, "reason": str, "write_paths": list[str],
+          "acceptance_commands": list[list[str]], "check_sha256": str | None,
+          "scope_derivation": str, "forbidden_paths": list[str],
+          "problems": list[str]}
 
 Usage::
 
@@ -107,6 +122,29 @@ def _write(path: Path, data: Any) -> None:
     tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n",
                    encoding="utf-8")
     tmp.replace(path)
+
+
+def _write_queue(path: Path, data: Any) -> None:
+    """Atomic queue write: tmp file, fsync, then ``os.replace``.
+
+    Same shape as ``tys_runner._write``, with the rename made explicit: the
+    launcher may read the queue from another process at any moment, so a
+    half-written file must never be observable under the real name.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with tmp.open("w", encoding="utf-8", newline="\n") as fh:
+        fh.write(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
+
+
+def _read(path: Path, default: Any = None) -> Any:
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return default
 
 
 def _safe_id(item_id: str) -> str:
@@ -423,6 +461,231 @@ def derive(
     out["write_paths"] = write_paths
     out["artifact"] = str(artifact)
     out["reason"] = "scope_derived"
+    return out
+
+
+# ------------------------------------------------------------ contract writing
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _argv_only(raw: Any) -> "tuple[List[List[str]], str]":
+    """Normalise to ``[[argv], ...]`` and refuse anything else.
+
+    The queue's contract is argv, not a command line: a shell string re-parses
+    after every allowlist has looked at it, so a string is a refusal here rather
+    than something to split and hope about.
+    """
+    if isinstance(raw, str):
+        return [], "shell_string_command: acceptance_commands must be argv lists"
+    if not isinstance(raw, (list, tuple)) or not raw:
+        return [], "no_acceptance_command"
+    commands: List[List[str]] = []
+    for index, cmd in enumerate([raw] if isinstance(raw[0], str) else list(raw)):
+        if isinstance(cmd, str):
+            return [], f"shell_string_command: command[{index}] must be an argv list"
+        if not isinstance(cmd, (list, tuple)) or not cmd:
+            return [], f"empty_command: command[{index}] is not a non-empty argv list"
+        if not all(isinstance(token, str) and token.strip() for token in cmd):
+            return [], (f"argv_not_strings: command[{index}] has an empty or "
+                        f"non-string token")
+        commands.append([token for token in cmd])
+    if not commands:
+        return [], "no_acceptance_command"
+    return commands, ""
+
+
+def _contract_commands(derived: Dict[str, Any]) -> "tuple[List[List[str]], str]":
+    """The argv the item will be graded by, preferring the derivation artifact.
+
+    ``derive`` returns the paths and the sha but not the command, so the command
+    is read back from the artifact it wrote - the same bytes that justify the
+    scope. A caller may pass ``acceptance_commands`` explicitly instead; both
+    paths still have to be argv.
+    """
+    if derived.get("acceptance_commands") is not None:
+        return _argv_only(derived.get("acceptance_commands"))
+    artifact = str(derived.get("artifact") or "").strip()
+    payload = _read(Path(artifact), {}) if artifact else {}
+    if isinstance(payload, dict) and payload.get("failing_command"):
+        return _argv_only(payload["failing_command"])
+    return [], "no_acceptance_command"
+
+
+def _forbidden_paths(payload: Any, derived: Dict[str, Any],
+                     commands: List[List[str]]) -> List[str]:
+    """The test file the contract grades, so a candidate cannot edit its own gate.
+
+    Read from the artifact first (that is the check that actually failed), then
+    from the command itself when the artifact names no test file.
+    """
+    out: List[str] = []
+    values: List[Any] = []
+    if isinstance(payload, dict):
+        values.append(payload.get("check_file"))
+    values.append(derived.get("check_file"))
+    for value in values:
+        text = str(value or "").replace("\\", "/").strip()
+        if text and text not in out:
+            out.append(text)
+    if not out and commands:
+        named = _named_test_file(commands[0])
+        if named:
+            out.append(str(named).replace("\\", "/").strip())
+    return out
+
+
+def _contract_problems(item: Dict[str, Any]) -> List[str]:
+    """Structural check of a written contract - what ``validate_contract`` needs."""
+    problems: List[str] = []
+    paths = item.get("write_paths")
+    if not isinstance(paths, list) or not paths:
+        problems.append("write_paths is empty")
+    elif not all(isinstance(p, str) and p.strip() for p in paths):
+        problems.append("write_paths must be non-empty strings")
+
+    commands = item.get("acceptance_commands")
+    if isinstance(commands, str):
+        problems.append("acceptance_commands is a shell string, not argv lists")
+    elif not isinstance(commands, list) or not commands:
+        problems.append("acceptance_commands is empty")
+    else:
+        for index, cmd in enumerate(commands):
+            if isinstance(cmd, str):
+                problems.append(f"command[{index}] is a shell string")
+            elif (not isinstance(cmd, list) or not cmd
+                  or not all(isinstance(a, str) and a.strip() for a in cmd)):
+                problems.append(f"command[{index}] is not a non-empty argv list")
+
+    if not str(item.get("objective") or "").strip():
+        problems.append("objective is empty")
+    sha = item.get("check_sha256")
+    if sha is not None and not _SHA256_RE.match(str(sha)):
+        problems.append("check_sha256 is not a sha256 hex digest")
+    if not str(item.get("scope_derivation") or "").strip():
+        problems.append("scope_derivation is missing")
+    if not isinstance(item.get("forbidden_paths"), list):
+        problems.append("forbidden_paths must be a list")
+    if item.get("needs_author"):
+        problems.append(f"needs_author is still set: {item.get('needs_author')}")
+    if item.get("blocked_reason"):
+        problems.append(f"blocked_reason is still set: {item.get('blocked_reason')}")
+    return problems
+
+
+def write_contract(
+    *,
+    queue_path: Any,
+    item_id: str,
+    derived: Dict[str, Any],
+    objective: str,
+    read_paths: Optional[Sequence[str]] = None,
+) -> Dict[str, Any]:
+    """Write a *proven* derivation into the queue as a dispatchable contract.
+
+    Refuses when the derivation did not succeed or carries no write paths: an
+    authored contract is evidence about where a fix goes, and this function
+    never supplies a path the traceback did not.
+    """
+    out: Dict[str, Any] = {
+        "ok": False,
+        "item_id": str(item_id),
+        "queue": str(queue_path),
+        "write_paths": [],
+        "acceptance_commands": [],
+        "check_sha256": None,
+        "scope_derivation": "",
+        "forbidden_paths": [],
+        "reason": "contract_refused",
+        "problems": [],
+    }
+
+    if not isinstance(derived, dict) or not derived.get("ok"):
+        reason = derived.get("reason") if isinstance(derived, dict) else "not_an_object"
+        out["reason"] = "scope_not_derived"
+        out["problems"] = [f"derivation refused: {reason or 'unknown'}"]
+        return out
+
+    write_paths = [str(p).replace("\\", "/").strip()
+                   for p in (derived.get("write_paths") or [])
+                   if str(p).strip()]
+    if not write_paths:
+        out["reason"] = "scope_unproven"
+        out["problems"] = ["derivation carries no write_paths"]
+        return out
+
+    commands, why = _contract_commands(derived)
+    if why:
+        out["reason"] = why.split(":", 1)[0]
+        out["problems"] = [why]
+        return out
+
+    queue_file = Path(queue_path)
+    queue = _read(queue_file, None)
+    if not isinstance(queue, dict) or not isinstance(queue.get("items"), list):
+        out["reason"] = "queue_unreadable"
+        return out
+    index = next((n for n, item in enumerate(queue["items"])
+                  if isinstance(item, dict) and str(item.get("id")) == str(item_id)), None)
+    if index is None:
+        out["reason"] = "item_not_found"
+        return out
+
+    item = queue["items"][index]
+    before = dict(item)
+    artifact = str(derived.get("artifact") or "").strip()
+    payload = _read(Path(artifact), {}) if artifact else {}
+    forbidden = _forbidden_paths(payload, derived, commands)
+    check_sha = derived.get("check_sha256")
+    goal = str(objective or "").strip() or str(item.get("next")
+                                              or item.get("title") or "").strip()
+    if not goal:
+        out["reason"] = "objective_missing"
+        return out
+
+    item.update({
+        "write_paths": write_paths,
+        "acceptance_commands": commands,
+        "objective": goal,
+        "check_sha256": check_sha,
+        "scope_derivation": artifact,
+        "forbidden_paths": forbidden,
+        "needs_author": None,
+        "blocked_reason": None,
+        "contract_written_at": _now(),
+    })
+    if read_paths is not None:
+        item["read_paths"] = [str(p).replace("\\", "/").strip()
+                              for p in read_paths if str(p).strip()]
+    queue["updated_at"] = _now()
+    _write_queue(queue_file, queue)
+
+    # Re-read from disk: the launcher judges the file, not this function's intent.
+    written = _read(queue_file, None)
+    reread = None
+    if isinstance(written, dict):
+        reread = next((row for row in written.get("items", [])
+                       if isinstance(row, dict) and str(row.get("id")) == str(item_id)), None)
+    problems = (["the queue on disk is not the queue that was written"] if reread is None
+                else _contract_problems(reread))
+    if problems:
+        # Never leave a contract in the queue that does not survive its own read.
+        queue["items"][index] = before
+        _write_queue(queue_file, queue)
+        out["reason"] = "readback_invalid"
+        out["problems"] = problems
+        return out
+
+    out.update({
+        "ok": True,
+        "reason": "contract_written",
+        "write_paths": write_paths,
+        "acceptance_commands": commands,
+        "check_sha256": check_sha,
+        "scope_derivation": artifact,
+        "forbidden_paths": forbidden,
+        "objective": goal,
+        "problems": [],
+    })
     return out
 
 

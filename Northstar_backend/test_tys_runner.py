@@ -112,9 +112,9 @@ def test_a_valid_completion_closes_the_cycle_and_rotates_at_the_limit(root, monk
 
 def test_crash_recovery_keeps_the_reserved_item(root, capsys):
     r.cmd_next()
-    # Simulate a dead session: the lease expires.
+    # Simulate a dead session: the holder pid no longer exists.
     lease = json.loads(r.LEASE.read_text(encoding="utf-8"))
-    lease["taken_ts"] = 0
+    lease["pid"] = 999999
     r.LEASE.write_text(json.dumps(lease), encoding="utf-8")
     assert r._lease() is None
     assert r.cmd_next() == 0                # the same item is reserved again
@@ -135,3 +135,42 @@ def test_dry_run_simulates_rotations_without_writing(root, capsys):
     assert out["cycles"] == 3
     after = r.LEDGER.read_text(encoding="utf-8") if r.LEDGER.exists() else None
     assert before == after
+
+
+# ------------------------------------------------------- A15: contract validation
+def _contract(**fields):
+    item = {"id": "M1g-contract-writer",
+            "write_paths": ["Northstar_backend/lib/thing.py"],
+            "acceptance_commands": [["python", "-m", "pytest", "-q",
+                                     "Northstar_backend/test_thing.py"]]}
+    item.update(fields)
+    return item
+
+
+def test_a_well_formed_contract_has_no_problems():
+    assert r.validate_contract(_contract()) == []
+
+
+def test_a_contract_without_scope_or_checks_names_the_gap():
+    assert r.validate_contract({"id": "x",
+                                "acceptance_commands": [["python", "-c", "print(1)"]]}
+                               ) == ["no write_paths declared"]
+    assert r.validate_contract({"id": "x", "write_paths": ["a.py"]}) == [
+        "no acceptance_commands declared"]
+
+
+def test_a_shell_string_or_a_network_command_is_refused():
+    assert any("shell string" in p for p in r.validate_contract(
+        _contract(acceptance_commands=["python -m pytest -q"])))
+
+    shell = r.validate_contract(_contract(
+        acceptance_commands=[["python", "-c", "print(1) && print(2)"]]))
+    assert any("shell operators" in p for p in shell), shell
+
+    browser = r.validate_contract(_contract(
+        acceptance_commands=[["python", "-m", "pytest", "chromeconnect/test_x.py"]]))
+    assert any("forbidden command token" in p for p in browser), browser
+
+    network = r.validate_contract(_contract(
+        acceptance_commands=[["curl", "https://example.test/x"]]))
+    assert any("forbidden command token" in p for p in network), network
