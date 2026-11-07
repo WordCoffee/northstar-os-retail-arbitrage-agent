@@ -182,7 +182,8 @@ def test_malicious_callback_urls_are_refused_with_a_reason(url, reason):
     "https://api.example.co.uk/webhook?x=1",
 ])
 def test_named_host_callbacks_still_pass(url):
-    assert dsa.validate_callback_url(url) == url
+    # A fake resolver keeps this off the network: the name answers with a public IP.
+    assert dsa.validate_callback_url(url, resolver=_resolver("93.184.216.34")) == url
 
 
 def test_refusal_happens_before_any_request_is_made():
@@ -210,11 +211,146 @@ def test_loopback_needs_an_explicit_opt_in_and_link_local_is_still_refused(monke
 
 def test_operator_allowlist_can_pin_the_callback_hosts(monkeypatch):
     monkeypatch.setenv(dsa.CALLBACK_ALLOW_HOSTS_ENV, "hooks.example.com")
-    assert dsa.validate_callback_url("https://hooks.example.com/x")
-    assert dsa.validate_callback_url("https://eu.hooks.example.com/x")
+    ok = _resolver("93.184.216.34")
+    assert dsa.validate_callback_url("https://hooks.example.com/x", resolver=ok)
+    assert dsa.validate_callback_url("https://eu.hooks.example.com/x", resolver=ok)
     with pytest.raises(dsa.CallbackRefused) as ei:
-        dsa.validate_callback_url("https://evil.test/x")
+        dsa.validate_callback_url("https://evil.test/x", resolver=ok)
     assert "host_not_allowed" in str(ei.value)
+
+
+# ── DNS resolution: an IP-literal-only guard is defeated by a wildcard name ───
+#
+# The incident: `127.0.0.1.nip.io` and `169.254.169.254.nip.io` are ordinary
+# hostnames (no letters-only check, no numeric spelling) that wildcard-resolve
+# to loopback and to the cloud metadata address. Every resolver below is fake,
+# so these tests never touch the network and never depend on nip.io existing.
+
+def _resolver(*addrs):
+    """A fake resolver: every host answers with `addrs`, and calls are recorded."""
+    def _resolve(host):
+        _resolve.calls.append(host)
+        return list(addrs)
+    _resolve.calls = []
+    return _resolve
+
+
+def _failing_resolver(exc=None):
+    def _resolve(host):
+        _resolve.calls.append(host)
+        raise exc or OSError("resolver unavailable")
+    _resolve.calls = []
+    return _resolve
+
+
+def test_nip_io_loopback_name_is_refused_after_resolution():
+    resolve = _resolver("127.0.0.1")
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("http://127.0.0.1.nip.io/", resolver=resolve)
+    assert "resolved_ip_refused(127.0.0.1)" in str(ei.value)
+    assert resolve.calls == ["127.0.0.1.nip.io"]  # the name really was resolved
+
+
+def test_nip_io_metadata_name_is_refused_after_resolution():
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("http://169.254.169.254.nip.io/latest/meta-data/",
+                                  resolver=_resolver("169.254.169.254"))
+    assert "resolved_ip_refused(169.254.169.254)" in str(ei.value)
+
+
+@pytest.mark.parametrize("answer", [
+    "127.0.0.1", "::1", "169.254.169.254", "10.0.0.7", "192.168.1.10",
+    "172.16.5.4", "0.0.0.0", "224.0.0.1", "240.0.0.1", "fd00::1", "fe80::1",
+])
+def test_any_private_class_answer_is_refused(answer):
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://internal.example.com/hook",
+                                  resolver=_resolver(answer))
+    assert "resolved_ip_refused" in str(ei.value)
+
+
+def test_one_bad_answer_among_good_ones_still_refuses():
+    """ANY resolved address decides, not the first one."""
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://rebind.example.com/hook",
+                                  resolver=_resolver("93.184.216.34", "10.0.0.7"))
+    assert "resolved_ip_refused(10.0.0.7)" in str(ei.value)
+
+
+def test_a_name_that_resolves_to_a_public_address_is_allowed():
+    with pytest.raises(dsa.CallbackRefused):          # sanity: without resolution it would pass
+        dsa.validate_callback_url("https://127.0.0.1.nip.io/hook", resolver=_resolver("127.0.0.1"))
+    url = "https://hooks.example.com/northstar/job"
+    assert dsa.validate_callback_url(url, resolver=_resolver("93.184.216.34")) == url
+
+
+def test_resolution_failure_fails_closed(monkeypatch):
+    """CHOSEN BEHAVIOUR: an unresolvable host is refused, not delivered to.
+
+    A failed lookup is indistinguishable from an attacker-controlled one, so the
+    default is denial. The single documented exception is a host the operator
+    pinned in the allowlist: that pin is an explicit trust decision, so it
+    survives a resolution failure (and the transport will fail the delivery
+    anyway). That exception is asserted here so it cannot drift silently.
+    """
+    resolve = _failing_resolver()
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://hooks.example.com/x", resolver=resolve)
+    assert "host_unresolved" in str(ei.value)
+    assert resolve.calls == ["hooks.example.com"]
+
+    # an exception of any type fails closed the same way
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://hooks.example.com/x",
+                                  resolver=_failing_resolver(TimeoutError("slow")))
+    assert "host_unresolved" in str(ei.value)
+
+    # no addresses at all is the same refusal as a failed lookup
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://hooks.example.com/x", resolver=_resolver())
+    assert "host_unresolved" in str(ei.value)
+
+    # the one exception: an operator-pinned host
+    monkeypatch.setenv(dsa.CALLBACK_ALLOW_HOSTS_ENV, "hooks.example.com")
+    assert dsa.validate_callback_url("https://hooks.example.com/x",
+                                     resolver=_failing_resolver()) == "https://hooks.example.com/x"
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("https://other.example.com/x", resolver=_failing_resolver())
+    assert "host_not_allowed" in str(ei.value)
+
+
+def test_loopback_opt_in_covers_resolved_loopback_but_not_metadata(monkeypatch):
+    """DESIGN_CALLBACK_ALLOW_LOOPBACK is a dev opt-in for 127.0.0.0/8 and ::1 only."""
+    monkeypatch.setenv(dsa.CALLBACK_ALLOW_LOOPBACK_ENV, "1")
+    assert dsa.validate_callback_url("http://127.0.0.1.nip.io:8765/hook",
+                                     resolver=_resolver("127.0.0.1"))
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("http://169.254.169.254.nip.io/latest/meta-data/",
+                                  resolver=_resolver("169.254.169.254"))
+    assert "resolved_ip_refused" in str(ei.value)
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.validate_callback_url("http://mixed.example.com/hook",
+                                  resolver=_resolver("127.0.0.1", "169.254.169.254"))
+    assert "resolved_ip_refused(169.254.169.254)" in str(ei.value)
+
+
+def test_delivery_revalidates_the_resolved_name_before_any_request(monkeypatch):
+    """Defence in depth: `deliver_webhook` must refuse before the transport too."""
+    calls = {"n": 0}
+
+    def counting_opener(*_a, **_k):
+        calls["n"] += 1
+        raise AssertionError("a refused callback must never reach the transport")
+
+    def _fake_getaddrinfo(host, *a, **kw):
+        return [(2, 1, 6, "", ("127.0.0.1", 0))]
+
+    monkeypatch.setattr(dsa.socket, "getaddrinfo", _fake_getaddrinfo)
+    with pytest.raises(dsa.CallbackRefused) as ei:
+        dsa.deliver_webhook("http://127.0.0.1.nip.io:9/hook", {"job_id": "j1"},
+                            opener=counting_opener)
+    assert "resolved_ip_refused(127.0.0.1)" in str(ei.value)
+    assert calls["n"] == 0
 
 
 def test_submit_generation_refuses_a_malicious_callback_before_creating_a_job(monkeypatch):

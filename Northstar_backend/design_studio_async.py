@@ -33,6 +33,7 @@ import ipaddress
 import json
 import os
 import re
+import socket
 import sys
 import time
 import urllib.request
@@ -40,7 +41,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Iterable, Optional
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -113,9 +114,19 @@ def _engine_status() -> dict:
 # again inside `deliver_webhook` before the first request is built.
 #
 # Deliberate limits, stated so nobody over-trusts the check:
-#   * no DNS resolution happens here, so a hostname that resolves to a private
-#     address is not caught by this function; the transport-level guard in
-#     `tools/egress_guard.py` is what covers Amazon calls everywhere else
+#   * the host is resolved and EVERY address it resolves to must be publicly
+#     routable, because a literal-only check is defeated by a wildcard DNS name
+#     (`127.0.0.1.nip.io`, `169.254.169.254.nip.io` resolve to loopback and to
+#     the cloud metadata address). The resolver is injectable so tests never
+#     touch the network.
+#   * resolution failure fails closed, with one documented exception: a host the
+#     operator pinned in DESIGN_CALLBACK_ALLOWED_HOSTS is an explicit trust
+#     decision and is allowed through, since that allowlist is the operator's own
+#     statement of which names may be called back.
+#   * the check is per-request, not per-connection: a name is resolved here and
+#     again by the transport, so a DNS-rebinding window between the two exists.
+#     The transport-level guard in `tools/egress_guard.py` is what covers Amazon
+#     calls everywhere else.
 #   * IP literals (v4 and v6, including the decimal spellings) are refused
 #     outright, so loopback/link-local/private/metadata targets never reach a socket
 
@@ -133,6 +144,35 @@ _NUMERIC_HOST = re.compile(r"^(0x[0-9a-f]+|[0-9]+)(\.(0x[0-9a-f]+|[0-9]+))*$")
 
 _TOOLS_DIR = Path(__file__).resolve().parents[1] / "tools"
 _EGRESS: Any = None
+
+#: A resolver maps a hostname to the addresses it answers with. Injected in tests.
+Resolver = Callable[[str], Iterable[str]]
+
+
+def _default_resolver(host: str) -> list:
+    """Every address `host` resolves to (A + AAAA), deduped, in resolver order."""
+    infos = socket.getaddrinfo(host, None, type=socket.SOCK_STREAM)
+    addrs: list = []
+    for info in infos:
+        addr = (info[4] or ("",))[0]
+        if addr and addr not in addrs:
+            addrs.append(addr)
+    return addrs
+
+
+def _ip_refusal_class(ip: Any) -> Optional[str]:
+    """Refusal reason for an address, or None when it is publicly routable."""
+    if ip.is_loopback:
+        return "loopback_ip"
+    if ip.is_link_local:
+        return "link_local_ip"
+    if ip.is_unspecified:
+        return "unspecified_ip"
+    if ip.is_private:
+        return "private_ip"
+    if ip.is_multicast or ip.is_reserved:
+        return "reserved_ip"
+    return None
 
 
 class CallbackRefused(ValueError):
@@ -158,11 +198,22 @@ def _flag(name: str, default: bool = False) -> bool:
 
 
 def validate_callback_url(url: Any, *, allow_hosts: Optional[list] = None,
-                          allow_loopback: Optional[bool] = None) -> str:
+                          allow_loopback: Optional[bool] = None,
+                          resolver: Optional[Resolver] = None) -> str:
     """Return the URL when it is a legal callback target, else raise CallbackRefused.
 
     Order matters: the Amazon refusal runs first (it is the hard standing gate),
-    then the SSRF rules, then the optional operator allowlist.
+    then the SSRF rules (literal, then resolved), then the optional operator
+    allowlist.
+
+    Resolution policy (the reason this function resolves at all): a name is not
+    safe just because it is not an IP literal - `127.0.0.1.nip.io` and
+    `169.254.169.254.nip.io` are ordinary hostnames that wildcard-resolve to
+    loopback and to the cloud metadata address. So every address the name
+    answers with is checked, and ONE bad answer refuses the URL. Failing to
+    resolve is a refusal too (fail closed), except for a host the operator
+    pinned in the allowlist - that pin is an explicit trust decision, whereas a
+    DNS answer is not.
     """
     text = "" if url is None else str(url).strip()
     if not text:
@@ -210,22 +261,9 @@ def validate_callback_url(url: Any, *, allow_hosts: Optional[list] = None,
     if ip is not None:
         if ip.is_loopback and allow_loopback:
             return text
-        if ip.is_loopback:
-            reason = "loopback_ip"
-        elif ip.is_link_local:
-            reason = "link_local_ip"
-        elif ip.is_unspecified:
-            reason = "unspecified_ip"
-        elif ip.is_private:
-            reason = "private_ip"
-        elif ip.is_multicast or ip.is_reserved:
-            reason = "reserved_ip"
-        else:
-            reason = "ip_literal"
+        reason = _ip_refusal_class(ip) or "ip_literal"
         raise CallbackRefused(f"callback_refused: {reason}({ip})")
 
-    if not host:
-        raise CallbackRefused("callback_refused: missing_host")
     if _NUMERIC_HOST.match(host):
         raise CallbackRefused(f"callback_refused: numeric_host({host})")
 
@@ -235,23 +273,62 @@ def validate_callback_url(url: Any, *, allow_hosts: Optional[list] = None,
                 return text
             raise CallbackRefused(f"callback_refused: loopback_host({host})")
 
+    # Operator allowlist first: a host the operator pinned is the only thing that
+    # may survive a resolution failure, so decide membership before resolving.
     allowed = allow_hosts
     if allowed is None:
         raw = os.environ.get(CALLBACK_ALLOW_HOSTS_ENV, "")
         allowed = [h.strip().lower().rstrip(".") for h in raw.split(",") if h.strip()]
-    if allowed:
-        if not any(host == a or host.endswith("." + a) for a in allowed):
-            raise CallbackRefused(f"callback_refused: host_not_allowed({host})")
+    pinned = bool(allowed) and any(host == a or host.endswith("." + a) for a in allowed)
+    if allowed and not pinned:
+        raise CallbackRefused(f"callback_refused: host_not_allowed({host})")
+
+    # ── DNS: the name must answer, and every answer must be publicly routable ──
+    resolve = resolver or _default_resolver
+    try:
+        answers = list(resolve(host))
+    except Exception as exc:  # noqa: BLE001 - fail closed, never fail open
+        if pinned:
+            return text
+        raise CallbackRefused(
+            f"callback_refused: host_unresolved({host}: {type(exc).__name__})")
+    if not answers:
+        if pinned:
+            return text
+        raise CallbackRefused(f"callback_refused: host_unresolved({host}: no_addresses)")
+
+    refused: list = []
+    for answer in answers:
+        try:
+            addr = ipaddress.ip_address(str(answer).split("%", 1)[0].strip())
+        except ValueError:
+            raise CallbackRefused(f"callback_refused: resolved_ip_refused({answer})")
+        reason = _ip_refusal_class(addr)
+        if reason is not None:
+            refused.append((addr, reason))
+    if refused:
+        # The dev opt-in covers loopback only: a name answering with a link-local
+        # or private address stays refused even with DESIGN_CALLBACK_ALLOW_LOOPBACK.
+        if allow_loopback and all(r == "loopback_ip" for _, r in refused):
+            return text
+        # Name the address that actually decides the refusal, not merely the first
+        # answer: with the dev opt-in on, 127.0.0.1 is not the problem, 169.254.x is.
+        culprit = next((addr for addr, reason in refused
+                        if not (allow_loopback and reason == "loopback_ip")),
+                       refused[0][0])
+        raise CallbackRefused(f"callback_refused: resolved_ip_refused({culprit})")
     return text
+
 
 
 def deliver_webhook(url: str, payload: Dict[str, Any], *, attempts: int = 3,
                     timeout: float = 10.0, opener=None) -> Dict[str, Any]:
     """POST JSON to a callback URL with bounded retries. Success = HTTP 2xx.
 
-    The URL is validated first: a refused callback raises `CallbackRefused`
-    before a request object exists, so no socket is opened and the caller sees a
-    refusal rather than a retry loop.
+    The URL is validated first - including resolving the host and refusing any
+    name that answers with a loopback/link-local/private/reserved address: a
+    refused callback raises `CallbackRefused` before a request object exists, so
+    no socket is opened and the caller sees a refusal rather than a retry loop.
 
     Retry policy (Packify-style, bounded): immediate -> 1s -> 4s backoff.
     Never raises on delivery; returns the delivery record stored on the job.
@@ -418,7 +495,8 @@ def submit_generation(acct: str, *, brief: str, kind: str = "image", tier: str =
             raise HTTPException(status_code=422, detail={
                 "code": "callback_url_refused", "message": str(exc),
                 "note": ("A callback must be an http(s) URL on a named host; IP literals, "
-                         "loopback and Amazon hosts are refused.")})
+                         "loopback, Amazon hosts and names that resolve to a loopback, "
+                         "link-local, private or reserved address are refused.")})
     st = _engine_status()
     if not st.get("armed"):
         raise HTTPException(status_code=409, detail={
@@ -636,7 +714,8 @@ def submit_assembly(acct: str, *, images, captions=None, narration: Optional[str
             raise HTTPException(status_code=422, detail={
                 "code": "callback_url_refused", "message": str(exc),
                 "note": ("A callback must be an http(s) URL on a named host; IP literals, "
-                         "loopback and Amazon hosts are refused.")})
+                         "loopback, Amazon hosts and names that resolve to a loopback, "
+                         "link-local, private or reserved address are refused.")})
     st = assembly_available()
     if not st["ready"]:
         raise HTTPException(status_code=409, detail={
