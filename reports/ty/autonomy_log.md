@@ -41,3 +41,4 @@ One line per cycle. Format:
 - 2026-11-06T12:15Z | T0 DNS closed | 050e4188: hostname resolved (A+AAAA) and refused if any answer is loopback/link-local/private/multicast/reserved; unresolvable fails closed; allowlist before resolution; 50 tests, live nip.io probe refused both loopback and metadata
 - 2026-11-06T12:25Z | T0 MCP closed | ec1be088: launcher chain refused (wsl/docker/env/xargs/ssh/curl...), interpreter code-flags with payloads refused, URL-shaped substrings found anywhere incl bare host and //host, fail-closed preserved; 49 tests, zero spawns on every refusal
 - 2026-11-06T12:35Z | A14 done | 04615b60: scope derived from a real traceback, test/policy frames dropped, uninterruptible refusals write nothing; 21 tests
+- 2026-11-06T12:45Z | A11 done | 8b0e848f: deterministic evaluator, 5 fail-fast gates, scope before execution, tamper gate with fail-closed resolution, regression via check_regression; 20 tests

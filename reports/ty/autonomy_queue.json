@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T12:35:00Z",
+  "updated": "2026-11-06T12:45:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -121,7 +121,7 @@
       "id": "M1c-evaluator",
       "kind": "automation",
       "priority": 1180,
-      "status": "pending",
+      "status": "done",
       "title": "tools/tys_evaluator.py: scope, well-formedness, target-green, check-not-tampered",
       "next": "Implement the four deterministic gates over a frozen diff + contract; no model verdicts.",
       "write_paths": [
@@ -139,7 +139,9 @@
       ],
       "depends_on": [
         "M0.5-spike"
-      ]
+      ],
+      "commit": "8b0e848f",
+      "verification": "20 passed; gates fail fast in order scope->malformed->target_red->tamper->regression; scope judged before anything executes"
     },
     {
       "id": "M1d-artifacts",
