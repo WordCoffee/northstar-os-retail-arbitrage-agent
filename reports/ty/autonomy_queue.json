@@ -236,15 +236,23 @@
       "id": "M2-work-generator",
       "kind": "automation",
       "priority": 1130,
-      "status": "pending",
+      "status": "done",
       "title": "The T0-T5 ladder: the queue never runs empty",
       "write_paths": [
-        "tools/tys_generator.py"
+        "tools/tys_generator.py",
+        "tools/tys_probes.py",
+        "Northstar_backend/test_tys_generator.py",
+        "tools/tys_runner.py",
+        "tools/tys_launcher.py",
+        "scripts/tys-watchdog.ps1"
       ],
       "depends_on": [
         "M1e-rejections",
         "M1g-contract-writer"
-      ]
+      ],
+      "commit": "9d6bb3b4",
+      "verification": "36 generator tests (0.93s); 159 gate-surface tests green. Ladder T0-T5 strict, one item per call, starvation names each tier number and writes nothing, supply_capped at 12 active / 24 per day, dedupe across all statuses, vacuous scanner is a finding. Four runner deltas landed in 8230b730/603f73e7.",
+      "completed_at": "2026-11-07T07:50:00Z"
     },
     {
       "id": "M2-worker-lane",
@@ -1159,7 +1167,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-07T07:42:00Z",
+  "updated_at": "2026-11-07T07:50:00Z",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {
