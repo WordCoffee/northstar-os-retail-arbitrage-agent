@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T12:15:00Z",
+  "updated": "2026-11-06T12:25:00Z",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -48,7 +48,7 @@
       "id": "T0-mcp-wsl",
       "kind": "incident",
       "priority": 1290,
-      "status": "pending",
+      "status": "done",
       "title": "MCP shell control is defeated by an interpreter one hop away (wsl -e bash) and misses embedded URLs",
       "next": "Refuse launcher commands that are interpreters/shells one hop away: wsl, docker, env, python -c, node -e, bash -c, cmd /c. Screen URL-shaped substrings anywhere in an argument (host-only forms and //host), not only ^https?://.",
       "write_paths": [
@@ -68,7 +68,9 @@
       "evidence": [
         "tools/mcp_client.py (ABSOLUTE_URL, _command_stem)"
       ],
-      "tier": "T0"
+      "tier": "T0",
+      "commit": "ec1be088",
+      "verification": "49 passed; all six verifier inputs refused with spawns==[] ; launcher chain (wsl/docker/env/xargs/ssh/curl...), interpreter code-flags, and URL-shaped substrings anywhere incl. bare and //host"
     },
     {
       "id": "M0.3b-token-meter",
