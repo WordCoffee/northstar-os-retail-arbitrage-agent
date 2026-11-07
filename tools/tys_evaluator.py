@@ -699,16 +699,25 @@ def _write_json(path: Path, payload: Dict[str, Any]) -> None:
     os.replace(tmp, path)
 
 
-def _diff_bytes(judge: "_Judge") -> bytes:
-    """``git diff --binary HEAD`` with the unborn-HEAD fallback ``changes()`` uses.
+def _diff_bytes(judge: "_Judge", paths: Optional[Sequence[str]] = None) -> bytes:
+    """``git diff --binary HEAD`` over the declared paths, with the unborn-HEAD fallback.
 
     ``--binary`` keeps a binary change base64 in the patch, which is what makes
     the captured bytes ASCII and hashable; the bytes written are the bytes hashed.
+
+    ``paths`` is the candidate's attributable set, and it matters: this box carries
+    a 40 MB tracked database that another lane keeps modified, so a diff over the
+    whole tree froze 52 MB per candidate. The artifact is meant to answer "what
+    exactly is on trial", and a database nobody's patch touched is not on trial.
+    ``None`` keeps the old whole-tree behaviour for callers that want it.
     """
-    code, text = judge._git_text("diff", "--binary", "HEAD")
+    if paths is not None and not paths:
+        return b""
+    scope = ["--", *[str(path) for path in paths]] if paths is not None else []
+    code, text = judge._git_text("diff", "--binary", "HEAD", *scope)
     if code != 0:
-        plain_code, plain = judge._git_text("diff", "--binary")
-        staged_code, staged = judge._git_text("diff", "--binary", "--cached")
+        plain_code, plain = judge._git_text("diff", "--binary", *scope)
+        staged_code, staged = judge._git_text("diff", "--binary", "--cached", *scope)
         if plain_code != 0 and staged_code != 0:
             raise RuntimeError(f"cannot capture the diff: {(plain or staged).strip()}")
         text = plain + "\n" + staged
@@ -780,8 +789,12 @@ def freeze(*, repo: Path, item_id: str, candidate_id: str, contract: Dict[str, A
                       or judge.attributable(rel)]
     tracked = {rel: list(statuses) for rel, statuses in changes.items()
                if rel not in untracked_set}
+    # The bytes on trial: this candidate's own changes, never another lane's dirty
+    # file. Freezing the whole tree made every artifact 52 MB on this box because a
+    # 40 MB tracked database is permanently modified by a parallel lane.
+    attributable = sorted({rel for rel in changes if judge.attributable(rel)})
 
-    diff_bytes = _diff_bytes(judge)
+    diff_bytes = _diff_bytes(judge, attributable)
     candidate = _slug(candidate_id)
     directory = repo_path / "state" / "author" / _slug(item_id)
     directory.mkdir(parents=True, exist_ok=True)

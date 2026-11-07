@@ -189,6 +189,23 @@ def test_a_pre_changed_test_file_is_not_blamed_on_the_candidate(repo):
     assert tolerant["ok"] is True, tolerant
 
 
+def test_the_frozen_diff_contains_only_the_candidates_changes(repo):
+    """The artifact answers "what is on trial", not "what is dirty on this box".
+
+    Measured: a 40 MB tracked database that a parallel lane keeps modified made every
+    frozen candidate 52 MB, and the duplicate check parsed all of it on every score.
+    """
+    (repo / "other_lane.py").write_text("X = 1\n", encoding="utf-8")
+    (repo / "pkg" / "mod.py").write_text("VALUE = 2\n", encoding="utf-8")
+
+    frozen = E.freeze(repo=repo, item_id="item", candidate_id="1",
+                      contract=card(["pkg/mod.py"], pre_changed=["other_lane.py"]))
+
+    text = Path(frozen["diff"]).read_text(encoding="utf-8")
+    assert "pkg/mod.py" in text
+    assert "other_lane.py" not in text
+
+
 def test_pre_changed_never_excuses_a_policy_path(repo):
     (repo / "AGENTS.md").write_text("payload\n", encoding="utf-8")
 
