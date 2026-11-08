@@ -78,14 +78,23 @@ RAM_FLOOR_GB = 2.0
 #: numbers are ceilings, not targets - the sampler picks the largest quant that
 #: fits inside the ceiling.
 ROLE_BUDGET_GB = {
-    "bojo": 3.0,
-    "router": 3.0,
-    "coder": 6.0,
-    "vision": 7.0,
-    "gui_grounding": 7.0,
-    "embeddings": 2.0,
+    "bojo": 3.5,
+    "router": 3.5,
+    "coder": 7.0,
+    "vision": 8.0,
+    "gui_grounding": 8.0,
+    "embeddings": 2.5,
     "image_flux": 12.0,
     "image_t2i": 12.0,
+}
+
+#: The model that actually serves each local role today. A role with no model is
+#: reported as unmapped rather than guessed at.
+ROLE_MODELS = {
+    "bojo": "bojo:latest",
+    "coder": "qwen3:8b",
+    "vision": "qwen2.5vl:7b",
+    "embeddings": "qwen3-embedding:0.6b",
 }
 
 
@@ -194,11 +203,16 @@ def load(model: str, *, role: str = "", keep_alive: str = "10m") -> Dict[str, An
                 "before": before}
     result = _ollama("/api/generate",
                      {"model": model, "prompt": "", "keep_alive": keep_alive})
+    # Measure the steady state, not the load spike: Ollama's host-RAM use peaks while
+    # the weights are being mapped, so judging RAM in the same instant reported a
+    # perfectly good GPU load as a refusal.
+    time.sleep(1.5)
     after = snapshot()
-    post = verdict(after)
+    post = verdict(after, ram())
     _log({"event": "load", "model": model, "role": role, "ok": result.get("ok"),
           "before": before, "after": after, "problems": post["problems"]})
     return {"ok": bool(result.get("ok")) and post["ok"], "loaded": result.get("ok"),
+            "reason": result.get("reason", ""),
             "problems": post["problems"], "before": before, "after": after}
 
 
@@ -238,6 +252,86 @@ def unlock(role: str = "") -> Dict[str, Any]:
     except OSError:
         pass
     return {"ok": True, "released": role or "any"}
+
+
+def ps() -> List[Dict[str, Any]]:
+    """What Ollama says is loaded, and on which processor. The PROCESSOR column."""
+    try:
+        with urllib.request.urlopen(base_url() + "/api/ps", timeout=10) as resp:
+            data = json.loads(resp.read().decode("utf-8", "replace") or "{}")
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        return [{"error": f"{type(exc).__name__}: {exc}"}]
+    out = []
+    for row in data.get("models") or []:
+        size_vram = int(row.get("size_vram") or 0)
+        size = int(row.get("size") or 0)
+        out.append({
+            "name": row.get("name"),
+            "size_gb": round(size / 1024 ** 3, 2),
+            "size_vram_gb": round(size_vram / 1024 ** 3, 2),
+            "processor": ("100% GPU" if size and size_vram >= size * 0.95
+                          else "100% CPU" if not size_vram else
+                          f"partial: {round(100 * size_vram / size)}% on GPU"),
+        })
+    return out
+
+
+def _warm(model: str, role: str, keep_alive: str = "2m") -> Dict[str, Any]:
+    """Load a model on the endpoint its kind actually serves.
+
+    An embedding-only model cannot be warmed through /api/generate; asking it to
+    generate is what made the embeddings row read as 'never loaded'.
+    """
+    if role == "embeddings":
+        return _ollama("/api/embeddings", {"model": model, "prompt": "warm-up"})
+    return _ollama("/api/generate",
+                   {"model": model, "prompt": "", "keep_alive": keep_alive})
+
+
+def roles_report(models: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+    """Load each role's model in turn and record VRAM and RAM where it actually ran.
+
+    One at a time, because `OLLAMA_MAX_LOADED_MODELS` is 1 on this box and two 7B
+    models do not fit in 16 GB of RAM. Everything is unloaded in a finally.
+    """
+    models = models or ROLE_MODELS
+    rows: List[Dict[str, Any]] = []
+    try:
+        for role, model in models.items():
+            before = snapshot()
+            warmed = _warm(model, role)
+            loaded = {"loaded": bool(warmed.get("ok")),
+                      "problems": [] if warmed.get("ok") else [warmed.get("reason", "")]}
+            served = ps()
+            after = snapshot()
+            mem = ram()
+            rows.append({
+                "role": role, "model": model,
+                "loaded": bool(loaded.get("loaded")),
+                "problems": loaded.get("problems") or [],
+                "served": served[0] if served else {},
+                "vram_used_gb": round((after.get("used_mb") or 0) / 1024, 2),
+                "vram_free_gb": after.get("free_gb"),
+                "ram_free_gb": mem.get("free_gb"),
+                "budget_gb": ROLE_BUDGET_GB.get(role),
+            })
+            unload(model)
+            wait_until_unloaded()
+    finally:
+        for model in models.values():
+            unload(model)
+    return {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "ollama": base_url(), "roles": rows}
+
+
+def wait_until_unloaded(seconds: float = 8.0) -> bool:
+    """Ollama frees a model lazily; measuring the next role before it does lies."""
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        if not ps() or all("error" in row for row in ps()):
+            return True
+        time.sleep(0.4)
+    return False
 
 
 def headroom(models: Optional[List[str]] = None) -> Dict[str, Any]:

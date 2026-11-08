@@ -27,19 +27,34 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 | D16 model scout | continuous | — | per-role incumbents, benchmark, quarantine + restore |
 | D17 bake-off | pending | — | REA vs Craft Anything on three targets |
 
-## The one blocker D1 found, which D7 inherits
+## The D1 blocker is resolved — do not repeat the old conclusion
 
-**Ollama cannot see this GPU.** `qwen2.5vl:7b` loads 7.4 GB into *system RAM* at 100% CPU
-and 0 VRAM; the server log says `library=cpu`, `driver=""`, "no usable GPU found" ×4.
-A fresh server with `CUDA_VISIBLE_DEVICES=0` behaves identically, so it is not the
-environment: the bundled runner cannot see the RTX 5080 (sm_120, driver CUDA UMD 13.4).
-One 7B load leaves 0.5–0.9 GB of RAM free, so two models resident at once is impossible
-today. `state/director/caps.json` records the consequence.
+`reports/ty/director_probe.md` once said "Ollama cannot see this GPU". **That was wrong.**
+Ollama was *told* not to look: `OLLAMA_LLM_LIBRARY=cpu` and `OLLAMA_NUM_GPU=0` were
+pinned in the User environment, and `bojo:latest` additionally baked `PARAMETER num_gpu 0`
+into its Modelfile. Cleared the pins, quarantined Bojo as `bojo:cpu-quarantine`, rebuilt
+`bojo:latest` without the parameter. Discovery is now
+`library=CUDA compute=12.0 name=CUDA0 driver=13.4 libdirs=ollama,cuda_v13`.
 
-D7 must therefore start with **structure first** (UI Automation tree + browser DevTools
-protocol), which is also what the work order asks for, and treat the VLM benchmark as a
-runtime decision: upgrade Ollama to a CUDA-13 build, or use llama.cpp with CUDA, or keep
-vision on CPU within an explicit latency budget. ComfyUI is the GPU path that works.
+Full write-up: `reports/ty/d7_gpu_diagnosis.md`. No Ollama upgrade, no `llama-server`
+switch and no llama.cpp build were needed — those steps remain unspent.
+
+| role | model | processor | VRAM used | RAM free |
+|---|---|---|---|---|
+| Bojo router | `bojo:latest` | 100% GPU | 3.07 GB | 6.20 GB |
+| planner/coder | `qwen3:8b` | 100% GPU | 6.63 GB | 6.20 GB |
+| vision | `qwen2.5vl:7b` | 100% GPU | 7.41 GB | 6.41 GB |
+| embeddings | `qwen3-embedding:0.6b` | 100% GPU | 2.08 GB | 6.55 GB |
+
+Idle: 15.63 GB VRAM free, 7.23 GB RAM free. `OLLAMA_MAX_LOADED_MODELS=1` stays until a
+two-model soak proves the UI stays responsive; Bojo + vision together measure 10.48 GB.
+
+## D7 continues structure-first
+
+UI Automation tree and browser DevTools are still the primary read — structure is faster
+and cheaper than pixels. The difference is that the VLM benchmark now measures
+`qwen2.5vl:7b` **on GPU** (element-click accuracy on the 40-screen set, latency, VRAM,
+RAM) rather than disqualifying it on CPU latency.
 
 ## Numbers to keep in mind
 
