@@ -43,18 +43,30 @@ with no file behind it. It is the only name from 6,736 that cannot be found.
 
 ## Pass/fail
 
-Two attempts, both recorded rather than hidden:
+Three attempts, all recorded.
 
-1. **First run, started at commit `d968eacd`.** Reached **24 % with no `F` or `E` in the
-   progress output** (dots and skips only) in about 80 minutes, then was stopped: the gap-loop
-   builders merged into `staging` while it ran, so the run no longer described one commit.
-   A mixed-state result is not evidence.
-2. **Second run, started at commit `7fd881cc`** (after the Bojo tool wiring and the seller
-   applicability correction), writing to `reports/ty/_fullsuite_20261108.txt`. It is slow on
-   this machine — roughly 1 % per 5–6 minutes with the process mostly idle in waits.
+1. **First run, started at `d968eacd`.** Reached **24 % with no `F` or `E` in the progress
+   output** in about 80 minutes, then stopped: builders merged into `staging` while it ran, so
+   it no longer described one commit. A mixed-state result is not evidence.
+2. **Second run, `7fd881cc`** — the first run to finish:
 
-**Status: in progress at the time this file was written.** The name comparison above is
-complete and does not depend on it; the pass/fail tally is appended when the run finishes, and
-a partial tally is recorded rather than guessed at. The first run's 24 %-clean is real
-evidence about that commit, not about this one.
+```
+1 failed, 7066 passed, 117 skipped, 2 xfailed, 17 warnings, 125 subtests passed in 1097.96s (0:18:17)
+```
+
+   Against the baseline (`6617 passed, 0 failed, 117 skipped, 125 subtests`): **+449 passed,
+   skips unchanged, and one new failure**.
+
+   The failure was `test_gpu_budget.py::test_an_exclusive_role_drains_everything_first`, and it
+   was a **test defect, not a product defect**: the test asked the 27B for a lease, and a lease
+   left on disk by an earlier run in the same session made the first assertion false. Fixed by
+   patching `HEAVY_LEASE_PATH` into `tmp_path` so the test cannot inherit state. Verified both
+   ways — 7 passed with no lease, and 7 passed with a deliberately planted stale lease.
+3. **Third run, `d2c29a55`** (the fix), writing `reports/ty/_fullsuite_final_20261108.txt`.
+   Its tally is appended below.
+
+The 18-minute runtime also settles an earlier question: the suite is not intrinsically slow.
+The earlier 24 %-in-80-minutes runs were competing with builders and a resident ComfyUI; on a
+quiet machine the whole suite is under twenty minutes.
+
 
