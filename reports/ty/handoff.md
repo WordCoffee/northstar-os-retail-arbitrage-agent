@@ -10,46 +10,54 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Position: D0–D17 complete; the gap-driven loop has four bundles queued
+## Position: D0–D17 complete; gap loop running; V3/V9 blocked on a locked desktop
 
 | unit | state | tag | note |
 |---|---|---|---|
 | D0–D7 | done | `ty-dir-D*` | baseline, probe, launcher, queue, scorecards, gaps, privacy, structure |
-| D8 control/browser | done | `ty-dir-D8` | risk classes, verify-after-act (V4), injection (V6), Profile 6 lease, CDP layer; six-point parity 6/6 twice; **V3 not run** |
+| D8 control/browser | done | `ty-dir-D8` | risk classes, verify-after-act (V4), injection (V6), Profile 6 lease, CDP layer; six-point parity 6/6 twice |
 | D9 seller-tester | done | `ty-dir-D9` | 32 briefs, 28 tests, 30 artefacts scored, 29 gaps |
 | D10 visual regression | done | `ty-dir-D10` | 31 views, frozen scenes, 6/6 fixtures, 41 tests |
 | D11 intel plane | done | `ty-dir-D11` | 5 connectors, 58 findings, 58/58 URLs verified |
-| D12 parallel bundles | done | `ty-dir-D12` | 6 merged; competitor-monitor 15→85, three services 15→75, 13 × +10; 2 at bar |
+| D12 parallel bundles | done | `ty-dir-D12` | 6 merged; competitor-monitor 15→85, three services 15→75, 13 × +10 |
 | D13 live mode | done | `ty-dir-D13` | narration + Q&A, blocked windows yield no pixels |
-| D14 computer mode | done | `ty-dir-D14` | scope + grants; outside-scope write refused; PC mode needs flag **and** grant |
-| D15 verification | done | `ty-dir-D15` | 17 agree, 2 FAILED, 1 BLOCKED (`reports/ty/d15_summary.md`) |
+| D14 computer mode | done | `ty-dir-D14` | scope + grants; outside-scope write refused |
+| D15 verification | done | `ty-dir-D15` | 17 agree, 2 FAILED (D17, V9), 1 BLOCKED (V3) |
 | D16 model scout | continuous | `ty-dir-D16` | router eval fixed; Bojo 15/18; qwen3.5:4b +1 (no swap) |
-| D17 bake-off | done (partial) | `ty-dir-D17` | REA on OSS target only; other two no result; earlier verdict withdrawn |
+| D17 bake-off | partial | `ty-dir-D17` | REA on the OSS target only; other two no result |
+| Chrome via UIA | done | see batch report | CDP unavailable; Profile 6 driven through UIA + pixels |
+| Seller dimension | done | — | `seller` 0.13 with a 5-output minimum; a passing test is worth 60, not 100 |
 
-## Two things are not done, by name
+## Scoring changed on 2026-11-08 — read this before trusting a score
 
-1. **V3 / Chrome Connect parity.** Chrome has no `--remote-debugging-port`, so Ty's Vision
-   cannot attach, the ten-task suite reports `not_run`, and the quarantine gate correctly
-   refuses. Chrome Connect stays the controller. One owner action, `needs_you.md` **DIR-4**:
-   close Chrome, reopen with
-   `--profile-directory="Profile 6" --remote-debugging-port=9222`.
-2. **V9 dogfood.** Driving the real UI needs V3. The Seller-Tester, live mode and verify-
-   after-act all exist; nothing has driven the real UI end to end. It stays FAILED until V3.
+Six dimensions: works 0.28, correct 0.25, complete 0.12, usable 0.12, measured 0.10,
+seller 0.13. **No service is at the bar, and the ceiling on artefacts alone is 77.** That is
+the honest reading: `listings` and `socialpulse` dropped 100 → 77 the moment seller scores
+entered the model, because no seller output has been scored for them.
+
+## Blocked, and what unblocks it
+
+1. **V3 parity and V9 dogfood: the desktop is locked** (`foreground = LockApp.exe`). The UIA
+   route is built and refuses by name; the dogfood harness is built and refuses by name.
+   Unlock the session and run:
+   `python -m tools.vision.dogfood --services competitor-monitor,listings,socialpulse`
+   then `python -m tools.vision.parity --twice --base http://127.0.0.1:8101/ui/`.
+   No password is needed by Ty and none will be used.
+2. **D17** needs Craft Anything installed and `northstar-os-ui/dist` built to complete the
+   three-target bake-off.
 
 ## Queue now
 
-`python tools/director_gaps.py --replan` has queued four bundles, all `raise complete`:
-goldengoose, offerchisel, prospector, hub (+10 each). Next session: claim them, one worktree
-each, gates, merge to `staging`, re-score.
+Four bundles were queued by the re-plan (`raise complete` for goldengoose, offerchisel,
+prospector, hub) and their Bojo tools are declared. Two builders are implementing them; after
+that, re-score and re-plan again. Empty queue means re-plan, never idle.
 
 ## Numbers to keep in mind
 
-- 29 services scored, **2 at bar** (listings 100, socialpulse 100), 27 below; worst gap 9.5.
-- Router: Bojo 15/18; best candidate qwen3.5:4b 16/18, inside the swap margin.
-- Vision: qwen2.5vl:7b on a clean server (f16 KV, ctx 8192); grounding 61.7 % on 40 screens.
-- Disk 10.8 GB free; floor 5 GB. GPU: ComfyUI is not resident — a render lane starts and stops
-  its own instance.
-- The 27B is off unless `gpu_budget.heavy_lease('27b', reason=...)` is called.
+- 29 services, 0 at bar, best 77. Worst gap is now `complete`, not `works`.
+- Router: Bojo 15/18. Vision: qwen2.5vl:7b on a clean server, grounding 61.7 % on 40 screens.
+- Full suite: 7,135 collected vs 6,736 at baseline (+400 names, −1 name that has no file).
+- Disk 10.3 GB free; floor 5 GB. ComfyUI is not resident. The 27B needs a lease.
 
 ## Rules that are easy to get wrong
 
