@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T09:57:20+00:00",
+  "updated_at": "2026-11-08T10:35:12+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -327,7 +327,7 @@
       "id": "d5-727137",
       "unit": "D5",
       "title": "add Seller-Tester briefs and score real outputs for beta-signup, ledger, auctioneer, foundation, beta, keywords, product-finder, thewatch, goldengoose, listingforge, rankledger, offerchisel, prospector, account, hub, beta-support, profitability, rivalboard, adpilot, towncrier, jobs, keyword-tracker, autothink, competitor-monitor, design-studio, beta-ops, golden-goose, listings, socialpulse (+30.0 possible on seller)",
-      "status": "queued",
+      "status": "released",
       "owner": "",
       "write_paths": [
         "ty/seller_briefs.json"
@@ -341,7 +341,7 @@
       "score_after": null,
       "evidence": "29 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:55:27+00:00",
-      "updated_at": "2026-11-08T09:55:27+00:00"
+      "updated_at": "2026-11-08T10:35:12+00:00"
     },
     {
       "id": "d5-840887",
