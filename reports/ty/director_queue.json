@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T21:21:39+00:00",
+  "updated_at": "2026-11-08T21:48:22+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -179,7 +179,8 @@
       "score_after": 67.0,
       "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:54:48+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00",
+      "rank": 0
     },
     {
       "id": "d5-240223",
@@ -200,7 +201,8 @@
       "score_after": 67.0,
       "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:54:48+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00",
+      "rank": 0
     },
     {
       "id": "d5-240249",
@@ -221,7 +223,8 @@
       "score_after": 67.0,
       "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:54:48+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00",
+      "rank": 0
     },
     {
       "id": "d5-240277",
@@ -241,7 +244,8 @@
       "score_after": 67.0,
       "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:54:48+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00",
+      "rank": 0
     },
     {
       "id": "d5-688415",
@@ -261,7 +265,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:54:48+00:00",
-      "updated_at": "2026-11-08T09:55:27+00:00"
+      "updated_at": "2026-11-08T09:55:27+00:00",
+      "rank": 0
     },
     {
       "id": "d5-688445",
@@ -281,7 +286,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:54:48+00:00",
-      "updated_at": "2026-11-08T09:55:27+00:00"
+      "updated_at": "2026-11-08T09:55:27+00:00",
+      "rank": 0
     },
     {
       "id": "d5-688470",
@@ -301,7 +307,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:54:48+00:00",
-      "updated_at": "2026-11-08T09:55:27+00:00"
+      "updated_at": "2026-11-08T09:55:27+00:00",
+      "rank": 0
     },
     {
       "id": "d5-688495",
@@ -321,7 +328,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:54:48+00:00",
-      "updated_at": "2026-11-08T09:55:27+00:00"
+      "updated_at": "2026-11-08T09:55:27+00:00",
+      "rank": 0
     },
     {
       "id": "d5-727137",
@@ -341,7 +349,8 @@
       "score_after": null,
       "evidence": "29 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:55:27+00:00",
-      "updated_at": "2026-11-08T10:35:12+00:00"
+      "updated_at": "2026-11-08T10:35:12+00:00",
+      "rank": 0
     },
     {
       "id": "d5-840887",
@@ -361,7 +370,8 @@
       "score_after": null,
       "evidence": "10 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:57:20+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:21:18+00:00",
+      "rank": 0
     },
     {
       "id": "d5-840911",
@@ -381,7 +391,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +21.8 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:57:20+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:21:18+00:00",
+      "rank": 0
     },
     {
       "id": "d5-840939",
@@ -401,7 +412,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +21.8 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:57:20+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:21:18+00:00",
+      "rank": 0
     },
     {
       "id": "d5-840966",
@@ -421,7 +433,8 @@
       "score_after": null,
       "evidence": "1 gap(s), best case +21.8 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
       "created_at": "2026-11-08T09:57:20+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:21:18+00:00",
+      "rank": 0
     },
     {
       "id": "ui-render-listings",
@@ -441,7 +454,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:06:14+00:00",
-      "updated_at": "2026-11-08T21:21:39+00:00"
+      "updated_at": "2026-11-08T21:21:39+00:00",
+      "rank": 0
     },
     {
       "id": "ui-render-socialpulse",
@@ -461,7 +475,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:06:14+00:00",
-      "updated_at": "2026-11-08T21:21:39+00:00"
+      "updated_at": "2026-11-08T21:21:39+00:00",
+      "rank": 0
     },
     {
       "id": "ui-render-competitor",
@@ -481,13 +496,14 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:06:14+00:00",
-      "updated_at": "2026-11-08T21:21:39+00:00"
+      "updated_at": "2026-11-08T21:21:39+00:00",
+      "rank": 0
     },
     {
       "id": "sel-01-picture-modes",
       "unit": "D12",
       "title": "Product pictures in all three input modes: prompt only, stored references, uploaded references",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "ty/seller_briefs.json",
@@ -499,11 +515,35 @@
       "rollback_tag": "rollback/pre-seller-quality-20261108",
       "acceptance": [],
       "tokens": 0,
+      "score_before": 75.2,
+      "score_after": 75.9,
+      "evidence": "56 briefs across 3 modes; per-mode summary; reference check; seller mean 16.7 -> 22.1 over 40 scored outputs",
+      "created_at": "2026-11-08T21:21:18+00:00",
+      "updated_at": "2026-11-08T21:47:47+00:00",
+      "rank": 0
+    },
+    {
+      "id": "sel-01b-reference-generation",
+      "unit": "D12",
+      "title": "Reference generation for real: a render lane that consumes the stored and uploaded reference instead of replaying artefacts (img2img / IP-Adapter)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester",
+        "tools/comfy_lane.py",
+        "Northstar_backend"
+      ],
+      "branch": "ty/sel-01b-reference-generation",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-sel01b-20261108",
+      "acceptance": [],
+      "tokens": 0,
       "score_before": null,
       "score_after": null,
       "evidence": "",
-      "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "created_at": "2026-11-08T21:47:47+00:00",
+      "updated_at": "2026-11-08T21:48:22+00:00",
+      "rank": 1
     },
     {
       "id": "sel-02-design-studio",
@@ -525,7 +565,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:48:22+00:00",
+      "rank": 2
     },
     {
       "id": "sel-03-aplus",
@@ -546,7 +587,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:48:22+00:00",
+      "rank": 3
     },
     {
       "id": "sel-04-packaging",
@@ -567,7 +609,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:48:22+00:00",
+      "rank": 4
     },
     {
       "id": "ux-05-render-routes",
@@ -587,7 +630,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:21:18+00:00"
+      "updated_at": "2026-11-08T21:48:22+00:00",
+      "rank": 5
     }
   ],
   "service_scores": {},

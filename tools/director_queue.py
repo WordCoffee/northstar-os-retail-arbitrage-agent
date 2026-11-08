@@ -239,17 +239,37 @@ def set_status(job_id: str, status: str, *, db: Optional[Path] = None,
 
 
 def mirror(db: Optional[Path] = None, mirror_path: Optional[Path] = None) -> Dict[str, Any]:
-    """Keep the readable JSON in step. It is for resume, not for authority."""
+    """Keep the readable JSON in step. It is for resume, not for authority.
+
+    The queue is a *ranked* list, so the mirror is ordered by `rank` first (lower runs
+    first), then by creation time. Insertion order alone made "the next job" depend on when
+    a row happened to be added, which is not a ranking.
+    """
     path = Path(mirror_path or MIRROR)
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         data = {"units": {}, "jobs": []}
-    data["jobs"] = jobs(db=db)
+    rows = jobs(db=db)
+    rows.sort(key=lambda row: (int(row.get("rank") or 0), row.get("created_at") or ""))
+    data["jobs"] = rows
     data["updated_at"] = _now()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return {"ok": True, "jobs": len(data["jobs"])}
+
+
+def set_rank(job_id: str, rank: int, *, db: Optional[Path] = None) -> Dict[str, Any]:
+    """Put a job at a position in the ranked list. Lower runs first."""
+    conn = _connect(db)
+    try:
+        conn.execute("UPDATE jobs SET rank=?, updated_at=? WHERE id=?",
+                     (int(rank), _now(), job_id))
+        _event(conn, job_id, "ranked", str(rank))
+    finally:
+        conn.close()
+    mirror(db)
+    return {"ok": True, "id": job_id, "rank": int(rank)}
 
 
 # ------------------------------------------------------------------- worktrees

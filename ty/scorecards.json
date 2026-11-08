@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-08T10:34:31+00:00",
+  "at": "2026-11-08T21:47:27+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.28,
@@ -851,60 +851,6 @@
       "purpose": "onboarding and plan selection for a private beta seller"
     },
     {
-      "id": "design-studio",
-      "label": "Design Studio",
-      "group": "Create",
-      "kind": "studio",
-      "route": "/design-studio",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 75.2,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 9.3,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "166 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 16.7,
-          "evidence": "30 Seller-Tester outputs, mean 16.7, 0 passed"
-        },
-        "complete": {
-          "score": 66.7,
-          "evidence": "2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /design-studio -> northstar-os-ui\\src\\pages\\internal\\DesignStudio.jsx; app p95 3.0 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "white-background main image from a phone photo",
-          "tag": "backed"
-        },
-        {
-          "text": "lifestyle scene with a scale reference",
-          "tag": "backed"
-        },
-        {
-          "text": "an A+ module set that matches the brand",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
-    },
-    {
       "id": "jobs",
       "label": "Jobs & Schedules",
       "group": "Internal",
@@ -950,6 +896,60 @@
         }
       ],
       "purpose": "long-running work that survives a reload and reports honestly"
+    },
+    {
+      "id": "design-studio",
+      "label": "Design Studio",
+      "group": "Create",
+      "kind": "studio",
+      "route": "/design-studio",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 75.9,
+      "meets_bar": false,
+      "weakest": "seller",
+      "gap": 8.6,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "166 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 22.1,
+          "evidence": "40 Seller-Tester outputs, mean 22.1, 0 passed"
+        },
+        "complete": {
+          "score": 66.7,
+          "evidence": "2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /design-studio -> northstar-os-ui\\src\\pages\\internal\\DesignStudio.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "white-background main image from a phone photo",
+          "tag": "backed"
+        },
+        {
+          "text": "lifestyle scene with a scale reference",
+          "tag": "backed"
+        },
+        {
+          "text": "an A+ module set that matches the brand",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
     },
     {
       "id": "account",

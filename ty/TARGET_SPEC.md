@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-08T10:34:31+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-08T21:47:27+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -22,8 +22,8 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | The Rival Board (`rivalboard`) | 63.2 | complete | no | 10.9 | 0.5 |
 | Support (`beta-support`) | 63.2 | complete | no | 10.9 | 0.5 |
 | Onboarding & Plan (`beta`) | 74.7 | complete | no | 9.3 | 0.9 |
-| Design Studio (`design-studio`) | 75.2 | seller | no | 9.3 | 0.95 |
 | Jobs & Schedules (`jobs`) | 63.2 | complete | no | 8.7 | 0.4 |
+| Design Studio (`design-studio`) | 75.9 | seller | no | 8.6 | 0.95 |
 | Account (`account`) | 74.7 | complete | no | 8.2 | 0.8 |
 | Profitability (`profitability`) | 74.7 | complete | no | 7.7 | 0.75 |
 | Golden Goose (`golden-goose`) | 77.0 | seller | no | 7.6 | 0.95 |
@@ -369,27 +369,6 @@ Seller scenarios:
 - `backed` — an invitee signs up without help
 - `backed` — a tester reports a bug and sees it acknowledged
 
-## Design Studio (`design-studio`)
-
-product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
-
-- route `/design-studio`, group Create, kind studio
-- **score 75.2 / bar 85** (impact 0.95, gap 9.3)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.28 | 166 test id(s) prove it |
-| correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 16.7 | 0.13 | 30 Seller-Tester outputs, mean 16.7, 0 passed |
-| complete | 66.7 | 0.12 | 2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
-| usable | 100.0 | 0.12 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.0 ms |
-
-Seller scenarios:
-- `backed` — white-background main image from a phone photo
-- `backed` — lifestyle scene with a scale reference
-- `backed` — an A+ module set that matches the brand
-
 ## Jobs & Schedules (`jobs`)
 
 long-running work that survives a reload and reports honestly.
@@ -408,6 +387,27 @@ long-running work that survives a reload and reports honestly.
 
 Seller scenarios:
 - `backed` — the work survives a reload and tells me when it failed
+
+## Design Studio (`design-studio`)
+
+product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
+
+- route `/design-studio`, group Create, kind studio
+- **score 75.9 / bar 85** (impact 0.95, gap 8.6)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.28 | 166 test id(s) prove it |
+| correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 22.1 | 0.13 | 40 Seller-Tester outputs, mean 22.1, 0 passed |
+| complete | 66.7 | 0.12 | 2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
+| usable | 100.0 | 0.12 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.0 ms |
+
+Seller scenarios:
+- `backed` — white-background main image from a phone photo
+- `backed` — lifestyle scene with a scale reference
+- `backed` — an A+ module set that matches the brand
 
 ## Account (`account`)
 
