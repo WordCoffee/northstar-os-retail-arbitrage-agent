@@ -1,0 +1,1399 @@
+{
+  "at": "2026-11-08T02:46:15+00:00",
+  "bar": 85.0,
+  "weights": {
+    "works": 0.3,
+    "correct": 0.3,
+    "complete": 0.15,
+    "usable": 0.15,
+    "measured": 0.1
+  },
+  "test_ids": 6736,
+  "scan_findings": 1,
+  "services": [
+    {
+      "id": "prospector",
+      "label": "Prospector",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/prospector",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 15.0,
+      "meets_bar": false,
+      "weakest": "works",
+      "gap": 63.0,
+      "dimensions": {
+        "works": {
+          "score": 0.0,
+          "evidence": "no test id maps to this service"
+        },
+        "correct": {
+          "score": 0.0,
+          "evidence": "no check proves its output is correct"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "assumed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "assumed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "assumed"
+        }
+      ],
+      "purpose": "find products worth selling, with demand and competition evidence"
+    },
+    {
+      "id": "thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/thewatch",
+      "impact": 0.6,
+      "bar": 85.0,
+      "score": 15.0,
+      "meets_bar": false,
+      "weakest": "works",
+      "gap": 42.0,
+      "dimensions": {
+        "works": {
+          "score": 0.0,
+          "evidence": "no test id maps to this service"
+        },
+        "correct": {
+          "score": 0.0,
+          "evidence": "no check proves its output is correct"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "assumed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "assumed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "assumed"
+        }
+      ],
+      "purpose": "watch the account for the things that quietly cost money"
+    },
+    {
+      "id": "rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/rivalboard",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 15.0,
+      "meets_bar": false,
+      "weakest": "works",
+      "gap": 35.0,
+      "dimensions": {
+        "works": {
+          "score": 0.0,
+          "evidence": "no test id maps to this service"
+        },
+        "correct": {
+          "score": 0.0,
+          "evidence": "no check proves its output is correct"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "assumed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "assumed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "assumed"
+        }
+      ],
+      "purpose": "what competitors changed, and what it means for us"
+    },
+    {
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/competitor-monitor",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 15.0,
+      "meets_bar": false,
+      "weakest": "works",
+      "gap": 35.0,
+      "dimensions": {
+        "works": {
+          "score": 0.0,
+          "evidence": "no test id maps to this service"
+        },
+        "correct": {
+          "score": 0.0,
+          "evidence": "no check proves its output is correct"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: watch_competitor"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "assumed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "assumed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "assumed"
+        }
+      ],
+      "purpose": "the competitor feed behind Rival Board"
+    },
+    {
+      "id": "goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/goldengoose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "557 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
+    },
+    {
+      "id": "golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/golden-goose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "557 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: golden_goose_scan"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
+    },
+    {
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/offerchisel",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "111 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "turn this product into a listing that will not be suppressed",
+          "tag": "backed"
+        },
+        {
+          "text": "rewrite the bullets for a different audience",
+          "tag": "backed"
+        },
+        {
+          "text": "fix the listing that lost its buy box",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "turn a product into an offer: price, title, bullets, images"
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "onboarding and plan selection for a private beta seller"
+    },
+    {
+      "id": "product-finder",
+      "label": "SourceScout",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/product-finder",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "1 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: scan_products"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "SourceScout: match a product idea to suppliers and landed cost"
+    },
+    {
+      "id": "hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/hub",
+      "impact": 0.85,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "844 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the room a seller lands in: today's work, the numbers that matter, and Bojo"
+    },
+    {
+      "id": "listingforge",
+      "label": "ListingForge",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/listingforge",
+      "impact": 0.85,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "35 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: compose_listing"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "turn this product into a listing that will not be suppressed",
+          "tag": "backed"
+        },
+        {
+          "text": "rewrite the bullets for a different audience",
+          "tag": "backed"
+        },
+        {
+          "text": "fix the listing that lost its buy box",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "create and version listings with the copy that converts"
+    },
+    {
+      "id": "ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/ledger",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "70 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "money in, money out, fees and margin per SKU without a spreadsheet"
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "group": "Account",
+      "kind": "account",
+      "route": "/account",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "141 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "change my plan without losing data",
+          "tag": "backed"
+        },
+        {
+          "text": "see exactly what I am entitled to",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the seller's own account: plan, entitlements, security, preferences"
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta-signup",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "invite entry that a real invitee can complete unaided"
+    },
+    {
+      "id": "profitability",
+      "label": "Profitability",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/profitability",
+      "impact": 0.75,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 7.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "4 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: margin_report"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "per-SKU profitability after fees, ads and returns"
+    },
+    {
+      "id": "auctioneer",
+      "label": "The Auctioneer",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/auctioneer",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 7.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "8 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "hold ROAS while doubling spend on the winner",
+          "tag": "backed"
+        },
+        {
+          "text": "cut the keywords that only cost money",
+          "tag": "backed"
+        },
+        {
+          "text": "show me what the campaign did last week",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "PPC bids and budgets that spend only where they return"
+    },
+    {
+      "id": "foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/foundation",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 7.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "844 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "the work survives a reload and tells me when it failed",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "Operations Hub"
+    },
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/adpilot",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 7.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "13 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: plan_campaign"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "hold ROAS while doubling spend on the winner",
+          "tag": "backed"
+        },
+        {
+          "text": "cut the keywords that only cost money",
+          "tag": "backed"
+        },
+        {
+          "text": "show me what the campaign did last week",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "campaign control: budget, bids, and the report behind them"
+    },
+    {
+      "id": "keywords",
+      "label": "Keywords & SEO",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/keywords",
+      "impact": 0.6,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 6.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "77 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "the work survives a reload and tells me when it failed",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "keyword research and SEO workbench"
+    },
+    {
+      "id": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/keyword-tracker",
+      "impact": 0.6,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 6.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "77 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: track_keywords"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "which keywords are worth owning, measured not guessed"
+    },
+    {
+      "id": "rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/rankledger",
+      "impact": 0.55,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 5.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "8 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "rank, impressions and conversion over time, per keyword"
+    },
+    {
+      "id": "autothink",
+      "label": "AutothinK",
+      "group": "AutothinK",
+      "kind": "workspace",
+      "route": "/autothink",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 5.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "68 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "remember my brand voice and use it later",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the memory plane: what the seller told us, recalled at the right time"
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta#support",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 5.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "support inside the beta without a human in the loop"
+    },
+    {
+      "id": "towncrier",
+      "label": "The Town Crier",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/towncrier",
+      "impact": 0.45,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 4.5,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "28 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "post about a restock without sounding automated",
+          "tag": "backed"
+        },
+        {
+          "text": "keep the voice consistent across three posts",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "seller-side social output that does not read like a robot"
+    },
+    {
+      "id": "jobs",
+      "label": "Jobs & Schedules",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/jobs",
+      "impact": 0.4,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 4.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "89 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "the work survives a reload and tells me when it failed",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "long-running work that survives a reload and reports honestly"
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "kind": "onboarding",
+      "route": "/beta-ops",
+      "impact": 0.4,
+      "bar": 85.0,
+      "score": 75.0,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 4.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "see who is active and what broke",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the tester dashboard: who is in, what they did, what broke"
+    },
+    {
+      "id": "design-studio",
+      "label": "Design Studio",
+      "group": "Create",
+      "kind": "studio",
+      "route": "/design-studio",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 85.0,
+      "meets_bar": false,
+      "weakest": "measured",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "166 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 66.7,
+          "evidence": "2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "white-background main image from a phone photo",
+          "tag": "backed"
+        },
+        {
+          "text": "lifestyle scene with a scale reference",
+          "tag": "backed"
+        },
+        {
+          "text": "an A+ module set that matches the brand",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
+    },
+    {
+      "id": "listings",
+      "label": "Listing Guardian",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/listings",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 90.0,
+      "meets_bar": false,
+      "weakest": "measured",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "35 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: optimize_listing"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "turn this product into a listing that will not be suppressed",
+          "tag": "backed"
+        },
+        {
+          "text": "rewrite the bullets for a different audience",
+          "tag": "backed"
+        },
+        {
+          "text": "fix the listing that lost its buy box",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "Listing Guardian: keep live listings compliant and correct"
+    },
+    {
+      "id": "socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/socialpulse",
+      "impact": 0.45,
+      "bar": 85.0,
+      "score": 90.0,
+      "meets_bar": false,
+      "weakest": "measured",
+      "gap": 0.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "28 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "its tests passed in the D0 measured run"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: plan_social"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "no threshold or performance check defined yet"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "post about a restock without sounding automated",
+          "tag": "backed"
+        },
+        {
+          "text": "keep the voice consistent across three posts",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "schedule and judge social posts against a brand voice"
+    }
+  ],
+  "global_findings": [
+    {
+      "check": "dead-module",
+      "file": "northstar-os-ui/src/lib/serviceGate.js",
+      "line": 1,
+      "message": "no module imports serviceGate.js (and it has no test); it is unreachable",
+      "severity": "medium"
+    }
+  ],
+  "at_bar": []
+}
