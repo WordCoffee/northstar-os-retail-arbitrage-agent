@@ -21,8 +21,8 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 | D4 scorecards | done | `ty-dir-D4` | 29 services, bar is **per dimension**, 0 of 29 at bar |
 | D5 gaps | done | `ty-dir-D5` | gaps → bundles; empty queue writes a defect, never idles |
 | D6 vision privacy | done | `ty-dir-D6` | V5 + V7 pass, including a real blocked window |
-| **D7 understanding** | **next** | — | structure-first (UIA + DevTools), then the VLM benchmark |
-| D8 control/browser | pending | — | risk classes, verify-after-act, Profile 6, Chrome Connect parity |
+| D7 vision understanding | done | `ty-dir-D7` | V1 (llava, 0.8 s JSON), V2 (20/20 element reads), V8 (10.29 GB with Bojo) |
+| **D8 control/browser** | **next** | — | risk classes, verify-after-act, Profile 6, Chrome Connect parity |
 | D9–D15 | pending | — | seller-tester, visual regression, intel, builders, live mode, PC mode, verification |
 | D16 model scout | continuous | — | per-role incumbents, benchmark, quarantine + restore |
 | D17 bake-off | pending | — | REA vs Craft Anything on three targets |
@@ -49,12 +49,24 @@ switch and no llama.cpp build were needed — those steps remain unspent.
 Idle: 15.63 GB VRAM free, 7.23 GB RAM free. `OLLAMA_MAX_LOADED_MODELS=1` stays until a
 two-model soak proves the UI stays responsive; Bojo + vision together measure 10.48 GB.
 
-## D7 continues structure-first
+## D7 result — structure first, and a measured model choice
 
-UI Automation tree and browser DevTools are still the primary read — structure is faster
-and cheaper than pixels. The difference is that the VLM benchmark now measures
-`qwen2.5vl:7b` **on GPU** (element-click accuracy on the 40-screen set, latency, VRAM,
-RAM) rather than disqualifying it on CPU latency.
+The UI Automation path is the primary read and it is deterministic: **V2 passed 20/20**
+against a real WinForms window, including reading a field's value back. No model was
+involved, which is the point.
+
+The VLM path needed a model. Three installed candidates were measured
+(`reports/ty/d7_vision_benchmark.md`): `qwen2.5vl:7b` degenerate, `moondream` degenerate,
+**`llava:7b` correct** — valid JSON naming Visual Studio Code in 0.8 s at 100 % GPU. The
+default is now `llava:7b` because it passed, not because it was listed first.
+
+Two engineering fixes came out of it: frames are downscaled to 1280 wide before encoding
+(a 2560×1600 frame made the encoder fail with `std::bad_alloc`), and vision keeps Bojo as
+its only companion because all three residents starved the encoder.
+
+**D8 next.** Note for D8: `free_comfy()` answers 200 but releases nothing on this build —
+it is reported as `verified: false` until a reading actually moves. Do not trust the
+acknowledgement.
 
 ## Numbers to keep in mind
 

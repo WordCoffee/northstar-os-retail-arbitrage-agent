@@ -98,12 +98,22 @@ RESIDENT_ROLES = ("bojo", "embeddings")
 #: a resident.
 EXCLUSIVE_ROLES = ("27b", "image_flux", "image_t2i")
 
+#: Which resident roles may stay beside each role. Vision keeps Bojo but evicts the
+#: embedding model: bojo + vision measure 10.48 GB, while all three (12.56 GB) left the
+#: multimodal encoder with too little working memory and it failed with std::bad_alloc.
+COMPANIONS = {
+    "vision": ("bojo",),
+    "gui_grounding": ("bojo",),
+}
+
 #: The model that actually serves each local role today. A role with no model is
 #: reported as unmapped rather than guessed at.
 ROLE_MODELS = {
     "bojo": "bojo:latest",
     "coder": "qwen3:8b",
-    "vision": "qwen2.5vl:7b",
+    # llava:7b by measurement: qwen2.5vl:7b and moondream both produce degenerate
+    # fragments on this box (reports/ty/d7_vision_benchmark.md).
+    "vision": "llava:7b",
     "embeddings": "qwen3-embedding:0.6b",
 }
 
@@ -275,8 +285,8 @@ def residency() -> Dict[str, Any]:
 ROLE_SIZE_GB = {
     "bojo": 3.07,
     "coder": 6.63,
-    "vision": 7.41,
-    "gui_grounding": 7.41,
+    "vision": 5.19,
+    "gui_grounding": 5.19,
     "embeddings": 2.08,
 }
 
@@ -284,17 +294,28 @@ COMFY = os.environ.get("COMFY_URL", "http://127.0.0.1:8188")
 
 
 def free_comfy(timeout: float = 30.0) -> Dict[str, Any]:
-    """Ask ComfyUI to drop its models. They reload on the next render, so this is
-    eviction, not loss - the same trade the stop/restore cycle made by hand."""
+    """Ask ComfyUI to drop its models, and verify that VRAM actually came back.
+
+    Measured 2026-11-07: this build answers `/free` with 200 and releases nothing (4.25 GB
+    stayed resident across the call). The endpoint is therefore reported as unproven
+    unless the reading moves, so nobody can mistake an acknowledgement for a release.
+    """
+    before = snapshot()
     req = urllib.request.Request(
         COMFY.rstrip("/") + "/free",
         data=json.dumps({"unload_models": True, "free_memory": True}).encode("utf-8"),
         headers={"Content-Type": "application/json"}, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return {"ok": 200 <= resp.status < 300, "status": resp.status}
+            status = resp.status
     except (urllib.error.URLError, OSError, ValueError) as exc:
-        return {"ok": False, "reason": f"{type(exc).__name__}: {exc}"}
+        return {"ok": False, "reason": f"{type(exc).__name__}: {exc}", "released_gb": 0.0}
+    time.sleep(3.0)
+    after = snapshot()
+    delta = round((after.get("free_gb") or 0) - (before.get("free_gb") or 0), 2)
+    return {"ok": 200 <= status < 300, "status": status, "released_gb": delta,
+            "verified": delta > 0.5,
+            "note": "" if delta > 0.5 else "acknowledged but VRAM unchanged - unproven"}
 
 
 def acquire(role: str, *, ttl_s: int = 3600) -> Dict[str, Any]:
@@ -308,7 +329,7 @@ def acquire(role: str, *, ttl_s: int = 3600) -> Dict[str, Any]:
     if not held.get("ok"):
         return held
     exclusive = role in EXCLUSIVE_ROLES
-    keep = () if exclusive else tuple(RESIDENT_ROLES) + (role,)
+    keep = () if exclusive else tuple(COMPANIONS.get(role, RESIDENT_ROLES)) + (role,)
     freed = enforce(keep=keep)
     if role == "27b":
         # llama-server is not an Ollama model; the lock manager owns the *residency*,
@@ -320,6 +341,10 @@ def acquire(role: str, *, ttl_s: int = 3600) -> Dict[str, Any]:
     if not model:
         unlock(role)
         return {"ok": False, "reason": "no_model_for_role", "role": role, "freed": freed}
+    if model in loaded_models():
+        # Already resident: there is nothing to load, so the fit check does not apply.
+        return {"ok": True, "role": role, "model": model, "exclusive": exclusive,
+                "freed": freed, "already_resident": True}
     need = ROLE_SIZE_GB.get(role, 0.0)
     fit = fits(role, need) if need else {"ok": True}
     comfy_freed = {}

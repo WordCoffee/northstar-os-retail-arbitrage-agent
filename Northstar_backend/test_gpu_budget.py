@@ -102,6 +102,7 @@ def test_release_restores_the_resident_pair(world):
 
 def test_budgets_come_from_the_measurement(world):
     assert G.ROLE_BUDGET_GB["27b"] == 14.5
-    assert G.ROLE_BUDGET_GB["vision"] == 8.0
+    assert G.ROLE_BUDGET_GB["vision"] == 8.0     # budget keeps the 7B-class headroom
     assert G.ROLE_BUDGET_GB["image_flux"] == 11.0
-    assert G.ROLE_SIZE_GB["vision"] == 7.41
+    assert G.ROLE_SIZE_GB["vision"] == 5.19      # llava:7b, measured
+    assert G.ROLE_MODELS["vision"] == "llava:7b"

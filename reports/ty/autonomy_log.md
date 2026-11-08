@@ -12,3 +12,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 | 2026-11-08 | D4 | director | 29 services scored from artefacts; bar is per-dimension so 0 of 29 pass; top gap prospector 63 | `ty-dir-D4` | 0 |
 | 2026-11-08 | D5 | director | gap-ranked bundles (>=5 points or >=3 gaps); replan writes a defect instead of idling | `ty-dir-D5` | 0 |
 | 2026-11-08 | D6 | director | V5+V7 pass: blocked window yields no pixels; pause and kill stop input in <1s; 11 tests | `ty-dir-D6` | 0 |
+| 2026-11-08 | D7 | director | V1+V2+V8 pass: llava 0.8s JSON, 20/20 element reads, 10.29GB VRAM with Bojo | `ty-dir-D7` | 0 |

@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T02:50:48+00:00",
+  "updated_at": "2026-11-08T05:14:36+00:00",
   "cycle": 1,
-  "unit_in_flight": "D7",
+  "unit_in_flight": "D8",
   "unit_order": [
     "D0",
     "D1",
@@ -92,7 +92,10 @@
       "summary": "V5+V7 pass: blocked window yields no pixels; pause and kill stop input in <1s; 11 tests"
     },
     "D7": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D7",
+      "completed_at": "2026-11-08T05:14:36+00:00",
+      "summary": "V1+V2+V8 pass: llava 0.8s JSON, 20/20 element reads, 10.29GB VRAM with Bojo"
     },
     "D8": {
       "status": "pending"
