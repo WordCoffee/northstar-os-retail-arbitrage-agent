@@ -78,8 +78,25 @@ Effect at once, with the real Seller-Tester pass (`30 outputs, 0 passed, mean 16
 | everything else | ≤ 95 | ≤ 77 | no seller evidence anywhere |
 
 **No service is at the bar, and 77 is the ceiling a service can reach on artefacts alone.**
-That is the honest number: the product's outputs are not good enough yet, and the scorecard
-now says so instead of crediting a green test suite.
+
+### Refinement the same hour: `seller` only applies to seller-facing services
+
+A first pass scored `seller = 0` for *every* service, which is wrong: `foundation` and
+`account` do not produce a seller artefact, so demanding an output score from them invents
+work. Ten services are seller-facing (`design-studio`, `listings`, `listingforge`,
+`offerchisel`, `goldengoose`, `golden-goose`, `product-finder`, `towncrier`, `socialpulse`,
+`adpilot`); for the rest the dimension is `not_applicable` and the weighted score is
+renormalised over the dimensions that do apply.
+
+The same correction went into the gap bundler: a `seller` gap is closed by adding briefs and
+scoring outputs (`ty/seller_briefs.json`), not by editing the backend, and all seller gaps
+collapse into **one** bundle because they write one file. Before this, the re-plan produced
+four jobs titled "raise seller for ledger" pointing at `Northstar_backend` — work nobody
+could do.
+
+Resulting gap distribution across the 29 services: **17 `complete`**, **10 `seller`**,
+**2 `measured`**. That is a queue of real work, not a list of slogans.
+
 
 ## 5. Digest
 
