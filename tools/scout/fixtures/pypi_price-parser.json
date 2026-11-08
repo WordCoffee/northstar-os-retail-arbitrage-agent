@@ -1,0 +1,64 @@
+{
+ "source": "pypi",
+ "query": "price parser",
+ "recorded_at": "2026-11-08T08:50:59+00:00",
+ "payload": {
+  "source": "pypi",
+  "query": "price parser",
+  "status": 200,
+  "projects": [
+   {
+    "info": {
+     "name": "price-parser",
+     "version": "0.5.1",
+     "summary": "Extract price and currency from a raw string",
+     "license": null,
+     "license_expression": "BSD-3-Clause",
+     "classifiers": [
+      "Development Status :: 4 - Beta",
+      "Intended Audience :: Developers",
+      "Natural Language :: English",
+      "Operating System :: OS Independent",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+      "Programming Language :: Python :: 3.12",
+      "Programming Language :: Python :: 3.13",
+      "Programming Language :: Python :: 3.14",
+      "Programming Language :: Python :: 3.9"
+     ],
+     "package_url": "https://pypi.org/project/price-parser/",
+     "home_page": null,
+     "project_urls": {
+      "Homepage": "https://github.com/scrapinghub/price-parser",
+      "Source": "https://github.com/scrapinghub/price-parser",
+      "Tracker": "https://github.com/scrapinghub/price-parser/issues"
+     },
+     "requires_python": ">=3.9",
+     "yanked": false
+    }
+   },
+   {
+    "info": {
+     "name": "price-parser-reworkd",
+     "version": "0.3.0",
+     "summary": "A simple price parser for extracting currency and value from strings (currently used as a Pydantic datatype only).",
+     "license": null,
+     "license_expression": null,
+     "classifiers": [
+      "License :: OSI Approved :: MIT License",
+      "Operating System :: OS Independent",
+      "Programming Language :: Python :: 3"
+     ],
+     "package_url": "https://pypi.org/project/price-parser-reworkd/",
+     "home_page": "https://github.com/mohamedmamdouh22/price-parser.git",
+     "project_urls": {
+      "Homepage": "https://github.com/mohamedmamdouh22/price-parser.git"
+     },
+     "requires_python": ">=3.6",
+     "yanked": false
+    }
+   }
+  ]
+ }
+}

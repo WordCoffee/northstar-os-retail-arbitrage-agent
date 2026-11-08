@@ -1,0 +1,105 @@
+{
+ "source": "github",
+ "query": "product photography",
+ "recorded_at": "2026-11-08T08:49:34+00:00",
+ "payload": {
+  "source": "github",
+  "query": "product photography",
+  "request_url": "https://api.github.com/search/repositories?q=product+photography&sort=stars&order=desc&per_page=3",
+  "status": 200,
+  "quota_remaining": 9,
+  "quota_limit": 10,
+  "total_count": 743,
+  "items": [
+   {
+    "full_name": "Dabble-Studio/3d-to-photo",
+    "html_url": "https://github.com/Dabble-Studio/3d-to-photo",
+    "description": "3D to Photo is an open-source package by Dabble, that combines threeJS and Stable diffusion to build a virtual photo studio for product photography. Load a 3D model into the browser and virtual shoot it in any kind of scene you can imagine",
+    "stargazers_count": 451,
+    "forks_count": 28,
+    "license": {
+     "key": "mit",
+     "name": "MIT License",
+     "spdx_id": "MIT",
+     "url": "https://api.github.com/licenses/mit",
+     "node_id": "MDc6TGljZW5zZTEz"
+    },
+    "topics": [],
+    "language": "JavaScript",
+    "pushed_at": "2024-01-10T20:06:50Z",
+    "archived": false,
+    "homepage": ""
+   },
+   {
+    "full_name": "SupercmoHQ/superCMO-skills",
+    "html_url": "https://github.com/SupercmoHQ/superCMO-skills",
+    "description": "Open-source skills that empower any AI agent (Claude, Cursor, Hermes, etc.) to generate end-to-end marketing campaigns - UGC videos, ad videos, product photography and more.",
+    "stargazers_count": 296,
+    "forks_count": 36,
+    "license": {
+     "key": "apache-2.0",
+     "name": "Apache License 2.0",
+     "spdx_id": "Apache-2.0",
+     "url": "https://api.github.com/licenses/apache-2.0",
+     "node_id": "MDc6TGljZW5zZTI="
+    },
+    "topics": [
+     "ad-creative",
+     "adcreative-alternative",
+     "agent-skills",
+     "ai-agents",
+     "ai-marketing",
+     "ai-video-ads",
+     "arcads-alternative",
+     "claude-code",
+     "claude-skills",
+     "codex",
+     "creatify-alternative",
+     "cursor",
+     "gemini-cli-extension",
+     "higgsfield-alternative",
+     "image-generation",
+     "mcp",
+     "model-context-protocol",
+     "text-to-speech",
+     "ugc-ads",
+     "video-generation"
+    ],
+    "language": "Python",
+    "pushed_at": "2026-10-21T12:24:13Z",
+    "archived": false,
+    "homepage": "https://getsupercmo.ai"
+   },
+   {
+    "full_name": "devanshug2307/Awesome-AI-Image-Prompts",
+    "html_url": "https://github.com/devanshug2307/Awesome-AI-Image-Prompts",
+    "description": "1,000+ curated AI image prompts, including copy-ready JSON prompts for OpenAI image tools, product photography, portraits, character design, and more.",
+    "stargazers_count": 293,
+    "forks_count": 36,
+    "license": {
+     "key": "mit",
+     "name": "MIT License",
+     "spdx_id": "MIT",
+     "url": "https://api.github.com/licenses/mit",
+     "node_id": "MDc6TGljZW5zZTEz"
+    },
+    "topics": [
+     "ai-image-generation",
+     "ai-image-prompts",
+     "chatgpt",
+     "dalle",
+     "gpt-image",
+     "image-generation",
+     "openai",
+     "prompt-engineering",
+     "prompt-guide",
+     "prompts"
+    ],
+    "language": null,
+    "pushed_at": "2026-08-08T05:43:52Z",
+    "archived": false,
+    "homepage": "https://agentpedia.codes/image-prompts"
+   }
+  ]
+ }
+}

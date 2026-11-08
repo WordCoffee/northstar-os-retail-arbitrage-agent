@@ -1,0 +1,89 @@
+{
+ "source": "github",
+ "query": "listing optimization ecommerce",
+ "recorded_at": "2026-11-08T08:49:35+00:00",
+ "payload": {
+  "source": "github",
+  "query": "listing optimization ecommerce",
+  "request_url": "https://api.github.com/search/repositories?q=listing+optimization+ecommerce&sort=stars&order=desc&per_page=3",
+  "status": 200,
+  "quota_remaining": 6,
+  "quota_limit": 10,
+  "total_count": 164,
+  "items": [
+   {
+    "full_name": "yoligehude14753/ecom-agent",
+    "html_url": "https://github.com/yoligehude14753/ecom-agent",
+    "description": "AI-powered e-commerce automation platform. Open-source, self-hosted, BYOK. Product research · Listing generator · Review analyzer · Competitor monitor · Ad optimizer",
+    "stargazers_count": 18,
+    "forks_count": 5,
+    "license": {
+     "key": "mit",
+     "name": "MIT License",
+     "spdx_id": "MIT",
+     "url": "https://api.github.com/licenses/mit",
+     "node_id": "MDc6TGljZW5zZTEz"
+    },
+    "topics": [
+     "ai",
+     "amazon",
+     "automation",
+     "ecommerce",
+     "fastapi",
+     "fba",
+     "llm",
+     "python",
+     "react",
+     "self-hosted"
+    ],
+    "language": "Python",
+    "pushed_at": "2026-03-26T08:30:44Z",
+    "archived": false,
+    "homepage": null
+   },
+   {
+    "full_name": "bethel-mark/ecom-listing-pro",
+    "html_url": "https://github.com/bethel-mark/ecom-listing-pro",
+    "description": "AI e-commerce listing optimization: auto-diagnose images, rewrite titles for conversion, design 6-image carousels with intelligent style matching. Anti-AI realism, watermark removal, Excel batch workflow, multi-platform rules (Amazon/Shopify/TikTok/Ozon), 3 prompt modes. Cross-border & domestic.",
+    "stargazers_count": 12,
+    "forks_count": 0,
+    "license": null,
+    "topics": [
+     "ai-agent",
+     "amazon-listing",
+     "codex-skill",
+     "cross-border",
+     "dropshipping",
+     "ecommerce",
+     "ecommerce-automation",
+     "glassmorphism",
+     "image-optimization",
+     "lazada",
+     "product-listing",
+     "seo",
+     "shopee",
+     "shopify",
+     "ugc",
+     "watermark-removal"
+    ],
+    "language": null,
+    "pushed_at": "2026-07-20T15:16:12Z",
+    "archived": false,
+    "homepage": "https://github.com/bethel-mark/ecom-listing-pro"
+   },
+   {
+    "full_name": "Dheenadhayalan211203/Urbancart-EcomerceWebApplication",
+    "html_url": "https://github.com/Dheenadhayalan211203/Urbancart-EcomerceWebApplication",
+    "description": "Urban Cart Urban Cart is a modern eCommerce web application built with React.js. It leverages a GET REST API to fetch product details, providing users with a seamless and efficient shopping experience.  Features Dynamic Product Listings: Fetch and display product details using a GET REST API. Responsive Design: Optimized for both desktop and mobile",
+    "stargazers_count": 10,
+    "forks_count": 1,
+    "license": null,
+    "topics": [],
+    "language": "JavaScript",
+    "pushed_at": "2024-06-02T09:53:00Z",
+    "archived": false,
+    "homepage": ""
+   }
+  ]
+ }
+}

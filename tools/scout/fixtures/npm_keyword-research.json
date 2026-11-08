@@ -1,0 +1,143 @@
+{
+ "source": "npm",
+ "query": "keyword research",
+ "recorded_at": "2026-11-08T08:49:49+00:00",
+ "payload": {
+  "source": "npm",
+  "query": "keyword research",
+  "request_url": "https://registry.npmjs.org/-/v1/search?text=keyword+research&size=3",
+  "status": 200,
+  "search": {
+   "objects": [
+    {
+     "package": {
+      "name": "@graphext/cuery",
+      "version": "0.11.14",
+      "description": "Cuery tools for AI-powered keyword research and brand analysis",
+      "date": "2026-10-08T09:13:28.797Z",
+      "publisher": {
+       "email": "npm-oidc-no-reply@github.com",
+       "trustedPublisher": {
+        "oidcConfigId": "5e468914-5dcf-4192-8d70-0be88e58ff19",
+        "id": "github"
+       },
+       "username": "GitHub Actions"
+      },
+      "links": {
+       "homepage": "https://github.com/graphext/cueryjs#readme",
+       "repository": "git+https://github.com/graphext/cueryjs.git",
+       "bugs": "https://github.com/graphext/cueryjs/issues",
+       "npm": "https://www.npmjs.com/package/@graphext/cuery"
+      }
+     },
+     "score": {
+      "final": 191.49507,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "yandex-wordstat-mcp",
+      "version": "2.0.3",
+      "description": "MCP server for the Yandex Wordstat v2 API (Yandex Cloud Search API) - keyword research and search trends for Russian market",
+      "date": "2026-10-28T15:03:37.525Z",
+      "publisher": {
+       "email": "albertpopkov@hotmail.com",
+       "username": "altrr2"
+      },
+      "links": {
+       "homepage": "https://github.com/seyka-ai/yandex-tools-mcp/tree/main/packages/yandex-wordstat-mcp#readme",
+       "repository": "git+https://github.com/seyka-ai/yandex-tools-mcp.git",
+       "bugs": "https://github.com/seyka-ai/yandex-tools-mcp/issues",
+       "npm": "https://www.npmjs.com/package/yandex-wordstat-mcp"
+      }
+     },
+     "score": {
+      "final": 186.08275,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "@stufently/yandex-wordstat-mcp",
+      "version": "2.2.1",
+      "description": "MCP server for Yandex Wordstat API — keyword research for Russian/CIS markets",
+      "date": "2026-10-16T01:39:34.888Z",
+      "publisher": {
+       "email": "npm-oidc-no-reply@github.com",
+       "trustedPublisher": {
+        "oidcConfigId": "aeed0ae2-5379-48f2-82e1-fda0d91417ab",
+        "id": "github"
+       },
+       "username": "GitHub Actions"
+      },
+      "links": {
+       "homepage": "https://github.com/stufently/yandex-mcp/tree/main/packages/yandex-wordstat-mcp#readme",
+       "repository": "git+https://github.com/stufently/yandex-mcp.git",
+       "bugs": "https://github.com/stufently/yandex-mcp/issues",
+       "npm": "https://www.npmjs.com/package/@stufently/yandex-wordstat-mcp"
+      }
+     },
+     "score": {
+      "final": 184.23227,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    }
+   ]
+  },
+  "latest": {
+   "@graphext/cuery": {
+    "name": "@graphext/cuery",
+    "version": "0.11.14",
+    "license": "MIT",
+    "description": "Cuery tools for AI-powered keyword research and brand analysis",
+    "repository": {
+     "url": "git+https://github.com/graphext/cueryjs.git",
+     "type": "git"
+    },
+    "homepage": "https://github.com/graphext/cueryjs#readme"
+   },
+   "yandex-wordstat-mcp": {
+    "name": "yandex-wordstat-mcp",
+    "version": "2.0.3",
+    "license": "MIT",
+    "description": "MCP server for the Yandex Wordstat v2 API (Yandex Cloud Search API) - keyword research and search trends for Russian market",
+    "repository": {
+     "url": "git+https://github.com/seyka-ai/yandex-tools-mcp.git",
+     "type": "git",
+     "directory": "packages/yandex-wordstat-mcp"
+    },
+    "homepage": "https://github.com/seyka-ai/yandex-tools-mcp/tree/main/packages/yandex-wordstat-mcp#readme"
+   },
+   "@stufently/yandex-wordstat-mcp": {
+    "name": "@stufently/yandex-wordstat-mcp",
+    "version": "2.2.1",
+    "license": "MIT",
+    "description": "MCP server for Yandex Wordstat API — keyword research for Russian/CIS markets",
+    "repository": {
+     "url": "git+https://github.com/stufently/yandex-mcp.git",
+     "type": "git",
+     "directory": "packages/yandex-wordstat-mcp"
+    },
+    "homepage": "https://github.com/stufently/yandex-mcp/tree/main/packages/yandex-wordstat-mcp#readme"
+   }
+  },
+  "downloads": {
+   "@graphext/cuery": 214,
+   "yandex-wordstat-mcp": 1378,
+   "@stufently/yandex-wordstat-mcp": 492
+  }
+ }
+}

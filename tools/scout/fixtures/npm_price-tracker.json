@@ -1,0 +1,127 @@
+{
+ "source": "npm",
+ "query": "price tracker",
+ "recorded_at": "2026-11-08T08:49:46+00:00",
+ "payload": {
+  "source": "npm",
+  "query": "price tracker",
+  "request_url": "https://registry.npmjs.org/-/v1/search?text=price+tracker&size=3",
+  "status": 200,
+  "search": {
+   "objects": [
+    {
+     "package": {
+      "name": "marketplace-price-tracker",
+      "version": "1.0.1",
+      "description": "JavaScript client for Marketplace Price Tracker API — search OfferUp, Reverb, TCGPlayer, StubHub, Swappa, Poshmark, Craigslist and more via RapidAPI",
+      "date": "2026-03-29T01:18:36.457Z",
+      "publisher": {
+       "email": "lulzasaur9192@gmail.com",
+       "username": "lulzasaur9192"
+      },
+      "links": {
+       "homepage": "https://rapidapi.com/lulzasaur9192/api/marketplace-price-api",
+       "repository": "git+https://github.com/lulzasaur9192/marketplace-price-tracker.git",
+       "bugs": "https://github.com/lulzasaur9192/marketplace-price-tracker/issues",
+       "npm": "https://www.npmjs.com/package/marketplace-price-tracker"
+      }
+     },
+     "score": {
+      "final": 126.988396,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "price-tracker-ai-mcp",
+      "version": "1.0.0",
+      "description": "Price Tracker Ai MCP server. Tools: track price, get price history, set alert. Built by MEOK AI Labs.",
+      "date": "2026-05-04T18:15:18.948Z",
+      "publisher": {
+       "email": "Nicholastempleman@gmail.com",
+       "username": "csga_global"
+      },
+      "links": {
+       "homepage": "https://github.com/CSOAI-ORG/price-tracker-ai-mcp#readme",
+       "repository": "git+https://github.com/CSOAI-ORG/price-tracker-ai-mcp.git",
+       "bugs": "https://github.com/CSOAI-ORG/price-tracker-ai-mcp/issues",
+       "npm": "https://www.npmjs.com/package/price-tracker-ai-mcp"
+      }
+     },
+     "score": {
+      "final": 126.39325,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "polyprice",
+      "version": "1.0.9",
+      "description": "Minimalistic real-time crypto price tracker. (no API key needed)",
+      "date": "2024-04-02T04:12:10.801Z",
+      "publisher": {
+       "email": "fantasim.dev@gmail.com",
+       "username": "fantasim"
+      },
+      "links": {
+       "npm": "https://www.npmjs.com/package/polyprice"
+      }
+     },
+     "score": {
+      "final": 125.09923,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    }
+   ]
+  },
+  "latest": {
+   "marketplace-price-tracker": {
+    "name": "marketplace-price-tracker",
+    "version": "1.0.1",
+    "license": "MIT",
+    "description": "JavaScript client for Marketplace Price Tracker API — search OfferUp, Reverb, TCGPlayer, StubHub, Swappa, Poshmark, Craigslist and more via RapidAPI",
+    "repository": {
+     "url": "git+https://github.com/lulzasaur9192/marketplace-price-tracker.git",
+     "type": "git"
+    },
+    "homepage": "https://rapidapi.com/lulzasaur9192/api/marketplace-price-api"
+   },
+   "price-tracker-ai-mcp": {
+    "name": "price-tracker-ai-mcp",
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "Price Tracker Ai MCP server. Tools: track price, get price history, set alert. Built by MEOK AI Labs.",
+    "repository": {
+     "url": "git+https://github.com/CSOAI-ORG/price-tracker-ai-mcp.git",
+     "type": "git"
+    },
+    "homepage": "https://github.com/CSOAI-ORG/price-tracker-ai-mcp#readme"
+   },
+   "polyprice": {
+    "name": "polyprice",
+    "version": "1.0.9",
+    "license": "MIT",
+    "description": "Minimalistic real-time crypto price tracker. (no API key needed)",
+    "repository": null,
+    "homepage": null
+   }
+  },
+  "downloads": {
+   "marketplace-price-tracker": 34,
+   "price-tracker-ai-mcp": 20,
+   "polyprice": 45
+  }
+ }
+}

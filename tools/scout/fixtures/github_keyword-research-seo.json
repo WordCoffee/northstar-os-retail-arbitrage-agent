@@ -1,0 +1,125 @@
+{
+ "source": "github",
+ "query": "keyword research seo",
+ "recorded_at": "2026-11-08T08:49:37+00:00",
+ "payload": {
+  "source": "github",
+  "query": "keyword research seo",
+  "request_url": "https://api.github.com/search/repositories?q=keyword+research+seo&sort=stars&order=desc&per_page=3",
+  "status": 200,
+  "quota_remaining": 4,
+  "quota_limit": 10,
+  "total_count": 1140,
+  "items": [
+   {
+    "full_name": "Ryze-AI-Adgent/open-seo-mcp-skills",
+    "html_url": "https://github.com/Ryze-AI-Adgent/open-seo-mcp-skills",
+    "description": "Free SEO MCP server + open-source SEO and GEO skills for Claude: keyword research, rank tracking, audits, backlinks, AI visibility on your real GSC/GA4/ads data. claude mcp add ryze --transport http https://connector.get-ryze.ai/mcp",
+    "stargazers_count": 8933,
+    "forks_count": 395,
+    "license": {
+     "key": "mit",
+     "name": "MIT License",
+     "spdx_id": "MIT",
+     "url": "https://api.github.com/licenses/mit",
+     "node_id": "MDc6TGljZW5zZTEz"
+    },
+    "topics": [
+     "ai-seo",
+     "ai-visibility",
+     "backlinks",
+     "claude",
+     "claude-code",
+     "claude-skills",
+     "dataforseo",
+     "generative-engine-optimization",
+     "geo",
+     "geo-mcp",
+     "keyword-research",
+     "llm-seo",
+     "mcp",
+     "mcp-server",
+     "open-source-seo",
+     "rank-tracking",
+     "seo",
+     "seo-audit",
+     "seo-mcp",
+     "seo-mcp-server"
+    ],
+    "language": "Shell",
+    "pushed_at": "2026-10-27T08:57:55Z",
+    "archived": false,
+    "homepage": "https://www.get-ryze.ai/how-to-connect-claude-to-google-meta-ads-mcp"
+   },
+   {
+    "full_name": "CorgiCorner/bisibility",
+    "html_url": "https://github.com/CorgiCorner/bisibility",
+    "description": "Open-source SEO platform. Track Google rankings. Research keywords. Inspect backlinks.",
+    "stargazers_count": 599,
+    "forks_count": 36,
+    "license": {
+     "key": "agpl-3.0",
+     "name": "GNU Affero General Public License v3.0",
+     "spdx_id": "AGPL-3.0",
+     "url": "https://api.github.com/licenses/agpl-3.0",
+     "node_id": "MDc6TGljZW5zZTE="
+    },
+    "topics": [
+     "ai-tracking",
+     "google-serp",
+     "keyword-tracker",
+     "open-source-seo",
+     "rank-tracker",
+     "rank-tracking",
+     "self-hosted",
+     "seo",
+     "seo-monitoring",
+     "seo-tools",
+     "serp-tracking"
+    ],
+    "language": "TypeScript",
+    "pushed_at": "2026-11-06T15:13:01Z",
+    "archived": false,
+    "homepage": "https://bisibility.com"
+   },
+   {
+    "full_name": "springvoiceswell/semrush-ai-tool",
+    "html_url": "https://github.com/springvoiceswell/semrush-ai-tool",
+    "description": "Semrush SEO AI-powered analysis tool MCP server & CLI for keyword research, domain analytics, backlink analysis",
+    "stargazers_count": 365,
+    "forks_count": 0,
+    "license": {
+     "key": "mit",
+     "name": "MIT License",
+     "spdx_id": "MIT",
+     "url": "https://api.github.com/licenses/mit",
+     "node_id": "MDc6TGljZW5zZTEz"
+    },
+    "topics": [
+     "ai-seo",
+     "backlink-analysis",
+     "claude-desktop",
+     "cursor-pro",
+     "semrush",
+     "semrush-alternative",
+     "semrush-api",
+     "semrush-features",
+     "semrush-patch",
+     "semrush-safe",
+     "seo",
+     "seo-automation",
+     "seo-optimization",
+     "seo-tools",
+     "seo-tools-rapid-url-indexer",
+     "serp-analysis",
+     "serp-api",
+     "serp-scraper"
+    ],
+    "language": "JavaScript",
+    "pushed_at": "2026-09-26T08:16:28Z",
+    "archived": false,
+    "homepage": ""
+   }
+  ]
+ }
+}

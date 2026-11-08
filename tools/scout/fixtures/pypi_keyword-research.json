@@ -1,0 +1,61 @@
+{
+ "source": "pypi",
+ "query": "keyword research",
+ "recorded_at": "2026-11-08T08:51:03+00:00",
+ "payload": {
+  "source": "pypi",
+  "query": "keyword research",
+  "status": 200,
+  "projects": [
+   {
+    "info": {
+     "name": "seo-keyword-research-tool",
+     "version": "0.1.9",
+     "summary": "Python SEO keywords suggestion tool. Google Autocomplete, Related Questions and Related Searches.",
+     "license": "MIT",
+     "license_expression": null,
+     "classifiers": [
+      "Development Status :: 3 - Alpha",
+      "Intended Audience :: Developers",
+      "Natural Language :: English",
+      "Operating System :: MacOS",
+      "Operating System :: Microsoft :: Windows",
+      "Operating System :: POSIX :: Linux",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.8",
+      "Programming Language :: Python :: 3.9",
+      "Topic :: Internet",
+      "Topic :: Utilities"
+     ],
+     "package_url": "https://pypi.org/project/seo-keyword-research-tool/",
+     "home_page": "https://github.com/chukhraiartur/seo-keyword-research-tool",
+     "project_urls": {
+      "Documentation": "https://github.com/chukhraiartur/seo-keyword-research-tool",
+      "Homepage": "https://github.com/chukhraiartur/seo-keyword-research-tool",
+      "Source": "https://github.com/chukhraiartur/seo-keyword-research-tool",
+      "Tracker": "https://github.com/chukhraiartur/seo-keyword-research-tool/issues"
+     },
+     "requires_python": ">=3.8",
+     "yanked": false
+    }
+   },
+   {
+    "info": {
+     "name": "research",
+     "version": "0.2.0",
+     "summary": "Utility modules used for research and/or learning",
+     "license": "MIT",
+     "license_expression": null,
+     "classifiers": [],
+     "package_url": "https://pypi.org/project/research/",
+     "home_page": "https://github.com/jackblandin/research",
+     "project_urls": {
+      "Homepage": "https://github.com/jackblandin/research"
+     },
+     "requires_python": "",
+     "yanked": false
+    }
+   }
+  ]
+ }
+}
