@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TY = ROOT / "reports" / "ty"
 QUEUE = TY / "director_queue.json"
 SCORES = ROOT / "ty" / "scorecards.json"
+TY_DIR = ROOT / "ty"
 DB = ROOT / "state" / "director" / "queue.sqlite"
 
 FLOOR_GB = 5.0
@@ -88,6 +89,21 @@ def _parity() -> Dict[str, Any]:
             "six_point": [p.name for p in sorted(TY.glob("d8_sixpoint_run*.json"))]}
 
 
+def _count(data: Any, key: str) -> int:
+    """Count a list of records whether it is a bare list or wrapped in a key.
+
+    `ty/seller_gaps.json` is a bare list; `ty/intel_gaps.json` is `{"findings": [...]}`.
+    Reading only the wrapped shape reported 0 for a 29-item list (found by the D15 verifier).
+    """
+    if isinstance(data, list):
+        return len(data)
+    if isinstance(data, dict):
+        value = data.get(key)
+        if isinstance(value, list):
+            return len(value)
+    return 0
+
+
 def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     """Everything the digest needs, as data. Missing files are reported, not invented."""
     queue = _read_json(QUEUE)
@@ -95,9 +111,9 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     rows = [row for row in scores.get("services") or [] if isinstance(row, dict)]
     below = [row for row in rows if not row.get("meets_bar")]
     below.sort(key=lambda row: -float(row.get("gap") or 0))
-    gaps = _read_json(ROOT / "ty" / "seller_gaps.json")
-    intel = _read_json(ROOT / "ty" / "intel_gaps.json")
-    models = _read_json(ROOT / "ty" / "model_leaderboard.json")
+    gaps = _read_json(TY_DIR / "seller_gaps.json")
+    intel = _read_json(TY_DIR / "intel_gaps.json")
+    models = _read_json(TY_DIR / "model_leaderboard.json")
     needs = (TY / "needs_you.md")
     return {
         "date": date.today().isoformat(),
@@ -110,8 +126,8 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
                                    "weakest": row.get("weakest")} for row in below[:5]]},
         "jobs": _jobs(),
         "parity": _parity(),
-        "seller_gaps": len(gaps.get("gaps") or []) if isinstance(gaps, dict) else 0,
-        "intel_findings": len(intel.get("findings") or []) if isinstance(intel, dict) else 0,
+        "seller_gaps": _count(gaps, "gaps"),
+        "intel_findings": _count(intel, "findings"),
         "model_roles": len((models.get("roles") or {})) if isinstance(models, dict) else 0,
         "needs_you_open": (len([line for line in needs.read_text(encoding="utf-8").splitlines()
                                 if line.startswith("## ")])

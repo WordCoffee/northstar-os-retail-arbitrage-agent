@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T09:15:57+00:00",
+  "updated_at": "2026-11-08T09:30:04+00:00",
   "cycle": 1,
-  "unit_in_flight": "D12",
+  "unit_in_flight": "D15",
   "unit_order": [
     "D0",
     "D1",
@@ -150,8 +150,8 @@
       "status": "done",
       "note": "Tool bake-off (PATCH 2 item 1): REA (MIT) vs Craft Anything (Apache 2.0) on three targets (open-source repo, hosted non-Amazon tool, local web app); score behaviour-spec accuracy, detail coverage, speed, token cost, reliability; winner is default per target kind, loser is backup; re-run on any version change of either.",
       "unit_tag": "ty-dir-D17",
-      "completed_at": "2026-11-08T09:15:57+00:00",
-      "summary": "REA vs Craft Anything on 3 targets, all six cells ran with artefacts; Craft Anything default (0.859/0.858/1.000), REA backup (0.753/0.270/0.752)"
+      "completed_at": "2026-11-08T09:30:04+00:00",
+      "summary": "re-probe: REA ran on the open-source repo (exit 0, 10/10, artefact tracked); hosted and local-app have no result (REA exit 1, Craft Anything not installed). Earlier 3-target verdict withdrawn as unreproducible"
     }
   },
   "jobs": [],

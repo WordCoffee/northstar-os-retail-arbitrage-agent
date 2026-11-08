@@ -21,3 +21,4 @@ One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 | 2026-11-08 | D14 | director | computer mode behind scope+grants: write outside scope refused and leaves no file; PC mode needs flag AND grant; plan printed, not executed; 8 tests | `ty-dir-D14` | 0 |
 | 2026-11-08 | D16 | director | model scout: router eval fixed (think=false); bojo 15/18, qwen3.5:4b 16/18 (+1 < margin 2) so incumbent kept; leaderboard written | `ty-dir-D16` | 0 |
 | 2026-11-08 | D17 | director | REA vs Craft Anything on 3 targets, all six cells ran with artefacts; Craft Anything default (0.859/0.858/1.000), REA backup (0.753/0.270/0.752) | `ty-dir-D17` | 0 |
+| 2026-11-08 | D17 | director | re-probe: REA ran on the open-source repo (exit 0, 10/10, artefact tracked); hosted and local-app have no result (REA exit 1, Craft Anything not installed). Earlier 3-target verdict withdrawn as unreproducible | `ty-dir-D17` | 0 |

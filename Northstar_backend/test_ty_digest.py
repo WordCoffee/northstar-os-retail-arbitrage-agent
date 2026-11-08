@@ -58,6 +58,7 @@ def test_the_digest_ranks_the_worst_gaps_first(tmp_path, monkeypatch):
 
 def test_missing_inputs_are_reported_as_zero_not_invented(tmp_path, monkeypatch):
     monkeypatch.setattr(ty_digest, "TY", tmp_path)
+    monkeypatch.setattr(ty_digest, "TY_DIR", tmp_path)
     monkeypatch.setattr(ty_digest, "QUEUE", tmp_path / "nope.json")
     monkeypatch.setattr(ty_digest, "SCORES", tmp_path / "nope.json")
     monkeypatch.setattr(ty_digest, "DB", tmp_path / "nope.sqlite")
@@ -65,3 +66,12 @@ def test_missing_inputs_are_reported_as_zero_not_invented(tmp_path, monkeypatch)
     assert data["seller_gaps"] == 0
     assert data["intel_findings"] == 0
     assert data["in_flight"] == ""
+
+
+def test_a_bare_list_and_a_wrapped_list_are_both_counted(tmp_path):
+    # seller_gaps.json is a list; intel_gaps.json wraps its findings
+    assert ty_digest._count([{"a": 1}, {"b": 2}], "gaps") == 2
+    assert ty_digest._count({"gaps": [1, 2, 3]}, "gaps") == 3
+    assert ty_digest._count({"findings": [1]}, "findings") == 1
+    assert ty_digest._count({}, "gaps") == 0
+    assert ty_digest._count(None, "gaps") == 0

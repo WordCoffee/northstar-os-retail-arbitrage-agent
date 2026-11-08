@@ -1,0 +1,316 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-08T09:29:47+00:00",
+  "generated_by": "tools/tool_bakeoff.py",
+  "weights": {
+    "accuracy": 0.4,
+    "detail": 0.25,
+    "speed": 0.15,
+    "tokens": 0.1,
+    "reliability": 0.1
+  },
+  "tools": {
+    "rea": {
+      "label": "REA",
+      "version": "6.5.0",
+      "licence": "MIT",
+      "install": "npm install -g rea-agents@6.5.0 (already installed)",
+      "source": "https://github.com/morluto/rea",
+      "binary": "rea",
+      "ai_required": false
+    },
+    "craft-anything": {
+      "label": "Craft Anything",
+      "version": "0.5.0",
+      "licence": "MIT OR Apache-2.0 (dual; the work order calls it Apache 2.0)",
+      "install": "prebuilt portable zip from github.com/storytold/craft-anything/releases/tag/v0.5.0, SHA-256 verified; no Rust toolchain and no build",
+      "source": "https://github.com/storytold/craft-anything",
+      "binary": "state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+      "ai_required": false,
+      "ai_required_for": "rebuild/chat only; static study needs no key"
+    }
+  },
+  "targets": [
+    {
+      "target": {
+        "id": "oss-repo",
+        "kind": "open-source repo on this machine",
+        "description": "TodoMVC examples/javascript-es6 (MIT), shallow sparse clone of github.com/tastejs/todomvc into state/vendor/todomvc",
+        "path": "state/vendor/todomvc/examples/javascript-es6",
+        "url": null,
+        "facts": [
+          "Controller",
+          "Model",
+          "View",
+          "Store",
+          "setView",
+          "addItem",
+          "removeItem",
+          "toggleComplete",
+          "showActive",
+          "memoryStorage"
+        ]
+      },
+      "cells": [
+        {
+          "tool": "rea",
+          "target": "oss-repo",
+          "status": "ran",
+          "reason": "",
+          "accuracy": 1.0,
+          "facts_found": 10,
+          "facts_total": 10,
+          "facts_missing": [],
+          "detail": 1.0,
+          "detail_units": 5430,
+          "seconds": 2.894,
+          "bytes": 7097846,
+          "tokens_est": 1774461,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --format json",
+          "artefact": "state\\bakeoff\\out\\rea-oss-repo.json",
+          "_record": {
+            "tool": "rea",
+            "target": "oss-repo",
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD",
+              "analyze-javascript-application",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6",
+              "--format",
+              "json"
+            ],
+            "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --format json",
+            "exit_code": 0,
+            "seconds": 2.894,
+            "artefact": "state\\bakeoff\\out\\rea-oss-repo.json",
+            "stderr": "state\\bakeoff\\out\\rea-oss-repo.err",
+            "bytes": 7097846,
+            "sha256": "69e69d37089159b21729e87b2e3e202cfef6724593262db820bc89a3fc216e2e"
+          },
+          "speed_norm": 1.0,
+          "tokens_norm": 1.0,
+          "composite": 1.0
+        },
+        {
+          "tool": "craft-anything",
+          "target": "oss-repo",
+          "status": "did-not-run",
+          "reason": "craft-anything: binary not found",
+          "seconds": null,
+          "_record": {
+            "tool": "craft-anything",
+            "target": "oss-repo",
+            "status": "blocked",
+            "reason": "craft-anything: binary not found",
+            "command": null,
+            "exit_code": null,
+            "artefact": null
+          },
+          "composite": null
+        }
+      ],
+      "decision": {
+        "target": "oss-repo",
+        "kind": "open-source repo on this machine",
+        "verdict": "winner",
+        "default": "rea",
+        "default_score": 1.0,
+        "backup": null,
+        "backup_score": null,
+        "reason": "rea scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (10/10)"
+      }
+    },
+    {
+      "target": {
+        "id": "hosted",
+        "kind": "hosted non-Amazon tool, read-only over the network",
+        "description": "https://opencode.ai/ - page and entry bundle fetched with a plain GET into state/bakeoff/hosted; both tools read the saved artefacts",
+        "path": "state/bakeoff/hosted",
+        "url": "https://opencode.ai/",
+        "facts": [
+          "anomalyco/opencode",
+          "npm install -g @opencode/cli",
+          "docs",
+          "install",
+          "sdk",
+          "github",
+          "opencode"
+        ]
+      },
+      "cells": [
+        {
+          "tool": "rea",
+          "target": "hosted",
+          "status": "did-not-run",
+          "reason": "exit code 1",
+          "seconds": 0.838,
+          "_record": {
+            "tool": "rea",
+            "target": "hosted",
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD",
+              "analyze-javascript-application",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted",
+              "--format",
+              "json"
+            ],
+            "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --format json",
+            "exit_code": 1,
+            "seconds": 0.838,
+            "artefact": "state\\bakeoff\\out\\rea-hosted.json",
+            "stderr": "state\\bakeoff\\out\\rea-hosted.err",
+            "bytes": 542,
+            "sha256": "3c98573806a1c0362bf34be67a7423cf8b791d3a663a4648aef49f2d1f6869a4"
+          },
+          "composite": null
+        },
+        {
+          "tool": "craft-anything",
+          "target": "hosted",
+          "status": "did-not-run",
+          "reason": "craft-anything: binary not found",
+          "seconds": null,
+          "_record": {
+            "tool": "craft-anything",
+            "target": "hosted",
+            "status": "blocked",
+            "reason": "craft-anything: binary not found",
+            "command": null,
+            "exit_code": null,
+            "artefact": null
+          },
+          "composite": null
+        }
+      ],
+      "decision": {
+        "target": "hosted",
+        "kind": "hosted non-Amazon tool, read-only over the network",
+        "verdict": "no-result",
+        "default": null,
+        "backup": null,
+        "reason": "neither tool produced a command line, exit code and artefact"
+      }
+    },
+    {
+      "target": {
+        "id": "local-app",
+        "kind": "this repo's local web app on 127.0.0.1",
+        "description": "northstar-os-ui/dist served on http://127.0.0.1:8123/ui/ and fetched with a plain GET into state/bakeoff/local",
+        "path": "state/bakeoff/local",
+        "url": "http://127.0.0.1:8123/ui/",
+        "facts": [
+          "/design-studio",
+          "/listings",
+          "Northstar",
+          "product-finder",
+          "beta-ops",
+          "golden-goose",
+          "/documents"
+        ]
+      },
+      "cells": [
+        {
+          "tool": "rea",
+          "target": "local-app",
+          "status": "did-not-run",
+          "reason": "exit code 1",
+          "seconds": 0.857,
+          "_record": {
+            "tool": "rea",
+            "target": "local-app",
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD",
+              "analyze-javascript-application",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local",
+              "--format",
+              "json"
+            ],
+            "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --format json",
+            "exit_code": 1,
+            "seconds": 0.857,
+            "artefact": "state\\bakeoff\\out\\rea-local-app.json",
+            "stderr": "state\\bakeoff\\out\\rea-local-app.err",
+            "bytes": 541,
+            "sha256": "8741153225b362509f20efa1ca5417f78a8fb6a0c1ba140d13f8789052f9c332"
+          },
+          "composite": null
+        },
+        {
+          "tool": "craft-anything",
+          "target": "local-app",
+          "status": "did-not-run",
+          "reason": "craft-anything: binary not found",
+          "seconds": null,
+          "_record": {
+            "tool": "craft-anything",
+            "target": "local-app",
+            "status": "blocked",
+            "reason": "craft-anything: binary not found",
+            "command": null,
+            "exit_code": null,
+            "artefact": null
+          },
+          "composite": null
+        }
+      ],
+      "decision": {
+        "target": "local-app",
+        "kind": "this repo's local web app on 127.0.0.1",
+        "verdict": "no-result",
+        "default": null,
+        "backup": null,
+        "reason": "neither tool produced a command line, exit code and artefact"
+      }
+    }
+  ],
+  "decisions": {
+    "oss-repo": {
+      "target": "oss-repo",
+      "kind": "open-source repo on this machine",
+      "verdict": "winner",
+      "default": "rea",
+      "default_score": 1.0,
+      "backup": null,
+      "backup_score": null,
+      "reason": "rea scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (10/10)"
+    },
+    "hosted": {
+      "target": "hosted",
+      "kind": "hosted non-Amazon tool, read-only over the network",
+      "verdict": "no-result",
+      "default": null,
+      "backup": null,
+      "reason": "neither tool produced a command line, exit code and artefact"
+    },
+    "local-app": {
+      "target": "local-app",
+      "kind": "this repo's local web app on 127.0.0.1",
+      "verdict": "no-result",
+      "default": null,
+      "backup": null,
+      "reason": "neither tool produced a command line, exit code and artefact"
+    }
+  },
+  "provenance_rows": [
+    {
+      "component": "tools/rea (bake-off only)",
+      "status": "INSTALLED",
+      "source": "https://github.com/morluto/rea v6.5.0",
+      "license": "MIT",
+      "reviewer": "builder-d16 (D17)",
+      "notes": "npm install -g rea-agents@6.5.0 (already installed). Studied three targets read-only; no Amazon target, no credentials, no spend."
+    },
+    {
+      "component": "tools/craft-anything (bake-off only)",
+      "status": "INSTALLED",
+      "source": "https://github.com/storytold/craft-anything v0.5.0",
+      "license": "MIT OR Apache-2.0 (dual; the work order calls it Apache 2.0)",
+      "reviewer": "builder-d16 (D17)",
+      "notes": "prebuilt portable zip from github.com/storytold/craft-anything/releases/tag/v0.5.0, SHA-256 verified; no Rust toolchain and no build. Studied three targets read-only; no Amazon target, no credentials, no spend."
+    }
+  ]
+}
