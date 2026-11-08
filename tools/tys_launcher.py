@@ -588,7 +588,11 @@ def model_up(timeout_s: float = 3.0) -> bool:
         url = MODEL_BASE_URL.rstrip("/") + "/health"
     try:
         with urllib.request.urlopen(url, timeout=timeout_s) as resp:
-            return 200 <= resp.status < 300
+            # Only an integer status counts. A test double that returns a bare
+            # BytesIO is not a healthy lane, and treating it as 200 turned a crash
+            # into "model up" - the wrong direction.
+            status = getattr(resp, "status", None)
+            return isinstance(status, int) and 200 <= status < 300
     except (urllib.error.URLError, OSError, ValueError):
         return False
 

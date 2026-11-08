@@ -115,3 +115,30 @@ meter-only mode and the billing workstream stays parked.
 designed panel, OCR gate passed. What only you can judge is whether the *design* is right. Say what
 to change and it becomes the next design task; silence leaves the current artwork as the declared
 design.
+
+---
+
+# Director program — needs you
+
+Queued by the Director (work order §2: hard lines go here as one exact action, and work
+continues without them).
+
+## DIR-1. Rotate three credentials that are already committed
+
+`reports/ty/GITLEAKS_TRIAGE.md` found three real-looking credentials in two tracked
+root-level chat exports (commits `a299d6e9`, `21aed4e3`):
+
+1. `SCAVIO_API_KEY` — `FirstNorthstarautomationchat.md:1143,1291`
+2. `BRIGHTDATA_API_KEY` — `FirstNorthstarautomationchat.md:1148,1296`
+3. a GitHub personal access token — `autothink-ui-chat-export.md:7852`
+
+Exact action: rotate all three at their providers, then say so and the history purge
+becomes a Director job. Deletion alone is not enough — the values are in git history.
+Nothing here is blocked by this; the loop continues.
+
+## DIR-3. OpenCode Go concurrency ceiling (only if D1 cannot measure it)
+
+D1 probes the real concurrent-session limit. If the probe cannot establish it, the
+Director caps at 4 cloud workers as the work order states and records the assumption in
+`reports/ty/director_probe.md`. No action needed unless the reply below is empty.
+

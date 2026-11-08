@@ -1,52 +1,8 @@
-# Autonomy log
+# Ty Director — autonomy log
 
-One line per cycle. Format:
-`YYYY-MM-DDTHH:MMZ | workstream | cycle | scorecard before -> after | tag | tokens`
+One line per cycle: workstream, role, cycle, score before/after, tag, tokens.
 
-- 2026-11-05 | init | 0 | program started | tag autonomy-baseline (e61ba173) | -
-- 2026-11-05T21:35Z | W1 product pictures | cycle 1 | compliance 0.0% -> 100% (3/3 measured), stored-reference 4 failures -> 4 renders, set_consistency 0.0 -> 34.7; product_fidelity 24.9 -> 0.0 (metric found invalid across scenarios) | tag autonomy-cycle-01-pre | ~320k tokens
-- 2026-11-05T21:35Z | phase A/B | cycle 0 | A4 MISSING->PRESENT, A6 MISSING->PRESENT, A7 PARTIAL->PRESENT, A9 MISSING->PRESENT | tags autonomy-grant-01-pre, autonomy-grant-02-pre | included above
-- 2026-11-05T21:40Z | W1 product pictures | cycle 2 | fidelity instrument fixed (subject crop); score unchanged at 0.0 because the finding is real: ssim 0.010-0.323, phash 26-28 vs reference | tag autonomy-cycle-01-pre | ~0.36M tokens cumulative
-- 2026-11-05T23:05Z | W8 UX + W1 creative | cycle 3 | UX 20/20 pages, 0 critical a11y, 0 console errors, 2 serious patterns left (was 6 patterns / 36 nodes); creative identity E1 blocked (weights missing, 9.5 GB free), E2 module landed with 7 tests | tags autonomy-grant-04-pre | ~0.45M tokens cumulative
-- 2026-11-06T02:10Z | W8 UX | cycle 4 | coverage 10/10 routes, dev notice 100%, 0 text below AA (was 3.38:1), empty state fits (239/267 -> fits), chips clipped 1 -> 0, mobile stream 24px -> 299px, gates 12/12 | tag autonomy-cycle-04-pre | shell CONFIRMED rebuild (.mb-shell) | ~0.55M tokens
-- 2026-11-06T02:45Z | W8 UX | cycle 5 | mobile fonts: WebKit refused /ui/ui/fonts/fonts.css; bundler import fixes it; mobile console errors 10-16/page -> 0; serif asserted on both viewports; gates 12/12 | tag autonomy-cycle-05-pre | ~0.58M tokens
-- 2026-11-06T03:15Z | W1 creative | cycle 6 | main-image text fidelity: 10 OCR boxes -> 0, text_accuracy 0.0 -> 100.0 on the real bench artifact; guard wired into bench + listing_render.generate; 34 tests green | tag autonomy-cycle-06-pre | ~0.60M tokens
-- 2026-11-06T04:05Z | W1 creative | cycle 7 | composite identity live: pouch preserved (MOGRA/LION'S MANE legible), scene 27.3s + cutout 9.7s; fixed bottom-crop + alpha-masked identity check; second render refused at 3830/4096 MB RAM | tag autonomy-cycle-07-pre | ~0.62M tokens
-- 2026-11-06T04:40Z | W6 design studio / A+ | cycle 8 | A+ page renders 6 modules at real sizes, 1.04 MB, contrast 4.57-10.85; three quality defects found (repeated tile imagery, Shiitake art under a Lion's Mane headline, hero crops the product) | tag autonomy-cycle-08-pre | ~0.64M tokens
-- 2026-11-06T05:20Z | W6 A+ / design identity | cycle 9 | design_registry (new-vs-same semantics, 6 tests) + aplus_from_design (7 distinct views, contained hero) -> preview 616 KB, problems [] ; still: hero ghost patch, logo floating, invented competitor column | tag autonomy-cycle-09-pre | ~0.66M tokens
-- 2026-11-06T05:15Z | M0 foundations | M0.1 runner (11 tests), M0.2 name-based guard (7 tests, 6039 ids), M0.4 disk reclaim (7 tests, 9.74 -> 14.21 GB, 3.86 GB freed) | tag autonomy-m0 | ~0.70M tokens
-- 2026-11-06T05:17Z | M0.5 lanes | 9 tests; gpu lease defers on ram_below_floor (2850<3000) instead of failing a render
-- 2026-11-06T05:50Z | M0.2 correction | junit classnames are dotted, collection ids are paths -> zero overlap; replaced with pytest_idlist plugin (6419 ids, +0/-0)
-- 2026-11-06T06:35Z | M2-lite launcher | 9 tests; next->worker->complete with heartbeat, runnable-if-checkable rule, evidence record, 6 stop reasons, dry-run
-- 2026-11-06T06:40Z | M2-lite launcher | 11 tests; first real dispatch S1-cancel-race -> model_lane_down (precise), item reverted+deferred, zero cycles burned; preflight added
-- 2026-11-06T07:05Z | worker model | pinned opencode-go/deepseek-v4.1-flash in opencode.jsonc; --standalone hangs (measured, 10 min no output) so removed; first deepseek worker run killed at 14 min during probing
-- 2026-11-06T07:25Z | agent lanes + guard | 3 named lanes (tys/verifier/research) pinned to deepseek-v4.1-flash, read-only lanes locked; tools/guard_agents.py (8 tests) refuses refusal-surrendering prompts, off-model lanes and writable read-only lanes
-- 2026-11-06T08:05Z | worker fixed | opencode run --agent tys --format json, prompt on stdin, session model provenance from session_v2 (verified); .CMD shim resolved
-- 2026-11-06T08:20Z | T0 Amazon gate | bright_data_client._fetch refused Amazon before any request (was a live egress hole via amazon_adapters); 15 tests; baseline ids 6453
-- 2026-11-06T08:30Z | practice | parallel lanes adopted as standing policy (AGENTS.md appended): read-only always parallel, writers on disjoint paths only, verification serialised, max 4 lanes
-- 2026-11-06T08:45Z | verifier agree | egress guard confirmed before key/cache/network; fixed 2 uncaught paths (amazon_search, offer_enrichment) so a refusal is a skip not a 500; guard now doubles-transport-aware (tests can patch requests.post); 173 passed
-- 2026-11-06T09:10Z | egress map | no global hook; 44 unguarded caller-URL sites; T0 (transport hook), T0 (callback SSRF), T1 (dataforseo host) queued; launcher now reverts bytes + refuses an already-green check (26 tests)
-- 2026-11-06T09:25Z | persistence | scripts/tys-watchdog.ps1 keeps exactly one launcher alive (restart on exit, backoff on model_lane_down, STOP respected); start-tys.ps1 detached; scheduled task NorthstarTysWatchdog at logon; verified restart after kill
-- 2026-11-06T09:35Z | T0 egress hook | tools/egress_guard.py installs one transport-level Amazon refusal over urllib+requests, journals every decision with caller file:line; 14 tests (refusal before the socket, allowed path unaffected, idempotent, uninstall restores)
-- 2026-11-06T09:55Z | revert bug fixed | the snapshot restore deleted files it had never seen (killed tools/egress_guard.py, reverted main.py twice); now git-based checkout for tracked paths + scoped delete for untracked, and a dirty target refuses dispatch; 15 tests
-- 2026-11-06T10:30Z | automation gate | strict order encoded as depends_on and ENFORCED in select_next; 21 automation units ordered A1-A21; product/security items blocked behind M2-worker-lane; next = M0.3b-token-meter
-- 2026-11-06T10:40Z | A17-adjacent | MCP client egress guarded (3324b71f): shell-wrapper refused, URL arguments refused before stdio_client is constructed, 23 tests
-- 2026-11-06T10:50Z | Amazon gate gaps closed | cf443599 guard refuses ASIN locators (URL/host//dp/) while allowing bare ASINs on the sanctioned path; 112fef46 linkage gate inside SP-API/Ads _refresh before httpx; f497bcdb report-download URL validated (https, advertising-api.amazon.com or *.amazonaws.com, no userinfo, 443); 51 tests + 2365 linkage assertions
-- 2026-11-06T11:10Z | verifier | 4 commits agree with 158 tests; TWO live bypasses found and queued as T0: nip.io DNS resolves to loopback (IP-literal-only guard) and wsl -e bash defeats the MCP shell control; T0 outranks the automation gate
-- 2026-11-06T11:20Z | perf baseline | scanner p95 6623ms (CSV re-read + 80,932 fuzzy calls), lanes/status 418ms (PowerShell+nvidia-smi per request), entry chunk 1088kB; four measured units queued behind the gate
-- 2026-11-06T11:35Z | A18 design | intel I0 designed: tracked refusals (logs/ is gitignored), one collector signature with accounting closure, reuse of web_research+vet_package, measured-vs-unknown quotas, yt-dlp needs a GRANT entry, competitor collector disabled because the Chrome policy files are absent here
-- 2026-11-06T11:45Z | A17 done | worker lane never broken: text is at event.part.text, provenance is in session_message (session_v2.model is NULL for run sessions), deepseek preflight no longer requires llama.cpp; live ok:true text='pong' model=deepseek-v4.1-flash 3.5s; 21 tests
-- 2026-11-06T11:55Z | concurrency probe | 4 lanes running at once (T0-callback-dns, T0-mcp-wsl, A9b-wire-meter, A11-evaluator), all writers on disjoint files; earlier 4-way and 5-way fan-outs all returned, so the cap is resource-bound (pytest/RAM), not session-bound
-- 2026-11-06T12:05Z | A9b done | token cap is now real: session estimate wired into the completion (80,834 tokens measured vs a 5-token payload guess), tokens_source recorded; 26 launcher tests
-- 2026-11-06T12:15Z | T0 DNS closed | 050e4188: hostname resolved (A+AAAA) and refused if any answer is loopback/link-local/private/multicast/reserved; unresolvable fails closed; allowlist before resolution; 50 tests, live nip.io probe refused both loopback and metadata
-- 2026-11-06T12:25Z | T0 MCP closed | ec1be088: launcher chain refused (wsl/docker/env/xargs/ssh/curl...), interpreter code-flags with payloads refused, URL-shaped substrings found anywhere incl bare host and //host, fail-closed preserved; 49 tests, zero spawns on every refusal
-- 2026-11-06T12:35Z | A14 done | 04615b60: scope derived from a real traceback, test/policy frames dropped, uninterruptible refusals write nothing; 21 tests
-- 2026-11-06T12:45Z | A11 done | 8b0e848f: deterministic evaluator, 5 fail-fast gates, scope before execution, tamper gate with fail-closed resolution, regression via check_regression; 20 tests
-- 2026-11-06T13:00Z | A15 done | 9f29a718: authored contract written atomically with readback rollback, argv-only, shell and network tokens refused, needs_author cleared; runnable flips to True; 39 tests
-- 2026-11-06T13:20Z | A12 done | 84eda331: freeze + evaluate_frozen replay through the same gates, tamper seal, pre_changed honours directories, state/author gitignored; 33 tests. Finding: a frozen candidate is 79 MB because the worktree has ~975 dirty tracked files
-- 2026-11-06T13:35Z | A13 design | found the evaluator is inert: launcher never calls freeze/evaluate_frozen and task_contract drops check_sha256 (silently disabling the tamper gate). Queued A12b to wire it; amended A13 write set and acceptance commands per the design
-- 2026-11-06T13:45Z | specs saved | A13 rejection-ledger spec persisted (fingerprint, append-only chained store in state/author, three-strike by signature, query seam inside evaluate_frozen); A16 generator design received with three runner deltas queued
-- 2026-11-06T14:00Z | A12b done | 9147995a: _run_cycle freezes then replays then evaluates live; check_sha256 survives; pre_changed_source=dispatch; a cycle that edits a test is refused out_of_scope. Real finding: 10,416 dirty paths (403 test/policy) mean the gate now refuses every candidate until the worktree is triaged - elevated to blocking
-- 2026-11-06T14:20Z | A10 VERDICT: STOP | 0/5 solved, 0 patches from 15 candidates. S1 gate void (1/100 repro, all three passes had 0-byte diffs); CPU-only inference (size_vram 0 on idle GPU); AST vocabulary cannot add a symbol. Author lane NOT built; retest queued with three preconditions
-- 2026-11-06T14:45Z | worktree triage | committed 277 source files (e4a56fb9, tag pre-worktree-triage); ignored exports/media/state/research/Downloads; reports/ BLOCKED by gitleaks with 290 findings - not committed, needs a review pass; freeze 94 MB -> 52 MB
-- 2026-11-06T15:05Z | A16 spec saved | ladder bands, per-tier discovery, one-item-per-call, dedupe keys, starvation honesty, 4 runner/watchdog deltas and the side findings (dry-run ignores depends_on) persisted so a fresh lane can build it
+| date | unit | role | score before -> after | tag | tokens |
+|---|---|---|---|---|---|
+| 2026-11-07 | D0 | director | n/a (baseline) | `director-baseline` / `ty-dir-D0` | — |
+| 2026-11-07 | D0 | director | suite RED (12-17 order-dependent failures) -> GREEN 6617 passed, 0 failed | `ty-dir-D0` | — |

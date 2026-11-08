@@ -15,8 +15,18 @@ import egress_guard as eg  # noqa: E402
 
 @pytest.fixture(autouse=True)
 def _clean():
+    """Leave the *real* transport behind, not the one `eg.install()` captured.
+
+    Measured defect: teardown is LIFO, so `monkeypatch` restored the true urlopen
+    first and this fixture's `eg.uninstall()` then re-applied the fake that install
+    had captured - a `BytesIO` fake leaked into every later test in the suite and
+    12-17 of them failed with `JSONDecodeError` or `no attribute 'status'`. All of
+    them passed in isolation.
+    """
+    original = urllib.request.urlopen
     yield
     eg.uninstall()
+    urllib.request.urlopen = original
 
 
 @pytest.mark.parametrize("url", [

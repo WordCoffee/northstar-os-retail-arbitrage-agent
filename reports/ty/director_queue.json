@@ -1,0 +1,100 @@
+{
+  "schema": "northstar.director_queue.v1",
+  "updated_at": "2026-11-07T10:55:00Z",
+  "cycle": 1,
+  "unit_in_flight": "D1",
+  "unit_order": [
+    "D0",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8",
+    "D9",
+    "D10",
+    "D11",
+    "D12",
+    "D13",
+    "D14",
+    "D15",
+    "D16",
+    "D17"
+  ],
+  "units": {
+    "D0": {
+      "status": "done",
+      "started_at": "2026-11-07T09:00:00Z",
+      "completed_at": "2026-11-07T10:55:00Z",
+      "rollback_tag": "director-baseline",
+      "unit_tag": "ty-dir-D0",
+      "evidence": {
+        "order": "reports/ty/director_work_order.md (172 lines + PATCH 1 + PATCH 2)",
+        "mandate": "ty/MANDATE.md",
+        "baseline_run": "reports/ty/_baseline_measured2_20261107.txt",
+        "baseline": "tests/BASELINE.json -> 6617 backend passed / 0 failed / 117 skipped / 125 subtests; 6736 ids (+283, -0)",
+        "aggregate": "GREEN"
+      }
+    },
+    "D1": {
+      "status": "pending"
+    },
+    "D2": {
+      "status": "pending"
+    },
+    "D3": {
+      "status": "pending"
+    },
+    "D4": {
+      "status": "pending"
+    },
+    "D5": {
+      "status": "pending"
+    },
+    "D6": {
+      "status": "pending"
+    },
+    "D7": {
+      "status": "pending"
+    },
+    "D8": {
+      "status": "pending"
+    },
+    "D9": {
+      "status": "pending"
+    },
+    "D10": {
+      "status": "pending"
+    },
+    "D11": {
+      "status": "pending"
+    },
+    "D12": {
+      "status": "pending"
+    },
+    "D13": {
+      "status": "pending"
+    },
+    "D14": {
+      "status": "pending"
+    },
+    "D15": {
+      "status": "pending"
+    },
+    "D16": {
+      "status": "continuous",
+      "note": "Model Scout lane (PATCH 2026-11-07 item 3): per-role incumbents and fixed eval sets, benchmark candidates on accuracy/speed/VRAM/RAM/license, swap only on a clear margin inside the VRAM/RAM budget, quarantine never delete, tested restore script, state/intel/models.json + per-role leaderboard in the digest."
+    },
+    "D17": {
+      "status": "pending",
+      "note": "Tool bake-off (PATCH 2 item 1): REA (MIT) vs Craft Anything (Apache 2.0) on three targets (open-source repo, hosted non-Amazon tool, local web app); score behaviour-spec accuracy, detail coverage, speed, token cost, reliability; winner is default per target kind, loser is backup; re-run on any version change of either."
+    }
+  },
+  "jobs": [],
+  "service_scores": {},
+  "blocked": [],
+  "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.",
+  "patch": "PATCH 2026-11-07 applied: 1 public-source rubric (no owner examples), 2 REA/clone-and-adopt with licence+vet+provenance, 3 D16 model scout, 4 GPU budget 80-90% VRAM / 92% ceiling / 2 GB RAM free. | PATCH 2: D17 tool bake-off (REA vs Craft Anything), Openverse as rubric reference source with per-image licence+URL."
+}
