@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-08T08:54:35+00:00",
+  "generated_by": "tools/model_scout.py",
+  "swap_rule": {
+    "margin_items": 2,
+    "must_fit": "role VRAM budget and the 2.0 GB RAM floor",
+    "auto_swap": false
+  },
+  "eval_sets": {
+    "json_adherence": {
+      "path": "tools\\model_scout\\evals\\json_adherence_10.json",
+      "sha256": "07877cfcf7751b15984b7134513a65b48510fcfc4758a3beb258e8618e4f3647",
+      "items": 10
+    },
+    "router": {
+      "path": "tools\\model_scout\\evals\\router_18.json",
+      "sha256": "79afc1a1f6cbfecf5de90ad32da66115d3943d989fb03cda458e0ac9d0a51904",
+      "items": 18
+    }
+  },
+  "roles": {
+    "bojo-router": {
+      "label": "Bojo router / default assistant",
+      "lane": "bojo",
+      "eval": "router",
+      "budget_key": "router",
+      "budget_gb": 3.5,
+      "manager_key": "bojo",
+      "incumbent": "bojo:latest",
+      "baseline": {
+        "correct": 6,
+        "items": 18,
+        "source": "reports/ty/model_bench_bojo_gpu_20261107.json",
+        "comparable_to_router_eval": false
+      },
+      "candidates": [
+        "qwen3.5:4b",
+        "qwen3.5:2b",
+        "gemma3:4b",
+        "qwen2.5-coder:3b"
+      ],
+      "quarantined": [],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": "bojo:latest",
+        "model": "bojo:latest",
+        "eval": "router",
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "All four candidates are already installed; scouting must never pull a model. Candidate order is the work order's order (Qwen3.5 4B first)."
+    },
+    "planner-coder": {
+      "label": "Planner / coder",
+      "lane": "coder",
+      "eval": "json_adherence",
+      "budget_key": "coder",
+      "budget_gb": 7.0,
+      "manager_key": "coder",
+      "incumbent": "qwen3:8b",
+      "baseline": null,
+      "candidates": [
+        "qwen2.5-coder:3b",
+        "qwen3.5:4b"
+      ],
+      "quarantined": [],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": "qwen3:8b",
+        "model": "qwen3:8b",
+        "eval": "json_adherence",
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "No coding eval is defined yet in this unit. Candidate scoring on json_adherence only; a coding benchmark stays with tools/coding_bench.py and is not claimed here."
+    },
+    "vision": {
+      "label": "Vision / VLM",
+      "lane": "vision",
+      "eval": null,
+      "budget_key": "vision",
+      "budget_gb": 8.0,
+      "manager_key": "vision",
+      "incumbent": "llava:7b",
+      "baseline": {
+        "source": "reports/ty/d7_vision_benchmark.md",
+        "result": "llava:7b returned valid JSON naming the correct app; qwen2.5vl:7b and moondream produced degenerate fragments"
+      },
+      "candidates": [],
+      "quarantined": [
+        {
+          "model": "qwen2.5vl:7b",
+          "reason": "degenerate fragments on this box (D7)",
+          "status": "quarantined pending a retest with a fixed harness",
+          "retest_blocked_because": "vision needs an image eval set; none exists yet"
+        }
+      ],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": "llava:7b",
+        "model": "llava:7b",
+        "eval": null,
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "caps.json records a 6.5 GB vision budget; tools/gpu_budget.py, the manager that enforces it, records 8.0 GB. 8.0 is used."
+    },
+    "gui-grounding": {
+      "label": "GUI grounding",
+      "lane": "gui_grounding",
+      "eval": null,
+      "budget_key": "gui_grounding",
+      "budget_gb": 8.0,
+      "manager_key": "gui_grounding",
+      "incumbent": null,
+      "baseline": null,
+      "candidates": [],
+      "quarantined": [],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": null,
+        "model": null,
+        "eval": null,
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "No model is installed and no candidate is registered. UI Automation (D7, 20/20) is the deterministic primary; a model is only needed when structure is unavailable."
+    },
+    "embeddings": {
+      "label": "Embeddings",
+      "lane": "embeddings",
+      "eval": null,
+      "budget_key": "embeddings",
+      "budget_gb": 2.5,
+      "manager_key": "embeddings",
+      "incumbent": "qwen3-embedding:0.6b",
+      "baseline": {
+        "source": "tools/bojo_eval.py --semantic (recall@3 on the seeded memory set)",
+        "result": "see the last reports/ bojo_eval artefact; no fixed embeddings leaderboard yet"
+      },
+      "candidates": [],
+      "quarantined": [],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": "qwen3-embedding:0.6b",
+        "model": "qwen3-embedding:0.6b",
+        "eval": null,
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "recall@3 is the existing metric, but its seeded set is not versioned as an eval file, so no swap is proposed."
+    },
+    "image": {
+      "label": "Image generation",
+      "lane": "image",
+      "eval": null,
+      "budget_key": "image_flux",
+      "budget_gb": 11.0,
+      "manager_key": null,
+      "incumbent": "ComfyUI workflows (FLUX.1 / FLUX 3 Image Klein)",
+      "baseline": null,
+      "candidates": [],
+      "quarantined": [],
+      "measurements": {},
+      "recommendation": {
+        "verdict": "unmeasured",
+        "incumbent": "ComfyUI workflows (FLUX.1 / FLUX 3 Image Klein)",
+        "model": "ComfyUI workflows (FLUX.1 / FLUX 3 Image Klein)",
+        "eval": null,
+        "reason": "no --run measurement in this leaderboard yet"
+      },
+      "quarantine": null,
+      "notes": "A workflow is not an Ollama tag, so the scout records it as an incumbent and never measures it with /api/chat."
+    }
+  }
+}

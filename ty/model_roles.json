@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "generated_at": "2026-11-08",
+  "source": [
+    "state/director/caps.json (role_budgets_gb, ollama.measured_roles, vision)",
+    "tools/gpu_budget.py (ROLE_MODELS, ROLE_BUDGET_GB, RESERVE_GB, RAM_FLOOR_GB)",
+    "reports/ty/handoff.md (D7 vision decision)",
+    "reports/ty/model_bench_bojo_gpu_20261107.json (the 6/18 Bojo score, reconciled below)"
+  ],
+  "baseline_reconciliation": {
+    "claim": "bojo:latest scores 6/18 on its routing eval",
+    "on_disk": "reports/ty/model_bench_bojo_gpu_20261107.json is 3 manager tasks (MGR-1..MGR-3) scored 0-2 on each of asks / no_fabrication / routes, i.e. 3 x 6 = 18 points. It is not an 18-item router set.",
+    "consequence": "6/18 is recorded as the incumbent's historical score but is NOT comparable to the 18-item intent->lane set in tools/model_scout/evals/router_18.json. The first --run measurement of bojo:latest establishes the comparable router baseline; the swap rule is applied only to measurements from the same eval set and item count."
+  },
+  "roles": {
+    "bojo-router": {
+      "label": "Bojo router / default assistant",
+      "lane": "bojo",
+      "budget_key": "router",
+      "budget_gb": 3.5,
+      "eval": "router",
+      "incumbent": "bojo:latest",
+      "incumbent_installed": true,
+      "baseline": {
+        "correct": 6,
+        "items": 18,
+        "source": "reports/ty/model_bench_bojo_gpu_20261107.json",
+        "comparable_to_router_eval": false
+      },
+      "candidates": [
+        "qwen3.5:4b",
+        "qwen3.5:2b",
+        "gemma3:4b",
+        "qwen2.5-coder:3b"
+      ],
+      "notes": "All four candidates are already installed; scouting must never pull a model. Candidate order is the work order's order (Qwen3.5 4B first).",
+      "manager_key": "bojo"
+    },
+    "planner-coder": {
+      "label": "Planner / coder",
+      "lane": "coder",
+      "budget_key": "coder",
+      "budget_gb": 7.0,
+      "eval": "json_adherence",
+      "incumbent": "qwen3:8b",
+      "incumbent_installed": true,
+      "baseline": null,
+      "candidates": [
+        "qwen2.5-coder:3b",
+        "qwen3.5:4b"
+      ],
+      "notes": "No coding eval is defined yet in this unit. Candidate scoring on json_adherence only; a coding benchmark stays with tools/coding_bench.py and is not claimed here.",
+      "manager_key": "coder"
+    },
+    "vision": {
+      "label": "Vision / VLM",
+      "lane": "vision",
+      "budget_key": "vision",
+      "budget_gb": 8.0,
+      "eval": null,
+      "incumbent": "llava:7b",
+      "incumbent_installed": true,
+      "baseline": {
+        "source": "reports/ty/d7_vision_benchmark.md",
+        "result": "llava:7b returned valid JSON naming the correct app; qwen2.5vl:7b and moondream produced degenerate fragments"
+      },
+      "candidates": [],
+      "quarantined": [
+        {
+          "model": "qwen2.5vl:7b",
+          "reason": "degenerate fragments on this box (D7)",
+          "status": "quarantined pending a retest with a fixed harness",
+          "retest_blocked_because": "vision needs an image eval set; none exists yet"
+        }
+      ],
+      "notes": "caps.json records a 6.5 GB vision budget; tools/gpu_budget.py, the manager that enforces it, records 8.0 GB. 8.0 is used.",
+      "manager_key": "vision"
+    },
+    "gui-grounding": {
+      "label": "GUI grounding",
+      "lane": "gui_grounding",
+      "budget_key": "gui_grounding",
+      "budget_gb": 8.0,
+      "eval": null,
+      "incumbent": null,
+      "incumbent_installed": false,
+      "baseline": null,
+      "candidates": [],
+      "notes": "No model is installed and no candidate is registered. UI Automation (D7, 20/20) is the deterministic primary; a model is only needed when structure is unavailable.",
+      "manager_key": "gui_grounding"
+    },
+    "embeddings": {
+      "label": "Embeddings",
+      "lane": "embeddings",
+      "budget_key": "embeddings",
+      "budget_gb": 2.5,
+      "eval": null,
+      "incumbent": "qwen3-embedding:0.6b",
+      "incumbent_installed": true,
+      "baseline": {
+        "source": "tools/bojo_eval.py --semantic (recall@3 on the seeded memory set)",
+        "result": "see the last reports/ bojo_eval artefact; no fixed embeddings leaderboard yet"
+      },
+      "candidates": [],
+      "notes": "recall@3 is the existing metric, but its seeded set is not versioned as an eval file, so no swap is proposed.",
+      "manager_key": "embeddings"
+    },
+    "image": {
+      "label": "Image generation",
+      "lane": "image",
+      "budget_key": "image_flux",
+      "budget_gb": 11.0,
+      "eval": null,
+      "incumbent": "ComfyUI workflows (FLUX.1 / FLUX 3 Image Klein)",
+      "incumbent_installed": true,
+      "baseline": null,
+      "candidates": [],
+      "notes": "A workflow is not an Ollama tag, so the scout records it as an incumbent and never measures it with /api/chat.",
+      "manager_key": null
+    }
+  }
+}
