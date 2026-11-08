@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "state" / "director" / "services.json"
+REGISTRY = ROOT / "ty" / "services.json"
 IDLIST = ROOT / "reports" / "ty" / "_idlist_20261107.txt"
 SCAN = ROOT / "state" / "director" / "scan.json"
 SPEC = ROOT / "ty" / "TARGET_SPEC.md"
