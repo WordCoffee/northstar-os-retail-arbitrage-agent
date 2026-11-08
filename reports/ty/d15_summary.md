@@ -66,10 +66,28 @@ runner CLI), and the quarantine gate correctly refuses. The exact command is in
 |---|---|
 | launcher survives reboot | task registered with a logon trigger, action proven to run (exit 0); a real reboot was not performed because it would end the owner's session |
 | empty queue triggers re-plan, never idle | implemented and tested (D5); the launcher writes the re-plan note |
-| ≥3 parallel bundles merged to staging with score before/after | **6 merged**; competitor-monitor +70, prospector/thewatch/rivalboard +60, 13 services +10; 2 services now at bar |
-| Seller-Tester filed real gaps | 29 gaps, all pointing at real artefacts |
-| V1–V9 pass | V1/V2/V4–V8 pass; **V3 BLOCKED**, **V9 FAILED** |
-| Chrome Connect parity passed twice | six-point contract verified twice; ten-task suite **not run** (V3) |
+| ≥3 parallel bundles merged to staging with score before/after | **6 merged**; competitor-monitor +70, prospector/thewatch/rivalboard +60, 13 services +10 at the time |
+| Seller-Tester filed real gaps | 29 gaps on the first pass, 57 after the second, all pointing at real artefacts |
+| V1–V9 pass | V1/V2/V4–V8 pass; **V3 BLOCKED** (locked desktop / no CDP), **V9 FAILED** |
+| Chrome Connect parity passed twice | six-point contract verified twice; ten-task suite **not run** |
 | intel plane ≥10 findings | 58 findings, 58/58 URLs verified |
 | model leaderboards re-run on GPU | router eval re-run; Bojo 15/18; no swap |
 | verifier agree/FAILED per unit | 17 agree, 2 FAILED, 1 BLOCKED |
+
+## Correction, 2026-11-08 (same day): the scorecard got stricter, so the numbers moved
+
+The 2-at-bar result above came from a scorecard that credited tests and routes. The owner
+then required Seller-Tester output scores in the model. With `seller` as a 0.13-weight
+dimension, a `correct` of 60 for test-only evidence, and a five-output minimum:
+
+| service | then | now | why |
+|---|---|---|---|
+| listings | 100.0 | **77.0** | tests + route + latency, no seller output scored |
+| socialpulse | 100.0 | **77.0** | same |
+| design-studio | 95.0 | **75.2** | its 30 scored outputs average 16.7 |
+| all others | ≤ 95 | ≤ 77 | no seller evidence at all |
+
+**No service is at the bar now, and 77 is the ceiling reachable on artefacts alone.** That is
+the honest status the mandate asks for: the code paths run, the outputs are not yet worth
+selling, and the scorecard says so.
+
