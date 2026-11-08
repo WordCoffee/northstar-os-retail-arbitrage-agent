@@ -1,0 +1,1431 @@
+{
+  "schema_version": 1,
+  "title": "Seller-Tester brief catalog (D9)",
+  "note": "Amazon-ready product-picture situations across eight categories. Constraints are checked programmatically; the vision judge is optional.",
+  "categories": [
+    "supplement_pouch",
+    "ceramic_mug",
+    "apparel",
+    "skincare_bottle",
+    "small_appliance",
+    "pet_product",
+    "tool",
+    "food_jar"
+  ],
+  "situations": [
+    "white_background_main",
+    "lifestyle",
+    "infographic",
+    "scale_reference",
+    "bundle_multipack",
+    "packaging_mockup",
+    "background_swap",
+    "series_consistency"
+  ],
+  "briefs": [
+    {
+      "id": "ST-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 12,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-002",
+      "category": "ceramic_mug",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-003",
+      "category": "apparel",
+      "situation": "infographic",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-004",
+      "category": "skincare_bottle",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 8,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-005",
+      "category": "small_appliance",
+      "situation": "bundle_multipack",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 25,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-006",
+      "category": "pet_product",
+      "situation": "packaging_mockup",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-007",
+      "category": "tool",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 65,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-008",
+      "category": "food_jar",
+      "situation": "series_consistency",
+      "difficulty": 1,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-009",
+      "category": "ceramic_mug",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 62,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-010",
+      "category": "apparel",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-011",
+      "category": "skincare_bottle",
+      "situation": "infographic",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 12,
+          "max": 75,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-012",
+      "category": "small_appliance",
+      "situation": "scale_reference",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 7,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 45,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-013",
+      "category": "pet_product",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 28,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-014",
+      "category": "tool",
+      "situation": "packaging_mockup",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 75,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-015",
+      "category": "food_jar",
+      "situation": "background_swap",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 60,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-016",
+      "category": "supplement_pouch",
+      "situation": "series_consistency",
+      "difficulty": 2,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 22,
+          "max": 48,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-017",
+      "category": "apparel",
+      "situation": "white_background_main",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 22,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-018",
+      "category": "skincare_bottle",
+      "situation": "lifestyle",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 72,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-019",
+      "category": "small_appliance",
+      "situation": "infographic",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 14,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-020",
+      "category": "pet_product",
+      "situation": "scale_reference",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 40,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-021",
+      "category": "tool",
+      "situation": "bundle_multipack",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 30,
+          "max": 72,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-022",
+      "category": "food_jar",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-023",
+      "category": "supplement_pouch",
+      "situation": "background_swap",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-024",
+      "category": "ceramic_mug",
+      "situation": "series_consistency",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 24,
+          "max": 45,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-025",
+      "category": "skincare_bottle",
+      "situation": "white_background_main",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 22,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-026",
+      "category": "small_appliance",
+      "situation": "lifestyle",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 72,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-027",
+      "category": "pet_product",
+      "situation": "infographic",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 14,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-028",
+      "category": "tool",
+      "situation": "scale_reference",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 40,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-029",
+      "category": "food_jar",
+      "situation": "bundle_multipack",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 30,
+          "max": 72,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-030",
+      "category": "supplement_pouch",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-031",
+      "category": "ceramic_mug",
+      "situation": "background_swap",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-032",
+      "category": "apparel",
+      "situation": "series_consistency",
+      "difficulty": 3,
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 24,
+          "max": 45,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    }
+  ]
+}

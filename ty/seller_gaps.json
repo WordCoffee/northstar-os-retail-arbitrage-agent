@@ -1,0 +1,389 @@
+[
+  {
+    "id": "gap-99117887cd80",
+    "brief_id": "ST-001",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_ab_crop.png",
+    "at": "2026-11-08T08:46:37+00:00"
+  },
+  {
+    "id": "gap-3ccb0e2c64fb",
+    "brief_id": "ST-002",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/_ab_full.png",
+    "at": "2026-11-08T08:46:37+00:00"
+  },
+  {
+    "id": "gap-b704608f1240",
+    "brief_id": "ST-003",
+    "score": 57.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "renders/ab_realism_crop.png",
+    "at": "2026-11-08T08:46:37+00:00"
+  },
+  {
+    "id": "gap-323b93d5aa72",
+    "brief_id": "ST-004",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/ab_realism_flat.png",
+    "at": "2026-11-08T08:46:37+00:00"
+  },
+  {
+    "id": "gap-0890851cbaae",
+    "brief_id": "ST-005",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/ab_realism_real.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-8204176e2551",
+    "brief_id": "ST-006",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/ab_realism_side_by_side.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-0906c94d93bf",
+    "brief_id": "ST-007",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/mogra-forest-dusk-mockup-complete-v1.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-101d22d81f41",
+    "brief_id": "ST-008",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/mogra-forest-dusk-mockup-complete.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-fe8ab930bc2a",
+    "brief_id": "ST-009",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/smoke_cutout_alpha.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-0e7ae8ed4804",
+    "brief_id": "ST-011",
+    "score": 57.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "generated_images/branding_logo-beacon-tower.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-47f8122cf9b0",
+    "brief_id": "ST-012",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/branding_logo-compass-diamond.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-de4bb7423460",
+    "brief_id": "ST-013",
+    "score": 35.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/branding_logo-monogram-n.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-9b57b6138471",
+    "brief_id": "ST-014",
+    "score": 45.5,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "generated_images/branding_logo-pathway-nodes.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-7cd959fdc974",
+    "brief_id": "ST-015",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/branding_logo-peak-summit.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-34fd428cdc2d",
+    "brief_id": "ST-016",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/branding_northstar-logo.jpg",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-5127a1701a11",
+    "brief_id": "ST-017",
+    "score": 20.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill",
+      "alpha_matte",
+      "file_size",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/screenshots/cloudflare_signup_20260911_132624.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-d8031b0228af",
+    "brief_id": "ST-018",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "generated_images/screenshots/costco_sourcescout_20260912_154633.png",
+    "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-eb27083380ed",
+    "brief_id": "ST-019",
+    "score": 28.6,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "generated_images/screenshots/costco_trash bags_20260911_212920.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-d84fca604f4e",
+    "brief_id": "ST-020",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/screenshots/costco_trash bags_20260912_062013.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-55068ff0cd1c",
+    "brief_id": "ST-021",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/screenshots/costco_trash bags_20260912_062051.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-16733296e283",
+    "brief_id": "ST-022",
+    "score": 0.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill",
+      "file_size"
+    ],
+    "artefact_path": "generated_images/screenshots/screenshot_20260911_130830.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-1ce79c057520",
+    "brief_id": "ST-023",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "file_size"
+    ],
+    "artefact_path": "generated_images/screenshots/screenshot_20260911_170506.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-b19ba565cd9f",
+    "brief_id": "ST-024",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "file_size"
+    ],
+    "artefact_path": "generated_images/screenshots/screenshot_20260911_171420.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-3e4affd4826e",
+    "brief_id": "ST-025",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "file_size"
+    ],
+    "artefact_path": "generated_images/screenshots/screenshot_20260912_061836.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-04a65d736d14",
+    "brief_id": "ST-026",
+    "score": 45.5,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "generated_images/screenshots/screenshot_20260912_183730.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-93b0a75ab15c",
+    "brief_id": "ST-027",
+    "score": 57.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "generated_images/screenshots/sourcescout_proof_20260912_164237.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-2234f35bf27c",
+    "brief_id": "ST-028",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/screenshots/sourcescout_proof_20260912_170901.png",
+    "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-bd4bfdc8c334",
+    "brief_id": "ST-029",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "generated_images/screenshots/sourcescout_proof_20260912_183753.png",
+    "at": "2026-11-08T08:46:40+00:00"
+  },
+  {
+    "id": "gap-22295d30f575",
+    "brief_id": "ST-030",
+    "score": 0.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill",
+      "file_size"
+    ],
+    "artefact_path": "generated_images/screenshots/test_chrome_signup.png",
+    "at": "2026-11-08T08:46:40+00:00"
+  }
+]
