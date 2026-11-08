@@ -10,10 +10,10 @@
     "json"
   ],
   "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --format json",
-  "exit_code": 1,
-  "seconds": 0.857,
+  "exit_code": 0,
+  "seconds": 12.573,
   "artefact": "state\\bakeoff\\out\\rea-local-app.json",
   "stderr": "state\\bakeoff\\out\\rea-local-app.err",
-  "bytes": 541,
-  "sha256": "8741153225b362509f20efa1ca5417f78a8fb6a0c1ba140d13f8789052f9c332"
+  "bytes": 75929075,
+  "sha256": "435372f1b7c61f9599f7cba8abc533c4e0f1052c0aee285555261b7e68cfa986"
 }

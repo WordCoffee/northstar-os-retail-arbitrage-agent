@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "created": "2026-09-26T22:30:00Z",
-  "updated": "2026-11-07T10:55:00Z",
-  "note": "D0 baseline refresh, measured (not hand-edited): scripts/run_all_tests.ps1 on 2026-11-07, log at reports/ty/_baseline_measured2_20261107.txt -> AGGREGATE GREEN. 6617 backend passed, 0 failed, 117 skipped, 125 subtests, 869-884 s; identity by name 6736 ids vs 6453 baseline (+283 new, -0 removed, 0 failing). Counts below are a floor (passed >= baseline), not an equality, because the autonomy loop adds tests every cycle. The previous run of the same script was RED with 17 then 12 failures: all were one defect - test_egress_guard.py installed the egress guard and its autouse teardown re-applied the monkeypatched urlopen fake after pytest had restored the real one, so every later network test received a bare BytesIO. Fixed in that fixture (it now restores the transport it saw before the test) and each of the 12 passed immediately.",
+  "updated": "2026-11-08T10:35:00Z",
+  "note": "Backend block re-measured 2026-11-08 on staging at commit d2c29a55: `python -m pytest -q -p no:cacheprovider -p pytest_idlist` from Northstar_backend, log at reports/ty/_fullsuite_final_20261108.txt -> 7067 passed, 0 failed, 117 skipped, 2 xfailed, 125 subtests in 1129 s. Identity by name against the 2026-11-07 list (reports/ty/_idlist_20261107.txt, 6736 ids): 7186 collected now, +451 added, -1 removed (agents/golden_goose_finder/test_single_match.py::test_import_has_no_side_effects has no file and no git history; it was collected from an untracked directory that has since gone). The one failure in the run before this one was a test defect, not a product defect: test_gpu_budget.py::test_an_exclusive_role_drains_everything_first inherited a 27B lease left on disk by an earlier run; it now patches HEAVY_LEASE_PATH into tmp_path and passes both with and without a planted stale lease. NOT re-measured in this run and therefore left at their 2026-11-07 values: golden_goose, ui, shell and functions. Do not read those as current.",
   "known_exceptions": {
     "ignored": [],
     "ignored_reason": "NONE",
@@ -11,14 +11,15 @@
     ],
     "known_failures_reason": "Load-sensitive cooperative-cancel race: the worker thread has 10 ms to observe a cancel request; under a full-suite load it can lose the race and the transition cancel_requested -> succeeded raises. It PASSED in the 2026-11-07 measured run (0 known pre-existing failures); it is kept here so a future load-induced failure is named rather than surprising. Passes in isolation.",
     "harness_note": "scripts/run_all_tests.ps1 backend summary parse was replaced by Parse-PytestSummary on 2026-11-05 (commit c459bccc). Run `scripts/run_all_tests.ps1 -SelfTest` to exercise the parser against six known summary shapes.",
-    "baseline_provenance": "Every count in `baseline` below comes from the measured run named in `note`. No value here may be edited by hand; re-measure instead."
+    "baseline_provenance": "Every count in `baseline.backend` comes from the measured run named in `note`. `golden_goose`, `ui`, `shell` and `functions` still come from the 2026-11-07 run and are labelled as such in the note. No value here may be edited by hand; re-measure instead."
   },
   "baseline": {
     "backend": {
-      "passed": 6617,
+      "passed": 7067,
       "failed": 0,
       "skipped": 117,
-      "subtests": 125
+      "subtests": 125,
+      "xfailed": 2
     },
     "golden_goose": {
       "passed": 511,

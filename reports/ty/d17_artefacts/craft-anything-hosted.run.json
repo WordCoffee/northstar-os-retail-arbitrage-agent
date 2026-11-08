@@ -1,0 +1,21 @@
+{
+  "tool": "craft-anything",
+  "target": "hosted",
+  "status": "ran",
+  "command": [
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+    "--deep",
+    "js-app-map",
+    "--input-path",
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted",
+    "--output-format",
+    "json"
+  ],
+  "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --output-format json",
+  "exit_code": 0,
+  "seconds": 0.013,
+  "artefact": "state\\bakeoff\\out\\craft-anything-hosted.json",
+  "stderr": "state\\bakeoff\\out\\craft-anything-hosted.err",
+  "bytes": 1853,
+  "sha256": "2741fa9831bf315a92dc8a93724603d2e3e43d1f13ed037b39497b3fab4de1d2"
+}

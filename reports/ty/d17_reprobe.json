@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-08T09:29:47+00:00",
+  "generated_at": "2026-11-08T21:11:03+00:00",
   "generated_by": "tools/tool_bakeoff.py",
   "weights": {
     "accuracy": 0.4,
@@ -63,7 +63,7 @@
           "facts_missing": [],
           "detail": 1.0,
           "detail_units": 5430,
-          "seconds": 2.894,
+          "seconds": 2.866,
           "bytes": 7097846,
           "tokens_est": 1774461,
           "reliability": 1.0,
@@ -83,43 +83,71 @@
             ],
             "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --format json",
             "exit_code": 0,
-            "seconds": 2.894,
+            "seconds": 2.866,
             "artefact": "state\\bakeoff\\out\\rea-oss-repo.json",
             "stderr": "state\\bakeoff\\out\\rea-oss-repo.err",
             "bytes": 7097846,
             "sha256": "69e69d37089159b21729e87b2e3e202cfef6724593262db820bc89a3fc216e2e"
           },
-          "speed_norm": 1.0,
-          "tokens_norm": 1.0,
-          "composite": 1.0
+          "speed_norm": 0.009,
+          "tokens_norm": 0.01,
+          "composite": 0.752
         },
         {
           "tool": "craft-anything",
           "target": "oss-repo",
-          "status": "did-not-run",
-          "reason": "craft-anything: binary not found",
-          "seconds": null,
+          "status": "ran",
+          "reason": "",
+          "accuracy": 0.9,
+          "facts_found": 9,
+          "facts_total": 10,
+          "facts_missing": [
+            "memoryStorage"
+          ],
+          "detail": 0.595,
+          "detail_units": 595,
+          "seconds": 0.025,
+          "bytes": 72557,
+          "tokens_est": 18139,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --output-format json",
+          "artefact": "state\\bakeoff\\out\\craft-anything-oss-repo.json",
           "_record": {
             "tool": "craft-anything",
             "target": "oss-repo",
-            "status": "blocked",
-            "reason": "craft-anything: binary not found",
-            "command": null,
-            "exit_code": null,
-            "artefact": null
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+              "--deep",
+              "js-app-map",
+              "--input-path",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6",
+              "--output-format",
+              "json"
+            ],
+            "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --output-format json",
+            "exit_code": 0,
+            "seconds": 0.025,
+            "artefact": "state\\bakeoff\\out\\craft-anything-oss-repo.json",
+            "stderr": "state\\bakeoff\\out\\craft-anything-oss-repo.err",
+            "bytes": 72557,
+            "sha256": "0e31d495ca07d1d9f8619b2aeb336c31948580f896c19165faf9d9113569b6f3"
           },
-          "composite": null
+          "speed_norm": 1.0,
+          "tokens_norm": 1.0,
+          "composite": 0.859
         }
       ],
       "decision": {
         "target": "oss-repo",
         "kind": "open-source repo on this machine",
         "verdict": "winner",
-        "default": "rea",
-        "default_score": 1.0,
-        "backup": null,
-        "backup_score": null,
-        "reason": "rea scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (10/10)"
+        "default": "craft-anything",
+        "default_score": 0.859,
+        "backup": "rea",
+        "backup_score": 0.752,
+        "reason": "craft-anything scored 0.859 on accuracy/detail/speed/tokens/reliability; accuracy 0.9 (9/10)"
       }
     },
     {
@@ -143,9 +171,29 @@
         {
           "tool": "rea",
           "target": "hosted",
-          "status": "did-not-run",
-          "reason": "exit code 1",
-          "seconds": 0.838,
+          "status": "ran",
+          "reason": "",
+          "accuracy": 0.0,
+          "facts_found": 0,
+          "facts_total": 7,
+          "facts_missing": [
+            "anomalyco/opencode",
+            "npm install -g @opencode/cli",
+            "docs",
+            "install",
+            "sdk",
+            "github",
+            "opencode"
+          ],
+          "detail": 0.049,
+          "detail_units": 49,
+          "seconds": 0.875,
+          "bytes": 10154,
+          "tokens_est": 2538,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --format json",
+          "artefact": "state\\bakeoff\\out\\rea-hosted.json",
           "_record": {
             "tool": "rea",
             "target": "hosted",
@@ -158,40 +206,78 @@
               "json"
             ],
             "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --format json",
-            "exit_code": 1,
-            "seconds": 0.838,
+            "exit_code": 0,
+            "seconds": 0.875,
             "artefact": "state\\bakeoff\\out\\rea-hosted.json",
             "stderr": "state\\bakeoff\\out\\rea-hosted.err",
-            "bytes": 542,
-            "sha256": "3c98573806a1c0362bf34be67a7423cf8b791d3a663a4648aef49f2d1f6869a4"
+            "bytes": 10154,
+            "sha256": "6c360bdd6402441f3d9d103826f5a73bce9ef3b39a279b3af77b8d8d68d93d5c"
           },
-          "composite": null
+          "speed_norm": 0.015,
+          "tokens_norm": 0.182,
+          "composite": 0.133
         },
         {
           "tool": "craft-anything",
           "target": "hosted",
-          "status": "did-not-run",
-          "reason": "craft-anything: binary not found",
-          "seconds": null,
+          "status": "ran",
+          "reason": "",
+          "accuracy": 0.0,
+          "facts_found": 0,
+          "facts_total": 7,
+          "facts_missing": [
+            "anomalyco/opencode",
+            "npm install -g @opencode/cli",
+            "docs",
+            "install",
+            "sdk",
+            "github",
+            "opencode"
+          ],
+          "detail": 0.013,
+          "detail_units": 13,
+          "seconds": 0.013,
+          "bytes": 1853,
+          "tokens_est": 463,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --output-format json",
+          "artefact": "state\\bakeoff\\out\\craft-anything-hosted.json",
           "_record": {
             "tool": "craft-anything",
             "target": "hosted",
-            "status": "blocked",
-            "reason": "craft-anything: binary not found",
-            "command": null,
-            "exit_code": null,
-            "artefact": null
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+              "--deep",
+              "js-app-map",
+              "--input-path",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted",
+              "--output-format",
+              "json"
+            ],
+            "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\hosted\" --output-format json",
+            "exit_code": 0,
+            "seconds": 0.013,
+            "artefact": "state\\bakeoff\\out\\craft-anything-hosted.json",
+            "stderr": "state\\bakeoff\\out\\craft-anything-hosted.err",
+            "bytes": 1853,
+            "sha256": "2741fa9831bf315a92dc8a93724603d2e3e43d1f13ed037b39497b3fab4de1d2"
           },
-          "composite": null
+          "speed_norm": 1.0,
+          "tokens_norm": 1.0,
+          "composite": 0.353
         }
       ],
       "decision": {
         "target": "hosted",
         "kind": "hosted non-Amazon tool, read-only over the network",
-        "verdict": "no-result",
-        "default": null,
-        "backup": null,
-        "reason": "neither tool produced a command line, exit code and artefact"
+        "verdict": "winner",
+        "default": "craft-anything",
+        "default_score": 0.353,
+        "backup": "rea",
+        "backup_score": 0.133,
+        "reason": "craft-anything scored 0.353 on accuracy/detail/speed/tokens/reliability; accuracy 0.0 (0/7)"
       }
     },
     {
@@ -215,9 +301,21 @@
         {
           "tool": "rea",
           "target": "local-app",
-          "status": "did-not-run",
-          "reason": "exit code 1",
-          "seconds": 0.857,
+          "status": "ran",
+          "reason": "",
+          "accuracy": 1.0,
+          "facts_found": 7,
+          "facts_total": 7,
+          "facts_missing": [],
+          "detail": 1.0,
+          "detail_units": 44051,
+          "seconds": 12.573,
+          "bytes": 75929075,
+          "tokens_est": 18982268,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --format json",
+          "artefact": "state\\bakeoff\\out\\rea-local-app.json",
           "_record": {
             "tool": "rea",
             "target": "local-app",
@@ -230,40 +328,70 @@
               "json"
             ],
             "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --format json",
-            "exit_code": 1,
-            "seconds": 0.857,
+            "exit_code": 0,
+            "seconds": 12.573,
             "artefact": "state\\bakeoff\\out\\rea-local-app.json",
             "stderr": "state\\bakeoff\\out\\rea-local-app.err",
-            "bytes": 541,
-            "sha256": "8741153225b362509f20efa1ca5417f78a8fb6a0c1ba140d13f8789052f9c332"
+            "bytes": 75929075,
+            "sha256": "435372f1b7c61f9599f7cba8abc533c4e0f1052c0aee285555261b7e68cfa986"
           },
-          "composite": null
+          "speed_norm": 0.017,
+          "tokens_norm": 0.008,
+          "composite": 0.753
         },
         {
           "tool": "craft-anything",
           "target": "local-app",
-          "status": "did-not-run",
-          "reason": "craft-anything: binary not found",
-          "seconds": null,
+          "status": "ran",
+          "reason": "",
+          "accuracy": 1.0,
+          "facts_found": 7,
+          "facts_total": 7,
+          "facts_missing": [],
+          "detail": 1.0,
+          "detail_units": 3117,
+          "seconds": 0.213,
+          "bytes": 635634,
+          "tokens_est": 158908,
+          "reliability": 1.0,
+          "exit_code": 0,
+          "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --output-format json",
+          "artefact": "state\\bakeoff\\out\\craft-anything-local-app.json",
           "_record": {
             "tool": "craft-anything",
             "target": "local-app",
-            "status": "blocked",
-            "reason": "craft-anything: binary not found",
-            "command": null,
-            "exit_code": null,
-            "artefact": null
+            "status": "ran",
+            "command": [
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+              "--deep",
+              "js-app-map",
+              "--input-path",
+              "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local",
+              "--output-format",
+              "json"
+            ],
+            "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\bakeoff\\local\" --output-format json",
+            "exit_code": 0,
+            "seconds": 0.213,
+            "artefact": "state\\bakeoff\\out\\craft-anything-local-app.json",
+            "stderr": "state\\bakeoff\\out\\craft-anything-local-app.err",
+            "bytes": 635634,
+            "sha256": "1a9710fe55eebac9d4b0a4cbdbb02f44949d791edcd7f7f2dbe7ca2a110b8a06"
           },
-          "composite": null
+          "speed_norm": 1.0,
+          "tokens_norm": 1.0,
+          "composite": 1.0
         }
       ],
       "decision": {
         "target": "local-app",
         "kind": "this repo's local web app on 127.0.0.1",
-        "verdict": "no-result",
-        "default": null,
-        "backup": null,
-        "reason": "neither tool produced a command line, exit code and artefact"
+        "verdict": "winner",
+        "default": "craft-anything",
+        "default_score": 1.0,
+        "backup": "rea",
+        "backup_score": 0.753,
+        "reason": "craft-anything scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (7/7)"
       }
     }
   ],
@@ -272,27 +400,31 @@
       "target": "oss-repo",
       "kind": "open-source repo on this machine",
       "verdict": "winner",
-      "default": "rea",
-      "default_score": 1.0,
-      "backup": null,
-      "backup_score": null,
-      "reason": "rea scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (10/10)"
+      "default": "craft-anything",
+      "default_score": 0.859,
+      "backup": "rea",
+      "backup_score": 0.752,
+      "reason": "craft-anything scored 0.859 on accuracy/detail/speed/tokens/reliability; accuracy 0.9 (9/10)"
     },
     "hosted": {
       "target": "hosted",
       "kind": "hosted non-Amazon tool, read-only over the network",
-      "verdict": "no-result",
-      "default": null,
-      "backup": null,
-      "reason": "neither tool produced a command line, exit code and artefact"
+      "verdict": "winner",
+      "default": "craft-anything",
+      "default_score": 0.353,
+      "backup": "rea",
+      "backup_score": 0.133,
+      "reason": "craft-anything scored 0.353 on accuracy/detail/speed/tokens/reliability; accuracy 0.0 (0/7)"
     },
     "local-app": {
       "target": "local-app",
       "kind": "this repo's local web app on 127.0.0.1",
-      "verdict": "no-result",
-      "default": null,
-      "backup": null,
-      "reason": "neither tool produced a command line, exit code and artefact"
+      "verdict": "winner",
+      "default": "craft-anything",
+      "default_score": 1.0,
+      "backup": "rea",
+      "backup_score": 0.753,
+      "reason": "craft-anything scored 1.0 on accuracy/detail/speed/tokens/reliability; accuracy 1.0 (7/7)"
     }
   },
   "provenance_rows": [

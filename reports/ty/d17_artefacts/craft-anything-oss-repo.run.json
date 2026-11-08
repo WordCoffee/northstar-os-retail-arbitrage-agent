@@ -1,0 +1,21 @@
+{
+  "tool": "craft-anything",
+  "target": "oss-repo",
+  "status": "ran",
+  "command": [
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe",
+    "--deep",
+    "js-app-map",
+    "--input-path",
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6",
+    "--output-format",
+    "json"
+  ],
+  "command_line": "\"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\craft-anything-app\\craft-anything-0.5.0-windows-x64-portable\\craft-anything-cli.exe\" --deep js-app-map --input-path \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\vendor\\todomvc\\examples\\javascript-es6\" --output-format json",
+  "exit_code": 0,
+  "seconds": 0.025,
+  "artefact": "state\\bakeoff\\out\\craft-anything-oss-repo.json",
+  "stderr": "state\\bakeoff\\out\\craft-anything-oss-repo.err",
+  "bytes": 72557,
+  "sha256": "0e31d495ca07d1d9f8619b2aeb336c31948580f896c19165faf9d9113569b6f3"
+}

@@ -116,6 +116,87 @@ TARGETS: List[Dict[str, Any]] = [
 ]
 
 
+def prepare_targets(base: str = "") -> Dict[str, Any]:
+    """Fetch the two network-ish targets into their folders with a plain read-only GET.
+
+    The bake-off compares tools on *evidence*, so the evidence has to exist: the hosted
+    page's HTML and its same-origin scripts, and this repo's built UI served locally. No
+    Amazon host is ever touched; both URLs are non-Amazon by construction.
+    """
+    import re
+    import threading
+    import urllib.parse
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+    import urllib.request
+
+    def fetch(url: str, folder: Path, *, limit: int = 25) -> Dict[str, Any]:
+        folder.mkdir(parents=True, exist_ok=True)
+        seen: set = set()
+        saved: list = []
+        errors: list = []
+
+        def grab(target: str) -> Optional[str]:
+            if target in seen or len(saved) >= limit:
+                return None
+            seen.add(target)
+            try:
+                with urllib.request.urlopen(target, timeout=30) as response:
+                    body = response.read(8_000_000)
+                name = (urllib.parse.urlparse(target).path.strip("/") or "index.html")
+                name = re.sub(r"[^A-Za-z0-9._/-]", "_", name).replace("/", "_")
+                if not name.endswith((".html", ".js", ".mjs", ".css")):
+                    name += ".html"
+                (folder / name).write_bytes(body)
+                saved.append(name)
+                return body.decode("utf-8", "replace")
+            except Exception as exc:  # noqa: BLE001 - a failed asset is recorded
+                errors.append(f"{target}: {type(exc).__name__}")
+                return None
+
+        html = grab(url)
+        if html:
+            root = "{0.scheme}://{0.netloc}".format(urllib.parse.urlparse(url))
+            for src in re.findall(r'(?:src|href)="([^"]+)"', html):
+                if src.startswith(("http://", "https://")):
+                    continue
+                grab(urllib.parse.urljoin(root + "/", src.lstrip("/")))
+        return {"ok": bool(saved), "url": url, "folder": str(folder),
+                "files": saved, "errors": errors}
+
+    results: Dict[str, Any] = {}
+
+    hosted = next(target for target in TARGETS if target["id"] == "hosted")
+    results["hosted"] = fetch(hosted["url"], ROOT / hosted["path"])
+
+    local = next(target for target in TARGETS if target["id"] == "local-app")
+    dist = ROOT / "northstar-os-ui" / "dist"
+    if not dist.is_dir():
+        results["local-app"] = {"ok": False, "reason": f"no build at {dist}"}
+    else:
+        class Handler(SimpleHTTPRequestHandler):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, directory=str(dist), **kwargs)
+
+            def translate_path(self, path):
+                if path.startswith("/ui/"):
+                    path = path[3:]
+                return super().translate_path(path)
+
+            def log_message(self, *args):
+                return
+
+        server = ThreadingHTTPServer(("127.0.0.1", 8123), Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            results["local-app"] = fetch(local["url"], ROOT / local["path"])
+        finally:
+            server.shutdown()
+            server.server_close()
+    return results
+
+
 # ---------------------------------------------------------------- commands
 def tool_binary(tool: str) -> Optional[Path]:
     raw = TOOLS[tool]["binary"]
@@ -406,6 +487,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--targets", default="",
                         help="comma-separated subset of oss-repo,hosted,local-app")
     parser.add_argument("--out", default=str(RESULTS_PATH))
+    parser.add_argument("--prepare", action="store_true",
+                        help="fetch the hosted and local targets with a read-only GET first")
     return parser
 
 
@@ -421,6 +504,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if unknown:
         print(f"error: unknown target(s) {unknown}", file=sys.stderr)
         return 2
+    if args.prepare:
+        prepared = prepare_targets()
+        print(json.dumps({"prepared": prepared}, indent=2)[:2000])
     payload = sweep(tools, target_ids, run=bool(args.run))
     write_results(payload, Path(args.out))
     for row in payload["targets"]:
