@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "title": "Seller-Tester brief catalog (D9)",
-  "note": "Amazon-ready product-picture situations across eight categories. Constraints are checked programmatically; the vision judge is optional.",
+  "note": "Amazon-ready product-picture situations across eight categories. source_mode names the single input a brief starts from: the prompt alone (prompt_only), a stored reference from an earlier generation (stored_reference), or a file the seller uploads (uploaded_reference). Reference modes carry a reference object; a prompt_only brief must not. Stored references point at real assets under renders/, and the Mogra Organic pouch is the only product with stored generations in this checkout. Uploaded references name the seller's own file and have no local copy here, so their reference check reports cannot-verify, which counts as a failure until the upload exists. Constraints are checked programmatically; the vision judge is optional.",
   "categories": [
     "supplement_pouch",
     "ceramic_mug",
@@ -66,7 +66,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-002",
@@ -108,7 +109,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-003",
@@ -150,7 +152,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-004",
@@ -195,7 +198,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-005",
@@ -240,7 +244,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-006",
@@ -282,7 +287,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-007",
@@ -327,7 +333,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-008",
@@ -372,7 +379,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-009",
@@ -417,7 +425,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-010",
@@ -459,7 +468,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-011",
@@ -501,7 +511,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-012",
@@ -546,7 +557,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-013",
@@ -591,7 +603,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-014",
@@ -633,7 +646,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-015",
@@ -678,7 +692,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-016",
@@ -723,7 +738,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-017",
@@ -768,7 +784,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-018",
@@ -810,7 +827,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-019",
@@ -852,7 +870,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-020",
@@ -897,7 +916,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-021",
@@ -942,7 +962,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-022",
@@ -984,7 +1005,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-023",
@@ -1029,7 +1051,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-024",
@@ -1074,7 +1097,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-025",
@@ -1119,7 +1143,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-026",
@@ -1161,7 +1186,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-027",
@@ -1203,7 +1229,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-028",
@@ -1248,7 +1275,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-029",
@@ -1293,7 +1321,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-030",
@@ -1335,7 +1364,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-031",
@@ -1380,7 +1410,8 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "source_mode": "prompt_only"
     },
     {
       "id": "ST-032",
@@ -1425,7 +1456,1279 @@
         "dimensions",
         "aspect",
         "background"
+      ],
+      "source_mode": "prompt_only"
+    },
+    {
+      "id": "ST-033",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_main_2000.png",
+        "role": "main_packshot",
+        "note": "Earlier white-background pack shot of the same Mogra Organic pouch; re-derive the main image from it."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 12,
+          "max": 70,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-034",
+      "category": "supplement_pouch",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/mogra-forest-dusk-mockup-complete.png",
+        "role": "lifestyle_scene",
+        "note": "Earlier greenhouse lifestyle render of the same twin pouches; continue the series from this scene."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-035",
+      "category": "supplement_pouch",
+      "situation": "infographic",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_main_2000.png",
+        "role": "main_packshot",
+        "note": "Earlier clean pack shot; annotate benefits around the same product, do not restyle the pack."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-036",
+      "category": "supplement_pouch",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_cutout_alpha.png",
+        "role": "cutout",
+        "note": "Earlier alpha cutout of the same pouch; place it next to a scale reference at true proportion."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 8,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-037",
+      "category": "supplement_pouch",
+      "situation": "bundle_multipack",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_main_2000.png",
+        "role": "main_packshot",
+        "note": "Earlier pack shot showing both flavours; build the multi-pack from the same artwork."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 25,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-038",
+      "category": "supplement_pouch",
+      "situation": "packaging_mockup",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/mogra-forest-dusk-mockup-complete.png",
+        "role": "lifestyle_scene",
+        "note": "Earlier lifestyle render; reuse the same pack artwork inside a retail carton mockup."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-039",
+      "category": "supplement_pouch",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_cutout_alpha.png",
+        "role": "cutout",
+        "note": "Earlier cutout of the same pouch; swap the background and keep the product untouched."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 65,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-040",
+      "category": "supplement_pouch",
+      "situation": "series_consistency",
+      "difficulty": 1,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/mogra-forest-dusk-mockup-complete.png",
+        "role": "lifestyle_scene",
+        "note": "Earlier lifestyle render; produce the next frame of the series with the same pack and light."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-041",
+      "category": "supplement_pouch",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/mogra-forest-dusk-mockup-complete.png",
+        "role": "lifestyle_scene",
+        "note": "Earlier lifestyle render; a tighter crop of the same scene, same product, same light."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-042",
+      "category": "supplement_pouch",
+      "situation": "series_consistency",
+      "difficulty": 2,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_main_2000.png",
+        "role": "main_packshot",
+        "note": "Earlier pack shot; keep the label identical and change only the setting for the next frame."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 22,
+          "max": 48,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-043",
+      "category": "supplement_pouch",
+      "situation": "background_swap",
+      "difficulty": 2,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/mogra-forest-dusk-mockup-complete.png",
+        "role": "lifestyle_scene",
+        "note": "Earlier lifestyle render; keep the pouches, replace the greenhouse with a studio backdrop."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 60,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-044",
+      "category": "supplement_pouch",
+      "situation": "packaging_mockup",
+      "difficulty": 2,
+      "source_mode": "stored_reference",
+      "reference": {
+        "kind": "stored_asset",
+        "path": "renders/smoke_cutout_alpha.png",
+        "role": "cutout",
+        "note": "Earlier cutout; wrap the same artwork onto a stand-up pouch mockup."
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 75,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-045",
+      "category": "ceramic_mug",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "mug_matte-black-front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "matte black 12 oz ceramic mug, front view",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-046",
+      "category": "apparel",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "tee_charcoal-folded.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "folded charcoal cotton t-shirt, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 62,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-047",
+      "category": "skincare_bottle",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "serum_amber-30ml.png",
+          "mime_type": "image/png",
+          "subject": "amber glass serum bottle, 30 ml, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 85,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-048",
+      "category": "small_appliance",
+      "situation": "packaging_mockup",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "kettle_brushed-steel.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "brushed steel electric kettle, side view",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 18,
+          "max": 75,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-049",
+      "category": "pet_product",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "dogfood_two-bags.png",
+          "mime_type": "image/png",
+          "subject": "two 5 lb dog-food bags side by side, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 28,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-050",
+      "category": "tool",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "drill_18v.png",
+          "mime_type": "image/png",
+          "subject": "18 V cordless drill with battery attached, side view",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 8,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-051",
+      "category": "food_jar",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "honey_24oz.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "24 oz glass jar of raw honey, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 65,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-052",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "pouch_kraft-unprinted.png",
+          "mime_type": "image/png",
+          "subject": "unprinted matte kraft stand-up pouch, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 22,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-053",
+      "category": "apparel",
+      "situation": "infographic",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "hoodie_olive-flat.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "olive hoodie laid flat, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 12,
+          "max": 75,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-054",
+      "category": "ceramic_mug",
+      "situation": "background_swap",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "mug_glazed-speckle.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "speckled glazed stoneware mug, three-quarter view",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.01
+        },
+        "background": {
+          "value": 245,
+          "tolerance": 3,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 55,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-055",
+      "category": "skincare_bottle",
+      "situation": "series_consistency",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "serum_clear-50ml.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "clear glass 50 ml serum bottle, front",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 8000,
+          "max_height": 8000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.005
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 4,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 20,
+          "max": 50,
+          "distance": 20
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 4,
+          "max_border_std": 4
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
+      ]
+    },
+    {
+      "id": "ST-056",
+      "category": "tool",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "wrench_set-rolled.png",
+          "mime_type": "image/png",
+          "subject": "rolled wrench set, open",
+          "note": "the seller's own photo; no local copy exists in this checkout"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 5,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "pass_score": 70,
+      "critical": [
+        "dimensions",
+        "aspect",
+        "background"
       ]
     }
+  ],
+  "source_modes": [
+    "prompt_only",
+    "stored_reference",
+    "uploaded_reference"
   ]
 }

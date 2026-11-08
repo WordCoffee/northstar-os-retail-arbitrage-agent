@@ -6,9 +6,11 @@ Every check returns::
 
 `score_image` loads the bytes once, runs the checks a brief asks for, and
 returns a 0-100 subscore. The checks are deliberately mechanical: dimensions,
-aspect, corner-sampled background, subject fill, matte/alpha, file size, and a
-margin-ink heuristic for the text rule. The heuristic is not OCR; a vision judge
-can be layered on top, but it is never required for a score.
+aspect, corner-sampled background, subject fill, matte/alpha, file size, a
+margin-ink heuristic for the text rule, and — for the two reference input
+modes — a reference-subject proxy supplied by `reference_check`. The heuristic
+is not OCR; a vision judge can be layered on top, but it is never required for
+a score.
 """
 from __future__ import annotations
 
@@ -26,6 +28,7 @@ DEFAULT_WEIGHTS = {
     "alpha_matte": 0.10,
     "file_size": 0.05,
     "text_free": 0.15,
+    "reference_subject": 0.25,
 }
 
 DEFAULT_CRITICAL = ("dimensions", "aspect", "background")
@@ -331,21 +334,67 @@ def _normalise_judgement(raw: Any) -> Dict[str, Any]:
             "reasons": [str(r)[:200] for r in reasons][:8]}
 
 
+def _reference_verdict(rgb: np.ndarray, brief: Dict[str, Any], reference_check: Any) -> Dict[str, Any]:
+    """Resolve the reference-subject verdict for this brief and image.
+
+    prompt_only  -> skipped (there is nothing to compare)
+    reference    -> the injected check's verdict, or a cannot_verify failure
+    unclassified -> cannot_verify failure (an undeclared input is not a pass)
+    """
+    mode = brief.get("source_mode") or "unclassified"
+    if mode == "prompt_only":
+        return {"ok": True, "skipped": True, "cannot_verify": False,
+                "detail": "prompt-only brief: no reference to verify"}
+    if mode not in ("stored_reference", "uploaded_reference"):
+        return {"ok": False, "skipped": False, "cannot_verify": True,
+                "detail": f"cannot verify: brief has no usable input mode ({mode!r})"}
+    if reference_check is None:
+        return {"ok": False, "skipped": False, "cannot_verify": True,
+                "detail": "cannot verify: no reference was supplied to the scorer"}
+    try:
+        raw = reference_check(rgb)
+    except Exception as exc:  # noqa: BLE001 - an unreadable reference is a failure, not a crash
+        return {"ok": False, "skipped": False, "cannot_verify": True,
+                "detail": f"cannot verify: reference check raised {type(exc).__name__}"}
+    if not isinstance(raw, dict):
+        return {"ok": False, "skipped": False, "cannot_verify": True,
+                "detail": "cannot verify: reference check returned a non-dict"}
+    return {
+        "ok": bool(raw.get("ok")),
+        "skipped": bool(raw.get("skipped")),
+        "cannot_verify": bool(raw.get("cannot_verify")),
+        "detail": str(raw.get("detail", ""))[:400],
+        **{k: v for k, v in raw.items()
+           if k not in ("ok", "skipped", "cannot_verify", "detail", "check")},
+    }
+
+
 def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
-                judge: Any = None) -> Dict[str, Any]:
-    """Score one image against one brief. Never raises on bad image data."""
+                judge: Any = None,
+                reference_check: Any = None) -> Dict[str, Any]:
+    """Score one image against one brief. Never raises on bad image data.
+
+    `reference_check` is an optional callable taking the decoded RGB array and
+    returning a check dict; the harness supplies it for reference-mode briefs.
+    A reference-mode brief scored without one is a `cannot_verify` failure —
+    the check is never silently skipped into a pass.
+    """
     brief_id = brief.get("id", "unknown")
+    mode = brief.get("source_mode") or "unclassified"
     base = {
         "brief_id": brief_id,
         "category": brief.get("category"),
         "situation": brief.get("situation"),
         "difficulty": brief.get("difficulty"),
+        "source_mode": mode,
         "checks": {},
         "failed_checks": [],
         "score": 0.0,
         "passed": False,
         "judged": False,
     }
+    if mode == "unclassified":
+        base["source_mode"] = "unclassified"
     try:
         loaded = load_image(image_bytes)
     except ValueError as exc:
@@ -364,6 +413,7 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         "format": loaded.fmt,
         "bytes": loaded.nbytes,
     })
+    checks["reference_subject"] = _reference_verdict(loaded.rgb, brief, reference_check)
 
     weights = dict(DEFAULT_WEIGHTS)
     weights.update(brief.get("weights") or {})
@@ -393,7 +443,12 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
 
     failed = [name for name, check in checks.items()
               if not check.get("skipped") and not check["ok"]]
-    critical = brief.get("critical", list(DEFAULT_CRITICAL))
+    critical = list(brief.get("critical") or DEFAULT_CRITICAL)
+    reference = checks["reference_subject"]
+    if not reference.get("skipped") and "reference_subject" not in critical:
+        # A picture that does not contain the reference subject cannot pass on
+        # the strength of its dimensions.
+        critical.append("reference_subject")
     critical_failed = [name for name in critical
                        if name in checks and not checks[name].get("skipped")
                        and not checks[name]["ok"]]

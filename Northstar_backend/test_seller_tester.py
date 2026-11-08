@@ -23,21 +23,30 @@ if str(ROOT) not in sys.path:
 
 from tools.seller_tester import (  # noqa: E402
     CATEGORIES,
+    MIN_PER_MODE,
+    REFERENCE_MODES,
     SITUATIONS,
+    SOURCE_MODES,
     ComfyGenerator,
     EscalationLog,
     FakeJudge,
     GeneratorUnavailable,
     StoredGenerator,
+    briefs_by_mode,
     build_gap,
+    check_reference_subject,
     escalate,
     file_gap,
     gap_id,
     get_judge,
     load_catalog,
     local_judge,
+    mode_counts,
+    normalise_reference_path,
+    reference_check_for_brief,
     run_pass,
     score_image,
+    select_briefs,
     validate_catalog,
 )
 from tools.seller_tester import scorers  # noqa: E402
@@ -83,6 +92,7 @@ def make_brief(brief_id: str = "T-001", **overrides) -> dict:
         "category": "supplement_pouch",
         "situation": "white_background_main",
         "difficulty": 1,
+        "source_mode": "prompt_only",
         "constraints": constraints,
         "pass_score": 70,
         "critical": ["dimensions", "aspect", "background"],
@@ -526,3 +536,273 @@ def test_full_pass_without_artefacts_raises(tmp_path):
         run_pass(generator=StoredGenerator(roots=[empty]), briefs=[make_brief()],
                  limit=1, gaps_path=tmp_path / "g.json", mirror_path=None,
                  escalation_path=tmp_path / "e.json")
+
+
+# --------------------------------------------------------------------------- input modes
+def coloured_product(size: int = 400, colour: tuple[int, int, int] = (40, 90, 60),
+                     bg: int = 255, box: tuple[int, int, int, int] = (80, 60, 320, 340)
+                     ) -> Image.Image:
+    image = Image.new("RGB", (size, size), (bg, bg, bg))
+    ImageDraw.Draw(image).rectangle(box, fill=colour)
+    return image
+
+
+def rgb_of(image: Image.Image) -> "np.ndarray":
+    return scorers.load_image(png_bytes(image)).rgb
+
+
+def test_shipped_catalog_declares_truthful_modes():
+    payload = load_catalog()
+    assert validate_catalog(payload) == []
+    counts = mode_counts(payload)
+    assert set(counts) >= set(SOURCE_MODES)
+    for mode in SOURCE_MODES:
+        assert counts[mode] >= MIN_PER_MODE, (mode, counts[mode])
+    by_mode = briefs_by_mode(payload)
+    for mode in SOURCE_MODES:
+        assert by_mode[mode], mode
+
+    for brief in payload["briefs"]:
+        mode = brief["source_mode"]
+        if mode == "prompt_only":
+            # A white-background brief with nothing behind it is not a reference brief.
+            assert "reference" not in brief, brief["id"]
+        elif mode == "stored_reference":
+            reference = brief["reference"]
+            assert reference["kind"] == "stored_asset"
+            path, reason = normalise_reference_path(reference["path"])
+            assert path is not None, (brief["id"], reason)
+            assert path.is_file()
+        elif mode == "uploaded_reference":
+            reference = brief["reference"]
+            assert reference["kind"] == "uploaded_file"
+            assert reference["path"] is None  # nothing is on disk until the seller uploads
+            assert reference["descriptor"]["filename"]
+            assert reference["descriptor"]["mime_type"].startswith("image/")
+
+    # Situations are covered in every mode that can honestly have them.
+    assert {b["situation"] for b in by_mode["stored_reference"]} == set(SITUATIONS)
+    assert len({b["category"] for b in by_mode["uploaded_reference"]}) >= 6
+    assert {b["category"] for b in by_mode["prompt_only"]} == set(CATEGORIES)
+
+
+def test_unknown_source_mode_is_refused():
+    payload = load_catalog()
+    payload["briefs"][0]["source_mode"] = "vibes_only"
+    errors = validate_catalog(payload)
+    assert any("unknown source_mode" in e for e in errors), errors
+
+    payload = load_catalog()
+    payload["briefs"][0]["reference"] = {"kind": "stored_asset", "path": "renders/smoke_main_2000.png"}
+    errors = validate_catalog(payload)
+    assert any("must not declare a reference" in e for e in errors), errors
+
+    payload = load_catalog()
+    last = payload["briefs"][-1]
+    last["source_mode"] = "stored_reference"
+    last["reference"] = {"kind": "uploaded_file",
+                         "descriptor": {"filename": "x.jpg",
+                                        "mime_type": "image/jpeg",
+                                        "subject": "x"}}
+    errors = validate_catalog(payload)
+    assert any("reference.kind must be 'stored_asset'" in e for e in errors), errors
+
+    payload = load_catalog()
+    last = payload["briefs"][-1]
+    last["source_mode"] = "stored_reference"
+    last["reference"] = {"kind": "stored_asset", "path": "../../etc/passwd"}
+    errors = validate_catalog(payload)
+    assert any("no '..'" in e for e in errors), errors
+
+    with pytest.raises(ValueError):
+        select_briefs(load_catalog()["briefs"], limit=3, mode="vibes_only")
+    with pytest.raises(ValueError):
+        escalate(make_brief(), load_catalog()["briefs"], source_mode="vibes_only")
+
+
+def test_reference_paths_outside_the_asset_trees_are_refused():
+    for value in ("C:/Windows/win.ini", "/etc/passwd", "docs/readme.md",
+                  "renders/../AGENTS.md", ""):
+        path, reason = normalise_reference_path(value)
+        assert path is None, (value, path)
+        assert reason
+    path, reason = normalise_reference_path("renders/smoke_main_2000.png")
+    assert path is not None and reason == ""
+
+
+def test_a_limited_pass_samples_every_mode():
+    catalog = load_catalog()["briefs"]
+    selected = select_briefs(catalog, limit=40)
+    assert len(selected) == 40
+    counts = {mode: sum(1 for row in selected if row["source_mode"] == mode)
+              for mode in SOURCE_MODES}
+    assert all(counts[mode] >= 12 for mode in SOURCE_MODES), counts
+
+    only = select_briefs(catalog, limit=5, mode="uploaded_reference")
+    assert len(only) == 5
+    assert {row["source_mode"] for row in only} == {"uploaded_reference"}
+
+
+def test_summary_groups_by_mode_and_never_hides_an_unscored_mode(tmp_path):
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    product_canvas(ratio=0.30).save(assets / "good.png")
+    product_canvas(ratio=0.35).save(assets / "good2.png")
+    gaps_path = tmp_path / "gaps.json"
+    summary = run_pass(
+        generator=StoredGenerator(roots=[assets]),
+        briefs=[make_brief("P-1"), make_brief("P-2")],
+        limit=2,
+        gaps_path=gaps_path, mirror_path=None,
+        escalation_path=tmp_path / "escalation.json",
+    )
+    assert set(summary["by_mode"]) == set(SOURCE_MODES)
+    assert summary["by_mode"]["prompt_only"]["scored"] == 2
+    assert summary["by_mode"]["stored_reference"]["scored"] == 0
+    assert summary["by_mode"]["uploaded_reference"]["scored"] == 0
+    assert summary["by_mode"]["stored_reference"]["mean_score"] == 0.0
+    assert summary["results"][0]["source_mode"] == "prompt_only"
+    assert summary["catalog_by_mode"]["prompt_only"] == 2
+    assert summary["not_scored"] == 0
+
+
+def test_a_stored_reference_pass_records_its_mode_and_reference(tmp_path):
+    class FixedGenerator:
+        name = "fixed"
+
+        def __init__(self, path: Path) -> None:
+            self.path = path
+
+        def pair(self, briefs, limit=None):
+            return [(briefs[0], self.path)]
+
+        def __len__(self) -> int:
+            return 1
+
+    brief = make_brief(
+        "S-1", source_mode="stored_reference",
+        reference={"kind": "stored_asset",
+                   "path": "renders/mogra-forest-dusk-mockup-complete.png"})
+    artefact = ROOT / "renders" / "smoke_main_2000.png"
+    summary = run_pass(
+        generator=FixedGenerator(artefact),
+        briefs=[brief],
+        limit=1,
+        gaps_path=tmp_path / "gaps.json", mirror_path=None,
+        escalation_path=tmp_path / "escalation.json",
+    )
+    row = summary["results"][0]
+    assert row["source_mode"] == "stored_reference"
+    assert row["reference"]["kind"] == "stored_asset"
+    # The same pouch photographed twice: the proxy can see the shared subject.
+    assert row["checks"]["reference_subject"]["ok"] is True, row["checks"]["reference_subject"]
+
+
+def test_a_prompt_only_brief_never_runs_the_reference_check():
+    result = score_image(png_bytes(product_canvas()), make_brief())
+    check = result["checks"]["reference_subject"]
+    assert check["skipped"] is True
+    assert check["ok"] is True
+    assert result["passed"] is True
+
+
+def test_reference_check_passes_when_the_reference_subject_is_present():
+    reference = rgb_of(coloured_product())
+    produced = rgb_of(coloured_product(size=600, bg=232,
+                                       box=(120, 90, 480, 510)))
+    verdict = check_reference_subject(produced, reference)
+    assert verdict["ok"] is True, verdict
+    assert verdict["cannot_verify"] is False
+    assert verdict["colour_agreement"] >= 0.6
+
+
+def test_reference_check_fails_on_a_different_colour_and_on_a_different_shape():
+    reference = rgb_of(coloured_product())
+    wrong_colour = rgb_of(coloured_product(colour=(190, 40, 40)))
+    verdict = check_reference_subject(wrong_colour, reference)
+    assert verdict["ok"] is False
+    assert verdict["cannot_verify"] is False
+    assert verdict["colour_agreement"] < 0.2
+
+    wrong_shape = rgb_of(coloured_product(size=600, box=(280, 30, 320, 570)))
+    verdict = check_reference_subject(wrong_shape, reference)
+    assert verdict["ok"] is False
+    assert verdict["cannot_verify"] is False
+    assert verdict["aspect_ratio"] > 1.6
+
+
+def test_reference_check_cannot_verify_counts_as_a_fail(tmp_path):
+    grey = Image.new("RGB", (400, 400), (255, 255, 255))
+    ImageDraw.Draw(grey).rectangle([80, 60, 320, 340], fill=(140, 140, 140))
+    verdict = check_reference_subject(rgb_of(grey), rgb_of(coloured_product()))
+    assert verdict["ok"] is False
+    assert verdict["cannot_verify"] is True
+
+    brief = make_brief(
+        "S-MISSING", source_mode="stored_reference",
+        reference={"kind": "stored_asset", "path": "renders/does-not-exist.png"})
+    missing = reference_check_for_brief(rgb_of(coloured_product()), brief)
+    assert missing["ok"] is False and missing["cannot_verify"] is True
+    assert "not on disk" in missing["detail"]
+
+    upload = make_brief(
+        "U-MISSING", source_mode="uploaded_reference",
+        reference={"kind": "uploaded_file", "path": None,
+                   "descriptor": {"filename": "mug.jpg", "mime_type": "image/jpeg",
+                                  "subject": "matte black mug"}})
+    unresolved = reference_check_for_brief(rgb_of(coloured_product()), upload)
+    assert unresolved["ok"] is False and unresolved["cannot_verify"] is True
+    assert "no local copy of the uploaded file" in unresolved["detail"]
+
+    local = tmp_path / "upload.png"
+    coloured_product().save(local)
+    resolvable = dict(upload, reference=dict(upload["reference"], path=str(local)))
+    # An absolute tmp path is not inside the asset trees, so it is still refused.
+    refused = reference_check_for_brief(rgb_of(coloured_product()), resolvable)
+    assert refused["ok"] is False and refused["cannot_verify"] is True
+    assert "repo-relative" in refused["detail"]
+
+
+def test_a_reference_brief_cannot_pass_on_constraints_alone():
+    result = score_image(png_bytes(product_canvas()), make_brief(
+        "S-2", source_mode="stored_reference",
+        reference={"kind": "stored_asset", "path": "renders/smoke_main_2000.png"}))
+    check = result["checks"]["reference_subject"]
+    assert check["cannot_verify"] is True
+    assert check["ok"] is False
+    assert result["passed"] is False
+    assert "reference_subject" in result["failed_checks"]
+
+    verified = score_image(
+        png_bytes(product_canvas()), make_brief(
+            "S-3", source_mode="stored_reference",
+            reference={"kind": "stored_asset", "path": "renders/smoke_main_2000.png"}),
+        reference_check=lambda rgb: {"ok": True, "detail": "injected pass"})
+    assert verified["checks"]["reference_subject"]["ok"] is True
+    assert verified["passed"] is True
+
+
+def test_escalation_keeps_the_ladder_inside_its_mode():
+    catalog = load_catalog()["briefs"]
+    stored = next(row for row in catalog if row["source_mode"] == "stored_reference")
+    brief = dict(stored)
+    used = set()
+    actions = []
+    for _ in range(8):
+        step = escalate(brief, catalog, used_categories=used)
+        brief = step["brief"]
+        actions.append(step["action"])
+        assert brief["source_mode"] == "stored_reference", step
+        assert isinstance(brief.get("reference"), dict), step
+        assert brief["reference"]["kind"] == "stored_asset"
+        used.add(brief["category"])
+    assert "new_category" in actions
+
+    prompt = next(row for row in catalog if row["source_mode"] == "prompt_only")
+    brief = dict(prompt)
+    for _ in range(8):
+        step = escalate(brief, catalog, used_categories=set())
+        brief = step["brief"]
+        assert brief["source_mode"] == "prompt_only"
+        assert "reference" not in brief
+

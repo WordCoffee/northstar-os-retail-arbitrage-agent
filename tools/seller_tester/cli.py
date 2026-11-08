@@ -15,7 +15,14 @@ import json
 import sys
 from pathlib import Path
 
-from .briefs import DEFAULT_CATALOG_PATH, SITUATIONS, load_catalog, validate_catalog
+from .briefs import (
+    DEFAULT_CATALOG_PATH,
+    SITUATIONS,
+    SOURCE_MODES,
+    load_catalog,
+    mode_counts,
+    validate_catalog,
+)
 from .escalate import escalate
 from .generators import ComfyGenerator, GeneratorUnavailable, StoredGenerator
 from .harness import run_pass
@@ -31,6 +38,7 @@ def _cmd_catalog(args: argparse.Namespace) -> int:
     print(json.dumps({
         "path": str(args.catalog or DEFAULT_CATALOG_PATH),
         "briefs": len(briefs),
+        "source_modes": mode_counts(payload),
         "situations": sorted({b.get("situation") for b in briefs}),
         "categories": sorted({b.get("category") for b in briefs}),
         "tiers": sorted({b.get("difficulty") for b in briefs}),
@@ -56,15 +64,21 @@ def _cmd_run(args: argparse.Namespace) -> int:
         generator = StoredGenerator()
     judge = local_judge if args.judge else None
     summary = run_pass(generator=generator, briefs=payload.get("briefs", []),
-                       limit=args.limit, judge=judge)
+                       limit=args.limit, mode=args.mode, judge=judge)
     out = Path(args.summary_out) if args.summary_out else DEFAULT_SUMMARY_PATH
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     head = {k: summary[k] for k in (
-        "generated_at", "generator", "judge_enabled", "scored", "passed",
-        "failed", "pass_rate", "mean_score", "gaps_filed", "gaps_in_file",
-        "gaps_path", "mirror_path")}
+        "generated_at", "generator", "judge_enabled", "mode_filter", "selected",
+        "scored", "not_scored", "passed", "failed", "pass_rate", "mean_score",
+        "gaps_filed", "gaps_in_file", "gaps_path", "mirror_path")}
     head["escalations"] = len(summary["escalations"])
+    head["catalog_by_mode"] = summary["catalog_by_mode"]
+    head["by_mode"] = {
+        name: {"scored": row["scored"], "passed": row["passed"],
+               "mean_score": row["mean_score"]}
+        for name, row in summary["by_mode"].items()
+    }
     print(json.dumps(head, indent=2))
     print(f"summary: {out}")
     return 0
@@ -80,9 +94,12 @@ def _cmd_escalate(args: argparse.Namespace) -> int:
     catalog = payload.get("briefs", [])
     used = {row.get("category") for row in briefs}
     for step in range(max(1, args.steps)):
-        outcome = escalate(brief, catalog, used_categories=used)
+        mode = brief.get("source_mode")
+        outcome = escalate(brief, catalog, used_categories=used,
+                           source_mode=mode if mode in SOURCE_MODES else None)
         print(f"{step + 1}. {outcome['action']}: {outcome['detail']} "
-              f"(id={outcome['brief'].get('id')}, tier={outcome['brief'].get('difficulty')})")
+              f"(id={outcome['brief'].get('id')}, tier={outcome['brief'].get('difficulty')}, "
+              f"mode={outcome['brief'].get('source_mode')})")
         brief = outcome["brief"]
         used.add(str(brief.get("category")))
     return 0
@@ -98,6 +115,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     run = sub.add_parser("run", help="run one pass with the stored generator")
     run.add_argument("--limit", type=int, default=20)
+    run.add_argument("--mode", default=None, choices=list(SOURCE_MODES),
+                     help="restrict the pass to one input mode (default: all three)")
     run.add_argument("--judge", action="store_true",
                      help="enable the LOCAL vision judge (off by default)")
     run.add_argument("--comfy", action="store_true",

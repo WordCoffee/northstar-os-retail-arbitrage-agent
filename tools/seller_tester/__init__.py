@@ -13,22 +13,44 @@ from __future__ import annotations
 from .briefs import (
     CATEGORIES,
     DEFAULT_CATALOG_PATH,
+    MIN_PER_MODE,
+    REFERENCE_MODES,
     SITUATIONS,
+    SOURCE_MODES,
+    briefs_by_mode,
+    brief_mode,
     load_catalog,
+    mode_counts,
     validate_catalog,
 )
 from .escalate import EscalationLog, escalate
 from .gaps import build_gap, file_gap, gap_id
 from .generators import ComfyGenerator, GeneratorUnavailable, StoredGenerator
-from .harness import run_pass, score_image
+from .harness import run_pass, score_image, select_briefs
 from .judge import FakeJudge, get_judge, local_judge
+from .reference_check import (
+    check_reference_subject,
+    colour_agreement,
+    dominant_hue,
+    load_reference_rgb,
+    normalise_reference_path,
+    reference_check_for_brief,
+    silhouette_aspect,
+    subject_mask,
+)
 
 __all__ = [
     "CATEGORIES",
     "SITUATIONS",
+    "SOURCE_MODES",
+    "REFERENCE_MODES",
+    "MIN_PER_MODE",
     "DEFAULT_CATALOG_PATH",
     "load_catalog",
     "validate_catalog",
+    "brief_mode",
+    "briefs_by_mode",
+    "mode_counts",
     "EscalationLog",
     "escalate",
     "build_gap",
@@ -39,7 +61,16 @@ __all__ = [
     "GeneratorUnavailable",
     "score_image",
     "run_pass",
+    "select_briefs",
     "FakeJudge",
     "get_judge",
     "local_judge",
+    "check_reference_subject",
+    "colour_agreement",
+    "dominant_hue",
+    "silhouette_aspect",
+    "subject_mask",
+    "load_reference_rgb",
+    "normalise_reference_path",
+    "reference_check_for_brief",
 ]

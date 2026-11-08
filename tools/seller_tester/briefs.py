@@ -1,7 +1,14 @@
 """Brief catalog loading and validation.
 
 A brief is one product-picture request a seller would plausibly make: category,
-product situation, and the hard constraints an Amazon-ready image must satisfy.
+product situation, the input it starts from, and the hard constraints an
+Amazon-ready image must satisfy.
+
+The product-picture service has exactly three inputs (ty/MANDATE.md): the
+prompt alone, stored references from earlier generations, and references the
+user uploads. `source_mode` names which one a brief uses, and every reference
+mode carries a `reference` object describing that input. A brief may not claim
+a reference it does not name.
 
 The catalog is data (`ty/seller_briefs.json`), not code. Nothing here calls a
 model or the network.
@@ -14,6 +21,11 @@ from typing import Any, Dict, Iterable, List
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CATALOG_PATH = REPO_ROOT / "ty" / "seller_briefs.json"
+
+SOURCE_MODES = ("prompt_only", "stored_reference", "uploaded_reference")
+REFERENCE_MODES = ("stored_reference", "uploaded_reference")
+REFERENCE_KINDS = {"stored_reference": "stored_asset", "uploaded_reference": "uploaded_file"}
+MIN_PER_MODE = 12
 
 CATEGORIES = (
     "supplement_pouch",
@@ -94,6 +106,61 @@ def _check_fill(brief_id: str, spec: Any, errors: List[str]) -> None:
         errors.append(f"{brief_id}: fill_pct must satisfy 0 <= min < max <= 100")
 
 
+def _check_reference(brief_id: str, mode: Any, reference: Any, errors: List[str]) -> None:
+    """A reference mode must name its reference; a prompt-only brief must not."""
+    if mode == "prompt_only":
+        if reference is not None:
+            errors.append(f"{brief_id}: prompt_only brief must not declare a reference")
+        return
+    if mode not in REFERENCE_MODES:
+        return  # the mode error is already reported
+    if not isinstance(reference, dict):
+        errors.append(f"{brief_id}: {mode} brief needs a reference object")
+        return
+    expected_kind = REFERENCE_KINDS[mode]
+    kind = reference.get("kind")
+    if kind != expected_kind:
+        errors.append(f"{brief_id}: reference.kind must be {expected_kind!r} for {mode}, got {kind!r}")
+        return
+    path = reference.get("path")
+    if kind == "stored_asset":
+        if not isinstance(path, str) or not path.strip():
+            errors.append(f"{brief_id}: stored reference needs a repo-relative path")
+        elif path.startswith("/") or ":" in path or ".." in Path(path.replace("\\", "/")).parts:
+            errors.append(f"{brief_id}: stored reference path must be repo-relative, no '..'")
+        elif not any(path.replace("\\", "/").startswith(root) for root in (
+                "renders/", "generated_images/", "Northstar_backend/data/studio_generated/")):
+            errors.append(f"{brief_id}: stored reference must live under renders/, "
+                          "generated_images/ or Northstar_backend/data/studio_generated/")
+    else:  # uploaded_file
+        descriptor = reference.get("descriptor")
+        if not isinstance(descriptor, dict):
+            errors.append(f"{brief_id}: uploaded reference needs a descriptor object")
+        else:
+            filename = descriptor.get("filename")
+            if not isinstance(filename, str) or not filename.strip():
+                errors.append(f"{brief_id}: uploaded reference descriptor needs a filename")
+            mime = descriptor.get("mime_type")
+            if not isinstance(mime, str) or not mime.startswith("image/"):
+                errors.append(f"{brief_id}: uploaded reference descriptor mime_type must be image/*")
+            subject = descriptor.get("subject")
+            if not isinstance(subject, str) or not subject.strip():
+                errors.append(f"{brief_id}: uploaded reference descriptor needs a subject")
+        if path is not None and not isinstance(path, str):
+            errors.append(f"{brief_id}: uploaded reference path must be a string or null")
+    spec = reference.get("check")
+    if spec is not None:
+        if not isinstance(spec, dict):
+            errors.append(f"{brief_id}: reference.check must be an object")
+        else:
+            colour = spec.get("min_colour_agreement", 0.62)
+            aspect = spec.get("max_aspect_ratio", 1.6)
+            if not isinstance(colour, (int, float)) or not 0 < colour <= 1:
+                errors.append(f"{brief_id}: reference.check.min_colour_agreement must be 0..1")
+            if not isinstance(aspect, (int, float)) or aspect < 1:
+                errors.append(f"{brief_id}: reference.check.max_aspect_ratio must be >= 1")
+
+
 def validate_catalog(payload: Dict[str, Any]) -> List[str]:
     """Return a list of human-readable problems. Empty list means valid."""
     errors: List[str] = []
@@ -108,6 +175,7 @@ def validate_catalog(payload: Dict[str, Any]) -> List[str]:
     situations = set()
     categories = set()
     tiers = set()
+    modes = {mode: 0 for mode in SOURCE_MODES}
 
     for index, brief in enumerate(briefs):
         if not isinstance(brief, dict):
@@ -131,9 +199,18 @@ def validate_catalog(payload: Dict[str, Any]) -> List[str]:
             errors.append(f"{brief_id}: unknown situation {situation!r}")
         else:
             situations.add(situation)
-        pair = (category, situation)
+
+        mode = brief.get("source_mode")
+        if mode not in SOURCE_MODES:
+            errors.append(f"{brief_id}: unknown source_mode {mode!r} "
+                          f"(must be one of {SOURCE_MODES})")
+        else:
+            modes[mode] += 1
+        _check_reference(brief_id, mode, brief.get("reference"), errors)
+
+        pair = (category, situation, brief.get("difficulty"), mode)
         if pair in seen_pairs:
-            errors.append(f"{brief_id}: duplicate category/situation pair {pair}")
+            errors.append(f"{brief_id}: duplicate (category, situation, difficulty, mode) {pair}")
         seen_pairs.add(pair)
 
         tier = brief.get("difficulty")
@@ -197,7 +274,36 @@ def validate_catalog(payload: Dict[str, Any]) -> List[str]:
     for tier in (1, 2, 3):
         if tier not in tiers:
             errors.append(f"catalog has no difficulty tier {tier}")
+    for mode, count in modes.items():
+        if count < MIN_PER_MODE:
+            errors.append(f"catalog has {count} {mode} briefs, need at least {MIN_PER_MODE}")
     return errors
+
+
+def brief_mode(brief: Dict[str, Any]) -> str:
+    """The brief's input mode, or `unclassified` when it declares none.
+
+    `unclassified` is deliberate: a brief that forgets its mode shows up as its
+    own bucket in the summary instead of being silently folded into prompt_only.
+    """
+    mode = brief.get("source_mode") if isinstance(brief, dict) else None
+    return str(mode) if mode in SOURCE_MODES else "unclassified"
+
+
+def briefs_by_mode(payload: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+    out: Dict[str, List[Dict[str, Any]]] = {name: [] for name in SOURCE_MODES}
+    for brief in payload.get("briefs", []):
+        out.setdefault(brief_mode(brief), []).append(brief)
+    return out
+
+
+def mode_counts(payload: Dict[str, Any]) -> Dict[str, int]:
+    """Declared brief count per mode, always including the three known modes."""
+    counts = {name: 0 for name in SOURCE_MODES}
+    for brief in payload.get("briefs", []):
+        key = brief_mode(brief)
+        counts[key] = counts.get(key, 0) + 1
+    return counts
 
 
 def briefs_by_situation(payload: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
