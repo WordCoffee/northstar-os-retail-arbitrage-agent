@@ -56,7 +56,9 @@ def test_enforce_unloads_everything_outside_the_keep_set(world):
     assert world["loaded"] == ["bojo:latest"]
 
 
-def test_an_exclusive_role_drains_everything_first(world):
+def test_an_exclusive_role_drains_everything_first(world, tmp_path, monkeypatch):
+    # Hermetic: a lease left on disk by an earlier run must not decide this test.
+    monkeypatch.setattr(G, "HEAVY_LEASE_PATH", tmp_path / "heavy_leases.json")
     # The 27B is off by default (WORK ORDER 3, folded fix 4): it needs a stated lease first.
     refused = G.acquire("27b")
     assert refused["ok"] is False and refused["reason"] == "heavy_role_not_leased"
