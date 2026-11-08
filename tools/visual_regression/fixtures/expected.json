@@ -1,0 +1,59 @@
+{
+  "schema": "northstar.visual_fixtures.v1",
+  "fixtures": [
+    {
+      "pair": "identical",
+      "case": "identical",
+      "expected": "pass",
+      "why": "same deterministic render; a gate that fails this is pure noise",
+      "baseline": "identical/baseline.png",
+      "candidate": "identical/candidate.png",
+      "images_identical": true
+    },
+    {
+      "pair": "antialias",
+      "case": "antialias",
+      "expected": "pass",
+      "why": "half-pixel re-render: the antialias tolerance must absorb it",
+      "baseline": "antialias/baseline.png",
+      "candidate": "antialias/candidate.png",
+      "images_identical": false
+    },
+    {
+      "pair": "noise",
+      "case": "noise",
+      "expected": "pass",
+      "why": "uniform +/-6 channel jitter, below the perceptual threshold",
+      "baseline": "noise/baseline.png",
+      "candidate": "noise/candidate.png",
+      "images_identical": false
+    },
+    {
+      "pair": "moved",
+      "case": "moved",
+      "expected": "fail",
+      "why": "card translated 28px to the right",
+      "baseline": "moved/baseline.png",
+      "candidate": "moved/candidate.png",
+      "images_identical": false
+    },
+    {
+      "pair": "recolour",
+      "case": "recolour",
+      "expected": "fail",
+      "why": "accent block pine #1f5e44 -> amber #c4782a",
+      "baseline": "recolour/baseline.png",
+      "candidate": "recolour/candidate.png",
+      "images_identical": false
+    },
+    {
+      "pair": "text",
+      "case": "text",
+      "expected": "fail",
+      "why": "revenue figure $12,480 -> $48,210 (small area, must still be caught)",
+      "baseline": "text/baseline.png",
+      "candidate": "text/candidate.png",
+      "images_identical": false
+    }
+  ]
+}

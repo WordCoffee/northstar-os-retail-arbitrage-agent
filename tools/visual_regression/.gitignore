@@ -1,0 +1,8 @@
+# Screenshots are evidence, not source.
+artifacts/
+__pycache__/
+*.pyc
+
+# Baselines ARE committed: baselines/**/*.png
+!baselines/
+!baselines/**

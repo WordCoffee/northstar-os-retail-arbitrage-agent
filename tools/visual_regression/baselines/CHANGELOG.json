@@ -1,0 +1,5 @@
+{
+  "schema": "northstar.visual_baseline_changelog.v1",
+  "note": "Append-only. Entry written only by tools/visual_regression/baseline.py after --update-baseline --scorecard-passed.",
+  "entries": []
+}
