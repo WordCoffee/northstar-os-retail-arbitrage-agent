@@ -86,10 +86,11 @@ def test_an_unregistered_route_is_a_named_zero(tmp_path, monkeypatch):
 
 def test_a_slow_app_fails_every_service(tmp_path, monkeypatch):
     src = tmp_path / "src"
-    (src / "data").mkdir(parents=True)
-    (src / "data" / "services.js").write_text("route: '/hub'", encoding="utf-8")
+    (src / "pages").mkdir(parents=True)
+    (src / "pages" / "Hub.jsx").write_text(
+        "export default function Hub() { return null }\n", encoding="utf-8")
     app = src / "App.jsx"
-    app.write_text("<div />", encoding="utf-8")
+    app.write_text('<Route path="/hub" element={<Hub />} />', encoding="utf-8")
     registry = tmp_path / "services.json"
     registry.write_text(json.dumps({"services": [{"id": "hub", "route": "/hub"}]}),
                         encoding="utf-8")
