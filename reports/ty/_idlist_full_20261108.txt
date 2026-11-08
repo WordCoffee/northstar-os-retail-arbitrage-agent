@@ -11108,7 +11108,7 @@
   "test_golden_goose_seam.py::test_categories_and_health_are_envelopes": "passed",
   "test_gpu_budget.py::test_the_resident_set_is_bojo_and_embeddings": "passed",
   "test_gpu_budget.py::test_enforce_unloads_everything_outside_the_keep_set": "passed",
-  "test_gpu_budget.py::test_an_exclusive_role_drains_everything_first": "failed",
+  "test_gpu_budget.py::test_an_exclusive_role_drains_everything_first": "passed",
   "test_gpu_budget.py::test_a_shared_role_keeps_the_resident_pair": "passed",
   "test_gpu_budget.py::test_a_role_that_does_not_fit_evicts_comfyui_before_refusing": "passed",
   "test_gpu_budget.py::test_release_restores_the_resident_pair": "passed",

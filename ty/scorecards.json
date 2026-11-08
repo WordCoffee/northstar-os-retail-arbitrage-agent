@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-08T09:56:17+00:00",
+  "at": "2026-11-08T10:34:31+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.28,
@@ -9,7 +9,7 @@
     "measured": 0.1,
     "seller": 0.13
   },
-  "test_ids": 6789,
+  "test_ids": 7186,
   "scan_findings": 1,
   "services": [
     {
@@ -183,11 +183,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "557 test id(s) prove it"
+          "evidence": "567 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": 0.0,
@@ -291,11 +291,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "111 test id(s) prove it"
+          "evidence": "114 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "111 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": 0.0,
@@ -653,11 +653,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "15 test id(s) prove it"
+          "evidence": "16 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "16 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": null,
@@ -708,11 +708,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "14 test id(s) prove it"
+          "evidence": "15 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "14 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": null,
@@ -1068,11 +1068,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "557 test id(s) prove it"
+          "evidence": "567 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": 0.0,
@@ -1384,11 +1384,11 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "5 test id(s) prove it"
+          "evidence": "6 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "5 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "6 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": null,

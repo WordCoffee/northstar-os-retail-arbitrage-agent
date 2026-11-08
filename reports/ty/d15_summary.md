@@ -69,7 +69,8 @@ runner CLI), and the quarantine gate correctly refuses. The exact command is in
 | ≥3 parallel bundles merged to staging with score before/after | **6 merged**; competitor-monitor +70, prospector/thewatch/rivalboard +60, 13 services +10 at the time |
 | Seller-Tester filed real gaps | 29 gaps on the first pass, 57 after the second, all pointing at real artefacts |
 | V1–V9 pass | V1/V2/V4–V8 pass; **V3 BLOCKED** (locked desktop / no CDP), **V9 FAILED** |
-| Chrome Connect parity passed twice | six-point contract verified twice; ten-task suite **not run** |
+| Chrome Connect parity passed twice | six-point contract verified twice (**three** times including the final re-check); ten-task suite **not run** |
+| full suite vs the 6,617 baseline | **7,067 passed, 0 failed, 117 skipped, 125 subtests, 18:49** — +450 passed, skips unchanged |
 | intel plane ≥10 findings | 58 findings, 58/58 URLs verified |
 | model leaderboards re-run on GPU | router eval re-run; Bojo 15/18; no swap |
 | verifier agree/FAILED per unit | 17 agree, 2 FAILED, 1 BLOCKED |

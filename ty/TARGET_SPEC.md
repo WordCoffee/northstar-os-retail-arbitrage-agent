@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-08T09:56:17+00:00 from `state/director/services.json`, 6789 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-08T10:34:31+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -112,8 +112,8 @@ the high-margin finder: score an opportunity and say why.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 557 test id(s) prove it |
-| correct | 60.0 | 0.25 | 557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 567 test id(s) prove it |
+| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
 | usable | 100.0 | 0.12 | no readiness finding names this service |
@@ -154,8 +154,8 @@ turn a product into an offer: price, title, bullets, images.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 111 test id(s) prove it |
-| correct | 60.0 | 0.25 | 111 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 114 test id(s) prove it |
+| correct | 60.0 | 0.25 | 114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: offer_recommendation |
 | usable | 100.0 | 0.12 | no readiness finding names this service |
@@ -296,8 +296,8 @@ rank, impressions and conversion over time, per keyword.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 15 test id(s) prove it |
-| correct | 60.0 | 0.25 | 15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 16 test id(s) prove it |
+| correct | 60.0 | 0.25 | 16 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
 | complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
 | usable | 100.0 | 0.12 | no readiness finding names this service |
@@ -317,8 +317,8 @@ what competitors changed, and what it means for us.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 14 test id(s) prove it |
-| correct | 60.0 | 0.25 | 14 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 15 test id(s) prove it |
+| correct | 60.0 | 0.25 | 15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
 | complete | 0.0 | 0.12 | no Bojo tool declared, so Bojo cannot drive it |
 | usable | 100.0 | 0.12 | no readiness finding names this service |
@@ -458,8 +458,8 @@ the high-margin finder: score an opportunity and say why.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 557 test id(s) prove it |
-| correct | 60.0 | 0.25 | 557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 567 test id(s) prove it |
+| correct | 60.0 | 0.25 | 567 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | 0.0 | 0.13 | no Seller-Tester output scored for this service |
 | complete | 100.0 | 0.12 | 1/1 declared Bojo tools wired: golden_goose_scan |
 | usable | 100.0 | 0.12 | no readiness finding names this service |
@@ -581,8 +581,8 @@ the competitor feed behind Rival Board.
 
 | dimension | score | weight | evidence |
 |---|---|---|---|
-| works | 100.0 | 0.28 | 5 test id(s) prove it |
-| correct | 60.0 | 0.25 | 5 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| works | 100.0 | 0.28 | 6 test id(s) prove it |
+| correct | 60.0 | 0.25 | 6 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
 | seller | None | 0.13 | this service does not produce a seller-facing artefact, so there is nothing to score |
 | complete | 0.0 | 0.12 | 0/1 declared Bojo tools wired: watch_competitor |
 | usable | 100.0 | 0.12 | no readiness finding names this service |

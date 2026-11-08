@@ -62,11 +62,31 @@ Three attempts, all recorded.
    left on disk by an earlier run in the same session made the first assertion false. Fixed by
    patching `HEAVY_LEASE_PATH` into `tmp_path` so the test cannot inherit state. Verified both
    ways — 7 passed with no lease, and 7 passed with a deliberately planted stale lease.
-3. **Third run, `d2c29a55`** (the fix), writing `reports/ty/_fullsuite_final_20261108.txt`.
-   Its tally is appended below.
+3. **Third run, `d2c29a55`** (the fix) — **clean**:
+
+```
+python -m pytest -q -p no:cacheprovider -p pytest_idlist
+7067 passed, 117 skipped, 2 xfailed, 17 warnings, 125 subtests passed in 1129.35s (0:18:49)
+```
+
+### The comparison, both ways the owner asked for
+
+| measure | baseline | now | delta |
+|---|---|---|---|
+| collected by name | 6,736 | **7,186** | **+451 added, −1 removed** |
+| passed | 6,617 | **7,067** | **+450** |
+| failed | 0 | **0** | — |
+| skipped | 117 | **117** | — |
+| subtests | 125 | **125** | — |
+| wall clock | — | **18:49** | — |
+
+The scorecard now reads this run (`_idlist_full_20261108.txt`, 7,186 ids) — the newest
+*complete* list, not a partial single-file list, because a partial list would silently drop
+the rest of the suite and crater every score.
 
 The 18-minute runtime also settles an earlier question: the suite is not intrinsically slow.
-The earlier 24 %-in-80-minutes runs were competing with builders and a resident ComfyUI; on a
-quiet machine the whole suite is under twenty minutes.
+The 24 %-in-80-minutes runs were competing with builders and a resident ComfyUI; on a quiet
+machine the whole suite is under twenty minutes.
+
 
 

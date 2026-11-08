@@ -54,10 +54,13 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 
 ## Numbers to keep in mind
 
-- 29 services, 0 at bar, best 77. Worst gap is now `complete`, not `works`.
+- 29 services, **0 at bar**, best 77. Weakest dimension across the set: 17 `complete`,
+  10 `seller`, 2 `measured`.
+- **Full suite on `7fd881cc`/`d2c29a55`: 7,067 passed, 0 failed, 117 skipped, 125 subtests,
+  18:49.** Baseline was 6,617 passed / 117 skipped / 125 subtests. Names: +451, −1 (the −1
+  has no file and no git history).
 - Router: Bojo 15/18. Vision: qwen2.5vl:7b on a clean server, grounding 61.7 % on 40 screens.
-- Full suite: 7,135 collected vs 6,736 at baseline (+400 names, −1 name that has no file).
-- Disk 10.3 GB free; floor 5 GB. ComfyUI is not resident. The 27B needs a lease.
+- Disk 8.5 GB free; floor 5 GB. ComfyUI is not resident. The 27B needs a lease.
 
 ## Rules that are easy to get wrong
 
