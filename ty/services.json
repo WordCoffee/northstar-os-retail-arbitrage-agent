@@ -1,377 +1,385 @@
 {
- "exported": "2026-11-07",
- "source": "northstar-os-ui/src/data/serviceRegistry.js",
- "count": 29,
- "services": [
-  {
-   "id": "hub",
-   "label": "Operations Hub",
-   "group": "Workspace",
-   "kind": "workspace",
-   "route": "/hub",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [],
-   "entitlementKey": "studio.hub",
-   "source": "nav"
-  },
-  {
-   "id": "ledger",
-   "label": "The Ledger",
-   "group": "Workspace",
-   "kind": "workspace",
-   "route": "/ledger",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [],
-   "entitlementKey": "studio.ledger",
-   "source": "nav"
-  },
-  {
-   "id": "prospector",
-   "label": "Prospector",
-   "group": "Sourcing",
-   "kind": "workspace",
-   "route": "/prospector",
-   "scene": "goose",
-   "theme": "goose",
-   "tools": [],
-   "entitlementKey": "studio.prospector",
-   "source": "nav"
-  },
-  {
-   "id": "goldengoose",
-   "label": "Golden Goose",
-   "group": "Sourcing",
-   "kind": "workspace",
-   "route": "/goldengoose",
-   "scene": "goose",
-   "theme": "goose",
-   "tools": [],
-   "entitlementKey": "studio.goldengoose",
-   "source": "nav"
-  },
-  {
-   "id": "offerchisel",
-   "label": "OfferChisel",
-   "group": "Listings",
-   "kind": "workspace",
-   "route": "/offerchisel",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [],
-   "entitlementKey": "studio.offerchisel",
-   "source": "nav"
-  },
-  {
-   "id": "towncrier",
-   "label": "The Town Crier",
-   "group": "Social",
-   "kind": "workspace",
-   "route": "/towncrier",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [],
-   "entitlementKey": "studio.towncrier",
-   "source": "nav"
-  },
-  {
-   "id": "auctioneer",
-   "label": "The Auctioneer",
-   "group": "Advertising",
-   "kind": "workspace",
-   "route": "/auctioneer",
-   "scene": "ppc",
-   "theme": "ppc",
-   "tools": [],
-   "entitlementKey": "studio.auctioneer",
-   "source": "nav"
-  },
-  {
-   "id": "autothink",
-   "label": "AutothinK",
-   "group": "AutothinK",
-   "kind": "workspace",
-   "route": "/autothink",
-   "scene": "research",
-   "theme": "research",
-   "tools": [],
-   "entitlementKey": "studio.autothink",
-   "source": "nav"
-  },
-  {
-   "id": "thewatch",
-   "label": "The Watch",
-   "group": "Monitoring",
-   "kind": "workspace",
-   "route": "/thewatch",
-   "scene": "default",
-   "theme": "monitor",
-   "tools": [],
-   "entitlementKey": "studio.thewatch",
-   "source": "nav"
-  },
-  {
-   "id": "rankledger",
-   "label": "RankLedger",
-   "group": "Monitoring",
-   "kind": "workspace",
-   "route": "/rankledger",
-   "scene": "default",
-   "theme": "monitor",
-   "tools": [],
-   "entitlementKey": "studio.rankledger",
-   "source": "nav"
-  },
-  {
-   "id": "rivalboard",
-   "label": "The Rival Board",
-   "group": "Monitoring",
-   "kind": "workspace",
-   "route": "/rivalboard",
-   "scene": "default",
-   "theme": "monitor",
-   "tools": [],
-   "entitlementKey": "studio.rivalboard",
-   "source": "nav"
-  },
-  {
-   "id": "account",
-   "label": "Account",
-   "group": "Account",
-   "kind": "account",
-   "route": "/account",
-   "scene": "default",
-   "theme": "account",
-   "tools": [],
-   "entitlementKey": "studio.account",
-   "source": "nav"
-  },
-  {
-   "id": "foundation",
-   "label": "Operations Hub",
-   "group": "Internal",
-   "kind": "workspace",
-   "route": "/foundation",
-   "scene": "default",
-   "theme": "ledger",
-   "tools": [],
-   "entitlementKey": "studio.foundation",
-   "source": "nav"
-  },
-  {
-   "id": "jobs",
-   "label": "Jobs & Schedules",
-   "group": "Internal",
-   "kind": "workspace",
-   "route": "/jobs",
-   "scene": "default",
-   "theme": "ledger",
-   "tools": [],
-   "entitlementKey": "studio.jobs",
-   "source": "nav"
-  },
-  {
-   "id": "keywords",
-   "label": "Keywords & SEO",
-   "group": "Internal",
-   "kind": "workspace",
-   "route": "/keywords",
-   "scene": "default",
-   "theme": "ledger",
-   "tools": [],
-   "entitlementKey": "studio.keywords",
-   "source": "nav"
-  },
-  {
-   "id": "beta",
-   "label": "Onboarding & Plan",
-   "group": "Private Beta",
-   "kind": "onboarding",
-   "route": "/beta",
-   "scene": "default",
-   "theme": "account",
-   "tools": [],
-   "entitlementKey": "studio.beta",
-   "source": "nav"
-  },
-  {
-   "id": "beta-support",
-   "label": "Support",
-   "group": "Private Beta",
-   "kind": "onboarding",
-   "route": "/beta#support",
-   "scene": "default",
-   "theme": "account",
-   "tools": [],
-   "entitlementKey": "studio.beta-support",
-   "source": "nav"
-  },
-  {
-   "id": "beta-signup",
-   "label": "Invite entry",
-   "group": "Private Beta",
-   "kind": "onboarding",
-   "route": "/beta-signup",
-   "scene": "default",
-   "theme": "account",
-   "tools": [],
-   "entitlementKey": "studio.beta-signup",
-   "source": "nav"
-  },
-  {
-   "id": "beta-ops",
-   "label": "Tester Dashboard",
-   "group": "Beta Operations",
-   "kind": "onboarding",
-   "route": "/beta-ops",
-   "scene": "default",
-   "theme": "account",
-   "tools": [],
-   "entitlementKey": "studio.beta-ops",
-   "source": "nav"
-  },
-  {
-   "id": "design-studio",
-   "label": "Design Studio",
-   "group": "Create",
-   "kind": "studio",
-   "route": "/design-studio",
-   "scene": "studio",
-   "theme": "studio",
-   "tools": [
-    "generate_image",
-    "list_templates",
-    "build_dieline"
-   ],
-   "entitlementKey": "studio.design-studio",
-   "source": "app-route"
-  },
-  {
-   "id": "product-finder",
-   "label": "SourceScout",
-   "group": "Sourcing",
-   "kind": "workspace",
-   "route": "/product-finder",
-   "scene": "goose",
-   "theme": "goose",
-   "tools": [
-    "scan_products"
-   ],
-   "entitlementKey": "studio.product-finder",
-   "source": "app-route"
-  },
-  {
-   "id": "golden-goose",
-   "label": "Golden Goose",
-   "group": "Sourcing",
-   "kind": "workspace",
-   "route": "/golden-goose",
-   "scene": "goose",
-   "theme": "goose",
-   "tools": [
-    "golden_goose_scan"
-   ],
-   "entitlementKey": "studio.golden-goose",
-   "source": "app-route"
-  },
-  {
-   "id": "listings",
-   "label": "Listing Guardian",
-   "group": "Listings",
-   "kind": "workspace",
-   "route": "/listings",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [
-    "optimize_listing"
-   ],
-   "entitlementKey": "studio.listings",
-   "source": "app-route"
-  },
-  {
-   "id": "keyword-tracker",
-   "label": "Keyword Tracker",
-   "group": "Monitoring",
-   "kind": "workspace",
-   "route": "/keyword-tracker",
-   "scene": "default",
-   "theme": "monitor",
-   "tools": [
-    "track_keywords"
-   ],
-   "entitlementKey": "studio.keyword-tracker",
-   "source": "app-route"
-  },
-  {
-   "id": "competitor-monitor",
-   "label": "Competitor Monitor",
-   "group": "Monitoring",
-   "kind": "workspace",
-   "route": "/competitor-monitor",
-   "scene": "default",
-   "theme": "monitor",
-   "tools": [
-    "watch_competitor"
-   ],
-   "entitlementKey": "studio.competitor-monitor",
-   "source": "app-route"
-  },
-  {
-   "id": "listingforge",
-   "label": "ListingForge",
-   "group": "Listings",
-   "kind": "workspace",
-   "route": "/listingforge",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [
-    "compose_listing"
-   ],
-   "entitlementKey": "studio.listingforge",
-   "source": "app-route"
-  },
-  {
-   "id": "adpilot",
-   "label": "AdPilot",
-   "group": "Advertising",
-   "kind": "workspace",
-   "route": "/adpilot",
-   "scene": "ppc",
-   "theme": "ppc",
-   "tools": [
-    "plan_campaign"
-   ],
-   "entitlementKey": "studio.adpilot",
-   "source": "app-route"
-  },
-  {
-   "id": "socialpulse",
-   "label": "SocialPulse",
-   "group": "Social",
-   "kind": "workspace",
-   "route": "/socialpulse",
-   "scene": "default",
-   "theme": "neutral",
-   "tools": [
-    "plan_social"
-   ],
-   "entitlementKey": "studio.socialpulse",
-   "source": "app-route"
-  },
-  {
-   "id": "profitability",
-   "label": "Profitability",
-   "group": "Workspace",
-   "kind": "workspace",
-   "route": "/profitability",
-   "scene": "default",
-   "theme": "ledger",
-   "tools": [
-    "margin_report"
-   ],
-   "entitlementKey": "studio.profitability",
-   "source": "app-route"
-  }
- ]
+  "exported": "2026-11-07",
+  "source": "northstar-os-ui/src/data/serviceRegistry.js",
+  "count": 29,
+  "services": [
+    {
+      "id": "hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/hub",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [
+        "hub_status"
+      ],
+      "entitlementKey": "studio.hub",
+      "source": "nav"
+    },
+    {
+      "id": "ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/ledger",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [],
+      "entitlementKey": "studio.ledger",
+      "source": "nav"
+    },
+    {
+      "id": "prospector",
+      "label": "Prospector",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/prospector",
+      "scene": "goose",
+      "theme": "goose",
+      "tools": [
+        "catalog_pull"
+      ],
+      "entitlementKey": "studio.prospector",
+      "source": "nav"
+    },
+    {
+      "id": "goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/goldengoose",
+      "scene": "goose",
+      "theme": "goose",
+      "tools": [
+        "golden_goose_scan"
+      ],
+      "entitlementKey": "studio.goldengoose",
+      "source": "nav"
+    },
+    {
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/offerchisel",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [
+        "offer_recommendation"
+      ],
+      "entitlementKey": "studio.offerchisel",
+      "source": "nav"
+    },
+    {
+      "id": "towncrier",
+      "label": "The Town Crier",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/towncrier",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [],
+      "entitlementKey": "studio.towncrier",
+      "source": "nav"
+    },
+    {
+      "id": "auctioneer",
+      "label": "The Auctioneer",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/auctioneer",
+      "scene": "ppc",
+      "theme": "ppc",
+      "tools": [],
+      "entitlementKey": "studio.auctioneer",
+      "source": "nav"
+    },
+    {
+      "id": "autothink",
+      "label": "AutothinK",
+      "group": "AutothinK",
+      "kind": "workspace",
+      "route": "/autothink",
+      "scene": "research",
+      "theme": "research",
+      "tools": [],
+      "entitlementKey": "studio.autothink",
+      "source": "nav"
+    },
+    {
+      "id": "thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/thewatch",
+      "scene": "default",
+      "theme": "monitor",
+      "tools": [],
+      "entitlementKey": "studio.thewatch",
+      "source": "nav"
+    },
+    {
+      "id": "rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/rankledger",
+      "scene": "default",
+      "theme": "monitor",
+      "tools": [],
+      "entitlementKey": "studio.rankledger",
+      "source": "nav"
+    },
+    {
+      "id": "rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/rivalboard",
+      "scene": "default",
+      "theme": "monitor",
+      "tools": [],
+      "entitlementKey": "studio.rivalboard",
+      "source": "nav"
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "group": "Account",
+      "kind": "account",
+      "route": "/account",
+      "scene": "default",
+      "theme": "account",
+      "tools": [],
+      "entitlementKey": "studio.account",
+      "source": "nav"
+    },
+    {
+      "id": "foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/foundation",
+      "scene": "default",
+      "theme": "ledger",
+      "tools": [],
+      "entitlementKey": "studio.foundation",
+      "source": "nav"
+    },
+    {
+      "id": "jobs",
+      "label": "Jobs & Schedules",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/jobs",
+      "scene": "default",
+      "theme": "ledger",
+      "tools": [],
+      "entitlementKey": "studio.jobs",
+      "source": "nav"
+    },
+    {
+      "id": "keywords",
+      "label": "Keywords & SEO",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/keywords",
+      "scene": "default",
+      "theme": "ledger",
+      "tools": [],
+      "entitlementKey": "studio.keywords",
+      "source": "nav"
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta",
+      "scene": "default",
+      "theme": "account",
+      "tools": [],
+      "entitlementKey": "studio.beta",
+      "source": "nav"
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta#support",
+      "scene": "default",
+      "theme": "account",
+      "tools": [],
+      "entitlementKey": "studio.beta-support",
+      "source": "nav"
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta-signup",
+      "scene": "default",
+      "theme": "account",
+      "tools": [],
+      "entitlementKey": "studio.beta-signup",
+      "source": "nav"
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "kind": "onboarding",
+      "route": "/beta-ops",
+      "scene": "default",
+      "theme": "account",
+      "tools": [],
+      "entitlementKey": "studio.beta-ops",
+      "source": "nav"
+    },
+    {
+      "id": "design-studio",
+      "label": "Design Studio",
+      "group": "Create",
+      "kind": "studio",
+      "route": "/design-studio",
+      "scene": "studio",
+      "theme": "studio",
+      "tools": [
+        "generate_image",
+        "list_templates",
+        "build_dieline"
+      ],
+      "entitlementKey": "studio.design-studio",
+      "source": "app-route"
+    },
+    {
+      "id": "product-finder",
+      "label": "SourceScout",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/product-finder",
+      "scene": "goose",
+      "theme": "goose",
+      "tools": [
+        "scan_products"
+      ],
+      "entitlementKey": "studio.product-finder",
+      "source": "app-route"
+    },
+    {
+      "id": "golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/golden-goose",
+      "scene": "goose",
+      "theme": "goose",
+      "tools": [
+        "golden_goose_scan"
+      ],
+      "entitlementKey": "studio.golden-goose",
+      "source": "app-route"
+    },
+    {
+      "id": "listings",
+      "label": "Listing Guardian",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/listings",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [
+        "optimize_listing"
+      ],
+      "entitlementKey": "studio.listings",
+      "source": "app-route"
+    },
+    {
+      "id": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/keyword-tracker",
+      "scene": "default",
+      "theme": "monitor",
+      "tools": [
+        "track_keywords"
+      ],
+      "entitlementKey": "studio.keyword-tracker",
+      "source": "app-route"
+    },
+    {
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/competitor-monitor",
+      "scene": "default",
+      "theme": "monitor",
+      "tools": [
+        "watch_competitor"
+      ],
+      "entitlementKey": "studio.competitor-monitor",
+      "source": "app-route"
+    },
+    {
+      "id": "listingforge",
+      "label": "ListingForge",
+      "group": "Listings",
+      "kind": "workspace",
+      "route": "/listingforge",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [
+        "compose_listing"
+      ],
+      "entitlementKey": "studio.listingforge",
+      "source": "app-route"
+    },
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/adpilot",
+      "scene": "ppc",
+      "theme": "ppc",
+      "tools": [
+        "plan_campaign"
+      ],
+      "entitlementKey": "studio.adpilot",
+      "source": "app-route"
+    },
+    {
+      "id": "socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/socialpulse",
+      "scene": "default",
+      "theme": "neutral",
+      "tools": [
+        "plan_social"
+      ],
+      "entitlementKey": "studio.socialpulse",
+      "source": "app-route"
+    },
+    {
+      "id": "profitability",
+      "label": "Profitability",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/profitability",
+      "scene": "default",
+      "theme": "ledger",
+      "tools": [
+        "margin_report"
+      ],
+      "entitlementKey": "studio.profitability",
+      "source": "app-route"
+    }
+  ]
 }

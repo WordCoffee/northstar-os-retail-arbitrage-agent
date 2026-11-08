@@ -1,0 +1,33 @@
+{
+  "at": "2026-11-08T09:48:46+00:00",
+  "services": [
+    {
+      "service": "competitor-monitor",
+      "url": "http://127.0.0.1:8101/ui/competitor-monitor",
+      "at": "2026-11-08T09:48:46+00:00",
+      "ok": false,
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+    },
+    {
+      "service": "listings",
+      "url": "http://127.0.0.1:8101/ui/listings",
+      "at": "2026-11-08T09:48:46+00:00",
+      "ok": false,
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+    },
+    {
+      "service": "socialpulse",
+      "url": "http://127.0.0.1:8101/ui/socialpulse",
+      "at": "2026-11-08T09:48:46+00:00",
+      "ok": false,
+      "blocked": true,
+      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+    }
+  ],
+  "passed": 0,
+  "total": 3,
+  "pass": false,
+  "base": "http://127.0.0.1:8101/ui"
+}

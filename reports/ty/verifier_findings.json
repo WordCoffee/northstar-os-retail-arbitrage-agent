@@ -1,0 +1,26 @@
+{
+  "updated_at": "2026-11-08T09:55:00+00:00",
+  "source": "reports/ty/d15_verification.md",
+  "failed": [
+    {
+      "unit": "D17",
+      "item": "REA vs Craft Anything bake-off",
+      "why": "the six cells had no artefacts on disk (they were in a gitignored worktree that was removed), so the result was not reproducible",
+      "state_now": "re-probed: REA ran on the open-source target (exit 0, 10/10 facts, artefact tracked); hosted and local-app still have no result; the three-target verdict is withdrawn"
+    },
+    {
+      "unit": "V9",
+      "item": "dogfood: Seller-Tester drives the real UI through the Vision Operator",
+      "why": "needs a live UI it can act on, which is V3; nothing has driven the real UI end to end",
+      "state_now": "still open; depends on V3, which is blocked on an unlocked desktop / CDP endpoint"
+    }
+  ],
+  "blocked": [
+    {
+      "unit": "V3",
+      "item": "ten-task parity suite",
+      "why": "no CDP endpoint, and the UIA fallback cannot drive a locked desktop",
+      "state_now": "Chrome 156, no debugging port, chrome://inspect has no toggle; UIA route built and refusing with the lock-screen reason"
+    }
+  ]
+}

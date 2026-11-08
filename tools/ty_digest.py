@@ -114,6 +114,7 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     gaps = _read_json(TY_DIR / "seller_gaps.json")
     intel = _read_json(TY_DIR / "intel_gaps.json")
     models = _read_json(TY_DIR / "model_leaderboard.json")
+    verifier = _read_json(TY / "verifier_findings.json")
     needs = (TY / "needs_you.md")
     return {
         "date": date.today().isoformat(),
@@ -129,6 +130,8 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
         "seller_gaps": _count(gaps, "gaps"),
         "intel_findings": _count(intel, "findings"),
         "model_roles": len((models.get("roles") or {})) if isinstance(models, dict) else 0,
+        "verifier_failed": (verifier.get("failed") or [])[:10] if isinstance(verifier, dict) else [],
+        "verifier_blocked": (verifier.get("blocked") or [])[:10] if isinstance(verifier, dict) else [],
         "needs_you_open": (len([line for line in needs.read_text(encoding="utf-8").splitlines()
                                 if line.startswith("## ")])
                            if needs.exists() else 0),
@@ -159,6 +162,22 @@ def render(data: Dict[str, Any]) -> str:
               f"{parity['runs']} suite run(s), {parity['passes']} passing; "
               f"quarantined: {parity['quarantined']}; "
               f"six-point evidence files: {len(parity['six_point'])}", ""]
+    failed = data.get("verifier_failed") or []
+    blocked = data.get("verifier_blocked") or []
+    lines += ["## Verifier FAILED items", ""]
+    if failed:
+        lines += ["| unit | item | why | state now |", "|---|---|---|---|"]
+        for row in failed:
+            lines.append(f"| {row.get('unit', '?')} | {row.get('item', '')} | "
+                         f"{row.get('why', '')} | {row.get('state_now', '')} |")
+    else:
+        lines.append("None recorded.")
+    if blocked:
+        lines += ["", "### Blocked, not failed", ""]
+        for row in blocked:
+            lines.append(f"- **{row.get('unit', '?')}** {row.get('item', '')} — "
+                         f"{row.get('why', '')} ({row.get('state_now', '')})")
+    lines += [""]
     lines += ["## Lanes", "",
               f"- Seller-Tester gaps filed: {data['seller_gaps']}",
               f"- Intel findings: {data['intel_findings']}",
