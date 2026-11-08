@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "model": "qwen2.5vl:7b",
+  "endpoint": "http://127.0.0.1:11435",
+  "num_ctx": 8192,
+  "json_format": false,
+  "temperature": 0.0,
+  "usable_runs": 3,
+  "attempts": [
+    {
+      "run": 1,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Python script for model testing\"\n    },\n    {\n      \"name\": \"Mogro Organics Amazon FBA product\",\n      \"purpose\": \"Amazon FBA product analysis\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order",
+        "Mogro Organics Amazon FBA product"
+      ],
+      "seconds": 10.8,
+      "eval_count": 83,
+      "model": "qwen2.5vl:7b"
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Python script for model testing\"\n    },\n    {\n      \"name\": \"Mogro Organics Amazon FBA product\",\n      \"purpose\": \"Amazon FBA product analysis\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order",
+        "Mogro Organics Amazon FBA product"
+      ],
+      "seconds": 0.74,
+      "eval_count": 83,
+      "model": "qwen2.5vl:7b"
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Python script for model testing\"\n    },\n    {\n      \"name\": \"Mogro Organics Amazon FBA product\",\n      \"purpose\": \"Amazon FBA product analysis\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order",
+        "Mogro Organics Amazon FBA product"
+      ],
+      "seconds": 0.75,
+      "eval_count": 83,
+      "model": "qwen2.5vl:7b"
+    }
+  ],
+  "verdict": "coherent"
+}

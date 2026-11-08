@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "model": "qwen2.5vl:7b",
+  "endpoint": "http://127.0.0.1:11434",
+  "num_ctx": 8192,
+  "json_format": false,
+  "temperature": 0.0,
+  "usable_runs": 3,
+  "attempts": [
+    {
+      "run": 1,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Code editor with terminal\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order"
+      ],
+      "seconds": 7.17,
+      "eval_count": 52,
+      "model": "qwen2.5vl:7b"
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Code editor with terminal\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order"
+      ],
+      "seconds": 0.49,
+      "eval_count": 52,
+      "model": "qwen2.5vl:7b"
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "raw": "```json\n{\n  \"apps\": [\n    {\n      \"name\": \"OC | Ty director finish order\",\n      \"purpose\": \"Code editor with terminal\"\n    }\n  ],\n  \"foreground\": \"OC | Ty director finish order\"\n}\n```",
+      "parsed": true,
+      "apps": [
+        "OC | Ty director finish order"
+      ],
+      "seconds": 0.47,
+      "eval_count": 52,
+      "model": "qwen2.5vl:7b"
+    }
+  ],
+  "verdict": "partial"
+}

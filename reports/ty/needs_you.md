@@ -142,3 +142,20 @@ D1 probes the real concurrent-session limit. If the probe cannot establish it, t
 Director caps at 4 cloud workers as the work order states and records the assumption in
 `reports/ty/director_probe.md`. No action needed unless the reply below is empty.
 
+## DIR-4. One Chrome restart, to close V3 and retire Chrome Connect (2026-11-08)
+
+Ty's Vision needs a CDP endpoint. Chrome is running without `--remote-debugging-port`, and
+the standing rules forbid Ty from killing Chrome or creating any throwaway profile, so Ty
+cannot create the endpoint itself.
+
+**One action:** close Google Chrome completely (every window), then open it once with:
+
+```
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --profile-directory="Profile 6" --remote-debugging-port=9222
+```
+
+Nothing else is needed. Ty then runs the ten-task parity suite twice and quarantines Chrome
+Connect only if both runs pass. Until then Chrome Connect stays the controller and the
+quarantine is correctly refused. This blocks nothing else in the program.
+
+

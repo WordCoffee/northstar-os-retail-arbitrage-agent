@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "model": "llava:7b",
+  "endpoint": "http://127.0.0.1:11435",
+  "num_ctx": 8192,
+  "json_format": false,
+  "temperature": 0.0,
+  "usable_runs": 3,
+  "attempts": [
+    {
+      "run": 1,
+      "ok": true,
+      "raw": " ```json\n\n{\n  \"apps\": [\n    {\n      \"name\": \"Visual Studio Code\",\n      \"purpose\": \"Code editor\"\n    },\n    {\n      \"name\": \"Windows Terminal\",\n      \"purpose\": \"Command line interface\"\n    },\n    {\n      \"name\": \"Windows Explorer\",\n      \"purpose\": \"File explorer\"\n    },\n    {\n      \"name\": \"Windows Notification\",\n      \"purpose\": \"System notifications\"\n    },\n    {\n      \"name\": \"Windows Taskbar\",\n      \"purpose\": \"Shortcuts to frequently used applications\"\n    },\n    {\n      \"name\": \"Windows Start Menu\",\n      \"purpose\": \"Start screen for launching applications\"\n    },\n    {\n      \"name\": \"",
+      "parsed": true,
+      "apps": [
+        "Visual Studio Code",
+        "Windows Terminal",
+        "Windows Explorer",
+        "Windows Notification",
+        "Windows Taskbar",
+        "Windows Start Menu",
+        "Windows Control Panel",
+        "Windows Action Center"
+      ],
+      "seconds": 12.54,
+      "eval_count": 258,
+      "model": "llava:7b"
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "raw": " ```json\n\n{\n  \"apps\": [\n    {\n      \"name\": \"Visual Studio Code\",\n      \"purpose\": \"Code editor\"\n    },\n    {\n      \"name\": \"Windows Terminal\",\n      \"purpose\": \"Command line interface\"\n    },\n    {\n      \"name\": \"Notepad\",\n      \"purpose\": \"Text editor\"\n    },\n    {\n      \"name\": \"Windows Explorer\",\n      \"purpose\": \"File explorer\"\n    },\n    {\n      \"name\": \"Windows Task Manager\",\n      \"purpose\": \"System performance monitor\"\n    },\n    {\n      \"name\": \"Windows PowerShell\",\n      \"purpose\": \"Scripting and automation tool\"\n    },\n    {\n      \"name\": \"Windows File Explorer\",\n      \"purpose\": \"",
+      "parsed": true,
+      "apps": [
+        "Visual Studio Code",
+        "Windows Terminal",
+        "Notepad",
+        "Windows Explorer",
+        "Windows Task Manager",
+        "Windows PowerShell",
+        "Windows File Explorer",
+        "Windows Command Prompt"
+      ],
+      "seconds": 1.89,
+      "eval_count": 251,
+      "model": "llava:7b"
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "raw": " ```json\n\n{\n  \"apps\": [\n    {\n      \"name\": \"Visual Studio Code\",\n      \"purpose\": \"Code editor\"\n    },\n    {\n      \"name\": \"Windows Terminal\",\n      \"purpose\": \"Command line interface\"\n    },\n    {\n      \"name\": \"Notepad\",\n      \"purpose\": \"Text editor\"\n    },\n    {\n      \"name\": \"Windows Explorer\",\n      \"purpose\": \"File explorer\"\n    },\n    {\n      \"name\": \"Windows Task Manager\",\n      \"purpose\": \"System performance monitor\"\n    },\n    {\n      \"name\": \"Windows PowerShell\",\n      \"purpose\": \"Scripting and automation tool\"\n    },\n    {\n      \"name\": \"Windows File Explorer\",\n      \"purpose\": \"",
+      "parsed": true,
+      "apps": [
+        "Visual Studio Code",
+        "Windows Terminal",
+        "Notepad",
+        "Windows Explorer",
+        "Windows Task Manager",
+        "Windows PowerShell",
+        "Windows File Explorer",
+        "Windows Command Prompt"
+      ],
+      "seconds": 1.91,
+      "eval_count": 251,
+      "model": "llava:7b"
+    }
+  ],
+  "verdict": "coherent"
+}

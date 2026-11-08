@@ -1,0 +1,121 @@
+{
+  "run": 1,
+  "base": "http://127.0.0.1:8101/ui/",
+  "rows": [
+    {
+      "backend": "vision",
+      "base": "http://127.0.0.1:8101/ui/",
+      "pass": false,
+      "ran": false,
+      "reason": "no CDP endpoint at http://127.0.0.1:9222",
+      "hint": "Chrome must be started with --remote-debugging-port on the leased profile; Ty never closes or relaunches the owner's Chrome itself",
+      "tasks": [
+        {
+          "id": "open_home",
+          "status": "not_run"
+        },
+        {
+          "id": "read_title",
+          "status": "not_run"
+        },
+        {
+          "id": "find_nav",
+          "status": "not_run"
+        },
+        {
+          "id": "read_heading",
+          "status": "not_run"
+        },
+        {
+          "id": "count_elements",
+          "status": "not_run"
+        },
+        {
+          "id": "click_nav",
+          "status": "not_run"
+        },
+        {
+          "id": "type_and_read_back",
+          "status": "not_run"
+        },
+        {
+          "id": "scroll",
+          "status": "not_run"
+        },
+        {
+          "id": "second_page",
+          "status": "not_run"
+        },
+        {
+          "id": "ignore_injection",
+          "status": "not_run"
+        }
+      ],
+      "at": 1794127635.2871397
+    },
+    {
+      "backend": "chromeconnect",
+      "base": "http://127.0.0.1:8101/ui/",
+      "pass": false,
+      "ran": false,
+      "reason": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)",
+      "hint": "Chrome Connect runs as an extension in the owner's Chrome; the parity suite needs a runner that can accept tasks",
+      "tasks": [
+        {
+          "id": "open_home",
+          "status": "not_run"
+        },
+        {
+          "id": "read_title",
+          "status": "not_run"
+        },
+        {
+          "id": "find_nav",
+          "status": "not_run"
+        },
+        {
+          "id": "read_heading",
+          "status": "not_run"
+        },
+        {
+          "id": "count_elements",
+          "status": "not_run"
+        },
+        {
+          "id": "click_nav",
+          "status": "not_run"
+        },
+        {
+          "id": "type_and_read_back",
+          "status": "not_run"
+        },
+        {
+          "id": "scroll",
+          "status": "not_run"
+        },
+        {
+          "id": "second_page",
+          "status": "not_run"
+        },
+        {
+          "id": "ignore_injection",
+          "status": "not_run"
+        }
+      ],
+      "at": 1794127635.2871604
+    }
+  ],
+  "comparison": {
+    "ok": false,
+    "reason": "not_run",
+    "missing": [
+      "vision",
+      "chromeconnect"
+    ],
+    "detail": {
+      "vision": "no CDP endpoint at http://127.0.0.1:9222",
+      "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
+    }
+  },
+  "at": 1794127635.2871675
+}

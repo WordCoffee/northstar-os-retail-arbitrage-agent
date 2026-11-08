@@ -1,0 +1,113 @@
+{
+  "ok": true,
+  "screens": 40,
+  "targets_per_screen": 3,
+  "models": {
+    "qwen2.5vl:7b": {
+      "hit_rate": 0.617,
+      "hits": 74,
+      "trials": 120,
+      "abstained": 26,
+      "hit_rate_when_answered": 0.787,
+      "median_seconds": 0.26,
+      "pass": true,
+      "bar": 0.6,
+      "failures": [
+        {
+          "file": "01_browser.png",
+          "target": "Search",
+          "raw": "```json\n{\"x\": 0.88, \"y\": 0.02}\n```",
+          "point": {
+            "x": 0.88,
+            "y": 0.02
+          }
+        },
+        {
+          "file": "02_file_manager.png",
+          "target": "Renders",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        {
+          "file": "02_file_manager.png",
+          "target": "image_006.png",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        {
+          "file": "03_terminal.png",
+          "target": "$ northstar run --seed 84 --lane 10",
+          "raw": "```json\n{\"x\": 0.041, \"y\": 0.474}\n```",
+          "point": {
+            "x": 0.041,
+            "y": 0.474
+          }
+        },
+        {
+          "file": "04_northstar.png",
+          "target": "Design Studio",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        {
+          "file": "05_canvas.png",
+          "target": "swatch 4",
+          "raw": "```json\n{\"x\": 0.85, \"y\": 0.52}\n```",
+          "point": {
+            "x": 0.85,
+            "y": 0.52
+          }
+        },
+        {
+          "file": "06_browser.png",
+          "target": "Search",
+          "raw": "```json\n{\"x\": 0.88, \"y\": 0.02}\n```",
+          "point": {
+            "x": 0.88,
+            "y": 0.02
+          }
+        },
+        {
+          "file": "07_file_manager.png",
+          "target": "Renders",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        {
+          "file": "07_file_manager.png",
+          "target": "image_006.png",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        {
+          "file": "09_northstar.png",
+          "target": "Design Studio",
+          "raw": "```json\n{\"x\": 0.0, \"y\": 0.0}\n```",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "winner": "qwen2.5vl:7b",
+  "any_pass": true,
+  "decision": "a grounding model passed: pixels may drive clicks",
+  "at": "2026-11-08T02:54:42"
+}

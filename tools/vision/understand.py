@@ -24,13 +24,23 @@ sys.path.insert(0, str(ROOT / "tools"))
 import gpu_budget  # noqa: E402
 from . import capture, privacy  # noqa: E402
 
-#: Chosen by measurement, not by preference (reports/ty/d7_vision_benchmark.md):
-#:   qwen2.5vl:7b  -> degenerate fragments (" the ``` image") on every temperature and
-#:                    context tested; matches the verdict already recorded in
-#:                    ty_83b_gpu_evaluation_20261101
-#:   moondream     -> degenerate ("xtop.")
-#:   llava:7b      -> coherent description, and valid JSON naming the correct app
-MODEL = "llava:7b"
+#: Chosen by measurement, and the verdict was corrected on 2026-11-08 (D8).
+#:
+#: The D7 conclusion -- "qwen2.5vl:7b degenerate, llava:7b correct" -- was measured against
+#: a server whose User environment pinned `OLLAMA_KV_CACHE_TYPE=q4_0` with a 65536 context.
+#: On a clean server (f16 KV cache, num_ctx 8192) the result reverses:
+#:
+#:   qwen2.5vl:7b  0.47-0.75 s warm, valid JSON, read the foreground window's real title
+#:   llava:7b      1.89-1.91 s warm, valid JSON, but invented apps that were not open
+#:
+#: llava listed "Windows Start Menu", "Control Panel" and "Visual Studio Code"; the window
+#: list at the same moment held a Windows Terminal, Settings and Chrome. qwen2.5vl named
+#: "OC | Ty director finish order", which is the exact terminal title. That is a clear
+#: margin on correctness, so the incumbent moves. Evidence:
+#: `reports/ty/d8_qwen25vl_clean11434.json`, `reports/ty/d8_vision_retest_llava.json`.
+MODEL = "qwen2.5vl:7b"
+MODEL_FALLBACK = "llava:7b"
+NUM_CTX = 8192
 MAX_WIDTH = 1280
 
 
@@ -117,7 +127,7 @@ def describe_screen(*, png: Optional[bytes] = None, model: str = MODEL,
         "model": model, "prompt": SCREEN_PROMPT, "stream": False,
         "keep_alive": "5m", "format": "json",
         "images": [base64.b64encode(_downscale(shot["png"])).decode("ascii")],
-        "options": {"temperature": 0.0, "num_predict": 300},
+        "options": {"temperature": 0.0, "num_predict": 300, "num_ctx": NUM_CTX},
     }
     try:
         body = _post(payload)

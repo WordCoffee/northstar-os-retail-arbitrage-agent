@@ -1,0 +1,170 @@
+{
+  "contract": "chrome_parity/v1",
+  "checked_at": "2026-11-08T02:47:22-0600",
+  "controller_root": "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project",
+  "requested_root": null,
+  "points": [
+    {
+      "id": "host_policy_amazon_first",
+      "title": "Host policy + hardcoded Amazon blocklist, evaluated first",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "config": {
+          "host_policy": "denylist",
+          "amazon_blocklist_size": 26,
+          "amazon_refusals": {
+            "https://www.amazon.com/dp/B0TEST": "amazon_prohibited",
+            "https://amazon.co.uk/dp/X": "amazon_prohibited",
+            "https://sellercentral.amazon.com/home": "amazon_prohibited",
+            "https://amazon.de/": "amazon_prohibited",
+            "https://amazon.co.uk.evil.example/x": "amazon_prohibited"
+          },
+          "order": {
+            "amazon": 250,
+            "denylist": 1049,
+            "allowlist": 1929
+          },
+          "fingerprint": "46308c9bb48090d796906edfc5229bbfb6ca6994cdd7cc1ea257b301bac349d5",
+          "baseline": "46308c9bb48090d796906edfc5229bbfb6ca6994cdd7cc1ea257b301bac349d5"
+        },
+        "probe": {
+          "ok": true,
+          "reason": null,
+          "owner_source": {
+            "path": "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\config\\chromecontrol_policy_owner.json",
+            "loaded": true,
+            "baseline": "46308c9bb48090d796906edfc5229bbfb6ca6994cdd7cc1ea257b301bac349d5"
+          }
+        }
+      }
+    },
+    {
+      "id": "profile6_lease",
+      "title": "Profile 6 lease (exact directory); every other profile refused",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "config": {
+          "authorized_directory": "Profile 6",
+          "pinned_directory": "Profile 6",
+          "read_owner_authorization": {
+            "present": true,
+            "directory": "Profile 6",
+            "authorized_by": "owner",
+            "authorized_at": "2026-10-27",
+            "scope": "standing profile selection for Chrome Connect; replaces every per-session pick",
+            "replaces_gate": "chrome_signed_out",
+            "pinned": "Profile 6",
+            "pin_matches": true
+          },
+          "profile6_lease_pass": true,
+          "profile7_lease_pass": false
+        },
+        "probe": {
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "credential_captcha_login_stops",
+      "title": "Credentials / CAPTCHA / login are stops, never automated",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "config": {
+          "missing_prohibited_actions": [],
+          "squarespace_deny": [
+            "sign_in",
+            "credential_entry",
+            "payment_action"
+          ],
+          "loop_stops": {
+            "login_wall": true,
+            "captcha": true,
+            "needs_owner": true
+          },
+          "denied_action_suite": {
+            "ran": true,
+            "exit_code": 0,
+            "tail": "or_login_never, category=denied\n  https://paypal.com/checkout: allowed=false, reason=marketplace_never, category=denied\n\n--- Allowed actions on approved origins ---\n  navigate on https://google.com/search?q=turmeric: allowed=true, reason=approved_search_engine, category=search_engine\n  read_page_text on https://google.com/search?q=turmeric: allowed=true, reason=approved_search_engine, category=search_engine\n  navigate on https://tracenet.net/cert/123: allowed=true, reason=gov_suffix:tracenet.net, category=government_registry\n  navigate on https://spicesboard.in/data: allowed=true, reason=gov_suffix:spicesboard.in, category=government_registry\n  navigate on https://usda.gov/organic: allowed=true, reason=gov_suffix:usda.gov, category=government_registry\n\n=== Denied-Action Tests Complete ===\n"
+          }
+        }
+      }
+    },
+    {
+      "id": "redirect_recheck",
+      "title": "Policy re-checked against the current URL after every action",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "pw_tool_evaluates_current_url": true,
+        "loop_rechecks_after_action": true,
+        "amazon_refused_by_policy": true
+      }
+    },
+    {
+      "id": "audit_journal",
+      "title": "Audit journal records decisions, tool calls and results",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "journal_dir": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\cc-parity-journal-ua749wfi",
+        "file": "2026-11-08T08-47-22-478Z_parity-probe-1794127642477.jsonl",
+        "live_files": [
+          "2026-11-02T13-58-41-496Z_open_ebay_search_results_sorted_price_sh_mvzbr5nc.jsonl",
+          "2026-11-02T13-58-49-432Z_open_ebay_search_results_sorted_price_sh_mvzbrbrr.jsonl",
+          "2026-11-05T02-14-35-431Z_test-error-content.jsonl",
+          "2026-11-05T02-14-35-440Z_noop_mw2wx8dr.jsonl",
+          "2026-11-05T02-14-35-447Z_noop_mw2wx8dy.jsonl"
+        ],
+        "live_dir": "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\data\\agent-journal",
+        "record_types": [
+          "decision",
+          "tool_call",
+          "tool_result"
+        ],
+        "sequence": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "secret_redacted": true,
+        "bearer_redacted": true,
+        "urls_recorded": [
+          "https://example.org/x",
+          "https://example.org/x"
+        ],
+        "timestamps": true
+      }
+    },
+    {
+      "id": "browser_benchmark",
+      "title": "Browser-brain benchmark runs and measures",
+      "status": "verified",
+      "detail": "",
+      "evidence": {
+        "replay": {
+          "ran": true,
+          "success": true,
+          "steps": 2,
+          "seconds": 0.0,
+          "status": null
+        },
+        "live_artifact": {
+          "file": "chromeconnect_3.0_complete_20261027.md",
+          "pass_rate": 0.667
+        }
+      }
+    }
+  ],
+  "retirement": "Chrome Connect may only be retired after this report reads overall=pass; a not_verified point is not permission.",
+  "overall": "pass",
+  "reason": "all six parity points verified",
+  "counts": {
+    "verified": 6,
+    "failed": 0,
+    "not_verified": 0
+  }
+}
