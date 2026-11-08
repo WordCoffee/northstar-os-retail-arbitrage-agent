@@ -463,12 +463,15 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--run", action="store_true")
     parser.add_argument("--twice", action="store_true")
     parser.add_argument("--backend", default="vision")
+    parser.add_argument("--backends", default="",
+                        help="comma list for --twice, e.g. uia,chromeconnect")
     parser.add_argument("--base", default="http://127.0.0.1:8101/ui/")
     parser.add_argument("--out", default="")
     ns = parser.parse_args(argv)
 
     if ns.twice:
-        result = run_twice(base=ns.base)
+        names = [name.strip() for name in (ns.backends or "").split(",") if name.strip()]
+        result = run_twice(base=ns.base, backends=names or None)
         print(json.dumps(result, indent=2))
         return 0 if result["ok"] else 1
     if ns.run:

@@ -3,12 +3,12 @@
   "base": "http://127.0.0.1:8101/ui/",
   "rows": [
     {
-      "backend": "vision",
+      "backend": "uia",
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
       "ran": false,
-      "reason": "no CDP endpoint at http://127.0.0.1:9222",
-      "hint": "Chrome must be started with --remote-debugging-port on the leased profile; Ty never closes or relaunches the owner's Chrome itself",
+      "reason": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
+      "hint": "",
       "tasks": [
         {
           "id": "open_home",
@@ -51,7 +51,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794127635.2871397
+      "at": 1794131525.881744
     },
     {
       "backend": "chromeconnect",
@@ -102,20 +102,20 @@
           "status": "not_run"
         }
       ],
-      "at": 1794127635.2871604
+      "at": 1794131525.881764
     }
   ],
   "comparison": {
     "ok": false,
     "reason": "not_run",
     "missing": [
-      "vision",
+      "uia",
       "chromeconnect"
     ],
     "detail": {
-      "vision": "no CDP endpoint at http://127.0.0.1:9222",
+      "uia": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794127635.2871675
+  "at": 1794131525.8817701
 }
