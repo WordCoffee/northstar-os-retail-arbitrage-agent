@@ -44,6 +44,23 @@ def _safe(call, default=None):
         return default
 
 
+def _pixels_changed(before: bytes, after: bytes, *, threshold: int = 12) -> bool:
+    """Did the screen change? Downscaled mean absolute difference, tolerant of caret flicker."""
+    try:
+        import io
+
+        from PIL import Image, ImageChops, ImageStat
+
+        with Image.open(io.BytesIO(before)) as first, Image.open(io.BytesIO(after)) as second:
+            a = first.convert("L").resize((160, 100))
+            b = second.convert("L").resize((160, 100))
+        diff = ImageChops.difference(a, b)
+        mean = ImageStat.Stat(diff).mean[0]
+        return mean > threshold
+    except Exception:  # noqa: BLE001 - an unreadable frame is not a change
+        return False
+
+
 def foreground_hwnd() -> int:
     try:
         return int(ctypes.windll.user32.GetForegroundWindow())
@@ -236,8 +253,13 @@ class ChromeUIA:
             import pyautogui  # noqa: PLC0415
 
             pyautogui.PAUSE = 0.02
-            pyautogui.hotkey(*[part for part in sequence.split("+")] if "+" in sequence
-                             else sequence)
+            # A chord is `hotkey`; a single key is `press`. Passing a bare string to
+            # `hotkey` types its letters one by one — measured 2026-11-08, when "enter"
+            # ended up inside the omnibox as "...competitor-monitorenter".
+            if "+" in sequence:
+                pyautogui.hotkey(*[part.strip() for part in sequence.split("+")])
+            else:
+                pyautogui.press(sequence)
             return sequence
 
         return self.control_layer.act(run)
@@ -259,11 +281,16 @@ class ChromeUIA:
         return self.control_layer.act(run)
 
     def open_url(self, url: str, *, new_tab: bool = True) -> Dict[str, Any]:
-        """Open a URL in a tab this session owns, and verify the title actually changed."""
+        """Open a URL in a tab this session owns, and verify the page actually changed.
+
+        A single-page app keeps one document title, so a title change is not a navigation
+        signal. The verified signal is: the title changed **or** the pixels changed.
+        """
         verdict = risk.evaluate({"kind": "navigate", "url": url}, url=url)
         if not verdict["allow"]:
             return {"ok": False, "refused": True, **verdict}
-        before = self.title_now()
+        before_title = self.title_now()
+        before_png = (self.screenshot() or {}).get("png")
         focused = self.focus()
         if not focused.get("ok"):
             return {"ok": False, "reason": focused.get("reason")}
@@ -281,18 +308,23 @@ class ChromeUIA:
         if not typed.get("ok"):
             return {"ok": False, "reason": f"could not type the URL: {typed}"}
         self._keys("enter", expect_foreground=False)
-        changed = self._wait_title_change(before)
+        changed = self._wait_navigation(before_title, before_png)
         return {"ok": bool(changed), "url": url, "title": self.title_now(),
                 "new_tab": new_tab,
-                "reason": "" if changed else "the page title never changed"}
+                "reason": "" if changed else "neither the title nor the pixels changed"}
 
-    def _wait_title_change(self, before: str, *, timeout: float = NAV_TIMEOUT_S) -> bool:
+    def _wait_navigation(self, before_title: str, before_png: Optional[bytes],
+                         *, timeout: float = NAV_TIMEOUT_S) -> bool:
         deadline = time.time() + timeout
         while time.time() < deadline:
-            if self.title_now() and self.title_now() != before:
+            time.sleep(0.4)
+            if self.title_now() and self.title_now() != before_title:
                 time.sleep(SETTLE_S)
                 return True
-            time.sleep(0.2)
+            after = (self.screenshot() or {}).get("png")
+            if before_png and after and _pixels_changed(before_png, after):
+                time.sleep(SETTLE_S)
+                return True
         return False
 
     def click(self, element: Dict[str, Any]) -> Dict[str, Any]:

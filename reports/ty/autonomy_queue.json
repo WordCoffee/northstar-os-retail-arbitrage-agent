@@ -1307,6 +1307,27 @@
       "why": "the launcher is the engine; a red cycle judgement is work nobody else will notice",
       "needs_author": "probe tys-launcher-tests is still red: the launcher is the engine; a red cycle judgement is work nobody else will notice",
       "last_generated_at": "2026-11-07T14:40:38+00:00"
+    },
+    {
+      "id": "gen-probe-tys-runner-tests-0cf0c6",
+      "kind": "automation",
+      "tier": "T0",
+      "generated_by": "tys_generator",
+      "dedupe_key": "probe:tys-runner-tests",
+      "source": "tools/tys_probes.py",
+      "title": "Probe red: tys-runner-tests",
+      "status": "needs_author",
+      "priority": 1300,
+      "attempts": 0,
+      "first_seen": "2026-11-08T20:40:40+00:00",
+      "generated_at": "2026-11-08T20:40:40+00:00",
+      "depends_on": [],
+      "objective": "Probe red: tys-runner-tests",
+      "probe_id": "tys-runner-tests",
+      "fixable_by": "worker",
+      "why": "the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
+      "needs_author": "probe tys-runner-tests is still red: the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
+      "last_generated_at": "2026-11-08T20:46:03+00:00"
     }
   ],
   "parked": [
@@ -1353,7 +1374,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-08T01:28:38+00:00",
+  "updated_at": "2026-11-08T20:46:03+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {

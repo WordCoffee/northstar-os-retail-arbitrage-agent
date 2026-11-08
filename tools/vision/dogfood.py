@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+from . import capture
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "reports" / "ty" / "d15_dogfood.json"
 SHOTS = ROOT / "reports" / "ty" / "dogfood_shots"
@@ -46,7 +47,8 @@ def seller_task(service: str, page_text: str) -> Dict[str, Any]:
         "competitor-monitor": ("competitor", "price", "change"),
         "listings": ("listing", "title", "price"),
         "socialpulse": ("social", "post", "reach"),
-    }.get(service, (service,))
+        "design-studio": ("design", "studio", "canvas"),
+    }.get(service, tuple(part for part in service.split("-") if part))
     hits = [word for word in vocabulary if word in folded]
     has_number = any(char.isdigit() for char in text)
     actionable = any(word in folded for word in ("save", "apply", "generate", "refresh",
@@ -116,6 +118,22 @@ def _save_shot(service: str, captured: Dict[str, Any]) -> Optional[str]:
         return str(path)
 
 
+def vision_read() -> Dict[str, Any]:
+    """Read the live page from pixels. Chrome exposes no page UIA tree without a launch flag."""
+    from . import understand
+
+    shot = capture.frame()
+    if not shot.get("ok") or shot.get("blocked"):
+        return {"ok": False, "text": "", "reason": shot.get("reason") or "no frame"}
+    read = understand.describe_page(png=shot["png"])
+    if not read.get("ok"):
+        return {"ok": False, "text": "", "reason": read.get("reason") or "unreadable page"}
+    return {"ok": True, "text": read.get("text") or "",
+            "title": read.get("title"), "controls": read.get("controls"),
+            "numbers": read.get("numbers"), "png": shot["png"],
+            "seconds": read.get("seconds")}
+
+
 def live() -> Dict[str, Any]:
     """Wire the real Chrome UIA session, and refuse loudly if it cannot drive."""
     from . import chrome_uia
@@ -149,7 +167,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     page = session["page"]
     try:
         payload = run(services=names, base=ns.base, open_url=page.open_url,
-                      read_text=page.read_text, shot=page.screenshot)
+                      read_text=vision_read, shot=page.screenshot)
     finally:
         page.close_tab()
     print(json.dumps({"pass": payload["pass"], "passed": payload["passed"],

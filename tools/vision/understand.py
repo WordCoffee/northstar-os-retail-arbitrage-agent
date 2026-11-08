@@ -155,6 +155,58 @@ def describe_screen(*, png: Optional[bytes] = None, model: str = MODEL,
     }
 
 
+PAGE_PROMPT = (
+    "You are looking at a screenshot of a web page in a browser. Answer with JSON only: "
+    '{"title":"","summary":"","controls":[{"label":"","kind":"link|button|tab|field"}],'
+    '"numbers":[""]}. '
+    "Give the page title if one is visible, one sentence on what the page is for, up to "
+    "eight visible controls with their exact labels, and up to six numbers. "
+    "No prose, no markdown."
+)
+
+
+def describe_page(*, png: bytes, model: str = MODEL) -> Dict[str, Any]:
+    """Read a page from pixels: title, purpose, controls, numbers.
+
+    `describe_screen` answers "which applications are open", which is the wrong question
+    once the browser is the application. Chrome publishes no page accessibility tree unless
+    it was launched with `--force-renderer-accessibility`, so this is the read path for page
+    content: crops go to the local model and only text comes back.
+    """
+    started = time.time()
+    if not png:
+        return {"ok": False, "reason": "no_frame", "seconds": 0.0}
+    payload = {
+        "model": model, "prompt": PAGE_PROMPT, "stream": False,
+        "keep_alive": "5m",
+        # `format: json` returns an EMPTY response with images on this runner (measured
+        # 2026-11-08: 246 KB PNG, 400 tokens budget, "" back). The prompt asks for JSON and
+        # `parse_json` enforces it, so the parser is the schema, not the decoder flag.
+        "images": [base64.b64encode(_downscale(png)).decode("ascii")],
+        "options": {"temperature": 0.0, "num_predict": 700, "num_ctx": NUM_CTX},
+    }
+    try:
+        body = _post(payload)
+    except Exception as exc:  # noqa: BLE001
+        return {"ok": False, "reason": f"{type(exc).__name__}: {exc}", "seconds":
+                round(time.time() - started, 1)}
+    raw = str(body.get("response") or "")
+    parsed = parse_json(raw)
+    controls = []
+    for item in parsed.get("controls") or []:
+        if isinstance(item, dict) and item.get("label"):
+            controls.append({"label": privacy.redact(str(item.get("label")))[:60],
+                             "kind": str(item.get("kind") or "")[:20]})
+    numbers = [privacy.redact(str(value))[:20] for value in (parsed.get("numbers") or [])]
+    text = " ".join([str(parsed.get("title") or ""), str(parsed.get("summary") or "")]
+                    + [c["label"] for c in controls] + numbers)
+    return {"ok": bool(parsed), "title": privacy.redact(str(parsed.get("title") or "")),
+            "summary": privacy.redact(str(parsed.get("summary") or "")),
+            "controls": controls, "numbers": numbers,
+            "text": privacy.redact(text), "seconds": round(time.time() - started, 1),
+            "model": model, "raw_is_json": bool(parsed)}
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Vision understanding (VLM)")
     parser.add_argument("--v1", action="store_true", help="run the V1 screen-awareness test")
