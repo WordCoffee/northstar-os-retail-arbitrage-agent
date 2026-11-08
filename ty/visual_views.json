@@ -1,0 +1,721 @@
+{
+  "schema": "northstar.visual_views.v1",
+  "generated": "2026-11-08",
+  "source": "ty/services.json",
+  "note": "Every service route from ty/services.json plus / and /home. still=1&seed=<n> is the freeze contract; the UI should honour it directly, and the gate also injects it via an init script.",
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "browser": "chromium",
+      "device_scale_factor": 1,
+      "is_mobile": false,
+      "has_touch": false
+    },
+    "iphone12-webkit": {
+      "width": 390,
+      "height": 844,
+      "browser": "webkit",
+      "device_scale_factor": 3,
+      "is_mobile": true,
+      "has_touch": true,
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+    }
+  },
+  "defaults": {
+    "ready": {
+      "selector": "#root",
+      "wait_until": "networkidle",
+      "min_text_chars": 40,
+      "settle_ms": 200
+    },
+    "freeze": {
+      "still": "1"
+    },
+    "full_page": false
+  },
+  "views": [
+    {
+      "id": "root",
+      "route": "/",
+      "label": "Northstar",
+      "group": "Public",
+      "scene": "default",
+      "theme": "default",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 953371
+      }
+    },
+    {
+      "id": "home",
+      "route": "/home",
+      "label": "Command Center",
+      "group": "Workspace",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 153392
+      }
+    },
+    {
+      "id": "hub",
+      "route": "/hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 517933
+      }
+    },
+    {
+      "id": "ledger",
+      "route": "/ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 228572
+      }
+    },
+    {
+      "id": "prospector",
+      "route": "/prospector",
+      "label": "Prospector",
+      "group": "Sourcing",
+      "scene": "goose",
+      "theme": "goose",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 495769
+      }
+    },
+    {
+      "id": "goldengoose",
+      "route": "/goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "scene": "goose",
+      "theme": "goose",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 746916
+      }
+    },
+    {
+      "id": "offerchisel",
+      "route": "/offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 848191
+      }
+    },
+    {
+      "id": "towncrier",
+      "route": "/towncrier",
+      "label": "The Town Crier",
+      "group": "Social",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 759896
+      }
+    },
+    {
+      "id": "auctioneer",
+      "route": "/auctioneer",
+      "label": "The Auctioneer",
+      "group": "Advertising",
+      "scene": "ppc",
+      "theme": "ppc",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 186373
+      }
+    },
+    {
+      "id": "autothink",
+      "route": "/autothink",
+      "label": "AutothinK",
+      "group": "AutothinK",
+      "scene": "research",
+      "theme": "research",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 897375
+      }
+    },
+    {
+      "id": "thewatch",
+      "route": "/thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
+      "scene": "default",
+      "theme": "monitor",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 186227
+      }
+    },
+    {
+      "id": "rankledger",
+      "route": "/rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "scene": "default",
+      "theme": "monitor",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 308285
+      }
+    },
+    {
+      "id": "rivalboard",
+      "route": "/rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
+      "scene": "default",
+      "theme": "monitor",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 982705
+      }
+    },
+    {
+      "id": "account",
+      "route": "/account",
+      "label": "Account",
+      "group": "Account",
+      "scene": "default",
+      "theme": "account",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 213124
+      }
+    },
+    {
+      "id": "foundation",
+      "route": "/foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
+      "scene": "default",
+      "theme": "ledger",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 674842
+      }
+    },
+    {
+      "id": "jobs",
+      "route": "/jobs",
+      "label": "Jobs & Schedules",
+      "group": "Internal",
+      "scene": "default",
+      "theme": "ledger",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 534181
+      }
+    },
+    {
+      "id": "keywords",
+      "route": "/keywords",
+      "label": "Keywords & SEO",
+      "group": "Internal",
+      "scene": "default",
+      "theme": "ledger",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 999070
+      }
+    },
+    {
+      "id": "beta",
+      "route": "/beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "scene": "default",
+      "theme": "account",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 345731
+      }
+    },
+    {
+      "id": "beta-support",
+      "route": "/beta#support",
+      "label": "Support",
+      "group": "Private Beta",
+      "scene": "default",
+      "theme": "account",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 183035
+      }
+    },
+    {
+      "id": "beta-signup",
+      "route": "/beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "scene": "default",
+      "theme": "account",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 323661
+      }
+    },
+    {
+      "id": "beta-ops",
+      "route": "/beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "scene": "default",
+      "theme": "account",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 331337
+      }
+    },
+    {
+      "id": "design-studio",
+      "route": "/design-studio",
+      "label": "Design Studio",
+      "group": "Create",
+      "scene": "studio",
+      "theme": "studio",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 473495
+      }
+    },
+    {
+      "id": "product-finder",
+      "route": "/product-finder",
+      "label": "SourceScout",
+      "group": "Sourcing",
+      "scene": "goose",
+      "theme": "goose",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 498528
+      }
+    },
+    {
+      "id": "golden-goose",
+      "route": "/golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "scene": "goose",
+      "theme": "goose",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 412376
+      }
+    },
+    {
+      "id": "listings",
+      "route": "/listings",
+      "label": "Listing Guardian",
+      "group": "Listings",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 807886
+      }
+    },
+    {
+      "id": "keyword-tracker",
+      "route": "/keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "scene": "default",
+      "theme": "monitor",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 769964
+      }
+    },
+    {
+      "id": "competitor-monitor",
+      "route": "/competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "scene": "default",
+      "theme": "monitor",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 901658
+      }
+    },
+    {
+      "id": "listingforge",
+      "route": "/listingforge",
+      "label": "ListingForge",
+      "group": "Listings",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 999138
+      }
+    },
+    {
+      "id": "adpilot",
+      "route": "/adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "scene": "ppc",
+      "theme": "ppc",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 553292
+      }
+    },
+    {
+      "id": "socialpulse",
+      "route": "/socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "scene": "default",
+      "theme": "neutral",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 350213
+      }
+    },
+    {
+      "id": "profitability",
+      "route": "/profitability",
+      "label": "Profitability",
+      "group": "Workspace",
+      "scene": "default",
+      "theme": "ledger",
+      "viewports": [
+        "desktop",
+        "iphone12-webkit"
+      ],
+      "ready": {
+        "selector": "#root",
+        "wait_until": "networkidle",
+        "min_text_chars": 40,
+        "settle_ms": 200
+      },
+      "freeze": {
+        "still": "1",
+        "seed": 428371
+      }
+    }
+  ]
+}
