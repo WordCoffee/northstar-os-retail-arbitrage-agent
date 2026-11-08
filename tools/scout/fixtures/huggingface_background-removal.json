@@ -1,0 +1,58 @@
+{
+ "source": "huggingface",
+ "query": "background removal",
+ "recorded_at": "2026-11-08T08:49:37+00:00",
+ "payload": {
+  "source": "huggingface",
+  "query": "background removal",
+  "request_url": "https://huggingface.co/api/models?search=background+removal&sort=downloads&direction=-1&limit=3",
+  "status": 200,
+  "items": [
+   {
+    "id": "Ajayk/car-background-removal-birefnet",
+    "modelId": "Ajayk/car-background-removal-birefnet",
+    "downloads": 11,
+    "likes": 0,
+    "tags": [
+     "safetensors",
+     "image-segmentation",
+     "background-removal",
+     "car",
+     "base_model:ZhengPeng7/BiRefNet",
+     "base_model:finetune:ZhengPeng7/BiRefNet",
+     "region:us"
+    ],
+    "pipeline_tag": "image-segmentation",
+    "createdAt": "2026-10-02T06:47:35.000Z",
+    "lastModified": null,
+    "library_name": null
+   },
+   {
+    "id": "aspis/detr-finetuned-car-background-removal",
+    "modelId": "aspis/detr-finetuned-car-background-removal",
+    "downloads": 0,
+    "likes": 0,
+    "tags": [
+     "region:us"
+    ],
+    "pipeline_tag": null,
+    "createdAt": "2022-07-26T11:23:50.000Z",
+    "lastModified": null,
+    "library_name": null
+   },
+   {
+    "id": "pierthodo/background_removal",
+    "modelId": "pierthodo/background_removal",
+    "downloads": 0,
+    "likes": 0,
+    "tags": [
+     "region:us"
+    ],
+    "pipeline_tag": null,
+    "createdAt": "2022-12-13T16:48:48.000Z",
+    "lastModified": null,
+    "library_name": null
+   }
+  ]
+ }
+}

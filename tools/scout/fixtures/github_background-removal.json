@@ -1,0 +1,89 @@
+{
+ "source": "github",
+ "query": "background removal",
+ "recorded_at": "2026-11-08T08:49:34+00:00",
+ "payload": {
+  "source": "github",
+  "query": "background removal",
+  "request_url": "https://api.github.com/search/repositories?q=background+removal&sort=stars&order=desc&per_page=3",
+  "status": 200,
+  "quota_remaining": 8,
+  "quota_limit": 10,
+  "total_count": 4189,
+  "items": [
+   {
+    "full_name": "imgly/background-removal-js",
+    "html_url": "https://github.com/imgly/background-removal-js",
+    "description": "Remove backgrounds from images directly in the browser environment with ease and no additional costs or privacy concerns. Explore an interactive demo.",
+    "stargazers_count": 7364,
+    "forks_count": 475,
+    "license": {
+     "key": "agpl-3.0",
+     "name": "GNU Affero General Public License v3.0",
+     "spdx_id": "AGPL-3.0",
+     "url": "https://api.github.com/licenses/agpl-3.0",
+     "node_id": "MDc6TGljZW5zZTE="
+    },
+    "topics": [
+     "background-removal",
+     "image-matting",
+     "image-segmentation",
+     "javascript",
+     "onnx",
+     "open-source",
+     "typescript"
+    ],
+    "language": "TypeScript",
+    "pushed_at": "2025-07-18T12:56:39Z",
+    "archived": false,
+    "homepage": "https://img.ly/showcases/cesdk/web/background-removal/web"
+   },
+   {
+    "full_name": "jasonmayes/Real-Time-Person-Removal",
+    "html_url": "https://github.com/jasonmayes/Real-Time-Person-Removal",
+    "description": "Removing people from complex backgrounds in real time using TensorFlow.js in the web browser",
+    "stargazers_count": 5151,
+    "forks_count": 638,
+    "license": {
+     "key": "apache-2.0",
+     "name": "Apache License 2.0",
+     "spdx_id": "Apache-2.0",
+     "url": "https://api.github.com/licenses/apache-2.0",
+     "node_id": "MDc6TGljZW5zZTI="
+    },
+    "topics": [],
+    "language": "JavaScript",
+    "pushed_at": "2021-10-06T07:25:20Z",
+    "archived": false,
+    "homepage": null
+   },
+   {
+    "full_name": "1038lab/ComfyUI-RMBG",
+    "html_url": "https://github.com/1038lab/ComfyUI-RMBG",
+    "description": "A ComfyUI custom node designed for advanced image background removal and object, face, clothes, and fashion segmentation, utilizing multiple models including RMBG-2.0, VRMBG-3.0, FeyNoBg, Finegrain Box Segmenter, INSPYRENET, BEN, BEN2, BiRefNet, Lucida, SDMatte, SAM, SAM2, SAM3, Florence-2, YOLOv8/YOLO11, Big-Lama, and GroundingDINO.",
+    "stargazers_count": 2223,
+    "forks_count": 142,
+    "license": {
+     "key": "gpl-3.0",
+     "name": "GNU General Public License v3.0",
+     "spdx_id": "GPL-3.0",
+     "url": "https://api.github.com/licenses/gpl-3.0",
+     "node_id": "MDc6TGljZW5zZTk="
+    },
+    "topics": [
+     "comfyui",
+     "comfyui-nodes",
+     "image",
+     "mask",
+     "remove-background",
+     "segmentation",
+     "stable-diffusion"
+    ],
+    "language": "Python",
+    "pushed_at": "2026-10-20T08:31:47Z",
+    "archived": false,
+    "homepage": "https://1038lab.github.io/ComfyUI-RMBG/"
+   }
+  ]
+ }
+}

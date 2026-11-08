@@ -1,0 +1,132 @@
+{
+ "source": "npm",
+ "query": "product photography",
+ "recorded_at": "2026-11-08T08:49:44+00:00",
+ "payload": {
+  "source": "npm",
+  "query": "product photography",
+  "request_url": "https://registry.npmjs.org/-/v1/search?text=product+photography&size=3",
+  "status": 200,
+  "search": {
+   "objects": [
+    {
+     "package": {
+      "name": "@deenruv/replicate-simple-bg-plugin",
+      "version": "1.0.16",
+      "description": "An AI-powered background generation plugin that uses [Replicate](https://replicate.com/) models to generate styled room backgrounds from uploaded images, ideal for virtual staging of product photography.",
+      "date": "2026-05-19T08:20:32.488Z",
+      "publisher": {
+       "email": "kamil@aexol.com",
+       "username": "kamil-aexol"
+      },
+      "links": {
+       "homepage": "https://deenruv.com/",
+       "npm": "https://www.npmjs.com/package/@deenruv/replicate-simple-bg-plugin"
+      }
+     },
+     "score": {
+      "final": 171.2992,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "pixelpanda",
+      "version": "0.1.1",
+      "description": "Official JavaScript/TypeScript SDK for the PixelPanda API — AI background removal, upscaling, enhancement, product photography, ad packs and UGC video",
+      "date": "2026-08-27T12:02:35.333Z",
+      "publisher": {
+       "email": "npm-oidc-no-reply@github.com",
+       "trustedPublisher": {
+        "oidcConfigId": "oidc:f17b4c43-15e3-460d-8036-a8e9bf033991",
+        "id": "github"
+       },
+       "username": "GitHub Actions"
+      },
+      "links": {
+       "homepage": "https://pixelpanda.ai/integrations/node-sdk",
+       "repository": "git+https://github.com/RyanKramer/pixelpanda-js.git",
+       "bugs": "https://github.com/RyanKramer/pixelpanda-js/issues",
+       "npm": "https://www.npmjs.com/package/pixelpanda"
+      }
+     },
+     "score": {
+      "final": 119.0887,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    },
+    {
+     "package": {
+      "name": "prompts-data-productstage",
+      "version": "1.0.0",
+      "description": "Professional AI product photography prompts for various product categories. Curated templates for e-commerce, Etsy, Shopify, and online stores. Learn more at https://productstage.ai",
+      "date": "2026-01-27T13:45:10.838Z",
+      "publisher": {
+       "email": "javajia@gmail.com",
+       "username": "liuyueqing"
+      },
+      "links": {
+       "homepage": "https://productstage.ai",
+       "repository": "git+https://github.com/LueYueqing/productstage.ai.git",
+       "bugs": "https://github.com/LueYueqing/productstage.ai/issues",
+       "npm": "https://www.npmjs.com/package/prompts-data-productstage"
+      }
+     },
+     "score": {
+      "final": 69.88687,
+      "detail": {
+       "popularity": 1,
+       "quality": 1,
+       "maintenance": 1
+      }
+     }
+    }
+   ]
+  },
+  "latest": {
+   "@deenruv/replicate-simple-bg-plugin": {
+    "name": "@deenruv/replicate-simple-bg-plugin",
+    "version": "1.0.16",
+    "license": "MIT",
+    "description": "An AI-powered background generation plugin that uses [Replicate](https://replicate.com/) models to generate styled room backgrounds from uploaded images, ideal for virtual staging of product photography.",
+    "repository": null,
+    "homepage": "https://deenruv.com/"
+   },
+   "pixelpanda": {
+    "name": "pixelpanda",
+    "version": "0.1.1",
+    "license": "MIT",
+    "description": "Official JavaScript/TypeScript SDK for the PixelPanda API — AI background removal, upscaling, enhancement, product photography, ad packs and UGC video",
+    "repository": {
+     "url": "git+https://github.com/RyanKramer/pixelpanda-js.git",
+     "type": "git"
+    },
+    "homepage": "https://pixelpanda.ai/integrations/node-sdk"
+   },
+   "prompts-data-productstage": {
+    "name": "prompts-data-productstage",
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "Professional AI product photography prompts for various product categories. Curated templates for e-commerce, Etsy, Shopify, and online stores. Learn more at https://productstage.ai",
+    "repository": {
+     "url": "git+https://github.com/LueYueqing/productstage.ai.git",
+     "type": "git"
+    },
+    "homepage": "https://productstage.ai"
+   }
+  },
+  "downloads": {
+   "@deenruv/replicate-simple-bg-plugin": 882,
+   "pixelpanda": 50,
+   "prompts-data-productstage": 18
+  }
+ }
+}

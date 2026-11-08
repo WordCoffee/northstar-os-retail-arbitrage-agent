@@ -1,0 +1,82 @@
+{
+ "source": "huggingface",
+ "query": "product photography",
+ "recorded_at": "2026-11-08T08:49:37+00:00",
+ "payload": {
+  "source": "huggingface",
+  "query": "product photography",
+  "request_url": "https://huggingface.co/api/models?search=product+photography&sort=downloads&direction=-1&limit=3",
+  "status": 200,
+  "items": [
+   {
+    "id": "Muapi/product-photography-flux-soft-light-cosmetics",
+    "modelId": "Muapi/product-photography-flux-soft-light-cosmetics",
+    "downloads": 291,
+    "likes": 0,
+    "tags": [
+     "diffusers",
+     "lora",
+     "text-to-image",
+     "stable-diffusion",
+     "flux",
+     "flux.1-d",
+     "base_model:black-forest-labs/FLUX.1-dev",
+     "base_model:adapter:black-forest-labs/FLUX.1-dev",
+     "license:openrail++",
+     "region:us"
+    ],
+    "pipeline_tag": "text-to-image",
+    "createdAt": "2025-08-18T18:04:06.000Z",
+    "lastModified": null,
+    "library_name": "diffusers"
+   },
+   {
+    "id": "Shoaibism/sdxl-product-photography-lora",
+    "modelId": "Shoaibism/sdxl-product-photography-lora",
+    "downloads": 267,
+    "likes": 0,
+    "tags": [
+     "diffusers",
+     "stable-diffusion-xl",
+     "lora",
+     "product-photography",
+     "dreambooth",
+     "sneakers",
+     "base_model:stabilityai/stable-diffusion-xl-base-1.0",
+     "base_model:adapter:stabilityai/stable-diffusion-xl-base-1.0",
+     "license:apache-2.0",
+     "region:us"
+    ],
+    "pipeline_tag": null,
+    "createdAt": "2026-06-21T10:48:51.000Z",
+    "lastModified": null,
+    "library_name": "diffusers"
+   },
+   {
+    "id": "marioortegat/jewelry-product-photography-sdxl-lora",
+    "modelId": "marioortegat/jewelry-product-photography-sdxl-lora",
+    "downloads": 174,
+    "likes": 4,
+    "tags": [
+     "diffusers",
+     "lora",
+     "stable-diffusion",
+     "stable-diffusion-xl",
+     "sdxl",
+     "jewelry",
+     "product-design",
+     "text-to-image",
+     "en",
+     "base_model:stabilityai/stable-diffusion-xl-base-1.0",
+     "base_model:adapter:stabilityai/stable-diffusion-xl-base-1.0",
+     "license:creativeml-openrail-m",
+     "region:us"
+    ],
+    "pipeline_tag": "text-to-image",
+    "createdAt": "2025-11-18T21:23:22.000Z",
+    "lastModified": null,
+    "library_name": "diffusers"
+   }
+  ]
+ }
+}
