@@ -111,11 +111,20 @@ COMPANIONS = {
 ROLE_MODELS = {
     "bojo": "bojo:latest",
     "coder": "qwen3:8b",
-    # llava:7b by measurement: qwen2.5vl:7b and moondream both produce degenerate
-    # fragments on this box (reports/ty/d7_vision_benchmark.md).
-    "vision": "llava:7b",
+    # qwen2.5vl:7b by measurement on a clean server (f16 KV cache, num_ctx 8192):
+    # 0.47-0.75 s and it reads the real window title. The earlier "degenerate" verdict was
+    # taken against a q4_0 KV cache with a 65536 context.
+    # reports/ty/d8_control_browser.md, reports/ty/d7_vision_benchmark.md (correction).
+    "vision": "qwen2.5vl:7b",
+    "gui_grounding": "qwen2.5vl:7b",
     "embeddings": "qwen3-embedding:0.6b",
 }
+
+#: Heavy roles are OFF unless a job leases them with a stated reason. The 27B is the one
+#: model that starves everything else (0.04 GB RAM free beside it), so "the 27B is
+#: available" must never read as "the 27B is on".
+HEAVY_DEFAULT_OFF = ("27b",)
+HEAVY_LEASE_PATH = STATE / "heavy_leases.json"
 
 
 def _now() -> str:
@@ -318,13 +327,59 @@ def free_comfy(timeout: float = 30.0) -> Dict[str, Any]:
             "note": "" if delta > 0.5 else "acknowledged but VRAM unchanged - unproven"}
 
 
+def heavy_lease(role: str, *, reason: str = "", hours: float = 2.0,
+                path: Optional[Path] = None) -> Dict[str, Any]:
+    """Lease a heavy role for a stated job. No reason, no lease.
+
+    A default-off heavy model is the only way the 27B can be safe on a 16 GB box: the
+    question "is it on?" then has one answer, and turning it on leaves a written reason.
+    """
+    if role not in HEAVY_DEFAULT_OFF:
+        return {"ok": False, "reason": f"{role!r} is not a heavy role",
+                "heavy_roles": list(HEAVY_DEFAULT_OFF)}
+    if len(str(reason or "").strip()) < 10:
+        return {"ok": False, "reason": "a lease needs a stated reason (10+ characters)",
+                "role": role}
+    target = Path(path or HEAVY_LEASE_PATH)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        data = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    data[role] = {"reason": str(reason).strip(), "at": _now(),
+                  "expires_at": time.time() + float(hours) * 3600, "hours": float(hours)}
+    target.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    return {"ok": True, "role": role, **data[role]}
+
+
+def heavy_lease_status(*, path: Optional[Path] = None,
+                       now: Optional[float] = None) -> Dict[str, Any]:
+    target = Path(path or HEAVY_LEASE_PATH)
+    current = time.time() if now is None else now
+    try:
+        data = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    live: Dict[str, Any] = {}
+    for role in HEAVY_DEFAULT_OFF:
+        row = data.get(role) or {}
+        if row and float(row.get("expires_at") or 0) > current:
+            live[role] = row
+    return {"default_off": list(HEAVY_DEFAULT_OFF), "leased": live,
+            "off": [role for role in HEAVY_DEFAULT_OFF if role not in live]}
+
+
 def acquire(role: str, *, ttl_s: int = 3600) -> Dict[str, Any]:
     """Take the GPU for a role, and leave the machine in a state that role can use.
 
     An exclusive role drains everything first, including the resident pair, because the
     27B measured 0.04 GB of RAM free next to nothing else. A shared role keeps the
-    resident pair and adds itself.
+    resident pair and adds itself. A heavy role additionally needs a live lease.
     """
+    if role in HEAVY_DEFAULT_OFF and role not in heavy_lease_status()["leased"]:
+        return {"ok": False, "reason": "heavy_role_not_leased", "role": role,
+                "detail": ("this role is off by default; lease it with a stated reason "
+                           "via heavy_lease(role, reason=...)")}
     held = lock(role, ttl_s=ttl_s)
     if not held.get("ok"):
         return held

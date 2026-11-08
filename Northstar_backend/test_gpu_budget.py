@@ -57,6 +57,11 @@ def test_enforce_unloads_everything_outside_the_keep_set(world):
 
 
 def test_an_exclusive_role_drains_everything_first(world):
+    # The 27B is off by default (WORK ORDER 3, folded fix 4): it needs a stated lease first.
+    refused = G.acquire("27b")
+    assert refused["ok"] is False and refused["reason"] == "heavy_role_not_leased"
+    assert G.heavy_lease("27b", reason="unit test: local reasoning job")["ok"] is True
+
     out = G.acquire("27b")
 
     assert out["ok"] is True and out["exclusive"] is True
@@ -104,5 +109,6 @@ def test_budgets_come_from_the_measurement(world):
     assert G.ROLE_BUDGET_GB["27b"] == 14.5
     assert G.ROLE_BUDGET_GB["vision"] == 8.0     # budget keeps the 7B-class headroom
     assert G.ROLE_BUDGET_GB["image_flux"] == 11.0
-    assert G.ROLE_SIZE_GB["vision"] == 5.19      # llava:7b, measured
-    assert G.ROLE_MODELS["vision"] == "llava:7b"
+    assert G.ROLE_SIZE_GB["vision"] == 5.19      # measured, 7B-class
+    # corrected 2026-11-08: qwen2.5vl:7b on a clean server beats llava on correctness
+    assert G.ROLE_MODELS["vision"] == "qwen2.5vl:7b"

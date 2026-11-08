@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T05:14:36+00:00",
+  "updated_at": "2026-11-08T08:55:49+00:00",
   "cycle": 1,
-  "unit_in_flight": "D8",
+  "unit_in_flight": "D12",
   "unit_order": [
     "D0",
     "D1",
@@ -98,7 +98,10 @@
       "summary": "V1+V2+V8 pass: llava 0.8s JSON, 20/20 element reads, 10.29GB VRAM with Bojo"
     },
     "D8": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D8",
+      "completed_at": "2026-11-08T08:55:49+00:00",
+      "summary": "risk classes, verify-after-act (V4 live), injson (V6 live), Profile 6 lease, CDP browser layer; six-point parity 6/6 verified twice; V3 not_run (no CDP endpoint, needs owner); quarantine refused; qwen2.5vl retest reverses D7; grounding 61.7% on 40 screens"
     },
     "D9": {
       "status": "pending"

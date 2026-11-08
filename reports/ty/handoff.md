@@ -83,3 +83,13 @@ acknowledgement.
 - A per-dimension bar means an 85 average is not a pass. `ty/scorecards.json` says so.
 - The launcher's pid file is authoritative; the command-line scan is only a fallback.
 - Never leave a debug script behind; every temporary tool in this session was removed.
+
+- 2026-11-08T08:58:49+00:00 queue empty while 26 service(s) are below the bar (worst: prospector); re-plan, do not idle.
+
+- 2026-11-08T08:58:59+00:00 launcher: director session ended (session 32136 gone; launcher restarting).
+
+- 2026-11-08T08:59:36+00:00 queue empty while 26 service(s) are below the bar (worst: prospector); re-plan, do not idle.
+
+- 2026-11-08T08:59:47+00:00 launcher: director session ended (session 27276 gone; launcher restarting).
+
+- 2026-11-08T08:59:53+00:00 queue empty while 26 service(s) are below the bar (worst: prospector); re-plan, do not idle.

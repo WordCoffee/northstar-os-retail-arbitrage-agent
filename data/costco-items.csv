@@ -1,9 +1,9 @@
 item_name,costco_cost
-"Kirkland Signature Ultra Clean HE Liquid Laundry Detergent, 146 loads, 194 fl oz",23.64
+"Kirkland Signature Ultra Clean Free & Clear HE Liquid Laundry Detergent, 146 loads, 194 fl oz",23.64
 "Kirkland Signature Whole Almonds, Baking Nuts, 3 lbs",17.15
 "Kirkland Signature Alkaline AA Batteries, 48-count",16.49
 "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",23.09
-Kirkland Signature Dishwasher Detergent Pacs 115 Count,13.99
+"Kirkland Signature Platinum Performance UltraShine Dishwasher Detergent Pacs, 115-count",15.39
 "Kirkland Signature, Pure Sea Salt, 30 oz",4.39
 "Kirkland Signature, Crushed Red Pepper, 10 oz",5.27
 "Kirkland Signature Paper Towels, 2-Ply, 160 Sheets, 12 Individually Wrapped Rolls",26.39
@@ -11,7 +11,7 @@ Kirkland Signature Men's Pima Polo,15.39
 "Kirkland Signature Elegant Plastic Plates, Variety Pack, White, 50-count",17.59
 "Kirkland Signature Facial Tissue, 3-Ply, 84-count, 12-pack",21.99
 "Kirkland Signature Coffee Organic House Decaf K-Cup Pod, 120-count",37.39
-"Kirkland Signature Men's Heavyweight Crew Tee, 6-pack",29.69
+"Kirkland Signature Women's Long Sleeve Slub Tee, 2-Pack",10.97
 "Kirkland Signature Hair Regrowth Treatment Extra Strength for Men, 5% Minoxidil Topical Solution, 2 fl oz, 6-pack",28.59
 "Kirkland Signature Men's Merino Wool Blend Sock, 4-pair",19.24
 "Kirkland Signature Flex-Tech 13-Gallon Kitchen Trash Bag, 200-count",24.74
@@ -19,10 +19,10 @@ Kirkland Signature Men's Pima Polo,15.39
 Kirkland Signature Women's Ribbed Crewneck,18.69
 Kirkland Signature Women's Lightweight Short,10.97
 Kirkland Signature Unisex Logo Tonal Hoodie,30.79
-Kirkland Signature Men's Softshell Bomber Jacket,25.29
+Kirkland Signature Men's Fleece Softshell Jacket,32.99
 "Kirkland Signature Hair Regrowth Treatment Minoxidil Foam for Men, 2.11 oz, 6-count",42.89
 "Kirkland Signature Adult Formula Chicken, Rice and Vegetable Dog Food, 25 lbs",27.49
-"Kirkland Signature by Stearns &amp; Foster 14.5"" Pillow Top Lakeridge Mattress",1319.99
+"Kirkland Signature by Stearns & Foster 14.5"" Pillow Top Lakeridge Mattress",989.99
 Costco Wholesale Unisex Logo Pant,24.19
 Kirkland Signature Breaded Panko Shrimp 2.5 lbs,19.79
 "Kirkland Signature Funhouse Treats, Variety Pack, 92 oz",27.71
@@ -160,7 +160,7 @@ Kirkland Signature Diaper Sizes 3-7,43.99
 "Kirkland Signature Reynolds Foodservice Foil HD, 18 in x 500 ft",59.39
 "Kirkland Signature Advanced Glucosamine, 1500 mg, and Chondroitin, 1200 mg, 280 ct",22.32
 "Kirkland Signature Dog Food, Chicken & Rice Formula, 13.2 oz, 24 ct",41.79
-"Kirkland Signature House Blend Whole Bean Coffee, Medium Roast, 2.5 lbs",22.98
+"Kirkland Signature House Blend Whole Bean Coffee, Medium Roast, 2.5 lbs",23.64
 "Kirkland Signature Liquid Egg Whites, Cage Free, 16 oz, 6 ct",15.72
 "Kirkland Signature Freezer Quart Plus Bags, Double Zipper, 264 ct",16.27
 "Kirkland Signature Chicken Breast Fillets, Lightly Breaded, 48 oz",17.37
@@ -197,11 +197,11 @@ Country Club Elite Golf Mats,307.99
 "PUMA Women's No Show Sock, 10-pair",17.59
 "ALPTREK Snowshoe Kit HD 821, Small",109.99
 "93"" Plush Bear, Blonde",329.99
-Kirkland Signature Men's Tailored Fit Dress Shirt-Exact Sleeve Length,31.89
+"Kirkland Signature Men’s Regular Fit Dress Shirt, Blue White Twill Check",32.99
 Stitch SL4 Golf Cart Bag,208.99
 "ALPTREK Snowshoe Kit HD 930, Large",109.99
 Mytagalongs Neoprene Backpack,43.99
-Kirkland Signature Men's Traditional Fit Dress Shirt - Exact Sleeve Length,31.89
+Kirkland Signature Men's Tailored Fit Dress Shirt-Exact Sleeve Length,31.89
 "StriVectin TL Advanced Tightening Neck Cream Plus, 1 oz, 2-pack",49.49
 "Kirkland Signature Powder Laundry Detergent, 200 Loads, 348.8 oz",27.49
 "Beyond Meat Plant-Based Patties, 4 oz, 10-count",1.13
@@ -522,7 +522,7 @@ GE 4.5 cu. ft. Washer with Water Level Control and 7.4 cu. ft. ELECTRIC Dryer Pa
 "Kirkland Signature Wild Alaskan Fish Oil 1400 mg, 230 Softgels",26.99
 "Kirkland Signature Glucosamine with MSM, 375 Tablets",20.49
 "Kirkland Signature USDA Organic Multivitamin, 80 Coated Tablets",26.99
-Kirkland Signature Men's Stretch Tech Pant,19.97
+Kirkland Signature Men's Stretch Jean,24.19
 Kirkland Signature Men's Pima Polo,17.99
 Kirkland Signature Men's Cotton Jean,18.69
 "Kirkland Signature, Organic Extra Virgin Olive Oil, 2 L",20.99
@@ -531,3 +531,7 @@ Kirkland Signature Men's Cotton Jean,18.69
 "Kirkland Signature Fish Oil 1000 mg, 400 Softgels",20.99
 "Kirkland Signature Quit 2 mg or 4mg, Original Gum, 380 Pieces",59.99
 Kirkland Signature Unisex Shearling Slipper,32.99
+Kirkland Signature 700 Thread Count Supima Cotton Sheet Set,98.99
+"Kirkland Signature Men’s Regular Fit Dress Shirt, Light Blue Dobby",32.99
+"Kirkland Signature, Organic Fruit and Vegetable Pouches, Variety Pack, 3.17 oz, 24-count",16.49
+"Kirkland Signature Cool Blast Severe Cold & Flu Day & Night, 168 Caplets",10.99
