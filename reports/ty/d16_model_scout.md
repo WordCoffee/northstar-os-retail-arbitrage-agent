@@ -158,3 +158,50 @@ write + mirror, replacement/quarantine, not-installed candidate, restore plan, C
 
 `python tools/model_scout.py --plan` writes the tracked leaderboard and the intel mirror;
 `--list-evals` prints both sets and their item counts.
+
+---
+
+# Director run, 2026-11-08 — the leaderboard, measured on the GPU
+
+Command (run by the Director lane, one model resident at a time, GPU lock held):
+
+```
+python tools/model_scout.py --run --role bojo-router --models qwen3.5:4b,qwen3.5:2b,gemma3:4b,qwen2.5-coder:3b
+```
+
+## A harness defect found and fixed first
+
+The first run scored `bojo:latest`, `qwen3.5:4b` and `qwen3.5:2b` at **0/18 with
+`matched: null` on every item**. That was not a model result. Qwen3.5-family models on this
+Ollama build (0.40.15) **think by default**: the thinking goes to a separate `thinking`
+field, and `content` comes back **empty** after `num_predict` tokens. Measured directly:
+
+| model | `think` | response | thinking |
+|---|---|---|---|
+| `qwen3.5:4b` | true (default) | `''` | 300 tokens of "Thinking Process: …" |
+| `qwen3.5:4b` | false | `'coder'` | none |
+| `bojo:latest` | true (default) | `''` | 300 tokens |
+| `bojo:latest` | false | `'coder'` | none |
+
+`tools/model_scout.py` now sends `"think": false`. A router eval that does not disable
+thinking measures the parser, not the model.
+
+## Result — 18-item router eval, clean
+
+| model | correct | accuracy | VRAM | verdict |
+|---|---|---|---|---|
+| **`bojo:latest`** (incumbent) | **15 / 18** | 0.833 | 3.07 GB | **kept** |
+| `qwen3.5:4b` | 16 / 18 | 0.889 | 3.13 GB | keep incumbent: margin +1 < required +2 |
+| `qwen3.5:2b` | 15 / 18 | 0.833 | 2.31 GB | keep incumbent: margin +0 |
+| `gemma3:4b` | 12 / 18 | 0.667 | 2.83 GB | keep incumbent: margin −3 |
+| `qwen2.5-coder:3b` | 6 / 18 | 0.333 | 2.25 GB | keep incumbent: margin −9 |
+
+**Bojo rises from 6/18 to 15/18** — and the 6/18 was never an 18-item result at all: it came
+from a 3-task × 6-point bench (`reports/ty/model_bench_bojo_gpu_20261107.json`) that the
+builder correctly flagged as non-comparable. The router is now measured on the real 18-item
+set, twice over: the incumbent at 15/18, and the best candidate one item ahead, which is
+inside the swap margin.
+
+`qwen3.5:4b` is the standing alternative if Bojo ever regresses: +1 item, +0.06 GB VRAM, same
+budget. Nothing is quarantined, because nothing was replaced.
+

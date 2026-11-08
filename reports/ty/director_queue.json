@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T08:55:49+00:00",
+  "updated_at": "2026-11-08T09:15:57+00:00",
   "cycle": 1,
   "unit_in_flight": "D12",
   "unit_order": [
@@ -104,33 +104,54 @@
       "summary": "risk classes, verify-after-act (V4 live), injson (V6 live), Profile 6 lease, CDP browser layer; six-point parity 6/6 verified twice; V3 not_run (no CDP endpoint, needs owner); quarantine refused; qwen2.5vl retest reverses D7; grounding 61.7% on 40 screens"
     },
     "D9": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D9",
+      "completed_at": "2026-11-08T09:15:52+00:00",
+      "summary": "seller-tester: 32 briefs, programmatic scorers, gap filing, escalation; 28 tests; real pass 30 artefacts scored, 29 gaps filed"
     },
     "D10": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D10",
+      "completed_at": "2026-11-08T09:15:52+00:00",
+      "summary": "visual regression gate: 31 views, frozen seeded scenes, perceptual diff; 6/6 fixture pairs classified; live capture refused without a server (exit 2); 41 tests"
     },
     "D11": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D11",
+      "completed_at": "2026-11-08T09:15:57+00:00",
+      "summary": "intel plane A18-A21: 5 source connectors, licence policy, atomic write; live run 58 findings, 58/58 URLs verified; 54 tests"
     },
     "D12": {
       "status": "pending"
     },
     "D13": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D13",
+      "completed_at": "2026-11-08T09:15:57+00:00",
+      "summary": "live mode text-first: observe narrates windows + element counts, asks answered from the observation, blocked windows yield no pixels; demo passes; 8 tests"
     },
     "D14": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D14",
+      "completed_at": "2026-11-08T09:15:57+00:00",
+      "summary": "computer mode behind scope+grants: write outside scope refused and leaves no file; PC mode needs flag AND grant; plan printed, not executed; 8 tests"
     },
     "D15": {
       "status": "pending"
     },
     "D16": {
-      "status": "continuous",
-      "note": "Model Scout lane (PATCH 2026-11-07 item 3): per-role incumbents and fixed eval sets, benchmark candidates on accuracy/speed/VRAM/RAM/license, swap only on a clear margin inside the VRAM/RAM budget, quarantine never delete, tested restore script, state/intel/models.json + per-role leaderboard in the digest."
+      "status": "done",
+      "note": "Model Scout lane (PATCH 2026-11-07 item 3): per-role incumbents and fixed eval sets, benchmark candidates on accuracy/speed/VRAM/RAM/license, swap only on a clear margin inside the VRAM/RAM budget, quarantine never delete, tested restore script, state/intel/models.json + per-role leaderboard in the digest.",
+      "unit_tag": "ty-dir-D16",
+      "completed_at": "2026-11-08T09:15:57+00:00",
+      "summary": "model scout: router eval fixed (think=false); bojo 15/18, qwen3.5:4b 16/18 (+1 < margin 2) so incumbent kept; leaderboard written"
     },
     "D17": {
-      "status": "pending",
-      "note": "Tool bake-off (PATCH 2 item 1): REA (MIT) vs Craft Anything (Apache 2.0) on three targets (open-source repo, hosted non-Amazon tool, local web app); score behaviour-spec accuracy, detail coverage, speed, token cost, reliability; winner is default per target kind, loser is backup; re-run on any version change of either."
+      "status": "done",
+      "note": "Tool bake-off (PATCH 2 item 1): REA (MIT) vs Craft Anything (Apache 2.0) on three targets (open-source repo, hosted non-Amazon tool, local web app); score behaviour-spec accuracy, detail coverage, speed, token cost, reliability; winner is default per target kind, loser is backup; re-run on any version change of either.",
+      "unit_tag": "ty-dir-D17",
+      "completed_at": "2026-11-08T09:15:57+00:00",
+      "summary": "REA vs Craft Anything on 3 targets, all six cells ran with artefacts; Craft Anything default (0.859/0.858/1.000), REA backup (0.753/0.270/0.752)"
     }
   },
   "jobs": [],

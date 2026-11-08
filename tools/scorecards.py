@@ -26,7 +26,17 @@ from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "ty" / "services.json"
-IDLIST = ROOT / "reports" / "ty" / "_idlist_20261107.txt"
+def _idlist_path() -> Path:
+    """The newest measured id list. A hardcoded date would ignore every later run."""
+    folder = ROOT / "reports" / "ty"
+    candidates = [path for path in folder.glob("_idlist_*.txt")
+                  if path.stem.replace("_idlist_", "").isdigit()]
+    if not candidates:
+        return folder / "_idlist_20261107.txt"
+    return max(candidates, key=lambda path: path.stat().st_mtime)
+
+
+IDLIST = _idlist_path()
 SCAN = ROOT / "state" / "director" / "scan.json"
 SPEC = ROOT / "ty" / "TARGET_SPEC.md"
 SCORES = ROOT / "ty" / "scorecards.json"
