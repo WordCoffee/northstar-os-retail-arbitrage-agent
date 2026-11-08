@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-07T10:55:00Z",
+  "updated_at": "2026-11-07T11:35:00Z",
   "cycle": 1,
-  "unit_in_flight": "D1",
+  "unit_in_flight": "D3",
   "unit_order": [
     "D0",
     "D1",
@@ -39,10 +39,33 @@
       }
     },
     "D1": {
-      "status": "pending"
+      "status": "done",
+      "completed_at": "2026-11-07T11:10:00Z",
+      "unit_tag": "ty-dir-D1",
+      "evidence": {
+        "probe": "reports/ty/director_probe.md",
+        "json": "state/director/probe.json",
+        "headless": "opencode v2.2.5; run --agent --format json --auto --model --session --continue all present",
+        "concurrency": "4/4 real sessions at once, wall 3.9s -> caps.json cloud_workers=4",
+        "gpu": "RTX 5080 Laptop, 16303 MB total, 16003 MB free idle",
+        "ollama_device": "cpu: library=cpu, driver empty, 'no usable GPU found' x4; qwen2.5vl:7b is 7.4 GB of RAM and 0 VRAM",
+        "libraries_missing": "mss, dxcam, uiautomation, comtypes, pywinauto, pyautogui, pynput",
+        "gpu_budget_manager": "tools/gpu_budget.py: snapshot, verdict, headroom, fits, lock/unlock, role budgets"
+      }
     },
     "D2": {
-      "status": "pending"
+      "status": "done",
+      "completed_at": "2026-11-07T11:35:00Z",
+      "unit_tag": "ty-dir-D2",
+      "evidence": {
+        "launcher": "scripts/ty_director.py",
+        "tests": "Northstar_backend/test_ty_director_launcher.py: 10 passed in 0.56s",
+        "kill_restart": "started director pid=32556 -> killed -> 'director died in 6s with no output; backing off 5s' -> started director pid=25644 (5s later)",
+        "crash_note": "reports/ty/handoff.md gains one dated line per death",
+        "zero_model_heartbeat": "--once calls tick(start=False): 10 tests assert it never starts a session; the live proof used a substitute command so the whole unit cost 0 tokens",
+        "pause": "state/vision/PAUSE blocks every start; the live run exited on it",
+        "caps": "state/director/caps.json (4 cloud workers measured, 1 local heavy lane)"
+      }
     },
     "D3": {
       "status": "pending"

@@ -1,6 +1,6 @@
 # D1 — director probe
 
-Measured 2026-11-08T01:35:15Z on this machine. Every line is command output, not an assumption.
+Measured 2026-11-08T02:26:10Z on this machine. Every line is command output, not an assumption.
 
 ## Headless session launch
 
@@ -42,7 +42,14 @@ GLOBAL FLAGS
 
 ## Concurrency (OpenCode Go)
 
-- **not probed yet** — run with --concurrency N. The cap stays at 4 until a measured number replaces it.
+- requested: 4, succeeded: 4, wall 3.9s — **ok**
+
+## Ollama inference device
+
+- device: **cpu**
+- last `inference compute`: `time=2026-11-06T04:50:47.539-06:00 level=INFO source=types.go:50 msg="inference compute" id=cpu library=cpu compute="" name=cpu description=cpu libdirs=ollama driver="" pci_id="" type="" total="15.4 GiB" available="2.4 GiB"`
+- "no usable GPU found" seen in server.log: 4 times
+- Measured separately: `qwen2.5vl:7b` loads 7.4 GB into system RAM at 100% CPU and 0 VRAM; a fresh server with `CUDA_VISIBLE_DEVICES=0` behaves identically. Ollama 0.40.4 cannot see this GPU (RTX 5080 Laptop, sm_120; driver CUDA UMD 13.4). The VRAM budget in PATCH 1 item 4 is therefore unmet for Ollama models until the runtime is upgraded or replaced; ComfyUI is the GPU path that does work.
 
 ## GPU
 
@@ -51,9 +58,9 @@ GLOBAL FLAGS
 
 ```
 NAME                           ID              SIZE      MODIFIED    
-gemma3:4b                      68ceab7e468a    3.4 GB    2 days ago     
-llava:7b                       8dd30f6b0cb1    4.7 GB    2 days ago     
-moondream:latest               55fc3abd3867    1.7 GB    2 days ago     
+gemma3:4b                      68ceab7e468a    3.4 GB    3 days ago     
+llava:7b                       8dd30f6b0cb1    4.7 GB    3 days ago     
+moondream:latest               55fc3abd3867    1.7 GB    3 days ago     
 qwen3.5:4b                     d8b0f5e9760c    3.3 GB    6 days ago     
 qwen2.5-coder:7b-parser-f16    577c810f2253    4.7 GB    6 days ago     
 qwen3:8b                       500a1f067a9f    5.2 GB    6 days ago     
@@ -69,7 +76,7 @@ qwen3-embedding:0.6b           ac6da0dfba84    639 MB    2 weeks ago
 ## Host
 
 - Windows-11-10.0.26200-SP0, python 3.14.5, 24 cpus
-- RAM free 3.9 of 15.4 GB; disk free 10.72 GB
+- RAM free 7.3 of 15.4 GB; disk free 9.86 GB
 
 ## Capture, UI Automation and input libraries
 

@@ -45,7 +45,7 @@ GPU_LOCK = ROOT / "state" / "gpu" / "lock.json"
 TOKEN_CAP = int(os.environ.get("TY_TOKEN_CAP_PER_DAY", "3000000"))
 CAP_FRACTION = 0.90
 HEARTBEAT_S = int(os.environ.get("TY_HEARTBEAT_S", "300"))
-FAST_EXIT_S = 90
+FAST_EXIT_S = 30
 BACKOFF_S = int(os.environ.get("TY_DIRECTOR_BACKOFF_S", "300"))
 
 RESUME = (
@@ -54,6 +54,14 @@ RESUME = (
     "and reports/ty/handoff.md, then continue from the first unfinished unit. "
     "No questions, no reports between cycles. Idle means re-plan."
 )
+
+#: How a live director session is recognised by its command line. Overridable so the
+#: crash/restart behaviour can be proven without spending a model call (D2).
+DIRECTOR_MARKER = os.environ.get("TY_DIRECTOR_MARKER", "--agent director")
+
+#: A JSON argv list that replaces `opencode run ...`. The resume line is still
+#: written to stdin, so a substitute process proves the launcher, not the model.
+DIRECTOR_CMD = os.environ.get("TY_DIRECTOR_CMD", "")
 
 
 def _now() -> str:
@@ -123,11 +131,42 @@ def _processes() -> List[Dict[str, Any]]:
         return []
 
 
+def _pid_alive(pid: int) -> bool:
+    if not pid:
+        return False
+    try:
+        import ctypes
+
+        handle = ctypes.windll.kernel32.OpenProcess(0x00100000, False, int(pid))
+        if not handle:
+            return False
+        ctypes.windll.kernel32.CloseHandle(handle)
+        return True
+    except Exception:  # noqa: BLE001 - unknown means "do not assume alive"
+        return False
+
+
 def find_director() -> Optional[Dict[str, Any]]:
-    """The one live director session, matched by command line."""
+    """The one live director session.
+
+    The pid file is authoritative. Scanning for a command-line marker alone produced
+    a false positive on the first live test: the operator's own shell contained the
+    marker text because it had set it as an environment variable, so the launcher
+    decided a director was already running and never started one. The scan is kept
+    only as a fallback for a lost pid file, and it requires a plausible process name.
+    """
+    record = _read(PID_FILE, {})
+    pid = int(record.get("pid") or 0)
+    if pid and _pid_alive(pid):
+        return {"ProcessId": pid, "CommandLine": " ".join(str(p) for p in
+                                                          (record.get("cmd") or []))}
+    marker = DIRECTOR_MARKER
+    if not marker:
+        return None
     for row in _processes():
         cmd = str(row.get("CommandLine") or "")
-        if "opencode" in cmd.lower() and "--agent director" in cmd:
+        name = str(row.get("Name") or "").lower()
+        if marker in cmd and name in ("opencode.exe", "python.exe", "python", "python3.exe"):
             return row
     return None
 
@@ -182,28 +221,48 @@ def crash_note(reason: str) -> None:
 
 
 def start_director() -> Optional[int]:
-    exe = shutil.which("opencode") or os.environ.get("TY_OPENCODE_EXE", "")
-    if not exe:
-        log("cannot start director: opencode not found")
-        return None
-    lane = os.environ.get("TY_DIRECTOR_AGENT", "director")
+    cmd: List[str]
+    if DIRECTOR_CMD:
+        try:
+            cmd = [str(part) for part in json.loads(DIRECTOR_CMD)]
+        except ValueError:
+            log("TY_DIRECTOR_CMD is not a JSON argv list; falling back to opencode")
+            cmd = []
+    else:
+        cmd = []
+    if not cmd:
+        exe = shutil.which("opencode") or os.environ.get("TY_OPENCODE_EXE", "")
+        if not exe:
+            log("cannot start director: opencode not found")
+            return None
+        lane = os.environ.get("TY_DIRECTOR_AGENT", "director")
+        cmd = [exe, "run", "--agent", lane, "--format", "json", "--auto"]
     LOG.parent.mkdir(parents=True, exist_ok=True)
     stream = LOG.parent / "ty_director_stream.jsonl"
     handle = stream.open("a", encoding="utf-8")
     try:
-        proc = subprocess.Popen(
-            [exe, "run", "--agent", lane, "--format", "json", "--auto"],
-            cwd=str(ROOT), stdin=subprocess.PIPE, stdout=handle,
-            stderr=subprocess.STDOUT, text=True)
+        proc = subprocess.Popen(cmd, cwd=str(ROOT), stdin=subprocess.PIPE,
+                                stdout=handle, stderr=subprocess.STDOUT, text=True)
+        # Every start carries the resume line: that is what makes a restart a
+        # resumption rather than a fresh, context-free agent.
         proc.stdin.write(RESUME + "\n")
         proc.stdin.close()
     except OSError as exc:
         handle.close()
         log(f"cannot start director: {exc}")
         return None
-    _write(PID_FILE, {"pid": proc.pid, "started_at": _now(), "lane": lane})
+    _write(PID_FILE, {"pid": proc.pid, "started_at": _now(), "cmd": cmd,
+                      "stream_bytes": _stream_size()})
     log(f"started director pid={proc.pid}")
     return proc.pid
+
+
+def _stream_size() -> int:
+    path = LOG.parent / "ty_director_stream.jsonl"
+    try:
+        return path.stat().st_size
+    except OSError:
+        return 0
 
 
 def blocked() -> Optional[str]:
@@ -255,6 +314,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--once", action="store_true", help="one heartbeat tick")
     parser.add_argument("--status", action="store_true", help="read-only status")
     parser.add_argument("--interval", type=int, default=HEARTBEAT_S)
+    parser.add_argument("--max-ticks", type=int, default=0,
+                        help="stop after this many heartbeat ticks (0 = forever)")
     ns = parser.parse_args(argv)
 
     if ns.status:
@@ -266,7 +327,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     log(f"launcher starting (heartbeat={ns.interval}s cap={TOKEN_CAP})")
     last_start = 0.0
     noted_dead = False
+    ticks = 0
     while True:
+        if ns.max_ticks and ticks >= ns.max_ticks:
+            heartbeat("stopped", reason="max_ticks")
+            log(f"stopping after {ticks} tick(s)")
+            return 0
+        ticks += 1
         reason = blocked()
         if reason in ("PAUSE file present", "STOP file present"):
             heartbeat("stopped", reason=reason)
@@ -282,15 +349,24 @@ def main(argv: Optional[List[str]] = None) -> int:
             noted_dead = False
         else:
             now = time.time()
+            record = _read(PID_FILE, {})
             if not noted_dead:
-                record = _read(PID_FILE, {})
                 if record.get("pid"):
                     crash_note(f"session {record.get('pid')} gone; launcher restarting")
                 noted_dead = True
-            if last_start and now - last_start < FAST_EXIT_S:
-                heartbeat("backoff", reason="fast_exit", seconds=BACKOFF_S)
-                log(f"director exited within {FAST_EXIT_S}s; backing off {BACKOFF_S}s")
+            # A crash is a short life **with no output**. A turn that did anything at
+            # all wrote to the stream, and a short productive turn must not be
+            # punished with a five-minute backoff - that would throttle the loop for
+            # being efficient. The old rule (time alone) backed off for ever because
+            # it never cleared last_start.
+            grew = _stream_size() > int(record.get("stream_bytes") or 0)
+            fast = bool(last_start) and (now - last_start) < FAST_EXIT_S and not grew
+            if fast:
+                heartbeat("backoff", reason="fast_exit_no_output", seconds=BACKOFF_S)
+                log(f"director died in {int(now - last_start)}s with no output; "
+                    f"backing off {BACKOFF_S}s")
                 time.sleep(BACKOFF_S)
+                last_start = 0.0
                 continue
             started = start_director()
             if started:

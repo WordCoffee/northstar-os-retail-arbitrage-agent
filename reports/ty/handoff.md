@@ -43,3 +43,9 @@ Its state and evidence are intact: `state/tys_runner/launcher.jsonl`,
 
 D1 — probe headless launch, OpenCode Go concurrency, capture libraries, UI Automation
 access, GPU headroom → `reports/ty/director_probe.md`. Then D2, D3.
+
+- 2026-11-08T02:30:08+00:00 launcher: director session ended (session 29080 gone; launcher restarting).
+
+- 2026-11-08T02:30:49+00:00 launcher: director session ended (session 27668 gone; launcher restarting).
+
+- 2026-11-08T02:31:55+00:00 launcher: director session ended (session 32556 gone; launcher restarting).

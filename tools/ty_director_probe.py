@@ -116,6 +116,38 @@ def probe_gpu() -> Dict[str, Any]:
     return out
 
 
+def probe_ollama() -> Dict[str, Any]:
+    """Is Ollama's inference actually on the GPU? Read-only, from its own log.
+
+    Measured 2026-11-07: `qwen2.5vl:7b` loads 7.4 GB into *system RAM* at 100% CPU
+    and 0 VRAM, and the server log says `library=cpu ... driver=""` plus
+    "no usable GPU found". A fresh server with `CUDA_VISIBLE_DEVICES=0` behaves
+    identically, so it is not an environment-variable problem: the bundled runner
+    cannot see this GPU (RTX 5080 Laptop, sm_120; driver CUDA UMD 13.4).
+    """
+    out: Dict[str, Any] = {}
+    exe = shutil.which("ollama")
+    if not exe:
+        out["state"] = "missing"
+        return out
+    out["version"] = run([exe, "--version"], timeout=20)
+    out["list"] = run([exe, "list"], timeout=20)
+    log_path = Path(os.environ.get("LOCALAPPDATA", "")) / "Ollama" / "server.log"
+    out["server_log"] = str(log_path)
+    if log_path.is_file():
+        try:
+            text = log_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            text = ""
+        compute = [line for line in text.splitlines() if "inference compute" in line]
+        out["last_inference_compute"] = (compute[-1][-300:] if compute else "")
+        out["no_usable_gpu_count"] = text.count("no usable GPU found")
+        out["library"] = ("cpu" if "library=cpu" in (compute[-1] if compute else "")
+                          else ("gpu" if "library=" in (compute[-1] if compute else "")
+                                else "unknown"))
+    return out
+
+
 def probe_host() -> Dict[str, Any]:
     out: Dict[str, Any] = {"platform": platform.platform(),
                            "python": sys.version.split()[0],
@@ -184,6 +216,21 @@ def render(probes: Dict[str, Any]) -> str:
                   f"- **not probed yet** — {conc.get('detail', '')}. The cap stays at 4 "
                   "until a measured number replaces it.", ""]
 
+    oc_ollama = probes.get("ollama") or {}
+    lines += ["## Ollama inference device", ""]
+    if oc_ollama:
+        lines += [f"- device: **{oc_ollama.get('library', oc_ollama.get('state', 'unknown'))}**",
+                  f"- last `inference compute`: `{oc_ollama.get('last_inference_compute', '')}`",
+                  f"- \"no usable GPU found\" seen in server.log: "
+                  f"{oc_ollama.get('no_usable_gpu_count', 0)} times",
+                  "- Measured separately: `qwen2.5vl:7b` loads 7.4 GB into system RAM at "
+                  "100% CPU and 0 VRAM; a fresh server with `CUDA_VISIBLE_DEVICES=0` "
+                  "behaves identically. Ollama 0.40.4 cannot see this GPU "
+                  "(RTX 5080 Laptop, sm_120; driver CUDA UMD 13.4). The VRAM budget in "
+                  "PATCH 1 item 4 is therefore unmet for Ollama models until the runtime "
+                  "is upgraded or replaced; ComfyUI is the GPU path that does work."]
+    lines += [""]
+
     gpu = probes["gpu"]
     lines += ["## GPU", "", f"- state: **{gpu.get('state')}**"]
     if (gpu.get("query") or {}).get("stdout"):
@@ -232,6 +279,7 @@ def main(argv: List[str] | None = None) -> int:
         "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "opencode": probe_opencode(),
         "gpu": probe_gpu(),
+        "ollama": probe_ollama(),
         "host": probe_host(),
         "screen": probe_screen(),
     }
