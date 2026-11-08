@@ -1,0 +1,162 @@
+{
+  "name": "json_adherence",
+  "version": 1,
+  "items": 10,
+  "scoring": "strict JSON with no surrounding prose, then the declarative schema must validate",
+  "system": "You are a JSON serialiser. Reply with exactly one JSON value and nothing else: no prose, no markdown, no code fence, no trailing commentary.",
+  "cases": [
+    {
+      "id": "J01",
+      "instruction": "Return an object with keys \"lane\" (one of bojo, coder, vision, gui_grounding, embeddings, image) and \"confidence\" (a number from 0 to 1).",
+      "schema": {
+        "type": "object",
+        "required": ["lane", "confidence"],
+        "additionalProperties": false,
+        "properties": {
+          "lane": {"type": "string", "enum": ["bojo", "coder", "vision", "gui_grounding", "embeddings", "image"]},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    {
+      "id": "J02",
+      "instruction": "Return one tool call: an object with \"tool\" equal to \"read\" and \"args\" an object whose only key is \"path\" (a string).",
+      "schema": {
+        "type": "object",
+        "required": ["tool", "args"],
+        "additionalProperties": false,
+        "properties": {
+          "tool": {"type": "string", "enum": ["read"]},
+          "args": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": false,
+            "properties": {"path": {"type": "string"}}
+          }
+        }
+      }
+    },
+    {
+      "id": "J03",
+      "instruction": "Return a JSON array of exactly three strings, being the three lane names in this order: bojo, coder, vision.",
+      "schema": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {"type": "string"}
+      }
+    },
+    {
+      "id": "J04",
+      "instruction": "Return an object with \"ok\" as the boolean true and \"count\" as the integer 3. No other keys.",
+      "schema": {
+        "type": "object",
+        "required": ["ok", "count"],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {"type": "boolean"},
+          "count": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "id": "J05",
+      "instruction": "Return an object with a single key \"status\" whose value is exactly \"queued\", \"running\" or \"done\".",
+      "schema": {
+        "type": "object",
+        "required": ["status"],
+        "additionalProperties": false,
+        "properties": {"status": {"type": "string", "enum": ["queued", "running", "done"]}}
+      }
+    },
+    {
+      "id": "J06",
+      "instruction": "Return an object with one key \"items\": an array of at least two objects, each with \"id\" (integer) and \"done\" (boolean).",
+      "schema": {
+        "type": "object",
+        "required": ["items"],
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "done"],
+              "additionalProperties": false,
+              "properties": {
+                "id": {"type": "integer"},
+                "done": {"type": "boolean"}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "J07",
+      "instruction": "Return an object with exactly three keys: \"role\" equal to \"vision\", \"model\" (a string) and \"vram_gb\" (a number).",
+      "schema": {
+        "type": "object",
+        "required": ["role", "model", "vram_gb"],
+        "additionalProperties": false,
+        "properties": {
+          "role": {"type": "string", "enum": ["vision"]},
+          "model": {"type": "string"},
+          "vram_gb": {"type": "number"}
+        }
+      }
+    },
+    {
+      "id": "J08",
+      "instruction": "Return an object with \"plan\" (an object with one key \"steps\", an array of strings) and \"dry_run\" equal to the boolean true.",
+      "schema": {
+        "type": "object",
+        "required": ["plan", "dry_run"],
+        "additionalProperties": false,
+        "properties": {
+          "plan": {
+            "type": "object",
+            "required": ["steps"],
+            "additionalProperties": false,
+            "properties": {
+              "steps": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "dry_run": {"type": "boolean", "enum": [true]}
+        }
+      }
+    },
+    {
+      "id": "J09",
+      "instruction": "Return an object with \"error\" as JSON null and \"data\" an object with one key \"rows\" whose value is an empty array.",
+      "schema": {
+        "type": "object",
+        "required": ["error", "data"],
+        "additionalProperties": false,
+        "properties": {
+          "error": {"type": "null"},
+          "data": {
+            "type": "object",
+            "required": ["rows"],
+            "additionalProperties": false,
+            "properties": {"rows": {"type": "array", "maxItems": 0}}
+          }
+        }
+      }
+    },
+    {
+      "id": "J10",
+      "instruction": "Return an object with \"score\" (a number from 0 to 100) and \"grade\" (one of A, B, C). No other keys.",
+      "schema": {
+        "type": "object",
+        "required": ["score", "grade"],
+        "additionalProperties": false,
+        "properties": {
+          "score": {"type": "number", "minimum": 0, "maximum": 100},
+          "grade": {"type": "string", "enum": ["A", "B", "C"]}
+        }
+      }
+    }
+  ]
+}

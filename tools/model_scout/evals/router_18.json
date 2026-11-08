@@ -1,0 +1,39 @@
+{
+  "name": "router",
+  "version": 1,
+  "items": 18,
+  "scoring": "one lane per reply; correct when the parsed lane equals expect",
+  "lane_definitions": {
+    "bojo": "conversation, routing, planning and summarising; the assistant itself",
+    "coder": "code reading, writing, refactoring, debugging, tests",
+    "vision": "understanding an image, screenshot, photo or video frame",
+    "gui_grounding": "locating or acting on a control in a live desktop or browser window",
+    "embeddings": "remembering, recalling and semantic search over stored text",
+    "image": "generating or rendering an image such as a product shot or A+ module"
+  },
+  "cases": [
+    {"id": "R01", "intent": "Refactor the upload handler to async and add a unit test for it.", "expect": "coder"},
+    {"id": "R02", "intent": "Why does pytest hang when the sqlite writer runs concurrently?", "expect": "coder"},
+    {"id": "R03", "intent": "Write a migration that adds a nullable sku column to the orders table.", "expect": "coder"},
+
+    {"id": "R04", "intent": "Describe what is showing in this screenshot of the shipping label.", "expect": "vision"},
+    {"id": "R05", "intent": "Read the text off this photo of the product pouch.", "expect": "vision"},
+    {"id": "R06", "intent": "Does this image show a torn box?", "expect": "vision"},
+
+    {"id": "R07", "intent": "Click the Save button in the Packify window.", "expect": "gui_grounding"},
+    {"id": "R08", "intent": "Find the address bar and type the listing URL into it.", "expect": "gui_grounding"},
+    {"id": "R09", "intent": "Which control in this open dialog is the OK button?", "expect": "gui_grounding"},
+
+    {"id": "R10", "intent": "Remember that Mogra Organics ships in a 6 oz pouch.", "expect": "embeddings"},
+    {"id": "R11", "intent": "What did I say about the brand voice last week?", "expect": "embeddings"},
+    {"id": "R12", "intent": "Recall the supplier payment terms I stored earlier.", "expect": "embeddings"},
+
+    {"id": "R13", "intent": "Render a white-background hero shot of the 6 oz pouch.", "expect": "image"},
+    {"id": "R14", "intent": "Generate an A+ lifestyle module with a scale reference.", "expect": "image"},
+    {"id": "R15", "intent": "Make a concept sheet for the new label design.", "expect": "image"},
+
+    {"id": "R16", "intent": "Hello, what can you do?", "expect": "bojo"},
+    {"id": "R17", "intent": "Route this request and tell me who owns it.", "expect": "bojo"},
+    {"id": "R18", "intent": "Summarise today's plan in two lines.", "expect": "bojo"}
+  ]
+}
