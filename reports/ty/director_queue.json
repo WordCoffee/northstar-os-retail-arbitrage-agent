@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T09:30:04+00:00",
+  "updated_at": "2026-11-08T09:30:40+00:00",
   "cycle": 1,
-  "unit_in_flight": "D15",
+  "unit_in_flight": "",
   "unit_order": [
     "D0",
     "D1",
@@ -122,7 +122,10 @@
       "summary": "intel plane A18-A21: 5 source connectors, licence policy, atomic write; live run 58 findings, 58/58 URLs verified; 54 tests"
     },
     "D12": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D12",
+      "completed_at": "2026-11-08T09:30:33+00:00",
+      "summary": "6 bundles merged to staging under gates: competitor-monitor 15->85, prospector/thewatch/rivalboard 15->75/75/75, 13 services +10 from the measured dimension, 2 at bar (listings, socialpulse 100); 53 new test ids from a real run"
     },
     "D13": {
       "status": "done",
@@ -137,7 +140,10 @@
       "summary": "computer mode behind scope+grants: write outside scope refused and leaves no file; PC mode needs flag AND grant; plan printed, not executed; 8 tests"
     },
     "D15": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D15",
+      "completed_at": "2026-11-08T09:30:28+00:00",
+      "summary": "independent verifier: 17 agree, 2 FAILED (D17 artefacts lost -> re-probed, V9 not done), 1 BLOCKED (V3 no CDP); digest bug fixed; risks stated, not hidden"
     },
     "D16": {
       "status": "done",
@@ -154,7 +160,90 @@
       "summary": "re-probe: REA ran on the open-source repo (exit 0, 10/10, artefact tracked); hosted and local-app have no result (REA exit 1, Craft Anything not installed). Earlier 3-target verdict withdrawn as unreproducible"
     }
   },
-  "jobs": [],
+  "jobs": [
+    {
+      "id": "d5-240196",
+      "unit": "D5",
+      "title": "raise complete for goldengoose (+10.0 on the weakest dimension)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "agents/golden_goose_finder"
+      ],
+      "branch": "ty/d5-240196",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:30:40+00:00",
+      "updated_at": "2026-11-08T09:30:40+00:00"
+    },
+    {
+      "id": "d5-240223",
+      "unit": "D5",
+      "title": "raise complete for offerchisel (+10.0 on the weakest dimension)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend",
+        "northstar-os-ui/src/rooms"
+      ],
+      "branch": "ty/d5-240223",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:30:40+00:00",
+      "updated_at": "2026-11-08T09:30:40+00:00"
+    },
+    {
+      "id": "d5-240249",
+      "unit": "D5",
+      "title": "raise complete for prospector (+10.0 on the weakest dimension)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend",
+        "northstar-os-ui/src/rooms"
+      ],
+      "branch": "ty/d5-240249",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:30:40+00:00",
+      "updated_at": "2026-11-08T09:30:40+00:00"
+    },
+    {
+      "id": "d5-240277",
+      "unit": "D5",
+      "title": "raise complete for hub (+10.0 on the weakest dimension)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "northstar-os-ui/src"
+      ],
+      "branch": "ty/d5-240277",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:30:40+00:00",
+      "updated_at": "2026-11-08T09:30:40+00:00"
+    }
+  ],
   "service_scores": {},
   "blocked": [],
   "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.",
