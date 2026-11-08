@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-08T08:54:35+00:00",
+  "generated_at": "2026-11-08T09:09:55+00:00",
   "generated_by": "tools/model_scout.py",
   "swap_rule": {
     "margin_items": 2,
@@ -10,12 +10,12 @@
   "eval_sets": {
     "json_adherence": {
       "path": "tools\\model_scout\\evals\\json_adherence_10.json",
-      "sha256": "07877cfcf7751b15984b7134513a65b48510fcfc4758a3beb258e8618e4f3647",
+      "sha256": "a7bd6662252a8222556cf8ca1b3c3d6bf0ce0ded68d7be2180ee92065b5a417e",
       "items": 10
     },
     "router": {
       "path": "tools\\model_scout\\evals\\router_18.json",
-      "sha256": "79afc1a1f6cbfecf5de90ad32da66115d3943d989fb03cda458e0ac9d0a51904",
+      "sha256": "77ce4ca7530f15c3379701a610ea5d667fee588e9fc60fc32787b925c8d4cdd1",
       "items": 18
     }
   },
@@ -41,13 +41,801 @@
         "qwen2.5-coder:3b"
       ],
       "quarantined": [],
-      "measurements": {},
+      "measurements": {
+        "bojo:latest": {
+          "model": "bojo:latest",
+          "role": "bojo-router",
+          "status": "measured",
+          "eval": "router",
+          "correct": 15,
+          "items": 18,
+          "accuracy": 0.833,
+          "rows": [
+            {
+              "id": "R01",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R02",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R03",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R04",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R05",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R06",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R07",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R08",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R09",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R10",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R11",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R12",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R13",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R14",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R15",
+              "expect": "image",
+              "matched": "vision",
+              "ok": false
+            },
+            {
+              "id": "R16",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R17",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R18",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            }
+          ],
+          "latency_ms": 66,
+          "latency_p95_ms": 72,
+          "vram_gb": 2.31,
+          "size_gb": 2.31,
+          "processor": "100% GPU",
+          "ram_free_gb": 5.86,
+          "replies": [
+            "coder",
+            "coder",
+            "coder",
+            "vision",
+            "vision",
+            "vision",
+            "gui_grounding",
+            "gui_grounding",
+            "gui_grounding",
+            "bojo",
+            "bojo",
+            "embeddings",
+            "image",
+            "image",
+            "vision",
+            "bojo",
+            "bojo",
+            "bojo"
+          ]
+        },
+        "qwen3.5:4b": {
+          "model": "qwen3.5:4b",
+          "role": "bojo-router",
+          "status": "measured",
+          "eval": "router",
+          "correct": 16,
+          "items": 18,
+          "accuracy": 0.889,
+          "rows": [
+            {
+              "id": "R01",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R02",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R03",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R04",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R05",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R06",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R07",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R08",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R09",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R10",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R11",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R12",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R13",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R14",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R15",
+              "expect": "image",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R16",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R17",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R18",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            }
+          ],
+          "latency_ms": 91,
+          "latency_p95_ms": 96,
+          "vram_gb": 3.13,
+          "size_gb": 3.13,
+          "processor": "100% GPU",
+          "ram_free_gb": 5.85,
+          "replies": [
+            "coder",
+            "coder",
+            "coder",
+            "vision",
+            "vision",
+            "vision",
+            "gui_grounding",
+            "gui_grounding",
+            "gui_grounding",
+            "bojo",
+            "embeddings",
+            "embeddings",
+            "image",
+            "image",
+            "bojo",
+            "bojo",
+            "bojo",
+            "bojo"
+          ]
+        },
+        "qwen3.5:2b": {
+          "model": "qwen3.5:2b",
+          "role": "bojo-router",
+          "status": "measured",
+          "eval": "router",
+          "correct": 15,
+          "items": 18,
+          "accuracy": 0.833,
+          "rows": [
+            {
+              "id": "R01",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R02",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R03",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R04",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R05",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R06",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R07",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R08",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R09",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R10",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R11",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R12",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R13",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R14",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R15",
+              "expect": "image",
+              "matched": "vision",
+              "ok": false
+            },
+            {
+              "id": "R16",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R17",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R18",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            }
+          ],
+          "latency_ms": 61,
+          "latency_p95_ms": 79,
+          "vram_gb": 2.31,
+          "size_gb": 2.31,
+          "processor": "100% GPU",
+          "ram_free_gb": 5.95,
+          "replies": [
+            "coder",
+            "coder",
+            "coder",
+            "vision",
+            "vision",
+            "vision",
+            "gui_grounding",
+            "gui_grounding",
+            "gui_grounding",
+            "bojo",
+            "bojo",
+            "embeddings",
+            "image",
+            "image",
+            "vision",
+            "bojo",
+            "bojo",
+            "bojo"
+          ]
+        },
+        "gemma3:4b": {
+          "model": "gemma3:4b",
+          "role": "bojo-router",
+          "status": "measured",
+          "eval": "router",
+          "correct": 12,
+          "items": 18,
+          "accuracy": 0.667,
+          "rows": [
+            {
+              "id": "R01",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R02",
+              "expect": "coder",
+              "matched": "gui_grounding",
+              "ok": false
+            },
+            {
+              "id": "R03",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R04",
+              "expect": "vision",
+              "matched": "image",
+              "ok": false
+            },
+            {
+              "id": "R05",
+              "expect": "vision",
+              "matched": "image",
+              "ok": false
+            },
+            {
+              "id": "R06",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R07",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R08",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R09",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R10",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R11",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R12",
+              "expect": "embeddings",
+              "matched": "embeddings",
+              "ok": true
+            },
+            {
+              "id": "R13",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R14",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R15",
+              "expect": "image",
+              "matched": "image",
+              "ok": true
+            },
+            {
+              "id": "R16",
+              "expect": "bojo",
+              "matched": "coder",
+              "ok": false
+            },
+            {
+              "id": "R17",
+              "expect": "bojo",
+              "matched": "coder",
+              "ok": false
+            },
+            {
+              "id": "R18",
+              "expect": "bojo",
+              "matched": "embeddings",
+              "ok": false
+            }
+          ],
+          "latency_ms": 85,
+          "latency_p95_ms": 100,
+          "vram_gb": 2.83,
+          "size_gb": 2.83,
+          "processor": "100% GPU",
+          "ram_free_gb": 5.83,
+          "replies": [
+            "coder\n",
+            "gui_grounding\n",
+            "coder\n",
+            "image\n",
+            "image\n",
+            "vision",
+            "gui_grounding\n",
+            "gui_grounding\n",
+            "gui_grounding\n",
+            "embeddings",
+            "embeddings",
+            "embeddings",
+            "image\n",
+            "image\n",
+            "image\n",
+            "coder\n",
+            "coder\n",
+            "embeddings\n"
+          ]
+        },
+        "qwen2.5-coder:3b": {
+          "model": "qwen2.5-coder:3b",
+          "role": "bojo-router",
+          "status": "measured",
+          "eval": "router",
+          "correct": 6,
+          "items": 18,
+          "accuracy": 0.333,
+          "rows": [
+            {
+              "id": "R01",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R02",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R03",
+              "expect": "coder",
+              "matched": "coder",
+              "ok": true
+            },
+            {
+              "id": "R04",
+              "expect": "vision",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R05",
+              "expect": "vision",
+              "matched": "coder",
+              "ok": false
+            },
+            {
+              "id": "R06",
+              "expect": "vision",
+              "matched": "vision",
+              "ok": true
+            },
+            {
+              "id": "R07",
+              "expect": "gui_grounding",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R08",
+              "expect": "gui_grounding",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R09",
+              "expect": "gui_grounding",
+              "matched": "gui_grounding",
+              "ok": true
+            },
+            {
+              "id": "R10",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R11",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R12",
+              "expect": "embeddings",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R13",
+              "expect": "image",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R14",
+              "expect": "image",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R15",
+              "expect": "image",
+              "matched": "bojo",
+              "ok": false
+            },
+            {
+              "id": "R16",
+              "expect": "bojo",
+              "matched": "bojo",
+              "ok": true
+            },
+            {
+              "id": "R17",
+              "expect": "bojo",
+              "matched": "coder",
+              "ok": false
+            },
+            {
+              "id": "R18",
+              "expect": "bojo",
+              "matched": "coder",
+              "ok": false
+            }
+          ],
+          "latency_ms": 50,
+          "latency_p95_ms": 85,
+          "vram_gb": 2.25,
+          "size_gb": 2.25,
+          "processor": "100% GPU",
+          "ram_free_gb": 6.17,
+          "replies": [
+            "coder",
+            "coder",
+            "coder",
+            "bojo",
+            "coder",
+            "vision",
+            "bojo",
+            "bojo",
+            "gui_grounding",
+            "bojo",
+            "bojo",
+            "bojo",
+            "bojo",
+            "bojo",
+            "bojo",
+            "bojo",
+            "coder",
+            "- Review and plan for upcoming tasks.\n- Update and optimize existing code."
+          ]
+        }
+      },
       "recommendation": {
-        "verdict": "unmeasured",
+        "verdict": "keep-incumbent",
         "incumbent": "bojo:latest",
         "model": "bojo:latest",
+        "reason": "no candidate cleared the margin and the budget",
         "eval": "router",
-        "reason": "no --run measurement in this leaderboard yet"
+        "candidates": [
+          {
+            "model": "qwen3.5:4b",
+            "verdict": "keep-incumbent",
+            "reason": "margin +1 < required +2",
+            "delta": 1,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 3.5,
+              "vram_gb": 3.13,
+              "ram_free_gb": 5.85,
+              "reserve_gb": 1.0
+            }
+          },
+          {
+            "model": "qwen3.5:2b",
+            "verdict": "keep-incumbent",
+            "reason": "margin +0 < required +2",
+            "delta": 0,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 3.5,
+              "vram_gb": 2.31,
+              "ram_free_gb": 5.95,
+              "reserve_gb": 1.0
+            }
+          },
+          {
+            "model": "gemma3:4b",
+            "verdict": "keep-incumbent",
+            "reason": "margin -3 < required +2",
+            "delta": -3,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 3.5,
+              "vram_gb": 2.83,
+              "ram_free_gb": 5.83,
+              "reserve_gb": 1.0
+            }
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "verdict": "keep-incumbent",
+            "reason": "margin -9 < required +2",
+            "delta": -9,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 3.5,
+              "vram_gb": 2.25,
+              "ram_free_gb": 6.17,
+              "reserve_gb": 1.0
+            }
+          }
+        ]
       },
       "quarantine": null,
       "notes": "All four candidates are already installed; scouting must never pull a model. Candidate order is the work order's order (Qwen3.5 4B first)."

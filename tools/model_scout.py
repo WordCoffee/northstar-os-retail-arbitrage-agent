@@ -523,6 +523,12 @@ def chat(model: str, system: str, user: str, *, num_predict: int = 80,
         "messages": [{"role": "system", "content": system},
                      {"role": "user", "content": user}],
         "stream": False,
+        # Qwen3.5-family models (qwen3.5:*, bojo:latest) think by default on this Ollama
+        # build: the thinking goes to a separate `thinking` field and `content` comes back
+        # EMPTY after num_predict tokens. Measured 2026-11-08: 300 tokens of thinking, ""
+        # content, on every router item. With think=false the same model answers "coder".
+        # A router eval that does not disable thinking measures the parser, not the model.
+        "think": False,
         "options": {"temperature": 0, "num_predict": num_predict},
     }, timeout)
     reply = (body.get("message") or {}).get("content") or ""

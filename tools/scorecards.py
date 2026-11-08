@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -212,6 +213,23 @@ def _wired_tools(ids: List[str]) -> Dict[str, bool]:
     return {tool: (f"'{tool}'" in haystack or f'"{tool}"' in haystack) for tool in ids}
 
 
+def _measured(service_id: str) -> Dict[str, Any]:
+    """The measured dimension, read from a real artefact and never assumed.
+
+    `tools/measured.py` checks that the service's route is registered in the UI, that the
+    component it renders exists, and that the app answers inside a latency budget. Without
+    that artefact the dimension is 0 with the reason named — which is what it was before
+    the artefact existed.
+    """
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import measured as measured_mod  # noqa: PLC0415
+
+        return measured_mod.score_for(service_id)
+    except Exception as exc:  # noqa: BLE001 - no artefact is a zero, not a crash
+        return {"score": 0.0, "evidence": f"measurement unavailable: {type(exc).__name__}"}
+
+
 def measure_one(service: Dict[str, Any], ids: List[str],
                 findings: List[Dict[str, Any]]) -> Dict[str, Any]:
     sid = service["id"]
@@ -247,8 +265,7 @@ def measure_one(service: Dict[str, Any], ids: List[str],
     else:
         dims["usable"] = {"score": 100.0,
                           "evidence": "no readiness finding names this service"}
-    dims["measured"] = {"score": 0.0,
-                        "evidence": "no threshold or performance check defined yet"}
+    dims["measured"] = _measured(sid)
 
     score = round(sum(WEIGHTS[key] * dims[key]["score"] for key in WEIGHTS), 1)
     meets = all(dim["score"] >= BAR for dim in dims.values())
