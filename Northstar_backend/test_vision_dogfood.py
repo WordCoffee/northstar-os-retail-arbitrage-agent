@@ -46,7 +46,7 @@ def test_a_live_run_is_scored_per_service(tmp_path, monkeypatch):
     pages = {
         "http://x/competitor-monitor": ("Competitor Monitor", "Competitor price 12%"),
         "http://x/listings": ("Listings", "Listing title price 19.99"),
-        "http://x/socialpulse": ("SocialPulse", "Social post reach"),
+        "http://x/socialpulse": ("SocialPulse", "Social post reach 12,400"),
     }
 
     def open_url(url):
