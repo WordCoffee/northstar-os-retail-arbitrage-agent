@@ -205,6 +205,7 @@ def heartbeat(state: str, **extra: Any) -> Dict[str, Any]:
         "cloud_workers": count_workers(), "caps": caps(),
         "disk_free_gb": disk_free_gb(), "queue": queue_depth(),
         "gpu_lock": _read(GPU_LOCK, {}), "pause": PAUSE.exists(), "stop": STOP.exists(),
+        "replan": replan_signal(),
         **extra,
     }
     _write(HEARTBEAT, payload)
@@ -263,6 +264,42 @@ def _stream_size() -> int:
         return path.stat().st_size
     except OSError:
         return 0
+
+
+def replan_signal() -> Dict[str, Any]:
+    """Would an empty queue be idle, or a re-plan?
+
+    The launcher does not re-plan (that is the Director's judgement); it decides
+    whether the next session must be *told* to. An empty queue while services are
+    below the bar is the defect the work order names, so the note goes in the handoff
+    the next session reads.
+    """
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import director_gaps as gaps  # noqa: PLC0415
+
+        open_rows = gaps.open_jobs()
+        if open_rows:
+            return {"needed": False, "open_jobs": len(open_rows)}
+        ranked = gaps.rank()
+        if not ranked:
+            return {"needed": False, "reason": "no_gaps"}
+        return {"needed": True, "gaps": len(ranked),
+                "top": ranked[0]["id"], "top_gap": ranked[0]["gap"]}
+    except Exception as exc:  # noqa: BLE001 - a signal must never stop the launcher
+        return {"needed": False, "error": f"{type(exc).__name__}: {exc}"}
+
+
+def _note_replan(signal: Dict[str, Any]) -> None:
+    if not signal.get("needed"):
+        return
+    try:
+        with HANDOFF.open("a", encoding="utf-8") as handle:
+            handle.write(f"\n- {_now()} queue empty while {signal.get('gaps')} service(s) "
+                         f"are below the bar (worst: {signal.get('top')}); re-plan, do "
+                         "not idle.\n")
+    except OSError:
+        pass
 
 
 def blocked() -> Optional[str]:
@@ -372,6 +409,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             if started:
                 last_start = time.time()
                 noted_dead = False
+                _note_replan(replan_signal())
         time.sleep(ns.interval)
 
 
