@@ -16,11 +16,31 @@ The queue is now ordered by the owner's instruction (2026-11-08): seller output 
 
 | # | job | what closes it |
 |---|---|---|
-| 1 | `sel-01-picture-modes` | product pictures in all three inputs: prompt only, stored reference, uploaded reference |
-| 2 | `sel-02-design-studio` | Design Studio output quality (the 16.7 mean must move) |
+| 1 | `sel-01b-reference-generation` | a render lane that **consumes** the stored/uploaded reference (img2img / IP-Adapter) — sel-01 added the briefs and the check, not the generation |
+| 2 | `sel-02-design-studio` | Design Studio output quality (the 22.1 mean must move) |
 | 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
 | 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
 | 5 | `ux-05-render-routes` | **26 of 29 service routes render the chat shell** |
+
+Ranking is stored (`jobs.rank`), not inferred from insertion order — `tools/director_queue.py`
+sorts the mirror by it.
+
+## sel-01 landed, and here is exactly how far
+
+56 briefs across the three modes (32 prompt-only, 12 stored-reference, 12 uploaded-reference),
+a per-mode summary, and a reference check. A real pass scored **40 outputs: prompt-only 16
+(mean 26.4), stored 12 (22.6), uploaded 12 (16.0); 0 passed in any mode.** Seller mean across
+the service moved **16.7 → 22.1**, design-studio 75.2 → 75.9.
+
+Three limits the builder stated and I am not going to paper over:
+
+1. **No generator produces *from* an input.** The stored lane replays existing artefacts, so no
+   mode is really "covered" — that is what `sel-01b` exists for.
+2. **`uploaded_reference` never saw a real upload** — all twelve are `cannot_verify` by
+   construction.
+3. **The reference proxy has a measured overlap**: a genuine pouch crop fails at 0.603 while
+   three dark-green UI screenshots pass at 0.637, so it fails conservatively and cannot be the
+   only gate. The local vision judge stays off by default until it is measured.
 
 ## The finding that matters most
 
