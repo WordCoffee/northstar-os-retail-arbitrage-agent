@@ -10,7 +10,56 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Position: D0–D17 complete; gap loop running; V3/V9 blocked on a locked desktop
+## Position: units done, queue re-ranked, one product defect dominating
+
+The queue is now ordered by the owner's instruction (2026-11-08): seller output quality first.
+
+| # | job | what closes it |
+|---|---|---|
+| 1 | `sel-01-picture-modes` | product pictures in all three inputs: prompt only, stored reference, uploaded reference |
+| 2 | `sel-02-design-studio` | Design Studio output quality (the 16.7 mean must move) |
+| 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
+| 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
+| 5 | `ux-05-render-routes` | **26 of 29 service routes render the chat shell** |
+
+## The finding that matters most
+
+`python -m tools.vision.ux_audit --run` → **renders 3 of 29**. Only `account`, `beta` and
+`design-studio` render their own page. `listings`, `socialpulse`, `competitor-monitor`,
+`product-finder`, `listingforge` and the rest open the generic Bojo shell. U12 of the UX work
+order passes only if "every service is reachable by click and nothing renders blank"; today it
+is not. Evidence: `ty/ux_audit.json` + `reports/ty/ux_audit_shots/`.
+
+## Scoring (unchanged, and strict)
+
+Six dimensions, bar 85 each: works 0.28, correct 0.25, complete 0.12, usable 0.12,
+measured 0.10, seller 0.13. `seller` applies only to the ten seller-facing services. A passing
+test is worth 60 on `correct`. **0 services at bar; 77 is the ceiling on artefacts alone.**
+
+## Verified today
+
+- **D17 complete.** Craft Anything 0.5.0 installed (checksum verified, `doctor` healthy) and the
+  bake-off ran all six cells: craft-anything 0.859 / 0.353 / 1.000 vs REA 0.752 / 0.133 / 0.753.
+  Craft Anything is the default on all three targets. `reports/ty/d17_bakeoff_final.md`.
+- **BASELINE.json** updated from the measured 7,067 run (+450 passed vs 6,617; names +451/−1).
+- **V3/V9 run.** V9: design-studio passes the seller task, the other three fail by rendering the
+  shell. V3: UIA scores 5/10 because Chrome exposes no renderer accessibility tree; page content
+  comes from pixels (`understand.describe_page`), which reads Design Studio correctly.
+- **Disk 215 GB free**, worktrees removed.
+
+## What is still open
+
+- The render defect above (ranked 5th by the owner's ordering).
+- V3's remaining half: either `--force-renderer-accessibility` or `--remote-debugging-port=9222`
+  needs one Chrome relaunch by the owner.
+- D17's hosted target: neither tool found the site's facts (0/7 each) — recorded, not hidden.
+
+## Numbers to keep in mind
+
+- 29 services, 0 at bar, best 77. Weakest dimension: 17 `complete`, 10 `seller`, 2 `measured`.
+- Router: Bojo 15/18. Vision: qwen2.5vl:7b, page reading works, app reading works, grounding 61.7 %.
+- Full suite: 7,067 passed, 0 failed, 117 skipped, 125 subtests, 18:49.
+- The dev stack is running on 8101/8000 for the audit; stop it with the recorded pids when idle.
 
 | unit | state | tag | note |
 |---|---|---|---|
