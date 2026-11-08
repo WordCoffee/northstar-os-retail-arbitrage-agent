@@ -1,7 +1,7 @@
 # Ty Director — handoff
 
-A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.md`
-(when D4 lands) and `reports/ty/director_queue.json`.
+A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.md` and
+`reports/ty/director_queue.json`.
 
 ## Resume line
 
@@ -10,42 +10,49 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Current position
+## Position: D7 next
 
-| field | value |
-|---|---|
-| unit | **D0 — baseline** |
-| started | 2026-11-07 09:00 |
-| rollback tag | `director-baseline` (at `de464cbd`) |
-| model | DeepSeek V4.1 Flash on OpenCode Go (pinned, no fallback) |
-| local lane | ComfyUI + qwen2.5vl, one GPU job at a time |
+| unit | state | tag | note |
+|---|---|---|---|
+| D0 baseline | done | `ty-dir-D0` | measured suite GREEN: 6617 passed, 0 failed, 117 skipped, 125 subtests, 6736 ids |
+| D1 probe | done | `ty-dir-D1` | 4/4 concurrent sessions; **Ollama runs 100% CPU** (see below) |
+| D2 launcher | done | `ty-dir-D2` | killed pid 32556 → restarted pid 25644 in 5 s; heartbeat starts nothing |
+| D3 queue | done | `ty-dir-D3` | overlap serialised; main refuses without the verifier |
+| D4 scorecards | done | `ty-dir-D4` | 29 services, bar is **per dimension**, 0 of 29 at bar |
+| D5 gaps | done | `ty-dir-D5` | gaps → bundles; empty queue writes a defect, never idles |
+| D6 vision privacy | done | `ty-dir-D6` | V5 + V7 pass, including a real blocked window |
+| **D7 understanding** | **next** | — | structure-first (UIA + DevTools), then the VLM benchmark |
+| D8 control/browser | pending | — | risk classes, verify-after-act, Profile 6, Chrome Connect parity |
+| D9–D15 | pending | — | seller-tester, visual regression, intel, builders, live mode, PC mode, verification |
+| D16 model scout | continuous | — | per-role incumbents, benchmark, quarantine + restore |
+| D17 bake-off | pending | — | REA vs Craft Anything on three targets |
 
-## What D0 has done
+## The one blocker D1 found, which D7 inherits
 
-- `reports/ty/director_work_order.md` — the order, saved verbatim (172 lines).
-- `ty/MANDATE.md` — the owner intent from §1 plus every hard line from §2, so the
-  mandate cannot drift by omission.
-- `reports/ty/director_queue.json`, `handoff.md`, `autonomy_log.md`, `grants.md`,
-  `replace_later.md`, `self_assessment.md` — created; `state/director/` created.
-- `director-baseline` tag created before any unit work.
-- Measured full test run started: `scripts/run_all_tests.ps1` →
-  `reports/ty/_baseline_measured_20261107.txt`. `tests/BASELINE.json` is updated from
-  that run only, never by hand.
+**Ollama cannot see this GPU.** `qwen2.5vl:7b` loads 7.4 GB into *system RAM* at 100% CPU
+and 0 VRAM; the server log says `library=cpu`, `driver=""`, "no usable GPU found" ×4.
+A fresh server with `CUDA_VISIBLE_DEVICES=0` behaves identically, so it is not the
+environment: the bundled runner cannot see the RTX 5080 (sm_120, driver CUDA UMD 13.4).
+One 7B load leaves 0.5–0.9 GB of RAM free, so two models resident at once is impossible
+today. `state/director/caps.json` records the consequence.
 
-## Stopped on purpose
+D7 must therefore start with **structure first** (UI Automation tree + browser DevTools
+protocol), which is also what the work order asks for, and treat the VLM benchmark as a
+runtime decision: upgrade Ollama to a CUDA-13 build, or use llama.cpp with CUDA, or keep
+vision on CPU within an explicit latency budget. ComfyUI is the GPU path that works.
 
-The previous autonomy loop (`tys_launcher` + `tys-watchdog`) is halted with a `STOP`
-file so the baseline measurement is clean. D2 replaces it with the director launcher.
-Its state and evidence are intact: `state/tys_runner/launcher.jsonl`,
-`reports/ty/SESSION_RESUME_20261107.md`.
+## Numbers to keep in mind
 
-## Next
+- One real worker cycle measured 25,789 tokens (small fix) and 83,710–127,914 (scanner
+  work); the daily cap is 3,000,000 with a stop at 90%.
+- Screens: 1 monitor, 2560×1600. GPU 16,303 MB total, 16,003 MB free idle.
+- Disk free: ~10.4 GB. The work order pauses GPU/download work below 10 GB.
+- The old autonomy loop is halted; `scripts/tys_*` remain for their tests only.
 
-D1 — probe headless launch, OpenCode Go concurrency, capture libraries, UI Automation
-access, GPU headroom → `reports/ty/director_probe.md`. Then D2, D3.
+## Rules that are easy to get wrong
 
-- 2026-11-08T02:30:08+00:00 launcher: director session ended (session 29080 gone; launcher restarting).
-
-- 2026-11-08T02:30:49+00:00 launcher: director session ended (session 27668 gone; launcher restarting).
-
-- 2026-11-08T02:31:55+00:00 launcher: director session ended (session 32556 gone; launcher restarting).
+- `state/` is gitignored: anything a fresh checkout needs must also live under `ty/`
+  (that is why `ty/services.json` exists).
+- A per-dimension bar means an 85 average is not a pass. `ty/scorecards.json` says so.
+- The launcher's pid file is authoritative; the command-line scan is only a fallback.
+- Never leave a debug script behind; every temporary tool in this session was removed.
