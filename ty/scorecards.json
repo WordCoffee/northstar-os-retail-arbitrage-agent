@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-08T09:46:15+00:00",
+  "at": "2026-11-08T09:56:17+00:00",
   "bar": 85.0,
   "weights": {
     "works": 0.28,
@@ -12,622 +12,6 @@
   "test_ids": 6789,
   "scan_findings": 1,
   "services": [
-    {
-      "id": "goldengoose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/goldengoose",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 28.5,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "557 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/goldengoose' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the high-margin finder: score an opportunity and say why"
-    },
-    {
-      "id": "prospector",
-      "label": "Prospector",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/prospector",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 27.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/prospector' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "find products worth selling, with demand and competition evidence"
-    },
-    {
-      "id": "offerchisel",
-      "label": "OfferChisel",
-      "group": "Listings",
-      "kind": "workspace",
-      "route": "/offerchisel",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 27.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "111 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "111 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/offerchisel' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "turn this product into a listing that will not be suppressed",
-          "tag": "backed"
-        },
-        {
-          "text": "rewrite the bullets for a different audience",
-          "tag": "backed"
-        },
-        {
-          "text": "fix the listing that lost its buy box",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "turn a product into an offer: price, title, bullets, images"
-    },
-    {
-      "id": "hub",
-      "label": "Operations Hub",
-      "group": "Workspace",
-      "kind": "workspace",
-      "route": "/hub",
-      "impact": 0.85,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 25.5,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "844 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "844 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/hub' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "start the day knowing what needs doing",
-          "tag": "backed"
-        },
-        {
-          "text": "see margin per SKU without a spreadsheet",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the room a seller lands in: today's work, the numbers that matter, and Bojo"
-    },
-    {
-      "id": "ledger",
-      "label": "The Ledger",
-      "group": "Workspace",
-      "kind": "workspace",
-      "route": "/ledger",
-      "impact": 0.8,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 24.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "70 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "70 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/ledger' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "start the day knowing what needs doing",
-          "tag": "backed"
-        },
-        {
-          "text": "see margin per SKU without a spreadsheet",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "money in, money out, fees and margin per SKU without a spreadsheet"
-    },
-    {
-      "id": "beta-signup",
-      "label": "Invite entry",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta-signup",
-      "impact": 0.8,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 24.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/beta-signup' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "invite entry that a real invitee can complete unaided"
-    },
-    {
-      "id": "auctioneer",
-      "label": "The Auctioneer",
-      "group": "Advertising",
-      "kind": "workspace",
-      "route": "/auctioneer",
-      "impact": 0.7,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 21.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "8 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "8 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/auctioneer' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "hold ROAS while doubling spend on the winner",
-          "tag": "backed"
-        },
-        {
-          "text": "cut the keywords that only cost money",
-          "tag": "backed"
-        },
-        {
-          "text": "show me what the campaign did last week",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "PPC bids and budgets that spend only where they return"
-    },
-    {
-      "id": "foundation",
-      "label": "Operations Hub",
-      "group": "Internal",
-      "kind": "workspace",
-      "route": "/foundation",
-      "impact": 0.7,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 21.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "844 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "844 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/foundation' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "the work survives a reload and tells me when it failed",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "Operations Hub"
-    },
-    {
-      "id": "golden-goose",
-      "label": "Golden Goose",
-      "group": "Sourcing",
-      "kind": "workspace",
-      "route": "/golden-goose",
-      "impact": 0.95,
-      "bar": 85.0,
-      "score": 65.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 19.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "557 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: golden_goose_scan"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /golden-goose -> northstar-os-ui\\src\\pages\\internal\\GoldenGoose.jsx; app p95 3.0 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "find a product in a category I have never sold",
-          "tag": "backed"
-        },
-        {
-          "text": "compare landed cost across three suppliers",
-          "tag": "backed"
-        },
-        {
-          "text": "tell me the margin at my fee tier",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the high-margin finder: score an opportunity and say why"
-    },
-    {
-      "id": "thewatch",
-      "label": "The Watch",
-      "group": "Monitoring",
-      "kind": "workspace",
-      "route": "/thewatch",
-      "impact": 0.6,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 18.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "6 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "6 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/thewatch' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "tell me what changed before I lose the buy box",
-          "tag": "backed"
-        },
-        {
-          "text": "show rank over the last 90 days",
-          "tag": "backed"
-        },
-        {
-          "text": "alert me when a competitor undercuts me",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "watch the account for the things that quietly cost money"
-    },
-    {
-      "id": "keywords",
-      "label": "Keywords & SEO",
-      "group": "Internal",
-      "kind": "workspace",
-      "route": "/keywords",
-      "impact": 0.6,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 18.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "77 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "77 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/keywords' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "the work survives a reload and tells me when it failed",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "keyword research and SEO workbench"
-    },
-    {
-      "id": "beta",
-      "label": "Onboarding & Plan",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 65.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 18.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.0 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "onboarding and plan selection for a private beta seller"
-    },
     {
       "id": "product-finder",
       "label": "SourceScout",
@@ -681,6 +65,162 @@
         }
       ],
       "purpose": "SourceScout: match a product idea to suppliers and landed cost"
+    },
+    {
+      "id": "ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/ledger",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 63.2,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 17.4,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "70 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "70 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/ledger' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "money in, money out, fees and margin per SKU without a spreadsheet"
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta-signup",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 63.2,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 17.4,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/beta-signup' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "invite entry that a real invitee can complete unaided"
+    },
+    {
+      "id": "goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/goldengoose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 67.0,
+      "meets_bar": false,
+      "weakest": "seller",
+      "gap": 17.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "557 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 0.0,
+          "evidence": "no Seller-Tester output scored for this service"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/goldengoose' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
     },
     {
       "id": "listingforge",
@@ -737,33 +277,33 @@
       "purpose": "create and version listings with the copy that converts"
     },
     {
-      "id": "rankledger",
-      "label": "RankLedger",
-      "group": "Monitoring",
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
       "kind": "workspace",
-      "route": "/rankledger",
-      "impact": 0.55,
+      "route": "/offerchisel",
+      "impact": 0.9,
       "bar": 85.0,
-      "score": 55.0,
+      "score": 67.0,
       "meets_bar": false,
       "weakest": "seller",
-      "gap": 16.5,
+      "gap": 16.2,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "15 test id(s) prove it"
+          "evidence": "111 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "111 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": 0.0,
           "evidence": "no Seller-Tester output scored for this service"
         },
         "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: offer_recommendation"
         },
         "usable": {
           "score": 100.0,
@@ -771,99 +311,50 @@
         },
         "measured": {
           "score": 0.0,
-          "evidence": "route '/rankledger' is not registered in the UI"
+          "evidence": "route '/offerchisel' is not registered in the UI"
         }
       },
       "scenarios": [
         {
-          "text": "tell me what changed before I lose the buy box",
+          "text": "turn this product into a listing that will not be suppressed",
           "tag": "backed"
         },
         {
-          "text": "show rank over the last 90 days",
+          "text": "rewrite the bullets for a different audience",
           "tag": "backed"
         },
         {
-          "text": "alert me when a competitor undercuts me",
+          "text": "fix the listing that lost its buy box",
           "tag": "backed"
         }
       ],
-      "purpose": "rank, impressions and conversion over time, per keyword"
+      "purpose": "turn a product into an offer: price, title, bullets, images"
     },
     {
-      "id": "account",
-      "label": "Account",
-      "group": "Account",
-      "kind": "account",
-      "route": "/account",
-      "impact": 0.8,
-      "bar": 85.0,
-      "score": 65.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 16.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "141 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "141 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /account -> northstar-os-ui\\src\\pages\\customer\\AccountStatus.jsx; app p95 3.0 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "change my plan without losing data",
-          "tag": "backed"
-        },
-        {
-          "text": "see exactly what I am entitled to",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the seller's own account: plan, entitlements, security, preferences"
-    },
-    {
-      "id": "rivalboard",
-      "label": "The Rival Board",
-      "group": "Monitoring",
+      "id": "auctioneer",
+      "label": "The Auctioneer",
+      "group": "Advertising",
       "kind": "workspace",
-      "route": "/rivalboard",
-      "impact": 0.5,
+      "route": "/auctioneer",
+      "impact": 0.7,
       "bar": 85.0,
-      "score": 55.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 15.0,
+      "weakest": "complete",
+      "gap": 15.3,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "14 test id(s) prove it"
+          "evidence": "8 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "14 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "8 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
@@ -875,124 +366,71 @@
         },
         "measured": {
           "score": 0.0,
-          "evidence": "route '/rivalboard' is not registered in the UI"
+          "evidence": "route '/auctioneer' is not registered in the UI"
         }
       },
       "scenarios": [
         {
-          "text": "tell me what changed before I lose the buy box",
+          "text": "hold ROAS while doubling spend on the winner",
           "tag": "backed"
         },
         {
-          "text": "show rank over the last 90 days",
+          "text": "cut the keywords that only cost money",
           "tag": "backed"
         },
         {
-          "text": "alert me when a competitor undercuts me",
+          "text": "show me what the campaign did last week",
           "tag": "backed"
         }
       ],
-      "purpose": "what competitors changed, and what it means for us"
+      "purpose": "PPC bids and budgets that spend only where they return"
     },
     {
-      "id": "beta-support",
-      "label": "Support",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta#support",
-      "impact": 0.5,
-      "bar": 85.0,
-      "score": 55.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 15.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 0.0,
-          "evidence": "route '/beta#support' is not registered in the UI"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "support inside the beta without a human in the loop"
-    },
-    {
-      "id": "profitability",
-      "label": "Profitability",
-      "group": "Workspace",
+      "id": "foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
       "kind": "workspace",
-      "route": "/profitability",
-      "impact": 0.75,
+      "route": "/foundation",
+      "impact": 0.7,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 15.0,
+      "weakest": "complete",
+      "gap": 15.3,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "4 test id(s) prove it"
+          "evidence": "844 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "4 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "844 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: margin_report"
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
         },
         "usable": {
           "score": 100.0,
           "evidence": "no readiness finding names this service"
         },
         "measured": {
-          "score": 100.0,
-          "evidence": "route /profitability -> northstar-os-ui\\src\\pages\\internal\\ProfitabilityDashboard.jsx; app p95 3.0 ms"
+          "score": 0.0,
+          "evidence": "route '/foundation' is not registered in the UI"
         }
       },
       "scenarios": [
         {
-          "text": "start the day knowing what needs doing",
-          "tag": "backed"
-        },
-        {
-          "text": "see margin per SKU without a spreadsheet",
+          "text": "the work survives a reload and tells me when it failed",
           "tag": "backed"
         }
       ],
-      "purpose": "per-SKU profitability after fees, ads and returns"
+      "purpose": "Operations Hub"
     },
     {
       "id": "adpilot",
@@ -1099,29 +537,30 @@
       "purpose": "seller-side social output that does not read like a robot"
     },
     {
-      "id": "jobs",
-      "label": "Jobs & Schedules",
-      "group": "Internal",
+      "id": "thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
       "kind": "workspace",
-      "route": "/jobs",
-      "impact": 0.4,
+      "route": "/thewatch",
+      "impact": 0.6,
       "bar": 85.0,
-      "score": 55.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 12.0,
+      "weakest": "complete",
+      "gap": 13.1,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "89 test id(s) prove it"
+          "evidence": "6 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "89 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "6 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
@@ -1133,29 +572,37 @@
         },
         "measured": {
           "score": 0.0,
-          "evidence": "route '/jobs' is not registered in the UI"
+          "evidence": "route '/thewatch' is not registered in the UI"
         }
       },
       "scenarios": [
         {
-          "text": "the work survives a reload and tells me when it failed",
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
           "tag": "backed"
         }
       ],
-      "purpose": "long-running work that survives a reload and reports honestly"
+      "purpose": "watch the account for the things that quietly cost money"
     },
     {
-      "id": "keyword-tracker",
-      "label": "Keyword Tracker",
-      "group": "Monitoring",
+      "id": "keywords",
+      "label": "Keywords & SEO",
+      "group": "Internal",
       "kind": "workspace",
-      "route": "/keyword-tracker",
+      "route": "/keywords",
       "impact": 0.6,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 12.0,
+      "weakest": "complete",
+      "gap": 13.1,
       "dimensions": {
         "works": {
           "score": 100.0,
@@ -1166,20 +613,68 @@
           "evidence": "77 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: track_keywords"
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
         },
         "usable": {
           "score": 100.0,
           "evidence": "no readiness finding names this service"
         },
         "measured": {
+          "score": 0.0,
+          "evidence": "route '/keywords' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "the work survives a reload and tells me when it failed",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "keyword research and SEO workbench"
+    },
+    {
+      "id": "rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/rankledger",
+      "impact": 0.55,
+      "bar": 85.0,
+      "score": 63.2,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 12.0,
+      "dimensions": {
+        "works": {
           "score": 100.0,
-          "evidence": "route /keyword-tracker -> northstar-os-ui\\src\\pages\\internal\\KeywordTracker.jsx; app p95 3.0 ms"
+          "evidence": "15 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "15 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/rankledger' is not registered in the UI"
         }
       },
       "scenarios": [
@@ -1196,32 +691,139 @@
           "tag": "backed"
         }
       ],
-      "purpose": "which keywords are worth owning, measured not guessed"
+      "purpose": "rank, impressions and conversion over time, per keyword"
     },
     {
-      "id": "autothink",
-      "label": "AutothinK",
-      "group": "AutothinK",
+      "id": "rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
       "kind": "workspace",
-      "route": "/autothink",
+      "route": "/rivalboard",
       "impact": 0.5,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 10.0,
+      "weakest": "complete",
+      "gap": 10.9,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "68 test id(s) prove it"
+          "evidence": "14 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "68 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "14 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
           "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/rivalboard' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "what competitors changed, and what it means for us"
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta#support",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 63.2,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 10.9,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/beta#support' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "support inside the beta without a human in the loop"
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.3,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
@@ -1233,70 +835,20 @@
         },
         "measured": {
           "score": 100.0,
-          "evidence": "route /autothink -> northstar-os-ui\\src\\pages\\internal\\AutothinK.jsx; app p95 3.0 ms"
+          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.0 ms"
         }
       },
       "scenarios": [
         {
-          "text": "remember my brand voice and use it later",
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
           "tag": "backed"
         }
       ],
-      "purpose": "the memory plane: what the seller told us, recalled at the right time"
-    },
-    {
-      "id": "competitor-monitor",
-      "label": "Competitor Monitor",
-      "group": "Monitoring",
-      "kind": "workspace",
-      "route": "/competitor-monitor",
-      "impact": 0.5,
-      "bar": 85.0,
-      "score": 65.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 10.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "5 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "5 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: watch_competitor"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /competitor-monitor -> northstar-os-ui\\src\\pages\\internal\\CompetitorMonitor.jsx; app p95 3.0 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "tell me what changed before I lose the buy box",
-          "tag": "backed"
-        },
-        {
-          "text": "show rank over the last 90 days",
-          "tag": "backed"
-        },
-        {
-          "text": "alert me when a competitor undercuts me",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the competitor feed behind Rival Board"
+      "purpose": "onboarding and plan selection for a private beta seller"
     },
     {
       "id": "design-studio",
@@ -1353,29 +905,77 @@
       "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
     },
     {
-      "id": "beta-ops",
-      "label": "Tester Dashboard",
-      "group": "Beta Operations",
-      "kind": "onboarding",
-      "route": "/beta-ops",
+      "id": "jobs",
+      "label": "Jobs & Schedules",
+      "group": "Internal",
+      "kind": "workspace",
+      "route": "/jobs",
       "impact": 0.4,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 63.2,
       "meets_bar": false,
-      "weakest": "seller",
-      "gap": 8.0,
+      "weakest": "complete",
+      "gap": 8.7,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "76 test id(s) prove it"
+          "evidence": "89 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "76 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "89 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
           "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/jobs' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "the work survives a reload and tells me when it failed",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "long-running work that survives a reload and reports honestly"
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "group": "Account",
+      "kind": "account",
+      "route": "/account",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.2,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "141 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "141 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
         },
         "complete": {
           "score": 0.0,
@@ -1387,16 +987,180 @@
         },
         "measured": {
           "score": 100.0,
-          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.0 ms"
+          "evidence": "route /account -> northstar-os-ui\\src\\pages\\customer\\AccountStatus.jsx; app p95 3.0 ms"
         }
       },
       "scenarios": [
         {
-          "text": "see who is active and what broke",
+          "text": "change my plan without losing data",
+          "tag": "backed"
+        },
+        {
+          "text": "see exactly what I am entitled to",
           "tag": "backed"
         }
       ],
-      "purpose": "the tester dashboard: who is in, what they did, what broke"
+      "purpose": "the seller's own account: plan, entitlements, security, preferences"
+    },
+    {
+      "id": "profitability",
+      "label": "Profitability",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/profitability",
+      "impact": 0.75,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 7.7,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "4 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "4 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: margin_report"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /profitability -> northstar-os-ui\\src\\pages\\internal\\ProfitabilityDashboard.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "per-SKU profitability after fees, ads and returns"
+    },
+    {
+      "id": "golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/golden-goose",
+      "impact": 0.95,
+      "bar": 85.0,
+      "score": 77.0,
+      "meets_bar": false,
+      "weakest": "seller",
+      "gap": 7.6,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "557 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "557 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 0.0,
+          "evidence": "no Seller-Tester output scored for this service"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: golden_goose_scan"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /golden-goose -> northstar-os-ui\\src\\pages\\internal\\GoldenGoose.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the high-margin finder: score an opportunity and say why"
+    },
+    {
+      "id": "prospector",
+      "label": "Prospector",
+      "group": "Sourcing",
+      "kind": "workspace",
+      "route": "/prospector",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 77.0,
+      "meets_bar": false,
+      "weakest": "measured",
+      "gap": 7.2,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "17 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: catalog_pull"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/prospector' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "find a product in a category I have never sold",
+          "tag": "backed"
+        },
+        {
+          "text": "compare landed cost across three suppliers",
+          "tag": "backed"
+        },
+        {
+          "text": "tell me the margin at my fee tier",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "find products worth selling, with demand and competition evidence"
     },
     {
       "id": "listings",
@@ -1451,6 +1215,261 @@
         }
       ],
       "purpose": "Listing Guardian: keep live listings compliant and correct"
+    },
+    {
+      "id": "hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "kind": "workspace",
+      "route": "/hub",
+      "impact": 0.85,
+      "bar": 85.0,
+      "score": 77.0,
+      "meets_bar": false,
+      "weakest": "measured",
+      "gap": 6.8,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "844 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "844 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: hub_status"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/hub' is not registered in the UI"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "start the day knowing what needs doing",
+          "tag": "backed"
+        },
+        {
+          "text": "see margin per SKU without a spreadsheet",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the room a seller lands in: today's work, the numbers that matter, and Bojo"
+    },
+    {
+      "id": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/keyword-tracker",
+      "impact": 0.6,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 6.2,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "77 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "77 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: track_keywords"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /keyword-tracker -> northstar-os-ui\\src\\pages\\internal\\KeywordTracker.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "which keywords are worth owning, measured not guessed"
+    },
+    {
+      "id": "autothink",
+      "label": "AutothinK",
+      "group": "AutothinK",
+      "kind": "workspace",
+      "route": "/autothink",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 5.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "68 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "68 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /autothink -> northstar-os-ui\\src\\pages\\internal\\AutothinK.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "remember my brand voice and use it later",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the memory plane: what the seller told us, recalled at the right time"
+    },
+    {
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/competitor-monitor",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 5.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "5 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "5 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: watch_competitor"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /competitor-monitor -> northstar-os-ui\\src\\pages\\internal\\CompetitorMonitor.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the competitor feed behind Rival Board"
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "kind": "onboarding",
+      "route": "/beta-ops",
+      "impact": 0.4,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 4.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "76 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.0 ms"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "see who is active and what broke",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the tester dashboard: who is in, what they did, what broke"
     },
     {
       "id": "socialpulse",

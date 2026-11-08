@@ -2520,6 +2520,82 @@ def ollama_tool_schemas(names: Optional[List[str]] = None) -> List[dict]:
     return out
 
 
+def _t_bojo_domain(name: str):
+    """Adapter: a domain tool takes plain kwargs and returns {ok, tool, data|reason}."""
+
+    def handler(args: Dict[str, Any], ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        from bojo_tools_registry import call  # noqa: PLC0415 - keeps import cost lazy
+
+        result = call(name, **{key: value for key, value in (args or {}).items()
+                               if not str(key).startswith("_")})
+        payload = result.get("data")
+        summary = (f"{name} returned {len(payload)} field(s)."
+                   if isinstance(payload, dict) else f"{name} finished.")
+        if not result.get("ok"):
+            summary = str(result.get("reason") or f"{name} failed.")
+        return {"ok": bool(result.get("ok")), "summary": summary[:400],
+                "error": "" if result.get("ok") else str(result.get("reason") or "")[:400],
+                "data": payload, "assets": []}
+
+    return handler
+
+
+#: Bojo tools implemented by domain modules (see `bojo_tools_registry`). A service is only
+#: drivable by Bojo when its tool is here AND the module behind it exists — which is exactly
+#: what the scorecard's `complete` dimension measures.
+TOOLS.update({
+    "catalog_pull": {
+        "description": ("Pull the sourcing catalog for a query and return the rows, with the "
+                        "source reported honestly (stock, live, empty). Prospector's tool."),
+        "parameters": {"type": "object", "properties": {
+            "query": {"type": "string", "minLength": 2},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 500},
+            "category": {"type": "string"},
+            "live": {"type": "boolean"},
+        }, "required": ["query"]},
+        "handler": _t_bojo_domain("catalog_pull"),
+    },
+    "golden_goose_scan": {
+        "description": ("Score candidate products through the real Golden Goose economics "
+                        "and filters, returning ranked opportunities with tier, scores and "
+                        "the arithmetic behind each one."),
+        "parameters": {"type": "object", "properties": {
+            "candidates": {"type": "array", "items": {"type": "object"}},
+            "roi_floor": {"type": "number"},
+            "min_monthly_sales": {"type": "integer", "minimum": 0},
+            "include_rejected": {"type": "boolean"},
+            "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+        }, "required": ["candidates"]},
+        "handler": _t_bojo_domain("golden_goose_scan"),
+    },
+    "offer_recommendation": {
+        "description": ("Recommend an offer price from cost, target margin, competitor "
+                        "prices and fees, with every arithmetic step returned so a seller "
+                        "can check it."),
+        "parameters": {"type": "object", "properties": {
+            "cost": {"type": "number", "minimum": 0},
+            "target_margin_pct": {"type": "number", "minimum": 0, "maximum": 99},
+            "competitor_prices": {"type": "array", "items": {"type": "number"}},
+            "fees": {"type": "object", "description":
+                     "Flat fees per unit, e.g. {referral_pct, referral_min, fulfilment, other}"},
+            "competitor_policy": {"type": "string", "enum": ["lowest", "median", "ignore"]},
+            "undercut_pct": {"type": "number", "minimum": 0, "maximum": 50},
+            "currency": {"type": "string"},
+        }, "required": ["cost", "target_margin_pct"]},
+        "handler": _t_bojo_domain("offer_recommendation"),
+    },
+    "hub_status": {
+        "description": ("Aggregate service health from the real status probes: disk, "
+                        "database, lanes, models and the render lock, per component with "
+                        "its evidence."),
+        "parameters": {"type": "object", "properties": {
+            "disk_path": {"type": "string"},
+        }, "required": []},
+        "handler": _t_bojo_domain("hub_status"),
+    },
+})
+
+
 def run_tool(name: str, raw_args: Any, ctx: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Validate → execute one tool call. Never raises; failures are honest results."""
     ctx = ctx or {}

@@ -82,16 +82,27 @@ def test_a_finding_about_the_service_lowers_usable_but_a_repo_wide_one_does_not(
 
 
 def test_the_bar_is_per_dimension_not_an_average(world):
-    """Alpha has 100 on two dimensions and 0 on `measured` and `seller`; not at the bar."""
+    """Alpha has 100 on several dimensions and 0 on `measured`; it is not at the bar."""
     result = S.measure()
     alpha = next(row for row in result["services"] if row["id"] == "alpha")
 
     assert alpha["score"] > 40          # the average still looks plausible
     assert alpha["meets_bar"] is False  # and the weakest dimension still fails
     assert "seller" in alpha["dimensions"]
+    # alpha is infrastructure: seller does not apply and is excluded, not scored as zero
+    assert alpha["dimensions"]["seller"].get("not_applicable") is True
+    assert alpha["dimensions"]["seller"]["score"] is None
+    assert result["at_bar"] == []
+
+
+def test_a_seller_facing_service_without_outputs_cannot_reach_the_bar(world, monkeypatch):
+    """When the service is seller-facing, a missing seller score is a real zero."""
+    monkeypatch.setattr(S, "SELLER_SERVICES", set(S.SELLER_SERVICES) | {"alpha"})
+    result = S.measure()
+    alpha = next(row for row in result["services"] if row["id"] == "alpha")
     assert alpha["dimensions"]["seller"]["score"] == 0.0
     assert "no Seller-Tester output" in alpha["dimensions"]["seller"]["evidence"]
-    assert result["at_bar"] == []
+    assert alpha["meets_bar"] is False
 
 
 def test_artefacts_alone_cannot_reach_the_bar(world):

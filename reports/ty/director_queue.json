@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T09:30:40+00:00",
+  "updated_at": "2026-11-08T09:55:27+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -165,7 +165,7 @@
       "id": "d5-240196",
       "unit": "D5",
       "title": "raise complete for goldengoose (+10.0 on the weakest dimension)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "agents/golden_goose_finder"
@@ -175,17 +175,17 @@
       "rollback_tag": "",
       "acceptance": [],
       "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "score_before": 55.0,
+      "score_after": 67.0,
+      "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:30:40+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00"
     },
     {
       "id": "d5-240223",
       "unit": "D5",
       "title": "raise complete for offerchisel (+10.0 on the weakest dimension)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend",
@@ -196,17 +196,17 @@
       "rollback_tag": "",
       "acceptance": [],
       "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "score_before": 55.0,
+      "score_after": 67.0,
+      "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:30:40+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00"
     },
     {
       "id": "d5-240249",
       "unit": "D5",
       "title": "raise complete for prospector (+10.0 on the weakest dimension)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend",
@@ -217,17 +217,17 @@
       "rollback_tag": "",
       "acceptance": [],
       "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "score_before": 55.0,
+      "score_after": 67.0,
+      "evidence": "Bojo tools wired and called through chat_tools.run_tool",
       "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:30:40+00:00"
+      "updated_at": "2026-11-08T09:54:48+00:00"
     },
     {
       "id": "d5-240277",
       "unit": "D5",
       "title": "raise complete for hub (+10.0 on the weakest dimension)",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src"
@@ -237,11 +237,111 @@
       "rollback_tag": "",
       "acceptance": [],
       "tokens": 0,
+      "score_before": 55.0,
+      "score_after": 67.0,
+      "evidence": "Bojo tools wired and called through chat_tools.run_tool",
+      "created_at": "2026-11-08T09:30:40+00:00",
+      "updated_at": "2026-11-08T09:54:48+00:00"
+    },
+    {
+      "id": "d5-688415",
+      "unit": "D5",
+      "title": "raise seller for beta-signup (+30.0 on the weakest dimension)",
+      "status": "released",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend"
+      ],
+      "branch": "ty/d5-688415",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "1 gap(s), best case +10.0 points on complete; below the 5.0-point / 3-gap threshold it would be a micro-edit",
-      "created_at": "2026-11-08T09:30:40+00:00",
-      "updated_at": "2026-11-08T09:30:40+00:00"
+      "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:54:48+00:00",
+      "updated_at": "2026-11-08T09:55:27+00:00"
+    },
+    {
+      "id": "d5-688445",
+      "unit": "D5",
+      "title": "raise seller for ledger (+30.0 on the weakest dimension)",
+      "status": "released",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend"
+      ],
+      "branch": "ty/d5-688445",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:54:48+00:00",
+      "updated_at": "2026-11-08T09:55:27+00:00"
+    },
+    {
+      "id": "d5-688470",
+      "unit": "D5",
+      "title": "raise seller for auctioneer (+30.0 on the weakest dimension)",
+      "status": "released",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend"
+      ],
+      "branch": "ty/d5-688470",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:54:48+00:00",
+      "updated_at": "2026-11-08T09:55:27+00:00"
+    },
+    {
+      "id": "d5-688495",
+      "unit": "D5",
+      "title": "raise seller for foundation (+30.0 on the weakest dimension)",
+      "status": "released",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/foundation"
+      ],
+      "branch": "ty/d5-688495",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "1 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:54:48+00:00",
+      "updated_at": "2026-11-08T09:55:27+00:00"
+    },
+    {
+      "id": "d5-727137",
+      "unit": "D5",
+      "title": "add Seller-Tester briefs and score real outputs for beta-signup, ledger, auctioneer, foundation, beta, keywords, product-finder, thewatch, goldengoose, listingforge, rankledger, offerchisel, prospector, account, hub, beta-support, profitability, rivalboard, adpilot, towncrier, jobs, keyword-tracker, autothink, competitor-monitor, design-studio, beta-ops, golden-goose, listings, socialpulse (+30.0 possible on seller)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/seller_briefs.json"
+      ],
+      "branch": "ty/d5-727137",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "29 gap(s), best case +30.0 points on seller; below the 5.0-point / 3-gap threshold it would be a micro-edit",
+      "created_at": "2026-11-08T09:55:27+00:00",
+      "updated_at": "2026-11-08T09:55:27+00:00"
     }
   ],
   "service_scores": {},

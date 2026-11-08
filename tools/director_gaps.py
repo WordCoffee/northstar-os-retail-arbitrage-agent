@@ -52,6 +52,15 @@ SERVICE_PATHS: Dict[str, List[str]] = {
 
 DEFAULT_PATHS = ["Northstar_backend"]
 
+#: Some dimensions are not fixed in the backend. A `seller` gap closes by adding briefs for
+#: that service and running the Seller-Tester; a `measured` gap closes by mounting the route.
+#: Without this, the re-plan produced "raise seller for ledger" with a backend write path,
+#: which is not work anyone can do.
+DIMENSION_PATHS: Dict[str, List[str]] = {
+    "seller": ["ty/seller_briefs.json"],
+    "measured": ["northstar-os-ui/src"],
+}
+
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -86,6 +95,12 @@ def bundle(rows: Optional[List[Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
     bundles: List[Dict[str, Any]] = []
     for dimension, members in groups.items():
         members = sorted(members, key=lambda row: -float(row["gap"]))
+        if dimension in DIMENSION_PATHS:
+            # One file, one job: every member of these dimensions writes the same path, so
+            # splitting them into four bundles would serialise four times for one edit.
+            best = max(float(row["bar"]) - float(row["score"]) for row in members)
+            bundles.append(_as_bundle(dimension, members, best))
+            continue
         current: List[Dict[str, Any]] = []
         best = 0.0
         for row in members:
@@ -103,13 +118,23 @@ def bundle(rows: Optional[List[Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
 def _as_bundle(dimension: str, members: List[Dict[str, Any]], points: float) -> Dict[str, Any]:
     paths: List[str] = []
     for row in members:
-        for path in SERVICE_PATHS.get(row["id"], DEFAULT_PATHS):
+        for path in (DIMENSION_PATHS.get(dimension)
+                     or SERVICE_PATHS.get(row["id"], DEFAULT_PATHS)):
             if path not in paths:
                 paths.append(path)
+    if dimension == "seller":
+        title = ("add Seller-Tester briefs and score real outputs for "
+                 + ", ".join(row["id"] for row in members)
+                 + f" (+{round(points, 1)} possible on seller)")
+    elif dimension == "measured":
+        title = ("mount the route for " + ", ".join(row["id"] for row in members)
+                 + f" (+{round(points, 1)} on measured)")
+    else:
+        title = (f"raise {dimension} for " + ", ".join(row["id"] for row in members)
+                 + f" (+{round(points, 1)} on the weakest dimension)")
     return {
         "unit": "D5",
-        "title": (f"raise {dimension} for " + ", ".join(row["id"] for row in members)
-                  + f" (+{round(points, 1)} on the weakest dimension)"),
+        "title": title,
         "dimension": dimension,
         "services": [row["id"] for row in members],
         "points": round(points, 1),

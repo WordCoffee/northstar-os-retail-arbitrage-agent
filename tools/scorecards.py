@@ -45,8 +45,14 @@ BAR = 85.0
 WEIGHTS = {"works": 0.28, "correct": 0.25, "complete": 0.12, "usable": 0.12,
            "measured": 0.10, "seller": 0.13}
 
-#: Test-id substrings that belong to each registry entry. Explicit on purpose: an
-#: inference would quietly award a service a score for somebody else's tests.
+#: Services whose output a seller actually sees. Only these can carry a Seller-Tester score;
+#: for infrastructure (foundation, account, beta-*, jobs) the dimension does not apply and is
+#: excluded from the weighted score rather than scored as a zero — a zero would demand output
+#: that the service is not supposed to produce.
+SELLER_SERVICES = {
+    "design-studio", "listings", "listingforge", "offerchisel", "goldengoose",
+    "golden-goose", "product-finder", "towncrier", "socialpulse", "adpilot",
+}
 SERVICE_TESTS: Dict[str, List[str]] = {
     "hub": ["foundation/tests", "test_ops_status"],
     "foundation": ["foundation/tests", "test_ops_status"],
@@ -281,7 +287,12 @@ def measure_one(service: Dict[str, Any], ids: List[str],
                      else "no test id maps to this service"),
     }
     dims["correct"] = _correct(matched)
-    dims["seller"] = _seller(sid)
+    if sid in SELLER_SERVICES:
+        dims["seller"] = _seller(sid)
+    else:
+        dims["seller"] = {"score": None, "not_applicable": True,
+                          "evidence": ("this service does not produce a seller-facing "
+                                       "artefact, so there is nothing to score")}
     if wired:
         good = sum(1 for value in wired.values() if value)
         dims["complete"] = {"score": round(100.0 * good / len(wired), 1),
@@ -300,14 +311,18 @@ def measure_one(service: Dict[str, Any], ids: List[str],
                           "evidence": "no readiness finding names this service"}
     dims["measured"] = _measured(sid)
 
-    score = round(sum(WEIGHTS[key] * dims[key]["score"] for key in WEIGHTS), 1)
-    meets = all(dim["score"] >= BAR for dim in dims.values())
+    applicable = {key: value for key, value in dims.items() if value.get("score") is not None}
+    total_weight = sum(WEIGHTS[key] for key in applicable) or 1.0
+    score = round(sum(WEIGHTS[key] * applicable[key]["score"] for key in applicable)
+                  / total_weight, 1)
+    meets = all(value["score"] >= BAR for value in applicable.values())
+    weakest = min(applicable, key=lambda k: applicable[k]["score"])
     scenarios = SCENARIOS.get(service.get("group", ""), [])
     return {
         "id": sid, "label": service.get("label"), "group": service.get("group"),
         "kind": service.get("kind"), "route": service.get("route"),
         "impact": IMPACT.get(sid, 0.5), "bar": BAR, "score": score,
-        "meets_bar": meets, "weakest": min(dims, key=lambda k: dims[k]["score"]),
+        "meets_bar": meets, "weakest": weakest,
         "gap": round(IMPACT.get(sid, 0.5) * max(0.0, BAR - score), 1),
         "dimensions": dims,
         "scenarios": [{"text": text, "tag": "backed" if matched else "assumed"}
