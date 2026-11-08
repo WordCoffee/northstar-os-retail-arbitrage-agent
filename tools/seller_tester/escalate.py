@@ -8,6 +8,12 @@ After a pass the brief gets harder, in this order:
 3. `new_category`    a fresh brief in a category the loop has not hit yet,
                      carrying a fresh constraint set.
 
+Escalation stays **inside the brief's input mode**: a `stored_reference` brief
+escalates to another stored-reference brief, never to a prompt-only one, and a
+new reference brief keeps a reference (reusing the original when the catalog
+has no same-mode template for that category). A mode that changes mid-ladder
+would silently test a different product input.
+
 `escalate()` is pure and always returns a usable brief. `EscalationLog` records
 every step (tracked in the run summary, mirrored to runtime state) so a later
 session can resume the ladder without guessing.
@@ -22,7 +28,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
-from .briefs import CATEGORIES, SITUATIONS
+from .briefs import CATEGORIES, REFERENCE_MODES, SITUATIONS, brief_mode
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_ESCALATION_PATH = REPO_ROOT / "state" / "seller" / "escalation.json"
@@ -70,10 +76,18 @@ def _apply_constraint(brief: Dict[str, Any], name: str) -> None:
 
 def _fresh_brief_from_catalog(brief: Dict[str, Any], category: str,
                               situation: str, catalog: Sequence[Dict[str, Any]],
-                              index: int) -> Dict[str, Any]:
-    template = next((row for row in catalog if row.get("category") == category), None)
-    if template is None:
-        template = next((row for row in catalog if row.get("situation") == situation), brief)
+                              index: int, mode: str) -> Dict[str, Any]:
+    """A new brief that keeps the ladder inside the same input mode."""
+    same_category = [row for row in catalog
+                     if row.get("category") == category and brief_mode(row) == mode]
+    same_mode = [row for row in catalog if brief_mode(row) == mode]
+    template = None
+    if same_category:
+        template = same_category[0]
+    elif same_mode:
+        template = same_mode[0]
+    else:
+        template = next((row for row in catalog if row.get("category") == category), brief)
     derived = copy.deepcopy(template)
     derived["id"] = f"{brief.get('id', 'ST')}-c{index}"
     derived["category"] = category
@@ -81,18 +95,38 @@ def _fresh_brief_from_catalog(brief: Dict[str, Any], category: str,
     derived["difficulty"] = 1
     derived["derived_from"] = brief.get("id")
     derived["added_constraints"] = []
+    if mode in REFERENCE_MODES:
+        derived["source_mode"] = mode
+        if not isinstance(derived.get("reference"), dict):
+            reference = brief.get("reference")
+            if isinstance(reference, dict):
+                derived["reference"] = copy.deepcopy(reference)
+                derived["reference_reused"] = True
+    elif mode in ("prompt_only", "unclassified"):
+        derived["source_mode"] = mode
+        derived.pop("reference", None)
     return derived
 
 
 def escalate(brief: Dict[str, Any], catalog: Sequence[Dict[str, Any]],
-             used_categories: Optional[Sequence[str]] = None) -> Dict[str, Any]:
-    """Return {action, detail, brief, constraint}. Never returns None."""
+             used_categories: Optional[Sequence[str]] = None,
+             source_mode: Optional[str] = None) -> Dict[str, Any]:
+    """Return {action, detail, brief, constraint}. Never returns None.
+
+    `source_mode` overrides the brief's own mode; both must be a known mode (or
+    `unclassified` for ad-hoc briefs built in process). An unknown mode is
+    refused rather than guessed.
+    """
+    mode = source_mode if source_mode is not None else brief_mode(brief)
+    if mode not in ("prompt_only", "stored_reference", "uploaded_reference", "unclassified"):
+        raise ValueError(f"unknown source_mode {mode!r}; escalation will not guess an input")
     used = set(used_categories or ())
     used.add(str(brief.get("category")))
     tier = int(brief.get("difficulty", 1) or 1)
 
     if tier < 3:
         derived = copy.deepcopy(brief)
+        derived["source_mode"] = mode
         derived["difficulty"] = tier + 1
         derived["escalated_from"] = brief.get("escalated_from") or brief.get("id")
         _tighten_fill(derived, 4.0)
@@ -102,7 +136,7 @@ def escalate(brief: Dict[str, Any], catalog: Sequence[Dict[str, Any]],
             background["tolerance"] = max(2, int(background.get("tolerance", 6)) - 1)
         derived["pass_score"] = min(95, int(derived.get("pass_score", 70)) + 5)
         return {"action": "raise_tier",
-                "detail": f"difficulty {tier} -> {tier + 1}",
+                "detail": f"difficulty {tier} -> {tier + 1} ({mode})",
                 "brief": derived, "constraint": None}
 
     added = list(brief.get("added_constraints") or [])
@@ -110,11 +144,12 @@ def escalate(brief: Dict[str, Any], catalog: Sequence[Dict[str, Any]],
     if remaining:
         name = remaining[0]
         derived = copy.deepcopy(brief)
+        derived["source_mode"] = mode
         derived["escalated_from"] = brief.get("escalated_from") or brief.get("id")
         _apply_constraint(derived, name)
         derived["pass_score"] = min(95, int(derived.get("pass_score", 70)) + 3)
         return {"action": "add_constraint",
-                "detail": f"added hard constraint {name}",
+                "detail": f"added hard constraint {name} ({mode})",
                 "brief": derived, "constraint": name}
 
     situation = str(brief.get("situation") or SITUATIONS[0])
@@ -123,9 +158,10 @@ def escalate(brief: Dict[str, Any], catalog: Sequence[Dict[str, Any]],
     unused = [name for name in CATEGORIES if name not in used]
     category = unused[0] if unused else CATEGORIES[len(used) % len(CATEGORIES)]
     index = len(used) + 1
-    derived = _fresh_brief_from_catalog(brief, category, next_situation, catalog, index)
+    derived = _fresh_brief_from_catalog(
+        brief, category, next_situation, catalog, index, mode)
     return {"action": "new_category",
-            "detail": f"new {category} brief in {next_situation} (id {derived['id']})",
+            "detail": f"new {category} brief in {next_situation} (id {derived['id']}, {mode})",
             "brief": derived, "constraint": None}
 
 
@@ -151,12 +187,14 @@ class EscalationLog:
 
     def record(self, brief: Dict[str, Any], step: Dict[str, Any], *,
                score: Optional[float] = None, artefact_path: Optional[str] = None,
-               at: Optional[str] = None) -> Dict[str, Any]:
+               at: Optional[str] = None,
+               source_mode: Optional[str] = None) -> Dict[str, Any]:
         new_brief = step.get("brief") or {}
         entry = {
             "at": at or _now(),
             "from_brief_id": brief.get("id"),
             "from_difficulty": brief.get("difficulty"),
+            "source_mode": source_mode or brief_mode(brief),
             "action": step.get("action"),
             "detail": step.get("detail"),
             "constraint": step.get("constraint"),
