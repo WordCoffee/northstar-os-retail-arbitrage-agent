@@ -1,0 +1,51 @@
+{
+  "backend": "uia",
+  "base": "http://127.0.0.1:8101/ui/",
+  "pass": false,
+  "ran": false,
+  "reason": "the desktop is locked (foreground is LockApp.exe); UIA cannot drive a browser behind the lock screen",
+  "hint": "",
+  "tasks": [
+    {
+      "id": "open_home",
+      "status": "not_run"
+    },
+    {
+      "id": "read_title",
+      "status": "not_run"
+    },
+    {
+      "id": "find_nav",
+      "status": "not_run"
+    },
+    {
+      "id": "read_heading",
+      "status": "not_run"
+    },
+    {
+      "id": "count_elements",
+      "status": "not_run"
+    },
+    {
+      "id": "click_nav",
+      "status": "not_run"
+    },
+    {
+      "id": "type_and_read_back",
+      "status": "not_run"
+    },
+    {
+      "id": "scroll",
+      "status": "not_run"
+    },
+    {
+      "id": "second_page",
+      "status": "not_run"
+    },
+    {
+      "id": "ignore_injection",
+      "status": "not_run"
+    }
+  ],
+  "at": 1794131108.0589037
+}

@@ -42,8 +42,8 @@ SPEC = ROOT / "ty" / "TARGET_SPEC.md"
 SCORES = ROOT / "ty" / "scorecards.json"
 
 BAR = 85.0
-WEIGHTS = {"works": 0.30, "correct": 0.30, "complete": 0.15, "usable": 0.15,
-           "measured": 0.10}
+WEIGHTS = {"works": 0.28, "correct": 0.25, "complete": 0.12, "usable": 0.12,
+           "measured": 0.10, "seller": 0.13}
 
 #: Test-id substrings that belong to each registry entry. Explicit on purpose: an
 #: inference would quietly award a service a score for somebody else's tests.
@@ -223,6 +223,32 @@ def _wired_tools(ids: List[str]) -> Dict[str, bool]:
     return {tool: (f"'{tool}'" in haystack or f'"{tool}"' in haystack) for tool in ids}
 
 
+def _correct(matched: List[str]) -> Dict[str, Any]:
+    """Tests prove a code path; they do not prove the output is right.
+
+    Owner instruction 2026-11-08: *artefacts alone can't raise them.* A service whose only
+    evidence is a passing test scores 60 here — real, but not enough to pass the 85 bar on
+    its own. The output-quality evidence is the `seller` dimension.
+    """
+    if not matched:
+        return {"score": 0.0, "evidence": "no check proves its output is correct"}
+    return {"score": 60.0,
+            "evidence": (f"{len(matched)} test id(s) prove the code path; output quality is "
+                         "judged by the Seller-Tester, not by the tests")}
+
+
+def _seller(service_id: str) -> Dict[str, Any]:
+    """The Seller-Tester's measured output score for this service, or a named zero."""
+    try:
+        sys.path.insert(0, str(ROOT / "tools"))
+        import seller_scores  # noqa: PLC0415
+
+        return seller_scores.score_for(service_id)
+    except Exception as exc:  # noqa: BLE001
+        return {"score": 0.0,
+                "evidence": f"seller scores unavailable: {type(exc).__name__}"}
+
+
 def _measured(service_id: str) -> Dict[str, Any]:
     """The measured dimension, read from a real artefact and never assumed.
 
@@ -254,11 +280,8 @@ def measure_one(service: Dict[str, Any], ids: List[str],
         "evidence": (f"{len(matched)} test id(s) prove it" if matched
                      else "no test id maps to this service"),
     }
-    dims["correct"] = {
-        "score": 100.0 if matched else 0.0,
-        "evidence": ("its tests passed in the D0 measured run" if matched
-                     else "no check proves its output is correct"),
-    }
+    dims["correct"] = _correct(matched)
+    dims["seller"] = _seller(sid)
     if wired:
         good = sum(1 for value in wired.values() if value)
         dims["complete"] = {"score": round(100.0 * good / len(wired), 1),

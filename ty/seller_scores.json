@@ -1,0 +1,16 @@
+{
+  "services": {
+    "design-studio": {
+      "mean": 16.7,
+      "scored": 30,
+      "passed": 0,
+      "at": "2026-11-08T09:45:39+00:00"
+    }
+  },
+  "at": "2026-11-08T09:46:00+00:00",
+  "pass": {
+    "scored": 30,
+    "passed": 0,
+    "mean_score": 16.7
+  }
+}

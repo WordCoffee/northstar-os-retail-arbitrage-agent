@@ -82,14 +82,24 @@ def test_a_finding_about_the_service_lowers_usable_but_a_repo_wide_one_does_not(
 
 
 def test_the_bar_is_per_dimension_not_an_average(world):
-    """Alpha has 100 on two dimensions and 0 on `measured`; it is not at the bar."""
+    """Alpha has 100 on two dimensions and 0 on `measured` and `seller`; not at the bar."""
     result = S.measure()
     alpha = next(row for row in result["services"] if row["id"] == "alpha")
 
-    assert alpha["score"] > 60          # the average looks respectable
+    assert alpha["score"] > 40          # the average still looks plausible
     assert alpha["meets_bar"] is False  # and the weakest dimension still fails
-    assert alpha["weakest"] in ("measured", "complete")
+    assert "seller" in alpha["dimensions"]
+    assert alpha["dimensions"]["seller"]["score"] == 0.0
+    assert "no Seller-Tester output" in alpha["dimensions"]["seller"]["evidence"]
     assert result["at_bar"] == []
+
+
+def test_artefacts_alone_cannot_reach_the_bar(world):
+    """A service whose only evidence is passing tests scores 60 on `correct`, not 100."""
+    result = S.measure()
+    alpha = next(row for row in result["services"] if row["id"] == "alpha")
+    assert alpha["dimensions"]["correct"]["score"] == 60.0
+    assert "Seller-Tester" in alpha["dimensions"]["correct"]["evidence"]
 
 
 def test_the_gap_is_impact_times_the_distance_to_the_bar(world):

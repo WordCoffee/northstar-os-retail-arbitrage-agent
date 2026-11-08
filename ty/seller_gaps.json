@@ -11,7 +11,7 @@
       "text_free"
     ],
     "artefact_path": "renders/_ab_crop.png",
-    "at": "2026-11-08T08:46:37+00:00"
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-3ccb0e2c64fb",
@@ -23,7 +23,19 @@
       "subject_fill"
     ],
     "artefact_path": "renders/_ab_full.png",
-    "at": "2026-11-08T08:46:37+00:00"
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
+    "id": "gap-c7c8b854e1fb",
+    "brief_id": "ST-003",
+    "score": 28.6,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/_debug_compose.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-b704608f1240",
@@ -35,6 +47,21 @@
     ],
     "artefact_path": "renders/ab_realism_crop.png",
     "at": "2026-11-08T08:46:37+00:00"
+  },
+  {
+    "id": "gap-442da4539235",
+    "brief_id": "ST-004",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_stage_heal_lm.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-323b93d5aa72",
@@ -51,6 +78,21 @@
     "at": "2026-11-08T08:46:37+00:00"
   },
   {
+    "id": "gap-d8cbf15c33be",
+    "brief_id": "ST-005",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_stage_heal_shi.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-0890851cbaae",
     "brief_id": "ST-005",
     "score": 15.0,
@@ -65,6 +107,18 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-aec5977b5103",
+    "brief_id": "ST-006",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/_stage_panel_lm.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-8204176e2551",
     "brief_id": "ST-006",
     "score": 9.1,
@@ -75,6 +129,21 @@
     ],
     "artefact_path": "renders/ab_realism_side_by_side.png",
     "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-c74eca97b7a4",
+    "brief_id": "ST-007",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_stage_panel_shi.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-0906c94d93bf",
@@ -92,6 +161,21 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-856c5c037981",
+    "brief_id": "ST-008",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_stage_warp_lm.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-101d22d81f41",
     "brief_id": "ST-008",
     "score": 5.0,
@@ -105,6 +189,21 @@
     ],
     "artefact_path": "renders/mogra-forest-dusk-mockup-complete.png",
     "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-0ea6275675e0",
+    "brief_id": "ST-009",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/_stage_warp_shi.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-fe8ab930bc2a",
@@ -121,6 +220,17 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-ab70bdb2be68",
+    "brief_id": "ST-010",
+    "score": 45.5,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "renders/ab_realism_crop.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-0e7ae8ed4804",
     "brief_id": "ST-011",
     "score": 57.1,
@@ -130,6 +240,18 @@
     ],
     "artefact_path": "generated_images/branding_logo-beacon-tower.jpg",
     "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-eb090d64349d",
+    "brief_id": "ST-011",
+    "score": 28.6,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/ab_realism_flat.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-47f8122cf9b0",
@@ -146,6 +268,20 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-fe2a5a87ada0",
+    "brief_id": "ST-012",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/ab_realism_real.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-de4bb7423460",
     "brief_id": "ST-013",
     "score": 35.0,
@@ -159,6 +295,21 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-4f7e958ce026",
+    "brief_id": "ST-013",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/ab_realism_side_by_side.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-9b57b6138471",
     "brief_id": "ST-014",
     "score": 45.5,
@@ -168,6 +319,18 @@
     ],
     "artefact_path": "generated_images/branding_logo-pathway-nodes.jpg",
     "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-1cb19d00ad19",
+    "brief_id": "ST-014",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_01_header.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-7cd959fdc974",
@@ -184,6 +347,20 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-728781b09226",
+    "brief_id": "ST-015",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_02_three_tiles.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-34fd428cdc2d",
     "brief_id": "ST-016",
     "score": 15.0,
@@ -196,6 +373,20 @@
     ],
     "artefact_path": "generated_images/branding_northstar-logo.jpg",
     "at": "2026-11-08T08:46:38+00:00"
+  },
+  {
+    "id": "gap-eeba40fe0c65",
+    "brief_id": "ST-016",
+    "score": 20.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_03_banner.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-5127a1701a11",
@@ -213,6 +404,20 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-888e81884222",
+    "brief_id": "ST-017",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_04_four_tiles.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-d8031b0228af",
     "brief_id": "ST-018",
     "score": 9.1,
@@ -225,6 +430,18 @@
     "at": "2026-11-08T08:46:38+00:00"
   },
   {
+    "id": "gap-f2ccfc4dceb1",
+    "brief_id": "ST-018",
+    "score": 9.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_05_comparison.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-eb27083380ed",
     "brief_id": "ST-019",
     "score": 28.6,
@@ -235,6 +452,20 @@
     ],
     "artefact_path": "generated_images/screenshots/costco_trash bags_20260911_212920.png",
     "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-3ddf71e38f08",
+    "brief_id": "ST-019",
+    "score": 0.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill",
+      "file_size",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_06_logo.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-d84fca604f4e",
@@ -252,6 +483,20 @@
     "at": "2026-11-08T08:46:39+00:00"
   },
   {
+    "id": "gap-13d91b736c7b",
+    "brief_id": "ST-020",
+    "score": 25.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_design/aplus_preview.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-55068ff0cd1c",
     "brief_id": "ST-021",
     "score": 5.0,
@@ -267,6 +512,21 @@
     "at": "2026-11-08T08:46:39+00:00"
   },
   {
+    "id": "gap-864ec4c2db4c",
+    "brief_id": "ST-021",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_01_header.png",
+    "at": "2026-11-08T09:45:38+00:00"
+  },
+  {
     "id": "gap-16733296e283",
     "brief_id": "ST-022",
     "score": 0.0,
@@ -278,6 +538,17 @@
     ],
     "artefact_path": "generated_images/screenshots/screenshot_20260911_130830.png",
     "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-918c87b9c9a5",
+    "brief_id": "ST-022",
+    "score": 45.5,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_02_three_tiles.png",
+    "at": "2026-11-08T09:45:38+00:00"
   },
   {
     "id": "gap-1ce79c057520",
@@ -294,6 +565,21 @@
     "at": "2026-11-08T08:46:39+00:00"
   },
   {
+    "id": "gap-9f5bf1d1a3ce",
+    "brief_id": "ST-023",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_03_banner.png",
+    "at": "2026-11-08T09:45:39+00:00"
+  },
+  {
     "id": "gap-b19ba565cd9f",
     "brief_id": "ST-024",
     "score": 25.0,
@@ -306,6 +592,21 @@
     ],
     "artefact_path": "generated_images/screenshots/screenshot_20260911_171420.png",
     "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-51512f34243e",
+    "brief_id": "ST-024",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_04_four_tiles.png",
+    "at": "2026-11-08T09:45:39+00:00"
   },
   {
     "id": "gap-3e4affd4826e",
@@ -323,6 +624,21 @@
     "at": "2026-11-08T08:46:39+00:00"
   },
   {
+    "id": "gap-8ca19cfb1af6",
+    "brief_id": "ST-025",
+    "score": 5.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_05_comparison.png",
+    "at": "2026-11-08T09:45:39+00:00"
+  },
+  {
     "id": "gap-04a65d736d14",
     "brief_id": "ST-026",
     "score": 45.5,
@@ -334,6 +650,19 @@
     "at": "2026-11-08T08:46:39+00:00"
   },
   {
+    "id": "gap-9bee705fd889",
+    "brief_id": "ST-026",
+    "score": 0.0,
+    "failed_checks": [
+      "dimensions",
+      "aspect",
+      "subject_fill",
+      "file_size"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_06_logo.png",
+    "at": "2026-11-08T09:45:39+00:00"
+  },
+  {
     "id": "gap-93b0a75ab15c",
     "brief_id": "ST-027",
     "score": 57.1,
@@ -343,6 +672,17 @@
     ],
     "artefact_path": "generated_images/screenshots/sourcescout_proof_20260912_164237.png",
     "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-2159be727ea1",
+    "brief_id": "ST-027",
+    "score": 57.1,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "renders/aplus_live_20261031/aplus_preview.png",
+    "at": "2026-11-08T09:45:39+00:00"
   },
   {
     "id": "gap-2234f35bf27c",
@@ -357,6 +697,20 @@
     ],
     "artefact_path": "generated_images/screenshots/sourcescout_proof_20260912_170901.png",
     "at": "2026-11-08T08:46:39+00:00"
+  },
+  {
+    "id": "gap-486bf4da24c9",
+    "brief_id": "ST-028",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/autonomy_probe/a10_stored_previous_generation.png",
+    "at": "2026-11-08T09:45:39+00:00"
   },
   {
     "id": "gap-bd4bfdc8c334",
@@ -374,6 +728,20 @@
     "at": "2026-11-08T08:46:40+00:00"
   },
   {
+    "id": "gap-9dac444b77f8",
+    "brief_id": "ST-029",
+    "score": 15.0,
+    "failed_checks": [
+      "dimensions",
+      "background",
+      "subject_fill",
+      "alpha_matte",
+      "text_free"
+    ],
+    "artefact_path": "renders/autonomy_probe/a10_uploaded_reference.png",
+    "at": "2026-11-08T09:45:39+00:00"
+  },
+  {
     "id": "gap-22295d30f575",
     "brief_id": "ST-030",
     "score": 0.0,
@@ -385,5 +753,16 @@
     ],
     "artefact_path": "generated_images/screenshots/test_chrome_signup.png",
     "at": "2026-11-08T08:46:40+00:00"
+  },
+  {
+    "id": "gap-1dbfb878e437",
+    "brief_id": "ST-030",
+    "score": 45.5,
+    "failed_checks": [
+      "dimensions",
+      "aspect"
+    ],
+    "artefact_path": "renders/autonomy_probe/a8_1024.png",
+    "at": "2026-11-08T09:45:39+00:00"
   }
 ]

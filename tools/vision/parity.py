@@ -273,8 +273,98 @@ class ChromeConnectBackend:
         return None
 
 
+class UIABackend:
+    """Ty's Vision driving the live Profile 6 window through UI Automation.
+
+    Used when there is no CDP endpoint (owner instruction 2026-11-08: *drive Profile 6
+    through UIA plus the pixel fallback*). It needs an unlocked, signed-in desktop: UIA can
+    read a locked screen's lock window, not the browser behind it.
+    """
+
+    name = "uia"
+
+    def __init__(self) -> None:
+        self.page: Any = None
+        self.url = ""
+
+    def available(self) -> Dict[str, Any]:
+        from . import chrome_uia  # noqa: PLC0415
+
+        status = chrome_uia.status()
+        if not status.get("windows"):
+            return {"ok": False, "reason": "no Chrome window to drive"}
+        # The lock screen is a different desktop: the foreground belongs to LockApp and no
+        # keystroke can reach Chrome. Detect it by process, not by hope.
+        foreground = int(status.get("foreground") or 0)
+        process = ""
+        if foreground:
+            import ctypes  # noqa: PLC0415
+            from ctypes import wintypes  # noqa: PLC0415
+
+            pid = wintypes.DWORD()
+            ctypes.windll.user32.GetWindowThreadProcessId(foreground, ctypes.byref(pid))
+            from . import capture  # noqa: PLC0415
+
+            process = capture._process_name(pid.value)
+        if process.casefold() == "lockapp.exe":
+            return {"ok": False,
+                    "reason": ("the desktop is locked (foreground is LockApp.exe); UIA "
+                               "cannot drive a browser behind the lock screen"),
+                    "kind": "desktop_locked"}
+        attached = chrome_uia.ChromeUIA.attach()
+        if not attached.get("ok"):
+            return {"ok": False, "reason": attached.get("reason"),
+                    "kind": "attach_refused"}
+        self.page = attached["page"]
+        return {"ok": True, "hwnd": self.page.hwnd}
+
+    def navigate(self, url: str) -> Dict[str, Any]:
+        if not self.page:
+            return {"ok": False, "reason": "not attached"}
+        result = self.page.open_url(url)
+        if result.get("ok"):
+            self.url = url
+        return result
+
+    def current_url(self) -> str:
+        return self.url
+
+    def title(self) -> str:
+        return self.page.title_now() if self.page else ""
+
+    def find(self, needle: str):
+        return self.page.find(needle) if self.page else None
+
+    def ax_tree(self) -> Dict[str, Any]:
+        if not self.page:
+            return {"ok": False, "elements": [], "count": 0}
+        elements = self.page.elements()
+        return {"ok": True, "elements": elements, "count": len(elements)}
+
+    def read_text(self, selector: str) -> Dict[str, Any]:
+        return self.page.read_text() if self.page else {"ok": False, "text": ""}
+
+    def click(self, element: Dict[str, Any]) -> Dict[str, Any]:
+        return self.page.click(element) if self.page else {"ok": False}
+
+    def type_text(self, text: str) -> Dict[str, Any]:
+        if not self.page:
+            return {"ok": False}
+        return self.page._type(text)
+
+    def scroll(self, dy: int) -> Dict[str, Any]:
+        if not self.page:
+            return {"ok": False}
+        return self.page._keys("pagedown")
+
+    def close(self) -> None:
+        if self.page:
+            self.page.close_tab()
+
+
 BACKENDS: Dict[str, Callable[..., Any]] = {"vision": VisionBackend,
-                                          "chromeconnect": ChromeConnectBackend}
+                                          "chromeconnect": ChromeConnectBackend,
+                                          "uia": UIABackend}
 
 
 # ------------------------------------------------------------------------- runner
@@ -318,23 +408,25 @@ def _recovery(backend: Any, base: str) -> Dict[str, Any]:
 
 
 def compare(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Vision matches or beats Chrome Connect on success rate and recovery."""
+    """A challenger matches or beats Chrome Connect on success rate and recovery."""
     by_name = {row["backend"]: row for row in rows}
-    vision = by_name.get("vision")
+    challenger = next((by_name[name] for name in ("vision", "uia") if name in by_name), None)
     incumbent = by_name.get("chromeconnect")
-    if not vision or not incumbent:
-        return {"ok": False, "reason": "both backends are required for a comparison"}
-    if not vision.get("ran") or not incumbent.get("ran"):
-        missing = [name for name, row in by_name.items() if not row.get("ran")]
+    if not challenger or not incumbent:
+        return {"ok": False, "reason": "both a challenger and the incumbent are required"}
+    if not challenger.get("ran") or not incumbent.get("ran"):
+        missing = [row["backend"] for row in rows if not row.get("ran")]
         return {"ok": False, "reason": "not_run", "missing": missing,
                 "detail": {name: by_name[name].get("reason") for name in missing}}
-    vision_rate = vision["passed"] / max(1, vision["total"])
+    challenger_rate = challenger["passed"] / max(1, challenger["total"])
     incumbent_rate = incumbent["passed"] / max(1, incumbent["total"])
-    ok = (vision_rate >= incumbent_rate
-          and bool(vision["recovery"].get("ok")) >= bool(incumbent["recovery"].get("ok")))
-    return {"ok": ok, "vision_rate": round(vision_rate, 2),
+    ok = (challenger_rate >= incumbent_rate
+          and bool(challenger["recovery"].get("ok"))
+          >= bool(incumbent["recovery"].get("ok")))
+    return {"ok": ok, "challenger": challenger["backend"],
+            "challenger_rate": round(challenger_rate, 2),
             "chromeconnect_rate": round(incumbent_rate, 2),
-            "vision_recovery": vision["recovery"].get("ok"),
+            "challenger_recovery": challenger["recovery"].get("ok"),
             "chromeconnect_recovery": incumbent["recovery"].get("ok")}
 
 
@@ -384,8 +476,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         row = run_suite(backend, base=ns.base)
         if ns.out:
             Path(ns.out).write_text(json.dumps(row, indent=2) + "\n", encoding="utf-8")
-        print(json.dumps({k: row[k] for k in ("backend", "pass", "ran", "passed",
-                                              "total", "reason", "recovery")}, indent=2))
+        print(json.dumps({k: row.get(k) for k in ("backend", "pass", "ran", "passed",
+                                                 "total", "reason", "recovery",
+                                                 "hint")}, indent=2))
         return 0 if row["pass"] else 1
     parser.print_help()
     return 0

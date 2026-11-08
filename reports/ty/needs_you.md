@@ -142,20 +142,41 @@ D1 probes the real concurrent-session limit. If the probe cannot establish it, t
 Director caps at 4 cloud workers as the work order states and records the assumption in
 `reports/ty/director_probe.md`. No action needed unless the reply below is empty.
 
-## DIR-4. One Chrome restart, to close V3 and retire Chrome Connect (2026-11-08)
+## DIR-4. Chrome debugging: replaced by the UIA route; now waiting on an unlocked desktop (2026-11-08)
 
-Ty's Vision needs a CDP endpoint. Chrome is running without `--remote-debugging-port`, and
-the standing rules forbid Ty from killing Chrome or creating any throwaway profile, so Ty
-cannot create the endpoint itself.
+The old entry asked for a Chrome restart. It has been replaced after trying the alternatives.
 
-**One action:** close Google Chrome completely (every window), then open it once with:
+**Tried, with evidence:**
+
+1. **Version.** Chrome `156.0.8078.80`, already running (pid 28428) on the default
+   user-data-dir with `Profile 6`, no `--remote-debugging-port`.
+2. **Relaunch with the flag.** `chrome.exe --profile-directory="Profile 6"
+   --remote-debugging-port=9222` handed off to the running instance: `http://127.0.0.1:9222/json/version`
+   still refuses, and no Chrome process carries the flag. Chrome will not open a debugging
+   port on a second launch while the first is alive.
+3. **`chrome://inspect`.** No such toggle exists: the page discovers *existing* endpoints,
+   it cannot enable one on a running browser, and Chrome ignores `chrome://` URLs passed on
+   the command line to a running instance (`start chrome://inspect` opened nothing).
+4. **Fallback adopted instead:** `tools/vision/chrome_uia.py` drives **Profile 6 itself**
+   through UI Automation with the pixel fallback — no throwaway profile, no profile copy.
+   It refuses any blocklisted window, verifies the foreground before every keystroke, opens
+   its own tab, and closes that tab. 10 tests; parity gained a `uia` backend.
+
+**What is needed now: the desktop is locked.** `GetForegroundWindow` is
+`Windows Default Lock Screen` / `LockApp.exe`, so no keystroke can reach Chrome and UIA can
+only read the lock window. The UIA parity backend reports exactly that and refuses
+(`reports/ty/d8_parity_uia.json`).
+
+**One action:** unlock and sign in to the Windows session, then leave it unlocked while Ty
+runs. Ty needs no password and will not attempt to unlock anything.
+
+Optional, only if you prefer CDP over UIA: with Chrome fully closed, reopen it once with
 
 ```
 & "C:\Program Files\Google\Chrome\Application\chrome.exe" --profile-directory="Profile 6" --remote-debugging-port=9222
 ```
 
-Nothing else is needed. Ty then runs the ten-task parity suite twice and quarantines Chrome
-Connect only if both runs pass. Until then Chrome Connect stays the controller and the
-quarantine is correctly refused. This blocks nothing else in the program.
+Either route closes V3; UIA needs nothing from you but presence.
+
 
 
