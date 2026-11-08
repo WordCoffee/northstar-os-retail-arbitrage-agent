@@ -1,0 +1,46 @@
+{
+  "model": "bojo:latest",
+  "score": 6,
+  "max": 18,
+  "tasks": [
+    {
+      "task": "MGR-1",
+      "asks": 0,
+      "no_fabrication": 2,
+      "routes": 0,
+      "total": 2,
+      "max": 6,
+      "asked_fields": [],
+      "invented_numbers": [],
+      "model": "bojo:latest",
+      "elapsed_s": 5.3,
+      "reply_head": ""
+    },
+    {
+      "task": "MGR-2",
+      "asks": 0,
+      "no_fabrication": 2,
+      "routes": 0,
+      "total": 2,
+      "max": 6,
+      "asked_fields": [],
+      "invented_numbers": [],
+      "model": "bojo:latest",
+      "elapsed_s": 1.87,
+      "reply_head": ""
+    },
+    {
+      "task": "MGR-3",
+      "asks": 0,
+      "no_fabrication": 2,
+      "routes": 0,
+      "total": 2,
+      "max": 6,
+      "asked_fields": [],
+      "invented_numbers": [],
+      "model": "bojo:latest",
+      "elapsed_s": 1.88,
+      "reply_head": ""
+    }
+  ]
+}

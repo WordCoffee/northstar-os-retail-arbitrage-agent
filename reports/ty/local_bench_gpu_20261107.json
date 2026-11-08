@@ -1,0 +1,57 @@
+{
+  "at": "2026-11-08T05:07:48Z",
+  "ollama": "http://127.0.0.1:11434",
+  "vram": {
+    "ok": true,
+    "gpu": "NVIDIA GeForce RTX 5080 Laptop GPU",
+    "total_mb": 16303,
+    "used_mb": 14076,
+    "free_mb": 1928,
+    "util_pct": 9,
+    "used_frac": 0.863,
+    "free_gb": 1.88
+  },
+  "ram": {
+    "ok": true,
+    "free_gb": 5.53,
+    "total_gb": 15.42
+  },
+  "rows": [
+    {
+      "role": "bojo",
+      "model": "bojo:latest",
+      "device": "100% GPU",
+      "repeats": 3,
+      "ttft_s": 0.02,
+      "tokens_per_s": 218.37,
+      "wall_s": 0.64
+    },
+    {
+      "role": "coder",
+      "model": "qwen3:8b",
+      "device": "100% GPU",
+      "repeats": 3,
+      "ttft_s": 0.01,
+      "tokens_per_s": 111.27,
+      "wall_s": 1.2
+    },
+    {
+      "role": "vision",
+      "model": "qwen2.5vl:7b",
+      "device": "100% GPU",
+      "repeats": 3,
+      "ttft_s": 0.009,
+      "tokens_per_s": 128.61,
+      "wall_s": 0.26
+    },
+    {
+      "role": "embeddings",
+      "model": "qwen3-embedding:0.6b",
+      "device": "100% GPU",
+      "texts": 5,
+      "dims": 1024,
+      "per_text_ms": 867.8,
+      "wall_s": 4.34
+    }
+  ]
+}

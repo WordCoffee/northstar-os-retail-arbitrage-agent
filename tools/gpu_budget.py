@@ -84,9 +84,19 @@ ROLE_BUDGET_GB = {
     "vision": 8.0,
     "gui_grounding": 8.0,
     "embeddings": 2.5,
-    "image_flux": 12.0,
-    "image_t2i": 12.0,
+    "image_flux": 11.0,
+    "image_t2i": 11.0,
+    "27b": 14.5,
 }
+
+#: The set that may stay resident between jobs. Measured together at 5.15 GB VRAM with
+#: 5.40 GB of RAM free and no change in desktop latency (reports/ty/d7_coexistence.md).
+RESIDENT_ROLES = ("bojo", "embeddings")
+
+#: Roles that need the whole GPU to themselves. The 27B measured 14.32 GB VRAM and
+#: 0.04 GB of RAM free, which is why the historical CPU pin existed; it is a lease, not
+#: a resident.
+EXCLUSIVE_ROLES = ("27b", "image_flux", "image_t2i")
 
 #: The model that actually serves each local role today. A role with no model is
 #: reported as unmapped rather than guessed at.
@@ -228,6 +238,121 @@ def fits(role: str, model_gb: float) -> Dict[str, Any]:
     return {"ok": model_gb <= available, "role": role, "model_gb": model_gb,
             "budget_gb": budget, "free_gb": snap["free_gb"],
             "available_gb": round(available, 2)}
+
+
+def loaded_models() -> List[str]:
+    """What Ollama currently holds resident, by name."""
+    return [str(row.get("name")) for row in ps() if row.get("name")]
+
+
+def enforce(keep: Optional[Sequence[str]] = None) -> Dict[str, Any]:
+    """Unload every resident model that is not in the keep set.
+
+    This is the lock manager owning residency rather than a global environment pin
+    owning it. It runs before an exclusive lease and before any budget-sensitive load.
+    """
+    keep_roles = list(RESIDENT_ROLES if keep is None else keep)
+    keep_models = {ROLE_MODELS[role] for role in keep_roles if role in ROLE_MODELS}
+    unloaded: List[str] = []
+    for name in loaded_models():
+        if name not in keep_models:
+            unload(name)
+            unloaded.append(name)
+    return {"kept": sorted(keep_models), "unloaded": unloaded,
+            "residency": residency()}
+
+
+def residency() -> Dict[str, Any]:
+    """Current residency versus the policy. Drift is visible, not assumed."""
+    policy = sorted(ROLE_MODELS[role] for role in RESIDENT_ROLES if role in ROLE_MODELS)
+    current = loaded_models()
+    return {"policy": policy, "current": sorted(current),
+            "drift": sorted(set(current) - set(policy))}
+
+
+#: Measured resident VRAM per role (reports/ty/d7_coexistence.md). Used to decide
+#: whether a role can be added without evicting something else first.
+ROLE_SIZE_GB = {
+    "bojo": 3.07,
+    "coder": 6.63,
+    "vision": 7.41,
+    "gui_grounding": 7.41,
+    "embeddings": 2.08,
+}
+
+COMFY = os.environ.get("COMFY_URL", "http://127.0.0.1:8188")
+
+
+def free_comfy(timeout: float = 30.0) -> Dict[str, Any]:
+    """Ask ComfyUI to drop its models. They reload on the next render, so this is
+    eviction, not loss - the same trade the stop/restore cycle made by hand."""
+    req = urllib.request.Request(
+        COMFY.rstrip("/") + "/free",
+        data=json.dumps({"unload_models": True, "free_memory": True}).encode("utf-8"),
+        headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return {"ok": 200 <= resp.status < 300, "status": resp.status}
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        return {"ok": False, "reason": f"{type(exc).__name__}: {exc}"}
+
+
+def acquire(role: str, *, ttl_s: int = 3600) -> Dict[str, Any]:
+    """Take the GPU for a role, and leave the machine in a state that role can use.
+
+    An exclusive role drains everything first, including the resident pair, because the
+    27B measured 0.04 GB of RAM free next to nothing else. A shared role keeps the
+    resident pair and adds itself.
+    """
+    held = lock(role, ttl_s=ttl_s)
+    if not held.get("ok"):
+        return held
+    exclusive = role in EXCLUSIVE_ROLES
+    keep = () if exclusive else tuple(RESIDENT_ROLES) + (role,)
+    freed = enforce(keep=keep)
+    if role == "27b":
+        # llama-server is not an Ollama model; the lock manager owns the *residency*,
+        # and hands back the starter rather than pretending it can load it.
+        return {"ok": True, "role": role, "exclusive": True, "freed": freed,
+                "action": "powershell -NoProfile -ExecutionPolicy Bypass "
+                          "-File scripts/start-northstar-llm.ps1"}
+    model = ROLE_MODELS.get(role, "")
+    if not model:
+        unlock(role)
+        return {"ok": False, "reason": "no_model_for_role", "role": role, "freed": freed}
+    need = ROLE_SIZE_GB.get(role, 0.0)
+    fit = fits(role, need) if need else {"ok": True}
+    comfy_freed = {}
+    if not fit.get("ok") and role not in ("image_flux", "image_t2i"):
+        # ComfyUI holds VRAM that it can reload on demand; the trace above proves it.
+        comfy_freed = free_comfy()
+        fit = fits(role, need)
+    if not fit.get("ok"):
+        unlock(role)
+        return {"ok": False, "reason": "does_not_fit", "role": role, "fit": fit,
+                "freed": freed, "comfy": comfy_freed}
+    result = load(model, role=role)
+    return {"ok": bool(result.get("ok")), "role": role, "model": model,
+            "exclusive": exclusive, "freed": freed, "comfy": comfy_freed,
+            "fit": fit, **result}
+
+
+def release(role: str, *, restore: bool = True) -> Dict[str, Any]:
+    """End a role's lease and put the resident pair back, which is the restore half."""
+    model = ROLE_MODELS.get(role, "")
+    unloaded = ""
+    if model:
+        unload(model)
+        unloaded = model
+    unlock(role)
+    restored: Dict[str, bool] = {}
+    if restore:
+        for name in RESIDENT_ROLES:
+            target = ROLE_MODELS.get(name)
+            if target:
+                restored[name] = bool(_warm(target, name).get("ok"))
+    return {"ok": True, "released": role, "unloaded": unloaded, "restored": restored,
+            "residency": residency()}
 
 
 def lock(role: str, ttl_s: int = 3600) -> Dict[str, Any]:
