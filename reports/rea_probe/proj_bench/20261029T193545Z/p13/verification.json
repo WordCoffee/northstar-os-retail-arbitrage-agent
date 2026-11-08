@@ -1,0 +1,8 @@
+{
+  "brief": "p13",
+  "checks": [
+    "sizes sourced",
+    "no unsourced row"
+  ],
+  "artifact": "canvases.json"
+}

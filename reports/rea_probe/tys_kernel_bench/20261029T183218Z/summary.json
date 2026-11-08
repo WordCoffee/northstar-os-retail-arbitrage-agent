@@ -1,0 +1,182 @@
+{
+  "mode": "kernel benchmark (run_kernel + semantic validators)",
+  "briefs": 20,
+  "passed": 12,
+  "failed": 8,
+  "rate": 0.6,
+  "model_lane": 17,
+  "tool_lane": 3,
+  "jsonl": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel_bench\\20261029T183218Z\\evidence.jsonl",
+  "failed_ids": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p07",
+    "p19",
+    "p20"
+  ],
+  "rows": [
+    {
+      "id": "p01",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 55.5
+    },
+    {
+      "id": "p02",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.1
+    },
+    {
+      "id": "p03",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 8.6
+    },
+    {
+      "id": "p04",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 8.5
+    },
+    {
+      "id": "p05",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.4
+    },
+    {
+      "id": "p06",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 3.3
+    },
+    {
+      "id": "p07",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 5.1
+    },
+    {
+      "id": "p08",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 2.7
+    },
+    {
+      "id": "p09",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 3.9
+    },
+    {
+      "id": "p10",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 4.8
+    },
+    {
+      "id": "p11",
+      "lane": "tool",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 1.5
+    },
+    {
+      "id": "p12",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 3.6
+    },
+    {
+      "id": "p13",
+      "lane": "tool",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 0.2
+    },
+    {
+      "id": "p14",
+      "lane": "tool",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "p15",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 50.9
+    },
+    {
+      "id": "p16",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 6.9
+    },
+    {
+      "id": "p17",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 3.2
+    },
+    {
+      "id": "p18",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": true,
+      "seconds": 8.7
+    },
+    {
+      "id": "p19",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 19.6
+    },
+    {
+      "id": "p20",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 5.2
+    }
+  ]
+}

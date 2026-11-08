@@ -1,0 +1,23 @@
+2026-11-02T01:05:32+00:00 [campaign-20261102T010532Z] campaign start max_tasks=3 deadline_minutes=120.0 max_consecutive_failures=2
+2026-11-02T01:05:32+00:00 [campaign-20261102T010532Z] dispatch task=ty-hitl-skip-report lane=qwen3.5:4b phase=precheck
+2026-11-02T01:05:45+00:00 [campaign-20261102T010532Z] completed task=ty-hitl-skip-report commit=883a7fed49aa duration=12.598
+2026-11-02T01:05:45+00:00 [campaign-20261102T010532Z] dispatch task=ty-diff-select-headers lane=qwen3.5:4b phase=precheck
+2026-11-02T01:05:57+00:00 [campaign-20261102T010532Z] failed task=ty-diff-select-headers commit=- duration=None
+2026-11-02T01:05:57+00:00 [campaign-20261102T010532Z] dispatch task=ty-artifact-jpeg lane=qwen3.5:4b phase=precheck
+2026-11-02T01:06:04+00:00 [campaign-20261102T010532Z] failed task=ty-artifact-jpeg commit=- duration=None
+2026-11-02T01:06:04+00:00 [campaign-20261102T010532Z] halt: 2 consecutive failures
+2026-11-02T01:06:04+00:00 [campaign-20261102T010532Z] campaign stop reason=max_consecutive_failures attempted=3 completed=1 failed=2
+2026-11-02T01:07:06+00:00 [campaign-20261102T010706Z] campaign start max_tasks=2 deadline_minutes=90.0 max_consecutive_failures=2
+2026-11-02T01:07:06+00:00 [campaign-20261102T010706Z] dispatch task=ty-diff-select-headers lane=qwen3.5:4b phase=precheck
+2026-11-02T01:07:58+00:00 [campaign-20261102T010706Z] failed task=ty-diff-select-headers commit=- duration=None
+2026-11-02T01:07:58+00:00 [campaign-20261102T010706Z] dispatch task=ty-artifact-jpeg lane=qwen3.5:4b phase=precheck
+2026-11-02T01:08:16+00:00 [campaign-20261102T010706Z] failed task=ty-artifact-jpeg commit=- duration=None
+2026-11-02T01:08:16+00:00 [campaign-20261102T010706Z] halt: 2 consecutive failures
+2026-11-02T01:08:16+00:00 [campaign-20261102T010706Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2
+2026-11-02T01:22:32+00:00 [campaign-20261102T012232Z] campaign start max_tasks=2 deadline_minutes=60.0 max_consecutive_failures=2
+2026-11-02T01:22:32+00:00 [campaign-20261102T012232Z] dispatch task=ty-diff-select-headers lane=qwen3.5:4b phase=precheck
+2026-11-02T01:24:26+00:00 [campaign-20261102T012232Z] failed task=ty-diff-select-headers commit=- duration=None
+2026-11-02T01:24:26+00:00 [campaign-20261102T012232Z] dispatch task=ty-artifact-jpeg lane=qwen3.5:4b phase=precheck
+2026-11-02T01:24:45+00:00 [campaign-20261102T012232Z] failed task=ty-artifact-jpeg commit=- duration=None
+2026-11-02T01:24:45+00:00 [campaign-20261102T012232Z] halt: 2 consecutive failures
+2026-11-02T01:24:45+00:00 [campaign-20261102T012232Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2

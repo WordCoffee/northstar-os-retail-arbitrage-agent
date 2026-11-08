@@ -1,0 +1,9 @@
+{
+  "brief": "p11",
+  "checks": [
+    "residual under 0.5 px",
+    "OCR terms read",
+    "printable"
+  ],
+  "artifact": "label.png"
+}

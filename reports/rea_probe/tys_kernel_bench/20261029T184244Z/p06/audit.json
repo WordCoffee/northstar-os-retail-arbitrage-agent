@@ -1,0 +1,5 @@
+{
+  "setting_key": "org.mfa_require_all",
+  "observed_value": false,
+  "verdict": "matches"
+}

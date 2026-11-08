@@ -1,0 +1,8 @@
+{
+  "brief": "p03",
+  "checks": [
+    "tests green",
+    "public API unchanged"
+  ],
+  "artifact": "refactor.md"
+}

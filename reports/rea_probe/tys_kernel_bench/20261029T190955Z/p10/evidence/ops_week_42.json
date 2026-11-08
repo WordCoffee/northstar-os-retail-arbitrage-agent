@@ -1,0 +1,29 @@
+{
+  "lanes": {
+    "browser": {
+      "failed": 1,
+      "passed": 3,
+      "runs": 4
+    },
+    "coding": {
+      "failed": 0,
+      "passed": 11,
+      "runs": 11
+    },
+    "label": {
+      "failed": 0,
+      "passed": 2,
+      "runs": 2
+    }
+  },
+  "missing": [
+    {
+      "field": "renders_completed",
+      "why": "render worker offline all week"
+    }
+  ],
+  "operator_gates": 1,
+  "renders_completed": null,
+  "source": "local evidence export, no live calls",
+  "week": "2026-W42"
+}

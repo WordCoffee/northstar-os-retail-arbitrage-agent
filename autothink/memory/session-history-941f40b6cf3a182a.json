@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Professional product photography of a 6oz stand-up pouch of Mogra Organics Lions Mane mushroom powder. Matte kraft-brown pouch with clear window showing fine off-white powder. Front label: 'Mogra Organics' in elegant serif at top, 'Lions Mane Mushroom Powder' below, '6 oz (170g)' weight badge, small gold 'Organic' badge, soft botanical illustration of lion's mane mushroom. Color palette: warm cream, earthy brown, forest green, gold accents. Pouch stands upright on natural stone surface with soft moss and dried lion's mane pieces beside it. Lighting: soft diffused natural light from upper-left. Background: blurred warm beige gradient with bokeh. Style: clean premium supplement packaging, e-commerce hero shot, 4:5 aspect ratio. No text artifacts, no watermarks.",
+    "track": "AUTOTHINK_RESEARCH",
+    "provider": "local",
+    "tier": "T2",
+    "model": "northstaros-qwen3.8:27b",
+    "ok": false,
+    "task_class": "AUTOTHINK_RESEARCH",
+    "label": "research",
+    "files_touched": [],
+    "live_action_requested": false,
+    "approval_status": "not_requested",
+    "reason": "ollama http 500",
+    "org_id": "941f40b6cf3a182a",
+    "user_id": "941f40b6cf3a182a",
+    "run_id": "atrun_b0091f1a4aa0ebdd",
+    "content": "[LOCAL FALLBACK] Ollama is unavailable (ollama http 500). The AutothinK brain is still online — start it with: ollama serve",
+    "elapsed_ms": null,
+    "timestamp": "2026-10-24T09:47:03.618303+00:00"
+  }
+]

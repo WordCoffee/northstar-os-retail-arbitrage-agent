@@ -1,0 +1,461 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261101T015753Z",
+  "started_at": "2026-11-01T01:57:53+00:00",
+  "finished_at": "2026-11-01T01:58:43+00:00",
+  "stop_reason": "max_tasks",
+  "counts": {
+    "completed": 8,
+    "failed": 0,
+    "dry_run": 0
+  },
+  "readiness": {
+    "verdict": "GO",
+    "ok": true,
+    "checked_at": "2026-11-01T01:57:58+00:00",
+    "model_lane": {
+      "ok": true,
+      "provider": "ollama",
+      "model": "bojo:gpu-orig",
+      "reason": "bojo:gpu-orig is installed, proven for the Ty tool loop, and estimated at 2.25 GB; free RAM 4.44 GB at dispatch",
+      "free_ram_gb": 4.438,
+      "installed": [
+        {
+          "model": "bojo:gpu-orig",
+          "rank": 28,
+          "estimated_ram_gb": 2.25,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:2b",
+          "rank": 22,
+          "estimated_ram_gb": 2.25,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5vl:7b",
+          "rank": 10,
+          "estimated_ram_gb": 5.0,
+          "fits": false
+        }
+      ]
+    },
+    "branch": "feature/chrome-connect-3.0"
+  },
+  "tasks": [
+    {
+      "task": "hitl-pathlike",
+      "name": "HITL counts accepts path-like roots",
+      "status": "completed",
+      "commit": "b42171c5c332",
+      "duration_s": 4.512,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-c",
+              "import sys,tempfile,json; from pathlib import Path; sys.path.insert(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_a.json').write_text(json.dumps({'status':'pending'})); assert hitl_counts(str(d))['total']==1"
+            ],
+            "ok": false,
+            "exit": 1,
+            "duration_s": 0.099,
+            "error": "exit 1",
+            "output": "t(0,'Northstar_backend'); from agent_kernel.hitl_counts import hitl_counts; d=Path(tempfile.mkdtemp()); h=d/'state'/'hitl'; h.mkdir(parents=True); (h/'hitl_a.json').write_text(json.dumps({'status':'pending'})); assert hitl_counts(str(d))['total']==1\n                                                                                                                                                                                                                                                                                                ~~~~~~~~~~~^^^^^^^^\n  File \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\Northstar_backend\\agent_kernel\\hitl_counts.py\", line 7, in hitl_counts\n    if not root.exists():\n           ^^^^^^^^^^^\nAttributeError: 'str' object has no attribute 'exists'\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "hitl-pathlike"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.042,
+          "error": "",
+          "output": "applied hitl-pathlike\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "format-quad-guard",
+      "name": "Reject malformed quads in bottle/tube compositors",
+      "status": "completed",
+      "commit": "ca29ceea6f44",
+      "duration_s": 5.599,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_format_quad_guard.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.213,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_format_quad_guard.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "format-quad-guard"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.07,
+          "error": "",
+          "output": "applied format-quad-guard\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "geometry-bottom-guard",
+      "name": "Reject bottle labels that run into the bottom seam",
+      "status": "completed",
+      "commit": "03da4b07a6a0",
+      "duration_s": 5.463,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_geometry_bottom_guard.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.18,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_geometry_bottom_guard.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "geometry-bottom-guard"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.044,
+          "error": "",
+          "output": "applied geometry-bottom-guard\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "print-quad-guard",
+      "name": "Reject degenerate dieline quads",
+      "status": "completed",
+      "commit": "190c8e456fb8",
+      "duration_s": 5.588,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_print_quad_guard.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.194,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_print_quad_guard.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "print-quad-guard"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.044,
+          "error": "",
+          "output": "applied print-quad-guard\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "surface-wrap-guard",
+      "name": "Validate the visible wrap fraction",
+      "status": "completed",
+      "commit": "ff4985247a12",
+      "duration_s": 6.289,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_surface_wrap_guard.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.183,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_surface_wrap_guard.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "surface-wrap-guard"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.043,
+          "error": "",
+          "output": "applied surface-wrap-guard\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "panels-format-guard",
+      "name": "Unknown package formats are not print-ready",
+      "status": "completed",
+      "commit": "48daca5b0fc4",
+      "duration_s": 6.342,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_panels_format_guard.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.169,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_panels_format_guard.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "panels-format-guard"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.056,
+          "error": "",
+          "output": "applied panels-format-guard\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "dead-code-cleanup",
+      "name": "Remove unused imports from the new creative modules",
+      "status": "completed",
+      "commit": "558eceb947ab",
+      "duration_s": 5.525,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_dead_code.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.192,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_dead_code.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "dead-code-cleanup"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.043,
+          "error": "",
+          "output": "applied dead-code-cleanup\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    },
+    {
+      "task": "docs-autonomy",
+      "name": "Document the readiness gate and long-campaign controls",
+      "status": "completed",
+      "commit": "74c7d49c7f64",
+      "duration_s": 5.458,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_docs.py",
+              "-q"
+            ],
+            "ok": false,
+            "exit": 4,
+            "duration_s": 1.183,
+            "error": "exit 4",
+            "output": "\nno tests ran in 0.00s\n\nERROR: file or directory not found: Northstar_backend/test_autonomy_docs.py\n\n"
+          }
+        ],
+        "expected": "fail",
+        "detail": "all prechecks failed as required"
+      },
+      "apply": [
+        {
+          "cmd": [
+            "python",
+            "tools/autonomy_patches.py",
+            "docs-autonomy"
+          ],
+          "ok": true,
+          "exit": 0,
+          "duration_s": 0.043,
+          "error": "",
+          "output": "applied docs-autonomy\n"
+        }
+      ],
+      "error": "",
+      "restoration": null
+    }
+  ]
+}

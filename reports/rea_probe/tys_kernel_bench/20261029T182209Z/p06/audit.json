@@ -1,0 +1,5 @@
+{
+  "setting_key": "org.mfa_require_all",
+  "observed_value": false,
+  "verdict": "The admin setting 'org.mfa_require_all' is currently set to false in the captured settings panel (Admin > Settings > Security) for organisation org-t2. No change was submitted; the value reflects the rendered control as observed at 2026-10-27T14:05:00Z."
+}

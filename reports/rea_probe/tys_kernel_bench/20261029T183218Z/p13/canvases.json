@@ -1,0 +1,37 @@
+[
+  {
+    "format": "ig-post",
+    "width": 1440,
+    "height": 1800,
+    "channel": "Instagram",
+    "source": "meta-ads-feed"
+  },
+  {
+    "format": "meta-story",
+    "width": 1440,
+    "height": 2560,
+    "channel": "Meta",
+    "source": "meta-ads-story"
+  },
+  {
+    "format": "x-post",
+    "width": 1200,
+    "height": 628,
+    "channel": "X",
+    "source": "x-creative-specs"
+  },
+  {
+    "format": "linkedin",
+    "width": 1200,
+    "height": 628,
+    "channel": "LinkedIn",
+    "source": "linkedin-ad-specs"
+  },
+  {
+    "format": "yt-thumb",
+    "width": 3840,
+    "height": 2160,
+    "channel": "YouTube",
+    "source": "youtube-thumbnails"
+  }
+]

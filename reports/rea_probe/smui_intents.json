@@ -3,22 +3,22 @@
   "date": "2026-10-28",
   "source_db": "Northstar_backend\\data\\northstar.db",
   "totals": {
-    "chat_sessions": 26,
-    "chat_messages": 121,
-    "chat_runs": 58,
-    "chat_tool_calls": 39
+    "chat_sessions": 29,
+    "chat_messages": 129,
+    "chat_runs": 62,
+    "chat_tool_calls": 45
   },
-  "user_messages_scanned": 60,
-  "messages_per_session": 4.65,
-  "tool_calls_per_session": 1.5,
+  "user_messages_scanned": 64,
+  "messages_per_session": 4.45,
+  "tool_calls_per_session": 1.55,
   "intent_counts": [
     [
       "image render",
-      33
+      34
     ],
     [
       "label / pouch composite",
-      21
+      22
     ],
     [
       "A+ / listing content",
@@ -39,6 +39,10 @@
       "calls": 15
     },
     {
+      "tool": "apply_label",
+      "calls": 9
+    },
+    {
       "tool": "creative_plan",
       "calls": 8
     },
@@ -48,10 +52,6 @@
     },
     {
       "tool": "list_templates",
-      "calls": 3
-    },
-    {
-      "tool": "apply_label",
       "calls": 3
     },
     {
@@ -114,9 +114,19 @@
       "tool_calls": 1
     },
     {
+      "session": "6a2f5590-c9f3-4b3f-9def-49415d2beb1c",
+      "messages": 4,
+      "tool_calls": 5
+    },
+    {
       "session": "6d2a2a2c-c0c0-4ff1-ae0b-1ba8a91d34bb",
       "messages": 4,
       "tool_calls": 1
+    },
+    {
+      "session": "04642798-b990-4b7b-93f0-c5687d5446da",
+      "messages": 2,
+      "tool_calls": 0
     },
     {
       "session": "138b3e01-c1d8-4a26-9fa4-77e012626aa1",
@@ -154,19 +164,9 @@
       "tool_calls": 0
     },
     {
-      "session": "d99a263b-a73e-424b-b72f-0c3ded63762a",
+      "session": "bee2c7d3-4db6-4bca-844d-be26e5070b84",
       "messages": 2,
       "tool_calls": 1
-    },
-    {
-      "session": "dc3fc30b-92f8-49ff-a544-215c2a866a8d",
-      "messages": 2,
-      "tool_calls": 1
-    },
-    {
-      "session": "df79baa1-18bb-4192-a643-7a4231152811",
-      "messages": 2,
-      "tool_calls": 0
     }
   ],
   "caveat": "Counts are keyword matches over user turns, not classified intents. A turn can match more than one rule. No message text is stored here."

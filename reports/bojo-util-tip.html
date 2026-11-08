@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tip calculator</title>
+<style>
+:root{--ink:#1c1a17;--muted:#6b6357;--line:#d9d2c6;--field:#fffdf8;--accent:#8a5a2b}
+*{box-sizing:border-box}
+body{margin:0;background:#f4efe6;color:var(--ink);
+  font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:640px;margin:0 auto;padding:32px 20px 56px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.lede{color:var(--muted);margin:0 0 24px}
+.card{background:var(--field);border:1px solid var(--line);border-radius:12px;
+  padding:18px;margin:0 0 16px}
+label{display:block;font-size:.85rem;color:var(--muted);margin:0 0 6px}
+input{width:100%;padding:10px 12px;font:inherit;color:inherit;background:#fff;
+  border:1px solid var(--line);border-radius:8px}
+input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row{grid-template-columns:1fr}}
+.out{display:flex;justify-content:space-between;gap:12px;padding:8px 0;
+  border-bottom:1px dashed var(--line)}
+.out:last-of-type{border-bottom:0}
+.out b{font-variant-numeric:tabular-nums}
+.warn{min-height:1.25rem;color:#a4442c;font-size:.85rem;margin:8px 0 0}
+.note{color:var(--muted);font-size:.8rem;margin:24px 0 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Tip calculator</h1>
+<p class="lede">Tip, total and the split. Nothing is guessed: leave a field empty and the page says what it needs instead of showing a number.</p>
+<section class="card"><div class="row"><div><label for="bill">Bill amount</label><input id="bill" name="bill" type="number" inputmode="decimal" step="any" min="0" value="" placeholder="0.00"></div><div><label for="tip">Tip (%)</label><input id="tip" name="tip" type="number" inputmode="decimal" step="1" min="0" value="" placeholder="e.g. 18"></div></div><div style="margin-top:12px"><div><label for="people">Split between (people)</label><input id="people" name="people" type="number" inputmode="decimal" step="1" min="0" value="" placeholder="e.g. 2"></div></div><div class="out"><span>Tip</span><b id="tipamt">—</b></div><div class="out"><span>Total</span><b id="total">—</b></div><div class="out"><span>Each person pays</span><b id="each">—</b></div><p class="warn" id="warn"></p></section>
+<p class="note">Built by NorthstarOS as a single self-contained page. No network, no account, no tracking. Nothing on this page is saved or sent anywhere; close the tab and it is gone.</p>
+</main>
+<script>
+
+var f = function (n) { return n.toLocaleString(undefined,
+  { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+function calc() {
+  var bill = parseFloat(document.getElementById('bill').value);
+  var tip = parseFloat(document.getElementById('tip').value);
+  var people = parseInt(document.getElementById('people').value, 10);
+  var ok = isFinite(bill) && isFinite(tip) && isFinite(people) && people >= 1;
+  if (ok) {
+    var tipamt = bill * tip / 100;
+    var total = bill * (1 + tip / 100);
+    document.getElementById('tipamt').textContent = f(tipamt);
+    document.getElementById('total').textContent = f(total);
+    document.getElementById('each').textContent = f(total / people);
+    document.getElementById('warn').textContent = '';
+  } else {
+    document.getElementById('tipamt').textContent = '\u2014';
+    document.getElementById('total').textContent = '\u2014';
+    document.getElementById('each').textContent = '\u2014';
+    document.getElementById('warn').textContent =
+      'Enter a bill, a tip percentage and at least one person.';
+  }
+}
+['bill', 'tip', 'people'].forEach(function (id) {
+  document.getElementById(id).addEventListener('input', calc);
+});
+calc();
+
+</script>
+</body>
+</html>

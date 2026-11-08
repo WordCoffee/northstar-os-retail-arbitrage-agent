@@ -1,0 +1,8 @@
+{
+  "brief": "p16",
+  "checks": [
+    "gate present",
+    "lanes scoped"
+  ],
+  "artifact": "campaign.md"
+}

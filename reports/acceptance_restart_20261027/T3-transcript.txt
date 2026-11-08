@@ -1,0 +1,47 @@
+Bojo
+Northstar creative assistant · Create
+Workbench
+Pause
+Stop
+Generate the Amazon MAIN listing image now by calling generate_image with width 2000 and height 2000. Subject: Mogra Organics Organic Lion's Mane Mushroom Powder, a 6 oz kraft stand-up pouch, the bare pouch centred on a pure white seamless studio background, soft even light, no props, no text or logos on the pouch.
+Edit & resend
+Fork
+Copy
+Rendering the image locally
+done
+comfyui
+details
+generated image (flux3-image-klein-nvfp4) · 2000×2000
+IMAGE
+View
+Download
+Copy id
+Thinking…
+The user wants me to generate an Amazon listing image with specific requirements:
+- Product: Mogra Organics Organic Lion's Mane Mushroom Powder
+- Format: 6 oz kraft stand-up pouch
+- Background: pure white seamless studio background
+- Lighting: soft even light
+- No props, no text or logos on the pouch
+
+I need to use generate_image with:
+- prompt: scene/surface description matching the requirements
+- width: 2000 px
+- height: 2000 px
+- tier: I should probably use "draft" since this is for a listing image and they'll likely want to edit it later
+
+Let me craft the prompt carefully following the creative-services-loop guidelines. The prompt needs to be clear about what's being rendered, but not include text or logos (since those are composited separately via apply_label).
+
+I should also note that according to Amazon selling rules, the main image should have a pure white background with the product filling most of the frame, no props or text on the main image. This aligns with what they're asking for.
+
+Let me make the prompt: "A kraft stand-up pouch of organic Lion's Mane Mushroom Powder centered on a pure white seamless studio background, soft even lighting, no props, no text or logos on the pouch, product filling most of the frame"
+
+I'll use tier "draft" since this is for a listing image that will likely be edited.
+The plate is ready. Name the product and the print pass runs on it.
+Image
+Video
+Options
+Mode: creative · concise · effort: off
+Dictate
+Send
+Enter sends · Shift+Enter newline · Stop saves the partial as partial

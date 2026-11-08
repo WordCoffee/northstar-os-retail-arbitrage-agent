@@ -1,0 +1,32 @@
+{
+  "mode": "kernel benchmark (run_kernel + semantic validators)",
+  "briefs": 2,
+  "passed": 0,
+  "failed": 2,
+  "rate": 0.0,
+  "model_lane": 2,
+  "tool_lane": 0,
+  "jsonl": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel_bench\\20261029T185309Z\\evidence.jsonl",
+  "failed_ids": [
+    "p01",
+    "p19"
+  ],
+  "rows": [
+    {
+      "id": "p01",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 10.6
+    },
+    {
+      "id": "p19",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 26.5
+    }
+  ]
+}

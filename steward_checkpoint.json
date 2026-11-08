@@ -1,0 +1,28 @@
+{
+  "phase": 2,
+  "status": "PROGRESS",
+  "updated_at": "2026-10-27T21:05:00Z",
+  "summary": {
+    "27b_model_oom_confirmed": true,
+    "27b_cpu_buffer_gb": 12.1,
+    "available_ram_gb": 7.6,
+    "small_model_candidate_gb": 3.3,
+    "embedding_model_gb": 0.639,
+    "ty_assistant_file": "steward/tys_assistant.py"
+  },
+  "tests": [],
+  "guardrails": {
+    "chromeconnect": {"intact": true},
+    "kill_switch": "active",
+    "tier_2_protected": true,
+    "no_vram_for_assistant": true
+  },
+  "next_phase": 3,
+  "blocked_items": [],
+  "notes": [
+    "Phase 0: 44 tests PASS",
+    "Phase 1: folder_grants.py + vault_broker.py created (Tier 1)",
+    "Phase 2: 27B OOM confirmed; Ty's Assistant started",
+    "Phase 3: Supervisor cycle, queues, email notifier (gated: STOP before enabling)"
+  ]
+}

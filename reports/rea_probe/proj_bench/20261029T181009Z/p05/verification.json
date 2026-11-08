@@ -1,0 +1,8 @@
+{
+  "brief": "p05",
+  "checks": [
+    "build exit 0",
+    "root cause named"
+  ],
+  "artifact": "build.log"
+}

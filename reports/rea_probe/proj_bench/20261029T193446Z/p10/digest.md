@@ -1,0 +1,1 @@
+artifact for p10: Assemble a digest from local evidence files with no invented numbers.

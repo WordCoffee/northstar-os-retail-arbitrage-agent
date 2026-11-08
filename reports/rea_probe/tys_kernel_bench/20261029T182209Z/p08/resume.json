@@ -1,0 +1,21 @@
+{
+  "run_id": "run-2026-10-27-a",
+  "resume_from": "ckpt-0003",
+  "completed_steps": [1, 2],
+  "blocking_gate": "operator_gate:spend_approval",
+  "next_step": {
+    "id": "publish_digest",
+    "n": 3,
+    "status": "blocked",
+    "reason": "paid credit spend requires a fresh operator approval"
+  },
+  "pending_steps": [
+    {
+      "id": "notify_finance",
+      "n": 4,
+      "status": "pending"
+    }
+  ],
+  "goal": "Publish the weekly ops digest to the finance channel",
+  "rule": "Resume from ckpt-0003; do not repeat steps 1 or 2."
+}

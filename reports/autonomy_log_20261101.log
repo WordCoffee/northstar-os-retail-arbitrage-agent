@@ -1,0 +1,52 @@
+2026-11-01T01:37:52+00:00 [campaign-20261101T013752Z] campaign start max_tasks=8 deadline_minutes=90 max_consecutive_failures=2
+2026-11-01T01:37:52+00:00 [campaign-20261101T013752Z] dispatch task=hitl-pathlike lane=prebuilt phase=precheck
+2026-11-01T01:37:52+00:00 [campaign-20261101T013752Z] dry_run task=hitl-pathlike commit=- duration=None
+2026-11-01T01:37:52+00:00 [campaign-20261101T013752Z] campaign stop reason=single_task attempted=1 completed=0 failed=1
+2026-11-01T01:57:58+00:00 [campaign-20261101T015753Z] campaign start max_tasks=8 deadline_minutes=180.0 max_consecutive_failures=2
+2026-11-01T01:57:58+00:00 [campaign-20261101T015753Z] dispatch task=hitl-pathlike lane=prebuilt phase=precheck
+2026-11-01T01:58:03+00:00 [campaign-20261101T015753Z] completed task=hitl-pathlike commit=b42171c5c332 duration=4.512
+2026-11-01T01:58:03+00:00 [campaign-20261101T015753Z] dispatch task=format-quad-guard lane=prebuilt phase=precheck
+2026-11-01T01:58:09+00:00 [campaign-20261101T015753Z] completed task=format-quad-guard commit=ca29ceea6f44 duration=5.599
+2026-11-01T01:58:09+00:00 [campaign-20261101T015753Z] dispatch task=geometry-bottom-guard lane=prebuilt phase=precheck
+2026-11-01T01:58:14+00:00 [campaign-20261101T015753Z] completed task=geometry-bottom-guard commit=03da4b07a6a0 duration=5.463
+2026-11-01T01:58:14+00:00 [campaign-20261101T015753Z] dispatch task=print-quad-guard lane=prebuilt phase=precheck
+2026-11-01T01:58:20+00:00 [campaign-20261101T015753Z] completed task=print-quad-guard commit=190c8e456fb8 duration=5.588
+2026-11-01T01:58:20+00:00 [campaign-20261101T015753Z] dispatch task=surface-wrap-guard lane=prebuilt phase=precheck
+2026-11-01T01:58:26+00:00 [campaign-20261101T015753Z] completed task=surface-wrap-guard commit=ff4985247a12 duration=6.289
+2026-11-01T01:58:26+00:00 [campaign-20261101T015753Z] dispatch task=panels-format-guard lane=prebuilt phase=precheck
+2026-11-01T01:58:32+00:00 [campaign-20261101T015753Z] completed task=panels-format-guard commit=48daca5b0fc4 duration=6.342
+2026-11-01T01:58:32+00:00 [campaign-20261101T015753Z] dispatch task=dead-code-cleanup lane=prebuilt phase=precheck
+2026-11-01T01:58:38+00:00 [campaign-20261101T015753Z] completed task=dead-code-cleanup commit=558eceb947ab duration=5.525
+2026-11-01T01:58:38+00:00 [campaign-20261101T015753Z] dispatch task=docs-autonomy lane=prebuilt phase=precheck
+2026-11-01T01:58:43+00:00 [campaign-20261101T015753Z] completed task=docs-autonomy commit=74c7d49c7f64 duration=5.458
+2026-11-01T01:58:43+00:00 [campaign-20261101T015753Z] campaign stop reason=max_tasks attempted=8 completed=8 failed=0
+2026-11-01T06:05:27+00:00 [campaign-20261101T060527Z] campaign start max_tasks=8 deadline_minutes=90 max_consecutive_failures=2
+2026-11-01T06:05:27+00:00 [campaign-20261101T060527Z] dispatch task=ty-dpi-image-guard lane=bojo:gpu-orig phase=precheck
+2026-11-01T06:05:27+00:00 [campaign-20261101T060527Z] dry_run task=ty-dpi-image-guard commit=- duration=None
+2026-11-01T06:05:27+00:00 [campaign-20261101T060527Z] campaign stop reason=dry_run attempted=1 completed=0 failed=0
+2026-11-01T06:09:09+00:00 [campaign-20261101T060857Z] campaign start max_tasks=1 deadline_minutes=30.0 max_consecutive_failures=2
+2026-11-01T06:09:09+00:00 [campaign-20261101T060857Z] dispatch task=ty-dpi-image-guard lane=bojo:gpu-orig phase=precheck
+2026-11-01T06:10:01+00:00 [campaign-20261101T060857Z] failed task=ty-dpi-image-guard commit=- duration=None
+2026-11-01T06:10:01+00:00 [campaign-20261101T060857Z] campaign stop reason=single_task attempted=1 completed=0 failed=1
+2026-11-01T19:03:53+00:00 [campaign-20261101T190353Z] campaign start max_tasks=3 deadline_minutes=120.0 max_consecutive_failures=2
+2026-11-01T19:03:53+00:00 [campaign-20261101T190353Z] dispatch task=ty-hitl-skip-report lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:04:13+00:00 [campaign-20261101T190353Z] failed task=ty-hitl-skip-report commit=- duration=None
+2026-11-01T19:04:13+00:00 [campaign-20261101T190353Z] dispatch task=ty-diff-select-headers lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:04:35+00:00 [campaign-20261101T190353Z] failed task=ty-diff-select-headers commit=- duration=None
+2026-11-01T19:04:35+00:00 [campaign-20261101T190353Z] halt: 2 consecutive failures
+2026-11-01T19:04:35+00:00 [campaign-20261101T190353Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2
+2026-11-01T19:06:28+00:00 [campaign-20261101T190628Z] campaign start max_tasks=3 deadline_minutes=120.0 max_consecutive_failures=2
+2026-11-01T19:06:28+00:00 [campaign-20261101T190628Z] dispatch task=ty-hitl-skip-report lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:08:00+00:00 [campaign-20261101T190628Z] failed task=ty-hitl-skip-report commit=- duration=None
+2026-11-01T19:08:00+00:00 [campaign-20261101T190628Z] dispatch task=ty-diff-select-headers lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:09:58+00:00 [campaign-20261101T190628Z] failed task=ty-diff-select-headers commit=- duration=None
+2026-11-01T19:09:58+00:00 [campaign-20261101T190628Z] halt: 2 consecutive failures
+2026-11-01T19:09:58+00:00 [campaign-20261101T190628Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2
+2026-11-01T19:11:21+00:00 [campaign-20261101T191121Z] campaign start max_tasks=1 deadline_minutes=40.0 max_consecutive_failures=2
+2026-11-01T19:11:21+00:00 [campaign-20261101T191121Z] dispatch task=ty-artifact-jpeg lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:14:44+00:00 [campaign-20261101T191121Z] failed task=ty-artifact-jpeg commit=- duration=None
+2026-11-01T19:14:44+00:00 [campaign-20261101T191121Z] campaign stop reason=single_task attempted=1 completed=0 failed=1
+2026-11-01T19:25:41+00:00 [campaign-20261101T192541Z] campaign start max_tasks=1 deadline_minutes=40.0 max_consecutive_failures=2
+2026-11-01T19:25:41+00:00 [campaign-20261101T192541Z] dispatch task=ty-hitl-skip-report lane=qwen2.5-coder:3b phase=precheck
+2026-11-01T19:26:00+00:00 [campaign-20261101T192541Z] failed task=ty-hitl-skip-report commit=- duration=None
+2026-11-01T19:26:00+00:00 [campaign-20261101T192541Z] campaign stop reason=single_task attempted=1 completed=0 failed=1

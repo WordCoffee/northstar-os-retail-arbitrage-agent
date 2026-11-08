@@ -1,0 +1,9 @@
+{
+  "brief": "p07",
+  "checks": [
+    "host named",
+    "expiry set",
+    "no login"
+  ],
+  "artifact": "runbook.md"
+}

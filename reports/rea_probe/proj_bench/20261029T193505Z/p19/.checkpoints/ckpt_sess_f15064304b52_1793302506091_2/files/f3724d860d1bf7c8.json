@@ -1,0 +1,8 @@
+{
+  "brief": "p19",
+  "checks": [
+    "one hunk applied",
+    "other hunk untouched"
+  ],
+  "artifact": "applied.diff"
+}

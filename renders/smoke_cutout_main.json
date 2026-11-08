@@ -40,10 +40,11 @@
     ],
     "fill_longest_side": 0.8795,
     "fill_area": 0.5506,
+    "fill_measurable": true,
     "verdict": "compliant",
     "blockers": [],
     "note": "Fill is reported both ways: longest side (the conservative reading, used for the verdict) and area. Amazon's own policy page is the authority."
   },
-  "seconds": 3.8,
+  "seconds": 21.9,
   "how_to_judge": "Open smoke_cutout_alpha.png on a dark background: edges must be clean, no halo. smoke_main_2000.png is what a listing slot gets; compliance.blockers says whether it would pass."
 }

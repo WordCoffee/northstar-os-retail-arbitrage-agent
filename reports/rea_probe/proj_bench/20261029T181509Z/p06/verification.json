@@ -1,0 +1,8 @@
+{
+  "brief": "p06",
+  "checks": [
+    "value quoted",
+    "no change made"
+  ],
+  "artifact": "audit.json"
+}

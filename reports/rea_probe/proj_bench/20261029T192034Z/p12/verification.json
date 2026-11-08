@@ -1,0 +1,8 @@
+{
+  "brief": "p12",
+  "checks": [
+    "defect quoted",
+    "front hash unchanged"
+  ],
+  "artifact": "back.md"
+}

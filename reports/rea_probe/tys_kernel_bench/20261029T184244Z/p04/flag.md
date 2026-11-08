@@ -1,0 +1,1 @@
+The feature flag is default off in the configuration module. Operators can override the flag by setting the environment variable to a truthy value. The test suite verifies that the flag remains off unless explicitly enabled.

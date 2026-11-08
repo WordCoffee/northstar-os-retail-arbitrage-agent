@@ -1,0 +1,9 @@
+{
+  "brief": "p18",
+  "checks": [
+    "goal kept",
+    "decisions kept",
+    "evidence kept"
+  ],
+  "artifact": "handoff.md"
+}

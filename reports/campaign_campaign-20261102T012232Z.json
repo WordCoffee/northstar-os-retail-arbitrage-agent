@@ -1,0 +1,281 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261102T012232Z",
+  "started_at": "2026-11-02T01:22:32+00:00",
+  "finished_at": "2026-11-02T01:24:45+00:00",
+  "stop_reason": "max_consecutive_failures",
+  "counts": {
+    "completed": 0,
+    "failed": 2,
+    "dry_run": 0
+  },
+  "readiness": {
+    "verdict": "GO",
+    "ok": true,
+    "checked_at": "2026-11-02T01:22:32+00:00",
+    "model_lane": {
+      "ok": true,
+      "provider": "ollama",
+      "model": "qwen3.5:4b",
+      "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 8.35 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+      "free_ram_gb": 8.348,
+      "post_load_headroom_gb": 5.56,
+      "estimate_not_measurement": true,
+      "installed": [
+        {
+          "model": "bojo:gpu-orig",
+          "rank": 28,
+          "estimated_ram_gb": 2.25,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:2b",
+          "rank": 22,
+          "estimated_ram_gb": 2.25,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5vl:7b",
+          "rank": 10,
+          "estimated_ram_gb": 5.0,
+          "fits": true
+        },
+        {
+          "model": "qwen3-embedding:0.6b",
+          "rank": 1,
+          "estimated_ram_gb": 0.54,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:3b",
+          "rank": 1,
+          "estimated_ram_gb": 1.62,
+          "fits": true
+        },
+        {
+          "model": "bojo:latest",
+          "rank": 1,
+          "estimated_ram_gb": 2.25,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:4b",
+          "rank": 1,
+          "estimated_ram_gb": 2.79,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b-parser-f16",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "fits": true
+        },
+        {
+          "model": "qwen3:8b",
+          "rank": 1,
+          "estimated_ram_gb": 4.38,
+          "fits": true
+        }
+      ]
+    },
+    "branch": "feature/chrome-connect-3.0"
+  },
+  "tasks": [
+    {
+      "task": "ty-diff-select-headers",
+      "name": "A selected-hunk diff keeps its file headers",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 8.37 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 8.373,
+        "post_load_headroom_gb": 5.58,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "fits": true
+          },
+          {
+            "model": "qwen3-embedding:0.6b",
+            "rank": 1,
+            "estimated_ram_gb": 0.54,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "fits": true
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "fits": true
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "max_steps",
+      "restoration": {
+        "sha": "e10e4277e5d7a1011ef5dccb5aaea78cc9a261e6",
+        "restored": [
+          "Northstar_backend/agent_kernel/diff.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    },
+    {
+      "task": "ty-artifact-jpeg",
+      "name": "A JPEG artifact is classified as an image",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 6.67 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 6.666,
+        "post_load_headroom_gb": 3.88,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "fits": true
+          },
+          {
+            "model": "qwen3-embedding:0.6b",
+            "rank": 1,
+            "estimated_ram_gb": 0.54,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "fits": true
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "fits": true
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "missing=[]; failures=['python state/probes/t7_artifact_jpeg.py exit 1: Traceback (most recent call last):\\n  File \"C:\\\\Users\\\\T2Hol\\\\Desktop\\\\Northstar OS Retail Arbitrage Agent\\\\state\\\\probes\\\\t7_artifact_jpeg.py\", line 43, in <module>\\n    check(\"valid jpeg classified as an image\", artifact_kind(g",
+      "restoration": {
+        "sha": "536c926fa09edb31e913fdd7553cf4417da645e8",
+        "restored": [
+          "Northstar_backend/agent_kernel/artifacts.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    }
+  ]
+}

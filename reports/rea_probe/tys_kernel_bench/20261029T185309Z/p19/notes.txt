@@ -1,0 +1,3 @@
+# Ops notes
+- render worker offline since Monday
+- digest not published

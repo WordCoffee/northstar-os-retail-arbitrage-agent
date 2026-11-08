@@ -1,0 +1,1 @@
+artifact for p07: Plan a read-only browser task with a per-host grant and an expiry.

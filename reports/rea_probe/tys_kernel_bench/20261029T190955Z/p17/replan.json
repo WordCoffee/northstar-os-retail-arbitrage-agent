@@ -1,0 +1,25 @@
+{
+  "goal": "Assemble a 15-second vertical ad and verify it before reporting done",
+  "nodes": [
+    {
+      "id": "n1",
+      "action": "scale the plate to 1080x1920",
+      "status": "done"
+    },
+    {
+      "id": "n2",
+      "action": "trim the narration and video to 15 seconds before muxing",
+      "status": "pending"
+    },
+    {
+      "id": "n3",
+      "action": "mux the trimmed narration track onto the trimmed clip",
+      "status": "pending"
+    },
+    {
+      "id": "n4",
+      "action": "ffprobe the result against the 12-15 second duration check",
+      "status": "pending"
+    }
+  ]
+}

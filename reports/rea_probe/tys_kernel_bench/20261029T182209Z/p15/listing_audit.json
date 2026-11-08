@@ -1,0 +1,55 @@
+{
+  "listing_file": "listing.txt",
+  "rubric_file": "rubric.md",
+  "dimensions": {
+    "Title": {
+      "score": 0,
+      "weight": "20%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no title text exists to evaluate against the rubric criteria."
+    },
+    "Bullets": {
+      "score": 0,
+      "weight": "20%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no bullet content exists to evaluate."
+    },
+    "Description": {
+      "score": 0,
+      "weight": "15%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no description text exists to evaluate."
+    },
+    "Keywords": {
+      "score": 0,
+      "weight": "10%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no keyword content exists to evaluate."
+    },
+    "Images": {
+      "score": 0,
+      "weight": "15%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no image slot information exists to evaluate."
+    },
+    "A+ content": {
+      "score": 0,
+      "weight": "10%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no A+ content modules exist to evaluate."
+    },
+    "Compliance": {
+      "score": 0,
+      "weight": "10%",
+      "status": "unmeasured",
+      "reason": "listing.txt is not present in the workspace; no compliance text exists to evaluate."
+    }
+  },
+  "unmeasurable_dimensions": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ],
+  "notes": "All seven rubric dimensions are unmeasured because listing.txt is absent from the workspace. The four fixture-level unmeasurable dimensions from rubric.md are also listed."
+}

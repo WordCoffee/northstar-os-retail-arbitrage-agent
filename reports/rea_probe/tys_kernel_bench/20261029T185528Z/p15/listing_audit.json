@@ -1,0 +1,57 @@
+{
+  "artifact": "listing_audit.json",
+  "source": "listing.txt",
+  "rubric": "rubric.md",
+  "dimensions": {
+    "Title": {
+      "weight": "20%",
+      "score": 4,
+      "evidence": "Line 1: 'Premium Ergonomic Office Chair with Lumbar Support and Adjustable Armrests - Black' (primary keyword present, under 200 chars, no promos; minor deduction for not being strictly keyword-first)",
+      "measured": true
+    },
+    "Bullets": {
+      "weight": "20%",
+      "score": 3,
+      "evidence": "Lines 3-7: Five bullets present, benefit-led, but only 2 contain concrete numbers (180 lbs, 360 degrees); 3 bullets lack specific figures",
+      "measured": true
+    },
+    "Description": {
+      "weight": "15%",
+      "score": 4,
+      "evidence": "Lines 9-14: Answers buyer questions (comfort, durability, assembly, warranty, materials); no unsubstantiated claims detected",
+      "measured": true
+    },
+    "Keywords": {
+      "weight": "10%",
+      "score": 4,
+      "evidence": "Lines 1-14: Keywords (ergonomic, lumbar support, adjustable, office chair) present naturally in copy; no stuffing detected",
+      "measured": true
+    },
+    "Images": {
+      "weight": "15%",
+      "score": 2,
+      "evidence": "Lines 16-17: Only 2 of 7 image slots referenced; no scale reference image mentioned",
+      "measured": true
+    },
+    "A+ content": {
+      "weight": "10%",
+      "score": 1,
+      "evidence": "Lines 18-19: Only 1 module referenced (spec table); rubric requires at least 3 modules with sourced specs",
+      "measured": true
+    },
+    "Compliance": {
+      "weight": "10%",
+      "score": 4,
+      "evidence": "Lines 9-19: No disease claims; disclaimer present (Line 19); weight rating (180 lbs) consistent throughout",
+      "measured": true
+    }
+  },
+  "unmeasured": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ],
+  "weighted_score": 3.15,
+  "notes": "Weighted score computed as sum(score * weight) across measured dimensions only. Unmeasured dimensions excluded from numeric score per rubric instruction."
+}

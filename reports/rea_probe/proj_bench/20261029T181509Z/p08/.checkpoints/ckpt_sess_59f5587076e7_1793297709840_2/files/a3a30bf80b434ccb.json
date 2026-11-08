@@ -1,0 +1,8 @@
+{
+  "brief": "p08",
+  "checks": [
+    "no duplicate step",
+    "checkpoint used"
+  ],
+  "artifact": "resume.json"
+}

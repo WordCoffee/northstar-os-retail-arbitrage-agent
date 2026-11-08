@@ -1,0 +1,59 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261101T013752Z",
+  "started_at": "2026-11-01T01:37:52+00:00",
+  "finished_at": "2026-11-01T01:37:52+00:00",
+  "stop_reason": "single_task",
+  "counts": {
+    "completed": 0,
+    "failed": 0,
+    "dry_run": 1
+  },
+  "readiness": {
+    "verdict": "SKIPPED",
+    "ok": true,
+    "checked_at": null,
+    "model_lane": null,
+    "branch": null
+  },
+  "tasks": [
+    {
+      "task": "hitl-pathlike",
+      "name": "HITL counts accepts path-like roots",
+      "status": "dry_run",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "prebuilt",
+        "model": "",
+        "reason": "prebuilt task; no model call",
+        "free_ram_gb": null,
+        "installed": []
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [
+          {
+            "cmd": [
+              "python",
+              "-m",
+              "pytest",
+              "Northstar_backend/test_autonomy_hitl_pathlike.py",
+              "-q"
+            ],
+            "ok": true,
+            "exit": 0,
+            "duration_s": 0.0,
+            "error": "",
+            "output": "[dry-run]"
+          }
+        ],
+        "expected": "fail"
+      },
+      "apply": null,
+      "error": "",
+      "restoration": null
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Northstar OS Two-Week Digest
+
+This digest summarizes the operational evidence for weeks 41 and 42 of 2026. The browser lane completed all five runs without failures, while the coding lane recorded twelve passes and two failures across fourteen total runs. The label lane executed three runs with one failure and two passes, and the operator gates count stood at two for the period. The renders_completed figure is missing from the available evidence and is therefore not stated here.

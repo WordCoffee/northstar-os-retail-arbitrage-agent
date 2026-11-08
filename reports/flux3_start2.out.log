@@ -1,0 +1,2 @@
+flux3: starting gateway on :8190
+flux3: ready - {"status": "ok", "model": "flux-3-image-klein", "detail": "flux3 image graph ready", "runtime": "comfyui (local inference; never launched by this gateway)", "weights": {"present": true, "missing": [], "unet": "C:\\Users\\T2Hol\\ComfyUI\\models\\diffusion_models\\flux3-image-klein-nvfp4.safetensors", "text_encoder": "C:\\Users\\T2Hol\\ComfyUI\\models\\text_encoders\\qwen3vl_4b_int8_convrot.safetensors", "vae": "C:\\Users\\T2Hol\\ComfyUI\\models\\vae\\flux2-vae.safetensors"}, "steps": 16}

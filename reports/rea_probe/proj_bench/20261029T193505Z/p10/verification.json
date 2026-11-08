@@ -1,0 +1,8 @@
+{
+  "brief": "p10",
+  "checks": [
+    "every number cited",
+    "missing data named"
+  ],
+  "artifact": "digest.md"
+}

@@ -1,0 +1,8 @@
+{
+  "brief": "p20",
+  "checks": [
+    "every node evidenced",
+    "plan complete"
+  ],
+  "artifact": "project.json"
+}

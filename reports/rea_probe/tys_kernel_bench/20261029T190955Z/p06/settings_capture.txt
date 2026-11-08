@@ -1,0 +1,6 @@
+GET /admin/settings/security   (read-only capture, 2026-10-27T14:03Z)
+
+  [x] Require MFA for members with the admin role
+  [ ] Require MFA for all members              <- observed checked=False
+  [x] Session timeout: 30 minutes
+  [ ] Allow personal access tokens

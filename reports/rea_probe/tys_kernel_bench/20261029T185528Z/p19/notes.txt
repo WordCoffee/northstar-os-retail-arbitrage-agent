@@ -1,0 +1,3 @@
+# Ops notes
+- render worker restarted Tuesday 09:00
+- digest not published

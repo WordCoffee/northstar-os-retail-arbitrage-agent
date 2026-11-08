@@ -1,0 +1,290 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261103T203020Z",
+  "started_at": "2026-11-03T20:30:20+00:00",
+  "finished_at": "2026-11-03T20:32:53+00:00",
+  "stop_reason": "max_consecutive_failures",
+  "counts": {
+    "completed": 0,
+    "failed": 2,
+    "dry_run": 0
+  },
+  "readiness": {
+    "verdict": "GO",
+    "ok": true,
+    "checked_at": "2026-11-03T20:30:51+00:00",
+    "model_lane": {
+      "ok": true,
+      "provider": "ollama",
+      "model": "qwen3.5:4b",
+      "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 7.48 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+      "free_ram_gb": 7.481,
+      "post_load_headroom_gb": 4.69,
+      "estimate_not_measurement": true,
+      "installed": [
+        {
+          "model": "bojo:gpu-orig",
+          "rank": 28,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:2b",
+          "rank": 22,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5vl:7b",
+          "rank": 10,
+          "estimated_ram_gb": 5.0,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:3b",
+          "rank": 1,
+          "estimated_ram_gb": 1.62,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "bojo:latest",
+          "rank": 1,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:4b",
+          "rank": 1,
+          "estimated_ram_gb": 2.79,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b-parser-f16",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3:8b",
+          "rank": 1,
+          "estimated_ram_gb": 4.38,
+          "resident": false,
+          "fits": true
+        }
+      ]
+    },
+    "branch": "feature/chrome-connect-3.0"
+  },
+  "tasks": [
+    {
+      "task": "ty-feather-sigma-guard",
+      "name": "A failed warp fit is refused, not blurred",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 7.49 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 7.492,
+        "post_load_headroom_gb": 4.7,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "resident": false,
+            "fits": true
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "max_steps",
+      "restoration": {
+        "sha": "c24cac74607130021103a44d3cafa6eb7892c18d",
+        "restored": [
+          "Northstar_backend/mockup_compositor.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    },
+    {
+      "task": "ty-feather-sigma-guard",
+      "name": "A failed warp fit is refused, not blurred",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 3.53 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 3.526,
+        "post_load_headroom_gb": 3.53,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "resident": true,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "resident": false,
+            "fits": false
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "max_steps",
+      "restoration": {
+        "sha": "161cd5ef5686423c00f5a89f02151e3b964ef7eb",
+        "restored": [
+          "Northstar_backend/mockup_compositor.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    }
+  ]
+}

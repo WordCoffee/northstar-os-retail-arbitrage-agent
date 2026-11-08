@@ -1,0 +1,5 @@
+{
+  "setting_key": "org.mfa_require_all",
+  "observed_value": false,
+  "verdict": "The admin setting 'org.mfa_require_all' is currently set to false, meaning MFA is not required for all members. This matches the observed value from the settings capture. No change was submitted."
+}

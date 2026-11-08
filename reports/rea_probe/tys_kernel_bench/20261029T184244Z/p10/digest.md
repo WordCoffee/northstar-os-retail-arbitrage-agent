@@ -1,0 +1,3 @@
+# Two-Week Operations Digest
+
+This digest summarises the operational evidence collected for weeks 41 and 42 of 2026. The data is drawn from local evidence exports and does not rely on live system calls. The coding lane recorded 14 runs with 12 passes and 2 failures during this period. The browser lane completed 5 runs with all 5 passing and zero failures. The label lane had 3 runs, with 2 passes and 1 failure. Operator gates were triggered twice across the two-week window. The renders_completed figure is missing from the available evidence and is therefore not stated here. No TODO, TBD, or FIXME markers remain in this document.

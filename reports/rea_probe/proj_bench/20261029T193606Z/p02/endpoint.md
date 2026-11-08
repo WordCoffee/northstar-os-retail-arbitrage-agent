@@ -1,0 +1,1 @@
+artifact for p02: Add one read-only endpoint with a test and no schema migration.

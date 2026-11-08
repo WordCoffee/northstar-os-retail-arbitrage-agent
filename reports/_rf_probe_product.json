@@ -1,0 +1,824 @@
+{
+ "request_info": {
+  "success": true,
+  "credits_used": 44,
+  "credits_remaining": 56,
+  "credits_used_this_request": 1
+ },
+ "request_parameters": {
+  "type": "product",
+  "amazon_domain": "amazon.com",
+  "asin": "0991846206"
+ },
+ "request_metadata": {
+  "created_at": "2026-11-03T02:05:46.514Z",
+  "processed_at": "2026-11-03T02:05:56.580Z",
+  "total_time_taken": 10.07,
+  "amazon_url": "https://www.amazon.com/dp/0991846206?th=1&psc=1"
+ },
+ "product": {
+  "title": "Intelligent Change The Five Minute Journal - Original Daily Gratitude Journal for Women & Men - Mindfulness, Happiness & Daily Reflection - Undated Planner - Affirmation Journal - Gifts for Women Original Linen",
+  "search_alias": {
+   "title": "Office Products",
+   "value": "search-alias=office-products"
+  },
+  "title_excluding_variant_name": "Intelligent Change The Five Minute Journal - Original Daily Gratitude Journal for Women & Men - Mindfulness, Happiness & Daily Reflection - Undated Planner - Affirmation Journal - Gifts for Women",
+  "keywords": "Intelligent Change The Five Minute Journal - Original Daily Gratitude Journal for Women & Men - Mindfulness, Happiness & Daily Reflection - Undated Planner - Affirmation Journal - Gifts for Women Original Linen",
+  "keywords_list": [
+   "Intelligent Change The Five Minute Journal - Original Daily Gratitude Journal for Women & Men - Mindfulness",
+   "Happiness & Daily Reflection - Undated Planner - Affirmation Journal - Gifts for Women Original Linen"
+  ],
+  "is_collection": false,
+  "asin": "0991846206",
+  "parent_asin": "B09VT9TTXQ",
+  "link": "https://www.amazon.com/clp/0991846206",
+  "brand": "Intelligent Change",
+  "sell_on_amazon": false,
+  "variants": [
+   {
+    "asin": "B09G3KYR28",
+    "title": "Bold Black",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B09G3KYR28?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Bold Black"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/81rFZKrPVuL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/81rFZKrPVuL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B09G3K6T6G",
+    "title": "Earth Green",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B09G3K6T6G?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Earth Green"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/917HfwEMEsL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/917HfwEMEsL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "0991846206",
+    "title": "Original Linen",
+    "is_current_product": true,
+    "link": "https://www.amazon.com/dp/0991846206?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Original Linen"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/81fEup9dhbL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/81fEup9dhbL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "0991846249",
+    "title": "Journal for Kids",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/0991846249?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Journal for Kids"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/61UvASH0hoL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/61UvASH0hoL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B09G3M4CT8",
+    "title": "Sunshine Yellow",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B09G3M4CT8?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Sunshine Yellow"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/81lcv5DCM6L._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/81lcv5DCM6L._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B0GRVSD4X2",
+    "title": "Floral",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B0GRVSD4X2?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Floral"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/716WwQCVmQL._AC_SL1402_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/716WwQCVmQL._AC_SL1402_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B0DXVYNWHD",
+    "title": "Ditsy Tulip",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B0DXVYNWHD?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Ditsy Tulip"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/61yp8VR5xHL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/61yp8VR5xHL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B08V1TYGJ6",
+    "title": "Blush Pink",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B08V1TYGJ6?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Blush Pink"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/81DTE0k5vYL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/81DTE0k5vYL._AC_SL1500_.jpg"
+     }
+    ]
+   },
+   {
+    "asin": "B0DXVWJJPW",
+    "title": "Ditsy Rose",
+    "is_current_product": false,
+    "link": "https://www.amazon.com/dp/B0DXVWJJPW?th=1&psc=1",
+    "dimensions": [
+     {
+      "name": "Color",
+      "value": "Ditsy Rose"
+     }
+    ],
+    "main_image": "https://m.media-amazon.com/images/I/61SnQxRDyEL._AC_SL1500_.jpg",
+    "images": [
+     {
+      "variant": "MAIN",
+      "link": "https://m.media-amazon.com/images/I/61SnQxRDyEL._AC_SL1500_.jpg"
+     }
+    ]
+   }
+  ],
+  "variant_asins_flat": "B09G3KYR28,B09G3K6T6G,0991846206,0991846249,B09G3M4CT8,B0GRVSD4X2,B0DXVYNWHD,B08V1TYGJ6,B0DXVWJJPW",
+  "proposition_65_warning": false,
+  "has_size_guide": true,
+  "add_on_item": {
+   "is_add_on_item": true
+  },
+  "categories": [
+   {
+    "name": "Office Products",
+    "link": "https://www.amazon.com/Office-Products/b/ref=dp_bc_1?ie=UTF8&node=1064954",
+    "category_id": "1064954"
+   },
+   {
+    "name": "Office & School Supplies",
+    "link": "https://www.amazon.com/Office-Supplies/b/ref=dp_bc_2?ie=UTF8&node=1069242",
+    "category_id": "1069242"
+   },
+   {
+    "name": "Calendars, Planners & Personal Organizers",
+    "link": "https://www.amazon.com/Calendars-Planners-Personal-Organizers/b/ref=dp_bc_3?ie=UTF8&node=1069454",
+    "category_id": "1069454"
+   },
+   {
+    "name": "Personal Organizers",
+    "link": "https://www.amazon.com/Personal-Organizers/b/ref=dp_bc_4?ie=UTF8&node=1069478",
+    "category_id": "1069478"
+   }
+  ],
+  "categories_flat": "Office Products > Office & School Supplies > Calendars, Planners & Personal Organizers > Personal Organizers",
+  "sub_title": {
+   "text": "Visit the Intelligent Change Store",
+   "link": "https://www.amazon.com/stores/IntelligentChange/page/C190430A-F1F8-487C-A5A8-C2CF3A867EDE?lp_asin=0991846206&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto"
+  },
+  "amazons_choice": {
+   "badge_text": "Amazon's  Choice"
+  },
+  "marketplace_id": "ATVPDKIKX0DER",
+  "rating": 4.5,
+  "rating_breakdown": {
+   "five_star": {
+    "percentage": 78,
+    "count": 14024
+   },
+   "four_star": {
+    "percentage": 9,
+    "count": 1618
+   },
+   "three_star": {
+    "percentage": 6,
+    "count": 1079
+   },
+   "two_star": {
+    "percentage": 3,
+    "count": 539
+   },
+   "one_star": {
+    "percentage": 4,
+    "count": 719
+   }
+  },
+  "ratings_total": 17980,
+  "main_image": {
+   "link": "https://m.media-amazon.com/images/I/81fEup9dhbL.jpg"
+  },
+  "images": [
+   {
+    "link": "https://m.media-amazon.com/images/I/81Ji2f4colL._AC_SL1500_.jpg",
+    "variant": "PT01"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/81-Z3hE0-SL._AC_SL1500_.jpg",
+    "variant": "PT02"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/71D-YYaxDNL._AC_SL1500_.jpg",
+    "variant": "PT03"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/81Miz0NdsAL._AC_SL1500_.jpg",
+    "variant": "PT04"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/71QTR6R1wWL._AC_SL1500_.jpg",
+    "variant": "PT05"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/91X2R00pqLL._AC_SL1500_.jpg",
+    "variant": "PT06"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/71C5rUK7QNL._AC_SL1500_.jpg",
+    "variant": "PT07"
+   },
+   {
+    "link": "https://m.media-amazon.com/images/I/61L9CMlmNPL._AC_SL1000_.jpg",
+    "variant": "PT08"
+   }
+  ],
+  "images_count": 8,
+  "images_flat": "https://m.media-amazon.com/images/I/81Ji2f4colL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/81-Z3hE0-SL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/71D-YYaxDNL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/81Miz0NdsAL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/71QTR6R1wWL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/91X2R00pqLL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/71C5rUK7QNL._AC_SL1500_.jpg,https://m.media-amazon.com/images/I/61L9CMlmNPL._AC_SL1000_.jpg",
+  "videos_count": 20,
+  "videos_additional": [
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.0c8ac2fbf3804ba296d912f22cd5596e",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "B09G3M4CT8",
+    "title": "Honest review of viral journal",
+    "profile_image_url": "https://m.media-amazon.com/images/I/A1mrdCAht9L._CR0,20,893,893_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/ssabriinaa",
+    "public_name": "Sab Amazon Reviews",
+    "vendor_code": "ssabriinaa:shop",
+    "vendor_name": "Sab Amazon Reviews",
+    "vendor_tracking_id": "onamzsabr0104-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/A1LMpTGIH6L._CR0,0,3024,1707_SR684,386_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/A1LMpTGIH6L.jpg",
+    "video_image_width": "3024",
+    "video_image_height": "4032",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/89500efb-453b-416d-a8ab-213476747166/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/04fa4eaa-6b44-4cac-a126-0d6c3f4f7c4e/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/04fa4eaa-6b44-4cac-a126-0d6c3f4f7c4e/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "1:39",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/149b2497-9b9f-487f-b953-e26e48d0bb27.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.06fff0d78564416eb3876dc58da74335",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "Five minute journal is life changing",
+    "profile_image_url": "https://m.media-amazon.com/images/I/A1U73NY2JGL._CR0,0,2012,2012_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/ms.murphy.68",
+    "public_name": "Murphys.law.68",
+    "vendor_code": "ms.murphy.68:shop",
+    "vendor_name": "Murphys.law.68",
+    "vendor_tracking_id": "onamztaradmur-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/61+PNVItocL._CR0,0,640,361_SR342,193_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/61+PNVItocL.jpg",
+    "video_image_width": "640",
+    "video_image_height": "1137",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/1572bb4d-80b1-48bc-8e77-a8457c896a33/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d29d4558-f504-49e5-bde4-c0730be9c095/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d29d4558-f504-49e5-bde4-c0730be9c095/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "0:52",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/6f6df61d-1f41-49f8-9ee0-5472c6406a0d.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.0daf8867314e4c1f98a412e11fbe6b3a",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "Start and end your day with this gratitude journal!",
+    "profile_image_url": "https://m.media-amazon.com/images/I/91BzfFhwCNL._CR0,0,2316,2316_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/k80daily",
+    "public_name": "K80daily",
+    "vendor_code": "k80daily:shop",
+    "vendor_name": "K80daily",
+    "vendor_tracking_id": "onamzkat08087-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/61dZPWcBkIL._CR0,0,640,361_SR342,193_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/61dZPWcBkIL.jpg",
+    "video_image_width": "640",
+    "video_image_height": "1137",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/0a031f9a-b3fb-485d-ad97-82eff975a873/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/6c44acf6-3967-4ff1-88d2-7295e517378d/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/6c44acf6-3967-4ff1-88d2-7295e517378d/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "0:48",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/9a23329d-57b3-4a9f-b138-6018e332610b.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.productreview.R1LEI89CSX36YD",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "Helping my healing journey \u2764\ufe0f\u200d\ud83e\ude79",
+    "profile_image_url": "https://m.media-amazon.com/images/S/amazon-avatars-global/0f62c2a4-d2c6-4eba-b0f2-3d7e330de0b2._CR0%2C79%2C843%2C843_SX460_._SL34_.jpg",
+    "profile_link": "/gp/profile/amzn1.account.AHNG6EC2MURUW7YYKNE47OWWIPMA",
+    "public_name": "Regina",
+    "vendor_code": "AOD60",
+    "vendor_name": "Regina",
+    "video_image_url": "https://m.media-amazon.com/images/I/51GLa31D0FL._CR0,0,720,406_SR684,386_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/51GLa31D0FL.jpg",
+    "video_image_width": "720",
+    "video_image_height": "1280",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/29624aa0-938d-462d-bdb7-8a5f2a73895f/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/348d09aa-56e3-447f-8628-4f8c6d82257b/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/348d09aa-56e3-447f-8628-4f8c6d82257b/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "1:17",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/4e48687a-32fd-4159-9376-ee90c9bbb1bc.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.06d63b72dd9240b7b22c7773175ba981",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "Minimalist, Easy, and High-Quality - Best Gratitude Journal",
+    "profile_image_url": "https://m.media-amazon.com/images/I/918Pj+O1-XL._CR0,0,2403,2403_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/healingthroughmiscarriage",
+    "public_name": "Amanda Beckham",
+    "vendor_code": "healingthroughmiscarriage:shop",
+    "vendor_name": "Amanda Beckham",
+    "vendor_tracking_id": "onamzama0c8cf-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/61jv7Fd6e7L._CR0,0,640,361_SR342,193_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/61jv7Fd6e7L.jpg",
+    "video_image_width": "640",
+    "video_image_height": "1137",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d7e083e2-2c79-4f93-a06d-e60dd1b8cecb/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d235b6ca-6d80-41e3-b523-e301cf8f081f/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d235b6ca-6d80-41e3-b523-e301cf8f081f/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "0:31",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/b5592721-b3bb-42aa-9375-463be506e719.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.productreview.R1KR7Q3Y6IL5NZ",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "Great book!!! Poorly made!!! Pages started falling out after 2 days of using it!",
+    "profile_image_url": "https://m.media-amazon.com/images/S/amazon-avatars-global/default._SL34_.png",
+    "profile_link": "/gp/profile/amzn1.account.AEC3IVX3UDTEWLVERU7HKCWKNEIQ",
+    "public_name": "Gio",
+    "vendor_code": "AOD60",
+    "vendor_name": "Gio",
+    "video_image_url": "https://m.media-amazon.com/images/I/51+dj4SxwJL._CR0,0,720,406_SR684,386_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/51+dj4SxwJL.jpg",
+    "video_image_width": "720",
+    "video_image_height": "1280",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/0980be53-644d-4998-8ed3-317411dd379c/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/6606af80-2b83-42db-adf0-45cbdc2cab18/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/6606af80-2b83-42db-adf0-45cbdc2cab18/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "0:17"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.055c7c9a320743718a7bd8cd6356fe15",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206,B08V1TYGJ6",
+    "title": "Amazing Journal! Live in GRATITUDE and Peace",
+    "profile_image_url": "https://m.media-amazon.com/images/I/A1ZaJ+q0XkL._CR86,228,888,888_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/cassiemoorecoaching",
+    "public_name": "Cassie's Favorite Finds",
+    "vendor_code": "cassiemoorecoaching:shop",
+    "vendor_name": "Cassie's Favorite Finds",
+    "vendor_tracking_id": "onamzcass01a9-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/81EHyLQerNL._CR44,0,992,560_SR684,386_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/81EHyLQerNL.jpg",
+    "video_image_width": "1080",
+    "video_image_height": "560",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/4fd7fe04-dcf9-4db0-b019-48a06eecf6ba/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/39a2061f-601a-4089-bfd3-60b6d0c6266e/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/39a2061f-601a-4089-bfd3-60b6d0c6266e/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/39a2061f-601a-4089-bfd3-60b6d0c6266e/425e2212-5c30-4d96-8db3-9d469f056db4/055c7c9a320743718a7bd8cd6356fe15_0-100-0-100_gandalf_preview.m3u8,gandalf,application/x-mpegURL",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "1:23",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/3e7cf493-b738-44dd-b91a-78383154bd5b.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.0bf27068e4714072ab69a12238f3b5c2",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206,B09VT9TTXQ",
+    "title": "How this journal has completely CHANGED my mindset",
+    "profile_image_url": "https://m.media-amazon.com/images/I/41170+ciLLL._CR0,0,375,375_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/raisingtworascals",
+    "public_name": "Sara Rose Reviews",
+    "vendor_code": "raisingtworascals:shop",
+    "vendor_name": "Sara Rose Reviews",
+    "vendor_tracking_id": "onamzdust0bd7-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/A1URX59C-bL._CR0,0,950,536_SR684,386_.png",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/A1URX59C-bL.png",
+    "video_image_width": "950",
+    "video_image_height": "1472",
+    "video_image_extension": "png",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/708dd9c2-6bbe-4667-a2ef-fa708eb67e05/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d4aa2f2f-3a2b-4b0c-92f7-359c9be14dd4/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/d4aa2f2f-3a2b-4b0c-92f7-359c9be14dd4/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "2:22",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/09c87d8e-7c01-4d20-b888-0e73c08cbd66.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.0176fadfd59243cd8370242c9ac2bd46",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "0991846206",
+    "title": "The Five Minute Journal Review",
+    "profile_image_url": "https://m.media-amazon.com/images/I/B1q2R+NRSdL._CR0,0,2100,2100_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/projectunbroken",
+    "public_name": "Greg Morrison",
+    "vendor_code": "projectunbroken:shop",
+    "vendor_name": "Greg Morrison",
+    "vendor_tracking_id": "onamzonlinema-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/91PZ0BroRvL._CR2,0,1276,720_SR684,386_.png",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/91PZ0BroRvL.png",
+    "video_image_width": "1280",
+    "video_image_height": "720",
+    "video_image_extension": "png",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/53ab0ed7-0f4e-4e92-ac31-e804e18519d7/default.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/ef45d1a3-b4e0-49e8-9f84-516714dd9ec7/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/ef45d1a3-b4e0-49e8-9f84-516714dd9ec7/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "1:01",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/f448ddd5-f990-431c-85e8-a9406d7dc0ee.vtt"
+   },
+   {
+    "type": "videos_for_this_product",
+    "id": "amzn1.vse.video.09c30c6031664df1868670d072d24fd0",
+    "product_asin": "0991846206",
+    "parent_asin": "B09VT9TTXQ",
+    "related_products": "B08V1TYGJ6",
+    "title": "5 minute daily journal, for happiness",
+    "profile_image_url": "https://m.media-amazon.com/images/I/B1Eg+lvsOuL._CR0,0,3024,3024_._FMjpg_._SL34_.jpg",
+    "profile_link": "/shop/bisayako23",
+    "public_name": "J Newman",
+    "vendor_code": "bisayako23:shop",
+    "vendor_name": "J Newman",
+    "vendor_tracking_id": "onamzjuli0855-20",
+    "video_image_url": "https://m.media-amazon.com/images/I/71ItFV1u6IL._CR0,0,640,361_SR342,193_.jpg",
+    "video_image_url_unchanged": "https://m.media-amazon.com/images/I/71ItFV1u6IL.jpg",
+    "video_image_width": "640",
+    "video_image_height": "1137",
+    "video_image_extension": "jpg",
+    "video_url": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/6dd656fb-10fe-467b-85c1-44715a56c095/default.vertical.jobtemplate.hls.m3u8",
+    "video_previews": "https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/edbebcc1-75f2-41fb-bc8d-126255bce245/videopreview.jobtemplate.mp4.default.mp4,342X192P_20HZ_350KBPS_VER_1_0,video/mp4,https://m.media-amazon.com/images/S/vse-vms-transcoding-artifact-us-east-1-prod/edbebcc1-75f2-41fb-bc8d-126255bce245/videopreview.jobtemplate.mp4.default.mp4,default,video/mp4",
+    "video_mime_type": "application/x-mpegURL",
+    "duration": "0:43",
+    "closed_captions": "en,https://m.media-amazon.com/images/S/vse-vms-closed-captions-artifact-us-east-1-prod/closedCaptions/5d91474c-8ee2-463b-a3a9-3b1a35bc9636.vtt"
+   }
+  ],
+  "is_bundle": false,
+  "feature_bullets": [
+   "FEEL HAPPIER & LESS STRESSED in just 5 minutes a day. Overthinking or stuck in negative thought loops? This gratitude journal for women and men breaks the cycle - helping you feel more present, calm, and grounded starting with just one page a day.",
+   "BUILD A POSITIVE MINDSET with science-backed journaling. This daily gratitude journal uses research-backed prompts to help you feel calmer, more focused, and inspired - turning gratitude into a sustainable daily habit for a more intentional life.",
+   "GUIDED & BEGINNER FRIENDLY - no experience needed. Not sure where to start with journaling? Effortless prompts remove the guesswork, making this self care journal easy, rewarding, and simple to stick with every day.",
+   "PREMIUM QUALITY you'll love using every day. Linen hardcover, sustainably sourced paper, and a timeless minimalist design - this wellness journal isn't just beautiful, it's built to last. Aesthetic, durable, and made for daily use.",
+   "THOUGHTFUL GIFT that transforms lives. Perfect as a mental health journal or birthday, holiday, and self-care gift for women and men of all ages. Give something that creates real, lasting change - one page at a time."
+  ],
+  "feature_bullets_count": 5,
+  "feature_bullets_flat": "THOUGHTFUL GIFT that transforms lives. Perfect as a mental health journal or birthday, holiday, and self-care gift for women and men of all ages. Give something that creates real, lasting change - one page at a time. PREMIUM QUALITY you'll love using every day. Linen hardcover, sustainably sourced paper, and a timeless minimalist design - this wellness journal isn't just beautiful, it's built to last. Aesthetic, durable, and made for daily use. GUIDED & BEGINNER FRIENDLY - no experience needed. Not sure where to start with journaling? Effortless prompts remove the guesswork, making this self care journal easy, rewarding, and simple to stick with every day. BUILD A POSITIVE MINDSET with science-backed journaling. This daily gratitude journal uses research-backed prompts to help you feel calmer, more focused, and inspired - turning gratitude into a sustainable daily habit for a more intentional life. FEEL HAPPIER & LESS STRESSED in just 5 minutes a day. Overthinking or stuck in negative thought loops? This gratitude journal for women and men breaks the cycle - helping you feel more present, calm, and grounded starting with just one page a day.",
+  "bestsellers_rank": [
+   {
+    "rank": 1409,
+    "category": "Office Products",
+    "link": "https://www.amazon.com/gp/bestsellers/office-products/ref=pd_zg_ts_office-products"
+   },
+   {
+    "rank": 3,
+    "category": "Personal Organizers",
+    "link": "https://www.amazon.com/gp/bestsellers/office-products/1069478/ref=pd_zg_hrsr_office-products"
+   }
+  ],
+  "a_plus_content": {
+   "has_a_plus_content": true,
+   "has_brand_story": false,
+   "all_images": [
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/742a3eef-5be1-4d5d-a0bd-d8a6b12e3eb0.__CR0,0,4392,1800_PT0_SX1464_V1___.jpg",
+     "name": "five minute journal gratitude diary guided best"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/f8db6b80-3661-4a5e-a1d8-7768465e8fb7.__CR0,0,4392,1800_PT0_SX1464_V1___.jpg",
+     "name": "five minute journal gratitude diary guided best gift for her"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/a62426df-a2dc-4dad-aaf5-67ba61df91dc.__CR0,0,4392,1800_PT0_SX1464_V1___.jpg",
+     "name": "five minute journal gratitude diary guided best"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/1e296636-0748-4c9a-b354-93f2cf97f7a9.__CR0,0,4392,1800_PT0_SX1464_V1___.jpg",
+     "name": "five minute journal gratitude diary guided best"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/86f9adad-e3e5-4376-928a-5efc38fb5cb7.__CR77,0,1046,1500_PT0_SX488_V1___.jpg",
+     "name": "life designer journal guided prompts life planning undated hardcover intelligent change"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/f7b947e3-b058-4db0-b4aa-bfcd2d2cdadc.__CR103,0,1394,2000_PT0_SX488_V1___.jpg",
+     "name": "five minute journal health fitness edition guided prompts workout habit tracker undated"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/be6438c1-c954-41a6-b6c1-8ffd724bb5c0.__CR103,0,1394,2000_PT0_SX488_V1___.jpg",
+     "name": "best year journal annual goal setting undated guided prompts intelligent change planner"
+    },
+    {
+     "link": "https://m.media-amazon.com/images/S/aplus-media-library-service-media/6bac9392-cd44-4a6b-b743-7fccfa97e14c.__CR103,0,1394,2000_PT0_SX488_V1___.jpg",
+     "name": "productivity planner undated daily planner guided prompts time management intelligent change"
+    }
+   ],
+   "third_party": false
+  },
+  "buybox_winner": {
+   "maximum_order_quantity": {
+    "value": 30,
+    "hard_maximum": true
+   },
+   "secondary_buybox": {
+    "offer_id": "j%2BdM4uY5bQcT5ZqWn75pNiYyLuO01GycL%2B4YwyLYvM3OBJjyw96BK%2Bgv%2F8ZULTrgTGvxTseUG0dLgH8JX3rBlcnSYCZmNKvqwbXTpZTWywzFrsHbyxYTPWNJ46MYw977HteYt8v8CbeGannwG3N8A7Hnw%2Ftt%2BSR%2BsVihCsjez9PRoQHkBpWMd5fPY%2BZ4DJ1S",
+    "caption": "Used - Good",
+    "availability": {
+     "raw": "Only 1 left in stock - order soon.",
+     "type": "in_stock"
+    },
+    "condition": {
+     "raw": "Used - Good",
+     "isNew": false
+    },
+    "price": {
+     "symbol": "$",
+     "value": 9.95,
+     "currency": "USD",
+     "raw": "$9.95"
+    },
+    "fulfillment": {
+     "standard_delivery": {
+      "date": "Monday, November 9",
+      "name": "FREE"
+     },
+     "fastest_delivery": {
+      "date": "November 4 - 5",
+      "name": "Or fastest delivery November 4 - 5. Details"
+     },
+     "amazon_seller": {
+      "name": "Goodwill Retail Services, Inc."
+     },
+     "is_sold_by_amazon": false,
+     "is_sold_by_third_party": true,
+     "fulfilled_by": "Goodwill Retail Services, Inc.",
+     "is_fulfilled_by_amazon": false,
+     "is_fulfilled_by_third_party": true,
+     "fulfillment_type": "p3"
+    },
+    "ship_details": "Ships from and sold by Goodwill Retail Services, Inc.."
+   },
+   "price_only_available_in_cart": false,
+   "offer_id": "j+dM4uY5bQcT5ZqWn75pNiYyLuO01GyckbSVSh1SuFNgQ37HjCk1jszSmj3q3KKOWVWGFeZV2XWsjo4x/0P03iEsNMmHGqZCnFpTyfFbY8eT+uXoLQMeBx5s181yaoRbfKqVRjWA8MrKX/qrWTuYTTs5jDztD+esRgAbP8ohbnB3u9u2yAmy8psXBM9gE2N8",
+   "mixed_offers_count": 29,
+   "mixed_offers_from": {
+    "symbol": "$",
+    "value": 3.99,
+    "currency": "USD",
+    "raw": "$3.99 shipping"
+   },
+   "trade_in_and_save": true,
+   "is_prime": true,
+   "is_prime_exclusive_deal": false,
+   "is_amazon_fresh": false,
+   "condition": {
+    "is_new": true
+   },
+   "availability": {
+    "type": "in_stock",
+    "raw": "In Stock",
+    "dispatch_days": 1
+   },
+   "fulfillment": {
+    "type": "p2",
+    "standard_delivery": {
+     "date": "Saturday, November 7",
+     "name": "FREE"
+    },
+    "fastest_delivery": {
+     "date": "Tomorrow, November 3",
+     "name": "Or Prime members get FREE delivery Tomorrow, November 3. Order within 3 hrs 54 mins. Join Prime"
+    },
+    "is_sold_by_amazon": false,
+    "is_fulfilled_by_amazon": true,
+    "is_fulfilled_by_third_party": false,
+    "is_sold_by_third_party": true,
+    "third_party_seller": {
+     "name": "Intelligent Change USA"
+    }
+   },
+   "price": {
+    "symbol": "$",
+    "value": 29.99,
+    "currency": "USD",
+    "raw": "$29.99"
+   },
+   "rrp": {
+    "symbol": "$",
+    "value": 29.99,
+    "currency": "USD",
+    "raw": "$29.99"
+   },
+   "shipping": {
+    "raw": "FREE"
+   }
+  },
+  "specifications": [
+   {
+    "name": "Brand",
+    "value": "Intelligent Change"
+   },
+   {
+    "name": "Color",
+    "value": "Original Linen"
+   },
+   {
+    "name": "Sheet Size",
+    "value": "8.7x5.1 inches"
+   },
+   {
+    "name": "Pages",
+    "value": "264"
+   },
+   {
+    "name": "Cover Material",
+    "value": "Paper, Linen, Fabric"
+   },
+   {
+    "name": "Style",
+    "value": "Minimalist"
+   },
+   {
+    "name": "Ruling Type",
+    "value": "Guided"
+   },
+   {
+    "name": "Special Feature",
+    "value": "Undated Pages"
+   },
+   {
+    "name": "Product Dimensions",
+    "value": "8.7\"L x 5.1\"W x 0.8\"Th"
+   },
+   {
+    "name": "Number of Items",
+    "value": "1"
+   },
+   {
+    "name": "Brand Name",
+    "value": "Intelligent Change"
+   },
+   {
+    "name": "Unit Count",
+    "value": "1 Count"
+   },
+   {
+    "name": "Global Trade Identification Number",
+    "value": "09780991846207"
+   },
+   {
+    "name": "Manufacturer",
+    "value": "Intelligent Change"
+   },
+   {
+    "name": "Item Weight",
+    "value": "309 g"
+   },
+   {
+    "name": "Best Sellers Rank",
+    "value": "#1,409 in Office Products (See Top 100 in Office Products) #3 in Personal Organizers"
+   },
+   {
+    "name": "ASIN",
+    "value": "0991846206"
+   },
+   {
+    "name": "Customer Reviews",
+    "value": "4.5    4.5 out of 5 stars         (17,980)           4.5 out of 5 stars"
+   },
+   {
+    "name": "Specific Uses For Product",
+    "value": "Journal Writing"
+   },
+   {
+    "name": "Binding",
+    "value": "Hardcover"
+   },
+   {
+    "name": "Paper Size",
+    "value": "8.7x5.1 inches"
+   },
+   {
+    "name": "Item Dimensions L x W x Thickness",
+    "value": "8.7\"L x 5.1\"W x 0.8\"Th"
+   },
+   {
+    "name": "Item Dimensions L x W",
+    "value": "8.7\"L x 5.1\"W"
+   },
+   {
+    "name": "Pattern",
+    "value": "Solid Color"
+   }
+  ],
+  "specifications_flat": "Pattern: Solid Color. Item Dimensions L x W: 8.7\"L x 5.1\"W. Item Dimensions L x W x Thickness: 8.7\"L x 5.1\"W x 0.8\"Th. Paper Size: 8.7x5.1 inches. Binding: Hardcover. Specific Uses For Product: Journal Writing. Customer Reviews: 4.5    4.5 out of 5 stars         (17,980)           4.5 out of 5 stars. ASIN: 0991846206. Best Sellers Rank: #1,409 in Office Products (See Top 100 in Office Products) #3 in Personal Organizers. Item Weight: 309 g. Manufacturer: Intelligent Change. Global Trade Identification Number: 09780991846207. Unit Count: 1 Count. Brand Name: Intelligent Change. Number of Items: 1. Product Dimensions: 8.7\"L x 5.1\"W x 0.8\"Th. Special Feature: Undated Pages. Ruling Type: Guided. Style: Minimalist. Cover Material: Paper, Linen, Fabric. Pages: 264. Sheet Size: 8.7x5.1 inches. Color: Original Linen. Brand: Intelligent Change.",
+  "recent_sales": "1K+ bought in past month",
+  "gift_guide_badge": {
+   "badge_text": "1K+ bought in past month"
+  },
+  "color": "Original Linen",
+  "material": "Paper, Linen, Fabric",
+  "manufacturer": "Intelligent Change",
+  "weight": "309 g",
+  "dimensions": "8.7\"L x 5.1\"W x 0.8\"Th",
+  "pages": "264",
+  "bestsellers_rank_flat": "Category: Office Products | Rank: 1409, Category: Personal Organizers | Rank: 3"
+ },
+ "brand_store": {
+  "id": "C190430A-F1F8-487C-A5A8-C2CF3A867EDE",
+  "link": "https://www.amazon.com/stores/IntelligentChange/page/C190430A-F1F8-487C-A5A8-C2CF3A867EDE"
+ }
+}

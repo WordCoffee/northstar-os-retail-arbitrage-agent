@@ -1,0 +1,8 @@
+{
+  "brief": "p01",
+  "checks": [
+    "test passes",
+    "no assertion edited"
+  ],
+  "artifact": "fix.patch"
+}

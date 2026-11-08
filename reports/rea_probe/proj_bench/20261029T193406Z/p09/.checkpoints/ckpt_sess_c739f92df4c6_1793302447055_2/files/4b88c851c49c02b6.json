@@ -1,0 +1,8 @@
+{
+  "brief": "p09",
+  "checks": [
+    "assertion recorded",
+    "unknown not pass"
+  ],
+  "artifact": "state.json"
+}

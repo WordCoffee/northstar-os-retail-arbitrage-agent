@@ -1,0 +1,54 @@
+[
+  {
+    "test": "inventory",
+    "ok": true,
+    "models": {
+      "flux3_nvfp4": 5277.7,
+      "flux3_te": 4858.6,
+      "seedvr2_3b": null,
+      "wan_5b": 3810.6,
+      "umt5": 4145.9,
+      "wan_vae": 1409.4,
+      "flux_vae": 336.2,
+      "seedvr2_vae": null
+    },
+    "tts": [
+      "Qwen3-TTS-12Hz-1.7B-Base",
+      "Qwen3-TTS-12Hz-1.7B-CustomVoice",
+      "Qwen3-TTS-Tokenizer-12Hz"
+    ],
+    "qwentts_node": true
+  },
+  {
+    "test": "flux3",
+    "ok": true,
+    "status": "success",
+    "seconds": 28.3,
+    "outputs": [
+      "ns-smoke-flux3_00001_.png"
+    ]
+  },
+  {
+    "test": "seedvr2",
+    "ok": null,
+    "skipped": "files not staged yet"
+  },
+  {
+    "test": "wan",
+    "ok": true,
+    "status": "success",
+    "seconds": 84.5,
+    "outputs": [
+      "ns-smoke-wan_00015_.mp4"
+    ]
+  },
+  {
+    "test": "tts",
+    "ok": true,
+    "status": "success",
+    "seconds": 24.1,
+    "outputs": [
+      "ns-smoke-tts_00010.flac"
+    ]
+  }
+]

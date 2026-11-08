@@ -1,0 +1,290 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261103T203430Z",
+  "started_at": "2026-11-03T20:34:30+00:00",
+  "finished_at": "2026-11-03T20:41:23+00:00",
+  "stop_reason": "max_consecutive_failures",
+  "counts": {
+    "completed": 0,
+    "failed": 2,
+    "dry_run": 0
+  },
+  "readiness": {
+    "verdict": "GO",
+    "ok": true,
+    "checked_at": "2026-11-03T20:35:01+00:00",
+    "model_lane": {
+      "ok": true,
+      "provider": "ollama",
+      "model": "qwen3.5:4b",
+      "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 7.41 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+      "free_ram_gb": 7.412,
+      "post_load_headroom_gb": 4.62,
+      "estimate_not_measurement": true,
+      "installed": [
+        {
+          "model": "bojo:gpu-orig",
+          "rank": 28,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:2b",
+          "rank": 22,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5vl:7b",
+          "rank": 10,
+          "estimated_ram_gb": 5.0,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:3b",
+          "rank": 1,
+          "estimated_ram_gb": 1.62,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "bojo:latest",
+          "rank": 1,
+          "estimated_ram_gb": 2.25,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3.5:4b",
+          "rank": 1,
+          "estimated_ram_gb": 2.79,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b-parser-f16",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen2.5-coder:7b",
+          "rank": 1,
+          "estimated_ram_gb": 3.92,
+          "resident": false,
+          "fits": true
+        },
+        {
+          "model": "qwen3:8b",
+          "rank": 1,
+          "estimated_ram_gb": 4.38,
+          "resident": false,
+          "fits": true
+        }
+      ]
+    },
+    "branch": "feature/chrome-connect-3.0"
+  },
+  "tasks": [
+    {
+      "task": "ty-pouch-mockup",
+      "name": "Composite a designed panel onto a photographed pouch",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 7.76 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 7.765,
+        "post_load_headroom_gb": 4.97,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "resident": false,
+            "fits": true
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "protocol_failed: read_discipline",
+      "restoration": {
+        "sha": "8ba21a58f169d980214ed243353a7217e6c1d97b",
+        "restored": [
+          "Northstar_backend/mockup_compositor.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    },
+    {
+      "task": "ty-plate-pair",
+      "name": "Refuse a plate with no pouch face",
+      "status": "failed",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "qwen3.5:4b",
+        "reason": "qwen3.5:4b is installed and proven for the Ty tool loop; free RAM 3.15 GB at dispatch; the 2.79 GB figure is a PRE-LOAD estimate only - residency is gated by the measured `model-resident` check, not by this number",
+        "free_ram_gb": 3.154,
+        "post_load_headroom_gb": 3.15,
+        "estimate_not_measurement": true,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen2.5-coder:3b",
+            "rank": 1,
+            "estimated_ram_gb": 1.62,
+            "resident": false,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen3.5:4b",
+            "rank": 1,
+            "estimated_ram_gb": 2.79,
+            "resident": true,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5-coder:7b-parser-f16",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen2.5-coder:7b",
+            "rank": 1,
+            "estimated_ram_gb": 3.92,
+            "resident": false,
+            "fits": false
+          },
+          {
+            "model": "qwen3:8b",
+            "rank": 1,
+            "estimated_ram_gb": 4.38,
+            "resident": false,
+            "fits": false
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": [],
+      "error": "ram_floor_breach: 2.94 GB free < 3.0 GB floor",
+      "restoration": {
+        "sha": "b98de99e0e88defd8504b4df074185f715caff98",
+        "restored": [
+          "Northstar_backend/mockup_compositor.py"
+        ],
+        "removed": [],
+        "dry_run": false,
+        "verified": true,
+        "count": 1
+      }
+    }
+  ]
+}

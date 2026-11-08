@@ -1,0 +1,21 @@
+2026-11-03T19:17:52+00:00 [campaign-20261103T191733Z] campaign start max_tasks=2 deadline_minutes=90 max_consecutive_failures=2
+2026-11-03T19:17:52+00:00 [campaign-20261103T191733Z] dispatch task=ty-feather-sigma-guard lane=qwen3.5:4b phase=precheck
+2026-11-03T19:18:34+00:00 [campaign-20261103T191733Z] failed task=ty-feather-sigma-guard commit=- duration=None
+2026-11-03T19:18:34+00:00 [campaign-20261103T191733Z] refused dispatch task=ty-feather-sigma-guard reason=profile_mismatch lane=qwen3-embedding:0.6b task=qwen3.5:4b
+2026-11-03T19:18:34+00:00 [campaign-20261103T191733Z] campaign stop reason=profile_mismatch attempted=1 completed=0 failed=1
+2026-11-03T20:30:51+00:00 [campaign-20261103T203020Z] campaign start max_tasks=2 deadline_minutes=40.0 max_consecutive_failures=2
+2026-11-03T20:30:51+00:00 [campaign-20261103T203020Z] dispatch task=ty-feather-sigma-guard lane=qwen3.5:4b phase=precheck
+2026-11-03T20:32:01+00:00 [campaign-20261103T203020Z] failed task=ty-feather-sigma-guard commit=- duration=None
+2026-11-03T20:32:01+00:00 [campaign-20261103T203020Z] dispatch task=ty-feather-sigma-guard lane=qwen3.5:4b phase=precheck
+2026-11-03T20:32:53+00:00 [campaign-20261103T203020Z] failed task=ty-feather-sigma-guard commit=- duration=None
+2026-11-03T20:32:53+00:00 [campaign-20261103T203020Z] halt: 2 consecutive failures
+2026-11-03T20:32:53+00:00 [campaign-20261103T203020Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2
+2026-11-03T20:33:42+00:00 [campaign-20261103T203336Z] refused launch: readiness NO-GO
+2026-11-03T20:35:01+00:00 [campaign-20261103T203430Z] campaign start max_tasks=2 deadline_minutes=45.0 max_consecutive_failures=2
+2026-11-03T20:35:01+00:00 [campaign-20261103T203430Z] dispatch task=ty-pouch-mockup lane=qwen3.5:4b phase=precheck
+2026-11-03T20:41:10+00:00 [campaign-20261103T203430Z] failed task=ty-pouch-mockup commit=- duration=None
+2026-11-03T20:41:10+00:00 [campaign-20261103T203430Z] dispatch task=ty-plate-pair lane=qwen3.5:4b phase=precheck
+2026-11-03T20:41:23+00:00 [campaign-20261103T203430Z] failed task=ty-plate-pair commit=- duration=None
+2026-11-03T20:41:23+00:00 [campaign-20261103T203430Z] halt: 2 consecutive failures
+2026-11-03T20:41:23+00:00 [campaign-20261103T203430Z] campaign stop reason=max_consecutive_failures attempted=2 completed=0 failed=2
+2026-11-03T20:41:23+00:00 [campaign-20261103T203430Z] lane released model=qwen3.5:4b ok=True

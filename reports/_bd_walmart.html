@@ -1,0 +1,1 @@
+A global adaptive rate limit has been applied. Please retry in a few seconds.

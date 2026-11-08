@@ -1,0 +1,1 @@
+artifact for p12: Fix one legal-copy defect while keeping the front panel unchanged.

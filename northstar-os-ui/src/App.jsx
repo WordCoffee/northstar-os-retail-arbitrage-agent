@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CommandPalette from './components/CommandPalette.jsx'
 import { NAV_GROUPS, canUseRole } from './data/nav-config.js'
@@ -13,53 +13,78 @@ import { TOAST_PROVIDER, useToast } from './components/ToastContext.jsx'
 import { ModeProvider, useMode } from './context/ModeContext.jsx'
 import { ShellProvider, useShell } from './shell/ShellContext.jsx'
 import MasterBrainShell from './shell/MasterBrainShell.jsx'
-
-import CommandCenter from './pages/internal/CommandCenter.jsx'
-import ProductFinder from './pages/internal/ProductFinder.jsx'
-import DesignStudio from './pages/internal/DesignStudio.jsx'
-import WorkbenchShell from './shell/WorkbenchShell.jsx'
 import { WorkspaceProvider } from './shell/WorkspaceTabs.jsx'
-import GoldenGooseDesk from './pages/internal/GoldenGoose.jsx'
-import ListingGuardian from './pages/internal/ListingGuardian.jsx'
-import KeywordTracker from './pages/internal/KeywordTracker.jsx'
-import CompetitorMonitor from './pages/internal/CompetitorMonitor.jsx'
-import ListingForge from './pages/internal/ListingForge.jsx'
-import AdPilot from './pages/internal/AdPilot.jsx'
-import SocialPulse from './pages/internal/SocialPulse.jsx'
-import ProfitabilityDashboard from './pages/internal/ProfitabilityDashboard.jsx'
-import CommerceOps from './pages/internal/CommerceOps.jsx'
-import Monitoring from './pages/internal/Monitoring.jsx'
-import ChromeConnect from './pages/internal/ChromeConnect.jsx'
-import AutothinK from './pages/internal/AutothinK.jsx'
-import SpreadsheetLab from './pages/internal/SpreadsheetLab.jsx'
-import MemoryBank from './pages/internal/MemoryBank.jsx'
-import SharedDataLayer from './pages/internal/SharedDataLayer.jsx'
-import ProviderAdapters from './pages/internal/ProviderAdapters.jsx'
-import MasterBrain from './pages/internal/MasterBrain.jsx'
-import PackifyDesign from './pages/internal/PackifyDesign.jsx'
-import Improvement from './pages/internal/Improvement.jsx'
-import GildedVoid from './pages/internal/GildedVoid.jsx'
-import CustomerWorkspace from './pages/customer/Workspace.jsx'
-import BetaOpsOverview from './pages/admin/Overview.jsx'
-import OrgsList, { OrgDetail } from './pages/admin/OrgsList.jsx'
-import InviteCreate, { InviteDetail } from './pages/admin/InviteCreate.jsx'
-import Cohorts, { SupportOps, ReportsExports, AuditNotes, LifecycleModal, EligibilityChecklist } from './pages/admin/Cohorts.jsx'
-import InternalAdmin from './pages/internal/Admin.jsx'
-import CustomerSetup from './pages/customer/Setup.jsx'
-import CustomerDocuments from './pages/customer/Documents.jsx'
-import CustomerPlan from './pages/customer/PlanUsage.jsx'
-import CustomerSupport, { TicketDetail as CustomerTicketDetail } from './pages/customer/Support.jsx'
-import CustomerAccount from './pages/customer/AccountStatus.jsx'
-import SignIn from './pages/public/SignIn.jsx'
-import Recovery from './pages/public/Recovery.jsx'
-import BetaLanding from './pages/public/BetaLanding.jsx'
-import BetaInviteAccept from './pages/public/BetaInviteAccept.jsx'
-import CustomerLegal from './pages/customer/Legal.jsx'
-import AccountSuspended from './pages/customer/Suspended.jsx'
-import AccountDowngraded from './pages/customer/Downgraded.jsx'
-import CustomerReaccept from './pages/customer/Reaccept.jsx'
-import NotFound from './pages/NotFound.jsx'
-import GalacticDeck from './pages/internal/GalacticDeck.jsx'
+
+// Route entry points are code-split: every page (and therefore the studio engine
+// behind the creative rooms) is fetched on first navigation instead of being
+// paid for on initial load. `lazyNamed` handles the modules that export a named
+// component alongside their default (admin Lists/Details, Support ticket detail).
+const lazyNamed = (loader, name) => lazy(() => loader().then(m => ({ default: m[name] })))
+
+const CommandCenter = lazy(() => import('./pages/internal/CommandCenter.jsx'))
+const ProductFinder = lazy(() => import('./pages/internal/ProductFinder.jsx'))
+const DesignStudio = lazy(() => import('./pages/internal/DesignStudio.jsx'))
+const WorkbenchShell = lazy(() => import('./shell/WorkbenchShell.jsx'))
+const GoldenGooseDesk = lazy(() => import('./pages/internal/GoldenGoose.jsx'))
+const ListingGuardian = lazy(() => import('./pages/internal/ListingGuardian.jsx'))
+const KeywordTracker = lazy(() => import('./pages/internal/KeywordTracker.jsx'))
+const CompetitorMonitor = lazy(() => import('./pages/internal/CompetitorMonitor.jsx'))
+const ListingForge = lazy(() => import('./pages/internal/ListingForge.jsx'))
+const AdPilot = lazy(() => import('./pages/internal/AdPilot.jsx'))
+const SocialPulse = lazy(() => import('./pages/internal/SocialPulse.jsx'))
+const ProfitabilityDashboard = lazy(() => import('./pages/internal/ProfitabilityDashboard.jsx'))
+const CommerceOps = lazy(() => import('./pages/internal/CommerceOps.jsx'))
+const Monitoring = lazy(() => import('./pages/internal/Monitoring.jsx'))
+const ChromeConnect = lazy(() => import('./pages/internal/ChromeConnect.jsx'))
+const AutothinK = lazy(() => import('./pages/internal/AutothinK.jsx'))
+const SpreadsheetLab = lazy(() => import('./pages/internal/SpreadsheetLab.jsx'))
+const MemoryBank = lazy(() => import('./pages/internal/MemoryBank.jsx'))
+const SharedDataLayer = lazy(() => import('./pages/internal/SharedDataLayer.jsx'))
+const ProviderAdapters = lazy(() => import('./pages/internal/ProviderAdapters.jsx'))
+const MasterBrain = lazy(() => import('./pages/internal/MasterBrain.jsx'))
+const PackifyDesign = lazy(() => import('./pages/internal/PackifyDesign.jsx'))
+const Improvement = lazy(() => import('./pages/internal/Improvement.jsx'))
+const GildedVoid = lazy(() => import('./pages/internal/GildedVoid.jsx'))
+const CustomerWorkspace = lazy(() => import('./pages/customer/Workspace.jsx'))
+const BetaOpsOverview = lazy(() => import('./pages/admin/Overview.jsx'))
+const OrgsList = lazy(() => import('./pages/admin/OrgsList.jsx'))
+const OrgDetail = lazyNamed(() => import('./pages/admin/OrgsList.jsx'), 'OrgDetail')
+const InviteCreate = lazy(() => import('./pages/admin/InviteCreate.jsx'))
+const InviteDetail = lazyNamed(() => import('./pages/admin/InviteCreate.jsx'), 'InviteDetail')
+const Cohorts = lazy(() => import('./pages/admin/Cohorts.jsx'))
+const SupportOps = lazyNamed(() => import('./pages/admin/Cohorts.jsx'), 'SupportOps')
+const ReportsExports = lazyNamed(() => import('./pages/admin/Cohorts.jsx'), 'ReportsExports')
+const AuditNotes = lazyNamed(() => import('./pages/admin/Cohorts.jsx'), 'AuditNotes')
+const LifecycleModal = lazyNamed(() => import('./pages/admin/Cohorts.jsx'), 'LifecycleModal')
+const EligibilityChecklist = lazyNamed(() => import('./pages/admin/Cohorts.jsx'), 'EligibilityChecklist')
+const InternalAdmin = lazy(() => import('./pages/internal/Admin.jsx'))
+const CustomerSetup = lazy(() => import('./pages/customer/Setup.jsx'))
+const CustomerDocuments = lazy(() => import('./pages/customer/Documents.jsx'))
+const CustomerPlan = lazy(() => import('./pages/customer/PlanUsage.jsx'))
+const CustomerSupport = lazy(() => import('./pages/customer/Support.jsx'))
+const CustomerTicketDetail = lazyNamed(() => import('./pages/customer/Support.jsx'), 'TicketDetail')
+const CustomerAccount = lazy(() => import('./pages/customer/AccountStatus.jsx'))
+const SignIn = lazy(() => import('./pages/public/SignIn.jsx'))
+const Recovery = lazy(() => import('./pages/public/Recovery.jsx'))
+const BetaLanding = lazy(() => import('./pages/public/BetaLanding.jsx'))
+const BetaInviteAccept = lazy(() => import('./pages/public/BetaInviteAccept.jsx'))
+const CustomerLegal = lazy(() => import('./pages/customer/Legal.jsx'))
+const AccountSuspended = lazy(() => import('./pages/customer/Suspended.jsx'))
+const AccountDowngraded = lazy(() => import('./pages/customer/Downgraded.jsx'))
+const CustomerReaccept = lazy(() => import('./pages/customer/Reaccept.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound.jsx'))
+const GalacticDeck = lazy(() => import('./pages/internal/GalacticDeck.jsx'))
+
+// Suspense boundary for the lazy route chunks. Kept inside the shell so the nav
+// (TopNav, rail, mobile bar) stays painted while a page chunk loads.
+function RouteFallback() {
+  return (
+    <div className="route-loading" role="status" aria-live="polite"
+      style={{ padding: 32, opacity: 0.55, fontSize: 14 }}>
+      Loading…
+    </div>
+  )
+}
 
 // The session carries a BACKEND role (organization_owner, operator,
 // internal_platform_admin...). The shell's checks below compare against the UI
@@ -307,10 +332,12 @@ function Shell() {
               Measured by tests/e2e/ux_scorecard.spec.ts on 2026-11-05. */}
           <p className="sr-only" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</p>
           {session.suspended
-            ? <AccountSuspended />
+            ? <Suspense fallback={<RouteFallback />}><AccountSuspended /></Suspense>
             : simpleMode && !keepAdvanced
               ? <SimpleShellRoutes role={role} authenticated={authenticated} loaded={loaded} />
-              : <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />}
+              : <Suspense fallback={<RouteFallback />}>
+                  <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />
+                </Suspense>}
         </main>
       </div>
       <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />

@@ -1,0 +1,1 @@
+The feature flag is currently set to default off in the configuration module. This means the flag is disabled unless an environment variable explicitly overrides it. Operators can enable the flag by setting the environment variable to a truthy value such as 1 or true.

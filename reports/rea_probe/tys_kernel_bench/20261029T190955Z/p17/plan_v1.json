@@ -1,0 +1,31 @@
+{
+  "created_at": "2026-10-27T09:10:00Z",
+  "failed_assertion": {
+    "check": "duration_12_15",
+    "evidence": "ffprobe format.duration=18.4",
+    "expected": "12-15",
+    "node": "n3",
+    "observed_seconds": 18.4
+  },
+  "goal": "Assemble a 15-second vertical ad and verify it before reporting done",
+  "nodes": [
+    {
+      "action": "scale the plate to 1080x1920",
+      "id": "n1",
+      "status": "done"
+    },
+    {
+      "action": "mux the narration track onto the clip",
+      "id": "n2",
+      "status": "done"
+    },
+    {
+      "action": "ffprobe the result against the checks",
+      "id": "n3",
+      "status": "failed"
+    }
+  ],
+  "note": "Do not retry this plan as written: the timeline itself is too long.",
+  "plan_version": 1,
+  "status": "failed"
+}

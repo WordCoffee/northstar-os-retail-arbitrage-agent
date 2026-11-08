@@ -1,0 +1,1 @@
+{"model":"bojo","messages":[{"role":"user","content":"Return JSON with keys title, objective, lane for: add a healthcheck endpoint and run tests"}],"format":"json","stream":false,"options":{"num_predict":160}}

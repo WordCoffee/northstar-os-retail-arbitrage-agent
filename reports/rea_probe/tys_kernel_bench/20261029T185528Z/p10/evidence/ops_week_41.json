@@ -1,0 +1,24 @@
+{
+  "lanes": {
+    "browser": {
+      "failed": 0,
+      "passed": 5,
+      "runs": 5
+    },
+    "coding": {
+      "failed": 2,
+      "passed": 12,
+      "runs": 14
+    },
+    "label": {
+      "failed": 1,
+      "passed": 2,
+      "runs": 3
+    }
+  },
+  "missing": [],
+  "operator_gates": 2,
+  "renders_completed": 9,
+  "source": "local evidence export, no live calls",
+  "week": "2026-W41"
+}

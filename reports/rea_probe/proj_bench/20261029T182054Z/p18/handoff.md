@@ -1,0 +1,1 @@
+artifact for p18: Write a handoff that survives context compaction and resume from it.

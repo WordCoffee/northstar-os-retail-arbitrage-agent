@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 85,
+  "cycle": 118,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -279,7 +279,7 @@
       "id": "M3-intel-I0",
       "kind": "automation",
       "priority": 1110,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Intel plane I0: source registry + collectors",
       "depends_on": [
         "M2-work-generator"
@@ -288,9 +288,9 @@
         "tools/intel_collect.py",
         "state/intel/sources.json"
       ],
-      "updated_at": "2026-11-07T14:48:49+00:00",
+      "updated_at": "2026-11-07T14:55:00+00:00",
       "needs_author": "no acceptance_commands declared",
-      "defer_until_cycle": 86
+      "defer_until_cycle": null
     },
     {
       "id": "M3-intel-I1",
@@ -460,12 +460,12 @@
       "id": "W0-c1",
       "kind": "self",
       "title": "Author/evaluator: turn a failing test into an authorized, scoped task with a best-of-N patch loop",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 1000,
       "note": "Self-improvement, ranked above product work because every other workstream stalls when the queue empties",
-      "updated_at": "2026-11-06T14:33:00+00:00",
+      "updated_at": "2026-11-07T14:55:00+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 37,
+      "defer_until_cycle": null,
       "depends_on": [
         "M2-work-generator"
       ]
@@ -589,12 +589,12 @@
       "kind": "workstream",
       "workstream": "W6",
       "priority": 950,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Hero cutout leaves a ghost backdrop patch in the top-right - use BiRefNet instead of the deterministic chroma key for a hero",
       "evidence": "renders/aplus_design/aplus_preview.png (hero, top-right)",
-      "updated_at": "2026-11-06T13:48:25+00:00",
+      "updated_at": "2026-11-07T14:55:00+00:00",
       "needs_author": "no write_paths declared",
-      "defer_until_cycle": 28,
+      "defer_until_cycle": null,
       "depends_on": [
         "M2-work-generator"
       ]
@@ -604,24 +604,30 @@
       "kind": "workstream",
       "workstream": "W6",
       "priority": 945,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Logo module is still the brand name in serif, large and floating - needs a real lockup (mark + wordmark + rule) or the brand logo in the design record",
       "evidence": "renders/aplus_design/aplus_preview.png (footer module)",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W6-aplus-consistency",
       "kind": "workstream",
       "workstream": "W6",
       "priority": 940,
-      "status": "pending",
+      "status": "needs_author",
       "title": "A+ page shipped Shiitake artwork under a Lion's Mane headline - add a copy-vs-plate OCR consistency guard",
       "evidence": "aplus_preview.png vs the plate OCR",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E1",
@@ -691,12 +697,15 @@
       "kind": "workstream",
       "workstream": "W6",
       "priority": 900,
-      "status": "pending",
+      "status": "needs_author",
       "title": "A+ hero cover-crop slices the product at the frame edge - use subject-aware cropping",
       "evidence": "aplus_preview.png module 01",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E2",
@@ -704,7 +713,7 @@
       "workstream": "W1",
       "title": "Deterministic composite fallback: BiRefNet cutout of the real product + generated scene + matched shadow",
       "priority": 880,
-      "status": "in_progress",
+      "status": "needs_author",
       "acceptance": "identity preserved by construction; text_accuracy 100% on reference cases",
       "licence": "MIT (installed)",
       "landed": "product_composite.py + 7 tests; tools/experiment_composite.py; live composite of the real MOGRA pouch on a FLUX 3 scene (renders/autonomy_probe/composite/lifestyle_linen_composite.png)",
@@ -713,7 +722,10 @@
       "evidence": "state/evidence/composite_experiment_20261106T035558Z.json",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E5",
@@ -721,7 +733,7 @@
       "workstream": "W0",
       "title": "Expose subagents, todos, plan_mode and skills as callable kernel tools (they exist and are unreachable)",
       "priority": 860,
-      "status": "pending",
+      "status": "needs_author",
       "acceptance": "each module callable through the kernel tool protocol, with tests",
       "licence": "in-repo, no dependency",
       "write_paths": [
@@ -731,7 +743,10 @@
       ],
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no acceptance_commands declared",
+      "defer_until_cycle": null
     },
     {
       "id": "UX-service-headings",
@@ -739,11 +754,14 @@
       "workstream": "W8",
       "title": "8 of 10 service pages have \"Bojo\" as their only heading - no page-level title inside the shell",
       "priority": 860,
-      "status": "pending",
+      "status": "needs_author",
       "evidence": "state/evidence/ux_coverage_chromium-desktop.json (heading column)",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "UX-tabbar",
@@ -751,11 +769,14 @@
       "workstream": "W8",
       "title": "Workbench tab bar (wb-tabbar) is not built on /ui/workbench; tab-state cannot be measured",
       "priority": 840,
-      "status": "pending",
+      "status": "needs_author",
       "note": "Flip TABS_EXPECTED to true in tests/e2e/ux_scorecard.spec.ts when it ships.",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "UX-a11y-1",
@@ -763,7 +784,7 @@
       "workstream": "W8",
       "title": "UX scorecard found: color-contrast failures (18-31 nodes/page), scrollable-region-focusable, and /ui + /ui/home titled 'Bojo'",
       "priority": 780,
-      "status": "in_progress",
+      "status": "needs_author",
       "evidence": "state/evidence/ux_scorecard_chromium-desktop_*.json",
       "fixed_so_far": "root-caused the simple.css layering (same selectors defined 3-4 times at lines 279/712/920 and 287/509/719) with a new canonical.css layer; greeting heading was scrolled out (stream 239 vs 267) and the auto-pin now skips an empty stream; starter prompts 3-up not 2+1; status chips no longer clipped (overflow visible on the header chain) and chip contrast fixed (3.38:1 -> AA); mobile chat stream 24px -> 299px; dev notice asserted on every route.",
       "next": "1) .mb-shell .chat-empty h3 is NOT visible in the Northstar shell (screenshot reports/ty/shots/ux_chromium-desktop_first_run_ui_home.png) - the greeting heading is missing or scrolled out while the paragraph renders; find why before touching spacing. 2) The shell suggestion grid still renders 2+1 because simple.css overrides .chat-suggestions with a grid (simple.css:287, :719) - stack it or use an even 3-up. 3) The status chip row still clips the last theme name (\"Concept Spacious'\"). 4) documents page contrast + .stage-canvas-pane focus.",
@@ -771,14 +792,17 @@
       "shell": "CONFIRMED: the Northstar rebuild shell (.mb-shell, data-shell-mode=\"simple\", data-simple-design=\"hearth\"), not the legacy room shell. Evidence: state/evidence/inspect_empty_state.json",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W2-c1",
       "kind": "workstream",
       "workstream": "W2",
       "title": "Listing optimization: build the scorecard, measure the current output",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 720,
       "dwell": "until-production-ready",
       "write_paths": [
@@ -790,19 +814,25 @@
       "acceptance": "listing scorecard exists, 40 held-out listings scored, claim-safety measured",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no acceptance_commands declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W2-c2",
       "kind": "workstream",
       "workstream": "W2",
       "title": "Listing optimization: close the largest scorecard gap",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 720,
       "blocked_by": "W2-c1",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W1-text-guard",
@@ -819,31 +849,37 @@
       "kind": "workstream",
       "workstream": "W6",
       "priority": 700,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Comparison module invents the competitor column; unsourced claims must not render",
       "evidence": "renders/aplus_design/aplus_preview.png (comparison module)",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W3-c1",
       "kind": "workstream",
       "workstream": "W3",
       "title": "PPC: scorecard over three historical search-term reports",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 680,
       "dwell": "bounded 6",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W1-c2",
       "kind": "workstream",
       "workstream": "W1",
       "title": "Product pictures: fidelity now compares the subject crop; it proves reference conditioning does NOT preserve the product",
-      "status": "in_progress",
+      "status": "needs_author",
       "priority": 650,
       "dwell": "until-production-ready",
       "acceptance": "held-out run twice with every measured dimension >= 85 and compliance 100%",
@@ -852,19 +888,25 @@
       "text_guard": "render_text_guard.ensure_text_free wired into the bench and into listing_render.generate for main images. Measured on the real bench artifact renders/autonomy_probe/bench/from-01-main_white_a1.png: 10 OCR boxes -> 0 in one pass, text_accuracy 0.0 -> 100.0 (state/evidence/text_guard_measurement.json). The cleaned plate looks right: the label panel is blank, ready for the vector type layer.",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W1-c3",
       "kind": "workstream",
       "workstream": "W1",
       "title": "Product pictures: reference id in the API contract; text-safe guard on the reference path",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 650,
       "blocked_by": "W1-c2",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:00+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E3",
@@ -872,12 +914,15 @@
       "workstream": "W7",
       "title": "Parametric packaging families (packbox MIT pattern): box, pouch, sleeve as parameters, not templates",
       "priority": 640,
-      "status": "pending",
+      "status": "needs_author",
       "acceptance": "5 sizes generate valid SVG+PDF with bleed/safe zones and pass prepress at TAC<=300",
       "licence": "MIT (pattern port, not vendored)",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E4",
@@ -885,24 +930,30 @@
       "workstream": "W4",
       "title": "Per-claim citations in research (hyperresearch MIT pattern); refuse a claim with no source",
       "priority": 620,
-      "status": "pending",
+      "status": "needs_author",
       "acceptance": "100% of emitted claims carry a URL + quote; 0 unsourced claims",
       "licence": "MIT (pattern port)",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W4-c1",
       "kind": "workstream",
       "workstream": "W4",
       "title": "Research: freshness + completeness scorecard on fixtures",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 600,
       "dwell": "bounded 6",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "R-E6",
@@ -910,36 +961,45 @@
       "workstream": "W4",
       "title": "Demand/keyword layer over our own fixtures (Jungle Scout parity without Amazon)",
       "priority": 540,
-      "status": "pending",
+      "status": "needs_author",
       "acceptance": "every number carries source + n; unmeasured is reported unmeasured",
       "licence": "in-repo + public aggregate stats",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W5-c1",
       "kind": "workstream",
       "workstream": "W5",
       "title": "Golden Goose: precision/recall on 120 labelled fixtures",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 480,
       "dwell": "bounded 5",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W7-c1",
       "kind": "workstream",
       "workstream": "W7",
       "title": "Packaging: readiness verdict correctness on 10 hand-made packs",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 440,
       "dwell": "bounded 5",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W13-parked",
@@ -954,98 +1014,125 @@
       "kind": "workstream",
       "workstream": "W6",
       "title": "Design studio: print round-trip on a real die drawing",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 405,
       "dwell": "until-production-ready",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W10-c1",
       "kind": "workstream",
       "workstream": "W10",
       "title": "Performance: enforce p95 budgets for render/listing/scan",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 360,
       "dwell": "bounded 4",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W11-c1",
       "kind": "workstream",
       "workstream": "W11",
       "title": "Onboarding: steps-to-first-artifact on a scripted journey",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 350,
       "dwell": "bounded 4",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W12-c1",
       "kind": "workstream",
       "workstream": "W12",
       "title": "Observability: injected-fault detection rate",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 300,
       "dwell": "bounded 3",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W9-c1",
       "kind": "workstream",
       "workstream": "W9",
       "title": "Security: automate the production-bundle dev-bypass assertion",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 300,
       "dwell": "bounded 3",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W14-c1",
       "kind": "workstream",
       "workstream": "W14",
       "title": "Docs: fresh-clone-to-green runbook check",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 160,
       "dwell": "bounded 2",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "W8-c1",
       "kind": "workstream",
       "workstream": "W8",
       "title": "UX: three scripted journeys as a held-out regression set",
-      "status": "pending",
+      "status": "needs_author",
       "priority": 140,
       "dwell": "bounded 2",
       "depends_on": [
         "M2-work-generator"
-      ]
+      ],
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "A-a10",
       "kind": "probe",
       "title": "A10 reference generation (PARTIAL: both paths render, library now exists, not wired to API)",
-      "status": "partial",
-      "next": "W1-cycle-3: accept a reference id in /api/design-studio/*"
+      "status": "needs_author",
+      "next": "W1-cycle-3: accept a reference id in /api/design-studio/*",
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "A-a3",
       "kind": "probe",
       "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
-      "status": "partial",
-      "next": "W0: author/evaluator for backlog proposals"
+      "status": "needs_author",
+      "next": "W0: author/evaluator for backlog proposals",
+      "updated_at": "2026-11-07T14:55:01+00:00",
+      "needs_author": "no write_paths declared",
+      "defer_until_cycle": null
     },
     {
       "id": "A-a4",
@@ -1094,7 +1181,7 @@
       "kind": "workstream",
       "workstream": "W9",
       "priority": 1196,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Worktree is 975 dirty tracked files + 10,099 untracked: a frozen candidate costs 79 MB",
       "next": "Triage: commit or move the tracked dirt (db, data blobs, exports), decide on the untracked trees, then re-freeze. Until then every candidate freeze is 79 MB and scope judgement needs pre_changed.",
       "write_paths": [
@@ -1109,9 +1196,9 @@
       "depends_on": [
         "M2-work-generator"
       ],
-      "updated_at": "2026-11-07T14:48:49+00:00",
+      "updated_at": "2026-11-07T14:55:00+00:00",
       "needs_author": "no acceptance_commands declared",
-      "defer_until_cycle": 85
+      "defer_until_cycle": null
     },
     {
       "id": "A12b-wire-evaluator",
@@ -1198,7 +1285,7 @@
       "nodeid": "Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
       "fixable_by": "worker",
       "needs_author": "proposal surface still reports pytest:Northstar_backend/foundation/tests/test_frontend_gate.py::test_v3_shell_invariants",
-      "last_generated_at": "2026-11-07T14:47:59+00:00"
+      "last_generated_at": "2026-11-08T01:28:38+00:00"
     },
     {
       "id": "gen-probe-tys-launcher-tests-d7dd9e",
@@ -1266,7 +1353,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-07T08:55:00Z",
+  "updated_at": "2026-11-08T01:28:38+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {

@@ -288,3 +288,52 @@ Openverse. Add Openverse (openverse.org, free API, no key needed) as a source fo
 - PATCH 2 item 2 amends PATCH 1 item 1: Openverse joins the public-source list. Every Openverse image is recorded with its licence and source URL; none may be used as a product asset.
 - The 3 bake-off targets: (a) an open-source repo already on this machine or cloneable from GitHub, (b) one hosted non-Amazon tool reached read-only over the network, (c) this repo's own local web app on 127.0.0.1. Amazon is never a target.
 - A bake-off result is "tool did not run" unless there is a command line, an exit code and an output artefact to cite.
+
+---
+
+# WORK ORDER 3 — 2026-11-08 (parallel D9/D10/D11/D16/D17, sequential D8→D15, folded fixes)
+
+Owner: Tyrone. Mode: fully autonomous, no reports between cycles. This section supersedes
+nothing above except where it names a clause; it adds the batch below and the folded fixes.
+
+## Batch A — parallel builder lanes (independent of D8), scope manifests
+
+| Lane | Unit | Scope manifest (write_paths) |
+|---|---|---|
+| builder-d9 | D9 Seller-Tester harness: brief catalog, programmatic + vision scoring, difficulty escalation, gap filing | `tools/seller_tester/`, `Northstar_backend/test_seller_tester.py`, `ty/seller_briefs.json`, `reports/ty/d9_*` |
+| builder-d10 | D10 visual regression gate: frozen seeded scenes, desktop + iPhone 12 WebKit, baseline protocol | `tools/visual_regression/`, `Northstar_backend/test_visual_regression.py`, `reports/ty/d10_*` |
+| builder-d11 | D11 intel plane A18–A21: scouts, vetting, `state/intel/gaps.json`, >=10 evidence-backed findings | `tools/scout/`, `Northstar_backend/test_scout_intel.py`, `state/intel/gaps.json`, `reports/ty/d11_*` |
+| builder-d16 | D16 Model Scout (router candidates first: Qwen3.5 4B, then others) + D17 REA vs Craft Anything bake-off | `tools/model_scout.py`, `tools/tool_bakeoff.py`, `state/intel/models.json`, `reports/ty/d16_*`, `reports/ty/d17_*` |
+
+Max 4 cloud builders. One heavy local job at a time through `tools/gpu_budget.py`.
+
+## Batch B — Director lane, in sequence
+
+D8 (risk classes, verify-after-act, Profile 6 lease, Chrome Connect parity suite **twice**,
+then quarantine Chrome Connect) → D12 (real batch of 3–4 parallel bundles merged to
+`staging`, score before/after) → D13 (live mode, text first) → D14 (computer mode
+scaffolding behind flags and grants, not enabled here) → D15 (independent verification).
+
+## Folded fixes (apply now, evidence required)
+
+1. **qwen2.5vl:7b retest** on a clean server: no KV-cache quantization, `num_ctx` ≈ 8192.
+   Overwrite the old verdict only if the measurement changes.
+2. **Pixel-grounding benchmark** (UI-TARS-class / OmniParser-class) on the 40-screen set.
+   Until one passes, vision control uses UIA and DOM only.
+3. **ComfyUI starts fresh per render lane and stops after.** `free_comfy()` is no longer
+   trusted: an acknowledgement is not a release.
+4. **27B off by default.** Lease it only for jobs that need local reasoning.
+5. **Disk floor:** no downloads or new worktrees below 5 GB free; report free space in
+   every digest.
+6. **Builders run targeted tests; full suites run serialised.**
+7. **Launcher as a persistent scheduled task**, proven to survive a reboot and a killed
+   session.
+
+## Completion bar (each with command output)
+
+launcher survives reboot · empty queue triggers re-plan, never idle · >=3 parallel bundles
+merged to staging with score before/after · Seller-Tester filed real gaps · V1–V9 pass ·
+Chrome Connect parity passed twice · intel plane >=10 evidence-backed findings · model
+leaderboards re-run on GPU · independent verifier agree/FAILED per unit. Anything needing
+payment, keys or login goes to `needs_you.md` and never blocks the rest. Then the
+gap-driven production loop, never idle while any service is below its bar.

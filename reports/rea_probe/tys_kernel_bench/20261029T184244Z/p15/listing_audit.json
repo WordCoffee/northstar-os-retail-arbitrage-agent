@@ -1,0 +1,55 @@
+{
+  "artifact": "listing_audit.json",
+  "source_files": ["listing.txt", "rubric.md"],
+  "dimensions": {
+    "Title": {
+      "weight": "20%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate title length, keyword placement, or promotional content."
+    },
+    "Bullets": {
+      "weight": "20%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate bullet count, benefit-led structure, or presence of concrete numbers."
+    },
+    "Description": {
+      "weight": "15%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate whether the description answers top buyer questions or contains unsupported claims."
+    },
+    "Keywords": {
+      "weight": "10%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate keyword presence or stuffing."
+    },
+    "Images": {
+      "weight": "15%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate image slot count or scale reference presence."
+    },
+    "A+ content": {
+      "weight": "10%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate module count or sourced specifications."
+    },
+    "Compliance": {
+      "weight": "10%",
+      "score": null,
+      "status": "unmeasured",
+      "reason": "listing.txt is not available in the current context to evaluate disease claims, disclaimer presence, or weight consistency."
+    }
+  },
+  "unmeasurable_dimensions": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ],
+  "notes": "All rubric dimensions are marked unmeasured because listing.txt content is not accessible in the current execution context. The four dimensions explicitly listed in rubric.md as unmeasurable from the fixture are also recorded."
+}

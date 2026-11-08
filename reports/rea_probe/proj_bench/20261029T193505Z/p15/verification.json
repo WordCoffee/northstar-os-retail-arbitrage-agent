@@ -1,0 +1,8 @@
+{
+  "brief": "p15",
+  "checks": [
+    "rubric cited",
+    "unmeasured listed"
+  ],
+  "artifact": "listing_audit.json"
+}

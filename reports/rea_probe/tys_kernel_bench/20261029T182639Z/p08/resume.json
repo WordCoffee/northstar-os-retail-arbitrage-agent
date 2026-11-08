@@ -1,0 +1,11 @@
+{
+  "run_id": "run-2026-10-27-a",
+  "status": "blocked",
+  "checkpoint": "ckpt-0003",
+  "blocking_gate": "operator_gate:spend_approval",
+  "resume_from": "ckpt-0003",
+  "completed_steps": [1, 2],
+  "next_step": 3,
+  "next_step_id": "publish_digest",
+  "rule": "Resume from ckpt-0003; do not repeat steps 1 or 2."
+}

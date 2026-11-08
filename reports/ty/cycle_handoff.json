@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-07T14:55:01+00:00",
+  "brief": {
+    "cycle": 118,
+    "item": "A-a3",
+    "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
+    "workstream": null,
+    "priority": null,
+    "write_paths": [],
+    "acceptance": "",
+    "acceptance_commands": [],
+    "next_action": "W0: author/evaluator for backlog proposals",
+    "rollback_tag": "autonomy-cycle-118",
+    "lease_token": "b561635cd516e73c",
+    "tokens_today": 293118,
+    "cycle_of_session": [],
+    "cycles_per_session": 3
+  },
+  "open_blockers": []
+}

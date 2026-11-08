@@ -1,0 +1,84 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "provider": {
+    "openrouter": {
+      "models": {
+        "deepseek/deepseek-v4.1-flash:floor": {
+          "name": "DeepSeek V4.1 Flash (Floor)",
+          "modelID": "deepseek/deepseek-v4.1-flash:floor",
+          "options": {
+            "provider": { "allow_fallbacks": true }
+          }
+        },
+        "deepseek/deepseek-v4-flash-0731:floor": {
+          "name": "DeepSeek V4 Flash 0731 (Floor)",
+          "modelID": "deepseek/deepseek-v4-flash-0731:floor",
+          "options": {
+            "provider": { "allow_fallbacks": true }
+          }
+        },
+        "z-ai/glm-5.3-flash:floor": {
+          "name": "GLM 5.3 Flash (Floor)",
+          "modelID": "z-ai/glm-5.3-flash:floor",
+          "options": {
+            "provider": { "allow_fallbacks": true }
+          }
+        },
+        "~anthropic/claude-sonnet-latest": {
+          "name": "Claude Sonnet Latest",
+          "limit": { "context": 180000, "output": 8192 },
+          "options": {
+            "provider": { "sort": "price", "allow_fallbacks": true }
+          }
+        }
+      }
+    }
+  },
+
+  "compaction": {
+    "auto": true,
+    "keep": { "tokens": 6000 },
+    "buffer": 12000
+  },
+
+  "mcp": {
+    // Chrome Connect is the controller for all browser work. It plans each step,
+    // evaluates each page, decides what to extract, stops at CAPTCHAs and logins,
+    // and journals every decision, tool call, URL, timestamp and result.
+    //
+    // Exposes chromeconnect_* tools ONLY. There is deliberately no
+    // navigate/click/type/screenshot tool: the browser is reachable only from
+    // inside a controller instruction.
+    "chromeconnect": {
+      "type": "local",
+      "command": ["node", "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\scripts\\chromecontrol-mcp-server.js"],
+      "enabled": true,
+      "environment": {
+        "CHROMECONNECT_TRANSPORT_MODULE": "C:\\Users\\T2Hol\\OneDrive\\Documents\\Default Project\\scripts\\chromecontrol-playwright-bridge.js"
+      }
+    },
+
+    // REMOVED 2026-10-04 — the raw Playwright MCP registration is DELETED, not
+    // disabled. Evidence that `enabled: false` is not honoured here: with that
+    // flag set, OpenCode still started `chromecontrol-mcp.js` (a launcher that
+    // resolves an attach mode and spawns @playwright/mcp), and that published
+    // 25 raw browser_* tools (navigate, click, type, screenshot, snapshot, tabs)
+    // straight to the model. With no `command`, there is nothing to start.
+    //
+    // Why it mattered: those tools let the model drive the browser with no
+    // Chrome Connect decision in front of it, so every guardrail in policy.js —
+    // the domain allowlist, the Amazon blocklist, the per-host read-only
+    // allow-list and the risk classes — was bypassed.
+    //
+    // Playwright is still reachable, but only the sanctioned way: Chrome Connect
+    // spawns its own single internal @playwright/mcp child inside the persistent
+    // session (lib/chromecontrol/mcp-session.js), behind the gate and the policy
+    // checks. That child is never an MCP server in this config.
+    //
+    // Do not re-add a `playwright` server here. Backup: opencode.jsonc.bak3.20261003
+    "playwright": {
+      "_deleted_20261004": "This server entry was REMOVED because it published 25 raw Playwright browser_* tools to the model, bypassing Chrome Connect. It has no `command`, so it cannot start anything. See comments above and backup opencode.jsonc.bak3.20261003."
+    }
+  }
+}

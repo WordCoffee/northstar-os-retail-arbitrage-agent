@@ -15,8 +15,11 @@ unambiguous and quarantines the rest.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+import copy
 import hashlib
 import json
+import threading
+import time
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
@@ -24,6 +27,49 @@ from pydantic import BaseModel, Field
 from data_layer import get_northstar_db
 
 router = APIRouter(prefix="/api/design-studio", tags=["design-studio"])
+
+
+# ── Short-lived component cache ────────────────────────────────────────────
+# The read-only status surfaces below recompute the same handful of components
+# on every request: the studio counters, the engine probe, and the lanes
+# status (which spawns PowerShell, nvidia-smi and two HTTP probes). None of
+# those answers can change meaningfully inside a few seconds, but the warm cost
+# was the entire latency budget. One TTL covers them all: the first request in
+# a window computes once, every later request returns a copy of that result.
+COMPONENT_CACHE_TTL_SECONDS = 8.0
+
+_COMPONENT_CACHE: Dict[Any, Any] = {}
+_COMPONENT_CACHE_LOCK = threading.Lock()
+
+
+def _cache_component(key: Any, compute):
+    """Return the component for ``key``, computed at most once per TTL.
+
+    The value is deep-copied on the way in and on the way out, so a caller can
+    never mutate the shared entry and the response shape is exactly what
+    ``compute`` returned. Expired entries are dropped on the next miss so a
+    per-account key cannot grow without bound.
+    """
+    now = time.monotonic()
+    with _COMPONENT_CACHE_LOCK:
+        hit = _COMPONENT_CACHE.get(key)
+        if hit is not None and now - hit[0] < COMPONENT_CACHE_TTL_SECONDS:
+            return copy.deepcopy(hit[1])
+        # Computed under the lock: two concurrent cold requests must not both
+        # spawn the probes. The producers are local reads, never re-entrant.
+        value = compute()
+        now = time.monotonic()
+        for stale in [k for k, (stamped, _v) in _COMPONENT_CACHE.items()
+                      if now - stamped >= COMPONENT_CACHE_TTL_SECONDS]:
+            _COMPONENT_CACHE.pop(stale, None)
+        _COMPONENT_CACHE[key] = (now, copy.deepcopy(value))
+        return value
+
+
+def _clear_component_cache() -> None:
+    """Drop every cached component (tests, and any caller that needs it fresh)."""
+    with _COMPONENT_CACHE_LOCK:
+        _COMPONENT_CACHE.clear()
 
 
 class ProjectIn(BaseModel):
@@ -1286,12 +1332,26 @@ def delete_listing_record(rid: str, acct: str = Depends(studio_account)):
 
 @router.get("/master-brain-context")
 def master_brain_context(acct: str = Depends(studio_account)):
+    return _cache_component(("master-brain-context", acct),
+                            lambda: _master_brain_context_component(acct))
+
+
+def _master_brain_context_component(acct: str) -> Dict[str, Any]:
     from design_studio_imports import (KIND_BRAND_VOICE, KIND_KEYWORDS,
                                        KIND_SP_SEARCH_TERMS, KIND_BRAND_ANALYTICS_SQP)
     db = get_northstar_db()
 
+    # One pass over this account's imports: the kinds are grouped from a single
+    # listing instead of one listing per kind. The unfiltered page can be
+    # shorter than the history, so a kind that is absent is asked for directly
+    # before it is reported unavailable.
+    imports = db.design_studio.imports.list_for_account(acct)
+
     def latest_import(kind):
-        rows = [r for r in db.design_studio.imports.list_for_account(acct, kind=kind)]
+        for row in imports:
+            if row.get("kind") == kind:
+                return row
+        rows = db.design_studio.imports.list_for_account(acct, kind=kind)
         return rows[0] if rows else None
 
     # Brand voice.
@@ -1870,8 +1930,8 @@ def generation_status(acct: str = Depends(studio_account)):
 
 # ── Status / health for the merged studio ──────────────────────────────────
 
-@router.get("/status")
-def studio_status(acct: str = Depends(studio_account)):
+def _studio_status_component(acct: str) -> Dict[str, Any]:
+    """The three counters, computed in one pass over their own stores."""
     db = get_northstar_db()
     return {
         "mode": "local",
@@ -1880,6 +1940,12 @@ def studio_status(acct: str = Depends(studio_account)):
         "jobs": len(db.design_studio.jobs.list_by_project(account_id=acct, limit=1000)),
         "note": "Local design workspace. Provider generation is gated behind explicit Run actions.",
     }
+
+
+@router.get("/status")
+def studio_status(acct: str = Depends(studio_account)):
+    return _cache_component(("studio-status", acct),
+                            lambda: _studio_status_component(acct))
 
 
 # ── Local media generation (ComfyUI runner) ────────────────────────────────
@@ -1931,8 +1997,27 @@ class GenerateIn(BaseModel):
 
 @router.get("/engine")
 def engine_status(acct: str = Depends(studio_account)):
-    import studio_generation as sg
-    return sg.engine_status()
+    def _compute():
+        import studio_generation as sg
+        return sg.engine_status()
+    # The probe is an HTTP round-trip to ComfyUI; it is the same answer for
+    # every caller for a few seconds.
+    return _cache_component(("studio-engine",), _compute)
+
+
+@router.get("/lanes/status")
+def lanes_status_cached(acct: str = Depends(studio_account)):
+    """Which lanes are usable, computed at most once per TTL.
+
+    The probes themselves stay in ``design_studio_lanes`` (PowerShell for the
+    speech engine, nvidia-smi for vision, two HTTP checks); this route only
+    memoises their combined result for a few seconds so a warm request does not
+    re-run them. The payload is returned exactly as the lane module built it.
+    """
+    def _compute():
+        from design_studio_lanes import lanes_status
+        return lanes_status(acct)
+    return _cache_component(("lanes-status", acct), _compute)
 
 
 @router.post("/generate")

@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    {
+      "node": "nodes/collect.py",
+      "returncode": 0,
+      "stdout": "collected 3 days",
+      "stderr": ""
+    },
+    {
+      "node": "nodes/summarise.py",
+      "returncode": 0,
+      "stdout": "summary total 24",
+      "stderr": ""
+    },
+    {
+      "node": "nodes/verify.py",
+      "returncode": 0,
+      "stdout": "verified total 24 across 3 days",
+      "stderr": ""
+    }
+  ]
+}

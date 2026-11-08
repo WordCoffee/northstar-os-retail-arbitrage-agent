@@ -1,0 +1,76 @@
+{
+  "schema": "northstar.campaign_manifest.v1",
+  "run_id": "campaign-20261101T060527Z",
+  "started_at": "2026-11-01T06:05:27+00:00",
+  "finished_at": "2026-11-01T06:05:27+00:00",
+  "stop_reason": "dry_run",
+  "counts": {
+    "completed": 0,
+    "failed": 0,
+    "dry_run": 1
+  },
+  "readiness": {
+    "verdict": "SKIPPED",
+    "ok": true,
+    "checked_at": null,
+    "model_lane": null,
+    "branch": null
+  },
+  "tasks": [
+    {
+      "task": "ty-dpi-image-guard",
+      "name": "Print gate refuses an impossible image/quad pairing",
+      "status": "dry_run",
+      "commit": "",
+      "duration_s": null,
+      "lane": {
+        "ok": true,
+        "provider": "ollama",
+        "model": "bojo:gpu-orig",
+        "reason": "bojo:gpu-orig is installed, proven for the Ty tool loop, and estimated at 2.25 GB; free RAM 4.75 GB at dispatch; estimated post-load headroom 2.50 GB",
+        "free_ram_gb": 4.745,
+        "post_load_headroom_gb": 2.5,
+        "installed": [
+          {
+            "model": "bojo:gpu-orig",
+            "rank": 28,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen3.5:2b",
+            "rank": 22,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          },
+          {
+            "model": "qwen2.5vl:7b",
+            "rank": 10,
+            "estimated_ram_gb": 5.0,
+            "fits": false
+          },
+          {
+            "model": "qwen3-embedding:0.6b",
+            "rank": 1,
+            "estimated_ram_gb": 0.54,
+            "fits": true
+          },
+          {
+            "model": "bojo:latest",
+            "rank": 1,
+            "estimated_ram_gb": 2.25,
+            "fits": true
+          }
+        ]
+      },
+      "prechecks": {
+        "ok": true,
+        "commands": [],
+        "expected": "none"
+      },
+      "apply": null,
+      "error": "",
+      "restoration": null
+    }
+  ]
+}

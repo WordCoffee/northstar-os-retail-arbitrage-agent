@@ -1,0 +1,194 @@
+{
+  "mode": "kernel benchmark (run_kernel + semantic validators)",
+  "briefs": 20,
+  "passed": 0,
+  "failed": 20,
+  "rate": 0.0,
+  "model_lane": 17,
+  "tool_lane": 3,
+  "jsonl": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\reports\\rea_probe\\tys_kernel_bench\\20261029T182209Z\\evidence.jsonl",
+  "failed_ids": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10",
+    "p11",
+    "p12",
+    "p13",
+    "p14",
+    "p15",
+    "p16",
+    "p17",
+    "p18",
+    "p19",
+    "p20"
+  ],
+  "rows": [
+    {
+      "id": "p01",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 51.0
+    },
+    {
+      "id": "p02",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.2
+    },
+    {
+      "id": "p03",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 6.6
+    },
+    {
+      "id": "p04",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 6.4
+    },
+    {
+      "id": "p05",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.3
+    },
+    {
+      "id": "p06",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 3.7
+    },
+    {
+      "id": "p07",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 6.2
+    },
+    {
+      "id": "p08",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 3.8
+    },
+    {
+      "id": "p09",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 2.9
+    },
+    {
+      "id": "p10",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 6.3
+    },
+    {
+      "id": "p11",
+      "lane": "tool",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "p12",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 3.9
+    },
+    {
+      "id": "p13",
+      "lane": "tool",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "p14",
+      "lane": "tool",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "p15",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": true,
+      "passed": false,
+      "seconds": 7.5
+    },
+    {
+      "id": "p16",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 26.4
+    },
+    {
+      "id": "p17",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.1
+    },
+    {
+      "id": "p18",
+      "lane": "coding",
+      "kernel_status": "complete",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 2.0
+    },
+    {
+      "id": "p19",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.2
+    },
+    {
+      "id": "p20",
+      "lane": "coding",
+      "kernel_status": "needs_human",
+      "content_valid": false,
+      "passed": false,
+      "seconds": 4.5
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+The feature flag is disabled by default, so its default state is off. Operators can override the default by setting the environment variable to a truthy value such as 1, true, yes, or on. When the environment variable is absent or set to a falsy value such as 0, false, no, or off, the flag remains off.

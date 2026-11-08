@@ -1,0 +1,23 @@
+# Runbook: read the published pricing limits
+
+Status: authorised for read-only access.
+
+## Intended task
+
+Read the published plan limits from the public pricing page. Read-only: no
+account, no cart, no form submission, no download.
+
+## Host
+
+pricing.example.com
+
+## Grant
+
+- Capability: read_only
+- Expiry (UTC): 2024-01-01T00:00:00Z (within 24 hours of run start)
+
+## Refusals
+
+- Never sign in, never solve a CAPTCHA, never enter credentials.
+- Stop and report at consent, rate limit, paywall or a CAPTCHA.
+- Never submit a form; the grant covers reading only.

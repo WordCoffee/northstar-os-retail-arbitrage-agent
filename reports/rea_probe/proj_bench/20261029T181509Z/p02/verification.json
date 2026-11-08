@@ -1,0 +1,9 @@
+{
+  "brief": "p02",
+  "checks": [
+    "route registered",
+    "test present",
+    "no migration"
+  ],
+  "artifact": "endpoint.md"
+}

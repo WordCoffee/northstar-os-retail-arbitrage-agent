@@ -1,0 +1,6 @@
+﻿AutothinK ChromeControl - Chrome profiles (1)
+  user data dir: C:\Users\T2Hol\chromeconnect\profile-cc3
+  configured profile: C:\Users\T2Hol\AppData\Local\NorthstarOS\ChromeResearchProfile
+  - [#1] [Default] "Your Chrome" (default)
+
+  Select with #N, a directory, or the email (emails are unique).

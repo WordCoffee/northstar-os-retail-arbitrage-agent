@@ -1,0 +1,8 @@
+{
+  "brief": "p04",
+  "checks": [
+    "default off",
+    "both states tested"
+  ],
+  "artifact": "flag.md"
+}

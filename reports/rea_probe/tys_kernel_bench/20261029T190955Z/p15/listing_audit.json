@@ -1,0 +1,45 @@
+{
+  "artifact": "listing_audit.json",
+  "source": "listing.txt",
+  "rubric": "rubric.md",
+  "dimensions": {
+    "title": {
+      "measured": true,
+      "score": 1,
+      "notes": "Title present and readable: 'Mogra Organics Organic Lion's Mane Mushroom Powder - 6 oz, 85 Servings'."
+    },
+    "bullets": {
+      "measured": true,
+      "score": 1,
+      "notes": "Five bullets present covering sourcing, format, usage, testing, and certifications."
+    },
+    "description": {
+      "measured": true,
+      "score": 1,
+      "notes": "Description present describing ingredient, preparation, and serving size."
+    },
+    "keywords": {
+      "measured": true,
+      "score": 1,
+      "notes": "Three keywords provided: lion's mane powder, organic mushroom powder, lion mane supplement."
+    },
+    "images": {
+      "measured": true,
+      "score": 0.71,
+      "notes": "5 of 7 image slots filled."
+    },
+    "a_plus_content": {
+      "measured": true,
+      "score": 0,
+      "notes": "A+ content: none."
+    },
+    "price": {
+      "measured": false,
+      "score": null,
+      "notes": "Price not supplied in this fixture; dimension is unmeasured."
+    }
+  },
+  "unmeasured_dimensions": ["price"],
+  "overall_score": 0.786,
+  "status": "complete"
+}

@@ -1,0 +1,8 @@
+{
+  "evidence": "run_log.json",
+  "nodes": [
+    {"node": "nodes/collect.py", "status": "pending"},
+    {"node": "nodes/summarise.py", "status": "pending"},
+    {"node": "nodes/verify.py", "status": "pending"}
+  ]
+}

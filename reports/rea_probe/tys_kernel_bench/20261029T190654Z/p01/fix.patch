@@ -1,0 +1,20 @@
+--- a/calc.py
++++ b/calc.py
+@@ -1,14 +1,14 @@
+ """Tiny arithmetic helpers used by the billing report."""
+ 
+ 
+ def add(a, b):
+     return a + b
+ 
+ 
+ def subtract(a, b):
+     return a - b
+ 
+ 
+ def total(values):
+     running = 0
+     for value in values:
+-        running = add(running, value)
++        running = add(running, value)
+     return running

@@ -1,0 +1,15 @@
+{
+  "run_id": "run-2026-10-27-b",
+  "path": "org.mfa_require_all",
+  "expected": true,
+  "observed": null,
+  "verdict": "unknown",
+  "reason": "observed value is null; unread values are never pass",
+  "change": {
+    "applied_at": "2026-10-27T16:20:00Z",
+    "applied_by": "operator",
+    "from": false,
+    "to": true,
+    "what": "operator toggled org.mfa_require_all"
+  }
+}

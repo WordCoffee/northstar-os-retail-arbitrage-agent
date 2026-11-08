@@ -1,0 +1,5 @@
+# Per-run browser host grants for this workspace.
+# Format: <host>  <capability>  <expires_utc>
+# An expiry of "unset" means the grant is not authorised yet.
+pricing.example.com   read_only   unset
+docs.example.com      read_only   unset

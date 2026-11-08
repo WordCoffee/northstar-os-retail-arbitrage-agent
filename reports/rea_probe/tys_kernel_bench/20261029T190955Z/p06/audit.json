@@ -1,0 +1,5 @@
+{
+  "setting_key": "org.mfa_require_all",
+  "observed_value": false,
+  "verdict": "The observed value in settings_capture.txt matches the value stored in admin_setting.json; no change was submitted."
+}

@@ -1,0 +1,47 @@
+{
+  "rubric_version": "v1",
+  "scored_dimensions": {
+    "Title": {
+      "score": 0,
+      "weight": "20%",
+      "evidence": "No title line present in listing.txt; primary keyword, length, and promo checks cannot be verified."
+    },
+    "Bullets": {
+      "score": 0,
+      "weight": "20%",
+      "evidence": "No five benefit-led bullets with concrete numbers found in listing.txt."
+    },
+    "Description": {
+      "score": 0,
+      "weight": "15%",
+      "evidence": "No description block answering the top five buyer questions found in listing.txt."
+    },
+    "Keywords": {
+      "score": 0,
+      "weight": "10%",
+      "evidence": "No keyword field or keyword usage in copy found in listing.txt."
+    },
+    "Images": {
+      "score": 0,
+      "weight": "15%",
+      "evidence": "No image slots or scale reference listed in listing.txt."
+    },
+    "A+ content": {
+      "score": 0,
+      "weight": "10%",
+      "evidence": "No A+ content modules or sourced specs present in listing.txt."
+    },
+    "Compliance": {
+      "score": 0,
+      "weight": "10%",
+      "evidence": "No disclaimer, disease-claim check, or weight consistency data present in listing.txt."
+    }
+  },
+  "unmeasured_dimensions": [
+    "Price competitiveness",
+    "BSR / sales velocity",
+    "Review count and rating",
+    "Conversion rate"
+  ],
+  "notes": "listing.txt contained no scorable content for any rubric dimension; all scored dimensions are recorded as 0 with the reason that the required content is absent. The four dimensions explicitly flagged in rubric.md as unmeasurable from the fixture are listed under unmeasured_dimensions."
+}
