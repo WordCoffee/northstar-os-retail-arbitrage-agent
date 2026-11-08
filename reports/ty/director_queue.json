@@ -1,8 +1,8 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T02:48:44+00:00",
+  "updated_at": "2026-11-08T02:50:48+00:00",
   "cycle": 1,
-  "unit_in_flight": "D6",
+  "unit_in_flight": "D7",
   "unit_order": [
     "D0",
     "D1",
@@ -86,7 +86,10 @@
       "summary": "gap-ranked bundles (>=5 points or >=3 gaps); replan writes a defect instead of idling"
     },
     "D6": {
-      "status": "pending"
+      "status": "done",
+      "unit_tag": "ty-dir-D6",
+      "completed_at": "2026-11-08T02:50:48+00:00",
+      "summary": "V5+V7 pass: blocked window yields no pixels; pause and kill stop input in <1s; 11 tests"
     },
     "D7": {
       "status": "pending"
