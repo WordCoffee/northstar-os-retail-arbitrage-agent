@@ -50,16 +50,22 @@ without `verifier_reproduced=True`.
 
 ## Scoring
 
-Five weighted dimensions per service: `works` 0.30, `correct` 0.30, `complete` 0.15,
-`usable` 0.15, `measured` 0.10, bar 85 **per dimension** — an 85 average is not a pass.
+Six weighted dimensions per service: `works` 0.28, `correct` 0.25, `complete` 0.12,
+`usable` 0.12, `measured` 0.10, `seller` 0.13, bar 85 **per dimension** — an 85 average is
+not a pass.
 
 - `works`/`correct` come from test ids (`reports/ty/_idlist_*.txt`), matched by explicit
-  filename patterns, never by inference.
+  filename patterns, never by inference. Passing tests score `correct` at **60, not 100**:
+  tests prove a code path, not that the output is worth selling.
 - `complete` comes from whether the Bojo tools a service declares are actually present.
 - `usable` comes from the readiness scan's findings that name the service.
 - `measured` comes from `tools/measured.py`: the route is **mounted** (`source:
   'app-route'` or an explicit `<Route>`), the component exists, and the app answers inside a
   latency budget. A catalogue entry is not a page.
+- `seller` comes from `tools/seller_scores.py`: the mean of real Seller-Tester output scores
+  for that service, requiring at least five scored outputs. A service with no scored output
+  gets 0 and the reason, so **artefacts alone cannot raise a service to the bar** (the
+  ceiling without seller evidence is 77).
 
 ## Ty's Vision
 
@@ -79,8 +85,11 @@ Deterministic before pixels, in this order:
    reported.
 6. **Browser** (`browser.py`): CDP over a Profile 6 lease, policy re-checked on every
    navigation, edits refused on external hosts.
-7. **Live mode** (`live.py`): narration and questions, text only.
-8. **Computer mode** (`computer.py`, `scope.py`): files, processes, windows, launches, behind
+7. **Browser without CDP** (`chrome_uia.py`): when Chrome will not expose a debugging port,
+   the same job is done through UI Automation with the pixel fallback — blocklisted windows
+   refused, foreground verified before every keystroke, its own tab, closed at the end.
+8. **Live mode** (`live.py`): narration and questions, text only.
+9. **Computer mode** (`computer.py`, `scope.py`): files, processes, windows, launches, behind
    scope and grants; `TY_PC_MODE` needs flag **and** grant.
 
 ## The GPU
