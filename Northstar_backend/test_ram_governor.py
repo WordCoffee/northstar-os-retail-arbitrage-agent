@@ -20,6 +20,9 @@ import ram_governor as G  # noqa: E402
 def isolated_state(tmp_path, monkeypatch):
     monkeypatch.setattr(G, "CAPS", tmp_path / "caps.json")
     monkeypatch.setattr(G, "JOURNAL", tmp_path / "ram_gate.jsonl")
+    # The real machine may be under a held pause while the suite runs; the policy tests must
+    # not inherit that, so the marker points somewhere that does not exist.
+    monkeypatch.setattr(G, "PAUSE", tmp_path / "PAUSE_BUILDERS")
     return tmp_path
 
 

@@ -38,6 +38,7 @@ from typing import Any, Dict, Optional
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "state" / "director"
 CAPS = STATE / "caps.json"
+PAUSE = STATE / "PAUSE_BUILDERS"
 JOURNAL = STATE / "ram_gate.jsonl"
 
 FULL_FREE_GB = 2.0
@@ -155,6 +156,14 @@ def decide(reading: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         reason += f"; capped at {cap} by state/director/caps.json cloud_workers"
         if paused:
             reason += " (paused)"
+
+    # A held pause: the candidate suite and the GPU benchmarks need the machine quiet, and a
+    # full suite is not a workload to run beside builders. The marker is a file, so anything
+    # that starts a builder — the launcher, a claim, a person — can see the same answer.
+    if PAUSE.exists():
+        max_builders = 0
+        paused = True
+        reason += f"; held paused by {PAUSE.relative_to(ROOT) if ROOT in PAUSE.parents else PAUSE}"
 
     return {
         "at": _now(),
