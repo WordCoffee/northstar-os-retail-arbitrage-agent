@@ -22,8 +22,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT / "tools") not in sys.path:
-    sys.path.insert(0, str(ROOT / "tools"))
+for _path in (ROOT / "tools", ROOT / "Northstar_backend"):
+    if str(_path) not in sys.path:
+        sys.path.insert(0, str(_path))
 PROOF = ROOT / "state" / "seller" / "composite_proof.json"
 OUT = ROOT / "state" / "seller" / "composite_region.json"
 BRIEFS = ROOT / "tools" / "seller_tester" / "mogra_briefs.json"
@@ -69,28 +70,80 @@ def cutout_for(brief: Dict[str, Any], artefact: Optional[Path] = None) -> Option
 
 
 def _region_verdict(artefact: Path, cutout: Any, placement: Any) -> Dict[str, Any]:
-    from PIL import Image
+    """Verify the product region with the repo's own identity metric.
 
-    import numpy as np
-
-    from seller_tester.composite_check import check_composite
-    from seller_tester.composite_check import missing_cutout_verdict
-
+    `product_composite.identity_check` already compares the composite's product box against
+    the cutout, masked by the cutout's alpha, and reported 0.9958 on the white-canvas run.
+    Re-implementing that comparison here produced a second, worse metric and a false
+    `cannot verify`; an audit that disagrees with a tested implementation for no measured
+    reason is a bug in the audit.
+    """
     if cutout is None:
+        from seller_tester.composite_check import missing_cutout_verdict
+
         return missing_cutout_verdict(
             "the generator did not save the cutout it used, so the product region cannot be "
             "compared; expected <artefact>.cutout.png")
-    with Image.open(artefact) as opened:
-        produced = np.array(opened.convert("RGB"))
-    return check_composite(produced, cutout, placement=placement,
-                           min_similarity=MIN_SIMILARITY)
+    if not placement:
+        from seller_tester.composite_check import check_composite
+
+        from PIL import Image
+
+        import numpy as np
+
+        with Image.open(artefact) as opened:
+            produced = np.array(opened.convert("RGB"))
+        return check_composite(produced, cutout, placement=None, min_similarity=MIN_SIMILARITY)
+
+    sidecar = artefact.with_suffix(".json")
+    box = placement
+    if sidecar.is_file():
+        try:
+            meta = json.loads(sidecar.read_text(encoding="utf-8"))
+            recorded = meta.get("product_box")
+            if isinstance(recorded, list) and len(recorded) == 4:
+                box = [int(value) for value in recorded]
+        except (OSError, ValueError):
+            pass
+    left, top, right, bottom = (int(value) for value in box)
+    if right <= left or bottom <= top:
+        left, top = int(placement[0]), int(placement[1])
+        right, bottom = left + int(placement[2]), top + int(placement[3])
+
+    import product_composite as composite  # noqa: PLC0415
+
+    cutout_path = None
+    for candidate in (artefact.with_suffix(".cutout.png"),
+                      ROOT / "renders" / "seller_composite" / f"{artefact.stem}.cutout.png"):
+        if candidate.is_file():
+            cutout_path = candidate
+            break
+    if cutout_path is None:
+        return {"ok": False, "cannot_verify": True,
+                "detail": "the cutout file is missing beside the artefact"}
+    result = composite.identity_check(artefact.read_bytes(), cutout_path.read_bytes(),
+                                      (left, top, right, bottom))
+    ssim = result.get("ssim")
+    ok = ssim is not None and float(ssim) >= 0.90
+    return {"ok": bool(ok), "cannot_verify": ssim is None, "similarity": ssim,
+            "found_by": "placement", "basis": "masked_ssim",
+            "detail": (f"product region {right - left}x{bottom - top} at ({left},{top}): "
+                       f"masked SSIM {ssim} ({result.get('verdict')})")}
 
 
 def _placement(result: Dict[str, Any]) -> Optional[List[int]]:
+    """The product box as (x, y, width, height).
+
+    `place_product` records `[left, top, right, bottom]`; `check_composite` takes
+    `[x, y, width, height]`. Reading one as the other put boxes outside the frame and made a
+    correct composite look unverifiable — the kind of unit error a rule catches only if the
+    box is actually used.
+    """
     generation = result.get("generation") or {}
     box = generation.get("product_box")
     if isinstance(box, list) and len(box) == 4:
-        return [int(value) for value in box]
+        left, top, right, bottom = (int(value) for value in box)
+        return [left, top, max(1, right - left), max(1, bottom - top)]
     return None
 
 

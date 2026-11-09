@@ -75,14 +75,18 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
     cutout = cutout_rgb.astype(np.float32)
+    distortion = 1.0
     if cutout.shape[:2] != region.shape[:2]:
-        # A one- or two-pixel difference is rounding, not a different product.
-        close = (abs(cutout.shape[0] - region.shape[0]) <= max(2, height // 100)
-                 and abs(cutout.shape[1] - region.shape[1]) <= max(2, width // 100))
-        if not close:
+        # The generator resizes the cutout to the placement, so compare at the geometry it
+        # actually used. A wild aspect change means the box is not this product, and that is
+        # reported rather than silently stretched away.
+        cut_aspect = cutout.shape[1] / float(cutout.shape[0])
+        box_aspect = width / float(height)
+        distortion = max(cut_aspect, box_aspect) / min(cut_aspect, box_aspect)
+        if distortion > 1.25:
             return _cannot_verify(
-                f"cutout is {cutout.shape[1]}x{cutout.shape[0]} but the placement is "
-                f"{width}x{height}; resize the cutout before comparing")
+                f"cutout aspect {cut_aspect:.2f} and placement aspect {box_aspect:.2f} "
+                f"differ by {distortion:.2f}x; this is not the same subject")
         try:
             import cv2  # noqa: PLC0415
 
@@ -135,7 +139,7 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
         basis = "structure"
     return _check(
         ok=True, cannot_verify=False, similarity=round(score, 4),
-        basis=basis,
+        basis=basis, aspect_distortion=round(distortion, 3),
         mae_similarity=round(max(0.0, 1.0 - mae), 4),
         pixels=int(mask.sum()), placement=[x, y, width, height],
         detail=(f"product region {width}x{height} at ({x},{y}): "
@@ -231,7 +235,13 @@ def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
 def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
                     placement: Optional[Sequence[int]] = None,
                     min_similarity: float = DEFAULT_MIN_SIMILARITY) -> Dict[str, Any]:
-    """The one entry point: use the recorded placement, or find the product."""
+    """The one entry point: compare at the recorded placement, or find the product.
+
+    A recorded placement can disagree with the artefact (scaled, stretched, or written in a
+    different coordinate space). When it scores below the bar, the product is also located
+    independently and the better of the two is reported — with `compared_by` saying which.
+    """
+    verdict: Dict[str, Any] = {}
     if placement is not None:
         cutout_rgb, cutout_alpha = split_rgba(cutout)
         if cutout_rgb is None:
@@ -242,9 +252,23 @@ def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
         verdict["min_similarity"] = float(min_similarity)
         if not verdict.get("cannot_verify"):
             verdict["ok"] = bool(verdict.get("similarity", 0.0) >= float(min_similarity))
-        return verdict
-    return locate_and_compare(np.asarray(produced_rgb), cutout,
-                              min_similarity=min_similarity)
+        if verdict.get("ok"):
+            verdict["compared_by"] = "placement"
+            return verdict
+
+    located = locate_and_compare(np.asarray(produced_rgb), cutout,
+                                 min_similarity=min_similarity)
+    located["compared_by"] = "template_match"
+    if placement is None:
+        return located
+    # Keep the placement result for the record; report whichever measured better.
+    if (located.get("similarity") or 0.0) >= (verdict.get("similarity") or 0.0):
+        located["placement_verdict"] = {k: verdict.get(k) for k in
+                                        ("ok", "similarity", "detail", "cannot_verify")}
+        return located
+    verdict["template_verdict"] = {k: located.get(k) for k in
+                                   ("ok", "similarity", "detail", "cannot_verify")}
+    return verdict
 
 
 __all__ = ["DEFAULT_MIN_SIMILARITY", "check_composite", "locate_and_compare",

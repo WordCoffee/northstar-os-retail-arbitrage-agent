@@ -322,6 +322,27 @@ class CompositeGenerator:
         record["artefact"] = str(target)
         record["bytes"] = len(png)
         record["seconds"] = round(time.time() - started, 2)
+        # The sidecar is what makes the artefact auditable later: route, cutout, and the
+        # box the product occupies. Written for every route, not only composites.
+        try:
+            sidecar = target.with_suffix(".json")
+            sidecar.write_text(json.dumps({
+                "brief_id": record.get("brief_id"),
+                "route": record.get("route"),
+                "fidelity": record.get("fidelity"),
+                "artefact": record.get("artefact"),
+                "cutout_path": record.get("cutout_path"),
+                "product_box": record.get("product_box"),
+                "product_scale": record.get("product_scale"),
+                "identity_ssim": record.get("identity"),
+                "scene_source": (record.get("scene") or {}).get("source"),
+                "upscaled_from": record.get("upscaled_from"),
+                "upscaled_to": record.get("upscaled_to"),
+                "upscaler": record.get("upscaler"),
+            }, indent=2) + "\n", encoding="utf-8")
+            record["sidecar"] = str(sidecar)
+        except OSError as exc:  # noqa: BLE001
+            record["sidecar_error"] = f"{type(exc).__name__}: {exc}"
         self.records.append(record)
         self._journal(record, started)
         return target
@@ -508,6 +529,18 @@ class CompositeGenerator:
             png, record = _upscale_to(png, required, record)
             if white_main and record.get("upscaled_to"):
                 record["white_canvas"] = _measure_white(png, record["product_box"])
+
+        # Save the cutout that was actually used, beside the artefact it produced.
+        # Without it the product-region check cannot tell "the real pouch" from
+        # "a pouch that prints the same words", and it must say cannot_verify.
+        try:
+            self.out_dir.mkdir(parents=True, exist_ok=True)
+            cut_target = self.out_dir / f"{brief.get('id') or 'brief'}.cutout.png"
+            cut_target.write_bytes(cut_png)
+            record["cutout_path"] = str(cut_target)
+        except OSError as exc:  # noqa: BLE001 - a missing cutout is recorded, not hidden
+            record["cutout_path"] = None
+            record["cutout_error"] = f"{type(exc).__name__}: {exc}"
         return png, record
 
     def _full_generation(self, brief: Dict[str, Any], record: Dict[str, Any]

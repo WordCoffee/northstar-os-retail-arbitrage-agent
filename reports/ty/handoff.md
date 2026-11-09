@@ -26,21 +26,31 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 `ux-05` is **done**: `SIMPLE_KEEP_ADVANCED` sent every unlisted path to the chat shell before its
 route ran; 29/29 routes now render, 60 Playwright tests pass.
 
-## In flight (2026-11-08, two builders)
+## In flight
 
-- **sel-01d** — main images as pure composites on flat 255 white at ~85 % fill (no scene); the
-  image lane records `nvidia-smi` and `ollama ps`, unloads Bojo/embeddings before a render and
-  reloads after, and checks its budget against **measured** free VRAM; a measured upscaler
-  replaces Lanczos; FLUX 3 is fixed or replaced with evidence.
-- **sel-01e** — a composite that `cannot_verify` **fails** (current two passes become
-  provisional); the OCR benchmark is rebuilt from hard real pouch crops; the null
-  vision-description embedding is fixed so it reports a real cosine or `cannot_verify`.
+- **reg-01** (rank 5, ahead of the UX chain) — the **service registry as the single source of
+  truth**: walk every advanced-view route with Ty's Vision plus the backend, record purpose,
+  inputs, outputs, actions and Bojo tool per service, then generate the Bojo tool list and the
+  default Northstar workspaces from it. Advanced view is **not** rebuilt; gaps are recorded in
+  `ty/registry_gaps.json` only where a service has no controls.
 
-## Scoring, as it stands
+## Composites: verified at last
 
-Six dimensions, bar 85 each. **2 services at bar** (`hub` 100, `prospector` 100), twelve at 86.2.
-`measured` is 28 of 29. A seller-facing service with only passing tests stays at 60 on `correct`;
-a service with no seller-facing artefact is judged on its tests.
+The product-region check now runs on the real artefacts and passes:
+
+| brief | score | region (masked SSIM) | passed |
+|---|---|---|---|
+| MG-C01 white main (flat 255 canvas, 2000 px) | **100** | 0.9958 | yes |
+| MG-C02 greenhouse | **81** | 0.9931 | yes |
+| MG-C03 forest mockup | **100** | 0.9835 | yes |
+
+**3 passed, mean 93.7, 3 verified.** Two unit bugs had to be fixed to get there: `place_product`
+records `[left, top, right, bottom]` and the check took `[x, y, w, h]`, and the audit was
+re-implementing a comparison the repo already had — `product_composite.identity_check` was right
+all along at 0.9958.
+
+Seller dimension is still 22.1 from the **40-output stored pass**; the three composites are below
+the five-output floor, so they inform the proof but not the score yet.
 
 ## The reference check changed on 2026-11-08
 
