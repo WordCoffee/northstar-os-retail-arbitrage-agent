@@ -4,17 +4,26 @@ The generator says it pasted the real product. This checks that it did: for ever
 `renders/seller_composite/`, cut the product out of the brief's reference, find it in the output
 and compare the region. The generator's own claim is not evidence.
 
+The owner's rule (2026-11-08) is applied here as well as in the scorer: **a product region that
+cannot be verified is a failure**. A row that cannot be verified is rewritten in the proof as
+`provisional: true`, `passed: false`, with `product_region` added to `failed_checks`, its score
+re-reduced through the same weights the scorer uses, and the old numbers kept under
+`provisional_score` / `provisional_passed` so the record shows what changed and why.
+
     python tools/composite_audit.py --run
 """
 from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT / "tools") not in sys.path:
+    sys.path.insert(0, str(ROOT / "tools"))
 PROOF = ROOT / "state" / "seller" / "composite_proof.json"
 OUT = ROOT / "state" / "seller" / "composite_region.json"
 BRIEFS = ROOT / "tools" / "seller_tester" / "mogra_briefs.json"
@@ -51,69 +60,174 @@ def cutout_for(brief: Dict[str, Any], artefact: Optional[Path] = None) -> Option
     for path in candidates:
         if path.is_file():
             from PIL import Image
+            import numpy as np
 
             with Image.open(path) as opened:
                 image = opened.convert("RGBA")
-            import numpy as np
-
             return np.array(image)
     return None
 
 
-def audit() -> Dict[str, Any]:
-    proof = _load(PROOF) or {}
+def _region_verdict(artefact: Path, cutout: Any, placement: Any) -> Dict[str, Any]:
+    from PIL import Image
+
+    import numpy as np
+
+    from seller_tester.composite_check import check_composite
+    from seller_tester.composite_check import missing_cutout_verdict
+
+    if cutout is None:
+        return missing_cutout_verdict(
+            "the generator did not save the cutout it used, so the product region cannot be "
+            "compared; expected <artefact>.cutout.png")
+    with Image.open(artefact) as opened:
+        produced = np.array(opened.convert("RGB"))
+    return check_composite(produced, cutout, placement=placement,
+                           min_similarity=MIN_SIMILARITY)
+
+
+def _placement(result: Dict[str, Any]) -> Optional[List[int]]:
+    generation = result.get("generation") or {}
+    box = generation.get("product_box")
+    if isinstance(box, list) and len(box) == 4:
+        return [int(value) for value in box]
+    return None
+
+
+def _check_summary(verdict: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "ok": bool(verdict.get("ok")),
+        "skipped": False,
+        "cannot_verify": bool(verdict.get("cannot_verify")),
+        "detail": str(verdict.get("detail") or "")[:400],
+    }
+
+
+def apply_region_to_row(result: Dict[str, Any], brief: Dict[str, Any],
+                        verdict: Dict[str, Any]) -> Dict[str, Any]:
+    """One proof row, re-scored with the product-region check. Pure, so it is testable."""
+    from seller_tester.scorers import combine_checks
+
+    checks = dict(result.get("checks") or {})
+    checks["product_region"] = _check_summary(verdict)
+    combined = combine_checks(checks, brief, composite_route=True)
+
+    old_score = result.get("score")
+    old_passed = bool(result.get("passed"))
+    cannot_verify = bool(verdict.get("cannot_verify"))
+
+    result["checks"] = checks
+    result["score"] = combined["score"]
+    result["passed"] = False if cannot_verify else combined["passed"]
+    result["failed_checks"] = list(combined["failed_checks"])
+    result["critical_failed"] = list(combined["critical_failed"])
+    result["product_region"] = {
+        "ok": bool(verdict.get("ok")),
+        "cannot_verify": cannot_verify,
+        "similarity": verdict.get("similarity"),
+        "found_by": verdict.get("found_by"),
+        "detail": str(verdict.get("detail") or ""),
+    }
+    if product_region_failed(verdict):
+        result["failed_reason"] = str(verdict.get("detail") or "")
+    else:
+        result.pop("failed_reason", None)
+
+    # Provisional = it passed on the other checks and only the product region is unproved.
+    # The old verdict is kept so the record shows exactly what changed.
+    if old_passed and cannot_verify:
+        result["provisional"] = True
+        result["provisional_score"] = old_score
+        result["provisional_passed"] = old_passed
+    else:
+        result.setdefault("provisional", False)
+        if result["provisional"]:
+            result.setdefault("provisional_score", old_score)
+            result.setdefault("provisional_passed", old_passed)
+    return result
+
+
+def product_region_failed(verdict: Dict[str, Any]) -> bool:
+    return bool(verdict.get("cannot_verify")) or not bool(verdict.get("ok"))
+
+
+def _resummarise(proof: Dict[str, Any], briefs: Dict[str, Dict[str, Any]]) -> None:
+    """Keep the summary honest after the rows changed."""
+    from seller_tester.harness import _by_category, _by_mode, _by_situation
+
+    results = proof.get("results") or []
+    passed = sum(1 for row in results if row.get("passed"))
+    scores = [float(row.get("score") or 0.0) for row in results]
+    proof["passed"] = passed
+    proof["failed"] = len(results) - passed
+    proof["pass_rate"] = round(100.0 * passed / len(results), 1) if results else 0.0
+    proof["mean_score"] = round(sum(scores) / len(scores), 1) if scores else 0.0
+    proof["provisional"] = sum(1 for row in results if row.get("provisional"))
+    proof["product_region_verified"] = sum(
+        1 for row in results if (row.get("product_region") or {}).get("ok"))
+    proof["by_mode"] = _by_mode(results)
+    proof["by_situation"] = _by_situation(results)
+    proof["by_category"] = _by_category(results)
+
+
+def audit(proof_path: Path = PROOF, out_path: Path = OUT) -> Dict[str, Any]:
+    proof = _load(proof_path) or {}
     results = proof.get("results") or []
     briefs = brief_index()
     rows: List[Dict[str, Any]] = []
     for result in results:
         brief_id = str(result.get("brief_id"))
+        brief = briefs.get(brief_id) or {}
+        artefact = ROOT / str(result.get("artefact_path") or "")
         entry: Dict[str, Any] = {"brief_id": brief_id,
                                  "artefact": result.get("artefact_path"),
                                  "route": result.get("route")}
-        brief = briefs.get(brief_id) or {}
-        artefact = ROOT / str(result.get("artefact_path") or "")
-        cutout = cutout_for(brief, artefact if artefact.is_file() else None)
-        if cutout is None:
-            entry.update({"ok": False, "cannot_verify": True,
-                          "reason": ("the generator did not save the cutout it used, and a "
-                                     "re-derived cutout would compare the whole scene; "
-                                     "expected <artefact>.cutout.png")})
-            rows.append(entry)
-            continue
         if not artefact.is_file():
             entry.update({"ok": False, "cannot_verify": True,
                           "reason": "composite artefact is not on disk"})
             rows.append(entry)
-            continue
-        try:
-            from PIL import Image
-
-            from seller_tester.composite_check import check_composite
-
-            with Image.open(artefact) as opened:
-                produced = __import__("numpy").array(opened.convert("RGB"))
-            verdict = check_composite(produced, cutout, min_similarity=MIN_SIMILARITY)
-        except Exception as exc:  # noqa: BLE001
-            entry.update({"ok": False, "cannot_verify": True,
-                          "reason": f"{type(exc).__name__}: {exc}"})
-            rows.append(entry)
-            continue
-        entry.update({
-            "ok": bool(verdict.get("ok")),
-            "cannot_verify": bool(verdict.get("cannot_verify")),
-            "similarity": verdict.get("similarity"),
-            "found_by": verdict.get("found_by"),
-            "min_similarity": MIN_SIMILARITY,
-            "detail": verdict.get("detail") or verdict.get("reason"),
-        })
+            verdict = {"ok": False, "cannot_verify": True,
+                       "detail": "product region cannot be verified: the composite artefact "
+                                 "is not on disk"}
+        else:
+            cutout = cutout_for(brief, artefact)
+            try:
+                verdict = _region_verdict(artefact, cutout, _placement(result))
+            except Exception as exc:  # noqa: BLE001
+                verdict = {"ok": False, "cannot_verify": True,
+                           "detail": (f"product region cannot be verified: "
+                                      f"{type(exc).__name__}: {exc}")}
+            entry.update({
+                "ok": bool(verdict.get("ok")),
+                "cannot_verify": bool(verdict.get("cannot_verify")),
+                "similarity": verdict.get("similarity"),
+                "found_by": verdict.get("found_by"),
+                "min_similarity": MIN_SIMILARITY,
+                "detail": verdict.get("detail") or verdict.get("reason"),
+            })
+        if result and brief:
+            before = result.get("score")
+            before_passed = bool(result.get("passed"))
+            apply_region_to_row(result, brief, verdict)
+            entry["provisional"] = bool(result.get("provisional"))
+            entry["score_before"] = before
+            entry["score_after"] = result.get("score")
+            entry["passed_before"] = before_passed
+            entry["passed_after"] = bool(result.get("passed"))
         rows.append(entry)
 
-    passed = sum(1 for row in rows if row.get("ok"))
+    _resummarise(proof, briefs)
     payload = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                "min_similarity": MIN_SIMILARITY, "rows": rows,
-               "passed": passed, "total": len(rows)}
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+               "passed": sum(1 for row in rows if row.get("ok")),
+               "provisional": proof.get("provisional", 0),
+               "verified": proof.get("product_region_verified", 0),
+               "total": len(rows)}
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    if results:
+        proof_path.parent.mkdir(parents=True, exist_ok=True)
+        proof_path.write_text(json.dumps(proof, indent=2) + "\n", encoding="utf-8")
     return payload
 
 
@@ -122,9 +236,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--run", action="store_true")
     ns = parser.parse_args(argv)
     payload = audit()
-    print(json.dumps({"passed": payload["passed"], "total": payload["total"],
-                      "rows": [{k: row.get(k) for k in ("brief_id", "ok", "similarity",
-                                                        "found_by", "detail")}
+    print(json.dumps({"verified": payload["verified"], "passed": payload["passed"],
+                      "provisional": payload["provisional"], "total": payload["total"],
+                      "rows": [{k: row.get(k) for k in ("brief_id", "ok", "cannot_verify",
+                                                        "similarity", "found_by",
+                                                        "provisional", "score_before",
+                                                        "score_after", "detail")}
                                for row in payload["rows"]]}, indent=2))
     return 0 if payload["passed"] == payload["total"] and payload["total"] else 1
 

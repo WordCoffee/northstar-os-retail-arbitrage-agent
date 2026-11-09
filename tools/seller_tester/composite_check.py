@@ -11,9 +11,14 @@ Two ways to find the region:
 * it did not — template match the cutout against the output on a downscaled grid, then verify at
   full size. Slower, and a miss is `cannot_verify`, never a pass.
 
-The score is mean absolute error over the opaque pixels only, normalised to 0..1. Shadow and
-lighting compositing is expected to move pixels slightly, so the default bar is 0.82; a wrong
-product scores far below it and the report shows the number.
+The score is normalised cross-correlation over opaque pixels (MAE is a diagnostic), because a
+composite applies a scene grade and a shadow: structure survives that, absolute colour does not.
+The default bar is 0.82; a wrong product scores far below it and the report shows the number.
+
+**A product region that cannot be verified is a failure, never a skip.** The owner's rule
+(2026-11-08): `cannot_verify` is a fail. Every refusal here therefore says
+`product region cannot be verified: <why>` and carries `ok: False`, so a caller that only
+looks at `ok` still fails it.
 """
 from __future__ import annotations
 
@@ -35,7 +40,13 @@ def _check(**kw: Any) -> Dict[str, Any]:
 
 
 def _cannot_verify(reason: str, **extra: Any) -> Dict[str, Any]:
-    return _check(ok=False, cannot_verify=True, detail=f"cannot verify: {reason}", **extra)
+    return _check(ok=False, cannot_verify=True,
+                  detail=f"product region cannot be verified: {reason}", **extra)
+
+
+def missing_cutout_verdict(reason: str) -> Dict[str, Any]:
+    """The verdict when there is nothing to compare against — a named failure, not a skip."""
+    return _cannot_verify(reason, check="product_region")
 
 
 def split_rgba(cutout: Any) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
@@ -237,4 +248,4 @@ def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
 
 
 __all__ = ["DEFAULT_MIN_SIMILARITY", "check_composite", "locate_and_compare",
-           "region_similarity", "split_rgba"]
+           "missing_cutout_verdict", "region_similarity", "split_rgba"]

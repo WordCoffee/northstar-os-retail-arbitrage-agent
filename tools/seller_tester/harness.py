@@ -39,7 +39,7 @@ from .briefs import (
 from .escalate import DEFAULT_ESCALATION_PATH, EscalationLog, escalate
 from .gaps import DEFAULT_GAPS_PATH, DEFAULT_MIRROR_PATH, build_gap, file_gap, read_gaps
 from .judge import get_judge
-from .reference_check import reference_check_for_brief
+from .reference_check import describe_picture, reference_check_for_brief
 from .scorers import score_image
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -99,20 +99,46 @@ def select_briefs(catalog: Sequence[Dict[str, Any]], limit: Optional[int] = None
             return selected
 
 
+def _load_cutout(artefact: Path) -> Optional[Any]:
+    """The cutout the generator saved beside the composite, or None.
+
+    None is not "skip": the scorer turns it into `product region cannot be verified`.
+    """
+    path = Path(artefact).with_suffix(".cutout.png")
+    if not path.is_file():
+        return None
+    try:
+        import numpy as np
+        from PIL import Image
+
+        with Image.open(path) as opened:
+            return np.array(opened.convert("RGBA"))
+    except (OSError, ValueError):
+        return None
+
+
 def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
              mode: Optional[str] = None,
              judge: Optional[Callable[[bytes, Dict[str, Any]], Dict[str, Any]]] = None,
+             describe: Optional[Callable[[Any], str]] = None,
              gaps_path: str | Path = DEFAULT_GAPS_PATH,
              mirror_path: str | Path | None = DEFAULT_MIRROR_PATH,
              escalation_path: str | Path | None = DEFAULT_ESCALATION_PATH,
              now: Optional[str] = None,
              progress: Optional[Callable[[int, int], None]] = None) -> Dict[str, Any]:
-    """Run one pass. Returns a summary suitable for a report."""
+    """Run one pass. Returns a summary suitable for a report.
+
+    `describe` is the local VLM describer for the two pictures in a reference check. It
+    defaults to `reference_check.describe_picture` (qwen2.5vl through
+    `vision.understand.describe_page`), so a pass records a real description and a real
+    embedding cosine; a pass under test can inject a callable instead.
+    """
     payload = briefs if briefs is not None else load_catalog(DEFAULT_CATALOG_PATH)
     catalog = _briefs_from(payload)
     if not catalog:
         raise ValueError("no briefs to run")
     active_judge = judge if judge is not None else get_judge()
+    describer = describe if describe is not None else describe_picture
 
     selected = select_briefs(catalog, limit=int(limit), mode=mode)
     if not selected:
@@ -133,14 +159,25 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         record_fn = getattr(generator, "record_for", None)
         generation = record_fn(brief.get("id")) if callable(record_fn) else None
         scene = (generation or {}).get("scene") or {}
-        scored = score_image(
-            data, brief, judge=active_judge,
-            reference_check=lambda rgb, b=brief: reference_check_for_brief(rgb, b),
-            scene_source=scene.get("source"),
-        )
-        rel = _relative(artefact)
         route_fn = getattr(generator, "route", None)
         route = route_fn(brief) if callable(route_fn) else route_for_brief(brief)
+        composite_route = bool(generation) and str(
+            (generation or {}).get("route") or "") == "composite"
+        if not composite_route and getattr(generator, "name", "") == "composite":
+            composite_route = True
+        cutout = _load_cutout(artefact) if composite_route else None
+        placement = (generation or {}).get("product_box") if composite_route else None
+        scored = score_image(
+            data, brief, judge=active_judge,
+            reference_check=lambda rgb, b=brief: reference_check_for_brief(
+                rgb, b, describe=describer),
+            scene_source=scene.get("source"),
+            route=route,
+            composite_route=composite_route,
+            cutout=cutout,
+            placement=placement,
+        )
+        rel = _relative(artefact)
         result_row = {
             "brief_id": scored.get("brief_id"),
             "category": scored.get("category"),
