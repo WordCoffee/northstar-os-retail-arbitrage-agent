@@ -394,6 +394,29 @@ def render(data: Dict[str, Any]) -> str:
         lines.append("No held-out proof on disk yet.")
     lines += [""]
 
+    lines += ["## Deterministic layout - source next to output", ""]
+    demo = _read_json(ROOT / "state" / "seller" / "layout_demo_proof.json") or {}
+    demo_briefs = _read_json(ROOT / "ty" / "seller_briefs_layout_demo.json") or {}
+    demo_by_id = {str(b.get("id")): b for b in demo_briefs.get("briefs") or []}
+    demo_rows = []
+    for result in demo.get("results") or []:
+        brief = demo_by_id.get(str(result.get("brief_id"))) or {}
+        demo_rows.append((str(result.get("brief_id")), brief.get("situation"),
+                          str(((brief.get("reference") or {}).get("path")) or ""),
+                          str(result.get("artefact_path") or ""),
+                          result.get("score"), result.get("passed"),
+                          (result.get("layout") or {}).get("kind")))
+    if demo_rows:
+        lines += ["| brief | situation | source | output | layout | score | passed |",
+                  "|---|---|---|---|---|---|---|"]
+        for brief_id, situation, source, output, score, passed, kind in demo_rows:
+            lines.append(f"| {brief_id} | {situation} | `{source}` | `{output}` | "
+                         f"{kind or 'scene'} | {score} | {'yes' if passed else 'no'} |")
+        lines += ["", "Side by side: `reports/ty/layout_demo_source_next_to_output.png`"]
+    else:
+        lines.append("No deterministic layout run on disk yet.")
+    lines += [""]
+
     lines += ["## Composites - source next to output", ""]
     composites = data.get("composites") or []
     if composites:
