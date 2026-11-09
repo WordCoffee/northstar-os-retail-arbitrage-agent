@@ -258,6 +258,26 @@ def disk_free_gb() -> Optional[float]:
         return None
 
 
+def ram_status(*, record: bool = False, who: str = "ty_director") -> Dict[str, Any]:
+    """The free-RAM governor's verdict. Never raises: a probe must not stop the loop.
+
+    ``record`` journals the decision; heartbeats pass False because an observation is
+    not a start decision and would otherwise write a line every interval.
+    """
+    try:
+        for base in (ROOT, Path(__file__).resolve().parents[1]):
+            tools_dir = str(base / "tools")
+            if tools_dir not in sys.path:
+                sys.path.insert(0, tools_dir)
+        import ram_governor  # noqa: PLC0415 - local tool, loaded on demand
+
+        return ram_governor.status(who=who, record=record)
+    except Exception as exc:  # noqa: BLE001 - an unavailable probe must not stall starts
+        return {"error": f"{type(exc).__name__}: {exc}", "paused": False,
+                "free_gb": None, "max_builders": None,
+                "reason": "ram governor unavailable; start allowed"}
+
+
 def queue_depth() -> Dict[str, Any]:
     data = _read(QUEUE, {})
     units = data.get("units") or {}
@@ -275,6 +295,7 @@ def heartbeat(state: str, **extra: Any) -> Dict[str, Any]:
         "cap_reached": tokens_today() >= TOKEN_CAP * CAP_FRACTION,
         "cloud_workers": count_workers(), "caps": caps(),
         "disk_free_gb": disk_free_gb(), "queue": queue_depth(),
+        "ram": ram_status(who="ty_director:heartbeat"),
         "gpu_lock": _read(GPU_LOCK, {}), "pause": PAUSE.exists(), "stop": STOP.exists(),
         "replan": replan_signal(),
         **extra,
@@ -397,6 +418,11 @@ def tick(start: bool = False) -> Dict[str, Any]:
         return heartbeat("running", director_pid=live.get("ProcessId"))
     if not start:
         return heartbeat("idle", reason="no director session (not started by --once)")
+    ram = ram_status(record=True, who="ty_director:start")
+    if ram.get("paused"):
+        log(f"ram gate: paused, free RAM {ram.get('free_gb')} GB "
+            "(max_builders=0); not starting a session")
+        return heartbeat("ram_paused", reason=ram.get("reason"), ram=ram)
     started = start_director()
     if started is None:
         return heartbeat("error", reason="opencode_not_found")
@@ -411,6 +437,7 @@ def status() -> int:
         "tokens_today": tokens_today(), "cap_reached": tokens_today() >= TOKEN_CAP * CAP_FRACTION,
         "disk_free_gb": disk_free_gb(), "queue": queue_depth(),
         "pause": PAUSE.exists(), "stop": STOP.exists(),
+        "ram": ram_status(who="ty_director:status"),
         "heartbeat": _read(HEARTBEAT, {}),
     }
     print(json.dumps(payload, indent=2))
@@ -457,6 +484,15 @@ def main(argv: Optional[List[str]] = None) -> int:
             heartbeat("running", director_pid=live.get("ProcessId"))
             noted_dead = False
         else:
+            # The RAM gate is consulted only here - after "no session is running" -
+            # so a paused governor can never stop a session that is already alive.
+            ram = ram_status(record=True, who="ty_director:loop")
+            if ram.get("paused"):
+                heartbeat("ram_paused", reason=ram.get("reason"), ram=ram)
+                log(f"ram gate: paused, free RAM {ram.get('free_gb')} GB "
+                    "(max_builders=0); not starting a session")
+                time.sleep(ns.interval)
+                continue
             now = time.time()
             record = _read(PID_FILE, {})
             if not noted_dead:

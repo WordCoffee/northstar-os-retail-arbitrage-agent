@@ -22,6 +22,7 @@ import json
 import os
 import sqlite3
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -64,6 +65,13 @@ CREATE INDEX IF NOT EXISTS jobs_status ON jobs(status);
 """
 
 RUNNING = ("claimed", "running", "ready")
+
+#: Units that do not occupy a builder lane (measurement, verification, operator work).
+NO_BUILDER_LANES = ("operator", "verifier", "measurement")
+
+#: Test seam: a callable returning the RAM governor's verdict. ``None`` means the real
+#: `tools/ram_governor.py`, imported on demand so a queue-only test never measures RAM.
+DEFAULT_GOVERNOR: Optional[Callable[[], Dict[str, Any]]] = None
 
 
 def _now() -> str:
@@ -173,12 +181,86 @@ def conflicts(job_id: str, *, db: Optional[Path] = None) -> List[Dict[str, Any]]
     return out
 
 
-def claim(job_id: str, owner: str, *, db: Optional[Path] = None) -> Dict[str, Any]:
-    """Claim a job atomically, refusing an overlapping scope.
+def unit_needs_builder(unit: str) -> bool:
+    """Whether a unit's jobs occupy a builder lane.
 
-    BEGIN IMMEDIATE takes the write lock before the overlap question is asked, so two
-    directors cannot both see "no conflict" and both claim.
+    The queue holds builder jobs, so the default is True. A unit opts out in the
+    readable mirror (``"needs_builder": false``, or a lane of operator/verifier/
+    measurement), which is what keeps a paused governor from blocking bookkeeping.
     """
+    try:
+        data = json.loads(MIRROR.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return True
+    row = (data.get("units") or {}).get(unit) or {}
+    if not isinstance(row, dict):
+        return True
+    if row.get("needs_builder") is False:
+        return False
+    return str(row.get("lane") or "").lower() not in NO_BUILDER_LANES
+
+
+def _query_governor(governor: Optional[Callable[[], Dict[str, Any]]], *,
+                    who: str) -> Optional[Dict[str, Any]]:
+    """Ask the RAM governor. Explicit first, then the injected default, then the real one.
+
+    A governor that cannot answer must not wedge the queue: ``None`` means "no verdict"
+    and the claim proceeds. The refusal path is only for a measured pause.
+    """
+    callable_governor = governor if governor is not None else DEFAULT_GOVERNOR
+    if callable_governor is not None:
+        try:
+            return callable_governor()
+        except Exception:  # noqa: BLE001 - a broken stub is not a pause
+            return None
+    try:
+        tools_dir = str(ROOT / "tools")
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        import ram_governor  # noqa: PLC0415 - local tool, loaded on demand
+
+        return ram_governor.status(who=f"claim:{who}", record=True)
+    except Exception:  # noqa: BLE001 - the queue stays usable without a probe
+        return None
+
+
+def _note_ram_refusal(job_id: str, owner: str, verdict: Dict[str, Any],
+                      db: Optional[Path] = None) -> None:
+    """Record the refusal on the job's event trail; the status stays queued."""
+    try:
+        conn = _connect(db)
+        try:
+            _event(conn, job_id, "ram_refused",
+                   f"{owner}: {verdict.get('free_gb')} GB free, max_builders="
+                   f"{verdict.get('max_builders')}")
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        pass
+
+
+def claim(job_id: str, owner: str, *, db: Optional[Path] = None,
+          governor: Optional[Callable[[], Dict[str, Any]]] = None,
+          needs_builder: Optional[bool] = None) -> Dict[str, Any]:
+    """Claim a job atomically, refusing an overlapping scope or a paused RAM gate.
+
+    The RAM question is asked before the write lock is taken: a paused governor means
+    there is no point handing back a job nobody can run, and the measurement costs a
+    probe, not a lock. ``governor`` is injectable so tests never depend on the machine.
+    """
+    current = job(job_id, db=db)
+    if current and current["status"] == "queued":
+        builder_work = (needs_builder if needs_builder is not None
+                        else unit_needs_builder(current["unit"]))
+        if builder_work:
+            verdict = _query_governor(governor, who=owner)
+            if verdict and verdict.get("paused"):
+                _note_ram_refusal(job_id, owner, verdict, db)
+                return {"ok": False, "reason": "ram_paused", "id": job_id,
+                        "free_gb": verdict.get("free_gb"),
+                        "max_builders": verdict.get("max_builders"),
+                        "detail": verdict.get("reason")}
+
     conn = _connect(db)
     try:
         conn.execute("BEGIN IMMEDIATE")

@@ -42,6 +42,11 @@ def root(tmp_path, monkeypatch):
         "REBOOT_CHECK": tmp_path / "tools" / "post_reboot_check.py",
     }.items():
         monkeypatch.setattr(D, name, value)
+    # Launcher tests must not depend on this machine's free RAM. The RAM-gate tests
+    # below override this stub with a paused verdict.
+    monkeypatch.setattr(D, "ram_status",
+                        lambda **_kw: {"free_gb": 8.0, "max_builders": 4,
+                                       "paused": False, "reason": "test stub"})
     (tmp_path / "reports" / "ty").mkdir(parents=True, exist_ok=True)
     D.QUEUE.write_text(json.dumps({
         "units": {"D1": {"status": "done"}, "D2": {"status": "pending"},
@@ -256,3 +261,76 @@ def test_a_heartbeat_tick_does_not_run_the_reboot_check(root, monkeypatch):
                         lambda: pytest.fail("--once must not record the proof"))
 
     assert D.main(["--once"]) == 0
+
+
+# ------------------------------------------------------ RAM governor gate (item 6)
+def _ram(free_gb: float, paused: bool):
+    return {"free_gb": free_gb, "max_builders": 0 if paused else 4,
+            "paused": paused,
+            "reason": f"free RAM {free_gb:.2f} GB: "
+                      f"{'0 new builders (paused)' if paused else 'up to 4 builders'}"}
+
+
+def test_the_heartbeat_records_the_governor_status(root, monkeypatch):
+    monkeypatch.setattr(D, "ram_status", lambda **_kw: _ram(2.4, False))
+    monkeypatch.setattr(D, "_processes", lambda: [])
+
+    payload = D.heartbeat("running")
+
+    assert payload["ram"]["max_builders"] == 4
+    assert payload["ram"]["free_gb"] == 2.4
+
+
+def test_a_paused_governor_refuses_a_new_session(root, monkeypatch):
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    monkeypatch.setattr(D, "ram_status", lambda **_kw: _ram(0.8, True))
+    monkeypatch.setattr(D, "start_director",
+                        lambda: pytest.fail("a paused RAM gate must not start a session"))
+
+    payload = D.tick(start=True)
+
+    assert payload["state"] == "ram_paused"
+    assert payload["ram"]["free_gb"] == 0.8
+    log = D.LOG.read_text(encoding="utf-8")
+    assert "0.8 GB" in log and "not starting a session" in log
+
+
+def test_a_paused_governor_leaves_a_running_session_alone(root, monkeypatch):
+    """It gates new starts only; nothing here can stop a live session."""
+    monkeypatch.setattr(D, "DIRECTOR_MARKER", "MARK-RAM")
+    monkeypatch.setattr(D, "_processes", lambda: [
+        {"ProcessId": 99, "Name": "opencode.exe",
+         "CommandLine": "opencode run --agent director MARK-RAM"}])
+    monkeypatch.setattr(D, "ram_status", lambda **_kw: _ram(0.7, True))
+    monkeypatch.setattr(D, "start_director",
+                        lambda: pytest.fail("a running session is not restarted"))
+
+    payload = D.tick(start=True)
+
+    assert payload["state"] == "running"
+    assert payload["director_pid"] == 99
+    # The pause line was never written: the gate is not even consulted for a live
+    # session, so nothing can touch it.
+    assert not D.LOG.exists()
+
+
+def test_the_launcher_loop_does_not_start_while_paused(root, monkeypatch):
+    """The loop path, not just `tick`, refuses a start at a paused governor."""
+    states = []
+    real_heartbeat = D.heartbeat
+
+    def spy(state, **extra):
+        states.append(state)
+        return real_heartbeat(state, **extra)
+
+    monkeypatch.setattr(D, "heartbeat", spy)
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    monkeypatch.setattr(D, "ram_status", lambda **_kw: _ram(0.9, True))
+    monkeypatch.setattr(D, "start_director",
+                        lambda: pytest.fail("the loop must not start while paused"))
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER", lambda: 1)
+
+    assert D.main(["--max-ticks", "1", "--interval", "0"]) == 0
+
+    assert "ram_paused" in states
+    assert "ram gate: paused, free RAM 0.9 GB" in D.LOG.read_text(encoding="utf-8")

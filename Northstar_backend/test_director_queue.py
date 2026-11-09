@@ -63,6 +63,11 @@ def repo(tmp_path, monkeypatch):
         "WORKTREES": root / "state" / "worktrees",
     }.items():
         monkeypatch.setattr(DQ, name, value)
+    # A queue test must never depend on this machine's free RAM. Tests that care
+    # about the gate pass their own `governor=` callable.
+    monkeypatch.setattr(DQ, "DEFAULT_GOVERNOR",
+                        lambda: {"paused": False, "free_gb": 8.0,
+                                 "max_builders": 4, "reason": "test stub"})
     return root
 
 
@@ -113,6 +118,55 @@ def test_the_mirror_carries_the_jobs_for_resume(repo):
     data = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
     assert [row["id"] for row in data["jobs"]] == ["mirrored"]
     assert data["units"]["D3"]["status"] == "pending"   # units are not clobbered
+
+
+# -------------------------------------------------------------------- RAM gate
+def _governor(paused: bool, free_gb: float = 8.0):
+    return lambda: {"paused": paused, "free_gb": free_gb,
+                    "max_builders": 0 if paused else 4,
+                    "reason": f"free RAM {free_gb:.2f} GB (test)"}
+
+
+def test_a_paused_governor_refuses_a_builder_claim(repo):
+    """A job nobody can run is not handed back as a claim."""
+    _job(repo, "starved", ["pkg/x.py"])
+
+    out = DQ.claim("starved", "builder-1", governor=_governor(True, 0.7))
+
+    assert out["ok"] is False
+    assert out["reason"] == "ram_paused"
+    assert out["free_gb"] == 0.7
+    assert DQ.job("starved")["status"] == "queued"
+
+
+def test_an_unpaused_governor_lets_the_claim_through(repo):
+    _job(repo, "roomy", ["pkg/y.py"])
+
+    out = DQ.claim("roomy", "builder-1", governor=_governor(False, 6.0))
+
+    assert out["ok"] is True
+    assert DQ.job("roomy")["status"] == "claimed"
+
+
+def test_a_unit_that_needs_no_builder_claims_while_paused(repo):
+    """Bookkeeping and verification work do not occupy a builder lane."""
+    data = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
+    data["units"]["D3"]["needs_builder"] = False
+    DQ.MIRROR.write_text(json.dumps(data), encoding="utf-8")
+    _job(repo, "bookkeeping", ["pkg/z.py"])
+
+    out = DQ.claim("bookkeeping", "operator-1", governor=_governor(True, 0.5))
+
+    assert out["ok"] is True
+    assert DQ.job("bookkeeping")["status"] == "claimed"
+
+
+def test_a_paused_refusal_leaves_the_job_for_later(repo):
+    """Refusal is not a status change: an unpaused governor can still claim it."""
+    _job(repo, "later", ["pkg/later.py"])
+
+    assert DQ.claim("later", "builder-1", governor=_governor(True))["reason"] == "ram_paused"
+    assert DQ.claim("later", "builder-1", governor=_governor(False))["ok"] is True
 
 
 # ---------------------------------------------------------------------- merges
