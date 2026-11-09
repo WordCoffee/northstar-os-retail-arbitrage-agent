@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-06T14:25:00Z",
+  "updated": "2026-11-09T18:29:59+00:00",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -1328,6 +1328,34 @@
       "why": "the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
       "needs_author": "probe tys-runner-tests is still red: the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
       "last_generated_at": "2026-11-09T15:59:50+00:00"
+    },
+    {
+      "id": "F0-foundation-tempdb-leak",
+      "kind": "defect",
+      "priority": 1150,
+      "status": "pending",
+      "title": "FoundationDB leaks one temp database per instance: 9,018 ns_foundation_*.db files in %TEMP%",
+      "next": "When path is None, register the created temp file for removal at interpreter exit and remove it in close(); never touch a caller-supplied path. Add two tests: the auto path is registered, a supplied path is untouched. Then quarantine the existing 9,018 files in one move (same volume) instead of deleting them.",
+      "write_paths": [
+        "Northstar_backend/foundation/db.py",
+        "Northstar_backend/test_foundation_tempdb.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_foundation_tempdb.py"
+        ]
+      ],
+      "why": "reports/ty/defects.md D-001: 9,018 ns_foundation_*.db files in %TEMP%; measured 2026-11-09",
+      "evidence": [
+        "Get-ChildItem $env:TEMP -Filter 'ns_foundation_*.db' -> 9018 files"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null
     }
   ],
   "parked": [
