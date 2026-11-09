@@ -1417,6 +1417,36 @@
       "verification": null,
       "created_at": "2026-11-09T21:37:44+00:00",
       "updated_at": "2026-11-09T21:37:44+00:00"
+    },
+    {
+      "id": "sel-07-layout-evidence",
+      "kind": "defect",
+      "priority": 1000,
+      "status": "pending",
+      "title": "The artefact sidecar does not say which layout produced the picture",
+      "next": "Write `layout` (kind, panel/quad, margin ink, copy source) and `product_quad` into <artefact>.json in generators.py next to the composite record, so a reviewer can tell a deterministic page from a scene without opening the proof.",
+      "write_paths": [
+        "tools/seller_tester/generators.py",
+        "Northstar_backend/test_seller_deterministic.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_seller_deterministic.py"
+        ]
+      ],
+      "why": "reports/ty/deterministic_layouts.md could only be written from an in-memory record; on disk the four demo artefacts are indistinguishable from scene renders",
+      "evidence": [
+        "renders/layout_demo/LM-DET-03.json has no `layout` key"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-09T22:33:08+00:00",
+      "updated_at": "2026-11-09T22:33:08+00:00"
     }
   ],
   "parked": [

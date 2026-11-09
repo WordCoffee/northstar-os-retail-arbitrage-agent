@@ -5813,6 +5813,26 @@
       "DIR-8 one Neck Nirvana photo",
       "DIR-9 more Lion's Mane photos"
     ],
-    "paused": "state/director/PAUSE_BUILDERS is held while the benchmark window runs"
+    "paused": "state/director/PAUSE_BUILDERS is held while the benchmark window runs",
+    "deterministic_layouts": {
+      "module": "tools/seller_tester/deterministic.py",
+      "report": "reports/ty/deterministic_layouts.md",
+      "sheet": "reports/ty/layout_demo_source_next_to_output.png",
+      "briefs": "ty/seller_briefs_layout_demo.json (4 demonstration briefs, not held-out)",
+      "result": "LM-DET-02 and LM-DET-04 at 100; LM-DET-01 79.2 and LM-DET-03 76.2, both failing only reference_subject (printed text 5/9 on mogra_pair_main)",
+      "geometry": "aspect 0.8 and dimensions pass on all four; product_region 0.959-0.962"
+    },
+    "mode_table": {
+      "rule": "the seller claim stays labelled 'stored-reference only' until prompt-only and stored-reference each reach 10 scored",
+      "held_out_counts": {
+        "prompt_only": 0,
+        "stored_reference": 0,
+        "uploaded_reference": 21
+      }
+    },
+    "builders": {
+      "ux-06-shell": "merged 04475aa3 (shell chrome on every authed route)",
+      "ux-07-tabs": "running in worktree state/worktrees/ux-07"
+    }
   }
 }
