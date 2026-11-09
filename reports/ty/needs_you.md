@@ -177,6 +177,21 @@ Exact action: drop **one** Neck Nirvana product photo (front of pack is enough) 
 become runnable with no code change. Until then the held-out mean is published over two lines, and
 the third line is named as missing in `reports/ty/heldout_<date>.md`.
 
+## DIR-9. More Lion's Mane product photographs (2026-11-09)
+
+The held-out set now runs **21 briefs over 14 distinct product photographs** — eleven Word Coffee
+photographs (one per brief) and three Mogra photographs. The Mogra side is the limit: there are
+exactly three real photographs of the Lion's Mane / Shiitake pouches on this machine
+(`renders/references/mogra/mogra_pair_main.png`, `mogra_pair_lifestyle.png`,
+`mogra_forest_dusk.png`), so ten Lion's Mane briefs cycle through those three, and the report says
+so under *Limits of this run*.
+
+Exact action: drop five to ten more photographs of the actual pouches (different angles, front and
+back, any lighting) into `renders/references/mogra/`. Nothing else needs doing — the brief generator
+uses every file it finds there and the report's independence note will clear itself. Pipeline-made
+art from `Northstar_backend/data/studio_generated/` is deliberately **not** used as a reference:
+scoring the pipeline against its own output would be circular.
+
 ## DIR-4. Chrome debugging: replaced by the UIA route (2026-11-08)
 
 The old entry asked for a Chrome restart. It has been replaced after trying the alternatives.
