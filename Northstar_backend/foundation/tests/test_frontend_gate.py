@@ -305,9 +305,11 @@ def test_v3_shell_invariants():
 
     app = open(os.path.join(UI_SRC, "App.jsx"), encoding="utf-8").read()
     route_count = len(re.findall(r"<Route\s+path=", app))
-    # The shipped route table after the Northstar UX rebuild (U1/U3).
-    # 58 routes; update this number only when a route is deliberately added or removed.
-    assert route_count == 58, f"expected 58 routes in App.jsx, found {route_count}"
+    # The shipped route table after the Northstar UX rebuild (U1/U3), plus the fourteen
+    # catalogue rooms ux-05 mounted so that every service in ty/services.json renders its own
+    # page instead of the chat shell (58 -> 72). Update this number only when a route is
+    # deliberately added or removed.
+    assert route_count == 72, f"expected 72 routes in App.jsx, found {route_count}"
 
     # The legacy client (services/api.js) must not be imported by any v3 module.
     v3_dirs = ["pages/internal", "pages/customer", "pages/admin", "pages/public",

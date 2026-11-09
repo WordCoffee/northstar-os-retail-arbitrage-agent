@@ -7,7 +7,7 @@
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
       "ran": true,
-      "passed": 6,
+      "passed": 5,
       "total": 10,
       "recovery": {
         "ok": true,
@@ -91,11 +91,9 @@
         {
           "id": "second_page",
           "title": "navigate to a second route",
-          "status": "pass",
-          "reason": "",
-          "evidence": {
-            "url": "http://127.0.0.1:8101/ui/listings"
-          }
+          "status": "fail",
+          "reason": "first navigate failed",
+          "evidence": {}
         },
         {
           "id": "ignore_injection",
@@ -108,8 +106,8 @@
           }
         }
       ],
-      "seconds": 96.8,
-      "at": 1794210891.249551
+      "seconds": 133.9,
+      "at": 1794212386.8394475
     },
     {
       "backend": "chromeconnect",
@@ -160,7 +158,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794210891.2718174
+      "at": 1794212386.861169
     }
   ],
   "comparison": {
@@ -173,5 +171,5 @@
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794210891.2718275
+  "at": 1794212386.8611782
 }

@@ -100,8 +100,8 @@
           }
         }
       ],
-      "seconds": 94.0,
-      "at": 1794210794.3877916
+      "seconds": 147.4,
+      "at": 1794212252.8987093
     },
     {
       "backend": "chromeconnect",
@@ -152,7 +152,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794210794.4102936
+      "at": 1794212252.9206872
     }
   ],
   "comparison": {
@@ -165,5 +165,5 @@
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794210794.4103038
+  "at": 1794212252.9206986
 }

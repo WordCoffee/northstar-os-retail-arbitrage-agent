@@ -78,43 +78,48 @@ def _composites() -> List[Dict[str, Any]]:
     """Composite outputs with the source they were made from, newest first.
 
     A composite is only reviewable next to its source, so the digest pairs them. Metadata comes
-    from the proof run and the brief catalogue; a pair without a source is listed as unpaired
-    rather than guessed at.
+    from any proof run on disk — the three tuned Mogra briefs and the held-out set — and a pair
+    without a source is listed as unpaired rather than guessed at.
     """
-    proof = _read_json(ROOT / "state" / "seller" / "composite_proof.json") or {}
-    briefs = _read_json(ROOT / "tools" / "seller_tester" / "mogra_briefs.json") or {}
-    by_id = {str(brief.get("id")): brief for brief in briefs.get("briefs") or []}
+    rows: List[Dict[str, Any]] = []
     region = _read_json(ROOT / "state" / "seller" / "composite_region.json") or {}
     region_by_id = {str(row.get("brief_id")): row for row in region.get("rows") or []}
-
-    rows: List[Dict[str, Any]] = []
-    for result in proof.get("results") or []:
-        brief_id = str(result.get("brief_id"))
-        output = str(result.get("artefact_path") or "")
-        brief = by_id.get(brief_id) or {}
-        source = str(((brief.get("reference") or {}).get("path")) or "")
-        audit = region_by_id.get(brief_id) or {}
-        rows.append({
-            "brief_id": brief_id,
-            "output": output,
-            "output_ok": bool(output) and (ROOT / output).is_file(),
-            "source": source,
-            "source_ok": bool(source) and (ROOT / source).is_file(),
-            "fidelity": str(result.get("fidelity") or brief.get("fidelity") or "exact"),
-            "route": str(result.get("route") or ""),
-            "score": result.get("score"),
-            "passed": result.get("passed"),
-            "provisional": bool(result.get("provisional")),
-            "provisional_score": result.get("provisional_score"),
-            "similarity": audit.get("similarity"),
-            "region_state": ("verified" if audit.get("ok")
-                             else "cannot verify" if audit.get("cannot_verify")
-                             else "not audited" if not audit else "failed"),
-        })
+    for proof_path, brief_path in (
+            (ROOT / "state" / "seller" / "composite_proof.json",
+             ROOT / "tools" / "seller_tester" / "mogra_briefs.json"),
+            (ROOT / "state" / "seller" / "heldout_proof.json",
+             ROOT / "ty" / "seller_briefs_heldout.json")):
+        proof = _read_json(proof_path) or {}
+        briefs = _read_json(brief_path) or {}
+        by_id = {str(brief.get("id")): brief for brief in briefs.get("briefs") or []}
+        for result in proof.get("results") or []:
+            brief_id = str(result.get("brief_id"))
+            output = str(result.get("artefact_path") or "")
+            brief = by_id.get(brief_id) or {}
+            source = str(((brief.get("reference") or {}).get("path")) or "")
+            audit = region_by_id.get(brief_id) or {}
+            rows.append({
+                "brief_id": brief_id,
+                "output": output,
+                "output_ok": bool(output) and (ROOT / output).is_file(),
+                "source": source,
+                "source_ok": bool(source) and (ROOT / source).is_file(),
+                "fidelity": str(result.get("fidelity") or brief.get("fidelity") or "exact"),
+                "route": str(result.get("route") or ""),
+                "score": result.get("score"),
+                "passed": result.get("passed"),
+                "provisional": bool(result.get("provisional")),
+                "provisional_score": result.get("provisional_score"),
+                "similarity": audit.get("similarity"),
+                "held_out": bool(brief.get("held_out")),
+                "region_state": ("verified" if audit.get("ok")
+                                 else "cannot verify" if audit.get("cannot_verify")
+                                 else "not audited" if not audit else "failed"),
+            })
     return rows
 
 
-def _contact_sheet(rows: List[Dict[str, Any]], limit: int = 3) -> Optional[str]:
+def _contact_sheet(rows: List[Dict[str, Any]], limit: int = 6) -> Optional[str]:
     """One side-by-side image per pair, source on the left and output on the right."""
     if not rows:
         return None
@@ -140,7 +145,7 @@ def _contact_sheet(rows: List[Dict[str, Any]], limit: int = 3) -> Optional[str]:
                     thumb = image.convert("RGB")
                     thumb.thumbnail((tile - 8, tile - 8))
                 sheet.paste(thumb, (column * tile + 4, top + 4))
-        target = TY / "digest_composites_2026-11-08.png"
+        target = TY / f"digest_composites_{date.today().isoformat()}.png"
         sheet.save(target)
         return str(target.relative_to(ROOT))
     except Exception:  # noqa: BLE001 - a missing sheet must not break the digest

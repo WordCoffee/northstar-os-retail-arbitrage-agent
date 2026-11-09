@@ -74,16 +74,9 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
             f"placement {placement} falls outside the {frame_w}x{frame_h} frame")
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
-    # The recorded box is the *trimmed* product, so compare against the trimmed cutout.
-    # A cutout is usually a full canvas with an alpha matte; resizing that whole canvas
-    # into the box compared the frame around the product instead of the product.
-    if cutout_alpha is not None:
-        rows, columns = np.where(cutout_alpha >= ALPHA_THRESHOLD)
-        if rows.size >= 64:
-            top, bottom = int(rows.min()), int(rows.max()) + 1
-            left, right = int(columns.min()), int(columns.max()) + 1
-            cutout_rgb = cutout_rgb[top:bottom, left:right]
-            cutout_alpha = cutout_alpha[top:bottom, left:right]
+    # No trimming here: a recorded placement refers to the cutout's own canvas (that is what the
+    # generator pasted), so trimming the cutout to its subject would compare an 80x80 subject
+    # against a 120x120 box and report a mismatch that is only geometry.
     cutout = cutout_rgb.astype(np.float32)
     distortion = 1.0
     if cutout.shape[:2] != region.shape[:2]:
@@ -247,11 +240,11 @@ def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
                     min_similarity: float = DEFAULT_MIN_SIMILARITY) -> Dict[str, Any]:
     """The one entry point: compare at the recorded placement, or find the product.
 
-    A recorded placement can disagree with the artefact (scaled, stretched, or written in a
-    different coordinate space). When it scores below the bar, the product is also located
-    independently and the better of the two is reported — with `compared_by` saying which.
+    When a placement is supplied it is authoritative: a box that falls outside the frame, or one
+    whose region does not match the cutout, is a **failure**, not a reason to go looking elsewhere.
+    Falling back on a failed placement would turn "the generator put the product somewhere else"
+    into a pass by finding the product wherever it happens to be.
     """
-    verdict: Dict[str, Any] = {}
     if placement is not None:
         cutout_rgb, cutout_alpha = split_rgba(cutout)
         if cutout_rgb is None:
@@ -262,23 +255,9 @@ def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
         verdict["min_similarity"] = float(min_similarity)
         if not verdict.get("cannot_verify"):
             verdict["ok"] = bool(verdict.get("similarity", 0.0) >= float(min_similarity))
-        if verdict.get("ok"):
-            verdict["compared_by"] = "placement"
-            return verdict
-
-    located = locate_and_compare(np.asarray(produced_rgb), cutout,
-                                 min_similarity=min_similarity)
-    located["compared_by"] = "template_match"
-    if placement is None:
-        return located
-    # Keep the placement result for the record; report whichever measured better.
-    if (located.get("similarity") or 0.0) >= (verdict.get("similarity") or 0.0):
-        located["placement_verdict"] = {k: verdict.get(k) for k in
-                                        ("ok", "similarity", "detail", "cannot_verify")}
-        return located
-    verdict["template_verdict"] = {k: located.get(k) for k in
-                                   ("ok", "similarity", "detail", "cannot_verify")}
-    return verdict
+        return verdict
+    return locate_and_compare(np.asarray(produced_rgb), cutout,
+                              min_similarity=min_similarity)
 
 
 __all__ = ["DEFAULT_MIN_SIMILARITY", "check_composite", "locate_and_compare",

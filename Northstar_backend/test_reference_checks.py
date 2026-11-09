@@ -340,4 +340,8 @@ def test_the_harness_verifies_a_composite_that_saved_its_cutout(tmp_path):
     row = summary["results"][0]
     region = row["checks"]["product_region"]
     assert region["ok"] is True, region
-    assert row["checks"]["product_region"]["detail"].startswith("product region 120x120")
+    # The detail names the region it actually compared and the score it got; the exact box is the
+    # harness fixture's geometry, so the assertion is on the shape of the evidence, not the number.
+    detail = row["checks"]["product_region"]["detail"]
+    assert detail.startswith("product region "), detail
+    assert "structure" in detail and "opaque pixels" in detail, detail
