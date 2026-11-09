@@ -67,7 +67,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-002",
@@ -110,7 +112,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-003",
@@ -153,7 +157,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-004",
@@ -199,7 +205,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-005",
@@ -245,7 +253,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-006",
@@ -288,7 +298,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-007",
@@ -334,7 +346,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-008",
@@ -380,7 +394,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-009",
@@ -426,7 +442,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-010",
@@ -469,7 +487,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-011",
@@ -512,7 +532,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-012",
@@ -558,7 +580,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-013",
@@ -604,7 +628,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-014",
@@ -647,7 +673,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-015",
@@ -693,7 +721,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-016",
@@ -739,7 +769,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-017",
@@ -785,7 +817,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-018",
@@ -828,7 +862,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-019",
@@ -871,7 +907,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-020",
@@ -917,7 +955,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-021",
@@ -963,7 +1003,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-022",
@@ -1006,7 +1048,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-023",
@@ -1052,7 +1096,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-024",
@@ -1098,7 +1144,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-025",
@@ -1144,7 +1192,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-026",
@@ -1187,7 +1237,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-027",
@@ -1230,7 +1282,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-028",
@@ -1276,7 +1330,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-029",
@@ -1322,7 +1378,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-030",
@@ -1365,7 +1423,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-031",
@@ -1411,7 +1471,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-032",
@@ -1457,7 +1519,9 @@
         "aspect",
         "background"
       ],
-      "source_mode": "prompt_only"
+      "source_mode": "prompt_only",
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-033",
@@ -1509,7 +1573,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-034",
@@ -1558,7 +1624,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-035",
@@ -1607,7 +1675,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-036",
@@ -1659,7 +1729,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-037",
@@ -1711,7 +1783,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-038",
@@ -1760,7 +1834,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-039",
@@ -1812,7 +1888,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-040",
@@ -1864,7 +1942,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-041",
@@ -1913,7 +1993,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-042",
@@ -1965,7 +2047,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-043",
@@ -2017,7 +2101,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-044",
@@ -2066,7 +2152,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-045",
@@ -2119,7 +2207,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-046",
@@ -2175,7 +2265,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-047",
@@ -2228,7 +2320,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-048",
@@ -2281,7 +2375,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-049",
@@ -2337,7 +2433,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-050",
@@ -2393,7 +2491,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-051",
@@ -2449,7 +2549,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-052",
@@ -2505,7 +2607,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-053",
@@ -2558,7 +2662,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-054",
@@ -2614,7 +2720,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-055",
@@ -2670,7 +2778,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     },
     {
       "id": "ST-056",
@@ -2723,7 +2833,9 @@
         "dimensions",
         "aspect",
         "background"
-      ]
+      ],
+      "fidelity": "exact",
+      "product_in_frame": true
     }
   ],
   "source_modes": [

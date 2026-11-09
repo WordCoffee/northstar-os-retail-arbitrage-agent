@@ -1,23 +1,43 @@
 {
   "ok": true,
-  "at": "2026-11-08T21:20:01+00:00",
+  "at": "2026-11-09T03:51:45+00:00",
   "base": "http://127.0.0.1:8101/ui",
   "rows": [
     {
       "id": "hub",
       "route": "/hub",
       "url": "http://127.0.0.1:8101/ui/hub",
-      "opened": false,
-      "renders": false,
-      "reason": "neither the title nor the pixels changed"
+      "opened": true,
+      "changed_vs_home": 0.84,
+      "title": "Operations Hub",
+      "controls": [
+        "Search the Northstar Index...",
+        "90%",
+        "100%",
+        "115%",
+        "130%",
+        "Operator",
+        "D",
+        "Pin snapshot"
+      ],
+      "renders": true
     },
     {
       "id": "ledger",
       "route": "/ledger",
       "url": "http://127.0.0.1:8101/ui/ledger",
-      "opened": false,
-      "renders": false,
-      "reason": "neither the title nor the pixels changed"
+      "opened": true,
+      "changed_vs_home": 0.844,
+      "title": "The Ledger",
+      "controls": [
+        "Search the Northstar Index...",
+        "Operator",
+        "D",
+        "Ask Gemini",
+        "115%",
+        "130%"
+      ],
+      "renders": true
     },
     {
       "id": "prospector",
@@ -39,17 +59,35 @@
       "id": "offerchisel",
       "route": "/offerchisel",
       "url": "http://127.0.0.1:8101/ui/offerchisel",
-      "opened": false,
-      "renders": false,
-      "reason": "neither the title nor the pixels changed"
+      "opened": true,
+      "changed_vs_home": 0.839,
+      "title": "OfferChisel",
+      "controls": [
+        "Generate Listing",
+        "SEO-first",
+        "Generate",
+        "Search the Northstar Index...",
+        "Operator",
+        "Ask Gemini"
+      ],
+      "renders": true
     },
     {
       "id": "towncrier",
       "route": "/towncrier",
       "url": "http://127.0.0.1:8101/ui/towncrier",
-      "opened": false,
-      "renders": false,
-      "reason": "neither the title nor the pixels changed"
+      "opened": true,
+      "changed_vs_home": 0.828,
+      "title": "The Town Crier",
+      "controls": [
+        "Search the Northstar Index...",
+        "Operator",
+        "Ask Gemini",
+        "Generate caption",
+        "Schedule this caption",
+        "Meta"
+      ],
+      "renders": true
     },
     {
       "id": "auctioneer",
@@ -71,21 +109,9 @@
       "id": "thewatch",
       "route": "/thewatch",
       "url": "http://127.0.0.1:8101/ui/thewatch",
-      "opened": true,
-      "changed_vs_home": 0.001,
-      "title": "Bojo",
-      "controls": [
-        "New chat",
-        "Search sessions",
-        "Generate the Amazon MAIN listing image now by calling...",
-        "Summarize the state of my sourcing pipeline and what needs d",
-        "List the die-line templates available for a new carton test.",
-        "Image",
-        "Video",
-        "Options"
-      ],
+      "opened": false,
       "renders": false,
-      "reason": "renders the home shell (changed 0.1% of cells)"
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "id": "rankledger",
@@ -107,38 +133,28 @@
       "id": "account",
       "route": "/account",
       "url": "http://127.0.0.1:8101/ui/account",
-      "opened": true,
-      "changed_vs_home": 0.803,
-      "title": "Account Status",
-      "controls": [
-        "Search the Northstar Index...",
-        "Operator",
-        "D",
-        "Ask Gemini",
-        "127.0.0.1:8101/ui/account",
-        "Search"
-      ],
-      "renders": true
+      "opened": false,
+      "renders": false,
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "id": "foundation",
       "route": "/foundation",
       "url": "http://127.0.0.1:8101/ui/foundation",
       "opened": true,
-      "changed_vs_home": 0.0,
-      "title": "Bojo - Northstar creative assistant",
+      "changed_vs_home": 0.841,
+      "title": "Foundation",
       "controls": [
-        "New chat",
-        "Search sessions",
-        "Generate the Amazon MAIN listing image now by calling...",
-        "Summarize the state of my sourcing pipeline and what needs d",
-        "List the die-line templates available for a new carton test.",
-        "Image",
-        "Video",
-        "Options"
+        "Refresh",
+        "Search the Northstar Index...",
+        "90%",
+        "100%",
+        "115%",
+        "130%",
+        "Operator",
+        "D"
       ],
-      "renders": false,
-      "reason": "renders the home shell (changed 0.0% of cells)"
+      "renders": true
     },
     {
       "id": "jobs",
@@ -161,14 +177,16 @@
       "route": "/beta",
       "url": "http://127.0.0.1:8101/ui/beta",
       "opened": true,
-      "changed_vs_home": 0.803,
+      "changed_vs_home": 0.833,
       "title": "NorthstarOS",
       "controls": [
         "Search the Northstar Index...",
         "Operator",
-        "D",
         "Accept Invitation",
         "Sign In",
+        "Portfolio & Finance",
+        "Golden Goose Finder",
+        "Product Finder",
         "Invite-Only Access"
       ],
       "renders": true
@@ -185,21 +203,9 @@
       "id": "beta-signup",
       "route": "/beta-signup",
       "url": "http://127.0.0.1:8101/ui/beta-signup",
-      "opened": true,
-      "changed_vs_home": 0.0,
-      "title": "Bojo - Northstar creative assistant",
-      "controls": [
-        "New chat",
-        "Search sessions",
-        "Generate the Amazon MAIN listing image now by calling...",
-        "Summarize the state of my sourcing pipeline and what needs d",
-        "List the die-line templates available for a new carton test.",
-        "Image",
-        "Video",
-        "Options"
-      ],
+      "opened": false,
       "renders": false,
-      "reason": "renders the home shell (changed 0.0% of cells)"
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "id": "beta-ops",
@@ -214,7 +220,7 @@
       "route": "/design-studio",
       "url": "http://127.0.0.1:8101/ui/design-studio",
       "opened": true,
-      "changed_vs_home": 0.675,
+      "changed_vs_home": 0.713,
       "title": "Design Studio",
       "controls": [
         "Canvas",
@@ -233,20 +239,19 @@
       "route": "/product-finder",
       "url": "http://127.0.0.1:8101/ui/product-finder",
       "opened": true,
-      "changed_vs_home": 0.001,
-      "title": "Bojo - Northstar creative assistant",
+      "changed_vs_home": 0.841,
+      "title": "SourceScout",
       "controls": [
-        "Auto",
-        "Create",
-        "Grow",
-        "Research",
-        "Operate",
-        "Autothink",
-        "Workbench",
-        "Image"
+        "New Lookup",
+        "Lookup",
+        "Product Set",
+        "Saved Sets",
+        "Coverage",
+        "Start researching",
+        "Open in Product Set",
+        "Send to Commerce Ops"
       ],
-      "renders": false,
-      "reason": "renders the home shell (changed 0.1% of cells)"
+      "renders": true
     },
     {
       "id": "golden-goose",
@@ -285,28 +290,38 @@
       "route": "/listingforge",
       "url": "http://127.0.0.1:8101/ui/listingforge",
       "opened": true,
-      "changed_vs_home": 0.061,
-      "title": "Bojo",
+      "changed_vs_home": 0.815,
+      "title": "ListingForge",
       "controls": [
-        "Auto",
-        "Create",
-        "Grow",
-        "Research",
-        "Operate",
-        "Autothink",
-        "Workbench",
-        "Edit & resend"
+        "Standard",
+        "Advanced",
+        "Create Listing",
+        "Templates",
+        "Editor",
+        "Assets",
+        "Revision Log",
+        "Operator"
       ],
-      "renders": false,
-      "reason": "renders the home shell (changed 6.1% of cells)"
+      "renders": true
     },
     {
       "id": "adpilot",
       "route": "/adpilot",
       "url": "http://127.0.0.1:8101/ui/adpilot",
-      "opened": false,
-      "renders": false,
-      "reason": "neither the title nor the pixels changed"
+      "opened": true,
+      "changed_vs_home": 0.839,
+      "title": "ListingForge",
+      "controls": [
+        "Standard",
+        "Advanced",
+        "Create Listing",
+        "Templates",
+        "Editor",
+        "Assets",
+        "Revision Log",
+        "Operator"
+      ],
+      "renders": true
     },
     {
       "id": "socialpulse",
@@ -325,33 +340,26 @@
       "reason": "neither the title nor the pixels changed"
     }
   ],
-  "renders": 3,
+  "renders": 10,
   "total": 29,
   "failures": [
-    "hub",
-    "ledger",
     "prospector",
     "goldengoose",
-    "offerchisel",
-    "towncrier",
     "auctioneer",
     "autothink",
     "thewatch",
     "rankledger",
     "rivalboard",
-    "foundation",
+    "account",
     "jobs",
     "keywords",
     "beta-support",
     "beta-signup",
     "beta-ops",
-    "product-finder",
     "golden-goose",
     "listings",
     "keyword-tracker",
     "competitor-monitor",
-    "listingforge",
-    "adpilot",
     "socialpulse",
     "profitability"
   ]

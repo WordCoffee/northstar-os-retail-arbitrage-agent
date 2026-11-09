@@ -105,12 +105,22 @@ def test_a_seller_facing_service_without_outputs_cannot_reach_the_bar(world, mon
     assert alpha["meets_bar"] is False
 
 
-def test_artefacts_alone_cannot_reach_the_bar(world):
-    """A service whose only evidence is passing tests scores 60 on `correct`, not 100."""
+def test_artefacts_alone_cannot_reach_the_bar(world, monkeypatch):
+    """A seller-facing service with only passing tests scores 60 on `correct`, not 100."""
+    monkeypatch.setattr(S, "SELLER_SERVICES", set(S.SELLER_SERVICES) | {"alpha"})
     result = S.measure()
     alpha = next(row for row in result["services"] if row["id"] == "alpha")
     assert alpha["dimensions"]["correct"]["score"] == 60.0
     assert "Seller-Tester" in alpha["dimensions"]["correct"]["evidence"]
+
+
+def test_a_service_with_no_seller_output_is_judged_on_its_tests(world):
+    """Alpha produces no seller-facing artefact, so tests are the only evidence there is."""
+    result = S.measure()
+    alpha = next(row for row in result["services"] if row["id"] == "alpha")
+    assert alpha["dimensions"]["seller"].get("not_applicable") is True
+    assert alpha["dimensions"]["correct"]["score"] == 100.0
+    assert "no seller-facing artefact" in alpha["dimensions"]["correct"]["evidence"]
 
 
 def test_the_gap_is_impact_times_the_distance_to_the_bar(world):

@@ -1,0 +1,235 @@
+{
+  "at": "2026-11-09T03:37:06+00:00",
+  "eval_set": [
+    "mogra_pair_main.png",
+    "mogra_pair_lifestyle.png",
+    "mogra_forest_dusk.png",
+    "text_card.png"
+  ],
+  "metric": "mean token recall of the printed text (fuzzy, the same matcher the reference check uses)",
+  "candidates": {
+    "rapidocr": {
+      "status": "measured",
+      "mean_recall": 1.0,
+      "frames": 4,
+      "seconds": 13.7,
+      "per_frame": [
+        {
+          "id": "mogra_pair_main.png",
+          "seconds": 4.64,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "mushroom",
+            "powder",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRAORGANICS Hlealthy&Organic MOGRA ORGANICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "mogra_pair_lifestyle.png",
+          "seconds": 3.13,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MOGRA ORGANICS Ilealthy & Organie MOGRA ORGANCS Healthy & Organic ORGANIS LIONSMANE ORGANIC SHITAKE MUSHROOM POWDER MUSHROOM POWDER 6 oz (170 g) 8oz (227g)"
+        },
+        {
+          "id": "mogra_forest_dusk.png",
+          "seconds": 3.05,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy&Organic Healthy& Organic ORGANICLION'SMANE ORGANIC SHIITAKE MUSHROOM POWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "text_card.png",
+          "seconds": 2.88,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOMPOWDER 6 oz (170 g)"
+        }
+      ],
+      "engine": "rapidocr_onnxruntime",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/RapidAI/RapidOCR",
+      "device": "cpu/onnx"
+    },
+    "rapidocr-2x": {
+      "status": "measured",
+      "mean_recall": 1.0,
+      "frames": 4,
+      "seconds": 19.15,
+      "per_frame": [
+        {
+          "id": "mogra_pair_main.png",
+          "seconds": 7.13,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "mushroom",
+            "powder",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRAORGAICS MOGRAORGAAICS Healthy&Organic Healthy&Organic ORGANILION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 88 6 oz (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "mogra_pair_lifestyle.png",
+          "seconds": 5.09,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRAORGAAICS lealthy&Organie MOGRA ORGAAICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 88 6 oz (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "mogra_forest_dusk.png",
+          "seconds": 4.67,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy& Organic Healthy&Organic ORGANIC SHIITAKE ORGANIC LION'S MANE MUSHROOMPOWDER MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "text_card.png",
+          "seconds": 2.26,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MOGRA ORGANICS ORGANIC LION'S MANE 6 oz (170 g) MUSHROOMPOWDER"
+        }
+      ],
+      "engine": "rapidocr_onnxruntime",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/RapidAI/RapidOCR",
+      "device": "cpu/onnx",
+      "note": "same engine, frames upscaled 2x before recognition"
+    },
+    "easyocr": {
+      "status": "measured",
+      "mean_recall": 0.843,
+      "frames": 4,
+      "seconds": 19.51,
+      "per_frame": [
+        {
+          "id": "mogra_pair_main.png",
+          "seconds": 12.01,
+          "recall": 0.571,
+          "matched": [
+            "organics",
+            "organic",
+            "lions",
+            "shiitake"
+          ],
+          "missing": [
+            "mogra",
+            "mushroom",
+            "powder"
+          ],
+          "error": "",
+          "text": "207 _ 2023 McXi? OIX;AAK $ Mealth} < Orxunie MKXRRA (XAAAK $ Healthy & Orkunic ORGANIC LIONSMANE M U $ HR 00 M RO W D E R ORGANIC SHIITAKE M U $ HR 0 0 M P 0 W D E R 6 0z (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "mogra_pair_lifestyle.png",
+          "seconds": 3.3,
+          "recall": 0.8,
+          "matched": [
+            "organics",
+            "organic",
+            "lions",
+            "shiitake"
+          ],
+          "missing": [
+            "mogra"
+          ],
+          "error": "",
+          "text": "IKXi?A CIX;AA $ Orxun MKXCRA (x;AK $ Haarh& Omrunic ORGANG LION'SMANE ORGANIC SHIITAKE M U $ HR 00 M RPOW D E R M U $ HR 0 0 M P 0 W D E R 6 0z (170 g) 8 oz (227 g)"
+        },
+        {
+          "id": "mogra_forest_dusk.png",
+          "seconds": 2.63,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthi * Organic Healthy < Organic ORGAVC LIONS MANE ORGAVC SHIIITAKE M U $ H R 0 0 M P 0 W D E R M U SH R 0 0 M P 0 W D E R 6 0z (170 g) 8 0z (227 g)"
+        },
+        {
+          "id": "text_card.png",
+          "seconds": 1.57,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic",
+            "lions",
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOM POWDER 6 oz (170 g)"
+        }
+      ],
+      "engine": "easyocr",
+      "licence": "Apache-2.0",
+      "source": "https://github.com/JaidedAI/EasyOCR",
+      "device": "torch"
+    }
+  },
+  "winner": "rapidocr",
+  "incumbent": "rapidocr",
+  "margin_over_incumbent": 0.0,
+  "decision": "keep rapidocr"
+}

@@ -117,6 +117,32 @@
       "candidates": [],
       "notes": "A workflow is not an Ollama tag, so the scout records it as an incumbent and never measures it with /api/chat.",
       "manager_key": null
+    },
+    "ocr": {
+      "label": "OCR (printed text on packaging)",
+      "eval": "mogra_text",
+      "incumbent": "rapidocr",
+      "candidates": [
+        "rapidocr",
+        "rapidocr-2x",
+        "easyocr"
+      ],
+      "measured": {
+        "rapidocr": {
+          "mean_recall": 1.0,
+          "licence": "Apache-2.0"
+        },
+        "rapidocr-2x": {
+          "mean_recall": 1.0,
+          "licence": "Apache-2.0"
+        },
+        "easyocr": {
+          "mean_recall": 0.843,
+          "licence": "Apache-2.0"
+        }
+      },
+      "decision": "keep rapidocr",
+      "source": "ty/ocr_leaderboard.json"
     }
   }
 }

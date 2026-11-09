@@ -60,13 +60,15 @@ def run(*, services: Optional[List[Dict[str, str]]] = None,
         return {"ok": False, "blocked": True, "at": _now(), "rows": rows,
                 "reason": "no live Vision session (desktop must be unlocked)"}
 
-    home = open_url(f"{BASE}/")
+    home = open_url(f"{BASE}/", new_tab=True)
     time.sleep(1.2)
     home_shot = (screenshot() or {}).get("png")
     for service in services or routes():
         url = f"{BASE}{service['route']}"
         entry: Dict[str, Any] = {"id": service["id"], "route": service["route"], "url": url}
-        opened = open_url(url)
+        # One tab, reused: 29 fresh tabs eventually degrade the renderer ("Aw, Snap!") and
+        # the audit starts measuring crashes instead of pages.
+        opened = open_url(url, new_tab=False)
         entry["opened"] = bool(opened.get("ok"))
         if not opened.get("ok"):
             entry.update({"renders": False, "reason": opened.get("reason")})

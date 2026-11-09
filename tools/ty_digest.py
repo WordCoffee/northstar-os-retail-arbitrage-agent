@@ -74,6 +74,66 @@ def _jobs() -> Dict[str, Any]:
                      ("queued", "claimed", "running", "ready")][:10]}
 
 
+def _composites() -> List[Dict[str, Any]]:
+    """Composite outputs with the source they were made from, newest first.
+
+    A composite is only reviewable next to its source, so the digest pairs them. The
+    convention is a sidecar JSON beside each output: `{"brief_id": ..., "source": ...,
+    "fidelity": ...}`. Missing sidecars are reported as unpaired rather than guessed.
+    """
+    rows: List[Dict[str, Any]] = []
+    for folder in (ROOT / "renders" / "composites", ROOT / "state" / "seller" / "composites"):
+        if not folder.is_dir():
+            continue
+        for output in sorted(folder.glob("*.png")):
+            sidecar = output.with_suffix(".json")
+            meta = _read_json(sidecar) if sidecar.exists() else {}
+            source = str(meta.get("source") or "")
+            rows.append({
+                "brief_id": str(meta.get("brief_id") or output.stem),
+                "output": str(output.relative_to(ROOT)),
+                "output_ok": output.exists(),
+                "source": source,
+                "source_ok": bool(source) and (ROOT / source).exists(),
+                "fidelity": str(meta.get("fidelity") or "exact"),
+                "similarity": meta.get("product_region_similarity"),
+            })
+    return rows
+
+
+def _contact_sheet(rows: List[Dict[str, Any]], limit: int = 3) -> Optional[str]:
+    """One side-by-side image per pair, source on the left and output on the right."""
+    if not rows:
+        return None
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+
+        pairs = [row for row in rows if row["source_ok"] and row["output_ok"]][:limit]
+        if not pairs:
+            return None
+        tile = 380
+        sheet = Image.new("RGB", (tile * 2, tile * len(pairs) + 26), "#f6f3ec")
+        draw = ImageDraw.Draw(sheet)
+        try:
+            font = ImageFont.truetype("segoeui.ttf", 16)
+        except OSError:
+            font = ImageFont.load_default()
+        draw.text((8, 4), "source", fill="#1b2a22", font=font)
+        draw.text((tile + 8, 4), "composite", fill="#1b2a22", font=font)
+        for index, row in enumerate(pairs):
+            top = 26 + index * tile
+            for column, path in enumerate((row["source"], row["output"])):
+                with Image.open(ROOT / path) as image:
+                    thumb = image.convert("RGB")
+                    thumb.thumbnail((tile - 8, tile - 8))
+                sheet.paste(thumb, (column * tile + 4, top + 4))
+        target = TY / "digest_composites_2026-11-08.png"
+        sheet.save(target)
+        return str(target.relative_to(ROOT))
+    except Exception:  # noqa: BLE001 - a missing sheet must not break the digest
+        return None
+
+
 def _parity() -> Dict[str, Any]:
     flag = ROOT / "config" / "chromeconnect_quarantine.json"
     runs = sorted(TY.glob("d8_parity_run*.json"))
@@ -130,6 +190,8 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
         "seller_gaps": _count(gaps, "gaps"),
         "intel_findings": _count(intel, "findings"),
         "model_roles": len((models.get("roles") or {})) if isinstance(models, dict) else 0,
+        "composites": _composites(),
+        "composite_sheet": _contact_sheet(_composites()),
         "verifier_failed": (verifier.get("failed") or [])[:10] if isinstance(verifier, dict) else [],
         "verifier_blocked": (verifier.get("blocked") or [])[:10] if isinstance(verifier, dict) else [],
         "needs_you_open": (len([line for line in needs.read_text(encoding="utf-8").splitlines()
@@ -164,6 +226,25 @@ def render(data: Dict[str, Any]) -> str:
               f"six-point evidence files: {len(parity['six_point'])}", ""]
     failed = data.get("verifier_failed") or []
     blocked = data.get("verifier_blocked") or []
+    lines += ["## Mogra composites — source next to output", ""]
+    composites = data.get("composites") or []
+    if composites:
+        lines += ["| brief | source | output | fidelity | product-region |",
+                  "|---|---|---|---|---|"]
+        for row in composites:
+            similarity = row.get("similarity")
+            lines.append(
+                f"| {row['brief_id']} | `{row['source']}` | `{row['output']}` | "
+                f"{row['fidelity']} | "
+                f"{'—' if similarity is None else similarity} |")
+        if data.get("composite_sheet"):
+            lines += ["", f"Side by side (source left, composite right): "
+                          f"`{data['composite_sheet']}`"]
+    else:
+        lines.append("None produced yet: no composite outputs on disk. `sel-01b` is the job "
+                     "that produces them.")
+    lines += [""]
+
     lines += ["## Verifier FAILED items", ""]
     if failed:
         lines += ["| unit | item | why | state now |", "|---|---|---|---|"]

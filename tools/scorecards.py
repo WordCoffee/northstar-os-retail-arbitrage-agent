@@ -234,15 +234,23 @@ def _wired_tools(ids: List[str]) -> Dict[str, bool]:
     return {tool: (f"'{tool}'" in haystack or f'"{tool}"' in haystack) for tool in ids}
 
 
-def _correct(matched: List[str]) -> Dict[str, Any]:
+def _correct(matched: List[str], seller_applicable: bool = True) -> Dict[str, Any]:
     """Tests prove a code path; they do not prove the output is right.
 
     Owner instruction 2026-11-08: *artefacts alone can't raise them.* A service whose only
     evidence is a passing test scores 60 here — real, but not enough to pass the 85 bar on
     its own. The output-quality evidence is the `seller` dimension.
+
+    Where no seller-facing artefact exists (`seller` does not apply), tests are the only
+    correctness evidence there is, so they carry full weight. Capping those services at 60
+    would make the bar unreachable by construction — a scoring bug, not a product finding.
     """
     if not matched:
         return {"score": 0.0, "evidence": "no check proves its output is correct"}
+    if not seller_applicable:
+        return {"score": 100.0,
+                "evidence": (f"{len(matched)} test id(s) prove behaviour; this service "
+                             "produces no seller-facing artefact, so tests are the evidence")}
     return {"score": 60.0,
             "evidence": (f"{len(matched)} test id(s) prove the code path; output quality is "
                          "judged by the Seller-Tester, not by the tests")}
@@ -291,7 +299,7 @@ def measure_one(service: Dict[str, Any], ids: List[str],
         "evidence": (f"{len(matched)} test id(s) prove it" if matched
                      else "no test id maps to this service"),
     }
-    dims["correct"] = _correct(matched)
+    dims["correct"] = _correct(matched, seller_applicable=sid in SELLER_SERVICES)
     if sid in SELLER_SERVICES:
         dims["seller"] = _seller(sid)
     else:
