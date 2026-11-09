@@ -14,8 +14,10 @@ Design rules:
 """
 from __future__ import annotations
 
+import atexit
 import functools
 import json
+import os
 import sqlite3
 import tempfile
 import threading
@@ -691,15 +693,23 @@ def _serialized(fn):
 
 
 class FoundationDB:
-    """SQLite-backed foundation store. Disposable by default."""
+    """SQLite-backed foundation store. Disposable by default.
+
+    When no path is given the store creates a temp file **and owns it**: the file is removed when
+    the store is closed and again at interpreter exit if nobody closed it. Before this, every
+    ``create_app`` in the suite left one ``ns_foundation_*.db`` behind — 9,018 of them had
+    accumulated in %TEMP% by 2026-11-09 (``reports/ty/defects.md`` D-001). A caller-supplied path
+    is never touched: that file may be the real database.
+    """
 
     def __init__(self, path: Optional[str] = None, *, schema: bool = True) -> None:
-        if path is None:
+        owns_path = path is None
+        if owns_path:
             fd, tmp = tempfile.mkstemp(prefix="ns_foundation_", suffix=".db")
-            import os
             os.close(fd)
             path = tmp
         self.path = path
+        self._owns_path = owns_path
         # One connection, one lock: every statement is serialized (see
         # _SerializedConnection); multi-statement transactions hold this lock.
         self.lock = threading.RLock()
@@ -708,6 +718,9 @@ class FoundationDB:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.execute("PRAGMA busy_timeout=5000")
+        if owns_path:
+            # Belt and braces: a process that forgets to close() still leaves nothing behind.
+            atexit.register(_remove_quietly, path)
         if schema:
             self.ensure_schema()
 
@@ -874,6 +887,22 @@ class FoundationDB:
     @_serialized
     def close(self) -> None:
         self.conn.close()
+        if getattr(self, "_owns_path", False):
+            # Only after the connection is closed: Windows will not unlink an open file.
+            _remove_quietly(self.path)
+
+
+def _remove_quietly(path: Optional[str]) -> None:
+    """Remove a temp database file, ignoring the races that make this best-effort.
+
+    Called from close() and from atexit, so a second call must be harmless, and a failure (Windows
+    still holding the handle, a file already gone) must never turn a clean shutdown into a crash.
+    """
+    try:
+        if path:
+            os.unlink(path)
+    except OSError:
+        pass
 
 
 @contextmanager
