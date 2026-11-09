@@ -140,6 +140,7 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
     mapping = brief_services(briefs)
     buckets: Dict[str, Dict[str, Dict[str, Any]]] = {}
     generated_at = ""
+    made_at = ""
     for data, generator in sources:
         generated_at = generated_at or str(data.get("generated_at") or "")
         for row in _rows(data):
@@ -149,6 +150,10 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
             except (TypeError, ValueError):
                 continue
             population = population_of(row, generator)
+            if population == "generated":
+                # The published mean's timestamp is the pass that produced the pictures,
+                # not the replay pass that happens to be read first.
+                made_at = made_at or str(data.get("generated_at") or "")
             bucket = buckets.setdefault(
                 service, {name: _bucket() for name in POPULATIONS})[population]
             bucket["scores"].append(value)
@@ -161,7 +166,7 @@ def build(*, summary: Optional[Dict[str, Any]] = None,
         replay = _summarise(split["replay"])
         row: Dict[str, Any] = {
             "mean": made["mean"], "scored": made["scored"], "passed": made["passed"],
-            "at": generated_at or _now(),
+            "at": made_at or generated_at or _now(),
             "population": "generated",
             "replay": replay,
         }

@@ -82,11 +82,12 @@ def test_the_live_file_matches_the_registry_shape():
 
 # --------------------------------------------------------------- populations
 def test_replayed_artefacts_are_context_and_never_the_published_mean():
-    replay = {"generator": "stored", "results": [
-        {"brief_id": "ST-001", "score": 10, "passed": False},
-        {"brief_id": "ST-001", "score": 20, "passed": False},
+    replay = {"generated_at": "2026-11-01T00:00:00+00:00", "generator": "stored",
+              "results": [
+                  {"brief_id": "ST-001", "score": 10, "passed": False},
+                  {"brief_id": "ST-001", "score": 20, "passed": False},
     ]}
-    made = {"generator": "composite", "results": [
+    made = {"generated_at": "2026-11-09T00:00:00+00:00", "generator": "composite", "results": [
         {"brief_id": "ST-001", "score": 90, "passed": True},
         {"brief_id": "ST-001", "score": 70, "passed": True},
         {"brief_id": "ST-001", "score": 80, "passed": True},
@@ -98,6 +99,7 @@ def test_replayed_artefacts_are_context_and_never_the_published_mean():
     assert row["mean"] == 80.0          # generated only: (90+70+80+100+60)/5
     assert row["scored"] == 5
     assert row["replay"] == {"mean": 15.0, "scored": 2, "passed": 0}
+    assert row["at"] == "2026-11-09T00:00:00+00:00"  # the pass that made the pictures
     assert built["pass"]["mean_score"] == 80.0
     assert built["pass"]["replay"]["mean_score"] == 15.0
     verdict = seller_scores.score_for("design-studio", data=built)
