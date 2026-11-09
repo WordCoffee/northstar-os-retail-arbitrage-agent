@@ -143,7 +143,8 @@ class Repo:
         return self.git("symbolic-ref", "--short", "-q", "HEAD", check=False).strip()
 
     def rev(self, ref: str) -> str:
-        return self.git("rev-parse", ref).strip()
+        """The commit a ref names. Peeled, so an annotated tag is not reported as a tag object."""
+        return self.git("rev-parse", f"{ref}^{{commit}}").strip()
 
     def commit_time(self, ref: str) -> int:
         return int(self.git("log", "-1", "--format=%ct", ref).strip() or 0)
@@ -151,17 +152,7 @@ class Repo:
     def commits_between(self, target: str, source: str) -> List[Commit]:
         raw = self.git("log", "--format=%x01%H%x1f%ad%x1f%s%x1f%b", "--date=short",
                        f"{target}..{source}")
-        out: List[Commit] = []
-        for chunk in raw.split("\x01"):
-            chunk = chunk.strip("\n")
-            if not chunk:
-                continue
-            parts = chunk.split("\x1f")
-            if len(parts) < 3:
-                continue
-            out.append(Commit(parts[0].strip(), parts[1].strip(), parts[2].strip(),
-                              parts[3].strip() if len(parts) > 3 else ""))
-        return out
+        return _parse_commit_log(raw)
 
     def changed_paths(self, target: str, source: str) -> List[str]:
         raw = self.git("diff", "--name-only", f"{target}..{source}")
@@ -798,17 +789,6 @@ def _pathspec_temp(paths: Sequence[str]) -> str:
     return name
 
 
-def _git_pathspec(repo: Repo, args: Sequence[str], paths: Sequence[str]) -> str:
-    name = _pathspec_temp(paths)
-    try:
-        return repo.git(*args, f"--pathspec-from-file={name}", "--pathspec-file-nul")
-    finally:
-        try:
-            os.unlink(name)
-        except OSError:
-            pass
-
-
 def _parse_commit_log(raw: str) -> List[Commit]:
     out: List[Commit] = []
     for chunk in raw.split("\x01"):
@@ -823,12 +803,44 @@ def _parse_commit_log(raw: str) -> List[Commit]:
     return out
 
 
+_TOUCH_CACHE: Dict[Tuple[str, str, str], Tuple[List[Commit], Dict[str, set]]] = {}
+
+
+def _log_index(repo: Repo, target: str, source: str) -> Tuple[List[Commit], Dict[str, set]]:
+    """Every bundle commit, and path -> the commits that touched it.
+
+    `git log` has no `--pathspec-from-file`, and 3,000 paths do not fit in argv, so the
+    index is built once per (repo, target, source) and slices filter it in memory.
+    """
+    key = (str(repo.root), target, source)
+    if key in _TOUCH_CACHE:
+        return _TOUCH_CACHE[key]
+    commits = repo.commits_between(target, source)
+    raw = repo.git("log", "--format=%H", "--name-only", "--no-renames",
+                   f"{target}..{source}")
+    touches: Dict[str, set] = {}
+    current = None
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if re.fullmatch(r"[0-9a-f]{40}", line):
+            current = line
+            continue
+        if current:
+            touches.setdefault(line, set()).add(current)
+    _TOUCH_CACHE[key] = (commits, touches)
+    return commits, touches
+
+
 def slice_commits(repo: Repo, target: str, source: str, paths: Sequence[str]) -> List[Commit]:
     if not paths:
         return []
-    raw = _git_pathspec(repo, ["log", "--format=%x01%H%x1f%ad%x1f%s%x1f%b", "--date=short",
-                               f"{target}..{source}"], paths)
-    return _parse_commit_log(raw)
+    commits, touches = _log_index(repo, target, source)
+    wanted: set = set()
+    for path in paths:
+        wanted |= touches.get(path, set())
+    return [commit for commit in commits if commit.sha in wanted]
 
 
 def _tree_paths(repo: Repo, ref: str) -> List[str]:
@@ -974,8 +986,9 @@ def write_slice_pack(repo: Repo, result: Dict[str, Any], out: Optional[Path] = N
     lines += ["", f"## Changed paths ({len(paths)})", "", "```"]
     lines += _sample(paths)
     lines += ["```", "", "## Commands", "", "Promote just this slice:", "", "```",
-              f'python tools/promote_staging.py --slice {name} --promote '
-              f'--approve-visual "<what you looked at and accepted>"', "```", "",
+              f'python tools/promote_staging.py --source {source} --slice {name} --promote '
+              + (f'--candidate {result["candidate"]} ' if result.get("candidate") else "")
+              + '--approve-visual "<what you looked at and accepted>"', "```", "",
               "Revert it:", "", "```",
               f"python tools/promote_staging.py --slice {name} --revert {promote_tag}", "```"]
 
@@ -1111,8 +1124,7 @@ def do_promote_slice(repo: Repo, result: Dict[str, Any]) -> Tuple[str, Optional[
                        cwd=str(repo.root), check=True, capture_output=True)
 
         paths = result["slice_paths"]
-        raw = _git_pathspec(repo, ["diff", "--name-status", "-z", "--no-renames",
-                                   f"{target}..{source}"], paths)
+        raw = repo.git("diff", "--name-status", "-z", "--no-renames", f"{target}..{source}")
         fields = [f for f in raw.split("\0") if f]
         statuses: Dict[str, str] = {}
         for index in range(0, len(fields) - 1, 2):
@@ -1347,9 +1359,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             pack = write_review_pack(repo, result)
         result["review"] = str(pack)
 
+    # A refused visual slice is only reviewable if the pack exists; writing it is part of
+    # the refusal, not an extra step the reviewer has to remember.
+    if (args.slice and not args.review and not result["eligible"]
+            and any(gate.key == "slice" and not gate.ok for gate in result["gates"])):
+        result["review"] = str(write_slice_pack(repo, result))
+
     if args.check:
         print(json.dumps(as_payload(result), indent=2) if args.json else render_check(result))
-        if args.review:
+        if result.get("review"):
             print(f"\nreview pack: {result['review']}")
         return 0 if result["eligible"] else 2
 

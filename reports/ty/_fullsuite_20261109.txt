@@ -1,0 +1,887 @@
+........................................................................ [  0%]
+........................................................................ [  1%]
+........................................................................ [  2%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+............................................................... [  7%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+......F...FF............................................................ [ 11%]
+........................................................................ [ 12%]
+..........ssss.............ssssss....................................... [ 13%]
+........................................F...................F........... [ 14%]
+.........ssss.......FFFF.F..........F..F....F........................... [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+.........sssssssss.........................ssssss....................... [ 18%]
+........................................................................ [ 19%]
+............F........................................s.................. [ 20%]
+................sssssssssssss................sssssss.................... [ 21%]
+.................sssssssss.............................................. [ 22%]
+........................................................................ [ 23%]
+............................F.............................. [ 24%]
+........................................................................ [ 25%]
+.............sssss...................................................... [ 26%]
+........................................................................ [ 27%]
+.................................................................. [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 29%]
+.................F...................................................... [ 30%]
+........................................................................ [ 31%]
+................................................................. [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+.F.F.................F.................................................F [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+..........................................s............................. [ 42%]
+...................................................sss.sss.s...s.s.....s [ 43%]
+.s.........sss.sss....................s................................. [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+.................s...................................................... [ 48%]
+........................................................................ [ 49%]
+...............................................FFFFF.................... [ 50%]
+........................................................................ [ 51%]
+....................................................................F... [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+...................................................................s.... [ 55%]
+........................................................................ [ 56%]
+.............................................................F.......... [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................sssssss................ [ 60%]
+....ss.................................................................. [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+............s........................................................... [ 64%]
+................................................................................................................................ [ 65%]
+........................................................................ [ 66%]
+.......................................s................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+............................sssssssssssssssssssssssssssss............... [ 72%]
+........................................................................ [ 73%]
+............x.................x......................................... [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+..................................................... [ 78%]
+F....................................................................... [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+...........................F.................................... [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+............................FFF.............................. [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+............................................. [ 99%]
+.........................................................                [100%]
+================================== FAILURES ===================================
+____________________ test_gate_ui_is_canonical_and_served _____________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3EF88DBF0>
+
+    def test_gate_ui_is_canonical_and_served(web):
+>       assert os.path.exists(os.path.join(DIST, "index.html"))
+E       AssertionError: assert False
+E        +  where False = <built-in function _path_exists>('C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\index.html')
+E        +    where <built-in function _path_exists> = <module 'ntpath' (frozen)>.exists
+E        +      where <module 'ntpath' (frozen)> = os.path
+E        +    and   'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\index.html' = <function join at 0x000002B3AEC0EAE0>('C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist', 'index.html')
+E        +      where <function join at 0x000002B3AEC0EAE0> = <module 'ntpath' (frozen)>.join
+E        +        where <module 'ntpath' (frozen)> = os.path
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_1c06_gate.py:29: AssertionError
+_____________________ test_gate_no_provider_calls_on_load _____________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F0868490>
+seeded_state = FoundationState(db=<Northstar_backend.foundation.db.FoundationDB object at 0x000002B3F0874A10>, repos=<Northstar_backe...t 0x000002B3F18D8550>, approvals=<Northstar_backend.foundation.approvals.ApprovalService object at 0x000002B3F0874A70>)
+
+    def test_gate_no_provider_calls_on_load(web, seeded_state):
+        h = owner_headers(seeded_state)
+        before_providers = seeded_state.repos.providers.count()
+        before_jobs = seeded_state.repos.job_requests.count()
+        for url in ("/ui", "/ui/foundation", "/ui/jobs", "/ui/keywords",
+                    "/api/v1/foundation/jobs-durable/queue-posture",
+                    "/api/v1/foundation/schedules/posture",
+                    "/api/v1/foundation/keywords/search?q=x"):
+>           assert web.get(url, headers=h).status_code == 200
+E           AssertionError: assert 404 == 200
+E            +  where 404 = <Response [404 Not Found]>.status_code
+E            +    where <Response [404 Not Found]> = get('/ui', headers={'X-User-Id': 'd5d9e22a-abca-4769-811e-dda5516445a3', 'X-Org-Id': '796fac88-22f8-43a8-9050-56b34437d6c9', 'X-Role': 'organization_owner', 'X-Env': 'production'})
+E            +      where get = <starlette.testclient.TestClient object at 0x000002B3F0868490>.get
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_1c06_gate.py:89: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:36:50 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+________________________ test_gate_security_and_bundle ________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F03AF350>
+
+    def test_gate_security_and_bundle(web):
+        r = web.get("/ui")
+        csp = r.headers.get("content-security-policy", "")
+        assert "frame-ancestors 'none'" in csp and "script-src 'self'" in csp
+        assert r.headers.get("x-frame-options") == "DENY"
+        # bundle scan for secrets
+        bundle = ""
+>       for a in os.listdir(os.path.join(DIST, "assets")):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_1c06_gate.py:101: FileNotFoundError
+---------------------------- Captured stdout call -----------------------------
+[32m01:36:51 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+_________________________ test_17_get_creates_no_jobs _________________________
+
+stack = {'client': <starlette.testclient.TestClient object at 0x000002B3F15779B0>, 'state': FoundationState(db=<Northstar_back...Jub3J0aHN0YXItYXBpIn0.7M7ftgAzEsIYT1SK0YRSjpMN3QxTnm5SLeT-sWJTW0g', 'org': 'ce6a12bd-222a-430f-ac2c-842f7fd6fa77', ...}
+
+    def test_17_get_creates_no_jobs(stack):
+        c = stack["client"]; h = stack["headers"]
+        before = stack["state"].repos.job_requests.count()
+        for url in ("/ui", "/api/v1/foundation/jobs-durable/queue-posture",
+                    "/api/v1/foundation/schedules/posture",
+                    "/api/v1/foundation/keywords/search?q=x"):
+>           assert c.get(url, headers=h).status_code == 200
+E           AssertionError: assert 404 == 200
+E            +  where 404 = <Response [404 Not Found]>.status_code
+E            +    where <Response [404 Not Found]> = get('/ui', headers={'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3YWIxZTYzZi0zY2FkLTQwMDUtYWVhOS1iMTExZmZjNDE...wiaXNzIjoiaHR0cHM6Ly9ub3J0aHN0YXIubG9jYWwiLCJhdWQiOiJub3J0aHN0YXItYXBpIn0.7M7ftgAzEsIYT1SK0YRSjpMN3QxTnm5SLeT-sWJTW0g'})
+E            +      where get = <starlette.testclient.TestClient object at 0x000002B3F15779B0>.get
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_e2e_matrix.py:214: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:39:25 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+_____________________ test_37_frontend_bundle_no_secrets ______________________
+
+stack = {'client': <starlette.testclient.TestClient object at 0x000002B3F07A4490>, 'state': FoundationState(db=<Northstar_back...Jub3J0aHN0YXItYXBpIn0.R3dvrXFRpJ0NO8DWza7ZOeGmMfTWnsAhcK2yIGrUxE4', 'org': '4aec3050-6a03-472d-acd2-dfa067c39332', ...}
+
+    def test_37_frontend_bundle_no_secrets(stack):
+        bundle = ""
+>       for a in os.listdir(os.path.join(DIST, "assets")):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_e2e_matrix.py:447: FileNotFoundError
+_____________________ test_build_exists_and_is_canonical ______________________
+
+    def test_build_exists_and_is_canonical():
+>       assert os.path.exists(INDEX), "northstar-os-ui production build missing"
+E       AssertionError: northstar-os-ui production build missing
+E       assert False
+E        +  where False = <built-in function _path_exists>('C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\index.html')
+E        +    where <built-in function _path_exists> = <module 'ntpath' (frozen)>.exists
+E        +      where <module 'ntpath' (frozen)> = os.path
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:38: AssertionError
+_____________________________ test_ui_root_served _____________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F0633570>
+
+    def test_ui_root_served(web):
+        r = web.get("/ui")
+>       assert r.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:46: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:40:10 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+____________________________ test_ui_assets_served ____________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F0F978A0>
+
+    def test_ui_assets_served(web):
+>       assets = os.listdir(os.path.join(DIST, "assets"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:51: FileNotFoundError
+_________________________ test_spa_fallback_deep_link _________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F0F95260>
+
+    def test_spa_fallback_deep_link(web):
+        r = web.get("/ui/jobs")
+>       assert r.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:60: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:40:12 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui/jobs "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui/jobs "HTTP/1.1 404 Not Found"
+____________________ test_built_bundle_contains_no_secrets ____________________
+
+    def test_built_bundle_contains_no_secrets():
+        """Scan the production JS bundle for obvious secret material."""
+>       assets = os.listdir(os.path.join(DIST, "assets"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:73: FileNotFoundError
+_______________________ test_page_load_creates_no_jobs ________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3EF829260>
+seeded_state = FoundationState(db=<Northstar_backend.foundation.db.FoundationDB object at 0x000002B3F09083B0>, repos=<Northstar_backe...t 0x000002B3F061A850>, approvals=<Northstar_backend.foundation.approvals.ApprovalService object at 0x000002B3F0908170>)
+
+    def test_page_load_creates_no_jobs(web, seeded_state):
+        h = owner_headers(seeded_state)
+        before_jobs = seeded_state.repos.job_requests.count()
+        before_runs = seeded_state.repos.job_runs.count()
+        before_usage = seeded_state.repos.usage.count()
+        for url in ("/ui", "/ui/jobs", "/ui/keywords", "/ui/foundation",
+                    "/api/v1/foundation/jobs-durable/queue-posture",
+                    "/api/v1/foundation/jobs-durable/handler-registry",
+                    "/api/v1/foundation/keywords/sources",
+                    "/api/v1/foundation/keywords/search?q=x",
+                    "/api/v1/foundation/schedules/posture"):
+>           assert web.get(url, headers=h).status_code == 200
+E           AssertionError: assert 404 == 200
+E            +  where 404 = <Response [404 Not Found]>.status_code
+E            +    where <Response [404 Not Found]> = get('/ui', headers={'X-User-Id': 'a4f346ff-31c1-4299-9514-466450eac69c', 'X-Org-Id': '8422595f-f000-4f34-ab38-f2d974e9021f', 'X-Role': 'organization_owner', 'X-Env': 'production'})
+E            +      where get = <starlette.testclient.TestClient object at 0x000002B3EF829260>.get
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:202: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:40:31 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+___________________________ test_ui_cache_controls ____________________________
+
+web = <starlette.testclient.TestClient object at 0x000002B3F033B020>
+
+    def test_ui_cache_controls(web):
+        index = web.get("/ui")
+        assert "no-store" in index.headers.get("cache-control", "")
+>       assets = os.listdir(os.path.join(DIST, "assets"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:230: FileNotFoundError
+---------------------------- Captured stdout call -----------------------------
+[32m01:40:36 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+__________________________ test_v3_shell_invariants ___________________________
+
+    def test_v3_shell_invariants():
+        """The v3 shell (SuiteRail + TopNav + CommandPalette) is the canonical shell.
+    
+        Asserts the real v3 invariants (no retired Sidebar.jsx, no legacy-UI tombstone
+        marker): the shell components exist, no v3 room imports the legacy client
+        `services/api.js`, and the App route table matches the SHIPPED count.
+        """
+        for name in ("SuiteRail.jsx", "TopNav.jsx", "CommandPalette.jsx"):
+            path = os.path.join(UI_SRC, "components", name)
+            assert os.path.exists(path), f"v3 shell component missing: {name}"
+    
+        app = open(os.path.join(UI_SRC, "App.jsx"), encoding="utf-8").read()
+        route_count = len(re.findall(r"<Route\s+path=", app))
+        # The shipped route table after the Northstar UX rebuild (U1/U3).
+        # 58 routes; update this number only when a route is deliberately added or removed.
+>       assert route_count == 58, f"expected 58 routes in App.jsx, found {route_count}"
+E       AssertionError: expected 58 routes in App.jsx, found 72
+E       assert 72 == 58
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_frontend_gate.py:310: AssertionError
+_________________________ test_bundle_scan_no_secrets _________________________
+
+    def test_bundle_scan_no_secrets():
+        bundle = ""
+>       for a in os.listdir(os.path.join(UI_DIST, "assets")):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\tests\test_local_production.py:52: FileNotFoundError
+_________ BrightDataSearchTests.test_request_uses_zone_url_and_bearer _________
+
+self = <test_amazon_search.BrightDataSearchTests testMethod=test_request_uses_zone_url_and_bearer>
+
+    def test_request_uses_zone_url_and_bearer(self):
+        html = brightdata_page([brightdata_card("B000000001", "Kirkland Signature K-Cups (120ct)", 48.87)])
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", "bd_live_test"), \
+             patch.object(bright_data_client, "requests") as mock_requests:
+            mock_requests.post.return_value = self._response(html)
+            bright_data_client.search_products("kirkland", 1)
+        args, kwargs = mock_requests.post.call_args
+>       self.assertEqual(kwargs["json"]["zone"], "northstaros")
+E       AssertionError: 'web_unlocker1' != 'northstaros'
+E       - web_unlocker1
+E       + northstaros
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_amazon_search.py:421: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[Bright Data] keyword='kirkland' page=1/1 cards=1 kept=1
+__________ ProductDetailTests.test_request_uses_zone_url_and_bearer ___________
+
+self = <test_bright_data_client.ProductDetailTests testMethod=test_request_uses_zone_url_and_bearer>
+
+    def test_request_uses_zone_url_and_bearer(self):
+        with patch.object(bright_data_client, "BRIGHTDATA_UNLOCKER_API_KEY", "bd_live_test"), \
+             patch.object(bright_data_client, "requests") as mock_requests:
+            mock_requests.post.return_value = self._response(product_page_html())
+            bright_data_client.get_product_detail("B000000001")
+        args, kwargs = mock_requests.post.call_args
+>       self.assertEqual(kwargs["json"]["zone"], "northstaros")
+E       AssertionError: 'web_unlocker1' != 'northstaros'
+E       - web_unlocker1
+E       + northstaros
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_bright_data_client.py:365: AssertionError
+____________ test_a_placement_outside_the_frame_is_a_named_failure ____________
+
+    def test_a_placement_outside_the_frame_is_a_named_failure():
+        cutout = rgba_product()
+        verdict = C.check_composite(frame_with(cutout), cutout, placement=[380, 30, 120, 120])
+>       assert verdict["ok"] is False and verdict["cannot_verify"] is True
+E       assert (True is False)
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_composite_fidelity.py:72: AssertionError
+_______ test_a_refused_region_names_the_product_region_and_never_passes _______
+
+    def test_a_refused_region_names_the_product_region_and_never_passes():
+        cutout = rgba_product()
+        verdict = C.check_composite(frame_with(cutout), cutout, placement=[380, 30, 120, 120])
+>       assert verdict["ok"] is False
+E       assert True is False
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_composite_fidelity.py:85: AssertionError
+________ test_warp_panel_with_maps_uses_realism_and_legacy_still_works ________
+
+    def test_warp_panel_with_maps_uses_realism_and_legacy_still_works():
+        plate = _ramp_plate(400, 400)
+        panel = _solid_panel(100, 200, (240, 240, 240, 255))
+        d = ImageDraw.Draw(panel)
+        d.rectangle([0, 20, 99, 40], fill=(30, 30, 30, 255))
+        quad = [(40, 60), (360, 50), (370, 350), (30, 360)]
+    
+        legacy = mc.warp_panel(plate, panel, quad, shading=0.5)
+        maps = cr.build_surface_maps(plate)
+        metrics: dict = {}
+>       modern = mc.warp_panel(plate, panel, quad, shading=0.5, maps=maps,
+                               metrics_out=metrics)
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_compositor_realism.py:210: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+photo = <PIL.Image.Image image mode=RGB size=400x400 at 0x2B3F1854C50>
+panel = <PIL.Image.Image image mode=RGBA size=100x200 at 0x2B3F189E810>
+quad = [(40, 60), (360, 50), (370, 350), (30, 360)], shading = 0.5
+realism = None
+maps = SurfaceMaps(broad=array([[ 60.,  60.,  61., ..., 198., 198., 199.],
+       [ 60.,  60.,  61., ..., 198., 198., 199.],
+....000004,  60.000004, ..., 199.      , 199.      ,
+        200.      ]], shape=(400, 400), dtype=float32), median=129.5)
+metrics_out = {'displacement_max_px': 1.1848057508468628}, grid = None
+mesh_iters = 3, edge_feather = None
+
+    def warp_panel(photo: Image.Image, panel: Image.Image, quad: Sequence,
+                   shading: float = 0.5, realism: Optional[Dict[str, Any]] = None,
+                   maps: Optional[Any] = None,
+                   metrics_out: Optional[Dict[str, Any]] = None,
+                   grid: Optional[Any] = None, mesh_iters: int = 3,
+                   edge_feather: Optional[float] = None) -> Image.Image:
+        """4-point homography (panel -> quad), bilinear, realism-integrated.
+    
+        Pass ``grid`` (an (ny, nx, 2) node array, see :func:`mesh_grid`) to warp
+        through a mesh instead of a single homography. A 5x7 mesh took the mean
+        reprojection error against a synthetic curved face from 5.413 px to
+        0.676 px (reports/rea_probe/warp_probe.json); the homography stays exact at
+        the four corners, which is why it is still the fallback.
+    
+        With ``maps`` (a compositor_realism.SurfaceMaps built from the plate) the
+        print takes the full surface-realism recipe: luminance displacement,
+        soft-light shading, capped specular, grain sync, opt-in fold/AO/print-sim
+        and a scene tonal match. ``shading`` is the master dial (0 = flat paste,
+        0.5 = research default). Without ``maps`` it falls back to the legacy
+        shading-only blend (kept for callers that have no plate access).
+        """
+        PW, PH = panel.size
+        # Pixel-centre convention: panel pixel (0,0) is the CENTRE of the first
+        # pixel and must land on the quad's top-left corner. Using PW/PH here mapped
+        # the panel's outer EDGE to the corner, which shifted the print half a pixel
+        # and dropped the last row/column from the face.
+        H = _homography([(0, 0), (PW - 1, 0), (PW - 1, PH - 1), (0, PH - 1)], list(quad))
+        Hinv = np.linalg.inv(H)
+        W, Hpx = photo.size
+        xs = [p[0] for p in quad]
+        ys = [p[1] for p in quad]
+        if grid is not None:
+            g = np.asarray(grid, dtype=float)
+            xs = list(xs) + [float(g[..., 0].min()), float(g[..., 0].max())]
+            ys = list(ys) + [float(g[..., 1].min()), float(g[..., 1].max())]
+        m = 6
+        x0, x1 = max(0, int(min(xs)) - m), min(W, int(max(xs)) + m)
+        y0, y1 = max(0, int(min(ys)) - m), min(Hpx, int(max(ys)) + m)
+        gx, gy = np.meshgrid(np.arange(x0, x1), np.arange(y0, y1))
+        pts = np.stack([gx.astype(float), gy.astype(float), np.ones_like(gx, dtype=float)], axis=-1)
+        uv = pts @ Hinv.T
+        u = uv[..., 0] / uv[..., 2]
+        v = uv[..., 1] / uv[..., 2]
+    
+        if grid is not None:
+            u, v = _refine_to_mesh(
+                u, v, gx.astype(float), gy.astype(float),
+                np.asarray(grid, dtype=float), float(PW), float(PH), iters=mesh_iters)
+    
+        # reality pass 1: luminance displacement (ink rides the surface's folds)
+        if maps is not None and shading > 0:
+            params = {**cr.DEFAULTS, **(realism or {})}
+            if params.get("displacement_k", 0) > 0:
+                sm = maps.slice(x0, x1, y0, y1)
+                scale_u = PW / max(1.0, float(x1 - x0))
+                scale_v = PH / max(1.0, float(y1 - y0))
+                du, dv = cr.displacement_shift(sm, scale_u, scale_v, params)
+                u = u + du
+                v = v + dv
+                if metrics_out is not None:
+                    metrics_out["displacement_max_px"] = float(
+                        max(np.abs(du).max(), np.abs(dv).max()) / max(scale_u, scale_v))
+    
+        pa = np.asarray(panel, dtype=np.float32)
+        # A pixel whose centre lands exactly on the quad boundary is INSIDE the
+        # printed face; the inverse homography returns -1e-13 there because the fit
+        # is numeric, not symbolic. Without an epsilon that boundary row/column is
+        # rejected and a 1 px line of plate shows along every edge of the label.
+        eps = 1e-6
+        valid = ((u >= -eps) & (u <= PW - 1 + eps)
+                 & (v >= -eps) & (v <= PH - 1 + eps))
+        uc = np.clip(u, 0, PW - 1)
+        vc = np.clip(v, 0, PH - 1)
+        u0 = np.floor(uc).astype(int)
+        v0 = np.floor(vc).astype(int)
+        u1 = np.minimum(u0 + 1, PW - 1)
+        v1 = np.minimum(v0 + 1, PH - 1)
+        wu = (uc - u0)[..., None]
+        wv = (vc - v0)[..., None]
+        samp = (pa[v0, u0] * (1 - wu) * (1 - wv) + pa[v0, u1] * wu * (1 - wv)
+>               + pa[v1, u0] * (1 - wu) * wv + pa[v1, u1] * wu * wv)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       numpy._core._exceptions._ArrayMemoryError: Unable to allocate 3.46 MiB for an array with shape (322, 352, 4) and data type float64
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\mockup_compositor.py:472: MemoryError
+_______________ test_end_to_end_contract_run_on_a_fresh_backend _______________
+
+tmp_path = WindowsPath('C:/Users/T2Hol/AppData/Local/Temp/pytest-of-T2Hol/pytest-1656/test_end_to_end_contract_run_o0')
+
+    def test_end_to_end_contract_run_on_a_fresh_backend(tmp_path):
+        result = cc.run(mode="in_process", db_dir=tmp_path)
+    
+        assert result["count"] == 29
+        assert len(result["services"]) == 29
+        rows = {row["id"]: row for row in result["services"]}
+        assert set(rows) == {s["id"] for s in cc.registry_services()}
+    
+        # The action the whole task exists to wire: product-finder must pass now.
+        assert rows["product-finder"]["verdict"] == "pass"
+        assert rows["product-finder"]["endpoint"] == "/api/products/finder"
+>       assert "row(s) under 'evaluated'" in rows["product-finder"]["evidence"]
+E       assert "row(s) under 'evaluated'" in '6 measured field(s) (passed,evaluated,candidate_count,passed_count,stocked_count,filter_source,thresholds)'
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_contract_check.py:108: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/sourcescout/summary "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/credits/me "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/v1/foundation/economics/compute "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/autothink/models "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/entitlements "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/providers "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/v1/foundation/jobs-durable "HTTP/1.1 201 Created"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/jobs-durable/e7ab51b7-5c7c-41ab-bd76-36557dbcf349 "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/v1/foundation/keywords/imports "HTTP/1.1 202 Accepted"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/jobs-durable/66e1ce97-3767-4a63-9c78-116cb0e1943c "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/v1/foundation/signup "HTTP/1.1 403 Forbidden"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/admin/dashboard "HTTP/1.1 403 Forbidden"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/design-studio/assets/upload "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/design-studio/assets "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/products/finder?limit=100 "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/v1/foundation/golden-goose/evaluate "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/listings/health "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/keywords "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/noncreative/competitor/observations "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: POST http://testserver/api/design-studio/listing-records "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/design-studio/listing-records "HTTP/1.1 200 OK"[0m
+[32m01:46:17 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/design-studio/amazon-files "HTTP/1.1 200 OK"[0m
+[32m01:46:18 [INFO    ] httpx2: HTTP Request: GET http://testserver/api/v1/foundation/economics/contract "HTTP/1.1 200 OK"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/sourcescout/summary "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/credits/me "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/v1/foundation/economics/compute "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/autothink/models "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/kirkland/scanner "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/entitlements "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/providers "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/v1/foundation/jobs-durable "HTTP/1.1 201 Created"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/jobs-durable/e7ab51b7-5c7c-41ab-bd76-36557dbcf349 "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/v1/foundation/keywords/imports "HTTP/1.1 202 Accepted"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/jobs-durable/66e1ce97-3767-4a63-9c78-116cb0e1943c "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/v1/foundation/signup "HTTP/1.1 403 Forbidden"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/admin/dashboard "HTTP/1.1 403 Forbidden"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/design-studio/assets/upload "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/design-studio/assets "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/products/finder?limit=100 "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/v1/foundation/golden-goose/evaluate "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/noncreative/listings/health "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/noncreative/keywords "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/noncreative/competitor/observations "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: POST http://testserver/api/design-studio/listing-records "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/design-studio/listing-records "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/design-studio/amazon-files "HTTP/1.1 200 OK"
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/api/v1/foundation/economics/contract "HTTP/1.1 200 OK"
+____________________________ test_env_files_exist _____________________________
+
+    def test_env_files_exist():
+        for path in _ENV_PATHS:
+>           assert path.is_file(), f"missing env file: {path}"
+E           AssertionError: missing env file: C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\.env
+E           assert False
+E            +  where False = is_file()
+E            +    where is_file = WindowsPath('C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/stageslice/.env').is_file
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_env_parseability.py:60: AssertionError
+_____________________ test_root_env_parses_with_all_keys ______________________
+
+    def test_root_env_parses_with_all_keys():
+        parsed = _parse(_REPO_ROOT / ".env")
+        # The audit recorded 53 keys; the malformed line cost the file every key.
+>       assert len(parsed) >= 40, f"only {len(parsed)} keys parsed from root .env"
+E       AssertionError: only 0 keys parsed from root .env
+E       assert 0 >= 40
+E        +  where 0 = len({})
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_env_parseability.py:66: AssertionError
+___________________________ test_backend_env_parses ___________________________
+
+    def test_backend_env_parses():
+        parsed = _parse(_REPO_ROOT / "Northstar_backend" / ".env")
+>       assert len(parsed) >= 20, f"only {len(parsed)} keys parsed from backend .env"
+E       AssertionError: only 0 keys parsed from backend .env
+E       assert 0 >= 20
+E        +  where 0 = len({})
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_env_parseability.py:71: AssertionError
+____________________ test_no_unparsable_lines_in_root_env _____________________
+
+    def test_no_unparsable_lines_in_root_env():
+        """Every non-blank, non-comment line must be ``KEY=VALUE``."""
+>       text = (_REPO_ROOT / ".env").read_text(encoding="utf-8", errors="replace")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_env_parseability.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python314\Lib\pathlib\__init__.py:787: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/stageslice/.env')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = 'replace'
+newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\.env'
+
+C:\Python314\Lib\pathlib\__init__.py:771: FileNotFoundError
+_____________________ test_required_keys_present_by_name ______________________
+
+    def test_required_keys_present_by_name():
+        for path, keys in _REQUIRED_KEYS_BY_ENV.items():
+            parsed = _parse(path)
+            for key in keys:
+>               assert key in parsed, f"{path.name} is missing {key}"
+E               AssertionError: .env is missing SCANNER_LIVE_ALLOWED
+E               assert 'SCANNER_LIVE_ALLOWED' in {}
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_env_parseability.py:93: AssertionError
+_______________ test_non_pouch_formats_use_a_measured_quad[box] _______________
+
+tmp_path = WindowsPath('C:/Users/T2Hol/AppData/Local/Temp/pytest-of-T2Hol/pytest-1656/test_non_pouch_formats_use_a_m0')
+kind = 'box'
+
+    @pytest.mark.parametrize("kind", ["box", "bottle", "tube"])
+    def test_non_pouch_formats_use_a_measured_quad(tmp_path, kind):
+        flow = _flow(tmp_path, kind)
+>       state = flow.run()
+                ^^^^^^^^^^
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_format_integration.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\creative_flow.py:476: in run
+    getattr(self, f"step_{name}")()
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\creative_flow.py:435: in step_evaluate
+    self.state.steps["evaluate"] = asset_rubric.score(
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\asset_rubric.py:197: in score
+    return score_listing(png, expected_copy=expected_copy)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\asset_rubric.py:124: in score_listing
+    m = metrics(png)
+        ^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+png = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x07\xd0\x00\x00\x07\xd0\x08\x02\x00\x00\x00\x15ZS.\x00\x01\x00\x00IDATx\...00\x00\x00\x00\x08\xc1\x1d\x00\x00\x00\x00\x00\xbet\xff\x7f\x80\xaa\xf2\x81\xecg\x89\x92\x00\x00\x00\x00IEND\xaeB`\x82'
+
+    def metrics(png: bytes) -> Dict[str, float]:
+        img = Image.open(BytesIO(png)).convert("RGB")
+        a = np.asarray(img, dtype=np.float32)
+    
+        white = np.all(a >= WHITE, axis=-1)
+        purity = float(white.mean())
+        h, w = a.shape[:2]
+        b = max(2, int(min(w, h) * 0.06))
+        ring = np.zeros((h, w), dtype=bool)
+        ring[:b, :] = True
+        ring[-b:, :] = True
+        ring[:, :b] = True
+        ring[:, -b:] = True
+        background_purity = float(white[ring].mean()) if ring.any() else 1.0
+    
+        subject = ~white
+        if subject.sum() < 50:
+            return {"contrast": 0.0, "fill": 0.0, "balance": 0.0,
+                    "hook_density": 0.0, "purity": round(purity, 4),
+                    "background_purity": round(background_purity, 4),
+                    "subject_px": 0}
+    
+        ys, xs = np.where(subject)
+        box_w = (xs.max() - xs.min() + 1) / w
+        box_h = (ys.max() - ys.min() + 1) / h
+        fill = float(max(box_w, box_h))          # longest side, the conservative reading
+    
+        lum = _lum(a)
+        subj = lum[subject]
+        hi, lo = float(np.percentile(subj, 95)), float(np.percentile(subj, 5))
+        contrast = 0.0 if hi + lo <= 1 else (hi - lo) / (hi + lo)
+    
+        cx = float(xs.mean()) / w
+        cy = float(ys.mean()) / h
+        balance = max(0.0, 1.0 - 2.0 * (((cx - 0.5) ** 2 + (cy - 0.5) ** 2) ** 0.5))
+    
+>       gx = np.abs(np.diff(lum, axis=1)).mean()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       numpy._core._exceptions._ArrayMemoryError: Unable to allocate 15.3 MiB for an array with shape (2000, 1999) and data type float32
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\asset_rubric.py:70: MemoryError
+_ LiveContainmentTests.test_ui_assets_mount_serves_disk_only_zero_provider_calls _
+
+self = <test_live_containment.LiveContainmentTests testMethod=test_ui_assets_mount_serves_disk_only_zero_provider_calls>
+
+    def test_ui_assets_mount_serves_disk_only_zero_provider_calls(self):
+        ui_mounts = [
+            r for r in main.app.routes if getattr(r, "path", None) == "/ui/assets"
+        ]
+>       self.assertEqual(len(ui_mounts), 1)
+E       AssertionError: 0 != 1
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_live_containment.py:138: AssertionError
+___________ ContainmentReassertTests.test_ui_assets_lookup_offline ____________
+
+self = <test_scanner_completeness.ContainmentReassertTests testMethod=test_ui_assets_lookup_offline>
+
+    def test_ui_assets_lookup_offline(self):
+        ui_mounts = [
+            r for r in main.app.routes if getattr(r, "path", None) == "/ui/assets"
+        ]
+>       self.assertEqual(len(ui_mounts), 1)
+E       AssertionError: 0 != 1
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_scanner_completeness.py:228: AssertionError
+______________________ test_no_undefined_jsx_components _______________________
+
+    def test_no_undefined_jsx_components():
+        """The Product Designer shipped two crashes from unimported components."""
+        checker = Path(__file__).resolve().parent.parent / "tools" / "check-jsx-imports.py"
+        result = subprocess.run(
+            [sys.executable, str(checker)],
+            capture_output=True, text=True, timeout=300,
+        )
+>       assert result.returncode == 0, result.stdout
+E       AssertionError: checked 151 .jsx files
+E         
+E         1 undefined component reference(s):
+E           pages/roomAdapters.jsx: <Component>
+E         no unguarded length-then-map renders found
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Python314\\python.exe', 'C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\s...mponent reference(s):\n  pages/roomAdapters.jsx: <Component>\nno unguarded length-then-map renders found\n', stderr='').returncode
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_shell_role_contract.py:89: AssertionError
+____________________________ test_ui_index_served _____________________________
+
+client = <starlette.testclient.TestClient object at 0x000002B3AC5F1D00>
+
+    def test_ui_index_served(client):
+        r = client.get("/ui")
+>       assert r.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_ui_assets_served.py:32: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:56:59 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui "HTTP/1.1 404 Not Found"
+__________________________ test_ui_deep_link_served ___________________________
+
+client = <starlette.testclient.TestClient object at 0x000002B3AC5F1590>
+
+    def test_ui_deep_link_served(client):
+        r = client.get("/ui/jobs")
+>       assert r.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_ui_assets_served.py:40: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[32m01:56:59 [INFO    ] httpx2: HTTP Request: GET http://testserver/ui/jobs "HTTP/1.1 404 Not Found"[0m
+------------------------------ Captured log call ------------------------------
+INFO     httpx2:_client.py:1085 HTTP Request: GET http://testserver/ui/jobs "HTTP/1.1 404 Not Found"
+__________________________ test_ui_assets_are_served __________________________
+
+client = <starlette.testclient.TestClient object at 0x000002B3AC5F2AD0>
+
+    def test_ui_assets_are_served(client):
+        dist = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                             "..", "northstar-os-ui", "dist"))
+        assets_dir = os.path.join(dist, "assets")
+>       assert os.path.isdir(assets_dir), "northstar-os-ui production build missing"
+E       AssertionError: northstar-os-ui production build missing
+E       assert False
+E        +  where False = <built-in function _path_isdir>('C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\stageslice\\northstar-os-ui\\dist\\assets')
+E        +    where <built-in function _path_isdir> = <module 'ntpath' (frozen)>.isdir
+E        +      where <module 'ntpath' (frozen)> = os.path
+
+C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\test_ui_assets_served.py:48: AssertionError
+============================== warnings summary ===============================
+design_studio_api.py:1455
+  C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\design_studio_api.py:1455: UserWarning: Field name "copy" in "APlusPackIn" shadows an attribute in parent "BaseModel"
+    class APlusPackIn(BaseModel):
+
+foundation/tests/test_auth_hardening.py::test_unexpected_algorithm_rejected
+foundation/tests/test_auth_hardening.py::test_secondary_algorithm_allowed_when_configured
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 35 bytes long, which is below the minimum recommended length of 48 bytes for SHA384. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+foundation/tests/test_auth_hardening.py::test_secondary_algorithm_allowed_when_configured
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 35 bytes long, which is below the minimum recommended length of 48 bytes for SHA384. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+foundation/tests/test_auth_jwt.py::test_wrong_signature_rejected
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 23 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+foundation/tests/test_auth_jwt.py::test_missing_signing_key_fails_closed
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 8 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+foundation/tests/test_auth_session.py::test_login_sets_httponly_cookie_and_no_token_in_body
+foundation/tests/test_auth_session.py::test_cookie_authenticates_me
+foundation/tests/test_auth_session.py::test_csrf_required_and_mismatch_denied
+foundation/tests/test_auth_session.py::test_logout_revokes_and_clears_session
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 17 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+foundation/tests/test_auth_session.py::test_cookie_authenticates_me
+foundation/tests/test_auth_session.py::test_csrf_required_and_mismatch_denied
+foundation/tests/test_auth_session.py::test_logout_revokes_and_clears_session
+  C:\Users\T2Hol\AppData\Roaming\Python\Python314\site-packages\jwt\api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 17 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+foundation/tests/test_beta_launch.py::test_revised_document_reprompts_existing_user
+  C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\Northstar_backend\foundation\db.py:644: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    return self._conn.execute(*args, **kwargs)
+
+test_purpose_commands.py::test_runs_against_the_real_repository
+test_purpose_commands.py::test_chat_tool_is_registered_and_callable
+  <unknown>:8: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+
+test_vision_structure.py::test_v1_names_the_visible_applications
+  C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent\state\worktrees\stageslice\tools\vision\capture.py:119: DeprecationWarning: mss.mss is deprecated and will be removed in a future release; use mss.MSS instead
+    with mss.mss() as sct:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED foundation/tests/test_1c06_gate.py::test_gate_ui_is_canonical_and_served
+FAILED foundation/tests/test_1c06_gate.py::test_gate_no_provider_calls_on_load
+FAILED foundation/tests/test_1c06_gate.py::test_gate_security_and_bundle - Fi...
+FAILED foundation/tests/test_e2e_matrix.py::test_17_get_creates_no_jobs - Ass...
+FAILED foundation/tests/test_e2e_matrix.py::test_37_frontend_bundle_no_secrets
+FAILED foundation/tests/test_frontend_gate.py::test_build_exists_and_is_canonical
+FAILED foundation/tests/test_frontend_gate.py::test_ui_root_served - assert 4...
+FAILED foundation/tests/test_frontend_gate.py::test_ui_assets_served - FileNo...
+FAILED foundation/tests/test_frontend_gate.py::test_spa_fallback_deep_link - ...
+FAILED foundation/tests/test_frontend_gate.py::test_built_bundle_contains_no_secrets
+FAILED foundation/tests/test_frontend_gate.py::test_page_load_creates_no_jobs
+FAILED foundation/tests/test_frontend_gate.py::test_ui_cache_controls - FileN...
+FAILED foundation/tests/test_frontend_gate.py::test_v3_shell_invariants - Ass...
+FAILED foundation/tests/test_local_production.py::test_bundle_scan_no_secrets
+FAILED test_amazon_search.py::BrightDataSearchTests::test_request_uses_zone_url_and_bearer
+FAILED test_bright_data_client.py::ProductDetailTests::test_request_uses_zone_url_and_bearer
+FAILED test_composite_fidelity.py::test_a_placement_outside_the_frame_is_a_named_failure
+FAILED test_composite_fidelity.py::test_a_refused_region_names_the_product_region_and_never_passes
+FAILED test_compositor_realism.py::test_warp_panel_with_maps_uses_realism_and_legacy_still_works
+FAILED test_contract_check.py::test_end_to_end_contract_run_on_a_fresh_backend
+FAILED test_env_parseability.py::test_env_files_exist - AssertionError: missi...
+FAILED test_env_parseability.py::test_root_env_parses_with_all_keys - Asserti...
+FAILED test_env_parseability.py::test_backend_env_parses - AssertionError: on...
+FAILED test_env_parseability.py::test_no_unparsable_lines_in_root_env - FileN...
+FAILED test_env_parseability.py::test_required_keys_present_by_name - Asserti...
+FAILED test_format_integration.py::test_non_pouch_formats_use_a_measured_quad[box]
+FAILED test_live_containment.py::LiveContainmentTests::test_ui_assets_mount_serves_disk_only_zero_provider_calls
+FAILED test_scanner_completeness.py::ContainmentReassertTests::test_ui_assets_lookup_offline
+FAILED test_shell_role_contract.py::test_no_undefined_jsx_components - Assert...
+FAILED test_ui_assets_served.py::test_ui_index_served - assert 404 == 200
+FAILED test_ui_assets_served.py::test_ui_deep_link_served - assert 404 == 200
+FAILED test_ui_assets_served.py::test_ui_assets_are_served - AssertionError: ...
+32 failed, 7189 passed, 125 skipped, 2 xfailed, 17 warnings, 125 subtests passed in 1339.23s (0:22:19)

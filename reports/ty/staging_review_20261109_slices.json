@@ -1,0 +1,2365 @@
+[
+ {
+  "slice": "Northstar_backend-adapters",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-agent_kernel",
+  "kind": "code",
+  "paths": 34,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-agents",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-assets",
+  "kind": "code",
+  "paths": 9,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-bojo_tools",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-costco_non_kirkland",
+  "kind": "code",
+  "paths": 63,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-data",
+  "kind": "code",
+  "paths": 262,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-faire_research",
+  "kind": "code",
+  "paths": 8,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-fixtures",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-foundation",
+  "kind": "code",
+  "paths": 156,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-gateway",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-importers",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-migrations_foundation",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-root",
+  "kind": "code",
+  "paths": 575,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-scripts",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-specialists",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-static",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-tasks",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-tests",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-tmp-probe",
+  "kind": "code",
+  "paths": 62,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-tools",
+  "kind": "code",
+  "paths": 12,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "Northstar_backend-tys_ops",
+  "kind": "code",
+  "paths": 11,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-content",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-image_aplus",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-listing_optimizer",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-package_designer",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-ppc_agent",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-root",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-social_graphics",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "agents-video_ugc",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "config-root",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "data-batch",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "data-chromeconnect_adapters",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "data-club_sourcing",
+  "kind": "code",
+  "paths": 44,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "data-root",
+  "kind": "code",
+  "paths": 7,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-club-sourcing-research-2026-09-30",
+  "kind": "code",
+  "paths": 14,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-club-sourcing-research-2026-10-01",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-hosted-readiness",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-mogra-organics-packaging",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-mogra-organics-research-2026-10-02",
+  "kind": "code",
+  "paths": 96,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-northstar-discovery",
+  "kind": "code",
+  "paths": 23,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-northstar-faire-discovery",
+  "kind": "code",
+  "paths": 23,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-northstar-phase1",
+  "kind": "code",
+  "paths": 34,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-northstar-phase1b",
+  "kind": "code",
+  "paths": 28,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-northstar-phase1c",
+  "kind": "code",
+  "paths": 59,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-root",
+  "kind": "code",
+  "paths": 75,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "docs-sourcing-research-2026-09-30",
+  "kind": "code",
+  "paths": 17,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-e2e_hero_20261030",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-e2e_labelled_20261030",
+  "kind": "code",
+  "paths": 8,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-flow_e2e1027",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-flow_formats_live_final_20261031",
+  "kind": "code",
+  "paths": 17,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-flow_formats_live_verified_20261031",
+  "kind": "code",
+  "paths": 13,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-pass1_coder_17k_20261029",
+  "kind": "code",
+  "paths": 13,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-pass1_coder_17k_v2_20261029",
+  "kind": "code",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "exports-pass1_coder_20261029",
+  "kind": "code",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "legacy-auth",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "legacy-landing",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "legacy-northstar-os",
+  "kind": "code",
+  "paths": 31,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "legacy-root",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "legacy-scout",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "renders-root",
+  "kind": "visual",
+  "paths": 16,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "reports-acceptance_restart_20261027",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-audit-2026-10-08",
+  "kind": "code",
+  "paths": 26,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-audit-2026-10-26",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-audit_20261024",
+  "kind": "code",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-batch1-audit-20261024",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-deploy",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-expansion_20261104",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-expansion_wave2_20261104",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-github_scan_20261104",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-golden_goose",
+  "kind": "code",
+  "paths": 286,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-improvement",
+  "kind": "code",
+  "paths": 86,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-northstar_acceptance_20261023",
+  "kind": "code",
+  "paths": 34,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-northstar_acceptance_20261025",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-phase9-evidence",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-rea_probe",
+  "kind": "code",
+  "paths": 3470,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-real-verify-2026-10-26",
+  "kind": "code",
+  "paths": 23,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261010",
+  "kind": "code",
+  "paths": 21,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261010_phase7",
+  "kind": "code",
+  "paths": 27,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261011",
+  "kind": "code",
+  "paths": 31,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261011_final",
+  "kind": "code",
+  "paths": 41,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261011_phase10",
+  "kind": "code",
+  "paths": 37,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261011_phase9",
+  "kind": "code",
+  "paths": 44,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-regression_20261016",
+  "kind": "code",
+  "paths": 40,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-root",
+  "kind": "code",
+  "paths": 493,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-screenshots_20261009",
+  "kind": "code",
+  "paths": 66,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-screenshots_20261010",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-screenshots_20261011",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-screenshots_20261016",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-steward",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-steward_digests",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-theme_20261024",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-theme_review",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-ty",
+  "kind": "code",
+  "paths": 166,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "reports-ui-evidence",
+  "kind": "code",
+  "paths": 10,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-ui_audit_20261016",
+  "kind": "code",
+  "paths": 27,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-ui_review_20261016",
+  "kind": "code",
+  "paths": 16,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "reports-video_scan",
+  "kind": "code",
+  "paths": 12,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-assistant_intelligence_20261028",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-bakeoff",
+  "kind": "code",
+  "paths": 977,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "research-design-studio",
+  "kind": "code",
+  "paths": 35,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-design_studio_deep_research_20261008",
+  "kind": "code",
+  "paths": 27,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-integration_20261023",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-marco_kaz_20261022",
+  "kind": "code",
+  "paths": 9,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-master_plan_v2_sweep_20261016",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-packify_dyp_re_20261016",
+  "kind": "code",
+  "paths": 13,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-packify_quality_deep_dive_20261016",
+  "kind": "code",
+  "paths": 9,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-production_stack_scan_20261016",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-rea_patterns_20261016",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-research_wave2_20261019",
+  "kind": "code",
+  "paths": 829,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-root",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "research-ui_production_tooling_scan_20261016",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root",
+  "kind": "code",
+  "paths": 151,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-.github",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-autothink",
+  "kind": "code",
+  "paths": 13,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-briefs",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-chromeconnect_runner",
+  "kind": "code",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-deploy",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-eval",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-knowledge",
+  "kind": "code",
+  "paths": 20,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-launchers",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-migrations",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-northstar",
+  "kind": "code",
+  "paths": 16,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-out_sb",
+  "kind": "code",
+  "paths": 10,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-screenshots",
+  "kind": "code",
+  "paths": 40,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-skills",
+  "kind": "code",
+  "paths": 7,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-specs",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-src",
+  "kind": "code",
+  "paths": 7,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-steward",
+  "kind": "code",
+  "paths": 27,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "root-turmeric_sourcing",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "root-ty",
+  "kind": "code",
+  "paths": 18,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "scripts-root",
+  "kind": "code",
+  "paths": 41,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "shared-master-brain",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "shared-root",
+  "kind": "code",
+  "paths": 8,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "shared-steward",
+  "kind": "code",
+  "paths": 13,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-author_handoffs",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-backlog",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-contracts",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-evidence",
+  "kind": "code",
+  "paths": 304,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-fix_patterns",
+  "kind": "code",
+  "paths": 12,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-fragments",
+  "kind": "code",
+  "paths": 77,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-probes",
+  "kind": "code",
+  "paths": 23,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-profiles",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-proposals",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "state-root",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "state-snapshots",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tests-agents",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tests-bench",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tests-e2e",
+  "kind": "code",
+  "paths": 30,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "tests-fixtures",
+  "kind": "code",
+  "paths": 24,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tests-root",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "tests-security",
+  "kind": "code",
+  "paths": 9,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-__pycache__",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-_blocks",
+  "kind": "code",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-comfy_workflows",
+  "kind": "code",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-fixtures",
+  "kind": "code",
+  "paths": 11,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-git-hooks",
+  "kind": "code",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-model_scout",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "tools-registry",
+  "kind": "code",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-root",
+  "kind": "code",
+  "paths": 244,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "tools-scout",
+  "kind": "code",
+  "paths": 36,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-seller_tester",
+  "kind": "code",
+  "paths": 17,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "tools-vision",
+  "kind": "code",
+  "paths": 22,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle"
+  ]
+ },
+ {
+  "slice": "tools-visual_regression",
+  "kind": "code",
+  "paths": 25,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-.theme-preview",
+  "kind": "code",
+  "paths": 4,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-assets",
+  "kind": "visual",
+  "paths": 10,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-chat",
+  "kind": "visual",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-components",
+  "kind": "visual",
+  "paths": 33,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-context",
+  "kind": "visual",
+  "paths": 1,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-data",
+  "kind": "visual",
+  "paths": 5,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-foundation",
+  "kind": "visual",
+  "paths": 20,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-galactic",
+  "kind": "visual",
+  "paths": 6,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-hooks",
+  "kind": "visual",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-kit",
+  "kind": "visual",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-lib",
+  "kind": "visual",
+  "paths": 52,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-pages",
+  "kind": "visual",
+  "paths": 74,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-prototypes",
+  "kind": "code",
+  "paths": 33,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-public",
+  "kind": "code",
+  "paths": 21,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-root",
+  "kind": "code",
+  "paths": 41,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-scene",
+  "kind": "visual",
+  "paths": 9,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-screenshots",
+  "kind": "code",
+  "paths": 190,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-scripts",
+  "kind": "code",
+  "paths": 3,
+  "eligible": false,
+  "refused_by": [
+   "suite"
+  ],
+  "blockers": [
+   "suite_red"
+  ]
+ },
+ {
+  "slice": "ui-services",
+  "kind": "visual",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-shell",
+  "kind": "visual",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-src",
+  "kind": "visual",
+  "paths": 2,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "verifier",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "verifier_failed_unit_in_bundle",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-studio",
+  "kind": "visual",
+  "paths": 35,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ },
+ {
+  "slice": "ui-styles",
+  "kind": "visual",
+  "paths": 15,
+  "eligible": false,
+  "refused_by": [
+   "suite",
+   "slice"
+  ],
+  "blockers": [
+   "suite_red",
+   "slice_visual"
+  ]
+ }
+]

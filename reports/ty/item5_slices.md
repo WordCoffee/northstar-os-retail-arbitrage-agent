@@ -1,6 +1,6 @@
 # Item 5 — promotion slices, 20261109
 
-`staging` @ `433c5d87d5ef` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10723 changed path(s).
+`staging-candidate/20261109-0158` @ `433c5d87d5ef` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10723 changed path(s).
 
 - code-only slices (auto-promotable when the suite is green): **169**
 - visual/creative slices (review pack each): **18**
