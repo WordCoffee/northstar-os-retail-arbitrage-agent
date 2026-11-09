@@ -63,7 +63,7 @@
       "evidence": {
         "route": "/ui/hub",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Operations Hub | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., 90%, 100%, 115%, 130%, Operator | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/hub.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Operations Hub | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., 90%, 100%, 115%, 130%, Operator | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/hub.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:2310",
           "Northstar_backend/main.py:987",
@@ -71,7 +71,9 @@
         ],
         "declared_tools": [
           "hub_status"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -121,12 +123,14 @@
       "evidence": {
         "route": "/ui/ledger",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Ledger | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, D, Ask Gemini, 115%, 130% | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/ledger.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Ledger | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, D, Ask Gemini, 115%, 130% | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/ledger.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:2419",
           "Northstar_backend/main.py:987"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -187,14 +191,16 @@
       "evidence": {
         "route": "/ui/prospector",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/prospector.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/prospector.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
         ],
         "declared_tools": [
           "catalog_pull"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -250,14 +256,16 @@
       "evidence": {
         "route": "/ui/goldengoose",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
         ],
         "declared_tools": [
           "golden_goose_scan"
-        ]
+        ],
+        "confidence": "none",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -316,13 +324,15 @@
       "evidence": {
         "route": "/ui/offerchisel",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: OfferChisel | ty/ux_audit.json controls (shell chrome included): Generate Listing, SEO-first, Generate, Search the Northstar Index..., Operator, Ask Gemini | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/offerchisel.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: OfferChisel | ty/ux_audit.json controls (shell chrome included): Generate Listing, SEO-first, Generate, Search the Northstar Index..., Operator, Ask Gemini | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/offerchisel.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
         "declared_tools": [
           "offer_recommendation"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -387,11 +397,13 @@
       "evidence": {
         "route": "/ui/towncrier",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Town Crier | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, Generate caption, Schedule this caption, Meta | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/towncrier.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Town Crier | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, Generate caption, Schedule this caption, Meta | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/towncrier.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -462,11 +474,13 @@
       "evidence": {
         "route": "/ui/auctioneer",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/auctioneer.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/auctioneer.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1461"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -544,13 +558,15 @@
       "evidence": {
         "route": "/ui/autothink",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/autothink.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/autothink.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1529",
           "Northstar_backend/main.py:1540",
           "Northstar_backend/main.py:1557"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -593,11 +609,13 @@
       "evidence": {
         "route": "/ui/thewatch",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/thewatch.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/thewatch.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -640,11 +658,13 @@
       "evidence": {
         "route": "/ui/rankledger",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/rankledger.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/rankledger.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -687,11 +707,13 @@
       "evidence": {
         "route": "/ui/rivalboard",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/rivalboard.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/rivalboard.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -741,12 +763,14 @@
       "evidence": {
         "route": "/ui/account",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/account.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/account.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1693",
           "Northstar_backend/foundation/api/router.py:1809"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -871,7 +895,7 @@
       "evidence": {
         "route": "/ui/foundation",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Foundation | ty/ux_audit.json controls (shell chrome included): Refresh, Search the Northstar Index..., 90%, 100%, 115%, 130% | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/foundation.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Foundation | ty/ux_audit.json controls (shell chrome included): Refresh, Search the Northstar Index..., 90%, 100%, 115%, 130% | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/foundation.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:755",
           "Northstar_backend/foundation/api/router.py:650",
@@ -883,7 +907,9 @@
           "Northstar_backend/foundation/api/router.py:1407",
           "Northstar_backend/foundation/api/router.py:466"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1031,7 +1057,23 @@
           "Northstar_backend/foundation/api/router.py:1047",
           "Northstar_backend/foundation/api/router.py:836"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "high",
+        "latest_attempt_blocked": "window did not take the foreground",
+        "controls": [
+          "Refresh",
+          "Queued",
+          "0",
+          "eligible for claim",
+          "Leased",
+          "0",
+          "claimed by a worker",
+          "Running",
+          "0",
+          "executing locally",
+          "Retry wait",
+          "0"
+        ]
       }
     },
     {
@@ -1145,7 +1187,7 @@
       "evidence": {
         "route": "/ui/keywords",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1078",
           "Northstar_backend/foundation/api/router.py:1116",
@@ -1154,7 +1196,9 @@
           "Northstar_backend/foundation/api/router.py:1240",
           "Northstar_backend/foundation/api/router.py:1207"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "none",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1188,7 +1232,19 @@
         "backend": [
           "Northstar_backend/main.py:353"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "high",
+        "latest_attempt_blocked": "window did not take the foreground",
+        "controls": [
+          "Search the Northstar Index...",
+          "Operator",
+          "Accept Invitation",
+          "Sign In",
+          "Portfolio & Finance",
+          "Golden Goose Finder",
+          "Product Finder",
+          "Invite-Only Access"
+        ]
       }
     },
     {
@@ -1218,11 +1274,13 @@
       "evidence": {
         "route": "/ui/beta#support",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "none",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1271,11 +1329,13 @@
       "evidence": {
         "route": "/ui/beta-signup",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/beta-signup.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ty/ux_audit_shots/beta-signup.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1756"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1330,12 +1390,14 @@
       "evidence": {
         "route": "/ui/beta-ops",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: window did not take the foreground | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:2025",
           "Northstar_backend/noncreative_reads.py:402"
         ],
-        "declared_tools": []
+        "declared_tools": [],
+        "confidence": "none",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1455,6 +1517,22 @@
           "generate_image",
           "list_templates",
           "build_dieline"
+        ],
+        "confidence": "high",
+        "latest_attempt_blocked": "window did not take the foreground",
+        "controls": [
+          "Canvas",
+          "Projects",
+          "Listing Images",
+          "A+ Brand Story",
+          "Storefront",
+          "Ads",
+          "Video & UGC Clips",
+          "Social",
+          "Packaging & Mockups",
+          "Dielines & Print",
+          "Asset Dashboard",
+          "Text"
         ]
       }
     },
@@ -1508,6 +1586,18 @@
         ],
         "declared_tools": [
           "scan_products"
+        ],
+        "confidence": "high",
+        "latest_attempt_blocked": "window did not take the foreground",
+        "controls": [
+          "New Lookup",
+          "Lookup",
+          "Product Set",
+          "Saved Sets",
+          "Coverage",
+          "Start researching",
+          "Open in Product Set",
+          "Send to Commerce Ops"
         ]
       }
     },
@@ -1593,7 +1683,7 @@
       "evidence": {
         "route": "/ui/golden-goose",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/golden-goose.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/golden-goose.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:401",
           "Northstar_backend/foundation/api/router.py:414",
@@ -1602,7 +1692,9 @@
         ],
         "declared_tools": [
           "golden_goose_scan"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1662,13 +1754,15 @@
       "evidence": {
         "route": "/ui/listings",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/listing-guardian.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/listing-guardian.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/noncreative_reads.py:226"
         ],
         "declared_tools": [
           "optimize_listing"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1731,7 +1825,7 @@
       "evidence": {
         "route": "/ui/keyword-tracker",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/keyword-tracker.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/keyword-tracker.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/noncreative_reads.py:336",
           "Northstar_backend/foundation/api/router.py:1078",
@@ -1739,7 +1833,9 @@
         ],
         "declared_tools": [
           "track_keywords"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1789,14 +1885,16 @@
       "evidence": {
         "route": "/ui/competitor-monitor",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/competitor-monitor.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/competitor-monitor.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/noncreative_reads.py:261",
           "Northstar_backend/main.py:2227"
         ],
         "declared_tools": [
           "watch_competitor"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1875,7 +1973,7 @@
       "evidence": {
         "route": "/ui/listingforge",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/listingforge.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/listingforge.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1695",
           "Northstar_backend/design_studio_api.py:1293",
@@ -1883,7 +1981,9 @@
         ],
         "declared_tools": [
           "compose_listing"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -1969,7 +2069,7 @@
       "evidence": {
         "route": "/ui/adpilot",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/adpilot.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/adpilot.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
@@ -1978,7 +2078,9 @@
         ],
         "declared_tools": [
           "plan_campaign"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -2034,13 +2136,15 @@
       "evidence": {
         "route": "/ui/socialpulse",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/socialpulse.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/socialpulse.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
         "declared_tools": [
           "plan_social"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     },
     {
@@ -2118,14 +2222,16 @@
       "evidence": {
         "route": "/ui/profitability",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/profitability.png",
+        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/profitability.png | latest attempt blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1445",
           "Northstar_backend/foundation/api/router.py:1461"
         ],
         "declared_tools": [
           "margin_report"
-        ]
+        ],
+        "confidence": "low",
+        "latest_attempt_blocked": "window did not take the foreground"
       }
     }
   ]

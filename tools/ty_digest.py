@@ -187,9 +187,13 @@ def _registry() -> Dict[str, Any]:
     workspaces = _read_json(TY_DIR / "northstar_workspaces.json") or {}
     gaps = _read_json(TY_DIR / "registry_gaps.json") or {}
     vision: Dict[str, int] = {}
+    confidence: Dict[str, int] = {}
     for row in rows:
-        kind = str(((row.get("evidence") or {}).get("vision")) or "unknown")
+        evidence = row.get("evidence") or {}
+        kind = str(evidence.get("vision") or "unknown")
         vision[kind] = vision.get(kind, 0) + 1
+        level = str(evidence.get("confidence") or "unknown")
+        confidence[level] = confidence.get(level, 0) + 1
     specs = workspaces.get("workspaces") if isinstance(workspaces, dict) else None
     if isinstance(specs, dict):
         specs = list(specs.values())
@@ -202,6 +206,7 @@ def _registry() -> Dict[str, Any]:
     return {"services": len(rows),
             "with_controls": sum(1 for row in rows if row.get("has_controls")),
             "vision": vision,
+            "confidence": confidence,
             "tools": {"owned": len(owned or []),
                       "wired": (tools.get("wired") if isinstance(tools, dict) else None)},
             "layouts": layouts,
@@ -280,6 +285,10 @@ def render(data: Dict[str, Any]) -> str:
         vision = registry.get("vision") or {}
         if vision:
             lines.append("- evidence: " + ", ".join(f"{k} {v}" for k, v in sorted(vision.items())))
+        confidence = registry.get("confidence") or {}
+        if confidence:
+            lines.append("- confidence: " + ", ".join(
+                f"{k} {v}" for k, v in sorted(confidence.items(), key=lambda kv: -kv[1])))
         layouts = registry.get("layouts") or {}
         if layouts:
             lines.append("- default-view layouts: " + ", ".join(

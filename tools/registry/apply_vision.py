@@ -50,6 +50,18 @@ def note_for(row: Dict[str, Any]) -> str:
     return note.strip(" |")
 
 
+#: How much each evidence kind is worth. A later walk that could not go live must not
+#: erase the live observation an earlier walk made: confidence is "best known", and a
+#: blocked attempt is recorded in the note instead of overwriting the page.
+STRENGTH = {"live": 3, "audit": 2, "screenshot": 2, "backend": 1}
+
+
+def _should_replace(existing: str, incoming: str, blocked: bool) -> bool:
+    if blocked:
+        return False
+    return STRENGTH.get(incoming, 0) >= STRENGTH.get(existing, 0)
+
+
 def apply(document: Dict[str, Any], walk: Dict[str, Any]) -> List[str]:
     rows = {row["id"]: row for row in walk.get("routes", [])}
     changed: List[str] = []
@@ -57,11 +69,29 @@ def apply(document: Dict[str, Any], walk: Dict[str, Any]) -> List[str]:
         row = rows.get(entry["id"])
         if row is None:
             continue
+        existing = str((entry.get("evidence") or {}).get("vision") or "")
+        blocked = bool(row.get("blocked_by"))
+        if not _should_replace(existing, str(row.get("vision") or ""), blocked):
+            # Keep what we know. A blocked attempt is recorded in its own field: a note that
+            # says "blocked" beside live evidence is a contradiction, and the test forbids it.
+            if existing == "live" and entry["evidence"].get("confidence") in (None, "low", "none"):
+                controls = entry["evidence"].get("controls") or []
+                entry["evidence"]["confidence"] = "high" if len(controls) >= 3 else "medium"
+                changed.append(entry["id"])
+            if blocked:
+                entry["evidence"]["latest_attempt_blocked"] = row["blocked_by"]
+                changed.append(entry["id"])
+            continue
         before = (entry["evidence"]["vision"], entry["evidence"]["vision_note"])
         entry["evidence"]["vision"] = row["vision"]
         entry["evidence"]["vision_note"] = note_for(row)
+        labels = _labels(row.get("controls"))
+        if labels:
+            entry["evidence"]["controls"] = labels[:12]
         if row.get("confidence"):
             entry["evidence"]["confidence"] = row["confidence"]
+        elif row["vision"] == "live":
+            entry["evidence"]["confidence"] = "high" if len(labels) >= 3 else "medium"
         if before != (row["vision"], entry["evidence"]["vision_note"]):
             changed.append(entry["id"])
     return changed
