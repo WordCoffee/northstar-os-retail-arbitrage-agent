@@ -1,0 +1,357 @@
+{
+  "schema": "northstar.bojo_tool_list.v1",
+  "generated_from": "ty/service_registry.json",
+  "count": 21,
+  "totals": {
+    "wired": 14,
+    "declared": 7,
+    "unclaimed": 27
+  },
+  "tools": [
+    {
+      "name": "ads_math",
+      "status": "wired",
+      "service": "auctioneer",
+      "also_used_by": [
+        "adpilot",
+        "profitability"
+      ],
+      "reason": "chat_tools.TOOLS['ads_math'] returns ACOS, break-even ACOS and profit per ad dollar from raw numbers."
+    },
+    {
+      "name": "build_dieline",
+      "status": "declared",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+    },
+    {
+      "name": "catalog_pull",
+      "status": "wired",
+      "service": "prospector",
+      "also_used_by": [
+        "product-finder"
+      ],
+      "reason": "chat_tools.TOOLS['catalog_pull'] pulls sourcing rows with an honest source label."
+    },
+    {
+      "name": "compose_listing",
+      "status": "declared",
+      "service": "listingforge",
+      "also_used_by": [],
+      "reason": "ty/services.json declares compose_listing; chat_tools.TOOLS has no handler by that name — the nearest wired tool is write_content."
+    },
+    {
+      "name": "generate_image",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['generate_image'] renders one image locally and refuses to paint text, logos or barcodes."
+    },
+    {
+      "name": "golden_goose_scan",
+      "status": "wired",
+      "service": "goldengoose",
+      "also_used_by": [
+        "golden-goose"
+      ],
+      "reason": "chat_tools.TOOLS['golden_goose_scan'] scores candidates and returns tier, scores and the arithmetic behind each one."
+    },
+    {
+      "name": "handoff_to_autothink",
+      "status": "wired",
+      "service": "autothink",
+      "also_used_by": [],
+      "reason": "ty/services.json declares no tool; chat_tools.TOOLS['handoff_to_autothink'] is the wired entry into AutothinK and requires an explicit operator confirm."
+    },
+    {
+      "name": "hub_status",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health — the same posture question this room answers."
+    },
+    {
+      "name": "list_templates",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['list_templates'] lists the parametric print templates."
+    },
+    {
+      "name": "listing_audit",
+      "status": "wired",
+      "service": "listings",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['listing_audit'] audits a title and bullets against Amazon rules; chat_tools.SERVICES maps the listing area to it."
+    },
+    {
+      "name": "margin_report",
+      "status": "declared",
+      "service": "profitability",
+      "also_used_by": [],
+      "reason": "ty/services.json declares margin_report; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ads_math."
+    },
+    {
+      "name": "offer_recommendation",
+      "status": "wired",
+      "service": "offerchisel",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['offer_recommendation'] is the declared listing-pricing tool for this service; it prices an offer rather than writing copy."
+    },
+    {
+      "name": "optimize_listing",
+      "status": "wired",
+      "service": "listings",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['optimize_listing'] scores and rewrites a listing against target keywords."
+    },
+    {
+      "name": "plan_campaign",
+      "status": "declared",
+      "service": "adpilot",
+      "also_used_by": [],
+      "reason": "ty/services.json declares plan_campaign; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ppc_plan."
+    },
+    {
+      "name": "plan_social",
+      "status": "wired",
+      "service": "towncrier",
+      "also_used_by": [
+        "socialpulse"
+      ],
+      "reason": "chat_tools.TOOLS['plan_social'] plans social graphics at exact canvas sizes with copy slots."
+    },
+    {
+      "name": "ppc_plan",
+      "status": "wired",
+      "service": "auctioneer",
+      "also_used_by": [
+        "adpilot"
+      ],
+      "reason": "chat_tools.TOOLS['ppc_plan'] turns ad reports into a validated change plan."
+    },
+    {
+      "name": "scan_products",
+      "status": "declared",
+      "service": "product-finder",
+      "also_used_by": [],
+      "reason": "ty/services.json declares scan_products; chat_tools.TOOLS has no handler by that name — the nearest wired tool is catalog_pull."
+    },
+    {
+      "name": "seo_check",
+      "status": "wired",
+      "service": "keywords",
+      "also_used_by": [
+        "keyword-tracker"
+      ],
+      "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile, including keyword coverage."
+    },
+    {
+      "name": "track_keywords",
+      "status": "declared",
+      "service": "keyword-tracker",
+      "also_used_by": [],
+      "reason": "ty/services.json declares track_keywords; chat_tools.TOOLS has no handler by that name — the nearest wired tool is seo_check."
+    },
+    {
+      "name": "watch_competitor",
+      "status": "declared",
+      "service": "competitor-monitor",
+      "also_used_by": [],
+      "reason": "ty/services.json declares watch_competitor; chat_tools.TOOLS has no handler by that name and no wired equivalent exists."
+    },
+    {
+      "name": "write_content",
+      "status": "wired",
+      "service": "towncrier",
+      "also_used_by": [
+        "listingforge"
+      ],
+      "reason": "chat_tools.TOOLS['write_content'] writes listing copy and returns keyword coverage per variant."
+    }
+  ],
+  "unclaimed": [
+    "apply_label",
+    "build_package",
+    "build_preset",
+    "build_utility",
+    "canvas_edit",
+    "corpus_drift",
+    "corpus_search",
+    "corpus_vector_search",
+    "create_dieline",
+    "creative_plan",
+    "design_brief",
+    "improvement_status",
+    "knowledge_lookup",
+    "place_logo",
+    "plan_aplus",
+    "plan_project",
+    "plan_video",
+    "purpose_command",
+    "seo_negatives",
+    "seo_profile",
+    "seo_propose",
+    "seo_retitle",
+    "service_catalog",
+    "system_status",
+    "voice_dub",
+    "voice_list",
+    "voice_tts"
+  ],
+  "chat_service_areas": [
+    {
+      "id": "listing",
+      "label": "Listing Forge / Guardian",
+      "tools": [
+        "listing_audit",
+        "optimize_listing",
+        "knowledge_lookup",
+        "seo_check",
+        "seo_retitle"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup",
+        "seo_retitle"
+      ]
+    },
+    {
+      "id": "ads",
+      "label": "AdPilot",
+      "tools": [
+        "ads_math",
+        "ppc_plan",
+        "knowledge_lookup",
+        "seo_negatives"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup",
+        "seo_negatives"
+      ]
+    },
+    {
+      "id": "aplus",
+      "label": "A+ Content",
+      "tools": [
+        "knowledge_lookup",
+        "creative_plan"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup",
+        "creative_plan"
+      ]
+    },
+    {
+      "id": "creator-connections",
+      "label": "Creator Connections",
+      "tools": [
+        "knowledge_lookup",
+        "creative_plan"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup",
+        "creative_plan"
+      ]
+    },
+    {
+      "id": "brand-store",
+      "label": "Brand & Store",
+      "tools": [
+        "knowledge_lookup",
+        "creative_plan"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup",
+        "creative_plan"
+      ]
+    },
+    {
+      "id": "reseller",
+      "label": "Reseller Ops",
+      "tools": [
+        "knowledge_lookup",
+        "listing_audit"
+      ],
+      "unclaimed_here": [
+        "knowledge_lookup"
+      ]
+    },
+    {
+      "id": "creative",
+      "label": "Creative Studio",
+      "tools": [
+        "creative_plan",
+        "generate_image",
+        "apply_label",
+        "place_logo",
+        "build_package",
+        "plan_aplus",
+        "plan_social",
+        "plan_video",
+        "write_content",
+        "design_brief",
+        "create_dieline",
+        "voice_list",
+        "voice_tts",
+        "voice_dub",
+        "list_templates",
+        "plan_project"
+      ],
+      "unclaimed_here": [
+        "creative_plan",
+        "apply_label",
+        "place_logo",
+        "build_package",
+        "plan_aplus",
+        "plan_video",
+        "design_brief",
+        "create_dieline",
+        "voice_list",
+        "voice_tts",
+        "voice_dub",
+        "plan_project"
+      ]
+    },
+    {
+      "id": "research",
+      "label": "Research & Corpus",
+      "tools": [
+        "corpus_search",
+        "corpus_vector_search",
+        "corpus_drift",
+        "knowledge_lookup"
+      ],
+      "unclaimed_here": [
+        "corpus_search",
+        "corpus_vector_search",
+        "corpus_drift",
+        "knowledge_lookup"
+      ]
+    },
+    {
+      "id": "system",
+      "label": "System & Improvement",
+      "tools": [
+        "system_status",
+        "improvement_status",
+        "service_catalog",
+        "purpose_command",
+        "plan_project"
+      ],
+      "unclaimed_here": [
+        "system_status",
+        "improvement_status",
+        "service_catalog",
+        "purpose_command",
+        "plan_project"
+      ]
+    }
+  ],
+  "bojo_domain_registry": [
+    "catalog_pull",
+    "golden_goose_scan",
+    "hub_status",
+    "offer_recommendation"
+  ]
+}

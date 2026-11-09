@@ -1,0 +1,763 @@
+{
+  "schema": "northstar.northstar_workspaces.v1",
+  "generated_from": "ty/service_registry.json",
+  "count": 29,
+  "layout_distribution": {
+    "feed": 9,
+    "split": 8,
+    "wizard": 5,
+    "board": 6,
+    "canvas": 1
+  },
+  "workspaces": [
+    {
+      "service": "hub",
+      "label": "Operations Hub",
+      "layout": "feed",
+      "primary_action": "open the service that is reporting a problem",
+      "primary_action_source": "local",
+      "empty_state": "Every probe answered; no service is reporting a problem.",
+      "data_shown": [
+        {
+          "name": "matched / pass / review totals",
+          "kind": "status",
+          "where": "four Metric tiles"
+        },
+        {
+          "name": "engine and credit posture",
+          "kind": "status",
+          "where": "Alpha Command Deck badges"
+        },
+        {
+          "name": "service entry points",
+          "kind": "table",
+          "where": "Service Grid rows"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Hub answers 'is anything wrong right now', so it is one scannable column of status cards with the service list inline; a split form would promise an input the room does not have."
+    },
+    {
+      "service": "ledger",
+      "label": "The Ledger",
+      "layout": "split",
+      "primary_action": "compare this period's consumption with the remaining balance",
+      "primary_action_source": "read credit balance",
+      "empty_state": "No credit read returned; the statement shows UNKNOWN rather than zero.",
+      "data_shown": [
+        {
+          "name": "credit balance / consumed / available",
+          "kind": "status",
+          "where": "Compute Credits metrics"
+        },
+        {
+          "name": "provider, T2 model and cloud key state",
+          "kind": "status",
+          "where": "Engine Posture metrics"
+        }
+      ],
+      "inputs_required": [],
+      "why": "A ledger reconciles two columns - what was consumed against what remains - so the split shape puts period totals beside the line items they explain."
+    },
+    {
+      "service": "prospector",
+      "label": "Prospector",
+      "layout": "split",
+      "primary_action": "run a live scan and keep the rows above the ROI floor",
+      "primary_action_source": "run / read scanner",
+      "empty_state": "Scanner returned no rows; show the cached-match fallback with its own source badge.",
+      "data_shown": [
+        {
+          "name": "ranked candidates (price, cost, net, ROI, score, sales/mo, buy box)",
+          "kind": "table",
+          "where": "Results table"
+        },
+        {
+          "name": "counts and top score",
+          "kind": "status",
+          "where": "Pipeline Snapshot"
+        }
+      ],
+      "inputs_required": [
+        "product or ASIN filter",
+        "minimum ROI"
+      ],
+      "why": "Prospecting is filter-in and ranked-table-out, so one side holds the filter and the run control while the other holds the ranking it produced."
+    },
+    {
+      "service": "goldengoose",
+      "label": "Golden Goose",
+      "layout": "feed",
+      "primary_action": "raise the deal-score floor until the list is short enough to act on",
+      "primary_action_source": "local",
+      "empty_state": "No deal clears the floor at this score; name the floor that would return one.",
+      "data_shown": [
+        {
+          "name": "qualified deals with net, ROI and score",
+          "kind": "table",
+          "where": "Qualified Deals list"
+        },
+        {
+          "name": "qualified count",
+          "kind": "status",
+          "where": "Filters badge"
+        }
+      ],
+      "inputs_required": [
+        "minimum deal score"
+      ],
+      "why": "The room answers one question per item - is this deal worth a look - so the deals read as a ranked stream and a single score floor is the whole control surface."
+    },
+    {
+      "service": "offerchisel",
+      "label": "OfferChisel",
+      "layout": "wizard",
+      "primary_action": "generate title, bullets and keywords for the named product",
+      "primary_action_source": "generate listing copy",
+      "empty_state": "No product named yet; the first step is the product name, not an empty result table.",
+      "data_shown": [
+        {
+          "name": "title",
+          "kind": "text",
+          "where": "Generated Output — TITLE"
+        },
+        {
+          "name": "four bullets",
+          "kind": "text",
+          "where": "Generated Output — BULLETS"
+        },
+        {
+          "name": "back-end search terms",
+          "kind": "text",
+          "where": "Generated Output — KEYWORDS"
+        }
+      ],
+      "inputs_required": [
+        "product name",
+        "listing style"
+      ],
+      "why": "One deliverable is produced in a fixed order (name, style, generate, accept), so a wizard keeps the operator on the steps that actually exist."
+    },
+    {
+      "service": "towncrier",
+      "label": "The Town Crier",
+      "layout": "wizard",
+      "primary_action": "write the caption for a brief and a platform",
+      "primary_action_source": "generate caption",
+      "empty_state": "No brief typed; the composer opens on the brief, because a caption cannot exist before it.",
+      "data_shown": [
+        {
+          "name": "caption",
+          "kind": "text",
+          "where": "Content Studio output"
+        },
+        {
+          "name": "hashtags",
+          "kind": "text",
+          "where": "Content Studio badges"
+        },
+        {
+          "name": "schedule reminder notice",
+          "kind": "status",
+          "where": "toast — gate stays closed"
+        }
+      ],
+      "inputs_required": [
+        "post brief",
+        "platform"
+      ],
+      "why": "Caption generation is brief, platform, caption, reminder; a wizard shows that order and keeps the closed publish gate visible at the last step."
+    },
+    {
+      "service": "auctioneer",
+      "label": "The Auctioneer",
+      "layout": "split",
+      "primary_action": "compute break-even ACoS from the campaign numbers",
+      "primary_action_source": "compute economics",
+      "empty_state": "No numbers entered; outputs stay blank, never zero.",
+      "data_shown": [
+        {
+          "name": "contribution profit / unit",
+          "kind": "status",
+          "where": "metric tile"
+        },
+        {
+          "name": "break-even and target ACoS",
+          "kind": "status",
+          "where": "metric tiles"
+        },
+        {
+          "name": "max CPC and ROI on invested cost",
+          "kind": "status",
+          "where": "metric tiles"
+        },
+        {
+          "name": "formula version and missing inputs",
+          "kind": "status",
+          "where": "metric + footer"
+        }
+      ],
+      "inputs_required": [
+        "selling price, landed cost, referral, FBA, ad cost",
+        "impressions, clicks, orders"
+      ],
+      "why": "The page is arithmetic-in and break-even-out - eight entered campaign numbers on one side, the canonical verdict on the other - so every input stays visible next to the result it produced."
+    },
+    {
+      "service": "autothink",
+      "label": "AutothinK",
+      "layout": "feed",
+      "primary_action": "run a prompt against the chosen model and keep the answer in history",
+      "primary_action_source": "run prompt",
+      "empty_state": "No run yet; the composer is the only thing on the page until the first answer arrives.",
+      "data_shown": [
+        {
+          "name": "model answer",
+          "kind": "text",
+          "where": "run result panel"
+        },
+        {
+          "name": "run history rows",
+          "kind": "table",
+          "where": "history list"
+        },
+        {
+          "name": "usage",
+          "kind": "status",
+          "where": "usage read"
+        }
+      ],
+      "inputs_required": [
+        "research query",
+        "provider",
+        "tier"
+      ],
+      "why": "AutothinK is a run log with a composer, so the answer and every earlier answer belong in one vertical stream rather than in a dashboard of tiles."
+    },
+    {
+      "service": "thewatch",
+      "label": "The Watch",
+      "layout": "feed",
+      "primary_action": "read the watchlist for signals",
+      "primary_action_source": "read scanner",
+      "empty_state": "Scanner unread; the watchlist says so instead of showing an empty list.",
+      "data_shown": [
+        {
+          "name": "watchlist rows (price, ROI, buy box, status)",
+          "kind": "table",
+          "where": "Watchlist"
+        },
+        {
+          "name": "tracked count, signal count, average price",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "inputs_required": [],
+      "why": "A watchlist is a short stream of things to glance at - one line per product with its signal state - not a form and not a board."
+    },
+    {
+      "service": "rankledger",
+      "label": "RankLedger",
+      "layout": "board",
+      "primary_action": "read which band a product's score places it in",
+      "primary_action_source": "read scanner",
+      "empty_state": "No scored rows; the board shows empty bands rather than a fabricated ranking.",
+      "data_shown": [
+        {
+          "name": "ranked table with ROI, sales/mo and score",
+          "kind": "table",
+          "where": "Product Standing"
+        },
+        {
+          "name": "tracked count, strong count, average ROI",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "inputs_required": [],
+      "why": "The row's job is its standing, so three score bands read as board columns (strong, competitive, weak) and a product's position carries the message."
+    },
+    {
+      "service": "rivalboard",
+      "label": "The Rival Board",
+      "layout": "board",
+      "primary_action": "read which products sit in the price-saturated lane",
+      "primary_action_source": "read scanner",
+      "empty_state": "No posture rows; the lanes stay empty and labelled.",
+      "data_shown": [
+        {
+          "name": "posture table (price, ROI, buy box, posture)",
+          "kind": "table",
+          "where": "Competitive Landscape"
+        },
+        {
+          "name": "posture counts",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Risk is a lane, not a number: grouping each product into high-margin, benign or price-saturated makes the saturated lane the thing the eye lands on."
+    },
+    {
+      "service": "account",
+      "label": "Account",
+      "layout": "feed",
+      "primary_action": "read what the plan allows",
+      "primary_action_source": "read entitlements",
+      "empty_state": "Entitlements unreadable; show the failure instead of a default plan.",
+      "data_shown": [
+        {
+          "name": "entitlement list",
+          "kind": "table",
+          "where": "entitlements panel"
+        },
+        {
+          "name": "plan usage",
+          "kind": "status",
+          "where": "usage tiles"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Account is a short statement of permissions and usage, so it reads as a vertical list of what this org may run rather than a settings form."
+    },
+    {
+      "service": "foundation",
+      "label": "Operations Hub",
+      "layout": "feed",
+      "primary_action": "read the failing subsystem and its evidence",
+      "primary_action_source": "read providers",
+      "empty_state": "Foundation unreachable; every section says UNKNOWN with the reason.",
+      "data_shown": [
+        {
+          "name": "provider and marketplace status",
+          "kind": "table",
+          "where": "status sections"
+        },
+        {
+          "name": "approvals, identity conflicts, imports",
+          "kind": "table",
+          "where": "status sections"
+        },
+        {
+          "name": "queue / schedule posture and audit tail",
+          "kind": "status",
+          "where": "status sections"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Foundation health is many independent probes - providers, marketplaces, approvals, audit - so one column of probe cards, each with its own state, beats a grid that implies the numbers are comparable."
+    },
+    {
+      "service": "jobs",
+      "label": "Jobs & Schedules",
+      "layout": "board",
+      "primary_action": "create a durable job or flip a schedule",
+      "primary_action_source": "create durable job",
+      "empty_state": "No durable jobs; the board starts empty with the create form attached, because the first job is the operator's own.",
+      "data_shown": [
+        {
+          "name": "durable jobs with state",
+          "kind": "table",
+          "where": "jobs table"
+        },
+        {
+          "name": "per-job audit trail",
+          "kind": "table",
+          "where": "job detail"
+        },
+        {
+          "name": "schedules and queue posture",
+          "kind": "table",
+          "where": "schedules panel"
+        }
+      ],
+      "inputs_required": [
+        "job type",
+        "job payload"
+      ],
+      "why": "A job has a state and a state is a column; the create form belongs beside the board because every job is born from it."
+    },
+    {
+      "service": "keywords",
+      "label": "Keywords & SEO",
+      "layout": "split",
+      "primary_action": "search the store, then submit an import",
+      "primary_action_source": "submit import",
+      "empty_state": "No keyword-store match; the panel says the store is empty rather than showing zero coverage.",
+      "data_shown": [
+        {
+          "name": "keyword results",
+          "kind": "table",
+          "where": "results table"
+        },
+        {
+          "name": "coverage gaps and search terms",
+          "kind": "table",
+          "where": "gap panels"
+        },
+        {
+          "name": "import batches with rejected rows",
+          "kind": "table",
+          "where": "imports panel"
+        }
+      ],
+      "inputs_required": [
+        "keyword search",
+        "import file name"
+      ],
+      "why": "Keyword work is find-then-import, so search and its results stay on one side while the import batch and its rejected rows stay on the other."
+    },
+    {
+      "service": "beta",
+      "label": "Onboarding & Plan",
+      "layout": "wizard",
+      "primary_action": "accept the invitation or sign in",
+      "primary_action_source": "local",
+      "empty_state": "The landing is always the first step; there is no empty variant.",
+      "data_shown": [
+        {
+          "name": "programme metrics",
+          "kind": "status",
+          "where": "MetricTiles"
+        }
+      ],
+      "inputs_required": [],
+      "why": "A landing page has one job - send the visitor to accept or sign in - so it is a two-step gate rather than a dashboard of programme detail."
+    },
+    {
+      "service": "beta-support",
+      "label": "Support",
+      "layout": "feed",
+      "primary_action": "read who handles beta support",
+      "primary_action_source": "local",
+      "empty_state": "The section renders only when the #support hash is present; otherwise the landing stands alone.",
+      "data_shown": [
+        {
+          "name": "support guidance",
+          "kind": "text",
+          "where": "section#support"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Support here is two sentences and a pointer to the ticket queue, so a single short card is the honest shape and anything larger would be padding."
+    },
+    {
+      "service": "beta-signup",
+      "label": "Invite entry",
+      "layout": "wizard",
+      "primary_action": "submit the invite code and email",
+      "primary_action_source": "create beta account",
+      "empty_state": "No code yet; the form waits rather than pre-filling a guess.",
+      "data_shown": [
+        {
+          "name": "signup result",
+          "kind": "status",
+          "where": "result panel"
+        }
+      ],
+      "inputs_required": [
+        "email",
+        "invite code"
+      ],
+      "why": "Redemption is one form and one result, so the wizard is a single step whose only required evidence is the code."
+    },
+    {
+      "service": "beta-ops",
+      "label": "Tester Dashboard",
+      "layout": "board",
+      "primary_action": "open the organisation that needs attention",
+      "primary_action_source": "read admin dashboard",
+      "empty_state": "No organisations in the cohort; the board stays empty rather than showing sample rows.",
+      "data_shown": [
+        {
+          "name": "organisation rows",
+          "kind": "table",
+          "where": "orgs table"
+        },
+        {
+          "name": "tester accounts",
+          "kind": "table",
+          "where": "accounts panel"
+        },
+        {
+          "name": "dashboard metrics",
+          "kind": "status",
+          "where": "MetricTiles"
+        }
+      ],
+      "inputs_required": [],
+      "why": "An organisation moves through lifecycle states, so a board keyed by state shows the cohort's shape at a glance and the drill-down is one click from the column."
+    },
+    {
+      "service": "design-studio",
+      "label": "Design Studio",
+      "layout": "canvas",
+      "primary_action": "upload a source asset, then compose the surface it belongs to",
+      "primary_action_source": "upload asset",
+      "empty_state": "No project open; the canvas offers a surface picker before an empty sheet.",
+      "data_shown": [
+        {
+          "name": "rendered image",
+          "kind": "image",
+          "where": "canvas / listing images"
+        },
+        {
+          "name": "dieline SVG + PDF",
+          "kind": "file",
+          "where": "Dielines section"
+        },
+        {
+          "name": "project, asset and job records",
+          "kind": "table",
+          "where": "Projects / Asset Dashboard"
+        }
+      ],
+      "inputs_required": [
+        "studio section",
+        "creative brief",
+        "dieline template",
+        "source image"
+      ],
+      "why": "The studio's output is a picture or a dieline, so the workspace is the canvas itself; picking a surface replaces the form instead of sitting beside it."
+    },
+    {
+      "service": "product-finder",
+      "label": "SourceScout",
+      "layout": "split",
+      "primary_action": "stage an ASIN and read the gates it still owes",
+      "primary_action_source": "local",
+      "empty_state": "No ASIN staged; the evidence panels stay empty and the gates stay UNKNOWN.",
+      "data_shown": [
+        {
+          "name": "ASIN rows with UNKNOWN fields until read",
+          "kind": "table",
+          "where": "Product Set and lookup tables"
+        },
+        {
+          "name": "gate checklist and unverified count",
+          "kind": "status",
+          "where": "Coverage tab"
+        }
+      ],
+      "inputs_required": [
+        "ASIN"
+      ],
+      "why": "Research is ASIN-in and evidence-out, so the ASIN field owns the left side while every unread gate stays UNKNOWN on the right instead of being filled with a guess."
+    },
+    {
+      "service": "golden-goose",
+      "label": "Golden Goose",
+      "layout": "split",
+      "primary_action": "evaluate the candidate against the gates",
+      "primary_action_source": "evaluate candidate",
+      "empty_state": "No candidate; the gate list is visible but the verdict stays blank.",
+      "data_shown": [
+        {
+          "name": "verdict, checklist and missing evidence",
+          "kind": "status",
+          "where": "evaluation panel"
+        },
+        {
+          "name": "queue rows",
+          "kind": "table",
+          "where": "queue list"
+        }
+      ],
+      "inputs_required": [
+        "item id",
+        "economics readiness",
+        "gate values",
+        "sample / approval flags"
+      ],
+      "why": "A verdict only means something next to the gates that produced it, so gates sit left and the checklist plus verified commission sit right."
+    },
+    {
+      "service": "listings",
+      "label": "Listing Guardian",
+      "layout": "board",
+      "primary_action": "read the highest-severity alert",
+      "primary_action_source": "read listing health",
+      "empty_state": "No local listing records; the board says the source is empty, not that listings are healthy.",
+      "data_shown": [
+        {
+          "name": "alert rows",
+          "kind": "table",
+          "where": "Alerts"
+        },
+        {
+          "name": "escalation rows",
+          "kind": "table",
+          "where": "Escalations"
+        },
+        {
+          "name": "listing / enrichment counts",
+          "kind": "status",
+          "where": "metric cards"
+        }
+      ],
+      "inputs_required": [
+        "view tab"
+      ],
+      "why": "Alerts already carry a severity, so severity is the column and review is a movement; a board shows both without inventing a control the service lacks."
+    },
+    {
+      "service": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "layout": "feed",
+      "primary_action": "read coverage for one keyword",
+      "primary_action_source": "search keyword store",
+      "empty_state": "No keyword rows; the feed says the store is empty.",
+      "data_shown": [
+        {
+          "name": "keyword rows with coverage",
+          "kind": "table",
+          "where": "keyword table"
+        },
+        {
+          "name": "gap list",
+          "kind": "table",
+          "where": "gaps panel"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Tracking is a per-keyword read with a coverage badge, so each keyword is one row in a stream that can be scanned for movement."
+    },
+    {
+      "service": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "layout": "feed",
+      "primary_action": "read the cached observation and its quantity match",
+      "primary_action_source": "read competitor observations",
+      "empty_state": "No observations; the panel labels the catalog cached instead of implying live tracking.",
+      "data_shown": [
+        {
+          "name": "observation table",
+          "kind": "table",
+          "where": "Cached market observations"
+        },
+        {
+          "name": "metric tiles",
+          "kind": "status",
+          "where": "tracked / rated / average price / votes"
+        }
+      ],
+      "inputs_required": [],
+      "why": "Observations are independent snapshots, so they stack as labelled rows rather than pretending to be a live competitor grid."
+    },
+    {
+      "service": "listingforge",
+      "label": "ListingForge",
+      "layout": "wizard",
+      "primary_action": "draft, edit, then save the listing record",
+      "primary_action_source": "save listing record",
+      "empty_state": "No brief; the wizard starts at the product name.",
+      "data_shown": [
+        {
+          "name": "proposal copy",
+          "kind": "text",
+          "where": "proposal panel"
+        },
+        {
+          "name": "saved listing record",
+          "kind": "table",
+          "where": "listing records"
+        }
+      ],
+      "inputs_required": [
+        "product name",
+        "tone",
+        "format hint"
+      ],
+      "why": "Composition is brief, proposal, edit, saved record, and the save is a distinct step, so a wizard makes the persistence boundary visible."
+    },
+    {
+      "service": "adpilot",
+      "label": "AdPilot",
+      "layout": "split",
+      "primary_action": "read the imported campaign and request ad copy",
+      "primary_action_source": "request ad copy",
+      "empty_state": "No imported file; campaigns show UNKNOWN and the copy panel waits.",
+      "data_shown": [
+        {
+          "name": "campaign rows with spend and ACoS",
+          "kind": "table",
+          "where": "campaign table"
+        },
+        {
+          "name": "ad copy variants",
+          "kind": "text",
+          "where": "copy panel"
+        }
+      ],
+      "inputs_required": [
+        "imported ad file",
+        "product name, brand tone, format hint"
+      ],
+      "why": "Ad work is evidence-in (the seller's own file) and proposal-out, so split keeps the imported metrics beside the copy they justify."
+    },
+    {
+      "service": "socialpulse",
+      "label": "SocialPulse",
+      "layout": "board",
+      "primary_action": "move a draft to review, then to publish-ready",
+      "primary_action_source": "local",
+      "empty_state": "No drafts; the columns stay empty and the composer is the only way in.",
+      "data_shown": [
+        {
+          "name": "draft rows by stage",
+          "kind": "table",
+          "where": "board columns"
+        },
+        {
+          "name": "approval queue",
+          "kind": "table",
+          "where": "approvals tab"
+        },
+        {
+          "name": "schedule reminders",
+          "kind": "table",
+          "where": "calendar"
+        }
+      ],
+      "inputs_required": [
+        "campaign",
+        "post hook",
+        "platform, format, voice"
+      ],
+      "why": "The room is a content pipeline, so drafts, review, approval and publish-ready are columns and the value is where each post sits."
+    },
+    {
+      "service": "profitability",
+      "label": "Profitability",
+      "layout": "split",
+      "primary_action": "compute contribution and readiness from the unit inputs",
+      "primary_action_source": "compute economics",
+      "empty_state": "No inputs; the result panel stays blank and readiness stays UNKNOWN.",
+      "data_shown": [
+        {
+          "name": "contribution profit and ROI",
+          "kind": "status",
+          "where": "EngineValue tiles"
+        },
+        {
+          "name": "readiness and purchase authorization",
+          "kind": "status",
+          "where": "readiness pill"
+        },
+        {
+          "name": "contract formula version",
+          "kind": "status",
+          "where": "header pill"
+        }
+      ],
+      "inputs_required": [
+        "selling price, acquisition cost",
+        "referral %, FBA fee, ad cost",
+        "quantity"
+      ],
+      "why": "Unit economics is inputs-in and verdict-out with a readiness gate, so the numbers stay on one side and the canonical result with its gate pill on the other."
+    }
+  ]
+}
