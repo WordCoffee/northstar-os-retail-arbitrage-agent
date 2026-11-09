@@ -99,6 +99,36 @@ def select_briefs(catalog: Sequence[Dict[str, Any]], limit: Optional[int] = None
             return selected
 
 
+def _placement_xywh(box: Any) -> Optional[List[int]]:
+    """The generator records ``product_box`` as (left, top, right, bottom).
+
+    `composite_check.check_composite` takes (x, y, width, height). Handing it the box
+    unconverted compared the whole cutout canvas against a box that was 1847 px "wide"
+    and 1605 px "tall", which scored a correct composite at 0.647. Convert once, here,
+    where the format is known.
+    """
+    if not isinstance(box, (list, tuple)) or len(box) != 4:
+        return None
+    left, top, right, bottom = (int(v) for v in box)
+    if right <= left or bottom <= top:
+        return None
+    return [left, top, right - left, bottom - top]
+
+
+def _population(generator: Any, generation: Optional[Dict[str, Any]]) -> str:
+    """Which population a result belongs to: a made picture, or a replayed file.
+
+    `StoredGenerator` replays images that happen to be on disk — screenshots, crops,
+    yesterday's renders. Those are useful context but they are not this pipeline's
+    output, so they are labelled at the row and never averaged into the published mean.
+    Every other generator records how it produced the picture.
+    """
+    if isinstance(generation, dict) and generation.get("route"):
+        return "generated"
+    name = str(getattr(generator, "name", "") or "").lower()
+    return "replay" if name in ("stored", "replay") else "generated"
+
+
 def _load_cutout(artefact: Path) -> Optional[Any]:
     """The cutout the generator saved beside the composite, or None.
 
@@ -161,12 +191,14 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         scene = (generation or {}).get("scene") or {}
         route_fn = getattr(generator, "route", None)
         route = route_fn(brief) if callable(route_fn) else route_for_brief(brief)
+        population = _population(generator, generation)
         composite_route = bool(generation) and str(
             (generation or {}).get("route") or "") == "composite"
         if not composite_route and getattr(generator, "name", "") == "composite":
             composite_route = True
         cutout = _load_cutout(artefact) if composite_route else None
-        placement = (generation or {}).get("product_box") if composite_route else None
+        placement = _placement_xywh((generation or {}).get("product_box")) \
+            if composite_route else None
         scored = score_image(
             data, brief, judge=active_judge,
             reference_check=lambda rgb, b=brief: reference_check_for_brief(
@@ -186,6 +218,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             "source_mode": scored.get("source_mode") or current_mode,
             "fidelity": brief_fidelity(brief),
             "route": route,
+            "population": population,
             "artefact_path": rel,
             "width": scored.get("width"),
             "height": scored.get("height"),
@@ -264,6 +297,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         "escalations": list(log.entries),
         "results": results,
     }
+    summary["by_population"] = _group(results, "population")
     summary["by_mode"] = _by_mode(results)
     summary["by_situation"] = _by_situation(results)
     summary["by_category"] = _by_category(results)

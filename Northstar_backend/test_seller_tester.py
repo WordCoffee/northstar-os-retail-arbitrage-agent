@@ -34,6 +34,7 @@ from tools.seller_tester import (  # noqa: E402
     SITUATIONS,
     SOURCE_MODES,
     ComfyGenerator,
+    CompositeGenerator,
     EscalationLog,
     FakeJudge,
     GeneratorUnavailable,
@@ -266,7 +267,98 @@ def test_text_free_rule_both_directions():
     assert scorers.check_text_free(inked.rgb, {"rule": "no_text", "max_ink": 0.2})["ok"] is True
 
 
+def test_a_product_that_fills_the_frame_is_not_read_as_overlay_text():
+    """Amazon main images ask for ~85 % linear fill; that crosses the 10 % margin band.
+
+    The margin-ink heuristic must count overlay ink, not the subject. A margin-confined
+    banner is still ink (the test above); a subject that reaches the centre is not.
+    """
+    large = loaded(product_canvas(ratio=0.72))  # 85 % of each side
+    result = scorers.check_text_free(large.rgb, {"rule": "no_text"})
+    assert result["ok"] is True, result
+    assert result["margin_ink"] == 0.0
+
+    # A banner confined to the margin still fails, beside the same large product.
+    image = product_canvas(ratio=0.72)
+    ImageDraw.Draw(image).rectangle([100, 560, 500, 595], fill=(20, 20, 20))
+    flagged = scorers.check_text_free(loaded(image).rgb, {"rule": "no_text"})
+    assert flagged["ok"] is False, flagged
+
+
+def test_product_box_corners_are_converted_to_xywh():
+    """`place_product` records (left, top, right, bottom); the check takes (x, y, w, h)."""
+    from tools.seller_tester import harness
+
+    assert harness._placement_xywh([10, 20, 110, 220]) == [10, 20, 100, 200]
+    assert harness._placement_xywh([10, 20, 5, 220]) is None
+    assert harness._placement_xywh([1, 2, 3]) is None
+
+
+def test_product_region_compares_the_trimmed_cutout_not_its_canvas():
+    """A full-canvas cutout must be trimmed to the subject before the box comparison."""
+    import cv2  # noqa: F401 - the comparison path needs it
+
+    from tools.seller_tester.composite_check import region_similarity
+
+    rng = np.random.default_rng(7)
+    pattern = (rng.integers(0, 256, size=(80, 80, 3))).astype(np.uint8)
+    canvas = np.zeros((240, 240, 4), dtype=np.uint8)
+    canvas[80:160, 80:160, :3] = pattern
+    canvas[80:160, 80:160, 3] = 255
+    produced = np.full((240, 240, 3), 255, dtype=np.uint8)
+    produced[40:120, 40:120] = pattern
+    verdict = region_similarity(produced, canvas[:, :, :3], canvas[:, :, 3] / 255.0,
+                                [40, 40, 80, 80])
+    assert verdict["ok"] is True, verdict
+    assert verdict["similarity"] >= 0.95, verdict
+
+
 # --------------------------------------------------------------------------- scoring
+def test_any_uniform_background_brief_uses_a_flat_canvas_at_its_own_value(tmp_path):
+    """The flat path follows the brief's background constraint, not the situation name.
+
+    A generated scene can never satisfy `background.mode: uniform`: it has texture and
+    corners that are not the requested value. So a scale-reference brief that asks for
+    a 245 background must get a flat 245 canvas and must not call the scene renderer.
+    """
+    sys.path.insert(0, str(ROOT / "Northstar_backend"))
+    import product_cutout as pc  # noqa: PLC0415
+
+    repo = tmp_path / "repo"
+    (repo / "renders").mkdir(parents=True)
+    reference = white_canvas(640)
+    ImageDraw.Draw(reference).ellipse([200, 120, 440, 520], fill=(40, 80, 40))
+    (repo / "renders" / "ref.png").write_bytes(png_bytes(reference))
+
+    brief = make_brief(
+        "T-FLAT", situation="scale_reference", source_mode="stored_reference",
+        fidelity="exact",
+        reference={"kind": "stored_asset", "path": "renders/ref.png"},
+        constraints={
+            "dimensions": {"min_width": 640, "min_height": 640,
+                           "max_width": 4000, "max_height": 4000},
+            "background": {"value": 245, "tolerance": 4, "mode": "uniform"},
+            "matte": {"mode": "white_matte", "value": 245, "tolerance": 5,
+                      "max_border_std": 5},
+            "text_rule": "allowed",
+        })
+
+    def renderer(*_args, **_kwargs):  # a scene render here would be the bug
+        raise AssertionError("the scene renderer was called for a uniform background")
+
+    generator = CompositeGenerator(
+        renderer=renderer, out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: pc.cutout(rgb, "grabcut"))
+    path = generator.generate(brief)
+    record = generator.record_for("T-FLAT")
+    assert path.is_file()
+    assert record["background_path"] == "flat_canvas"
+    assert record["flat_level"] == 245
+    assert record["white_canvas"]["corners_exact"] is True
+    with Image.open(path) as produced:
+        assert produced.convert("RGB").getpixel((2, 2)) == (245, 245, 245)
+
+
 def test_score_image_full_pass_and_fail():
     brief = make_brief()
     passing = score_image(png_bytes(product_canvas(ratio=0.30)), brief)

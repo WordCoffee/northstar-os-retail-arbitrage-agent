@@ -1,16 +1,56 @@
 {
   "services": {
     "design-studio": {
-      "mean": 22.1,
-      "scored": 40,
-      "passed": 0,
-      "at": "2026-11-08T21:47:05+00:00"
+      "mean": 93.5,
+      "scored": 12,
+      "passed": 9,
+      "at": "2026-11-08T21:47:05+00:00",
+      "population": "generated",
+      "replay": {
+        "mean": 29.2,
+        "scored": 40,
+        "passed": 0
+      }
     }
   },
-  "at": "2026-11-09T05:22:39+00:00",
+  "at": "2026-11-09T07:56:09+00:00",
   "pass": {
-    "scored": 40,
-    "passed": 0,
-    "mean_score": 22.1
+    "population": "generated",
+    "scored": 12,
+    "passed": 9,
+    "mean_score": 93.5,
+    "replay": {
+      "scored": 40,
+      "passed": 0,
+      "mean_score": 29.2
+    }
+  },
+  "ceiling": {
+    "briefs": 56,
+    "reference_resolvable": 12,
+    "resolvable_brief_ids": [
+      "ST-033",
+      "ST-034",
+      "ST-035",
+      "ST-036",
+      "ST-037",
+      "ST-038",
+      "ST-039",
+      "ST-040",
+      "ST-041",
+      "ST-042",
+      "ST-043",
+      "ST-044"
+    ],
+    "prompt_only": 32,
+    "unresolved_reference": 12,
+    "unresolved_by_mode": {
+      "uploaded_reference": 12
+    },
+    "generated_scored": 12,
+    "coverage_of_catalog_pct": 21.4,
+    "ceiling_generated_mean_if_all_scoreable_pass": 100.0,
+    "catalog_mean_if_every_scoreable_brief_passes": 21.4,
+    "note": "the published mean is over generated/composite outputs. Only 12 of 56 briefs have a reference on disk that can be cut out and verified; the other 44 cannot be produced honestly here (32 prompt-only, 12 with no local reference copy). Counting those as zero would be a pipeline verdict on evidence that does not exist; counting them as passes would be invention."
   }
 }
