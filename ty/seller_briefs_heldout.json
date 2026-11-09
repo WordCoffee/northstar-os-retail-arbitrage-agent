@@ -1,6 +1,6 @@
 {
   "schema": "northstar.seller_briefs.heldout.v1",
-  "note": "21 held-out briefs plus 3 declared-but-unscorable Neck Nirvana ones. The three are declared so the gap is visible, not so they can be scored.",
+  "note": "21 runnable held-out briefs plus 3 declared-but-unscorable Neck Nirvana ones. The three are declared so the gap is visible, not so they can score.",
   "briefs": [
     {
       "id": "HO-001",
@@ -23,8 +23,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -34,13 +34,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -61,7 +62,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "lifestyle",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -77,8 +78,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -87,16 +88,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -115,7 +117,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "infographic",
-      "difficulty": 3,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -131,8 +133,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -142,15 +144,16 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
-          "mode": "uniform"
+          "tolerance": 6,
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -185,8 +188,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -195,16 +198,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -223,7 +227,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "bundle_multipack",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -239,8 +243,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -249,16 +253,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -277,7 +282,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "packaging_mockup",
-      "difficulty": 3,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -293,8 +298,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -304,13 +309,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -347,8 +353,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -357,16 +363,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -385,7 +392,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "series_consistency",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -401,8 +408,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -411,16 +418,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -438,8 +446,8 @@
       "id": "HO-009",
       "category": "supplement_pouch",
       "product_line": "lions-mane",
-      "situation": "packaging_mockup",
-      "difficulty": 3,
+      "situation": "white_background_main",
+      "difficulty": 2,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -455,8 +463,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -466,13 +474,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -493,7 +502,7 @@
       "category": "supplement_pouch",
       "product_line": "lions-mane",
       "situation": "lifestyle",
-      "difficulty": 1,
+      "difficulty": 2,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -509,8 +518,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -519,16 +528,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -544,7 +554,7 @@
     },
     {
       "id": "HO-011",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "white_background_main",
       "difficulty": 1,
@@ -563,8 +573,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -574,13 +584,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -598,10 +609,10 @@
     },
     {
       "id": "HO-012",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "lifestyle",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -617,8 +628,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -627,16 +638,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -652,10 +664,10 @@
     },
     {
       "id": "HO-013",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "infographic",
-      "difficulty": 3,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -671,8 +683,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -682,15 +694,16 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
-          "mode": "uniform"
+          "tolerance": 6,
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -706,7 +719,7 @@
     },
     {
       "id": "HO-014",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "scale_reference",
       "difficulty": 1,
@@ -725,8 +738,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -735,16 +748,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -760,10 +774,10 @@
     },
     {
       "id": "HO-015",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "bundle_multipack",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -779,8 +793,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -789,16 +803,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -814,10 +829,10 @@
     },
     {
       "id": "HO-016",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "packaging_mockup",
-      "difficulty": 3,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -833,8 +848,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -844,13 +859,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -868,7 +884,7 @@
     },
     {
       "id": "HO-017",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "background_swap",
       "difficulty": 1,
@@ -887,8 +903,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -897,16 +913,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -922,10 +939,10 @@
     },
     {
       "id": "HO-018",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "series_consistency",
-      "difficulty": 2,
+      "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -941,8 +958,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -951,16 +968,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -976,10 +994,10 @@
     },
     {
       "id": "HO-019",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
-      "situation": "packaging_mockup",
-      "difficulty": 3,
+      "situation": "white_background_main",
+      "difficulty": 2,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -995,8 +1013,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1006,13 +1024,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -1030,10 +1049,10 @@
     },
     {
       "id": "HO-020",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
       "situation": "lifestyle",
-      "difficulty": 1,
+      "difficulty": 2,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
@@ -1049,8 +1068,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1059,16 +1078,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -1084,9 +1104,9 @@
     },
     {
       "id": "HO-021",
-      "category": "coffee_box",
+      "category": "food_jar",
       "product_line": "word-coffee",
-      "situation": "white_background_main",
+      "situation": "infographic",
       "difficulty": 2,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
@@ -1103,8 +1123,8 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1114,15 +1134,16 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
-          "mode": "uniform"
+          "tolerance": 6,
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "no_text",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -1135,30 +1156,31 @@
         }
       },
       "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
-    },
+    }
+  ],
+  "declared_unscorable": [
     {
-      "id": "HO-022",
+      "id": "HO-D01",
       "category": "supplement_pouch",
       "product_line": "neck-nirvana",
       "situation": "white_background_main",
       "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
-      "product_in_frame": true,
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
         "path": null,
         "descriptor": {
-          "filename": "",
-          "mime_type": "",
+          "filename": "neck-nirvana-missing.png",
+          "mime_type": "image/png",
           "subject": "neck nirvana product"
         }
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1168,13 +1190,14 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
+          "tolerance": 6,
           "mode": "uniform"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -1188,31 +1211,30 @@
           "max_bytes": 12000000
         }
       },
-      "note": "No product imagery exists on this machine for this brand; unscored."
+      "note": "No product imagery exists on this machine for this brand; unscorable."
     },
     {
-      "id": "HO-023",
+      "id": "HO-D02",
       "category": "supplement_pouch",
       "product_line": "neck-nirvana",
       "situation": "lifestyle",
       "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
-      "product_in_frame": true,
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
         "path": null,
         "descriptor": {
-          "filename": "",
-          "mime_type": "",
+          "filename": "neck-nirvana-missing.png",
+          "mime_type": "image/png",
           "subject": "neck nirvana product"
         }
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1221,16 +1243,17 @@
           "tolerance": 0.02
         },
         "background": {
-          "value": null,
-          "tolerance": 0,
+          "value": 255,
+          "tolerance": 6,
           "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "allowed",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -1242,31 +1265,30 @@
           "max_bytes": 12000000
         }
       },
-      "note": "No product imagery exists on this machine for this brand; unscored."
+      "note": "No product imagery exists on this machine for this brand; unscorable."
     },
     {
-      "id": "HO-024",
+      "id": "HO-D03",
       "category": "supplement_pouch",
       "product_line": "neck-nirvana",
       "situation": "infographic",
       "difficulty": 1,
       "source_mode": "uploaded_reference",
       "fidelity": "exact",
-      "product_in_frame": true,
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
         "path": null,
         "descriptor": {
-          "filename": "",
-          "mime_type": "",
+          "filename": "neck-nirvana-missing.png",
+          "mime_type": "image/png",
           "subject": "neck nirvana product"
         }
       },
       "constraints": {
         "dimensions": {
-          "min_width": 1024,
-          "min_height": 1024,
+          "min_width": 2000,
+          "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
@@ -1276,15 +1298,16 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 10,
-          "mode": "uniform"
+          "tolerance": 6,
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 8,
+          "min": 12,
           "max": 100,
-          "distance": 40
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
-        "text_rule": "expected",
+        "text_rule": "text_expected",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -1296,7 +1319,7 @@
           "max_bytes": 12000000
         }
       },
-      "note": "No product imagery exists on this machine for this brand; unscored."
+      "note": "No product imagery exists on this machine for this brand; unscorable."
     }
   ]
 }

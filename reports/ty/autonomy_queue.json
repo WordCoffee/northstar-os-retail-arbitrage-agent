@@ -1327,7 +1327,7 @@
       "fixable_by": "worker",
       "why": "the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
       "needs_author": "probe tys-runner-tests is still red: the runner owns the lease, the cap and the queue; red here means the loop cannot reserve a cycle honestly",
-      "last_generated_at": "2026-11-08T20:46:03+00:00"
+      "last_generated_at": "2026-11-09T15:59:50+00:00"
     }
   ],
   "parked": [
@@ -1374,7 +1374,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-08T20:46:03+00:00",
+  "updated_at": "2026-11-09T15:59:50+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {

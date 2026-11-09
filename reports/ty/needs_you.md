@@ -163,6 +163,20 @@ job list, and one command to promote or revert. Visual and creative bundles stay
 until you read it. Code-only bundles promote themselves once the suite is green and the verifier
 reproduces the deltas.
 
+## DIR-8. One Neck Nirvana product photograph (2026-11-09)
+
+The held-out run covers three lines as asked. Two are real: **Lion's Mane** (Mogra photographs) and
+**Word Coffee** (your `pictures for seller umbrella` folder) — 21 briefs, all with a real product
+photograph as the reference. **Neck Nirvana has no imagery anywhere on this machine**: the brand
+folder under `Desktop\t2-os\brands\neck-nirvana` exists and is empty, and a whole-drive search by
+name found nothing. Its three briefs are declared as `declared_unscorable` in
+`ty/seller_briefs_heldout.json` rather than scored against an invented product.
+
+Exact action: drop **one** Neck Nirvana product photo (front of pack is enough) somewhere obvious —
+`Desktop\t2-os\brands\neck-nirvana\` is where the pipeline already looks. The three briefs then
+become runnable with no code change. Until then the held-out mean is published over two lines, and
+the third line is named as missing in `reports/ty/heldout_<date>.md`.
+
 ## DIR-4. Chrome debugging: replaced by the UIA route (2026-11-08)
 
 The old entry asked for a Chrome restart. It has been replaced after trying the alternatives.

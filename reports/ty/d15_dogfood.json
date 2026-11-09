@@ -1,48 +1,28 @@
 {
-  "at": "2026-11-09T08:20:31+00:00",
+  "at": "2026-11-09T15:25:02+00:00",
   "services": [
     {
       "service": "design-studio",
       "url": "http://127.0.0.1:8101/ui/design-studio",
-      "at": "2026-11-09T08:19:47+00:00",
-      "opened": true,
+      "at": "2026-11-09T15:23:54+00:00",
+      "opened": false,
       "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
-      "text_chars": 0,
-      "task": {
-        "ok": false,
-        "service": "design-studio",
-        "vocabulary": [],
-        "has_number": false,
-        "actionable": false,
-        "chars": 0,
-        "why": "the page did not show the service's own vocabulary and a number"
-      },
       "ok": false,
-      "screenshot": "reports\\ty\\dogfood_shots\\design-studio.png"
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "service": "listings",
       "url": "http://127.0.0.1:8101/ui/listings",
-      "at": "2026-11-09T08:19:52+00:00",
-      "opened": true,
+      "at": "2026-11-09T15:24:11+00:00",
+      "opened": false,
       "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
-      "text_chars": 0,
-      "task": {
-        "ok": false,
-        "service": "listings",
-        "vocabulary": [],
-        "has_number": false,
-        "actionable": false,
-        "chars": 0,
-        "why": "the page did not show the service's own vocabulary and a number"
-      },
       "ok": false,
-      "screenshot": "reports\\ty\\dogfood_shots\\listings.png"
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "service": "socialpulse",
       "url": "http://127.0.0.1:8101/ui/socialpulse",
-      "at": "2026-11-09T08:19:58+00:00",
+      "at": "2026-11-09T15:24:28+00:00",
       "opened": false,
       "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
       "ok": false,
@@ -51,7 +31,7 @@
     {
       "service": "competitor-monitor",
       "url": "http://127.0.0.1:8101/ui/competitor-monitor",
-      "at": "2026-11-09T08:20:14+00:00",
+      "at": "2026-11-09T15:24:45+00:00",
       "opened": false,
       "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
       "ok": false,

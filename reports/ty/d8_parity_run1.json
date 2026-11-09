@@ -7,22 +7,28 @@
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
       "ran": true,
-      "passed": 6,
+      "passed": 5,
       "total": 10,
       "recovery": {
-        "ok": true,
-        "first_attempt_ok": true,
-        "second_attempt_ok": true,
-        "url": "http://127.0.0.1:8101/ui/"
+        "ok": false,
+        "first_attempt_ok": false,
+        "second_attempt_ok": false,
+        "url": ""
       },
       "tasks": [
         {
           "id": "open_home",
           "title": "open the base page",
-          "status": "pass",
-          "reason": "",
+          "status": "fail",
+          "reason": "navigate failed",
           "evidence": {
-            "url": "http://127.0.0.1:8101/ui/"
+            "result": {
+              "ok": false,
+              "url": "http://127.0.0.1:8101/ui/",
+              "title": "NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
+              "new_tab": true,
+              "reason": "neither the title nor the pixels changed"
+            }
           }
         },
         {
@@ -56,7 +62,7 @@
           "status": "pass",
           "reason": "",
           "evidence": {
-            "count": 52
+            "count": 57
           }
         },
         {
@@ -65,7 +71,7 @@
           "status": "fail",
           "reason": "click did not change the URL",
           "evidence": {
-            "before": "http://127.0.0.1:8101/ui/"
+            "before": ""
           }
         },
         {
@@ -100,8 +106,8 @@
           }
         }
       ],
-      "seconds": 147.4,
-      "at": 1794212252.8987093
+      "seconds": 353.2,
+      "at": 1794239539.407895
     },
     {
       "backend": "chromeconnect",
@@ -152,7 +158,7 @@
           "status": "not_run"
         }
       ],
-      "at": 1794212252.9206872
+      "at": 1794239539.4302757
     }
   ],
   "comparison": {
@@ -165,5 +171,5 @@
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794212252.9206986
+  "at": 1794239539.4302874
 }

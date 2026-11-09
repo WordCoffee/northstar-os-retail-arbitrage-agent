@@ -17,15 +17,23 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parents[1]
-PROOF = ROOT / "state" / "seller" / "composite_proof.json"
+PROOF = ROOT / "state" / "seller" / "heldout_composite_proof.json"
+PROOF_FALLBACK = ROOT / "state" / "seller" / "composite_proof.json"
 BRIEFS = ROOT / "ty" / "seller_briefs_heldout.json"
 OUT = ROOT / "state" / "seller" / "heldout_proof.json"
 REPORT = ROOT / "reports" / "ty" / f"heldout_{date.today().isoformat()}.md"
 
 
 def split() -> Dict[str, Any]:
-    proof = json.loads(PROOF.read_text(encoding="utf-8")) if PROOF.exists() else {"results": []}
-    briefs = json.loads(BRIEFS.read_text(encoding="utf-8"))["briefs"]
+    # The held-out proof is its own file: a held-out run must never overwrite, or be confused
+    # with, the tuned composite proof. The fallback only reads a proof that already contains
+    # held-out ids, and says which file it read.
+    proof_path = PROOF if PROOF.exists() else PROOF_FALLBACK
+    proof = (json.loads(proof_path.read_text(encoding="utf-8"))
+             if proof_path.exists() else {"results": []})
+    payload = json.loads(BRIEFS.read_text(encoding="utf-8"))
+    briefs = payload["briefs"]
+    declared = payload.get("declared_unscorable") or []
     by_id = {b["id"]: b for b in briefs}
     rows: List[Dict[str, Any]] = []
     for result in proof.get("results") or []:
@@ -41,6 +49,7 @@ def split() -> Dict[str, Any]:
             "passed": result.get("passed"),
             "route": result.get("route"),
             "artefact_path": result.get("artefact_path"),
+            "reference": ((brief.get("reference") or {}).get("path")),
             "failed_checks": result.get("failed_checks") or [],
             "cannot_verify": result.get("cannot_verify"),
             "fidelity": result.get("fidelity"),
@@ -51,6 +60,9 @@ def split() -> Dict[str, Any]:
         lines[str(row["product_line"])].append(row)
     summary = {
         "held_out_briefs": len(briefs),
+        "declared_unscorable": [{"brief_id": b["id"], "product_line": b.get("product_line"),
+                                 "situation": b.get("situation"),
+                                 "reason": b.get("note")} for b in declared],
         "scored": len(scored),
         "passed": sum(1 for row in scored if row.get("passed")),
         "mean": round(sum(float(row["score"]) for row in scored) / len(scored), 1)
@@ -60,7 +72,12 @@ def split() -> Dict[str, Any]:
                     for name, rows_ in lines.items()},
         "unscored_lines": sorted({b["product_line"] for b in briefs} - set(lines)),
     }
-    payload = {"at": date.today().isoformat(), "summary": summary, "results": rows}
+    try:
+        proof_label = str(proof_path.resolve().relative_to(ROOT))
+    except ValueError:  # a path outside the repo (a test, a temp run) is named absolutely
+        proof_label = str(proof_path)
+    payload = {"at": date.today().isoformat(), "proof": proof_label,
+               "summary": summary, "results": rows}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     _write_report(briefs, scored, summary)
@@ -70,8 +87,9 @@ def split() -> Dict[str, Any]:
 def _write_report(briefs: List[Dict[str, Any]], scored: List[Dict[str, Any]],
                   summary: Dict[str, Any]) -> None:
     lines = ["# Held-out run", "",
-             f"{summary['scored']} of {summary['held_out_briefs']} held-out briefs scored, "
-             f"{summary['passed']} passed, mean **{summary['mean']}**.", "",
+             f"{summary['scored']} of {summary['held_out_briefs']} runnable held-out briefs "
+             f"scored, {summary['passed']} passed"
+             + (f", mean **{summary['mean']}**." if summary["mean"] is not None else "."), "",
              "| brief | line | situation | score | passed | failed |",
              "|---|---|---|---|---|---|"]
     for row in sorted(scored, key=lambda r: r["brief_id"]):
@@ -82,6 +100,9 @@ def _write_report(briefs: List[Dict[str, Any]], scored: List[Dict[str, Any]],
               "|---|---|---|---|"]
     for name, row in summary["by_line"].items():
         lines.append(f"| {name} | {row['scored']} | {row['passed']} | {row['mean']} |")
+    declared_lines = sorted({d["product_line"] for d in summary.get("declared_unscorable") or []})
+    for name in declared_lines:
+        lines.append(f"| {name} | 0 | — | **not scored**: no product imagery on this machine |")
     missing = [b for b in briefs if b["id"] not in {r["brief_id"] for r in scored}]
     if missing:
         lines += ["", "## Declared but unscorable", ""]

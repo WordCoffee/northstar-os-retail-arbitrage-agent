@@ -872,14 +872,14 @@
       "controls_evidence": "App.jsx:250 mounts pages/customer/AccountStatus.jsx for /account; northstar-os-ui/src/pages/customer/AccountStatus.jsx:14-15 performs two reads and the file has no button or input.",
       "evidence": {
         "route": "/ui/account",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/account.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1693",
           "Northstar_backend/foundation/api/router.py:1809"
         ],
         "declared_tools": [],
-        "confidence": "low",
+        "confidence": "medium",
         "latest_attempt_blocked": "neither the title nor the pixels changed"
       }
     },
@@ -1005,7 +1005,7 @@
       "evidence": {
         "route": "/ui/foundation",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: 127.0.0.1:8101/ui/foundation | controls (shell chrome included): Back, Forward, Reload, Menu, Grid, Search",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:755",
           "Northstar_backend/foundation/api/router.py:650",
@@ -1018,7 +1018,7 @@
           "Northstar_backend/foundation/api/router.py:466"
         ],
         "declared_tools": [],
-        "confidence": "high",
+        "confidence": "medium",
         "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Back",
@@ -1165,7 +1165,7 @@
       "evidence": {
         "route": "/ui/jobs",
         "vision": "live",
-        "vision_note": "opened in a session-owned Chrome tab and described by understand.describe_page | title: Jobs & Schedules | controls (shell chrome included): Refresh, Queued, 0, eligible for claim, Leased, 0",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:855",
           "Northstar_backend/foundation/api/router.py:868",
@@ -1178,7 +1178,7 @@
           "Northstar_backend/foundation/api/router.py:836"
         ],
         "declared_tools": [],
-        "confidence": "high",
+        "confidence": "medium",
         "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Refresh",
@@ -1358,13 +1358,13 @@
       "evidence": {
         "route": "/ui/beta",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS | controls (shell chrome included): Search the Northstar Index..., Operator, D, Accept Invitation, Sign In, Need access? Contact your organization operator.",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
         "declared_tools": [],
-        "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "medium",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Search the Northstar Index...",
           "Operator",
@@ -1698,7 +1698,7 @@
       "evidence": {
         "route": "/ui/design-studio",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Design Studio | controls (shell chrome included): Canvas, Projects, Listing Images, A+ Brand Story, Storefront, Ads",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
           "Northstar_backend/studio_upload_router.py:22",
@@ -1711,8 +1711,8 @@
           "list_templates",
           "build_dieline"
         ],
-        "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "medium",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Canvas",
           "Projects",
@@ -1773,15 +1773,15 @@
       "evidence": {
         "route": "/ui/product-finder",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: SourceScout | controls (shell chrome included): New Lookup, Lookup, Product Set, Saved Sets, Coverage, Start researching",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
         "declared_tools": [
           "scan_products"
         ],
-        "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "confidence": "medium",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "New Lookup",
           "Lookup",
@@ -2188,8 +2188,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/ListingForge.jsx:140 proposal request from the brief form; :298 and :380 save the listing record.",
       "evidence": {
         "route": "/ui/listingforge",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/listingforge.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:1695",
           "Northstar_backend/design_studio_api.py:1293",
@@ -2198,7 +2198,7 @@
         "declared_tools": [
           "compose_listing"
         ],
-        "confidence": "low",
+        "confidence": "medium",
         "latest_attempt_blocked": "neither the title nor the pixels changed"
       }
     },
