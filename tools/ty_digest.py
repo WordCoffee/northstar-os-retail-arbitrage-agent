@@ -177,6 +177,37 @@ def _count(data: Any, key: str) -> int:
     return 0
 
 
+def _registry() -> Dict[str, Any]:
+    """What the service registry says, in one block: coverage, controls, tools, layouts."""
+    data = _read_json(TY_DIR / "service_registry.json")
+    rows = data.get("services") if isinstance(data, dict) else None
+    if not rows:
+        return {}
+    tools = _read_json(TY_DIR / "bojo_tool_list.json") or {}
+    workspaces = _read_json(TY_DIR / "northstar_workspaces.json") or {}
+    gaps = _read_json(TY_DIR / "registry_gaps.json") or {}
+    vision: Dict[str, int] = {}
+    for row in rows:
+        kind = str(((row.get("evidence") or {}).get("vision")) or "unknown")
+        vision[kind] = vision.get(kind, 0) + 1
+    specs = workspaces.get("workspaces") if isinstance(workspaces, dict) else None
+    if isinstance(specs, dict):
+        specs = list(specs.values())
+    layouts: Dict[str, int] = {}
+    for spec in specs or []:
+        layout = str((spec or {}).get("layout") or "?")
+        layouts[layout] = layouts.get(layout, 0) + 1
+    gap_rows = gaps.get("gaps") if isinstance(gaps, dict) else gaps
+    owned = tools.get("tools") if isinstance(tools, dict) else None
+    return {"services": len(rows),
+            "with_controls": sum(1 for row in rows if row.get("has_controls")),
+            "vision": vision,
+            "tools": {"owned": len(owned or []),
+                      "wired": (tools.get("wired") if isinstance(tools, dict) else None)},
+            "layouts": layouts,
+            "gaps": len(gap_rows or [])}
+
+
 def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     """Everything the digest needs, as data. Missing files are reported, not invented."""
     queue = _read_json(QUEUE)
@@ -205,6 +236,7 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
         "model_roles": len((models.get("roles") or {})) if isinstance(models, dict) else 0,
         "composites": _composites(),
         "composite_sheet": _contact_sheet(_composites()),
+        "registry": _registry(),
         "verifier_failed": (verifier.get("failed") or [])[:10] if isinstance(verifier, dict) else [],
         "verifier_blocked": (verifier.get("blocked") or [])[:10] if isinstance(verifier, dict) else [],
         "needs_you_open": (len([line for line in needs.read_text(encoding="utf-8").splitlines()
@@ -239,6 +271,24 @@ def render(data: Dict[str, Any]) -> str:
               f"six-point evidence files: {len(parity['six_point'])}", ""]
     failed = data.get("verifier_failed") or []
     blocked = data.get("verifier_blocked") or []
+    registry = data.get("registry") or {}
+    if registry:
+        lines += ["## Service registry (single source of truth)", ""]
+        lines.append(f"{registry['services']} services, {registry['with_controls']} with controls, "
+                     f"{registry.get('gaps', 0)} gaps recorded.")
+        lines.append("")
+        vision = registry.get("vision") or {}
+        if vision:
+            lines.append("- evidence: " + ", ".join(f"{k} {v}" for k, v in sorted(vision.items())))
+        layouts = registry.get("layouts") or {}
+        if layouts:
+            lines.append("- default-view layouts: " + ", ".join(
+                f"{k} {v}" for k, v in sorted(layouts.items(), key=lambda kv: -kv[1])))
+        tools = registry.get("tools") or {}
+        if tools:
+            lines.append(f"- Bojo tools owned by a service: {tools.get('owned')}")
+        lines.append("")
+
     lines += ["## Mogra composites — source next to output", ""]
     composites = data.get("composites") or []
     if composites:

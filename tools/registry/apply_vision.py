@@ -19,15 +19,30 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "ty" / "service_registry.json"
 
 
+def _labels(controls: Any) -> List[str]:
+    """Control names, whether the walker wrote strings or {label, kind} objects."""
+    out: List[str] = []
+    for item in controls or []:
+        if isinstance(item, dict):
+            label = str(item.get("label") or item.get("name") or "").strip()
+        else:
+            label = str(item).strip()
+        if label:
+            out.append(label)
+    return out
+
+
 def note_for(row: Dict[str, Any]) -> str:
     note = row.get("detail", "")
     audit_sourced = row.get("vision") == "screenshot"
     if row.get("title"):
         prefix = "ty/ux_audit.json " if audit_sourced else ""
         note += f" | {prefix}title: {row['title']}"
-    if row.get("controls"):
+    labels = _labels(row.get("controls"))
+    if labels:
         prefix = "ty/ux_audit.json " if audit_sourced else ""
-        note += f" | {prefix}controls (shell chrome included): {', '.join(row['controls'][:6])}"
+        note += (f" | {prefix}controls (shell chrome included): "
+                 f"{', '.join(labels[:6])}")
     if row.get("blocked_by"):
         note += f" | blocked: {row['blocked_by']}"
     if row.get("shot"):

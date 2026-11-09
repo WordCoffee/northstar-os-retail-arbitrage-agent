@@ -62,8 +62,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 — 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page.",
       "evidence": {
         "route": "/ui/hub",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: Operations Hub | controls (shell chrome included): Search the Northstar Index..., 90%, 100%, 115%, 130%, Operator | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Operations Hub | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., 90%, 100%, 115%, 130%, Operator | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/hub.png",
         "backend": [
           "Northstar_backend/main.py:2310",
           "Northstar_backend/main.py:987",
@@ -120,8 +120,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/Ledger.jsx:11-22 performs two reads and renders Metric tiles; the file contains no button, input, select or textarea.",
       "evidence": {
         "route": "/ui/ledger",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: The Ledger | controls (shell chrome included): Search the Northstar Index..., Operator, D, Ask Gemini, 115%, 130% | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Ledger | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, D, Ask Gemini, 115%, 130% | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/ledger.png",
         "backend": [
           "Northstar_backend/main.py:2419",
           "Northstar_backend/main.py:987"
@@ -186,8 +186,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/Prospector.jsx:119 filter input, :122 Min ROI slider, :125 'Run live scan'; :167 Export and :168 'Pin top 3'.",
       "evidence": {
         "route": "/ui/prospector",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/prospector.png",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
@@ -250,7 +250,7 @@
       "evidence": {
         "route": "/ui/goldengoose",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:1842",
           "Northstar_backend/main.py:2247"
@@ -315,8 +315,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/OfferChisel.jsx:54 product input, :56 style select, :63 Generate; :79 copies the generated title.",
       "evidence": {
         "route": "/ui/offerchisel",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: OfferChisel | controls (shell chrome included): Generate Listing, SEO-first, Generate, Search the Northstar Index..., Operator, Ask Gemini | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: OfferChisel | ty/ux_audit.json controls (shell chrome included): Generate Listing, SEO-first, Generate, Search the Northstar Index..., Operator, Ask Gemini | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/offerchisel.png",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
@@ -386,8 +386,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/TownCrier.jsx:62 brief textarea, :65 platform select, Generate; :40-43 Schedule only toasts 'publish gate closed'.",
       "evidence": {
         "route": "/ui/towncrier",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: The Town Crier | controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, Generate caption, Schedule this caption, Meta | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: The Town Crier | ty/ux_audit.json controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, Generate caption, Schedule this caption, Meta | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/towncrier.png",
         "backend": [
           "Northstar_backend/main.py:1540"
         ],
@@ -461,8 +461,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/Auctioneer.jsx:67-72 eight numeric inputs; :73 Compute (canonical).",
       "evidence": {
         "route": "/ui/auctioneer",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/auctioneer.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1461"
         ],
@@ -544,7 +544,7 @@
       "evidence": {
         "route": "/ui/autothink",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/autothink.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/autothink.png",
         "backend": [
           "Northstar_backend/main.py:1529",
           "Northstar_backend/main.py:1540",
@@ -592,8 +592,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/TheWatch.jsx:10-27 — one scanner read, then a render; no input, button or select in the file.",
       "evidence": {
         "route": "/ui/thewatch",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/thewatch.png",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
@@ -639,8 +639,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/RankLedger.jsx:10-30 — reads the scanner and sorts in memory; the file has no form control.",
       "evidence": {
         "route": "/ui/rankledger",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/rankledger.png",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
@@ -686,8 +686,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 — one read and a derived posture column; no control exists.",
       "evidence": {
         "route": "/ui/rivalboard",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/rivalboard.png",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
@@ -741,7 +741,7 @@
       "evidence": {
         "route": "/ui/account",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/account.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/account.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1693",
           "Northstar_backend/foundation/api/router.py:1809"
@@ -870,8 +870,8 @@
       "controls_evidence": "northstar-os-ui/src/foundation/pages/FoundationStatus.jsx:31-43 fires twelve distinct reads; :88 Refresh re-runs them. Nothing on the page accepts input or writes.",
       "evidence": {
         "route": "/ui/foundation",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: Foundation | controls (shell chrome included): Refresh, Search the Northstar Index..., 90%, 100%, 115%, 130% | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Foundation | ty/ux_audit.json controls (shell chrome included): Refresh, Search the Northstar Index..., 90%, 100%, 115%, 130% | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/foundation.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:755",
           "Northstar_backend/foundation/api/router.py:650",
@@ -1018,8 +1018,8 @@
       "controls_evidence": "northstar-os-ui/src/foundation/pages/Jobs.jsx:115 job-type select, :125 payload textarea, :60 create; :69 cancel, :74 retry, :80 schedule enable/disable.",
       "evidence": {
         "route": "/ui/jobs",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "live",
+        "vision_note": "opened in a session-owned Chrome tab and described by understand.describe_page | title: Jobs & Schedules | controls (shell chrome included): Refresh, Queued, 0, eligible for claim, Leased, 0",
         "backend": [
           "Northstar_backend/foundation/api/router.py:855",
           "Northstar_backend/foundation/api/router.py:868",
@@ -1145,7 +1145,7 @@
       "evidence": {
         "route": "/ui/keywords",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1078",
           "Northstar_backend/foundation/api/router.py:1116",
@@ -1183,8 +1183,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:41-42 — 'Accept Invitation' and 'Sign In' call navigate(); the file imports no API client.",
       "evidence": {
         "route": "/ui/beta",
-        "vision": "audit",
-        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: NorthstarOS | controls (shell chrome included): Search the Northstar Index..., Operator, Accept Invitation, Sign In, Portfolio & Finance, Golden Goose Finder | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "live",
+        "vision_note": "opened in a session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS | controls (shell chrome included): Search the Northstar Index..., Operator, Accept Invitation, Sign In, Portfolio & Finance, Golden Goose Finder",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -1218,7 +1218,7 @@
       "evidence": {
         "route": "/ui/beta#support",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -1270,8 +1270,8 @@
       "controls_evidence": "northstar-os-ui/src/foundation/pages/BetaSignup.jsx:32 email input, :35 invite-code input, :37 submit.",
       "evidence": {
         "route": "/ui/beta-signup",
-        "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ty/ux_audit_shots/beta-signup.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1756"
         ],
@@ -1330,7 +1330,7 @@
       "evidence": {
         "route": "/ui/beta-ops",
         "vision": "backend",
-        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: neither the title nor the pixels changed",
         "backend": [
           "Northstar_backend/foundation/api/router.py:2025",
           "Northstar_backend/noncreative_reads.py:402"
@@ -1442,8 +1442,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/DesignStudio.jsx:87-101 section picker; each built section (canvas, dielines, projects) carries its own form controls.",
       "evidence": {
         "route": "/ui/design-studio",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Design Studio | ty/ux_audit.json controls (shell chrome included): Canvas, Projects, Listing Images, A+ Brand Story, Storefront, Ads | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/design-studio.png",
+        "vision": "live",
+        "vision_note": "opened in a session-owned Chrome tab and described by understand.describe_page | title: Design Studio | controls (shell chrome included): Canvas, Projects, Listing Images, A+ Brand Story, Storefront, Ads",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
           "Northstar_backend/studio_upload_router.py:22",
@@ -1501,8 +1501,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/ProductFinder.jsx:140 ASIN input and :143 add stage a local row; :169 opens the set, :170 hands off to Commerce Ops; the file contains no fetch or api call — /api/products/finder appears only in comments (:18-21, :124).",
       "evidence": {
         "route": "/ui/product-finder",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: SourceScout | ty/ux_audit.json controls (shell chrome included): New Lookup, Lookup, Product Set, Saved Sets, Coverage, Start researching | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/product-finder.png",
+        "vision": "live",
+        "vision_note": "opened in a session-owned Chrome tab and described by understand.describe_page | title: SourceScout | controls (shell chrome included): New Lookup, Lookup, Product Set, Saved Sets, Coverage, Start researching",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -1593,7 +1593,7 @@
       "evidence": {
         "route": "/ui/golden-goose",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/golden-goose.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/golden-goose.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:401",
           "Northstar_backend/foundation/api/router.py:414",
@@ -1662,7 +1662,7 @@
       "evidence": {
         "route": "/ui/listings",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/listing-guardian.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/listing-guardian.png",
         "backend": [
           "Northstar_backend/noncreative_reads.py:226"
         ],
@@ -1731,7 +1731,7 @@
       "evidence": {
         "route": "/ui/keyword-tracker",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/keyword-tracker.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/keyword-tracker.png",
         "backend": [
           "Northstar_backend/noncreative_reads.py:336",
           "Northstar_backend/foundation/api/router.py:1078",
@@ -1789,7 +1789,7 @@
       "evidence": {
         "route": "/ui/competitor-monitor",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/competitor-monitor.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/competitor-monitor.png",
         "backend": [
           "Northstar_backend/noncreative_reads.py:261",
           "Northstar_backend/main.py:2227"
@@ -1875,7 +1875,7 @@
       "evidence": {
         "route": "/ui/listingforge",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/listingforge.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/listingforge.png",
         "backend": [
           "Northstar_backend/main.py:1695",
           "Northstar_backend/design_studio_api.py:1293",
@@ -1969,7 +1969,7 @@
       "evidence": {
         "route": "/ui/adpilot",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/adpilot.png",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/adpilot.png",
         "backend": [
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
@@ -2034,7 +2034,7 @@
       "evidence": {
         "route": "/ui/socialpulse",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/socialpulse.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/socialpulse.png",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -2118,7 +2118,7 @@
       "evidence": {
         "route": "/ui/profitability",
         "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/profitability.png",
+        "vision_note": "committed capture of this route; not described live | blocked: neither the title nor the pixels changed | shot: reports/ui_audit_20261016/profitability.png",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1445",
           "Northstar_backend/foundation/api/router.py:1461"
