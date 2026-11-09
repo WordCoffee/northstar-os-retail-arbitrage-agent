@@ -48,6 +48,20 @@ REACT_BUILTINS = {"Fragment", "Suspense", "StrictMode", "Profiler", "Memo"}
 UNSAFE_LENGTH_MAP = re.compile(r"&&\s*[A-Za-z_$][A-Za-z0-9_$.]*\.length\s*\)")
 
 
+BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+LINE_COMMENT = re.compile(r"(?<!:)//[^\n]*")
+
+
+def strip_comments(source: str) -> str:
+    """Remove comments before asking which components are used.
+
+    A comment that explains *why* a page does not render a router outlet is not a reference to it.
+    The checker reported shell/WorkspacePanels.jsx for exactly that (2026-11-09), and a false
+    positive here blocks a correct build. The look-behind keeps `https://` inside string literals.
+    """
+    return LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", source))
+
+
 def destructured_aliases(source: str) -> set[str]:
     """Capitalised names bound by destructuring, which are local bindings.
 
@@ -121,7 +135,7 @@ def main() -> int:
         checked += 1
         rel = str(path.relative_to(SRC)).replace("\\", "/")
         available = names_from(source)
-        used = set(JSX_TAG.findall(source)) - REACT_BUILTINS
+        used = set(JSX_TAG.findall(strip_comments(source))) - REACT_BUILTINS
         for name in sorted(used - available):
             problems.append((rel, name))
         for line_no, text in unsafe_render_lines(source):

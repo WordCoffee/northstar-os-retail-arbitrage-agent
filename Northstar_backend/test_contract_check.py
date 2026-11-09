@@ -16,6 +16,7 @@ here touches Amazon or a paid provider.
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -94,7 +95,21 @@ def test_substance_separates_stubs_from_measurements(payload, expected):
     assert ok is expected
 
 
-def test_end_to_end_contract_run_on_a_fresh_backend(tmp_path):
+def test_end_to_end_contract_run_on_a_fresh_backend(tmp_path, monkeypatch):
+    # The product-finder reads the local search cache. `test_network_guard` points that cache at an
+    # empty temp file on purpose, so this test used to pass only when an earlier module happened to
+    # leave candidates in it — an order dependence, not a measurement. It seeds its own.
+    cache = tmp_path / "scanner-search-cache.json"
+    cache.write_text(json.dumps({
+        "schema_version": 1,
+        "source": "contract-test",
+        "fetched_at": "2026-11-09T00:00:00+00:00",
+        "candidate_count": 1,
+        "products": [{"asin": "B0TEST00001", "name": "Contract Test Candidate",
+                      "price": 10.0, "product_url": "https://example.invalid/dp/B0TEST00001"}],
+    }), encoding="utf-8")
+    monkeypatch.setenv("SCANNER_SEARCH_CACHE_PATH", str(cache))
+
     result = cc.run(mode="in_process", db_dir=tmp_path)
 
     assert result["count"] == 29

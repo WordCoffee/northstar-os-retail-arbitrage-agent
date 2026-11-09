@@ -79,6 +79,20 @@ def test_app_guard_translates_the_role():
 
 # --- no undefined JSX component references ---------------------------------
 
+def test_the_checker_ignores_a_component_name_inside_a_comment(tmp_path):
+    """A comment explaining why a page has no router outlet is not a reference to one."""
+    sample = (
+        "// the shell renders this instead of an <Outlet/> swap\n"
+        "/* and <Ghost/> here is prose too */\n"
+        "const url = 'https://example.com/path'\n"
+        "export default function A() { return <Real /> }\n"
+    )
+    cleaned = _checker.strip_comments(sample)
+    assert "<Outlet" not in cleaned
+    assert "<Ghost" not in cleaned
+    assert "https://example.com/path" in cleaned, "a URL in a string must survive"
+
+
 def test_no_undefined_jsx_components():
     """The Product Designer shipped two crashes from unimported components."""
     checker = Path(__file__).resolve().parent.parent / "tools" / "check-jsx-imports.py"

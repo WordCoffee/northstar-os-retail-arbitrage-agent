@@ -17,6 +17,12 @@ import unittest
 from unittest.mock import patch
 
 _TMP = tempfile.mkdtemp(prefix="coverage-report-test-")
+_WATCHED = ("SCANNER_OFFER_ENRICHMENT", "SCANNER_SEARCH_CACHE_PATH", "COSTCO_CSV_PATH",
+            "COSTCO_CATALOG_DETAIL_PATH", "COSTCO_INVOICE_PATH", "COSTCO_AMAZON_MAPPING_PATH")
+#: What the environment held *before* this module configured it. tearDownModule puts these back, so
+#: a later module (the contract check reads the real scanner cache) is not left pointing at a temp
+#: file that no longer has candidates.
+_PRE_IMPORT_ENV = {name: os.environ.get(name) for name in _WATCHED}
 os.environ["SCANNER_OFFER_ENRICHMENT"] = "OFF"
 os.environ["SCANNER_SEARCH_CACHE_PATH"] = os.path.join(_TMP, "scanner-search-cache.json")
 os.environ["COSTCO_CSV_PATH"] = os.path.join(_TMP, "costco-items.csv")
@@ -33,9 +39,7 @@ CACHE_PATH = os.environ["SCANNER_SEARCH_CACHE_PATH"]
 CSV_PATH = os.environ["COSTCO_CSV_PATH"]
 LEDGER_PATH = os.environ["COSTCO_AMAZON_MAPPING_PATH"]
 
-_ENV = {name: os.environ.get(name) for name in (
-    "SCANNER_OFFER_ENRICHMENT", "SCANNER_SEARCH_CACHE_PATH", "COSTCO_CSV_PATH",
-    "COSTCO_CATALOG_DETAIL_PATH", "COSTCO_INVOICE_PATH", "COSTCO_AMAZON_MAPPING_PATH")}
+_ENV = {name: os.environ.get(name) for name in _WATCHED}
 _ENV_AT_IMPORT = dict(_ENV)
 
 
@@ -54,7 +58,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    for name, value in _ENV.items():
+    for name, value in _PRE_IMPORT_ENV.items():
         if value is None:
             os.environ.pop(name, None)
         else:
