@@ -117,6 +117,36 @@ nothing) made the *product* better, but `product_analysis.py` is a **protected a
 recorded hash — `test_proof_batch_run` refused it, correctly. The change was reverted rather than
 re-baselined: a protected file is not a place to fix a test-environment problem.
 
+## D-006 — the JSX crash checker read comments as code (2026-11-09)
+
+**Measured:** `python tools/check-jsx-imports.py` reported `shell/WorkspacePanels.jsx: <Outlet>`
+after the ux-07 merge, failing `test_shell_role_contract.py`. The file never uses `<Outlet>`; a
+**comment** explains that the shell renders each tab's page itself "instead of letting the shared
+`<Outlet/>` swap pages out".
+
+**Cause:** the checker scanned raw source for JSX tags, so a component name inside a comment counted
+as a reference. A checker that flags correct code blocks a correct build — and the next person
+"fixes" it by deleting an accurate explanation.
+
+**Fix:** `strip_comments()` removes `/* … */` and `// …` before the tag scan, with a look-behind so
+`https://` inside a string survives. Two tests: comments are ignored, URLs are not.
+
+## D-007 — the contract test depended on another module having populated the cache (2026-11-09)
+
+**Measured:** `test_end_to_end_contract_run_on_a_fresh_backend` failed with
+`assert "row(s) under 'evaluated'" in '6 measured field(s) (…)'` whenever it ran without a prior test
+that had written candidates. Alone it passed; after `test_coverage_report.py` it failed.
+
+**Cause:** `test_network_guard.py` — imported by every module — points `SCANNER_SEARCH_CACHE_PATH` at
+an **empty** temp file on purpose (hermetic cache). The contract test's product-finder therefore
+returned `evaluated: 0`, a count instead of rows, unless an earlier test had left candidates behind.
+Passing was luck, not measurement.
+
+**Fix:** the test seeds a one-candidate cache in its own `tmp_path` and points the environment at it.
+It now measures the endpoint rather than the test order. Verified in the pair that used to fail: 24
+passed.
+
+
 
 ## D-004 — a killed render wedged the GPU lane (2026-11-09)
 
