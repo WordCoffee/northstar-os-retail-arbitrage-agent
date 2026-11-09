@@ -17,7 +17,7 @@ from typing import Any, Dict, Iterable, List, Optional
 INPUT_KINDS = ("query", "file", "selection", "setting")
 OUTPUT_KINDS = ("table", "image", "file", "status", "text")
 EFFECTS = ("read", "write", "external")
-BOJO_STATUS = ("wired", "declared", "none")
+BOJO_STATUS = ("wired", "declared", "none", "retired")
 VISION_KINDS = ("live", "screenshot", "audit", "backend")
 METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
 LAYOUTS = ("feed", "split", "canvas", "wizard", "board")
