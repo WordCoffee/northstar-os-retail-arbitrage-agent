@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -37,6 +38,8 @@ def root(tmp_path, monkeypatch):
         "HANDOFF": tmp_path / "reports" / "ty" / "handoff.md",
         "QUEUE": tmp_path / "reports" / "ty" / "director_queue.json",
         "GPU_LOCK": state / "gpu" / "lock.json",
+        "REBOOT_PROOF": state / "reboot_proof.json",
+        "REBOOT_CHECK": tmp_path / "tools" / "post_reboot_check.py",
     }.items():
         monkeypatch.setattr(D, name, value)
     (tmp_path / "reports" / "ty").mkdir(parents=True, exist_ok=True)
@@ -175,3 +178,81 @@ def test_the_launcher_never_stacks_two_directors(root, monkeypatch):
     payload = D.tick(start=True)
     assert payload["state"] == "running"
     assert payload["director_pid"] == 99
+
+
+# ------------------------------------------------------- item 2: post-reboot proof
+def _write_proof(epoch: float) -> None:
+    D.REBOOT_PROOF.parent.mkdir(parents=True, exist_ok=True)
+    D.REBOOT_PROOF.write_text(
+        json.dumps({"checked_epoch": epoch, "checked_at": "2026-11-09T00:00:00+00:00"}),
+        encoding="utf-8")
+
+
+def _quiet_launcher(monkeypatch) -> None:
+    """A one-tick launcher that never needs a model or a process table."""
+    monkeypatch.setattr(D, "_processes", lambda: [])
+    monkeypatch.setattr(D, "start_director", lambda: None)
+
+
+def test_the_first_start_after_a_boot_runs_the_reboot_check(root, monkeypatch):
+    calls = []
+    _quiet_launcher(monkeypatch)
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER",
+                        lambda: calls.append("ran") or 4242)
+
+    assert D.reboot_check_needed() is True          # no proof file at all yet
+    assert D.main(["--max-ticks", "1", "--interval", "0"]) == 0
+
+    assert calls == ["ran"]
+    assert "launcher starting" in D.LOG.read_text(encoding="utf-8")
+
+
+def test_a_second_start_in_the_same_boot_does_not_run_the_check(root, monkeypatch):
+    _quiet_launcher(monkeypatch)
+    _write_proof(time.time())                       # written after this boot
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER",
+                        lambda: pytest.fail("a proof for this boot already exists"))
+
+    assert D.reboot_check_needed() is False
+    assert D.main(["--max-ticks", "1", "--interval", "0"]) == 0
+
+
+def test_a_proof_from_before_this_boot_is_stale(root, monkeypatch):
+    boot = D.boot_epoch()
+    assert boot is not None
+    _quiet_launcher(monkeypatch)
+    _write_proof(boot - 3600)
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER", lambda: 1)
+
+    assert D.reboot_check_needed() is True
+    assert D.run_reboot_check_once() == 1
+
+
+def test_a_failing_reboot_check_does_not_stop_the_launcher(root, monkeypatch):
+    _quiet_launcher(monkeypatch)
+
+    def boom():
+        raise RuntimeError("the check broke")
+
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER", boom)
+
+    assert D.main(["--max-ticks", "1", "--interval", "0"]) == 0
+    log = D.LOG.read_text(encoding="utf-8")
+    assert "reboot check skipped: RuntimeError: the check broke" in log
+    assert "stopping after 1 tick" in log
+
+
+def test_a_missing_check_script_is_skipped_in_one_line(root, monkeypatch):
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER", None)   # the real spawn path
+    assert D.REBOOT_CHECK.exists() is False
+
+    assert D.run_reboot_check_once() is None
+    assert "tools/post_reboot_check.py missing; skipped" in D.LOG.read_text(encoding="utf-8")
+
+
+def test_a_heartbeat_tick_does_not_run_the_reboot_check(root, monkeypatch):
+    """`--once` stays model-free and write-light; only a real start records the proof."""
+    monkeypatch.setattr(D, "REBOOT_CHECK_RUNNER",
+                        lambda: pytest.fail("--once must not record the proof"))
+
+    assert D.main(["--once"]) == 0
