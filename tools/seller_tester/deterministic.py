@@ -183,8 +183,16 @@ def infographic(canvas_bytes: bytes, product_box: Sequence[int],
     width, height = source.size
     seed = stable_seed(str(brief.get("id") or "infographic"))
     box = [int(v) for v in product_box]
+    # The page meets the brief's background level, so `subject_fill` measures the panel and the
+    # copy rather than counting a slightly-off-white page as 100 % subject.
+    background = ((brief.get("constraints") or {}).get("background") or {})
+    try:
+        page_level = int(background.get("value", 255))
+    except (TypeError, ValueError):
+        page_level = 255
+    page_level = max(0, min(255, page_level))
 
-    page = _from_array(np.full((height, width, 3), PAPER, dtype=np.uint8))
+    page = _from_array(np.full((height, width, 3), page_level, dtype=np.uint8))
     draw = ImageDraw.Draw(page)
     top = _font(max(28, height // 16), bold=True)
     sub = _font(max(20, height // 34))

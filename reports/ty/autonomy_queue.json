@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-09T18:29:59+00:00",
+  "updated": "2026-11-09T21:37:44+00:00",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -1356,6 +1356,67 @@
       "tier": "code",
       "commit": null,
       "verification": null
+    },
+    {
+      "id": "sel-05-dieline",
+      "kind": "feature",
+      "priority": 1100,
+      "status": "pending",
+      "title": "Packaging dieline: map artwork onto front, side and bottom faces with fold shadows",
+      "next": "Extend tools/seller_tester/deterministic.py panel_warp into a three-face dieline: front quad plus a side face (compressed horizontally) and a bottom gusset, each mapped from its own region of the artwork, with fold lines and a contact shadow. Record every face quad so the product-region check can warp the cutout per face.",
+      "write_paths": [
+        "tools/seller_tester/deterministic.py",
+        "Northstar_backend/test_seller_deterministic.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_seller_deterministic.py"
+        ]
+      ],
+      "why": "the owner asked for perspective warp OR template mapping of real artwork onto the dieline; the warp landed, the dieline is the stronger half",
+      "evidence": [
+        "renders/layout_demo/LM-DET-03.png",
+        "reports/ty/deterministic_layouts.md"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-09T21:37:44+00:00",
+      "updated_at": "2026-11-09T21:37:44+00:00"
+    },
+    {
+      "id": "sel-06-infographic-copy",
+      "kind": "feature",
+      "priority": 1050,
+      "status": "pending",
+      "title": "Infographic callouts currently say where the product is, not what it does",
+      "next": "Add an optional `copy` block to a brief (heading, callouts, footer) that the seller supplies, and render it verbatim; keep the structural defaults when absent. Never invent a claim.",
+      "write_paths": [
+        "tools/seller_tester/deterministic.py",
+        "ty/seller_briefs.json"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_seller_deterministic.py"
+        ]
+      ],
+      "why": "a product guide that cannot carry the seller's own words is half a guide",
+      "evidence": [
+        "reports/ty/deterministic_layouts.md"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-09T21:37:44+00:00",
+      "updated_at": "2026-11-09T21:37:44+00:00"
     }
   ],
   "parked": [
