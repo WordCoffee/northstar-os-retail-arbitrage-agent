@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-09T04:04:23+00:00",
+  "updated_at": "2026-11-09T04:41:38+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -523,6 +523,28 @@
       "rank": 0
     },
     {
+      "id": "sel-01c-cutout-provenance",
+      "unit": "D12",
+      "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester",
+        "state/seller"
+      ],
+      "branch": "ty/sel-01c-cutout-provenance",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-sel01c-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T04:04:23+00:00",
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 1
+    },
+    {
       "id": "sel-01b-reference-generation",
       "unit": "D12",
       "title": "Reference generation for real: a render lane that consumes the stored and uploaded reference instead of replaying artefacts (img2img / IP-Adapter)",
@@ -542,8 +564,8 @@
       "score_after": 75.9,
       "evidence": "composite pipeline: BiRefNet cutout (14/14), 3 Mogra composites, 2 pass the printed-text check; region check cannot verify until the cutout is saved",
       "created_at": "2026-11-08T21:47:47+00:00",
-      "updated_at": "2026-11-09T04:04:23+00:00",
-      "rank": 1
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 2
     },
     {
       "id": "sel-02-design-studio",
@@ -565,30 +587,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:48:22+00:00",
-      "rank": 2
-    },
-    {
-      "id": "sel-01c-cutout-provenance",
-      "unit": "D12",
-      "title": "Composite provenance: save the cutout and placement beside every composite so the product-region check can verify it",
-      "status": "queued",
-      "owner": "",
-      "write_paths": [
-        "tools/seller_tester",
-        "state/seller"
-      ],
-      "branch": "ty/sel-01c-cutout-provenance",
-      "worktree": "",
-      "rollback_tag": "rollback/pre-sel01c-20261108",
-      "acceptance": [],
-      "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "",
-      "created_at": "2026-11-09T04:04:23+00:00",
-      "updated_at": "2026-11-09T04:04:23+00:00",
-      "rank": 2
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 3
     },
     {
       "id": "sel-03-aplus",
@@ -609,8 +609,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:48:22+00:00",
-      "rank": 3
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 4
     },
     {
       "id": "sel-04-packaging",
@@ -631,14 +631,14 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:48:22+00:00",
-      "rank": 4
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 5
     },
     {
       "id": "ux-05-render-routes",
       "unit": "D12",
       "title": "26 of 29 service routes render the chat shell instead of their own page",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "northstar-os-ui/src"
@@ -648,12 +648,12 @@
       "rollback_tag": "rollback/pre-seller-quality-20261108",
       "acceptance": [],
       "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "",
+      "score_before": 0.0,
+      "score_after": 0.0,
+      "evidence": "29/29 routes render; 60 e2e passed",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-08T21:48:22+00:00",
-      "rank": 5
+      "updated_at": "2026-11-09T04:41:38+00:00",
+      "rank": 6
     },
     {
       "id": "ux-06-shell",
@@ -674,8 +674,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T03:16:49+00:00",
-      "rank": 6
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 7
     },
     {
       "id": "ux-07-tabs",
@@ -695,8 +695,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T03:16:49+00:00",
-      "rank": 7
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 8
     },
     {
       "id": "ux-08-scene",
@@ -717,8 +717,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T03:16:49+00:00",
-      "rank": 8
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 9
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -740,8 +740,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:35:26+00:00",
-      "updated_at": "2026-11-09T03:35:26+00:00",
-      "rank": 9
+      "updated_at": "2026-11-09T04:41:09+00:00",
+      "rank": 10
     }
   ],
   "service_scores": {},
