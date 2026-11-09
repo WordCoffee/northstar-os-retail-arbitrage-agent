@@ -115,6 +115,7 @@ _generated_snapshot: dict = {}
 
 
 def pytest_sessionstart(session):  # noqa: ANN001
+    _capture_path_env_baseline()
     for pattern in _GENERATED_ARTIFACT_GLOBS:
         for path in glob.glob(pattern):
             try:
@@ -155,3 +156,49 @@ def _restore_generated_artifacts():  # noqa: ANN201
     """Restore the generated scanner cache to its committed bytes after each test."""
     yield
     _restore_generated()
+
+
+# --- path-env isolation ----------------------------------------------------
+# The scanner and the report CLIs set these variables globally when their mains run
+# (``os.environ["SCANNER_SEARCH_CACHE_PATH"] = args.cache`` and friends). A test that drives such a
+# main therefore leaves the next test reading a different catalogue. That is not hypothetical: with
+# ``test_costco_api_client.py`` ahead of it in the same process, the contract test's product-finder
+# call returned a count instead of rows and the assertion failed, while the same test passed alone.
+# Restoring these names after every test makes the suite order-independent, which is what a full
+# run is supposed to be.
+_MUTABLE_PATH_ENV = (
+    "SCANNER_SEARCH_CACHE_PATH",
+    "COSTCO_CSV_PATH",
+    "COSTCO_CATALOG_DETAIL_PATH",
+    "COSTCO_INVOICE_PATH",
+    "COSTCO_AMAZON_MAPPING_PATH",
+    "COSTCO_CATALOG_SNAPSHOT_PATH",
+    "COSTCO_CATALOG_ARCHIVE_PATH",
+    "COSTCO_CATALOG_RUN_REPORT_PATH",
+)
+_path_env_baseline: dict = {}
+
+
+def _capture_path_env_baseline() -> None:
+    if not _path_env_baseline:
+        for name in _MUTABLE_PATH_ENV:
+            _path_env_baseline[name] = os.environ.get(name)
+
+
+def _restore_path_env() -> None:
+    for name, value in _path_env_baseline.items():
+        if value is None:
+            os.environ.pop(name, None)
+        else:
+            os.environ[name] = value
+
+
+@pytest.fixture(autouse=True)
+def _no_path_env_leak():  # noqa: ANN201
+    """Restore the mutable path vars to their session baseline after every test.
+
+    It has to be the *baseline*, not the value at test setup: the leak happens during an earlier
+    test, so by the time this test starts the damage is already in its environment.
+    """
+    yield
+    _restore_path_env()

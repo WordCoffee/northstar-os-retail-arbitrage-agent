@@ -1,6 +1,6 @@
 # Item 5 — promotion slices, 20261109
 
-`staging` @ `433c5d87d5ef` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10723 changed path(s).
+`staging` @ `02d9a67491b4` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10762 changed path(s).
 
 - code-only slices (auto-promotable when the suite is green): **169**
 - visual/creative slices (review pack each): **18**
@@ -20,7 +20,7 @@
 | `Northstar_backend-gateway` | code | 5 | 0 | 0 |
 | `Northstar_backend-importers` | code | 2 | 0 | 0 |
 | `Northstar_backend-migrations_foundation` | code | 18 | 0 | 0 |
-| `Northstar_backend-root` | code | 575 | 0 | 4 |
+| `Northstar_backend-root` | code | 580 | 0 | 4 |
 | `Northstar_backend-scripts` | code | 1 | 0 | 0 |
 | `Northstar_backend-specialists` | code | 18 | 0 | 0 |
 | `Northstar_backend-static` | code | 2 | 0 | 0 |
@@ -77,8 +77,8 @@
 | `reports-expansion_20261104` | code | 4 | 0 | 0 |
 | `reports-expansion_wave2_20261104` | code | 2 | 0 | 0 |
 | `reports-github_scan_20261104` | code | 4 | 0 | 0 |
-| `reports-golden_goose` | code | 286 | 0 | 0 |
-| `reports-improvement` | code | 86 | 0 | 0 |
+| `reports-golden_goose` | code | 292 | 0 | 0 |
+| `reports-improvement` | code | 87 | 0 | 0 |
 | `reports-northstar_acceptance_20261023` | code | 34 | 0 | 26 |
 | `reports-northstar_acceptance_20261025` | code | 2 | 0 | 2 |
 | `reports-phase9-evidence` | code | 2 | 0 | 0 |
@@ -100,13 +100,13 @@
 | `reports-steward_digests` | code | 2 | 0 | 0 |
 | `reports-theme_20261024` | code | 4 | 0 | 4 |
 | `reports-theme_review` | code | 4 | 0 | 0 |
-| `reports-ty` | code | 166 | 0 | 0 |
+| `reports-ty` | code | 183 | 0 | 0 |
 | `reports-ui-evidence` | code | 10 | 0 | 9 |
 | `reports-ui_audit_20261016` | code | 27 | 0 | 25 |
 | `reports-ui_review_20261016` | code | 16 | 0 | 15 |
 | `reports-video_scan` | code | 12 | 0 | 2 |
 | `research-assistant_intelligence_20261028` | code | 6 | 0 | 0 |
-| `research-bakeoff` | code | 977 | 0 | 13 |
+| `research-bakeoff` | code | 978 | 0 | 13 |
 | `research-design-studio` | code | 35 | 0 | 0 |
 | `research-design_studio_deep_research_20261008` | code | 27 | 0 | 0 |
 | `research-integration_20261023` | code | 1 | 0 | 0 |
@@ -137,7 +137,7 @@
 | `root-src` | code | 7 | 0 | 0 |
 | `root-steward` | code | 27 | 0 | 0 |
 | `root-turmeric_sourcing` | code | 6 | 0 | 0 |
-| `root-ty` | code | 18 | 0 | 0 |
+| `root-ty` | code | 19 | 0 | 0 |
 | `scripts-root` | code | 41 | 0 | 0 |
 | `shared-master-brain` | code | 1 | 0 | 0 |
 | `shared-root` | code | 8 | 0 | 0 |
@@ -166,10 +166,10 @@
 | `tools-git-hooks` | code | 1 | 0 | 0 |
 | `tools-model_scout` | code | 3 | 0 | 0 |
 | `tools-registry` | code | 5 | 0 | 0 |
-| `tools-root` | code | 244 | 0 | 0 |
+| `tools-root` | code | 250 | 0 | 0 |
 | `tools-scout` | code | 36 | 0 | 0 |
 | `tools-seller_tester` | code | 17 | 0 | 0 |
-| `tools-vision` | code | 22 | 0 | 0 |
+| `tools-vision` | code | 24 | 0 | 0 |
 | `tools-visual_regression` | code | 25 | 0 | 12 |
 | `ui-.theme-preview` | code | 4 | 0 | 0 |
 | `ui-assets` | visual | 10 | 10 | 10 |

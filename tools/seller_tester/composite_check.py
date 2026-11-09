@@ -22,7 +22,7 @@ looks at `ok` still fails it.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
@@ -64,7 +64,20 @@ def split_rgba(cutout: Any) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]
 def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
                       cutout_alpha: np.ndarray,
                       placement: Sequence[int]) -> Dict[str, Any]:
-    """Compare the placed region with the cutout, over opaque pixels only."""
+    """Compare the placed region with the cutout, over opaque pixels only.
+
+    A cutout arrives in one of two shapes and both are legitimate:
+
+    * a **tight crop** of the product, in which case the recorded box is the product;
+    * a **full canvas** with an alpha matte, in which case the recorded box may be either the
+      canvas that was pasted or the subject inside it.
+
+    Two generators on this project did exactly those two things, so guessing one and calling the
+    other a failure was measuring the convention, not the composite. Both readings are therefore
+    compared and the better one is reported, with ``compared`` saying which. This is **not** a
+    frame-wide search: only the recorded box is ever compared, so a box outside the frame is still
+    a failure and a product pasted somewhere else still fails.
+    """
     x, y, width, height = (int(value) for value in placement)
     frame_h, frame_w = produced_rgb.shape[:2]
     if width <= 0 or height <= 0:
@@ -74,10 +87,36 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
             f"placement {placement} falls outside the {frame_w}x{frame_h} frame")
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
-    # No trimming here: a recorded placement refers to the cutout's own canvas (that is what the
-    # generator pasted), so trimming the cutout to its subject would compare an 80x80 subject
-    # against a 120x120 box and report a mismatch that is only geometry.
-    cutout = cutout_rgb.astype(np.float32)
+    candidates: List[Tuple[str, np.ndarray, Optional[np.ndarray]]] = [("canvas", cutout_rgb.astype(np.float32),
+                                None if cutout_alpha is None else cutout_alpha.astype(np.float32))]
+    if cutout_alpha is not None:
+        rows, columns = np.where(cutout_alpha >= ALPHA_THRESHOLD)
+        if rows.size >= 64:
+            top, bottom = int(rows.min()), int(rows.max()) + 1
+            left, right = int(columns.min()), int(columns.max()) + 1
+            candidates.append(("trimmed",
+                               cutout_rgb[top:bottom, left:right].astype(np.float32),
+                               cutout_alpha[top:bottom, left:right].astype(np.float32)))
+
+    verdicts = [_compare_at_placement(region, cutout, alpha, (x, y, width, height), name)
+                for name, cutout, alpha in candidates]
+    usable = [verdict for verdict in verdicts if not verdict.get("cannot_verify")]
+    if not usable:
+        return verdicts[0]
+    best = max(usable, key=lambda verdict: float(verdict.get("similarity") or 0.0))
+    best["compared"] = best.get("compared") or "canvas"
+    if len(usable) > 1:
+        best["alternatives"] = {verdict["compared"]: verdict.get("similarity")
+                                for verdict in usable}
+    return best
+
+
+def _compare_at_placement(region: np.ndarray, cutout: np.ndarray,
+                          cutout_alpha: Optional[np.ndarray],
+                          placement: Sequence[int], compared: str) -> Dict[str, Any]:
+    """One reading of the placement: the cutout scaled into the region, compared by structure."""
+    x, y, width, height = (int(value) for value in placement)
+    cutout = np.asarray(cutout, dtype=np.float32)
     distortion = 1.0
     if cutout.shape[:2] != region.shape[:2]:
         # The generator resizes the cutout to the placement, so compare at the geometry it
@@ -88,8 +127,8 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
         distortion = max(cut_aspect, box_aspect) / min(cut_aspect, box_aspect)
         if distortion > 1.25:
             return _cannot_verify(
-                f"cutout aspect {cut_aspect:.2f} and placement aspect {box_aspect:.2f} "
-                f"differ by {distortion:.2f}x; this is not the same subject")
+                f"{compared} cutout aspect {cut_aspect:.2f} and placement aspect "
+                f"{box_aspect:.2f} differ by {distortion:.2f}x; this is not the same subject")
         try:
             import cv2  # noqa: PLC0415
 
@@ -142,12 +181,12 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
         basis = "structure"
     return _check(
         ok=True, cannot_verify=False, similarity=round(score, 4),
-        basis=basis, aspect_distortion=round(distortion, 3),
+        basis=basis, aspect_distortion=round(distortion, 3), compared=compared,
         mae_similarity=round(max(0.0, 1.0 - mae), 4),
         pixels=int(mask.sum()), placement=[x, y, width, height],
         detail=(f"product region {width}x{height} at ({x},{y}): "
                 f"{basis} {score:.3f} over {int(mask.sum())} opaque pixels "
-                f"(mean-abs {1 - mae:.3f})"))
+                f"(mean-abs {1 - mae:.3f}, {compared})"))
 
 
 def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
