@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-09T03:36:13+00:00",
+  "generated_at": "2026-11-08T23:06:14",
   "generated_by": "tools/model_scout.py",
   "swap_rule": {
     "margin_items": 2,
@@ -1426,6 +1426,173 @@
       },
       "quarantine": null,
       "notes": "Not Ollama tags: measured by tools/seller_tester/editor_bench.py on the three Mogra uploads (cutout eval). A row is a segmentation method, not a model. birefnet is the measured winner (14/14 items, mean edge 1.83 px) and needs the local ComfyUI lane; grabcut is the lane-free fallback (14/14, 5.08 px); rembg is not installed here. --run is not the way to scout this role: there are no Ollama tags for it."
+    },
+    "upscalers": {
+      "label": "Upscalers (the 768 -> 1536 composite step)",
+      "lane": "upscale",
+      "eval": null,
+      "budget_key": "image_t2i",
+      "budget_gb": 12.0,
+      "manager_key": null,
+      "incumbent": "lanczos",
+      "candidates": [
+        "realesrgan",
+        "swinir",
+        "comfy_latent"
+      ],
+      "measurements": {
+        "lanczos": {
+          "role": "upscalers",
+          "status": "measured",
+          "correct": 0,
+          "items": 18,
+          "latency_ms": 780,
+          "ssim": 0.90862,
+          "psnr_db": 30.264,
+          "edge_sharpness": 0.02148,
+          "vram_gb": 0.0,
+          "ram_free_gb": 5.26,
+          "licence": "Pillow MIT; no weights",
+          "error": null
+        },
+        "realesrgan": {
+          "role": "upscalers",
+          "status": "measured",
+          "correct": 14,
+          "items": 18,
+          "latency_ms": 7080,
+          "ssim": 0.9219,
+          "psnr_db": 29.937,
+          "edge_sharpness": 0.0251,
+          "vram_gb": 3.56,
+          "ram_free_gb": 5.26,
+          "licence": "BSD-3-Clause (Real-ESRGAN code and x4plus weights)",
+          "error": null
+        },
+        "swinir": {
+          "role": "upscalers",
+          "status": "measured",
+          "correct": 14,
+          "items": 18,
+          "latency_ms": 8310,
+          "ssim": 0.92625,
+          "psnr_db": 30.2,
+          "edge_sharpness": 0.02592,
+          "vram_gb": 3.94,
+          "ram_free_gb": 5.26,
+          "licence": "Apache-2.0 (SwinIR code and SwinIR-M x4 GAN weights)",
+          "error": null
+        },
+        "comfy_latent": {
+          "role": "upscalers",
+          "status": "measured",
+          "correct": 2,
+          "items": 18,
+          "latency_ms": 40460,
+          "ssim": 0.65052,
+          "psnr_db": 18.883,
+          "edge_sharpness": 0.02188,
+          "vram_gb": 0.0,
+          "ram_free_gb": 5.26,
+          "licence": "Apache-2.0 ComfyUI nodes; checkpoint licence applies (SDXL OpenRAIL++-M)",
+          "error": null
+        }
+      },
+      "recommendation": {
+        "verdict": "replace",
+        "incumbent": "lanczos",
+        "model": "swinir",
+        "reason": "scout item margin confirmed; swinir wins 14/18 items vs the Lanczos control (0/18); tied on items with realesrgan, tie broken on mean SSIM (0.92625 vs 0.9219).",
+        "eval": null,
+        "candidates": [
+          {
+            "model": "realesrgan",
+            "verdict": "replace",
+            "reason": "margin +14 >= +2 and fits 12.0 GB",
+            "delta": 14,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 12.0,
+              "vram_gb": 3.56,
+              "ram_free_gb": 5.26,
+              "reserve_gb": 1.0
+            }
+          },
+          {
+            "model": "swinir",
+            "verdict": "replace",
+            "reason": "margin +14 >= +2 and fits 12.0 GB",
+            "delta": 14,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 12.0,
+              "vram_gb": 3.94,
+              "ram_free_gb": 5.26,
+              "reserve_gb": 1.0
+            }
+          },
+          {
+            "model": "comfy_latent",
+            "verdict": "replace",
+            "reason": "margin +2 >= +2 and fits 12.0 GB",
+            "delta": 2,
+            "required_margin": 2,
+            "fits": {
+              "ok": true,
+              "problems": [],
+              "budget_gb": 12.0,
+              "vram_gb": 0.0,
+              "ram_free_gb": 5.26,
+              "reserve_gb": 1.0
+            }
+          }
+        ],
+        "winner_correct": 14,
+        "decided_by": "measurement on the three Mogra crops",
+        "eval_spec": {
+          "images": [
+            "pair_main_clean",
+            "pair_main_soft",
+            "pair_lifestyle_clean",
+            "pair_lifestyle_soft",
+            "forest_dusk_clean",
+            "forest_dusk_soft"
+          ],
+          "reference": "native-resolution centre crop (known good)",
+          "probe": "the same crop downsampled 2x with Lanczos",
+          "metrics": [
+            "PSNR",
+            "SSIM",
+            "Sobel edge sharpness",
+            "seconds"
+          ]
+        }
+      },
+      "quarantine": null,
+      "notes": "Not Ollama tags: measured by tools/upscale.py --benchmark on known-good native crops from the three Mogra uploads (the composites themselves have no higher-resolution ground truth, so grading a Lanczos upscale against them would be circular). Items = PSNR and SSIM beating the Lanczos control per image. Lanczos is the control, not a candidate. Decision + licences are written into ty/model_leaderboard.json by model_scout.write_leaderboard.",
+      "eval_detail": {
+        "images": [
+          "pair_main_clean",
+          "pair_main_soft",
+          "pair_lifestyle_clean",
+          "pair_lifestyle_soft",
+          "forest_dusk_clean",
+          "forest_dusk_soft"
+        ],
+        "reference": "native-resolution centre crop (known good)",
+        "probe": "the same crop downsampled 2x with Lanczos",
+        "metrics": [
+          "PSNR",
+          "SSIM",
+          "Sobel edge sharpness",
+          "seconds"
+        ]
+      },
+      "measured_at": "2026-11-08T23:06:14"
     }
   }
 }

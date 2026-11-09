@@ -7,7 +7,9 @@ pictures with a known subject.
 from __future__ import annotations
 
 import io
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -18,6 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 for _extra in (str(ROOT), str(ROOT / "tools"), str(ROOT / "Northstar_backend")):
     if _extra not in sys.path:
         sys.path.insert(0, _extra)
+
+# The lane journal is evidence. A test run must not append to it.
+os.environ.setdefault("NS_LANE_JOURNAL",
+                      str(Path(tempfile.gettempdir()) / "ns_test_lane_journal.jsonl"))
 
 import product_cutout as pc  # noqa: E402
 from tools.seller_tester import reference_check  # noqa: E402
@@ -229,6 +235,111 @@ def test_tolerant_brief_generates_instead_of_compositing(repo: Path):
     assert record["cutout"] is None
     with Image.open(repo / "out" / f"{brief['id']}.png") as produced:
         assert produced.size == (320, 320)
+
+
+# ---------------------------------------------------------------- white main image
+def test_white_main_is_a_flat_255_canvas_and_never_renders_a_scene(repo: Path):
+    """MG-C01's failure was a generated grey room. The main image is a composite."""
+    _product_png(repo / "renders" / "references" / "product.png",
+                 box=(200, 160, 400, 520))
+    brief = _brief("renders/references/product.png")
+    brief["situation"] = "white_background_main"
+    brief["constraints"]["dimensions"] = {"min_width": 1536, "min_height": 1536,
+                                          "max_width": 8192, "max_height": 8192}
+    brief["constraints"]["background"] = {"value": 255, "tolerance": 14,
+                                          "mode": "uniform", "spread_tolerance": 18}
+    brief["constraints"]["fill_pct"] = {"min": 10, "max": 85, "distance": 20}
+    calls = {"render": 0}
+
+    def renderer(brief, mode="scene", inside_lane=None):
+        calls["render"] += 1
+        raise AssertionError("a white main image must not start the scene lane")
+
+    generator = CompositeGenerator(
+        renderer=renderer, out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(200, 160, 400, 520)))
+    path = generator.generate(brief)
+    record = generator.record_for(brief["id"])
+
+    assert calls["render"] == 0, "no ComfyUI, no scene, no grade"
+    assert record["scene"]["source"] == "flat_white_canvas"
+    white = record["white_canvas"]
+    assert white["canvas"] == [2000, 2000]
+    assert white["corners_exactly_255"] is True
+    assert 80.0 <= white["height_fill_pct"] <= 90.0, white
+    assert 10.0 <= white["subject_fill_pct"] <= 85.0, white
+
+    from tools.seller_tester import scorers
+
+    loaded = scorers.load_image(path.read_bytes())
+    rgb = loaded.rgb
+    assert scorers.check_dimensions(loaded.width, loaded.height,
+                                    brief["constraints"]["dimensions"])["ok"] is True
+    assert scorers.check_background(rgb, brief["constraints"]["background"])["ok"] is True
+    assert scorers.check_subject_fill(rgb, brief["constraints"]["fill_pct"],
+                                      brief["constraints"]["background"])["ok"] is True
+    assert scorers.check_alpha_matte(loaded, brief["constraints"]["matte"])["skipped"] is True
+
+
+def test_a_white_main_uses_the_lane_free_cutout_and_records_the_substitution(repo: Path):
+    _product_png(repo / "renders" / "references" / "product.png")
+    brief = _brief("renders/references/product.png")
+    brief["situation"] = "white_background_main"
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: (_ for _ in ()).throw(
+            AssertionError("no scene render for a white main")),
+        out_dir=repo / "out", repo_root=repo, method="birefnet")
+    generator.generate(brief)
+    record = generator.record_for(brief["id"])
+    assert record["method"] == "grabcut"
+    assert record["cutout_refused"]["method"] == "birefnet"
+    assert "starts no lane" in record["cutout_refused"]["reason"]
+
+
+def test_a_small_render_is_upscaled_by_the_measured_backend(repo: Path, monkeypatch):
+    import upscale
+
+    _product_png(repo / "renders" / "references" / "product.png")
+    brief = _brief("renders/references/product.png")
+    brief["constraints"]["dimensions"] = {"min_width": 1280, "min_height": 1280}
+    calls = {}
+
+    def fake(png, required, record):
+        calls["required"] = tuple(required)
+        record["upscale"] = {"method": "fake-measured", "licence": "test"}
+        record["upscaled_to"] = list(required)
+        record["upscaled_from"] = [640, 640]
+        return _scene_bytes(tuple(required)), record
+
+    monkeypatch.setattr(upscale, "upscale_to_min", fake)
+    generator = CompositeGenerator(
+        renderer=lambda b, m="scene", inside_lane=None: {
+            "bytes": _scene_bytes(), "source": "generated", "prompt": "scene",
+            "image_path": None, "lane": {"stopped": {"ok": True}}},
+        out_dir=repo / "out", repo_root=repo,
+        cutout_fn=lambda rgb: _alpha_from_box(rgb, box=(200, 160, 400, 520)))
+    generator.generate(brief)
+    record = generator.record_for(brief["id"])
+    assert calls["required"] == (1280, 1280)
+    assert record["upscale"]["method"] == "fake-measured"
+    assert record["upscaled_to"] == [1280, 1280]
+
+
+def test_the_lanczos_control_is_recorded_with_its_licence():
+    import upscale
+
+    buffer = io.BytesIO()
+    Image.new("RGB", (400, 300), (180, 160, 120)).save(buffer, format="PNG")
+    record: dict = {}
+    data, record = upscale.upscale_to_min(buffer.getvalue(), (800, 600), record,
+                                          method="lanczos")
+    assert record["upscaled_from"] == [400, 300]
+    assert record["upscaled_to"] == [800, 600]
+    assert record["upscale"]["method"] == "lanczos"
+    assert "Pillow" in record["upscale"]["licence"]
+    with Image.open(io.BytesIO(data)) as opened:
+        assert opened.size == (800, 600)
+    assert upscale.ACTIVE in upscale.LICENCES
 
 
 # ---------------------------------------------------------------- reference check
