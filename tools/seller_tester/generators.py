@@ -157,6 +157,8 @@ WHITE_LEVEL = 255
 
 
 def _as_rgb(png: bytes):
+    from io import BytesIO  # noqa: PLC0415
+
     from PIL import Image  # noqa: PLC0415
 
     return Image.open(BytesIO(png)).convert("RGB")
@@ -164,6 +166,10 @@ def _as_rgb(png: bytes):
 
 def split_rgba_bytes(png: bytes):
     """RGB and alpha (0..1) from a PNG the generator saved, or (None, None)."""
+    from io import BytesIO  # noqa: PLC0415
+
+    import numpy as np  # noqa: PLC0415
+
     from .composite_check import split_rgba  # noqa: PLC0415
 
     try:
@@ -595,6 +601,8 @@ class CompositeGenerator:
             record["shadow"] = bool(placed.get("shadow"))
         quad = placed.get("product_quad")
         if quad:
+            import numpy as np  # noqa: PLC0415
+
             from .composite_check import quad_similarity  # noqa: PLC0415
 
             cut_rgb, cut_alpha = split_rgba_bytes(cut_png)

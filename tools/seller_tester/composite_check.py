@@ -294,6 +294,8 @@ def quad_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
     """
     import cv2  # noqa: PLC0415
 
+    if cutout_rgb is None:
+        return _cannot_verify("the cutout is not an RGB or RGBA image")
     points = [[int(p[0]), int(p[1])] for p in quad]
     if len(points) != 4:
         return _cannot_verify(f"the placement quad needs four points, got {len(points)}")

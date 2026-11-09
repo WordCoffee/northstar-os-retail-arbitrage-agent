@@ -148,6 +148,57 @@ def test_a_different_product_in_the_quad_fails():
     assert verdict["ok"] is False, verdict
 
 
+def test_the_packaging_route_records_a_quad_and_a_quad_identity(tmp_path):
+    """The generator must survive its own packaging path: this is the test the demo run lacked.
+
+    It runs the real `CompositeGenerator` with an injected scene renderer (no GPU, no model), on a
+    brief whose situation is `packaging_mockup`, and asserts the record carries the quad and that
+    the identity was measured against the warped panel rather than the flat artwork.
+    """
+    import json
+
+    from seller_tester.generators import CompositeGenerator
+
+    reference = ROOT / "renders" / "references" / "mogra" / "mogra_pair_main.png"
+    brief = {
+        "id": "LM-QUAD-01",
+        "category": "supplement_pouch",
+        "situation": "packaging_mockup",
+        "difficulty": 1,
+        "source_mode": "uploaded_reference",
+        "fidelity": "exact",
+        "product_in_frame": True,
+        "reference": {"kind": "uploaded_file", "path": str(reference.relative_to(ROOT)),
+                      "descriptor": {"filename": reference.name, "mime_type": "image/png",
+                                     "subject": "mogra"}},
+        "constraints": {"dimensions": {"min_width": 512, "min_height": 512},
+                        "aspect": {"ratio": 1.0, "tolerance": 0.05},
+                        "background": {"value": 255, "tolerance": 24, "mode": "free"},
+                        "fill_pct": {"min": 5, "max": 100, "distance": 40},
+                        "matte": {"mode": "any"}},
+    }
+
+    class Renderer:
+        def __call__(self, brief, mode, inside_lane=None):
+            from io import BytesIO
+
+            from PIL import Image
+
+            buffer = BytesIO()
+            Image.new("RGB", (1024, 1024), (238, 236, 230)).save(buffer, format="PNG")
+            return {"bytes": buffer.getvalue(), "source": "synthetic", "prompt": None,
+                    "seed": 0, "steps": 0, "lane": None, "width": 1024, "height": 1024}
+
+    generator = CompositeGenerator(renderer=Renderer(), method="grabcut",
+                                   out_dir=tmp_path, repo_root=ROOT, layout="deterministic")
+    path = generator.generate(brief)
+    assert path.is_file()
+    record = (generator.records or [{}])[-1]
+    assert record.get("layout", {}).get("kind") == "deterministic", record.get("layout")
+    assert record.get("product_quad"), "the packaging route must record where the panel is"
+    assert record.get("identity_verdict") == "quad"
+
+
 @pytest.mark.parametrize("bad", ["auto", "", "anything"])
 def test_an_unknown_layout_is_refused(bad):
     from seller_tester.generators import CompositeGenerator
