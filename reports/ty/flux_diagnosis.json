@@ -1,0 +1,167 @@
+{
+  "at": "2026-11-09T06:57:21+00:00",
+  "versions": {
+    "at": "2026-11-09T06:57:21+00:00",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "comfy": {
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "cudnn": 91900,
+      "available": true,
+      "capability": [
+        12,
+        0
+      ],
+      "device": "NVIDIA GeForce RTX 5080 Laptop GPU"
+    },
+    "repo": {
+      "torch": "2.15.0+cpu",
+      "cuda": null,
+      "cudnn": null,
+      "available": false,
+      "capability": null,
+      "device": null
+    },
+    "upscaler": "swinir"
+  },
+  "attempts": [
+    {
+      "label": "contended-1024",
+      "model": "flux3",
+      "width": 1024,
+      "height": 1024,
+      "ok": false,
+      "error": "GeneratorUnavailable: render refused: 2.9 GB free RAM is below the 3 GB floor",
+      "before": {
+        "at": "2026-11-09T06:57:32+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 3214,
+          "free_mb": 12790
+        },
+        "ollama_ps": [
+          "bojo:latest"
+        ]
+      },
+      "after": {
+        "at": "2026-11-09T06:57:32+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 3214,
+          "free_mb": 12790
+        },
+        "ollama_ps": [
+          "bojo:latest"
+        ]
+      },
+      "at": "2026-11-09T06:57:32.855793+00:00"
+    },
+    {
+      "label": "contended-1536",
+      "model": "flux3",
+      "width": 1536,
+      "height": 1536,
+      "ok": false,
+      "error": "GeneratorUnavailable: render refused: 2.9 GB free RAM is below the 3 GB floor",
+      "before": {
+        "at": "2026-11-09T06:57:32+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 3214,
+          "free_mb": 12790
+        },
+        "ollama_ps": [
+          "bojo:latest"
+        ]
+      },
+      "after": {
+        "at": "2026-11-09T06:57:33+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 3214,
+          "free_mb": 12790
+        },
+        "ollama_ps": [
+          "bojo:latest"
+        ]
+      },
+      "at": "2026-11-09T06:57:33.023003+00:00"
+    },
+    {
+      "label": "unloaded-1024",
+      "model": "flux3",
+      "width": 1024,
+      "height": 1024,
+      "ok": true,
+      "seconds": null,
+      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00030_.png",
+      "before": {
+        "at": "2026-11-09T06:57:33+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 0,
+          "free_mb": 16003
+        },
+        "ollama_ps": []
+      },
+      "after": {
+        "at": "2026-11-09T06:58:35+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 0,
+          "free_mb": 16003
+        },
+        "ollama_ps": []
+      },
+      "at": "2026-11-09T06:57:33.379714+00:00"
+    },
+    {
+      "label": "unloaded-1536",
+      "model": "flux3",
+      "width": 1536,
+      "height": 1536,
+      "ok": true,
+      "seconds": null,
+      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00031_.png",
+      "before": {
+        "at": "2026-11-09T06:58:35+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 0,
+          "free_mb": 16003
+        },
+        "ollama_ps": []
+      },
+      "after": {
+        "at": "2026-11-09T07:00:05+00:00",
+        "vram": {
+          "total_mb": 16303,
+          "used_mb": 14,
+          "free_mb": 15990
+        },
+        "ollama_ps": []
+      },
+      "at": "2026-11-09T06:58:35.737788+00:00"
+    }
+  ],
+  "resident_loaded": {
+    "ok": true,
+    "model": "bojo:latest"
+  },
+  "unload": {
+    "unloaded": [
+      "bojo:latest",
+      "qwen3-embedding:0.6b"
+    ],
+    "after": {
+      "at": "2026-11-09T06:57:33+00:00",
+      "vram": {
+        "total_mb": 16303,
+        "used_mb": 0,
+        "free_mb": 16003
+      },
+      "ollama_ps": []
+    }
+  },
+  "first_working": "unloaded-1024"
+}

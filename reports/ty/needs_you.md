@@ -142,7 +142,28 @@ D1 probes the real concurrent-session limit. If the probe cannot establish it, t
 Director caps at 4 cloud workers as the work order states and records the assumption in
 `reports/ty/director_probe.md`. No action needed unless the reply below is empty.
 
-## DIR-4. Chrome debugging: replaced by the UIA route; now waiting on an unlocked desktop (2026-11-08)
+## DIR-5. Turn off lock-on-idle and sleep while plugged in (2026-11-09)
+
+Settings → Accounts → Sign-in options → *If you've been away, when should Windows require you to
+sign in again?* → **Never**; and Settings → System → Power & battery → **Screen and sleep** →
+plugged-in sleep = **Never**. Ty never touches the lock screen and never enters a Windows
+password; this is the only way the vision lane can run unattended. One action, two toggles.
+
+## DIR-6. Reboot once after saving work (2026-11-09)
+
+Reboot this machine once when convenient, then leave it to come back up and sign in. The
+`NorthstarTyDirector` logon task starts itself; its first run writes `reports/ty/reboot_proof.md`
+with the boot time, the task's last result, the director pid and the queue state. Ty verifies that
+file the moment it appears. Nothing else is needed from you, and no password is involved.
+
+## DIR-7. First staging review pack (2026-11-09)
+
+`reports/ty/staging_review_<date>.md` is waiting: before/after images, scorecard deltas, the merged
+job list, and one command to promote or revert. Visual and creative bundles stay on `staging`
+until you read it. Code-only bundles promote themselves once the suite is green and the verifier
+reproduces the deltas.
+
+## DIR-4. Chrome debugging: replaced by the UIA route (2026-11-08)
 
 The old entry asked for a Chrome restart. It has been replaced after trying the alternatives.
 
