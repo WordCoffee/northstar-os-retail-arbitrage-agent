@@ -101,13 +101,23 @@ Three limits the builder stated and I am not going to paper over:
 order passes only if "every service is reachable by click and nothing renders blank"; today it
 is not. Evidence: `ty/ux_audit.json` + `reports/ty/ux_audit_shots/`.
 
-## Scoring (unchanged weights, one correction)
+## Scoring, 2026-11-09
 
-Six dimensions, bar 85 each: works 0.28, correct 0.25, complete 0.12, usable 0.12,
-measured 0.10, seller 0.13. `seller` applies only to the ten seller-facing services. A
-seller-facing service with only passing tests stays at 60 on `correct`; a service with no
-seller-facing artefact is judged on its tests, because capping it made the bar unreachable by
-construction.
+Seven dimensions, bar 85 each: works 0.23, correct 0.25, complete 0.12, usable 0.07,
+measured 0.10, seller 0.13, **contract 0.10** (new, paid for from `works` and `usable`).
+
+**2 services at bar: `hub` 100, `prospector` 100.** Twelve at 86.2, held back by `complete`
+because their declared Bojo tool has no handler.
+
+Integrity fix landed with the contract work: `complete` used to mean "this tool's name appears
+somewhere in the backend source", which a comment or a test satisfies — `keyword-tracker` and
+`profitability` were scoring 100 with no handler at all. It now means a **callable handler
+exists** in the chat tool table or the domain registry: the same gate that decides what Bojo is
+offered.
+
+Contract check: **20 of 29 pass, 4 persist, 3 gaps, 6 fail** (`reports/ty/contract_01.md`). A
+service that only has paid-model actions is never called — that is standing gate (a), not a
+skip.
 
 **Today: 2 services at bar (`hub` 100, `prospector` 100), twelve at 86.2.** The ceiling was 77
 this morning. `measured` is 28 of 29 after ux-05.
