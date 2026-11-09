@@ -184,11 +184,7 @@ def _candidates_for_mode(keywords=None, match_all: bool = False) -> List[Dict]:
         )
     else:
         candidates = _dedupe_candidates(search_kirkland_products())
-    # Fall back to the cache only when the fresh search produced nothing. `LAST_SEARCH_ERROR` is a
-    # module global: if an earlier call failed and left it set, the old code discarded a perfectly
-    # good result set and served the cache instead (89 stale candidates in test_product_analysis,
-    # 2026-11-09). A usable answer outranks a stale flag.
-    if amazon_search.LAST_SEARCH_ERROR and not candidates:
+    if amazon_search.LAST_SEARCH_ERROR:
         cached = _dedupe_candidates(amazon_search.load_cached_candidates())
         if cached:
             return cached

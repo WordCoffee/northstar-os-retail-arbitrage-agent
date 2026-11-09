@@ -221,34 +221,22 @@
   },
   "B000000001": {
     "offer": {
-      "amazon_price": 48.87,
+      "amazon_price": 10.0,
       "buy_box_price": 48.87,
       "lowest_price": 45.87,
       "highest_price": 53.87,
       "total_sellers": 5,
       "fba_sellers": 2,
       "fba_sellers_estimated": false,
-      "lowest_price_seller_type": "unknown",
-      "highest_price_seller_type": "unknown",
       "monthly_sales_estimate": 1200,
       "monthly_sales_estimated": true,
-      "fba_fee": 9.25,
-      "amazon_category": "Grocery & Gourmet Food",
-      "browse_node_id": 16310101,
-      "breadcrumb": [
-        "Grocery & Gourmet Food",
-        "Snack Foods"
-      ],
-      "category_source_hint": "breadcrumb",
-      "buy_box_seller": null,
-      "buy_box_fulfillment": null,
-      "other_sellers_present": null,
-      "title": "Kirkland Test Item",
-      "offer_data_provider": "brightdata",
+      "fba_fee": null,
+      "offer_data_provider": "easyparser",
       "enrichment_status": "complete",
-      "enriched_at": "2026-09-18T00:58:42.601708+00:00"
+      "enriched_at": "2026-01-01T00:00:00+00:00",
+      "asin": "B000000001"
     },
-    "cached_at": "2026-09-18T00:58:42.602482+00:00"
+    "cached_at": "2026-11-09T22:44:06.440843+00:00"
   },
   "B0TESTASIN": {
     "offer": {
@@ -271,9 +259,9 @@
       "title": "Test Product",
       "offer_data_provider": "easyparser",
       "enrichment_status": "complete",
-      "enriched_at": "2026-09-02T07:35:56.260691+00:00"
+      "enriched_at": "2026-11-09T22:45:40.991359+00:00"
     },
-    "cached_at": "2026-09-02T07:35:56.260826+00:00"
+    "cached_at": "2026-11-09T22:45:40.992457+00:00"
   },
   "B00BH3HPZW": {
     "offer": {
@@ -8078,5 +8066,24 @@
       "enriched_at": "2026-09-23T06:11:53.388791+00:00"
     },
     "cached_at": "2026-09-23T06:11:53.390372+00:00"
+  },
+  "B000000009": {
+    "offer": {
+      "amazon_price": 48.87,
+      "buy_box_price": 48.87,
+      "lowest_price": 45.87,
+      "highest_price": 53.87,
+      "total_sellers": 5,
+      "fba_sellers": 2,
+      "fba_sellers_estimated": false,
+      "monthly_sales_estimate": 1200,
+      "monthly_sales_estimated": true,
+      "fba_fee": null,
+      "offer_data_provider": "chocodata",
+      "enrichment_status": "partial",
+      "enriched_at": "2026-01-01T00:00:00+00:00",
+      "asin": "B000000009"
+    },
+    "cached_at": "2026-11-09T22:44:06.413927+00:00"
   }
 }

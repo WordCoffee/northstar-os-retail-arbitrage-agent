@@ -33,6 +33,33 @@ CACHE_PATH = os.environ["SCANNER_SEARCH_CACHE_PATH"]
 CSV_PATH = os.environ["COSTCO_CSV_PATH"]
 LEDGER_PATH = os.environ["COSTCO_AMAZON_MAPPING_PATH"]
 
+_ENV = {name: os.environ.get(name) for name in (
+    "SCANNER_OFFER_ENRICHMENT", "SCANNER_SEARCH_CACHE_PATH", "COSTCO_CSV_PATH",
+    "COSTCO_CATALOG_DETAIL_PATH", "COSTCO_INVOICE_PATH", "COSTCO_AMAZON_MAPPING_PATH")}
+_ENV_AT_IMPORT = dict(_ENV)
+
+
+def setUpModule():
+    """Re-apply this module's paths when it starts.
+
+    They are set at import, and another module running before this one can legitimately change or
+    remove them (test_product_analysis opts into live mode). Re-applying the module's own values
+    makes it independent of what ran first; tearDownModule puts the importer's values back.
+    """
+    for name, value in _ENV_AT_IMPORT.items():
+        if value is None:
+            os.environ.pop(name, None)
+        else:
+            os.environ[name] = value
+
+
+def tearDownModule():
+    for name, value in _ENV.items():
+        if value is None:
+            os.environ.pop(name, None)
+        else:
+            os.environ[name] = value
+
 
 def _asin(i: int) -> str:
     return "B0%08d" % i

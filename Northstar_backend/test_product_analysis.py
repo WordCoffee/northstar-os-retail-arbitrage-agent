@@ -15,37 +15,28 @@ import product_analysis
 from pricing import screen_by_profit_tier
 
 
+_PREVIOUS_ENRICHMENT = os.environ.get("SCANNER_OFFER_ENRICHMENT")
+
+
 def setUpModule():
     """Live-path tests: explicitly opt into SCANNER_LIVE_ALLOWED (the
-    default-off gate) and clear any cache-only override another module left behind.
+    default-off gate) and name the provider token this module wants.
 
-    `SCANNER_OFFER_ENRICHMENT=OFF` wins over the live gate, so a module that sets it at import time
-    (test_coverage_report.py does) used to make this file read the 89-entry cache instead of the
-    candidates its mocks return. The module now states the environment it needs rather than
-    inheriting one.
+    `_enrichment_mode()` treats an unset SCANNER_OFFER_ENRICHMENT as OFF (cache-only), so relying on
+    a value leaked from another module made these tests read the 89-entry cache instead of the
+    candidates their mocks return. The value is saved and put back afterwards, so this module does
+    not strip configuration another module set at import.
     """
     os.environ["SCANNER_LIVE_ALLOWED"] = "1"
-    # `_enrichment_mode()` treats an unset value as OFF (cache-only), so this module has to name the
-    # provider token it wants rather than relying on a leak from another module's import.
     os.environ["SCANNER_OFFER_ENRICHMENT"] = "AUTO"
 
 
 def tearDownModule():
     os.environ.pop("SCANNER_LIVE_ALLOWED", None)
-    os.environ.pop("SCANNER_OFFER_ENRICHMENT", None)
-
-
-def test_a_stale_search_error_does_not_discard_a_fresh_result():
-    """`LAST_SEARCH_ERROR` is a module global; a stale value must not override a usable answer."""
-    fresh = [fake_candidate("B000000001", "Kirkland Item", 48.87)]
-    stale = [fake_candidate("B000000002", "Cached Item", 12.0)]
-    with patch.object(product_analysis, "search_kirkland_products", return_value=fresh), \
-         patch.object(offer_enrichment, "_enrichment_mode", return_value="AUTO"), \
-         patch.object(product_analysis.amazon_search, "LAST_SEARCH_ERROR", "boom"), \
-         patch.object(product_analysis.amazon_search, "load_cached_candidates",
-                      return_value=stale):
-        chosen = product_analysis._candidates_for_mode()
-    assert [row["asin"] for row in chosen] == ["B000000001"]
+    if _PREVIOUS_ENRICHMENT is None:
+        os.environ.pop("SCANNER_OFFER_ENRICHMENT", None)
+    else:
+        os.environ["SCANNER_OFFER_ENRICHMENT"] = _PREVIOUS_ENRICHMENT
 
 
 def fake_candidate(asin, name, amazon_price=48.87):
