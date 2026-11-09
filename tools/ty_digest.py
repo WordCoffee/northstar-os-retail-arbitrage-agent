@@ -85,10 +85,10 @@ def _composites() -> List[Dict[str, Any]]:
     region = _read_json(ROOT / "state" / "seller" / "composite_region.json") or {}
     region_by_id = {str(row.get("brief_id")): row for row in region.get("rows") or []}
     for proof_path, brief_path in (
-            (ROOT / "state" / "seller" / "composite_proof.json",
-             ROOT / "tools" / "seller_tester" / "mogra_briefs.json"),
             (ROOT / "state" / "seller" / "heldout_proof.json",
-             ROOT / "ty" / "seller_briefs_heldout.json")):
+             ROOT / "ty" / "seller_briefs_heldout.json"),
+            (ROOT / "state" / "seller" / "composite_proof.json",
+             ROOT / "tools" / "seller_tester" / "mogra_briefs.json")):
         proof = _read_json(proof_path) or {}
         briefs = _read_json(brief_path) or {}
         by_id = {str(brief.get("id")): brief for brief in briefs.get("briefs") or []}
@@ -343,19 +343,20 @@ def render(data: Dict[str, Any]) -> str:
             lines.append(f"- Bojo tools owned by a service: {tools.get('owned')}")
         lines.append("")
 
-    lines += ["## Mogra composites — source next to output", ""]
+    lines += ["## Composites - source next to output", ""]
     composites = data.get("composites") or []
     if composites:
-        lines += ["| brief | source | output | route | fidelity | score | product region |",
-                  "|---|---|---|---|---|---|---|"]
+        lines += ["| brief | source | output | route | fidelity | score | product region | set |",
+                  "|---|---|---|---|---|---|---|---|"]
         for row in composites:
             lines.append(
                 f"| {row['brief_id']} | `{row['source']}` | `{row['output']}` | "
                 f"{row.get('route', '')} | {row['fidelity']} | "
-                f"{row.get('score', '—')}"
+                f"{row.get('score', '-')}"
                 + (f" (provisional {row.get('provisional_score')})"
                    if row.get("provisional") else "")
-                + " | " + str(row.get("region_state", "not audited")) + " |")
+                + " | " + str(row.get("region_state", "not audited"))
+                + " | " + ("held out" if row.get("held_out") else "tuned") + " |")
         if data.get("composite_sheet"):
             lines += ["", f"Side by side (source left, composite right): "
                           f"`{data['composite_sheet']}`"]
