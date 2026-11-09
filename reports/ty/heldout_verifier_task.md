@@ -49,3 +49,24 @@ as a failure.
 - Renders are stochastic. Scores may differ slightly; a **different pass/fail on any brief** is a
   DISAGREE, and so is a mean more than 3 points away.
 - Record the command you actually ran and its real output line, not a paraphrase.
+
+## Check the bar itself, not only the score (added 2026-11-09 after D-002)
+
+The first held-out run applied one brief's constraints to all eight situations, so every brief
+failed `alpha_matte` against a white-matte rule that belonged to a white-background main image. The
+scorer was right; the brief was wrong. So before you accept any score, assert that each held-out
+brief carries the **tuned catalogue's own constraints for its situation**:
+
+```python
+import json
+tuned = {}
+for b in json.load(open("ty/seller_briefs.json", encoding="utf-8"))["briefs"]:
+    if b["source_mode"] != "prompt_only":
+        tuned.setdefault(b["situation"], b["constraints"])
+for b in json.load(open("ty/seller_briefs_heldout.json", encoding="utf-8"))["briefs"]:
+    assert b["constraints"] == tuned[b["situation"]], b["id"]
+```
+
+If that fails, the run is scoring against a different bar than the product and the verdict is
+**DISAGREE** whatever the mean says. `python -m pytest -q test_heldout_set.py` does this and more;
+run it in `Northstar_backend/`.
