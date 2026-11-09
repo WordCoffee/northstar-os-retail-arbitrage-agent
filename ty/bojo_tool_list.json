@@ -1,11 +1,11 @@
 {
   "schema": "northstar.bojo_tool_list.v1",
   "generated_from": "ty/service_registry.json",
-  "count": 21,
+  "count": 44,
   "totals": {
-    "wired": 14,
+    "wired": 37,
     "declared": 7,
-    "unclaimed": 27
+    "unclaimed": 4
   },
   "tools": [
     {
@@ -19,11 +19,46 @@
       "reason": "chat_tools.TOOLS['ads_math'] returns ACOS, break-even ACOS and profit per ad dollar from raw numbers."
     },
     {
+      "name": "apply_label",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['apply_label'] composites the operator's real logo and copy onto a rendered pouch plate - the studio's finishing step."
+    },
+    {
       "name": "build_dieline",
       "status": "declared",
       "service": "design-studio",
       "also_used_by": [],
       "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+    },
+    {
+      "name": "build_package",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['build_package'] builds the complete package (front/back/side panels, dieline, labelled mockup) the studio's packaging surface promises."
+    },
+    {
+      "name": "build_preset",
+      "status": "wired",
+      "service": "autothink",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['build_preset'] resolves the BUILD presets (tools, memory, model) that shape an AutothinK build run."
+    },
+    {
+      "name": "build_utility",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['build_utility'] builds a self-contained HTML utility page and stores it as a studio asset (asset_type utility-app)."
+    },
+    {
+      "name": "canvas_edit",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['canvas_edit'] checks and applies one bounded edit to the open design canvas - the studio's canvas surface."
     },
     {
       "name": "catalog_pull",
@@ -40,6 +75,27 @@
       "service": "listingforge",
       "also_used_by": [],
       "reason": "ty/services.json declares compose_listing; chat_tools.TOOLS has no handler by that name — the nearest wired tool is write_content."
+    },
+    {
+      "name": "create_dieline",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['create_dieline'] builds a layered SVG/PDF dieline from a print template; it is the wired form of the declared build_dieline."
+    },
+    {
+      "name": "creative_plan",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['creative_plan'] plans a creative job and then runs it for real (draft/final) with a credit reserve - the studio's create flow."
+    },
+    {
+      "name": "design_brief",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['design_brief'] turns a request into a structured brief (palette, suggested dielines) before any render."
     },
     {
       "name": "generate_image",
@@ -70,6 +126,20 @@
       "service": "hub",
       "also_used_by": [],
       "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health — the same posture question this room answers."
+    },
+    {
+      "name": "improvement_status",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['improvement_status'] reports knowledge coverage, rule count and open gaps - the knowledge-plane side of hub's posture."
+    },
+    {
+      "name": "knowledge_lookup",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['knowledge_lookup'] returns sourced do/don't rules for any service; hub is the shared entry point that routes to them."
     },
     {
       "name": "list_templates",
@@ -107,11 +177,32 @@
       "reason": "chat_tools.TOOLS['optimize_listing'] scores and rewrites a listing against target keywords."
     },
     {
+      "name": "place_logo",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['place_logo'] places the operator's logo on a plate at a measured anchor and reports contrast and coverage."
+    },
+    {
+      "name": "plan_aplus",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['plan_aplus'] plans A+ modules, eligibility and copy checks - the studio's A+ surface."
+    },
+    {
       "name": "plan_campaign",
       "status": "declared",
       "service": "adpilot",
       "also_used_by": [],
       "reason": "ty/services.json declares plan_campaign; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ppc_plan."
+    },
+    {
+      "name": "plan_project",
+      "status": "wired",
+      "service": "autothink",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['plan_project'] builds an agent-kernel plan with lanes for a build-anything run; AutothinK is where those runs happen."
     },
     {
       "name": "plan_social",
@@ -121,6 +212,13 @@
         "socialpulse"
       ],
       "reason": "chat_tools.TOOLS['plan_social'] plans social graphics at exact canvas sizes with copy slots."
+    },
+    {
+      "name": "plan_video",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['plan_video'] storyboards a UGC video (scenes, fps, frames, claims check) - the studio's video surface."
     },
     {
       "name": "ppc_plan",
@@ -148,11 +246,74 @@
       "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile, including keyword coverage."
     },
     {
+      "name": "seo_negatives",
+      "status": "wired",
+      "service": "adpilot",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['seo_negatives'] splits search terms into negatives and harvest candidates against the brand profile; the handler is documented as the AdPilot hook."
+    },
+    {
+      "name": "seo_profile",
+      "status": "wired",
+      "service": "keywords",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['seo_profile'] shows the account's brand SEO profile and its keyword clusters - the keyword store's canonical profile."
+    },
+    {
+      "name": "seo_propose",
+      "status": "wired",
+      "service": "keywords",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['seo_propose'] proposes profile keyword additions from imported SQP rows without editing the profile."
+    },
+    {
+      "name": "seo_retitle",
+      "status": "wired",
+      "service": "listingforge",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['seo_retitle'] rewrites a title toward the profile's head terms; the handler names ListingForge as its home."
+    },
+    {
+      "name": "service_catalog",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['service_catalog'] lists every service area and the tool that handles it - hub's own map of the suite."
+    },
+    {
+      "name": "system_status",
+      "status": "wired",
+      "service": "hub",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['system_status'] reports the local media engine and chat model posture - the engine half of hub's status page."
+    },
+    {
       "name": "track_keywords",
       "status": "declared",
       "service": "keyword-tracker",
       "also_used_by": [],
       "reason": "ty/services.json declares track_keywords; chat_tools.TOOLS has no handler by that name — the nearest wired tool is seo_check."
+    },
+    {
+      "name": "voice_dub",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['voice_dub'] dubs a script into another language through the local voice adapter for ad voiceovers."
+    },
+    {
+      "name": "voice_list",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['voice_list'] lists the available voice profiles for ad voiceovers in the studio."
+    },
+    {
+      "name": "voice_tts",
+      "status": "wired",
+      "service": "design-studio",
+      "also_used_by": [],
+      "reason": "chat_tools.TOOLS['voice_tts'] renders a script to a voiceover through the local voice adapter."
     },
     {
       "name": "watch_competitor",
@@ -172,33 +333,10 @@
     }
   ],
   "unclaimed": [
-    "apply_label",
-    "build_package",
-    "build_preset",
-    "build_utility",
-    "canvas_edit",
     "corpus_drift",
     "corpus_search",
     "corpus_vector_search",
-    "create_dieline",
-    "creative_plan",
-    "design_brief",
-    "improvement_status",
-    "knowledge_lookup",
-    "place_logo",
-    "plan_aplus",
-    "plan_project",
-    "plan_video",
-    "purpose_command",
-    "seo_negatives",
-    "seo_profile",
-    "seo_propose",
-    "seo_retitle",
-    "service_catalog",
-    "system_status",
-    "voice_dub",
-    "voice_list",
-    "voice_tts"
+    "purpose_command"
   ],
   "chat_service_areas": [
     {
@@ -211,10 +349,7 @@
         "seo_check",
         "seo_retitle"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup",
-        "seo_retitle"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "ads",
@@ -225,10 +360,7 @@
         "knowledge_lookup",
         "seo_negatives"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup",
-        "seo_negatives"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "aplus",
@@ -237,10 +369,7 @@
         "knowledge_lookup",
         "creative_plan"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup",
-        "creative_plan"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "creator-connections",
@@ -249,10 +378,7 @@
         "knowledge_lookup",
         "creative_plan"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup",
-        "creative_plan"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "brand-store",
@@ -261,10 +387,7 @@
         "knowledge_lookup",
         "creative_plan"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup",
-        "creative_plan"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "reseller",
@@ -273,9 +396,7 @@
         "knowledge_lookup",
         "listing_audit"
       ],
-      "unclaimed_here": [
-        "knowledge_lookup"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "creative",
@@ -298,20 +419,7 @@
         "list_templates",
         "plan_project"
       ],
-      "unclaimed_here": [
-        "creative_plan",
-        "apply_label",
-        "place_logo",
-        "build_package",
-        "plan_aplus",
-        "plan_video",
-        "design_brief",
-        "create_dieline",
-        "voice_list",
-        "voice_tts",
-        "voice_dub",
-        "plan_project"
-      ]
+      "unclaimed_here": []
     },
     {
       "id": "research",
@@ -325,8 +433,7 @@
       "unclaimed_here": [
         "corpus_search",
         "corpus_vector_search",
-        "corpus_drift",
-        "knowledge_lookup"
+        "corpus_drift"
       ]
     },
     {
@@ -340,11 +447,7 @@
         "plan_project"
       ],
       "unclaimed_here": [
-        "system_status",
-        "improvement_status",
-        "service_catalog",
-        "purpose_command",
-        "plan_project"
+        "purpose_command"
       ]
     }
   ],

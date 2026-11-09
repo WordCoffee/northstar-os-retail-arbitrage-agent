@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-09T05:22:20+00:00",
+  "updated_at": "2026-11-09T06:37:59+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -541,30 +541,28 @@
       "score_after": null,
       "evidence": "cutout+sidecar saved by the generator; product-region verified by masked SSIM 0.9958/0.9931/0.9835",
       "created_at": "2026-11-09T04:04:23+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
+      "updated_at": "2026-11-09T06:31:02+00:00",
       "rank": 1
     },
     {
-      "id": "sel-02-design-studio",
+      "id": "ux-05-render-routes",
       "unit": "D12",
-      "title": "Design Studio output quality: move the 16.7 mean on real product pictures",
-      "status": "queued",
+      "title": "26 of 29 service routes render the chat shell instead of their own page",
+      "status": "merged",
       "owner": "",
       "write_paths": [
-        "tools/seller_tester",
-        "Northstar_backend",
         "northstar-os-ui/src"
       ],
-      "branch": "ty/sel-02-design-studio",
+      "branch": "ty/ux-05-render-routes",
       "worktree": "",
       "rollback_tag": "rollback/pre-seller-quality-20261108",
       "acceptance": [],
       "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "",
+      "score_before": 0.0,
+      "score_after": 0.0,
+      "evidence": "29/29 routes render; 60 e2e passed",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
+      "updated_at": "2026-11-09T06:31:02+00:00",
       "rank": 2
     },
     {
@@ -591,6 +589,52 @@
       "rank": 2
     },
     {
+      "id": "reg-01-service-registry",
+      "unit": "R",
+      "title": "Service registry as the single source of truth: walk every advanced-view route (Vision + backend), record purpose/inputs/outputs/actions/Bojo tool, and generate the Bojo tool list and the default Northstar workspaces from it",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "ty/service_registry.json",
+        "tools/registry",
+        "northstar-os-ui/src/northstar"
+      ],
+      "branch": "ty/reg-01-service-registry",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T05:22:20+00:00",
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 3
+    },
+    {
+      "id": "sel-02-design-studio",
+      "unit": "D12",
+      "title": "Design Studio output quality: move the 16.7 mean on real product pictures",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "tools/seller_tester",
+        "Northstar_backend",
+        "northstar-os-ui/src"
+      ],
+      "branch": "ty/sel-02-design-studio",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-seller-quality-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-08T21:21:18+00:00",
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 4
+    },
+    {
       "id": "sel-03-aplus",
       "unit": "D12",
       "title": "A+ content modules: briefs, real renders, scored like a seller would",
@@ -609,8 +653,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 3
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 5
     },
     {
       "id": "sel-04-packaging",
@@ -631,51 +675,7 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 4
-    },
-    {
-      "id": "reg-01-service-registry",
-      "unit": "R",
-      "title": "Service registry as the single source of truth: walk every advanced-view route (Vision + backend), record purpose/inputs/outputs/actions/Bojo tool, and generate the Bojo tool list and the default Northstar workspaces from it",
-      "status": "queued",
-      "owner": "",
-      "write_paths": [
-        "ty/service_registry.json",
-        "tools/registry",
-        "northstar-os-ui/src/northstar"
-      ],
-      "branch": "ty/reg-01-service-registry",
-      "worktree": "",
-      "rollback_tag": "rollback/pre-reg-20261108",
-      "acceptance": [],
-      "tokens": 0,
-      "score_before": null,
-      "score_after": null,
-      "evidence": "",
-      "created_at": "2026-11-09T05:22:20+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 5
-    },
-    {
-      "id": "ux-05-render-routes",
-      "unit": "D12",
-      "title": "26 of 29 service routes render the chat shell instead of their own page",
-      "status": "merged",
-      "owner": "",
-      "write_paths": [
-        "northstar-os-ui/src"
-      ],
-      "branch": "ty/ux-05-render-routes",
-      "worktree": "",
-      "rollback_tag": "rollback/pre-seller-quality-20261108",
-      "acceptance": [],
-      "tokens": 0,
-      "score_before": 0.0,
-      "score_after": 0.0,
-      "evidence": "29/29 routes render; 60 e2e passed",
-      "created_at": "2026-11-08T21:21:18+00:00",
-      "updated_at": "2026-11-09T04:41:38+00:00",
+      "updated_at": "2026-11-09T06:31:02+00:00",
       "rank": 6
     },
     {
@@ -697,8 +697,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 6
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 7
     },
     {
       "id": "ux-07-tabs",
@@ -718,8 +718,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 7
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 8
     },
     {
       "id": "ux-08-scene",
@@ -740,8 +740,8 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:16:49+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 8
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 9
     },
     {
       "id": "ux-09-design-studio-canvas",
@@ -763,8 +763,218 @@
       "score_after": null,
       "evidence": "",
       "created_at": "2026-11-09T03:35:26+00:00",
-      "updated_at": "2026-11-09T05:22:20+00:00",
-      "rank": 9
+      "updated_at": "2026-11-09T06:31:02+00:00",
+      "rank": 10
+    },
+    {
+      "id": "reg-03-scan-products",
+      "unit": "D12",
+      "title": "scan_products: Product Finder / Prospector product scan handler with honest source labels",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/scan_products.py",
+        "Northstar_backend/test_bojo_tools_scan_products.py"
+      ],
+      "branch": "ty/reg-03-scan-products",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-scan-products",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_scan_products.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 11
+    },
+    {
+      "id": "reg-03-compose-listing",
+      "unit": "D12",
+      "title": "compose_listing: ListingForge listing compose handler (title, bullets, back-end terms)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/compose_listing.py",
+        "Northstar_backend/test_bojo_tools_compose_listing.py"
+      ],
+      "branch": "ty/reg-03-compose-listing",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-compose-listing",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_compose_listing.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 12
+    },
+    {
+      "id": "reg-03-build-dieline",
+      "unit": "D12",
+      "title": "build_dieline: Design Studio dieline handler (layered SVG + PDF from a print template)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/build_dieline.py",
+        "Northstar_backend/test_bojo_tools_build_dieline.py"
+      ],
+      "branch": "ty/reg-03-build-dieline",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-build-dieline",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_build_dieline.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 13
+    },
+    {
+      "id": "reg-03-track-keywords",
+      "unit": "D12",
+      "title": "track_keywords: Keyword Tracker coverage and rank-trend handler",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/track_keywords.py",
+        "Northstar_backend/test_bojo_tools_track_keywords.py"
+      ],
+      "branch": "ty/reg-03-track-keywords",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-track-keywords",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_track_keywords.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 14
+    },
+    {
+      "id": "reg-03-watch-competitor",
+      "unit": "D12",
+      "title": "watch_competitor: Competitor Monitor observation handler (price, rating, votes, quantity match)",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/watch_competitor.py",
+        "Northstar_backend/test_bojo_tools_watch_competitor.py"
+      ],
+      "branch": "ty/reg-03-watch-competitor",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-watch-competitor",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_watch_competitor.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 15
+    },
+    {
+      "id": "reg-03-margin-report",
+      "unit": "D12",
+      "title": "margin_report: Profitability unit contribution and ROI report handler",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/margin_report.py",
+        "Northstar_backend/test_bojo_tools_margin_report.py"
+      ],
+      "branch": "ty/reg-03-margin-report",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-margin-report",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_margin_report.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 16
+    },
+    {
+      "id": "reg-03-plan-campaign",
+      "unit": "D12",
+      "title": "plan_campaign: AdPilot campaign plan handler from imported ad files",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/bojo_tools/plan_campaign.py",
+        "Northstar_backend/test_bojo_tools_plan_campaign.py"
+      ],
+      "branch": "ty/reg-03-plan-campaign",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-reg03-plan-campaign",
+      "acceptance": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "Northstar_backend/test_bojo_tools_plan_campaign.py",
+          "-q"
+        ]
+      ],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T06:37:59+00:00",
+      "updated_at": "2026-11-09T06:37:59+00:00",
+      "rank": 17
     }
   ],
   "service_scores": {},

@@ -1783,7 +1783,7 @@ def _t_service_catalog(args, ctx) -> dict:
     """List the services Bojo can act on and the tool that handles each."""
     return {
         "ok": True,
-        "summary": f"{len(SERVICES)} service areas routed to {len(TOOLS)} tools.",
+        "summary": f"{len(SERVICES)} service areas routed to {len(tool_names())} tools.",
         "services": SERVICES,
         "tools": tool_names(),
     }
@@ -2503,16 +2503,64 @@ TOOLS: Dict[str, dict] = {    "system_status": {
 }
 
 
+# ── What is offered ──────────────────────────────────────────────────────────
+# Offered means a callable handler exists. A spec that carries no handler (a tool
+# declared on a service that was never implemented) cannot be offered, and neither
+# can a retired one. Both rules are derived here, once, so a handler that lands
+# later makes its tool appear by itself and no list needs editing.
+
+#: Retired: kept in ``TOOLS`` so the handler and its tests stay, never offered.
+#: Name → one-line reason. Retirement is not deletion; prove the tool dead first.
+RETIRED: Dict[str, str] = {
+    "corpus_search": "research corpus keyword search; no service in the registry owns a corpus",
+    "corpus_vector_search": "semantic corpus search; no service in the registry owns a corpus",
+    "corpus_drift": "embedding-drift instrumentation; no service in the registry owns a corpus",
+    "purpose_command": "read-only self-analysis of this repository, not a seller service",
+}
+
+
+def _apply_retirements() -> None:
+    for name, reason in RETIRED.items():
+        if name in TOOLS:
+            TOOLS[name] = {**TOOLS[name], "status": "retired", "retired_reason": reason}
+
+
+_apply_retirements()
+
+
+def has_handler(spec: Optional[dict]) -> bool:
+    """True when the spec carries a callable handler — the offer gate."""
+    return callable((spec or {}).get("handler"))
+
+
+def is_offered(name: str, spec: Optional[dict] = None) -> bool:
+    """Offered = a callable handler exists and the tool is not retired."""
+    spec = TOOLS.get(name) if spec is None else spec
+    if not has_handler(spec):
+        return False
+    return str((spec or {}).get("status") or "wired") != "retired"
+
+
+def offered_names() -> List[str]:
+    """Every tool Bojo may be offered: handler present, not retired."""
+    return [name for name, spec in TOOLS.items() if is_offered(name, spec)]
+
+
 def tool_names() -> List[str]:
-    return list(TOOLS.keys())
+    """The offered list. Derived — never a hand-maintained catalogue."""
+    return offered_names()
 
 
 def ollama_tool_schemas(names: Optional[List[str]] = None) -> List[dict]:
-    """Ollama `tools` payload for the registered tools."""
+    """Ollama `tools` payload for the offered tools.
+
+    A name that is not offered (no handler, or retired) is dropped even when a
+    caller asks for it by name, so a stale focus list cannot smuggle it in.
+    """
     out = []
     for name in (names or tool_names()):
         spec = TOOLS.get(name)
-        if not spec:
+        if not is_offered(name, spec):
             continue
         out.append({"type": "function", "function": {
             "name": name, "description": spec["description"], "parameters": spec["parameters"],
@@ -2603,6 +2651,11 @@ def run_tool(name: str, raw_args: Any, ctx: Optional[Dict[str, Any]] = None) -> 
     if spec is None:
         return {"ok": False, "summary": f"Unknown tool '{name}'.",
                 "error": f"known tools: {', '.join(tool_names())}", "assets": []}
+    if not has_handler(spec):
+        # A declared-but-unimplemented tool is not offered, and a direct call must
+        # not look like a run either.
+        return {"ok": False, "summary": f"Tool '{name}' has no handler.",
+                "error": "declared but not implemented; it is not offered", "assets": []}
     try:
         args = parse_arguments(raw_args)
         args = validate_tool_arguments(spec, args)
