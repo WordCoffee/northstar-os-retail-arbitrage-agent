@@ -458,9 +458,15 @@ class CompositeGenerator:
         if self.layout != "deterministic" or situation not in deterministic.SITUATIONS:
             return placed
         try:
+            # `place_product` records (left, top, right, bottom); every layout helper in
+            # `deterministic` works in (x, y, width, height). Convert once, here, and convert
+            # back at the end: mixing the two conventions is what made a correct composite
+            # score as a geometry mismatch twice on this project.
+            left, top, right, bottom = (int(v) for v in placed["product_box"])
+            xywh = [left, top, max(1, right - left), max(1, bottom - top)]
             # The render lane gives a square; the brief may ask for 4:5. Extend first, so the
             # product box and the copy band are both in the canvas the brief asked for.
-            fitted = deterministic.fit_aspect(placed["bytes"], placed["product_box"],
+            fitted = deterministic.fit_aspect(placed["bytes"], xywh,
                                               deterministic.brief_aspect(brief))
             box = fitted["product_box"]
             record["aspect_fit"] = dict(fitted["added"])
@@ -475,7 +481,7 @@ class CompositeGenerator:
             return placed
         updated = dict(placed)
         updated["bytes"] = result["bytes"]
-        updated["product_box"] = list(box)
+        updated["product_box"] = [box[0], box[1], box[0] + box[2], box[1] + box[3]]
         if result.get("quad"):
             updated["product_quad"] = result["quad"]
         record["layout"] = {"kind": "deterministic", **result["meta"]}

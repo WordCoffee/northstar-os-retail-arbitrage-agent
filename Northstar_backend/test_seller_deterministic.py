@@ -237,6 +237,12 @@ def test_the_packaging_route_records_a_quad_and_a_quad_identity(tmp_path):
     assert record.get("layout", {}).get("kind") == "deterministic", record.get("layout")
     assert record.get("product_quad"), "the packaging route must record where the panel is"
     assert record.get("identity_verdict") == "quad"
+    # the record's box is (left, top, right, bottom), and the quad must sit inside it
+    left, top, right, bottom = record["product_box"]
+    assert right > left and bottom > top, record["product_box"]
+    for x, y in record["product_quad"]:
+        assert left <= x <= right and top <= y <= bottom, (record["product_box"],
+                                                           record["product_quad"])
 
 
 @pytest.mark.parametrize("bad", ["auto", "", "anything"])

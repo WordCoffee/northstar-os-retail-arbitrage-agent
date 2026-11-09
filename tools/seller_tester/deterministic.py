@@ -18,6 +18,10 @@ Neither stage invents a product claim. The callouts are structural ("front view"
 "net weight"), because a claim is the seller's to make, not a renderer's. That is recorded in the
 metadata as `copy_source`, so a reviewer can see the choice rather than infer it.
 
+**Every box in this module is `(x, y, width, height)`.** The generator records `product_box` as
+`(left, top, right, bottom)` and converts once at the boundary; mixing the two conventions has
+produced two false geometry failures on this project, so the conversion lives in one place.
+
     python -m tools.seller_tester composite --catalog … --layout deterministic
 """
 from __future__ import annotations
