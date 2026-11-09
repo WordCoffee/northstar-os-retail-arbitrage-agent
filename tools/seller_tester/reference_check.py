@@ -218,7 +218,9 @@ def text_match(produced_text: str, reference_text: str, *,
                   detail=(f"{len(matched)}/{len(wanted)} key words present "
                           f"({recall:.2f}, min {float(min_recall):.2f})"),
                   matched=matched, missing=missing, recall=round(recall, 3),
-                  min_recall=float(min_recall))
+                  min_recall=float(min_recall),
+                  produced_text=str(produced_text or "")[:600],
+                  reference_text=str(reference_text or "")[:600])
 
 
 # ------------------------------------------------------------------ embeddings
@@ -254,7 +256,13 @@ def semantic_agreement(produced_desc: str, reference_desc: str, *,
                        min_score: float = DEFAULT_MIN_EMBEDDING,
                        embedder: Optional[Callable[[str], Optional[List[float]]]] = None,
                        ) -> Dict[str, Any]:
-    """Do two descriptions mean the same thing? Local embeddings, cosine."""
+    """Do two descriptions mean the same thing? Local embeddings, cosine.
+
+    A blank description is not agreement: embedding nothing and comparing it with
+    nothing would read as a perfect match, so it is `cannot_verify` instead.
+    """
+    if not str(produced_desc or "").strip() or not str(reference_desc or "").strip():
+        return _cannot_verify("no description was produced for one of the pictures")
     call = embedder or embed
     score = cosine(call(produced_desc), call(reference_desc))
     if score is None:

@@ -143,6 +143,19 @@
       },
       "decision": "keep rapidocr",
       "source": "ty/ocr_leaderboard.json"
+    },
+    "editors": {
+      "label": "Cutout editors (composite path)",
+      "lane": "editors",
+      "budget_key": null,
+      "budget_gb": null,
+      "eval": "cutout",
+      "incumbent": "birefnet",
+      "incumbent_installed": true,
+      "baseline": null,
+      "candidates": ["grabcut", "background_distance", "otsu_lab", "rembg"],
+      "notes": "Not Ollama tags: measured by tools/seller_tester/editor_bench.py on the three Mogra uploads (cutout eval). A row is a segmentation method, not a model. birefnet is the measured winner (14/14 items, mean edge 1.83 px) and needs the local ComfyUI lane; grabcut is the lane-free fallback (14/14, 5.08 px); rembg is not installed here. --run is not the way to scout this role: there are no Ollama tags for it.",
+      "manager_key": null
     }
   }
 }

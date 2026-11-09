@@ -1,0 +1,102 @@
+{
+  "schema": "northstar.seller_briefs.v1",
+  "note": "Three uploaded-reference briefs backed by the first real uploads in this checkout (renders/references/mogra/, manifest.json). They exist to prove the composite path end to end: the product pixels must come from the upload, only the scene is generated, and fidelity `exact` routes every one of them through CompositeGenerator. Constraints are the proof-run size of the render lane (1536 px scenes); the production catalog asks for 2000 px. Background is free where the scene is generated, because a generated scene cannot promise a flat white sweep; the fidelity verdict is the printed-text check, not the backdrop.",
+  "briefs": [
+    {
+      "id": "MG-C01",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two Mogra Organics stand-up pouches, front, white-background main",
+          "note": "real upload: copied from renders/smoke_main_2000.png, recorded in renders/references/mogra/manifest.json"
+        },
+        "check": {"min_token_recall": 0.6, "min_embedding": 0.72}
+      },
+      "scene_prompt": "an empty seamless white studio sweep with a soft contact-shadow area on the floor, even soft light, no objects, no product, no text, product photography backdrop",
+      "placement": {"scale": 0.72, "anchor": [0.5, 0.6]},
+      "constraints": {
+        "dimensions": {"min_width": 1536, "min_height": 1536, "max_width": 8192, "max_height": 8192},
+        "aspect": {"ratio": 1.0, "tolerance": 0.02},
+        "background": {"value": 255, "tolerance": 14, "mode": "uniform", "spread_tolerance": 18},
+        "fill_pct": {"min": 10, "max": 85, "distance": 20},
+        "text_rule": "allowed",
+        "matte": {"mode": "any"},
+        "file_size": {"min_bytes": 20000, "max_bytes": 12000000}
+      },
+      "pass_score": 70,
+      "critical": ["dimensions", "aspect", "background", "reference_subject"]
+    },
+    {
+      "id": "MG-C02",
+      "category": "supplement_pouch",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "the same two Mogra Organics pouches in a greenhouse scene",
+          "note": "real upload: copied from renders/smoke_cutout_alpha.png, recorded in renders/references/mogra/manifest.json"
+        },
+        "check": {"min_token_recall": 0.6, "min_embedding": 0.72}
+      },
+      "scene_prompt": "an empty sunlit greenhouse bench with soft diffused daylight and blurred green foliage behind, shallow depth of field, no objects, no product, no text",
+      "placement": {"scale": 0.7, "anchor": [0.5, 0.6]},
+      "constraints": {
+        "dimensions": {"min_width": 1536, "min_height": 1536, "max_width": 8192, "max_height": 8192},
+        "aspect": {"ratio": 1.0, "tolerance": 0.02},
+        "background": {"value": 255, "tolerance": 6, "mode": "free"},
+        "fill_pct": {"min": 10, "max": 85, "distance": 20},
+        "text_rule": "allowed",
+        "matte": {"mode": "any"},
+        "file_size": {"min_bytes": 20000, "max_bytes": 12000000}
+      },
+      "pass_score": 70,
+      "critical": ["dimensions", "aspect", "reference_subject"]
+    },
+    {
+      "id": "MG-C03",
+      "category": "supplement_pouch",
+      "situation": "packaging_mockup",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_forest_dusk.png",
+        "descriptor": {
+          "filename": "mogra_forest_dusk.png",
+          "mime_type": "image/png",
+          "subject": "Mogra Organics packaging mockup at forest dusk",
+          "note": "real upload: copied from renders/mogra-forest-dusk-mockup-complete.png, recorded in renders/references/mogra/manifest.json"
+        },
+        "check": {"min_token_recall": 0.6, "min_embedding": 0.72}
+      },
+      "scene_prompt": "an empty forest clearing at dusk with soft mist and low warm light, dark mossy ground, photographic, no objects, no product, no text",
+      "placement": {"scale": 0.74, "anchor": [0.5, 0.56]},
+      "constraints": {
+        "dimensions": {"min_width": 1536, "min_height": 1536, "max_width": 8192, "max_height": 8192},
+        "aspect": {"ratio": 1.0, "tolerance": 0.02},
+        "background": {"value": 255, "tolerance": 6, "mode": "free"},
+        "fill_pct": {"min": 10, "max": 85, "distance": 20},
+        "text_rule": "allowed",
+        "matte": {"mode": "any"},
+        "file_size": {"min_bytes": 20000, "max_bytes": 12000000}
+      },
+      "pass_score": 70,
+      "critical": ["dimensions", "aspect", "reference_subject"]
+    }
+  ]
+}

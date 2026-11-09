@@ -28,9 +28,12 @@ There is no fourth input. A brief that forgets its mode is bucketed as
 | --- | --- |
 | `briefs.py` | Load + validate `ty/seller_briefs.json` (56 briefs, 3 input modes, 8 situations, 8 categories, tiers 1-3) |
 | `scorers.py` | Pure PIL+numpy checks and the 0-100 subscore |
-| `reference_check.py` | Reference-subject proxy for the two reference modes |
+| `reference_check.py` | Reference fidelity: printed text (OCR), embedding agreement, colour as a diagnostic only |
 | `judge.py` | Optional vision adapter (local Ollama verifier only; OFF by default) |
-| `generators.py` | `stored` replay adapter and documented local `comfy` adapter |
+| `generators.py` | `stored` replay, documented local `comfy` adapter, and the `composite` path |
+| `scene_render.py` | Scene generation through a fresh `tools/comfy_lane.py` instance (SDXL / SD1.5 / FLUX 3) |
+| `editor_bench.py` | Measures cutout methods on the Mogra uploads and writes the `editors` leaderboard row |
+| `mogra_briefs.json` | The three real-upload briefs used by the composite proof |
 | `escalate.py` | Tier -> constraint -> new-category ladder + history, inside one mode |
 | `gaps.py` | Gap records in `ty/seller_gaps.json`, mirrored to `state/seller/gaps.json` |
 | `harness.py` | `run_pass` orchestration, mode-balanced selection and summary |
@@ -47,17 +50,20 @@ There is no fourth input. A brief that forgets its mode is bucketed as
 | `alpha_matte` | real alpha cutout coverage, or a flat near-white border ring with low std |
 | `file_size` | byte bounds plus a minimum bytes-per-pixel sanity floor |
 | `text_free` | margin-ink heuristic (dark/saturated pixels in the outer 10% band) for `no_text` / `text_expected` |
-| `reference_subject` | dominant-colour (chroma-weighted hue) agreement and silhouette-aspect agreement with the reference asset; skipped for `prompt_only` |
+| `reference_subject` | printed-text match (OCR both pictures, fuzzy token recall >= 0.60); embedding agreement when there is no text; colour agreement reported as a diagnostic, never a gate |
 
 `text_free` is a heuristic, not OCR: it detects overlay ink in the margin, so a
 product that bleeds into the margin can be flagged. A vision judge is the
 semantic second opinion, and it is never required for a score.
 
-`reference_subject` is a proxy, not recognition. It cannot verify when the
-reference is missing, when the upload has no local copy, or when either picture
-has almost no colour — and `cannot_verify` counts as a **failure**, never a
-pass. Its calibration and known false positives are recorded in
-`reports/ty/sel01_picture_modes.md`.
+`reference_subject` decides on evidence, in order: printed text (local ONNX OCR,
+fuzzy token match), then an embedding agreement between the local vision model's
+descriptions, and never colour (the 0.60 colour agreement is measured and
+reported as a diagnostic only — a genuine pouch scored 0.603 while three
+dark-green UI screenshots scored 0.637). It cannot verify when the reference is
+missing, when the upload has no local copy, or when neither text nor a
+description can be measured — and `cannot_verify` counts as a **failure**, never
+a pass.
 
 Score = weighted mean of the non-skipped checks (weights live in
 `scorers.DEFAULT_WEIGHTS`, override per brief). A result passes when the score
@@ -88,6 +94,14 @@ skip, never a pass. Tests inject `FakeJudge`.
   refuses cleanly (`GeneratorUnavailable`) when ComfyUI is not up. It refuses
   non-loopback hosts at construction. It has no armed workflow: wiring one is a
   separate, operator-visible step. Nothing is retried or downloaded.
+* `composite` — the real-product path. `fidelity` decides: `exact` (and every
+  reference brief that does not say otherwise) cuts the product out of the
+  reference and composites it into a generated scene; `tolerant` and every
+  `prompt_only` brief are fully generated. The scene comes from a fresh
+  `tools/comfy_lane.py` instance that stops and proves it stopped; BiRefNet runs
+  inside that same lane. A refused lane is `GeneratorUnavailable` — no artefact,
+  no replayed image, and a synthetic backdrop (when explicitly requested) is
+  `cannot_verify`, never a pass.
 
 ## Selection and summary
 
@@ -121,7 +135,10 @@ python -m tools.seller_tester run --limit 40            # all three input modes
 python -m tools.seller_tester run --limit 12 --mode stored_reference
 python -m tools.seller_tester run --limit 5 --judge     # local vision only
 python -m tools.seller_tester escalate --brief ST-034 --steps 6
-python -m pytest Northstar_backend/test_seller_tester.py -q
+python -m tools.seller_tester composite --limit 3   # real cutout + generated scene
+python -m tools.seller_tester editor_bench --with-lane   # cutout leaderboard
+python -m pytest Northstar_backend/test_seller_tester.py \
+    Northstar_backend/test_seller_tester_composite.py -q
 ```
 
 `run` writes the full summary to `state/seller/last_run.json` (gitignored).
