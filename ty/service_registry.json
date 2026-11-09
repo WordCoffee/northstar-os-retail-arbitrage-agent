@@ -1,0 +1,2132 @@
+{
+  "schema": "northstar.service_registry.v1",
+  "generated": "2026-11-08",
+  "source": "ty/services.json + Northstar_backend route table + Ty's Vision walk",
+  "count": 29,
+  "services": [
+    {
+      "id": "hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "advanced_route": "/hub",
+      "purpose": "Shows whether the operation is healthy right now — catalog match totals, model and credit posture, the open gates — and jumps into the four working services.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "matched / pass / review totals",
+          "kind": "status",
+          "where": "four Metric tiles"
+        },
+        {
+          "name": "engine and credit posture",
+          "kind": "status",
+          "where": "Alpha Command Deck badges"
+        },
+        {
+          "name": "service entry points",
+          "kind": "table",
+          "where": "Service Grid rows"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read catalog summary",
+          "effect": "read",
+          "endpoint": "/api/sourcescout/summary",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2310"
+        },
+        {
+          "name": "read model posture",
+          "effect": "read",
+          "endpoint": "/api/v1/models",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:987"
+        },
+        {
+          "name": "read credit balance",
+          "effect": "read",
+          "endpoint": "/api/v1/credits/me",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2419"
+        }
+      ],
+      "bojo_tool": {
+        "name": "hub_status",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health — the same posture question this room answers."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No input or write control: 'Run batch' and 'Pin snapshot' only toast, and the gate switches are display-only.",
+      "controls_evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 — 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page.",
+      "evidence": {
+        "route": "/ui/hub",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: Operations Hub | controls (shell chrome included): Search the Northstar Index..., 90%, 100%, 115%, 130%, Operator | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:2310",
+          "Northstar_backend/main.py:987",
+          "Northstar_backend/main.py:2419"
+        ],
+        "declared_tools": [
+          "hub_status"
+        ]
+      }
+    },
+    {
+      "id": "ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "advanced_route": "/ledger",
+      "purpose": "Reports compute credits — balance, consumption and period — next to the engine posture that spends them.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "credit balance / consumed / available",
+          "kind": "status",
+          "where": "Compute Credits metrics"
+        },
+        {
+          "name": "provider, T2 model and cloud key state",
+          "kind": "status",
+          "where": "Engine Posture metrics"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read credit balance",
+          "effect": "read",
+          "endpoint": "/api/v1/credits/me",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2419"
+        },
+        {
+          "name": "read model posture",
+          "effect": "read",
+          "endpoint": "/api/v1/models",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:987"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "No chat tool reads the credit ledger; chat_tools has no credits or spend tool, so Bojo cannot drive this room."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control at all: the page reads credits and model posture and offers nothing to act on.",
+      "controls_evidence": "northstar-os-ui/src/pages/Ledger.jsx:11-22 performs two reads and renders Metric tiles; the file contains no button, input, select or textarea.",
+      "evidence": {
+        "route": "/ui/ledger",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: The Ledger | controls (shell chrome included): Search the Northstar Index..., Operator, D, Ask Gemini, 115%, 130% | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:2419",
+          "Northstar_backend/main.py:987"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "prospector",
+      "label": "Prospector",
+      "group": "Sourcing",
+      "advanced_route": "/prospector",
+      "purpose": "Ranks Kirkland/Amazon candidates by live ROI and margin from the scanner, falling back to cached SourceScout matches when the scanner is unavailable.",
+      "inputs": [
+        {
+          "name": "product or ASIN filter",
+          "kind": "query",
+          "source": "Prospector.jsx:119"
+        },
+        {
+          "name": "minimum ROI",
+          "kind": "setting",
+          "source": "Prospector.jsx:122"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ranked candidates (price, cost, net, ROI, score, sales/mo, buy box)",
+          "kind": "table",
+          "where": "Results table"
+        },
+        {
+          "name": "counts and top score",
+          "kind": "status",
+          "where": "Pipeline Snapshot"
+        }
+      ],
+      "actions": [
+        {
+          "name": "run / read scanner",
+          "effect": "read",
+          "endpoint": "/api/kirkland/scanner",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1842"
+        },
+        {
+          "name": "read cached matches",
+          "effect": "read",
+          "endpoint": "/api/sourcescout/matches",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2247"
+        }
+      ],
+      "bojo_tool": {
+        "name": "catalog_pull",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['catalog_pull'] and bojo_tools.sourcing['catalog_pull'] pull sourcing rows and report the source honestly."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/Prospector.jsx:119 filter input, :122 Min ROI slider, :125 'Run live scan'; :167 Export and :168 'Pin top 3'.",
+      "evidence": {
+        "route": "/ui/prospector",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1842",
+          "Northstar_backend/main.py:2247"
+        ],
+        "declared_tools": [
+          "catalog_pull"
+        ]
+      }
+    },
+    {
+      "id": "goldengoose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "advanced_route": "/goldengoose",
+      "purpose": "Filters the scanner's ranked deals by a minimum deal score and pins the ones worth a second look.",
+      "inputs": [
+        {
+          "name": "minimum deal score",
+          "kind": "setting",
+          "source": "GoldenGoose.jsx:82"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "qualified deals with net, ROI and score",
+          "kind": "table",
+          "where": "Qualified Deals list"
+        },
+        {
+          "name": "qualified count",
+          "kind": "status",
+          "where": "Filters badge"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read scanner",
+          "effect": "read",
+          "endpoint": "/api/kirkland/scanner",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1842"
+        },
+        {
+          "name": "read cached matches",
+          "effect": "read",
+          "endpoint": "/api/sourcescout/matches",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2247"
+        }
+      ],
+      "bojo_tool": {
+        "name": "golden_goose_scan",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['golden_goose_scan'] scores candidates through the Golden Goose filters and returns the arithmetic; the same handler serves /golden-goose."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/GoldenGoose.jsx:82 min-score slider; :107-117 per-deal pin toggle.",
+      "evidence": {
+        "route": "/ui/goldengoose",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1842",
+          "Northstar_backend/main.py:2247"
+        ],
+        "declared_tools": [
+          "golden_goose_scan"
+        ]
+      }
+    },
+    {
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
+      "advanced_route": "/offerchisel",
+      "purpose": "Generates an Amazon title, four bullets and back-end search terms for a named product through the local engine.",
+      "inputs": [
+        {
+          "name": "product name",
+          "kind": "query",
+          "source": "OfferChisel.jsx:54"
+        },
+        {
+          "name": "listing style",
+          "kind": "setting",
+          "source": "OfferChisel.jsx:56"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "title",
+          "kind": "text",
+          "where": "Generated Output — TITLE"
+        },
+        {
+          "name": "four bullets",
+          "kind": "text",
+          "where": "Generated Output — BULLETS"
+        },
+        {
+          "name": "back-end search terms",
+          "kind": "text",
+          "where": "Generated Output — KEYWORDS"
+        }
+      ],
+      "actions": [
+        {
+          "name": "generate listing copy",
+          "effect": "external",
+          "endpoint": "/api/autothink/run",
+          "method": "POST",
+          "source": "Northstar_backend/main.py:1540"
+        }
+      ],
+      "bojo_tool": {
+        "name": "offer_recommendation",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['offer_recommendation'] is the declared listing-pricing tool for this service; it prices an offer rather than writing copy."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/OfferChisel.jsx:54 product input, :56 style select, :63 Generate; :79 copies the generated title.",
+      "evidence": {
+        "route": "/ui/offerchisel",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: OfferChisel | controls (shell chrome included): Generate Listing, SEO-first, Generate, Search the Northstar Index..., Operator, Ask Gemini | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1540"
+        ],
+        "declared_tools": [
+          "offer_recommendation"
+        ]
+      }
+    },
+    {
+      "id": "towncrier",
+      "label": "The Town Crier",
+      "group": "Social",
+      "advanced_route": "/towncrier",
+      "purpose": "Writes one brand-voice caption plus hashtags for a brief and platform, and records a schedule reminder without publishing.",
+      "inputs": [
+        {
+          "name": "post brief",
+          "kind": "query",
+          "source": "TownCrier.jsx:62"
+        },
+        {
+          "name": "platform",
+          "kind": "setting",
+          "source": "TownCrier.jsx:65"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "kind": "text",
+          "where": "Content Studio output"
+        },
+        {
+          "name": "hashtags",
+          "kind": "text",
+          "where": "Content Studio badges"
+        },
+        {
+          "name": "schedule reminder notice",
+          "kind": "status",
+          "where": "toast — gate stays closed"
+        }
+      ],
+      "actions": [
+        {
+          "name": "generate caption",
+          "effect": "external",
+          "endpoint": "/api/autothink/run",
+          "method": "POST",
+          "source": "Northstar_backend/main.py:1540"
+        }
+      ],
+      "bojo_tool": {
+        "name": "plan_social",
+        "status": "wired",
+        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['plan_social'] is the wired handler for social content (canvas sizes, copy slots)."
+      },
+      "also_declares": [
+        {
+          "name": "write_content",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['write_content'] writes social captions screened for prohibited claims."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/TownCrier.jsx:62 brief textarea, :65 platform select, Generate; :40-43 Schedule only toasts 'publish gate closed'.",
+      "evidence": {
+        "route": "/ui/towncrier",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: The Town Crier | controls (shell chrome included): Search the Northstar Index..., Operator, Ask Gemini, Generate caption, Schedule this caption, Meta | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1540"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "auctioneer",
+      "label": "The Auctioneer",
+      "group": "Advertising",
+      "advanced_route": "/auctioneer",
+      "purpose": "Computes contribution profit, break-even ACoS, target ACoS and max CPC from entered campaign numbers using the canonical economics engine.",
+      "inputs": [
+        {
+          "name": "selling price, landed cost, referral, FBA, ad cost",
+          "kind": "setting",
+          "source": "Auctioneer.jsx:8-17"
+        },
+        {
+          "name": "impressions, clicks, orders",
+          "kind": "setting",
+          "source": "Auctioneer.jsx:15-17"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "contribution profit / unit",
+          "kind": "status",
+          "where": "metric tile"
+        },
+        {
+          "name": "break-even and target ACoS",
+          "kind": "status",
+          "where": "metric tiles"
+        },
+        {
+          "name": "max CPC and ROI on invested cost",
+          "kind": "status",
+          "where": "metric tiles"
+        },
+        {
+          "name": "formula version and missing inputs",
+          "kind": "status",
+          "where": "metric + footer"
+        }
+      ],
+      "actions": [
+        {
+          "name": "compute economics",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/economics/compute",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1461",
+          "note": "pure computation; no record is written"
+        }
+      ],
+      "bojo_tool": {
+        "name": "ads_math",
+        "status": "wired",
+        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['ads_math'] computes ACoS, break-even ACoS and TACOS — the same arithmetic."
+      },
+      "also_declares": [
+        {
+          "name": "ppc_plan",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['ppc_plan'] turns ad reports into a validated change plan."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/Auctioneer.jsx:67-72 eight numeric inputs; :73 Compute (canonical).",
+      "evidence": {
+        "route": "/ui/auctioneer",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:1461"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "autothink",
+      "label": "AutothinK",
+      "group": "AutothinK",
+      "advanced_route": "/autothink",
+      "purpose": "Runs a prompt against the chosen local or cloud model and keeps the run history with model and elapsed time.",
+      "inputs": [
+        {
+          "name": "research query",
+          "kind": "query",
+          "source": "AutothinK.jsx:166"
+        },
+        {
+          "name": "provider",
+          "kind": "setting",
+          "source": "AutothinK.jsx:171"
+        },
+        {
+          "name": "tier",
+          "kind": "setting",
+          "source": "AutothinK.jsx:185"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model answer",
+          "kind": "text",
+          "where": "run result panel"
+        },
+        {
+          "name": "run history rows",
+          "kind": "table",
+          "where": "history list"
+        },
+        {
+          "name": "usage",
+          "kind": "status",
+          "where": "usage read"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read models",
+          "effect": "read",
+          "endpoint": "/api/autothink/models",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1529"
+        },
+        {
+          "name": "run prompt",
+          "effect": "external",
+          "endpoint": "/api/autothink/run",
+          "method": "POST",
+          "source": "Northstar_backend/main.py:1540"
+        },
+        {
+          "name": "read history",
+          "effect": "read",
+          "endpoint": "/api/autothink/history",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1557"
+        }
+      ],
+      "bojo_tool": {
+        "name": "handoff_to_autothink",
+        "status": "wired",
+        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['handoff_to_autothink'] is the wired entry into AutothinK and requires an explicit operator confirm."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/AutothinK.jsx:166 query input, :171 provider select, :185 tier select, :199 Run.",
+      "evidence": {
+        "route": "/ui/autothink",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/autothink.png",
+        "backend": [
+          "Northstar_backend/main.py:1529",
+          "Northstar_backend/main.py:1540",
+          "Northstar_backend/main.py:1557"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
+      "advanced_route": "/thewatch",
+      "purpose": "Lists the top scanner products as a watchlist, tagging ROI at or above 30% as a signal and the rest as watch.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "watchlist rows (price, ROI, buy box, status)",
+          "kind": "table",
+          "where": "Watchlist"
+        },
+        {
+          "name": "tracked count, signal count, average price",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read scanner",
+          "effect": "read",
+          "endpoint": "/api/kirkland/scanner",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1842"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "No chat tool reads the monitoring watchlist; the room is a projection of the scanner read."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control: no watch/unwatch, no threshold, no scan trigger.",
+      "controls_evidence": "northstar-os-ui/src/pages/TheWatch.jsx:10-27 — one scanner read, then a render; no input, button or select in the file.",
+      "evidence": {
+        "route": "/ui/thewatch",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1842"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "advanced_route": "/rankledger",
+      "purpose": "Orders the scanner's products by opportunity score and labels each strong, competitive or weak.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "ranked table with ROI, sales/mo and score",
+          "kind": "table",
+          "where": "Product Standing"
+        },
+        {
+          "name": "tracked count, strong count, average ROI",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read scanner",
+          "effect": "read",
+          "endpoint": "/api/kirkland/scanner",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1842"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "No chat tool exposes rank standings; the page ranks the scanner read in memory."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control: no sort selector, no band threshold, no export.",
+      "controls_evidence": "northstar-os-ui/src/pages/RankLedger.jsx:10-30 — reads the scanner and sorts in memory; the file has no form control.",
+      "evidence": {
+        "route": "/ui/rankledger",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1842"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
+      "advanced_route": "/rivalboard",
+      "purpose": "Groups scanner products by margin risk — high-margin, benign or price-saturated — with the buy-box seller.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "posture table (price, ROI, buy box, posture)",
+          "kind": "table",
+          "where": "Competitive Landscape"
+        },
+        {
+          "name": "posture counts",
+          "kind": "status",
+          "where": "Snapshot"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read scanner",
+          "effect": "read",
+          "endpoint": "/api/kirkland/scanner",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:1842"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "No chat tool owns competitor posture; the page derives it from the scanner read."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control: no risk threshold, no seller filter, no drill-down.",
+      "controls_evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 — one read and a derived posture column; no control exists.",
+      "evidence": {
+        "route": "/ui/rivalboard",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:1842"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "group": "Account",
+      "advanced_route": "/account",
+      "purpose": "Shows the signed-in account's entitlements and plan usage so the operator can see what the org is allowed to run.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "entitlement list",
+          "kind": "table",
+          "where": "entitlements panel"
+        },
+        {
+          "name": "plan usage",
+          "kind": "status",
+          "where": "usage tiles"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read entitlements",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/entitlements",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1693"
+        },
+        {
+          "name": "read plan usage",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/plan-usage",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1809"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Account entitlements are a foundation read; chat_tools has no account or plan tool."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control: entitlements and usage are read-only; no plan change, export or seat request.",
+      "controls_evidence": "App.jsx:250 mounts pages/customer/AccountStatus.jsx for /account; northstar-os-ui/src/pages/customer/AccountStatus.jsx:14-15 performs two reads and the file has no button or input.",
+      "evidence": {
+        "route": "/ui/account",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/account.png",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:1693",
+          "Northstar_backend/foundation/api/router.py:1809"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
+      "advanced_route": "/foundation",
+      "purpose": "Reports foundation health in one page — providers, marketplaces, product count, approvals, identity conflicts, queue and schedule posture, imports and audit.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "provider and marketplace status",
+          "kind": "table",
+          "where": "status sections"
+        },
+        {
+          "name": "approvals, identity conflicts, imports",
+          "kind": "table",
+          "where": "status sections"
+        },
+        {
+          "name": "queue / schedule posture and audit tail",
+          "kind": "status",
+          "where": "status sections"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read providers",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/providers",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:755"
+        },
+        {
+          "name": "read marketplaces",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/marketplaces",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:650"
+        },
+        {
+          "name": "read approvals",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/approvals",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1351"
+        },
+        {
+          "name": "read identity conflicts",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/identity/conflicts",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:718"
+        },
+        {
+          "name": "read usage summary",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/usage/summary",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1331"
+        },
+        {
+          "name": "read queue posture",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable/queue-posture",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:845"
+        },
+        {
+          "name": "read schedule posture",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/schedules/posture",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:995"
+        },
+        {
+          "name": "read audit tail",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/audit",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1407"
+        },
+        {
+          "name": "read environment",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/environment",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:466"
+        },
+        {
+          "name": "read product count",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/products",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:659"
+        },
+        {
+          "name": "read identity candidates",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/identity/candidates",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:711"
+        },
+        {
+          "name": "read keyword imports",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/imports",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1240"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Foundation posture is a read-only status surface; no chat tool reads it."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "Only a Refresh button that repeats the same twelve reads; no probe trigger, no approval decision, no export.",
+      "controls_evidence": "northstar-os-ui/src/foundation/pages/FoundationStatus.jsx:31-43 fires twelve distinct reads; :88 Refresh re-runs them. Nothing on the page accepts input or writes.",
+      "evidence": {
+        "route": "/ui/foundation",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: Foundation | controls (shell chrome included): Refresh, Search the Northstar Index..., 90%, 100%, 115%, 130% | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:755",
+          "Northstar_backend/foundation/api/router.py:650",
+          "Northstar_backend/foundation/api/router.py:1351",
+          "Northstar_backend/foundation/api/router.py:718",
+          "Northstar_backend/foundation/api/router.py:1331",
+          "Northstar_backend/foundation/api/router.py:845",
+          "Northstar_backend/foundation/api/router.py:995",
+          "Northstar_backend/foundation/api/router.py:1407",
+          "Northstar_backend/foundation/api/router.py:466"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "jobs",
+      "label": "Jobs & Schedules",
+      "group": "Internal",
+      "advanced_route": "/jobs",
+      "purpose": "Creates and controls durable jobs and schedules: submit a job, inspect its audit trail, cancel or retry it, enable or disable a schedule.",
+      "inputs": [
+        {
+          "name": "job type",
+          "kind": "selection",
+          "source": "Jobs.jsx:115"
+        },
+        {
+          "name": "job payload",
+          "kind": "query",
+          "source": "Jobs.jsx:125"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "durable jobs with state",
+          "kind": "table",
+          "where": "jobs table"
+        },
+        {
+          "name": "per-job audit trail",
+          "kind": "table",
+          "where": "job detail"
+        },
+        {
+          "name": "schedules and queue posture",
+          "kind": "table",
+          "where": "schedules panel"
+        }
+      ],
+      "actions": [
+        {
+          "name": "list durable jobs",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:855"
+        },
+        {
+          "name": "create durable job",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/jobs-durable",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:868"
+        },
+        {
+          "name": "read job audit",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/audit",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:904"
+        },
+        {
+          "name": "cancel job",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/cancel",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:930"
+        },
+        {
+          "name": "retry job",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/jobs-durable/{job_id}/retry",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:944"
+        },
+        {
+          "name": "list schedules",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/schedules",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:960"
+        },
+        {
+          "name": "enable schedule",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/schedules/{schedule_id}/enable",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1037"
+        },
+        {
+          "name": "disable schedule",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/schedules/{schedule_id}/disable",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1047"
+        },
+        {
+          "name": "read handler registry",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable/handler-registry",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:836"
+        },
+        {
+          "name": "read queue posture",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable/queue-posture",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:845"
+        },
+        {
+          "name": "read schedule posture",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/schedules/posture",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:995"
+        },
+        {
+          "name": "read one job",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/jobs-durable/{job_id}",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:891"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Bojo has no job or schedule tool; durable jobs are controlled through the foundation API only."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/foundation/pages/Jobs.jsx:115 job-type select, :125 payload textarea, :60 create; :69 cancel, :74 retry, :80 schedule enable/disable.",
+      "evidence": {
+        "route": "/ui/jobs",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:855",
+          "Northstar_backend/foundation/api/router.py:868",
+          "Northstar_backend/foundation/api/router.py:904",
+          "Northstar_backend/foundation/api/router.py:930",
+          "Northstar_backend/foundation/api/router.py:944",
+          "Northstar_backend/foundation/api/router.py:960",
+          "Northstar_backend/foundation/api/router.py:1037",
+          "Northstar_backend/foundation/api/router.py:1047",
+          "Northstar_backend/foundation/api/router.py:836"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "keywords",
+      "label": "Keywords & SEO",
+      "group": "Internal",
+      "advanced_route": "/keywords",
+      "purpose": "Searches the keyword store, shows coverage gaps and search terms, and submits keyword imports with a rejection view.",
+      "inputs": [
+        {
+          "name": "keyword search",
+          "kind": "query",
+          "source": "Keywords.jsx:92"
+        },
+        {
+          "name": "import file name",
+          "kind": "file",
+          "source": "Keywords.jsx:60"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "keyword results",
+          "kind": "table",
+          "where": "results table"
+        },
+        {
+          "name": "coverage gaps and search terms",
+          "kind": "table",
+          "where": "gap panels"
+        },
+        {
+          "name": "import batches with rejected rows",
+          "kind": "table",
+          "where": "imports panel"
+        }
+      ],
+      "actions": [
+        {
+          "name": "search keywords",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/search",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1078"
+        },
+        {
+          "name": "read gaps",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/gaps",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1116"
+        },
+        {
+          "name": "read search terms",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/search-terms",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1126"
+        },
+        {
+          "name": "read sources",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/sources",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1180"
+        },
+        {
+          "name": "list imports",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/imports",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1240"
+        },
+        {
+          "name": "submit import",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/keywords/imports",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1207"
+        },
+        {
+          "name": "read one keyword",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/{keyword_id}",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1310"
+        },
+        {
+          "name": "read rejected import rows",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/imports/{batch_id}/rejected",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1264"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Keyword import and coverage are foundation reads/writes; the SEO tools in chat_tools score content, they do not manage the keyword store."
+      },
+      "also_declares": [
+        {
+          "name": "seo_check",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile — adjacent, not the store itself."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/foundation/pages/Keywords.jsx:92 search input, :95 Search, :169 Submit import, :105/:176 detail links.",
+      "evidence": {
+        "route": "/ui/keywords",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:1078",
+          "Northstar_backend/foundation/api/router.py:1116",
+          "Northstar_backend/foundation/api/router.py:1126",
+          "Northstar_backend/foundation/api/router.py:1180",
+          "Northstar_backend/foundation/api/router.py:1240",
+          "Northstar_backend/foundation/api/router.py:1207"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "advanced_route": "/beta",
+      "purpose": "Public beta landing that explains the programme and sends the visitor to accept an invitation or sign in.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "programme metrics",
+          "kind": "status",
+          "where": "MetricTiles"
+        }
+      ],
+      "actions": [],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "A public landing page; no chat tool and no API call is involved."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "Landing page only: the only actions are navigation to /beta/accept and /sign-in.",
+      "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:41-42 — 'Accept Invitation' and 'Sign In' call navigate(); the file imports no API client.",
+      "evidence": {
+        "route": "/ui/beta",
+        "vision": "audit",
+        "vision_note": "title and controls recorded by the committed live walk in ty/ux_audit.json | title: NorthstarOS | controls (shell chrome included): Search the Northstar Index..., Operator, Accept Invitation, Sign In, Portfolio & Finance, Golden Goose Finder | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:353"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "advanced_route": "/beta#support",
+      "purpose": "The support section of the beta landing: who handles beta support and where signed-in testers open the ticket queue.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "support guidance",
+          "kind": "text",
+          "where": "section#support"
+        }
+      ],
+      "actions": [],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "A static section of the landing page; ticket handling lives in the customer Support room."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "Static section: no ticket form and no contact action; the ticket queue lives at /support.",
+      "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:53-65 renders section#support only when the hash is #support; the section contains two paragraphs and no control.",
+      "evidence": {
+        "route": "/ui/beta#support",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/main.py:353"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "advanced_route": "/beta-signup",
+      "purpose": "Validates an invite code with an email and creates the beta account.",
+      "inputs": [
+        {
+          "name": "email",
+          "kind": "query",
+          "source": "BetaSignup.jsx:32"
+        },
+        {
+          "name": "invite code",
+          "kind": "query",
+          "source": "BetaSignup.jsx:35"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "signup result",
+          "kind": "status",
+          "where": "result panel"
+        }
+      ],
+      "actions": [
+        {
+          "name": "create beta account",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/signup",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1756"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Account creation is a foundation write with no chat-tool equivalent."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/foundation/pages/BetaSignup.jsx:32 email input, :35 invite-code input, :37 submit.",
+      "evidence": {
+        "route": "/ui/beta-signup",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:1756"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "advanced_route": "/beta-ops",
+      "purpose": "Admin dashboard of beta organisations and tester accounts, with drill-down into an org and exports.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "organisation rows",
+          "kind": "table",
+          "where": "orgs table"
+        },
+        {
+          "name": "tester accounts",
+          "kind": "table",
+          "where": "accounts panel"
+        },
+        {
+          "name": "dashboard metrics",
+          "kind": "status",
+          "where": "MetricTiles"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read admin dashboard",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/admin/dashboard",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:2025"
+        },
+        {
+          "name": "read tester accounts",
+          "effect": "read",
+          "endpoint": "/api/v1/noncreative/accounts",
+          "method": "GET",
+          "source": "Northstar_backend/noncreative_reads.py:402"
+        }
+      ],
+      "bojo_tool": {
+        "name": "none",
+        "status": "none",
+        "reason": "Beta operations is an admin read surface; no chat tool covers accounts or orgs."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No input: org drill-down, Export Report and Audit Log are all navigation; no cohort filter or account action.",
+      "controls_evidence": "northstar-os-ui/src/pages/admin/Overview.jsx:105 'Open' navigates to the org page, :152 'Export Report' and 'Audit Log' navigate; the page has no input or select.",
+      "evidence": {
+        "route": "/ui/beta-ops",
+        "vision": "backend",
+        "vision_note": "no live page, no committed capture, no rendered audit row for this route | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:2025",
+          "Northstar_backend/noncreative_reads.py:402"
+        ],
+        "declared_tools": []
+      }
+    },
+    {
+      "id": "design-studio",
+      "label": "Design Studio",
+      "group": "Create",
+      "advanced_route": "/design-studio",
+      "purpose": "One creative studio: pick a surface (canvas, listing images, A+, storefront, ads, video, social, packaging, dielines, 3D scene) and produce assets against templates.",
+      "inputs": [
+        {
+          "name": "studio section",
+          "kind": "selection",
+          "source": "DesignStudio.jsx:87-101"
+        },
+        {
+          "name": "creative brief",
+          "kind": "query",
+          "source": "canvas composer"
+        },
+        {
+          "name": "dieline template",
+          "kind": "selection",
+          "source": "Dielines section"
+        },
+        {
+          "name": "source image",
+          "kind": "file",
+          "source": "canvas / asset upload"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rendered image",
+          "kind": "image",
+          "where": "canvas / listing images"
+        },
+        {
+          "name": "dieline SVG + PDF",
+          "kind": "file",
+          "where": "Dielines section"
+        },
+        {
+          "name": "project, asset and job records",
+          "kind": "table",
+          "where": "Projects / Asset Dashboard"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read studio projects",
+          "effect": "read",
+          "endpoint": "/api/design-studio/projects",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:157"
+        },
+        {
+          "name": "upload asset",
+          "effect": "write",
+          "endpoint": "/api/design-studio/assets/upload",
+          "method": "POST",
+          "source": "Northstar_backend/studio_upload_router.py:22"
+        },
+        {
+          "name": "list assets",
+          "effect": "read",
+          "endpoint": "/api/design-studio/assets",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:201"
+        },
+        {
+          "name": "render dieline geometry",
+          "effect": "read",
+          "endpoint": "/api/design-studio/print/dielines/geometry",
+          "method": "POST",
+          "source": "Northstar_backend/design_studio_print.py:729"
+        },
+        {
+          "name": "list packaged deliverables",
+          "effect": "read",
+          "endpoint": "/api/design-studio/dashboard/packages",
+          "method": "GET",
+          "source": "Northstar_backend/studio_dashboard.py:112"
+        }
+      ],
+      "bojo_tool": {
+        "name": "generate_image",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['generate_image'] renders one image locally and refuses to paint text, logos or barcodes."
+      },
+      "also_declares": [
+        {
+          "name": "list_templates",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['list_templates'] lists the parametric print templates."
+        },
+        {
+          "name": "build_dieline",
+          "status": "declared",
+          "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/DesignStudio.jsx:87-101 section picker; each built section (canvas, dielines, projects) carries its own form controls.",
+      "evidence": {
+        "route": "/ui/design-studio",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: Design Studio | ty/ux_audit.json controls (shell chrome included): Canvas, Projects, Listing Images, A+ Brand Story, Storefront, Ads | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/design-studio.png",
+        "backend": [
+          "Northstar_backend/design_studio_api.py:157",
+          "Northstar_backend/studio_upload_router.py:22",
+          "Northstar_backend/design_studio_api.py:201",
+          "Northstar_backend/design_studio_print.py:729",
+          "Northstar_backend/studio_dashboard.py:112"
+        ],
+        "declared_tools": [
+          "generate_image",
+          "list_templates",
+          "build_dieline"
+        ]
+      }
+    },
+    {
+      "id": "product-finder",
+      "label": "SourceScout",
+      "group": "Sourcing",
+      "advanced_route": "/product-finder",
+      "purpose": "Stages an ASIN for research and shows its identity, risk, market and economics gates; every field the page has not read is labelled UNKNOWN, and no catalog call is made from this page yet.",
+      "inputs": [
+        {
+          "name": "ASIN",
+          "kind": "query",
+          "source": "ProductFinder.jsx:140"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ASIN rows with UNKNOWN fields until read",
+          "kind": "table",
+          "where": "Product Set and lookup tables"
+        },
+        {
+          "name": "gate checklist and unverified count",
+          "kind": "status",
+          "where": "Coverage tab"
+        }
+      ],
+      "actions": [],
+      "bojo_tool": {
+        "name": "scan_products",
+        "status": "declared",
+        "reason": "ty/services.json declares scan_products; chat_tools.TOOLS has no handler by that name — the nearest wired tool is catalog_pull."
+      },
+      "also_declares": [
+        {
+          "name": "catalog_pull",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['catalog_pull'] pulls sourcing rows with an honest source label."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/ProductFinder.jsx:140 ASIN input and :143 add stage a local row; :169 opens the set, :170 hands off to Commerce Ops; the file contains no fetch or api call — /api/products/finder appears only in comments (:18-21, :124).",
+      "evidence": {
+        "route": "/ui/product-finder",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: SourceScout | ty/ux_audit.json controls (shell chrome included): New Lookup, Lookup, Product Set, Saved Sets, Coverage, Start researching | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/product-finder.png",
+        "backend": [
+          "Northstar_backend/main.py:353"
+        ],
+        "declared_tools": [
+          "scan_products"
+        ]
+      }
+    },
+    {
+      "id": "golden-goose",
+      "label": "Golden Goose",
+      "group": "Sourcing",
+      "advanced_route": "/golden-goose",
+      "purpose": "Evaluates a candidate against explicit gates and returns a purchase verdict with the verified commission, then queues the decision.",
+      "inputs": [
+        {
+          "name": "item id",
+          "kind": "query",
+          "source": "GoldenGoose.jsx:49"
+        },
+        {
+          "name": "economics readiness",
+          "kind": "selection",
+          "source": "GoldenGoose.jsx:53"
+        },
+        {
+          "name": "gate values",
+          "kind": "setting",
+          "source": "GoldenGoose.jsx:67"
+        },
+        {
+          "name": "sample / approval flags",
+          "kind": "selection",
+          "source": "GoldenGoose.jsx:58-59"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "verdict, checklist and missing evidence",
+          "kind": "status",
+          "where": "evaluation panel"
+        },
+        {
+          "name": "queue rows",
+          "kind": "table",
+          "where": "queue list"
+        }
+      ],
+      "actions": [
+        {
+          "name": "evaluate candidate",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/golden-goose/evaluate",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:401"
+        },
+        {
+          "name": "read queue",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/golden-goose/queue",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:414"
+        },
+        {
+          "name": "read item",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/golden-goose/{item_id}",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:427"
+        },
+        {
+          "name": "record decision",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/golden-goose/{item_id}/decision",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:443"
+        }
+      ],
+      "bojo_tool": {
+        "name": "golden_goose_scan",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['golden_goose_scan'] scores candidates and returns tier, scores and the arithmetic behind each one."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/GoldenGoose.jsx:49 item input, :53 readiness select, :58-59 flags, :67 gate selects, :74 Evaluate.",
+      "evidence": {
+        "route": "/ui/golden-goose",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/golden-goose.png",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:401",
+          "Northstar_backend/foundation/api/router.py:414",
+          "Northstar_backend/foundation/api/router.py:427",
+          "Northstar_backend/foundation/api/router.py:443"
+        ],
+        "declared_tools": [
+          "golden_goose_scan"
+        ]
+      }
+    },
+    {
+      "id": "listings",
+      "label": "Listing Guardian",
+      "group": "Listings",
+      "advanced_route": "/listings",
+      "purpose": "Turns local listing and identity records into severity-ranked alerts, diffs, history and escalations to Commerce Ops.",
+      "inputs": [
+        {
+          "name": "view tab",
+          "kind": "selection",
+          "source": "ListingGuardian.jsx:9-14"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "alert rows",
+          "kind": "table",
+          "where": "Alerts"
+        },
+        {
+          "name": "escalation rows",
+          "kind": "table",
+          "where": "Escalations"
+        },
+        {
+          "name": "listing / enrichment counts",
+          "kind": "status",
+          "where": "metric cards"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read listing health",
+          "effect": "read",
+          "endpoint": "/api/v1/noncreative/listings/health",
+          "method": "GET",
+          "source": "Northstar_backend/noncreative_reads.py:226"
+        }
+      ],
+      "bojo_tool": {
+        "name": "optimize_listing",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['optimize_listing'] scores and rewrites a listing against target keywords."
+      },
+      "also_declares": [
+        {
+          "name": "listing_audit",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['listing_audit'] audits a title and bullets against Amazon rules; chat_tools.SERVICES maps the listing area to it."
+        }
+      ],
+      "has_controls": false,
+      "gap": "No input or write: New Rule only toasts, History navigates, Escalate navigates; no diff review or rule creation.",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/ListingGuardian.jsx:85 'New Rule' and :86 'History' only toast or navigate, :75 escalate navigates to Commerce Ops; the tabs switch a subview and no input or write exists.",
+      "evidence": {
+        "route": "/ui/listings",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/listing-guardian.png",
+        "backend": [
+          "Northstar_backend/noncreative_reads.py:226"
+        ],
+        "declared_tools": [
+          "optimize_listing"
+        ]
+      }
+    },
+    {
+      "id": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "advanced_route": "/keyword-tracker",
+      "purpose": "Shows keyword coverage, rank trends and gaps from local keyword data plus the foundation keyword store.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "keyword rows with coverage",
+          "kind": "table",
+          "where": "keyword table"
+        },
+        {
+          "name": "gap list",
+          "kind": "table",
+          "where": "gaps panel"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read local keywords",
+          "effect": "read",
+          "endpoint": "/api/v1/noncreative/keywords",
+          "method": "GET",
+          "source": "Northstar_backend/noncreative_reads.py:336"
+        },
+        {
+          "name": "search keyword store",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/search",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1078"
+        },
+        {
+          "name": "read keyword gaps",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/keywords/gaps",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1116"
+        }
+      ],
+      "bojo_tool": {
+        "name": "track_keywords",
+        "status": "declared",
+        "reason": "ty/services.json declares track_keywords; chat_tools.TOOLS has no handler by that name — the nearest wired tool is seo_check."
+      },
+      "also_declares": [
+        {
+          "name": "seo_check",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile, including keyword coverage."
+        }
+      ],
+      "has_controls": false,
+      "gap": "Track New, Reports and Verify only toast; no search input, no term add, no threshold.",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/KeywordTracker.jsx:59 'Track New' and :60 'Reports' only toast; :83 'Verify' calls a toast helper (:verified). No input or write exists.",
+      "evidence": {
+        "route": "/ui/keyword-tracker",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/keyword-tracker.png",
+        "backend": [
+          "Northstar_backend/noncreative_reads.py:336",
+          "Northstar_backend/foundation/api/router.py:1078",
+          "Northstar_backend/foundation/api/router.py:1116"
+        ],
+        "declared_tools": [
+          "track_keywords"
+        ]
+      }
+    },
+    {
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "advanced_route": "/competitor-monitor",
+      "purpose": "Compares cached SourceScout observations with local competitor records — price, rating, votes and quantity match.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "observation table",
+          "kind": "table",
+          "where": "Cached market observations"
+        },
+        {
+          "name": "metric tiles",
+          "kind": "status",
+          "where": "tracked / rated / average price / votes"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read competitor observations",
+          "effect": "read",
+          "endpoint": "/api/v1/noncreative/competitor/observations",
+          "method": "GET",
+          "source": "Northstar_backend/noncreative_reads.py:261"
+        },
+        {
+          "name": "read SourceScout catalog",
+          "effect": "read",
+          "endpoint": "/api/sourcescout",
+          "method": "GET",
+          "source": "Northstar_backend/main.py:2227"
+        }
+      ],
+      "bojo_tool": {
+        "name": "watch_competitor",
+        "status": "declared",
+        "reason": "ty/services.json declares watch_competitor; chat_tools.TOOLS has no handler by that name and no wired equivalent exists."
+      },
+      "also_declares": [],
+      "has_controls": false,
+      "gap": "No control: no ASIN add, no refresh, no comparison selector.",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/CompetitorMonitor.jsx:10-80 — two reads and two tables; the page has no input, button or select.",
+      "evidence": {
+        "route": "/ui/competitor-monitor",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/competitor-monitor.png",
+        "backend": [
+          "Northstar_backend/noncreative_reads.py:261",
+          "Northstar_backend/main.py:2227"
+        ],
+        "declared_tools": [
+          "watch_competitor"
+        ]
+      }
+    },
+    {
+      "id": "listingforge",
+      "label": "ListingForge",
+      "group": "Listings",
+      "advanced_route": "/listingforge",
+      "purpose": "Drafts a listing proposal from a product brief through the reasoning provider, then saves or updates the listing record.",
+      "inputs": [
+        {
+          "name": "product name",
+          "kind": "query",
+          "source": "ListingForge.jsx:140"
+        },
+        {
+          "name": "tone",
+          "kind": "setting",
+          "source": "ListingForge.jsx proposal form"
+        },
+        {
+          "name": "format hint",
+          "kind": "setting",
+          "source": "ListingForge.jsx proposal form"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "proposal copy",
+          "kind": "text",
+          "where": "proposal panel"
+        },
+        {
+          "name": "saved listing record",
+          "kind": "table",
+          "where": "listing records"
+        }
+      ],
+      "actions": [
+        {
+          "name": "request listing proposal",
+          "effect": "external",
+          "endpoint": "/api/v1/reasoning/listing-proposal",
+          "method": "POST",
+          "source": "Northstar_backend/main.py:1695"
+        },
+        {
+          "name": "save listing record",
+          "effect": "write",
+          "endpoint": "/api/design-studio/listing-records",
+          "method": "POST",
+          "source": "Northstar_backend/design_studio_api.py:1293"
+        },
+        {
+          "name": "read listing records",
+          "effect": "read",
+          "endpoint": "/api/design-studio/listing-records",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:1270"
+        }
+      ],
+      "bojo_tool": {
+        "name": "compose_listing",
+        "status": "declared",
+        "reason": "ty/services.json declares compose_listing; chat_tools.TOOLS has no handler by that name — the nearest wired tool is write_content."
+      },
+      "also_declares": [
+        {
+          "name": "write_content",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['write_content'] writes listing copy and returns keyword coverage per variant."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/ListingForge.jsx:140 proposal request from the brief form; :298 and :380 save the listing record.",
+      "evidence": {
+        "route": "/ui/listingforge",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/listingforge.png",
+        "backend": [
+          "Northstar_backend/main.py:1695",
+          "Northstar_backend/design_studio_api.py:1293",
+          "Northstar_backend/design_studio_api.py:1270"
+        ],
+        "declared_tools": [
+          "compose_listing"
+        ]
+      }
+    },
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "advanced_route": "/adpilot",
+      "purpose": "Builds a campaign view from the seller's own imported ad files and proposes ad copy, leaving unknown metrics unknown.",
+      "inputs": [
+        {
+          "name": "imported ad file",
+          "kind": "file",
+          "source": "AdPilot.jsx:74"
+        },
+        {
+          "name": "product name, brand tone, format hint",
+          "kind": "query",
+          "source": "AdPilot.jsx:146-159"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "campaign rows with spend and ACoS",
+          "kind": "table",
+          "where": "campaign table"
+        },
+        {
+          "name": "ad copy variants",
+          "kind": "text",
+          "where": "copy panel"
+        }
+      ],
+      "actions": [
+        {
+          "name": "list imported ad files",
+          "effect": "read",
+          "endpoint": "/api/design-studio/amazon-files",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:1552"
+        },
+        {
+          "name": "read imported rows",
+          "effect": "read",
+          "endpoint": "/api/design-studio/amazon-files/{uid}/rows",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:1569"
+        },
+        {
+          "name": "read harvested terms",
+          "effect": "read",
+          "endpoint": "/api/design-studio/terms",
+          "method": "GET",
+          "source": "Northstar_backend/design_studio_api.py:843"
+        },
+        {
+          "name": "request ad copy",
+          "effect": "external",
+          "endpoint": "/api/v1/reasoning/ad-copy-proposal",
+          "method": "POST",
+          "source": "Northstar_backend/main.py:1711"
+        }
+      ],
+      "bojo_tool": {
+        "name": "plan_campaign",
+        "status": "declared",
+        "reason": "ty/services.json declares plan_campaign; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ppc_plan."
+      },
+      "also_declares": [
+        {
+          "name": "ppc_plan",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['ppc_plan'] turns ad reports into a validated change plan."
+        },
+        {
+          "name": "ads_math",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['ads_math'] computes ACoS, break-even and TACOS."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/AdPilot.jsx:146-159 product, tone and format inputs; :117 ad-copy request; :266 image upload input.",
+      "evidence": {
+        "route": "/ui/adpilot",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/adpilot.png",
+        "backend": [
+          "Northstar_backend/design_studio_api.py:1552",
+          "Northstar_backend/design_studio_api.py:1569",
+          "Northstar_backend/design_studio_api.py:843",
+          "Northstar_backend/main.py:1711"
+        ],
+        "declared_tools": [
+          "plan_campaign"
+        ]
+      }
+    },
+    {
+      "id": "socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "advanced_route": "/socialpulse",
+      "purpose": "Runs a local social content board — campaigns, drafts, review, approval and publish-ready — with nothing publishing.",
+      "inputs": [
+        {
+          "name": "campaign",
+          "kind": "selection",
+          "source": "SocialPulse.jsx:267"
+        },
+        {
+          "name": "post hook",
+          "kind": "query",
+          "source": "SocialPulse.jsx composer"
+        },
+        {
+          "name": "platform, format, voice",
+          "kind": "setting",
+          "source": "SocialPulse.jsx:276"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "draft rows by stage",
+          "kind": "table",
+          "where": "board columns"
+        },
+        {
+          "name": "approval queue",
+          "kind": "table",
+          "where": "approvals tab"
+        },
+        {
+          "name": "schedule reminders",
+          "kind": "table",
+          "where": "calendar"
+        }
+      ],
+      "actions": [],
+      "bojo_tool": {
+        "name": "plan_social",
+        "status": "wired",
+        "reason": "chat_tools.TOOLS['plan_social'] plans social graphics at exact canvas sizes with copy slots."
+      },
+      "also_declares": [],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/SocialPulse.jsx:249-252 Draft Post / Send for Approval, :234-241 add draft and advance state; everything is local state — no API call exists in the file.",
+      "evidence": {
+        "route": "/ui/socialpulse",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/socialpulse.png",
+        "backend": [
+          "Northstar_backend/main.py:353"
+        ],
+        "declared_tools": [
+          "plan_social"
+        ]
+      }
+    },
+    {
+      "id": "profitability",
+      "label": "Profitability",
+      "group": "Workspace",
+      "advanced_route": "/profitability",
+      "purpose": "Computes unit contribution, ROI and purchase readiness from price, cost and fees through the canonical engine, never granting purchase authorization by itself.",
+      "inputs": [
+        {
+          "name": "selling price, acquisition cost",
+          "kind": "setting",
+          "source": "ProfitabilityDashboard.jsx:83-87"
+        },
+        {
+          "name": "referral %, FBA fee, ad cost",
+          "kind": "setting",
+          "source": "ProfitabilityDashboard.jsx:91-99"
+        },
+        {
+          "name": "quantity",
+          "kind": "setting",
+          "source": "ProfitabilityDashboard.jsx:108"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "contribution profit and ROI",
+          "kind": "status",
+          "where": "EngineValue tiles"
+        },
+        {
+          "name": "readiness and purchase authorization",
+          "kind": "status",
+          "where": "readiness pill"
+        },
+        {
+          "name": "contract formula version",
+          "kind": "status",
+          "where": "header pill"
+        }
+      ],
+      "actions": [
+        {
+          "name": "read economics contract",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/economics/contract",
+          "method": "GET",
+          "source": "Northstar_backend/foundation/api/router.py:1445"
+        },
+        {
+          "name": "compute economics",
+          "effect": "read",
+          "endpoint": "/api/v1/foundation/economics/compute",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:1461",
+          "note": "pure computation; no record is written"
+        }
+      ],
+      "bojo_tool": {
+        "name": "margin_report",
+        "status": "declared",
+        "reason": "ty/services.json declares margin_report; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ads_math."
+      },
+      "also_declares": [
+        {
+          "name": "ads_math",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['ads_math'] returns ACOS, break-even ACOS and profit per ad dollar from raw numbers."
+        }
+      ],
+      "has_controls": true,
+      "gap": null,
+      "controls_evidence": "northstar-os-ui/src/pages/internal/ProfitabilityDashboard.jsx:83-108 six numeric inputs and a compute button.",
+      "evidence": {
+        "route": "/ui/profitability",
+        "vision": "screenshot",
+        "vision_note": "committed capture of this route; not described live | blocked: no dev server listening on 127.0.0.1:8101; no Chrome window attached | shot: reports/ui_audit_20261016/profitability.png",
+        "backend": [
+          "Northstar_backend/foundation/api/router.py:1445",
+          "Northstar_backend/foundation/api/router.py:1461"
+        ],
+        "declared_tools": [
+          "margin_report"
+        ]
+      }
+    }
+  ]
+}

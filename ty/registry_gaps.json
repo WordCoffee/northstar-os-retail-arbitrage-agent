@@ -1,0 +1,112 @@
+{
+  "schema": "northstar.registry_gaps.v1",
+  "generated_from": "ty/service_registry.json",
+  "count": 13,
+  "note": "A service listed here has no control of its own. The fix is a gap record, not a rewrite of the advanced view.",
+  "gaps": [
+    {
+      "id": "hub",
+      "label": "Operations Hub",
+      "group": "Workspace",
+      "advanced_route": "/hub",
+      "reason": "No input or write control: 'Run batch' and 'Pin snapshot' only toast, and the gate switches are display-only.",
+      "evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 — 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page."
+    },
+    {
+      "id": "ledger",
+      "label": "The Ledger",
+      "group": "Workspace",
+      "advanced_route": "/ledger",
+      "reason": "No control at all: the page reads credits and model posture and offers nothing to act on.",
+      "evidence": "northstar-os-ui/src/pages/Ledger.jsx:11-22 performs two reads and renders Metric tiles; the file contains no button, input, select or textarea."
+    },
+    {
+      "id": "thewatch",
+      "label": "The Watch",
+      "group": "Monitoring",
+      "advanced_route": "/thewatch",
+      "reason": "No control: no watch/unwatch, no threshold, no scan trigger.",
+      "evidence": "northstar-os-ui/src/pages/TheWatch.jsx:10-27 — one scanner read, then a render; no input, button or select in the file."
+    },
+    {
+      "id": "rankledger",
+      "label": "RankLedger",
+      "group": "Monitoring",
+      "advanced_route": "/rankledger",
+      "reason": "No control: no sort selector, no band threshold, no export.",
+      "evidence": "northstar-os-ui/src/pages/RankLedger.jsx:10-30 — reads the scanner and sorts in memory; the file has no form control."
+    },
+    {
+      "id": "rivalboard",
+      "label": "The Rival Board",
+      "group": "Monitoring",
+      "advanced_route": "/rivalboard",
+      "reason": "No control: no risk threshold, no seller filter, no drill-down.",
+      "evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 — one read and a derived posture column; no control exists."
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "group": "Account",
+      "advanced_route": "/account",
+      "reason": "No control: entitlements and usage are read-only; no plan change, export or seat request.",
+      "evidence": "App.jsx:250 mounts pages/customer/AccountStatus.jsx for /account; northstar-os-ui/src/pages/customer/AccountStatus.jsx:14-15 performs two reads and the file has no button or input."
+    },
+    {
+      "id": "foundation",
+      "label": "Operations Hub",
+      "group": "Internal",
+      "advanced_route": "/foundation",
+      "reason": "Only a Refresh button that repeats the same twelve reads; no probe trigger, no approval decision, no export.",
+      "evidence": "northstar-os-ui/src/foundation/pages/FoundationStatus.jsx:31-43 fires twelve distinct reads; :88 Refresh re-runs them. Nothing on the page accepts input or writes."
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "advanced_route": "/beta",
+      "reason": "Landing page only: the only actions are navigation to /beta/accept and /sign-in.",
+      "evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:41-42 — 'Accept Invitation' and 'Sign In' call navigate(); the file imports no API client."
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "advanced_route": "/beta#support",
+      "reason": "Static section: no ticket form and no contact action; the ticket queue lives at /support.",
+      "evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:53-65 renders section#support only when the hash is #support; the section contains two paragraphs and no control."
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "advanced_route": "/beta-ops",
+      "reason": "No input: org drill-down, Export Report and Audit Log are all navigation; no cohort filter or account action.",
+      "evidence": "northstar-os-ui/src/pages/admin/Overview.jsx:105 'Open' navigates to the org page, :152 'Export Report' and 'Audit Log' navigate; the page has no input or select."
+    },
+    {
+      "id": "listings",
+      "label": "Listing Guardian",
+      "group": "Listings",
+      "advanced_route": "/listings",
+      "reason": "No input or write: New Rule only toasts, History navigates, Escalate navigates; no diff review or rule creation.",
+      "evidence": "northstar-os-ui/src/pages/internal/ListingGuardian.jsx:85 'New Rule' and :86 'History' only toast or navigate, :75 escalate navigates to Commerce Ops; the tabs switch a subview and no input or write exists."
+    },
+    {
+      "id": "keyword-tracker",
+      "label": "Keyword Tracker",
+      "group": "Monitoring",
+      "advanced_route": "/keyword-tracker",
+      "reason": "Track New, Reports and Verify only toast; no search input, no term add, no threshold.",
+      "evidence": "northstar-os-ui/src/pages/internal/KeywordTracker.jsx:59 'Track New' and :60 'Reports' only toast; :83 'Verify' calls a toast helper (:verified). No input or write exists."
+    },
+    {
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "advanced_route": "/competitor-monitor",
+      "reason": "No control: no ASIN add, no refresh, no comparison selector.",
+      "evidence": "northstar-os-ui/src/pages/internal/CompetitorMonitor.jsx:10-80 — two reads and two tables; the page has no input, button or select."
+    }
+  ]
+}
