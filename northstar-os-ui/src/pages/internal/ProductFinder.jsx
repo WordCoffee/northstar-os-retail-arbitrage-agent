@@ -1,7 +1,8 @@
 import { PageLayout, DataTable, DataNotice } from '../../components/Shared.jsx'
 import RoomTabs from '../../components/RoomTabs.jsx'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useCallback, useRef, useState, useEffect } from 'react'
+import { fetchFinderCandidates, findCandidate, candidateToRow } from '../../lib/productFinderApi.js'
 
 const TABS = [
   { id: 'lookup', label: 'Lookup' },
@@ -19,6 +20,13 @@ const TABS = [
 // 2026-10-16: invented rows REMOVED. The workbench starts empty; every row is
 // an ASIN the operator adds. Real cached observations still come from
 // /api/products/finder (cache-only) and are labelled as such when present.
+//
+// 2026-11-09 (contract-01): the page now CALLS that endpoint. An ASIN add is a
+// real request; a row is only rendered from a candidate the backend returned.
+// When the cache has no observation the page says so, and when the backend
+// refuses it shows the refusal - neither path invents a metric. The endpoint is
+// GET-only (main.py:2875), so "add" issues a GET; there is no write here and
+// nothing is sent to a provider.
 const PRODUCTS = []
 
 const SAVED_SETS = []
@@ -77,32 +85,65 @@ export default function ProductFinder() {
   const location = useLocation()
   const [products, setProducts] = useState(PRODUCTS)
   const [newAsin, setNewAsin] = useState('')
+  const [lookup, setLookup] = useState({ state: 'idle', message: '', code: '' })
+  const inFlight = useRef(null)
+
+  // One request path for both the ASIN add and the ?asin= deep link. The row is
+  // built from the candidate the backend returned; a miss or a refusal is
+  // reported, never faked.
+  const lookupAsin = useCallback(async (rawAsin) => {
+    const asin = String(rawAsin || '').trim().toUpperCase()
+    if (!/^B0[A-Z0-9]{8}$/.test(asin)) return
+    if (inFlight.current) inFlight.current.abort()
+    const controller = new AbortController()
+    inFlight.current = controller
+    setLookup({ state: 'loading', message: `Reading cached observations for ${asin}…`, code: '' })
+    try {
+      const payload = await fetchFinderCandidates({ signal: controller.signal })
+      if (controller.signal.aborted) return
+      const candidate = findCandidate(payload, asin)
+      if (candidate) {
+        const row = candidateToRow(candidate, asin)
+        setProducts(prev => [row, ...prev.filter(p => p.asin !== asin)])
+        setLookup({ state: 'found', message: `Read ${asin} from ${payload.filterSource} (${payload.candidateCount} candidates scored).`, code: '' })
+      } else {
+        // Honest miss: the cache holds nothing for this ASIN. Show the ASIN and
+        // no metrics rather than UNKNOWN values that look like observations.
+        setProducts(prev => [{
+          asin, title: 'No cached observation', brand: 'UNKNOWN', category: 'UNKNOWN',
+          price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED',
+          margin: 'UNKNOWN', monthlySales: 'UNKNOWN', rating: 'UNKNOWN', reviews: 'UNKNOWN',
+          reasons: [], status: 'Not in cache', cached: false,
+        }, ...prev.filter(p => p.asin !== asin)])
+        setLookup({ state: 'missing', message: `No cached observation for ${asin}. Nothing was invented; a scan would need to fill it.`, code: '' })
+      }
+    } catch (err) {
+      if (controller.signal.aborted || err.name === 'AbortError') return
+      setLookup({
+        state: 'error',
+        code: err.code || 'lookup_failed',
+        message: err.message || 'The backend refused the finder request.',
+      })
+    }
+  }, [])
 
   // 2026-10-16 (REA adoption #1): a home "Start from an ASIN" seed deep-links
-  // here with ?asin=; add it once so the lookup is ready on arrival.
+  // here with ?asin=; run the same real lookup on arrival.
   useEffect(() => {
     const seed = (new URLSearchParams(location.search).get('asin') || '').trim().toUpperCase()
-    if (/^B0[A-Z0-9]{8}$/.test(seed)) {
-      setProducts(prev => prev.some(p => p.asin === seed) ? prev : ([
-        { asin: seed, title: 'Researching…', brand: 'UNKNOWN', category: 'UNKNOWN', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: false },
-        ...prev,
-      ]))
-    }
+    if (/^B0[A-Z0-9]{8}$/.test(seed)) lookupAsin(seed)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const addProduct = () => {
     const asin = newAsin.trim().toUpperCase()
     if (!asin) return
-    setProducts(prev => ([
-      { asin, title: 'Researching…', brand: 'UNKNOWN', category: 'UNKNOWN', price: 'UNKNOWN', rank: 'UNKNOWN', offers: 'UNKNOWN', buybox: 'UNVERIFIED', margin: 'UNKNOWN', status: 'Researching', img: false },
-      ...prev,
-    ]))
     setNewAsin('')
+    lookupAsin(asin)
   }
 
   const requested = new URLSearchParams(location.search).get('view') || ''
   const view = TABS.some(t => t.id === requested) ? requested : (id ? 'set' : 'lookup')
-  const primary = products[0] || { asin: '—', title: 'No product added yet', brand: '—', category: '—', status: 'Researching' }
+  const primary = products[0] || { asin: '—', title: 'No product added yet', brand: '—', category: '—', status: 'No lookup yet' }
   const unverifiedGates = GATES.filter(g => ['UNVERIFIED', 'UNKNOWN', 'UNMEASURED', 'REQUIRED', 'INCOMPLETE', 'UNAVAILABLE'].includes(g.v)).length
 
   return (
@@ -118,35 +159,60 @@ export default function ProductFinder() {
       <RoomTabs tabs={TABS} base="/product-finder" />
 
       {view !== 'set' && (
-        <DataNotice tone="internal" title="Your research workbench — no live market data on this surface">
-          Every product row is one YOU add; every metric starts <strong>UNKNOWN</strong> until a cached observation
-          exists. Nothing here is a market observation, and no value may be read as a real Amazon figure.
-          Real cached observations come from <code>/api/products/finder</code> (cache-only; a plain page load
-          never contacts a provider).
+        <DataNotice tone="internal" title="Your research workbench — cached observations, never a live market call">
+          Every product row is one YOU add. A lookup reads the local cache through{' '}
+          <code>/api/products/finder</code>; a plain page load never contacts a provider. Metrics the
+          cache does not carry stay <strong>UNKNOWN</strong> — nothing is read as a real Amazon figure.
         </DataNotice>
       )}
 
       {view === 'lookup' && (
         <div className="subview workbench">
-          {products.length === 0 && (
-            <div className="card" style={{ marginBottom: 14 }} data-testid="pf-add-first">
-              <div className="card-head">
-                <h3 className="card-title">Add your first product</h3>
-                <span className="pill pill-muted">starts as all-UNKNOWN</span>
+          <div className="card" style={{ marginBottom: 14 }} data-testid="pf-add-first">
+            <div className="card-head">
+              <h3 className="card-title">Add a product</h3>
+              <span className="pill pill-muted">reads /api/products/finder</span>
+            </div>
+            <div className="inline-flex" style={{ gap: 8, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              <label className="stack" style={{ gap: 4 }}>
+                <span className="text-low" style={{ fontSize: 11 }}>ASIN</span>
+                <input className="field" style={{ width: 170 }} placeholder="B0XXXXXXXX"
+                  data-testid="pf-asin-input"
+                  value={newAsin} onChange={e => setNewAsin(e.target.value.toUpperCase())} />
+              </label>
+              <button className="btn btn-sm btn-primary"
+                data-testid="pf-add"
+                disabled={!/^B0[A-Z0-9]{8}$/.test(newAsin) || lookup.state === 'loading'}
+                onClick={addProduct}>
+                {lookup.state === 'loading' ? 'Reading…' : 'Start researching'}
+              </button>
+            </div>
+            <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
+              A row is rendered only from a cached observation the backend returned — nothing is invented.
+            </div>
+          </div>
+
+          {lookup.state === 'error' && (
+            <div className="alert alert-error" role="alert" data-testid="pf-lookup-error"
+              style={{ marginBottom: 14 }}>
+              <div className="alert-title">Lookup refused ({lookup.code})</div>
+              <div className="alert-text">
+                The backend did not answer the finder request: {lookup.message}. No row was staged
+                and no value was invented. Try again when the API is available.
               </div>
-              <div className="inline-flex" style={{ gap: 8, alignItems: 'flex-end', flexWrap: 'wrap' }}>
-                <label className="stack" style={{ gap: 4 }}>
-                  <span className="text-low" style={{ fontSize: 11 }}>ASIN</span>
-                  <input className="field" style={{ width: 170 }} placeholder="B0XXXXXXXX"
-                    value={newAsin} onChange={e => setNewAsin(e.target.value.toUpperCase())} />
-                </label>
-                <button className="btn btn-sm btn-primary" disabled={!/^B0[A-Z0-9]{8}$/.test(newAsin)} onClick={addProduct}>
-                  Start researching
-                </button>
-              </div>
-              <div className="text-low" style={{ fontSize: 11, marginTop: 6 }}>
-                Every metric starts UNKNOWN until a cached observation exists — nothing is invented.
-              </div>
+            </div>
+          )}
+          {lookup.state === 'missing' && (
+            <div className="alert" role="status" data-testid="pf-lookup-missing"
+              style={{ marginBottom: 14 }}>
+              <div className="alert-title">No cached observation</div>
+              <div className="alert-text">{lookup.message}</div>
+            </div>
+          )}
+          {lookup.state === 'found' && (
+            <div className="text-low" style={{ fontSize: 11, marginBottom: 10 }}
+              data-testid="pf-lookup-note">
+              {lookup.message}
             </div>
           )}
           <div className="card" style={{ marginBottom: 14 }}>
@@ -161,8 +227,10 @@ export default function ProductFinder() {
                   <span className="pill pill-muted">ASIN: {primary.asin}</span>
                   <span className="pill pill-muted">{primary.brand}</span>
                   <span className="pill pill-unknown">Pack match: UNKNOWN</span>
-                  <span className="pill pill-muted">Researching</span>
-                  <span className="pill pill-muted" title="Cached observation — not live Amazon data">observed 2h ago</span>
+                  <span className="pill pill-muted">{primary.status}</span>
+                  <span className="pill pill-muted" title="Cached observation — not live Amazon data">
+                    {primary.cached ? 'cached observation' : 'no cached observation'}
+                  </span>
                 </div>
               </div>
               <div className="inline-flex" style={{ gap: 8, alignSelf: 'center' }}>
@@ -200,7 +268,7 @@ export default function ProductFinder() {
             </div>
             <DataTable columns={marketColumns} rows={products} />
             <div style={{ marginTop: 10, fontSize: 11, color: 'var(--ink-soft)' }}>
-              Source: Provider adapter observation — cached snapshot, not live Amazon data · observed 2h ago · Prices marked UNKNOWN reflect unavailable data, not zero.
+              Source: {lookup.state === 'found' ? lookup.message : 'cached finder observations when a lookup returns one; no live Amazon call'}. Prices marked UNKNOWN reflect unavailable data, not zero.
             </div>
           </div>
 
@@ -234,11 +302,14 @@ export default function ProductFinder() {
             </div>
             <div className="grid-2">
               <div>
-                <h4 style={{ fontSize: 14, color: 'var(--pine-deep)', marginBottom: 8 }}>Provenance Timeline</h4>
-                <div style={{ fontSize: 13, color: 'var(--ink-mid)', lineHeight: 1.8 }}>
-                  <div>2h ago — Initial observation by Provider Adapter (cached snapshot)</div>
-                  <div>1h ago — Rank snapshot recorded (historical)</div>
-                  <div>12m ago — Price check failed (UNAVAILABLE)</div>
+                <h4 style={{ fontSize: 14, color: 'var(--pine-deep)', marginBottom: 8 }}>Provenance</h4>
+                <div style={{ fontSize: 13, color: 'var(--ink-mid)', lineHeight: 1.8 }} data-testid="pf-provenance">
+                  <div>
+                    {lookup.state === 'found'
+                      ? `Lookup returned ${primary.asin} from the local cache (${primary.status}).`
+                      : 'No cached observation read for the selected product yet.'}
+                  </div>
+                  <div>Nothing on this page contacts a provider and no purchase is authorized.</div>
                 </div>
               </div>
               <div>

@@ -45,10 +45,15 @@ IDLIST = _idlist_path()
 SCAN = ROOT / "state" / "director" / "scan.json"
 SPEC = ROOT / "ty" / "TARGET_SPEC.md"
 SCORES = ROOT / "ty" / "scorecards.json"
+CONTRACTS = ROOT / "state" / "contracts" / "service_contracts.json"
 
 BAR = 85.0
-WEIGHTS = {"works": 0.28, "correct": 0.25, "complete": 0.12, "usable": 0.12,
-           "measured": 0.10, "seller": 0.13}
+# 2026-11-09 (contract-01): `contract` proves the service's primary action
+# actually reaches and persists. Its 0.10 comes out of `works` (0.28 -> 0.23) and
+# `usable` (0.12 -> 0.07), so the total stays 1.00 and no dimension is invented
+# out of nothing. Every other weight is unchanged.
+WEIGHTS = {"works": 0.23, "correct": 0.25, "complete": 0.12, "usable": 0.07,
+           "measured": 0.10, "seller": 0.13, "contract": 0.10}
 
 #: Services whose output a seller actually sees. Only these can carry a Seller-Tester score;
 #: for infrastructure (foundation, account, beta-*, jobs) the dimension does not apply and is
@@ -285,6 +290,36 @@ def _measured(service_id: str) -> Dict[str, Any]:
         return {"score": 0.0, "evidence": f"measurement unavailable: {type(exc).__name__}"}
 
 
+def _contract(service_id: str) -> Dict[str, Any]:
+    """The contract dimension: did the primary action reach and persist?
+
+    Read from `state/contracts/service_contracts.json`, written by
+    `tools/contract_check.py` against a real backend. 100 only on a `pass`
+    verdict; every other verdict is 0 with the named reason, because a service
+    whose headline action cannot be proven is not production-ready however many
+    unit tests pass.
+    """
+    path = CONTRACTS
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"score": 0.0,
+                "evidence": ("no contract artefact: run "
+                             "python tools/contract_check.py")}
+    rows = {row.get("id"): row for row in (data.get("services") or [])}
+    row = rows.get(service_id)
+    if not row:
+        return {"score": 0.0,
+                "evidence": "service is absent from the contract artefact"}
+    if row.get("verdict") == "pass":
+        return {"score": 100.0,
+                "evidence": (f"{row.get('method')} {row.get('endpoint')} "
+                             f"-> {row.get('status')}; {row.get('evidence')}")}
+    return {"score": 0.0,
+            "evidence": (f"{row.get('verdict')}: {row.get('reason')}"
+                         if row.get("reason") else str(row.get("verdict")))}
+
+
 def measure_one(service: Dict[str, Any], ids: List[str],
                 findings: List[Dict[str, Any]]) -> Dict[str, Any]:
     sid = service["id"]
@@ -323,6 +358,7 @@ def measure_one(service: Dict[str, Any], ids: List[str],
         dims["usable"] = {"score": 100.0,
                           "evidence": "no readiness finding names this service"}
     dims["measured"] = _measured(sid)
+    dims["contract"] = _contract(sid)
 
     applicable = {key: value for key, value in dims.items() if value.get("score") is not None}
     total_weight = sum(WEIGHTS[key] for key in applicable) or 1.0
