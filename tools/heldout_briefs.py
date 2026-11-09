@@ -29,18 +29,16 @@ LIONS_MANE = [
 WORD_COFFEE = [
     "renders/references/word-coffee/word_coffee_moms_front.jpg",
     "renders/references/word-coffee/word_coffee_women_front.jpg",
-    "renders/references/word-coffee/word_coffee_moms_20.png",
-    "renders/references/word-coffee/wc_moms_22.png",
-    "renders/references/word-coffee/wc_moms_24.png",
-    "renders/references/word-coffee/wc_moms_29.png",
-    "renders/references/word-coffee/wc_moms_33.png",
-    "renders/references/word-coffee/wc_women_37.png",
-    "renders/references/word-coffee/wc_women_40.png",
-    "renders/references/word-coffee/wc_women_45.png",
-    "renders/references/word-coffee/wc_women_46.png",
+    "renders/references/word-coffee/wc_women_pic_box.jpg",
+    "renders/references/word-coffee/wc_women_main_front.jpg",
+    "renders/references/word-coffee/wc_women_card_mirror.jpg",
+    "renders/references/word-coffee/wc_women_easter_table.png",
+    "renders/references/word-coffee/wc_women_in_purse.png",
 ]
-# Deliberately not the brand wordmark: a logo is not a product, and two briefs that share one
-# produced byte-identical composites in the first run. Eleven briefs, eleven distinct photographs.
+# Only images that show the actual box. The owner's folders also hold a dozen quote cards and a
+# wordmark, and those were in the pool for two runs — which is how a "product" composite of a quote
+# card appeared in the first digest. A card is not a product and a logo is not a product. What
+# remains is what a seller would upload: seven product images, two on white and five in scene.
 # The validator's category vocabulary has no coffee box, so Word Coffee is filed as `food_jar`
 # (a sealed retail food package). Filing it under the closest real category is honest; inventing
 # a category to make the set look bespoke is not.

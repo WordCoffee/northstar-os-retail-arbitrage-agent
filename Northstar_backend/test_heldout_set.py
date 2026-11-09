@@ -68,10 +68,14 @@ def test_no_brief_treats_a_brand_wordmark_as_the_product(payload):
         assert "wordmark" not in name, brief["id"]
 
 
-def test_the_word_coffee_briefs_use_a_distinct_photograph_each(payload):
-    word = [b for b in payload["briefs"] if b["product_line"] == "word-coffee"]
-    references = [b["reference"]["path"] for b in word]
-    assert len(references) == len(set(references)), "two Word Coffee briefs share one photograph"
+def test_a_reference_is_never_reused_for_the_same_situation(payload):
+    """Ten Lion's Mane briefs share three photographs and eleven Word Coffee briefs share seven:
+    that is the real stock of product imagery on this machine. What must not happen is the same
+    product being tested twice in the same situation, which would be one test wearing two ids."""
+    pairs = [(b["reference"]["path"], b["situation"]) for b in payload["briefs"]]
+    assert len(pairs) == len(set(pairs)), "the same product is tested twice in one situation"
+    distinct = {b["reference"]["path"] for b in payload["briefs"]}
+    assert len(distinct) >= 8, f"only {len(distinct)} distinct products; the set is too thin"
 
 
 def test_each_situation_inherits_the_tuned_bar_for_that_situation(payload):
