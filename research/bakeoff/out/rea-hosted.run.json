@@ -1,0 +1,19 @@
+{
+  "tool": "rea",
+  "target": "hosted",
+  "status": "ran",
+  "command": [
+    "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD",
+    "analyze-javascript-application",
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\item3\\research\\bakeoff\\targets\\hosted",
+    "--format",
+    "json"
+  ],
+  "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\item3\\research\\bakeoff\\targets\\hosted\" --format json",
+  "exit_code": 0,
+  "seconds": 22.898,
+  "artefact": "research\\bakeoff\\out\\rea-hosted.json",
+  "stderr": "research\\bakeoff\\out\\rea-hosted.err",
+  "bytes": 96013591,
+  "sha256": "daf50e90eeda3375d940806eebe48fe955ab63abd23796fd30b740d0f444d0be"
+}

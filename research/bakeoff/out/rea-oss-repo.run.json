@@ -1,0 +1,19 @@
+{
+  "tool": "rea",
+  "target": "oss-repo",
+  "status": "ran",
+  "command": [
+    "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD",
+    "analyze-javascript-application",
+    "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\item3\\research\\bakeoff\\targets\\todomvc\\examples\\javascript-es6",
+    "--format",
+    "json"
+  ],
+  "command_line": "C:\\Users\\T2Hol\\AppData\\Roaming\\npm\\rea.CMD analyze-javascript-application \"C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\item3\\research\\bakeoff\\targets\\todomvc\\examples\\javascript-es6\" --format json",
+  "exit_code": 0,
+  "seconds": 3.499,
+  "artefact": "research\\bakeoff\\out\\rea-oss-repo.json",
+  "stderr": "research\\bakeoff\\out\\rea-oss-repo.err",
+  "bytes": 7097922,
+  "sha256": "d91da29c2ec55c93598dd979fb305b2d50e641b00902d9920683955735643256"
+}

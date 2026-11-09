@@ -10,12 +10,20 @@ code and a non-empty output artefact. Nothing is inferred from a README.
     # re-score artefacts already on disk (no subprocess, used by the tests)
     python tools/tool_bakeoff.py --score-only
 
+    # decompress the committed *.json.gz artefacts and prove their sha256
+    # against the run sidecars (a fresh checkout has no large JSON in git)
+    python tools/tool_bakeoff.py --unpack
+
 Targets
   oss-repo   an open-source JavaScript app already on this machine
-             (TodoMVC examples/javascript-es6, MIT, cloned into state/vendor)
+             (TodoMVC examples/javascript-es6, MIT, cloned into
+             research/bakeoff/targets/todomvc)
   hosted     a hosted, non-Amazon tool reached read-only over the network
              (https://opencode.ai/, page + entry bundle saved with plain GET)
   local-app  this repo's own built web app served on 127.0.0.1:8123
+
+Every artefact (fetch, run, error and score sidecar) stays under
+research/bakeoff/, so a verifier can reproduce a cell from a fresh checkout.
 
 Amazon is never a target. No credentials, no spending, no browser automation:
 the hosted page and the local app are fetched with a plain read-only GET and
@@ -47,7 +55,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = ROOT / "state" / "bakeoff" / "out"
+OUT_DIR = ROOT / "research" / "bakeoff" / "out"
 RESULTS_PATH = ROOT / "ty" / "bakeoff_results.json"
 
 WEIGHTS = {"accuracy": 0.40, "detail": 0.25, "speed": 0.15, "tokens": 0.10,
@@ -69,9 +77,9 @@ TOOLS = {
         "licence": "MIT OR Apache-2.0 (dual; the work order calls it Apache 2.0)",
         "install": ("prebuilt portable zip from "
                     "github.com/storytold/craft-anything/releases/tag/v0.5.0, "
-                    "SHA-256 verified; no Rust toolchain and no build"),
+                    "SHA-256 verified against SHA256SUMS.txt; no Rust toolchain and no build"),
         "source": "https://github.com/storytold/craft-anything",
-        "binary": str(Path("state/vendor/craft-anything-app/"
+        "binary": str(Path("research/bakeoff/vendor/craft-anything-bin/"
                            "craft-anything-0.5.0-windows-x64-portable/"
                            "craft-anything-cli.exe")),
         "ai_required": False,
@@ -87,8 +95,8 @@ TARGETS: List[Dict[str, Any]] = [
         "id": "oss-repo",
         "kind": "open-source repo on this machine",
         "description": ("TodoMVC examples/javascript-es6 (MIT), shallow sparse clone of "
-                        "github.com/tastejs/todomvc into state/vendor/todomvc"),
-        "path": "state/vendor/todomvc/examples/javascript-es6",
+                        "github.com/tastejs/todomvc into research/bakeoff/targets/todomvc"),
+        "path": "research/bakeoff/targets/todomvc/examples/javascript-es6",
         "url": None,
         "facts": ["Controller", "Model", "View", "Store", "setView", "addItem",
                   "removeItem", "toggleComplete", "showActive", "memoryStorage"],
@@ -97,8 +105,8 @@ TARGETS: List[Dict[str, Any]] = [
         "id": "hosted",
         "kind": "hosted non-Amazon tool, read-only over the network",
         "description": ("https://opencode.ai/ - page and entry bundle fetched with a plain "
-                        "GET into state/bakeoff/hosted; both tools read the saved artefacts"),
-        "path": "state/bakeoff/hosted",
+                        "GET into research/bakeoff/targets/hosted; both tools read the saved artefacts"),
+        "path": "research/bakeoff/targets/hosted",
         "url": "https://opencode.ai/",
         "facts": ["anomalyco/opencode", "npm install -g @opencode/cli", "docs",
                   "install", "sdk", "github", "opencode"],
@@ -107,8 +115,8 @@ TARGETS: List[Dict[str, Any]] = [
         "id": "local-app",
         "kind": "this repo's local web app on 127.0.0.1",
         "description": ("northstar-os-ui/dist served on http://127.0.0.1:8123/ui/ and fetched "
-                        "with a plain GET into state/bakeoff/local"),
-        "path": "state/bakeoff/local",
+                        "with a plain GET into research/bakeoff/targets/local"),
+        "path": "research/bakeoff/targets/local",
         "url": "http://127.0.0.1:8123/ui/",
         "facts": ["/design-studio", "/listings", "Northstar", "product-finder",
                   "beta-ops", "golden-goose", "/documents"],
@@ -137,11 +145,15 @@ def prepare_targets(base: str = "") -> Dict[str, Any]:
         errors: list = []
 
         def grab(target: str) -> Optional[str]:
-            if target in seen or len(saved) >= limit:
+            if target in seen or len(saved) >= limit or target.startswith("data:"):
                 return None
             seen.add(target)
             try:
-                with urllib.request.urlopen(target, timeout=30) as response:
+                # A plain, honest User-Agent: opencode.ai answers 403 to the default
+                # "Python-urllib" agent, and a generic name keeps us a normal visitor.
+                request = urllib.request.Request(
+                    target, headers={"User-Agent": "northstar-bakeoff/1.0 (read-only study)"})
+                with urllib.request.urlopen(request, timeout=30) as response:
                     body = response.read(8_000_000)
                 name = (urllib.parse.urlparse(target).path.strip("/") or "index.html")
                 name = re.sub(r"[^A-Za-z0-9._/-]", "_", name).replace("/", "_")
@@ -244,9 +256,11 @@ def run_cell(tool: str, target: Dict[str, Any], out_dir: Path = OUT_DIR,
                 "reason": f"timed out after {timeout_s}s", "command": command,
                 "exit_code": None, "artefact": None}
     elapsed = round(time.perf_counter() - started, 3)
-    artefact.write_text(proc.stdout or "", encoding="utf-8")
-    stderr_path.write_text(proc.stderr or "", encoding="utf-8")
+    # Bytes, not text: on Windows `write_text` turns "\n" into "\r\n", which made the
+    # file on disk differ from the payload that was hashed (a verifier's first catch).
     payload = (proc.stdout or "").encode("utf-8")
+    artefact.write_bytes(payload)
+    stderr_path.write_bytes((proc.stderr or "").encode("utf-8"))
     record = {"tool": tool, "target": target["id"], "status": "ran",
               "command": command,
               "command_line": subprocess.list2cmdline(command),
@@ -258,6 +272,46 @@ def run_cell(tool: str, target: Dict[str, Any], out_dir: Path = OUT_DIR,
     (out_dir / f"{tool}-{target['id']}.run.json").write_text(
         json.dumps(record, indent=2) + "\n", encoding="utf-8")
     return record
+
+
+def unpack_artefacts(out_dir: Path = OUT_DIR) -> List[Dict[str, Any]]:
+    """Restore `*.json.gz` artefacts and prove each one against its run sidecar.
+
+    The tool output is large (REA writes tens of megabytes per target), so git keeps
+    the compressed form. The sidecar records the sha256 of the *uncompressed*
+    payload, so this is a check, not a convenience: a mismatch is reported and the
+    file is not written.
+    """
+    import gzip
+    rows: List[Dict[str, Any]] = []
+    for archive in sorted(out_dir.glob("*.json.gz")):
+        name = archive.name[: -len(".gz")]
+        dest = out_dir / name
+        row: Dict[str, Any] = {"artefact": str(dest.relative_to(ROOT)), "ok": False}
+        try:
+            payload = gzip.decompress(archive.read_bytes())
+        except OSError as exc:
+            row["reason"] = f"cannot decompress: {exc}"
+            rows.append(row)
+            continue
+        digest = hashlib.sha256(payload).hexdigest()
+        sidecar = out_dir / (name[: -len(".json")] + ".run.json")
+        expected = None
+        if sidecar.is_file():
+            try:
+                expected = json.loads(sidecar.read_text(encoding="utf-8")).get("sha256")
+            except ValueError:
+                expected = None
+        row.update({"sha256": digest, "bytes": len(payload), "expected": expected})
+        if expected and expected != digest:
+            row["reason"] = "sha256 does not match the run sidecar"
+            rows.append(row)
+            continue
+        dest.write_bytes(payload)
+        row["ok"] = True
+        row["reason"] = "sha256 verified" if expected else "no sidecar hash to check"
+        rows.append(row)
+    return rows
 
 
 def load_record(tool: str, target: Dict[str, Any], out_dir: Path = OUT_DIR) -> Dict[str, Any]:
@@ -489,6 +543,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--out", default=str(RESULTS_PATH))
     parser.add_argument("--prepare", action="store_true",
                         help="fetch the hosted and local targets with a read-only GET first")
+    parser.add_argument("--unpack", action="store_true",
+                        help="decompress committed *.json.gz artefacts and check their sha256")
     return parser
 
 
@@ -504,6 +560,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if unknown:
         print(f"error: unknown target(s) {unknown}", file=sys.stderr)
         return 2
+    if args.unpack:
+        rows = unpack_artefacts()
+        print(json.dumps({"unpacked": rows}, indent=2))
+        if not all(row["ok"] for row in rows):
+            print("error: an artefact failed its sha256 check", file=sys.stderr)
+            return 1
     if args.prepare:
         prepared = prepare_targets()
         print(json.dumps({"prepared": prepared}, indent=2)[:2000])

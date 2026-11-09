@@ -1,0 +1,22 @@
+﻿js-app-map ΓÇö Analyse a JavaScript app
+
+Static analysis of an Electron app (app.asar or unpacked folder), a web bundle folder, a ZIP or a single script into an application graph: package and entry points (main, preload, renderer), BrowserWindow webPreferences, the IPC channel map (ipcMain.handle/on Γåö ipcRenderer.invoke/send, contextBridge members), module imports, bundler and chunk splitting (webpack, esbuild, browserify; Vite/Rollup detected), routes, HTTP endpoints, storage, platform effects, native modules, vendors and source maps. Built-in parser; nothing is executed.
+
+Usage: craft-anything-cli js-app-map [options] [--json '{...}' | @params.json | -]
+
+Options:
+  --format                       any  
+  --if-tampered                  any  
+  --include-node-modules         boolean  Also parse code under node_modules (off: only their package.json files are read, as vendor facts).
+  --input-path                   string (required)  Absolute path of an app.asar, an unpacked Electron app or web bundle folder, a ZIP, or one .js/.html file.
+  --limit                        integer  Modules per page in the result (the graph itself is always complete up to max_nodes).
+  --max-file-bytes               integer  Largest single file read.
+  --max-files                    integer  Most files read.
+  --max-nodes                    integer  Most graph nodes kept.
+  --max-total-bytes              integer  Most bytes read in total.
+  --offset                       integer  First module of the module page in the result.
+  --source-paths                 array  Extra absolute files or folders to include (for example an `app.asar.unpacked` folder kept elsewhere).
+
+Output:
+  --output-format                json, jsonl, md or text (--format after the tool name is this tool's own option)
+
