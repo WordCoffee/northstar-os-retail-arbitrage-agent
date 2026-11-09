@@ -371,13 +371,19 @@ def _reference_verdict(rgb: np.ndarray, brief: Dict[str, Any], reference_check: 
 
 def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 judge: Any = None,
-                reference_check: Any = None) -> Dict[str, Any]:
+                reference_check: Any = None,
+                scene_source: Optional[str] = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
     returning a check dict; the harness supplies it for reference-mode briefs.
-    A reference-mode brief scored without one is a `cannot_verify` failure —
-    the check is never silently skipped into a pass.
+    A reference-mode brief scored without one is a `cannot_verify` failure — the
+    check is never silently skipped into a pass.
+
+    `scene_source` is the generator's own label for how the picture was made. A
+    composite whose scene is `synthetic` did not go through the render lane, so it
+    is `cannot_verify` and cannot pass: the cutout and the placement are proved,
+    the generated scene is not.
     """
     brief_id = brief.get("id", "unknown")
     mode = brief.get("source_mode") or "unclassified"
@@ -460,6 +466,12 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
     base["score"] = round(score, 1)
     base["passed"] = bool(score >= pass_score and not critical_failed)
     base["pass_score"] = pass_score
+    if scene_source == "synthetic":
+        base["passed"] = False
+        base["cannot_verify"] = True
+        base["cannot_verify_reason"] = (
+            "the scene was a synthetic backdrop, not a render: the cutout and the "
+            "placement are proved, the generated scene is not")
     return base
 
 

@@ -25,6 +25,11 @@ DEFAULT_CATALOG_PATH = REPO_ROOT / "ty" / "seller_briefs.json"
 SOURCE_MODES = ("prompt_only", "stored_reference", "uploaded_reference")
 REFERENCE_MODES = ("stored_reference", "uploaded_reference")
 REFERENCE_KINDS = {"stored_reference": "stored_asset", "uploaded_reference": "uploaded_file"}
+
+#: `exact` means the product must be the seller's own pixels (composite path);
+#: `tolerant` allows a full generation because nothing has to be preserved exactly.
+FIDELITIES = ("exact", "tolerant")
+ROUTES = ("composite", "full_generation")
 MIN_PER_MODE = 12
 
 CATEGORIES = (
@@ -161,13 +166,19 @@ def _check_reference(brief_id: str, mode: Any, reference: Any, errors: List[str]
                 errors.append(f"{brief_id}: reference.check.max_aspect_ratio must be >= 1")
 
 
-def validate_catalog(payload: Dict[str, Any]) -> List[str]:
-    """Return a list of human-readable problems. Empty list means valid."""
+def validate_catalog(payload: Dict[str, Any], *, require_coverage: bool = True) -> List[str]:
+    """Return a list of human-readable problems. Empty list means valid.
+
+    ``require_coverage=False`` checks each brief on its own but skips the
+    whole-catalog rules (minimum briefs per mode, every category/situation/tier).
+    It exists for a focused proof catalog — a three-brief run against real
+    uploads — where those rules are not what is being tested.
+    """
     errors: List[str] = []
     briefs = payload.get("briefs") if isinstance(payload, dict) else None
     if not isinstance(briefs, list):
         return ["catalog has no briefs list"]
-    if len(briefs) < 24:
+    if require_coverage and len(briefs) < 24:
         errors.append(f"catalog has {len(briefs)} briefs, need at least 24")
 
     seen_ids = set()
@@ -207,6 +218,10 @@ def validate_catalog(payload: Dict[str, Any]) -> List[str]:
         else:
             modes[mode] += 1
         _check_reference(brief_id, mode, brief.get("reference"), errors)
+
+        fidelity = brief.get("fidelity")
+        if fidelity is not None and fidelity not in FIDELITIES:
+            errors.append(f"{brief_id}: fidelity must be one of {FIDELITIES}, got {fidelity!r}")
 
         pair = (category, situation, brief.get("difficulty"), mode)
         if pair in seen_pairs:
@@ -266,16 +281,16 @@ def validate_catalog(payload: Dict[str, Any]) -> List[str]:
             errors.append(f"{brief_id}: critical must be a list of check names")
 
     for name in SITUATIONS:
-        if name not in situations:
+        if require_coverage and name not in situations:
             errors.append(f"catalog does not cover situation {name!r}")
     for name in CATEGORIES:
-        if name not in categories:
+        if require_coverage and name not in categories:
             errors.append(f"catalog does not cover category {name!r}")
     for tier in (1, 2, 3):
-        if tier not in tiers:
+        if require_coverage and tier not in tiers:
             errors.append(f"catalog has no difficulty tier {tier}")
     for mode, count in modes.items():
-        if count < MIN_PER_MODE:
+        if require_coverage and count < MIN_PER_MODE:
             errors.append(f"catalog has {count} {mode} briefs, need at least {MIN_PER_MODE}")
     return errors
 
@@ -288,6 +303,33 @@ def brief_mode(brief: Dict[str, Any]) -> str:
     """
     mode = brief.get("source_mode") if isinstance(brief, dict) else None
     return str(mode) if mode in SOURCE_MODES else "unclassified"
+
+
+def brief_fidelity(brief: Dict[str, Any]) -> str:
+    """`exact` or `tolerant`, defaulting by input mode rather than by convenience.
+
+    A reference brief that says nothing is `exact`: the seller gave us the product,
+    so the product pixels must survive. A prompt-only brief has nothing to preserve,
+    so it is `tolerant` and may be fully generated.
+    """
+    declared = brief.get("fidelity") if isinstance(brief, dict) else None
+    if brief_mode(brief) == "prompt_only":
+        # There is no reference product to preserve, so `exact` cannot mean anything.
+        return "tolerant"
+    if declared in FIDELITIES:
+        return str(declared)
+    return "exact"
+
+
+def route_for_brief(brief: Dict[str, Any]) -> str:
+    """Which path a brief takes: `composite` or `full_generation`.
+
+    prompt_only is always a full generation, whatever the brief says: there is no
+    product to cut out. `tolerant` is allowed to generate; `exact` must composite.
+    """
+    if brief_mode(brief) == "prompt_only":
+        return "full_generation"
+    return "full_generation" if brief_fidelity(brief) == "tolerant" else "composite"
 
 
 def briefs_by_mode(payload: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:

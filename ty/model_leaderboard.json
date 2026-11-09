@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_at": "2026-11-08T09:09:55+00:00",
+  "generated_at": "2026-11-09T03:36:13+00:00",
   "generated_by": "tools/model_scout.py",
   "swap_rule": {
     "margin_items": 2,
@@ -8,6 +8,11 @@
     "auto_swap": false
   },
   "eval_sets": {
+    "cutout": {
+      "path": "tools\\model_scout\\evals\\cutout.json",
+      "sha256": "f1ceab2bf62e405e9e0d77d0dad91072e2b567ac4dcf0604945e0dbf129fa8d6",
+      "items": 3
+    },
     "json_adherence": {
       "path": "tools\\model_scout\\evals\\json_adherence_10.json",
       "sha256": "a7bd6662252a8222556cf8ca1b3c3d6bf0ce0ded68d7be2180ee92065b5a417e",
@@ -965,6 +970,462 @@
       },
       "quarantine": null,
       "notes": "A workflow is not an Ollama tag, so the scout records it as an incumbent and never measures it with /api/chat."
+    },
+    "editors": {
+      "label": "Cutout editors (composite path)",
+      "lane": "editors",
+      "eval": "cutout",
+      "budget_key": null,
+      "budget_gb": null,
+      "manager_key": null,
+      "incumbent": "birefnet",
+      "baseline": null,
+      "candidates": [
+        "grabcut",
+        "background_distance",
+        "otsu_lab",
+        "rembg"
+      ],
+      "quarantined": [],
+      "measurements": {
+        "background_distance": {
+          "model": "background_distance",
+          "role": "editors",
+          "status": "measured",
+          "correct": 13,
+          "items": 14,
+          "per_asset": {
+            "mogra_pair_main.png": {
+              "reference_coverage": 0.4497,
+              "seconds": 0.031,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.448,
+              "coverage_delta": 0.0018,
+              "border_contact": 0.0,
+              "edge_gradient_px": 7.407,
+              "boundary_roughness": 2.65,
+              "recall": 0.857,
+              "matched": [
+                "organics",
+                "organic",
+                "lions",
+                "mushroom",
+                "powder",
+                "shiitake"
+              ],
+              "missing": [
+                "mogra"
+              ],
+              "ocr_text": "ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            },
+            "mogra_pair_lifestyle.png": {
+              "reference_coverage": 0.4119,
+              "seconds": 0.024,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.4113,
+              "coverage_delta": 0.0006,
+              "border_contact": 0.0,
+              "edge_gradient_px": 4.546,
+              "boundary_roughness": 2.651,
+              "recall": 0.8,
+              "matched": [
+                "organics",
+                "organic",
+                "lions",
+                "shiitake"
+              ],
+              "missing": [
+                "mogra"
+              ],
+              "ocr_text": "ORGANIS LION'SMANE ORGANIC SHIITAKE MUSHROOM POWDER MUSHROOM POWDER 6 0z (170 g) 8oz(227g)"
+            },
+            "mogra_forest_dusk.png": {
+              "reference_coverage": 0.8497,
+              "seconds": 0.027,
+              "checks": {
+                "coverage": null,
+                "border": false,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.8585,
+              "coverage_delta": 0.0088,
+              "border_contact": 0.7517,
+              "edge_gradient_px": 2.916,
+              "boundary_roughness": 5.898,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics"
+              ],
+              "missing": [],
+              "ocr_text": "EST MOGRA ORGANICS MOGRA ORGANICS Healthy & Organic Heatthy&Organic ORGANIC LION'S MANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            }
+          },
+          "licence": "OpenCV (Apache-2.0) + NumPy (BSD-3-Clause); installed; no model weights",
+          "vram_gb": null,
+          "ram_free_gb": 4.28,
+          "latency_ms": 27.2,
+          "mean_edge_px": 4.96
+        },
+        "otsu_lab": {
+          "model": "otsu_lab",
+          "role": "editors",
+          "status": "measured",
+          "correct": 10,
+          "items": 14,
+          "per_asset": {
+            "mogra_pair_main.png": {
+              "reference_coverage": 0.4497,
+              "seconds": 0.167,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": false,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.4133,
+              "coverage_delta": 0.0364,
+              "border_contact": 0.0,
+              "edge_gradient_px": 7.238,
+              "boundary_roughness": 3.978,
+              "recall": 0.571,
+              "matched": [
+                "organics",
+                "organic",
+                "mushroom",
+                "powder"
+              ],
+              "missing": [
+                "mogra",
+                "lions",
+                "shiitake"
+              ],
+              "ocr_text": "ORGANIC CITAKE USHR DER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            },
+            "mogra_pair_lifestyle.png": {
+              "reference_coverage": 0.4119,
+              "seconds": 0.043,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": false,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.3779,
+              "coverage_delta": 0.0341,
+              "border_contact": 0.0,
+              "edge_gradient_px": 4.424,
+              "boundary_roughness": 4.013,
+              "recall": 0.0,
+              "matched": [],
+              "missing": [
+                "mogra",
+                "organics",
+                "organic",
+                "lions",
+                "shiitake"
+              ],
+              "ocr_text": "DER MUSHROOM POWDER 6 0z (170 g) 8oz(227g)"
+            },
+            "mogra_forest_dusk.png": {
+              "reference_coverage": 0.8497,
+              "seconds": 0.078,
+              "checks": {
+                "coverage": null,
+                "border": false,
+                "text": false,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.376,
+              "coverage_delta": 0.4737,
+              "border_contact": 0.2219,
+              "edge_gradient_px": 2.881,
+              "boundary_roughness": 9.784,
+              "recall": 0.0,
+              "matched": [],
+              "missing": [
+                "mogra",
+                "organics"
+              ],
+              "ocr_text": ""
+            }
+          },
+          "licence": "OpenCV (Apache-2.0) + NumPy (BSD-3-Clause); installed; no model weights",
+          "vram_gb": null,
+          "ram_free_gb": 4.28,
+          "latency_ms": 96.4,
+          "mean_edge_px": 4.85
+        },
+        "grabcut": {
+          "model": "grabcut",
+          "role": "editors",
+          "status": "measured",
+          "correct": 14,
+          "items": 14,
+          "per_asset": {
+            "mogra_pair_main.png": {
+              "reference_coverage": 0.4497,
+              "seconds": 8.03,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.4113,
+              "coverage_delta": 0.0384,
+              "border_contact": 0.0,
+              "edge_gradient_px": 7.547,
+              "boundary_roughness": 2.762,
+              "recall": 0.857,
+              "matched": [
+                "mogra",
+                "organics",
+                "organic",
+                "lions",
+                "mushroom",
+                "powder"
+              ],
+              "missing": [
+                "shiitake"
+              ],
+              "ocr_text": "EST 2023 EST 2023 MOGRA ORGANICS Healthy&Organic MOGRA ORGANCS Healthy&Organic INISLION'SMANE ORGANIC SHII AKI SHROOMPOWDER MUSHROOM 6 oz (170 g) 8 oz (227 g"
+            },
+            "mogra_pair_lifestyle.png": {
+              "reference_coverage": 0.4119,
+              "seconds": 3.789,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.422,
+              "coverage_delta": 0.0101,
+              "border_contact": 0.0,
+              "edge_gradient_px": 4.679,
+              "boundary_roughness": 2.295,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics",
+                "organic",
+                "lions",
+                "shiitake"
+              ],
+              "missing": [],
+              "ocr_text": "MOGRA ORGANICS Ilealthy & Organic MOGRA ORGANICS Healthy & Organic IISLION'SMANE ORGANIC SHIITAKE HROOM POWDER MUSHROOM POWDER 6 oz (170 g) 8oz (227 g)"
+            },
+            "mogra_forest_dusk.png": {
+              "reference_coverage": 0.8497,
+              "seconds": 3.511,
+              "checks": {
+                "coverage": null,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.475,
+              "coverage_delta": 0.3748,
+              "border_contact": 0.0,
+              "edge_gradient_px": 2.999,
+              "boundary_roughness": 4.078,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics"
+              ],
+              "missing": [],
+              "ocr_text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy& Organic Healthy&Organic ORGANIC LION'S MANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            }
+          },
+          "licence": "OpenCV GrabCut (Apache-2.0 implementation of Rother et al. 2004); installed; no model weights",
+          "vram_gb": null,
+          "ram_free_gb": 4.28,
+          "latency_ms": 5110.0,
+          "mean_edge_px": 5.08
+        },
+        "birefnet": {
+          "model": "birefnet",
+          "role": "editors",
+          "status": "measured",
+          "correct": 14,
+          "items": 14,
+          "per_asset": {
+            "mogra_pair_main.png": {
+              "reference_coverage": 0.4497,
+              "seconds": 7.581,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.4945,
+              "coverage_delta": 0.0448,
+              "border_contact": 0.0,
+              "edge_gradient_px": 2.637,
+              "boundary_roughness": 1.71,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics",
+                "organic",
+                "lions",
+                "mushroom",
+                "powder",
+                "shiitake"
+              ],
+              "missing": [],
+              "ocr_text": "EST 2023 EST 2023 MOGRAORGANICS Hlealthy&Organic MOGRA ORGANICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            },
+            "mogra_pair_lifestyle.png": {
+              "reference_coverage": 0.4119,
+              "seconds": 1.191,
+              "checks": {
+                "coverage": true,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.4535,
+              "coverage_delta": 0.0416,
+              "border_contact": 0.0,
+              "edge_gradient_px": 1.559,
+              "boundary_roughness": 1.711,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics",
+                "organic",
+                "lions",
+                "shiitake"
+              ],
+              "missing": [],
+              "ocr_text": "MOGRA ORGANICS Ilealthy & Organic MOGRA ORGANICS Healthy & Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOM POWDER MUSHROOM POWDER 6 oz (170 g) 8oz (227 g)"
+            },
+            "mogra_forest_dusk.png": {
+              "reference_coverage": 0.8497,
+              "seconds": 1.244,
+              "checks": {
+                "coverage": null,
+                "border": true,
+                "text": true,
+                "edge": true,
+                "time": true
+              },
+              "coverage": 0.5026,
+              "coverage_delta": 0.3472,
+              "border_contact": 0.0,
+              "edge_gradient_px": 1.294,
+              "boundary_roughness": 1.703,
+              "recall": 1.0,
+              "matched": [
+                "mogra",
+                "organics"
+              ],
+              "missing": [],
+              "ocr_text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy&Organic Healthy&Organic ORGANIC LION'SMANE ORGANIC SHIITAKE MUSHROOM POWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+            }
+          },
+          "licence": "BiRefNet weights birefnet.safetensors (MIT, ZhengPeng7/BiRefNet); already on disk; needs the local ComfyUI lane",
+          "vram_gb": null,
+          "ram_free_gb": 4.28,
+          "latency_ms": 3338.8,
+          "mean_edge_px": 1.83
+        },
+        "rembg": {
+          "model": "rembg",
+          "role": "editors",
+          "status": "not_installed",
+          "reason": "not in this environment; nothing was pulled",
+          "correct": null,
+          "items": null,
+          "latency_ms": null,
+          "licence": "rembg (MIT) + U-2-Net weights (Apache-2.0); NOT installed here",
+          "per_asset": {}
+        }
+      },
+      "recommendation": {
+        "verdict": "keep-incumbent",
+        "incumbent": "birefnet",
+        "model": "birefnet",
+        "reason": "no candidate cleared the margin and the budget",
+        "eval": "cutout",
+        "candidates": [
+          {
+            "model": "background_distance",
+            "verdict": "keep-incumbent",
+            "reason": "margin -1 < required +2",
+            "delta": -1,
+            "required_margin": 2,
+            "fits": {
+              "ok": false,
+              "reason": "no budget for role",
+              "problems": [
+                "unknown role budget"
+              ]
+            }
+          },
+          {
+            "model": "otsu_lab",
+            "verdict": "keep-incumbent",
+            "reason": "margin -4 < required +2",
+            "delta": -4,
+            "required_margin": 2,
+            "fits": {
+              "ok": false,
+              "reason": "no budget for role",
+              "problems": [
+                "unknown role budget"
+              ]
+            }
+          },
+          {
+            "model": "grabcut",
+            "verdict": "keep-incumbent",
+            "reason": "margin +0 < required +2",
+            "delta": 0,
+            "required_margin": 2,
+            "fits": {
+              "ok": false,
+              "reason": "no budget for role",
+              "problems": [
+                "unknown role budget"
+              ]
+            }
+          },
+          {
+            "model": "rembg",
+            "verdict": "hold",
+            "reason": "not measured: not_installed"
+          }
+        ]
+      },
+      "quarantine": null,
+      "notes": "Not Ollama tags: measured by tools/seller_tester/editor_bench.py on the three Mogra uploads (cutout eval). A row is a segmentation method, not a model. birefnet is the measured winner (14/14 items, mean edge 1.83 px) and needs the local ComfyUI lane; grabcut is the lane-free fallback (14/14, 5.08 px); rembg is not installed here. --run is not the way to scout this role: there are no Ollama tags for it."
     }
   }
 }

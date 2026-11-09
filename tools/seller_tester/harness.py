@@ -30,9 +30,11 @@ from typing import Any, Callable, Dict, List, Optional, Sequence
 from .briefs import (
     DEFAULT_CATALOG_PATH,
     SOURCE_MODES,
+    brief_fidelity,
     brief_mode,
     load_catalog,
     mode_counts,
+    route_for_brief,
 )
 from .escalate import DEFAULT_ESCALATION_PATH, EscalationLog, escalate
 from .gaps import DEFAULT_GAPS_PATH, DEFAULT_MIRROR_PATH, build_gap, file_gap, read_gaps
@@ -128,22 +130,32 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
     for index, (brief, artefact) in enumerate(pairs):
         data = Path(artefact).read_bytes()
         current_mode = brief_mode(brief)
+        record_fn = getattr(generator, "record_for", None)
+        generation = record_fn(brief.get("id")) if callable(record_fn) else None
+        scene = (generation or {}).get("scene") or {}
         scored = score_image(
             data, brief, judge=active_judge,
             reference_check=lambda rgb, b=brief: reference_check_for_brief(rgb, b),
+            scene_source=scene.get("source"),
         )
         rel = _relative(artefact)
+        route_fn = getattr(generator, "route", None)
+        route = route_fn(brief) if callable(route_fn) else route_for_brief(brief)
         result_row = {
             "brief_id": scored.get("brief_id"),
             "category": scored.get("category"),
             "situation": scored.get("situation"),
             "difficulty": scored.get("difficulty"),
             "source_mode": scored.get("source_mode") or current_mode,
+            "fidelity": brief_fidelity(brief),
+            "route": route,
             "artefact_path": rel,
             "width": scored.get("width"),
             "height": scored.get("height"),
             "score": scored.get("score"),
             "passed": bool(scored.get("passed")),
+            "cannot_verify": bool(scored.get("cannot_verify")),
+            "cannot_verify_reason": scored.get("cannot_verify_reason"),
             "failed_checks": list(scored.get("failed_checks") or []),
             "checks": {
                 name: {"ok": check.get("ok"),
@@ -158,6 +170,14 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             result_row["reference"] = {
                 "kind": reference.get("kind"),
                 "path": reference.get("path"),
+            }
+        reference_verdict = (scored.get("checks") or {}).get("reference_subject")
+        if isinstance(reference_verdict, dict):
+            result_row["reference_check"] = dict(reference_verdict)
+        if generation is not None:
+            result_row["generation"] = {
+                key: value for key, value in generation.items()
+                if key not in ("artefact",)
             }
         if scored.get("error"):
             result_row["error"] = scored["error"]

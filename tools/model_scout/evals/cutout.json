@@ -1,0 +1,33 @@
+{
+  "name": "cutout",
+  "version": 1,
+  "items": 3,
+  "scoring": "per asset: coverage consistent with the reference mask, printed-text recall >= 0.60 on the white composite, alpha edge band <= 8 px, <= 60 s. correct = checks passed, items = applicable checks.",
+  "why": "The composite path keeps the seller's pixels, so the cutout is the product. The items are the service's own acceptance rule (printed text) plus two measurable sanity checks, not preferences.",
+  "assets": [
+    "renders/references/mogra/mogra_pair_main.png",
+    "renders/references/mogra/mogra_pair_lifestyle.png",
+    "renders/references/mogra/mogra_forest_dusk.png"
+  ],
+  "harness": "tools/seller_tester/editor_bench.py",
+  "cases": [
+    {
+      "id": "CUT-01",
+      "asset": "renders/references/mogra/mogra_pair_main.png",
+      "expect": "text recall >= 0.60",
+      "printed": ["MOGRA ORGANICS", "ORGANIC LION'S MANE", "MUSHROOM POWDER", "6 oz (170 g)", "ORGANIC SHIITAKE", "8 oz (227 g)"]
+    },
+    {
+      "id": "CUT-02",
+      "asset": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "expect": "text recall >= 0.60",
+      "printed": ["MOGRA ORGANICS", "ORGANIC LION'S MANE", "ORGANIC SHIITAKE"]
+    },
+    {
+      "id": "CUT-03",
+      "asset": "renders/references/mogra/mogra_forest_dusk.png",
+      "expect": "text recall >= 0.60",
+      "printed": ["MOGRA ORGANICS"]
+    }
+  ]
+}

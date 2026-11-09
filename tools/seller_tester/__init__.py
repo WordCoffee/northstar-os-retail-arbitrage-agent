@@ -13,19 +13,28 @@ from __future__ import annotations
 from .briefs import (
     CATEGORIES,
     DEFAULT_CATALOG_PATH,
+    FIDELITIES,
     MIN_PER_MODE,
     REFERENCE_MODES,
+    ROUTES,
     SITUATIONS,
     SOURCE_MODES,
+    brief_fidelity,
     briefs_by_mode,
     brief_mode,
     load_catalog,
     mode_counts,
+    route_for_brief,
     validate_catalog,
 )
 from .escalate import EscalationLog, escalate
 from .gaps import build_gap, file_gap, gap_id
-from .generators import ComfyGenerator, GeneratorUnavailable, StoredGenerator
+from .generators import (
+    CompositeGenerator,
+    ComfyGenerator,
+    GeneratorUnavailable,
+    StoredGenerator,
+)
 from .harness import run_pass, score_image, select_briefs
 from .judge import FakeJudge, get_judge, local_judge
 from .reference_check import (
@@ -50,11 +59,15 @@ __all__ = [
     "SITUATIONS",
     "SOURCE_MODES",
     "REFERENCE_MODES",
+    "FIDELITIES",
+    "ROUTES",
     "MIN_PER_MODE",
     "DEFAULT_CATALOG_PATH",
     "load_catalog",
     "validate_catalog",
     "brief_mode",
+    "brief_fidelity",
+    "route_for_brief",
     "briefs_by_mode",
     "mode_counts",
     "EscalationLog",
@@ -64,6 +77,7 @@ __all__ = [
     "gap_id",
     "StoredGenerator",
     "ComfyGenerator",
+    "CompositeGenerator",
     "GeneratorUnavailable",
     "score_image",
     "run_pass",
