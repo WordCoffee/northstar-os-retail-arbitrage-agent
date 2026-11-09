@@ -77,27 +77,38 @@ def _jobs() -> Dict[str, Any]:
 def _composites() -> List[Dict[str, Any]]:
     """Composite outputs with the source they were made from, newest first.
 
-    A composite is only reviewable next to its source, so the digest pairs them. The
-    convention is a sidecar JSON beside each output: `{"brief_id": ..., "source": ...,
-    "fidelity": ...}`. Missing sidecars are reported as unpaired rather than guessed.
+    A composite is only reviewable next to its source, so the digest pairs them. Metadata comes
+    from the proof run and the brief catalogue; a pair without a source is listed as unpaired
+    rather than guessed at.
     """
+    proof = _read_json(ROOT / "state" / "seller" / "composite_proof.json") or {}
+    briefs = _read_json(ROOT / "tools" / "seller_tester" / "mogra_briefs.json") or {}
+    by_id = {str(brief.get("id")): brief for brief in briefs.get("briefs") or []}
+    region = _read_json(ROOT / "state" / "seller" / "composite_region.json") or {}
+    region_by_id = {str(row.get("brief_id")): row for row in region.get("rows") or []}
+
     rows: List[Dict[str, Any]] = []
-    for folder in (ROOT / "renders" / "composites", ROOT / "state" / "seller" / "composites"):
-        if not folder.is_dir():
-            continue
-        for output in sorted(folder.glob("*.png")):
-            sidecar = output.with_suffix(".json")
-            meta = _read_json(sidecar) if sidecar.exists() else {}
-            source = str(meta.get("source") or "")
-            rows.append({
-                "brief_id": str(meta.get("brief_id") or output.stem),
-                "output": str(output.relative_to(ROOT)),
-                "output_ok": output.exists(),
-                "source": source,
-                "source_ok": bool(source) and (ROOT / source).exists(),
-                "fidelity": str(meta.get("fidelity") or "exact"),
-                "similarity": meta.get("product_region_similarity"),
-            })
+    for result in proof.get("results") or []:
+        brief_id = str(result.get("brief_id"))
+        output = str(result.get("artefact_path") or "")
+        brief = by_id.get(brief_id) or {}
+        source = str(((brief.get("reference") or {}).get("path")) or "")
+        audit = region_by_id.get(brief_id) or {}
+        rows.append({
+            "brief_id": brief_id,
+            "output": output,
+            "output_ok": bool(output) and (ROOT / output).is_file(),
+            "source": source,
+            "source_ok": bool(source) and (ROOT / source).is_file(),
+            "fidelity": str(result.get("fidelity") or brief.get("fidelity") or "exact"),
+            "route": str(result.get("route") or ""),
+            "score": result.get("score"),
+            "passed": result.get("passed"),
+            "similarity": audit.get("similarity"),
+            "region_state": ("verified" if audit.get("ok")
+                             else "cannot verify" if audit.get("cannot_verify")
+                             else "not audited" if not audit else "failed"),
+        })
     return rows
 
 
@@ -229,14 +240,13 @@ def render(data: Dict[str, Any]) -> str:
     lines += ["## Mogra composites — source next to output", ""]
     composites = data.get("composites") or []
     if composites:
-        lines += ["| brief | source | output | fidelity | product-region |",
-                  "|---|---|---|---|---|"]
+        lines += ["| brief | source | output | route | fidelity | score | product region |",
+                  "|---|---|---|---|---|---|---|"]
         for row in composites:
-            similarity = row.get("similarity")
             lines.append(
                 f"| {row['brief_id']} | `{row['source']}` | `{row['output']}` | "
-                f"{row['fidelity']} | "
-                f"{'—' if similarity is None else similarity} |")
+                f"{row.get('route', '')} | {row['fidelity']} | "
+                f"{row.get('score', '—')} | {row.get('region_state', 'not audited')} |")
         if data.get("composite_sheet"):
             lines += ["", f"Side by side (source left, composite right): "
                           f"`{data['composite_sheet']}`"]

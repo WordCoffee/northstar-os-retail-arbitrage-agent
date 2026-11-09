@@ -23,7 +23,7 @@ import numpy as np
 
 DEFAULT_MIN_SIMILARITY = 0.82
 ALPHA_THRESHOLD = 0.5
-SEARCH_MAX_EDGE = 640
+SEARCH_MAX_EDGE = 1280
 
 
 def _check(**kw: Any) -> Dict[str, Any]:
@@ -65,23 +65,71 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
     cutout = cutout_rgb.astype(np.float32)
     if cutout.shape[:2] != region.shape[:2]:
-        return _cannot_verify(
-            f"cutout is {cutout.shape[1]}x{cutout.shape[0]} but the placement is "
-            f"{width}x{height}; resize the cutout before comparing")
+        # A one- or two-pixel difference is rounding, not a different product.
+        close = (abs(cutout.shape[0] - region.shape[0]) <= max(2, height // 100)
+                 and abs(cutout.shape[1] - region.shape[1]) <= max(2, width // 100))
+        if not close:
+            return _cannot_verify(
+                f"cutout is {cutout.shape[1]}x{cutout.shape[0]} but the placement is "
+                f"{width}x{height}; resize the cutout before comparing")
+        try:
+            import cv2  # noqa: PLC0415
+
+            cutout = cv2.resize(cutout, (region.shape[1], region.shape[0]),
+                                interpolation=cv2.INTER_AREA)
+            if cutout_alpha is not None:
+                cutout_alpha = cv2.resize(cutout_alpha, (region.shape[1], region.shape[0]),
+                                          interpolation=cv2.INTER_AREA)
+        except Exception as exc:  # noqa: BLE001
+            return _cannot_verify(f"could not align the cutout ({type(exc).__name__})")
 
     mask = cutout_alpha >= ALPHA_THRESHOLD if cutout_alpha is not None else \
         np.ones(region.shape[:2], dtype=bool)
+    if mask.shape[:2] != region.shape[:2]:
+        # Coerce: a mismatch here is a rounding path, never a reason to crash the audit.
+        try:
+            import cv2  # noqa: PLC0415
+
+            cutout = cv2.resize(cutout, (region.shape[1], region.shape[0]),
+                                interpolation=cv2.INTER_AREA)
+            if cutout_alpha is not None:
+                cutout_alpha = cv2.resize(cutout_alpha, (region.shape[1], region.shape[0]),
+                                          interpolation=cv2.INTER_AREA)
+                mask = cutout_alpha >= ALPHA_THRESHOLD
+            else:
+                mask = np.ones(region.shape[:2], dtype=bool)
+        except Exception as exc:  # noqa: BLE001
+            return _cannot_verify(f"could not align the cutout ({type(exc).__name__})")
     if int(mask.sum()) < 64:
         return _cannot_verify("the cutout is almost entirely transparent")
 
     difference = np.abs(region - cutout).max(axis=2)[mask]
     mae = float(difference.mean()) / 255.0
-    score = max(0.0, 1.0 - mae)
+
+    # Structure, not exposure. A composite applies a scene grade and a shadow, which shifts
+    # every channel; normalised cross-correlation (zero-mean Pearson) is invariant to that and
+    # is what "the same product" actually means. MAE stays as a diagnostic.
+    left = region[mask].reshape(-1)
+    right = cutout[mask].reshape(-1)
+    left = left - left.mean()
+    right = right - right.mean()
+    denominator = float(np.linalg.norm(left) * np.linalg.norm(right))
+    if denominator <= 1e-9:
+        # A flat-coloured subject has no structure to correlate; colour agreement is then
+        # the only evidence there is, and it is reported as such.
+        score = max(0.0, 1.0 - mae)
+        basis = "colour_only"
+    else:
+        score = max(0.0, min(1.0, float(np.dot(left, right) / denominator)))
+        basis = "structure"
     return _check(
         ok=True, cannot_verify=False, similarity=round(score, 4),
+        basis=basis,
+        mae_similarity=round(max(0.0, 1.0 - mae), 4),
         pixels=int(mask.sum()), placement=[x, y, width, height],
         detail=(f"product region {width}x{height} at ({x},{y}): "
-                f"similarity {score:.3f} over {int(mask.sum())} opaque pixels"))
+                f"{basis} {score:.3f} over {int(mask.sum())} opaque pixels "
+                f"(mean-abs {1 - mae:.3f})"))
 
 
 def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
@@ -92,6 +140,17 @@ def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
     if cutout_rgb is None:
         return _cannot_verify("the cutout is not an RGB or RGBA image")
 
+    # Crop to the subject. A cutout is usually a full canvas with an alpha matte, so its
+    # bounding box is the whole image; matching that template can never fit inside a frame
+    # that shows the product smaller than the reference canvas.
+    if cutout_alpha is not None:
+        rows, columns = np.where(cutout_alpha >= ALPHA_THRESHOLD)
+        if rows.size >= 64:
+            top, bottom = int(rows.min()), int(rows.max()) + 1
+            left, right = int(columns.min()), int(columns.max()) + 1
+            cutout_rgb = cutout_rgb[top:bottom, left:right]
+            cutout_alpha = cutout_alpha[top:bottom, left:right]
+
     try:
         import cv2  # noqa: PLC0415 - optional at import time
     except Exception as exc:  # noqa: BLE001
@@ -101,48 +160,57 @@ def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
     if frame.ndim != 3:
         return _cannot_verify("the produced picture is not colour")
 
-    scale = min(1.0, SEARCH_MAX_EDGE / float(max(frame.shape[:2])))
-    if scale < 1.0:
-        size = (max(1, int(frame.shape[1] * scale)), max(1, int(frame.shape[0] * scale)))
-        small_frame = cv2.resize(frame, size, interpolation=cv2.INTER_AREA)
-    else:
-        small_frame = frame
+    # Multi-scale search on grayscale structure. A single scale cannot find a product that
+    # the composite scaled down, and a masked correlation over a near-frame-sized template
+    # returns nonsense; normalised cross-correlation over a few candidate scales does not.
+    scale_down = min(1.0, SEARCH_MAX_EDGE / float(max(frame.shape[:2])))
+    search_frame = frame
+    if scale_down < 1.0:
+        search_frame = cv2.resize(
+            frame, (max(1, int(frame.shape[1] * scale_down)),
+                    max(1, int(frame.shape[0] * scale_down))),
+            interpolation=cv2.INTER_AREA)
+    search_gray = cv2.cvtColor(search_frame.astype(np.uint8),
+                               cv2.COLOR_RGB2GRAY).astype(np.float32)
 
-    if cutout_alpha is None:
-        mask = None
-    else:
-        mask = (cutout_alpha >= ALPHA_THRESHOLD).astype(np.uint8)
-        if int(mask.sum()) < 64:
-            return _cannot_verify("the cutout is almost entirely transparent")
+    best = (-1.0, 0, 0, 1.0)
+    for candidate in (1.0, 0.85, 0.72, 0.6, 0.5, 0.42, 0.35, 0.3):
+        height = int(cutout_rgb.shape[0] * scale_down * candidate)
+        width = int(cutout_rgb.shape[1] * scale_down * candidate)
+        if height < 24 or width < 24:
+            continue
+        if height > search_gray.shape[0] or width > search_gray.shape[1]:
+            continue
+        template = cv2.cvtColor(
+            cv2.resize(cutout_rgb, (width, height), interpolation=cv2.INTER_AREA),
+            cv2.COLOR_RGB2GRAY).astype(np.float32)
+        try:
+            result = cv2.matchTemplate(search_gray, template, cv2.TM_CCOEFF_NORMED)
+        except Exception:  # noqa: BLE001
+            continue
+        result = np.nan_to_num(result, nan=-1.0, posinf=-1.0, neginf=-1.0)
+        _, score, _, location = cv2.minMaxLoc(result)
+        if score > best[0]:
+            best = (float(score), int(location[0]), int(location[1]), candidate)
 
-    search = small_frame.astype(np.float32)
-    template = cutout_rgb.astype(np.float32)
-    if template.shape[0] > search.shape[0] or template.shape[1] > search.shape[1]:
-        return _cannot_verify("the cutout is larger than the produced picture")
-
-    try:
-        if mask is not None:
-            result = cv2.matchTemplate(search, template, cv2.TM_CCORR_NORMED,
-                                       mask=mask.astype(np.float32))
-        else:
-            result = cv2.matchTemplate(search, template, cv2.TM_CCOEFF_NORMED)
-    except Exception as exc:  # noqa: BLE001
-        return _cannot_verify(f"template match failed ({type(exc).__name__}: {exc})")
-
-    result = np.nan_to_num(result, nan=0.0, posinf=0.0, neginf=0.0)
-    _, best, _, best_loc = cv2.minMaxLoc(result)
-    if best <= 0.0:
+    if best[0] <= 0.0:
         return _cannot_verify("the cutout does not appear anywhere in the produced picture",
-                              best_match=round(float(best), 4))
+                              best_match=round(best[0], 4))
 
-    x = int(round(best_loc[0] / scale))
-    y = int(round(best_loc[1] / scale))
-    width = int(round(template.shape[1] / scale))
-    height = int(round(template.shape[0] / scale))
-    verdict = region_similarity(np.asarray(produced_rgb), cutout_rgb, cutout_alpha,
-                               [x, y, width, height])
+    score, left_edge, top_edge, candidate = best
+    width = max(1, int(round(cutout_rgb.shape[1] * candidate)))
+    height = max(1, int(round(cutout_rgb.shape[0] * candidate)))
+    x = int(round(left_edge / scale_down))
+    y = int(round(top_edge / scale_down))
+    # Compare at the scale the product was actually found at; comparing a full-size cutout
+    # against a downscaled region would be a size error, not a fidelity test.
+    scaled_rgb = cv2.resize(cutout_rgb, (width, height), interpolation=cv2.INTER_AREA)
+    scaled_alpha = (cv2.resize(cutout_alpha, (width, height), interpolation=cv2.INTER_AREA)
+                    if cutout_alpha is not None else None)
+    verdict = region_similarity(frame, scaled_rgb, scaled_alpha, [x, y, width, height])
     verdict["found_by"] = "template_match"
-    verdict["match_score"] = round(float(best), 4)
+    verdict["match_score"] = round(score, 4)
+    verdict["template_scale"] = candidate
     verdict["min_similarity"] = float(min_similarity)
     if not verdict.get("cannot_verify"):
         verdict["ok"] = bool(verdict.get("similarity", 0.0) >= float(min_similarity))

@@ -18,10 +18,16 @@ from seller_tester import fidelity as F  # noqa: E402
 
 
 def rgba_product(size=120, colour=(30, 120, 70), alpha=255):
+    """A textured product: real products are never flat, and a flat square has no structure
+    for a correlation to find (the template match is undefined on zero variance)."""
     image = np.zeros((size, size, 4), dtype=np.uint8)
     image[:, :] = (255, 255, 255, 0)
     inner = size // 6
-    image[inner:size - inner, inner:size - inner] = (*colour, alpha)
+    box = image[inner:size - inner, inner:size - inner]
+    ramp = np.linspace(-26, 26, box.shape[0]).astype(np.int16)[:, None]
+    texture = np.clip(np.array(colour, dtype=np.int16)[None, None, :] + ramp[:, :, None], 0, 255)
+    box[:, :, :3] = texture.astype(np.uint8)
+    box[:, :, 3] = alpha
     return image
 
 
