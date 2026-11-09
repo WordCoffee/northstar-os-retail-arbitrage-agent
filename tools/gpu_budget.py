@@ -435,20 +435,51 @@ def release(role: str, *, restore: bool = True) -> Dict[str, Any]:
             "residency": residency()}
 
 
+def _pid_alive(pid: int) -> bool:
+    """Is this process still running? Unknown counts as alive, so a probe failure never steals a lock."""
+    if pid <= 0:
+        return False
+    try:
+        import psutil  # noqa: PLC0415
+
+        return bool(psutil.pid_exists(pid))
+    except Exception:  # noqa: BLE001
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError:
+            return False
+
+
 def lock(role: str, ttl_s: int = 3600) -> Dict[str, Any]:
-    """One heavy local job at a time. A second claim is refused, not queued."""
+    """One heavy local job at a time. A second claim is refused, not queued.
+
+    A holder that died without releasing — a killed render, a crashed test — must not wedge the
+    lane forever: on 2026-11-09 a killed composite held the lock and the next run refused with
+    `gpu_locked` for a pid that no longer existed. So a lock whose pid is *provably gone* is
+    reclaimed and the reclamation is recorded in the new lock. A lock held by a live process is
+    still refused, which is the property that matters.
+    """
     state = {}
     try:
         state = json.loads(LOCK.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         state = {}
+    reclaimed = None
     if state and time.time() - float(state.get("ts") or 0) < ttl_s:
-        if int(state.get("pid") or 0) and state.get("pid") != os.getpid():
-            return {"ok": False, "reason": "gpu_locked", "held_by": state}
+        holder = int(state.get("pid") or 0)
+        if holder and holder != os.getpid():
+            if _pid_alive(holder):
+                return {"ok": False, "reason": "gpu_locked", "held_by": state}
+            reclaimed = state
     STATE.mkdir(parents=True, exist_ok=True)
-    LOCK.write_text(json.dumps({"role": role, "pid": os.getpid(), "ts": time.time(),
-                                "at": _now()}, indent=2) + "\n", encoding="utf-8")
-    return {"ok": True, "role": role}
+    payload = {"role": role, "pid": os.getpid(), "ts": time.time(), "at": _now()}
+    if reclaimed:
+        payload["reclaimed"] = {"role": reclaimed.get("role"), "pid": reclaimed.get("pid"),
+                                "at": reclaimed.get("at"),
+                                "why": "the recorded pid was not running"}
+    LOCK.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {"ok": True, "role": role, **({"reclaimed": payload["reclaimed"]} if reclaimed else {})}
 
 
 def unlock(role: str = "") -> Dict[str, Any]:

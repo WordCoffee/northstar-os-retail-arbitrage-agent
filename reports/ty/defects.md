@@ -57,3 +57,26 @@ other five, and they are lower. That is the finding, not a regression.
 **The first run's proof is archived, not deleted:**
 `reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`.
 
+## D-003 — the reference pool held quote cards and a wordmark, not just products (2026-11-09)
+
+**Measured:** the digest contact sheet showed a composite of a **quote card** — "I CARRY MY
+CHILDREN NOT JUST IN MY ARMS, BUT IN MY SOUL" — presented as a product output. Checking the pool
+visually (`reports/ty/_reference_candidates*.png`) found that of the twelve files copied from the
+owner's `pictures for seller umbrella` folder, **only two were the actual box**: the rest are a
+dozen social quote cards and the brand wordmark.
+
+**Consequence:** six of the 21 held-out briefs were scored against a quote card rather than a
+product. A card is not a product; scoring a seller pipeline on one measures nothing. The two runs
+before this fix are superseded, and the earlier claim that 21 briefs covered "14 distinct product
+photographs" was wrong — it was 14 files, of which some were cards.
+
+**Fix:** the pool is now seven Word Coffee product images (two on white, five in scene, all showing
+the box) and three Mogra photographs — **ten real products over 21 briefs**. A test asserts no
+product is tested twice in the same situation, and at least eight distinct products are present.
+Non-product files are quarantined at
+`reports/ty/quarantined/references_word-coffee_not_products/`.
+
+**Lesson to reuse:** a reference pool has to be looked at, not counted. The file names said "for
+mom" and "for women"; only the pixels said "quote card".
+
+
