@@ -20,10 +20,11 @@ The queue is now ordered by the owner's instruction (2026-11-08): seller output 
 | 2 | `sel-02-design-studio` | Design Studio output quality (the 22.1 mean must move) |
 | 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
 | 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
-| 5 | `ux-05-render-routes` | **26 of 29 service routes render the chat shell** |
+| 5 | `ux-05-render-routes` | **done** — the `SIMPLE_KEEP_ADVANCED` allowlist sent every unlisted path to the chat shell; 29/29 routes now render, 60 e2e tests pass |
 | 6 | `ux-06-shell` | shell chrome on every service route, DevBanner in the shell |
 | 7 | `ux-07-tabs` | workspace tabs keep state; the shell tells Bojo which tab is open |
 | 8 | `ux-08-scene` | one scene loaded per service, unloaded on switch, still-frame fallback |
+| 9 | `ux-09-design-studio-canvas` | the Canva-like canvas workspace: content types, tool rail, layers, snap, undo, autosave, PNG+PDF export, wired to the asset dashboard and dielines |
 
 Ranking is stored (`jobs.rank`), not inferred from insertion order — `tools/director_queue.py`
 sorts the mirror by it. `ux-06`/`07`/`08` sit behind `ux-05` deliberately: the shell cannot be
@@ -60,11 +61,16 @@ Three limits the builder stated and I am not going to paper over:
 order passes only if "every service is reachable by click and nothing renders blank"; today it
 is not. Evidence: `ty/ux_audit.json` + `reports/ty/ux_audit_shots/`.
 
-## Scoring (unchanged, and strict)
+## Scoring (unchanged weights, one correction)
 
 Six dimensions, bar 85 each: works 0.28, correct 0.25, complete 0.12, usable 0.12,
-measured 0.10, seller 0.13. `seller` applies only to the ten seller-facing services. A passing
-test is worth 60 on `correct`. **0 services at bar; 77 is the ceiling on artefacts alone.**
+measured 0.10, seller 0.13. `seller` applies only to the ten seller-facing services. A
+seller-facing service with only passing tests stays at 60 on `correct`; a service with no
+seller-facing artefact is judged on its tests, because capping it made the bar unreachable by
+construction.
+
+**Today: 2 services at bar (`hub` 100, `prospector` 100), twelve at 86.2.** The ceiling was 77
+this morning. `measured` is 28 of 29 after ux-05.
 
 ## Verified today
 
