@@ -234,9 +234,32 @@ def _backend_text() -> str:
 
 
 def _wired_tools(ids: List[str]) -> Dict[str, bool]:
-    """Is a Bojo tool id actually referenced anywhere in the backend?"""
-    haystack = _backend_text()
-    return {tool: (f"'{tool}'" in haystack or f'"{tool}"' in haystack) for tool in ids}
+    """Is each declared tool actually callable by Bojo?
+
+    The old check searched the backend source for the tool's name, which a comment, a test or
+    a registry mention satisfies — so two services scored 100 on `complete` while their tools
+    had no handler at all. "Wired" now means a callable handler exists in the chat tool table or
+    in the domain registry: the same gate that decides what Bojo is offered.
+    """
+    if not ids:
+        return {}
+    try:
+        import sys  # noqa: PLC0415
+
+        if str(ROOT / "Northstar_backend") not in sys.path:
+            sys.path.insert(0, str(ROOT / "Northstar_backend"))
+        import chat_tools  # noqa: PLC0415
+
+        offered = set(chat_tools.tool_names())
+    except Exception:  # noqa: BLE001 - no tool table means nothing is wired
+        offered = set()
+    try:
+        import bojo_tools_registry  # noqa: PLC0415
+
+        domain = set(bojo_tools_registry.names())
+    except Exception:  # noqa: BLE001
+        domain = set()
+    return {tool: (tool in offered or tool in domain) for tool in ids}
 
 
 def _correct(matched: List[str], seller_applicable: bool = True) -> Dict[str, Any]:

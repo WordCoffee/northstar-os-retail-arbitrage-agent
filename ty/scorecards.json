@@ -1,17 +1,76 @@
 {
-  "at": "2026-11-09T05:22:41+00:00",
+  "at": "2026-11-09T06:47:16+00:00",
   "bar": 85.0,
   "weights": {
-    "works": 0.28,
+    "works": 0.23,
     "correct": 0.25,
     "complete": 0.12,
-    "usable": 0.12,
+    "usable": 0.07,
     "measured": 0.1,
-    "seller": 0.13
+    "seller": 0.13,
+    "contract": 0.1
   },
   "test_ids": 7186,
   "scan_findings": 1,
   "services": [
+    {
+      "id": "adpilot",
+      "label": "AdPilot",
+      "group": "Advertising",
+      "kind": "workspace",
+      "route": "/adpilot",
+      "impact": 0.7,
+      "bar": 85.0,
+      "score": 55.0,
+      "meets_bar": false,
+      "weakest": "seller",
+      "gap": 21.0,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "13 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 0.0,
+          "evidence": "no Seller-Tester output scored for this service"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: plan_campaign"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "empty_payload: payload has no measured rows or fields (keys: uploads,note)"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "hold ROAS while doubling spend on the winner",
+          "tag": "backed"
+        },
+        {
+          "text": "cut the keywords that only cost money",
+          "tag": "backed"
+        },
+        {
+          "text": "show me what the campaign did last week",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "campaign control: budget, bids, and the report behind them"
+    },
     {
       "id": "product-finder",
       "label": "SourceScout",
@@ -48,6 +107,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /product-finder -> northstar-os-ui\\src\\pages\\internal\\ProductFinder.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/products/finder -> 200; 89 row(s) under 'evaluated'"
         }
       },
       "scenarios": [
@@ -102,6 +165,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /listingforge -> northstar-os-ui\\src\\pages\\internal\\ListingForge.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/design-studio/listing-records -> 200; 6 measured field(s) (id,record); read back adad0461-16cd-4966-a146-69d94d9f9097 via /api/design-studio/listing-records"
         }
       },
       "scenarios": [
@@ -121,33 +188,33 @@
       "purpose": "create and version listings with the copy that converts"
     },
     {
-      "id": "adpilot",
-      "label": "AdPilot",
-      "group": "Advertising",
+      "id": "offerchisel",
+      "label": "OfferChisel",
+      "group": "Listings",
       "kind": "workspace",
-      "route": "/adpilot",
-      "impact": 0.7,
+      "route": "/offerchisel",
+      "impact": 0.9,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 67.0,
       "meets_bar": false,
       "weakest": "seller",
-      "gap": 14.0,
+      "gap": 16.2,
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "13 test id(s) prove it"
+          "evidence": "114 test id(s) prove it"
         },
         "correct": {
           "score": 60.0,
-          "evidence": "13 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+          "evidence": "114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
         },
         "seller": {
           "score": 0.0,
           "evidence": "no Seller-Tester output scored for this service"
         },
         "complete": {
-          "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: plan_campaign"
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: offer_recommendation"
         },
         "usable": {
           "score": 100.0,
@@ -155,24 +222,28 @@
         },
         "measured": {
           "score": 100.0,
-          "evidence": "route /adpilot -> northstar-os-ui\\src\\pages\\internal\\AdPilot.jsx; app p95 3.4 ms"
+          "evidence": "route /offerchisel -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "fail: every action is an external paid-model call"
         }
       },
       "scenarios": [
         {
-          "text": "hold ROAS while doubling spend on the winner",
+          "text": "turn this product into a listing that will not be suppressed",
           "tag": "backed"
         },
         {
-          "text": "cut the keywords that only cost money",
+          "text": "rewrite the bullets for a different audience",
           "tag": "backed"
         },
         {
-          "text": "show me what the campaign did last week",
+          "text": "fix the listing that lost its buy box",
           "tag": "backed"
         }
       ],
-      "purpose": "campaign control: budget, bids, and the report behind them"
+      "purpose": "turn a product into an offer: price, title, bullets, images"
     },
     {
       "id": "towncrier",
@@ -182,10 +253,10 @@
       "route": "/towncrier",
       "impact": 0.45,
       "bar": 85.0,
-      "score": 65.0,
+      "score": 55.0,
       "meets_bar": false,
       "weakest": "seller",
-      "gap": 9.0,
+      "gap": 13.5,
       "dimensions": {
         "works": {
           "score": 100.0,
@@ -210,6 +281,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /towncrier -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "fail: every action is an external paid-model call"
         }
       },
       "scenarios": [
@@ -223,6 +298,116 @@
         }
       ],
       "purpose": "seller-side social output that does not read like a robot"
+    },
+    {
+      "id": "beta-support",
+      "label": "Support",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta#support",
+      "impact": 0.5,
+      "bar": 85.0,
+      "score": 63.2,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 10.9,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 0.0,
+          "evidence": "route '/beta#support' is not registered in the UI"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "no_primary_action: registry records no actions for this service"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "support inside the beta without a human in the loop"
+    },
+    {
+      "id": "beta",
+      "label": "Onboarding & Plan",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta",
+      "impact": 0.9,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 9.3,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "no_primary_action: registry records no actions for this service"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "onboarding and plan selection for a private beta seller"
     },
     {
       "id": "design-studio",
@@ -260,6 +445,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /design-studio -> northstar-os-ui\\src\\pages\\internal\\DesignStudio.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets"
         }
       },
       "scenarios": [
@@ -277,6 +466,115 @@
         }
       ],
       "purpose": "product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use"
+    },
+    {
+      "id": "beta-signup",
+      "label": "Invite entry",
+      "group": "Private Beta",
+      "kind": "onboarding",
+      "route": "/beta-signup",
+      "impact": 0.8,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 8.2,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /beta-signup -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "permission_denied: HTTP 403 - signup is not available at this time"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "an invitee signs up without help",
+          "tag": "backed"
+        },
+        {
+          "text": "a tester reports a bug and sees it acknowledged",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "invite entry that a real invitee can complete unaided"
+    },
+    {
+      "id": "socialpulse",
+      "label": "SocialPulse",
+      "group": "Social",
+      "kind": "workspace",
+      "route": "/socialpulse",
+      "impact": 0.45,
+      "bar": 85.0,
+      "score": 67.0,
+      "meets_bar": false,
+      "weakest": "seller",
+      "gap": 8.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "28 test id(s) prove it"
+        },
+        "correct": {
+          "score": 60.0,
+          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
+        },
+        "seller": {
+          "score": 0.0,
+          "evidence": "no Seller-Tester output scored for this service"
+        },
+        "complete": {
+          "score": 100.0,
+          "evidence": "1/1 declared Bojo tools wired: plan_social"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /socialpulse -> northstar-os-ui\\src\\pages\\internal\\SocialPulse.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "no_primary_action: registry records no actions for this service"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "post about a restock without sounding automated",
+          "tag": "backed"
+        },
+        {
+          "text": "keep the voice consistent across three posts",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "schedule and judge social posts against a brand voice"
     },
     {
       "id": "goldengoose",
@@ -314,6 +612,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /goldengoose -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
         }
       },
       "scenarios": [
@@ -368,6 +670,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /golden-goose -> northstar-os-ui\\src\\pages\\internal\\GoldenGoose.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/golden-goose/evaluate -> 200; 17 measured field(s) (item_id,decision,resale_score)"
         }
       },
       "scenarios": [
@@ -385,60 +691,6 @@
         }
       ],
       "purpose": "the high-margin finder: score an opportunity and say why"
-    },
-    {
-      "id": "offerchisel",
-      "label": "OfferChisel",
-      "group": "Listings",
-      "kind": "workspace",
-      "route": "/offerchisel",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 7.2,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "114 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "114 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: offer_recommendation"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /offerchisel -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "turn this product into a listing that will not be suppressed",
-          "tag": "backed"
-        },
-        {
-          "text": "rewrite the bullets for a different audience",
-          "tag": "backed"
-        },
-        {
-          "text": "fix the listing that lost its buy box",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "turn a product into an offer: price, title, bullets, images"
     },
     {
       "id": "listings",
@@ -476,6 +728,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /listings -> northstar-os-ui\\src\\pages\\internal\\ListingGuardian.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/noncreative/listings/health -> 200; 2 row(s) under 'items'"
         }
       },
       "scenarios": [
@@ -495,11 +751,11 @@
       "purpose": "Listing Guardian: keep live listings compliant and correct"
     },
     {
-      "id": "beta-support",
-      "label": "Support",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta#support",
+      "id": "competitor-monitor",
+      "label": "Competitor Monitor",
+      "group": "Monitoring",
+      "kind": "workspace",
+      "route": "/competitor-monitor",
       "impact": 0.5,
       "bar": 85.0,
       "score": 74.7,
@@ -509,11 +765,70 @@
       "dimensions": {
         "works": {
           "score": 100.0,
-          "evidence": "17 test id(s) prove it"
+          "evidence": "6 test id(s) prove it"
         },
         "correct": {
           "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+          "evidence": "6 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
+        },
+        "seller": {
+          "score": null,
+          "not_applicable": true,
+          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
+        },
+        "complete": {
+          "score": 0.0,
+          "evidence": "0/1 declared Bojo tools wired: watch_competitor"
+        },
+        "usable": {
+          "score": 100.0,
+          "evidence": "no readiness finding names this service"
+        },
+        "measured": {
+          "score": 100.0,
+          "evidence": "route /competitor-monitor -> northstar-os-ui\\src\\pages\\internal\\CompetitorMonitor.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 0.0,
+          "evidence": "empty_payload: payload has no measured rows or fields (keys: kind,count,items,summary)"
+        }
+      },
+      "scenarios": [
+        {
+          "text": "tell me what changed before I lose the buy box",
+          "tag": "backed"
+        },
+        {
+          "text": "show rank over the last 90 days",
+          "tag": "backed"
+        },
+        {
+          "text": "alert me when a competitor undercuts me",
+          "tag": "backed"
+        }
+      ],
+      "purpose": "the competitor feed behind Rival Board"
+    },
+    {
+      "id": "beta-ops",
+      "label": "Tester Dashboard",
+      "group": "Beta Operations",
+      "kind": "onboarding",
+      "route": "/beta-ops",
+      "impact": 0.4,
+      "bar": 85.0,
+      "score": 74.7,
+      "meets_bar": false,
+      "weakest": "complete",
+      "gap": 4.1,
+      "dimensions": {
+        "works": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove it"
+        },
+        "correct": {
+          "score": 100.0,
+          "evidence": "76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
         },
         "seller": {
           "score": null,
@@ -529,71 +844,21 @@
           "evidence": "no readiness finding names this service"
         },
         "measured": {
+          "score": 100.0,
+          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.4 ms"
+        },
+        "contract": {
           "score": 0.0,
-          "evidence": "route '/beta#support' is not registered in the UI"
+          "evidence": "permission_denied: HTTP 403 - role_operator_lacks_platform_admin"
         }
       },
       "scenarios": [
         {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
+          "text": "see who is active and what broke",
           "tag": "backed"
         }
       ],
-      "purpose": "support inside the beta without a human in the loop"
-    },
-    {
-      "id": "socialpulse",
-      "label": "SocialPulse",
-      "group": "Social",
-      "kind": "workspace",
-      "route": "/socialpulse",
-      "impact": 0.45,
-      "bar": 85.0,
-      "score": 77.0,
-      "meets_bar": false,
-      "weakest": "seller",
-      "gap": 3.6,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "28 test id(s) prove it"
-        },
-        "correct": {
-          "score": 60.0,
-          "evidence": "28 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests"
-        },
-        "seller": {
-          "score": 0.0,
-          "evidence": "no Seller-Tester output scored for this service"
-        },
-        "complete": {
-          "score": 100.0,
-          "evidence": "1/1 declared Bojo tools wired: plan_social"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /socialpulse -> northstar-os-ui\\src\\pages\\internal\\SocialPulse.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "post about a restock without sounding automated",
-          "tag": "backed"
-        },
-        {
-          "text": "keep the voice consistent across three posts",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "schedule and judge social posts against a brand voice"
+      "purpose": "the tester dashboard: who is in, what they did, what broke"
     },
     {
       "id": "hub",
@@ -632,6 +897,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /hub -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/sourcescout/summary -> 200; 6 measured field(s) (total,pass,fail,review,pass_rate,fail_rate,review_rate)"
         }
       },
       "scenarios": [
@@ -683,6 +952,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /ledger -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/credits/me -> 200; 5 measured field(s) (balance,allotment,consumed,class,plan,period)"
         }
       },
       "scenarios": [
@@ -734,6 +1007,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /prospector -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
         }
       },
       "scenarios": [
@@ -789,6 +1066,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /auctioneer -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/economics/compute -> 200; 9 measured field(s) (formula_version,currency,marketplace,readiness,missing_inputs,purchase_ready,explanation,gross_revenue)"
         }
       },
       "scenarios": [
@@ -844,6 +1125,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /autothink -> northstar-os-ui\\src\\pages\\internal\\AutothinK.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/autothink/models -> 200; 98 measured field(s) (local_available,cloud_available,cloud_provider,cloud_live_armed,default_local_model,default_cloud_model,models,catalog)"
         }
       },
       "scenarios": [
@@ -891,6 +1176,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /thewatch -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
         }
       },
       "scenarios": [
@@ -946,6 +1235,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /rankledger -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
         }
       },
       "scenarios": [
@@ -1001,6 +1294,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /rivalboard -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/kirkland/scanner -> 200; 89 row(s) under 'products'"
         }
       },
       "scenarios": [
@@ -1056,6 +1353,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /account -> northstar-os-ui\\src\\pages\\customer\\AccountStatus.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/foundation/entitlements -> 200; 3 measured field(s) (tier,max_jobs_per_month,export_enabled,advanced_reports,seat_limit,support_level,override_allowed)"
         }
       },
       "scenarios": [
@@ -1107,6 +1408,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /foundation -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/foundation/providers -> 200; 2 row(s) under 'items'"
         }
       },
       "scenarios": [
@@ -1154,6 +1459,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /jobs -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/jobs-durable -> 201; 1 row(s) under 'runs'; read back 76b3213b-5c1d-41ee-9442-63dbbcbec094 via /api/v1/foundation/jobs-durable/76b3213b-5c1d-41ee-9442-63dbbcbec094"
         }
       },
       "scenarios": [
@@ -1201,6 +1510,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /keywords -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "POST /api/v1/foundation/keywords/imports -> 202; 5 measured field(s) (job_id,state,source_file_id,file_name,status,executes_in_worker); read back 965ed449-f2a8-4324-a6af-f5dd80721707 via /api/v1/foundation/jobs-durable/965ed449-f2a8-4324-a6af-f5dd80721707"
         }
       },
       "scenarios": [
@@ -1210,155 +1523,6 @@
         }
       ],
       "purpose": "keyword research and SEO workbench"
-    },
-    {
-      "id": "beta",
-      "label": "Onboarding & Plan",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta",
-      "impact": 0.9,
-      "bar": 85.0,
-      "score": 86.2,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 0.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta -> northstar-os-ui\\src\\pages\\public\\BetaLanding.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "onboarding and plan selection for a private beta seller"
-    },
-    {
-      "id": "beta-signup",
-      "label": "Invite entry",
-      "group": "Private Beta",
-      "kind": "onboarding",
-      "route": "/beta-signup",
-      "impact": 0.8,
-      "bar": 85.0,
-      "score": 86.2,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 0.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "17 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta-signup -> northstar-os-ui\\src\\pages\\roomAdapters.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "an invitee signs up without help",
-          "tag": "backed"
-        },
-        {
-          "text": "a tester reports a bug and sees it acknowledged",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "invite entry that a real invitee can complete unaided"
-    },
-    {
-      "id": "beta-ops",
-      "label": "Tester Dashboard",
-      "group": "Beta Operations",
-      "kind": "onboarding",
-      "route": "/beta-ops",
-      "impact": 0.4,
-      "bar": 85.0,
-      "score": 86.2,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 0.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "76 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "76 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "no Bojo tool declared, so Bojo cannot drive it"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /beta-ops -> northstar-os-ui\\src\\pages\\admin\\Overview.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "see who is active and what broke",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the tester dashboard: who is in, what they did, what broke"
     },
     {
       "id": "keyword-tracker",
@@ -1397,6 +1561,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /keyword-tracker -> northstar-os-ui\\src\\pages\\internal\\KeywordTracker.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/noncreative/keywords -> 200; 10 row(s) under 'items'"
         }
       },
       "scenarios": [
@@ -1414,61 +1582,6 @@
         }
       ],
       "purpose": "which keywords are worth owning, measured not guessed"
-    },
-    {
-      "id": "competitor-monitor",
-      "label": "Competitor Monitor",
-      "group": "Monitoring",
-      "kind": "workspace",
-      "route": "/competitor-monitor",
-      "impact": 0.5,
-      "bar": 85.0,
-      "score": 86.2,
-      "meets_bar": false,
-      "weakest": "complete",
-      "gap": 0.0,
-      "dimensions": {
-        "works": {
-          "score": 100.0,
-          "evidence": "6 test id(s) prove it"
-        },
-        "correct": {
-          "score": 100.0,
-          "evidence": "6 test id(s) prove behaviour; this service produces no seller-facing artefact, so tests are the evidence"
-        },
-        "seller": {
-          "score": null,
-          "not_applicable": true,
-          "evidence": "this service does not produce a seller-facing artefact, so there is nothing to score"
-        },
-        "complete": {
-          "score": 0.0,
-          "evidence": "0/1 declared Bojo tools wired: watch_competitor"
-        },
-        "usable": {
-          "score": 100.0,
-          "evidence": "no readiness finding names this service"
-        },
-        "measured": {
-          "score": 100.0,
-          "evidence": "route /competitor-monitor -> northstar-os-ui\\src\\pages\\internal\\CompetitorMonitor.jsx; app p95 3.4 ms"
-        }
-      },
-      "scenarios": [
-        {
-          "text": "tell me what changed before I lose the buy box",
-          "tag": "backed"
-        },
-        {
-          "text": "show rank over the last 90 days",
-          "tag": "backed"
-        },
-        {
-          "text": "alert me when a competitor undercuts me",
-          "tag": "backed"
-        }
-      ],
-      "purpose": "the competitor feed behind Rival Board"
     },
     {
       "id": "profitability",
@@ -1507,6 +1620,10 @@
         "measured": {
           "score": 100.0,
           "evidence": "route /profitability -> northstar-os-ui\\src\\pages\\internal\\ProfitabilityDashboard.jsx; app p95 3.4 ms"
+        },
+        "contract": {
+          "score": 100.0,
+          "evidence": "GET /api/v1/foundation/economics/contract -> 200; 10 measured field(s) (formula_version,money_type,rounding,readiness_states,metrics)"
         }
       },
       "scenarios": [
