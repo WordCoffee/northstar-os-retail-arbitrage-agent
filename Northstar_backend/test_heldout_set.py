@@ -60,6 +60,35 @@ def test_text_rules_are_the_ones_the_pipeline_understands(payload):
     assert by_situation["infographic"] == "text_expected"
 
 
+def test_each_situation_inherits_the_tuned_bar_for_that_situation(payload):
+    """The held-out part of a brief is the product photograph, never the constraint.
+
+    The first held-out run copied one brief's constraints onto all eight situations, which put a
+    required white matte on lifestyle and infographic briefs and made 21 of 21 fail `alpha_matte`
+    for a rule that was never about them. This is the test that stops that coming back.
+    """
+    catalog = json.loads((ROOT / "ty" / "seller_briefs.json").read_text(encoding="utf-8"))
+    tuned = {}
+    for brief in catalog["briefs"]:
+        if brief.get("source_mode") == "prompt_only":
+            continue
+        tuned.setdefault(brief["situation"], brief["constraints"])
+    for brief in payload["briefs"]:
+        assert brief["constraints"] == tuned[brief["situation"]], brief["id"]
+        assert set(brief["constraints"]) >= {"dimensions", "aspect", "background", "fill_pct"}
+
+
+def test_a_white_matte_is_only_required_where_the_tuned_catalogue_requires_it(payload):
+    white = {"white_background_main", "scale_reference", "bundle_multipack", "background_swap",
+             "series_consistency"}
+    for brief in payload["briefs"]:
+        mode = (brief["constraints"].get("matte") or {}).get("mode", "any")
+        if brief["situation"] in white:
+            assert mode == "white_matte", brief["id"]
+        else:
+            assert mode == "any", f"{brief['situation']} must not demand a white matte"
+
+
 def test_neck_nirvana_is_declared_and_never_runnable(payload):
     declared = payload["declared_unscorable"]
     assert len(declared) == 3

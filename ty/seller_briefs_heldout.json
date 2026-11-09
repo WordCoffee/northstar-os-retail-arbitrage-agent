@@ -85,7 +85,7 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
@@ -93,17 +93,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 85,
+          "distance": 20
         },
         "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -133,13 +129,13 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 2000,
+          "min_width": 1600,
           "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
+          "ratio": 0.8,
           "tolerance": 0.02
         },
         "background": {
@@ -148,17 +144,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 10,
+          "max": 80,
+          "distance": 20
         },
         "text_rule": "text_expected",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -199,16 +191,15 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "tolerance": 8,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 8,
+          "max": 50,
+          "distance": 20
         },
-        "text_rule": "text_expected",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -255,15 +246,14 @@
         "background": {
           "value": 255,
           "tolerance": 6,
-          "mode": "free"
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 25,
+          "max": 85,
+          "distance": 20
         },
-        "text_rule": "text_expected",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -299,31 +289,27 @@
       "constraints": {
         "dimensions": {
           "min_width": 2000,
-          "min_height": 2000,
+          "min_height": 2500,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
-          "tolerance": 0.02
+          "ratio": 0.8,
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
           "tolerance": 6,
-          "mode": "uniform"
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 80,
+          "distance": 20
         },
-        "text_rule": "no_text",
+        "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -360,25 +346,24 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.01
         },
         "background": {
-          "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "value": 245,
+          "tolerance": 4,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 65,
+          "distance": 20
         },
-        "text_rule": "allowed",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
         },
         "file_size": {
           "min_bytes": 20000,
@@ -410,30 +395,29 @@
         "dimensions": {
           "min_width": 2000,
           "min_height": 2000,
-          "max_width": 10000,
-          "max_height": 10000
+          "max_width": 8000,
+          "max_height": 8000
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.005
         },
         "background": {
           "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "tolerance": 4,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 20,
+          "max": 50,
+          "distance": 20
         },
-        "text_rule": "allowed",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "tolerance": 4,
+          "max_border_std": 4
         },
         "file_size": {
           "min_bytes": 20000,
@@ -525,7 +509,7 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
@@ -533,17 +517,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 85,
+          "distance": 20
         },
         "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -635,7 +615,7 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
@@ -643,17 +623,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 85,
+          "distance": 20
         },
         "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -683,13 +659,13 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 2000,
+          "min_width": 1600,
           "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
+          "ratio": 0.8,
           "tolerance": 0.02
         },
         "background": {
@@ -698,17 +674,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 10,
+          "max": 80,
+          "distance": 20
         },
         "text_rule": "text_expected",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -749,16 +721,15 @@
         },
         "background": {
           "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "tolerance": 8,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 8,
+          "max": 50,
+          "distance": 20
         },
-        "text_rule": "text_expected",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -805,15 +776,14 @@
         "background": {
           "value": 255,
           "tolerance": 6,
-          "mode": "free"
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 25,
+          "max": 85,
+          "distance": 20
         },
-        "text_rule": "text_expected",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
@@ -849,31 +819,27 @@
       "constraints": {
         "dimensions": {
           "min_width": 2000,
-          "min_height": 2000,
+          "min_height": 2500,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
-          "tolerance": 0.02
+          "ratio": 0.8,
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
           "tolerance": 6,
-          "mode": "uniform"
+          "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 80,
+          "distance": 20
         },
-        "text_rule": "no_text",
+        "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -910,25 +876,24 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.01
         },
         "background": {
-          "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "value": 245,
+          "tolerance": 4,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 65,
+          "distance": 20
         },
-        "text_rule": "allowed",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "value": 245,
+          "tolerance": 5,
+          "max_border_std": 5
         },
         "file_size": {
           "min_bytes": 20000,
@@ -960,30 +925,29 @@
         "dimensions": {
           "min_width": 2000,
           "min_height": 2000,
-          "max_width": 10000,
-          "max_height": 10000
+          "max_width": 8000,
+          "max_height": 8000
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.005
         },
         "background": {
           "value": 255,
-          "tolerance": 6,
-          "mode": "free"
+          "tolerance": 4,
+          "mode": "uniform"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 20,
+          "max": 50,
+          "distance": 20
         },
-        "text_rule": "allowed",
+        "text_rule": "no_text",
         "matte": {
           "mode": "white_matte",
           "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "tolerance": 4,
+          "max_border_std": 4
         },
         "file_size": {
           "min_bytes": 20000,
@@ -1075,7 +1039,7 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
@@ -1083,17 +1047,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 85,
+          "distance": 20
         },
         "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -1123,13 +1083,13 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 2000,
+          "min_width": 1600,
           "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
+          "ratio": 0.8,
           "tolerance": 0.02
         },
         "background": {
@@ -1138,17 +1098,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 10,
+          "max": 80,
+          "distance": 20
         },
         "text_rule": "text_expected",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -1240,7 +1196,7 @@
         },
         "aspect": {
           "ratio": 1.0,
-          "tolerance": 0.02
+          "tolerance": 0.03
         },
         "background": {
           "value": 255,
@@ -1248,17 +1204,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 15,
+          "max": 85,
+          "distance": 20
         },
         "text_rule": "allowed",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,
@@ -1287,13 +1239,13 @@
       },
       "constraints": {
         "dimensions": {
-          "min_width": 2000,
+          "min_width": 1600,
           "min_height": 2000,
           "max_width": 10000,
           "max_height": 10000
         },
         "aspect": {
-          "ratio": 1.0,
+          "ratio": 0.8,
           "tolerance": 0.02
         },
         "background": {
@@ -1302,17 +1254,13 @@
           "mode": "free"
         },
         "fill_pct": {
-          "min": 12,
-          "max": 100,
-          "distance": 20,
-          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+          "min": 10,
+          "max": 80,
+          "distance": 20
         },
         "text_rule": "text_expected",
         "matte": {
-          "mode": "white_matte",
-          "value": 255,
-          "tolerance": 6,
-          "max_border_std": 6
+          "mode": "any"
         },
         "file_size": {
           "min_bytes": 20000,

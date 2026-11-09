@@ -42,29 +42,29 @@ CATEGORY = {"lions-mane": "supplement_pouch", "word-coffee": "food_jar"}
 SITUATION_ORDER = ("white_background_main", "lifestyle", "infographic", "scale_reference",
                    "bundle_multipack", "packaging_mockup", "background_swap", "series_consistency")
 
-# The validator's vocabulary, exactly (briefs.TEXT_RULES).
-TEXT_FREE_SITUATIONS = ("white_background_main", "packaging_mockup")
-TEXT_EXPECTED_SITUATIONS = ("infographic", "scale_reference", "bundle_multipack")
+#: The constraint profile for each situation is the tuned catalogue's own, copied straight across.
+#: Taking one arbitrary brief's constraints and reusing them for every situation is what the first
+#: held-out run did, and it put a required white matte on lifestyle and infographic briefs: 21 of 21
+#: briefs then failed `alpha_matte` for a rule that was never about them. The held-out part of a
+#: held-out brief is the **product photograph**, never the bar.
+def _situation_profiles(catalog: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    profiles: Dict[str, Dict[str, Any]] = {}
+    for brief in catalog.get("briefs") or []:
+        if brief.get("source_mode") == "prompt_only":
+            continue
+        situation = brief.get("situation")
+        constraints = brief.get("constraints")
+        if situation and isinstance(constraints, dict) and situation not in profiles:
+            profiles[situation] = json.loads(json.dumps(constraints))
+    return profiles
 
 
-def _constraints(template: Dict[str, Any], situation: str) -> Dict[str, Any]:
-    """The tuned reference brief's own constraints, with only the background rule changed.
-
-    Anything else — dimensions, aspect, fill, file size — stays exactly as the tuned catalogue
-    has it, so a held-out failure means the pipeline failed, not that the bar moved.
-    """
-    base = json.loads(json.dumps(template.get("constraints") or {}))
-    background = dict(base.get("background") or {})
-    if situation in TEXT_FREE_SITUATIONS:
-        background["mode"] = "uniform"
-        background["value"] = 255
-    else:
-        background["mode"] = "free"
-        background.setdefault("value", 255)
-    base["background"] = background
-    base["text_rule"] = ("no_text" if situation in TEXT_FREE_SITUATIONS else
-                         "text_expected" if situation in TEXT_EXPECTED_SITUATIONS else "allowed")
-    return base
+def _constraints(profiles: Dict[str, Dict[str, Any]], situation: str) -> Dict[str, Any]:
+    """The tuned constraints for this situation, unmodified. A missing one is a bug, not a guess."""
+    if situation not in profiles:
+        raise KeyError(f"the tuned catalogue has no non-prompt-only brief for {situation!r}, "
+                       "so a held-out brief cannot inherit a fair bar for it")
+    return json.loads(json.dumps(profiles[situation]))
 
 
 def _difficulty(n: int) -> int:
@@ -72,8 +72,8 @@ def _difficulty(n: int) -> int:
     return 1 + (n // len(SITUATION_ORDER))
 
 
-def _brief(index: int, line: str, situation: str, reference: str, template: Dict[str, Any],
-           difficulty: int) -> Dict[str, Any]:
+def _brief(index: int, line: str, situation: str, reference: str,
+           profiles: Dict[str, Dict[str, Any]], difficulty: int) -> Dict[str, Any]:
     suffix = Path(reference).suffix.lower()
     return {
         "id": f"HO-{index:03d}",
@@ -92,7 +92,7 @@ def _brief(index: int, line: str, situation: str, reference: str, template: Dict
                            "mime_type": ("image/png" if suffix == ".png" else "image/jpeg"),
                            "subject": line.replace("-", " ")},
         },
-        "constraints": _constraints(template, situation),
+        "constraints": _constraints(profiles, situation),
         "note": ("Held-out: never used while tuning. A real product photograph is the "
                  "reference; the pipeline must composite it, not generate a lookalike."),
     }
@@ -100,15 +100,14 @@ def _brief(index: int, line: str, situation: str, reference: str, template: Dict
 
 def build() -> Dict[str, Any]:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
-    template = next((b for b in catalog["briefs"] if b.get("source_mode") != "prompt_only"),
-                    catalog["briefs"][0])
+    profiles = _situation_profiles(catalog)
     briefs: List[Dict[str, Any]] = []
     index = 0
     for line, refs, count in (("lions-mane", LIONS_MANE, 10), ("word-coffee", WORD_COFFEE, 11)):
         for n in range(count):
             index += 1
             briefs.append(_brief(index, line, SITUATION_ORDER[n % len(SITUATION_ORDER)],
-                                 refs[n % len(refs)], template, _difficulty(n)))
+                                 refs[n % len(refs)], profiles, _difficulty(n)))
     declared: List[Dict[str, Any]] = []
     for n in range(3):
         declared.append({
@@ -124,7 +123,7 @@ def build() -> Dict[str, Any]:
                           "descriptor": {"filename": "neck-nirvana-missing.png",
                                          "mime_type": "image/png",
                                          "subject": "neck nirvana product"}},
-            "constraints": _constraints(template, SITUATION_ORDER[n]),
+            "constraints": _constraints(profiles, SITUATION_ORDER[n]),
             "note": "No product imagery exists on this machine for this brand; unscorable.",
         })
     return {"schema": "northstar.seller_briefs.heldout.v1",
