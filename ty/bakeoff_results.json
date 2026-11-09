@@ -428,5 +428,66 @@
       "reviewer": "builder-d16 (D17)",
       "notes": "prebuilt portable zip from github.com/storytold/craft-anything/releases/tag/v0.5.0, SHA-256 verified against SHA256SUMS.txt; no Rust toolchain and no build. Studied three targets read-only; no Amazon target, no credentials, no spend."
     }
-  ]
+  ],
+  "accuracy_verdict": {
+    "at": "2026-11-09T07:36:08+00:00",
+    "weights": {
+      "accuracy": 0.4,
+      "detail": 0.25,
+      "speed": 0.15,
+      "tokens": 0.1,
+      "reliability": 0.1
+    },
+    "targets": [
+      {
+        "target": "oss-repo",
+        "accuracy_leader": "rea",
+        "accuracy_leaders": [
+          "rea"
+        ],
+        "accuracy": 1.0,
+        "facts": {
+          "rea": "10/10",
+          "craft-anything": "9/10"
+        },
+        "composite_leader": "craft-anything",
+        "disagree": true,
+        "why": "the composite winner is cheaper, not more accurate: rea surfaced 10/10 of the declared ground truth against craft-anything's 9/10"
+      },
+      {
+        "target": "hosted",
+        "accuracy_leader": "tie",
+        "accuracy_leaders": [
+          "rea",
+          "craft-anything"
+        ],
+        "accuracy": 1.0,
+        "facts": {
+          "rea": "7/7",
+          "craft-anything": "7/7"
+        },
+        "composite_leader": "craft-anything",
+        "disagree": false,
+        "why": ""
+      },
+      {
+        "target": "local-app",
+        "accuracy_leader": "tie",
+        "accuracy_leaders": [
+          "rea",
+          "craft-anything"
+        ],
+        "accuracy": 1.0,
+        "facts": {
+          "rea": "7/7",
+          "craft-anything": "7/7"
+        },
+        "composite_leader": "craft-anything",
+        "disagree": false,
+        "why": ""
+      }
+    ],
+    "ground_truth": "each target declares a facts list read off the target itself; accuracy = fraction of those facts the tool's own output names",
+    "composite_note": "accuracy is 0.40 of the composite; detail, speed and tokens make up the other 0.45 and reliability 0.10, so a composite win can come entirely from cost"
+  }
 }

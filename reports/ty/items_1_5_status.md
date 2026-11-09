@@ -16,13 +16,18 @@ one-line `needs_you.md` entry, never let a parked item block the rest.
 
 ## Item 2 — reboot proof
 
+**SETTINGS VERIFIED · BOOT PROOF PENDING (DIR-6).** The configuration is proven and the check tool
+is real, but **no post-boot run has been logged**, so the item is not closed. It stays open until
+`reports/ty/reboot_proof.md` gains a section whose boot time is later than the last task run and
+whose `LastTaskResult` is 0 — which only a reboot can produce.
+
 | sub-item | status | evidence |
 |---|---|---|
-| Task settings verified offline | **VERIFIED** | 6/6: `MSFT_TaskLogonTrigger` (no end boundary), `StartWhenAvailable`, restart 3 × 1 min, both battery stops disabled, `ExecutionTimeLimit PT0S`, `MultipleInstances IgnoreNew`. |
+| Task settings verified offline | **VERIFIED** | 6/6: `MSFT_TaskLogonTrigger` (no end boundary), `StartWhenAvailable True`, restart 3 x 1 min, `DisallowStartIfOnBatteries False` + `StopIfGoingOnBatteries False`, `ExecutionTimeLimit PT0S`, `MultipleInstances IgnoreNew`. |
 | Vision needs an interactive session | **VERIFIED** | `LogonType InteractiveToken`; `chrome_uia` calls `SetForegroundWindow`/`uiautomation` and `capture` uses `mss`/`ImageGrab`. A "run whether logged on or not" task would capture a black desktop. |
-| `tools/post_reboot_check.py` | **VERIFIED** | Real run: boot `2026-11-03T17:48:04Z`, uptime 5 d 13 h, task last run `2026-11-08T09:00:15Z` result **0**, director pid 16592 **not alive**, 14 open jobs, resume line present, handoff mtime `2026-11-09T06:47:39Z`. Writes `reports/ty/reboot_proof.md`. |
-| Launcher runs it on first start after boot | **VERIFIED** | 6 new launcher tests: first start after boot runs it, a second start in the same boot does not, a stale proof does not, a broken check logs and exits 0. 32 tests total. |
-| needs_you entry for the reboot | **VERIFIED** | `needs_you.md` **DIR-6**, one line, no password. |
+| `tools/post_reboot_check.py` | **VERIFIED (the tool)** | Real run: boot `2026-11-03T17:48:04Z`, uptime 5 d 13 h, task last run `2026-11-08T09:00:15Z` result **0** — that run **predates the boot**, so it is not a post-boot proof — 14 open jobs, resume line present. 17 tests. |
+| Launcher runs it on first start after boot | **VERIFIED** | 6 launcher tests: first start after boot runs it, a second start in the same boot does not, a stale proof does not, a broken check logs and exits 0. 32 tests total. |
+| **Boot proof logged** | **PENDING — DIR-6** | Needs one reboot. The launcher writes the section automatically on its first start after boot; this row changes to VERIFIED only then. |
 
 ## Item 3 — reverse-study bake-off (D17)
 

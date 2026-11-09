@@ -1,0 +1,112 @@
+{
+  "ok": false,
+  "blocked": false,
+  "steps": [
+    {
+      "step": "live walk",
+      "argv": [
+        "C:\\Python314\\pythonw.exe",
+        "-m",
+        "tools.registry.vision_walk",
+        "--out",
+        "state/registry/vision_live.json"
+      ],
+      "exit": 0,
+      "ok": true,
+      "tail": [
+        "wrote state/registry/vision_live.json"
+      ]
+    },
+    {
+      "step": "apply vision",
+      "argv": [
+        "C:\\Python314\\pythonw.exe",
+        "-m",
+        "tools.registry.apply_vision",
+        "--vision",
+        "state/registry/vision_live.json"
+      ],
+      "exit": 0,
+      "ok": true,
+      "tail": [
+        "updated vision evidence for 29 services"
+      ]
+    },
+    {
+      "step": "build",
+      "argv": [
+        "C:\\Python314\\pythonw.exe",
+        "-m",
+        "tools.registry.build"
+      ],
+      "exit": 0,
+      "ok": true,
+      "tail": [
+        "wrote ty\\bojo_tool_list.json",
+        "wrote ty\\northstar_workspaces.json",
+        "wrote ty\\registry_gaps.json",
+        "29 services \u00b7 44 tools (37 wired, 7 declared, 4 unclaimed) \u00b7 gaps 13 \u00b7 layouts {'feed': 9, 'split': 8, 'wizard': 5, 'board': 6, 'canvas': 1}"
+      ]
+    },
+    {
+      "step": "V3 parity",
+      "argv": [
+        "C:\\Python314\\pythonw.exe",
+        "-m",
+        "tools.vision.parity",
+        "--twice",
+        "--base",
+        "http://127.0.0.1:8101/ui/",
+        "--backends",
+        "uia,chromeconnect"
+      ],
+      "exit": 1,
+      "ok": false,
+      "tail": [
+        "          \"uia\",",
+        "          \"chromeconnect\"",
+        "        ],",
+        "        \"detail\": {",
+        "          \"uia\": \"no Chrome window to drive\",",
+        "          \"chromeconnect\": \"no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)\"",
+        "        }",
+        "      }",
+        "    }",
+        "  ]",
+        "}",
+        "<frozen runpy>:130: RuntimeWarning: 'tools.vision.parity' found in sys.modules after import of package 'tools.vision', but prior to execution of 'tools.vision.parity'; this may result in unpredictable behaviour"
+      ]
+    },
+    {
+      "step": "V9 dogfood",
+      "argv": [
+        "C:\\Python314\\pythonw.exe",
+        "-m",
+        "tools.vision.dogfood",
+        "--services",
+        "design-studio,listings,socialpulse,competitor-monitor"
+      ],
+      "exit": 2,
+      "ok": false,
+      "tail": [
+        "    {",
+        "      \"service\": \"socialpulse\",",
+        "      \"ok\": false,",
+        "      \"reason\": \"no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything\"",
+        "    },",
+        "    {",
+        "      \"service\": \"competitor-monitor\",",
+        "      \"ok\": false,",
+        "      \"reason\": \"no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything\"",
+        "    }",
+        "  ]",
+        "}"
+      ]
+    }
+  ],
+  "session": {
+    "locked": false,
+    "reason": "",
+    "foreground": "Settings"
+  }
+}

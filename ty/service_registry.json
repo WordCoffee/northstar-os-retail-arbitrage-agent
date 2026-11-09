@@ -94,7 +94,7 @@
           "hub_status"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -151,7 +151,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -221,7 +221,7 @@
           "catalog_pull"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -286,7 +286,7 @@
           "golden_goose_scan"
         ],
         "confidence": "none",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -353,7 +353,7 @@
           "offer_recommendation"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -424,7 +424,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -501,7 +501,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -598,7 +598,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -647,7 +647,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -696,7 +696,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -745,7 +745,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -802,7 +802,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -941,7 +941,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1091,7 +1091,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "window did not take the foreground",
+        "latest_attempt_blocked": "no Chrome window attached",
         "controls": [
           "Refresh",
           "Queued",
@@ -1240,7 +1240,7 @@
         ],
         "declared_tools": [],
         "confidence": "none",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1276,7 +1276,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "window did not take the foreground",
+        "latest_attempt_blocked": "no Chrome window attached",
         "controls": [
           "Search the Northstar Index...",
           "Operator",
@@ -1322,7 +1322,7 @@
         ],
         "declared_tools": [],
         "confidence": "none",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1377,7 +1377,7 @@
         ],
         "declared_tools": [],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1439,7 +1439,7 @@
         ],
         "declared_tools": [],
         "confidence": "none",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1626,7 +1626,7 @@
           "build_dieline"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "window did not take the foreground",
+        "latest_attempt_blocked": "no Chrome window attached",
         "controls": [
           "Canvas",
           "Projects",
@@ -1695,7 +1695,7 @@
           "scan_products"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "window did not take the foreground",
+        "latest_attempt_blocked": "no Chrome window attached",
         "controls": [
           "New Lookup",
           "Lookup",
@@ -1801,7 +1801,7 @@
           "golden_goose_scan"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1869,7 +1869,7 @@
           "optimize_listing"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -1942,7 +1942,7 @@
           "track_keywords"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -2001,7 +2001,7 @@
           "watch_competitor"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -2095,7 +2095,7 @@
           "compose_listing"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -2197,7 +2197,7 @@
           "plan_campaign"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -2261,7 +2261,7 @@
           "plan_social"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     },
     {
@@ -2348,7 +2348,7 @@
           "margin_report"
         ],
         "confidence": "low",
-        "latest_attempt_blocked": "window did not take the foreground"
+        "latest_attempt_blocked": "no Chrome window attached"
       }
     }
   ]

@@ -1,26 +1,32 @@
 {
-  "updated_at": "2026-11-08T09:55:00+00:00",
+  "updated_at": "2026-11-09T08:20:00+00:00",
   "source": "reports/ty/d15_verification.md",
   "failed": [
     {
-      "unit": "D17",
-      "item": "REA vs Craft Anything bake-off",
-      "why": "the six cells had no artefacts on disk (they were in a gitignored worktree that was removed), so the result was not reproducible",
-      "state_now": "re-probed: REA ran on the open-source target (exit 0, 10/10 facts, artefact tracked); hosted and local-app still have no result; the three-target verdict is withdrawn"
-    },
-    {
-      "unit": "V9",
+      "unit": "V9 (real desktop)",
       "item": "dogfood: Seller-Tester drives the real UI through the Vision Operator",
-      "why": "needs a live UI it can act on, which is V3; nothing has driven the real UI end to end",
-      "state_now": "still open; depends on V3, which is blocked on an unlocked desktop / CDP endpoint"
+      "why": "the desktop is locked, so the live-desktop half of V9 cannot run; the localhost half is now verified",
+      "state_now": "V9-localhost VERIFIED (tests/e2e/v9_localhost.spec.ts, 4 passed, real PNG export). Real-desktop remains parked on the unlock trigger (tools/unlock_watch.py)."
     }
   ],
   "blocked": [
     {
       "unit": "V3",
       "item": "ten-task parity suite",
-      "why": "no CDP endpoint, and the UIA fallback cannot drive a locked desktop",
-      "state_now": "Chrome 156, no debugging port, chrome://inspect has no toggle; UIA route built and refusing with the lock-screen reason"
+      "why": "locked desktop; no CDP endpoint",
+      "state_now": "parked on tools/unlock_watch.py; Chrome Connect retained as controller"
+    }
+  ],
+  "verified_since": [
+    {
+      "unit": "D17",
+      "item": "REA vs Craft Anything bake-off",
+      "evidence": "research/bakeoff with six cells, tracked artefacts, run_all.ps1 verified from a fresh detached worktree; craft-anything default on all three targets"
+    },
+    {
+      "unit": "V9-localhost",
+      "item": "dogfood through the UI on localhost",
+      "evidence": "tests/e2e/v9_localhost.spec.ts -> 4 passed, Design Studio add-headline + PNG export >1000 bytes"
     }
   ]
 }

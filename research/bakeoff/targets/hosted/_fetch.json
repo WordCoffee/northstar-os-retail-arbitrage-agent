@@ -1,0 +1,17 @@
+{
+  "url": "https://opencode.ai/",
+  "final_url": "https://opencode.ai/",
+  "status": 200,
+  "fetched_at": "2026-11-09T07:29:01+00:00",
+  "bytes": 194113,
+  "sha256": "4b016d4d43bda7ddaa0730d1d6a0d83302328bcdc891122c2a4342ecb5d3e378",
+  "content_type": "text/html",
+  "headers": {
+    "Content-Type": "text/html",
+    "Server": "cloudflare"
+  },
+  "tracked_copy": "research\\bakeoff\\targets\\hosted\\index.html",
+  "tracked_sha256": "4b016d4d43bda7ddaa0730d1d6a0d83302328bcdc891122c2a4342ecb5d3e378",
+  "identical_to_tracked": true,
+  "note": "A 200 from the site itself, fetched now. If identical_to_tracked is false the tracked copy was captured at an earlier time and the site has changed since; the bake-off still scored a real capture, and the mismatch is recorded rather than hidden."
+}
