@@ -150,12 +150,6 @@ def _as_png(image) -> bytes:
     return buffer.getvalue()
 
 
-def _outside(box: Sequence[int], rect: Tuple[int, int, int, int]) -> bool:
-    left, top, right, bottom = rect
-    x, y, width, height = (int(v) for v in box)
-    return right <= x or left >= x + width or bottom <= y or top >= y + height
-
-
 def margin_ink_fraction(rgb: np.ndarray, ratio: float = MARGIN_RATIO) -> float:
     """The fraction of the outer band that is ink — the same measure the scorer applies."""
     height, width = rgb.shape[:2]
@@ -216,11 +210,12 @@ def infographic(canvas_bytes: bytes, product_box: Sequence[int],
     draw.rectangle((panel_x, panel_y, panel_x + panel_w, panel_y + panel_h),
                    outline=RULE, width=max(2, height // 500))
 
-    scale = panel_w / float(max(1, int(crop_w)))
-    mapped = [int(round(panel_x + (box[0] - left) * scale)),
-              int(round(panel_y + (box[1] - upper) * scale)),
-              max(1, int(round(box[2] * scale))),
-              max(1, int(round(box[3] * scale)))]
+    scale_x = panel_w / float(max(1, crop.size[0]))
+    scale_y = panel_h / float(max(1, crop.size[1]))
+    mapped = [int(round(panel_x + (box[0] - left) * scale_x)),
+              int(round(panel_y + (box[1] - upper) * scale_y)),
+              max(1, int(round(box[2] * scale_x))),
+              max(1, int(round(box[3] * scale_y)))]
 
     # Title in the top margin band, above the panel.
     heading = (title or str(brief.get("product_line") or brief.get("category") or "product"))
