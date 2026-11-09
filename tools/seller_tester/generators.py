@@ -466,6 +466,7 @@ class CompositeGenerator:
             record["aspect_fit"] = dict(fitted["added"])
             if situation == "infographic":
                 result = deterministic.infographic(fitted["bytes"], box, brief)
+                box = result.get("product_box", box)
             else:
                 result = deterministic.panel_warp(fitted["bytes"], box, brief)
         except Exception as exc:  # noqa: BLE001 - a refused layout is a named record entry
@@ -548,6 +549,7 @@ class CompositeGenerator:
             record["cutout_in_lane"] = bool(in_lane)
 
         reference_coverage = float(reference_check.subject_mask(rgb).mean())
+        situation_now = str(brief.get("situation") or "")
         metrics = pc.alpha_metrics(cut.alpha, reference_coverage=reference_coverage)
         if metrics["subject_px"] == 0:
             raise GeneratorUnavailable(
@@ -584,6 +586,13 @@ class CompositeGenerator:
         else:
             scale = float(placement.get("scale", 0.72))
             anchor = tuple(placement.get("anchor", (0.5, 0.68)))
+            if self.layout == "deterministic" and situation_now == "packaging_mockup":
+                # A wide subject at 0.72 of the frame height fills ~90 % of a 4:5 page, which the
+                # brief's own fill range rejects. 0.55 lands inside 15-80 % and still fills the
+                # panel; the value is recorded below.
+                scale = min(scale, 0.55)
+                record["fill_cap"] = {"situation": situation_now, "scale": scale,
+                                      "why": "a page mockup must leave margin around the panel"}
         cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
         placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
                                          anchor=anchor)

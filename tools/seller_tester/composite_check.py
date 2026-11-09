@@ -87,6 +87,15 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
             f"placement {placement} falls outside the {frame_w}x{frame_h} frame")
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
+    # The generator places the *subject*, trimmed to its alpha, so the aspect that matters is the
+    # subject's — not the canvas's. A pouch pair on a square canvas has a 1.86:1 subject, and a
+    # guard comparing 1.0 to 1.86 called that "not the same subject" (LM-DET-01, 2026-11-09).
+    subject_aspect = None
+    if cutout_alpha is not None:
+        rows, columns = np.where(np.asarray(cutout_alpha) >= ALPHA_THRESHOLD)
+        if rows.size >= 64:
+            subject_aspect = ((int(columns.max()) - int(columns.min()) + 1)
+                              / float(int(rows.max()) - int(rows.min()) + 1))
     candidates: List[Tuple[str, np.ndarray, Optional[np.ndarray]]] = [("canvas", cutout_rgb.astype(np.float32),
                                 None if cutout_alpha is None else cutout_alpha.astype(np.float32))]
     if cutout_alpha is not None:
@@ -98,7 +107,8 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
                                cutout_rgb[top:bottom, left:right].astype(np.float32),
                                cutout_alpha[top:bottom, left:right].astype(np.float32)))
 
-    verdicts = [_compare_at_placement(region, cutout, alpha, (x, y, width, height), name)
+    verdicts = [_compare_at_placement(region, cutout, alpha, (x, y, width, height), name,
+                                      source_aspect=subject_aspect)
                 for name, cutout, alpha in candidates]
     usable = [verdict for verdict in verdicts if not verdict.get("cannot_verify")]
     if not usable:
@@ -113,7 +123,8 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
 
 def _compare_at_placement(region: np.ndarray, cutout: np.ndarray,
                           cutout_alpha: Optional[np.ndarray],
-                          placement: Sequence[int], compared: str) -> Dict[str, Any]:
+                          placement: Sequence[int], compared: str,
+                          source_aspect: Optional[float] = None) -> Dict[str, Any]:
     """One reading of the placement: the cutout scaled into the region, compared by structure."""
     x, y, width, height = (int(value) for value in placement)
     cutout = np.asarray(cutout, dtype=np.float32)
@@ -122,7 +133,7 @@ def _compare_at_placement(region: np.ndarray, cutout: np.ndarray,
         # The generator resizes the cutout to the placement, so compare at the geometry it
         # actually used. A wild aspect change means the box is not this product, and that is
         # reported rather than silently stretched away.
-        cut_aspect = cutout.shape[1] / float(cutout.shape[0])
+        cut_aspect = source_aspect if source_aspect else cutout.shape[1] / float(cutout.shape[0])
         box_aspect = width / float(height)
         distortion = max(cut_aspect, box_aspect) / min(cut_aspect, box_aspect)
         if distortion > 1.25:
@@ -309,6 +320,16 @@ def quad_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
                               f"{frame_w}x{frame_h} frame")
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
+    # `place_product` pastes the *trimmed subject* into the box, so the quad describes where the
+    # subject sits. Warping the whole canvas into it would compare the product plus its transparent
+    # margins, which is what made two demo panels read structure 0.33 and 0.24.
+    if cutout_alpha is not None:
+        rows, columns = np.where(np.asarray(cutout_alpha) >= ALPHA_THRESHOLD)
+        if rows.size >= 64:
+            top, bottom = int(rows.min()), int(rows.max()) + 1
+            left, right = int(columns.min()), int(columns.max()) + 1
+            cutout_rgb = cutout_rgb[top:bottom, left:right]
+            cutout_alpha = np.asarray(cutout_alpha)[top:bottom, left:right]
     source = np.float32([[0, 0], [cutout_rgb.shape[1] - 1, 0],
                          [cutout_rgb.shape[1] - 1, cutout_rgb.shape[0] - 1],
                          [0, cutout_rgb.shape[0] - 1]])

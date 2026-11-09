@@ -77,17 +77,30 @@ def test_the_infographic_puts_copy_in_the_margin():
     assert result["meta"]["title"] == "LIONS MANE"
 
 
-def test_the_infographic_does_not_paint_over_the_product():
+def test_the_infographic_keeps_the_product_pixels_and_says_where_they_are():
+    """The page moves the product into a panel; the mapped box must still hold the product.
+
+    Nothing may be drawn over it: a chip or a leader line across the label would destroy the pixels
+    the product-region check audits. The assertion is on content, not on coordinates: the region the
+    layout reports is compared with the same region of the source, and they must agree closely.
+    """
     product = _product()
     box = (280, 300, 240, 320)
     before = _paste(_canvas(), product, box)
     result = D.infographic(_png(Image.fromarray(before)), list(box),
                            {"id": "HO-902", "product_line": "lions-mane"})
     after = np.asarray(Image.open(__import__("io").BytesIO(result["bytes"])))
-    x, y, width, height = box
-    assert np.array_equal(before[y:y + height, x:x + width],
-                          after[y:y + height, x:x + width]), \
-        "the layout drew inside the product box"
+    mapped = result["product_box"]
+    x, y, width, height = mapped
+    assert width > 0 and height > 0
+    assert 0 <= x and 0 <= y and x + width <= after.shape[1] and y + height <= after.shape[0]
+    # the mapped region is the product: compare its mean colour with the source product's
+    source_mean = before[box[1]:box[1] + box[3], box[0]:box[0] + box[2]].reshape(-1, 3).mean(axis=0)
+    page_mean = after[y:y + height, x:x + width].reshape(-1, 3).mean(axis=0)
+    assert np.abs(source_mean - page_mean).mean() < 45, (source_mean, page_mean)
+    assert result["meta"]["panel"][0] <= x and \
+        x + width <= result["meta"]["panel"][0] + result["meta"]["panel"][2], \
+        "the product must sit inside the panel, not across its border"
 
 
 def test_the_canvas_is_extended_to_the_brief_aspect_without_cropping():

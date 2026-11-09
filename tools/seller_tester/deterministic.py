@@ -172,78 +172,107 @@ def margin_ink_fraction(rgb: np.ndarray, ratio: float = MARGIN_RATIO) -> float:
 
 def infographic(canvas_bytes: bytes, product_box: Sequence[int],
                 brief: Dict[str, Any], *, title: str = "") -> Dict[str, Any]:
-    """Draw the page furniture around an already-placed product. Deterministic."""
-    from PIL import ImageDraw  # noqa: PLC0415
+    """Compose a page: the scene as a framed photo panel, copy in the margins. Deterministic.
 
-    image = _as_image(canvas_bytes)
-    draw = ImageDraw.Draw(image)
-    width, height = image.size
+    A full-bleed collage is 100 % "subject" by the brief's own fill measure, so a page has to leave
+    real margin. The scene (with the product already placed in it) becomes a panel inset on paper;
+    the title, callouts and footer live in the margin. The product's box is mapped through the
+    panel transform and returned, so the product-region check still compares the real pixels.
+    """
+    from PIL import Image, ImageDraw  # noqa: PLC0415
+
+    source = _as_image(canvas_bytes)
+    width, height = source.size
     seed = stable_seed(str(brief.get("id") or "infographic"))
     box = [int(v) for v in product_box]
 
+    page = _from_array(np.full((height, width, 3), PAPER, dtype=np.uint8))
+    draw = ImageDraw.Draw(page)
     top = _font(max(28, height // 16), bold=True)
     sub = _font(max(20, height // 34))
     small = _font(max(16, height // 52))
 
-    # Title inside the top margin band, so the copy is where the brief says copy lives.
+    # The photo panel: 70 % of the width, in the middle, leaving real margins for the copy.
+    panel_w = int(width * 0.70)
+    panel_h = int(height * 0.50)
+    panel_x = (width - panel_w) // 2
+    panel_y = int(height * 0.27)
+
+    # Expand the crop around the product so the panel keeps the panel's aspect, never stretching.
+    crop_aspect = panel_w / float(panel_h)
+    cx, cy = box[0] + box[2] / 2.0, box[1] + box[3] / 2.0
+    crop_w = max(float(box[2]) * 1.18, 1.0)
+    crop_h = crop_w / crop_aspect
+    if crop_h < box[3] * 1.18:
+        crop_h = float(box[3]) * 1.18
+        crop_w = crop_h * crop_aspect
+    left = int(max(0, min(width - crop_w, cx - crop_w / 2)))
+    upper = int(max(0, min(height - crop_h, cy - crop_h / 2)))
+    crop_w = min(crop_w, width - left)
+    crop_h = min(crop_h, height - upper)
+    crop = source.crop((left, upper, left + int(crop_w), upper + int(crop_h)))
+    panel = crop.resize((panel_w, panel_h), Image.LANCZOS)
+    page.paste(panel, (panel_x, panel_y))
+    draw.rectangle((panel_x, panel_y, panel_x + panel_w, panel_y + panel_h),
+                   outline=RULE, width=max(2, height // 500))
+
+    scale = panel_w / float(max(1, int(crop_w)))
+    mapped = [int(round(panel_x + (box[0] - left) * scale)),
+              int(round(panel_y + (box[1] - upper) * scale)),
+              max(1, int(round(box[2] * scale))),
+              max(1, int(round(box[3] * scale)))]
+
+    # Title in the top margin band, above the panel.
     heading = (title or str(brief.get("product_line") or brief.get("category") or "product"))
     heading = heading.replace("-", " ").upper()
-    band = int(height * MARGIN_RATIO)
-    # A filled banner guarantees readable margin ink instead of relying on a thin line of type:
-    # the brief's `text_expected` rule measures ink in the outer band, and 0.01 % is not copy.
-    draw.rectangle((0, 0, width, min(height, int(band * 1.15))), fill=PAPER)
     draw.rectangle((0, 0, width, max(6, height // 90)), fill=ACCENT)
-    draw.text((int(width * 0.06), int(height * 0.030)), heading, font=top, fill=INK)
-    draw.text((int(width * 0.06), int(height * 0.082)), "product guide", font=sub,
-              fill=ACCENT)
-    draw.line((int(width * 0.06), int(height * 0.112), int(width * 0.44), int(height * 0.112)),
+    draw.text((int(width * 0.07), int(height * 0.030)), heading, font=top, fill=INK)
+    draw.text((int(width * 0.07), int(height * 0.085)), "product guide", font=sub, fill=ACCENT)
+    draw.line((int(width * 0.07), int(height * 0.118), int(width * 0.45), int(height * 0.118)),
               fill=RULE, width=max(2, height // 700))
 
-    # Callouts: label + leader line aimed at the product box edge, never drawn over the product.
+    # Callouts live in the side margins and point *into* the panel. Nothing is drawn over the
+    # product: a chip or a line across the label would destroy the very pixels being audited.
     drawn = 0
+    chip_w = int(width * 0.125)
     for index, label in enumerate(CALLOUTS):
-        y = int(height * (0.40 + 0.16 * index))
-        left_text = (index + seed) % 2 == 0
-        if left_text:
-            anchor_x = int(width * 0.07)
-            text = label.upper()
-            draw.text((anchor_x, y), text, font=small, fill=INK)
-            start = (anchor_x + int(width * 0.20), y + int(height * 0.012))
-            end = (box[0] - int(width * 0.005), y + int(height * 0.012))
-        else:
-            anchor_x = int(width * 0.93) - int(width * 0.20)
-            text = label.upper()
-            draw.text((anchor_x, y), text, font=small, fill=INK)
-            start = (anchor_x - int(width * 0.012), y + int(height * 0.012))
-            end = (box[0] + box[2] + int(width * 0.005), y + int(height * 0.012))
-        if _outside(box, (min(start[0], end[0]), y, max(start[0], end[0]) + 1,
-                          y + int(height * 0.03))):
-            draw.line((start, end), fill=ACCENT, width=max(2, height // 900))
-            dot = max(3, height // 300)
-            draw.ellipse((end[0] - dot, end[1] - dot, end[0] + dot, end[1] + dot),
-                         fill=ACCENT)
-            drawn += 1
+        left_side = (index + seed) % 2 == 0
+        y = panel_y + int(panel_h * (0.14 + 0.32 * index))
+        chip_x = int(width * 0.012) if left_side else (width - chip_w - int(width * 0.012))
+        draw.rounded_rectangle((chip_x, y, chip_x + chip_w, y + int(height * 0.032)),
+                               radius=max(4, height // 320), fill=PAPER, outline=RULE,
+                               width=max(2, height // 900))
+        draw.text((chip_x + int(width * 0.008), y + int(height * 0.006)), label.upper(),
+                  font=small, fill=INK)
+        start = (chip_x + chip_w, y + int(height * 0.016)) if left_side \
+            else (chip_x, y + int(height * 0.016))
+        end = ((panel_x + 8) if left_side else (panel_x + panel_w - 8),
+               min(max(y + int(height * 0.016), mapped[1]), mapped[1] + mapped[3]))
+        draw.line((start, end), fill=ACCENT, width=max(2, height // 900))
+        dot = max(3, height // 320)
+        draw.ellipse((end[0] - dot, end[1] - dot, end[0] + dot, end[1] + dot), fill=ACCENT)
+        drawn += 1
 
-    # Footer strip inside the bottom margin band.
-    foot_y = int(height * 0.955)
-    draw.rectangle((0, int(height * (1 - MARGIN_RATIO * 1.15)), width, height), fill=PAPER)
-    draw.line((int(width * 0.06), foot_y - int(height * 0.012),
-               int(width * 0.94), foot_y - int(height * 0.012)),
+    # Footer in the bottom margin band, below the panel.
+    foot_y = int(height * 0.94)
+    draw.line((int(width * 0.07), foot_y - int(height * 0.014),
+               int(width * 0.93), foot_y - int(height * 0.014)),
               fill=RULE, width=max(2, height // 900))
-    draw.text((int(width * 0.06), foot_y),
+    draw.text((int(width * 0.07), foot_y),
               f"prepared by northstar  ·  {str(brief.get('id') or '')}".strip(), font=small,
               fill=INK)
 
-    out = _as_png(image)
-    rgb = np.asarray(_as_image(out))
+    out = _as_png(page)
+    rgb = np.asarray(page)
     return {
         "bytes": out,
         "meta": {"layout": "infographic", "callouts": drawn, "seed": seed,
-                 "title": heading,
+                 "title": heading, "panel": [panel_x, panel_y, panel_w, panel_h],
                  "margin_ink": round(margin_ink_fraction(rgb), 5),
+                 "product_box": mapped,
                  "copy_source": ("structural labels only; no product claim is invented "
-                                 "by a renderer"),
-                 "product_box": box},
+                                 "by a renderer")},
+        "product_box": mapped,
     }
 
 
