@@ -1,0 +1,111 @@
+/* Workspace tab strip (ux-07).
+   Scoped to the shell: `wst-` never collides with the page or workbench
+   (`wb-`) class names. Tokens come from app.css (:root); no new colours. */
+
+.wst-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 16px;
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--divider-mid);
+  font-family: var(--font-ui);
+}
+
+.wst-list {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.wst-tab {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  max-width: 220px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: transparent;
+  color: var(--ink-mid);
+}
+
+.wst-tab.is-active {
+  background: var(--paper);
+  border-color: var(--divider-mid);
+  box-shadow: inset 0 2px 0 var(--pine);
+  padding-bottom: 1px;              /* covers the bar's bottom rule */
+  margin-bottom: -1px;
+}
+
+.wst-tab-btn {
+  min-width: 0;
+  padding: 9px 4px 8px 12px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wst-tab-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wst-tab.is-active .wst-tab-btn { color: var(--pine-deep); font-weight: 600; }
+.wst-tab:hover { background: var(--surface-hover); }
+.wst-tab.is-active:hover { background: var(--paper); }
+
+.wst-tab-btn:focus-visible,
+.wst-tab-close:focus-visible {
+  outline: 2px solid var(--pine-mid);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+.wst-tab-close {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 0 6px 0 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-faint);
+  font-size: 15px;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.wst-tab-close:hover { background: var(--bone); color: var(--clay); }
+
+.wst-hint {
+  align-self: center;
+  margin-left: auto;
+  white-space: nowrap;
+  font-size: 10.5px;
+  color: var(--ink-faint);
+}
+
+/* Panels stack in the outlet. Only the selected one is laid out; the rest stay
+   mounted (and keep their state) with `hidden`. */
+.wst-panel { min-height: 0; }
+.wst-panel[hidden] { display: none; }
+
+@media (max-width: 900px) {
+  .wst-bar { padding: 0 8px; }
+  .wst-hint { display: none; }
+  .wst-tab { max-width: 160px; }
+}

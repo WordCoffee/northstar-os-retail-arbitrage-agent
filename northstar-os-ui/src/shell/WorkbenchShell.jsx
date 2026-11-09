@@ -15,35 +15,13 @@ import { themeVars } from '../lib/serviceThemes.js'
 import { useThemeShift } from '../kit/useThemeShift.js'
 import SceneHost from '../scene/SceneHost.jsx'
 import { useWorkspace } from './WorkspaceTabs.jsx'
+import { TAB_PANELS } from './WorkspacePanels.jsx'
 
-import DesignStudio from '../pages/internal/DesignStudio.jsx'
-import ProductFinder from '../pages/internal/ProductFinder.jsx'
-import GoldenGooseDesk from '../pages/internal/GoldenGoose.jsx'
-import ListingGuardian from '../pages/internal/ListingGuardian.jsx'
-import ListingForge from '../pages/internal/ListingForge.jsx'
-import AdPilot from '../pages/internal/AdPilot.jsx'
-import SocialPulse from '../pages/internal/SocialPulse.jsx'
-import ProfitabilityDashboard from '../pages/internal/ProfitabilityDashboard.jsx'
-import KeywordTracker from '../pages/internal/KeywordTracker.jsx'
-import CompetitorMonitor from '../pages/internal/CompetitorMonitor.jsx'
-import AutothinK from '../pages/internal/AutothinK.jsx'
-
-// Service id -> the page component that already implements it. A service without
-// an entry renders an honest placeholder that names what is missing; it never
-// renders a blank panel.
-const WORKSPACES = {
-  'design-studio': DesignStudio,
-  'product-finder': ProductFinder,
-  'golden-goose': GoldenGooseDesk,
-  listings: ListingGuardian,
-  listingforge: ListingForge,
-  adpilot: AdPilot,
-  socialpulse: SocialPulse,
-  profitability: ProfitabilityDashboard,
-  'keyword-tracker': KeywordTracker,
-  'competitor-monitor': CompetitorMonitor,
-  autothink: AutothinK,
-}
+// Service id -> the page component that already implements it. One map, shared
+// with the shell's workspace tabs (`WorkspacePanels.jsx`); a service without an
+// entry renders an honest placeholder that names what is missing, never a blank
+// panel.
+const WORKSPACES = TAB_PANELS
 
 function NotWired({ service }) {
   // A catalogue entry is not a page: `source: 'app-route'` entries have a real
