@@ -229,10 +229,13 @@ def infographic(canvas_bytes: bytes, product_box: Sequence[int],
               max(1, int(round(box[2] * scale_x))),
               max(1, int(round(box[3] * scale_y)))]
 
-    # Title in the top margin band, above the panel.
+    # Title in the top margin band, above the panel. The accent rule is inset so all four corners
+    # stay at the page level: the fill measure samples the corners, and a full-bleed bar at a
+    # corner makes a white page read as 99 % subject.
     heading = (title or str(brief.get("product_line") or brief.get("category") or "product"))
     heading = heading.replace("-", " ").upper()
-    draw.rectangle((0, 0, width, max(6, height // 90)), fill=ACCENT)
+    draw.rectangle((int(width * 0.07), int(height * 0.018),
+                    int(width * 0.93), int(height * 0.026)), fill=ACCENT)
     draw.text((int(width * 0.07), int(height * 0.030)), heading, font=top, fill=INK)
     draw.text((int(width * 0.07), int(height * 0.085)), "product guide", font=sub, fill=ACCENT)
     draw.line((int(width * 0.07), int(height * 0.118), int(width * 0.45), int(height * 0.118)),
