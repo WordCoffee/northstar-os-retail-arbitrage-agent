@@ -138,6 +138,10 @@ def _limits(scored: List[Dict[str, Any]], briefs: List[Dict[str, Any]]) -> List[
             lines.append(f"  - `{Path(reference).name}` is the reference for "
                          f"{len(ids)} briefs ({', '.join(sorted(ids))}): those rows are not "
                          "independent products.")
+    lines.append("- **Distinct product designs are fewer than distinct files.** Three Mogra images "
+                 "are one Lion's Mane + Shiitake pouch pair; the Word Coffee images are two box "
+                 "designs (For Mom, Modern Woman). Twenty-one briefs therefore vary the *situation* "
+                 "and the *frame*, not the product range.")
     by_situation: Dict[str, List[bool]] = defaultdict(list)
     for row in scored:
         by_situation[str(row.get("situation"))].append(bool(row.get("passed")))
@@ -146,7 +150,7 @@ def _limits(scored: List[Dict[str, Any]], briefs: List[Dict[str, Any]]) -> List[
     if failed_situations:
         lines.append(f"- **Situations with no pass at all:** {', '.join(failed_situations)}. "
                      "Those are gaps in the composite route, not one unlucky image each.")
-    lines.append("- A held-out brief here varies the **product photograph and the situation**; it "
+    lines.append("- A held-out brief here varies the **product image and the situation**; it "
                  "does not vary the constraint bar, which is the tuned catalogue's own.")
     lines.append("")
     return lines
