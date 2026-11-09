@@ -101,10 +101,28 @@ SDXL_CKPT = "sd_xl_base_1.0.safetensors"
 REALISTIC_CKPT = "Realistic_Vision_V6.0_NV_B1_fp16.safetensors"
 
 CHECKPOINTS = {
-    "sdxl": {"ckpt": SDXL_CKPT, "width": 768, "height": 768, "steps": 20, "cfg": 7.0},
+    "sdxl": {"ckpt": SDXL_CKPT, "width": 1536, "height": 1536, "steps": 24, "cfg": 7.0},
     "realistic": {"ckpt": REALISTIC_CKPT, "width": 640, "height": 640, "steps": 25,
                   "cfg": 7.0},
 }
+
+#: VRAM a model needs at 1024^2, and the extra it needs per additional megapixel.
+#: This is the model's *need*, not the machine's headroom: the headroom is measured
+#: from nvidia-smi by the lane on every run and the two are subtracted there.
+MODEL_VRAM_GB = {
+    "sdxl": (5.2, 3.0),
+    "realistic": (3.2, 1.2),
+    "flux3": (11.0, 1.4),
+}
+
+
+def needed_vram_gb(model: str, width: int, height: int) -> Optional[float]:
+    spec = MODEL_VRAM_GB.get(model)
+    if spec is None:
+        return None
+    base, per_mp = spec
+    megapixels = max(1.0, (int(width) * int(height)) / float(1024 * 1024))
+    return round(base + per_mp * megapixels, 2)
 
 
 def checkpoint_graph(ckpt: str, prompt: str, *, negative: str = SCENE_NEGATIVE,
@@ -186,7 +204,8 @@ def render_scene(prompt: str, *, width: int = 768, height: int = 768,
                  steps: int = 8, seed: Optional[int] = None,
                  timeout: float = 900.0,
                  inside_lane: Optional[Any] = None,
-                 model: str = "sdxl") -> Dict[str, Any]:
+                 model: str = "sdxl",
+                 watchlist: Optional[list] = None) -> Dict[str, Any]:
     """One generated scene through a lane this call owns. Raises when it cannot.
 
     ``inside_lane`` is an optional callable run *inside* the lane, before the
@@ -244,7 +263,10 @@ def render_scene(prompt: str, *, width: int = 768, height: int = 768,
                 raise RuntimeError(f"unknown scene model {model!r}")
             return side
 
-        outcome = comfy_lane.lane(_work)
+        outcome = comfy_lane.lane(
+            _work, needed_gb=needed_vram_gb(model, width, height),
+            role=f"scene:{model}",
+            watchlist=list(watchlist) if watchlist is not None else None)
     finally:
         gpu_budget.unlock("seller_composite")
 
@@ -273,17 +295,20 @@ def render_scene(prompt: str, *, width: int = 768, height: int = 768,
 class ComfySceneRenderer:
     """Default renderer: a fresh ComfyUI lane per brief, stop verified.
 
-    SDXL is the default scene model because FLUX 3's nvfp4 loader (comfy-aimdo
-    ``vbar``) failed on this box (`Fault failed: 2`) while another model held 7 GB
-    of VRAM; the classic checkpoint path does not share that failure mode. FLUX 3
-    remains selectable with ``model="flux3"``.
+    SDXL at **1536** is the default because it was measured rendering at that size
+    on this box with the lane empty (see reports/ty/sel01d_white_canvas_gpu.md).
+    That makes the scene the brief's own size instead of a 768 render resampled up.
 
-    The scene size is a parameter, not a wish: 1536 failed while that VRAM was
-    held, so the default is a size that has actually rendered here. The generator
-    upscales the composite to the brief's minimum and records that it did.
+    FLUX 3's nvfp4 loader (comfy-aimdo ``vbar``) failed on this box (`Fault failed:
+    2`) while another model held 7 GB of VRAM; the classic checkpoint path does not
+    share that failure mode. FLUX 3 remains selectable with ``model="flux3"`` and a
+    failure there is raised with the gateway's own error, never replayed.
+
+    The lane refuses before it starts when the measured free VRAM cannot hold
+    ``needed_vram_gb(model, width, height)`` plus the 1 GB reserve.
     """
 
-    def __init__(self, *, width: int = 768, height: int = 768, steps: int = 20,
+    def __init__(self, *, width: int = 1536, height: int = 1536, steps: int = 24,
                  seed: Optional[int] = None, model: str = "sdxl") -> None:
         self.width, self.height, self.steps, self.seed = width, height, steps, seed
         self.model = model
@@ -342,12 +367,15 @@ def renderer_from_name(name: str) -> Any:
 
 
 __all__ = [
+    "CHECKPOINTS",
     "ComfySceneRenderer",
+    "MODEL_VRAM_GB",
     "SCENE_NEGATIVE",
     "SDXL_CKPT",
     "SITUATION_SCENES",
     "full_prompt",
     "lane_ready",
+    "needed_vram_gb",
     "render_scene",
     "renderer_from_name",
     "scene_prompt",

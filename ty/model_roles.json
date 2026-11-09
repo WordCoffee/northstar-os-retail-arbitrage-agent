@@ -144,6 +144,22 @@
       "decision": "keep rapidocr",
       "source": "ty/ocr_leaderboard.json"
     },
+    "upscalers": {
+      "label": "Upscalers (the 768 -> 1536 composite step)",
+      "lane": "upscale",
+      "budget_key": "image_t2i",
+      "budget_gb": 12.0,
+      "eval": null,
+      "incumbent": "lanczos",
+      "incumbent_installed": true,
+      "baseline": {
+        "source": "PIL.Image.LANCZOS resample (the control)",
+        "result": "the incumbent measured in the same eval as the candidates; it adds no detail by construction"
+      },
+      "candidates": ["realesrgan", "swinir", "comfy_latent"],
+      "notes": "Not Ollama tags: measured by tools/upscale.py --benchmark on known-good native crops from the three Mogra uploads (the composites themselves have no higher-resolution ground truth, so grading a Lanczos upscale against them would be circular). Items = PSNR and SSIM beating the Lanczos control per image. Lanczos is the control, not a candidate. Decision + licences are written into ty/model_leaderboard.json by model_scout.write_leaderboard.",
+      "manager_key": null
+    },
     "editors": {
       "label": "Cutout editors (composite path)",
       "lane": "editors",

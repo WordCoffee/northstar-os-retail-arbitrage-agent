@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -145,6 +146,15 @@ class ComfyGenerator:
 
 DEFAULT_CUTOUT_METHOD = "birefnet"
 
+#: The Amazon main-image situation is a *pure composite on flat white*: no scene
+#: model, no grade, no gradient. Canvas and subject fill are requirements, not
+#: preferences (2026-11-08 owner instruction after MG-C01 produced a grey "white"
+#: studio and failed its own background check).
+WHITE_MAIN_SITUATION = "white_background_main"
+WHITE_CANVAS_PX = 2000
+WHITE_FILL = 0.85
+WHITE_LEVEL = 255
+
 
 def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
     """The brief's minimum output size, when it asks for more than the scene gives."""
@@ -156,35 +166,59 @@ def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
     return (max(1, min_width), max(1, min_height))
 
 
-def _upscale_to(png: bytes, required: Tuple[int, int],
-                record: Dict[str, Any]) -> Tuple[bytes, Dict[str, Any]]:
-    """Lanczos upscale to the brief's minimum. Recorded, never silent.
-
-    The lane may render smaller than the brief asks (VRAM headroom is shared with
-    the resident models). Upscaling is a resample of the composited picture; it adds
-    no detail, and the record says so.
-    """
+def white_canvas_png(size: int = WHITE_CANVAS_PX) -> bytes:
+    """A flat (255,255,255) RGB canvas. No model, no scene, no grade."""
     from io import BytesIO
 
     from PIL import Image
 
-    with Image.open(BytesIO(png)) as opened:
-        width, height = opened.size
-        target_w, target_h = required
-        if width >= target_w and height >= target_h:
-            return png, record
-        factor = max(target_w / float(width), target_h / float(height))
-        new_size = (int(round(width * factor)), int(round(height * factor)))
-        resized = opened.convert("RGB").resize(new_size, Image.LANCZOS)
     buffer = BytesIO()
-    resized.save(buffer, format="PNG")
-    record["upscaled_from"] = [width, height]
-    record["upscaled_to"] = list(new_size)
-    record["upscale_note"] = "lanczos resample to the brief's minimum; adds no detail"
-    box = record.get("product_box")
-    if isinstance(box, list) and len(box) == 4:
-        record["product_box"] = [int(round(value * factor)) for value in box]
-    return buffer.getvalue(), record
+    Image.new("RGB", (int(size), int(size)), (WHITE_LEVEL, WHITE_LEVEL, WHITE_LEVEL)
+              ).save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _measure_white(png: bytes, product_box: Sequence[int]) -> Dict[str, Any]:
+    """Corners, area fill and height/width fill of the finished white canvas."""
+    from io import BytesIO
+
+    import numpy as np
+    from PIL import Image
+
+    from . import scorers  # noqa: PLC0415
+
+    with Image.open(BytesIO(png)) as opened:
+        rgb = np.asarray(opened.convert("RGB"), dtype=np.uint8)
+    height, width = rgb.shape[:2]
+    corners = scorers.sample_corners(rgb, 24)
+    fill = scorers.check_subject_fill(rgb, {"min": 0, "max": 100, "distance": 20},
+                                      {"value": WHITE_LEVEL, "tolerance": 0, "mode": "uniform"})
+    left, top, right, bottom = (int(v) for v in product_box)
+    return {
+        "canvas": [width, height],
+        "corners": [list(c) for c in corners],
+        "corners_exactly_255": all(all(int(ch) == WHITE_LEVEL for ch in c) for c in corners),
+        "subject_fill_pct": fill["fill_pct"],
+        "height_fill_pct": round(100.0 * (bottom - top) / height, 2),
+        "width_fill_pct": round(100.0 * (right - left) / width, 2),
+    }
+
+
+def _upscale_to(png: bytes, required: Tuple[int, int],
+                record: Dict[str, Any]) -> Tuple[bytes, Dict[str, Any]]:
+    """Upscale to the brief's minimum with the *measured* upscaler.
+
+    ``tools/upscale.py --benchmark`` decides which backend runs; Lanczos is the
+    control it must beat and the recorded fallback when the winner is refused.
+    The record states the method, its licence and the refusal reason, so a
+    resample can never pass as a reconstruction.
+    """
+    tools_dir = str(REPO_ROOT / "tools")
+    if tools_dir not in sys.path:
+        sys.path.insert(0, tools_dir)
+    import upscale  # noqa: PLC0415
+
+    return upscale.upscale_to_min(png, required, record)
 
 
 class CompositeGenerator:
@@ -224,7 +258,8 @@ class CompositeGenerator:
         self.seed = seed
         if renderer is not None:
             self.renderer = renderer
-            self.renderer_name = "injected"
+            self.renderer_name = ("comfy" if type(renderer).__name__ == "ComfySceneRenderer"
+                                  else "injected")
         else:
             from .scene_render import renderer_from_name  # noqa: PLC0415
 
@@ -260,6 +295,7 @@ class CompositeGenerator:
     def generate(self, brief: Dict[str, Any]) -> Path:
         from .briefs import brief_fidelity, route_for_brief  # noqa: PLC0415
 
+        started = time.time()
         route = route_for_brief(brief)
         fidelity = brief_fidelity(brief)
         record: Dict[str, Any] = {
@@ -275,7 +311,9 @@ class CompositeGenerator:
         except GeneratorUnavailable as exc:
             record["error"] = str(exc)
             record["artefact"] = None
+            record["seconds"] = round(time.time() - started, 2)
             self.records.append(record)
+            self._journal(record, started)
             raise
 
         self.out_dir.mkdir(parents=True, exist_ok=True)
@@ -283,8 +321,40 @@ class CompositeGenerator:
         target.write_bytes(png)
         record["artefact"] = str(target)
         record["bytes"] = len(png)
+        record["seconds"] = round(time.time() - started, 2)
         self.records.append(record)
+        self._journal(record, started)
         return target
+
+    def _journal(self, record: Dict[str, Any], started: float) -> None:
+        """One row per render in the lane journal, including the failed attempts.
+
+        It nests the lane row (snapshots, unload/reload, budget) beside the
+        upscaler and the white-canvas measurement, so the journal answers the
+        whole question for a render rather than half of it.
+        """
+        try:
+            import comfy_lane  # noqa: PLC0415
+
+            scene = record.get("scene") or {}
+            comfy_lane.record_render({
+                "brief_id": record.get("brief_id"),
+                "route": record.get("route"),
+                "renderer": record.get("renderer"),
+                "scene_source": scene.get("source"),
+                "model": scene.get("model"),
+                "white_canvas": record.get("white_canvas"),
+                "upscaler": record.get("upscale"),
+                "upscaled_to": record.get("upscaled_to"),
+                "product_box": record.get("product_box"),
+                "identity_ssim": record.get("identity"),
+                "lane": scene.get("lane"),
+                "seconds": record.get("seconds", round(time.time() - started, 2)),
+                "artefact": record.get("artefact"),
+                "error": record.get("error"),
+            })
+        except Exception:  # noqa: BLE001 - the journal must never fail a render
+            pass
 
     def _render(self, brief: Dict[str, Any], mode: str,
                 inside_lane: Optional[Any] = None) -> Dict[str, Any]:
@@ -312,12 +382,12 @@ class CompositeGenerator:
         return "inside_lane" in parameters or any(
             p.kind is inspect.Parameter.VAR_KEYWORD for p in parameters.values())
 
-    def _cut(self, rgb: Any) -> Any:
+    def _cut(self, rgb: Any, method: Optional[str] = None) -> Any:
         import product_cutout as pc  # noqa: PLC0415
 
         if self.cutout_fn is not None:
             return self.cutout_fn(rgb)
-        return pc.cutout(rgb, self.method)
+        return pc.cutout(rgb, method or self.method)
 
     def _composite(self, brief: Dict[str, Any], record: Dict[str, Any]
                    ) -> Tuple[bytes, Dict[str, Any]]:
@@ -334,18 +404,46 @@ class CompositeGenerator:
         import product_composite as composite  # noqa: PLC0415
         import product_cutout as pc  # noqa: PLC0415
 
-        # BiRefNet lives in the media lane; the default renderer runs it inside the
-        # same fresh instance it uses for the scene. Everyone else is CPU-only.
-        in_lane = self.method == "birefnet" and self.cutout_fn is None
+        white_main = str(brief.get("situation") or "") == WHITE_MAIN_SITUATION
         cut = None
-        scene = self._render(brief, "scene",
-                             inside_lane=(lambda: self._cut(rgb)) if in_lane else None)
-        if in_lane:
-            cut = (scene.get("inside_lane") or {})
-        if cut is None:
-            cut = self._cut(rgb)
-        record["method"] = self.method
-        record["cutout_in_lane"] = bool(in_lane)
+        if white_main:
+            # No ComfyUI, no scene model, no grade: the Amazon main image is the
+            # real pixels on a true flat-white canvas.
+            scene = {
+                "bytes": white_canvas_png(WHITE_CANVAS_PX),
+                "source": "flat_white_canvas",
+                "prompt": None,
+                "note": ("flat 255 canvas; the subject is the only ink, so the "
+                         "background check is exact rather than approximate"),
+                "image_path": None, "seed": None, "steps": 0, "lane": None,
+            }
+            chosen_method = self.method
+            if chosen_method == "birefnet" and self.cutout_fn is None:
+                # BiRefNet needs the ComfyUI lane, and this path deliberately starts
+                # no lane. The substitution is recorded, never silent.
+                chosen_method = "grabcut"
+                record["cutout_refused"] = {
+                    "method": "birefnet",
+                    "reason": ("birefnet runs inside the ComfyUI lane; the white-main "
+                               "path starts no lane. grabcut (14/14 on the same eval, "
+                               "5.08 px mean edge) was used instead."),
+                }
+            cut = self._cut(rgb, method=chosen_method)
+            record["method"] = chosen_method
+            in_lane = False
+            record["cutout_in_lane"] = False
+        else:
+            # BiRefNet lives in the media lane; the default renderer runs it inside
+            # the same fresh instance it uses for the scene. Everyone else is CPU-only.
+            in_lane = self.method == "birefnet" and self.cutout_fn is None
+            scene = self._render(brief, "scene",
+                                 inside_lane=(lambda: self._cut(rgb)) if in_lane else None)
+            if in_lane:
+                cut = (scene.get("inside_lane") or {})
+            if cut is None:
+                cut = self._cut(rgb)
+            record["method"] = self.method
+            record["cutout_in_lane"] = bool(in_lane)
 
         reference_coverage = float(reference_check.subject_mask(rgb).mean())
         metrics = pc.alpha_metrics(cut.alpha, reference_coverage=reference_coverage)
@@ -357,18 +455,46 @@ class CompositeGenerator:
         record["scene"] = {
             "source": scene.get("source"), "prompt": scene.get("prompt"),
             "prompt_used": scene_prompt(brief),
+            "model": scene.get("model"),
             "image_path": scene.get("image_path"),
             "seed": scene.get("seed"), "steps": scene.get("steps"),
+            "width": scene.get("width"), "height": scene.get("height"),
+            "lane": scene.get("lane"),
             "lane_stopped": bool(((scene.get("lane") or {}).get("stopped") or {}).get("ok")),
             "note": scene.get("note"),
         }
 
         placement = brief.get("placement") or {}
-        scale = float(placement.get("scale", 0.72))
-        anchor = tuple(placement.get("anchor", (0.5, 0.68)))
+        if white_main:
+            # 85 % of the frame's long side. A wide pair (two pouches side by side)
+            # cannot be 85 % tall without running past the frame width, and cropping
+            # a main image is worse than a smaller height fill; the measured values
+            # are recorded either way.
+            bbox = metrics.get("bbox") or [0, 0, 1, 1]
+            product_w = max(1, int(bbox[2]) - int(bbox[0]))
+            product_h = max(1, int(bbox[3]) - int(bbox[1]))
+            scale = WHITE_FILL
+            if product_w > product_h:
+                scale = WHITE_FILL * (product_h / float(product_w))
+            anchor = (0.5, 0.5)
+            record["fill_basis"] = ("longest side 85 % of the canvas "
+                                    f"(cutout bbox {product_w}x{product_h})")
+        else:
+            scale = float(placement.get("scale", 0.72))
+            anchor = tuple(placement.get("anchor", (0.5, 0.68)))
         cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
         placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
                                          anchor=anchor)
+        if white_main:
+            # A contact shadow is allowed only if it leaves every corner at 255.
+            measured = _measure_white(placed["bytes"], placed["product_box"])
+            if not measured["corners_exactly_255"]:
+                placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
+                                                 anchor=anchor, shadow=False)
+                measured = _measure_white(placed["bytes"], placed["product_box"])
+                record["shadow_dropped"] = "a contact shadow reached a corner"
+            record["white_canvas"] = measured
+            record["shadow"] = bool(placed.get("shadow"))
         identity = composite.identity_check(placed["bytes"], cut_png,
                                             tuple(placed["product_box"]))
         record["product_box"] = list(placed["product_box"])
@@ -380,6 +506,8 @@ class CompositeGenerator:
         required = _required_size(brief)
         if required is not None:
             png, record = _upscale_to(png, required, record)
+            if white_main and record.get("upscaled_to"):
+                record["white_canvas"] = _measure_white(png, record["product_box"])
         return png, record
 
     def _full_generation(self, brief: Dict[str, Any], record: Dict[str, Any]
@@ -387,8 +515,10 @@ class CompositeGenerator:
         scene = self._render(brief, "full")
         record["scene"] = {
             "source": scene.get("source"), "prompt": scene.get("prompt"),
-            "image_path": scene.get("image_path"), "seed": scene.get("seed"),
-            "steps": scene.get("steps"),
+            "model": scene.get("model"), "image_path": scene.get("image_path"),
+            "seed": scene.get("seed"), "steps": scene.get("steps"),
+            "width": scene.get("width"), "height": scene.get("height"),
+            "lane": scene.get("lane"),
             "lane_stopped": bool(((scene.get("lane") or {}).get("stopped") or {}).get("ok")),
             "note": scene.get("note"),
         }
