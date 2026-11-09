@@ -90,6 +90,33 @@ def test_the_infographic_does_not_paint_over_the_product():
         "the layout drew inside the product box"
 
 
+def test_the_canvas_is_extended_to_the_brief_aspect_without_cropping():
+    """A 4:5 brief used to be failed on `aspect` by a lane that can only produce 1.0."""
+    product = _product()
+    box = (180, 200, 240, 320)
+    before = _paste(_canvas(700), product, box)
+    fitted = D.fit_aspect(_png(Image.fromarray(before)), list(box), 0.8)
+    out = np.asarray(Image.open(__import__("io").BytesIO(fitted["bytes"])))
+    assert round(out.shape[1] / out.shape[0], 3) == 0.8
+    assert out.shape[0] > before.shape[0], "the canvas should grow, not shrink"
+    # every original pixel is still there, moved down by the new top band
+    top = fitted["added"]["top"]
+    assert np.array_equal(before, out[top:top + before.shape[0], :before.shape[1]])
+    assert fitted["product_box"][1] == box[1] + top
+
+
+def test_a_square_brief_is_left_alone():
+    fitted = D.fit_aspect(_png(_canvas(400)), [10, 10, 100, 100], 1.0)
+    assert fitted["added"] == {"width": 0, "height": 0, "top": 0, "left": 0}
+    assert fitted["product_box"] == [10, 10, 100, 100]
+
+
+def test_the_brief_aspect_is_read_from_the_constraints():
+    assert D.brief_aspect({"constraints": {"aspect": {"ratio": 0.8}}}) == 0.8
+    assert D.brief_aspect({}) == 1.0
+    assert D.brief_aspect({"constraints": {"aspect": {"ratio": 99}}}) == 1.0
+
+
 def test_the_panel_warp_is_byte_identical_on_a_repeat():
     product = _product()
     before = _png(Image.fromarray(_paste(_canvas(), product, (280, 300, 240, 320))))

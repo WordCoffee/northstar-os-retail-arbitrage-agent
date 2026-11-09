@@ -458,18 +458,23 @@ class CompositeGenerator:
         if self.layout != "deterministic" or situation not in deterministic.SITUATIONS:
             return placed
         try:
+            # The render lane gives a square; the brief may ask for 4:5. Extend first, so the
+            # product box and the copy band are both in the canvas the brief asked for.
+            fitted = deterministic.fit_aspect(placed["bytes"], placed["product_box"],
+                                              deterministic.brief_aspect(brief))
+            box = fitted["product_box"]
+            record["aspect_fit"] = dict(fitted["added"])
             if situation == "infographic":
-                result = deterministic.infographic(
-                    placed["bytes"], placed["product_box"], brief)
+                result = deterministic.infographic(fitted["bytes"], box, brief)
             else:
-                result = deterministic.panel_warp(
-                    placed["bytes"], placed["product_box"], brief)
+                result = deterministic.panel_warp(fitted["bytes"], box, brief)
         except Exception as exc:  # noqa: BLE001 - a refused layout is a named record entry
             record["layout"] = {"kind": "refused", "situation": situation,
                                 "reason": f"{type(exc).__name__}: {exc}"}
             return placed
         updated = dict(placed)
         updated["bytes"] = result["bytes"]
+        updated["product_box"] = list(box)
         if result.get("quad"):
             updated["product_quad"] = result["quad"]
         record["layout"] = {"kind": "deterministic", **result["meta"]}

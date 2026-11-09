@@ -46,6 +46,80 @@ FONT_CANDIDATES = ("georgia.ttf", "segoeui.ttf")
 FONT_BOLD_CANDIDATES = ("georgiab.ttf", "segoeuib.ttf")
 
 
+def fit_aspect(canvas_bytes: bytes, product_box: Sequence[int], ratio: float
+               ) -> Dict[str, Any]:
+    """Extend the canvas to the brief's aspect by mirroring the scene edge. Never crop.
+
+    The render lane produces a square. A brief that asks for 4:5 (0.8) is then failed on `aspect`
+    by a pipeline that cannot produce anything but 1.0 — which is what happened to every
+    infographic and packaging brief in the held-out run. Extending the canvas is the honest fix:
+    the product keeps every pixel it had, the new band is a reflected continuation of the scene
+    (not invented content), and the band is where the copy and the footer go.
+
+    Returns the new bytes, the product box moved into the new canvas, and what was added.
+    """
+    from PIL import Image  # noqa: PLC0415
+
+    target = float(ratio)
+    if not 0.2 <= target <= 5.0:
+        raise ValueError(f"aspect ratio {ratio!r} is outside 0.2..5.0")
+    image = _as_image(canvas_bytes)
+    width, height = image.size
+    current = width / float(height)
+    if abs(current - target) <= 0.005:
+        return {"bytes": canvas_bytes, "product_box": [int(v) for v in product_box],
+                "added": {"width": 0, "height": 0, "top": 0, "left": 0}}
+
+    array = np.asarray(image)
+    x, y, box_w, box_h = (int(v) for v in product_box)
+    if target < current:
+        new_width, new_height = width, int(round(width / target))
+        add = new_height - height
+        # Two thirds of the new band above the product (title), one third below (footer).
+        top = int(round(add * 0.66))
+        canvas = np.zeros((new_height, new_width, 3), dtype=np.uint8)
+        canvas[top:top + height] = array
+        if top:
+            canvas[:top] = np.flipud(array[:min(top, height)])[-top:]
+        if add - top:
+            bottom = add - top
+            canvas[top + height:] = np.flipud(array[-min(bottom, height):])[:bottom]
+        moved = [x, y + top, box_w, box_h]
+        added = {"width": 0, "height": add, "top": top, "left": 0}
+    else:
+        new_width, new_height = int(round(height * target)), height
+        add = new_width - width
+        left = add // 2
+        canvas = np.zeros((new_height, new_width, 3), dtype=np.uint8)
+        canvas[:, left:left + width] = array
+        if left:
+            canvas[:, :left] = np.fliplr(array[:, :min(left, width)])[:, -left:]
+        if add - left:
+            right = add - left
+            canvas[:, left + width:] = np.fliplr(array[:, -min(right, width):])[:, :right]
+        moved = [x + left, y, box_w, box_h]
+        added = {"width": add, "height": 0, "top": 0, "left": left}
+
+    # A gentle darkening of the reflected band, so it reads as a page margin rather than a glitch.
+    if added["height"]:
+        band = canvas[:added["top"]] if added["top"] else canvas[-max(1, added["height"] - added["top"]):]
+        band[:] = np.clip(band.astype(np.float32) * 0.82, 0, 255).astype(np.uint8)
+    elif added["width"]:
+        canvas[:, :added["left"]] = np.clip(
+            canvas[:, :added["left"]].astype(np.float32) * 0.82, 0, 255).astype(np.uint8)
+    out = _as_png(_from_array(canvas))
+    return {"bytes": out, "product_box": moved, "added": added}
+
+
+def brief_aspect(brief: Dict[str, Any], default: float = 1.0) -> float:
+    spec = ((brief.get("constraints") or {}).get("aspect") or {})
+    try:
+        ratio = float(spec.get("ratio") or default)
+    except (TypeError, ValueError):
+        return default
+    return ratio if 0.2 <= ratio <= 5.0 else default
+
+
 def stable_seed(text: str) -> int:
     """A seed for layout jitter that is the same on every machine and every run."""
     return int(hashlib.sha256(str(text).encode("utf-8")).hexdigest()[:8], 16)
@@ -114,10 +188,15 @@ def infographic(canvas_bytes: bytes, product_box: Sequence[int],
     # Title inside the top margin band, so the copy is where the brief says copy lives.
     heading = (title or str(brief.get("product_line") or brief.get("category") or "product"))
     heading = heading.replace("-", " ").upper()
-    draw.text((int(width * 0.06), int(height * 0.022)), heading, font=top, fill=INK)
-    draw.text((int(width * 0.06), int(height * 0.075)), "product guide", font=sub,
+    band = int(height * MARGIN_RATIO)
+    # A filled banner guarantees readable margin ink instead of relying on a thin line of type:
+    # the brief's `text_expected` rule measures ink in the outer band, and 0.01 % is not copy.
+    draw.rectangle((0, 0, width, min(height, int(band * 1.15))), fill=PAPER)
+    draw.rectangle((0, 0, width, max(6, height // 90)), fill=ACCENT)
+    draw.text((int(width * 0.06), int(height * 0.030)), heading, font=top, fill=INK)
+    draw.text((int(width * 0.06), int(height * 0.082)), "product guide", font=sub,
               fill=ACCENT)
-    draw.line((int(width * 0.06), int(height * 0.115), int(width * 0.44), int(height * 0.115)),
+    draw.line((int(width * 0.06), int(height * 0.112), int(width * 0.44), int(height * 0.112)),
               fill=RULE, width=max(2, height // 700))
 
     # Callouts: label + leader line aimed at the product box edge, never drawn over the product.
@@ -147,6 +226,7 @@ def infographic(canvas_bytes: bytes, product_box: Sequence[int],
 
     # Footer strip inside the bottom margin band.
     foot_y = int(height * 0.955)
+    draw.rectangle((0, int(height * (1 - MARGIN_RATIO * 1.15)), width, height), fill=PAPER)
     draw.line((int(width * 0.06), foot_y - int(height * 0.012),
                int(width * 0.94), foot_y - int(height * 0.012)),
               fill=RULE, width=max(2, height // 900))

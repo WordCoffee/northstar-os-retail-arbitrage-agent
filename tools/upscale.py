@@ -401,6 +401,13 @@ def upscale_to_min(png: bytes, required_sizes: Tuple[int, int], record: Dict[str
     box = record.get("product_box")
     if isinstance(box, list) and len(box) == 4:
         record["product_box"] = [int(round(value * factor)) for value in box]
+    quad = record.get("product_quad")
+    if isinstance(quad, list) and len(quad) == 4:
+        # The quad is in the picture's coordinates, so it has to move with the picture. Without
+        # this the product-region check compared a 748x533 quad against a 2500 px canvas and
+        # reported structure 0.000 — a geometry bug wearing the costume of a fidelity failure.
+        record["product_quad"] = [[int(round(point[0] * factor)), int(round(point[1] * factor))]
+                                  for point in quad]
     return result["bytes"], record
 
 
