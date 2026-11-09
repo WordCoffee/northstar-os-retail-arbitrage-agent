@@ -41,6 +41,8 @@ STOP = ROOT / "STOP"
 HANDOFF = ROOT / "reports" / "ty" / "handoff.md"
 QUEUE = ROOT / "reports" / "ty" / "director_queue.json"
 GPU_LOCK = ROOT / "state" / "gpu" / "lock.json"
+REBOOT_PROOF = STATE / "reboot_proof.json"
+REBOOT_CHECK = ROOT / "tools" / "post_reboot_check.py"
 
 TOKEN_CAP = int(os.environ.get("TY_TOKEN_CAP_PER_DAY", "3000000"))
 CAP_FRACTION = 0.90
@@ -86,6 +88,75 @@ def log(message: str) -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     with LOG.open("a", encoding="utf-8") as handle:
         handle.write(f"{_now()} {message}\n")
+
+
+#: Test seam: a callable that replaces the detached spawn, so "ran / did not run"
+#: can be proven without starting a child process.
+REBOOT_CHECK_RUNNER: Optional[Any] = None
+
+
+def boot_epoch() -> Optional[float]:
+    """This boot's instant, without a subprocess.
+
+    On Windows `time.monotonic()` counts from boot, so `time.time() - monotonic()`
+    is the boot second. It costs nothing, which is what lets the launcher ask the
+    question on every start.
+    """
+    try:
+        return time.time() - time.monotonic()
+    except (OSError, ValueError):
+        return None
+
+
+def reboot_check_needed() -> bool:
+    """True when the recorded proof predates this boot, or was never written."""
+    boot = boot_epoch()
+    if boot is None:
+        return False
+    record = _read(REBOOT_PROOF, {})
+    if not isinstance(record, dict) or not record:
+        return True
+    try:
+        written = float(record.get("checked_epoch") or 0)
+    except (TypeError, ValueError):
+        return True
+    return written < boot
+
+
+def run_reboot_check_once() -> Optional[int]:
+    """Record the post-reboot proof, at most once per boot.
+
+    Runs on the launcher's own start, before the first director session, because the
+    proof is about *this* boot and a session that already began has nothing to add to
+    it. The check is spawned detached and never waited on: it costs a few milliseconds
+    and cannot hold the session, which is the requirement that matters. A check that
+    fails writes nothing, is reported in one log line, and the launcher carries on -
+    the proof is nice to have, the loop is not.
+    """
+    try:
+        if not reboot_check_needed():
+            return None
+        if REBOOT_CHECK_RUNNER is not None:
+            return REBOOT_CHECK_RUNNER()
+        if not REBOOT_CHECK.exists():
+            log("reboot check: tools/post_reboot_check.py missing; skipped")
+            return None
+        creationflags = 0
+        if os.name == "nt":
+            creationflags = (getattr(subprocess, "DETACHED_PROCESS", 0)
+                             | getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        proc = subprocess.Popen(
+            [sys.executable, str(REBOOT_CHECK), "--quiet"],
+            cwd=str(ROOT), stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL, creationflags=creationflags, close_fds=True)
+        log(f"reboot check: no proof for this boot; started pid={proc.pid}")
+        return proc.pid
+    except Exception as exc:  # noqa: BLE001 - a proof must never stop the launcher
+        try:
+            log(f"reboot check skipped: {type(exc).__name__}: {exc}")
+        except OSError:
+            pass
+        return None
 
 
 def caps() -> Dict[str, Any]:
@@ -362,6 +433,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 0
 
     log(f"launcher starting (heartbeat={ns.interval}s cap={TOKEN_CAP})")
+    run_reboot_check_once()
     last_start = 0.0
     noted_dead = False
     ticks = 0
