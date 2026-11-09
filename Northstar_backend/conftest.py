@@ -164,41 +164,102 @@ def _restore_generated_artifacts():  # noqa: ANN201
 # main therefore leaves the next test reading a different catalogue. That is not hypothetical: with
 # ``test_costco_api_client.py`` ahead of it in the same process, the contract test's product-finder
 # call returned a count instead of rows and the assertion failed, while the same test passed alone.
-# Restoring these names after every test makes the suite order-independent, which is what a full
-# run is supposed to be.
-_MUTABLE_PATH_ENV = (
-    "SCANNER_SEARCH_CACHE_PATH",
-    "COSTCO_CSV_PATH",
-    "COSTCO_CATALOG_DETAIL_PATH",
-    "COSTCO_INVOICE_PATH",
-    "COSTCO_AMAZON_MAPPING_PATH",
-    "COSTCO_CATALOG_SNAPSHOT_PATH",
-    "COSTCO_CATALOG_ARCHIVE_PATH",
-    "COSTCO_CATALOG_RUN_REPORT_PATH",
-)
+#
+# The rule has to be per *module*, not per session: several test modules configure the environment
+# at import time and then read it with ``os.environ[...]`` inside their tests (test_coverage_report.py
+# sets SCANNER_OFFER_ENRICHMENT=OFF and five COSTCO_* paths exactly that way). A session-baseline
+# restore deleted their configuration and turned 16 green tests into KeyErrors (candidate 5,
+# 2026-11-09). The same leak, in the other direction, made test_product_analysis read 89 cached
+# candidates instead of the one its mock returns, because coverage_report's OFF mode survived into it.
+#
+# So the isolation is over **every** environment name, diffed across each module's import: a module
+# keeps what it set up when it was imported, a test's own changes are undone after that test, and
+# another module's leftover is reset when the next module starts.
+_EXCLUDED_ENV = {"PATH", "PYTHONPATH", "PYTHONHOME", "SYSTEMROOT", "TEMP", "TMP", "PWD",
+                 "PYTEST_CURRENT_TEST", "PYTEST_VERSION", "PYTEST_ADDOPTS"}
 _path_env_baseline: dict = {}
+_module_path_env: dict = {}
+_module_in_use: list = [""]
+_before_import: dict = {}
+_import_values: dict = {}
 
 
 def _capture_path_env_baseline() -> None:
     if not _path_env_baseline:
-        for name in _MUTABLE_PATH_ENV:
-            _path_env_baseline[name] = os.environ.get(name)
+        _path_env_baseline.update({k: v for k, v in os.environ.items()
+                                   if k not in _EXCLUDED_ENV})
 
 
-def _restore_path_env() -> None:
-    for name, value in _path_env_baseline.items():
+def _watched_env() -> tuple:
+    return tuple(name for name in os.environ if name not in _EXCLUDED_ENV)
+
+
+def pytest_collectstart(collector):  # noqa: ANN001
+    """Remember the environment immediately before a module is imported."""
+    nodeid = getattr(collector, "nodeid", "")
+    if nodeid and type(collector).__name__ == "Module":
+        _before_import[nodeid] = dict(os.environ)
+
+
+def pytest_collectreport(report):  # noqa: ANN001
+    """Record which mutable names this module's import set, and to what."""
+    nodeid = getattr(report, "nodeid", "")
+    before = _before_import.pop(nodeid, None)
+    if before is None:
+        return
+    changed = {}
+    for name in _watched_env():
+        current = os.environ.get(name)
+        if current != before.get(name):
+            changed[name] = current
+            _import_values.setdefault(name, set()).add(current)
+    _module_path_env[nodeid] = changed
+
+
+def _restore_path_env(values: dict) -> None:
+    for name, value in (values or {}).items():
+        if name in _EXCLUDED_ENV:
+            continue
         if value is None:
             os.environ.pop(name, None)
         else:
             os.environ[name] = value
 
 
-@pytest.fixture(autouse=True)
-def _no_path_env_leak():  # noqa: ANN201
-    """Restore the mutable path vars to their session baseline after every test.
+def _enter_module(key: str, nodeid: str) -> None:
+    """Give this module its own environment and drop another module's leftovers.
 
-    It has to be the *baseline*, not the value at test setup: the leak happens during an earlier
-    test, so by the time this test starts the damage is already in its environment.
+    A value is only reset when it is *provably* another module's import-time value — a module that
+    configured the same variable in ``setUpClass`` keeps it, which is what
+    ``test_product_analysis`` does.
     """
+    if key == _module_in_use[0] and key in _module_path_env:
+        return
+    _module_in_use[0] = key
+    mine = _module_path_env.get(nodeid) or {}
+    for name, value in list(_import_values.items()):
+        if name in mine or name in _EXCLUDED_ENV:
+            continue
+        current = os.environ.get(name)
+        if current in value and current != _path_env_baseline.get(name):
+            if _path_env_baseline.get(name) is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = _path_env_baseline[name]
+    _module_path_env.setdefault(key, dict(os.environ))
+
+
+@pytest.fixture(autouse=True)
+def _no_path_env_leak(request):  # noqa: ANN201
+    """Keep each module's path environment to itself, and undo exactly what a test body changes."""
+    module = getattr(request.node, "module", None)
+    key = getattr(module, "__file__", "") or str(getattr(request.node, "fspath", ""))
+    nodeid = getattr(request.node, "nodeid", "").split("::")[0]
+    _enter_module(key, nodeid)
+    snapshot = dict(os.environ)
     yield
-    _restore_path_env()
+    for name in list(os.environ):
+        if name not in snapshot:
+            os.environ.pop(name, None)
+    for name, value in snapshot.items():
+        os.environ[name] = value

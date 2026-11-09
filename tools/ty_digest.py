@@ -411,7 +411,7 @@ def render(data: Dict[str, Any]) -> str:
                   "|---|---|---|---|---|---|---|"]
         for brief_id, situation, source, output, score, passed, kind in demo_rows:
             lines.append(f"| {brief_id} | {situation} | `{source}` | `{output}` | "
-                         f"{kind or 'scene'} | {score} | {'yes' if passed else 'no'} |")
+                         f"{kind or 'not recorded'} | {score} | {'yes' if passed else 'no'} |")
         lines += ["", "Side by side: `reports/ty/layout_demo_source_next_to_output.png`"]
     else:
         lines.append("No deterministic layout run on disk yet.")

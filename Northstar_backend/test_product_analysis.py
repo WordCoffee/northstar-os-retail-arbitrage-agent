@@ -17,12 +17,35 @@ from pricing import screen_by_profit_tier
 
 def setUpModule():
     """Live-path tests: explicitly opt into SCANNER_LIVE_ALLOWED (the
-    default-off gate). tearDownModule restores it for later modules."""
+    default-off gate) and clear any cache-only override another module left behind.
+
+    `SCANNER_OFFER_ENRICHMENT=OFF` wins over the live gate, so a module that sets it at import time
+    (test_coverage_report.py does) used to make this file read the 89-entry cache instead of the
+    candidates its mocks return. The module now states the environment it needs rather than
+    inheriting one.
+    """
     os.environ["SCANNER_LIVE_ALLOWED"] = "1"
+    # `_enrichment_mode()` treats an unset value as OFF (cache-only), so this module has to name the
+    # provider token it wants rather than relying on a leak from another module's import.
+    os.environ["SCANNER_OFFER_ENRICHMENT"] = "AUTO"
 
 
 def tearDownModule():
     os.environ.pop("SCANNER_LIVE_ALLOWED", None)
+    os.environ.pop("SCANNER_OFFER_ENRICHMENT", None)
+
+
+def test_a_stale_search_error_does_not_discard_a_fresh_result():
+    """`LAST_SEARCH_ERROR` is a module global; a stale value must not override a usable answer."""
+    fresh = [fake_candidate("B000000001", "Kirkland Item", 48.87)]
+    stale = [fake_candidate("B000000002", "Cached Item", 12.0)]
+    with patch.object(product_analysis, "search_kirkland_products", return_value=fresh), \
+         patch.object(offer_enrichment, "_enrichment_mode", return_value="AUTO"), \
+         patch.object(product_analysis.amazon_search, "LAST_SEARCH_ERROR", "boom"), \
+         patch.object(product_analysis.amazon_search, "load_cached_candidates",
+                      return_value=stale):
+        chosen = product_analysis._candidates_for_mode()
+    assert [row["asin"] for row in chosen] == ["B000000001"]
 
 
 def fake_candidate(asin, name, amazon_price=48.87):
@@ -793,7 +816,11 @@ class EnrichmentCreditGatingTests(unittest.TestCase):
 
     def test_off_mode_never_calls_live_provider(self):
         candidates = [fake_candidate("B000000001", "Kirkland Item", 48.87)]
+        # OFF mode reads the cache by definition, so the cache is pinned here. Relying on whatever
+        # an earlier test happened to save made this assertion depend on test order.
         with patch.object(product_analysis, "search_kirkland_products", return_value=candidates), \
+             patch.object(product_analysis.amazon_search, "load_cached_candidates",
+                          return_value=candidates), \
              patch.object(offer_enrichment, "_enrichment_mode", return_value="OFF"), \
              patch.object(offer_enrichment, "get_scanner_offer", return_value=fake_offer()) as enrich_mock, \
              patch.object(offer_enrichment, "_offline_offer", return_value={
