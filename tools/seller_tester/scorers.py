@@ -247,24 +247,50 @@ def check_file_size(nbytes: int, width: int, height: int,
                nbytes=nbytes, bytes_per_pixel=round(bpp, 4), check="file_size")
 
 
+def _ink_mask(rgb: np.ndarray) -> np.ndarray:
+    """Dark or saturated pixels, before any decision about what they are."""
+    flat = rgb.astype(np.int32)
+    luminance = (flat[:, :, 0] * 299 + flat[:, :, 1] * 587 + flat[:, :, 2] * 114) // 1000
+    chroma = flat.max(axis=2) - flat.min(axis=2)
+    return (luminance < 140) | (chroma > 70)
+
+
 def _margin_ink_fraction(rgb: np.ndarray, margin_ratio: float = MARGIN_RATIO) -> float:
+    """Ink confined to the margin band, as a share of the band.
+
+    A product that fills the frame legitimately crosses the outer band — Amazon's own
+    main-image rule asks for ~85 % linear fill — so counting every dark pixel there
+    would flag the product itself as overlay text. Only ink that is *confined* to the
+    band counts: a connected ink region that also reaches the central area is the
+    subject or the scene, not a text overlay. A banner, badge or watermark that lives
+    entirely inside the band is still counted.
+    """
     height, width = rgb.shape[:2]
     band = max(8, int(min(height, width) * margin_ratio))
-    strips = (
-        rgb[:band, :, :],
-        rgb[-band:, :, :],
-        rgb[:, :band, :],
-        rgb[:, -band:, :],
-    )
-    ink = 0
-    total = 0
-    for strip in strips:
-        flat = strip.reshape(-1, 3).astype(np.int32)
-        luminance = (flat[:, 0] * 299 + flat[:, 1] * 587 + flat[:, 2] * 114) // 1000
-        chroma = flat.max(axis=1) - flat.min(axis=1)
-        ink += int(((luminance < 140) | (chroma > 70)).sum())
-        total += flat.shape[0]
-    return ink / float(max(1, total))
+    mask = _ink_mask(rgb)
+    total = width * height - max(0, width - 2 * band) * max(0, height - 2 * band)
+    if total <= 0:
+        return 0.0
+    central = (band, band, max(band, width - band), max(band, height - band))
+    try:
+        import cv2  # noqa: PLC0415 - optional; the caller already depends on numpy/PIL
+
+        count, _, stats, _ = cv2.connectedComponentsWithStats(
+            mask.astype(np.uint8), connectivity=8)
+        margin_ink = 0
+        for label in range(1, count):
+            left, top, wide, high, area = (int(v) for v in stats[label])
+            right, bottom = left + wide, top + high
+            # Does the region reach the area a subject occupies? A product that fills
+            # ~85 % of the frame does; an overlay banner or corner badge does not.
+            reaches_centre = (right > central[0] and left < central[2]
+                              and bottom > central[1] and top < central[3])
+            if not reaches_centre:
+                margin_ink += area
+        return min(1.0, margin_ink / float(total))
+    except Exception:  # noqa: BLE001 - no OpenCV is a fallback, never a false pass
+        strips = (mask[:band, :], mask[-band:, :], mask[:, :band], mask[:, -band:])
+        return float(sum(int(strip.sum()) for strip in strips)) / float(max(1, total))
 
 
 def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:

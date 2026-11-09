@@ -74,6 +74,16 @@ def region_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
             f"placement {placement} falls outside the {frame_w}x{frame_h} frame")
 
     region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
+    # The recorded box is the *trimmed* product, so compare against the trimmed cutout.
+    # A cutout is usually a full canvas with an alpha matte; resizing that whole canvas
+    # into the box compared the frame around the product instead of the product.
+    if cutout_alpha is not None:
+        rows, columns = np.where(cutout_alpha >= ALPHA_THRESHOLD)
+        if rows.size >= 64:
+            top, bottom = int(rows.min()), int(rows.max()) + 1
+            left, right = int(columns.min()), int(columns.max()) + 1
+            cutout_rgb = cutout_rgb[top:bottom, left:right]
+            cutout_alpha = cutout_alpha[top:bottom, left:right]
     cutout = cutout_rgb.astype(np.float32)
     distortion = 1.0
     if cutout.shape[:2] != region.shape[:2]:

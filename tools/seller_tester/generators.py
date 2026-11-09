@@ -166,20 +166,22 @@ def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
     return (max(1, min_width), max(1, min_height))
 
 
-def white_canvas_png(size: int = WHITE_CANVAS_PX) -> bytes:
-    """A flat (255,255,255) RGB canvas. No model, no scene, no grade."""
+def white_canvas_png(size: int = WHITE_CANVAS_PX, level: int = WHITE_LEVEL) -> bytes:
+    """A flat RGB canvas at `level` (255 white, 245 off-white). No model, no grade."""
     from io import BytesIO
 
     from PIL import Image
 
     buffer = BytesIO()
-    Image.new("RGB", (int(size), int(size)), (WHITE_LEVEL, WHITE_LEVEL, WHITE_LEVEL)
+    value = int(max(0, min(255, level)))
+    Image.new("RGB", (int(size), int(size)), (value, value, value)
               ).save(buffer, format="PNG")
     return buffer.getvalue()
 
 
-def _measure_white(png: bytes, product_box: Sequence[int]) -> Dict[str, Any]:
-    """Corners, area fill and height/width fill of the finished white canvas."""
+def _measure_white(png: bytes, product_box: Sequence[int],
+                   level: int = WHITE_LEVEL) -> Dict[str, Any]:
+    """Corners, area fill and height/width fill of the finished flat canvas."""
     from io import BytesIO
 
     import numpy as np
@@ -192,12 +194,15 @@ def _measure_white(png: bytes, product_box: Sequence[int]) -> Dict[str, Any]:
     height, width = rgb.shape[:2]
     corners = scorers.sample_corners(rgb, 24)
     fill = scorers.check_subject_fill(rgb, {"min": 0, "max": 100, "distance": 20},
-                                      {"value": WHITE_LEVEL, "tolerance": 0, "mode": "uniform"})
+                                      {"value": level, "tolerance": 0, "mode": "uniform"})
     left, top, right, bottom = (int(v) for v in product_box)
+    value = int(level)
     return {
         "canvas": [width, height],
         "corners": [list(c) for c in corners],
+        "level": value,
         "corners_exactly_255": all(all(int(ch) == WHITE_LEVEL for ch in c) for c in corners),
+        "corners_exact": all(all(int(ch) == value for ch in c) for c in corners),
         "subject_fill_pct": fill["fill_pct"],
         "height_fill_pct": round(100.0 * (bottom - top) / height, 2),
         "width_fill_pct": round(100.0 * (right - left) / width, 2),
@@ -425,17 +430,26 @@ class CompositeGenerator:
         import product_composite as composite  # noqa: PLC0415
         import product_cutout as pc  # noqa: PLC0415
 
-        white_main = str(brief.get("situation") or "") == WHITE_MAIN_SITUATION
+        # A brief whose own background constraint is a flat uniform value cannot be
+        # satisfied by a generated scene: a scene has texture, a horizon and corners
+        # that are not that value. The main-image situation is the common case, but the
+        # rule is the constraint, not the situation name, so every uniform-background
+        # brief takes the flat canvas at the value the brief asks for.
+        background_spec = (brief.get("constraints") or {}).get("background") or {}
+        flat_level = int(background_spec.get("value", WHITE_LEVEL)) \
+            if str(background_spec.get("mode") or "") == "uniform" else None
+        white_main = (str(brief.get("situation") or "") == WHITE_MAIN_SITUATION
+                      or flat_level is not None)
         cut = None
         if white_main:
-            # No ComfyUI, no scene model, no grade: the Amazon main image is the
-            # real pixels on a true flat-white canvas.
+            # No ComfyUI, no scene model, no grade: the real pixels on a flat canvas.
+            canvas_level = WHITE_LEVEL if flat_level is None else flat_level
             scene = {
-                "bytes": white_canvas_png(WHITE_CANVAS_PX),
+                "bytes": white_canvas_png(WHITE_CANVAS_PX, canvas_level),
                 "source": "flat_white_canvas",
                 "prompt": None,
-                "note": ("flat 255 canvas; the subject is the only ink, so the "
-                         "background check is exact rather than approximate"),
+                "note": (f"flat {canvas_level} canvas; the subject is the only ink, so "
+                         "the background check is exact rather than approximate"),
                 "image_path": None, "seed": None, "steps": 0, "lane": None,
             }
             chosen_method = self.method
@@ -451,6 +465,8 @@ class CompositeGenerator:
                 }
             cut = self._cut(rgb, method=chosen_method)
             record["method"] = chosen_method
+            record["background_path"] = "flat_canvas"
+            record["flat_level"] = canvas_level
             in_lane = False
             record["cutout_in_lane"] = False
         else:
@@ -507,12 +523,14 @@ class CompositeGenerator:
         placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
                                          anchor=anchor)
         if white_main:
-            # A contact shadow is allowed only if it leaves every corner at 255.
-            measured = _measure_white(placed["bytes"], placed["product_box"])
-            if not measured["corners_exactly_255"]:
+            # A contact shadow is allowed only if it leaves every corner at the level.
+            measured = _measure_white(placed["bytes"], placed["product_box"],
+                                      canvas_level)
+            if not measured["corners_exact"]:
                 placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
                                                  anchor=anchor, shadow=False)
-                measured = _measure_white(placed["bytes"], placed["product_box"])
+                measured = _measure_white(placed["bytes"], placed["product_box"],
+                                          canvas_level)
                 record["shadow_dropped"] = "a contact shadow reached a corner"
             record["white_canvas"] = measured
             record["shadow"] = bool(placed.get("shadow"))
@@ -528,7 +546,8 @@ class CompositeGenerator:
         if required is not None:
             png, record = _upscale_to(png, required, record)
             if white_main and record.get("upscaled_to"):
-                record["white_canvas"] = _measure_white(png, record["product_box"])
+                record["white_canvas"] = _measure_white(
+                    png, record["product_box"], canvas_level)
 
         # Save the cutout that was actually used, beside the artefact it produced.
         # Without it the product-region check cannot tell "the real pouch" from

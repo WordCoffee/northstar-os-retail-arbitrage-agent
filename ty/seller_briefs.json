@@ -46,8 +46,9 @@
         },
         "fill_pct": {
           "min": 12,
-          "max": 70,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -421,8 +422,9 @@
         },
         "fill_pct": {
           "min": 18,
-          "max": 62,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -796,8 +798,9 @@
         },
         "fill_pct": {
           "min": 22,
-          "max": 55,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -1171,8 +1174,9 @@
         },
         "fill_pct": {
           "min": 22,
-          "max": 55,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -1553,8 +1557,9 @@
         },
         "fill_pct": {
           "min": 12,
-          "max": 70,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -2245,8 +2250,9 @@
         },
         "fill_pct": {
           "min": 18,
-          "max": 62,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {
@@ -2587,8 +2593,9 @@
         },
         "fill_pct": {
           "min": 22,
-          "max": 55,
-          "distance": 20
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
         },
         "text_rule": "no_text",
         "matte": {

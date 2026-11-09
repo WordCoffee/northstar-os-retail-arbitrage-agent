@@ -78,3 +78,96 @@ def test_the_live_file_matches_the_registry_shape():
         assert isinstance(service, str)
         assert 0.0 <= float(row["mean"]) <= 100.0
         assert int(row["scored"]) >= 1
+
+
+# --------------------------------------------------------------- populations
+def test_replayed_artefacts_are_context_and_never_the_published_mean():
+    replay = {"generated_at": "2026-11-01T00:00:00+00:00", "generator": "stored",
+              "results": [
+                  {"brief_id": "ST-001", "score": 10, "passed": False},
+                  {"brief_id": "ST-001", "score": 20, "passed": False},
+    ]}
+    made = {"generated_at": "2026-11-09T00:00:00+00:00", "generator": "composite", "results": [
+        {"brief_id": "ST-001", "score": 90, "passed": True},
+        {"brief_id": "ST-001", "score": 70, "passed": True},
+        {"brief_id": "ST-001", "score": 80, "passed": True},
+        {"brief_id": "ST-001", "score": 100, "passed": True},
+        {"brief_id": "ST-001", "score": 60, "passed": False},
+    ]}
+    built = seller_scores.build(summary=replay, composite=made, briefs=BRIEFS)
+    row = built["services"]["design-studio"]
+    assert row["mean"] == 80.0          # generated only: (90+70+80+100+60)/5
+    assert row["scored"] == 5
+    assert row["replay"] == {"mean": 15.0, "scored": 2, "passed": 0}
+    assert row["at"] == "2026-11-09T00:00:00+00:00"  # the pass that made the pictures
+    assert built["pass"]["mean_score"] == 80.0
+    assert built["pass"]["replay"]["mean_score"] == 15.0
+    verdict = seller_scores.score_for("design-studio", data=built)
+    assert verdict["score"] == 80.0
+    assert "2 replayed artefact(s) excluded as context" in verdict["evidence"]
+
+
+def test_a_row_population_marker_beats_the_summary_generator():
+    row = {"brief_id": "ST-001", "score": 50, "population": "replay"}
+    assert seller_scores.population_of(row, "composite") == "replay"
+    made = {"brief_id": "ST-001", "score": 50,
+            "generation": {"route": "composite"}}
+    assert seller_scores.population_of(made, "stored") == "generated"
+
+
+def test_many_replays_do_not_satisfy_the_generated_sample_floor():
+    replay = {"generator": "stored", "results": [
+        {"brief_id": "ST-001", "score": 30, "passed": False} for _ in range(40)]}
+    made = {"generator": "composite", "results": [
+        {"brief_id": "ST-001", "score": 100, "passed": True} for _ in range(3)]}
+    built = seller_scores.build(summary=replay, composite=made, briefs=BRIEFS)
+    verdict = seller_scores.score_for("design-studio", data=built)
+    assert verdict["score"] == 0.0
+    assert "only 3 generated/composite output(s)" in verdict["evidence"]
+    assert "40 replayed artefact(s) are context only" in verdict["evidence"]
+
+
+# --------------------------------------------------------------- ceiling
+def test_ceiling_counts_what_can_actually_be_judged():
+    briefs = {"briefs": [
+        {"id": "P-1", "source_mode": "prompt_only"},
+        {"id": "R-1", "source_mode": "stored_reference",
+         "reference": {"kind": "stored_asset", "path": "renders/smoke_main_2000.png"}},
+        {"id": "R-2", "source_mode": "stored_reference",
+         "reference": {"kind": "stored_asset", "path": "renders/does_not_exist.png"}},
+        {"id": "U-1", "source_mode": "uploaded_reference",
+         "reference": {"kind": "uploaded_file", "path": None,
+                       "descriptor": {"filename": "x.jpg", "mime_type": "image/jpeg",
+                                      "subject": "a mug"}}},
+    ]}
+    result = seller_scores.ceiling(briefs=briefs, generated_scored=1)
+    assert result["briefs"] == 4
+    assert result["reference_resolvable"] == 1
+    assert result["resolvable_brief_ids"] == ["R-1"]
+    assert result["prompt_only"] == 1
+    assert result["unresolved_reference"] == 2
+    assert result["coverage_of_catalog_pct"] == 25.0
+    assert result["catalog_mean_if_every_scoreable_brief_passes"] == 25.0
+    assert result["ceiling_generated_mean_if_all_scoreable_pass"] == 100.0
+
+
+def test_the_live_catalog_ceiling_is_measured_not_guessed():
+    """56 briefs: 12 stored references on disk, 32 prompt-only, 12 uploads with no copy."""
+    result = seller_scores.ceiling()
+    assert result["briefs"] == 56
+    assert result["reference_resolvable"] == 12
+    assert result["prompt_only"] == 32
+    assert result["unresolved_by_mode"] == {"uploaded_reference": 12}
+    assert result["coverage_of_catalog_pct"] == 21.4
+    assert result["catalog_mean_if_every_scoreable_brief_passes"] == 21.4
+
+
+def test_the_published_score_is_the_generated_population_of_the_live_passes():
+    data = seller_scores._read(seller_scores.OUT) or {}
+    row = (data.get("services") or {}).get("design-studio") or {}
+    if not row:
+        pytest.skip("no live seller_scores.json in this checkout")
+    assert row.get("population") == "generated"
+    assert "replay" in row
+    assert data.get("pass", {}).get("population") == "generated"
+    assert "replay" in (data.get("pass") or {})
