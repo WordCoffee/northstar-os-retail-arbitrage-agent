@@ -1,11 +1,6 @@
-import { lazy, Suspense, useState } from 'react'
-import { useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import CommandPalette from './components/CommandPalette.jsx'
-import { NAV_GROUPS, canUseRole } from './data/nav-config.js'
+import { lazy } from 'react'
+import { useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { fromBackendRole } from './data/roles.js'
-import SuiteRail from './components/SuiteRail.jsx'
-import TopNav from './components/TopNav.jsx'
-import MobileBottomNav from './components/MobileBottomNav.jsx'
 import VisionRing from './components/VisionRing.jsx'
 import { SessionProvider, useSession } from './foundation/session.jsx'
 import { LOCAL_DEV } from './foundation/dev.js'
@@ -14,6 +9,9 @@ import { ModeProvider, useMode } from './context/ModeContext.jsx'
 import { ShellProvider, useShell } from './shell/ShellContext.jsx'
 import MasterBrainShell from './shell/MasterBrainShell.jsx'
 import { WorkspaceProvider } from './shell/WorkspaceTabs.jsx'
+import ShellLayout from './shell/ShellLayout.jsx'
+import DevBanner from './shell/DevBanner.jsx'
+import { isPublicPath } from './shell/shellRoutes.js'
 
 // Route entry points are code-split: every page (and therefore the studio engine
 // behind the creative rooms) is fetched on first navigation instead of being
@@ -94,17 +92,6 @@ const JobsRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'JobsRoom')
 const KeywordsRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'KeywordsRoom')
 const BetaSignupRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'BetaSignupRoom')
 
-// Suspense boundary for the lazy route chunks. Kept inside the shell so the nav
-// (TopNav, rail, mobile bar) stays painted while a page chunk loads.
-function RouteFallback() {
-  return (
-    <div className="route-loading" role="status" aria-live="polite"
-      style={{ padding: 32, opacity: 0.55, fontSize: 14 }}>
-      Loading…
-    </div>
-  )
-}
-
 // An entitlement gate must render a real page, not bounce to the chat shell.
 // Redirecting /beta-ops to /home made a role gate indistinguishable from the
 // shell defect measured 2026-11-08 ("renders the home shell"). This keeps the
@@ -153,15 +140,15 @@ function LegacyStudioRedirect({ section }) {
   return <Navigate to={`/design-studio?${next.toString()}`} replace />
 }
 
-// Paths reachable without a session (public entry surfaces). /beta-signup is
-// the invite-entry page: an invitee has no session yet, so it must not bounce
-// to /sign-in before they can redeem the code.
-const PUBLIC_PATHS = ['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal', '/beta-signup']
+// Public entry surfaces live in src/shell/shellRoutes.js: five of them
+// (/beta, /beta/accept, /sign-in, /recovery, /legal) are reachable without a
+// session AND render outside the shell chrome; /beta-signup is reachable
+// without a session but is a catalogue room, so it renders inside the shell.
 
 function GuardedRoutes({ role, authenticated, loaded }) {
   const location = useLocation()
   const path = location.pathname
-  const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '/'))
+  const isPublic = isPublicPath(path)
   // Wait for the session to resolve before enforcing the auth gate, otherwise a
   // dev-session user is briefly treated as signed-out and bounced to /sign-in
   // (which also drops the deep-link query string).
@@ -177,96 +164,105 @@ function GuardedRoutes({ role, authenticated, loaded }) {
   }
   const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
   if (adminOnly && role !== 'platform_admin') {
-    return <AccessDenied needed="platform admin" />
+    // Still a shell route: the denial is the room's own page, inside the chrome.
+    return (
+      <ShellLayout role={role}>
+        <AccessDenied needed="platform admin" />
+      </ShellLayout>
+    )
   }
   return (
     <Routes>
-      <Route path="/home" element={<CommandCenter />} />
-      <Route path="/product-finder" element={<ProductFinder />} />
-      <Route path="/product-finder/:id" element={<ProductFinder />} />
-      <Route path="/design-studio/*" element={<DesignStudio />} />
-      <Route path="/workbench" element={<WorkspaceProvider><WorkbenchShell /></WorkspaceProvider>} />
-      <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
-<Route path="/packify-design" element={<PackifyDesign />} />
-      <Route path="/creative-studio" element={<LegacyStudioRedirect section="projects" />} />
-      <Route path="/golden-goose" element={<GoldenGooseDesk />} />
-      <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
-      <Route path="/listings" element={<ListingGuardian />} />
-      <Route path="/keyword-tracker" element={<KeywordTracker />} />
-      <Route path="/competitor-monitor" element={<CompetitorMonitor />} />
-      <Route path="/listingforge" element={<ListingForge />} />
-      <Route path="/adpilot" element={<AdPilot />} />
-      <Route path="/socialpulse" element={<SocialPulse />} />
-      <Route path="/profitability" element={<ProfitabilityDashboard />} />
-      <Route path="/spreadsheet-lab" element={<SpreadsheetLab />} />
-      <Route path="/commerce-ops" element={<CommerceOps />} />
-      <Route path="/commerce-ops/:id" element={<CommerceOps />} />
-      <Route path="/monitoring" element={<Monitoring />} />
-<Route path="/chromeconnect" element={<ChromeConnect />} />
-      <Route path="/autothink" element={<AutothinK />} />
-      <Route path="/memory-bank" element={<MemoryBank />} />
-      <Route path="/shared-data" element={<SharedDataLayer />} />
-      <Route path="/provider-adapters" element={<ProviderAdapters />} />
-      <Route path="/master-brain" element={<MasterBrain />} />
-      <Route path="/improvement" element={<Improvement />} />
-      <Route path="/galactic" element={<GalacticDeck />} />
-      <Route path="/baroque" element={<GildedVoid />} />
-      <Route path="/customer-workspace" element={<CustomerWorkspace />} />
-      <Route path="/beta-ops" element={<BetaOpsOverview />} />
-      <Route path="/beta-ops/orgs" element={<OrgsList />} />
-      <Route path="/beta-ops/orgs/:id" element={<OrgDetail />} />
-      <Route path="/beta-ops/invites" element={<InviteCreate />} />
-      <Route path="/beta-ops/invites/:id" element={<InviteDetail />} />
-      <Route path="/beta-ops/cohorts" element={<Cohorts />} />
-      <Route path="/beta-ops/support" element={<SupportOps />} />
-      <Route path="/beta-ops/reports" element={<ReportsExports />} />
-      <Route path="/beta-ops/audit" element={<AuditNotes />} />
-      <Route path="/beta-ops/lifecycle" element={<LifecycleModal />} />
-      <Route path="/beta-ops/eligibility" element={<EligibilityChecklist />} />
-      <Route path="/admin" element={<InternalAdmin />} />
+      {/* ONE layout route carries the chrome for every service route. A new
+          route added as a child of this element cannot be missing the top nav,
+          the side nav or the outlet — that is the point of the layout route. */}
+      <Route element={<ShellLayout role={role} />}>
+        <Route path="/home" element={<CommandCenter />} />
+        <Route path="/product-finder" element={<ProductFinder />} />
+        <Route path="/product-finder/:id" element={<ProductFinder />} />
+        <Route path="/design-studio/*" element={<DesignStudio />} />
+        <Route path="/workbench" element={<WorkspaceProvider><WorkbenchShell /></WorkspaceProvider>} />
+        <Route path="/product-designer" element={<LegacyStudioRedirect section="3d-scene" />} />
+        <Route path="/packify-design" element={<PackifyDesign />} />
+        <Route path="/creative-studio" element={<LegacyStudioRedirect section="projects" />} />
+        <Route path="/golden-goose" element={<GoldenGooseDesk />} />
+        <Route path="/golden-goose/:id" element={<GoldenGooseDesk />} />
+        <Route path="/listings" element={<ListingGuardian />} />
+        <Route path="/keyword-tracker" element={<KeywordTracker />} />
+        <Route path="/competitor-monitor" element={<CompetitorMonitor />} />
+        <Route path="/listingforge" element={<ListingForge />} />
+        <Route path="/adpilot" element={<AdPilot />} />
+        <Route path="/socialpulse" element={<SocialPulse />} />
+        <Route path="/profitability" element={<ProfitabilityDashboard />} />
+        <Route path="/spreadsheet-lab" element={<SpreadsheetLab />} />
+        <Route path="/commerce-ops" element={<CommerceOps />} />
+        <Route path="/commerce-ops/:id" element={<CommerceOps />} />
+        <Route path="/monitoring" element={<Monitoring />} />
+        <Route path="/chromeconnect" element={<ChromeConnect />} />
+        <Route path="/autothink" element={<AutothinK />} />
+        <Route path="/memory-bank" element={<MemoryBank />} />
+        <Route path="/shared-data" element={<SharedDataLayer />} />
+        <Route path="/provider-adapters" element={<ProviderAdapters />} />
+        <Route path="/master-brain" element={<MasterBrain />} />
+        <Route path="/improvement" element={<Improvement />} />
+        <Route path="/galactic" element={<GalacticDeck />} />
+        <Route path="/baroque" element={<GildedVoid />} />
+        <Route path="/customer-workspace" element={<CustomerWorkspace />} />
+        <Route path="/beta-ops" element={<BetaOpsOverview />} />
+        <Route path="/beta-ops/orgs" element={<OrgsList />} />
+        <Route path="/beta-ops/orgs/:id" element={<OrgDetail />} />
+        <Route path="/beta-ops/invites" element={<InviteCreate />} />
+        <Route path="/beta-ops/invites/:id" element={<InviteDetail />} />
+        <Route path="/beta-ops/cohorts" element={<Cohorts />} />
+        <Route path="/beta-ops/support" element={<SupportOps />} />
+        <Route path="/beta-ops/reports" element={<ReportsExports />} />
+        <Route path="/beta-ops/audit" element={<AuditNotes />} />
+        <Route path="/beta-ops/lifecycle" element={<LifecycleModal />} />
+        <Route path="/beta-ops/eligibility" element={<EligibilityChecklist />} />
+        <Route path="/admin" element={<InternalAdmin />} />
 
-      {/* Catalogue rooms: the pages existed but had no <Route>, so the route
-          silently fell through. Registered in data/serviceRegistry.js. */}
-      <Route path="/hub" element={<HubRoom />} />
-      <Route path="/ledger" element={<LedgerRoom />} />
-      <Route path="/prospector" element={<ProspectorRoom />} />
-      <Route path="/goldengoose" element={<LegacyGoldenGooseRoom />} />
-      <Route path="/offerchisel" element={<OfferChiselRoom />} />
-      <Route path="/towncrier" element={<TownCrierRoom />} />
-      <Route path="/auctioneer" element={<AuctioneerRoom />} />
-      <Route path="/thewatch" element={<TheWatchRoom />} />
-      <Route path="/rankledger" element={<RankLedgerRoom />} />
-      <Route path="/rivalboard" element={<RivalBoardRoom />} />
-      <Route path="/foundation" element={<FoundationStatusRoom />} />
-      <Route path="/jobs" element={<JobsRoom />} />
-      <Route path="/keywords" element={<KeywordsRoom />} />
-      <Route path="/beta-signup" element={<BetaSignupRoom />} />
+        {/* Catalogue rooms: the pages existed but had no <Route>, so the route
+            silently fell through. Registered in data/serviceRegistry.js. */}
+        <Route path="/hub" element={<HubRoom />} />
+        <Route path="/ledger" element={<LedgerRoom />} />
+        <Route path="/prospector" element={<ProspectorRoom />} />
+        <Route path="/goldengoose" element={<LegacyGoldenGooseRoom />} />
+        <Route path="/offerchisel" element={<OfferChiselRoom />} />
+        <Route path="/towncrier" element={<TownCrierRoom />} />
+        <Route path="/auctioneer" element={<AuctioneerRoom />} />
+        <Route path="/thewatch" element={<TheWatchRoom />} />
+        <Route path="/rankledger" element={<RankLedgerRoom />} />
+        <Route path="/rivalboard" element={<RivalBoardRoom />} />
+        <Route path="/foundation" element={<FoundationStatusRoom />} />
+        <Route path="/jobs" element={<JobsRoom />} />
+        <Route path="/keywords" element={<KeywordsRoom />} />
+        <Route path="/beta-signup" element={<BetaSignupRoom />} />
 
-      <Route path="/setup" element={<CustomerSetup />} />
-      <Route path="/documents" element={<CustomerDocuments />} />
-      <Route path="/plan" element={<CustomerPlan />} />
-      <Route path="/support" element={<CustomerSupport />} />
-      <Route path="/support/:id" element={<CustomerTicketDetail />} />
-      <Route path="/account" element={<CustomerAccount />} />
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/recovery" element={<Recovery />} />
-      <Route path="/beta" element={<BetaLanding />} />
-      <Route path="/beta/accept" element={<BetaInviteAccept />} />
-      <Route path="/legal" element={<CustomerLegal />} />
-      <Route path="/suspended" element={<AccountSuspended />} />
-      <Route path="/downgraded" element={<AccountDowngraded />} />
-      <Route path="/reaccept" element={<CustomerReaccept />} />
-      <Route path="*" element={<NotFound />} />
+        <Route path="/setup" element={<CustomerSetup />} />
+        <Route path="/documents" element={<CustomerDocuments />} />
+        <Route path="/plan" element={<CustomerPlan />} />
+        <Route path="/support" element={<CustomerSupport />} />
+        <Route path="/support/:id" element={<CustomerTicketDetail />} />
+        <Route path="/account" element={<CustomerAccount />} />
+        <Route path="/suspended" element={<AccountSuspended />} />
+        <Route path="/downgraded" element={<AccountDowngraded />} />
+        <Route path="/reaccept" element={<CustomerReaccept />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+
+      {/* Outside the shell chrome on purpose (shellRoutes.js
+          SHELL_EXEMPT_PATHS): the entry surfaces a signed-out visitor must reach
+          without a top bar or rail. ShellLayout's exempt branch still renders
+          the outlet container (so the page keeps its scroll frame) and the
+          DevBanner is drawn above this switch, so the notice survives. */}
+      <Route path="/sign-in" element={<ShellLayout role={role}><SignIn /></ShellLayout>} />
+      <Route path="/recovery" element={<ShellLayout role={role}><Recovery /></ShellLayout>} />
+      <Route path="/beta" element={<ShellLayout role={role}><BetaLanding /></ShellLayout>} />
+      <Route path="/beta/accept" element={<ShellLayout role={role}><BetaInviteAccept /></ShellLayout>} />
+      <Route path="/legal" element={<ShellLayout role={role}><CustomerLegal /></ShellLayout>} />
     </Routes>
   )
 }
-
-const MOBILE_ACTIVE = [
-  { path: '/home', tab: 'home' },
-  { path: '/product-finder', tab: 'sourcescout' },
-  { path: '/golden-goose', tab: 'goose' },
-  { path: '/profitability', tab: 'profitability' },
-]
 
 // Northstar is Bojo's home, not a replacement for every room.
 //
@@ -278,10 +274,13 @@ const MOBILE_ACTIVE = [
 // (listings, socialpulse, the whole legacy catalogue) opened the chat shell
 // instead of itself.
 //
-// The rule is inverted: only these chat-first paths keep the shell. Every other
-// path renders the page its <Route> declares — so a new room cannot be
+// The rule is inverted: only these chat-first paths keep the chat surface. Every
+// other path renders the page its <Route> declares — so a new room cannot be
 // swallowed by forgetting to add it here, and an unknown path gets the honest
 // NotFound page rather than a chat surface that pretends to be it.
+//
+// The chrome does NOT change with the mode any more: the chat-first frame and
+// every room both render inside <ShellLayout> (top nav + side nav + outlet).
 const CHAT_FIRST_PATHS = [/^\/$/, /^\/home(\/|$)/]
 
 function ModeGate({ children }) {
@@ -294,11 +293,12 @@ function ModeGate({ children }) {
 
 // The Northstar view replaces the internal rooms, so it must carry the SAME auth
 // gate GuardedRoutes enforces — a signed-out visitor hitting /golden-goose is
-// redirected to sign-in, never shown the shell.
+// redirected to sign-in, never shown the shell. The chat sits in the shell's
+// outlet with the chat-first frame, so the top nav and side nav stay put.
 function SimpleShellRoutes({ role, authenticated, loaded }) {
   const location = useLocation()
   const path = location.pathname
-  const isPublic = PUBLIC_PATHS.some(p => path === p || path.startsWith(p + '/'))
+  const isPublic = isPublicPath(path)
   if (!loaded) return null
   if (LOCAL_DEV && path === '/sign-in') {
     return <Navigate to="/home" replace />
@@ -308,26 +308,28 @@ function SimpleShellRoutes({ role, authenticated, loaded }) {
   }
   const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
   if (adminOnly && role !== 'platform_admin') {
-    return <AccessDenied needed="platform admin" />
+    return (
+      <ShellLayout role={role}>
+        <AccessDenied needed="platform admin" />
+      </ShellLayout>
+    )
   }
-  return <MasterBrainShell />
+  return (
+    <ShellLayout role={role} mainClassName="main-content-simple">
+      <MasterBrainShell />
+    </ShellLayout>
+  )
 }
 
 function Shell() {
   const session = useSession()
-  const { toast } = useToast()
   const { mode } = useMode()
-  const navigate = useNavigate()
   const location = useLocation()
-  const [paletteOpen, setPaletteOpen] = useState(false)
-  const [toolsOpen, setToolsOpen] = useState(false)
 
   const role = currentRole(session)
   const authenticated = !!session.authenticated
   const loaded = !!session.loaded
   const path = location.pathname
-  const mobileTab = MOBILE_ACTIVE.find(m => path === m.path || path.startsWith(m.path + '/'))
-  const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
   // V3: Northstar is the main view; Advanced view is the room shell (tier-gated).
   const simpleMode = mode !== 'advanced'
   const chatFirst = CHAT_FIRST_PATHS.some(re => re.test(path))
@@ -349,77 +351,14 @@ function Shell() {
           {session.ownerTestModeBanner || 'OWNER TEST MODE — bypasses are audited.'}
         </div>
       )}
-      {(LOCAL_DEV || session.authMethod === 'dev_shim') && (
-        <div data-testid="dev-banner" role="status"
-          // Same paint-order fix as the owner-test banner above: `.cosmic-canvas`
-          // is position:fixed/z-index:0, so a static banner is painted underneath
-          // it. Measured 2026-10-28: the banner occupied (0,0,1760x33) with
-          // background rgb(180,67,47) and elementFromPoint at its centre still
-          // returned CANVAS.cosmic-canvas — present in the DOM, invisible on screen.
-          // Restyled 2026-11-05: it is an environment notice, not an error. The
-          // alarm red made every page look broken on first load; the text is
-          // unchanged (the smoke test and the rules both depend on it).
-          style={{ position: 'relative', zIndex: 10, background: '#232a2e', color: '#e6e1d8', textAlign: 'center', padding: '5px 12px', fontSize: 12.5, fontWeight: 600, letterSpacing: 0.2, borderBottom: '1px solid #39434a' }}>
-          DEV: AUTH DISABLED — local loopback only
-        </div>
-      )}
-      <div className="app-scale">
-      <TopNav
-        role={role}
-        paletteOpen={paletteOpen}
-        setPaletteOpen={setPaletteOpen}
-      />
-      <div className="body-layout">
-        {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
-        <main tabIndex={0} className={`main-content ${simpleMode && chatFirst ? 'main-content-simple' : ''}`}>
-          {/* The app name is not the page heading. This used to be an <h1>, which
-              meant every route announced "Northstar OS" as its heading to a
-              screen reader and the real page <h1> was the second one in the DOM.
-              Measured by tests/e2e/ux_scorecard.spec.ts on 2026-11-05. */}
-          <p className="sr-only" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</p>
-          {session.suspended
-            ? <Suspense fallback={<RouteFallback />}><AccountSuspended /></Suspense>
-            : simpleMode && chatFirst
-              ? <SimpleShellRoutes role={role} authenticated={authenticated} loaded={loaded} />
-              : <Suspense fallback={<RouteFallback />}>
-                  <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />
-                </Suspense>}
-        </main>
-      </div>
-      <MobileBottomNav active={mobileActive} onToolsClick={() => setToolsOpen(true)} />
-      </div>
-      {toolsOpen && (
-        <div className="tools-sheet-overlay" onClick={() => setToolsOpen(false)}>
-          <div className="tools-sheet" onClick={e => e.stopPropagation()}>
-            <div className="tools-sheet-header">
-              <span className="tools-sheet-title">Tools</span>
-              <button onClick={() => setToolsOpen(false)} className="tools-sheet-close" aria-label="Close tools">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-            <div className="tools-sheet-content">
-              {NAV_GROUPS.filter(g => g.sections.some(s => canUseRole(s, role))).map(g => (
-                <div key={g.id} className="tools-sheet-group">
-                  <div className="tools-sheet-group-label">{g.label}</div>
-                  {g.sections.filter(s => canUseRole(s, role)).map(s => (
-                    <button
-                      key={s.id}
-                      className="tools-sheet-item"
-                      onClick={() => { navigate(s.route); setToolsOpen(false) }}
-                    >
-                      {s.label}
-                      {s.status && <span className={`pill pill-${s.statusTone || 'muted'}`} title={s.readinessTitle || ''}>{s.status}</span>}
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      {paletteOpen && (
-        <CommandPalette onClose={() => setPaletteOpen(false)} />
-      )}
+      {/* Above the chrome, so it covers the routes that are deliberately outside
+          the shell too (/sign-in, /beta, /recovery, /legal). */}
+      <DevBanner authMethod={session.authMethod} />
+      {session.suspended
+        ? <ShellLayout role={role}><AccountSuspended /></ShellLayout>
+        : simpleMode && chatFirst
+          ? <SimpleShellRoutes role={role} authenticated={authenticated} loaded={loaded} />
+          : <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />}
       <ToastContainer />
       <VisionRing />
     </div>
