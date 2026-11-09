@@ -75,6 +75,25 @@ const CustomerReaccept = lazy(() => import('./pages/customer/Reaccept.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 const GalacticDeck = lazy(() => import('./pages/internal/GalacticDeck.jsx'))
 
+// Catalogue rooms that predate the router shell. Their pages exist; only the
+// <Route> entries were missing, so /hub, /ledger and friends fell through to
+// NotFound (or, in Northstar, to the chat shell). The adapter supplies the
+// toast/navigate props those pages were written against.
+const HubRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'HubRoom')
+const LedgerRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'LedgerRoom')
+const ProspectorRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'ProspectorRoom')
+const LegacyGoldenGooseRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'LegacyGoldenGooseRoom')
+const OfferChiselRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'OfferChiselRoom')
+const TownCrierRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'TownCrierRoom')
+const AuctioneerRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'AuctioneerRoom')
+const TheWatchRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'TheWatchRoom')
+const RankLedgerRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'RankLedgerRoom')
+const RivalBoardRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'RivalBoardRoom')
+const FoundationStatusRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'FoundationStatusRoom')
+const JobsRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'JobsRoom')
+const KeywordsRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'KeywordsRoom')
+const BetaSignupRoom = lazyNamed(() => import('./pages/roomAdapters.jsx'), 'BetaSignupRoom')
+
 // Suspense boundary for the lazy route chunks. Kept inside the shell so the nav
 // (TopNav, rail, mobile bar) stays painted while a page chunk loads.
 function RouteFallback() {
@@ -82,6 +101,26 @@ function RouteFallback() {
     <div className="route-loading" role="status" aria-live="polite"
       style={{ padding: 32, opacity: 0.55, fontSize: 14 }}>
       Loading…
+    </div>
+  )
+}
+
+// An entitlement gate must render a real page, not bounce to the chat shell.
+// Redirecting /beta-ops to /home made a role gate indistinguishable from the
+// shell defect measured 2026-11-08 ("renders the home shell"). This keeps the
+// gate (no data, no controls) while giving the route its own, honest surface.
+function AccessDenied({ needed }) {
+  return (
+    <div className="page" data-testid="route-access-denied" data-required-role={needed}>
+      <div className="page-head">
+        <div className="title-block">
+          <h1 className="text-glow">Access restricted</h1>
+          <p>
+            This room requires the <strong>{needed}</strong> role. Your current session
+            does not hold it, so no data or controls are shown here.
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -114,8 +153,10 @@ function LegacyStudioRedirect({ section }) {
   return <Navigate to={`/design-studio?${next.toString()}`} replace />
 }
 
-// Paths reachable without a session (public entry surfaces).
-const PUBLIC_PATHS = ['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal']
+// Paths reachable without a session (public entry surfaces). /beta-signup is
+// the invite-entry page: an invitee has no session yet, so it must not bounce
+// to /sign-in before they can redeem the code.
+const PUBLIC_PATHS = ['/sign-in', '/recovery', '/beta', '/beta/accept', '/legal', '/beta-signup']
 
 function GuardedRoutes({ role, authenticated, loaded }) {
   const location = useLocation()
@@ -136,7 +177,7 @@ function GuardedRoutes({ role, authenticated, loaded }) {
   }
   const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
   if (adminOnly && role !== 'platform_admin') {
-    return <Navigate to="/home" replace />
+    return <AccessDenied needed="platform admin" />
   }
   return (
     <Routes>
@@ -183,6 +224,24 @@ function GuardedRoutes({ role, authenticated, loaded }) {
       <Route path="/beta-ops/lifecycle" element={<LifecycleModal />} />
       <Route path="/beta-ops/eligibility" element={<EligibilityChecklist />} />
       <Route path="/admin" element={<InternalAdmin />} />
+
+      {/* Catalogue rooms: the pages existed but had no <Route>, so the route
+          silently fell through. Registered in data/serviceRegistry.js. */}
+      <Route path="/hub" element={<HubRoom />} />
+      <Route path="/ledger" element={<LedgerRoom />} />
+      <Route path="/prospector" element={<ProspectorRoom />} />
+      <Route path="/goldengoose" element={<LegacyGoldenGooseRoom />} />
+      <Route path="/offerchisel" element={<OfferChiselRoom />} />
+      <Route path="/towncrier" element={<TownCrierRoom />} />
+      <Route path="/auctioneer" element={<AuctioneerRoom />} />
+      <Route path="/thewatch" element={<TheWatchRoom />} />
+      <Route path="/rankledger" element={<RankLedgerRoom />} />
+      <Route path="/rivalboard" element={<RivalBoardRoom />} />
+      <Route path="/foundation" element={<FoundationStatusRoom />} />
+      <Route path="/jobs" element={<JobsRoom />} />
+      <Route path="/keywords" element={<KeywordsRoom />} />
+      <Route path="/beta-signup" element={<BetaSignupRoom />} />
+
       <Route path="/setup" element={<CustomerSetup />} />
       <Route path="/documents" element={<CustomerDocuments />} />
       <Route path="/plan" element={<CustomerPlan />} />
@@ -209,34 +268,21 @@ const MOBILE_ACTIVE = [
   { path: '/profitability', tab: 'profitability' },
 ]
 
-// In Northstar (the default view) these surfaces keep their real pages: account/legal/admin
-// surfaces are not rooms, and the public entry points must never be replaced
-// by the chat shell. Everything else becomes a focus inside the shell.
-const SIMPLE_KEEP_ADVANCED = [
-  /^\/beta-ops(\/|$)/, /^\/admin(\/|$)/, /^\/account(\/|$)/, /^\/plan(\/|$)/,
-  /^\/support(\/|$)/, /^\/documents(\/|$)/, /^\/setup(\/|$)/, /^\/legal(\/|$)/,
-  /^\/sign-in(\/|$)/, /^\/recovery(\/|$)/, /^\/beta(\/|$)/, /^\/suspended(\/|$)/,
-  /^\/downgraded(\/|$)/, /^\/reaccept(\/|$)/,
-  // The Gilded Void is a visual-system surface, not a room — it keeps its
-  // real page in Northstar like the account/legal/admin surfaces above.
-  /^\/baroque(\/|$)/,
-
-  // The Design Studio is a tool workspace with its own sections (dielines,
-  // packaging, A+ modules, the asset dashboard), not a chat focus. Replacing it
-  // with the chat shell made every creative lane unreachable on the free tier,
-  // where advanced_view is false — found by the dashboard e2e test.
-  /^\/design-studio(\/|$)/,
-
-  // The workbench is the shell itself: Bojo docked, services as tabs.
-  /^\/workbench(\/|$)/,
-
-  // The Improvement room carries the live Tys Assistant panel (queue, lanes,
-  // task progress, memory). Replacing it with chat in Northstar hid the
-  // operator's own automation state.
-  /^\/improvement(\/|$)/,
-
-  new RegExp("^/galactic(/|$)"),
-]
+// Northstar is Bojo's home, not a replacement for every room.
+//
+// Until 2026-11-08 this was a hand-maintained allowlist (SIMPLE_KEEP_ADVANCED)
+// of the paths that were allowed to render their own page in Northstar; every
+// path not on it fell through to <MasterBrainShell/>. Measured with
+// python -m tools.vision.ux_audit --run: 3 of 29 service routes rendered. The
+// list only ever grew when someone remembered, so every room added afterwards
+// (listings, socialpulse, the whole legacy catalogue) opened the chat shell
+// instead of itself.
+//
+// The rule is inverted: only these chat-first paths keep the shell. Every other
+// path renders the page its <Route> declares — so a new room cannot be
+// swallowed by forgetting to add it here, and an unknown path gets the honest
+// NotFound page rather than a chat surface that pretends to be it.
+const CHAT_FIRST_PATHS = [/^\/$/, /^\/home(\/|$)/]
 
 function ModeGate({ children }) {
   const shell = useShell()
@@ -262,7 +308,7 @@ function SimpleShellRoutes({ role, authenticated, loaded }) {
   }
   const adminOnly = path === '/beta-ops' || path.startsWith('/beta-ops/') || path === '/admin'
   if (adminOnly && role !== 'platform_admin') {
-    return <Navigate to="/home" replace />
+    return <AccessDenied needed="platform admin" />
   }
   return <MasterBrainShell />
 }
@@ -284,7 +330,7 @@ function Shell() {
   const mobileActive = toolsOpen ? 'tools' : (mobileTab ? mobileTab.tab : '')
   // V3: Northstar is the main view; Advanced view is the room shell (tier-gated).
   const simpleMode = mode !== 'advanced'
-  const keepAdvanced = SIMPLE_KEEP_ADVANCED.some(re => re.test(path))
+  const chatFirst = CHAT_FIRST_PATHS.some(re => re.test(path))
 
   return (
     <div className={`app ${simpleMode ? 'shell-simple' : 'shell-advanced'}`}>
@@ -325,7 +371,7 @@ function Shell() {
       />
       <div className="body-layout">
         {!simpleMode && <SuiteRail onNavigate={() => setToolsOpen(false)} />}
-        <main tabIndex={0} className={`main-content ${simpleMode && !keepAdvanced ? 'main-content-simple' : ''}`}>
+        <main tabIndex={0} className={`main-content ${simpleMode && chatFirst ? 'main-content-simple' : ''}`}>
           {/* The app name is not the page heading. This used to be an <h1>, which
               meant every route announced "Northstar OS" as its heading to a
               screen reader and the real page <h1> was the second one in the DOM.
@@ -333,7 +379,7 @@ function Shell() {
           <p className="sr-only" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>Northstar OS</p>
           {session.suspended
             ? <Suspense fallback={<RouteFallback />}><AccountSuspended /></Suspense>
-            : simpleMode && !keepAdvanced
+            : simpleMode && chatFirst
               ? <SimpleShellRoutes role={role} authenticated={authenticated} loaded={loaded} />
               : <Suspense fallback={<RouteFallback />}>
                   <GuardedRoutes role={role} authenticated={authenticated} loaded={loaded} />

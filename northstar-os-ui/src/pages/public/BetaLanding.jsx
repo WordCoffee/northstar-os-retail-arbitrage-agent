@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { MetricTiles } from '../../components/Shared.jsx'
 
 export default function BetaLanding() {
   const navigate = useNavigate()
+  const { hash } = useLocation()
   return (
     <div className="fade-in">
       <div className="page-header" style={{ textAlign: 'center', paddingTop: 60 }}>
@@ -43,6 +44,25 @@ export default function BetaLanding() {
           <p className="text-low" style={{ fontSize: 12, textAlign: 'center' }}>Need access? Contact your organization operator.</p>
         </div>
       </div>
+
+      {/* data/serviceRegistry.js registers "Support" at /beta#support. That is
+          the same document as /beta by design — it is a section, not a second
+          page — so the section renders only when the hash is present. That
+          makes the deep link land somewhere real and keeps the route
+          distinguishable from the bare landing page. */}
+      {hash === '#support' && (
+        <section id="support" data-testid="beta-support-section"
+                 className="card" style={{ maxWidth: 500, margin: '24px auto 0' }}>
+          <h2 style={{ marginTop: 0, fontSize: 20 }}>Support</h2>
+          <p className="text-mid" style={{ fontSize: 13, marginBottom: 8 }}>
+            Beta support is handled by the operator who issued your invitation. Include your
+            invite code and the email you signed up with so they can find your account.
+          </p>
+          <p className="text-low" style={{ fontSize: 12, margin: 0 }}>
+            Signed-in testers can open the Support room under Account for the ticket queue.
+          </p>
+        </section>
+      )}
     </div>
   )
 }

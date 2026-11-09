@@ -4,9 +4,12 @@
 // (Auto · Create · Grow · Research · Operate · AutothinK), real hardware
 // telemetry, and the universal chat surface underneath.
 //
-// Rooms become FOCUSES: navigating to a room route in Northstar selects the
-// matching focus instead of rendering the room (the room itself lives in the
-// Advanced view, which qualifying tiers can open from here).
+// This is Bojo's HOME, not a replacement for the service rooms. It mounts only
+// for the chat-first paths (/ and /home); every other route renders its own
+// page. It used to mount for every path not on a hand-kept allowlist, which is
+// why 26 of 29 service routes showed this chat surface instead of themselves
+// (measured 2026-11-08 by tools.vision.ux_audit). PATH_FOCUS still lets a
+// deep link select a focus when this shell is mounted with a matching path.
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { useEffect, useMemo, useState } from 'react'

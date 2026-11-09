@@ -49,11 +49,18 @@ for (const rel of files) {
 }
 
 const app = fs.readFileSync(path.join(ROOT, 'src/App.jsx'), 'utf8')
-check(app.includes("import GalacticDeck from './pages/internal/GalacticDeck.jsx'"),
+// The deck is imported through React.lazy (route-level code splitting), so the
+// eager `import GalacticDeck from …` line this check was written against is
+// gone. The contract is still "App.jsx imports the deck"; match that.
+check(app.includes("import('./pages/internal/GalacticDeck.jsx')"),
   'App.jsx imports the deck')
 check(app.includes('path="/galactic"'), 'App.jsx routes /galactic')
-check(app.includes('new RegExp("^/galactic(/|$)")'),
-  'App.jsx keeps the deck advanced in Simple mode')
+// UX-05 replaced the SIMPLE_KEEP_ADVANCED allowlist with CHAT_FIRST_PATHS: only
+// / and /home keep the chat shell, every other route renders its own page. The
+// deck's guarantee is the same as before — it must never be listed chat-first.
+const chatFirst = app.match(/const CHAT_FIRST_PATHS = \[([^\]]*)\]/)
+check(Boolean(chatFirst) && !chatFirst[1].includes('galactic'),
+  'App.jsx keeps the deck out of the chat shell')
 
 const nav = fs.readFileSync(path.join(ROOT, 'src/data/nav-config.js'), 'utf8')
 check(nav.includes("id: 'galactic-deck'"), 'nav-config exposes Galactic Deck')
