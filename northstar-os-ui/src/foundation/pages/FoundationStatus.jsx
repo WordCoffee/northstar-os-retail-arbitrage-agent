@@ -68,16 +68,16 @@ export default function FoundationStatus({ toast }) {
 
   useEffect(() => { load() }, [])
 
-  if (state.status === 'loading') return <div className="page"><StateMessage state="loading" /></div>
+  if (state.status === 'loading') return <div className="page" data-testid="foundation-status"><StateMessage state="loading" /></div>
   if (state.status === 'error') {
-    return <div className="page"><StateMessage state="error"
+    return <div className="page" data-testid="foundation-status"><StateMessage state="error"
       title="Foundation API unavailable"
       detail={`${state.error?.message || 'error'} — the foundation router may not be mounted on this backend.`}
       onRetry={load} /></div>
   }
 
   return (
-    <div className="page">
+    <div className="page" data-testid="foundation-status">
       <PageHead
         title="Foundation"
         sub="P0 shared foundation — organizations, identity, provenance, providers, jobs, usage (shadow), audit, approvals"

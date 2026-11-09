@@ -82,9 +82,9 @@ export default function Jobs({ toast }) {
     } catch (e) { toast(e.message, 'err') }
   }
 
-  if (state.status === 'loading') return <div className="page"><StateMessage state="loading" /></div>
+  if (state.status === 'loading') return <div className="page" data-testid="jobs-status"><StateMessage state="loading" /></div>
   if (state.status === 'error') return (
-    <div className="page"><StateMessage state="error" title="Backend unavailable"
+    <div className="page" data-testid="jobs-status"><StateMessage state="error" title="Backend unavailable"
       detail={state.error?.message} onRetry={load} /></div>
   )
 
@@ -92,7 +92,7 @@ export default function Jobs({ toast }) {
     .filter(([k]) => k.startsWith('blocked')).map(([k, v]) => `${k}=${v}`).join(' ')) || 'none'
 
   return (
-    <div className="page">
+    <div className="page" data-testid="jobs-status">
       <PageHead title="Jobs & Schedules"
         sub="Durable execution — queue, workers, retries, approvals, schedules"
         badges={[{ label: session.environment, tone: session.environment === 'sandbox' ? 'demo' : 'live' }]}

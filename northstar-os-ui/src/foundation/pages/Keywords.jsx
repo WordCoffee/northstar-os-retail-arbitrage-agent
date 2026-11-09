@@ -62,9 +62,9 @@ export default function Keywords({ toast }) {
     } catch (e) { toast(e.message, 'err') }
   }
 
-  if (state.status === 'loading') return <div className="page"><StateMessage state="loading" /></div>
+  if (state.status === 'loading') return <div className="page" data-testid="keywords-status"><StateMessage state="loading" /></div>
   if (state.status === 'error') return (
-    <div className="page"><StateMessage state="error" title="Backend unavailable"
+    <div className="page" data-testid="keywords-status"><StateMessage state="error" title="Backend unavailable"
       detail={state.error?.message} onRetry={load} /></div>
   )
 
@@ -72,7 +72,7 @@ export default function Keywords({ toast }) {
     .filter(([, v]) => v.status === 'PRESENT').map(([k]) => k) : []
 
   return (
-    <div className="page">
+    <div className="page" data-testid="keywords-status">
       <PageHead title="Keywords & SEO"
         sub="Shared keyword/search-term/target intelligence — local & imported data only"
         badges={[{ label: session.environment, tone: session.environment === 'sandbox' ? 'demo' : 'live' }]}
