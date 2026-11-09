@@ -3,21 +3,33 @@
   "verdict": "AGREE",
   "claimed": {
     "scored": 21,
-    "passed": 13,
-    "mean": 86.2,
+    "passed": 16,
+    "mean": 92.0,
     "by_line": {
-      "lions-mane": {"scored": 10, "passed": 7, "mean": 91.3},
-      "word-coffee": {"scored": 11, "passed": 6, "mean": 81.6},
+      "lions-mane": {"scored": 10, "passed": 8, "mean": 95.0},
+      "word-coffee": {"scored": 11, "passed": 8, "mean": 89.3},
       "neck-nirvana": {"scored": 0, "passed": null, "mean": null, "declared_unscorable": 3}
-    }
+    },
+    "situations_with_no_pass": ["infographic", "packaging_mockup"]
   },
   "reproduced": {
     "scored": 21,
-    "passed": 13,
-    "mean": 86.2,
+    "passed": 16,
+    "mean": 92.0,
     "by_line": {
-      "lions-mane": {"scored": 10, "passed": 7, "mean": 91.3},
-      "word-coffee": {"scored": 11, "passed": 6, "mean": 81.6}
+      "lions-mane": {"scored": 10, "passed": 8, "mean": 95.0},
+      "word-coffee": {"scored": 11, "passed": 8, "mean": 89.3}
+    },
+    "situations_with_no_pass": ["infographic", "packaging_mockup"],
+    "situation_passes": {
+      "white_background_main": "4/4",
+      "lifestyle": "4/4",
+      "infographic": "0/3",
+      "scale_reference": "2/2",
+      "bundle_multipack": "2/2",
+      "packaging_mockup": "0/2",
+      "background_swap": "2/2",
+      "series_consistency": "2/2"
     },
     "cannot_verify_rows": 0,
     "artefacts": {
@@ -25,10 +37,27 @@
       "missing": 0,
       "not_png": 0,
       "under_20kb": 0,
-      "smallest_bytes": 130720
+      "smallest_bytes": 429160
     },
-    "bar_check": "21/21 held-out briefs carry the tuned catalogue's constraints for their situation (independent snippet: BAR_OK briefs= 21 situations= 8; pytest Northstar_backend/test_heldout_set.py -> 9 passed)"
+    "bar_check": "pytest -q Northstar_backend/test_heldout_set.py -> 11 passed in 0.25s; independent snippet -> BAR_OK briefs= 21 situations= 8; no wordmark, no (reference, situation) repeat"
   },
   "per_brief_mismatches": [],
-  "notes": "Composite pass was already complete on disk (heldout_composite.py --status -> done 21 of 21), so per the brief I did NOT re-run it and verified the existing artefact instead of overwriting it. Mean recomputed independently from state/seller/heldout_proof.json result rows: round(sum(score)/count(scored),1) = 86.2; passed = 13 rows with passed=true and no cannot_verify; by-line 10/7/91.3 and 11/6/81.6 both reproduce to the decimal. All 21 artefact_path values exist, are real PNGs (89 50 4E 47 magic), smallest 130,720 B > 20 KB. Report table rows match the proof rows on score, pass flag and situation with zero mismatches. `python tools/heldout_briefs.py --write` regenerated ty/seller_briefs_heldout.json byte-identically (sha256 2E0CCB69... unchanged); ty/seller_briefs.json untouched. Bar check (D-002 regression) passes. Two observations that do not change the numbers but the director should know: (1) HO-014 and HO-018 are byte-identical PNGs because both reference renders/references/word-coffee/word_coffee_logo.png, a wordmark rather than a product photograph, and their scenes are indistinguishable; both briefs fail anyway (83.3, 70.0), so the pass count is not inflated, but those two briefs test less than a product image would. (2) digest_composites_2026-11-09.png has six source-left/composite-right pairs from six distinct source files, but rows 1-3 are the same Mogra lion's mane + shiitake pouch pair photographed in three settings, not six unrelated products. Quarantined pre-run copies of the briefs/proof/report left in %TEMP%\\opencode\\; nothing in the repo was overwritten with different content."
+  "superseded": {
+    "unit": "heldout-run (first verification, 2026-11-09)",
+    "what_it_verified": "the earlier 21 scored / 13 passed / mean 86.2 run over the 12-file reference pool",
+    "why_superseded": "that pool contained social quote cards and the brand wordmark; the briefs file and the composite proof were regenerated and the pass re-run from scratch, so the 13/86.2 AGREE applies to an artefact that no longer exists on disk (archived at reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json)",
+    "still_valid_from_it": "the D-002 bar check and the artefact/PNG checks were re-run here and still hold"
+  },
+  "per_brief_reference_findings": [
+    {
+      "brief_id": "HO-015",
+      "product_line": "word-coffee",
+      "situation": "bundle_multipack",
+      "score": 80.0,
+      "passed": true,
+      "reference": "renders/references/word-coffee/wc_women_card_mirror.jpg",
+      "finding": "shows a pink affirmation/quote card stuck to a bathroom mirror, not the Word Coffee box: this is exactly the class of file D-003 quarantined, and it is still in the pool and still scored (and passed)"
+    }
+  ],
+  "notes": "Composite pass was already complete (tools/heldout_composite.py --status -> done 21, 16 passed, mean 92.0), so it was NOT re-run. Recomputed from state/seller/heldout_proof.json rows: round(sum(score)/count(scored),1) = 92.0; passed = 16 rows with passed=true and no cannot_verify; by-line 10/8/95.0 and 11/8/89.3 to the decimal. All 21 artefact_path files exist, are real PNGs (89 50 4E 47 magic), smallest 429,160 B > 20 KB. Report table rows match the proof on score, pass flag and situation with zero mismatches. pytest Northstar_backend/test_heldout_set.py -> 11 passed (the two new pins: no wordmark reference, no product twice in one situation); independent bar snippet -> BAR_OK briefs= 21 situations= 8. Situations with no pass confirmed: infographic 0/3, packaging_mockup 0/2. Three findings do not move the numbers but the director should know: (1) HO-015's reference is a quote card, so one of 21 briefs still tests a card rather than a product, and it passed at 80.0; (2) wc_women_main_front.jpg and word_coffee_women_front.jpg are byte-identical (sha256 AE941A3C...), so the pool is 10 paths but 9 distinct photographs, not ten real products; (3) the digest's six pairs are six distinct source photographs of three product designs (the Mogra pouch pair in three photographs, the For Mom box, the Modern Woman box in two photographs), not six distinct products. None of the three changes a pass/fail on any brief."
 }

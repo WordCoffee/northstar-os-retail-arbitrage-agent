@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-09T19:45:00+00:00",
+  "updated_at": "2026-11-09T20:05:00+00:00",
   "source": "reports/ty/d15_verification.md",
   "failed": [
     {
@@ -7,6 +7,12 @@
       "item": "dogfood: Seller-Tester drives the real desktop through the Vision Operator",
       "why": "the desktop is locked, so the live-desktop half of V9 cannot run; the localhost half is verified",
       "state_now": "V9-localhost VERIFIED by the 2026-11-09 verifier: tests/e2e/v9_verifier_evidence.spec.ts -> 1 passed, V9_VERIFIER export_bytes=30094, screenshot reports/ty/v9_verifier_screenshot.png (61,462 B); tests/e2e/v9_localhost.spec.ts -> 2 passed (chromium-desktop). Real-desktop remains parked on the unlock trigger (tools/unlock_watch.py)."
+    },
+    {
+      "unit": "held-out run (D-003 residue)",
+      "item": "HO-015 bundle_multipack is still scored against a quote card",
+      "why": "renders/references/word-coffee/wc_women_card_mirror.jpg shows a pink affirmation card on a bathroom mirror, not the Word Coffee box; the pin test only rejects filenames containing logo/wordmark",
+      "state_now": "found by the 2026-11-09 verifier; HO-015 scored 80.0 and passed, so the 16/92.0 figure counts one card as a product. Replace the reference or quarantine it and re-run the affected brief. Also wc_women_main_front.jpg == word_coffee_women_front.jpg (sha256 AE941A3C...): 10 paths, 9 distinct photographs."
     }
   ],
   "blocked": [
@@ -30,8 +36,8 @@
     },
     {
       "unit": "held-out run",
-      "item": "21 held-out briefs, two product lines, scored against the tuned bar",
-      "evidence": "2026-11-09: 21 scored, 13 passed, mean 86.2 recomputed from state/seller/heldout_proof.json rows (lions-mane 10/7/91.3, word-coffee 11/6/81.6); neck-nirvana 3 declared unscorable; pytest -q Northstar_backend/test_heldout_set.py -> 9 passed; bar check BAR_OK briefs= 21 situations= 8; 21/21 artefacts real PNGs > 20 KB; see reports/ty/verifier_heldout.json"
+      "item": "21 held-out briefs over the regenerated ten-file product pool",
+      "evidence": "2026-11-09 re-verify: 21 scored, 16 passed, mean 92.0 recomputed from state/seller/heldout_proof.json rows (lions-mane 10/8/95.0, word-coffee 11/8/89.3; infographic 0/3, packaging_mockup 0/2); neck-nirvana 3 declared unscorable; pytest -q Northstar_backend/test_heldout_set.py -> 11 passed; bar snippet BAR_OK briefs= 21 situations= 8; 21/21 artefacts real PNGs, smallest 429,160 B. Supersedes the 13/86.2 run of the old 12-file pool (archived). See reports/ty/verifier_heldout.json"
     }
   ]
 }

@@ -26,19 +26,19 @@ LIONS_MANE = [
     "renders/references/mogra/mogra_pair_lifestyle.png",
     "renders/references/mogra/mogra_forest_dusk.png",
 ]
+#: A reviewed roster: every path here was opened as an image and shows the physical product. That
+#: review is the point — the first pool was chosen by file name, and of twelve files only two were
+#: the box (the rest were social quote cards and a wordmark). `card_mirror` was removed after the
+#: verifier opened it and found a card on a bathroom mirror with no box in frame; a second file was
+#: a byte-identical copy of the women's front shot. Five Word Coffee photographs remain.
 WORD_COFFEE = [
-    "renders/references/word-coffee/word_coffee_moms_front.jpg",
-    "renders/references/word-coffee/word_coffee_women_front.jpg",
-    "renders/references/word-coffee/wc_women_pic_box.jpg",
-    "renders/references/word-coffee/wc_women_main_front.jpg",
-    "renders/references/word-coffee/wc_women_card_mirror.jpg",
-    "renders/references/word-coffee/wc_women_easter_table.png",
-    "renders/references/word-coffee/wc_women_in_purse.png",
+    "renders/references/word-coffee/word_coffee_moms_front.jpg",      # For Mom box, on white
+    "renders/references/word-coffee/word_coffee_women_front.jpg",     # Modern Woman box, on white
+    "renders/references/word-coffee/wc_women_pic_box.jpg",            # box, in scene
+    "renders/references/word-coffee/wc_women_easter_table.png",       # box, on a table
+    "renders/references/word-coffee/wc_women_in_purse.png",           # box, in a handbag
 ]
-# Only images that show the actual box. The owner's folders also hold a dozen quote cards and a
-# wordmark, and those were in the pool for two runs — which is how a "product" composite of a quote
-# card appeared in the first digest. A card is not a product and a logo is not a product. What
-# remains is what a seller would upload: seven product images, two on white and five in scene.
+HELDOUT_REFERENCES = tuple(LIONS_MANE) + tuple(WORD_COFFEE)
 # The validator's category vocabulary has no coffee box, so Word Coffee is filed as `food_jar`
 # (a sealed retail food package). Filing it under the closest real category is honest; inventing
 # a category to make the set look bespoke is not.

@@ -68,6 +68,27 @@ def test_no_brief_treats_a_brand_wordmark_as_the_product(payload):
         assert "wordmark" not in name, brief["id"]
 
 
+def test_every_reference_is_on_the_reviewed_roster_and_distinct(payload):
+    """Bytes, not names: two "different" files were one photograph, and one "product" file was a card.
+
+    Distinct *files* must be distinct photographs. A photograph may still serve several briefs
+    (three Mogra images carry ten Lion's Mane briefs) — that is disclosed in the report's limits.
+    """
+    import hashlib
+
+    roster = set(heldout_briefs.HELDOUT_REFERENCES)
+    for brief in payload["briefs"]:
+        assert brief["reference"]["path"] in roster, (
+            f"{brief['id']} uses {brief['reference']['path']}, which is not on the reviewed roster")
+    by_hash = {}
+    for path in sorted({b["reference"]["path"] for b in payload["briefs"]}):
+        digest = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+        assert digest not in by_hash, (
+            f"{path} is byte-identical to {by_hash[digest]}; that is one photograph sold twice")
+        by_hash[digest] = path
+    assert len(by_hash) >= 8, f"only {len(by_hash)} distinct photographs"
+
+
 def test_a_reference_is_never_reused_for_the_same_situation(payload):
     """Ten Lion's Mane briefs share three photographs and eleven Word Coffee briefs share seven:
     that is the real stock of product imagery on this machine. What must not happen is the same

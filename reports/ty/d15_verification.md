@@ -29,7 +29,7 @@ every command below was run in this session and its real output is quoted.
 | 18 | Disk floor and digest | **agree** | `ty_digest.py` → `"free_gb": 10.57, "floor_gb": 5.0, "allow": true` (see note: it also prints `seller_gaps: 0`) |
 | 19 | Scope enforcement | **agree** | `test_vision_computer.py -q` → `10 passed`; `test_a_write_outside_scope_is_refused_and_leaves_no_file` PASSED, plus `test_dot_dot_cannot_walk_out_of_scope` and `test_a_path_outside_the_declared_roots_is_refused` PASSED |
 | 20 | Launcher persistence | **agree** | `Get-ScheduledTask NorthstarTyDirector` → `State Ready`, trigger `MSFT_TaskLogonTrigger`; `reports/ty/d8_launcher_task.xml` exists, 1,647 B |
-| 21 | held-out run | **agree** | re-run by the independent verifier 2026-11-09: 21 scored, **13 passed, mean 86.2** recomputed from `state/seller/heldout_proof.json` rows (lions-mane 10/7/91.3, word-coffee 11/6/81.6, neck-nirvana 3 declared unscorable); `pytest -q Northstar_backend/test_heldout_set.py` → `9 passed in 0.22s`; bar check `BAR_OK briefs= 21 situations= 8` (no D-002 repeat); 21/21 artefacts real PNGs > 20 KB |
+| 21 | held-out run | **agree** | re-verified 2026-11-09 against the regenerated pool: 21 scored, **16 passed, mean 92.0** recomputed from `state/seller/heldout_proof.json` rows (lions-mane 10/8/95.0, word-coffee 11/8/89.3, neck-nirvana 3 declared unscorable; no pass in `infographic` 0/3 or `packaging_mockup` 0/2); `pytest -q Northstar_backend/test_heldout_set.py` → `11 passed in 0.25s`; bar snippet → `BAR_OK briefs= 21 situations= 8`; 21/21 artefacts real PNGs ≥ 429,160 B. Finding: HO-015 still scores a quote card |
 
 ## Detail and the exact output behind each row
 
@@ -356,34 +356,45 @@ NorthstarTyDirector  Ready MSFT_TaskLogonTrigger
 
 `reports/ty/d8_launcher_task.xml` exists (1,647 B). The task is registered at logon and Ready.
 
-### 21. Held-out run — agree (verified 2026-11-09)
+### 21. Held-out run — agree (re-verified 2026-11-09, regenerated pool)
 
 Independent verifier session, not the author of the held-out run. The composite pass was already
-complete (`--status` → `{"total": 21, "done": 21, "passed": 13, "mean": 86.2}`), so I verified the
-existing artefact instead of overwriting it.
+complete (`--status` → `{"total": 21, "done": 21, "passed": 16, "mean": 92.0}`), so I verified the
+existing artefact instead of overwriting it. This supersedes the earlier 13 / 86.2 check of the old
+12-file pool; that proof is archived at
+`reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`.
 
 ```
 > python -m pytest -q Northstar_backend/test_heldout_set.py
-9 passed in 0.22s
+11 passed in 0.25s
 
-> python $env:TEMP\opencode\bar_check.py
+> python $env:TEMP\opencode\bar2.py
 BAR_OK briefs= 21 situations= 8
+distinct paths 10 distinct image bytes 9
+DUPLICATE BYTES: ['renders/references/word-coffee/wc_women_main_front.jpg',
+                  'renders/references/word-coffee/word_coffee_women_front.jpg']
 
-> python $env:TEMP\opencode\recheck.py
-rows 21 scored 21 passed 13
-mean 86.2
-lions-mane scored 10 passed 7 mean 91.3
-word-coffee scored 11 passed 6 mean 81.6
-cannot_verify rows 0
-artefact problems: none
+> python $env:TEMP\opencode\recheck2.py
+rows 21 scored 21 passed 16 cannot_verify 0
+mean 92.0
+lions-mane scored 10 passed 8 mean 95.0
+word-coffee scored 11 passed 8 mean 89.3
+artefact problems: none | min bytes 429160
+sit infographic passes 0 of 3
+sit packaging_mockup passes 0 of 2
 ```
 
 The mean is recomputed as `sum(score)/count(scored)`, not read from the proof's summary block; the
-two agree. All 21 `artefact_path` files exist, carry PNG magic bytes and are larger than 20 KB
-(smallest 130,720 B). `python tools/heldout_briefs.py --write` regenerates the briefs
-byte-identically (sha256 `2E0CCB69…` unchanged) and `ty/seller_briefs.json` is untouched. The
-D-002 bar regression is absent: every held-out brief carries the tuned catalogue's constraints for
-its own situation. Full detail in `reports/ty/verifier_heldout.md` and
+two agree. All 21 `artefact_path` files exist, carry PNG magic bytes and the smallest is 429,160 B.
+The D-002 bar regression is absent: every held-out brief carries the tuned catalogue's constraints
+for its own situation, and the new pins (no wordmark reference, no product twice in one situation)
+pass.
+
+Finding recorded, not a score change: **HO-015 (`bundle_multipack`, 80.0, passed) still uses
+`wc_women_card_mirror.jpg`, a quote card on a bathroom mirror — no box in frame.** It is the class of
+file D-003 quarantined, and the pin test only rejects filenames containing `logo`/`wordmark`. Also,
+`wc_women_main_front.jpg` and `word_coffee_women_front.jpg` are byte-identical, so the pool is ten
+paths but nine distinct photographs. Full detail in `reports/ty/verifier_heldout.md` and
 `reports/ty/verifier_heldout.json`.
 
 ## Summary
