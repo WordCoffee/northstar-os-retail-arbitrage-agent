@@ -113,7 +113,43 @@ def _write_report(briefs: List[Dict[str, Any]], scored: List[Dict[str, Any]],
             reason = ("no product imagery exists on this machine for this brand"
                       if not path else "the run did not produce this brief")
             lines.append(f"- {brief['id']} ({brief['product_line']}): {reason}")
+    lines += _limits(scored, briefs)
     REPORT.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _limits(scored: List[Dict[str, Any]], briefs: List[Dict[str, Any]]) -> List[str]:
+    """What this run does not prove, computed rather than promised.
+
+    A held-out number invites the reader to believe more than it shows: that every brief is an
+    independent product, and that every situation is measured for the first time. Both are checkable
+    from the rows, so both are stated.
+    """
+    by_reference: Dict[str, List[str]] = defaultdict(list)
+    by_id = {b["id"]: b for b in briefs}
+    for row in scored:
+        reference = row.get("reference") or (by_id.get(row["brief_id"], {})
+                                            .get("reference") or {}).get("path")
+        by_reference[str(reference)].append(row["brief_id"])
+    lines = ["", "## Limits of this run", ""]
+    lines.append(f"- **{len(by_reference)} distinct reference images over {len(scored)} scored "
+                 "briefs.**")
+    for reference, ids in sorted(by_reference.items()):
+        if len(ids) > 1:
+            lines.append(f"  - `{Path(reference).name}` is the reference for "
+                         f"{len(ids)} briefs ({', '.join(sorted(ids))}): those rows are not "
+                         "independent products.")
+    by_situation: Dict[str, List[bool]] = defaultdict(list)
+    for row in scored:
+        by_situation[str(row.get("situation"))].append(bool(row.get("passed")))
+    failed_situations = [name for name, outcomes in sorted(by_situation.items())
+                         if outcomes and not any(outcomes)]
+    if failed_situations:
+        lines.append(f"- **Situations with no pass at all:** {', '.join(failed_situations)}. "
+                     "Those are gaps in the composite route, not one unlucky image each.")
+    lines.append("- A held-out brief here varies the **product photograph and the situation**; it "
+                 "does not vary the constraint bar, which is the tuned catalogue's own.")
+    lines.append("")
+    return lines
 
 
 def main(argv: List[str] | None = None) -> int:

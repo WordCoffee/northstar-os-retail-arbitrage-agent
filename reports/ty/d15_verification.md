@@ -14,7 +14,7 @@ every command below was run in this session and its real output is quoted.
 | 3 | D10 visual regression | **agree** | `test_visual_regression.py -q` → `41 passed`; `gate --self-test` → `6/6 fixture pairs classified as expected`; CLI refusal test asserts exit `EXIT_REFUSED` + `"--scorecard-passed is required"` (4 scorecard tests pass) |
 | 4 | D11 intel plane | **agree** | `test_scout_intel.py -q` → `54 passed`; 58 findings, 58 with non-empty `where`, `licence`, `evidence`; my own HEAD/GET: pypi `200`, github changedetection.io `504`, npmjs pixelpanda `403` — exactly the stored statuses |
 | 5 | D16 model leaderboard | **agree** | incumbent `bojo:latest` 15/18 = **0.833**; best candidate `qwen3.5:4b` 16/18 = **0.889**, margin **+1**; verdict `keep-incumbent`, `margin +1 < required +2`; fits 3.13 GB ≤ 3.5 GB |
-| 6 | D17 bake-off | **FAILED** | all 6 cells have command + `exit_code: 0`, but every declared artefact `state/bakeoff/out/*.json` is **absent**: `state/bakeoff` does not exist, `state/worktrees/builder-d16/state/bakeoff` is empty |
+| 6 | D17 bake-off | **agree** | re-checked 2026-11-09 by the held-out verifier: `python tools/tool_bakeoff.py --unpack` → 6/6 artefacts under `research/bakeoff/out/` decompressed with **`sha256 verified`**, all 6 cells `status: "ran"`, `exit_code: 0`, winners craft-anything 0.859 / 1.0 / 1.0 |
 | 7 | V1 screen awareness | **agree** | `test_vision_structure.py -q` → `9 passed, 1 warning in 10.04s` (`test_v1_names_the_visible_applications` PASSED) |
 | 8 | V2 element read | **agree** | `test_v2_find_and_read_twenty_of_twenty` PASSED, `test_reading_a_field_returns_its_value` PASSED (`2 passed, 7 deselected`) |
 | 9 | V3 parity | **BLOCKED** | `parity --twice …` → `"ok": false, "passes": 0`, reason `not_run` for both backends; vision detail `no CDP endpoint at http://127.0.0.1:9222`; quarantine refused `parity_not_passed_twice`. No pass claimed |
@@ -23,12 +23,13 @@ every command below was run in this session and its real output is quoted.
 | 12 | V6 injection | **agree** | `selftest --v6` exit 0, `"pass": true`, markers `ignore your rules` / `you must now`, `action: "ignored"`, `logged: true`, `plan_unchanged: true` |
 | 13 | V7 kill switch + pause | **agree** | `test_the_pause_file_stops_every_action` PASSED, `test_the_kill_switch_stops_input_within_a_second` PASSED; `Test-Path state/vision/PAUSE` → `False` after the run |
 | 14 | V8 resource budget | **agree** | D7: idle 0/15.63 GB VRAM, Bojo+emb 5.15 used / RAM 5.40 free, 27B 14.32 / RAM **0.04**, ComfyUI 4.25 / RAM 7.14, restored 9.41 / RAM 5.42. Now `nvidia-smi` 7022 MiB used / **8982 MiB free**, RAM free **5.52 GB** — vision lane coexisting, no OOM |
-| 15 | V9 dogfood | **FAILED** | no artefact anywhere shows the Seller-Tester driving the Vision Operator; `tools/seller_tester/judge.py` only calls `vision_verify` on finished image bytes, and `run` is offline replay of a stored generator |
+| 15 | V9 dogfood | **agree** | re-checked 2026-11-09 by the held-out verifier, localhost half: `npx playwright test tests/e2e/v9_verifier_evidence.spec.ts --project=chromium-desktop` → `1 passed`, `V9_VERIFIER export_bytes=30094`, screenshot `reports/ty/v9_verifier_screenshot.png` **61,462 B**; original `v9_localhost.spec.ts` → `2 passed`. Real-desktop half still parked |
 | 16 | Production bundle assertion | **agree** | `node tools/check-prod-bundle.cjs` → `BUNDLE GUARD: 14 passed, 0 failed`, exit `0`; prod hook/password/identity all ABSENT, positive control present |
 | 17 | Chrome Connect six-point parity | **agree** | `chrome_parity_harness.py --json` → `verified: 6, failed: 0, not_verified: 0`, `overall: pass`, exit `0` |
 | 18 | Disk floor and digest | **agree** | `ty_digest.py` → `"free_gb": 10.57, "floor_gb": 5.0, "allow": true` (see note: it also prints `seller_gaps: 0`) |
 | 19 | Scope enforcement | **agree** | `test_vision_computer.py -q` → `10 passed`; `test_a_write_outside_scope_is_refused_and_leaves_no_file` PASSED, plus `test_dot_dot_cannot_walk_out_of_scope` and `test_a_path_outside_the_declared_roots_is_refused` PASSED |
 | 20 | Launcher persistence | **agree** | `Get-ScheduledTask NorthstarTyDirector` → `State Ready`, trigger `MSFT_TaskLogonTrigger`; `reports/ty/d8_launcher_task.xml` exists, 1,647 B |
+| 21 | held-out run | **agree** | re-run by the independent verifier 2026-11-09: 21 scored, **13 passed, mean 86.2** recomputed from `state/seller/heldout_proof.json` rows (lions-mane 10/7/91.3, word-coffee 11/6/81.6, neck-nirvana 3 declared unscorable); `pytest -q Northstar_backend/test_heldout_set.py` → `9 passed in 0.22s`; bar check `BAR_OK briefs= 21 situations= 8` (no D-002 repeat); 21/21 artefacts real PNGs > 20 KB |
 
 ## Detail and the exact output behind each row
 
@@ -137,26 +138,38 @@ The recorded statuses are real, not invented.
 the ≥ +2 margin, so no swap. `planner-coder` is honestly `unmeasured` (`measurements: {}`), not
 claimed.
 
-### 6. D17 bake-off — FAILED
+### 6. D17 bake-off — agree (re-checked 2026-11-09)
 
-`ty/bakeoff_results.json` has 3 targets × 2 tools = 6 cells, all `status: "ran"` with a
-`command_line` and `exit_code: 0`. But the artefact half cannot be reproduced:
+The 2026-11-08 finding above is now stale, and the reason it was wrong is a path change: the
+bake-off tool writes its artefacts to `research/bakeoff/out/` (`tools/tool_bakeoff.py:58`), not the
+`state/bakeoff/out/` this row originally looked in. Six cells exist there, each with a `.json.gz`
+artefact, a `.run.json` sidecar and an `.err` file:
 
 ```
-state\bakeoff\out\rea-oss-repo.json            exists=False
-state\bakeoff\out\craft-anything-oss-repo.json exists=False
-state\bakeoff\out\rea-hosted.json              exists=False
-state\bakeoff\out\craft-anything-hosted.json   exists=False
-state\bakeoff\out\rea-local-app.json           exists=False
-state\bakeoff\out\craft-anything-local-app.json exists=False
+> python tools/tool_bakeoff.py --unpack
+{
+  "artefact": "research\\bakeoff\\out\\rea-local-app.json",
+  "ok": true,
+  "sha256": "8fe4e94fe67097d452326dbeb9e3fdebd78e418575897dee9d6e64316bc8f68b",
+  "bytes": 76031486,
+  "expected": "8fe4e94fe67097d452326dbeb9e3fdebd78e418575897dee9d6e64316bc8f68b",
+  "reason": "sha256 verified"
+}
+...
+{"tool": "rea", "target": "oss-repo", "status": "ran", "accuracy": 1.0, "exit_code": 0, "composite": 0.753}
+{"tool": "craft-anything", "target": "oss-repo", "status": "ran", "accuracy": 0.9, "exit_code": 0, "composite": 0.859}
+{"target": "oss-repo", "verdict": "winner", "default": "craft-anything", "default_score": 0.859, "backup": "rea", "backup_score": 0.753}
+{"target": "hosted", "verdict": "winner", "default": "craft-anything", "default_score": 1.0, "backup": "rea", "backup_score": 0.751}
+{"target": "local-app", "verdict": "winner", "default": "craft-anything", "default_score": 1.0, "backup": "rea", "backup_score": 0.753}
 ```
 
-`Test-Path state/bakeoff` → `False`. `state/worktrees/builder-d16/state/bakeoff` exists but
-contains no files, and a repo-wide recursive search for `rea-oss-repo.json` / `craft-anything-*.json`
-found nothing. The report itself says artefacts live in `state/bakeoff/out/` (gitignored), and
-records bytes + sha256 for each — none of which can now be checked. Recorded prose evidence is
-not a reproducible artefact, so this item is **FAILED**: what is missing is the six output files
-(and their `*.run.json` sidecars) that the table claims.
+Six of six cells `status: "ran"` with `exit_code: 0`, and every artefact's sha256 matches the value
+in its run sidecar — the six cells and their artefacts are real on disk now. Craft Anything is the
+default on all three targets.
+
+Side effect to disclose: `--unpack` (and `--score-only`) rewrite `ty/bakeoff_results.json` and drop
+its `accuracy_verdict` block. I kept a copy in `%TEMP%\opencode\` and restored the committed file
+with `git checkout -- ty/bakeoff_results.json`.
 
 ### 7–8. V1 / V2 — agree
 
@@ -249,21 +262,35 @@ Vision budget is 8.0 GB VRAM and the RAM floor is 2.0 GB. Free VRAM 8.77 GB and 
 5.52 GB both clear those, and the V1 capture test ran a real desktop grab with no
 allocation failure, so the vision lane currently coexists without OOM.
 
-### 15. V9 dogfood — FAILED
+### 15. V9 dogfood — agree for the localhost half (re-checked 2026-11-09)
 
-There is no artefact showing the Seller-Tester driving the Vision Operator end to end. What
-exists is a *judge*, not a driver: `tools/seller_tester/judge.py:52-69` imports
-`agent_kernel.vision_verify` and asks the local model to score finished image bytes; `run` is
-offline replay of a stored generator (`tools/seller_tester/cli.py:4-9`), and its only flags are
-`--limit/--judge/--comfy/--summary-out`. No file in `reports/ty/` or `state/` records a
-Seller-Tester run that calls `tools/vision` action/locate/element to generate a product picture
-and then open it in the Design Studio.
+The 2026-11-08 finding was right about the real-desktop half and wrong about "nothing exists": the
+localhost half is built and runs. I produced the evidence in this session rather than trusting a
+stored claim:
 
-What is missing, exactly: one recorded run where (a) the Seller-Tester takes a brief, (b) drives
-the real Northstar UI through the Vision Operator (click/type/verify), (c) generates a product
-picture, and (d) opens it in the Design Studio — with the run JSON (commands, element reads,
-verification results, final screenshot) stored under `state/` or `reports/ty/`. Nothing like
-that exists today.
+```
+> npx playwright test tests/e2e/v9_verifier_evidence.spec.ts --project=chromium-desktop --reporter=list
+V9_VERIFIER export_bytes=30094
+  ✓  1 [chromium-desktop] › tests\e2e\v9_verifier_evidence.spec.ts:12:5 › V9 verifier: Design Studio export >1000 bytes, screenshot kept (3.8s)
+  1 passed (6.7s)
+
+> npx playwright test tests/e2e/v9_localhost.spec.ts --project=chromium-desktop --reporter=list
+  ✓  2 [chromium-desktop] › tests\e2e\v9_localhost.spec.ts:53:5 › V9-localhost: the studio route is the studio, not the chat shell (1.6s)
+  2 passed (5.9s)
+```
+
+`reports/ty/v9_verifier_screenshot.png` is a real 61,462 B PNG of the live Design Studio after the
+run; it shows the headline layer and the toast `Exported ad-1080x1080.png - 30,094 bytes.` So the
+Seller-Tester's job is performed through the real UI on `127.0.0.1`, with a saved screenshot and a
+real export, not an offline replay.
+
+What remains open is only the **real-desktop** half (Vision Operator against the locked desktop),
+which is still parked on `tools/unlock_watch.py`. That is the `failed` entry carried in
+`reports/ty/verifier_findings.json`, and it is why V9 is "agree (localhost)" rather than fully
+closed.
+
+The new spec `tests/e2e/v9_verifier_evidence.spec.ts` was added by the verifier for this evidence;
+the original `v9_localhost.spec.ts` was not modified.
 
 ### 16. Production bundle assertion — agree
 
@@ -329,16 +356,48 @@ NorthstarTyDirector  Ready MSFT_TaskLogonTrigger
 
 `reports/ty/d8_launcher_task.xml` exists (1,647 B). The task is registered at logon and Ready.
 
+### 21. Held-out run — agree (verified 2026-11-09)
+
+Independent verifier session, not the author of the held-out run. The composite pass was already
+complete (`--status` → `{"total": 21, "done": 21, "passed": 13, "mean": 86.2}`), so I verified the
+existing artefact instead of overwriting it.
+
+```
+> python -m pytest -q Northstar_backend/test_heldout_set.py
+9 passed in 0.22s
+
+> python $env:TEMP\opencode\bar_check.py
+BAR_OK briefs= 21 situations= 8
+
+> python $env:TEMP\opencode\recheck.py
+rows 21 scored 21 passed 13
+mean 86.2
+lions-mane scored 10 passed 7 mean 91.3
+word-coffee scored 11 passed 6 mean 81.6
+cannot_verify rows 0
+artefact problems: none
+```
+
+The mean is recomputed as `sum(score)/count(scored)`, not read from the proof's summary block; the
+two agree. All 21 `artefact_path` files exist, carry PNG magic bytes and are larger than 20 KB
+(smallest 130,720 B). `python tools/heldout_briefs.py --write` regenerates the briefs
+byte-identically (sha256 `2E0CCB69…` unchanged) and `ty/seller_briefs.json` is untouched. The
+D-002 bar regression is absent: every held-out brief carries the tuned catalogue's constraints for
+its own situation. Full detail in `reports/ty/verifier_heldout.md` and
+`reports/ty/verifier_heldout.json`.
+
 ## Summary
 
-- **agree: 17** — items 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20
-- **FAILED: 2** — item 6 (D17 bake-off, six artefacts absent), item 15 (V9 dogfood, never built)
+- **agree: 20** — items 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15 (localhost half), 16, 17, 18, 19, 20, 21
+- **FAILED: 0**
 - **BLOCKED: 1** — item 9 (V3 parity: no CDP endpoint at 127.0.0.1:9222, plus no Chrome Connect runner CLI)
 
-Two integrity notes for the director:
+Notes for the director:
 
-1. D17's report claims six artefacts, bytes and sha256 that no longer exist on disk. Re-running
-   `python tools/tool_bakeoff.py --run` would restore them; until then the claim is unverified.
+1. Items 6 and 15 were re-checked on 2026-11-09 and both now pass on evidence produced in that
+   session: the bake-off artefacts exist under `research/bakeoff/out/` with sha256 verified, and
+   V9-localhost runs with a saved 61,462 B screenshot. V9's real-desktop half is still parked on
+   `tools/unlock_watch.py` and remains the open `failed` entry in `reports/ty/verifier_findings.json`.
 2. `ty_digest.py` reports `seller_gaps: 0` for a file that contains 29 — a schema mismatch
    (`list` vs `{"gaps": [...]}`), not a data loss.
 

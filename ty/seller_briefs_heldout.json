@@ -701,9 +701,9 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_logo.png",
+        "path": "renders/references/word-coffee/wc_moms_22.png",
         "descriptor": {
-          "filename": "word_coffee_logo.png",
+          "filename": "wc_moms_22.png",
           "mime_type": "image/png",
           "subject": "word coffee"
         }
@@ -755,10 +755,10 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+        "path": "renders/references/word-coffee/wc_moms_24.png",
         "descriptor": {
-          "filename": "word_coffee_moms_front.jpg",
-          "mime_type": "image/jpeg",
+          "filename": "wc_moms_24.png",
+          "mime_type": "image/png",
           "subject": "word coffee"
         }
       },
@@ -809,10 +809,10 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_women_front.jpg",
+        "path": "renders/references/word-coffee/wc_moms_29.png",
         "descriptor": {
-          "filename": "word_coffee_women_front.jpg",
-          "mime_type": "image/jpeg",
+          "filename": "wc_moms_29.png",
+          "mime_type": "image/png",
           "subject": "word coffee"
         }
       },
@@ -860,9 +860,9 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_moms_20.png",
+        "path": "renders/references/word-coffee/wc_moms_33.png",
         "descriptor": {
-          "filename": "word_coffee_moms_20.png",
+          "filename": "wc_moms_33.png",
           "mime_type": "image/png",
           "subject": "word coffee"
         }
@@ -914,9 +914,9 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_logo.png",
+        "path": "renders/references/word-coffee/wc_women_37.png",
         "descriptor": {
-          "filename": "word_coffee_logo.png",
+          "filename": "wc_women_37.png",
           "mime_type": "image/png",
           "subject": "word coffee"
         }
@@ -968,10 +968,10 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+        "path": "renders/references/word-coffee/wc_women_40.png",
         "descriptor": {
-          "filename": "word_coffee_moms_front.jpg",
-          "mime_type": "image/jpeg",
+          "filename": "wc_women_40.png",
+          "mime_type": "image/png",
           "subject": "word coffee"
         }
       },
@@ -1023,10 +1023,10 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_women_front.jpg",
+        "path": "renders/references/word-coffee/wc_women_45.png",
         "descriptor": {
-          "filename": "word_coffee_women_front.jpg",
-          "mime_type": "image/jpeg",
+          "filename": "wc_women_45.png",
+          "mime_type": "image/png",
           "subject": "word coffee"
         }
       },
@@ -1074,9 +1074,9 @@
       "held_out": true,
       "reference": {
         "kind": "uploaded_file",
-        "path": "renders/references/word-coffee/word_coffee_moms_20.png",
+        "path": "renders/references/word-coffee/wc_women_46.png",
         "descriptor": {
-          "filename": "word_coffee_moms_20.png",
+          "filename": "wc_women_46.png",
           "mime_type": "image/png",
           "subject": "word coffee"
         }

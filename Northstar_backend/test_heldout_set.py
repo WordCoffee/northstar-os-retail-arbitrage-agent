@@ -60,6 +60,20 @@ def test_text_rules_are_the_ones_the_pipeline_understands(payload):
     assert by_situation["infographic"] == "text_expected"
 
 
+def test_no_brief_treats_a_brand_wordmark_as_the_product(payload):
+    """A logo is not a product: two briefs that shared one produced byte-identical composites."""
+    for brief in payload["briefs"]:
+        name = Path(brief["reference"]["path"]).name.lower()
+        assert "logo" not in name, f"{brief['id']} uses a wordmark as its reference"
+        assert "wordmark" not in name, brief["id"]
+
+
+def test_the_word_coffee_briefs_use_a_distinct_photograph_each(payload):
+    word = [b for b in payload["briefs"] if b["product_line"] == "word-coffee"]
+    references = [b["reference"]["path"] for b in word]
+    assert len(references) == len(set(references)), "two Word Coffee briefs share one photograph"
+
+
 def test_each_situation_inherits_the_tuned_bar_for_that_situation(payload):
     """The held-out part of a brief is the product photograph, never the constraint.
 

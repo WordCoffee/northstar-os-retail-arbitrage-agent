@@ -30,8 +30,17 @@ WORD_COFFEE = [
     "renders/references/word-coffee/word_coffee_moms_front.jpg",
     "renders/references/word-coffee/word_coffee_women_front.jpg",
     "renders/references/word-coffee/word_coffee_moms_20.png",
-    "renders/references/word-coffee/word_coffee_logo.png",
+    "renders/references/word-coffee/wc_moms_22.png",
+    "renders/references/word-coffee/wc_moms_24.png",
+    "renders/references/word-coffee/wc_moms_29.png",
+    "renders/references/word-coffee/wc_moms_33.png",
+    "renders/references/word-coffee/wc_women_37.png",
+    "renders/references/word-coffee/wc_women_40.png",
+    "renders/references/word-coffee/wc_women_45.png",
+    "renders/references/word-coffee/wc_women_46.png",
 ]
+# Deliberately not the brand wordmark: a logo is not a product, and two briefs that share one
+# produced byte-identical composites in the first run. Eleven briefs, eleven distinct photographs.
 # The validator's category vocabulary has no coffee box, so Word Coffee is filed as `food_jar`
 # (a sealed retail food package). Filing it under the closest real category is honest; inventing
 # a category to make the set look bespoke is not.
