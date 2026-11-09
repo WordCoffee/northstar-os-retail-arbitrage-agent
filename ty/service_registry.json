@@ -56,7 +56,28 @@
         "status": "wired",
         "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health — the same posture question this room answers."
       },
-      "also_declares": [],
+      "also_declares": [
+        {
+          "name": "improvement_status",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['improvement_status'] reports knowledge coverage, rule count and open gaps - the knowledge-plane side of hub's posture."
+        },
+        {
+          "name": "knowledge_lookup",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['knowledge_lookup'] returns sourced do/don't rules for any service; hub is the shared entry point that routes to them."
+        },
+        {
+          "name": "service_catalog",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['service_catalog'] lists every service area and the tool that handles it - hub's own map of the suite."
+        },
+        {
+          "name": "system_status",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['system_status'] reports the local media engine and chat model posture - the engine half of hub's status page."
+        }
+      ],
       "has_controls": false,
       "gap": "No input or write control: 'Run batch' and 'Pin snapshot' only toast, and the gate switches are display-only.",
       "controls_evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 — 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page.",
@@ -551,7 +572,18 @@
         "status": "wired",
         "reason": "ty/services.json declares no tool; chat_tools.TOOLS['handoff_to_autothink'] is the wired entry into AutothinK and requires an explicit operator confirm."
       },
-      "also_declares": [],
+      "also_declares": [
+        {
+          "name": "build_preset",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['build_preset'] resolves the BUILD presets (tools, memory, model) that shape an AutothinK build run."
+        },
+        {
+          "name": "plan_project",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['plan_project'] builds an agent-kernel plan with lanes for a build-anything run; AutothinK is where those runs happen."
+        }
+      ],
       "has_controls": true,
       "gap": null,
       "controls_evidence": "northstar-os-ui/src/pages/AutothinK.jsx:166 query input, :171 provider select, :185 tier select, :199 Run.",
@@ -1179,6 +1211,16 @@
           "name": "seo_check",
           "status": "wired",
           "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile — adjacent, not the store itself."
+        },
+        {
+          "name": "seo_profile",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_profile'] shows the account's brand SEO profile and its keyword clusters - the keyword store's canonical profile."
+        },
+        {
+          "name": "seo_propose",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_propose'] proposes profile keyword additions from imported SQP rows without editing the profile."
         }
       ],
       "has_controls": true,
@@ -1497,6 +1539,71 @@
           "name": "build_dieline",
           "status": "declared",
           "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+        },
+        {
+          "name": "apply_label",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['apply_label'] composites the operator's real logo and copy onto a rendered pouch plate - the studio's finishing step."
+        },
+        {
+          "name": "build_package",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['build_package'] builds the complete package (front/back/side panels, dieline, labelled mockup) the studio's packaging surface promises."
+        },
+        {
+          "name": "build_utility",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['build_utility'] builds a self-contained HTML utility page and stores it as a studio asset (asset_type utility-app)."
+        },
+        {
+          "name": "canvas_edit",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['canvas_edit'] checks and applies one bounded edit to the open design canvas - the studio's canvas surface."
+        },
+        {
+          "name": "create_dieline",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['create_dieline'] builds a layered SVG/PDF dieline from a print template; it is the wired form of the declared build_dieline."
+        },
+        {
+          "name": "creative_plan",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['creative_plan'] plans a creative job and then runs it for real (draft/final) with a credit reserve - the studio's create flow."
+        },
+        {
+          "name": "design_brief",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['design_brief'] turns a request into a structured brief (palette, suggested dielines) before any render."
+        },
+        {
+          "name": "place_logo",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['place_logo'] places the operator's logo on a plate at a measured anchor and reports contrast and coverage."
+        },
+        {
+          "name": "plan_aplus",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['plan_aplus'] plans A+ modules, eligibility and copy checks - the studio's A+ surface."
+        },
+        {
+          "name": "plan_video",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['plan_video'] storyboards a UGC video (scenes, fps, frames, claims check) - the studio's video surface."
+        },
+        {
+          "name": "voice_dub",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['voice_dub'] dubs a script into another language through the local voice adapter for ad voiceovers."
+        },
+        {
+          "name": "voice_list",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['voice_list'] lists the available voice profiles for ad voiceovers in the studio."
+        },
+        {
+          "name": "voice_tts",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['voice_tts'] renders a script to a voiceover through the local voice adapter."
         }
       ],
       "has_controls": true,
@@ -1965,6 +2072,11 @@
           "name": "write_content",
           "status": "wired",
           "reason": "chat_tools.TOOLS['write_content'] writes listing copy and returns keyword coverage per variant."
+        },
+        {
+          "name": "seo_retitle",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_retitle'] rewrites a title toward the profile's head terms; the handler names ListingForge as its home."
         }
       ],
       "has_controls": true,
@@ -2061,6 +2173,11 @@
           "name": "ads_math",
           "status": "wired",
           "reason": "chat_tools.TOOLS['ads_math'] computes ACoS, break-even and TACOS."
+        },
+        {
+          "name": "seo_negatives",
+          "status": "wired",
+          "reason": "chat_tools.TOOLS['seo_negatives'] splits search terms into negatives and harvest candidates against the brand profile; the handler is documented as the AdPilot hook."
         }
       ],
       "has_controls": true,

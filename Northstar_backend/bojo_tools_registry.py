@@ -13,6 +13,11 @@ from typing import Any, Callable, Dict, List
 
 _MODULES = ("bojo_tools.sourcing", "bojo_tools_ops")
 
+#: Retired domain tools: name → one-line reason. The handler stays in its module and
+#: still answers a direct ``call``; it is simply never offered. Retirement is not
+#: deletion — prove the tool dead first.
+RETIRED: Dict[str, str] = {}
+
 
 def _load(name: str) -> Dict[str, Callable[..., Any]]:
     try:
@@ -26,6 +31,7 @@ def _load(name: str) -> Dict[str, Callable[..., Any]]:
 
 
 def tools() -> Dict[str, Callable[..., Any]]:
+    """Every domain handler that exists, retired ones included."""
     found: Dict[str, Callable[..., Any]] = {}
     for name in _MODULES:
         for tool_name, handler in _load(name).items():
@@ -33,8 +39,23 @@ def tools() -> Dict[str, Callable[..., Any]]:
     return found
 
 
+def has_handler(name: str) -> bool:
+    """True when a callable handler exists for this name — the offer gate."""
+    return callable(tools().get(str(name)))
+
+
+def offered() -> List[str]:
+    """The offered list: a callable handler exists and the tool is not retired.
+
+    Derived, so a tool whose module lands later appears without editing a list, and
+    a module that is missing contributes nothing instead of offering a dead name.
+    """
+    return sorted(name for name, handler in tools().items()
+                  if callable(handler) and name not in RETIRED)
+
+
 def names() -> List[str]:
-    return sorted(tools())
+    return offered()
 
 
 def get(name: str) -> Callable[..., Any]:
@@ -61,4 +82,4 @@ def call(name: str, **kwargs: Any) -> Dict[str, Any]:
     return {"ok": True, "tool": name, "data": result}
 
 
-__all__ = ["tools", "names", "get", "call"]
+__all__ = ["tools", "names", "offered", "has_handler", "RETIRED", "get", "call"]
