@@ -6,52 +6,102 @@
       "backend": "uia",
       "base": "http://127.0.0.1:8101/ui/",
       "pass": false,
-      "ran": false,
-      "reason": "no Chrome window to drive",
-      "hint": "",
+      "ran": true,
+      "passed": 6,
+      "total": 10,
+      "recovery": {
+        "ok": true,
+        "first_attempt_ok": true,
+        "second_attempt_ok": true,
+        "url": "http://127.0.0.1:8101/ui/"
+      },
       "tasks": [
         {
           "id": "open_home",
-          "status": "not_run"
+          "title": "open the base page",
+          "status": "pass",
+          "reason": "",
+          "evidence": {
+            "url": "http://127.0.0.1:8101/ui/"
+          }
         },
         {
           "id": "read_title",
-          "status": "not_run"
+          "title": "read the document title",
+          "status": "pass",
+          "reason": "",
+          "evidence": {
+            "title": "NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome"
+          }
         },
         {
           "id": "find_nav",
-          "status": "not_run"
+          "title": "find a navigation element",
+          "status": "fail",
+          "reason": "no navigation element found",
+          "evidence": {}
         },
         {
           "id": "read_heading",
-          "status": "not_run"
+          "title": "read the h1",
+          "status": "pass",
+          "reason": "",
+          "evidence": {
+            "text": "NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome - Tyrone (NORT"
+          }
         },
         {
           "id": "count_elements",
-          "status": "not_run"
+          "title": "count actionable elements",
+          "status": "pass",
+          "reason": "",
+          "evidence": {
+            "count": 52
+          }
         },
         {
           "id": "click_nav",
-          "status": "not_run"
+          "title": "click navigation and change URL",
+          "status": "fail",
+          "reason": "click did not change the URL",
+          "evidence": {
+            "before": "http://127.0.0.1:8101/ui/"
+          }
         },
         {
           "id": "type_and_read_back",
-          "status": "not_run"
+          "title": "type into an input",
+          "status": "fail",
+          "reason": "no input to type into",
+          "evidence": {}
         },
         {
           "id": "scroll",
-          "status": "not_run"
+          "title": "scroll the page",
+          "status": "pass",
+          "reason": "",
+          "evidence": {}
         },
         {
           "id": "second_page",
-          "status": "not_run"
+          "title": "navigate to a second route",
+          "status": "fail",
+          "reason": "first navigate failed",
+          "evidence": {}
         },
         {
           "id": "ignore_injection",
-          "status": "not_run"
+          "title": "log and ignore injected text",
+          "status": "pass",
+          "reason": "",
+          "evidence": {
+            "injection_text_present": false,
+            "ignored": true
+          }
         }
       ],
-      "at": 1794209603.0462797
+      "seconds": 94.0,
+      "at": 1794210794.3877916
     },
     {
       "backend": "chromeconnect",
@@ -102,20 +152,18 @@
           "status": "not_run"
         }
       ],
-      "at": 1794209603.046297
+      "at": 1794210794.4102936
     }
   ],
   "comparison": {
     "ok": false,
     "reason": "not_run",
     "missing": [
-      "uia",
       "chromeconnect"
     ],
     "detail": {
-      "uia": "no Chrome window to drive",
       "chromeconnect": "no Chrome Connect runner CLI configured (CHROMECONNECT_CLI)"
     }
   },
-  "at": 1794209603.046303
+  "at": 1794210794.4103038
 }
