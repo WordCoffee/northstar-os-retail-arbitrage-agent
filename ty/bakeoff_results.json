@@ -489,5 +489,24 @@
     ],
     "ground_truth": "each target declares a facts list read off the target itself; accuracy = fraction of those facts the tool's own output names",
     "composite_note": "accuracy is 0.40 of the composite; detail, speed and tokens make up the other 0.45 and reliability 0.10, so a composite win can come entirely from cost"
+  },
+  "default_policy": {
+    "first_pass": "craft-anything",
+    "accuracy_critical": "rea",
+    "why": "Craft Anything is the measured composite winner on all three targets and is 10-100x cheaper per target (72 KB-702 KB in 0.04-0.22 s against REA 7-96 MB in 3.5-22.9 s). On the one target where accuracy differed it was the less accurate tool - REA found 10/10 ground-truth facts on the open-source repo against 9/10 - so any pass whose purpose is the last fact, a completeness audit or a claim that must be exhaustive uses REA.",
+    "evidence": {
+      "accuracy_leaders": {
+        "oss-repo": "rea",
+        "hosted": "tie",
+        "local-app": "tie"
+      },
+      "composite_leaders": {
+        "oss-repo": "craft-anything",
+        "hosted": "craft-anything",
+        "local-app": "craft-anything"
+      }
+    },
+    "set_at": "2026-11-09T08:20:00+00:00",
+    "set_by": "owner instruction 2026-11-09"
   }
 }

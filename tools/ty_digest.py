@@ -229,11 +229,19 @@ def _resources() -> Dict[str, Any]:
             sys.path.insert(0, str(ROOT / "tools"))
         import ram_governor  # noqa: PLC0415
 
-        decision = ram_governor.status()
+        decision = ram_governor.status(record=False)
     except Exception as exc:  # noqa: BLE001
         decision = {"reason": f"governor unavailable: {type(exc).__name__}"}
+    daily = {}
+    try:
+        journal = ROOT / "state" / "director" / "ram_min_daily.json"
+        daily = json.loads(journal.read_text(encoding="utf-8")) if journal.exists() else {}
+    except Exception:  # noqa: BLE001
+        daily = {}
     return {"free_ram_gb": free_ram, "max_builders": decision.get("max_builders"),
-            "paused": decision.get("paused"), "reason": decision.get("reason")}
+            "paused": decision.get("paused"), "reason": decision.get("reason"),
+            "daily_min_gb": (daily.get(date.today().isoformat()) or {}).get("min_gb"),
+            "daily_samples": (daily.get(date.today().isoformat()) or {}).get("samples")}
 
 
 def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
@@ -284,6 +292,9 @@ def render(data: Dict[str, Any]) -> str:
         (f"**Free RAM:** {res['free_ram_gb']} GB - up to {res['max_builders']} builders"
          + (" (PAUSED: new builders refused)" if res.get("paused") else "")
          + f" - {res.get('reason', '')}" if res else "**Free RAM:** unmeasured"),
+        (f"**Free RAM today, lowest:** {res.get('daily_min_gb')} GB "
+         f"over {res.get('daily_samples')} samples" if res.get("daily_min_gb") is not None else
+         "**Free RAM today, lowest:** no samples yet"),
         "",
         f"**Unit in flight:** {data['in_flight'] or '(none)'}", "",
         "| unit | status |", "|---|---|",

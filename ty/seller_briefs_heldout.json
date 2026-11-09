@@ -1,0 +1,1302 @@
+{
+  "schema": "northstar.seller_briefs.heldout.v1",
+  "note": "21 held-out briefs plus 3 declared-but-unscorable Neck Nirvana ones. The three are declared so the gap is visible, not so they can be scored.",
+  "briefs": [
+    {
+      "id": "HO-001",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-002",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-003",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "infographic",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_forest_dusk.png",
+        "descriptor": {
+          "filename": "mogra_forest_dusk.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-004",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-005",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-006",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_forest_dusk.png",
+        "descriptor": {
+          "filename": "mogra_forest_dusk.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-007",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-008",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "series_consistency",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-009",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_forest_dusk.png",
+        "descriptor": {
+          "filename": "mogra_forest_dusk.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-010",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-011",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_moms_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-012",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "lifestyle",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_women_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_women_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-013",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "infographic",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_20.png",
+        "descriptor": {
+          "filename": "word_coffee_moms_20.png",
+          "mime_type": "image/png",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-014",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "scale_reference",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_logo.png",
+        "descriptor": {
+          "filename": "word_coffee_logo.png",
+          "mime_type": "image/png",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-015",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "bundle_multipack",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_moms_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-016",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_women_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_women_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-017",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "background_swap",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_20.png",
+        "descriptor": {
+          "filename": "word_coffee_moms_20.png",
+          "mime_type": "image/png",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-018",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "series_consistency",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_logo.png",
+        "descriptor": {
+          "filename": "word_coffee_logo.png",
+          "mime_type": "image/png",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-019",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "packaging_mockup",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_moms_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-020",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_women_front.jpg",
+        "descriptor": {
+          "filename": "word_coffee_women_front.jpg",
+          "mime_type": "image/jpeg",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-021",
+      "category": "coffee_box",
+      "product_line": "word-coffee",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/word-coffee/word_coffee_moms_20.png",
+        "descriptor": {
+          "filename": "word_coffee_moms_20.png",
+          "mime_type": "image/png",
+          "subject": "word coffee"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out: never used while tuning. A real product photograph is the reference; the pipeline must composite it, not generate a lookalike."
+    },
+    {
+      "id": "HO-022",
+      "category": "supplement_pouch",
+      "product_line": "neck-nirvana",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "",
+          "mime_type": "",
+          "subject": "neck nirvana product"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "No product imagery exists on this machine for this brand; unscored."
+    },
+    {
+      "id": "HO-023",
+      "category": "supplement_pouch",
+      "product_line": "neck-nirvana",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "",
+          "mime_type": "",
+          "subject": "neck nirvana product"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": null,
+          "tolerance": 0,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "No product imagery exists on this machine for this brand; unscored."
+    },
+    {
+      "id": "HO-024",
+      "category": "supplement_pouch",
+      "product_line": "neck-nirvana",
+      "situation": "infographic",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null,
+        "descriptor": {
+          "filename": "",
+          "mime_type": "",
+          "subject": "neck nirvana product"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1024,
+          "min_height": 1024,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 10,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 8,
+          "max": 100,
+          "distance": 40
+        },
+        "text_rule": "expected",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "No product imagery exists on this machine for this brand; unscored."
+    }
+  ]
+}

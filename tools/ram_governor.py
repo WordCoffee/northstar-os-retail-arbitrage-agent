@@ -187,6 +187,34 @@ def _journal(record: Dict[str, Any]) -> None:
         pass
 
 
+DAILY_MIN = STATE / "ram_min_daily.json"
+
+
+def record_daily_min(free_gb: Optional[float], *, path: Optional[Path] = None) -> Dict[str, Any]:
+    """Keep the lowest free RAM seen today.
+
+    The owner asked for the daily minimum in the digest, and the reason is not curiosity: a run
+    that dipped below 2 GB is the explanation for a slow suite, a refused render or a killed
+    model load, and a single end-of-day number cannot show it.
+    """
+    target = Path(path or DAILY_MIN)
+    today = datetime.now().strftime("%Y-%m-%d")
+    try:
+        data = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    row = data.get(today) or {"min_gb": None, "samples": 0}
+    if free_gb is not None:
+        row["min_gb"] = (round(min(row["min_gb"], float(free_gb)), 2)
+                         if row.get("min_gb") is not None else round(float(free_gb), 2))
+        row["samples"] = int(row.get("samples") or 0) + 1
+    row["at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    data[today] = row
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return {"date": today, **row}
+
+
 def status(*, who: str = "cli", record: bool = True,
            reading: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """The governor's current verdict, optionally journaled as one line."""
@@ -195,6 +223,8 @@ def status(*, who: str = "cli", record: bool = True,
     decision["event"] = "status"
     if record:
         _journal(decision)
+    if decision.get("free_gb") is not None:
+        decision["daily_min"] = record_daily_min(decision["free_gb"])
     return decision
 
 

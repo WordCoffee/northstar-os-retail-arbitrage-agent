@@ -94,7 +94,7 @@
           "hub_status"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Pin snapshot",
           "Run batch",
@@ -161,7 +161,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "esc",
           "Search",
@@ -245,7 +245,7 @@
           "catalog_pull"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Scan Controls",
           "Min ROI",
@@ -318,7 +318,7 @@
           "golden_goose_scan"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Filters",
           "Search the Northstar Index...",
@@ -393,7 +393,7 @@
           "offer_recommendation"
         ],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Generate Listing",
           "Search the Northstar Index...",
@@ -478,7 +478,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Search the Northstar Index...",
           "Operator",
@@ -563,7 +563,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Search the Northstar Index...",
           "Operator",
@@ -717,7 +717,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Operator",
           "Ask Gemini",
@@ -1019,7 +1019,7 @@
         ],
         "declared_tools": [],
         "confidence": "high",
-        "latest_attempt_blocked": "no Chrome window attached",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
         "controls": [
           "Back",
           "Forward",
@@ -1698,7 +1698,7 @@
       "evidence": {
         "route": "/ui/design-studio",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Design Studio | controls (shell chrome included): Canvas, Projects, Listing Images, A+ Brand Story, Storefront, Ads",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
           "Northstar_backend/studio_upload_router.py:22",
@@ -1711,7 +1711,7 @@
           "list_templates",
           "build_dieline"
         ],
-        "confidence": "medium",
+        "confidence": "high",
         "latest_attempt_blocked": "no Chrome window attached",
         "controls": [
           "Canvas",
@@ -1946,16 +1946,26 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/ListingGuardian.jsx:85 'New Rule' and :86 'History' only toast or navigate, :75 escalate navigates to Commerce Ops; the tabs switch a subview and no input or write exists.",
       "evidence": {
         "route": "/ui/listings",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/listing-guardian.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Listing Guardian | controls (shell chrome included): New Rule, History, Alerts, Diffs, History, Escalations",
         "backend": [
           "Northstar_backend/noncreative_reads.py:226"
         ],
         "declared_tools": [
           "optimize_listing"
         ],
-        "confidence": "low",
-        "latest_attempt_blocked": "neither the title nor the pixels changed"
+        "confidence": "high",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
+        "controls": [
+          "New Rule",
+          "History",
+          "Alerts",
+          "Diffs",
+          "History",
+          "Escalations",
+          "Operator",
+          "D"
+        ]
       }
     },
     {
@@ -2077,8 +2087,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/CompetitorMonitor.jsx:10-80 — two reads and two tables; the page has no input, button or select.",
       "evidence": {
         "route": "/ui/competitor-monitor",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/competitor-monitor.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Competitor Monitor | controls (shell chrome included): Add Competitor, Market Report, Search the Northstar Index..., Operator, Ask Gemini, DEV: AUTH DISABLED — local loopback only",
         "backend": [
           "Northstar_backend/noncreative_reads.py:261",
           "Northstar_backend/main.py:2227"
@@ -2086,8 +2096,16 @@
         "declared_tools": [
           "watch_competitor"
         ],
-        "confidence": "low",
-        "latest_attempt_blocked": "neither the title nor the pixels changed"
+        "confidence": "high",
+        "latest_attempt_blocked": "neither the title nor the pixels changed",
+        "controls": [
+          "Add Competitor",
+          "Market Report",
+          "Search the Northstar Index...",
+          "Operator",
+          "Ask Gemini",
+          "DEV: AUTH DISABLED — local loopback only"
+        ]
       }
     },
     {
@@ -2271,8 +2289,8 @@
       "controls_evidence": "northstar-os-ui/src/pages/internal/AdPilot.jsx:146-159 product, tone and format inputs; :117 ad-copy request; :266 image upload input.",
       "evidence": {
         "route": "/ui/adpilot",
-        "vision": "screenshot",
-        "vision_note": "committed capture of this route; not described live | ty/ux_audit.json title: ListingForge | ty/ux_audit.json controls (shell chrome included): Standard, Advanced, Create Listing, Templates, Editor, Assets | blocked: window did not take the foreground | shot: reports/ui_audit_20261016/adpilot.png | latest attempt blocked: neither the title nor the pixels changed",
+        "vision": "live",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
@@ -2282,7 +2300,7 @@
         "declared_tools": [
           "plan_campaign"
         ],
-        "confidence": "low",
+        "confidence": "medium",
         "latest_attempt_blocked": "neither the title nor the pixels changed"
       }
     },
