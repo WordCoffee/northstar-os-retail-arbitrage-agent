@@ -1,0 +1,23 @@
+{
+  "model": "ByteDance-Seed/UI-TARS-2B-SFT",
+  "licence": "Apache-2.0",
+  "downloaded_gb": 9.11,
+  "attempts": [
+    {
+      "at": "2026-11-09T07:5x",
+      "free_ram_gb": 3.0,
+      "result": "process killed during checkpoint shard loading",
+      "traceback": null
+    },
+    {
+      "at": "2026-11-09T08:4x",
+      "free_ram_gb": 5.72,
+      "result": "process killed during checkpoint shard loading",
+      "traceback": null
+    }
+  ],
+  "stack": "ComfyUI venv: transformers 4.57.0, accelerate, torch 2.11.0+cu128, CUDA available",
+  "conclusion": "a 2B fp16 VL model needs roughly 6-7 GB of RAM to load on this box before it reaches the GPU; 16 GB total with the OS, browser and a running suite leaves less. No hit rate produced, so the 61.7% baseline stands and UIA+DOM remain primary.",
+  "harness": "tools/vision/grounding_uitars.py",
+  "next": "retry with every other process idle, or a 2-4 bit quantised build that loads inside 4 GB"
+}
