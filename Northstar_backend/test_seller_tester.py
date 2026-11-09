@@ -21,6 +21,12 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+
+@pytest.fixture(autouse=True)
+def _offline_describer(monkeypatch):
+    """The VLM describer is on in production. This module's contract is offline-only."""
+    monkeypatch.setenv("NORTHSTAR_VLM_DESCRIBE", "0")
+
 from tools.seller_tester import (  # noqa: E402
     CATEGORIES,
     MIN_PER_MODE,

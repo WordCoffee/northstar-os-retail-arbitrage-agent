@@ -1,6 +1,9 @@
 """Composite fidelity: does the output contain the real product region?
 
 And: is `tolerant` doing its job, or is it a loophole? Both are checkable, so both are checked.
+
+Also the owner's rule (2026-11-08): a product region that cannot be verified is a failure, and
+its reason names the product region.
 """
 from __future__ import annotations
 
@@ -74,6 +77,15 @@ def test_a_transparent_cutout_cannot_be_verified():
     verdict = C.check_composite(np.zeros((300, 300, 3), dtype=np.uint8), empty,
                                 placement=[10, 10, 100, 100])
     assert verdict["ok"] is False and verdict["cannot_verify"] is True
+
+
+def test_a_refused_region_names_the_product_region_and_never_passes():
+    cutout = rgba_product()
+    verdict = C.check_composite(frame_with(cutout), cutout, placement=[380, 30, 120, 120])
+    assert verdict["ok"] is False
+    assert verdict["detail"].startswith("product region cannot be verified:")
+    assert C.missing_cutout_verdict("nothing saved")["detail"] == \
+        "product region cannot be verified: nothing saved"
 
 
 def test_the_product_is_found_without_a_recorded_placement():

@@ -120,7 +120,7 @@
     },
     "ocr": {
       "label": "OCR (printed text on packaging)",
-      "eval": "mogra_text",
+      "eval": "mogra_crops",
       "incumbent": "rapidocr",
       "candidates": [
         "rapidocr",
@@ -129,15 +129,15 @@
       ],
       "measured": {
         "rapidocr": {
-          "mean_recall": 1.0,
+          "mean_recall": 0.875,
           "licence": "Apache-2.0"
         },
         "rapidocr-2x": {
-          "mean_recall": 1.0,
+          "mean_recall": 0.906,
           "licence": "Apache-2.0"
         },
         "easyocr": {
-          "mean_recall": 0.843,
+          "mean_recall": 0.359,
           "licence": "Apache-2.0"
         }
       },
@@ -153,7 +153,12 @@
       "incumbent": "birefnet",
       "incumbent_installed": true,
       "baseline": null,
-      "candidates": ["grabcut", "background_distance", "otsu_lab", "rembg"],
+      "candidates": [
+        "grabcut",
+        "background_distance",
+        "otsu_lab",
+        "rembg"
+      ],
       "notes": "Not Ollama tags: measured by tools/seller_tester/editor_bench.py on the three Mogra uploads (cutout eval). A row is a segmentation method, not a model. birefnet is the measured winner (14/14 items, mean edge 1.83 px) and needs the local ComfyUI lane; grabcut is the lane-free fallback (14/14, 5.08 px); rembg is not installed here. --run is not the way to scout this role: there are no Ollama tags for it.",
       "manager_key": null
     }

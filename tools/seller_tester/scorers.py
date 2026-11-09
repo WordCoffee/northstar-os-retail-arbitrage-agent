@@ -39,6 +39,10 @@ NO_TEXT_MAX_INK = 0.02
 TEXT_EXPECTED_MIN_INK = 0.002
 MARGIN_RATIO = 0.10
 
+#: Weight of the product-region check on a composite. It is graded only for composites, and
+#: the denominator is the graded set, so adding it changes nothing for a full generation.
+PRODUCT_REGION_WEIGHT = 0.25
+
 
 @dataclass
 class LoadedImage:
@@ -369,10 +373,94 @@ def _reference_verdict(rgb: np.ndarray, brief: Dict[str, Any], reference_check: 
     }
 
 
+def _product_region_verdict(produced_rgb: np.ndarray, *, cutout: Any,
+                            placement: Any) -> Dict[str, Any]:
+    """The composite's own proof: the product pixels in the output are the upload's.
+
+    There is no pass here for "we did not look". A composite route always runs this check; when
+    the generator saved no cutout it is `product region cannot be verified: ...`, which is a
+    failure under the owner's rule (2026-11-08).
+    """
+    if cutout is None:
+        from .composite_check import missing_cutout_verdict
+
+        return missing_cutout_verdict(
+            "the generator saved no cutout it used, so the product region cannot be compared "
+            "(expected <artefact>.cutout.png beside the composite)")
+    try:
+        from .composite_check import check_composite
+
+        verdict = check_composite(produced_rgb, cutout, placement=placement)
+    except Exception as exc:  # noqa: BLE001 - an unreadable cutout is a named failure
+        from .composite_check import missing_cutout_verdict
+
+        return missing_cutout_verdict(
+            f"the product-region comparison raised {type(exc).__name__}: {exc}")
+    verdict.setdefault("skipped", False)
+    verdict.setdefault("cannot_verify", False)
+    verdict["ok"] = bool(verdict.get("ok"))
+    verdict["check"] = "product_region"
+    return verdict
+
+
+def combine_checks(checks: Dict[str, Dict[str, Any]], brief: Dict[str, Any], *,
+                   composite_route: bool = False) -> Dict[str, Any]:
+    """Turn measured checks into a score, a verdict and the reasons.
+
+    Split out of `score_image` so a later audit can re-score a recorded run with one new check
+    (the product region) without inventing numbers: the same weights, the same critical set,
+    the same `cannot_verify`-cannot-pass rule.
+    """
+    weights = dict(DEFAULT_WEIGHTS)
+    weights.update(brief.get("weights") or {})
+    if composite_route:
+        # Graded only for composites; the denominator is the graded set, so a full
+        # generation is unchanged.
+        weights["product_region"] = float(
+            brief.get("product_region_weight", PRODUCT_REGION_WEIGHT))
+    vision = checks.get("vision")
+    if isinstance(vision, dict) and not vision.get("skipped"):
+        weights["vision"] = float(brief.get("vision_weight", 0.25))
+
+    graded = [name for name, check in checks.items()
+              if not check.get("skipped") and weights.get(name, 0) > 0]
+    denominator = sum(weights[name] for name in graded)
+    weighted = sum(weights[name] * (1.0 if checks[name]["ok"] else 0.0) for name in graded)
+    score = 100.0 * weighted / denominator if denominator else 0.0
+
+    failed = [name for name, check in checks.items()
+              if not check.get("skipped") and not check["ok"]]
+    critical = list(brief.get("critical") or DEFAULT_CRITICAL)
+    reference = checks.get("reference_subject") or {}
+    if not reference.get("skipped") and "reference_subject" not in critical:
+        # A picture that does not contain the reference subject cannot pass on
+        # the strength of its dimensions.
+        critical.append("reference_subject")
+    if composite_route and "product_region" not in critical:
+        # An unverified product region is a failure even when every other check passes.
+        critical.append("product_region")
+    critical_failed = [name for name in critical
+                       if name in checks and not checks[name].get("skipped")
+                       and not checks[name]["ok"]]
+    pass_score = float(brief.get("pass_score", 70))
+    return {
+        "score": round(score, 1),
+        "passed": bool(score >= pass_score and not critical_failed),
+        "failed_checks": failed,
+        "critical_failed": critical_failed,
+        "pass_score": pass_score,
+        "graded": graded,
+    }
+
+
 def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 judge: Any = None,
                 reference_check: Any = None,
-                scene_source: Optional[str] = None) -> Dict[str, Any]:
+                scene_source: Optional[str] = None,
+                route: Optional[str] = None,
+                composite_route: Optional[bool] = None,
+                cutout: Any = None,
+                placement: Any = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
@@ -384,15 +472,23 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
     composite whose scene is `synthetic` did not go through the render lane, so it
     is `cannot_verify` and cannot pass: the cutout and the placement are proved,
     the generated scene is not.
+
+    `composite_route` says the picture came out of the composite path. The product
+    region is then a mandatory check: no saved cutout means `cannot_verify` and a
+    fail, never a skip. When it is `None`, a brief that declares `route: composite`
+    selects the same behaviour, so a caller cannot forget the check by omission.
     """
     brief_id = brief.get("id", "unknown")
     mode = brief.get("source_mode") or "unclassified"
+    if composite_route is None:
+        composite_route = str(route or brief.get("route") or "") == "composite"
     base = {
         "brief_id": brief_id,
         "category": brief.get("category"),
         "situation": brief.get("situation"),
         "difficulty": brief.get("difficulty"),
         "source_mode": mode,
+        "route": route,
         "checks": {},
         "failed_checks": [],
         "score": 0.0,
@@ -420,9 +516,9 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         "bytes": loaded.nbytes,
     })
     checks["reference_subject"] = _reference_verdict(loaded.rgb, brief, reference_check)
-
-    weights = dict(DEFAULT_WEIGHTS)
-    weights.update(brief.get("weights") or {})
+    if composite_route:
+        checks["product_region"] = _product_region_verdict(
+            loaded.rgb, cutout=cutout, placement=placement)
 
     if judge is not None:
         rubric = {
@@ -436,42 +532,30 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         verdict = _normalise_judgement(judge(image_bytes, rubric))
         checks["vision"] = verdict
         if not verdict.get("skipped"):
-            weights["vision"] = float(brief.get("vision_weight", 0.25))
             base["judged"] = True
         else:
             checks["vision"]["ok"] = True
 
-    graded = [name for name, check in checks.items()
-              if not check.get("skipped") and weights.get(name, 0) > 0]
-    denominator = sum(weights[name] for name in graded)
-    weighted = sum(weights[name] * (1.0 if checks[name]["ok"] else 0.0) for name in graded)
-    score = 100.0 * weighted / denominator if denominator else 0.0
-
-    failed = [name for name, check in checks.items()
-              if not check.get("skipped") and not check["ok"]]
-    critical = list(brief.get("critical") or DEFAULT_CRITICAL)
-    reference = checks["reference_subject"]
-    if not reference.get("skipped") and "reference_subject" not in critical:
-        # A picture that does not contain the reference subject cannot pass on
-        # the strength of its dimensions.
-        critical.append("reference_subject")
-    critical_failed = [name for name in critical
-                       if name in checks and not checks[name].get("skipped")
-                       and not checks[name]["ok"]]
-    pass_score = float(brief.get("pass_score", 70))
+    combined = combine_checks(checks, brief, composite_route=composite_route)
 
     base["checks"] = checks
-    base["failed_checks"] = failed
-    base["critical_failed"] = critical_failed
-    base["score"] = round(score, 1)
-    base["passed"] = bool(score >= pass_score and not critical_failed)
-    base["pass_score"] = pass_score
+    base["failed_checks"] = combined["failed_checks"]
+    base["critical_failed"] = combined["critical_failed"]
+    base["score"] = combined["score"]
+    base["passed"] = combined["passed"]
+    base["pass_score"] = combined["pass_score"]
     if scene_source == "synthetic":
         base["passed"] = False
         base["cannot_verify"] = True
         base["cannot_verify_reason"] = (
             "the scene was a synthetic backdrop, not a render: the cutout and the "
             "placement are proved, the generated scene is not")
+    product_region = checks.get("product_region")
+    if composite_route and isinstance(product_region, dict) \
+            and product_region.get("cannot_verify"):
+        base["passed"] = False
+        base["cannot_verify"] = True
+        base["cannot_verify_reason"] = str(product_region.get("detail") or "")
     return base
 
 
@@ -479,6 +563,8 @@ __all__ = [
     "DEFAULT_WEIGHTS",
     "DEFAULT_CRITICAL",
     "LoadedImage",
+    "PRODUCT_REGION_WEIGHT",
+    "combine_checks",
     "load_image",
     "sample_corners",
     "check_dimensions",

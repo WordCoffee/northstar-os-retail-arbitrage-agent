@@ -1,78 +1,487 @@
 {
-  "at": "2026-11-09T03:37:06+00:00",
+  "at": "2026-11-09T04:50:35+00:00",
   "eval_set": [
-    "mogra_pair_main.png",
-    "mogra_pair_lifestyle.png",
-    "mogra_forest_dusk.png",
-    "text_card.png"
+    {
+      "id": "main_brand_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_brand_left.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_pair_main.png",
+      "box": [
+        415,
+        825,
+        645,
+        922
+      ],
+      "text_px": 23,
+      "note": "brand lockup + subtitle on the green pouch, small caps",
+      "width": 230,
+      "height": 97
+    },
+    {
+      "id": "main_brand_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_brand_right.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_pair_main.png",
+      "box": [
+        1340,
+        845,
+        1585,
+        942
+      ],
+      "text_px": 24,
+      "note": "brand lockup + subtitle on the black pouch",
+      "width": 245,
+      "height": 97
+    },
+    {
+      "id": "main_name_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_name_left.jpg",
+      "expected": "ORGANIC LION'S MANE",
+      "source": "mogra_pair_main.png",
+      "box": [
+        200,
+        1068,
+        880,
+        1132
+      ],
+      "text_px": 43,
+      "note": "display serif over dark green, real curvature",
+      "width": 680,
+      "height": 64
+    },
+    {
+      "id": "main_name_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_name_right.jpg",
+      "expected": "ORGANIC SHIITAKE",
+      "source": "mogra_pair_main.png",
+      "box": [
+        1120,
+        1088,
+        1818,
+        1156
+      ],
+      "text_px": 48,
+      "note": "display serif over near-black",
+      "width": 698,
+      "height": 68
+    },
+    {
+      "id": "main_panel_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_panel_left.jpg",
+      "expected": "MUSHROOM POWDER 6 oz (170 g)",
+      "source": "mogra_pair_main.png",
+      "box": [
+        205,
+        1128,
+        790,
+        1500
+      ],
+      "text_px": 28,
+      "note": "sub-name + weight panel, low contrast on dark green",
+      "width": 585,
+      "height": 372
+    },
+    {
+      "id": "main_panel_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\main_panel_right.jpg",
+      "expected": "MUSHROOM POWDER 8 oz (227 g)",
+      "source": "mogra_pair_main.png",
+      "box": [
+        1215,
+        1148,
+        1730,
+        1500
+      ],
+      "text_px": 31,
+      "note": "sub-name + weight panel on near-black",
+      "width": 515,
+      "height": 352
+    },
+    {
+      "id": "life_brand_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_brand_left.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        265,
+        610,
+        412,
+        662
+      ],
+      "text_px": 17,
+      "note": "brand lockup at 17 px in a scene, blurred background",
+      "width": 147,
+      "height": 52
+    },
+    {
+      "id": "life_brand_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_brand_right.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        805,
+        618,
+        960,
+        674
+      ],
+      "text_px": 22,
+      "note": "brand lockup at 22 px on the black pouch",
+      "width": 155,
+      "height": 56
+    },
+    {
+      "id": "life_name_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_name_left.jpg",
+      "expected": "ORGANIC LION'S MANE",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        140,
+        730,
+        548,
+        785
+      ],
+      "text_px": 31,
+      "note": "display serif in the greenhouse scene",
+      "width": 408,
+      "height": 55
+    },
+    {
+      "id": "life_name_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_name_right.jpg",
+      "expected": "ORGANIC SHIITAKE",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        676,
+        741,
+        1096,
+        799
+      ],
+      "text_px": 34,
+      "note": "display serif in the greenhouse scene",
+      "width": 420,
+      "height": 58
+    },
+    {
+      "id": "life_panel_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_panel_left.jpg",
+      "expected": "MUSHROOM POWDER 6 oz (170 g)",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        190,
+        762,
+        495,
+        996
+      ],
+      "text_px": 24,
+      "note": "sub-name + weight, shallow depth of field",
+      "width": 305,
+      "height": 234
+    },
+    {
+      "id": "life_panel_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\life_panel_right.jpg",
+      "expected": "MUSHROOM POWDER 8 oz (227 g)",
+      "source": "mogra_pair_lifestyle.png",
+      "box": [
+        730,
+        775,
+        1050,
+        1000
+      ],
+      "text_px": 23,
+      "note": "sub-name + weight on the black pouch",
+      "width": 320,
+      "height": 225
+    },
+    {
+      "id": "forest_brand_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\forest_brand_left.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_forest_dusk.png",
+      "box": [
+        185,
+        278,
+        532,
+        362
+      ],
+      "text_px": 32,
+      "note": "brand lockup at dusk, warm low light",
+      "width": 347,
+      "height": 84
+    },
+    {
+      "id": "forest_brand_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\forest_brand_right.jpg",
+      "expected": "EST 2023 MOGRA ORGANICS Healthy & Organic",
+      "source": "mogra_forest_dusk.png",
+      "box": [
+        680,
+        278,
+        1035,
+        357
+      ],
+      "text_px": 35,
+      "note": "brand lockup at dusk, warm low light",
+      "width": 355,
+      "height": 79
+    },
+    {
+      "id": "forest_name_left",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\forest_name_left.jpg",
+      "expected": "ORGANIC LION'S MANE",
+      "source": "mogra_forest_dusk.png",
+      "box": [
+        168,
+        350,
+        548,
+        414
+      ],
+      "text_px": 36,
+      "note": "display serif, warm low light, mild blur",
+      "width": 380,
+      "height": 64
+    },
+    {
+      "id": "forest_panel_right",
+      "path": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\sel-01e\\state\\ocr\\crops\\forest_panel_right.jpg",
+      "expected": "MUSHROOM POWDER 8 oz (227 g)",
+      "source": "mogra_forest_dusk.png",
+      "box": [
+        720,
+        372,
+        1000,
+        715
+      ],
+      "text_px": 23,
+      "note": "sub-name + weight, lowest-contrast case in the set",
+      "width": 280,
+      "height": 343
+    }
   ],
-  "metric": "mean token recall of the printed text (fuzzy, the same matcher the reference check uses)",
+  "crop_count": 16,
+  "crop_source": "renders/references/mogra/*.png (real uploads), cropped and saved as JPEG q72",
+  "metric": "mean token recall of the crop's known printed text (fuzzy, the same matcher the reference check uses)",
   "candidates": {
     "rapidocr": {
       "status": "measured",
-      "mean_recall": 1.0,
-      "frames": 4,
-      "seconds": 13.7,
+      "mean_recall": 0.875,
+      "frames": 16,
+      "seconds": 28.63,
+      "crops_read_exactly": 12,
+      "hard_crops": [
+        "main_brand_left",
+        "main_brand_right",
+        "life_brand_left",
+        "life_brand_right"
+      ],
       "per_frame": [
         {
-          "id": "mogra_pair_main.png",
-          "seconds": 4.64,
-          "recall": 1.0,
+          "id": "main_brand_left",
+          "seconds": 2.62,
+          "recall": 0.75,
           "matched": [
             "mogra",
-            "organics",
-            "organic",
-            "lions",
-            "mushroom",
-            "powder",
-            "shiitake"
+            "healthy",
+            "organic"
           ],
-          "missing": [],
-          "error": "",
-          "text": "EST 2023 EST 2023 MOGRAORGANICS Hlealthy&Organic MOGRA ORGANICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
-        },
-        {
-          "id": "mogra_pair_lifestyle.png",
-          "seconds": 3.13,
-          "recall": 1.0,
-          "matched": [
-            "mogra",
-            "organics",
-            "organic",
-            "lions",
-            "shiitake"
-          ],
-          "missing": [],
-          "error": "",
-          "text": "MOGRA ORGANICS Ilealthy & Organie MOGRA ORGANCS Healthy & Organic ORGANIS LIONSMANE ORGANIC SHITAKE MUSHROOM POWDER MUSHROOM POWDER 6 oz (170 g) 8oz (227g)"
-        },
-        {
-          "id": "mogra_forest_dusk.png",
-          "seconds": 3.05,
-          "recall": 1.0,
-          "matched": [
-            "mogra",
+          "missing": [
             "organics"
           ],
-          "missing": [],
           "error": "",
-          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy&Organic Healthy& Organic ORGANICLION'SMANE ORGANIC SHIITAKE MUSHROOM POWDER MUSHROOMPOWDER 6 oz (170 g) 8 oz (227 g)"
+          "text": "2023 MOGRAORGAICS Healthy&Organic"
         },
         {
-          "id": "text_card.png",
-          "seconds": 2.88,
-          "recall": 1.0,
+          "id": "main_brand_right",
+          "seconds": 1.84,
+          "recall": 0.5,
           "matched": [
             "mogra",
+            "healthy"
+          ],
+          "missing": [
             "organics",
+            "organic"
+          ],
+          "error": "",
+          "text": "2023 MOGRAORGAAICS HealthyOrganie"
+        },
+        {
+          "id": "main_name_left",
+          "seconds": 0.29,
+          "recall": 1.0,
+          "matched": [
             "organic",
-            "lions",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC LIONSMANE"
+        },
+        {
+          "id": "main_name_right",
+          "seconds": 0.2,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC SHIITAKE"
+        },
+        {
+          "id": "main_panel_left",
+          "seconds": 1.41,
+          "recall": 1.0,
+          "matched": [
             "mushroom",
             "powder"
           ],
           "missing": [],
           "error": "",
-          "text": "MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOMPOWDER 6 oz (170 g)"
+          "text": "MUSHROOMPOWDER 60z(170g)"
+        },
+        {
+          "id": "main_panel_right",
+          "seconds": 1.78,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOM POWDER (227g)"
+        },
+        {
+          "id": "life_brand_left",
+          "seconds": 1.8,
+          "recall": 0.25,
+          "matched": [
+            "mogra"
+          ],
+          "missing": [
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "error": "",
+          "text": "MOGRAORGANKS Hualthy&Organie"
+        },
+        {
+          "id": "life_brand_right",
+          "seconds": 1.71,
+          "recall": 0.5,
+          "matched": [
+            "mogra",
+            "healthy"
+          ],
+          "missing": [
+            "organics",
+            "organic"
+          ],
+          "error": "",
+          "text": "MOGRAORGANCS Healthy&Organie"
+        },
+        {
+          "id": "life_name_left",
+          "seconds": 2.35,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANICLION'SMANE"
+        },
+        {
+          "id": "life_name_right",
+          "seconds": 2.6,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC SHIITAKE"
+        },
+        {
+          "id": "life_panel_left",
+          "seconds": 1.78,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOM POWDER 6oz(170g)"
+        },
+        {
+          "id": "life_panel_right",
+          "seconds": 1.47,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOM POWDER 8oz(227g)"
+        },
+        {
+          "id": "forest_brand_left",
+          "seconds": 2.1,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 MOGRA ORGANICS Hualthy& Organi"
+        },
+        {
+          "id": "forest_brand_right",
+          "seconds": 2.08,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 MOGRA ORGANICS Healthy&Organic"
+        },
+        {
+          "id": "forest_name_left",
+          "seconds": 2.73,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANICLION'SMANE MUSHROOM MPOWDER"
+        },
+        {
+          "id": "forest_panel_right",
+          "seconds": 1.87,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "RUAO MUSHROOMPOWDER 80z(227g)"
         }
       ],
       "engine": "rapidocr_onnxruntime",
@@ -82,144 +491,460 @@
     },
     "rapidocr-2x": {
       "status": "measured",
-      "mean_recall": 1.0,
-      "frames": 4,
-      "seconds": 19.15,
+      "mean_recall": 0.906,
+      "frames": 16,
+      "seconds": 19.52,
+      "crops_read_exactly": 13,
+      "hard_crops": [
+        "main_brand_left",
+        "life_brand_left",
+        "forest_brand_left"
+      ],
       "per_frame": [
         {
-          "id": "mogra_pair_main.png",
-          "seconds": 7.13,
+          "id": "main_brand_left",
+          "seconds": 0.82,
+          "recall": 0.5,
+          "matched": [
+            "mogra",
+            "organic"
+          ],
+          "missing": [
+            "organics",
+            "healthy"
+          ],
+          "error": "",
+          "text": "2023 MOGRAORGAAICS Healehy&Organic"
+        },
+        {
+          "id": "main_brand_right",
+          "seconds": 1.43,
           "recall": 1.0,
           "matched": [
             "mogra",
             "organics",
+            "healthy",
+            "organic"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "2023 MOGRA ORGAAICS Healthy&Organic"
+        },
+        {
+          "id": "main_name_left",
+          "seconds": 0.13,
+          "recall": 1.0,
+          "matched": [
             "organic",
-            "lions",
-            "mushroom",
-            "powder",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC LIONSMANE"
+        },
+        {
+          "id": "main_name_right",
+          "seconds": 0.12,
+          "recall": 1.0,
+          "matched": [
+            "organic",
             "shiitake"
           ],
           "missing": [],
           "error": "",
-          "text": "EST 2023 EST 2023 MOGRAORGAICS MOGRAORGAAICS Healthy&Organic Healthy&Organic ORGANILION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 88 6 oz (170 g) 8 oz (227 g)"
+          "text": "ORGANIC SHIITAKE"
         },
         {
-          "id": "mogra_pair_lifestyle.png",
-          "seconds": 5.09,
+          "id": "main_panel_left",
+          "seconds": 1.9,
           "recall": 1.0,
           "matched": [
-            "mogra",
-            "organics",
-            "organic",
-            "lions",
-            "shiitake"
-          ],
-          "missing": [],
-          "error": "",
-          "text": "EST 2023 EST 2023 MOGRAORGAAICS lealthy&Organie MOGRA ORGAAICS Healthy&Organic ORGANISLION'SMANE ORGANIC SHIITAKE MUSHROOMPOWDER MUSHROOMPOWDER 88 6 oz (170 g) 8 oz (227 g)"
-        },
-        {
-          "id": "mogra_forest_dusk.png",
-          "seconds": 4.67,
-          "recall": 1.0,
-          "matched": [
-            "mogra",
-            "organics"
-          ],
-          "missing": [],
-          "error": "",
-          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthy& Organic Healthy&Organic ORGANIC SHIITAKE ORGANIC LION'S MANE MUSHROOMPOWDER MUSHROOM POWDER 6 oz (170 g) 8 oz (227 g)"
-        },
-        {
-          "id": "text_card.png",
-          "seconds": 2.26,
-          "recall": 1.0,
-          "matched": [
-            "mogra",
-            "organics",
-            "organic",
-            "lions",
             "mushroom",
             "powder"
           ],
           "missing": [],
           "error": "",
-          "text": "MOGRA ORGANICS ORGANIC LION'S MANE 6 oz (170 g) MUSHROOMPOWDER"
+          "text": "MUSHROOMPOWDER 6oz(170g)"
+        },
+        {
+          "id": "main_panel_right",
+          "seconds": 1.27,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOM POWDER 8z (227g)"
+        },
+        {
+          "id": "life_brand_left",
+          "seconds": 1.3,
+          "recall": 0.25,
+          "matched": [
+            "mogra"
+          ],
+          "missing": [
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "error": "",
+          "text": "MOGRA ORGAKS Halthy&orxanio"
+        },
+        {
+          "id": "life_brand_right",
+          "seconds": 0.76,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MOGRA ORGANICS Healthy&Ostanfe"
+        },
+        {
+          "id": "life_name_left",
+          "seconds": 1.84,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIG CLION'S MANE"
+        },
+        {
+          "id": "life_name_right",
+          "seconds": 1.67,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC SHITAKE"
+        },
+        {
+          "id": "life_panel_left",
+          "seconds": 1.33,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROON POWDER 6 oz (170 g)"
+        },
+        {
+          "id": "life_panel_right",
+          "seconds": 1.12,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOM POWDER 8oz (227 g)"
+        },
+        {
+          "id": "forest_brand_left",
+          "seconds": 0.9,
+          "recall": 0.75,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic"
+          ],
+          "missing": [
+            "healthy"
+          ],
+          "error": "",
+          "text": "EST 2023 MOGRA ORGANICS Huatth&organic"
+        },
+        {
+          "id": "forest_brand_right",
+          "seconds": 1.64,
+          "recall": 1.0,
+          "matched": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "EST 2023 MOGRA ORGANICS Healthy&erganie"
+        },
+        {
+          "id": "forest_name_left",
+          "seconds": 1.78,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANICLION'SMANE MUSHROOMPOWDER"
+        },
+        {
+          "id": "forest_panel_right",
+          "seconds": 1.51,
+          "recall": 1.0,
+          "matched": [
+            "mushroom",
+            "powder"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "MUSHROOMPOWDER 8 0z (227 g)"
         }
       ],
       "engine": "rapidocr_onnxruntime",
       "licence": "Apache-2.0",
       "source": "https://github.com/RapidAI/RapidOCR",
       "device": "cpu/onnx",
-      "note": "same engine, frames upscaled 2x before recognition"
+      "note": "same engine, crops upscaled 2x before recognition"
     },
     "easyocr": {
       "status": "measured",
-      "mean_recall": 0.843,
-      "frames": 4,
-      "seconds": 19.51,
+      "mean_recall": 0.359,
+      "frames": 16,
+      "seconds": 18.94,
+      "crops_read_exactly": 3,
+      "hard_crops": [
+        "main_brand_left",
+        "main_brand_right",
+        "main_panel_left",
+        "main_panel_right",
+        "life_brand_left",
+        "life_brand_right",
+        "life_name_left",
+        "life_panel_left",
+        "life_panel_right",
+        "forest_brand_left",
+        "forest_brand_right",
+        "forest_name_left",
+        "forest_panel_right"
+      ],
       "per_frame": [
         {
-          "id": "mogra_pair_main.png",
-          "seconds": 12.01,
-          "recall": 0.571,
-          "matched": [
+          "id": "main_brand_left",
+          "seconds": 7.65,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mogra",
             "organics",
-            "organic",
-            "lions",
-            "shiitake"
+            "healthy",
+            "organic"
+          ],
+          "error": "",
+          "text": "2071 McXil?A OIX;AIK $ Mealth; < Orxunia"
+        },
+        {
+          "id": "main_brand_right",
+          "seconds": 0.1,
+          "recall": 0.25,
+          "matched": [
+            "healthy"
           ],
           "missing": [
             "mogra",
+            "organics",
+            "organic"
+          ],
+          "error": "",
+          "text": "EST 2023 MKXR?A (X;AAK $ Healthy & Orxanie"
+        },
+        {
+          "id": "main_name_left",
+          "seconds": 0.09,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "lions"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC LIONSMANE"
+        },
+        {
+          "id": "main_name_right",
+          "seconds": 0.11,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC SHIITAKE"
+        },
+        {
+          "id": "main_panel_left",
+          "seconds": 0.33,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
             "mushroom",
             "powder"
           ],
           "error": "",
-          "text": "207 _ 2023 McXi? OIX;AAK $ Mealth} < Orxunie MKXRRA (XAAAK $ Healthy & Orkunic ORGANIC LIONSMANE M U $ HR 00 M RO W D E R ORGANIC SHIITAKE M U $ HR 0 0 M P 0 W D E R 6 0z (170 g) 8 oz (227 g)"
+          "text": "M U $ HR 00 M BOW D E R 6 0z (170 g)"
         },
         {
-          "id": "mogra_pair_lifestyle.png",
-          "seconds": 3.3,
-          "recall": 0.8,
+          "id": "main_panel_right",
+          "seconds": 0.28,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mushroom",
+            "powder"
+          ],
+          "error": "",
+          "text": "M U $ HR 0 0 M P 0 W D E R 8 oz (227 g)"
+        },
+        {
+          "id": "life_brand_left",
+          "seconds": 0.06,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "error": "",
+          "text": "VcXi?A OX;HIK $"
+        },
+        {
+          "id": "life_brand_right",
+          "seconds": 0.12,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mogra",
+            "organics",
+            "healthy",
+            "organic"
+          ],
+          "error": "",
+          "text": "MKXCQA ( XAIc $ Haalhy & Omnni"
+        },
+        {
+          "id": "life_name_left",
+          "seconds": 0.07,
+          "recall": 0.5,
+          "matched": [
+            "lions"
+          ],
+          "missing": [
+            "organic"
+          ],
+          "error": "",
+          "text": "ORGANG LIONSMANE"
+        },
+        {
+          "id": "life_name_right",
+          "seconds": 0.08,
+          "recall": 1.0,
+          "matched": [
+            "organic",
+            "shiitake"
+          ],
+          "missing": [],
+          "error": "",
+          "text": "ORGANIC SHIITAKE"
+        },
+        {
+          "id": "life_panel_left",
+          "seconds": 0.16,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mushroom",
+            "powder"
+          ],
+          "error": "",
+          "text": "M U $ H R 00 M ROW D E R 6 0z (170 g)"
+        },
+        {
+          "id": "life_panel_right",
+          "seconds": 0.24,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
+            "mushroom",
+            "powder"
+          ],
+          "error": "",
+          "text": "ANaLAA4 L414 M U $ HR 0 0 M P 0 W D E R 8 oz (227 g)"
+        },
+        {
+          "id": "forest_brand_left",
+          "seconds": 9.08,
+          "recall": 0.75,
+          "matched": [
+            "mogra",
+            "organics",
+            "organic"
+          ],
+          "missing": [
+            "healthy"
+          ],
+          "error": "",
+          "text": "EST 2023 MOGRA ORGANCS Huathy QrKani"
+        },
+        {
+          "id": "forest_brand_right",
+          "seconds": 0.18,
+          "recall": 0.75,
           "matched": [
             "organics",
-            "organic",
-            "lions",
-            "shiitake"
+            "healthy",
+            "organic"
           ],
           "missing": [
             "mogra"
           ],
           "error": "",
-          "text": "IKXi?A CIX;AA $ Orxun MKXCRA (x;AK $ Haarh& Omrunic ORGANG LION'SMANE ORGANIC SHIITAKE M U $ HR 00 M RPOW D E R M U $ HR 0 0 M P 0 W D E R 6 0z (170 g) 8 oz (227 g)"
+          "text": "EST 2023 VOGRA ORGANICS Health; Xorganc"
         },
         {
-          "id": "mogra_forest_dusk.png",
-          "seconds": 2.63,
-          "recall": 1.0,
+          "id": "forest_name_left",
+          "seconds": 0.13,
+          "recall": 0.5,
           "matched": [
-            "mogra",
-            "organics"
+            "lions"
           ],
-          "missing": [],
+          "missing": [
+            "organic"
+          ],
           "error": "",
-          "text": "EST 2023 EST 2023 MOGRA ORGANICS MOGRA ORGANICS Healthi * Organic Healthy < Organic ORGAVC LIONS MANE ORGAVC SHIIITAKE M U $ H R 0 0 M P 0 W D E R M U SH R 0 0 M P 0 W D E R 6 0z (170 g) 8 0z (227 g)"
+          "text": "ORGAVC LIONS MANE M U 5 HR 0 0 M P 0 W D E R"
         },
         {
-          "id": "text_card.png",
-          "seconds": 1.57,
-          "recall": 1.0,
-          "matched": [
-            "mogra",
-            "organics",
-            "organic",
-            "lions",
+          "id": "forest_panel_right",
+          "seconds": 0.28,
+          "recall": 0.0,
+          "matched": [],
+          "missing": [
             "mushroom",
             "powder"
           ],
-          "missing": [],
           "error": "",
-          "text": "MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOM POWDER 6 oz (170 g)"
+          "text": ")RuUouln M Ush R 0 0 M P 0 W D E R 8 0z (227 g)"
         }
       ],
       "engine": "easyocr",
@@ -228,8 +953,139 @@
       "device": "torch"
     }
   },
-  "winner": "rapidocr",
+  "leaderboard": [
+    {
+      "engine": "rapidocr-2x",
+      "mean_recall": 0.906,
+      "crops_read_exactly": 13,
+      "seconds": 19.52,
+      "licence": "Apache-2.0",
+      "hard_crops": [
+        "main_brand_left",
+        "life_brand_left",
+        "forest_brand_left"
+      ]
+    },
+    {
+      "engine": "rapidocr",
+      "mean_recall": 0.875,
+      "crops_read_exactly": 12,
+      "seconds": 28.63,
+      "licence": "Apache-2.0",
+      "hard_crops": [
+        "main_brand_left",
+        "main_brand_right",
+        "life_brand_left",
+        "life_brand_right"
+      ]
+    },
+    {
+      "engine": "easyocr",
+      "mean_recall": 0.359,
+      "crops_read_exactly": 3,
+      "seconds": 18.94,
+      "licence": "Apache-2.0",
+      "hard_crops": [
+        "main_brand_left",
+        "main_brand_right",
+        "main_panel_left",
+        "main_panel_right",
+        "life_brand_left",
+        "life_brand_right",
+        "life_name_left",
+        "life_panel_left",
+        "life_panel_right",
+        "forest_brand_left",
+        "forest_brand_right",
+        "forest_name_left",
+        "forest_panel_right"
+      ]
+    }
+  ],
+  "per_crop": {
+    "main_brand_left": {
+      "rapidocr": 0.75,
+      "rapidocr-2x": 0.5,
+      "easyocr": 0.0
+    },
+    "main_brand_right": {
+      "rapidocr": 0.5,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.25
+    },
+    "main_name_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 1.0
+    },
+    "main_name_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 1.0
+    },
+    "main_panel_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    },
+    "main_panel_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    },
+    "life_brand_left": {
+      "rapidocr": 0.25,
+      "rapidocr-2x": 0.25,
+      "easyocr": 0.0
+    },
+    "life_brand_right": {
+      "rapidocr": 0.5,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    },
+    "life_name_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.5
+    },
+    "life_name_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 1.0
+    },
+    "life_panel_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    },
+    "life_panel_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    },
+    "forest_brand_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 0.75,
+      "easyocr": 0.75
+    },
+    "forest_brand_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.75
+    },
+    "forest_name_left": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.5
+    },
+    "forest_panel_right": {
+      "rapidocr": 1.0,
+      "rapidocr-2x": 1.0,
+      "easyocr": 0.0
+    }
+  },
+  "winner": "rapidocr-2x",
   "incumbent": "rapidocr",
-  "margin_over_incumbent": 0.0,
+  "margin_over_incumbent": 0.031,
   "decision": "keep rapidocr"
 }
