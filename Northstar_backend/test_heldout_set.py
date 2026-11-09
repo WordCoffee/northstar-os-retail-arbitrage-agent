@@ -60,6 +60,32 @@ def test_text_rules_are_the_ones_the_pipeline_understands(payload):
     assert by_situation["infographic"] == "text_expected"
 
 
+def test_the_mode_label_stays_stored_reference_only_until_both_other_modes_reach_ten():
+    rows = [{"source_mode": "uploaded_reference", "score": 90.0, "passed": True} for _ in range(21)]
+    coverage = heldout_run.mode_coverage(rows)
+    assert coverage["label"] == "stored-reference only"
+    assert coverage["counts"]["uploaded_reference"] == 21
+
+
+def test_the_label_lifts_only_when_prompt_only_and_stored_reference_are_both_covered():
+    rows = ([{"source_mode": "prompt_only", "score": 1.0, "passed": False}] * 10
+            + [{"source_mode": "stored_reference", "score": 1.0, "passed": False}] * 10
+            + [{"source_mode": "uploaded_reference", "score": 1.0, "passed": False}] * 1)
+    assert heldout_run.mode_coverage(rows)["label"] == "all three modes"
+    # one mode short is still short
+    short = rows[:-11]
+    assert heldout_run.mode_coverage(short)["label"] == "stored-reference only"
+
+
+def test_the_mode_table_shows_unmeasured_modes_at_zero_rather_than_omitting_them():
+    rows = [{"source_mode": "uploaded_reference", "score": 80.0, "passed": True},
+            {"source_mode": "uploaded_reference", "score": 60.0, "passed": False}]
+    table = heldout_run.by_mode(rows)
+    assert list(table) == ["prompt_only", "stored_reference", "uploaded_reference"]
+    assert table["prompt_only"] == {"n": 0, "passed": 0, "mean": None}
+    assert table["uploaded_reference"] == {"n": 2, "passed": 1, "mean": 70.0}
+
+
 def test_no_brief_treats_a_brand_wordmark_as_the_product(payload):
     """A logo is not a product: two briefs that shared one produced byte-identical composites."""
     for brief in payload["briefs"]:

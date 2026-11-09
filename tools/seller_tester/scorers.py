@@ -400,7 +400,7 @@ def _reference_verdict(rgb: np.ndarray, brief: Dict[str, Any], reference_check: 
 
 
 def _product_region_verdict(produced_rgb: np.ndarray, *, cutout: Any,
-                            placement: Any) -> Dict[str, Any]:
+                            placement: Any, placement_quad: Any = None) -> Dict[str, Any]:
     """The composite's own proof: the product pixels in the output are the upload's.
 
     There is no pass here for "we did not look". A composite route always runs this check; when
@@ -416,7 +416,8 @@ def _product_region_verdict(produced_rgb: np.ndarray, *, cutout: Any,
     try:
         from .composite_check import check_composite
 
-        verdict = check_composite(produced_rgb, cutout, placement=placement)
+        verdict = check_composite(produced_rgb, cutout, placement=placement,
+                                  placement_quad=placement_quad)
     except Exception as exc:  # noqa: BLE001 - an unreadable cutout is a named failure
         from .composite_check import missing_cutout_verdict
 
@@ -486,7 +487,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 route: Optional[str] = None,
                 composite_route: Optional[bool] = None,
                 cutout: Any = None,
-                placement: Any = None) -> Dict[str, Any]:
+                placement: Any = None,
+                placement_quad: Any = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
@@ -544,7 +546,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
     checks["reference_subject"] = _reference_verdict(loaded.rgb, brief, reference_check)
     if composite_route:
         checks["product_region"] = _product_region_verdict(
-            loaded.rgb, cutout=cutout, placement=placement)
+            loaded.rgb, cutout=cutout, placement=placement,
+            placement_quad=placement_quad)
 
     if judge is not None:
         rubric = {

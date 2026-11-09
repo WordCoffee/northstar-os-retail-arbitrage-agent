@@ -129,7 +129,8 @@ def _cmd_composite(args: argparse.Namespace) -> int:
 
         renderer = renderer_from_name("synthetic")
     generator = CompositeGenerator(renderer=renderer, method=args.method,
-                                   out_dir=args.out_dir, repo_root=Path(args.root))
+                                   out_dir=args.out_dir, repo_root=Path(args.root),
+                                   layout=getattr(args, "layout", "deterministic"))
     summary = run_pass(generator=generator, briefs=payload.get("briefs", []),
                        limit=args.limit, judge=None,
                        gaps_path=Path(args.gaps) if args.gaps else None,
@@ -203,6 +204,9 @@ def build_parser() -> argparse.ArgumentParser:
                       help="comfy starts its own lane; synthetic is the offline fallback")
     comp.add_argument("--method", default="birefnet",
                       help="cutout method (birefnet, grabcut, background_distance, otsu_lab)")
+    comp.add_argument("--layout", default="deterministic", choices=["deterministic", "scene"],
+                      help=("deterministic lays out infographics and packaging panels with "
+                            "measured geometry; scene leaves those two situations to the model"))
     comp.add_argument("--scene-size", type=int, default=768,
                       help="scene render size in px (768 is what renders under the shared VRAM)")
     comp.add_argument("--steps", type=int, default=20)

@@ -156,6 +156,25 @@ WHITE_FILL = 0.85
 WHITE_LEVEL = 255
 
 
+def _as_rgb(png: bytes):
+    from PIL import Image  # noqa: PLC0415
+
+    return Image.open(BytesIO(png)).convert("RGB")
+
+
+def split_rgba_bytes(png: bytes):
+    """RGB and alpha (0..1) from a PNG the generator saved, or (None, None)."""
+    from .composite_check import split_rgba  # noqa: PLC0415
+
+    try:
+        from PIL import Image  # noqa: PLC0415
+
+        with Image.open(BytesIO(png)) as opened:
+            return split_rgba(np.asarray(opened.convert("RGBA")))
+    except Exception:  # noqa: BLE001
+        return None, None
+
+
 def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
     """The brief's minimum output size, when it asks for more than the scene gives."""
     dimensions = ((brief.get("constraints") or {}).get("dimensions") or {})
@@ -254,7 +273,11 @@ class CompositeGenerator:
                  cutout_fn: Optional[Any] = None,
                  out_dir: Optional[str | Path] = None,
                  repo_root: str | Path = REPO_ROOT,
-                 seed: Optional[int] = None) -> None:
+                 seed: Optional[int] = None,
+                 layout: str = "deterministic") -> None:
+        if layout not in ("deterministic", "scene"):
+            raise ValueError(f"layout must be 'deterministic' or 'scene', got {layout!r}")
+        self.layout = layout
         self.repo_root = Path(repo_root)
         self.method = method
         self.cutout_fn = cutout_fn
@@ -415,6 +438,37 @@ class CompositeGenerator:
             return self.cutout_fn(rgb)
         return pc.cutout(rgb, method or self.method)
 
+    def _layout_stage(self, brief: Dict[str, Any], placed: Dict[str, Any],
+                      record: Dict[str, Any]) -> Dict[str, Any]:
+        """Run the deterministic stage for the situations a free render cannot satisfy.
+
+        Off by default only when the caller sets `layout="scene"`; the point of the stage is that
+        the brief's geometry is not left to a sampling model. A failure here is recorded and the
+        scene is kept rather than crashing the pass — but it is never silent.
+        """
+        from . import deterministic  # noqa: PLC0415
+
+        situation = str(brief.get("situation") or "")
+        if self.layout != "deterministic" or situation not in deterministic.SITUATIONS:
+            return placed
+        try:
+            if situation == "infographic":
+                result = deterministic.infographic(
+                    placed["bytes"], placed["product_box"], brief)
+            else:
+                result = deterministic.panel_warp(
+                    placed["bytes"], placed["product_box"], brief)
+        except Exception as exc:  # noqa: BLE001 - a refused layout is a named record entry
+            record["layout"] = {"kind": "refused", "situation": situation,
+                                "reason": f"{type(exc).__name__}: {exc}"}
+            return placed
+        updated = dict(placed)
+        updated["bytes"] = result["bytes"]
+        if result.get("quad"):
+            updated["product_quad"] = result["quad"]
+        record["layout"] = {"kind": "deterministic", **result["meta"]}
+        return updated
+
     def _composite(self, brief: Dict[str, Any], record: Dict[str, Any]
                    ) -> Tuple[bytes, Dict[str, Any]]:
         from . import reference_check  # noqa: PLC0415
@@ -522,6 +576,11 @@ class CompositeGenerator:
         cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
         placed = composite.place_product(scene["bytes"], cut_png, scale=scale,
                                          anchor=anchor)
+        # Two situations cannot be satisfied by a generated render: an infographic needs machine-
+        # readable copy in the margin, and a packaging mockup needs the seller's own artwork on a
+        # panel. Both are laid out deterministically *after* the product is placed, so the product
+        # region is still the real cutout at a recorded geometry.
+        placed = self._layout_stage(brief, placed, record)
         if white_main:
             # A contact shadow is allowed only if it leaves every corner at the level.
             measured = _measure_white(placed["bytes"], placed["product_box"],
@@ -534,9 +593,20 @@ class CompositeGenerator:
                 record["shadow_dropped"] = "a contact shadow reached a corner"
             record["white_canvas"] = measured
             record["shadow"] = bool(placed.get("shadow"))
-        identity = composite.identity_check(placed["bytes"], cut_png,
-                                            tuple(placed["product_box"]))
+        quad = placed.get("product_quad")
+        if quad:
+            from .composite_check import quad_similarity  # noqa: PLC0415
+
+            cut_rgb, cut_alpha = split_rgba_bytes(cut_png)
+            verdict = quad_similarity(np.asarray(_as_rgb(placed["bytes"])), cut_rgb,
+                                      cut_alpha, quad)
+            identity = {"ssim": verdict.get("similarity"), "verdict": "quad",
+                        "detail": verdict.get("detail")}
+        else:
+            identity = composite.identity_check(placed["bytes"], cut_png,
+                                                tuple(placed["product_box"]))
         record["product_box"] = list(placed["product_box"])
+        record["product_quad"] = list(quad) if quad else None
         record["product_scale"] = placed["product_scale"]
         record["identity"] = identity.get("ssim")
         record["identity_verdict"] = identity.get("verdict")

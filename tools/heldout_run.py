@@ -23,6 +23,52 @@ BRIEFS = ROOT / "ty" / "seller_briefs_heldout.json"
 OUT = ROOT / "state" / "seller" / "heldout_proof.json"
 REPORT = ROOT / "reports" / "ty" / f"heldout_{date.today().isoformat()}.md"
 
+#: The three input modes a brief can declare. The published seller claim carries a coverage label
+#: naming the modes actually proven; see `mode_coverage`.
+MODES = ("prompt_only", "stored_reference", "uploaded_reference")
+MODES_NEEDED_FOR_FULL_LABEL = 10
+FULL_LABEL = "all three modes"
+PARTIAL_LABEL = "stored-reference only"
+
+
+def by_mode(scored: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """n, passed and mean for every declared mode, with the unmeasured ones visible at zero."""
+    out: Dict[str, Dict[str, Any]] = {}
+    for mode in MODES:
+        rows = [row for row in scored if str(row.get("source_mode")) == mode]
+        out[mode] = {
+            "n": len(rows),
+            "passed": sum(1 for row in rows if row.get("passed")),
+            "mean": round(sum(float(row["score"]) for row in rows) / len(rows), 1) if rows else None,
+        }
+    unknown = sorted({str(row.get("source_mode")) for row in scored} - set(MODES))
+    if unknown:
+        out["unknown"] = {"n": sum(1 for row in scored if str(row.get("source_mode")) in unknown),
+                          "passed": 0, "mean": None, "modes": unknown}
+    return out
+
+
+def mode_coverage(scored: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """The label the seller claim must wear, and why.
+
+    Owner instruction (2026-11-09): keep calling the claim **stored-reference only** until the
+    other two modes each have 10+ scored. The label is therefore computed, not remembered — a
+    report that says "all three modes" has to have the rows to back it.
+    """
+    counts = {mode: sum(1 for row in scored if str(row.get("source_mode")) == mode) for mode in MODES}
+    ready = (counts["prompt_only"] >= MODES_NEEDED_FOR_FULL_LABEL
+             and counts["stored_reference"] >= MODES_NEEDED_FOR_FULL_LABEL)
+    return {
+        "label": FULL_LABEL if ready else PARTIAL_LABEL,
+        "counts": counts,
+        "needed_per_mode": MODES_NEEDED_FOR_FULL_LABEL,
+        "why": ("every mode has at least "
+                f"{MODES_NEEDED_FOR_FULL_LABEL} scored"
+                if ready else
+                "prompt-only and stored-reference must each reach "
+                f"{MODES_NEEDED_FOR_FULL_LABEL} scored before the label lifts"),
+    }
+
 
 def split() -> Dict[str, Any]:
     # The held-out proof is its own file: a held-out run must never overwrite, or be confused
@@ -45,6 +91,7 @@ def split() -> Dict[str, Any]:
             "brief_id": brief_id,
             "product_line": brief.get("product_line"),
             "situation": brief.get("situation"),
+            "source_mode": result.get("source_mode") or brief.get("source_mode"),
             "score": result.get("score"),
             "passed": result.get("passed"),
             "route": result.get("route"),
@@ -69,6 +116,8 @@ def split() -> Dict[str, Any]:
         "passed": sum(1 for row in scored if row.get("passed")),
         "mean": round(sum(float(row["score"]) for row in scored) / len(scored), 1)
         if scored else None,
+        "by_mode": by_mode(scored),
+        "mode_coverage": mode_coverage(scored),
         "by_line": {name: {"scored": len(rows_), "passed": sum(1 for r in rows_ if r.get("passed")),
                            "mean": round(sum(float(r["score"]) for r in rows_) / len(rows_), 1)}
                     for name, rows_ in lines.items()},
@@ -98,7 +147,20 @@ def _write_report(briefs: List[Dict[str, Any]], scored: List[Dict[str, Any]],
         lines.append(f"| {row['brief_id']} | {row['product_line']} | {row['situation']} | "
                      f"{row['score']} | {'yes' if row.get('passed') else 'no'} | "
                      f"{', '.join(row.get('failed_checks') or []) or '—'} |")
-    lines += ["", "## By product line", "", "| line | scored | passed | mean |",
+    lines += ["", "## By input mode", "",
+              "| mode | n | passed | mean |", "|---|---|---|---|"]
+    for mode, row in summary["by_mode"].items():
+        if mode == "unknown":
+            continue
+        mean = row["mean"] if row["mean"] is not None else "—"
+        lines.append(f"| {mode.replace('_', '-')} | {row['n']} | {row['passed']} | {mean} |")
+    coverage = summary["mode_coverage"]
+    lines += ["", f"**Mode coverage: {coverage['label']}.** "
+                  f"prompt-only {coverage['counts']['prompt_only']} scored, "
+                  f"stored-reference {coverage['counts']['stored_reference']} scored, "
+                  f"uploaded-reference {coverage['counts']['uploaded_reference']} scored — "
+                  f"{coverage['why']}.", ""]
+    lines += ["## By product line", "", "| line | scored | passed | mean |",
               "|---|---|---|---|"]
     for name, row in summary["by_line"].items():
         lines.append(f"| {name} | {row['scored']} | {row['passed']} | {row['mean']} |")

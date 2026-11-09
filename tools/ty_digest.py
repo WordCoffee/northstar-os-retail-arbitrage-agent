@@ -371,6 +371,29 @@ def render(data: Dict[str, Any]) -> str:
             lines.append(f"- Bojo tools owned by a service: {tools.get('owned')}")
         lines.append("")
 
+    lines += ["## Held-out by input mode", ""]
+    heldout = _read_json(ROOT / "state" / "seller" / "heldout_proof.json") or {}
+    heldout_summary = heldout.get("summary") or {}
+    by_mode = heldout_summary.get("by_mode") or {}
+    coverage = heldout_summary.get("mode_coverage") or {}
+    if by_mode:
+        lines += ["| mode | n | passed | mean |", "|---|---|---|---|"]
+        for mode in ("prompt_only", "stored_reference", "uploaded_reference"):
+            row = by_mode.get(mode) or {}
+            mean = row.get("mean") if row.get("mean") is not None else "-"
+            lines.append(f"| {mode.replace('_', '-')} | {row.get('n', 0)} | "
+                         f"{row.get('passed', 0)} | {mean} |")
+        if coverage:
+            counts = coverage.get("counts") or {}
+            lines += ["", f"**Mode coverage: {coverage.get('label')}.** "
+                          f"prompt-only {counts.get('prompt_only', 0)}, "
+                          f"stored-reference {counts.get('stored_reference', 0)}, "
+                          f"uploaded-reference {counts.get('uploaded_reference', 0)} scored. "
+                          f"{coverage.get('why', '')}."]
+    else:
+        lines.append("No held-out proof on disk yet.")
+    lines += [""]
+
     lines += ["## Composites - source next to output", ""]
     composites = data.get("composites") or []
     if composites:

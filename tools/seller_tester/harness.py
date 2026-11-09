@@ -199,6 +199,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         cutout = _load_cutout(artefact) if composite_route else None
         placement = _placement_xywh((generation or {}).get("product_box")) \
             if composite_route else None
+        placement_quad = (generation or {}).get("product_quad") if composite_route else None
         scored = score_image(
             data, brief, judge=active_judge,
             reference_check=lambda rgb, b=brief: reference_check_for_brief(
@@ -208,6 +209,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             composite_route=composite_route,
             cutout=cutout,
             placement=placement,
+            placement_quad=placement_quad,
         )
         rel = _relative(artefact)
         result_row = {

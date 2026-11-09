@@ -204,3 +204,7 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - The launcher's pid file is authoritative; the logon task is `NorthstarTyDirector`.
 - A bake-off result without an artefact on disk is "did not run". D17 proved that the hard way.
 - Never leave a debug script behind; this session's temporary tools were removed.
+
+- 2026-11-09T20:51:18+00:00 launcher: director session ended (session 16592 gone; launcher restarting).
+
+- 2026-11-09T20:56:19+00:00 launcher: director session ended (session 8564 gone; launcher restarting).

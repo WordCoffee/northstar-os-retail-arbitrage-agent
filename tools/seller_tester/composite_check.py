@@ -274,8 +274,59 @@ def locate_and_compare(produced_rgb: np.ndarray, cutout: Any,
     return verdict
 
 
+def quad_bbox(quad: Sequence[Sequence[int]]) -> List[int]:
+    """The tight integer box containing a quad: x, y, width, height."""
+    xs = [int(point[0]) for point in quad]
+    ys = [int(point[1]) for point in quad]
+    left, top = min(xs), min(ys)
+    return [left, top, max(xs) - left + 1, max(ys) - top + 1]
+
+
+def quad_similarity(produced_rgb: np.ndarray, cutout_rgb: np.ndarray,
+                    cutout_alpha: Optional[np.ndarray],
+                    quad: Sequence[Sequence[int]]) -> Dict[str, Any]:
+    """Compare a *perspective-warped* placement with the cutout, warping the cutout the same way.
+
+    A panel mockup is the seller's artwork on an angled face. Comparing that face to the flat
+    artwork would report a geometry mismatch and call it a fidelity failure. So the cutout is
+    warped into the quad's own bounding box with the same homography and compared to the region —
+    which is the question the check is actually asking: *are these the seller's pixels?*
+    """
+    import cv2  # noqa: PLC0415
+
+    points = [[int(p[0]), int(p[1])] for p in quad]
+    if len(points) != 4:
+        return _cannot_verify(f"the placement quad needs four points, got {len(points)}")
+    frame_h, frame_w = produced_rgb.shape[:2]
+    bbox = quad_bbox(points)
+    x, y, width, height = bbox
+    if width <= 0 or height <= 0:
+        return _cannot_verify(f"the placement quad has no area ({points})")
+    if x < 0 or y < 0 or x + width > frame_w or y + height > frame_h:
+        return _cannot_verify(f"the placement quad {points} falls outside the "
+                              f"{frame_w}x{frame_h} frame")
+
+    region = produced_rgb[y:y + height, x:x + width].astype(np.float32)
+    source = np.float32([[0, 0], [cutout_rgb.shape[1] - 1, 0],
+                         [cutout_rgb.shape[1] - 1, cutout_rgb.shape[0] - 1],
+                         [0, cutout_rgb.shape[0] - 1]])
+    dest = np.float32([[p[0] - x, p[1] - y] for p in points])
+    matrix = cv2.getPerspectiveTransform(source, dest)
+    warped = cv2.warpPerspective(cutout_rgb.astype(np.float32), matrix, (width, height),
+                                 flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+    warped_alpha = None
+    if cutout_alpha is not None:
+        warped_alpha = cv2.warpPerspective(cutout_alpha.astype(np.float32), matrix,
+                                           (width, height), flags=cv2.INTER_LINEAR,
+                                           borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    verdict = _compare_at_placement(region, warped, warped_alpha, (x, y, width, height), "quad")
+    verdict["quad"] = points
+    return verdict
+
+
 def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
                     placement: Optional[Sequence[int]] = None,
+                    placement_quad: Optional[Sequence[Sequence[int]]] = None,
                     min_similarity: float = DEFAULT_MIN_SIMILARITY) -> Dict[str, Any]:
     """The one entry point: compare at the recorded placement, or find the product.
 
@@ -283,7 +334,21 @@ def check_composite(produced_rgb: np.ndarray, cutout: Any, *,
     whose region does not match the cutout, is a **failure**, not a reason to go looking elsewhere.
     Falling back on a failed placement would turn "the generator put the product somewhere else"
     into a pass by finding the product wherever it happens to be.
+
+    A `placement_quad` is the same rule for a panel: the product occupies a quad, the cutout is
+    warped into it, and only that quad is compared.
     """
+    if placement_quad is not None:
+        cutout_rgb, cutout_alpha = split_rgba(cutout)
+        if cutout_rgb is None:
+            return _cannot_verify("the cutout is not an RGB or RGBA image")
+        verdict = quad_similarity(np.asarray(produced_rgb), cutout_rgb, cutout_alpha,
+                                  placement_quad)
+        verdict["found_by"] = "placement_quad"
+        verdict["min_similarity"] = float(min_similarity)
+        if not verdict.get("cannot_verify"):
+            verdict["ok"] = bool(verdict.get("similarity", 0.0) >= float(min_similarity))
+        return verdict
     if placement is not None:
         cutout_rgb, cutout_alpha = split_rgba(cutout)
         if cutout_rgb is None:

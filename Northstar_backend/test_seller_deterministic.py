@@ -1,0 +1,156 @@
+"""The deterministic stages: infographic copy and the packaging panel.
+
+Two claims are being tested, and they are different. First, **determinism**: the same brief and the
+same inputs produce the same bytes, which is what makes these situations testable at all. Second,
+**honesty of the geometry**: the text is where the brief says copy lives, the product's own pixels
+are not painted over, and a perspective-warped panel is still compared against the artwork it came
+from rather than being reported as a fidelity failure.
+"""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import numpy as np
+import pytest
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "tools"))
+
+from PIL import Image  # noqa: E402
+
+from seller_tester import deterministic as D  # noqa: E402
+from seller_tester import composite_check as C  # noqa: E402
+
+
+def _canvas(size=800, colour=(250, 248, 244)):
+    return Image.new("RGB", (size, size), colour)
+
+
+def _png(image) -> bytes:
+    from io import BytesIO
+
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _product(size=(240, 320)):
+    """A blocky 'product' with structure, so a similarity score means something."""
+    rng = np.random.default_rng(11)
+    array = np.zeros((size[1], size[0], 3), dtype=np.uint8)
+    array[:] = (30, 110, 70)
+    array[20:120, 30:210] = rng.integers(0, 255, size=(100, 180, 3), dtype=np.uint8)
+    return array
+
+
+def _paste(canvas, product, box):
+    x, y, width, height = box
+    out = np.array(canvas).copy()
+    resized = np.array(Image.fromarray(product).resize((width, height)))
+    out[y:y + height, x:x + width] = resized
+    return out
+
+
+def test_the_seed_is_stable_and_depends_on_the_brief():
+    assert D.stable_seed("HO-001") == D.stable_seed("HO-001")
+    assert D.stable_seed("HO-001") != D.stable_seed("HO-002")
+    assert isinstance(D.stable_seed("x"), int)
+
+
+def test_the_infographic_is_byte_identical_on_a_repeat():
+    canvas = _png(_canvas())
+    brief = {"id": "HO-900", "situation": "infographic", "product_line": "lions-mane"}
+    first = D.infographic(canvas, [280, 300, 240, 320], brief)
+    second = D.infographic(canvas, [280, 300, 240, 320], brief)
+    assert first["bytes"] == second["bytes"]
+    assert first["meta"]["margin_ink"] == second["meta"]["margin_ink"]
+
+
+def test_the_infographic_puts_copy_in_the_margin():
+    canvas = _png(_canvas())
+    brief = {"id": "HO-901", "situation": "infographic", "product_line": "lions-mane"}
+    result = D.infographic(canvas, [280, 300, 240, 320], brief)
+    ink = D.margin_ink_fraction(np.asarray(Image.open(__import__("io").BytesIO(result["bytes"]))))
+    assert ink >= 0.002, f"margin ink {ink} is below the brief's text_expected bar"
+    assert result["meta"]["callouts"] >= 1
+    assert result["meta"]["title"] == "LIONS MANE"
+
+
+def test_the_infographic_does_not_paint_over_the_product():
+    product = _product()
+    box = (280, 300, 240, 320)
+    before = _paste(_canvas(), product, box)
+    result = D.infographic(_png(Image.fromarray(before)), list(box),
+                           {"id": "HO-902", "product_line": "lions-mane"})
+    after = np.asarray(Image.open(__import__("io").BytesIO(result["bytes"])))
+    x, y, width, height = box
+    assert np.array_equal(before[y:y + height, x:x + width],
+                          after[y:y + height, x:x + width]), \
+        "the layout drew inside the product box"
+
+
+def test_the_panel_warp_is_byte_identical_on_a_repeat():
+    product = _product()
+    before = _png(Image.fromarray(_paste(_canvas(), product, (280, 300, 240, 320))))
+    brief = {"id": "HO-903", "situation": "packaging_mockup"}
+    first = D.panel_warp(before, [280, 300, 240, 320], brief)
+    second = D.panel_warp(before, [280, 300, 240, 320], brief)
+    assert first["bytes"] == second["bytes"]
+    assert first["quad"] == second["quad"]
+
+
+def test_the_panel_warp_changes_the_artwork_inside_the_quad_only():
+    product = _product()
+    box = (280, 300, 240, 320)
+    before = _paste(_canvas(), product, box)
+    after = np.asarray(Image.open(__import__("io").BytesIO(
+        D.panel_warp(_png(Image.fromarray(before)), list(box),
+                     {"id": "HO-904"})["bytes"])))
+    x, y, width, height = box
+    assert not np.array_equal(before[y:y + height, x:x + width],
+                              after[y:y + height, x:x + width]), "the panel was not warped"
+    outside = np.ones(before.shape[:2], dtype=bool)
+    outside[y:y + height, x:x + width] = False
+    assert np.array_equal(before[outside], after[outside]), "the warp leaked outside its panel"
+
+
+def test_a_warped_panel_is_compared_against_the_artwork_with_the_same_homography():
+    product = _product()
+    box = [280, 300, 240, 320]
+    canvas = _paste(_canvas(), product, box)
+    warped = D.panel_warp(_png(Image.fromarray(canvas)), box, {"id": "HO-905"})
+    produced = np.asarray(Image.open(__import__("io").BytesIO(warped["bytes"])))
+    verdict = C.check_composite(produced, product, placement_quad=warped["quad"])
+    assert verdict["cannot_verify"] is False, verdict
+    assert verdict["ok"] is True, verdict
+    assert verdict["compared"] == "quad"
+
+
+def test_a_quad_outside_the_frame_is_a_named_failure():
+    produced = np.zeros((200, 200, 3), dtype=np.uint8)
+    verdict = C.check_composite(produced, _product(), placement_quad=[[10, 10], [300, 10],
+                                                                     [300, 300], [10, 300]])
+    assert verdict["ok"] is False
+    assert verdict["cannot_verify"] is True
+    assert "outside" in verdict["detail"]
+
+
+def test_a_different_product_in_the_quad_fails():
+    product = _product()
+    box = [280, 300, 240, 320]
+    warped = D.panel_warp(_png(Image.fromarray(_paste(_canvas(), product, box))), box,
+                          {"id": "HO-906"})
+    produced = np.asarray(Image.open(__import__("io").BytesIO(warped["bytes"])))
+    rng = np.random.default_rng(3)
+    other = rng.integers(0, 255, size=product.shape, dtype=np.uint8)
+    verdict = C.check_composite(produced, other, placement_quad=warped["quad"])
+    assert verdict["ok"] is False, verdict
+
+
+@pytest.mark.parametrize("bad", ["auto", "", "anything"])
+def test_an_unknown_layout_is_refused(bad):
+    from seller_tester.generators import CompositeGenerator
+
+    with pytest.raises(ValueError):
+        CompositeGenerator(renderer=object(), layout=bad)

@@ -1,0 +1,214 @@
+{
+  "schema": "northstar.seller_briefs.layout_demo.v1",
+  "note": "Four demonstration briefs for the deterministic layout stages. They are not part of the held-out set and their scores are not published as one.",
+  "briefs": [
+    {
+      "id": "LM-DET-01",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "infographic",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": false,
+      "demo": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "mogra organics lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Layout demonstration, not held-out: the deterministic infographic and packaging stages on the real Lion's Mane pouch."
+    },
+    {
+      "id": "LM-DET-02",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "infographic",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": false,
+      "demo": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "mogra organics lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 1600,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 10,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "text_expected",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Layout demonstration, not held-out: the deterministic infographic and packaging stages on the real Lion's Mane pouch."
+    },
+    {
+      "id": "LM-DET-03",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "packaging_mockup",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": false,
+      "demo": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "mogra organics lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Layout demonstration, not held-out: the deterministic infographic and packaging stages on the real Lion's Mane pouch."
+    },
+    {
+      "id": "LM-DET-04",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "packaging_mockup",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "held_out": false,
+      "demo": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_forest_dusk.png",
+        "descriptor": {
+          "filename": "mogra_forest_dusk.png",
+          "mime_type": "image/png",
+          "subject": "mogra organics lions mane"
+        }
+      },
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2500,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 0.8,
+          "tolerance": 0.03
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "free"
+        },
+        "fill_pct": {
+          "min": 15,
+          "max": 80,
+          "distance": 20
+        },
+        "text_rule": "allowed",
+        "matte": {
+          "mode": "any"
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Layout demonstration, not held-out: the deterministic infographic and packaging stages on the real Lion's Mane pouch."
+    }
+  ]
+}
