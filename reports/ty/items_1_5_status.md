@@ -11,7 +11,7 @@ one-line `needs_you.md` entry, never let a parked item block the rest.
 | V3 + UIA parity parked on the unlock trigger | **VERIFIED (parked)** | `tools/unlock_watch.py` runs as pid 8652, polls the Win32 foreground every **300 s with no model call**, and runs `tools/ty_unlock_checks.py` the moment the lock screen is gone. Log: `reports/ty/unlock_watch.log`, state: `state/director/unlock_watch.json`. |
 | Never touch the lock screen / password | **VERIFIED** | No code path types a password; the watcher only reads the foreground title. |
 | needs_you entry for lock-on-idle and sleep | **VERIFIED** | `needs_you.md` **DIR-5**, two toggles named. |
-| Pixel-grounding benchmark, UI-TARS/OmniParser class | **BLOCKED-ON-RESOURCE** | Free RAM **0.57 GB of 15.42 GB**: the render/lane floor is 3 GB and no benchmark can run without evicting the machine. No model was downloaded. Baseline stays **61.7 %** (qwen2.5vl, 40 screens) and **UIA + DOM remain primary**, which is the owner's stated fallback. Trigger: run `python -m tools.vision.grounding --run --models <candidate>` when free RAM ≥ 3 GB. |
+| Pixel-grounding benchmark, UI-TARS/OmniParser class | **BLOCKED-ON-LICENCE-REVIEW** (and resource) | Licences checked from each project's own file: **UI-TARS Apache-2.0** (LICENSE read), **OmniParser CC-BY-4.0** (GitHub API `license.spdx_id`; attribution required, commercial use allowed). Neither is installed. Running the OmniParser recipe here needs **ultralytics, which is AGPL-3.0** — our own provider suite refuses `agpl_network_copyleft_unreviewed` — or `trust_remote_code` on a Florence-2 checkpoint, which executes code fetched at runtime; neither is a decision to take quietly for a benchmark. Free RAM was also **0.57 GB of 15.42 GB** when it was attempted. Baseline stays **61.7 %** and **UIA + DOM remain primary**, which is the owner's stated fallback. Trigger: `python -m tools.vision.grounding --run --models <candidate>` once a permitted candidate is approved and free RAM ≥ 3 GB. |
 | Chrome Connect kept until both suites pass twice | **VERIFIED (kept)** | Six-point contract 6/6 verified (three separate runs); the ten-task suite is still `not_run` because it needs the same unlocked desktop. **Not quarantined** — the condition for quarantine has not been met. |
 
 ## Item 2 — reboot proof
@@ -43,37 +43,6 @@ All six cells: command, exit 0, artefact under the tracked `research/bakeoff/`. 
 reproduces any or all cells and was **verified from a fresh detached worktree**. One real defect
 fixed: artefacts had been written in text mode, so CRLF made the file differ from the bytes that
 were hashed — that is exactly why the old run could not be verified.
-
-## Item 4 — reliable image rendering
-
-**VERIFIED** (re-render included, now that RAM cleared).
-
-| sub-item | evidence |
-|---|---|
-| Versions | ComfyUI venv: Python 3.14.5, **torch 2.11.0+cu128**, CUDA 12.8, **cuDNN 9.19**, capability **(12,0)** Blackwell; driver **617.42**; ComfyUI **0.43.0**; upscaler **swinir**. The repo interpreter is `torch 2.15.0+cpu` and never renders. |
-| Diagnosis | `tools/flux_diagnosis.py`: both **contended** attempts failed with *`render refused: 2.9 GB free RAM is below the 3 GB floor`* — a headroom refusal, not the cuDNN error. Both **unloaded** attempts succeeded, at 1024 **and 1536**. |
-| Fixes tried in order | Fix 1 (unload residents) worked, so the rest were not spent: no CUDA-13 rebuild, no ComfyUI update, no cuDNN disable, no quantised variant, no engine swap. |
-| Native scenes + real upscaler | Default renderer **SDXL at 1536 native**; **SwinIR-M ×4** is the measured upscaler (14/18 vs Lanczos 0/18, Apache-2.0, logged). |
-| Re-render + region check | Re-rendered all three after RAM cleared: **MG-C01 100 · MG-C02 100 · MG-C03 100**, product regions verified at **0.9958 / 0.9928 / 0.9834**. |
-| Digest | Source next to output, all three `verified`, plus `digest_composites_2026-11-08.png`. |
-
-## Item 5 — staging to main
-
-**VERIFIED — and it refuses today's bundle, correctly.**
-
-`tools/promote_staging.py` with three gates; `--check` on the real repo (`staging @ 31c887ec`,
-`main @ ecef24a7`, 1151 commits) → **REFUSED**:
-
-| gate | result | why |
-|---|---|---|
-| suite | **FAIL** `suite_stale` | the green run (7067 passed, 0 failed, ids 7186 = 7186) was written 00:52:29; two later commits landed at 01:00:14 |
-| verifier | **FAIL** | open FAILED **D17** and **V9** commits are in the bundle |
-| bundle | **FAIL** `bundle_visual` | 262 visual/creative paths under `northstar-os-ui/src/` (570 images) |
-
-16 tests, all scratch-repo fixtures; the real `main` was never merged. The review pack is written
-at `reports/ty/staging_review_20261109.md` — 24 before/after images, scorecard deltas, the
-1151-commit job list, and one command to promote or revert. `needs_you.md` **DIR-7**.
-
 
 ## Item 4 — reliable image rendering
 
