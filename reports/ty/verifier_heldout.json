@@ -4,21 +4,23 @@
   "claimed": {
     "scored": 21,
     "passed": 16,
-    "mean": 92.0,
+    "mean": 90.0,
     "by_line": {
-      "lions-mane": {"scored": 10, "passed": 8, "mean": 95.0},
-      "word-coffee": {"scored": 11, "passed": 8, "mean": 89.3},
+      "lions-mane": {"scored": 10, "passed": 8, "mean": 94.0},
+      "word-coffee": {"scored": 11, "passed": 8, "mean": 86.3},
       "neck-nirvana": {"scored": 0, "passed": null, "mean": null, "declared_unscorable": 3}
     },
-    "situations_with_no_pass": ["infographic", "packaging_mockup"]
+    "situations_with_no_pass": ["infographic", "packaging_mockup"],
+    "distinct_references": 8,
+    "briefs": 21
   },
   "reproduced": {
     "scored": 21,
     "passed": 16,
-    "mean": 92.0,
+    "mean": 90.0,
     "by_line": {
-      "lions-mane": {"scored": 10, "passed": 8, "mean": 95.0},
-      "word-coffee": {"scored": 11, "passed": 8, "mean": 89.3}
+      "lions-mane": {"scored": 10, "passed": 8, "mean": 94.0},
+      "word-coffee": {"scored": 11, "passed": 8, "mean": 86.3}
     },
     "situations_with_no_pass": ["infographic", "packaging_mockup"],
     "situation_passes": {
@@ -32,32 +34,31 @@
       "series_consistency": "2/2"
     },
     "cannot_verify_rows": 0,
+    "distinct_references": 8,
+    "distinct_reference_bytes": 8,
+    "briefs": 21,
     "artefacts": {
       "count": 21,
       "missing": 0,
       "not_png": 0,
       "under_20kb": 0,
-      "smallest_bytes": 429160
+      "smallest_bytes": 683227,
+      "largest_bytes": 7360417
     },
-    "bar_check": "pytest -q Northstar_backend/test_heldout_set.py -> 11 passed in 0.25s; independent snippet -> BAR_OK briefs= 21 situations= 8; no wordmark, no (reference, situation) repeat"
+    "bar_check": "pytest -q Northstar_backend/test_heldout_set.py -> 12 passed in 0.27s; independent snippet -> 8 distinct paths, 8 distinct sha256 values, 0 duplicate (reference, situation) pairs, 0 logo references"
   },
   "per_brief_mismatches": [],
-  "superseded": {
-    "unit": "heldout-run (first verification, 2026-11-09)",
-    "what_it_verified": "the earlier 21 scored / 13 passed / mean 86.2 run over the 12-file reference pool",
-    "why_superseded": "that pool contained social quote cards and the brand wordmark; the briefs file and the composite proof were regenerated and the pass re-run from scratch, so the 13/86.2 AGREE applies to an artefact that no longer exists on disk (archived at reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json)",
-    "still_valid_from_it": "the D-002 bar check and the artefact/PNG checks were re-run here and still hold"
-  },
-  "per_brief_reference_findings": [
+  "superseded": [
     {
-      "brief_id": "HO-015",
-      "product_line": "word-coffee",
-      "situation": "bundle_multipack",
-      "score": 80.0,
-      "passed": true,
-      "reference": "renders/references/word-coffee/wc_women_card_mirror.jpg",
-      "finding": "shows a pink affirmation/quote card stuck to a bathroom mirror, not the Word Coffee box: this is exactly the class of file D-003 quarantined, and it is still in the pool and still scored (and passed)"
+      "unit": "heldout-run (first verification, 2026-11-09)",
+      "what_it_verified": "21 scored / 13 passed / mean 86.2 over the original 12-file reference pool",
+      "why_superseded": "that pool contained social quote cards and the brand wordmark; D-003 quarantined them and the briefs and proof were regenerated (proof archived at reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json)"
+    },
+    {
+      "unit": "heldout-run (second verification, 2026-11-09)",
+      "what_it_verified": "21 scored / 16 passed / mean 92.0 over the ten-path pool",
+      "why_superseded": "that pool still had wc_women_card_mirror.jpg (a quote card) and a byte-identical duplicate of word_coffee_women_front.jpg; both were removed and the pass re-run from scratch, so the 92.0 proof no longer exists on disk"
     }
   ],
-  "notes": "Composite pass was already complete (tools/heldout_composite.py --status -> done 21, 16 passed, mean 92.0), so it was NOT re-run. Recomputed from state/seller/heldout_proof.json rows: round(sum(score)/count(scored),1) = 92.0; passed = 16 rows with passed=true and no cannot_verify; by-line 10/8/95.0 and 11/8/89.3 to the decimal. All 21 artefact_path files exist, are real PNGs (89 50 4E 47 magic), smallest 429,160 B > 20 KB. Report table rows match the proof on score, pass flag and situation with zero mismatches. pytest Northstar_backend/test_heldout_set.py -> 11 passed (the two new pins: no wordmark reference, no product twice in one situation); independent bar snippet -> BAR_OK briefs= 21 situations= 8. Situations with no pass confirmed: infographic 0/3, packaging_mockup 0/2. Three findings do not move the numbers but the director should know: (1) HO-015's reference is a quote card, so one of 21 briefs still tests a card rather than a product, and it passed at 80.0; (2) wc_women_main_front.jpg and word_coffee_women_front.jpg are byte-identical (sha256 AE941A3C...), so the pool is 10 paths but 9 distinct photographs, not ten real products; (3) the digest's six pairs are six distinct source photographs of three product designs (the Mogra pouch pair in three photographs, the For Mom box, the Modern Woman box in two photographs), not six distinct products. None of the three changes a pass/fail on any brief."
+  "notes": "Composite pass was already complete (tools/heldout_composite.py --status -> done 21, 16 passed, mean 90.0), so it was NOT re-run. Recomputed from state/seller/heldout_proof.json rows: round(sum(score)/count(scored),1) = 90.0; passed = 16 rows with passed=true and no cannot_verify; by-line 10/8/94.0 and 11/8/86.3 to the decimal. All 21 artefact_path files exist, are real PNGs (89 50 4E 47 magic), sizes 683,227 to 7,360,417 B. Report table rows match the proof on score, pass flag and situation with zero mismatches. Pool is 8 distinct non-empty paths with 8 distinct sha256 values, no logo, no duplicate (reference, situation) pair; I opened all eight images and each shows the physical product (3 Mogra pouch photographs, and Word Coffee: For Mom box on white, Modern Woman box on white, in a handbag, on an Easter table, and in a kitchen). Digest has six pairs, source-left/composite-right, and six distinct source files. Remaining honest limit, already stated by the author and not a defect: the eight photographs show fewer distinct product designs (one Mogra pouch pair, two Word Coffee box designs), so 21 briefs vary situation and frame rather than product range. The previous HO-015 quote-card finding is resolved (the file is in quarantine) and the duplicate-image finding is resolved."
 }

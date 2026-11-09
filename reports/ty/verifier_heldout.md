@@ -1,18 +1,14 @@
-# Held-out run — independent verification (re-run, 2026-11-09)
+# Held-out run — independent verification (third pass, 2026-11-09)
 
 Verifier: separate session from the author. Repo root
-`C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent`. This file replaces the earlier
-13 / 86.2 verification, which is now **superseded**: the reference pool changed (D-003) and both the
-briefs file and the composite proof were regenerated.
+`C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent`. Two earlier verifications are
+superseded by this one (see the end of this file).
 
 ## Verdict: AGREE
 
-21 scored, **16 passed, mean 92.0** — reproduced exactly from the proof rows on disk, not from the
-summary block. Lions Mane 10 / 8 / 95.0, Word Coffee 11 / 8 / 89.3. No per-brief pass/fail differs
-from the claim. All 21 artefacts are real PNGs.
-
-One brief's reference is still a quote card (HO-015) and the pool is 9 distinct photographs, not 10 —
-both recorded below as findings; neither moves a score.
+21 scored, **16 passed, mean 90.0** — reproduced exactly from the proof rows on disk, not from the
+summary block. Lions Mane 10 / 8 / 94.0, Word Coffee 11 / 8 / 86.3. No per-brief pass/fail differs
+from the claim. Eight distinct product photographs, all 21 artefacts real.
 
 ## What I ran, in order, and the real output
 
@@ -20,102 +16,92 @@ both recorded below as findings; neither moves a score.
 
 ```
 > python tools/heldout_composite.py --status
-{ "total": 21, "done": 21, "remaining": [], "passed": 16, "mean": 92.0 }
+{ "total": 21, "done": 21, "remaining": [], "passed": 16, "mean": 90.0 }
 ```
 
 ### 2. Everything recomputed from the result rows
 
 ```
-> python $env:TEMP\opencode\recheck2.py
+> python $env:TEMP\opencode\recheck3.py
 rows 21 scored 21 passed 16 cannot_verify 0
-mean 92.0
-lions-mane scored 10 passed 8 mean 95.0
-word-coffee scored 11 passed 8 mean 89.3
-artefact problems: none | min bytes 429160
-sit background_swap passes 2 of 2
-sit bundle_multipack passes 2 of 2
-sit infographic passes 0 of 3
-sit lifestyle passes 4 of 4
-sit packaging_mockup passes 0 of 2
-sit scale_reference passes 2 of 2
-sit series_consistency passes 2 of 2
-sit white_background_main passes 4 of 4
-summary block: 21 16 92.0
+mean 90.0
+lions-mane 10 8 94.0
+word-coffee 11 8 86.3
+artefact problems: none | min 683227 | max 7360417
+sit background_swap 2 of 2
+sit bundle_multipack 2 of 2
+sit infographic 0 of 3
+sit lifestyle 4 of 4
+sit packaging_mockup 0 of 2
+sit scale_reference 2 of 2
+sit series_consistency 2 of 2
+sit white_background_main 4 of 4
+summary block: 21 16 90.0
 ```
 
 `mean = round(sum(score)/count(scored), 1)`; `passed` counts `passed == true and not cannot_verify`.
-The two situations with no pass are exactly `infographic` (0/3) and `packaging_mockup` (0/2), as
-claimed.
+The two situations with no pass are exactly `infographic` (0/3) and `packaging_mockup` (0/2).
 
 ### 3. Report table vs proof rows
 
 ```
-> python $env:TEMP\opencode\tablecheck2.py
-report rows vs proof mismatches: none
+> python $env:TEMP\opencode\refs3.py
+distinct paths 8
+distinct bytes 8
+dup (ref,situation): 0
+logo refs: []
+report vs proof mismatches: none
 ```
-
-Score, pass flag and situation agree for all 21 briefs.
 
 ### 4. Bar check
 
 ```
 > python -m pytest -q Northstar_backend/test_heldout_set.py
-...........                                                              [100%]
-11 passed in 0.25s
-
-> python $env:TEMP\opencode\bar2.py
-BAR_OK briefs= 21 situations= 8
-distinct paths 10 distinct image bytes 9
-DUPLICATE BYTES: ['renders/references/word-coffee/wc_women_main_front.jpg',
-                  'renders/references/word-coffee/word_coffee_women_front.jpg']
+............                                                             [100%]
+12 passed in 0.27s
 ```
 
-All 21 briefs carry the tuned catalogue's constraints for their situation (no D-002 repeat); no
-reference filename contains `logo`/`wordmark`; no `(reference, situation)` pair repeats.
+Twelve tests pass, covering roster membership, hash-distinctness, no product twice in a situation,
+and each brief's constraints equal to the tuned catalogue's for its situation (no D-002 repeat).
 
-### 5. Reference pool — looked at, not counted
+### 5. Reference roster — opened, not counted
 
-`renders/references/word-coffee/` now holds 7 files; `renders/references/mogra/` holds 3;
-10 non-product files (9 quote cards + `word_coffee_logo.png`) are quarantined at
-`reports/ty/quarantined/references_word-coffee_not_products/`. I opened the files themselves.
+| file | briefs | shows the physical product? |
+|---|---|---|
+| `mogra_pair_main.png` | HO-001, 004, 007, 010 | yes — lion's mane + shiitake pouches, white |
+| `mogra_pair_lifestyle.png` | HO-002, 005, 008 | yes — same pouches, greenhouse |
+| `mogra_forest_dusk.png` | HO-003, 006, 009 | yes — pouches, forest dusk |
+| `word_coffee_moms_front.jpg` | HO-011, 016, 021 | yes — For Mom box on white |
+| `word_coffee_women_front.jpg` | HO-012, 017 | yes — Modern Woman box in a kitchen |
+| `wc_women_pic_box.jpg` | HO-013, 018 | yes — Modern Woman box on white |
+| `wc_women_in_purse.png` | HO-015, 020 | yes — box in a handbag |
+| `wc_women_easter_table.png` | HO-014, 019 | yes — box on an Easter table |
 
-| brief | situation | reference | shows the physical product? |
-|---|---|---|---|
-| HO-011, HO-018 | white_background_main, series_consistency | `word_coffee_moms_front.jpg` | yes — For Mom box |
-| HO-012, HO-019 | lifestyle, white_background_main | `word_coffee_women_front.jpg` | yes — Modern Woman box |
-| HO-014, HO-021 | scale_reference, infographic | `wc_women_main_front.jpg` | yes — same bytes as the file above |
-| HO-013, HO-020 | infographic, lifestyle | `wc_women_pic_box.jpg` | yes — box on white |
-| HO-016 | packaging_mockup | `wc_women_easter_table.png` | yes — boxes on a table |
-| HO-017 | background_swap | `wc_women_in_purse.png` | yes — box in a handbag |
-| **HO-015** | **bundle_multipack** | **`wc_women_card_mirror.jpg`** | **no — a pink affirmation card on a bathroom mirror, no box in frame** |
-| HO-001…HO-010 | all eight situations | 3 Mogra photographs | yes — lion's mane / shiitake pouches |
+None fails. The two files I asked to be removed last time are in
+`reports/ty/quarantined/references_word-coffee_not_products/` (`wc_women_card_mirror.jpg`,
+`wc_women_main_front_duplicate_of_women_front.jpg`), alongside the eleven earlier non-products. No
+file was deleted.
 
-So one of 21 briefs (HO-015, scored 80.0, **passed**) is still scored against a quote card. That is
-the exact class D-003 quarantined; the file was not caught because its name has no `logo` / `card`
-marker that the pin test checks.
+Honest limit, already stated by the author: eight photographs, but fewer product designs — the three
+Mogra frames are one pouch pair and the five Word Coffee frames are two box designs. The 21 briefs
+vary situation and frame, not product range.
 
 ### 6. Digest
 
 `reports/ty/digest_composites_2026-11-09.png` is six rows, each labelled `source` (left) and
-`composite` (right), and no source file repeats. The six are not six distinct products, though:
-rows 1–3 are the same Mogra pouch pair from three photographs, row 4 is the For Mom box, rows 5–6 are
-the same Modern Woman box in two photographs. Three product designs over six distinct source
-photographs.
+`composite` (right), from six distinct source files (three Mogra photographs, the For Mom box, and the
+Modern Woman box in two different scenes). No source repeats, and every right-hand tile is a
+composite of the left-hand product.
 
-## Findings that do not change the numbers
+## Superseded runs
 
-1. **HO-015 is still a quote card** — D-003 residue, and it passed. The pin test only rejects names
-   containing `logo`/`wordmark`, so a card with an innocuous filename gets through.
-2. **`wc_women_main_front.jpg` == `word_coffee_women_front.jpg`** (sha256 `AE941A3C…`). Ten reference
-   paths, nine distinct photographs. D-003's "ten real products" is one too many.
-3. **Digest = 3 product designs, 6 photographs**, not six distinct products.
+1. **21 / 13 / 86.2** — original 12-file pool, which held quote cards and the wordmark. Proof
+   archived at `reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`.
+2. **21 / 16 / 92.0** — ten-path pool that still contained `wc_women_card_mirror.jpg` (a quote card,
+   HO-015) and a byte-identical duplicate of `word_coffee_women_front.jpg`. Both findings were acted
+   on; that proof is no longer on disk.
 
-## Superseded run
-
-The 21 / 13 / 86.2 verification in this file's earlier revision covered the old 12-file pool. That
-proof is archived at `reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json` and the
-AGREE recorded there applies to an artefact no longer on disk. The D-002 bar check and the
-artefact/PNG checks were re-run here and still hold.
+The D-002 bar check and the artefact/PNG checks were re-run here and still hold.
 
 ## Reproduce my numbers
 

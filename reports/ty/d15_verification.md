@@ -29,7 +29,7 @@ every command below was run in this session and its real output is quoted.
 | 18 | Disk floor and digest | **agree** | `ty_digest.py` → `"free_gb": 10.57, "floor_gb": 5.0, "allow": true` (see note: it also prints `seller_gaps: 0`) |
 | 19 | Scope enforcement | **agree** | `test_vision_computer.py -q` → `10 passed`; `test_a_write_outside_scope_is_refused_and_leaves_no_file` PASSED, plus `test_dot_dot_cannot_walk_out_of_scope` and `test_a_path_outside_the_declared_roots_is_refused` PASSED |
 | 20 | Launcher persistence | **agree** | `Get-ScheduledTask NorthstarTyDirector` → `State Ready`, trigger `MSFT_TaskLogonTrigger`; `reports/ty/d8_launcher_task.xml` exists, 1,647 B |
-| 21 | held-out run | **agree** | re-verified 2026-11-09 against the regenerated pool: 21 scored, **16 passed, mean 92.0** recomputed from `state/seller/heldout_proof.json` rows (lions-mane 10/8/95.0, word-coffee 11/8/89.3, neck-nirvana 3 declared unscorable; no pass in `infographic` 0/3 or `packaging_mockup` 0/2); `pytest -q Northstar_backend/test_heldout_set.py` → `11 passed in 0.25s`; bar snippet → `BAR_OK briefs= 21 situations= 8`; 21/21 artefacts real PNGs ≥ 429,160 B. Finding: HO-015 still scores a quote card |
+| 21 | held-out run | **agree** | re-verified 2026-11-09 against the reviewed eight-photograph pool: 21 scored, **16 passed, mean 90.0** recomputed from `state/seller/heldout_proof.json` rows (lions-mane 10/8/94.0, word-coffee 11/8/86.3, neck-nirvana 3 declared unscorable; no pass in `infographic` 0/3 or `packaging_mockup` 0/2); `pytest -q Northstar_backend/test_heldout_set.py` → `12 passed in 0.27s`; 8 distinct paths = 8 distinct sha256, no duplicate (reference, situation) pair; 21/21 artefacts real PNGs 683,227–7,360,417 B; all 8 references show the physical product |
 
 ## Detail and the exact output behind each row
 
@@ -356,45 +356,54 @@ NorthstarTyDirector  Ready MSFT_TaskLogonTrigger
 
 `reports/ty/d8_launcher_task.xml` exists (1,647 B). The task is registered at logon and Ready.
 
-### 21. Held-out run — agree (re-verified 2026-11-09, regenerated pool)
+### 21. Held-out run — agree (re-verified 2026-11-09, reviewed eight-photograph pool)
 
 Independent verifier session, not the author of the held-out run. The composite pass was already
-complete (`--status` → `{"total": 21, "done": 21, "passed": 16, "mean": 92.0}`), so I verified the
-existing artefact instead of overwriting it. This supersedes the earlier 13 / 86.2 check of the old
-12-file pool; that proof is archived at
-`reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`.
+complete (`--status` → `{"total": 21, "done": 21, "passed": 16, "mean": 90.0}`), so I verified the
+existing artefact instead of overwriting it. This supersedes the earlier 13 / 86.2 check of the
+12-file pool (proof archived at
+`reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`) and the 16 / 92.0 check of
+the ten-path pool, whose proof is no longer on disk.
 
 ```
 > python -m pytest -q Northstar_backend/test_heldout_set.py
-11 passed in 0.25s
+12 passed in 0.27s
 
-> python $env:TEMP\opencode\bar2.py
-BAR_OK briefs= 21 situations= 8
-distinct paths 10 distinct image bytes 9
-DUPLICATE BYTES: ['renders/references/word-coffee/wc_women_main_front.jpg',
-                  'renders/references/word-coffee/word_coffee_women_front.jpg']
+> python $env:TEMP\opencode\refs3.py
+distinct paths 8
+distinct bytes 8
+dup (ref,situation): 0
+logo refs: []
+report vs proof mismatches: none
 
-> python $env:TEMP\opencode\recheck2.py
+> python $env:TEMP\opencode\recheck3.py
 rows 21 scored 21 passed 16 cannot_verify 0
-mean 92.0
-lions-mane scored 10 passed 8 mean 95.0
-word-coffee scored 11 passed 8 mean 89.3
-artefact problems: none | min bytes 429160
-sit infographic passes 0 of 3
-sit packaging_mockup passes 0 of 2
+mean 90.0
+lions-mane 10 8 94.0
+word-coffee 11 8 86.3
+artefact problems: none | min 683227 | max 7360417
+sit background_swap 2 of 2
+sit bundle_multipack 2 of 2
+sit infographic 0 of 3
+sit lifestyle 4 of 4
+sit packaging_mockup 0 of 2
+sit scale_reference 2 of 2
+sit series_consistency 2 of 2
+sit white_background_main 4 of 4
 ```
 
 The mean is recomputed as `sum(score)/count(scored)`, not read from the proof's summary block; the
-two agree. All 21 `artefact_path` files exist, carry PNG magic bytes and the smallest is 429,160 B.
-The D-002 bar regression is absent: every held-out brief carries the tuned catalogue's constraints
-for its own situation, and the new pins (no wordmark reference, no product twice in one situation)
-pass.
+two agree. All 21 `artefact_path` files exist, carry PNG magic bytes and run from 683,227 to
+7,360,417 B. The D-002 bar regression is absent, and the pins (roster membership, hash-distinctness,
+no product twice in a situation) pass.
 
-Finding recorded, not a score change: **HO-015 (`bundle_multipack`, 80.0, passed) still uses
-`wc_women_card_mirror.jpg`, a quote card on a bathroom mirror — no box in frame.** It is the class of
-file D-003 quarantined, and the pin test only rejects filenames containing `logo`/`wordmark`. Also,
-`wc_women_main_front.jpg` and `word_coffee_women_front.jpg` are byte-identical, so the pool is ten
-paths but nine distinct photographs. Full detail in `reports/ty/verifier_heldout.md` and
+I opened all eight roster images: three Mogra pouch photographs and five Word Coffee box
+photographs (For Mom on white, Modern Woman on white, in a handbag, on an Easter table, in a
+kitchen). Every one shows the physical product. The two files flagged last time are now in
+`reports/ty/quarantined/references_word-coffee_not_products/` — `wc_women_card_mirror.jpg` and
+`wc_women_main_front_duplicate_of_women_front.jpg` — so both earlier findings are resolved, nothing
+deleted. Eight photographs still show fewer distinct product designs (one pouch pair, two box
+designs), which the report states honestly. Full detail in `reports/ty/verifier_heldout.md` and
 `reports/ty/verifier_heldout.json`.
 
 ## Summary
