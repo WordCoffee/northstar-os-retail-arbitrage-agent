@@ -29,5 +29,31 @@ and remove it in `close()`; never touch a caller-supplied path. Add a test that 
 is registered and that a supplied path is left alone. Do not delete the 9,018 existing files by hand
 — quarantine them in one move (same volume) and let the fix stop the growth.
 
-**Status:** queued. Not fixed while a full suite is running: editing `db.py` mid-collection would
-make the run's evidence ambiguous.
+**Status:** fixed in `fix/f0-tempdb` (commit `3718763d`), 5 tests.
+
+## D-002 — the first held-out run scored every brief against the wrong bar (2026-11-09)
+
+**Measured:** the first held-out composite pass reported **16 of 21 passed, mean 86.2**, and **21 of
+21 briefs failed `alpha_matte`** with `border mean 61.0 (>= 249)`. A check that fails on every
+single brief is not a result, it is a broken constraint.
+
+**Cause:** `tools/heldout_briefs.py` took **one** brief's constraints (ST-033, a white-background
+main image) and reused them for all eight situations. `white_matte` requires a clean near-white
+border ring, which only a white-background composition can have — so lifestyle, infographic and
+packaging briefs were failed for a rule that was never about them. The scorer was right; the brief
+was wrong.
+
+**Fix:** the constraint profile for each situation is copied from the **tuned catalogue's own brief
+for that situation**, unmodified. A test asserts each held-out brief's constraints equal the tuned
+ones, and a second asserts a white matte is required only where the tuned catalogue requires it.
+
+**Consequence to be honest about:** with the correct bar, four of the eight situations
+(`scale_reference`, `bundle_multipack`, `background_swap`, `series_consistency`) legitimately
+require a white matte, and the composite route renders a generated scene for them. The tuned
+composite proof only ever covered three situations — white-background main, lifestyle and packaging
+mockup — all of which are matte-friendly. The held-out numbers are the first measurement of the
+other five, and they are lower. That is the finding, not a regression.
+
+**The first run's proof is archived, not deleted:**
+`reports/ty/quarantined/heldout_composite_proof_first_run_20261109.json`.
+
