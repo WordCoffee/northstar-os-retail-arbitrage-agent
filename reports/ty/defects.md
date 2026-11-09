@@ -81,10 +81,41 @@ mom" and "for women"; only the pixels said "quote card".
 
 **Second pass, after the verifier opened the files:** `wc_women_card_mirror.jpg` turned out to be an
 affirmation card on a bathroom mirror with no box in frame, and `wc_women_main_front.jpg` was a
-byte-identical copy of `word_coffee_women_front.jpg`. So the pool is now an explicit **reviewed
-roster** of eight photographs (three Mogra, five Word Coffee), and a test hashes them: distinct
-files must be distinct photographs, and every path must be on the roster. Names and counts were
-never the control; the pixels were.
+byte-identical copy of `word_coffee_front.jpg`. So the pool is now an explicit **reviewed roster** of
+eight photographs (three Mogra, five Word Coffee), and a test hashes them: distinct files must be
+distinct photographs, and every path must be on the roster. Names and counts were never the control;
+the pixels were.
+
+## D-005 — test modules share one environment, so the suite was order-dependent in both directions
+(2026-11-09)
+
+**Measured, twice, in opposite directions.** With `test_costco_api_client.py` ahead of it, the
+contract test's product-finder returned a count instead of rows, because that module had left
+`SCANNER_SEARCH_CACHE_PATH` pointing at a temp directory that no longer existed. With
+`test_coverage_report.py` ahead of `test_product_analysis.py`, the latter read **89 cached
+candidates** instead of the one its mocks return, because coverage_report sets
+`SCANNER_OFFER_ENRICHMENT=OFF` at import and an unset value means OFF too.
+
+**Three attempts, two of them wrong, and the wrong ones are the useful part:**
+
+1. Restoring these names to their **session baseline** after every test turned 16 green tests into
+   `KeyError`s: three modules configure the paths at **import** time and read them with
+   `os.environ[...]` inside their tests.
+2. Diffing **every** environment name across each module's import and resetting the rest was too
+   broad: **67 tests failed**, because modules legitimately configure things for themselves and
+   expect that configuration to outlive a single test.
+3. What ships: a **narrow watched list** of ten names (the eight scanner paths plus
+   `SCANNER_OFFER_ENRICHMENT` and `SCANNER_LIVE_ALLOWED`), restored per test to the value they had
+   at that test's start, plus the two modules that need specific values now declaring them in
+   `setUpModule`/`tearDownModule` instead of relying on an import side effect.
+
+Verified by pairing the modules that used to interfere, in the order the suite runs them: 48 passed.
+
+**A wrong turn worth recording:** fixing the same symptom by changing
+`product_analysis._candidates_for_mode` (fall back to the cache only when the fresh search returned
+nothing) made the *product* better, but `product_analysis.py` is a **protected artefact** with a
+recorded hash — `test_proof_batch_run` refused it, correctly. The change was reverted rather than
+re-baselined: a protected file is not a place to fix a test-environment problem.
 
 
 ## D-004 — a killed render wedged the GPU lane (2026-11-09)
