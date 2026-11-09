@@ -104,6 +104,8 @@ def _composites() -> List[Dict[str, Any]]:
             "route": str(result.get("route") or ""),
             "score": result.get("score"),
             "passed": result.get("passed"),
+            "provisional": bool(result.get("provisional")),
+            "provisional_score": result.get("provisional_score"),
             "similarity": audit.get("similarity"),
             "region_state": ("verified" if audit.get("ok")
                              else "cannot verify" if audit.get("cannot_verify")
@@ -246,7 +248,10 @@ def render(data: Dict[str, Any]) -> str:
             lines.append(
                 f"| {row['brief_id']} | `{row['source']}` | `{row['output']}` | "
                 f"{row.get('route', '')} | {row['fidelity']} | "
-                f"{row.get('score', '—')} | {row.get('region_state', 'not audited')} |")
+                f"{row.get('score', '—')}"
+                + (f" (provisional {row.get('provisional_score')})"
+                   if row.get("provisional") else "")
+                + " | " + str(row.get("region_state", "not audited")) + " |")
         if data.get("composite_sheet"):
             lines += ["", f"Side by side (source left, composite right): "
                           f"`{data['composite_sheet']}`"]
