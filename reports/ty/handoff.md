@@ -16,14 +16,24 @@ The queue is now ordered by the owner's instruction (2026-11-08): seller output 
 
 | # | job | what closes it |
 |---|---|---|
-| 1 | `sel-01b-reference-generation` | a render lane that **consumes** the stored/uploaded reference (img2img / IP-Adapter) — sel-01 added the briefs and the check, not the generation |
+| 1 | `sel-01b-reference-generation` | **composite, not generate**: cut the real product out of the upload and place it in a generated scene; full generation only where fidelity is tolerant. Editors benchmarked through the model scout, licences in `provenance.csv`. First real uploads: `renders/references/mogra/` |
 | 2 | `sel-02-design-studio` | Design Studio output quality (the 22.1 mean must move) |
 | 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
 | 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
 | 5 | `ux-05-render-routes` | **26 of 29 service routes render the chat shell** |
+| 6 | `ux-06-shell` | shell chrome on every service route, DevBanner in the shell |
+| 7 | `ux-07-tabs` | workspace tabs keep state; the shell tells Bojo which tab is open |
+| 8 | `ux-08-scene` | one scene loaded per service, unloaded on switch, still-frame fallback |
 
 Ranking is stored (`jobs.rank`), not inferred from insertion order — `tools/director_queue.py`
-sorts the mirror by it.
+sorts the mirror by it. `ux-06`/`07`/`08` sit behind `ux-05` deliberately: the shell cannot be
+verified while the routes do not render.
+
+## The reference check changed on 2026-11-08
+
+`tools/seller_tester/reference_check.py` decides by **printed text (OCR, fuzzy token match)**
+then **meaning (local embeddings, cosine)**, and reports colour agreement as a **diagnostic
+only** — the 0.60 proxy is no longer a gate. `cannot_verify` is still a failure. 44 tests.
 
 ## sel-01 landed, and here is exactly how far
 
