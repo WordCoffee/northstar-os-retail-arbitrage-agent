@@ -10,25 +10,37 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Position: units done, queue re-ranked, one product defect dominating
-
-The queue is now ordered by the owner's instruction (2026-11-08): seller output quality first.
+## Position: seller quality first, and two checks that must be able to fail
 
 | # | job | what closes it |
 |---|---|---|
-| 1 | `sel-01b-reference-generation` | **composite, not generate**: cut the real product out of the upload and place it in a generated scene; full generation only where fidelity is tolerant. Editors benchmarked through the model scout, licences in `provenance.csv`. First real uploads: `renders/references/mogra/` |
-| 2 | `sel-02-design-studio` | Design Studio output quality (the 22.1 mean must move) |
+| 1 | `sel-01c-cutout-provenance` | save `<artefact>.cutout.png` and the placement beside every composite so the product-region check can verify it |
+| 2 | `sel-02-design-studio` | Design Studio output quality |
 | 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
 | 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
-| 5 | `ux-05-render-routes` | **done** — the `SIMPLE_KEEP_ADVANCED` allowlist sent every unlisted path to the chat shell; 29/29 routes now render, 60 e2e tests pass |
-| 6 | `ux-06-shell` | shell chrome on every service route, DevBanner in the shell |
-| 7 | `ux-07-tabs` | workspace tabs keep state; the shell tells Bojo which tab is open |
-| 8 | `ux-08-scene` | one scene loaded per service, unloaded on switch, still-frame fallback |
-| 9 | `ux-09-design-studio-canvas` | the Canva-like canvas workspace: content types, tool rail, layers, snap, undo, autosave, PNG+PDF export, wired to the asset dashboard and dielines |
+| 5 | `ux-06-shell` | shell chrome on every route, DevBanner in the shell |
+| 6 | `ux-07-tabs` | workspace tabs keep state; the shell tells Bojo which tab is open |
+| 7 | `ux-08-scene` | one scene loaded per service, unloaded on switch, still-frame fallback |
+| 8 | `ux-09-design-studio-canvas` | the Canva-like canvas workspace |
 
-Ranking is stored (`jobs.rank`), not inferred from insertion order — `tools/director_queue.py`
-sorts the mirror by it. `ux-06`/`07`/`08` sit behind `ux-05` deliberately: the shell cannot be
-verified while the routes do not render.
+`ux-05` is **done**: `SIMPLE_KEEP_ADVANCED` sent every unlisted path to the chat shell before its
+route ran; 29/29 routes now render, 60 Playwright tests pass.
+
+## In flight (2026-11-08, two builders)
+
+- **sel-01d** — main images as pure composites on flat 255 white at ~85 % fill (no scene); the
+  image lane records `nvidia-smi` and `ollama ps`, unloads Bojo/embeddings before a render and
+  reloads after, and checks its budget against **measured** free VRAM; a measured upscaler
+  replaces Lanczos; FLUX 3 is fixed or replaced with evidence.
+- **sel-01e** — a composite that `cannot_verify` **fails** (current two passes become
+  provisional); the OCR benchmark is rebuilt from hard real pouch crops; the null
+  vision-description embedding is fixed so it reports a real cosine or `cannot_verify`.
+
+## Scoring, as it stands
+
+Six dimensions, bar 85 each. **2 services at bar** (`hub` 100, `prospector` 100), twelve at 86.2.
+`measured` is 28 of 29. A seller-facing service with only passing tests stays at 60 on `correct`;
+a service with no seller-facing artefact is judged on its tests.
 
 ## The reference check changed on 2026-11-08
 
