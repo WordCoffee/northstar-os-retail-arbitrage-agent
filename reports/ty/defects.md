@@ -79,4 +79,21 @@ Non-product files are quarantined at
 **Lesson to reuse:** a reference pool has to be looked at, not counted. The file names said "for
 mom" and "for women"; only the pixels said "quote card".
 
+## D-004 — a killed render wedged the GPU lane (2026-11-09)
+
+**Measured:** after a composite pass was stopped, the next run refused with
+`generator unavailable: gpu locked by {'role': 'seller_composite', 'pid': 11448, ...}` — and pid
+11448 no longer existed. `state/gpu/lock.json` had no notion of a stale holder, so the lane stayed
+closed until someone noticed and unlocked it by hand.
+
+**Cause:** `tools/gpu_budget.lock()` refused whenever a lock file was younger than the TTL and named
+a different pid, without asking whether that pid was still running.
+
+**Fix:** a lock whose pid is **provably gone** (`psutil.pid_exists`, falling back to `os.kill(pid,
+0)`) is reclaimed, and the new lock records the reclaim (`reclaimed: {role, pid, at, why}`) so it is
+visible rather than silent. A lock held by a **live** process is still refused, which is the property
+that matters. A probe that errors counts as alive: stealing a lock because `psutil` is missing would
+be worse than refusing. Six tests in `test_gpu_lock.py`.
+
+
 
