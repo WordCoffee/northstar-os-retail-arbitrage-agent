@@ -10,21 +10,39 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
-## Position: seller quality first, and two checks that must be able to fail
+## Position, 2026-11-09
 
-| # | job | what closes it |
+| # | job | status |
 |---|---|---|
-| 1 | `sel-01c-cutout-provenance` | save `<artefact>.cutout.png` and the placement beside every composite so the product-region check can verify it |
-| 2 | `sel-02-design-studio` | Design Studio output quality |
-| 3 | `sel-03-aplus` | A+ content modules, briefs + scored outputs |
-| 4 | `sel-04-packaging` | packaging and mockups, dielines + scored outputs |
-| 5 | `ux-06-shell` | shell chrome on every route, DevBanner in the shell |
-| 6 | `ux-07-tabs` | workspace tabs keep state; the shell tells Bojo which tab is open |
-| 7 | `ux-08-scene` | one scene loaded per service, unloaded on switch, still-frame fallback |
-| 8 | `ux-09-design-studio-canvas` | the Canva-like canvas workspace |
+| 1 | `sel-01c-cutout-provenance` | **merged** — the generator saves `<artefact>.cutout.png` + a sidecar; product region verified at 0.9958 / 0.9931 / 0.9835 |
+| 2 | `ux-05-render-routes` | **merged** — 29/29 routes render; 60 Playwright tests pass |
+| 3 | `reg-01-service-registry` | **merged** — 29 services in `ty/service_registry.json`, tool list and workspaces generated |
+| 4 | `sel-02-design-studio` | queued |
+| 5 | `sel-03-aplus` | queued |
+| 6 | `sel-04-packaging` | queued |
+| 7 | `ux-06-shell` | queued |
+| 8–10 | `ux-07-tabs`, `ux-08-scene`, `ux-09-design-studio-canvas` | queued |
 
-`ux-05` is **done**: `SIMPLE_KEEP_ADVANCED` sent every unlisted path to the chat shell before its
-route ran; 29/29 routes now render, 60 Playwright tests pass.
+Both completed prerequisite units sit **ahead of ux-06 shell** in the ranking, which is stored in
+`jobs.rank` rather than inferred from insertion order.
+
+## Registry confidence (new)
+
+Every entry now carries `evidence.confidence`: **high 4 · low 21 · none 4**. High means a live
+page described with three or more controls; low means a committed screenshot; none means backend
+only. A later walk that could not go live **cannot downgrade** a recorded live observation — the
+blocked retry goes in `evidence.latest_attempt_blocked` instead.
+
+## Waiting on an unlocked desktop — one command
+
+```
+python tools/ty_unlock_checks.py
+```
+
+It runs the live walk over every route, applies it to the registry, then runs V3 (ten-task parity
+twice) and V9 (dogfood), and refuses by name while the desktop is locked — which it is right now
+(`foreground is 'Windows Default Lock Screen'`). `--status` answers the question without running
+anything.
 
 ## In flight
 
