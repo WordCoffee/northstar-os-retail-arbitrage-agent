@@ -1,6 +1,6 @@
 # Target spec — what production-ready means, per service
 
-Derived 2026-11-09T06:47:16+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
+Derived 2026-11-09T07:59:52+00:00 from `state/director/services.json`, 7186 measured test ids and 1 readiness findings. **Scores are measured, never asserted**: a dimension with no artefact scores 0 and says why.
 
 Bar: **85 on every dimension** (not an average). A service is at the bar only when its weakest dimension clears it. Impact weight is what a paying seller needs first; gap = impact x (bar - score).
 
@@ -13,7 +13,6 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | The Town Crier (`towncrier`) | 55.0 | seller | no | 13.5 | 0.45 |
 | Support (`beta-support`) | 63.2 | complete | no | 10.9 | 0.5 |
 | Onboarding & Plan (`beta`) | 74.7 | complete | no | 9.3 | 0.9 |
-| Design Studio (`design-studio`) | 75.9 | seller | no | 8.6 | 0.95 |
 | Invite entry (`beta-signup`) | 74.7 | complete | no | 8.2 | 0.8 |
 | SocialPulse (`socialpulse`) | 67.0 | seller | no | 8.1 | 0.45 |
 | Golden Goose (`goldengoose`) | 77.0 | seller | no | 7.6 | 0.95 |
@@ -33,6 +32,7 @@ Bar: **85 on every dimension** (not an average). A service is at the bar only wh
 | Operations Hub (`foundation`) | 86.2 | complete | no | 0.0 | 0.7 |
 | Jobs & Schedules (`jobs`) | 86.2 | complete | no | 0.0 | 0.4 |
 | Keywords & SEO (`keywords`) | 86.2 | complete | no | 0.0 | 0.6 |
+| Design Studio (`design-studio`) | 85.2 | correct | no | 0.0 | 0.95 |
 | Keyword Tracker (`keyword-tracker`) | 86.2 | complete | no | 0.0 | 0.6 |
 | Profitability (`profitability`) | 86.2 | complete | no | 0.0 | 0.75 |
 
@@ -192,28 +192,6 @@ onboarding and plan selection for a private beta seller.
 Seller scenarios:
 - `backed` — an invitee signs up without help
 - `backed` — a tester reports a bug and sees it acknowledged
-
-## Design Studio (`design-studio`)
-
-product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
-
-- route `/design-studio`, group Create, kind studio
-- **score 75.9 / bar 85** (impact 0.95, gap 8.6)
-
-| dimension | score | weight | evidence |
-|---|---|---|---|
-| works | 100.0 | 0.23 | 166 test id(s) prove it |
-| correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
-| seller | 22.1 | 0.13 | 40 Seller-Tester outputs, mean 22.1, 0 passed |
-| complete | 66.7 | 0.12 | 2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
-| usable | 100.0 | 0.07 | no readiness finding names this service |
-| measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
-| contract | 100.0 | 0.1 | POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets |
-
-Seller scenarios:
-- `backed` — white-background main image from a phone photo
-- `backed` — lifestyle scene with a scale reference
-- `backed` — an A+ module set that matches the brand
 
 ## Invite entry (`beta-signup`)
 
@@ -617,6 +595,28 @@ keyword research and SEO workbench.
 
 Seller scenarios:
 - `backed` — the work survives a reload and tells me when it failed
+
+## Design Studio (`design-studio`)
+
+product pictures in any seller situation, and A+ content, from a prompt, stored references, or uploads - Canva-grade to use.
+
+- route `/design-studio`, group Create, kind studio
+- **score 85.2 / bar 85** (impact 0.95, gap 0.0)
+
+| dimension | score | weight | evidence |
+|---|---|---|---|
+| works | 100.0 | 0.23 | 166 test id(s) prove it |
+| correct | 60.0 | 0.25 | 166 test id(s) prove the code path; output quality is judged by the Seller-Tester, not by the tests |
+| seller | 93.5 | 0.13 | 12 Seller-Tester outputs (generated/composite), mean 93.5, 9 passed; 40 replayed artefact(s) excluded as context (mean 29.2) |
+| complete | 66.7 | 0.12 | 2/3 declared Bojo tools wired: build_dieline, generate_image, list_templates |
+| usable | 100.0 | 0.07 | no readiness finding names this service |
+| measured | 100.0 | 0.1 | route /design-studio -> northstar-os-ui\src\pages\internal\DesignStudio.jsx; app p95 3.4 ms |
+| contract | 100.0 | 0.1 | POST /api/design-studio/assets/upload -> 200; 10 measured field(s) (id,asset,file_url); read back 78fbb038-e23f-4323-95e8-5b7912410382 via /api/design-studio/assets |
+
+Seller scenarios:
+- `backed` — white-background main image from a phone photo
+- `backed` — lifestyle scene with a scale reference
+- `backed` — an A+ module set that matches the brand
 
 ## Keyword Tracker (`keyword-tracker`)
 

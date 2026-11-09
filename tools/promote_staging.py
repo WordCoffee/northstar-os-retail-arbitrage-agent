@@ -799,14 +799,21 @@ def _pathspec_temp(paths: Sequence[str]) -> str:
 
 
 def _git_pathspec(repo: Repo, args: Sequence[str], paths: Sequence[str]) -> str:
-    name = _pathspec_temp(paths)
-    try:
-        return repo.git(*args, f"--pathspec-from-file={name}", "--pathspec-file-nul")
-    finally:
-        try:
-            os.unlink(name)
-        except OSError:
-            pass
+    """Run a git command restricted to `paths`, without `--pathspec-from-file`.
+
+    `--pathspec-from-file` is a newer option than the git on this box (`fatal: unrecognized
+    argument`), so the paths go after `--` in batches. Batching keeps the command line inside
+    Windows' limit even when a slice covers thousands of files, and the caller merges the output.
+    """
+    cleaned = [str(path).replace("\\", "/") for path in paths if str(path).strip()]
+    if not cleaned:
+        return repo.git(*args)
+    chunks: List[str] = []
+    batch = 40
+    for start in range(0, len(cleaned), batch):
+        chunk = cleaned[start:start + batch]
+        chunks.append(repo.git(*args, "--", *chunk))
+    return "\n".join(chunks)
 
 
 def _parse_commit_log(raw: str) -> List[Commit]:
@@ -1348,9 +1355,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         result["review"] = str(pack)
 
     if args.check:
+        # A refusal that a human is meant to act on must leave them something to act on: a
+        # visual slice/bundle writes its review pack even under --check, because "refused,
+        # nothing to show" is how a gate becomes a dead end.
+        visual_refusal = any(gate.key in ("slice", "bundle") and not gate.ok
+                             for gate in result["gates"])
+        if visual_refusal and not args.review:
+            try:
+                pack = write_slice_pack(repo, result) if args.slice else \
+                    write_review_pack(repo, result)
+                result["review"] = str(pack)
+            except Exception:  # noqa: BLE001 - a missing pack must not hide the refusal
+                pass
         print(json.dumps(as_payload(result), indent=2) if args.json else render_check(result))
-        if args.review:
-            print(f"\nreview pack: {result['review']}")
+        if (args.review or result.get("review")) and not args.json:
+            print(f"\nreview pack: {result.get('review')}")
         return 0 if result["eligible"] else 2
 
     if not result["eligible"]:

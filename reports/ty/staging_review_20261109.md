@@ -1,23 +1,23 @@
 # Staging review — 20261109
 
-`staging` is 1151 commit(s) ahead of `main` and the bundle contains visual or creative work, so it is refused by name and shown here instead.
+`staging` is 1170 commit(s) ahead of `main` and the bundle contains visual or creative work, so it is refused by name and shown here instead.
 
-- source `staging` @ `31c887ec3f0d9f27db6711936398823a04a18f44`
+- source `staging` @ `4e853dd1422df70a1113e4f3672d42300ebf60d5`
 - target `main` @ `ecef24a75d924a240b4722d9a92c9ba9fdc2f687`
 
 ## Gates
 
 | gate | result | evidence |
 |---|---|---|
-| suite | FAIL | summary: 7067 passed, 117 skipped, 2 xfailed, 17 warning run written 2026-11-09T00:52:29, newest staging commit 2026-11-09T01:00:14 |
+| suite | FAIL | summary: 7067 passed, 117 skipped, 2 xfailed, 17 warning, 125 subtests run written 2026-11-08T04:34:07, newest staging commit 2026-11-09T01:59:58 |
 | verifier | FAIL | d15_verification.md: 17 agree, 2 FAILED, 1 BLOCKED reproduced by: not recorded (--verifier not given) |
-| bundle | FAIL | bundle main..staging: 1151 commit(s), 9735 changed path(s) visual/creative paths: 262 |
+| bundle | FAIL | bundle main..staging: 1170 commit(s), 10738 changed path(s) visual/creative paths: 262 |
 
 Refused by: `suite`, `verifier`, `bundle`
 
 ## Before / after
 
-570 image(s) changed in the bundle. Composited digests come first, then dogfood/audit shots, then screenshots, newest first (24 of 570):
+583 image(s) changed in the bundle. Composited digests come first, then dogfood/audit shots, then screenshots, newest first (24 of 583):
 
 | after (this bundle) | before (on `main`) |
 |---|---|
@@ -84,10 +84,29 @@ after: 29 services, at_bar **2** (hub, prospector), test_ids 7186
 | adpilot | 55 | no |
 | towncrier | 55 | no |
 
-## Merged job list (1151 commits)
+## Merged job list (1170 commits)
 
 | sha | date | job |
 |---|---|---|
+| `4e853dd1` | 2026-11-09 | merge stage-slice: candidate freeze, slice classifier, per-service review packs |
+| `de52dd96` | 2026-11-09 | merge sel-02: seller mean 22.1 -> 93.5, design-studio 75.9 -> 85.2 |
+| `9657cd96` | 2026-11-09 | fix: roomAdapters used a JSX tag for an argument component (and then said so in a comment the scanner also read) |
+| `595fc476` | 2026-11-09 | seller_scores: timestamp the published mean from the generated pass |
+| `88706b14` | 2026-11-09 | design studio seller score: judge generated composites, not replayed files |
+| `a410813d` | 2026-11-09 | digest: free RAM and the builder allowance, alongside disk |
+| `c684e7c3` | 2026-11-09 | status update: UI-TARS blocked on RAM after a real attempt, hosted target proven live, FLUX 3 measured at 11.93 GB and still flaky, OmniParser grant recorded |
+| `24a8fd65` | 2026-11-09 | GRANT: ultralytics dev-only for the OmniParser-class grounding benchmark (AGPL confined to the bench, never served); replace_later entries for ultralytics and OmniParser |
+| `94be3157` | 2026-11-09 | merge ramgov: free-RAM governor gating builder claims and launcher starts |
+| `0115d768` | 2026-11-09 | bake-off: hosted target proven live and byte-identical, accuracy-first verdict separates ground truth from cost; verifier AGREE |
+| `f995a911` | 2026-11-09 | item5 slices: classify the bundle by unit, gate and promote one slice at a time, review packs with 5-10 images |
+| `9c8fb445` | 2026-11-09 | verify: bake-off reproduction |
+| `1994a936` | 2026-11-09 | ram governor: gate builder starts on measured free RAM |
+| `433c5d87` | 2026-11-09 | items 1-5 status table: five sections, grounding benchmark parked on a licence decision with both licences verified |
+| `f23e918d` | 2026-11-09 | items 1-5: V9-localhost verified, unlock watcher running, reboot proof, reproducible bake-off, FLUX diagnosis with unload fix, composites at 100, promotion pipeline refusing |
+| `5d89b522` | 2026-11-09 | merge item3: reproducible D17 bake-off with tracked artefacts, six cells, craft-anything default |
+| `e8a92d60` | 2026-11-09 | merge item5: promotion pipeline with three gates, refusing today's visual bundle and writing the review pack |
+| `f7f8b8c8` | 2026-11-09 | item5: staging-to-main promotion gate with three named refusals, plus the visual review pack |
+| `8391c845` | 2026-11-09 | research/bakeoff: reproducible D17 bake-off (Craft Anything v0.5.0 vs REA 6.5.0) |
 | `31c887ec` | 2026-11-09 | merge item2: reboot proof, task settings verified, launcher runs the check on first start after boot |
 | `0e89783c` | 2026-11-09 | item2: the reboot proof is measured after the boot, not argued before it |
 | `f48655d3` | 2026-11-09 | handoff: contract dimension in the weights, 2 at bar, the complete-dimension correction |
