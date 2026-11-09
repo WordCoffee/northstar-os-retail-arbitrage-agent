@@ -96,41 +96,62 @@ def _audit_row(service_id: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def live_describe(route: str) -> Dict[str, Any]:
+def live_describe(route: str, attempts: int = 2) -> Dict[str, Any]:
     """Open the route in a session-owned tab and describe the page.
 
-    Returns ``{"ok": False, "reason": ...}`` whenever the desktop or the browser
-    cannot supply a page. The caller records that reason verbatim.
+    A fresh tab per route, retried once: the first attempt after a long idle sometimes loses
+    the address bar. Returns ``{"ok": False, "reason": ...}`` whenever the desktop or the
+    browser cannot supply a page; the caller records that reason verbatim.
     """
     try:
         from tools.vision import chrome_uia, understand  # noqa: PLC0415
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "reason": f"vision modules unavailable: {exc}"}
 
-    attached = chrome_uia.ChromeUIA.attach()
-    if not attached.get("ok"):
-        return {"ok": False, "reason": attached.get("reason") or "no Chrome window"}
-    page = attached["page"]
-    try:
-        opened = page.open_url(f"{BASE}{route}", new_tab=True)
-        if not opened.get("ok"):
-            return {"ok": False, "reason": opened.get("reason") or "route did not open"}
-        frame = page.screenshot()
-        if not frame.get("ok") or not frame.get("png"):
-            return {"ok": False, "reason": frame.get("reason") or "no frame captured"}
-        described = understand.describe_page(png=frame["png"])
-        return {
-            "ok": True,
-            "title": described.get("title") or page.title_now(),
-            "controls": described.get("controls") or [],
-            "summary": described.get("summary") or "",
-            "url": opened.get("url"),
-        }
-    finally:
+    reason = "not attempted"
+    for attempt in range(1, max(1, attempts) + 1):
+        attached = chrome_uia.ChromeUIA.attach()
+        if not attached.get("ok"):
+            return {"ok": False, "reason": attached.get("reason") or "no Chrome window"}
+        page = attached["page"]
         try:
-            page.close_tab()
-        except Exception:  # noqa: BLE001 - closing is best-effort
-            pass
+            opened = page.open_url(f"{BASE}{route}", new_tab=True)
+            if not opened.get("ok"):
+                reason = opened.get("reason") or "route did not open"
+                continue
+            frame = page.screenshot()
+            if not frame.get("ok") or not frame.get("png"):
+                reason = frame.get("reason") or "no frame captured"
+                continue
+            described = understand.describe_page(png=frame["png"])
+            return {
+                "ok": True,
+                "attempt": attempt,
+                "title": described.get("title") or page.title_now(),
+                "controls": described.get("controls") or [],
+                "summary": described.get("summary") or "",
+                "url": opened.get("url"),
+            }
+        finally:
+            try:
+                page.close_tab()
+            except Exception:  # noqa: BLE001 - closing is best-effort
+                pass
+    return {"ok": False, "reason": reason}
+
+
+def confidence_for(live: Dict[str, Any], fallback: str) -> str:
+    """How much the registry entry is trusted, stated rather than implied.
+
+    high    live page, and the page showed three or more controls
+    medium  live page, but thin: fewer than three controls (could be a shell)
+    low     no live page; a committed screenshot was described instead
+    none    backend only — the route was never seen
+    """
+    if live.get("ok"):
+        controls = live.get("controls") or []
+        return "high" if len(controls) >= 3 else "medium"
+    return "low" if fallback == "screenshot" else "none"
 
 
 def walk(service_ids: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -164,10 +185,12 @@ def walk(service_ids: Optional[List[str]] = None) -> Dict[str, Any]:
             row.update(
                 {
                     "vision": "live",
+                    "attempt": live.get("attempt"),
+                    "confidence": confidence_for(live, "live"),
                     "title": live.get("title"),
                     "controls": live.get("controls") or [],
                     "summary": live.get("summary"),
-                    "detail": "opened in a session-owned Chrome tab and described by understand.describe_page",
+                    "detail": "opened in a fresh session-owned Chrome tab and described by understand.describe_page",
                 }
             )
         else:
@@ -177,6 +200,7 @@ def walk(service_ids: Optional[List[str]] = None) -> Dict[str, Any]:
                 row.update(
                     {
                         "vision": "screenshot",
+                        "confidence": confidence_for(live, "screenshot"),
                         "shot": str(shot.relative_to(ROOT)).replace("\\", "/"),
                         "detail": "committed capture of this route; not described live",
                     }
@@ -188,6 +212,7 @@ def walk(service_ids: Optional[List[str]] = None) -> Dict[str, Any]:
                 row.update(
                     {
                         "vision": "audit",
+                        "confidence": confidence_for(live, "screenshot"),
                         "title": audit.get("title"),
                         "controls": audit.get("controls") or [],
                         "detail": "title and controls recorded by the committed live walk in ty/ux_audit.json",
@@ -197,6 +222,7 @@ def walk(service_ids: Optional[List[str]] = None) -> Dict[str, Any]:
                 row.update(
                     {
                         "vision": "backend",
+                        "confidence": "none",
                         "detail": "no live page, no committed capture, no rendered audit row for this route",
                     }
                 )

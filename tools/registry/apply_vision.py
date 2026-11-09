@@ -60,6 +60,8 @@ def apply(document: Dict[str, Any], walk: Dict[str, Any]) -> List[str]:
         before = (entry["evidence"]["vision"], entry["evidence"]["vision_note"])
         entry["evidence"]["vision"] = row["vision"]
         entry["evidence"]["vision_note"] = note_for(row)
+        if row.get("confidence"):
+            entry["evidence"]["confidence"] = row["confidence"]
         if before != (row["vision"], entry["evidence"]["vision_note"]):
             changed.append(entry["id"])
     return changed
