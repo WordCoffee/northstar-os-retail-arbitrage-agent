@@ -79,6 +79,14 @@ Non-product files are quarantined at
 **Lesson to reuse:** a reference pool has to be looked at, not counted. The file names said "for
 mom" and "for women"; only the pixels said "quote card".
 
+**Second pass, after the verifier opened the files:** `wc_women_card_mirror.jpg` turned out to be an
+affirmation card on a bathroom mirror with no box in frame, and `wc_women_main_front.jpg` was a
+byte-identical copy of `word_coffee_women_front.jpg`. So the pool is now an explicit **reviewed
+roster** of eight photographs (three Mogra, five Word Coffee), and a test hashes them: distinct
+files must be distinct photographs, and every path must be on the roster. Names and counts were
+never the control; the pixels were.
+
+
 ## D-004 — a killed render wedged the GPU lane (2026-11-09)
 
 **Measured:** after a composite pass was stopped, the next run refused with
