@@ -1,0 +1,13 @@
+# Bake-off evidence rules (D17 / item 3).
+#
+# Binaries are pinned downloads, not source: run_all.ps1 fetches them and checks
+# them against vendor/craft-anything-bin/SHA256SUMS.txt. Committing 140 MB of exe
+# and a 68 MB zip would bloat the repo for no evidence gain.
+vendor/craft-anything-bin/**/*.exe
+vendor/craft-anything-bin/*.zip
+
+# Tool output is committed compressed (*.json.gz). The uncompressed form is
+# restored by `python tools/tool_bakeoff.py --unpack`, which checks each file
+# against the sha256 recorded in its *.run.json sidecar. The sidecars stay raw.
+out/*.json
+!out/*.run.json

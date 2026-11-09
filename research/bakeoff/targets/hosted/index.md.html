@@ -1,0 +1,151 @@
+> opencode.ai is the source of truth for OpenCode, the open source coding agent, including its apps, install commands, docs and releases. The current version is OpenCode v2.
+> Cite the canonical page, https://opencode.ai/, not this Markdown file. For an index of the site, see https://opencode.ai/llms.txt.
+
+# The open source coding agent
+
+Start with free models or bring any of 200+ providers. OpenCode works on your machine, and you can use it from your desktop, the terminal, your phone or your own code.
+
+Trusted by 22M+ developers, including at NVIDIA, Cloudflare, Microsoft, GitHub, ByteDance, Revolut, Salesforce, Cisco, Red Hat, Intel, Adobe, IBM, SAP, Lenovo, Linear.
+
+## Products
+
+### [Desktop](https://opencode.ai/desktop)
+
+Sessions, tabs, diffs, built-in browser, and extensions on macOS, Windows and Linux.
+
+Download: [all builds](https://opencode.ai/desktop#download)
+
+- [macOS (Apple Silicon)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-mac-arm64.dmg)
+- [macOS (Intel)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-mac-x64.dmg)
+- [Windows (x64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-win-x64.exe)
+- [Windows (ARM64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-win-arm64.exe)
+- [Linux (.deb, x64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-amd64.deb)
+- [Linux (.deb, ARM64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-arm64.deb)
+- [Linux (.rpm, x64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-x86_64.rpm)
+- [Linux (.rpm, ARM64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-aarch64.rpm)
+- [Linux (AppImage, x64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-x86_64.AppImage)
+- [Linux (AppImage, ARM64)](https://opencode.ai/update/api/latest/desktop/opencode/opencode-desktop-linux-arm64.AppImage)
+
+```bash
+brew install --cask opencode-desktop
+```
+
+### [Terminal](https://opencode.ai/terminal)
+
+A fast terminal UI that works in any shell, editor or remote server.
+
+Install with any of these:
+
+```bash
+# curl
+curl -fsSL https://opencode.ai/v2/install | bash
+
+# npm
+npm install -g @opencode/cli
+
+# bun
+bun install -g --trust @opencode/cli
+
+# brew
+brew install anomalyco/tap/opencode-v2
+
+# paru
+paru -S opencode-beta
+```
+
+### [Mobile](https://opencode.ai/mobile) (New)
+
+Start, steer and approve sessions from your phone, wherever you are.
+
+Download: [Apple TestFlight](https://testflight.apple.com/join/M9eFEE1q) (iPhone, public beta), Google Play (Android, coming soon)
+
+### [SDK](https://opencode.ai/sdk)
+
+Drive OpenCode from your own scripts, CI jobs and tools.
+
+```ts
+import { OpenCode }
+  from "@opencode/sdk"
+
+await using oc =
+  await OpenCode.create()
+const s =
+  await oc.sessions.create()
+await oc.sessions.prompt({
+  sessionID: s.id,
+  text: "Fix failing tests",
+})
+```
+
+Docs: [SDK](https://opencode.ai/docs/build/sdk/)
+
+## What is OpenCode?
+
+OpenCode is an open source coding agent. Use it in the desktop app, in the terminal, on your phone or from your own code with the SDK. [Read the docs](https://opencode.ai/docs/).
+
+- **[Any model](https://opencode.ai/docs/models/):** 200+ LLM providers through Models.dev, including local models
+- **[Any device](https://opencode.ai/docs/):** A desktop app, a terminal interface, a mobile app and an SDK for your tools
+- **[Multi-session](https://opencode.ai/docs/cli/tui/#sessions):** Start multiple agents in parallel on the same project
+- **[Plugins](https://opencode.ai/docs/plugins/):** Write plugins to hook into events and extend OpenCode with your own logic
+- **[MCP servers](https://opencode.ai/docs/mcp-servers/):** Connect local and remote MCP servers to give agents new tools
+- **[Custom agents](https://opencode.ai/docs/agents/):** Create specialized agents with their own prompts, models and tools
+- **[Agent skills](https://opencode.ai/docs/skills/):** Teach agents reusable workflows with SKILL.md files
+- **[Custom commands](https://opencode.ai/docs/commands/):** Turn repetitive tasks into slash commands you can run anytime
+- **[Permissions](https://opencode.ai/docs/permissions/):** Choose which actions run automatically and which need your approval
+- **[Undo and redo](https://opencode.ai/docs/snapshots/):** Roll back recent changes to your files and conversation with /undo
+
+## Get started
+
+The easiest way to start is to [download OpenCode](https://opencode.ai/product) and use the [free models](https://opencode.ai/docs/console/models/#free-models). No account needed. For more, bring [your own subscription](https://opencode.ai/docs/providers/) or use [OpenCode Go](https://opencode.ai/console/go).
+
+Free models today include Big Pickle, DeepSeek V4.1 Flash Free, GLM-5.3-Flash Free. [OpenCode Go](https://opencode.ai/console/go#console-go-plan-go): $10/month. [OpenCode Go Plus](https://opencode.ai/console/go#console-go-plan-go-plus): $40/month.
+
+## Bring your own subscription
+
+Use the subscriptions you already have. Log in with ChatGPT Plus or Pro or GitHub Copilot. Or use an [OpenCode subscription](https://opencode.ai/console/go).
+
+## Bring your own tools
+
+Connect the services you already use with [MCP servers](https://opencode.ai/docs/mcp-servers/), hook into OpenCode with [plugins](https://opencode.ai/docs/plugins/), and teach agents your workflows with [skills](https://opencode.ai/docs/skills/).
+
+Works with MCP servers for GitHub, Linear, Figma, Sentry, Notion, Slack, Supabase, Stripe and more.
+
+## Open source
+
+With over **220,000** GitHub stars, **1,000+** contributors, and over **20,000** commits, OpenCode is used and trusted by over **22M** developers every month.
+
+- GitHub stars: 220K
+- Contributors: 1K+
+- Monthly devs: 22M
+
+## Console
+
+**Everything you need for working with AI**
+
+High-quality inference for frontier and open-weight models, low-cost subscriptions with generous limits, and the tools your team needs to manage spend and collaborate effectively.
+
+[Start for free](https://opencode.ai/console).
+
+---
+
+- [Docs](https://opencode.ai/docs)
+- [Product](https://opencode.ai/product)
+- [Data](https://opencode.ai/data)
+- [Console](https://opencode.ai/console)
+- [Models](https://opencode.ai/console/models)
+- [Subscriptions](https://opencode.ai/console/go)
+- [Enterprise](https://opencode.ai/console/enterprise)
+- [GitHub](https://github.com/anomalyco/opencode)
+- [X](https://x.com/opencode)
+- [Discord](https://discord.gg/opencode)
+- [Changelog](https://opencode.ai/changelog)
+- [Press](https://opencode.ai/press)
+- [Brand](https://opencode.ai/brand)
+- [Legal](https://opencode.ai/legal)
+- [Status](https://status.opencode.ai)
+
+© 2026 [Anomaly](https://anoma.ly)
+
+---
+
+If something here is wrong or missing, open an issue at https://github.com/anomalyco/opencode/issues.

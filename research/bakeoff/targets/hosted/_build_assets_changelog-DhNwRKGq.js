@@ -1,0 +1,1 @@
+import{n as e,t}from"./client-0MV2ky5l.js";var n=e(t(`ce244aa5-86402002`),`changelog`),r=e(t(`ce244aa5-8be411b9`),`changelog-page`),i=e(t(`ce244aa5-3eef9207`),`changelog-entry`),a=e(t(`ce244aa5-7e6593f6`),`product-changelog`);export{a as i,i as n,r,n as t};

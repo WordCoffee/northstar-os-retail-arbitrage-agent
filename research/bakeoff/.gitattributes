@@ -1,0 +1,9 @@
+# Evidence and analysis targets are bytes, not text.
+#
+# The repo-wide autocrlf setting rewrites line endings on checkout, which would
+# hand a verifier a hosted/local target that differs byte-for-byte from the one
+# analysed (different hashes, different scoring input). These paths keep exactly
+# the bytes that were fetched, parsed or produced.
+out/** -text
+targets/** -text
+vendor/** -text

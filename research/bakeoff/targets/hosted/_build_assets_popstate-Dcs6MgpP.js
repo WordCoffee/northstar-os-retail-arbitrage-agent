@@ -1,0 +1,1 @@
+var e;function t(t){return e=t,()=>{e===t&&(e=void 0)}}window.addEventListener(`popstate`,t=>{e?.(t)&&t.stopImmediatePropagation()});export{t};
