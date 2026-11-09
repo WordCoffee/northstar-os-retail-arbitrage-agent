@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-08T21:48:22+00:00",
+  "updated_at": "2026-11-09T03:16:49+00:00",
   "cycle": 1,
   "unit_in_flight": "",
   "unit_order": [
@@ -540,9 +540,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "design changed 2026-11-08: uploaded references are cut out and composited into a generated scene; full generation only where exact fidelity is not required; editors benchmarked through the model scout with licences logged; Mogra Organics assets are the first real uploads; OCR text-match + embedding check; the 0.60 colour proxy is not a gate",
       "created_at": "2026-11-08T21:47:47+00:00",
-      "updated_at": "2026-11-08T21:48:22+00:00",
+      "updated_at": "2026-11-09T03:16:49+00:00",
       "rank": 1
     },
     {
@@ -632,6 +632,71 @@
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-08T21:48:22+00:00",
       "rank": 5
+    },
+    {
+      "id": "ux-06-shell",
+      "unit": "U",
+      "title": "Shell chrome on every service route: top nav, side nav and workspace outlet, with the DevBanner in the shell rather than only on sign-in",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "northstar-os-ui/src/shell",
+        "northstar-os-ui/src/App.jsx"
+      ],
+      "branch": "ty/ux-06-shell",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-ux-shell-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T03:16:49+00:00",
+      "updated_at": "2026-11-09T03:16:49+00:00",
+      "rank": 6
+    },
+    {
+      "id": "ux-07-tabs",
+      "unit": "U",
+      "title": "Workspace tab bar: tabs keep state across switching and the shell tells Bojo which tab is open and a summary of its state",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "northstar-os-ui/src/shell"
+      ],
+      "branch": "ty/ux-07-tabs",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-ux-shell-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T03:16:49+00:00",
+      "updated_at": "2026-11-09T03:16:49+00:00",
+      "rank": 7
+    },
+    {
+      "id": "ux-08-scene",
+      "unit": "U",
+      "title": "Scene engine wired to the shell: exactly one scene loaded per service, unloaded on switch, still-frame fallback when WebGL is unavailable, reduced-motion honoured",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "northstar-os-ui/src/scenes",
+        "northstar-os-ui/src/shell"
+      ],
+      "branch": "ty/ux-08-scene",
+      "worktree": "",
+      "rollback_tag": "rollback/pre-ux-shell-20261108",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-09T03:16:49+00:00",
+      "updated_at": "2026-11-09T03:16:49+00:00",
+      "rank": 8
     }
   ],
   "service_scores": {},

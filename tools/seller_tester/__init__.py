@@ -29,14 +29,20 @@ from .generators import ComfyGenerator, GeneratorUnavailable, StoredGenerator
 from .harness import run_pass, score_image, select_briefs
 from .judge import FakeJudge, get_judge, local_judge
 from .reference_check import (
-    check_reference_subject,
+    check_reference_for_brief,
     colour_agreement,
+    cosine,
     dominant_hue,
+    embed,
+    key_tokens,
     load_reference_rgb,
     normalise_reference_path,
+    ocr_text,
     reference_check_for_brief,
+    semantic_agreement,
     silhouette_aspect,
     subject_mask,
+    text_match,
 )
 
 __all__ = [
@@ -65,8 +71,14 @@ __all__ = [
     "FakeJudge",
     "get_judge",
     "local_judge",
-    "check_reference_subject",
+    "check_reference_for_brief",
     "colour_agreement",
+    "cosine",
+    "embed",
+    "key_tokens",
+    "ocr_text",
+    "semantic_agreement",
+    "text_match",
     "dominant_hue",
     "silhouette_aspect",
     "subject_mask",

@@ -34,7 +34,7 @@ from tools.seller_tester import (  # noqa: E402
     StoredGenerator,
     briefs_by_mode,
     build_gap,
-    check_reference_subject,
+    check_reference_for_brief,
     escalate,
     file_gap,
     gap_id,
@@ -706,35 +706,88 @@ def test_a_prompt_only_brief_never_runs_the_reference_check():
     assert result["passed"] is True
 
 
-def test_reference_check_passes_when_the_reference_subject_is_present():
-    reference = rgb_of(coloured_product())
-    produced = rgb_of(coloured_product(size=600, bg=232,
-                                       box=(120, 90, 480, 510)))
-    verdict = check_reference_subject(produced, reference)
+def test_reference_check_passes_when_the_printed_text_matches():
+    brief = make_brief("S-TEXT", source_mode="stored_reference",
+                       reference={"kind": "stored_asset",
+                                  "path": "renders/references/mogra/mogra_pair_main.png"})
+    produced = rgb_of(coloured_product(size=600, bg=232, box=(120, 90, 480, 510)))
+    verdict = check_reference_for_brief(
+        produced, produced, brief,
+        produced_text="MOGRAORGANICS ORGANICLION'SMANE MUSHROOMPOWDER 6oz170g",
+        reference_text="MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOM POWDER 6 oz (170 g)")
     assert verdict["ok"] is True, verdict
-    assert verdict["cannot_verify"] is False
-    assert verdict["colour_agreement"] >= 0.6
+    assert verdict["decided_by"] == "printed_text"
+    assert verdict["text"]["recall"] >= 0.6
 
 
-def test_reference_check_fails_on_a_different_colour_and_on_a_different_shape():
-    reference = rgb_of(coloured_product())
+def test_the_colour_proxy_is_a_diagnostic_and_never_the_gate():
+    """The owner's instruction: 0.60 colour agreement must not decide acceptance."""
+    brief = make_brief("S-COLOUR", source_mode="stored_reference",
+                       reference={"kind": "stored_asset",
+                                  "path": "renders/references/mogra/mogra_pair_main.png"})
+    reference = rgb_of(coloured_product(colour=(30, 90, 60)))
     wrong_colour = rgb_of(coloured_product(colour=(190, 40, 40)))
-    verdict = check_reference_subject(wrong_colour, reference)
-    assert verdict["ok"] is False
-    assert verdict["cannot_verify"] is False
-    assert verdict["colour_agreement"] < 0.2
+    verdict = check_reference_for_brief(
+        wrong_colour, reference, brief,
+        produced_text="MOGRA ORGANICS ORGANIC SHIITAKE",
+        reference_text="MOGRA ORGANICS ORGANIC SHIITAKE")
+    assert verdict["ok"] is True, verdict          # text decides, colour does not
+    assert verdict["diagnostic"]["colour_gate"] is False
+    assert verdict["diagnostic"]["colour_agreement"] < 0.6   # and it is still reported
 
-    wrong_shape = rgb_of(coloured_product(size=600, box=(280, 30, 320, 570)))
-    verdict = check_reference_subject(wrong_shape, reference)
+
+def test_missing_text_fails_even_when_the_colour_matches():
+    brief = make_brief("S-NOTEXT", source_mode="stored_reference",
+                       reference={"kind": "stored_asset",
+                                  "path": "renders/references/mogra/mogra_pair_main.png"})
+    reference = rgb_of(coloured_product(colour=(30, 90, 60)))
+    verdict = check_reference_for_brief(
+        reference, reference, brief,
+        produced_text="no words on this picture at all",
+        reference_text="MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOM POWDER")
     assert verdict["ok"] is False
-    assert verdict["cannot_verify"] is False
-    assert verdict["aspect_ratio"] > 1.6
+    assert verdict["decided_by"] == "printed_text"
+
+
+def test_embeddings_decide_when_there_is_no_printed_text():
+    brief = make_brief("S-EMBED", source_mode="stored_reference",
+                       reference={"kind": "stored_asset",
+                                  "path": "renders/references/mogra/mogra_pair_main.png"})
+    reference = rgb_of(coloured_product())
+    near = {"a": [1.0, 0.0, 0.0], "b": [0.98, 0.1, 0.0]}
+    verdict = check_reference_for_brief(
+        reference, reference, brief, produced_text="", reference_text="",
+        produced_desc="a green stand-up pouch", reference_desc="a green stand-up pouch",
+        embedder=lambda text: near["a"] if "produced" in text else near["b"])
+    # both descriptions are the same text here, so the injected vectors decide
+    assert verdict["decided_by"] == "embedding"
+    assert verdict["ok"] is True
+
+
+def test_text_match_is_fuzzy_about_ocr_noise():
+    from tools.seller_tester.reference_check import text_match
+
+    verdict = text_match("MOGRAORGAICS ORGANISLION'SMANE MUSHROOMPOWDER",
+                         "MOGRA ORGANICS ORGANIC LION'S MANE MUSHROOM POWDER")
+    assert verdict["ok"] is True, verdict
+    assert verdict["recall"] >= 0.6
+
+
+def test_key_tokens_ignore_numbers_and_short_words():
+    from tools.seller_tester.reference_check import key_tokens
+
+    tokens = key_tokens("EST 2023 MOGRA ORGANICS 6 oz (170 g) A/B")
+    assert "mogra" in tokens and "organics" in tokens
+    assert "2023" not in tokens and "est" not in tokens
 
 
 def test_reference_check_cannot_verify_counts_as_a_fail(tmp_path):
-    grey = Image.new("RGB", (400, 400), (255, 255, 255))
-    ImageDraw.Draw(grey).rectangle([80, 60, 320, 340], fill=(140, 140, 140))
-    verdict = check_reference_subject(rgb_of(grey), rgb_of(coloured_product()))
+    reference = rgb_of(coloured_product())
+    verdict = check_reference_for_brief(
+        reference, reference, make_brief("S-CANNOT", source_mode="stored_reference",
+                                         reference={"kind": "stored_asset", "path": "x"}),
+        produced_text="", reference_text="",
+        embedder=lambda text: None)
     assert verdict["ok"] is False
     assert verdict["cannot_verify"] is True
 

@@ -1,35 +1,37 @@
-"""Reference-subject check for the two reference input modes.
+"""Reference fidelity: printed text (OCR) and meaning (embeddings), not a colour threshold.
 
-The product-picture service has exactly three inputs (ty/MANDATE.md): the
-prompt alone, stored references from earlier generations, and references the
-user uploads. A reference-mode brief is only satisfied if the produced picture
-actually contains the subject from the reference — not merely plausible pixels.
+The product-picture service has exactly three inputs (ty/MANDATE.md): the prompt alone,
+stored references from earlier generations, and references the user uploads. A reference-mode
+brief is satisfied only if the produced picture actually contains the referenced product —
+not merely plausible pixels.
 
-That cannot be proved with pixels alone, so this module implements a *measurable
-proxy* and never claims more than that:
+The owner's instruction (2026-11-08) replaced the earlier design:
 
-* dominant-colour agreement (chroma-weighted hue histogram intersection), and
-* silhouette aspect agreement (bounding box of the separable subject).
+* the **0.60 colour proxy is not a gate** any more. It is measured and reported as a
+  diagnostic, because a genuine pouch crop scored 0.603 while three dark-green UI screenshots
+  scored 0.637 — it fails conservatively and cannot decide acceptance;
+* a **printed-text match** (OCR on both pictures) decides fidelity where the reference carries
+  legible brand text. OCR is noisy on real renders ("MOGRAORGAICS"), so matching is fuzzy and
+  token-based rather than exact;
+* an **embedding agreement** between the local vision model's descriptions of the two pictures
+  decides shape and meaning where text is absent;
+* composites are the preferred path for uploads, so the real product is cut out and placed in
+  a generated scene and only the *scene* is generated.
 
-Anything this proxy cannot measure is reported as `cannot_verify`, which counts
-as a failure in scoring. It is never a pass. The optional local vision judge
-remains the semantic second opinion; it is off by default.
-
-Calibration on this checkout (reference `renders/smoke_main_2000.png`, the Mogra
-Organic pouch) is recorded in `reports/ty/sel01_picture_modes.md`; the defaults
-below sit inside that measured gap. The proxy is coarse by construction and its
-known false positives are documented there rather than hidden.
+`cannot_verify` is always a failure. Nothing here reports a pass it did not measure.
 """
 from __future__ import annotations
 
+import difflib
+import re
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-# Only these trees may supply a stored reference asset.
+# Only these trees may supply a reference asset.
 REFERENCE_ROOTS = (
     "renders/",
     "generated_images/",
@@ -41,8 +43,21 @@ HUE_BINS = 12
 CORNER_PATCH = 16
 BACKGROUND_DISTANCE = 28
 
-DEFAULT_MIN_COLOUR = 0.62
+#: Diagnostic only. It is reported, never used to accept or reject a picture.
+DIAGNOSTIC_MIN_COLOUR = 0.62
 DEFAULT_MAX_ASPECT_RATIO = 1.6
+
+#: Fraction of the reference's key tokens the produced picture must show.
+DEFAULT_MIN_TOKEN_RECALL = 0.6
+#: Cosine between the two descriptions must clear this when text cannot decide.
+DEFAULT_MIN_EMBEDDING = 0.72
+#: A key token is an alphanumeric run at least this long.
+MIN_TOKEN_LEN = 5
+#: Fuzzy match ratio for OCR noise.
+FUZZY_RATIO = 0.82
+
+EMBED_MODEL = "qwen3-embedding:0.6b"
+EMBED_URL = "http://127.0.0.1:11434/api/embeddings"
 
 
 def _check(**kw: Any) -> Dict[str, Any]:
@@ -59,12 +74,7 @@ def _cannot_verify(reason: str, **extra: Any) -> Dict[str, Any]:
 
 def normalise_reference_path(value: Any, repo_root: str | Path = REPO_ROOT
                              ) -> Tuple[Optional[Path], str]:
-    """Resolve a stored-asset reference inside the allowed trees.
-
-    Returns (path, reason). A path outside the allowed trees, an absolute path
-    or a missing file returns (None, reason) — the caller turns that into a
-    `cannot_verify` failure. Nothing here guesses a replacement asset.
-    """
+    """Resolve a stored-asset reference inside the allowed trees."""
     if not isinstance(value, str) or not value.strip():
         return None, "reference path is empty"
     raw = value.strip().replace("\\", "/")
@@ -81,39 +91,23 @@ def normalise_reference_path(value: Any, repo_root: str | Path = REPO_ROOT
     return target, ""
 
 
+# ------------------------------------------------------------------ pixels (diagnostic)
 def subject_mask(rgb: np.ndarray) -> np.ndarray:
-    """Pixels that differ from the corner-sampled background.
-
-    When the corners do not describe a background (a full-bleed picture), the
-    whole frame is the subject. When they describe almost nothing, the caller
-    ends up with an empty mask and the check reports `cannot_verify`.
-    """
     height, width = rgb.shape[:2]
     size = max(4, min(CORNER_PATCH, height // 8, width // 8))
-    patches = (
-        rgb[:size, :size],
-        rgb[:size, width - size:],
-        rgb[height - size:, :size],
-        rgb[height - size:, width - size:],
-    )
+    patches = (rgb[:size, :size], rgb[:size, width - size:],
+               rgb[height - size:, :size], rgb[height - size:, width - size:])
     background = np.median(
         np.array([np.median(p.reshape(-1, 3), axis=0) for p in patches]), axis=0)
     difference = np.abs(rgb.astype(np.int16) - background.astype(np.int16)).max(axis=2)
     mask = difference > BACKGROUND_DISTANCE
-    coverage = float(mask.mean())
-    if coverage > 0.90:
-        # No separable background: the subject fills the frame.
+    if float(mask.mean()) > 0.90:
         return np.ones((height, width), dtype=bool)
     return mask
 
 
 def dominant_hue(rgb: np.ndarray, chroma_min: float = CHROMA_MIN,
                  bins: int = HUE_BINS) -> Optional[np.ndarray]:
-    """Chroma-weighted hue histogram of the subject pixels, or None.
-
-    None means "there is not enough colour to compare" — reported as
-    `cannot_verify`, never as agreement.
-    """
     mask = subject_mask(rgb)
     pixels = rgb[mask].reshape(-1, 3).astype(np.float32)
     if pixels.size == 0:
@@ -124,8 +118,7 @@ def dominant_hue(rgb: np.ndarray, chroma_min: float = CHROMA_MIN,
     keep = chroma >= chroma_min
     if int(keep.sum()) < max(16, int(0.01 * pixels.shape[0])):
         return None
-    pixels = pixels[keep]
-    chroma = chroma[keep]
+    pixels, chroma = pixels[keep], chroma[keep]
     red, green, blue = pixels[:, 0], pixels[:, 1], pixels[:, 2]
     hue = np.zeros(pixels.shape[0], dtype=np.float32)
     max_is_red = high[keep] == red
@@ -136,16 +129,20 @@ def dominant_hue(rgb: np.ndarray, chroma_min: float = CHROMA_MIN,
     hue[rest] = ((red[rest] - green[rest]) / chroma[rest]) + 4
     hue *= 60.0
     histogram = np.zeros(bins, dtype=np.float32)
-    index = (hue / (360.0 / bins)).astype(np.int32) % bins
-    np.add.at(histogram, index, chroma)
+    np.add.at(histogram, (hue / (360.0 / bins)).astype(np.int32) % bins, chroma)
     total = float(histogram.sum())
-    if total <= 0.0:
+    return None if total <= 0.0 else histogram / total
+
+
+def colour_agreement(produced: np.ndarray, reference: np.ndarray) -> Optional[float]:
+    """Diagnostic only. Kept because it is honest evidence, not because it decides."""
+    a, b = dominant_hue(produced), dominant_hue(reference)
+    if a is None or b is None:
         return None
-    return histogram / total
+    return float(np.minimum(a, b).sum())
 
 
 def silhouette_aspect(rgb: np.ndarray) -> Optional[float]:
-    """Width/height of the subject bounding box, or None when there is no subject."""
     mask = subject_mask(rgb)
     rows, columns = np.where(mask)
     if rows.size == 0:
@@ -157,55 +154,181 @@ def silhouette_aspect(rgb: np.ndarray) -> Optional[float]:
     return width / float(height)
 
 
-def colour_agreement(produced: np.ndarray, reference: np.ndarray) -> Optional[float]:
-    """Hue-histogram intersection in 0..1, or None when colour is unmeasurable."""
-    produced_hue = dominant_hue(produced)
-    reference_hue = dominant_hue(reference)
-    if produced_hue is None or reference_hue is None:
+# ------------------------------------------------------------------ OCR
+def ocr_text(rgb: np.ndarray) -> Dict[str, Any]:
+    """Text visible in a picture, via the local ONNX OCR engine. No network, no cloud."""
+    try:
+        from rapidocr_onnxruntime import RapidOCR  # noqa: PLC0415
+
+        engine = RapidOCR()
+        result, _ = engine(np.ascontiguousarray(rgb[:, :, ::-1]))
+    except Exception as exc:  # noqa: BLE001 - unreadable text is a named failure
+        return {"ok": False, "items": [], "text": "", "reason": f"{type(exc).__name__}: {exc}"}
+    items: List[Dict[str, Any]] = []
+    for row in result or []:
+        try:
+            items.append({"text": str(row[1]), "score": float(row[2])})
+        except (IndexError, TypeError, ValueError):
+            continue
+    return {"ok": bool(items), "items": items,
+            "text": " ".join(item["text"] for item in items)}
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", str(text or "").casefold())
+
+
+def key_tokens(text: str) -> List[str]:
+    """Tokens worth matching: brand and product words, plus sizes.
+
+    OCR merges and mangles words ("MOGRAORGAICS"), so tokens are compared fuzzily and a
+    token only counts once. Very short runs and pure numbers are dropped — '2023' appears on
+    every pack and proves nothing.
+    """
+    raw = re.findall(r"[A-Za-z0-9][A-Za-z0-9'&.\-]*", str(text or ""))
+    out: List[str] = []
+    for token in raw:
+        norm = _norm(token)
+        if len(norm) < MIN_TOKEN_LEN or norm.isdigit():
+            continue
+        if norm not in out:
+            out.append(norm)
+    return out
+
+
+def text_match(produced_text: str, reference_text: str, *,
+               min_recall: float = DEFAULT_MIN_TOKEN_RECALL) -> Dict[str, Any]:
+    """Does the produced picture print the reference's key words? Fuzzy, token-based."""
+    wanted = key_tokens(reference_text)
+    if not wanted:
+        return _cannot_verify("the reference picture carries no legible text to match")
+    haystack = [_norm(chunk) for chunk in str(produced_text or "").split()]
+    haystack = [chunk for chunk in haystack if chunk]
+    joined = "".join(haystack)
+    matched, missing = [], []
+    for token in wanted:
+        best = max((difflib.SequenceMatcher(None, token, chunk).ratio()
+                    for chunk in haystack), default=0.0)
+        if best >= FUZZY_RATIO or token in joined:
+            matched.append(token)
+        else:
+            missing.append(token)
+    recall = len(matched) / len(wanted)
+    return _check(ok=recall >= float(min_recall), cannot_verify=False,
+                  detail=(f"{len(matched)}/{len(wanted)} key words present "
+                          f"({recall:.2f}, min {float(min_recall):.2f})"),
+                  matched=matched, missing=missing, recall=round(recall, 3),
+                  min_recall=float(min_recall))
+
+
+# ------------------------------------------------------------------ embeddings
+def embed(text: str, *, model: str = EMBED_MODEL, url: str = EMBED_URL,
+          timeout: float = 30.0) -> Optional[List[float]]:
+    """A local text embedding. None when the model is unavailable — never a fake vector."""
+    import json
+    import urllib.request
+
+    try:
+        request = urllib.request.Request(
+            url, data=json.dumps({"model": model, "prompt": str(text)[:4000]}).encode(),
+            headers={"Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = json.loads(response.read().decode("utf-8", "replace") or "{}")
+        vector = body.get("embedding")
+        return [float(value) for value in vector] if vector else None
+    except Exception:  # noqa: BLE001
         return None
-    return float(np.minimum(produced_hue, reference_hue).sum())
 
 
-def check_reference_subject(produced: np.ndarray, reference: np.ndarray, *,
-                            min_colour: float = DEFAULT_MIN_COLOUR,
-                            max_aspect_ratio: float = DEFAULT_MAX_ASPECT_RATIO
-                            ) -> Dict[str, Any]:
-    """Compare a produced picture with its reference image."""
-    agreement = colour_agreement(produced, reference)
-    if agreement is None:
+def cosine(a: Optional[Sequence[float]], b: Optional[Sequence[float]]) -> Optional[float]:
+    if not a or not b or len(a) != len(b):
+        return None
+    left, right = np.asarray(a, dtype=np.float32), np.asarray(b, dtype=np.float32)
+    denominator = float(np.linalg.norm(left) * np.linalg.norm(right))
+    if denominator <= 0.0:
+        return None
+    return float(np.dot(left, right) / denominator)
+
+
+def semantic_agreement(produced_desc: str, reference_desc: str, *,
+                       min_score: float = DEFAULT_MIN_EMBEDDING,
+                       embedder: Optional[Callable[[str], Optional[List[float]]]] = None,
+                       ) -> Dict[str, Any]:
+    """Do two descriptions mean the same thing? Local embeddings, cosine."""
+    call = embedder or embed
+    score = cosine(call(produced_desc), call(reference_desc))
+    if score is None:
+        return _cannot_verify("no local embedding available for the two descriptions")
+    return _check(ok=score >= float(min_score), cannot_verify=False,
+                  detail=f"embedding agreement {score:.3f} (min {float(min_score):.2f})",
+                  similarity=round(score, 4), min_similarity=float(min_score))
+
+
+# ------------------------------------------------------------------ the verdict
+def check_reference_for_brief(produced_rgb: np.ndarray, reference_rgb: np.ndarray,
+                              brief: Dict[str, Any], *,
+                              produced_text: Optional[str] = None,
+                              reference_text: Optional[str] = None,
+                              produced_desc: str = "", reference_desc: str = "",
+                              ocr: Optional[Callable[[np.ndarray], Dict[str, Any]]] = None,
+                              embedder: Optional[Callable[[str], Optional[List[float]]]] = None,
+                              ) -> Dict[str, Any]:
+    """Decide fidelity from text and meaning; report colour as a diagnostic.
+
+    Order matters: printed text is the strongest evidence when it exists, meaning is the
+    fallback, and colour is never the deciding vote.
+    """
+    spec = (brief.get("reference") or {}).get("check") or {}
+    ocr_fn = ocr or ocr_text
+
+    def _ocr(rgb: np.ndarray, known: Optional[str]) -> Dict[str, Any]:
+        if known is not None:
+            return {"ok": bool(str(known).strip()), "text": str(known or "")}
+        return ocr_fn(rgb)
+
+    produced_ocr = _ocr(produced_rgb, produced_text)
+    reference_ocr = _ocr(reference_rgb, reference_text)
+    text_verdict = text_match(produced_ocr.get("text", ""), reference_ocr.get("text", ""),
+                              min_recall=float(spec.get("min_token_recall",
+                                                        DEFAULT_MIN_TOKEN_RECALL)))
+    meaning = semantic_agreement(produced_desc, reference_desc,
+                                 min_score=float(spec.get("min_embedding",
+                                                          DEFAULT_MIN_EMBEDDING)),
+                                 embedder=embedder)
+    agreement = colour_agreement(produced_rgb, reference_rgb)
+    produced_aspect, reference_aspect = silhouette_aspect(produced_rgb), silhouette_aspect(
+        reference_rgb)
+
+    decided_by = ""
+    ok = False
+    if not text_verdict.get("cannot_verify"):
+        decided_by = "printed_text"
+        ok = bool(text_verdict["ok"])
+    elif not meaning.get("cannot_verify"):
+        decided_by = "embedding"
+        ok = bool(meaning["ok"])
+
+    if not decided_by:
         return _cannot_verify(
-            "one of the pictures has too little colour to compare "
-            "(<1% of subject pixels above chroma 30)")
-    produced_aspect = silhouette_aspect(produced)
-    reference_aspect = silhouette_aspect(reference)
-    if produced_aspect is None or reference_aspect is None:
-        return _cannot_verify("no separable subject silhouette in one of the pictures")
-    ratio = max(produced_aspect, reference_aspect) / min(produced_aspect, reference_aspect)
-    colour_ok = agreement >= float(min_colour)
-    aspect_ok = ratio <= float(max_aspect_ratio)
+            "neither printed text nor an embedding could be measured",
+            diagnostic={"colour_agreement": None if agreement is None else round(agreement, 4)})
+
     return _check(
-        ok=bool(colour_ok and aspect_ok),
-        detail=(f"dominant-colour agreement {agreement:.3f} "
-                f"(min {float(min_colour):.2f}); silhouette aspect "
-                f"{produced_aspect:.2f} vs {reference_aspect:.2f} "
-                f"(ratio {ratio:.2f}, max {float(max_aspect_ratio):.2f})"),
-        colour_agreement=round(agreement, 4),
-        min_colour=float(min_colour),
-        produced_aspect=round(produced_aspect, 3),
-        reference_aspect=round(reference_aspect, 3),
-        aspect_ratio=round(ratio, 3),
-        max_aspect_ratio=float(max_aspect_ratio),
+        ok=ok, cannot_verify=False, decided_by=decided_by,
+        detail=(f"{decided_by}: {'pass' if ok else 'fail'} — {text_verdict.get('detail') or meaning.get('detail')}"),
+        text=text_verdict, meaning=meaning,
+        diagnostic={
+            "colour_agreement": None if agreement is None else round(agreement, 4),
+            "colour_gate": False,
+            "produced_aspect": None if produced_aspect is None else round(produced_aspect, 3),
+            "reference_aspect": None if reference_aspect is None else round(reference_aspect, 3),
+        },
     )
 
 
 def load_reference_rgb(reference: Dict[str, Any], *,
                        repo_root: str | Path = REPO_ROOT
                        ) -> Tuple[Optional[np.ndarray], str, Optional[str]]:
-    """Load the reference image for a brief's `reference` object.
-
-    Returns (rgb, reason, resolved_path). `rgb` is None when the reference
-    cannot be read; `reason` then explains why in plain words.
-    """
     if not isinstance(reference, dict):
         return None, "brief declares no reference object", None
     kind = reference.get("kind")
@@ -234,7 +357,11 @@ def load_reference_rgb(reference: Dict[str, Any], *,
 
 
 def reference_check_for_brief(produced_rgb: np.ndarray, brief: Dict[str, Any], *,
-                              repo_root: str | Path = REPO_ROOT) -> Dict[str, Any]:
+                              repo_root: str | Path = REPO_ROOT,
+                              produced_text: Optional[str] = None,
+                              embedder: Optional[Callable[[str], Optional[List[float]]]] = None,
+                              describe: Optional[Callable[[np.ndarray], str]] = None,
+                              ) -> Dict[str, Any]:
     """Full reference check for one brief: resolve, load, compare, or refuse."""
     mode = brief.get("source_mode") or "unclassified"
     if mode == "prompt_only":
@@ -248,29 +375,28 @@ def reference_check_for_brief(produced_rgb: np.ndarray, brief: Dict[str, Any], *
     rgb, reason, resolved = load_reference_rgb(reference, repo_root=repo_root)
     if rgb is None:
         return _cannot_verify(reason, reference_path=resolved)
-    spec = (reference or {}).get("check") or {}
-    verdict = check_reference_subject(
-        produced_rgb, rgb,
-        min_colour=float(spec.get("min_colour_agreement", DEFAULT_MIN_COLOUR)),
-        max_aspect_ratio=float(spec.get("max_aspect_ratio", DEFAULT_MAX_ASPECT_RATIO)),
-    )
+
+    produced_desc = reference_desc = ""
+    if describe is not None:
+        try:
+            produced_desc = describe(produced_rgb) or ""
+            reference_desc = describe(rgb) or ""
+        except Exception:  # noqa: BLE001 - a description failure is not a pass
+            produced_desc = reference_desc = ""
+
+    verdict = check_reference_for_brief(
+        produced_rgb, rgb, brief, produced_text=produced_text,
+        produced_desc=produced_desc, reference_desc=reference_desc, embedder=embedder)
     verdict["reference_path"] = resolved
     verdict["reference_kind"] = (reference or {}).get("kind")
     return verdict
 
 
 __all__ = [
-    "CHROMA_MIN",
-    "DEFAULT_MAX_ASPECT_RATIO",
-    "DEFAULT_MIN_COLOUR",
-    "HUE_BINS",
-    "REFERENCE_ROOTS",
-    "check_reference_subject",
-    "colour_agreement",
-    "dominant_hue",
-    "load_reference_rgb",
-    "normalise_reference_path",
-    "reference_check_for_brief",
-    "silhouette_aspect",
-    "subject_mask",
+    "CHROMA_MIN", "DEFAULT_MAX_ASPECT_RATIO", "DIAGNOSTIC_MIN_COLOUR", "DEFAULT_MIN_EMBEDDING",
+    "DEFAULT_MIN_TOKEN_RECALL", "EMBED_MODEL", "HUE_BINS", "REFERENCE_ROOTS",
+    "check_reference_for_brief", "colour_agreement", "cosine", "dominant_hue", "embed",
+    "key_tokens", "load_reference_rgb", "normalise_reference_path", "ocr_text",
+    "reference_check_for_brief", "semantic_agreement", "silhouette_aspect", "subject_mask",
+    "text_match",
 ]
