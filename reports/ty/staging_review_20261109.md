@@ -48,12 +48,19 @@ Three classes, from the tracebacks in the log:
 
 - **19 need the built UI bundle** (`northstar-os-ui/dist`, gitignored, absent in a fresh
   worktree): `FileNotFoundError: ...\northstar-os-ui\dist\assets`,
-  `AssertionError: northstar-os-ui production build missing`.
-- **8 need `.env`** (gitignored, absent in a fresh worktree):
-  `AssertionError: missing env file: ...\stageslice\.env`.
-- **5 are genuine at this commit**, not environment:
+  `AssertionError: northstar-os-ui production build missing`. That is the 14
+  `foundation/` tests plus `test_ui_assets_served` (3), `test_live_containment` (1) and
+  `test_scanner_completeness` (1).
+- **7 need `.env`** (gitignored, absent in a fresh worktree):
+  `AssertionError: missing env file: ...\stageslice\.env` for the five
+  `test_env_parseability` tests, and the two Bright Data tests, which post to the default
+  `web_unlocker1` zone instead of the configured `northstaros`
+  (`AssertionError: 'web_unlocker1' != 'northstaros'`).
+- **6 are genuine at this commit**, not environment:
   `pages/roomAdapters.jsx: <Component>` (undefined JSX component), two composite-fidelity
-  verdicts, one compositor-realism verdict, one format-integration box quad.
+  verdicts, one compositor-realism verdict, one format-integration box quad, and
+  `test_end_to_end_contract_run_on_a_fresh_backend` (product-finder evidence no longer
+  contains the `row(s) under 'evaluated'` phrase the contract asserts).
 
 The JSX failure was fixed by `9657cd96` ("roomAdapters used a JSX tag for an argument
 component") — a commit that landed on `staging` **after** this candidate, which is itself
@@ -151,7 +158,9 @@ red. Of those:
 
 - 133 code slices are refused **only** by the suite — they become promotable the moment a
   green candidate exists;
-- 36 code slices are also refused by `verifier_failed_unit_in_bundle`;
+- 36 code slices are also refused by `verifier_failed_unit_in_bundle`; the verifier's two
+  open FAILED units are **D17** (bake-off artefacts absent) and **V9** (dogfood), and any
+  commit subject that names them pulls its slice in;
 - 18 visual slices are refused by `slice_visual` as designed (packs above).
 
 A candidate that is red cannot promote any slice, however small: the suite is the
@@ -162,3 +171,16 @@ evidence that the slice is safe to carry, and it does not exist for this sha.
 - No merge into `main`, whole branch or slice.
 - No tag other than the candidate tag; no force-push.
 - `staging` was not touched from here; it advanced from another lane during the run.
+
+## Parallel lane, same brief
+
+While this run was in flight, another session landed the slicing tool on `staging`
+(`f995a911`, then the follow-up `269fa43a` "pathspec batching for this git, review pack on
+a visual refusal even under --check"), and tagged its own candidate
+`staging-candidate/20261109-0201` at `269fa43a`. This branch (`ty/stageslice`) carries
+`f995a911` + `8018a3a7`; `8018a3a7` is not on top of `269fa43a`, so merging this branch
+into `staging` will conflict in `tools/promote_staging.py`, `reports/ty/item5_slices.md`
+and this report. The two tool fixes are complementary: this branch peels annotated tags
+(`rev` -> `^{commit}`), builds the slice-commit index once instead of batching `git log`
+invocations, and puts `--source`/`--candidate` in each pack's promote command.
+
