@@ -50,6 +50,8 @@ def split() -> Dict[str, Any]:
             "route": result.get("route"),
             "artefact_path": result.get("artefact_path"),
             "reference": ((brief.get("reference") or {}).get("path")),
+            "product_region": (result.get("checks") or {}).get("product_region")
+            or result.get("product_region"),
             "failed_checks": result.get("failed_checks") or [],
             "cannot_verify": result.get("cannot_verify"),
             "fidelity": result.get("fidelity"),

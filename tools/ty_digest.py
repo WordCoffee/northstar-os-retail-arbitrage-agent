@@ -98,6 +98,22 @@ def _composites() -> List[Dict[str, Any]]:
             brief = by_id.get(brief_id) or {}
             source = str(((brief.get("reference") or {}).get("path")) or "")
             audit = region_by_id.get(brief_id) or {}
+            # A separate audit wins when it exists. Otherwise the proof's own product_region check
+            # is the evidence — the scoring pass already compared the product inside the composite
+            # against the cutout, and calling that "not audited" would understate what was measured.
+            scored_region = (((result.get("checks") or {}).get("product_region"))
+                             or result.get("product_region") or {})
+            if audit:
+                region_state = ("verified" if audit.get("ok")
+                                else "cannot verify" if audit.get("cannot_verify") else "failed")
+                similarity = audit.get("similarity")
+            elif scored_region:
+                region_state = ("verified" if scored_region.get("ok")
+                                else "cannot verify" if scored_region.get("cannot_verify")
+                                else "failed")
+                similarity = scored_region.get("similarity")
+            else:
+                region_state, similarity = "not audited", None
             rows.append({
                 "brief_id": brief_id,
                 "output": output,
@@ -110,11 +126,9 @@ def _composites() -> List[Dict[str, Any]]:
                 "passed": result.get("passed"),
                 "provisional": bool(result.get("provisional")),
                 "provisional_score": result.get("provisional_score"),
-                "similarity": audit.get("similarity"),
+                "similarity": similarity,
                 "held_out": bool(brief.get("held_out")),
-                "region_state": ("verified" if audit.get("ok")
-                                 else "cannot verify" if audit.get("cannot_verify")
-                                 else "not audited" if not audit else "failed"),
+                "region_state": region_state,
             })
     return rows
 
@@ -126,7 +140,21 @@ def _contact_sheet(rows: List[Dict[str, Any]], limit: int = 6) -> Optional[str]:
     try:
         from PIL import Image, ImageDraw, ImageFont
 
-        pairs = [row for row in rows if row["source_ok"] and row["output_ok"]][:limit]
+        pairs = [row for row in rows if row["source_ok"] and row["output_ok"]]
+        # Six *distinct* products are more reviewable than six rows that repeat three sources, so
+        # take one pair per source first and only then re-use a source for the remaining slots.
+        chosen: List[Dict[str, Any]] = []
+        seen = set()
+        for row in pairs:
+            if row["source"] not in seen and len(chosen) < limit:
+                chosen.append(row)
+                seen.add(row["source"])
+        for row in pairs:
+            if len(chosen) >= limit:
+                break
+            if row not in chosen:
+                chosen.append(row)
+        pairs = chosen[:limit]
         if not pairs:
             return None
         tile = 380
