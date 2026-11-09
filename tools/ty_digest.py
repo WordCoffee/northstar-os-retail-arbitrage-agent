@@ -213,6 +213,29 @@ def _registry() -> Dict[str, Any]:
             "gaps": len(gap_rows or [])}
 
 
+def _resources() -> Dict[str, Any]:
+    """Disk and RAM, because both gate work and both have refused work today."""
+    try:
+        import psutil  # noqa: PLC0415
+
+        ram = psutil.virtual_memory()
+        free_ram = round(ram.available / (1024 ** 3), 2)
+    except Exception:  # noqa: BLE001
+        free_ram = None
+    try:
+        import sys  # noqa: PLC0415
+
+        if str(ROOT / "tools") not in sys.path:
+            sys.path.insert(0, str(ROOT / "tools"))
+        import ram_governor  # noqa: PLC0415
+
+        decision = ram_governor.status()
+    except Exception as exc:  # noqa: BLE001
+        decision = {"reason": f"governor unavailable: {type(exc).__name__}"}
+    return {"free_ram_gb": free_ram, "max_builders": decision.get("max_builders"),
+            "paused": decision.get("paused"), "reason": decision.get("reason")}
+
+
 def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     """Everything the digest needs, as data. Missing files are reported, not invented."""
     queue = _read_json(QUEUE)
@@ -228,6 +251,7 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
     return {
         "date": date.today().isoformat(),
         "disk": allow_download(path=path),
+        "resources": _resources(),
         "units": {name: (row.get("status") if isinstance(row, dict) else row)
                   for name, row in (queue.get("units") or {}).items()},
         "in_flight": queue.get("unit_in_flight", ""),
@@ -252,10 +276,15 @@ def collect(*, path: Optional[Path] = None) -> Dict[str, Any]:
 
 def render(data: Dict[str, Any]) -> str:
     disk = data["disk"]
+    res = data.get("resources") or {}
     lines: List[str] = [
         f"# Ty digest — {data['date']}", "",
-        f"**Disk free:** {disk['free_gb']} GB (floor {disk['floor_gb']} GB — "
+        f"**Disk free:** {disk['free_gb']} GB (floor {disk['floor_gb']} GB - "
         f"{'ok' if disk['allow'] else 'BELOW FLOOR, work that consumes disk is refused'})", "",
+        (f"**Free RAM:** {res['free_ram_gb']} GB - up to {res['max_builders']} builders"
+         + (" (PAUSED: new builders refused)" if res.get("paused") else "")
+         + f" - {res.get('reason', '')}" if res else "**Free RAM:** unmeasured"),
+        "",
         f"**Unit in flight:** {data['in_flight'] or '(none)'}", "",
         "| unit | status |", "|---|---|",
     ]

@@ -1,40 +1,70 @@
 {
-  "at": "2026-11-09T07:33:23+00:00",
+  "at": "2026-11-09T07:55:52+00:00",
   "services": [
     {
       "service": "design-studio",
       "url": "http://127.0.0.1:8101/ui/design-studio",
-      "at": "2026-11-09T07:33:23+00:00",
-      "ok": false,
-      "blocked": true,
-      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+      "at": "2026-11-09T07:54:51+00:00",
+      "opened": true,
+      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "text_chars": 329,
+      "task": {
+        "ok": true,
+        "service": "design-studio",
+        "vocabulary": [
+          "design",
+          "studio",
+          "canvas"
+        ],
+        "has_number": true,
+        "actionable": false,
+        "chars": 329,
+        "why": ""
+      },
+      "ok": true,
+      "screenshot": "reports\\ty\\dogfood_shots\\design-studio.png"
     },
     {
       "service": "listings",
       "url": "http://127.0.0.1:8101/ui/listings",
-      "at": "2026-11-09T07:33:23+00:00",
-      "ok": false,
-      "blocked": true,
-      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+      "at": "2026-11-09T07:55:11+00:00",
+      "opened": true,
+      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+      "text_chars": 175,
+      "task": {
+        "ok": true,
+        "service": "listings",
+        "vocabulary": [
+          "listing"
+        ],
+        "has_number": true,
+        "actionable": false,
+        "chars": 175,
+        "why": ""
+      },
+      "ok": true,
+      "screenshot": "reports\\ty\\dogfood_shots\\listings.png"
     },
     {
       "service": "socialpulse",
       "url": "http://127.0.0.1:8101/ui/socialpulse",
-      "at": "2026-11-09T07:33:23+00:00",
+      "at": "2026-11-09T07:55:18+00:00",
+      "opened": false,
+      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
       "ok": false,
-      "blocked": true,
-      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+      "reason": "neither the title nor the pixels changed"
     },
     {
       "service": "competitor-monitor",
       "url": "http://127.0.0.1:8101/ui/competitor-monitor",
-      "at": "2026-11-09T07:33:23+00:00",
+      "at": "2026-11-09T07:55:35+00:00",
+      "opened": false,
+      "title": "NorthstarOS — Retail Arbitrage Suite - Google Chrome",
       "ok": false,
-      "blocked": true,
-      "reason": "no live Vision session: the desktop must be unlocked and Chrome attached before this can drive anything"
+      "reason": "neither the title nor the pixels changed"
     }
   ],
-  "passed": 0,
+  "passed": 2,
   "total": 4,
   "pass": false,
   "base": "http://127.0.0.1:8101/ui"
