@@ -99,11 +99,12 @@ def _choose(primary: Optional[float],
                 "disagreement_pct": None}
     spread = abs(primary - secondary) / max(primary, secondary, 1e-9)
     pct = round(spread * 100, 1)
-    if spread > DISAGREE_FRACTION:
-        # The lower reading wins. The optimistic one is the one that lies.
-        return {"free_gb": min(primary, secondary), "disagreement": True,
-                "disagreement_pct": pct}
-    return {"free_gb": primary, "disagreement": False, "disagreement_pct": pct}
+    # The lower reading always wins, not only when the two disagree wildly. A governor that
+    # averages, or that trusts the optimistic number while the pair is "close", is choosing to
+    # believe the reading that lets more work start — which is exactly the failure it exists to
+    # prevent. The disagreement is still reported, because a 13 % spread is itself information.
+    return {"free_gb": min(primary, secondary), "disagreement": spread > DISAGREE_FRACTION,
+            "disagreement_pct": pct}
 
 
 def _cloud_worker_cap() -> Optional[int]:

@@ -112,7 +112,11 @@ CHECKPOINTS = {
 MODEL_VRAM_GB = {
     "sdxl": (5.2, 3.0),
     "realistic": (3.2, 1.2),
-    "flux3": (11.0, 1.4),
+    # Measured 2026-11-09 with every resident unloaded: FLUX 3 at 1024 peaked at **11.93 GB**
+    # (89.5 s, `reports/ty/flux_vram_measure.json`). The old (11.0, 1.4) claimed 12.4 GB at the
+    # same size and refused a render that works. These numbers are the measurement, plus a
+    # 0.3 GB cushion for the sampler's transient allocations.
+    "flux3": (10.6, 1.3),
 }
 
 

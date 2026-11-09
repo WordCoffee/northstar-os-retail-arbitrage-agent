@@ -1,7 +1,7 @@
 {
-  "at": "2026-11-09T06:57:21+00:00",
+  "at": "2026-11-09T07:45:07+00:00",
   "versions": {
-    "at": "2026-11-09T06:57:21+00:00",
+    "at": "2026-11-09T07:45:07+00:00",
     "platform": "Windows-11-10.0.26200-SP0",
     "comfy": {
       "torch": "2.11.0+cu128",
@@ -30,10 +30,11 @@
       "model": "flux3",
       "width": 1024,
       "height": 1024,
-      "ok": false,
-      "error": "GeneratorUnavailable: render refused: 2.9 GB free RAM is below the 3 GB floor",
+      "ok": true,
+      "seconds": null,
+      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00033_.png",
       "before": {
-        "at": "2026-11-09T06:57:32+00:00",
+        "at": "2026-11-09T07:45:18+00:00",
         "vram": {
           "total_mb": 16303,
           "used_mb": 3214,
@@ -44,59 +45,59 @@
         ]
       },
       "after": {
-        "at": "2026-11-09T06:57:32+00:00",
+        "at": "2026-11-09T07:47:16+00:00",
         "vram": {
           "total_mb": 16303,
-          "used_mb": 3214,
-          "free_mb": 12790
+          "used_mb": 3210,
+          "free_mb": 12794
         },
         "ollama_ps": [
           "bojo:latest"
         ]
       },
-      "at": "2026-11-09T06:57:32.855793+00:00"
+      "at": "2026-11-09T07:45:18.293133+00:00"
     },
     {
       "label": "contended-1536",
       "model": "flux3",
       "width": 1536,
       "height": 1536,
-      "ok": false,
-      "error": "GeneratorUnavailable: render refused: 2.9 GB free RAM is below the 3 GB floor",
+      "ok": true,
+      "seconds": null,
+      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00034_.png",
       "before": {
-        "at": "2026-11-09T06:57:32+00:00",
+        "at": "2026-11-09T07:47:17+00:00",
         "vram": {
           "total_mb": 16303,
-          "used_mb": 3214,
-          "free_mb": 12790
+          "used_mb": 3210,
+          "free_mb": 12794
         },
         "ollama_ps": [
           "bojo:latest"
         ]
       },
       "after": {
-        "at": "2026-11-09T06:57:33+00:00",
+        "at": "2026-11-09T07:48:58+00:00",
         "vram": {
           "total_mb": 16303,
-          "used_mb": 3214,
-          "free_mb": 12790
+          "used_mb": 3210,
+          "free_mb": 12794
         },
         "ollama_ps": [
           "bojo:latest"
         ]
       },
-      "at": "2026-11-09T06:57:33.023003+00:00"
+      "at": "2026-11-09T07:47:17.100682+00:00"
     },
     {
       "label": "unloaded-1024",
       "model": "flux3",
       "width": 1024,
       "height": 1024,
-      "ok": true,
-      "seconds": null,
-      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00030_.png",
+      "ok": false,
+      "error": "RuntimeError: flux3 render failed: {'status_str': 'error', 'completed': False, 'messages': [['execution_start', {'prompt_id': '2d93d259-e453-4c30-83dc-1fb77664bd4a', 'timestamp': 1794210564986}], ['execution_cached', {'nodes': [], 'prompt_id': '2d93d259-e453-4c30-83dc-1fb77664bd4a', 'timestamp': 1794210564987}], ['execution_error', {'prompt_id': '2d93d259-e453-4c30-83dc-1fb77664bd4a', 'node_id': '107', 'node_type': 'KSampler', 'executed': ['102', '104', '101', '105', '106', '132', '103'], 'exception_message': 'hostbuf_file_reader_read failed\\n', 'exception_type': 'RuntimeError', 'traceback': [",
       "before": {
-        "at": "2026-11-09T06:57:33+00:00",
+        "at": "2026-11-09T07:48:58+00:00",
         "vram": {
           "total_mb": 16303,
           "used_mb": 0,
@@ -105,26 +106,25 @@
         "ollama_ps": []
       },
       "after": {
-        "at": "2026-11-09T06:58:35+00:00",
+        "at": "2026-11-09T07:49:51+00:00",
         "vram": {
           "total_mb": 16303,
-          "used_mb": 0,
-          "free_mb": 16003
+          "used_mb": 1836,
+          "free_mb": 14168
         },
         "ollama_ps": []
       },
-      "at": "2026-11-09T06:57:33.379714+00:00"
+      "at": "2026-11-09T07:48:58.813119+00:00"
     },
     {
       "label": "unloaded-1536",
       "model": "flux3",
       "width": 1536,
       "height": 1536,
-      "ok": true,
-      "seconds": null,
-      "image_path": "C:\\Users\\T2Hol\\ComfyUI\\output\\flux3_00031_.png",
+      "ok": false,
+      "error": "GeneratorUnavailable: render lane failed: budget: refused: 13.86 GB free - 13.53 GB needed = 0.33 GB < 1.0 GB reserve",
       "before": {
-        "at": "2026-11-09T06:58:35+00:00",
+        "at": "2026-11-09T07:49:51+00:00",
         "vram": {
           "total_mb": 16303,
           "used_mb": 0,
@@ -133,15 +133,17 @@
         "ollama_ps": []
       },
       "after": {
-        "at": "2026-11-09T07:00:05+00:00",
+        "at": "2026-11-09T07:49:55+00:00",
         "vram": {
           "total_mb": 16303,
-          "used_mb": 14,
-          "free_mb": 15990
+          "used_mb": 1836,
+          "free_mb": 14168
         },
-        "ollama_ps": []
+        "ollama_ps": [
+          "qwen3-embedding:0.6b"
+        ]
       },
-      "at": "2026-11-09T06:58:35.737788+00:00"
+      "at": "2026-11-09T07:49:51.627940+00:00"
     }
   ],
   "resident_loaded": {
@@ -154,7 +156,7 @@
       "qwen3-embedding:0.6b"
     ],
     "after": {
-      "at": "2026-11-09T06:57:33+00:00",
+      "at": "2026-11-09T07:48:58+00:00",
       "vram": {
         "total_mb": 16303,
         "used_mb": 0,
@@ -163,5 +165,5 @@
       "ollama_ps": []
     }
   },
-  "first_working": "unloaded-1024"
+  "first_working": "contended-1024"
 }

@@ -320,6 +320,19 @@ def lane(work: Callable[[], Any], *, start: Callable[[], Dict[str, Any]] = _star
         row["unload_verified"] = {item.get("tag"): bool(item.get("verified"))
                                   for item in unloaded}
         row["gpu_ready"] = row["gpu_before"] if not unloaded else snapshot()
+        if unloaded:
+            # An unloaded model releases VRAM asynchronously; measuring immediately reads the
+            # old number and refuses a render that would fit. Two short samples, keep the best.
+            import time as _time  # noqa: PLC0415
+
+            best = row["gpu_ready"]
+            for _ in range(3):
+                _time.sleep(2.0)
+                current = snapshot()
+                if (current.get("free_gb") or 0) > (best.get("free_gb") or 0):
+                    best = current
+            row["gpu_ready"] = best
+            row["gpu_settle_samples"] = 3
         if still_resident:
             outcome = {"ok": False, "refused": True,
                        "reason": (f"could not unload {still_resident}; refusing so the "

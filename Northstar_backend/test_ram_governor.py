@@ -62,12 +62,15 @@ def test_a_disagreement_picks_the_lower_reading_and_reports_both():
     assert "3.00" in decision["reason"] and "1.50" in decision["reason"]
 
 
-def test_a_small_difference_uses_the_primary_reading():
-    decision = _status(3.0, 2.8)          # 6.7 % apart: not a disagreement
+def test_a_small_difference_still_uses_the_lower_reading():
+    """A governor that trusts the optimistic number while the pair is "close" is choosing to
+    believe the reading that lets more work start — the failure it exists to prevent."""
+    decision = _status(3.0, 2.8)          # 6.7 % apart: reported, not ignored
 
-    assert decision["free_gb"] == 3.0
-    assert decision["max_builders"] == 4
+    assert decision["free_gb"] == 2.8
+    assert decision["max_builders"] == 4   # still above the 2 GB line, so still 4
     assert decision["disagreement"] is False
+    assert decision["disagreement_pct"] == 6.7
 
 
 def test_one_missing_probe_still_decides():
