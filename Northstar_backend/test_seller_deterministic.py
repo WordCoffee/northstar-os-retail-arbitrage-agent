@@ -188,6 +188,56 @@ def test_a_different_product_in_the_quad_fails():
     assert verdict["ok"] is False, verdict
 
 
+def test_a_prompt_only_brief_is_not_asked_for_a_cutout_it_never_had():
+    """The product-region check belongs to the composite route only.
+
+    A prompt-only brief has no reference and no cutout by definition. Marking it `cannot_verify`
+    because it has no cutout failed all twelve of the first prompt-only held-out briefs for a check
+    that does not apply to them (2026-11-09).
+    """
+    import json
+
+    from seller_tester import harness
+
+    brief = {"id": "PO-X", "situation": "lifestyle", "source_mode": "prompt_only",
+             "fidelity": "tolerant", "category": "supplement_pouch",
+             "constraints": {"dimensions": {"min_width": 64, "min_height": 64},
+                             "aspect": {"ratio": 1.0, "tolerance": 0.1},
+                             "background": {"value": 255, "tolerance": 40, "mode": "free"},
+                             "fill_pct": {"min": 1, "max": 100, "distance": 40}}}
+
+    class Generator:
+        name = "composite"
+
+        def route(self, brief):
+            return "full_generation"
+
+        def pair(self, briefs, limit=None):
+            from io import BytesIO
+            from pathlib import Path as _Path
+
+            from PIL import Image
+
+            buffer = BytesIO()
+            Image.new("RGB", (256, 256), (245, 245, 245)).save(buffer, format="PNG")
+            target = _Path(tmp_path) / "PO-X.png"
+            target.write_bytes(buffer.getvalue())
+            return [(briefs[0], target)]
+
+        def record_for(self, brief_id):
+            return {"brief_id": brief_id, "route": "full_generation",
+                    "scene": {"source": "generated"}, "product_box": None,
+                    "cutout_path": None}
+
+    tmp_path = __import__("tempfile").mkdtemp()
+    summary = harness.run_pass(generator=Generator(), briefs=[brief], limit=1, judge=None,
+                               describe=lambda *a, **k: "a product")
+    row = summary["results"][0]
+    region = (row.get("checks") or {}).get("product_region") or {}
+    assert region.get("skipped") is True, region
+    assert region.get("cannot_verify") is False, region
+
+
 def test_the_packaging_route_records_a_quad_and_a_quad_identity(tmp_path):
     """The generator must survive its own packaging path: this is the test the demo run lacked.
 

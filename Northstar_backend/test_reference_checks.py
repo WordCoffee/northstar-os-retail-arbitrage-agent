@@ -207,7 +207,11 @@ def test_a_brief_that_declares_route_composite_is_checked_without_the_flag():
 def test_a_full_generation_brief_does_not_run_the_region_check():
     brief = composite_brief(route=None)
     scored = scorers.score_image(png_bytes(pouch(size=(900, 900))), brief)
-    assert "product_region" not in scored["checks"]
+    # It is present but skipped with a reason, so the absence of a comparison is visible
+    # rather than indistinguishable from a silent pass.
+    region = scored["checks"]["product_region"]
+    assert region["skipped"] is True
+    assert "composite route" in region["detail"]
 
 
 def test_a_composite_with_a_saved_cutout_verifies(tmp_path):

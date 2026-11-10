@@ -365,7 +365,10 @@ def test_score_image_full_pass_and_fail():
     assert passing["passed"] is True, passing["checks"]
     assert passing["score"] == pytest.approx(100.0)
     assert passing["failed_checks"] == []
-    assert set(passing["checks"]) == set(scorers.DEFAULT_WEIGHTS)
+    # product_region is recorded even when it does not apply (skipped, with a reason), so an
+    # absent check can never read as a silent pass; the weighted checks are the other keys.
+    assert set(passing["checks"]) - {"product_region"} == set(scorers.DEFAULT_WEIGHTS)
+    assert passing["checks"]["product_region"]["skipped"] is True
 
     failing_brief = make_brief("T-002", constraints={
         "dimensions": {"exact": [2000, 2000], "tolerance_px": 2},

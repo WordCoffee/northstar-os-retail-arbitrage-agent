@@ -192,9 +192,14 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
         route_fn = getattr(generator, "route", None)
         route = route_fn(brief) if callable(route_fn) else route_for_brief(brief)
         population = _population(generator, generation)
-        composite_route = bool(generation) and str(
-            (generation or {}).get("route") or "") == "composite"
-        if not composite_route and getattr(generator, "name", "") == "composite":
+        # The product-region check asks "are these the seller's pixels?" — a question that only
+        # exists for the composite route, where the generator pasted a cutout it saved. Falling back
+        # to the generator's name made every prompt-only brief `cannot_verify` for a cutout it was
+        # never supposed to have (12 of 12 in the first held-out prompt-only run, 2026-11-09). Prefer
+        # the record's own route; only use the generator name when the record states none.
+        recorded_route = str((generation or {}).get("route") or "")
+        composite_route = recorded_route == "composite"
+        if not recorded_route and getattr(generator, "name", "") == "composite":
             composite_route = True
         cutout = _load_cutout(artefact) if composite_route else None
         placement = _placement_xywh((generation or {}).get("product_box")) \
