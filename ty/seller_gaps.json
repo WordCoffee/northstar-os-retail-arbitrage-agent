@@ -30,6 +30,16 @@
     "at": "2026-11-10T03:00:26+00:00"
   },
   {
+    "id": "gap-b626ec429997",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpk2yc884c\\PO-X.png",
+    "at": "2026-11-10T04:57:45+00:00"
+  },
+  {
     "id": "gap-8171862628d1",
     "brief_id": "PO-X",
     "score": 60.0,

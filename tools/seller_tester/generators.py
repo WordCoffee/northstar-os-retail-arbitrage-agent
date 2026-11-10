@@ -181,6 +181,20 @@ def split_rgba_bytes(png: bytes):
         return None, None
 
 
+def _required_px(brief: Dict[str, Any]) -> int:
+    """Side length for the re-composition canvas: the brief's minimum, at least 1024."""
+    required = _required_size(brief)
+    if required is None:
+        return 1024
+    return max(1024, max(required))
+
+
+def flat(brief: Dict[str, Any]) -> bool:
+    """True when the brief wants a generated background rather than a flat canvas."""
+    background = ((brief.get("constraints") or {}).get("background") or {})
+    return str(background.get("mode") or "") != "uniform"
+
+
 def _required_size(brief: Dict[str, Any]) -> Optional[Tuple[int, int]]:
     """The brief's minimum output size, when it asks for more than the scene gives."""
     dimensions = ((brief.get("constraints") or {}).get("dimensions") or {})
@@ -662,6 +676,20 @@ class CompositeGenerator:
 
     def _full_generation(self, brief: Dict[str, Any], record: Dict[str, Any]
                          ) -> Tuple[bytes, Dict[str, Any]]:
+        """Prompt-only: generate a plate, cut the product out of it, then run the layout stages.
+
+        The first version stopped after the render, which measured "what does the model draw" and
+        nothing else: all twelve held-out prompt-only briefs failed the brief's own background, fill
+        and text rules. The pipeline now treats the render as *material* — the same way a composite
+        treats the seller's photograph — so the rest of the stages apply uniformly:
+
+        1. generate the plate from the brief's description;
+        2. cut the product out of that plate;
+        3. re-compose it on a canvas the brief's constraints can actually satisfy;
+        4. run the deterministic stage for `infographic` / `packaging_mockup`.
+
+        Fidelity stays `tolerant`: nothing here claims the product pixels are the seller's.
+        """
         scene = self._render(brief, "full")
         record["scene"] = {
             "source": scene.get("source"), "prompt": scene.get("prompt"),
@@ -672,7 +700,48 @@ class CompositeGenerator:
             "lane_stopped": bool(((scene.get("lane") or {}).get("stopped") or {}).get("ok")),
             "note": scene.get("note"),
         }
-        return scene["bytes"], record
+        png, record = self._generate_cut_and_compose(brief, scene, record)
+        return png, record
+
+    def _generate_cut_and_compose(self, brief: Dict[str, Any], scene: Dict[str, Any],
+                                  record: Dict[str, Any]) -> Tuple[bytes, Dict[str, Any]]:
+        """Cut the product out of the generated plate and re-compose it, then lay it out."""
+        from io import BytesIO  # noqa: PLC0415
+
+        from PIL import Image  # noqa: PLC0415
+
+        import product_composite as composite  # noqa: PLC0415
+        import product_cutout as pc  # noqa: PLC0415
+
+        try:
+            plate = Image.open(BytesIO(scene["bytes"])).convert("RGB")
+            array = np.asarray(plate)
+            cut = self._cut(array, method="grabcut")
+            if int(np.asarray(cut.alpha).sum()) == 0:
+                raise RuntimeError("the cutout is empty")
+            cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
+            canvas = white_canvas_png(_required_px(brief))
+            placed = composite.place_product(scene["bytes"] if flat(brief) else canvas,
+                                             cut_png, scale=0.62, anchor=(0.5, 0.6))
+            placed = self._layout_stage(brief, placed, record)
+            record["cut_from_generation"] = {
+                "method": "grabcut",
+                "subject_px": int(np.asarray(cut.alpha).sum()),
+                "note": ("prompt-only runs generate -> cut -> compose -> layout; the product is "
+                         "the model's drawing, not the seller's pixels"),
+            }
+            record["product_box"] = list(placed["product_box"])
+            if placed.get("product_quad"):
+                record["product_quad"] = placed["product_quad"]
+            self.out_dir.mkdir(parents=True, exist_ok=True)
+            cut_target = self.out_dir / f"{brief.get('id') or 'brief'}.cutout.png"
+            cut_target.write_bytes(cut_png)
+            record["cutout_path"] = str(cut_target)
+            return placed["bytes"], record
+        except Exception as exc:  # noqa: BLE001 - a refused stage keeps the plate, and says so
+            record["cut_from_generation"] = {"method": "refused",
+                                             "reason": f"{type(exc).__name__}: {exc}"}
+            return scene["bytes"], record
 
     def record_for(self, brief_id: Any) -> Optional[Dict[str, Any]]:
         for row in reversed(self.records):
