@@ -1,0 +1,63 @@
+/* THE SCENE BED — one layer, behind everything, owned by the shell.
+ *
+ * Placement: the bed paints as the backmost thing in the shell (z-index: -1
+ * inside the app frame). It is opaque where nothing covers it, and the workspace
+ * shows it through a paper veil rather than by lifting the bed above the page.
+ * Nothing in this file touches the top bar, the rail or the tab strip: those
+ * keep their own surfaces and their own stacking.
+ *
+ * Why the veil is 0.93 paper and not a transparent workspace: `--paper` is
+ * #f5f0e8 and the room text is set for that. A 7% scene contribution over a
+ * near-black plate lands near #e7e2da, which keeps pine-deep ink above AA. The
+ * scene is scenery, not a background that competes with the prose.
+ */
+
+.app-scale:has(> .scene-bed) {
+  position: relative;
+  isolation: isolate;
+}
+
+.scene-bed {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #04060b;
+  contain: strict;
+}
+
+.scene-canvas,
+.scene-poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.scene-poster {
+  /* The poster is a still: never animate it, even when the mode is reduced. */
+  animation: none;
+  transform: scale(1.02);
+}
+
+/* The workspace becomes a paper veil over the scene while one is mounted.
+   Scoped to the shell frame's own attribute so a page outside the shell is
+   untouched. */
+.app-scale[data-scene-bed="live"] .main-content,
+.app-scale[data-scene-bed="static"] .main-content,
+.app-scale[data-scene-bed="reduced"] .main-content {
+  background: rgba(245, 240, 232, 0.93);
+}
+
+/* Reduced motion is honoured twice: the engine schedules no frames, and any
+   future CSS motion on this layer is off. */
+@media (prefers-reduced-motion: reduce) {
+  .scene-canvas,
+  .scene-poster {
+    animation: none !important;
+    transition: none !important;
+    transform: none;
+  }
+}

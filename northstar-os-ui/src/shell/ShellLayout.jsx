@@ -36,8 +36,15 @@
 // globalThis.__northstarWorkspaceTab, and a `northstar:workspace-tab` event).
 // It deliberately does not invent page state it cannot read.
 //
+// ux-08 — the scene bed. The shell also owns the SCENE: `<SceneHost>` is
+// mounted once, here, and pointed at the active service, so exactly one canvas
+// exists per shell and switching tabs releases the previous scene instead of
+// stacking a second one. The mode the engine settled on (`live` | `static` |
+// `reduced`) is mirrored onto the frame as `data-scene-bed`, which is what the
+// workspace veil in scene.css keys off. See sceneEngine.js for the lifecycle.
+//
 // Routes a signed-out visitor needs (see shellRoutes.js) are exempt: they render
-// the outlet alone, with no top bar and no rail.
+// the outlet alone, with no top bar and no rail. They get no scene either.
 
 import { Suspense, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -50,6 +57,7 @@ import { isShellExempt } from './shellRoutes.js'
 import TabBar from './TabBar.jsx'
 import WorkspacePanel from './WorkspacePanels.jsx'
 import useWorkspaceTabs from './useWorkspaceTabs.js'
+import SceneHost from './SceneHost.jsx'
 import './tabs.css'
 
 const MOBILE_ACTIVE = [
@@ -94,6 +102,9 @@ export default function ShellLayout({ role = 'invitee', mainClassName = '', chil
   const location = useLocation()
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [toolsOpen, setToolsOpen] = useState(false)
+  // Which mode the scene engine settled on. Published on the frame so the
+  // workspace veil and a browser lane can both read it.
+  const [sceneMode, setSceneMode] = useState('off')
 
   const {
     tabs: openTabs, activeId, activeTab, visited, mainRef, summary,
@@ -173,7 +184,15 @@ export default function ShellLayout({ role = 'invitee', mainClassName = '', chil
       data-active-tab={activeId || ''}
       data-active-tab-label={activeTab?.label || ''}
       data-tab-summary={summaryJson}
+      data-scene-bed={sceneMode}
     >
+      {/* One bed for the whole shell. Pointed at the active service, never at a
+          page: a hidden tab keeps its DOM, not its animation loop. */}
+      <SceneHost
+        serviceId={activeId}
+        pathname={path}
+        onModeChange={setSceneMode}
+      />
       <TopNav
         role={role}
         paletteOpen={paletteOpen}
