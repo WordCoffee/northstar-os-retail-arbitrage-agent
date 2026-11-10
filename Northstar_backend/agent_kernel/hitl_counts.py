@@ -1,0 +1,37 @@
+import os
+from pathlib import Path
+import json
+
+def hitl_counts(root):
+    """Count hitl statuses in state directory.
+
+    `skipped` is the number of files that could not be read as JSON: a corrupt
+    record is reported, never silently counted as one of the three statuses.
+    """
+    root = Path(root)
+    if not root.exists():
+        return {'pending': 0, 'approved': 0, 'denied': 0, 'skipped': 0, 'total': 0}
+
+    state_path = Path(root) / 'state' / 'hitl'
+    pending = approved = denied = skipped = 0
+
+    if not state_path.exists():
+        return {'pending': 0, 'approved': 0, 'denied': 0, 'skipped': 0, 'total': 0}
+
+    for hitl_file in state_path.glob('hitl_*.json'):
+        try:
+            with open(hitl_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if isinstance(data, dict):
+                status = data.get('status')
+                if status == 'pending':
+                    pending += 1
+                elif status == 'approved':
+                    approved += 1
+                elif status == 'denied':
+                    denied += 1
+        except (json.JSONDecodeError, IOError):
+            skipped += 1
+
+    total = pending + approved + denied
+    return {'pending': pending, 'approved': approved, 'denied': denied, 'skipped': skipped, 'total': total}

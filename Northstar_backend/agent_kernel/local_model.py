@@ -1,0 +1,273 @@
+"""Model callable for the bounded coding agent, backed by the local llama.cpp lane.
+
+The agent loop in ``coding_agent.py`` expects ``Model = Callable[[str], str]``:
+one prompt in, one JSON tool object out. This module supplies that callable over
+the OpenAI-compatible endpoint of ``llama-server`` (default 127.0.0.1:8080).
+
+Thinking is disabled by default. The 27B reasons inside ``<think>`` when it is
+enabled and will spend a small token budget there instead of emitting the JSON
+object the loop needs; the caller can opt back in per instance.
+"""
+from __future__ import annotations
+
+import json
+import os
+import urllib.error
+import urllib.request
+from typing import Any, Dict, Optional
+
+
+class ModelError(RuntimeError):
+    """The worker answered but produced no usable content."""
+
+
+DEFAULT_BASE_URL = "http://127.0.0.1:8080"
+DEFAULT_MODEL = "northstaros-27b-coder"
+
+#: Constrains every agent turn to one well-formed tool object. Without it the
+#: model occasionally answers with prose or a truncated JSON, which the loop has
+#: to reject as a protocol error (measured: 14 wasted steps in one run).
+TOOL_CALL_SCHEMA: Dict[str, Any] = {
+    "type": "object",
+    "required": ["tool"],
+    "additionalProperties": False,
+    "properties": {
+        "tool": {"enum": ["list", "read", "grep", "write", "write_many",
+                          "apply_patch", "ast_edit", "ast_edit_batch",
+                          "run", "finish"]},
+        "args": {"type": "object", "additionalProperties": True},
+    },
+}
+
+
+def _post_json(url: str, payload: Dict[str, Any], timeout_s: float) -> Dict[str, Any]:
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout_s) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def health(base_url: str = DEFAULT_BASE_URL, timeout_s: float = 3.0) -> bool:
+    """True when the worker answers /health with status ok."""
+    try:
+        with urllib.request.urlopen(base_url.rstrip("/") + "/health", timeout=timeout_s) as r:
+            data = json.loads(r.read().decode("utf-8"))
+        return str(data.get("status") or "").lower() == "ok"
+    except Exception:  # noqa: BLE001 - a health probe never raises
+        return False
+
+
+class LlamaCppModel:
+    """Prompt -> text over llama-server's /v1/chat/completions."""
+
+    def __init__(
+        self,
+        base_url: str = DEFAULT_BASE_URL,
+        model: str = DEFAULT_MODEL,
+        *,
+        timeout_s: float = 600.0,
+        max_tokens: int = 600,
+        temperature: float = 0.15,
+        disable_thinking: bool = True,
+        retries: int = 1,
+        schema: Optional[Dict[str, Any]] = None,
+        num_ctx: Optional[int] = None,
+    ) -> None:
+        self.base_url = base_url.rstrip("/")
+        self.model = model
+        self.timeout_s = float(timeout_s)
+        self.max_tokens = int(max_tokens)
+        self.temperature = float(temperature)
+        self.disable_thinking = bool(disable_thinking)
+        self.retries = max(0, int(retries))
+        # Context size is a llama-server LAUNCH flag (-c), not a request option,
+        # so it is recorded here for callers and probes but deliberately kept off
+        # the wire: the OpenAI-compatible body has no field llama.cpp honours for
+        # it, and sending one would pretend to change a server-side setting.
+        # (This parameter exists because 3669f651 copied the OllamaChatModel line
+        # here without the argument, which raised NameError on construction.)
+        self.num_ctx = int(num_ctx) if num_ctx else None
+        self.schema = schema
+
+    def payload(self, prompt: str) -> Dict[str, Any]:
+        body: Dict[str, Any] = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": str(prompt)}],
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens,
+            "stream": False,
+        }
+        if self.disable_thinking:
+            body["chat_template_kwargs"] = {"enable_thinking": False}
+        if self.schema:
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": "tool_call", "schema": self.schema},
+            }
+        return body
+
+    def __call__(self, prompt: str) -> str:
+        url = f"{self.base_url}/v1/chat/completions"
+        last: Optional[Exception] = None
+        for attempt in range(self.retries + 1):
+            try:
+                out = _post_json(url, self.payload(prompt), self.timeout_s)
+            except urllib.error.URLError as exc:
+                last = exc
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"worker unreachable at {url}: {exc}") from exc
+            choices = out.get("choices") or [{}]
+            message = (choices[0] or {}).get("message") or {}
+            text = str(message.get("content") or "").strip()
+            if text:
+                return text
+            reasoning = str(message.get("reasoning_content") or "").strip()
+            last = ModelError(
+                "worker returned no content"
+                + (f" (reasoning_chars={len(reasoning)})" if reasoning else "")
+            )
+            if attempt < self.retries:
+                # Retry once with a wider budget: a reasoning-only answer means
+                # the thinking block ate max_tokens.
+                self.max_tokens = min(4096, self.max_tokens * 2)
+                self.disable_thinking = True
+                continue
+        raise last or ModelError("worker returned no content")
+
+class OllamaChatModel:
+    """Prompt -> JSON text over Ollama's native /api/chat.
+
+    Ollama's OpenAI-compatible /v1 route ignores `format: json`; the native chat
+    route honours it. The coding agent only needs one JSON object per turn, so
+    this adapter asks for JSON explicitly and retries once with a wider budget if
+    the model spends the whole first budget on reasoning.
+    """
+
+    def __init__(self, base_url: str = "http://127.0.0.1:11434",
+                 model: str = "bojo", *, timeout_s: float = 600.0,
+                 max_tokens: int = 4096, temperature: float = 0.1,
+                 retries: int = 1, num_ctx: Optional[int] = None,
+                 native_tools: bool = False,
+                 tool_names: Optional[Sequence[str]] = None):
+        self.base_url = base_url.rstrip("/")
+        self.model = model
+        self.timeout_s = float(timeout_s)
+        self.max_tokens = int(max_tokens)
+        self.temperature = float(temperature)
+        self.retries = max(0, int(retries))
+        # Per-request context: a small model on a small box does not need the
+        # model's 32k default for a one-file task, and a smaller KV cache leaves
+        # more host RAM free. This is a request option, not an environment change.
+        self.num_ctx = int(num_ctx) if num_ctx else None
+        # Native tool calling: Ollama's /api/chat accepts a `tools` array and can
+        # return structured `message.tool_calls`. Forcing every model through a
+        # JSON-text prompt discards that interface - and `bojo` advertises it while
+        # the coder lane does not produce it reliably.
+        self.native_tools = bool(native_tools)
+        self.tool_names = list(tool_names or ())
+
+    def payload(self, prompt: str) -> Dict[str, Any]:
+        body: Dict[str, Any] = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": str(prompt)}],
+            "stream": False,
+            "options": {"num_predict": self.max_tokens,
+                        "temperature": self.temperature,
+                        **({"num_ctx": self.num_ctx} if self.num_ctx else {})},
+        }
+        if self.native_tools:
+            from . import tool_protocol as _tp
+            body["tools"] = _tp.json_schemas(self.tool_names or None)
+            body["think"] = False
+        else:
+            body["format"] = "json"
+            body["think"] = False
+        return body
+
+    def __call__(self, prompt: str) -> str:
+        url = f"{self.base_url}/api/chat"
+        last: Optional[Exception] = None
+        strict_json = True
+        for attempt in range(self.retries + 1):
+            payload = self.payload(prompt)
+            if not strict_json:
+                # The server-side JSON-constrained path can fail (observed: HTTP
+                # 500 after ~100 tokens, twice, on the same prompt). Falling back
+                # to the same prompt WITHOUT the constraint keeps the protocol the
+                # same - the executor still validates the reply - and does not
+                # generate any content on the model's behalf.
+                payload.pop("format", None)
+                payload.pop("think", None)
+            try:
+                out = _post_json(url, payload, self.timeout_s)
+            except urllib.error.HTTPError as exc:
+                last = exc
+                if exc.code >= 500 and attempt < self.retries:
+                    strict_json = False
+                    continue
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"Ollama returned HTTP {exc.code} at {url}") from exc
+            except urllib.error.URLError as exc:
+                last = exc
+                if attempt < self.retries:
+                    continue
+                raise ModelError(f"Ollama worker unreachable at {url}: {exc}") from exc
+            message = out.get("message") or {}
+            calls = message.get("tool_calls") or []
+            if self.native_tools and calls:
+                call = calls[0] or {}
+                fn = call.get("function") or {}
+                name = str(fn.get("name") or "").strip()
+                args = fn.get("arguments")
+                if isinstance(args, str):
+                    try:
+                        args = json.loads(args)
+                    except ValueError:
+                        args = {"__unparsed__": args}
+                if not isinstance(args, dict):
+                    args = {"__unparsed__": args}
+                # Hand the call back as the SAME one-JSON-action string the JSON
+                # path produces, so a single validator judges both interfaces.
+                return json.dumps({"tool": name, "args": args})
+            text = str(message.get("content") or "").strip()
+            if text:
+                return text
+            last = ModelError("Ollama returned no content")
+            if attempt < self.retries:
+                self.max_tokens = min(16384, self.max_tokens * 2)
+                continue
+        raise last or ModelError("Ollama returned no content")
+
+
+def make_local_model(**overrides: Any):
+    """Build a model callable from TYS_CODING_* env vars plus explicit overrides.
+
+    TYS_CODING_PROVIDER=ollama selects the native Ollama chat adapter (JSON mode);
+    the default remains the OpenAI-compatible llama.cpp lane.
+    """
+    provider = str(overrides.pop("provider", os.environ.get("TYS_CODING_PROVIDER", "compat"))).lower()
+    if provider == "ollama":
+        overrides.pop("schema", None)
+        params: Dict[str, Any] = {
+            "base_url": os.environ.get("TYS_CODING_URL", "http://127.0.0.1:11434"),
+            "model": os.environ.get("TYS_CODING_MODEL", "bojo"),
+            "timeout_s": float(os.environ.get("TYS_CODING_TIMEOUT_S", "600")),
+            "max_tokens": int(os.environ.get("TYS_CODING_MAX_TOKENS", "4096")),
+        }
+        params.update(overrides)
+        return OllamaChatModel(**params)
+    params = {
+        "base_url": os.environ.get("TYS_CODING_URL", DEFAULT_BASE_URL),
+        "model": os.environ.get("TYS_CODING_MODEL", DEFAULT_MODEL),
+        "timeout_s": float(os.environ.get("TYS_CODING_TIMEOUT_S", "600")),
+        "max_tokens": int(os.environ.get("TYS_CODING_MAX_TOKENS", "4096")),
+        "schema": TOOL_CALL_SCHEMA,
+    }
+    params.update(overrides)
+    return LlamaCppModel(**params)
