@@ -181,6 +181,24 @@ def split_rgba_bytes(png: bytes):
         return None, None
 
 
+def _resize_png(png: bytes, side: int) -> bytes:
+    """Resample a square plate up to the brief's size. Recorded, never silent."""
+    from io import BytesIO  # noqa: PLC0415
+
+    from PIL import Image  # noqa: PLC0415
+
+    with Image.open(BytesIO(png)) as opened:
+        image = opened.convert("RGB")
+        if image.width == side and image.height == side:
+            buffer = BytesIO()
+            image.save(buffer, format="PNG")
+            return buffer.getvalue()
+        resized = image.resize((side, side), Image.LANCZOS)
+        buffer = BytesIO()
+        resized.save(buffer, format="PNG")
+        return buffer.getvalue()
+
+
 def _required_px(brief: Dict[str, Any]) -> int:
     """Side length for the re-composition canvas: the brief's minimum, at least 1024."""
     required = _required_size(brief)
@@ -720,9 +738,27 @@ class CompositeGenerator:
             if int(np.asarray(cut.alpha).sum()) == 0:
                 raise RuntimeError("the cutout is empty")
             cut_png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
-            canvas = white_canvas_png(_required_px(brief))
-            placed = composite.place_product(scene["bytes"] if flat(brief) else canvas,
-                                             cut_png, scale=0.62, anchor=(0.5, 0.6))
+            # The canvas has to be the brief's size, not the lane's 768: using the raw scene for a
+            # free background meant every prompt-only brief failed `dimensions` at 768x768 (12 of 12,
+            # 2026-11-10). A free background is the scene resampled up; a uniform one is the flat
+            # canvas at the brief's level.
+            target_px = _required_px(brief)
+            if flat(brief):
+                background = _resize_png(scene["bytes"], target_px)
+                record["background_resampled"] = {"from": "scene", "to": target_px}
+            else:
+                background = white_canvas_png(target_px)
+            placed = composite.place_product(background, cut_png, scale=0.62, anchor=(0.5, 0.6))
+            if str(brief.get("label_mode") or "") == "warp":
+                # The body was drawn without lettering; the label is composed and warped on here, so
+                # the copy is readable by construction rather than by luck.
+                from . import label_warp  # noqa: PLC0415
+
+                label_png = label_warp.compose_label(brief)
+                warped = label_warp.warp_label(placed["bytes"], placed["product_box"], label_png)
+                placed = dict(placed)
+                placed["bytes"] = warped["bytes"]
+                record["label"] = {"mode": "warp", **warped["meta"]}
             placed = self._layout_stage(brief, placed, record)
             record["cut_from_generation"] = {
                 "method": "grabcut",
