@@ -232,9 +232,14 @@ def test_tolerant_brief_generates_instead_of_compositing(repo: Path):
     generator.generate(brief)
     record = generator.record_for(brief["id"])
     assert record["route"] == "full_generation"
-    assert record["cutout"] is None
+    # A tolerant brief is not a composite: it has no seller pixels to preserve, and the
+    # product-region check does not apply. It *does* run the pipeline now — generate, cut,
+    # compose, then lay out — so the artefact is the composed canvas at the brief's size, not the
+    # lane's 320 px plate. The first version of this test pinned the raw plate, which is exactly
+    # the behaviour that made every prompt-only brief fail `dimensions` (2026-11-10).
+    assert record["cut_from_generation"]["method"] in ("grabcut", "refused")
     with Image.open(repo / "out" / f"{brief['id']}.png") as produced:
-        assert produced.size == (320, 320)
+        assert produced.size[0] >= 320 and produced.size[0] == produced.size[1]
 
 
 # ---------------------------------------------------------------- white main image

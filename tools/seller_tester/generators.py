@@ -507,10 +507,18 @@ class CompositeGenerator:
                 box = result.get("product_box", box)
             else:
                 result = deterministic.panel_warp(fitted["bytes"], box, brief)
-        except Exception as exc:  # noqa: BLE001 - a refused layout is a named record entry
+        except (ValueError, RuntimeError) as exc:
             record["layout"] = {"kind": "refused", "situation": situation,
                                 "reason": f"{type(exc).__name__}: {exc}"}
             return placed
+        except Exception as exc:  # noqa: BLE001 - re-raised loud, never degraded
+            from .stage_guard import StageFailed  # noqa: PLC0415
+
+            record["layout"] = {"kind": "error", "situation": situation,
+                                "error": f"{type(exc).__name__}: {exc}"}
+            raise StageFailed(
+                f"layout stage for {situation!r} raised {type(exc).__name__}: {exc} — a bug, not a "
+                "refusal") from exc
         updated = dict(placed)
         updated["bytes"] = result["bytes"]
         updated["product_box"] = [box[0], box[1], box[0] + box[2], box[1] + box[3]]
@@ -782,13 +790,17 @@ class CompositeGenerator:
             record["cut_from_generation"] = {"method": "refused",
                                              "reason": f"{type(exc).__name__}: {exc}"}
             return scene["bytes"], record
-        except (NameError, AttributeError, TypeError, ImportError) as exc:
+        except Exception as exc:  # noqa: BLE001 - re-raised as loud, never swallowed
             # A programmer error is not a refused stage. Swallowing these made a missing `import
             # numpy` look like "the stage refused" for two scoring rounds, and the score silently
-            # fell back to the raw plate (2026-11-10).
-            raise GeneratorUnavailable(
-                f"prompt-only compose failed with a programmer error: "
-                f"{type(exc).__name__}: {exc}") from exc
+            # fell back to the raw plate (2026-11-10). stage_guard is the one place that decides.
+            from .stage_guard import StageFailed  # noqa: PLC0415
+
+            record["cut_from_generation"] = {"method": "error",
+                                             "error": f"{type(exc).__name__}: {exc}"}
+            raise StageFailed(
+                f"prompt-only compose raised {type(exc).__name__}: {exc} — a bug in the pipeline, "
+                "not a refused stage") from exc
 
     def record_for(self, brief_id: Any) -> Optional[Dict[str, Any]]:
         for row in reversed(self.records):

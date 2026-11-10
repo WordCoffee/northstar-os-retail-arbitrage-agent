@@ -1,5 +1,15 @@
 [
   {
+    "id": "gap-2a8119a85488",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmp00yc3idm\\PO-X.png",
+    "at": "2026-11-10T11:05:59+00:00"
+  },
+  {
     "id": "gap-08ae1853d57d",
     "brief_id": "PO-X",
     "score": 60.0,
@@ -88,6 +98,16 @@
     ],
     "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpt5zobb6n\\PO-X.png",
     "at": "2026-11-10T02:59:56+00:00"
+  },
+  {
+    "id": "gap-d15b2b0eec83",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmpx_9g3cm_\\PO-X.png",
+    "at": "2026-11-10T11:06:54+00:00"
   },
   {
     "id": "gap-0bd6d9f3c37d",
