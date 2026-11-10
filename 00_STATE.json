@@ -5831,8 +5831,32 @@
       }
     },
     "builders": {
-      "ux-06-shell": "merged 04475aa3 (shell chrome on every authed route)",
-      "ux-07-tabs": "running in worktree state/worktrees/ux-07"
-    }
+      "ux-06-shell": "merged 04475aa3",
+      "ux-07-tabs": "merged; promoted paths wait on the visual review pack",
+      "next": "ux-07b (ChatSurface forwards only summary.canvas), then ux-08-scene"
+    },
+    "promotion": {
+      "candidate": "staging-candidate/20261109-1811",
+      "suite": "7329 passed, 0 failed, 117 skipped in 17m51s",
+      "verifier": "20 agree, 0 FAILED, 1 BLOCKED (V3, locked desktop)",
+      "promoted_slices": [
+        "tools-seller_tester",
+        "tools-root",
+        "tools-vision",
+        "Northstar_backend-tests"
+      ],
+      "main": "e2f0c9d0 -> 82097ac1 (four promote tags, four rollback tags)",
+      "refused": "the whole bundle, on 271 visual paths that need the owner's eyes",
+      "record": "reports/ty/item5_promotion.md"
+    },
+    "defects_today": [
+      "D-001 temp DB leak",
+      "D-002 held-out bar",
+      "D-003 reference pool",
+      "D-004 stale GPU lock",
+      "D-005 suite env isolation",
+      "D-006 JSX checker read comments",
+      "D-007 contract test cache dependence"
+    ]
   }
 }
