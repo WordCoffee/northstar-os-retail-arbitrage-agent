@@ -36,4 +36,17 @@ GL_BIN="$(find_gitleaks)" || {
   echo "Fix or remove them; for reviewed false positives add an allowlist entry to .gitleaks.toml." >&2
   exit 1
 }
+
+# Chat exports must not carry keys at all. gitleaks catches them after the fact; this stops the
+# transcript from being committed in the first place, and it looks only at files whose name says
+# they are an export. Installed from tools/git-hooks/pre-commit.
+if command -v python >/dev/null 2>&1; then
+  ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || echo .)"
+  ( cd "$ROOT_DIR" && python -m tools.chat_export_guard --staged ) || {
+    echo "" >&2
+    echo "pre-commit BLOCKED: a chat export assigns a key-shaped value." >&2
+    echo "Rotate the key and remove the export from the tree." >&2
+    exit 1
+  }
+fi
 exit 0
