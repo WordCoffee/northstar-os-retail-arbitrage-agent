@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { renderDoc } from '../engine/doc.js'
-import { snapBox } from '../../lib/studioCanvas.js'
+import { snapMove, snapResize, SNAP_PX } from '../engine/snap.js'
 
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 4
@@ -35,11 +35,13 @@ export default function Stage({
   // U7: optional Canva-style snapping. Off by default, so the sections that
   // shipped before this unit keep their exact drag behaviour. `onGuides` is
   // called with the guides that actually fired, so the caller draws the line it
-  // snapped to rather than a decorative one.
+  // snapped to rather than a decorative one. Guides are pixel-space: the
+  // threshold is 8 px on screen, not 8 % of the document.
   snap = false,
   onGuides,
   guides = [],
   overlay = null,
+  onScaleChange,
 }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
@@ -61,6 +63,13 @@ export default function Stage({
   const aspect = doc && doc.h ? doc.w / doc.h : 1
   const dispH = clamp(Math.round(cssW / aspect), minHeight, Math.max(minHeight, maxHeight))
   const dispW = Math.round(dispH * aspect)
+  // The percentage a designer reads is raster scale: 100 % means one document
+  // pixel per CSS pixel, which is rarely the same as "fitted to this column".
+  const scalePct = doc && doc.w > 0 ? Math.round(((dispW * zoom) / doc.w) * 100) : Math.round(zoom * 100)
+
+  useEffect(() => {
+    if (onScaleChange) onScaleChange(scalePct)
+  }, [scalePct, onScaleChange])
 
   // ── paint ──
   useEffect(() => {
@@ -103,6 +112,11 @@ export default function Stage({
 
   const selected = doc ? doc.layers.find(l => l.id === selectedId) : null
 
+  // Every layer a drag may snap against: visible, on the artboard, not itself.
+  const snapOthers = useCallback((skipId) => (
+    doc ? doc.layers.filter(l => l.id !== skipId && l.kind !== 'bg' && l.visible !== false) : []
+  ), [doc])
+
   const onPointerDown = (e) => {
     if (!doc) return
     const p = toNorm(e.clientX, e.clientY)
@@ -125,7 +139,10 @@ export default function Stage({
     const rawY = clamp(drag.oy + dy, -0.4, 1.2)
     if (snap) {
       const layer = doc.layers.find(l => l.id === drag.id)
-      const box = snapBox(rawX, rawY, layer?.w ?? 0.2, layer?.h ?? 0.2)
+      const box = snapMove(
+        { x: rawX, y: rawY, w: layer?.w ?? 0.2, h: layer?.h ?? 0.2 },
+        { canvas: { W: dispW, H: dispH }, others: snapOthers(drag.id), threshold: SNAP_PX },
+      )
       onChangeLayer && onChangeLayer(drag.id, { x: box.x, y: box.y })
       onGuides && onGuides(box.guides)
       return
@@ -154,15 +171,29 @@ export default function Stage({
     const move = (ev) => {
       const q = toNorm(ev.clientX, ev.clientY)
       if (!q) return
-      onChangeLayer && onChangeLayer(selected.id, {
+      const proposed = {
+        x: sx,
+        y: sy,
         w: clamp(startW + (q.x - p.x), 0.02, 1),
         h: clamp(startH + (q.y - p.y), 0.02, 1),
+      }
+      if (!snap) {
+        onChangeLayer && onChangeLayer(selected.id, { w: proposed.w, h: proposed.h })
+        return
+      }
+      const box = snapResize(proposed, {
+        canvas: { W: dispW, H: dispH },
+        others: snapOthers(selected.id),
+        threshold: SNAP_PX,
       })
+      onChangeLayer && onChangeLayer(selected.id, { w: box.w, h: box.h })
+      onGuides && onGuides(box.guides)
     }
     const up = () => {
       window.removeEventListener('pointermove', move)
       window.removeEventListener('pointerup', up)
       onCommitLayer && onCommitLayer(selected.id)
+      onGuides && onGuides([])
     }
     window.addEventListener('pointermove', move)
     window.addEventListener('pointerup', up)
@@ -183,9 +214,14 @@ export default function Stage({
         {badge}
         <div className="stage-zoom">
           <button className="stage-zoom-btn" title="Zoom out" onClick={() => onZoomChange && onZoomChange(clamp(zoom - 0.25, MIN_ZOOM, MAX_ZOOM))}>−</button>
-          <span className="text-mono stage-zoom-val">{Math.round(zoom * 100)}%</span>
+          <span className="text-mono stage-zoom-val" title="Scale: one document pixel per CSS pixel at 100%">{scalePct}%</span>
           <button className="stage-zoom-btn" title="Zoom in" onClick={() => onZoomChange && onZoomChange(clamp(zoom + 0.25, MIN_ZOOM, MAX_ZOOM))}>+</button>
-          <button className="stage-zoom-btn stage-zoom-fit" title="Fit to pane" onClick={() => onZoomChange && onZoomChange(1)}>Fit</button>
+          <button className="stage-zoom-btn stage-zoom-fit" title="Fit the canvas to this column" onClick={() => onZoomChange && onZoomChange(1)}>Fit</button>
+          <button
+            className="stage-zoom-btn"
+            title="Actual size: one document pixel per CSS pixel"
+            onClick={() => onZoomChange && onZoomChange(doc && dispW ? clamp(doc.w / dispW, MIN_ZOOM, MAX_ZOOM) : 1)}
+          >100%</button>
         </div>
       </div>
 

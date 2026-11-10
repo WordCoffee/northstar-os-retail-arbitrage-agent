@@ -120,6 +120,7 @@ export default function CanvasWorkspace({ onNavigateSection }) {
   const [panel, setPanel] = useState('properties')
   const [panelOpen, setPanelOpen] = useState(false)
   const [zoom, setZoom] = useState(1)
+  const [scalePct, setScalePct] = useState(100)
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [guides, setGuides] = useState([])
   const [showGuides, setShowGuides] = useState(true)
@@ -695,6 +696,7 @@ export default function CanvasWorkspace({ onNavigateSection }) {
               guides={showGuides ? guides : []}
               overlay={dielineOverlay}
               minHeight={260}
+              onScaleChange={setScalePct}
               maxHeight={640}
               footer={(
                 <span className="cw-stage-foot">
@@ -868,7 +870,7 @@ export default function CanvasWorkspace({ onNavigateSection }) {
         <span className="cw-status-sep">·</span>
         <span>{doc.layers.length} layer{doc.layers.length === 1 ? '' : 's'}</span>
         <span className="cw-status-sep">·</span>
-        <span>{Math.round(zoom * 100)}%</span>
+        <span title="Canvas scale: one document pixel per CSS pixel at 100%">{scalePct}%</span>
         {lastExport && (
           <>
             <span className="cw-status-sep">·</span>
