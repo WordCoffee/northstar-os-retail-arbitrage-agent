@@ -918,5 +918,25 @@
     "content": "stub",
     "elapsed_ms": null,
     "timestamp": "2026-11-10T03:21:33.001567+00:00"
+  },
+  {
+    "query": "hello",
+    "track": "AUTOTHINK_RESEARCH",
+    "provider": "local",
+    "tier": "T2",
+    "model": "stub-model",
+    "ok": true,
+    "task_class": "AUTOTHINK_RESEARCH",
+    "label": "research",
+    "files_touched": [],
+    "live_action_requested": false,
+    "approval_status": "not_requested",
+    "reason": null,
+    "org_id": "tenant-empty4",
+    "user_id": "user-smoke",
+    "run_id": "atrun_099d60db5a2b2c22",
+    "content": "stub",
+    "elapsed_ms": null,
+    "timestamp": "2026-11-10T03:49:00.064438+00:00"
   }
 ]

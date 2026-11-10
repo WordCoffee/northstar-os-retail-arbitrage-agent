@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-10T00:13:03+00:00",
+  "updated": "2026-11-10T03:42:41+00:00",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -1452,7 +1452,7 @@
       "id": "ux-07b-tab-context-to-bojo",
       "kind": "feature",
       "priority": 980,
-      "status": "pending",
+      "status": "done",
       "title": "The tab summary stops at ChatSurface: Bojo is not told which tab is open",
       "next": "Forward the workspace tab summary (tab id, route, title, state digest) into the chat turn body: `src/chat/ChatSurface.jsx:624` currently forwards only `summary.canvas`. Add one field to the turn payload and a test that the model request carries it.",
       "write_paths": [
@@ -1472,10 +1472,61 @@
         "commit 693fdd24"
       ],
       "tier": "code",
+      "commit": "1e29faaf",
+      "verification": "vitest 26 passed; build ok",
+      "created_at": "2026-11-09T22:43:40+00:00",
+      "updated_at": "2026-11-10T03:42:41+00:00"
+    },
+    {
+      "id": "ux-07c-turn-body-tab",
+      "kind": "feature",
+      "priority": 960,
+      "status": "pending",
+      "title": "The chat request body carries `tab`, and the backend drops it on the floor",
+      "next": "Add `tab` to `TurnIn` in Northstar_backend/chat_router.py and forward it into the model turn (it currently forwards only `canvas`, and pydantic extra='ignore' discards the rest). One field, one test that the model request contains it.",
+      "write_paths": [
+        "Northstar_backend/chat_router.py",
+        "Northstar_backend/test_chat_turn_body.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_chat_turn_body.py"
+        ]
+      ],
+      "why": "ux-07b publishes the tab summary in the body, but the server accepts and discards it, so Bojo still is not told which tab is open",
+      "evidence": [
+        "reports/ty/ux07b_tab_context.md",
+        "commit 1e29faaf"
+      ],
+      "tier": "code",
       "commit": null,
       "verification": null,
-      "created_at": "2026-11-09T22:43:40+00:00",
-      "updated_at": "2026-11-09T22:43:40+00:00"
+      "created_at": "2026-11-10T03:42:41+00:00",
+      "updated_at": "2026-11-10T03:42:41+00:00"
+    },
+    {
+      "id": "f0-promotion-gitleaks",
+      "kind": "incident",
+      "priority": 1200,
+      "status": "blocked",
+      "title": "149 code slices cannot reach main: the gitleaks hook refuses three of them",
+      "next": "Needs the owner: DIR-1 (rotate the three committed credentials, then purge them from history), or reviewed .gitleaks.toml allowlist entries. Until then main cannot collect its own suite.",
+      "write_paths": [],
+      "acceptance_commands": [],
+      "why": "Northstar_backend-data, -root and -static carry 24 gitleaks findings; bypassing the hook would be a policy bypass",
+      "evidence": [
+        "reports/ty/main_vs_candidate.md",
+        "reports/ty/needs_you.md DIR-1"
+      ],
+      "tier": "owner",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-10T03:42:41+00:00",
+      "updated_at": "2026-11-10T03:42:41+00:00"
     }
   ],
   "parked": [

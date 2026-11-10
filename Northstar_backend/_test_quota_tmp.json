@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-10T03:27:11.891525+00:00",
+  "updated_at": "2026-11-10T03:54:39.308140+00:00",
   "apps": {
     "RAPIDAPI_BDC": {
       "discovery": {
@@ -17,7 +17,7 @@
         "remaining": null,
         "exhausted": false,
         "last_reset": null,
-        "updated_at": "2026-11-10T03:27:11.891517+00:00"
+        "updated_at": "2026-11-10T03:54:39.308133+00:00"
       }
     },
     "RAPIDAPI_REALTIME": {
