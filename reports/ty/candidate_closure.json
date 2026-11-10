@@ -4,5 +4,15 @@
   "base": "main",
   "base_sha": "ef9cad1dfdc9",
   "worktree": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\state\\worktrees\\candidate-closure",
-  "gitleaks": []
+  "gitleaks": [],
+  "collect": {
+    "returncode": 0,
+    "seconds": 23.9,
+    "tail": [
+      "",
+      "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+      "7465 tests collected in 21.38s"
+    ],
+    "errors": []
+  }
 }

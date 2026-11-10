@@ -39,17 +39,48 @@ def git(*args: str, cwd: Path | None = None, check: bool = True) -> str:
     return result.stdout
 
 
-def gitleaks(worktree: Path) -> List[Dict[str, Any]]:
-    report = worktree / "gitleaks.json"
-    subprocess.run(["gitleaks", "git", "--pre-commit", "--staged", "--redact",
-                    "--report-format", "json", "--report-path", str(report),
-                    "-c", str(ROOT / ".gitleaks.toml")],
-                   cwd=str(worktree), capture_output=True, text=True, check=False)
-    if not report.exists():
-        return []
-    data = json.loads(report.read_text(encoding="utf-8") or "[]")
-    return [{"file": item.get("File"), "line": item.get("StartLine"), "rule": item.get("RuleID")}
-            for item in data]
+def gitleaks(worktree: Path) -> Dict[str, Any]:
+    """Scan the **whole tree that would result**, not just the staged delta.
+
+    `gitleaks git --pre-commit --staged` only sees what the commit changes. For a whole-tree
+    promotion that is the wrong question: the two chat exports are already in main, so staging the
+    candidate produces no diff for them and the scan reported a clean tree that still contains five
+    credentials (measured 2026-11-10). So the tracked files are mirrored into a scratch directory and
+    scanned as content, and the scan fails closed if gitleaks itself could not run.
+    """
+    import os as _os
+    import shutil as _shutil
+    import tempfile as _tempfile
+
+    listed = subprocess.run(["git", "ls-files"], cwd=str(worktree), capture_output=True, text=True)
+    tracked = [line.strip() for line in listed.stdout.splitlines() if line.strip()]
+    scratch = Path(_tempfile.mkdtemp(prefix="tracked-"))
+    try:
+        for rel in tracked:
+            source = worktree / rel
+            if not source.is_file():
+                continue
+            target = scratch / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                _os.link(source, target)          # hard link: no copy, same bytes
+            except OSError:
+                _shutil.copy2(source, target)
+        report = scratch / "gitleaks.json"
+        result = subprocess.run(["gitleaks", "dir", str(scratch), "--redact",
+                                 "--report-format", "json", "--report-path", str(report),
+                                 "-c", str(ROOT / ".gitleaks.toml"), "--exit-code", "0"],
+                                capture_output=True, text=True, check=False)
+        if not report.exists():
+            return {"ok": False, "findings": [],
+                    "error": (result.stderr or "gitleaks produced no report")[-300:]}
+        data = json.loads(report.read_text(encoding="utf-8") or "[]")
+        findings = [{"file": item.get("File"), "line": item.get("StartLine"),
+                     "rule": item.get("RuleID")}
+                    for item in data if "gitleaks.json" not in str(item.get("File"))]
+        return {"ok": True, "findings": findings, "tracked_files": len(tracked)}
+    finally:
+        _shutil.rmtree(scratch, ignore_errors=True)
 
 
 def pytest_run(worktree: Path, *, collect_only: bool, timeout: int) -> Dict[str, Any]:
@@ -91,13 +122,18 @@ def main(argv: List[str] | None = None) -> int:
         # main + the candidate tree, without moving main
         git("read-tree", "-u", "--reset", candidate, cwd=worktree)
         git("add", "-A", cwd=worktree)
-        result["gitleaks"] = gitleaks(worktree)
+        scan = gitleaks(worktree)
+        result["gitleaks"] = scan["findings"]
+        result["gitleaks_ok"] = scan["ok"]
+        result["tracked_files"] = scan.get("tracked_files")
+        if not scan["ok"]:
+            result["gitleaks_error"] = scan.get("error")
         OUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         result["collect"] = pytest_run(worktree, collect_only=True, timeout=1800)
         OUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         if not ns.gate_only:
             result["suite"] = pytest_run(worktree, collect_only=False, timeout=3600)
-        ok = (not result["gitleaks"] and result["collect"]["returncode"] == 0
+        ok = (result["gitleaks_ok"] and not result["gitleaks"] and result["collect"]["returncode"] == 0
               and not result["collect"]["errors"]
               and (ns.gate_only or result.get("suite", {}).get("returncode") == 0))
         result["verdict"] = "SAFE-TO-PROMOTE" if ok else "REFUSED"
