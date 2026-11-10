@@ -2960,7 +2960,13 @@
           "rules": true,
           "scene": "flat"
         }
-      ]
+      ],
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-002",
@@ -3045,7 +3051,13 @@
           "rules": false,
           "scene": "flat"
         }
-      ]
+      ],
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-003",
@@ -3116,7 +3128,7 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "IMMUNE SUPPORT",
+            "DAILY FOCUS",
             "MENTAL CLARITY",
             "STEADY ENERGY"
           ],
@@ -3131,7 +3143,13 @@
           "rules": false,
           "scene": "flat"
         }
-      ]
+      ],
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-004",
@@ -3214,7 +3232,13 @@
           "rules": false,
           "scene": "flat"
         }
-      ]
+      ],
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-005",
@@ -3294,6 +3318,12 @@
           "subject": "the same two pouches in a greenhouse scene",
           "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
         }
+      },
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
     {
@@ -3403,7 +3433,13 @@
           "rules": false,
           "scene": "flat"
         }
-      ]
+      ],
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-007",
@@ -3473,9 +3509,9 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "60 SERVINGS",
-            "VEGAN CAPSULES",
-            "THIRD PARTY TESTED"
+            "GIFT BOX",
+            "GREETING CARDS",
+            "MADE FOR EVERY DAY"
           ],
           "text_box": [
             0.05,
@@ -3500,7 +3536,7 @@
           "product_in_frame": false,
           "text_required": [
             "SUPPLEMENT FACTS",
-            "SERVING SIZE 2 CAPSULES"
+            "ONE MESSAGE AT A TIME"
           ],
           "text_box": [
             0.05,
@@ -3554,10 +3590,10 @@
           },
           "product_in_frame": true,
           "text_required": [
-            "MOGRA VS OTHER BRANDS",
+            "WORD COFFEE GIFT SETS",
             "ORGANIC FOR MOM",
-            "NO ARTIFICIAL FILLERS",
-            "THIRD PARTY TESTED"
+            "GREETING CARDS INCLUDED",
+            "MADE FOR EVERY DAY"
           ],
           "text_box": [
             0.05,
@@ -3586,8 +3622,8 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "TRY MOGRA TODAY",
-            "FREE SHIPPING"
+            "SHOP WORD COFFEE",
+            "GIFT READY"
           ],
           "text_box": [
             0.05,
@@ -3641,9 +3677,9 @@
           },
           "product_in_frame": true,
           "text_required": [
-            "MORNING RITUAL",
-            "MIX INTO COFFEE OR TEA",
-            "ONE SCOOP DAILY"
+            "A DAILY NOTE",
+            "OPEN THE BOX",
+            "READ ONE CARD A DAY"
           ],
           "text_box": [
             0.52,
@@ -3726,8 +3762,8 @@
           },
           "product_in_frame": true,
           "text_required": [
-            "TECHNICAL SPECIFICATIONS",
-            "1500MG PER SERVING"
+            "WHAT ARRIVES",
+            "EMPOWERING MOMS"
           ],
           "text_box": [
             0.05,
@@ -3756,9 +3792,9 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "SERVING SIZE 2 CAPSULES",
-            "SERVINGS PER CONTAINER 30",
-            "STORAGE COOL AND DRY"
+            "ONE MESSAGE AT A TIME",
+            "A GIFT THAT SPEAKS",
+            "FOR MOM"
           ],
           "text_box": [
             0.05,
@@ -3782,8 +3818,8 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "ORGANIC CERTIFIED",
-            "VEGAN FRIENDLY"
+            "WORD COFFEE",
+            "MOTIVATION FOR THE MODERN WOMAN"
           ],
           "text_box": [
             0.05,
@@ -3869,7 +3905,7 @@
           },
           "product_in_frame": false,
           "text_required": [
-            "IMMUNE SUPPORT",
+            "DAILY FOCUS",
             "MENTAL CLARITY",
             "STEADY ENERGY"
           ],
@@ -3886,7 +3922,13 @@
         }
       ],
       "product_line": "lions-mane",
-      "note": "A+ ingredient_grid for lions mane, built on the same module shape as the existing family so the module type is comparable."
+      "note": "A+ ingredient_grid for lions mane, built on the same module shape as the existing family so the module type is comparable.",
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-012",
@@ -3967,7 +4009,13 @@
           "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
         }
       },
-      "product_line": "lions-mane"
+      "product_line": "lions-mane",
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-013",
@@ -4054,7 +4102,13 @@
         }
       ],
       "product_line": "lions-mane",
-      "note": "A+ comparison_table for lions mane, built on the same module shape as the existing family so the module type is comparable."
+      "note": "A+ comparison_table for lions mane, built on the same module shape as the existing family so the module type is comparable.",
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     },
     {
       "id": "AP-014",
@@ -4166,7 +4220,13 @@
         }
       ],
       "product_line": "lions-mane",
-      "note": "A+ hero_band for lions mane, built on the same module shape as the existing family so the module type is comparable."
+      "note": "A+ hero_band for lions mane, built on the same module shape as the existing family so the module type is comparable.",
+      "text_sources": {
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
+        "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
+      }
     }
   ]
 }
