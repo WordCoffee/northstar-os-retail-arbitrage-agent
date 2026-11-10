@@ -403,6 +403,43 @@ def calculate_unit_costs():
     }
 
 
+# --- Canonical economics bridge (1C-03R) -------------------------------------
+# The authoritative net/ROI for scanner unit economics come from
+# foundation/economics. The legacy expression below is retained ONLY as a
+# labeled fallback when the canonical engine is unavailable, and its value is
+# identical for the same inputs (verified by parity tests).
+try:  # run as top-level module (cwd = Northstar_backend)
+    from foundation.economics import EconomicsInput as _EconInput, compute as _econ_compute
+    from foundation.economics.versions import FORMULA_VERSION as _FORMULA_VERSION
+except ImportError:  # relative import variant
+    try:
+        from .foundation.economics import EconomicsInput as _EconInput, compute as _econ_compute
+        from .foundation.economics.versions import FORMULA_VERSION as _FORMULA_VERSION
+    except ImportError:  # pragma: no cover
+        _EconInput = None
+        _econ_compute = None
+        _FORMULA_VERSION = None
+
+
+def _canonical_unit_economics(*, price, cogs, referral_fee, fba_fee, inbound, prep,
+                              packaging, return_reserve):
+    """Return the canonical economics dict (serialized) or None if unavailable."""
+    if _EconInput is None or _econ_compute is None:
+        return None
+    try:
+        out = _econ_compute(_EconInput(
+            marketplace="amazon.com", currency="USD",
+            selling_price=price, acquisition_cost=cogs,
+            referral_fee_amount=referral_fee, fba_fulfillment_fee=fba_fee,
+            inbound_freight=inbound, prep_cost=prep,
+            other_marketplace_fees=packaging, refund_return_reserve=return_reserve,
+            advertising_cost="0", provenance="estimated",
+        ))
+        return out.to_dict()
+    except Exception:  # never let the bridge break the scanner
+        return None
+
+
 def calculate_unit_economics(product, costco):
     """Full per-unit economics for one product against its Costco cost.
 
@@ -473,6 +510,8 @@ def calculate_unit_economics(product, costco):
         **unit,
         "net_profit": None,
         "roi_pct": None,
+        "formula_version": _FORMULA_VERSION,
+        "readiness": None,
         "economics_confidence": ECON_UNAVAILABLE,
         "economics_status": None,
         "economics_note": None,
@@ -510,6 +549,22 @@ def calculate_unit_economics(product, costco):
         ), 2)
         out["net_profit"] = net
         out["roi_pct"] = round(net / cogs * 100.0, 2) if cogs > 0 else None
+        # 1C-03R: canonical economics is authoritative for net; attach version,
+        # readiness, and canonical ROI-on-invested-cost. Same inputs -> same net.
+        _ce = _canonical_unit_economics(
+            price=price, cogs=cogs, referral_fee=referral["referral_fee"],
+            fba_fee=fba["fba_fee"], inbound=unit["inbound_cost_per_unit"],
+            prep=unit["prep_cost_per_unit"], packaging=unit["packaging_cost_per_unit"],
+            return_reserve=return_reserve)
+        if _ce is not None:
+            if _ce.get("contribution_profit_after_ads") is not None:
+                out["net_profit"] = float(_ce["contribution_profit_after_ads"])
+            out["formula_version"] = _ce.get("formula_version")
+            out["readiness"] = _ce.get("readiness")
+            out["roi_on_invested_cost"] = _ce.get("roi_on_invested_cost")
+            out["roi_denominator_label"] = _ce.get("roi_denominator_label")
+            out["roi_basis_note"] = ("roi_pct is ROI on COGS (legacy field); "
+                                     "roi_on_invested_cost is canonical (/landed).")
         out["economics_confidence"] = ECON_ESTIMATED
         out["economics_status"] = ECON_STATUS_ESTIMATED
         out["economics_note"] = (
