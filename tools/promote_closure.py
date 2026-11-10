@@ -190,6 +190,7 @@ def run_gitleaks_staged(worktree: Path) -> Dict[str, Any]:
     """
     report = worktree / "gitleaks.json"
     result = subprocess.run(["gitleaks", "git", "--pre-commit", "--staged", "--redact",
+                             "--max-target-megabytes", "50",
                              "--report-format", "json", "--report-path", str(report),
                              "-c", str(ROOT / ".gitleaks.toml")],
                             cwd=str(worktree), capture_output=True, text=True, check=False)

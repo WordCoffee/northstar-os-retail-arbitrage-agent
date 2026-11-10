@@ -1,0 +1,41 @@
+{
+  "ref": "ef9cad1d",
+  "returncode": 0,
+  "stderr_tail": [
+    "\u001b[90m5:04AM\u001b[0m \u001b[32mINF\u001b[0m \u001b[1mscanned ~116137899 bytes (116.14 MB) in 5.51s\u001b[0m",
+    "\u001b[90m5:04AM\u001b[0m \u001b[33mWRN\u001b[0m \u001b[1mleaks found: 5\u001b[0m"
+  ],
+  "tracked_files": 3816,
+  "findings": 5,
+  "by_file": {
+    "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/FirstNorthstarautomationchat.md": 4,
+    "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/autothink-ui-chat-export.md": 1
+  },
+  "detail": [
+    {
+      "file": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/FirstNorthstarautomationchat.md",
+      "line": 1143,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/FirstNorthstarautomationchat.md",
+      "line": 1148,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/FirstNorthstarautomationchat.md",
+      "line": 1291,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/FirstNorthstarautomationchat.md",
+      "line": 1296,
+      "rule": "generic-api-key"
+    },
+    {
+      "file": "C:/Users/T2Hol/Desktop/Northstar OS Retail Arbitrage Agent/state/worktrees/_rescan-main/autothink-ui-chat-export.md",
+      "line": 7852,
+      "rule": "github-pat"
+    }
+  ]
+}

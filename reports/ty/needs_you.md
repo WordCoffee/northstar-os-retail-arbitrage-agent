@@ -135,6 +135,69 @@ continues without them).
 > rewritten `main` or a GitHub support request, and it is your decision, not mine.
 > Full evidence: `reports/ty/secret_exposure_report.md`.
 
+## SEC-0. The public remote: what the API says, and the rewrite prepared for you (2026-11-10)
+
+**Exposure.** `WordCoffee/northstar-os-retail-arbitrage-agent` is **public**, created 2026-07-19,
+last pushed 2026-09-20, **14 MB**, **0 forks, 0 stars, 0 watchers**. Zero forks is good news and not
+a guarantee: it does not mean nobody cloned it or that a crawler has not indexed it.
+
+**Other public repos under the same account** (10 total, all public): `Amazon-Ads-Bid-Adjustment-Calc`,
+`house-finder`, `word-coffee`, `Word-coffee-website`, `Word-coffee.co`, `WordCoffee.co`,
+`Wordcoffee-website`, `wordcoffee.github.io`, `WordCoffee`. I have not scanned those — say the word
+and I will, the same way.
+
+**Full history, all refs, counts only** (`reports/ty/history_sensitive.md`): 1,711 commits across 189
+refs.
+
+| category | occurrences | commits |
+|---|---|---|
+| `dev_credential_url` (a URL carrying user:pass) | **88** | **26** |
+| `dev_credential_assignment` (password=/token= …) | 535 | 80 |
+| `email` | 935 | 130 |
+| phone (shape-checked) | 319 | 4 |
+| vendor mentions (Amazon, Costco, Bright Data, …) | see the report | — |
+
+The 88 URLs and 26 commits are the ones worth your eye; the rest is either code noise or commercial
+information rather than a credential. No value, line or filename was printed anywhere.
+
+**`main` at `ef9cad1d`, rescanned with the fixed config**: 3,816 tracked files, **5 findings** — the
+two exports, nothing else. (The earlier "0 findings" was a config that did not parse; the gate now
+fails closed.)
+
+**The rewrite is prepared and verified, and not applied.**
+- Fresh mirror clone: `state/security/mirror` (a `git clone --mirror` of this working copy).
+- `git filter-repo --invert-paths` removed `FirstNorthstarautomationchat.md`,
+  `autothink-ui-chat-export.md`, and the three captured pages `reports/_bd_amazon.html`,
+  `reports/_bd_beeswax.html`, `reports/_bd_unpaper.html` — those carried third-party page tokens in
+  older revisions.
+- `git filter-repo --replace-text` scrubbed a synthetic test key from one older revision. The
+  replacement file is generated, never echoed.
+- **Verification:** `gitleaks git` on the rewritten mirror → **no leaks found**, 1,710 commits
+  preserved (one commit is the merge that only added those pages).
+
+**Exact commands, for you to run when you are ready.** I will not run these: they rewrite a public
+default branch.
+
+```bash
+# 1. rotate the three keys first (DIR-1a/b/c). Nothing below helps until they are dead.
+cd "/path/to/state/security/mirror"
+git remote remove origin
+git remote add origin https://github.com/WordCoffee/northstar-os-retail-arbitrage-agent.git
+
+# 2. rewrite the public history. --force-with-lease is deliberately not used: the remote is the
+#    thing being replaced, and the lease would fail on every ref the rewrite drops.
+git push --force origin 'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
+
+# 3. make GitHub drop the unreachable objects now rather than "eventually".
+#    Either wait for the automatic gc, or open a support request naming the repo and asking for a
+#    purge of unreachable objects; the old blobs stay reachable by SHA until that happens.
+
+# 4. only then, in the working repo:
+git fetch origin --prune --tags
+```
+After the force-push, say the word and I will run `python tools/retire_chat_exports.py --retire`,
+which removes the exports from the tree and allowlists their dead fingerprints, then re-scan.
+
 ## DIR-1a. Rotate the Scavio API key (committed)
 
 `FirstNorthstarautomationchat.md` **line 1143** and **line 1291** contain a Scavio API key — the same

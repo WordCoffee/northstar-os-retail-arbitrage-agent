@@ -464,3 +464,83 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-10T07:37:48+00:00 launcher: director session ended (session 15924 gone; launcher restarting).
 
 - 2026-11-10T07:42:51+00:00 launcher: director session ended (session 7916 gone; launcher restarting).
+
+- 2026-11-10T07:47:53+00:00 launcher: director session ended (session 20836 gone; launcher restarting).
+
+- 2026-11-10T07:52:54+00:00 launcher: director session ended (session 4804 gone; launcher restarting).
+
+- 2026-11-10T07:57:56+00:00 launcher: director session ended (session 21752 gone; launcher restarting).
+
+- 2026-11-10T08:02:57+00:00 launcher: director session ended (session 25408 gone; launcher restarting).
+
+- 2026-11-10T08:07:59+00:00 launcher: director session ended (session 15072 gone; launcher restarting).
+
+- 2026-11-10T08:13:00+00:00 launcher: director session ended (session 20064 gone; launcher restarting).
+
+- 2026-11-10T08:18:02+00:00 launcher: director session ended (session 13240 gone; launcher restarting).
+
+- 2026-11-10T08:23:03+00:00 launcher: director session ended (session 25256 gone; launcher restarting).
+
+- 2026-11-10T08:28:04+00:00 launcher: director session ended (session 12812 gone; launcher restarting).
+
+- 2026-11-10T08:33:05+00:00 launcher: director session ended (session 7152 gone; launcher restarting).
+
+- 2026-11-10T08:38:07+00:00 launcher: director session ended (session 21344 gone; launcher restarting).
+
+- 2026-11-10T08:43:08+00:00 launcher: director session ended (session 7576 gone; launcher restarting).
+
+- 2026-11-10T08:48:10+00:00 launcher: director session ended (session 6828 gone; launcher restarting).
+
+- 2026-11-10T08:53:12+00:00 launcher: director session ended (session 7400 gone; launcher restarting).
+
+- 2026-11-10T08:58:13+00:00 launcher: director session ended (session 25152 gone; launcher restarting).
+
+- 2026-11-10T09:03:15+00:00 launcher: director session ended (session 22652 gone; launcher restarting).
+
+- 2026-11-10T09:08:16+00:00 launcher: director session ended (session 4120 gone; launcher restarting).
+
+- 2026-11-10T09:13:18+00:00 launcher: director session ended (session 9324 gone; launcher restarting).
+
+- 2026-11-10T09:18:19+00:00 launcher: director session ended (session 20252 gone; launcher restarting).
+
+- 2026-11-10T09:23:20+00:00 launcher: director session ended (session 20500 gone; launcher restarting).
+
+- 2026-11-10T09:28:22+00:00 launcher: director session ended (session 16832 gone; launcher restarting).
+
+- 2026-11-10T09:33:23+00:00 launcher: director session ended (session 12048 gone; launcher restarting).
+
+- 2026-11-10T09:38:25+00:00 launcher: director session ended (session 13268 gone; launcher restarting).
+
+- 2026-11-10T09:43:26+00:00 launcher: director session ended (session 2728 gone; launcher restarting).
+
+- 2026-11-10T09:48:28+00:00 launcher: director session ended (session 21204 gone; launcher restarting).
+
+- 2026-11-10T09:53:29+00:00 launcher: director session ended (session 3824 gone; launcher restarting).
+
+- 2026-11-10T09:58:31+00:00 launcher: director session ended (session 21076 gone; launcher restarting).
+
+- 2026-11-10T10:03:33+00:00 launcher: director session ended (session 13772 gone; launcher restarting).
+
+- 2026-11-10T10:08:34+00:00 launcher: director session ended (session 19728 gone; launcher restarting).
+
+- 2026-11-10T10:13:35+00:00 launcher: director session ended (session 3500 gone; launcher restarting).
+
+- 2026-11-10T10:18:37+00:00 launcher: director session ended (session 2416 gone; launcher restarting).
+
+- 2026-11-10T10:23:39+00:00 launcher: director session ended (session 1496 gone; launcher restarting).
+
+- 2026-11-10T10:28:40+00:00 launcher: director session ended (session 19304 gone; launcher restarting).
+
+- 2026-11-10T10:33:41+00:00 launcher: director session ended (session 23132 gone; launcher restarting).
+
+- 2026-11-10T10:38:43+00:00 launcher: director session ended (session 3708 gone; launcher restarting).
+
+- 2026-11-10T10:43:44+00:00 launcher: director session ended (session 24432 gone; launcher restarting).
+
+- 2026-11-10T10:48:46+00:00 launcher: director session ended (session 21476 gone; launcher restarting).
+
+- 2026-11-10T10:53:47+00:00 launcher: director session ended (session 6236 gone; launcher restarting).
+
+- 2026-11-10T10:58:48+00:00 launcher: director session ended (session 24356 gone; launcher restarting).
+
+- 2026-11-10T11:03:50+00:00 launcher: director session ended (session 4408 gone; launcher restarting).

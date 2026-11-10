@@ -68,6 +68,7 @@ def gitleaks(worktree: Path) -> Dict[str, Any]:
                 _shutil.copy2(source, target)
         report = scratch / "gitleaks.json"
         result = subprocess.run(["gitleaks", "dir", str(scratch), "--redact",
+                                 "--max-target-megabytes", "50",
                                  "--report-format", "json", "--report-path", str(report),
                                  "-c", str(ROOT / ".gitleaks.toml"), "--exit-code", "0"],
                                 capture_output=True, text=True, check=False)
