@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -74,7 +75,14 @@ def main(argv: List[str] | None = None) -> int:
 
     candidate = git("rev-parse", f"{ns.ref}^{{commit}}").strip()
     base = git("rev-parse", ns.base).strip()
-    worktree = Path(tempfile.mkdtemp(prefix="candidate-closure-"))
+    # Work under the repo, not %TEMP%: the temp-directory run spent 50 minutes on 196 s of CPU
+    # (a stall, not work), while the same suite in state/worktrees finished in 19. A worktree on
+    # the same volume as the repo is what the earlier full-suite runs used.
+    worktree = ROOT / "state" / "worktrees" / "candidate-closure"
+    if worktree.exists():
+        subprocess.run(["git", "worktree", "remove", "--force", str(worktree)],
+                       cwd=str(ROOT), capture_output=True, text=True)
+        shutil.rmtree(worktree, ignore_errors=True)
     result: Dict[str, Any] = {"candidate": ns.ref, "candidate_sha": candidate[:12],
                               "base": ns.base, "base_sha": base[:12], "worktree": str(worktree)}
     try:
@@ -84,7 +92,9 @@ def main(argv: List[str] | None = None) -> int:
         git("read-tree", "-u", "--reset", candidate, cwd=worktree)
         git("add", "-A", cwd=worktree)
         result["gitleaks"] = gitleaks(worktree)
+        OUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         result["collect"] = pytest_run(worktree, collect_only=True, timeout=1800)
+        OUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         if not ns.gate_only:
             result["suite"] = pytest_run(worktree, collect_only=False, timeout=3600)
         ok = (not result["gitleaks"] and result["collect"]["returncode"] == 0
