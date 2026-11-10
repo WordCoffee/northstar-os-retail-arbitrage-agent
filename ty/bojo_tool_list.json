@@ -452,9 +452,16 @@
     }
   ],
   "bojo_domain_registry": [
+    "build_dieline",
     "catalog_pull",
+    "compose_listing",
     "golden_goose_scan",
     "hub_status",
-    "offer_recommendation"
+    "margin_report",
+    "offer_recommendation",
+    "plan_campaign",
+    "scan_products",
+    "track_keywords",
+    "watch_competitor"
   ]
 }

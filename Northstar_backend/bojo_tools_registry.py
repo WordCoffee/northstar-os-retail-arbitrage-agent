@@ -11,7 +11,16 @@ from __future__ import annotations
 
 from typing import Any, Callable, Dict, List
 
-_MODULES = ("bojo_tools.sourcing", "bojo_tools_ops")
+_MODULES = (
+    "bojo_tools.sourcing",
+    "bojo_tools.sourcing_extra",
+    "bojo_tools.publishing",
+    "bojo_tools.keywords",
+    "bojo_tools.competitors",
+    "bojo_tools.economics",
+    "bojo_tools.campaigns",
+    "bojo_tools_ops",
+)
 
 #: Retired domain tools: name → one-line reason. The handler stays in its module and
 #: still answers a direct ``call``; it is simply never offered. Retirement is not
