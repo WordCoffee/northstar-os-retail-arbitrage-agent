@@ -93,6 +93,21 @@ def test_the_checker_ignores_a_component_name_inside_a_comment(tmp_path):
     assert "https://example.com/path" in cleaned, "a URL in a string must survive"
 
 
+def test_a_string_containing_two_slashes_does_not_hide_a_real_missing_component():
+    """The verifier's counter-example: `"a//b"` must not truncate the line.
+
+    A comment stripper that treats any `//` as a comment start silently loses everything after it —
+    including a genuinely unimported component. That is a false negative, which is worse than a
+    noisy checker.
+    """
+    sample = 'const p = "a//b";\nexport default function A() { return <Ghost /> }\n'
+    cleaned = _checker.strip_comments(sample)
+    assert "a//b" in cleaned
+    used = set(_checker.JSX_TAG.findall(cleaned)) - _checker.REACT_BUILTINS
+    assert "Ghost" in used
+    assert "Ghost" not in _checker.names_from(sample)
+
+
 def test_no_undefined_jsx_components():
     """The Product Designer shipped two crashes from unimported components."""
     checker = Path(__file__).resolve().parent.parent / "tools" / "check-jsx-imports.py"

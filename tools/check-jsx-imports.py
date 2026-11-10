@@ -48,18 +48,54 @@ REACT_BUILTINS = {"Fragment", "Suspense", "StrictMode", "Profiler", "Memo"}
 UNSAFE_LENGTH_MAP = re.compile(r"&&\s*[A-Za-z_$][A-Za-z0-9_$.]*\.length\s*\)")
 
 
-BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
-LINE_COMMENT = re.compile(r"(?<!:)//[^\n]*")
-
-
 def strip_comments(source: str) -> str:
-    """Remove comments before asking which components are used.
+    """Remove comments, and only comments.
 
-    A comment that explains *why* a page does not render a router outlet is not a reference to it.
-    The checker reported shell/WorkspacePanels.jsx for exactly that (2026-11-09), and a false
-    positive here blocks a correct build. The look-behind keeps `https://` inside string literals.
+    A comment that explains *why* a page does not render a router outlet is not a reference to it
+    (D-006), so comments have to go before the tag scan. But the first version of this used a regex
+    that treated any ``//`` as the start of a comment, and the verifier proved the cost: in
+    ``const p = "a//b"; ... <Ghost />`` the rest of the line vanished and a genuinely unimported
+    component went unreported. A checker that silently misses a crash is worse than one that
+    occasionally over-reports.
+
+    So this walks the text and tracks whether it is inside a string or template literal. It is not a
+    parser: it does not understand regex literals or nested templates, which is why it errs towards
+    keeping text (a false positive is visible; a false negative is not).
     """
-    return LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", source))
+    out = []
+    index = 0
+    length = len(source)
+    quote = ""
+    while index < length:
+        char = source[index]
+        if quote:
+            out.append(char)
+            if char == "\\" and index + 1 < length:
+                out.append(source[index + 1])
+                index += 2
+                continue
+            if char == quote:
+                quote = ""
+            index += 1
+            continue
+        if char in ("'", '"', "`"):
+            quote = char
+            out.append(char)
+            index += 1
+            continue
+        if char == "/" and index + 1 < length:
+            nxt = source[index + 1]
+            if nxt == "/":
+                newline = source.find("\n", index)
+                index = length if newline < 0 else newline
+                continue
+            if nxt == "*":
+                close = source.find("*/", index + 2)
+                index = length if close < 0 else close + 2
+                continue
+        out.append(char)
+        index += 1
+    return "".join(out)
 
 
 def destructured_aliases(source: str) -> set[str]:
