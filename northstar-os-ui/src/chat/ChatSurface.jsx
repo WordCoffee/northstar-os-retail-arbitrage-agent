@@ -28,6 +28,7 @@ import Icon from '../components/Icon.jsx'
 import WorkbenchPanel from './WorkbenchPanel.jsx'
 import { chatApi, chatVoice, streamTurn, assetFileUrl } from './api.js'
 import { useAssetSrc, saveAsset } from './assetUrl.js'
+import { buildTurnBody, readPublishedTab } from './turnBody.js'
 import { useWorkspaceOptional } from '../shell/WorkspaceTabs.jsx'
 
 const DEFAULT_SUGGESTIONS = [
@@ -613,7 +614,7 @@ export default function ChatSurface({
 
     try {
       const sid = await ensureSession()
-      await streamTurn(sid, {
+      await streamTurn(sid, buildTurnBody({
         content,
         think: thinking !== 'off',
         media,
@@ -622,7 +623,10 @@ export default function ChatSurface({
         style,
         attachments: attachments.map((a) => a.id),
         canvas: workspaceRef.current?.summary?.canvas || undefined,
-      }, ({ event, data }) => {
+        // ux-07b: the workspace tab the operator is looking at, read from the
+        // summary the shell publishes. Absent when no workspace is open.
+        tab: readPublishedTab(),
+      }), ({ event, data }) => {
         if (event === 'start') {
           setTurnId(data.turn_id || '')
           patchBot((m) => ({ ...m, model: data.model || m.model }))
