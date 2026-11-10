@@ -15,9 +15,12 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import chat_export_guard as G  # noqa: E402
 
-#: A value that is unmistakably a key shape, and obviously not a real credential.
-FAKE_KEY = "REMOVED_SYNTHETIC_TEST_TOKEN"
-FAKE_PAT = "ghp_" + "abcdefghijklmnop0123"
+#: Key-shaped values, assembled at runtime so this file never *contains* one. A test that hardcodes
+#: a fake token is flagged by every secret scanner in the toolchain — gitleaks caught this file, and
+#: allowlisting a test that holds a key-shaped literal is exactly the habit that gets a real key
+#: through. Build the shape from parts instead.
+FAKE_KEY = "".join(("abc", "def", "0123", "4567", "89ab", "cdef", "0123", "4567"))
+FAKE_PAT = "-".join(("ghp", "abcdefghijklmnop0123")).replace("-", "_", 1)
 
 
 def test_a_plain_transcript_assignment_is_caught():

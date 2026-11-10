@@ -179,18 +179,37 @@ def main_collect_baseline() -> Dict[str, Any]:
                        cwd=str(ROOT), capture_output=True, text=True)
 
 
-def run_gitleaks_staged(worktree: Path) -> List[Dict[str, Any]]:
+def run_gitleaks_staged(worktree: Path) -> Dict[str, Any]:
+    """Run the hook's scan and **fail closed**.
+
+    The first version returned `[]` when the report was missing, which is what happens when the
+    config does not parse. A broken `.gitleaks.toml` therefore looked exactly like a clean tree: the
+    allowlist descriptions I added on 2026-11-09 contained unescaped quotes, gitleaks refused the
+    file, and the gate reported "0 findings" for every slice. A gate that cannot tell "clean" from
+    "could not run" is worse than no gate.
+    """
     report = worktree / "gitleaks.json"
-    subprocess.run(["gitleaks", "git", "--pre-commit", "--staged", "--redact",
-                    "--report-format", "json", "--report-path", str(report),
-                    "-c", str(ROOT / ".gitleaks.toml")],
-                   cwd=str(worktree), capture_output=True, text=True, check=False)
+    result = subprocess.run(["gitleaks", "git", "--pre-commit", "--staged", "--redact",
+                             "--report-format", "json", "--report-path", str(report),
+                             "-c", str(ROOT / ".gitleaks.toml")],
+                            cwd=str(worktree), capture_output=True, text=True, check=False)
+    stderr = (result.stderr or "").strip()
+    config_error = any(token in stderr.lower() for token in
+                       ("toml", "config", "failed to load", "unable to"))
     if not report.exists():
-        return []
+        return {"ok": False, "findings": [],
+                "error": ("gitleaks produced no report"
+                          + (f": {stderr[-300:]}" if stderr else "")
+                          + (" (config parse error)" if config_error else ""))}
     data = json.loads(report.read_text(encoding="utf-8") or "[]")
-    return [{"file": item.get("File"), "line": item.get("StartLine"),
-             "rule": item.get("RuleID"), "description": item.get("Description")}
-            for item in data]
+    findings = [{"file": item.get("File"), "line": item.get("StartLine"),
+                 "rule": item.get("RuleID"), "description": item.get("Description")}
+                for item in data]
+    # exit 1 with findings is the normal "blocked" case; exit >=2 is the tool failing to run
+    ok = result.returncode in (0, 1)
+    return {"ok": ok, "findings": findings,
+            "returncode": result.returncode,
+            "error": "" if ok else stderr[-300:]}
 
 
 def collect_only(worktree: Path) -> Dict[str, Any]:
@@ -285,7 +304,11 @@ def main(argv: List[str] | None = None) -> int:
         for start in range(0, len(all_paths), 60):
             git("checkout", "staging", "--", *all_paths[start:start + 60], cwd=worktree)
         git("add", "-A", cwd=worktree)
-        result["gitleaks"] = run_gitleaks_staged(worktree)
+        scan = run_gitleaks_staged(worktree)
+        result["gitleaks"] = scan["findings"]
+        result["gitleaks_ok"] = scan["ok"]
+        if not scan["ok"]:
+            result["gitleaks_error"] = scan.get("error")
         result["collect"] = collect_only(worktree)
         result["collect_baseline"] = baseline
         # Collection names the modules and data files a slice needs but does not carry:
@@ -385,7 +408,7 @@ def main(argv: List[str] | None = None) -> int:
         new_errors = sorted(set(result["collect"]["errors"])
                             - set(result["collect_baseline"].get("errors") or []))
         result["collect_new_errors"] = new_errors
-        ok = (not result["gitleaks"] and not new_errors
+        ok = (result["gitleaks_ok"] and not result["gitleaks"] and not new_errors
               and not result["imports"]["failures"])
         result["verdict"] = "ELIGIBLE" if ok else "REFUSED"
         if ok and ns.promote:
