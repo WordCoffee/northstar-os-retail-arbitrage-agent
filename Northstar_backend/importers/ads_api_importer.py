@@ -18,6 +18,7 @@ import time
 import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlsplit
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +26,67 @@ logger = logging.getLogger(__name__)
 ADS_API_BASE = "https://advertising-api.amazon.com"
 ADS_AUTH_URL = "https://api.amazon.com/auth/o2/token"
 
+# Report downloads come from the Ads API host or from an AWS S3 bucket. A
+# provider-supplied URL on any other host is refused before the request
+# (T2-report-download-host): the report `url` field is data, not a permission
+# slip, and a host allowlist is what stops it becoming one.
+ADS_REPORT_HOSTS = ("advertising-api.amazon.com",)
+ADS_REPORT_HOST_SUFFIXES = (".amazonaws.com",)
+
 # Ad types
 SPONSORED_PRODUCTS = "sp"
 SPONSORED_BRANDS = "sb"
+
+
+class UnsafeReportURL(RuntimeError):
+    """Raised when a report download URL is not an expected AWS S3 / Ads host."""
+
+
+def is_allowed_report_url(url: Optional[str]) -> bool:
+    """True only for an https URL on the Ads API host or an AWS S3 host.
+
+    Refused: any other scheme (including http), an IP literal (metadata
+    services, loopback), a host that merely *contains* amazonaws.com
+    (`evil-amazonaws.com`, `s3.amazonaws.com.evil.example`), embedded
+    credentials, and a non-443 port.
+    """
+    if not isinstance(url, str) or not url.strip():
+        return False
+    try:
+        parsed = urlsplit(url.strip())
+        host = (parsed.hostname or "").lower().rstrip(".")
+        port = parsed.port
+    except ValueError:
+        return False
+    if parsed.scheme.lower() != "https":
+        return False
+    if parsed.username or parsed.password:
+        return False
+    if port not in (None, 443):
+        return False
+    if not host:
+        return False
+    if host in ADS_REPORT_HOSTS:
+        return True
+    return host.endswith(ADS_REPORT_HOST_SUFFIXES)
+
+
+def assert_allowed_report_url(url: Optional[str]) -> str:
+    """Return `url` if it is an expected AWS S3 / Ads report host, else refuse.
+
+    Called before the download request, so a hostile `url` in a report status
+    payload can never become a request to an arbitrary host.
+    """
+    if is_allowed_report_url(url):
+        return url  # type: ignore[return-value]
+    try:
+        host = (urlsplit(str(url or "").strip()).hostname or "").lower() or "unparseable URL"
+    except ValueError:
+        host = "unparseable URL"
+    raise UnsafeReportURL(
+        f"Report download refused: host {host!r} is not an expected AWS S3 "
+        "(.amazonaws.com) or Amazon Ads (advertising-api.amazon.com) endpoint.")
+
 
 # Endpoint templates
 ADS_ENDPOINTS = {
@@ -41,6 +100,15 @@ ADS_ENDPOINTS = {
     "report_status": "/v2/reports/{reportId}",
     "search_terms": "/v2/searchTerms",
 }
+
+
+class AmazonLinkageDisabled(RuntimeError):
+    """Amazon token refresh refused: account linkage is disabled by architecture.
+
+    Raised from `AdsAPIAuth._refresh` BEFORE any request, so a caller that
+    builds the auth class directly (not through `AdsAPIImporter`) is stopped
+    too.
+    """
 
 
 class AdsAPIAuth:
@@ -75,7 +143,18 @@ class AdsAPIAuth:
         return datetime.now(timezone.utc) >= self._token_expiry
 
     def _refresh(self):
-        """Refresh the OAuth access token."""
+        """Refresh the OAuth access token.
+
+        Refuses before any request unless the Amazon-linkage gate is on. The
+        gate used to live only on the importer's public methods, so any caller
+        holding a bare `AdsAPIAuth` could still reach the Amazon OAuth token
+        endpoint.
+        """
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
+
+        if not linkage_enabled():
+            raise AmazonLinkageDisabled(linkage_refusal_reason())
+
         try:
             import httpx
 
@@ -117,16 +196,29 @@ class AdsAPIImporter:
 
     def __init__(self, db=None):
         from data_layer import get_db, NorthstarDB
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
 
         if db is None:
             db = get_db()
         self.db = db
         self.nsdb = NorthstarDB()
         self.auth = AdsAPIAuth()
-        self._enabled = self.auth.is_configured
+        # Architecture (2026-10-11): file-only. Refused unless the linkage gate
+        # is explicitly enabled, regardless of credentials.
+        self._enabled = self.auth.is_configured and linkage_enabled()
         self._profile_id = None
-        if not self._enabled:
+        if not linkage_enabled():
+            self._refusal = linkage_refusal_reason()
+            logger.warning("Ads API importer refused: %s", self._refusal)
+        elif not self.auth.is_configured:
+            self._refusal = "Ads API credentials are not configured"
             logger.warning("Ads API not configured — import will return empty results")
+        else:
+            self._refusal = None
+
+    @property
+    def refusal_reason(self):
+        return self._refusal
 
     @property
     def is_configured(self) -> bool:
@@ -499,6 +591,10 @@ class AdsAPIImporter:
             logger.error("Report completed but no download URL found")
             result["errors"] = 1
             return result
+
+        # The url came from a provider payload: refuse any host that is not an
+        # expected AWS S3 / Ads endpoint BEFORE the request is made.
+        assert_allowed_report_url(download_url)
 
         try:
             import httpx

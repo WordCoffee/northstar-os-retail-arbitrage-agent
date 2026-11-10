@@ -32,6 +32,14 @@ SP_API_ENDPOINTS = {
 }
 
 
+class AmazonLinkageDisabled(RuntimeError):
+    """Amazon token refresh refused: account linkage is disabled by architecture.
+
+    Raised from `SPAPIAuth._refresh` BEFORE any request, so a caller that builds
+    the auth class directly (not through `SPAPIImporter`) is stopped too.
+    """
+
+
 class SPAPIAuth:
     """LWA token management with automatic refresh."""
 
@@ -58,7 +66,17 @@ class SPAPIAuth:
         return datetime.now(timezone.utc) >= self._token_expiry
 
     def _refresh(self):
-        """Refresh the LWA access token."""
+        """Refresh the LWA access token.
+
+        Refuses before any request unless the Amazon-linkage gate is on. The
+        gate used to live only on the importer's public methods, so any caller
+        holding a bare `SPAPIAuth` could still reach api.amazon.com.
+        """
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
+
+        if not linkage_enabled():
+            raise AmazonLinkageDisabled(linkage_refusal_reason())
+
         try:
             import httpx
             resp = httpx.post(
@@ -95,15 +113,28 @@ class SPAPIImporter:
 
     def __init__(self, db=None):
         from data_layer import get_db, NorthstarDB
+        from amazon_linkage_gate import linkage_enabled, linkage_refusal_reason
 
         if db is None:
             db = get_db()
         self.db = db
         self.nsdb = NorthstarDB()
         self.auth = SPAPIAuth()
-        self._enabled = self.auth.is_configured
-        if not self._enabled:
+        # Architecture (2026-10-11): file-only. The importer refuses unless the
+        # Amazon-linkage gate is explicitly enabled, regardless of credentials.
+        self._enabled = self.auth.is_configured and linkage_enabled()
+        if not linkage_enabled():
+            self._refusal = linkage_refusal_reason()
+            logger.warning("SP-API importer refused: %s", self._refusal)
+        elif not self.auth.is_configured:
+            self._refusal = "SP-API credentials are not configured"
             logger.warning("SP-API not configured — import will return empty results")
+        else:
+            self._refusal = None
+
+    @property
+    def refusal_reason(self):
+        return self._refusal
 
     @property
     def is_configured(self) -> bool:
