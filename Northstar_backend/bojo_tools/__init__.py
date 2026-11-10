@@ -17,6 +17,43 @@ are returned as ``ok=False``; programmer errors in the caller's arguments raise.
 
 from __future__ import annotations
 
-from .sourcing import TOOLS, catalog_pull, golden_goose_scan
+from .campaigns import TOOLS as _CAMPAIGN_TOOLS
+from .campaigns import plan_campaign
+from .competitors import TOOLS as _COMPETITOR_TOOLS
+from .competitors import watch_competitor
+from .economics import TOOLS as _ECONOMICS_TOOLS
+from .economics import margin_report
+from .keywords import TOOLS as _KEYWORD_TOOLS
+from .keywords import track_keywords
+from .publishing import TOOLS as _PUBLISHING_TOOLS
+from .publishing import build_dieline, compose_listing
+from .sourcing import TOOLS as _SOURCING_TOOLS
+from .sourcing import catalog_pull, golden_goose_scan
+from .sourcing_extra import TOOLS as _SOURCING_EXTRA_TOOLS
+from .sourcing_extra import scan_products
 
-__all__ = ["TOOLS", "catalog_pull", "golden_goose_scan"]
+#: Every handler in this package, keyed by tool name. The registry loads each
+#: module's own ``TOOLS`` dict, so this is only a convenience for callers that
+#: already hold the package.
+TOOLS = {
+    **_SOURCING_TOOLS,
+    **_SOURCING_EXTRA_TOOLS,
+    **_PUBLISHING_TOOLS,
+    **_KEYWORD_TOOLS,
+    **_COMPETITOR_TOOLS,
+    **_ECONOMICS_TOOLS,
+    **_CAMPAIGN_TOOLS,
+}
+
+__all__ = [
+    "TOOLS",
+    "catalog_pull",
+    "golden_goose_scan",
+    "scan_products",
+    "compose_listing",
+    "build_dieline",
+    "track_keywords",
+    "watch_competitor",
+    "margin_report",
+    "plan_campaign",
+]

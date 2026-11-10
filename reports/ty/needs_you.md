@@ -124,6 +124,17 @@ design.
 Queued by the Director (work order §2: hard lines go here as one exact action, and work
 continues without them).
 
+> # URGENT (2026-11-10): these keys are on a PUBLIC GitHub remote
+>
+> `origin` is `https://github.com/WordCoffee/northstar-os-retail-arbitrage-agent` and the repository
+> is **public**. Both exports are still in `origin/main`'s tree (`61a023ca`, last pushed 2026-09-20),
+> carried by commits `a299d6e9` and `21aed4e3`. Anyone can read all three credentials.
+>
+> Rotate them today. After you do, I remove the exports from the tree and allowlist their dead
+> fingerprints. Removing a file does **not** fix a public history — that needs a force-push of a
+> rewritten `main` or a GitHub support request, and it is your decision, not mine.
+> Full evidence: `reports/ty/secret_exposure_report.md`.
+
 ## DIR-1a. Rotate the Scavio API key (committed)
 
 `FirstNorthstarautomationchat.md` **line 1143** and **line 1291** contain a Scavio API key — the same

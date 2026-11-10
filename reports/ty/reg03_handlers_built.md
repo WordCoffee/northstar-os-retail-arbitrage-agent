@@ -1,0 +1,134 @@
+# Seven handler-less tools now have handlers: six domain modules, 63 new tests, none of them offered yet
+
+2026-11-10, branch `ty/reg-03-handlers` (from `c8bf28a4`), worktree
+`state/worktrees/reg03-handlers`. Ranks 11-17 of `reports/ty/reg03_tools.md` §3, built in the
+order a seller feels them.
+
+All seven are implemented as **wrappers over production code**. No fee model, no ACoS
+formula, no geometry and no coverage weighting was written a second time; each tool's
+docstring names the function it calls, and each test pins the real output (the campaign
+budget split, the canonical Decimal fee stack, the head/body coverage weighting) rather
+than a stub's.
+
+## 1. The seven, in rank order
+
+| rank | tool | domain module | status | tests | wraps (production, file:line) |
+|---|---|---|---|---|---|
+| 11 | `scan_products` | `bojo_tools/sourcing_extra.py` | **done** | 12 | `amazon_search.load_cached_candidates` `amazon_search.py:121`, `amazon_search.search_products` `amazon_search.py:330`, `amazon_search.cache_meta` `amazon_search.py:87` |
+| 12 | `compose_listing` | `bojo_tools/publishing.py` | **done** | 15 (shared) | `reasoning_tasks.listing_proposal` `reasoning_tasks.py:120` (the function behind `POST /api/v1/reasoning/listing-proposal`, `main.py:1695`) |
+| 13 | `build_dieline` | `bojo_tools/publishing.py` | **done** | (shared) | `design_studio_print.build_from_template` `design_studio_print.py:641`, `render_svg` `:473`, `render_pdf` `:518`; the builder already runs `dieline_geometry.require_valid` |
+| 14 | `track_keywords` | `bojo_tools/keywords.py` | **done** | 11 | `seo_score.score_listing` `seo_score.py:130`, `seo_score.keyword_clusters` `seo_score.py:56` |
+| 15 | `watch_competitor` | `bojo_tools/competitors.py` | **done** | 7 | `market_snapshot_store.get_snapshot` `market_snapshot_store.py:170`, `snapshot_freshness_status` `:413`, `is_fresh_success` `:428` |
+| 16 | `margin_report` | `bojo_tools/economics.py` | **done** | 9 | `foundation.economics.compute` `foundation/economics/engine.py:20` + `EconomicsOutput.to_dict` `foundation/economics/outputs.py:46` (the engine behind `POST /api/v1/economics/compute`, `foundation/api/router.py:1461`) |
+| 17 | `plan_campaign` | `bojo_tools/campaigns.py` | **done** | 9 | `ad_pilot.generate_campaign_structure` `ad_pilot.py:196`, `ad_pilot.compute_target_acos` `ad_pilot.py:327` |
+
+`publishing.py` carries both publishing tools; 15 tests cover the pair. Counts are collected
+tests: 12 + 15 + 11 + 7 + 9 + 9 = **63 new**, plus the 7 pre-existing
+`test_bojo_tools_registry.py` tests = 70 in the run below.
+
+`bojo_tools/_coerce.py` is the one addition nobody ordered: a 45-line numeric/JSON coercion
+helper (`num`, `whole`, `text`, `jsonable`) shared by the new modules, because three copies of
+`float()`-with-a-guard is how a calculator starts. It holds no business logic and is not
+registered as a domain module (no `TOOLS` dict, so the registry skips it).
+
+## 2. What each tool refuses, and why that is the point
+
+Business failures are `ok=False` with a reason; only argument-contract mistakes raise.
+
+- `scan_products`: cache first; a live request is forwarded only when the caller passes
+  `live=True`, and `amazon_search.search_products` still refuses unless the per-run live
+  envelope is armed — the refusal is reported (`the live envelope is not armed`), never
+  worked around. No Amazon host is touched by this module or its tests.
+- `compose_listing`: the real normalisation runs (200/500/2000 char limits, prohibited
+  phrases, copy audit) against a fake provider; a failed provider is `ok=False`, and
+  `applied: False` is in every payload.
+- `build_dieline`: an unknown template, an out-of-range parameter or an inverted safe margin
+  is `ok=False` with the engine's own message.
+- `track_keywords`: no profile, a profile with no keyword clusters, or a listing with no copy
+  is `ok=False` — score `None` is never dressed up as 0%.
+- `watch_competitor`: an ASIN with no stored observation is listed under `missing`; if
+  nothing at all is stored the tool fails rather than reporting five empty competitors.
+- `margin_report`: unknown keys are dropped **and named** in `ignored_inputs`; an input left
+  `null` stays UNKNOWN (the engine's rule). No selling price or no acquisition cost is
+  `ok=False`; a margin that cannot be completed is `ok=False` listing the missing inputs.
+- `plan_campaign`: `no_spend: true` in every payload; no keywords, a non-positive budget or
+  an ACoS outside 0-100% is `ok=False`.
+
+## 3. Registration, and the honest gap: they are callable but still not offered
+
+`bojo_tools_registry._MODULES` now loads all eight modules. The derived offer list went from
+4 to **11**:
+
+```
+['build_dieline', 'catalog_pull', 'compose_listing', 'golden_goose_scan', 'hub_status',
+ 'margin_report', 'offer_recommendation', 'plan_campaign', 'scan_products',
+ 'track_keywords', 'watch_competitor']
+```
+
+`ty/bojo_tool_list.json` embeds that list (`bojo_domain_registry`), so the array was
+regenerated by hand to the same sorted value; `python -m tools.registry.build --check` now
+prints `registry, tool list, workspaces and gaps agree`.
+
+**The seven are still not in Bojo's model-facing tool array.** `chat_tools.TOOLS` has no spec
+entry for any of them, and `chat_tools.tool_names()` derives from specs, not from
+`bojo_tools_registry`. So `bojo_tools_registry.has_handler(n)` is true for all seven and
+`bojo_tools_registry.call(n, ...)` works, but `"scan_products" not in chat_tools.tool_names()`
+still holds. Adding those spec entries is a separate, coupled change: `test_service_registry`
+requires a tool marked `declared` in `ty/service_registry.json` to be absent from
+`chat_tools.TOOLS`, so the spec entries and the `declared` → `wired` status flips (in
+`ty/service_registry.json`, `ty/bojo_tool_list.json` and `ty/scorecards.json`) have to land
+together, and that registry pair is another lane's write path. Recorded here as the next
+step, not silently half-done.
+
+## 4. Evidence
+
+```
+python -m pytest -q Northstar_backend/test_bojo_tools_*.py
+70 passed, 1 warning in 1.81s
+```
+
+(The glob was expanded by PowerShell because it does not glob native arguments:
+`python -m pytest -q (Get-ChildItem Northstar_backend/test_bojo_tools_*.py | % FullName)`.)
+
+Adjacent tests that the registry and tool-list change could have broken:
+
+```
+python -m pytest -q Northstar_backend/test_tool_offering.py \
+  Northstar_backend/test_service_registry.py Northstar_backend/test_bojo_sourcing_tools.py \
+  Northstar_backend/test_bojo_ops_tools.py
+71 passed in 1.45s
+
+python -m tools.registry.build --check
+registry, tool list, workspaces and gaps agree
+```
+
+The full suite was not run: another lane holds the main tree and this box serialises
+verification.
+
+## 5. Not done, and why
+
+- **No `chat_tools` spec entries / status flips** — see §3; the coupling with
+  `test_service_registry` and the registry lane's write paths.
+- **No persistence in `build_dieline`** — the live handler (`_t_create_dieline`) writes SVG/PDF
+  as studio assets against a DB session. A domain tool has no context object, so this returns
+  the markup/geometry and leaves storage to the caller. Persisting would mean inventing a
+  context the contract deliberately does not give the tool.
+- **No new rollback tag** — nothing here is destructive; the branch is unmerged and the change
+  is additive (two files edited, seven added).
+
+## 6. One unintended commit on this branch, kept separate on purpose
+
+The first commit attempt was blocked by the pre-commit gitleaks hook, which could not load its
+own config:
+
+```
+FTL unable to load gitleaks config, err: While parsing config: toml: expected newline but got U+0072 'r'
+pre-commit BLOCKED: gitleaks found potential secrets in staged changes.
+```
+
+`.gitleaks.toml:59` embedded a JSON snippet with its own double quotes inside a double-quoted
+TOML string, so the string closed early and the file did not parse — which blocked **every**
+commit in the repository, not just this one. `dc543ed9` fixes only that quoting (value
+unchanged, TOML literal string) as its own commit; `tomllib` now parses the file and all twelve
+allowlist blocks load, and the hook runs again (`no leaks found`). No rule was removed and
+nothing was allowlisted.
