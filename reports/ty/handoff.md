@@ -352,3 +352,7 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-10T02:55:09+00:00 launcher: director session ended (session 21920 gone; launcher restarting).
 
 - 2026-11-10T03:00:16+00:00 launcher: director session ended (session 23636 gone; launcher restarting).
+
+- 2026-11-10T03:05:20+00:00 launcher: director session ended (session 12768 gone; launcher restarting).
+
+- 2026-11-10T03:10:28+00:00 launcher: director session ended (session 2924 gone; launcher restarting).
