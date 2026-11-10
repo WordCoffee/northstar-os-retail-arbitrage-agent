@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parents[1]
-PROOF = ROOT / "state" / "seller" / "heldout_prompt_only_proof2.json"
+PROOF = ROOT / "state" / "seller" / "heldout_prompt_only_proof3.json"
 REPORT = ROOT / "reports" / "ty" / "prompt_only_checks.md"
 CHECKS = ("dimensions", "aspect", "background", "subject_fill", "alpha_matte", "file_size",
           "text_free", "reference_subject", "product_region")

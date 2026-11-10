@@ -726,6 +726,8 @@ class CompositeGenerator:
         """Cut the product out of the generated plate and re-compose it, then lay it out."""
         from io import BytesIO  # noqa: PLC0415
 
+        import numpy as np  # noqa: PLC0415
+
         from PIL import Image  # noqa: PLC0415
 
         import product_composite as composite  # noqa: PLC0415
@@ -774,10 +776,19 @@ class CompositeGenerator:
             cut_target.write_bytes(cut_png)
             record["cutout_path"] = str(cut_target)
             return placed["bytes"], record
-        except Exception as exc:  # noqa: BLE001 - a refused stage keeps the plate, and says so
+        except (ValueError, RuntimeError) as exc:
+            # A stage that cannot run keeps the plate and says so: an empty cutout is a business
+            # outcome, not a bug.
             record["cut_from_generation"] = {"method": "refused",
                                              "reason": f"{type(exc).__name__}: {exc}"}
             return scene["bytes"], record
+        except (NameError, AttributeError, TypeError, ImportError) as exc:
+            # A programmer error is not a refused stage. Swallowing these made a missing `import
+            # numpy` look like "the stage refused" for two scoring rounds, and the score silently
+            # fell back to the raw plate (2026-11-10).
+            raise GeneratorUnavailable(
+                f"prompt-only compose failed with a programmer error: "
+                f"{type(exc).__name__}: {exc}") from exc
 
     def record_for(self, brief_id: Any) -> Optional[Dict[str, Any]]:
         for row in reversed(self.records):

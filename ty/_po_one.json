@@ -1,0 +1,53 @@
+{
+  "schema": "northstar.seller_briefs.heldout_modes.v1",
+  "note": "Prompt-only subset for a re-score after the harness fix.",
+  "briefs": [
+    {
+      "id": "PO-001",
+      "category": "supplement_pouch",
+      "product_line": "lions-mane",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "product_in_frame": true,
+      "held_out": true,
+      "prompt": "Product photograph of a matte forest-green stand-up pouch with a white round label reading MOGRA ORGANICS and ORGANIC LION'S MANE MUSHROOM POWDER, gold mushroom line art, 6 oz (170 g) printed at the base, on a seamless white studio background, product centred, no props. Photorealistic, no text overlay.",
+      "constraints": {
+        "dimensions": {
+          "min_width": 2000,
+          "min_height": 2000,
+          "max_width": 10000,
+          "max_height": 10000
+        },
+        "aspect": {
+          "ratio": 1.0,
+          "tolerance": 0.02
+        },
+        "background": {
+          "value": 255,
+          "tolerance": 6,
+          "mode": "uniform"
+        },
+        "fill_pct": {
+          "min": 12,
+          "max": 100,
+          "distance": 20,
+          "note": "area share of the frame. Amazon main-image guidance asks for at least 85% linear fill and sets no upper bound; at 85% linear a square subject is ~72% area, so the former 55-70% area caps would reject a compliant main image. No cap is applied."
+        },
+        "text_rule": "no_text",
+        "matte": {
+          "mode": "white_matte",
+          "value": 255,
+          "tolerance": 6,
+          "max_border_std": 6
+        },
+        "file_size": {
+          "min_bytes": 20000,
+          "max_bytes": 12000000
+        }
+      },
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition."
+    }
+  ]
+}
