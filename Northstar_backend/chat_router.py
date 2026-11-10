@@ -809,6 +809,10 @@ class TurnIn(BaseModel):
     # U8: the open canvas, published by the workbench. Optional and additive —
     # a turn from anywhere else simply has no canvas to act on.
     canvas: Optional[Dict[str, Any]] = Field(default=None)
+    # ux-07c: the workspace tab the operator is looking at, published by the shell. Without
+    # this field pydantic's extra='ignore' accepted the client's `tab` and dropped it, so Bojo
+    # could not talk about the page in front of the user (reports/ty/ux07b_tab_context.md).
+    tab: Optional[Dict[str, Any]] = Field(default=None)
 
 
 # The switches are model-side instructions, never written into the transcript: the
@@ -1008,6 +1012,19 @@ def turn_directive(options: Optional[Dict[str, Any]],
     style = _STYLE_HINT.get(o.get("style"), "")
     if style:
         lines.append(style)
+    tab = o.get("tab") if isinstance(o.get("tab"), dict) else None
+    if tab:
+        # Structural facts only: which page, what it is called, and the small state digest the
+        # shell publishes. Enough to say "you are looking at X"; not a DOM dump.
+        title = str(tab.get("title") or "").strip()[:120]
+        route = str(tab.get("route") or "").strip()[:200]
+        state = tab.get("state") if isinstance(tab.get("state"), dict) else {}
+        bits = [f"Open workspace tab: {title or route or 'unnamed'}"]
+        if route:
+            bits.append(f"route {route}")
+        if state:
+            bits.append("state " + ", ".join(f"{key}={state[key]}" for key in sorted(state))[:240])
+        lines.append("; ".join(bits) + ".")
     atts = [str(a) for a in (o.get("attachments") or []) if a][:12]
     meta = [m for m in (attachment_meta or []) if isinstance(m, dict)]
     if meta:
@@ -1164,7 +1181,8 @@ def create_turn(sid: str, body: TurnIn, acct: str = Depends(studio_account)):
                            len(body.attachments), body.mode), model=body.model,
         options={"media": body.media, "thinking": body.thinking,
                  "style": body.style, "mode": body.mode,
-                 "attachments": body.attachments, "canvas": body.canvas})
+                 "attachments": body.attachments, "canvas": body.canvas,
+                 "tab": body.tab})
     return StreamingResponse(
         generator,
         media_type="text/event-stream",
