@@ -56,7 +56,7 @@ regexTarget = "line"
 regexes = ['''AIza[0-9A-Za-z_\-]{35}''']
 
 [[allowlists]]
-description = "FP: Northstar_backend/test_chrome_uia.py:93 constructs a fake UI Automation element ({"role": "TextControl", "name": "api_key"}) to stand in for an accessibility tree; the value is a field label in a test fixture, not a credential"
+description = 'FP: Northstar_backend/test_chrome_uia.py:93 constructs a fake UI Automation element ({"role": "TextControl", "name": "api_key"}) to stand in for an accessibility tree; the value is a field label in a test fixture, not a credential'
 paths = ['''Northstar_backend[\\/]test_chrome_uia\.py$''']
 
 [[allowlists]]
