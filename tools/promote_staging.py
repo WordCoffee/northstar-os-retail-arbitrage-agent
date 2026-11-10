@@ -1,0 +1,1414 @@
+"""Item 5 — move `main` only when three gates pass, and name the gate that refuses.
+
+`main` is the branch customers are served from, so a promotion cannot be "the tests looked
+green once". Three gates are evaluated in this order, each with the evidence it read:
+
+1. **suite** — a full serialised run is green *and* its test-id list still matches the
+   baseline by name. A run file older than the newest commit on the source branch is
+   stale: it cannot speak for code that did not exist when it ran.
+2. **verifier** — an independent session reproduced the scorecard deltas (an `agree`
+   verdict exists) and no open FAILED unit is inside the bundle.
+3. **bundle** — nothing visual or creative is being auto-promoted. A commit under
+   `northstar-os-ui/src/` is visual unless it is a test, a render, research, an export or
+   a digest composite. Visual work needs a human to look at it, so it is refused by name
+   and a review pack is written instead.
+
+    python tools/promote_staging.py --check               # report eligibility, change nothing
+    python tools/promote_staging.py --check --review       # ...and write the visual review pack
+    python tools/promote_staging.py --promote              # merge source -> target when eligible
+    python tools/promote_staging.py --revert promote/...   # undo a promotion merge
+
+    python tools/promote_staging.py --list-slices          # one line per slice, code vs visual
+    python tools/promote_staging.py --slice ui-pages --check    # gates for one slice alone
+    python tools/promote_staging.py --slice ui-pages --promote  # promote that slice alone
+
+A **slice** is one coherent unit of the bundle: one service's UI paths, one backend module,
+one tool directory. `--list-slices` classifies every path in `source`-not-`target` by slice,
+so a bundle of 10,000 paths becomes a table of units. A slice is *visual* when any of its
+paths changes how the product renders (the same creative rule the bundle gate uses, plus
+`renders/`): those are refused and written up as per-service review packs with 5 to 10
+images. Everything else is *code* and may be promoted on its own once the candidate suite
+is green.
+
+Refusals exit 2 and print the gate's key (`suite_stale`, `verifier_failed_unit_in_bundle`,
+`bundle_visual`, `slice_visual`, ...). A refusal never moves a branch and never deletes a tag.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Sequence, Tuple
+
+ROOT = Path(__file__).resolve().parents[1]
+
+DEFAULT_BASELINE_IDLIST = Path("reports/ty/_idlist_20261107.txt")
+SUITE_DIR = Path("reports/ty")
+VERDICT_FILE = Path("reports/ty/d15_verification.md")
+FINDINGS_FILE = Path("reports/ty/verifier_findings.json")
+PROMOTION_RECORD = Path("reports/ty/item5_promotion.md")
+SCORECARDS = Path("ty/scorecards.json")
+
+# A path under northstar-os-ui/src/ is creative unless it is one of these.
+CREATIVE_EXEMPT_PREFIXES = (
+    "northstar-os-ui/src/renders/",
+    "northstar-os-ui/src/research/",
+    "northstar-os-ui/src/exports/",
+    "reports/ty/digest_composites_",
+)
+TEST_PATTERN = re.compile(
+    r"(^|/)(test_[^/]*\.py|.*_test\.py|.*\.test\.(js|jsx|ts|tsx)|.*\.spec\.(js|jsx|ts|tsx)|__tests__/)"
+)
+
+SUMMARY_FIELD = re.compile(r"(\d+)\s+(passed|failed|errors?|skipped|xfailed|xpassed|warnings?)\b")
+STAMP = re.compile(r"(\d{8})")
+
+
+class Refusal(Exception):
+    """A named refusal: the gate that failed and the evidence that failed it."""
+
+    def __init__(self, key: str, message: str) -> None:
+        super().__init__(f"{key}: {message}")
+        self.key = key
+        self.message = message
+
+
+@dataclass
+class Gate:
+    key: str
+    title: str
+    ok: bool = False
+    blockers: List[str] = field(default_factory=list)
+    evidence: List[str] = field(default_factory=list)
+    facts: Dict[str, Any] = field(default_factory=dict)
+
+    def fail(self, key: str, message: str) -> "Gate":
+        self.ok = False
+        self.blockers.append(f"{key}: {message}")
+        return self
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "gate": self.key,
+            "title": self.title,
+            "ok": self.ok,
+            "blockers": self.blockers,
+            "evidence": self.evidence,
+            "facts": self.facts,
+        }
+
+
+@dataclass
+class Commit:
+    sha: str
+    date: str
+    subject: str
+    body: str
+
+
+class Repo:
+    """git, rooted at one worktree, with the arguments this tool needs."""
+
+    def __init__(self, root: Path) -> None:
+        self.root = Path(root)
+
+    def git(self, *args: str, check: bool = True) -> str:
+        proc = subprocess.run(
+            ["git", "--no-pager", *args],
+            cwd=str(self.root),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        if check and proc.returncode != 0:
+            raise RuntimeError(f"git {' '.join(args)} failed: {proc.stderr.strip() or proc.stdout.strip()}")
+        return proc.stdout
+
+    def ok(self, *args: str) -> bool:
+        return subprocess.run(
+            ["git", "--no-pager", *args],
+            cwd=str(self.root),
+            capture_output=True,
+            text=True,
+        ).returncode == 0
+
+    def head_ref(self) -> str:
+        return self.git("symbolic-ref", "--short", "-q", "HEAD", check=False).strip()
+
+    def rev(self, ref: str) -> str:
+        return self.git("rev-parse", ref).strip()
+
+    def commit_time(self, ref: str) -> int:
+        return int(self.git("log", "-1", "--format=%ct", ref).strip() or 0)
+
+    def commits_between(self, target: str, source: str) -> List[Commit]:
+        raw = self.git("log", "--format=%x01%H%x1f%ad%x1f%s%x1f%b", "--date=short",
+                       f"{target}..{source}")
+        out: List[Commit] = []
+        for chunk in raw.split("\x01"):
+            chunk = chunk.strip("\n")
+            if not chunk:
+                continue
+            parts = chunk.split("\x1f")
+            if len(parts) < 3:
+                continue
+            out.append(Commit(parts[0].strip(), parts[1].strip(), parts[2].strip(),
+                              parts[3].strip() if len(parts) > 3 else ""))
+        return out
+
+    def changed_paths(self, target: str, source: str) -> List[str]:
+        raw = self.git("diff", "--name-only", f"{target}..{source}")
+        return [line.strip() for line in raw.splitlines() if line.strip()]
+
+    def show(self, ref: str, path: str) -> Optional[str]:
+        proc = subprocess.run(
+            ["git", "--no-pager", "show", f"{ref}:{path}"],
+            cwd=str(self.root),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        return proc.stdout if proc.returncode == 0 else None
+
+
+# --------------------------------------------------------------------------- gate 1
+
+
+def parse_summary(text: str) -> Optional[Dict[str, int]]:
+    """The last pytest summary line, as counts. None when there is no summary."""
+    counts: Dict[str, int] = {}
+    for line in reversed(text.splitlines()):
+        if " passed" not in line and " failed" not in line and " error" not in line:
+            continue
+        found = SUMMARY_FIELD.findall(line)
+        if not found:
+            continue
+        for number, word in found:
+            word = "error" if word.startswith("error") else word.rstrip("s") if word in ("warnings", "errors") else word
+            counts[word] = counts.get(word, 0) + int(number)
+        sub = re.search(r"(\d+)\s+subtests?\b", line)
+        if sub:
+            counts["subtests"] = int(sub.group(1))
+        if "passed" in counts:
+            return counts
+    return None
+
+
+def read_text(path: Path) -> str:
+    """Read a report as text. The suite logs were written by PowerShell as UTF-16LE."""
+    raw = path.read_bytes()
+    if raw[:200].count(b"\x00") > 20:
+        try:
+            text = raw.decode("utf-16")
+        except UnicodeDecodeError:
+            text = raw.decode("utf-16-le", errors="replace")
+    else:
+        text = raw.decode("utf-8", errors="replace")
+    return text.replace("\x00", "")
+
+
+def newest_suite_report(root: Path, explicit: Optional[Path] = None) -> Optional[Path]:
+    """The newest `_fullsuite_*.txt`, by mtime. A `_final` run wins a tie only.
+
+    Preferring a `_final` report regardless of age would let an old green run outrank
+    the fresh run of the candidate being promoted, which is exactly the thing gate 1
+    exists to prevent.
+    """
+    if explicit is not None:
+        return explicit if explicit.exists() else None
+    folder = root / SUITE_DIR
+    candidates = [p for p in folder.glob("_fullsuite_*.txt")
+                  if not p.name.startswith("_fullsuite_exit_")]
+    if not candidates:
+        return None
+
+    def rank(path: Path) -> Tuple[int, int]:
+        return (int(path.stat().st_mtime), 1 if "_fullsuite_final_" in path.name else 0)
+
+    return max(candidates, key=rank)
+
+
+def idlist_candidates(root: Path, report: Path, baseline: Path) -> List[Path]:
+    """Id lists that could belong to this run, by the date stamp in the report name."""
+    folder = root / SUITE_DIR
+    match = STAMP.search(report.name)
+    if match:
+        named = [folder / f"_idlist_full_{match.group(1)}.txt",
+                 folder / f"_idlist_{match.group(1)}.txt"]
+        found = [p for p in named if p.exists()]
+        if found:
+            return found
+    others = [p for p in folder.glob("_idlist_*.txt")
+              if "gapbatch" not in p.stem and p.resolve() != baseline.resolve()]
+    return sorted(others, key=lambda p: p.stat().st_mtime, reverse=True)[:1]
+
+
+def load_ids(path: Path) -> List[str]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(data, dict):
+        ids = data.get("ids") or data.get("results") or []
+        return list(ids.keys()) if isinstance(ids, dict) else [str(x) for x in ids]
+    return [str(x) for x in data]
+
+
+def gate_suite(repo: Repo, source: str, explicit: Optional[Path],
+               baseline: Path, candidate: Optional[str] = None) -> Gate:
+    gate = Gate("suite", "full suite green, compared by test name")
+    root = repo.root
+    if candidate:
+        gate.facts["candidate"] = candidate
+        if not repo.ok("rev-parse", "--verify", f"refs/tags/{candidate}"):
+            gate.fail("candidate_missing", f"tag {candidate} does not exist; the suite cannot name what it tested")
+        else:
+            tag_sha = repo.rev(f"{candidate}^{{commit}}")
+            gate.evidence.append(f"candidate {candidate} = {tag_sha[:12]}")
+            if tag_sha != repo.rev(source):
+                gate.fail("candidate_mismatch",
+                          f"{candidate} names {tag_sha[:12]} but {source} is {repo.rev(source)[:12]}")
+    report = newest_suite_report(root, explicit)
+    if report is None:
+        return gate.fail("suite_missing", f"no run report under {SUITE_DIR}/_fullsuite_*.txt")
+
+    text = read_text(report)
+    summary = parse_summary(text)
+    gate.facts["report"] = str(report.relative_to(root)) if report.is_relative_to(root) else str(report)
+    if summary is None:
+        return gate.fail("suite_unparsable", f"{report.name} has no pytest summary line")
+    gate.facts["summary"] = summary
+    gate.evidence.append(
+        "summary: " + ", ".join(f"{v} {k}" for k, v in summary.items())
+    )
+
+    red = summary.get("failed", 0) + summary.get("error", 0)
+    if red or summary.get("passed", 0) == 0:
+        gate.fail("suite_red", f"{report.name} is not green "
+                  f"({summary.get('failed', 0)} failed, {summary.get('error', 0)} errors)")
+
+    run_mtime = int(report.stat().st_mtime)
+    newest = repo.commit_time(source)
+    gate.facts["run_mtime"] = run_mtime
+    gate.facts["newest_commit"] = newest
+    gate.facts["newest_commit_iso"] = datetime.fromtimestamp(newest).isoformat(timespec="seconds") if newest else ""
+    gate.evidence.append(
+        f"run written {datetime.fromtimestamp(run_mtime).isoformat(timespec='seconds')}, "
+        f"newest {source} commit {gate.facts['newest_commit_iso']}"
+    )
+    if run_mtime < newest:
+        lag = newest - run_mtime
+        gate.fail("suite_stale", f"{report.name} is {lag}s older than the newest commit on {source}; "
+                  "the run cannot speak for code it predates")
+
+    candidates = idlist_candidates(root, report, baseline)
+    if not candidates or not baseline.exists():
+        gate.fail("suite_idlist_missing",
+                  f"cannot compare ids: run idlist={candidates}, baseline={baseline}")
+        return gate
+    outcomes = sum(summary.get(k, 0) for k in ("passed", "skipped", "xfailed", "xpassed"))
+    ids_path = candidates[0]
+    for candidate in candidates:
+        if len(load_ids(candidate)) == outcomes:
+            ids_path = candidate
+            break
+    run_ids = load_ids(ids_path)
+    base_ids = load_ids(baseline)
+    added = [i for i in run_ids if i not in set(base_ids)]
+    removed = [i for i in base_ids if i not in set(run_ids)]
+    gate.facts.update({
+        "idlist": str(ids_path.relative_to(root)) if ids_path.is_relative_to(root) else str(ids_path),
+        "run_ids": len(run_ids),
+        "baseline_ids": len(base_ids),
+        "added": added,
+        "removed": removed,
+    })
+    gate.evidence.append(
+        f"ids: {len(run_ids)} in {ids_path.name} vs {len(base_ids)} in {baseline.name} "
+        f"-> {len(added)} added, {len(removed)} removed"
+    )
+    gate.evidence.append(
+        f"run outcomes {outcomes} vs {len(run_ids)} ids: "
+        + ("reconcile" if outcomes == len(run_ids) else "do not reconcile (counted, not blocking)")
+    )
+    if added:
+        gate.evidence.append("added: " + ", ".join(sorted(added)[:6])
+                             + (f" (+{len(added) - 6} more)" if len(added) > 6 else ""))
+    if removed:
+        gate.evidence.append("removed: " + ", ".join(sorted(removed)[:10]))
+        gate.fail("suite_coverage_regression",
+                  f"{len(removed)} test id(s) present on the baseline are gone from the run: "
+                  + ", ".join(sorted(removed)[:5]))
+
+    if not gate.blockers:
+        gate.ok = True
+    return gate
+
+
+# --------------------------------------------------------------------------- gate 2
+
+
+def parse_verdicts(text: str) -> List[Tuple[str, str, str]]:
+    """(unit, item, verdict) from the D15 verdict table."""
+    rows: List[Tuple[str, str, str]] = []
+    row = re.compile(r"^\|\s*\d+\s*\|\s*(.+?)\s*\|\s*\*\*(agree|FAILED|BLOCKED)\*\*\s*\|", re.M)
+    for item, verdict in row.findall(text):
+        token = re.match(r"([A-Za-z]{1,4}\d+[A-Za-z0-9\-]*)", item)
+        unit = token.group(1) if token else item
+        rows.append((unit, item, verdict))
+    return rows
+
+
+def gate_verifier(repo: Repo, source: str, target: str, commits: Sequence[Commit],
+                  note: Optional[str]) -> Gate:
+    gate = Gate("verifier", "independent verifier reproduced the scorecard deltas")
+    root = repo.root
+    verdict_file = root / VERDICT_FILE
+    findings_file = root / FINDINGS_FILE
+
+    if not verdict_file.exists():
+        return gate.fail("verifier_missing", f"{VERDICT_FILE} does not exist; nobody reproduced the deltas")
+    verdicts = parse_verdicts(read_text(verdict_file))
+    if not verdicts:
+        return gate.fail("verifier_unparsable", f"{VERDICT_FILE} has no verdict table")
+    agree = [u for u, _, v in verdicts if v == "agree"]
+    failed = [u for u, _, v in verdicts if v == "FAILED"]
+    blocked = [u for u, _, v in verdicts if v == "BLOCKED"]
+    gate.facts.update({"agree": agree, "failed": failed, "blocked": blocked,
+                       "verifier": note or ""})
+    gate.evidence.append(f"{VERDICT_FILE.name}: {len(agree)} agree, {len(failed)} FAILED, "
+                         f"{len(blocked)} BLOCKED")
+    gate.evidence.append("reproduced by: " + (note if note else "not recorded (--verifier not given)"))
+    if not agree:
+        gate.fail("verifier_no_agree", f"{VERDICT_FILE.name} records no agree verdict")
+
+    open_failed: List[Tuple[str, str]] = []
+    if findings_file.exists():
+        try:
+            findings = json.loads(read_text(findings_file))
+        except json.JSONDecodeError as exc:
+            return gate.fail("verifier_unparsable", f"{FINDINGS_FILE.name}: {exc}")
+        for item in findings.get("failed", []):
+            open_failed.append((str(item.get("unit", "?")), str(item.get("item", ""))))
+        gate.evidence.append(
+            f"{FINDINGS_FILE.name}: {len(open_failed)} open FAILED, "
+            f"{len(findings.get('blocked', []))} blocked"
+        )
+    else:
+        gate.fail("verifier_findings_missing", f"{FINDINGS_FILE} does not exist; open failures unknown")
+    for unit, _ in open_failed:
+        if unit not in failed:
+            failed.append(unit)
+
+    haystack = [(c.sha, c.subject + "\n" + c.body) for c in commits]
+    in_bundle: List[Tuple[str, List[str]]] = []
+    for unit in sorted(set(failed)):
+        pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(unit)}(?![A-Za-z0-9])", re.I)
+        hits = [sha for sha, text in haystack if pattern.search(text)]
+        if hits:
+            in_bundle.append((unit, hits[:5]))
+
+    if in_bundle:
+        for unit, hits in in_bundle:
+            gate.fail("verifier_failed_unit_in_bundle",
+                      f"FAILED unit {unit} is in the bundle "
+                      f"(commits: {', '.join(h[:8] for h in hits)})")
+        gate.evidence.append("failed units in bundle: "
+                             + ", ".join(f"{u} ({len(h)} commit(s))" for u, h in in_bundle))
+    else:
+        gate.evidence.append("no open FAILED unit is referenced by a bundle commit")
+
+    for unit in sorted(set(blocked)):
+        pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(unit)}(?![A-Za-z0-9])", re.I)
+        hits = [sha for sha, text in haystack if pattern.search(text)]
+        if hits:
+            gate.evidence.append(
+                f"warning: BLOCKED unit {unit} is in the bundle ({len(hits)} commit(s), "
+                f"e.g. {', '.join(h[:8] for h in hits[:3])}) — blocked, not failed, so it is "
+                "reported not refused"
+            )
+
+    gate.ok = not gate.blockers
+    return gate
+
+
+# --------------------------------------------------------------------------- gate 3
+
+
+def is_creative(path: str) -> bool:
+    if not path.startswith("northstar-os-ui/src/"):
+        return False
+    if path.startswith(CREATIVE_EXEMPT_PREFIXES):
+        return False
+    if TEST_PATTERN.search(path):
+        return False
+    return True
+
+
+def gate_bundle(repo: Repo, source: str, target: str, commits: Sequence[Commit],
+                approval: Optional[str]) -> Gate:
+    gate = Gate("bundle", "no visual or creative change in the bundle")
+    paths = repo.changed_paths(target, source)
+    creative = [p for p in paths if is_creative(p)]
+    gate.facts.update({"commits": len(commits), "paths": len(paths),
+                       "creative_paths": len(creative),
+                       "creative_sample": creative[:60],
+                       "approval": approval or ""})
+    gate.evidence.append(f"bundle {target}..{source}: {len(commits)} commit(s), "
+                         f"{len(paths)} changed path(s)")
+    gate.evidence.append(f"visual/creative paths: {len(creative)}")
+    if creative:
+        gate.evidence.extend("  " + p for p in creative[:10])
+        if len(creative) > 10:
+            gate.evidence.append(f"  ... and {len(creative) - 10} more")
+        if approval:
+            gate.evidence.append(f"operator visual approval recorded: {approval}")
+            gate.ok = True
+            gate.facts["approved"] = True
+            return gate
+        gate.fail("bundle_visual",
+                  f"{len(creative)} visual/creative path(s) under northstar-os-ui/src/ "
+                  "(e.g. " + ", ".join(creative[:3]) + ") — needs human eyes, not auto-promotion")
+        return gate
+    gate.ok = True
+    return gate
+
+
+# --------------------------------------------------------------------------- promotion
+
+
+def evaluate(repo: Repo, source: str, target: str, *, suite: Optional[Path],
+             baseline: Path, verifier: Optional[str], approval: Optional[str]) -> Dict[str, Any]:
+    commits = repo.commits_between(target, source)
+    gates = [
+        gate_suite(repo, source, suite, baseline),
+        gate_verifier(repo, source, target, commits, verifier),
+        gate_bundle(repo, source, target, commits, approval),
+    ]
+    failed = [g.key for g in gates if not g.ok]
+    return {
+        "source": source,
+        "target": target,
+        "source_sha": repo.rev(source),
+        "target_sha": repo.rev(target),
+        "commits": commits,
+        "gates": gates,
+        "eligible": not failed,
+        "refused_by": failed,
+    }
+
+
+def as_payload(result: Dict[str, Any]) -> Dict[str, Any]:
+    payload = {
+        "source": result["source"],
+        "target": result["target"],
+        "slice": result.get("slice", ""),
+        "slice_paths": result.get("slice_paths", []),
+        "candidate": result.get("candidate", ""),
+        "source_sha": result["source_sha"],
+        "target_sha": result["target_sha"],
+        "eligible": result["eligible"],
+        "refused_by": result["refused_by"],
+        "gates": [gate.as_dict() for gate in result["gates"]],
+        "review": result.get("review", ""),
+    }
+    return payload
+
+
+def render_check(result: Dict[str, Any]) -> str:
+    lines = ["=== item 5 -- staging to main eligibility ==="]
+    if result.get("slice"):
+        lines.append(f"slice: {result['slice']} ({len(result.get('slice_paths', []))} path(s))")
+    lines += [
+             f"source {result['source']} @ {result['source_sha'][:8]}  "
+             f"target {result['target']} @ {result['target_sha'][:8]}",
+             f"bundle: {len(result['commits'])} commit(s)", ""]
+    for index, gate in enumerate(result["gates"], 1):
+        status = "PASS" if gate.ok else "FAIL"
+        lines.append(f"gate {index}/3  {gate.key:9s} {status}  {gate.title}")
+        for line in gate.evidence:
+            lines.append(f"   - {line}")
+        for blocker in gate.blockers:
+            lines.append(f"   x {blocker}")
+        lines.append("")
+    if result["eligible"]:
+        lines.append("VERDICT: ELIGIBLE -- all three gates pass")
+    else:
+        lines.append("VERDICT: REFUSED -- " + ", ".join(f"gate '{k}'" for k in result["refused_by"]))
+    return "\n".join(lines)
+
+
+def _safe_date() -> str:
+    return datetime.now().strftime("%Y%m%d")
+
+
+def write_promotion_record(repo: Repo, result: Dict[str, Any], tag: str,
+                           rollback_tag: Optional[str], new_sha: str) -> Path:
+    path = repo.root / PROMOTION_RECORD
+    path.parent.mkdir(parents=True, exist_ok=True)
+    body = [f"# Item 5 promotion — {_safe_date()}", "",
+            f"- source `{result['source']}` @ `{result['source_sha']}`",
+            f"- target `{result['target']}` @ `{result['target_sha']}` before, `{new_sha}` after",
+            f"- promotion tag `{tag}`",
+            f"- rollback tag `{rollback_tag}`" if rollback_tag else "- rollback tag: none",
+            f"- bundle: {len(result['commits'])} commit(s)", "",
+            "## Gates", ""]
+    for index, gate in enumerate(result["gates"], 1):
+        body.append(f"### {index}. {gate.key} — {'PASS' if gate.ok else 'FAIL'}")
+        body.append("")
+        body.append(gate.title)
+        body.append("")
+        for line in gate.evidence:
+            body.append(f"- {line}")
+        for blocker in gate.blockers:
+            body.append(f"- **{blocker}**")
+        body.append("")
+    path.write_text("\n".join(body) + "\n", encoding="utf-8")
+    return path
+
+
+def _scorecards(repo: Repo, ref: str) -> Optional[Dict[str, Any]]:
+    raw = repo.show(ref, SCORECARDS.as_posix())
+    if raw is None:
+        return None
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+
+
+IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp")
+
+
+def _image_paths(paths: Sequence[str]) -> List[str]:
+    return [p for p in paths if p.lower().endswith(IMAGE_SUFFIXES)]
+
+
+def _last_touch(repo: Repo, target: str, source: str) -> Dict[str, int]:
+    """path -> the newest commit time that touched it inside the bundle."""
+    raw = repo.git("log", "--format=%x01%ct", "--name-only", f"{target}..{source}")
+    touch: Dict[str, int] = {}
+    stamp = 0
+    for line in raw.splitlines():
+        if line.startswith("\x01"):
+            try:
+                stamp = int(line[1:].strip())
+            except ValueError:
+                stamp = 0
+            continue
+        path = line.strip()
+        if path:
+            touch[path] = max(touch.get(path, 0), stamp)
+    return touch
+
+
+def write_review_pack(repo: Repo, result: Dict[str, Any], out: Optional[Path] = None) -> Path:
+    root = repo.root
+    source, target = result["source"], result["target"]
+    date = _safe_date()
+    path = out or (root / "reports" / "ty" / f"staging_review_{date}.md")
+    paths = repo.changed_paths(target, source)
+    images = _image_paths(paths)
+    touch = _last_touch(repo, target, source)
+
+    def rank(path: str) -> int:
+        if "digest_composites_" in path:
+            return 0
+        if re.search(r"dogfood|audit|review", path, re.I):
+            return 1
+        if "screenshots/" in path:
+            return 2
+        return 3
+
+    # Test fixtures are not evidence of what the product looks like to a person.
+    reviewable = [p for p in images if "/fixtures/" not in p and "\\fixtures\\" not in p]
+    ordered = sorted(reviewable, key=lambda p: (rank(p), -touch.get(p, 0)))
+    chosen: List[str] = []
+    for item in ordered:
+        if item not in chosen:
+            chosen.append(item)
+        if len(chosen) >= 24:
+            break
+
+    before_scores = _scorecards(repo, target)
+    after_scores = _scorecards(repo, source)
+
+    lines = [f"# Staging review — {date}", "",
+             f"`{source}` is {len(result['commits'])} commit(s) ahead of `{target}` and the bundle "
+             "contains visual or creative work, so it is refused by name and shown here instead.",
+             "",
+             f"- source `{source}` @ `{result['source_sha']}`",
+             f"- target `{target}` @ `{result['target_sha']}`",
+             "", "## Gates", "", "| gate | result | evidence |", "|---|---|---|"]
+    for gate in result["gates"]:
+        evidence = " ".join(gate.evidence[:2]).replace("|", "/")
+        lines.append(f"| {gate.key} | {'PASS' if gate.ok else 'FAIL'} | {evidence} |")
+    if result["refused_by"]:
+        lines += ["", "Refused by: " + ", ".join(f"`{k}`" for k in result["refused_by"])]
+
+    lines += ["", "## Before / after", "",
+              f"{len(images)} image(s) changed in the bundle. Composited digests come first, then "
+              f"dogfood/audit shots, then screenshots, newest first ({len(chosen)} of {len(images)}):", "",
+              "| after (this bundle) | before (on `main`) |", "|---|---|"]
+    if chosen:
+        for item in chosen:
+            after_link = f"![after](../../{item})"
+            before_link = (f"![before](../../{item})" if repo.ok("cat-file", "-e", f"{target}:{item}")
+                           else "_absent on main_")
+            lines.append(f"| `{item}`<br>{after_link} | {before_link} |")
+    else:
+        lines.append("| _no image changed_ | _nothing to compare_ |")
+
+    lines += ["", "## Scorecard deltas", ""]
+    if before_scores is None and after_scores is None:
+        lines.append("`ty/scorecards.json` does not exist on either side.")
+    elif before_scores is None:
+        lines += [f"`ty/scorecards.json` is **absent on `{target}`** — every score here is new.", "",
+                  f"after: {len(after_scores.get('services', []))} services, "
+                  f"at_bar **{len(after_scores.get('at_bar', []))}** "
+                  f"({', '.join(after_scores.get('at_bar', [])) or 'none'}), "
+                  f"test_ids {after_scores.get('test_ids')}", "",
+                  "| service | score | at bar |", "|---|---|---|"]
+        for service in sorted(after_scores.get("services", []),
+                              key=lambda s: s.get("score", 0.0), reverse=True):
+            lines.append(f"| {service.get('id')} | {service.get('score', 0.0):g} | "
+                         f"{'yes' if service.get('meets_bar') else 'no'} |")
+    else:
+        before_map = {s["id"]: s for s in before_scores.get("services", [])}
+        after_map = {s["id"]: s for s in after_scores.get("services", [])}
+        lines += ["| service | before | after | delta | at bar |", "|---|---|---|---|---|"]
+        for sid in sorted(set(before_map) | set(after_map)):
+            b, a = before_map.get(sid), after_map.get(sid)
+            b_score = b.get("score", 0.0) if b else 0.0
+            a_score = a.get("score", 0.0) if a else 0.0
+            delta = a_score - b_score
+            bar = "yes" if (a and a.get("meets_bar")) else "no"
+            lines.append(f"| {sid} | {b_score:g} | {a_score:g} | {delta:+g} | {bar} |")
+        lines += ["", f"at_bar before **{len(before_scores.get('at_bar', []))}** -> "
+                      f"after **{len(after_scores.get('at_bar', []))}**; "
+                      f"test_ids {before_scores.get('test_ids')} -> {after_scores.get('test_ids')}"]
+
+    lines += ["", f"## Merged job list ({len(result['commits'])} commits)", "",
+              "| sha | date | job |", "|---|---|---|"]
+    for commit in result["commits"]:
+        subject = commit.subject.replace("|", "/")
+        lines.append(f"| `{commit.sha[:8]}` | {commit.date} | {subject} |")
+
+    tag = f"promote/{date}-{result['source_sha'][:8]}"
+    lines += ["", "## One command", ""]
+    if repo.ok("rev-parse", "--verify", f"refs/tags/{tag}"):
+        lines += ["Promotion tag exists; to undo it:", "", "```",
+                  f"python tools/promote_staging.py --revert {tag}", "```"]
+    else:
+        lines += ["Look at the images above, then promote with the recorded approval:",
+                  "", "```",
+                  f'python tools/promote_staging.py --promote --verifier "<session>" '
+                  f'--approve-visual "<what you looked at and accepted>"', "```"]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+# --------------------------------------------------------------------------- slices
+
+# A slice is a directory-level unit: one service's UI paths, one backend module area,
+# one tool. Loose files at the top of an area are folded into `<area>-root` so the
+# table stays a table and not a file list.
+SLICE_AREAS = ("northstar-os-ui", "Northstar_backend", "tools", "reports", "research",
+               "docs", "tests", "state", "data", "legacy", "config", "shared", "lib",
+               "agents", "scripts", "renders", "exports")
+
+# Product renders: a change here changes what the seller sees, even though it is not
+# under `northstar-os-ui/src/`.
+VISUAL_SLICE_PREFIXES = (
+    "renders/",
+    "northstar-os-ui/src/renders/",
+)
+
+# Where a review pack looks for committed evidence when the slice itself carries no
+# images. The owner-named directories come first; the rest is what this repo actually
+# has (`reports/ty/ux_audit_shots/` and `renders/seller_composite/` do not exist on
+# every branch, so they are tried, not required).
+EVIDENCE_DIRS = (
+    "reports/ty/dogfood_shots/",
+    "reports/ty/ux_audit_shots/",
+    "renders/seller_composite/",
+    "reports/ty/review/",
+    "northstar-os-ui/screenshots/",
+    "reports/ui_review_20261016/shots/",
+    "reports/",
+    "northstar-os-ui/prototypes/",
+    "northstar-os-ui/src/assets/",
+    "research/bakeoff/vendor/",
+    "exports/",
+)
+
+_TREE_CACHE: Dict[Tuple[str, str], List[str]] = {}
+
+
+def slice_for(path: str) -> str:
+    """The slice a path belongs to. Deterministic, so two runs agree."""
+    parts = path.split("/")
+    if path.startswith("northstar-os-ui/src/"):
+        rest = path[len("northstar-os-ui/src/"):].split("/")
+        return "ui-src" if len(rest) == 1 else "ui-" + rest[0]
+    if path.startswith("northstar-os-ui/"):
+        rest = path[len("northstar-os-ui/"):].split("/")
+        return "ui-" + (rest[0] if len(rest) > 1 else "root")
+    for area in SLICE_AREAS:
+        prefix = area + "/"
+        if path.startswith(prefix):
+            rest = path[len(prefix):].split("/")
+            return area + "-root" if len(rest) == 1 else area + "-" + rest[0]
+    if "/" not in path:
+        return "root"
+    return "root-" + parts[0]
+
+
+def build_slices(paths: Sequence[str]) -> Dict[str, List[str]]:
+    groups: Dict[str, List[str]] = {}
+    for path in paths:
+        groups.setdefault(slice_for(path), []).append(path)
+    for name in groups:
+        groups[name] = sorted(groups[name])
+    return groups
+
+
+def slice_is_visual(paths: Sequence[str]) -> bool:
+    """True when the slice changes how something renders."""
+    return any(is_creative(p) or p.startswith(VISUAL_SLICE_PREFIXES) for p in paths)
+
+
+def _slug(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "slice"
+
+
+def _pathspec_temp(paths: Sequence[str]) -> str:
+    """A NUL-separated pathspec file, so 3,000 paths do not become a 100 KB argv."""
+    import tempfile
+    fd, name = tempfile.mkstemp(prefix="ns-pathspec-", suffix=".txt")
+    with os.fdopen(fd, "wb") as fh:
+        for path in paths:
+            fh.write(path.encode("utf-8") + b"\0")
+    return name
+
+
+def _git_pathspec(repo: Repo, args: Sequence[str], paths: Sequence[str]) -> str:
+    """Run a git command restricted to `paths`, without `--pathspec-from-file`.
+
+    `--pathspec-from-file` is a newer option than the git on this box (`fatal: unrecognized
+    argument`), so the paths go after `--` in batches. Batching keeps the command line inside
+    Windows' limit even when a slice covers thousands of files, and the caller merges the output.
+    """
+    cleaned = [str(path).replace("\\", "/") for path in paths if str(path).strip()]
+    if not cleaned:
+        return repo.git(*args)
+    chunks: List[str] = []
+    batch = 40
+    for start in range(0, len(cleaned), batch):
+        chunk = cleaned[start:start + batch]
+        chunks.append(repo.git(*args, "--", *chunk))
+    return "\n".join(chunks)
+
+
+def _parse_commit_log(raw: str) -> List[Commit]:
+    out: List[Commit] = []
+    for chunk in raw.split("\x01"):
+        chunk = chunk.strip("\n")
+        if not chunk:
+            continue
+        parts = chunk.split("\x1f")
+        if len(parts) < 3:
+            continue
+        out.append(Commit(parts[0].strip(), parts[1].strip(), parts[2].strip(),
+                          parts[3].strip() if len(parts) > 3 else ""))
+    return out
+
+
+def slice_commits(repo: Repo, target: str, source: str, paths: Sequence[str]) -> List[Commit]:
+    if not paths:
+        return []
+    raw = _git_pathspec(repo, ["log", "--format=%x01%H%x1f%ad%x1f%s%x1f%b", "--date=short",
+                               f"{target}..{source}"], paths)
+    return _parse_commit_log(raw)
+
+
+def _tree_paths(repo: Repo, ref: str) -> List[str]:
+    key = (str(repo.root), ref)
+    if key not in _TREE_CACHE:
+        raw = repo.git("ls-tree", "-r", "--name-only", ref)
+        _TREE_CACHE[key] = [line.strip() for line in raw.splitlines() if line.strip()]
+    return _TREE_CACHE[key]
+
+
+def _image_rank(path: str) -> int:
+    if "digest_composites_" in path:
+        return 0
+    for order, prefix in enumerate(EVIDENCE_DIRS, start=1):
+        if path.startswith(prefix):
+            return order
+    return len(EVIDENCE_DIRS) + 1
+
+
+def choose_slice_images(repo: Repo, source: str, paths: Sequence[str],
+                        limit: int = 10) -> Tuple[List[str], set]:
+    """5 to 10 images: the slice's own first, then committed evidence as context."""
+    own = sorted({p for p in paths
+                  if p.lower().endswith(IMAGE_SUFFIXES) and "/fixtures/" not in p},
+                 key=lambda p: (_image_rank(p), p))
+    chosen = list(own[:limit])
+    tokens = [t for t in re.split(r"[-_.]", slice_slug_tokens(paths)) if len(t) >= 4]
+
+    if len(chosen) < 5:
+        evidence = [p for p in _tree_paths(repo, source)
+                    if p.lower().endswith(IMAGE_SUFFIXES) and "/fixtures/" not in p]
+        evidence.sort(key=lambda p: (0 if any(t in p.lower() for t in tokens) else 1,
+                                     _image_rank(p), p))
+        for path in evidence:
+            if path not in chosen:
+                chosen.append(path)
+            if len(chosen) >= limit:
+                break
+    return chosen[:limit], set(own)
+
+
+def slice_slug_tokens(paths: Sequence[str]) -> str:
+    """The slice name of a path list, used only for image matching."""
+    return slice_for(paths[0]) if paths else ""
+
+
+def _sample(paths: Sequence[str], limit: int = 0) -> List[str]:
+    """The changed paths, in full: a review pack says exactly what the slice touches."""
+    if limit and len(paths) > limit:
+        return list(paths[:limit]) + [f"... and {len(paths) - limit} more"]
+    return list(paths)
+
+
+def _scorecard_lines(repo: Repo, result: Dict[str, Any], name: str) -> List[str]:
+    target, source = result["target"], result["source"]
+    before = _scorecards(repo, target)
+    after = _scorecards(repo, source)
+    if before is None and after is None:
+        return ["`ty/scorecards.json` does not exist on either side."]
+    if after is None:
+        return [f"`ty/scorecards.json` is absent on `{source}`; nothing to compare."]
+    if before is None:
+        lines = [f"`ty/scorecards.json` is **absent on `{target}`** — every score is new.", "",
+                 f"at_bar **{len(after.get('at_bar', []))}**: "
+                 f"{', '.join(after.get('at_bar', [])) or 'none'}",
+                 "", "| service | score | at bar |", "|---|---|---|"]
+        for service in sorted(after.get("services", []),
+                              key=lambda s: s.get("score", 0.0), reverse=True)[:12]:
+            lines.append(f"| {service.get('id')} | {service.get('score', 0.0):g} | "
+                         f"{'yes' if service.get('meets_bar') else 'no'} |")
+        return lines
+
+    before_map = {s["id"]: s for s in before.get("services", [])}
+    after_map = {s["id"]: s for s in after.get("services", [])}
+    rows = []
+    for sid in sorted(set(before_map) | set(after_map)):
+        b, a = before_map.get(sid), after_map.get(sid)
+        b_score = b.get("score", 0.0) if b else 0.0
+        a_score = a.get("score", 0.0) if a else 0.0
+        rows.append((sid, b_score, a_score, a_score - b_score,
+                     bool(a and a.get("meets_bar"))))
+    tokens = [t for t in re.split(r"[-_]", name) if len(t) >= 4]
+    matched = [r for r in rows if any(t in r[0].replace("-", "") or t in r[0] for t in tokens)]
+    shown = matched if matched else sorted(rows, key=lambda r: -abs(r[3]))[:8]
+    heading = ("matched service id" if matched
+               else "no scorecard id matches this slice — largest movers")
+    lines = [heading, "", "| service | before | after | delta | at bar |", "|---|---|---|---|---|"]
+    for sid, b_score, a_score, delta, bar in shown:
+        lines.append(f"| {sid} | {b_score:g} | {a_score:g} | {delta:+g} | {'yes' if bar else 'no'} |")
+    lines += ["", f"at_bar before **{len(before.get('at_bar', []))}** -> after "
+                  f"**{len(after.get('at_bar', []))}**; test_ids "
+                  f"{before.get('test_ids')} -> {after.get('test_ids')}"]
+    return lines
+
+
+def write_slice_pack(repo: Repo, result: Dict[str, Any], out: Optional[Path] = None) -> Path:
+    name = result["slice"]
+    paths = result["slice_paths"]
+    date = _safe_date()
+    target, source = result["target"], result["source"]
+    path = out or (repo.root / "reports" / "ty" / "review" / f"{_slug(name)}_{date}.md")
+    images, own = choose_slice_images(repo, source, paths)
+    creative = [p for p in paths if is_creative(p) or p.startswith(VISUAL_SLICE_PREFIXES)]
+    slug = _slug(name)
+    sha8 = result["source_sha"][:8]
+    promote_tag = f"promote/{date}-{slug}-{sha8}"
+
+    lines = [f"# {name} — review pack, {date}", "",
+             f"This slice of `{source}` touches {len(result['commits'])} commit(s) ahead of "
+             f"`{target}` and changes **{len(paths)} path(s)**, {len(creative)} of which render. "
+             "It is refused for auto-promotion (`slice_visual`): a person has to look at these "
+             "images first.", ""]
+    if result.get("candidate"):
+        lines += [f"- candidate `{result['candidate']}` @ `{result['source_sha'][:12]}`",
+                  f"- target `{target}` @ `{result['target_sha'][:12]}`", ""]
+
+    lines += ["## Gates", "", "| gate | result | evidence |", "|---|---|---|"]
+    for gate in result["gates"]:
+        evidence = " ".join(gate.evidence[:2]).replace("|", "/")
+        lines.append(f"| {gate.key} | {'PASS' if gate.ok else 'FAIL'} | {evidence} |")
+    if result["refused_by"]:
+        lines += ["", "Refused by: " + ", ".join(f"`{k}`" for k in result["refused_by"])]
+
+    labelled = [(p, p in own) for p in images]
+    lines += ["", f"## Images ({len(images)} of 5–10)", "",
+              "Slice images first, then committed evidence as context. `before` shows the same "
+              "path on the target branch; a blank before means the file is new here.", "",
+              "| after (this slice) | before | where |", "|---|---|---|"]
+    for item, is_own in labelled:
+        after_link = f"![after](../../../{item})"
+        before_link = ("![before](../../../" + item + ")"
+                       if repo.ok("cat-file", "-e", f"{target}:{item}") else "_new here_")
+        where = "this slice" if is_own else "context"
+        lines.append(f"| `{item}`<br>{after_link} | {before_link} | {where} |")
+    if len(images) < 5:
+        lines.append("")
+        lines.append(f"> Only {len(images)} committed image(s) exist for this bundle; "
+                     "5 were wanted and the shortfall is named rather than filled.")
+
+    lines += ["", "## Scorecard delta", ""]
+    lines += _scorecard_lines(repo, result, name)
+
+    lines += ["", f"## Changed paths ({len(paths)})", "", "```"]
+    lines += _sample(paths)
+    lines += ["```", "", "## Commands", "", "Promote just this slice:", "", "```",
+              f'python tools/promote_staging.py --slice {name} --promote '
+              f'--approve-visual "<what you looked at and accepted>"', "```", "",
+              "Revert it:", "", "```",
+              f"python tools/promote_staging.py --slice {name} --revert {promote_tag}", "```"]
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+def gate_slice(name: str, paths: Sequence[str], approval: Optional[str]) -> Gate:
+    gate = Gate("slice", f"slice {name} carries no rendering change")
+    creative = [p for p in paths if is_creative(p) or p.startswith(VISUAL_SLICE_PREFIXES)]
+    images = [p for p in paths if p.lower().endswith(IMAGE_SUFFIXES)]
+    gate.facts.update({"slice": name, "paths": len(paths), "visual_paths": len(creative),
+                       "images": len(images), "creative_sample": creative[:40],
+                       "approval": approval or ""})
+    gate.evidence.append(f"slice {name}: {len(paths)} path(s), {len(images)} image(s)")
+    gate.evidence.append(f"rendering paths: {len(creative)}")
+    if not paths:
+        return gate.fail("slice_empty", f"no path in the bundle belongs to slice {name}")
+    if not creative:
+        gate.ok = True
+        return gate
+    gate.evidence.extend("  " + p for p in creative[:10])
+    if len(creative) > 10:
+        gate.evidence.append(f"  ... and {len(creative) - 10} more")
+    if approval:
+        gate.evidence.append(f"operator visual approval recorded: {approval}")
+        gate.facts["approved"] = True
+        gate.ok = True
+        return gate
+    return gate.fail("slice_visual",
+                     f"{len(creative)} rendering path(s) in slice {name} "
+                     "(e.g. " + ", ".join(creative[:3]) + ") — needs human eyes, not auto-promotion")
+
+
+def evaluate_slice(repo: Repo, source: str, target: str, name: str, *, suite: Optional[Path],
+                   baseline: Path, verifier: Optional[str], approval: Optional[str],
+                   candidate: Optional[str]) -> Dict[str, Any]:
+    groups = build_slices(repo.changed_paths(target, source))
+    paths = groups.get(name, [])
+    commits = slice_commits(repo, target, source, paths)
+    gates = [
+        gate_suite(repo, source, suite, baseline, candidate),
+        gate_verifier(repo, source, target, commits, verifier),
+        gate_slice(name, paths, approval),
+    ]
+    failed = [g.key for g in gates if not g.ok]
+    return {
+        "source": source,
+        "target": target,
+        "slice": name,
+        "slice_paths": paths,
+        "candidate": candidate or "",
+        "source_sha": repo.rev(source),
+        "target_sha": repo.rev(target),
+        "commits": commits,
+        "gates": gates,
+        "eligible": not failed,
+        "refused_by": failed,
+    }
+
+
+def slice_table(repo: Repo, source: str, target: str) -> List[Dict[str, Any]]:
+    groups = build_slices(repo.changed_paths(target, source))
+    rows: List[Dict[str, Any]] = []
+    for name in sorted(groups):
+        paths = groups[name]
+        rows.append({
+            "slice": name,
+            "kind": "visual" if slice_is_visual(paths) else "code",
+            "paths": len(paths),
+            "rendering": sum(1 for p in paths
+                             if is_creative(p) or p.startswith(VISUAL_SLICE_PREFIXES)),
+            "images": sum(1 for p in paths if p.lower().endswith(IMAGE_SUFFIXES)),
+        })
+    return rows
+
+
+def write_slice_table(repo: Repo, rows: Sequence[Dict[str, Any]], result: Dict[str, Any],
+                      out: Path) -> Path:
+    date = _safe_date()
+    visual = [r for r in rows if r["kind"] == "visual"]
+    code = [r for r in rows if r["kind"] == "code"]
+    lines = [f"# Item 5 — promotion slices, {date}", "",
+             f"`{result['source']}` @ `{result['source_sha'][:12]}` vs `{result['target']}` @ "
+             f"`{result['target_sha'][:12]}`: {len(rows)} slice(s) over "
+             f"{sum(r['paths'] for r in rows)} changed path(s).", "",
+             f"- code-only slices (auto-promotable when the suite is green): **{len(code)}**",
+             f"- visual/creative slices (review pack each): **{len(visual)}**", "",
+             "| slice | kind | paths | rendering | images |", "|---|---|---|---|---|"]
+    for row in rows:
+        lines.append(f"| `{row['slice']}` | {row['kind']} | {row['paths']} | "
+                     f"{row['rendering']} | {row['images']} |")
+    path = out
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+def do_promote_slice(repo: Repo, result: Dict[str, Any]) -> Tuple[str, Optional[str], str, str]:
+    """Copy exactly one slice's paths onto the target and commit them there."""
+    name = result["slice"]
+    target, source = result["target"], result["source"]
+    date = _safe_date()
+    slug = _slug(name)
+    sha8 = result["source_sha"][:8]
+    tag = f"promote/{date}-{slug}-{sha8}"
+    if repo.ok("rev-parse", "--verify", f"refs/tags/{tag}"):
+        raise Refusal("tag_exists", f"{tag} already exists; tags are never moved or deleted")
+
+    rollback_tag = f"rollback/{date}-{result['target_sha'][:8]}"
+    if repo.ok("rev-parse", "--verify", f"refs/tags/{rollback_tag}"):
+        rollback_tag = f"{rollback_tag}-2"
+
+    worktree = repo.root / ".promote-worktree"
+    if worktree.exists():
+        raise Refusal("worktree_dirty", f"{worktree} already exists; refusing to touch it")
+
+    def run(*args: str, check: bool = False) -> subprocess.CompletedProcess:
+        return subprocess.run(["git", "--no-pager", *args], cwd=str(worktree),
+                              capture_output=True, text=True)
+
+    lock = None
+    try:
+        add = subprocess.run(["git", "--no-pager", "worktree", "add", str(worktree), target],
+                             cwd=str(repo.root), capture_output=True, text=True)
+        if add.returncode != 0:
+            raise Refusal("target_checked_out",
+                          f"`{target}` cannot be checked out for the merge ({add.stderr.strip()}). "
+                          f"Run `git merge --no-ff {source}` in a worktree on `{target}`.")
+        lock = worktree
+        subprocess.run(["git", "tag", rollback_tag, result["target_sha"]],
+                       cwd=str(repo.root), check=True, capture_output=True)
+
+        paths = result["slice_paths"]
+        raw = _git_pathspec(repo, ["diff", "--name-status", "-z", "--no-renames",
+                                   f"{target}..{source}"], paths)
+        fields = [f for f in raw.split("\0") if f]
+        statuses: Dict[str, str] = {}
+        for index in range(0, len(fields) - 1, 2):
+            statuses[fields[index + 1]] = fields[index][:1]
+        existing = [p for p in paths if statuses.get(p, "M") != "D"]
+        deleted = [p for p in paths if statuses.get(p) == "D"]
+
+        name_file = _pathspec_temp(existing)
+        try:
+            checkout = run("checkout", source, f"--pathspec-from-file={name_file}",
+                           "--pathspec-file-nul")
+        finally:
+            os.unlink(name_file)
+        if checkout.returncode != 0:
+            raise Refusal("slice_checkout_failed",
+                          (checkout.stderr or checkout.stdout).strip()[:400])
+        if deleted:
+            name_file = _pathspec_temp(deleted)
+            try:
+                run("rm", "--quiet", "--ignore-unmatch", "--pathspec-from-file=" + name_file,
+                    "--pathspec-file-nul")
+            finally:
+                os.unlink(name_file)
+
+        run("add", "-A")
+        message = (f"promote slice {name}: {len(paths)} path(s) from {source} {sha8}"
+                   + (f" ({result['candidate']})" if result.get("candidate") else "")
+                   + f" {tag}")
+        commit = run("commit", "-m", message)
+        if commit.returncode != 0:
+            raise Refusal("slice_commit_failed", (commit.stderr or commit.stdout).strip()[:400])
+        new_sha = run("rev-parse", "HEAD").stdout.strip()
+        subprocess.run(["git", "tag", tag, new_sha], cwd=str(repo.root), check=True,
+                       capture_output=True)
+    finally:
+        if lock is not None:
+            subprocess.run(["git", "worktree", "remove", "--force", str(worktree)],
+                           cwd=str(repo.root), capture_output=True)
+            subprocess.run(["git", "worktree", "prune"], cwd=str(repo.root), capture_output=True)
+    return tag, rollback_tag, new_sha, message
+
+
+def do_promote(repo: Repo, result: Dict[str, Any]) -> Tuple[str, Optional[str], str]:
+    target, source = result["target"], result["source"]
+    date = _safe_date()
+    tag = f"promote/{date}-{result['source_sha'][:8]}"
+    if repo.ok("rev-parse", "--verify", f"refs/tags/{tag}"):
+        raise Refusal("tag_exists", f"{tag} already exists; tags are never moved or deleted")
+
+    rollback_tag = f"rollback/{date}-{result['target_sha'][:8]}"
+    if repo.ok("rev-parse", "--verify", f"refs/tags/{rollback_tag}"):
+        rollback_tag = f"{rollback_tag}-2"
+
+    worktree = repo.root / ".promote-worktree"
+    if worktree.exists():
+        raise Refusal("worktree_dirty", f"{worktree} already exists; refusing to touch it")
+    lock = None
+    try:
+        add = subprocess.run(
+            ["git", "--no-pager", "worktree", "add", str(worktree), target],
+            cwd=str(repo.root), capture_output=True, text=True,
+        )
+        if add.returncode != 0:
+            raise Refusal(
+                "target_checked_out",
+                f"`{target}` cannot be checked out for the merge ({add.stderr.strip()}). "
+                f"Run `git merge --no-ff {source}` in a worktree on `{target}`.",
+            )
+        lock = worktree
+        subprocess.run(["git", "tag", rollback_tag, result["target_sha"]],
+                       cwd=str(repo.root), check=True, capture_output=True)
+        merge = subprocess.run(
+            ["git", "--no-pager", "merge", "--no-ff", "-m",
+             f"promote: {source} {result['source_sha'][:12]} -> {target} "
+             f"({len(result['commits'])} commits, gates 1-3 green) {tag}",
+             source],
+            cwd=str(worktree), capture_output=True, text=True,
+        )
+        if merge.returncode != 0:
+            subprocess.run(["git", "merge", "--abort"], cwd=str(worktree), capture_output=True)
+            raise Refusal("merge_conflict", (merge.stderr or merge.stdout).strip().splitlines()[0]
+                          if (merge.stderr or merge.stdout).strip() else "merge failed")
+        new_sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(worktree),
+                                 capture_output=True, text=True).stdout.strip()
+        subprocess.run(["git", "tag", tag, new_sha], cwd=str(repo.root), check=True,
+                       capture_output=True)
+    finally:
+        if lock is not None:
+            subprocess.run(["git", "worktree", "remove", "--force", str(worktree)],
+                           cwd=str(repo.root), capture_output=True)
+            subprocess.run(["git", "worktree", "prune"], cwd=str(repo.root), capture_output=True)
+    return tag, rollback_tag, new_sha
+
+
+def do_revert(repo: Repo, tag: str, target: str) -> Dict[str, Any]:
+    if not repo.ok("rev-parse", "--verify", f"refs/tags/{tag}"):
+        return {"reverted": False, "reason": "tag_absent",
+                "message": f"no tag {tag}; nothing to revert"}
+    parents = repo.git("rev-list", "--parents", "-n1", tag).split()
+    merge = len(parents) > 2
+    args = ["revert"] + (["-m", "1"] if merge else []) + ["--no-edit", tag]
+
+    worktree: Optional[Path] = None
+    if repo.head_ref() == target:
+        cwd = repo.root
+    else:
+        worktree = repo.root / ".revert-worktree"
+        if worktree.exists():
+            raise Refusal("worktree_dirty", f"{worktree} already exists; refusing to touch it")
+        add = subprocess.run(["git", "--no-pager", "worktree", "add", str(worktree), target],
+                             cwd=str(repo.root), capture_output=True, text=True)
+        if add.returncode != 0:
+            raise Refusal("target_checked_out",
+                          f"`{target}` cannot be checked out to revert ({add.stderr.strip()}); "
+                          f"run `git revert {'-m 1 ' if merge else ''}--no-edit {tag}` there")
+        cwd = worktree
+    try:
+        revert = subprocess.run(["git", "--no-pager", *args], cwd=str(cwd),
+                                capture_output=True, text=True)
+        if revert.returncode != 0:
+            subprocess.run(["git", "revert", "--abort"], cwd=str(cwd), capture_output=True)
+            raise Refusal("revert_conflict", (revert.stderr or revert.stdout).strip()[:400])
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=str(cwd),
+                              capture_output=True, text=True).stdout.strip()
+    finally:
+        if worktree is not None:
+            subprocess.run(["git", "worktree", "remove", "--force", str(worktree)],
+                           cwd=str(repo.root), capture_output=True)
+            subprocess.run(["git", "worktree", "prune"], cwd=str(repo.root), capture_output=True)
+    return {"reverted": True, "reason": "ok", "head": head}
+
+
+def append_slice_promotion(repo: Repo, result: Dict[str, Any], tag: str,
+                           rollback_tag: Optional[str], new_sha: str, message: str) -> Path:
+    """Append one slice's promotion to the slice log; never rewrites earlier entries."""
+    path = repo.root / "reports" / "ty" / "item5_slices.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lines = []
+    if not path.exists() or not path.read_text(encoding="utf-8").strip():
+        lines += [f"# Item 5 — promotion slices", ""]
+    lines += [f"## Promoted slice `{result['slice']}` — {_safe_date()}", "",
+              f"- source `{result['source']}` @ `{result['source_sha']}`",
+              f"- slice: {len(result['slice_paths'])} path(s), "
+              f"{len(result['commits'])} commit(s) touch it",
+              f"- promotion tag `{tag}`",
+              f"- rollback tag `{rollback_tag or 'none'}`",
+              f"- new `{result['target']}` sha `{new_sha}`",
+              f"- commit message: {message}", ""]
+    with path.open("a", encoding="utf-8") as fh:
+        fh.write("\n".join(lines) + "\n")
+    return path
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="replace")
+            except (ValueError, OSError):
+                pass
+    parser = argparse.ArgumentParser(description="Promote staging to main, gated")
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--check", action="store_true", help="report eligibility, change nothing")
+    mode.add_argument("--promote", action="store_true", help="merge source -> target when eligible")
+    mode.add_argument("--revert", metavar="TAG", help="revert a promotion; no-op when the tag is absent")
+    mode.add_argument("--list-slices", action="store_true",
+                      help="classify every changed path by slice; write reports/ty/item5_slices.md")
+    parser.add_argument("--source", default="staging")
+    parser.add_argument("--target", default="main")
+    parser.add_argument("--slice", help="evaluate or promote one named slice instead of the bundle")
+    parser.add_argument("--candidate", help="candidate tag the suite ran on; must name `source`")
+    parser.add_argument("--slices-out", type=Path, default=Path("reports/ty/item5_slices.md"),
+                        help="where --list-slices writes its table")
+    parser.add_argument("--suite", type=Path, help="the full-suite report to read")
+    parser.add_argument("--baseline-idlist", type=Path, default=DEFAULT_BASELINE_IDLIST)
+    parser.add_argument("--verifier", help="who reproduced the scorecard deltas")
+    parser.add_argument("--approve-visual", help="operator approval note covering the visual bundle")
+    parser.add_argument("--review", action="store_true", help="write the visual review pack")
+    parser.add_argument("--json", action="store_true", help="machine-readable output")
+    parser.add_argument("--repo", type=Path, default=ROOT, help=argparse.SUPPRESS)
+    args = parser.parse_args(argv)
+
+    repo = Repo(args.repo)
+    baseline = args.baseline_idlist if args.baseline_idlist.is_absolute() else repo.root / args.baseline_idlist
+
+    if args.revert:
+        try:
+            outcome = do_revert(repo, args.revert, args.target)
+        except Refusal as refusal:
+            print(f"REFUSED {refusal}", file=sys.stderr)
+            return 2
+        print(json.dumps(outcome) if args.json else outcome["message"])
+        return 0
+
+    if args.list_slices:
+        rows = slice_table(repo, args.source, args.target)
+        result = {"source": args.source, "target": args.target,
+                  "source_sha": repo.rev(args.source), "target_sha": repo.rev(args.target)}
+        out = args.slices_out if args.slices_out.is_absolute() else repo.root / args.slices_out
+        path = write_slice_table(repo, rows, result, out)
+        if args.json:
+            print(json.dumps({"slices": rows, "table": str(path)}, indent=2))
+        else:
+            print(f"=== slices: {args.source} -> {args.target} ===")
+            print(f"{len(rows)} slice(s), "
+                  f"{sum(1 for r in rows if r['kind'] == 'visual')} visual, "
+                  f"{sum(1 for r in rows if r['kind'] == 'code')} code")
+            for row in rows:
+                print(f"  {row['kind']:6s} {row['paths']:5d} paths  {row['slice']}")
+            print(f"\ntable: {path}")
+        return 0
+
+    try:
+        if args.slice:
+            result = evaluate_slice(repo, args.source, args.target, args.slice,
+                                    suite=args.suite, baseline=baseline,
+                                    verifier=args.verifier, approval=args.approve_visual,
+                                    candidate=args.candidate)
+        else:
+            result = evaluate(repo, args.source, args.target, suite=args.suite,
+                              baseline=baseline, verifier=args.verifier,
+                              approval=args.approve_visual)
+    except RuntimeError as exc:
+        print(f"ERROR {exc}", file=sys.stderr)
+        return 1
+
+    if args.review:
+        if args.slice:
+            pack = write_slice_pack(repo, result)
+        else:
+            pack = write_review_pack(repo, result)
+        result["review"] = str(pack)
+
+    if args.check:
+        # A refusal that a human is meant to act on must leave them something to act on: a
+        # visual slice/bundle writes its review pack even under --check, because "refused,
+        # nothing to show" is how a gate becomes a dead end.
+        visual_refusal = any(gate.key in ("slice", "bundle") and not gate.ok
+                             for gate in result["gates"])
+        if visual_refusal and not args.review:
+            try:
+                pack = write_slice_pack(repo, result) if args.slice else \
+                    write_review_pack(repo, result)
+                result["review"] = str(pack)
+            except Exception:  # noqa: BLE001 - a missing pack must not hide the refusal
+                pass
+        print(json.dumps(as_payload(result), indent=2) if args.json else render_check(result))
+        if (args.review or result.get("review")) and not args.json:
+            print(f"\nreview pack: {result.get('review')}")
+        return 0 if result["eligible"] else 2
+
+    if not result["eligible"]:
+        pack = None
+        if args.slice:
+            if any(gate.key == "slice" and not gate.ok for gate in result["gates"]):
+                pack = write_slice_pack(repo, result)
+        elif any(gate.key == "bundle" and not gate.ok for gate in result["gates"]):
+            pack = write_review_pack(repo, result)
+        print(render_check(result))
+        if pack:
+            print(f"\nreview pack: {pack}")
+        return 2
+
+    try:
+        if args.slice:
+            tag, rollback_tag, new_sha, message = do_promote_slice(repo, result)
+        else:
+            tag, rollback_tag, new_sha = do_promote(repo, result)
+            message = ""
+    except Refusal as refusal:
+        print(f"REFUSED {refusal}", file=sys.stderr)
+        return 2
+    if args.slice:
+        record = append_slice_promotion(repo, result, tag, rollback_tag, new_sha, message)
+    else:
+        record = write_promotion_record(repo, result, tag, rollback_tag, new_sha)
+    payload = {"promoted": True, "slice": args.slice or "", "tag": tag,
+               "rollback": rollback_tag, "new_target_sha": new_sha,
+               "record": str(record)}
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(render_check(result))
+        print(f"\npromoted: tag {tag}, rollback tag {rollback_tag}")
+        print(f"new {args.target} sha: {new_sha}")
+        print(f"record: {record}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
