@@ -2857,12 +2857,18 @@
       "content_type": "hero_band",
       "category": "supplement_pouch",
       "difficulty": 1,
-      "source_mode": "stored_reference",
+      "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
       "reference": {
-        "kind": "stored_asset",
-        "path": "renders/smoke_main_2000.png"
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
       },
       "page": {
         "width": 970,
@@ -2961,12 +2967,18 @@
       "content_type": "comparison_table",
       "category": "supplement_pouch",
       "difficulty": 2,
-      "source_mode": "stored_reference",
+      "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
       "reference": {
-        "kind": "stored_asset",
-        "path": "renders/smoke_main_2000.png"
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
       },
       "page": {
         "width": 970,
@@ -3040,12 +3052,18 @@
       "content_type": "ingredient_grid",
       "category": "supplement_pouch",
       "difficulty": 2,
-      "source_mode": "stored_reference",
+      "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
       "reference": {
-        "kind": "stored_asset",
-        "path": "renders/smoke_main_2000.png"
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
       },
       "page": {
         "width": 970,
@@ -3120,12 +3138,18 @@
       "content_type": "lifestyle_band",
       "category": "supplement_pouch",
       "difficulty": 3,
-      "source_mode": "stored_reference",
+      "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
       "reference": {
-        "kind": "stored_asset",
-        "path": "renders/mogra-forest-dusk-mockup-complete.png"
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "the same two pouches in a greenhouse scene",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
       },
       "page": {
         "width": 970,
@@ -3159,7 +3183,7 @@
           "text_align": "left",
           "font_scale": 0.06,
           "rules": false,
-          "scene": "generated",
+          "scene": "flat",
           "product_anchor": [
             0.28,
             0.58
@@ -3197,7 +3221,7 @@
       "content_type": "brand_story",
       "category": "supplement_pouch",
       "difficulty": 1,
-      "source_mode": "prompt_only",
+      "source_mode": "uploaded_reference",
       "fidelity": "tolerant",
       "product_in_frame": false,
       "note": "Text-only brand story: no product pixels, so 'tolerant' is lawful here and only here.",
@@ -3260,19 +3284,35 @@
           "rules": false,
           "scene": "flat"
         }
-      ]
+      ],
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "the same two pouches in a greenhouse scene",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      }
     },
     {
       "id": "AP-006",
       "content_type": "spec_strip",
       "category": "supplement_pouch",
       "difficulty": 2,
-      "source_mode": "stored_reference",
+      "source_mode": "uploaded_reference",
       "fidelity": "exact",
       "product_in_frame": true,
       "reference": {
-        "kind": "stored_asset",
-        "path": "renders/smoke_main_2000.png"
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
       },
       "page": {
         "width": 970,

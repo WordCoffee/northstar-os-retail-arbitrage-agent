@@ -129,7 +129,8 @@ def _cmd_composite(args: argparse.Namespace) -> int:
 
         renderer = renderer_from_name("synthetic")
     generator = CompositeGenerator(renderer=renderer, method=args.method,
-                                   out_dir=args.out_dir, repo_root=Path(args.root))
+                                   out_dir=args.out_dir, repo_root=Path(args.root),
+                                   layout=getattr(args, "layout", "deterministic"))
     summary = run_pass(generator=generator, briefs=payload.get("briefs", []),
                        limit=args.limit, judge=None,
                        gaps_path=Path(args.gaps) if args.gaps else None,
@@ -171,6 +172,37 @@ def _cmd_composite(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_aplus(args: argparse.Namespace) -> int:
+    """The composite path for the A+ page family: uploaded references, deterministic layout."""
+    from .aplus import run_aplus_family
+
+    catalog_path = Path(args.catalog or DEFAULT_CATALOG_PATH)
+    payload = load_catalog(catalog_path)
+    proof = run_aplus_family(
+        payload, repo_root=Path(args.root), out_dir=args.out_dir,
+        method=args.method, limit=args.limit,
+        prove_determinism=not args.no_determinism_check,
+        proof_path=args.summary_out)
+    for row in proof["briefs"]:
+        print(json.dumps({
+            "brief": row["brief_id"], "content_type": row["content_type"],
+            "passed": row["passed"], "score": row["score"],
+            "modules": f"{row['module_pass_count']}/{row['module_count_total']}",
+            "deterministic": (row["determinism"].get("modules_identical")
+                              and row["determinism"].get("page_identical"))
+            if row["determinism"].get("checked") else None,
+            "page": row["page_path"],
+            "modules_detail": [{"id": m["id"], "score": m["score"],
+                                "passed": m["passed"],
+                                "failed_checks": m["failed_checks"]}
+                               for m in row["modules"]],
+            "failure": (row["reasons"] or [None])[0],
+        }, ensure_ascii=False))
+    print(json.dumps(proof["summary"], ensure_ascii=False))
+    print(f"proof: {proof.get('proof_path')}")
+    return 0 if proof["ok"] else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="tools.seller_tester",
                                      description="Seller-Tester harness (D9)")
@@ -203,6 +235,9 @@ def build_parser() -> argparse.ArgumentParser:
                       help="comfy starts its own lane; synthetic is the offline fallback")
     comp.add_argument("--method", default="birefnet",
                       help="cutout method (birefnet, grabcut, background_distance, otsu_lab)")
+    comp.add_argument("--layout", default="deterministic", choices=["deterministic", "scene"],
+                      help=("deterministic lays out infographics and packaging panels with "
+                            "measured geometry; scene leaves those two situations to the model"))
     comp.add_argument("--scene-size", type=int, default=768,
                       help="scene render size in px (768 is what renders under the shared VRAM)")
     comp.add_argument("--steps", type=int, default=20)
@@ -215,6 +250,22 @@ def build_parser() -> argparse.ArgumentParser:
     comp.add_argument("--gaps", default=str(
         Path(__file__).resolve().parents[2] / "state" / "seller" / "composite_gaps.json"),
         help="gap file for this run (kept out of the shared ty/seller_gaps.json)")
+
+    ap = sub.add_parser(
+        "aplus",
+        help="produce and score the A+ module family on the seller's uploads")
+    ap.add_argument("--catalog", default=None,
+                    help=f"default {DEFAULT_CATALOG_PATH}")
+    ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--method", default="grabcut",
+                    help="cutout method (grabcut is seeded for determinism)")
+    ap.add_argument("--out-dir", default=None,
+                    help="module/page artefacts (default renders/aplus)")
+    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[2]))
+    ap.add_argument("--summary-out", default=str(
+        Path(__file__).resolve().parents[2] / "state" / "seller" / "aplus_proof.json"))
+    ap.add_argument("--no-determinism-check", action="store_true",
+                    help="produce each brief once instead of twice; the proof says so")
     return parser
 
 
@@ -228,6 +279,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_run(args)
         if args.command == "composite":
             return _cmd_composite(args)
+        if args.command == "aplus":
+            return _cmd_aplus(args)
         return _cmd_escalate(args)
     except GeneratorUnavailable as exc:
         print(f"generator unavailable: {exc}", file=sys.stderr)

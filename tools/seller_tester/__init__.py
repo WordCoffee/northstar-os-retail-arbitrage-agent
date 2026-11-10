@@ -27,6 +27,19 @@ from .briefs import (
     route_for_brief,
     validate_catalog,
 )
+from .aplus import (
+    APLUS_KEY,
+    CONTENT_TYPES,
+    MIN_APLUS_BRIEFS,
+    declared_page_height,
+    load_aplus_briefs,
+    module_grid,
+    produce_module,
+    produce_page,
+    run_aplus_family,
+    score_aplus_page,
+    validate_aplus_briefs,
+)
 from .escalate import EscalationLog, escalate
 from .gaps import build_gap, file_gap, gap_id
 from .generators import (
@@ -55,6 +68,17 @@ from .reference_check import (
 )
 
 __all__ = [
+    "APLUS_KEY",
+    "CONTENT_TYPES",
+    "MIN_APLUS_BRIEFS",
+    "declared_page_height",
+    "load_aplus_briefs",
+    "module_grid",
+    "produce_module",
+    "produce_page",
+    "run_aplus_family",
+    "score_aplus_page",
+    "validate_aplus_briefs",
     "CATEGORIES",
     "SITUATIONS",
     "SOURCE_MODES",

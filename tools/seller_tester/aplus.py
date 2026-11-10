@@ -11,11 +11,14 @@ So this module has its own brief family, its own producer and its own scorer:
 
 * the **brief** declares the module grid (id, kind, width, height, order), the
   copy each module must show, and the product-in-frame rule per module;
-* the **producer** composites the seller's real product pixels for modules that
-  carry the product (the same cutout/composite path as the picture service) and
-  typesets flat copy for modules that do not; a module that needs a generated
-  scene asks the render lane, and a refused lane is `cannot_verify` with the
-  reason, never a replayed file;
+* the **producer** builds every module on the seller's **uploaded** reference (a
+  `prompt_only` or `stored_reference` A+ brief is refused by validation). Modules
+  that carry the product are cut out, composited at the module's own anchor and
+  scale, then laid out by `deterministic.infographic`: a photo panel, a title
+  band, the declared copy in the opposite column and a footer. Text-only modules
+  are typeset into their declared box. No diffusion scene is involved, so the
+  same brief and the same upload produce the same bytes; `run_aplus_family`
+  measures that by producing each page twice and comparing every hash;
 * the **scorer** measures the page: module count and order, each module's real
   pixels against its declared size, the required copy per module through OCR and
   the same fuzzy matcher the reference check uses, and the product region for
@@ -32,9 +35,13 @@ existing render lane, which owns its own lock and RAM floor.
 from __future__ import annotations
 
 import difflib
+import hashlib
 import json
 import re
+import shutil
 import sys
+import tempfile
+from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
@@ -78,16 +85,6 @@ DEFAULT_PASS_SCORE = 70
 FUZZY_RATIO = 0.82
 #: A module whose luminance barely varies rendered nothing. A flat canvas is 0.0.
 BLANK_LUMINANCE_STD = 0.75
-
-FONT_CANDIDATES = (
-    r"C:\Windows\Fonts\arialbd.ttf",
-    r"C:\Windows\Fonts\seguisb.ttf",
-    r"C:\Windows\Fonts\calibrib.ttf",
-    r"C:\Windows\Fonts\arial.ttf",
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-)
-
 
 # --------------------------------------------------------------------- loading
 def load_aplus_briefs(payload: Optional[Dict[str, Any]] = None
@@ -198,6 +195,16 @@ def validate_aplus_briefs(payload: Dict[str, Any]) -> List[str]:
             errors.append(f"{brief_id}: fidelity must be 'exact' or 'tolerant'")
         if mode in REFERENCE_MODES and not isinstance(brief.get("reference"), dict):
             errors.append(f"{brief_id}: {mode} brief needs a reference object")
+
+        # Owner's rule for A+ (2026-11-09): every module is built on the seller's own uploaded
+        # picture, never on a prompt or an earlier stored generation.
+        if mode in SOURCE_MODES and mode != "uploaded_reference":
+            errors.append(f"{brief_id}: A+ modules must build on the seller's uploaded "
+                          f"reference (source_mode 'uploaded_reference'), got {mode!r}")
+        reference = brief.get("reference")
+        if isinstance(reference, dict) and reference.get("kind") != "uploaded_file":
+            errors.append(f"{brief_id}: A+ reference must be kind 'uploaded_file', "
+                          f"got {reference.get('kind')!r}")
 
         page = brief.get("page")
         page_width = DEFAULT_PAGE_WIDTH
@@ -326,59 +333,6 @@ def _png_bytes(image: Any) -> bytes:
     return buffer.getvalue()
 
 
-def _font(size: int) -> Any:
-    from PIL import ImageFont
-
-    for candidate in FONT_CANDIDATES:
-        try:
-            if Path(candidate).is_file():
-                return ImageFont.truetype(candidate, size)
-        except OSError:
-            continue
-    try:
-        return ImageFont.load_default(size=size)
-    except TypeError:  # Pillow < 10.1
-        return ImageFont.load_default()
-
-
-def _draw_copy(image: Any, module: Dict[str, Any]) -> None:
-    """Typeset a module's required copy inside its declared text box."""
-    from PIL import ImageDraw
-
-    width, height = image.size
-    lines = module["text_required"]
-    box = module["text_box"]
-    left = int(width * float(box[0]))
-    top = int(height * float(box[1]))
-    box_width = max(1, int(width * float(box[2])))
-    box_height = max(1, int(height * float(box[3])))
-    size = max(18, int(height * module["font_scale"]))
-    font = _font(size)
-    draw = ImageDraw.Draw(image)
-    count = max(1, len(lines))
-    step = box_height / float(count)
-    align = module["text_align"]
-    for index, line in enumerate(lines):
-        y = top + int(step * index + step * 0.5)
-        text = str(line)
-        try:
-            bounds = draw.textbbox((0, 0), text, font=font)
-            text_width = bounds[2] - bounds[0]
-        except (AttributeError, ValueError):
-            text_width = int(len(text) * size * 0.55)
-        if align == "center":
-            x = left + max(0, (box_width - text_width) // 2)
-        elif align == "right":
-            x = left + max(0, box_width - text_width)
-        else:
-            x = left
-        draw.text((x, y - size // 2), text, font=font, fill=(28, 34, 30))
-        if module.get("rules") and index < count - 1:
-            rule_y = top + int(step * (index + 1))
-            draw.line((left, rule_y, left + box_width, rule_y),
-                      fill=(176, 176, 168), width=max(1, size // 24))
-
-
 def _cutout_png(brief: Dict[str, Any], *, repo_root: Path, method: str
                 ) -> Tuple[Optional[bytes], Optional[Any], Dict[str, Any]]:
     """Cut the seller's product out of the brief's reference, once per page."""
@@ -388,6 +342,17 @@ def _cutout_png(brief: Dict[str, Any], *, repo_root: Path, method: str
         brief.get("reference"), repo_root=repo_root)
     if rgb is None:
         return None, None, {"ok": False, "reason": reason, "reference_path": resolved}
+    if method == "grabcut":
+        # GrabCut draws from OpenCV's global RNG even with an initial mask: two runs on the
+        # same upload produced different masks (measured 2026-11-09), which broke the A+
+        # byte-for-byte claim. Seeding here is what makes the module deterministic. A method
+        # this module does not know is still refused by `pc.cutout`, never swapped.
+        try:
+            import cv2  # noqa: PLC0415
+
+            cv2.setRNGSeed(0)
+        except Exception:  # noqa: BLE001 - no cv2 means `pc.cutout` will refuse grabcut itself
+            pass
     try:
         cut = pc.cutout(rgb, method)
     except Exception as exc:  # noqa: BLE001 - a refused cutout is a stated failure
@@ -400,7 +365,10 @@ def _cutout_png(brief: Dict[str, Any], *, repo_root: Path, method: str
                             "reason": f"cutout method {method!r} found no product",
                             "reference_path": resolved}
     png = pc.rgba_png_bytes(cut.rgb, cut.alpha)
-    rgba = np.dstack([cut.rgb, (np.asarray(cut.alpha) * 255).astype(np.uint8)])
+    # `cut.alpha` is already uint8 0..255. Scaling it again wrapped 255 to 1, so the recorded
+    # cutout carried an almost-empty alpha and the product-region check compared a handful of
+    # pixels; the module looked right (it used the PNG) and only the audit was wrong.
+    rgba = np.dstack([cut.rgb, np.asarray(cut.alpha, dtype=np.uint8)])
     return png, rgba, {"ok": True, "method": method, "reference_path": resolved,
                        "metrics": metrics}
 
@@ -412,21 +380,54 @@ def _module_canvas(module: Dict[str, Any]) -> Any:
                      (module["background_value"],) * 3)
 
 
-def _place_and_copy(image: Any, module: Dict[str, Any], cut_png: bytes
-                    ) -> Tuple[Any, List[int]]:
-    """Composite the cutout onto a module image, then typeset the copy over it."""
+def _deterministic_module(brief: Dict[str, Any], module: Dict[str, Any],
+                          base_png: bytes, *, product_png: Optional[bytes] = None
+                          ) -> Tuple[Any, Optional[List[int]], Dict[str, Any]]:
+    """Lay out one module with the shared deterministic stages.
+
+    The product, when the module carries it, is composited from the seller's uploaded reference
+    at the module's own anchor and scale; `deterministic.infographic` then draws the measured page
+    furniture (photo panel, title band, copy column, footer) at the module's declared size. No
+    diffusion scene is involved: the same brief and the same upload produce the same bytes.
+    """
     import product_composite as composite
     from PIL import Image
 
-    placed = composite.place_product(
-        _png_bytes(image), cut_png,
-        scale=module["product_scale"],
-        anchor=tuple(module["product_anchor"]),
-        shadow=True)
-    composed = Image.open(BytesIO(placed["bytes"])).convert("RGB")
-    _draw_copy(composed, module)
-    left, top, right, bottom = (int(v) for v in placed["product_box"])
-    return composed, [left, top, right - left, bottom - top]
+    from . import deterministic
+
+    width, height = module["width"], module["height"]
+    box = [0, 0, max(1, width), max(1, height)]
+    if product_png is not None:
+        placed = composite.place_product(
+            base_png, product_png,
+            scale=float(module["product_scale"]),
+            anchor=tuple(module["product_anchor"]),
+            shadow=True)
+        left, top, right, bottom = (int(v) for v in placed["product_box"])
+        box = [left, top, max(1, right - left), max(1, bottom - top)]
+        # The canvas is already at the module's declared aspect, so fit_aspect is normally a
+        # no-op; it is the shared guard that extends (never crops) if a caller ever supplies a
+        # different-sized scene.
+        fitted = deterministic.fit_aspect(placed["bytes"], box,
+                                          width / float(max(1, height)))
+        canvas = fitted["bytes"]
+        box = fitted["product_box"]
+        result = deterministic.infographic(
+            canvas, box, brief,
+            title=str(module.get("title") or module["text_required"][0]),
+            copy_lines=module["text_required"][1:],
+            variant="band", copy_align=module["text_align"],
+            background=module["background_value"])
+        composed = Image.open(BytesIO(result["bytes"])).convert("RGB")
+        return composed, list(result["product_box"]), dict(result["meta"])
+
+    result = deterministic.infographic(
+        base_png, box, brief, title="",
+        copy_lines=module["text_required"], variant="copy",
+        copy_box=module["text_box"], copy_align=module["text_align"],
+        background=module["background_value"])
+    composed = Image.open(BytesIO(result["bytes"])).convert("RGB")
+    return composed, None, dict(result["meta"])
 
 
 def produce_module(brief: Dict[str, Any], module: Dict[str, Any], *,
@@ -443,7 +444,7 @@ def produce_module(brief: Dict[str, Any], module: Dict[str, Any], *,
         "product_in_frame": module["product_in_frame"],
         "text_required": list(module["text_required"]),
         "bytes": None, "path": None, "cutout": cutout_rgba,
-        "product_box": None, "scene_source": "flat",
+        "product_box": None, "scene_source": "flat", "layout": None,
         "cannot_verify": False, "cannot_verify_reason": None,
     }
     try:
@@ -466,24 +467,20 @@ def produce_module(brief: Dict[str, Any], module: Dict[str, Any], *,
             record["scene_source"] = source
             base = Image.open(BytesIO(scene["bytes"])).convert("RGB")
             base = base.resize((module["width"], module["height"]), Image.LANCZOS)
+            base_png = _png_bytes(base)
             if source != "generated":
                 record["cannot_verify"] = True
                 record["cannot_verify_reason"] = (
                     f"scene source {source!r} is not a render; the product pixels are "
                     "proved, the scene is not")
-            if module["product_in_frame"]:
-                image, box = _place_and_copy(base, module, cutout_png)
-                record["product_box"] = box
-            else:
-                image = base
-                _draw_copy(image, module)
         else:
-            image = _module_canvas(module)
-            if module["product_in_frame"]:
-                image, box = _place_and_copy(image, module, cutout_png)
-                record["product_box"] = box
-            else:
-                _draw_copy(image, module)
+            base_png = _png_bytes(_module_canvas(module))
+
+        image, box, layout = _deterministic_module(
+            brief, module, base_png,
+            product_png=cutout_png if module["product_in_frame"] else None)
+        record["product_box"] = box
+        record["layout"] = layout
     except _ModuleRefused as exc:
         record["cannot_verify"] = True
         record["cannot_verify_reason"] = str(exc)
@@ -827,6 +824,142 @@ def score_aplus_page(brief: Dict[str, Any], modules: Sequence[Dict[str, Any]], *
     }
 
 
+# ---------------------------------------------------------------- the family pass
+def _sha256(data: Optional[bytes]) -> Optional[str]:
+    return hashlib.sha256(data).hexdigest() if data else None
+
+
+def _check_summary(result: Dict[str, Any]) -> Dict[str, bool]:
+    return {name: bool(check.get("ok"))
+            for name, check in (result.get("checks") or {}).items()}
+
+
+def _module_proof(record: Dict[str, Any], score_row: Dict[str, Any]) -> Dict[str, Any]:
+    layout = record.get("layout") or {}
+    return {
+        "id": record.get("id"),
+        "kind": record.get("kind"),
+        "declared_size": [record.get("width"), record.get("height")],
+        "layout": layout.get("variant") or layout.get("layout"),
+        "bytes_sha256": _sha256(record.get("bytes")),
+        "product_box": record.get("product_box"),
+        "score": score_row.get("score"),
+        "passed": score_row.get("passed"),
+        "failed_checks": score_row.get("failed_checks"),
+        "checks": _check_summary(score_row),
+        "text": (score_row.get("checks") or {}).get("text", {}).get("detail"),
+        "cannot_verify": score_row.get("cannot_verify"),
+        "cannot_verify_reason": score_row.get("cannot_verify_reason"),
+    }
+
+
+def run_aplus_family(payload: Optional[Dict[str, Any]] = None, *,
+                     repo_root: str | Path = REPO_ROOT,
+                     out_dir: Optional[str | Path] = None,
+                     method: str = "grabcut",
+                     limit: Optional[int] = None,
+                     ocr: Optional[Callable[[np.ndarray], Dict[str, Any]]] = None,
+                     prove_determinism: bool = True,
+                     proof_path: Optional[str | Path] = None) -> Dict[str, Any]:
+    """Produce, score and prove the whole A+ family.
+
+    Every brief is a page of modules built from the seller's uploaded reference through the
+    deterministic layout stage. Determinism is measured, not asserted: when
+    `prove_determinism` is on, each brief is produced a second time into a throwaway directory
+    and its page and module hashes must match byte for byte.
+    """
+    root = Path(repo_root)
+    if payload is None:
+        from .briefs import DEFAULT_CATALOG_PATH
+
+        with open(DEFAULT_CATALOG_PATH, "r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    briefs = load_aplus_briefs(payload)
+    errors = validate_aplus_briefs(payload)
+    if limit is not None:
+        briefs = briefs[:max(0, int(limit))]
+    target_dir = Path(out_dir) if out_dir is not None else root / "renders" / "aplus"
+
+    rows: List[Dict[str, Any]] = []
+    for brief in briefs:
+        produced = produce_page(brief, repo_root=root, out_dir=target_dir, method=method)
+        page_path = produced["page"].get("path")
+        page_bytes = Path(page_path).read_bytes() if page_path else None
+        score = score_aplus_page(brief, produced["modules"], page_bytes=page_bytes, ocr=ocr)
+
+        determinism: Dict[str, Any] = {"checked": False}
+        if prove_determinism:
+            with tempfile.TemporaryDirectory(prefix="aplus-determinism-") as scratch:
+                repeat = produce_page(brief, repo_root=root, out_dir=scratch, method=method)
+                repeat_page = repeat["page"].get("path")
+                repeat_page_bytes = (Path(repeat_page).read_bytes()
+                                     if repeat_page else None)
+                first_modules = [_sha256(row.get("bytes")) for row in produced["modules"]]
+                second_modules = [_sha256(row.get("bytes")) for row in repeat["modules"]]
+                determinism = {
+                    "checked": True,
+                    "modules_identical": first_modules == second_modules,
+                    "page_identical": page_bytes == repeat_page_bytes,
+                    "module_sha256": first_modules,
+                    "page_sha256": _sha256(page_bytes),
+                }
+
+        by_id = {row.get("id"): row for row in produced["modules"]}
+        rows.append({
+            "brief_id": brief.get("id"),
+            "content_type": brief.get("content_type"),
+            "source_mode": brief_mode(brief),
+            "fidelity": brief_fidelity(brief),
+            "reference_path": produced["cutout"].get("reference_path"),
+            "page_path": _relative(page_path),
+            "page_sha256": _sha256(page_bytes),
+            "determinism": determinism,
+            "score": score["score"],
+            "passed": score["passed"],
+            "module_pass_count": score["module_pass_count"],
+            "module_count_total": score["module_count_total"],
+            "failed_modules": score["failed_modules"],
+            "reasons": score["reasons"],
+            "modules": [_module_proof(by_id[row["id"]], row)
+                        for row in score["modules"] if row["id"] in by_id],
+            "missing_modules": [row["id"] for row in score["modules"]
+                                if row["id"] not in by_id],
+        })
+
+    scores = [float(row["score"]) for row in rows]
+    deterministic = all((row["determinism"].get("modules_identical")
+                         and row["determinism"].get("page_identical"))
+                        for row in rows) if prove_determinism else None
+    proof = {
+        "schema": "northstar.seller_tester.aplus_proof.v1",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "family": "aplus",
+        "catalog": "ty/seller_briefs.json",
+        "out_dir": _relative(target_dir),
+        "method": method,
+        "determinism_proved": deterministic,
+        "briefs": rows,
+        "summary": {
+            "briefs": len(rows),
+            "passed": sum(1 for row in rows if row["passed"]),
+            "mean_score": round(sum(scores) / len(scores), 1) if scores else 0.0,
+            "modules_passed": sum(int(row["module_pass_count"]) for row in rows),
+            "modules_total": sum(int(row["module_count_total"]) for row in rows),
+        },
+        "errors": errors,
+        "ok": (not errors and all(row["passed"] for row in rows)
+               and (deterministic is not False)),
+    }
+    if proof_path is not False:
+        target = Path(proof_path) if proof_path is not None \
+            else root / "state" / "seller" / "aplus_proof.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(proof, indent=2, ensure_ascii=False) + "\n",
+                          encoding="utf-8")
+        proof["proof_path"] = _relative(target)
+    return proof
+
+
 __all__ = [
     "APLUS_KEY",
     "CONTENT_TYPES",
@@ -836,6 +969,7 @@ __all__ = [
     "module_grid",
     "produce_module",
     "produce_page",
+    "run_aplus_family",
     "score_aplus_page",
     "validate_aplus_briefs",
 ]
