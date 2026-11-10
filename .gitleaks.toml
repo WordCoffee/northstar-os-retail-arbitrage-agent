@@ -54,3 +54,11 @@ condition = "AND"
 paths = ['''reports[\\/]_wm_beeswax\.html$''', '''reports[\\/]_wm_unpaper\.html$''']
 regexTarget = "line"
 regexes = ['''AIza[0-9A-Za-z_\-]{35}''']
+
+[[allowlists]]
+description = "FP: Northstar_backend/test_chrome_uia.py:93 constructs a fake UI Automation element ({"role": "TextControl", "name": "api_key"}) to stand in for an accessibility tree; the value is a field label in a test fixture, not a credential"
+paths = ['''Northstar_backend[\\/]test_chrome_uia\.py$''']
+
+[[allowlists]]
+description = "FP: Northstar_backend/test_vision_computer.py:74 writes a fake secret file into a tmp_path so the vision pipeline can be tested for refusing/redacting it; the value exists to be refused"
+paths = ['''Northstar_backend[\\/]test_vision_computer\.py$''']

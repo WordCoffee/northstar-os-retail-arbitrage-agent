@@ -78,7 +78,8 @@ decision.
 ## Docs
 
 docs/CREATIVE_LANES.md is the operator-facing map of the surfaces, endpoints, contracts and gaps.
-eports/ty/SESSION_20261103.md is the index of this session's units, commits, probes and artifacts.
+
+eports/ty/SESSION_20261103.md is the index of this session's units, commits, probes and artifacts.
 
 
 ---
@@ -123,9 +124,48 @@ design.
 Queued by the Director (work order §2: hard lines go here as one exact action, and work
 continues without them).
 
-## DIR-1. Rotate three credentials that are already committed
+## DIR-1a. Rotate the Scavio API key (committed)
 
-> **Now also blocking promotion (2026-11-09).** Promoting the remaining 149 code slices to `main`
+`FirstNorthstarautomationchat.md` **line 1143** and **line 1291** contain a Scavio API key — the same
+credential twice. It is in git history, not just the working tree, so editing the file is not enough.
+
+**Rotate it at Scavio, then say so** and the history purge becomes a Director job (the value must be
+removed from every commit that carries it). gitleaks rule `generic-api-key`.
+
+## DIR-1b. Rotate the Bright Data API key (committed)
+
+`FirstNorthstarautomationchat.md` **line 1148** and **line 1296** — the same Bright Data key twice.
+Same action: rotate at the provider, then I purge history. Rule `generic-api-key`.
+
+## DIR-1c. Rotate the GitHub personal access token (committed)
+
+`autothink-ui-chat-export.md` **line 7852** carries a GitHub PAT, which is the highest-risk of the
+three: a PAT can push code. **Revoke it in GitHub → Settings → Developer settings → Tokens**, then I
+purge the line from history. Rule `github-pat`.
+
+## DIR-1. The measure that made these visible
+
+`reports/ty/gitleaks_classified.md` classifies **all 312 gitleaks findings** in this working tree:
+
+| class | findings |
+|---|---|
+| real, **committed** (the three above) | **5** |
+| real, local only (`.env` files, untracked) | 43 |
+| fixtures, test modules and captured logs | 69 |
+| vendored third-party code (`venv-crew`, `site-packages`) | 44 |
+| untracked review (exports, worktree copies) | 151 |
+
+The `.env` findings are credentials too, but they are not in history, so no rotation is needed for
+the leak; they are the live keys and stay where they are.
+
+**Promotion is still blocked by two findings that are not real** — `test_chrome_uia.py:93` and
+`test_vision_computer.py:74`, both synthetic values in tests that build fake accessibility trees and
+fake secret files. Those are allowlisted in `.gitleaks.toml` with a logged commit
+(`reports/ty/gitleaks_allowlist_20261109.md`); the three above are not, and must not be.
+
+
+
+> **History note.** Promoting the remaining 149 code slices to `main`
 > is refused by the repository's own gitleaks pre-commit hook: **24 findings** across
 > `Northstar_backend-data`, `Northstar_backend-root` and `Northstar_backend-static`. That is this
 > entry's leak class, and it is why `main` cannot collect its test suite
