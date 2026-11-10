@@ -548,6 +548,7 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         checks["product_region"] = _product_region_verdict(
             loaded.rgb, cutout=cutout, placement=placement,
             placement_quad=placement_quad)
+
     else:
         # No reference, no cutout, nothing to preserve: the check does not apply. It is recorded as
         # skipped with that reason rather than left out, so an absent check is never mistaken for a
@@ -555,6 +556,7 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         checks["product_region"] = _skip(
             "the product-region check applies to the composite route; this brief has no reference "
             "to preserve")
+
 
     if judge is not None:
         rubric = {

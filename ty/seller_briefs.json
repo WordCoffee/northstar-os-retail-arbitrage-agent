@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "title": "Seller-Tester brief catalog (D9)",
   "note": "Amazon-ready product-picture situations across eight categories. source_mode names the single input a brief starts from: the prompt alone (prompt_only), a stored reference from an earlier generation (stored_reference), or a file the seller uploads (uploaded_reference). Reference modes carry a reference object; a prompt_only brief must not. Stored references point at real assets under renders/, and the Mogra Organic pouch is the only product with stored generations in this checkout. Uploaded references name the seller's own file and have no local copy here, so their reference check reports cannot-verify, which counts as a failure until the upload exists. Constraints are checked programmatically; the vision judge is optional.",
   "categories": [
@@ -2849,5 +2849,561 @@
     "prompt_only",
     "stored_reference",
     "uploaded_reference"
+  ],
+  "aplus_note": "A+ content modules are a distinct seller deliverable from product pictures: an ordered page of modules with their own pixel grid and required copy. Each A+ brief declares its modules (id, kind, width, height, order), the copy each module must show, and the product-in-frame rule. product_in_frame: true means the seller's own product pixels must be composited, which is only lawful with fidelity exact and a reference; the single product_in_frame: false text-only brand story is the one place fidelity tolerant is used.",
+  "aplus_briefs": [
+    {
+      "id": "AP-001",
+      "content_type": "hero_band",
+      "category": "supplement_pouch",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      },
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 246
+        }
+      },
+      "modules": [
+        {
+          "id": "hero",
+          "kind": "hero_band",
+          "width": 970,
+          "height": 600,
+          "background": {
+            "mode": "uniform",
+            "value": 246
+          },
+          "product_in_frame": true,
+          "text_required": [
+            "MOGRA ORGANICS",
+            "LION'S MANE",
+            "DAILY FOCUS NATURALLY"
+          ],
+          "text_box": [
+            0.05,
+            0.08,
+            0.48,
+            0.84
+          ],
+          "text_align": "left",
+          "font_scale": 0.078,
+          "rules": false,
+          "scene": "flat",
+          "product_anchor": [
+            0.7,
+            0.54
+          ],
+          "product_scale": 0.72
+        },
+        {
+          "id": "sub_band",
+          "kind": "spec_strip",
+          "width": 970,
+          "height": 220,
+          "background": {
+            "mode": "uniform",
+            "value": 232
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "60 SERVINGS",
+            "VEGAN CAPSULES",
+            "THIRD PARTY TESTED"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.9,
+            0.8
+          ],
+          "text_align": "center",
+          "font_scale": 0.085,
+          "rules": false,
+          "scene": "flat"
+        },
+        {
+          "id": "spec_strip",
+          "kind": "spec_strip",
+          "width": 970,
+          "height": 160,
+          "background": {
+            "mode": "uniform",
+            "value": 246
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "SUPPLEMENT FACTS",
+            "SERVING SIZE 2 CAPSULES"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.9,
+            0.8
+          ],
+          "text_align": "left",
+          "font_scale": 0.09,
+          "rules": true,
+          "scene": "flat"
+        }
+      ]
+    },
+    {
+      "id": "AP-002",
+      "content_type": "comparison_table",
+      "category": "supplement_pouch",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      },
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 250
+        }
+      },
+      "modules": [
+        {
+          "id": "comparison",
+          "kind": "comparison_table",
+          "width": 970,
+          "height": 560,
+          "background": {
+            "mode": "uniform",
+            "value": 250
+          },
+          "product_in_frame": true,
+          "text_required": [
+            "MOGRA VS OTHER BRANDS",
+            "ORGANIC LION'S MANE",
+            "NO ARTIFICIAL FILLERS",
+            "THIRD PARTY TESTED"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.62,
+            0.82
+          ],
+          "text_align": "left",
+          "font_scale": 0.062,
+          "rules": true,
+          "scene": "flat",
+          "product_anchor": [
+            0.82,
+            0.3
+          ],
+          "product_scale": 0.3
+        },
+        {
+          "id": "cta",
+          "kind": "spec_strip",
+          "width": 970,
+          "height": 180,
+          "background": {
+            "mode": "uniform",
+            "value": 232
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "TRY MOGRA TODAY",
+            "FREE SHIPPING"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.9,
+            0.8
+          ],
+          "text_align": "center",
+          "font_scale": 0.1,
+          "rules": false,
+          "scene": "flat"
+        }
+      ]
+    },
+    {
+      "id": "AP-003",
+      "content_type": "ingredient_grid",
+      "category": "supplement_pouch",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      },
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 244
+        }
+      },
+      "modules": [
+        {
+          "id": "ingredient_grid",
+          "kind": "ingredient_grid",
+          "width": 970,
+          "height": 520,
+          "background": {
+            "mode": "uniform",
+            "value": 244
+          },
+          "product_in_frame": true,
+          "text_required": [
+            "LION'S MANE",
+            "CORDYCEPS",
+            "REISHI",
+            "TURKEY TAIL"
+          ],
+          "text_box": [
+            0.42,
+            0.12,
+            0.52,
+            0.76
+          ],
+          "text_align": "left",
+          "font_scale": 0.055,
+          "rules": false,
+          "scene": "flat",
+          "product_anchor": [
+            0.17,
+            0.66
+          ],
+          "product_scale": 0.42
+        },
+        {
+          "id": "benefit_band",
+          "kind": "ingredient_grid",
+          "width": 970,
+          "height": 300,
+          "background": {
+            "mode": "uniform",
+            "value": 236
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "IMMUNE SUPPORT",
+            "MENTAL CLARITY",
+            "STEADY ENERGY"
+          ],
+          "text_box": [
+            0.06,
+            0.08,
+            0.88,
+            0.84
+          ],
+          "text_align": "left",
+          "font_scale": 0.09,
+          "rules": false,
+          "scene": "flat"
+        }
+      ]
+    },
+    {
+      "id": "AP-004",
+      "content_type": "lifestyle_band",
+      "category": "supplement_pouch",
+      "difficulty": 3,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "the same two pouches in a greenhouse scene",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      },
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 240
+        }
+      },
+      "modules": [
+        {
+          "id": "lifestyle_band",
+          "kind": "lifestyle_band",
+          "width": 970,
+          "height": 560,
+          "background": {
+            "mode": "uniform",
+            "value": 246
+          },
+          "product_in_frame": true,
+          "text_required": [
+            "MORNING RITUAL",
+            "MIX INTO COFFEE OR TEA",
+            "ONE SCOOP DAILY"
+          ],
+          "text_box": [
+            0.52,
+            0.12,
+            0.42,
+            0.76
+          ],
+          "text_align": "left",
+          "font_scale": 0.06,
+          "rules": false,
+          "scene": "flat",
+          "product_anchor": [
+            0.28,
+            0.58
+          ],
+          "product_scale": 0.6
+        },
+        {
+          "id": "tagline_band",
+          "kind": "brand_story",
+          "width": 970,
+          "height": 180,
+          "background": {
+            "mode": "uniform",
+            "value": 240
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "MADE FOR EVERY DAY"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.9,
+            0.8
+          ],
+          "text_align": "center",
+          "font_scale": 0.11,
+          "rules": false,
+          "scene": "flat"
+        }
+      ]
+    },
+    {
+      "id": "AP-005",
+      "content_type": "brand_story",
+      "category": "supplement_pouch",
+      "difficulty": 1,
+      "source_mode": "uploaded_reference",
+      "fidelity": "tolerant",
+      "product_in_frame": false,
+      "note": "Text-only brand story: no product pixels, so 'tolerant' is lawful here and only here.",
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 242
+        }
+      },
+      "modules": [
+        {
+          "id": "brand_story",
+          "kind": "brand_story",
+          "width": 970,
+          "height": 600,
+          "background": {
+            "mode": "uniform",
+            "value": 242
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "OUR STORY",
+            "GROWN IN SMALL BATCHES",
+            "FROM FOREST TO SHELF"
+          ],
+          "text_box": [
+            0.06,
+            0.1,
+            0.88,
+            0.8
+          ],
+          "text_align": "center",
+          "font_scale": 0.085,
+          "rules": false,
+          "scene": "flat"
+        },
+        {
+          "id": "founder_quote",
+          "kind": "brand_story",
+          "width": 970,
+          "height": 260,
+          "background": {
+            "mode": "uniform",
+            "value": 232
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "WE BELIEVE IN SIMPLE THINGS",
+            "NO FILLERS AND NO SHORTCUTS"
+          ],
+          "text_box": [
+            0.06,
+            0.08,
+            0.88,
+            0.84
+          ],
+          "text_align": "center",
+          "font_scale": 0.09,
+          "rules": false,
+          "scene": "flat"
+        }
+      ],
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_lifestyle.png",
+        "descriptor": {
+          "filename": "mogra_pair_lifestyle.png",
+          "mime_type": "image/png",
+          "subject": "the same two pouches in a greenhouse scene",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      }
+    },
+    {
+      "id": "AP-006",
+      "content_type": "spec_strip",
+      "category": "supplement_pouch",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "product_in_frame": true,
+      "reference": {
+        "kind": "uploaded_file",
+        "path": "renders/references/mogra/mogra_pair_main.png",
+        "descriptor": {
+          "filename": "mogra_pair_main.png",
+          "mime_type": "image/png",
+          "subject": "two MOGRA stand-up pouches on white, front",
+          "note": "the seller own photo, resolved from renders/references/mogra in this checkout"
+        }
+      },
+      "page": {
+        "width": 970,
+        "gap_px": 0,
+        "background": {
+          "value": 255
+        }
+      },
+      "modules": [
+        {
+          "id": "tech_hero",
+          "kind": "hero_band",
+          "width": 970,
+          "height": 420,
+          "background": {
+            "mode": "uniform",
+            "value": 255
+          },
+          "product_in_frame": true,
+          "text_required": [
+            "TECHNICAL SPECIFICATIONS",
+            "1500MG PER SERVING"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.55,
+            0.8
+          ],
+          "text_align": "left",
+          "font_scale": 0.07,
+          "rules": false,
+          "scene": "flat",
+          "product_anchor": [
+            0.74,
+            0.58
+          ],
+          "product_scale": 0.66
+        },
+        {
+          "id": "spec_rows",
+          "kind": "spec_strip",
+          "width": 970,
+          "height": 260,
+          "background": {
+            "mode": "uniform",
+            "value": 246
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "SERVING SIZE 2 CAPSULES",
+            "SERVINGS PER CONTAINER 30",
+            "STORAGE COOL AND DRY"
+          ],
+          "text_box": [
+            0.05,
+            0.1,
+            0.9,
+            0.8
+          ],
+          "text_align": "left",
+          "font_scale": 0.065,
+          "rules": true,
+          "scene": "flat"
+        },
+        {
+          "id": "certification",
+          "kind": "spec_strip",
+          "width": 970,
+          "height": 180,
+          "background": {
+            "mode": "uniform",
+            "value": 228
+          },
+          "product_in_frame": false,
+          "text_required": [
+            "ORGANIC CERTIFIED",
+            "VEGAN FRIENDLY"
+          ],
+          "text_box": [
+            0.05,
+            0.12,
+            0.9,
+            0.76
+          ],
+          "text_align": "center",
+          "font_scale": 0.11,
+          "rules": false,
+          "scene": "flat"
+        }
+      ]
+    }
   ]
 }

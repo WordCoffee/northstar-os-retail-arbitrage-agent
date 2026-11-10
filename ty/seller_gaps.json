@@ -1,5 +1,15 @@
 [
   {
+    "id": "gap-08ae1853d57d",
+    "brief_id": "PO-X",
+    "score": 60.0,
+    "failed_checks": [
+      "subject_fill"
+    ],
+    "artefact_path": "C:\\Users\\T2Hol\\AppData\\Local\\Temp\\tmp2mxgl8ac\\PO-X.png",
+    "at": "2026-11-10T03:41:16+00:00"
+  },
+  {
     "id": "gap-12e4161a3dfe",
     "brief_id": "PO-X",
     "score": 60.0,

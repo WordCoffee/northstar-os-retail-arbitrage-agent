@@ -195,7 +195,11 @@ def test_a_prompt_only_brief_is_not_asked_for_a_cutout_it_never_had():
     because it has no cutout failed all twelve of the first prompt-only held-out briefs for a check
     that does not apply to them (2026-11-09).
     """
-    import json
+    import tempfile
+    from io import BytesIO
+    from pathlib import Path as _Path
+
+    from PIL import Image
 
     from seller_tester import harness
 
@@ -205,6 +209,7 @@ def test_a_prompt_only_brief_is_not_asked_for_a_cutout_it_never_had():
                              "aspect": {"ratio": 1.0, "tolerance": 0.1},
                              "background": {"value": 255, "tolerance": 40, "mode": "free"},
                              "fill_pct": {"min": 1, "max": 100, "distance": 40}}}
+    tmp_path = tempfile.mkdtemp()
 
     class Generator:
         name = "composite"
@@ -213,11 +218,6 @@ def test_a_prompt_only_brief_is_not_asked_for_a_cutout_it_never_had():
             return "full_generation"
 
         def pair(self, briefs, limit=None):
-            from io import BytesIO
-            from pathlib import Path as _Path
-
-            from PIL import Image
-
             buffer = BytesIO()
             Image.new("RGB", (256, 256), (245, 245, 245)).save(buffer, format="PNG")
             target = _Path(tmp_path) / "PO-X.png"
@@ -229,11 +229,9 @@ def test_a_prompt_only_brief_is_not_asked_for_a_cutout_it_never_had():
                     "scene": {"source": "generated"}, "product_box": None,
                     "cutout_path": None}
 
-    tmp_path = __import__("tempfile").mkdtemp()
     summary = harness.run_pass(generator=Generator(), briefs=[brief], limit=1, judge=None,
                                describe=lambda *a, **k: "a product")
-    row = summary["results"][0]
-    region = (row.get("checks") or {}).get("product_region") or {}
+    region = (summary["results"][0].get("checks") or {}).get("product_region") or {}
     assert region.get("skipped") is True, region
     assert region.get("cannot_verify") is False, region
 
