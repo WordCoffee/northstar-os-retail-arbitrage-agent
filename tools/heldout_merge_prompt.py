@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(r"C:\Users\T2Hol\Desktop\Northstar OS Retail Arbitrage Agent")
 MODES = ROOT / "state" / "seller" / "heldout_modes_proof.json"
-PROMPT = ROOT / "state" / "seller" / "heldout_prompt_only_proof3.json"
+PROMPT = ROOT / "state" / "seller" / "heldout_prompt_only_proof4.json"
 
 
 def main() -> int:
