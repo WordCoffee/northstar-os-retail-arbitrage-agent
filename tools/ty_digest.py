@@ -399,6 +399,43 @@ def render(data: Dict[str, Any]) -> str:
         lines.append("No held-out proof on disk yet.")
     lines += [""]
 
+    lines += ["## A+ pages - source next to output", ""]
+    aplus_proof = _read_json(ROOT / "state" / "seller" / "aplus_proof.json") or {}
+    aplus_catalog = _read_json(ROOT / "ty" / "seller_briefs.json") or {}
+    aplus_by_id = {str(row.get("id")): row for row in aplus_catalog.get("aplus_briefs") or []}
+    aplus_rows = []
+    for row in aplus_proof.get("briefs") or []:
+        brief = aplus_by_id.get(str(row.get("brief_id"))) or {}
+        source = str(row.get("reference_path") or
+                     ((brief.get("reference") or {}).get("path")) or "")
+        page = str(row.get("page_path") or "")
+        if source and not Path(source).is_absolute():
+            source = str(ROOT / source)
+        aplus_rows.append((str(row.get("brief_id")), row.get("content_type"),
+                           brief.get("product_line") or "mogra", row.get("score"),
+                           f"{row.get('module_pass_count')}/{row.get('module_count_total')}",
+                           row.get("passed"), source, page))
+    if aplus_rows:
+        lines += ["| brief | type | brand | modules | score | passed | page |",
+                  "|---|---|---|---|---|---|---|"]
+        for brief_id, kind, brand, score, modules, passed, source, page in aplus_rows:
+            lines.append(f"| {brief_id} | {kind} | {brand} | {modules} | {score} | "
+                         f"{'yes' if passed else 'no'} | `{page}` |")
+        family = aplus_proof.get("family") if isinstance(aplus_proof.get("family"), dict) else {}
+        if family:
+            lines += ["", f"Family: **{family.get('passed')} of {family.get('briefs')} briefs** "
+                          f"passed, mean **{family.get('mean_score')}**, "
+                          f"{family.get('modules_passed')}/{family.get('modules_total')} modules."]
+        else:
+            passed = sum(1 for row in aplus_rows if row[5])
+            lines += ["", f"Family: **{passed} of {len(aplus_rows)} briefs** passed "
+                          "(computed from the rows; the proof's `family` field is a label)."]
+        lines += ["", "Six pairs, source next to the page: "
+                      "`reports/ty/aplus_source_next_to_output.png`"]
+    else:
+        lines.append("No A+ run on disk yet.")
+    lines += [""]
+
     lines += ["## Deterministic layout - source next to output", ""]
     demo = _read_json(ROOT / "state" / "seller" / "layout_demo_proof.json") or {}
     demo_briefs = _read_json(ROOT / "ty" / "seller_briefs_layout_demo.json") or {}

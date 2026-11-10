@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-10T03:42:41+00:00",
+  "updated": "2026-11-10T05:10:09+00:00",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -1475,13 +1475,13 @@
       "commit": "1e29faaf",
       "verification": "vitest 26 passed; build ok",
       "created_at": "2026-11-09T22:43:40+00:00",
-      "updated_at": "2026-11-10T03:42:41+00:00"
+      "updated_at": "2026-11-10T05:10:09+00:00"
     },
     {
       "id": "ux-07c-turn-body-tab",
       "kind": "feature",
       "priority": 960,
-      "status": "pending",
+      "status": "done",
       "title": "The chat request body carries `tab`, and the backend drops it on the floor",
       "next": "Add `tab` to `TurnIn` in Northstar_backend/chat_router.py and forward it into the model turn (it currently forwards only `canvas`, and pydantic extra='ignore' discards the rest). One field, one test that the model request contains it.",
       "write_paths": [
@@ -1503,10 +1503,10 @@
         "commit 1e29faaf"
       ],
       "tier": "code",
-      "commit": null,
-      "verification": null,
+      "commit": "ef41860a",
+      "verification": "5 tests: model, passthrough, directive, absent, malformed",
       "created_at": "2026-11-10T03:42:41+00:00",
-      "updated_at": "2026-11-10T03:42:41+00:00"
+      "updated_at": "2026-11-10T05:10:09+00:00"
     },
     {
       "id": "f0-promotion-gitleaks",
@@ -1527,6 +1527,66 @@
       "verification": null,
       "created_at": "2026-11-10T03:42:41+00:00",
       "updated_at": "2026-11-10T03:42:41+00:00"
+    },
+    {
+      "id": "sel-08-aplus-copy-audit",
+      "kind": "defect",
+      "priority": 1120,
+      "status": "pending",
+      "title": "The eight new A+ briefs inherited Mogra claim lines when cloned for Word Coffee",
+      "next": "Replace every inherited spec_strip / comparison copy line in AP-007..AP-010 with Word Coffee's own (the box has no serving size, capsules or 1500 mg). AP-010 already fails one module for exactly this: 'missing copy: 1500MG PER SERVING'.",
+      "write_paths": [
+        "ty/seller_briefs.json"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "tools.seller_tester",
+          "aplus",
+          "--summary-out",
+          "state/seller/aplus_proof.json"
+        ]
+      ],
+      "why": "a cloned module is fine; cloned *claims* are not. The renderer must never print a benefit that belongs to another product",
+      "evidence": [
+        "reports/ty/aplus_source_next_to_output.png",
+        "AP-010 module tech_hero"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-10T05:10:09+00:00",
+      "updated_at": "2026-11-10T05:10:09+00:00"
+    },
+    {
+      "id": "sel-09-prompt-only-plates",
+      "kind": "feature",
+      "priority": 1080,
+      "status": "pending",
+      "title": "Prompt-only scores 34.5 because the plate is wrong, not the pipeline",
+      "next": "Put the brief's own constraints into the generation prompt (background level, aspect, fill) and re-run the twelve. If that does not move it, the mode is a product answer, not an engineering one: it becomes 'upload one photo'.",
+      "write_paths": [
+        "tools/seller_tester/scene_render.py"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "pytest",
+          "-q",
+          "test_seller_tester_composite.py"
+        ]
+      ],
+      "why": "reports/ty/prompt_only_pipeline.md: structure did not rescue the mode; the plate did not change",
+      "evidence": [
+        "state/seller/heldout_prompt_only_proof2.json"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-10T05:10:09+00:00",
+      "updated_at": "2026-11-10T05:10:09+00:00"
     }
   ],
   "parked": [
