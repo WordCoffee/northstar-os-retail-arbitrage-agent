@@ -21,7 +21,10 @@ class AmazonAPIAdapter(BaseAdapter):
         return "amazon_api"
 
     def is_configured(self) -> bool:
-        return bool(os.environ.get("SP_API_REFRESH_TOKEN"))
+        # Architecture (2026-10-11): file-only. The unified Amazon adapter
+        # refuses unless the linkage gate is explicitly enabled.
+        from amazon_linkage_gate import linkage_enabled
+        return linkage_enabled() and bool(os.environ.get("SP_API_REFRESH_TOKEN"))
 
     def _run_importer(self, importer_class, method: str, **kwargs) -> ProviderResponse:
         """Run an importer method and wrap the result."""
