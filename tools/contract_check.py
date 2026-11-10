@@ -94,6 +94,21 @@ OVERRIDES: Dict[str, Dict[str, Any]] = {
         "note": ("ty/service_registry.json actions[] is empty; the endpoint is "
                  "verified on disk and ProductFinder.jsx now calls it"),
     },
+    # AdPilot's registry entry lists three reads and one external action, so its contract could
+    # never show a *persisted* primary action: there was nothing to persist into (adpilot `contract`
+    # = 0, `complete` = 0). A campaign plan is the thing a seller returns to, so it is saved as a
+    # durable job through the foundation store — the same store and the same read-back the `jobs`
+    # service is proved with. The registry entry should carry this write; until it does, the override
+    # names it here rather than reporting a gap that is no longer true.
+    "adpilot": {
+        "name": "save a campaign plan",
+        "effect": "write",
+        "endpoint": "/api/v1/foundation/jobs-durable",
+        "method": "POST",
+        "source": "Northstar_backend/foundation/api/jobs.py",
+        "note": ("a campaign plan is persisted as a durable job and read back by id; the registry "
+                 "entry lists reads only (2026-11-10)"),
+    },
 }
 
 #: How to execute each endpoint. `fn` entries are built at run time so every

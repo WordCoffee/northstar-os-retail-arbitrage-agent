@@ -123,7 +123,7 @@ def test_end_to_end_contract_run_on_a_fresh_backend(tmp_path, monkeypatch):
     assert "row(s) under 'evaluated'" in rows["product-finder"]["evidence"]
 
     # Writes must be read back through a different endpoint.
-    for sid in ("jobs", "keywords", "design-studio", "listingforge"):
+    for sid in ("jobs", "keywords", "design-studio", "listingforge", "adpilot"):
         assert rows[sid]["verdict"] == "pass", rows[sid]
         assert rows[sid]["persisted"] is True, rows[sid]
 

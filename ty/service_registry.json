@@ -2260,6 +2260,14 @@
           "endpoint": "/api/v1/reasoning/ad-copy-proposal",
           "method": "POST",
           "source": "Northstar_backend/main.py:1711"
+        },
+        {
+          "name": "save a campaign plan",
+          "effect": "write",
+          "endpoint": "/api/v1/foundation/jobs-durable",
+          "method": "POST",
+          "source": "Northstar_backend/foundation/api/router.py:868",
+          "why": "a plan the seller can return to is the difference between a report and a tool; stored as a durable job and read back by id"
         }
       ],
       "bojo_tool": {
