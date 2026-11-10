@@ -83,6 +83,25 @@ def gitleaks(worktree: Path) -> Dict[str, Any]:
         _shutil.rmtree(scratch, ignore_errors=True)
 
 
+def build_ui(worktree: Path) -> Dict[str, Any]:
+    """Build the UI bundle inside the worktree before running the suite.
+
+    `northstar-os-ui/dist` is gitignored, so a fresh worktree has no bundle and the UI-serving tests
+    fail with 404s — 31 of them, which looks exactly like a regression and is not one (measured
+    2026-11-10). A gate that cannot tell "no bundle" from "broken build" is measuring its own setup.
+    """
+    ui = worktree / "northstar-os-ui"
+    if not (ui / "package.json").is_file():
+        return {"ok": False, "reason": "no northstar-os-ui/package.json in the candidate"}
+    install = subprocess.run(["npm", "install", "--silent"], cwd=str(ui),
+                             capture_output=True, text=True, timeout=1800)
+    build = subprocess.run(["npm", "run", "build"], cwd=str(ui),
+                           capture_output=True, text=True, timeout=1800)
+    return {"ok": build.returncode == 0,
+            "install_rc": install.returncode, "build_rc": build.returncode,
+            "tail": (build.stdout or build.stderr).strip().splitlines()[-2:]}
+
+
 def pytest_run(worktree: Path, *, collect_only: bool, timeout: int) -> Dict[str, Any]:
     args = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider"]
     if collect_only:
@@ -132,6 +151,7 @@ def main(argv: List[str] | None = None) -> int:
         result["collect"] = pytest_run(worktree, collect_only=True, timeout=1800)
         OUT.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         if not ns.gate_only:
+            result["ui_build"] = build_ui(worktree)
             result["suite"] = pytest_run(worktree, collect_only=False, timeout=3600)
         ok = (result["gitleaks_ok"] and not result["gitleaks"] and result["collect"]["returncode"] == 0
               and not result["collect"]["errors"]
@@ -153,6 +173,8 @@ def main(argv: List[str] | None = None) -> int:
         print("collect-only:", result["collect"]["tail"])
         for error in result["collect"]["errors"][:8]:
             print("   ", error)
+        if "ui_build" in result:
+            print(f"ui build: rc={result['ui_build'].get('build_rc')} {result['ui_build'].get('tail')}")
         if "suite" in result:
             print(f"full suite: {result['suite']['tail']} ({result['suite']['seconds']}s)")
         print(f"VERDICT: {result['verdict']}")

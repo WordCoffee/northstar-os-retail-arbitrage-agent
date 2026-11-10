@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "updated": "2026-11-10T05:10:09+00:00",
+  "updated": "2026-11-10T06:58:25+00:00",
   "owner": "Tyrone (T2 Holdings)",
   "program": "Ty Autonomy Program",
   "phase": "C",
@@ -1532,7 +1532,7 @@
       "id": "sel-08-aplus-copy-audit",
       "kind": "defect",
       "priority": 1120,
-      "status": "pending",
+      "status": "done",
       "title": "The eight new A+ briefs inherited Mogra claim lines when cloned for Word Coffee",
       "next": "Replace every inherited spec_strip / comparison copy line in AP-007..AP-010 with Word Coffee's own (the box has no serving size, capsules or 1500 mg). AP-010 already fails one module for exactly this: 'missing copy: 1500MG PER SERVING'.",
       "write_paths": [
@@ -1554,10 +1554,10 @@
         "AP-010 module tech_hero"
       ],
       "tier": "code",
-      "commit": null,
-      "verification": null,
+      "commit": "c8bf28a4",
+      "verification": "claims lint clean; A+ 14/14 at 100.0",
       "created_at": "2026-11-10T05:10:09+00:00",
-      "updated_at": "2026-11-10T05:10:09+00:00"
+      "updated_at": "2026-11-10T06:58:25+00:00"
     },
     {
       "id": "sel-09-prompt-only-plates",
@@ -1587,6 +1587,58 @@
       "verification": null,
       "created_at": "2026-11-10T05:10:09+00:00",
       "updated_at": "2026-11-10T05:10:09+00:00"
+    },
+    {
+      "id": "sec-01-rotate-and-purge",
+      "kind": "incident",
+      "priority": 2000,
+      "status": "blocked",
+      "title": "Three credentials are readable on a PUBLIC GitHub remote",
+      "next": "Owner rotates SCAVIO_API_KEY, BRIGHTDATA_API_KEY and the GitHub PAT, then decides on the history rewrite (force-push of a rewritten main, or a GitHub support purge). Then `python tools/retire_chat_exports.py --retire` removes the exports and allowlists their dead fingerprints.",
+      "write_paths": [],
+      "acceptance_commands": [],
+      "why": "reports/ty/secret_exposure_report.md: origin is public, both exports are in origin/main (61a023ca), commits a299d6e9 and 21aed4e3",
+      "evidence": [
+        "reports/ty/secret_exposure_report.md",
+        "reports/ty/gitleaks_classified.md"
+      ],
+      "tier": "owner",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-10T06:58:25+00:00",
+      "updated_at": "2026-11-10T06:58:25+00:00"
+    },
+    {
+      "id": "sel-10-seller-coverage",
+      "kind": "feature",
+      "priority": 1500,
+      "status": "pending",
+      "title": "Every seller-facing service is below the bar on one dimension: reference coverage",
+      "next": "Raise reference coverage from 12 of 56 briefs: collect the missing uploads (the twelve uploaded_reference briefs have no file), then re-score the seller dimension. Until coverage passes ~40 %, no seller-facing service can reach 85 on its own.",
+      "write_paths": [
+        "ty/seller_briefs.json",
+        "ty/seller_briefs_heldout.json"
+      ],
+      "acceptance_commands": [
+        [
+          "python",
+          "-m",
+          "tools.seller_tester",
+          "composite",
+          "--limit",
+          "21"
+        ]
+      ],
+      "why": "reports/ty/launch_readiness.md: seller=0 or 60 is what keeps listings and PPC below the bar",
+      "evidence": [
+        "reports/ty/launch_readiness.md",
+        "ty/scorecards.json"
+      ],
+      "tier": "code",
+      "commit": null,
+      "verification": null,
+      "created_at": "2026-11-10T06:58:25+00:00",
+      "updated_at": "2026-11-10T06:58:25+00:00"
     }
   ],
   "parked": [

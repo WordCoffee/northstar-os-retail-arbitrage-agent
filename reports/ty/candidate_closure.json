@@ -14,5 +14,16 @@
       "7465 tests collected in 21.38s"
     ],
     "errors": []
-  }
+  },
+  "suite": {
+    "returncode": 1,
+    "seconds": 1088.0,
+    "tail": [
+      "FAILED test_ui_assets_served.py::test_ui_deep_link_served - assert 404 == 200",
+      "FAILED test_ui_assets_served.py::test_ui_assets_are_served - AssertionError: ...",
+      "31 failed, 7307 passed, 125 skipped, 2 xfailed, 17 warnings, 125 subtests passed in 1082.78s (0:18:02)"
+    ],
+    "errors": []
+  },
+  "verdict": "REFUSED"
 }
