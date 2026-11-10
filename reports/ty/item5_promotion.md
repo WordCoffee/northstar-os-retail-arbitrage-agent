@@ -1,39 +1,53 @@
-# Item 5 — promotion record: REFUSED
+# Promotion record — 2026-11-09
 
-Run 2026-11-09, worktree `state/worktrees/item5`, branch `ty/item5`.
-`python tools/promote_staging.py --check` against the real repo. Nothing was merged, no tag
-was created, `main` stayed at `ecef24a7`.
+Two promotions today, and one deliberate refusal. This file is the record the owner reads instead of
+a chat log.
 
-| gate | result | evidence |
+## Promoted to `main` (code only, all three gates green)
+
+Candidate: `staging-candidate/20261109-1811` at `3f002e0c`.
+Full suite on that candidate: **7329 passed, 0 failed, 117 skipped, 2 xfailed** in 17 m 51 s
+(`reports/ty/_fullsuite_candidate8_20261109.txt`).
+Verifier gate: 20 agree, 0 FAILED, 1 BLOCKED (V3, locked desktop) — `reports/ty/d15_verification.md`.
+
+| slice | paths | main after |
 |---|---|---|
-| 1 suite | **FAIL** `suite_stale` | `_fullsuite_final_20261108.txt` is green (7067 passed, 117 skipped, 2 xfailed, 0 failed) and its ids reconcile 7186 = 7186, `_idlist_full_20261108.txt` vs `_idlist_20261107.txt` -> 450 added, 0 removed. But the run was written 2026-11-09T00:52:29 and the newest `staging` commit is 2026-11-09T01:00:14, so the run predates the two commits that landed after it. |
-| 2 verifier | **FAIL** `verifier_failed_unit_in_bundle` | `reports/ty/d15_verification.md`: 17 agree, 2 FAILED, 1 BLOCKED. `verifier_findings.json` lists open FAILED units **D17** and **V9**; both are in the bundle (D17: 20ccd103, 93682edc, 1b53c526, 41b000bc, b70fab7a; V9: 0d0241c7, 22fd9069, 0abf3944). BLOCKED V3 is also in the bundle (52 commits) and is reported, not refused, because it is blocked rather than failed. |
-| 3 bundle | **FAIL** `bundle_visual` | `main..staging` is 1151 commits / 9735 changed paths, of which **262** are visual or creative under `northstar-os-ui/src/` (e.g. `App.jsx`, the galactic asset set). 570 images changed. |
+| `tools-seller_tester` | 18 | `d5badc5f` |
+| `tools-root` | 252 | `4650f024` |
+| `tools-vision` | 24 | `20392bb5` |
+| `Northstar_backend-tests` | 5 | `82097ac1` |
 
-Verdict: `REFUSED -- gate 'suite', gate 'verifier', gate 'bundle'`.
+Each promotion wrote a `promote/20261109-<slice>-3f002e0c` tag and a `rollback/20261109-<sha>`
+tag, so any one of them can be undone without touching the others.
 
-A pending full-suite run is the only thing in the way of gate 1, and a fresh run on the current
-`staging` head is what clears it. Gate 2 cannot be cleared by a document: D17 and V9 must be
-fixed or moved out of the bundle. Gate 3 is a human look: the pack is
-`reports/ty/staging_review_20261109.md`.
+`main` therefore now carries the deterministic layout stages, the grounding benchmark runners, the
+held-out tooling, the JSX checker fix and their tests. It does **not** yet carry the UI work.
 
-When all three are green:
+## Refused, on purpose: the bundle
+
+`python tools/promote_staging.py --check --candidate staging-candidate/20261109-1811` →
+**REFUSED — gate `bundle`**: 271 visual/creative paths under `northstar-os-ui/src/` need human eyes.
+That refusal is the rule working, not an error.
+
+## Waiting on you (visual slices, 18 of them)
+
+`reports/ty/staging_review_20261109.md` is the review pack. The ones that carry today's work:
+
+| slice | paths | what changed |
+|---|---|---|
+| `ui-shell` | 27 | ux-06 shell chrome on every authed route; ux-07 workspace tabs with state kept across switching |
+| `ui-pages` | 74 | the earlier room pages (unchanged today, still pending) |
+| `ui-assets`, `ui-galactic`, `ui-studio`, `ui-styles`, ... | 13 more | earlier visual work, unchanged today |
+
+The honest caveat on ux-07: the tab summary reaches the DOM, a global and an event, but
+`src/chat/ChatSurface.jsx:624` forwards only `summary.canvas`, so **Bojo still is not told which tab
+is open**. That is queued as `ux-07b-tab-context-to-bojo` and is one field plus a test, not a
+redesign.
+
+## To undo
 
 ```
-python tools/promote_staging.py --promote --verifier "<session that reproduced the deltas>" \
-    --approve-visual "<what was looked at and accepted>"
+python tools/promote_staging.py --revert rollback/20261109-20392bb5
 ```
 
-That tags `rollback/<date>-<main-sha>`, merges `--no-ff`, tags `promote/<date>-<staging-sha>`,
-and prints the new `main` sha. To undo a promotion: `python tools/promote_staging.py --revert promote/<date>-<sha>`.
-
-## Tests
-
-```
-python -m pytest Northstar_backend/test_promote_staging.py -q
-16 passed in 10.08s
-```
-
-Each gate is tested refusing on its own (stale run, red run, FAILED unit in the bundle, visual
-path in the bundle), the eligible case produces a `promote/` tag and a two-parent merge commit,
-and `--revert` is a no-op when the tag is absent. All fixtures are scratch repos under `tmp_path`.
+One command per slice, in reverse order, if any of the four turns out to be wrong.

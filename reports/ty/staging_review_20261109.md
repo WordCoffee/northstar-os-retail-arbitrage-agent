@@ -1,23 +1,23 @@
 # Staging review — 20261109
 
-`staging` is 1170 commit(s) ahead of `main` and the bundle contains visual or creative work, so it is refused by name and shown here instead.
+`staging` is 1218 commit(s) ahead of `main` and the bundle contains visual or creative work, so it is refused by name and shown here instead.
 
-- source `staging` @ `4e853dd1422df70a1113e4f3672d42300ebf60d5`
-- target `main` @ `ecef24a75d924a240b4722d9a92c9ba9fdc2f687`
+- source `staging` @ `3f002e0c71a6ca89053b0a7d0b00d448b69fbc5a`
+- target `main` @ `82097ac1821743306e22c2340825d1e36b97b1d9`
 
 ## Gates
 
 | gate | result | evidence |
 |---|---|---|
-| suite | FAIL | summary: 7067 passed, 117 skipped, 2 xfailed, 17 warning, 125 subtests run written 2026-11-08T04:34:07, newest staging commit 2026-11-09T01:59:58 |
-| verifier | FAIL | d15_verification.md: 17 agree, 2 FAILED, 1 BLOCKED reproduced by: not recorded (--verifier not given) |
-| bundle | FAIL | bundle main..staging: 1170 commit(s), 10738 changed path(s) visual/creative paths: 262 |
+| suite | PASS | summary: 7329 passed, 117 skipped, 2 xfailed, 17 warning, 125 subtests run written 2026-11-09T18:09:25, newest staging commit 2026-11-09T17:51:46 |
+| verifier | PASS | d15_verification.md: 20 agree, 0 FAILED, 1 BLOCKED reproduced by: not recorded (--verifier not given) |
+| bundle | FAIL | bundle main..staging: 1218 commit(s), 10532 changed path(s) visual/creative paths: 271 |
 
-Refused by: `suite`, `verifier`, `bundle`
+Refused by: `bundle`
 
 ## Before / after
 
-583 image(s) changed in the bundle. Composited digests come first, then dogfood/audit shots, then screenshots, newest first (24 of 583):
+585 image(s) changed in the bundle. Composited digests come first, then dogfood/audit shots, then screenshots, newest first (24 of 585):
 
 | after (this bundle) | before (on `main`) |
 |---|---|
@@ -68,10 +68,10 @@ after: 29 services, at_bar **2** (hub, prospector), test_ids 7186
 | keywords | 86.2 | no |
 | keyword-tracker | 86.2 | no |
 | profitability | 86.2 | no |
+| design-studio | 85.2 | no |
 | goldengoose | 77 | no |
 | golden-goose | 77 | no |
 | listings | 77 | no |
-| design-studio | 75.9 | no |
 | beta | 74.7 | no |
 | beta-signup | 74.7 | no |
 | competitor-monitor | 74.7 | no |
@@ -84,10 +84,58 @@ after: 29 services, at_bar **2** (hub, prospector), test_ids 7186
 | adpilot | 55 | no |
 | towncrier | 55 | no |
 
-## Merged job list (1170 commits)
+## Merged job list (1218 commits)
 
 | sha | date | job |
 |---|---|---|
+| `3f002e0c` | 2026-11-09 | defects D-006/D-007: the JSX checker read comments as code, and the contract test depended on another module's cache |
+| `1e4c63d0` | 2026-11-09 | fix the two suite failures: the JSX checker no longer reads component names out of comments (it flagged a comment about an outlet), and the contract test seeds its own scanner cache instead of depending on another module having left candidates there |
+| `b372544f` | 2026-11-09 | defects D-005: the suite was order-dependent in both directions, the two wrong fixes are recorded with their failure counts, and product_analysis stays byte-identical to its protected baseline |
+| `defaf1dd` | 2026-11-09 | merge ux-07: workspace tabs keep state across switching and publish a tab summary to the shell |
+| `d8fb4584` | 2026-11-09 | env isolation narrowed to the ten variables that actually leak, and the two modules that need them now declare them; product_analysis remains byte-identical to its protected baseline (the fallback change was reverted, not baselined) |
+| `693fdd24` | 2026-11-09 | ux-07: workspace tab bar keeps each open service mounted, and publishes the open tab to Bojo |
+| `4d2437cb` | 2026-11-09 | queue sel-07 (the sidecar does not say which layout made the picture) and today's state block |
+| `0e2ba856` | 2026-11-09 | env isolation is per module over every name, not just the path vars: a module keeps what it set at import, a test body is undone, another module's leftover is dropped. Plus the product_analysis fallback no longer discards a fresh result over a stale LAST_SEARCH_ERROR (targeted: 167 + 37) |
+| `925d34cc` | 2026-11-09 | report: the deterministic infographic and packaging stages, the Lion's Mane result (2 of 4 at 100, 2 failing only on OCR of one source), and the three scorer/generator defects they exposed |
+| `c4fc7bef` | 2026-11-09 | inset the infographic's accent rule so the page corners stay at the background level; the fill measure samples the corners and a full-bleed bar read as 99% subject |
+| `ad92b6fc` | 2026-11-09 | the infographic page meets the brief's background level, so subject_fill measures the panel and the copy instead of counting an off-white page as 100% subject |
+| `570053d2` | 2026-11-09 | convert between the record's (left,top,right,bottom) box and the layout's (x,y,w,h) in one place; assert the quad sits inside the box so the convention cannot drift again |
+| `f03bf668` | 2026-11-09 | fix the infographic's product-box mapping: scale from the crop that was actually pasted, not the pre-clamp crop |
+| `77ac6363` | 2026-11-09 | deterministic infographic is a page: a 70% photo panel with copy in the margins, callouts pointing in from outside so no product pixel is overdrawn, and a fill cap for wide packaging panels; the region check compares the subject's aspect and the trimmed cutout in the quad path |
+| `04475aa3` | 2026-11-09 | merge ux-06: shell chrome on every authed route (TopNav + rail + outlet, DevBanner in the shell), 72-entry route table preserved |
+| `6a17ce2f` | 2026-11-09 | deterministic layouts honour the brief's aspect (extend by mirroring, never crop), reinforce the margin copy so text_expected is satisfied, and scale the product quad with the upscale so the quad check compares the right area (16 tests) |
+| `1b604a6c` | 2026-11-09 | digest: a deterministic-layout section, source next to output, with the situation and the score on each row |
+| `ad86d8b3` | 2026-11-09 | feat(shell): mount TopNav, side nav and workspace outlet on every service route |
+| `edc7fe42` | 2026-11-09 | fix the packaging path in the generator: numpy and BytesIO were missing so the quad identity crashed; a generator-level test now runs the quad path without a GPU |
+| `f36dfd78` | 2026-11-09 | deterministic layout stages: infographic copy and packaging panel warp, with a quad-aware product-region check so a warped panel is compared against its own artwork (12 tests); per-mode table with the stored-reference-only label rule (15 tests) |
+| `6ae869b8` | 2026-11-09 | held-out final: 16 of 21 pass, mean 90.0 on 8 verified product images; verifier agrees and names both superseded runs (13/86.2, 16/92.0) |
+| `cbce8d0b` | 2026-11-09 | held-out report states the design-vs-file distinction it used to leave implicit: three Mogra images are one pouch pair, the Word Coffee images are two box designs |
+| `8fbb067e` | 2026-11-09 | defects D-003: the second half - a card on a mirror and a byte-duplicate, found by opening the files |
+| `65fe3da9` | 2026-11-09 | held-out pool is a reviewed roster: the mirror shot was a card, one file was a byte copy, so 8 verified photographs of real products over 21 briefs; hashes must differ (12 tests) |
+| `27e84f3e` | 2026-11-09 | defects: D-004 records the stale GPU lock and the reclaim rule |
+| `e01b8491` | 2026-11-09 | gpu lock: a holder that is provably gone is reclaimed and the reclaim is recorded, so a killed render no longer wedges the lane (6 tests); D-003 records the quote-card reference pool |
+| `1692871f` | 2026-11-09 | held-out references are product images only: the pool had a dozen quote cards and a wordmark, which is how a card composite reached the digest; now 10 real products, no product tested twice in one situation |
+| `95eb40db` | 2026-11-09 | state: a dated director block so the load-first file carries today's held-out set, defects and owner asks |
+| `a1734aa6` | 2026-11-09 | merge F0: FoundationDB removes a temp database it created (9,018 had leaked into %TEMP%) |
+| `7a15d5fe` | 2026-11-09 | needs you: DIR-9 asks for more Lion's Mane photographs, the one thing limiting the held-out set to 14 distinct products |
+| `b1582d48` | 2026-11-09 | held-out references: eleven distinct Word Coffee photographs instead of three photos plus a wordmark, so the 21 briefs are 14 products rather than 7; two tests pin it |
+| `e3fd0035` | 2026-11-09 | digest: six held-out pairs, one per distinct product, product region read from the proof's own check instead of reported as 'not audited' |
+| `16fc82e3` | 2026-11-09 | verifier task: check the bar as well as the score, so a repeat of D-002 is a DISAGREE and not a number to explain away |
+| `971624d7` | 2026-11-09 | defects: D-002 records that the first held-out run applied one brief's constraints to all eight situations, and why the corrected bar will score lower |
+| `a45cee7d` | 2026-11-09 | held-out briefs inherit the tuned constraint profile per situation: the first run reused one brief's constraints and put a white matte on lifestyle/infographic, failing alpha_matte on 21 of 21 (2 tests pin it) |
+| `edb7d341` | 2026-11-09 | digest: composites section is no longer Mogra-only, held-out pairs come first so the six side-by-side rows are the held-out evidence, and each row says which set it is |
+| `f9d58598` | 2026-11-09 | fix the 2 candidate-suite failures: the region check measures both readings of a placement box (canvas or trimmed subject) and reports which, and conftest restores the path env vars to their session baseline so the contract test stops depending on test order |
+| `3718763d` | 2026-11-09 | fix F0: a FoundationDB that creates its own temp file now removes it on close and at exit; a supplied path is never touched (5 tests) |
+| `02d9a674` | 2026-11-09 | OmniParser runner: 7 tests on the parts that decide a hit (normalisation against grounding.hit's 1280x800 frame, label matching, refusal, the 71.7% adoption bar); defects.md D-001 filed for the 9,018 leaked temp DBs and queued |
+| `bbba7fef` | 2026-11-09 | held-out composite pass is resumable: chunks of briefs without a verdict, merged proof, and it can never overwrite the tuned three-brief proof (6 tests) |
+| `fc2ef0ba` | 2026-11-09 | held-out set: 21 runnable briefs validated by the same validator (text rules, unique pairs, real references), 3 Neck Nirvana briefs declared unscorable, its own proof file, 7 tests; DIR-8 filed for the missing photograph |
+| `aca1de1b` | 2026-11-09 | UI-TARS: two load attempts recorded, both killed at shard load (3.0 and 5.72 GB free); baseline stands |
+| `4fd78431` | 2026-11-09 | benchmarks: OmniParser-class runner (YOLO under the GRANT + Florence-2 captioner), held-out splitter |
+| `7d83b9b8` | 2026-11-09 | fix the 7 candidate-suite failures: placement is authoritative again (no trim, no fallback), route count 58->72 after ux-05, region detail assertion on evidence not geometry |
+| `41876ecb` | 2026-11-09 | sel-02 explained with the per-brief diff and the coverage caveat; held-out briefs across three lines; daily RAM minimum in the digest; reverse-study default policy |
+| `e0361e8b` | 2026-11-09 | governor: a held PAUSE_BUILDERS marker, so the suite and the GPU benchmarks get a quiet machine |
+| `6d177661` | 2026-11-09 | status table for items 1-5 in the requested verdict format; candidate tag recorded; suite running on it |
+| `269fa43a` | 2026-11-09 | promote: pathspec batching for this git, review pack on a visual refusal even under --check |
 | `4e853dd1` | 2026-11-09 | merge stage-slice: candidate freeze, slice classifier, per-service review packs |
 | `de52dd96` | 2026-11-09 | merge sel-02: seller mean 22.1 -> 93.5, design-studio 75.9 -> 85.2 |
 | `9657cd96` | 2026-11-09 | fix: roomAdapters used a JSX tag for an argument component (and then said so in a comment the scanner also read) |

@@ -1,6 +1,6 @@
 # Item 5 — promotion slices, 20261109
 
-`staging` @ `02d9a67491b4` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10762 changed path(s).
+`staging` @ `3f002e0c71a6` vs `main` @ `ecef24a75d92`: 187 slice(s) over 10831 changed path(s).
 
 - code-only slices (auto-promotable when the suite is green): **169**
 - visual/creative slices (review pack each): **18**
@@ -20,7 +20,7 @@
 | `Northstar_backend-gateway` | code | 5 | 0 | 0 |
 | `Northstar_backend-importers` | code | 2 | 0 | 0 |
 | `Northstar_backend-migrations_foundation` | code | 18 | 0 | 0 |
-| `Northstar_backend-root` | code | 580 | 0 | 4 |
+| `Northstar_backend-root` | code | 586 | 0 | 4 |
 | `Northstar_backend-scripts` | code | 1 | 0 | 0 |
 | `Northstar_backend-specialists` | code | 18 | 0 | 0 |
 | `Northstar_backend-static` | code | 2 | 0 | 0 |
@@ -77,8 +77,8 @@
 | `reports-expansion_20261104` | code | 4 | 0 | 0 |
 | `reports-expansion_wave2_20261104` | code | 2 | 0 | 0 |
 | `reports-github_scan_20261104` | code | 4 | 0 | 0 |
-| `reports-golden_goose` | code | 292 | 0 | 0 |
-| `reports-improvement` | code | 87 | 0 | 0 |
+| `reports-golden_goose` | code | 300 | 0 | 0 |
+| `reports-improvement` | code | 91 | 0 | 0 |
 | `reports-northstar_acceptance_20261023` | code | 34 | 0 | 26 |
 | `reports-northstar_acceptance_20261025` | code | 2 | 0 | 2 |
 | `reports-phase9-evidence` | code | 2 | 0 | 0 |
@@ -100,7 +100,7 @@
 | `reports-steward_digests` | code | 2 | 0 | 0 |
 | `reports-theme_20261024` | code | 4 | 0 | 4 |
 | `reports-theme_review` | code | 4 | 0 | 0 |
-| `reports-ty` | code | 183 | 0 | 0 |
+| `reports-ty` | code | 215 | 0 | 2 |
 | `reports-ui-evidence` | code | 10 | 0 | 9 |
 | `reports-ui_audit_20261016` | code | 27 | 0 | 25 |
 | `reports-ui_review_20261016` | code | 16 | 0 | 15 |
@@ -137,7 +137,7 @@
 | `root-src` | code | 7 | 0 | 0 |
 | `root-steward` | code | 27 | 0 | 0 |
 | `root-turmeric_sourcing` | code | 6 | 0 | 0 |
-| `root-ty` | code | 19 | 0 | 0 |
+| `root-ty` | code | 20 | 0 | 0 |
 | `scripts-root` | code | 41 | 0 | 0 |
 | `shared-master-brain` | code | 1 | 0 | 0 |
 | `shared-root` | code | 8 | 0 | 0 |
@@ -155,7 +155,7 @@
 | `state-snapshots` | code | 2 | 0 | 0 |
 | `tests-agents` | code | 2 | 0 | 0 |
 | `tests-bench` | code | 1 | 0 | 0 |
-| `tests-e2e` | code | 30 | 0 | 0 |
+| `tests-e2e` | code | 33 | 0 | 0 |
 | `tests-fixtures` | code | 24 | 0 | 0 |
 | `tests-root` | code | 6 | 0 | 0 |
 | `tests-security` | code | 9 | 0 | 0 |
@@ -166,9 +166,9 @@
 | `tools-git-hooks` | code | 1 | 0 | 0 |
 | `tools-model_scout` | code | 3 | 0 | 0 |
 | `tools-registry` | code | 5 | 0 | 0 |
-| `tools-root` | code | 250 | 0 | 0 |
+| `tools-root` | code | 252 | 0 | 0 |
 | `tools-scout` | code | 36 | 0 | 0 |
-| `tools-seller_tester` | code | 17 | 0 | 0 |
+| `tools-seller_tester` | code | 18 | 0 | 0 |
 | `tools-vision` | code | 24 | 0 | 0 |
 | `tools-visual_regression` | code | 25 | 0 | 12 |
 | `ui-.theme-preview` | code | 4 | 0 | 0 |
@@ -190,7 +190,43 @@
 | `ui-screenshots` | code | 190 | 0 | 189 |
 | `ui-scripts` | code | 3 | 0 | 0 |
 | `ui-services` | visual | 2 | 2 | 0 |
-| `ui-shell` | visual | 15 | 15 | 0 |
+| `ui-shell` | visual | 27 | 24 | 0 |
 | `ui-src` | visual | 2 | 2 | 0 |
 | `ui-studio` | visual | 35 | 35 | 0 |
 | `ui-styles` | visual | 15 | 15 | 0 |
+## Promoted slice `tools-seller_tester` — 20261109
+
+- source `staging` @ `3f002e0c71a6ca89053b0a7d0b00d448b69fbc5a`
+- slice: 18 path(s), 24 commit(s) touch it
+- promotion tag `promote/20261109-tools-seller-tester-3f002e0c`
+- rollback tag `rollback/20261109-ecef24a7`
+- new `main` sha `d5badc5fd868da77fb5f3c6160f79b7a5dedd6ef`
+- commit message: promote slice tools-seller_tester: 18 path(s) from staging 3f002e0c (staging-candidate/20261109-1811) promote/20261109-tools-seller-tester-3f002e0c
+
+## Promoted slice `tools-root` — 20261109
+
+- source `staging` @ `3f002e0c71a6ca89053b0a7d0b00d448b69fbc5a`
+- slice: 252 path(s), 359 commit(s) touch it
+- promotion tag `promote/20261109-tools-root-3f002e0c`
+- rollback tag `rollback/20261109-d5badc5f`
+- new `main` sha `4650f0244483b8e4c449ef680cbe5e9cf65b4226`
+- commit message: promote slice tools-root: 252 path(s) from staging 3f002e0c (staging-candidate/20261109-1811) promote/20261109-tools-root-3f002e0c
+
+## Promoted slice `tools-vision` — 20261109
+
+- source `staging` @ `3f002e0c71a6ca89053b0a7d0b00d448b69fbc5a`
+- slice: 24 path(s), 13 commit(s) touch it
+- promotion tag `promote/20261109-tools-vision-3f002e0c`
+- rollback tag `rollback/20261109-4650f024`
+- new `main` sha `20392bb5733c0f251490b05abb8d8d5998f5377e`
+- commit message: promote slice tools-vision: 24 path(s) from staging 3f002e0c (staging-candidate/20261109-1811) promote/20261109-tools-vision-3f002e0c
+
+## Promoted slice `Northstar_backend-tests` — 20261109
+
+- source `staging` @ `3f002e0c71a6ca89053b0a7d0b00d448b69fbc5a`
+- slice: 5 path(s), 8 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-tests-3f002e0c`
+- rollback tag `rollback/20261109-20392bb5`
+- new `main` sha `82097ac1821743306e22c2340825d1e36b97b1d9`
+- commit message: promote slice Northstar_backend-tests: 5 path(s) from staging 3f002e0c (staging-candidate/20261109-1811) promote/20261109-northstar-backend-tests-3f002e0c
+
