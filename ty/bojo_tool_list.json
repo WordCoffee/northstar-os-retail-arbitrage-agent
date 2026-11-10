@@ -3,8 +3,8 @@
   "generated_from": "ty/service_registry.json",
   "count": 44,
   "totals": {
-    "wired": 37,
-    "declared": 7,
+    "wired": 44,
+    "declared": 0,
     "unclaimed": 4
   },
   "tools": [
@@ -27,10 +27,10 @@
     },
     {
       "name": "build_dieline",
-      "status": "declared",
+      "status": "wired",
       "service": "design-studio",
       "also_used_by": [],
-      "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "build_package",
@@ -71,10 +71,10 @@
     },
     {
       "name": "compose_listing",
-      "status": "declared",
+      "status": "wired",
       "service": "listingforge",
       "also_used_by": [],
-      "reason": "ty/services.json declares compose_listing; chat_tools.TOOLS has no handler by that name — the nearest wired tool is write_content."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "create_dieline",
@@ -157,10 +157,10 @@
     },
     {
       "name": "margin_report",
-      "status": "declared",
+      "status": "wired",
       "service": "profitability",
       "also_used_by": [],
-      "reason": "ty/services.json declares margin_report; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ads_math."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "offer_recommendation",
@@ -192,10 +192,10 @@
     },
     {
       "name": "plan_campaign",
-      "status": "declared",
+      "status": "wired",
       "service": "adpilot",
       "also_used_by": [],
-      "reason": "ty/services.json declares plan_campaign; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ppc_plan."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "plan_project",
@@ -231,10 +231,10 @@
     },
     {
       "name": "scan_products",
-      "status": "declared",
+      "status": "wired",
       "service": "product-finder",
       "also_used_by": [],
-      "reason": "ty/services.json declares scan_products; chat_tools.TOOLS has no handler by that name — the nearest wired tool is catalog_pull."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "seo_check",
@@ -289,10 +289,10 @@
     },
     {
       "name": "track_keywords",
-      "status": "declared",
+      "status": "wired",
       "service": "keyword-tracker",
       "also_used_by": [],
-      "reason": "ty/services.json declares track_keywords; chat_tools.TOOLS has no handler by that name — the nearest wired tool is seo_check."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "voice_dub",
@@ -317,10 +317,10 @@
     },
     {
       "name": "watch_competitor",
-      "status": "declared",
+      "status": "wired",
       "service": "competitor-monitor",
       "also_used_by": [],
-      "reason": "ty/services.json declares watch_competitor; chat_tools.TOOLS has no handler by that name and no wired equivalent exists."
+      "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
     },
     {
       "name": "write_content",

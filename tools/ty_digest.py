@@ -399,6 +399,35 @@ def render(data: Dict[str, Any]) -> str:
         lines.append("No held-out proof on disk yet.")
     lines += [""]
 
+    lines += ["## Prompt-only - brief next to output", ""]
+    po_proof = _read_json(ROOT / "state" / "seller" / "heldout_prompt_only_proof4.json") or {}
+    po_briefs = _read_json(ROOT / "ty" / "seller_briefs_heldout_modes.json") or {}
+    po_by_id = {str(row.get("id")): row for row in po_briefs.get("briefs") or []
+                if row.get("source_mode") == "prompt_only"}
+    po_rows = []
+    for result in po_proof.get("results") or []:
+        brief = po_by_id.get(str(result.get("brief_id")))
+        if not brief:
+            continue
+        po_rows.append((str(result.get("brief_id")), brief.get("situation"),
+                        result.get("score"), result.get("passed"),
+                        str(result.get("artefact_path") or ""),
+                        str(brief.get("prompt") or "")[:90]))
+    if po_rows:
+        lines += ["| brief | situation | score | passed | output |",
+                  "|---|---|---|---|---|"]
+        for brief_id, situation, score, passed, artefact, _prompt in po_rows:
+            lines.append(f"| {brief_id} | {situation} | {score} | "
+                         f"{'yes' if passed else 'no'} | `{artefact}` |")
+        passed = sum(1 for row in po_rows if row[3])
+        lines += ["", f"**{passed} of {len(po_rows)} passed.** There is no source image for these "
+                      "briefs - they are generated from text - so the pair is the **brief next to the "
+                      "output**:",
+                      "`reports/ty/prompt_only_source_next_to_output.png`"]
+    else:
+        lines.append("No prompt-only run on disk yet.")
+    lines += [""]
+
     lines += ["## A+ pages - source next to output", ""]
     aplus_proof = _read_json(ROOT / "state" / "seller" / "aplus_proof.json") or {}
     aplus_catalog = _read_json(ROOT / "ty" / "seller_briefs.json") or {}

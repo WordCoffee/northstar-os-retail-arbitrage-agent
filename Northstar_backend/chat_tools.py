@@ -1836,6 +1836,98 @@ def _t_canvas_edit(args, ctx):
             "instruction": instruction, "assets": []}
 
 
+def _bojo_handler(domain_tool: str):
+    """Adapter: a chat spec whose work is a registered Bojo domain handler.
+
+    The seven `reg-03` handlers wrap production code and answer the registry's own contract
+    (`{"ok": ..., "tool": ..., "data" | "reason"}`). The chat surface needs the same thing behind its
+    own spec shape, so this is one adapter rather than seven near-copies. It imports lazily: a
+    registry that cannot load must not break the chat module at import time.
+    """
+
+    def handler(args, ctx=None) -> dict:  # noqa: ANN001 - the chat spec's own signature
+        import bojo_tools_registry  # noqa: PLC0415
+
+        payload = dict(args or {})
+        result = bojo_tools_registry.call(domain_tool, **payload)
+        if not isinstance(result, dict):
+            return {"ok": False, "summary": f"{domain_tool} returned no result",
+                    "error": f"unexpected return type {type(result).__name__}", "assets": []}
+        summary = result.get("reason") or f"{domain_tool}: ok"
+        return {"ok": bool(result.get("ok")), "summary": str(summary)[:300],
+                "error": None if result.get("ok") else str(result.get("reason") or "")[:300],
+                "data": result.get("data") or {}, "assets": []}
+
+    handler.__name__ = f"t_{domain_tool}"
+    return handler
+
+
+_BOJO_SPECS = {
+    "scan_products": {
+        "description": ("Find products for a brief. Cache first; a live search runs only when the "
+                        "operator envelope is armed, and the refusal is reported rather than worked "
+                        "around. No spend."),
+        "parameters": {"type": "object",
+                       "properties": {"query": {"type": "string", "maxLength": 120},
+                                      "limit": {"type": "integer", "minimum": 1, "maximum": 50}},
+                       "required": []},
+    },
+    "compose_listing": {
+        "description": ("Compose a listing for a product from its facts: title, bullets and "
+                        "description, with the prohibited-word and copy-audit normalisation applied. "
+                        "Deterministic given the same facts."),
+        "parameters": {"type": "object",
+                       "properties": {"product": {"type": "string", "maxLength": 160},
+                                      "facts": {"type": "object"},
+                                      "platform": {"type": "string", "maxLength": 40}},
+                       "required": ["product"]},
+    },
+    "build_dieline": {
+        "description": ("Build a packaging dieline for a product from a template: geometry validated, "
+                        "SVG and PDF rendered. No spend."),
+        "parameters": {"type": "object",
+                       "properties": {"product": {"type": "string", "maxLength": 160},
+                                      "template": {"type": "string", "maxLength": 60},
+                                      "format": {"type": "string", "enum": ["svg", "pdf"]}},
+                       "required": ["product"]},
+    },
+    "track_keywords": {
+        "description": ("Score keyword coverage for a listing: head terms weighted above body terms, "
+                        "per field. Read-only."),
+        "parameters": {"type": "object",
+                       "properties": {"listing": {"type": "object"},
+                                      "keywords": {"type": "array", "items": {"type": "string"}}},
+                       "required": ["listing"]},
+    },
+    "watch_competitor": {
+        "description": ("Read the stored competitor snapshot for a product and report its freshness. "
+                        "Read-only; nothing is fetched."),
+        "parameters": {"type": "object",
+                       "properties": {"product": {"type": "string", "maxLength": 160},
+                                      "asin": {"type": "string", "maxLength": 20}},
+                       "required": []},
+    },
+    "margin_report": {
+        "description": ("Run the fee-engine economics over numbers the operator already entered: unit "
+                        "cost, price, fees. One canonical calculator, no second copy."),
+        "parameters": {"type": "object",
+                       "properties": {"cost": {"type": "number"},
+                                      "price": {"type": "number"},
+                                      "fees": {"type": "number"},
+                                      "quantity": {"type": "integer", "minimum": 1}},
+                       "required": ["cost", "price"]},
+    },
+    "plan_campaign": {
+        "description": ("Plan an ad campaign structure and its target ACOS from a budget and a "
+                        "listing. Returns a plan only; no spend and no provider call."),
+        "parameters": {"type": "object",
+                       "properties": {"budget": {"type": "number"},
+                                      "listing": {"type": "object"},
+                                      "target_acos": {"type": "number"}},
+                       "required": ["budget"]},
+    },
+}
+
 TOOLS: Dict[str, dict] = {    "system_status": {
         "description": "Report the local media engine + chat model status. Read-only.",
         "parameters": {"type": "object", "properties": {}, "required": []},
@@ -2526,6 +2618,14 @@ def _apply_retirements() -> None:
 
 
 _apply_retirements()
+
+
+# The seven reg-03 handlers become offered tools here: a spec with a callable handler is what
+# `is_offered` looks for, so registering after TOOLS exists is the whole wiring.
+for _bojo_name, _bojo_spec in _BOJO_SPECS.items():
+    _spec = dict(_bojo_spec)
+    _spec["handler"] = _bojo_handler(_bojo_name)
+    TOOLS.setdefault(_bojo_name, _spec)
 
 
 def has_handler(spec: Optional[dict]) -> bool:

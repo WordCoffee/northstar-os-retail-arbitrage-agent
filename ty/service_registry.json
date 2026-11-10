@@ -9,7 +9,7 @@
       "label": "Operations Hub",
       "group": "Workspace",
       "advanced_route": "/hub",
-      "purpose": "Shows whether the operation is healthy right now — catalog match totals, model and credit posture, the open gates — and jumps into the four working services.",
+      "purpose": "Shows whether the operation is healthy right now \u2014 catalog match totals, model and credit posture, the open gates \u2014 and jumps into the four working services.",
       "inputs": [],
       "outputs": [
         {
@@ -54,7 +54,7 @@
       "bojo_tool": {
         "name": "hub_status",
         "status": "wired",
-        "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health — the same posture question this room answers."
+        "reason": "chat_tools.TOOLS['hub_status'] aggregates disk/db/lane/model/render-lock health \u2014 the same posture question this room answers."
       },
       "also_declares": [
         {
@@ -80,7 +80,7 @@
       ],
       "has_controls": false,
       "gap": "No input or write control: 'Run batch' and 'Pin snapshot' only toast, and the gate switches are display-only.",
-      "controls_evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 — 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page.",
+      "controls_evidence": "northstar-os-ui/src/pages/Hub.jsx:38-39 \u2014 'Pin snapshot' and 'Run batch' only call toast(); :69 service rows and :91 quick actions call navigate(); no input, select or request is created by the page.",
       "evidence": {
         "route": "/ui/hub",
         "vision": "live",
@@ -112,7 +112,7 @@
       "label": "The Ledger",
       "group": "Workspace",
       "advanced_route": "/ledger",
-      "purpose": "Reports compute credits — balance, consumption and period — next to the engine posture that spends them.",
+      "purpose": "Reports compute credits \u2014 balance, consumption and period \u2014 next to the engine posture that spends them.",
       "inputs": [],
       "outputs": [
         {
@@ -351,17 +351,17 @@
         {
           "name": "title",
           "kind": "text",
-          "where": "Generated Output — TITLE"
+          "where": "Generated Output \u2014 TITLE"
         },
         {
           "name": "four bullets",
           "kind": "text",
-          "where": "Generated Output — BULLETS"
+          "where": "Generated Output \u2014 BULLETS"
         },
         {
           "name": "back-end search terms",
           "kind": "text",
-          "where": "Generated Output — KEYWORDS"
+          "where": "Generated Output \u2014 KEYWORDS"
         }
       ],
       "actions": [
@@ -442,7 +442,7 @@
         {
           "name": "schedule reminder notice",
           "kind": "status",
-          "where": "toast — gate stays closed"
+          "where": "toast \u2014 gate stays closed"
         }
       ],
       "actions": [
@@ -542,7 +542,7 @@
       "bojo_tool": {
         "name": "ads_math",
         "status": "wired",
-        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['ads_math'] computes ACoS, break-even ACoS and TACOS — the same arithmetic."
+        "reason": "ty/services.json declares no tool; chat_tools.TOOLS['ads_math'] computes ACoS, break-even ACoS and TACOS \u2014 the same arithmetic."
       },
       "also_declares": [
         {
@@ -707,11 +707,11 @@
       "also_declares": [],
       "has_controls": false,
       "gap": "No control: no watch/unwatch, no threshold, no scan trigger.",
-      "controls_evidence": "northstar-os-ui/src/pages/TheWatch.jsx:10-27 — one scanner read, then a render; no input, button or select in the file.",
+      "controls_evidence": "northstar-os-ui/src/pages/TheWatch.jsx:10-27 \u2014 one scanner read, then a render; no input, button or select in the file.",
       "evidence": {
         "route": "/ui/thewatch",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Watch | controls (shell chrome included): Operator, Ask Gemini, Search the Northstar Index..., DEV: AUTH DISABLED — local loopback only, Watchlist, Snapshot",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: The Watch | controls (shell chrome included): Operator, Ask Gemini, Search the Northstar Index..., DEV: AUTH DISABLED \u2014 local loopback only, Watchlist, Snapshot",
         "backend": [
           "Northstar_backend/main.py:1842"
         ],
@@ -722,7 +722,7 @@
           "Operator",
           "Ask Gemini",
           "Search the Northstar Index...",
-          "DEV: AUTH DISABLED — local loopback only",
+          "DEV: AUTH DISABLED \u2014 local loopback only",
           "Watchlist",
           "Snapshot"
         ]
@@ -764,7 +764,7 @@
       "also_declares": [],
       "has_controls": false,
       "gap": "No control: no sort selector, no band threshold, no export.",
-      "controls_evidence": "northstar-os-ui/src/pages/RankLedger.jsx:10-30 — reads the scanner and sorts in memory; the file has no form control.",
+      "controls_evidence": "northstar-os-ui/src/pages/RankLedger.jsx:10-30 \u2014 reads the scanner and sorts in memory; the file has no form control.",
       "evidence": {
         "route": "/ui/rankledger",
         "vision": "screenshot",
@@ -782,7 +782,7 @@
       "label": "The Rival Board",
       "group": "Monitoring",
       "advanced_route": "/rivalboard",
-      "purpose": "Groups scanner products by margin risk — high-margin, benign or price-saturated — with the buy-box seller.",
+      "purpose": "Groups scanner products by margin risk \u2014 high-margin, benign or price-saturated \u2014 with the buy-box seller.",
       "inputs": [],
       "outputs": [
         {
@@ -813,7 +813,7 @@
       "also_declares": [],
       "has_controls": false,
       "gap": "No control: no risk threshold, no seller filter, no drill-down.",
-      "controls_evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 — one read and a derived posture column; no control exists.",
+      "controls_evidence": "northstar-os-ui/src/pages/RivalBoard.jsx:10-27 \u2014 one read and a derived posture column; no control exists.",
       "evidence": {
         "route": "/ui/rivalboard",
         "vision": "screenshot",
@@ -873,7 +873,7 @@
       "evidence": {
         "route": "/ui/account",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:1693",
           "Northstar_backend/foundation/api/router.py:1809"
@@ -888,7 +888,7 @@
       "label": "Operations Hub",
       "group": "Internal",
       "advanced_route": "/foundation",
-      "purpose": "Reports foundation health in one page — providers, marketplaces, product count, approvals, identity conflicts, queue and schedule posture, imports and audit.",
+      "purpose": "Reports foundation health in one page \u2014 providers, marketplaces, product count, approvals, identity conflicts, queue and schedule posture, imports and audit.",
       "inputs": [],
       "outputs": [
         {
@@ -1005,7 +1005,7 @@
       "evidence": {
         "route": "/ui/foundation",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:755",
           "Northstar_backend/foundation/api/router.py:650",
@@ -1165,7 +1165,7 @@
       "evidence": {
         "route": "/ui/jobs",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/foundation/api/router.py:855",
           "Northstar_backend/foundation/api/router.py:868",
@@ -1298,7 +1298,7 @@
         {
           "name": "seo_check",
           "status": "wired",
-          "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile — adjacent, not the store itself."
+          "reason": "chat_tools.TOOLS['seo_check'] scores content against the brand SEO profile \u2014 adjacent, not the store itself."
         },
         {
           "name": "seo_profile",
@@ -1354,11 +1354,11 @@
       "also_declares": [],
       "has_controls": false,
       "gap": "Landing page only: the only actions are navigation to /beta/accept and /sign-in.",
-      "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:41-42 — 'Accept Invitation' and 'Sign In' call navigate(); the file imports no API client.",
+      "controls_evidence": "northstar-os-ui/src/pages/public/BetaLanding.jsx:41-42 \u2014 'Accept Invitation' and 'Sign In' call navigate(); the file imports no API client.",
       "evidence": {
         "route": "/ui/beta",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -1623,8 +1623,8 @@
         },
         {
           "name": "build_dieline",
-          "status": "declared",
-          "reason": "ty/services.json declares build_dieline; chat_tools.TOOLS has no such handler — the wired equivalent is create_dieline."
+          "status": "wired",
+          "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
         },
         {
           "name": "apply_label",
@@ -1698,7 +1698,7 @@
       "evidence": {
         "route": "/ui/design-studio",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/design_studio_api.py:157",
           "Northstar_backend/studio_upload_router.py:22",
@@ -1757,8 +1757,8 @@
       "actions": [],
       "bojo_tool": {
         "name": "scan_products",
-        "status": "declared",
-        "reason": "ty/services.json declares scan_products; chat_tools.TOOLS has no handler by that name — the nearest wired tool is catalog_pull."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [
         {
@@ -1769,11 +1769,11 @@
       ],
       "has_controls": true,
       "gap": null,
-      "controls_evidence": "northstar-os-ui/src/pages/internal/ProductFinder.jsx:140 ASIN input and :143 add stage a local row; :169 opens the set, :170 hands off to Commerce Ops; the file contains no fetch or api call — /api/products/finder appears only in comments (:18-21, :124).",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/ProductFinder.jsx:140 ASIN input and :143 add stage a local row; :169 opens the set, :170 hands off to Commerce Ops; the file contains no fetch or api call \u2014 /api/products/finder appears only in comments (:18-21, :124).",
       "evidence": {
         "route": "/ui/product-finder",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:353"
         ],
@@ -2012,8 +2012,8 @@
       ],
       "bojo_tool": {
         "name": "track_keywords",
-        "status": "declared",
-        "reason": "ty/services.json declares track_keywords; chat_tools.TOOLS has no handler by that name — the nearest wired tool is seo_check."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [
         {
@@ -2046,7 +2046,7 @@
       "label": "Competitor Monitor",
       "group": "Monitoring",
       "advanced_route": "/competitor-monitor",
-      "purpose": "Compares cached SourceScout observations with local competitor records — price, rating, votes and quantity match.",
+      "purpose": "Compares cached SourceScout observations with local competitor records \u2014 price, rating, votes and quantity match.",
       "inputs": [],
       "outputs": [
         {
@@ -2078,17 +2078,17 @@
       ],
       "bojo_tool": {
         "name": "watch_competitor",
-        "status": "declared",
-        "reason": "ty/services.json declares watch_competitor; chat_tools.TOOLS has no handler by that name and no wired equivalent exists."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [],
       "has_controls": false,
       "gap": "No control: no ASIN add, no refresh, no comparison selector.",
-      "controls_evidence": "northstar-os-ui/src/pages/internal/CompetitorMonitor.jsx:10-80 — two reads and two tables; the page has no input, button or select.",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/CompetitorMonitor.jsx:10-80 \u2014 two reads and two tables; the page has no input, button or select.",
       "evidence": {
         "route": "/ui/competitor-monitor",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Competitor Monitor | controls (shell chrome included): Add Competitor, Market Report, Search the Northstar Index..., Operator, Ask Gemini, DEV: AUTH DISABLED — local loopback only",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: Competitor Monitor | controls (shell chrome included): Add Competitor, Market Report, Search the Northstar Index..., Operator, Ask Gemini, DEV: AUTH DISABLED \u2014 local loopback only",
         "backend": [
           "Northstar_backend/noncreative_reads.py:261",
           "Northstar_backend/main.py:2227"
@@ -2104,7 +2104,7 @@
           "Search the Northstar Index...",
           "Operator",
           "Ask Gemini",
-          "DEV: AUTH DISABLED — local loopback only"
+          "DEV: AUTH DISABLED \u2014 local loopback only"
         ]
       }
     },
@@ -2168,8 +2168,8 @@
       ],
       "bojo_tool": {
         "name": "compose_listing",
-        "status": "declared",
-        "reason": "ty/services.json declares compose_listing; chat_tools.TOOLS has no handler by that name — the nearest wired tool is write_content."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [
         {
@@ -2189,7 +2189,7 @@
       "evidence": {
         "route": "/ui/listingforge",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/main.py:1695",
           "Northstar_backend/design_studio_api.py:1293",
@@ -2264,8 +2264,8 @@
       ],
       "bojo_tool": {
         "name": "plan_campaign",
-        "status": "declared",
-        "reason": "ty/services.json declares plan_campaign; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ppc_plan."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [
         {
@@ -2290,7 +2290,7 @@
       "evidence": {
         "route": "/ui/adpilot",
         "vision": "live",
-        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS — Retail Arbitrage Suite - Google Chrome",
+        "vision_note": "opened in a fresh session-owned Chrome tab and described by understand.describe_page | title: NorthstarOS \u2014 Retail Arbitrage Suite - Google Chrome",
         "backend": [
           "Northstar_backend/design_studio_api.py:1552",
           "Northstar_backend/design_studio_api.py:1569",
@@ -2309,7 +2309,7 @@
       "label": "SocialPulse",
       "group": "Social",
       "advanced_route": "/socialpulse",
-      "purpose": "Runs a local social content board — campaigns, drafts, review, approval and publish-ready — with nothing publishing.",
+      "purpose": "Runs a local social content board \u2014 campaigns, drafts, review, approval and publish-ready \u2014 with nothing publishing.",
       "inputs": [
         {
           "name": "campaign",
@@ -2353,7 +2353,7 @@
       "also_declares": [],
       "has_controls": true,
       "gap": null,
-      "controls_evidence": "northstar-os-ui/src/pages/internal/SocialPulse.jsx:249-252 Draft Post / Send for Approval, :234-241 add draft and advance state; everything is local state — no API call exists in the file.",
+      "controls_evidence": "northstar-os-ui/src/pages/internal/SocialPulse.jsx:249-252 Draft Post / Send for Approval, :234-241 add draft and advance state; everything is local state \u2014 no API call exists in the file.",
       "evidence": {
         "route": "/ui/socialpulse",
         "vision": "screenshot",
@@ -2427,8 +2427,8 @@
       ],
       "bojo_tool": {
         "name": "margin_report",
-        "status": "declared",
-        "reason": "ty/services.json declares margin_report; chat_tools.TOOLS has no handler by that name — the nearest wired tool is ads_math."
+        "status": "wired",
+        "reason": "reg-03 handler exists in bojo_tools and chat_tools.TOOLS carries a spec (2026-11-10)"
       },
       "also_declares": [
         {
