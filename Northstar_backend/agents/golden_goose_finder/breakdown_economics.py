@@ -388,6 +388,33 @@ def _fba_fee(
 # ---------------------------------------------------------------------------
 
 
+def _canonical_gg_economics(*, price, unit_cogs, referral, fulfillment, inbound,
+                           prep, packaging, reserve):
+    """Canonical economics bridge (1C-03R Batch C3). Returns a serialized
+    canonical output dict, or None if unavailable. Never raises."""
+    try:
+        from foundation.economics import EconomicsInput as _EI, compute as _c
+        from foundation.economics.versions import FORMULA_VERSION as _FV
+    except ImportError:
+        try:
+            from ....foundation.economics import EconomicsInput as _EI, compute as _c
+            from ....foundation.economics.versions import FORMULA_VERSION as _FV
+        except ImportError:
+            return None
+    try:
+        out = _c(_EI(
+            marketplace="amazon.com", currency="USD", selling_price=price,
+            acquisition_cost=unit_cogs, referral_fee_amount=referral,
+            fba_fulfillment_fee=fulfillment, inbound_freight=inbound,
+            prep_cost=(prep + packaging), refund_return_reserve=reserve,
+            advertising_cost="0", provenance="estimated"))
+        d = out.to_dict()
+        d["_formula_version"] = _FV
+        return d
+    except Exception:
+        return None
+
+
 def calculate_breakdown_economics(
     wholesale: WholesalePack,
     individual: IndividualListing,
@@ -567,7 +594,7 @@ def calculate_breakdown_economics(
         if note not in notes:
             notes.append(note)
 
-    return BreakdownEconomics(
+    result = BreakdownEconomics(
         wholesale=wholesale,
         individual=individual,
         unit_cogs=round(unit_cogs, 2),
@@ -595,6 +622,18 @@ def calculate_breakdown_economics(
         undercut_headroom=undercut_headroom,
         max_undercut_price=max_undercut_price,
     )
+    # 1C-03R Batch C3: attach canonical economics (formula version, readiness,
+    # canonical ROI/margin). Additive; legacy fields above are unchanged.
+    _ce = _canonical_gg_economics(
+        price=price, unit_cogs=unit_cogs, referral=referral, fulfillment=fulfillment,
+        inbound=inbound_cost, prep=prep_cost, packaging=(repack + packaging_cost),
+        reserve=return_reserve)
+    if _ce is not None:
+        result.formula_version = _ce.get("_formula_version")
+        result.readiness = _ce.get("readiness")
+        result.roi_on_invested_cost = _ce.get("roi_on_invested_cost")
+        result.margin_on_revenue = _ce.get("margin_on_revenue")
+    return result
 
 
 def evaluate_batch(
