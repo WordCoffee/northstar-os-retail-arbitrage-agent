@@ -385,11 +385,16 @@ def render(data: Dict[str, Any]) -> str:
                          f"{row.get('passed', 0)} | {mean} |")
         if coverage:
             counts = coverage.get("counts") or {}
-            lines += ["", f"**Mode coverage: {coverage.get('label')}.** "
+            zero = [m for m, row in by_mode.items() if row.get("n", 0) == 0]
+            lines += ["", f"**Capability: {coverage.get('label')}.** "
                           f"prompt-only {counts.get('prompt_only', 0)}, "
                           f"stored-reference {counts.get('stored_reference', 0)}, "
                           f"uploaded-reference {counts.get('uploaded_reference', 0)} scored. "
                           f"{coverage.get('why', '')}."]
+            if zero:
+                lines.append("**Not measured:** "
+                             + ", ".join(m.replace("_", "-") for m in zero)
+                             + " scored 0 outputs; unmeasured is not failed.")
     else:
         lines.append("No held-out proof on disk yet.")
     lines += [""]

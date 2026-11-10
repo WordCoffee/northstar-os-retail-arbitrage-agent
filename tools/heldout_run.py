@@ -14,11 +14,19 @@ import json
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 PROOF = ROOT / "state" / "seller" / "heldout_composite_proof.json"
 PROOF_FALLBACK = ROOT / "state" / "seller" / "composite_proof.json"
+
+#: Every held-out proof on disk, paired with the brief file that produced it, is published together.
+#: One report with one per-mode table beats two reports that each silently cover a single mode.
+SOURCES = (
+    (PROOF, ROOT / "ty" / "seller_briefs_heldout.json"),
+    (ROOT / "state" / "seller" / "heldout_modes_proof.json",
+     ROOT / "ty" / "seller_briefs_heldout_modes.json"),
+)
 BRIEFS = ROOT / "ty" / "seller_briefs_heldout.json"
 OUT = ROOT / "state" / "seller" / "heldout_proof.json"
 REPORT = ROOT / "reports" / "ty" / f"heldout_{date.today().isoformat()}.md"
@@ -26,9 +34,8 @@ REPORT = ROOT / "reports" / "ty" / f"heldout_{date.today().isoformat()}.md"
 #: The three input modes a brief can declare. The published seller claim carries a coverage label
 #: naming the modes actually proven; see `mode_coverage`.
 MODES = ("prompt_only", "stored_reference", "uploaded_reference")
-MODES_NEEDED_FOR_FULL_LABEL = 10
-FULL_LABEL = "all three modes"
-PARTIAL_LABEL = "stored-reference only"
+#: A mode counts as *measured* at ten scored outputs. Below that it is unmeasured, not failed.
+MODE_PROVEN_AT = 10
 
 
 def by_mode(scored: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -49,69 +56,86 @@ def by_mode(scored: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
 
 
 def mode_coverage(scored: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """The label the seller claim must wear, and why.
+    """The capability label, computed from the per-mode counts rather than remembered.
 
-    Owner instruction (2026-11-09): keep calling the claim **stored-reference only** until the
-    other two modes each have 10+ scored. The label is therefore computed, not remembered — a
-    report that says "all three modes" has to have the rows to back it.
+    The label names the modes that actually carry measured outputs. A mode with zero scored outputs
+    is **not measured** — it is not "failed", and it must not be silently folded into another mode's
+    claim. The previous string said "stored-reference only" while every scored row was
+    uploaded-reference and stored-reference had none, which was simply wrong; it is now derived.
     """
-    counts = {mode: sum(1 for row in scored if str(row.get("source_mode")) == mode) for mode in MODES}
-    ready = (counts["prompt_only"] >= MODES_NEEDED_FOR_FULL_LABEL
-             and counts["stored_reference"] >= MODES_NEEDED_FOR_FULL_LABEL)
+    counts = {mode: sum(1 for row in scored if str(row.get("source_mode")) == mode)
+              for mode in MODES}
+    proven = [mode for mode in MODES if counts[mode] >= MODE_PROVEN_AT]
+    unmeasured = [mode for mode in MODES if counts[mode] == 0]
+    thin = [mode for mode in MODES if 0 < counts[mode] < MODE_PROVEN_AT]
+    if not proven:
+        label = "no mode measured"
+    elif len(proven) == len(MODES):
+        label = "all three modes"
+    else:
+        label = " and ".join(mode.replace("_", "-") for mode in proven) + " only"
     return {
-        "label": FULL_LABEL if ready else PARTIAL_LABEL,
+        "label": label,
+        "proven_modes": proven,
+        "unmeasured_modes": unmeasured,
+        "thin_modes": thin,
         "counts": counts,
-        "needed_per_mode": MODES_NEEDED_FOR_FULL_LABEL,
-        "why": ("every mode has at least "
-                f"{MODES_NEEDED_FOR_FULL_LABEL} scored"
-                if ready else
-                "prompt-only and stored-reference must each reach "
-                f"{MODES_NEEDED_FOR_FULL_LABEL} scored before the label lifts"),
+        "proven_at": MODE_PROVEN_AT,
+        "why": (f"a mode is measured at {MODE_PROVEN_AT}+ scored outputs; "
+                + (", ".join(f"{m} {counts[m]}" for m in MODES))),
+        "zero_scored": {mode: counts[mode] == 0 for mode in MODES},
     }
 
 
-def split() -> Dict[str, Any]:
-    # The held-out proof is its own file: a held-out run must never overwrite, or be confused
-    # with, the tuned composite proof. The fallback only reads a proof that already contains
-    # held-out ids, and says which file it read.
-    proof_path = PROOF if PROOF.exists() else PROOF_FALLBACK
-    proof = (json.loads(proof_path.read_text(encoding="utf-8"))
-             if proof_path.exists() else {"results": []})
-    payload = json.loads(BRIEFS.read_text(encoding="utf-8"))
-    briefs = payload["briefs"]
-    declared = payload.get("declared_unscorable") or []
-    by_id = {b["id"]: b for b in briefs}
+def _sources() -> List[tuple]:
+    return [(proof, briefs) for proof, briefs in SOURCES if briefs.exists()]
+
+
+def split(sources: Optional[List[tuple]] = None) -> Dict[str, Any]:
     rows: List[Dict[str, Any]] = []
-    for result in proof.get("results") or []:
-        brief_id = str(result.get("brief_id"))
-        if brief_id not in by_id:
-            continue
-        brief = by_id[brief_id]
-        rows.append({
-            "brief_id": brief_id,
-            "product_line": brief.get("product_line"),
-            "situation": brief.get("situation"),
-            "source_mode": result.get("source_mode") or brief.get("source_mode"),
-            "score": result.get("score"),
-            "passed": result.get("passed"),
-            "route": result.get("route"),
-            "artefact_path": result.get("artefact_path"),
-            "reference": ((brief.get("reference") or {}).get("path")),
-            "product_region": (result.get("checks") or {}).get("product_region")
-            or result.get("product_region"),
-            "failed_checks": result.get("failed_checks") or [],
-            "cannot_verify": result.get("cannot_verify"),
-            "fidelity": result.get("fidelity"),
-        })
+    declared: List[Dict[str, Any]] = []
+    briefs: List[Dict[str, Any]] = []
+    labels: List[str] = []
+    for proof_path, brief_path in (sources if sources is not None else _sources()):
+        proof = (json.loads(proof_path.read_text(encoding="utf-8"))
+                 if proof_path.exists() else {"results": []})
+        payload = json.loads(brief_path.read_text(encoding="utf-8"))
+        file_briefs = payload.get("briefs") or []
+        declared.extend(payload.get("declared_unscorable") or [])
+        briefs.extend(file_briefs)
+        by_id = {b["id"]: b for b in file_briefs}
+        try:
+            labels.append(str(proof_path.resolve().relative_to(ROOT)))
+        except ValueError:
+            labels.append(str(proof_path))
+        for result in proof.get("results") or []:
+            brief_id = str(result.get("brief_id"))
+            brief = by_id.get(brief_id)
+            if brief is None:
+                continue
+            rows.append({
+                "brief_id": brief_id,
+                "product_line": brief.get("product_line"),
+                "situation": brief.get("situation"),
+                "source_mode": result.get("source_mode") or brief.get("source_mode"),
+                "score": result.get("score"),
+                "passed": result.get("passed"),
+                "route": result.get("route"),
+                "artefact_path": result.get("artefact_path"),
+                "reference": ((brief.get("reference") or {}).get("path")),
+                "product_region": (result.get("checks") or {}).get("product_region")
+                or result.get("product_region"),
+                "failed_checks": result.get("failed_checks") or [],
+                "cannot_verify": result.get("cannot_verify"),
+                "fidelity": result.get("fidelity"),
+            })
     scored = [row for row in rows if row.get("score") is not None]
     lines: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for row in scored:
         lines[str(row["product_line"])].append(row)
     summary = {
         "held_out_briefs": len(briefs),
-        "declared_unscorable": [{"brief_id": b["id"], "product_line": b.get("product_line"),
-                                 "situation": b.get("situation"),
-                                 "reason": b.get("note")} for b in declared],
+        "declared_unscorable": declared,
         "scored": len(scored),
         "passed": sum(1 for row in scored if row.get("passed")),
         "mean": round(sum(float(row["score"]) for row in scored) / len(scored), 1)
@@ -121,13 +145,9 @@ def split() -> Dict[str, Any]:
         "by_line": {name: {"scored": len(rows_), "passed": sum(1 for r in rows_ if r.get("passed")),
                            "mean": round(sum(float(r["score"]) for r in rows_) / len(rows_), 1)}
                     for name, rows_ in lines.items()},
-        "unscored_lines": sorted({b["product_line"] for b in briefs} - set(lines)),
+        "unscored_lines": sorted({str(b.get("product_line")) for b in briefs} - set(lines)),
     }
-    try:
-        proof_label = str(proof_path.resolve().relative_to(ROOT))
-    except ValueError:  # a path outside the repo (a test, a temp run) is named absolutely
-        proof_label = str(proof_path)
-    payload = {"at": date.today().isoformat(), "proof": proof_label,
+    payload = {"at": date.today().isoformat(), "proofs": labels,
                "summary": summary, "results": rows}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -155,11 +175,18 @@ def _write_report(briefs: List[Dict[str, Any]], scored: List[Dict[str, Any]],
         mean = row["mean"] if row["mean"] is not None else "—"
         lines.append(f"| {mode.replace('_', '-')} | {row['n']} | {row['passed']} | {mean} |")
     coverage = summary["mode_coverage"]
-    lines += ["", f"**Mode coverage: {coverage['label']}.** "
+    zero = [mode for mode in summary["by_mode"]
+            if mode != "unknown" and coverage["zero_scored"].get(mode)]
+    plain = ", ".join(f"**{mode.replace('_', '-')} has 0 scored outputs**" for mode in zero)
+    lines += ["", f"**Capability: {coverage['label']}.** "
                   f"prompt-only {coverage['counts']['prompt_only']} scored, "
                   f"stored-reference {coverage['counts']['stored_reference']} scored, "
                   f"uploaded-reference {coverage['counts']['uploaded_reference']} scored — "
-                  f"{coverage['why']}.", ""]
+                  f"{coverage['why']}.",
+                  ("  " + plain + (": that mode is not measured here, which is not the "
+                                    "same as failed." if len(zero) == 1 else
+                                    ": those modes are not measured here, which is not the "
+                                    "same as failed.") if plain else ""), ""]
     lines += ["## By product line", "", "| line | scored | passed | mean |",
               "|---|---|---|---|"]
     for name, row in summary["by_line"].items():

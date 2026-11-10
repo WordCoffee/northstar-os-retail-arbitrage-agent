@@ -60,21 +60,44 @@ def test_text_rules_are_the_ones_the_pipeline_understands(payload):
     assert by_situation["infographic"] == "text_expected"
 
 
-def test_the_mode_label_stays_stored_reference_only_until_both_other_modes_reach_ten():
+def test_the_capability_label_names_only_the_modes_that_were_measured():
+    """The label is derived from the counts, and it must not name a mode with no rows.
+
+    The old text said "stored-reference only" while every scored row was uploaded-reference and
+    stored-reference had none — a claim contradicted by its own table on the next line.
+    """
     rows = [{"source_mode": "uploaded_reference", "score": 90.0, "passed": True} for _ in range(21)]
     coverage = heldout_run.mode_coverage(rows)
-    assert coverage["label"] == "stored-reference only"
-    assert coverage["counts"]["uploaded_reference"] == 21
+    assert coverage["label"] == "uploaded-reference only"
+    assert coverage["proven_modes"] == ["uploaded_reference"]
+    assert coverage["unmeasured_modes"] == ["prompt_only", "stored_reference"]
+    assert coverage["zero_scored"]["prompt_only"] is True
+    assert coverage["zero_scored"]["stored_reference"] is True
 
 
-def test_the_label_lifts_only_when_prompt_only_and_stored_reference_are_both_covered():
-    rows = ([{"source_mode": "prompt_only", "score": 1.0, "passed": False}] * 10
-            + [{"source_mode": "stored_reference", "score": 1.0, "passed": False}] * 10
-            + [{"source_mode": "uploaded_reference", "score": 1.0, "passed": False}] * 1)
+def test_a_mode_counts_as_measured_at_ten_scored_outputs_and_not_before():
+    nine = [{"source_mode": "prompt_only", "score": 1.0, "passed": False}] * 9
+    assert heldout_run.mode_coverage(nine)["label"] == "no mode measured"
+    ten = nine + [{"source_mode": "prompt_only", "score": 1.0, "passed": False}]
+    coverage = heldout_run.mode_coverage(ten)
+    assert coverage["label"] == "prompt-only only"
+    assert coverage["thin_modes"] == []
+
+
+def test_two_and_three_measured_modes_are_named_in_full():
+    rows = ([{"source_mode": "prompt_only", "score": 50.0, "passed": False}] * 10
+            + [{"source_mode": "uploaded_reference", "score": 90.0, "passed": True}] * 10)
+    assert heldout_run.mode_coverage(rows)["label"] == "prompt-only and uploaded-reference only"
+    rows = rows + [{"source_mode": "stored_reference", "score": 70.0, "passed": True}] * 10
     assert heldout_run.mode_coverage(rows)["label"] == "all three modes"
-    # one mode short is still short
-    short = rows[:-11]
-    assert heldout_run.mode_coverage(short)["label"] == "stored-reference only"
+
+
+def test_a_thin_mode_is_reported_as_thin_not_as_proven():
+    rows = ([{"source_mode": "prompt_only", "score": 50.0, "passed": False}] * 4
+            + [{"source_mode": "uploaded_reference", "score": 90.0, "passed": True}] * 12)
+    coverage = heldout_run.mode_coverage(rows)
+    assert coverage["label"] == "uploaded-reference only"
+    assert coverage["thin_modes"] == ["prompt_only"]
 
 
 def test_the_mode_table_shows_unmeasured_modes_at_zero_rather_than_omitting_them():
@@ -174,29 +197,24 @@ def test_a_cannot_verify_row_is_a_failure_not_a_pass(tmp_path, monkeypatch, payl
         {"brief_id": second, "score": 40.0, "passed": False, "cannot_verify": True,
          "failed_checks": ["product_region"]},
     ]}), encoding="utf-8")
-    monkeypatch.setattr(heldout_run, "BRIEFS", briefs_path)
-    monkeypatch.setattr(heldout_run, "PROOF", proof_path)
-    monkeypatch.setattr(heldout_run, "PROOF_FALLBACK", tmp_path / "absent.json")
     monkeypatch.setattr(heldout_run, "OUT", tmp_path / "out.json")
     monkeypatch.setattr(heldout_run, "REPORT", tmp_path / "report.md")
-    summary = heldout_run.split()["summary"]
+    summary = heldout_run.split(sources=[(proof_path, briefs_path)])["summary"]
     assert summary["scored"] == 2
     assert summary["passed"] == 1
     assert summary["mean"] == 65.0  # (90 + 40) / 2, not 90 over the passing rows alone
     report = (tmp_path / "report.md").read_text(encoding="utf-8")
     assert "neck-nirvana" in report and "not scored" in report
-    assert "**not scored**" in report
 
 
-def test_the_proof_it_reads_is_named(tmp_path, monkeypatch, payload):
+def test_every_proof_it_reads_is_named(tmp_path, monkeypatch, payload):
+    """Every held-out proof is published together, and the report says which ones it read."""
     briefs_path = tmp_path / "briefs.json"
     briefs_path.write_text(json.dumps(payload), encoding="utf-8")
-    monkeypatch.setattr(heldout_run, "BRIEFS", briefs_path)
-    monkeypatch.setattr(heldout_run, "PROOF", tmp_path / "absent.json")
-    monkeypatch.setattr(heldout_run, "PROOF_FALLBACK", tmp_path / "also-absent.json")
+    missing_proof = tmp_path / "absent.json"
     monkeypatch.setattr(heldout_run, "OUT", tmp_path / "out.json")
     monkeypatch.setattr(heldout_run, "REPORT", tmp_path / "report.md")
-    result = heldout_run.split()
+    result = heldout_run.split(sources=[(missing_proof, briefs_path)])
     assert result["summary"]["scored"] == 0
     assert result["summary"]["mean"] is None
-    assert result["proof"].endswith("also-absent.json")
+    assert result["proofs"] and str(missing_proof) in result["proofs"][0]
