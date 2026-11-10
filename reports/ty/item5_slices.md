@@ -230,3 +230,129 @@
 - new `main` sha `82097ac1821743306e22c2340825d1e36b97b1d9`
 - commit message: promote slice Northstar_backend-tests: 5 path(s) from staging 3f002e0c (staging-candidate/20261109-1811) promote/20261109-northstar-backend-tests-3f002e0c
 
+## Promoted slice `Northstar_backend-adapters` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 3 path(s), 6 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-adapters-6658f7c2`
+- rollback tag `rollback/20261109-82097ac1`
+- new `main` sha `aebb08bbb9114f108185cfa1747af396bbf34de4`
+- commit message: promote slice Northstar_backend-adapters: 3 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-adapters-6658f7c2
+
+## Promoted slice `Northstar_backend-agent_kernel` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 34 path(s), 48 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-agent-kernel-6658f7c2`
+- rollback tag `rollback/20261109-aebb08bb`
+- new `main` sha `0115ed028f8c6aab3c72a509bc878c56b896c1f8`
+- commit message: promote slice Northstar_backend-agent_kernel: 34 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-agent-kernel-6658f7c2
+
+## Promoted slice `Northstar_backend-agents` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 2 path(s), 2 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-agents-6658f7c2`
+- rollback tag `rollback/20261109-0115ed02`
+- new `main` sha `a942a422609895600c0ddd5b98bf40d2c0577e89`
+- commit message: promote slice Northstar_backend-agents: 2 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-agents-6658f7c2
+
+## Promoted slice `Northstar_backend-assets` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 9 path(s), 5 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-assets-6658f7c2`
+- rollback tag `rollback/20261109-a942a422`
+- new `main` sha `454032d47ecabaef4bfd059e2532acbd6fc1f457`
+- commit message: promote slice Northstar_backend-assets: 9 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-assets-6658f7c2
+
+## Promoted slice `Northstar_backend-bojo_tools` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 2 path(s), 1 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-bojo-tools-6658f7c2`
+- rollback tag `rollback/20261109-454032d4`
+- new `main` sha `e2738fb138bd6cee7bea44111104281b19fa1255`
+- commit message: promote slice Northstar_backend-bojo_tools: 2 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-bojo-tools-6658f7c2
+
+## Promoted slice `Northstar_backend-costco_non_kirkland` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 63 path(s), 6 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-costco-non-kirkland-6658f7c2`
+- rollback tag `rollback/20261109-e2738fb1`
+- new `main` sha `7ada57091b36adf0e6517b453304611b3ff97b80`
+- commit message: promote slice Northstar_backend-costco_non_kirkland: 63 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-costco-non-kirkland-6658f7c2
+
+## Promoted slice `Northstar_backend-faire_research` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 8 path(s), 1 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-faire-research-6658f7c2`
+- rollback tag `rollback/20261109-7ada5709-2`
+- new `main` sha `cf7d3324938f7ba90c7b22868dc32959795dfa00`
+- commit message: promote slice Northstar_backend-faire_research: 8 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-faire-research-6658f7c2
+
+## Promoted slice `Northstar_backend-fixtures` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 1 path(s), 1 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-fixtures-6658f7c2`
+- rollback tag `rollback/20261109-cf7d3324`
+- new `main` sha `0ec5cb87d540cf0f1b1375075d6a05e1bee6ba63`
+- commit message: promote slice Northstar_backend-fixtures: 1 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-fixtures-6658f7c2
+
+## Promoted slice `Northstar_backend-foundation` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 156 path(s), 80 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-foundation-6658f7c2`
+- rollback tag `rollback/20261109-0ec5cb87`
+- new `main` sha `fd6ea160a826910df4820bd151ee326a761613b3`
+- commit message: promote slice Northstar_backend-foundation: 156 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-foundation-6658f7c2
+
+## Promoted slice `Northstar_backend-gateway` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 5 path(s), 2 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-gateway-6658f7c2`
+- rollback tag `rollback/20261109-fd6ea160`
+- new `main` sha `6bd8b3f17f517fd21c4d0012d770e0bafcc3be9d`
+- commit message: promote slice Northstar_backend-gateway: 5 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-gateway-6658f7c2
+
+## Promoted slice `Northstar_backend-importers` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 2 path(s), 3 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-importers-6658f7c2`
+- rollback tag `rollback/20261109-6bd8b3f1`
+- new `main` sha `626bc0fa6c72328292702cecb0caa00f448c492a`
+- commit message: promote slice Northstar_backend-importers: 2 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-importers-6658f7c2
+
+## Promoted slice `Northstar_backend-migrations_foundation` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 18 path(s), 6 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-migrations-foundation-6658f7c2`
+- rollback tag `rollback/20261109-626bc0fa`
+- new `main` sha `bf17425b07fb638b8be1154d87b5fbb2ec9c82eb`
+- commit message: promote slice Northstar_backend-migrations_foundation: 18 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-migrations-foundation-6658f7c2
+
+## Promoted slice `Northstar_backend-scripts` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 1 path(s), 1 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-scripts-6658f7c2`
+- rollback tag `rollback/20261109-bf17425b-2`
+- new `main` sha `605ce25fe90498e524ff375ea17a811e8279e511`
+- commit message: promote slice Northstar_backend-scripts: 1 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-scripts-6658f7c2
+
+## Promoted slice `Northstar_backend-specialists` — 20261109
+
+- source `staging` @ `6658f7c2373e518b6ee33c2bf79b3006634f4b7b`
+- slice: 18 path(s), 7 commit(s) touch it
+- promotion tag `promote/20261109-northstar-backend-specialists-6658f7c2`
+- rollback tag `rollback/20261109-605ce25f`
+- new `main` sha `b4792612652c9512994ca47bcd62c13f1a14677f`
+- commit message: promote slice Northstar_backend-specialists: 18 path(s) from staging 6658f7c2 (staging-candidate/20261109-2135) promote/20261109-northstar-backend-specialists-6658f7c2
+

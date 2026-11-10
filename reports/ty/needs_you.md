@@ -125,6 +125,14 @@ continues without them).
 
 ## DIR-1. Rotate three credentials that are already committed
 
+> **Now also blocking promotion (2026-11-09).** Promoting the remaining 149 code slices to `main`
+> is refused by the repository's own gitleaks pre-commit hook: **24 findings** across
+> `Northstar_backend-data`, `Northstar_backend-root` and `Northstar_backend-static`. That is this
+> entry's leak class, and it is why `main` cannot collect its test suite
+> (`reports/ty/main_vs_candidate.md`). Rotating the three credentials and purging them from history
+> unblocks the promotion; adding reviewed allowlist entries to `.gitleaks.toml` is the alternative,
+> and it is your call, not the agent's.
+
 `reports/ty/GITLEAKS_TRIAGE.md` found three real-looking credentials in two tracked
 root-level chat exports (commits `a299d6e9`, `21aed4e3`):
 
