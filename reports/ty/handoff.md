@@ -10,6 +10,28 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 4 — the app prints two forms, and the seller number is the product's
+
+Two jobs merged, both of them structural. Reports: `reports/ty/sel06b_second_brand.md`,
+`reports/ty/sel06_product_pipeline.md`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `sel-06b-second-brand` — the app could print **one** packaging form for **one** brand | merged. `brand_art` is a dispatch layer; the folding-carton renderers are new; a brand is a data entry. Pouch output sha256 `e0160055bf0884c1` **unchanged**. 17 new tests, 55 packaging tests pass, OCR gate on both carton faces, local judge 4/4 at 95 |
+| 2 | `sel-06-exercise-product-pipeline` (D-011) — the harness rendered its own lookalike | merged. `ProductPipelineGenerator` calls `product_picture.build` with a supplied plate; refusals carry the app's own reason. Prompt-only 12 held-out briefs, both brands: **12/12 mean 97.5** mechanical, **11/12 mean 94.9** judged |
+| 3 | the seller dimension read the harness | merged. `seller_scores.py` publishes the app pass; harness pass not averaged beside it. design-studio **75.9 → 89.3**, seller 94.9 over 12 generated outputs; **4 services at bar** (hub, prospector, keyword-tracker, profitability 100) |
+
+**What the 94.9 does not prove.** The plate is `drawn` (`synthetic_plate`) because
+`studio_generation.engine_status()` reports `armed: False` — `MEDIA_GEN_LIVE` is not 1 and ComfyUI is
+not reachable. The plate is named in the published record (`pipeline.plate_source: "drawn"`), and the
+one judged failure (PO-002) is that plate: the judge's own reasons are "the counter is not a light oak
+kitchen counter", "the lighting is not morning light". **Arming the lane and running
+`python -m tools.seller_tester product --renderer comfy` is the next real measurement.**
+
+**Next, in rank order:** `sel-07-bundle-and-body-shape` (PO-012 measures one unit of three; the pouch
+prompts drew a box twice) → `sel-refs-designs` (21 stored rows are 2 product designs) →
+`sel-04-packaging` → `ux-0610-live-verify` (still parked: `python tools/ty_unlock_checks.py --status`).
+
 ## Position, 2026-11-11 cycle 3 — prompt-only is honest now, and the label gap is named
 
 Unit report: `reports/ty/rerender_prompt_only_20261111.md`. Six jobs merged, two defects closed.
@@ -774,3 +796,5 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-11T00:42:44+00:00 launcher: director session ended (session 25480 gone; launcher restarting).
 
 - 2026-11-11T00:47:46+00:00 launcher: director session ended (session 15316 gone; launcher restarting).
+
+- 2026-11-11T03:43:57+00:00 launcher: director session ended (session 24680 gone; launcher restarting).
