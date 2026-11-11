@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T10:05:59+00:00",
+  "updated_at": "2026-11-11T10:30:46+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -1212,7 +1212,7 @@
       "id": "fix-fullgen-matte-cutout",
       "unit": "D22",
       "title": "D-025: a generated white-main brief keeps the plate's own cast shadow; route the generation cutout through the real matte (BiRefNet) and re-measure at seed 2747063199",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/",
@@ -1228,9 +1228,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-025 closed: generation route asks BiRefNet for the matte (comfy_lane, needed_gb 3.0) and records cutout_matte; grabcut only as a named fallback. Synthetic plate: matte 3 band px vs grabcut 768, residue 0.00%. Real pinned seed 2747063199: 100.0, residue 0.00%, smear gone. scorers._product_mask_from_cutout now accepts PNG bytes (bytes made the residue check silently skip). 4 tests + 1 lane-gated. reports/ty/d025_fullgen_matte_cutout.md; tag ty-dir-d025-fullgen-matte",
       "created_at": "2026-11-11T10:05:53+00:00",
-      "updated_at": "2026-11-11T10:05:59+00:00",
+      "updated_at": "2026-11-11T10:21:52+00:00",
       "rank": 1
     },
     {
@@ -1375,7 +1375,7 @@
       "id": "fix-fullgen-silhouette",
       "unit": "D22",
       "title": "D-026: record the mask that was actually composited and make the residue check refuse a silhouette that does not agree with the painted product",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "tools/seller_tester/",
@@ -1390,9 +1390,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "D-026 closed: check_matte_residue takes silhouette_source; a colour cut (grabcut/background_distance/otsu_lab) returns UNVERIFIED with words, never 0.00% clean. Harness passes generation.cutout_matte.method. Real rescore: d025 matte 0.00%/100.0, d022_pinned grabcut 14.76%/90.0 failed (reproduces D-022). 6 new tests in test_fullgen_silhouette.py, 19 green. reports/ty/d026_fullgen_silhouette.md; tag ty-dir-d026-silhouette",
       "created_at": "2026-11-11T10:05:59+00:00",
-      "updated_at": "2026-11-11T10:05:59+00:00",
+      "updated_at": "2026-11-11T10:29:09+00:00",
       "rank": 2
     },
     {
@@ -1608,7 +1608,7 @@
       "id": "pack-02-apparel-flat-print",
       "unit": "D4",
       "title": "Apparel flat-print form: a garment with a blank print area, so the 6 apparel briefs stop being unrenderable",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/brand_art.py",
@@ -1626,9 +1626,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "Apparel form: 280x350 mm chest print, body measured from its own silhouette, aspect kept, blank plate refused by name, drawn garment plate. ST-017 100.0 (print inside the body, no shadow); ST-046 80.0 cannot_verify (the uploaded file is not in this checkout). 5 tests pass, 1 skipped. reports/ty/pack02_apparel_flat_print.md; tag ty-dir-pack-02-apparel",
       "created_at": "2026-11-11T06:06:41+00:00",
-      "updated_at": "2026-11-11T06:06:41+00:00",
+      "updated_at": "2026-11-11T10:30:46+00:00",
       "rank": 5
     },
     {

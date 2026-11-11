@@ -24,6 +24,36 @@ interrupted through the server API (`POST /api/session/<id>/interrupt`) rather t
 killing processes. **No lane may navigate, click, type or walk pages until the owner lifts
 it.** Delete `state/vision/PAUSE` only on the owner's word — never to make a check pass.
 
+## Position, 2026-11-11 cycle 23 — one colour cut can no longer pass as a clean picture, and apparel prints
+
+Unit reports: `reports/ty/d026_fullgen_silhouette.md` (tag `ty-dir-d026-silhouette`) and
+`reports/ty/pack02_apparel_flat_print.md` (tag `ty-dir-pack-02-apparel`).
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-fullgen-silhouette` (D-026, rank 2) — the residue check counted pixels outside the **recorded** silhouette, and on the generation route that silhouette is the cutout, so an attached shadow sat inside it and a smear scored 0.00 % | **D-026 closed.** `check_matte_residue` takes `silhouette_source`; a colour cut (`grabcut`/`background_distance`/`otsu_lab`) returns **UNVERIFIED with words**, never a clean number. The live pass passes `generation.cutout_matte.method` through |
+| 2 | `pack-02-apparel-flat-print` (rank 3) — `brand_art` knew a pouch, a carton and a cylinder, so every apparel brief was refused by name | **merged.** Apparel is a declared form with a **280 × 350 mm** chest print; the garment route measures the body from its own silhouette, keeps the artwork's aspect, refuses a blank plate by name, and `scene_render` draws the garment |
+
+**D-026 measured on the real artefacts, no render:** `renders/d025/PO-001.png` (matte) →
+0.00 %, 100.0 passed; `renders/d022_pinned/PO-001.png` (grabcut) → **14.76 %, 90.0,
+`matte_residue` failed** — reproducing D-022's own number, so the two instruments now agree.
+
+**Apparel measured: ST-017 100.0** (cream tee on 255 white, Mogra chest print inside the
+body, no shadow). **ST-046 80.0** — `reference_subject` **cannot verify**: the uploaded file
+`tee_charcoal-folded.jpg` is not in this checkout. The garment rendered; it cannot be scored
+without the owner's file, and `cannot_verify` is a failure by contract, not a skip.
+
+**Also closed this session, and it was corrupting the resume mirror:**
+`director_queue.acceptance` was written as `[list(c) for c in "..."]`, so a 400-character
+acceptance line became 400 one-character commands in `reports/ty/director_queue.json`. Now
+`acceptance_list()` splits on newlines and `_repair_acceptance()` rebuilds old rows.
+
+**Tests:** 19 in silhouette/matte/residue (6 new), 5 + 1 skipped in apparel, 92 in the
+seller/composite/fill group, 21 in the queue store.
+
+**Next, in rank order:** `reference-depth` → `pack-03-boxart-forms` → `block3-workspaces` →
+`block4-seller-tests` → `block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 21 — a generated plate's cast shadow is cut by a matte, not by colour
 
 Unit report: `reports/ty/d025_fullgen_matte_cutout.md`. Tag `ty-dir-d025-fullgen-matte`.

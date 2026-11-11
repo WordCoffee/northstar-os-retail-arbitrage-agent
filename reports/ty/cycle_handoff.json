@@ -1,18 +1,29 @@
 {
-  "at": "2026-11-07T14:55:01+00:00",
+  "at": "2026-11-11T09:45:07+00:00",
   "brief": {
-    "cycle": 118,
-    "item": "A-a3",
-    "title": "A3 unattended loop (PARTIAL by design: queue drained, proposals need an author)",
+    "cycle": 120,
+    "item": "F0-foundation-tempdb-leak",
+    "title": "FoundationDB leaks one temp database per instance: 9,018 ns_foundation_*.db files in %TEMP%",
     "workstream": null,
-    "priority": null,
-    "write_paths": [],
+    "priority": 1150,
+    "write_paths": [
+      "Northstar_backend/foundation/db.py",
+      "Northstar_backend/test_foundation_tempdb.py"
+    ],
     "acceptance": "",
-    "acceptance_commands": [],
-    "next_action": "W0: author/evaluator for backlog proposals",
-    "rollback_tag": "autonomy-cycle-118",
-    "lease_token": "b561635cd516e73c",
-    "tokens_today": 293118,
+    "acceptance_commands": [
+      [
+        "python",
+        "-m",
+        "pytest",
+        "-q",
+        "test_foundation_tempdb.py"
+      ]
+    ],
+    "next_action": "When path is None, register the created temp file for removal at interpreter exit and remove it in close(); never touch a caller-supplied path. Add two tests: the auto path is registered, a supplied path is untouched. Then quarantine the existing 9,018 files in one move (same volume) instead of deleting them.",
+    "rollback_tag": "autonomy-cycle-120",
+    "lease_token": "f75cf9d1fa1dcbab",
+    "tokens_today": 0,
     "cycle_of_session": [],
     "cycles_per_session": 3
   },

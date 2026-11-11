@@ -12,7 +12,7 @@
     "tokens_used_today_estimate": 320000,
     "max_cycle_wall_clock_minutes": 180
   },
-  "cycle": 118,
+  "cycle": 120,
   "last_measured": "2026-11-05T21:30:59Z",
   "items": [
     {
@@ -1333,7 +1333,7 @@
       "id": "F0-foundation-tempdb-leak",
       "kind": "defect",
       "priority": 1150,
-      "status": "pending",
+      "status": "in_progress",
       "title": "FoundationDB leaks one temp database per instance: 9,018 ns_foundation_*.db files in %TEMP%",
       "next": "When path is None, register the created temp file for removal at interpreter exit and remove it in close(); never touch a caller-supplied path. Add two tests: the auto path is registered, a supplied path is untouched. Then quarantine the existing 9,018 files in one move (same volume) instead of deleting them.",
       "write_paths": [
@@ -1355,7 +1355,8 @@
       ],
       "tier": "code",
       "commit": null,
-      "verification": null
+      "verification": null,
+      "updated_at": "2026-11-11T09:45:07+00:00"
     },
     {
       "id": "sel-05-dieline",
@@ -1612,7 +1613,7 @@
       "id": "sel-10-seller-coverage",
       "kind": "feature",
       "priority": 1500,
-      "status": "pending",
+      "status": "needs_author",
       "title": "Every seller-facing service is below the bar on one dimension: reference coverage",
       "next": "Raise reference coverage from 12 of 56 briefs: collect the missing uploads (the twelve uploaded_reference briefs have no file), then re-score the seller dimension. Until coverage passes ~40 %, no seller-facing service can reach 85 on its own.",
       "write_paths": [
@@ -1638,7 +1639,10 @@
       "commit": null,
       "verification": null,
       "created_at": "2026-11-10T06:58:25+00:00",
-      "updated_at": "2026-11-10T06:58:25+00:00"
+      "updated_at": "2026-11-11T09:45:07+00:00",
+      "check_already_green": true,
+      "needs_author": "check_already_green: the check passes before any work, so it cannot prove a patch",
+      "defer_until_cycle": null
     }
   ],
   "parked": [
@@ -1685,7 +1689,7 @@
     "measured_at": "2026-11-05T21:51:00Z"
   },
   "research": "reports/ty/research_20261105.md",
-  "updated_at": "2026-11-09T15:59:50+00:00",
+  "updated_at": "2026-11-11T09:45:07+00:00",
   "gate": "reports/ty/AUTOMATION_GATE.md",
   "ordering_note": "Order: T0 incidents, then the automation gate A9-A17, then these measured performance units. They are queued with numbers so that when the gate opens the fix is mechanical, not exploratory.",
   "gate_state": {
