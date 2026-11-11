@@ -1,0 +1,626 @@
+{
+  "mode": "prompt_only",
+  "artefact_dir": "renders/heldout_prompt_only8",
+  "n": 12,
+  "passed": 12,
+  "failed": 0,
+  "mean": 98.3,
+  "pass_rate": 100.0,
+  "missing_artefacts": [],
+  "check_failures": {
+    "subject_fill": 1
+  },
+  "weights": {
+    "dimensions": 0.2,
+    "aspect": 0.1,
+    "background": 0.2,
+    "subject_fill": 0.2,
+    "alpha_matte": 0.1,
+    "file_size": 0.05,
+    "text_free": 0.15,
+    "reference_subject": 0.25
+  },
+  "rows": [
+    {
+      "brief": "PO-001",
+      "situation": "white_background_main",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 19.9% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "310112 bytes (0.078 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-002",
+      "situation": "lifestyle",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "1688441 bytes (0.422 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-003",
+      "situation": "scale_reference",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 35.9% vs 8.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "666291 bytes (0.167 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-004",
+      "situation": "bundle_multipack",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 35.0% vs 25.0-85.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "685470 bytes (0.171 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-005",
+      "situation": "background_swap",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.010"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(245, 245, 245), (245, 245, 245), (245, 245, 245), (245, 245, 245)] vs target (245, 245, 245) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 25.2% vs 15.0-65.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 245.0 (>= 240), std 0.00 (<= 5.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "449146 bytes (0.112 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-006",
+      "situation": "series_consistency",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 8000x8000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.005"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 27.7% vs 20.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 251), std 0.00 (<= 4.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "670513 bytes (0.168 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.02% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-007",
+      "situation": "infographic",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2500 vs min 1600x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "760483 bytes (0.152 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 2.83% vs min 0.20% (text expected)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-008",
+      "situation": "packaging_mockup",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2500x3125 vs min 2000x2500, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 0.8000 vs 0.8000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2879958 bytes (0.369 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-009",
+      "situation": "white_background_main",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 41.9% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "685670 bytes (0.171 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-010",
+      "situation": "lifestyle",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "1887090 bytes (0.472 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-011",
+      "situation": "scale_reference",
+      "route": null,
+      "bar": 70.0,
+      "score": 100.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-8; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "detail": "subject fill 25.5% vs 8.0-50.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "495731 bytes (0.124 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    },
+    {
+      "brief": "PO-012",
+      "situation": "bundle_multipack",
+      "route": null,
+      "bar": 70.0,
+      "score": 80.0,
+      "passed": true,
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": false,
+          "skipped": false,
+          "detail": "subject fill 24.8% vs 25.0-85.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "detail": "539197 bytes (0.135 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "detail": "prompt-only brief: no reference to verify"
+        }
+      }
+    }
+  ],
+  "note": "the bar is each brief's own pass_score, printed per row; no weight and no bar was changed for this measurement"
+}

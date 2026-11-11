@@ -1,0 +1,491 @@
+{
+  "briefs": 56,
+  "covered": 56,
+  "coverage_pct": 100.0,
+  "by_source": {
+    "brand_asset": 17,
+    "public_licensed": 39
+  },
+  "held_out_briefs": 17,
+  "tuning_briefs": 39,
+  "uncovered": [],
+  "images": {
+    "brand_asset": 8,
+    "public_licensed": 29,
+    "synthetic_excluded": 185
+  },
+  "categories_covered": [
+    "apparel",
+    "ceramic_mug",
+    "food_jar",
+    "pet_product",
+    "skincare_bottle",
+    "small_appliance",
+    "supplement_pouch",
+    "tool"
+  ],
+  "rejected_by_review": 14,
+  "reviewed_depth": {
+    "apparel": 3,
+    "ceramic_mug": 2,
+    "pet_product": 1,
+    "skincare_bottle": 2,
+    "toy": 2,
+    "food_jar": 1,
+    "tool": 2,
+    "small_appliance": 1,
+    "electronics_accessories": 1,
+    "supplement_pouch": 8
+  },
+  "usable_images": 23,
+  "assigned": [
+    {
+      "brief": "ST-001",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_main.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-002",
+      "category": "ceramic_mug",
+      "split": "tuning",
+      "reference": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-003",
+      "category": "apparel",
+      "split": "tuning",
+      "reference": "renders/references/categories/apparel/0fffcc65-3d90-4c6f-9789-3a4fb9058b1a.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-004",
+      "category": "skincare_bottle",
+      "split": "tuning",
+      "reference": "renders/references/categories/home/c6d0c06a-ee1b-49c4-971d-673a5c9a179d.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-005",
+      "category": "small_appliance",
+      "split": "tuning",
+      "reference": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-006",
+      "category": "pet_product",
+      "split": "tuning",
+      "reference": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-007",
+      "category": "tool",
+      "split": "held_out",
+      "reference": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-008",
+      "category": "food_jar",
+      "split": "tuning",
+      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-009",
+      "category": "ceramic_mug",
+      "split": "held_out",
+      "reference": "renders/references/categories/ceramic_mug/3c2448d4-f084-44b7-a615-629805ff4b7e.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-010",
+      "category": "apparel",
+      "split": "held_out",
+      "reference": "renders/references/categories/apparel/71a44417-9c2c-47a1-aa3a-f1b3eb0201fd.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-011",
+      "category": "skincare_bottle",
+      "split": "tuning",
+      "reference": "renders/references/categories/home/c6d0c06a-ee1b-49c4-971d-673a5c9a179d.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-012",
+      "category": "small_appliance",
+      "split": "held_out",
+      "reference": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-013",
+      "category": "pet_product",
+      "split": "tuning",
+      "reference": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-014",
+      "category": "tool",
+      "split": "tuning",
+      "reference": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-015",
+      "category": "food_jar",
+      "split": "tuning",
+      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-016",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-017",
+      "category": "apparel",
+      "split": "tuning",
+      "reference": "renders/references/categories/apparel/24dfdf04-b458-494b-bed8-10acc45e0d51.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-018",
+      "category": "skincare_bottle",
+      "split": "held_out",
+      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-019",
+      "category": "small_appliance",
+      "split": "tuning",
+      "reference": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-020",
+      "category": "pet_product",
+      "split": "tuning",
+      "reference": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-021",
+      "category": "tool",
+      "split": "tuning",
+      "reference": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-022",
+      "category": "food_jar",
+      "split": "tuning",
+      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-023",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/word-coffee/wc_women_easter_table.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-024",
+      "category": "ceramic_mug",
+      "split": "tuning",
+      "reference": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-025",
+      "category": "skincare_bottle",
+      "split": "held_out",
+      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-026",
+      "category": "small_appliance",
+      "split": "held_out",
+      "reference": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-027",
+      "category": "pet_product",
+      "split": "tuning",
+      "reference": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-028",
+      "category": "tool",
+      "split": "tuning",
+      "reference": "renders/references/categories/tool/40aede9f-5a04-4c5a-9b7f-a7064a8f101c.jpg",
+      "source_type": "public_licensed",
+      "licence": "by-sa"
+    },
+    {
+      "brief": "ST-029",
+      "category": "food_jar",
+      "split": "held_out",
+      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-030",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_main.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-031",
+      "category": "ceramic_mug",
+      "split": "tuning",
+      "reference": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-032",
+      "category": "apparel",
+      "split": "held_out",
+      "reference": "renders/references/categories/apparel/71a44417-9c2c-47a1-aa3a-f1b3eb0201fd.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-033",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/word-coffee/wc_women_easter_table.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-034",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/word-coffee/word_coffee_women_front.jpg",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-035",
+      "category": "supplement_pouch",
+      "split": "held_out",
+      "reference": "renders/references/word-coffee/wc_women_in_purse.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-036",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/word-coffee/wc_women_pic_box.jpg",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-037",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-038",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-039",
+      "category": "supplement_pouch",
+      "split": "held_out",
+      "reference": "renders/references/mogra/mogra_forest_dusk.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-040",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_main.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-041",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-042",
+      "category": "supplement_pouch",
+      "split": "held_out",
+      "reference": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-043",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/word-coffee/word_coffee_women_front.jpg",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-044",
+      "category": "supplement_pouch",
+      "split": "held_out",
+      "reference": "renders/references/word-coffee/wc_women_in_purse.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-045",
+      "category": "ceramic_mug",
+      "split": "held_out",
+      "reference": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-046",
+      "category": "apparel",
+      "split": "tuning",
+      "reference": "renders/references/categories/apparel/24dfdf04-b458-494b-bed8-10acc45e0d51.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-047",
+      "category": "skincare_bottle",
+      "split": "tuning",
+      "reference": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-048",
+      "category": "small_appliance",
+      "split": "tuning",
+      "reference": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-049",
+      "category": "pet_product",
+      "split": "tuning",
+      "reference": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-050",
+      "category": "tool",
+      "split": "held_out",
+      "reference": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-051",
+      "category": "food_jar",
+      "split": "tuning",
+      "reference": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-052",
+      "category": "supplement_pouch",
+      "split": "tuning",
+      "reference": "renders/references/mogra/mogra_pair_main.png",
+      "source_type": "brand_asset",
+      "licence": "owner-owned"
+    },
+    {
+      "brief": "ST-053",
+      "category": "apparel",
+      "split": "held_out",
+      "reference": "renders/references/categories/apparel/71a44417-9c2c-47a1-aa3a-f1b3eb0201fd.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-054",
+      "category": "ceramic_mug",
+      "split": "held_out",
+      "reference": "renders/references/categories/ceramic_mug/3c2448d4-f084-44b7-a615-629805ff4b7e.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-055",
+      "category": "skincare_bottle",
+      "split": "tuning",
+      "reference": "renders/references/categories/home/c6d0c06a-ee1b-49c4-971d-673a5c9a179d.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    },
+    {
+      "brief": "ST-056",
+      "category": "tool",
+      "split": "tuning",
+      "reference": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "source_type": "public_licensed",
+      "licence": "by"
+    }
+  ]
+}

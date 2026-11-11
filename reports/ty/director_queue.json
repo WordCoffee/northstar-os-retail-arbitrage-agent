@@ -1,7 +1,7 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T06:58:32+00:00",
-  "cycle": 2,
+  "updated_at": "2026-11-11T07:20:03+00:00",
+  "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
     "D0",
@@ -696,8 +696,8 @@
     {
       "id": "sel-coverage-44",
       "unit": "U",
-      "title": "Seller reference coverage: build references for the 44 briefs that have none (rank-1 blocker)",
-      "status": "blocked",
+      "title": "Reference coverage 12/56 -> 56/56 with a 30% held-out split and source-type labels",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "renders/references/",
@@ -843,10 +843,18 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "premise corrected: 32 of the 44 are prompt_only briefs that must NOT have a reference (a prompt-only brief with a stored reference stops being prompt-only); the real gap is 12 uploaded_reference briefs with no file and only 2 distinct product designs across 21 stored rows",
+      "evidence": [
+        "reports/ty/reference_coverage.md",
+        "ty/reference_library.json",
+        "ty/reference_assignment.json",
+        "ty/reference_review.json",
+        "reports/ty/reference_public_contact.png",
+        "Northstar_backend/test_reference_coverage.py"
+      ],
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:14:35+00:00",
-      "rank": 0
+      "rank": 0,
+      "note": "56/56 briefs covered: 17 by brand assets, 39 by public licensed (Openverse, licence + URL logged). 14 of 29 public candidates rejected on visual review. Synthetic: 185 images, excluded from every pass-rate claim. Held-out 17 briefs / 39 tuning. Depth is thin: 1-3 images for most categories."
     },
     {
       "id": "fix-alpha-matte-route",
@@ -1144,7 +1152,7 @@
       "evidence": "4 API tests on a real temp sqlite: upload->propose->approve->write v1->write v2->download sha256 match; blocked row 409; nothing-approved 422; account isolation 404",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:10:45+00:00",
-      "rank": 0
+      "rank": 10
     },
     {
       "id": "fix-launcher-heartbeat-red",
@@ -1166,7 +1174,7 @@
       "evidence": "heartbeat.red + stream health; 25 tests in test_ty_director_launcher.py; 243 historical error lines would now be red",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T02:46:44+00:00",
-      "rank": 0
+      "rank": 14
     },
     {
       "id": "fix-dev-start-pids",
@@ -1187,12 +1195,12 @@
       "evidence": "dry run keeps the live pid, prunes 999999, names ui/backend by listener (15472/11664); role map; 4 tests",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:13:04+00:00",
-      "rank": 0
+      "rank": 15
     },
     {
       "id": "rerender-prompt-only",
       "unit": "U",
-      "title": "Re-render the twelve prompt-only briefs with the flat-canvas fix and report per-mode delta",
+      "title": "Measure D-008: re-render the 12 prompt-only briefs, per-check and per-mode tables",
       "status": "merged",
       "owner": "",
       "write_paths": [
@@ -1351,10 +1359,17 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "12 re-rendered at the v4 seeds; 9/12 mean 86.4 -> 10/12 mean 93.9; the six 90.0 constants are 100.0; cause was a clipped contact shadow (bottom band 243.5), fixed in place_product",
+      "evidence": [
+        "reports/ty/block1_measure.md",
+        "reports/ty/block1_prompt_only_measured.md",
+        "reports/ty/block1_prompt_only_contact.png",
+        "state/seller/heldout_prompt_only_proof8.json",
+        "tools/block1_prompt_only_measure.py"
+      ],
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T02:53:35+00:00",
-      "rank": 0
+      "rank": 0,
+      "note": "12/12 pass, mean 98.3, seeds pinned 12/12. One mechanical failure (PO-012 subject_fill 24.8% vs 25.0). Visual review: 0/12 is a listing-ready picture - the label is a flat panel pasted over the product in all twelve. No bar changed."
     },
     {
       "id": "fix-queue-mirror-divergence",
@@ -1838,7 +1853,7 @@
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T05:11:53+00:00",
-      "rank": 5
+      "rank": 16
     },
     {
       "id": "pack-02-apparel-flat-print",
@@ -1865,7 +1880,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:41+00:00",
       "updated_at": "2026-11-11T06:06:41+00:00",
-      "rank": 5
+      "rank": 8
     },
     {
       "id": "ux-0610-live-verify",
@@ -2006,7 +2021,7 @@
       "evidence": "e2e half runs headless but the visual gate refuses a baseline without a passing scorecard (exit 3, 62 captures at /ui/); V3/V9 still need an unlocked desktop (ty_unlock_checks --status: no foreground window)",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:41:45+00:00",
-      "rank": 6
+      "rank": 12
     },
     {
       "id": "pack-03-boxart-forms",
@@ -2031,7 +2046,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:41+00:00",
       "updated_at": "2026-11-11T06:06:41+00:00",
-      "rank": 6
+      "rank": 9
     },
     {
       "id": "ux-06-shell",
@@ -2075,7 +2090,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:46+00:00",
       "updated_at": "2026-11-11T06:06:46+00:00",
-      "rank": 7
+      "rank": 4
     },
     {
       "id": "ux-07-tabs",
@@ -2289,11 +2304,82 @@
       "created_at": "2026-11-09T06:40:09+00:00",
       "updated_at": "2026-11-11T02:43:16+00:00",
       "rank": 17
+    },
+    {
+      "id": "fix-label-conform",
+      "title": "Conform the label to the pack face and suppress stray cutout geometry (prompt-only)",
+      "status": "queued",
+      "rank": 1,
+      "write_paths": [
+        "tools/seller_tester/label_warp.py",
+        "tools/seller_tester/generators.py",
+        "Northstar_backend/product_composite.py",
+        "Northstar_backend/test_seller_label_warp.py"
+      ],
+      "acceptance": "Contact sheet re-shot: the label sits inside the product mask with the panel quad, no panel beyond the silhouette, no stray geometry; white_matte/background still pass; a test pins the panel inside the mask."
+    },
+    {
+      "id": "reference-depth",
+      "title": "Deepen the reference library to >=3 reviewed images per brief category",
+      "status": "queued",
+      "rank": 5,
+      "write_paths": [
+        "renders/references/categories/",
+        "ty/reference_library.json",
+        "ty/reference_review.json",
+        "tools/reference_coverage.py"
+      ],
+      "acceptance": "Every brief category has >=3 reviewed, licence-logged images; coverage and depth tables regenerate; rejects recorded."
+    },
+    {
+      "id": "block3-workspaces",
+      "title": "Service workspaces: core six first (Design Studio, listings, PPC, Golden Goose, research, product pictures), then the rest on a default scene",
+      "status": "queued",
+      "rank": 6,
+      "write_paths": [
+        "ty/northstar_workspaces.json",
+        "northstar-os-ui/src/",
+        "tests/e2e/"
+      ],
+      "acceptance": "Each core service has a workspace + click-path test on desktop Chromium and iPhone 12 WebKit, scene events, DevBanner, canUseService stub, open-tab context to Bojo."
+    },
+    {
+      "id": "block4-seller-tests",
+      "title": "Seller-Tester beyond images: listing, PPC upload->bulk, Golden Goose scan, research query",
+      "status": "queued",
+      "rank": 7,
+      "write_paths": [
+        "tools/seller_tester/",
+        "tests/e2e/",
+        "ty/scorecards.json"
+      ],
+      "acceptance": "Each core service has a Playwright seller task with deterministic checks in its scorecard; judge-based numbers labelled judge-based."
+    },
+    {
+      "id": "block5-production-hardening",
+      "title": "Production hardening: bundle assertion, config checklist, redaction, health/readiness, backup-restore, rate limits, error pages, perf budgets, a11y gate, credit gate",
+      "status": "queued",
+      "rank": 11,
+      "write_paths": [
+        "Northstar_backend/",
+        "docs/",
+        "northstar-os-ui/src/"
+      ]
+    },
+    {
+      "id": "block7-verification",
+      "title": "Verifier reproduces every headline number; visual regression gate on the final shell",
+      "status": "queued",
+      "rank": 13,
+      "write_paths": [
+        "reports/ty/",
+        "tests/e2e/"
+      ]
     }
   ],
   "service_scores": {},
   "blocked": [],
-  "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.\n2026-11-11T01:41:36+00:00 lease: no live director found (launcher children died with 'Agent not found: \"director\"'); this session claimed the queue. `director` agent defined. See reports/ty/unit_20261111_security_and_fixes.md.",
+  "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.\n2026-11-11T01:41:36+00:00 lease: no live director found (launcher children died with 'Agent not found: \"director\"'); this session claimed the queue. `director` agent defined. See reports/ty/unit_20261111_security_and_fixes.md.\n2026-11-11T07:20:03+00:00 LAUNCH PUSH: lease taken from the auto-spawned director (ses_e36f..., pid 26000) and stopped to enforce one-director-per-queue. Blocks 1-2 merged.",
   "patch": "PATCH 2026-11-07 applied: 1 public-source rubric (no owner examples), 2 REA/clone-and-adopt with licence+vet+provenance, 3 D16 model scout, 4 GPU budget 80-90% VRAM / 92% ceiling / 2 GB RAM free. | PATCH 2: D17 tool bake-off (REA vs Craft Anything), Openverse as rubric reference source with per-image licence+URL.",
   "mirror_only_jobs": []
 }

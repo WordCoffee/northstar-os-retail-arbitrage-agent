@@ -1,0 +1,1474 @@
+{
+  "rows": [
+    {
+      "category": "apparel",
+      "source_type": "public_licensed",
+      "id": "71a44417-9c2c-47a1-aa3a-f1b3eb0201fd",
+      "query": "apparel product photography",
+      "title": "Wati-2018-Dkblue",
+      "creator": "Symic",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/73344134@N00/8572370390",
+      "image_url": "https://live.staticflickr.com/8507/8572370390_a95a7166f6_b.jpg",
+      "file": "renders/references/categories/apparel/71a44417-9c2c-47a1-aa3a-f1b3eb0201fd.jpg",
+      "sha256": "e588d84e7d413112",
+      "pixels": [
+        1000,
+        1000
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "apparel",
+      "source_type": "public_licensed",
+      "id": "24dfdf04-b458-494b-bed8-10acc45e0d51",
+      "query": "apparel product photography",
+      "title": "Volco-C0931108-Orange",
+      "creator": "Symic",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/73344134@N00/8572370494",
+      "image_url": "https://live.staticflickr.com/8371/8572370494_8fb36bcd31_b.jpg",
+      "file": "renders/references/categories/apparel/24dfdf04-b458-494b-bed8-10acc45e0d51.jpg",
+      "sha256": "162e1d9d60e87d71",
+      "pixels": [
+        1000,
+        998
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "apparel",
+      "source_type": "public_licensed",
+      "id": "0fffcc65-3d90-4c6f-9789-3a4fb9058b1a",
+      "query": "apparel product photography",
+      "title": "Volco-C0211202-Black",
+      "creator": "Symic",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/73344134@N00/8571276669",
+      "image_url": "https://live.staticflickr.com/8512/8571276669_35bfba8a28_b.jpg",
+      "file": "renders/references/categories/apparel/0fffcc65-3d90-4c6f-9789-3a4fb9058b1a.jpg",
+      "sha256": "cace2aa97f5cf449",
+      "pixels": [
+        1000,
+        1000
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "ceramic_mug",
+      "source_type": "public_licensed",
+      "id": "47af6dc3-22d3-4732-9d3d-36351fe0835d",
+      "query": "ceramic mug product",
+      "title": "Black Coffee and Tea in White Cup is Hot",
+      "creator": "epSos.de",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://commons.wikimedia.org/w/index.php?curid=27942430",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/64/Black_Coffee_and_Tea_in_White_Cup_is_Hot.png",
+      "file": "renders/references/categories/ceramic_mug/47af6dc3-22d3-4732-9d3d-36351fe0835d.png",
+      "sha256": "48929c9bf8e4335e",
+      "pixels": [
+        4096,
+        2900
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "ceramic_mug",
+      "source_type": "public_licensed",
+      "id": "3c2448d4-f084-44b7-a615-629805ff4b7e",
+      "query": "ceramic mug product",
+      "title": "0501Ga4. Souvenir mug 'Novokhopersk'",
+      "creator": "Александрова Галина",
+      "licence": "by",
+      "licence_version": "4.0",
+      "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://commons.wikimedia.org/w/index.php?curid=145238475",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/86/0501Ga4._Souvenir_mug_%22Novokhopersk%22.jpg",
+      "file": "renders/references/categories/ceramic_mug/3c2448d4-f084-44b7-a615-629805ff4b7e.jpg",
+      "sha256": "2b5f71adf17e0572",
+      "pixels": [
+        1277,
+        1585
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "pet_product",
+      "source_type": "public_licensed",
+      "id": "1180d52d-de54-447a-8c5d-956746e6c188",
+      "query": "pet toy product",
+      "title": "All people love noodle",
+      "creator": "Anton Novoselov",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/45495368@N07/4712010305",
+      "image_url": "https://live.staticflickr.com/1276/4712010305_c28fb7c4aa_b.jpg",
+      "file": "renders/references/categories/pet_product/1180d52d-de54-447a-8c5d-956746e6c188.jpg",
+      "sha256": "daaadd07e993d549",
+      "pixels": [
+        1007,
+        1024
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "pet_product",
+      "source_type": "public_licensed",
+      "id": "969ebb22-c1ef-4e0d-948d-c9cc052f64f8",
+      "query": "pet toy product",
+      "title": "Preparations",
+      "creator": "AMagill",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/85473033@N00/3478740201",
+      "image_url": "https://live.staticflickr.com/3605/3478740201_9d961214b0_b.jpg",
+      "file": "renders/references/categories/pet_product/969ebb22-c1ef-4e0d-948d-c9cc052f64f8.jpg",
+      "sha256": "511f347261621cf8",
+      "pixels": [
+        1024,
+        909
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "pet_product",
+      "source_type": "public_licensed",
+      "id": "d245a14d-f767-4603-be81-65d107e5dbc3",
+      "query": "pet toy product",
+      "title": "Magic Caterpillar -- 1960s",
+      "creator": "JFGryphon",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.flickr.com/photos/30484128@N03/53414360681",
+      "image_url": "https://live.staticflickr.com/65535/53414360681_b9084f00fe_b.jpg",
+      "file": "renders/references/categories/pet_product/d245a14d-f767-4603-be81-65d107e5dbc3.jpg",
+      "sha256": "55c6fb31794c5c78",
+      "pixels": [
+        931,
+        1024
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "skincare_bottle",
+      "source_type": "public_licensed",
+      "id": "22d6a4b4-59f1-4771-9e02-1ac49c794afb",
+      "query": "skincare bottle product",
+      "title": "Pure Jasmine and Rose Oil Absolute Perfume - All Natural Aromatherapy Essential Oils ~ Rose and Jasmine Perfume ~ Bridal",
+      "creator": "Naomi King",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/22141297@N06/7796400432",
+      "image_url": "https://live.staticflickr.com/8433/7796400432_d86933aba3_b.jpg",
+      "file": "renders/references/categories/skincare_bottle/22d6a4b4-59f1-4771-9e02-1ac49c794afb.jpg",
+      "sha256": "96f6e886f7e85835",
+      "pixels": [
+        1024,
+        838
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "toy",
+      "source_type": "public_licensed",
+      "id": "0cc40dac-d029-4fb2-9b24-b15da786ce86",
+      "query": "wooden toy product",
+      "title": "Kick Light for iPhone",
+      "creator": "RidwanJaafar",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/48279789@N00/8978645249",
+      "image_url": "https://live.staticflickr.com/3753/8978645249_716cc7df43_b.jpg",
+      "file": "renders/references/categories/toy/0cc40dac-d029-4fb2-9b24-b15da786ce86.jpg",
+      "sha256": "77f327a8b92e6c8e",
+      "pixels": [
+        1024,
+        1024
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "a188b5af-6e76-4351-9557-ab573494440f",
+      "query": "home decor product",
+      "title": "BEST HOME DECOR PRODUCTS",
+      "creator": "IndoGemstone",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/47544036@N03/23957115233",
+      "image_url": "https://live.staticflickr.com/1607/23957115233_3066d3eaf2_b.jpg",
+      "file": "renders/references/categories/home/a188b5af-6e76-4351-9557-ab573494440f.jpg",
+      "sha256": "76c5508dda5377ab",
+      "pixels": [
+        960,
+        960
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "11cd31ce-1801-4ee9-ab44-3202c816a35e",
+      "query": "home decor product",
+      "title": "BEST HOME DECOR PRODUCTS",
+      "creator": "IndoGemstone",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/47544036@N03/24918263831",
+      "image_url": "https://live.staticflickr.com/1535/24918263831_e822112f07_b.jpg",
+      "file": "renders/references/categories/home/11cd31ce-1801-4ee9-ab44-3202c816a35e.jpg",
+      "sha256": "90c1d505825abf21",
+      "pixels": [
+        960,
+        960
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "electronics_accessories",
+      "source_type": "public_licensed",
+      "id": "a7e728bb-b06d-47f7-9d8c-81710186ab23",
+      "query": "usb cable product",
+      "title": "“Daily $AAPL UX FAIL WTF” #Mac #annoyance / SML.20130128.IP3.SQ",
+      "creator": "See-ming Lee (SML)",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/48973657@N00/8421572499",
+      "image_url": "https://live.staticflickr.com/8492/8421572499_4c0806d7fc_b.jpg",
+      "file": "renders/references/categories/electronics_accessories/a7e728bb-b06d-47f7-9d8c-81710186ab23.jpg",
+      "sha256": "a7f60df1234b12c5",
+      "pixels": [
+        1024,
+        1024
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "food_jar",
+      "source_type": "public_licensed",
+      "id": "9b4968c4-005c-4586-a4c2-85171c98e646",
+      "query": "glass food jar product",
+      "title": "FLOUR",
+      "creator": "rockindave1",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/63723146@N08/8187284549",
+      "image_url": "https://live.staticflickr.com/8062/8187284549_2bc6116132_b.jpg",
+      "file": "renders/references/categories/food_jar/9b4968c4-005c-4586-a4c2-85171c98e646.jpg",
+      "sha256": "393f6637c5334d07",
+      "pixels": [
+        1024,
+        949
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "tool",
+      "source_type": "public_licensed",
+      "id": "0a0c81aa-18ae-493c-a384-96c469766ec4",
+      "query": "hand tool product",
+      "title": "Push Pin Through",
+      "creator": "Podknox",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/91198056@N00/2681187930",
+      "image_url": "https://live.staticflickr.com/3055/2681187930_06eed89acf_b.jpg",
+      "file": "renders/references/categories/tool/0a0c81aa-18ae-493c-a384-96c469766ec4.jpg",
+      "sha256": "d5671c04962d4e55",
+      "pixels": [
+        768,
+        1024
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "tool",
+      "source_type": "public_licensed",
+      "id": "14b89791-3c34-44e0-ac6a-62fc711c497d",
+      "query": "hand tool product",
+      "title": "The Final Casting * The Casting Process * Craft & Design / Product Design",
+      "creator": "Jordanhill School D&T Dept",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/42042252@N02/4109701060",
+      "image_url": "https://live.staticflickr.com/2583/4109701060_2df3425a68_b.jpg",
+      "file": "renders/references/categories/tool/14b89791-3c34-44e0-ac6a-62fc711c497d.jpg",
+      "sha256": "99a7e804e9202539",
+      "pixels": [
+        1023,
+        685
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "tool",
+      "source_type": "public_licensed",
+      "id": "40aede9f-5a04-4c5a-9b7f-a7064a8f101c",
+      "query": "hand tool product",
+      "title": "Basic guitar toolkit",
+      "creator": "TT Zop",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/47292975@N05/4398070128",
+      "image_url": "https://live.staticflickr.com/2781/4398070128_d7231b3d41_b.jpg",
+      "file": "renders/references/categories/tool/40aede9f-5a04-4c5a-9b7f-a7064a8f101c.jpg",
+      "sha256": "be6f992a1e830ff3",
+      "pixels": [
+        1024,
+        768
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "small_appliance",
+      "source_type": "public_licensed",
+      "id": "f9d206f4-cf26-4d9b-abd1-5b50429f32fa",
+      "query": "kitchen appliance product",
+      "title": "the Smart Waffle: details & food",
+      "creator": "Breville USA",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/38102750@N06/15458621077",
+      "image_url": "https://live.staticflickr.com/3948/15458621077_ab47e132ba_b.jpg",
+      "file": "renders/references/categories/small_appliance/f9d206f4-cf26-4d9b-abd1-5b50429f32fa.jpg",
+      "sha256": "5dd022c93ff94710",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "small_appliance",
+      "source_type": "public_licensed",
+      "id": "72a65717-59da-464c-b46d-474211536be8",
+      "query": "kitchen appliance product",
+      "title": "#211 bacheloriana",
+      "creator": "romana klee",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/28581290@N08/4853987056",
+      "image_url": "https://live.staticflickr.com/4121/4853987056_e2e43d175f_b.jpg",
+      "file": "renders/references/categories/small_appliance/72a65717-59da-464c-b46d-474211536be8.jpg",
+      "sha256": "30669ebb2899c41e",
+      "pixels": [
+        1024,
+        639
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "small_appliance",
+      "source_type": "public_licensed",
+      "id": "d831189a-332c-4cb6-ae4a-2dde6dce2802",
+      "query": "kitchen appliance product",
+      "title": "Behind-the-Scenes User Guide Videos",
+      "creator": "Breville USA",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/38102750@N06/15641914811",
+      "image_url": "https://live.staticflickr.com/3941/15641914811_703195b061_b.jpg",
+      "file": "renders/references/categories/small_appliance/d831189a-332c-4cb6-ae4a-2dde6dce2802.jpg",
+      "sha256": "ce0c5ede630c0020",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "toy",
+      "source_type": "public_licensed",
+      "id": "e8b5ddb3-5a25-4385-97d1-9bde234d4b5a",
+      "query": "wooden toy product",
+      "title": "Hanging On",
+      "creator": "Adam Court",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/132182845@N06/23499486435",
+      "image_url": "https://live.staticflickr.com/776/23499486435_65f3ab232c_b.jpg",
+      "file": "renders/references/categories/toy/e8b5ddb3-5a25-4385-97d1-9bde234d4b5a.jpg",
+      "sha256": "82830e2afd892c8e",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "toy",
+      "source_type": "public_licensed",
+      "id": "adb1ed35-3039-4afa-a45a-d347e196d933",
+      "query": "wooden toy product",
+      "title": "Haba Ball Track Construction Set Pieces",
+      "creator": "aMichiganMom",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/11172002@N05/4620700984",
+      "image_url": "https://live.staticflickr.com/4032/4620700984_06294edb2a_b.jpg",
+      "file": "renders/references/categories/toy/adb1ed35-3039-4afa-a45a-d347e196d933.jpg",
+      "sha256": "9f4bc196d85e037a",
+      "pixels": [
+        1024,
+        768
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "346131d5-a062-42ec-98f3-529a97ee88a1",
+      "query": "home decor product",
+      "title": "BEST HOME DECOR PRODUCT",
+      "creator": "IndoGemstone",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/47544036@N03/23957115153",
+      "image_url": "https://live.staticflickr.com/1644/23957115153_50cd00cb7f_b.jpg",
+      "file": "renders/references/categories/home/346131d5-a062-42ec-98f3-529a97ee88a1.jpg",
+      "sha256": "a44fa9aa72e09b6d",
+      "pixels": [
+        960,
+        720
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "725e4367-40a6-4e33-88f7-160dd4dc0c78",
+      "query": "home decor product",
+      "title": "BEST HOME DECORATION PRODUCT",
+      "creator": "IndoGemstone",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/47544036@N03/23957115273",
+      "image_url": "https://live.staticflickr.com/1563/23957115273_0380ec8def_b.jpg",
+      "file": "renders/references/categories/home/725e4367-40a6-4e33-88f7-160dd4dc0c78.jpg",
+      "sha256": "404b9719cd2a95f8",
+      "pixels": [
+        1024,
+        768
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "c6d0c06a-ee1b-49c4-971d-673a5c9a179d",
+      "query": "candle product photography",
+      "title": "Etude House Lipstick",
+      "creator": "SodanieChea",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/41942551@N02/8513781345",
+      "image_url": "https://live.staticflickr.com/8111/8513781345_a61fd7742b_b.jpg",
+      "file": "renders/references/categories/home/c6d0c06a-ee1b-49c4-971d-673a5c9a179d.jpg",
+      "sha256": "f2cae631ccffb337",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "4a835227-3553-478b-b870-12d8f5c8c6c1",
+      "query": "candle product photography",
+      "title": "Babak Khoshnoud",
+      "creator": "Incase.",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/62021300@N00/8969962184",
+      "image_url": "https://live.staticflickr.com/5448/8969962184_3e04df1a4a_b.jpg",
+      "file": "renders/references/categories/home/4a835227-3553-478b-b870-12d8f5c8c6c1.jpg",
+      "sha256": "9ba545fb095293a0",
+      "pixels": [
+        1024,
+        769
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "home",
+      "source_type": "public_licensed",
+      "id": "464b329c-8d6a-41ce-81df-9741492a7199",
+      "query": "candle product photography",
+      "title": "Perdona'ls, pare...",
+      "creator": "sweetenough",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/49477236@N02/5371382088",
+      "image_url": "https://live.staticflickr.com/5046/5371382088_2514269542_b.jpg",
+      "file": "renders/references/categories/home/464b329c-8d6a-41ce-81df-9741492a7199.jpg",
+      "sha256": "c59d45e782639083",
+      "pixels": [
+        1023,
+        685
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "electronics_accessories",
+      "source_type": "public_licensed",
+      "id": "4c1d3c37-68dd-4b23-ae4b-9855c3d83635",
+      "query": "usb cable product",
+      "title": "Recharging Danbo Power",
+      "creator": "Takashi(aes256)",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/46151146@N04/9754012931",
+      "image_url": "https://live.staticflickr.com/7333/9754012931_b19806b32c_b.jpg",
+      "file": "renders/references/categories/electronics_accessories/4c1d3c37-68dd-4b23-ae4b-9855c3d83635.jpg",
+      "sha256": "e1ec10ac7e03cd21",
+      "pixels": [
+        1024,
+        682
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "electronics_accessories",
+      "source_type": "public_licensed",
+      "id": "9ef1e1d9-341b-4f53-aaec-3906029b8608",
+      "query": "usb cable product",
+      "title": "Externe Notebook CDROM/DVD Cases Slot-In PATA IDE NEU und OVP USB 2",
+      "creator": "audioreservoir",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/53515430@N06/9491870285",
+      "image_url": "https://live.staticflickr.com/7438/9491870285_d692f03cbd_b.jpg",
+      "file": "renders/references/categories/electronics_accessories/9ef1e1d9-341b-4f53-aaec-3906029b8608.jpg",
+      "sha256": "15144877564b9ee3",
+      "pixels": [
+        1024,
+        683
+      ],
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-6e54d5d4755ba9cd",
+      "file": "renders/references/mogra/mogra_pair_main.png",
+      "sha256": "6e54d5d4755ba9cd",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-eb0f024d9dce5ecb",
+      "file": "renders/references/mogra/mogra_pair_lifestyle.png",
+      "sha256": "eb0f024d9dce5ecb",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-f03b771df2f4fba3",
+      "file": "renders/references/mogra/mogra_forest_dusk.png",
+      "sha256": "f03b771df2f4fba3",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-fb254b2eac489fc8",
+      "file": "renders/references/word-coffee/word_coffee_moms_front.jpg",
+      "sha256": "fb254b2eac489fc8",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-ae941a3c3a32001a",
+      "file": "renders/references/word-coffee/word_coffee_women_front.jpg",
+      "sha256": "ae941a3c3a32001a",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-6107b970dfc9eb9e",
+      "file": "renders/references/word-coffee/wc_women_pic_box.jpg",
+      "sha256": "6107b970dfc9eb9e",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-2454743c07e2f2e0",
+      "file": "renders/references/word-coffee/wc_women_easter_table.png",
+      "sha256": "2454743c07e2f2e0",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    },
+    {
+      "category": "supplement_pouch",
+      "source_type": "brand_asset",
+      "id": "brand-2d94003b9b064093",
+      "file": "renders/references/word-coffee/wc_women_in_purse.png",
+      "sha256": "2d94003b9b064093",
+      "licence": "owner-owned",
+      "licence_url": null,
+      "source_url": null,
+      "usage": "owner's own product photograph; usable as a seller reference"
+    }
+  ],
+  "refused": [
+    {
+      "query": "apparel product photography",
+      "id": "e5f2a05d-b5f3-4cf1-b3c4-b7714c44b1db",
+      "reason": "small 1024x680"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "b5d771d1-9931-4127-8864-c27422a1ad22",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "ce50d612-6046-45b1-911c-28146b4bd612",
+      "reason": "small 790x1024"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "45203848-2851-4e49-8b04-265f660010a3",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "faf35b87-de0c-4fc7-8cac-0414e80f2e2b",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "3bd14e8a-4f03-4291-b7c5-3f3a50a257b7",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "235bb938-7df9-491c-bff8-4fbe44c69857",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "33776fa5-f2e3-4eab-b2f9-6c3a22914019",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "eaf6b077-9764-404d-b122-a65e9b424d2b",
+      "reason": "small 534x952"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "a8583ee7-747d-42ce-93f8-6eda50cddcd2",
+      "reason": "download HTTPError"
+    },
+    {
+      "query": "ceramic mug product",
+      "id": "85d78c7f-c6ad-4831-876f-40a1d1dc24a0",
+      "reason": "small 331x235"
+    },
+    {
+      "query": "coffee mug product photography",
+      "id": "2cab96a2-9e36-48fc-9c9f-c3b4c4554067",
+      "reason": "small 768x1024"
+    },
+    {
+      "query": "coffee mug product photography",
+      "id": "b70bf587-c132-43c0-8acf-7dad0d144ac4",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "coffee mug product photography",
+      "id": "5d151862-75dd-4fbc-b7c6-8ba97573cf15",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "pet toy product",
+      "id": "655f6d77-20bf-405f-933a-430261f07738",
+      "reason": "small 678x1024"
+    },
+    {
+      "query": "pet toy product",
+      "id": "39acc887-41ae-466c-b7a6-7173c1bc7f00",
+      "reason": "small 240x189"
+    },
+    {
+      "query": "pet toy product",
+      "id": "a7602a45-be5e-4e55-b8ea-ec2e7c10a084",
+      "reason": "small 375x500"
+    },
+    {
+      "query": "pet toy product",
+      "id": "94146dd1-3304-49cd-8b4f-ac539f2545f7",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "pet toy product",
+      "id": "eca38bbc-c579-4ff3-a26e-bb13d5146adb",
+      "reason": "small 1024x693"
+    },
+    {
+      "query": "pet toy product",
+      "id": "ad3b7ca8-b613-46e6-8546-b3bc07983030",
+      "reason": "small 773x1024"
+    },
+    {
+      "query": "pet toy product",
+      "id": "bda71e08-ddd1-46d6-8145-7d550a3c2691",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "pet toy product",
+      "id": "43df0522-0e92-427c-8a15-d085c3df5919",
+      "reason": "small 500x500"
+    },
+    {
+      "query": "dog product photography",
+      "id": "0cca3b71-9d81-48fd-a5ed-d7c1649b2688",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "92fa76e0-5e0a-4547-876f-e2d3fa67f702",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "32e58a12-f26b-4389-9ffd-0a00ffd25ddf",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "e609f437-ee42-4610-ad64-365012e97803",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "27d9e706-b76a-42aa-8a3e-7499459a6adb",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "407fc40e-0028-4dce-b753-7d31ff12c729",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "fdb77a93-0685-42de-b5a9-f09c0de2d1ab",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "4f6f8f39-1c62-4ae9-8a33-fb7b6f1d43ad",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "7549777e-11e8-4eb5-8db2-84bf7d5fface",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "dog product photography",
+      "id": "dd984be1-f017-4670-a598-c875b60c73f2",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "a3d8d35c-a4ea-4a32-8981-f768aea29bae",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "dog product photography",
+      "id": "f29ced72-3017-4b0e-9afa-9fa490635f30",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "fa2cf140-273e-400d-9e5b-b01384247504",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "a65b4bb3-b683-4f1a-8f24-749ff9641937",
+      "reason": "small 1024x684"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "763464f9-76fc-42e3-89e2-7a528c6c33ee",
+      "reason": "small 500x375"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "1e13f91d-3f4e-4b80-9b23-32e8d63de0aa",
+      "reason": "small 500x500"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "05b1b428-0e5a-4280-863e-b28085bcae5b",
+      "reason": "small 500x500"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "d477716d-8c0d-42de-aa92-37bc3b1e9a0c",
+      "reason": "small 500x500"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "d0c531cc-ef50-4a14-b375-869f5af9c08f",
+      "reason": "small 1024x621"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "3c013614-c01b-4e15-b387-7539b4c7b3bd",
+      "reason": "small 1024x621"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "fe5676cb-0690-4a42-8acf-db7da9e63bcb",
+      "reason": "small 1024x621"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "47279ba5-4275-4d43-8178-c6ed25c2d13d",
+      "reason": "small 1024x621"
+    },
+    {
+      "query": "skincare bottle product",
+      "id": "3bf3c95a-0cec-498a-b289-7f4af265acfa",
+      "reason": "small 1024x621"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "03dce6de-e9b4-45a7-9d0e-413fbbedd57a",
+      "reason": "small 791x1024"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "b14610e0-2328-4d02-8509-805364bb4d1e",
+      "reason": "small 500x385"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "e8b5ddb3-5a25-4385-97d1-9bde234d4b5a",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "4bb12da4-5bbf-45ca-bab1-d7a405f568e4",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "3514002a-2e96-4e4c-8e5b-28f0384b7de8",
+      "reason": "small 576x1024"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "adb1ed35-3039-4afa-a45a-d347e196d933",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "815ea223-ff81-4c7c-9cec-948de0a87112",
+      "reason": "small 1024x681"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "2985247c-02fc-4942-9f5d-99e8b6b1a6b4",
+      "reason": "small 681x1024"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "182bfabe-9c8b-4f45-bc94-5c9ffc98cb8c",
+      "reason": "small 1024x681"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "4165bb9e-c19c-44d9-9f35-bfc3b42e8307",
+      "reason": "small 1024x681"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "42df6df6-e865-486a-b5d4-10c023013c21",
+      "reason": "small 1024x681"
+    },
+    {
+      "query": "children toy product photography",
+      "id": "5c9ad448-87c6-470c-8410-8deb5cad1a3b",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "home decor product",
+      "id": "8d39aa09-db50-40bc-9a2b-a56f21dc9147",
+      "reason": "small 500x365"
+    },
+    {
+      "query": "home decor product",
+      "id": "346131d5-a062-42ec-98f3-529a97ee88a1",
+      "reason": "small 960x720"
+    },
+    {
+      "query": "home decor product",
+      "id": "e1f03acb-5abe-4670-9f5c-f53d320979bd",
+      "reason": "small 500x365"
+    },
+    {
+      "query": "home decor product",
+      "id": "725e4367-40a6-4e33-88f7-160dd4dc0c78",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "home decor product",
+      "id": "0b0d97dc-b504-40a8-b932-55cf555122c5",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "home decor product",
+      "id": "fd4a529c-e3a4-4f1c-87d9-c7ded28ae2f5",
+      "reason": "small 960x720"
+    },
+    {
+      "query": "home decor product",
+      "id": "ad994ae7-bfba-4848-9424-d7a9c16470bd",
+      "reason": "small 1024x640"
+    },
+    {
+      "query": "home decor product",
+      "id": "6186fc41-5036-45df-9a4a-643946d337c6",
+      "reason": "small 680x1024"
+    },
+    {
+      "query": "home decor product",
+      "id": "a83468ee-4bce-4b1d-a437-d51ac379e258",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "home decor product",
+      "id": "50c5c4cf-bccb-4018-abd8-2a64d95d56c1",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "candle product photography",
+      "id": "c6d0c06a-ee1b-49c4-971d-673a5c9a179d",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "candle product photography",
+      "id": "d010ed0c-6e39-4a4f-85c0-5be52ec7ddb9",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "candle product photography",
+      "id": "7ad6c510-4ad1-46a2-a442-6a6c9ec79e49",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "candle product photography",
+      "id": "4a835227-3553-478b-b870-12d8f5c8c6c1",
+      "reason": "small 1024x769"
+    },
+    {
+      "query": "candle product photography",
+      "id": "986828ed-6161-4da1-ad42-aa27b93a9584",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "candle product photography",
+      "id": "82c52733-55d4-421f-ba99-b027ae1ee033",
+      "reason": "small 683x1024"
+    },
+    {
+      "query": "candle product photography",
+      "id": "464b329c-8d6a-41ce-81df-9741492a7199",
+      "reason": "small 1024x685"
+    },
+    {
+      "query": "candle product photography",
+      "id": "757f8981-13f6-4bf4-88be-c3f1ead9250e",
+      "reason": "small 1024x576"
+    },
+    {
+      "query": "candle product photography",
+      "id": "758e8dc8-8659-4060-a44f-ac740957f348",
+      "reason": "small 1024x791"
+    },
+    {
+      "query": "candle product photography",
+      "id": "9b77272d-f0e4-4f8d-bb7a-c9a98dbfb52d",
+      "reason": "small 1024x791"
+    },
+    {
+      "query": "candle product photography",
+      "id": "de238f90-d3a0-430f-a2d2-a62093e6b81b",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "candle product photography",
+      "id": "b59f0607-cb29-4e56-8d78-06e7ed15d702",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "usb cable product",
+      "id": "c1f45c72-9499-4b8d-8210-9ec3bbbf13b7",
+      "reason": "small 375x500"
+    },
+    {
+      "query": "usb cable product",
+      "id": "79ff3fc4-1d6b-4747-90a7-da3103b55b59",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "usb cable product",
+      "id": "55be36bc-487e-44fc-bde9-ce735096adfc",
+      "reason": "small 500x183"
+    },
+    {
+      "query": "usb cable product",
+      "id": "4c1d3c37-68dd-4b23-ae4b-9855c3d83635",
+      "reason": "small 1024x682"
+    },
+    {
+      "query": "usb cable product",
+      "id": "254d3933-3023-4287-aef3-44fb1c4983b9",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "usb cable product",
+      "id": "f5633283-5900-486a-957a-24abf23aa246",
+      "reason": "small 500x203"
+    },
+    {
+      "query": "usb cable product",
+      "id": "9ef1e1d9-341b-4f53-aaec-3906029b8608",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "usb cable product",
+      "id": "018dfe6b-9e25-48fe-8456-09bf2b54a303",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "usb cable product",
+      "id": "40129d61-b589-48ac-8d29-b61d9b0b4d64",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "usb cable product",
+      "id": "654fdb57-a5a8-4abf-8434-c1853bdbc657",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "usb cable product",
+      "id": "3c59c760-4dc4-49a7-b228-c9dee3953c85",
+      "reason": "small 1024x681"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "de553ec6-e08d-4f59-b296-d46a3afe0524",
+      "reason": "small 500x375"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "2c17cd5e-c3cc-41b7-a460-2adb4c15ba50",
+      "reason": "small 1024x667"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "bf7109e8-806f-4124-8074-6aa7e316abd0",
+      "reason": "small 500x280"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "40ba67c6-130f-4842-a173-7bbafa099856",
+      "reason": "small 1024x576"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "547a8348-30b2-44f7-b6c0-76fb915ca5c2",
+      "reason": "small 1000x500"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "b517a200-3f08-4af0-9873-f7e216604cf5",
+      "reason": "small 160x240"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "912f89e7-becb-4ebc-8913-05bf605169ca",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "567c5b48-b17f-40e2-8c4d-61fef1654c07",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "6aa0c8e1-c541-460c-9c54-d3b67ed9e7f1",
+      "reason": "small 400x500"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "5907d551-9644-4055-b305-2af539e34ba3",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "glass food jar product",
+      "id": "951ac7a9-688b-422f-bc1f-4ddcf922ef15",
+      "reason": "small 375x500"
+    },
+    {
+      "query": "hand tool product",
+      "id": "0a0c81aa-18ae-493c-a384-96c469766ec4",
+      "reason": "small 768x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "67ded8d8-ead2-4d31-b532-2be989631d55",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "a9484ed5-a46f-4d74-a28a-116a14cd6490",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "14b89791-3c34-44e0-ac6a-62fc711c497d",
+      "reason": "small 1024x685"
+    },
+    {
+      "query": "hand tool product",
+      "id": "f3d14bd7-25b8-43af-8cf6-fecfaa13b87a",
+      "reason": "small 567x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "4c430d98-f9cd-4929-aa8e-6428f34a5ce8",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "7a254387-265c-45fd-a4eb-a66987b7f388",
+      "reason": "small 500x338"
+    },
+    {
+      "query": "hand tool product",
+      "id": "40aede9f-5a04-4c5a-9b7f-a7064a8f101c",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "hand tool product",
+      "id": "2e8d593a-074c-42d4-a9df-a3aed23b3991",
+      "reason": "small 500x266"
+    },
+    {
+      "query": "hand tool product",
+      "id": "4a1715cd-2b9e-4687-89c3-14654da6b1ed",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "6fcb3b8e-9194-43b3-939b-02d76379f1a4",
+      "reason": "small 682x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "dd57c603-7d21-4712-a9a3-0771d7085395",
+      "reason": "small 1024x768"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "75a15671-bd28-42be-a978-7e161ac95cb8",
+      "reason": "small 369x500"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "59501af1-4348-49b9-a439-ce732f911798",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "f9d206f4-cf26-4d9b-abd1-5b50429f32fa",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "4e78644a-bc77-4a18-83e3-7518acb17731",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "f27a14e6-b7a7-4bb6-adbd-b54c59554a4a",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "35953d3c-ffc1-4872-85bf-6f060fd83937",
+      "reason": "small 500x382"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "72a65717-59da-464c-b46d-474211536be8",
+      "reason": "small 1024x639"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "daf12e08-8e4c-4c91-b125-29e5d2d3e876",
+      "reason": "small 500x375"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "5e36d437-0bed-474c-88bb-ae2b604ff901",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "d831189a-332c-4cb6-ae4a-2dde6dce2802",
+      "reason": "small 1024x683"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "18be3902-7ce9-4cf1-9ea7-516f13b95ea5",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "7b3af72a-411c-47ae-a0c3-ac40a34bd841",
+      "reason": "small 640x960"
+    },
+    {
+      "query": "hand tool product",
+      "id": "67ded8d8-ead2-4d31-b532-2be989631d55",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "a9484ed5-a46f-4d74-a28a-116a14cd6490",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "f3d14bd7-25b8-43af-8cf6-fecfaa13b87a",
+      "reason": "small 567x1024"
+    },
+    {
+      "query": "hand tool product",
+      "id": "4c430d98-f9cd-4929-aa8e-6428f34a5ce8",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "hand tool product",
+      "id": "7a254387-265c-45fd-a4eb-a66987b7f388",
+      "reason": "small 500x338"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "75a15671-bd28-42be-a978-7e161ac95cb8",
+      "reason": "small 369x500"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "59501af1-4348-49b9-a439-ce732f911798",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "4e78644a-bc77-4a18-83e3-7518acb17731",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "f27a14e6-b7a7-4bb6-adbd-b54c59554a4a",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "35953d3c-ffc1-4872-85bf-6f060fd83937",
+      "reason": "small 500x382"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "daf12e08-8e4c-4c91-b125-29e5d2d3e876",
+      "reason": "small 500x375"
+    },
+    {
+      "query": "kitchen appliance product",
+      "id": "5e36d437-0bed-474c-88bb-ae2b604ff901",
+      "reason": "small 240x240"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "03dce6de-e9b4-45a7-9d0e-413fbbedd57a",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "b14610e0-2328-4d02-8509-805364bb4d1e",
+      "reason": "small 500x385"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "4bb12da4-5bbf-45ca-bab1-d7a405f568e4",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "3514002a-2e96-4e4c-8e5b-28f0384b7de8",
+      "reason": "small 576x1024"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "815ea223-ff81-4c7c-9cec-948de0a87112",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "2985247c-02fc-4942-9f5d-99e8b6b1a6b4",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "182bfabe-9c8b-4f45-bc94-5c9ffc98cb8c",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "4165bb9e-c19c-44d9-9f35-bfc3b42e8307",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "wooden toy product",
+      "id": "42df6df6-e865-486a-b5d4-10c023013c21",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "children toy product photography",
+      "id": "5c9ad448-87c6-470c-8410-8deb5cad1a3b",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "home decor product",
+      "id": "8d39aa09-db50-40bc-9a2b-a56f21dc9147",
+      "reason": "small 500x365"
+    },
+    {
+      "query": "home decor product",
+      "id": "e1f03acb-5abe-4670-9f5c-f53d320979bd",
+      "reason": "small 500x365"
+    },
+    {
+      "query": "candle product photography",
+      "id": "d010ed0c-6e39-4a4f-85c0-5be52ec7ddb9",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "candle product photography",
+      "id": "7ad6c510-4ad1-46a2-a442-6a6c9ec79e49",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "candle product photography",
+      "id": "986828ed-6161-4da1-ad42-aa27b93a9584",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "candle product photography",
+      "id": "82c52733-55d4-421f-ba99-b027ae1ee033",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "usb cable product",
+      "id": "c1f45c72-9499-4b8d-8210-9ec3bbbf13b7",
+      "reason": "small 375x500"
+    },
+    {
+      "query": "usb cable product",
+      "id": "79ff3fc4-1d6b-4747-90a7-da3103b55b59",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "usb cable product",
+      "id": "55be36bc-487e-44fc-bde9-ce735096adfc",
+      "reason": "small 500x183"
+    },
+    {
+      "query": "usb cable product",
+      "id": "254d3933-3023-4287-aef3-44fb1c4983b9",
+      "reason": "off_topic: no category term in title/tags/description"
+    },
+    {
+      "query": "usb cable product",
+      "id": "f5633283-5900-486a-957a-24abf23aa246",
+      "reason": "small 500x203"
+    }
+  ],
+  "at": "2026-11-11",
+  "policy": {
+    "allowed_licences": [
+      "by",
+      "by-sa",
+      "cc0"
+    ],
+    "usage": "rubric references only; never product assets; Amazon never contacted",
+    "synthetic": "tagged and excluded from every pass-rate claim"
+  }
+}

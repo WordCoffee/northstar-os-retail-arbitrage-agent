@@ -1,0 +1,239 @@
+{
+  "sheet": "reports/ty/reference_public_contact.png",
+  "reviewed_by": "director visual review (not a model judge)",
+  "reviewed_at": "2026-11-11",
+  "by_sha": {
+    "cace2aa97f5cf449": {
+      "index": 1,
+      "verdict": "keep",
+      "reason": "tank top on a white field, garment is the subject",
+      "title": "Volco-C0211202-Black",
+      "category": "apparel",
+      "reclassify_to": null
+    },
+    "162e1d9d60e87d71": {
+      "index": 2,
+      "verdict": "keep",
+      "reason": "shorts on a white field, garment is the subject",
+      "title": "Volco-C0931108-Orange",
+      "category": "apparel",
+      "reclassify_to": null
+    },
+    "e588d84e7d413112": {
+      "index": 3,
+      "verdict": "keep",
+      "reason": "dress on a hanger, garment is the subject",
+      "title": "Wati-2018-Dkblue",
+      "category": "apparel",
+      "reclassify_to": null
+    },
+    "2b5f71adf17e0572": {
+      "index": 4,
+      "verdict": "keep",
+      "reason": "souvenir mug, mug is the subject",
+      "title": "0501Ga4. Souvenir mug 'Novokhopersk'",
+      "category": "ceramic_mug",
+      "reclassify_to": null
+    },
+    "48929c9bf8e4335e": {
+      "index": 5,
+      "verdict": "keep",
+      "reason": "white cup of coffee, cup is the subject",
+      "title": "Black Coffee and Tea in White Cup is Hot",
+      "category": "ceramic_mug",
+      "reclassify_to": null
+    },
+    "e1ec10ac7e03cd21": {
+      "index": 6,
+      "verdict": "keep",
+      "reason": "figure with a USB cable, accessory is in frame",
+      "title": "Recharging Danbo Power",
+      "category": "electronics_accessories",
+      "reclassify_to": null
+    },
+    "15144877564b9ee3": {
+      "index": 7,
+      "verdict": "reject",
+      "reason": "circuit board close-up, a component not a product",
+      "title": "Externe Notebook CDROM/DVD Cases Slot-In PATA IDE NEU und OVP USB 2",
+      "category": "electronics_accessories",
+      "reclassify_to": null
+    },
+    "a7f60df1234b12c5": {
+      "index": 8,
+      "verdict": "reject",
+      "reason": "desktop monitor and code editor, no product",
+      "title": "\u201cDaily $AAPL UX FAIL WTF\u201d #Mac #annoyance / SML.20130128.IP3.SQ",
+      "category": "electronics_accessories",
+      "reclassify_to": null
+    },
+    "393f6637c5334d07": {
+      "index": 9,
+      "verdict": "keep",
+      "reason": "flour in a glass jar, jar is the subject",
+      "title": "FLOUR",
+      "category": "food_jar",
+      "reclassify_to": null
+    },
+    "90c1d505825abf21": {
+      "index": 10,
+      "verdict": "reject",
+      "reason": "walnuts in a market pile, not a home-decor product",
+      "title": "BEST HOME DECOR PRODUCTS",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "a44fa9aa72e09b6d": {
+      "index": 11,
+      "verdict": "reject",
+      "reason": "gourds in a market pile, not a product photo",
+      "title": "BEST HOME DECOR PRODUCT",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "c59d45e782639083": {
+      "index": 12,
+      "verdict": "reject",
+      "reason": "museum still life, not a product",
+      "title": "Perdona'ls, pare...",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "9ba545fb095293a0": {
+      "index": 13,
+      "verdict": "reject",
+      "reason": "person at a workbench, no product as subject",
+      "title": "Babak Khoshnoud",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "404b9719cd2a95f8": {
+      "index": 14,
+      "verdict": "reject",
+      "reason": "market gourds on a stand, not a product photo",
+      "title": "BEST HOME DECORATION PRODUCT",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "76c5508dda5377ab": {
+      "index": 15,
+      "verdict": "reject",
+      "reason": "market walnuts, not a product photo",
+      "title": "BEST HOME DECOR PRODUCTS",
+      "category": "home",
+      "reclassify_to": null
+    },
+    "f2cae631ccffb337": {
+      "index": 16,
+      "verdict": "reclassify",
+      "reason": "lipstick products, real product but filed under home",
+      "title": "Etude House Lipstick",
+      "category": "home",
+      "reclassify_to": "skincare_bottle"
+    },
+    "daaadd07e993d549": {
+      "index": 17,
+      "verdict": "reject",
+      "reason": "child eating noodles, no product",
+      "title": "All people love noodle",
+      "category": "pet_product",
+      "reclassify_to": null
+    },
+    "511f347261621cf8": {
+      "index": 18,
+      "verdict": "keep",
+      "reason": "dog biscuits packaging, pet product",
+      "title": "Preparations",
+      "category": "pet_product",
+      "reclassify_to": null
+    },
+    "55c6fb31794c5c78": {
+      "index": 19,
+      "verdict": "reject",
+      "reason": "1960s cartoon card, not a product",
+      "title": "Magic Caterpillar -- 1960s",
+      "category": "pet_product",
+      "reclassify_to": null
+    },
+    "96f6e886f7e85835": {
+      "index": 20,
+      "verdict": "keep",
+      "reason": "perfume bottles, product is the subject",
+      "title": "Pure Jasmine and Rose Oil Absolute Perfume - All Natural Aromatherapy Essential Oils ~ Rose and Jasmine Perfume ~ Bridal",
+      "category": "skincare_bottle",
+      "reclassify_to": null
+    },
+    "30669ebb2899c41e": {
+      "index": 21,
+      "verdict": "reject",
+      "reason": "laboratory glassware setup, not a consumer product",
+      "title": "#211 bacheloriana",
+      "category": "small_appliance",
+      "reclassify_to": null
+    },
+    "ce0c5ede630c0020": {
+      "index": 22,
+      "verdict": "reject",
+      "reason": "dark room with a person, no product",
+      "title": "Behind-the-Scenes User Guide Videos",
+      "category": "small_appliance",
+      "reclassify_to": null
+    },
+    "5dd022c93ff94710": {
+      "index": 23,
+      "verdict": "keep",
+      "reason": "waffle maker with waffles, appliance is the subject",
+      "title": "the Smart Waffle: details & food",
+      "category": "small_appliance",
+      "reclassify_to": null
+    },
+    "d5671c04962d4e55": {
+      "index": 24,
+      "verdict": "keep",
+      "reason": "caulk gun in use, tool is the subject",
+      "title": "Push Pin Through",
+      "category": "tool",
+      "reclassify_to": null
+    },
+    "99a7e804e9202539": {
+      "index": 25,
+      "verdict": "reject",
+      "reason": "casting process, hands and mould, no product",
+      "title": "The Final Casting * The Casting Process * Craft & Design / Product Design",
+      "category": "tool",
+      "reclassify_to": null
+    },
+    "be6f992a1e830ff3": {
+      "index": 26,
+      "verdict": "keep",
+      "reason": "guitar toolkit laid out, tools are the subject",
+      "title": "Basic guitar toolkit",
+      "category": "tool",
+      "reclassify_to": null
+    },
+    "77f327a8b92e6c8e": {
+      "index": 27,
+      "verdict": "keep",
+      "reason": "wooden game box, toy is the subject",
+      "title": "Kick Light for iPhone",
+      "category": "toy",
+      "reclassify_to": null
+    },
+    "9f4bc196d85e037a": {
+      "index": 28,
+      "verdict": "keep",
+      "reason": "wooden construction toy pieces, toy is the subject",
+      "title": "Haba Ball Track Construction Set Pieces",
+      "category": "toy",
+      "reclassify_to": null
+    },
+    "82830e2afd892c8e": {
+      "index": 29,
+      "verdict": "reject",
+      "reason": "christmas decorations display, not a product photo",
+      "title": "Hanging On",
+      "category": "toy",
+      "reclassify_to": null
+    }
+  }
+}

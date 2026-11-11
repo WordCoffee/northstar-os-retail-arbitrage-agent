@@ -227,6 +227,31 @@ no `director` agent, so the launcher's `opencode run --agent director` has been 
 installed. The director lane was never actually alive outside a manual chat session. Fixing the config
 is a one-line addition; the proof is a launcher tick that reports `running` with a real pid.
 
+## LAUNCH PUSH, 2026-11-11T06:10Z — lease taken, Blocks 1 and 2 measured
+
+**Lease.** The launcher had spawned a director after the previous unit released the lease
+(`ses_e36f86943ffe7yUb1Q7ErT5EXg`, pid 26000). That session was live and mid-tool-call, so it was
+**stopped at 06:09Z** to enforce one-director-per-queue, and the lease was written to the opencode
+service that serves this owner-initiated session. Its uncommitted work was preserved in commit
+`c0d6f3e1` (brand_art/mockup_compositor/product_picture + a cylinder-form test, 24 tests green) and
+its queue entries (D-012, D-016, D-017/018, packaging forms) were kept and re-ranked.
+
+**Block 1 — D-008 measured.** `reports/ty/block1_measure.md`.
+12 prompt-only briefs re-rendered with all 12 render seeds pinned to the previous proof.
+**n 12 · pass 12 · mean 98.3.** One mechanical failure: PO-012 `subject_fill` 24.8 % against 25.0.
+Zero `alpha_matte` failures — the D-008 symptom is gone.
+**And 0 of 12 is a picture a seller would list.** The label is a flat panel pasted over the product
+in all twelve; 7 have the panel beyond the silhouette; 6 carry stray cutout geometry. Both sentences
+are true. No bar was changed. `fix-label-conform` is rank 1.
+
+**Block 2 — reference coverage.** `reports/ty/reference_coverage.md`.
+**56 of 56 briefs** now have a reviewed, licence-logged reference: 17 brand assets (hash roster),
+39 public licensed (Openverse; licence + URL on every row), 185 synthetic images tagged and
+**excluded** from every pass-rate claim. 14 of 29 public candidates were rejected on visual review
+(`reports/ty/reference_public_contact.png`, `ty/reference_review.json`). Held-out split 17 briefs /
+39 tuning, disjoint image split. **Depth is thin — 1 to 3 reviewed images per category** — and is
+rank 5 (`reference-depth`). Neck Nirvana stays unscorable.
+
 ## Position, 2026-11-11 (cycle 2)
 
 Unit report: `reports/ty/unit_20261111_security_and_fixes.md`. Nine units merged, three defects filed.
@@ -935,3 +960,5 @@ that, re-score and re-plan again. Empty queue means re-plan, never idle.
 - 2026-11-11T03:43:57+00:00 launcher: director session ended (session 24680 gone; launcher restarting).
 
 - 2026-11-11T05:14:38+00:00 launcher: director session ended (session 26360 gone; launcher restarting).
+
+- 2026-11-11T07:05:17+00:00 launcher: director session ended (session 21024 gone; launcher restarting).
