@@ -103,6 +103,25 @@ FORM_PLATE_BRIEFS: Dict[str, Dict[str, str]] = {
     art.GIFT_BOX: BOX_PLATE_BRIEFS,
     art.CYLINDER: CYLINDER_PLATE_BRIEFS,
 }
+
+#: Apparel: the print area is a chest panel, not a wrap and not a carton face. The
+#: plate is a garment laid flat, so the panel is measured from the body's own
+#: silhouette the same way a pouch's face is.
+APPAREL_PLATE_TEMPLATE = (
+    "a photograph of one blank unprinted heavyweight cotton t-shirt laid flat and "
+    "pressed, sleeves out, viewed square from above on a pale seamless studio sweep, "
+    "the whole garment in frame with its silhouette clearly separated from the "
+    "background, chest area blank, {turn}, no print, no lettering and no label, no "
+    "shadow and no cast shadow, soft diffused key light from the upper left, photoreal "
+    "commercial apparel photography, sharp focus on the fabric")
+
+APPAREL_PLATE_BRIEFS: Dict[str, str] = {
+    "front": APPAREL_PLATE_TEMPLATE.format(turn="the front of the garment facing up"),
+    "back": APPAREL_PLATE_TEMPLATE.format(turn="the back of the garment facing up"),
+}
+
+FORM_PLATE_BRIEFS[art.APPAREL] = APPAREL_PLATE_BRIEFS
+
 FORM_INSETS: Dict[str, Dict[str, float]] = {
     art.POUCH: {"inset_x": 0.075, "inset_top": 0.20, "inset_bottom": 0.10},
     art.GIFT_BOX: {"inset_x": 0.055, "inset_top": 0.055, "inset_bottom": 0.055},
@@ -110,6 +129,9 @@ FORM_INSETS: Dict[str, Dict[str, float]] = {
     # curve, and runs nearly to the silhouette's sides: the label wraps, so the
     # side inset is small while the top inset carries the shoulder and the cap.
     art.CYLINDER: {"inset_x": 0.03, "inset_top": 0.26, "inset_bottom": 0.10},
+    # An apparel print sits on the chest: clear of the shoulders and the side seams,
+    # and above the hem. The panel is measured on the garment's own silhouette.
+    art.APPAREL: {"inset_x": 0.20, "inset_top": 0.16, "inset_bottom": 0.42},
 }
 
 #: The print should follow the pouch surface, not sit on it as a sticker. Measured
@@ -454,6 +476,10 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
         # A cylinder measures its own body (difference from the plate's own
         # background) and warps round the visible arc; there is no quad to take.
         return _compose_cylinder(plate, design, face, insets, units, shading=shading)
+    if form == art.APPAREL:
+        # A garment has no panel to discover; the chest print area is declared in mm
+        # and placed on the measured body (D-025).
+        return _compose_apparel(plate, design, face, insets, units, shading=shading)
     if quad is not None:
         quads = [quad]
     else:
@@ -492,6 +518,81 @@ def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
         "legibility": gate,
         "gate_ok": bool(gate.get("ok")),
         "reason": "" if gate.get("ok") else str(gate.get("reason") or "not legible"),
+    }
+
+
+def _compose_apparel(plate: Image.Image, design: Dict[str, Any], face: str,
+                     insets: Dict[str, float], units: int, *, shading: float
+                     ) -> Dict[str, Any]:
+    """Print the declared chest panel onto a garment, measured from its silhouette.
+
+    A garment has no *panel* to discover: a tee is one silhouette, and
+    `find_panel_quads` has nothing to lock onto (measured 2026-11-11: a pale tee on a
+    pale sweep raises `plate_face_not_found`). What a garment does have is a declared
+    print area — a physical size in millimetres — so the body is measured, the area is
+    placed on the chest at that size, and the same composition and OCR gate the other
+    forms use puts the artwork on it. The silhouette cut is relative to the plate's own
+    contrast, because a light garment on a light sweep is the D-016 lesson.
+    """
+    import numpy as np
+
+    rgb = np.asarray(plate.convert("RGB")).astype(np.int16)
+    corner = np.median(rgb[:24, :24].reshape(-1, 3), axis=0)
+    difference = np.abs(rgb - corner).max(axis=2)
+    threshold = max(6.0, min(28.0, 0.25 * float(np.percentile(difference, 99.5))))
+    mask = difference > threshold
+    rows, columns = np.nonzero(mask)
+    if rows.size < 1000:
+        raise ValueError(
+            "plate_face_not_found: the garment's silhouette is not separable from the "
+            f"background at {threshold:.1f} levels")
+    left, right = int(columns.min()), int(columns.max()) + 1
+    top, bottom = int(rows.min()), int(rows.max()) + 1
+    body_w, body_h = right - left, bottom - top
+    px0 = left + body_w * float(insets.get("inset_x", 0.20))
+    px1 = right - body_w * float(insets.get("inset_x", 0.20))
+    py0 = top + body_h * float(insets.get("inset_top", 0.16))
+    py1 = bottom - body_h * float(insets.get("inset_bottom", 0.42))
+    width_mm, height_mm = art.face_mm(design, face)
+    aspect = max(0.05, float(height_mm) / max(0.1, float(width_mm)))
+    area_w = max(8.0, px1 - px0)
+    area_h = area_w * aspect
+    if area_h > (py1 - py0):
+        area_h = max(8.0, py1 - py0)
+        area_w = area_h / aspect
+    cx, cy = (px0 + px1) / 2.0, (py0 + py1) / 2.0
+    quad = [(cx - area_w / 2.0, cy - area_h / 2.0),
+            (cx + area_w / 2.0, cy - area_h / 2.0),
+            (cx + area_w / 2.0, cy + area_h / 2.0),
+            (cx - area_w / 2.0, cy + area_h / 2.0)]
+    size = (max(64, int(area_w)), max(64, int(area_h)))
+    panel = (art.front_panel(design, size=size) if face == "front"
+             else art.back_panel(design, size=size))
+    maps = None
+    composed = plate.convert("RGB")
+    if shading:
+        import compositor_realism as cr
+
+        maps = cr.build_surface_maps(composed)
+        composed, _ = mc.neutralize_quad(composed, quad, feather=10)
+    composed = mc.composite_panel_onto_quad(composed, panel, quad, feather=2.2,
+                                            shading=shading, realism=dict(REALISM),
+                                            maps=maps)
+    gate = mq.assert_legible(composed, wordmark=str(design["brand"]),
+                             net_weight=str(design.get("net_weight") or "") or None)
+    return {
+        "image": composed,
+        "quad": [[round(x, 2), round(y, 2)] for x, y in quad],
+        "quads": [[[round(x, 2), round(y, 2)] for x, y in quad]],
+        "bands": [[round(px0, 2), round(py0, 2), round(px1, 2), round(py1, 2)]],
+        "units_found": 1,
+        "panel": panel,
+        "legibility": gate,
+        "gate_ok": bool(gate.get("ok")),
+        "reason": "" if gate.get("ok") else str(gate.get("reason") or "not legible"),
+        "form": art.APPAREL,
+        "silhouette": {"box": [left, top, right, bottom],
+                       "threshold": round(float(threshold), 2)},
     }
 
 

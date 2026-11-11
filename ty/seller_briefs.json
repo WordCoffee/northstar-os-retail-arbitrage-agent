@@ -941,7 +941,17 @@
       ],
       "source_mode": "prompt_only",
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "mogra-tee",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain heavyweight cotton t-shirt laid flat and pressed, sleeves out, blank chest, no text, no lettering, no logo, on a seamless white studio background, garment centred, no props. Photorealistic, unprinted apparel.",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Lion's Mane Tee",
+        "weight": "100% cotton",
+        "lines": []
+      },
+      "note": " | pack-02 (D-025): wired to the app product_picture path on the apparel flat form (label_mode warp, product_line mogra-tee, body_prompt) so the chest print is composed by the app instead of the model inventing lettering."
     },
     {
       "id": "ST-018",
@@ -2513,7 +2523,17 @@
         "background"
       ],
       "fidelity": "exact",
-      "product_in_frame": true
+      "product_in_frame": true,
+      "product_line": "mogra-tee",
+      "label_mode": "warp",
+      "body_prompt": "Product photograph of a plain heavyweight cotton t-shirt laid flat and pressed, sleeves out, blank chest, no text, no lettering, no logo, on a seamless white studio background, garment centred, no props. Photorealistic, unprinted apparel.",
+      "label": {
+        "brand": "Mogra Organics",
+        "product": "Lion's Mane Tee",
+        "weight": "100% cotton",
+        "lines": []
+      },
+      "note": " | pack-02 (D-025): wired to the app product_picture path on the apparel flat form (label_mode warp, product_line mogra-tee, body_prompt) so the chest print is composed by the app instead of the model inventing lettering."
     },
     {
       "id": "ST-047",
@@ -3204,9 +3224,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3295,9 +3315,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3387,9 +3407,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3476,9 +3496,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3562,9 +3582,9 @@
         }
       },
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -3677,9 +3697,9 @@
         }
       ],
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4166,9 +4186,9 @@
       "product_line": "lions-mane",
       "note": "A+ ingredient_grid for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4253,9 +4273,9 @@
       },
       "product_line": "lions-mane",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4346,9 +4366,9 @@
       "product_line": "lions-mane",
       "note": "A+ comparison_table for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     },
@@ -4464,9 +4484,9 @@
       "product_line": "lions-mane",
       "note": "A+ hero_band for lions mane, built on the same module shape as the existing family so the module type is comparable.",
       "text_sources": {
-        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "60 SERVINGS": "owner-stated serving count (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "1500MG PER SERVING": "owner-stated 2,000 mg per 2 g serving (needs_you.md A3, DRAFT)",
-        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT · VERIFY BEFORE PRINT)",
+        "2 CAPSULES": "owner-stated serving size (needs_you.md A3, DRAFT \u00b7 VERIFY BEFORE PRINT)",
         "SERVINGS PER CONTAINER 30": "owner-stated container count (needs_you.md A3, DRAFT)"
       }
     }

@@ -31,11 +31,13 @@ import package_art
 POUCH = "stand_up_pouch"
 GIFT_BOX = "gift_box"
 CYLINDER = "rigid_cylinder"
+APPAREL = "apparel_flat"
 
 FORM_NAMES: Dict[str, str] = {
     POUCH: "stand-up pouch, front and back panels",
     GIFT_BOX: "folding carton (gift box), front and back panels",
     CYLINDER: "rigid cylinder (jar, bottle, tube or canister), wrap-around label",
+    APPAREL: "apparel with a flat chest print area, front and back",
 }
 
 #: Which blank body the *drawn* plate draws for a form. The plate must be the
@@ -44,6 +46,7 @@ PLATE_KINDS: Dict[str, str] = {
     POUCH: "pouch",
     GIFT_BOX: "gift_box",
     CYLINDER: "cylinder",
+    APPAREL: "apparel",
 }
 
 #: Word Coffee — a slim pale-pink and cream gift box. The briefs in
@@ -234,6 +237,42 @@ PINE_PAWS_JOINT: Dict[str, Any] = {
                "note": "no certification and no disease claim is made"},
 }
 
+#: A cotton tee with a chest print. The print area is a declared physical size in
+#: millimetres (a 280 x 350 mm chest panel on an adult large), so the artwork is
+#: scaled from the garment's own measurement instead of being stretched to fit.
+MOGRA_TEE: Dict[str, Any] = {
+    "id": "mogra-tee",
+    "plate_subject": "heavyweight cotton t-shirt laid flat",
+    "brand": "MOGRA ORGANICS",
+    "product": "LION'S MANE",
+    "form": APPAREL,
+    "face_mm": {"front": [280.0, 350.0], "back": [280.0, 350.0]},
+    "theme": "forest",
+    "script_line": "One Message at a Time",
+    "subtitle": "ORGANIC  ·  SMALL BATCH",
+    "tagline": "Wear the mushroom",
+    "net_weight": "100% cotton",
+    "net_weight_line": "100% COTTON",
+    "servings": "ADULT LARGE",
+    "inside": "Heavyweight cotton tee with a screen-printed chest panel.",
+    "ingredients": "100% combed cotton. Machine wash cold, tumble dry low.",
+    "label_sections": [
+        {"head": "CARE", "body": "Machine wash cold, inside out. Tumble dry low. "
+                                 "Do not iron the print."},
+        {"head": "FIT", "body": "Unisex adult large. Pre-shrunk; expect under 3% shrink."},
+    ],
+    "about": "Printed in small runs. Colours may vary slightly between batches.",
+    "company": "PRINTED FOR T2 HOLDINGS LLC",
+    "lot_code": "LOT  MT-0000",
+    "best_by": "STYLE  MT-0000",
+    "barcode_digits": "8 50000 00000 8",
+    "draft_note": "DRAFT  ·  VERIFY BEFORE PRINT",
+    "back_draft_note": "DRAFT  ·  VERIFY CARE COPY BEFORE PRINT",
+    "status": "DRAFT - copy and care instructions must be verified before print",
+    "claims": {"organic_seal": False, "fda": False,
+               "note": "no certification is claimed that the brand has not got"},
+}
+
 _DESIGN_IDS = {
     "mogra-lions-mane": "mogra-lions-mane",
     "mogra_lions_mane": "mogra-lions-mane",
@@ -244,6 +283,7 @@ _DESIGN_IDS = {
     "word-coffee-mug": "word-coffee-mug",
     "harbor-body-oil": "harbor-body-oil",
     "pine-paws-joint": "pine-paws-joint",
+    "mogra-tee": "mogra-tee",
 }
 
 #: Seller brief `product_line` -> design id. Explicit: a brief that names a line
@@ -259,6 +299,8 @@ _PRODUCT_LINES = {
     "word-coffee-mug": "word-coffee-mug",
     "harbor-body-oil": "harbor-body-oil",
     "pine-paws-joint": "pine-paws-joint",
+    "mogra-tee": "mogra-tee",
+    "mogra_tee": "mogra-tee",
 }
 
 
@@ -275,6 +317,7 @@ _LOCAL_DESIGNS: Dict[str, Dict[str, Any]] = {
     "word-coffee-mug": WORD_COFFEE_MUG,
     "harbor-body-oil": HARBOR_BODY_OIL,
     "pine-paws-joint": PINE_PAWS_JOINT,
+    "mogra-tee": MOGRA_TEE,
 }
 
 
@@ -353,7 +396,9 @@ def front_panel(design: Optional[Dict[str, Any]] = None,
     if form_of(dsn) == POUCH:
         return mogra_label_art.front_panel(dsn, size=size)
     width_mm, height_mm = face_mm(dsn, "front")
-    if form_of(dsn) == CYLINDER:
+    if form_of(dsn) in (CYLINDER, APPAREL):
+        # An apparel print is a flat panel on a garment, the same artwork problem as a
+        # cylinder label: no carton panels to fill, so the label renderer draws it.
         img = package_art.render_front_label(_spec(dsn), width_mm=width_mm,
                                              height_mm=height_mm)
     else:
@@ -371,7 +416,7 @@ def back_panel(design: Optional[Dict[str, Any]] = None,
     if form_of(dsn) == POUCH:
         return mogra_label_art.back_panel(dsn, size=size)
     width_mm, height_mm = face_mm(dsn, "back")
-    if form_of(dsn) == CYLINDER:
+    if form_of(dsn) in (CYLINDER, APPAREL):
         img = package_art.render_back_label(_spec(dsn), width_mm=width_mm,
                                             height_mm=height_mm)
     else:

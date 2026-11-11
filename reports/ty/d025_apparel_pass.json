@@ -1,0 +1,346 @@
+{
+  "generated_at": "2026-11-11T10:06:34+00:00",
+  "generator": "product_pipeline",
+  "judge_enabled": false,
+  "mode_filter": null,
+  "catalog_briefs": 2,
+  "catalog_by_mode": {
+    "prompt_only": 1,
+    "stored_reference": 0,
+    "uploaded_reference": 1
+  },
+  "selected": 2,
+  "artefacts_available": null,
+  "scored": 2,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 1,
+  "failed": 1,
+  "pass_rate": 50.0,
+  "mean_score": 90.0,
+  "gaps_filed": 1,
+  "gaps_in_file": 1,
+  "gaps_path": "state/seller/d025_gaps.json",
+  "mirror_path": "state/seller/d025_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T10:06:33+00:00",
+      "from_brief_id": "ST-017",
+      "from_difficulty": 3,
+      "source_mode": "prompt_only",
+      "action": "add_constraint",
+      "detail": "added hard constraint tight_background (prompt_only)",
+      "constraint": "tight_background",
+      "to_brief_id": "ST-017",
+      "to_difficulty": 3,
+      "score": 100.0,
+      "artefact_path": "renders/d025/ST-017/product_front.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "ST-017",
+      "category": "apparel",
+      "situation": "white_background_main",
+      "difficulty": 3,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/d025/ST-017/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-4; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 42.4% vs 22.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±4"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "272344 bytes (0.068 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-017",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "mogra-tee",
+        "form": "apparel_flat",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank apparel on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "apparel_flat",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\d025\\ST-017\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": true,
+        "bytes": 272344,
+        "seconds": 8.95
+      }
+    },
+    {
+      "brief_id": "ST-046",
+      "category": "apparel",
+      "situation": "white_background_main",
+      "difficulty": 2,
+      "source_mode": "uploaded_reference",
+      "fidelity": "exact",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/d025/ST-046/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 80.0,
+      "passed": false,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [
+        "reference_subject"
+      ],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-5; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 41.1% vs 18.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 0.00% of the frame (0 px) outside the product's silhouette, 0 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±5"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "265049 bytes (0.066 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": false,
+          "skipped": false,
+          "cannot_verify": true,
+          "detail": "cannot verify: no local copy of the uploaded file (tee_charcoal-folded.jpg); the upload was not present in this checkout"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference": {
+        "kind": "uploaded_file",
+        "path": null
+      },
+      "reference_check": {
+        "ok": false,
+        "skipped": false,
+        "cannot_verify": true,
+        "detail": "cannot verify: no local copy of the uploaded file (tee_charcoal-folded.jpg); the upload was not present in this checkout",
+        "reference_path": null
+      },
+      "generation": {
+        "brief_id": "ST-046",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "drawn",
+        "design": "mogra-tee",
+        "form": "apparel_flat",
+        "plate": {
+          "source": "synthetic_plate",
+          "prompt": "drawn blank apparel on a white field (no render lane)",
+          "model": null,
+          "width": 2000,
+          "height": 2000,
+          "seed": 7,
+          "note": "not generated: a drawn plate used only for the offline proof"
+        },
+        "build": {
+          "ok": true,
+          "form": "apparel_flat",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\d025\\ST-046\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": true,
+        "bytes": 265049,
+        "seconds": 5.63
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 2,
+      "passed": 1,
+      "failed": 1,
+      "pass_rate": 50.0,
+      "mean_score": 90.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 1,
+      "passed": 0,
+      "failed": 1,
+      "pass_rate": 0.0,
+      "mean_score": 80.0
+    }
+  },
+  "by_situation": {
+    "white_background_main": {
+      "scored": 2,
+      "passed": 1,
+      "failed": 1,
+      "pass_rate": 50.0,
+      "mean_score": 90.0
+    }
+  },
+  "by_category": {
+    "apparel": {
+      "scored": 2,
+      "passed": 1,
+      "failed": 1,
+      "pass_rate": 50.0,
+      "mean_score": 90.0
+    }
+  },
+  "pipeline": "app",
+  "plate_source": "drawn",
+  "refused": []
+}

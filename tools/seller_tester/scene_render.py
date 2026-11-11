@@ -388,6 +388,40 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
                        (left + w + int(w * 0.03), top_y + h),
                        (left - int(w * 0.03), top_y + h)], fill=body)
             d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+    elif kind == "apparel":
+        # A garment laid flat (D-025): a torso with two sleeves, drawn as one
+        # silhouette so the plate's own colour cut finds a single subject with a
+        # chest area inside it. Drawn, never called a photograph.
+        base = tuple(stock) if stock else (238, 236, 231)
+        body = base
+        shade = tuple(max(0, int(c * 0.94)) for c in base)
+        unit_w = int(width * 0.54 / max(1, units) * (0.92 if units > 1 else 1.0))
+        h = int(height * 0.66)
+        gap = int(width * 0.04) if units > 1 else 0
+        span = unit_w * units + gap * (units - 1)
+        start = (width - span) // 2
+        top_y = int(height * 0.17)
+        for index in range(max(1, units)):
+            left = start + index * (unit_w + gap)
+            w = unit_w
+            sleeve = int(w * 0.26)
+            d.polygon([(left + int(w * 0.18), top_y),
+                       (left + int(w * 0.82), top_y),
+                       (left + w + sleeve, top_y + int(h * 0.30)),
+                       (left + w + sleeve - int(w * 0.06), top_y + int(h * 0.46)),
+                       (left + w, top_y + int(h * 0.34)),
+                       (left + w, top_y + h),
+                       (left, top_y + h),
+                       (left, top_y + int(h * 0.34)),
+                       (left - sleeve + int(w * 0.06), top_y + int(h * 0.46)),
+                       (left - sleeve, top_y + int(h * 0.30))], fill=body)
+            # a collar and a hem line, so the garment reads as a tee and the chest
+            # panel has a top edge to sit under
+            d.arc([left + int(w * 0.36), top_y - int(h * 0.02),
+                   left + int(w * 0.64), top_y + int(h * 0.06)], 0, 180, fill=shade,
+                  width=max(2, w // 90))
+            d.line([left, top_y + h - int(h * 0.06), left + w, top_y + h - int(h * 0.06)],
+                   fill=shade, width=max(2, w // 120))
     elif kind == "cylinder":
         # A rigid cylinder (jar, bottle, tube, canister): a round body with a
         # shoulder, a cap and a base curve. Drawn, never called a photograph.
