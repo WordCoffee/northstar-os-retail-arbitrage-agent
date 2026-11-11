@@ -10,6 +10,32 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 16 — a main image is composed without the composite's own shadow
+
+Unit report: `reports/ty/d022_fullgen_white_composite.md`. Tag `ty-dir-fix-fullgen-white-composite`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-fullgen-white-composite` (D-022, rank 2) — the full-generation route already composes the product on the brief's flat canvas, then called `place_product` with its default `shadow=True`; that soft ellipse *is* the grey pool on 255 white | **D-022 closed.** `_generate_cut_and_compose` passes `shadow=not flat(brief)`: a uniform/white-matte brief gets no shadow, a free/scene brief keeps it |
+
+**Measured before the fix, from D-020's audit:** eight published artefacts at **10.2 – 25.6 %
+background residue**; PO-001 was 25.6 %. The shadow is not a model artefact — it is
+`product_composite._contact_shadow`, 1.15 × product width, blurred, filled `(18,14,10)`, and
+it was added on purpose (D-018 reserved its footprint so it could not be clipped). The bug
+was that a main image kept it.
+
+**The real re-render was refused, and is queued rather than claimed:** `budget: refused:
+8.48 GB free - 8.2 GB needed = 0.28 GB < 1.0 GB reserve` — `qwen2.5vl:7b` sat on the GPU for
+another lane and its lease was **extended** mid-attempt (03:36 → 03:42), so it is in use and
+not mine to unload. `d022-real-rerender` (rank 3) is the number that retires it.
+
+**Tests:** 4 in `test_fullgen_white_composite.py` (written first, including the control: the
+same composition with the shadow on **fails** the residue check), 91 in the seller group.
+
+**Next, in rank order:** `d022-real-rerender` → `sel-04-packaging` → `pack-02-apparel-flat-print`
+→ `reference-depth` → `pack-03-boxart-forms` → `block3-workspaces` → `block4-seller-tests` →
+`block5-production-hardening` → `block7-verification` → D-019.
+
 ## Position, 2026-11-11 cycle 15 — a main image gets a shadowless plate, drawn and real
 
 Unit report: `reports/ty/d021_drawn_plate_shadow.md`. Tag `ty-dir-fix-drawn-plate-shadow`.
