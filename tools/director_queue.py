@@ -132,6 +132,46 @@ def paths_conflict(left: Iterable[str], right: Iterable[str]) -> List[str]:
     return sorted(set(hits))
 
 
+def acceptance_list(value: Any) -> List[str]:
+    """Acceptance entries are commands: one non-empty string per check.
+
+    A caller that passed a plain string used to be exploded into one entry per
+    character — ``[list(c) for c in "..." ]`` — so a 400-character acceptance
+    line became 400 one-character "commands". That is why several jobs in
+    ``reports/ty/director_queue.json`` carried an ``acceptance`` array with one
+    entry per letter, and why the readable resume mirror became unreadable.
+    A string is now split on newlines; a sequence of strings is kept as-is.
+    """
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [line.strip() for line in value.splitlines() if line.strip()]
+    out: List[str] = []
+    for item in value:
+        if isinstance(item, str):
+            text = item.strip()
+            if text:
+                out.append(text)
+        else:
+            joined = " ".join(str(part) for part in item).strip()
+            if joined:
+                out.append(joined)
+    return out
+
+
+def _repair_acceptance(entries: Sequence[Any]) -> List[str]:
+    """Rebuild a row written by the character-exploding bug.
+
+    The signature is unambiguous: more than eight entries, every one of them a
+    single character. Joining them restores the original command instead of
+    leaving 400 fragments in the store and the mirror.
+    """
+    items = list(entries or [])
+    if len(items) > 8 and all(isinstance(x, str) and len(x) == 1 for x in items):
+        return ["".join(items).strip()]
+    return acceptance_list(items)
+
+
 def _event(conn: sqlite3.Connection, job: str, event: str, detail: str = "") -> None:
     conn.execute("INSERT INTO events(at, job, event, detail) VALUES (?,?,?,?)",
                  (_now(), job, event, detail))
@@ -148,7 +188,7 @@ def add_job(*, db: Optional[Path] = None, unit: str, title: str,
             "INSERT INTO jobs(id, unit, title, status, write_paths, branch, acceptance,"
             " rollback_tag, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
             (stem, unit, title, "queued", json.dumps(list(write_paths)),
-             branch or f"ty/{stem}", json.dumps([list(c) for c in acceptance]),
+             branch or f"ty/{stem}", json.dumps(acceptance_list(acceptance)),
              rollback_tag, now, now))
         _event(conn, stem, "added", title)
     except sqlite3.IntegrityError:
@@ -162,7 +202,7 @@ def add_job(*, db: Optional[Path] = None, unit: str, title: str,
 def _row_to_job(row: sqlite3.Row) -> Dict[str, Any]:
     job = dict(row)
     job["write_paths"] = json.loads(job.get("write_paths") or "[]")
-    job["acceptance"] = json.loads(job.get("acceptance") or "[]")
+    job["acceptance"] = _repair_acceptance(json.loads(job.get("acceptance") or "[]"))
     return job
 
 
@@ -412,7 +452,7 @@ def import_mirror(*, db: Optional[Path] = None,
                 "branch": str(row.get("branch") or f"ty/{jid}"),
                 "worktree": str(row.get("worktree") or ""),
                 "rollback_tag": str(row.get("rollback_tag") or ""),
-                "acceptance": json.dumps(list(row.get("acceptance") or [])),
+                "acceptance": json.dumps(_repair_acceptance(row.get("acceptance") or [])),
                 "tokens": int(row.get("tokens") or 0),
                 "score_before": row.get("score_before"),
                 "score_after": row.get("score_after"),

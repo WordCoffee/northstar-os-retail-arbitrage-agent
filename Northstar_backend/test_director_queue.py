@@ -305,3 +305,45 @@ def test_a_status_write_for_a_job_that_does_not_exist_is_refused(repo):
     out = DQ.set_status("never-added", "merged", evidence="pretend")
     assert out["ok"] is False and out["reason"] == "no_such_job"
     assert DQ.job("never-added") is None
+
+# --- acceptance commands, not characters -------------------------------------
+# A caller that passed a plain string used to be exploded one entry per character
+# (`[list(c) for c in "..."]`), so 400-letter acceptance text became 400
+# one-character "commands" in the store and in reports/ty/director_queue.json.
+
+
+def test_a_plain_string_acceptance_is_one_command_not_one_entry_per_letter(repo):
+    text = "python -m pytest Northstar_backend/test_x.py -q"
+    assert DQ.add_job(unit="D3", title="one command", write_paths=["a"], acceptance=text)["ok"]
+    job = DQ.jobs(status="queued")[0]
+    assert job["acceptance"] == [text]
+    assert len(job["acceptance"][0]) == len(text)
+
+
+def test_a_multiline_acceptance_string_is_one_command_per_line(repo):
+    text = "first check\n\n  second check  \n"
+    DQ.add_job(unit="D3", title="two commands", write_paths=["a"], acceptance=text)
+    assert DQ.jobs()[0]["acceptance"] == ["first check", "second check"]
+
+
+def test_a_sequence_acceptance_is_kept_as_commands(repo):
+    DQ.add_job(unit="D3", title="seq", write_paths=["a"],
+               acceptance=["cmd one", "cmd two"])
+    assert DQ.jobs()[0]["acceptance"] == ["cmd one", "cmd two"]
+
+
+def test_an_already_exploded_row_is_rebuilt_when_it_is_read(repo):
+    """The repair path: a stored character list becomes the original command."""
+    text = "python -m pytest Northstar_backend/test_x.py -q"
+    DQ.add_job(unit="D3", title="legacy", write_paths=["a"], acceptance=[])
+    conn = DQ._connect(DQ.DB)
+    conn.execute("UPDATE jobs SET acceptance=? WHERE id=(SELECT id FROM jobs LIMIT 1)",
+                 (json.dumps(list(text)),))
+    conn.commit()
+    conn.close()
+    assert DQ.jobs()[0]["acceptance"] == [text]
+
+
+def test_a_legitimately_short_acceptance_is_not_joined_by_the_repair(repo):
+    DQ.add_job(unit="D3", title="short", write_paths=["a"], acceptance=["a", "b", "c"])
+    assert DQ.jobs()[0]["acceptance"] == ["a", "b", "c"]
