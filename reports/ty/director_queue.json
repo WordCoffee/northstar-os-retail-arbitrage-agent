@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T06:30:13+00:00",
+  "updated_at": "2026-11-11T06:58:32+00:00",
   "cycle": 2,
   "unit_in_flight": "",
   "unit_order": [
@@ -1543,7 +1543,7 @@
       "id": "white-cutout-main",
       "unit": "D4",
       "title": "D-015: a main-image brief needs the product cut out on 255 white, not composited on a sweep",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/product_picture.py",
@@ -1558,9 +1558,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "cutout on the plate before compose; area-based fill from the brief's band; harness decides from constraints; real plate ST-001 70->100; drawn 20/20 95.0; seller 96.2/32; 7 tests, 119 related green",
       "created_at": "2026-11-11T06:30:07+00:00",
-      "updated_at": "2026-11-11T06:30:12+00:00",
+      "updated_at": "2026-11-11T06:58:31+00:00",
       "rank": 1
     },
     {
@@ -1697,6 +1697,30 @@
       "evidence": "units on build + find_panel_quads per-unit measurement; bundle briefs corrected (units 3, body_prompt 3 units); PO-004/PO-012 units_found 3, fill 25.9%, score 100; 12/12 mean 97.5; 21 + 68 tests; reports/ty/sel07_bundle_units.md",
       "created_at": "2026-11-11T03:28:52+00:00",
       "updated_at": "2026-11-11T04:50:01+00:00",
+      "rank": 3
+    },
+    {
+      "id": "fix-shadow-and-white-fill",
+      "unit": "D4",
+      "title": "D-017/D-018: a plate's opaque shadow survives the cutout, and a white product on white defeats the fill instrument",
+      "status": "queued",
+      "owner": "",
+      "write_paths": [
+        "Northstar_backend/product_picture.py",
+        "Northstar_backend/product_cutout.py",
+        "tools/seller_tester/scorers.py",
+        "Northstar_backend/test_*.py"
+      ],
+      "branch": "ty/fix-shadow-and-white-fill",
+      "worktree": "",
+      "rollback_tag": "",
+      "acceptance": [],
+      "tokens": 0,
+      "score_before": null,
+      "score_after": null,
+      "evidence": "",
+      "created_at": "2026-11-11T06:58:31+00:00",
+      "updated_at": "2026-11-11T06:58:32+00:00",
       "rank": 3
     },
     {

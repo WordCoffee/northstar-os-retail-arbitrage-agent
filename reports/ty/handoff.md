@@ -10,6 +10,36 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 9 — a main image is now the product alone on white
+
+Unit report: `reports/ty/white_cutout_main.md`. Tag `ty-dir-white-cutout-main`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `white-cutout-main` (D-015) — a main-image brief was scored on a photograph of a product on a sweep, so `background` and `alpha_matte` failed | **merged.** The cutout runs on the **plate**, before the label is composed (cutting the finished picture punched the label's light panel out and took the wordmark with it); the product is stood on the brief's value at a share of the canvas **area** from the brief's own fill band; a free/scene background keeps the photograph |
+
+**Real plate: ST-001 70 → 100.** The delivered picture is a kraft pouch with its
+real wrinkles, the designed label on the front panel, on 255 white, corners ≥ 250,
+border std ≤ 4 (`renders/comfy_plate6/ST-001/product_front.png`).
+
+**Drawn catalog pass: 20/20 passed, mean 95.0** — ceramic_mug 90, food_jar 100,
+pet_product 92.5, skincare_bottle 92.5, supplement_pouch 100. Published seller
+dimension **96.2 over 32 outputs**.
+
+**New defects:** D-017 a plate's opaque contact shadow survives the cutout (needs a
+real matte — BiRefNet in the lane — not a colour threshold); D-018 a **white product
+on a white canvas** defeats the fill instrument (ST-024 20.7 % vs 24, ST-031 19.8 %
+vs 20), because it measures the subject by difference from the corner colour.
+
+**Next, in rank order:** `fix-label-scale-plate` (D-016) → `fix-shadow-and-white-fill`
+(D-017/D-018) → `pack-02-apparel-flat-print` → `pack-03-boxart-forms` →
+`sel-04-packaging` → `fix-bundle-units` → `ux-0610-live-verify`.
+
+**Still the honest ceiling:** every drawn-plate number is a stand-in photograph. The
+real-plate lane works and costs 70–90 s per picture, so a full 20-brief real pass is
+a scheduled lane (`python tools/comfy_plate_pass.py --limit 20`), not an interactive
+one.
+
 ## Position, 2026-11-11 cycle 8 — the render lane is real, and one real plate scores 100
 
 Unit report: `reports/ty/comfy_plate_live.md`. Tag `ty-dir-comfy-plate-live`.
