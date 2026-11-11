@@ -298,3 +298,10 @@ def test_import_mirror_adopts_missing_jobs_and_refreshes_changed_ones(repo):
     after = json.loads(DQ.MIRROR.read_text(encoding="utf-8"))
     assert after["mirror_only_jobs"] == []
     assert {row["id"] for row in after["jobs"]} == {"stale", "adopted"}
+
+
+def test_a_status_write_for_a_job_that_does_not_exist_is_refused(repo):
+    """It used to return ok: an UPDATE that matched nothing looked like a merge."""
+    out = DQ.set_status("never-added", "merged", evidence="pretend")
+    assert out["ok"] is False and out["reason"] == "no_such_job"
+    assert DQ.job("never-added") is None
