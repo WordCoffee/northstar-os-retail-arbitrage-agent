@@ -661,10 +661,97 @@ def find_panel_quad(image: Union[Image.Image, str, Path], *,
     return [[float(p[0]), float(p[1])] for p in quad]
 
 
+# ── several faces in one plate (a bundle) ───────────────────────────────────
+
+def find_panel_quads(image: Union[Image.Image, str, Path], *, count: int = 1,
+                     inset_x: float = 0.075, inset_top: float = 0.20,
+                     inset_bottom: float = 0.10, threshold: float = 26.0,
+                     ) -> List[List[List[float]]]:
+    """Measure the front face of each package in a plate, left to right.
+
+    A bundle picture holds two or three units. `find_panel_quad` measures one
+    face by treating the tallest coloured object as the product; with three units
+    that is still one of them. This segments the same foreground mask into
+    components, keeps the ``count`` tallest (a prop or a shadow cannot outvote a
+    package), sorts them left to right and measures each on its own crop with the
+    pouch measurement, so the insets and the bow fit stay per-face.
+
+    Fewer measured faces than asked for is the caller's refusal, not a guess: a
+    bundle that shows one unit is not a bundle.
+    """
+    if isinstance(image, Image.Image):
+        img = image.convert("RGB")
+    else:
+        img = Image.open(image).convert("RGB")
+    import numpy as np
+
+    import pouch_label
+
+    if count <= 1:
+        return [find_panel_quad(img, inset_x=inset_x, inset_top=inset_top,
+                                inset_bottom=inset_bottom, threshold=threshold)]
+
+    mask = None
+    labels = None
+    keep: List[int] = []
+    found = pouch_label.package_components(img, threshold=threshold)
+    if found is not None:
+        labels, keep = found
+        mask = (labels > 0)
+    if mask is None or not mask.any():
+        raise ValueError("plate_face_not_found: the plate has no separable subject")
+    try:
+        import cv2
+    except Exception as exc:  # noqa: BLE001 - without cv2 there is no component pass
+        raise ValueError(f"plate_face_not_found: multi-face measurement needs cv2 ({exc})") from exc
+
+    total = mask.astype(bool).sum()
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(
+        mask.astype(np.uint8), connectivity=8)
+    boxes = []
+    for index in range(1, n):
+        x, y, w, h, area = stats[index]
+        if area < 0.02 * total or h < 0.10 * img.height:
+            continue
+        boxes.append((index, int(x), int(y), int(w), int(h), int(area)))
+    if not boxes:
+        raise ValueError("plate_face_not_found: no package-sized component in the plate")
+    boxes.sort(key=lambda box: -box[4])
+    chosen = sorted(boxes[:max(1, int(count))], key=lambda box: box[1])
+
+    rgb = np.asarray(img).copy()
+    quads: List[List[List[float]]] = []
+    for index, x, y, w, h, _area in chosen:
+        # Measure each unit on its own: everything that is not this component is
+        # flattened to the plate's own background, so the neighbouring units
+        # cannot join the silhouette and the insets stay per face.
+        left = max(0, x - int(w * 0.10))
+        top = max(0, y - int(h * 0.06))
+        right = min(img.width, x + w + int(w * 0.10))
+        bottom = min(img.height, y + h + int(h * 0.06))
+        crop = rgb[top:bottom, left:right].copy()
+        component = labels[top:bottom, left:right] == index
+        outside = ~component
+        if outside.sum() < 64:
+            continue
+        background = np.median(crop[outside].reshape(-1, 3), axis=0)
+        crop[outside] = background.astype(np.uint8)
+        try:
+            measured = find_panel_quad(Image.fromarray(crop), inset_x=inset_x,
+                                       inset_top=inset_top,
+                                       inset_bottom=inset_bottom,
+                                       threshold=threshold)
+        except ValueError:
+            continue
+        quads.append([[float(px + left), float(py + top)] for px, py in measured])
+    if not quads:
+        raise ValueError("plate_face_not_found: the components had no measurable face")
+    return quads
+
+
 # ── presets ─────────────────────────────────────────────────────────────────
 
-DEFAULT_TEMPLATES: Dict[str, Dict[str, Any]] = {
-    "mogra-forest-dusk": {
+DEFAULT_TEMPLATES: Dict[str, Dict[str, Any]] = {    "mogra-forest-dusk": {
         "description": "Two-pouch forest dusk mockup: cream logo roundel, serif "
                        "product names, gold engraved glyph, four cert icons, weight footers.",
         "panel": {"size": [700, 1000]},

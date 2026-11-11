@@ -837,3 +837,59 @@ def compose(plate_path: Path, *, title: str, subtitle: str = "", weight: str = "
                  "from the render, not a die drawing — confirm panel geometry with the "
                  "pouch converter before print."),
     }
+
+def foreground_mask(img, threshold: float = 26.0):
+    """Public view of the pouch mask, for callers that need several faces.
+
+    A bundle plate holds more than one package; the multi-face measurement in
+    `mockup_compositor.find_panel_quads` segments this same mask into components
+    rather than re-implementing it.
+    """
+    return _foreground_mask(img, threshold=threshold)
+
+
+def package_components(img, threshold: float = 26.0):
+    """Every package-sized component, labelled — a bundle keeps its units.
+
+    `_foreground_mask` deliberately keeps **one** pouch (the tallest), which is
+    right for a single product and wrong for a three-unit bundle: the mask then
+    contains only the first unit and the other two panels could never be placed.
+    This returns the labelled components instead of collapsing them, so a bundle
+    is measured as a bundle. Returns ``(labels, indices)`` or ``None`` when the
+    chroma path finds no package-sized object (the caller then falls back to the
+    single-face measurement).
+    """
+    import numpy as np
+
+    rgb = np.asarray(img.convert("RGB"))
+    h, w = rgb.shape[:2]
+    try:
+        import cv2
+    except Exception:  # noqa: BLE001 - without cv2 there is no component pass
+        return None
+
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
+    sat, val = hsv[:, :, 1], hsv[:, :, 2]
+    cand = ((sat > 40) & (val > 25)).astype(np.uint8)
+    if int(cand.sum()) < int(h * w * 0.03):
+        return None
+    k_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
+    k_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    m = cv2.morphologyEx(cand, cv2.MORPH_CLOSE, k_close)
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, k_open)
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(m, 8)
+    keep = []
+    for index in range(1, n):
+        area = stats[index, cv2.CC_STAT_AREA]
+        height = stats[index, cv2.CC_STAT_HEIGHT]
+        if area < h * w * 0.02:
+            continue
+        if height < h * 0.30:          # a package is tall; a prop or a shadow is not
+            continue
+        keep.append(int(index))
+    if not keep:
+        return None
+    out = np.zeros_like(labels)
+    for index in keep:
+        out[labels == index] = index
+    return out, keep

@@ -17,6 +17,7 @@ that way is ``cannot_verify``.
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
@@ -342,7 +343,7 @@ class ComfySceneRenderer:
 
 def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch",
                     field: str = "sweep", value: int = 255,
-                    stock: Optional[Any] = None,
+                    stock: Optional[Any] = None, units: int = 1,
                     seed: int = 7) -> Dict[str, Any]:
     """A **drawn** blank package on a field — the plate stand-in for the app pipeline.
 
@@ -363,29 +364,39 @@ def synthetic_plate(*, width: int = 1536, height: int = 1536, kind: str = "pouch
         base = tuple(stock) if stock else (240, 196, 202)
         body = base
         top = tuple(max(0, int(c * 0.94)) for c in base)
-        w = int(width * 0.44)
+        unit_w = int(width * 0.44 / max(1, units) * (0.92 if units > 1 else 1.0))
         h = int(height * 0.62)
-        left = (width - w) // 2
+        gap = int(width * 0.03) if units > 1 else 0
+        span = unit_w * units + gap * (units - 1)
+        start = (width - span) // 2
         top_y = int(height * 0.19)
-        d.polygon([(left, top_y), (left + w, top_y),
-                   (left + w + int(w * 0.03), top_y + h),
-                   (left - int(w * 0.03), top_y + h)], fill=body)
-        d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+        for index in range(max(1, units)):
+            left = start + index * (unit_w + gap)
+            w = unit_w
+            d.polygon([(left, top_y), (left + w, top_y),
+                       (left + w + int(w * 0.03), top_y + h),
+                       (left - int(w * 0.03), top_y + h)], fill=body)
+            d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
     else:
         base = tuple(stock) if stock else (213, 167, 122)
         body = base
         top = tuple(max(0, int(c * 0.92)) for c in base)
-        w = int(width * 0.38)
+        unit_w = int(width * 0.38 / max(1, units) * (0.92 if units > 1 else 1.0))
         h = int(height * 0.62)
-        left = (width - w) // 2
+        gap = int(width * 0.03) if units > 1 else 0
+        span = unit_w * units + gap * (units - 1)
+        start = (width - span) // 2
         top_y = int(height * 0.20)
-        d.polygon([(left, top_y), (left + w, top_y),
-                   (left + w + max(2, w // 60), top_y + h),
-                   (left - max(2, w // 60), top_y + h)], fill=body)
-        d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
-        # base shadow so the plate is not a sticker on a flat field
-        d.ellipse([left - w // 8, top_y + h - h // 40,
-                   left + w + w // 8, top_y + h + h // 22], fill=(206, 204, 200))
+        for index in range(max(1, units)):
+            left = start + index * (unit_w + gap)
+            w = unit_w
+            d.polygon([(left, top_y), (left + w, top_y),
+                       (left + w + max(2, w // 60), top_y + h),
+                       (left - max(2, w // 60), top_y + h)], fill=body)
+            d.rectangle([left, top_y, left + w, top_y + max(6, h // 40)], fill=top)
+            # base shadow so the plate is not a sticker on a flat field
+            d.ellipse([left - w // 8, top_y + h - h // 40,
+                       left + w + w // 8, top_y + h + h // 22], fill=(206, 204, 200))
 
     if field != "white":
         # a vertical light ramp, so the measured surface has real shading
@@ -440,20 +451,24 @@ def stock_from_brief(brief: Dict[str, Any]) -> Optional[Any]:
     unrecognised keeps the form's default stock.
     """
     text = " ".join(str(brief.get(key) or "") for key in ("body_prompt", "prompt")).lower()
+    # Word boundaries, not substrings: "message" contains "sage", and the first
+    # version painted every Word Coffee box sage because its tagline says
+    # "One Message at a Time". Compound colours are checked before simple ones.
     palette = (
         (("forest-green", "forest green", "dark green"), (37, 54, 40)),
+        (("pale-pink", "pale pink", "blush", "lilac"), (240, 196, 202)),
+        (("matte black", "charcoal"), (38, 38, 40)),
         (("olive",), (96, 108, 70)),
         (("sage",), (150, 168, 146)),
-        (("pale-pink", "pale pink", "blush", "lilac"), (240, 196, 202)),
         (("pink",), (238, 206, 208)),
-        (("matte black", "black", "charcoal"), (38, 38, 40)),
+        (("black",), (38, 38, 40)),
         (("navy", "midnight"), (32, 44, 58)),
         (("white", "ivory", "bone"), (245, 238, 226)),
         (("cream",), (238, 226, 205)),
         (("kraft", "brown", "tan"), (213, 167, 122)),
     )
     for words, colour in palette:
-        if any(word in text for word in words):
+        if any(re.search(rf"\b{re.escape(word)}\b", text) for word in words):
             return colour
     return None
 
@@ -482,10 +497,12 @@ def renderer_from_name(name: str) -> Any:
                      or mode.startswith("white") or mode.startswith("solid"))
             field = "white" if white else "sweep"
             value = int(background.get("value", 255)) if white else 232
+            stock_colour = stock_from_brief(brief)
+            unit_count = max(1, int(brief.get("units") or 1))
             width, height = (int(size[0]), int(size[1])) if size else (1536, 1536)
             return synthetic_plate(width=max(1024, width), height=max(1024, height),
                                    kind=kind, field=field, value=value,
-                                   stock=stock_from_brief(brief))
+                                   stock=stock_colour, units=unit_count)
 
         return _drawn
     if name == "synthetic":

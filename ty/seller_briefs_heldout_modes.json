@@ -208,7 +208,7 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition. | units=3: the output must show three units, so the plate prompt asks for three and product_picture.build refuses a plate that measures fewer.",
       "label_mode": "warp",
       "label": {
         "brand": "Word Coffee",
@@ -218,7 +218,8 @@
           "Empowering Moms, One Message at a Time"
         ]
       },
-      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, one unit shown, on a white background. Photorealistic, unlabelled packaging, matte card."
+      "body_prompt": "Product photograph of three identical plain slim pale-pink and cream gift boxes with blank front panels, arranged side by side on a white background, no text, no lettering, no logo. Photorealistic, unlabelled packaging, matte card.",
+      "units": 3
     },
     {
       "id": "PO-005",
@@ -640,7 +641,7 @@
           "max_bytes": 12000000
         }
       },
-      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition.",
+      "note": "Held-out, prompt-only: no reference image exists for this brief, so the pipeline generates the product from the description. Fidelity is tolerant by definition. | units=3: the output must show three units, so the plate prompt asks for three and product_picture.build refuses a plate that measures fewer.",
       "label_mode": "warp",
       "label": {
         "brand": "Word Coffee",
@@ -650,7 +651,8 @@
           "Empowering Moms, One Message at a Time"
         ]
       },
-      "body_prompt": "Product photograph of a plain slim pale-pink and cream gift box with a blank front panel, no text, no lettering, no logo, one unit shown, on a white background. Photorealistic, unlabelled packaging, matte card."
+      "body_prompt": "Product photograph of three identical plain slim pale-pink and cream gift boxes with blank front panels, arranged side by side on a white background, no text, no lettering, no logo. Photorealistic, unlabelled packaging, matte card.",
+      "units": 3
     },
     {
       "id": "SR-001",

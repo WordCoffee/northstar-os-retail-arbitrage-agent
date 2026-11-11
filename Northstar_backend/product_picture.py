@@ -172,38 +172,55 @@ def _guarded_plate(brief: str, *, width: int, height: int, tier: str,
 
 def compose_face(plate: Image.Image, design: Dict[str, Any], face: str, *,
                  shading: float = 0.45, feather: Optional[float] = 2.2,
-                 form: Optional[str] = None) -> Dict[str, Any]:
-    """Measure the face, warp the declared panel onto it, OCR the result.
+                 form: Optional[str] = None, quad: Optional[Sequence] = None,
+                 units: int = 1) -> Dict[str, Any]:
+    """Measure the face(s), warp the declared panel onto each, OCR the result.
 
-    Returns ``{image, quad, panel, legibility, gate_ok, reason}``. A photograph
-    with no measurable package raises ``ValueError('plate_face_not_found: …')``;
-    a picture whose copy cannot be read returns ``gate_ok=False`` with the
-    reason instead of passing silently. The print-area insets come from the
-    design's form, so a carton face is not inset like a pouch weld.
+    Returns ``{image, quad, quads, units_found, panel, legibility, gate_ok, reason}``.
+    A photograph with no measurable package raises ``ValueError('plate_face_not_found:
+    …')``; with ``units > 1`` a plate that shows fewer units than asked for raises
+    ``ValueError('units_not_found: …')`` — a bundle that shows one unit is not a
+    bundle, and printing one panel on one of three boxes is a false picture. A
+    picture whose copy cannot be read returns ``gate_ok=False`` with the reason
+    instead of passing silently. The print-area insets come from the design's form,
+    so a carton face is not inset like a pouch weld.
     """
     form = form or art.form_of(design)
     insets = FORM_INSETS.get(form, FORM_INSETS[art.POUCH])
-    quad = mc.find_panel_quad(plate, **insets)
+    if quad is not None:
+        quads = [quad]
+    else:
+        quads = mc.find_panel_quads(plate, count=max(1, int(units)), **insets)
+    if len(quads) < max(1, int(units)):
+        raise ValueError(
+            f"units_not_found: measured {len(quads)} of {int(units)} requested")
     panel = (art.front_panel(design) if face == "front" else art.back_panel(design))
 
     maps = None
-    base = plate.convert("RGB")
+    composed_img = plate.convert("RGB")
     if shading:
         import compositor_realism as cr
         # Measure the surface BEFORE flattening the label target: the crease
         # field is what makes the print ride the pouch. Flatten AFTER, so a
         # specular patch in the photograph cannot wash out the design.
-        maps = cr.build_surface_maps(base)
-        base, _neutralized = mc.neutralize_quad(base, quad, feather=10)
-    composed = mc.composite_panel_onto_quad(
-        base, panel, quad, feather=feather, shading=shading,
-        realism=dict(REALISM), maps=maps)
+        maps = cr.build_surface_maps(composed_img)
+        composed_img, _neutralized = mc.neutralize_quad(composed_img, quads[0], feather=10)
+    for index, measured in enumerate(quads):
+        if shading and index:
+            composed_img, _neutralized = mc.neutralize_quad(composed_img, measured,
+                                                            feather=10)
+        composed_img = mc.composite_panel_onto_quad(
+            composed_img, panel, measured, feather=feather, shading=shading,
+            realism=dict(REALISM), maps=maps)
 
-    gate = mq.assert_legible(composed, wordmark=str(design["brand"]),
+    gate = mq.assert_legible(composed_img, wordmark=str(design["brand"]),
                              net_weight=str(design.get("net_weight") or "") or None)
     return {
-        "image": composed,
-        "quad": [[round(float(x), 2), round(float(y), 2)] for x, y in quad],
+        "image": composed_img,
+        "quad": [[round(float(x), 2), round(float(y), 2)] for x, y in quads[0]],
+        "quads": [[[round(float(x), 2), round(float(y), 2)] for x, y in measured]
+                  for measured in quads],
+        "units_found": len(quads),
         "panel": panel,
         "legibility": gate,
         "gate_ok": bool(gate.get("ok")),
@@ -229,16 +246,20 @@ def build(design: Optional[Dict[str, Any]] = None, *,
           generator: Optional[Callable[..., Dict[str, Any]]] = None,
           shading: float = 0.45,
           out_root: Optional[str] = None,
-          reference: Optional[bytes] = None) -> Dict[str, Any]:
+          reference: Optional[bytes] = None,
+          units: int = 1) -> Dict[str, Any]:
     """Render the plates, compose the panels and gate every picture.
 
     ``generator(brief, width=…, height=…, tier=…, seed=…)`` is injectable so the
     composition and the gate can be tested without the image engine; the default
-    is the real FLUX 3 text-safe lane. The function never claims a pass it did
-    not measure: every face carries its own OCR report and refusal reason.
+    is the real FLUX 3 text-safe lane. ``units`` is how many packages the picture
+    must show: a bundle plate that measures fewer is refused with the count, never
+    captioned as a bundle. The function never claims a pass it did not measure:
+    every face carries its own OCR report and refusal reason.
     """
     dsn = design or art.design_for("mogra-lions-mane")
     form = art.form_of(dsn)
+    units = max(1, int(units or 1))
     out = resolve_out_dir(out_dir, base=out_root)
     out.mkdir(parents=True, exist_ok=True)
     rejected = out / "_rejected"
@@ -314,7 +335,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
             continue
 
         try:
-            composed = compose_face(plate, dsn, face, shading=shading, form=form)
+            composed = compose_face(plate, dsn, face, shading=shading, form=form,
+                                    units=units)
         except ValueError as exc:
             record.update({"ok": False, "stage": "compose", "reason": str(exc)})
             plate.save(rejected / f"{face}_plate.png")
@@ -324,6 +346,9 @@ def build(design: Optional[Dict[str, Any]] = None, *,
 
         record.update({
             "quad": composed["quad"],
+            "quads": composed["quads"],
+            "units_requested": units,
+            "units_found": composed["units_found"],
             "legibility": composed["legibility"],
             "gate_ok": composed["gate_ok"],
             "stage": "done" if composed["gate_ok"] else "legibility",
@@ -348,7 +373,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
         "created_at": _now(),
         "ok": bool(ok and all(r.get("ok") for r in records) and len(records) == len(faces)),
         "product": {"brand": dsn["brand"], "product": dsn["product"],
-                    "form": form, "net_weight": dsn["net_weight"]},
+                    "form": form, "net_weight": dsn["net_weight"],
+                    "units": units},
         "out_dir": str(out),
         "faces": records,
         "engine": {"lane": "flux3-comfyui", "armed": _engine_armed(),
@@ -356,6 +382,8 @@ def build(design: Optional[Dict[str, Any]] = None, *,
                    "tier": tier},
         "checks": {
             "plate_face_measured": all(bool(r.get("quad")) for r in records),
+            "units": {r["face"]: r.get("units_found") for r in records},
+            "units_complete": all(r.get("units_found") == units for r in records),
             "panel_gate": {r["face"]: r.get("gate_ok") for r in records},
             "legible": all(r.get("gate_ok") for r in records),
             "files": sorted(p.name for p in out.glob("product_*.png")),

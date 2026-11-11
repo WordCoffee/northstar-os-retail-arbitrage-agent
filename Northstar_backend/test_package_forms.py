@@ -23,6 +23,7 @@ import brand_art as ba
 import mockup_quality as mq
 import mogra_label_art as mg
 import product_picture as pp
+from tools.seller_tester.scene_render import synthetic_plate
 
 
 def _png(img: Image.Image) -> bytes:
@@ -229,3 +230,60 @@ def test_the_api_validates_faces_against_the_designs_form():
             api.ProductPictureIn(product="word-coffee", faces=["side"]), acct="t")
     assert err.value.status_code == 422
     assert "front" in str(err.value.detail)
+
+
+# ── a bundle is three units, and it is measured as three ────────────────────
+
+def test_three_units_are_measured_left_to_right():
+    from tools.seller_tester.scene_render import synthetic_plate
+    import mockup_compositor as mc
+
+    plate = Image.open(io.BytesIO(
+        synthetic_plate(width=2000, height=2000, kind="gift_box",
+                        field="white", units=3)["bytes"]))
+    quads = mc.find_panel_quads(plate, count=3, **pp.FORM_INSETS[ba.GIFT_BOX])
+    assert len(quads) == 3
+    centres = [sum(point[0] for point in quad) / 4 for quad in quads]
+    assert centres == sorted(centres), centres
+    assert centres[2] - centres[0] > 200
+
+
+def test_a_three_unit_build_writes_three_panels_and_says_so(tmp_path):
+    from tools.seller_tester.scene_render import synthetic_plate
+
+    plate = Image.open(io.BytesIO(
+        synthetic_plate(width=2000, height=2000, kind="gift_box",
+                        field="white", units=3)["bytes"]))
+    result = pp.build(ba.design_for("word-coffee"), out_dir=str(tmp_path / "b"),
+                      out_root=str(tmp_path), faces=("front",), units=3,
+                      width=2000, height=2000, generator=_generator(plate))
+    assert result["ok"] is True, json.dumps(result["faces"], indent=2)
+    face = result["faces"][0]
+    assert face["units_found"] == 3 and len(face["quads"]) == 3
+    assert result["product"]["units"] == 3
+    assert result["checks"]["units_complete"] is True
+
+
+def test_a_bundle_plate_with_one_unit_is_refused(tmp_path):
+    from tools.seller_tester.scene_render import synthetic_plate
+
+    plate = Image.open(io.BytesIO(
+        synthetic_plate(width=2000, height=2000, kind="gift_box",
+                        field="white", units=1)["bytes"]))
+    result = pp.build(ba.design_for("word-coffee"), out_dir=str(tmp_path / "b"),
+                      out_root=str(tmp_path), faces=("front",), units=3,
+                      width=2000, height=2000, generator=_generator(plate))
+    assert result["ok"] is False
+    assert "units_not_found: measured 1 of 3" in result["faces"][0]["reason"]
+    assert not (tmp_path / "b" / "product_front.png").exists()
+
+
+def test_one_unit_is_still_one_unit(tmp_path):
+    plate = Image.open(io.BytesIO(
+        synthetic_plate(width=2000, height=2000, kind="gift_box",
+                        field="white", units=1)["bytes"]))
+    result = pp.build(ba.design_for("word-coffee"), out_dir=str(tmp_path / "b"),
+                      out_root=str(tmp_path), faces=("front",), width=2000,
+                      height=2000, generator=_generator(plate))
+    assert result["ok"] is True
+    assert result["faces"][0]["units_found"] == 1
