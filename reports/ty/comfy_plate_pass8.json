@@ -1,0 +1,344 @@
+{
+  "generated_at": "2026-11-11T07:15:55+00:00",
+  "generator": "product_pipeline",
+  "judge_enabled": false,
+  "mode_filter": "prompt_only",
+  "catalog_briefs": 56,
+  "catalog_by_mode": {
+    "prompt_only": 32,
+    "stored_reference": 12,
+    "uploaded_reference": 12
+  },
+  "selected": 2,
+  "artefacts_available": null,
+  "scored": 2,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 2,
+  "failed": 0,
+  "pass_rate": 100.0,
+  "mean_score": 100.0,
+  "gaps_filed": 0,
+  "gaps_in_file": 2,
+  "gaps_path": "state/seller/comfy_gaps.json",
+  "mirror_path": "state/seller/comfy_gaps.json",
+  "escalations": [
+    {
+      "at": "2026-11-11T07:15:55+00:00",
+      "from_brief_id": "ST-001",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-001",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/comfy_plate8/ST-001/product_front.png"
+    },
+    {
+      "at": "2026-11-11T07:15:55+00:00",
+      "from_brief_id": "ST-002",
+      "from_difficulty": 1,
+      "source_mode": "prompt_only",
+      "action": "raise_tier",
+      "detail": "difficulty 1 -> 2 (prompt_only)",
+      "constraint": null,
+      "to_brief_id": "ST-002",
+      "to_difficulty": 2,
+      "score": 100.0,
+      "artefact_path": "renders/comfy_plate8/ST-002/product_front.png"
+    }
+  ],
+  "results": [
+    {
+      "brief_id": "ST-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/comfy_plate8/ST-001/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 37.5% vs 12.0-100.0% (distance > 20)"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "1936097 bytes (0.484 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-001",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "comfy",
+        "design": "MOGRA",
+        "form": "stand_up_pouch",
+        "plate": {
+          "source": "comfy-flux3",
+          "prompt": "a photograph of one blank unprinted kraft stand-up pouch standing upright on a pale seamless studio sweep, its front face square to the camera, soft diffused key light from the upper left, a gentle contact shadow, subtle paper grain, photoreal commercial product photography, sharp focus on the pouch"
+        },
+        "build": {
+          "ok": true,
+          "form": "stand_up_pouch",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\comfy_plate8\\ST-001\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": true,
+        "bytes": 1936097,
+        "seconds": 151.78
+      }
+    },
+    {
+      "brief_id": "ST-002",
+      "category": "ceramic_mug",
+      "situation": "lifestyle",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "product_picture",
+      "population": "generated",
+      "artefact_path": "renders/comfy_plate8/ST-002/product_front.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 100.0,
+      "passed": true,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.030"
+        },
+        "background": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "background is free for this brief"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "a free (scene) background gives no corner colour to measure against, and no product box was recorded: subject fill cannot be measured on this artefact"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "matte free for this brief"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "3353190 bytes (0.838 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "text allowed for this brief"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "brief_id": "ST-002",
+        "route": "product_picture",
+        "fidelity": "exact",
+        "renderer": "comfy",
+        "design": "word-coffee-mug",
+        "form": "rigid_cylinder",
+        "plate": {
+          "source": "comfy-flux3",
+          "prompt": "a photograph of one blank unprinted rigid cylindrical package standing upright on a pale grey seamless studio sweep, the whole package in frame with its silhouette clearly separated from the background, its front square to the camera, no lettering and no label, a soft contact shadow, soft diffused key light from the upper left, photoreal commercial product photography, sharp focus on the body"
+        },
+        "build": {
+          "ok": true,
+          "form": "rigid_cylinder",
+          "units": 1,
+          "faces": [
+            {
+              "face": "front",
+              "stage": "done",
+              "gate_ok": true,
+              "reason": "",
+              "units_found": 1
+            }
+          ],
+          "manifest": "renders\\comfy_plate8\\ST-002\\product_picture_manifest.json"
+        },
+        "product_box": null,
+        "flat_background": false,
+        "bytes": 3353190,
+        "seconds": 155.28
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 2,
+      "passed": 2,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "lifestyle": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "white_background_main": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "by_category": {
+    "ceramic_mug": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    },
+    "supplement_pouch": {
+      "scored": 1,
+      "passed": 1,
+      "failed": 0,
+      "pass_rate": 100.0,
+      "mean_score": 100.0
+    }
+  },
+  "pipeline": "app",
+  "plate_source": "comfy",
+  "refused": []
+}
