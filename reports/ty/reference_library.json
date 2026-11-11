@@ -1,0 +1,795 @@
+{
+  "at": "2026-11-11T04:59:59+00:00",
+  "source": "Openverse (openverse.org), API v1, no key",
+  "policy": {
+    "allowed_licences": [
+      "by",
+      "by-sa",
+      "cc0"
+    ],
+    "refused_licences": [
+      "by-nc",
+      "by-nc-sa",
+      "by-nd",
+      "by-nc-nd",
+      "unknown"
+    ],
+    "usage": "rubric references only; never product assets",
+    "amazon": "never contacted"
+  },
+  "rows": [
+    {
+      "id": "03dce6de-e9b4-45a7-9d0e-413fbbedd57a",
+      "query": "coffee bag packaging",
+      "title": "Kid Flier 6.5 plans, improved, in color! A balsa wood stick and copier paper glider for first-time builders and fliers.",
+      "creator": "wbaiv",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/9998127@N06/8606241195",
+      "image_url": "https://live.staticflickr.com/8395/8606241195_ccabed65f1_b.jpg",
+      "width": 791,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\03dce6de-e9b4-45a7-9d0e-413fbbedd57a.jpg",
+      "sha256": "277086f258d1bf83",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:42+00:00",
+      "file_size": [
+        791,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a diagram of a small aircraft, the 'Kid Flier', which is presented as a product package (a drawing)"
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "d365c24a-8f5e-4525-8b8e-77c7dc9b052e",
+      "query": "coffee bag packaging",
+      "title": "Mt Top - Vac Packaging",
+      "creator": "MTC Group",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/32384746@N07/4348457338",
+      "image_url": "https://live.staticflickr.com/2626/4348457338_02bea1bc13_b.jpg",
+      "width": 1024,
+      "height": 768,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\d365c24a-8f5e-4525-8b8e-77c7dc9b052e.jpg",
+      "sha256": "fd43364f23d7ff37",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:42+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a stack of cardboard boxes, which are packages."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "17abb93b-02d3-4b73-9ebd-b151693debe7",
+      "query": "coffee bag packaging",
+      "title": "Square Mile Sweetshop Espresso bag, Giddyup coffee, Fortune Park, London, UK",
+      "creator": "gruntzooki",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/37996580417@N01/8233904413",
+      "image_url": "https://live.staticflickr.com/8065/8233904413_b57e69edc5_b.jpg",
+      "width": 768,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\17abb93b-02d3-4b73-9ebd-b151693debe7.jpg",
+      "sha256": "f0ffb0081f9a6295",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:42+00:00",
+      "file_size": [
+        768,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image clearly shows a bag of coffee beans, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "5fbef744-e85e-48c8-abf4-6a98e0266498",
+      "query": "coffee bag packaging",
+      "title": "156",
+      "creator": "außerirdische sind gesund",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/88249458@N00/4599961810",
+      "image_url": "https://live.staticflickr.com/1432/4599961810_c5de8f305d_b.jpg",
+      "width": 1024,
+      "height": 768,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\5fbef744-e85e-48c8-abf4-6a98e0266498.jpg",
+      "sha256": "6db935b37b2cbd39",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:42+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a foil pouch, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "42b53078-1918-4ff2-99b5-ca74dbefdd19",
+      "query": "gift box packaging",
+      "title": "Modified Robin Glynn's Gift Box",
+      "creator": "georigami",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/69208357@N00/5888103701",
+      "image_url": "https://live.staticflickr.com/5199/5888103701_3c09bcd7c6_b.jpg",
+      "width": 1024,
+      "height": 768,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\42b53078-1918-4ff2-99b5-ca74dbefdd19.jpg",
+      "sha256": "c5751e109917f865",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:42+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a folded origami box, which is a package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "03b622f6-500b-4e10-a5e1-dbdc6d6384cc",
+      "query": "gift box packaging",
+      "title": "Base of Decorative Hexagonal Origami Gift Box (with Lid removed): # 17",
+      "creator": "Dominic's pics",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/64097751@N00/5705840524",
+      "image_url": "https://live.staticflickr.com/2185/5705840524_db6c269576_b.jpg",
+      "width": 1024,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\03b622f6-500b-4e10-a5e1-dbdc6d6384cc.jpg",
+      "sha256": "b225b642107adaa4",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:43+00:00",
+      "file_size": [
+        1024,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image shows a pink paper box, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "f4ac09e6-c0a5-4b9c-ad7d-28ec551bdbdb",
+      "query": "gift box packaging",
+      "title": "Decorative Hexagonal Origami Gift Box with Lid: # 18",
+      "creator": "Dominic's pics",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/64097751@N00/5705260713",
+      "image_url": "https://live.staticflickr.com/2248/5705260713_f6211a2ea4_b.jpg",
+      "width": 1024,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\f4ac09e6-c0a5-4b9c-ad7d-28ec551bdbdb.jpg",
+      "sha256": "10ed622e4d387d61",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:43+00:00",
+      "file_size": [
+        1024,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a box, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "30291853-704b-446b-b34d-6a4c25834614",
+      "query": "gift box packaging",
+      "title": "Base of Decorative Hexagonal Origami Gift Box (with Lid removed): # 18",
+      "creator": "Dominic's pics",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/64097751@N00/5705264007",
+      "image_url": "https://live.staticflickr.com/3015/5705264007_3d5428b575_b.jpg",
+      "width": 1024,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\30291853-704b-446b-b34d-6a4c25834614.jpg",
+      "sha256": "10cd314d03ceadcd",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:43+00:00",
+      "file_size": [
+        1024,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image shows a folded paper box, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "fe3794ca-283b-4b65-822a-abaf5559d0fa",
+      "query": "product packaging mockup",
+      "title": "Minimal toothpaste tube mockup psd in black and white",
+      "creator": "skeyndor.oficial",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.flickr.com/photos/57794015@N05/51913423154",
+      "image_url": "https://live.staticflickr.com/65535/51913423154_dd2da46034_b.jpg",
+      "width": 824,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\fe3794ca-283b-4b65-822a-abaf5559d0fa.jpg",
+      "sha256": "74f3678d91c4cdca",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        824,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image clearly shows a tube, which is a type of package for a product."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "438fc113-5950-4473-964d-50aec6f748a1",
+      "query": "product packaging mockup",
+      "title": "Minimal toothpaste tube mockup psd in black and white",
+      "creator": "skeyndor.oficial",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.flickr.com/photos/57794015@N05/51913199173",
+      "image_url": "https://live.staticflickr.com/65535/51913199173_413b8ac60f_b.jpg",
+      "width": 837,
+      "height": 1024,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\438fc113-5950-4473-964d-50aec6f748a1.jpg",
+      "sha256": "3109b8c619d9752a",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        837,
+        1023
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image clearly shows a tube of skincare product, which is a package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "159ed596-733d-4bf5-b356-b294ff708088",
+      "query": "tea tin packaging",
+      "title": "Monarch Pan-Fired Japan Tea",
+      "creator": "afiler",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/99909734@N00/113338963",
+      "image_url": "https://live.staticflickr.com/54/113338963_3c3eb398bd_b.jpg",
+      "width": 1024,
+      "height": 768,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\159ed596-733d-4bf5-b356-b294ff708088.jpg",
+      "sha256": "0c01e96d7c693d15",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image clearly shows a tin box labeled with tea, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "46444bf3-7ea9-4832-905e-df8f73ff0083",
+      "query": "tea tin packaging",
+      "title": "Planet Canit, LLC. Silver Joes Tin",
+      "creator": "kurmanstaff",
+      "licence": "by-sa",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "source_url": "https://www.flickr.com/photos/62558987@N07/9404795520",
+      "image_url": "https://live.staticflickr.com/3777/9404795520_ec0ac1f33e_b.jpg",
+      "width": 1024,
+      "height": 983,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\46444bf3-7ea9-4832-905e-df8f73ff0083.jpg",
+      "sha256": "e74913b79458439d",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        1024,
+        983
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image shows a tin of coffee, which is a product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "66f23b5b-f056-4dc8-93aa-d482aaeaac9b",
+      "query": "tea tin packaging",
+      "title": "Twinings, Earl Gray tin, location",
+      "creator": "",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.rawpixel.com/image/6112546/photo-image-public-domain-leaf-free",
+      "image_url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9zdGF0aWMvaW1hZ2Uvd2Vic2l0ZS8yMDIyLTA0L2xyL2ZyZWFybF9ncmF5X3RlZV90ZWEtaW1hZ2Uta3oyZTQxeHYuanBn.jpg",
+      "width": 4752,
+      "height": 3168,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\66f23b5b-f056-4dc8-93aa-d482aaeaac9b.jpg",
+      "sha256": "ba6589fc299106b2",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        1024,
+        683
+      ],
+      "vision": {
+        "pass": true,
+        "score": 95.0,
+        "reasons": [
+          "The image clearly shows three tins of Twinings Earl Grey Tea, which are physical product packages."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "0b72f779-d11d-452b-9d25-9ca9e6fec9f2",
+      "query": "soap box packaging",
+      "title": "mosaic package side",
+      "creator": "soapylovedeb",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/60608121@N00/312466026",
+      "image_url": "https://live.staticflickr.com/114/312466026_608de4aa70_b.jpg",
+      "width": 1024,
+      "height": 885,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\0b72f779-d11d-452b-9d25-9ca9e6fec9f2.jpg",
+      "sha256": "7fa098a25d13b225",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:44+00:00",
+      "file_size": [
+        1024,
+        885
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a clear plastic box containing a set of soaps. The box is the subject of the picture."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "1a56e04a-d35f-4290-9165-2fca32d81be7",
+      "query": "spice jar label",
+      "title": "Illy Spice Tins",
+      "creator": "psd",
+      "licence": "by",
+      "licence_version": "2.0",
+      "licence_url": "https://creativecommons.org/licenses/by/2.0/",
+      "source_url": "https://www.flickr.com/photos/45581782@N00/4785729659",
+      "image_url": "https://live.staticflickr.com/4136/4785729659_545822a24c_b.jpg",
+      "width": 1024,
+      "height": 768,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\1a56e04a-d35f-4290-9165-2fca32d81be7.jpg",
+      "sha256": "4c7094ceec36b945",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:45+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a collection of spice jars, which are packages of spices."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "5e58c1fa-9e2b-4090-a210-88379be86d90",
+      "query": "skincare bottle packaging",
+      "title": "",
+      "creator": "",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.rawpixel.com/image/5944151/free-public-domain-cc0-photo",
+      "image_url": "https://images.rawpixel.com/editor_1024/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg4MTEwMTItaW1hZ2Uta3d5b2ZmbmEuanBn.jpg",
+      "width": 3648,
+      "height": 2736,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\5e58c1fa-9e2b-4090-a210-88379be86d90.jpg",
+      "sha256": "9385b1f316e59e7e",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:45+00:00",
+      "file_size": [
+        1024,
+        768
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a bottle of skincare product, which is a physical package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    },
+    {
+      "id": "26e7cfb3-caf0-4597-ba7e-0c9e7242fd86",
+      "query": "skincare bottle packaging",
+      "title": "Body wash bottle clipart, beauty",
+      "creator": "",
+      "licence": "cc0",
+      "licence_version": "1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "https://www.rawpixel.com/image/6819220/vector-public-domain-pink-illustrations",
+      "image_url": "https://images.rawpixel.com/editor_1024/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA1L2pvYjcyOS0wMDMtdi5qcGc.jpg",
+      "width": 2666,
+      "height": 4000,
+      "file": "C:\\Users\\T2Hol\\Desktop\\Northstar OS Retail Arbitrage Agent\\renders\\references\\public\\26e7cfb3-caf0-4597-ba7e-0c9e7242fd86.jpg",
+      "sha256": "9b7b844551f4bbf5",
+      "usage": "rubric reference only - never a product asset, never composited into a seller picture",
+      "checked_at": "2026-11-11T04:59:45+00:00",
+      "file_size": [
+        682,
+        1024
+      ],
+      "vision": {
+        "pass": true,
+        "score": 90.0,
+        "reasons": [
+          "The image shows a bottle of body wash, which is a physical product package."
+        ],
+        "available": true,
+        "model": "gemma3:4b"
+      }
+    }
+  ],
+  "refused": [
+    {
+      "query": "stand up pouch packaging",
+      "id": "55e5e5a7-ef82-4ad3-91d3-5ced2fed02fa",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "stand up pouch packaging",
+      "id": "7d92a259-7a4f-4271-89cd-7e6de50f217e",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "stand up pouch packaging",
+      "id": "116a6355-923f-4245-a4c1-46eb67852a09",
+      "reason": "too small: 500x500"
+    },
+    {
+      "query": "stand up pouch packaging",
+      "id": "6f6e6207-c4dc-4a8c-b18b-f6e130302483",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "stand up pouch packaging",
+      "id": "cabb809a-46b6-4b91-9400-29cfe8c6f0ac",
+      "reason": "too small: 745x560"
+    },
+    {
+      "query": "stand up pouch packaging",
+      "id": "c0d77b2a-7c45-42cf-99bb-f24864656070",
+      "reason": "too small: 871x655"
+    },
+    {
+      "query": "coffee bag packaging",
+      "id": "59083a89-333e-4f0a-ac0d-d427d9da70c0",
+      "reason": "too small: 1024x681"
+    },
+    {
+      "query": "coffee bag packaging",
+      "id": "981ee5c4-cfbd-4138-ad99-0a7cc0cddfb4",
+      "reason": "too small: 1024x685"
+    },
+    {
+      "query": "coffee bag packaging",
+      "id": "8ce6ab56-69ff-4acb-b46f-5696e9896ca4",
+      "reason": "too small: 681x1024"
+    },
+    {
+      "query": "coffee bag packaging",
+      "id": "3986576e-d613-4a8d-8436-f1296aa49cad",
+      "reason": "too small: 1024x681"
+    },
+    {
+      "query": "coffee bag packaging",
+      "id": "ecaecf47-009b-4ed1-8bf1-db2e321d4f19",
+      "reason": "too small: 1024x655"
+    },
+    {
+      "query": "gift box packaging",
+      "id": "fd04a204-cad6-4706-a0f4-2d46cbe96333",
+      "reason": "too small: 1024x682"
+    },
+    {
+      "query": "gift box packaging",
+      "id": "feb46d53-5721-40e0-b68f-5e9792ba8b9f",
+      "reason": "too small: 500x375"
+    },
+    {
+      "query": "gift box packaging",
+      "id": "01ed35a1-aa54-47c4-8f55-edc898f2d3cc",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "supplement bottle label",
+      "id": "1c1a7594-7f77-499e-b2ef-21b7de1a67ac",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "supplement bottle label",
+      "id": "097b0e30-b7a8-4004-8c03-f4febe452df5",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "cosmetic jar packaging",
+      "id": "936f7399-c922-473f-8306-a46e3fd545a7",
+      "reason": "too small: 1675x632"
+    },
+    {
+      "query": "cosmetic jar packaging",
+      "id": "5764c5e8-88b7-4097-93cf-62d88a35ddcf",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "cosmetic jar packaging",
+      "id": "82a5773e-0b2c-4bfe-a9a5-1efd4e6c4028",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "cosmetic jar packaging",
+      "id": "1ec5ed1e-25ee-4307-9feb-6f46be875b9e",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "cosmetic jar packaging",
+      "id": "65f1b7fb-878b-45a9-a999-532abdfda479",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "e7a65670-3699-4492-bb52-6ff7f20046ef",
+      "reason": "too small: 1024x680"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "e181cc30-2ad0-4787-8ba3-0d47b7d0a6a0",
+      "reason": "too small: 1024x680"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "36433546-c75f-490b-8b0c-1709ed7c7ceb",
+      "reason": "too small: 1024x680"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "13a190e9-c0ea-4a09-8975-ef9c6ccb431c",
+      "reason": "too small: 520x1024"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "63277131-a3d6-476a-a966-f69509407ed0",
+      "reason": "too small: 1024x691"
+    },
+    {
+      "query": "product packaging mockup",
+      "id": "d24cb08b-3e5c-4377-8ae2-f265b7d9890e",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "tea tin packaging",
+      "id": "154d3bfa-bac8-40c4-bcbe-93643add9aee",
+      "reason": "too small: 1024x326"
+    },
+    {
+      "query": "tea tin packaging",
+      "id": "507534e0-c88e-42fb-8334-eb5bb1219bf6",
+      "reason": "too small: 1024x576"
+    },
+    {
+      "query": "tea tin packaging",
+      "id": "d55dad3e-b205-41a8-8acb-198c91704b66",
+      "reason": "too small: 500x301"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "7123129c-caaf-4443-a44f-4ab580c01178",
+      "reason": "too small: 500x389"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "7b5625cc-80f5-4bb9-a599-3fa6cb070377",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "f5c1d938-ef92-48da-9bda-ac06de699039",
+      "reason": "too small: 500x496"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "4aae1157-cc79-44c4-8952-b78f2364455b",
+      "reason": "too small: 683x1024"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "628d2e8d-adca-44ab-8bf4-1386a6ade5a1",
+      "reason": "too small: 500x498"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "5c3f3840-efa4-41a7-bbea-5e017e569eea",
+      "reason": "too small: 223x240"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "d1d9e418-eef0-4d7d-876e-ffc226bc0a8b",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "183be64c-1f69-453e-bf3d-e6e87b6bf6cf",
+      "reason": "too small: 972x650"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "d035354d-cf50-4163-a731-bb5fe37e8a9f",
+      "reason": "off_topic: no packaging object in the title, tags or description"
+    },
+    {
+      "query": "soap box packaging",
+      "id": "47d2834a-c573-4b4d-b811-26dc5ca6cc04",
+      "reason": "download failed: HTTPError"
+    },
+    {
+      "query": "spice jar label",
+      "id": "8c34148c-1656-40c3-9c55-5ef38ed0bdd8",
+      "reason": "too small: 1024x487"
+    },
+    {
+      "query": "spice jar label",
+      "id": "1b74b2b9-8e25-491b-ad25-2d052f047ead",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "2c17cd5e-c3cc-41b7-a460-2adb4c15ba50",
+      "reason": "too small: 1024x667"
+    },
+    {
+      "query": "spice jar label",
+      "id": "0f400cff-1cb5-43fc-8722-683512705adf",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "3eff95e1-24cf-4825-93d9-ee5113711d9b",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "41e32d5a-a818-438c-a219-e23344e86a09",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "e6a8305e-7102-41bc-8aa6-85d3179f3d60",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "3e69870c-6230-40f6-9487-8c6fdbaab45b",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "e91b6128-1c30-4959-9c3a-b77af55054ce",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "c68e4620-7c8a-4067-8862-a6948ce2f819",
+      "reason": "too small: 1024x683"
+    },
+    {
+      "query": "spice jar label",
+      "id": "89592fc4-682f-4c7d-ae12-a4844a82ddcf",
+      "reason": "too small: 1024x683"
+    }
+  ],
+  "counts": {
+    "kept": 17,
+    "refused": 51,
+    "distinct_queries_with_a_row": 7,
+    "vision_confirmed_packages": 17
+  }
+}
