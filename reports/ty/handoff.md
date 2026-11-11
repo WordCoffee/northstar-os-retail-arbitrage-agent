@@ -24,6 +24,7 @@ Unit report: `reports/ty/rerender_prompt_only_20261111.md`. Six jobs merged, two
 | 6 | `fix-dev-start-pids` (D-009) — the pid record is resolved from the listeners and pruned of the dead | merged |
 | 7 | `ppc-upload-live` — upload → propose → approve → write v1 → write v2 → download, hash matches | merged |
 | 8 | `sel-05-label-fidelity` — label composed and warped onto an unlettered body: judged **83.5 → 98.7**, 12/12 | merged |
+| 9 | visual gate, first live run — 62 captures (31 views × desktop + iPhone 12 WebKit) at `/ui/`, no baseline without a passing scorecard; three views described by the local model as real workspaces (`reports/ty/visual_gate_and_views_20261111.md`) | evidence, no code change |
 
 **The seller number, per mode, never blended:** prompt-only 12 scored / **12 passed / 98.3**
 mechanically; with the local vision judge (`gemma3:4b`, loopback) **12 passed / 98.7**. Stored
