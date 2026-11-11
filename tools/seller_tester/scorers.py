@@ -303,8 +303,15 @@ def check_subject_fill(rgb: np.ndarray, spec: Dict[str, Any],
 MATTE_RESIDUE_MAX = 0.005
 
 
+#: Cutout methods that separate an object from its pixels by colour. A shadow that is
+#: attached and opaque survives every one of them, so the silhouette they produce is the
+#: product *plus* its shadow — which makes "outside the silhouette" empty (D-026).
+COLOUR_CUT_METHODS = ("grabcut", "background_distance", "otsu_lab")
+
+
 def check_matte_residue(rgb: np.ndarray, spec: Dict[str, Any], *,
-                        subject_mask: Optional[np.ndarray] = None) -> Dict[str, Any]:
+                        subject_mask: Optional[np.ndarray] = None,
+                        silhouette_source: Optional[str] = None) -> Dict[str, Any]:
     """Is a flat background flat **everywhere**, not only in the corners?
 
     D-020 (found 2026-11-11 while closing D-017): `check_background` samples the four
@@ -335,6 +342,15 @@ def check_matte_residue(rgb: np.ndarray, spec: Dict[str, Any], *,
         return _skip("the recorded silhouette does not match the picture's frame")
     if not mask.any():
         return _skip("the recorded silhouette is empty, so nothing is inside it")
+    if str(silhouette_source or "").lower() in COLOUR_CUT_METHODS:
+        # D-026 (measured 2026-11-11): a colour cut keeps a shadow that is attached to
+        # the product, so the silhouette it produced already contains the thing this
+        # check looks for. Reporting 0.00 % there is not a clean picture, it is a mask
+        # hiding the smear; say it cannot be verified instead of saying it is clean.
+        return _skip(f"the silhouette came from a colour cut ({silhouette_source}), "
+                     "which keeps a shadow attached to the product; an instrument "
+                     "cannot police the mask it is calibrated against, so this picture "
+                     "is UNVERIFIED for residue — not clean")
     target = _as_rgb(spec.get("value", 255))
     tolerance = int(spec.get("tolerance", 6))
     import cv2
@@ -498,7 +514,8 @@ def check_text_free(rgb: np.ndarray, spec: Dict[str, Any]) -> Dict[str, Any]:
 def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
                 composite_route: bool = True,
                 product_box: Optional[Any] = None,
-                cutout: Any = None) -> Dict[str, Dict[str, Any]]:
+                cutout: Any = None,
+                silhouette_source: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
     """Every mechanical check for this brief.
 
     `composite_route` decides whether `alpha_matte` is *applicable*. A composite route cuts the
@@ -524,7 +541,8 @@ def _run_checks(loaded: LoadedImage, brief: Dict[str, Any], *,
     # D-020: the same silhouette, used for the property `background` only samples at the
     # corners. Graded only where a silhouette exists; otherwise skipped with the reason.
     checks["matte_residue"] = check_matte_residue(
-        loaded.rgb, background_spec, subject_mask=subject_mask)
+        loaded.rgb, background_spec, subject_mask=subject_mask,
+        silhouette_source=silhouette_source)
     matte_spec = constraints.get("matte") or {}
     if composite_route:
         checks["alpha_matte"] = check_alpha_matte(loaded, matte_spec)
@@ -709,7 +727,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
                 cutout: Any = None,
                 placement: Any = None,
                 placement_quad: Any = None,
-                product_box: Optional[Any] = None) -> Dict[str, Any]:
+                product_box: Optional[Any] = None,
+                silhouette_source: Optional[str] = None) -> Dict[str, Any]:
     """Score one image against one brief. Never raises on bad image data.
 
     `reference_check` is an optional callable taking the decoded RGB array and
@@ -758,7 +777,8 @@ def score_image(image_bytes: bytes, brief: Dict[str, Any], *,
         return base
 
     checks = _run_checks(loaded, brief, composite_route=composite_route,
-                         product_box=product_box, cutout=cutout)
+                         product_box=product_box, cutout=cutout,
+                         silhouette_source=silhouette_source)
     base.update({
         "width": loaded.width,
         "height": loaded.height,

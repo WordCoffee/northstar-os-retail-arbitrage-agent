@@ -345,6 +345,7 @@ def run_pass(*, generator: Any, briefs: Any = None, limit: int = 20,
             placement=placement,
             placement_quad=placement_quad,
             product_box=product_box,
+            silhouette_source=((generation or {}).get("cutout_matte") or {}).get("method"),
         )
         rel = _relative(artefact)
         result_row = {

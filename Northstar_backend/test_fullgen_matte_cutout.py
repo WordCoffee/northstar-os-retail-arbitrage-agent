@@ -105,13 +105,14 @@ def _run(tmp_path, *, matte: str) -> dict:
     return {"artefact": artefact, "record": record}
 
 
-def _residue(artefact, product_box) -> dict:
+def _residue(artefact, product_box, *, source=None) -> dict:
     cutout = artefact.with_suffix(".cutout.png")
     rgb = np.asarray(Image.open(artefact).convert("RGB"))
     mask = scorers._product_mask_from_cutout(
         cutout.read_bytes() if cutout.is_file() else None, product_box, rgb.shape[:2])
     return scorers.check_matte_residue(
-        rgb, {"value": 255, "tolerance": 6, "mode": "uniform"}, subject_mask=mask)
+        rgb, {"value": 255, "tolerance": 6, "mode": "uniform"}, subject_mask=mask,
+        silhouette_source=source)
 
 
 def test_a_real_matte_removes_the_shadow_the_plate_drew(tmp_path):
@@ -142,10 +143,13 @@ def test_the_control_grabcut_keeps_the_same_shadow(tmp_path):
     assert kept > 500, (
         "grabcut must keep the plate's drawn shadow, or the matte assertion below is "
         f"a tautology; it kept {kept} px")
-    # D-026, recorded rather than hidden: the silhouette the residue check is handed is
-    # the grabcut cutout's own alpha, which includes the ellipse, so "outside the
-    # silhouette" is empty and the check reads 0.00 % on a picture with a visible smear.
-    assert _residue(out["artefact"], out["record"]["product_box"])["residue_pct"] == 0.0
+    # D-026: the silhouette the check is handed IS the grabcut cutout, shadow included, so
+    # "outside the silhouette" is empty. It must say it cannot verify — never report 0.00 %
+    # as if the picture were clean.
+    # The mask alone cannot tell, so the source is declared and the check refuses.
+    residue = _residue(out["artefact"], out["record"]["product_box"], source="grabcut")
+    assert residue.get("skipped") is True, residue
+    assert "colour cut" in str(residue.get("detail") or ""), residue
 
 
 def test_the_fallback_is_recorded_by_name(tmp_path):

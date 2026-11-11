@@ -1,0 +1,186 @@
+{
+  "generated_at": "2026-11-11T10:26:52+00:00",
+  "generator": "replay-generated",
+  "judge_enabled": false,
+  "mode_filter": "prompt_only",
+  "catalog_briefs": 1,
+  "catalog_by_mode": {
+    "prompt_only": 1,
+    "stored_reference": 0,
+    "uploaded_reference": 0
+  },
+  "selected": 1,
+  "artefacts_available": null,
+  "scored": 1,
+  "not_scored": 0,
+  "not_scored_reason": null,
+  "passed": 0,
+  "failed": 1,
+  "pass_rate": 0.0,
+  "mean_score": 90.0,
+  "gaps_filed": 1,
+  "gaps_in_file": 3,
+  "gaps_path": "state/seller/heldout_prompt_only_gaps5.json",
+  "mirror_path": null,
+  "escalations": [],
+  "results": [
+    {
+      "brief_id": "PO-001",
+      "category": "supplement_pouch",
+      "situation": "white_background_main",
+      "difficulty": 1,
+      "source_mode": "prompt_only",
+      "fidelity": "tolerant",
+      "route": "full_generation",
+      "population": "generated",
+      "artefact_path": "renders/d022_pinned/PO-001.png",
+      "width": 2000,
+      "height": 2000,
+      "score": 90.0,
+      "passed": false,
+      "cannot_verify": false,
+      "cannot_verify_reason": null,
+      "failed_checks": [
+        "matte_residue"
+      ],
+      "checks": {
+        "dimensions": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "2000x2000 vs min 2000x2000, max 10000x10000"
+        },
+        "aspect": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "aspect 1.0000 vs 1.0000 +-0.020"
+        },
+        "background": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "corners [(255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255)] vs target (255, 255, 255) +-6; max deviation 0, corner spread 0"
+        },
+        "subject_fill": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "subject fill 24.3% vs 12.0-100.0% (distance > 20)"
+        },
+        "matte_residue": {
+          "ok": false,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "background residue 14.76% of the frame (590541 px) outside the product's silhouette, 587151 px of it neutral (shadow-shaped); limit 0.5% at value 255 ±6"
+        },
+        "alpha_matte": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "border mean 255.0 (>= 249), std 0.00 (<= 6.0)"
+        },
+        "file_size": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "583441 bytes (0.146 bytes/px) vs 20000-12000000 bytes, min 0.010 bytes/px"
+        },
+        "text_free": {
+          "ok": true,
+          "skipped": false,
+          "cannot_verify": false,
+          "detail": "margin ink 0.00% vs max 2.00% (text-free)"
+        },
+        "reference_subject": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "prompt-only brief: no reference to verify"
+        },
+        "product_region": {
+          "ok": true,
+          "skipped": true,
+          "cannot_verify": false,
+          "detail": "the product-region check applies to the composite route; this brief has no reference to preserve"
+        }
+      },
+      "reference_check": {
+        "ok": true,
+        "skipped": true,
+        "cannot_verify": false,
+        "detail": "prompt-only brief: no reference to verify"
+      },
+      "generation": {
+        "route": "full_generation",
+        "product_box": [
+          312,
+          580,
+          1687,
+          1820
+        ],
+        "cutout_path": "renders\\d022_pinned\\PO-001.cutout.png",
+        "scene": {
+          "source": "generated"
+        }
+      }
+    }
+  ],
+  "by_population": {
+    "generated": {
+      "scored": 1,
+      "passed": 0,
+      "failed": 1,
+      "pass_rate": 0.0,
+      "mean_score": 90.0
+    }
+  },
+  "by_mode": {
+    "prompt_only": {
+      "scored": 1,
+      "passed": 0,
+      "failed": 1,
+      "pass_rate": 0.0,
+      "mean_score": 90.0
+    },
+    "stored_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    },
+    "uploaded_reference": {
+      "scored": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": 0.0,
+      "mean_score": 0.0
+    }
+  },
+  "by_situation": {
+    "white_background_main": {
+      "scored": 1,
+      "passed": 0,
+      "failed": 1,
+      "pass_rate": 0.0,
+      "mean_score": 90.0
+    }
+  },
+  "by_category": {
+    "supplement_pouch": {
+      "scored": 1,
+      "passed": 0,
+      "failed": 1,
+      "pass_rate": 0.0,
+      "mean_score": 90.0
+    }
+  },
+  "rerender": {
+    "mode": "prompt_only",
+    "rescore_only": true,
+    "judged": false,
+    "artefacts": "renders/d022_pinned",
+    "why": "the scorer changed, not the picture: these are the artefacts already on disk, re-measured with the instrument the situation calls for"
+  }
+}
