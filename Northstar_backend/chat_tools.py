@@ -1868,68 +1868,124 @@ def _bojo_handler(domain_tool: str):
 
 
 _BOJO_SPECS = {
-    "scan_products": {
-        "description": ("Find products for a brief. Cache first; a live search runs only when the "
-                        "operator envelope is armed, and the refusal is reported rather than worked "
-                        "around. No spend."),
-        "parameters": {"type": "object",
-                       "properties": {"query": {"type": "string", "maxLength": 120},
-                                      "limit": {"type": "integer", "minimum": 1, "maximum": 50}},
-                       "required": []},
+    #: Parameters are the **handlers'** parameters, not a friendlier shape. `_bojo_handler`
+    #: forwards these straight into `registry.call(name, **args)`, so a renamed parameter is a
+    #: tool that is offered and can never run (measured 2026-11-11: six of these seven answered
+    #: "bad arguments" for every call). test_tool_offering.py now derives that invariant.
+    "build_dieline": {
+        "description": (
+            "Build a layered, print-ready dieline from a parametric template. Same engine as "
+            "Design Studio's print lane; bad geometry is refused by name rather than forced."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "template_id": {"type": "string", "maxLength": 60},
+                "params": {"type": "object",
+                           "description": "the template's own dimensions in mm"},
+                "include_svg": {"type": "boolean"},
+                "pdf": {"type": "boolean"},
+            },
+            "required": ["template_id"],
+        },
     },
     "compose_listing": {
-        "description": ("Compose a listing for a product from its facts: title, bullets and "
-                        "description, with the prohibited-word and copy-audit normalisation applied. "
-                        "Deterministic given the same facts."),
-        "parameters": {"type": "object",
-                       "properties": {"product": {"type": "string", "maxLength": 160},
-                                      "facts": {"type": "object"},
-                                      "platform": {"type": "string", "maxLength": 40}},
-                       "required": ["product"]},
-    },
-    "build_dieline": {
-        "description": ("Build a packaging dieline for a product from a template: geometry validated, "
-                        "SVG and PDF rendered. No spend."),
-        "parameters": {"type": "object",
-                       "properties": {"product": {"type": "string", "maxLength": 160},
-                                      "template": {"type": "string", "maxLength": 60},
-                                      "format": {"type": "string", "enum": ["svg", "pdf"]}},
-                       "required": ["product"]},
-    },
-    "track_keywords": {
-        "description": ("Score keyword coverage for a listing: head terms weighted above body terms, "
-                        "per field. Read-only."),
-        "parameters": {"type": "object",
-                       "properties": {"listing": {"type": "object"},
-                                      "keywords": {"type": "array", "items": {"type": "string"}}},
-                       "required": ["listing"]},
-    },
-    "watch_competitor": {
-        "description": ("Read the stored competitor snapshot for a product and report its freshness. "
-                        "Read-only; nothing is fetched."),
-        "parameters": {"type": "object",
-                       "properties": {"product": {"type": "string", "maxLength": 160},
-                                      "asin": {"type": "string", "maxLength": 20}},
-                       "required": []},
+        "description": (
+            "Draft a listing revision proposal for one SKU from its own facts. Prohibited-word "
+            "and copy-audit normalisation applied; deterministic given the same facts."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "sku": {"type": "string", "maxLength": 60},
+                "title": {"type": "string", "maxLength": 200},
+                "bullets": {"type": "array", "items": {"type": "string"}},
+                "description": {"type": "string"},
+                "attributes": {"type": "object"},
+                "keywords": {"type": "array", "items": {"type": "string"}},
+                "brand": {"type": "string", "maxLength": 80},
+            },
+            "required": ["sku"],
+        },
     },
     "margin_report": {
-        "description": ("Run the fee-engine economics over numbers the operator already entered: unit "
-                        "cost, price, fees. One canonical calculator, no second copy."),
-        "parameters": {"type": "object",
-                       "properties": {"cost": {"type": "number"},
-                                      "price": {"type": "number"},
-                                      "fees": {"type": "number"},
-                                      "quantity": {"type": "integer", "minimum": 1}},
-                       "required": ["cost", "price"]},
+        "description": (
+            "Run the canonical fee and economics engine over the numbers entered. A missing "
+            "input is reported, never defaulted into a plausible number."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "inputs": {"type": "object",
+                           "description": "the engine's own keys: cost, price, fees, quantity"},
+            },
+            "required": ["inputs"],
+        },
     },
     "plan_campaign": {
-        "description": ("Plan an ad campaign structure and its target ACOS from a budget and a "
-                        "listing. Returns a plan only; no spend and no provider call."),
-        "parameters": {"type": "object",
-                       "properties": {"budget": {"type": "number"},
-                                      "listing": {"type": "object"},
-                                      "target_acos": {"type": "number"}},
-                       "required": ["budget"]},
+        "description": (
+            "Plan a four-tier Sponsored Products campaign for one ASIN. Nothing is spent; the "
+            "plan is a proposal the seller approves."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "asin": {"type": "string", "maxLength": 20},
+                "keywords": {"type": "array", "items": {"type": "string"}},
+                "product_title": {"type": "string", "maxLength": 200},
+                "daily_budget": {"type": "number"},
+                "target_acos": {"type": "number"},
+                "product_cost": {"type": "number"},
+                "amazon_price": {"type": "number"},
+            },
+            "required": ["asin", "keywords"],
+        },
+    },
+    "scan_products": {
+        "description": (
+            "Find sourcing candidates for a query. Cache first; a live search runs only when "
+            "the operator envelope is armed, and the refusal is reported rather than worked "
+            "around. No spend."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "maxLength": 120},
+                "keywords": {"type": "array", "items": {"type": "string"}},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 50},
+                "live": {"type": "boolean"},
+            },
+            "required": [],
+        },
+    },
+    "track_keywords": {
+        "description": (
+            "Score a listing's keyword coverage against a brand SEO profile. Reports coverage "
+            "and the gaps; never claims a rank."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "listing": {"type": "object",
+                            "description": "title, bullets, description"},
+                "brand_key": {"type": "string", "maxLength": 60},
+            },
+            "required": ["listing"],
+        },
+    },
+    "watch_competitor": {
+        "description": (
+            "Report the stored competitor observation for each ASIN. A missing observation is "
+            "reported, never estimated."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "asins": {"type": "array", "items": {"type": "string"}},
+                "stage": {"type": "string", "maxLength": 30},
+            },
+            "required": ["asins", "stage"],
+        },
     },
 }
 
