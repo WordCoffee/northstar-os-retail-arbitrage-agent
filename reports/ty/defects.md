@@ -261,8 +261,18 @@ label-truncation fixes made on 2026-11-11, and the app's own path may not have t
 output. Until then, seller scores are labelled "harness pipeline" wherever they appear. Queued as
 `sel-06-exercise-product-pipeline` at rank 1.
 
+## D-016 — the label is scaled to a body narrower than the body in the plate (2026-11-11)
 
+**Measured:** a pale body on a pale sweep loses its silhouette edge to a fixed
+16-level mask cut; the measured band set px-per-mm, so the printed label came out
+small. On a fixture whose truth is exact (body 500 px wide, 900 px tall) the old
+rule measured 479 px, the new one 493 px, i.e. +2.9 % label scale, and the body
+height exact. The same fault had a second half: the plate brief was per form, so a
+mug and a canister were both asked of the model as an anonymous tube.
 
-
-
-
+**Closed 2026-11-11:** `mockup_compositor.find_cylinder_bands` cuts the mask
+relative to the plate's own subject contrast (`max(5.0, min(threshold, 0.20*p99.5))`)
+and keeps the vertical extent on the caller's firm cut; `brand_art` declares a
+`plate_subject` per cylinder design and `product_picture.plate_brief(face, form,
+design)` asks for that object. 4 new tests, 27 in the file, 79 and 75 in the
+related groups. `reports/ty/d016_label_scale_plate.md`.

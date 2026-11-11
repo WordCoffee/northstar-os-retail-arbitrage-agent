@@ -10,6 +10,33 @@ A fresh session continues from this file plus `ty/MANDATE.md`, `ty/TARGET_SPEC.m
 > and `reports/ty/handoff.md`, then continue from the first unfinished unit. No
 > questions, no reports between cycles. Idle means re-plan.
 
+## Position, 2026-11-11 cycle 10 — the label is scaled to the body that is in the plate
+
+Unit report: `reports/ty/d016_label_scale_plate.md`. Tag `ty-dir-fix-label-scale-plate`.
+
+| # | job | result |
+|---|---|---|
+| 1 | `fix-label-scale-plate` (D-016) — a pale body on a pale sweep was cut at a fixed 16 levels, so the silhouette edge was never in the mask and the label was printed small; and the plate brief was per *form*, so a mug was asked of the model as an anonymous tube | **merged.** The mask cut is relative to the plate's own contrast (`max(5.0, min(threshold, 0.20·p99.5))`); the vertical extent stays on the caller's firm cut; each cylinder design declares its `plate_subject` and `plate_brief(face, form, design)` asks for that object |
+
+**Measured on a fixture whose truth is exact:** 479 px measured of a 500 px body →
+**493 px** (+2.9 % label scale), body height 900 px exact. A shadow 0–45 % of the
+body height does not widen the band (+0.0 %); plate grain moves it to 491 px. The
+earlier idea of relaxing the column-growth hysteresis 0.35 → 0.22 was **rejected on
+measurement** (+4.8 % over-measure behind a 22 %-tall shadow) and left at 0.35.
+
+**Tests:** 27 in `test_package_cylinder_form.py` (4 new), 79 in the compositor /
+package / geometry group, 75 in the seller-tester group. Held-out modes pass (6
+briefs, drawn): 6/6, mean 100.0 — a subset, not comparable with cycle 9's 20-brief 95.0.
+
+**Two directors were alive at 01:05–01:23 (D-011, the takeover race);** the other
+session had already swept this unit's three source files into `80ad1659` before it
+released the lease. Content verified at HEAD by `grep`, not assumed.
+
+**Next, in rank order:** `fix-label-conform` → `fix-shadow-and-white-fill`
+(D-017/D-018) → `fix-bundle-units` (D-012) → `reference-depth` → `block3-workspaces`
+→ `block4-seller-tests` → `pack-02-apparel-flat-print` → `pack-03-boxart-forms` →
+`block5-production-hardening` → `block7-verification` → `sel-04-packaging`.
+
 ## Position, 2026-11-11 cycle 9 — a main image is now the product alone on white
 
 Unit report: `reports/ty/white_cutout_main.md`. Tag `ty-dir-white-cutout-main`.

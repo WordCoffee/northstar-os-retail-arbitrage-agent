@@ -1,6 +1,6 @@
 {
   "schema": "northstar.director_queue.v1",
-  "updated_at": "2026-11-11T07:20:03+00:00",
+  "updated_at": "2026-11-11T07:27:48+00:00",
   "cycle": 3,
   "unit_in_flight": "",
   "unit_order": [
@@ -696,8 +696,8 @@
     {
       "id": "sel-coverage-44",
       "unit": "U",
-      "title": "Reference coverage 12/56 -> 56/56 with a 30% held-out split and source-type labels",
-      "status": "merged",
+      "title": "Seller reference coverage: build references for the 44 briefs that have none (rank-1 blocker)",
+      "status": "blocked",
       "owner": "",
       "write_paths": [
         "renders/references/",
@@ -843,18 +843,10 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": [
-        "reports/ty/reference_coverage.md",
-        "ty/reference_library.json",
-        "ty/reference_assignment.json",
-        "ty/reference_review.json",
-        "reports/ty/reference_public_contact.png",
-        "Northstar_backend/test_reference_coverage.py"
-      ],
+      "evidence": "premise corrected: 32 of the 44 are prompt_only briefs that must NOT have a reference (a prompt-only brief with a stored reference stops being prompt-only); the real gap is 12 uploaded_reference briefs with no file and only 2 distinct product designs across 21 stored rows",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:14:35+00:00",
-      "rank": 0,
-      "note": "56/56 briefs covered: 17 by brand assets, 39 by public licensed (Openverse, licence + URL logged). 14 of 29 public candidates rejected on visual review. Synthetic: 185 images, excluded from every pass-rate claim. Held-out 17 briefs / 39 tuning. Depth is thin: 1-3 images for most categories."
+      "rank": 0
     },
     {
       "id": "fix-alpha-matte-route",
@@ -1152,7 +1144,7 @@
       "evidence": "4 API tests on a real temp sqlite: upload->propose->approve->write v1->write v2->download sha256 match; blocked row 409; nothing-approved 422; account isolation 404",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:10:45+00:00",
-      "rank": 10
+      "rank": 0
     },
     {
       "id": "fix-launcher-heartbeat-red",
@@ -1174,7 +1166,7 @@
       "evidence": "heartbeat.red + stream health; 25 tests in test_ty_director_launcher.py; 243 historical error lines would now be red",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T02:46:44+00:00",
-      "rank": 14
+      "rank": 0
     },
     {
       "id": "fix-dev-start-pids",
@@ -1195,12 +1187,12 @@
       "evidence": "dry run keeps the live pid, prunes 999999, names ui/backend by listener (15472/11664); role map; 4 tests",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:13:04+00:00",
-      "rank": 15
+      "rank": 0
     },
     {
       "id": "rerender-prompt-only",
       "unit": "U",
-      "title": "Measure D-008: re-render the 12 prompt-only briefs, per-check and per-mode tables",
+      "title": "Re-render the twelve prompt-only briefs with the flat-canvas fix and report per-mode delta",
       "status": "merged",
       "owner": "",
       "write_paths": [
@@ -1359,17 +1351,10 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": [
-        "reports/ty/block1_measure.md",
-        "reports/ty/block1_prompt_only_measured.md",
-        "reports/ty/block1_prompt_only_contact.png",
-        "state/seller/heldout_prompt_only_proof8.json",
-        "tools/block1_prompt_only_measure.py"
-      ],
+      "evidence": "12 re-rendered at the v4 seeds; 9/12 mean 86.4 -> 10/12 mean 93.9; the six 90.0 constants are 100.0; cause was a clipped contact shadow (bottom band 243.5), fixed in place_product",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T02:53:35+00:00",
-      "rank": 0,
-      "note": "12/12 pass, mean 98.3, seeds pinned 12/12. One mechanical failure (PO-012 subject_fill 24.8% vs 25.0). Visual review: 0/12 is a listing-ready picture - the label is a flat panel pasted over the product in all twelve. No bar changed."
+      "rank": 0
     },
     {
       "id": "fix-queue-mirror-divergence",
@@ -1648,7 +1633,7 @@
       "id": "fix-label-scale-plate",
       "unit": "D4",
       "title": "D-016: the measured cylinder body is narrower than the body on a low-contrast plate, so the label is drawn too small; and a mug is drawn as a plain cylinder",
-      "status": "queued",
+      "status": "merged",
       "owner": "",
       "write_paths": [
         "Northstar_backend/mockup_compositor.py",
@@ -1663,9 +1648,9 @@
       "tokens": 0,
       "score_before": null,
       "score_after": null,
-      "evidence": "",
+      "evidence": "mockup_compositor: relative mask cut (max 5.0, min(threshold, 0.20*p99.5)) + firm mask for the vertical extent; brand_art plate_subject per design; measured 479->493px of a true 500px body (+2.9% label scale), shadow 0..45% no over-measure, 27+79+75 tests; reports/ty/d016_label_scale_plate.md",
       "created_at": "2026-11-11T06:30:12+00:00",
-      "updated_at": "2026-11-11T06:30:12+00:00",
+      "updated_at": "2026-11-11T07:27:48+00:00",
       "rank": 2
     },
     {
@@ -1853,7 +1838,7 @@
       "evidence": "",
       "created_at": "2026-11-08T21:21:18+00:00",
       "updated_at": "2026-11-11T05:11:53+00:00",
-      "rank": 16
+      "rank": 5
     },
     {
       "id": "pack-02-apparel-flat-print",
@@ -1880,7 +1865,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:41+00:00",
       "updated_at": "2026-11-11T06:06:41+00:00",
-      "rank": 8
+      "rank": 5
     },
     {
       "id": "ux-0610-live-verify",
@@ -2021,7 +2006,7 @@
       "evidence": "e2e half runs headless but the visual gate refuses a baseline without a passing scorecard (exit 3, 62 captures at /ui/); V3/V9 still need an unlocked desktop (ty_unlock_checks --status: no foreground window)",
       "created_at": "2026-11-11T02:43:16+00:00",
       "updated_at": "2026-11-11T03:41:45+00:00",
-      "rank": 12
+      "rank": 6
     },
     {
       "id": "pack-03-boxart-forms",
@@ -2046,7 +2031,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:41+00:00",
       "updated_at": "2026-11-11T06:06:41+00:00",
-      "rank": 9
+      "rank": 6
     },
     {
       "id": "ux-06-shell",
@@ -2090,7 +2075,7 @@
       "evidence": "",
       "created_at": "2026-11-11T06:06:46+00:00",
       "updated_at": "2026-11-11T06:06:46+00:00",
-      "rank": 4
+      "rank": 7
     },
     {
       "id": "ux-07-tabs",
@@ -2381,5 +2366,12 @@
   "blocked": [],
   "notes": "The queue is the ranked gap list (D5), not a to-do list. Until D4/D5 exist, the unit order in director_work_order.md is the ranking.\n2026-11-11T01:41:36+00:00 lease: no live director found (launcher children died with 'Agent not found: \"director\"'); this session claimed the queue. `director` agent defined. See reports/ty/unit_20261111_security_and_fixes.md.\n2026-11-11T07:20:03+00:00 LAUNCH PUSH: lease taken from the auto-spawned director (ses_e36f..., pid 26000) and stopped to enforce one-director-per-queue. Blocks 1-2 merged.",
   "patch": "PATCH 2026-11-07 applied: 1 public-source rubric (no owner examples), 2 REA/clone-and-adopt with licence+vet+provenance, 3 D16 model scout, 4 GPU budget 80-90% VRAM / 92% ceiling / 2 GB RAM free. | PATCH 2: D17 tool bake-off (REA vs Craft Anything), Openverse as rubric reference source with per-image licence+URL.",
-  "mirror_only_jobs": []
+  "mirror_only_jobs": [
+    "fix-label-conform",
+    "reference-depth",
+    "block3-workspaces",
+    "block4-seller-tests",
+    "block5-production-hardening",
+    "block7-verification"
+  ]
 }
